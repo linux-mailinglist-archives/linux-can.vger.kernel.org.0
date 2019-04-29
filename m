@@ -2,111 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 060DBDE6C
-	for <lists+linux-can@lfdr.de>; Mon, 29 Apr 2019 10:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B73E09A
+	for <lists+linux-can@lfdr.de>; Mon, 29 Apr 2019 12:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727612AbfD2IxX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 Apr 2019 04:53:23 -0400
-Received: from mail-eopbgr140134.outbound.protection.outlook.com ([40.107.14.134]:55293
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        id S1727621AbfD2Kg3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 Apr 2019 06:36:29 -0400
+Received: from mail-eopbgr130085.outbound.protection.outlook.com ([40.107.13.85]:31457
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727525AbfD2IxX (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 29 Apr 2019 04:53:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.se;
- s=selector1;
+        id S1727560AbfD2Kg3 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 29 Apr 2019 06:36:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5qeRuZLrUkq60Btaeq+vnxRx/UmFPvMjCexezcg0k94=;
- b=cjk3SxUeG/YgSRMRRi9Xhp/Kicubn2mZLdT5ijL6VSP+i6AmMkHlHHBPf9vx50EWvsE1UoIpQiWnPAmqTdPIrZNhHk0nZuVEvxliIzaxDpXPXbVl+IUkKYnMd86a9OjF3+FAWF/3fpr/OGHVQMfg6Qh2LdBhUn8MBKuKrgFHnys=
-Received: from VI1PR10MB2672.EURPRD10.PROD.OUTLOOK.COM (20.178.126.212) by
- VI1PR10MB1679.EURPRD10.PROD.OUTLOOK.COM (10.165.194.24) with Microsoft SMTP
+ bh=2MSpJQcxYQgg4E4wCby5AbJVV/qGl5a8qdFBoCUx1HU=;
+ b=AKdO6AikNxYQrqCB62m4DPpsyEOVhL0os5+UbGLmNXLWWo9H7fEaiOh2PiSlHYUlMU7GKfO82T+bWQ1uMQQVs3yRqsOJA4Gtafq8/9+eYWmQhn4Ji+XsFJrhKYdUwjpVQcmwoB50quuZbLENFOPQDZvAHd3GMieoU2wEfWke8Z0=
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (52.134.92.158) by
+ AM0PR04MB4066.eurprd04.prod.outlook.com (52.134.92.152) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1835.12; Mon, 29 Apr 2019 08:53:19 +0000
-Received: from VI1PR10MB2672.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::48b8:9cff:182:f3d8]) by VI1PR10MB2672.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::48b8:9cff:182:f3d8%2]) with mapi id 15.20.1835.018; Mon, 29 Apr 2019
- 08:53:19 +0000
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>
-CC:     Thomas Winding <twi@deif.com>, Fabio Estevam <festevam@gmail.com>,
-        Per Christensen <pnc@deif.com>,
-        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
+ 15.20.1835.15; Mon, 29 Apr 2019 10:36:24 +0000
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::8cda:4e52:8e87:8f0e]) by AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::8cda:4e52:8e87:8f0e%2]) with mapi id 15.20.1835.018; Mon, 29 Apr 2019
+ 10:36:24 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: Re: [PATCH] can: flexcan: bump FLEXCAN_TIMEOUT_US to 250
-Thread-Topic: [PATCH] can: flexcan: bump FLEXCAN_TIMEOUT_US to 250
-Thread-Index: AQHU1PaDftXKRmjpAUe9LFJjLfS9raYUlMMAgAG4fwD///7hgIABEGQAgAABhwCAO8n9AA==
-Date:   Mon, 29 Apr 2019 08:53:19 +0000
-Message-ID: <e9b2b895-aa65-72be-5e6e-d38365ff2624@prevas.dk>
-References: <20190307150024.23628-1-rasmus.villemoes@prevas.dk>
- <a418bbc9-186c-174a-20d8-18cedeaf0089@pengutronix.de>
- <5615c217-8ba6-e452-1aaa-1e3b32eb4cca@prevas.dk>
- <f1fb86fb-1b6b-1860-899d-820d4bc672cf@pengutronix.de>
- <4471c611-1a58-6365-2ab6-1b39c310265a@prevas.dk>
- <b03e9868-3070-ce35-3477-3119d691baec@pengutronix.de>
-In-Reply-To: <b03e9868-3070-ce35-3477-3119d691baec@pengutronix.de>
-Accept-Language: en-US
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH] can: flexcan: change .tseg1_min value to 2 in bittiming
+ const
+Thread-Topic: [PATCH] can: flexcan: change .tseg1_min value to 2 in bittiming
+ const
+Thread-Index: AQHU/l/eGgL8EWD7kUani7YEBLcwp6ZS8GyQ
+Date:   Mon, 29 Apr 2019 10:36:24 +0000
+Message-ID: <AM0PR04MB42119D481BD7A6494E4F364F80390@AM0PR04MB4211.eurprd04.prod.outlook.com>
+References: <20190429074551.25754-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190429074551.25754-1-qiangqing.zhang@nxp.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0185.eurprd05.prod.outlook.com
- (2603:10a6:3:f8::33) To VI1PR10MB2672.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:803:e3::20)
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Rasmus.Villemoes@prevas.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [81.216.59.226]
+ smtp.mailfrom=aisheng.dong@nxp.com; 
+x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f1a7fb5b-868f-4588-7cbe-08d6cc80204c
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:VI1PR10MB1679;
-x-ms-traffictypediagnostic: VI1PR10MB1679:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VI1PR10MB1679CA97E0A3D54EC6897C3E8A390@VI1PR10MB1679.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:480;
+x-ms-office365-filtering-correlation-id: c739a4ed-23b3-41c0-3efc-08d6cc8e86f5
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB4066;
+x-ms-traffictypediagnostic: AM0PR04MB4066:
+x-microsoft-antispam-prvs: <AM0PR04MB4066E39C7B1ACC77CEA83DAA80390@AM0PR04MB4066.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1079;
 x-forefront-prvs: 0022134A87
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(396003)(39840400004)(366004)(136003)(199004)(189003)(6246003)(31696002)(81166006)(8936002)(81156014)(36756003)(44832011)(8676002)(31686004)(8976002)(5660300002)(6512007)(54906003)(110136005)(99286004)(6506007)(386003)(6306002)(486006)(53936002)(53546011)(7736002)(305945005)(4326008)(25786009)(52116002)(76176011)(186003)(446003)(6486002)(6436002)(26005)(42882007)(97736004)(71190400001)(14444005)(256004)(2616005)(93886005)(316002)(11346002)(476003)(71200400001)(102836004)(229853002)(74482002)(2906002)(7416002)(66066001)(6116002)(3846002)(478600001)(72206003)(14454004)(73956011)(966005)(68736007)(66556008)(64756008)(66946007)(66476007)(66446008);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR10MB1679;H:VI1PR10MB2672.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: prevas.se does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(366004)(346002)(376002)(39860400002)(136003)(189003)(199004)(97736004)(9686003)(305945005)(52536014)(76116006)(66476007)(66556008)(64756008)(66446008)(73956011)(55016002)(66946007)(6436002)(25786009)(7696005)(86362001)(54906003)(110136005)(2201001)(99286004)(6506007)(102836004)(76176011)(4326008)(6246003)(316002)(33656002)(6116002)(3846002)(7736002)(68736007)(81156014)(8676002)(8936002)(53936002)(74316002)(81166006)(2501003)(478600001)(2906002)(229853002)(256004)(14444005)(5660300002)(44832011)(486006)(446003)(11346002)(476003)(14454004)(71200400001)(71190400001)(66066001)(26005)(186003)(142923001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4066;H:AM0PR04MB4211.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: QsCvv9DfAXhrce+r8iwMTZPpniDF42JIsWN9y3iqo7Ls1zU9fAgdg52dOQvhBst6x4a9a4u9ENff1hmfuL67ZKEQr+i7DCNw1WcWfVI8mnFxvZNarwmbbhQrTxe4BzoqICJ9PbY3lAxOzG9grsw78BJRK1hvyYvDtEC5ybwpW5vZ3Sb7fncoOCtUXSiHlP/mfcgBd5quQvz+YiytT92y6ZsR2RiSi2tQv/5r6Rlc5sx9ZBgpB+lT4IB2Y3OXppwlC1rz3ZgahIQA5CLmGTB93GxNvLLfkCLZ0EON1V7lwzUd5R9xCsUq68oMdkfyYAHmXFtTKsipNZJlJjVEWkDhofmdg/5WK0i4tQfFx5uO1sbQFdQa/gqdi8geiTBS72CpbvlblBl5JY2Drw596eMFz9zVQSX9U8seo8LiXibffmM=
+x-microsoft-antispam-message-info: Y431h52vz0Eki8+zi7uS3ZUs1vDkShui4fgJSWrPA2oLc2hXP/VfbZ4A12U0NZ+Jl9uOXhgHY2+uGrKzgI1gwKt0n0z8v7PiSDYYnCmemtvv9bIdlI4Czi5EpnAdmZzRqfJgQvp8BBOlNyAhit6nOW8HUJZyBnSFyjiQUSMU3EmBYABF29bIBF0dWnLX/Jg0Wx6XKWeuu2/h1O9Rm+IJVjOlTYVehz1vynxeOdvSsdDefdW3MzdgFeg6zltjoAv+32ye6OhrIietq1BousdYE7BkLHoyUzfNSHnJfOoHbP3TQaDkeu9BPpKAk/vB6jW62qXzb2gfaMrSWZsvDKs/KtGT99Z3RyWLAmS6+2XJhYPGWCTT9tZLCm3+WUHhPav+xYExS1jgn4ngMik3rI6CYJ0RahM/3T7MhS21jOdZ8YQ=
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <9689F66843FFC84F9F2B01A6B923C809@EURPRD10.PROD.OUTLOOK.COM>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1a7fb5b-868f-4588-7cbe-08d6cc80204c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2019 08:53:19.1729
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c739a4ed-23b3-41c0-3efc-08d6cc8e86f5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Apr 2019 10:36:24.0274
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB1679
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4066
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-T24gMjIvMDMvMjAxOSAwOC41MSwgTWFyYyBLbGVpbmUtQnVkZGUgd3JvdGU6DQo+IE9uIDMvMjIv
-MTkgODo0NSBBTSwgUmFzbXVzIFZpbGxlbW9lcyB3cm90ZToNCj4+IE9uIDIxLzAzLzIwMTkgMTYu
-MzAsIE1hcmMgS2xlaW5lLUJ1ZGRlIHdyb3RlOg0KPj4+IE9uIDMvMjEvMTkgMzozNCBQTSwgUmFz
-bXVzIFZpbGxlbW9lcyB3cm90ZToNCj4+Pj4gT24gMjAvMDMvMjAxOSAxNC4xOCwgTWFyYyBLbGVp
-bmUtQnVkZGUgd3JvdGU6DQo+Pj4NCj4+PiBDYW4geW91IHByb3Bvc2UgYW4gdXBkYXRlZCBjb21t
-aXQgbWVzc2FnZSBmb3IgSm9ha2ltIFpoYW5nJ3MgcGF0Y2g/DQo+Pj4NCj4+PiBodHRwczovL2dp
-dC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9ta2wvbGludXgtY2FuLmdpdC9j
-b21taXQvP2g9dGVzdGluZyZpZD05ZGFlZDg5YWU4YTNmYzQ0Y2NkMmIyYmI5YzNjNGQzZTM0MzE5
-MDRkDQo+Pj4NCj4+PiBJJ2xsIGFkZCBpdCBieSBoYW5kIGFuZCBpbmNyZWFzZSB0aGUgdGltZW91
-dCB0byAyNTAuIE9rPw0KPj4NCj4+IFNvdW5kcyBmaW5lLiBJbiBvcmRlciBub3QgdG8gY2hhbmdl
-IEpvYWtpbSdzIGNvbW1pdCBsb2cgdG9vIG11Y2gsIGhvdw0KPj4gYWJvdXQgYWRkaW5nIHNvbWV0
-aGluZyBsaWtlICh3aXRoIHlvdXIgaW5pdGlhbHMsIHNpbmNlIHlvdSdyZSBuZXh0IGluDQo+PiB0
-aGUgc2lnbi1vZmYgY2hhaW4pDQo+Pg0KPj4gW21rbDogTWVhbndoaWxlLCBSYXNtdXMgVmlsbGVt
-b2VzIHJlcG9ydGVkIHRoYXQgZXZlbiB3aXRoIGEgdGltZW91dCBvZg0KPj4gMTAwLCBmbGV4Y2Fu
-X3Byb2JlKCkgZmFpbHMgb24gdGhlIE1QQzgzMDksIHdoaWNoIHJlcXVpcmVzIGEgdmFsdWUgb2Yg
-YXQNCj4+IGxlYXN0IDE0MCB0byB3b3JrIHJlbGlhYmx5LiAyNTAgd29ya3MgZm9yIGV2ZXJ5b25l
-Ll0NCj4+DQo+PiA/IEZlZWwgZnJlZSB0byBlZGl0IGFzIHlvdSB3aXNoLg0KPiANCj4gVGhhbmtz
-LCBJJ3ZlIGFkZGVkIHRoYXQgdG8gdGhlIGNvbW1pdCBtZXNzYWdlIGl0c2VsZi4NCg0KV2hhdCdz
-IHRoZSBzdGF0dXMgb2YgdGhpcz8gSSBjYW4ndCBmaW5kIGFueXRoaW5nIGluIC1uZXh0IChhcyBv
-Zg0KbmV4dC0yMDE5MDQyNiksIG5laXRoZXIgSm9ha2ltJ3Mgb3JpZ2luYWwgb3IgdGhlIGFtZW5k
-ZWQgcGF0Y2guDQoNClRoYW5rcywNClJhc211cw0K
+PiBGcm9tOiBKb2FraW0gWmhhbmcNCj4gU2VudDogTW9uZGF5LCBBcHJpbCAyOSwgMjAxOSAzOjQ4
+IFBNDQo+IA0KPiBUaW1lIFNlZ21lbnQxKHRzZWcxKSBpcyBjb21wb3NlZCBvZiBQcm9wYWdhdGUg
+U2VnbWVudChwcm9wX3NlZykgYW5kDQo+IFBoYXNlIFNlZ21lbmcxKHBoYXNlX3NlZzEpLiBUaGUg
+cmFuZ2Ugb2YgVGltZSBTZWdtZW50MShwbHVzIDIpIGlzIDIgdXAgdG8NCj4gMTYgYWNjb3JkaW5n
+IHRvIGxhdGVzdCByZWZlcmVuY2UgbWFudWFsLiBUaGF0IG1lYW5zIHRoZSBtaW5pbXVtIHZhbHVl
+IG9mDQo+IFBST1BTRUcgYW5kIFBTRUcxIGJpdCBmaWVsZCBpcyAwLiBTbyBjaGFuZ2UgLnRzZWcx
+IG1pbiB2YWx1ZSB0byAyLg0KPiANCg0KSSBzYXcgbGF0ZXN0IE1YNlEgUk0gc3RpbGwgaW5kaWNh
+dGVzIGl0J3MgNC0xNi4NCkNhbiB5b3UgaGVscCBkb3VibGUgY2hlY2sgd2l0aCBJQyBndXlzIHdo
+ZXRoZXIgYWxsIFJNIG9mIHJlbGF0ZWQgY2hpcHMNCm5lZWQgdXBkYXRlPw0KDQpSZWdhcmRzDQpE
+b25nIEFpc2hlbmcNCg0KPiBTaWduZWQtb2ZmLWJ5OiBKb2FraW0gWmhhbmcgPHFpYW5ncWluZy56
+aGFuZ0BueHAuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMgfCAyICst
+DQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+
+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9jYW4vZmxleGNhbi5jIGIvZHJpdmVycy9uZXQvY2Fu
+L2ZsZXhjYW4uYyBpbmRleA0KPiBlMzUwODNmZjMxZWUuLjJlYTM1ZWY0YWEyNyAxMDA2NDQNCj4g
+LS0tIGEvZHJpdmVycy9uZXQvY2FuL2ZsZXhjYW4uYw0KPiArKysgYi9kcml2ZXJzL25ldC9jYW4v
+ZmxleGNhbi5jDQo+IEBAIC0zMjcsNyArMzI3LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBmbGV4
+Y2FuX2RldnR5cGVfZGF0YQ0KPiBmc2xfbHMxMDIxYV9yMl9kZXZ0eXBlX2RhdGEgPSB7DQo+IA0K
+PiAgc3RhdGljIGNvbnN0IHN0cnVjdCBjYW5fYml0dGltaW5nX2NvbnN0IGZsZXhjYW5fYml0dGlt
+aW5nX2NvbnN0ID0gew0KPiAgCS5uYW1lID0gRFJWX05BTUUsDQo+IC0JLnRzZWcxX21pbiA9IDQs
+DQo+ICsJLnRzZWcxX21pbiA9IDIsDQo+ICAJLnRzZWcxX21heCA9IDE2LA0KPiAgCS50c2VnMl9t
+aW4gPSAyLA0KPiAgCS50c2VnMl9tYXggPSA4LA0KPiAtLQ0KPiAyLjE3LjENCg0K
