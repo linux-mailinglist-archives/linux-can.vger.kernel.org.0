@@ -2,105 +2,170 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B8B108D2
-	for <lists+linux-can@lfdr.de>; Wed,  1 May 2019 16:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4E110C92
+	for <lists+linux-can@lfdr.de>; Wed,  1 May 2019 20:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbfEAOKe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 1 May 2019 10:10:34 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:53130 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbfEAOKe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 1 May 2019 10:10:34 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x41EAO6G050410;
-        Wed, 1 May 2019 09:10:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1556719824;
-        bh=bAMCoxbOD2B1PLsePYRKKsn9nDsgrie3svDUTp4kGi4=;
-        h=Subject:From:To:CC:References:Date:In-Reply-To;
-        b=HIfpV4nkLVfesPuy3NXtH+ew99tBBr98ofmw3JTAH8dUUU5PeJE2NZNa0TUsW1oMt
-         Gw7KE5eocXLxH/5UV/L4N59Fg0+NLwi/SK0xCdaKeQ1CFNRBoJ6XS0QE/8vwN6ygI1
-         8huTUqaDqOddNP55/HYrQu9JjVnp1P8wfnp7wyZo=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x41EAOWB044005
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 May 2019 09:10:24 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 1 May
- 2019 09:10:23 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 1 May 2019 09:10:23 -0500
-Received: from [10.250.90.63] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x41EANNr088527;
-        Wed, 1 May 2019 09:10:23 -0500
-Subject: Re: [PATCH v11 1/5] can: m_can: Create a m_can platform framework
-From:   Dan Murphy <dmurphy@ti.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>, <mkl@pengutronix.de>,
-        <davem@davemloft.net>
-CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20190319172651.10012-1-dmurphy@ti.com>
- <3ce79402-00f1-d7e6-955e-1ad7eb00d0de@ti.com>
- <c05a6a22-c162-518d-683a-18731bd67e38@grandegger.com>
- <2d594ba8-e4e4-14f9-1eb0-8f753c79eb54@ti.com>
-Message-ID: <a8b9fcca-dc35-3ca4-e3eb-109bc534e804@ti.com>
-Date:   Wed, 1 May 2019 09:10:27 -0500
+        id S1726150AbfEASFz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 1 May 2019 14:05:55 -0400
+Received: from gateway30.websitewelcome.com ([192.185.151.58]:24029 "EHLO
+        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726019AbfEASFy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 1 May 2019 14:05:54 -0400
+X-Greylist: delayed 1426 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 May 2019 14:05:53 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id C2B2D3EEE
+        for <linux-can@vger.kernel.org>; Wed,  1 May 2019 12:42:06 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id LtF8hVm7k90onLtF8he7yl; Wed, 01 May 2019 12:42:06 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.119.203] (port=40056 helo=[192.168.1.76])
+        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.91)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hLtF8-002WgJ-4b; Wed, 01 May 2019 12:42:06 -0500
+Subject: Re: [PATCH net-next] can: kvaser_usb: Use struct_size() in
+ alloc_candev()
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190208031035.GA2665@embeddedor>
+ <1220cd8d-913f-934b-9c4d-26f4012c3150@embeddedor.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ VtSixD1uOgytAP7RWS474w==
+Message-ID: <524a265c-21fb-72e1-e077-dd51d8807751@embeddedor.com>
+Date:   Wed, 1 May 2019 12:42:03 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <2d594ba8-e4e4-14f9-1eb0-8f753c79eb54@ti.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <1220cd8d-913f-934b-9c4d-26f4012c3150@embeddedor.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.119.203
+X-Source-L: No
+X-Exim-ID: 1hLtF8-002WgJ-4b
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.1.76]) [189.250.119.203]:40056
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 9
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello
+Hi all,
 
-On 4/18/19 9:36 AM, Dan Murphy wrote:
-> Marc
+Friendly ping(second one):
+
+Who can take this?
+
+Thanks
+--
+Gustavo
+
+On 2/25/19 6:48 PM, Gustavo A. R. Silva wrote:
+> Hi all,
 > 
-> On 4/2/19 7:17 AM, Wolfgang Grandegger wrote:
->> Hello Dan,
+> Friendly ping:
+> 
+> Who can take this?
+> 
+> Thanks
+> --
+> Gustavo
+> 
+> On 2/7/19 9:10 PM, Gustavo A. R. Silva wrote:
+>> One of the more common cases of allocation size calculations is finding
+>> the size of a structure that has a zero-sized array at the end, along
+>> with memory for some number of elements for that array. For example:
 >>
->> Am 02.04.19 um 14:03 schrieb Dan Murphy:
->>> Wolfgang
->>>
->>> On 3/19/19 12:26 PM, Dan Murphy wrote:
->>>> Create a m_can platform framework that peripheral
->>>> devices can register to and use common code and register sets.
->>>> The peripheral devices may provide read/write and configuration
->>>> support of the IP.
->>>>
->>>> Acked-by: Wolfgang Grandegger <wg@grandegger.com>
->>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->>>> ---
->>>>
->>>
->>> Wondering if this will be going into 5.1 PR?
+>> struct foo {
+>>     int stuff;
+>>     void *entry[];
+>> };
 >>
->> it's Marc who is doing the upstreaming ... and maybe a final review as well.
+>> instance = alloc(sizeof(struct foo) + count * sizeof(void *));
 >>
-> 
-> Can you tell me if this will be taken?
-
-This patchset has gone unresponded to from the maintainers for quite some time.
-
-I have numerous customers using this patchset from my public repo and they want the
-driver in the mainline kernel.
-
-Is there any help or anything needed to get this merged for 5.2?
-
-Dan
-
-> 
-> Dan
-> 
->> Wolfgang.
+>> Instead of leaving these open-coded and prone to type mistakes, we can
+>> now use the new struct_size() helper:
+>>
+>> instance = alloc(struct_size(instance, entry, count));
+>>
+>> This code was detected with the help of Coccinelle.
+>>
+>> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+>> ---
+>>  drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+>> index c89c7d4900d7..0f1d3e807d63 100644
+>> --- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+>> +++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+>> @@ -643,8 +643,7 @@ static int kvaser_usb_init_one(struct kvaser_usb *dev,
+>>  			return err;
+>>  	}
+>>  
+>> -	netdev = alloc_candev(sizeof(*priv) +
+>> -			      dev->max_tx_urbs * sizeof(*priv->tx_contexts),
+>> +	netdev = alloc_candev(struct_size(priv, tx_contexts, dev->max_tx_urbs),
+>>  			      dev->max_tx_urbs);
+>>  	if (!netdev) {
+>>  		dev_err(&dev->intf->dev, "Cannot alloc candev\n");
 >>
