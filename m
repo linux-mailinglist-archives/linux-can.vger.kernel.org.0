@@ -2,36 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5037817316
-	for <lists+linux-can@lfdr.de>; Wed,  8 May 2019 10:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F508179A6
+	for <lists+linux-can@lfdr.de>; Wed,  8 May 2019 14:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbfEHIDv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 8 May 2019 04:03:51 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39765 "EHLO
+        id S1726991AbfEHMpY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 May 2019 08:45:24 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54007 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfEHIDv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 May 2019 04:03:51 -0400
+        with ESMTP id S1726796AbfEHMpY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 May 2019 08:45:24 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hOHYG-0008L5-VU; Wed, 08 May 2019 10:03:45 +0200
+        id 1hOLwl-0003xy-31; Wed, 08 May 2019 14:45:19 +0200
 Received: from [192.168.137.87] (nat079013.nat.FH-Koeln.DE [139.6.79.13])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8A3904093E1;
-        Wed,  8 May 2019 08:03:43 +0000 (UTC)
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>
-References: <DB7PR04MB4618C4C69EBBB622BAC78D0BE6370@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <ccdd3f0d-a59f-4ab3-f29e-7d42fd87f193@pengutronix.de>
- <VI1PR04MB4622DBA6742BFF6BDB89EA94E6320@VI1PR04MB4622.eurprd04.prod.outlook.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 44627409944;
+        Wed,  8 May 2019 12:45:17 +0000 (UTC)
+To:     Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     robh+dt@kernel.org
+References: <20190507093437.26025-1-sean@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,16 +90,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: CAN bit time limitation in Flexcan driver
-Message-ID: <ccf9ba47-dd88-0c91-3635-1c0f1e3447ad@pengutronix.de>
-Date:   Wed, 8 May 2019 10:03:33 +0200
+Subject: Re: [PATCH 1/2] can: mcp251x: add support for mcp25625
+Message-ID: <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
+Date:   Wed, 8 May 2019 14:45:08 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB4622DBA6742BFF6BDB89EA94E6320@VI1PR04MB4622.eurprd04.prod.outlook.com>
+In-Reply-To: <20190507093437.26025-1-sean@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="yTW5qaDDGtDEeGK945wGK3cVEsXa5WJZ0"
+ boundary="49w0JpKSlrlzf082by62WVKvJBzNDxFdI"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,74 +110,175 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---yTW5qaDDGtDEeGK945wGK3cVEsXa5WJZ0
-Content-Type: multipart/mixed; boundary="jfgHjSYnHVIgQVjF1LJ0cBkQeN2KFcp8k";
+--49w0JpKSlrlzf082by62WVKvJBzNDxFdI
+Content-Type: multipart/mixed; boundary="tj9JHD050yMPssaoTy9KffCRZ3PWecbo4";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: "wg@grandegger.com" <wg@grandegger.com>,
- Aisheng Dong <aisheng.dong@nxp.com>, dl-linux-imx <linux-imx@nxp.com>
-Message-ID: <ccf9ba47-dd88-0c91-3635-1c0f1e3447ad@pengutronix.de>
-Subject: Re: CAN bit time limitation in Flexcan driver
-References: <DB7PR04MB4618C4C69EBBB622BAC78D0BE6370@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <ccdd3f0d-a59f-4ab3-f29e-7d42fd87f193@pengutronix.de>
- <VI1PR04MB4622DBA6742BFF6BDB89EA94E6320@VI1PR04MB4622.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB4622DBA6742BFF6BDB89EA94E6320@VI1PR04MB4622.eurprd04.prod.outlook.com>
+To: Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org,
+ devicetree@vger.kernel.org
+Cc: robh+dt@kernel.org
+Message-ID: <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
+Subject: Re: [PATCH 1/2] can: mcp251x: add support for mcp25625
+References: <20190507093437.26025-1-sean@geanix.com>
+In-Reply-To: <20190507093437.26025-1-sean@geanix.com>
 
---jfgHjSYnHVIgQVjF1LJ0cBkQeN2KFcp8k
+--tj9JHD050yMPssaoTy9KffCRZ3PWecbo4
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 5/8/19 4:39 AM, Joakim Zhang wrote:
->> > Another question is that CAN driver doesn=E2=80=99t ensure the total=
- number of
->> > time quanta in a bit time programabled at least from 8 to 25 via CAN=
-
->> > bittiming calculation(CAN_CALC_BITTIMING).
+On 5/7/19 11:34 AM, Sean Nyekjaer wrote:
+> Fully compatible with mcp2515, the mcp25625 have
+> integrated transceiver.
 >=20
->> Where does this 8 to 25 limitation come from?
->=20
-> =C2=A0 [Joakim] Both ISO11898-1:2003(E) and ISO11898-1:2015(E) all ment=
-ion it:
-> =C2=A0 ISO11898-1:2003(E):
-> =C2=A0 ISO11898-1:2015(E):
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 
-I still read the spec as I've written in the previous mail:
+I've mentioned the mcp25625 to the .in file and properly introduced the
+mcp25625 as a new model in the driver itself. This way the debug output
+is formated properly:
 
->> > 1)ISO 11898-1:2003(E) show that :
->> >=20
->> >         12.4.1.2 Programming of bit time
->> >=20
->> >                  *The total number of time quanta in a bit time shal=
-l be
->> > programmable at least from 8 to 25*.
->> >=20
->> > 2)CAN2.0 spec show that:
->> >=20
->> >         8 BIT TIMING REQUIREMENTS
->> >=20
->> >                  *The total number of TIME QUANTA in a bit time has =
-to
->> > be programmable at least from 8 to 25.*
+> 	netdev_info(net, "MCP%x successfully initialized.\n", priv->model);
 
-I read the above quoted paragraph as:
+This is how the patch looks like now:
 
-If you implement a spec conforming CAN core, the time quanta has to
-programmable in a certain range (according to CAN2.0, while SO
-11898-1:2003(E) says it "shall be"). That range must be at least 8...25.
+=46rom b1a45a5837c3501b75a9c542af809f80fe3dc0da Mon Sep 17 00:00:00 2001
+From: Sean Nyekjaer <sean@geanix.com>
+Date: Tue, 7 May 2019 11:34:36 +0200
+Subject: [PATCH] can: mcp251x: add support for mcp25625
 
-To my understanding you might implement a wider range.
+Fully compatible with mcp2515, the mcp25625 have integrated transceiver.
 
-> And the total number in a nominal bit time and a data bit time also
-> have a least limitation when can fd mode enable.
+This patch adds support for the mcp25625 to the existing mcp251x driver.
 
-I understand the spec that it defines a minimum of configuration range.
-You might implement a wider range.
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/spi/Kconfig   |  5 +++--
+ drivers/net/can/spi/mcp251x.c | 25 ++++++++++++++++---------
+ 2 files changed, 19 insertions(+), 11 deletions(-)
 
-Is here a native speaker listening, who can read the spec and tell
-what's the correct interpretation?
+diff --git a/drivers/net/can/spi/Kconfig b/drivers/net/can/spi/Kconfig
+index 8f2e0dd7b756..792e9c6c4a2f 100644
+--- a/drivers/net/can/spi/Kconfig
++++ b/drivers/net/can/spi/Kconfig
+@@ -8,9 +8,10 @@ config CAN_HI311X
+ 	  Driver for the Holt HI311x SPI CAN controllers.
+=20
+ config CAN_MCP251X
+-	tristate "Microchip MCP251x SPI CAN controllers"
++	tristate "Microchip MCP251x and MCP25625 SPI CAN controllers"
+ 	depends on HAS_DMA
+ 	---help---
+-	  Driver for the Microchip MCP251x SPI CAN controllers.
++	  Driver for the Microchip MCP251x and MCP25625 SPI CAN
++	  controllers.
+=20
+ endmenu
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.=
+c
+index e90817608645..da64e71a62ee 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -1,5 +1,5 @@
+ /*
+- * CAN bus driver for Microchip 251x CAN Controller with SPI Interface
++ * CAN bus driver for Microchip 251x/25625 CAN Controller with SPI Inter=
+face
+  *
+  * MCP2510 support and bug fixes by Christian Pellegrin
+  * <chripell@evolware.org>
+@@ -41,7 +41,7 @@
+  * static struct spi_board_info spi_board_info[] =3D {
+  *         {
+  *                 .modalias =3D "mcp2510",
+- *			// or "mcp2515" depending on your controller
++ *			// "mcp2515" or "mcp25625" depending on your controller
+  *                 .platform_data =3D &mcp251x_info,
+  *                 .irq =3D IRQ_EINT13,
+  *                 .max_speed_hz =3D 2*1000*1000,
+@@ -238,6 +238,7 @@ static const struct can_bittiming_const mcp251x_bitti=
+ming_const =3D {
+ enum mcp251x_model {
+ 	CAN_MCP251X_MCP2510	=3D 0x2510,
+ 	CAN_MCP251X_MCP2515	=3D 0x2515,
++	CAN_MCP251X_MCP25625	=3D 0x25625,
+ };
+=20
+ struct mcp251x_priv {
+@@ -280,7 +281,6 @@ static inline int mcp251x_is_##_model(struct spi_devi=
+ce *spi) \
+ }
+=20
+ MCP251X_IS(2510);
+-MCP251X_IS(2515);
+=20
+ static void mcp251x_clean(struct net_device *net)
+ {
+@@ -639,7 +639,7 @@ static int mcp251x_hw_reset(struct spi_device *spi)
+=20
+ 	/* Wait for oscillator startup timer after reset */
+ 	mdelay(MCP251X_OST_DELAY_MS);
+-=09
++
+ 	reg =3D mcp251x_read_reg(spi, CANSTAT);
+ 	if ((reg & CANCTRL_REQOP_MASK) !=3D CANCTRL_REQOP_CONF)
+ 		return -ENODEV;
+@@ -820,9 +820,8 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev=
+_id)
+ 		/* receive buffer 0 */
+ 		if (intf & CANINTF_RX0IF) {
+ 			mcp251x_hw_rx(spi, 0);
+-			/*
+-			 * Free one buffer ASAP
+-			 * (The MCP2515 does this automatically.)
++			/* Free one buffer ASAP
++			 * (The MCP2515/25625 does this automatically.)
+ 			 */
+ 			if (mcp251x_is_2510(spi))
+ 				mcp251x_write_bits(spi, CANINTF, CANINTF_RX0IF, 0x00);
+@@ -831,7 +830,7 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev=
+_id)
+ 		/* receive buffer 1 */
+ 		if (intf & CANINTF_RX1IF) {
+ 			mcp251x_hw_rx(spi, 1);
+-			/* the MCP2515 does this automatically */
++			/* The MCP2515/25625 does this automatically. */
+ 			if (mcp251x_is_2510(spi))
+ 				clear_intf |=3D CANINTF_RX1IF;
+ 		}
+@@ -1006,6 +1005,10 @@ static const struct of_device_id mcp251x_of_match[=
+] =3D {
+ 		.compatible	=3D "microchip,mcp2515",
+ 		.data		=3D (void *)CAN_MCP251X_MCP2515,
+ 	},
++	{
++		.compatible	=3D "microchip,mcp25625",
++		.data		=3D (void *)CAN_MCP251X_MCP25625,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, mcp251x_of_match);
+@@ -1019,6 +1022,10 @@ static const struct spi_device_id mcp251x_id_table=
+[] =3D {
+ 		.name		=3D "mcp2515",
+ 		.driver_data	=3D (kernel_ulong_t)CAN_MCP251X_MCP2515,
+ 	},
++	{
++		.name		=3D "mcp25625",
++		.driver_data	=3D (kernel_ulong_t)CAN_MCP251X_MCP25625,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(spi, mcp251x_id_table);
+@@ -1259,5 +1266,5 @@ module_spi_driver(mcp251x_can_driver);
+=20
+ MODULE_AUTHOR("Chris Elston <celston@katalix.com>, "
+ 	      "Christian Pellegrin <chripell@evolware.org>");
+-MODULE_DESCRIPTION("Microchip 251x CAN driver");
++MODULE_DESCRIPTION("Microchip 251x/25625 CAN driver");
+ MODULE_LICENSE("GPL v2");
+--=20
+2.20.1
 
 Marc
 
@@ -192,23 +289,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---jfgHjSYnHVIgQVjF1LJ0cBkQeN2KFcp8k--
+--tj9JHD050yMPssaoTy9KffCRZ3PWecbo4--
 
---yTW5qaDDGtDEeGK945wGK3cVEsXa5WJZ0
+--49w0JpKSlrlzf082by62WVKvJBzNDxFdI
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAlzSjVYACgkQWsYho5Hk
-nSDsTggAs1edPN3bqIQH+5e8MYwuTCibI3FFV8o/CEZ12jzqjL2SQDHQGLTG7QmO
-u+2I520YoyM6xwNRsMQZl+Dt8jXmRTP+T8F+mSpOaCficKvufM0gcoNknErYWH3V
-MV7wMqF8vrV4Fi94Sts223u5fss8LvGX4orCuJ2Lu4SX0lllhNHvKuRWNiqQ2CS2
-PgX123k4nsacEZuWnY8u3C7H9+yqPf7a+9vfag2sASr8A5AzZhC1dnskS1lnqKhK
-AM2R169JI5RWHH2g4gVZN1Ng0yIVENjK1YNUz7e/dTqENYo70Pv86uwPWZF1LUFE
-9UHL/w0rq2mRHhugCrQ/GxkLSscJnQ==
-=xJX/
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAlzSz1UACgkQWsYho5Hk
+nSBuEQf+KK4wNFjq0UkeOVUyu4Q+H/jrYJDNl3mmS3zXhShb+LNR7ZhzunTA1e4V
+kiRCnLdSXmGoc1QymZjveYJq5wC5u6IElH/OwHD8YY13V8NyThWXKPeziHiIPM55
+KQDnLPbjsy2V3gyEY4npX8LOJSJmTtQq5TeZeMsFvqiU8OdrxMaSw3z05sZeM0u0
++HKBTQODW2Iq/FNLMIyK2NH6OQCpCU2NI+YtFafi2MUHBR540hSoGikutFkPm54f
+SAzmbwLJQW0KOjXGUA9wHPmay9OGTrXUhsfBhEm3Esssw9VdMEkp//foQD+97nJx
++8XiT70vrbomMn0/k/Ygt1rNgVEi4g==
+=60FF
 -----END PGP SIGNATURE-----
 
---yTW5qaDDGtDEeGK945wGK3cVEsXa5WJZ0--
+--49w0JpKSlrlzf082by62WVKvJBzNDxFdI--
