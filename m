@@ -2,33 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F508179A6
-	for <lists+linux-can@lfdr.de>; Wed,  8 May 2019 14:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1EE6179A9
+	for <lists+linux-can@lfdr.de>; Wed,  8 May 2019 14:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726991AbfEHMpY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 8 May 2019 08:45:24 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54007 "EHLO
+        id S1727356AbfEHMqA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 8 May 2019 08:46:00 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45015 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726796AbfEHMpY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 8 May 2019 08:45:24 -0400
+        with ESMTP id S1726921AbfEHMp7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 8 May 2019 08:45:59 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hOLwl-0003xy-31; Wed, 08 May 2019 14:45:19 +0200
+        id 1hOLxM-000400-0c; Wed, 08 May 2019 14:45:56 +0200
 Received: from [192.168.137.87] (nat079013.nat.FH-Koeln.DE [139.6.79.13])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 44627409944;
-        Wed,  8 May 2019 12:45:17 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0D1ED409947;
+        Wed,  8 May 2019 12:45:54 +0000 (UTC)
+Subject: Re: [PATCH 1/2] can: mcp251x: add support for mcp25625
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org
 References: <20190507093437.26025-1-sean@geanix.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -90,16 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 1/2] can: mcp251x: add support for mcp25625
-Message-ID: <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
-Date:   Wed, 8 May 2019 14:45:08 +0200
+Message-ID: <68a1efc0-a07d-fae2-3942-650035c9634a@pengutronix.de>
+Date:   Wed, 8 May 2019 14:45:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190507093437.26025-1-sean@geanix.com>
+In-Reply-To: <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="49w0JpKSlrlzf082by62WVKvJBzNDxFdI"
+ boundary="lw2RIdFyXFwN1Civ5fQ4kWHCzo2X2RZUo"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,175 +111,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---49w0JpKSlrlzf082by62WVKvJBzNDxFdI
-Content-Type: multipart/mixed; boundary="tj9JHD050yMPssaoTy9KffCRZ3PWecbo4";
+--lw2RIdFyXFwN1Civ5fQ4kWHCzo2X2RZUo
+Content-Type: multipart/mixed; boundary="61fUK01FFsp6PKqP9OUagp05FJAz5CLVT";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org,
  devicetree@vger.kernel.org
 Cc: robh+dt@kernel.org
-Message-ID: <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
+Message-ID: <68a1efc0-a07d-fae2-3942-650035c9634a@pengutronix.de>
 Subject: Re: [PATCH 1/2] can: mcp251x: add support for mcp25625
 References: <20190507093437.26025-1-sean@geanix.com>
-In-Reply-To: <20190507093437.26025-1-sean@geanix.com>
+ <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
+In-Reply-To: <18a26b2f-5166-2142-4b8d-59818ac6fd8b@pengutronix.de>
 
---tj9JHD050yMPssaoTy9KffCRZ3PWecbo4
+--61fUK01FFsp6PKqP9OUagp05FJAz5CLVT
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 5/7/19 11:34 AM, Sean Nyekjaer wrote:
-> Fully compatible with mcp2515, the mcp25625 have
-> integrated transceiver.
+On 5/8/19 2:45 PM, Marc Kleine-Budde wrote:
+> On 5/7/19 11:34 AM, Sean Nyekjaer wrote:
+>> Fully compatible with mcp2515, the mcp25625 have
+>> integrated transceiver.
+>>
+>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 >=20
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> I've mentioned the mcp25625 to the .in file and properly introduced the=
 
-I've mentioned the mcp25625 to the .in file and properly introduced the
-mcp25625 as a new model in the driver itself. This way the debug output
-is formated properly:
+> mcp25625 as a new model in the driver itself. This way the debug output=
 
-> 	netdev_info(net, "MCP%x successfully initialized.\n", priv->model);
+> is formated properly:
 
-This is how the patch looks like now:
-
-=46rom b1a45a5837c3501b75a9c542af809f80fe3dc0da Mon Sep 17 00:00:00 2001
-From: Sean Nyekjaer <sean@geanix.com>
-Date: Tue, 7 May 2019 11:34:36 +0200
-Subject: [PATCH] can: mcp251x: add support for mcp25625
-
-Fully compatible with mcp2515, the mcp25625 have integrated transceiver.
-
-This patch adds support for the mcp25625 to the existing mcp251x driver.
-
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/Kconfig   |  5 +++--
- drivers/net/can/spi/mcp251x.c | 25 ++++++++++++++++---------
- 2 files changed, 19 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/net/can/spi/Kconfig b/drivers/net/can/spi/Kconfig
-index 8f2e0dd7b756..792e9c6c4a2f 100644
---- a/drivers/net/can/spi/Kconfig
-+++ b/drivers/net/can/spi/Kconfig
-@@ -8,9 +8,10 @@ config CAN_HI311X
- 	  Driver for the Holt HI311x SPI CAN controllers.
-=20
- config CAN_MCP251X
--	tristate "Microchip MCP251x SPI CAN controllers"
-+	tristate "Microchip MCP251x and MCP25625 SPI CAN controllers"
- 	depends on HAS_DMA
- 	---help---
--	  Driver for the Microchip MCP251x SPI CAN controllers.
-+	  Driver for the Microchip MCP251x and MCP25625 SPI CAN
-+	  controllers.
-=20
- endmenu
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.=
-c
-index e90817608645..da64e71a62ee 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -1,5 +1,5 @@
- /*
-- * CAN bus driver for Microchip 251x CAN Controller with SPI Interface
-+ * CAN bus driver for Microchip 251x/25625 CAN Controller with SPI Inter=
-face
-  *
-  * MCP2510 support and bug fixes by Christian Pellegrin
-  * <chripell@evolware.org>
-@@ -41,7 +41,7 @@
-  * static struct spi_board_info spi_board_info[] =3D {
-  *         {
-  *                 .modalias =3D "mcp2510",
-- *			// or "mcp2515" depending on your controller
-+ *			// "mcp2515" or "mcp25625" depending on your controller
-  *                 .platform_data =3D &mcp251x_info,
-  *                 .irq =3D IRQ_EINT13,
-  *                 .max_speed_hz =3D 2*1000*1000,
-@@ -238,6 +238,7 @@ static const struct can_bittiming_const mcp251x_bitti=
-ming_const =3D {
- enum mcp251x_model {
- 	CAN_MCP251X_MCP2510	=3D 0x2510,
- 	CAN_MCP251X_MCP2515	=3D 0x2515,
-+	CAN_MCP251X_MCP25625	=3D 0x25625,
- };
-=20
- struct mcp251x_priv {
-@@ -280,7 +281,6 @@ static inline int mcp251x_is_##_model(struct spi_devi=
-ce *spi) \
- }
-=20
- MCP251X_IS(2510);
--MCP251X_IS(2515);
-=20
- static void mcp251x_clean(struct net_device *net)
- {
-@@ -639,7 +639,7 @@ static int mcp251x_hw_reset(struct spi_device *spi)
-=20
- 	/* Wait for oscillator startup timer after reset */
- 	mdelay(MCP251X_OST_DELAY_MS);
--=09
-+
- 	reg =3D mcp251x_read_reg(spi, CANSTAT);
- 	if ((reg & CANCTRL_REQOP_MASK) !=3D CANCTRL_REQOP_CONF)
- 		return -ENODEV;
-@@ -820,9 +820,8 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev=
-_id)
- 		/* receive buffer 0 */
- 		if (intf & CANINTF_RX0IF) {
- 			mcp251x_hw_rx(spi, 0);
--			/*
--			 * Free one buffer ASAP
--			 * (The MCP2515 does this automatically.)
-+			/* Free one buffer ASAP
-+			 * (The MCP2515/25625 does this automatically.)
- 			 */
- 			if (mcp251x_is_2510(spi))
- 				mcp251x_write_bits(spi, CANINTF, CANINTF_RX0IF, 0x00);
-@@ -831,7 +830,7 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev=
-_id)
- 		/* receive buffer 1 */
- 		if (intf & CANINTF_RX1IF) {
- 			mcp251x_hw_rx(spi, 1);
--			/* the MCP2515 does this automatically */
-+			/* The MCP2515/25625 does this automatically. */
- 			if (mcp251x_is_2510(spi))
- 				clear_intf |=3D CANINTF_RX1IF;
- 		}
-@@ -1006,6 +1005,10 @@ static const struct of_device_id mcp251x_of_match[=
-] =3D {
- 		.compatible	=3D "microchip,mcp2515",
- 		.data		=3D (void *)CAN_MCP251X_MCP2515,
- 	},
-+	{
-+		.compatible	=3D "microchip,mcp25625",
-+		.data		=3D (void *)CAN_MCP251X_MCP25625,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, mcp251x_of_match);
-@@ -1019,6 +1022,10 @@ static const struct spi_device_id mcp251x_id_table=
-[] =3D {
- 		.name		=3D "mcp2515",
- 		.driver_data	=3D (kernel_ulong_t)CAN_MCP251X_MCP2515,
- 	},
-+	{
-+		.name		=3D "mcp25625",
-+		.driver_data	=3D (kernel_ulong_t)CAN_MCP251X_MCP25625,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(spi, mcp251x_id_table);
-@@ -1259,5 +1266,5 @@ module_spi_driver(mcp251x_can_driver);
-=20
- MODULE_AUTHOR("Chris Elston <celston@katalix.com>, "
- 	      "Christian Pellegrin <chripell@evolware.org>");
--MODULE_DESCRIPTION("Microchip 251x CAN driver");
-+MODULE_DESCRIPTION("Microchip 251x/25625 CAN driver");
- MODULE_LICENSE("GPL v2");
---=20
-2.20.1
+Added both patches to linux-can-testing.
 
 Marc
 
@@ -289,23 +153,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---tj9JHD050yMPssaoTy9KffCRZ3PWecbo4--
+--61fUK01FFsp6PKqP9OUagp05FJAz5CLVT--
 
---49w0JpKSlrlzf082by62WVKvJBzNDxFdI
+--lw2RIdFyXFwN1Civ5fQ4kWHCzo2X2RZUo
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAlzSz1UACgkQWsYho5Hk
-nSBuEQf+KK4wNFjq0UkeOVUyu4Q+H/jrYJDNl3mmS3zXhShb+LNR7ZhzunTA1e4V
-kiRCnLdSXmGoc1QymZjveYJq5wC5u6IElH/OwHD8YY13V8NyThWXKPeziHiIPM55
-KQDnLPbjsy2V3gyEY4npX8LOJSJmTtQq5TeZeMsFvqiU8OdrxMaSw3z05sZeM0u0
-+HKBTQODW2Iq/FNLMIyK2NH6OQCpCU2NI+YtFafi2MUHBR540hSoGikutFkPm54f
-SAzmbwLJQW0KOjXGUA9wHPmay9OGTrXUhsfBhEm3Esssw9VdMEkp//foQD+97nJx
-+8XiT70vrbomMn0/k/Ygt1rNgVEi4g==
-=60FF
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAlzSz38ACgkQWsYho5Hk
+nSAUUwgAgFI48RUywTjkkzLOoGYLrjv2N2kCOuGV+826SdJbnpOMMaDNCgwNIPpe
+RCRA8ouPuwrlE3iZ9Y+eA9pImecgeEJqnGOe0yq/ghgcTxMQ08FHS7ySYiMTd0RE
+V96VXFjJGDunm94yP/X2VsZ2fbis3I9n3Dgid2K3KVpQDQMPR7+1G/cWOGWHfu2U
+YK/wHYL4mvwMmF/O4wgDSF9eqyDjeJlgeUrW5NwL527GQs+utQj1RsrmjNLOXQv4
+XOeSEsJWhevPRGa7he8QThrasEowEqYoNEqDWgWB4bQ2tmJswDoWBBZ5FIVM/48Y
+OnniV1VEht0TKyTHc2Znd32/V2xrsg==
+=tLGM
 -----END PGP SIGNATURE-----
 
---49w0JpKSlrlzf082by62WVKvJBzNDxFdI--
+--lw2RIdFyXFwN1Civ5fQ4kWHCzo2X2RZUo--
