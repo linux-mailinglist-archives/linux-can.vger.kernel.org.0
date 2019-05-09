@@ -2,63 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8B619021
-	for <lists+linux-can@lfdr.de>; Thu,  9 May 2019 20:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F235192BC
+	for <lists+linux-can@lfdr.de>; Thu,  9 May 2019 21:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbfEISXp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 May 2019 14:23:45 -0400
-Received: from mga02.intel.com ([134.134.136.20]:61282 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726632AbfEISXp (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 9 May 2019 14:23:45 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 May 2019 11:23:44 -0700
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 May 2019 11:23:43 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hOnhm-0002vY-UR; Fri, 10 May 2019 02:23:42 +0800
-Date:   Fri, 10 May 2019 02:23:15 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     kbuild-all@01.org, linux-can@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [mkl-can-next:j1939 108/109] net/can/j1939/socket.c:741:16: sparse:
- sparse: symbol 'j1939_sk_get_timestamping_opt_stats' was not declared.
- Should it be static?
-Message-ID: <201905100252.18aBimi8%lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1726895AbfEITUc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 May 2019 15:20:32 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:60226 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726907AbfEITUc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 May 2019 15:20:32 -0400
+X-IronPort-AV: E=Sophos;i="5.60,450,1549897200"; 
+   d="scan'208";a="15462905"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 10 May 2019 04:20:29 +0900
+Received: from fabrizio-dev.ree.adwin.renesas.com (unknown [10.226.36.196])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 4F427415F3F2;
+        Fri, 10 May 2019 04:20:26 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Simon Horman <horms@verge.net.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH repost 0/5] Repost CAN and CANFD dt-bindings
+Date:   Thu,  9 May 2019 20:20:17 +0100
+Message-Id: <1557429622-31676-1-git-send-email-fabrizio.castro@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git j1939
-head:   615497ae46c3916c814348718657458523481622
-commit: 0d07d158907c09ebaf8e75b2125d2a83b8bd4837 [108/109] j1939: add MSG_ERRQUEUE support
-reproduce:
-        # apt-get install sparse
-        git checkout 0d07d158907c09ebaf8e75b2125d2a83b8bd4837
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+Dear All,
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
+I am reposting some CAN and CANFD related dt-bindings changes for
+Renesas' R-Car and RZ/G devices that have been originally sent
+end of last year and beginning of this year.
 
+Thanks,
+Fab
 
-sparse warnings: (new ones prefixed by >>)
+Fabrizio Castro (3):
+  dt-bindings: can: rcar_can: Fix RZ/G2 CAN clocks
+  dt-bindings: can: rcar_can: Add r8a774c0 support
+  dt-bindings: can: rcar_canfd: document r8a774c0 support
 
->> net/can/j1939/socket.c:741:16: sparse: sparse: symbol 'j1939_sk_get_timestamping_opt_stats' was not declared. Should it be static?
+Marek Vasut (2):
+  dt-bindings: can: rcar_canfd: document r8a77965 support
+  dt-bindings: can: rcar_canfd: document r8a77990 support
 
-Please review and possibly fold the followup patch.
+ Documentation/devicetree/bindings/net/can/rcar_can.txt   | 13 ++++---------
+ Documentation/devicetree/bindings/net/can/rcar_canfd.txt | 16 ++++++++++------
+ 2 files changed, 14 insertions(+), 15 deletions(-)
 
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+-- 
+2.7.4
+
