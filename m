@@ -2,78 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 483701B6CC
-	for <lists+linux-can@lfdr.de>; Mon, 13 May 2019 15:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31EF1FBD1
+	for <lists+linux-can@lfdr.de>; Wed, 15 May 2019 22:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729326AbfEMNMy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 13 May 2019 09:12:54 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:43811 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728713AbfEMNMy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 13 May 2019 09:12:54 -0400
-X-ASG-Debug-ID: 1557753170-0a88180930172bc70001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.103.163.adsl.dyn.edpnet.net [77.109.103.163]) by relay-b03.edpnet.be with ESMTP id 515pfPmHGjgkNJYy; Mon, 13 May 2019 15:12:50 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.103.163.adsl.dyn.edpnet.net[77.109.103.163]
-X-Barracuda-Apparent-Source-IP: 77.109.103.163
-Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id A3657836875;
-        Mon, 13 May 2019 15:12:50 +0200 (CEST)
-Date:   Mon, 13 May 2019 15:12:49 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     mkl@pengutronix.de, wg@grandegger.com, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, robin@protonic.nl, david@protonic.nl
-Subject: Re: [PATCH] j1939: transport: seed retry timeout for (E)TP sessions
-Message-ID: <20190513131249.GA18228@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH] j1939: transport: seed retry timeout for (E)TP sessions
-Mail-Followup-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-        mkl@pengutronix.de, wg@grandegger.com, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, robin@protonic.nl, david@protonic.nl
-References: <20190513124427.30997-1-o.rempel@pengutronix.de>
- <304363b3-ff27-f28d-43e6-20a4facd6729@pengutronix.de>
+        id S1726302AbfEOUyP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 May 2019 16:54:15 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:42910 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726290AbfEOUyO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 15 May 2019 16:54:14 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x4FKs2rH056136;
+        Wed, 15 May 2019 15:54:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1557953642;
+        bh=+wUqRqbw1z4xlc63HNeRQzojTjDL8233B/q0TJ3CDqU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=A8Ng9owoXW5xqTffS3aPfLW8Ey+bkIZHgNfVox3ygbbiBBABQCxRXh06OkZ8Zi0ww
+         sBv2bwYChvfIauYs74HPHMLklrNqtFgmBl8QS/oPlBveBq0xPcZcVxdsK6W7QKxnt0
+         EE8xQOmslh2qdP1exvQZU8AvZ8H3fZCRVizCAHgQ=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x4FKs2lE060513
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 May 2019 15:54:02 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 15
+ May 2019 15:54:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 15 May 2019 15:54:01 -0500
+Received: from [10.250.90.63] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x4FKs1ew020719;
+        Wed, 15 May 2019 15:54:01 -0500
+Subject: Re: [PATCH v12 1/5] can: m_can: Create a m_can platform framework
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190509161109.10499-1-dmurphy@ti.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <dbb7bdef-820d-5dcc-d7b5-a82bc1b076fb@ti.com>
+Date:   Wed, 15 May 2019 15:54:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <304363b3-ff27-f28d-43e6-20a4facd6729@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.103.163.adsl.dyn.edpnet.net[77.109.103.163]
-X-Barracuda-Start-Time: 1557753170
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 762
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5127 1.0000 0.7500
-X-Barracuda-Spam-Score: 0.75
-X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.71216
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <20190509161109.10499-1-dmurphy@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On ma, 13 mei 2019 14:50:10 +0200, Oleksij Rempel wrote:
-> Hi folks!
+Marc
+
+On 5/9/19 11:11 AM, Dan Murphy wrote:
+> Create a m_can platform framework that peripheral
+> devices can register to and use common code and register sets.
+> The peripheral devices may provide read/write and configuration
+> support of the IP.
 > 
-> what do think about this change? Are there better ways to solve it?
-> This issue is easy to reproduce if I send 2 (E)TPs in parallel. For example:
+> Acked-by: Wolfgang Grandegger <wg@grandegger.com>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> ---
 > 
-> jcat -i /test_100k can0:0x80 :0x90,0x13400 &
-> jcat -i /test_100k can0:0x80 :0x91,0x12300 &
+> v12 - Update the m_can_read/write functions to create a backtrace if the callback
+> pointer is NULL. - https://lore.kernel.org/patchwork/patch/1052302/
+> 
 
-Ah, you made it reproducible. 
-I considered long time ago this would potentially be an issue, but never
-managed to identify it as a source of problem.
+Is this able to be merged now?
 
-I think it's a good improvement,
-including the remove of this paramter.
+Dan
 
-> >  static unsigned int j1939_tp_block = 255;
-> >-static unsigned int j1939_tp_retry_ms = 20;
-> >  static unsigned int j1939_tp_packet_delay;
-> >  static unsigned int j1939_tp_padding = 1;
-
-Kurt
+<snip>
