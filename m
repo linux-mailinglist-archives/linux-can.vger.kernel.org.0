@@ -2,34 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 252F521713
-	for <lists+linux-can@lfdr.de>; Fri, 17 May 2019 12:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ACE023354
+	for <lists+linux-can@lfdr.de>; Mon, 20 May 2019 14:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727727AbfEQKkm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 May 2019 06:40:42 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57907 "EHLO
+        id S1732662AbfETMPn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 May 2019 08:15:43 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60211 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727689AbfEQKkm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 May 2019 06:40:42 -0400
+        with ESMTP id S1732660AbfETMPm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 May 2019 08:15:42 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hRaI1-00042b-DG; Fri, 17 May 2019 12:40:37 +0200
+        id 1hShCd-00068Y-Nb; Mon, 20 May 2019 14:15:39 +0200
 Received: from [IPv6:2003:c7:711:c6f5:3de8:d0f0:b5f9:2a7d] (unknown [IPv6:2003:c7:711:c6f5:3de8:d0f0:b5f9:2a7d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8893140EB44;
-        Fri, 17 May 2019 10:40:33 +0000 (UTC)
-Subject: Re: [PATCH] can: gw: Fix error path of cgw_module_init
-To:     YueHaibing <yuehaibing@huawei.com>, davem@davemloft.net,
-        socketcan@hartkopp.net
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org
-References: <20190516155435.42376-1-yuehaibing@huawei.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D7E8D40ED63;
+        Fri, 17 May 2019 17:18:54 +0000 (UTC)
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+References: <20190517023652.19285-1-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -92,15 +93,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <80ca1430-da86-42c3-75c7-eadf91b20220@pengutronix.de>
-Date:   Fri, 17 May 2019 12:40:28 +0200
+Subject: Re: [PATCH] can: flexcan: fix deadlock when using self wakeup
+Message-ID: <39410a95-0eb9-d266-7210-920fa5198a23@pengutronix.de>
+Date:   Fri, 17 May 2019 19:18:43 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190516155435.42376-1-yuehaibing@huawei.com>
+In-Reply-To: <20190517023652.19285-1-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="cPuBWzThF7gPhGlulF8GCMJHLe8C2T2Qq"
+ boundary="Go4NWz52i4MJ57IbARzPbBbqTrUyn2OAk"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,110 +113,73 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---cPuBWzThF7gPhGlulF8GCMJHLe8C2T2Qq
-Content-Type: multipart/mixed; boundary="7HyhubOsnI1bfLTM2ueTvbWhCyzvAY2W1";
+--Go4NWz52i4MJ57IbARzPbBbqTrUyn2OAk
+Content-Type: multipart/mixed; boundary="Jv1LKUKsFIPlukbQg0P091Jh5uZXhkcE7";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: YueHaibing <yuehaibing@huawei.com>, davem@davemloft.net,
- socketcan@hartkopp.net
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-can@vger.kernel.org
-Message-ID: <80ca1430-da86-42c3-75c7-eadf91b20220@pengutronix.de>
-Subject: Re: [PATCH] can: gw: Fix error path of cgw_module_init
-References: <20190516155435.42376-1-yuehaibing@huawei.com>
-In-Reply-To: <20190516155435.42376-1-yuehaibing@huawei.com>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>, "wg@grandegger.com"
+ <wg@grandegger.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ Aisheng Dong <aisheng.dong@nxp.com>
+Message-ID: <39410a95-0eb9-d266-7210-920fa5198a23@pengutronix.de>
+Subject: Re: [PATCH] can: flexcan: fix deadlock when using self wakeup
+References: <20190517023652.19285-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190517023652.19285-1-qiangqing.zhang@nxp.com>
 
---7HyhubOsnI1bfLTM2ueTvbWhCyzvAY2W1
+--Jv1LKUKsFIPlukbQg0P091Jh5uZXhkcE7
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 5/16/19 5:54 PM, YueHaibing wrote:
-> This patch fix error path for cgw_module_init
-> to avoid possible crash if some error occurs.
+On 5/17/19 4:39 AM, Joakim Zhang wrote:
+> As reproted by Sean Nyekjaer bellow:
+> When suspending, when there is still can traffic on the
+> interfaces the flexcan immediately wakes the platform again.
+> As it should :-)
+> But it throws this error msg:
+> [ 3169.378661] PM: noirq suspend of devices failed
 >=20
-> Fixes: c1aabdf379bc ("can-gw: add netlink based CAN routing")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  net/can/gw.c | 46 +++++++++++++++++++++++++++++++---------------
->  1 file changed, 31 insertions(+), 15 deletions(-)
+> On the way down to suspend the interface that throws the error
+> message does call flexcan_suspend but fails to call
+> flexcan_noirq_suspend.
+> That means the flexcan_enter_stop_mode is called, but on the way
+> out of suspend the driver only calls flexcan_resume and skips
+> flexcan_noirq_resume, thus it doesn't call flexcan_exit_stop_mode.
+> This leaves the flexcan in stop mode, and with the current driver
+> it can't recover from this even with a soft reboot, it requires a
+> hard reboot.
 >=20
-> diff --git a/net/can/gw.c b/net/can/gw.c
-> index 53859346..8b53ec7 100644
-> --- a/net/can/gw.c
-> +++ b/net/can/gw.c
-> @@ -1046,32 +1046,48 @@ static __init int cgw_module_init(void)
->  	pr_info("can: netlink gateway (rev " CAN_GW_VERSION ") max_hops=3D%d\=
-n",
->  		max_hops);
-> =20
-> -	register_pernet_subsys(&cangw_pernet_ops);
-> +	ret =3D register_pernet_subsys(&cangw_pernet_ops);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret =3D -ENOMEM;
->  	cgw_cache =3D kmem_cache_create("can_gw", sizeof(struct cgw_job),
->  				      0, 0, NULL);
-> -
->  	if (!cgw_cache)
-> -		return -ENOMEM;
-> +		goto out_cache_create;
-> =20
->  	/* set notifier */
->  	notifier.notifier_call =3D cgw_notifier;
-> -	register_netdevice_notifier(&notifier);
-> +	ret =3D register_netdevice_notifier(&notifier);
-> +	if (ret)
-> +		goto out_register_notifier;
-> =20
->  	ret =3D rtnl_register_module(THIS_MODULE, PF_CAN, RTM_GETROUTE,
->  				   NULL, cgw_dump_jobs, 0);
-> -	if (ret) {
-> -		unregister_netdevice_notifier(&notifier);
-> -		kmem_cache_destroy(cgw_cache);
-> -		return -ENOBUFS;
-> -	}
-> -
-> -	/* Only the first call to rtnl_register_module can fail */
-> -	rtnl_register_module(THIS_MODULE, PF_CAN, RTM_NEWROUTE,
-> -			     cgw_create_job, NULL, 0);
-> -	rtnl_register_module(THIS_MODULE, PF_CAN, RTM_DELROUTE,
-> -			     cgw_remove_job, NULL, 0);
-> +	if (ret)
-> +		goto out_rtnl_register1;
-> +
-> +	ret =3D rtnl_register_module(THIS_MODULE, PF_CAN, RTM_NEWROUTE,
-> +				   cgw_create_job, NULL, 0);
-> +	if (ret)
-> +		goto out_rtnl_register2;
-> +	ret =3D rtnl_register_module(THIS_MODULE, PF_CAN, RTM_DELROUTE,
-> +				   cgw_remove_job, NULL, 0);
-> +	if (ret)
-> +		goto out_rtnl_register2;
-> =20
->  	return 0;
-> +
-> +out_rtnl_register2:
-> +	rtnl_unregister_all(PF_CAN);
-
-Currently gw.c is the only user of rtnl_register_module(PF_CAN), but
-PF_CAN is not specific to gw. Better change this to individual
-rtnl_unregister(int protocol, int msgtype).
-
-> +out_rtnl_register1:
-> +	unregister_netdevice_notifier(&notifier);
-> +out_register_notifier:
-> +	kmem_cache_destroy(cgw_cache);
-> +out_cache_create:
-> +	unregister_pernet_subsys(&cangw_pernet_ops);
-> +
-> +	return ret;
->  }
-> =20
->  static __exit void cgw_module_exit(void)
+> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
 >=20
+> This patch intends to fix the issue, and also add comment to explain th=
+e
+> wakeup flow.
+>=20
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 
+The existing self wakeup support:
+
+| de3578c198c6 ("can: flexcan: add self wakeup support")
+
+looks broken to me.
+
+According to the data sheet:
+
+> To enter stop mode, the CPU should manually assert a global Stop Mode
+> request (see the CAN1_STOP_REQ and CAN2_STOP_REQ bit in the register
+> IOMUXC_GPR4) and check the acknowledgement asserted by the FlexCAN
+> (see the CAN1_STOP_ACK and CAN2_STOP_ACK in the register
+> IOMUXC_GPR4). The CPU must only consider the FlexCAN in Stop Mode
+> when both request and acknowledgement conditions are satisfied.
+you have to poll for the acknowledgement, which is not done in the
+driver. Please fix that first.
+
+As far as I understand the documentation the suspend() and resume
+functions should be symmetric. If they are, you shouldn't need the
+in_stop_mode hack.
+
+regards,
 Marc
 
 --=20
@@ -224,23 +189,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---7HyhubOsnI1bfLTM2ueTvbWhCyzvAY2W1--
+--Jv1LKUKsFIPlukbQg0P091Jh5uZXhkcE7--
 
---cPuBWzThF7gPhGlulF8GCMJHLe8C2T2Qq
+--Go4NWz52i4MJ57IbARzPbBbqTrUyn2OAk
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAlzej5wACgkQWsYho5Hk
-nSDWnQgAiSTwIP05LGuj4vDQprzUDrSIm12iNB+pwMUbKo12heT6NLYMjcMlqwDl
-LsYodfTBT4jqKsT4EwmVr9voAa78VbUyCPrCyovs1uVj8zehSqoh1m0unR26tNEh
-N/7rhJUByPi9E0z00xFUsmlLzcybJmX2sEccbf0djNkP3No2Xfl3C5sEpmfIEl9W
-M/+RedUAx7eTKh+Tv4Czp7Lma3DLGV43c2CoTmzXCB4E5oJUiw36zRk29hYKUmUP
-NszCTwJfFpHFJg9AepFHWUFOeG3razNSm9b39kl3xQ+CahpdHV8cNAG4AyrmROTl
-rB8jHWIb5gbi5Gk3W8msD4cKIMNtdQ==
-=l9WC
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAlze7PMACgkQWsYho5Hk
+nSDxPgf/f6dRbgpAnPasidRj//IFjHpbV5QV76Sfq0jpxJhRtmHbfdKs0z6Ww2cI
+dR0YZilm0+5WSvRR58DzVO/JXep6cwbgr/vvYeSf7LFAXiF8+HIatsmf+//XygyS
+YNb8CIZDvFGwcSdFqqjkyO51+QSNB/ZjoLya2TauqveMBZCuyGp7r0toZN1a0MXY
+Lhcn8SXgye4sVXrePnXDuiTbirKRH4UYjXaV27Ej4iA+kCXo+bX4NxMgm7jD7nkN
+lSs/xD578w/dLd7C0Fpdn38MNXNBB86TSQL1M/HEGazbzcA56gdb70+9SfpEjxsw
+5lGoSwAOkFOQsHE19x2826vU2kN+mg==
+=c7E1
 -----END PGP SIGNATURE-----
 
---cPuBWzThF7gPhGlulF8GCMJHLe8C2T2Qq--
+--Go4NWz52i4MJ57IbARzPbBbqTrUyn2OAk--
