@@ -2,162 +2,1286 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D412929234
-	for <lists+linux-can@lfdr.de>; Fri, 24 May 2019 09:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F1629B92
+	for <lists+linux-can@lfdr.de>; Fri, 24 May 2019 17:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389086AbfEXH6g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 24 May 2019 03:58:36 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:17044 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388959AbfEXH6f (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 24 May 2019 03:58:35 -0400
-Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
-  Eugen.Hristev@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="Eugen.Hristev@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa4.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
-  envelope-from="Eugen.Hristev@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa4.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,506,1549954800"; 
-   d="scan'208";a="34294288"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 24 May 2019 00:58:33 -0700
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.76.108) with Microsoft SMTP Server (TLS) id
- 14.3.352.0; Fri, 24 May 2019 00:57:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector1-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lyr5m/5RftE8r2nFYQaJCpEXnIo72l8HmQKzK8vOaOs=;
- b=Bl3y/gyeuLUfcC5d2aJEP1aslMGPJ1UFx/4MDkB/32/lzKFyDiJ49ozqNM6K5JCu4x2xuQirHHZayS9w9r/Yx2r1FmFOwLa/jOR+Ehf5WCAAKyjoIbGHed2znz89gDbeTnnNrDzLKmI4p/SdRJOAZxDoJKvzTN5YvCfBcZwVvUE=
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
- DM5PR11MB1996.namprd11.prod.outlook.com (10.168.107.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.18; Fri, 24 May 2019 07:11:25 +0000
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::2807:f606:3b7c:cce9]) by DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::2807:f606:3b7c:cce9%9]) with mapi id 15.20.1922.018; Fri, 24 May 2019
- 07:11:25 +0000
-From:   <Eugen.Hristev@microchip.com>
-To:     <b29396@freescale.com>, <Nicolas.Ferre@microchip.com>,
-        <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wg@grandegger.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Ludovic.Desroches@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <Eugen.Hristev@microchip.com>
-Subject: [PATCH RESEND RESEND] can: m_can: implement errata "Needless
- activation of MRAF irq"
-Thread-Topic: [PATCH RESEND RESEND] can: m_can: implement errata "Needless
- activation of MRAF irq"
-Thread-Index: AQHVEf/m6PobHKfYsEKffOeARNkxQA==
-Date:   Fri, 24 May 2019 07:11:25 +0000
-Message-ID: <1558681595-15736-1-git-send-email-eugen.hristev@microchip.com>
-Accept-Language: ro-RO, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: LNXP265CA0080.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:76::20) To DM5PR11MB1242.namprd11.prod.outlook.com
- (2603:10b6:3:14::8)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.7.4
-x-originating-ip: [94.177.32.154]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ba66e6f0-b241-43f3-3855-08d6e0170885
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:DM5PR11MB1996;
-x-ms-traffictypediagnostic: DM5PR11MB1996:
-x-ms-exchange-purlcount: 3
-x-microsoft-antispam-prvs: <DM5PR11MB1996254C790B31EBDF720277E8020@DM5PR11MB1996.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0047BC5ADE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(366004)(346002)(39860400002)(376002)(189003)(199004)(110136005)(73956011)(25786009)(99286004)(186003)(52116002)(66946007)(66446008)(64756008)(68736007)(26005)(66556008)(66476007)(6436002)(102836004)(3846002)(6116002)(4326008)(386003)(6506007)(7736002)(8676002)(6306002)(81166006)(81156014)(5660300002)(8936002)(305945005)(50226002)(316002)(6486002)(2906002)(6512007)(476003)(66066001)(53936002)(966005)(72206003)(2201001)(86362001)(486006)(2616005)(14454004)(478600001)(71200400001)(71190400001)(2501003)(14444005)(36756003)(256004)(107886003)(921003)(1121003)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1996;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 22F0XjZuDjn12NcyRn2x29UyANMEIcfMaCuWdv57ZdX6davSlQHEDQCFR+dmij//uGJrZQSil0SaGk4Q8AWdv72TzGmeP1niacmTZe+pW8OOPwCcmmYyrgm3MMcp722WMFQmmmx/Pwm2gINJZMqqM2SNEV7D4mMjU5zGZOxtxp12kLUDNs6E0SOvL4aqjTOX4wNTIYF5J5RNRleD+pZWtvHjaHE+yWNvd7GGm1q982EgyujZtbZh+NVvYwIkYlqhTGnpFWtNM9xwZVNunrhRDoydD8FJ5UW0FZsXi73pUKKPyOn9xO5KfxzoEQAf031EYAyWGmx7z1HtZwqDpVmMdKdfJt5UWUWIvfFo7fy1RLGaSBk8C95X+NN8Zf7LEN3Eksszv4eL58xM02HYzZHp8wAHTpwlDCOH7Nfxa3gjEt0=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <097912EB2D7BE74C9D3E6CCA42B7A573@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S2389710AbfEXP6m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 24 May 2019 11:58:42 -0400
+Received: from mailhost.rzbo.de ([91.103.116.220]:29000 "EHLO mailhost.rzbo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389385AbfEXP6l (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 24 May 2019 11:58:41 -0400
+X-Greylist: delayed 810 seconds by postgrey-1.27 at vger.kernel.org; Fri, 24 May 2019 11:58:32 EDT
+X-ASG-Debug-ID: 1558712699-04bb236891e9820001-ZXuqFv
+Received: from SCG-SWVMS-MEX01.schulz.intra ([10.240.9.15]) by mailhost.rzbo.de with ESMTP id ihpppTj5CZYdc3jB (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO) for <linux-can@vger.kernel.org>; Fri, 24 May 2019 17:44:59 +0200 (CEST)
+X-Barracuda-Envelope-From: Marcel.Schmidt@schulz-soluware.com
+Received: from laptop332.schulz-group.intra (10.2.8.10) by
+ SCG-SWVMS-MEX01.schulz.intra (10.240.9.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P256) id
+ 15.1.845.34; Fri, 24 May 2019 17:44:59 +0200
+From:   <marcel.schmidt@schulz-soluware.com>
+To:     <linux-can@vger.kernel.org>
+CC:     Marcel Schmidt <marcel.schmidt@schulz-soluware.com>
+Subject: [PATCH] can/ifi_canfd: Added API for IFI-CANFD functionalities
+Date:   Fri, 24 May 2019 17:43:42 +0200
+X-ASG-Orig-Subj: [PATCH] can/ifi_canfd: Added API for IFI-CANFD functionalities
+Message-ID: <20190524154342.22888-1-marcel.schmidt@schulz-soluware.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba66e6f0-b241-43f3-3855-08d6e0170885
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 May 2019 07:11:25.4294
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eugen.hristev@microchip.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1996
-X-OriginatorOrg: microchip.com
+Content-Type: text/plain
+X-Originating-IP: [10.2.8.10]
+X-ClientProxiedBy: SCG-SWVMS-MEX01.schulz.intra (10.240.9.15) To
+ SCG-SWVMS-MEX01.schulz.intra (10.240.9.15)
+X-Barracuda-Connect: UNKNOWN[10.240.9.15]
+X-Barracuda-Start-Time: 1558712699
+X-Barracuda-Encrypted: ECDHE-RSA-AES256-SHA384
+X-Barracuda-URL: https://mailhost.rzbo.de:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at rzbo.de
+X-Barracuda-Scan-Msg-Size: 40950
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=1000.0 tests=NO_REAL_NAME
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.71738
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.00 NO_REAL_NAME           From: does not include a real name
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-RnJvbTogRXVnZW4gSHJpc3RldiA8ZXVnZW4uaHJpc3RldkBtaWNyb2NoaXAuY29tPg0KDQpEdXJp
-bmcgZnJhbWUgcmVjZXB0aW9uIHdoaWxlIHRoZSBNQ0FOIGlzIGluIEVycm9yIFBhc3NpdmUgc3Rh
-dGUNCmFuZCB0aGUgUmVjZWl2ZSBFcnJvciBDb3VudGVyIGhhcyB0aGV2YWx1ZSBNQ0FOX0VDUi5S
-RUMgPSAxMjcsIGl0IG1heSBoYXBwZW4NCnRoYXQgTUNBTl9JUi5NUkFGIGlzIHNldCBhbHRob3Vn
-aCB0aGVyZSB3YXMgbm8gTWVzc2FnZSBSQU0gYWNjZXNzIGZhaWx1cmUuDQpJZiBNQ0FOX0lSLk1S
-QUYgaXMgZW5hYmxlZCwgYW4gaW50ZXJydXB0IHRvIHRoZSBIb3N0IENQVSBpcyBnZW5lcmF0ZWQu
-DQpXb3JrIGFyb3VuZDoNClRoZSBNZXNzYWdlIFJBTSBBY2Nlc3MgRmFpbHVyZSBpbnRlcnJ1cHQg
-cm91dGluZSBuZWVkcyB0byBjaGVjayB3aGV0aGVyDQogTUNBTl9FQ1IuUlAgPSAnMScgYW5kIE1D
-QU5fRUNSLlJFQyA9ICcxMjcnLg0KSW4gdGhpcyBjYXNlLCByZXNldCBNQ0FOX0lSLk1SQUYuIE5v
-IGZ1cnRoZXIgYWN0aW9uIGlzIHJlcXVpcmVkLg0KVGhpcyBhZmZlY3RzIHZlcnNpb25zIG9sZGVy
-IHRoYW4gMy4yLjANCg0KRXJyYXRhIGV4cGxhaW5lZCBvbiBTYW1hNWQyIFNvQyB3aGljaCBpbmNs
-dWRlcyB0aGlzIGhhcmR3YXJlIGJsb2NrOg0KaHR0cDovL3d3MS5taWNyb2NoaXAuY29tL2Rvd25s
-b2Fkcy9lbi9EZXZpY2VEb2MvU0FNQTVEMi1GYW1pbHktU2lsaWNvbi1FcnJhdGEtYW5kLURhdGEt
-U2hlZXQtQ2xhcmlmaWNhdGlvbi1EUzgwMDAwODAzQi5wZGYgY2hhcHRlciA2LjINCg0KUmVwcm9k
-dWNpYmlsaXR5OiBJZiAyIGRldmljZXMgd2l0aCBtX2NhbiBhcmUgY29ubmVjdGVkIGJhY2sgdG8g
-YmFjaywNCmNvbmZpZ3VyaW5nIGRpZmZlcmVudCBiaXRyYXRlIG9uIHRoZW0gd2lsbCBsZWFkIHRv
-IGludGVycnVwdCBzdG9ybSBvbiB0aGUNCnJlY2VpdmluZyBzaWRlLCB3aXRoIGVycm9yICJNZXNz
-YWdlIFJBTSBhY2Nlc3MgZmFpbHVyZSBvY2N1cnJlZCIuDQpBbm90aGVyIHdheSBpcyB0byBoYXZl
-IGEgYmFkIGhhcmR3YXJlIGNvbm5lY3Rpb24uIEJhZCB3aXJlIGNvbm5lY3Rpb24gY2FuIGxlYWQN
-CnRvIHRoaXMgaXNzdWUgYXMgd2VsbC4NCg0KVGhpcyBwYXRjaCBmaXhlcyB0aGUgaXNzdWUgYWNj
-b3JkaW5nIHRvIHByb3ZpZGVkIHdvcmthcm91bmQuDQoNClJldmlld2VkLWJ5OiBMdWRvdmljIERl
-c3JvY2hlcyA8bHVkb3ZpYy5kZXNyb2NoZXNAbWljcm9jaGlwLmNvbT4NClNpZ25lZC1vZmYtYnk6
-IEV1Z2VuIEhyaXN0ZXYgPGV1Z2VuLmhyaXN0ZXZAbWljcm9jaGlwLmNvbT4NCi0tLQ0KDQpIZWxs
-bywNCg0KVGhpcyBwYXRjaCB3YXMgaW5pdGlhbGx5IHNlbnQgb24gTWFyY2ggNHRoOg0KaHR0cHM6
-Ly9tYXJjLmluZm8vP2w9bGludXgtY2FuJm09MTU1MTcxMDY2MDAzNzIzJnc9Mg0KUmVzZW5kIG9u
-IEFwcmlsIDJuZDoNCmh0dHBzOi8vbWFyYy5pbmZvLz9sPWxpbnV4LWNhbiZtPTE1NTYxNzQwOTgy
-NjI3MSZ3PTINCg0KSXMgdGhlcmUgYW55IHJlYXNvbiB3aHkgdGhlcmUgaXMgbm8gYW5zd2VyID8g
-QW0gSSBub3Qgc2VuZGluZyB0aGlzIHBhdGNoDQp0byB0aGUgcmlnaHQgcGVvcGxlPw0KDQpUaGFu
-ayB5b3UsDQpFdWdlbg0KDQogZHJpdmVycy9uZXQvY2FuL21fY2FuL21fY2FuLmMgfCAyMSArKysr
-KysrKysrKysrKysrKysrKysNCiAxIGZpbGUgY2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKQ0KDQpk
-aWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvY2FuL21fY2FuL21fY2FuLmMgYi9kcml2ZXJzL25ldC9j
-YW4vbV9jYW4vbV9jYW4uYw0KaW5kZXggOWI0NDk0MC4uZGViMjc0YSAxMDA2NDQNCi0tLSBhL2Ry
-aXZlcnMvbmV0L2Nhbi9tX2Nhbi9tX2Nhbi5jDQorKysgYi9kcml2ZXJzL25ldC9jYW4vbV9jYW4v
-bV9jYW4uYw0KQEAgLTgyMiw2ICs4MjIsMjcgQEAgc3RhdGljIGludCBtX2Nhbl9wb2xsKHN0cnVj
-dCBuYXBpX3N0cnVjdCAqbmFwaSwgaW50IHF1b3RhKQ0KIAlpZiAoIWlycXN0YXR1cykNCiAJCWdv
-dG8gZW5kOw0KIA0KKwkvKiBFcnJhdGEgd29ya2Fyb3VuZCBmb3IgaXNzdWUgIk5lZWRsZXNzIGFj
-dGl2YXRpb24gb2YgTVJBRiBpcnEiDQorCSAqIER1cmluZyBmcmFtZSByZWNlcHRpb24gd2hpbGUg
-dGhlIE1DQU4gaXMgaW4gRXJyb3IgUGFzc2l2ZSBzdGF0ZQ0KKwkgKiBhbmQgdGhlIFJlY2VpdmUg
-RXJyb3IgQ291bnRlciBoYXMgdGhlIHZhbHVlIE1DQU5fRUNSLlJFQyA9IDEyNywNCisJICogaXQg
-bWF5IGhhcHBlbiB0aGF0IE1DQU5fSVIuTVJBRiBpcyBzZXQgYWx0aG91Z2ggdGhlcmUgd2FzIG5v
-DQorCSAqIE1lc3NhZ2UgUkFNIGFjY2VzcyBmYWlsdXJlLg0KKwkgKiBJZiBNQ0FOX0lSLk1SQUYg
-aXMgZW5hYmxlZCwgYW4gaW50ZXJydXB0IHRvIHRoZSBIb3N0IENQVSBpcyBnZW5lcmF0ZWQNCisJ
-ICogVGhlIE1lc3NhZ2UgUkFNIEFjY2VzcyBGYWlsdXJlIGludGVycnVwdCByb3V0aW5lIG5lZWRz
-IHRvIGNoZWNrDQorCSAqIHdoZXRoZXIgTUNBTl9FQ1IuUlAgPSDigJkx4oCZIGFuZCBNQ0FOX0VD
-Ui5SRUMgPSAxMjcuDQorCSAqIEluIHRoaXMgY2FzZSwgcmVzZXQgTUNBTl9JUi5NUkFGLiBObyBm
-dXJ0aGVyIGFjdGlvbiBpcyByZXF1aXJlZC4NCisJICovDQorCWlmICgocHJpdi0+dmVyc2lvbiA8
-PSAzMSkgJiYgKGlycXN0YXR1cyAmIElSX01SQUYpICYmDQorCSAgICAobV9jYW5fcmVhZChwcml2
-LCBNX0NBTl9FQ1IpICYgRUNSX1JQKSkgew0KKwkJc3RydWN0IGNhbl9iZXJyX2NvdW50ZXIgYmVj
-Ow0KKw0KKwkJX19tX2Nhbl9nZXRfYmVycl9jb3VudGVyKGRldiwgJmJlYyk7DQorCQlpZiAoYmVj
-LnJ4ZXJyID09IDEyNykgew0KKwkJCW1fY2FuX3dyaXRlKHByaXYsIE1fQ0FOX0lSLCBJUl9NUkFG
-KTsNCisJCQlpcnFzdGF0dXMgJj0gfklSX01SQUY7DQorCQl9DQorCX0NCisNCiAJcHNyID0gbV9j
-YW5fcmVhZChwcml2LCBNX0NBTl9QU1IpOw0KIAlpZiAoaXJxc3RhdHVzICYgSVJfRVJSX1NUQVRF
-KQ0KIAkJd29ya19kb25lICs9IG1fY2FuX2hhbmRsZV9zdGF0ZV9lcnJvcnMoZGV2LCBwc3IpOw0K
-LS0gDQoyLjcuNA0KDQo=
+From: Marcel Schmidt <marcel.schmidt@schulz-soluware.com>
+
+Updates the ifi_canfd platform driver and adds an universal
+interface that enables the usage of its functionalities outside of
+this platform driver.
+
+It was implemented with respect to role models like SJA1000 or C_Can.
+Therefore the driver is split into three files.
+ifi_canfd_platform.c contains the platform specific implementations
+and remains the same. ifi_canfd.c+h enables common IFI-CANFD
+functionalities usable for other drivers.
+
+Signed-off-by: Marcel Schmidt <marcel.schmidt@schulz-soluware.com>
+---
+ drivers/net/can/ifi_canfd/Kconfig             |  10 +-
+ drivers/net/can/ifi_canfd/Makefile            |   3 +-
+ drivers/net/can/ifi_canfd/ifi_canfd.c         | 555 ++++++------------
+ drivers/net/can/ifi_canfd/ifi_canfd.h         | 341 +++++++++++
+ .../net/can/ifi_canfd/ifi_canfd_platform.c    | 121 ++++
+ 5 files changed, 639 insertions(+), 391 deletions(-)
+ create mode 100644 drivers/net/can/ifi_canfd/ifi_canfd.h
+ create mode 100644 drivers/net/can/ifi_canfd/ifi_canfd_platform.c
+
+diff --git a/drivers/net/can/ifi_canfd/Kconfig b/drivers/net/can/ifi_canfd/Kconfig
+index 9e8934ff63a7..6a40ac193d2e 100644
+--- a/drivers/net/can/ifi_canfd/Kconfig
++++ b/drivers/net/can/ifi_canfd/Kconfig
+@@ -1,8 +1,14 @@
+-config CAN_IFI_CANFD
++menuconfig CAN_IFI_CANFD
++	tristate "IFI_CAN_FD devices"
+ 	depends on HAS_IOMEM
+-	tristate "IFI CAN_FD IP"
++
++if CAN_IFI_CANFD
++
++config CAN_IFI_CANFD_PLATFORM
++	tristate "Generic Platform Bus based IFI CAN_FD driver"
+ 	---help---
+ 	  This driver adds support for the I/F/I CAN_FD soft IP block
+ 	  connected to the "platform bus" (Linux abstraction for directly
+ 	  to the processor attached devices). The CAN_FD is most often
+ 	  synthesised into an FPGA or CPLD.
++endif
+diff --git a/drivers/net/can/ifi_canfd/Makefile b/drivers/net/can/ifi_canfd/Makefile
+index b229960cdf39..1a15abeac9d9 100644
+--- a/drivers/net/can/ifi_canfd/Makefile
++++ b/drivers/net/can/ifi_canfd/Makefile
+@@ -1,5 +1,6 @@
+ #
+-#  Makefile for the IFI CANFD controller driver.
++#  Makefile for the IFI CANFD controller drivers.
+ #
+ 
+ obj-$(CONFIG_CAN_IFI_CANFD) += ifi_canfd.o
++obj-$(CONFIG_CAN_IFI_CANFD_PLATFORM) += ifi_canfd_platform.o
+diff --git a/drivers/net/can/ifi_canfd/ifi_canfd.c b/drivers/net/can/ifi_canfd/ifi_canfd.c
+index fedd927ba6ed..24a576d26589 100644
+--- a/drivers/net/can/ifi_canfd/ifi_canfd.c
++++ b/drivers/net/can/ifi_canfd/ifi_canfd.c
+@@ -10,7 +10,6 @@
+  * License version 2. This program is licensed "as is" without any
+  * warranty of any kind, whether express or implied.
+  */
+-
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
+@@ -23,207 +22,36 @@
+ #include <linux/platform_device.h>
+ 
+ #include <linux/can/dev.h>
++#include "ifi_canfd.h"
+ 
+-#define IFI_CANFD_STCMD				0x0
+-#define IFI_CANFD_STCMD_HARDRESET		0xDEADCAFD
+-#define IFI_CANFD_STCMD_ENABLE			BIT(0)
+-#define IFI_CANFD_STCMD_ERROR_ACTIVE		BIT(2)
+-#define IFI_CANFD_STCMD_ERROR_PASSIVE		BIT(3)
+-#define IFI_CANFD_STCMD_BUSOFF			BIT(4)
+-#define IFI_CANFD_STCMD_ERROR_WARNING		BIT(5)
+-#define IFI_CANFD_STCMD_BUSMONITOR		BIT(16)
+-#define IFI_CANFD_STCMD_LOOPBACK		BIT(18)
+-#define IFI_CANFD_STCMD_DISABLE_CANFD		BIT(24)
+-#define IFI_CANFD_STCMD_ENABLE_ISO		BIT(25)
+-#define IFI_CANFD_STCMD_ENABLE_7_9_8_8_TIMING	BIT(26)
+-#define IFI_CANFD_STCMD_NORMAL_MODE		((u32)BIT(31))
+-
+-#define IFI_CANFD_RXSTCMD			0x4
+-#define IFI_CANFD_RXSTCMD_REMOVE_MSG		BIT(0)
+-#define IFI_CANFD_RXSTCMD_RESET			BIT(7)
+-#define IFI_CANFD_RXSTCMD_EMPTY			BIT(8)
+-#define IFI_CANFD_RXSTCMD_OVERFLOW		BIT(13)
+-
+-#define IFI_CANFD_TXSTCMD			0x8
+-#define IFI_CANFD_TXSTCMD_ADD_MSG		BIT(0)
+-#define IFI_CANFD_TXSTCMD_HIGH_PRIO		BIT(1)
+-#define IFI_CANFD_TXSTCMD_RESET			BIT(7)
+-#define IFI_CANFD_TXSTCMD_EMPTY			BIT(8)
+-#define IFI_CANFD_TXSTCMD_FULL			BIT(12)
+-#define IFI_CANFD_TXSTCMD_OVERFLOW		BIT(13)
+-
+-#define IFI_CANFD_INTERRUPT			0xc
+-#define IFI_CANFD_INTERRUPT_ERROR_BUSOFF	BIT(0)
+-#define IFI_CANFD_INTERRUPT_ERROR_WARNING	BIT(1)
+-#define IFI_CANFD_INTERRUPT_ERROR_STATE_CHG	BIT(2)
+-#define IFI_CANFD_INTERRUPT_ERROR_REC_TEC_INC	BIT(3)
+-#define IFI_CANFD_INTERRUPT_ERROR_COUNTER	BIT(10)
+-#define IFI_CANFD_INTERRUPT_TXFIFO_EMPTY	BIT(16)
+-#define IFI_CANFD_INTERRUPT_TXFIFO_REMOVE	BIT(22)
+-#define IFI_CANFD_INTERRUPT_RXFIFO_NEMPTY	BIT(24)
+-#define IFI_CANFD_INTERRUPT_RXFIFO_NEMPTY_PER	BIT(25)
+-#define IFI_CANFD_INTERRUPT_SET_IRQ		((u32)BIT(31))
+-
+-#define IFI_CANFD_IRQMASK			0x10
+-#define IFI_CANFD_IRQMASK_ERROR_BUSOFF		BIT(0)
+-#define IFI_CANFD_IRQMASK_ERROR_WARNING		BIT(1)
+-#define IFI_CANFD_IRQMASK_ERROR_STATE_CHG	BIT(2)
+-#define IFI_CANFD_IRQMASK_ERROR_REC_TEC_INC	BIT(3)
+-#define IFI_CANFD_IRQMASK_SET_ERR		BIT(7)
+-#define IFI_CANFD_IRQMASK_SET_TS		BIT(15)
+-#define IFI_CANFD_IRQMASK_TXFIFO_EMPTY		BIT(16)
+-#define IFI_CANFD_IRQMASK_SET_TX		BIT(23)
+-#define IFI_CANFD_IRQMASK_RXFIFO_NEMPTY		BIT(24)
+-#define IFI_CANFD_IRQMASK_SET_RX		((u32)BIT(31))
+-
+-#define IFI_CANFD_TIME				0x14
+-#define IFI_CANFD_FTIME				0x18
+-#define IFI_CANFD_TIME_TIMEB_OFF		0
+-#define IFI_CANFD_TIME_TIMEA_OFF		8
+-#define IFI_CANFD_TIME_PRESCALE_OFF		16
+-#define IFI_CANFD_TIME_SJW_OFF_7_9_8_8		25
+-#define IFI_CANFD_TIME_SJW_OFF_4_12_6_6		28
+-#define IFI_CANFD_TIME_SET_SJW_4_12_6_6		BIT(6)
+-#define IFI_CANFD_TIME_SET_TIMEB_4_12_6_6	BIT(7)
+-#define IFI_CANFD_TIME_SET_PRESC_4_12_6_6	BIT(14)
+-#define IFI_CANFD_TIME_SET_TIMEA_4_12_6_6	BIT(15)
+-
+-#define IFI_CANFD_TDELAY			0x1c
+-#define IFI_CANFD_TDELAY_DEFAULT		0xb
+-#define IFI_CANFD_TDELAY_MASK			0x3fff
+-#define IFI_CANFD_TDELAY_ABS			BIT(14)
+-#define IFI_CANFD_TDELAY_EN			BIT(15)
+-
+-#define IFI_CANFD_ERROR				0x20
+-#define IFI_CANFD_ERROR_TX_OFFSET		0
+-#define IFI_CANFD_ERROR_TX_MASK			0xff
+-#define IFI_CANFD_ERROR_RX_OFFSET		16
+-#define IFI_CANFD_ERROR_RX_MASK			0xff
+-
+-#define IFI_CANFD_ERRCNT			0x24
+-
+-#define IFI_CANFD_SUSPEND			0x28
+-
+-#define IFI_CANFD_REPEAT			0x2c
+-
+-#define IFI_CANFD_TRAFFIC			0x30
+-
+-#define IFI_CANFD_TSCONTROL			0x34
+-
+-#define IFI_CANFD_TSC				0x38
+-
+-#define IFI_CANFD_TST				0x3c
+-
+-#define IFI_CANFD_RES1				0x40
+-
+-#define IFI_CANFD_ERROR_CTR			0x44
+-#define IFI_CANFD_ERROR_CTR_UNLOCK_MAGIC	0x21302899
+-#define IFI_CANFD_ERROR_CTR_OVERLOAD_FIRST	BIT(0)
+-#define IFI_CANFD_ERROR_CTR_ACK_ERROR_FIRST	BIT(1)
+-#define IFI_CANFD_ERROR_CTR_BIT0_ERROR_FIRST	BIT(2)
+-#define IFI_CANFD_ERROR_CTR_BIT1_ERROR_FIRST	BIT(3)
+-#define IFI_CANFD_ERROR_CTR_STUFF_ERROR_FIRST	BIT(4)
+-#define IFI_CANFD_ERROR_CTR_CRC_ERROR_FIRST	BIT(5)
+-#define IFI_CANFD_ERROR_CTR_FORM_ERROR_FIRST	BIT(6)
+-#define IFI_CANFD_ERROR_CTR_OVERLOAD_ALL	BIT(8)
+-#define IFI_CANFD_ERROR_CTR_ACK_ERROR_ALL	BIT(9)
+-#define IFI_CANFD_ERROR_CTR_BIT0_ERROR_ALL	BIT(10)
+-#define IFI_CANFD_ERROR_CTR_BIT1_ERROR_ALL	BIT(11)
+-#define IFI_CANFD_ERROR_CTR_STUFF_ERROR_ALL	BIT(12)
+-#define IFI_CANFD_ERROR_CTR_CRC_ERROR_ALL	BIT(13)
+-#define IFI_CANFD_ERROR_CTR_FORM_ERROR_ALL	BIT(14)
+-#define IFI_CANFD_ERROR_CTR_BITPOSITION_OFFSET	16
+-#define IFI_CANFD_ERROR_CTR_BITPOSITION_MASK	0xff
+-#define IFI_CANFD_ERROR_CTR_ER_RESET		BIT(30)
+-#define IFI_CANFD_ERROR_CTR_ER_ENABLE		((u32)BIT(31))
+-
+-#define IFI_CANFD_PAR				0x48
+-
+-#define IFI_CANFD_CANCLOCK			0x4c
+-
+-#define IFI_CANFD_SYSCLOCK			0x50
+-
+-#define IFI_CANFD_VER				0x54
+-#define IFI_CANFD_VER_REV_MASK			0xff
+-#define IFI_CANFD_VER_REV_MIN_SUPPORTED		0x15
+-
+-#define IFI_CANFD_IP_ID				0x58
+-#define IFI_CANFD_IP_ID_VALUE			0xD073CAFD
+-
+-#define IFI_CANFD_TEST				0x5c
+-
+-#define IFI_CANFD_RXFIFO_TS_63_32		0x60
+-
+-#define IFI_CANFD_RXFIFO_TS_31_0		0x64
+-
+-#define IFI_CANFD_RXFIFO_DLC			0x68
+-#define IFI_CANFD_RXFIFO_DLC_DLC_OFFSET		0
+-#define IFI_CANFD_RXFIFO_DLC_DLC_MASK		0xf
+-#define IFI_CANFD_RXFIFO_DLC_RTR		BIT(4)
+-#define IFI_CANFD_RXFIFO_DLC_EDL		BIT(5)
+-#define IFI_CANFD_RXFIFO_DLC_BRS		BIT(6)
+-#define IFI_CANFD_RXFIFO_DLC_ESI		BIT(7)
+-#define IFI_CANFD_RXFIFO_DLC_OBJ_OFFSET		8
+-#define IFI_CANFD_RXFIFO_DLC_OBJ_MASK		0x1ff
+-#define IFI_CANFD_RXFIFO_DLC_FNR_OFFSET		24
+-#define IFI_CANFD_RXFIFO_DLC_FNR_MASK		0xff
+-
+-#define IFI_CANFD_RXFIFO_ID			0x6c
+-#define IFI_CANFD_RXFIFO_ID_ID_OFFSET		0
+-#define IFI_CANFD_RXFIFO_ID_ID_STD_MASK		CAN_SFF_MASK
+-#define IFI_CANFD_RXFIFO_ID_ID_STD_OFFSET	0
+-#define IFI_CANFD_RXFIFO_ID_ID_STD_WIDTH	10
+-#define IFI_CANFD_RXFIFO_ID_ID_XTD_MASK		CAN_EFF_MASK
+-#define IFI_CANFD_RXFIFO_ID_ID_XTD_OFFSET	11
+-#define IFI_CANFD_RXFIFO_ID_ID_XTD_WIDTH	18
+-#define IFI_CANFD_RXFIFO_ID_IDE			BIT(29)
+-
+-#define IFI_CANFD_RXFIFO_DATA			0x70	/* 0x70..0xac */
+-
+-#define IFI_CANFD_TXFIFO_SUSPEND_US		0xb0
+-
+-#define IFI_CANFD_TXFIFO_REPEATCOUNT		0xb4
+-
+-#define IFI_CANFD_TXFIFO_DLC			0xb8
+-#define IFI_CANFD_TXFIFO_DLC_DLC_OFFSET		0
+-#define IFI_CANFD_TXFIFO_DLC_DLC_MASK		0xf
+-#define IFI_CANFD_TXFIFO_DLC_RTR		BIT(4)
+-#define IFI_CANFD_TXFIFO_DLC_EDL		BIT(5)
+-#define IFI_CANFD_TXFIFO_DLC_BRS		BIT(6)
+-#define IFI_CANFD_TXFIFO_DLC_FNR_OFFSET		24
+-#define IFI_CANFD_TXFIFO_DLC_FNR_MASK		0xff
+-
+-#define IFI_CANFD_TXFIFO_ID			0xbc
+-#define IFI_CANFD_TXFIFO_ID_ID_OFFSET		0
+-#define IFI_CANFD_TXFIFO_ID_ID_STD_MASK		CAN_SFF_MASK
+-#define IFI_CANFD_TXFIFO_ID_ID_STD_OFFSET	0
+-#define IFI_CANFD_TXFIFO_ID_ID_STD_WIDTH	10
+-#define IFI_CANFD_TXFIFO_ID_ID_XTD_MASK		CAN_EFF_MASK
+-#define IFI_CANFD_TXFIFO_ID_ID_XTD_OFFSET	11
+-#define IFI_CANFD_TXFIFO_ID_ID_XTD_WIDTH	18
+-#define IFI_CANFD_TXFIFO_ID_IDE			BIT(29)
+-
+-#define IFI_CANFD_TXFIFO_DATA			0xc0	/* 0xb0..0xfc */
+-
+-#define IFI_CANFD_FILTER_MASK(n)		(0x800 + ((n) * 8) + 0)
+-#define IFI_CANFD_FILTER_MASK_EXT		BIT(29)
+-#define IFI_CANFD_FILTER_MASK_EDL		BIT(30)
+-#define IFI_CANFD_FILTER_MASK_VALID		((u32)BIT(31))
+-
+-#define IFI_CANFD_FILTER_IDENT(n)		(0x800 + ((n) * 8) + 4)
+-#define IFI_CANFD_FILTER_IDENT_IDE		BIT(29)
+-#define IFI_CANFD_FILTER_IDENT_CANFD		BIT(30)
+-#define IFI_CANFD_FILTER_IDENT_VALID		((u32)BIT(31))
+-
+-/* IFI CANFD private data structure */
+-struct ifi_canfd_priv {
+-	struct can_priv		can;	/* must be the first member */
+-	struct napi_struct	napi;
+-	struct net_device	*ndev;
+-	void __iomem		*base;
++static const struct can_bittiming_const ifi_canfd_bittiming_const = {
++	.name		= KBUILD_MODNAME,
++	.tseg1_min	= 1,	/* Time segment 1 = prop_seg + phase_seg1 */
++	.tseg1_max	= 256,
++	.tseg2_min	= 2,	/* Time segment 2 = phase_seg2 */
++	.tseg2_max	= 256,
++	.sjw_max	= 128,
++	.brp_min	= 2,
++	.brp_max	= 512,
++	.brp_inc	= 1,
+ };
+ 
+-static void ifi_canfd_irq_enable(struct net_device *ndev, bool enable)
++static void ifi_canfd_irq_clear(struct net_device *ndev)
++{
++	struct ifi_canfd_priv *priv = netdev_priv(ndev);
++	u32 ifi_reg_status = readl(priv->base + IFI_CANFD_INTERRUPT);
++
++	/* Clear pending IFI CAN controller interrupts */
++	writel(ifi_reg_status, priv->base + IFI_CANFD_INTERRUPT);
++
++	/* Unlock, reset and enable the error counter. */
++	writel(IFI_CANFD_ERROR_CTR_UNLOCK_MAGIC,
++	       priv->base + IFI_CANFD_ERROR_CTR);
++	writel(IFI_CANFD_ERROR_CTR_ER_RESET, priv->base + IFI_CANFD_ERROR_CTR);
++	writel(IFI_CANFD_ERROR_CTR_ER_ENABLE, priv->base + IFI_CANFD_ERROR_CTR);
++}
++
++void ifi_canfd_irq_enable(struct net_device *ndev, bool enable, u8 clear)
+ {
+ 	struct ifi_canfd_priv *priv = netdev_priv(ndev);
+ 	u32 enirq = 0;
+@@ -243,8 +71,87 @@ static void ifi_canfd_irq_enable(struct net_device *ndev, bool enable)
+ 	       IFI_CANFD_IRQMASK_SET_TX |
+ 	       IFI_CANFD_IRQMASK_SET_RX | enirq,
+ 	       priv->base + IFI_CANFD_IRQMASK);
++
++	if (clear)
++		ifi_canfd_irq_clear(ndev);
++}
++EXPORT_SYMBOL_GPL(ifi_canfd_irq_enable);
++
++static void ifi_canfd_set_bittiming(struct net_device *ndev)
++{
++	struct ifi_canfd_priv *priv = netdev_priv(ndev);
++	const struct can_bittiming *bt = &priv->can.bittiming;
++	const struct can_bittiming *dbt = &priv->can.data_bittiming;
++	u16 brp, sjw, tseg1, tseg2, tdc;
++
++	/* Configure bit timing */
++	brp = bt->brp - 2;
++	sjw = bt->sjw - 1;
++	tseg1 = bt->prop_seg + bt->phase_seg1 - 1;
++	tseg2 = bt->phase_seg2 - 2;
++	writel((tseg2 << IFI_CANFD_TIME_TIMEB_OFF) |
++	       (tseg1 << IFI_CANFD_TIME_TIMEA_OFF) |
++	       (brp << IFI_CANFD_TIME_PRESCALE_OFF) |
++	       (sjw << IFI_CANFD_TIME_SJW_OFF_7_9_8_8),
++	       priv->base + IFI_CANFD_TIME);
++
++	/* Configure data bit timing */
++	brp = dbt->brp - 2;
++	sjw = dbt->sjw - 1;
++	tseg1 = dbt->prop_seg + dbt->phase_seg1 - 1;
++	tseg2 = dbt->phase_seg2 - 2;
++	writel((tseg2 << IFI_CANFD_TIME_TIMEB_OFF) |
++	       (tseg1 << IFI_CANFD_TIME_TIMEA_OFF) |
++	       (brp << IFI_CANFD_TIME_PRESCALE_OFF) |
++	       (sjw << IFI_CANFD_TIME_SJW_OFF_7_9_8_8),
++	       priv->base + IFI_CANFD_FTIME);
++
++	/* Configure transmitter delay */
++	tdc = dbt->brp * (dbt->prop_seg + dbt->phase_seg1);
++	tdc &= IFI_CANFD_TDELAY_MASK;
++	writel(IFI_CANFD_TDELAY_EN | tdc, priv->base + IFI_CANFD_TDELAY);
+ }
+ 
++static void ifi_canfd_set_filter(struct net_device *ndev, const u32 id,
++				 bool enable, u32 mask, u32 ident)
++{
++	struct ifi_canfd_priv *priv = netdev_priv(ndev);
++
++	if (!enable) {
++		mask = 0;
++		ident = 0;
++	}
++
++	writel(mask, priv->base + IFI_CANFD_FILTER_MASK(id));
++	writel(ident, priv->base + IFI_CANFD_FILTER_IDENT(id));
++}
++
++void ifi_canfd_set_filters(struct net_device *ndev, bool enable)
++{
++	/* Receive all CAN frames (standard ID) */
++	ifi_canfd_set_filter(ndev, 0, enable,
++			     IFI_CANFD_FILTER_MASK_VALID |
++			     IFI_CANFD_FILTER_MASK_EXT,
++			     IFI_CANFD_FILTER_IDENT_VALID);
++
++	/* Receive all CAN frames (extended ID) */
++	ifi_canfd_set_filter(ndev, 1, enable,
++			     IFI_CANFD_FILTER_MASK_VALID |
++			     IFI_CANFD_FILTER_MASK_EXT,
++			     IFI_CANFD_FILTER_IDENT_VALID |
++			     IFI_CANFD_FILTER_IDENT_IDE);
++
++	/* Receive all CANFD frames */
++	ifi_canfd_set_filter(ndev, 2, enable,
++			     IFI_CANFD_FILTER_MASK_VALID |
++			     IFI_CANFD_FILTER_MASK_EDL |
++			     IFI_CANFD_FILTER_MASK_EXT,
++			     IFI_CANFD_FILTER_IDENT_VALID |
++			     IFI_CANFD_FILTER_IDENT_CANFD |
++			     IFI_CANFD_FILTER_IDENT_IDE);
++}
++EXPORT_SYMBOL_GPL(ifi_canfd_set_filters);
++
+ static void ifi_canfd_read_fifo(struct net_device *ndev)
+ {
+ 	struct net_device_stats *stats = &ndev->stats;
+@@ -480,7 +387,7 @@ static int ifi_canfd_handle_state_change(struct net_device *ndev,
+ 	case CAN_STATE_BUS_OFF:
+ 		/* bus-off state */
+ 		priv->can.state = CAN_STATE_BUS_OFF;
+-		ifi_canfd_irq_enable(ndev, 0);
++		ifi_canfd_irq_enable(ndev, 0, 0);
+ 		priv->can.can_stats.bus_off++;
+ 		can_bus_off(ndev);
+ 		break;
+@@ -566,7 +473,7 @@ static int ifi_canfd_handle_state_errors(struct net_device *ndev)
+ 	return work_done;
+ }
+ 
+-static int ifi_canfd_poll(struct napi_struct *napi, int quota)
++int ifi_canfd_poll(struct napi_struct *napi, int quota)
+ {
+ 	struct net_device *ndev = napi->dev;
+ 	struct ifi_canfd_priv *priv = netdev_priv(ndev);
+@@ -590,13 +497,14 @@ static int ifi_canfd_poll(struct napi_struct *napi, int quota)
+ 
+ 	if (work_done < quota) {
+ 		napi_complete_done(napi, work_done);
+-		ifi_canfd_irq_enable(ndev, 1);
++		ifi_canfd_irq_enable(ndev, 1, 0);
+ 	}
+ 
+ 	return work_done;
+ }
++EXPORT_SYMBOL_GPL(ifi_canfd_poll);
+ 
+-static irqreturn_t ifi_canfd_isr(int irq, void *dev_id)
++irqreturn_t ifi_canfd_isr(int irq, void *dev_id)
+ {
+ 	struct net_device *ndev = (struct net_device *)dev_id;
+ 	struct ifi_canfd_priv *priv = netdev_priv(ndev);
+@@ -612,6 +520,9 @@ static irqreturn_t ifi_canfd_isr(int irq, void *dev_id)
+ 	const u32 clr_irq_mask = ~((u32)IFI_CANFD_INTERRUPT_SET_IRQ);
+ 	u32 isr;
+ 
++	if (priv->pre_irq)
++		priv->pre_irq(priv);
++
+ 	isr = readl(priv->base + IFI_CANFD_INTERRUPT);
+ 
+ 	/* No interrupt */
+@@ -623,7 +534,7 @@ static irqreturn_t ifi_canfd_isr(int irq, void *dev_id)
+ 
+ 	/* RX IRQ or bus warning, start NAPI */
+ 	if (isr & rx_irq_mask) {
+-		ifi_canfd_irq_enable(ndev, 0);
++		ifi_canfd_irq_enable(ndev, 0, 0);
+ 		napi_schedule(&priv->napi);
+ 	}
+ 
+@@ -637,88 +548,10 @@ static irqreturn_t ifi_canfd_isr(int irq, void *dev_id)
+ 	if (isr & tx_irq_mask)
+ 		netif_wake_queue(ndev);
+ 
+-	return IRQ_HANDLED;
+-}
+-
+-static const struct can_bittiming_const ifi_canfd_bittiming_const = {
+-	.name		= KBUILD_MODNAME,
+-	.tseg1_min	= 1,	/* Time segment 1 = prop_seg + phase_seg1 */
+-	.tseg1_max	= 256,
+-	.tseg2_min	= 2,	/* Time segment 2 = phase_seg2 */
+-	.tseg2_max	= 256,
+-	.sjw_max	= 128,
+-	.brp_min	= 2,
+-	.brp_max	= 512,
+-	.brp_inc	= 1,
+-};
+-
+-static void ifi_canfd_set_bittiming(struct net_device *ndev)
+-{
+-	struct ifi_canfd_priv *priv = netdev_priv(ndev);
+-	const struct can_bittiming *bt = &priv->can.bittiming;
+-	const struct can_bittiming *dbt = &priv->can.data_bittiming;
+-	u16 brp, sjw, tseg1, tseg2, tdc;
+-
+-	/* Configure bit timing */
+-	brp = bt->brp - 2;
+-	sjw = bt->sjw - 1;
+-	tseg1 = bt->prop_seg + bt->phase_seg1 - 1;
+-	tseg2 = bt->phase_seg2 - 2;
+-	writel((tseg2 << IFI_CANFD_TIME_TIMEB_OFF) |
+-	       (tseg1 << IFI_CANFD_TIME_TIMEA_OFF) |
+-	       (brp << IFI_CANFD_TIME_PRESCALE_OFF) |
+-	       (sjw << IFI_CANFD_TIME_SJW_OFF_7_9_8_8),
+-	       priv->base + IFI_CANFD_TIME);
+-
+-	/* Configure data bit timing */
+-	brp = dbt->brp - 2;
+-	sjw = dbt->sjw - 1;
+-	tseg1 = dbt->prop_seg + dbt->phase_seg1 - 1;
+-	tseg2 = dbt->phase_seg2 - 2;
+-	writel((tseg2 << IFI_CANFD_TIME_TIMEB_OFF) |
+-	       (tseg1 << IFI_CANFD_TIME_TIMEA_OFF) |
+-	       (brp << IFI_CANFD_TIME_PRESCALE_OFF) |
+-	       (sjw << IFI_CANFD_TIME_SJW_OFF_7_9_8_8),
+-	       priv->base + IFI_CANFD_FTIME);
+-
+-	/* Configure transmitter delay */
+-	tdc = dbt->brp * (dbt->prop_seg + dbt->phase_seg1);
+-	tdc &= IFI_CANFD_TDELAY_MASK;
+-	writel(IFI_CANFD_TDELAY_EN | tdc, priv->base + IFI_CANFD_TDELAY);
+-}
+-
+-static void ifi_canfd_set_filter(struct net_device *ndev, const u32 id,
+-				 const u32 mask, const u32 ident)
+-{
+-	struct ifi_canfd_priv *priv = netdev_priv(ndev);
+-
+-	writel(mask, priv->base + IFI_CANFD_FILTER_MASK(id));
+-	writel(ident, priv->base + IFI_CANFD_FILTER_IDENT(id));
+-}
+-
+-static void ifi_canfd_set_filters(struct net_device *ndev)
+-{
+-	/* Receive all CAN frames (standard ID) */
+-	ifi_canfd_set_filter(ndev, 0,
+-			     IFI_CANFD_FILTER_MASK_VALID |
+-			     IFI_CANFD_FILTER_MASK_EXT,
+-			     IFI_CANFD_FILTER_IDENT_VALID);
+-
+-	/* Receive all CAN frames (extended ID) */
+-	ifi_canfd_set_filter(ndev, 1,
+-			     IFI_CANFD_FILTER_MASK_VALID |
+-			     IFI_CANFD_FILTER_MASK_EXT,
+-			     IFI_CANFD_FILTER_IDENT_VALID |
+-			     IFI_CANFD_FILTER_IDENT_IDE);
++	if (priv->post_irq)
++		priv->post_irq(priv);
+ 
+-	/* Receive all CANFD frames */
+-	ifi_canfd_set_filter(ndev, 2,
+-			     IFI_CANFD_FILTER_MASK_VALID |
+-			     IFI_CANFD_FILTER_MASK_EDL |
+-			     IFI_CANFD_FILTER_MASK_EXT,
+-			     IFI_CANFD_FILTER_IDENT_VALID |
+-			     IFI_CANFD_FILTER_IDENT_CANFD |
+-			     IFI_CANFD_FILTER_IDENT_IDE);
++	return IRQ_HANDLED;
+ }
+ 
+ static void ifi_canfd_start(struct net_device *ndev)
+@@ -732,7 +565,7 @@ static void ifi_canfd_start(struct net_device *ndev)
+ 	       priv->base + IFI_CANFD_STCMD);
+ 
+ 	ifi_canfd_set_bittiming(ndev);
+-	ifi_canfd_set_filters(ndev);
++	ifi_canfd_set_filters(ndev, 1);
+ 
+ 	/* Reset FIFOs */
+ 	writel(IFI_CANFD_RXSTCMD_RESET, priv->base + IFI_CANFD_RXSTCMD);
+@@ -766,13 +599,7 @@ static void ifi_canfd_start(struct net_device *ndev)
+ 
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+-	ifi_canfd_irq_enable(ndev, 1);
+-
+-	/* Unlock, reset and enable the error counter. */
+-	writel(IFI_CANFD_ERROR_CTR_UNLOCK_MAGIC,
+-	       priv->base + IFI_CANFD_ERROR_CTR);
+-	writel(IFI_CANFD_ERROR_CTR_ER_RESET, priv->base + IFI_CANFD_ERROR_CTR);
+-	writel(IFI_CANFD_ERROR_CTR_ER_ENABLE, priv->base + IFI_CANFD_ERROR_CTR);
++	ifi_canfd_irq_enable(ndev, 1, 1);
+ 
+ 	/* Enable controller */
+ 	writel(stcmd, priv->base + IFI_CANFD_STCMD);
+@@ -800,20 +627,6 @@ static void ifi_canfd_stop(struct net_device *ndev)
+ 	priv->can.state = CAN_STATE_STOPPED;
+ }
+ 
+-static int ifi_canfd_set_mode(struct net_device *ndev, enum can_mode mode)
+-{
+-	switch (mode) {
+-	case CAN_MODE_START:
+-		ifi_canfd_start(ndev);
+-		netif_wake_queue(ndev);
+-		break;
+-	default:
+-		return -EOPNOTSUPP;
+-	}
+-
+-	return 0;
+-}
+-
+ static int ifi_canfd_open(struct net_device *ndev)
+ {
+ 	struct ifi_canfd_priv *priv = netdev_priv(ndev);
+@@ -826,11 +639,14 @@ static int ifi_canfd_open(struct net_device *ndev)
+ 	}
+ 
+ 	/* Register interrupt handler */
+-	ret = request_irq(ndev->irq, ifi_canfd_isr, IRQF_SHARED,
+-			  ndev->name, ndev);
+-	if (ret < 0) {
+-		netdev_err(ndev, "Failed to request interrupt\n");
+-		goto err_irq;
++	if (!(priv->flags & IFI_CANFD_CUSTOM_IRQ_HANDLING)) {
++		ret = request_irq(ndev->irq, ifi_canfd_isr, IRQF_SHARED,
++				  ndev->name, ndev);
++		if (ret < 0) {
++			netdev_err(ndev,
++				   "Failed to request interrupt: %i\n", ret);
++			goto err_irq;
++		}
+ 	}
+ 
+ 	ifi_canfd_start(ndev);
+@@ -854,7 +670,8 @@ static int ifi_canfd_close(struct net_device *ndev)
+ 
+ 	ifi_canfd_stop(ndev);
+ 
+-	free_irq(ndev->irq, ndev);
++	if (!(priv->flags & IFI_CANFD_CUSTOM_IRQ_HANDLING))
++		free_irq(ndev->irq, ndev);
+ 
+ 	close_candev(ndev);
+ 
+@@ -937,52 +754,32 @@ static const struct net_device_ops ifi_canfd_netdev_ops = {
+ 	.ndo_change_mtu	= can_change_mtu,
+ };
+ 
+-static int ifi_canfd_plat_probe(struct platform_device *pdev)
++static int ifi_canfd_set_mode(struct net_device *ndev, enum can_mode mode)
+ {
+-	struct device *dev = &pdev->dev;
+-	struct net_device *ndev;
+-	struct ifi_canfd_priv *priv;
+-	struct resource *res;
+-	void __iomem *addr;
+-	int irq, ret;
+-	u32 id, rev;
+-
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	addr = devm_ioremap_resource(dev, res);
+-	irq = platform_get_irq(pdev, 0);
+-	if (IS_ERR(addr) || irq < 0)
+-		return -EINVAL;
+-
+-	id = readl(addr + IFI_CANFD_IP_ID);
+-	if (id != IFI_CANFD_IP_ID_VALUE) {
+-		dev_err(dev, "This block is not IFI CANFD, id=%08x\n", id);
+-		return -EINVAL;
++	switch (mode) {
++	case CAN_MODE_START:
++		ifi_canfd_start(ndev);
++		netif_wake_queue(ndev);
++		break;
++	default:
++		return -EOPNOTSUPP;
+ 	}
+ 
+-	rev = readl(addr + IFI_CANFD_VER) & IFI_CANFD_VER_REV_MASK;
+-	if (rev < IFI_CANFD_VER_REV_MIN_SUPPORTED) {
+-		dev_err(dev, "This block is too old (rev %i), minimum supported is rev %i\n",
+-			rev, IFI_CANFD_VER_REV_MIN_SUPPORTED);
+-		return -EINVAL;
+-	}
++	return 0;
++}
+ 
+-	ndev = alloc_candev(sizeof(*priv), 1);
+-	if (!ndev)
+-		return -ENOMEM;
++struct net_device *alloc_ifi_canfd_dev(int sizeof_priv, int echo_skb_max)
++{
++	struct net_device *ndev;
++	struct ifi_canfd_priv *priv;
+ 
+-	ndev->irq = irq;
+-	ndev->flags |= IFF_ECHO;	/* we support local echo */
+-	ndev->netdev_ops = &ifi_canfd_netdev_ops;
++	ndev = alloc_candev(sizeof(struct ifi_canfd_priv) + sizeof_priv,
++			    echo_skb_max);
++	if (!ndev)
++		return NULL;
+ 
+ 	priv = netdev_priv(ndev);
+ 	priv->ndev = ndev;
+-	priv->base = addr;
+-
+-	netif_napi_add(ndev, &priv->napi, ifi_canfd_poll, 64);
+-
+-	priv->can.state = CAN_STATE_STOPPED;
+-
+-	priv->can.clock.freq = readl(addr + IFI_CANFD_CANCLOCK);
+ 
+ 	priv->can.bittiming_const	= &ifi_canfd_bittiming_const;
+ 	priv->can.data_bittiming_const	= &ifi_canfd_bittiming_const;
+@@ -999,54 +796,36 @@ static int ifi_canfd_plat_probe(struct platform_device *pdev)
+ 				       CAN_CTRLMODE_FD_NON_ISO |
+ 				       CAN_CTRLMODE_BERR_REPORTING;
+ 
+-	platform_set_drvdata(pdev, ndev);
+-	SET_NETDEV_DEV(ndev, dev);
++	return ndev;
++}
++EXPORT_SYMBOL_GPL(alloc_ifi_canfd_dev);
+ 
+-	ret = register_candev(ndev);
+-	if (ret) {
+-		dev_err(dev, "Failed to register (ret=%d)\n", ret);
+-		goto err_reg;
+-	}
++void free_ifi_canfd_dev(struct net_device *ndev)
++{
++	free_candev(ndev);
++}
++EXPORT_SYMBOL_GPL(free_ifi_canfd_dev);
+ 
+-	devm_can_led_init(ndev);
++int register_ifi_canfd_dev(struct net_device *ndev)
++{
++	int ret;
+ 
+-	dev_info(dev, "Driver registered: regs=%p, irq=%d, clock=%d\n",
+-		 priv->base, ndev->irq, priv->can.clock.freq);
++	ndev->netdev_ops = &ifi_canfd_netdev_ops;
++	ndev->flags |= IFF_ECHO;
+ 
+-	return 0;
++	ret =  register_candev(ndev);
++	if (!ret)
++		devm_can_led_init(ndev);
+ 
+-err_reg:
+-	free_candev(ndev);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(register_ifi_canfd_dev);
+ 
+-static int ifi_canfd_plat_remove(struct platform_device *pdev)
++void unregister_ifi_canfd_dev(struct net_device *ndev)
+ {
+-	struct net_device *ndev = platform_get_drvdata(pdev);
+-
+ 	unregister_candev(ndev);
+-	platform_set_drvdata(pdev, NULL);
+-	free_candev(ndev);
+-
+-	return 0;
+ }
+-
+-static const struct of_device_id ifi_canfd_of_table[] = {
+-	{ .compatible = "ifi,canfd-1.0", .data = NULL },
+-	{ /* sentinel */ },
+-};
+-MODULE_DEVICE_TABLE(of, ifi_canfd_of_table);
+-
+-static struct platform_driver ifi_canfd_plat_driver = {
+-	.driver = {
+-		.name		= KBUILD_MODNAME,
+-		.of_match_table	= ifi_canfd_of_table,
+-	},
+-	.probe	= ifi_canfd_plat_probe,
+-	.remove	= ifi_canfd_plat_remove,
+-};
+-
+-module_platform_driver(ifi_canfd_plat_driver);
++EXPORT_SYMBOL_GPL(unregister_ifi_canfd_dev);
+ 
+ MODULE_AUTHOR("Marek Vasut <marex@denx.de>");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/net/can/ifi_canfd/ifi_canfd.h b/drivers/net/can/ifi_canfd/ifi_canfd.h
+new file mode 100644
+index 000000000000..1954157615d8
+--- /dev/null
++++ b/drivers/net/can/ifi_canfd/ifi_canfd.h
+@@ -0,0 +1,341 @@
++/*
++ * CAN bus driver for IFI CANFD controller
++ *
++ * Copyright (C) 2016 Marek Vasut <marex@denx.de>
++ *
++ * Details about this controller can be found at
++ * http://www.ifi-pld.de/IP/CANFD/canfd.html
++ *
++ * This file is licensed under the terms of the GNU General Public
++ * License version 2. This program is licensed "as is" without any
++ * warranty of any kind, whether express or implied.
++ */
++#ifndef IFI_CANFD_H_
++#define IFI_CANFD_H_
++
++#define IFI_CANFD_STCMD				0x0
++#define IFI_CANFD_STCMD_HARDRESET		0xDEADCAFD
++#define IFI_CANFD_STCMD_ENABLE			BIT(0)
++#define IFI_CANFD_STCMD_ERROR_ACTIVE		BIT(2)
++#define IFI_CANFD_STCMD_ERROR_PASSIVE		BIT(3)
++#define IFI_CANFD_STCMD_BUSOFF			BIT(4)
++#define IFI_CANFD_STCMD_ERROR_WARNING		BIT(5)
++#define IFI_CANFD_STCMD_BUSMONITOR		BIT(16)
++#define IFI_CANFD_STCMD_LOOPBACK		BIT(18)
++#define IFI_CANFD_STCMD_DISABLE_CANFD		BIT(24)
++#define IFI_CANFD_STCMD_ENABLE_ISO		BIT(25)
++#define IFI_CANFD_STCMD_ENABLE_7_9_8_8_TIMING	BIT(26)
++#define IFI_CANFD_STCMD_NORMAL_MODE		((u32)BIT(31))
++
++#define IFI_CANFD_RXSTCMD			0x4
++#define IFI_CANFD_RXSTCMD_REMOVE_MSG		BIT(0)
++#define IFI_CANFD_RXSTCMD_RESET			BIT(7)
++#define IFI_CANFD_RXSTCMD_EMPTY			BIT(8)
++#define IFI_CANFD_RXSTCMD_OVERFLOW		BIT(13)
++#define IFI_CANFD_RXSTCMD_FIFO_NUMBER		0xFFFF0000
++#define IFI_CANFD_RXSTCMD_FIFO_NUMBER_OFF	16
++
++#define IFI_CANFD_TXSTCMD			0x8
++#define IFI_CANFD_TXSTCMD_ADD_MSG		BIT(0)
++#define IFI_CANFD_TXSTCMD_HIGH_PRIO		BIT(1)
++#define IFI_CANFD_TXSTCMD_REMOVE_PEND_MSG	BIT(6)
++#define IFI_CANFD_TXSTCMD_RESET			BIT(7)
++#define IFI_CANFD_TXSTCMD_EMPTY			BIT(8)
++#define IFI_CANFD_TXSTCMD_FULL			BIT(12)
++#define IFI_CANFD_TXSTCMD_OVERFLOW		BIT(13)
++
++#define IFI_CANFD_INTERRUPT			0xc
++#define IFI_CANFD_INTERRUPT_ERROR_BUSOFF	BIT(0)
++#define IFI_CANFD_INTERRUPT_ERROR_WARNING	BIT(1)
++#define IFI_CANFD_INTERRUPT_ERROR_STATE_CHG	BIT(2)
++#define IFI_CANFD_INTERRUPT_ERROR_REC_TEC_INC	BIT(3)
++#define IFI_CANFD_INTERRUPT_ERROR_COUNTER	BIT(10)
++#define IFI_CANFD_INTERRUPT_TXFIFO_EMPTY	BIT(16)
++#define IFI_CANFD_INTERRUPT_TXFIFO_OVERFLOW	BIT(21)
++#define IFI_CANFD_INTERRUPT_TXFIFO_REMOVE	BIT(22)
++#define IFI_CANFD_INTERRUPT_RXFIFO_NEMPTY	BIT(24)
++#define IFI_CANFD_INTERRUPT_RXFIFO_NEMPTY_PER	BIT(25)
++#define IFI_CANFD_INTERRUPT_RXFIFO_OVERFLOW	BIT(30)
++#define IFI_CANFD_INTERRUPT_SET_IRQ		((u32)BIT(31))
++
++#define IFI_CANFD_IRQMASK			0x10
++#define IFI_CANFD_IRQMASK_ERROR_BUSOFF		BIT(0)
++#define IFI_CANFD_IRQMASK_ERROR_WARNING		BIT(1)
++#define IFI_CANFD_IRQMASK_ERROR_STATE_CHG	BIT(2)
++#define IFI_CANFD_IRQMASK_ERROR_REC_TEC_INC	BIT(3)
++#define IFI_CANFD_IRQMASK_SET_ERR		BIT(7)
++#define IFI_CANFD_IRQMASK_SET_TS		BIT(15)
++#define IFI_CANFD_IRQMASK_TXFIFO_EMPTY		BIT(16)
++#define IFI_CANFD_IRQMASK_SET_TX		BIT(23)
++#define IFI_CANFD_IRQMASK_RXFIFO_NEMPTY		BIT(24)
++#define IFI_CANFD_IRQMASK_RXFIFO_OVERFLOW	BIT(30)
++#define IFI_CANFD_IRQMASK_SET_RX		((u32)BIT(31))
++
++#define IFI_CANFD_TIME				0x14
++#define IFI_CANFD_FTIME				0x18
++#define IFI_CANFD_TIME_TIMEB_OFF		0
++#define IFI_CANFD_TIME_TIMEA_OFF		8
++#define IFI_CANFD_TIME_PRESCALE_OFF		16
++#define IFI_CANFD_TIME_SJW_OFF_7_9_8_8		25
++#define IFI_CANFD_TIME_SJW_OFF_4_12_6_6		28
++#define IFI_CANFD_TIME_SET_SJW_4_12_6_6		BIT(6)
++#define IFI_CANFD_TIME_SET_TIMEB_4_12_6_6	BIT(7)
++#define IFI_CANFD_TIME_SET_PRESC_4_12_6_6	BIT(14)
++#define IFI_CANFD_TIME_SET_TIMEA_4_12_6_6	BIT(15)
++
++#define IFI_CANFD_TDELAY			0x1c
++#define IFI_CANFD_TDELAY_DEFAULT		0xb
++#define IFI_CANFD_TDELAY_MASK			0x3fff
++#define IFI_CANFD_TDELAY_ABS			BIT(14)
++#define IFI_CANFD_TDELAY_EN			BIT(15)
++
++#define IFI_CANFD_ERROR				0x20
++#define IFI_CANFD_ERROR_TX_OFFSET		0
++#define IFI_CANFD_ERROR_TX_MASK			0xff
++#define IFI_CANFD_ERROR_RX_OFFSET		16
++#define IFI_CANFD_ERROR_RX_MASK			0xff
++
++#define IFI_CANFD_ERRCNT			0x24
++
++#define IFI_CANFD_SUSPEND			0x28
++
++#define IFI_CANFD_REPEAT			0x2c
++
++#define IFI_CANFD_TRAFFIC			0x30
++
++#define IFI_CANFD_TSCONTROL			0x34
++
++#define IFI_CANFD_TSC				0x38
++
++#define IFI_CANFD_TST				0x3c
++
++#define IFI_CANFD_RES1				0x40
++
++#define IFI_CANFD_ERROR_CTR			0x44
++#define IFI_CANFD_ERROR_CTR_UNLOCK_MAGIC	0x21302899
++#define IFI_CANFD_ERROR_CTR_OVERLOAD_FIRST	BIT(0)
++#define IFI_CANFD_ERROR_CTR_ACK_ERROR_FIRST	BIT(1)
++#define IFI_CANFD_ERROR_CTR_BIT0_ERROR_FIRST	BIT(2)
++#define IFI_CANFD_ERROR_CTR_BIT1_ERROR_FIRST	BIT(3)
++#define IFI_CANFD_ERROR_CTR_STUFF_ERROR_FIRST	BIT(4)
++#define IFI_CANFD_ERROR_CTR_CRC_ERROR_FIRST	BIT(5)
++#define IFI_CANFD_ERROR_CTR_FORM_ERROR_FIRST	BIT(6)
++#define IFI_CANFD_ERROR_CTR_OVERLOAD_ALL	BIT(8)
++#define IFI_CANFD_ERROR_CTR_ACK_ERROR_ALL	BIT(9)
++#define IFI_CANFD_ERROR_CTR_BIT0_ERROR_ALL	BIT(10)
++#define IFI_CANFD_ERROR_CTR_BIT1_ERROR_ALL	BIT(11)
++#define IFI_CANFD_ERROR_CTR_STUFF_ERROR_ALL	BIT(12)
++#define IFI_CANFD_ERROR_CTR_CRC_ERROR_ALL	BIT(13)
++#define IFI_CANFD_ERROR_CTR_FORM_ERROR_ALL	BIT(14)
++#define IFI_CANFD_ERROR_CTR_BITPOSITION_OFFSET	16
++#define IFI_CANFD_ERROR_CTR_ERROR_FIRST_MASK	0x000000FF
++#define IFI_CANFD_ERROR_CTR_ERROR_ALL_MASK	0x00007F00
++#define IFI_CANFD_ERROR_CTR_BITPOSITION_MASK	0x03ff0000
++#define IFI_CANFD_ERROR_CTR_ERRORFRAME_RESET	BIT(26)
++#define IFI_CANFD_ERROR_CTR_OVERLOAD_RESET	BIT(27)
++#define IFI_CANFD_ERROR_CTR_ERRORFRAME_PEND	BIT(28)
++#define IFI_CANFD_ERROR_CTR_OVERLOAD_PEND	BIT(29)
++#define IFI_CANFD_ERROR_CTR_ER_RESET		BIT(30)
++#define IFI_CANFD_ERROR_CTR_ER_ENABLE		((u32)BIT(31))
++
++#define IFI_CANFD_PAR				0x48
++#define IFI_CANFD_PAR_TX_SIZE			0x000000FF
++#define IFI_CANFD_PAR_RX_SIZE			0x0000FF00
++#define IFI_CANFD_PAR_SINGLE_CLOCK		BIT(16)
++#define IFI_CANFD_PAR_NO_TSTAMP			BIT(17)
++#define IFI_CANFD_PAR_NO_FILTER			BIT(18)
++#define IFI_CANFD_PAR_NO_BUSSTAT		BIT(19)
++
++#define IFI_CANFD_CANCLOCK			0x4c
++
++#define IFI_CANFD_SYSCLOCK			0x50
++
++#define IFI_CANFD_VER				0x54
++#define IFI_CANFD_VER_REV_MASK			0xff
++#define IFI_CANFD_VER_REV_MIN_SUPPORTED		0x15
++
++#define IFI_CANFD_IP_ID				0x58
++#define IFI_CANFD_IP_ID_VALUE			0xD073CAFD
++
++#define IFI_CANFD_TEST				0x5c
++
++#define IFI_CANFD_RXFIFO_TS_63_32		0x60
++
++#define IFI_CANFD_RXFIFO_TS_31_0		0x64
++
++#define IFI_CANFD_RXFIFO_DLC			0x68
++#define IFI_CANFD_RXFIFO_DLC_DLC_OFFSET		0
++#define IFI_CANFD_RXFIFO_DLC_DLC_MASK		0xf
++#define IFI_CANFD_RXFIFO_DLC_RTR		BIT(4)
++#define IFI_CANFD_RXFIFO_DLC_EDL		BIT(5)
++#define IFI_CANFD_RXFIFO_DLC_BRS		BIT(6)
++#define IFI_CANFD_RXFIFO_DLC_ESI		BIT(7)
++#define IFI_CANFD_RXFIFO_DLC_OBJ_OFFSET		8
++#define IFI_CANFD_RXFIFO_DLC_OBJ_MASK		0x0001ff00
++#define IFI_CANFD_RXFIFO_DLC_FNR_OFFSET		24
++#define IFI_CANFD_RXFIFO_DLC_FNR_MASK		0xff000000
++
++#define IFI_CANFD_RXFIFO_ID			0x6c
++#define IFI_CANFD_RXFIFO_ID_ID_OFFSET		0
++#define IFI_CANFD_RXFIFO_ID_ID_STD_MASK		CAN_SFF_MASK
++#define IFI_CANFD_RXFIFO_ID_ID_STD_OFFSET	0
++#define IFI_CANFD_RXFIFO_ID_ID_STD_WIDTH	10
++#define IFI_CANFD_RXFIFO_ID_ID_XTD_MASK		CAN_EFF_MASK
++#define IFI_CANFD_RXFIFO_ID_ID_XTD_OFFSET	11
++#define IFI_CANFD_RXFIFO_ID_ID_XTD_WIDTH	18
++#define IFI_CANFD_RXFIFO_ID_IDE			BIT(29)
++
++#define IFI_CANFD_RXFIFO_DATA			0x70
++
++#define IFI_CANFD_TXFIFO_SUSPEND_US		0xb0
++
++#define IFI_CANFD_TXFIFO_REPEATCOUNT		0xb4
++
++#define IFI_CANFD_TXFIFO_DLC			0xb8
++#define IFI_CANFD_TXFIFO_DLC_DLC_OFFSET		0
++#define IFI_CANFD_TXFIFO_DLC_DLC_MASK		0xf
++#define IFI_CANFD_TXFIFO_DLC_RTR		BIT(4)
++#define IFI_CANFD_TXFIFO_DLC_EDL		BIT(5)
++#define IFI_CANFD_TXFIFO_DLC_BRS		BIT(6)
++#define IFI_CANFD_TXFIFO_DLC_FNR_OFFSET		24
++#define IFI_CANFD_TXFIFO_DLC_FNR_MASK		0xff
++
++#define IFI_CANFD_TXFIFO_ID			0xbc
++#define IFI_CANFD_TXFIFO_ID_ID_OFFSET		0
++#define IFI_CANFD_TXFIFO_ID_ID_STD_MASK		CAN_SFF_MASK
++#define IFI_CANFD_TXFIFO_ID_ID_STD_OFFSET	0
++#define IFI_CANFD_TXFIFO_ID_ID_STD_WIDTH	10
++#define IFI_CANFD_TXFIFO_ID_ID_XTD_MASK		CAN_EFF_MASK
++#define IFI_CANFD_TXFIFO_ID_ID_XTD_OFFSET	11
++#define IFI_CANFD_TXFIFO_ID_ID_XTD_WIDTH	18
++#define IFI_CANFD_TXFIFO_ID_IDE			BIT(29)
++
++#define IFI_CANFD_TXFIFO_DATA			0xc0
++
++#define IFI_CANFD_FILTER_MASK(n)		(0x800 + ((n) * 8) + 0)
++#define IFI_CANFD_FILTER_MASK_EXT		BIT(29)
++#define IFI_CANFD_FILTER_MASK_EDL		BIT(30)
++#define IFI_CANFD_FILTER_MASK_VALID		((u32)BIT(31))
++
++#define IFI_CANFD_FILTER_IDENT(n)		(0x800 + ((n) * 8) + 4)
++#define IFI_CANFD_FILTER_IDENT_IDE		BIT(29)
++#define IFI_CANFD_FILTER_IDENT_CANFD		BIT(30)
++#define IFI_CANFD_FILTER_IDENT_VALID		((u32)BIT(31))
++
++#define IFI_CANFD_CUSTOM_IRQ_HANDLING		0x1
++
++/**
++ * struct ifi_canfd_priv - IFI CANFD device
++ * @can: CAN common private data
++ * @napi: Structure for NAPI scheduling
++ * @ndev: Network Device data
++ * @base: Base address
++ * @priv: additional field for device specific specific programming
++ * @flags: Custom mode flags
++ * @pre_irq: function pointers for custom pre-irq functionality
++ * @post_irq: function pointers for custom post-irq functionality
++ *
++ * Contains common fields of an IFI CANFD device
++ */
++struct ifi_canfd_priv {
++	struct can_priv		can;	/* must be the first member */
++	struct napi_struct	napi;
++	struct net_device	*ndev;
++	void __iomem		*base;
++
++	void			*priv;	/* custom content */
++	u16			flags;	/* custom mode flags*/
++
++	void (*pre_irq)(const struct ifi_canfd_priv *priv);
++	void (*post_irq)(const struct ifi_canfd_priv *priv);
++};
++
++/**
++ * ifi_canfd_irq_enable() - Enable/disable interrupt mode
++ * @ndev: Network device (CAN)
++ * @enable: flag 1-enable,0-disable
++ * @clear: flag to clear interrupts when set to 1
++ *
++ * Enables/disables/clears interrupts on request
++ *
++ * Return: None
++ */
++void ifi_canfd_irq_enable(struct net_device *ndev, bool enable, u8 clear);
++
++/**
++ * ifi_canfd_set_filters() - Set Filter masks and IDs
++ * @ndev: Network device (CAN)
++ * @enable: enable/disable flag
++ *
++ * Sets filter masks and IDs for standard/extended CAN and CANFD frames
++ *
++ * Return: None
++ */
++void ifi_canfd_set_filters(struct net_device *ndev, bool enable);
++
++/**
++ * ifi_canfd_poll() - NAPI polling function
++ * @napi: Structure for NAPI scheduling similar to tasklet but with weighting
++ * @quota: Places a limit on the amount of work the driver may do.
++ *	   If and only if the return value is less than the budget, your driver
++ *	   must reenable interrupts and turn off polling
++ *
++ * Polls driver to pick up all available packets when interrupt is serviced
++ *
++ * Return: No. of packets processed
++ */
++int ifi_canfd_poll(struct napi_struct *napi, int quota);
++
++/**
++ * ifi_canfd_isr()
++ * @irq: IRQ Number
++ * @dev_id: Device ID
++ *
++ * This function is executed on reception of an interrupt
++ *
++ * Return: Interrupt handling status
++ */
++irqreturn_t ifi_canfd_isr(int irq, void *dev_id);
++
++/**
++ * alloc_ifi_canfd_dev() - Allocate CAN device
++ * @sizeof_priv: size of device interface
++ * @echo_skb_max: max. number of sockets
++ *
++ * Allocates a CAN device
++ *
++ * Return: Network device allocated
++ */
++struct net_device *alloc_ifi_canfd_dev(int sizeof_priv, int echo_skb_max);
++
++/**
++ * free_ifi_canfd_dev() - Free CAN device
++ * @ndev: Network device (CAN)
++ *
++ * Frees previously allocated CAN device
++ *
++ * Return: None
++ */
++void free_ifi_canfd_dev(struct net_device *ndev);
++
++/**
++ * register_ifi_canfd_dev() - Register CAN device
++ * @ndev: Network device (CAN)
++ *
++ * Registers CAN device and sets netdev_ops structure
++ *
++ * Return: return code register_candev
++ */
++int register_ifi_canfd_dev(struct net_device *ndev);
++
++/**
++ * unregister_ifi_canfd_dev() - Unregister CAN device
++ * @ndev: Network device (CAN)
++ *
++ * Unregisters CAN device
++ *
++ * Return: None
++ */
++void unregister_ifi_canfd_dev(struct net_device *ndev);
++
++#endif /* IFI_CANFD_H_ */
+diff --git a/drivers/net/can/ifi_canfd/ifi_canfd_platform.c b/drivers/net/can/ifi_canfd/ifi_canfd_platform.c
+new file mode 100644
+index 000000000000..2bbcfc2d77ce
+--- /dev/null
++++ b/drivers/net/can/ifi_canfd/ifi_canfd_platform.c
+@@ -0,0 +1,121 @@
++/*
++ * CAN bus driver for IFI CANFD controller
++ *
++ * Copyright (C) 2016 Marek Vasut <marex@denx.de>
++ *
++ * Details about this controller can be found at
++ * http://www.ifi-pld.de/IP/CANFD/canfd.html
++ *
++ * This file is licensed under the terms of the GNU General Public
++ * License version 2. This program is licensed "as is" without any
++ * warranty of any kind, whether express or implied.
++ */
++#include <linux/clk.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/netdevice.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++
++#include <linux/can/dev.h>
++#include "ifi_canfd.h"
++
++static int ifi_canfd_plat_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct net_device *ndev;
++	struct ifi_canfd_priv *priv;
++	struct resource *res;
++	void __iomem *addr;
++	int irq, ret;
++	u32 id, rev;
++
++	dev_err(dev, "IFI-FD Probe start\n");
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	addr = devm_ioremap_resource(dev, res);
++	irq = platform_get_irq(pdev, 0);
++	if (IS_ERR(addr) || irq < 0)
++		return -EINVAL;
++
++	id = readl(addr + IFI_CANFD_IP_ID);
++	if (id != IFI_CANFD_IP_ID_VALUE) {
++		dev_err(dev, "This block is not IFI CANFD, id=%08x\n", id);
++		return -EINVAL;
++	}
++
++	rev = readl(addr + IFI_CANFD_VER) & IFI_CANFD_VER_REV_MASK;
++	if (rev < IFI_CANFD_VER_REV_MIN_SUPPORTED) {
++		dev_err(dev, "This block is too old (rev %i), minimum supported is rev %i\n",
++			rev, IFI_CANFD_VER_REV_MIN_SUPPORTED);
++		return -EINVAL;
++	}
++
++	ndev = alloc_ifi_canfd_dev(0, 1);
++	if (!ndev)
++		return -ENOMEM;
++
++	priv = netdev_priv(ndev);
++
++	priv->can.state = CAN_STATE_STOPPED;
++	priv->can.clock.freq = readl(addr + IFI_CANFD_CANCLOCK);
++
++	ndev->irq = irq;
++	priv->base = addr;
++
++	netif_napi_add(ndev, &priv->napi, ifi_canfd_poll, 64);
++
++	platform_set_drvdata(pdev, ndev);
++	SET_NETDEV_DEV(ndev, dev);
++
++	ret = register_ifi_canfd_dev(ndev);
++	if (ret) {
++		dev_err(dev, "Failed to register (ret=%d)\n", ret);
++		goto err_reg;
++	}
++
++	dev_info(dev, "Driver registered: regs=%p, irq=%d, clock=%d\n",
++		 priv->base, ndev->irq, priv->can.clock.freq);
++
++	return 0;
++
++err_reg:
++	free_ifi_canfd_dev(ndev);
++	return ret;
++}
++
++static int ifi_canfd_plat_remove(struct platform_device *pdev)
++{
++	struct net_device *ndev = platform_get_drvdata(pdev);
++
++	unregister_ifi_canfd_dev(ndev);
++	platform_set_drvdata(pdev, NULL);
++	free_ifi_canfd_dev(ndev);
++
++	return 0;
++}
++
++static const struct of_device_id ifi_canfd_of_table[] = {
++	{ .compatible = "ifi,canfd-1.0", .data = NULL },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, ifi_canfd_of_table);
++
++static struct platform_driver ifi_canfd_plat_driver = {
++	.driver = {
++		.name		= KBUILD_MODNAME,
++		.of_match_table	= ifi_canfd_of_table,
++	},
++	.probe	= ifi_canfd_plat_probe,
++	.remove	= ifi_canfd_plat_remove,
++};
++
++module_platform_driver(ifi_canfd_plat_driver);
++
++MODULE_AUTHOR("Marek Vasut <marex@denx.de>");
++MODULE_LICENSE("GPL v2");
++MODULE_DESCRIPTION("CAN bus driver for IFI CANFD controller");
+-- 
+2.17.1
+
