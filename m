@@ -2,166 +2,231 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E362D4FB
-	for <lists+linux-can@lfdr.de>; Wed, 29 May 2019 07:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4D02D5FE
+	for <lists+linux-can@lfdr.de>; Wed, 29 May 2019 09:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbfE2FEp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 29 May 2019 01:04:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49157 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfE2FEp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 29 May 2019 01:04:45 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1hVqlX-0000dh-9q; Wed, 29 May 2019 07:04:43 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1hVqlW-0000Bw-PW; Wed, 29 May 2019 07:04:42 +0200
-Date:   Wed, 29 May 2019 07:04:42 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     David Jander <david@protonic.nl>, mkl@pengutronix.de,
-        wg@grandegger.com, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, robin@protonic.nl
-Subject: Re: j1939: control messages and PGN
-Message-ID: <20190529050442.4ss6bvqnxic4xk6k@pengutronix.de>
-References: <20190528115435.GA7453@pengutronix.de>
- <20190528131344.GA11191@x1.vandijck-laurijssen.be>
- <20190528162757.5e23e4c4@erd988>
- <20190528144803.GB11191@x1.vandijck-laurijssen.be>
+        id S1725948AbfE2HMD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 29 May 2019 03:12:03 -0400
+Received: from mail-eopbgr10062.outbound.protection.outlook.com ([40.107.1.62]:14333
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725882AbfE2HMC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 29 May 2019 03:12:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bCveSdaMyAw9d12pQ7Zrjvs2lyY+oiiKsyV5Gj2el5E=;
+ b=i1UVzT+OOY5xc4XfkCNkE9aV6yvViV5+dDMq1uuEtRUoBCbNCM3X77AuMANbowfc2hWiwBRMlKQbd3Ky2OKm7qw+Pa/x0E5zr38cRUjbRl/PuuAp1o+TxFKP0lmLoWyxja3Mv0W7UTkbT+T+W/zACK90j8nOdg0Pph/roIMSBwg=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.138.152) by
+ DB7PR04MB4714.eurprd04.prod.outlook.com (20.176.233.31) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.16; Wed, 29 May 2019 07:11:54 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::d020:ef8f:cfd0:2c1c]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::d020:ef8f:cfd0:2c1c%6]) with mapi id 15.20.1943.016; Wed, 29 May 2019
+ 07:11:54 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     Pankaj Bansal <pankaj.bansal@nxp.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: RE: [PATCH v2 1/4] net: can: flexcan: use CAN FD frames for Tx/Rx
+Thread-Topic: [PATCH v2 1/4] net: can: flexcan: use CAN FD frames for Tx/Rx
+Thread-Index: AQHVFTt+yT6hM/nT70WZ193G7RwJh6aBqY2A
+Date:   Wed, 29 May 2019 07:11:54 +0000
+Message-ID: <DB7PR04MB4618318AC0709A48F6B222F0E61F0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+References: <20190528151844.14668-1-pankaj.bansal@nxp.com>
+ <20190528151844.14668-2-pankaj.bansal@nxp.com>
+In-Reply-To: <20190528151844.14668-2-pankaj.bansal@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7f369912-bb65-44f8-e55e-08d6e404edf0
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4714;
+x-ms-traffictypediagnostic: DB7PR04MB4714:
+x-microsoft-antispam-prvs: <DB7PR04MB4714177B72733EC8C9AE9A47E61F0@DB7PR04MB4714.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 0052308DC6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(376002)(136003)(39860400002)(366004)(189003)(199004)(13464003)(71190400001)(71200400001)(66066001)(7696005)(316002)(25786009)(52536014)(73956011)(102836004)(6506007)(66476007)(76176011)(14444005)(6246003)(256004)(66946007)(99286004)(68736007)(229853002)(53546011)(14454004)(110136005)(478600001)(4326008)(53936002)(2906002)(9686003)(81156014)(486006)(476003)(55016002)(66446008)(446003)(11346002)(76116006)(186003)(5660300002)(66556008)(33656002)(7736002)(86362001)(3846002)(6116002)(74316002)(64756008)(26005)(305945005)(81166006)(8936002)(6436002)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4714;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: irMsvqg2pd/IoWqDbwe0LyWDAWMlb4UVeSoykBfbGDfKBGyk5pl7mKUuRJok+3Q0knXT8ngZz6i9oz/ZLPQS88wnRBn4gEz4trONmOQJWBRHpSmHtgG2oapNeys9w5U8cCPadb2dScpCzscyMSnyQEw/lOEBCMJNXYy7aNf//qWXbZdfd/q2rws6Z1qtkPqTSH49qJBvxhZe75PNMIgEKHbER99oaWe4rpOfP3huK8xrGqnPtKjFP5eCxNJh82f0MtKD35FBj9nams7zwYiHYg/qYbXXHTMIji2u1xcV3XtsQR8pNnxUPdPbsv+nVAo4LRKraKo31TvdwuYzksrqktSectQHzYjVa1DudsZKvAHvPJ8wWZAk9ohKNR0vg2rGqsiltanRROic9Q868KxZ/oQ/yForBrqZl3gN5e5bpew=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190528144803.GB11191@x1.vandijck-laurijssen.be>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 06:34:29 up 11 days, 10:52, 32 users,  load average: 0.02, 0.02,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f369912-bb65-44f8-e55e-08d6e404edf0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 May 2019 07:11:54.1344
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qiangqing.zhang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4714
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, May 28, 2019 at 04:48:03PM +0200, Kurt Van Dijck wrote:
-> On di, 28 mei 2019 16:27:57 +0200, David Jander wrote:
-> > On Tue, 28 May 2019 15:13:44 +0200
-> > Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
-> > 
-> > > On di, 28 mei 2019 13:54:35 +0200, Oleksij Rempel wrote:
-> > > > Hi all,
-> > > > 
-> > > > when receiving j1939 control messages, the current code looks up the
-> > > > session by DA and SA only, not taking the PGN (which is part of the
-> > > > control messages' data) into account.
-> > > > 
-> > > > When it comes to error control messages the session is aborted, even if
-> > > > the PGN doesn't match. In EOMA the session is aborted, too. This means
-> > > > receiving control messages with non matching PGNs lead to session abort.
-> > > > 
-> > > > Is this in general a good behavior?
-> > 
-> > Tl;DR: Yes, if PGN does not match the (E)TP session should be aborted.
-> > 
-> > > It is indeed a bit stupid.
-> > > 
-> > > If 2 ends are talking to each other, and 1 of those 2 talks about
-> > > something else, that implies that you talk not about the same thing
-> > > either, and you probably want to abort soon. It would be better if
-> > > you only abort 'probably soon' and not 'immediately' in such case, since
-> > > you're right that reception of another PGN control frame does not imply
-> > > that you're current session became invalid.
-> > 
-> > If the session is with me and I see conflicting PGN (not start of a new
-> > session), why not send an abort immediately?
-> > 
-> > > In j1939 however, the data part does not carry PGN info, since only 1
-> > > session can be open. This implies 2 things:
-> > > * Ignoring PGN difference in control frames makes you blind to the data
-> > >   consistency, so you may think in certain cases that you continue to receive
-> > >   data while it's actually the data that belongs to another PGN.
-> > 
-> > The sender cannot start sending data without the receiver acknowledging that
-> > with a CTS message first. If the CTS contains a different PGN than the RTS,
-> > then the sender should abort immediately.
-> > For ETP, if the receiver sees a DPO frame with a different PGN, it should also
-> > send an abort for that PGN immediately.
-> > 
-> > > * If node A talks to node B on a different PGN that node B thinks that
-> > >   node A is talking, then this is AFAIK considered as protocol
-> > >   violation because you risk data corruption.
-> > > 
-> > > The PGN in all-but-1st control frame could be considered redundant, but
-> > > since it's there, it should match.
-> > 
-> > Ack.
-> > 
-> > > So, it's still not a good behaviour, but j1939 IMHO requires you to do so.
-> > > 
-> > > So you think this is bad, let's make it even worse :-)
-> > > Between 2 nodes, actually 2 sessions may exist, 1 recv & 1 send.
-> > 
-> > Actually four in this case: ETPrx, TPrx, ETPtx and ETPrx, right?
-> 
-> Right, I tend to forget ETP for simplicity :-)
-> > 
-> > > Still, control frames that to RTS, CTS, DPO, ... are uni-directional,
-> > > i.e. they map to only 1 of those 2 sessions exclusively.
-> > > This is not the case for an abort message.
-> > > _If I'm not mistaken_, the PGN info should be ignored for abort frames,
-> > > since it may be unclear what exactly you abort: a old PGN, or a newly
-> > > requested PGN. And due to that, it's also unclear if it applies to the
-> > > send or recv path, so you abort, AFAIK, both directions at once.
-> > > But I have not the specifications around now, I can't verify.
-> > 
-> > The abort message also contains the PGN of the packeted message, so AFAICS, you
-> > can abort any one specific of the 4 theoretically simultaneous sessions,
-> > because the should have different PGN's for the different directions (rx/tx).
-> > 
-> > That's probably one of the reasons why there is always a different PGN used to
-> > talk in one direction than in the other.
-> I see.
-> I did not implement that very nice, I think.
-
-Let's take some example to make me better understand all possible
-scenarios.
-We have node 0x80 and node 0x90:
-- 0x80 is transmitting data to the 0x90 with RTS PGN 0x12300
-- if 0x90 get control signal from 0x80 (DPO) with PGN 0x13300, 0x90 should
-  send abort message to 0x13300 and cancel currently running 0x80->0x90,0x12300
-  session.
-
-- if 0x80 get control signal from 0x90 (CTS, EOMA) with PGN 0x13300, 0x80 should
-  send abort message to 0x90 0x13300 and cancel currently running 0x80->0x90,0x12300
-  session.
-
-- if 0x80 and 0x90 will get abort signal for 0x80->0x90,0x13300, which
-  was send by 0x80 or evil third ECU, currently running 0x80->0x90,0x12300
-  session should not be aborted.
- 
-Correct?
-
-  What is about not related  control signals. For 0x90 - CTS, EOMA; and
-  for 0x80 - DPO?
-  I ask because this stack has loop back design, so 0x90 and 0x80 will get own
-  signals as well.
-
-I can imagine at least some reason why we can get wrong signals:
-- address conflicts (multiple ECUs configured with same address)
-- buggy software 
-- some CAN bus issues
-- malicious attempts to exploit ECU remotely. 
-
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IGxpbnV4LWNhbi1vd25lckB2
+Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LWNhbi1vd25lckB2Z2VyLmtlcm5lbC5vcmc+DQo+IE9uIEJl
+aGFsZiBPZiBQYW5rYWogQmFuc2FsDQo+IFNlbnQ6IDIwMTnE6jXUwjI4yNUgMTc6NTUNCj4gVG86
+IFdvbGZnYW5nIEdyYW5kZWdnZXIgPHdnQGdyYW5kZWdnZXIuY29tPjsgTWFyYyBLbGVpbmUtQnVk
+ZGUNCj4gPG1rbEBwZW5ndXRyb25peC5kZT4NCj4gQ2M6IGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5v
+cmcNCj4gU3ViamVjdDogW1BBVENIIHYyIDEvNF0gbmV0OiBjYW46IGZsZXhjYW46IHVzZSBDQU4g
+RkQgZnJhbWVzIGZvciBUeC9SeA0KPiANCj4gVXNlIGNhbiBGRCBmcmFtZXMgZm9yIFR4L1J4IG9w
+ZXJhdGlvbnMuIFRoaXMgd291bGQgYmUgbmVlZGVkIGluIHVwY29taW5nDQo+IFNPQyBMWDIxNjBB
+LCB3aGljaCBzdXBwb3J0cyBDQU4gRkQgcHJvdG9jb2wNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFBh
+bmthaiBCYW5zYWwgPHBhbmthai5iYW5zYWxAbnhwLmNvbT4NCj4gLS0tDQo+IA0KPiBOb3RlczoN
+Cj4gICAgIFYyOg0KPiAgICAgLSBObyBjaGFuZ2UNCj4gDQo+ICBkcml2ZXJzL25ldC9jYW4vZmxl
+eGNhbi5jICAgICAgfCAzNiArKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLQ0KPiAgZHJp
+dmVycy9uZXQvY2FuL3J4LW9mZmxvYWQuYyAgIHwgMzIgKysrKysrKysrKysrKysrKysrKysrLS0t
+LS0tLQ0KPiAgaW5jbHVkZS9saW51eC9jYW4vcngtb2ZmbG9hZC5oIHwgIDYgKysrKystDQo+ICAz
+IGZpbGVzIGNoYW5nZWQsIDUwIGluc2VydGlvbnMoKyksIDI0IGRlbGV0aW9ucygtKQ0KPiANCj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMgYi9kcml2ZXJzL25ldC9jYW4v
+ZmxleGNhbi5jIGluZGV4DQo+IDQ0MjU4Y2M4NzFiMy4uOTMxZWZmZmI4ZmEyIDEwMDY0NA0KPiAt
+LS0gYS9kcml2ZXJzL25ldC9jYW4vZmxleGNhbi5jDQo+ICsrKyBiL2RyaXZlcnMvbmV0L2Nhbi9m
+bGV4Y2FuLmMNCj4gQEAgLTYwOSwxMCArNjA5LDEwIEBAIHN0YXRpYyBpbnQgZmxleGNhbl9nZXRf
+YmVycl9jb3VudGVyKGNvbnN0IHN0cnVjdA0KPiBuZXRfZGV2aWNlICpkZXYsICBzdGF0aWMgbmV0
+ZGV2X3R4X3QgZmxleGNhbl9zdGFydF94bWl0KHN0cnVjdCBza19idWZmICpza2IsDQo+IHN0cnVj
+dCBuZXRfZGV2aWNlICpkZXYpICB7DQo+ICAJY29uc3Qgc3RydWN0IGZsZXhjYW5fcHJpdiAqcHJp
+diA9IG5ldGRldl9wcml2KGRldik7DQo+IC0Jc3RydWN0IGNhbl9mcmFtZSAqY2YgPSAoc3RydWN0
+IGNhbl9mcmFtZSAqKXNrYi0+ZGF0YTsNCj4gKwlzdHJ1Y3QgY2FuZmRfZnJhbWUgKmNmZCA9IChz
+dHJ1Y3QgY2FuZmRfZnJhbWUgKilza2ItPmRhdGE7DQo+ICAJdTMyIGNhbl9pZDsNCj4gIAl1MzIg
+ZGF0YTsNCj4gLQl1MzIgY3RybCA9IEZMRVhDQU5fTUJfQ09ERV9UWF9EQVRBIHwgKGNmLT5jYW5f
+ZGxjIDw8IDE2KTsNCj4gKwl1MzIgY3RybCA9IEZMRVhDQU5fTUJfQ09ERV9UWF9EQVRBIHwgKGNh
+bl9sZW4yZGxjKGNmZC0+bGVuKSA8PCAxNik7DQo+ICAJaW50IGk7DQo+IA0KPiAgCWlmIChjYW5f
+ZHJvcHBlZF9pbnZhbGlkX3NrYihkZXYsIHNrYikpIEBAIC02MjAsMTggKzYyMCwxOCBAQCBzdGF0
+aWMNCj4gbmV0ZGV2X3R4X3QgZmxleGNhbl9zdGFydF94bWl0KHN0cnVjdCBza19idWZmICpza2Is
+IHN0cnVjdCBuZXRfZGV2aWNlICpkZQ0KPiANCj4gIAluZXRpZl9zdG9wX3F1ZXVlKGRldik7DQo+
+IA0KPiAtCWlmIChjZi0+Y2FuX2lkICYgQ0FOX0VGRl9GTEFHKSB7DQo+IC0JCWNhbl9pZCA9IGNm
+LT5jYW5faWQgJiBDQU5fRUZGX01BU0s7DQo+ICsJaWYgKGNmZC0+Y2FuX2lkICYgQ0FOX0VGRl9G
+TEFHKSB7DQo+ICsJCWNhbl9pZCA9IGNmZC0+Y2FuX2lkICYgQ0FOX0VGRl9NQVNLOw0KPiAgCQlj
+dHJsIHw9IEZMRVhDQU5fTUJfQ05UX0lERSB8IEZMRVhDQU5fTUJfQ05UX1NSUjsNCj4gIAl9IGVs
+c2Ugew0KPiAtCQljYW5faWQgPSAoY2YtPmNhbl9pZCAmIENBTl9TRkZfTUFTSykgPDwgMTg7DQo+
+ICsJCWNhbl9pZCA9IChjZmQtPmNhbl9pZCAmIENBTl9TRkZfTUFTSykgPDwgMTg7DQo+ICAJfQ0K
+PiANCj4gLQlpZiAoY2YtPmNhbl9pZCAmIENBTl9SVFJfRkxBRykNCj4gKwlpZiAoIWNhbl9pc19j
+YW5mZF9za2Ioc2tiKSAmJiAoY2ZkLT5jYW5faWQgJiBDQU5fUlRSX0ZMQUcpKQ0KPiAgCQljdHJs
+IHw9IEZMRVhDQU5fTUJfQ05UX1JUUjsNCj4gDQo+IC0JZm9yIChpID0gMDsgaSA8IGNmLT5jYW5f
+ZGxjOyBpICs9IHNpemVvZih1MzIpKSB7DQo+IC0JCWRhdGEgPSBiZTMyX3RvX2NwdXAoKF9fYmUz
+MiAqKSZjZi0+ZGF0YVtpXSk7DQo+ICsJZm9yIChpID0gMDsgaSA8IGNhbl9sZW4yZGxjKGNmZC0+
+bGVuKTsgaSArPSBzaXplb2YodTMyKSkgew0KPiArCQlkYXRhID0gYmUzMl90b19jcHVwKChfX2Jl
+MzIgKikmY2ZkLT5kYXRhW2ldKTsNCj4gIAkJcHJpdi0+d3JpdGUoZGF0YSwgJnByaXYtPnR4X21i
+LT5kYXRhW2kgLyBzaXplb2YodTMyKV0pOw0KPiAgCX0NCj4gDQo+IEBAIC03NjAsMTIgKzc2MCwx
+MyBAQCBzdGF0aWMgaW5saW5lIHN0cnVjdCBmbGV4Y2FuX3ByaXYNCj4gKnJ4X29mZmxvYWRfdG9f
+cHJpdihzdHJ1Y3QgY2FuX3J4X29mZmxvYWQgKm9mZiAgfQ0KPiANCj4gIHN0YXRpYyB1bnNpZ25l
+ZCBpbnQgZmxleGNhbl9tYWlsYm94X3JlYWQoc3RydWN0IGNhbl9yeF9vZmZsb2FkICpvZmZsb2Fk
+LA0KPiAtCQkJCQkgc3RydWN0IGNhbl9mcmFtZSAqY2YsDQo+ICsJCQkJCSBzdHJ1Y3Qgc2tfYnVm
+ZiAqc2tiLA0KPiAgCQkJCQkgdTMyICp0aW1lc3RhbXAsIHVuc2lnbmVkIGludCBuKQ0KPiAgew0K
+PiAgCXN0cnVjdCBmbGV4Y2FuX3ByaXYgKnByaXYgPSByeF9vZmZsb2FkX3RvX3ByaXYob2ZmbG9h
+ZCk7DQo+ICAJc3RydWN0IGZsZXhjYW5fcmVncyBfX2lvbWVtICpyZWdzID0gcHJpdi0+cmVnczsN
+Cj4gIAlzdHJ1Y3QgZmxleGNhbl9tYiBfX2lvbWVtICptYjsNCj4gKwlzdHJ1Y3QgY2FuZmRfZnJh
+bWUgKmNmZCA9IChzdHJ1Y3QgY2FuZmRfZnJhbWUgKilza2ItPmRhdGE7DQo+ICAJdTMyIHJlZ19j
+dHJsLCByZWdfaWQsIHJlZ19pZmxhZzE7DQo+ICAJaW50IGk7DQo+IA0KPiBAQCAtODAyLDE3ICs4
+MDMsMjEgQEAgc3RhdGljIHVuc2lnbmVkIGludCBmbGV4Y2FuX21haWxib3hfcmVhZChzdHJ1Y3QN
+Cj4gY2FuX3J4X29mZmxvYWQgKm9mZmxvYWQsDQo+IA0KPiAgCXJlZ19pZCA9IHByaXYtPnJlYWQo
+Jm1iLT5jYW5faWQpOw0KPiAgCWlmIChyZWdfY3RybCAmIEZMRVhDQU5fTUJfQ05UX0lERSkNCj4g
+LQkJY2YtPmNhbl9pZCA9ICgocmVnX2lkID4+IDApICYgQ0FOX0VGRl9NQVNLKSB8IENBTl9FRkZf
+RkxBRzsNCj4gKwkJY2ZkLT5jYW5faWQgPSAoKHJlZ19pZCA+PiAwKSAmIENBTl9FRkZfTUFTSykg
+fCBDQU5fRUZGX0ZMQUc7DQo+ICAJZWxzZQ0KPiAtCQljZi0+Y2FuX2lkID0gKHJlZ19pZCA+PiAx
+OCkgJiBDQU5fU0ZGX01BU0s7DQo+ICsJCWNmZC0+Y2FuX2lkID0gKHJlZ19pZCA+PiAxOCkgJiBD
+QU5fU0ZGX01BU0s7DQo+IA0KPiAgCWlmIChyZWdfY3RybCAmIEZMRVhDQU5fTUJfQ05UX1JUUikN
+Cj4gLQkJY2YtPmNhbl9pZCB8PSBDQU5fUlRSX0ZMQUc7DQo+IC0JY2YtPmNhbl9kbGMgPSBnZXRf
+Y2FuX2RsYygocmVnX2N0cmwgPj4gMTYpICYgMHhmKTsNCj4gKwkJY2ZkLT5jYW5faWQgfD0gQ0FO
+X1JUUl9GTEFHOw0KPiANCj4gLQlmb3IgKGkgPSAwOyBpIDwgY2YtPmNhbl9kbGM7IGkgKz0gc2l6
+ZW9mKHUzMikpIHsNCj4gKwlpZiAoY2FuX2lzX2NhbmZkX3NrYihza2IpKQ0KPiArCQljZmQtPmxl
+biA9IGNhbl9kbGMybGVuKGdldF9jYW5mZF9kbGMoKHJlZ19jdHJsID4+IDE2KSAmIDB4ZikpOw0K
+PiArCWVsc2UNCj4gKwkJY2ZkLT5sZW4gPSBnZXRfY2FuX2RsYygocmVnX2N0cmwgPj4gMTYpICYg
+MHhmKTsNCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBjZmQtPmxlbjsgaSArPSBzaXplb2YodTMy
+KSkgew0KPiAgCQlfX2JlMzIgZGF0YSA9IGNwdV90b19iZTMyKHByaXYtPnJlYWQoJm1iLT5kYXRh
+W2kgLyBzaXplb2YodTMyKV0pKTsNCj4gLQkJKihfX2JlMzIgKikoY2YtPmRhdGEgKyBpKSA9IGRh
+dGE7DQo+ICsJCSooX19iZTMyICopKGNmZC0+ZGF0YSArIGkpID0gZGF0YTsNCj4gIAl9DQo+IA0K
+PiAgCS8qIG1hcmsgYXMgcmVhZCAqLw0KPiBAQCAtMTI2Miw2ICsxMjY3LDcgQEAgc3RhdGljIGlu
+dCBmbGV4Y2FuX29wZW4oc3RydWN0IG5ldF9kZXZpY2UgKmRldikNCj4gIAlwcml2LT5yZWdfaW1h
+c2sxX2RlZmF1bHQgPSAwOw0KPiAgCXByaXYtPnJlZ19pbWFzazJfZGVmYXVsdCA9IEZMRVhDQU5f
+SUZMQUdfTUIocHJpdi0+dHhfbWJfaWR4KTsNCj4gDQo+ICsJcHJpdi0+b2ZmbG9hZC5mZF9lbmFi
+bGUgPSBmYWxzZTsNCj4gIAlwcml2LT5vZmZsb2FkLm1haWxib3hfcmVhZCA9IGZsZXhjYW5fbWFp
+bGJveF9yZWFkOw0KPiANCj4gIAlpZiAocHJpdi0+ZGV2dHlwZV9kYXRhLT5xdWlya3MgJiBGTEVY
+Q0FOX1FVSVJLX1VTRV9PRkZfVElNRVNUQU1QKQ0KPiB7IGRpZmYgLS1naXQgYS9kcml2ZXJzL25l
+dC9jYW4vcngtb2ZmbG9hZC5jIGIvZHJpdmVycy9uZXQvY2FuL3J4LW9mZmxvYWQuYyBpbmRleA0K
+PiAyY2U0ZmE4Njk4YzcuLjU1NmIyODBhYTQ2YyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQv
+Y2FuL3J4LW9mZmxvYWQuYw0KPiArKysgYi9kcml2ZXJzL25ldC9jYW4vcngtb2ZmbG9hZC5jDQo+
+IEBAIC01NSwxMSArNTUsMTEgQEAgc3RhdGljIGludCBjYW5fcnhfb2ZmbG9hZF9uYXBpX3BvbGwo
+c3RydWN0IG5hcGlfc3RydWN0DQo+ICpuYXBpLCBpbnQgcXVvdGEpDQo+IA0KPiAgCXdoaWxlICgo
+d29ya19kb25lIDwgcXVvdGEpICYmDQo+ICAJICAgICAgIChza2IgPSBza2JfZGVxdWV1ZSgmb2Zm
+bG9hZC0+c2tiX3F1ZXVlKSkpIHsNCj4gLQkJc3RydWN0IGNhbl9mcmFtZSAqY2YgPSAoc3RydWN0
+IGNhbl9mcmFtZSAqKXNrYi0+ZGF0YTsNCj4gKwkJc3RydWN0IGNhbmZkX2ZyYW1lICpjZmQgPSAo
+c3RydWN0IGNhbmZkX2ZyYW1lICopc2tiLT5kYXRhOw0KPiANCj4gIAkJd29ya19kb25lKys7DQo+
+ICAJCXN0YXRzLT5yeF9wYWNrZXRzKys7DQo+IC0JCXN0YXRzLT5yeF9ieXRlcyArPSBjZi0+Y2Fu
+X2RsYzsNCj4gKwkJc3RhdHMtPnJ4X2J5dGVzICs9IGNmZC0+bGVuOw0KPiAgCQluZXRpZl9yZWNl
+aXZlX3NrYihza2IpOw0KPiAgCX0NCj4gDQo+IEBAIC0xMjIsMTkgKzEyMiwyMyBAQCBzdGF0aWMg
+c3RydWN0IHNrX2J1ZmYNCj4gKmNhbl9yeF9vZmZsb2FkX29mZmxvYWRfb25lKHN0cnVjdCBjYW5f
+cnhfb2ZmbG9hZCAqb2ZmbG9hZCAgew0KPiAgCXN0cnVjdCBza19idWZmICpza2IgPSBOVUxMOw0K
+PiAgCXN0cnVjdCBjYW5fcnhfb2ZmbG9hZF9jYiAqY2I7DQo+IC0Jc3RydWN0IGNhbl9mcmFtZSAq
+Y2Y7DQo+ICsJc3RydWN0IGNhbmZkX2ZyYW1lICpjZmQ7DQo+ICAJaW50IHJldDsNCj4gDQo+ICAJ
+LyogSWYgcXVldWUgaXMgZnVsbCBvciBza2Igbm90IGF2YWlsYWJsZSwgcmVhZCB0byBkaXNjYXJk
+IG1haWxib3ggKi8NCj4gIAlpZiAobGlrZWx5KHNrYl9xdWV1ZV9sZW4oJm9mZmxvYWQtPnNrYl9x
+dWV1ZSkgPD0NCj4gLQkJICAgb2ZmbG9hZC0+c2tiX3F1ZXVlX2xlbl9tYXgpKQ0KPiAtCQlza2Ig
+PSBhbGxvY19jYW5fc2tiKG9mZmxvYWQtPmRldiwgJmNmKTsNCj4gKwkJICAgb2ZmbG9hZC0+c2ti
+X3F1ZXVlX2xlbl9tYXgpKSB7DQo+ICsJCWlmIChvZmZsb2FkLT5mZF9lbmFibGUpDQo+ICsJCQlz
+a2IgPSBhbGxvY19jYW5mZF9za2Iob2ZmbG9hZC0+ZGV2LCAmY2ZkKTsNCj4gKwkJZWxzZQ0KPiAr
+CQkJc2tiID0gYWxsb2NfY2FuX3NrYihvZmZsb2FkLT5kZXYsDQo+ICsJCQkJCSAgICAoc3RydWN0
+IGNhbl9mcmFtZSAqKikmY2ZkKTsNCg0KW0pvYWtpbm0gWmhhbmddDQpVc2luZyBhbGxvY19jYW5m
+ZF9za2IoKSB0byBhbGxvY2F0ZSBza2Igd2hlbiBGRCBtb2RlIGVuYWJsZSwgaXQgaXMgdW5yZWFz
+b25hYmxlLg0KV2hlbiBGRCBtb2RlIGVuYWJsZWQsIHdlIGFsc28gY2FuIHRyYW5zbWl0L3JlY2Vp
+dmUgY2xhc3NpYyBmcmFtZSwgc2hvdWxkIHVzZSBhbGxvY19jYW5fc2tiKCkNCmluIHRoaXMgY2Fz
+ZS4gSWYgeW91IHN0aWxsIHVzZSBhbGxvY19jYW5fc2tiKCkgaW4gdGhpcyBjYXNlLCBpdCB3aWxs
+IGNhdXNlIGZhaWx1cmUgZm9yIHJlbW90ZSBmcmFtZS4NClNvIGl0IGlzIG1vcmUgcmVhc29uYWJs
+ZSB0byBhbGxvY2F0ZSBza2IgYWZ0ZXIgd2UgcmVjZWl2ZWQgdGhlIENBTiBmcmFtZS4NCg0KPiAr
+CX0NCj4gDQo+ICAJaWYgKCFza2IpIHsNCj4gLQkJc3RydWN0IGNhbl9mcmFtZSBjZl9vdmVyZmxv
+dzsNCj4gIAkJdTMyIHRpbWVzdGFtcDsNCj4gDQo+IC0JCXJldCA9IG9mZmxvYWQtPm1haWxib3hf
+cmVhZChvZmZsb2FkLCAmY2Zfb3ZlcmZsb3csDQo+ICsJCXJldCA9IG9mZmxvYWQtPm1haWxib3hf
+cmVhZChvZmZsb2FkLCBvZmZsb2FkLT5za2Jfb3ZlcmZsb3csDQo+ICAJCQkJCSAgICAmdGltZXN0
+YW1wLCBuKTsNCj4gIAkJaWYgKHJldCkNCj4gIAkJCW9mZmxvYWQtPmRldi0+c3RhdHMucnhfZHJv
+cHBlZCsrOw0KPiBAQCAtMTQzLDcgKzE0Nyw3IEBAIHN0YXRpYyBzdHJ1Y3Qgc2tfYnVmZg0KPiAq
+Y2FuX3J4X29mZmxvYWRfb2ZmbG9hZF9vbmUoc3RydWN0IGNhbl9yeF9vZmZsb2FkICpvZmZsb2Fk
+DQo+ICAJfQ0KPiANCj4gIAljYiA9IGNhbl9yeF9vZmZsb2FkX2dldF9jYihza2IpOw0KPiAtCXJl
+dCA9IG9mZmxvYWQtPm1haWxib3hfcmVhZChvZmZsb2FkLCBjZiwgJmNiLT50aW1lc3RhbXAsIG4p
+Ow0KPiArCXJldCA9IG9mZmxvYWQtPm1haWxib3hfcmVhZChvZmZsb2FkLCBza2IsICZjYi0+dGlt
+ZXN0YW1wLCBuKTsNCj4gIAlpZiAoIXJldCkgew0KPiAgCQlrZnJlZV9za2Ioc2tiKTsNCj4gIAkJ
+cmV0dXJuIE5VTEw7DQo+IEBAIC0yNzMsNiArMjc3LDggQEAgRVhQT1JUX1NZTUJPTF9HUEwoY2Fu
+X3J4X29mZmxvYWRfcXVldWVfdGFpbCk7DQo+IA0KPiAgc3RhdGljIGludCBjYW5fcnhfb2ZmbG9h
+ZF9pbml0X3F1ZXVlKHN0cnVjdCBuZXRfZGV2aWNlICpkZXYsIHN0cnVjdA0KPiBjYW5fcnhfb2Zm
+bG9hZCAqb2ZmbG9hZCwgdW5zaWduZWQgaW50IHdlaWdodCkgIHsNCj4gKwlzdHJ1Y3QgY2FuZmRf
+ZnJhbWUgKmNmZDsNCj4gKw0KPiAgCW9mZmxvYWQtPmRldiA9IGRldjsNCj4gDQo+ICAJLyogTGlt
+aXQgcXVldWUgbGVuIHRvIDR4IHRoZSB3ZWlnaHQgKHJvdW50ZWQgdG8gbmV4dCBwb3dlciBvZiB0
+d28pICovDQo+IEBAIC0yODYsNiArMjkyLDE1IEBAIHN0YXRpYyBpbnQgY2FuX3J4X29mZmxvYWRf
+aW5pdF9xdWV1ZShzdHJ1Y3QNCj4gbmV0X2RldmljZSAqZGV2LCBzdHJ1Y3QgY2FuX3J4X29mZmxv
+DQo+ICAJZGV2X2RiZyhkZXYtPmRldi5wYXJlbnQsICIlczogc2tiX3F1ZXVlX2xlbl9tYXg9JWRc
+biIsDQo+ICAJCV9fZnVuY19fLCBvZmZsb2FkLT5za2JfcXVldWVfbGVuX21heCk7DQo+IA0KPiAr
+CWlmIChvZmZsb2FkLT5mZF9lbmFibGUpDQo+ICsJCW9mZmxvYWQtPnNrYl9vdmVyZmxvdyA9IGFs
+bG9jX2NhbmZkX3NrYihvZmZsb2FkLT5kZXYsICZjZmQpOw0KPiArCWVsc2UNCj4gKwkJb2ZmbG9h
+ZC0+c2tiX292ZXJmbG93ID0gYWxsb2NfY2FuX3NrYihvZmZsb2FkLT5kZXYsDQo+ICsJCQkJCQkg
+ICAgICAoc3RydWN0IGNhbl9mcmFtZSAqKikmY2ZkKTsNCj4gKw0KPiArCWlmICh1bmxpa2VseSgh
+b2ZmbG9hZC0+c2tiX292ZXJmbG93KSkNCj4gKwkJcmV0dXJuIC1FTk9NRU07DQo+ICsNCj4gIAly
+ZXR1cm4gMDsNCj4gIH0NCj4gDQo+IEBAIC0zMjksNiArMzQ0LDcgQEAgdm9pZCBjYW5fcnhfb2Zm
+bG9hZF9kZWwoc3RydWN0IGNhbl9yeF9vZmZsb2FkDQo+ICpvZmZsb2FkKSAgew0KPiAgCW5ldGlm
+X25hcGlfZGVsKCZvZmZsb2FkLT5uYXBpKTsNCj4gIAlza2JfcXVldWVfcHVyZ2UoJm9mZmxvYWQt
+PnNrYl9xdWV1ZSk7DQo+ICsJa2ZyZWVfc2tiKG9mZmxvYWQtPnNrYl9vdmVyZmxvdyk7DQo+ICB9
+DQo+ICBFWFBPUlRfU1lNQk9MX0dQTChjYW5fcnhfb2ZmbG9hZF9kZWwpOw0KPiANCj4gZGlmZiAt
+LWdpdCBhL2luY2x1ZGUvbGludXgvY2FuL3J4LW9mZmxvYWQuaCBiL2luY2x1ZGUvbGludXgvY2Fu
+L3J4LW9mZmxvYWQuaA0KPiBpbmRleCA4MjY4ODExYTY5N2UuLmQwMWViMzU2NjkyYyAxMDA2NDQN
+Cj4gLS0tIGEvaW5jbHVkZS9saW51eC9jYW4vcngtb2ZmbG9hZC5oDQo+ICsrKyBiL2luY2x1ZGUv
+bGludXgvY2FuL3J4LW9mZmxvYWQuaA0KPiBAQCAtMjMsMTAgKzIzLDEzIEBADQo+ICBzdHJ1Y3Qg
+Y2FuX3J4X29mZmxvYWQgew0KPiAgCXN0cnVjdCBuZXRfZGV2aWNlICpkZXY7DQo+IA0KPiAtCXVu
+c2lnbmVkIGludCAoKm1haWxib3hfcmVhZCkoc3RydWN0IGNhbl9yeF9vZmZsb2FkICpvZmZsb2Fk
+LCBzdHJ1Y3QNCj4gY2FuX2ZyYW1lICpjZiwNCj4gKwl1bnNpZ25lZCBpbnQgKCptYWlsYm94X3Jl
+YWQpKHN0cnVjdCBjYW5fcnhfb2ZmbG9hZCAqb2ZmbG9hZCwNCj4gKwkJCQkgICAgIHN0cnVjdCBz
+a19idWZmICpza2IsDQo+ICAJCQkJICAgICB1MzIgKnRpbWVzdGFtcCwgdW5zaWduZWQgaW50IG1i
+KTsNCj4gDQo+ICAJc3RydWN0IHNrX2J1ZmZfaGVhZCBza2JfcXVldWU7DQo+ICsJc3RydWN0IHNr
+X2J1ZmYgKnNrYl9vdmVyZmxvdzsNCj4gKw0KPiAgCXUzMiBza2JfcXVldWVfbGVuX21heDsNCj4g
+DQo+ICAJdW5zaWduZWQgaW50IG1iX2ZpcnN0Ow0KPiBAQCAtMzQsNiArMzcsNyBAQCBzdHJ1Y3Qg
+Y2FuX3J4X29mZmxvYWQgew0KPiANCj4gIAlzdHJ1Y3QgbmFwaV9zdHJ1Y3QgbmFwaTsNCj4gDQo+
+ICsJYm9vbCBmZF9lbmFibGU7DQo+ICAJYm9vbCBpbmM7DQo+ICB9Ow0KPiANCj4gLS0NCj4gMi4x
+Ny4xDQoNCg==
