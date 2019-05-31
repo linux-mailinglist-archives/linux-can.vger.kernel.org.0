@@ -2,59 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CDD3053C
-	for <lists+linux-can@lfdr.de>; Fri, 31 May 2019 01:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5818230D8B
+	for <lists+linux-can@lfdr.de>; Fri, 31 May 2019 13:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726131AbfE3XKz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 30 May 2019 19:10:55 -0400
-Received: from smtp.tjto.jus.br ([189.10.44.215]:38938 "EHLO smtp.tjto.jus.br"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726106AbfE3XKz (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 30 May 2019 19:10:55 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.tjto.jus.br (Postfix) with ESMTP id 967D23E4B2A;
-        Thu, 30 May 2019 18:51:53 -0300 (BRT)
-Received: from smtp.tjto.jus.br ([127.0.0.1])
-        by localhost (mta-in.tjto.jus.br [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id xkjda3itwML3; Thu, 30 May 2019 18:51:53 -0300 (BRT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.tjto.jus.br (Postfix) with ESMTP id 532083E64B9;
-        Thu, 30 May 2019 18:51:53 -0300 (BRT)
-X-Virus-Scanned: amavisd-new at mta-in.tjto.jus.br
-Received: from smtp.tjto.jus.br ([127.0.0.1])
-        by localhost (mta-in.tjto.jus.br [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1eJlSM-6AClM; Thu, 30 May 2019 18:51:53 -0300 (BRT)
-Received: from [192.99.135.118] (ip118.ip-192-99-135.net [192.99.135.118])
-        (Authenticated sender: nelsonsena@tjto.jus.br)
-        by smtp.tjto.jus.br (Postfix) with ESMTPSA id A1C633E6463;
-        Thu, 30 May 2019 18:51:46 -0300 (BRT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726798AbfEaLvm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 31 May 2019 07:51:42 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40074 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbfEaLvm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 31 May 2019 07:51:42 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x4VBpR1j106746;
+        Fri, 31 May 2019 06:51:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1559303487;
+        bh=HRLvIjx+R4FfsPnV+OErB6fuDJVknwRmHtgkR9AUk2Q=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=zONJqRnW4wi8VaPRVM3nZZ25un490NHdlLvlne0czcJ1DgLsRqNXya2rpY55jGxbP
+         hsxTq3fWTgKUWKuB5RO6+7/JDmSqtTkyQchcg4OZo9DP1wbB0lCrIzcP0E2wVPvY4q
+         t8p7wFdnrw4hUC5qhyBwjUKNiM068nOrPYiI8B/8=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x4VBpRAO004529
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 31 May 2019 06:51:27 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 31
+ May 2019 06:51:26 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 31 May 2019 06:51:26 -0500
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x4VBpQmH122805;
+        Fri, 31 May 2019 06:51:26 -0500
+Subject: Re: [PATCH v12 1/5] can: m_can: Create a m_can platform framework
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <dbb7bdef-820d-5dcc-d7b5-a82bc1b076fb@ti.com>
+Message-ID: <a8e3f2d3-18c3-3bdb-1318-8964afc7e032@ti.com>
+Date:   Fri, 31 May 2019 06:51:25 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?b?UmU6IOKCrCAyLDAwMCwwMDAuMDAgRXVybw==?=
-To:     Recipients <nelsonsena@tjto.jus.br>
-From:   nelsonsena@tjto.jus.br
-Date:   Thu, 30 May 2019 14:51:43 -0700
-Reply-To: myburghhugohendrik@gmail.com
-Message-Id: <20190530215146.A1C633E6463@smtp.tjto.jus.br>
+In-Reply-To: <dbb7bdef-820d-5dcc-d7b5-a82bc1b076fb@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Lieber Freund,
+Marc
 
-Ich bin Herr Richard Wahl der Mega-Gewinner von $ 533M In Mega Millions Jackpot spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt. Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt. Ich habe mich freiwillig dazu entschieden, Ihnen den Betrag von € 2.000.000,00 zu spenden eine der ausgewählten 5, um meine Gewinne zu überprüfen, finden Sie auf meiner You Tube Seite unten.
+On 5/15/19 3:54 PM, Dan Murphy wrote:
+> Marc
+>
+> On 5/9/19 11:11 AM, Dan Murphy wrote:
+>> Create a m_can platform framework that peripheral
+>> devices can register to and use common code and register sets.
+>> The peripheral devices may provide read/write and configuration
+>> support of the IP.
+>>
+>> Acked-by: Wolfgang Grandegger <wg@grandegger.com>
+>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>> ---
+>>
+>> v12 - Update the m_can_read/write functions to create a backtrace if the callback
+>> pointer is NULL. - https://lore.kernel.org/patchwork/patch/1052302/
+>>
+> Is this able to be merged now?
 
-UHR MICH HIER: https://www.youtube.com/watch?v=tne02ExNDrw
+ping
 
-Das ist dein Spendencode: [DF00430342018]
 
-Antworten Sie mit dem Spendencode auf diese E-Mail: wahlfoundationorg@gmail.com
-
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-
-Herr Richard Wahl
+> Dan
+>
+> <snip>
