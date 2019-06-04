@@ -2,95 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC35834FFC
-	for <lists+linux-can@lfdr.de>; Tue,  4 Jun 2019 20:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE75635000
+	for <lists+linux-can@lfdr.de>; Tue,  4 Jun 2019 20:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbfFDStu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Jun 2019 14:49:50 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34047 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbfFDStu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jun 2019 14:49:50 -0400
-Received: by mail-qt1-f196.google.com with SMTP id m29so9797134qtu.1
-        for <linux-can@vger.kernel.org>; Tue, 04 Jun 2019 11:49:49 -0700 (PDT)
+        id S1726532AbfFDSwn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Jun 2019 14:52:43 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38382 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726261AbfFDSwn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jun 2019 14:52:43 -0400
+Received: by mail-ed1-f67.google.com with SMTP id g13so1916471edu.5;
+        Tue, 04 Jun 2019 11:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=kPGz3PL4NcuihogsAqKWQP21CtWJ3BVUnUOFtNrtgaw=;
-        b=p5IB9/SzJVzevFf0txTxdNFiQmb9iW4dxCzE8Rj9+kdcTB5o7qJDebTfXSSosCYwVo
-         J0kzgszbf28osO4ITcu1+hJHzx4srz60TOhv4h/sSiBma7xi4/6vSFQuGozmRKljMVkh
-         ethHnypjUP/LwXBT+83R6sFrUxjwOWtYaHgjGENiJh8kQZdUdzBxpWnD2oz+EtUMB/Uc
-         021cHX9UpnGWj1V8aKCytZLEEFE/xdEMXY12oitR1sRv8P2DzJOZ62HMhqlsWDJkZAkL
-         Q5Im2RQRbMoR8N+M+AgBtcaYeMUDuuyH/Il6jwa3FYSiRdc/T5TX2fx7E6VDkRPF2TWN
-         n+Ww==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xppoq916Yvrn8sNjF55PlOumldtD02PnJm3y84wOdxU=;
+        b=hXvEUSb/zDhk8SlqmRLVW3dVa3DEQ0yyDZYGHFiNfwR3sljtYLO+Ebot8GNr3EKlWG
+         o06QZnPPP6r3VqL/G9GcnXzcDt+7uQ4di8XGpyqCFwexvbZJndSYPPmaojTJXGx6udH8
+         JmZUrxExqLyx9Y04L1qhuU0Th0BwWGj+KMa8LP06/T9tN+H7+wfHeU/yYLovyFvQM4SX
+         Hibf3MFB99i7JlGPzyW+2m7VPNvv4j9xpCF4U1X0rx/Kyl1enP6GbVbCvZUmi9Ycy9r3
+         /VNsgW1OUM0wf6qis1dP9u/YxUuytaoD3Hkg8WtJLgnroFeb+B3USfjcf6aWce1jkkgB
+         lkvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kPGz3PL4NcuihogsAqKWQP21CtWJ3BVUnUOFtNrtgaw=;
-        b=k63fZCos+gT8uYcILw40BpW7EUHBsG4+sJkDoq3P2tRRsWDRLRBLSehSSRGaGoWx5L
-         Z+E3J96iAPH3eZ9qPDiG4vVIfAEaG6G815PvNsYxG6uJzb2+ij5BRagb0UxQQaX4QEPH
-         aXroJgY2G2gO0/aifaTazXHmknW3Xqjq+DPKaKO42k6j9Edl4zj+UzNngKYn6Ag+DnP3
-         zFSmQw/stUhBVRjIuyQ6wBNB7cqIppEazP2DtvD5vvyd1WtrIeH17+24wHcVPBYS9t/Q
-         rX7GDqDJNOlYjZsIeVLI14xtm7xaQz9c8N/zp7ot2N+1fnFgjJvpbmx/acntpxA0fRN1
-         C2rw==
-X-Gm-Message-State: APjAAAUkphaIesVRC69yMghmmpq7ebktXnebnYrby3H+yhsXpYuL2KKl
-        cspsMmeSW9ynNpbuS+LcQkj7vJO5
-X-Google-Smtp-Source: APXvYqyEF2kIDjMqQ1Bh3I4kmsx55ZCLnfgg6JJ23JqyDSTviBeYbNTVEEMo40YZ4jO0emXOfzUWjw==
-X-Received: by 2002:aed:20ec:: with SMTP id 99mr4967788qtb.51.1559674189228;
-        Tue, 04 Jun 2019 11:49:49 -0700 (PDT)
-Received: from fabio-Latitude-E5450.am.freescale.net ([177.221.114.206])
-        by smtp.gmail.com with ESMTPSA id 100sm10191906qtb.53.2019.06.04.11.49.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 11:49:48 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     mkl@pengutronix.de
-Cc:     wg@grandegger.com, linux-can@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] can: flexcan: Remove unneeded registration message
-Date:   Tue,  4 Jun 2019 15:49:42 -0300
-Message-Id: <20190604184942.22530-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xppoq916Yvrn8sNjF55PlOumldtD02PnJm3y84wOdxU=;
+        b=ArXpo8GgvVHZTLj7fY86YhvqUyK8mYY8lFxEQ7VDgDRhy4CxtSK3CkY8wJ+vabOvda
+         c5ZwirS2wSTp2hi8yKYPFm22igmDi0MtG0RTeqldjcxV1pz/jKoxcIslCo4Yvh9lSNVk
+         MNP7g1TnCO7gY54k3IDO4H8zE4YFvGH4v9FwRioP8s3Omv/DVhUXIpup1zRzizOd7Yey
+         fTa9W0LyMSO5Y4FO8+mVfSq1oWwbQk4TROUrnQ9tzXzshL9AQ3XEowJ/SDYVnN7UQTr8
+         kLGqpXhoTZkHcf5sn9J6yQ5/5+KOQHgYos/YmnPZt5td5bmT4i+IgLx5TylU3rzhW9M6
+         6Fdg==
+X-Gm-Message-State: APjAAAXdYXNNNIqQiw3HfeoyZ0+lAwRgVKjpWrYFoZRZB1P2oc/RI+xK
+        w04pPjtV8A6pjLtjeo53t4duau9rNAm/Uxami/Y=
+X-Google-Smtp-Source: APXvYqw/e/dL/xwHXYVLDWfS0iJk4NBa2k76WdqcSY5wAfNnXhFdLuYooVZuWG8jScAXgMF1Fskn7QDYNUNXFXV8C8g=
+X-Received: by 2002:a50:bdc2:: with SMTP id z2mr37757106edh.245.1559674361090;
+ Tue, 04 Jun 2019 11:52:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <0000000000001bb6d7058a716205@google.com>
+In-Reply-To: <0000000000001bb6d7058a716205@google.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 4 Jun 2019 14:52:05 -0400
+Message-ID: <CAF=yD-K8ooDronfFK0XTCnvK6u1heNL71KW0SFmDPB69xLaseA@mail.gmail.com>
+Subject: Re: memory leak in raw_sendmsg
+To:     syzbot <syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com>
+Cc:     David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Network Development <netdev@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        wg@grandegger.com, patrick.ohly@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Currently the following message is observed when the flexcan
-driver is probed:
+On Mon, Jun 3, 2019 at 6:24 PM syzbot
+<syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    3ab4436f Merge tag 'nfsd-5.2-1' of git://linux-nfs.org/~bf..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=158090a6a00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=50393f7bfe444ff6
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a90604060cb40f5bdd16
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e42092a00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1327b0a6a00000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com
+>
+> BUG: memory leak
+> unreferenced object 0xffff888118308200 (size 224):
+>    comm "syz-executor081", pid 7046, jiffies 4294948162 (age 13.870s)
+>    hex dump (first 32 bytes):
+>      b0 64 19 2a 81 88 ff ff b0 64 19 2a 81 88 ff ff  .d.*.....d.*....
+>      00 90 28 24 81 88 ff ff 00 64 19 2a 81 88 ff ff  ..($.....d.*....
+>    backtrace:
+>      [<0000000085e706a4>] kmemleak_alloc_recursive
+> include/linux/kmemleak.h:55 [inline]
+>      [<0000000085e706a4>] slab_post_alloc_hook mm/slab.h:439 [inline]
+>      [<0000000085e706a4>] slab_alloc mm/slab.c:3326 [inline]
+>      [<0000000085e706a4>] kmem_cache_alloc+0x134/0x270 mm/slab.c:3488
+>      [<000000005a366403>] skb_clone+0x6e/0x140 net/core/skbuff.c:1321
+>      [<00000000854d44b1>] __skb_tstamp_tx+0x19f/0x220 net/core/skbuff.c:4434
+>      [<0000000091e53e01>] __dev_queue_xmit+0x920/0xd60 net/core/dev.c:3813
+>      [<0000000043e22300>] dev_queue_xmit+0x18/0x20 net/core/dev.c:3910
+>      [<0000000091bdc746>] can_send+0x138/0x2b0 net/can/af_can.c:290
+>      [<000000002dddbaef>] raw_sendmsg+0x1bb/0x300 net/can/raw.c:780
 
-flexcan 2090000.flexcan: device registered (reg_base=(ptrval), irq=23)
+The CAN protocol seems to be missing an error queue purge on socket
+destruction. Verified that this still happens on net-next and the
+following stops the warning:
 
-The reason for printing 'ptrval' is explained at
-Documentation/core-api/printk-formats.rst:
+    static void can_sock_destruct(struct sock *sk)
+    {
+             skb_queue_purge(&sk->sk_receive_queue);
+    +       __skb_queue_purge(&sk->sk_error_queue);
+    }
 
-"Pointers printed without a specifier extension (i.e unadorned %p) are
-hashed to prevent leaking information about the kernel memory layout. This
-has the added benefit of providing a unique identifier. On 64-bit machines
-the first 32 bits are zeroed. The kernel will print ``(ptrval)`` until it
-gathers enough entropy."
+I would have to double check socket destruct semantics to be sure, but
+judging from inet_sock_destruct there is no need to take the list
+lock.
 
-Instead of passing %pK, which can print the correct address, simply
-remove the entire message as it is not really that useful.
+This appears to be going back to the introduction of tx timestamps for
+CAN in commit 51f31cabe3ce ("ip: support for TX timestamps on UDP and
+RAW sockets")
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- drivers/net/can/flexcan.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 1c66fb2ad76b..05e5609f87f8 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -1583,9 +1583,6 @@ static int flexcan_probe(struct platform_device *pdev)
- 			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
- 	}
- 
--	dev_info(&pdev->dev, "device registered (reg_base=%p, irq=%d)\n",
--		 priv->regs, dev->irq);
--
- 	return 0;
- 
-  failed_register:
--- 
-2.17.1
-
+There don't seem to be any other protocols families that setup
+tx_flags but lack the error queue purge.
