@@ -2,120 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE75635000
-	for <lists+linux-can@lfdr.de>; Tue,  4 Jun 2019 20:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3ABB37478
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2019 14:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbfFDSwn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Jun 2019 14:52:43 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:38382 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbfFDSwn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Jun 2019 14:52:43 -0400
-Received: by mail-ed1-f67.google.com with SMTP id g13so1916471edu.5;
-        Tue, 04 Jun 2019 11:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xppoq916Yvrn8sNjF55PlOumldtD02PnJm3y84wOdxU=;
-        b=hXvEUSb/zDhk8SlqmRLVW3dVa3DEQ0yyDZYGHFiNfwR3sljtYLO+Ebot8GNr3EKlWG
-         o06QZnPPP6r3VqL/G9GcnXzcDt+7uQ4di8XGpyqCFwexvbZJndSYPPmaojTJXGx6udH8
-         JmZUrxExqLyx9Y04L1qhuU0Th0BwWGj+KMa8LP06/T9tN+H7+wfHeU/yYLovyFvQM4SX
-         Hibf3MFB99i7JlGPzyW+2m7VPNvv4j9xpCF4U1X0rx/Kyl1enP6GbVbCvZUmi9Ycy9r3
-         /VNsgW1OUM0wf6qis1dP9u/YxUuytaoD3Hkg8WtJLgnroFeb+B3USfjcf6aWce1jkkgB
-         lkvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xppoq916Yvrn8sNjF55PlOumldtD02PnJm3y84wOdxU=;
-        b=ArXpo8GgvVHZTLj7fY86YhvqUyK8mYY8lFxEQ7VDgDRhy4CxtSK3CkY8wJ+vabOvda
-         c5ZwirS2wSTp2hi8yKYPFm22igmDi0MtG0RTeqldjcxV1pz/jKoxcIslCo4Yvh9lSNVk
-         MNP7g1TnCO7gY54k3IDO4H8zE4YFvGH4v9FwRioP8s3Omv/DVhUXIpup1zRzizOd7Yey
-         fTa9W0LyMSO5Y4FO8+mVfSq1oWwbQk4TROUrnQ9tzXzshL9AQ3XEowJ/SDYVnN7UQTr8
-         kLGqpXhoTZkHcf5sn9J6yQ5/5+KOQHgYos/YmnPZt5td5bmT4i+IgLx5TylU3rzhW9M6
-         6Fdg==
-X-Gm-Message-State: APjAAAXdYXNNNIqQiw3HfeoyZ0+lAwRgVKjpWrYFoZRZB1P2oc/RI+xK
-        w04pPjtV8A6pjLtjeo53t4duau9rNAm/Uxami/Y=
-X-Google-Smtp-Source: APXvYqw/e/dL/xwHXYVLDWfS0iJk4NBa2k76WdqcSY5wAfNnXhFdLuYooVZuWG8jScAXgMF1Fskn7QDYNUNXFXV8C8g=
-X-Received: by 2002:a50:bdc2:: with SMTP id z2mr37757106edh.245.1559674361090;
- Tue, 04 Jun 2019 11:52:41 -0700 (PDT)
+        id S1727135AbfFFMpq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Jun 2019 08:45:46 -0400
+Received: from mail.iot.bzh ([51.75.236.24]:63826 "EHLO mail.iot.bzh"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725267AbfFFMpq (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 6 Jun 2019 08:45:46 -0400
+Received: from [10.18.0.57] (unknown [10.18.0.57])
+        by mail.iot.bzh (Postfix) with ESMTPSA id C4F9D40073;
+        Thu,  6 Jun 2019 14:45:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
+        t=1559825140; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fqq0uDcJ6h6lXsTm9uvEDGFq8fL8Ydaw5zzBMRCuvE8=;
+        b=aRcuPBT0qAtot4Dut7h4RgDmVXl9InVdjKngtPSCfZHCOGuCUTm1+HjW7oUlxV9s7E4IZJ
+        jQsU4/EsZwDfnMkaY9AQCXbQgTECGF9FyUHEIBaxHS6MwMbT8qfj8Uk5qKRsMMCt+oKkO5
+        SVxlZPqqtxpC0bfnhNYvi5wAWDwHJzPU+kKKompDqNZRQ6GLCEUx9bCNGCe+j1zwqs9Al0
+        E/v6SrNINuRSGWDGy3TJJp7cs39a4VNlLOcHy6MzUXEMX5rx+t31HfMZBhgJLzzjhhtr2K
+        zxIJHmdFUY4TYYf8q2PS1fXScR4qWz/tz9BCxTComQ8CGtotU/zOSCPMRayTGQ==
+Subject: Re: J1939 in AGL
+To:     linux-can@vger.kernel.org
+References: <ede28202-7be2-5a2f-bc17-4f3af02471bf@iot.bzh>
+ <20190603183523.GA10222@x1.vandijck-laurijssen.be>
+From:   "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+Organization: IOTBZH
+Message-ID: <4698add1-0d49-649e-d44f-cdd4615733de@iot.bzh>
+Date:   Thu, 6 Jun 2019 14:45:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <0000000000001bb6d7058a716205@google.com>
-In-Reply-To: <0000000000001bb6d7058a716205@google.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 4 Jun 2019 14:52:05 -0400
-Message-ID: <CAF=yD-K8ooDronfFK0XTCnvK6u1heNL71KW0SFmDPB69xLaseA@mail.gmail.com>
-Subject: Re: memory leak in raw_sendmsg
-To:     syzbot <syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com>
-Cc:     David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Network Development <netdev@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        wg@grandegger.com, patrick.ohly@intel.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190603183523.GA10222@x1.vandijck-laurijssen.be>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 6:24 PM syzbot
-<syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    3ab4436f Merge tag 'nfsd-5.2-1' of git://linux-nfs.org/~bf..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=158090a6a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=50393f7bfe444ff6
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a90604060cb40f5bdd16
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e42092a00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1327b0a6a00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com
->
-> BUG: memory leak
-> unreferenced object 0xffff888118308200 (size 224):
->    comm "syz-executor081", pid 7046, jiffies 4294948162 (age 13.870s)
->    hex dump (first 32 bytes):
->      b0 64 19 2a 81 88 ff ff b0 64 19 2a 81 88 ff ff  .d.*.....d.*....
->      00 90 28 24 81 88 ff ff 00 64 19 2a 81 88 ff ff  ..($.....d.*....
->    backtrace:
->      [<0000000085e706a4>] kmemleak_alloc_recursive
-> include/linux/kmemleak.h:55 [inline]
->      [<0000000085e706a4>] slab_post_alloc_hook mm/slab.h:439 [inline]
->      [<0000000085e706a4>] slab_alloc mm/slab.c:3326 [inline]
->      [<0000000085e706a4>] kmem_cache_alloc+0x134/0x270 mm/slab.c:3488
->      [<000000005a366403>] skb_clone+0x6e/0x140 net/core/skbuff.c:1321
->      [<00000000854d44b1>] __skb_tstamp_tx+0x19f/0x220 net/core/skbuff.c:4434
->      [<0000000091e53e01>] __dev_queue_xmit+0x920/0xd60 net/core/dev.c:3813
->      [<0000000043e22300>] dev_queue_xmit+0x18/0x20 net/core/dev.c:3910
->      [<0000000091bdc746>] can_send+0x138/0x2b0 net/can/af_can.c:290
->      [<000000002dddbaef>] raw_sendmsg+0x1bb/0x300 net/can/raw.c:780
+Hi Kurt,
 
-The CAN protocol seems to be missing an error queue purge on socket
-destruction. Verified that this still happens on net-next and the
-following stops the warning:
+Thanks for the reply, the compile ran fine with minor modifications on 
+patches gotten from v5.1 version. I've not tested at runtime yet but 
+should be good.
 
-    static void can_sock_destruct(struct sock *sk)
-    {
-             skb_queue_purge(&sk->sk_receive_queue);
-    +       __skb_queue_purge(&sk->sk_error_queue);
-    }
+I'll tell you once done if you are interested. You could take a look in 
+the AGL Jira ticket[1] to get the patches, if you want.
 
-I would have to double check socket destruct semantics to be sure, but
-judging from inet_sock_destruct there is no need to take the list
-lock.
+What about an integration in the mainline kernel ? Is there any date or 
+release planned so far ? Thanks
 
-This appears to be going back to the introduction of tx timestamps for
-CAN in commit 51f31cabe3ce ("ip: support for TX timestamps on UDP and
-RAW sockets")
+Best regards.
 
-There don't seem to be any other protocols families that setup
-tx_flags but lack the error queue purge.
+[1]: https://jira.automotivelinux.org/browse/SPEC-2386
+
+On 03/06/2019 20:35, Kurt Van Dijck wrote:
+> On ma, 03 jun 2019 18:25:03 +0200, Romain Forlot [IoT.bzh] wrote:
+>> Hi,
+>>
+>> We are working to support the J1939 protocol, using your works on socketCAN,
+>> in AGL (Automotive Grade Linux). We are facing some problems or questions
+>> about how to use it. We still have support for LTSI Kernel which is 4.14 by
+>> now and certainly will be 4.19 for the next and your work are based on the
+>> latest Linux v5.1 version.
+>>
+>> Backporting them to 4.19 seems easy, we just took the diff at the head of
+>> the "j1939" branch of linux-can-next repository as patches and applied them
+>> to the mainline 4.19 Kernel. We did the same about the 4.14 but only took
+>> the J1939 relative patches with a slight change on drivers/net/can/dev.c
+>> patches in the patches implementing the CAN midlayer private.
+>>
+>> Is it planned to support the 4.19 version in the future as it seems to be
+>> the next LTSI version ? And less probable, do you planned for 4.14 the
+>> actual LTSI ?
+>>
+>> What do you think about the way we did to backport the work on J1939 ?
+>> Runtime tests aren't been ran for now but we just prove that patches apply,
+>> which is not enough for sure, but as the work are limited to the J1939
+>> module then we are relatively confident and would appreciate your feedback.
+> You could, as an intermediate step between 'patch apply' and 'runtime tests',
+> try to compile the kernel with j1939.
+> Most of the backporting I did in the past indicated the amount of work
+> during compiling.
+>
+> Kind regards,
+> Kurt
+
+-- 
+Romain Forlot - Embedded Engineer - IoT.bzh
+romain.forlot@iot.bzh - www.iot.bzh - +33675142438
+
