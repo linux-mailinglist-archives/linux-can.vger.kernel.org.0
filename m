@@ -2,99 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3ABB37478
-	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2019 14:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAF2374F7
+	for <lists+linux-can@lfdr.de>; Thu,  6 Jun 2019 15:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbfFFMpq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Jun 2019 08:45:46 -0400
-Received: from mail.iot.bzh ([51.75.236.24]:63826 "EHLO mail.iot.bzh"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbfFFMpq (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 6 Jun 2019 08:45:46 -0400
-Received: from [10.18.0.57] (unknown [10.18.0.57])
-        by mail.iot.bzh (Postfix) with ESMTPSA id C4F9D40073;
-        Thu,  6 Jun 2019 14:45:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
-        t=1559825140; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fqq0uDcJ6h6lXsTm9uvEDGFq8fL8Ydaw5zzBMRCuvE8=;
-        b=aRcuPBT0qAtot4Dut7h4RgDmVXl9InVdjKngtPSCfZHCOGuCUTm1+HjW7oUlxV9s7E4IZJ
-        jQsU4/EsZwDfnMkaY9AQCXbQgTECGF9FyUHEIBaxHS6MwMbT8qfj8Uk5qKRsMMCt+oKkO5
-        SVxlZPqqtxpC0bfnhNYvi5wAWDwHJzPU+kKKompDqNZRQ6GLCEUx9bCNGCe+j1zwqs9Al0
-        E/v6SrNINuRSGWDGy3TJJp7cs39a4VNlLOcHy6MzUXEMX5rx+t31HfMZBhgJLzzjhhtr2K
-        zxIJHmdFUY4TYYf8q2PS1fXScR4qWz/tz9BCxTComQ8CGtotU/zOSCPMRayTGQ==
-Subject: Re: J1939 in AGL
-To:     linux-can@vger.kernel.org
-References: <ede28202-7be2-5a2f-bc17-4f3af02471bf@iot.bzh>
- <20190603183523.GA10222@x1.vandijck-laurijssen.be>
-From:   "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
-Organization: IOTBZH
-Message-ID: <4698add1-0d49-649e-d44f-cdd4615733de@iot.bzh>
-Date:   Thu, 6 Jun 2019 14:45:39 +0200
+        id S1727068AbfFFNQw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Jun 2019 09:16:52 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:48924 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726877AbfFFNQw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Jun 2019 09:16:52 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x56DGdCd105057;
+        Thu, 6 Jun 2019 08:16:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1559826999;
+        bh=gNc+oO3ghLaZB8nWHGiSN1D1nntyfITwOC+PGqY/I1k=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=mE2ExLrE3/z+ERYMtKdRwxxRLxrBNtzLfvEQW9tj0sHNpBVfJ7/gXaz2FtqzuHYS/
+         6pWZsakqdawZlgCx59JV0lYaQk54WnTjbIIoxdJ30/KR1EhA03hHDEzZtpfGljubKK
+         iTRpCdvBYn+VfgaGgIkWT9bJdrXjGd2lqwWOLBAo=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x56DGdP1099326
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 6 Jun 2019 08:16:39 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 6 Jun
+ 2019 08:16:38 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 6 Jun 2019 08:16:39 -0500
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x56DGcRS034254;
+        Thu, 6 Jun 2019 08:16:38 -0500
+Subject: Re: [PATCH v12 1/5] can: m_can: Create a m_can platform framework
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <dbb7bdef-820d-5dcc-d7b5-a82bc1b076fb@ti.com>
+ <a8e3f2d3-18c3-3bdb-1318-8964afc7e032@ti.com>
+Message-ID: <93530d94-ec65-de82-448e-f2460dd39fb9@ti.com>
+Date:   Thu, 6 Jun 2019 08:16:37 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190603183523.GA10222@x1.vandijck-laurijssen.be>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <a8e3f2d3-18c3-3bdb-1318-8964afc7e032@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Kurt,
+Marc
 
-Thanks for the reply, the compile ran fine with minor modifications on 
-patches gotten from v5.1 version. I've not tested at runtime yet but 
-should be good.
+Bump
 
-I'll tell you once done if you are interested. You could take a look in 
-the AGL Jira ticket[1] to get the patches, if you want.
-
-What about an integration in the mainline kernel ? Is there any date or 
-release planned so far ? Thanks
-
-Best regards.
-
-[1]: https://jira.automotivelinux.org/browse/SPEC-2386
-
-On 03/06/2019 20:35, Kurt Van Dijck wrote:
-> On ma, 03 jun 2019 18:25:03 +0200, Romain Forlot [IoT.bzh] wrote:
->> Hi,
->>
->> We are working to support the J1939 protocol, using your works on socketCAN,
->> in AGL (Automotive Grade Linux). We are facing some problems or questions
->> about how to use it. We still have support for LTSI Kernel which is 4.14 by
->> now and certainly will be 4.19 for the next and your work are based on the
->> latest Linux v5.1 version.
->>
->> Backporting them to 4.19 seems easy, we just took the diff at the head of
->> the "j1939" branch of linux-can-next repository as patches and applied them
->> to the mainline 4.19 Kernel. We did the same about the 4.14 but only took
->> the J1939 relative patches with a slight change on drivers/net/can/dev.c
->> patches in the patches implementing the CAN midlayer private.
->>
->> Is it planned to support the 4.19 version in the future as it seems to be
->> the next LTSI version ? And less probable, do you planned for 4.14 the
->> actual LTSI ?
->>
->> What do you think about the way we did to backport the work on J1939 ?
->> Runtime tests aren't been ran for now but we just prove that patches apply,
->> which is not enough for sure, but as the work are limited to the J1939
->> module then we are relatively confident and would appreciate your feedback.
-> You could, as an intermediate step between 'patch apply' and 'runtime tests',
-> try to compile the kernel with j1939.
-> Most of the backporting I did in the past indicated the amount of work
-> during compiling.
+On 5/31/19 6:51 AM, Dan Murphy wrote:
+> Marc
 >
-> Kind regards,
-> Kurt
-
--- 
-Romain Forlot - Embedded Engineer - IoT.bzh
-romain.forlot@iot.bzh - www.iot.bzh - +33675142438
-
+> On 5/15/19 3:54 PM, Dan Murphy wrote:
+>> Marc
+>>
+>> On 5/9/19 11:11 AM, Dan Murphy wrote:
+>>> Create a m_can platform framework that peripheral
+>>> devices can register to and use common code and register sets.
+>>> The peripheral devices may provide read/write and configuration
+>>> support of the IP.
+>>>
+>>> Acked-by: Wolfgang Grandegger <wg@grandegger.com>
+>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>>> ---
+>>>
+>>> v12 - Update the m_can_read/write functions to create a backtrace if 
+>>> the callback
+>>> pointer is NULL. - https://lore.kernel.org/patchwork/patch/1052302/
+>>>
+>> Is this able to be merged now?
+>
+> ping
+>
+>
+>> Dan
+>>
+>> <snip>
