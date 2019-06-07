@@ -2,89 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 143AC39702
-	for <lists+linux-can@lfdr.de>; Fri,  7 Jun 2019 22:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345323978E
+	for <lists+linux-can@lfdr.de>; Fri,  7 Jun 2019 23:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729950AbfFGUqN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Jun 2019 16:46:13 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:36404 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729640AbfFGUqN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Jun 2019 16:46:13 -0400
-Received: by mail-qk1-f194.google.com with SMTP id g18so2125343qkl.3;
-        Fri, 07 Jun 2019 13:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fRehPsNPEN/ECzbU8b7fuUn9KqNcRuRp0hIKZaFy6Ug=;
-        b=Y4c5SCaQfbBPk52YPTi7o4M2R3JAWZWzK6p8WRbz6/xgBQSaH7fHxZG29xgOkQJc1t
-         2NI3RNcgMTxZpyjWl1ILg0kQXBoPpUjaWA6QJoDMncoRU5mLR4HBbjkOq0udnqD5LUHw
-         GbXJvxdKZ04dHBRALWGB5ArybMie+IEqfmO7JSFpd6X1TUMboVcqj4qPHVguXItpTYmN
-         m4yeu02OexHattRSuOaA5GvB25TsZQyxTX16adMDm8ouiBWHPm9ZB2F6YRyFzXGem0eX
-         NAfYwsvRUFP9+PnbEhisXAB9LRu5qSivB5mIQJUmkRJrCzG1AFH8+1Y/mhgAtfgICnYJ
-         oBSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fRehPsNPEN/ECzbU8b7fuUn9KqNcRuRp0hIKZaFy6Ug=;
-        b=KngsJ4BBBIkK8zoRD114mcUan4W4U1OIX16ipUhfMuo/2ji/6gItM4EQSJdspTsXYe
-         hDP7dzKlSYM2zJTuct94yi+PW/H+XlS99HWtxS8j7vjsg0smoRAWXrei5bSz+H7CFseR
-         xO/2QTxB53hCHozH/kNH0pH419/SkHIxzqHpSk0UNUTeaVX8Yg/gwPMBmsakQEj6dTke
-         xQmmyIEFESC+cD7+OwIfk+WjJO74ZAYJBPoghULLZmSXR/GsnlL6I65uc0uO0Zru5GQV
-         Tuu9aCq1KWOqBadG8u6lFkmUomte79F5IoWAMGdpvCSYXdJJjc8pC5E/ewRyH5vU85vC
-         BtYA==
-X-Gm-Message-State: APjAAAVSyZtNbVjKXwqCt49MPD8fUvwDhU3wu5H6c3bmEgxuHUyBxO7i
-        DGkmI1d+s3NvyYhJCWM/8wZja+nW
-X-Google-Smtp-Source: APXvYqy6Qlb1MbiwtpuE9bC1TwrNvnsXqBqXwEVCqregplmHtCs75rJJPbqV7FPAiPbCGgAOB16vlg==
-X-Received: by 2002:a37:c45:: with SMTP id 66mr27122899qkm.31.1559940372089;
-        Fri, 07 Jun 2019 13:46:12 -0700 (PDT)
-Received: from willemb1.nyc.corp.google.com ([2620:0:1003:315:3fa1:a34c:1128:1d39])
-        by smtp.gmail.com with ESMTPSA id d23sm1437823qtq.6.2019.06.07.13.46.10
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 13:46:11 -0700 (PDT)
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+        id S1731225AbfFGVPu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 Jun 2019 17:15:50 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53043 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731077AbfFGVPt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Jun 2019 17:15:49 -0400
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hZMDB-00006I-FX; Fri, 07 Jun 2019 23:15:45 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-can@vger.kernel.org, mkl@pengutronix.de,
-        wg@grandegger.com, patrick.ohly@intel.com,
-        Willem de Bruijn <willemb@google.com>,
-        syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com
-Subject: [PATCH net] can: purge socket error queue on sock destruct
-Date:   Fri,  7 Jun 2019 16:46:07 -0400
-Message-Id: <20190607204607.250375-1-willemdebruijn.kernel@gmail.com>
-X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
+Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2019-06-07
+Date:   Fri,  7 Jun 2019 23:15:32 +0200
+Message-Id: <20190607211541.16095-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+Hello David,
 
-CAN supports software tx timestamps as of the below commit. Purge
-any queued timestamp packets on socket destroy.
+this is a pull reqeust of 9 patches for net/master.
 
-Fixes: 51f31cabe3ce ("ip: support for TX timestamps on UDP and RAW sockets")
-Reported-by: syzbot+a90604060cb40f5bdd16@syzkaller.appspotmail.com
-Signed-off-by: Willem de Bruijn <willemb@google.com>
+The first patch is by Alexander Dahl and removes a duplicate menu entry from
+the Kconfig. The next patch by Joakim Zhang fixes the timeout in the flexcan
+driver when setting small bit rates. Anssi Hannula's patch for the xilinx_can
+driver fixes the bittiming_const for CAN FD core. The two patches by Sean
+Nyekjaer bring mcp25625 to the existing mcp251x driver. The patch by Eugen
+Hristev implements an errata for the m_can driver. YueHaibing's patch fixes the
+error handling ing can_init(). The patch by Fabio Estevam for the flexcan
+driver removes an unneeded registration message during flexcan_probe(). And the
+last patch is by Willem de Bruijn and adds the missing purging the  socket
+error queue on sock destruct.
+
+regards,
+Marc
+
 ---
- net/can/af_can.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index e8fd5dc1780ae..189a6bf8f829c 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -99,6 +99,7 @@ EXPORT_SYMBOL(can_ioctl);
- static void can_sock_destruct(struct sock *sk)
- {
- 	skb_queue_purge(&sk->sk_receive_queue);
-+	skb_queue_purge(&sk->sk_error_queue);
- }
- 
- static const struct can_proto *can_get_proto(int protocol)
--- 
-2.22.0.rc2.383.gf4fbbf30c2-goog
+The following changes since commit c7e3c93abbc1382923c7f4fe5ba9ea6aa0fa8d0e:
+
+  Merge tag 'wireless-drivers-for-davem-2019-06-07' of git://git.kernel.org/pub/scm/linux/kernel/git/kvalo/wireless-drivers (2019-06-07 12:16:26 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.2-20190607
+
+for you to fetch changes up to fd704bd5ee749d560e86c4f1fd2ef486d8abf7cf:
+
+  can: purge socket error queue on sock destruct (2019-06-07 23:03:54 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.2-20190607
+
+----------------------------------------------------------------
+Alexander Dahl (1):
+      can: usb: Kconfig: Remove duplicate menu entry
+
+Anssi Hannula (1):
+      can: xilinx_can: use correct bittiming_const for CAN FD core
+
+Eugen Hristev (1):
+      can: m_can: implement errata "Needless activation of MRAF irq"
+
+Fabio Estevam (1):
+      can: flexcan: Remove unneeded registration message
+
+Joakim Zhang (1):
+      can: flexcan: fix timeout when set small bitrate
+
+Sean Nyekjaer (2):
+      dt-bindings: can: mcp251x: add mcp25625 support
+      can: mcp251x: add support for mcp25625
+
+Willem de Bruijn (1):
+      can: purge socket error queue on sock destruct
+
+YueHaibing (1):
+      can: af_can: Fix error path of can_init()
+
+ .../bindings/net/can/microchip,mcp251x.txt         |  1 +
+ drivers/net/can/flexcan.c                          |  5 +----
+ drivers/net/can/m_can/m_can.c                      | 21 ++++++++++++++++++
+ drivers/net/can/spi/Kconfig                        |  5 +++--
+ drivers/net/can/spi/mcp251x.c                      | 25 ++++++++++++++--------
+ drivers/net/can/usb/Kconfig                        |  6 ------
+ drivers/net/can/xilinx_can.c                       |  2 +-
+ net/can/af_can.c                                   | 25 +++++++++++++++++++---
+ 8 files changed, 65 insertions(+), 25 deletions(-)
+
+
 
