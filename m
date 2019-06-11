@@ -2,106 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76EC83C499
-	for <lists+linux-can@lfdr.de>; Tue, 11 Jun 2019 08:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D363C4B1
+	for <lists+linux-can@lfdr.de>; Tue, 11 Jun 2019 09:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404200AbfFKG6i (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Jun 2019 02:58:38 -0400
-Received: from mail-eopbgr30054.outbound.protection.outlook.com ([40.107.3.54]:29085
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2403758AbfFKG6i (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 11 Jun 2019 02:58:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x31bpzNhQAPwsNqF4u9x7C60redJ0ERVIvrvhVnFHfQ=;
- b=sdEnoq4Ub2g3r8DzJTBPcjmykbdk9eQqHdRM+XKUCR+4NzcP/7h+Q8H4S2S+PYNIMW4LXSEE/vhZNXqY5IvVTh+BPAFtDc/+NGWqVs7SegoZYOqErVisJG8nmK193ss4+LhS2ChY5UYoqWvctP4S2vPaqrf89kaP0dgDT5ddFOE=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.138.152) by
- DB7PR04MB5579.eurprd04.prod.outlook.com (20.178.106.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.21; Tue, 11 Jun 2019 06:58:31 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::d020:ef8f:cfd0:2c1c]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::d020:ef8f:cfd0:2c1c%6]) with mapi id 15.20.1987.010; Tue, 11 Jun 2019
- 06:58:31 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Sean Nyekjaer <sean@geanix.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
+        id S2391320AbfFKHIc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Jun 2019 03:08:32 -0400
+Received: from first.geanix.com ([116.203.34.67]:48560 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391121AbfFKHIc (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 11 Jun 2019 03:08:32 -0400
+Received: from [10.130.30.123] (unknown [89.221.170.34])
+        by first.geanix.com (Postfix) with ESMTPSA id C7B5013EA;
+        Tue, 11 Jun 2019 07:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1560236770; bh=O2niOTOhNGiNDk8HzKWU1vaZJJAl7wgZCIqiGLXAQ80=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Xv4MNpjGbEtIXyukxpVpjIMIe1ugM1AGQ9wrFqEpvIAI46plcdM3JE+mKa89/Tg/F
+         x1In8uOO4HQIQ7OFtkfrgLVLOwp/tqyannCYswc0ZwrChvBBoYVWZQAtahyMyLT4vH
+         rEND+lv1Lf4IcFkTgmVs7G35wdTFtwMqdyi/SJwgXyGYVjRo3wCzFVzszgj70uCZen
+         5Nt0sb4KtGnsRgb13lRb7YZU+iZTrtJgq9sFUdjlDU0Mdg4MbPMtrH+9dKNEewR+Mp
+         MEkuiqMYP0QcNCGgQQ2X2GScfPLoS/t/V2miQenUcEDB4sw2m6mir+kmKrZkHSN7WO
+         hds7cMKrIcEvg==
+Subject: Re: [PATCH] can: flexcan: fix deadlock when using self wakeup
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
         "wg@grandegger.com" <wg@grandegger.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH] can: flexcan: fix deadlock when using self wakeup
-Thread-Topic: [PATCH] can: flexcan: fix deadlock when using self wakeup
-Thread-Index: AQHVDFm06ozNDmulK0GLXWOup5sGAaaSKhwAgAQCnFA=
-Date:   Tue, 11 Jun 2019 06:58:31 +0000
-Message-ID: <DB7PR04MB46181EE74BF030D728042FD6E6ED0@DB7PR04MB4618.eurprd04.prod.outlook.com>
 References: <20190517023652.19285-1-qiangqing.zhang@nxp.com>
  <fbbe474f-bdf7-a97a-543d-da17dfd2a114@geanix.com>
-In-Reply-To: <fbbe474f-bdf7-a97a-543d-da17dfd2a114@geanix.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-originating-ip: [92.121.36.198]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 24c3af61-0d6f-4942-28e3-08d6ee3a36ce
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB5579;
-x-ms-traffictypediagnostic: DB7PR04MB5579:
-x-microsoft-antispam-prvs: <DB7PR04MB55790CA0735DFD19FF5D3D8AE6ED0@DB7PR04MB5579.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 006546F32A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(39860400002)(376002)(136003)(396003)(366004)(346002)(13464003)(189003)(199004)(110136005)(54906003)(8676002)(25786009)(229853002)(66946007)(8936002)(2501003)(53936002)(4326008)(26005)(14444005)(81156014)(3846002)(7736002)(14454004)(305945005)(2906002)(81166006)(33656002)(6246003)(256004)(66066001)(2201001)(6506007)(66476007)(316002)(52536014)(74316002)(476003)(6436002)(99286004)(66556008)(64756008)(478600001)(486006)(66446008)(186003)(7696005)(76116006)(53546011)(71200400001)(446003)(9686003)(11346002)(86362001)(68736007)(55016002)(102836004)(5660300002)(71190400001)(73956011)(76176011)(6116002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5579;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 0tpGHDchMzICFZdz+76b2bOF6hOBw8uRw5xuka1R9r785oat84n8DsS//+j2ORZ51Y+qOxjrTXN3kfdcNQjUzVSDMrv1Tt8pME8mRQbjkc2TVH38fealVnzMc6zWIkmwJYZtmqXLbIJKwLRCw0tf3qCt9DM+pHw8+V312v//f2q3oJhacoPFSTii0tSPPw4FPHxB9Akhux1uWrUD91NndxO+iWaubp7fvazPE4XTAKUanC3suOLas7KAI0M08yH3KijxWvL/R6QfmqxZo96j4Mi5fyoLt2OTBMPL7i44xq/wA0hyf1mlXn1uAikZtmWHiPh+JQfY0Hi1zSytKQkHQ7bfWX58cOLVXvowhPwzv6APOrUVKsrxh4Ssm6Tzse9D6AfxBkj4MU+HCDncRyNRy6iyKXQdHNGSO/z1ORB4ttk=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <DB7PR04MB46181EE74BF030D728042FD6E6ED0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+From:   Sean Nyekjaer <sean@geanix.com>
+Message-ID: <23fcfa1b-a664-7768-a793-26627b14463e@geanix.com>
+Date:   Tue, 11 Jun 2019 09:08:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24c3af61-0d6f-4942-28e3-08d6ee3a36ce
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 06:58:31.2869
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qiangqing.zhang@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5579
+In-Reply-To: <DB7PR04MB46181EE74BF030D728042FD6E6ED0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF autolearn=disabled
+        version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 796779db2bec
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNlYW4gTnlla2phZXIgPHNl
-YW5AZ2Vhbml4LmNvbT4NCj4gU2VudDogMjAxOeW5tDbmnIg55pelIDE6NDINCj4gVG86IEpvYWtp
-bSBaaGFuZyA8cWlhbmdxaW5nLnpoYW5nQG54cC5jb20+OyBta2xAcGVuZ3V0cm9uaXguZGU7DQo+
-IGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGRsLWxpbnV4LWlteCA8bGludXgtaW14
-QG54cC5jb20+OyB3Z0BncmFuZGVnZ2VyLmNvbTsNCj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZw0K
-PiBTdWJqZWN0OiBSZTogW1BBVENIXSBjYW46IGZsZXhjYW46IGZpeCBkZWFkbG9jayB3aGVuIHVz
-aW5nIHNlbGYgd2FrZXVwDQo+IA0KPiANCj4gDQo+IE9uIDE3LzA1LzIwMTkgMDQuMzksIEpvYWtp
-bSBaaGFuZyB3cm90ZToNCj4gPiBBcyByZXByb3RlZCBieSBTZWFuIE55ZWtqYWVyIGJlbGxvdzoN
-Cj4gPiBXaGVuIHN1c3BlbmRpbmcsIHdoZW4gdGhlcmUgaXMgc3RpbGwgY2FuIHRyYWZmaWMgb24g
-dGhlIGludGVyZmFjZXMgdGhlDQo+ID4gZmxleGNhbiBpbW1lZGlhdGVseSB3YWtlcyB0aGUgcGxh
-dGZvcm0gYWdhaW4uDQo+ID4gQXMgaXQgc2hvdWxkIDotKQ0KPiA+IEJ1dCBpdCB0aHJvd3MgdGhp
-cyBlcnJvciBtc2c6DQo+ID4gWyAzMTY5LjM3ODY2MV0gUE06IG5vaXJxIHN1c3BlbmQgb2YgZGV2
-aWNlcyBmYWlsZWQNCj4gPg0KPiA+IE9uIHRoZSB3YXkgZG93biB0byBzdXNwZW5kIHRoZSBpbnRl
-cmZhY2UgdGhhdCB0aHJvd3MgdGhlIGVycm9yIG1lc3NhZ2UNCj4gPiBkb2VzIGNhbGwgZmxleGNh
-bl9zdXNwZW5kIGJ1dCBmYWlscyB0byBjYWxsIGZsZXhjYW5fbm9pcnFfc3VzcGVuZC4NCj4gPiBU
-aGF0IG1lYW5zIHRoZSBmbGV4Y2FuX2VudGVyX3N0b3BfbW9kZSBpcyBjYWxsZWQsIGJ1dCBvbiB0
-aGUgd2F5IG91dA0KPiA+IG9mIHN1c3BlbmQgdGhlIGRyaXZlciBvbmx5IGNhbGxzIGZsZXhjYW5f
-cmVzdW1lIGFuZCBza2lwcw0KPiA+IGZsZXhjYW5fbm9pcnFfcmVzdW1lLCB0aHVzIGl0IGRvZXNu
-J3QgY2FsbCBmbGV4Y2FuX2V4aXRfc3RvcF9tb2RlLg0KPiA+IFRoaXMgbGVhdmVzIHRoZSBmbGV4
-Y2FuIGluIHN0b3AgbW9kZSwgYW5kIHdpdGggdGhlIGN1cnJlbnQgZHJpdmVyIGl0DQo+ID4gY2Fu
-J3QgcmVjb3ZlciBmcm9tIHRoaXMgZXZlbiB3aXRoIGEgc29mdCByZWJvb3QsIGl0IHJlcXVpcmVz
-IGEgaGFyZA0KPiA+IHJlYm9vdC4NCj4gPg0KPiA+IEZpeGVzOiBkZTM1NzhjMTk4YzYgKCJjYW46
-IGZsZXhjYW46IGFkZCBzZWxmIHdha2V1cCBzdXBwb3J0IikNCj4gPg0KPiA+IFRoaXMgcGF0Y2gg
-aW50ZW5kcyB0byBmaXggdGhlIGlzc3VlLCBhbmQgYWxzbyBhZGQgY29tbWVudCB0byBleHBsYWlu
-DQo+ID4gdGhlIHdha2V1cCBmbG93Lg0KPiA+IFJlcG9ydGVkLWJ5OiBTZWFuIE55ZWtqYWVyIDxz
-ZWFuQGdlYW5peC5jb20+DQo+ID4gU2lnbmVkLW9mZi1ieTogSm9ha2ltIFpoYW5nIDxxaWFuZ3Fp
-bmcuemhhbmdAbnhwLmNvbT4NCj4gDQo+IEhvdyBpcyBpdCBnb2luZyB3aXRoIHRoZSB1cGRhdGVk
-IHBhdGNoPw0KDQpIaSBTZWFuLA0KDQoJSSBzdGlsbCBuZWVkIGRpc2N1c3Mgd2l0aCBNYXJjIGFi
-b3V0IHRoZSBzb2x1dGlvbi4NCg0KSm9ha2ltIFpoYW5nDQo+IC9TZWFuDQo=
+
+
+On 11/06/2019 08.58, Joakim Zhang wrote:
+>>
+>> How is it going with the updated patch?
+> 
+> Hi Sean,
+> 
+> 	I still need discuss with Marc about the solution.
+> 
+> Joakim Zhang
+
+Hi, Joakim
+
+Please include me in the loop :-)
+
+/Sean
