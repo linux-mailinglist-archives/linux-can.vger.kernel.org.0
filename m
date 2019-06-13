@@ -2,89 +2,153 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BA844D19
-	for <lists+linux-can@lfdr.de>; Thu, 13 Jun 2019 22:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2534744EC8
+	for <lists+linux-can@lfdr.de>; Thu, 13 Jun 2019 23:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727492AbfFMULR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 13 Jun 2019 16:11:17 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:33544 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727216AbfFMULR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Jun 2019 16:11:17 -0400
-Received: by mail-qt1-f195.google.com with SMTP id x2so23198219qtr.0;
-        Thu, 13 Jun 2019 13:11:16 -0700 (PDT)
+        id S1727716AbfFMV4l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 13 Jun 2019 17:56:41 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:43639 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726900AbfFMV4l (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Jun 2019 17:56:41 -0400
+Received: by mail-qk1-f193.google.com with SMTP id m14so393087qka.10;
+        Thu, 13 Jun 2019 14:56:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kynEIGqHqfFyAVA0SpaU2DX6zDv55jiILYeSznYNPNM=;
-        b=VXT55wnlP1gaptlqCaP6Q19kMN8PxGge6CKEF1rbrRFG92yXiAExnzjgBeHyoO2ng0
-         tPRZm/QELaK90p/pLbXs6WjnTi15OPOGiNLCTFuCxeYcSFqjTQiOEGvPwAA5fBiAZJsy
-         ghAjuH9Ft7wJqig8SIBjFqxzUzOcncPGU384bRBtyLaHIYDzjDFO86dmvu6XcN6T9IY0
-         lU1fDj74amOoDXJHcroJHzIP1QdVYJQVrMga0TwJ6iIt56TmKfKwSrQOhKrFBBsi0esG
-         83WA+ITtCfjOi/IBAlZdd38u57mliN1zPk4+md0fpitOb/PdzicpG7qcnn8/guhoNjKh
-         BvCw==
-X-Gm-Message-State: APjAAAWr7uBu6t8kQLdQ98CVI1bjK40lziT8T8vKrbKzvxQr2rxu8ckG
-        TpAifVglsQKG6D/d9vpaEA==
-X-Google-Smtp-Source: APXvYqxe5eNSjkfbROg4faPppv8JUsym693JfsCHFj7SlJQvCa0P8AkVS5ftZTKmBf8oa+65LisbGQ==
-X-Received: by 2002:a0c:e712:: with SMTP id d18mr4944214qvn.152.1560456676142;
-        Thu, 13 Jun 2019 13:11:16 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=k0L1wTwwBKVO8fN5HgeovJ0u361UEeJyp2XXsEpN81Q=;
+        b=rdl6TLWxh3lsRves+fF0v4nXKYjXZdOes9XdBuNLHIrTxniizDd1G50h24OXZ6SgAC
+         e/qqStQcZncX9RiD/CSuScI6MyIfuqfarifT1BUZlsPj/AQnphSN7mIcuiMDubz41Fqu
+         N1Fq2DwkcWqMGGOPo7a2aQBCbZ/1SYQ/Fl9eqFLZiUEfR4sce8/oZl5RCLmXq11X2KP+
+         5JkEeWzY8fXuyFtFzKq3oWx2LVfamGpjUbjKHPLwx3jCr52MwWANdR12K7vbXHKg6qYb
+         5t3zh+za3hJRl/CyMKNxao7L/nx10A9TCk7kqA0rw/HrQtzfysaZ0hrMKLNzSdbmcqIq
+         FV+Q==
+X-Gm-Message-State: APjAAAX/vAUQEBPrgcM6jT1imfAJyhFa6bIBsN942ZHsp8/xLO5uA4r8
+        qPNU6w4XSZE229xCqbV5CQ==
+X-Google-Smtp-Source: APXvYqwLNbuO9TlEayQmZJoMDcvC6+7kJBo5YiPj+oXCNO0poz53gh1K94PHPQjtVEmwnBT2WDYb1Q==
+X-Received: by 2002:a37:783:: with SMTP id 125mr72538751qkh.0.1560463000454;
+        Thu, 13 Jun 2019 14:56:40 -0700 (PDT)
 Received: from localhost ([64.188.179.243])
-        by smtp.gmail.com with ESMTPSA id z1sm345280qth.7.2019.06.13.13.11.15
+        by smtp.gmail.com with ESMTPSA id e66sm367426qtb.55.2019.06.13.14.56.39
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 13:11:15 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 14:11:14 -0600
+        Thu, 13 Jun 2019 14:56:39 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 15:56:37 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+To:     Pankaj Bansal <pankaj.bansal@nxp.com>
+Cc:     Leo Li <leoyang.li@nxp.com>, Mark Rutland <mark.rutland@arm.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Simon Horman <horms@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH repost 4/5] dt-bindings: can: rcar_canfd: document
- r8a77990 support
-Message-ID: <20190613201114.GA22253@bogus>
-References: <1557429622-31676-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1557429622-31676-5-git-send-email-fabrizio.castro@bp.renesas.com>
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] Documentation: can: flexcan: Add flexcan clocks'
+ information
+Message-ID: <20190613215637.GA4455@bogus>
+References: <20190516133556.15872-1-pankaj.bansal@nxp.com>
+ <20190516133556.15872-2-pankaj.bansal@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1557429622-31676-5-git-send-email-fabrizio.castro@bp.renesas.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190516133556.15872-2-pankaj.bansal@nxp.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu,  9 May 2019 20:20:21 +0100, Fabrizio Castro wrote:
-> From: Marek Vasut <marek.vasut@gmail.com>
-> 
-> Document the support for rcar_canfd on R8A77990 SoC devices.
-> 
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@gmail.com>
-> Cc: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Simon Horman <horms+renesas@verge.net.au>
-> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> Cc: linux-renesas-soc@vger.kernel.org
-> To: devicetree@vger.kernel.org
-> Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
-> ---
->  Documentation/devicetree/bindings/net/can/rcar_canfd.txt | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
+On Thu, May 16, 2019 at 08:12:26AM +0000, Pankaj Bansal wrote:
+> The clocking information is missing from flexcan device tree bindings.
+> This information is needed to be able to use flexcan. Document the same.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+'dt-bindings: can: ...' for the subject.
+
+> 
+> Signed-off-by: Pankaj Bansal <pankaj.bansal@nxp.com>
+> ---
+> 
+> Notes:
+>     Dependencies:
+>     - https://lore.kernel.org/patchwork/cover/1024536/
+>     
+>     V2:
+>     - Removed clock-frequency from optional properties
+>     - Added Dependencies in Notes
+> 
+>  .../bindings/net/can/fsl-flexcan.txt         | 46 +++++++++++++++++-
+>  1 file changed, 44 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt b/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
+> index a04168605998..73c616ca0f9a 100644
+> --- a/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
+> +++ b/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
+> @@ -12,9 +12,42 @@ Required properties:
+>  - reg : Offset and length of the register set for this device
+>  - interrupts : Interrupt tuple for this device
+>  
+> -Optional properties:
+> +Clocking information is must for flexcan. please refer below info for
+> +understanding clocking in flexcan:
+> +
+> +• The FLEXCAN module is divided into two blocks. Controller host interface
+> +  ("CHI") and Protocol Engine ("PE")
+> +• Both these blocks require clock.
+> +• CHI is responsible for registers read write including MB read/write.
+> +  While PE is responsible for Transfer/receive data on CAN bus.
+> +• The clocks feeding to these two blocks can be synchronous (i.e. same clock)
+> +  or asynchronous (i.e. separate clocks).
+> +• Selection is made in the CLK_SRC bit (bit 13) of Control 1 Register.
+> +  - CLK_SRC = 0, asynchronous i.e. separate clocks for CHI and PE
+> +  - CLK_SRC = 1, synchronous i.e. CHI clock is used for PE and PE
+> +                 clock is not used.
+> +• If this bit is not implemented in SOC, then SOC only supports asynchronous
+> +  clocks.
+> +• Either of the clock can be generated by any of the clock source.
+> +• When the two clocks are asynchronous, then following restrictions apply to
+> +  PE clock.
+> +  - PE clock must be less than CHI clock.
+> +• If low jitter is required on CAN bus, dedicated oscillator can be used to
+> +  provide PE clock, but it must be less than CHI clock.
+> +
+> +Base on above information clocking info in flexcan can be defined in two ways:
+
+s/Base/Based/
+
+> +
+> +Method 1(Preferred):
+> +  - clocks: phandle to the clocks feeding the flexcan. Two can be given:
+> +    - "ipg": Protocol Engine clock
+> +    - "per": Controller host interface clock
+> +  - clock-names: Must contain the clock names described just above.
+>  
+> -- clock-frequency : The oscillator frequency driving the flexcan device
+> +Method 2(Not Preferred):
+> +  - clock-frequency : The synchronous clock frequency supplied to both
+> +  Controller host interface and Protocol Engine
+> +
+> +Optional properties:
+>  
+>  - xceiver-supply: Regulator that powers the CAN transceiver
+>  
+> @@ -47,5 +80,14 @@ Example:
+>  		interrupts = <48 0x2>;
+>  		interrupt-parent = <&mpic>;
+>  		clock-frequency = <200000000>; // filled in by bootloader
+> +	};
+> +
+> +	can@2180000 {
+> +		compatible = "fsl,lx2160ar1-flexcan";
+> +		reg = <0x0 0x2180000 0x0 0x10000>;
+> +		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+> +		clocks = <&sysclk>, <&clockgen 4 7>;
+> +		clock-names = "ipg", "per";
+>  		fsl,clk-source = <0>; // select clock source 0 for PE
+> +		status = "disabled";
+
+Don't show status in examples.
+
+>  	};
+> -- 
+> 2.17.1
+> 
