@@ -2,24 +2,23 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D4042CA4
-	for <lists+linux-can@lfdr.de>; Wed, 12 Jun 2019 18:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6B8743E26
+	for <lists+linux-can@lfdr.de>; Thu, 13 Jun 2019 17:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407068AbfFLQtK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 Jun 2019 12:49:10 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:37960 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405826AbfFLQtK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 Jun 2019 12:49:10 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 0826415224152;
-        Wed, 12 Jun 2019 09:49:08 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 09:49:08 -0700 (PDT)
-Message-Id: <20190612.094908.1957141510166169801.davem@davemloft.net>
-To:     horms@verge.net.au
+        id S1731753AbfFMPri (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 13 Jun 2019 11:47:38 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:39764 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731751AbfFMJ0m (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Jun 2019 05:26:42 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id A335925B7FA;
+        Thu, 13 Jun 2019 19:26:39 +1000 (AEST)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id 91846940483; Thu, 13 Jun 2019 11:26:37 +0200 (CEST)
+Date:   Thu, 13 Jun 2019 11:26:37 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     David Miller <davem@davemloft.net>
 Cc:     fabrizio.castro@bp.renesas.com, wg@grandegger.com,
         mkl@pengutronix.de, robh+dt@kernel.org, mark.rutland@arm.com,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
@@ -27,30 +26,36 @@ Cc:     fabrizio.castro@bp.renesas.com, wg@grandegger.com,
         geert+renesas@glider.be, Chris.Paterson2@renesas.com,
         biju.das@bp.renesas.com, linux-renesas-soc@vger.kernel.org
 Subject: Re: [PATCH repost 0/5] Repost CAN and CANFD dt-bindings
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190612122020.sgp5q427ilh6bbbg@verge.net.au>
+Message-ID: <20190613092635.ztm4k34o5jrxmadd@verge.net.au>
 References: <1557429622-31676-1-git-send-email-fabrizio.castro@bp.renesas.com>
-        <TY1PR01MB1770D2AAF2ED748575CA4CBFC0100@TY1PR01MB1770.jpnprd01.prod.outlook.com>
-        <20190612122020.sgp5q427ilh6bbbg@verge.net.au>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 12 Jun 2019 09:49:09 -0700 (PDT)
+ <TY1PR01MB1770D2AAF2ED748575CA4CBFC0100@TY1PR01MB1770.jpnprd01.prod.outlook.com>
+ <20190612122020.sgp5q427ilh6bbbg@verge.net.au>
+ <20190612.094908.1957141510166169801.davem@davemloft.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190612.094908.1957141510166169801.davem@davemloft.net>
+Organisation: Horms Solutions BV
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Simon Horman <horms@verge.net.au>
-Date: Wed, 12 Jun 2019 14:20:20 +0200
-
-> are you comfortable with me taking these patches
-> through the renesas tree? Or perhaps should they be reposted
-> to you for inclusion in net-next?
+On Wed, Jun 12, 2019 at 09:49:08AM -0700, David Miller wrote:
+> From: Simon Horman <horms@verge.net.au>
+> Date: Wed, 12 Jun 2019 14:20:20 +0200
 > 
-> They have been stuck for a long time now.
+> > are you comfortable with me taking these patches
+> > through the renesas tree? Or perhaps should they be reposted
+> > to you for inclusion in net-next?
+> > 
+> > They have been stuck for a long time now.
+> 
+> They can go through the renesas tree, no problem.
+> 
+> Acked-by: David S. Miller <davem@davemloft.net>
 
-They can go through the renesas tree, no problem.
+Thanks Dave,
 
-Acked-by: David S. Miller <davem@davemloft.net>
+I have applied these to the renesas tree for inclusion in v5.3.
