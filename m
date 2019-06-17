@@ -2,35 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CE34834B
-	for <lists+linux-can@lfdr.de>; Mon, 17 Jun 2019 14:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED0348354
+	for <lists+linux-can@lfdr.de>; Mon, 17 Jun 2019 15:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfFQM5l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Jun 2019 08:57:41 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:45375 "EHLO
+        id S1726005AbfFQNAH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Jun 2019 09:00:07 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36507 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725983AbfFQM5l (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Jun 2019 08:57:41 -0400
+        with ESMTP id S1725983AbfFQNAH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Jun 2019 09:00:07 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hcrCc-0000Ah-KB; Mon, 17 Jun 2019 14:57:38 +0200
+        id 1hcrEz-0000dt-UO; Mon, 17 Jun 2019 15:00:06 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:10a:6ce2:4275:4351] (unknown [IPv6:2a03:f580:87bc:d400:10a:6ce2:4275:4351])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 51D15420E4C;
-        Mon, 17 Jun 2019 12:57:37 +0000 (UTC)
-Subject: Re: [PATCH] can: flexcan: fix stop mode acknowledgment
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20190611064458.1477-1-qiangqing.zhang@nxp.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8F936420E7D;
+        Mon, 17 Jun 2019 13:00:04 +0000 (UTC)
+Subject: Re: missing files/dirs in MAINTAINERS CAN entries
+To:     "Robert P. J. Day" <rpjday@crashcourse.ca>,
+        linux-can@vger.kernel.org
+References: <alpine.LFD.2.21.1906140559150.12857@localhost.localdomain>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -93,15 +90,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <c24b0982-13af-ecdd-c3a2-7ec62863483c@pengutronix.de>
-Date:   Mon, 17 Jun 2019 14:57:31 +0200
+Message-ID: <9ab43eeb-970a-5196-2811-c54f2b979e2c@pengutronix.de>
+Date:   Mon, 17 Jun 2019 15:00:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <20190611064458.1477-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <alpine.LFD.2.21.1906140559150.12857@localhost.localdomain>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="cvAjkbgjtIBPFXtwAZGsZw2EolaY2hBIx"
+ boundary="PUOOesRtOWobigGB6gO8orX7kVkxswnjG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,66 +109,47 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---cvAjkbgjtIBPFXtwAZGsZw2EolaY2hBIx
-Content-Type: multipart/mixed; boundary="UiByezooILPcSPJ4wew7Ay0aqL1JqGCw1";
+--PUOOesRtOWobigGB6gO8orX7kVkxswnjG
+Content-Type: multipart/mixed; boundary="T2pzdvh1CN0fklEDUuok81mPsULzPNR8P";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: dl-linux-imx <linux-imx@nxp.com>, "wg@grandegger.com"
- <wg@grandegger.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <c24b0982-13af-ecdd-c3a2-7ec62863483c@pengutronix.de>
-Subject: Re: [PATCH] can: flexcan: fix stop mode acknowledgment
-References: <20190611064458.1477-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20190611064458.1477-1-qiangqing.zhang@nxp.com>
+To: "Robert P. J. Day" <rpjday@crashcourse.ca>, linux-can@vger.kernel.org
+Message-ID: <9ab43eeb-970a-5196-2811-c54f2b979e2c@pengutronix.de>
+Subject: Re: missing files/dirs in MAINTAINERS CAN entries
+References: <alpine.LFD.2.21.1906140559150.12857@localhost.localdomain>
+In-Reply-To: <alpine.LFD.2.21.1906140559150.12857@localhost.localdomain>
 
---UiByezooILPcSPJ4wew7Ay0aqL1JqGCw1
+--T2pzdvh1CN0fklEDUuok81mPsULzPNR8P
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 6/11/19 8:47 AM, Joakim Zhang wrote:
-> To enter stop mode, the CPU should manually assert a global Stop Mode
-> request and check the acknowledgment asserted by FlexCAN. The CPU must
-> only consider the FlexCAN in stop mode when both request and
-> acknowledgment conditions are satisfied.
+On 6/14/19 12:10 PM, Robert P. J. Day wrote:
 >=20
-> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
-> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-> ---
->  drivers/net/can/flexcan.c | 47 ++++++++++++++++++++++++++++++++-------=
-
->  1 file changed, 39 insertions(+), 8 deletions(-)
+>   at a glance, seems to be a few omissions or lack of specificity in
+> the MAINTAINERS file for CAN-related content in the two sections:
 >=20
-> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-> index e35083ff31ee..282dac1d8f5c 100644
-> --- a/drivers/net/can/flexcan.c
-> +++ b/drivers/net/can/flexcan.c
-> @@ -404,9 +404,11 @@ static void flexcan_enable_wakeup_irq(struct flexc=
-an_priv *priv, bool enable)
->  	priv->write(reg_mcr, &regs->mcr);
->  }
-> =20
-> -static inline void flexcan_enter_stop_mode(struct flexcan_priv *priv)
-> +static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
->  {
->  	struct flexcan_regs __iomem *regs =3D priv->regs;
-> +	unsigned int timeout =3D FLEXCAN_TIMEOUT_US / 10;
-> +	unsigned int ackval;
->  	u32 reg_mcr;
-> =20
->  	reg_mcr =3D priv->read(&regs->mcr);
-> @@ -416,20 +418,48 @@ static inline void flexcan_enter_stop_mode(struct=
- flexcan_priv *priv)
->  	/* enable stop request */
->  	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
->  			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
-> +
-> +	/* get stop acknowledgment */
-> +	regmap_read(priv->stm.gpr, priv->stm.ack_gpr, &ackval);
+>   - CAN NETWORK DRIVERS
+>   - CAN NETWORK LAYER
+>=20
+>   first, there's no specific CAN listing for include/net/netns/can.h,
+> it's just listed as part of general networking.
+>=20
+>   also, there are unmentioned entries under include/linux/can/,
+> including:
+>=20
+>   led.h
+>   rx-offload.h
+>   skb.h
+>=20
+> and no entry for include/linux/can/dev/ specifically (which contains
+> the single header file peak_canfd.h).
+>=20
+>   oh, and no mention of include/uapi/linux/can/vxcan.h.
+>=20
+> just thought i'd mention this if it was of any interest.
 
-Please make use of regmap_read_poll_timeout().
+Feel free to send a patch.
 
 Marc
 
@@ -182,23 +160,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---UiByezooILPcSPJ4wew7Ay0aqL1JqGCw1--
+--T2pzdvh1CN0fklEDUuok81mPsULzPNR8P--
 
---cvAjkbgjtIBPFXtwAZGsZw2EolaY2hBIx
+--PUOOesRtOWobigGB6gO8orX7kVkxswnjG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0HjjsACgkQWsYho5Hk
-nSAc6Af/SC6IZIEi3x800dtNiFzZK5yxPBNrJYiloomQ0SXnnLugf2+aF3A4xteR
-iNYGimTyvKfKYuccbADp9PVhfmvAwoPPssMLMWoThB3yaOyW6EDQz0sx9nvngEQY
-u0eWIkmSzFj3fAVeVXpWXUh+40GudQk0gDCPpB05DCOhlS0CRbl91wcUAchSd9rX
-zOtt0z08lDcsTgDkqWoP8FULcv56/L9S8gmsg438W0zdHXp71vS3UG3ePl8bvKpD
-IQ8I1U/dvZYgFJuaP9/hjiNMDPi64aTfn/h9mUnH6AYIjzgcBuSlVhpny9It0WjJ
-gVwAx97DVegOWC51NQxmpEL5vRfg/A==
-=5lfw
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0HjtAACgkQWsYho5Hk
+nSDScQgAl1YDBhebM9zzZQ+rmOmcQ7tIxKCxZI0Lg2wHgtzQMT35CQUOqNAroS2V
+ZnYWw10MWULyXqlleG3DPgplDDA228NhMtDL/17BIMtyq0zS/Vy7OzEx3ppXpzTH
+gSZlHjuS3lQdCW2JOhkS9Qe8tuZePcYsUncw1lOqC5jSIfK/6NoCyKRRwyRAPUnw
+mWLGx9VdULk/gEn+I/ZuEtwUI9aSmJ3ePGWaryU4jjOwkhw0AF/0jHrWRKxmeVx6
+ssEk2ETHQI82Hc89mFbr28zOvPhJWCOcu95HMXdqI52yfjz+uD/yCsHuKwUWsHuv
+nRLIYUgyk56UIjS+VsLm/d4ielpp+w==
+=46ri
 -----END PGP SIGNATURE-----
 
---cvAjkbgjtIBPFXtwAZGsZw2EolaY2hBIx--
+--PUOOesRtOWobigGB6gO8orX7kVkxswnjG--
