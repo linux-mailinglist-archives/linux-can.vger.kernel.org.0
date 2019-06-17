@@ -2,60 +2,73 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B6F46B92
-	for <lists+linux-can@lfdr.de>; Fri, 14 Jun 2019 23:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD5547AD1
+	for <lists+linux-can@lfdr.de>; Mon, 17 Jun 2019 09:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbfFNVOM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Jun 2019 17:14:12 -0400
-Received: from [89.32.41.185] ([89.32.41.185]:41309 "EHLO slot0.normalihy.ga"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1726160AbfFNVOM (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 14 Jun 2019 17:14:12 -0400
-X-Greylist: delayed 1870 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 17:14:11 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=normalihy.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=slaoma@normalihy.ga;
- bh=LF69dDschg8kOsoWmykprZXCKM4=;
- b=mLGdd5OIUpwfWC9HpjJFiglGqM2qs+jth/JZsfN/29yYBwLUZk5Vcu4YthH4EcZEZH7GQmQS/LZl
-   9+cEtEiGHw7hDDwGMYjK9jid5LY08AEHnMPshEbNn+gRPKnwfCPcroLEYu0lBw6s0UqfjrWcgz6Q
-   kkN9nGt24GxJXfnuZ1uYjCmelF02q7nD/MhgGBg1msVZeJKKC5Ya5eHF+JProrw6DGUal5GliTv/
-   nO+gjpngc+WNwBKddnqMrIUhAdP8+I3n/jA0lWxYFQK2Kn8zvVTfRKcSb0pQDZct+1JqlfaF9uFS
-   tbLvFxTo/q6+Myn+Q6KbabxcjJEMgaaAKhBjbg==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=normalihy.ga;
- b=MvD7ajdgxeGo85rAd3IWlzVGo3c/VVwMVeFQYRmMrQ7087ioq3EXIkA+SrPOITksG+7l9InoeesM
-   aGdehITW3KHdCnSi2ZoZTOmUP8AP1kPPyhBeRlyF7NHXsHCIEYOgsiqIhQhv9+PGrv3wUcKJ0fZU
-   AW3JbyKl7K5e3xAA7mvBTLe1KPcwa3DspCsuFJlUOrRZFTicyN5iihavb9tDI8ZQ9+JzMTk6CElE
-   IK1oyo/iz7/8Mo/HwFx7tCTsu9EYpg9cZeaTZPC5Jxh7K2mozLV39Rvzn00y22bHJtQ+kngUnSA0
-   Xr+8gsQW9mBB2YB/p11zqMaYmsSxBVd2CQKrUg==;
-Content-Type: text/plain; charset="utf-8"
+        id S1725995AbfFQH2g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Jun 2019 03:28:36 -0400
+Received: from slot0.nejknio.cf ([89.32.41.233]:36784 "EHLO slot0.nejknio.cf"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726320AbfFQH2d (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 17 Jun 2019 03:28:33 -0400
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=nejknio.cf;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=trade1@nejknio.cf;
+ bh=73Xs4LxjK+lP+h5mKCyFyWTpkoQ=;
+ b=H0ISKjOTyV1qUOEZjakGJHsnCFempdeqXTj6I8OW39GMPFdbH24x8JIX1Wriwfiin8JEWjE0zwOQ
+   +cW+TP48v2CtPI3enyLf2bBWzIbZfGIN9jKCAYQl/FmXmcb0hnox1bpG5k4hRNM7pnBvqy+LYpCN
+   1L5BKOvzp6M5HlUySW+mPto35S7RvS/SqOhg2Ob7HgdH6E2YnVL5YWYnhcRPFlBsumk8c2pUfBh6
+   62CrNq2w/XG5QMGDTWlFezN4JNfNu87J0hxJAJMF+oyAVrsWV9gYXaPEDITAV322YjVIqsbKVRvL
+   iWRGH4jN0tXSX7fJpsgCzmk0h8LqJJHi6IdziQ==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=nejknio.cf;
+ b=EB4W5o/7Xh3/jS9cy2ZAEkYurVyND2n1qCjg3UUumnB8M3aTBCzWUUHLmCCUGnehgurzNkxmVEaJ
+   Q482SUtr4UKCX3dCZ7+cSdMkfYJEg5mUEDCUBi5Y3gDtIvARbzr+o/qzbBi5VeFOghCSTs5k7nZ3
+   a9p5aaW7uzjYcvyrKsG4aD6WeRCAd7FU47O0Mf2IJvc0DnDDLfRouet0jzyjkD2sp9t5Jaiu4xx4
+   5eCGtar7xUTrmVxiRQeWMeLDEZb5zW48ZuEQ729S5Zm73MmhQPHlFOVS0xCy1LKEcRdH52k7QBap
+   b+HNjf6GuXbtPNijUGolBDArhiE/i+VJ5ZU3vA==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Description: Mail message body
-Subject: INQUIRY -AGRA POLANDS
-To:     Recipients <slaoma@normalihy.ga>
-From:   "Mrkt dept" <slaoma@normalihy.ga>
-Date:   Fri, 14 Jun 2019 13:33:08 -0700
-Reply-To: agra.poland@aol.com
-Message-ID: <0.0.2.490.1D522F0549619C6.0@slot0.normalihy.ga>
+Subject: PRODUCT INQUIRY FOR EXPORT SHIPMENT
+To:     Recipients <trade1@nejknio.cf>
+From:   "Mark Maths" <trade1@nejknio.cf>
+Date:   Mon, 17 Jun 2019 10:08:43 +0300
+Reply-To: purchase_m.maths@aol.com
+Message-ID: <0.0.1.D70.1D524DB74C1505C.0@slot0.nejknio.cf>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Sir,
+Dear Sales team,
+ =
 
-Greetings rom Agra Polands.
-we have been building our international business since 1997, dealing with a=
- wide range of luxury consumer goods in order to efficiently and effectivel=
-y satisfy all our customers=E2=80=99 demands.
+In furtherance to our market research, we have reviewed all your products t=
+ypes and we have finally interested in your product for our market here in =
 
-Kindly confirm if you be able to supply us with our desired items.
 
-What is your Payment terms and Shipments?.
+United State for your production. We introduce ourselves as Emilxa Tram SRL=
+, A general group of company located in the United State. =
 
-Regards
 
-Riccardo Corbo
-International Buyer & Analyst
-Address:Via Trento, 7/F - Lomazzo (CO) - Italy VAT IT 12165160156 =
+We are sourcing for new suppliers from your location =
 
-agra.poland@aol.com
+
+Kindly advice us if you accept new purchase orders, I will forward our PO f=
+or urgent order.
+
+Waiting for your response to send order. Reply to ( purchase_m.maths@aol.co=
+m)
+
+Best regards.
+Mark Maths
+Company Address:
+Emilxa Tram SRL Company Limited
+P.O. Box 978
+Road Town
+Tortola
+British Virgin Islands
+Contact information:
+Tel: +1 (284) 493 7235
+Email: purchase_m.maths@aol.com
+https://meridianbvi.com/contact-us/
