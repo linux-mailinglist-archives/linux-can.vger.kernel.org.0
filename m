@@ -2,64 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DAF4F6D6
-	for <lists+linux-can@lfdr.de>; Sat, 22 Jun 2019 18:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85911504A2
+	for <lists+linux-can@lfdr.de>; Mon, 24 Jun 2019 10:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726423AbfFVQ2u (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 22 Jun 2019 12:28:50 -0400
-Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:44192 "EHLO
-        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726378AbfFVQ2u (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 22 Jun 2019 12:28:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
-X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
- lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
- 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
- b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
- lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
- 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
- 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
- O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
- RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
- 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
- q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
- P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
- BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
- ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
- FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
- ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
- 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
-Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
-From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
-Reply-To: miss.fmayusuf11@gmail.com
-Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
-Subject: From:Miss: Fatima Yusuf.
+        id S1726583AbfFXIeS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Jun 2019 04:34:18 -0400
+Received: from mail-eopbgr30120.outbound.protection.outlook.com ([40.107.3.120]:37738
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725916AbfFXIeS (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 24 Jun 2019 04:34:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.se;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MtW8TNwL3nMci6PXQxTPxjx9kVsYY9xkqlI7JvXxawk=;
+ b=EMfpHTNXGZBph+0eQj0rrr/Cmds27ksRe6yK3Kq78jl4fXoNz8NIVvi1w8Hk/U2l06FHvorhVRXbLuWeaoSFFQUvX4dyS0wbn7IDpz8Zy5Nzw9CMh7IZ9ry5NS47iChnFBI2tK8109eb/xsamrUqcNxiFEq5E+2ylU/X1NAYiIQ=
+Received: from AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM (10.255.30.92) by
+ AM0PR10MB2387.EURPRD10.PROD.OUTLOOK.COM (20.177.109.28) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Mon, 24 Jun 2019 08:34:14 +0000
+Received: from AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d591:47a7:70ee:3162]) by AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d591:47a7:70ee:3162%7]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
+ 08:34:14 +0000
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>
+CC:     Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next] can: dev: call netif_carrier_off() in
+ register_candev()
+Thread-Topic: [PATCH net-next] can: dev: call netif_carrier_off() in
+ register_candev()
+Thread-Index: AQHVKmeahsDxJm0SfUSG50fnY2XQSw==
+Date:   Mon, 24 Jun 2019 08:34:13 +0000
+Message-ID: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HE1PR07CA0020.eurprd07.prod.outlook.com
+ (2603:10a6:7:67::30) To AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:160::28)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Rasmus.Villemoes@prevas.se; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.20.1
+x-originating-ip: [81.216.59.226]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c0c1c281-f7d6-4fcf-9550-08d6f87ebcbb
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR10MB2387;
+x-ms-traffictypediagnostic: AM0PR10MB2387:
+x-microsoft-antispam-prvs: <AM0PR10MB2387FDA80145DEC038003EF48AE00@AM0PR10MB2387.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:2887;
+x-forefront-prvs: 007814487B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(396003)(376002)(39840400004)(346002)(199004)(189003)(26005)(102836004)(66946007)(36756003)(110136005)(71200400001)(42882007)(25786009)(8676002)(81166006)(81156014)(54906003)(486006)(8976002)(305945005)(4326008)(316002)(3846002)(71190400001)(53936002)(6116002)(256004)(8936002)(7736002)(6512007)(478600001)(4744005)(64756008)(66446008)(186003)(74482002)(1076003)(66066001)(99286004)(6506007)(386003)(6436002)(44832011)(50226002)(73956011)(6486002)(68736007)(476003)(2616005)(5660300002)(2906002)(14454004)(72206003)(66476007)(66556008)(52116002);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR10MB2387;H:AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: prevas.se does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 36SNkUwLObqVNjHz4gVlASaEBdUGy2H9fXgLftHwYRAPE5AhDrKr8BxznJsK2CLwfNRqPjaAxfdGHbD9qeK7GioZ2Qn0J4my8W3y2xseacTd3Wn/hks+IvVz1Lfgot2h/BXzTrqXBpD7aanBAe+OwaW5MGDN/qI2rMPR6xSLWJKiHqDVCr0pHhj0JNimiwHmx0DgYkPVkrtij64l/SdV+2RA/cDmbbnnwk9W0gX/MTw6FyN8WPyplWQHiLYhoPLq3nBUxRTsoHC4Yze6F92L+qfqFo03zprUbG+IVfPMD9uPsjS4iVgBW88hNYJzgtHo4gq9lpTkzEPWDmgl1HDn4zHopVtypGNWkT2yRZoxfXA/D2AY2hpOX49tB8pqPA84qsvBgPYTfxL35fo2A/hGsBKQEBUxRfrms+Q/ynZLebw=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0c1c281-f7d6-4fcf-9550-08d6f87ebcbb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 08:34:13.9239
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rasmus.Villemoes@prevas.dk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2387
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-From:Miss: Fatima Yusuf.
-
-For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
-
-I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
-
-Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
-
-I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
-
-I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
-
-My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
+Q09ORklHX0NBTl9MRURTIGlzIGRlcHJlY2F0ZWQuIFdoZW4gdHJ5aW5nIHRvIHVzZSB0aGUgZ2Vu
+ZXJpYyBuZXRkZXYNCnRyaWdnZXIgYXMgc3VnZ2VzdGVkLCB0aGVyZSdzIGEgc21hbGwgaW5jb25z
+aXN0ZW5jeSB3aXRoIHRoZSBsaW5rDQpwcm9wZXJ0eTogVGhlIExFRCBpcyBvbiBpbml0aWFsbHks
+IHN0YXlzIG9uIHdoZW4gdGhlIGRldmljZSBpcyBicm91Z2h0DQp1cCwgYW5kIHRoZW4gdHVybnMg
+b2ZmIChhcyBleHBlY3RlZCkgd2hlbiB0aGUgZGV2aWNlIGlzIGJyb3VnaHQgZG93bi4NCg0KTWFr
+ZSBzdXJlIHRoZSBMRUQgYWx3YXlzIHJlZmxlY3RzIHRoZSBzdGF0ZSBvZiB0aGUgQ0FOIGRldmlj
+ZS4NCg0KU2lnbmVkLW9mZi1ieTogUmFzbXVzIFZpbGxlbW9lcyA8cmFzbXVzLnZpbGxlbW9lc0Bw
+cmV2YXMuZGs+DQotLS0NCiBkcml2ZXJzL25ldC9jYW4vZGV2LmMgfCAxICsNCiAxIGZpbGUgY2hh
+bmdlZCwgMSBpbnNlcnRpb24oKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi9kZXYu
+YyBiL2RyaXZlcnMvbmV0L2Nhbi9kZXYuYw0KaW5kZXggYzA1ZTRkNTBkNDNkLi5mYWQyN2FjZTYy
+NDggMTAwNjQ0DQotLS0gYS9kcml2ZXJzL25ldC9jYW4vZGV2LmMNCisrKyBiL2RyaXZlcnMvbmV0
+L2Nhbi9kZXYuYw0KQEAgLTEyNjAsNiArMTI2MCw3IEBAIGludCByZWdpc3Rlcl9jYW5kZXYoc3Ry
+dWN0IG5ldF9kZXZpY2UgKmRldikNCiAJCXJldHVybiAtRUlOVkFMOw0KIA0KIAlkZXYtPnJ0bmxf
+bGlua19vcHMgPSAmY2FuX2xpbmtfb3BzOw0KKwluZXRpZl9jYXJyaWVyX29mZihkZXYpOw0KIAly
+ZXR1cm4gcmVnaXN0ZXJfbmV0ZGV2KGRldik7DQogfQ0KIEVYUE9SVF9TWU1CT0xfR1BMKHJlZ2lz
+dGVyX2NhbmRldik7DQotLSANCjIuMjAuMQ0KDQo=
