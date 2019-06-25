@@ -2,87 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5645197E
-	for <lists+linux-can@lfdr.de>; Mon, 24 Jun 2019 19:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B764524BB
+	for <lists+linux-can@lfdr.de>; Tue, 25 Jun 2019 09:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732430AbfFXR1B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Jun 2019 13:27:01 -0400
-Received: from mail-yw1-f67.google.com ([209.85.161.67]:45440 "EHLO
-        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728831AbfFXR1A (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Jun 2019 13:27:00 -0400
-Received: by mail-yw1-f67.google.com with SMTP id m16so6133390ywh.12
-        for <linux-can@vger.kernel.org>; Mon, 24 Jun 2019 10:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yXmuDDswJwasFysM5xAe3iWKG6lQgSipjb+VoaydZpo=;
-        b=ZEzIcJAE76hfGZSdojtnNCDq8KnZa8QzLX4gcsB7N0ETY6ORcgQdkor67xpQexSWWo
-         fnprlr44zWbGI7KMkoUFtAlcXBvv5h8VZTTFA5WYfT7tmNiBdpnUEvMjWV1eespYOnxk
-         Fl+PI+e3gWgPAAA77uCNH9dQDpxVjW9vD+haq9JfuhF09FQJyTdun0ZPUHYjjtY0KurC
-         v+0o1Wo/EOBSSgiNa8QwBP/x7zBnjsu9+huHIxK7XbalT0GWYGrUmiI2uEkTzkEN6Djk
-         nC9qkPQYSsytaWz/1g2lwHRxrOvwJWFj6RibszIU/C+giXx6xQLf/9D3PHoZAG1pkMQh
-         vRHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yXmuDDswJwasFysM5xAe3iWKG6lQgSipjb+VoaydZpo=;
-        b=iNPWT9iu8F5g9mfT5So4J6lxx426xeXPmuyKDSbjQNsHv8wlZA4e/93nTOJusJju4C
-         ltNly6F/JBW/ipQqVSv5A3Dme/WY7i1G233/YybeFPPu0WLH7pMPwDmgNbX3JAgGU93a
-         4UoMZFC+jfKcSqA5Ju6N+QjFs0Sxk21g+IKf7V/TCTl+KUz4Fj/AWZ74KrhHaaCtt4yO
-         hq0VJhf763lSYxxQkU1cUvwlbJJypEKjnK+uG90laoQVAAOg2CU57ICZCBfPPFF0AeaX
-         Jr/Chz43MAQzqE0PVJZiZ9PD4aq38G1Z2epSka4PBkz54fs3+tVjzlULS7hssq5l8OHv
-         Rw5Q==
-X-Gm-Message-State: APjAAAUmEdVKkhGEF3Hyi8P39J9r5NzDgvsbGwjzlURaGnVqX/z/Op7C
-        E5Pnc+SUQAKhk7D13HCJgY/CXLmn
-X-Google-Smtp-Source: APXvYqzuJmKcjJNM3XSS6AuTLQRtCO9g97RJtQGrT5tl6YVRq6L8KL+JBdyjqyQCHbBgYQc8FRkccQ==
-X-Received: by 2002:a81:22c1:: with SMTP id i184mr83830107ywi.292.1561397218518;
-        Mon, 24 Jun 2019 10:26:58 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id a201sm3058731ywa.19.2019.06.24.10.26.56
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 10:26:56 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id w9so1479918ybe.9
-        for <linux-can@vger.kernel.org>; Mon, 24 Jun 2019 10:26:56 -0700 (PDT)
-X-Received: by 2002:a25:21c2:: with SMTP id h185mr14071216ybh.125.1561397215686;
- Mon, 24 Jun 2019 10:26:55 -0700 (PDT)
+        id S1726928AbfFYHaO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Jun 2019 03:30:14 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58901 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726907AbfFYHaO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Jun 2019 03:30:14 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1hffu7-0003Ju-IT; Tue, 25 Jun 2019 09:30:11 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1hffu5-0007AX-Qn; Tue, 25 Jun 2019 09:30:09 +0200
+Date:   Tue, 25 Jun 2019 09:30:09 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
+        wg@grandegger.com
+Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
+        robin@protonic.nl, david@protonic.nl
+Subject: j1939: discussion: RX path
+Message-ID: <20190625073009.GA15948@pengutronix.de>
 MIME-Version: 1.0
-References: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
-In-Reply-To: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 24 Jun 2019 13:26:18 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
-Message-ID: <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
-Subject: Re: [PATCH net-next] can: dev: call netif_carrier_off() in register_candev()
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 09:19:13 up 32 days, 13:22, 112 users,  load average: 0.19, 0.26,
+ 0.35
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 4:34 AM Rasmus Villemoes
-<rasmus.villemoes@prevas.dk> wrote:
->
-> CONFIG_CAN_LEDS is deprecated. When trying to use the generic netdev
-> trigger as suggested, there's a small inconsistency with the link
-> property: The LED is on initially, stays on when the device is brought
-> up, and then turns off (as expected) when the device is brought down.
->
-> Make sure the LED always reflects the state of the CAN device.
->
-> Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Hello all,
 
-Should this target net? Regardless of CONFIG_CAN_LEDS deprecation,
-this is already not initialized properly if that CONFIG is disabled
-and a can_led_event call at device probe is a noop.
+We already had a discussion about the J1939 use case for server
+implementation. Short description of the challenge will looks as follow:
+- main socket is listening on DST address and PGN.
+- as soon as connection was requested from peer the server will
+  create new connect()ed socket with SRC, DST addresses and PGN.
+
+With current stack implementation both sockets (main and connected) will
+receive same packages. At least with huge packages it will start to be
+not really good :).
+
+To solve this issue we have following variants:
+variant a:
+ - all sockets can receive everything (as currently implemented)
+variant b:
+ - only one socket will receive specific tuple. In this case kernel
+   should calculate RX "priority". Only highest priority will RX packet.
+   - all sockets with same priority will receive the matching packet
+   - socket option promisc == same priority as exact match
+variant c:
+ - all sockets can receive everything
+   add socket option: "ignore me if other can rx"
+
+We think variant b makes most sense to us.
+
+Opinions?
+
+regards, Oleksij & Marc
+
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
