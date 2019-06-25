@@ -2,81 +2,134 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E270F55107
-	for <lists+linux-can@lfdr.de>; Tue, 25 Jun 2019 16:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19553555EF
+	for <lists+linux-can@lfdr.de>; Tue, 25 Jun 2019 19:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbfFYOEh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Jun 2019 10:04:37 -0400
-Received: from mail-yw1-f67.google.com ([209.85.161.67]:40972 "EHLO
-        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727731AbfFYOEh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Jun 2019 10:04:37 -0400
-Received: by mail-yw1-f67.google.com with SMTP id y185so7551215ywy.8
-        for <linux-can@vger.kernel.org>; Tue, 25 Jun 2019 07:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6pIIC3jytWsmntojJM5beMPwkkISJ/lE+BJnG08AcnU=;
-        b=mRU4gBCrfg1gioLKe8ve3oGpbXdbfnB/ITSmqUQ9RcKXPtDFqmjktz9gM9ltsUh+wg
-         yUOjr6uBYr3ljB+H8Qpntj89LzaLJ8o3QlvN9SRou/ztu9mINIl4ZYYaTN4BJuuYlANb
-         Ut0kJmWvQM9BgB5orcacPdtvxfMMYeSgbJvugc/6SVKkKeNPc9WXLZlNEwSzV7Jyz7dw
-         D2YbmYBouyrHwbDsgfzL+et32rsvUyNbdFc2SUx5jusN9rhLxCH4jZgtjKHlro+olg7q
-         B0MwiYxTbk+3sGmNj0ndHj6Tn9PKidy1jzuvBQtDn3VADbLLRGWJqFTBKEe1779CkJhT
-         49Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6pIIC3jytWsmntojJM5beMPwkkISJ/lE+BJnG08AcnU=;
-        b=cK0ye7T/ZXd5rEGXRn4hm2duk0EaX1cOkxQ+Wd2lADeXKNc2pqMgxxKRgGnCC7Xpz8
-         /0ToTlO8DaCXhStmZw9/p6JQGfFP5xoIH5XbkYawhIaCToYtH2FVrEvclkURgpg4SDe+
-         PIc2iWvEiUU/XcbKWt2Slacti3wc3qyS7JuVc2P6FI4iwqmXzdGWM0/9I6ddmOedl3hz
-         BxQvD0VlVLeGBSNid9/Qe3zA6DUOA58dFqM8XKCaYqJ/DuIaRKkffi3mGzXVe206Rea1
-         T2a5h1YrZ2ddiHfDXLyr7mZiaYHojTiVOAw50cLrQuvOBHjHLQYMWn1EMMh5c+AvjuCN
-         4KbQ==
-X-Gm-Message-State: APjAAAUFxBmqVuMfXuZT4R7CUY5eh+I2Z+AmlKShnVD323nopIlBNK7d
-        MshhoohYxu52062Ws5Cc0QGAu8l2
-X-Google-Smtp-Source: APXvYqyYAh5SXJI8Ha+49jkGF/ZWxgPRKQkP13nJZgcGqcBDGZWfT0p8ata1SYKl2v2DHTqIFpCmLw==
-X-Received: by 2002:a81:a18b:: with SMTP id y133mr76129497ywg.239.1561471475523;
-        Tue, 25 Jun 2019 07:04:35 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id q63sm3636305ywq.17.2019.06.25.07.04.33
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 07:04:34 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id i14so7491858ybp.7
-        for <linux-can@vger.kernel.org>; Tue, 25 Jun 2019 07:04:33 -0700 (PDT)
-X-Received: by 2002:a25:99c4:: with SMTP id q4mr11512887ybo.390.1561471473136;
- Tue, 25 Jun 2019 07:04:33 -0700 (PDT)
+        id S1729740AbfFYRbt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Jun 2019 13:31:49 -0400
+Received: from relay-b03.edpnet.be ([212.71.1.220]:41687 "EHLO
+        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727652AbfFYRbs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Jun 2019 13:31:48 -0400
+X-ASG-Debug-ID: 1561483899-0a88186e2255400001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.103.163.adsl.dyn.edpnet.net [77.109.103.163]) by relay-b03.edpnet.be with ESMTP id aY0KvRTgfXujeEU2; Tue, 25 Jun 2019 19:31:39 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.103.163.adsl.dyn.edpnet.net[77.109.103.163]
+X-Barracuda-Apparent-Source-IP: 77.109.103.163
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 35F578CCB12;
+        Tue, 25 Jun 2019 19:31:39 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 19:31:37 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     David Jander <david@protonic.nl>, robin@protonic.nl,
+        linux-can@vger.kernel.org, mkl@pengutronix.de,
+        kernel@pengutronix.de, wg@grandegger.com
+Subject: Re: j1939: discussion: RX path
+Message-ID: <20190625173137.GB8923@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: j1939: discussion: RX path
+Mail-Followup-To: Oleksij Rempel <o.rempel@pengutronix.de>,
+        David Jander <david@protonic.nl>, robin@protonic.nl,
+        linux-can@vger.kernel.org, mkl@pengutronix.de,
+        kernel@pengutronix.de, wg@grandegger.com
+References: <20190625073009.GA15948@pengutronix.de>
+ <20190625104315.57172f69@erd988>
+ <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
 MIME-Version: 1.0
-References: <20190625125048.28849-1-houweitaoo@gmail.com>
-In-Reply-To: <20190625125048.28849-1-houweitaoo@gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 25 Jun 2019 10:03:56 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSegsUvPSWX+CZuafSD32Sx+xJmYPiQ92geDNqAe8_JGrQ@mail.gmail.com>
-Message-ID: <CA+FuTSegsUvPSWX+CZuafSD32Sx+xJmYPiQ92geDNqAe8_JGrQ@mail.gmail.com>
-Subject: Re: [PATCH] can: mcp251x: add error check when wq alloc failed
-To:     Weitao Hou <houweitaoo@gmail.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        allison@lohutok.net, tglx@linutronix.de, sean@geanix.com,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 77.109.103.163.adsl.dyn.edpnet.net[77.109.103.163]
+X-Barracuda-Start-Time: 1561483899
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 3037
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5724 1.0000 0.7500
+X-Barracuda-Spam-Score: 0.75
+X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.73108
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 8:51 AM Weitao Hou <houweitaoo@gmail.com> wrote:
->
-> add error check when workqueue alloc failed, and remove
-> redundant code to make it clear
->
-> Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
+On di, 25 jun 2019 10:54:55 +0200, Oleksij Rempel wrote:
+> On 25.06.19 10:43, David Jander wrote:
+> >On Tue, 25 Jun 2019 09:30:09 +0200
+> >Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> >
+> >>Hello all,
+> >>
+> >>We already had a discussion about the J1939 use case for server
+> >>implementation. Short description of the challenge will looks as follow:
+> >>- main socket is listening on DST address and PGN.
+> >>- as soon as connection was requested from peer the server will
+> >>   create new connect()ed socket with SRC, DST addresses and PGN.
+> >>
+> >>With current stack implementation both sockets (main and connected) will
+> >>receive same packages. At least with huge packages it will start to be
+> >>not really good :).
+> >>
+> >>To solve this issue we have following variants:
+> >>variant a:
+> >>  - all sockets can receive everything (as currently implemented)
+> >>variant b:
+> >>  - only one socket will receive specific tuple. In this case kernel
+> >>    should calculate RX "priority". Only highest priority will RX packet.
+> >>    - all sockets with same priority will receive the matching packet
+> >>    - socket option promisc == same priority as exact match
+> >
+> >How is this "priority" determined?
+> >Something like this:
+> >
+> >  for each socket:
+> >	 prio = 0
+> >	 listening on same DST or PGN ==> prio++
+> >	 listening on same DST and PGN ==> prio++
+> >	 connect()ed to same SRC ==> prio++
+> >  deliver frame to socket(s) with highest prio.
+> >
+> >Is that what you mean?
+> 
+> ACK.
 
-Acked-by: Willem de Bruijn <willemb@google.com>
+I don't like any of these.
+
+The problem you try to solve is 'huge packet duplication where it is
+probably not required'.
+Your proposed solution puts a policy in the kernel that goes in serious
+conflict with a multiuser system. It is driven by a typical
+implementation, but did not address the problem you try to solve.
+
+In order to avoid receiving huge packets where we suspect it is not
+really wanted, we should not try to guess what 'a' program wants, nor
+implement rules that apply to 1 specific case.
+Instead, we should protect sockets from receiving huge packets.
+
+Why not add a socket option, that implements a ceiling on the
+size of received packets.
+If that defaults to, let's say, 1785 bytes, so anyone will out of the
+box receive all TP sessions, but no ETP session, then the user will not
+be really supprised, and we need to make only 1 clear decision during delivery.
+
+I honestly think that my proprosal puts way less decision policy in the
+kernel code, and effectively addresses the problem you tried to solve,
+without adding unnecessary multi-user restrictions.
+
+What's your thought?
+Kurt
+
+> 
+> Kind regards,
+> Oleksij Rempel
+> 
+> -- 
+> Pengutronix e.K.                           |                             |
+> Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+> Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
