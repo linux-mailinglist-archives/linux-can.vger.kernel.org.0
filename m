@@ -2,249 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E7B56B79
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 16:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3634156BB5
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 16:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727667AbfFZOCk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jun 2019 10:02:40 -0400
-Received: from protonic.xs4all.nl ([83.163.252.89]:43106 "EHLO protonic.nl"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725958AbfFZOCk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 26 Jun 2019 10:02:40 -0400
-Received: from erd988 (erd988.prtnl [192.168.224.30])
-        by sparta (Postfix) with ESMTP id 753E844A00D3;
-        Wed, 26 Jun 2019 16:04:22 +0200 (CEST)
-Date:   Wed, 26 Jun 2019 16:02:38 +0200
-From:   David Jander <david@protonic.nl>
-To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, robin@protonic.nl,
-        linux-can@vger.kernel.org, mkl@pengutronix.de,
-        kernel@pengutronix.de, wg@grandegger.com
-Subject: Re: j1939: discussion: RX path
-Message-ID: <20190626160238.5d62fc15@erd988>
-In-Reply-To: <20190626130012.GC8923@x1.vandijck-laurijssen.be>
-References: <20190625073009.GA15948@pengutronix.de>
-        <20190625104315.57172f69@erd988>
-        <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
-        <20190625173137.GB8923@x1.vandijck-laurijssen.be>
-        <20190626091524.40410c4b@erd988>
-        <20190626130012.GC8923@x1.vandijck-laurijssen.be>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726628AbfFZORm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jun 2019 10:17:42 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:34052 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725958AbfFZORm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jun 2019 10:17:42 -0400
+Received: by mail-ed1-f67.google.com with SMTP id s49so3642460edb.1;
+        Wed, 26 Jun 2019 07:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jz+d8Bq6px4B5hv9aLpu7uCGEvD+endKK7G195O5KL8=;
+        b=Xpyj1SUPnpsE8OMNc9qWXya/cPkZB9lk6rT8T0PoUrlFKAxcKz4Yy7evwdpI1FOXdn
+         FuO689CFG8+xvQfJoY34NLnEzKyE89bBKXy3vMTSJNuCPyh7U9nwu8I98fUrR0/nmcM5
+         RjvASyRfbHLqGvhuA4sK/ktdvelXsXIYu9/yYn6C+eiAravBk/5asaEO0jtF9r0kxBrx
+         Rrm0y7DRVVTF3MBy+0Qj86uUIeREEb4CBI0Yu/ayD40X+xQjB/jVWu2theWuOjmxxQxH
+         xOksdgr/UaX3dHuv/qwlxewevbcc5oUZIjT3KkXAvEY5rDHZzTqatZMpIYe8I2x5fIhw
+         td2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jz+d8Bq6px4B5hv9aLpu7uCGEvD+endKK7G195O5KL8=;
+        b=aEAfjYE6mtZKAR+uYk4iL08csq26cBekfWzV8t99QYrdQEhYzMAcfwqnUBvuTRHO+o
+         Q52UvOU1VgKDF8LYz8VxOQ4J45lFJ9gRcNf+OtUIi+FRnXxjautpnHe4WP4VaWCBaOMn
+         jSgCgMDQPxZRojVD45/vFiYydlsrULfIqQ2603HSbI/A5AKwjrWZ2twgA1zCAYCQb08z
+         gMNBBSGbf09ytopdbfiMDJoOb1q0PhFm2TvxHu3CukkA5smptxZaSnmSvDWy56Q8ymfE
+         8KbAuZ4mPk/NcO7eCLUl+qsErDKhdWB9At4zscjwMU8UAr93ieiOn988mMJvyZ31lTGE
+         5Yyg==
+X-Gm-Message-State: APjAAAVw66aid8A2zeCNINZdyqoDsloPtUl9POjost7sbi7rFTQYtUqe
+        7iQXpZK/aKpvXpdlFD8Yai3Q2kioU8BKBJFzJgI=
+X-Google-Smtp-Source: APXvYqzrDNdvijzgbDqLjKhIz4Heet+Bul9RUJ3dxyVTIvG4efO+aI1oC/4DF9NAaTNa5V5XYDFtsZA2Eu41NOmx0z0=
+X-Received: by 2002:a50:a53a:: with SMTP id y55mr5734894edb.147.1561558659862;
+ Wed, 26 Jun 2019 07:17:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
+ <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com> <ff8160d4-3357-9b4f-1840-bbe46195da5a@prevas.dk>
+In-Reply-To: <ff8160d4-3357-9b4f-1840-bbe46195da5a@prevas.dk>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 26 Jun 2019 10:17:03 -0400
+Message-ID: <CAF=yD-KyWJwdESFmY=CvbkTBT8yey2atKDY-tgd19yAeMf525g@mail.gmail.com>
+Subject: Re: [PATCH net-next] can: dev: call netif_carrier_off() in register_candev()
+To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 26 Jun 2019 15:00:12 +0200
-Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
-
-> On wo, 26 jun 2019 09:15:24 +0200, David Jander wrote:
-> > Dear Kurt,
-> > 
-> > On Tue, 25 Jun 2019 19:31:37 +0200
-> > Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
-> >   
-> > > On di, 25 jun 2019 10:54:55 +0200, Oleksij Rempel wrote:  
-> > > > On 25.06.19 10:43, David Jander wrote:    
-> > > > >On Tue, 25 Jun 2019 09:30:09 +0200
-> > > > >Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> > > > >    
-> > > > >>Hello all,
-> > > > >>
-> > > > >>We already had a discussion about the J1939 use case for server
-> > > > >>implementation. Short description of the challenge will looks as follow:
-> > > > >>- main socket is listening on DST address and PGN.
-> > > > >>- as soon as connection was requested from peer the server will
-> > > > >>   create new connect()ed socket with SRC, DST addresses and PGN.
-> > > > >>
-> > > > >>With current stack implementation both sockets (main and connected) will
-> > > > >>receive same packages. At least with huge packages it will start to be
-> > > > >>not really good :).
-> > > > >>
-> > > > >>To solve this issue we have following variants:
-> > > > >>variant a:
-> > > > >>  - all sockets can receive everything (as currently implemented)
-> > > > >>variant b:
-> > > > >>  - only one socket will receive specific tuple. In this case kernel
-> > > > >>    should calculate RX "priority". Only highest priority will RX packet.
-> > > > >>    - all sockets with same priority will receive the matching packet
-> > > > >>    - socket option promisc == same priority as exact match    
-> > > > >
-> > > > >How is this "priority" determined?
-> > > > >Something like this:
-> > > > >
-> > > > >  for each socket:
-> > > > >	 prio = 0
-> > > > >	 listening on same DST or PGN ==> prio++
-> > > > >	 listening on same DST and PGN ==> prio++
-> > > > >	 connect()ed to same SRC ==> prio++
-> > > > >  deliver frame to socket(s) with highest prio.  
-> 
-> more than 1 socket may have equal highest priority
-
-True. We might want to restrict that though.
-
-> > > > >
-> > > > >Is that what you mean?    
-> > > > 
-> > > > ACK.    
-> > > 
-> > > I don't like any of these.
-> > > 
-> > > The problem you try to solve is 'huge packet duplication where it is
-> > > probably not required'.
-> > > Your proposed solution puts a policy in the kernel that goes in serious
-> > > conflict with a multiuser system. It is driven by a typical
-> > > implementation, but did not address the problem you try to solve.
-> > > 
-> > > In order to avoid receiving huge packets where we suspect it is not
-> > > really wanted, we should not try to guess what 'a' program wants, nor
-> > > implement rules that apply to 1 specific case.
-> > > Instead, we should protect sockets from receiving huge packets.
-> > > 
-> > > Why not add a socket option, that implements a ceiling on the
-> > > size of received packets.
-> > > If that defaults to, let's say, 1785 bytes, so anyone will out of the
-> > > box receive all TP sessions, but no ETP session, then the user will not
-> > > be really supprised, and we need to make only 1 clear decision during delivery.
-> > > 
-> > > I honestly think that my proprosal puts way less decision policy in the
-> > > kernel code, and effectively addresses the problem you tried to solve,
-> > > without adding unnecessary multi-user restrictions.
-> > > 
-> > > What's your thought?  
-> > 
-> > Thanks for your feedback. I understand it may sound counter-intuitive, but it
-> > really isn't. What we are trying to accomplish is for SocketCAN with J1939 to
-> > behave much like a network adapter with TCP/IP.  
-> 
-> J1939 is a datagram system, so more like UDP/IP.
-
-In some aspects it is more like UDP, but unlike UDP, J1939 does have have
-handshaking (in hardware) and is considered reliable.
-Also the transport protocol implements handshakes and reliability for bigger
-"datagrams".
-On top of that, many applications (like the ISObus fileserver, or the ISObus
-VT) behave much more like a connection-oriented server, thus benefiting more
-from the TCP/IP server analogy. I.e. there is a "client" who establishes a
-connection with a "server" and from then on they semantically communicate over
-a point to point channel, akin to a connected TCP/IP socket.
-
-> > The solution you propose is not enough. The problem really is not restricted
-> > to "big" messages.  
-> I see.
-> > If there are a lot of small frames coming from one client,
-> > you really do not want all the unnecessary interruptions to other sockets, but
-> > only the one that is connected to that client. That is actually one of the
-> > main reasons to have J1939 in the kernel as opposed to a user-space
-> > implementation... besides of course the obvious gains related to (E)TP.  
-> 
-> The main reason for J1939 in kernel is address claiming and Transport
-> Protocol is impossible for a multiuser (or multi-process) system to be
-> handled decently.
-> If that was not the case, CAN_RAW was good enough.
-
-Well, we have a lot of applications where sometimes more than one process on
-the same system claims an address and communicates using a user-space
-implementation of J1939. If there is more than one process, there is a
-significant context-switching overhead though that we want to avoid.
-Besides that it works quite well though.
-
-> > The underlying problem here is that we are trying to have the same sort of
-> > "connection oriented" sockets as in TCP/IP, but on a J1939-CAN network there is
-> > no way of initiating nor terminating a connection, and bigger data "streams"
-> > are artificially encapsulated in these (E)TP sessions. The semantics of J1939
-> > and ISObus nevertheless are very similar to TCP/IP: There are servers that
-> > bind() to an address and port number (NAME and PGN), and clients that
-> > connect() to a server from a source address and -port number (client-NAME and
-> > client-PGN).  
-> 
-> Again, J1939 has UDP semantics, and you're right that it's similar.
-> That's why I chose to stick to BSD socket model that close.
+On Wed, Jun 26, 2019 at 5:31 AM Rasmus Villemoes
+<rasmus.villemoes@prevas.dk> wrote:
 >
-> > 
-> > The problem is that in the "server" case, just as in TCP/IP you would want a
-> > new socket to be created (as is done with the accept() system call in TCP/IP)
-> > for each new client that connect()s.  
-> 
-> Now you're going off the road (what a choice of words, isn't protronic
-> in agriculture too?).
+> On 24/06/2019 19.26, Willem de Bruijn wrote:
+> > On Mon, Jun 24, 2019 at 4:34 AM Rasmus Villemoes
+> > <rasmus.villemoes@prevas.dk> wrote:
+> >>
+> >> CONFIG_CAN_LEDS is deprecated. When trying to use the generic netdev
+> >> trigger as suggested, there's a small inconsistency with the link
+> >> property: The LED is on initially, stays on when the device is brought
+> >> up, and then turns off (as expected) when the device is brought down.
+> >>
+> >> Make sure the LED always reflects the state of the CAN device.
+> >>
+> >> Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+> >
+> > Should this target net?
+>
+> No, I think this should go through the CAN tree. Perhaps I've
+> misunderstood when to use the net-next prefix - is that only for things
+> that should be applied directly to the net-next tree? If so, sorry.
 
-We do have a few agricultural customers, yes, and we also develop our own
-ISObus applications.
-But we also use J1939 and ISObus for some regular industrial applications...
+I don't see consistent behavior on the list, so this is probably fine.
+It would probably help to target can (for fixes) or can-next (for new
+features).
 
-> A UDP server opens 1 socket, and does not require a socket per
-> connection, since the connection does not exist.
+Let me reframe the question: should this target can, instead of can-next?
 
-True. But like I said above, in ISObus there are use-cases where a
-connection-oriented approach is used, even though there is no formal
-handshaking of the establishment and closing of a connection in the link layer.
+> > Regardless of CONFIG_CAN_LEDS deprecation,
+> > this is already not initialized properly if that CONFIG is disabled
+> > and a can_led_event call at device probe is a noop.
+>
+> I'm not sure I understand this part. The CONFIG_CAN_LEDS support for
+> showing the state of the interface is implemented via hooking into the
+> ndo_open/ndo_stop callbacks, and does not look at or touch the
+> __LINK_STATE_NOCARRIER bit at all.
+>
+> Other than via the netdev LED trigger I don't think one can even observe
+> the slightly odd initial state of the __LINK_STATE_NOCARRIER bit for CAN
+> devices,
 
-> A UDP 'connected client' does only exist at application level, and
-> whenever the 'server' needs to send, it uses sendto() with destination
-> address of the client.
+it's still incorrect, though I guess that's moot in practice.
 
-You can always use J1939 like that too. We just wanted to use the
-connection-oriented semantics from TCP/IP also, in order to be able to use
-send() and recv() on such a socket.
+> which is why I framed this as a fix purely to allow the netdev
+> trigger to be a closer drop-in replacement for CONFIG_CAN_LEDS.
 
-> > For TCP/IP there is a defined sequence of TCP messages (SYN/ACK/FIN/...) that
-> > initiates and terminates a "connection". Such a stateful protocol inherently
-> > requires time-outs on the connection level to work. Probably one of the
-> > reasons why J1939 is much simpler and stateless, due to it's real-time
-> > requirements. Anyway, since the notion of a "connection" is a lot more vague
-> > in J1939, there is some cooperation needed from user-space in order to decide
-> > when a connection is established, and when it is closed. We cannot have an
-> > accept() system call for J1939 unfortunately. Instead of that, the user-space
-> > application needs to open a new socket that does bind() and then connect() to
-> > the client's NAME and PGN. At that point (same as with an accept()ed TCP/IP
-> > connection) all traffic coming from that specific NAME and PGN to the "server"
-> > should be delivered only on that socket. And exactly this is what we are
-> > trying to accomplish now, while we only have a bunch of sockets owned by one
-> > application and no stateful information of the connection state of each of
-> > those sockets.  
-> 
-> Why would you apply STREAM semantics on a DATAGRAM network?
-
-Not strictly STREAM, but rather the notion of connections.
-
-> > Imagine a J1939 "server" that has 20 "clients" connected to it. It will thus
-> > have 21 open sockets (one for the server itself (the bind()ed socket) and one
-> > for each of the "clients" (the bind()ed and connect()ed sockets). Now imagine
-> > the trouble of having to deal with the fact that every single message from
-> > client A is received on all 21 sockets duplicated! You don't want that. Not
-> > for big messages, nor for small ones.  
-> 
-> I don't even want those 20 sockets for Datagrams.
-
-...but I do want to keep track of connected peers. The fact that you call all
-the messages datagrams does not make much of a difference really. TCP/IP is
-also used for request/answer datagram communication in case of a TCP/IP server.
-
-> I'm not aware of the complexity that has been added recently for the
-> ETP, but that should not break multiuser operation, i.e.,
-> if I write 'a' program, then that program should receive the same thing
-> regardless of the presence of other sockets on the local system, with or
-> withing the same process.
-> I would not plan to violate that rule.
-> I seriously would not.
-
-That rule is not violated as long as these processes have their own address
-(and NAME). If they share the same address and NAME, they are part of the same
-control-function. In that case, as long as they do not connect() and only use
-sendto() and recvfrom() that rule also holds true.
-It is only when you use connect() to establish a 1:1 connection with another
-peer. The only difference with TCP/IP sockets in that case is that you use
-connect() on both ends instead of listen()/accept(), and the
-establishment/tear-down of the connection is thus left to the application.
-
-Best regards,
-
--- 
-David Jander
-Protonic Holland.
+So the entire CONFIG_CAN_LEDS code is to be removed? What exactly is
+this netdev trigger replacement, if not can_led_event? Sorry, I
+probably miss some context.
