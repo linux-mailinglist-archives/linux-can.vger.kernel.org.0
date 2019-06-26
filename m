@@ -2,134 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0498565DD
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 11:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B55A565AA
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 11:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbfFZJqw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jun 2019 05:46:52 -0400
-Received: from mail.vanhool.be ([81.246.120.164]:63031 "EHLO mail.vanhool.be"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726242AbfFZJqv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 26 Jun 2019 05:46:51 -0400
-X-Greylist: delayed 1168 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jun 2019 05:46:50 EDT
-Received: from mail.vanhool.be (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27BA7FC061;
-        Wed, 26 Jun 2019 11:27:18 +0200 (CEST)
-Received: from mail.vanhool.be (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CC57FC060;
-        Wed, 26 Jun 2019 11:27:18 +0200 (CEST)
-Received: from mailserver3.corp.vanhool.com (unknown [160.1.7.209])
-        by mail.vanhool.be (Postfix) with ESMTPS;
-        Wed, 26 Jun 2019 11:27:18 +0200 (CEST)
-Received: from mailserver3.corp.vanhool.com (2002:a001:7d1::a001:7d1) by
- mailserver3.corp.vanhool.com (2002:a001:7d1::a001:7d1) with Microsoft SMTP
- Server (TLS) id 15.0.1395.4; Wed, 26 Jun 2019 11:27:17 +0200
-Received: from mailserver3.corp.vanhool.com ([fe80::6427:372:f132:9b49]) by
- mailserver3.corp.vanhool.com ([fe80::6427:372:f132:9b49%12]) with mapi id
- 15.00.1395.000; Wed, 26 Jun 2019 11:27:17 +0200
-From:   AVERMAETE Kristoff <kristoff.avermaete@vanhool.com>
-To:     'Marc Kleine-Budde' <mkl@pengutronix.de>,
-        David Jander <david@protonic.nl>
-CC:     linux-can <linux-can@vger.kernel.org>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: RE: Linux J1939: built in-kernel vs. user space stack?
-Thread-Topic: Linux J1939: built in-kernel vs. user space stack?
-Thread-Index: AQHVK/Gtq8+36/xMOUugmilDCJp9mqatdIwAgAADVYCAACLecA==
-Date:   Wed, 26 Jun 2019 09:27:17 +0000
-Message-ID: <6622af4fcee74cbf9e8eae4be4c6c3a2@mailserver3.corp.vanhool.com>
-References: <79f5ed74-671a-4253-2628-7d9df58f3694@pengutronix.de>
- <20190626101306.164d36f9@erd988>
- <92d20042-9195-8199-59fe-48ceaa7837cd@pengutronix.de>
-In-Reply-To: <92d20042-9195-8199-59fe-48ceaa7837cd@pengutronix.de>
-Accept-Language: nl-BE, en-US
-Content-Language: nl-NL
+        id S1725930AbfFZJbn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jun 2019 05:31:43 -0400
+Received: from mail-eopbgr50097.outbound.protection.outlook.com ([40.107.5.97]:28647
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725379AbfFZJbn (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 26 Jun 2019 05:31:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.se;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3UmchpQjV68nFeTKcfNuDUgiEf9Z412PKJjMH8xTT7M=;
+ b=IYOpHiHy71/4wSgdsxaXRvYDqHg06a4UAWK++vN3xI12i1dAuGq9czRlb4rYMb2FDe0au3nA5m0NCWBkgpTL6bkQQcTcsYu9JZqAbU0NBcsdjsN1hj715xAX/+ZeC1SaXy+OWgU00sqA9jCXZgHlPUNn96c7Vq/k50wEIH2/Xrs=
+Received: from AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM (10.255.30.92) by
+ AM0PR10MB2289.EURPRD10.PROD.OUTLOOK.COM (20.177.109.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Wed, 26 Jun 2019 09:31:39 +0000
+Received: from AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d591:47a7:70ee:3162]) by AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d591:47a7:70ee:3162%7]) with mapi id 15.20.2008.014; Wed, 26 Jun 2019
+ 09:31:39 +0000
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] can: dev: call netif_carrier_off() in
+ register_candev()
+Thread-Topic: [PATCH net-next] can: dev: call netif_carrier_off() in
+ register_candev()
+Thread-Index: AQHVKmeahsDxJm0SfUSG50fnY2XQS6arDw4AgAKgCYA=
+Date:   Wed, 26 Jun 2019 09:31:39 +0000
+Message-ID: <ff8160d4-3357-9b4f-1840-bbe46195da5a@prevas.dk>
+References: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
+ <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
+In-Reply-To: <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [160.1.12.101]
-Content-Type: text/plain;
-        charset="utf-8"
+x-clientproxiedby: HE1PR0202CA0014.eurprd02.prod.outlook.com
+ (2603:10a6:3:8c::24) To AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:160::28)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Rasmus.Villemoes@prevas.se; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [81.216.59.226]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5afc0410-8121-4538-06a1-08d6fa191741
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR10MB2289;
+x-ms-traffictypediagnostic: AM0PR10MB2289:
+x-microsoft-antispam-prvs: <AM0PR10MB228975B70913236166A778338AE20@AM0PR10MB2289.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-forefront-prvs: 00808B16F3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(376002)(39850400004)(366004)(136003)(346002)(189003)(199004)(229853002)(6436002)(8936002)(14444005)(6512007)(6486002)(256004)(5660300002)(8976002)(72206003)(478600001)(4326008)(25786009)(66446008)(64756008)(66556008)(305945005)(73956011)(66476007)(66946007)(7736002)(31686004)(14454004)(8676002)(81166006)(81156014)(68736007)(2906002)(71200400001)(71190400001)(26005)(476003)(486006)(54906003)(44832011)(36756003)(99286004)(2616005)(3846002)(186003)(6116002)(11346002)(316002)(66066001)(76176011)(52116002)(53546011)(6506007)(386003)(102836004)(6246003)(74482002)(446003)(6916009)(42882007)(53936002)(31696002);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR10MB2289;H:AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: prevas.se does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: g7a0gOxCMwZmkstquGvSTeNpVlE98g5sp17AH8HU8Jhyn4kTWA7Na0TqMuV/bNQNuAGxNyD0OBtpv516OdybeaxxR2UvNWSYz9F1pioOQEV7Iy45ojZXJQWvkdcPRzyrKHXYbAaxNhLuWjIUDu1yJv3Wxrhm7V54MbPwLhbNfM7+92DSxQ4ym/jWFCHKq5BWpgHPjHk43jYctaEpub01WUSOiHnB48Ft3L3O2x3rMyzSMcFINBbPOiPqJItvCW18AArzv6ZsQrLPctQ7yBMkpr3wimvkX4GF5jyJi4ha3rWWKO97ClVLp5IP4hqbT3LkyAf3rwVLApjv9DhKAJHgEyCDsU5DY/j8mw7dTG4fz70UKrwxlAIspA8CvMw5D/bVXdjlhBDgC9Z07U1hsZExxEK56Jt3CcGb1sAYZyI7FG8=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1038AA6E0DD7FA4689BDA53C0FEA4596@EURPRD10.PROD.OUTLOOK.COM>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-TM-AS-GCONF: 11111111
-X-TM-AS-SMTP: 1.0 bWFpbHNlcnZlcjMuY29ycC52YW5ob29sLmNvbQ== 
-        a3Jpc3RvZmYuYXZlcm1hZXRlQHZhbmhvb2wuY29t
-X-TM-AS-ERS: 160.1.7.209-127.5.249.21
-X-TM-AS-Product-Ver: IMSVA-9.1.0.1976-8.5.0.1020-24716.003
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSVA-9.1.0.1976-8.5.1020-24716.003
-X-TMASE-Result: 10--14.663300-10.000000
-X-TMASE-MatchedRID: EMyCvCfVN1GlgxshcWfq4hjFEX4UJBCyUb4EdIZGxuD7jZ40qn7f4byi
-        uLk/2fH4JSzNAX5Zpi9MP01kejT9olMH2K6Z+33Hc7uq4k7WFKOuQaF33T8MPkTqq9Xa45y5vf2
-        yHAohazmI5rt/DRsq4nTy4RCE61JISR9dTjlQdMnF30Jee57vxo1j+mrGi/PFgptJLUV6SF2AGS
-        sd6jlkoU9uF7F9cIpv6rDTpjQ7KPOeziiX8KrRquNBBVe5eLQFg4bLQO8HYqYRGC0rW8q1XdoNe
-        lO7JXwb/ye/3Hc9K1rXX+MPQbzciTWg20/TdHCGNVRz+HwqL4JuchTq5J5u9CgVbxW7FDOVt2rb
-        RfUdmZ5Fz/iQE/hT84pQp5zaCPbdZB7FaQ6KQ99YcYljwpu4xGskdVh5iWKKxKLCLOyCW5D1Zeb
-        7KEkrKGInJfxdRvZ7tNvIx77SGgwtIbjApBhlePC3jJqTOlQ/nkX6ZrnAtcFa6MiUgjvzmWn2Ga
-        /3mGosa8g5AKL3Rbc0NDCEqdL7DWrRCqFi6ztkwrUhv0kAAvF9LQinZ4QefFEOfJuMbL5P9zw4l
-        zv7RUn3FLeZXNZS4KBkcgGnJ4WmGSr9BKUkBoeflXKHbedn0GshsMcPoCWZ+rohS8AhKqd+3Bnd
-        fXUhXQ==
-X-TMASE-SNAP-Result: 1.821001.0001-0-2-1:0,12:0,22:0,33:0,34:0-0
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5afc0410-8121-4538-06a1-08d6fa191741
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2019 09:31:39.4635
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Rasmus.Villemoes@prevas.dk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2289
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgYWxsLA0KDQpUaGFuayB5b3UgZm9yIHlvdXIgY2xhcmlmeWluZyBhbnN3ZXJzLg0KDQpJdCBh
-cHBlYXJzIEkgaGF2ZSBtYWRlIHRvbyBtYW55IGFzc3VtcHRpb25zIGFib3V0IHRoZSBsb2FkIGRp
-c3RyaWJ1dGlvbjogbGlrZSBKMTkzOSBjb25maWd1cmluZyB0aGUgQ0FOIGxheWVyIGFzIHN1Y2gg
-dGhhdCB0aGUgbWFqb3IgbG9hZCBpcyBoYW5kbGVkIGJ5IENBTiwgd2hpbGUgSjE5MzkncyBqb2Ig
-Y2FuIGJlIGxpbWl0ZWQgdG8gaW50ZXJwcmV0aW5nIG9ubHkgcmVsZXZhbnQgaW5jb21pbmcgZGF0
-YS4gU29ycnkgZm9yIHRoYXQuDQotLT4gSSB3aWxsIGRpdmUgaW50byB0aGUgaW1wbGVtZW50YXRp
-b24gZGV0YWlscyBhbmQgcHJvYmFibHkgbGV2ZWwgdXAgYWJvdXQgdGhlIEoxOTM5IHByb3RvY29s
-IHRvby4NCk91ciBnb2FsIGlzIHRvIGJ1aWxkIEoxOTM5IG1vZHVsZXMsIGRlZGljYXRlZCB0byBh
-IHNpbmdsZSB0YXNrLiBTb21lIGV4YW1wbGVzOiBkaXNwbGF5aW5nIGNlcnRhaW4gcGFyYW1ldGVy
-cywgbG9nZ2luZyBKMTkzOSB0cmFmZmljIG9uIGEgbGluZSwgaW5qZWN0aW5nIChmYXVsdHkpIG1l
-c3NhZ2VzIGZvciB0ZXN0aW5nIHB1cnBvc2VzLg0KDQpTbyBJIHdpbGwgbm93IGZhbWlsaWFyaXpl
-IGJldHRlciB3aXRoIHRoZSBsaW51eC1jYW4gd29ybGQgYW5kIGhhdmUgYSBsb29rIGF0IGVjbGlw
-c2UgdGl0YW4uIE9ubHkgdGhlbiBJIHdpbGwgYmUgYWJsZSB0byBoYXZlIGEgd2VsbC1mb3VuZGVk
-IGFuc3dlciB0byB5b3VyIHJlYWN0aW9ucy4NCg0KQmVzdCByZWdhcmRzLA0KS3Jpc3RvZmYNCg0K
-LS0tLS1Pb3JzcHJvbmtlbGlqayBiZXJpY2h0LS0tLS0NClZhbjogTWFyYyBLbGVpbmUtQnVkZGUg
-PG1rbEBwZW5ndXRyb25peC5kZT4gDQpWZXJ6b25kZW46IHdvZW5zZGFnIDI2IGp1bmkgMjAxOSAx
-MDoyNQ0KQWFuOiBEYXZpZCBKYW5kZXIgPGRhdmlkQHByb3RvbmljLm5sPg0KQ0M6IGxpbnV4LWNh
-biA8bGludXgtY2FuQHZnZXIua2VybmVsLm9yZz47IEFWRVJNQUVURSBLcmlzdG9mZiA8a3Jpc3Rv
-ZmYuYXZlcm1hZXRlQHZhbmhvb2wuY29tPjsgS3VydCBWYW4gRGlqY2sgPGRldi5rdXJ0QHZhbmRp
-amNrLWxhdXJpanNzZW4uYmU+OyBPbGVrc2lqIFJlbXBlbCA8by5yZW1wZWxAcGVuZ3V0cm9uaXgu
-ZGU+DQpPbmRlcndlcnA6IFJlOiBMaW51eCBKMTkzOTogYnVpbHQgaW4ta2VybmVsIHZzLiB1c2Vy
-IHNwYWNlIHN0YWNrPw0KDQpPbiA2LzI2LzE5IDEwOjEzIEFNLCBEYXZpZCBKYW5kZXIgd3JvdGU6
-DQo+PiBEbyB5b3UgdGhpbmsgaXQgd291bGQgYmUgYW4gaW50ZXJlc3RpbmcgY29udHJpYnV0aW9u
-IGlmIEkgaXNvbGF0ZWQgDQo+PiB0aGUgZnVuY3Rpb25hbGl0eSBpbiB1c2VyIHNwYWNlPw0KPj4g
-VGhhdCB3YXkgd2UgY291bGQgdGVzdCBvdXIgYXBwbGljYXRpb24gY29kZSBhbG9uZyB3aXRoIHRo
-ZSBpc29sYXRlZA0KPj4gSjE5Mzkgc3RhY2sgb24gd2hhdGV2ZXIgQ0FOLWVuYWJsZWQgTGludXgg
-cGxhdGZvcm0gaXMgcHJvdmlkZWQgdG8gdXMuDQo+Pg0KPj4gRG8geW91IHRoaW5rIHRoaXMgaXMg
-YSBiYWQgaWRlYT8NCj4gDQo+IFdpdGggImlzb2xhdGluZyIgdGhlIGZ1bmN0aW9uYWxpdHkgaW4g
-dXNlci1zcGFjZSwgeW91IG1lYW4gaGF2aW5nIGEgDQo+IHNlcGFyYXRlIHVzZXItc3BhY2UgSjE5
-Mzkgc3RhY2sgdGhhdCBjYW4gYmUgdXNlZCBmb3IgdGVzdGluZyB0aGUga2VybmVsLXN0YWNrPw0K
-PiBUaGF0IHdvdWxkIGFjdHVhbGx5IGJlIGEgZ3JlYXQgaWRlYS4NCj4gDQo+IFRoZXJlIGlzIEox
-OTM5IHN1cHBvcnQgaW4gdGhlIGNhbi11dGlscyBhbHJlYWR5Og0KPiANCj4gaHR0cHM6Ly9naXRo
-dWIuY29tL2xpbnV4LWNhbi9jYW4tdXRpbHMNCj4gDQo+IEJ1dCBhIGZ1bGwtYmxvd24gYWx0ZXJu
-YXRpdmUgaW1wbGVtZW50YXRpb24gdGhhdCBjYW4gYmUgdXNlZCBmb3IgDQo+IHJlZ3Jlc3Npb24t
-dGVzdGluZyBtYXkgYmUgbmljZSB0byBoYXZlIG9mIGNvdXJzZSwgaWYgaXQgY2FuIGJlIEdQTCdl
-ZA0KDQpBbiBfYWx0ZXJuYXRpdmVfIGltcGxlbWVudGF0aW9uIG9mIGEgajE5Mzkgc3RhY2sgKGVz
-cGVjaWFsbHkgd2hlbiBpdCBjb21lcyB0byAoRSlUUCkgZm9yIHRlc3Rpbmcgd291bGQgYmUgbmlj
-ZSB0byBoYXZlLiBUaGlzIGlzIHdoZXJlIGVjbGlwc2UgdGl0YW4gY29tZXMgaW50byB0aGUgZ2Ft
-ZS4gSG93ZXZlciBmcm9tIG15IHBvaW50IG9mIHZpZXcgaXQgbWFrZXMgbm8gc2Vuc2UgdG8gcG9y
-dCB0aGUgaW4ta2VybmVsIHN0YWNrIHRvIHVzZXIgc3BhY2UuDQoNCk1hcmMNCg0KLS0gDQpQZW5n
-dXRyb25peCBlLksuICAgICAgICAgICAgICAgICAgfCBNYXJjIEtsZWluZS1CdWRkZSAgICAgICAg
-ICAgfA0KSW5kdXN0cmlhbCBMaW51eCBTb2x1dGlvbnMgICAgICAgIHwgUGhvbmU6ICs0OS0yMzEt
-MjgyNi05MjQgICAgIHwNClZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAgICB8IEZheDog
-ICArNDktNTEyMS0yMDY5MTctNTU1NSB8DQpBbXRzZ2VyaWNodCBIaWxkZXNoZWltLCBIUkEgMjY4
-NiAgfCBodHRwOi8vd3d3LnBlbmd1dHJvbml4LmRlICAgfA0KDQoNCkRJU0NMQUlNRVI6DQoNCkFu
-eSBlbWFpbCBjb21taXR0aW5nIG91ciBjb21wYW55IG5lZWRzIHRvIGJlIGFwcHJvdmVkIGJ5IHRo
-ZSBtYW5hZ2luZw0KZGlyZWN0b3IuIFRoaXMgZW1haWwgYW5kIGl0cyBhdHRhY2htZW50cyBhcmUg
-Zm9yIHRoZSBpbnRlbmRlZCBhZGRyZXNzZWUgb25seS4gSWYgDQp5b3UgaGF2ZSByZWNlaXZlZCBp
-dCBpbiBlcnJvciB0aGVuIHBsZWFzZSBkZWxldGUgaXQgYW5kIG5vdGlmeSB0aGUgc2VuZGVyIGJ5
-IHJldHVybiANCmVtYWlsLiBJbiBjYXNlIG9mIGRvdWJ0IGFib3V0IGNvcnJlY3RuZXNzIG9yIGNv
-bXBsZXRlbmVzcyBvZiB0aGlzIGVtYWlsIHBsZWFzZSANCmNvbnRhY3QgdGhlIHNlbmRlci4gVGhh
-bmsgeW91IGZvciB5b3VyIGNvb3BlcmF0aW9uLg0KV2FybmluZzogQW55IG1haWwgc2VudCB0byB0
-aGlzIGUtbWFpbCBhZGRyZXNzIGlzIGNvbnNpZGVyZWQgYXMgY29tcGFueSBtYWlsIGFuZCBjYW4g
-YmUgb3BlbmVkIGJ5IHRoZSBNYW5hZ2VtZW50Lg0KVmFuIEhvb2wgY29uZGl0aW9ucyBhcmUgYXBw
-bGljYWJsZSBhbmQgdGhpcyB3aXRob3V0IHJlc2VydmF0aW9uIG9uIGFsbCBvZmZlcnMsIHNhbGVz
-LCBwdXJjaGFzZXMs4oCm
-
+T24gMjQvMDYvMjAxOSAxOS4yNiwgV2lsbGVtIGRlIEJydWlqbiB3cm90ZToNCj4gT24gTW9uLCBK
+dW4gMjQsIDIwMTkgYXQgNDozNCBBTSBSYXNtdXMgVmlsbGVtb2VzDQo+IDxyYXNtdXMudmlsbGVt
+b2VzQHByZXZhcy5kaz4gd3JvdGU6DQo+Pg0KPj4gQ09ORklHX0NBTl9MRURTIGlzIGRlcHJlY2F0
+ZWQuIFdoZW4gdHJ5aW5nIHRvIHVzZSB0aGUgZ2VuZXJpYyBuZXRkZXYNCj4+IHRyaWdnZXIgYXMg
+c3VnZ2VzdGVkLCB0aGVyZSdzIGEgc21hbGwgaW5jb25zaXN0ZW5jeSB3aXRoIHRoZSBsaW5rDQo+
+PiBwcm9wZXJ0eTogVGhlIExFRCBpcyBvbiBpbml0aWFsbHksIHN0YXlzIG9uIHdoZW4gdGhlIGRl
+dmljZSBpcyBicm91Z2h0DQo+PiB1cCwgYW5kIHRoZW4gdHVybnMgb2ZmIChhcyBleHBlY3RlZCkg
+d2hlbiB0aGUgZGV2aWNlIGlzIGJyb3VnaHQgZG93bi4NCj4+DQo+PiBNYWtlIHN1cmUgdGhlIExF
+RCBhbHdheXMgcmVmbGVjdHMgdGhlIHN0YXRlIG9mIHRoZSBDQU4gZGV2aWNlLg0KPj4NCj4+IFNp
+Z25lZC1vZmYtYnk6IFJhc211cyBWaWxsZW1vZXMgPHJhc211cy52aWxsZW1vZXNAcHJldmFzLmRr
+Pg0KPiANCj4gU2hvdWxkIHRoaXMgdGFyZ2V0IG5ldD8NCg0KTm8sIEkgdGhpbmsgdGhpcyBzaG91
+bGQgZ28gdGhyb3VnaCB0aGUgQ0FOIHRyZWUuIFBlcmhhcHMgSSd2ZQ0KbWlzdW5kZXJzdG9vZCB3
+aGVuIHRvIHVzZSB0aGUgbmV0LW5leHQgcHJlZml4IC0gaXMgdGhhdCBvbmx5IGZvciB0aGluZ3MN
+CnRoYXQgc2hvdWxkIGJlIGFwcGxpZWQgZGlyZWN0bHkgdG8gdGhlIG5ldC1uZXh0IHRyZWU/IElm
+IHNvLCBzb3JyeS4NCg0KPiBSZWdhcmRsZXNzIG9mIENPTkZJR19DQU5fTEVEUyBkZXByZWNhdGlv
+biwNCj4gdGhpcyBpcyBhbHJlYWR5IG5vdCBpbml0aWFsaXplZCBwcm9wZXJseSBpZiB0aGF0IENP
+TkZJRyBpcyBkaXNhYmxlZA0KPiBhbmQgYSBjYW5fbGVkX2V2ZW50IGNhbGwgYXQgZGV2aWNlIHBy
+b2JlIGlzIGEgbm9vcC4NCg0KSSdtIG5vdCBzdXJlIEkgdW5kZXJzdGFuZCB0aGlzIHBhcnQuIFRo
+ZSBDT05GSUdfQ0FOX0xFRFMgc3VwcG9ydCBmb3INCnNob3dpbmcgdGhlIHN0YXRlIG9mIHRoZSBp
+bnRlcmZhY2UgaXMgaW1wbGVtZW50ZWQgdmlhIGhvb2tpbmcgaW50byB0aGUNCm5kb19vcGVuL25k
+b19zdG9wIGNhbGxiYWNrcywgYW5kIGRvZXMgbm90IGxvb2sgYXQgb3IgdG91Y2ggdGhlDQpfX0xJ
+TktfU1RBVEVfTk9DQVJSSUVSIGJpdCBhdCBhbGwuDQoNCk90aGVyIHRoYW4gdmlhIHRoZSBuZXRk
+ZXYgTEVEIHRyaWdnZXIgSSBkb24ndCB0aGluayBvbmUgY2FuIGV2ZW4gb2JzZXJ2ZQ0KdGhlIHNs
+aWdodGx5IG9kZCBpbml0aWFsIHN0YXRlIG9mIHRoZSBfX0xJTktfU1RBVEVfTk9DQVJSSUVSIGJp
+dCBmb3IgQ0FODQpkZXZpY2VzLCB3aGljaCBpcyB3aHkgSSBmcmFtZWQgdGhpcyBhcyBhIGZpeCBw
+dXJlbHkgdG8gYWxsb3cgdGhlIG5ldGRldg0KdHJpZ2dlciB0byBiZSBhIGNsb3NlciBkcm9wLWlu
+IHJlcGxhY2VtZW50IGZvciBDT05GSUdfQ0FOX0xFRFMuDQoNClJhc211cw0K
