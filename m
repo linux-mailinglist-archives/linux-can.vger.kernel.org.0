@@ -2,161 +2,191 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D04CB562F5
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 09:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E28956356
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 09:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfFZHP0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jun 2019 03:15:26 -0400
-Received: from protonic.xs4all.nl ([83.163.252.89]:41232 "EHLO protonic.nl"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726006AbfFZHP0 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 26 Jun 2019 03:15:26 -0400
-Received: from erd988 (erd988.prtnl [192.168.224.30])
-        by sparta (Postfix) with ESMTP id C8B3744A00D3;
-        Wed, 26 Jun 2019 09:17:08 +0200 (CEST)
-Date:   Wed, 26 Jun 2019 09:15:24 +0200
-From:   David Jander <david@protonic.nl>
-To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, robin@protonic.nl,
-        linux-can@vger.kernel.org, mkl@pengutronix.de,
+        id S1725930AbfFZHdB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jun 2019 03:33:01 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42971 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725797AbfFZHdA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jun 2019 03:33:00 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hg2QI-0005nV-Et; Wed, 26 Jun 2019 09:32:54 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:10a:6ce2:4275:4351] (unknown [IPv6:2a03:f580:87bc:d400:10a:6ce2:4275:4351])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 18EC7427188;
+        Wed, 26 Jun 2019 07:32:52 +0000 (UTC)
+To:     David Jander <david@protonic.nl>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Cc:     robin@protonic.nl, linux-can@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
         kernel@pengutronix.de, wg@grandegger.com
-Subject: Re: j1939: discussion: RX path
-Message-ID: <20190626091524.40410c4b@erd988>
-In-Reply-To: <20190625173137.GB8923@x1.vandijck-laurijssen.be>
 References: <20190625073009.GA15948@pengutronix.de>
-        <20190625104315.57172f69@erd988>
-        <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
-        <20190625173137.GB8923@x1.vandijck-laurijssen.be>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ <20190625104315.57172f69@erd988>
+ <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
+ <20190625173137.GB8923@x1.vandijck-laurijssen.be>
+ <20190626091524.40410c4b@erd988>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: j1939: discussion: RX path
+Message-ID: <fc126ad7-d90f-f012-7865-2d7cba6248ef@pengutronix.de>
+Date:   Wed, 26 Jun 2019 09:32:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20190626091524.40410c4b@erd988>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="6CwlHtAbnx4xv0cJVkHHKTNRzSzVzFup7"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--6CwlHtAbnx4xv0cJVkHHKTNRzSzVzFup7
+Content-Type: multipart/mixed; boundary="atJdj2xOHbbFnVaNkzmI1jGLKS2RHsfrq";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: David Jander <david@protonic.nl>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Cc: robin@protonic.nl, linux-can@vger.kernel.org,
+ Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+ wg@grandegger.com
+Message-ID: <fc126ad7-d90f-f012-7865-2d7cba6248ef@pengutronix.de>
+Subject: Re: j1939: discussion: RX path
+References: <20190625073009.GA15948@pengutronix.de>
+ <20190625104315.57172f69@erd988>
+ <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
+ <20190625173137.GB8923@x1.vandijck-laurijssen.be>
+ <20190626091524.40410c4b@erd988>
+In-Reply-To: <20190626091524.40410c4b@erd988>
 
-Dear Kurt,
+--atJdj2xOHbbFnVaNkzmI1jGLKS2RHsfrq
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 25 Jun 2019 19:31:37 +0200
-Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be> wrote:
+On 6/26/19 9:15 AM, David Jander wrote:
+[...]
 
-> On di, 25 jun 2019 10:54:55 +0200, Oleksij Rempel wrote:
-> > On 25.06.19 10:43, David Jander wrote:  
-> > >On Tue, 25 Jun 2019 09:30:09 +0200
-> > >Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> > >  
-> > >>Hello all,
-> > >>
-> > >>We already had a discussion about the J1939 use case for server
-> > >>implementation. Short description of the challenge will looks as follow:
-> > >>- main socket is listening on DST address and PGN.
-> > >>- as soon as connection was requested from peer the server will
-> > >>   create new connect()ed socket with SRC, DST addresses and PGN.
-> > >>
-> > >>With current stack implementation both sockets (main and connected) will
-> > >>receive same packages. At least with huge packages it will start to be
-> > >>not really good :).
-> > >>
-> > >>To solve this issue we have following variants:
-> > >>variant a:
-> > >>  - all sockets can receive everything (as currently implemented)
-> > >>variant b:
-> > >>  - only one socket will receive specific tuple. In this case kernel
-> > >>    should calculate RX "priority". Only highest priority will RX packet.
-> > >>    - all sockets with same priority will receive the matching packet
-> > >>    - socket option promisc == same priority as exact match  
-> > >
-> > >How is this "priority" determined?
-> > >Something like this:
-> > >
-> > >  for each socket:
-> > >	 prio = 0
-> > >	 listening on same DST or PGN ==> prio++
-> > >	 listening on same DST and PGN ==> prio++
-> > >	 connect()ed to same SRC ==> prio++
-> > >  deliver frame to socket(s) with highest prio.
-> > >
-> > >Is that what you mean?  
-> > 
-> > ACK.  
-> 
-> I don't like any of these.
-> 
-> The problem you try to solve is 'huge packet duplication where it is
-> probably not required'.
-> Your proposed solution puts a policy in the kernel that goes in serious
-> conflict with a multiuser system. It is driven by a typical
-> implementation, but did not address the problem you try to solve.
-> 
-> In order to avoid receiving huge packets where we suspect it is not
-> really wanted, we should not try to guess what 'a' program wants, nor
-> implement rules that apply to 1 specific case.
-> Instead, we should protect sockets from receiving huge packets.
-> 
-> Why not add a socket option, that implements a ceiling on the
-> size of received packets.
-> If that defaults to, let's say, 1785 bytes, so anyone will out of the
-> box receive all TP sessions, but no ETP session, then the user will not
-> be really supprised, and we need to make only 1 clear decision during delivery.
-> 
-> I honestly think that my proprosal puts way less decision policy in the
-> kernel code, and effectively addresses the problem you tried to solve,
-> without adding unnecessary multi-user restrictions.
-> 
-> What's your thought?
+> Imagine a J1939 "server" that has 20 "clients" connected to it. It will=
+ thus
+> have 21 open sockets (one for the server itself (the bind()ed socket) a=
+nd one
+> for each of the "clients" (the bind()ed and connect()ed sockets). Now i=
+magine
+> the trouble of having to deal with the fact that every single message f=
+rom
+> client A is received on all 21 sockets duplicated! You don't want that.=
+ Not
+> for big messages, nor for small ones.
 
-Thanks for your feedback. I understand it may sound counter-intuitive, but it
-really isn't. What we are trying to accomplish is for SocketCAN with J1939 to
-behave much like a network adapter with TCP/IP.
+Every single message from client A is _not_ received on all 21 sockets.
+It's only recieved on the initial "server" bind()ed socket and the only
+one "client" bind()ed and connect()ed socket.
 
-The solution you propose is not enough. The problem really is not restricted
-to "big" messages. If there are a lot of small frames coming from one client,
-you really do not want all the unnecessary interruptions to other sockets, but
-only the one that is connected to that client. That is actually one of the
-main reasons to have J1939 in the kernel as opposed to a user-space
-implementation... besides of course the obvious gains related to (E)TP.
+On the other hand the "server" socket will receive all messages that the
+all the 20 "client" socket will receive. And we're trying to avoid that.
 
-The underlying problem here is that we are trying to have the same sort of
-"connection oriented" sockets as in TCP/IP, but on a J1939-CAN network there is
-no way of initiating nor terminating a connection, and bigger data "streams"
-are artificially encapsulated in these (E)TP sessions. The semantics of J1939
-and ISObus nevertheless are very similar to TCP/IP: There are servers that
-bind() to an address and port number (NAME and PGN), and clients that
-connect() to a server from a source address and -port number (client-NAME and
-client-PGN).
+Marc
 
-The problem is that in the "server" case, just as in TCP/IP you would want a
-new socket to be created (as is done with the accept() system call in TCP/IP)
-for each new client that connect()s.
-For TCP/IP there is a defined sequence of TCP messages (SYN/ACK/FIN/...) that
-initiates and terminates a "connection". Such a stateful protocol inherently
-requires time-outs on the connection level to work. Probably one of the
-reasons why J1939 is much simpler and stateless, due to it's real-time
-requirements. Anyway, since the notion of a "connection" is a lot more vague
-in J1939, there is some cooperation needed from user-space in order to decide
-when a connection is established, and when it is closed. We cannot have an
-accept() system call for J1939 unfortunately. Instead of that, the user-space
-application needs to open a new socket that does bind() and then connect() to
-the client's NAME and PGN. At that point (same as with an accept()ed TCP/IP
-connection) all traffic coming from that specific NAME and PGN to the "server"
-should be delivered only on that socket. And exactly this is what we are
-trying to accomplish now, while we only have a bunch of sockets owned by one
-application and no stateful information of the connection state of each of
-those sockets.
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
-Imagine a J1939 "server" that has 20 "clients" connected to it. It will thus
-have 21 open sockets (one for the server itself (the bind()ed socket) and one
-for each of the "clients" (the bind()ed and connect()ed sockets). Now imagine
-the trouble of having to deal with the fact that every single message from
-client A is received on all 21 sockets duplicated! You don't want that. Not
-for big messages, nor for small ones.
 
-Best regards,
+--atJdj2xOHbbFnVaNkzmI1jGLKS2RHsfrq--
 
--- 
-David Jander
-Protonic Holland.
+--6CwlHtAbnx4xv0cJVkHHKTNRzSzVzFup7
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0TH6AACgkQWsYho5Hk
+nSDvFQf9G5ETh5LffsqqFyt2/XztFM5C9lAJhcezMLw1d23+fVq1GViqglsYf8/0
+bUTTjW1XA9drkFfLJRk9fpXYE1AD6aVb2ELxYdDOhMLmUNBwvcMTJEWdvtfrohF3
+p5+uIZevjSRJjFJY2amPsWEvIlqkf2NX2lKWAfXm1Ax5l2kqwOr0uJiYE221rUD9
+a3/12qR2tUUsUwC/KcdYDvkJ6IsfC1RsbTAnfNI2vRNO8nCful0q/ncIglPQzBT6
+tJlDVQnPh5SNbUxOZ9DXYj22GwjvTUr9cmfNA+tz3XwJEMPHXdnpzS72Pk3Q1zhc
+KWzdMevBLoTIUo3fVqvEpxz1g2ZCTA==
+=IydX
+-----END PGP SIGNATURE-----
+
+--6CwlHtAbnx4xv0cJVkHHKTNRzSzVzFup7--
