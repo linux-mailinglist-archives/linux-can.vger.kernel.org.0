@@ -2,113 +2,208 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B55A565AA
-	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 11:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97407565DF
+	for <lists+linux-can@lfdr.de>; Wed, 26 Jun 2019 11:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725930AbfFZJbn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jun 2019 05:31:43 -0400
-Received: from mail-eopbgr50097.outbound.protection.outlook.com ([40.107.5.97]:28647
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725379AbfFZJbn (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 26 Jun 2019 05:31:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.se;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3UmchpQjV68nFeTKcfNuDUgiEf9Z412PKJjMH8xTT7M=;
- b=IYOpHiHy71/4wSgdsxaXRvYDqHg06a4UAWK++vN3xI12i1dAuGq9czRlb4rYMb2FDe0au3nA5m0NCWBkgpTL6bkQQcTcsYu9JZqAbU0NBcsdjsN1hj715xAX/+ZeC1SaXy+OWgU00sqA9jCXZgHlPUNn96c7Vq/k50wEIH2/Xrs=
-Received: from AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM (10.255.30.92) by
- AM0PR10MB2289.EURPRD10.PROD.OUTLOOK.COM (20.177.109.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Wed, 26 Jun 2019 09:31:39 +0000
-Received: from AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::d591:47a7:70ee:3162]) by AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::d591:47a7:70ee:3162%7]) with mapi id 15.20.2008.014; Wed, 26 Jun 2019
- 09:31:39 +0000
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next] can: dev: call netif_carrier_off() in
- register_candev()
-Thread-Topic: [PATCH net-next] can: dev: call netif_carrier_off() in
- register_candev()
-Thread-Index: AQHVKmeahsDxJm0SfUSG50fnY2XQS6arDw4AgAKgCYA=
-Date:   Wed, 26 Jun 2019 09:31:39 +0000
-Message-ID: <ff8160d4-3357-9b4f-1840-bbe46195da5a@prevas.dk>
-References: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
- <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
-In-Reply-To: <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR0202CA0014.eurprd02.prod.outlook.com
- (2603:10a6:3:8c::24) To AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:160::28)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Rasmus.Villemoes@prevas.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [81.216.59.226]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5afc0410-8121-4538-06a1-08d6fa191741
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR10MB2289;
-x-ms-traffictypediagnostic: AM0PR10MB2289:
-x-microsoft-antispam-prvs: <AM0PR10MB228975B70913236166A778338AE20@AM0PR10MB2289.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-forefront-prvs: 00808B16F3
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(376002)(39850400004)(366004)(136003)(346002)(189003)(199004)(229853002)(6436002)(8936002)(14444005)(6512007)(6486002)(256004)(5660300002)(8976002)(72206003)(478600001)(4326008)(25786009)(66446008)(64756008)(66556008)(305945005)(73956011)(66476007)(66946007)(7736002)(31686004)(14454004)(8676002)(81166006)(81156014)(68736007)(2906002)(71200400001)(71190400001)(26005)(476003)(486006)(54906003)(44832011)(36756003)(99286004)(2616005)(3846002)(186003)(6116002)(11346002)(316002)(66066001)(76176011)(52116002)(53546011)(6506007)(386003)(102836004)(6246003)(74482002)(446003)(6916009)(42882007)(53936002)(31696002);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR10MB2289;H:AM0PR10MB3027.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: prevas.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: g7a0gOxCMwZmkstquGvSTeNpVlE98g5sp17AH8HU8Jhyn4kTWA7Na0TqMuV/bNQNuAGxNyD0OBtpv516OdybeaxxR2UvNWSYz9F1pioOQEV7Iy45ojZXJQWvkdcPRzyrKHXYbAaxNhLuWjIUDu1yJv3Wxrhm7V54MbPwLhbNfM7+92DSxQ4ym/jWFCHKq5BWpgHPjHk43jYctaEpub01WUSOiHnB48Ft3L3O2x3rMyzSMcFINBbPOiPqJItvCW18AArzv6ZsQrLPctQ7yBMkpr3wimvkX4GF5jyJi4ha3rWWKO97ClVLp5IP4hqbT3LkyAf3rwVLApjv9DhKAJHgEyCDsU5DY/j8mw7dTG4fz70UKrwxlAIspA8CvMw5D/bVXdjlhBDgC9Z07U1hsZExxEK56Jt3CcGb1sAYZyI7FG8=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1038AA6E0DD7FA4689BDA53C0FEA4596@EURPRD10.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        id S1726347AbfFZJro (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jun 2019 05:47:44 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:49895 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbfFZJro (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jun 2019 05:47:44 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hg4Wk-0003mT-9l; Wed, 26 Jun 2019 11:47:42 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:10a:6ce2:4275:4351] (unknown [IPv6:2a03:f580:87bc:d400:10a:6ce2:4275:4351])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C6A974272E3;
+        Wed, 26 Jun 2019 09:47:40 +0000 (UTC)
+To:     AVERMAETE Kristoff <kristoff.avermaete@vanhool.com>,
+        David Jander <david@protonic.nl>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+References: <79f5ed74-671a-4253-2628-7d9df58f3694@pengutronix.de>
+ <20190626101306.164d36f9@erd988>
+ <92d20042-9195-8199-59fe-48ceaa7837cd@pengutronix.de>
+ <6622af4fcee74cbf9e8eae4be4c6c3a2@mailserver3.corp.vanhool.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: Linux J1939: built in-kernel vs. user space stack?
+Message-ID: <2e92dd12-ed17-bc30-d6dd-87db38f3a425@pengutronix.de>
+Date:   Wed, 26 Jun 2019 11:47:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5afc0410-8121-4538-06a1-08d6fa191741
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2019 09:31:39.4635
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Rasmus.Villemoes@prevas.dk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2289
+In-Reply-To: <6622af4fcee74cbf9e8eae4be4c6c3a2@mailserver3.corp.vanhool.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="4RpiaPzej0g8e4klOzjGnWWdKdfUNov8c"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-T24gMjQvMDYvMjAxOSAxOS4yNiwgV2lsbGVtIGRlIEJydWlqbiB3cm90ZToNCj4gT24gTW9uLCBK
-dW4gMjQsIDIwMTkgYXQgNDozNCBBTSBSYXNtdXMgVmlsbGVtb2VzDQo+IDxyYXNtdXMudmlsbGVt
-b2VzQHByZXZhcy5kaz4gd3JvdGU6DQo+Pg0KPj4gQ09ORklHX0NBTl9MRURTIGlzIGRlcHJlY2F0
-ZWQuIFdoZW4gdHJ5aW5nIHRvIHVzZSB0aGUgZ2VuZXJpYyBuZXRkZXYNCj4+IHRyaWdnZXIgYXMg
-c3VnZ2VzdGVkLCB0aGVyZSdzIGEgc21hbGwgaW5jb25zaXN0ZW5jeSB3aXRoIHRoZSBsaW5rDQo+
-PiBwcm9wZXJ0eTogVGhlIExFRCBpcyBvbiBpbml0aWFsbHksIHN0YXlzIG9uIHdoZW4gdGhlIGRl
-dmljZSBpcyBicm91Z2h0DQo+PiB1cCwgYW5kIHRoZW4gdHVybnMgb2ZmIChhcyBleHBlY3RlZCkg
-d2hlbiB0aGUgZGV2aWNlIGlzIGJyb3VnaHQgZG93bi4NCj4+DQo+PiBNYWtlIHN1cmUgdGhlIExF
-RCBhbHdheXMgcmVmbGVjdHMgdGhlIHN0YXRlIG9mIHRoZSBDQU4gZGV2aWNlLg0KPj4NCj4+IFNp
-Z25lZC1vZmYtYnk6IFJhc211cyBWaWxsZW1vZXMgPHJhc211cy52aWxsZW1vZXNAcHJldmFzLmRr
-Pg0KPiANCj4gU2hvdWxkIHRoaXMgdGFyZ2V0IG5ldD8NCg0KTm8sIEkgdGhpbmsgdGhpcyBzaG91
-bGQgZ28gdGhyb3VnaCB0aGUgQ0FOIHRyZWUuIFBlcmhhcHMgSSd2ZQ0KbWlzdW5kZXJzdG9vZCB3
-aGVuIHRvIHVzZSB0aGUgbmV0LW5leHQgcHJlZml4IC0gaXMgdGhhdCBvbmx5IGZvciB0aGluZ3MN
-CnRoYXQgc2hvdWxkIGJlIGFwcGxpZWQgZGlyZWN0bHkgdG8gdGhlIG5ldC1uZXh0IHRyZWU/IElm
-IHNvLCBzb3JyeS4NCg0KPiBSZWdhcmRsZXNzIG9mIENPTkZJR19DQU5fTEVEUyBkZXByZWNhdGlv
-biwNCj4gdGhpcyBpcyBhbHJlYWR5IG5vdCBpbml0aWFsaXplZCBwcm9wZXJseSBpZiB0aGF0IENP
-TkZJRyBpcyBkaXNhYmxlZA0KPiBhbmQgYSBjYW5fbGVkX2V2ZW50IGNhbGwgYXQgZGV2aWNlIHBy
-b2JlIGlzIGEgbm9vcC4NCg0KSSdtIG5vdCBzdXJlIEkgdW5kZXJzdGFuZCB0aGlzIHBhcnQuIFRo
-ZSBDT05GSUdfQ0FOX0xFRFMgc3VwcG9ydCBmb3INCnNob3dpbmcgdGhlIHN0YXRlIG9mIHRoZSBp
-bnRlcmZhY2UgaXMgaW1wbGVtZW50ZWQgdmlhIGhvb2tpbmcgaW50byB0aGUNCm5kb19vcGVuL25k
-b19zdG9wIGNhbGxiYWNrcywgYW5kIGRvZXMgbm90IGxvb2sgYXQgb3IgdG91Y2ggdGhlDQpfX0xJ
-TktfU1RBVEVfTk9DQVJSSUVSIGJpdCBhdCBhbGwuDQoNCk90aGVyIHRoYW4gdmlhIHRoZSBuZXRk
-ZXYgTEVEIHRyaWdnZXIgSSBkb24ndCB0aGluayBvbmUgY2FuIGV2ZW4gb2JzZXJ2ZQ0KdGhlIHNs
-aWdodGx5IG9kZCBpbml0aWFsIHN0YXRlIG9mIHRoZSBfX0xJTktfU1RBVEVfTk9DQVJSSUVSIGJp
-dCBmb3IgQ0FODQpkZXZpY2VzLCB3aGljaCBpcyB3aHkgSSBmcmFtZWQgdGhpcyBhcyBhIGZpeCBw
-dXJlbHkgdG8gYWxsb3cgdGhlIG5ldGRldg0KdHJpZ2dlciB0byBiZSBhIGNsb3NlciBkcm9wLWlu
-IHJlcGxhY2VtZW50IGZvciBDT05GSUdfQ0FOX0xFRFMuDQoNClJhc211cw0K
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--4RpiaPzej0g8e4klOzjGnWWdKdfUNov8c
+Content-Type: multipart/mixed; boundary="AY3NwWj70IegGRwwI0LheocMJLYAwcVs8";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: AVERMAETE Kristoff <kristoff.avermaete@vanhool.com>,
+ David Jander <david@protonic.nl>
+Cc: linux-can <linux-can@vger.kernel.org>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ Oleksij Rempel <o.rempel@pengutronix.de>
+Message-ID: <2e92dd12-ed17-bc30-d6dd-87db38f3a425@pengutronix.de>
+Subject: Re: Linux J1939: built in-kernel vs. user space stack?
+References: <79f5ed74-671a-4253-2628-7d9df58f3694@pengutronix.de>
+ <20190626101306.164d36f9@erd988>
+ <92d20042-9195-8199-59fe-48ceaa7837cd@pengutronix.de>
+ <6622af4fcee74cbf9e8eae4be4c6c3a2@mailserver3.corp.vanhool.com>
+In-Reply-To: <6622af4fcee74cbf9e8eae4be4c6c3a2@mailserver3.corp.vanhool.com>
+
+--AY3NwWj70IegGRwwI0LheocMJLYAwcVs8
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+
+On 6/26/19 11:27 AM, AVERMAETE Kristoff wrote:
+> It appears I have made too many assumptions about the load
+> distribution: like J1939 configuring the CAN layer as such that the
+> major load is handled by CAN, while J1939's job can be limited to
+> interpreting only relevant incoming data. Sorry for that.
+
+No problem!
+
+> --> I will dive into the implementation details and probably level up
+> about the J1939 protocol too.
+
+> Our goal is to build J1939 modules, dedicated to a single task. Some
+> examples:
+
+> displaying certain parameters
+
+I think this would be a normal user space application using j1939 sockets=
+=2E
+
+> logging J1939 traffic on a line
+
+You can log the complete CAN traffic via tcpdump and/or wireshark
+already. If you want to log only certain CAN ids you can write your own
+application and use CAN_RAW sockets for this.
+
+> injecting (faulty) messages for testing purposes.
+
+The quick and dirty method would be a user space CAN_RAW application.
+The cleaner solution would be to use ttcn-3 for this.
+
+For an introduction, have a look at Harald Welte's talks:
+
+https://media.ccc.de/search/?q=3Dttcn
+
+> So I will now familiarize better with the linux-can world and have a
+> look at eclipse titan. Only then I will be able to have a
+> well-founded answer to your reactions.
+
+Looking forward to that!
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--AY3NwWj70IegGRwwI0LheocMJLYAwcVs8--
+
+--4RpiaPzej0g8e4klOzjGnWWdKdfUNov8c
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0TPzgACgkQWsYho5Hk
+nSCzyQf7BQpS/AfEJTHnt9DDicr8H8dLJY3w2FXPxRyhQJKpW3zj7sH4NO2RDuyt
+6imPH4s7dC7m4xTI9NSl7+TfeyVEACq1ksLLpa+o8d05zOG/ZVVn8akYfpoDD5kM
+Gy1ZT4CR+rLpOFjhIruE+9oUztvkPxQmJ4CTqErsvP8LuxcId5nLQLXFb4MNtSJY
+U9YYam77hWoe86CvBVkeYZUlkw0Vn7MlgL6ykuytaRnBE8i4G99FKqZS12DCKp2A
+3BPU2xbvCm8rzOUF9kcPNmDoen0Sm/A5VpbyfmLTb5TZytGY9Sm8yquX7d48g72p
+JhdqH9cSn6KEplWk3fdbfsY4rkQqZw==
+=y4FY
+-----END PGP SIGNATURE-----
+
+--4RpiaPzej0g8e4klOzjGnWWdKdfUNov8c--
