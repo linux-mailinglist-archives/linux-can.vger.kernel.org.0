@@ -2,40 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44329577D1
-	for <lists+linux-can@lfdr.de>; Thu, 27 Jun 2019 02:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87D357695
+	for <lists+linux-can@lfdr.de>; Thu, 27 Jun 2019 02:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728625AbfF0Ahd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jun 2019 20:37:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42000 "EHLO mail.kernel.org"
+        id S1729275AbfF0AkK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 Jun 2019 20:40:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728620AbfF0Ahd (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:37:33 -0400
+        id S1728410AbfF0AkK (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:40:10 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D504121851;
-        Thu, 27 Jun 2019 00:37:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0BEF0205ED;
+        Thu, 27 Jun 2019 00:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595852;
-        bh=8uBScBdl8XMNzEQIBDNipy741zQgpj506xIZOhko9jU=;
+        s=default; t=1561596009;
+        bh=6Sp5x8S886L5spv2yGt0k07vOzOJRvdAmBeiH7wNofc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q1yPJQw37KdKMESDctDHIkRLKm7+IVafPZ8DvpATn7ETAJ2kAFZGCu9/GxMv5AZ+m
-         kY5m5uKUoaPaTqLWk99HSD4mygVewxO8KIag8aaKW6DM61sUCRcj3UYJumoSEm910O
-         a3JMppm3167ipIyqhdKzfrpzEn/Ef6YWFblQ6OOQ=
+        b=vCQT2dVRw59oMvIidEmTDrl9thxIuHp5sztTPgbBSjHEzgwCIwaGBoOhERthfrfNy
+         rc0xnHZqigm5FlRmtmE0/GfkaIo3IqoLVEH8CfwA8++DCa50nIKivu/5znZnRCLAg+
+         Ib9doaAn33I3cN/3IqJop23JqTz+WwzZCGCsPU0Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YueHaibing <yuehaibing@huawei.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
+Cc:     Sean Nyekjaer <sean@geanix.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 24/60] can: af_can: Fix error path of can_init()
-Date:   Wed, 26 Jun 2019 20:35:39 -0400
-Message-Id: <20190627003616.20767-24-sashal@kernel.org>
+        netdev@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 13/35] dt-bindings: can: mcp251x: add mcp25625 support
+Date:   Wed, 26 Jun 2019 20:39:01 -0400
+Message-Id: <20190627003925.21330-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
-References: <20190627003616.20767-1-sashal@kernel.org>
+In-Reply-To: <20190627003925.21330-1-sashal@kernel.org>
+References: <20190627003925.21330-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,70 +44,33 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+From: Sean Nyekjaer <sean@geanix.com>
 
-[ Upstream commit c5a3aed1cd3152429348ee1fe5cdcca65fe901ce ]
+[ Upstream commit 0df82dcd55832a99363ab7f9fab954fcacdac3ae ]
 
-This patch add error path for can_init() to avoid possible crash if some
-error occurs.
+Fully compatible with mcp2515, the mcp25625 have integrated transceiver.
 
-Fixes: 0d66548a10cb ("[CAN]: Add PF_CAN core module")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+This patch add the mcp25625 to the device tree bindings documentation.
+
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/can/af_can.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 1684ba5b51eb..80d0ec599439 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -958,6 +958,8 @@ static struct pernet_operations can_pernet_ops __read_mostly = {
- 
- static __init int can_init(void)
- {
-+	int err;
-+
- 	/* check for correct padding to be able to use the structs similarly */
- 	BUILD_BUG_ON(offsetof(struct can_frame, can_dlc) !=
- 		     offsetof(struct canfd_frame, len) ||
-@@ -971,15 +973,31 @@ static __init int can_init(void)
- 	if (!rcv_cache)
- 		return -ENOMEM;
- 
--	register_pernet_subsys(&can_pernet_ops);
-+	err = register_pernet_subsys(&can_pernet_ops);
-+	if (err)
-+		goto out_pernet;
- 
- 	/* protocol register */
--	sock_register(&can_family_ops);
--	register_netdevice_notifier(&can_netdev_notifier);
-+	err = sock_register(&can_family_ops);
-+	if (err)
-+		goto out_sock;
-+	err = register_netdevice_notifier(&can_netdev_notifier);
-+	if (err)
-+		goto out_notifier;
-+
- 	dev_add_pack(&can_packet);
- 	dev_add_pack(&canfd_packet);
- 
- 	return 0;
-+
-+out_notifier:
-+	sock_unregister(PF_CAN);
-+out_sock:
-+	unregister_pernet_subsys(&can_pernet_ops);
-+out_pernet:
-+	kmem_cache_destroy(rcv_cache);
-+
-+	return err;
- }
- 
- static __exit void can_exit(void)
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
+index ee3723beb701..33b38716b77f 100644
+--- a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
++++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
+@@ -4,6 +4,7 @@ Required properties:
+  - compatible: Should be one of the following:
+    - "microchip,mcp2510" for MCP2510.
+    - "microchip,mcp2515" for MCP2515.
++   - "microchip,mcp25625" for MCP25625.
+  - reg: SPI chip select.
+  - clocks: The clock feeding the CAN controller.
+  - interrupt-parent: The parent interrupt controller.
 -- 
 2.20.1
 
