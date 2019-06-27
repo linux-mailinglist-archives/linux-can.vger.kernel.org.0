@@ -2,158 +2,186 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1135792B
-	for <lists+linux-can@lfdr.de>; Thu, 27 Jun 2019 03:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB48E57F63
+	for <lists+linux-can@lfdr.de>; Thu, 27 Jun 2019 11:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfF0B5L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Jun 2019 21:57:11 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:44214 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726727AbfF0B5L (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Jun 2019 21:57:11 -0400
-Received: by mail-ed1-f67.google.com with SMTP id k8so5421199edr.11;
-        Wed, 26 Jun 2019 18:57:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+RYkXAvqY8Ibx3IpyCaGL2CQcHDuy3e5cBUf4u/Tp/M=;
-        b=EKmuAx0YE8zGnIn16nAVwfLy8jupcGyNhEpKgRhlRVTs/JbVjBDzwFMLg8b5Thbjf3
-         JBTkK0v4uy4NmZiGqSK3y5yNqqFCN6gh2y3rN/h+sIDsx6ingt26hFUTEZBH+Uq6oe10
-         R94ppMNzcI1fJPqbM6Lx/UmigIJvy6v7kjnniG1IISPLU53pflf0DCNWx2dgZe841g9k
-         NyELytBCDan+NYVVDzWlMmXkSVpDsfNxRpI9mm0IKihuSlXKtoE+skbdugYIJ8o1yNt6
-         oV9oBOOys6tzr3B0lNmhmRcbKxrxWrqlVvx3ZyWdYiCLHxoV6Nm5glZyyZphJeU39ZOP
-         PDPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+RYkXAvqY8Ibx3IpyCaGL2CQcHDuy3e5cBUf4u/Tp/M=;
-        b=QrXeSlEwBr3vjJZ1Ae+de9HFVaaQqRAgFlDpc2KOHcdwX5MOgEF9hnBdDpHonfytOA
-         7YHVwHoJiHIiIfTed8upPyJaW9aRl6k5Ub3qg/ZEHVwENtMRDm2Ea25/+gM2wYQsdXgs
-         MpKUgdIz+JWfrTjOvNY0HWWD3n71OYn1nDS70ig1kEWW6cMUMYyGehZSuGM9+/VZXqLj
-         SudEEKZn4Y2IM9c3k+4outSss8+5FwahXIKIDLPGi/PmLkuVuyi2U2n+IYg6zhSAj7tg
-         VLB9lMrvQ8HnrwxCNolp52zVXpDNK94hvhpLB45zWq8FvXHvhWnKu+XjIdd1P6uJ9lwM
-         j9OQ==
-X-Gm-Message-State: APjAAAWi4W4Z78bDTRPF+RRCEbOoHpzhyGczlspZw0xsrWBwLhMxA30o
-        Z6QYBuR9GTsrqhYPtnsX6QLOdNIFG0R/ElMH5u4=
-X-Google-Smtp-Source: APXvYqxxvl9NPGvEuUHgHk0kixOVXn9H07WTnpiqX6Y5Ae5tVNuS4k9zysYn1D9KqeMJGvpUUZfpMlEU/0Qtlqwz1qE=
-X-Received: by 2002:a50:b1db:: with SMTP id n27mr1094773edd.62.1561600628882;
- Wed, 26 Jun 2019 18:57:08 -0700 (PDT)
+        id S1726385AbfF0JeA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Jun 2019 05:34:00 -0400
+Received: from relay-b02.edpnet.be ([212.71.1.222]:55931 "EHLO
+        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbfF0JeA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Jun 2019 05:34:00 -0400
+X-ASG-Debug-ID: 1561628035-0a7b8d0c9f1cb060001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.103.163.adsl.dyn.edpnet.net [77.109.103.163]) by relay-b02.edpnet.be with ESMTP id EpegEA60XxihpYCW; Thu, 27 Jun 2019 11:33:55 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.103.163.adsl.dyn.edpnet.net[77.109.103.163]
+X-Barracuda-Apparent-Source-IP: 77.109.103.163
+Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 4ED0E8D1597;
+        Thu, 27 Jun 2019 11:33:55 +0200 (CEST)
+Date:   Thu, 27 Jun 2019 11:33:53 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     David Jander <david@protonic.nl>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, robin@protonic.nl,
+        linux-can@vger.kernel.org, mkl@pengutronix.de,
+        kernel@pengutronix.de, wg@grandegger.com
+Subject: Re: j1939: discussion: RX path
+Message-ID: <20190627093353.GA693@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: j1939: discussion: RX path
+Mail-Followup-To: David Jander <david@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, robin@protonic.nl,
+        linux-can@vger.kernel.org, mkl@pengutronix.de,
+        kernel@pengutronix.de, wg@grandegger.com
+References: <20190625073009.GA15948@pengutronix.de>
+ <20190625104315.57172f69@erd988>
+ <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
+ <20190625173137.GB8923@x1.vandijck-laurijssen.be>
+ <20190626091524.40410c4b@erd988>
+ <20190626130012.GC8923@x1.vandijck-laurijssen.be>
+ <20190626160238.5d62fc15@erd988>
 MIME-Version: 1.0
-References: <20190624083352.29257-1-rasmus.villemoes@prevas.dk>
- <CA+FuTSeHhz1kntLyeUfAB4ZbtYjO1=Ornwse-yQbPwo5c-_2=g@mail.gmail.com>
- <ff8160d4-3357-9b4f-1840-bbe46195da5a@prevas.dk> <CAF=yD-KyWJwdESFmY=CvbkTBT8yey2atKDY-tgd19yAeMf525g@mail.gmail.com>
- <838ce911-7205-f828-4fc5-79cebc32322a@prevas.dk>
-In-Reply-To: <838ce911-7205-f828-4fc5-79cebc32322a@prevas.dk>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Wed, 26 Jun 2019 21:56:32 -0400
-Message-ID: <CAF=yD-L5AmCeHiDA8RUr_E41FFzGdnudCVzTAHFi-Q1rHGPazQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] can: dev: call netif_carrier_off() in register_candev()
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190626160238.5d62fc15@erd988>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 77.109.103.163.adsl.dyn.edpnet.net[77.109.103.163]
+X-Barracuda-Start-Time: 1561628035
+X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 6209
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5040 1.0000 0.7500
+X-Barracuda-Spam-Score: 0.75
+X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.73184
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 5:19 PM Rasmus Villemoes
-<rasmus.villemoes@prevas.dk> wrote:
->
-> On 26/06/2019 16.17, Willem de Bruijn wrote:
-> > On Wed, Jun 26, 2019 at 5:31 AM Rasmus Villemoes
-> > <rasmus.villemoes@prevas.dk> wrote:
-> >>
-> >> On 24/06/2019 19.26, Willem de Bruijn wrote:
-> >>> On Mon, Jun 24, 2019 at 4:34 AM Rasmus Villemoes
-> >>> <rasmus.villemoes@prevas.dk> wrote:
-> >>>>
-> >>>> Make sure the LED always reflects the state of the CAN device.
-> >>>
-> >>> Should this target net?
-> >>
-> >> No, I think this should go through the CAN tree. Perhaps I've
-> >> misunderstood when to use the net-next prefix - is that only for things
-> >> that should be applied directly to the net-next tree? If so, sorry.
-> >
-> > I don't see consistent behavior on the list, so this is probably fine.
-> > It would probably help to target can (for fixes) or can-next (for new
-> > features).
-> >
-> > Let me reframe the question: should this target can, instead of can-next?
->
-> Ah, now I see what you meant, but at least I learned when to use
-> net/net-next.
->
-> I think can-next is fine, especially this late in the rc cycle. But I'll
-> leave it to the CAN maintainer(s).
->
-> >>> Regardless of CONFIG_CAN_LEDS deprecation,
-> >>> this is already not initialized properly if that CONFIG is disabled
-> >>> and a can_led_event call at device probe is a noop.
-> >>
-> >> I'm not sure I understand this part. The CONFIG_CAN_LEDS support for
-> >> showing the state of the interface is implemented via hooking into the
-> >> ndo_open/ndo_stop callbacks, and does not look at or touch the
-> >> __LINK_STATE_NOCARRIER bit at all.
-> >>
-> >> Other than via the netdev LED trigger I don't think one can even observe
-> >> the slightly odd initial state of the __LINK_STATE_NOCARRIER bit for CAN
-> >> devices,
-> >
-> > it's still incorrect, though I guess that's moot in practice.
-> Exactly.
->
-> >> which is why I framed this as a fix purely to allow the netdev
-> >> trigger to be a closer drop-in replacement for CONFIG_CAN_LEDS.
-> >
-> > So the entire CONFIG_CAN_LEDS code is to be removed? What exactly is
-> > this netdev trigger replacement, if not can_led_event? Sorry, I
-> > probably miss some context.
->
-> drivers/net/can/Kconfig contains these comments
->
->         # The netdev trigger (LEDS_TRIGGER_NETDEV) should be able to do
->         # everything that this driver is doing. This is marked as broken
->         # because it uses stuff that is intended to be changed or removed.
->         # Please consider switching to the netdev trigger and confirm it
->         # fulfills your needs instead of fixing this driver.
->
-> introduced by the commit 30f3b42147ba6 which also marked CONFIG_CAN_LEDS
-> as (depends on) BROKEN. So while a .dts for using the CAN led trigger
-> might be
->
->                 cana {
->                         label = "cana:green:activity";
->                         gpios = <&gpio0 10 0>;
->                         default-state = "off";
->                         linux,default-trigger = "can0-rxtx";
->                 };
->
-> one can achieve mostly the same thing with CAN_LEDS=n,
-> LEDS_TRIGGER_NETDEV=y setting linux,default-trigger = "netdev" plus a
-> small init script (or udev rule or whatever works) that does
->
-> d=/sys/class/leds/cana:green:activity
-> echo can0 > $d/device_name
-> echo 1 > $d/link
-> echo 1 > $d/rx
-> echo 1 > $d/tx
->
-> to tie the cana LED to the can0 device, plus configure it to show "link"
-> state as well as blink on rx and tx.
->
-> This works just fine, except for the initial state of the LED. AFAIU,
-> the netdev trigger doesn't need cooperation from each device driver
-> since it simply works of a timer that periodically checks for changes in
-> dev_get_stats().
+On wo, 26 jun 2019 16:02:38 +0200, David Jander wrote:
+> > > > On di, 25 jun 2019 10:54:55 +0200, Oleksij Rempel wrote:  
+> > > > > On 25.06.19 10:43, David Jander wrote:    
+> > > > > >On Tue, 25 Jun 2019 09:30:09 +0200
+> > > > > >Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> > > > > >    
+> > > > > >>Hello all,
+> > > > > >>
+> > > > > >>We already had a discussion about the J1939 use case for server
+> > > > > >>implementation. Short description of the challenge will looks as follow:
+> > > > > >>- main socket is listening on DST address and PGN.
+> > > > > >>- as soon as connection was requested from peer the server will
+> > > > > >>   create new connect()ed socket with SRC, DST addresses and PGN.
+> > > > > >>
+> > > > > >>With current stack implementation both sockets (main and connected) will
+> > > > > >>receive same packages. At least with huge packages it will start to be
+> > > > > >>not really good :).
+> > > > > >>
+> > > > > >>To solve this issue we have following variants:
+> > > > > >>variant a:
+> > > > > >>  - all sockets can receive everything (as currently implemented)
+> > > > > >>variant b:
+> > > > > >>  - only one socket will receive specific tuple. In this case kernel
+> > > > > >>    should calculate RX "priority". Only highest priority will RX packet.
+> > > > > >>    - all sockets with same priority will receive the matching packet
+> > > > > >>    - socket option promisc == same priority as exact match    
+[...]
+> > > > 
+> > > > I don't like any of these.
+> > > > 
+> > > > The problem you try to solve is 'huge packet duplication where it is
+> > > > probably not required'.
+> > > > Your proposed solution puts a policy in the kernel that goes in serious
+> > > > conflict with a multiuser system. It is driven by a typical
+> > > > implementation, but did not address the problem you try to solve.
+> > > > 
+> > > > In order to avoid receiving huge packets where we suspect it is not
+> > > > really wanted, we should not try to guess what 'a' program wants, nor
+> > > > implement rules that apply to 1 specific case.
+> > > > Instead, we should protect sockets from receiving huge packets.
+> > > > 
+> > > > Why not add a socket option, that implements a ceiling on the
+> > > > size of received packets.
+> > > > If that defaults to, let's say, 1785 bytes, so anyone will out of the
+> > > > box receive all TP sessions, but no ETP session, then the user will not
+> > > > be really supprised, and we need to make only 1 clear decision during delivery.
+> > > > 
+> > > > I honestly think that my proprosal puts way less decision policy in the
+> > > > kernel code, and effectively addresses the problem you tried to solve,
+> > > > without adding unnecessary multi-user restrictions.
+> > > > 
+> > > > What's your thought?  
+> > > 
+> > > Thanks for your feedback. I understand it may sound counter-intuitive, but it
+> > > really isn't. What we are trying to accomplish is for SocketCAN with J1939 to
+> > > behave much like a network adapter with TCP/IP.  
+> > 
+> > J1939 is a datagram system, so more like UDP/IP.
+> 
+> In some aspects it is more like UDP, but unlike UDP, J1939 does have have
+> handshaking (in hardware) and is considered reliable.
+> Also the transport protocol implements handshakes and reliability for bigger
+> "datagrams".
 
-Thanks, I had to read up on that code. Makes sense.
+There is no handshaking, and by far not in hardware.
+The only handshaking that exists is for non-broadcast TP.
 
-Acked-by: Willem de Bruijn <willemb@google.com>
+Broadcast TP and <=8byte datagrams are sent unreliably, just as regular
+CAN.
+
+> On top of that, many applications (like the ISObus fileserver, or the ISObus
+> VT) behave much more like a connection-oriented server, thus benefiting more
+> from the TCP/IP server analogy. I.e. there is a "client" who establishes a
+> connection with a "server" and from then on they semantically communicate over
+> a point to point channel, akin to a connected TCP/IP socket.
+
+If you create a server where different sockets are used for different
+DST+PGNs, and you want to avoid receiving the same thing in your own
+sockets, then you should be more precise in your applied filters.
+
+Unlike TCP and UDP, most J1939 applications are not designed with
+1 or few PGNs in mind, but use a huge range of PGN's. That is why
+filter lists are common in CAN / J1939 and not in TCP / UDP.
+The 'server' example is the exception, not the standard.
+
+> True. But like I said above, in ISObus there are use-cases where a
+> connection-oriented approach is used, even though there is no formal
+> handshaking of the establishment and closing of a connection in the link layer.
+
+A 'server' socket that 'listens' for new 'connections' need not
+listening to all PGNs, does it? IMHO, it needs 1 or a few PGNs, and the
+point-to-point socket needs the rest.
+So, worst cast, the point-to-point socket receives also the packets that
+trigger connection construction/destruction for 1 specific destination,
+and more specifically, it needs those in order to close your virtual
+'connection'.
+
+If this is not feasible, then adapt your listening socket's filters
+accordingly.
+
+> > I'm not aware of the complexity that has been added recently for the
+> > ETP, but that should not break multiuser operation, i.e.,
+> > if I write 'a' program, then that program should receive the same thing
+> > regardless of the presence of other sockets on the local system, with or
+> > withing the same process.
+> > I would not plan to violate that rule.
+> > I seriously would not.
+> 
+> That rule is not violated as long as these processes have their own address
+> (and NAME). If they share the same address and NAME, they are part of the same
+> control-function. In that case, as long as they do not connect() and only use
+> sendto() and recvfrom() that rule also holds true.
+> It is only when you use connect() to establish a 1:1 connection with another
+> peer. The only difference with TCP/IP sockets in that case is that you use
+> connect() on both ends instead of listen()/accept(), and the
+> establishment/tear-down of the connection is thus left to the application.
+
+Then you must redesign/redefine the filters because they are no more
+coherent.
+
+Kind regards,
+Kurt
+
