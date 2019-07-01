@@ -2,197 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B195822F
-	for <lists+linux-can@lfdr.de>; Thu, 27 Jun 2019 14:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E415B926
+	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2019 12:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfF0MIw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Jun 2019 08:08:52 -0400
-Received: from protonic.xs4all.nl ([83.163.252.89]:48943 "EHLO protonic.nl"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726375AbfF0MIv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 27 Jun 2019 08:08:51 -0400
-Received: from erd988 (erd988.prtnl [192.168.224.30])
-        by sparta (Postfix) with ESMTP id 16EEF44A00DE;
-        Thu, 27 Jun 2019 14:10:34 +0200 (CEST)
-Date:   Thu, 27 Jun 2019 14:08:49 +0200
-From:   David Jander <david@protonic.nl>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     robin@protonic.nl, linux-can@vger.kernel.org, mkl@pengutronix.de,
-        kernel@pengutronix.de, wg@grandegger.com,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Subject: Re: j1939: discussion: RX path
-Message-ID: <20190627140849.39916a65@erd988>
-In-Reply-To: <20190627105901.GA24805@pengutronix.de>
-References: <20190625073009.GA15948@pengutronix.de>
-        <20190625104315.57172f69@erd988>
-        <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
-        <20190625173137.GB8923@x1.vandijck-laurijssen.be>
-        <20190626091524.40410c4b@erd988>
-        <20190626130012.GC8923@x1.vandijck-laurijssen.be>
-        <20190626160238.5d62fc15@erd988>
-        <20190627093353.GA693@x1.vandijck-laurijssen.be>
-        <20190627105901.GA24805@pengutronix.de>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728053AbfGAKik (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Jul 2019 06:38:40 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37629 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbfGAKij (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Jul 2019 06:38:39 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hhthk-0000tX-Ah; Mon, 01 Jul 2019 12:38:36 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d] (unknown [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0414C42A6FA;
+        Mon,  1 Jul 2019 10:38:34 +0000 (UTC)
+Subject: Re: [PATCH V3] can: flexcan: fix stop mode acknowledgment
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <42ef6763-c8a6-9fcd-4706-8ebfa2f51ba0@pengutronix.de>
+Date:   Mon, 1 Jul 2019 12:37:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 27 Jun 2019 12:59:01 +0200
-Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1
+Content-Type: multipart/mixed; boundary="vDeLvfVUrJvD2FXwUXwMD8Hd2EQiXbsiQ";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>, "wg@grandegger.com"
+ <wg@grandegger.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <42ef6763-c8a6-9fcd-4706-8ebfa2f51ba0@pengutronix.de>
+Subject: Re: [PATCH V3] can: flexcan: fix stop mode acknowledgment
+References: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
 
-> On Thu, Jun 27, 2019 at 11:33:53AM +0200, Kurt Van Dijck wrote:
-> > > > > Thanks for your feedback. I understand it may sound counter-intuitive, but it
-> > > > > really isn't. What we are trying to accomplish is for SocketCAN with J1939 to
-> > > > > behave much like a network adapter with TCP/IP.    
-> > > > 
-> > > > J1939 is a datagram system, so more like UDP/IP.  
-> > > 
-> > > In some aspects it is more like UDP, but unlike UDP, J1939 does have have
-> > > handshaking (in hardware) and is considered reliable.  
-> 
-> You probably mean the way the CAN bus works, which is not specific to
-> J1939.
+--vDeLvfVUrJvD2FXwUXwMD8Hd2EQiXbsiQ
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-Yes. J1939 relies on the reliability of CAN (no pun intended).
-Side-note: We also have a J1939 implementation on top of TCP/IP... not UDP for
-obvious reasons ;-)
+On 6/19/19 9:42 AM, Joakim Zhang wrote:
+> To enter stop mode, the CPU should manually assert a global Stop Mode
+> request and check the acknowledgment asserted by FlexCAN. The CPU must
+> only consider the FlexCAN in stop mode when both request and
+> acknowledgment conditions are satisfied.
+>=20
+> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
+> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+>=20
+> ChangeLog:
+> V1->V2:
+> 	* regmap_read()-->regmap_read_poll_timeout()
+> V2->V3:
+> 	* change the way of error return, it will make easy for function
+> 	extension.
 
-> > > Also the transport protocol implements handshakes and reliability for bigger
-> > > "datagrams".  
-> > 
-> > There is no handshaking, and by far not in hardware.  
-> 
-> I think David means the collision avoid on the CAN bus...
+Please rebase to linux-next/master, as this is a fix.
 
-CAN collision avoidance, priority, message reception ACK and corrupted message
-NACK/destroy, etc...
-Of course there IS handshaking in CAN hardware. And J1939 obviously relies on
-it!
-In theory though, CAN is not 100% airtight, but in practice these guarantees
-in hardware are enough for it to be considered "robust" for all but the most
-critical use-cases.
+Marc
 
-> > The only handshaking that exists is for non-broadcast TP.  
-> 
-> Yes, on the J1939 level, there's only handshaking inclusive RTS/CTS/EOMA
-> for (E)TP.
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
-The J1939 handshaking for (E)TP is mainly necessary for dealing with different
-hardware limitations confronted with big(ish) amount of incoming bulk data.
 
-> > Broadcast TP and <=8byte datagrams are sent unreliably, just as regular
-> > CAN.  
-> 
-> It's fire and forget, but the most (?) people consider the underlying
-> CAN bus reliable (enough). :)
+--vDeLvfVUrJvD2FXwUXwMD8Hd2EQiXbsiQ--
 
-Indeed.
+--CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-> > > On top of that, many applications (like the ISObus fileserver, or the ISObus
-> > > VT) behave much more like a connection-oriented server, thus benefiting more
-> > > from the TCP/IP server analogy. I.e. there is a "client" who establishes a
-> > > connection with a "server" and from then on they semantically communicate over
-> > > a point to point channel, akin to a connected TCP/IP socket.  
-> > 
-> > If you create a server where different sockets are used for different
-> > DST+PGNs, and you want to avoid receiving the same thing in your own
-> > sockets, then you should be more precise in your applied filters.  
-> 
-> Yes, but...
-> 
-> For David's use case you want to receive the initial message by the
-> client, the you create a new socket()/bind()/connect() it. While the
-> newly created socket is active, you don't want to receive any messages
-> from that client on the server socket. This might be done by modifying
-> the filters. As soon as you close the dedicated client socket, you have
-> to modify the filers again. These are two separate operations, thus
-> racy by design. If you do it right, you don't loose any messages, but
-> receive them in both sockets. (Which makes user space handling more
-> complex).
-> 
-> > Unlike TCP and UDP, most J1939 applications are not designed with
-> > 1 or few PGNs in mind, but use a huge range of PGN's. That is why
-> > filter lists are common in CAN / J1939 and not in TCP / UDP.
-> > The 'server' example is the exception, not the standard.  
-> 
-> We'd like to have an API that supports the whole spectrum of use cases.
+-----BEGIN PGP SIGNATURE-----
 
-AFAICS, the current API covers all use-cases. For the strictly
-datagram-oriented use-cases, there is always recvfrom() and sendto() on a
-single socket.
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0Z4oYACgkQWsYho5Hk
+nSBrgQgAgLWzsaWnUrrHa4ZkTf04iRA2C9WAbJU9+bkWMaSptOt/u8ndGZXWi91z
+xQq8sV+j6CYAoMxYIZj+MiZhhkqkgQEstUYw3hvtWE3x4WAyLPyVYpg6JmnMV/ar
+Yrfk2+hkR+UziBOMaKdF8aX+ImiksQrlcGhj2nrxrucLrdCu1rpKxVP4s/4eP34m
+4SOLS3MequqZpYtN0rxZeJreRVymm0stNMU54AG9dmaF3EzxKtEmjMHQtzbPW4k3
+Cgvgvxy6w3OF0b8syZul3DmcbIkBm2fwJ8rV1Z2ojuraubGGwWW4TkZzIN5RqV0W
+Qux43aOkexWnHnav8+N5K6h9dy9NgA==
+=VwiK
+-----END PGP SIGNATURE-----
 
-> > > True. But like I said above, in ISObus there are use-cases where a
-> > > connection-oriented approach is used, even though there is no formal
-> > > handshaking of the establishment and closing of a connection in the link layer.  
-> > 
-> > A 'server' socket that 'listens' for new 'connections' need not
-> > listening to all PGNs, does it? IMHO, it needs 1 or a few PGNs, and the
-> > point-to-point socket needs the rest.  
-> 
-> The server socket may listen on as many PGNs as it wants to. The
-> dedicated socket to the client uses one tuple only (SRC/DST/PGN), which
-> is a point-to-point connection.
-
-Correct. I don't know about J1939, but on ISObus there are quite a few
-application protocols that work that way (file-server, virtual terminal).
-
-> > So, worst cast, the point-to-point socket receives also the packets that
-> > trigger connection construction/destruction for 1 specific destination,
-> > and more specifically, it needs those in order to close your virtual
-> > 'connection'.  
-> 
-> ACK
-
-In the example of a VT or file-server, there are no "specific" packets that
-trigger connection/disconnection.
-A "connection" is established on first contact from the client, and held
-"active" as long as the implement sends periodic "Working Set Maintenance"
-messages (in case of a VT) or "Client Connection Maintenance" messages
-(fileserver client).
-
-> > If this is not feasible, then adapt your listening socket's filters
-> > accordingly.
-> 
-> I don't like this, due to the raciness of the approach.
-> 
-> We just prototyped a sock option for "server" sockets. The options is
-> disabled by default, when enabled all packets that are received in a
-> connect()ed socket are ignored on this socket.
-
-Switching filters on reception of a message is inherently racy and should
-always be avoided.
-
-> > > > I'm not aware of the complexity that has been added recently for the
-> > > > ETP, but that should not break multiuser operation, i.e.,
-> > > > if I write 'a' program, then that program should receive the same thing
-> > > > regardless of the presence of other sockets on the local system, with or
-> > > > withing the same process.
-> > > > I would not plan to violate that rule.
-> > > > I seriously would not.  
-> > > 
-> > > That rule is not violated as long as these processes have their own address
-> > > (and NAME). If they share the same address and NAME, they are part of the same
-> > > control-function. In that case, as long as they do not connect() and only use
-> > > sendto() and recvfrom() that rule also holds true.
-> > > It is only when you use connect() to establish a 1:1 connection with another
-> > > peer. The only difference with TCP/IP sockets in that case is that you use
-> > > connect() on both ends instead of listen()/accept(), and the
-> > > establishment/tear-down of the connection is thus left to the application.  
-> > 
-> > Then you must redesign/redefine the filters because they are no more
-> > coherent.  
-> 
-> regards,
-> Oleksij & Marc
-> 
-
-Best regards,
-
--- 
-David Jander
-Protonic Holland.
+--CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1--
