@@ -2,179 +2,189 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E415B926
-	for <lists+linux-can@lfdr.de>; Mon,  1 Jul 2019 12:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3135C5C6BC
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jul 2019 03:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728053AbfGAKik (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Jul 2019 06:38:40 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37629 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfGAKij (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Jul 2019 06:38:39 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1hhthk-0000tX-Ah; Mon, 01 Jul 2019 12:38:36 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d] (unknown [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0414C42A6FA;
-        Mon,  1 Jul 2019 10:38:34 +0000 (UTC)
-Subject: Re: [PATCH V3] can: flexcan: fix stop mode acknowledgment
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        id S1726430AbfGBBpo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Jul 2019 21:45:44 -0400
+Received: from mail-eopbgr00084.outbound.protection.outlook.com ([40.107.0.84]:43662
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726347AbfGBBpo (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 1 Jul 2019 21:45:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9f6Cba8MWxLipm3J7aqw6G4BWTpjPbM4fJz55MeNllM=;
+ b=XsCue82d0M91hjRmttoPow9EwEw++YlIIv4E9TX+lHJl0BN2ceBIyVbGkVNMe+VlDkuY2KgxTZjDlIWJil44d3scUJ5oCBSIW2x2fIEoYwdB38DHEwi7rMLXA4Zd17CMoVx/HypbKbd/69BNogOnGKheTLk8KsPJp118XHvtCXM=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.138.152) by
+ DB7PR04MB4746.eurprd04.prod.outlook.com (20.176.233.80) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.18; Tue, 2 Jul 2019 01:45:41 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::58d4:6713:ac7d:83d2]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::58d4:6713:ac7d:83d2%3]) with mapi id 15.20.2032.019; Tue, 2 Jul 2019
+ 01:45:41 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <42ef6763-c8a6-9fcd-4706-8ebfa2f51ba0@pengutronix.de>
-Date:   Mon, 1 Jul 2019 12:37:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: [PATCH V4] can: flexcan: fix stop mode acknowledgment
+Thread-Topic: [PATCH V4] can: flexcan: fix stop mode acknowledgment
+Thread-Index: AQHVMHfaCqKrzVTOS0G/H4Ie2l5GYA==
+Date:   Tue, 2 Jul 2019 01:45:41 +0000
+Message-ID: <20190702014316.26444-1-qiangqing.zhang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: SG2PR03CA0112.apcprd03.prod.outlook.com
+ (2603:1096:4:91::16) To DB7PR04MB4618.eurprd04.prod.outlook.com
+ (2603:10a6:5:36::24)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 02189176-a006-4fc4-7834-08d6fe8efd41
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4746;
+x-ms-traffictypediagnostic: DB7PR04MB4746:
+x-microsoft-antispam-prvs: <DB7PR04MB4746CB06C98F65DA8A95E410E6F80@DB7PR04MB4746.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 008663486A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(346002)(136003)(376002)(39860400002)(396003)(54534003)(199004)(189003)(478600001)(186003)(8936002)(2906002)(52116002)(50226002)(64756008)(68736007)(305945005)(81156014)(86362001)(6486002)(81166006)(5660300002)(8676002)(25786009)(3846002)(102836004)(6116002)(6436002)(1076003)(386003)(256004)(71200400001)(14444005)(71190400001)(2616005)(99286004)(476003)(73956011)(66066001)(486006)(53936002)(316002)(66446008)(2501003)(110136005)(66476007)(14454004)(54906003)(26005)(7736002)(66946007)(66556008)(6506007)(6512007)(4326008)(36756003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4746;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: mF3o1Nzi4WEEO3HnGnINSe1xTIcPUHkb0QiO0F2Y9/n7lvJIU7sAqPIKA4YbOZSDmIOwh4b74ncN3m6ouiJMcgAtCwYZFvRZeevl5dt6FM8V4X0FMrBXNbv6y1yBSKBM8RHefed5rpSFEs0sTbDaGr1VEG1pe45IevlVOfrkskYfXIsclBJuAM0mlz/dEE8dowLyBBFYILpB/KiR0LZKHEpIuxhXY0SFtjXhJvuBPXTEOs7fgWXQb2arY4J2ZPOGva1yDaolqOtMHKXBpVluXxRiyfhn4vyw/gBmOBaAgeIFjZiKzS/WvBy14Y2qYNVABvNSFJkD8SD3mVDeY37frAtNVKYZbNmtooevcQVWaTUSLPuv2bhHUfWTvIPxF9KLbz95eP3bVki/H/RjWY2/xB32/zYcJqSPdTpA1IVHUCM=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02189176-a006-4fc4-7834-08d6fe8efd41
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 01:45:41.1358
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qiangqing.zhang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4746
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1
-Content-Type: multipart/mixed; boundary="vDeLvfVUrJvD2FXwUXwMD8Hd2EQiXbsiQ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: dl-linux-imx <linux-imx@nxp.com>, "wg@grandegger.com"
- <wg@grandegger.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <42ef6763-c8a6-9fcd-4706-8ebfa2f51ba0@pengutronix.de>
-Subject: Re: [PATCH V3] can: flexcan: fix stop mode acknowledgment
-References: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20190619074035.25719-1-qiangqing.zhang@nxp.com>
+To enter stop mode, the CPU should manually assert a global Stop Mode
+request and check the acknowledgment asserted by FlexCAN. The CPU must
+only consider the FlexCAN in stop mode when both request and
+acknowledgment conditions are satisfied.
 
---vDeLvfVUrJvD2FXwUXwMD8Hd2EQiXbsiQ
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-On 6/19/19 9:42 AM, Joakim Zhang wrote:
-> To enter stop mode, the CPU should manually assert a global Stop Mode
-> request and check the acknowledgment asserted by FlexCAN. The CPU must
-> only consider the FlexCAN in stop mode when both request and
-> acknowledgment conditions are satisfied.
->=20
-> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
-> Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
->=20
-> ChangeLog:
-> V1->V2:
-> 	* regmap_read()-->regmap_read_poll_timeout()
-> V2->V3:
-> 	* change the way of error return, it will make easy for function
-> 	extension.
+ChangeLog:
+V1->V2:
+	* regmap_read()-->regmap_read_poll_timeout()
+V2->V3:
+	* change the way of error return, it will make easy for function
+	extension.
+V3->V4:
+	* rebase to linux-next/master, as this is a fix.
+---
+ drivers/net/can/flexcan.c | 31 +++++++++++++++++++++++++++----
+ 1 file changed, 27 insertions(+), 4 deletions(-)
 
-Please rebase to linux-next/master, as this is a fix.
-
-Marc
-
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 1c66fb2ad76b..bf1bd6f5dbb1 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -400,9 +400,10 @@ static void flexcan_enable_wakeup_irq(struct flexcan_p=
+riv *priv, bool enable)
+ 	priv->write(reg_mcr, &regs->mcr);
+ }
+=20
+-static inline void flexcan_enter_stop_mode(struct flexcan_priv *priv)
++static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
+ {
+ 	struct flexcan_regs __iomem *regs =3D priv->regs;
++	unsigned int ackval;
+ 	u32 reg_mcr;
+=20
+ 	reg_mcr =3D priv->read(&regs->mcr);
+@@ -412,20 +413,37 @@ static inline void flexcan_enter_stop_mode(struct fle=
+xcan_priv *priv)
+ 	/* enable stop request */
+ 	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+ 			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
++
++	/* get stop acknowledgment */
++	if (regmap_read_poll_timeout(priv->stm.gpr, priv->stm.ack_gpr,
++				     ackval, ackval & (1 << priv->stm.ack_bit),
++				     0, FLEXCAN_TIMEOUT_US))
++		return -ETIMEDOUT;
++
++	return 0;
+ }
+=20
+-static inline void flexcan_exit_stop_mode(struct flexcan_priv *priv)
++static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
+ {
+ 	struct flexcan_regs __iomem *regs =3D priv->regs;
++	unsigned int ackval;
+ 	u32 reg_mcr;
+=20
+ 	/* remove stop request */
+ 	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+ 			   1 << priv->stm.req_bit, 0);
+=20
++	/* get stop acknowledgment */
++	if (regmap_read_poll_timeout(priv->stm.gpr, priv->stm.ack_gpr,
++				     ackval, !(ackval & (1 << priv->stm.ack_bit)),
++				     0, FLEXCAN_TIMEOUT_US))
++		return -ETIMEDOUT;
++
+ 	reg_mcr =3D priv->read(&regs->mcr);
+ 	reg_mcr &=3D ~FLEXCAN_MCR_SLF_WAK;
+ 	priv->write(reg_mcr, &regs->mcr);
++
++	return 0;
+ }
+=20
+ static inline void flexcan_error_irq_enable(const struct flexcan_priv *pri=
+v)
+@@ -1615,7 +1633,9 @@ static int __maybe_unused flexcan_suspend(struct devi=
+ce *device)
+ 		 */
+ 		if (device_may_wakeup(device)) {
+ 			enable_irq_wake(dev->irq);
+-			flexcan_enter_stop_mode(priv);
++			err =3D flexcan_enter_stop_mode(priv);
++			if (err)
++				return err;
+ 		} else {
+ 			err =3D flexcan_chip_disable(priv);
+ 			if (err)
+@@ -1665,10 +1685,13 @@ static int __maybe_unused flexcan_noirq_resume(stru=
+ct device *device)
+ {
+ 	struct net_device *dev =3D dev_get_drvdata(device);
+ 	struct flexcan_priv *priv =3D netdev_priv(dev);
++	int err;
+=20
+ 	if (netif_running(dev) && device_may_wakeup(device)) {
+ 		flexcan_enable_wakeup_irq(priv, false);
+-		flexcan_exit_stop_mode(priv);
++		err =3D flexcan_exit_stop_mode(priv);
++		if (err)
++			return err;
+ 	}
+=20
+ 	return 0;
 --=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+2.17.1
 
-
---vDeLvfVUrJvD2FXwUXwMD8Hd2EQiXbsiQ--
-
---CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0Z4oYACgkQWsYho5Hk
-nSBrgQgAgLWzsaWnUrrHa4ZkTf04iRA2C9WAbJU9+bkWMaSptOt/u8ndGZXWi91z
-xQq8sV+j6CYAoMxYIZj+MiZhhkqkgQEstUYw3hvtWE3x4WAyLPyVYpg6JmnMV/ar
-Yrfk2+hkR+UziBOMaKdF8aX+ImiksQrlcGhj2nrxrucLrdCu1rpKxVP4s/4eP34m
-4SOLS3MequqZpYtN0rxZeJreRVymm0stNMU54AG9dmaF3EzxKtEmjMHQtzbPW4k3
-Cgvgvxy6w3OF0b8syZul3DmcbIkBm2fwJ8rV1Z2ojuraubGGwWW4TkZzIN5RqV0W
-Qux43aOkexWnHnav8+N5K6h9dy9NgA==
-=VwiK
------END PGP SIGNATURE-----
-
---CtEx9EuPCx90ZiAfPbOGGu1CxAL2Apkt1--
