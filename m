@@ -2,49 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BF561F06
-	for <lists+linux-can@lfdr.de>; Mon,  8 Jul 2019 14:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CE161F11
+	for <lists+linux-can@lfdr.de>; Mon,  8 Jul 2019 14:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730950AbfGHMzs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 8 Jul 2019 08:55:48 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34242 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728892AbfGHMzs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Jul 2019 08:55:48 -0400
-Received: by mail-ot1-f67.google.com with SMTP id n5so16092733otk.1;
-        Mon, 08 Jul 2019 05:55:47 -0700 (PDT)
+        id S1728892AbfGHM4r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Jul 2019 08:56:47 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34280 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728264AbfGHM4r (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Jul 2019 08:56:47 -0400
+Received: by mail-oi1-f195.google.com with SMTP id l12so12513836oil.1;
+        Mon, 08 Jul 2019 05:56:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CY+RhrJnFubDDbiIrZyXLw75lUiZRz6EsymCdcoavtU=;
-        b=Z9up9DnIbbzEPrOeVYd3kVUZBMS2iboPj5o5STcjHMieEqNt/dTfFU4CNU8fU5dzhF
-         25RAOwnbV3i5pWDG6mC3nRP+kMyT78l7KyotlymAiu8XgKqu91tWK75oQpL5ooVYgZ8l
-         8flq1vMs0tiTjVpt/NDoHV++fZgaGkJczlWzI4dkIbgO7HSNr6jK6cJ2lPglJmxZaOoV
-         b59dnAugs4VlN66UkobyfqrY1CJN7OzbsBSAp7mBApX8P0ODUKAvaVoWCYk5wglPCuUr
-         qEo7m1S07GboTjQl3KB3OiGAwC3Is708lnEKMKOZsb/Vx/gRMqL/4hpVfd5PojsurdM3
-         0+AQ==
-X-Gm-Message-State: APjAAAWIxBzaidgWdRsZ1XOeCFNdF+MCq4vP9KIG3ixP9IcsoaFyf+qE
-        6hVHK1vhZqlzK988YpmX0IoSjjW6sbSjaLPny1g=
-X-Google-Smtp-Source: APXvYqwFL+4zysqtgbh6jv5g14+D5Us7ngVON2WHlU6B+9Snut3IlCo9BTRpnxbrZ0gGR07NZEcR37cPFaCeGkiGBpc=
-X-Received: by 2002:a9d:529:: with SMTP id 38mr14377098otw.145.1562590546625;
- Mon, 08 Jul 2019 05:55:46 -0700 (PDT)
+        bh=XI/RwJW66BJ+bgsS2cJUx1109bAK41jH7oe8lIEoR3I=;
+        b=kwna15IX+IpVszJfKdAR2rjyfcky+eS4t06h2M9stIukoQ56wjlxDg1flOQOiKD53+
+         HGsFLpDt4yHnTG3Nz7vMjDg+zc07UuzhJQWRzJLiLiz4rz8n32US9sW8adEq2Pyz/sPk
+         Q57x2hJ/WtYOFVL8bEspOxqqIOwqO6G9Dbk2T/Nf/83PjYxX6S67XNdsbRwvpPUwmqnV
+         A013Hm9znctoGKMRb5So/6vWEAiTYpZywQCn+4J/47gfCxLf6t/afiNIE0vYm83Mr6s7
+         xTv/Y4e3+H1LVCRjw4mHyGZ9vRBXNWj6pMoMfuMLEBnFXljAwMVBr30bdUuRjiVPIu6y
+         cLTA==
+X-Gm-Message-State: APjAAAVCyzdWc6KOai5JKhTxqUop51BCX6dIQpDEnDV7s3vGTL+CSNlj
+        RTugodjM0Y7XhZdWvMVDhT0DQs4WKebaZaMVOYM=
+X-Google-Smtp-Source: APXvYqxkEKL26Vp7I2CmXjdz3gegpB1Z+1t0zzIcSDhSVTV664nERnqlGdAx7jEkv4px7CKsID4v00kBt4fvNFkiMt4=
+X-Received: by 2002:aca:bd43:: with SMTP id n64mr8555849oif.148.1562590606372;
+ Mon, 08 Jul 2019 05:56:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <1560513214-28031-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1560513214-28031-2-git-send-email-fabrizio.castro@bp.renesas.com> <20190617093023.nhvrvujg52gcglko@verge.net.au>
-In-Reply-To: <20190617093023.nhvrvujg52gcglko@verge.net.au>
+References: <1560513214-28031-1-git-send-email-fabrizio.castro@bp.renesas.com> <1560513214-28031-3-git-send-email-fabrizio.castro@bp.renesas.com>
+In-Reply-To: <1560513214-28031-3-git-send-email-fabrizio.castro@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 8 Jul 2019 14:55:35 +0200
-Message-ID: <CAMuHMdVdKVMiOZJVPyM_Y6YNvDsdTwf+EhmS3VJPUb_zOrf7Yw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] dt-bindings: can: rcar_canfd: document r8a774a1 support
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "David S. Miller" <davem@davemloft.net>,
+Date:   Mon, 8 Jul 2019 14:56:35 +0200
+Message-ID: <CAMuHMdWULgX2E2CzEkp1_0_hab6YYk5kuuSdEVEOJN_X9OAKNw@mail.gmail.com>
+Subject: Re: [PATCH 2/6] dt-bindings: can: rcar_can: Complete documentation
+ for RZ/G2[EM]
+To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+Cc:     Simon Horman <horms@verge.net.au>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-can@vger.kernel.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
         netdev <netdev@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
@@ -57,71 +57,23 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 11:30 AM Simon Horman <horms@verge.net.au> wrote:
-> On Fri, Jun 14, 2019 at 12:53:29PM +0100, Fabrizio Castro wrote:
-> > Document the support for rcar_canfd on R8A774A1 SoC devices.
-> >
-> > Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-> > Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
+On Fri, Jun 14, 2019 at 1:53 PM Fabrizio Castro
+<fabrizio.castro@bp.renesas.com> wrote:
+> Add missing RZ/G2[EM] CANFD clock specific documentation.
+>
+> Fixes: 868b7c0f43e6 ("dt-bindings: can: rcar_can: Add r8a774a1 support")
+> Fixes: 0c11e7d0f51c ("dt-bindings: can: rcar_can: Add r8a774c0 support")
+> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> > ---
-> > Hello Simon,
-> >
-> > I think it would make more sense if this patch went through you as it
-> > sits on series:
-> > https://lkml.org/lkml/2019/5/9/941
-> >
-> > Do you think that's doable?
->
-> That seems reasonable to me.
->
-> Dave are you happy with me taking this, and 2/6, through
-> the renesas tree?
-
-As the previous change to this file was acked by Dave, and went in through
-the Renesas tree, have I applied this patch and patch 2/6, and queued
-it for v5.4.
-
-Thanks!
-
-> >  Documentation/devicetree/bindings/net/can/rcar_canfd.txt | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/can/rcar_canfd.txt b/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-> > index 32f051f..00afaff 100644
-> > --- a/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-> > +++ b/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-> > @@ -4,6 +4,7 @@ Renesas R-Car CAN FD controller Device Tree Bindings
-> >  Required properties:
-> >  - compatible: Must contain one or more of the following:
-> >    - "renesas,rcar-gen3-canfd" for R-Car Gen3 and RZ/G2 compatible controllers.
-> > +  - "renesas,r8a774a1-canfd" for R8A774A1 (RZ/G2M) compatible controller.
-> >    - "renesas,r8a774c0-canfd" for R8A774C0 (RZ/G2E) compatible controller.
-> >    - "renesas,r8a7795-canfd" for R8A7795 (R-Car H3) compatible controller.
-> >    - "renesas,r8a7796-canfd" for R8A7796 (R-Car M3-W) compatible controller.
-> > @@ -32,10 +33,10 @@ enable/disable the respective channel.
-> >  Required properties for "renesas,r8a774c0-canfd", "renesas,r8a7795-canfd",
-> >  "renesas,r8a7796-canfd", "renesas,r8a77965-canfd", and "renesas,r8a77990-canfd"
-> >  compatible:
-> > -In R8A774C0, R8A7795, R8A7796, R8A77965, and R8A77990 SoCs, canfd clock is a
-> > -div6 clock and can be used by both CAN and CAN FD controller at the same time.
-> > -It needs to be scaled to maximum frequency if any of these controllers use it.
-> > -This is done using the below properties:
-> > +In R8A774A1, R8A774C0, R8A7795, R8A7796, R8A77965, and R8A77990 SoCs, canfd
-> > +clock is a div6 clock and can be used by both CAN and CAN FD controller at the
-> > +same time. It needs to be scaled to maximum frequency if any of these
-> > +controllers use it. This is done using the below properties:
-> >
-> >  - assigned-clocks: phandle of canfd clock.
-> >  - assigned-clock-rates: maximum frequency of this clock.
+I.e. applied and queued for v5.4.
 
 Gr{oetje,eeting}s,
 
                         Geert
 
---
+-- 
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
