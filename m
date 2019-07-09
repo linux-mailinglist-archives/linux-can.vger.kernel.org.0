@@ -2,32 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2696331D
-	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2019 10:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4FA63337
+	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2019 11:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbfGII7U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Jul 2019 04:59:20 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47435 "EHLO
+        id S1726030AbfGIJAS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Jul 2019 05:00:18 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56283 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbfGII7T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Jul 2019 04:59:19 -0400
+        with ESMTP id S1725951AbfGIJAS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Jul 2019 05:00:18 -0400
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1hklxw-00085I-HI; Tue, 09 Jul 2019 10:59:12 +0200
+        id 1hklxw-00085J-H2; Tue, 09 Jul 2019 10:59:12 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1hklxu-0000Yr-V5; Tue, 09 Jul 2019 10:59:10 +0200
+        id 1hklxv-0000ZW-0B; Tue, 09 Jul 2019 10:59:11 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
         wg@grandegger.com
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, robin@protonic.nl, david@protonic.nl
-Subject: [PATCH v1 01/34] j1939: rename to done to rx
-Date:   Tue,  9 Jul 2019 10:58:36 +0200
-Message-Id: <20190709085909.1413-1-o.rempel@pengutronix.de>
+Subject: [PATCH v1 02/34] j1939: transport: make const what is possible
+Date:   Tue,  9 Jul 2019 10:58:37 +0200
+Message-Id: <20190709085909.1413-2-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190709085909.1413-1-o.rempel@pengutronix.de>
+References: <20190709085909.1413-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
@@ -41,172 +43,77 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- net/can/j1939/j1939-priv.h |  5 ++---
- net/can/j1939/socket.c     |  2 +-
- net/can/j1939/transport.c  | 36 ++++++++++++++++++------------------
- 3 files changed, 21 insertions(+), 22 deletions(-)
+ net/can/j1939/j1939-priv.h |  2 +-
+ net/can/j1939/transport.c  | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-index 84d2d540347a..eeefa2f0cbc9 100644
+index eeefa2f0cbc9..612ed17864d0 100644
 --- a/net/can/j1939/j1939-priv.h
 +++ b/net/can/j1939/j1939-priv.h
-@@ -261,9 +261,8 @@ struct j1939_session {
- 		 * this counter can be set back if responder node didn't
- 		 * received all packets send by originator. */
- 		unsigned int tx;
--		/* done - number of packets received and confirmed by
--		 * responder */
--		unsigned int done;
-+		/* rx - number of packets received */
-+		unsigned int rx;
- 		/* block - amount of packets expected in one block */
- 		unsigned int block;
- 		/* dpo - ETP.CM_DPO, Data Packet Offset */
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 68d5894f9e33..0c5de3178e12 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -852,7 +852,7 @@ static struct sk_buff *j1939_sk_get_timestamping_opt_stats(struct j1939_session
- 		return NULL;
+@@ -161,7 +161,7 @@ struct j1939_sk_buff_cb {
+ 	priority_t priority;
+ };
  
- 	nla_put_u32(stats, J1939_NLA_BYTES_ACKED,
--		    min(session->pkt.done * 7, session->total_message_size));
-+		    min(session->pkt.rx * 7, session->total_message_size));
+-static inline struct j1939_sk_buff_cb *j1939_skb_to_cb(struct sk_buff *skb)
++static inline struct j1939_sk_buff_cb *j1939_skb_to_cb(const struct sk_buff *skb)
+ {
+ 	BUILD_BUG_ON(sizeof(struct j1939_sk_buff_cb) > sizeof(skb->cb));
  
- 	return stats;
- }
 diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index e862f3d6c4b6..fe9ab330f761 100644
+index fe9ab330f761..b10352fafe84 100644
 --- a/net/can/j1939/transport.c
 +++ b/net/can/j1939/transport.c
-@@ -301,7 +301,7 @@ static void j1939_session_skb_drop_old(struct j1939_session *session)
- 	if (skb_queue_len(&session->skb_queue) < 2)
- 		return;
+@@ -365,19 +365,19 @@ static struct sk_buff *j1939_session_skb_find(struct j1939_session *session)
+ /* see if we are receiver
+  * returns 0 for broadcasts, although we will receive them
+  */
+-static inline int j1939_tp_im_receiver(struct j1939_sk_buff_cb *skcb)
++static inline int j1939_tp_im_receiver(const struct j1939_sk_buff_cb *skcb)
+ {
+ 	return skcb->dst_flags & J1939_ECU_LOCAL;
+ }
  
--	offset_start = session->pkt.done * 7;
-+	offset_start = session->pkt.rx * 7;
+ /* see if we are sender */
+-static inline int j1939_tp_im_transmitter(struct j1939_sk_buff_cb *skcb)
++static inline int j1939_tp_im_transmitter(const struct j1939_sk_buff_cb *skcb)
+ {
+ 	return skcb->src_flags & J1939_ECU_LOCAL;
+ }
  
- 	spin_lock_irqsave(&session->skb_queue.lock, flags);
- 	do_skb = skb_peek(&session->skb_queue);
-@@ -680,11 +680,11 @@ static int j1939_tp_txnext(struct j1939_session *session)
- 			break;
-  tx_cts:
- 		ret = 0;
--		len = session->pkt.total - session->pkt.done;
-+		len = session->pkt.total - session->pkt.rx;
- 		len = min3(len, session->pkt.block, j1939_tp_block ?: 255);
+ /* see if we are involved as either receiver or transmitter */
+-static int j1939_tp_im_involved(struct j1939_sk_buff_cb *skcb, bool swap)
++static int j1939_tp_im_involved(const struct j1939_sk_buff_cb *skcb, bool swap)
+ {
+ 	if (swap)
+ 		return j1939_tp_im_receiver(skcb);
+@@ -506,7 +506,7 @@ static void j1939_skbcb_swap(struct j1939_sk_buff_cb *skcb)
+ }
  
- 		if (session->skcb.addr.type == J1939_ETP) {
--			pkt = session->pkt.done + 1;
-+			pkt = session->pkt.rx + 1;
- 			dat[0] = J1939_ETP_CMD_CTS;
- 			dat[1] = len;
- 			dat[2] = (pkt >> 0);
-@@ -693,7 +693,7 @@ static int j1939_tp_txnext(struct j1939_session *session)
- 		} else {
- 			dat[0] = J1939_TP_CMD_CTS;
- 			dat[1] = len;
--			dat[2] = session->pkt.done + 1;
-+			dat[2] = session->pkt.rx + 1;
- 		}
- 		if (dat[0] == session->last_txcmd)
- 			/* done already */
-@@ -712,9 +712,9 @@ static int j1939_tp_txnext(struct j1939_session *session)
- 		    session->last_txcmd != J1939_ETP_CMD_DPO) {
- 			/* do dpo */
- 			dat[0] = J1939_ETP_CMD_DPO;
--			session->pkt.dpo = session->pkt.done;
-+			session->pkt.dpo = session->pkt.rx;
- 			pkt = session->pkt.dpo;
--			dat[1] = session->pkt.last - session->pkt.done;
-+			dat[1] = session->pkt.last - session->pkt.rx;
- 			dat[2] = (pkt >> 0);
- 			dat[3] = (pkt >> 8);
- 			dat[4] = (pkt >> 16);
-@@ -723,7 +723,7 @@ static int j1939_tp_txnext(struct j1939_session *session)
- 				goto failed;
- 			session->last_txcmd = dat[0];
- 			j1939_tp_set_rxtimeout(session, 1250);
--			session->pkt.tx = session->pkt.done;
-+			session->pkt.tx = session->pkt.rx;
- 		}
- 		/* fallthrough */
- 	case J1939_TP_CMD_CTS: /* fallthrough */
-@@ -732,7 +732,7 @@ static int j1939_tp_txnext(struct j1939_session *session)
- 		if ((session->skcb.addr.type == J1939_ETP ||
- 		     !j1939_cb_is_broadcast(&session->skcb)) &&
- 		    j1939_tp_im_receiver(&session->skcb)) {
--			if (session->pkt.done >= session->pkt.total) {
-+			if (session->pkt.rx >= session->pkt.total) {
- 				if (session->skcb.addr.type == J1939_ETP) {
- 					dat[0] = J1939_ETP_CMD_EOMA;
- 					dat[1] = session->total_message_size >> 0;
-@@ -755,7 +755,7 @@ static int j1939_tp_txnext(struct j1939_session *session)
- 				j1939_tp_set_rxtimeout(session, 1250);
- 				/* wait for the EOMA packet to come in */
- 				break;
--			} else if (session->pkt.done >= session->pkt.last) {
-+			} else if (session->pkt.rx >= session->pkt.last) {
- 				session->last_txcmd = 0;
- 				goto tx_cts;
- 			}
-@@ -1091,14 +1091,14 @@ j1939_xtp_rx_cts(struct j1939_session *session, struct sk_buff *skb)
- 		goto out_session_unlock;
- 	} else {
- 		/* set packet counters only when not CTS(0) */
--		session->pkt.done = pkt - 1;
-+		session->pkt.rx = pkt - 1;
- 		j1939_session_skb_drop_old(session);
--		session->pkt.last = session->pkt.done + dat[1];
-+		session->pkt.last = session->pkt.rx + dat[1];
- 		if (session->pkt.last > session->pkt.total)
- 			/* safety measure */
- 			session->pkt.last = session->pkt.total;
- 		/* TODO: do not set tx here, do it in txtimer */
--		session->pkt.tx = session->pkt.done;
-+		session->pkt.tx = session->pkt.rx;
- 	}
+ static struct sk_buff *j1939_tp_tx_dat_new(struct j1939_priv *priv,
+-					   struct j1939_sk_buff_cb *re_skcb,
++					   const struct j1939_sk_buff_cb *re_skcb,
+ 					   bool ctl,
+ 					   bool swap_src_dst)
+ {
+@@ -564,7 +564,7 @@ static int j1939_tp_tx_dat(struct j1939_session *session,
+ }
  
- 	session->last_cmd = dat[0];
-@@ -1274,7 +1274,7 @@ j1939_session *j1939_xtp_rx_rts_session_new(struct j1939_priv *priv,
- 		session->pkt.block = min(dat[3], dat[4]);
- 	}
+ static int j1939_xtp_do_tx_ctl(struct j1939_priv *priv,
+-			       struct j1939_sk_buff_cb *re_skcb,
++			       const struct j1939_sk_buff_cb *re_skcb,
+ 			       bool swap_src_dst, pgn_t pgn, const u8 *dat)
+ {
+ 	struct sk_buff *skb;
+@@ -597,7 +597,7 @@ static inline int j1939_tp_tx_ctl(struct j1939_session *session,
+ }
  
--	session->pkt.done = 0;
-+	session->pkt.rx = 0;
- 	session->pkt.tx = 0;
- 
- 	WARN_ON_ONCE(j1939_session_activate(session));
-@@ -1382,7 +1382,7 @@ static void j1939_xtp_rx_dat(struct j1939_priv *priv, struct sk_buff *skb)
- 
- 	packet = (dat[0] - 1 + session->pkt.dpo);
- 	if (packet > session->pkt.total ||
--	    (session->pkt.done + 1) > session->pkt.total) {
-+	    (session->pkt.rx + 1) > session->pkt.total) {
- 		netdev_info(priv->ndev, "%s: should have been completed\n",
- 			    __func__);
- 		goto out_session_unlock;
-@@ -1401,16 +1401,16 @@ static void j1939_xtp_rx_dat(struct j1939_priv *priv, struct sk_buff *skb)
- 
- 	tpdat = se_skb->data;
- 	memcpy(&tpdat[offset], &dat[1], nbytes);
--	if (packet == session->pkt.done)
--		++session->pkt.done;
-+	if (packet == session->pkt.rx)
-+		session->pkt.rx++;
- 
- 	if (skcb->addr.type != J1939_ETP &&
- 	    j1939_cb_is_broadcast(&session->skcb)) {
--		if (session->pkt.done >= session->pkt.total)
-+		if (session->pkt.rx >= session->pkt.total)
- 			final = true;
- 	} else {
- 		/* never final, an EOMA must follow */
--		if (session->pkt.done >= session->pkt.last)
-+		if (session->pkt.rx >= session->pkt.last)
- 			do_cts_eoma = true;
- 	}
- 	j1939_session_unlock(session);
+ static int j1939_xtp_tx_abort(struct j1939_priv *priv,
+-			      struct j1939_sk_buff_cb *re_skcb,
++			      const struct j1939_sk_buff_cb *re_skcb,
+ 			      bool swap_src_dst,
+ 			      enum j1939_xtp_abort err,
+ 			      pgn_t pgn)
 -- 
 2.20.1
 
