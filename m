@@ -2,91 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B44EF639F3
-	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2019 19:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADE963A39
+	for <lists+linux-can@lfdr.de>; Tue,  9 Jul 2019 19:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbfGIRJ0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Jul 2019 13:09:26 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:12255 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726335AbfGIRJ0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Jul 2019 13:09:26 -0400
-X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Jul 2019 13:09:25 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1562692164;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=IVeSt0e1J8SvDVVbG9XREaY23+cMgr7W2CknZSyD+tY=;
-        b=rHAgohP9U6ZjUKHvdg+JFpi2AtL8Wpmnxm/NId9Lop0DnA+v/a1E8jGyanNN3bPV+j
-        K+K8e84PSe//7z+x+UyyY047xtvOTxm8cSFRKPl77+hFpSanP4j+7E23wM5CN8Ths7tM
-        sLdEYATbod7oyYuDB2rwSabC8sA0wEvo9G0qsffGzpr0fStT7cRuEyCzOpTWWPNqnDOz
-        newvsmr6qexRcSAp/1zrEoG2jTh0fujzlm7ctcHcHhQ+a/jogEboF9+2v1DtevVqHAts
-        wdcqRZDAn4YD3PV4YD0aj8t1tW5vRfrD1FGZ2fh8RTlzOpOp6IloWZVAme54b3ImJbW/
-        5rew==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGXsh5kUrI"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.40.177]
-        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
-        with ESMTPSA id k05d3bv69H3I25Z
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Tue, 9 Jul 2019 19:03:18 +0200 (CEST)
+        id S1726238AbfGIRhu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Jul 2019 13:37:50 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:34981 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726133AbfGIRhu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Jul 2019 13:37:50 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1hku3h-0001zv-OB; Tue, 09 Jul 2019 19:37:41 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1hku3g-0005cH-1q; Tue, 09 Jul 2019 19:37:40 +0200
+Date:   Tue, 9 Jul 2019 19:37:40 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
+        wg@grandegger.com, robin@protonic.nl, david@protonic.nl,
+        kernel@pengutronix.de, linux-can@vger.kernel.org
 Subject: Re: [PATCH v1 13/34] j1939: socket: drop sanity check for ifindex
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
-        wg@grandegger.com
-Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
-        robin@protonic.nl, david@protonic.nl
+Message-ID: <20190709173740.pisuzxscqad7d76w@pengutronix.de>
 References: <20190709085909.1413-1-o.rempel@pengutronix.de>
  <20190709085909.1413-13-o.rempel@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <a680d36b-0cbd-f5a6-e3fc-786b518a62bb@hartkopp.net>
-Date:   Tue, 9 Jul 2019 19:03:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ <a680d36b-0cbd-f5a6-e3fc-786b518a62bb@hartkopp.net>
 MIME-Version: 1.0
-In-Reply-To: <20190709085909.1413-13-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a680d36b-0cbd-f5a6-e3fc-786b518a62bb@hartkopp.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 19:23:44 up 52 days, 23:41, 49 users,  load average: 0.08, 0.02,
+ 0.01
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oleksij,
+Hi Oliver,
 
-the topic said what this patch does - but there's no commit message that 
-tells the reader why the check can be dropped.
-
-And the removed comment in the patch leaves me even more lost ...
-
-Regards,
-Oliver
-
-On 09/07/2019 10.58, Oleksij Rempel wrote:
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->   net/can/j1939/socket.c | 5 -----
->   1 file changed, 5 deletions(-)
+On Tue, Jul 09, 2019 at 07:03:12PM +0200, Oliver Hartkopp wrote:
+> Hi Oleksij,
 > 
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index 19e662574b5f..39df867cfe84 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -272,14 +272,9 @@ static bool j1939_sk_recv_match_one(struct j1939_sock *jsk,
->   static void j1939_sk_recv_one(struct j1939_sock *jsk, struct sk_buff *oskb)
->   {
->   	const struct j1939_sk_buff_cb *oskcb = j1939_skb_to_cb(oskb);
-> -	const struct can_skb_priv *oskb_prv = can_skb_prv(oskb);
->   	struct j1939_sk_buff_cb *skcb;
->   	struct sk_buff *skb;
->   
-> -	if (jsk->ifindex != oskb_prv->ifindex)
-> -		/* this socket does not take packets from this iface */
-> -		return;
-> -
->   	if (!j1939_sk_recv_match_one(jsk, oskcb))
->   		return;
->   
+> the topic said what this patch does - but there's no commit message that
+> tells the reader why the check can be dropped.
 > 
+> And the removed comment in the patch leaves me even more lost ...
+
+You right. I'll update the commit message.
+
+Current j1939 stack implementation has one priv structure per interface.
+There are no more global structures. All sockets are linked to related
+priv. The can_rx call back is also configured with appropriate priv.
+It means, we can't get an skb for different ifindex.
+
+> Regards,
+> Oliver
+> 
+> On 09/07/2019 10.58, Oleksij Rempel wrote:
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >   net/can/j1939/socket.c | 5 -----
+> >   1 file changed, 5 deletions(-)
+> > 
+> > diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+> > index 19e662574b5f..39df867cfe84 100644
+> > --- a/net/can/j1939/socket.c
+> > +++ b/net/can/j1939/socket.c
+> > @@ -272,14 +272,9 @@ static bool j1939_sk_recv_match_one(struct j1939_sock *jsk,
+> >   static void j1939_sk_recv_one(struct j1939_sock *jsk, struct sk_buff *oskb)
+> >   {
+> >   	const struct j1939_sk_buff_cb *oskcb = j1939_skb_to_cb(oskb);
+> > -	const struct can_skb_priv *oskb_prv = can_skb_prv(oskb);
+> >   	struct j1939_sk_buff_cb *skcb;
+> >   	struct sk_buff *skb;
+> > -	if (jsk->ifindex != oskb_prv->ifindex)
+> > -		/* this socket does not take packets from this iface */
+> > -		return;
+> > -
+> >   	if (!j1939_sk_recv_match_one(jsk, oskcb))
+> >   		return;
+> > 
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
