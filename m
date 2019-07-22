@@ -2,447 +2,156 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C436FB13
-	for <lists+linux-can@lfdr.de>; Mon, 22 Jul 2019 10:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6722A6FB4A
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jul 2019 10:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728148AbfGVIQ0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Jul 2019 04:16:26 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:35585 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbfGVIQZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jul 2019 04:16:25 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1hpTUZ-000864-VJ; Mon, 22 Jul 2019 10:16:20 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d] (unknown [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5336F436056;
-        Mon, 22 Jul 2019 08:16:07 +0000 (UTC)
-Subject: Re: [PATCH V2 1/1] can: sja1000: f81601: add Fintek F81601 support
-To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>, wg@grandegger.com,
-        peter_hong@fintek.com.tw
-Cc:     davem@davemloft.net, f.suligoi@asem.it,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-References: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <563b0d71-3c60-d32c-cf19-73611f68d45a@pengutronix.de>
-Date:   Mon, 22 Jul 2019 10:15:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727310AbfGVI2L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Jul 2019 04:28:11 -0400
+Received: from mail-eopbgr140070.outbound.protection.outlook.com ([40.107.14.70]:22288
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726130AbfGVI2L (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 22 Jul 2019 04:28:11 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gJJtCOqRJ0QbJ6C36JOdTTvuO8f30EPUM9uHP9up50Db9zITOjEmcrjMXHG930w3dK4616gzpdM4/x+znhyoqZngOhIrcO7fBD5V6PM4nGK5iM5iNdxkTHBtEJyxgKqIYpvITATD/u2Z2S7LTrTRib2qWzzQ1AOMD/4/8mdQscoNNXuZo6VQgqDp1Ub4pDI4hfTfOdyyGKNKnfnbP9LY9Yfwb9yr3+aTnimls5P5hUtq3W4qQ30LDxhEu1nswU4BCTi54myyHc8kpi58ZDuDS5NEDUW5cjLQf5ihh/D/4mOzRfxqck+Vf+nh4oModX2HlYO27s8YAa+BceCZsesIWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m85sQBkX8k/yJOvzoSSnqFk6mp1zagAyuvth+BbLkyI=;
+ b=hX2dh9za6gM932NV+UeouKQ5vfIWBQr7M2WdFBC/CAc7+LZQGtBgTEjB/OKzD5fYRpNyHfY86XaQcwm3Qvk2OXRBOwtlWPKlG+im9nyhnviqUQdQjVvNDx9E0uyzTtYgVuubtewskPem3Xgdm1J42c0QsIs3FH0uTyIURB8avIbJLOGq+X6GUnEFt6sSpqGBtIMWzbsKYOCfZ8lWrnhGRoqDVBfl0x15/ZUg84WRp0nT5nuxKWmcu1iXAoHZrQtMqKZVtbUgKR2s2t/vjTjj7gb77fPMfWHu1JljfWfy+Y8dBMx2tzUjQLd7qG4UZy7eWali80SHgT9R+QRDySlUJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
+ header.d=nxp.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m85sQBkX8k/yJOvzoSSnqFk6mp1zagAyuvth+BbLkyI=;
+ b=d49VeqyHQ0gNikSivkgrEKlsTHfNCBk2PDDTiEfSi7qAFAfpgduBnpBLH16MioYsdPw19Dx9BNDbf/fv0LLUF0G/g3mF1CB59ZQ1GH6KbuD6BOyXUnDwSpowwnnpd3eqQBDq7C7a+twhkKrIxqxkPzipfs9rnvd9O/Sn2prK5jg=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB4299.eurprd04.prod.outlook.com (52.135.129.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2094.15; Mon, 22 Jul 2019 08:28:03 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::6553:8d04:295c:774b]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::6553:8d04:295c:774b%5]) with mapi id 15.20.2094.013; Mon, 22 Jul 2019
+ 08:28:03 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V4] can: flexcan: fix stop mode acknowledgment
+Thread-Topic: [PATCH V4] can: flexcan: fix stop mode acknowledgment
+Thread-Index: AQHVMHfaCqKrzVTOS0G/H4Ie2l5GYKbWbbRg
+Date:   Mon, 22 Jul 2019 08:28:03 +0000
+Message-ID: <DB7PR04MB4618CDE67D0A781CD5844581E6C40@DB7PR04MB4618.eurprd04.prod.outlook.com>
+References: <20190702014316.26444-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190702014316.26444-1-qiangqing.zhang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ba07103a-8694-4f0e-af5c-08d70e7e83cd
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4299;
+x-ms-traffictypediagnostic: DB7PR04MB4299:
+x-microsoft-antispam-prvs: <DB7PR04MB429974E1C6FF08D13CF92F82E6C40@DB7PR04MB4299.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 01068D0A20
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(189003)(199004)(54534003)(13464003)(2906002)(7696005)(71190400001)(71200400001)(476003)(55016002)(33656002)(26005)(99286004)(53936002)(68736007)(569044001)(102836004)(74316002)(446003)(7736002)(11346002)(76176011)(25786009)(53546011)(6506007)(229853002)(305945005)(9686003)(54906003)(186003)(486006)(81166006)(81156014)(3846002)(14444005)(256004)(6116002)(478600001)(76116006)(66946007)(64756008)(66446008)(66476007)(66556008)(110136005)(8936002)(6436002)(316002)(5660300002)(52536014)(66066001)(8676002)(86362001)(2501003)(4326008)(6246003)(14454004);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4299;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 4ZwzAstBrcMdBJ5KTkcYkPYeRqinUD3QDx09g+D9W5PLjMzjiPwyScrXI6I6Yx45o+/V6A6sJ/+2fKqfHBekx5RyTy1tgog98J4tHRldPPA+bQHDirld+CxXJP+OfegeciXHoIcbmoOg+liSVBpkMqBBT/28OrHGGIulINFdYPwrGvZRTBKjClGJvRdt/lEgtnGAR+MTzLOFDqBs5TlVl6AxHUChZ8sn+JniZ4bh0eY6CbBna8IzIUYYYtfLT6gydadrhaos1onIir/S3G+v4styAZYx1t8TwHybsMXXPLLcSEw0HDY+DMJUKzL2xmZr3t5OXA2SSjilpMjCyJr9GpJkabFTs0o983EaivIXYKAFqlLAW69n0LIgDqTMctoUJ2JG3LkihCl5zPa4Uld3XdKmaMLD33XF+v0k/gX53hI=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba07103a-8694-4f0e-af5c-08d70e7e83cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 08:28:03.5038
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qiangqing.zhang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4299
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir
-Content-Type: multipart/mixed; boundary="0MyzbmtnTSQhU6eVIDkvcFCldXzdtm07m";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>, wg@grandegger.com,
- peter_hong@fintek.com.tw
-Cc: davem@davemloft.net, f.suligoi@asem.it, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org, netdev@vger.kernel.org,
- "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Message-ID: <563b0d71-3c60-d32c-cf19-73611f68d45a@pengutronix.de>
-Subject: Re: [PATCH V2 1/1] can: sja1000: f81601: add Fintek F81601 support
-References: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
-In-Reply-To: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
-
---0MyzbmtnTSQhU6eVIDkvcFCldXzdtm07m
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 7/22/19 8:22 AM, Ji-Ze Hong (Peter Hong) wrote:
-> This patch add support for Fintek PCIE to 2 CAN controller support
->=20
-> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-> ---
-> Changelog:
-> v2:
-> 	1: Fix comment on the spinlock with write access.
-> 	2: Use ARRAY_SIZE instead of F81601_PCI_MAX_CHAN.
-> 	3: Check the strap pin outside the loop.
-> 	4: Fix the cleanup issue in f81601_pci_add_card().
-> 	5: Remove unused "channels" in struct f81601_pci_card.
->=20
->  drivers/net/can/sja1000/Kconfig  |   8 ++
->  drivers/net/can/sja1000/Makefile |   1 +
->  drivers/net/can/sja1000/f81601.c | 215 +++++++++++++++++++++++++++++++=
-++++++++
->  3 files changed, 224 insertions(+)
->  create mode 100644 drivers/net/can/sja1000/f81601.c
->=20
-> diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/=
-Kconfig
-> index f6dc89927ece..8588323c5138 100644
-> --- a/drivers/net/can/sja1000/Kconfig
-> +++ b/drivers/net/can/sja1000/Kconfig
-> @@ -101,4 +101,12 @@ config CAN_TSCAN1
->  	  IRQ numbers are read from jumpers JP4 and JP5,
->  	  SJA1000 IO base addresses are chosen heuristically (first that work=
-s).
-> =20
-> +config CAN_F81601
-> +	tristate "Fintek F81601 PCIE to 2 CAN Controller"
-> +	depends on PCI
-> +	help
-> +	  This driver adds support for Fintek F81601 PCIE to 2 CAN Controller=
-=2E
-> +	  It had internal 24MHz clock source, but it can be changed by
-> +	  manufacturer. We can use modinfo to get usage for parameters.
-> +	  Visit http://www.fintek.com.tw to get more information.
->  endif
-> diff --git a/drivers/net/can/sja1000/Makefile b/drivers/net/can/sja1000=
-/Makefile
-> index 9253aaf9e739..6f6268543bd9 100644
-> --- a/drivers/net/can/sja1000/Makefile
-> +++ b/drivers/net/can/sja1000/Makefile
-> @@ -13,3 +13,4 @@ obj-$(CONFIG_CAN_PEAK_PCMCIA) +=3D peak_pcmcia.o
->  obj-$(CONFIG_CAN_PEAK_PCI) +=3D peak_pci.o
->  obj-$(CONFIG_CAN_PLX_PCI) +=3D plx_pci.o
->  obj-$(CONFIG_CAN_TSCAN1) +=3D tscan1.o
-> +obj-$(CONFIG_CAN_F81601) +=3D f81601.o
-> diff --git a/drivers/net/can/sja1000/f81601.c b/drivers/net/can/sja1000=
-/f81601.c
-> new file mode 100644
-> index 000000000000..3c378de8764d
-> --- /dev/null
-> +++ b/drivers/net/can/sja1000/f81601.c
-> @@ -0,0 +1,215 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Fintek F81601 PCIE to 2 CAN controller driver
-> + *
-> + * Copyright (C) 2019 Peter Hong <peter_hong@fintek.com.tw>
-> + * Copyright (C) 2019 Linux Foundation
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/delay.h>
-> +#include <linux/slab.h>
-> +#include <linux/pci.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/io.h>
-> +#include <linux/version.h>
-> +
-> +#include "sja1000.h"
-> +
-> +#define F81601_PCI_MAX_CHAN		2
-> +
-> +#define F81601_DECODE_REG		0x209
-> +#define F81601_IO_MODE			BIT(7)
-> +#define F81601_MEM_MODE			BIT(6)
-> +#define F81601_CFG_MODE			BIT(5)
-> +#define F81601_CAN2_INTERNAL_CLK	BIT(3)
-> +#define F81601_CAN1_INTERNAL_CLK	BIT(2)
-> +#define F81601_CAN2_EN			BIT(1)
-> +#define F81601_CAN1_EN			BIT(0)
-> +
-> +#define F81601_TRAP_REG			0x20a
-> +#define F81601_CAN2_HAS_EN		BIT(4)
-> +
-> +struct f81601_pci_card {
-> +	void __iomem *addr;
-> +	spinlock_t lock;	/* use this spin lock only for write access */
-> +	struct pci_dev *dev;
-> +	struct net_device *net_dev[F81601_PCI_MAX_CHAN];
-> +};
-> +
-> +static const struct pci_device_id f81601_pci_tbl[] =3D {
-> +	{ PCI_DEVICE(0x1c29, 0x1703) },
-> +	{},
-> +};
-> +
-> +MODULE_DEVICE_TABLE(pci, f81601_pci_tbl);
-> +
-> +static bool internal_clk =3D 1;
-
-true
-
-> +module_param(internal_clk, bool, 0444);
-> +MODULE_PARM_DESC(internal_clk, "Use internal clock, default 1 (24MHz)"=
-);
-> +
-> +static unsigned int external_clk;
-> +module_param(external_clk, uint, 0444);
-> +MODULE_PARM_DESC(external_clk, "External Clock, must spec when interna=
-l_clk =3D 0");
-> +
-> +static u8 f81601_pci_read_reg(const struct sja1000_priv *priv, int por=
-t)
-> +{
-> +	return readb(priv->reg_base + port);
-> +}
-> +
-> +static void f81601_pci_write_reg(const struct sja1000_priv *priv, int =
-port,
-> +				 u8 val)
-> +{
-> +	struct f81601_pci_card *card =3D priv->priv;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&card->lock, flags);
-> +	writeb(val, priv->reg_base + port);
-> +	readb(priv->reg_base);
-> +	spin_unlock_irqrestore(&card->lock, flags);
-> +}
-> +
-> +static void f81601_pci_del_card(struct pci_dev *pdev)
-> +{
-> +	struct f81601_pci_card *card =3D pci_get_drvdata(pdev);
-> +	struct net_device *dev;
-> +	int i =3D 0;
-> +
-> +	for (i =3D 0; i < ARRAY_SIZE(card->net_dev); i++) {
-> +		dev =3D card->net_dev[i];
-> +		if (!dev)
-> +			continue;
-> +
-> +		dev_info(&pdev->dev, "%s: Removing %s\n", __func__, dev->name);
-> +
-> +		unregister_sja1000dev(dev);
-> +		free_sja1000dev(dev);
-> +	}
-> +
-> +	pcim_iounmap(pdev, card->addr);
-> +}
-> +
-> +/* Probe F81601 based device for the SJA1000 chips and register each
-> + * available CAN channel to SJA1000 Socket-CAN subsystem.
-> + */
-> +static int f81601_pci_add_card(struct pci_dev *pdev,
-> +			       const struct pci_device_id *ent)
-> +{
-> +	struct sja1000_priv *priv;
-> +	struct net_device *dev;
-> +	struct f81601_pci_card *card;
-> +	int err, i, count;
-> +	u8 tmp;
-> +
-> +	if (pcim_enable_device(pdev) < 0) {
-
-I'm missing a corresponding disable_device().
-
-> +		dev_err(&pdev->dev, "Failed to enable PCI device\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	dev_info(&pdev->dev, "Detected card at slot #%i\n",
-> +		 PCI_SLOT(pdev->devfn));
-> +
-> +	card =3D devm_kzalloc(&pdev->dev, sizeof(*card), GFP_KERNEL);
-> +	if (!card)
-> +		return -ENOMEM;
-> +
-> +	card->dev =3D pdev;
-> +	spin_lock_init(&card->lock);
-> +
-> +	pci_set_drvdata(pdev, card);
-> +
-> +	tmp =3D F81601_IO_MODE | F81601_MEM_MODE | F81601_CFG_MODE |
-> +		F81601_CAN2_EN | F81601_CAN1_EN;
-> +
-> +	if (internal_clk) {
-> +		tmp |=3D F81601_CAN2_INTERNAL_CLK | F81601_CAN1_INTERNAL_CLK;
-> +
-> +		dev_info(&pdev->dev,
-> +			 "F81601 running with internal clock: 24Mhz\n");
-> +	} else {
-> +		dev_info(&pdev->dev,
-> +			 "F81601 running with external clock: %dMhz\n",
-> +			 external_clk / 1000000);
-> +	}
-> +
-> +	pci_write_config_byte(pdev, F81601_DECODE_REG, tmp);
-> +
-> +	card->addr =3D pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
-> +
-> +	if (!card->addr) {
-> +		err =3D -ENOMEM;
-> +		dev_err(&pdev->dev, "%s: Failed to remap BAR\n", __func__);
-> +		goto failure_cleanup;
-> +	}
-> +
-> +	/* read CAN2_HW_EN strap pin to detect how many CANBUS do we have */
-> +	count =3D ARRAY_SIZE(card->net_dev);
-> +	pci_read_config_byte(pdev, F81601_TRAP_REG, &tmp);
-> +	if (!(tmp & F81601_CAN2_HAS_EN))
-> +		count =3D 1;
-> +
-> +	/* Detect available channels */
-> +	for (i =3D 0; i < count; i++) {
-> +		dev =3D alloc_sja1000dev(0);
-> +		if (!dev) {
-> +			err =3D -ENOMEM;
-> +			goto failure_cleanup;
-> +		}
-> +
-> +		priv =3D netdev_priv(dev);
-> +		priv->priv =3D card;
-> +		priv->irq_flags =3D IRQF_SHARED;
-> +		priv->reg_base =3D card->addr + 0x80 * i;
-> +		priv->read_reg =3D f81601_pci_read_reg;
-> +		priv->write_reg =3D f81601_pci_write_reg;
-> +
-> +		if (internal_clk)
-> +			priv->can.clock.freq =3D 24000000 / 2;
-> +		else
-> +			priv->can.clock.freq =3D external_clk / 2;
-> +
-> +		priv->ocr =3D OCR_TX0_PUSHPULL | OCR_TX1_PUSHPULL;
-> +		priv->cdr =3D CDR_CBP;
-> +
-> +		SET_NETDEV_DEV(dev, &pdev->dev);
-> +		dev->dev_id =3D i;
-> +		dev->irq =3D pdev->irq;
-> +
-> +		/* Register SJA1000 device */
-> +		err =3D register_sja1000dev(dev);
-> +		if (err) {
-> +			dev_err(&pdev->dev,
-> +				"%s: Registering device failed: %x\n", __func__,
-> +				err);
-> +			free_sja1000dev(dev);
-> +			goto failure_cleanup;
-> +		}
-> +
-> +		card->net_dev[i] =3D dev;
-> +		dev_info(&pdev->dev, "Channel #%d, %s at 0x%p, irq %d\n", i,
-> +			 dev->name, priv->reg_base, dev->irq);
-> +	}
-> +
-> +	return 0;
-> +
-> +failure_cleanup:
-> +	dev_err(&pdev->dev, "%s: failed: %d. Cleaning Up.\n", __func__, err);=
-
-> +	f81601_pci_del_card(pdev);
-> +
-> +	return err;
-> +}
-> +
-> +static struct pci_driver f81601_pci_driver =3D {
-> +	.name =3D		"f81601",
-> +	.id_table =3D	f81601_pci_tbl,
-> +	.probe =3D	f81601_pci_add_card,
-> +	.remove =3D	f81601_pci_del_card,
-> +};
-> +
-> +MODULE_DESCRIPTION("Fintek F81601 PCIE to 2 CANBUS adaptor driver");
-> +MODULE_AUTHOR("Peter Hong <peter_hong@fintek.com.tw>");
-> +MODULE_LICENSE("GPL v2");
-> +
-> +module_pci_driver(f81601_pci_driver);
->=20
-
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---0MyzbmtnTSQhU6eVIDkvcFCldXzdtm07m--
-
---mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl01cLUACgkQWsYho5Hk
-nSC/5wf+NlWC2Z3mmTHBa0ee/zqz8s0COHTDxt4RT/5LV1o2Y7njg1MghLLdCbem
-1jUZuL4qhN4SJXSkAOzA9Q1WhJaQgy9usb1YVoOkAxjNsb3EQ+VDzV1mrcCZ3aiI
-wlsEinT97pCovaeejyGVrAZhUs1G4Wr4dvP1os8AIdzshnI7PtmuYuSujqo9Dg7B
-4HBvQ7Spcy38VJ+jWQykI0tdANcHZUIQgYFgLjH9yWocgk7g18aJ8JY4KKec28lL
-bqz2x68JsidUhCOlWzphdYh7QJ7VqXB0Ebyx+fIRGQdnRIx+w3KGmenytjIQM5T8
-VhAIehpToasAoujj89ogqOu3PVz62Q==
-=iQLY
------END PGP SIGNATURE-----
-
---mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir--
+DQpLaW5kbHkgUGluZy4uLg0KDQpCZXN0IFJlZ2FyZHMsDQpKb2FraW0gWmhhbmcNCg0KPiAtLS0t
+LU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKb2FraW0gWmhhbmcNCj4gU2VudDogMjAx
+OcTqN9TCMsjVIDk6NDYNCj4gVG86IG1rbEBwZW5ndXRyb25peC5kZTsgbGludXgtY2FuQHZnZXIu
+a2VybmVsLm9yZw0KPiBDYzogd2dAZ3JhbmRlZ2dlci5jb207IG5ldGRldkB2Z2VyLmtlcm5lbC5v
+cmc7IGRsLWxpbnV4LWlteA0KPiA8bGludXgtaW14QG54cC5jb20+OyBKb2FraW0gWmhhbmcgPHFp
+YW5ncWluZy56aGFuZ0BueHAuY29tPg0KPiBTdWJqZWN0OiBbUEFUQ0ggVjRdIGNhbjogZmxleGNh
+bjogZml4IHN0b3AgbW9kZSBhY2tub3dsZWRnbWVudA0KPiANCj4gVG8gZW50ZXIgc3RvcCBtb2Rl
+LCB0aGUgQ1BVIHNob3VsZCBtYW51YWxseSBhc3NlcnQgYSBnbG9iYWwgU3RvcCBNb2RlDQo+IHJl
+cXVlc3QgYW5kIGNoZWNrIHRoZSBhY2tub3dsZWRnbWVudCBhc3NlcnRlZCBieSBGbGV4Q0FOLiBU
+aGUgQ1BVIG11c3QNCj4gb25seSBjb25zaWRlciB0aGUgRmxleENBTiBpbiBzdG9wIG1vZGUgd2hl
+biBib3RoIHJlcXVlc3QgYW5kDQo+IGFja25vd2xlZGdtZW50IGNvbmRpdGlvbnMgYXJlIHNhdGlz
+ZmllZC4NCj4gDQo+IEZpeGVzOiBkZTM1NzhjMTk4YzYgKCJjYW46IGZsZXhjYW46IGFkZCBzZWxm
+IHdha2V1cCBzdXBwb3J0IikNCj4gUmVwb3J0ZWQtYnk6IE1hcmMgS2xlaW5lLUJ1ZGRlIDxta2xA
+cGVuZ3V0cm9uaXguZGU+DQo+IFNpZ25lZC1vZmYtYnk6IEpvYWtpbSBaaGFuZyA8cWlhbmdxaW5n
+LnpoYW5nQG54cC5jb20+DQo+IA0KPiBDaGFuZ2VMb2c6DQo+IFYxLT5WMjoNCj4gCSogcmVnbWFw
+X3JlYWQoKS0tPnJlZ21hcF9yZWFkX3BvbGxfdGltZW91dCgpDQo+IFYyLT5WMzoNCj4gCSogY2hh
+bmdlIHRoZSB3YXkgb2YgZXJyb3IgcmV0dXJuLCBpdCB3aWxsIG1ha2UgZWFzeSBmb3IgZnVuY3Rp
+b24NCj4gCWV4dGVuc2lvbi4NCj4gVjMtPlY0Og0KPiAJKiByZWJhc2UgdG8gbGludXgtbmV4dC9t
+YXN0ZXIsIGFzIHRoaXMgaXMgYSBmaXguDQo+IC0tLQ0KPiAgZHJpdmVycy9uZXQvY2FuL2ZsZXhj
+YW4uYyB8IDMxICsrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0NCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAyNyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMgYi9kcml2ZXJzL25ldC9jYW4vZmxleGNhbi5jIGlu
+ZGV4DQo+IDFjNjZmYjJhZDc2Yi4uYmYxYmQ2ZjVkYmIxIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
+L25ldC9jYW4vZmxleGNhbi5jDQo+ICsrKyBiL2RyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMNCj4g
+QEAgLTQwMCw5ICs0MDAsMTAgQEAgc3RhdGljIHZvaWQgZmxleGNhbl9lbmFibGVfd2FrZXVwX2ly
+cShzdHJ1Y3QNCj4gZmxleGNhbl9wcml2ICpwcml2LCBib29sIGVuYWJsZSkNCj4gIAlwcml2LT53
+cml0ZShyZWdfbWNyLCAmcmVncy0+bWNyKTsNCj4gIH0NCj4gDQo+IC1zdGF0aWMgaW5saW5lIHZv
+aWQgZmxleGNhbl9lbnRlcl9zdG9wX21vZGUoc3RydWN0IGZsZXhjYW5fcHJpdiAqcHJpdikNCj4g
+K3N0YXRpYyBpbmxpbmUgaW50IGZsZXhjYW5fZW50ZXJfc3RvcF9tb2RlKHN0cnVjdCBmbGV4Y2Fu
+X3ByaXYgKnByaXYpDQo+ICB7DQo+ICAJc3RydWN0IGZsZXhjYW5fcmVncyBfX2lvbWVtICpyZWdz
+ID0gcHJpdi0+cmVnczsNCj4gKwl1bnNpZ25lZCBpbnQgYWNrdmFsOw0KPiAgCXUzMiByZWdfbWNy
+Ow0KPiANCj4gIAlyZWdfbWNyID0gcHJpdi0+cmVhZCgmcmVncy0+bWNyKTsNCj4gQEAgLTQxMiwy
+MCArNDEzLDM3IEBAIHN0YXRpYyBpbmxpbmUgdm9pZCBmbGV4Y2FuX2VudGVyX3N0b3BfbW9kZShz
+dHJ1Y3QNCj4gZmxleGNhbl9wcml2ICpwcml2KQ0KPiAgCS8qIGVuYWJsZSBzdG9wIHJlcXVlc3Qg
+Ki8NCj4gIAlyZWdtYXBfdXBkYXRlX2JpdHMocHJpdi0+c3RtLmdwciwgcHJpdi0+c3RtLnJlcV9n
+cHIsDQo+ICAJCQkgICAxIDw8IHByaXYtPnN0bS5yZXFfYml0LCAxIDw8IHByaXYtPnN0bS5yZXFf
+Yml0KTsNCj4gKw0KPiArCS8qIGdldCBzdG9wIGFja25vd2xlZGdtZW50ICovDQo+ICsJaWYgKHJl
+Z21hcF9yZWFkX3BvbGxfdGltZW91dChwcml2LT5zdG0uZ3ByLCBwcml2LT5zdG0uYWNrX2dwciwN
+Cj4gKwkJCQkgICAgIGFja3ZhbCwgYWNrdmFsICYgKDEgPDwgcHJpdi0+c3RtLmFja19iaXQpLA0K
+PiArCQkJCSAgICAgMCwgRkxFWENBTl9USU1FT1VUX1VTKSkNCj4gKwkJcmV0dXJuIC1FVElNRURP
+VVQ7DQo+ICsNCj4gKwlyZXR1cm4gMDsNCj4gIH0NCj4gDQo+IC1zdGF0aWMgaW5saW5lIHZvaWQg
+ZmxleGNhbl9leGl0X3N0b3BfbW9kZShzdHJ1Y3QgZmxleGNhbl9wcml2ICpwcml2KQ0KPiArc3Rh
+dGljIGlubGluZSBpbnQgZmxleGNhbl9leGl0X3N0b3BfbW9kZShzdHJ1Y3QgZmxleGNhbl9wcml2
+ICpwcml2KQ0KPiAgew0KPiAgCXN0cnVjdCBmbGV4Y2FuX3JlZ3MgX19pb21lbSAqcmVncyA9IHBy
+aXYtPnJlZ3M7DQo+ICsJdW5zaWduZWQgaW50IGFja3ZhbDsNCj4gIAl1MzIgcmVnX21jcjsNCj4g
+DQo+ICAJLyogcmVtb3ZlIHN0b3AgcmVxdWVzdCAqLw0KPiAgCXJlZ21hcF91cGRhdGVfYml0cyhw
+cml2LT5zdG0uZ3ByLCBwcml2LT5zdG0ucmVxX2dwciwNCj4gIAkJCSAgIDEgPDwgcHJpdi0+c3Rt
+LnJlcV9iaXQsIDApOw0KPiANCj4gKwkvKiBnZXQgc3RvcCBhY2tub3dsZWRnbWVudCAqLw0KPiAr
+CWlmIChyZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQocHJpdi0+c3RtLmdwciwgcHJpdi0+c3RtLmFj
+a19ncHIsDQo+ICsJCQkJICAgICBhY2t2YWwsICEoYWNrdmFsICYgKDEgPDwgcHJpdi0+c3RtLmFj
+a19iaXQpKSwNCj4gKwkJCQkgICAgIDAsIEZMRVhDQU5fVElNRU9VVF9VUykpDQo+ICsJCXJldHVy
+biAtRVRJTUVET1VUOw0KPiArDQo+ICAJcmVnX21jciA9IHByaXYtPnJlYWQoJnJlZ3MtPm1jcik7
+DQo+ICAJcmVnX21jciAmPSB+RkxFWENBTl9NQ1JfU0xGX1dBSzsNCj4gIAlwcml2LT53cml0ZShy
+ZWdfbWNyLCAmcmVncy0+bWNyKTsNCj4gKw0KPiArCXJldHVybiAwOw0KPiAgfQ0KPiANCj4gIHN0
+YXRpYyBpbmxpbmUgdm9pZCBmbGV4Y2FuX2Vycm9yX2lycV9lbmFibGUoY29uc3Qgc3RydWN0IGZs
+ZXhjYW5fcHJpdiAqcHJpdikNCj4gQEAgLTE2MTUsNyArMTYzMyw5IEBAIHN0YXRpYyBpbnQgX19t
+YXliZV91bnVzZWQgZmxleGNhbl9zdXNwZW5kKHN0cnVjdA0KPiBkZXZpY2UgKmRldmljZSkNCj4g
+IAkJICovDQo+ICAJCWlmIChkZXZpY2VfbWF5X3dha2V1cChkZXZpY2UpKSB7DQo+ICAJCQllbmFi
+bGVfaXJxX3dha2UoZGV2LT5pcnEpOw0KPiAtCQkJZmxleGNhbl9lbnRlcl9zdG9wX21vZGUocHJp
+dik7DQo+ICsJCQllcnIgPSBmbGV4Y2FuX2VudGVyX3N0b3BfbW9kZShwcml2KTsNCj4gKwkJCWlm
+IChlcnIpDQo+ICsJCQkJcmV0dXJuIGVycjsNCj4gIAkJfSBlbHNlIHsNCj4gIAkJCWVyciA9IGZs
+ZXhjYW5fY2hpcF9kaXNhYmxlKHByaXYpOw0KPiAgCQkJaWYgKGVycikNCj4gQEAgLTE2NjUsMTAg
+KzE2ODUsMTMgQEAgc3RhdGljIGludCBfX21heWJlX3VudXNlZA0KPiBmbGV4Y2FuX25vaXJxX3Jl
+c3VtZShzdHJ1Y3QgZGV2aWNlICpkZXZpY2UpICB7DQo+ICAJc3RydWN0IG5ldF9kZXZpY2UgKmRl
+diA9IGRldl9nZXRfZHJ2ZGF0YShkZXZpY2UpOw0KPiAgCXN0cnVjdCBmbGV4Y2FuX3ByaXYgKnBy
+aXYgPSBuZXRkZXZfcHJpdihkZXYpOw0KPiArCWludCBlcnI7DQo+IA0KPiAgCWlmIChuZXRpZl9y
+dW5uaW5nKGRldikgJiYgZGV2aWNlX21heV93YWtldXAoZGV2aWNlKSkgew0KPiAgCQlmbGV4Y2Fu
+X2VuYWJsZV93YWtldXBfaXJxKHByaXYsIGZhbHNlKTsNCj4gLQkJZmxleGNhbl9leGl0X3N0b3Bf
+bW9kZShwcml2KTsNCj4gKwkJZXJyID0gZmxleGNhbl9leGl0X3N0b3BfbW9kZShwcml2KTsNCj4g
+KwkJaWYgKGVycikNCj4gKwkJCXJldHVybiBlcnI7DQo+ICAJfQ0KPiANCj4gIAlyZXR1cm4gMDsN
+Cj4gLS0NCj4gMi4xNy4xDQoNCg==
