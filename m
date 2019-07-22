@@ -2,115 +2,327 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C66A6F2B9
-	for <lists+linux-can@lfdr.de>; Sun, 21 Jul 2019 13:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9E86F977
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jul 2019 08:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfGULQU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 21 Jul 2019 07:16:20 -0400
-Received: from mail-out.m-online.net ([212.18.0.10]:55416 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbfGULQU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 21 Jul 2019 07:16:20 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 45s2HM6ym3z1rTYv;
-        Sun, 21 Jul 2019 13:16:15 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 45s2HM62Qfz1qqkV;
-        Sun, 21 Jul 2019 13:16:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id J06kTi-1zavR; Sun, 21 Jul 2019 13:16:14 +0200 (CEST)
-X-Auth-Info: q6y0rkxoxHQAcej9cW4ksnXptmCzSAi0d1SRvzz6nvg=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sun, 21 Jul 2019 13:16:14 +0200 (CEST)
-Subject: Re: [PATCH resend] can/ifi_canfd: Added API for IFI-CANFD
- functionalities
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        marcel.schmidt@schulz-soluware.com, linux-can@vger.kernel.org,
-        wg@grandegger.com
-References: <20190712095150.29446-1-marcel.schmidt@schulz-soluware.com>
- <e9a85767-c9a2-06a9-c355-e43d0e507c10@pengutronix.de>
-From:   Marek Vasut <marex@denx.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=marex@denx.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <b89bb3c5-c0d3-257a-4741-c7ed330ab4a0@denx.de>
-Date:   Sun, 21 Jul 2019 12:55:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <e9a85767-c9a2-06a9-c355-e43d0e507c10@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1727093AbfGVGWN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Jul 2019 02:22:13 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36734 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725920AbfGVGWN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jul 2019 02:22:13 -0400
+Received: by mail-pl1-f194.google.com with SMTP id k8so18720476plt.3;
+        Sun, 21 Jul 2019 23:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=9VtjEpgMaECiPt5rwojRl0NUGWfR4eW7OxT6f8ANPYE=;
+        b=Hna7Lx0O+0X1F1xnoEfIzDmUVonQkB+cixCUA9Yx9lEnuV2QMOTO9GEEg5+qZzOQSp
+         Dw/pXWdUktMyzqABXt/W7UaUs9Qvlo8PaaFsiFZB4A9YcYKaGhvn9ClyOhPm5A4UZpzp
+         c5QSqwIStm2uUuG6ltM9PxUBZqA4J420bo9BBEj/PFkhrpzJrdWmWVyviGjcop0ymHDH
+         rCCYdffC7i6CzFmqG43pBY3dJO8HWyTJx/qIEcwbW0I6HhyZuCy0NA6+EeeB5nH7hNSk
+         DWlYsclrMj+4GyTw8w4WNZCaC68YntCn+XFQhLBJdaLwJJr0azGmeDIEp8kg8Hr0Ig0F
+         Xpfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=9VtjEpgMaECiPt5rwojRl0NUGWfR4eW7OxT6f8ANPYE=;
+        b=Z638P7kNNh3n2+d4DaiE7r98FeT/f5bMewbVyQgddUlEzBETkAWOeHS+D2FGglhuLa
+         9AQDU1vpbn/46HnunO49nsmsbZl+nfGfhpz95jrSGBXnAbMmMpp1lvB5/4oIjfuUaDHM
+         oXWHSW/2p0Q3hG1DX5vtLnagFWSNCb1qd962dWGgJyt8tRqusZ/9aBpt/YG/5d4/ZPvx
+         J7xXNxyJwpzDNeRdlt3E6yGiPWKX1djD70H3uwjR9L2cjL0rUjoWjTIXjXP/5XLxSWP0
+         wR29dxeOkMMTuWH/JR19lifOYl2mXan4Rm1HUYaI/4AiY7F+UocmkjCUrOAqWteQnvtM
+         dgEw==
+X-Gm-Message-State: APjAAAUR+Xb5WVx3UNA0v7KLknvr0Vb9/jdyVNGqghIlyGZLPUb9BaWL
+        zN84iGY/pTBugMxjkhj3XEZrZ5ca
+X-Google-Smtp-Source: APXvYqw26xOe4cS2ZS/bGPIqLe3gNxmoZWLkFCVzKgJqyEs46WS7M2wv4UgKCcpqAiVmI0cz6qQlkA==
+X-Received: by 2002:a17:902:aa88:: with SMTP id d8mr69856599plr.274.1563776532427;
+        Sun, 21 Jul 2019 23:22:12 -0700 (PDT)
+Received: from localhost (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id s66sm40277381pfs.8.2019.07.21.23.22.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 21 Jul 2019 23:22:11 -0700 (PDT)
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, peter_hong@fintek.com.tw
+Cc:     davem@davemloft.net, f.suligoi@asem.it,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: [PATCH V2 1/1] can: sja1000: f81601: add Fintek F81601 support
+Date:   Mon, 22 Jul 2019 14:22:01 +0800
+Message-Id: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 7/19/19 2:52 PM, Marc Kleine-Budde wrote:
-> Marek,
-> 
-> can I have you Acked-by for this?
-> 
-> Marc
-> 
-> On 7/12/19 11:51 AM, marcel.schmidt@schulz-soluware.com wrote:
->> From: Marcel Schmidt <marcel.schmidt@schulz-soluware.com>
->>
->> Updates the ifi_canfd platform driver and adds an universal
->> interface that enables the usage of its functionalities outside of
->> this platform driver.
->>
->> It was implemented with respect to role models like SJA1000 or C_Can.
->> Therefore the driver is split into three files.
->> ifi_canfd_platform.c contains the platform specific implementations
->> and remains functional the same. ifi_canfd.c+h enables common IFI-CANFD
->> functionalities usable for other drivers.
+This patch add support for Fintek PCIE to 2 CAN controller support
 
-I had a quick look at the patch, but I don't quite understand what the
-goal/purpose of the patch is ?
+Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+---
+Changelog:
+v2:
+	1: Fix comment on the spinlock with write access.
+	2: Use ARRAY_SIZE instead of F81601_PCI_MAX_CHAN.
+	3: Check the strap pin outside the loop.
+	4: Fix the cleanup issue in f81601_pci_add_card().
+	5: Remove unused "channels" in struct f81601_pci_card.
+
+ drivers/net/can/sja1000/Kconfig  |   8 ++
+ drivers/net/can/sja1000/Makefile |   1 +
+ drivers/net/can/sja1000/f81601.c | 215 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 224 insertions(+)
+ create mode 100644 drivers/net/can/sja1000/f81601.c
+
+diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
+index f6dc89927ece..8588323c5138 100644
+--- a/drivers/net/can/sja1000/Kconfig
++++ b/drivers/net/can/sja1000/Kconfig
+@@ -101,4 +101,12 @@ config CAN_TSCAN1
+ 	  IRQ numbers are read from jumpers JP4 and JP5,
+ 	  SJA1000 IO base addresses are chosen heuristically (first that works).
+ 
++config CAN_F81601
++	tristate "Fintek F81601 PCIE to 2 CAN Controller"
++	depends on PCI
++	help
++	  This driver adds support for Fintek F81601 PCIE to 2 CAN Controller.
++	  It had internal 24MHz clock source, but it can be changed by
++	  manufacturer. We can use modinfo to get usage for parameters.
++	  Visit http://www.fintek.com.tw to get more information.
+ endif
+diff --git a/drivers/net/can/sja1000/Makefile b/drivers/net/can/sja1000/Makefile
+index 9253aaf9e739..6f6268543bd9 100644
+--- a/drivers/net/can/sja1000/Makefile
++++ b/drivers/net/can/sja1000/Makefile
+@@ -13,3 +13,4 @@ obj-$(CONFIG_CAN_PEAK_PCMCIA) += peak_pcmcia.o
+ obj-$(CONFIG_CAN_PEAK_PCI) += peak_pci.o
+ obj-$(CONFIG_CAN_PLX_PCI) += plx_pci.o
+ obj-$(CONFIG_CAN_TSCAN1) += tscan1.o
++obj-$(CONFIG_CAN_F81601) += f81601.o
+diff --git a/drivers/net/can/sja1000/f81601.c b/drivers/net/can/sja1000/f81601.c
+new file mode 100644
+index 000000000000..3c378de8764d
+--- /dev/null
++++ b/drivers/net/can/sja1000/f81601.c
+@@ -0,0 +1,215 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Fintek F81601 PCIE to 2 CAN controller driver
++ *
++ * Copyright (C) 2019 Peter Hong <peter_hong@fintek.com.tw>
++ * Copyright (C) 2019 Linux Foundation
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/interrupt.h>
++#include <linux/netdevice.h>
++#include <linux/delay.h>
++#include <linux/slab.h>
++#include <linux/pci.h>
++#include <linux/can/dev.h>
++#include <linux/io.h>
++#include <linux/version.h>
++
++#include "sja1000.h"
++
++#define F81601_PCI_MAX_CHAN		2
++
++#define F81601_DECODE_REG		0x209
++#define F81601_IO_MODE			BIT(7)
++#define F81601_MEM_MODE			BIT(6)
++#define F81601_CFG_MODE			BIT(5)
++#define F81601_CAN2_INTERNAL_CLK	BIT(3)
++#define F81601_CAN1_INTERNAL_CLK	BIT(2)
++#define F81601_CAN2_EN			BIT(1)
++#define F81601_CAN1_EN			BIT(0)
++
++#define F81601_TRAP_REG			0x20a
++#define F81601_CAN2_HAS_EN		BIT(4)
++
++struct f81601_pci_card {
++	void __iomem *addr;
++	spinlock_t lock;	/* use this spin lock only for write access */
++	struct pci_dev *dev;
++	struct net_device *net_dev[F81601_PCI_MAX_CHAN];
++};
++
++static const struct pci_device_id f81601_pci_tbl[] = {
++	{ PCI_DEVICE(0x1c29, 0x1703) },
++	{},
++};
++
++MODULE_DEVICE_TABLE(pci, f81601_pci_tbl);
++
++static bool internal_clk = 1;
++module_param(internal_clk, bool, 0444);
++MODULE_PARM_DESC(internal_clk, "Use internal clock, default 1 (24MHz)");
++
++static unsigned int external_clk;
++module_param(external_clk, uint, 0444);
++MODULE_PARM_DESC(external_clk, "External Clock, must spec when internal_clk = 0");
++
++static u8 f81601_pci_read_reg(const struct sja1000_priv *priv, int port)
++{
++	return readb(priv->reg_base + port);
++}
++
++static void f81601_pci_write_reg(const struct sja1000_priv *priv, int port,
++				 u8 val)
++{
++	struct f81601_pci_card *card = priv->priv;
++	unsigned long flags;
++
++	spin_lock_irqsave(&card->lock, flags);
++	writeb(val, priv->reg_base + port);
++	readb(priv->reg_base);
++	spin_unlock_irqrestore(&card->lock, flags);
++}
++
++static void f81601_pci_del_card(struct pci_dev *pdev)
++{
++	struct f81601_pci_card *card = pci_get_drvdata(pdev);
++	struct net_device *dev;
++	int i = 0;
++
++	for (i = 0; i < ARRAY_SIZE(card->net_dev); i++) {
++		dev = card->net_dev[i];
++		if (!dev)
++			continue;
++
++		dev_info(&pdev->dev, "%s: Removing %s\n", __func__, dev->name);
++
++		unregister_sja1000dev(dev);
++		free_sja1000dev(dev);
++	}
++
++	pcim_iounmap(pdev, card->addr);
++}
++
++/* Probe F81601 based device for the SJA1000 chips and register each
++ * available CAN channel to SJA1000 Socket-CAN subsystem.
++ */
++static int f81601_pci_add_card(struct pci_dev *pdev,
++			       const struct pci_device_id *ent)
++{
++	struct sja1000_priv *priv;
++	struct net_device *dev;
++	struct f81601_pci_card *card;
++	int err, i, count;
++	u8 tmp;
++
++	if (pcim_enable_device(pdev) < 0) {
++		dev_err(&pdev->dev, "Failed to enable PCI device\n");
++		return -ENODEV;
++	}
++
++	dev_info(&pdev->dev, "Detected card at slot #%i\n",
++		 PCI_SLOT(pdev->devfn));
++
++	card = devm_kzalloc(&pdev->dev, sizeof(*card), GFP_KERNEL);
++	if (!card)
++		return -ENOMEM;
++
++	card->dev = pdev;
++	spin_lock_init(&card->lock);
++
++	pci_set_drvdata(pdev, card);
++
++	tmp = F81601_IO_MODE | F81601_MEM_MODE | F81601_CFG_MODE |
++		F81601_CAN2_EN | F81601_CAN1_EN;
++
++	if (internal_clk) {
++		tmp |= F81601_CAN2_INTERNAL_CLK | F81601_CAN1_INTERNAL_CLK;
++
++		dev_info(&pdev->dev,
++			 "F81601 running with internal clock: 24Mhz\n");
++	} else {
++		dev_info(&pdev->dev,
++			 "F81601 running with external clock: %dMhz\n",
++			 external_clk / 1000000);
++	}
++
++	pci_write_config_byte(pdev, F81601_DECODE_REG, tmp);
++
++	card->addr = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
++
++	if (!card->addr) {
++		err = -ENOMEM;
++		dev_err(&pdev->dev, "%s: Failed to remap BAR\n", __func__);
++		goto failure_cleanup;
++	}
++
++	/* read CAN2_HW_EN strap pin to detect how many CANBUS do we have */
++	count = ARRAY_SIZE(card->net_dev);
++	pci_read_config_byte(pdev, F81601_TRAP_REG, &tmp);
++	if (!(tmp & F81601_CAN2_HAS_EN))
++		count = 1;
++
++	/* Detect available channels */
++	for (i = 0; i < count; i++) {
++		dev = alloc_sja1000dev(0);
++		if (!dev) {
++			err = -ENOMEM;
++			goto failure_cleanup;
++		}
++
++		priv = netdev_priv(dev);
++		priv->priv = card;
++		priv->irq_flags = IRQF_SHARED;
++		priv->reg_base = card->addr + 0x80 * i;
++		priv->read_reg = f81601_pci_read_reg;
++		priv->write_reg = f81601_pci_write_reg;
++
++		if (internal_clk)
++			priv->can.clock.freq = 24000000 / 2;
++		else
++			priv->can.clock.freq = external_clk / 2;
++
++		priv->ocr = OCR_TX0_PUSHPULL | OCR_TX1_PUSHPULL;
++		priv->cdr = CDR_CBP;
++
++		SET_NETDEV_DEV(dev, &pdev->dev);
++		dev->dev_id = i;
++		dev->irq = pdev->irq;
++
++		/* Register SJA1000 device */
++		err = register_sja1000dev(dev);
++		if (err) {
++			dev_err(&pdev->dev,
++				"%s: Registering device failed: %x\n", __func__,
++				err);
++			free_sja1000dev(dev);
++			goto failure_cleanup;
++		}
++
++		card->net_dev[i] = dev;
++		dev_info(&pdev->dev, "Channel #%d, %s at 0x%p, irq %d\n", i,
++			 dev->name, priv->reg_base, dev->irq);
++	}
++
++	return 0;
++
++failure_cleanup:
++	dev_err(&pdev->dev, "%s: failed: %d. Cleaning Up.\n", __func__, err);
++	f81601_pci_del_card(pdev);
++
++	return err;
++}
++
++static struct pci_driver f81601_pci_driver = {
++	.name =		"f81601",
++	.id_table =	f81601_pci_tbl,
++	.probe =	f81601_pci_add_card,
++	.remove =	f81601_pci_del_card,
++};
++
++MODULE_DESCRIPTION("Fintek F81601 PCIE to 2 CANBUS adaptor driver");
++MODULE_AUTHOR("Peter Hong <peter_hong@fintek.com.tw>");
++MODULE_LICENSE("GPL v2");
++
++module_pci_driver(f81601_pci_driver);
+-- 
+2.7.4
+
