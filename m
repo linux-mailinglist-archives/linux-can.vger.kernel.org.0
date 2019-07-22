@@ -2,33 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE6B6FAE6
-	for <lists+linux-can@lfdr.de>; Mon, 22 Jul 2019 10:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C436FB13
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jul 2019 10:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbfGVIGP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Jul 2019 04:06:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43131 "EHLO
+        id S1728148AbfGVIQ0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Jul 2019 04:16:26 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35585 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726998AbfGVIGO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jul 2019 04:06:14 -0400
+        with ESMTP id S1725874AbfGVIQZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jul 2019 04:16:25 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hpTKl-0006fE-C6; Mon, 22 Jul 2019 10:06:11 +0200
+        id 1hpTUZ-000864-VJ; Mon, 22 Jul 2019 10:16:20 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d] (unknown [IPv6:2a03:f580:87bc:d400:c9d4:83d5:b99:4f4d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EDD8D43602A;
-        Mon, 22 Jul 2019 08:06:09 +0000 (UTC)
-To:     Marek Vasut <marex@denx.de>, marcel.schmidt@schulz-soluware.com,
-        linux-can@vger.kernel.org, wg@grandegger.com
-References: <20190712095150.29446-1-marcel.schmidt@schulz-soluware.com>
- <e9a85767-c9a2-06a9-c355-e43d0e507c10@pengutronix.de>
- <b89bb3c5-c0d3-257a-4741-c7ed330ab4a0@denx.de>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5336F436056;
+        Mon, 22 Jul 2019 08:16:07 +0000 (UTC)
+Subject: Re: [PATCH V2 1/1] can: sja1000: f81601: add Fintek F81601 support
+To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>, wg@grandegger.com,
+        peter_hong@fintek.com.tw
+Cc:     davem@davemloft.net, f.suligoi@asem.it,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+References: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,17 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH resend] can/ifi_canfd: Added API for IFI-CANFD
- functionalities
-Message-ID: <5d1f7519-c344-b429-1342-996809d5d615@pengutronix.de>
-Date:   Mon, 22 Jul 2019 10:06:01 +0200
+Message-ID: <563b0d71-3c60-d32c-cf19-73611f68d45a@pengutronix.de>
+Date:   Mon, 22 Jul 2019 10:15:49 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <b89bb3c5-c0d3-257a-4741-c7ed330ab4a0@denx.de>
+In-Reply-To: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="PjqiKPG0NkZs1RA81JGoeYTdHvzKpRhSl"
+ boundary="mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,51 +113,309 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---PjqiKPG0NkZs1RA81JGoeYTdHvzKpRhSl
-Content-Type: multipart/mixed; boundary="FAMms1kLEUptfCmi0XoBxwixI5vDK3t6L";
+--mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir
+Content-Type: multipart/mixed; boundary="0MyzbmtnTSQhU6eVIDkvcFCldXzdtm07m";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Marek Vasut <marex@denx.de>, marcel.schmidt@schulz-soluware.com,
- linux-can@vger.kernel.org, wg@grandegger.com
-Message-ID: <5d1f7519-c344-b429-1342-996809d5d615@pengutronix.de>
-Subject: Re: [PATCH resend] can/ifi_canfd: Added API for IFI-CANFD
- functionalities
-References: <20190712095150.29446-1-marcel.schmidt@schulz-soluware.com>
- <e9a85767-c9a2-06a9-c355-e43d0e507c10@pengutronix.de>
- <b89bb3c5-c0d3-257a-4741-c7ed330ab4a0@denx.de>
-In-Reply-To: <b89bb3c5-c0d3-257a-4741-c7ed330ab4a0@denx.de>
+To: "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>, wg@grandegger.com,
+ peter_hong@fintek.com.tw
+Cc: davem@davemloft.net, f.suligoi@asem.it, linux-kernel@vger.kernel.org,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Message-ID: <563b0d71-3c60-d32c-cf19-73611f68d45a@pengutronix.de>
+Subject: Re: [PATCH V2 1/1] can: sja1000: f81601: add Fintek F81601 support
+References: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
+In-Reply-To: <1563776521-28317-1-git-send-email-hpeter+linux_kernel@gmail.com>
 
---FAMms1kLEUptfCmi0XoBxwixI5vDK3t6L
+--0MyzbmtnTSQhU6eVIDkvcFCldXzdtm07m
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 7/21/19 12:55 PM, Marek Vasut wrote:
-> On 7/19/19 2:52 PM, Marc Kleine-Budde wrote:
->> On 7/12/19 11:51 AM, marcel.schmidt@schulz-soluware.com wrote:
->>> From: Marcel Schmidt <marcel.schmidt@schulz-soluware.com>
->>>
->>> Updates the ifi_canfd platform driver and adds an universal
->>> interface that enables the usage of its functionalities outside of
->>> this platform driver.
->>>
->>> It was implemented with respect to role models like SJA1000 or C_Can.=
-
->>> Therefore the driver is split into three files.
->>> ifi_canfd_platform.c contains the platform specific implementations
->>> and remains functional the same. ifi_canfd.c+h enables common IFI-CAN=
-FD
->>> functionalities usable for other drivers.
+On 7/22/19 8:22 AM, Ji-Ze Hong (Peter Hong) wrote:
+> This patch add support for Fintek PCIE to 2 CAN controller support
 >=20
-> I had a quick look at the patch, but I don't quite understand what the
-> goal/purpose of the patch is ?
+> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+> ---
+> Changelog:
+> v2:
+> 	1: Fix comment on the spinlock with write access.
+> 	2: Use ARRAY_SIZE instead of F81601_PCI_MAX_CHAN.
+> 	3: Check the strap pin outside the loop.
+> 	4: Fix the cleanup issue in f81601_pci_add_card().
+> 	5: Remove unused "channels" in struct f81601_pci_card.
+>=20
+>  drivers/net/can/sja1000/Kconfig  |   8 ++
+>  drivers/net/can/sja1000/Makefile |   1 +
+>  drivers/net/can/sja1000/f81601.c | 215 +++++++++++++++++++++++++++++++=
+++++++++
+>  3 files changed, 224 insertions(+)
+>  create mode 100644 drivers/net/can/sja1000/f81601.c
+>=20
+> diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/=
+Kconfig
+> index f6dc89927ece..8588323c5138 100644
+> --- a/drivers/net/can/sja1000/Kconfig
+> +++ b/drivers/net/can/sja1000/Kconfig
+> @@ -101,4 +101,12 @@ config CAN_TSCAN1
+>  	  IRQ numbers are read from jumpers JP4 and JP5,
+>  	  SJA1000 IO base addresses are chosen heuristically (first that work=
+s).
+> =20
+> +config CAN_F81601
+> +	tristate "Fintek F81601 PCIE to 2 CAN Controller"
+> +	depends on PCI
+> +	help
+> +	  This driver adds support for Fintek F81601 PCIE to 2 CAN Controller=
+=2E
+> +	  It had internal 24MHz clock source, but it can be changed by
+> +	  manufacturer. We can use modinfo to get usage for parameters.
+> +	  Visit http://www.fintek.com.tw to get more information.
+>  endif
+> diff --git a/drivers/net/can/sja1000/Makefile b/drivers/net/can/sja1000=
+/Makefile
+> index 9253aaf9e739..6f6268543bd9 100644
+> --- a/drivers/net/can/sja1000/Makefile
+> +++ b/drivers/net/can/sja1000/Makefile
+> @@ -13,3 +13,4 @@ obj-$(CONFIG_CAN_PEAK_PCMCIA) +=3D peak_pcmcia.o
+>  obj-$(CONFIG_CAN_PEAK_PCI) +=3D peak_pci.o
+>  obj-$(CONFIG_CAN_PLX_PCI) +=3D plx_pci.o
+>  obj-$(CONFIG_CAN_TSCAN1) +=3D tscan1.o
+> +obj-$(CONFIG_CAN_F81601) +=3D f81601.o
+> diff --git a/drivers/net/can/sja1000/f81601.c b/drivers/net/can/sja1000=
+/f81601.c
+> new file mode 100644
+> index 000000000000..3c378de8764d
+> --- /dev/null
+> +++ b/drivers/net/can/sja1000/f81601.c
+> @@ -0,0 +1,215 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Fintek F81601 PCIE to 2 CAN controller driver
+> + *
+> + * Copyright (C) 2019 Peter Hong <peter_hong@fintek.com.tw>
+> + * Copyright (C) 2019 Linux Foundation
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/delay.h>
+> +#include <linux/slab.h>
+> +#include <linux/pci.h>
+> +#include <linux/can/dev.h>
+> +#include <linux/io.h>
+> +#include <linux/version.h>
+> +
+> +#include "sja1000.h"
+> +
+> +#define F81601_PCI_MAX_CHAN		2
+> +
+> +#define F81601_DECODE_REG		0x209
+> +#define F81601_IO_MODE			BIT(7)
+> +#define F81601_MEM_MODE			BIT(6)
+> +#define F81601_CFG_MODE			BIT(5)
+> +#define F81601_CAN2_INTERNAL_CLK	BIT(3)
+> +#define F81601_CAN1_INTERNAL_CLK	BIT(2)
+> +#define F81601_CAN2_EN			BIT(1)
+> +#define F81601_CAN1_EN			BIT(0)
+> +
+> +#define F81601_TRAP_REG			0x20a
+> +#define F81601_CAN2_HAS_EN		BIT(4)
+> +
+> +struct f81601_pci_card {
+> +	void __iomem *addr;
+> +	spinlock_t lock;	/* use this spin lock only for write access */
+> +	struct pci_dev *dev;
+> +	struct net_device *net_dev[F81601_PCI_MAX_CHAN];
+> +};
+> +
+> +static const struct pci_device_id f81601_pci_tbl[] =3D {
+> +	{ PCI_DEVICE(0x1c29, 0x1703) },
+> +	{},
+> +};
+> +
+> +MODULE_DEVICE_TABLE(pci, f81601_pci_tbl);
+> +
+> +static bool internal_clk =3D 1;
 
-As Marcel writes, he want to be able to use the functionalities outside
-of this driver. Maybe there's another driver that makes use of this.
+true
 
-If there is another driver, I think it's best to include it in this
-series, so that we can see if having a second driver is a good idea in
-the first place.
+> +module_param(internal_clk, bool, 0444);
+> +MODULE_PARM_DESC(internal_clk, "Use internal clock, default 1 (24MHz)"=
+);
+> +
+> +static unsigned int external_clk;
+> +module_param(external_clk, uint, 0444);
+> +MODULE_PARM_DESC(external_clk, "External Clock, must spec when interna=
+l_clk =3D 0");
+> +
+> +static u8 f81601_pci_read_reg(const struct sja1000_priv *priv, int por=
+t)
+> +{
+> +	return readb(priv->reg_base + port);
+> +}
+> +
+> +static void f81601_pci_write_reg(const struct sja1000_priv *priv, int =
+port,
+> +				 u8 val)
+> +{
+> +	struct f81601_pci_card *card =3D priv->priv;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&card->lock, flags);
+> +	writeb(val, priv->reg_base + port);
+> +	readb(priv->reg_base);
+> +	spin_unlock_irqrestore(&card->lock, flags);
+> +}
+> +
+> +static void f81601_pci_del_card(struct pci_dev *pdev)
+> +{
+> +	struct f81601_pci_card *card =3D pci_get_drvdata(pdev);
+> +	struct net_device *dev;
+> +	int i =3D 0;
+> +
+> +	for (i =3D 0; i < ARRAY_SIZE(card->net_dev); i++) {
+> +		dev =3D card->net_dev[i];
+> +		if (!dev)
+> +			continue;
+> +
+> +		dev_info(&pdev->dev, "%s: Removing %s\n", __func__, dev->name);
+> +
+> +		unregister_sja1000dev(dev);
+> +		free_sja1000dev(dev);
+> +	}
+> +
+> +	pcim_iounmap(pdev, card->addr);
+> +}
+> +
+> +/* Probe F81601 based device for the SJA1000 chips and register each
+> + * available CAN channel to SJA1000 Socket-CAN subsystem.
+> + */
+> +static int f81601_pci_add_card(struct pci_dev *pdev,
+> +			       const struct pci_device_id *ent)
+> +{
+> +	struct sja1000_priv *priv;
+> +	struct net_device *dev;
+> +	struct f81601_pci_card *card;
+> +	int err, i, count;
+> +	u8 tmp;
+> +
+> +	if (pcim_enable_device(pdev) < 0) {
+
+I'm missing a corresponding disable_device().
+
+> +		dev_err(&pdev->dev, "Failed to enable PCI device\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "Detected card at slot #%i\n",
+> +		 PCI_SLOT(pdev->devfn));
+> +
+> +	card =3D devm_kzalloc(&pdev->dev, sizeof(*card), GFP_KERNEL);
+> +	if (!card)
+> +		return -ENOMEM;
+> +
+> +	card->dev =3D pdev;
+> +	spin_lock_init(&card->lock);
+> +
+> +	pci_set_drvdata(pdev, card);
+> +
+> +	tmp =3D F81601_IO_MODE | F81601_MEM_MODE | F81601_CFG_MODE |
+> +		F81601_CAN2_EN | F81601_CAN1_EN;
+> +
+> +	if (internal_clk) {
+> +		tmp |=3D F81601_CAN2_INTERNAL_CLK | F81601_CAN1_INTERNAL_CLK;
+> +
+> +		dev_info(&pdev->dev,
+> +			 "F81601 running with internal clock: 24Mhz\n");
+> +	} else {
+> +		dev_info(&pdev->dev,
+> +			 "F81601 running with external clock: %dMhz\n",
+> +			 external_clk / 1000000);
+> +	}
+> +
+> +	pci_write_config_byte(pdev, F81601_DECODE_REG, tmp);
+> +
+> +	card->addr =3D pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
+> +
+> +	if (!card->addr) {
+> +		err =3D -ENOMEM;
+> +		dev_err(&pdev->dev, "%s: Failed to remap BAR\n", __func__);
+> +		goto failure_cleanup;
+> +	}
+> +
+> +	/* read CAN2_HW_EN strap pin to detect how many CANBUS do we have */
+> +	count =3D ARRAY_SIZE(card->net_dev);
+> +	pci_read_config_byte(pdev, F81601_TRAP_REG, &tmp);
+> +	if (!(tmp & F81601_CAN2_HAS_EN))
+> +		count =3D 1;
+> +
+> +	/* Detect available channels */
+> +	for (i =3D 0; i < count; i++) {
+> +		dev =3D alloc_sja1000dev(0);
+> +		if (!dev) {
+> +			err =3D -ENOMEM;
+> +			goto failure_cleanup;
+> +		}
+> +
+> +		priv =3D netdev_priv(dev);
+> +		priv->priv =3D card;
+> +		priv->irq_flags =3D IRQF_SHARED;
+> +		priv->reg_base =3D card->addr + 0x80 * i;
+> +		priv->read_reg =3D f81601_pci_read_reg;
+> +		priv->write_reg =3D f81601_pci_write_reg;
+> +
+> +		if (internal_clk)
+> +			priv->can.clock.freq =3D 24000000 / 2;
+> +		else
+> +			priv->can.clock.freq =3D external_clk / 2;
+> +
+> +		priv->ocr =3D OCR_TX0_PUSHPULL | OCR_TX1_PUSHPULL;
+> +		priv->cdr =3D CDR_CBP;
+> +
+> +		SET_NETDEV_DEV(dev, &pdev->dev);
+> +		dev->dev_id =3D i;
+> +		dev->irq =3D pdev->irq;
+> +
+> +		/* Register SJA1000 device */
+> +		err =3D register_sja1000dev(dev);
+> +		if (err) {
+> +			dev_err(&pdev->dev,
+> +				"%s: Registering device failed: %x\n", __func__,
+> +				err);
+> +			free_sja1000dev(dev);
+> +			goto failure_cleanup;
+> +		}
+> +
+> +		card->net_dev[i] =3D dev;
+> +		dev_info(&pdev->dev, "Channel #%d, %s at 0x%p, irq %d\n", i,
+> +			 dev->name, priv->reg_base, dev->irq);
+> +	}
+> +
+> +	return 0;
+> +
+> +failure_cleanup:
+> +	dev_err(&pdev->dev, "%s: failed: %d. Cleaning Up.\n", __func__, err);=
+
+> +	f81601_pci_del_card(pdev);
+> +
+> +	return err;
+> +}
+> +
+> +static struct pci_driver f81601_pci_driver =3D {
+> +	.name =3D		"f81601",
+> +	.id_table =3D	f81601_pci_tbl,
+> +	.probe =3D	f81601_pci_add_card,
+> +	.remove =3D	f81601_pci_del_card,
+> +};
+> +
+> +MODULE_DESCRIPTION("Fintek F81601 PCIE to 2 CANBUS adaptor driver");
+> +MODULE_AUTHOR("Peter Hong <peter_hong@fintek.com.tw>");
+> +MODULE_LICENSE("GPL v2");
+> +
+> +module_pci_driver(f81601_pci_driver);
+>=20
 
 Marc
 
@@ -167,23 +426,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---FAMms1kLEUptfCmi0XoBxwixI5vDK3t6L--
+--0MyzbmtnTSQhU6eVIDkvcFCldXzdtm07m--
 
---PjqiKPG0NkZs1RA81JGoeYTdHvzKpRhSl
+--mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl01bmkACgkQWsYho5Hk
-nSAhxAf/ZEpG3PJjxSxLcK2R/oxh/806h+3layQNxPMLjc5e3p26Y5ZvZLrcHYV2
-Lq70zn/fd44FYWSiFJpifaKkxdIdFzcIk2azXKbXbhqSScP2PBghPJ9Y0CNkhd1E
-11LfhXdTjZnPxGmFwfXjsShYNMy0oDPCf/ZQbrTotpzJ0a5dUBYOPSmANEd1vnoR
-SXpM/QxBknByIU6+QkVrBCoNmxfsAqfq7MMe9bYKl2zzS83KOhxb+Qc1ciUwaJcw
-yrDR023Qhr08DuhHtuVnrphd/ck6RGaThdOsDy+oE6Mynzv1tXCCpWpt0qtlqSAa
-tE6bNvrMhh7JVPtvhjSG3+CbUqXr3g==
-=afkK
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl01cLUACgkQWsYho5Hk
+nSC/5wf+NlWC2Z3mmTHBa0ee/zqz8s0COHTDxt4RT/5LV1o2Y7njg1MghLLdCbem
+1jUZuL4qhN4SJXSkAOzA9Q1WhJaQgy9usb1YVoOkAxjNsb3EQ+VDzV1mrcCZ3aiI
+wlsEinT97pCovaeejyGVrAZhUs1G4Wr4dvP1os8AIdzshnI7PtmuYuSujqo9Dg7B
+4HBvQ7Spcy38VJ+jWQykI0tdANcHZUIQgYFgLjH9yWocgk7g18aJ8JY4KKec28lL
+bqz2x68JsidUhCOlWzphdYh7QJ7VqXB0Ebyx+fIRGQdnRIx+w3KGmenytjIQM5T8
+VhAIehpToasAoujj89ogqOu3PVz62Q==
+=iQLY
 -----END PGP SIGNATURE-----
 
---PjqiKPG0NkZs1RA81JGoeYTdHvzKpRhSl--
+--mJLZRfX9Zg8lPTEnkyw4j87Qu8VoabKir--
