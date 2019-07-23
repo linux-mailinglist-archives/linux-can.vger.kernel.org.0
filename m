@@ -2,121 +2,209 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ECE701D7
-	for <lists+linux-can@lfdr.de>; Mon, 22 Jul 2019 16:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320157147D
+	for <lists+linux-can@lfdr.de>; Tue, 23 Jul 2019 10:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728963AbfGVOEy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Jul 2019 10:04:54 -0400
-Received: from mail-eopbgr80092.outbound.protection.outlook.com ([40.107.8.92]:52215
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728103AbfGVOEy (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 22 Jul 2019 10:04:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ud5JWfGli3NPzr0KPul6Y/FNA9JgdI8vfQbw4uaWJ6U/Nnufhs2xrZL78qotrTg3IXkNCU53TAYjG6ngLqu6i4LrqXimS1FAvu5HORvryxTL9NIjh50Xi8jQ6eg+FXok++iIk4/akWmzgGHTCXUEqw24ZYvNo873vHxb3XFCdVIWrjBy8gVfZ6CEqz480Bcz+EBe2NS1hjKqDkYxgY8+cJKfcR6MgaYipwR427xKupUAm1yweCXcNlsq8uiJ+Da/wPeEWWCmzdXjcxGH3m4MKeX68ySD8cosfvtV5m5DyxUp3xtmiM7vli6NM00ZxIGJxyYUuXUHrZkZheFveLoTVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZHKspdx+I8ZD1HDDkmUUY9AEkfoPmAJos4U80EZgu8s=;
- b=hwZhrVq8ZyUCydv5slVtARblDIRpaqtGXI5PIhcNJI8O5uNuk5E3m4pCSj8wyNHVKygcr9ti0eRchcE4/nn/Gog0GKTLr9vyR4/d458+jAZhs97O55jR1fO8+mFsj/SKK+IkP/uMNfy+lekW3eJ5nrVwpXcHrmkOwI7PqmV8X6QrJIqZ8aKFO9loWtm+QS52ijz7h3zJfCM8kvEJJGtk/Ubn+U4TRAcuBm/Cx1ekLdq9kDw49vUu/M+dfIPzlD8xXroufThGAKr1MMPY3QkcyJD7OiKur7nIIw2tI98gp6n1TiMvck2jzOlB/4qKCvHAtUD4e/x2EZTninZpFu/evQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=prevas.se;dmarc=pass action=none
- header.from=prevas.dk;dkim=pass header.d=prevas.dk;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.se;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZHKspdx+I8ZD1HDDkmUUY9AEkfoPmAJos4U80EZgu8s=;
- b=JlbZHX8+pIQmJEDpzzY4uWJ0vMYwJBUxd6ITh51qfAa4QRmK9pM0j/1k+riTCcMACIsWbM1EK3qlhGcARwBXEk4N2A5ipjSx039qRfetVE1hycEtx87OlWLy0KP3TycxszyJvm0DsS1v1PUunDRR9h3ObKzbh5qym24IoM536jY=
-Received: from AM0PR10MB3476.EURPRD10.PROD.OUTLOOK.COM (10.186.175.83) by
- AM0PR10MB3091.EURPRD10.PROD.OUTLOOK.COM (10.255.31.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.16; Mon, 22 Jul 2019 14:04:50 +0000
-Received: from AM0PR10MB3476.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::9451:861a:85cc:daa0]) by AM0PR10MB3476.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::9451:861a:85cc:daa0%2]) with mapi id 15.20.2094.017; Mon, 22 Jul 2019
- 14:04:50 +0000
-From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <Rasmus.Villemoes@prevas.se>,
-        Willem de Bruijn <willemb@google.com>
-Subject: [PATCH v2] can: dev: call netif_carrier_off() in register_candev()
-Thread-Topic: [PATCH v2] can: dev: call netif_carrier_off() in
- register_candev()
-Thread-Index: AQHVQJZtC69p4g+Gi0ut/NKwJq5HBA==
-Date:   Mon, 22 Jul 2019 14:04:50 +0000
-Message-ID: <20190722140429.19782-1-rasmus.villemoes@prevas.dk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM6P191CA0051.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:209:7f::28) To AM0PR10MB3476.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:15e::19)
-x-mailer: git-send-email 2.20.1
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Rasmus.Villemoes@prevas.se; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [81.216.59.226]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2b78c812-ebcb-4073-ca5a-08d70ead8f77
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:AM0PR10MB3091;
-x-ms-traffictypediagnostic: AM0PR10MB3091:
-x-microsoft-antispam-prvs: <AM0PR10MB3091BDE89252AE3224CD097D8AC40@AM0PR10MB3091.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:2887;
-x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39840400004)(396003)(366004)(136003)(346002)(376002)(189003)(199004)(2616005)(8676002)(66066001)(476003)(5660300002)(36756003)(53936002)(305945005)(42882007)(508600001)(26005)(186003)(6512007)(7736002)(25786009)(52116002)(6436002)(14454004)(386003)(102836004)(6486002)(6506007)(68736007)(4326008)(316002)(486006)(71190400001)(66446008)(66556008)(66476007)(66946007)(256004)(99286004)(1076003)(44832011)(64756008)(71200400001)(2906002)(81156014)(81166006)(50226002)(4744005)(110136005)(54906003)(8936002)(3846002)(6116002)(8976002);DIR:OUT;SFP:1102;SCL:1;SRVR:AM0PR10MB3091;H:AM0PR10MB3476.EURPRD10.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: prevas.se does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: RFkUEqEMaqRrhLMeaGCMo3Ncu2H89pGuoUmEUjfN1E3FwxnUY68XZ4tqelgpqLfzj7LDhO3ASnTj7slOMOqCpQRwdS12f0bv/5nhPaGMECKCktDjOqQRsjfUJHUejJVVUphf1BX324E1tHZFUfUw7sBsFUcATRkVXhk1k7brGeyIW1FqJa32DhiXYM4JAhtbCeveDQr/GwjMj5Vi9oMLQ/1FPVcOB/dhT/wLCEKnQU0UEeQZujfMVT6QQa7gtbA9TTfn9ccR+4P7HNN7rDmSMGozJ+zXTATyccJxwHOODGoeOBDwAzcHyvwHsyp041bBDaDvYOPGTYByOz7PmLppM4MBLyiHUb7d7kfsHizMkfK1V2LXkoqnsFJvBG4D0pCpCJH4yIU50qvQB2aLhk3xnDJP8TRcIqJhTUXs4nu/I4M=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S2387644AbfGWI7e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Jul 2019 04:59:34 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54135 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727748AbfGWI7e (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Jul 2019 04:59:34 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hpqdq-00048Y-Sg; Tue, 23 Jul 2019 10:59:26 +0200
+Received: from [IPv6:2003:c7:729:c745:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c745:c9d4:83d5:b99:4f4d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7AF1D43702B;
+        Tue, 23 Jul 2019 08:59:22 +0000 (UTC)
+Subject: Re: j1939: discussion: RX path (J1939_SOCK_RECV_OWN)
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        David Jander <david@protonic.nl>
+Cc:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        robin@protonic.nl, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, wg@grandegger.com, romain.forlot@iot.bzh
+References: <20190625104315.57172f69@erd988>
+ <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
+ <20190625173137.GB8923@x1.vandijck-laurijssen.be>
+ <20190626091524.40410c4b@erd988>
+ <20190626130012.GC8923@x1.vandijck-laurijssen.be>
+ <20190626160238.5d62fc15@erd988>
+ <20190627093353.GA693@x1.vandijck-laurijssen.be>
+ <20190627105901.GA24805@pengutronix.de> <20190627140849.39916a65@erd988>
+ <20190722091328.GA24349@pengutronix.de>
+ <20190722133723.GA17189@pengutronix.de>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <e3197f96-48de-7887-7a04-eef75fd6a6a3@pengutronix.de>
+Date:   Tue, 23 Jul 2019 10:59:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: prevas.dk
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b78c812-ebcb-4073-ca5a-08d70ead8f77
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 14:04:50.1652
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d350cf71-778d-4780-88f5-071a4cb1ed61
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Rasmus.Villemoes@prevas.dk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3091
+In-Reply-To: <20190722133723.GA17189@pengutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-CONFIG_CAN_LEDS is deprecated. When trying to use the generic netdev
-trigger as suggested, there's a small inconsistency with the link
-property: The LED is on initially, stays on when the device is brought
-up, and then turns off (as expected) when the device is brought down.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S
+Content-Type: multipart/mixed; boundary="9TxXbumQwOPluaIz5c3kHrFRYkwmQjRTF";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oleksij Rempel <o.rempel@pengutronix.de>, David Jander <david@protonic.nl>
+Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>, robin@protonic.nl,
+ linux-can@vger.kernel.org, kernel@pengutronix.de, wg@grandegger.com,
+ romain.forlot@iot.bzh
+Message-ID: <e3197f96-48de-7887-7a04-eef75fd6a6a3@pengutronix.de>
+Subject: Re: j1939: discussion: RX path (J1939_SOCK_RECV_OWN)
+References: <20190625104315.57172f69@erd988>
+ <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
+ <20190625173137.GB8923@x1.vandijck-laurijssen.be>
+ <20190626091524.40410c4b@erd988>
+ <20190626130012.GC8923@x1.vandijck-laurijssen.be>
+ <20190626160238.5d62fc15@erd988>
+ <20190627093353.GA693@x1.vandijck-laurijssen.be>
+ <20190627105901.GA24805@pengutronix.de> <20190627140849.39916a65@erd988>
+ <20190722091328.GA24349@pengutronix.de>
+ <20190722133723.GA17189@pengutronix.de>
+In-Reply-To: <20190722133723.GA17189@pengutronix.de>
 
-Make sure the LED always reflects the state of the CAN device.
+--9TxXbumQwOPluaIz5c3kHrFRYkwmQjRTF
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Acked-by: Willem de Bruijn <willemb@google.com>
----
-v2: resending with proper subject (no net-next) and Willem's ack.
+On 7/22/19 3:37 PM, Oleksij Rempel wrote:
+> We just noticed, in current implementation J1939_SOCK_RECV_OWN doesn't
+> work anymore (for ETP). And ...naively thinking it probably makes no
+> sense to support it for different reasons:
+>=20
+> - we have a better feedback mechanism via the error queue feature
+> - with RECV_OWN the socket receives the complete payload back into user=
 
- drivers/net/can/dev.c | 1 +
- 1 file changed, 1 insertion(+)
+>   space, where the error queue will give back message number at state o=
+f
+>   the message/transfer.
+> - the error queue mechanism is extendable with more information and eve=
+n
+>   backwards compatible.
+>=20
+> However in the current implementation you'll receive an ACK via error
+> queue if the (E)TP transfer is completed, but for simple messages, the
+> ACK is received as soon as the packet has been put into the packet
+> scheduler. It would be better to wait and send the ACK only after the
+> simple message has been send onto the wire (i.e.: after the CAN
+> controller's TX-complete interrupt).
+>=20
+> We'll remove J1939_SOCK_RECV_OWN for now.
+>=20
+> But we already noticed that this will break jacd, however we think we
+> can fix it, by using a separate socket to receive. Are there any other
+> use cases or existing applications relying on this feature?
 
-diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index c05e4d50d43d..fad27ace6248 100644
---- a/drivers/net/can/dev.c
-+++ b/drivers/net/can/dev.c
-@@ -1260,6 +1260,7 @@ int register_candev(struct net_device *dev)
- 		return -EINVAL;
-=20
- 	dev->rtnl_link_ops =3D &can_link_ops;
-+	netif_carrier_off(dev);
- 	return register_netdev(dev);
- }
- EXPORT_SYMBOL_GPL(register_candev);
+I think in AGL they switch on self reception of j1939 sockets by default.=
+
+
+Marc
+
 --=20
-2.20.1
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
+
+--9TxXbumQwOPluaIz5c3kHrFRYkwmQjRTF--
+
+--4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl02zFsACgkQWsYho5Hk
+nSARqwgApBf+ZQ68HgHGBRDc9cLj1QENrU+gpU0Ph020JCjk8TNLl6eskG4GXiCR
+HIvXGVL9uHwLiQkR9PlCppASTSyyqMVT3AjwhguWjmWjUw26jnAOA9QPdvLEqZsp
+uAtNyPTNsLMBAo9B2Ps9EVsUfr2xxV6lSIZ6kHL5CnQz9TRRkd/edyqsWIIhUBe+
+EEc1VXpgpcVRvzP930Uk04D1HEXdY6FmplDaQXLhSUT85MA/oFx29UARshXLtuoa
+5kvIlj2453Ouzm3+hlkZ7xORpF0IPATiiG11jrZA0MXoYsNMCAbTT5DMKgpXK4t5
+OhcIuwLtWgzniuHZJ5Ml76nR3K3kBQ==
+=AlIP
+-----END PGP SIGNATURE-----
+
+--4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S--
