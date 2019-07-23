@@ -2,209 +2,328 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 320157147D
-	for <lists+linux-can@lfdr.de>; Tue, 23 Jul 2019 10:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE3E71489
+	for <lists+linux-can@lfdr.de>; Tue, 23 Jul 2019 11:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387644AbfGWI7e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Jul 2019 04:59:34 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54135 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727748AbfGWI7e (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Jul 2019 04:59:34 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1hpqdq-00048Y-Sg; Tue, 23 Jul 2019 10:59:26 +0200
-Received: from [IPv6:2003:c7:729:c745:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c745:c9d4:83d5:b99:4f4d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7AF1D43702B;
-        Tue, 23 Jul 2019 08:59:22 +0000 (UTC)
-Subject: Re: j1939: discussion: RX path (J1939_SOCK_RECV_OWN)
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Cc:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        robin@protonic.nl, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, wg@grandegger.com, romain.forlot@iot.bzh
-References: <20190625104315.57172f69@erd988>
- <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
- <20190625173137.GB8923@x1.vandijck-laurijssen.be>
- <20190626091524.40410c4b@erd988>
- <20190626130012.GC8923@x1.vandijck-laurijssen.be>
- <20190626160238.5d62fc15@erd988>
- <20190627093353.GA693@x1.vandijck-laurijssen.be>
- <20190627105901.GA24805@pengutronix.de> <20190627140849.39916a65@erd988>
- <20190722091328.GA24349@pengutronix.de>
- <20190722133723.GA17189@pengutronix.de>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <e3197f96-48de-7887-7a04-eef75fd6a6a3@pengutronix.de>
-Date:   Tue, 23 Jul 2019 10:59:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190722133723.GA17189@pengutronix.de>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        id S2387796AbfGWJDL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Jul 2019 05:03:11 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36474 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732079AbfGWJDL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Jul 2019 05:03:11 -0400
+Received: by mail-pf1-f194.google.com with SMTP id r7so18810778pfl.3;
+        Tue, 23 Jul 2019 02:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=ff//iqoikAdsi6nNJlh84Wod7YDmZ2vL6WZ5tYQOJLU=;
+        b=SPTrYxWy0WMQgkh3WTYk8fbvsJwnX5yL20SHpNV225AUV6TEqvsI7OgeB68DbXgd38
+         4m7ppeeFqxKgOjDTe0YIoS4hMj1dnxhQZvEbnTNMttYCP6q4e7TcyZky6O1ZVivbHa1Y
+         eRKeM0MCoMwU60hKWK/zX80wemwkNuSyCbRjHPxPoA6ujOJLtq6yXmuPb0vIeYXI8kgk
+         +eSD9mu16Y2KBnWTcyHdgVv8wq0ZlWJTZn6Id6Q0jLNYCXeQRwRHtzL8vY6puPaITqGv
+         nPwD1KFEgnyW0V9lw5ItAnG+pr3/uGRv8tolqW8OUWYb6soNVEZMPHn5pmm8jAN/jQHU
+         SrIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ff//iqoikAdsi6nNJlh84Wod7YDmZ2vL6WZ5tYQOJLU=;
+        b=SxGcAyZpGbhvCNsgxoy8HnbtNiwzcX8r1BkMiFiYdHBskOq6MEDoUFV8hze/Fd14T2
+         IZv7zoiD6yAvqQALxOtN7wAcjf5MnkmnCkFi+bUp9Z+KFUO5Gjcwsql544NWmwnBFa04
+         rWgpZb+ZCdoO+BZczGybwbTulYRc5s2n6K7U3MM99+SqOL8qJTtie4fvq2eNAuwgeAt5
+         MJlFD61HHbeAye0tf5WH8ilIk0ZaMi00m0q+iuJKQ+SgYb/soMJiXO2kt2cfwQ7Xmvyt
+         uocGp1wQulGmFNrsYG1UUnowQAE9f2YGRS9+oeGJd4d2bwmbsm27x6MQlDQuCqIfmhVu
+         puHw==
+X-Gm-Message-State: APjAAAX/TMJfmVVyeZ4m+mU8mG9FXTINg7kJNr4CtOgW0gvNDZNrDDrC
+        EGzoY9/16NOD/wqSi6Qfyhs=
+X-Google-Smtp-Source: APXvYqxSZIXkCdVKfCdiL0IOgK3PJ2b7BELEkM7lz4riY+0hEcyJbiQiD8X138WmsiDLas9OLHnpsw==
+X-Received: by 2002:a17:90a:b104:: with SMTP id z4mr80993230pjq.102.1563872590393;
+        Tue, 23 Jul 2019 02:03:10 -0700 (PDT)
+Received: from localhost (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id u16sm41405442pjb.2.2019.07.23.02.03.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 02:03:09 -0700 (PDT)
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, peter_hong@fintek.com.tw
+Cc:     davem@davemloft.net, f.suligoi@asem.it,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: [PATCH V3 1/1] can: sja1000: f81601: add Fintek F81601 support
+Date:   Tue, 23 Jul 2019 17:03:06 +0800
+Message-Id: <1563872586-30870-1-git-send-email-hpeter+linux_kernel@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S
-Content-Type: multipart/mixed; boundary="9TxXbumQwOPluaIz5c3kHrFRYkwmQjRTF";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oleksij Rempel <o.rempel@pengutronix.de>, David Jander <david@protonic.nl>
-Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>, robin@protonic.nl,
- linux-can@vger.kernel.org, kernel@pengutronix.de, wg@grandegger.com,
- romain.forlot@iot.bzh
-Message-ID: <e3197f96-48de-7887-7a04-eef75fd6a6a3@pengutronix.de>
-Subject: Re: j1939: discussion: RX path (J1939_SOCK_RECV_OWN)
-References: <20190625104315.57172f69@erd988>
- <3596eb35-4597-4a54-9e58-89e5ceb647a6@pengutronix.de>
- <20190625173137.GB8923@x1.vandijck-laurijssen.be>
- <20190626091524.40410c4b@erd988>
- <20190626130012.GC8923@x1.vandijck-laurijssen.be>
- <20190626160238.5d62fc15@erd988>
- <20190627093353.GA693@x1.vandijck-laurijssen.be>
- <20190627105901.GA24805@pengutronix.de> <20190627140849.39916a65@erd988>
- <20190722091328.GA24349@pengutronix.de>
- <20190722133723.GA17189@pengutronix.de>
-In-Reply-To: <20190722133723.GA17189@pengutronix.de>
+This patch add support for Fintek PCIE to 2 CAN controller support
 
---9TxXbumQwOPluaIz5c3kHrFRYkwmQjRTF
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+---
+v3:
+	1: Fix module parameter "internal_clk" default from 1 to true.
+	2: Remove non-usable pcim_iounmap().
 
-On 7/22/19 3:37 PM, Oleksij Rempel wrote:
-> We just noticed, in current implementation J1939_SOCK_RECV_OWN doesn't
-> work anymore (for ETP). And ...naively thinking it probably makes no
-> sense to support it for different reasons:
->=20
-> - we have a better feedback mechanism via the error queue feature
-> - with RECV_OWN the socket receives the complete payload back into user=
+v2:
+	1: Fix comment on the spinlock with write access.
+	2: Use ARRAY_SIZE instead of F81601_PCI_MAX_CHAN.
+	3: Check the strap pin outside the loop.
+	4: Fix the cleanup issue in f81601_pci_add_card().
+	5: Remove unused "channels" in struct f81601_pci_card.
 
->   space, where the error queue will give back message number at state o=
-f
->   the message/transfer.
-> - the error queue mechanism is extendable with more information and eve=
-n
->   backwards compatible.
->=20
-> However in the current implementation you'll receive an ACK via error
-> queue if the (E)TP transfer is completed, but for simple messages, the
-> ACK is received as soon as the packet has been put into the packet
-> scheduler. It would be better to wait and send the ACK only after the
-> simple message has been send onto the wire (i.e.: after the CAN
-> controller's TX-complete interrupt).
->=20
-> We'll remove J1939_SOCK_RECV_OWN for now.
->=20
-> But we already noticed that this will break jacd, however we think we
-> can fix it, by using a separate socket to receive. Are there any other
-> use cases or existing applications relying on this feature?
+ drivers/net/can/sja1000/Kconfig  |   8 ++
+ drivers/net/can/sja1000/Makefile |   1 +
+ drivers/net/can/sja1000/f81601.c | 213 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 222 insertions(+)
+ create mode 100644 drivers/net/can/sja1000/f81601.c
 
-I think in AGL they switch on self reception of j1939 sockets by default.=
+diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
+index f6dc89927ece..8588323c5138 100644
+--- a/drivers/net/can/sja1000/Kconfig
++++ b/drivers/net/can/sja1000/Kconfig
+@@ -101,4 +101,12 @@ config CAN_TSCAN1
+ 	  IRQ numbers are read from jumpers JP4 and JP5,
+ 	  SJA1000 IO base addresses are chosen heuristically (first that works).
+ 
++config CAN_F81601
++	tristate "Fintek F81601 PCIE to 2 CAN Controller"
++	depends on PCI
++	help
++	  This driver adds support for Fintek F81601 PCIE to 2 CAN Controller.
++	  It had internal 24MHz clock source, but it can be changed by
++	  manufacturer. We can use modinfo to get usage for parameters.
++	  Visit http://www.fintek.com.tw to get more information.
+ endif
+diff --git a/drivers/net/can/sja1000/Makefile b/drivers/net/can/sja1000/Makefile
+index 9253aaf9e739..6f6268543bd9 100644
+--- a/drivers/net/can/sja1000/Makefile
++++ b/drivers/net/can/sja1000/Makefile
+@@ -13,3 +13,4 @@ obj-$(CONFIG_CAN_PEAK_PCMCIA) += peak_pcmcia.o
+ obj-$(CONFIG_CAN_PEAK_PCI) += peak_pci.o
+ obj-$(CONFIG_CAN_PLX_PCI) += plx_pci.o
+ obj-$(CONFIG_CAN_TSCAN1) += tscan1.o
++obj-$(CONFIG_CAN_F81601) += f81601.o
+diff --git a/drivers/net/can/sja1000/f81601.c b/drivers/net/can/sja1000/f81601.c
+new file mode 100644
+index 000000000000..3d0436efead9
+--- /dev/null
++++ b/drivers/net/can/sja1000/f81601.c
+@@ -0,0 +1,213 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Fintek F81601 PCIE to 2 CAN controller driver
++ *
++ * Copyright (C) 2019 Peter Hong <peter_hong@fintek.com.tw>
++ * Copyright (C) 2019 Linux Foundation
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/interrupt.h>
++#include <linux/netdevice.h>
++#include <linux/delay.h>
++#include <linux/slab.h>
++#include <linux/pci.h>
++#include <linux/can/dev.h>
++#include <linux/io.h>
++#include <linux/version.h>
++
++#include "sja1000.h"
++
++#define F81601_PCI_MAX_CHAN		2
++
++#define F81601_DECODE_REG		0x209
++#define F81601_IO_MODE			BIT(7)
++#define F81601_MEM_MODE			BIT(6)
++#define F81601_CFG_MODE			BIT(5)
++#define F81601_CAN2_INTERNAL_CLK	BIT(3)
++#define F81601_CAN1_INTERNAL_CLK	BIT(2)
++#define F81601_CAN2_EN			BIT(1)
++#define F81601_CAN1_EN			BIT(0)
++
++#define F81601_TRAP_REG			0x20a
++#define F81601_CAN2_HAS_EN		BIT(4)
++
++struct f81601_pci_card {
++	void __iomem *addr;
++	spinlock_t lock;	/* use this spin lock only for write access */
++	struct pci_dev *dev;
++	struct net_device *net_dev[F81601_PCI_MAX_CHAN];
++};
++
++static const struct pci_device_id f81601_pci_tbl[] = {
++	{ PCI_DEVICE(0x1c29, 0x1703) },
++	{},
++};
++
++MODULE_DEVICE_TABLE(pci, f81601_pci_tbl);
++
++static bool internal_clk = true;
++module_param(internal_clk, bool, 0444);
++MODULE_PARM_DESC(internal_clk, "Use internal clock, default true (24MHz)");
++
++static unsigned int external_clk;
++module_param(external_clk, uint, 0444);
++MODULE_PARM_DESC(external_clk, "External clock when internal_clk disabled");
++
++static u8 f81601_pci_read_reg(const struct sja1000_priv *priv, int port)
++{
++	return readb(priv->reg_base + port);
++}
++
++static void f81601_pci_write_reg(const struct sja1000_priv *priv, int port,
++				 u8 val)
++{
++	struct f81601_pci_card *card = priv->priv;
++	unsigned long flags;
++
++	spin_lock_irqsave(&card->lock, flags);
++	writeb(val, priv->reg_base + port);
++	readb(priv->reg_base);
++	spin_unlock_irqrestore(&card->lock, flags);
++}
++
++static void f81601_pci_del_card(struct pci_dev *pdev)
++{
++	struct f81601_pci_card *card = pci_get_drvdata(pdev);
++	struct net_device *dev;
++	int i = 0;
++
++	for (i = 0; i < ARRAY_SIZE(card->net_dev); i++) {
++		dev = card->net_dev[i];
++		if (!dev)
++			continue;
++
++		dev_info(&pdev->dev, "%s: Removing %s\n", __func__, dev->name);
++
++		unregister_sja1000dev(dev);
++		free_sja1000dev(dev);
++	}
++}
++
++/* Probe F81601 based device for the SJA1000 chips and register each
++ * available CAN channel to SJA1000 Socket-CAN subsystem.
++ */
++static int f81601_pci_add_card(struct pci_dev *pdev,
++			       const struct pci_device_id *ent)
++{
++	struct sja1000_priv *priv;
++	struct net_device *dev;
++	struct f81601_pci_card *card;
++	int err, i, count;
++	u8 tmp;
++
++	if (pcim_enable_device(pdev) < 0) {
++		dev_err(&pdev->dev, "Failed to enable PCI device\n");
++		return -ENODEV;
++	}
++
++	dev_info(&pdev->dev, "Detected card at slot #%i\n",
++		 PCI_SLOT(pdev->devfn));
++
++	card = devm_kzalloc(&pdev->dev, sizeof(*card), GFP_KERNEL);
++	if (!card)
++		return -ENOMEM;
++
++	card->dev = pdev;
++	spin_lock_init(&card->lock);
++
++	pci_set_drvdata(pdev, card);
++
++	tmp = F81601_IO_MODE | F81601_MEM_MODE | F81601_CFG_MODE |
++		F81601_CAN2_EN | F81601_CAN1_EN;
++
++	if (internal_clk) {
++		tmp |= F81601_CAN2_INTERNAL_CLK | F81601_CAN1_INTERNAL_CLK;
++
++		dev_info(&pdev->dev,
++			 "F81601 running with internal clock: 24Mhz\n");
++	} else {
++		dev_info(&pdev->dev,
++			 "F81601 running with external clock: %dMhz\n",
++			 external_clk / 1000000);
++	}
++
++	pci_write_config_byte(pdev, F81601_DECODE_REG, tmp);
++
++	card->addr = pcim_iomap(pdev, 0, pci_resource_len(pdev, 0));
++
++	if (!card->addr) {
++		err = -ENOMEM;
++		dev_err(&pdev->dev, "%s: Failed to remap BAR\n", __func__);
++		goto failure_cleanup;
++	}
++
++	/* read CAN2_HW_EN strap pin to detect how many CANBUS do we have */
++	count = ARRAY_SIZE(card->net_dev);
++	pci_read_config_byte(pdev, F81601_TRAP_REG, &tmp);
++	if (!(tmp & F81601_CAN2_HAS_EN))
++		count = 1;
++
++	/* Detect available channels */
++	for (i = 0; i < count; i++) {
++		dev = alloc_sja1000dev(0);
++		if (!dev) {
++			err = -ENOMEM;
++			goto failure_cleanup;
++		}
++
++		priv = netdev_priv(dev);
++		priv->priv = card;
++		priv->irq_flags = IRQF_SHARED;
++		priv->reg_base = card->addr + 0x80 * i;
++		priv->read_reg = f81601_pci_read_reg;
++		priv->write_reg = f81601_pci_write_reg;
++
++		if (internal_clk)
++			priv->can.clock.freq = 24000000 / 2;
++		else
++			priv->can.clock.freq = external_clk / 2;
++
++		priv->ocr = OCR_TX0_PUSHPULL | OCR_TX1_PUSHPULL;
++		priv->cdr = CDR_CBP;
++
++		SET_NETDEV_DEV(dev, &pdev->dev);
++		dev->dev_id = i;
++		dev->irq = pdev->irq;
++
++		/* Register SJA1000 device */
++		err = register_sja1000dev(dev);
++		if (err) {
++			dev_err(&pdev->dev,
++				"%s: Registering device failed: %x\n", __func__,
++				err);
++			free_sja1000dev(dev);
++			goto failure_cleanup;
++		}
++
++		card->net_dev[i] = dev;
++		dev_info(&pdev->dev, "Channel #%d, %s at 0x%p, irq %d\n", i,
++			 dev->name, priv->reg_base, dev->irq);
++	}
++
++	return 0;
++
++failure_cleanup:
++	dev_err(&pdev->dev, "%s: failed: %d. Cleaning Up.\n", __func__, err);
++	f81601_pci_del_card(pdev);
++
++	return err;
++}
++
++static struct pci_driver f81601_pci_driver = {
++	.name =		"f81601",
++	.id_table =	f81601_pci_tbl,
++	.probe =	f81601_pci_add_card,
++	.remove =	f81601_pci_del_card,
++};
++
++MODULE_DESCRIPTION("Fintek F81601 PCIE to 2 CANBUS adaptor driver");
++MODULE_AUTHOR("Peter Hong <peter_hong@fintek.com.tw>");
++MODULE_LICENSE("GPL v2");
++
++module_pci_driver(f81601_pci_driver);
+-- 
+2.7.4
 
-
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---9TxXbumQwOPluaIz5c3kHrFRYkwmQjRTF--
-
---4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl02zFsACgkQWsYho5Hk
-nSARqwgApBf+ZQ68HgHGBRDc9cLj1QENrU+gpU0Ph020JCjk8TNLl6eskG4GXiCR
-HIvXGVL9uHwLiQkR9PlCppASTSyyqMVT3AjwhguWjmWjUw26jnAOA9QPdvLEqZsp
-uAtNyPTNsLMBAo9B2Ps9EVsUfr2xxV6lSIZ6kHL5CnQz9TRRkd/edyqsWIIhUBe+
-EEc1VXpgpcVRvzP930Uk04D1HEXdY6FmplDaQXLhSUT85MA/oFx29UARshXLtuoa
-5kvIlj2453Ouzm3+hlkZ7xORpF0IPATiiG11jrZA0MXoYsNMCAbTT5DMKgpXK4t5
-OhcIuwLtWgzniuHZJ5Ml76nR3K3kBQ==
-=AlIP
------END PGP SIGNATURE-----
-
---4n4CYVYRrRlX1VF8BwoGxrdqzZOV9BY5S--
