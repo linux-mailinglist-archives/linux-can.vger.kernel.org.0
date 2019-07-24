@@ -2,108 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D70A872BAF
-	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2019 11:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFB572F68
+	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2019 15:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbfGXJsn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 Jul 2019 05:48:43 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49745 "EHLO
+        id S1726830AbfGXND3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 Jul 2019 09:03:29 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58741 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725826AbfGXJsm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Jul 2019 05:48:42 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
+        with ESMTP id S1727269AbfGXND1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Jul 2019 09:03:27 -0400
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hqDt1-0001h1-Gx; Wed, 24 Jul 2019 11:48:39 +0200
-Received: from [IPv6:2003:c7:729:c703:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c703:c9d4:83d5:b99:4f4d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D498B437BC0;
-        Wed, 24 Jul 2019 09:48:37 +0000 (UTC)
-To:     Andrejs Cainikovs <Andrejs.Cainikovs@netmodule.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Patrick Zysset <Patrick.Zysset@netmodule.com>
-References: <20190208131738.27668-1-andrejs.cainikovs@netmodule.com>
- <20190208131738.27668-2-andrejs.cainikovs@netmodule.com>
+        id 1hqGvU-0006gK-PE; Wed, 24 Jul 2019 15:03:24 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH 1/2] can: c_can: support 64 message objects for D_CAN
-Message-ID: <080346c5-eace-f0bc-ef3a-0354988b9fb4@pengutronix.de>
-Date:   Wed, 24 Jul 2019 11:48:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2019-07-24
+Date:   Wed, 24 Jul 2019 15:03:15 +0200
+Message-Id: <20190724130322.31702-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20190208131738.27668-2-andrejs.cainikovs@netmodule.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="L8Cw1XMGI72qJhJ4eicrbChBaG8O2hc47"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
@@ -112,80 +34,76 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---L8Cw1XMGI72qJhJ4eicrbChBaG8O2hc47
-Content-Type: multipart/mixed; boundary="v1QXW5jEeOizdY2Gf64dDD33bLn4mSlJh";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Andrejs Cainikovs <Andrejs.Cainikovs@netmodule.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: Patrick Zysset <Patrick.Zysset@netmodule.com>
-Message-ID: <080346c5-eace-f0bc-ef3a-0354988b9fb4@pengutronix.de>
-Subject: Re: [PATCH 1/2] can: c_can: support 64 message objects for D_CAN
-References: <20190208131738.27668-1-andrejs.cainikovs@netmodule.com>
- <20190208131738.27668-2-andrejs.cainikovs@netmodule.com>
-In-Reply-To: <20190208131738.27668-2-andrejs.cainikovs@netmodule.com>
+Hello David,
 
---v1QXW5jEeOizdY2Gf64dDD33bLn4mSlJh
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
+this is a pull reqeust of 7 patches for net/master.
 
-On 2/8/19 2:17 PM, Andrejs Cainikovs wrote:
-> D_CAN supports up to 128 message objects, comparing to 32 on C_CAN.
-> However, some CPUs with D_CAN controller have their own limits:
-> TI AM335x Sitara CPU, for example, supports max of 64 message objects.
->=20
-> This patch extends max D_CAN message objects up to 64.
+The first patch is by Rasmus Villemoes add a missing netif_carrier_off() to
+register_candev() so that generic netdev trigger based LEDs are initially off.
 
-Please don't make this a kconfig option.
+Nikita Yushchenko's patch for the rcar_canfd driver fixes a possible IRQ storm
+on high load.
 
-According to you description this is a HW feature, so please add the max
-number of messe objects to "struct c_can_driver_data" and adjust the
-drvdata accordingly.
+The patch by Weitao Hou for the mcp251x driver add missing error checking to
+the work queue allocation.
 
-> static const struct of_device_id c_can_of_table[] =3D {
-> 	{ .compatible =3D "bosch,c_can", .data =3D &c_can_drvdata },
-> 	{ .compatible =3D "bosch,d_can", .data =3D &d_can_drvdata },
-> 	{ .compatible =3D "ti,dra7-d_can", .data =3D &dra7_dcan_drvdata },
-> 	{ .compatible =3D "ti,am3352-d_can", .data =3D &am3352_dcan_drvdata },=
+Both Wen Yang's and Joakim Zhang's patch for the flexcan driver fix a problem
+with the stop-mode.
 
-> 	{ .compatible =3D "ti,am4372-d_can", .data =3D &am3352_dcan_drvdata },=
+Stephane Grosjean contributes a patch for the peak_usb driver to fix a
+potential double kfree_skb().
 
-> 	{ /* sentinel */ },
-> };
+The last patch is by YueHaibing and fixes the error path in can-gw's
+cgw_module_init() function.
 
-You probably have to pass it via "struct c_can_priv" so that it's
-available in the c_can.c
-
+regards,
 Marc
 
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+---
+
+The following changes since commit d86afb89305de205b0d2f20c2160adf039e9508d:
+
+  net: thunderx: Use fwnode_get_mac_address() (2019-07-23 14:09:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.3-20190724
+
+for you to fetch changes up to b7a14297f102b6e2ce6f16feffebbb9bde1e9b55:
+
+  can: gw: Fix error path of cgw_module_init (2019-07-24 11:19:03 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.3-20190724
+
+----------------------------------------------------------------
+Joakim Zhang (1):
+      can: flexcan: fix stop mode acknowledgment
+
+Nikita Yushchenko (1):
+      can: rcar_canfd: fix possible IRQ storm on high load
+
+Rasmus Villemoes (1):
+      can: dev: call netif_carrier_off() in register_candev()
+
+Stephane Grosjean (1):
+      can: peak_usb: fix potential double kfree_skb()
+
+Weitao Hou (1):
+      can: mcp251x: add error check when wq alloc failed
+
+Wen Yang (1):
+      can: flexcan: fix an use-after-free in flexcan_setup_stop_mode()
+
+YueHaibing (1):
+      can: gw: Fix error path of cgw_module_init
+
+ drivers/net/can/dev.c                        |  2 ++
+ drivers/net/can/flexcan.c                    | 39 ++++++++++++++++++----
+ drivers/net/can/rcar/rcar_canfd.c            |  9 ++---
+ drivers/net/can/spi/mcp251x.c                | 49 +++++++++++++---------------
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c |  8 ++---
+ net/can/gw.c                                 | 48 ++++++++++++++++++---------
+ 6 files changed, 98 insertions(+), 57 deletions(-)
 
 
---v1QXW5jEeOizdY2Gf64dDD33bLn4mSlJh--
-
---L8Cw1XMGI72qJhJ4eicrbChBaG8O2hc47
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl04KWMACgkQWsYho5Hk
-nSBWkgf/ewd8pvUqq2juUWx2Y5InHfSxIly9r0t5CyhJUYiBGy6etdKBVK6BUQTn
-hAqK6D+NVLOweN95M9IOA5h721FYtN/5f4T7FbahooZFgHWWapwOETBX2q9Nipby
-Fobu45M/ZBu4t5vkHAAXl3nHPat/gqpA0t19zz6eZzgAP7mze0GTIJZyfyfcMk54
-LvrKBxSv0XxBKS+fSBLIDV/QLyuXngGG/wZRELpY9gHdND3pvu0d/eipxVovVDPj
-mgMdDC+fJRhgNmnisPtpLLgqfdL5GCenFxQtTxB/y5i+d5HINTGjYy6yNdwqrmJ8
-CVkYqFNxFFD10Zis4v0pQrAbDzpXgA==
-=vEUi
------END PGP SIGNATURE-----
-
---L8Cw1XMGI72qJhJ4eicrbChBaG8O2hc47--
