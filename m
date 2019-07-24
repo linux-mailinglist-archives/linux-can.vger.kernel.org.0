@@ -2,37 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8277472A03
-	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2019 10:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7504272AEE
+	for <lists+linux-can@lfdr.de>; Wed, 24 Jul 2019 11:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbfGXI0O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 Jul 2019 04:26:14 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:55115 "EHLO
+        id S1726099AbfGXJAc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 Jul 2019 05:00:32 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:59803 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725919AbfGXI0N (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Jul 2019 04:26:13 -0400
+        with ESMTP id S1726074AbfGXJAc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Jul 2019 05:00:32 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hqCbB-0000Xk-CP; Wed, 24 Jul 2019 10:26:09 +0200
+        id 1hqD8Q-00052Q-Uu; Wed, 24 Jul 2019 11:00:31 +0200
 Received: from [IPv6:2003:c7:729:c703:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c703:c9d4:83d5:b99:4f4d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 949F1437ACC;
-        Wed, 24 Jul 2019 08:26:06 +0000 (UTC)
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     Anant Gole <anantgole@ti.com>, AnilKumar Ch <anilkumar@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1556539376-20932-1-git-send-email-jhofstee@victronenergy.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F20BD437B37;
+        Wed, 24 Jul 2019 09:00:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kernel@pengutronix.de,
+        linux-can@vger.kernel.org
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -94,16 +89,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH] can: ti_hecc: use timestamp based rx-offloading
-Message-ID: <5881cb80-883b-a96b-2939-973150cfc196@pengutronix.de>
-Date:   Wed, 24 Jul 2019 10:26:02 +0200
+Subject: pull-request: can-next 2019-07-24
+Message-ID: <93540cba-184a-a9c5-f9d2-b1779a69a36f@pengutronix.de>
+Date:   Wed, 24 Jul 2019 11:00:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1556539376-20932-1-git-send-email-jhofstee@victronenergy.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="0TGN2duKhCYiG04TA8avalkRqpNrVCmIu"
+ boundary="mcwcQRZcymoRCEPFj9qin1ccxdXCla9Fm"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,217 +108,211 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0TGN2duKhCYiG04TA8avalkRqpNrVCmIu
-Content-Type: multipart/mixed; boundary="wOe0gYcUEepxQHwDfsJDd7ZqTtKeTJmc8";
+--mcwcQRZcymoRCEPFj9qin1ccxdXCla9Fm
+Content-Type: multipart/mixed; boundary="Ny076OquJ5tQUUcfzJ1ODEqRkRFUVdKW8";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: Anant Gole <anantgole@ti.com>, AnilKumar Ch <anilkumar@ti.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>,
- "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-Message-ID: <5881cb80-883b-a96b-2939-973150cfc196@pengutronix.de>
-Subject: Re: [PATCH] can: ti_hecc: use timestamp based rx-offloading
-References: <1556539376-20932-1-git-send-email-jhofstee@victronenergy.com>
-In-Reply-To: <1556539376-20932-1-git-send-email-jhofstee@victronenergy.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net, kernel@pengutronix.de, linux-can@vger.kernel.org
+Message-ID: <93540cba-184a-a9c5-f9d2-b1779a69a36f@pengutronix.de>
+Subject: pull-request: can-next 2019-07-24
 
---wOe0gYcUEepxQHwDfsJDd7ZqTtKeTJmc8
+--Ny076OquJ5tQUUcfzJ1ODEqRkRFUVdKW8
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 4/29/19 2:03 PM, Jeroen Hofstee wrote:
-> As already mentioned in [1] and included in [2], there is an off by one=
+Hello David,
 
-> issue since the high bank is already enabled when the _next_ mailbox to=
+this is a pull request for net-next/master consisting of 26 patches.
 
-> be read has index 12, so the mailbox being read was 13. The message can=
+The first two patches are by me. One adds missing files of the CAN
+subsystem to the MAINTAINERS file, while the other sorts the
+Makefile/Kconfig of the sja1000 drivers sub directory. In the next patch
+Ji-Ze Hong (Peter Hong) provides a driver for the "Fintek PCIE to 2 CAN"
+controller, based on the the sja1000 IP core.
 
-> therefore go into mailbox 31 and the driver will be repolled until the
-> mailbox 12 eventually receives a msg. Or the message might end up in th=
-e
-> 12th mailbox, but then it would become disabled after reading it and on=
-ly
-> be enabled again in the next "round" after mailbox 13 was read, which c=
-an
-> cause out of order messages, since the lower priority mailboxes can
-> accept messages in the meantime.
->=20
-> As mentioned in [3] there is a hardware race condition when changing th=
-e
-> CANME register while messages are being received. Even when including a=
+Gustavo A. R. Silva's patch for the kvaser_usb driver introduces the use
+of struct_size() instead of open coding it. Henning Colliander's patch
+adds a driver for the "Kvaser PCIEcan" devices.
 
-> busy poll on reception, like in [2] there are still overflows and out o=
-f
-> order messages at times, but less then without the busy loop polling.
-> Unlike what the patch suggests, the polling time is not in the microsec=
-ond
-> range, but takes as long as a current CAN bus reception needs to finish=
-,
-> so typically more in the fraction of millisecond range. Since the timeo=
-ut
-> is in jiffies it won't timeout.
->=20
-> Even with these additional fixes the driver is still not able to provid=
-e a
-> proper FIFO which doesn't drop packages. So change the driver to use
-> rx-offload and base order on timestamp instead of message box numbers. =
-As
-> a side affect, this also fixes [4] and [5].
->=20
-> Before this change messages with a single byte counter were dropped /
-> received out of order at a bitrate of 250kbit/s on an am3517. With this=
+Another patch by Gustavo A. R. Silva marks expected switch fall-throughs
+properly.
 
-> patch that no longer occurs up to and including 1Mbit/s.
->=20
-> [1] https://linux-can.vger.kernel.narkive.com/zgO9inVi/patch-can-ti-hec=
-c-fix-rx-wrong-sequence-issue#post6
-> [2] http://arago-project.org/git/projects/?p=3Dlinux-omap3.git;a=3Dcomm=
-it;h=3D02346892777f07245de4d5af692513ebd852dcb2
-> [3] https://linux-can.vger.kernel.narkive.com/zgO9inVi/patch-can-ti-hec=
-c-fix-rx-wrong-sequence-issue#post5
-> [4] https://patchwork.ozlabs.org/patch/895956/
-> [5] https://www.spinics.net/lists/netdev/msg494971.html
->=20
-> Cc: Anant Gole <anantgole@ti.com>
-> Cc: AnilKumar Ch <anilkumar@ti.com>
-> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-> ---
->  drivers/net/can/ti_hecc.c | 189 +++++++++++++-------------------------=
---------
->  1 file changed, 53 insertions(+), 136 deletions(-)
->=20
-> diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-> index db6ea93..fe7ffff 100644
-> --- a/drivers/net/can/ti_hecc.c
-> +++ b/drivers/net/can/ti_hecc.c
-> @@ -5,6 +5,7 @@
->   * specs for the same is available at <http://www.ti.com>
->   *
->   * Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.c=
-om/
-> + * Copyright (C) 2019 Jeroen Hofstee <jhofstee@victronenergy.com>
->   *
->   * This program is free software; you can redistribute it and/or
->   * modify it under the terms of the GNU General Public License as
-> @@ -34,6 +35,7 @@
->  #include <linux/can/dev.h>
->  #include <linux/can/error.h>
->  #include <linux/can/led.h>
-> +#include <linux/can/rx-offload.h>
-> =20
->  #define DRV_NAME "ti_hecc"
->  #define HECC_MODULE_VERSION     "0.7"
-> @@ -63,29 +65,16 @@ MODULE_VERSION(HECC_MODULE_VERSION);
->  #define HECC_TX_PRIO_MASK	(MAX_TX_PRIO << HECC_MB_TX_SHIFT)
->  #define HECC_TX_MB_MASK		(HECC_MAX_TX_MBOX - 1)
->  #define HECC_TX_MASK		((HECC_MAX_TX_MBOX - 1) | HECC_TX_PRIO_MASK)
-> -#define HECC_TX_MBOX_MASK	(~(BIT(HECC_MAX_TX_MBOX) - 1))
-> -#define HECC_DEF_NAPI_WEIGHT	HECC_MAX_RX_MBOX
-> =20
->  /*
-> - * Important Note: RX mailbox configuration
-> - * RX mailboxes are further logically split into two - main and buffer=
+Dan Murphy provides 5 patches for the m_can. After cleanups a framework
+is introduced so that the driver can be used from memory mapped IO as
+well as SPI attached devices. Finally he adds a driver for the tcan4x5x
+which uses this framework.
 
-> - * mailboxes. The goal is to get all packets into main mailboxes as
-> - * driven by mailbox number and receive priority (higher to lower) and=
+A series of 5 patches by Appana Durga Kedareswara rao for the xilinx_can
+driver, first clean up,then add support for CANFD. Colin Ian King
+contributes another cleanup for the xilinx_can driver.
 
-> - * buffer mailboxes are used to receive pkts while main mailboxes are =
-being
-> - * processed. This ensures in-order packet reception.
-> - *
-> - * Here are the recommended values for buffer mailbox. Note that RX ma=
-ilboxes
-> - * start after TX mailboxes:
-> - *
-> - * HECC_MAX_RX_MBOX		HECC_RX_BUFFER_MBOX	No of buffer mailboxes
-> - * 28				12			8
-> - * 16				20			4
-> + * RX mailbox configuration
-> + * The remaining mailboxes are used for reception and are delivered ba=
-sed on
-> + * their timestamp, to avoid a hardware race when CANME is changed whi=
-le
-> + * CAN-bus traffix is being received.
->   */
-> =20
->  #define HECC_MAX_RX_MBOX	(HECC_MAX_MAILBOXES - HECC_MAX_TX_MBOX)
-> -#define HECC_RX_BUFFER_MBOX	12 /* as per table above */
->  #define HECC_RX_FIRST_MBOX	(HECC_MAX_MAILBOXES - 1)
-> -#define HECC_RX_HIGH_MBOX_MASK	(~(BIT(HECC_RX_BUFFER_MBOX) - 1))
-> =20
->  /* TI HECC module registers */
->  #define HECC_CANME		0x0	/* Mailbox enable */
-> @@ -123,6 +112,8 @@ MODULE_VERSION(HECC_MODULE_VERSION);
->  #define HECC_CANMDL		0x8
->  #define HECC_CANMDH		0xC
-> =20
-> +#define HECC_CANMOTS		0x100
+Robert P. J. Day's patch corrects the brief history of the CAN protocol
+given in the Kconfig menu entry.
 
-It's actually 0x80
+2 patches by Dong Aisheng for the flexcan driver provide PE clock source
+select support and dt-bindings description.
+2 patches by Sean Nyekjaer for the flexcan driver provide add CAN
+wakeup-source property and dt-bindings description.
 
-> +
->  #define HECC_SET_REG		0xFFFFFFFF
->  #define HECC_CANID_MASK		0x3FF	/* 18 bits mask for extended id's */
->  #define HECC_CCE_WAIT_COUNT     100	/* Wait for ~1 sec for CCE bit */
-> @@ -193,7 +184,7 @@ static const struct can_bittiming_const ti_hecc_bit=
-timing_const =3D {
-> =20
->  struct ti_hecc_priv {
->  	struct can_priv can;	/* MUST be first member/field */
-> -	struct napi_struct napi;
-> +	struct can_rx_offload offload;
->  	struct net_device *ndev;
->  	struct clk *clk;
->  	void __iomem *base;
-> @@ -203,7 +194,6 @@ struct ti_hecc_priv {
->  	spinlock_t mbx_lock; /* CANME register needs protection */
->  	u32 tx_head;
->  	u32 tx_tail;
-> -	u32 rx_next;
->  	struct regulator *reg_xceiver;
->  };
-> =20
-> @@ -265,6 +255,11 @@ static inline u32 hecc_get_bit(struct ti_hecc_priv=
- *priv, int reg, u32 bit_mask)
->  	return (hecc_read(priv, reg) & bit_mask) ? 1 : 0;
->  }
-> =20
-> +static inline u32 hecc_read_stamp(struct ti_hecc_priv *priv, u32 mbxno=
-)
-> +{
-> +	return __raw_readl(priv->hecc_ram + 0x80 + 4 * mbxno);
+Jeroen Hofstee's patch converts the ti_hecc driver to make use of the
+rx-offload helper fixing a number of outstanding bugs.
 
-I've changed this function to use HECC_CANMOTS.
+The first patch of Oliver Hartkopp removes the now obsolete empty
+ioctl() handler for the CAN protocols. The second patch adds SPDX
+license identifiers for CAN subsystem.
 
+regards,
 Marc
+
+---
+
+The following changes since commit 3e3bb69589e482e0783f28d4cd1d8e56fda0bc=
+bb:
+
+  tc-testing: added tdc tests for [b|p]fifo qdisc (2019-07-23 14:08:15 -0=
+700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git ta=
+gs/linux-can-next-for-5.4-20190724
+
+for you to fetch changes up to fba76a58452694b9b13c07e48839fa84c75f57af:
+
+  can: Add SPDX license identifiers for CAN subsystem (2019-07-24 10:31:5=
+5 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.4-20190724
+
+----------------------------------------------------------------
+Aisheng Dong (1):
+      can: flexcan: implement can Runtime PM
+
+Appana Durga Kedareswara rao (5):
+      can: xilinx_can: Fix style issues
+      can: xilinx_can: Fix kernel doc warnings
+      can: xilinx_can: Fix flags field initialization for axi can and can=
+ps
+      can: xilinx_can: Add cantype parameter in xcan_devtype_data struct
+      can: xilinx_can: Add support for CANFD FD frames
+
+Colin Ian King (1):
+      can: xilinx_can: clean up indentation issue
+
+Dan Murphy (5):
+      can: m_can: Fix checkpatch issues on existing code
+      can: m_can: Create a m_can platform framework
+      can: m_can: Rename m_can_priv to m_can_classdev
+      dt-bindings: can: tcan4x5x: Add DT bindings for TCAN4x5X driver
+      can: tcan4x5x: Add tcan4x5x driver to the kernel
+
+Dong Aisheng (2):
+      dt-bindings: can: flexcan: add PE clock source property to device t=
+ree
+      can: flexcan: add support for PE clock source select
+
+Gustavo A. R. Silva (2):
+      can: kvaser_usb: Use struct_size() in alloc_candev()
+      can: mark expected switch fall-throughs
+
+Henning Colliander (1):
+      can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices
+
+Jeroen Hofstee (1):
+      can: ti_hecc: use timestamp based rx-offloading
+
+Ji-Ze Hong (Peter Hong) (1):
+      can: sja1000: f81601: add Fintek F81601 support
+
+Marc Kleine-Budde (2):
+      MAINTAINERS: can: add missing files to CAN NETWORK DRIVERS and CAN =
+NETWORK LAYER
+      can: sja1000: Makefile/Kconfig: sort alphabetically
+
+Oliver Hartkopp (2):
+      can: remove obsolete empty ioctl() handler
+      can: Add SPDX license identifiers for CAN subsystem
+
+Robert P. J. Day (1):
+      can: Kconfig: correct history of the CAN protocol
+
+Sean Nyekjaer (2):
+      dt-bindings: can: flexcan: add can wakeup property
+      can: flexcan: add support for DT property 'wakeup-source'
+
+ .../devicetree/bindings/net/can/fsl-flexcan.txt    |   10 +
+ .../devicetree/bindings/net/can/tcan4x5x.txt       |   37 +
+ MAINTAINERS                                        |    5 +
+ drivers/net/can/Kconfig                            |   13 +
+ drivers/net/can/Makefile                           |    1 +
+ drivers/net/can/at91_can.c                         |    6 +-
+ drivers/net/can/flexcan.c                          |  136 +-
+ drivers/net/can/kvaser_pciefd.c                    | 1912 ++++++++++++++=
+++++++
+ drivers/net/can/m_can/Kconfig                      |   22 +-
+ drivers/net/can/m_can/Makefile                     |    2 +
+ drivers/net/can/m_can/m_can.c                      | 1079 +++++------
+ drivers/net/can/m_can/m_can.h                      |  110 ++
+ drivers/net/can/m_can/m_can_platform.c             |  202 +++
+ drivers/net/can/m_can/tcan4x5x.c                   |  532 ++++++
+ drivers/net/can/peak_canfd/peak_pciefd_main.c      |    2 +-
+ drivers/net/can/sja1000/Kconfig                    |   79 +-
+ drivers/net/can/sja1000/Makefile                   |   11 +-
+ drivers/net/can/sja1000/f81601.c                   |  212 +++
+ drivers/net/can/spi/mcp251x.c                      |    3 +-
+ drivers/net/can/ti_hecc.c                          |  191 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c   |    3 +-
+ drivers/net/can/usb/peak_usb/pcan_usb.c            |    2 +-
+ drivers/net/can/xilinx_can.c                       |  293 ++-
+ include/linux/can/core.h                           |    3 +-
+ include/linux/can/skb.h                            |    2 +-
+ net/can/Kconfig                                    |   11 +-
+ net/can/af_can.c                                   |   10 +-
+ net/can/af_can.h                                   |    1 +
+ net/can/bcm.c                                      |    3 +-
+ net/can/gw.c                                       |    1 +
+ net/can/proc.c                                     |    1 +
+ net/can/raw.c                                      |    3 +-
+ 32 files changed, 4098 insertions(+), 800 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/tcan4x5x.tx=
+t
+ create mode 100644 drivers/net/can/kvaser_pciefd.c
+ create mode 100644 drivers/net/can/m_can/m_can.h
+ create mode 100644 drivers/net/can/m_can/m_can_platform.c
+ create mode 100644 drivers/net/can/m_can/tcan4x5x.c
+ create mode 100644 drivers/net/can/sja1000/f81601.c
 
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
 Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |-
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---wOe0gYcUEepxQHwDfsJDd7ZqTtKeTJmc8--
 
---0TGN2duKhCYiG04TA8avalkRqpNrVCmIu
+
+
+
+--Ny076OquJ5tQUUcfzJ1ODEqRkRFUVdKW8--
+
+--mcwcQRZcymoRCEPFj9qin1ccxdXCla9Fm
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl04FhoACgkQWsYho5Hk
-nSDbcAgAowGB7FaxEXpOn0rkFgKcX+WreYg4QLIoqkXsUAZOPLSXCh40RxrwBrNj
-pNQw2F/hgSwn+0raPQrbfDjufSJ37KevDZlrDZJ7+yHx7Qnm485C+QArCyIBFg+d
-xbAwHX2hagaRS7dEefOVD77jULgqJ4fKCmzqZBM4hILC9Cnc11x+fM7ZnTus2d4x
-VQXOoHSHa5yiyTw9r0BWDyvbC/pXADo4nA/MNCzuik2W+JOtve6zLCWJgePZKuvx
-zwY0rKDJAX4dqzPclABE+4E9FbTMzuB8t892INDWQt74RDO9SWPcX7RiObE0t0Yd
-oBDdvuXwzddfEu9f6L9pPQ+58dDDlg==
-=hV5H
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl04HigACgkQWsYho5Hk
+nSBEdQf/f1itwIrD0OxlTvEXBspSy9dVCFphyt2sWUe3VU5wOd8HD65QzEGJde7I
+Ny/BBbyNpeXcyUKtBcCsDGH0IRodm+kxXhdFEb0QiT5UTLXgMvYQSqnIvqx8CwWb
+Ux5fGMwv77vqtdVfwGYTpj55gIuB2ufWRZylioq9TEp0AYqE+YWKA3OEAYb0D6MT
+FVxorSCqEXi6FxNlslc+OeeyjIP/7NqiIG8bxfxonheZUbkp9uoJo1wzq4cEOgb2
+yaOTGb+w3RA5tud5Kj+Rm7rYys6DER5T9z2s/L6R3+DuR3T53iqNRddxZid0M5jo
+CYfK5OpmfCetszPH9Pdl7bKo7mn9Mw==
+=Wgs/
 -----END PGP SIGNATURE-----
 
---0TGN2duKhCYiG04TA8avalkRqpNrVCmIu--
+--mcwcQRZcymoRCEPFj9qin1ccxdXCla9Fm--
