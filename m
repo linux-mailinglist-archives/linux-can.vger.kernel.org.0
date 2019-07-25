@@ -2,277 +2,199 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDB074B8C
-	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 12:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E7E74BB5
+	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 12:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727260AbfGYK10 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Jul 2019 06:27:26 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35636 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728603AbfGYK1Z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 06:27:25 -0400
-Received: by mail-lj1-f194.google.com with SMTP id x25so47547082ljh.2
-        for <linux-can@vger.kernel.org>; Thu, 25 Jul 2019 03:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=capp-tech-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NFNtrdsE6wikmtyhjQ1bg7FsBjKiXenqyYi9rNT5Dig=;
-        b=ulyyAUQc2lGpzi5L6CrxcSTS7+CCJ+uRDEO18zuDLAj2RcO0ga9vICNGq7iq36QbC7
-         THjpNqXgYXSusE6qCXjm69dtIF4rGgDTirVmyn43p7thbAo5iP1K3K0OgyrZ7Pi9c+Md
-         wcG0zINMOyCkh5gqQXFoSWZhPZD5dEBBPv6B2bBBKzII0hg1I+ymKRaRg9UrIlr3p3vA
-         nUQSMAa8mkS4fIlnwkpnLw//MSmEU1al9YUPfursQdh3a3VjmE0BzNdzZLZBHsgpSzc6
-         udii+W2iqQiSql+nzp2mKT14Z1NzbcLDYJbXJdx8dPDNt4QtTXn6x6NWbJPEtpRtIQON
-         V6Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NFNtrdsE6wikmtyhjQ1bg7FsBjKiXenqyYi9rNT5Dig=;
-        b=AKW7CI1z/UeinQk2Sf8eulAGA9zU+Xb50Sl5JUlUXXgfRtLKF+44gUj9FFVO2yVOOa
-         C01b61BmIp8184FgxTtqqfYbKJlRj3NKdAcbTojqN36jfKuvoq3CKBECId4pD5sRmSGC
-         2pDZHruxxbB0NzD0IoWYQ22rl+MpRVs6BrK9p96uFHbpUaN1e97u9ZXYrr5z4Bj2Gewb
-         MpYghwwPNVYEuRMOMQeypSrwzYZRSxhlDtzdpjlbqFkxsvqLnbx6NLHm5o0qWVbGik38
-         klTfnwenShTUbEQnRo+yJgaLg1/i7SpDV0Fo3R/gdi07N+mE6MHW4AB/uXfmGaiOKVH+
-         C7Lg==
-X-Gm-Message-State: APjAAAVseqGGbX963BIz8/x938dp8o7K54TMErTbLU3RhUh/FhWswWAw
-        ElwfJ3/hX0rO8E/8nlN6uYFM8TtidC5N6gbn6BYmUA==
-X-Google-Smtp-Source: APXvYqytBjenJcK2ueHIwRJVFSps2NxpHBpND5+c891lEfoxp2g16NEtowHrWEepNY3MDrIrhCTsCbJp8UQ2O7FvBCo=
-X-Received: by 2002:a2e:9bc6:: with SMTP id w6mr46979370ljj.156.1564050441927;
- Thu, 25 Jul 2019 03:27:21 -0700 (PDT)
+        id S1726491AbfGYKhR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Jul 2019 06:37:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47367 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbfGYKhR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 06:37:17 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hqb7a-00038B-Nf; Thu, 25 Jul 2019 12:37:14 +0200
+Received: from [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 48647438CE4;
+        Thu, 25 Jul 2019 10:37:12 +0000 (UTC)
+Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20190712075926.7357-1-qiangqing.zhang@nxp.com>
+ <DB7PR04MB461831872271A98E741FF68AE6C10@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
+Date:   Thu, 25 Jul 2019 12:37:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
- <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
-In-Reply-To: <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
-From:   Tom Prohaszka <tprohaszka@capp-tech.com>
-Date:   Thu, 25 Jul 2019 06:27:09 -0400
-Message-ID: <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
-Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
- __this_cpu_add() in preemptible
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@martin.sperl.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Here is the backtrace:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v
+Content-Type: multipart/mixed; boundary="qGuZIf5lPtITr0mdKMxewU2Toy4gXun4s";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: "wg@grandegger.com" <wg@grandegger.com>, dl-linux-imx
+ <linux-imx@nxp.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
+Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
+References: <20190712075926.7357-1-qiangqing.zhang@nxp.com>
+ <DB7PR04MB461831872271A98E741FF68AE6C10@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
+In-Reply-To: <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
 
- can1  456   [8]  0F 00 00 00 00 00 00 00
-  can1  354   [8]  0F 00 00 00 00 00 00 00
-  can1  331   [8]  0F 00 00 00 00 00 00 00
-  can1  234   [8]  01 00 00 00 00 00 00 00
-  can1  044   [8]  00 00 00 00 00 00 07 00
-  can1  354   [8]^C  can1  456   [8]  0F 00 00 00 00 00 00 00
-root@ccimx6ulcvdp:~/tmp# BUG: using __this_cpu_add() in preemptible
-[00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
+--qGuZIf5lPtITr0mdKMxewU2Toy4gXun4s
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-root@ccimx6ulcvdp:~/tmp# ifconfiBUG: using __this_cpu_add() in
-preemptible [00000000] code: irq/194-mcp25xx/805
-gBUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
- BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-cBUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-anBUG: using __this_cpu_add() in preemptible [00000000] code:
-irq/194-mcp25xx/805
-1BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
- BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-doBUG: using __this_cpu_add() in preemptible [00000000] code:
-irq/194-mcp25xx/805
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-wn
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-pgd = 80004000
-[00000000] *pgd=00000000
-Internal error: Oops: 17 [#1] PREEMPT SMP ARM
-Modules linked in: cryptodev(O) wlan(O)
-CPU: 0 PID: 805 Comm: irq/194-mcp25xx Tainted: G           O
-4.9.65-dey+gf832589 #41
-Hardware name: Freescale i.MX6 UltraLite (Device Tree)
-task: b9322840 task.stack: b9356000
-PC is at _raw_spin_lock_irqsave+0x2c/0x6c
-LR is at preempt_count_add+0x134/0x164
-pc : [<8094d6c4>]    lr : [<801520d8>]    psr: 00010193
-sp : b9357e68  ip : b9357e48  fp : b9357e7c
-r10: ffff0ff3  r9 : 00000000  r8 : 00018834
-r7 : b82f4c50  r6 : 00000000  r5 : 80010113  r4 : 00000000
-r3 : b9322840  r2 : 00000001  r1 : ffffffff  r0 : 00000000
-Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 10c53c7d  Table: b892006a  DAC: 00000051
-Process irq/194-mcp25xx (pid: 805, stack limit = 0xb9356210)
-Stack: (0xb9357e68 to 0xb9358000)
-7e60:                   b82f44c0 00000005 b9357e94 b9357e80 805c7968 8094d6a4
-7e80: b82f44c0 00000005 b9357ef4 b9357e98 805c6a44 805c7954 8045a584 b92b8600
-7ea0: 8017e780 00000001 00000000 80c26db0 80c26d80 80a51448 80f6c564 b82f46d4
-7ec0: 8094db74 80152114 b9357ef4 b92b8600 b8224d00 00000000 00000001 b8224d00
-7ee0: b92b8600 8017e780 b9357f14 b9357ef8 8017e7ac 805c6204 b9356000 b92b8624
-7f00: 00000000 00000001 b9357f54 b9357f18 8017ead4 8017e78c 80faae92 ffffe000
-7f20: 00000000 8017e8ac 00000000 00000000 b92b8680 b9356000 b92b8600 8017e98c
-7f40: 00000000 00000000 b9357fac b9357f58 8014956c 8017e998 00000000 00000000
-7f60: 00000000 b92b8600 00000000 00000000 b9357f70 b9357f70 00000000 00000000
-7f80: b9357f80 b9357f80 b9357fac b92b8680 80149464 00000000 00000000 00000000
-7fa0: 00000000 b9357fb0 801082d8 80149470 00000000 00000000 00000000 00000000
-7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-7fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-[<8094d6c4>] (_raw_spin_lock_irqsave) from [<805c7968>]
-(mcp25xxfd_can_tx_queue_restart+0x20/0x7c)
-[<805c7968>] (mcp25xxfd_can_tx_queue_restart) from [<805c6a44>]
-(mcp25xxfd_can_int+0x84c/0x974)
-[<805c6a44>] (mcp25xxfd_can_int) from [<8017e7ac>] (irq_thread_fn+0x2c/0x64)
-[<8017e7ac>] (irq_thread_fn) from [<8017ead4>] (irq_thread+0x148/0x200)
-[<8017ead4>] (irq_thread) from [<8014956c>] (kthread+0x108/0x120)
-[<8014956c>] (kthread) from [<801082d8>] (ret_from_fork+0x14/0x3c)
-Code: f10c0080 e3a00001 ebe01238 f594f000 (e1943f9f)
----[ end trace 355ef7f6bf82f534 ]---
-note: irq/194-mcp25xx[805] exited with preempt_count 1
-Unable to handle kernel paging request at virtual address ffffffec
-pgd = 80004000
-[ffffffec] *pgd=bbfde861, *pte=00000000, *ppte=00000000
-Internal error: Oops: 37 [#2] PREEMPT SMP ARM
-Modules linked in: cryptodev(O) wlan(O)
-CPU: 0 PID: 805 Comm: irq/194-mcp25xx Tainted: G      D    O
-4.9.65-dey+gf832589 #41
-Hardware name: Freescale i.MX6 UltraLite (Device Tree)
-task: b9322840 task.stack: b9356000
-PC is at kthread_data+0x18/0x20
-LR is at irq_thread_dtor+0x38/0xe0
-pc : [<8014a1bc>]    lr : [<8017e8e4>]    psr: 20010193
-sp : b9357c40  ip : b9357c50  fp : b9357c4c
-r10: 00000017  r9 : ffffe000  r8 : 00000000
-r7 : b9322840  r6 : b9322c68  r5 : 80fb11f8  r4 : b9322840
-r3 : 00000000  r2 : 0000b734  r1 : 0000b734  r0 : b9322840
-Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-Control: 10c53c7d  Table: b892006a  DAC: 00000051
-Process irq/194-mcp25xx (pid: 805, stack limit = 0xb9356210)
-Stack: (0xb9357c40 to 0xb9358000)
-7c40: b9357c64 b9357c50 8017e8e4 8014a1b0 b9322c4c 80fb11f8 b9357c8c b9357c68
-7c60: 8014784c 8017e8b8 b9322840 0000000b 00000000 b9357c98 b9356000 ffffe000
-7c80: b9357cb4 b9357c90 8012d3fc 80147788 b9356000 00000000 b9357cb4 b9357ca8
-7ca0: 80128030 7f000000 b9357cf4 b9357cb8 8010ce64 8012d0c8 b9356210 0000000b
-7cc0: 80116a44 60010193 80bd675c 00000000 b9357e18 00000017 00000000 00000000
-7ce0: b9356000 ffff0ff3 b9357d0c b9357cf8 8011b920 8010cc28 b9357e18 00000000
-7d00: b9357d64 b9357d10 8094eeb0 8011b8b8 805c8c8c 805b71d8 b9357da8 b9357da8
-7d20: b8563400 00000000 805b4524 00000000 00000003 00000003 00000000 80f08a34
-7d40: 00000017 8094ea8c 00000000 b9357e18 b9356000 ffff0ff3 b9357e14 b9357d68
-7d60: 8010125c 8094ea98 805c8d80 8094b324 b82f2144 b82f2144 00000000 00000003
-7d80: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-7da0: 00000802 00b71b00 b9357d18 b9357d18 00000000 0000067e 00000009 0000067c
-7dc0: 00000001 00000000 b9357dfc b9357dd8 805c9044 805c8cc8 00000000 00000400
-7de0: 00000000 bd200000 00000000 b82f44c0 b9357e3c 8094d6c4 00010193 ffffffff
-7e00: b9357e4c 00018834 b9357e7c b9357e18 8094e178 8010121c 00000000 ffffffff
-7e20: 00000001 b9322840 00000000 80010113 00000000 b82f4c50 00018834 00000000
-7e40: ffff0ff3 b9357e7c b9357e48 b9357e68 801520d8 8094d6c4 00010193 ffffffff
-7e60: 00000051 00000000 b82f44c0 00000005 b9357e94 b9357e80 805c7968 8094d6a4
-7e80: b82f44c0 00000005 b9357ef4 b9357e98 805c6a44 805c7954 8045a584 b92b8600
-7ea0: 8017e780 00000001 00000000 80c26db0 80c26d80 80a51448 80f6c564 b82f46d4
-7ec0: 8094db74 80152114 b9357ef4 b92b8600 b8224d00 00000000 00000001 b8224d00
-7ee0: b92b8600 8017e780 b9357f14 b9357ef8 8017e7ac 805c6204 b9356000 b92b8624
-7f00: 00000000 00000001 b9357f54 b9357f18 8017ead4 8017e78c 80faae92 ffffe000
-7f20: 00000000 8017e8ac 00000000 00000000 b92b8680 b9356000 b92b8600 8017e98c
-7f40: 00000000 00000000 b9357fac b9357f58 8014956c 8017e998 00000000 00000000
-7f60: 00000000 b92b8600 00000000 00000000 b9357f70 b9357f70 00000001 00010001
-7f80: b9357f80 b9357f80 b9357fac b92b8680 80149464 00000000 00000000 00000000
-7fa0: 00000000 b9357fb0 801082d8 80149470 00000000 00000000 00000000 00000000
-7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-7fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-[<8014a1bc>] (kthread_data) from [<8017e8e4>] (irq_thread_dtor+0x38/0xe0)
-[<8017e8e4>] (irq_thread_dtor) from [<8014784c>] (task_work_run+0xd0/0xf0)
-[<8014784c>] (task_work_run) from [<8012d3fc>] (do_exit+0x340/0xa88)
-[<8012d3fc>] (do_exit) from [<8010ce64>] (die+0x248/0x344)
-[<8010ce64>] (die) from [<8011b920>] (__do_kernel_fault.part.0+0x74/0x1f4)
-[<8011b920>] (__do_kernel_fault.part.0) from [<8094eeb0>]
-(do_page_fault+0x424/0x438)
-[<8094eeb0>] (do_page_fault) from [<8010125c>] (do_DataAbort+0x4c/0xc8)
-[<8010125c>] (do_DataAbort) from [<8094e178>] (__dabt_svc+0x58/0x80)
-Exception stack(0xb9357e18 to 0xb9357e60)
-7e00:                                                       00000000 ffffffff
-7e20: 00000001 b9322840 00000000 80010113 00000000 b82f4c50 00018834 00000000
-7e40: ffff0ff3 b9357e7c b9357e48 b9357e68 801520d8 8094d6c4 00010193 ffffffff
-[<8094e178>] (__dabt_svc) from [<8094d6c4>] (_raw_spin_lock_irqsave+0x2c/0x6c)
-[<8094d6c4>] (_raw_spin_lock_irqsave) from [<805c7968>]
-(mcp25xxfd_can_tx_queue_restart+0x20/0x7c)
-[<805c7968>] (mcp25xxfd_can_tx_queue_restart) from [<805c6a44>]
-(mcp25xxfd_can_int+0x84c/0x974)
-[<805c6a44>] (mcp25xxfd_can_int) from [<8017e7ac>] (irq_thread_fn+0x2c/0x64)
-[<8017e7ac>] (irq_thread_fn) from [<8017ead4>] (irq_thread+0x148/0x200)
-[<8017ead4>] (irq_thread) from [<8014956c>] (kthread+0x108/0x120)
-[<8014956c>] (kthread) from [<801082d8>] (ret_from_fork+0x14/0x3c)
-Code: e24cb004 e52de004 e8bd4000 e5903320 (e5130014)
----[ end trace 355ef7f6bf82f535 ]---
-Fixing recursive fault but reboot is needed!
-sched: RT throttling activated
-mca-cc6ul-rtc mca-cc6ul-rtc: Failed to set RTC time data: -110
-reboot
-^C^C
+On 7/25/19 9:53 AM, Marc Kleine-Budde wrote:
+> On 7/25/19 9:38 AM, Joakim Zhang wrote:
+>> Kindly pinging...
+>>
+>> After you git pull request for linux-can-next-for-5.4-20190724, some p=
+atches are missing from linux-can-next/testing.
+>> can: flexcan: flexcan_mailbox_read() make use of flexcan_write64() to =
+mark the mailbox as read
+>> can: flexcan: flexcan_irq(): add support for TX mailbox in iflag1
+>> can: flexcan: flexcan_read_reg_iflag_rx(): optimize reading
+>> can: flexcan: introduce struct flexcan_priv::tx_mask and make use of i=
+t
+>> can: flexcan: convert struct flexcan_priv::rx_mask{1,2} to rx_mask
+>> can: flexcan: remove TX mailbox bit from struct flexcan_priv::rx_mask{=
+1,2}
+>> can: flexcan: rename struct flexcan_priv::reg_imask{1,2}_default to rx=
+_mask{1,2}
+>> can: flexcan: flexcan_irq(): rename variable reg_iflag -> reg_iflag_rx=
+
+>> can: flexcan: rename macro FLEXCAN_IFLAG_MB() -> FLEXCAN_IFLAG2_MB()
+>>
+>> You can refer to below link for the reason of adding above patches:
+>> https://www.spinics.net/lists/linux-can/msg00777.html
+>> https://www.spinics.net/lists/linux-can/msg01150.html
+>>
+>> Are you prepared to add back these patches as they are necessary for
+>> Flexcan CAN FD? And this Flexcan CAN FD patch set is based on these
+>> patches.
+>=20
+> Yes, these patches will be added back.
+
+I've cleaned up the first patch a bit, and pushed everything to the
+testing branch. Can you give it a test.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
+--qGuZIf5lPtITr0mdKMxewU2Toy4gXun4s--
 
+--u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-The system is going down for reboot NOW! (pts/0) (Sun Jul 21 21:40:36 2019):
-INIT: Switching to runlevel: 6
-INIT: Sending processes the TERM signal
-Stopping syslogd/klogd: stopped syslogd (pid 601)
-stopped klogd (pid 604)
-done
-Stopping Dropbear SSH server: stopped /usr/sbin/dropbear (pid 642)
-dropbear.
+-----BEGIN PGP SIGNATURE-----
 
-On Wed, Jul 24, 2019 at 5:36 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 7/24/19 3:28 AM, Tom Prohaszka wrote:
-> > We implemented the MCP25xxfd driver patch V7 and are experiencing an
-> > issue when the CPU load for the mcp25xxfd driver is over 30%.  Using
-> > CANDump or our custom application, we see:
-> >
-> > root@ccimx6ulcvdp:~/tmp# BUG: using __this_cpu_add() in preemptible
-> > [00000000] code: irq/194-mcp25xx/805
->
-> Do you have a full OOPS/backtrace for this?
->
-> > When this occurs, the kernel eventually crashes.  Has this been seen
-> > by anyone, or any suggestions on what could cause this?
-> >
-> > Our system is:
-> > CAN 2.0 Std, 500Kbps, Tx/Rx enabled, but only Receiving CAN messages
-> > Digi Imx6ul,
-> > MCP2517 clk 40Mhz
-> > SPI Clk 12 Mhz
-> > Linux version 4.9.65-dey+gf832589 (gcc version 6.2.0 (GCC) ) #41 SMP
-> > PREEMPT Sun Jul 7 21:39:25 EDT 2019
-> >
-> > On a secondary question, in the driver comments, it was mentioned that
-> > transfer rate was >99% with no network statistics, but when network
-> > statistics are used, the transfer rate drops 60%.
-> > We don't care about network statistics, can you provide info on how
-> > you turned this off?
->
-> Adding Martin on Cc.
->
-> Marc
->
-> --
-> Pengutronix e.K.                  | Marc Kleine-Budde           |
-> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-> Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
->
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl05hlEACgkQWsYho5Hk
+nSAGjQf9Fbu0zJ+edTfTI/tu491WgJu4gVTHHnuVA+RBRWIXDx6mvzsYVr+hnmQd
+OEmiuWwTTHMfqt4RQCFLb/RWBNBtva8BwCsAplIZOAx4kV/4Y+ki4ya9yqOu7HLD
+QZuZWrUR/zawrhFWLLYzUB9JzeFHDspXa77JM7X5fn8HsqhJh0Lvtmgv3680aDHw
+hiXyotE7q86ilP7EMjytSbbJgAjJ6cGpabpFFeGwXaPF2yauRP6gT2Uhanr5CtKU
+pQlS6bKMpxoA1KIu18TVtLnneSCAVZI8EZiEwaKXeaoaRVLUxdd8aAKliFP2F735
+itt0n9Yl5SFVi6btLkktoZzmtN994Q==
+=tDGV
+-----END PGP SIGNATURE-----
+
+--u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v--
