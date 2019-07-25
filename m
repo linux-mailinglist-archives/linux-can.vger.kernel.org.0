@@ -2,38 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88E7E74BB5
-	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 12:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE3174C27
+	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 12:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbfGYKhR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Jul 2019 06:37:17 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47367 "EHLO
+        id S2387781AbfGYKuH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Jul 2019 06:50:07 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46221 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725851AbfGYKhR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 06:37:17 -0400
+        with ESMTP id S1728232AbfGYKuG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 06:50:06 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hqb7a-00038B-Nf; Thu, 25 Jul 2019 12:37:14 +0200
+        id 1hqbK0-0004Ok-VM; Thu, 25 Jul 2019 12:50:05 +0200
 Received: from [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 48647438CE4;
-        Thu, 25 Jul 2019 10:37:12 +0000 (UTC)
-Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A385438CFF;
+        Thu, 25 Jul 2019 10:50:02 +0000 (UTC)
+To:     Tom Prohaszka <tprohaszka@capp-tech.com>
+Cc:     linux-can@vger.kernel.org, kernel@martin.sperl.org
+References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
+ <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
+ <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20190712075926.7357-1-qiangqing.zhang@nxp.com>
- <DB7PR04MB461831872271A98E741FF68AE6C10@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +91,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
-Date:   Thu, 25 Jul 2019 12:37:05 +0200
+Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
+ __this_cpu_add() in preemptible
+Message-ID: <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
+Date:   Thu, 25 Jul 2019 12:49:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
+In-Reply-To: <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v"
+ boundary="m8AeAbj5h4HKnkxJRH3PP8bVf1iBXazYk"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,61 +112,110 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v
-Content-Type: multipart/mixed; boundary="qGuZIf5lPtITr0mdKMxewU2Toy4gXun4s";
+--m8AeAbj5h4HKnkxJRH3PP8bVf1iBXazYk
+Content-Type: multipart/mixed; boundary="wXko8jenmDQK4ungOG66lvnSyMvwvgtUF";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: "wg@grandegger.com" <wg@grandegger.com>, dl-linux-imx
- <linux-imx@nxp.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
-Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
-References: <20190712075926.7357-1-qiangqing.zhang@nxp.com>
- <DB7PR04MB461831872271A98E741FF68AE6C10@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
-In-Reply-To: <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
+To: Tom Prohaszka <tprohaszka@capp-tech.com>
+Cc: linux-can@vger.kernel.org, kernel@martin.sperl.org
+Message-ID: <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
+Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
+ __this_cpu_add() in preemptible
+References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
+ <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
+ <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
+In-Reply-To: <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
 
---qGuZIf5lPtITr0mdKMxewU2Toy4gXun4s
+--wXko8jenmDQK4ungOG66lvnSyMvwvgtUF
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 7/25/19 9:53 AM, Marc Kleine-Budde wrote:
-> On 7/25/19 9:38 AM, Joakim Zhang wrote:
->> Kindly pinging...
->>
->> After you git pull request for linux-can-next-for-5.4-20190724, some p=
-atches are missing from linux-can-next/testing.
->> can: flexcan: flexcan_mailbox_read() make use of flexcan_write64() to =
-mark the mailbox as read
->> can: flexcan: flexcan_irq(): add support for TX mailbox in iflag1
->> can: flexcan: flexcan_read_reg_iflag_rx(): optimize reading
->> can: flexcan: introduce struct flexcan_priv::tx_mask and make use of i=
-t
->> can: flexcan: convert struct flexcan_priv::rx_mask{1,2} to rx_mask
->> can: flexcan: remove TX mailbox bit from struct flexcan_priv::rx_mask{=
-1,2}
->> can: flexcan: rename struct flexcan_priv::reg_imask{1,2}_default to rx=
-_mask{1,2}
->> can: flexcan: flexcan_irq(): rename variable reg_iflag -> reg_iflag_rx=
-
->> can: flexcan: rename macro FLEXCAN_IFLAG_MB() -> FLEXCAN_IFLAG2_MB()
->>
->> You can refer to below link for the reason of adding above patches:
->> https://www.spinics.net/lists/linux-can/msg00777.html
->> https://www.spinics.net/lists/linux-can/msg01150.html
->>
->> Are you prepared to add back these patches as they are necessary for
->> Flexcan CAN FD? And this Flexcan CAN FD patch set is based on these
->> patches.
+On 7/25/19 12:27 PM, Tom Prohaszka wrote:
+> Here is the backtrace:
 >=20
-> Yes, these patches will be added back.
+>  can1  456   [8]  0F 00 00 00 00 00 00 00
+>   can1  354   [8]  0F 00 00 00 00 00 00 00
+>   can1  331   [8]  0F 00 00 00 00 00 00 00
+>   can1  234   [8]  01 00 00 00 00 00 00 00
+>   can1  044   [8]  00 00 00 00 00 00 07 00
+>   can1  354   [8]^C  can1  456   [8]  0F 00 00 00 00 00 00 00
 
-I've cleaned up the first patch a bit, and pushed everything to the
-testing branch. Can you give it a test.
+Do you reproduce the problem by pressing Ctrl+c?
 
-regards,
+> root@ccimx6ulcvdp:~/tmp# BUG: using __this_cpu_add() in preemptible
+> [00000000] code: irq/194-mcp25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+
+Hmm according to the code, it should print a backtrace here...
+
+See https://elixir.bootlin.com/linux/v4.9.65/source/lib/smp_processor_id.=
+c#L46
+
+>         preempt_disable_notrace();
+>=20
+>         if (!printk_ratelimit())
+>                 goto out_enable;
+>=20
+>         printk(KERN_ERR "BUG: using %s%s() in preemptible [%08x] code: =
+%s/%d\n",
+>                 what1, what2, preempt_count() - 1, current->comm, curre=
+nt->pid);
+>=20
+>         print_symbol("caller is %s\n", (long)__builtin_return_address(0=
+));
+>         dump_stack();
+
+Can you enable some of the in-kernel debugging stuff:
+
+Kernel hacking
+	-> Memory Debugging
+		-> Debug object operations		(everyting)
+		-> Kernel memory leak detector		(enable)
+	-> Debug preemptible kernel			(enable)
+	-> Lock Debugging (spinlocks, mutexes, etc...)	(everything, but not the =
+self tests)
+	-> Stack backtrace support			(enable)
+
+=2E. and send output when it breaks.
+
 Marc
 
 --=20
@@ -178,23 +225,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---qGuZIf5lPtITr0mdKMxewU2Toy4gXun4s--
+--wXko8jenmDQK4ungOG66lvnSyMvwvgtUF--
 
---u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v
+--m8AeAbj5h4HKnkxJRH3PP8bVf1iBXazYk
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl05hlEACgkQWsYho5Hk
-nSAGjQf9Fbu0zJ+edTfTI/tu491WgJu4gVTHHnuVA+RBRWIXDx6mvzsYVr+hnmQd
-OEmiuWwTTHMfqt4RQCFLb/RWBNBtva8BwCsAplIZOAx4kV/4Y+ki4ya9yqOu7HLD
-QZuZWrUR/zawrhFWLLYzUB9JzeFHDspXa77JM7X5fn8HsqhJh0Lvtmgv3680aDHw
-hiXyotE7q86ilP7EMjytSbbJgAjJ6cGpabpFFeGwXaPF2yauRP6gT2Uhanr5CtKU
-pQlS6bKMpxoA1KIu18TVtLnneSCAVZI8EZiEwaKXeaoaRVLUxdd8aAKliFP2F735
-itt0n9Yl5SFVi6btLkktoZzmtN994Q==
-=tDGV
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl05iVYACgkQWsYho5Hk
+nSAj8Qf+Mmj0wOKDhfoxhFd+O5ZMbE72DQ19y8fuaP14gLr8T41DbwARCNH6MkWB
+Fk1sn/twbCRgaUoP74aiG22aBu/pYo/vAWEWEmhdqNcyq+nvnNtt4MreKRSQkuej
+ncZd/4m8lWGKMAoDdIYpZ7ATYp6tiK6KEgDMBoi5y4lUg8DcdTOft1EfKQtVIexj
+JDVj3wzhkop6BO/tHwu3ovspmqwi060KDF3N58uIYJBmvEEkenq0z9tZFhssNk4A
+9cHvzEoY2TvAMUgKpMs0dD+ymJqW41RviZYx5LR3Mpb2LTMjkt8kkj78qOOkDtbN
+CpJvjIsrRAKPk81XQkCB61mOAU+aoQ==
+=yNFA
 -----END PGP SIGNATURE-----
 
---u4IkX5Ie06c9SrWb94ZE9RBA6IYwhnM6v--
+--m8AeAbj5h4HKnkxJRH3PP8bVf1iBXazYk--
