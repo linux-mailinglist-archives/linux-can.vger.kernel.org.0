@@ -2,33 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BD3747BC
-	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 09:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7BB747DB
+	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 09:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbfGYHFD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Jul 2019 03:05:03 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51233 "EHLO
+        id S1729662AbfGYHKA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Jul 2019 03:10:00 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55915 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbfGYHFD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 03:05:03 -0400
+        with ESMTP id S1729448AbfGYHKA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 03:10:00 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hqXoD-0005CJ-Se; Thu, 25 Jul 2019 09:05:01 +0200
+        id 1hqXsy-0005jA-N3; Thu, 25 Jul 2019 09:09:56 +0200
 Received: from [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C5DA64385E8;
-        Thu, 25 Jul 2019 07:05:00 +0000 (UTC)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-References: <20190723130003.17733-1-socketcan@hartkopp.net>
- <20190723130003.17733-2-socketcan@hartkopp.net>
- <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
- <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D4B054385F9;
+        Thu, 25 Jul 2019 07:09:53 +0000 (UTC)
+Subject: Re: [PATCH v12 1/5] can: m_can: Create a m_can platform framework
+To:     Greg KH <gregkh@linuxfoundation.org>, Dan Murphy <dmurphy@ti.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <dbb7bdef-820d-5dcc-d7b5-a82bc1b076fb@ti.com>
+ <a8e3f2d3-18c3-3bdb-1318-8964afc7e032@ti.com>
+ <93530d94-ec65-de82-448e-f2460dd39fb9@ti.com>
+ <0f6c41c8-0071-ed3a-9e65-caf02a0fbefe@ti.com>
+ <6fa79302-ad32-7f43-f9d5-af70aa789284@ti.com>
+ <f236a88a-485c-9002-1e4a-9a5ad0e1c81f@ti.com>
+ <437b6371-8488-a0ff-fa68-d1fb5a81bb8b@ti.com>
+ <20190724064754.GC22447@kroah.com>
+ <443fe5e5-5e5c-f669-1f4b-565d9f3dd6c8@ti.com>
+ <20190725062834.GC5647@kroah.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,16 +101,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
-Message-ID: <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
-Date:   Thu, 25 Jul 2019 09:04:55 +0200
+Message-ID: <98b95fbe-adcc-c95f-7f3d-6c57122f4586@pengutronix.de>
+Date:   Thu, 25 Jul 2019 09:09:49 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
+In-Reply-To: <20190725062834.GC5647@kroah.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="GOIQa9Dtfb3xf2KGQQDzeb3UNC6sMlhf9"
+ boundary="SyeBRhgR6Wi7a7a7T18A7SOMgbULzN3PG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,105 +120,126 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---GOIQa9Dtfb3xf2KGQQDzeb3UNC6sMlhf9
-Content-Type: multipart/mixed; boundary="BMEaOxlS2crmTiGmZwuersBTUNN9ToKAl";
+--SyeBRhgR6Wi7a7a7T18A7SOMgbULzN3PG
+Content-Type: multipart/mixed; boundary="QN5jWKS6cqhMz0iPtcqSdVweoxpAUyMl7";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Message-ID: <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
-Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
-References: <20190723130003.17733-1-socketcan@hartkopp.net>
- <20190723130003.17733-2-socketcan@hartkopp.net>
- <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
- <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
-In-Reply-To: <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
+To: Greg KH <gregkh@linuxfoundation.org>, Dan Murphy <dmurphy@ti.com>
+Cc: wg@grandegger.com, davem@davemloft.net, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <98b95fbe-adcc-c95f-7f3d-6c57122f4586@pengutronix.de>
+Subject: Re: [PATCH v12 1/5] can: m_can: Create a m_can platform framework
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <dbb7bdef-820d-5dcc-d7b5-a82bc1b076fb@ti.com>
+ <a8e3f2d3-18c3-3bdb-1318-8964afc7e032@ti.com>
+ <93530d94-ec65-de82-448e-f2460dd39fb9@ti.com>
+ <0f6c41c8-0071-ed3a-9e65-caf02a0fbefe@ti.com>
+ <6fa79302-ad32-7f43-f9d5-af70aa789284@ti.com>
+ <f236a88a-485c-9002-1e4a-9a5ad0e1c81f@ti.com>
+ <437b6371-8488-a0ff-fa68-d1fb5a81bb8b@ti.com>
+ <20190724064754.GC22447@kroah.com>
+ <443fe5e5-5e5c-f669-1f4b-565d9f3dd6c8@ti.com>
+ <20190725062834.GC5647@kroah.com>
+In-Reply-To: <20190725062834.GC5647@kroah.com>
 
---BMEaOxlS2crmTiGmZwuersBTUNN9ToKAl
+--QN5jWKS6cqhMz0iPtcqSdVweoxpAUyMl7
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 7/24/19 8:07 PM, Oliver Hartkopp wrote:
-> On 24.07.19 15:36, Marc Kleine-Budde wrote:
->=20
->>> @@ -425,23 +502,22 @@ static void can_can_gw_rcv(struct sk_buff *skb,=
- void *data)
->>>   		int max_len =3D nskb->len - offsetof(struct canfd_frame, data);
+On 7/25/19 8:28 AM, Greg KH wrote:
+> On Wed, Jul 24, 2019 at 10:36:02AM -0500, Dan Murphy wrote:
+>> Hello
 >>
->> I know, this is original code...but max_len can either be 8 (for CAN
->> frames) or 64 (for CAN-FD frames)? Because we always have full can_fra=
-me
->> or canfd_frame in the skb, right?  I assume a lot more will break if t=
-he
->> len neither 8 nor 64.
->=20
-> Yes. The code has been added recently for commit 0aaa81377c5a0 ("can:=20
-> gw: ensure DLC boundaries after CAN frame modification") to check the=20
-> data length after the CAN frame modification.
->=20
-> And yes, we only have proper CAN (FD) frames in our skbs which have a=20
-> special ethertype :-)
->=20
->>>   		/* dlc may have changed, make sure it fits to the CAN frame */
->>> -		if (cf->len > max_len)
->>> -			goto out_delete;
->>> +		if (cf->len > max_len) {
->>> +			/* delete frame due to misconfiguration */
->>> +			gwj->deleted_frames++;
->>> +			kfree_skb(nskb);
->>> +			return;
->>> +		}
->>>  =20
->>> -		/* check for checksum updates in classic CAN length only */
->>> -		if (gwj->mod.csumfunc.crc8) {
->>> -			if (cf->len > 8)
->>> -				goto out_delete;
->>> +		/* ensure a valid CAN (FD) frame data length */
->>> +		cf->len =3D validate_len[cf->len];
+>> On 7/24/19 1:47 AM, Greg KH wrote:
+>>> On Tue, Jul 23, 2019 at 10:14:14AM -0500, Dan Murphy wrote:
+>>>> Hello
+>>>>
+>>>> On 7/10/19 7:08 AM, Dan Murphy wrote:
+>>>>> Hello
+>>>>>
+>>>>> On 6/17/19 10:09 AM, Dan Murphy wrote:
+>>>>>> Marc
+>>>>>>
+>>>>>> On 6/10/19 11:35 AM, Dan Murphy wrote:
+>>>>>>> Bump
+>>>>>>>
+>>>>>>> On 6/6/19 8:16 AM, Dan Murphy wrote:
+>>>>>>>> Marc
+>>>>>>>>
+>>>>>>>> Bump
+>>>>>>>>
+>>>>>>>> On 5/31/19 6:51 AM, Dan Murphy wrote:
+>>>>>>>>> Marc
+>>>>>>>>>
+>>>>>>>>> On 5/15/19 3:54 PM, Dan Murphy wrote:
+>>>>>>>>>> Marc
+>>>>>>>>>>
+>>>>>>>>>> On 5/9/19 11:11 AM, Dan Murphy wrote:
+>>>>>>>>>>> Create a m_can platform framework that peripheral
+>>>>>>>>>>> devices can register to and use common code and register sets=
+=2E
+>>>>>>>>>>> The peripheral devices may provide read/write and configurati=
+on
+>>>>>>>>>>> support of the IP.
+>>>>>>>>>>>
+>>>>>>>>>>> Acked-by: Wolfgang Grandegger <wg@grandegger.com>
+>>>>>>>>>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>>>>>>>>>>> ---
+>>>>>>>>>>>
+>>>>>>>>>>> v12 - Update the m_can_read/write functions to
+>>>>>>>>>>> create a backtrace if the callback
+>>>>>>>>>>> pointer is NULL. - https://lore.kernel.org/patchwork/patch/10=
+52302/
+>>>>>>>>>>>
+>>>>>>>>>> Is this able to be merged now?
+>>>>>>>>> ping
+>>>>>> Wondering if there is anything else we need to do?
+>>>>>>
+>>>>>> The part has officially shipped and we had hoped to have driver
+>>>>>> support in Linux as part of the announcement.
+>>>>>>
+>>>>> Is this being sent in a PR for 5.3?
+>>>>>
+>>>>> Dan
+>>>>>
+>>>> Adding Greg to this thread as I have no idea what is going on with t=
+his.
+>>> Why me?  What am I supposed to do here?  I see no patches at all to d=
+o
+>>> anything with :(
 >>
->> This looks strange to me, but I cannot say if I don't userstand this o=
-r
->> if there really is a potential problem:
->> - first you calculate max_len
->> - the cf->len > max_len is discarded
+>> I am not sure who to email. The maintainer seems to be on hiatus or su=
+per
+>> busy with other work.
 >=20
-> Right. In this case the frame modification leads to a length value=20
-> beyond 8/64 byte, which is then discarded.
+> Who is the maintainer?
+
+That's me.
+
+>> So I added you to see if you know how to handle this.=C2=A0 Wolfgang A=
+cked it but
+>> he said Marc needs to pull
 >=20
->> - but then cf->len is "rounded up" via validate_len[].
+> Then work with them, again, what can I do if I can't even see the
+> patches here?
+
+The patches are included in a pull request to David Miller
+(net-next/master, the CAN upstream), which has already have been merged.
+
+>> it in.=C2=A0 We have quite a few users of this patchset. I have been h=
+osting the
+>> patchset in a different tree.
 >>
->> What's the purpose of the last step?
+>> These users keep pinging us for upstream status and all we can do is p=
+oint
+>> them to the
+>>
+>> LKML to show we are continuing to pursue inclusion.
+>>
+>> https://lore.kernel.org/patchwork/project/lkml/list/?series=3D393454
 >=20
-> Ha, good question :-)
->=20
-> The reason for this results from the non-linear data length code for CA=
-N=20
-> FD data length.
->=20
-> For CAN you can have 0, 1, 2, 3, 4, 5, 6, 7, 8
->=20
-> For CAN FD it is 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 16, 20, 24, 32, 48, 64
->=20
-> If the CAN FD length was 12 before the modification and the modificatio=
-n=20
-> was to "set bit 0 in the length field" then you get 13.
-
-ok
-
-> But the length value of 13 is an illegal value for CAN FD length and ca=
-n=20
-> not been sent by a CAN FD controller.
-
-ok, but that doesn't matter, because all CAN-FD drivers must convert
-from struct canfd_frame::len to the dlc (=3D=3D their register value)
-anyways using the can_len2dlc() function.
-
-> Therefore we need a round-up to get the next valid CAN FD length value =
-
-> (in our example it get's from 13 to 16).
-
-I don't think this is needed, the user space might send such packets and
-the drivers have to deal with then anyways.
+> Looks sane, work with the proper developers, good luck!
 
 Marc
 
@@ -220,23 +250,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---BMEaOxlS2crmTiGmZwuersBTUNN9ToKAl--
+--QN5jWKS6cqhMz0iPtcqSdVweoxpAUyMl7--
 
---GOIQa9Dtfb3xf2KGQQDzeb3UNC6sMlhf9
+--SyeBRhgR6Wi7a7a7T18A7SOMgbULzN3PG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl05VJcACgkQWsYho5Hk
-nSBFNAgAj65zmBix8J3r8YW1jxCOIGtM67YRXG7tLC7cF/jnbsmmlDP63XqMSUnL
-e6XyQSGz7mnffwGT2KBMFtxfu3hw4m+slYA8+JOrPNVYJhTULAJoh8LgvbD8g5tT
-RkGgUITzdhTGuF71fZQu3qTPxfus0YRMSGtIfyDe0FS4DOos3tPL1TkVEA2TFbr2
-GPJwi5tzPCNBVqwQQUngAODwnm2cO11o6KlsDsbdsV0sM9m1sIZw99XXbf3zbZz9
-4/otML5OlRzJGLNxVb6NPqeiGzNDC3fl7gXk46gl/IeteMSgVvRszw0gFjoFfR9G
-Cn/Tvv430Bw893I3yo86An/yrTYsZA==
-=C7+e
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl05Vb0ACgkQWsYho5Hk
+nSDmHQgAqjfWPPj6SIVuU5r1vwRl+igXIiKKf5wbNNThPsVrtWr/rUGl/RIDYCNr
+UsAjTR2XxEte/MegGEJHF+ds+N5ObG8sQbLED6VqlKCcnip40VamkBVnRQD7xfsi
+4mseg99aTg3ITp0VQoD241wbuh3mA/wrHYzBdHFF5lH2rRU4P6G+CxsgW/uyCU2T
+SmrTsvka70aovp+8ixOOxWlUfZQ5rF/oBboCZ2DUTwJGIRtcdy1BP2WyP+lATRJ3
+h8NP29gzo/V0ri1nDxX81N0qva+yMryRIkONE+mL956SCKhleXVtB+Qs4YFcbRfS
+sDV5Jj+RP7+58G/SmcwupdZTdd0EQA==
+=RQ+I
 -----END PGP SIGNATURE-----
 
---GOIQa9Dtfb3xf2KGQQDzeb3UNC6sMlhf9--
+--SyeBRhgR6Wi7a7a7T18A7SOMgbULzN3PG--
