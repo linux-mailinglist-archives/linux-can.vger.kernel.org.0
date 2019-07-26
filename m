@@ -2,276 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4805D751A1
-	for <lists+linux-can@lfdr.de>; Thu, 25 Jul 2019 16:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3627C75C88
+	for <lists+linux-can@lfdr.de>; Fri, 26 Jul 2019 03:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387920AbfGYOpJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Jul 2019 10:45:09 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54041 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387829AbfGYOpJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jul 2019 10:45:09 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1hqezT-0004X6-RW; Thu, 25 Jul 2019 16:45:07 +0200
-Received: from [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d] (unknown [IPv6:2003:c7:729:c79e:c9d4:83d5:b99:4f4d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CEBDD438F58;
-        Thu, 25 Jul 2019 14:45:06 +0000 (UTC)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-References: <20190723130003.17733-1-socketcan@hartkopp.net>
- <20190723130003.17733-2-socketcan@hartkopp.net>
- <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
- <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
- <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
- <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
-Message-ID: <1684a411-e05c-a7a0-2b65-ceefc68e6b12@pengutronix.de>
-Date:   Thu, 25 Jul 2019 16:45:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1725887AbfGZBZv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Jul 2019 21:25:51 -0400
+Received: from mail-eopbgr60064.outbound.protection.outlook.com ([40.107.6.64]:20510
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725819AbfGZBZv (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 25 Jul 2019 21:25:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gfLJYf+rtJMpG+HRVitNWw7kr/SwvC+zPrce+0gb+MSRCUfmIh6YXbqzWY4q+FVHvcHCI9Q6OAz4SnCsRxD/ENtoovM2rqYQ3Ce1x4HsdvSiOJjAqbkAXY962f5/tIRhnVE45zd48wrfB68sD7YTiolwqGH3dLr8UGVvlZ5WDv5lyDXwXvl5KVLQwlxLH2F/cId5GNXIDFa183qDXLq8WstrvVuyel6L3gvOZtPgUaUVZJTvqHAQgHryFaEWKOS0aUSKSoiMCSBwgqZHnw1uC7w3Y4eWhPyOfenVkzLJeJPrypMhIuawRKN5HBSu4PNRTsJ7mmJJEAnvNDmvr3kuoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9AK9zy5fK3hI/A18HMF3gwpFWIp5axeMs+ynfM9Y2Cg=;
+ b=I4X3IIG3luXqaE6SaJdgSPacrtOnG1mHPcoEz29wjB+k1vVKBXsAAoyKrZ7NVDYK38D8zSYgP+DSVwyUf7+74xrYkQrauRWJ24F+DK5hqroChe+C6KxKqkrI1AA7XOkP2Ilr/oHeMbFn0LErvi+uDaHhsHx8qFVQ52NhcIAjTDCP1jPmx0E2jYZ8lVfLcrqBufQgUJn//B9ErMY6dRRGH516FDz+fHCMPqAceSPOx1B4abbO/B8L/XF8HOynxU2zg9jC5iD6gXLZ1Abuz+P+b5O9Wt0z68tJSjSNw357rDQ1R+yNRx9GVl6LzzUx6Qx1/y4dX3I3CSmcwZsBM+sTYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=nxp.com;dmarc=pass action=none header.from=nxp.com;dkim=pass
+ header.d=nxp.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9AK9zy5fK3hI/A18HMF3gwpFWIp5axeMs+ynfM9Y2Cg=;
+ b=HiWjYoqXO+4l2xtzq88sJtPIyn3/cSV4ZTXLWfko+xrabqV2OzWJR6itT1fKjAEig7DiFCLOjZzvLd17UTQQroZmjSr2NBFPhO7AseaCoIA7cB7jjQOR1Nwstg6NHpVGNbAjGcc+Ge0zmm39CtCXS80cgNHn8uQ1PHHhbVTyRZ4=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB5130.eurprd04.prod.outlook.com (20.176.233.32) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2094.16; Fri, 26 Jul 2019 01:25:47 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::6553:8d04:295c:774b]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::6553:8d04:295c:774b%5]) with mapi id 15.20.2094.013; Fri, 26 Jul 2019
+ 01:25:47 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
+Thread-Topic: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
+Thread-Index: AQHVOIgqonFULiHPO0eSKFSJ3ULGeqbbAsWQgAAINwCAAC3BgIAA9gtA
+Date:   Fri, 26 Jul 2019 01:25:47 +0000
+Message-ID: <DB7PR04MB46180B39F68030C4EA5E2533E6C00@DB7PR04MB4618.eurprd04.prod.outlook.com>
+References: <20190712075926.7357-1-qiangqing.zhang@nxp.com>
+ <DB7PR04MB461831872271A98E741FF68AE6C10@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <22ca8787-fa99-50bb-af1a-098866542e42@pengutronix.de>
+ <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
+In-Reply-To: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 33ea7199-2341-4ba2-df39-08d71168302c
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB5130;
+x-ms-traffictypediagnostic: DB7PR04MB5130:
+x-ms-exchange-purlcount: 3
+x-microsoft-antispam-prvs: <DB7PR04MB5130A774C815DBD7784269D0E6C00@DB7PR04MB5130.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-forefront-prvs: 01106E96F6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(396003)(346002)(376002)(366004)(13464003)(199004)(189003)(446003)(99286004)(6116002)(2906002)(11346002)(52536014)(8676002)(81156014)(186003)(110136005)(81166006)(86362001)(76116006)(476003)(2501003)(5660300002)(102836004)(53386004)(6436002)(6246003)(76176011)(71200400001)(3846002)(966005)(26005)(71190400001)(316002)(53546011)(55016002)(74316002)(4326008)(66946007)(14444005)(64756008)(53936002)(25786009)(486006)(66476007)(66556008)(7736002)(68736007)(6506007)(33656002)(305945005)(14454004)(8936002)(6306002)(7696005)(229853002)(66446008)(54906003)(66066001)(256004)(478600001)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5130;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: VlCMM41ECEpCMnLOteyVZ+YDSUUZA3uEEMwi0f4Jog85TcnCdtGaHCQhLZ8snLgQO4yFQ5lBztmL8bBLiZELgnBOGM9iAido7tQ0EJuW13sgcxT/OWjlaXop+9ae+Sr+7wTrspABgIWKq572d6bJ4AEGr1kLt61dBhjLuZFjs8wrUKpTnnBZBm8X65B2Nr7ttH/EsV/XXZBeo3/XEVrYeWcCd1ZOJNPHKhU7/WQO8q+7jDNJDrbs6QOTe6sZRp4q2TlkRfqzlyWAVR6yq3Xes3VDZfN7phtM/e4BV/bV7xoM31d/iuyUTDIEnzVblkztjIfucArumpCizLdkrTULgzc3AkSzmqWf8oFm+0auNfQPELyQOx77/oG3HO3G9G2VZEMicQQYVg5WX3GVKUXa/bMK/TBv00+I3gEIYU2rtkE=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="3VUmDhRvfAUNOgnn7lTGBICmRniaU6VX3"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33ea7199-2341-4ba2-df39-08d71168302c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2019 01:25:47.7433
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qiangqing.zhang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5130
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---3VUmDhRvfAUNOgnn7lTGBICmRniaU6VX3
-Content-Type: multipart/mixed; boundary="Gwfnas1cGmm2wuxJIA8zA7qndfi6MuDEy";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Message-ID: <1684a411-e05c-a7a0-2b65-ceefc68e6b12@pengutronix.de>
-Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
-References: <20190723130003.17733-1-socketcan@hartkopp.net>
- <20190723130003.17733-2-socketcan@hartkopp.net>
- <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
- <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
- <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
- <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
-In-Reply-To: <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
-
---Gwfnas1cGmm2wuxJIA8zA7qndfi6MuDEy
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-
-On 7/25/19 3:59 PM, Oliver Hartkopp wrote:
-> On 25.07.19 09:04, Marc Kleine-Budde wrote:
->> On 7/24/19 8:07 PM, Oliver Hartkopp wrote:
->=20
->>> If the CAN FD length was 12 before the modification and the modificat=
-ion
->>> was to "set bit 0 in the length field" then you get 13.
->>
->> ok
->>
->>> But the length value of 13 is an illegal value for CAN FD length and =
-can
->>> not been sent by a CAN FD controller.
->>
->> ok, but that doesn't matter, because all CAN-FD drivers must convert
->> from struct canfd_frame::len to the dlc (=3D=3D their register value)
->> anyways using the can_len2dlc() function.
->>
->>> Therefore we need a round-up to get the next valid CAN FD length valu=
-e
->>> (in our example it get's from 13 to 16).
->>
->> I don't think this is needed, the user space might send such packets a=
-nd
->> the drivers have to deal with then anyways.
->=20
-> Ok, maybe pointing to the driver lead to a wrong discussion.
->=20
-> We manipulate the length info and end with a CAN FD frame which has a=20
-> length which is unspecified in the CAN standard.
-
-Every user can generate such frames...
-
-> A valid CAN FD frame can not have a data length of 13.
-
-Ok, let's put it this way: after decoding the dlc value from a real CAN
-FD frame you received over the wire, the length will not be 13.
-
-> So we fix this up after manipulation.
-
-Why?
-
-I don't know if this is possible with can-gw, but can you do other
-calculations based on the len, so you might need the sanitized length.
-
-Every user can generate such frames and the drivers have to deal with it
-anyways.
-
-> Neither the CAN controller
-
-In the TX path the CAN controller driver will translate the len into the
-dlc, so the CAN _controller_ will not see the wrong length of e.g. 13.
-
-> nor the user reading from a socket should ever get an invalid CAN FD
-> frame.
-
-What happens if the user sends a CAN FD frame with len =3D=3D 13? All hw
-drivers will convert this into a DLC.
-
-What about the loopback'ed frames?
-I don't have CAN FD hardware, so I cannot test.
-What about vcan?
-
-vcan doesn't do the len -> dlc -> len conversion:
-
-I manupulated the cansend to send a CANFD frame with the non sanitized le=
-n:
-
-> index 8db9fd21aa99..16dbd867f493 100644
-> --- a/cansend.c
-> +++ b/cansend.c
-> @@ -132,7 +132,7 @@ int main(int argc, char **argv)
->                 }
-> =20
->                 /* ensure discrete CAN FD length values 0..8, 12, 16, 2=
-0, 24, 32, 64 */
-> -               frame.len =3D can_dlc2len(can_len2dlc(frame.len));
-> +               //frame.len =3D can_dlc2len(can_len2dlc(frame.len));
->         }
-
-Then I see:
-
-> ./cansend vcan0 '5A1##0112233445566778899aa'
-> write(3, "\xa1\x05\x00\x00\x0a\x00\x00\x00\x11\x22\x33\x44\x55\x66\x77\=
-x88\x99\xaa\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"..., =
-72) =3D 72
-                             ^^^
-
-len =3D=3D 0xa =3D=3D 10
-
-and the corresponding candump:
-
-> recvmsg(3, {msg_name=3D{sa_family=3DAF_CAN, sa_data=3D"\x00\x00\x05\x00=
-\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"},
-> msg_namelen=3D24->16,
-> msg_iov=3D[{iov_base=3D"\xa1\x05\x00\x00\x0a\x00\x00\x00\x11\x22\x33\x4=
-4\x55\x66\x77\x88\x99\xaa\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00=
-\x00\x00"...,
-                                       ^^^
-len =3D=3D 0xa =3D=3D 10
-
-> iov_len=3D72}], msg_iovlen=3D1, msg_controllen=3D0, msg_flags=3DMSG_DON=
-TROUTE},
-> 0) =3D 72
-
-Which is then displayed as:
-
->   vcan0  5A1  [10]  11 22 33 44 55 66 77 88 99 AA
-
-Do we need to sanitize the CAN FD frames somewhere in the stack? Note
-you can completely bypass the PF_CAN and insert the frames into the
-packet scheduler so they end up unchanged in the driver.
-
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---Gwfnas1cGmm2wuxJIA8zA7qndfi6MuDEy--
-
---3VUmDhRvfAUNOgnn7lTGBICmRniaU6VX3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl05wG4ACgkQWsYho5Hk
-nSBxRQf/cMo8EicxucnF5SW1FwGj3i2Y14kv7W3ymZqyBwLherY8Kdlvn8CoXhJq
-d6Ow6foe6R3kg82PzlH4Kc4GllDQMUPIXqA3TjDUisUIv/iK9toeTWuh5Vh2aN2w
-yPvmWMO0hl+xsDbafIom0ROn2yhgdcV+5diVO2i7YgTc8LR8FdHJK+r/iHypVASS
-Q5oH0icy6o3ttKhkiH7oQ1z7Zb6S1jGxQBFIhkQ8s6bAi1Is36FIxpR3xPq8iwU9
-ehSskqKMfRfkFdX2wmmu2h+cGiq9+VmNDNRoiNfkMctwczp3B7hCdlrbwrx7xc+L
-z4pGC3Sjq8xuzT0Ca4/YQkfBKei7dQ==
-=2ghy
------END PGP SIGNATURE-----
-
---3VUmDhRvfAUNOgnn7lTGBICmRniaU6VX3--
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE1hcmMgS2xlaW5lLUJ1ZGRl
+IDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IDIwMTnlubQ35pyIMjXml6UgMTg6MzcNCj4g
+VG86IEpvYWtpbSBaaGFuZyA8cWlhbmdxaW5nLnpoYW5nQG54cC5jb20+OyBsaW51eC1jYW5Admdl
+ci5rZXJuZWwub3JnDQo+IENjOiB3Z0BncmFuZGVnZ2VyLmNvbTsgZGwtbGludXgtaW14IDxsaW51
+eC1pbXhAbnhwLmNvbT47DQo+IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6
+IFtQQVRDSCAwLzhdIGNhbjogZmxleGNhbjogYWRkIENBTiBGRCBzdXBwb3J0IGZvciBOWFAgRmxl
+eGNhbg0KPiANCj4gT24gNy8yNS8xOSA5OjUzIEFNLCBNYXJjIEtsZWluZS1CdWRkZSB3cm90ZToN
+Cj4gPiBPbiA3LzI1LzE5IDk6MzggQU0sIEpvYWtpbSBaaGFuZyB3cm90ZToNCj4gPj4gS2luZGx5
+IHBpbmdpbmcuLi4NCj4gPj4NCj4gPj4gQWZ0ZXIgeW91IGdpdCBwdWxsIHJlcXVlc3QgZm9yIGxp
+bnV4LWNhbi1uZXh0LWZvci01LjQtMjAxOTA3MjQsIHNvbWUgcGF0Y2hlcw0KPiBhcmUgbWlzc2lu
+ZyBmcm9tIGxpbnV4LWNhbi1uZXh0L3Rlc3RpbmcuDQo+ID4+IGNhbjogZmxleGNhbjogZmxleGNh
+bl9tYWlsYm94X3JlYWQoKSBtYWtlIHVzZSBvZiBmbGV4Y2FuX3dyaXRlNjQoKSB0bw0KPiA+PiBt
+YXJrIHRoZSBtYWlsYm94IGFzIHJlYWQNCj4gPj4gY2FuOiBmbGV4Y2FuOiBmbGV4Y2FuX2lycSgp
+OiBhZGQgc3VwcG9ydCBmb3IgVFggbWFpbGJveCBpbiBpZmxhZzENCj4gPj4gY2FuOiBmbGV4Y2Fu
+OiBmbGV4Y2FuX3JlYWRfcmVnX2lmbGFnX3J4KCk6IG9wdGltaXplIHJlYWRpbmcNCj4gPj4gY2Fu
+OiBmbGV4Y2FuOiBpbnRyb2R1Y2Ugc3RydWN0IGZsZXhjYW5fcHJpdjo6dHhfbWFzayBhbmQgbWFr
+ZSB1c2Ugb2YNCj4gPj4gaXQNCj4gPj4gY2FuOiBmbGV4Y2FuOiBjb252ZXJ0IHN0cnVjdCBmbGV4
+Y2FuX3ByaXY6OnJ4X21hc2t7MSwyfSB0byByeF9tYXNrDQo+ID4+IGNhbjogZmxleGNhbjogcmVt
+b3ZlIFRYIG1haWxib3ggYml0IGZyb20gc3RydWN0DQo+ID4+IGZsZXhjYW5fcHJpdjo6cnhfbWFz
+a3sxLDJ9DQo+ID4+IGNhbjogZmxleGNhbjogcmVuYW1lIHN0cnVjdCBmbGV4Y2FuX3ByaXY6OnJl
+Z19pbWFza3sxLDJ9X2RlZmF1bHQgdG8NCj4gPj4gcnhfbWFza3sxLDJ9DQo+ID4+IGNhbjogZmxl
+eGNhbjogZmxleGNhbl9pcnEoKTogcmVuYW1lIHZhcmlhYmxlIHJlZ19pZmxhZyAtPg0KPiA+PiBy
+ZWdfaWZsYWdfcngNCj4gPj4gY2FuOiBmbGV4Y2FuOiByZW5hbWUgbWFjcm8gRkxFWENBTl9JRkxB
+R19NQigpIC0+DQo+IEZMRVhDQU5fSUZMQUcyX01CKCkNCj4gPj4NCj4gPj4gWW91IGNhbiByZWZl
+ciB0byBiZWxvdyBsaW5rIGZvciB0aGUgcmVhc29uIG9mIGFkZGluZyBhYm92ZSBwYXRjaGVzOg0K
+PiA+PiBodHRwczovL3d3dy5zcGluaWNzLm5ldC9saXN0cy9saW51eC1jYW4vbXNnMDA3NzcuaHRt
+bA0KPiA+PiBodHRwczovL3d3dy5zcGluaWNzLm5ldC9saXN0cy9saW51eC1jYW4vbXNnMDExNTAu
+aHRtbA0KPiA+Pg0KPiA+PiBBcmUgeW91IHByZXBhcmVkIHRvIGFkZCBiYWNrIHRoZXNlIHBhdGNo
+ZXMgYXMgdGhleSBhcmUgbmVjZXNzYXJ5IGZvcg0KPiA+PiBGbGV4Y2FuIENBTiBGRD8gQW5kIHRo
+aXMgRmxleGNhbiBDQU4gRkQgcGF0Y2ggc2V0IGlzIGJhc2VkIG9uIHRoZXNlDQo+ID4+IHBhdGNo
+ZXMuDQo+ID4NCj4gPiBZZXMsIHRoZXNlIHBhdGNoZXMgd2lsbCBiZSBhZGRlZCBiYWNrLg0KPiAN
+Cj4gSSd2ZSBjbGVhbmVkIHVwIHRoZSBmaXJzdCBwYXRjaCBhIGJpdCwgYW5kIHB1c2hlZCBldmVy
+eXRoaW5nIHRvIHRoZSB0ZXN0aW5nDQo+IGJyYW5jaC4gQ2FuIHlvdSBnaXZlIGl0IGEgdGVzdC4N
+Cg0KSGkgTWFyYywNCg0KQm90aCBDbGFzc2ljIENBTiBhbmQgQ0FOIEZEIGNhbiB3b3JrIGZpbmUg
+b24gbXkgc2lkZSB0ZXN0LCB0aGFuayB5b3UgZm9yIHlvdXIga2luZGx5IHJldmlldy4NCg0KQmVz
+dCBSZWdhcmRzLA0KSm9ha2ltIFpoYW5nDQo+IHJlZ2FyZHMsDQo+IE1hcmMNCj4gDQo+IC0tDQo+
+IFBlbmd1dHJvbml4IGUuSy4gICAgICAgICAgICAgICAgICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAg
+ICAgICAgICB8DQo+IEluZHVzdHJpYWwgTGludXggU29sdXRpb25zICAgICAgICB8IFBob25lOiAr
+NDktMjMxLTI4MjYtOTI0ICAgICB8DQo+IFZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAg
+ICB8IEZheDogICArNDktNTEyMS0yMDY5MTctNTU1NSB8DQo+IEFtdHNnZXJpY2h0IEhpbGRlc2hl
+aW0sIEhSQSAyNjg2ICB8IGh0dHA6Ly93d3cucGVuZ3V0cm9uaXguZGUgICB8DQoNCg==
