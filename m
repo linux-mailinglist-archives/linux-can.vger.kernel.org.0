@@ -2,93 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE9178A52
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2019 13:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39650792C9
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2019 20:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387450AbfG2LTE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 Jul 2019 07:19:04 -0400
-Received: from de-out1.bosch-org.com ([139.15.230.186]:42622 "EHLO
-        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387576AbfG2LTE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 Jul 2019 07:19:04 -0400
-X-Greylist: delayed 4267 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 07:19:03 EDT
-Received: from fe0vm1650.rbesz01.com (unknown [139.15.230.188])
-        by si0vms0216.rbdmz01.com (Postfix) with ESMTPS id 45xxyt2TKdz1XLG7Q;
-        Mon, 29 Jul 2019 13:19:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=escrypt.com;
-        s=key1-intmail; t=1564399142;
-        bh=b69hpWt00mKwqXSGYZ/AyETIvAw/cFN7S7wBPDfpquo=; l=10;
-        h=From:Subject:From:Reply-To:Sender;
-        b=cDW+mXzgg33OdIRkXnYnmjufZQaGUObQrwglCQMDurjMdjKFapze5M15YLlmtgTEu
-         gqa0oCTeffYBRJ5smCbDh+/MWVAGXNHgFiregA4EFEHfseUdoF+9cnLcwgRxL+ax+f
-         sFKtN310ENddh76g7bigKn+UVy5/AnR6dCsF+5AU=
-Received: from fe0vm1740.rbesz01.com (unknown [10.58.172.176])
-        by fe0vm1650.rbesz01.com (Postfix) with ESMTPS id 45xxyt0n0Vz1QY;
-        Mon, 29 Jul 2019 13:19:02 +0200 (CEST)
-X-AuditID: 0a3aad14-cf7ff700000027e4-8d-5d3ed625fded
-Received: from fe0vm1651.rbesz01.com ( [10.58.173.29])
-        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by fe0vm1740.rbesz01.com (SMG Outbound) with SMTP id 20.44.10212.526DE3D5; Mon, 29 Jul 2019 13:19:01 +0200 (CEST)
-Received: from FE-MBX2038.de.bosch.com (fe-mbx2038.de.bosch.com [10.3.231.48])
-        by fe0vm1651.rbesz01.com (Postfix) with ESMTPS id 45xxyr6zjGzvkB;
-        Mon, 29 Jul 2019 13:19:00 +0200 (CEST)
-Received: from FE-MBX2038.de.bosch.com (10.3.231.48) by
- FE-MBX2038.de.bosch.com (10.3.231.48) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Mon, 29 Jul 2019 13:19:00 +0200
-Received: from FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2]) by
- FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2%2]) with mapi id
- 15.01.1713.008; Mon, 29 Jul 2019 13:19:00 +0200
-From:   "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
-        <fixed-term.Konstantin.Buecheler@escrypt.com>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        id S2387465AbfG2SHK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 Jul 2019 14:07:10 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47296 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387445AbfG2SHK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 Jul 2019 14:07:10 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x6TI76sc006197;
+        Mon, 29 Jul 2019 13:07:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1564423626;
+        bh=AKFELG+ezMD88zUiFgJwQ2qYzeJA1maECZ/eCcsQ5BI=;
+        h=Subject:To:References:From:Date:In-Reply-To;
+        b=CBKqAuwj48L5GMVzsMDe9zcI4EbfErf14jumS2A0llT4PJlGH5q0skLfRZS7tKBPj
+         zYLvV0zahvOBAI/YSVUYRFb/J2mdQjFpIkn5QRbS+iqsD+yxbDZUQ6z+D7dKVzsblR
+         puBi1Noqjc7uAPBW8bSmiu0R8siLIUCRCItPAUws=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x6TI760D030092
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 29 Jul 2019 13:07:06 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 29
+ Jul 2019 13:07:06 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 29 Jul 2019 13:07:06 -0500
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x6TI75uW080583;
+        Mon, 29 Jul 2019 13:07:06 -0500
+Subject: Re: tcan4x5x on a Raspberry Pi
+To:     "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
+        <fixed-term.Konstantin.Buecheler@escrypt.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "dmurphy@ti.com" <dmurphy@ti.com>
-Subject: tcan4x5x on a Raspberry Pi
-Thread-Topic: tcan4x5x on a Raspberry Pi
-Thread-Index: AdVF/c5mwtK0bcvDSY+DXrUhyfKmYQ==
-Date:   Mon, 29 Jul 2019 11:19:00 +0000
-Message-ID: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.23.200.63]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+References: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <d1badcdb-7635-705d-35d5-448297e8fafa@ti.com>
+Date:   Mon, 29 Jul 2019 13:07:06 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA21SYUxbZRTltqV7a/bs49GOSye4PF3ihkPALTaAjBgT2R/FuMQ5rVrGo63S
-        FvtaBsxsLLpZYQT84dYR13XYadI4hI4NQusYXZB1kCy6DUlk01goFIRsbgIKFvtoWfvDfyfn
-        3HPufed9hJC2EgpCZzCzJoO6khFLRJL88xnbt4wUqXLGzmYpG4e6kpWuhS+Eyh8cG4uFJYOj
-        3YKSB+7MUsE+SWE5W6mrZk3PFr0n0donZ6GqXVDjPdUorocZaACCQGoH2o6UNMB6gqZsApys
-        39wAkgj2ADadCwiiwixgv18fFS4DfnneCbwgpnT4+YWW1SEZVYUt0ydFPBZSW3B+ZiCZx6nU
-        kzg0cU8cnXka5zp+EfGLZVQ2Dt/W8bQoMj7ov7IaQ1L5GDh6cR2PgcrAjo4bwmhkGrqDC6uR
-        SFHo9EZ5pOQYCoRj/Gacu9obO+EZdHj+FEdxFn59dkYYzU9B/6lxUQvIWxNiWxMsrQmW1gSL
-        A0QukFewOdX63Od35GSbyliuLic3e79R74boX5H1wJKvwgcCAnywkxAwcvLCSqGKfqzMWF6r
-        VXPad02WSpZjFOTFDKWKTn1Ec5YyvY7jdEaDD5AQMjKyiylQ0WS5uraONRmjNh9sIkRMGqkh
-        Xn2bpjRqM/sBy1axpjW1gCAYJDNvFqnoFBOrYWsqdJXmNZnJICEpKYnemKgkrhUQ633wHLEh
-        slt1KxJBclVqPafTxOzpUTu9xsat12E30RI63SYk+gfsbUJaZDAaWEUamcSnUPy81mJ4dIfi
-        cXJqPF9FyxOEeNY0BIEAJpWs5c0bIo8+fgGS3XxpKTEybspzRzz84136fgzwpDcMODo9KMWp
-        8E0pWp33KPzM256Hi79dysOw7ZIS7c6+F3Dxj44XcdQxV4L2u579aHO7NBjuWdbh/cC193Fq
-        6bQeB8aDNTi2EPwIV76yH8KVf4ebALsm+s8ALp9xtwH2NVmdgNceftILOO7v8Uaw23YFsPl6
-        ux/wL2twGNDTNT8CuPjtjTuA1t/9k4B279EQTEe6FkS69kpXuzarzf/TdYyNf6qiHqqlodeO
-        bSp9qL2zjIfYb37SlcuuLjbfKt2TXDi5N7048/VQ77atlsOZszsP1x4/4f3nre6Xet/4W9p5
-        0GU5dvn29jrTXu7juy/vKWHETxVPvKIXpP/o+rQx675raJ0nvOsd74PO4z8fOGg81/dht7zn
-        u+bdb+7buuuJXwccnbKRA4GF+SMFjIjTqnO3CU2c+j9rJVv6mwQAAA==
+In-Reply-To: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi all,=20
-
-I am currently working on a project where I am trying to use the tcan4550 c=
-hip with a Raspberry PI 3B.
-I am struggling to create a working device tree overlay file for the Raspbe=
-rry Pi.
-Has anyone here tried this already? I would appreciate any help.=20
-
-Thanks,
 Konstantin
 
+On 7/29/19 6:19 AM, FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu) wrote:
+> Hi all,
+>
+> I am currently working on a project where I am trying to use the tcan4550 chip with a Raspberry PI 3B.
+> I am struggling to create a working device tree overlay file for the Raspberry Pi.
+> Has anyone here tried this already? I would appreciate any help.
+
+Are you using the driver from net-next?
+
+https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/drivers/net/can/m_can
+
+DT documentation here
+
+https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+
+I did the development on a BeagleBone Black.
+
+Dan
+
+> Thanks,
+> Konstantin
+>
