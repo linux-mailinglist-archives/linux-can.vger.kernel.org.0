@@ -2,298 +2,213 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 536807813A
-	for <lists+linux-can@lfdr.de>; Sun, 28 Jul 2019 21:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BC978755
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2019 10:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbfG1Tha (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 28 Jul 2019 15:37:30 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:36953 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbfG1Th3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 28 Jul 2019 15:37:29 -0400
-Received: by mail-lf1-f66.google.com with SMTP id c9so40475020lfh.4
-        for <linux-can@vger.kernel.org>; Sun, 28 Jul 2019 12:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=capp-tech-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eR1SDzDd2XHVeb+8nKnPVv9jL3fbppU64OO8UOMv8bQ=;
-        b=m/kbU1hbmqjWMjrFz2PauPmIipRD/XxOOw715AeQ93xindVKR+yLIOy6xApRvesLz+
-         rTug8hrTAY5ZlXCVbxLLyuPbDLZODkD6F8O9JObzZOgJH5wHo4fyzxoO6Qer07OSlz/V
-         xZln5kUtlx/db3p/yj53b9DReyLT3AYGD/aglxgoTiQlMtvcMTwVKD6t0LLIX2Z0pSCC
-         0lPzicrvon4x1qo/FHcLIoJCPbI9ilvv+ADrySb5OgsCHY1CmG1O5OVivf3gxx0+0IPu
-         GVycDxgnnZvnpHjGit6sSl4acWlVWx21P78SsuUoMtu9fp/9co7nszvztAbb6z0AU2iA
-         8Pnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eR1SDzDd2XHVeb+8nKnPVv9jL3fbppU64OO8UOMv8bQ=;
-        b=D6rRusisHL/F3love+rAW/UtQ9CRrLrNuOyA85kFNKYnqdQyHBqoP/edrnLQwzPVXH
-         cwjilGRe1tl5ZLpDf6TjmOcocHapEtO8+YPH7IttQJdlD47N0yX1DfMQh5SIecM0flT8
-         KvuKsUSVp5x2jfLqlf4JNb7h/vSrpcUjs8lvletBJoHHxhN10uqknxwQxR0bqaFJ7ABr
-         Z91jusdevkuMKdGy9S02kXKF1GsOopgVitOAqNOBPKjZtUUQnS2wwNO731r4uYu0t/E/
-         OONZoB2+7tjZHKeBscQKZIBhRMhe32iyB/XAzvWnYH+8jkVTgwB9KHz2EzSrg0yqjlb5
-         IDSQ==
-X-Gm-Message-State: APjAAAX5yQDdE4Ymt2OdIwKJ9eCiBxyo613dLg2sOO1Ag7wNSpVTTehh
-        jv7lT9/1mYzfaEbmdH/Sit3oF7XvS/aUBUr/rRwlPg==
-X-Google-Smtp-Source: APXvYqytF1EueJrVyBbE3pyrID3ITjcrTfrSW6JacCgFzHsvNBigr3IvUOlWtgflZlw7bLu/me1Ez6dpMEQ1eUJJwaI=
-X-Received: by 2002:a19:6e4d:: with SMTP id q13mr8318329lfk.6.1564342646231;
- Sun, 28 Jul 2019 12:37:26 -0700 (PDT)
-MIME-Version: 1.0
+        id S1727243AbfG2I1I (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 Jul 2019 04:27:08 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:52815 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfG2I1I (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 Jul 2019 04:27:08 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hs0zp-0002Vk-Mq; Mon, 29 Jul 2019 10:27:05 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DC54C43AC1D;
+        Mon, 29 Jul 2019 08:27:02 +0000 (UTC)
+To:     Tom Prohaszka <tprohaszka@capp-tech.com>
+Cc:     linux-can@vger.kernel.org, kernel@martin.sperl.org
 References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
- <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de> <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
+ <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
+ <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
  <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
-In-Reply-To: <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
-From:   Tom Prohaszka <tprohaszka@capp-tech.com>
-Date:   Sun, 28 Jul 2019 15:37:14 -0400
-Message-ID: <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
+ <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXzuQENBFxSzJYBCAC58uHRFEjVVE3J
+ 31eyEQT6H1zSFCccTMPO/ewwAnotQWo98Bc67ecmprcnjRjSUKTbyY/eFxS21JnC4ZB0pJKx
+ MNwK6zq71wLmpseXOgjufuG3kvCgwHLGf/nkBHXmSINHvW00eFK/kJBakwHEbddq8Dr4ewmr
+ G7yr8d6A3CSn/qhOYWhIxNORK3SVo4Io7ExNX/ljbisGsgRzsWvY1JlN4sabSNEr7a8YaqTd
+ 2CfFe/5fPcQRGsfhAbH2pVGigr7JddONJPXGE7XzOrx5KTwEv19H6xNe+D/W3FwjZdO4TKIo
+ vcZveSDrFWOi4o2Te4O5OB/2zZbNWPEON8MaXi9zABEBAAGJA3IEGAEKACYWIQTBQAugs5ie
+ b7x9W1wrXuIRxYrqVAUCXFLMlgIbAgUJAeKNmgFACRArXuIRxYrqVMB0IAQZAQoAHRYhBJrx
+ JF84Dn3PPNRrhVrGIaOR5J0gBQJcUsyWAAoJEFrGIaOR5J0grw4H/itil/yryJCvzi6iuZHS
+ suSHHOiEf+UQHib1MLP96LM7FmDabjVSmJDpH4TsMu17A0HTG+bPMAdeia0+q9FWSvSHYW8D
+ wNhfkb8zojpa37qBpVpiNy7r6BKGSRSoFOv6m/iIoRJuJ041AEKao6djj/FdQF8OV1EtWKRO
+ +nE2bNuDCcwHkhHP+FHExdzhKSmnIsMjGpGwIQKN6DxlJ7fN4W7UZFIQdSO21ei+akinBo4K
+ O0uNCnVmePU1UzrwXKG2sS2f97A+sZE89vkc59NtfPHhofI3JkmYexIF6uqLA3PumTqLQ2Lu
+ bywPAC3YNphlhmBrG589p+sdtwDQlpoH9O7NeBAAg/lyGOUUIONrheii/l/zR0xxr2TDE6tq
+ 6HZWdtjWoqcaky6MSyJQIeJ20AjzdV/PxMkd8zOijRVTnlK44bcfidqFM6yuT1bvXAO6NOPy
+ pvBRnfP66L/xECnZe7s07rXpNFy72XGNZwhj89xfpK4a9E8HQcOD0mNtCJaz7TTugqBOsQx2
+ 45VPHosmhdtBQ6/gjlf2WY9FXb5RyceeSuK4lVrz9uZB+fUHBge/giOSsrqFo/9fWAZsE67k
+ 6Mkdbpc7ZQwxelcpP/giB9N+XAfBsffQ8q6kIyuFV4ILsIECCIA4nt1rYmzphv6t5J6PmlTq
+ TzW9jNzbYANoOFAGnjzNRyc9i8UiLvjhTzaKPBOkQfhStEJaZrdSWuR/7Tt2wZBBoNTsgNAw
+ A+cEu+SWCvdX7vNpsCHMiHtcEmVt5R0Tex1Ky87EfXdnGR2mDi6Iyxi3MQcHez3C61Ga3Baf
+ P8UtXR6zrrrlX22xXtpNJf4I4Z6RaLpB/avIXTFXPbJ8CUUbVD2R2mZ/jyzaTzgiABDZspbS
+ gw17QQUrKqUog0nHXuaGGA1uvreHTnyBWx5P8FP7rhtvYKhw6XdJ06ns+2SFcQv0Bv6PcSDK
+ aRXmnW+OsDthn84x1YkfGIRJEPvvmiOKQsFEiB4OUtTX2pheYmZcZc81KFfJMmE8Z9+LT6Ry
+ uSS5AQ0EXFLNDgEIAL14qAzTMCE1PwRrYJRI/RSQGAGF3HLdYvjbQd9Ozzg02K3mNCF2Phb1
+ cjsbMk/V6WMxYoZCEtCh4X2GjQG2GDDW4KC9HOa8cTmr9Vcno+f+pUle09TMzWDgtnH92WKx
+ d0FIQev1zDbxU7lk1dIqyOjjpyhmR8Put6vgunvuIjGJ/GapHL/O0yjVlpumtmow6eME2muc
+ TeJjpapPWBGcy/8VU4LM8xMeMWv8DtQML5ogyJxZ0Smt+AntIzcF9miV2SeYXA3OFiojQstF
+ vScN7owL1XiQ3UjJotCp6pUcSVgVv0SgJXbDo5Nv87M2itn68VPfTu2uBBxRYqXQovsR++kA
+ EQEAAYkCPAQYAQoAJhYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUs0OAhsMBQkB4o0iAAoJ
+ ECte4hHFiupUbioQAJ40bEJmMOF28vFcGvQrpI+lfHJGk9zSrh4F4SlJyOVWV1yWyUAINr8w
+ v1aamg2nAppZ16z4nAnGU/47tWZ4P8blLVG8x4SWzz3D7MCy1FsQBTrWGLqWldPhkBAGp2VH
+ xDOK4rLhuQWx3H5zd3kPXaIgvHI3EliWaQN+u2xmTQSJN75I/V47QsaPvkm4TVe3JlB7l1Fg
+ OmSvYx31YC+3slh89ayjPWt8hFaTLnB9NaW9bLhs3E2ESF9Dei0FRXIt3qnFV/hnETsx3X4h
+ KEnXxhSRDVeURP7V6P/z3+WIfddVKZk5ZLHi39fJpxvsg9YLSfStMJ/cJfiPXk1vKdoa+FjN
+ 7nGAZyF6NHTNhsI7aHnvZMDavmAD3lK6CY+UBGtGQA3QhrUc2cedp1V53lXwor/D/D3Wo9wY
+ iSXKOl4fFCh2Peo7qYmFUaDdyiCxvFm+YcIeMZ8wO5udzkjDtP4lWKAn4tUcdcwMOT5d0I3q
+ WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
+ lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
+ QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
 Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
  __this_cpu_add() in preemptible
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@martin.sperl.org
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <f6c215d0-59c1-dcc2-7605-70198ef3f9ad@pengutronix.de>
+Date:   Mon, 29 Jul 2019 10:26:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="7w01Xt2CBIQ5dAk6yFYTf6IcQj3i2JqtJ"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hey Marc,
-I added the options below, but it doesn't look like the stack is dumping.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--7w01Xt2CBIQ5dAk6yFYTf6IcQj3i2JqtJ
+Content-Type: multipart/mixed; boundary="e4kgwdwcYMCXRlxtGqZxXWJclEZZJ1LKU";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Tom Prohaszka <tprohaszka@capp-tech.com>
+Cc: linux-can@vger.kernel.org, kernel@martin.sperl.org
+Message-ID: <f6c215d0-59c1-dcc2-7605-70198ef3f9ad@pengutronix.de>
+Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
+ __this_cpu_add() in preemptible
+References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
+ <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
+ <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
+ <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
+ <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
+In-Reply-To: <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
 
-check_preemption_disabled: 143 callbacks suppressed
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-caller is __this_cpu_preempt_check+0x1c/0x20
-CPU: 0 PID: 805 Comm: irq/194-mcp25xx Tainted: G           O
-4.9.65-dey+gf832589 #44
-Hardware name: Freescale i.MX6 UltraLite (Device Tree)
-[<80111790>] (unwind_backtrace) from [<8010d6cc>] (show_stack+0x20/0x24)
-[<8010d6cc>] (show_stack) from [<804c1c94>] (dump_stack+0xa0/0xcc)
-[<804c1c94>] (dump_stack) from [<804e1ad8>]
-(check_preemption_disabled+0x130/0x134)
-[<804e1ad8>] (check_preemption_disabled) from [<804e1b1c>]
-(__this_cpu_preempt_check+0x1c/0x20)
-[<804e1b1c>] (__this_cpu_preempt_check) from [<80804284>]
-(__netif_receive_skb_core+0x118/0xa60)
-[<80804284>] (__netif_receive_skb_core) from [<80806ffc>]
-(__netif_receive_skb+0x38/0x94)
-[<80806ffc>] (__netif_receive_skb) from [<808070e8>]
-(netif_receive_skb_internal+0x90/0x21c)
-[<808070e8>] (netif_receive_skb_internal) from [<808072e4>]
-(netif_receive_skb+0x70/0x1f4)
-[<808072e4>] (netif_receive_skb) from [<8065006c>]
-(mcp25xxfd_can_int+0x8f8/0x9cc)
-[<8065006c>] (mcp25xxfd_can_int) from [<8019d2e4>] (irq_thread_fn+0x2c/0x64)
-[<8019d2e4>] (irq_thread_fn) from [<8019d644>] (irq_thread+0x180/0x24c)
-[<8019d644>] (irq_thread) from [<801529f4>] (kthread+0x11c/0x134)
-[<801529f4>] (kthread) from [<80108650>] (ret_from_fork+0x14/0x24)
-  can1  456   [8]  0F 00 00 00 00 00 00 00
-  can1  456   [8]  0F 00 00 00 00 00 00 00
-  can1  121   [8]  0F 00 00 00 00 00 00 00
-  can1  354   [8]  0F 00 00 00 00 00 00 00
-  can1  099   [8]  0F 00 00 00 00 00 00 00
-  can1  331   [8]  0F 00 00 00 00 00 00 00
-  can1  123   [8]  00 0E 00 00 00 00 00 00
-  can1  003   [8]  00 00 00 04 00 00 00 00
-  can1  099   [8]  00 00 00 00 00 0A 00 00
-  can1  011   [8]  00 00 0D 00 00 00 00 00
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-caller is __this_cpu_preempt_check+0x1c/0x20
-CPU: 0 PID: 805 Comm: irq/194-mcp25xx Tainted: G           O
-4.9.65-dey+gf832589 #44
-Hardware name: Freescale i.MX6 UltraLite (Device Tree)
-[<80111790>] (unwind_backtrace) from [<8010d6cc>] (show_stack+0x20/0x24)
-[<8010d6cc>] (show_stack) from [<804c1c94>] (dump_stack+0xa0/0xcc)
-[<804c1c94>] (dump_stack) from [<804e1ad8>]
-(check_preemption_disabled+0x130/0x134)
-[<804e1ad8>] (check_preemption_disabled) from [<804e1b1c>]
-(__this_cpu_preempt_check+0x1c/0x20)
-[<804e1b1c>] (__this_cpu_preempt_check) from [<80804284>]
-(__netif_receive_skb_core+0x118/0xa60)
-[<80804284>] (__netif_receive_skb_core) from [<80806ffc>]
-(__netif_receive_skb+0x38/0x94)
-[<80806ffc>] (__netif_receive_skb) from [<808070e8>]
-(netif_receive_skb_internal+0x90/0x21c)
-[<808070e8>] (netif_receive_skb_internal) from [<808072e4>]
-(netif_receive_skb+0x70/0x1f4)
-[<808072e4>] (netif_receive_skb) from [<8065006c>]
-(mcp25xxfd_can_int+0x8f8/0x9cc)
-[<8065006c>] (mcp25xxfd_can_int) from [<8019d2e4>] (irq_thread_fn+0x2c/0x64)
-[<8019d2e4>] (irq_thread_fn) from [<8019d644>] (irq_thread+0x180/0x24c)
-[<8019d644>] (irq_thread) from [<801529f4>] (kthread+0x11c/0x134)
-[<801529f4>] (kthread) from [<80108650>] (ret_from_fork+0x14/0x24)
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-caller is __this_cpu_preempt_check+0x1c/0x20
-CPU: 0 PID: 805 Comm: irq/194-mcp25xx Tainted: G           O
-4.9.65-dey+gf832589 #44
-Hardware name: Freescale i.MX6 UltraLite (Device Tree)
-[<80111790>] (unwind_backtrace) from [<8010d6cc>] (show_stack+0x20/0x24)
-[<8010d6cc>] (show_stack) from [<804c1c94>] (dump_stack+0xa0/0xcc)
-[<804c1c94>] (dump_stack) from [<804e1ad8>]
-(check_preemption_disabled+0x130/0x134)
-[<804e1ad8>] (check_preemption_disabled) from [<804e1b1c>]
-(__this_cpu_preempt_check+0x1c/0x20)
-[<804e1b1c>] (__this_cpu_preempt_check) from [<80804284>]
-(__netif_receive_skb_core+0x118/0xa60)
-[<80804284>] (__netif_receive_skb_core) from [<80806ffc>]
-(__netif_receive_skb+0x38/0x94)
-[<80806ffc>] (__netif_receive_skb) from [<808070e8>]
-(netif_receive_skb_internal+0x90/0x21c)
-[<808070e8>] (netif_receive_skb_internal) from [<808072e4>]
-(netif_receive_skb+0x70/0x1f4)
-[<808072e4>] (netif_receive_skb) from [<8065006c>]
-(mcp25xxfd_can_int+0x8f8/0x9cc)
-[<8065006c>] (mcp25xxfd_can_int) from [<8019d2e4>] (irq_thread_fn+0x2c/0x64)
-[<8019d2e4>] (irq_thread_fn) from [<8019d644>] (irq_thread+0x180/0x24c)
-[<8019d644>] (irq_thread) from [<801529f4>] (kthread+0x11c/0x134)
-[<801529f4>] (kthread) from [<80108650>] (ret_from_fork+0x14/0x24)
-  can1  331   [8]  0F 00 00 00 00 00 00 00
-BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
+--e4kgwdwcYMCXRlxtGqZxXWJclEZZJ1LKU
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
 
-CONFIG_VIRTUALIZATION=y
-CONFIG_DEBUG_KERNEL=y
-CONFIG_FTRACE=y
-CONFIG_FUNCTION_TRACER=y
-CONFIG_FUNCTION_GRAPH_TRACER=y
-CONFIG_KPROBES=y
-CONIFG_DEBUG_BUGVERBOSE=y
-CONFIG_UNWIND_INFO=y
-CONIFG_STACK_UNWIND=y
-CONFIG_OF_DYNAMIC=y
-CONFIG_FRAME_POINTER=y
-#
-# Debug Lockups and Hangs
-#
-# CONFIG_LOCKUP_DETECTOR is not set
-# CONFIG_DETECT_HUNG_TASK is not set
-# CONFIG_WQ_WATCHDOG is not set
-# CONFIG_PANIC_ON_OOPS is not set
-CONFIG_PANIC_ON_OOPS_VALUE=0
-CONFIG_PANIC_TIMEOUT=0
-# CONFIG_SCHED_DEBUG is not set
-# CONFIG_SCHED_INFO is not set
-# CONFIG_SCHEDSTATS is not set
-# CONFIG_SCHED_STACK_END_CHECK is not set
-# CONFIG_DEBUG_TIMEKEEPING is not set
-# CONFIG_TIMER_STATS is not set
-CONFIG_DEBUG_PREEMPT=y
+On 7/28/19 9:37 PM, Tom Prohaszka wrote:
+> Hey Marc,
+> I added the options below, but it doesn't look like the stack is dumpin=
+g.
 
-#
+Thanks, that's indeed a proper stack dump, which is a different name for
+backtrace.
 
-#
-# Lock Debugging (spinlocks, mutexes, etc...)
-#
-CONFIG_DEBUG_RT_MUTEXES=y
-CONFIG_DEBUG_SPINLOCK=y
-CONFIG_DEBUG_MUTEXES=y
-CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
-CONFIG_DEBUG_LOCK_ALLOC=y
-CONFIG_PROVE_LOCKING=y
-CONFIG_LOCKDEP=y
-CONFIG_LOCK_STAT=y
-CONFIG_DEBUG_LOCKDEP=y
-CONFIG_DEBUG_ATOMIC_SLEEP=y
-# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
-# CONFIG_LOCK_TORTURE_TEST is not set
-CONFIG_TRACE_IRQFLAGS=y
-CONFIG_STACKTRACE=y
-#
-# Memory Debugging
-#
-# CONFIG_PAGE_EXTENSION is not set
-# CONFIG_DEBUG_PAGEALLOC is not set
-# CONFIG_PAGE_POISONING is not set
-# CONFIG_DEBUG_PAGE_REF is not set
-CONFIG_DEBUG_OBJECTS=y
-CONFIG_DEBUG_OBJECTS_SELFTEST=y
-CONFIG_DEBUG_OBJECTS_FREE=y
-CONFIG_DEBUG_OBJECTS_TIMERS=y
-CONFIG_DEBUG_OBJECTS_WORK=y
-CONFIG_DEBUG_OBJECTS_RCU_HEAD=y
-CONFIG_DEBUG_OBJECTS_PERCPU_COUNTER=y
-CONFIG_DEBUG_OBJECTS_ENABLE_DEFAULT=1
-# CONFIG_SLUB_STATS is not set
-CONFIG_HAVE_DEBUG_KMEMLEAK=y
-CONFIG_DEBUG_KMEMLEAK=y
-CONFIG_DEBUG_KMEMLEAK_EARLY_LOG_SIZE=400
-# CONFIG_DEBUG_KMEMLEAK_TEST is not set
-# CONFIG_DEBUG_KMEMLEAK_DEFAULT_OFF is not set
-# CONFIG_DEBUG_STACK_USAGE is not set
-# CONFIG_DEBUG_VM is not set
-# CONFIG_DEBUG_MEMORY_INIT is not set
-# CONFIG_DEBUG_PER_CPU_MAPS is not set
-# CONFIG_DEBUG_HIGHMEM is not set
-# CONFIG_DEBUG_SHIRQ is not set
+> check_preemption_disabled: 143 callbacks suppressed
+> BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp=
+25xx/805
+> caller is __this_cpu_preempt_check+0x1c/0x20
+> CPU: 0 PID: 805 Comm: irq/194-mcp25xx Tainted: G           O
+> 4.9.65-dey+gf832589 #44
+> Hardware name: Freescale i.MX6 UltraLite (Device Tree)
+> [<80111790>] (unwind_backtrace) from [<8010d6cc>] (show_stack+0x20/0x24=
+)
+> [<8010d6cc>] (show_stack) from [<804c1c94>] (dump_stack+0xa0/0xcc)
+> [<804c1c94>] (dump_stack) from [<804e1ad8>]
+> (check_preemption_disabled+0x130/0x134)
+> [<804e1ad8>] (check_preemption_disabled) from [<804e1b1c>]
+> (__this_cpu_preempt_check+0x1c/0x20)
+> [<804e1b1c>] (__this_cpu_preempt_check) from [<80804284>]
+> (__netif_receive_skb_core+0x118/0xa60)
+> [<80804284>] (__netif_receive_skb_core) from [<80806ffc>]
+> (__netif_receive_skb+0x38/0x94)
+> [<80806ffc>] (__netif_receive_skb) from [<808070e8>]
+> (netif_receive_skb_internal+0x90/0x21c)
+> [<808070e8>] (netif_receive_skb_internal) from [<808072e4>]
+> (netif_receive_skb+0x70/0x1f4)
+> [<808072e4>] (netif_receive_skb) from [<8065006c>]
+> (mcp25xxfd_can_int+0x8f8/0x9cc)
+> [<8065006c>] (mcp25xxfd_can_int) from [<8019d2e4>] (irq_thread_fn+0x2c/=
+0x64)
+> [<8019d2e4>] (irq_thread_fn) from [<8019d644>] (irq_thread+0x180/0x24c)=
+
+> [<8019d644>] (irq_thread) from [<801529f4>] (kthread+0x11c/0x134)
+> [<801529f4>] (kthread) from [<80108650>] (ret_from_fork+0x14/0x24)
+
+We see that netif_receive_skb() is called from the mcp's interrupt
+handler (mcp25xxfd_can_int), which is not allowed.
+
+I've pushed a fix to mcp25xxfd branch on linux-can-next. Please use that
+patch stack, it's the newest.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
+g/?h=3Dmcp25xxfd
+
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
-On Thu, Jul 25, 2019 at 6:50 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 7/25/19 12:27 PM, Tom Prohaszka wrote:
-> > Here is the backtrace:
-> >
-> >  can1  456   [8]  0F 00 00 00 00 00 00 00
-> >   can1  354   [8]  0F 00 00 00 00 00 00 00
-> >   can1  331   [8]  0F 00 00 00 00 00 00 00
-> >   can1  234   [8]  01 00 00 00 00 00 00 00
-> >   can1  044   [8]  00 00 00 00 00 00 07 00
-> >   can1  354   [8]^C  can1  456   [8]  0F 00 00 00 00 00 00 00
->
-> Do you reproduce the problem by pressing Ctrl+c?
->
-> > root@ccimx6ulcvdp:~/tmp# BUG: using __this_cpu_add() in preemptible
-> > [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
-> > BUG: using __this_cpu_add() in preemptible [00000000] code: irq/194-mcp25xx/805
->
-> Hmm according to the code, it should print a backtrace here...
->
-> See https://elixir.bootlin.com/linux/v4.9.65/source/lib/smp_processor_id.c#L46
->
-> >         preempt_disable_notrace();
-> >
-> >         if (!printk_ratelimit())
-> >                 goto out_enable;
-> >
-> >         printk(KERN_ERR "BUG: using %s%s() in preemptible [%08x] code: %s/%d\n",
-> >                 what1, what2, preempt_count() - 1, current->comm, current->pid);
-> >
-> >         print_symbol("caller is %s\n", (long)__builtin_return_address(0));
-> >         dump_stack();
->
-> Can you enable some of the in-kernel debugging stuff:
->
-> Kernel hacking
->         -> Memory Debugging
->                 -> Debug object operations              (everyting)
->                 -> Kernel memory leak detector          (enable)
->         -> Debug preemptible kernel                     (enable)
->         -> Lock Debugging (spinlocks, mutexes, etc...)  (everything, but not the self tests)
->         -> Stack backtrace support                      (enable)
->
-> .. and send output when it breaks.
->
-> Marc
->
-> --
-> Pengutronix e.K.                  | Marc Kleine-Budde           |
-> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-> Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
->
+--e4kgwdwcYMCXRlxtGqZxXWJclEZZJ1LKU--
+
+--7w01Xt2CBIQ5dAk6yFYTf6IcQj3i2JqtJ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0+rc8ACgkQWsYho5Hk
+nSDYbgf/d8wTwtKtxM6JEB+7Lf4/Ycp1dEI61tdTHzuK0qkoGwRswq5dR7CrbdfR
+aR3mpXG/bx3dapYY5Fw/JjZYbHXmC87Bkf/O53UUO1EboZvbXp9BvkMX308SA8z1
+3Zi+yBRZMbr23vGCJr8QSasXmkZkhEJ3gjZvpzWkgWzDCEQxJOzIZIYPrtw2jJ+2
+vtngbCtosOuocejmdJ1cOGBbY082JDsXRkSXRS2/YXKHJGpVJG8m98tTleGE3RS5
+F8hJ6fCly7vwbYRz+cmalDTcDGGgorm0InRhogbCjEZ+eliz/XYV9uc1avnFHluG
+Eauwp+kRJLoZfUeNGWMrF9JmoSUnxw==
+=BRRg
+-----END PGP SIGNATURE-----
+
+--7w01Xt2CBIQ5dAk6yFYTf6IcQj3i2JqtJ--
