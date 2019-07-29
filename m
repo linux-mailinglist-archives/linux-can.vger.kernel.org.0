@@ -2,83 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39650792C9
-	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2019 20:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7179A21
+	for <lists+linux-can@lfdr.de>; Mon, 29 Jul 2019 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387465AbfG2SHK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 Jul 2019 14:07:10 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:47296 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387445AbfG2SHK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 29 Jul 2019 14:07:10 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x6TI76sc006197;
-        Mon, 29 Jul 2019 13:07:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1564423626;
-        bh=AKFELG+ezMD88zUiFgJwQ2qYzeJA1maECZ/eCcsQ5BI=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=CBKqAuwj48L5GMVzsMDe9zcI4EbfErf14jumS2A0llT4PJlGH5q0skLfRZS7tKBPj
-         zYLvV0zahvOBAI/YSVUYRFb/J2mdQjFpIkn5QRbS+iqsD+yxbDZUQ6z+D7dKVzsblR
-         puBi1Noqjc7uAPBW8bSmiu0R8siLIUCRCItPAUws=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x6TI760D030092
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 29 Jul 2019 13:07:06 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 29
- Jul 2019 13:07:06 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 29 Jul 2019 13:07:06 -0500
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x6TI75uW080583;
-        Mon, 29 Jul 2019 13:07:06 -0500
-Subject: Re: tcan4x5x on a Raspberry Pi
-To:     "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
-        <fixed-term.Konstantin.Buecheler@escrypt.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <d1badcdb-7635-705d-35d5-448297e8fafa@ti.com>
-Date:   Mon, 29 Jul 2019 13:07:06 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727320AbfG2UlV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 Jul 2019 16:41:21 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:35277 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728915AbfG2UlU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 29 Jul 2019 16:41:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564432878;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=58Z8bDRgyAi1iHQvHHwK8+g7BxsaAQ9fV6DBfYqu6nI=;
+        b=F2ivxhPOOLN6tdjHSjli/a4rX/BrPWuIeCWO6rPZNAjsFK2wIvfQjuuqoFrnu86BGs
+        GLUafAUb6dgQuWSHyno7fLzgaXFfKeApPZVAVrqqCXXxqiBhqY1TKR+PfzZgSw5TGJbs
+        rSvJLPBsLBZkZuMDLitKYxdNQdXMHWzk4J81AiSoIZkJFFNxRARzAoAqmQUIMYG6GJ1J
+        Q94asqQ9S64anFq1dfB6+CIzxbX8/9s6kgXj2PGamrovFJfOv2Dx5MH1DhWB2wi9jEyG
+        5rE2PvyjN5fH1EX/HQqypQQlbmtD0s0ZLvrJIGSweMkskz6WnnlTtep6sA36qa6bBdla
+        qZag==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0lO8DsfULo/u6TWni45U="
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
+        with ESMTPSA id k05d3bv6TKfCvOi
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Mon, 29 Jul 2019 22:41:12 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     davem@davemloft.net, netdev@vger.kernel.org
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        kernel test robot <rong.a.chen@intel.com>
+Subject: [PATCH net-next] can: fix ioctl function removal
+Date:   Mon, 29 Jul 2019 22:40:56 +0200
+Message-Id: <20190729204056.2976-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Konstantin
+Commit 60649d4e0af ("can: remove obsolete empty ioctl() handler") replaced the
+almost empty can_ioctl() function with sock_no_ioctl() which always returns
+-EOPNOTSUPP.
 
-On 7/29/19 6:19 AM, FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu) wrote:
-> Hi all,
->
-> I am currently working on a project where I am trying to use the tcan4550 chip with a Raspberry PI 3B.
-> I am struggling to create a working device tree overlay file for the Raspberry Pi.
-> Has anyone here tried this already? I would appreciate any help.
+Even though we don't have any ioctl() functions on socket/network layer we need
+to return -ENOIOCTLCMD to be able to forward ioctl commands like SIOCGIFINDEX
+to the network driver layer.
 
-Are you using the driver from net-next?
+This patch fixes the wrong return codes in the CAN network layer protocols.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/drivers/net/can/m_can
+Reported-by: kernel test robot <rong.a.chen@intel.com>
+Fixes: 60649d4e0af ("can: remove obsolete empty ioctl() handler")
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ net/can/bcm.c | 9 ++++++++-
+ net/can/raw.c | 9 ++++++++-
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
-DT documentation here
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index 8da986b19d88..bf1d0bbecec8 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -1680,6 +1680,13 @@ static int bcm_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	return size;
+ }
+ 
++int bcm_sock_no_ioctlcmd(struct socket *sock, unsigned int cmd,
++			 unsigned long arg)
++{
++	/* no ioctls for socket layer -> hand it down to NIC layer */
++	return -ENOIOCTLCMD;
++}
++
+ static const struct proto_ops bcm_ops = {
+ 	.family        = PF_CAN,
+ 	.release       = bcm_release,
+@@ -1689,7 +1696,7 @@ static const struct proto_ops bcm_ops = {
+ 	.accept        = sock_no_accept,
+ 	.getname       = sock_no_getname,
+ 	.poll          = datagram_poll,
+-	.ioctl         = sock_no_ioctl,
++	.ioctl         = bcm_sock_no_ioctlcmd,
+ 	.gettstamp     = sock_gettstamp,
+ 	.listen        = sock_no_listen,
+ 	.shutdown      = sock_no_shutdown,
+diff --git a/net/can/raw.c b/net/can/raw.c
+index ff720272f7b7..da386f1fa815 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -837,6 +837,13 @@ static int raw_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	return size;
+ }
+ 
++int raw_sock_no_ioctlcmd(struct socket *sock, unsigned int cmd,
++			 unsigned long arg)
++{
++	/* no ioctls for socket layer -> hand it down to NIC layer */
++	return -ENOIOCTLCMD;
++}
++
+ static const struct proto_ops raw_ops = {
+ 	.family        = PF_CAN,
+ 	.release       = raw_release,
+@@ -846,7 +853,7 @@ static const struct proto_ops raw_ops = {
+ 	.accept        = sock_no_accept,
+ 	.getname       = raw_getname,
+ 	.poll          = datagram_poll,
+-	.ioctl         = sock_no_ioctl,
++	.ioctl         = raw_sock_no_ioctlcmd,
+ 	.gettstamp     = sock_gettstamp,
+ 	.listen        = sock_no_listen,
+ 	.shutdown      = sock_no_shutdown,
+-- 
+2.20.1
 
-https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-
-I did the development on a BeagleBone Black.
-
-Dan
-
-> Thanks,
-> Konstantin
->
