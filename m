@@ -2,39 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C82957A0F2
-	for <lists+linux-can@lfdr.de>; Tue, 30 Jul 2019 08:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1717A14F
+	for <lists+linux-can@lfdr.de>; Tue, 30 Jul 2019 08:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbfG3GCf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 30 Jul 2019 02:02:35 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36203 "EHLO
+        id S1726491AbfG3Gaw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 30 Jul 2019 02:30:52 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45879 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726033AbfG3GCf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 30 Jul 2019 02:02:35 -0400
+        with ESMTP id S1726490AbfG3Gaw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 30 Jul 2019 02:30:52 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hsLDU-0003c3-TK; Tue, 30 Jul 2019 08:02:32 +0200
+        id 1hsLeq-0004Oa-69; Tue, 30 Jul 2019 08:30:48 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E614943B49B;
-        Tue, 30 Jul 2019 06:02:30 +0000 (UTC)
-Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
- __this_cpu_add() in preemptible
-To:     Tom Prohaszka <tprohaszka@capp-tech.com>
-Cc:     linux-can@vger.kernel.org, kernel@martin.sperl.org
-References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
- <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
- <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
- <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
- <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
- <f6c215d0-59c1-dcc2-7605-70198ef3f9ad@pengutronix.de>
- <CANRGksgZE7tSwAyuhWo9_c7LwXO3hrvhqZwfUyyH0c5xYS_WpA@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5527743B56B;
+        Tue, 30 Jul 2019 06:30:44 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, davem@davemloft.net,
+        netdev@vger.kernel.org
+Cc:     linux-can@vger.kernel.org,
+        kernel test robot <rong.a.chen@intel.com>
+References: <20190729204056.2976-1-socketcan@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -97,15 +91,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <4b097fd5-3b17-b2c6-b9f4-f8cb0c404073@pengutronix.de>
-Date:   Tue, 30 Jul 2019 08:02:20 +0200
+Subject: Re: [PATCH net-next] can: fix ioctl function removal
+Message-ID: <79020cce-4f58-2104-a817-235e6d216528@pengutronix.de>
+Date:   Tue, 30 Jul 2019 08:30:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CANRGksgZE7tSwAyuhWo9_c7LwXO3hrvhqZwfUyyH0c5xYS_WpA@mail.gmail.com>
+In-Reply-To: <20190729204056.2976-1-socketcan@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="zBkrXg3uPn0xapPETzdRs0jDLE8viK4An"
+ boundary="DBn7XNyJyxx3wl4DuIhL9wGMiKcLFY07b"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,36 +111,50 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---zBkrXg3uPn0xapPETzdRs0jDLE8viK4An
-Content-Type: multipart/mixed; boundary="elgiqoxeuOWOlJHqx7etzqNw50WpaFtJO";
+--DBn7XNyJyxx3wl4DuIhL9wGMiKcLFY07b
+Content-Type: multipart/mixed; boundary="ebDKpq1kSlPBM7D86uHsDXf6fU1GgRk16";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Tom Prohaszka <tprohaszka@capp-tech.com>
-Cc: linux-can@vger.kernel.org, kernel@martin.sperl.org
-Message-ID: <4b097fd5-3b17-b2c6-b9f4-f8cb0c404073@pengutronix.de>
-Subject: Re: Microchip mcp25xxfd can controller driver- BUG: using
- __this_cpu_add() in preemptible
-References: <CANRGksjUg8r5zwCpnat_UhX0EP3PDcyazApNSxqc6R_iu0Tqtg@mail.gmail.com>
- <d48e0b11-2fa7-eafe-6ec5-fe4a84e33c14@pengutronix.de>
- <CANRGksi1Wk2qoeSGTG+q4KBjRDxa_qZQCxyamr5PXOeM62witA@mail.gmail.com>
- <5cf240d7-f9bc-1cff-5ce0-bd3f5f437d9c@pengutronix.de>
- <CANRGkshiaL9QXMt8s15FydRdL9uF-zBqKw07fVn6JvJaob0umw@mail.gmail.com>
- <f6c215d0-59c1-dcc2-7605-70198ef3f9ad@pengutronix.de>
- <CANRGksgZE7tSwAyuhWo9_c7LwXO3hrvhqZwfUyyH0c5xYS_WpA@mail.gmail.com>
-In-Reply-To: <CANRGksgZE7tSwAyuhWo9_c7LwXO3hrvhqZwfUyyH0c5xYS_WpA@mail.gmail.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, davem@davemloft.net,
+ netdev@vger.kernel.org
+Cc: linux-can@vger.kernel.org, kernel test robot <rong.a.chen@intel.com>
+Message-ID: <79020cce-4f58-2104-a817-235e6d216528@pengutronix.de>
+Subject: Re: [PATCH net-next] can: fix ioctl function removal
+References: <20190729204056.2976-1-socketcan@hartkopp.net>
+In-Reply-To: <20190729204056.2976-1-socketcan@hartkopp.net>
 
---elgiqoxeuOWOlJHqx7etzqNw50WpaFtJO
+--ebDKpq1kSlPBM7D86uHsDXf6fU1GgRk16
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 7/30/19 2:59 AM, Tom Prohaszka wrote:
-> You ROCK!  Thank you for finding the issue!
+On 7/29/19 10:40 PM, Oliver Hartkopp wrote:
+> Commit 60649d4e0af ("can: remove obsolete empty ioctl() handler") repla=
+ced the
+> almost empty can_ioctl() function with sock_no_ioctl() which always ret=
+urns
+> -EOPNOTSUPP.
+>=20
+> Even though we don't have any ioctl() functions on socket/network layer=
+ we need
+> to return -ENOIOCTLCMD to be able to forward ioctl commands like SIOCGI=
+FINDEX
+> to the network driver layer.
+>=20
+> This patch fixes the wrong return codes in the CAN network layer protoc=
+ols.
+>=20
+> Reported-by: kernel test robot <rong.a.chen@intel.com>
+> Fixes: 60649d4e0af ("can: remove obsolete empty ioctl() handler")
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-You're welcome.
+David Miller has already applied the patch.
 
-Can I add your Tested-by Tag?
+| commit 473d924d7d46cb57aa4c1863261d18366af345af
+| Author: Oliver Hartkopp <socketcan@hartkopp.net>
+| Date:   Mon Jul 29 22:40:56 2019 +0200
 
+Thanks,
 Marc
 
 --=20
@@ -155,23 +164,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---elgiqoxeuOWOlJHqx7etzqNw50WpaFtJO--
+--ebDKpq1kSlPBM7D86uHsDXf6fU1GgRk16--
 
---zBkrXg3uPn0xapPETzdRs0jDLE8viK4An
+--DBn7XNyJyxx3wl4DuIhL9wGMiKcLFY07b
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0/3WwACgkQWsYho5Hk
-nSADVAf9GL2nb8vn91JCFcND40phOnQAm5qa3nAotVotLldPwtFtbYFJyCF3xpob
-9an4nVjxQMGwhAewi1gPDoKrnne+9OOZ0ILfYM9sqN43JJrmxXXW8FHuzXVlrIBb
-lGqVBaCazx7e0uqb3C8xKUL6zIU9ocUkMj0jkGuQqCOiWuvk18iTlWPk5AdlY9zm
-yHFNd3Q0B64HgikFTPXUReGOz4hAIeoA9RoGWlEn9kr2Tx9nKQD5LqtN6cS+M/iO
-6wHoyW1LdUq8GQuCj0hgv6NA8V5UlblDAwxLfNU5pIEkcCYLPqdERDXfLX52a1VJ
-LTJHiANto37ZYWupGHIHZnrSv/zHTw==
-=uhK9
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl0/5BAACgkQWsYho5Hk
+nSAdlwf9FvQXprA9ijUqrNwvCNVM/h2siMdeeoUrg1SqzhgA7widx9raFr12K3Zu
+rDef8fGTPErEz6ARQpF6ThMhEd6N3qjplMsK/WHBz7LaGPy+6RtCLr4p8g7cR0XL
+EDb0b808S6onPQQJqjqBQGaBqRwBNsf1xshZPU5ECv5nMC9wtUitONw+DWfJeGZG
+cgYiTbobOAyPBXDkXcfuyWRxM6wGlf8VEcNZ4X6gYbYQW1ufpu9Yp6BevO+F/8kw
+OAFEcuX3WC04SIwH9hZBqIG2nH2Df6gzXJbVJtXjWvS48E4pGZoUa+EzqVSxJvgf
+s1gY216N6Z+3HW6FjcNTvsQYYVPdfA==
+=8Qnh
 -----END PGP SIGNATURE-----
 
---zBkrXg3uPn0xapPETzdRs0jDLE8viK4An--
+--DBn7XNyJyxx3wl4DuIhL9wGMiKcLFY07b--
