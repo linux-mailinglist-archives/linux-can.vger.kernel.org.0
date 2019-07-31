@@ -2,221 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4B97C56D
-	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2019 16:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283217CEB6
+	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2019 22:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388146AbfGaOzb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 31 Jul 2019 10:55:31 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:36649 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388075AbfGaOza (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Jul 2019 10:55:30 -0400
-Received: by mail-lj1-f194.google.com with SMTP id i21so65928634ljj.3;
-        Wed, 31 Jul 2019 07:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Z+hRd98x5TV3xKbm4IgKfN0HNypL+IKEJ8fZRsTiix0=;
-        b=fvVGLBSFsBeCBbnAFgMoGV4TPLTvo+6xoI2Hvax7N4ReE4xjlKMrgKGz/x44aYgJQQ
-         HBNms7NhIT17yeS954cS+log+VeGl0T5OgofXv+MgCMI9r/lh97ZlpjO+jFKm4GgcrF1
-         V4+FyBD0eB6oDNjWK+lgsjszwZmt55x092LDcZDdD/623SJ8sHXp8gJlV++eXfeMpOqA
-         XmbQ+VwXFzzI8oxD4BzLq0znoqzisSSm9SNpO4BhfF5E/00R0O42uJN++S5kC0Ylb7P/
-         lMTBwWCtQWrDxWdSurU1DYP4dDm3sonbWhsk0L6UA26lsQkqA9yfxlNIn97JfVqY9/JM
-         htVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Z+hRd98x5TV3xKbm4IgKfN0HNypL+IKEJ8fZRsTiix0=;
-        b=M7ICN+Gc6Sxh/EzO5+UuPT9f61eRN8APndwAE+zBPdSyGjG1krqh3JrRWGGcdDL5zl
-         N7tHO9ll4RNXJP7nPbBFrXFUuZavtVbYShkicwxVnQOkmXdK9muLecZZyzmtLQOI2eTB
-         n8hJmnAUrwexkDc6C9MJXesFXX2r3N5K6GLd/tN6IPKj1y4dTNlM1fcFOu4p5JnsGWHA
-         BXY1XkTzEnTY8tFWt1Ja7P02bYBsfERVwovkBH+1PT+JUJpw3Xl+Oo7uifX1Hz/NFsU3
-         8RC/vvWwmh5KSmjSQ6a2sB/ds3G3hnO7AQ0S9KxMILOuPuwD/+3uYPc4k1Jjuz4hlNnK
-         lIWw==
-X-Gm-Message-State: APjAAAXxe5P3UNPbnje8HivpzTKhRDREk0XqYQSJStIQhyi5jLV/v1q2
-        c33lDZn+ZtbGHtmh/ge+KQY=
-X-Google-Smtp-Source: APXvYqzykQOfJKE2+s8Z9PdCeuLmIeuPmPCh8PdDa326fgulb9QTYSesVp7dRtsjEFi6EP9kH+9kIw==
-X-Received: by 2002:a2e:8849:: with SMTP id z9mr25234956ljj.203.1564584927631;
-        Wed, 31 Jul 2019 07:55:27 -0700 (PDT)
-Received: from localhost.localdomain (77.241.141.68.bredband.3.dk. [77.241.141.68])
-        by smtp.gmail.com with ESMTPSA id j7sm15647799lji.27.2019.07.31.07.55.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 31 Jul 2019 07:55:27 -0700 (PDT)
-From:   Tomas Bortoli <tomasbortoli@gmail.com>
-To:     wg@grandegger.com, mkl@pengutronix.de, linux-can@vger.kernel.org
-Cc:     davem@davemloft.net, gregkh@linuxfoundation.org,
-        alexios.zavras@intel.com, tglx@linutronix.de, allison@lohutok.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller@googlegroups.com, Tomas Bortoli <tomasbortoli@gmail.com>
-Subject: [PATCH] peak_usb: Fix info-leaks to USB devices
-Date:   Wed, 31 Jul 2019 10:54:47 -0400
-Message-Id: <20190731145447.29270-1-tomasbortoli@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        id S1726096AbfGaUgf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 31 Jul 2019 16:36:35 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.160]:35316 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726865AbfGaUge (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Jul 2019 16:36:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564605392;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:Cc:From:References:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=TbBBpZzTRS68q/B8BiUwW2bmmzRpwgmwTUVOcRSqJ/c=;
+        b=kL/njHrqWKpdPVYwHjYCMNY4oBK67rRWqH4ffge1OX1lFXnlVYfssgQTWgFmysRyQc
+        xXkqNDCqMHk401OUIj8Di38ZNZhHYZVbjhCHE7uDchX5I8kcrb2E36e4mBSH9x1fupio
+        nm4ouW2k91Q8CygjvfjfBO1d7MHoFqm2segVRQP1vs53ADxTgkhhPPzDukNeERXZJ4A9
+        +WydnFk18ZRCNXD7E99hjapV7OEaxFi9OKljrKpP+zez4QBraipW64lPamjHhEFpCwGz
+        FLbIW8b5gLCVfd740U0mXjMtzgW7du7kBiYRixlUTwRap2M9qazMzc3A3Sf2u/FRVsN+
+        QaXQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMb16TD7DezTSFqw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.76]
+        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
+        with ESMTPSA id k05d3bv6VKaJ2zV
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Wed, 31 Jul 2019 22:36:19 +0200 (CEST)
+Subject: Re: Disable Network Statistics - CAN
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Martin Sperl <kernel@martin.sperl.org>
+References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
+ <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
+ <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Tom Prohaszka <tprohaszka@capp-tech.com>, linux-can@vger.kernel.org
+Message-ID: <15161cba-0831-cda8-b773-88880e72a6ec@hartkopp.net>
+Date:   Wed, 31 Jul 2019 22:36:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Uninitialized Kernel memory can leak to USB devices.
++ Martin
 
-Fix by using kzalloc() instead of kmalloc() on the affected buffers.
+On 31/07/2019 16.16, Marc Kleine-Budde wrote:
+> On 7/31/19 3:38 PM, Oliver Hartkopp wrote:
+>> Hi all,
+>>
+>> On 31/07/2019 03.49, Tom Prohaszka wrote:
+>>> We are using the MCP25xxfd driver.  A comment in the code indicated
+>>> that during testing, the network statistics were disabled to achieve
+>>> high utilization of the CAN bus.  Another comment indicated that when
+>>> network statistics were re-enabled, a 60% decrease in throughput
+>>> occurred.
+> 
+> Can you point me to these comments?
+> 
+>>> My question is, how can we disable the network statistics for CAN, and
+>>> if not possible for CAN, globally.
+>>
+>> there seem to be tons of MCP25XXFD_DEBUGFS_STATS_*() macros.
+> 
+> I'm not sure that incrementing some counters will cause a performace
+> degration of 60%.
+> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n131
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_debugfs.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a
+>>
+>> We had to purge all the debug stuff when mainlining the CAN subsystem
+>> and I wonder if this is really NEEDED.
+>>
+>> When the driver is in mainline Linux we can assume it to work - and not
+>> to be debugged anymore.
+>>
+>> Additionally the CAN_DEBUG_DEVICES Kconfig option could have been used
+>> to debug potential pitfalls.
+>>
+>> IMO the debugfs stuff should be removed completely.
+> 
+> Or at least make it a per driver option.
 
-Signed-off-by: Tomas Bortoli <tomasbortoli@gmail.com>
-Reported-by: syzbot+d6a5a1a3657b596ef132@syzkaller.appspotmail.com
-Reported-by: syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com
----
-Crash logs:
-1.
-BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x7ef/0x1f50 drivers/usb/core/urb.c:405
-CPU: 0 PID: 3359 Comm: kworker/0:2 Not tainted 5.2.0-rc4+ #7
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x191/0x1f0 lib/dump_stack.c:113
- kmsan_report+0x162/0x2d0 mm/kmsan/kmsan.c:611
- kmsan_internal_check_memory+0x974/0xa80 mm/kmsan/kmsan.c:705
- kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:617
- usb_submit_urb+0x7ef/0x1f50 drivers/usb/core/urb.c:405
- usb_start_wait_urb+0x143/0x410 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x49f/0x7f0 drivers/usb/core/message.c:156
- pcan_usb_pro_send_req+0x26b/0x3e0 drivers/net/can/usb/peak_usb/pcan_usb_pro.c:336
- pcan_usb_fd_drv_loaded drivers/net/can/usb/peak_usb/pcan_usb_fd.c:460 [inline]
- pcan_usb_fd_init+0x16ee/0x1900 drivers/net/can/usb/peak_usb/pcan_usb_fd.c:885
- peak_usb_create_dev drivers/net/can/usb/peak_usb/pcan_usb_core.c:809 [inline]
- peak_usb_probe+0x1416/0x1b20 drivers/net/can/usb/peak_usb/pcan_usb_core.c:907
- usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
- really_probe+0x1344/0x1d90 drivers/base/dd.c:513
- driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
- __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
- bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
- __device_attach+0x489/0x750 drivers/base/dd.c:843
- device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
-2.
-BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x7ef/0x1f50 /drivers/usb/core/urb.c:405
-CPU: 1 PID: 3814 Comm: kworker/1:2 Not tainted 5.2.0+ #15
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack /lib/dump_stack.c:77 [inline]
- dump_stack+0x191/0x1f0 /lib/dump_stack.c:113
- kmsan_report+0x162/0x2d0 /mm/kmsan/kmsan_report.c:109
- kmsan_internal_check_memory+0x974/0xa80 /mm/kmsan/kmsan.c:551
- kmsan_handle_urb+0x28/0x40 /mm/kmsan/kmsan_hooks.c:621
- usb_submit_urb+0x7ef/0x1f50 /drivers/usb/core/urb.c:405
- usb_start_wait_urb+0x143/0x410 /drivers/usb/core/message.c:58
- usb_internal_control_msg /drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x49f/0x7f0 /drivers/usb/core/message.c:156
- pcan_usb_pro_send_req /drivers/net/can/usb/peak_usb/pcan_usb_pro.c:336 [inline]
- pcan_usb_pro_drv_loaded /drivers/net/can/usb/peak_usb/pcan_usb_pro.c:504 [inline]
- pcan_usb_pro_init+0x1319/0x1720 /drivers/net/can/usb/peak_usb/pcan_usb_pro.c:894
- peak_usb_create_dev /drivers/net/can/usb/peak_usb/pcan_usb_core.c:809 [inline]
- peak_usb_probe+0x1416/0x1b20 /drivers/net/can/usb/peak_usb/pcan_usb_core.c:907
- usb_probe_interface+0xd19/0x1310 /drivers/usb/core/driver.c:361
- really_probe+0x1344/0x1d90 /drivers/base/dd.c:513
- driver_probe_device+0x1ba/0x510 /drivers/base/dd.c:670
- __device_attach_driver+0x5b8/0x790 /drivers/base/dd.c:777
- bus_for_each_drv+0x28e/0x3b0 /drivers/base/bus.c:454
- __device_attach+0x489/0x750 /drivers/base/dd.c:843
- device_initial_probe+0x4a/0x60 /drivers/base/dd.c:890
- bus_probe_device+0x131/0x390 /drivers/base/bus.c:514
- device_add+0x25b5/0x2df0 /drivers/base/core.c:2111
- usb_set_configuration+0x309f/0x3710 /drivers/usb/core/message.c:2027
- generic_probe+0xe7/0x280 /drivers/usb/core/generic.c:210
- usb_probe_device+0x146/0x200 /drivers/usb/core/driver.c:266
- really_probe+0x1344/0x1d90 /drivers/base/dd.c:513
- driver_probe_device+0x1ba/0x510 /drivers/base/dd.c:670
- __device_attach_driver+0x5b8/0x790 /drivers/base/dd.c:777
- bus_for_each_drv+0x28e/0x3b0 /drivers/base/bus.c:454
- __device_attach+0x489/0x750 /drivers/base/dd.c:843
- device_initial_probe+0x4a/0x60 /drivers/base/dd.c:890
- bus_probe_device+0x131/0x390 /drivers/base/bus.c:514
- device_add+0x25b5/0x2df0 /drivers/base/core.c:2111
- usb_new_device+0x23e5/0x2fb0 /drivers/usb/core/hub.c:2534
- hub_port_connect /drivers/usb/core/hub.c:5089 [inline]
- hub_port_connect_change /drivers/usb/core/hub.c:5204 [inline]
- port_event /drivers/usb/core/hub.c:5350 [inline]
- hub_event+0x5853/0x7320 /drivers/usb/core/hub.c:5432
- process_one_work+0x1572/0x1f00 /kernel/workqueue.c:2269
- worker_thread+0x111b/0x2460 /kernel/workqueue.c:2415
- kthread+0x4b5/0x4f0 /kernel/kthread.c:256
- ret_from_fork+0x35/0x40 /arch/x86/entry/entry_64.S:355
-Uninit was created at:
- kmsan_save_stack_with_flags /mm/kmsan/kmsan.c:187 [inline]
- kmsan_internal_poison_shadow+0x53/0xa0 /mm/kmsan/kmsan.c:146
- kmsan_slab_alloc+0xaa/0x120 /mm/kmsan/kmsan_hooks.c:175
- slab_alloc_node /mm/slub.c:2771 [inline]
- slab_alloc /mm/slub.c:2780 [inline]
- kmem_cache_alloc_trace+0x873/0xa50 /mm/slub.c:2797
- kmalloc /./include/linux/slab.h:547 [inline]
- pcan_usb_pro_drv_loaded /drivers/net/can/usb/peak_usb/pcan_usb_pro.c:497 [inline]
- pcan_usb_pro_init+0xe96/0x1720 /drivers/net/can/usb/peak_usb/pcan_usb_pro.c:894
- peak_usb_create_dev /drivers/net/can/usb/peak_usb/pcan_usb_core.c:809 [inline]
- peak_usb_probe+0x1416/0x1b20 /drivers/net/can/usb/peak_usb/pcan_usb_core.c:907
- usb_probe_interface+0xd19/0x1310 /drivers/usb/core/driver.c:361
- really_probe+0x1344/0x1d90 /drivers/base/dd.c:513
- driver_probe_device+0x1ba/0x510 /drivers/base/dd.c:670
- __device_attach_driver+0x5b8/0x790 /drivers/base/dd.c:777
- bus_for_each_drv+0x28e/0x3b0 /drivers/base/bus.c:454
- __device_attach+0x489/0x750 /drivers/base/dd.c:843
- device_initial_probe+0x4a/0x60 /drivers/base/dd.c:890
- bus_probe_device+0x131/0x390 /drivers/base/bus.c:514
- device_add+0x25b5/0x2df0 /drivers/base/core.c:2111
- usb_set_configuration+0x309f/0x3710 /drivers/usb/core/message.c:2027
- generic_probe+0xe7/0x280 /drivers/usb/core/generic.c:210
- usb_probe_device+0x146/0x200 /drivers/usb/core/driver.c:266
- really_probe+0x1344/0x1d90 /drivers/base/dd.c:513
- driver_probe_device+0x1ba/0x510 /drivers/base/dd.c:670
- __device_attach_driver+0x5b8/0x790 /drivers/base/dd.c:777
- bus_for_each_drv+0x28e/0x3b0 /drivers/base/bus.c:454
- __device_attach+0x489/0x750 /drivers/base/dd.c:843
- device_initial_probe+0x4a/0x60 /drivers/base/dd.c:890
- bus_probe_device+0x131/0x390 /drivers/base/bus.c:514
- device_add+0x25b5/0x2df0 /drivers/base/core.c:2111
- usb_new_device+0x23e5/0x2fb0 /drivers/usb/core/hub.c:2534
- hub_port_connect /drivers/usb/core/hub.c:5089 [inline]
- hub_port_connect_change /drivers/usb/core/hub.c:5204 [inline]
- port_event /drivers/usb/core/hub.c:5350 [inline]
- hub_event+0x5853/0x7320 /drivers/usb/core/hub.c:5432
- process_one_work+0x1572/0x1f00 /kernel/workqueue.c:2269
- worker_thread+0x111b/0x2460 /kernel/workqueue.c:2415
- kthread+0x4b5/0x4f0 /kernel/kthread.c:256
- ret_from_fork+0x35/0x40 /arch/x86/entry/entry_64.S:355
-Bytes 2-15 of 16 are uninitialized
-Memory access of size 16 starts at ffff8881030286e0
-==================================================================
+Looking at
 
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c  | 2 +-
- drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_priv.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n134
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index 34761c3a6286..47cc1ff5b88e 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -841,7 +841,7 @@ static int pcan_usb_fd_init(struct peak_usb_device *dev)
- 			goto err_out;
- 
- 		/* allocate command buffer once for all for the interface */
--		pdev->cmd_buffer_addr = kmalloc(PCAN_UFD_CMD_BUFFER_SIZE,
-+		pdev->cmd_buffer_addr = kzalloc(PCAN_UFD_CMD_BUFFER_SIZE,
- 						GFP_KERNEL);
- 		if (!pdev->cmd_buffer_addr)
- 			goto err_out_1;
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-index 178bb7cff0c1..53cb2f72bdd0 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
-@@ -494,7 +494,7 @@ static int pcan_usb_pro_drv_loaded(struct peak_usb_device *dev, int loaded)
- 	u8 *buffer;
- 	int err;
- 
--	buffer = kmalloc(PCAN_USBPRO_FCT_DRVLD_REQ_LEN, GFP_KERNEL);
-+	buffer = kzalloc(PCAN_USBPRO_FCT_DRVLD_REQ_LEN, GFP_KERNEL);
- 	if (!buffer)
- 		return -ENOMEM;
- 
--- 
-2.11.0
+the driver logs extensively almost everything what the CAN controller 
+offers.
 
+At least this debugging output should depend on
+
+CAN_DEBUG_DEVICES && CONFIG_DEBUG_FS
+
+but I still wonder if you need u64 tx_brs_count or
+u8 brs[MCP25XXFD_CAN_RX_DLC_HISTORY_SIZE]
+
+These are statistics about CAN frame content. Why would we need this in 
+normal operation or even in debugging cases?
+
+Regards,
+Oliver
