@@ -2,81 +2,202 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2CA7C3B9
-	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2019 15:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BED77C4A2
+	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2019 16:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728268AbfGaNih (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 31 Jul 2019 09:38:37 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.25]:20896 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727230AbfGaNih (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Jul 2019 09:38:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564580312;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=O7DFmiSlN27O8fjDAv0OFgpcEtxZIEu87+9g0WcDCKc=;
-        b=EhWmdJ3qMTkpmcxi1sytLkhO3Fu0VeXOOXYyxjH//3/ep9S0Bi9SD3V3bhi5JeqOFd
-        0dn6BQ0gGKzi28MqSSc067Ub1FZKOG4wjC+BZDN4J44ibu/ufC3+F69qp8Hf3pjOc3uu
-        I9Bz6VK/VlNecv33cdWTtegnYv2mNu5WPz/JoK0+kxbo29/rZtBKOdq0KiuwotRsmZH3
-        BA4yPzLtXrwaJmNaj0mQsD5nA19RCZQpFt4yeECoeSaR3+j79OCk9PfQcAlSoCN8Gj3M
-        hdboPu4M96uzHv154CjzEsiitaDHGvo2FtOaQtka3Z1oknQIBFF/Zr2Sv2wM97/H5GoT
-        RcyQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3DbdV+MXxt8WEBWwP2Y"
-X-RZG-CLASS-ID: mo00
-Received: from [172.20.10.6]
-        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
-        with ESMTPSA id k05d3bv6VDcV28L
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Wed, 31 Jul 2019 15:38:31 +0200 (CEST)
-Subject: Re: Disable Network Statistics - CAN
-To:     Tom Prohaszka <tprohaszka@capp-tech.com>, linux-can@vger.kernel.org
+        id S1727474AbfGaOQk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 31 Jul 2019 10:16:40 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56843 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726308AbfGaOQj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Jul 2019 10:16:39 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1hspPB-0004xu-N8; Wed, 31 Jul 2019 16:16:37 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 65CA543C47B;
+        Wed, 31 Jul 2019 14:16:36 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Tom Prohaszka <tprohaszka@capp-tech.com>,
+        linux-can@vger.kernel.org
 References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
-Date:   Wed, 31 Jul 2019 15:38:25 +0200
+ <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: Disable Network Statistics - CAN
+Message-ID: <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+Date:   Wed, 31 Jul 2019 16:16:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="xiSJThYhODQpiUHuY9TkMJC20HC1vGypg"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi all,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--xiSJThYhODQpiUHuY9TkMJC20HC1vGypg
+Content-Type: multipart/mixed; boundary="jgBGlki7XYUL1dmOvXOWBThoMBSsznUBR";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+ Tom Prohaszka <tprohaszka@capp-tech.com>, linux-can@vger.kernel.org
+Message-ID: <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+Subject: Re: Disable Network Statistics - CAN
+References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
+ <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
+In-Reply-To: <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
 
-On 31/07/2019 03.49, Tom Prohaszka wrote:
-> We are using the MCP25xxfd driver.  A comment in the code indicated
-> that during testing, the network statistics were disabled to achieve
-> high utilization of the CAN bus.  Another comment indicated that when
-> network statistics were re-enabled, a 60% decrease in throughput
-> occurred.
-> 
-> My question is, how can we disable the network statistics for CAN, and
-> if not possible for CAN, globally.
+--jgBGlki7XYUL1dmOvXOWBThoMBSsznUBR
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-there seem to be tons of MCP25XXFD_DEBUGFS_STATS_*() macros.
+On 7/31/19 3:38 PM, Oliver Hartkopp wrote:
+> Hi all,
+>=20
+> On 31/07/2019 03.49, Tom Prohaszka wrote:
+>> We are using the MCP25xxfd driver.  A comment in the code indicated
+>> that during testing, the network statistics were disabled to achieve
+>> high utilization of the CAN bus.  Another comment indicated that when
+>> network statistics were re-enabled, a 60% decrease in throughput
+>> occurred.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n131
+Can you point me to these comments?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_debugfs.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a
+>> My question is, how can we disable the network statistics for CAN, and=
 
-We had to purge all the debug stuff when mainlining the CAN subsystem 
-and I wonder if this is really NEEDED.
+>> if not possible for CAN, globally.
+>=20
+> there seem to be tons of MCP25XXFD_DEBUGFS_STATS_*() macros.
 
-When the driver is in mainline Linux we can assume it to work - and not 
-to be debugged anymore.
+I'm not sure that incrementing some counters will cause a performace
+degration of 60%.
 
-Additionally the CAN_DEBUG_DEVICES Kconfig option could have been used 
-to debug potential pitfalls.
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/=
+tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c?h=3Dmcp25xxfd&id=3D=
+9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n131
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/=
+tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_debugfs.h?h=3Dmcp25xxfd&=
+id=3D9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a
+>=20
+> We had to purge all the debug stuff when mainlining the CAN subsystem=20
+> and I wonder if this is really NEEDED.
+>=20
+> When the driver is in mainline Linux we can assume it to work - and not=
+=20
+> to be debugged anymore.
+>=20
+> Additionally the CAN_DEBUG_DEVICES Kconfig option could have been used =
 
-IMO the debugfs stuff should be removed completely.
+> to debug potential pitfalls.
+>=20
+> IMO the debugfs stuff should be removed completely.
 
-Best regards,
-Oliver
+Or at least make it a per driver option.
 
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--jgBGlki7XYUL1dmOvXOWBThoMBSsznUBR--
+
+--xiSJThYhODQpiUHuY9TkMJC20HC1vGypg
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1Bor8ACgkQWsYho5Hk
+nSDGFgf/b6IBW/xYL/PEBjw46Qi5HBmrsycqU5oZAUpT/VClTcy346GL63jasOcW
+El4cda/JzFI/sHIE25iwJNkZ3XwyFv3gUL26OuMvr9fpBw7Flv1uWSeoupV5FNQy
+56id7LNl3HCNPpE1cXQRu6kvs4rty/D9MFcyh55X1+BYTj+8mUSpfGDqOx6j1D4z
+IaV74//q34fRHwXwMEkckbpjekbm8fzwfQaYWQ1qMBgpS4no68f/KfsE/ceuQN0y
+0MqfdGN9kOztrga4EpoYXe6yjbVrsf1Fog4dl4ymGChHkSJu2PZKBq0gqWSMteHo
+0/THHUKA/K2GTI7clIDlSr1rfhydkg==
+=lhZ3
+-----END PGP SIGNATURE-----
+
+--xiSJThYhODQpiUHuY9TkMJC20HC1vGypg--
