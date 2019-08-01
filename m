@@ -2,58 +2,114 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1487E7D6D2
-	for <lists+linux-can@lfdr.de>; Thu,  1 Aug 2019 10:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE64C7E6E9
+	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 01:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730531AbfHAH7v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Aug 2019 03:59:51 -0400
-Received: from first.geanix.com ([116.203.34.67]:33310 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728528AbfHAH7v (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 1 Aug 2019 03:59:51 -0400
-Received: from [192.168.8.20] (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id 179B8B82;
-        Thu,  1 Aug 2019 07:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1564646377; bh=bqSW8N5/HhtbhEB5rZZbOlI+x9iOGq4D7clal5rL8S4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=layg9ZS6arHsJUH4dF4n3AG6I3f/qB6sAyvaOVQucygZAIMD716xf5qey/pzzz3ya
-         xrylqquvvqKeXoAZPc7IDvyUtYDKgMwbTbyvNQ0Pwy83Yf9AdZU3xMZXaP+CEnpQFs
-         iZoYFBczcDYALjZQHQSSX9TmgaFDECSWhBClwcm0GBZ+ynQ+FOYad/i8UdgFI0oBgh
-         Knnfr+t46ajz1rkzq0/JUYgsY6RewAB55Rx7nDqTkiyPrR9qnlbFjyLOSdgZtGNjA6
-         vRvFR0/iNmymeNrl32GW6qoreeasP+edlo5C66P4ZBIYQFF2pteKgloxdnFo5Ac6LQ
-         jaZ0VPNseqcxA==
-Subject: Re: [PATCH] can: flexcan: free error skb if enqueueing failed
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        Sean Nyekjaer <sean@geanix.com>
-References: <20190715185308.104333-1-martin@geanix.com>
-From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
-Message-ID: <d5f8811e-4b85-776a-668f-33f64ec6ef16@geanix.com>
-Date:   Thu, 1 Aug 2019 09:59:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2390483AbfHAXt5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Aug 2019 19:49:57 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:35542 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733221AbfHAXt4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Aug 2019 19:49:56 -0400
+Received: by mail-lf1-f68.google.com with SMTP id p197so51534441lfa.2
+        for <linux-can@vger.kernel.org>; Thu, 01 Aug 2019 16:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=capp-tech-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w9BSF2Y8qNdGXlBBRfluRgRErzVgWR0aGyXgFsakMao=;
+        b=pwiIVmM9O2qnrsVxT1xXWoiKAQpUNxvKO7TkiW04t+2qihb1DccHNMVBHN+BJEuSHp
+         lpqPOTZrGf9R9w6KOisRh2fhgMOPmiNRO4CZAUyswX+/cE+oHKNlTMi1Ke4nkTVlOIOf
+         7B3xSUoWo/mASJLEspgXI8fVJcq+RhY/iAYSagyBwsgYE2BV+7/82OGol3s0XCW4f80f
+         Y/oOERgRua6H1lTiWenh8d9GskE4+6vPBMMvlcxa5pBefEGrzFEEnpBdCGNc0R2IsgPo
+         QxRSGmRzEX2qLHWk+k2bZmmTl5xZxxs4tisUXmGiEPw/jGAEPJmQY43BjbfoQ9I6hgJM
+         elCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w9BSF2Y8qNdGXlBBRfluRgRErzVgWR0aGyXgFsakMao=;
+        b=BH0MgawVngqoIKTcnWtimmtdQB/CJT1J/aUrzQgSTLX/Ji1DjDp33AG4jMoRe3q4gP
+         NVLHP99Okyx2EsFUwba/xwpUoCiIJwqZEHfg3EGAzf8caR3/x8m6tTEE865cQ8PRdsGd
+         6BLzHBjc8jkMUErH3JcLo/CMPAw8oTq3N3nu3N9NpW9IxGgTqG+ojTk8g4tFtdmTwSs/
+         M+smKNJiJ1Jcye4E/elhf2LpHI6nE8L1jWJ15vK8cm5scMK1SixGuZhyASwECtrriHBU
+         06MBOl0KXf/DGdItKwgJePQMoGq6Prlz4r1ky0J3eLCTBkqLJ3+ZnANjTiKTx4D2hpGm
+         wsYQ==
+X-Gm-Message-State: APjAAAX0zgKGwy7o4NXTHhpS6YcldIQTRpidqFdP+PyV7X3aQxcJP9QK
+        8GRodE02hU89v/eLU/U5CkIpT6BQqUNhB1iKNyQW8A==
+X-Google-Smtp-Source: APXvYqwDwmZaSG4EDOi+E6WwzKU9S0uFsMQlJh2yD09CiXpo+dFkE+9je1uGbatLL/RPnefA3sLyf9mN2/DOp4AoRcc=
+X-Received: by 2002:ac2:4109:: with SMTP id b9mr56884707lfi.31.1564703395111;
+ Thu, 01 Aug 2019 16:49:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190715185308.104333-1-martin@geanix.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=3.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 1ffa6606a633
+References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
+ <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net> <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+In-Reply-To: <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+From:   Tom Prohaszka <tprohaszka@capp-tech.com>
+Date:   Thu, 1 Aug 2019 19:49:44 -0400
+Message-ID: <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+Subject: Re: Disable Network Statistics - CAN
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 15/07/2019 20.53, Martin Hundebøll wrote:
-> If the call to can_rx_offload_queue_sorted() fails, the passed skb isn't
-> consumed, so the caller must do so.
-> 
-> Fixes: 30164759db1b ("can: flexcan: make use of rx-offload's irq_offload_fifo")
-> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+I found this for the V5 commit:
+https://www.spinics.net/lists/linux-can/msg00847.html
+I may have read it wrong.  It sounds like the network stack is
+dropping them, not necessarily the "statistics" gathering.
 
-Ping.
+Still the driver is able to handle reception of 99.95% of all CAN frames
+of a 100% saturated 1MHz Can2.0 Bus with Frames with standard IDs and
+DLC=0 on a Raspberry Pi 3. Note that this statistics is without injection
+into the network stack, which then drops about 60% of all frames.
+
+On Wed, Jul 31, 2019 at 10:16 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 7/31/19 3:38 PM, Oliver Hartkopp wrote:
+> > Hi all,
+> >
+> > On 31/07/2019 03.49, Tom Prohaszka wrote:
+> >> We are using the MCP25xxfd driver.  A comment in the code indicated
+> >> that during testing, the network statistics were disabled to achieve
+> >> high utilization of the CAN bus.  Another comment indicated that when
+> >> network statistics were re-enabled, a 60% decrease in throughput
+> >> occurred.
+>
+> Can you point me to these comments?
+>
+> >> My question is, how can we disable the network statistics for CAN, and
+> >> if not possible for CAN, globally.
+> >
+> > there seem to be tons of MCP25XXFD_DEBUGFS_STATS_*() macros.
+>
+> I'm not sure that incrementing some counters will cause a performace
+> degration of 60%.
+>
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n131
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_debugfs.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a
+> >
+> > We had to purge all the debug stuff when mainlining the CAN subsystem
+> > and I wonder if this is really NEEDED.
+> >
+> > When the driver is in mainline Linux we can assume it to work - and not
+> > to be debugged anymore.
+> >
+> > Additionally the CAN_DEBUG_DEVICES Kconfig option could have been used
+> > to debug potential pitfalls.
+> >
+> > IMO the debugfs stuff should be removed completely.
+>
+> Or at least make it a per driver option.
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                  | Marc Kleine-Budde           |
+> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+> Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+>
