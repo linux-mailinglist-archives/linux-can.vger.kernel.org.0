@@ -2,112 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 283217CEB6
-	for <lists+linux-can@lfdr.de>; Wed, 31 Jul 2019 22:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1487E7D6D2
+	for <lists+linux-can@lfdr.de>; Thu,  1 Aug 2019 10:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbfGaUgf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 31 Jul 2019 16:36:35 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.160]:35316 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726865AbfGaUge (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Jul 2019 16:36:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1564605392;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:Cc:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=TbBBpZzTRS68q/B8BiUwW2bmmzRpwgmwTUVOcRSqJ/c=;
-        b=kL/njHrqWKpdPVYwHjYCMNY4oBK67rRWqH4ffge1OX1lFXnlVYfssgQTWgFmysRyQc
-        xXkqNDCqMHk401OUIj8Di38ZNZhHYZVbjhCHE7uDchX5I8kcrb2E36e4mBSH9x1fupio
-        nm4ouW2k91Q8CygjvfjfBO1d7MHoFqm2segVRQP1vs53ADxTgkhhPPzDukNeERXZJ4A9
-        +WydnFk18ZRCNXD7E99hjapV7OEaxFi9OKljrKpP+zez4QBraipW64lPamjHhEFpCwGz
-        FLbIW8b5gLCVfd740U0mXjMtzgW7du7kBiYRixlUTwRap2M9qazMzc3A3Sf2u/FRVsN+
-        QaXQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMb16TD7DezTSFqw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.76]
-        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
-        with ESMTPSA id k05d3bv6VKaJ2zV
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Wed, 31 Jul 2019 22:36:19 +0200 (CEST)
-Subject: Re: Disable Network Statistics - CAN
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Martin Sperl <kernel@martin.sperl.org>
-References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
- <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
- <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Tom Prohaszka <tprohaszka@capp-tech.com>, linux-can@vger.kernel.org
-Message-ID: <15161cba-0831-cda8-b773-88880e72a6ec@hartkopp.net>
-Date:   Wed, 31 Jul 2019 22:36:07 +0200
+        id S1730531AbfHAH7v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Aug 2019 03:59:51 -0400
+Received: from first.geanix.com ([116.203.34.67]:33310 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728528AbfHAH7v (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 1 Aug 2019 03:59:51 -0400
+Received: from [192.168.8.20] (unknown [85.184.140.241])
+        by first.geanix.com (Postfix) with ESMTPSA id 179B8B82;
+        Thu,  1 Aug 2019 07:59:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1564646377; bh=bqSW8N5/HhtbhEB5rZZbOlI+x9iOGq4D7clal5rL8S4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=layg9ZS6arHsJUH4dF4n3AG6I3f/qB6sAyvaOVQucygZAIMD716xf5qey/pzzz3ya
+         xrylqquvvqKeXoAZPc7IDvyUtYDKgMwbTbyvNQ0Pwy83Yf9AdZU3xMZXaP+CEnpQFs
+         iZoYFBczcDYALjZQHQSSX9TmgaFDECSWhBClwcm0GBZ+ynQ+FOYad/i8UdgFI0oBgh
+         Knnfr+t46ajz1rkzq0/JUYgsY6RewAB55Rx7nDqTkiyPrR9qnlbFjyLOSdgZtGNjA6
+         vRvFR0/iNmymeNrl32GW6qoreeasP+edlo5C66P4ZBIYQFF2pteKgloxdnFo5Ac6LQ
+         jaZ0VPNseqcxA==
+Subject: Re: [PATCH] can: flexcan: free error skb if enqueueing failed
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Sean Nyekjaer <sean@geanix.com>
+References: <20190715185308.104333-1-martin@geanix.com>
+From:   =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+Message-ID: <d5f8811e-4b85-776a-668f-33f64ec6ef16@geanix.com>
+Date:   Thu, 1 Aug 2019 09:59:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+In-Reply-To: <20190715185308.104333-1-martin@geanix.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Language: en-US-large
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=3.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 1ffa6606a633
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-+ Martin
-
-On 31/07/2019 16.16, Marc Kleine-Budde wrote:
-> On 7/31/19 3:38 PM, Oliver Hartkopp wrote:
->> Hi all,
->>
->> On 31/07/2019 03.49, Tom Prohaszka wrote:
->>> We are using the MCP25xxfd driver.  A comment in the code indicated
->>> that during testing, the network statistics were disabled to achieve
->>> high utilization of the CAN bus.  Another comment indicated that when
->>> network statistics were re-enabled, a 60% decrease in throughput
->>> occurred.
+On 15/07/2019 20.53, Martin Hundebøll wrote:
+> If the call to can_rx_offload_queue_sorted() fails, the passed skb isn't
+> consumed, so the caller must do so.
 > 
-> Can you point me to these comments?
-> 
->>> My question is, how can we disable the network statistics for CAN, and
->>> if not possible for CAN, globally.
->>
->> there seem to be tons of MCP25XXFD_DEBUGFS_STATS_*() macros.
-> 
-> I'm not sure that incrementing some counters will cause a performace
-> degration of 60%.
-> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n131
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_debugfs.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a
->>
->> We had to purge all the debug stuff when mainlining the CAN subsystem
->> and I wonder if this is really NEEDED.
->>
->> When the driver is in mainline Linux we can assume it to work - and not
->> to be debugged anymore.
->>
->> Additionally the CAN_DEBUG_DEVICES Kconfig option could have been used
->> to debug potential pitfalls.
->>
->> IMO the debugfs stuff should be removed completely.
-> 
-> Or at least make it a per driver option.
+> Fixes: 30164759db1b ("can: flexcan: make use of rx-offload's irq_offload_fifo")
+> Signed-off-by: Martin Hundebøll <martin@geanix.com>
 
-Looking at
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_priv.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n134
-
-the driver logs extensively almost everything what the CAN controller 
-offers.
-
-At least this debugging output should depend on
-
-CAN_DEBUG_DEVICES && CONFIG_DEBUG_FS
-
-but I still wonder if you need u64 tx_brs_count or
-u8 brs[MCP25XXFD_CAN_RX_DLC_HISTORY_SIZE]
-
-These are statistics about CAN frame content. Why would we need this in 
-normal operation or even in debugging cases?
-
-Regards,
-Oliver
+Ping.
