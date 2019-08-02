@@ -2,34 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0E7D7F5BB
-	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 13:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD217F5FB
+	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 13:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729325AbfHBLHl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Aug 2019 07:07:41 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36449 "EHLO
+        id S1731231AbfHBL3e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Aug 2019 07:29:34 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33557 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729311AbfHBLHl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 07:07:41 -0400
+        with ESMTP id S1729620AbfHBL3e (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 07:29:34 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1htVPO-0001aZ-TG; Fri, 02 Aug 2019 13:07:38 +0200
+        id 1htVka-0003G2-Fu; Fri, 02 Aug 2019 13:29:32 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9987643D6E1;
-        Fri,  2 Aug 2019 11:07:37 +0000 (UTC)
-To:     Tom Prohaszka <tprohaszka@capp-tech.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
- <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
- <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
- <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7A0D443D6F0;
+        Fri,  2 Aug 2019 11:29:27 +0000 (UTC)
+Subject: Re: [PATCH] net/can/usb/peak_usb: force the string buffer
+ NULL-terminated
+To:     Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+Cc:     linux-can@vger.kernel.org
+References: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -92,16 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: Disable Network Statistics - CAN
-Message-ID: <db34f851-8f2f-b4bf-011b-fef985c79afe@pengutronix.de>
-Date:   Fri, 2 Aug 2019 13:07:32 +0200
+Message-ID: <72663b41-5a04-50ad-cbc9-fd11cc19f98a@pengutronix.de>
+Date:   Fri, 2 Aug 2019 13:29:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+In-Reply-To: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa"
+ boundary="fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,46 +110,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa
-Content-Type: multipart/mixed; boundary="kteRtgQt0m12ZvuNlJTQzi6MGPOtzYLu3";
+--fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N
+Content-Type: multipart/mixed; boundary="gaoeyg1phy7IhFt9zgeKKgkSvdXLrdhGM";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Tom Prohaszka <tprohaszka@capp-tech.com>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Message-ID: <db34f851-8f2f-b4bf-011b-fef985c79afe@pengutronix.de>
-Subject: Re: Disable Network Statistics - CAN
-References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
- <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
- <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
- <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
-In-Reply-To: <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+To: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+Cc: linux-can@vger.kernel.org
+Message-ID: <72663b41-5a04-50ad-cbc9-fd11cc19f98a@pengutronix.de>
+Subject: Re: [PATCH] net/can/usb/peak_usb: force the string buffer
+ NULL-terminated
+References: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
+In-Reply-To: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
 
---kteRtgQt0m12ZvuNlJTQzi6MGPOtzYLu3
+--gaoeyg1phy7IhFt9zgeKKgkSvdXLrdhGM
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 8/2/19 1:49 AM, Tom Prohaszka wrote:
-> I found this for the V5 commit:
-> https://www.spinics.net/lists/linux-can/msg00847.html
-> I may have read it wrong.  It sounds like the network stack is
-> dropping them, not necessarily the "statistics" gathering.
+On 7/31/19 9:25 AM, Wang Xiayang wrote:
+> strncpy() does not ensure NULL-termination when the input string
+> size equals to the destination buffer size IFNAMSIZ.
+> The output string is passed to dev_info() which relies on
+> the NULL-termination.
 >=20
-> Still the driver is able to handle reception of 99.95% of all CAN frame=
-s
-> of a 100% saturated 1MHz Can2.0 Bus with Frames with standard IDs and
-> DLC=3D0 on a Raspberry Pi 3. Note that this statistics is without injec=
-tion
-> into the network stack, which then drops about 60% of all frames.
-To my understanding it's the networking stack that drops the CAN frames
-not the statistics itself.
+> Use strlcpy() instead.
+>=20
+> This issue is identified by a Coccinelle script.
+>=20
+> Signed-off-by: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
 
-However I've added a Kconfig option to the driver to switch off the
-debugfs support:
+Applied both patches.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
-g/?h=3Dmcp25xxfd
-
+Thanks,
 Marc
 
 --=20
@@ -161,23 +151,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---kteRtgQt0m12ZvuNlJTQzi6MGPOtzYLu3--
+--gaoeyg1phy7IhFt9zgeKKgkSvdXLrdhGM--
 
---otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa
+--fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EGXQACgkQWsYho5Hk
-nSC3KwgAgtWW7tI/1sgevuhDYBIpj+2tu2mKwv6tVTgD2r7LIPdaxvRPulUTWKSN
-Cb6M0+5sicgfWiF8ytPpNEewFDrDY4ecv84aZg2qqQ1asq96BkZSnQHAtBFywUWd
-KkoSulkJe/Rwl7g1G/ySvdAtednCv5ibdQ5et2yi3nvGmth1W12joek1PfL13p7D
-j9oIf1U5aCd2kzQ86hO7fVc19JF4l5AeWDLwMf0ScVWFsaxvYJ42gTyn02ERA02D
-EvuIL5vOqIPJ9HbzsXRFu+IBFMAi7PygLKddiwkmq/jJm1HZuKvWps9Md6EG15vh
-PBb2hLTZbedXCPkSGbf3oTIVW0BVlg==
-=fnau
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EHpMACgkQWsYho5Hk
+nSCQKgf/ZOBYxPXR/9SXdatgL/j7mVJIAQgZ4+mSt6PTMM0WldEz2z0TAu/lVcPs
+0UJXfLEtcVqkHOB1fPrcCBeuoYn/UFPPNJiU7u2MWvRNm/7UMbj25RRQtSCD5B9y
+GxaBd5dQLAb6RzB/AilYljz9+dgvTPT0srOXyUT0ZMLd7oNki2gEHIz4nAXSIiOB
+MWc6d+Up0k+hpIPhqVeC6cv2MZECTXQir2paTU5l9G+CYZ14Wo13JdPg9+ECGedL
+YEih59qI3a5BtQgnYBY2So48gt097Uhmqk14JEy2BD6l9KKoXT1UJ8MG5nhUC28a
+wICRCozJQc6Qrhhr7/P7Z6brBrplCQ==
+=6+GL
 -----END PGP SIGNATURE-----
 
---otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa--
+--fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N--
