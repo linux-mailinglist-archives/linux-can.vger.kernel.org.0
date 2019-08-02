@@ -2,33 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD217F5FB
-	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 13:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675857F630
+	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 13:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731231AbfHBL3e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Aug 2019 07:29:34 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:33557 "EHLO
+        id S2388886AbfHBLqQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Aug 2019 07:46:16 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:32975 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729620AbfHBL3e (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 07:29:34 -0400
+        with ESMTP id S1725985AbfHBLqQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 07:46:16 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1htVka-0003G2-Fu; Fri, 02 Aug 2019 13:29:32 +0200
+        id 1htW0e-0004pR-WB; Fri, 02 Aug 2019 13:46:09 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7A0D443D6F0;
-        Fri,  2 Aug 2019 11:29:27 +0000 (UTC)
-Subject: Re: [PATCH] net/can/usb/peak_usb: force the string buffer
- NULL-terminated
-To:     Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
-Cc:     linux-can@vger.kernel.org
-References: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1A76D43D6FF;
+        Fri,  2 Aug 2019 11:46:04 +0000 (UTC)
+Subject: Re: [PATCH] peak_usb: Fix info-leaks to USB devices
+To:     Tomas Bortoli <tomasbortoli@gmail.com>, wg@grandegger.com,
+        linux-can@vger.kernel.org
+Cc:     davem@davemloft.net, gregkh@linuxfoundation.org,
+        alexios.zavras@intel.com, tglx@linutronix.de, allison@lohutok.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller@googlegroups.com
+References: <20190731145447.29270-1-tomasbortoli@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <72663b41-5a04-50ad-cbc9-fd11cc19f98a@pengutronix.de>
-Date:   Fri, 2 Aug 2019 13:29:23 +0200
+Message-ID: <94a82ee7-880e-704c-14ea-328b17854441@pengutronix.de>
+Date:   Fri, 2 Aug 2019 13:45:59 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
+In-Reply-To: <20190731145447.29270-1-tomasbortoli@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N"
+ boundary="bUHFL0ZY0h4QKkg7KNcgGEekD5qTsRGu2"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,38 +113,39 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N
-Content-Type: multipart/mixed; boundary="gaoeyg1phy7IhFt9zgeKKgkSvdXLrdhGM";
+--bUHFL0ZY0h4QKkg7KNcgGEekD5qTsRGu2
+Content-Type: multipart/mixed; boundary="taHezyBPFjLpFu9Ua1xiWSIFcmBQqJa51";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
-Cc: linux-can@vger.kernel.org
-Message-ID: <72663b41-5a04-50ad-cbc9-fd11cc19f98a@pengutronix.de>
-Subject: Re: [PATCH] net/can/usb/peak_usb: force the string buffer
- NULL-terminated
-References: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
-In-Reply-To: <20190731072559.29406-1-xywang.sjtu@sjtu.edu.cn>
+To: Tomas Bortoli <tomasbortoli@gmail.com>, wg@grandegger.com,
+ linux-can@vger.kernel.org
+Cc: davem@davemloft.net, gregkh@linuxfoundation.org,
+ alexios.zavras@intel.com, tglx@linutronix.de, allison@lohutok.net,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller@googlegroups.com
+Message-ID: <94a82ee7-880e-704c-14ea-328b17854441@pengutronix.de>
+Subject: Re: [PATCH] peak_usb: Fix info-leaks to USB devices
+References: <20190731145447.29270-1-tomasbortoli@gmail.com>
+In-Reply-To: <20190731145447.29270-1-tomasbortoli@gmail.com>
 
---gaoeyg1phy7IhFt9zgeKKgkSvdXLrdhGM
+--taHezyBPFjLpFu9Ua1xiWSIFcmBQqJa51
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 7/31/19 9:25 AM, Wang Xiayang wrote:
-> strncpy() does not ensure NULL-termination when the input string
-> size equals to the destination buffer size IFNAMSIZ.
-> The output string is passed to dev_info() which relies on
-> the NULL-termination.
+On 7/31/19 4:54 PM, Tomas Bortoli wrote:
+> Uninitialized Kernel memory can leak to USB devices.
 >=20
-> Use strlcpy() instead.
+> Fix by using kzalloc() instead of kmalloc() on the affected buffers.
 >=20
-> This issue is identified by a Coccinelle script.
->=20
-> Signed-off-by: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+> Signed-off-by: Tomas Bortoli <tomasbortoli@gmail.com>
+> Reported-by: syzbot+d6a5a1a3657b596ef132@syzkaller.appspotmail.com
+> Reported-by: syzbot+513e4d0985298538bf9b@syzkaller.appspotmail.com
 
-Applied both patches.
+Applied, but split into two patches, as the problem was introduced in
+two separate commits.
 
-Thanks,
+regards,
 Marc
 
 --=20
@@ -151,23 +155,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---gaoeyg1phy7IhFt9zgeKKgkSvdXLrdhGM--
+--taHezyBPFjLpFu9Ua1xiWSIFcmBQqJa51--
 
---fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N
+--bUHFL0ZY0h4QKkg7KNcgGEekD5qTsRGu2
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EHpMACgkQWsYho5Hk
-nSCQKgf/ZOBYxPXR/9SXdatgL/j7mVJIAQgZ4+mSt6PTMM0WldEz2z0TAu/lVcPs
-0UJXfLEtcVqkHOB1fPrcCBeuoYn/UFPPNJiU7u2MWvRNm/7UMbj25RRQtSCD5B9y
-GxaBd5dQLAb6RzB/AilYljz9+dgvTPT0srOXyUT0ZMLd7oNki2gEHIz4nAXSIiOB
-MWc6d+Up0k+hpIPhqVeC6cv2MZECTXQir2paTU5l9G+CYZ14Wo13JdPg9+ECGedL
-YEih59qI3a5BtQgnYBY2So48gt097Uhmqk14JEy2BD6l9KKoXT1UJ8MG5nhUC28a
-wICRCozJQc6Qrhhr7/P7Z6brBrplCQ==
-=6+GL
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EIngACgkQWsYho5Hk
+nSD8vgf8DJdo1LsTA5upQRO9+/x1xqDq+ssUrsPgYQU8Oeik4bHaDvyhN5pOXXVP
+QXx9xNv6SFDKwi/I2IP/4A87PWbHRZf1TT67yMGRMBofgR9v1eM34oFdHRPsx16+
+6fylUL5cvukN2Zo540ppZ/OxHmUZvNMzSSytt6KWL1FfwRdZzUSQ6bk02HHF1xTY
+BAIHM6LKW12OgQ4eSJV9/EgDeOU+97BlnxDhlR6qUoDPgcp+tY/UpQqRA1dZ5wFY
+J9ZDx8tZTfAc+MhRZ1+yzRB/+oOssIuhvHe8UP/IgviBre1osMmmggH1TXnPJVzQ
+lgcWR9rpEFShfT+wI0YHK+Wi1rFgaA==
+=YiHU
 -----END PGP SIGNATURE-----
 
---fEQLblovqh7rl7PURFjrajZT2qZ5EHn9N--
+--bUHFL0ZY0h4QKkg7KNcgGEekD5qTsRGu2--
