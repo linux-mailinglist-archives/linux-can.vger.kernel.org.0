@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4AE77F67D
-	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 14:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925E67F69F
+	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 14:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730704AbfHBMHU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Aug 2019 08:07:20 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36861 "EHLO
+        id S2389226AbfHBMMm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Aug 2019 08:12:42 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36899 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729980AbfHBMHT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 08:07:19 -0400
+        with ESMTP id S2387770AbfHBMMm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 08:12:42 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1htWL5-0006vA-4Y; Fri, 02 Aug 2019 14:07:15 +0200
+        id 1htWQH-0007V5-0I; Fri, 02 Aug 2019 14:12:37 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0D07843D74A;
-        Fri,  2 Aug 2019 12:07:14 +0000 (UTC)
-Subject: Re: [PATCH][next] can: kvaser_pciefd: remove redundant negative check
- on trigger
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 559D643D761;
+        Fri,  2 Aug 2019 12:12:35 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Colin King <colin.king@canonical.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org,
         Henning Colliander <henning.colliander@evidente.se>,
         Jimmy Assarsson <extja@kvaser.com>,
-        Christer Beskow <chbe@kvaser.com>
+        Christer Beskow <chbe@kvaser.com>, walter harms <wharms@bfs.de>
 References: <20190725112509.1075-1-colin.king@canonical.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <954ea3c6-3a2d-ee4e-c4c8-a49358d569b6@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,15 +95,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <954ea3c6-3a2d-ee4e-c4c8-a49358d569b6@pengutronix.de>
-Date:   Fri, 2 Aug 2019 14:07:10 +0200
+Subject: Re: [PATCH][next] can: kvaser_pciefd: remove redundant negative check
+ on trigger
+Message-ID: <34bd981c-0bc1-6eba-9663-f8e8ced2f72e@pengutronix.de>
+Date:   Fri, 2 Aug 2019 14:12:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190725112509.1075-1-colin.king@canonical.com>
+In-Reply-To: <954ea3c6-3a2d-ee4e-c4c8-a49358d569b6@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="G8TMHH3aqvcSICyEMi0JzW5k4s1Z46P22"
+ boundary="DXmJXbu7rk1HGraFlSw9WGVOQYHPuvE59"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,58 +116,69 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---G8TMHH3aqvcSICyEMi0JzW5k4s1Z46P22
-Content-Type: multipart/mixed; boundary="9MrFRpJrl4DodDkv4jgC1ZDYOd5mgQRYA";
+--DXmJXbu7rk1HGraFlSw9WGVOQYHPuvE59
+Content-Type: multipart/mixed; boundary="ZQh91bgBZe0YjWdLIWZvz7nEmgMpEJrXC";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Colin King <colin.king@canonical.com>,
  Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org
 Cc: kernel-janitors@vger.kernel.org,
  Henning Colliander <henning.colliander@evidente.se>,
- Jimmy Assarsson <extja@kvaser.com>, Christer Beskow <chbe@kvaser.com>
-Message-ID: <954ea3c6-3a2d-ee4e-c4c8-a49358d569b6@pengutronix.de>
+ Jimmy Assarsson <extja@kvaser.com>, Christer Beskow <chbe@kvaser.com>,
+ walter harms <wharms@bfs.de>
+Message-ID: <34bd981c-0bc1-6eba-9663-f8e8ced2f72e@pengutronix.de>
 Subject: Re: [PATCH][next] can: kvaser_pciefd: remove redundant negative check
  on trigger
 References: <20190725112509.1075-1-colin.king@canonical.com>
-In-Reply-To: <20190725112509.1075-1-colin.king@canonical.com>
+ <954ea3c6-3a2d-ee4e-c4c8-a49358d569b6@pengutronix.de>
+In-Reply-To: <954ea3c6-3a2d-ee4e-c4c8-a49358d569b6@pengutronix.de>
 
---9MrFRpJrl4DodDkv4jgC1ZDYOd5mgQRYA
+--ZQh91bgBZe0YjWdLIWZvz7nEmgMpEJrXC
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Adding the Author(s) to Cc.
+On 8/2/19 2:07 PM, Marc Kleine-Budde wrote:
+> Adding the Author(s) to Cc.
+>=20
+> On 7/25/19 1:25 PM, Colin King wrote:
+>> From: Colin Ian King <colin.king@canonical.com>
+>>
+>> The check to see if trigger is less than zero is always false, trigger=
 
-On 7/25/19 1:25 PM, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
->=20
-> The check to see if trigger is less than zero is always false, trigger
-> is always in the range 0..255.  Hence the check is redundant and can
-> be removed.
->=20
-> Addresses-Coverity: ("Logically dead code")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/net/can/kvaser_pciefd.c | 3 ---
->  1 file changed, 3 deletions(-)
->=20
-> diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_p=
-ciefd.c
-> index 3af747cbbde4..68e00aad0810 100644
-> --- a/drivers/net/can/kvaser_pciefd.c
-> +++ b/drivers/net/can/kvaser_pciefd.c
-> @@ -652,9 +652,6 @@ static void kvaser_pciefd_pwm_stop(struct kvaser_pc=
-iefd_can *can)
->  	top =3D (pwm_ctrl >> KVASER_PCIEFD_KCAN_PWM_TOP_SHIFT) & 0xff;
-> =20
->  	trigger =3D (100 * top + 50) / 100;
-> -	if (trigger < 0)
-> -		trigger =3D 0;
-> -
->  	pwm_ctrl =3D trigger & 0xff;
->  	pwm_ctrl |=3D (top & 0xff) << KVASER_PCIEFD_KCAN_PWM_TOP_SHIFT;
->  	iowrite32(pwm_ctrl, can->reg_base + KVASER_PCIEFD_KCAN_PWM_REG);
->=20
+>> is always in the range 0..255.  Hence the check is redundant and can
+>> be removed.
+>>
+>> Addresses-Coverity: ("Logically dead code")
+>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+>> ---
+>>  drivers/net/can/kvaser_pciefd.c | 3 ---
+>>  1 file changed, 3 deletions(-)
+>>
+>> diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_=
+pciefd.c
+>> index 3af747cbbde4..68e00aad0810 100644
+>> --- a/drivers/net/can/kvaser_pciefd.c
+>> +++ b/drivers/net/can/kvaser_pciefd.c
+>> @@ -652,9 +652,6 @@ static void kvaser_pciefd_pwm_stop(struct kvaser_p=
+ciefd_can *can)
+>>  	top =3D (pwm_ctrl >> KVASER_PCIEFD_KCAN_PWM_TOP_SHIFT) & 0xff;
+>> =20
+>>  	trigger =3D (100 * top + 50) / 100;
+
+As Walter pointed out the above code makes no sense in the first place.
+
+>> -	if (trigger < 0)
+>> -		trigger =3D 0;
+>> -
+
+Can someone have a deeper look at this code section and decide what to
+do with this finding.
+
+>>  	pwm_ctrl =3D trigger & 0xff;
+>>  	pwm_ctrl |=3D (top & 0xff) << KVASER_PCIEFD_KCAN_PWM_TOP_SHIFT;
+>>  	iowrite32(pwm_ctrl, can->reg_base + KVASER_PCIEFD_KCAN_PWM_REG);
+>>
 
 regards,
 Marc
@@ -178,23 +190,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---9MrFRpJrl4DodDkv4jgC1ZDYOd5mgQRYA--
+--ZQh91bgBZe0YjWdLIWZvz7nEmgMpEJrXC--
 
---G8TMHH3aqvcSICyEMi0JzW5k4s1Z46P22
+--DXmJXbu7rk1HGraFlSw9WGVOQYHPuvE59
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EJ24ACgkQWsYho5Hk
-nSDHLAf/evif4UhnEzCWXAm6eTOORviGs1HoDY+7aLbIDSzIJqNmrBE4W5H7dlVq
-II7nIgfEu4FRW2Ke4eOJFwFz7YrCrN3FfwXtULrH6oSrKzd8Jrcc+1qJBa+sfNkd
-J8dQkD1vNRlU0yhrsE7oPi8gdZwKyT55C4sJ5CSuEVNdDwOZOvpEPr8CwKd8erEc
-XI/ifzl8S/25miv9+usoONExoo+1ckwxJmzjXsqlVn1l5kLG8Z8lyhXZwpj5qYip
-ZB8qE1nW4WpdjYEAZysg15ZcN+PtZx6knodcU/LGCR4kkbai+x2YyClwFFkDZg9m
-diJnI5UV6WvPEiMx6y8GcXhBmYqVqw==
-=1rK7
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EKK0ACgkQWsYho5Hk
+nSARwQgAj1game82YoBoUt3nIrj3r+el5e5N/67rPixsLJ3DbiYbp3/XzwktMbWw
+3/PDKPQXo/Y3/0LmP7Lk71wQkResvqtJvK2k4MIt+PxhZfQ2QW+kObpzWYcXQzRG
+I24G8hAA3o5TE5PwdZr5TH6UZ9Gx4KAHsqqmBaopT6q0um3nANZ6TZAwgKI5OR5W
+Y90EB5wCwWLUzY4o+R1ndmjm5yQZMJNmXu5quWMi53TPaNSTCTipefUTAU9RgzqT
+JBQvZMXOM9L+VtUmnx+hnx/fMTNbkWUjHAkQ64lSI6I+cPNGDZR9zxxGLsOx1Ee3
+u7khuOqfAjLgivF50ioWz82mTwuv6g==
+=03/D
 -----END PGP SIGNATURE-----
 
---G8TMHH3aqvcSICyEMi0JzW5k4s1Z46P22--
+--DXmJXbu7rk1HGraFlSw9WGVOQYHPuvE59--
