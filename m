@@ -2,114 +2,182 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE64C7E6E9
-	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 01:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E7D7F5BB
+	for <lists+linux-can@lfdr.de>; Fri,  2 Aug 2019 13:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390483AbfHAXt5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Aug 2019 19:49:57 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:35542 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733221AbfHAXt4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Aug 2019 19:49:56 -0400
-Received: by mail-lf1-f68.google.com with SMTP id p197so51534441lfa.2
-        for <linux-can@vger.kernel.org>; Thu, 01 Aug 2019 16:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=capp-tech-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=w9BSF2Y8qNdGXlBBRfluRgRErzVgWR0aGyXgFsakMao=;
-        b=pwiIVmM9O2qnrsVxT1xXWoiKAQpUNxvKO7TkiW04t+2qihb1DccHNMVBHN+BJEuSHp
-         lpqPOTZrGf9R9w6KOisRh2fhgMOPmiNRO4CZAUyswX+/cE+oHKNlTMi1Ke4nkTVlOIOf
-         7B3xSUoWo/mASJLEspgXI8fVJcq+RhY/iAYSagyBwsgYE2BV+7/82OGol3s0XCW4f80f
-         Y/oOERgRua6H1lTiWenh8d9GskE4+6vPBMMvlcxa5pBefEGrzFEEnpBdCGNc0R2IsgPo
-         QxRSGmRzEX2qLHWk+k2bZmmTl5xZxxs4tisUXmGiEPw/jGAEPJmQY43BjbfoQ9I6hgJM
-         elCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w9BSF2Y8qNdGXlBBRfluRgRErzVgWR0aGyXgFsakMao=;
-        b=BH0MgawVngqoIKTcnWtimmtdQB/CJT1J/aUrzQgSTLX/Ji1DjDp33AG4jMoRe3q4gP
-         NVLHP99Okyx2EsFUwba/xwpUoCiIJwqZEHfg3EGAzf8caR3/x8m6tTEE865cQ8PRdsGd
-         6BLzHBjc8jkMUErH3JcLo/CMPAw8oTq3N3nu3N9NpW9IxGgTqG+ojTk8g4tFtdmTwSs/
-         M+smKNJiJ1Jcye4E/elhf2LpHI6nE8L1jWJ15vK8cm5scMK1SixGuZhyASwECtrriHBU
-         06MBOl0KXf/DGdItKwgJePQMoGq6Prlz4r1ky0J3eLCTBkqLJ3+ZnANjTiKTx4D2hpGm
-         wsYQ==
-X-Gm-Message-State: APjAAAX0zgKGwy7o4NXTHhpS6YcldIQTRpidqFdP+PyV7X3aQxcJP9QK
-        8GRodE02hU89v/eLU/U5CkIpT6BQqUNhB1iKNyQW8A==
-X-Google-Smtp-Source: APXvYqwDwmZaSG4EDOi+E6WwzKU9S0uFsMQlJh2yD09CiXpo+dFkE+9je1uGbatLL/RPnefA3sLyf9mN2/DOp4AoRcc=
-X-Received: by 2002:ac2:4109:: with SMTP id b9mr56884707lfi.31.1564703395111;
- Thu, 01 Aug 2019 16:49:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
- <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net> <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
-In-Reply-To: <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
-From:   Tom Prohaszka <tprohaszka@capp-tech.com>
-Date:   Thu, 1 Aug 2019 19:49:44 -0400
-Message-ID: <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
-Subject: Re: Disable Network Statistics - CAN
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S1729325AbfHBLHl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Aug 2019 07:07:41 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36449 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729311AbfHBLHl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Aug 2019 07:07:41 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1htVPO-0001aZ-TG; Fri, 02 Aug 2019 13:07:38 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1] (unknown [IPv6:2a03:f580:87bc:d400:595f:209f:a34b:fbc1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9987643D6E1;
+        Fri,  2 Aug 2019 11:07:37 +0000 (UTC)
+To:     Tom Prohaszka <tprohaszka@capp-tech.com>
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
+ <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
+ <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+ <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: Disable Network Statistics - CAN
+Message-ID: <db34f851-8f2f-b4bf-011b-fef985c79afe@pengutronix.de>
+Date:   Fri, 2 Aug 2019 13:07:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I found this for the V5 commit:
-https://www.spinics.net/lists/linux-can/msg00847.html
-I may have read it wrong.  It sounds like the network stack is
-dropping them, not necessarily the "statistics" gathering.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa
+Content-Type: multipart/mixed; boundary="kteRtgQt0m12ZvuNlJTQzi6MGPOtzYLu3";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Tom Prohaszka <tprohaszka@capp-tech.com>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Message-ID: <db34f851-8f2f-b4bf-011b-fef985c79afe@pengutronix.de>
+Subject: Re: Disable Network Statistics - CAN
+References: <CANRGksgbzcwt+XYNbZNrRMy=MXrT4WjXXW814=xYUgiJG+9twA@mail.gmail.com>
+ <e4b4d4ea-735c-fa26-3c19-369b1e19b9f7@hartkopp.net>
+ <4a7e43fc-dce5-218c-6ebf-85e48ee42936@pengutronix.de>
+ <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
+In-Reply-To: <CANRGkshBMbe+JHr0Ya4fZ5L06UQpdJ5ScAc3Xpc-yYsmw1X1EA@mail.gmail.com>
 
-Still the driver is able to handle reception of 99.95% of all CAN frames
-of a 100% saturated 1MHz Can2.0 Bus with Frames with standard IDs and
-DLC=0 on a Raspberry Pi 3. Note that this statistics is without injection
-into the network stack, which then drops about 60% of all frames.
+--kteRtgQt0m12ZvuNlJTQzi6MGPOtzYLu3
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 31, 2019 at 10:16 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 7/31/19 3:38 PM, Oliver Hartkopp wrote:
-> > Hi all,
-> >
-> > On 31/07/2019 03.49, Tom Prohaszka wrote:
-> >> We are using the MCP25xxfd driver.  A comment in the code indicated
-> >> that during testing, the network statistics were disabled to achieve
-> >> high utilization of the CAN bus.  Another comment indicated that when
-> >> network statistics were re-enabled, a 60% decrease in throughput
-> >> occurred.
->
-> Can you point me to these comments?
->
-> >> My question is, how can we disable the network statistics for CAN, and
-> >> if not possible for CAN, globally.
-> >
-> > there seem to be tons of MCP25XXFD_DEBUGFS_STATS_*() macros.
->
-> I'm not sure that incrementing some counters will cause a performace
-> degration of 60%.
->
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a#n131
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_debugfs.h?h=mcp25xxfd&id=9b2ffbb925a0c32ea064c0a91b6bacb33d5e877a
-> >
-> > We had to purge all the debug stuff when mainlining the CAN subsystem
-> > and I wonder if this is really NEEDED.
-> >
-> > When the driver is in mainline Linux we can assume it to work - and not
-> > to be debugged anymore.
-> >
-> > Additionally the CAN_DEBUG_DEVICES Kconfig option could have been used
-> > to debug potential pitfalls.
-> >
-> > IMO the debugfs stuff should be removed completely.
->
-> Or at least make it a per driver option.
->
-> Marc
->
-> --
-> Pengutronix e.K.                  | Marc Kleine-Budde           |
-> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-> Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
->
+On 8/2/19 1:49 AM, Tom Prohaszka wrote:
+> I found this for the V5 commit:
+> https://www.spinics.net/lists/linux-can/msg00847.html
+> I may have read it wrong.  It sounds like the network stack is
+> dropping them, not necessarily the "statistics" gathering.
+>=20
+> Still the driver is able to handle reception of 99.95% of all CAN frame=
+s
+> of a 100% saturated 1MHz Can2.0 Bus with Frames with standard IDs and
+> DLC=3D0 on a Raspberry Pi 3. Note that this statistics is without injec=
+tion
+> into the network stack, which then drops about 60% of all frames.
+To my understanding it's the networking stack that drops the CAN frames
+not the statistics itself.
+
+However I've added a Kconfig option to the driver to switch off the
+debugfs support:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
+g/?h=3Dmcp25xxfd
+
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--kteRtgQt0m12ZvuNlJTQzi6MGPOtzYLu3--
+
+--otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1EGXQACgkQWsYho5Hk
+nSC3KwgAgtWW7tI/1sgevuhDYBIpj+2tu2mKwv6tVTgD2r7LIPdaxvRPulUTWKSN
+Cb6M0+5sicgfWiF8ytPpNEewFDrDY4ecv84aZg2qqQ1asq96BkZSnQHAtBFywUWd
+KkoSulkJe/Rwl7g1G/ySvdAtednCv5ibdQ5et2yi3nvGmth1W12joek1PfL13p7D
+j9oIf1U5aCd2kzQ86hO7fVc19JF4l5AeWDLwMf0ScVWFsaxvYJ42gTyn02ERA02D
+EvuIL5vOqIPJ9HbzsXRFu+IBFMAi7PygLKddiwkmq/jJm1HZuKvWps9Md6EG15vh
+PBb2hLTZbedXCPkSGbf3oTIVW0BVlg==
+=fnau
+-----END PGP SIGNATURE-----
+
+--otwDy4R7Yuq6AS9kWxtRRJ5uVTEThspAa--
