@@ -2,34 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 007E283200
-	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2019 14:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD66283208
+	for <lists+linux-can@lfdr.de>; Tue,  6 Aug 2019 14:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbfHFM6s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Aug 2019 08:58:48 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58475 "EHLO
+        id S1731132AbfHFM7s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Aug 2019 08:59:48 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44063 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730188AbfHFM6r (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Aug 2019 08:58:47 -0400
+        with ESMTP id S1729898AbfHFM7s (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Aug 2019 08:59:48 -0400
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1huz37-0002wE-7f; Tue, 06 Aug 2019 14:58:45 +0200
+        id 1huz37-0002wF-7d; Tue, 06 Aug 2019 14:58:45 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1huz36-0003qp-Hk; Tue, 06 Aug 2019 14:58:44 +0200
+        id 1huz36-0003qz-Im; Tue, 06 Aug 2019 14:58:44 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
         wg@grandegger.com
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, robin@protonic.nl, david@protonic.nl
-Subject: =?UTF-8?q?=5BPATCH=20v1=200/6=5D=20last=20patch=20=E2=84=A2?=
-Date:   Tue,  6 Aug 2019 14:58:34 +0200
-Message-Id: <20190806125840.5634-1-o.rempel@pengutronix.de>
+Subject: [PATCH v1 1/6] j1939: remove CAN_J1939_DEBUG option
+Date:   Tue,  6 Aug 2019 14:58:35 +0200
+Message-Id: <20190806125840.5634-2-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190806125840.5634-1-o.rempel@pengutronix.de>
+References: <20190806125840.5634-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
 X-SA-Exim-Mail-From: ore@pengutronix.de
@@ -40,29 +41,40 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch set is hopefully "last change ™" needed before upstreaming.
-This will brake user space UAPI, so you will need to update your tools
-to work with it.
+all debugging options are dynamic now
 
-Oleksij Rempel (6):
-  j1939: remove CAN_J1939_DEBUG option
-  j1939: j1939_can_recv: add sanity test on skb_clone
-  j1939: remove SO_J1939_RECV_OWN support
-  j1939: notify user space if simple package was transmitted by HW
-  j1939: transport: remove SKBTX_ANY_TSTAMP from simple skb
-  j1939: transport: j1939_xtp_rx_dat_one: add sanity check for
-    j1939_session_skb_find()
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ net/can/j1939/Kconfig  | 6 ------
+ net/can/j1939/Makefile | 2 --
+ 2 files changed, 8 deletions(-)
 
- Documentation/networking/j1939.rst |  6 --
- include/uapi/linux/can/j1939.h     |  5 +-
- net/can/j1939/Kconfig              |  6 --
- net/can/j1939/Makefile             |  2 -
- net/can/j1939/j1939-priv.h         | 11 +---
- net/can/j1939/main.c               | 13 ++++-
- net/can/j1939/socket.c             | 32 +++++------
- net/can/j1939/transport.c          | 89 +++++++++++++++++++++++++++---
- 8 files changed, 111 insertions(+), 53 deletions(-)
-
+diff --git a/net/can/j1939/Kconfig b/net/can/j1939/Kconfig
+index 4f4c8142b185..2998298b71ec 100644
+--- a/net/can/j1939/Kconfig
++++ b/net/can/j1939/Kconfig
+@@ -13,9 +13,3 @@ config CAN_J1939
+ 	  The relevant parts in kernel are
+ 	  SAE j1939-21 (datalink & transport protocol)
+ 	  & SAE j1939-81 (network management).
+-
+-config CAN_J1939_DEBUG
+-	bool "debug SAE J1939"
+-	depends on CAN_J1939
+-	help
+-	  Say Y to add extra debug code (via printk) in the j1939 stack
+diff --git a/net/can/j1939/Makefile b/net/can/j1939/Makefile
+index 46e6c6ed221d..19181bdae173 100644
+--- a/net/can/j1939/Makefile
++++ b/net/can/j1939/Makefile
+@@ -1,7 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-cppflags-$(CONFIG_CAN_J1939_DEBUG) += -DDEBUG
+-
+ obj-$(CONFIG_CAN_J1939) += can-j1939.o
+ 
+ can-j1939-objs := \
 -- 
 2.20.1
 
