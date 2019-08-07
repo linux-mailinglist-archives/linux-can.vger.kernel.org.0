@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A467E848FC
-	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2019 11:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D780848FE
+	for <lists+linux-can@lfdr.de>; Wed,  7 Aug 2019 11:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729199AbfHGJzt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Aug 2019 05:55:49 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50709 "EHLO
+        id S1728915AbfHGJzs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Aug 2019 05:55:48 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44751 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729284AbfHGJzt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Aug 2019 05:55:49 -0400
+        with ESMTP id S1728894AbfHGJzr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Aug 2019 05:55:47 -0400
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1hvIfY-0005F5-HN; Wed, 07 Aug 2019 11:55:44 +0200
+        id 1hvIfY-0005F7-HN; Wed, 07 Aug 2019 11:55:44 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1hvIfX-0001i0-5L; Wed, 07 Aug 2019 11:55:43 +0200
+        id 1hvIfX-0001iQ-6O; Wed, 07 Aug 2019 11:55:43 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
         wg@grandegger.com
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, robin@protonic.nl, david@protonic.nl
-Subject: [PATCH v1 2/5] j1939: make J1939_ERRQUEUE_SCHED/ACK optional again.
-Date:   Wed,  7 Aug 2019 11:55:38 +0200
-Message-Id: <20190807095541.2544-3-o.rempel@pengutronix.de>
+Subject: [PATCH v1 3/5] j1939: add comments for locks
+Date:   Wed,  7 Aug 2019 11:55:39 +0200
+Message-Id: <20190807095541.2544-4-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190807095541.2544-1-o.rempel@pengutronix.de>
 References: <20190807095541.2544-1-o.rempel@pengutronix.de>
@@ -43,52 +43,41 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- net/can/j1939/socket.c    | 7 ++++++-
- net/can/j1939/transport.c | 1 -
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ net/can/j1939/j1939-priv.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 3c1b3c0ec18f..da93afee1d0a 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -811,7 +811,6 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
- 	ret = memcpy_from_msg(skb_put(skb, size), msg, size);
- 	if (ret < 0)
- 		goto free_skb;
--	sock_tx_timestamp(sk, skb->sk->sk_tsflags, &skb_shinfo(skb)->tx_flags);
+diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
+index feb6bc64db0a..5881e4c86b44 100644
+--- a/net/can/j1939/j1939-priv.h
++++ b/net/can/j1939/j1939-priv.h
+@@ -81,8 +81,10 @@ struct j1939_priv {
  
- 	skb->dev = ndev;
+ 	unsigned int tp_max_packet_size;
  
-@@ -901,11 +900,17 @@ void j1939_sk_errqueue(struct j1939_session *session,
- 	memset(serr, 0, sizeof(*serr));
- 	switch (type) {
- 	case J1939_ERRQUEUE_ACK:
-+		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_ACK))
-+			return;
+-	struct list_head j1939_socks;
++	/* lock for j1939_socks list */
+ 	spinlock_t j1939_socks_lock;
++	struct list_head j1939_socks;
 +
- 		serr->ee.ee_errno = ENOMSG;
- 		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
- 		serr->ee.ee_info = SCM_TSTAMP_ACK;
- 		break;
- 	case J1939_ERRQUEUE_SCHED:
-+		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED))
-+			return;
-+
- 		serr->ee.ee_errno = ENOMSG;
- 		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
- 		serr->ee.ee_info = SCM_TSTAMP_SCHED;
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 4d285a92bd41..c2573d0f0721 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1004,7 +1004,6 @@ static int j1939_simple_txnext(struct j1939_session *session)
- 		return -ENOMEM;
+ 	struct kref rx_kref;
+ };
  
- 	can_skb_set_owner(skb, se_skb->sk);
--	skb_shinfo(skb)->tx_flags &= ~SKBTX_ANY_TSTAMP;
+@@ -226,6 +228,7 @@ struct j1939_session {
+ 	struct list_head active_session_list_entry;
+ 	struct list_head sk_session_queue_entry;
+ 	struct kref kref;
++	/* session lock */
+ 	spinlock_t lock;
+ 	struct sock *sk;
  
- 	j1939_tp_set_rxtimeout(session,
- 			       J1939_XTP_ABORT_TIMEOUT_MS);
+@@ -306,6 +309,7 @@ struct j1939_sock {
+ 	atomic_t skb_pending;
+ 	wait_queue_head_t waitq;
+ 
++	/* lock for the sk_session_queue list */
+ 	spinlock_t sk_session_queue_lock;
+ 	struct list_head sk_session_queue;
+ };
 -- 
 2.20.1
 
