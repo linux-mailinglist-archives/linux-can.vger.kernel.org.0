@@ -2,164 +2,167 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2261D8812D
-	for <lists+linux-can@lfdr.de>; Fri,  9 Aug 2019 19:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4042088376
+	for <lists+linux-can@lfdr.de>; Fri,  9 Aug 2019 21:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406599AbfHIR3g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Aug 2019 13:29:36 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:25393 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHIR3g (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Aug 2019 13:29:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1565371773;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=oX6nsEQsBq2eis3+TM7HkV4lnUJFdO7cahH0cYFkVNo=;
-        b=BnCyBI9Ss3mRrC0oFdsCHfPECRgsHANlr+vkOlFe3j67xbVZMwoFFM38w9QjAFZTOl
-        KfqK3jcF2nFOqu+OmnmLwt4c6NfgCD2o+efk1r45PSo+FQWDBXKiRJk9U+sT6xi8FPVU
-        Wsh2DjT83SYjNMzM7XBeg0DwGG+HboCbkamp8pw5n7PX8zklxZ6kZt+f6SdPudSunvTH
-        MLYgBk1PnISQe5BcpX55F9SbPd4PCxfV/isRk1aiLyVRX06qlZXqr1d3emgJ01FAaQh0
-        o7yvFWyhaGIBuKeY6fssloD3RiAXUzx50DE32R0UNvp8C6ueEGxbnvy5f8GQpL8fksXC
-        tutA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJUch5l03U"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.40.177]
-        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
-        with ESMTPSA id k05d3bv79HTVTda
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Fri, 9 Aug 2019 19:29:31 +0200 (CEST)
-Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-References: <20190723130003.17733-1-socketcan@hartkopp.net>
- <20190723130003.17733-2-socketcan@hartkopp.net>
- <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
- <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
- <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
- <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
- <1684a411-e05c-a7a0-2b65-ceefc68e6b12@pengutronix.de>
- <727ad8d4-acc3-d72d-613e-fb3429f670f6@hartkopp.net>
- <6acd5e5b-764a-f3f9-8e2c-6dacd3923e7e@pengutronix.de>
- <9b4ca3eb-c3b9-926c-9b86-6077229791be@hartkopp.net>
- <e8b96c8b-5942-d6ff-f61f-dffd1c99c942@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <eeaf5a93-82ae-f2fb-c4cc-1c9f7f926171@hartkopp.net>
-Date:   Fri, 9 Aug 2019 19:29:25 +0200
+        id S1725904AbfHITtw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Aug 2019 15:49:52 -0400
+Received: from mailproxy03.manitu.net ([217.11.48.67]:38686 "EHLO
+        mailproxy03.manitu.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbfHITtw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Aug 2019 15:49:52 -0400
+Received: from [10.0.30.7] (dslb-092-074-039-194.092.074.pools.vodafone-ip.de [92.74.39.194])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: wg@grandegger.com)
+        by mailproxy03.manitu.net (Postfix) with ESMTPSA id 7BFCBD40051;
+        Fri,  9 Aug 2019 21:49:49 +0200 (CEST)
+Subject: Re: tcan4x5x on a Raspberry Pi
+To:     "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
+        <fixed-term.Konstantin.Buecheler@escrypt.com>,
+        Dan Murphy <dmurphy@ti.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
+ <d1badcdb-7635-705d-35d5-448297e8fafa@ti.com>
+ <ee351bd74b764759bb0258af3651bd4a@escrypt.com>
+From:   Wolfgang Grandegger <wg@grandegger.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=wg@grandegger.com; prefer-encrypt=mutual; keydata=
+ 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
+ 8QEfHnPzgykCs2DOOQ==
+Message-ID: <09c773a9-6b50-5633-c597-dcc67e938920@grandegger.com>
+Date:   Fri, 9 Aug 2019 21:49:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-In-Reply-To: <e8b96c8b-5942-d6ff-f61f-dffd1c99c942@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <ee351bd74b764759bb0258af3651bd4a@escrypt.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 09/08/2019 16.27, Marc Kleine-Budde wrote:
-> On 8/9/19 12:27 PM, Oliver Hartkopp wrote:
+Hello Konstantin,
 
->> The problem in loopback and vcan is similar.
->>
->> But the issues that rises up when sanitizing the FD length value in
->> loopback/vcan/af_can -> we start to fiddle inside the skb data.
->>
->> When we do so, we need to skb_copy() the skb instead of working on
->> clones to prevent race conditions inside the data, see:
->>
->> https://elixir.bootlin.com/linux/v5.2.6/source/net/can/gw.c#L387
->>
->> skb_copy would have a performance impact and it would trigger a big
->> rewriting of the current code. Don't know if it's worth that.
+m 09.08.19 um 18:46 schrieb FIXED-TERM Buecheler Konstantin
+(ETAS-SEC/ECT-Mu):
 > 
-> Which race condition do you have in mind?
-
-E.g. you create a can-gw job that forwards the incoming CAN frame to 10 
-different vcan's.
-
-These 10 skb's have been cloned which means their skb->data points to 
-the exact same location. When now each vcan instance on a multicore 
-system reads and writes the length info you have a classical race on 
-that one memory location.
-
-> For loopback ("can_put_echo_skb()"), I see a race condition in some CAN
-> drivers: They first do a can_put_echo_skb(), then keep using the skb to
-> write ->data into the hardware.
+>> Konstantin
 > 
-> If we modify the skb in can_put_echo_skb(), then the CAN driver will see
-> the sanitized struct canfd_frame::len. This means for dlc == 13, 14, 15
-> the driver will write more data into the hardware than needed. It
-> probably depends on the HW what the controller sends out if you have a
-> dlc == 14 (which means len up to 48 bytes) but only write 33 bytes into
-> the registers.
+>>> On 7/29/19 6:19 AM, FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu) wrote:
+>>> Hi all,
+>>>
+>>> I am currently working on a project where I am trying to use the tcan4550 chip with a Raspberry PI 3B.
+>>> I am struggling to create a working device tree overlay file for the Raspberry Pi.
+>>> Has anyone here tried this already? I would appreciate any help.
+> 
+>> Are you using the driver from net-next?
+> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/drivers/net/can/m_can
+> 
+> Yes, I am using the driver from net-next. 
+> 
+> 
+>> DT documentation here
+> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+> 
+> I saw this documentation but it didn’t help much (As I said, I don’t have much experience with device trees) . My dts file currently looks like this:  
+> 
+> /dts-v1/;
+> /plugin/;
+> 
+> / {
+>     compatible = "brcm,bcm2835", "brcm,bcm2836", "brcm,bcm2708", "brcm,bcm2709";
+>     fragment@0 {
+>         target = <&spi0>;
+> 	__overlay__ {
+>             status = "okay";
+> 	    spidev@0{
+> 	        status = "disabled";
+> 	    };
+> 	};
+>     };
+> 
+>     fragment@2 {
+>         compatible = "bosch, m_can";
+> 	target = <&spi0>;
+> 	__overlay__ {
+> 	    tcan4x5x: tcan4x5x@0 {
+> 	             compatible = "ti,tcan4x5x";
+>                           reg = <0>;
+> 		#address-cells = <1>;
+>                          #size-cells = <1>;
+> 		spi-max-frequency = <10000000>;
+>                          bosch,mram-cfg = <0x0 0 0 32 0 0 1 1>;
+> 		data-ready-gpios = <&gpio 23 0>;
+> 		device-wake-gpios = <&gpio 24 1>;
+> 				
+> 	    };		
+> 	};
+>     };
+> };
+> 
+> 
+> Checking dmesg I always see these errors:
+> [    5.409051] tcan4x5x spi0.0: no clock found
+> [    5.409064] tcan4x5x spi0.0: no CAN clock source defined
+> [    5.409125] tcan4x5x spi0.0: data-ready gpio not defined
+> [    5.409135] tcan4x5x spi0.0: Probe failed, err=-22
+> 
+> I already fixed the clock issue once by doing something like this:
+> clocks = <&can0_osc>,
+>               <&can0_osc>;
+> clock-names = "hclk", "cclk";
+> But that didn’t fix the " data-ready gpio not defined" error.
+> 
+> 
+>> I did the development on a BeagleBone Black.
 
-Then you have uninitialized content from the CAN registers and not from 
-the skb on the wire :-)
+Before fiddling with the dynamic device tree, I would try to patch
+normal device tree source files first.
 
-> While other drivers don't touch the skb after can_put_echo_skb().
-> 
-> Can we modify the ->len in can_get_echo_skb() (or the __ variant) right
-> before pushing the skv into the networking stack? We have to look at the
-> data path for driver that cannot/don't use can_get_echo_skb() due to no
-> TX-complete interrupt.
-> 
-> Looking at vcan, where's the race condition when modifying the skb in
-> vcan_tx()?
-
-As written above. Additionally the echo is mostly done in can_send() in 
-af_can.c. And vcan_tx() is just a /dev/null from the packet flow 
-perspective.
-
->> I tend to sanitize the CAN FD length values when they are introduced
->> into the system (CAN_RAW, CAN_BCM, CAN FD drivers*) and when they are
->> modified (CAN_GW).
->>
->> * = already done
-> 
-> You miss the datapath that directly injects packets into the networking
-> stack with the mechanism that tcpdump uses but the sending into the
-> kernel instead of receiving (I don't remember the exact name). This path
-> skips all checks in CAN_RAW. This is why we have the
-> "can_dropped_invalid_skb()" in all drivers.
-
-I don't know whether these tools can create ethertype CAN(FD) skbs which 
-is mandatory for the CAN stack to process skbs. But if so, you are right.
-
-> So from my point of view it makes no sense to sanitize the len value in
-> gw, as the drivers convert from len to dlc anyways.
-> 
-> What do I see when I attach a candump to the src and another one to the
-> dst interface? I suspenct:
-> 
-> src) the unmodified canfd_frame with sanitized len, as the controller
-> knowns only the dlc.
-> 
-> dst) the modified-by-gw canfd_frame, _after_ the loopback by the driver?
-> If there's neither sanitation in the gw not in the loopback, it's the
-> unsanitized len.
-> 
-> When I have another application sending on the dst interface, the
-> candump receives the un-sanitized, as there's no sanitation in the loopback.
-> 
-> For me the loopback is and vcan is the part to modify, as gw is just a
-> another source of unsanitized len information.
-> 
->> My idea was to fix things up when someone manipulates the CAN or CAN FD
->> length field with can-gw.
-> 
-> For CAN you don't have to do any sanitization, only check if the len is
-> <= 8.
-
-Mapping [0..8] to [0..8] is pointless but correct :-)
-
->> Or do you think I should just omit it and let the data flow as-is?
-> 
-> ACK
-
-Ok, will send a v2 with a removed sanitized CAN FD length. The 
-boundaries of the max length information (max 8 or 64) is tested anyway.
-
-Regards,
-Oliver
+Wolfgang
