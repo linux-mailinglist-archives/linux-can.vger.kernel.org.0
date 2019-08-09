@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 926C98745A
-	for <lists+linux-can@lfdr.de>; Fri,  9 Aug 2019 10:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F176687444
+	for <lists+linux-can@lfdr.de>; Fri,  9 Aug 2019 10:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405690AbfHIIid (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Aug 2019 04:38:33 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47829 "EHLO
+        id S2405947AbfHIIgE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Aug 2019 04:36:04 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43219 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfHIIic (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Aug 2019 04:38:32 -0400
+        with ESMTP id S2405829AbfHIIgB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Aug 2019 04:36:01 -0400
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1hw0NQ-000592-IG; Fri, 09 Aug 2019 10:35:56 +0200
+        id 1hw0NQ-000594-IM; Fri, 09 Aug 2019 10:35:56 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1hw0NO-0004Oe-G6; Fri, 09 Aug 2019 10:35:54 +0200
+        id 1hw0NO-0004Op-H3; Fri, 09 Aug 2019 10:35:54 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
         wg@grandegger.com
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, robin@protonic.nl, david@protonic.nl
-Subject: [PATCH v1 03/21] j1939: make J1939_ERRQUEUE_SCHED/ACK optional again.
-Date:   Fri,  9 Aug 2019 10:35:35 +0200
-Message-Id: <20190809083553.16687-4-o.rempel@pengutronix.de>
+Subject: [PATCH v1 04/21] j1939: remove session lock
+Date:   Fri,  9 Aug 2019 10:35:36 +0200
+Message-Id: <20190809083553.16687-5-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190809083553.16687-1-o.rempel@pengutronix.de>
 References: <20190809083553.16687-1-o.rempel@pengutronix.de>
@@ -41,54 +41,162 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This lock was used only on rx path for CTS and DATA packages. In current
+implementation we should not be able to process messages in parallel for
+same interfaces. In case we do, will need more locking then DATA and CTS
+
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- net/can/j1939/socket.c    | 7 ++++++-
- net/can/j1939/transport.c | 1 -
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ net/can/j1939/j1939-priv.h |  1 -
+ net/can/j1939/transport.c  | 38 ++++++++------------------------------
+ 2 files changed, 8 insertions(+), 31 deletions(-)
 
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 3c1b3c0ec18f..da93afee1d0a 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -811,7 +811,6 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
- 	ret = memcpy_from_msg(skb_put(skb, size), msg, size);
- 	if (ret < 0)
- 		goto free_skb;
--	sock_tx_timestamp(sk, skb->sk->sk_tsflags, &skb_shinfo(skb)->tx_flags);
+diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
+index feb6bc64db0a..8e0da24fd43c 100644
+--- a/net/can/j1939/j1939-priv.h
++++ b/net/can/j1939/j1939-priv.h
+@@ -226,7 +226,6 @@ struct j1939_session {
+ 	struct list_head active_session_list_entry;
+ 	struct list_head sk_session_queue_entry;
+ 	struct kref kref;
+-	spinlock_t lock;
+ 	struct sock *sk;
  
- 	skb->dev = ndev;
- 
-@@ -901,11 +900,17 @@ void j1939_sk_errqueue(struct j1939_session *session,
- 	memset(serr, 0, sizeof(*serr));
- 	switch (type) {
- 	case J1939_ERRQUEUE_ACK:
-+		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_ACK))
-+			return;
-+
- 		serr->ee.ee_errno = ENOMSG;
- 		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
- 		serr->ee.ee_info = SCM_TSTAMP_ACK;
- 		break;
- 	case J1939_ERRQUEUE_SCHED:
-+		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED))
-+			return;
-+
- 		serr->ee.ee_errno = ENOMSG;
- 		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
- 		serr->ee.ee_info = SCM_TSTAMP_SCHED;
+ 	/* ifindex, src, dst, pgn define the session block
 diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 4d285a92bd41..c2573d0f0721 100644
+index c2573d0f0721..a9671e2a5fcf 100644
 --- a/net/can/j1939/transport.c
 +++ b/net/can/j1939/transport.c
-@@ -1004,7 +1004,6 @@ static int j1939_simple_txnext(struct j1939_session *session)
- 		return -ENOMEM;
+@@ -308,17 +308,6 @@ static inline bool j1939_cb_is_broadcast(const struct j1939_sk_buff_cb *skcb)
+ 	return (!skcb->addr.dst_name && (skcb->addr.da == 0xff));
+ }
  
- 	can_skb_set_owner(skb, se_skb->sk);
--	skb_shinfo(skb)->tx_flags &= ~SKBTX_ANY_TSTAMP;
+-/* transport status locking */
+-static inline void j1939_session_lock(struct j1939_session *session)
+-{
+-	spin_lock_bh(&session->lock);
+-}
+-
+-static inline void j1939_session_unlock(struct j1939_session *session)
+-{
+-	spin_unlock_bh(&session->lock);
+-}
+-
+ static void j1939_session_skb_drop_old(struct j1939_session *session)
+ {
+ 	struct sk_buff *do_skb;
+@@ -1304,11 +1293,9 @@ j1939_xtp_rx_cts_one(struct j1939_session *session, struct sk_buff *skb)
  
- 	j1939_tp_set_rxtimeout(session,
- 			       J1939_XTP_ABORT_TIMEOUT_MS);
+ 	netdev_dbg(session->priv->ndev, "%s: 0x%p\n", __func__, session);
+ 
+-	j1939_session_lock(session);
+-
+ 	if (session->last_cmd == dat[0]) {
+ 		err = J1939_XTP_ABORT_DUP_SEQ;
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	}
+ 
+ 	if (session->skcb.addr.type == J1939_ETP)
+@@ -1316,9 +1303,9 @@ j1939_xtp_rx_cts_one(struct j1939_session *session, struct sk_buff *skb)
+ 	else
+ 		pkt = dat[2];
+ 	if (!pkt) {
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	} else if (dat[1] > session->pkt.block /* 0xff for etp */) {
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	} else {
+ 		/* set packet counters only when not CTS(0) */
+ 		session->pkt.tx_acked = pkt - 1;
+@@ -1332,7 +1319,6 @@ j1939_xtp_rx_cts_one(struct j1939_session *session, struct sk_buff *skb)
+ 	}
+ 
+ 	session->last_cmd = dat[0];
+-	j1939_session_unlock(session);
+ 	if (dat[1]) {
+ 		j1939_tp_set_rxtimeout(session, 1250);
+ 		if (session->transmission) {
+@@ -1348,8 +1334,7 @@ j1939_xtp_rx_cts_one(struct j1939_session *session, struct sk_buff *skb)
+ 	}
+ 	return;
+ 
+- out_session_unlock:
+-	j1939_session_unlock(session);
++ out_session_cancel:
+ 	j1939_session_timers_cancel(session);
+ 	j1939_tp_set_rxtimeout(session, J1939_XTP_ABORT_TIMEOUT_MS);
+ 	j1939_session_cancel(session, err);
+@@ -1381,7 +1366,6 @@ static struct j1939_session *j1939_session_new(struct j1939_priv *priv,
+ 
+ 	INIT_LIST_HEAD(&session->active_session_list_entry);
+ 	INIT_LIST_HEAD(&session->sk_session_queue_entry);
+-	spin_lock_init(&session->lock);
+ 	kref_init(&session->kref);
+ 
+ 	j1939_priv_get(priv);
+@@ -1688,8 +1672,6 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 		/* makes no sense */
+ 		goto out_session_cancel;
+ 
+-	j1939_session_lock(session);
+-
+ 	switch (session->last_cmd) {
+ 	case 0xff:
+ 		break;
+@@ -1703,7 +1685,7 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 	default:
+ 		netdev_info(priv->ndev, "%s: 0x%p: last %02x\n", __func__,
+ 			    session, session->last_cmd);
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	}
+ 
+ 	packet = (dat[0] - 1 + session->pkt.dpo);
+@@ -1711,13 +1693,13 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 	    (session->pkt.rx + 1) > session->pkt.total) {
+ 		netdev_info(priv->ndev, "%s: 0x%p: should have been completed\n",
+ 			    __func__, session);
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	}
+ 	se_skb = j1939_session_skb_find(session);
+ 	if (!se_skb) {
+ 		netdev_warn(priv->ndev, "%s: 0x%p: no skb found\n", __func__,
+ 			    session);
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	}
+ 
+ 	skcb = j1939_skb_to_cb(se_skb);
+@@ -1728,7 +1710,7 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 	if (nbytes <= 0 || (nbytes + 1) > skb->len) {
+ 		netdev_info(priv->ndev, "%s: 0x%p: nbytes %i, len %i\n",
+ 			    __func__, session, nbytes, skb->len);
+-		goto out_session_unlock;
++		goto out_session_cancel;
+ 	}
+ 
+ 	tpdat = se_skb->data;
+@@ -1745,7 +1727,6 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 		if (session->pkt.rx >= session->pkt.last)
+ 			do_cts_eoma = true;
+ 	}
+-	j1939_session_unlock(session);
+ 
+ 	if (final) {
+ 		j1939_session_completed(session);
+@@ -1761,9 +1742,6 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 
+ 	return;
+ 
+- out_session_unlock:
+-	/* unlock session (spinlock) before trying to send */
+-	j1939_session_unlock(session);
+  out_session_cancel:
+ 	j1939_session_timers_cancel(session);
+ 	j1939_tp_set_rxtimeout(session, J1939_XTP_ABORT_TIMEOUT_MS);
 -- 
 2.20.1
 
