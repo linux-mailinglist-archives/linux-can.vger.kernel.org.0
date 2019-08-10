@@ -2,167 +2,497 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4042088376
-	for <lists+linux-can@lfdr.de>; Fri,  9 Aug 2019 21:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E706E88CDE
+	for <lists+linux-can@lfdr.de>; Sat, 10 Aug 2019 21:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbfHITtw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Aug 2019 15:49:52 -0400
-Received: from mailproxy03.manitu.net ([217.11.48.67]:38686 "EHLO
-        mailproxy03.manitu.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbfHITtw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Aug 2019 15:49:52 -0400
-Received: from [10.0.30.7] (dslb-092-074-039-194.092.074.pools.vodafone-ip.de [92.74.39.194])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: wg@grandegger.com)
-        by mailproxy03.manitu.net (Postfix) with ESMTPSA id 7BFCBD40051;
-        Fri,  9 Aug 2019 21:49:49 +0200 (CEST)
-Subject: Re: tcan4x5x on a Raspberry Pi
-To:     "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
-        <fixed-term.Konstantin.Buecheler@escrypt.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <845ea24f71b74b42821c7fce20bc0476@escrypt.com>
- <d1badcdb-7635-705d-35d5-448297e8fafa@ti.com>
- <ee351bd74b764759bb0258af3651bd4a@escrypt.com>
-From:   Wolfgang Grandegger <wg@grandegger.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=wg@grandegger.com; prefer-encrypt=mutual; keydata=
- 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
- 8QEfHnPzgykCs2DOOQ==
-Message-ID: <09c773a9-6b50-5633-c597-dcc67e938920@grandegger.com>
-Date:   Fri, 9 Aug 2019 21:49:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1725884AbfHJTS3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 10 Aug 2019 15:18:29 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.160]:35200 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725863AbfHJTS3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 10 Aug 2019 15:18:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1565464701;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=qjiWgz3E9Mc0pdk676AhmGQnj1SG6etQPNnbfbX/SKY=;
+        b=Ux31ouo49FppTMNdezv4Ff9YPTN92e0dU1FqABtQ5vE/Z0hecJVuB3tDz0wT1AjxDq
+        k6Q/sT1XMImRbfq2r5JAjPbco7Ljl7m18Cu50tRdx643fH0UipRk0ngtuvsya9Im3Zh/
+        W5+47uunsQzUbDwg0mn//GQSsdbsc0JF22nTqY+hifuoqsR5Wn1yiZK0r0NpUbsvygGZ
+        et4WEvRpOF0J2yRqoqo05j1bzNxzkwXoc4ZA0lOc+GGAQjRa2VVBd+5tdWMgb+qHJ2P9
+        pSXQr2uhdTpbuEJw721tGT5Z/NY3FGtBbCkg041U011uSySCgNzN9i/64ljDHkROV8DC
+        7cBQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0lO8DsfULo/u+TWFdAQ=="
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+        by smtp.strato.de (RZmta 44.24 DYNA|AUTH)
+        with ESMTPSA id k05d3bv7AJIKUup
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Sat, 10 Aug 2019 21:18:20 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH v2 1/2] can: gw: use struct canfd_frame as internal data structure
+Date:   Sat, 10 Aug 2019 21:18:09 +0200
+Message-Id: <20190810191810.7638-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <ee351bd74b764759bb0258af3651bd4a@escrypt.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Konstantin,
+To prepare the CAN FD support this patch implements the first adaptions in
+data structures for CAN FD without changing the current functionality.
 
-m 09.08.19 um 18:46 schrieb FIXED-TERM Buecheler Konstantin
-(ETAS-SEC/ECT-Mu):
-> 
->> Konstantin
-> 
->>> On 7/29/19 6:19 AM, FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu) wrote:
->>> Hi all,
->>>
->>> I am currently working on a project where I am trying to use the tcan4550 chip with a Raspberry PI 3B.
->>> I am struggling to create a working device tree overlay file for the Raspberry Pi.
->>> Has anyone here tried this already? I would appreciate any help.
-> 
->> Are you using the driver from net-next?
-> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/drivers/net/can/m_can
-> 
-> Yes, I am using the driver from net-next. 
-> 
-> 
->> DT documentation here
-> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git/tree/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> 
-> I saw this documentation but it didn’t help much (As I said, I don’t have much experience with device trees) . My dts file currently looks like this:  
-> 
-> /dts-v1/;
-> /plugin/;
-> 
-> / {
->     compatible = "brcm,bcm2835", "brcm,bcm2836", "brcm,bcm2708", "brcm,bcm2709";
->     fragment@0 {
->         target = <&spi0>;
-> 	__overlay__ {
->             status = "okay";
-> 	    spidev@0{
-> 	        status = "disabled";
-> 	    };
-> 	};
->     };
-> 
->     fragment@2 {
->         compatible = "bosch, m_can";
-> 	target = <&spi0>;
-> 	__overlay__ {
-> 	    tcan4x5x: tcan4x5x@0 {
-> 	             compatible = "ti,tcan4x5x";
->                           reg = <0>;
-> 		#address-cells = <1>;
->                          #size-cells = <1>;
-> 		spi-max-frequency = <10000000>;
->                          bosch,mram-cfg = <0x0 0 0 32 0 0 1 1>;
-> 		data-ready-gpios = <&gpio 23 0>;
-> 		device-wake-gpios = <&gpio 24 1>;
-> 				
-> 	    };		
-> 	};
->     };
-> };
-> 
-> 
-> Checking dmesg I always see these errors:
-> [    5.409051] tcan4x5x spi0.0: no clock found
-> [    5.409064] tcan4x5x spi0.0: no CAN clock source defined
-> [    5.409125] tcan4x5x spi0.0: data-ready gpio not defined
-> [    5.409135] tcan4x5x spi0.0: Probe failed, err=-22
-> 
-> I already fixed the clock issue once by doing something like this:
-> clocks = <&can0_osc>,
->               <&can0_osc>;
-> clock-names = "hclk", "cclk";
-> But that didn’t fix the " data-ready gpio not defined" error.
-> 
-> 
->> I did the development on a BeagleBone Black.
+Additionally some code at the end of this patch is moved or indented to
+simplify the review of the next implementation step.
 
-Before fiddling with the dynamic device tree, I would try to patch
-normal device tree source files first.
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
 
-Wolfgang
+v2: fixed some Checkpatch warnings
+
+ include/uapi/linux/can/gw.h |   5 +-
+ net/can/gw.c                | 222 +++++++++++++++++++-----------------
+ 2 files changed, 120 insertions(+), 107 deletions(-)
+
+diff --git a/include/uapi/linux/can/gw.h b/include/uapi/linux/can/gw.h
+index 7bee7a0b9800..ed811bc463b5 100644
+--- a/include/uapi/linux/can/gw.h
++++ b/include/uapi/linux/can/gw.h
+@@ -93,10 +93,11 @@ enum {
+ 
+ /* CAN frame elements that are affected by curr. 3 CAN frame modifications */
+ #define CGW_MOD_ID	0x01
+-#define CGW_MOD_DLC	0x02
++#define CGW_MOD_DLC	0x02		/* contains the data length in bytes */
++#define CGW_MOD_LEN	CGW_MOD_DLC	/* CAN FD length representation */
+ #define CGW_MOD_DATA	0x04
+ 
+-#define CGW_FRAME_MODS 3 /* ID DLC DATA */
++#define CGW_FRAME_MODS 3 /* ID DLC/LEN DATA */
+ 
+ #define MAX_MODFUNCTIONS (CGW_MOD_FUNCS * CGW_FRAME_MODS)
+ 
+diff --git a/net/can/gw.c b/net/can/gw.c
+index ce17f836262b..3a4f1de2c1ed 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -86,10 +86,10 @@ static struct kmem_cache *cgw_cache __read_mostly;
+ /* structure that contains the (on-the-fly) CAN frame modifications */
+ struct cf_mod {
+ 	struct {
+-		struct can_frame and;
+-		struct can_frame or;
+-		struct can_frame xor;
+-		struct can_frame set;
++		struct canfd_frame and;
++		struct canfd_frame or;
++		struct canfd_frame xor;
++		struct canfd_frame set;
+ 	} modframe;
+ 	struct {
+ 		u8 and;
+@@ -97,7 +97,7 @@ struct cf_mod {
+ 		u8 xor;
+ 		u8 set;
+ 	} modtype;
+-	void (*modfunc[MAX_MODFUNCTIONS])(struct can_frame *cf,
++	void (*modfunc[MAX_MODFUNCTIONS])(struct canfd_frame *cf,
+ 					  struct cf_mod *mod);
+ 
+ 	/* CAN frame checksum calculation after CAN frame modifications */
+@@ -106,8 +106,10 @@ struct cf_mod {
+ 		struct cgw_csum_crc8 crc8;
+ 	} csum;
+ 	struct {
+-		void (*xor)(struct can_frame *cf, struct cgw_csum_xor *xor);
+-		void (*crc8)(struct can_frame *cf, struct cgw_csum_crc8 *crc8);
++		void (*xor)(struct canfd_frame *cf,
++			    struct cgw_csum_xor *xor);
++		void (*crc8)(struct canfd_frame *cf,
++			     struct cgw_csum_crc8 *crc8);
+ 	} csumfunc;
+ 	u32 uid;
+ };
+@@ -152,23 +154,23 @@ struct cgw_job {
+ 
+ /* modification functions that are invoked in the hot path in can_can_gw_rcv */
+ 
+-#define MODFUNC(func, op) static void func(struct can_frame *cf, \
++#define MODFUNC(func, op) static void func(struct canfd_frame *cf, \
+ 					   struct cf_mod *mod) { op ; }
+ 
+ MODFUNC(mod_and_id, cf->can_id &= mod->modframe.and.can_id)
+-MODFUNC(mod_and_dlc, cf->can_dlc &= mod->modframe.and.can_dlc)
++MODFUNC(mod_and_len, cf->len &= mod->modframe.and.len)
+ MODFUNC(mod_and_data, *(u64 *)cf->data &= *(u64 *)mod->modframe.and.data)
+ MODFUNC(mod_or_id, cf->can_id |= mod->modframe.or.can_id)
+-MODFUNC(mod_or_dlc, cf->can_dlc |= mod->modframe.or.can_dlc)
++MODFUNC(mod_or_len, cf->len |= mod->modframe.or.len)
+ MODFUNC(mod_or_data, *(u64 *)cf->data |= *(u64 *)mod->modframe.or.data)
+ MODFUNC(mod_xor_id, cf->can_id ^= mod->modframe.xor.can_id)
+-MODFUNC(mod_xor_dlc, cf->can_dlc ^= mod->modframe.xor.can_dlc)
++MODFUNC(mod_xor_len, cf->len ^= mod->modframe.xor.len)
+ MODFUNC(mod_xor_data, *(u64 *)cf->data ^= *(u64 *)mod->modframe.xor.data)
+ MODFUNC(mod_set_id, cf->can_id = mod->modframe.set.can_id)
+-MODFUNC(mod_set_dlc, cf->can_dlc = mod->modframe.set.can_dlc)
++MODFUNC(mod_set_len, cf->len = mod->modframe.set.len)
+ MODFUNC(mod_set_data, *(u64 *)cf->data = *(u64 *)mod->modframe.set.data)
+ 
+-static inline void canframecpy(struct can_frame *dst, struct can_frame *src)
++static void canframecpy(struct canfd_frame *dst, struct can_frame *src)
+ {
+ 	/*
+ 	 * Copy the struct members separately to ensure that no uninitialized
+@@ -177,12 +179,14 @@ static inline void canframecpy(struct can_frame *dst, struct can_frame *src)
+ 	 */
+ 
+ 	dst->can_id = src->can_id;
+-	dst->can_dlc = src->can_dlc;
++	dst->len = src->can_dlc;
+ 	*(u64 *)dst->data = *(u64 *)src->data;
+ }
+ 
+ static int cgw_chk_csum_parms(s8 fr, s8 to, s8 re)
+ {
++	s8 dlen = CAN_MAX_DLEN;
++
+ 	/*
+ 	 * absolute dlc values 0 .. 7 => 0 .. 7, e.g. data [0]
+ 	 * relative to received dlc -1 .. -8 :
+@@ -192,27 +196,27 @@ static int cgw_chk_csum_parms(s8 fr, s8 to, s8 re)
+ 	 * -8 => index = 0 (data[0])
+ 	 */
+ 
+-	if (fr > -9 && fr < 8 &&
+-	    to > -9 && to < 8 &&
+-	    re > -9 && re < 8)
++	if (fr >= -dlen && fr < dlen &&
++	    to >= -dlen && to < dlen &&
++	    re >= -dlen && re < dlen)
+ 		return 0;
+ 	else
+ 		return -EINVAL;
+ }
+ 
+-static inline int calc_idx(int idx, int rx_dlc)
++static inline int calc_idx(int idx, int rx_len)
+ {
+ 	if (idx < 0)
+-		return rx_dlc + idx;
++		return rx_len + idx;
+ 	else
+ 		return idx;
+ }
+ 
+-static void cgw_csum_xor_rel(struct can_frame *cf, struct cgw_csum_xor *xor)
++static void cgw_csum_xor_rel(struct canfd_frame *cf, struct cgw_csum_xor *xor)
+ {
+-	int from = calc_idx(xor->from_idx, cf->can_dlc);
+-	int to = calc_idx(xor->to_idx, cf->can_dlc);
+-	int res = calc_idx(xor->result_idx, cf->can_dlc);
++	int from = calc_idx(xor->from_idx, cf->len);
++	int to = calc_idx(xor->to_idx, cf->len);
++	int res = calc_idx(xor->result_idx, cf->len);
+ 	u8 val = xor->init_xor_val;
+ 	int i;
+ 
+@@ -230,7 +234,7 @@ static void cgw_csum_xor_rel(struct can_frame *cf, struct cgw_csum_xor *xor)
+ 	cf->data[res] = val;
+ }
+ 
+-static void cgw_csum_xor_pos(struct can_frame *cf, struct cgw_csum_xor *xor)
++static void cgw_csum_xor_pos(struct canfd_frame *cf, struct cgw_csum_xor *xor)
+ {
+ 	u8 val = xor->init_xor_val;
+ 	int i;
+@@ -241,7 +245,7 @@ static void cgw_csum_xor_pos(struct can_frame *cf, struct cgw_csum_xor *xor)
+ 	cf->data[xor->result_idx] = val;
+ }
+ 
+-static void cgw_csum_xor_neg(struct can_frame *cf, struct cgw_csum_xor *xor)
++static void cgw_csum_xor_neg(struct canfd_frame *cf, struct cgw_csum_xor *xor)
+ {
+ 	u8 val = xor->init_xor_val;
+ 	int i;
+@@ -252,11 +256,12 @@ static void cgw_csum_xor_neg(struct can_frame *cf, struct cgw_csum_xor *xor)
+ 	cf->data[xor->result_idx] = val;
+ }
+ 
+-static void cgw_csum_crc8_rel(struct can_frame *cf, struct cgw_csum_crc8 *crc8)
++static void cgw_csum_crc8_rel(struct canfd_frame *cf,
++			      struct cgw_csum_crc8 *crc8)
+ {
+-	int from = calc_idx(crc8->from_idx, cf->can_dlc);
+-	int to = calc_idx(crc8->to_idx, cf->can_dlc);
+-	int res = calc_idx(crc8->result_idx, cf->can_dlc);
++	int from = calc_idx(crc8->from_idx, cf->len);
++	int to = calc_idx(crc8->to_idx, cf->len);
++	int res = calc_idx(crc8->result_idx, cf->len);
+ 	u8 crc = crc8->init_crc_val;
+ 	int i;
+ 
+@@ -291,7 +296,8 @@ static void cgw_csum_crc8_rel(struct can_frame *cf, struct cgw_csum_crc8 *crc8)
+ 	cf->data[crc8->result_idx] = crc^crc8->final_xor_val;
+ }
+ 
+-static void cgw_csum_crc8_pos(struct can_frame *cf, struct cgw_csum_crc8 *crc8)
++static void cgw_csum_crc8_pos(struct canfd_frame *cf,
++			      struct cgw_csum_crc8 *crc8)
+ {
+ 	u8 crc = crc8->init_crc_val;
+ 	int i;
+@@ -318,7 +324,8 @@ static void cgw_csum_crc8_pos(struct can_frame *cf, struct cgw_csum_crc8 *crc8)
+ 	cf->data[crc8->result_idx] = crc^crc8->final_xor_val;
+ }
+ 
+-static void cgw_csum_crc8_neg(struct can_frame *cf, struct cgw_csum_crc8 *crc8)
++static void cgw_csum_crc8_neg(struct canfd_frame *cf,
++			      struct cgw_csum_crc8 *crc8)
+ {
+ 	u8 crc = crc8->init_crc_val;
+ 	int i;
+@@ -349,7 +356,7 @@ static void cgw_csum_crc8_neg(struct can_frame *cf, struct cgw_csum_crc8 *crc8)
+ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ {
+ 	struct cgw_job *gwj = (struct cgw_job *)data;
+-	struct can_frame *cf;
++	struct canfd_frame *cf;
+ 	struct sk_buff *nskb;
+ 	int modidx = 0;
+ 
+@@ -411,7 +418,7 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 	nskb->dev = gwj->dst.dev;
+ 
+ 	/* pointer to modifiable CAN frame */
+-	cf = (struct can_frame *)nskb->data;
++	cf = (struct canfd_frame *)nskb->data;
+ 
+ 	/* perform preprocessed modification functions if there are any */
+ 	while (modidx < MAX_MODFUNCTIONS && gwj->mod.modfunc[modidx])
+@@ -420,22 +427,22 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 	/* Has the CAN frame been modified? */
+ 	if (modidx) {
+ 		/* get available space for the processed CAN frame type */
+-		int max_len = nskb->len - offsetof(struct can_frame, data);
++		int max_len = nskb->len - offsetof(struct canfd_frame, data);
+ 
+ 		/* dlc may have changed, make sure it fits to the CAN frame */
+-		if (cf->can_dlc > max_len)
++		if (cf->len > max_len)
+ 			goto out_delete;
+ 
+ 		/* check for checksum updates in classic CAN length only */
+ 		if (gwj->mod.csumfunc.crc8) {
+-			if (cf->can_dlc > 8)
++			if (cf->len > 8)
+ 				goto out_delete;
+ 
+ 			(*gwj->mod.csumfunc.crc8)(cf, &gwj->mod.csum.crc8);
+ 		}
+ 
+ 		if (gwj->mod.csumfunc.xor) {
+-			if (cf->can_dlc > 8)
++			if (cf->len > 8)
+ 				goto out_delete;
+ 
+ 			(*gwj->mod.csumfunc.xor)(cf, &gwj->mod.csum.xor);
+@@ -506,7 +513,6 @@ static int cgw_notifier(struct notifier_block *nb,
+ static int cgw_put_job(struct sk_buff *skb, struct cgw_job *gwj, int type,
+ 		       u32 pid, u32 seq, int flags)
+ {
+-	struct cgw_frame_mod mb;
+ 	struct rtcanmsg *rtcan;
+ 	struct nlmsghdr *nlh;
+ 
+@@ -543,32 +549,36 @@ static int cgw_put_job(struct sk_buff *skb, struct cgw_job *gwj, int type,
+ 			goto cancel;
+ 	}
+ 
+-	if (gwj->mod.modtype.and) {
+-		memcpy(&mb.cf, &gwj->mod.modframe.and, sizeof(mb.cf));
+-		mb.modtype = gwj->mod.modtype.and;
+-		if (nla_put(skb, CGW_MOD_AND, sizeof(mb), &mb) < 0)
+-			goto cancel;
+-	}
++	if (1) {
++		struct cgw_frame_mod mb;
+ 
+-	if (gwj->mod.modtype.or) {
+-		memcpy(&mb.cf, &gwj->mod.modframe.or, sizeof(mb.cf));
+-		mb.modtype = gwj->mod.modtype.or;
+-		if (nla_put(skb, CGW_MOD_OR, sizeof(mb), &mb) < 0)
+-			goto cancel;
+-	}
++		if (gwj->mod.modtype.and) {
++			memcpy(&mb.cf, &gwj->mod.modframe.and, sizeof(mb.cf));
++			mb.modtype = gwj->mod.modtype.and;
++			if (nla_put(skb, CGW_MOD_AND, sizeof(mb), &mb) < 0)
++				goto cancel;
++		}
+ 
+-	if (gwj->mod.modtype.xor) {
+-		memcpy(&mb.cf, &gwj->mod.modframe.xor, sizeof(mb.cf));
+-		mb.modtype = gwj->mod.modtype.xor;
+-		if (nla_put(skb, CGW_MOD_XOR, sizeof(mb), &mb) < 0)
+-			goto cancel;
+-	}
++		if (gwj->mod.modtype.or) {
++			memcpy(&mb.cf, &gwj->mod.modframe.or, sizeof(mb.cf));
++			mb.modtype = gwj->mod.modtype.or;
++			if (nla_put(skb, CGW_MOD_OR, sizeof(mb), &mb) < 0)
++				goto cancel;
++		}
+ 
+-	if (gwj->mod.modtype.set) {
+-		memcpy(&mb.cf, &gwj->mod.modframe.set, sizeof(mb.cf));
+-		mb.modtype = gwj->mod.modtype.set;
+-		if (nla_put(skb, CGW_MOD_SET, sizeof(mb), &mb) < 0)
+-			goto cancel;
++		if (gwj->mod.modtype.xor) {
++			memcpy(&mb.cf, &gwj->mod.modframe.xor, sizeof(mb.cf));
++			mb.modtype = gwj->mod.modtype.xor;
++			if (nla_put(skb, CGW_MOD_XOR, sizeof(mb), &mb) < 0)
++				goto cancel;
++		}
++
++		if (gwj->mod.modtype.set) {
++			memcpy(&mb.cf, &gwj->mod.modframe.set, sizeof(mb.cf));
++			mb.modtype = gwj->mod.modtype.set;
++			if (nla_put(skb, CGW_MOD_SET, sizeof(mb), &mb) < 0)
++				goto cancel;
++		}
+ 	}
+ 
+ 	if (gwj->mod.uid) {
+@@ -656,7 +666,6 @@ static int cgw_parse_attr(struct nlmsghdr *nlh, struct cf_mod *mod,
+ 			  u8 gwtype, void *gwtypeattr, u8 *limhops)
+ {
+ 	struct nlattr *tb[CGW_MAX+1];
+-	struct cgw_frame_mod mb;
+ 	int modidx = 0;
+ 	int err = 0;
+ 
+@@ -676,69 +685,72 @@ static int cgw_parse_attr(struct nlmsghdr *nlh, struct cf_mod *mod,
+ 	}
+ 
+ 	/* check for AND/OR/XOR/SET modifications */
++	if (1) {
++		struct cgw_frame_mod mb;
+ 
+-	if (tb[CGW_MOD_AND]) {
+-		nla_memcpy(&mb, tb[CGW_MOD_AND], CGW_MODATTR_LEN);
++		if (tb[CGW_MOD_AND]) {
++			nla_memcpy(&mb, tb[CGW_MOD_AND], CGW_MODATTR_LEN);
+ 
+-		canframecpy(&mod->modframe.and, &mb.cf);
+-		mod->modtype.and = mb.modtype;
++			canframecpy(&mod->modframe.and, &mb.cf);
++			mod->modtype.and = mb.modtype;
+ 
+-		if (mb.modtype & CGW_MOD_ID)
+-			mod->modfunc[modidx++] = mod_and_id;
++			if (mb.modtype & CGW_MOD_ID)
++				mod->modfunc[modidx++] = mod_and_id;
+ 
+-		if (mb.modtype & CGW_MOD_DLC)
+-			mod->modfunc[modidx++] = mod_and_dlc;
++			if (mb.modtype & CGW_MOD_LEN)
++				mod->modfunc[modidx++] = mod_and_len;
+ 
+-		if (mb.modtype & CGW_MOD_DATA)
+-			mod->modfunc[modidx++] = mod_and_data;
+-	}
++			if (mb.modtype & CGW_MOD_DATA)
++				mod->modfunc[modidx++] = mod_and_data;
++		}
+ 
+-	if (tb[CGW_MOD_OR]) {
+-		nla_memcpy(&mb, tb[CGW_MOD_OR], CGW_MODATTR_LEN);
++		if (tb[CGW_MOD_OR]) {
++			nla_memcpy(&mb, tb[CGW_MOD_OR], CGW_MODATTR_LEN);
+ 
+-		canframecpy(&mod->modframe.or, &mb.cf);
+-		mod->modtype.or = mb.modtype;
++			canframecpy(&mod->modframe.or, &mb.cf);
++			mod->modtype.or = mb.modtype;
+ 
+-		if (mb.modtype & CGW_MOD_ID)
+-			mod->modfunc[modidx++] = mod_or_id;
++			if (mb.modtype & CGW_MOD_ID)
++				mod->modfunc[modidx++] = mod_or_id;
+ 
+-		if (mb.modtype & CGW_MOD_DLC)
+-			mod->modfunc[modidx++] = mod_or_dlc;
++			if (mb.modtype & CGW_MOD_LEN)
++				mod->modfunc[modidx++] = mod_or_len;
+ 
+-		if (mb.modtype & CGW_MOD_DATA)
+-			mod->modfunc[modidx++] = mod_or_data;
+-	}
++			if (mb.modtype & CGW_MOD_DATA)
++				mod->modfunc[modidx++] = mod_or_data;
++		}
+ 
+-	if (tb[CGW_MOD_XOR]) {
+-		nla_memcpy(&mb, tb[CGW_MOD_XOR], CGW_MODATTR_LEN);
++		if (tb[CGW_MOD_XOR]) {
++			nla_memcpy(&mb, tb[CGW_MOD_XOR], CGW_MODATTR_LEN);
+ 
+-		canframecpy(&mod->modframe.xor, &mb.cf);
+-		mod->modtype.xor = mb.modtype;
++			canframecpy(&mod->modframe.xor, &mb.cf);
++			mod->modtype.xor = mb.modtype;
+ 
+-		if (mb.modtype & CGW_MOD_ID)
+-			mod->modfunc[modidx++] = mod_xor_id;
++			if (mb.modtype & CGW_MOD_ID)
++				mod->modfunc[modidx++] = mod_xor_id;
+ 
+-		if (mb.modtype & CGW_MOD_DLC)
+-			mod->modfunc[modidx++] = mod_xor_dlc;
++			if (mb.modtype & CGW_MOD_LEN)
++				mod->modfunc[modidx++] = mod_xor_len;
+ 
+-		if (mb.modtype & CGW_MOD_DATA)
+-			mod->modfunc[modidx++] = mod_xor_data;
+-	}
++			if (mb.modtype & CGW_MOD_DATA)
++				mod->modfunc[modidx++] = mod_xor_data;
++		}
+ 
+-	if (tb[CGW_MOD_SET]) {
+-		nla_memcpy(&mb, tb[CGW_MOD_SET], CGW_MODATTR_LEN);
++		if (tb[CGW_MOD_SET]) {
++			nla_memcpy(&mb, tb[CGW_MOD_SET], CGW_MODATTR_LEN);
+ 
+-		canframecpy(&mod->modframe.set, &mb.cf);
+-		mod->modtype.set = mb.modtype;
++			canframecpy(&mod->modframe.set, &mb.cf);
++			mod->modtype.set = mb.modtype;
+ 
+-		if (mb.modtype & CGW_MOD_ID)
+-			mod->modfunc[modidx++] = mod_set_id;
++			if (mb.modtype & CGW_MOD_ID)
++				mod->modfunc[modidx++] = mod_set_id;
+ 
+-		if (mb.modtype & CGW_MOD_DLC)
+-			mod->modfunc[modidx++] = mod_set_dlc;
++			if (mb.modtype & CGW_MOD_LEN)
++				mod->modfunc[modidx++] = mod_set_len;
+ 
+-		if (mb.modtype & CGW_MOD_DATA)
+-			mod->modfunc[modidx++] = mod_set_data;
++			if (mb.modtype & CGW_MOD_DATA)
++				mod->modfunc[modidx++] = mod_set_data;
++		}
+ 	}
+ 
+ 	/* check for checksum operations after CAN frame modifications */
+-- 
+2.20.1
+
