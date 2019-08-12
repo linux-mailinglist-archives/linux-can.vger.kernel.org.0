@@ -2,195 +2,135 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E48AB8997D
-	for <lists+linux-can@lfdr.de>; Mon, 12 Aug 2019 11:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D5789ACF
+	for <lists+linux-can@lfdr.de>; Mon, 12 Aug 2019 12:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbfHLJKm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Aug 2019 05:10:42 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43125 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727140AbfHLJKl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Aug 2019 05:10:41 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1hx6Ld-0006WE-VG; Mon, 12 Aug 2019 11:10:38 +0200
-Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A634344310F;
-        Mon, 12 Aug 2019 09:10:35 +0000 (UTC)
-Subject: Re: [PATCH 0/5] can: xilinx_can: Bug fixes
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        wg@grandegger.com, davem@davemloft.net, michal.simek@xilinx.com
+        id S1727738AbfHLKHC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Aug 2019 06:07:02 -0400
+Received: from mail-eopbgr770078.outbound.protection.outlook.com ([40.107.77.78]:44346
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727409AbfHLKHC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:07:02 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F14PKUYDbliNZs/E+3AkeBuMT5rtyFVqTaoZVR60M3+Vyojm56aQob3+oYowVzxHfQ/lES7S9iUM0odhoM07+VJ8vK7ZrN6c2sd4uAi98OviFi6Dm+ZrnO0YmBpDiVtbD+31yvF/m5ritPFovdQO5t/ATUXMHuQ/TrHyo2qmCyC4E1RGihGBXbphPL+j5UV0cN2j79nZsAw8Yt+OXiCUbHtltbf/5JNdZHGa9CbY77CcXuf5GIf0PqqxZXL3IuhB69yTUIt0bTZjGZX/3aHEi2gxnNviMbJkDUNalhS429X7F3eTbVOZlDvm3UvuRWuLJY5q9FYvRgS9IrI0shePmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XEzoY0em8tcyd3SujX5IHtKC6ikj6UNssIrG7GpE20M=;
+ b=QH4AMC5QZ3+nSOEthNuby0M5pxgIHDNnlMHRpo2jnCNXRYj/DvG8UE6up4aId+R9QFGkgDKQtBGZDRa4K2DbeluvNZvmVE1lb6rxua6/Kpgu4M0tIFsP718p5PkOd1WBtJJbTi5W4oufBhWuVK5g8wAD63KIGV2JIhd7zE3WvXwRduLHZ8dB/JLmcbIRTh+DUIr/2vo+N3SWiJ9EwfGLtZmZ2+ZHF8rm1lccpeWvXeiJ8QZVw8SBQgVgbuhcB2hcAaJuHSoCLSKs95tEa7JdUVf1LeL7Xs4qnj/jtbqbvtk4h+GsG0HEBzQ2TANBRDeBEduL++l9NmMDnv1Im7BmiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XEzoY0em8tcyd3SujX5IHtKC6ikj6UNssIrG7GpE20M=;
+ b=tUbIJyXo8Retmbspgnn/7VqmXzf0tWTCUJ1yjHbJXUNx1zfIVMIV0Ht6g1lmFP9J9iHDDJSrNqVD3ktOKPitTKXtjkC+opKI/9b56Y4zDiicDgOAWvysw7zgBUlAla4I3+gnJVzTPfekQMLXxAkENi4VmT2lkCYUy5ews0TT0hc=
+Received: from SN4PR0201CA0037.namprd02.prod.outlook.com
+ (2603:10b6:803:2e::23) by SN1PR02MB3808.namprd02.prod.outlook.com
+ (2603:10b6:802:31::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2157.21; Mon, 12 Aug
+ 2019 10:07:00 +0000
+Received: from CY1NAM02FT012.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::201) by SN4PR0201CA0037.outlook.office365.com
+ (2603:10b6:803:2e::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2157.14 via Frontend
+ Transport; Mon, 12 Aug 2019 10:07:00 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT012.mail.protection.outlook.com (10.152.75.158) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2157.15
+ via Frontend Transport; Mon, 12 Aug 2019 10:06:58 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <appana.durga.rao@xilinx.com>)
+        id 1hx7EA-0002PA-5n; Mon, 12 Aug 2019 03:06:58 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <appana.durga.rao@xilinx.com>)
+        id 1hx7E5-0004P8-1x; Mon, 12 Aug 2019 03:06:53 -0700
+Received: from xsj-pvapsmtp01 (xsj-smtp.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x7CA6oEb003599;
+        Mon, 12 Aug 2019 03:06:51 -0700
+Received: from [10.140.6.6] (helo=xhdappanad40.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <appana.durga.rao@xilinx.com>)
+        id 1hx7E2-0004OP-AF; Mon, 12 Aug 2019 03:06:50 -0700
+From:   Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        michal.simek@xilinx.com
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1565594914-18999-1-git-send-email-appana.durga.rao@xilinx.com>
- <7ecaa7df-3202-21d8-de93-5f6af3582964@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <5571da8a-de1f-f420-f6b7-81c6d8932430@pengutronix.de>
-Date:   Mon, 12 Aug 2019 11:10:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
+Subject: [PATCH v2 0/5] can: xilinx_can: Bug fixes
+Date:   Mon, 12 Aug 2019 15:36:41 +0530
+Message-Id: <1565604406-4920-1-git-send-email-appana.durga.rao@xilinx.com>
+X-Mailer: git-send-email 2.7.4
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(346002)(376002)(396003)(136003)(2980300002)(199004)(189003)(356004)(478600001)(14444005)(6666004)(16586007)(106002)(48376002)(316002)(36386004)(107886003)(81166006)(81156014)(8676002)(6636002)(4326008)(305945005)(5660300002)(4744005)(186003)(2906002)(26005)(36756003)(63266004)(70206006)(70586007)(50226002)(8936002)(476003)(336012)(126002)(47776003)(50466002)(2616005)(7696005)(51416003)(486006)(9786002)(426003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN1PR02MB3808;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
 MIME-Version: 1.0
-In-Reply-To: <7ecaa7df-3202-21d8-de93-5f6af3582964@pengutronix.de>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="n406Pf6ucFPRr81ZBCSfLv22f4uepOdOB"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2e5259a4-bb52-4adf-2eef-08d71f0cd049
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709080)(1401327)(2017052603328);SRVR:SN1PR02MB3808;
+X-MS-TrafficTypeDiagnostic: SN1PR02MB3808:
+X-Microsoft-Antispam-PRVS: <SN1PR02MB38080D876B3BC8068D286823DCD30@SN1PR02MB3808.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:1122;
+X-Forefront-PRVS: 012792EC17
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: 5Fu+XKACbIE6R4b9bEJGCldsrPjzKSTMk7TNEW70ZgM0P3r3rYnQZFjRMhdFfcmT5blrEWzS0+5g1mSWfIyujibMflkD30hCcK7NoK6R6ls3BBTPuZX5A06s2XPwkMWMqtRWfCX5gsU0PwbJIPA7IDhnsIBGc1858S5PiqtIceZ2LFEHUsOYx9i182Dz91hj2UfSeCmj35ehw31pAV6KgriPokAMm55vE8UitqT3BXsREzh81634wEZ1YjW2PCmgTzMKDcZkP2I1O6e2t0AA03thUoVlcmBpubZ8Ik4SbbNQIfUEvYlZSRdU7FAD59rTL5k8kFUMZbKvUk+xWoDKUvxH5NYv24xM+ffCJW0UZZ/I8KDgf+LpM7ajPdLHSqgRmuXiQX+ss6HgQ2bzZcu+uzBB/ougpU2/JMVivEP6tPI=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2019 10:06:58.6867
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e5259a4-bb52-4adf-2eef-08d71f0cd049
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR02MB3808
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---n406Pf6ucFPRr81ZBCSfLv22f4uepOdOB
-Content-Type: multipart/mixed; boundary="Bh7iV2cCBX2dzNWNFNsLjKNDADYAoxdLa";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
- wg@grandegger.com, davem@davemloft.net, michal.simek@xilinx.com
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-ID: <5571da8a-de1f-f420-f6b7-81c6d8932430@pengutronix.de>
-Subject: Re: [PATCH 0/5] can: xilinx_can: Bug fixes
-References: <1565594914-18999-1-git-send-email-appana.durga.rao@xilinx.com>
- <7ecaa7df-3202-21d8-de93-5f6af3582964@pengutronix.de>
-In-Reply-To: <7ecaa7df-3202-21d8-de93-5f6af3582964@pengutronix.de>
+This patch series fixes below issues
+--> Bugs in the driver w.r.to CANFD 2.0 IP support
+--> Defer the probe if clock is not found
 
---Bh7iV2cCBX2dzNWNFNsLjKNDADYAoxdLa
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Changes for v2:
+[1/5]:
+--> Improved commit description
+[1/5] and [5/5]:
+--> Added sob line
+[1/5], [2/5], [3/5], [4/5], [5/5]:
+--> Added Fixes tag in the commit description
 
-On 8/12/19 11:05 AM, Marc Kleine-Budde wrote:
-> On 8/12/19 9:28 AM, Appana Durga Kedareswara rao wrote:
->> This patch series fixes below issues
->> --> Bugs in the driver w.r.to CANFD 2.0 IP support
->> --> Defer the probe if clock is not found
->>
->> Appana Durga Kedareswara rao (3):
->>   can: xilinx_can: Fix FSR register handling in the rx path
->>   can: xilinx_can: Fix the data updation logic for CANFD FD frames
->>   can: xilinx_can: Fix FSR register FL and RI mask values for canfd 2.=
-0
->>
->> Srinivas Neeli (1):
->>   can: xilinx_can: Fix the data phase btr1 calculation
->>
->> Venkatesh Yadav Abbarapu (1):
->>   can: xilinx_can: defer the probe if clock is not found
->=20
-> Please add your S-o-b to patches 4+5.
->=20
-> As these all are bugfixes please add a reference to the commit it fixes=
-:
->=20
->     Fixes: commitish ("description")
+Appana Durga Kedareswara rao (3):
+  can: xilinx_can: Fix FSR register handling in the rx path
+  can: xilinx_can: Fix the data updation logic for CANFD FD frames
+  can: xilinx_can: Fix FSR register FL and RI mask values for canfd 2.0
 
-Add this to your ~/.gitconfig:
+Srinivas Neeli (1):
+  can: xilinx_can: Fix the data phase btr1 calculation
 
-[alias]
-        lfixes =3D log --pretty=3Dfixes
-[pretty]
-        fixes =3D Fixes: %h (\"%s\")
+Venkatesh Yadav Abbarapu (1):
+  can: xilinx_can: Skip error message on deferred probe
 
-and then use $(git lfixes $commitish).
+ drivers/net/can/xilinx_can.c | 162 +++++++++++++++++++------------------------
+ 1 file changed, 72 insertions(+), 90 deletions(-)
 
-Marc
+-- 
+2.7.4
 
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---Bh7iV2cCBX2dzNWNFNsLjKNDADYAoxdLa--
-
---n406Pf6ucFPRr81ZBCSfLv22f4uepOdOB
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1RLQgACgkQWsYho5Hk
-nSA7iAf/SPKEeZgvTZ73lEBwv0Fw+6St3jUayWb22nfMohsOBtHE07DbuA4uewt8
-8VjnSvqK9MH44QayDP5vBVKGCnSYrSFQj51PgL1YOg/ftVQLWXCAkgq1SwWVykKk
-QI6HiYTLqV4t/0ebVq61nryUZmt0VYBg2maBaLtkutPWkrbweAX+tSfZHD6rVtwp
-RkMkA77gC5rK7iSWQTngUiiIRU0I2wUAtECbI+R/aa7FtkWT3GqlferXW++yJRBJ
-AMST2HsiTD9gLRj0t0GjpcO/kRhL25mcpcTlIcsNpMNBJAhBhj93PyOe5qFantC4
-JfbfGVETc+P9Wjf3B61ShI0/LlpFiQ==
-=lsBO
------END PGP SIGNATURE-----
-
---n406Pf6ucFPRr81ZBCSfLv22f4uepOdOB--
