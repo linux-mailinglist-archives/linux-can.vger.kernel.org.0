@@ -2,34 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 642DE8B41D
-	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2019 11:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5E48B886
+	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2019 14:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbfHMJap (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Aug 2019 05:30:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57011 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbfHMJap (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Aug 2019 05:30:45 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1hxT8b-0004W7-JD; Tue, 13 Aug 2019 11:30:41 +0200
-Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F3D514445EF;
-        Tue, 13 Aug 2019 09:30:39 +0000 (UTC)
+        id S1727528AbfHMM1s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Aug 2019 08:27:48 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:21439 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727546AbfHMM1s (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Aug 2019 08:27:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1565699263;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=M5760lRnFBzkVxOWq9hHcj8oQWcV1zKKFqVZSHe0dTA=;
+        b=kvoiZfDB/OE73+1BYL5k+Tk2FcpFSxRBnBisiymoNT2mZr5GcxCh/Na4L710fzMo9/
+        Xv06jQiYCYgiiy1VOA3LvBt09fpQQIrPocRp+PjI9R9oYZeSNTZuyY9L+CYC63OfM89b
+        +YurEJQ2P604369CnIeR/PyVBM2kkYlqpRRaFtFap9r8EWsOtPt6dBCj2Ml9GMV+Qm2Z
+        6ARai+txKbBf4sfgKkB/C9MG9W8pfoITzHQDNWitiX5uHVfcQXYTkGDAyI50SHmIYJEd
+        l3TOMs8bkgBUJ8bIYZ+QZEaMUSUECyWfBPKZvjICl+6uqAFVR8SPjGLecf2qlo3Jm4Wh
+        RALA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVsh5lEw8"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.40.177]
+        by smtp.strato.de (RZmta 44.26.1 DYNA|AUTH)
+        with ESMTPSA id R073b7v7DCRb061
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Tue, 13 Aug 2019 14:27:37 +0200 (CEST)
 Subject: Re: Mainline status for "can/bcm: Replace hrtimer_tasklet with
  softirq based hrtimer"?
-To:     Sebastian Sewior <bigeasy@linutronix.de>,
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sebastian Sewior <bigeasy@linutronix.de>,
         Thomas Gleixner <tglx@linutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+Cc:     Anna-Maria Gleixner <anna-maria@linutronix.de>,
         Tom Zanussi <zanussi@kernel.org>,
         linux-can <linux-can@vger.kernel.org>
 References: <20171022213938.940451689@linutronix.de>
@@ -40,156 +46,45 @@ References: <20171022213938.940451689@linutronix.de>
  <5e744197-005a-a941-9372-810586f64157@hartkopp.net>
  <alpine.DEB.2.21.1908122028470.7324@nanos.tec.linutronix.de>
  <20190813072427.i6ieuahddhveku6f@linutronix.de>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <92c6a310-ce5f-b5fa-e532-c193023bc729@pengutronix.de>
-Date:   Tue, 13 Aug 2019 11:30:32 +0200
+ <92c6a310-ce5f-b5fa-e532-c193023bc729@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <03bb7a58-3e80-2c21-2462-97ff7058dd7b@hartkopp.net>
+Date:   Tue, 13 Aug 2019 14:27:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190813072427.i6ieuahddhveku6f@linutronix.de>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="nl6j6ePRvKIbTyDHwyPRKOrwmqy5VQsVz"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <92c6a310-ce5f-b5fa-e532-c193023bc729@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---nl6j6ePRvKIbTyDHwyPRKOrwmqy5VQsVz
-Content-Type: multipart/mixed; boundary="UjkuZq6dSwHvnjNrVEf04MMsuxhZC00tB";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sebastian Sewior <bigeasy@linutronix.de>,
- Thomas Gleixner <tglx@linutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
- Anna-Maria Gleixner <anna-maria@linutronix.de>,
- Tom Zanussi <zanussi@kernel.org>, linux-can <linux-can@vger.kernel.org>
-Message-ID: <92c6a310-ce5f-b5fa-e532-c193023bc729@pengutronix.de>
-Subject: Re: Mainline status for "can/bcm: Replace hrtimer_tasklet with
- softirq based hrtimer"?
-References: <20171022213938.940451689@linutronix.de>
- <20171022214053.508480159@linutronix.de>
- <15b391b9-ad47-c5b6-a6be-bdb4a336c968@hartkopp.net>
- <a36f5369-d66a-dbb8-9a77-7bcefa432ce1@hartkopp.net>
- <alpine.DEB.2.20.1711291358160.2056@hypnos.tec.linutronix.de>
- <5e744197-005a-a941-9372-810586f64157@hartkopp.net>
- <alpine.DEB.2.21.1908122028470.7324@nanos.tec.linutronix.de>
- <20190813072427.i6ieuahddhveku6f@linutronix.de>
-In-Reply-To: <20190813072427.i6ieuahddhveku6f@linutronix.de>
+On 13/08/2019 11.30, Marc Kleine-Budde wrote:
+> On 8/13/19 9:24 AM, Sebastian Sewior wrote:
+>> On 2019-08-12 20:31:34 [+0200], Thomas Gleixner wrote:
+>>> I was assuming this goes through the can/net process. So TBH, I did not pay
+>>> attention as this was not using that old crufty hrtimer_tasklet() construct
+>>> which we removed.
+>>
+>> The mvpp2 driver fell through the cracks as well. I will repost that
+>> one…
+>>
+>> Oliver, I believe you can handle the can driver yourself, right?
+> 
+> I've added the patch to can-next and it will be included in the next
+> pull request to David Miller.
 
---UjkuZq6dSwHvnjNrVEf04MMsuxhZC00tB
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Thanks all!
 
-On 8/13/19 9:24 AM, Sebastian Sewior wrote:
-> On 2019-08-12 20:31:34 [+0200], Thomas Gleixner wrote:
->> I was assuming this goes through the can/net process. So TBH, I did no=
-t pay
->> attention as this was not using that old crufty hrtimer_tasklet() cons=
-truct
->> which we removed.
->=20
-> The mvpp2 driver fell through the cracks as well. I will repost that
-> one=E2=80=A6
->=20
-> Oliver, I believe you can handle the can driver yourself, right?
+I was really happy to get the hrtimer trampoline stuff reverted in the 
+code again. Thanks for your effort! I needed some time to review the 
+changes as the trampoline approach included weird complexity that time :-)
 
-I've added the patch to can-next and it will be included in the next
-pull request to David Miller.
+@Marc: Please add my Acked-by: if it's still missing in the current 
+upstream patch. Tnx!
 
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---UjkuZq6dSwHvnjNrVEf04MMsuxhZC00tB--
-
---nl6j6ePRvKIbTyDHwyPRKOrwmqy5VQsVz
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1SgzkACgkQWsYho5Hk
-nSBocQgAhBfIBinA7PYMAJTjGckJrMlc3lPCQKOI3QzwtXqQgOXjWa3CSKSAHNUt
-f2Lh3BZpQJwqKh7hHDfMspZ6r2zOMjRdCZmouKY5oLb+gPrkiMeX5WNHURZHCxzT
-GtDcXoinuTY8wT6jkB7xnaLqpkEKBj4Udit+Lp+7MvStGUzrQ4dIpUzwT+xR1eZw
-2YYqTWn5g+44ponxRLXuB6h3Ofj7nI82qRXOmV4ldAfNnbDGC03Hts2nHT55IqqA
-6RWRxSNQUKzTqt+PapNRlnc76mdGkVIO3YGT3/U5111JoYa2D1RaJOaVs038y07q
-IRiSFMuSnCKtWGL7lnQdGPHtXOBd7Q==
-=z+9R
------END PGP SIGNATURE-----
-
---nl6j6ePRvKIbTyDHwyPRKOrwmqy5VQsVz--
+Best,
+Oliver
