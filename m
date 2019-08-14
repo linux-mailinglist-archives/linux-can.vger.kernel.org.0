@@ -2,39 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AF18C8F8
-	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 04:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF378C892
+	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 04:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728333AbfHNCNe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Aug 2019 22:13:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45584 "EHLO mail.kernel.org"
+        id S1728965AbfHNCQM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Aug 2019 22:16:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728327AbfHNCNd (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:13:33 -0400
+        id S1728955AbfHNCQL (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:16:11 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B63020844;
-        Wed, 14 Aug 2019 02:13:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 89A7E2133F;
+        Wed, 14 Aug 2019 02:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748812;
-        bh=kmMFtceavFSAC0WIdK8pZzNQNRGs6T/4Isu+nUIr9lE=;
+        s=default; t=1565748971;
+        bh=QByntpCTKCXY11dSE5ZXEeDqtNWp0L6eYuNcYYUszME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qz/1deJDCdhYswZ+Onwxcwvspwg9NLJya5Pt2yizPsZs+BuKqgTZ1o/Jy+LckGcPR
-         0o/edo8D2cpF8US13dnvfDgn6LgzT51mrVvv4S182WfDZ2KF5nAR5TmFb7vfQonwSf
-         fHeaZYEAUyw2pbrgljCJTNzSkrv8MFYFmU8VqvRc=
+        b=zcZ98fGlfdFjmlzpnIvpAK+qK5BDK1Cg/KGIW+suQrGXG9xF7A6v9KPC502y4Smtv
+         Rhi20tXBBqnrLIbzKggIdajVIePdrVEbq/pG+saPYHtVCi7J2zzJFl3K4PT1nxROvC
+         ivURh+wfz6gYfOaVXASgJ4DaCwEDAjXsUoBJ/5ms=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wang Xiayang <xywang.sjtu@sjtu.edu.cn>,
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Willem de Bruijn <willemb@google.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 076/123] can: peak_usb: force the string buffer NULL-terminated
-Date:   Tue, 13 Aug 2019 22:10:00 -0400
-Message-Id: <20190814021047.14828-76-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 13/68] can: dev: call netif_carrier_off() in register_candev()
+Date:   Tue, 13 Aug 2019 22:14:51 -0400
+Message-Id: <20190814021548.16001-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
-References: <20190814021047.14828-1-sashal@kernel.org>
+In-Reply-To: <20190814021548.16001-1-sashal@kernel.org>
+References: <20190814021548.16001-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,38 +45,38 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+From: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 
-[ Upstream commit e787f19373b8a5fa24087800ed78314fd17b984a ]
+[ Upstream commit c63845609c4700488e5eacd6ab4d06d5d420e5ef ]
 
-strncpy() does not ensure NULL-termination when the input string size
-equals to the destination buffer size IFNAMSIZ. The output string is
-passed to dev_info() which relies on the NULL-termination.
+CONFIG_CAN_LEDS is deprecated. When trying to use the generic netdev
+trigger as suggested, there's a small inconsistency with the link
+property: The LED is on initially, stays on when the device is brought
+up, and then turns off (as expected) when the device is brought down.
 
-Use strlcpy() instead.
+Make sure the LED always reflects the state of the CAN device.
 
-This issue is identified by a Coccinelle script.
-
-Signed-off-by: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Acked-by: Willem de Bruijn <willemb@google.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/dev.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index 458154c9b4829..4c2cda5ecf3f8 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -855,7 +855,7 @@ static void peak_usb_disconnect(struct usb_interface *intf)
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index c05e4d50d43d7..bd127ce3aba24 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -1260,6 +1260,8 @@ int register_candev(struct net_device *dev)
+ 		return -EINVAL;
  
- 		dev_prev_siblings = dev->prev_siblings;
- 		dev->state &= ~PCAN_USB_STATE_CONNECTED;
--		strncpy(name, netdev->name, IFNAMSIZ);
-+		strlcpy(name, netdev->name, IFNAMSIZ);
- 
- 		unregister_netdev(netdev);
- 
+ 	dev->rtnl_link_ops = &can_link_ops;
++	netif_carrier_off(dev);
++
+ 	return register_netdev(dev);
+ }
+ EXPORT_SYMBOL_GPL(register_candev);
 -- 
 2.20.1
 
