@@ -2,89 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5E48B886
-	for <lists+linux-can@lfdr.de>; Tue, 13 Aug 2019 14:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BC98C73E
+	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 04:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbfHMM1s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Aug 2019 08:27:48 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:21439 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727546AbfHMM1s (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Aug 2019 08:27:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1565699263;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=M5760lRnFBzkVxOWq9hHcj8oQWcV1zKKFqVZSHe0dTA=;
-        b=kvoiZfDB/OE73+1BYL5k+Tk2FcpFSxRBnBisiymoNT2mZr5GcxCh/Na4L710fzMo9/
-        Xv06jQiYCYgiiy1VOA3LvBt09fpQQIrPocRp+PjI9R9oYZeSNTZuyY9L+CYC63OfM89b
-        +YurEJQ2P604369CnIeR/PyVBM2kkYlqpRRaFtFap9r8EWsOtPt6dBCj2Ml9GMV+Qm2Z
-        6ARai+txKbBf4sfgKkB/C9MG9W8pfoITzHQDNWitiX5uHVfcQXYTkGDAyI50SHmIYJEd
-        l3TOMs8bkgBUJ8bIYZ+QZEaMUSUECyWfBPKZvjICl+6uqAFVR8SPjGLecf2qlo3Jm4Wh
-        RALA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVsh5lEw8"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.40.177]
-        by smtp.strato.de (RZmta 44.26.1 DYNA|AUTH)
-        with ESMTPSA id R073b7v7DCRb061
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Tue, 13 Aug 2019 14:27:37 +0200 (CEST)
-Subject: Re: Mainline status for "can/bcm: Replace hrtimer_tasklet with
- softirq based hrtimer"?
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sebastian Sewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Tom Zanussi <zanussi@kernel.org>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20171022213938.940451689@linutronix.de>
- <20171022214053.508480159@linutronix.de>
- <15b391b9-ad47-c5b6-a6be-bdb4a336c968@hartkopp.net>
- <a36f5369-d66a-dbb8-9a77-7bcefa432ce1@hartkopp.net>
- <alpine.DEB.2.20.1711291358160.2056@hypnos.tec.linutronix.de>
- <5e744197-005a-a941-9372-810586f64157@hartkopp.net>
- <alpine.DEB.2.21.1908122028470.7324@nanos.tec.linutronix.de>
- <20190813072427.i6ieuahddhveku6f@linutronix.de>
- <92c6a310-ce5f-b5fa-e532-c193023bc729@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <03bb7a58-3e80-2c21-2462-97ff7058dd7b@hartkopp.net>
-Date:   Tue, 13 Aug 2019 14:27:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729195AbfHNCWS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Aug 2019 22:22:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49720 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728682AbfHNCSr (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:18:47 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E19C720989;
+        Wed, 14 Aug 2019 02:18:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565749126;
+        bh=ofRR4q194vxRJTR0/BHAGC0G9PhdVmLLiofeg9bAwpo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eYTzak1qDEwoHFf1CzRU3tMVCmH0RhC4VdhqmUUmxb196iFXqsMHQFHGwXwj1hIqb
+         2umkWIDbP3cgZ0CISEPPs9Y2DKZK7u3JcwSmsHYxDNxQEWu+ZaWi4lDNcciI+kizQj
+         QJ45//GlwrFrk1ZIU4Nc/cdNMs4xDZqu+GGcCPeo=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Willem de Bruijn <willemb@google.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 08/44] can: dev: call netif_carrier_off() in register_candev()
+Date:   Tue, 13 Aug 2019 22:17:57 -0400
+Message-Id: <20190814021834.16662-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190814021834.16662-1-sashal@kernel.org>
+References: <20190814021834.16662-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <92c6a310-ce5f-b5fa-e532-c193023bc729@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 13/08/2019 11.30, Marc Kleine-Budde wrote:
-> On 8/13/19 9:24 AM, Sebastian Sewior wrote:
->> On 2019-08-12 20:31:34 [+0200], Thomas Gleixner wrote:
->>> I was assuming this goes through the can/net process. So TBH, I did not pay
->>> attention as this was not using that old crufty hrtimer_tasklet() construct
->>> which we removed.
->>
->> The mvpp2 driver fell through the cracks as well. I will repost that
->> one…
->>
->> Oliver, I believe you can handle the can driver yourself, right?
-> 
-> I've added the patch to can-next and it will be included in the next
-> pull request to David Miller.
+From: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
 
-Thanks all!
+[ Upstream commit c63845609c4700488e5eacd6ab4d06d5d420e5ef ]
 
-I was really happy to get the hrtimer trampoline stuff reverted in the 
-code again. Thanks for your effort! I needed some time to review the 
-changes as the trampoline approach included weird complexity that time :-)
+CONFIG_CAN_LEDS is deprecated. When trying to use the generic netdev
+trigger as suggested, there's a small inconsistency with the link
+property: The LED is on initially, stays on when the device is brought
+up, and then turns off (as expected) when the device is brought down.
 
-@Marc: Please add my Acked-by: if it's still missing in the current 
-upstream patch. Tnx!
+Make sure the LED always reflects the state of the CAN device.
 
-Best,
-Oliver
+Signed-off-by: Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Acked-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/can/dev.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index 7d61d8801220e..d92113db4fb97 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -1217,6 +1217,8 @@ int register_candev(struct net_device *dev)
+ 		return -EINVAL;
+ 
+ 	dev->rtnl_link_ops = &can_link_ops;
++	netif_carrier_off(dev);
++
+ 	return register_netdev(dev);
+ }
+ EXPORT_SYMBOL_GPL(register_candev);
+-- 
+2.20.1
+
