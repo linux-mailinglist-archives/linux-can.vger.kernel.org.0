@@ -2,32 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5C68CBCD
-	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 08:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4B48CC45
+	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 09:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727414AbfHNGQm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Aug 2019 02:16:42 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54129 "EHLO
+        id S1725895AbfHNHDl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Aug 2019 03:03:41 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57951 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbfHNGQm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Aug 2019 02:16:42 -0400
+        with ESMTP id S1726383AbfHNHDk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Aug 2019 03:03:40 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hxmaN-0005zq-Vd; Wed, 14 Aug 2019 08:16:40 +0200
+        id 1hxnJr-0001XQ-Dg; Wed, 14 Aug 2019 09:03:39 +0200
 Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 17427444EE2;
-        Wed, 14 Aug 2019 06:16:37 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 588F9444FAA;
+        Wed, 14 Aug 2019 07:03:38 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+References: <20190723130003.17733-1-socketcan@hartkopp.net>
+ <20190723130003.17733-2-socketcan@hartkopp.net>
+ <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
+ <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
+ <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
+ <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
+ <1684a411-e05c-a7a0-2b65-ceefc68e6b12@pengutronix.de>
+ <727ad8d4-acc3-d72d-613e-fb3429f670f6@hartkopp.net>
+ <6acd5e5b-764a-f3f9-8e2c-6dacd3923e7e@pengutronix.de>
+ <9b4ca3eb-c3b9-926c-9b86-6077229791be@hartkopp.net>
+ <e8b96c8b-5942-d6ff-f61f-dffd1c99c942@pengutronix.de>
+ <eeaf5a93-82ae-f2fb-c4cc-1c9f7f926171@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kernel@pengutronix.de,
-        linux-can@vger.kernel.org
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -89,15 +99,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: pull-request: can-next 2019-08-14
-Message-ID: <f0658ccd-389f-fc60-7538-c512112b9978@pengutronix.de>
-Date:   Wed, 14 Aug 2019 08:16:24 +0200
+Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
+Message-ID: <6663f38d-61f7-d258-ebd5-86a0e16c6b68@pengutronix.de>
+Date:   Wed, 14 Aug 2019 09:03:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <eeaf5a93-82ae-f2fb-c4cc-1c9f7f926171@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="tT6upIpksf70DqJYx4HU3tzNJSTM4Bj7e"
+ boundary="RMJl4hNBdidXXyphaGj2LV2oWtTasCndG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -108,199 +119,186 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---tT6upIpksf70DqJYx4HU3tzNJSTM4Bj7e
-Content-Type: multipart/mixed; boundary="fzRiYf3JlkZf0FPiKDHpQZU25i5AIWrq9";
+--RMJl4hNBdidXXyphaGj2LV2oWtTasCndG
+Content-Type: multipart/mixed; boundary="VuK1wahVqh95Oy35nGKvHBgGSAFIRpkXP";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net, kernel@pengutronix.de, linux-can@vger.kernel.org
-Message-ID: <f0658ccd-389f-fc60-7538-c512112b9978@pengutronix.de>
-Subject: pull-request: can-next 2019-08-14
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Message-ID: <6663f38d-61f7-d258-ebd5-86a0e16c6b68@pengutronix.de>
+Subject: Re: [PATCH 2/2] can: gw: add support for CAN FD frames
+References: <20190723130003.17733-1-socketcan@hartkopp.net>
+ <20190723130003.17733-2-socketcan@hartkopp.net>
+ <3c5aabfc-10cf-51b1-e76e-08c5cce8b56f@pengutronix.de>
+ <f0c82e62-0b97-68eb-2bcb-27c6e92a113c@hartkopp.net>
+ <2f24fc11-8123-8384-bf1c-63ee71424d27@pengutronix.de>
+ <65c2946b-15d0-e6cb-a28e-d0b713b6a256@hartkopp.net>
+ <1684a411-e05c-a7a0-2b65-ceefc68e6b12@pengutronix.de>
+ <727ad8d4-acc3-d72d-613e-fb3429f670f6@hartkopp.net>
+ <6acd5e5b-764a-f3f9-8e2c-6dacd3923e7e@pengutronix.de>
+ <9b4ca3eb-c3b9-926c-9b86-6077229791be@hartkopp.net>
+ <e8b96c8b-5942-d6ff-f61f-dffd1c99c942@pengutronix.de>
+ <eeaf5a93-82ae-f2fb-c4cc-1c9f7f926171@hartkopp.net>
+In-Reply-To: <eeaf5a93-82ae-f2fb-c4cc-1c9f7f926171@hartkopp.net>
 
---fzRiYf3JlkZf0FPiKDHpQZU25i5AIWrq9
+--VuK1wahVqh95Oy35nGKvHBgGSAFIRpkXP
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Hello David,
+On 8/9/19 7:29 PM, Oliver Hartkopp wrote:
+>> Which race condition do you have in mind?
+>=20
+> E.g. you create a can-gw job that forwards the incoming CAN frame to 10=
+=20
+> different vcan's.
+>=20
+> These 10 skb's have been cloned which means their skb->data points to=20
+> the exact same location. When now each vcan instance on a multicore=20
+> system reads and writes the length info you have a classical race on=20
+> that one memory location.
 
-this is a pull request for net-next/master consisting of 41 patches.
+Thanks. I've totally missed the point that can-gw can forward CAN frames
+to more than one interface.
 
-The first two patches are for the kvaser_pciefd driver: Christer Beskow
-removes unnecessary code in the kvaser_pciefd_pwm_stop() function,
-YueHaibing removes the unused including of <linux/version.h>.
+>> For loopback ("can_put_echo_skb()"), I see a race condition in some CA=
+N
+>> drivers: They first do a can_put_echo_skb(), then keep using the skb t=
+o
+>> write ->data into the hardware.
+>>
+>> If we modify the skb in can_put_echo_skb(), then the CAN driver will s=
+ee
+>> the sanitized struct canfd_frame::len. This means for dlc =3D=3D 13, 1=
+4, 15
+>> the driver will write more data into the hardware than needed. It
+>> probably depends on the HW what the controller sends out if you have a=
 
-In the next patch YueHaibing also removes the unused including of
-<linux/version.h> in the f81601 driver.
+>> dlc =3D=3D 14 (which means len up to 48 bytes) but only write 33 bytes=
+ into
+>> the registers.
+>=20
+> Then you have uninitialized content from the CAN registers and not from=
+=20
+> the skb on the wire :-)
 
-In the ti_hecc driver the next 6 patches are by me and fix checkpatch
-warnings. YueHaibing's patch removes an unused variable in the
-ti_hecc_mailbox_read() function.
+ACK.
 
-The next 6 patches all target the xilinx_can driver. Anssi Hannula's
-patch fixes a chip start failure with an invalid bus. The patch by
-Venkatesh Yadav Abbarapu skips an error message in case of a deferred
-probe. The 3 patches by Appana Durga Kedareswara rao fix the RX and TX
-path for CAN-FD frames. Srinivas Neeli's patch fixes the bit timing
-calculations for CAN-FD.
+>> While other drivers don't touch the skb after can_put_echo_skb().
+>>
+>> Can we modify the ->len in can_get_echo_skb() (or the __ variant) righ=
+t
+>> before pushing the skv into the networking stack? We have to look at t=
+he
+>> data path for driver that cannot/don't use can_get_echo_skb() due to n=
+o
+>> TX-complete interrupt.
+>>
+>> Looking at vcan, where's the race condition when modifying the skb in
+>> vcan_tx()?
+>=20
+> As written above. Additionally the echo is mostly done in can_send() in=
+=20
+> af_can.c. And vcan_tx() is just a /dev/null from the packet flow=20
+> perspective.
 
-The next 12 patches are by me and several checkpatch warnings in the
-af_can, raw and bcm components.
+With can-gw, the skb hitting vcan may be cloned and thus changing the
+data is not allowed. But what about the loopback path? Are there
+usecases where a cloned skb used?
 
-Thomas Gleixner provides a patch for the bcm, which switches the timer
-to HRTIMER_MODE_SOFT and removes the hrtimer_tasklet.
+>>> I tend to sanitize the CAN FD length values when they are introduced
+>>> into the system (CAN_RAW, CAN_BCM, CAN FD drivers*) and when they are=
 
-Then 6 more patches by me for the gw component, which fix checkpatch
-warnings, followed by 2 patches by Oliver Hartkopp to add CAN-FD
-support.
+>>> modified (CAN_GW).
+>>>
+>>> * =3D already done
+>>
+>> You miss the datapath that directly injects packets into the networkin=
+g
+>> stack with the mechanism that tcpdump uses but the sending into the
+>> kernel instead of receiving (I don't remember the exact name). This pa=
+th
+>> skips all checks in CAN_RAW. This is why we have the
+>> "can_dropped_invalid_skb()" in all drivers.
+>=20
+> I don't know whether these tools can create ethertype CAN(FD) skbs whic=
+h=20
+> is mandatory for the CAN stack to process skbs. But if so, you are righ=
+t.
 
-The vcan driver gets 3 patches by me, fixing checkpatch warnings.
+You can inject arbitrary packets into the kernel.
 
-And finally a patch by Andre Hartmann to fix typos in CAN's netlink
-header.
+>> So from my point of view it makes no sense to sanitize the len value i=
+n
+>> gw, as the drivers convert from len to dlc anyways.
+>>
+>> What do I see when I attach a candump to the src and another one to th=
+e
+>> dst interface? I suspenct:
+>>
+>> src) the unmodified canfd_frame with sanitized len, as the controller
+>> knowns only the dlc.
+>>
+>> dst) the modified-by-gw canfd_frame, _after_ the loopback by the drive=
+r?
+>> If there's neither sanitation in the gw not in the loopback, it's the
+>> unsanitized len.
+>>
+>> When I have another application sending on the dst interface, the
+>> candump receives the un-sanitized, as there's no sanitation in the loo=
+pback.
+>>
+>> For me the loopback is and vcan is the part to modify, as gw is just a=
 
-regards,
+>> another source of unsanitized len information.
+>>
+>>> My idea was to fix things up when someone manipulates the CAN or CAN =
+FD
+>>> length field with can-gw.
+>>
+>> For CAN you don't have to do any sanitization, only check if the len i=
+s
+>> <=3D 8.
+>=20
+> Mapping [0..8] to [0..8] is pointless but correct :-)
+
+:p
+
+>>> Or do you think I should just omit it and let the data flow as-is?
+>>
+>> ACK
+>=20
+> Ok, will send a v2 with a removed sanitized CAN FD length. The=20
+> boundaries of the max length information (max 8 or 64) is tested anyway=
+=2E
+
+Tnx. It's in the linux-can-next-for-5.4-20190814 pull reqeust.
+
 Marc
-
----
-
-The following changes since commit 53f6f391786e01bf2050c03d8a36d9defdcc28=
-31:
-
-  caif: no need to check return value of debugfs_create functions (2019-0=
-8-11 21:31:25 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git ta=
-gs/linux-can-next-for-5.4-20190814
-
-for you to fetch changes up to 3ca3c4aad2efa2931b663acc4ece7a38b31071d1:
-
-  can: netlink: fix documentation typos (2019-08-13 17:32:21 +0200)
-
-----------------------------------------------------------------
-linux-can-next-for-5.4-20190814
-
-----------------------------------------------------------------
-Andre Hartmann (1):
-      can: netlink: fix documentation typos
-
-Anssi Hannula (1):
-      can: xilinx_can: xcan_chip_start(): fix failure with invalid bus
-
-Appana Durga Kedareswara rao (3):
-      can: xilinx_can: xcanfd_rx(): fix FSR register handling in the RX p=
-ath
-      can: xilinx_can: fix the data update logic for CANFD FD frames
-      can: xilinx_can: xcan_rx_fifo_get_next_frame(): fix FSR register FL=
- and RI mask values for canfd 2.0
-
-Christer Beskow (1):
-      can: kvaser_pciefd: kvaser_pciefd_pwm_stop(): remove unnecessary co=
-de when setting pwm duty cycle to zero
-
-Marc Kleine-Budde (27):
-      can: ti_hecc: convert block comments to network style comments
-      can: ti_hecc: fix indention
-      can: ti_hecc: avoid long lines
-      can: ti_hecc: fix print formating strings
-      can: ti_hecc: ti_hecc_start(): avoid multiple assignments
-      can: ti_hecc: ti_hecc_mailbox_read(): add blank lines to improve re=
-adability
-      can: af_can: convert block comments to network style comments
-      can: af_can: balance braces around else statements
-      can: af_can: fix alignment
-      can: af_can: avoid splitting quoted string across lines
-      can: af_can: can_pernet_init(): Use preferred style kzalloc(sizeof(=
-)) usage
-      can: af_can: add missing identifiers to struct receiver::func
-      can: raw: convert block comments to network style comments
-      can: raw: remove unnecessary blank lines, add suggested blank lines=
-
-      can: raw: balance braces around else statements
-      can: raw: raw_module_init(): use pr_err() instead of printk(KERN_ER=
-R, ...)
-      can: raw: raw_sock_no_ioctlcmd(): mark function as static
-      can: bcm: bcm_sock_no_ioctlcmd(): mark function as static
-      can: gw: convert block comments to network style comments
-      can: gw: remove unnecessary blank lines, add suggested blank lines
-      can: gw: add missing spaces around operators
-      can: gw: can_can_gw_rcv(): remove return at end of void function
-      can: gw: cgw_dump_jobs(): avoid long lines
-      can: gw: cgw_parse_attr(): remove unnecessary braces for single sta=
-tement block
-      can: vcan: convert block comments to network style comments
-      can: vcan: remove unnecessary blank lines
-      can: vcan: introduce pr_fmt and make use of it
-
-Oliver Hartkopp (2):
-      can: gw: use struct canfd_frame as internal data structure
-      can: gw: add support for CAN FD frames
-
-Srinivas Neeli (1):
-      can: xilinx_can: xcan_set_bittiming(): fix the data phase btr1 calc=
-ulation
-
-Thomas Gleixner (1):
-      can: bcm: switch timer to HRTIMER_MODE_SOFT and remove hrtimer_task=
-let
-
-Venkatesh Yadav Abbarapu (1):
-      can: xilinx_can: xcan_probe(): skip error message on deferred probe=
-
-
-YueHaibing (3):
-      can: kvaser_pciefd: Remove unused including <linux/version.h>
-      can: sja1000: f81601: remove unused including <linux/version.h>
-      can: ti_hecc: ti_hecc_mailbox_read(): remove set but not used varia=
-ble 'mbx_mask'
-
- drivers/net/can/kvaser_pciefd.c  |  11 +-
- drivers/net/can/sja1000/f81601.c |   1 -
- drivers/net/can/ti_hecc.c        |  85 ++++---
- drivers/net/can/vcan.c           |  19 +-
- drivers/net/can/xilinx_can.c     | 175 ++++++--------
- include/uapi/linux/can/gw.h      |  17 +-
- include/uapi/linux/can/netlink.h |   6 +-
- net/can/af_can.c                 |  89 +++----
- net/can/af_can.h                 |   5 +-
- net/can/bcm.c                    | 160 +++++-------
- net/can/gw.c                     | 510 +++++++++++++++++++++++++--------=
-------
- net/can/raw.c                    |  34 ++-
- 12 files changed, 579 insertions(+), 533 deletions(-)
 
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
 Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |-
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
+--VuK1wahVqh95Oy35nGKvHBgGSAFIRpkXP--
 
-
-
-
-
-
---fzRiYf3JlkZf0FPiKDHpQZU25i5AIWrq9--
-
---tT6upIpksf70DqJYx4HU3tzNJSTM4Bj7e
+--RMJl4hNBdidXXyphaGj2LV2oWtTasCndG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1TpzgACgkQWsYho5Hk
-nSA51Qf/ZNawLD88769eVybOvf28da4wye9OwAvplgBDGZCuNN0bFyBEOwVeSVgY
-jjLPhs3enYDyLHoNTrxuPD0/w1jlc9AbIDtm6qWJSy2VkRvq79s0pXgSXCOxAogT
-4mVsry61S59rcJLhj9BGsAxSbBSruAW0VDtl3n7PU3bijft3YkW9tbOPp7ajYcsB
-85uaBEjFupR3Zf8ILvb8khZUemc7bV7PiulBdDiFv6VFFLUuKptzcv1WQgyJcixN
-PKche9NAmqdjpwVYBMSQ4I9jEFl9kjwJB9AMof36QCUu/FcZZamD9J1EPN6Rwpu9
-zrb4qi7HA/rSpc2H6JsSQqdBSlZYvA==
-=Jm2o
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1TskMACgkQWsYho5Hk
+nSAYTgf+OKEB8o4cqJ2CFk3I+rPaNz/A2q1nwzZxaw6YbcOKY/rfX4ve2HwRbrT/
+vy4yMXPOUSXMsVpUIO19huXPOElLgegFY3qm0SJk+b6Bn6+MFuYvYwWfLTRG0Yh5
+X1VzcOInAnnZTKuwrYDONY6eVDaIiq2ZxcEeG8E45uub3wyCGbQrKyueaZxTQYTD
+NS9CAH4PIpAqxUMcSgVZ8PRE8L0H46j2XsD8N6XWyanfHZxrN+e+HoM7aiyBonEz
+M+pxUJRk4xs8I4cEi1ZIWoWOqdLvBIDn0Z+0Vcbbc2gtVqx0a5k7ELbtWD4Ca84o
+3B2VVbbz3noK4f2dyd0W5KJ1yRBB6A==
+=6KVP
 -----END PGP SIGNATURE-----
 
---tT6upIpksf70DqJYx4HU3tzNJSTM4Bj7e--
+--RMJl4hNBdidXXyphaGj2LV2oWtTasCndG--
