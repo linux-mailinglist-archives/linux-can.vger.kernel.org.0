@@ -2,131 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF428CF3E
-	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 11:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E688CFE7
+	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 11:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725800AbfHNJW0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Aug 2019 05:22:26 -0400
-Received: from baptiste.telenet-ops.be ([195.130.132.51]:53072 "EHLO
-        baptiste.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbfHNJW0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Aug 2019 05:22:26 -0400
-Received: from ramsan ([84.194.98.4])
-        by baptiste.telenet-ops.be with bizsmtp
-        id oxNP2000105gfCL01xNP7S; Wed, 14 Aug 2019 11:22:23 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hxpU6-0003Su-Tb; Wed, 14 Aug 2019 11:22:22 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hxpU6-0003Nl-S4; Wed, 14 Aug 2019 11:22:22 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] can: rcar_can: Remove unused platform data support
-Date:   Wed, 14 Aug 2019 11:22:21 +0200
-Message-Id: <20190814092221.12959-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1725996AbfHNJnZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Aug 2019 05:43:25 -0400
+Received: from de-out1.bosch-org.com ([139.15.230.186]:51468 "EHLO
+        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725265AbfHNJnZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Aug 2019 05:43:25 -0400
+Received: from fe0vm1650.rbesz01.com (unknown [139.15.230.188])
+        by fe0vms0187.rbdmz01.com (Postfix) with ESMTPS id 467l56128nz1XLDQw;
+        Wed, 14 Aug 2019 11:43:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=escrypt.com;
+        s=key1-intmail; t=1565775802;
+        bh=X0oETvpFcGplNJn3ohMC9pcbXvP9UDJwP0kLctCAZSI=; l=10;
+        h=From:Subject:From:Reply-To:Sender;
+        b=PN5uHHgHHbYEx9wMuyHveIFWSj/YduWyBrFtwQWpSFL2zHo03D8cw+cb5hoh10IsU
+         cG7FW/2DukItewu8scVOnSY/bzWHLCLmL4/aT/PjHiX0Oh1rJnudrlETzMVbnMqPZd
+         HauosnjzwnqmAwnpLKlQdKZHDsBUW9ZpXPFXcC1I=
+Received: from si0vm2083.rbesz01.com (unknown [10.58.172.176])
+        by fe0vm1650.rbesz01.com (Postfix) with ESMTPS id 467l560bbFz2HN;
+        Wed, 14 Aug 2019 11:43:22 +0200 (CEST)
+X-AuditID: 0a3aad17-dd5ff700000059bd-c9-5d53d7b9b782
+Received: from fe0vm1652.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by si0vm2083.rbesz01.com (SMG Outbound) with SMTP id C1.35.22973.9B7D35D5; Wed, 14 Aug 2019 11:43:21 +0200 (CEST)
+Received: from FE-MBX2038.de.bosch.com (fe-mbx2038.de.bosch.com [10.3.231.48])
+        by fe0vm1652.rbesz01.com (Postfix) with ESMTPS id 467l55674ZzB0L;
+        Wed, 14 Aug 2019 11:43:21 +0200 (CEST)
+Received: from FE-MBX2038.de.bosch.com (10.3.231.48) by
+ FE-MBX2038.de.bosch.com (10.3.231.48) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.1713.5; Wed, 14 Aug 2019 11:43:21 +0200
+Received: from FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2]) by
+ FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2%2]) with mapi id
+ 15.01.1713.008; Wed, 14 Aug 2019 11:43:21 +0200
+From:   "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
+        <fixed-term.Konstantin.Buecheler@escrypt.com>
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     Dan Murphy <dmurphy@ti.com>
+Subject: can: tcan4x5x: spi bits_per_word issue on Raspberry PI
+Thread-Topic: can: tcan4x5x: spi bits_per_word issue on Raspberry PI
+Thread-Index: AdVShK+Dlg6CyEY5S5W9jARFpSiyrA==
+Date:   Wed, 14 Aug 2019 09:43:21 +0000
+Message-ID: <f1e2a3fba8604996b16e11f9405542d1@escrypt.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.23.200.63]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA21Sf0wTZxjmu/7g7HpyXKm8qyvoZWYZuK60bmlgccz9iP8soOwP96ORAw7a
+        AW3XKwJmyRjZSKRjdGY4hhNRBLV0ThiIIhtZhzWyGd0wWjcjmsEGHbNEswChlN3ZYvvH/vny
+        fM/7Ps/7fO8dLqI+xFW42eJg7RamgpbKxLLsr9XPnLtRYNQGx3MMzp/6JQb3fIvI4OtYlyva
+        ftE/iG1/0JeWj70le6GErTDvYe3Pbi2UmZYbS22exBpfcAKrQ7OSRrQGB3ILLAyFUSOS4RTZ
+        ikHnb4ewyOU8guZ9I9LI5R8EnZ1TSJBQ5PcIPq/PF7CUNMNn37owAaeQNnAFvhALWESmg//w
+        3MN+BfkinGod43mc73kFPjmYGWnXwLwn+LBdTG6Cvxa/kgqYILOhd9idKGBEquH06SuiiGUq
+        9P05H01NwrHhCA+kEmb+CEf5DXDvx6FohM3Qcf6+NIIzofvI36KIfzJc+nJS7ELKtjjbtjhJ
+        W5ykLU7SgcRupOTM2j2VOq1Br7EXsdxebZam2FrZhyKfJfUsOn691IswHHnRczhGK4ms2gIj
+        tbbIWlJrYjjTbntVBcvRKmJAbTBSikc0V1VUaeY4s9XiRYCL6BTC9ctOI0WUMLV7Wbs1IvOi
+        9biYTiXK8Lx3KLKMcbDlLGtj7avVHByngXA6+YHJdraMrSk1VzhWy7SaQAkJCdS6+Er8WAxf
+        40V6XM7PdjbyFgRnYyo5c1lU/nhETq2yMekYysNdM4eOivAfLrTz55RwUmKL1cKqUokzDbwX
+        KahMVZZHaVRPEE918Q9UxhVijgHkRziiFcSyEETO//uxHEAMCqtLjpIxke4YryEbJNBeb4db
+        D0bF0HLyoBRuzzbJwd/Quxb8gYtJMB0eT4Lb1yeTYP/8VBJcG+gn4eflKwoYWJpMA8/MzXRY
+        8EynQ7D7+Eb4t671SQhMNGVCuNu3Gc6EPtJA+70FLbSedepg3/ApHYw0Neuhd6VLDyfm6nMh
+        NNKzDa6d9OXBwp2xHbB0oOFt2H/kbiFM3w8xMDruLQ7wO8b4Hc/6dwg7djCO/9lxlI09TlWH
+        Mj7t0Z7oyNp6aYtE15+RVx3+ZuJ1/Y1Fvbx7ZXDojfKuIs1jaU9XV11l3UHX3fWHM171vct+
+        sI16SR+SeH99r+VOWvVKSvZs7qgtp+Dq8685Z3a9qRyq+d2T71iy3pyjzzUXbno/pHhZffTW
+        ynfuyxsSezCG3GVMXiy+8HG5S36Z3U2LOROTlSGyc8x/DzM2mZQEAAA=
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-All R-Car platforms use DT for describing CAN controllers.
-R-Car CAN platform data support was never used in any upstream kernel.
+Hi all,
 
-Move the Clock Select Register settings enum into the driver, and remove
-platform data support and the corresponding header file.
+I am trying to use a tcan4550 together with a Raspberry PI 3 B. I am using =
+the tcan4x5x driver from net-next.=20
+I always get the following error during startup.
+	tcan4x5x spi0.0: Probe failed, err=3D-22
+	tcan4x5x: probe of spi0.0 failed with error -22
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/net/can/rcar/rcar_can.c       | 22 +++++++++-------------
- include/linux/can/platform/rcar_can.h | 18 ------------------
- 2 files changed, 9 insertions(+), 31 deletions(-)
- delete mode 100644 include/linux/can/platform/rcar_can.h
+I realized that this happens because the Raspberry PI does only support 8/9=
+ bit words. https://elinux.org/index.php?title=3DRPi_SPI#Supported_bits_per=
+_word
+In the driver it is set to 32.
+	spi->bits_per_word =3D 32;
 
-diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-index cf218949a8fb52d5..3c5e9c2c5342147f 100644
---- a/drivers/net/can/rcar/rcar_can.c
-+++ b/drivers/net/can/rcar/rcar_can.c
-@@ -15,11 +15,17 @@
- #include <linux/can/led.h>
- #include <linux/can/dev.h>
- #include <linux/clk.h>
--#include <linux/can/platform/rcar_can.h>
- #include <linux/of.h>
- 
- #define RCAR_CAN_DRV_NAME	"rcar_can"
- 
-+/* Clock Select Register settings */
-+enum CLKR {
-+	CLKR_CLKP1 = 0,	/* Peripheral clock (clkp1) */
-+	CLKR_CLKP2 = 1,	/* Peripheral clock (clkp2) */
-+	CLKR_CLKEXT = 3	/* Externally input clock */
-+};
-+
- #define RCAR_SUPPORTED_CLOCKS	(BIT(CLKR_CLKP1) | BIT(CLKR_CLKP2) | \
- 				 BIT(CLKR_CLKEXT))
- 
-@@ -736,7 +742,6 @@ static const char * const clock_names[] = {
- 
- static int rcar_can_probe(struct platform_device *pdev)
- {
--	struct rcar_can_platform_data *pdata;
- 	struct rcar_can_priv *priv;
- 	struct net_device *ndev;
- 	struct resource *mem;
-@@ -745,17 +750,8 @@ static int rcar_can_probe(struct platform_device *pdev)
- 	int err = -ENODEV;
- 	int irq;
- 
--	if (pdev->dev.of_node) {
--		of_property_read_u32(pdev->dev.of_node,
--				     "renesas,can-clock-select", &clock_select);
--	} else {
--		pdata = dev_get_platdata(&pdev->dev);
--		if (!pdata) {
--			dev_err(&pdev->dev, "No platform data provided!\n");
--			goto fail;
--		}
--		clock_select = pdata->clock_select;
--	}
-+	of_property_read_u32(pdev->dev.of_node, "renesas,can-clock-select",
-+			     &clock_select);
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
-diff --git a/include/linux/can/platform/rcar_can.h b/include/linux/can/platform/rcar_can.h
-deleted file mode 100644
-index a43dcd0cf79ee3ec..0000000000000000
---- a/include/linux/can/platform/rcar_can.h
-+++ /dev/null
-@@ -1,18 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _CAN_PLATFORM_RCAR_CAN_H_
--#define _CAN_PLATFORM_RCAR_CAN_H_
--
--#include <linux/types.h>
--
--/* Clock Select Register settings */
--enum CLKR {
--	CLKR_CLKP1 = 0,	/* Peripheral clock (clkp1) */
--	CLKR_CLKP2 = 1,	/* Peripheral clock (clkp2) */
--	CLKR_CLKEXT = 3	/* Externally input clock */
--};
--
--struct rcar_can_platform_data {
--	enum CLKR clock_select;	/* Clock source select */
--};
--
--#endif	/* !_CAN_PLATFORM_RCAR_CAN_H_ */
--- 
-2.17.1
+Setting this to 8 does not help of course since the tcan chip expects a mul=
+tiple of 32 per spi transaction.=20
+I don't know if this is a Raspberry Pi specific problem or if there are mor=
+e devices with this hardware limitation.=20
 
+Does anyone have a workaround for that?=20
+
+If this a common issue it might be a good idea to patch the driver. I will =
+check if I can find proper a way to do so.=20
+
+Regards,=20
+Konstantin=20
