@@ -2,124 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1FC8D6CA
-	for <lists+linux-can@lfdr.de>; Wed, 14 Aug 2019 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5568E5D7
+	for <lists+linux-can@lfdr.de>; Thu, 15 Aug 2019 09:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbfHNPBr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Aug 2019 11:01:47 -0400
-Received: from de-out1.bosch-org.com ([139.15.230.186]:57302 "EHLO
-        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbfHNPBr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Aug 2019 11:01:47 -0400
-Received: from si0vm1947.rbesz01.com (unknown [139.15.230.188])
-        by fe0vms0187.rbdmz01.com (Postfix) with ESMTPS id 467t8S6s0yz1XLDR1;
-        Wed, 14 Aug 2019 17:01:44 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=escrypt.com;
-        s=key1-intmail; t=1565794905;
-        bh=tr1+zuR17b0O+ok/Vwxp++E35xoAd0xPOQql34gtAW8=; l=10;
-        h=From:Subject:From:Reply-To:Sender;
-        b=vnBMzSqpHfVIih4mg50ewOvQ7HHp+rj6Ie26N+7nJNgB8i+K+sg633vwz7Nks454R
-         r+VIGb9drj6+FqUX+loq1qzViwkgC/icpSBfGNzRWTqR24bDmSAMnNh8X7ZwwIaY8D
-         n0XVQiZ1dW3EaOErq1LEtciccnl2HusEDIlpz93g=
-Received: from fe0vm1741.rbesz01.com (unknown [10.58.172.176])
-        by si0vm1947.rbesz01.com (Postfix) with ESMTPS id 467t8S6Wgkz6CjQSZ;
-        Wed, 14 Aug 2019 17:01:44 +0200 (CEST)
-X-AuditID: 0a3aad15-9a9ff70000002236-31-5d542258c0c2
-Received: from fe0vm1652.rbesz01.com ( [10.58.173.29])
-        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by fe0vm1741.rbesz01.com (SMG Outbound) with SMTP id 38.FB.08758.852245D5; Wed, 14 Aug 2019 17:01:44 +0200 (CEST)
-Received: from FE-MBX2039.de.bosch.com (fe-mbx2039.de.bosch.com [10.3.231.49])
-        by fe0vm1652.rbesz01.com (Postfix) with ESMTPS id 467t8S4ng5zB0M;
-        Wed, 14 Aug 2019 17:01:44 +0200 (CEST)
-Received: from FE-MBX2038.de.bosch.com (10.3.231.48) by
- FE-MBX2039.de.bosch.com (10.3.231.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.1713.5; Wed, 14 Aug 2019 17:01:44 +0200
-Received: from FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2]) by
- FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2%2]) with mapi id
- 15.01.1713.008; Wed, 14 Aug 2019 17:01:44 +0200
-From:   "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
-        <fixed-term.Konstantin.Buecheler@escrypt.com>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Dan Murphy <dmurphy@ti.com>
-Subject: can: tcan4x5x: spi bits_per_word issue on Raspberry PI
-Thread-Topic: tcan4x5x: spi bits_per_word issue on Raspberry PI
-Thread-Index: AdVShK+Dlg6CyEY5S5W9jARFpSiyrAAKzACw
-Date:   Wed, 14 Aug 2019 15:01:44 +0000
-Message-ID: <3f71bdff8f4f4fe19ad9a09be89bc73d@escrypt.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
+        id S1730456AbfHOH67 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Aug 2019 03:58:59 -0400
+Received: from mail-eopbgr40049.outbound.protection.outlook.com ([40.107.4.49]:5761
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730363AbfHOH67 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 15 Aug 2019 03:58:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bf/7IMNQrCXxBca54fxhwWu9Oh9Bh5yUdGgqOhMGcn/UY+u0rp6pmfDQ8lz+mLgntUZWEaTHErin2AhW4/LDiDuUITEyZin/Xe75n1m0/xAR2S3wdbE+ang3jGp1R4DueDqx6TEqsVVUTOaskVhJLmBTLezUA1LneeqNclQkGSF1ciZFGiXY4sW/m7DHp6Eiw9hzhuo/cj+oYyOHgj1XMKhNNdMHVlAybeEyD9k9dzTeyJFq3eqi4AeIvcUOg+7+ZVoxr2y579xuncaE9ziHCe1VUpUUw1BySyofnQW4Gwc43cmvOWSIpb9P9SeyB4GNww36rDFViW53mWvys3QuGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k5/Lejk+FIL1jdjXz3Rl75TOwHW1Y2Yj+5lDNsmyEKE=;
+ b=Mv2S2svBOdWPJK8r+7WDLVDugTTHNYf/Q5wTZzuovlJPvCqvKO3an+rWQnynjHHNPmjf0T6KMy72KDZRZBrloVXztFIvyrrg1n0BOudwlU98+wlJAw/sokXoQJKv+1tQWkj/+uggnmBW5/5BrVlprOK4X/otgAjflW1q5NcVDjQW19B7hMR6cwW0zxbjyCpSohZoLo67fBr+PEgMQdj4ZY7nmsUu5qHfU6UCXiybRVW7Hx3Kep9gTln4nkOSeyF795gONDTsIKUphbE5EQHrX52TxWl1AP6747so2K9itPo2JDY57X8czO4mDLqg2ATok7rWkNf08owvYTcrqAQVhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k5/Lejk+FIL1jdjXz3Rl75TOwHW1Y2Yj+5lDNsmyEKE=;
+ b=LETQKJIYMwNaRT3RsBvO33eKOQofZ/Hwfa/xITJnRXJtjnDc9JRitEqUU2dOoI0L5DPh3dyGpVRxzFnW9N0HiK70IJSHo+fpSF3jb8NAYMM2WL4lRw6OF5Fyqbs+zUojI35hLFJpp3ttE6GaLtjosko4gMvo3pfF2OKnvrWr5dU=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB4633.eurprd04.prod.outlook.com (52.135.138.155) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2157.16; Thu, 15 Aug 2019 07:58:56 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::c8ca:1c9c:6c3:fb6f]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::c8ca:1c9c:6c3:fb6f%4]) with mapi id 15.20.2157.022; Thu, 15 Aug 2019
+ 07:58:56 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: [PATCH] can: flexcan: update hardware feature information for i.MX8QM
+Thread-Topic: [PATCH] can: flexcan: update hardware feature information for
+ i.MX8QM
+Thread-Index: AQHVUz9JHtFxWG8yHEWEXi8hhLkhPQ==
+Date:   Thu, 15 Aug 2019 07:58:56 +0000
+Message-ID: <20190815075638.23148-1-qiangqing.zhang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [10.23.200.63]
-Content-Type: text/plain; charset="us-ascii"
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: SG2PR02CA0037.apcprd02.prod.outlook.com
+ (2603:1096:3:18::25) To DB7PR04MB4618.eurprd04.prod.outlook.com
+ (2603:10a6:5:38::23)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4862539d-ffaf-48fe-18e9-08d721566bfb
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4633;
+x-ms-traffictypediagnostic: DB7PR04MB4633:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB4633E6CB53DE45490F0CED65E6AC0@DB7PR04MB4633.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:949;
+x-forefront-prvs: 01304918F3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(136003)(39860400002)(376002)(346002)(189003)(199004)(486006)(99286004)(71190400001)(71200400001)(50226002)(25786009)(66066001)(6436002)(6116002)(3846002)(6486002)(305945005)(256004)(14444005)(2616005)(476003)(478600001)(2501003)(15650500001)(4326008)(66946007)(66446008)(64756008)(66556008)(66476007)(54906003)(186003)(110136005)(4744005)(316002)(81156014)(52116002)(5660300002)(81166006)(36756003)(8936002)(1076003)(26005)(53936002)(8676002)(7736002)(2906002)(102836004)(14454004)(386003)(6506007)(86362001)(6512007);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4633;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: OLkB8mVY8iY6X13013wq09OuXB4nRcrTPWpNDmqY8c9bAGz3qLMw3vpiiCzdk+x1XzX0JtBEWyn4dkirv0rnZDuf/VOxh/Z5FZBBhGWAZe5VHECtgBB7IlUC+Jy8A/Ji7OAR/Qh/nrWPEZUvaeXryzEKrRE/FgubUt9XzqXHITHCROn/AjWdQz0Zac9M9I0aK/D7EUNlTCQTY8H3y/LEagcRDn4w3Hflse/kQo0msgyA88TTO/7jBV2T8rFYkGI36KXk9BoEan1elS2V1+cOHUb23v+EXm8SBv4LZ20V+Aq/1jqB2OIwhtj1t63zsFlH3ITp8e7V3OzuaEwsbgR/GQvEYP6ZReFUcrDwT/vsmY3QQWxYVVQvg/1/1GRPZeZn/GWKVAilrNb2YyunQabp/e9vzsm4mEMH8W8/NKtmwZs=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmrmkOLIzCtJLcpLzFFi42LhslorqxuhFBJr8KnJ0KL79BZWi1XfpzJb
-        HFsg5sDscfzGdiaPz5vkApiiuGxSUnMyy1KL9O0SuDI6fj1lLWjirvjT3cnWwHieo4uRk0NC
-        wETi04Wn7F2MXBxCAjOYJCZ1rmeDcHYzSmzpvMQK4bxllOi6OpMRpEVIYB+jxKF1ziA2m0Cm
-        xMTNE5hAbBGBAokJr6azgNjMAvISN+Z/AKsXFrCXWDfjFAtEjb3E1cY77BC2kcTzKyfAelkE
-        VCX2PbgLVsMrYCXRtvIxWA2jgKzEhg3nmSFmiktsevadFeJsAYkleyDiEgKiEi8f/4OKK0i8
-        O7wL6gYdiQW7P7FB2NoSyxa+ZoaYLyhxcuYTlgmMorOQjJ2FpGUWkpZZSFoWMLKsYhRNSzUo
-        yzU0NzHUK0pKLa4yMNRLzs/dxAiJGNEdjB9eph1iZOJgPMRoysGkJMpbPjU4VogvKT+lMiOx
-        OCO+qDQntVhJinerrEWskDBcuLg0KTezuDgzP+8QowQHs5II74SLQbFCvCmJlVWpRfkQbYcY
-        pTlYlMR50zn8Y4QE0hNLUrNTUwtSi2Cy1hwcShK8vxRCYoUEi1LTUyvSMnNKYNJKsryMDAwM
-        QmLIMsjWMnFwHmI05uAB2q2uCDSCt7ggMbc4Mx2qXRKiXQgmitB6itGfY8LLuYuYOQ4enQck
-        n4JIIZa8/LxUKXFeZWmgWQIgXRmleXDXSMnwqi8FelAUSQJh4ivGG4wcjErCvBvEgJp5gKkf
-        4Q4J3u2goBOECiI0GS0B6hFYzSExr6lI4s7nIywSTeu/skhMXTmbTeLem14eiRdnTvBIdCz6
-        yiNxo20jn8SNV8f5JV78u8wvce/aE36JSd+f8ktc2bpFQOLM3/PCEh1bTopJvJj3WUpi6+8n
-        chJrXt6Ul/ix5oW8xPtlyxUlvjbMUJHo3t+vKfHqfq+2xL9lx3QkXpz4rSux7U+LnsSKCz16
-        EvPe/TCQmLGj20iic886I4n9vf3GEhv/LzV+BQxjJmAYv7kRCArjksQSLGEMFUV4TqqBkUW2
-        ZeZTjgLdMlffT4wB06a/ttvw7s9ste6GmZ9FrLmtDnDfZYyIZAzVUKg3n7htZoukxdGPmze7
-        vd9jGZZoacJ+Omlq68SO9mP6F23kbO6utPfU/FZgqfBZ875mSdzuSHWlaYsfH/OMfLZ8VmPg
-        nGlsV/fODQ7l/tqdcXjiDif9cnm+2y2HlViKMxINtZiLihMBaFYbzZYEAAA=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4862539d-ffaf-48fe-18e9-08d721566bfb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2019 07:58:56.2434
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zXVnbGFRYTbGj620MWMTcggWzsCkGCGRDrT+ELQaBP5F81hcAAFxfjTxw4A6rCImCmwTF+uJJRZIoldqaD83wQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4633
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> Hi all,
->=20
-> I am trying to use a tcan4550 together with a Raspberry PI 3 B. I am usin=
-g the
-> tcan4x5x driver from net-next.
-> I always get the following error during startup.
-> 	tcan4x5x spi0.0: Probe failed, err=3D-22
-> 	tcan4x5x: probe of spi0.0 failed with error -22
->=20
-> I realized that this happens because the Raspberry PI does only support 8=
-/9 bit
-> words. https://elinux.org/index.php?title=3DRPi_SPI#Supported_bits_per_wo=
-rd
-> In the driver it is set to 32.
-> 	spi->bits_per_word =3D 32;
->=20
-> Setting this to 8 does not help of course since the tcan chip expects a m=
-ultiple of
-> 32 per spi transaction.
-> I don't know if this is a Raspberry Pi specific problem or if there are m=
-ore devices
-> with this hardware limitation.
->=20
-> Does anyone have a workaround for that?
+Update hardware feature information for i.MX8QM.
 
-It seems to be enough to just change the bits_per_word value to 8
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+---
+ drivers/net/can/flexcan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->=20
-> If this a common issue it might be a good idea to patch the driver. I wil=
-l check if I
-> can find proper a way to do so.
->=20
-> Regards,
-> Konstantin
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 58a794c7387b..def8cbbc04e8 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -207,7 +207,7 @@
+  *   MX35  FlexCAN2  03.00.00.00     no        no        no       no      =
+  no           no
+  *   MX53  FlexCAN2  03.00.00.00    yes        no        no       no      =
+  no           no
+  *   MX6s  FlexCAN3  10.00.12.00    yes       yes        no       no      =
+ yes           no
+- *  MX8QM         ?  ?                ?         ?         ?        ?      =
+   ?          yes
++ *  MX8QM  FlexCAN3  03.00.23.00    yes       yes        no       no      =
+ yes          yes
+  *   VF610 FlexCAN3  ?               no       yes        no      yes      =
+ yes?          no
+  * LS1021A FlexCAN2  03.00.04.00     no       yes        no       no      =
+ yes           no
+  * LX2160A FlexCAN3  03.00.23.00     no       yes        no       no      =
+ yes          yes
+--=20
+2.17.1
 
-Now I have another really confusing problem. Anything I write to SPI is wri=
-tten little endian. The tcan chip expects big endian.=20
-Anything I read from SPI is treated as little endian but is big endian. Doe=
-s anyone know why this happens?=20
-Is there a flag or something I can set for the SPI device/wire to fix this?
-
-Regards,
-Konstantin
