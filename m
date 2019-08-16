@@ -2,88 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6FA901EC
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 14:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39D69020B
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 14:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727087AbfHPMrc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 08:47:32 -0400
-Received: from mail-relay152.hrz.tu-darmstadt.de ([130.83.252.152]:51206 "EHLO
-        mail-relay152.hrz.tu-darmstadt.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727104AbfHPMrb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 08:47:31 -0400
-X-Greylist: delayed 530 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 08:47:30 EDT
-Received: from elektron.ikp.physik.tu-darmstadt.de (elektron.ikp.physik.tu-darmstadt.de [130.83.133.205])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by mail-relay152.hrz.tu-darmstadt.de (Postfix) with ESMTPS id 4692tR6nz8z43pC;
-        Fri, 16 Aug 2019 14:38:39 +0200 (CEST)
-Received: from hertz (hertz.ikp.physik.tu-darmstadt.de [130.83.133.204])
-        by elektron.ikp.physik.tu-darmstadt.de (Postfix) with ESMTP id A79B0100AEE;
-        Fri, 16 Aug 2019 14:38:39 +0200 (CEST)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-ID: <23894.41935.398091.806166@gargle.gargle.HOWL>
-Date:   Fri, 16 Aug 2019 14:38:39 +0200
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     bon@elektron.ikp.physik.tu-darmstadt.de, linux-can@vger.kernel.org
+        id S1726541AbfHPMzX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 08:55:23 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.217]:34541 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726032AbfHPMzX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 08:55:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1565960121;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=p58O2hqnhc8UNAfzUShJ8SjOf3o7BpUYWi/9Vy+Vopc=;
+        b=bZrXEVjNIpIuxut9stqx84eoUespXXQgu+PCd9+ZU0uHqKM/8YyUlUjd2waYYxgoWl
+        qoW8D8WAiayCRhwOepbpMkerA8AWZ1iifRR0tbqLM8cQ1OdP5u7f4NeCIy8OO/YKsdUF
+        1Y1hd4bLksDJxRxddsO9J5btZvzWrJyFtqr6x3CrGpBfgXI9RfljSxyDhRtvnDzjUSrB
+        YuzDlUa/TXdyPbLuKjHjR6qFTO1KCMKOeQH0kIEr/KUb5ZNmnwzO+KAs50gllQ6MA3yp
+        NUGZ1cX0Py4jhdmTZqeIeb4Q6qiZJHr+Hi+cXpYGVCrKRkLFxfhwkGOiDOw1/8F0Bqlk
+        BLxA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVch8lCA="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 44.26.1 DYNA|AUTH)
+        with ESMTPSA id R073b7v7GCtH8qH
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
+        (Client did not present a certificate);
+        Fri, 16 Aug 2019 14:55:17 +0200 (CEST)
 Subject: Re: User-Space Can dongles? Stlink-v3Bridge as CAN dongle
-In-Reply-To: <a3ab86b1-12da-9ca3-899d-8385e6a332dc@pengutronix.de>
+To:     bon@elektron.ikp.physik.tu-darmstadt.de,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
 References: <23894.35590.153840.921485@gargle.gargle.HOWL>
-        <a3ab86b1-12da-9ca3-899d-8385e6a332dc@pengutronix.de>
-X-Mailer: VM 8.2.0b under 25.3.1 (x86_64-suse-linux-gnu)
-From:   bon@elektron.ikp.physik.tu-darmstadt.de
+ <a3ab86b1-12da-9ca3-899d-8385e6a332dc@pengutronix.de>
+ <23894.41935.398091.806166@gargle.gargle.HOWL>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <9550d765-799d-027c-fee7-7a02ad22db0e@hartkopp.net>
+Date:   Fri, 16 Aug 2019 14:54:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <23894.41935.398091.806166@gargle.gargle.HOWL>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Marc Kleine-Budde writes:
-> On 8/16/19 12:52 PM, bon@elektron.ikp.physik.tu-darmstadt.de wrote:
-> > STMicroelectronics provides STLINK-V3Set and STLINK-V3Mini ( > 10
-> > Euro) primary for SWD/Jtag debugging via USB. However bridge functions
-> > are implemented for Uart, GPIO, I2C, SPI and CAN. A library (*1) is
-> > provided to use these bridge functions, stacking on some device
-> > library (*2) stacking finally on libusb.
-> 
-> What do you mean by bridge functions?
+Hi Uwe,
 
-Bridge is what STM call this function. They describe is as
-"The bridge API (STLINK-V3-BRIDGE) is a set of source files allowing
-the development of personal computer applications exercising the
-STLINK-V3 bridge interface of a target board."
+long time no read ;-)
 
-It is normal USB communication, with the basic USB protocol
-hidden/abstracted by a library.
+On 16/08/2019 14.38, bon@elektron.ikp.physik.tu-darmstadt.de wrote:
+> Marc Kleine-Budde writes:
+>> On 8/16/19 12:52 PM, bon@elektron.ikp.physik.tu-darmstadt.de wrote:
 
-> 
-> In a proper designed system, you want to have UART, GPIO, I2C, SPI and
-> CAN drivers in the kernel, not implemented in user space.
->
-This would imply the USB protocol open or reverse engineered or
-leaked. For the JTAG/SWD part this is already done (OpenOCD, pyOCD,
-blackmagic debug probe), also only in user space. For the "bridge
-functions there are not (yet?) open specifications.
+>>> However this would imply a user-space socketcan adapter. Is such a
+>>> thing possible?
+>>
+>> Create a vcan and attach your userspace components to it.
+>>
 
-> > Using these dongles as socket-can adapters would come handy.
-> 
-> Does the license allow you to cerate any open source software with it?
->
-https://www.st.com/content/ccc/resource/legal/legal_agreement/license_agreement/group0/87/0c/3d/ad/0a/ba/44/26/DM00216740/files/DM00216740.pdf/jcr:content/translations/en.DM00216740.pdf
+ACK.
 
-looks like.
+> Is there some example code doing something similar?
+There were some binary CAN tools that needed a serial line with SLCAN 
+protocol to work.
 
-> > However this would imply a user-space socketcan adapter. Is such a
-> > thing possible? 
-> 
-> Create a vcan and attach your userspace components to it.
-> 
+For that reason I built this piece of code to emulate a serial line with 
+a pty and connected the frame flow to a CAN socket.
 
-Is there some example code doing something similar?
+https://github.com/linux-can/can-utils/blob/master/slcanpty.c
 
-Thanks
--- 
-Uwe Bonnes                bon@elektron.ikp.physik.tu-darmstadt.de
-
-Institut fuer Kernphysik  Schlossgartenstrasse 9  64289 Darmstadt
---------- Tel. 06151 1623569 ------- Fax. 06151 1623305 ---------
+Best,
+Oliver
