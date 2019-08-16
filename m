@@ -2,28 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 758509021F
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 14:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1651D9026F
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 15:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727245AbfHPM7W (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 08:59:22 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37383 "EHLO
+        id S1726597AbfHPNF3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 09:05:29 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39243 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbfHPM7W (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 08:59:22 -0400
+        with ESMTP id S1726032AbfHPNF3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 09:05:29 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hybpB-0003tH-2D; Fri, 16 Aug 2019 14:59:21 +0200
+        id 1hybv5-0005Mf-Dc; Fri, 16 Aug 2019 15:05:27 +0200
 Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 49EA844685C;
-        Fri, 16 Aug 2019 12:59:20 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9D3B944688D;
+        Fri, 16 Aug 2019 13:05:26 +0000 (UTC)
 To:     bon@elektron.ikp.physik.tu-darmstadt.de
 Cc:     linux-can@vger.kernel.org
 References: <23894.35590.153840.921485@gargle.gargle.HOWL>
@@ -92,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
 Subject: Re: User-Space Can dongles? Stlink-v3Bridge as CAN dongle
-Message-ID: <41b0a58d-d605-df01-69f5-c1a9cb2a9c9b@pengutronix.de>
-Date:   Fri, 16 Aug 2019 14:59:11 +0200
+Message-ID: <552783f1-d0a0-76ea-5fd3-52a31297152a@pengutronix.de>
+Date:   Fri, 16 Aug 2019 15:05:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
 In-Reply-To: <23894.41935.398091.806166@gargle.gargle.HOWL>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="uPQVof9u6lMDJQWyE5DbbbizrTvA3xIjX"
+ boundary="eoY1Jf5dAMXnNRLAZRS7RJmGrUGDure4I"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,37 +111,42 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---uPQVof9u6lMDJQWyE5DbbbizrTvA3xIjX
-Content-Type: multipart/mixed; boundary="37Kub7IkjBY6TxUudsAEiyKwvmw3E9Hab";
+--eoY1Jf5dAMXnNRLAZRS7RJmGrUGDure4I
+Content-Type: multipart/mixed; boundary="7eSu2KnhrVwbMH0rV7matKs81BwBafkYY";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: bon@elektron.ikp.physik.tu-darmstadt.de
 Cc: linux-can@vger.kernel.org
-Message-ID: <41b0a58d-d605-df01-69f5-c1a9cb2a9c9b@pengutronix.de>
+Message-ID: <552783f1-d0a0-76ea-5fd3-52a31297152a@pengutronix.de>
 Subject: Re: User-Space Can dongles? Stlink-v3Bridge as CAN dongle
 References: <23894.35590.153840.921485@gargle.gargle.HOWL>
  <a3ab86b1-12da-9ca3-899d-8385e6a332dc@pengutronix.de>
  <23894.41935.398091.806166@gargle.gargle.HOWL>
 In-Reply-To: <23894.41935.398091.806166@gargle.gargle.HOWL>
 
---37Kub7IkjBY6TxUudsAEiyKwvmw3E9Hab
+--7eSu2KnhrVwbMH0rV7matKs81BwBafkYY
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
 On 8/16/19 2:38 PM, bon@elektron.ikp.physik.tu-darmstadt.de wrote:
->> Create a vcan and attach your userspace components to it.
+>> In a proper designed system, you want to have UART, GPIO, I2C, SPI and=
 
-> Is there some example code doing something similar?
+>> CAN drivers in the kernel, not implemented in user space.
+>>
+> This would imply the USB protocol open or reverse engineered or
+> leaked. For the JTAG/SWD part this is already done (OpenOCD, pyOCD,
+> blackmagic debug probe), also only in user space.
 
-Basically do the same as cansend and candump:
+Yes, because there was no kernel abstraction for jtag adapters.
 
-https://github.com/linux-can/can-utils/blob/master/cansend.c
-https://github.com/linux-can/can-utils/blob/master/candump.c
+> For the "bridge
+> functions there are not (yet?) open specifications.
 
-If you receive a CAN frame from the dongle, send it to the vcan. If you
-receive a CAN frame from vcan, send it via the dongle.
+However for CAN we have. So I'd rather use a proper supported USB CAN
+adapter or write a kernel driver for this.
 
+regards,
 Marc
 
 --=20
@@ -151,23 +156,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---37Kub7IkjBY6TxUudsAEiyKwvmw3E9Hab--
+--7eSu2KnhrVwbMH0rV7matKs81BwBafkYY--
 
---uPQVof9u6lMDJQWyE5DbbbizrTvA3xIjX
+--eoY1Jf5dAMXnNRLAZRS7RJmGrUGDure4I
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WqJ8ACgkQWsYho5Hk
-nSBWoQf/bZKc/TwC/0UjyyJU07xfEmT4wXqoqaN7/IMklkcfUM+TzVMqyOqopj9y
-YOgxju1nBpRj8wXMvzb1D/wpbxEkO8qEuYIfO2JwWtbLqW0vgcs4b9ozddChlS0Y
-3WZewQi5OpuuT6YhhTcRTPY8LUuck0IRnTQfl3LdPZI/ivW2nRPmy2eaM4RwUTVy
-oBkyY5PsXqRN1L/ujjtwbTNUra6+mDUrRD3PIkZeTZtKbwXUrBFUdI4TmT62aJjJ
-8vwtCN4ErFlgJYMIl8e8Jmi6HQi9fgPeCkyVA2TagxAaBcuVf5V8iidFxmiXuQiQ
-1n9MEFUm0xzf60NZlPxEcU6umqk1tg==
-=ZIVT
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WqhEACgkQWsYho5Hk
+nSAX2wgAo6hHmU5GD3KBoik6EKcwvV6X80Oy9DDB+JKH07betupfeUp776IjAYeq
+tmy6wA5y7O9PFpzZukVGDe+heUF/SMX6CfW6yWvsH42N7dqBMZg9xjK4SMkOrztA
+o1XtexRK66Y90FNZbVIwKQ7gE9C9kVXRagPChG7vQiNtgSboAFab9f4wSNh0qrGD
+CXFQGnx209WUG6lzIRU+4cwHLynVj93n+/MfOPixh1KfgknYMRwLc1SFZWKexUj4
+TxjaIkqIf+tEQDR6o/Gooecs1KV6V/u6DZijZmrRmAV7L0EnVCEr7dzsOzRkrHHq
+eEpUEAef7HVRaUkJJBNfceYwzcsaVQ==
+=Gh1s
 -----END PGP SIGNATURE-----
 
---uPQVof9u6lMDJQWyE5DbbbizrTvA3xIjX--
+--eoY1Jf5dAMXnNRLAZRS7RJmGrUGDure4I--
