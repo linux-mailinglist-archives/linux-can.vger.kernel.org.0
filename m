@@ -2,37 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B22D8FBAE
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 09:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B898FCB4
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 09:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfHPHGY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 03:06:24 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:42739 "EHLO
+        id S1726575AbfHPHsb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 03:48:31 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44047 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbfHPHGY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 03:06:24 -0400
+        with ESMTP id S1725945AbfHPHsa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 03:48:30 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hyWJY-0001KP-Lx; Fri, 16 Aug 2019 09:06:20 +0200
+        id 1hyWyJ-0005J5-KJ; Fri, 16 Aug 2019 09:48:27 +0200
 Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1BB8A446436;
-        Fri, 16 Aug 2019 07:06:18 +0000 (UTC)
-Subject: Re: [PATCH] can: rcar_can: Remove unused platform data support
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20190814092221.12959-1-geert+renesas@glider.be>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5874044646B;
+        Fri, 16 Aug 2019 07:48:26 +0000 (UTC)
+To:     Dan Murphy <dmurphy@ti.com>, wg@grandegger.com
+Cc:     linux-can@vger.kernel.org
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <20190509161109.10499-4-dmurphy@ti.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -95,15 +90,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <20456e4e-e56c-7e7e-c390-e959d0ef50d0@pengutronix.de>
-Date:   Fri, 16 Aug 2019 09:06:15 +0200
+Subject: Re: [PATCH v12 4/5] can: tcan4x5x: Add tcan4x5x driver to the kernel
+Message-ID: <9af58b1d-dda9-bb34-8797-37864e7d65fc@pengutronix.de>
+Date:   Fri, 16 Aug 2019 09:48:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190814092221.12959-1-geert+renesas@glider.be>
+In-Reply-To: <20190509161109.10499-4-dmurphy@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="AdrRRVl7yIBdNyNfHGtSq1Oj7rO0sdXKi"
+ boundary="D56yWysN7Ei4ohpaDYlXzSXDgIWP2Mk4d"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,39 +110,51 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---AdrRRVl7yIBdNyNfHGtSq1Oj7rO0sdXKi
-Content-Type: multipart/mixed; boundary="S6sBI0XHi3tQ8SIYfRXrgceCgNgXSB2w0";
+--D56yWysN7Ei4ohpaDYlXzSXDgIWP2Mk4d
+Content-Type: multipart/mixed; boundary="UgQOvxiupD2mi1nauF3flkA8woNpQZkrl";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Wolfgang Grandegger <wg@grandegger.com>,
- Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>, linux-can@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <20456e4e-e56c-7e7e-c390-e959d0ef50d0@pengutronix.de>
-Subject: Re: [PATCH] can: rcar_can: Remove unused platform data support
-References: <20190814092221.12959-1-geert+renesas@glider.be>
-In-Reply-To: <20190814092221.12959-1-geert+renesas@glider.be>
+To: Dan Murphy <dmurphy@ti.com>, wg@grandegger.com
+Cc: linux-can@vger.kernel.org
+Message-ID: <9af58b1d-dda9-bb34-8797-37864e7d65fc@pengutronix.de>
+Subject: Re: [PATCH v12 4/5] can: tcan4x5x: Add tcan4x5x driver to the kernel
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <20190509161109.10499-4-dmurphy@ti.com>
+In-Reply-To: <20190509161109.10499-4-dmurphy@ti.com>
 
---S6sBI0XHi3tQ8SIYfRXrgceCgNgXSB2w0
+--UgQOvxiupD2mi1nauF3flkA8woNpQZkrl
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 8/14/19 11:22 AM, Geert Uytterhoeven wrote:
-> All R-Car platforms use DT for describing CAN controllers.
-> R-Car CAN platform data support was never used in any upstream kernel.
->=20
-> Move the Clock Select Register settings enum into the driver, and remov=
-e
-> platform data support and the corresponding header file.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On 5/9/19 6:11 PM, Dan Murphy wrote:
+> +static int regmap_spi_gather_write(void *context, const void *reg,
+> +				   size_t reg_len, const void *val,
+> +				   size_t val_len)
+> +{
+> +	struct device *dev =3D context;
+> +	struct spi_device *spi =3D to_spi_device(dev);
+> +	struct spi_message m;
+> +	u32 addr;
+> +	struct spi_transfer t[2] =3D {
+> +		{ .tx_buf =3D &addr, .len =3D reg_len, .cs_change =3D 0,},
+> +		{ .tx_buf =3D val, .len =3D val_len, },
+> +	};
+> +
+> +	addr =3D TCAN4X5X_WRITE_CMD | (*((u16 *)reg) << 8) | val_len >> 3;
 
-Applied to can-next-testing.
+Why do you shift the len by 3? This means division by 8, but AFAICS the
+chip expects the number of words (32 bit) you want to read.
 
-tnx,
+> +
+> +	spi_message_init(&m);
+> +	spi_message_add_tail(&t[0], &m);
+> +	spi_message_add_tail(&t[1], &m);
+> +
+> +	return spi_sync(spi, &m);
+> +}
+
+regards,
 Marc
 
 --=20
@@ -156,23 +164,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---S6sBI0XHi3tQ8SIYfRXrgceCgNgXSB2w0--
+--UgQOvxiupD2mi1nauF3flkA8woNpQZkrl--
 
---AdrRRVl7yIBdNyNfHGtSq1Oj7rO0sdXKi
+--D56yWysN7Ei4ohpaDYlXzSXDgIWP2Mk4d
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WVecACgkQWsYho5Hk
-nSDU5ggAgyN9BwVFh/xMh10s6ONd5da1RQxGFEF3oehwPxxMasBRfiGMYeUecz84
-E4hNoKapYtG78o7FiR7sL0YWJU6WP6lrAF7U04rByw/vJjlokd+kskkxd5niYhCf
-G/xbSe1+xSSfzbEGzgQ8hh5IvEqvm2G16V3wRyqO8ET59A9FXCUilhcFwlHAqvnV
-cX0nP0IA+yf6c7nGczCUS8QyaJymmKkBu15wmXieDrsh8Gj7oKoDuxHXV86/OHPX
-1hfzRSBWK5zb9hX9U7AP6vSUpRTV3tphtAPx/nBzxOHuVwP29Wl0qLMAQgbRVGl4
-T+2ZafWFCUKjp82Wr6HH1nzcaKkJ/Q==
-=hKXp
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WX8MACgkQWsYho5Hk
+nSDVyAf9ERm6hRQmJOzRYOxG303Po6Otg+8VqYWrHxJWg68Pd+C1SaFutfMiPM6P
+XQC3yMDl1BKqL+6n5eW6lHGz19evJiX/QfWyn7hu3/FNL393YzSXh3cjR204lQde
+6ApyEoJ2x1kV0tezCBf0Ll0TrDhoEKjqAettAVpMUOWGvbM1SuBWOtdibTMY8uLF
+GAeP3F5FfYuDIsZI1RDxzZ6Yan37S6e9pM7kl+MBRKAhQbN+NY+Nq89ONSvw1Lms
+ElG/uIwrZ+rdHbs7k81E7KawQWelfvP8EGXEp67YypcpWNkyeBfjQbKmf4xOzkCZ
+HFS3Ycb5+5YEua18UyqEaxr862riMw==
+=OJle
 -----END PGP SIGNATURE-----
 
---AdrRRVl7yIBdNyNfHGtSq1Oj7rO0sdXKi--
+--D56yWysN7Ei4ohpaDYlXzSXDgIWP2Mk4d--
