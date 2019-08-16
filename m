@@ -2,157 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B38F58FDA5
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 10:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC348FDC0
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 10:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727076AbfHPIUs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 04:20:48 -0400
-Received: from mail-eopbgr140051.outbound.protection.outlook.com ([40.107.14.51]:64417
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726809AbfHPIUr (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 16 Aug 2019 04:20:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kd0/9i4uUTI00G1Upcbn0+dXLeIEkuK+WJ7Ww3acnv95gMlLoqjaLRI5NQvsxC0QfB1i8lssKPbzvfpQk0RDmaMPKhyUQcy/0ICdr6T7QWAofcQPQ6vO/0OQSxmdAkJmMZkeaL0RaG2nbOsyKsLkgeTSXeyReH551VswQMscYX6xh3hc0HnZtUNH/jsik1SpcLVEPjvIXCIqZyfRqeb0207fuqm5+1FkRPhKARU5+yhYLXrQvi/jlFhz2JPAViTulrxHqU54q8lh3ZF7838uzQEjM5n1/W2rVMbnC9k4H2x4SA6geuh81dWFuMNSvKzhxvajgSrISkwvNQz4AWvQNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jjni1yQQHYAQq/lz2TnGBSx9Fp6htKdA7RKiGgYf9NQ=;
- b=Jq0NVnaEH60H/ZU7qbwALt91wf58FWjb50JCEuqKE/34LBP+/89lpFpo+c0As9ZI1RFAAlr7nJ4qIz+ylrnQxKZf2fT4UTX7WFK4aQgYA5wiwqqBVHqwymFwBlwd+5DzwN0ZUKO03APVK26Xq6p5fEeSh03yW/iah7BGo5CYktKDu1XCNlseXqa15sgELkfZxOkhYh3v2OvuWZ2pEmShMVlolVwg3afIkA9xxhbJszbg0STO+ThxoEx9Tk6HH8Y4/sg2T2vt7xWvneK8VnaiMAVIRpFmNqHgxdB3kEUePlJHwcV2TdHJYDK1q7M2C3LkB5bXGtpLbo+muQREwJTNQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jjni1yQQHYAQq/lz2TnGBSx9Fp6htKdA7RKiGgYf9NQ=;
- b=FOT05os02SakGaCjgytg/rR66VtyeDZp24IT3ZTYbYBmdmTfHDd2jKTM+Mw7xOMj0JS6Tv6lfA/UbohDkjtRdD8y7SbM7/OKT4clYY/qjzD7hicbSqYzwhjQTTSY6NPo4wopENv/hwCohqK5K7g59mt9wRoAS5+CIs/vGu1xFfM=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB5419.eurprd04.prod.outlook.com (20.178.104.204) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.21; Fri, 16 Aug 2019 08:20:45 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::c8ca:1c9c:6c3:fb6f]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::c8ca:1c9c:6c3:fb6f%4]) with mapi id 15.20.2157.022; Fri, 16 Aug 2019
- 08:20:45 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        id S1726596AbfHPI0U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 04:26:20 -0400
+Received: from de-out1.bosch-org.com ([139.15.230.186]:38268 "EHLO
+        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725945AbfHPI0U (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 04:26:20 -0400
+Received: from si0vm1947.rbesz01.com (unknown [139.15.230.188])
+        by si0vms0217.rbdmz01.com (Postfix) with ESMTPS id 468xHD4PLnz4f3kZr;
+        Fri, 16 Aug 2019 10:26:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=escrypt.com;
+        s=key1-intmail; t=1565943976;
+        bh=51lHsOudyERfxi06LdmLTl0wH2tAJofmNNzjgVcYkQk=; l=10;
+        h=From:Subject:From:Reply-To:Sender;
+        b=eKmEMwuZXGOsZ8mgXfzigiOEyHZf+By8nt9KDsoawFhz12ggcA1JlhY3glYwYxUyp
+         0PnlGtbmuS5w/P2Muap52fJ37iG1+1rkSmdxijvQIpoyTAfpyuiLLCQyeYMqUSYEyM
+         atn8MD2/cxfOOkAiC3fGG17LZ43DUomtkZuFa6RE=
+Received: from fe0vm7918.rbesz01.com (unknown [10.58.172.176])
+        by si0vm1947.rbesz01.com (Postfix) with ESMTPS id 468xHD42ktz6CjQfT;
+        Fri, 16 Aug 2019 10:26:16 +0200 (CEST)
+X-AuditID: 0a3aad10-12dff700000020cf-9e-5d5668a833e4
+Received: from si0vm1949.rbesz01.com ( [10.58.173.29])
+        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by fe0vm7918.rbesz01.com (SMG Outbound) with SMTP id 71.8D.08399.8A8665D5; Fri, 16 Aug 2019 10:26:16 +0200 (CEST)
+Received: from FE-MBX2038.de.bosch.com (fe-mbx2038.de.bosch.com [10.3.231.48])
+        by si0vm1949.rbesz01.com (Postfix) with ESMTPS id 468xHD2TcNz6Cjw36;
+        Fri, 16 Aug 2019 10:26:16 +0200 (CEST)
+Received: from FE-MBX2038.de.bosch.com (10.3.231.48) by
+ FE-MBX2038.de.bosch.com (10.3.231.48) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.1713.5; Fri, 16 Aug 2019 10:26:16 +0200
+Received: from FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2]) by
+ FE-MBX2038.de.bosch.com ([fe80::12c:f84b:4fd6:38c2%2]) with mapi id
+ 15.01.1713.008; Fri, 16 Aug 2019 10:26:16 +0200
+From:   "FIXED-TERM Buecheler Konstantin (ETAS-SEC/ECT-Mu)" 
+        <fixed-term.Konstantin.Buecheler@escrypt.com>
+To:     Patrick Menschel <menschel.p@posteo.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "sean@geanix.com" <sean@geanix.com>
-CC:     "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: [PATCH REPOST 2/2] can: flexcan: add LPSR mode support for i.MX7D
-Thread-Topic: [PATCH REPOST 2/2] can: flexcan: add LPSR mode support for
- i.MX7D
-Thread-Index: AQHVVAuAN63M2nXzF0CEcv0dlGbD9Q==
-Date:   Fri, 16 Aug 2019 08:20:44 +0000
-Message-ID: <20190816081749.19300-3-qiangqing.zhang@nxp.com>
-References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     Dan Murphy <dmurphy@ti.com>
+Subject: AW: can: tcan4x5x: spi bits_per_word issue on Raspberry PI
+Thread-Topic: can: tcan4x5x: spi bits_per_word issue on Raspberry PI
+Thread-Index: AdVShK+Dlg6CyEY5S5W9jARFpSiyrAAKzACwACDpRIAABDvpgAAxaNpg
+Date:   Fri, 16 Aug 2019 08:26:16 +0000
+Message-ID: <47108d803086402c83d1073f3e3a62bb@escrypt.com>
+References: <3f71bdff8f4f4fe19ad9a09be89bc73d@escrypt.com>
+ <f78bb414-4165-3f56-151a-47ab4a8a645d@pengutronix.de>
+ <e6577cc2-89fc-9428-b73e-47f41eff2949@posteo.de>
+In-Reply-To: <e6577cc2-89fc-9428-b73e-47f41eff2949@posteo.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.17.1
-x-clientproxiedby: SG2PR0401CA0004.apcprd04.prod.outlook.com
- (2603:1096:3:1::14) To DB7PR04MB4618.eurprd04.prod.outlook.com
- (2603:10a6:5:38::23)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9cc2aea1-7f99-4128-97ba-08d72222a28d
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:DB7PR04MB5419;
-x-ms-traffictypediagnostic: DB7PR04MB5419:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB54192F458118ABCF316A3FB0E6AF0@DB7PR04MB5419.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 0131D22242
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(346002)(396003)(39840400004)(136003)(54534003)(199004)(189003)(5660300002)(478600001)(6512007)(110136005)(4326008)(25786009)(54906003)(81166006)(76176011)(2906002)(81156014)(53936002)(8676002)(316002)(1076003)(186003)(3846002)(99286004)(11346002)(66946007)(14454004)(26005)(86362001)(2501003)(52116002)(6436002)(476003)(50226002)(6486002)(2616005)(386003)(446003)(66556008)(66066001)(256004)(6506007)(14444005)(486006)(36756003)(66476007)(6116002)(71190400001)(71200400001)(305945005)(102836004)(64756008)(66446008)(8936002)(2201001)(7736002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5419;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ubvLTRJ/OLTcZzHyPCEc+Tj4J4WuFMCFZRxUCbohYjbsnVn+X5hP6ve1zHjECpBuf/h5B6qWJy3YPr9msGKwszewI2FBu5TVXPIrrsQi6wYI6K2W9cM/9quPlUXaiddA9jz+InHgNN2VgmOj29DjwK83HnAhwlq3ohF65Y0Wvb1kqQ40DfgpAyv+tCNzbcofT2Ox/Lri3vsRD2s/y5uurRR/+0UtOJRVTbrkf5pn7bCGEJ7Heck7OJ5S0PfnluU6BsETK7DsUIAqugCCEH/ZO6eAZCfv+g5ql1igIKD9ddl3nhzGwM/qWNZbD2q1f1cM6yZxgaTSRaFAvB05R+8oAJhpei2a+6JXwB0yNznt9Bh0EImPjWWyCBdWGfuSvWWVlnQBF9kg/Hh/cuqq3M75yW0vj4dYpqWmTP+jwcOK1ZE=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+x-originating-ip: [10.23.200.63]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cc2aea1-7f99-4128-97ba-08d72222a28d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Aug 2019 08:20:44.9803
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vrNv4h7r2Vor36L5qlUP9ZiL8ZMZejsExCUzCaFKunSqN8Uav/oLZHwWGzqMmmLmwe1oqOtCynEQC7RYVEwZug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5419
+X-Brightmail-Tracker: H4sIAAAAAAAAA22Tb0xTVxjGOb0XubBePVza8g6odF1kUSLCplnVbTFxM3yYc3OBELYGi1xo
+        M1pIb3FCsoXYuRBqoCaUlTJAwTrnolX+yMaUhgICZbJpmEEDW3RzQ6bOjVBEEXfbW2g/7MvJ
+        Oc9zfs/7nvfmUgTTQSVQOoOJNRo0xcpVMWTMtjPyjae02er08+5ElWW0M1J1et5GqP6xjpEq
+        V2sdqbp8TLYjMrP2aXrm435p5tBEtyhztn3tu2RuzGsFbLHuAGvc9Ma+GO3C8Hxk6QV88PMj
+        40QlqsTVKJoCvBm+9/4ZVY1iKAbbRXDr2Xjw0IvgjtkbKRzuIxiYqiRWnLN/LZJ+fhXWwdEO
+        q8hvSPAgArN9KspvEDgZJloeIv8+Du+Ee2fv8ADFX3oTjjSm+mUJ3gU1422BHBKvA3O9L3Cd
+        xtvg+BdtIqGYE8Gw3RUwovHr0GFdCOQjLIdz534khFrx0P7HfKTwIAwnLgo6YCnc/W0pqCvg
+        QX9PoAcCrwdXzyYBfQHqLLeihLqxMNLwO2lF8Y6wVEeIcIQRjjDiGCJPI2khm35A/+rWDFWa
+        MZ/lKtIz0vaX6NuR8Anxt+g7b6EHiSjkQVsokVJKf2x7X82szi8pKNdqOG2esayY5ZQJdJdc
+        pWbiVmSuLF+v4zhdicGDgCKUEtp6da+aoQs05RWssUTAPCiRIpXxdBG150MGF2lM7EcsW8oa
+        l93tFKUEerYwW83EGtki9mChrti0bCvlNIqIiGBk4U54WREV7UGvUGK+doM/guZKNXpOVxTE
+        nxdwZlkNoV6URVnvNrUSVN9gM786B9v4daDJ2UowpKHEwCbE02Vb+ETsZ7VlhpWeEpLol5z8
+        M6VhRih3Bk0gCinj6I4CHhbzf0uoG6C7/QOMDYoh6OUTPIO9z0HzISPYH9oQLNlPknDINUfC
+        XNczftfeGQWu+hEKqnofUTD9w7AYqlrnxDDhPENDy+XDq6Hz8PE1MDEztAYaa69iaK43M1D3
+        6AoDt61OCczeOy+Fqs4RGTyYORkP7r6hJPil7kYSzF75Wg43emuT4afJm8nQZXcoYPFXnwKu
+        +VqUMDx98UWwuGvXw2cW34YZftIiftJbx7L8kzZpTP8z6aAaelxCJYIxrwbJOnIfL41m7/wy
+        p2Cv27S73/UzkyZpesuyveGbZFuO6v7mGq4rZXHtV6n6jO7r124+GamRKFJk7803fipKHOnb
+        uDCZt9ujcA0+saVMpppl+v3TuadSFezb4gFC/U7F7bxPfJeu28vd0n17Llj/nc764Ojojr97
+        ctZdmnraW60kOa0mYwNh5DT/AbbNXJzGBAAA
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For i.MX7D LPSR mode, the controller will lost power and got the
-configuration state lost after system resume back. (coming i.MX8QM/QXP
-will also completely power off the domain, the controller state will be
-lost and needs restore).
-So we need to set pinctrl state again and re-start chip to do
-re-configuration after resume.
-
-For wakeup case, it should not set pinctrl to sleep state by
-pinctrl_pm_select_sleep_state.
-For interface is not up before suspend case, we don't need
-re-configure as it will be configured by user later by interface up.
-
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-
-ChangeLog:
-V1->V2:
-	* rebase on linux-can/testing.
-	* move into a patch set.
----
- drivers/net/can/flexcan.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index de2bf71b335b..b3edaf6a5a61 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -25,6 +25,7 @@
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/pinctrl/consumer.h>
- #include <linux/regmap.h>
-=20
- #define DRV_NAME			"flexcan"
-@@ -1640,9 +1641,9 @@ static int __maybe_unused flexcan_suspend(struct devi=
-ce *device)
-=20
- 			priv->in_stop_mode =3D true;
- 		} else {
--			err =3D flexcan_chip_disable(priv);
--			if (err)
--				return err;
-+			flexcan_chip_stop(dev);
-+
-+			pinctrl_pm_select_sleep_state(device);
- 		}
- 		netif_stop_queue(dev);
- 		netif_device_detach(dev);
-@@ -1674,7 +1675,9 @@ static int __maybe_unused flexcan_resume(struct devic=
-e *device)
-=20
- 			disable_irq_wake(dev->irq);
- 		} else {
--			err =3D flexcan_chip_enable(priv);
-+			pinctrl_pm_select_default_state(device);
-+
-+			err =3D flexcan_chip_start(dev);
- 			if (err)
- 				return err;
- 		}
---=20
-2.17.1
-
+PiA+PiBOb3cgSSBoYXZlIGFub3RoZXIgcmVhbGx5IGNvbmZ1c2luZyBwcm9ibGVtLiBBbnl0aGlu
+ZyBJIHdyaXRlIHRvIFNQSSBpcyB3cml0dGVuIGxpdHRsZSBlbmRpYW4uIFRoZSB0Y2FuIGNoaXAg
+ZXhwZWN0cyBiaWcgZW5kaWFuLg0KPiA+PiBBbnl0aGluZyBJIHJlYWQgZnJvbSBTUEkgaXMgdHJl
+YXRlZCBhcyBsaXR0bGUgZW5kaWFuIGJ1dCBpcyBiaWcgZW5kaWFuLiBEb2VzIGFueW9uZSBrbm93
+IHdoeSB0aGlzIGhhcHBlbnM/DQo+ID4+IElzIHRoZXJlIGEgZmxhZyBvciBzb21ldGhpbmcgSSBj
+YW4gc2V0IGZvciB0aGUgU1BJIGRldmljZS93aXJlIHRvIGZpeCB0aGlzPw0KPiA+DQo+ID4gSGF2
+ZSB5b3UgY2hhbmdlZCB0aGUgYml0c19wZXJfd29yZCB0byA4PyBUaGVuIHlvdSByZWFkIGp1c3Qg
+YSBzdHJlYW0NCj4gPiBvZiBieXRlcy4gSWYgeW91IHRyZWFkIHRoZW0gYXMgYW4gdTMyIHRoZXkg
+YXJlIGluIGhvc3Qgb3JkZXIuDQo+ID4NCg0KQE1hcmMNClllcywgSSBjaGFuZ2VkIGJpdHNfcGVy
+X3dvcmQgdG8gOC4gU2luY2UgdGhlIFBJIGRvZXMgbm90IHN1cHBvcnQgYW55IHZhbHVlcyBhcGFy
+dCBmcm9tIA0KOCBhbmQgOSB0aGlzIHNlZW1zIHRvIGJlIHRoZSBvbmx5IHdheS4NCg0KPiA+IE1h
+cmMNCj4gPg0KPiANCj4gDQo+IEhpLA0KPiANCj4gZnJvbSBteSBleHBlcmllbmNlIHdpdGggU1BJ
+REVWIG9uIFJQSSwgdGhlIGRyaXZlciB1c2VzIGEgY2hhciBhcnJheSBmb3IgSS9PLg0KPiBBcyB0
+aGUgUlBJIGNvZGUgaXMgYnVpbGQgbGl0dGxlIGVuZGlhbiwgbG9naWNhbGx5IGxpdHRsZSBlbmRp
+YW4gY29tZXMgb3V0IG9mIFNQSS4gWW91DQo+IGJhc2ljYWxseSBoYXZlIHRvIGludmVydCB0aGUg
+Yml0IGFuZCBieXRlIG9yZGVyIGJ5IGhhbmQgZm9yIGEgYmlnIGVuZGlhbiBzbGF2ZS4NCj4gDQoN
+CkBQYXRyaWNrLCBNYXJjDQpZb3UgYm90aCBhcmUgcmlnaHQuIFRoaXMgc2VlbXMgdG8gYmUgdGhl
+IHByb2JsZW0uIFRoZSBTUEkgZHJpdmVyIHVzZXMgY2hhciBhcnJheXMNCmFuZCB0aGUgdGNhbiBk
+cml2ZXIgdHJlYXRzIHRoZW0gYXMgdTMyLiANCg0KSSB3aWxsIHRyeSB0byBjaGFuZ2UgdGhlIGJ5
+dGUgb3JkZXIgYnkgaGFuZCB0byBnZXQgaXQgcnVubmluZyBmb3IgbXkgcHJvamVjdC4gQnV0IGlu
+IHRoZSBsb25nIA0KcnVuLCB0aGlzIGRvZXMgbm90IHNlZW0gdG8gYmUgYSBwcm9wZXIgc29sdXRp
+b24uLi4gDQoNClJlZ2FyZHMsIA0KS29uc3RhbnRpbiANCg0KDQo+IENsb2NrIFBoYXNlIGFuZCBD
+bG9jayBQb2xhcml0eSBhcmUgYWxzbyBhbiBpc3N1ZSBvbiB0aGUgUlBJIGFzIGF0IGxlYXN0IFNQ
+SURFVg0KPiBraW5kbHkgb3Zlcmxvb2tzIGFueSBvcHRpb25zIHNldCBwcmV2aW91c2x5Lg0KPiBJ
+IGhhZCBteSBzaGFyZSBvZiB0aGlzIHdoaWxlIHdyaXRpbmcgYSB0ZXN0IGFwcCBmb3IgYSBNQVgz
+MTg1NSBJQyBhbmQgZW5kZWQgdXANCj4gY2FzdGluZyBhIGxpdHRsZSBlbmRpYW4gYXJyYXkgdG8g
+YSBiaWcgZW5kaWFuIHN0cnVjdHVyZS4NCj4gDQo+IFJlZ2FyZHMsDQo+IFBhdHJpY2sNCg0K
