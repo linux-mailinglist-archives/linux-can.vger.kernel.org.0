@@ -2,33 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4D78FF28
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 11:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C858A8FF39
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 11:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfHPJil (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 05:38:41 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36633 "EHLO
+        id S1726839AbfHPJnp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 05:43:45 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44711 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbfHPJik (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 05:38:40 -0400
+        with ESMTP id S1726765AbfHPJno (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 05:43:44 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hyYgv-0008Nu-4x; Fri, 16 Aug 2019 11:38:37 +0200
+        id 1hyYlp-0000PG-8K; Fri, 16 Aug 2019 11:43:41 +0200
 Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C1F0B4466F4;
-        Fri, 16 Aug 2019 09:38:33 +0000 (UTC)
-To:     Dan Murphy <dmurphy@ti.com>, wg@grandegger.com, davem@davemloft.net
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4F2C3446701;
+        Fri, 16 Aug 2019 09:43:40 +0000 (UTC)
+Subject: Re: [PATCH v12 4/5] can: tcan4x5x: Add tcan4x5x driver to the kernel
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     linux-can@vger.kernel.org
 References: <20190509161109.10499-1-dmurphy@ti.com>
- <20190509161109.10499-3-dmurphy@ti.com>
+ <20190509161109.10499-4-dmurphy@ti.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,17 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH v12 3/5] dt-bindings: can: tcan4x5x: Add DT bindings for
- TCAN4x5X driver
-Message-ID: <bdf06ead-a2e8-09a9-8cdd-49b54ec9da72@pengutronix.de>
-Date:   Fri, 16 Aug 2019 11:38:30 +0200
+Message-ID: <f6a07c62-3a2b-85a9-b402-0283ace18222@pengutronix.de>
+Date:   Fri, 16 Aug 2019 11:43:36 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190509161109.10499-3-dmurphy@ti.com>
+In-Reply-To: <20190509161109.10499-4-dmurphy@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx"
+ boundary="4pWqFJ6OKLr5wcEpFUImo4hx9T5faw743"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,106 +110,344 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx
-Content-Type: multipart/mixed; boundary="q6QniM5YBwprqSKHFOCHjmzVW0QcEIZcF";
+--4pWqFJ6OKLr5wcEpFUImo4hx9T5faw743
+Content-Type: multipart/mixed; boundary="6aTJ1vAl6IU6I0tkWzG0IjKmD7idMlr94";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>, wg@grandegger.com, davem@davemloft.net
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <bdf06ead-a2e8-09a9-8cdd-49b54ec9da72@pengutronix.de>
-Subject: Re: [PATCH v12 3/5] dt-bindings: can: tcan4x5x: Add DT bindings for
- TCAN4x5X driver
+To: Dan Murphy <dmurphy@ti.com>
+Cc: linux-can@vger.kernel.org
+Message-ID: <f6a07c62-3a2b-85a9-b402-0283ace18222@pengutronix.de>
+Subject: Re: [PATCH v12 4/5] can: tcan4x5x: Add tcan4x5x driver to the kernel
 References: <20190509161109.10499-1-dmurphy@ti.com>
- <20190509161109.10499-3-dmurphy@ti.com>
-In-Reply-To: <20190509161109.10499-3-dmurphy@ti.com>
+ <20190509161109.10499-4-dmurphy@ti.com>
+In-Reply-To: <20190509161109.10499-4-dmurphy@ti.com>
 
---q6QniM5YBwprqSKHFOCHjmzVW0QcEIZcF
+--6aTJ1vAl6IU6I0tkWzG0IjKmD7idMlr94
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
 On 5/9/19 6:11 PM, Dan Murphy wrote:
-> DT binding documentation for TI TCAN4x5x driver.
+> Add the TCAN4x5x SPI CAN driver.  This device uses the
+> Bosch MCAN IP core along with a SPI interface map.
+> Register to the MCAN common core code to manage the MCAN IP.
 >=20
+> This device has a special method to indicate a write/read
+> operation on the data payload.
+>=20
+> Acked-by: Wolfgang Grandegger <wg@grandegger.com>
 > Signed-off-by: Dan Murphy <dmurphy@ti.com>
 > ---
 >=20
-> v12 - No changes - https://lore.kernel.org/patchwork/patch/1052300/
+> v12 - No changes - https://lore.kernel.org/patchwork/patch/1052301/
 >=20
-> v11 - No changes - https://lore.kernel.org/patchwork/patch/1051178/
-> v10 - No changes - https://lore.kernel.org/patchwork/patch/1050488/
-> v9 - No Changes - https://lore.kernel.org/patchwork/patch/1050118/
-> v8 - No Changes - https://lore.kernel.org/patchwork/patch/1047981/
-> v7 - Made device state optional - https://lore.kernel.org/patchwork/pat=
-ch/1047218/
-> v6 - No changes - https://lore.kernel.org/patchwork/patch/1042445/
+> v11 - No changes - https://lore.kernel.org/patchwork/patch/1051180/
+> v10 - No changes - https://lore.kernel.org/patchwork/patch/1050490/
+> v9 - No changes - https://lore.kernel.org/patchwork/patch/1050119/
+> v8 - No changes - https://lore.kernel.org/patchwork/patch/1047978/
+> v7 - Fixed remaining checkpatch issues and renamed callbacks for m_can =
+change -
+> https://lore.kernel.org/patchwork/patch/1047221/
+> v6 - Updated Kconfig help and added REGMAP_SPI dependency, fixed coding=
+ style issues,
+> removed setting GPIO high in wake routine, change -EIO to return ret in=
+ init and
+> setup functions - https://lore.kernel.org/patchwork/patch/1042443/
 >=20
->  .../devicetree/bindings/net/can/tcan4x5x.txt  | 37 +++++++++++++++++++=
+>  drivers/net/can/m_can/Kconfig    |   9 +
+>  drivers/net/can/m_can/Makefile   |   1 +
+>  drivers/net/can/m_can/tcan4x5x.c | 533 +++++++++++++++++++++++++++++++=
 
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/tcan4x5x.=
-txt
+>  3 files changed, 543 insertions(+)
+>  create mode 100644 drivers/net/can/m_can/tcan4x5x.c
 >=20
-> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/D=
-ocumentation/devicetree/bindings/net/can/tcan4x5x.txt
+> diff --git a/drivers/net/can/m_can/Kconfig b/drivers/net/can/m_can/Kcon=
+fig
+> index f7119fd72df4..cf4f32765efa 100644
+> --- a/drivers/net/can/m_can/Kconfig
+> +++ b/drivers/net/can/m_can/Kconfig
+> @@ -12,3 +12,12 @@ config CAN_M_CAN_PLATFORM
+>  	  Say Y here if you want support for IO Mapped Bosch M_CAN controller=
+=2E
+>  	  This support is for devices that have the Bosch M_CAN controller
+>  	  IP embedded into the device and the IP is IO Mapped to the processo=
+r.
+> +
+> +config CAN_M_CAN_TCAN4X5X
+> +	depends on CAN_M_CAN
+> +	depends on REGMAP_SPI
+> +	tristate "TCAN4X5X M_CAN device"
+> +	---help---
+> +	  Say Y here if you want support for Texas Instruments TCAN4x5x
+> +	  M_CAN controller.  This device is a peripherial device that uses th=
+e
+> +	  SPI bus for communication.
+> diff --git a/drivers/net/can/m_can/Makefile b/drivers/net/can/m_can/Mak=
+efile
+> index 057bbcdb3c74..e77f0eccff97 100644
+> --- a/drivers/net/can/m_can/Makefile
+> +++ b/drivers/net/can/m_can/Makefile
+> @@ -4,3 +4,4 @@
+> =20
+>  obj-$(CONFIG_CAN_M_CAN) +=3D m_can.o
+>  obj-$(CONFIG_CAN_M_CAN_PLATFORM) +=3D m_can_platform.o
+> +obj-$(CONFIG_CAN_M_CAN_TCAN4X5X) +=3D tcan4x5x.o
+> diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/t=
+can4x5x.c
 > new file mode 100644
-> index 000000000000..c388f7d9feb1
+> index 000000000000..411502c3c98e
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> @@ -0,0 +1,37 @@
-> +Texas Instruments TCAN4x5x CAN Controller
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +++ b/drivers/net/can/m_can/tcan4x5x.c
+> @@ -0,0 +1,533 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// SPI to CAN driver for the Texas Instruments TCAN4x5x
+> +// Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.t=
+i.com/
 > +
-> +This file provides device node information for the TCAN4x5x interface =
-contains.
+> +#include <linux/regmap.h>
+> +#include <linux/spi/spi.h>
 > +
-> +Required properties:
-> +	- compatible: "ti,tcan4x5x"
-> +	- reg: 0
-> +	- #address-cells: 1
-> +	- #size-cells: 0
-> +	- spi-max-frequency: Maximum frequency of the SPI bus the chip can
-> +			     operate at should be less than or equal to 18 MHz.
-> +	- data-ready-gpios: Interrupt GPIO for data and error reporting.
-> +	- device-wake-gpios: Wake up GPIO to wake up the TCAN device.
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/gpio/consumer.h>
 > +
-> +See Documentation/devicetree/bindings/net/can/m_can.txt for additional=
-
-> +required property details.
+> +#include "m_can.h"
 > +
-> +Optional properties:
-> +	- reset-gpios: Hardwired output GPIO. If not defined then software
-> +		       reset.
-> +	- device-state-gpios: Input GPIO that indicates if the device is in
-> +			      a sleep state or if the device is active.
+> +#define DEVICE_NAME "tcan4x5x"
+> +#define TCAN4X5X_EXT_CLK_DEF	40000000
 > +
-> +Example:
-> +tcan4x5x: tcan4x5x@0 {
-> +		compatible =3D "ti,tcan4x5x";
-> +		reg =3D <0>;
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <1>;
-> +		spi-max-frequency =3D <10000000>;
-> +		bosch,mram-cfg =3D <0x0 0 0 32 0 0 1 1>;
-> +		data-ready-gpios =3D <&gpio1 14 GPIO_ACTIVE_LOW>;
-
-Can you convert this into a proper interrupt property? E.g.:
-
->                 interrupt-parent =3D <&gpio4>;
->                 interrupts =3D <13 0x2>;
-
-See:
-https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/b=
-indings/net/can/microchip,mcp251x.txt#L21
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tr=
-ee/drivers/net/can/spi/mcp251x.c?h=3Dmcp251x#n945
-
-> +		device-state-gpios =3D <&gpio3 21 GPIO_ACTIVE_HIGH>;
-> +		device-wake-gpios =3D <&gpio1 15 GPIO_ACTIVE_HIGH>;
-> +		reset-gpios =3D <&gpio1 27 GPIO_ACTIVE_LOW>;
+> +#define TCAN4X5X_DEV_ID0	0x00
+> +#define TCAN4X5X_DEV_ID1	0x04
+> +#define TCAN4X5X_REV		0x08
+> +#define TCAN4X5X_STATUS		0x0C
+> +#define TCAN4X5X_ERROR_STATUS	0x10
+> +#define TCAN4X5X_CONTROL	0x14
+> +
+> +#define TCAN4X5X_CONFIG		0x800
+> +#define TCAN4X5X_TS_PRESCALE	0x804
+> +#define TCAN4X5X_TEST_REG	0x808
+> +#define TCAN4X5X_INT_FLAGS	0x820
+> +#define TCAN4X5X_MCAN_INT_REG	0x824
+> +#define TCAN4X5X_INT_EN		0x830
+> +
+> +/* Interrupt bits */
+> +#define TCAN4X5X_CANBUSTERMOPEN_INT_EN	BIT(30)
+> +#define TCAN4X5X_CANHCANL_INT_EN	BIT(29)
+> +#define TCAN4X5X_CANHBAT_INT_EN		BIT(28)
+> +#define TCAN4X5X_CANLGND_INT_EN		BIT(27)
+> +#define TCAN4X5X_CANBUSOPEN_INT_EN	BIT(26)
+> +#define TCAN4X5X_CANBUSGND_INT_EN	BIT(25)
+> +#define TCAN4X5X_CANBUSBAT_INT_EN	BIT(24)
+> +#define TCAN4X5X_UVSUP_INT_EN		BIT(22)
+> +#define TCAN4X5X_UVIO_INT_EN		BIT(21)
+> +#define TCAN4X5X_TSD_INT_EN		BIT(19)
+> +#define TCAN4X5X_ECCERR_INT_EN		BIT(16)
+> +#define TCAN4X5X_CANINT_INT_EN		BIT(15)
+> +#define TCAN4X5X_LWU_INT_EN		BIT(14)
+> +#define TCAN4X5X_CANSLNT_INT_EN		BIT(10)
+> +#define TCAN4X5X_CANDOM_INT_EN		BIT(8)
+> +#define TCAN4X5X_CANBUS_ERR_INT_EN	BIT(5)
+> +#define TCAN4X5X_BUS_FAULT		BIT(4)
+> +#define TCAN4X5X_MCAN_INT		BIT(1)
+> +#define TCAN4X5X_ENABLE_TCAN_INT	(TCAN4X5X_MCAN_INT | \
+> +					TCAN4X5X_BUS_FAULT | \
+> +					TCAN4X5X_CANBUS_ERR_INT_EN | \
+> +					TCAN4X5X_CANINT_INT_EN)
+> +
+> +/* MCAN Interrupt bits */
+> +#define TCAN4X5X_MCAN_IR_ARA		BIT(29)
+> +#define TCAN4X5X_MCAN_IR_PED		BIT(28)
+> +#define TCAN4X5X_MCAN_IR_PEA		BIT(27)
+> +#define TCAN4X5X_MCAN_IR_WD		BIT(26)
+> +#define TCAN4X5X_MCAN_IR_BO		BIT(25)
+> +#define TCAN4X5X_MCAN_IR_EW		BIT(24)
+> +#define TCAN4X5X_MCAN_IR_EP		BIT(23)
+> +#define TCAN4X5X_MCAN_IR_ELO		BIT(22)
+> +#define TCAN4X5X_MCAN_IR_BEU		BIT(21)
+> +#define TCAN4X5X_MCAN_IR_BEC		BIT(20)
+> +#define TCAN4X5X_MCAN_IR_DRX		BIT(19)
+> +#define TCAN4X5X_MCAN_IR_TOO		BIT(18)
+> +#define TCAN4X5X_MCAN_IR_MRAF		BIT(17)
+> +#define TCAN4X5X_MCAN_IR_TSW		BIT(16)
+> +#define TCAN4X5X_MCAN_IR_TEFL		BIT(15)
+> +#define TCAN4X5X_MCAN_IR_TEFF		BIT(14)
+> +#define TCAN4X5X_MCAN_IR_TEFW		BIT(13)
+> +#define TCAN4X5X_MCAN_IR_TEFN		BIT(12)
+> +#define TCAN4X5X_MCAN_IR_TFE		BIT(11)
+> +#define TCAN4X5X_MCAN_IR_TCF		BIT(10)
+> +#define TCAN4X5X_MCAN_IR_TC		BIT(9)
+> +#define TCAN4X5X_MCAN_IR_HPM		BIT(8)
+> +#define TCAN4X5X_MCAN_IR_RF1L		BIT(7)
+> +#define TCAN4X5X_MCAN_IR_RF1F		BIT(6)
+> +#define TCAN4X5X_MCAN_IR_RF1W		BIT(5)
+> +#define TCAN4X5X_MCAN_IR_RF1N		BIT(4)
+> +#define TCAN4X5X_MCAN_IR_RF0L		BIT(3)
+> +#define TCAN4X5X_MCAN_IR_RF0F		BIT(2)
+> +#define TCAN4X5X_MCAN_IR_RF0W		BIT(1)
+> +#define TCAN4X5X_MCAN_IR_RF0N		BIT(0)
+> +#define TCAN4X5X_ENABLE_MCAN_INT	(TCAN4X5X_MCAN_IR_TC | \
+> +					TCAN4X5X_MCAN_IR_RF0N | \
+> +					TCAN4X5X_MCAN_IR_RF1N | \
+> +					TCAN4X5X_MCAN_IR_RF0F | \
+> +					TCAN4X5X_MCAN_IR_RF1F)
+> +#define TCAN4X5X_MRAM_START	0x8000
+> +#define TCAN4X5X_MCAN_OFFSET	0x1000
+> +#define TCAN4X5X_MAX_REGISTER	0x8fff
+> +
+> +#define TCAN4X5X_CLEAR_ALL_INT	0xffffffff
+> +#define TCAN4X5X_SET_ALL_INT	0xffffffff
+> +
+> +#define TCAN4X5X_WRITE_CMD	(0x61 << 24)
+> +#define TCAN4X5X_READ_CMD	(0x41 << 24)
+> +
+> +#define TCAN4X5X_MODE_SEL_MASK		(BIT(7) | BIT(6))
+> +#define TCAN4X5X_MODE_SLEEP		0x00
+> +#define TCAN4X5X_MODE_STANDBY		BIT(6)
+> +#define TCAN4X5X_MODE_NORMAL		BIT(7)
+> +
+> +#define TCAN4X5X_SW_RESET	BIT(2)
+> +
+> +#define TCAN4X5X_MCAN_CONFIGURED	BIT(5)
+> +#define TCAN4X5X_WATCHDOG_EN		BIT(3)
+> +#define TCAN4X5X_WD_60_MS_TIMER		0
+> +#define TCAN4X5X_WD_600_MS_TIMER	BIT(28)
+> +#define TCAN4X5X_WD_3_S_TIMER		BIT(29)
+> +#define TCAN4X5X_WD_6_S_TIMER		(BIT(28) | BIT(29))
+> +
+> +struct tcan4x5x_priv {
+> +	struct regmap *regmap;
+> +	struct spi_device *spi;
+> +	struct mutex tcan4x5x_lock; /* SPI device lock */
+> +
+> +	struct m_can_classdev *mcan_dev;
+> +
+> +	struct gpio_desc *reset_gpio;
+> +	struct gpio_desc *interrupt_gpio;
+> +	struct gpio_desc *device_wake_gpio;
+> +	struct gpio_desc *device_state_gpio;
+> +	struct regulator *power;
+> +
+> +	/* Register based ip */
+> +	int mram_start;
+> +	int reg_offset;
 > +};
+> +
+> +static struct can_bittiming_const tcan4x5x_bittiming_const =3D {
+> +	.name =3D DEVICE_NAME,
+> +	.tseg1_min =3D 2,
+> +	.tseg1_max =3D 31,
+> +	.tseg2_min =3D 2,
+> +	.tseg2_max =3D 16,
+> +	.sjw_max =3D 16,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 32,
+> +	.brp_inc =3D 1,
+> +};
+> +
+> +static struct can_bittiming_const tcan4x5x_data_bittiming_const =3D {
+> +	.name =3D DEVICE_NAME,
+> +	.tseg1_min =3D 1,
+> +	.tseg1_max =3D 32,
+> +	.tseg2_min =3D 1,
+> +	.tseg2_max =3D 16,
+> +	.sjw_max =3D 16,
+> +	.brp_min =3D 1,
+> +	.brp_max =3D 32,
+> +	.brp_inc =3D 1,
+> +};
+> +
+> +static void tcan4x5x_check_wake(struct tcan4x5x_priv *priv)
+> +{
+> +	int wake_state =3D 0;
+> +
+> +	if (priv->device_state_gpio)
+> +		wake_state =3D gpiod_get_value(priv->device_state_gpio);
+> +
+> +	if (priv->device_wake_gpio && wake_state) {
+> +		gpiod_set_value(priv->device_wake_gpio, 0);
+> +		usleep_range(5, 50);
+> +		gpiod_set_value(priv->device_wake_gpio, 1);
+> +	}
+> +}
+> +
+> +static int regmap_spi_gather_write(void *context, const void *reg,
+> +				   size_t reg_len, const void *val,
+> +				   size_t val_len)
+> +{
+> +	struct device *dev =3D context;
+> +	struct spi_device *spi =3D to_spi_device(dev);
+> +	struct spi_message m;
+> +	u32 addr;
+> +	struct spi_transfer t[2] =3D {
+> +		{ .tx_buf =3D &addr, .len =3D reg_len, .cs_change =3D 0,},
+> +		{ .tx_buf =3D val, .len =3D val_len, },
+> +	};
+> +
+> +	addr =3D TCAN4X5X_WRITE_CMD | (*((u16 *)reg) << 8) | val_len >> 3;
+> +
+> +	spi_message_init(&m);
+> +	spi_message_add_tail(&t[0], &m);
+> +	spi_message_add_tail(&t[1], &m);
+> +
+> +	return spi_sync(spi, &m);
+> +}
+> +
+> +static int tcan4x5x_regmap_write(void *context, const void *data, size=
+_t count)
+> +{
+> +	u16 *reg =3D (u16 *)(data);
+> +	const u32 *val =3D data + 4;
+> +
+> +	return regmap_spi_gather_write(context, reg, 4, val, count);
+> +}
+> +
+> +static int regmap_spi_async_write(void *context,
+> +				  const void *reg, size_t reg_len,
+> +				  const void *val, size_t val_len,
+> +				  struct regmap_async *a)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+> +static struct regmap_async *regmap_spi_async_alloc(void)
+> +{
+> +	return NULL;
+> +}
+> +
+> +static int tcan4x5x_regmap_read(void *context,
+> +				const void *reg, size_t reg_size,
+> +				void *val, size_t val_size)
+> +{
+> +	struct device *dev =3D context;
+> +	struct spi_device *spi =3D to_spi_device(dev);
+> +
+> +	u32 addr =3D TCAN4X5X_READ_CMD | (*((u16 *)reg) << 8) | val_size >> 2=
+;
+> +
+> +	return spi_write_then_read(spi, &addr, reg_size, (u32 *)val, val_size=
+);
+> +}
+> +
+> +static struct regmap_bus tcan4x5x_bus =3D {
+> +	.write =3D tcan4x5x_regmap_write,
+> +	.gather_write =3D regmap_spi_gather_write,
+> +	.async_write =3D regmap_spi_async_write,
+> +	.async_alloc =3D regmap_spi_async_alloc,
+> +	.read =3D tcan4x5x_regmap_read,
+> +	.read_flag_mask =3D 0x00,
+> +	.reg_format_endian_default =3D REGMAP_ENDIAN_NATIVE,
+> +	.val_format_endian_default =3D REGMAP_ENDIAN_NATIVE,
+> +};
+> +
+> +static u32 tcan4x5x_read_reg(struct m_can_classdev *cdev, int reg)
+> +{
+> +	struct tcan4x5x_priv *priv =3D (struct tcan4x5x_priv *)cdev->device_d=
+ata;
+> +	u32 val;
+> +
+> +	tcan4x5x_check_wake(priv);
+
+Do you have to call this every time you access the Chip? Can you move
+this into the open() function?
 
 Marc
 
@@ -222,23 +458,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---q6QniM5YBwprqSKHFOCHjmzVW0QcEIZcF--
+--6aTJ1vAl6IU6I0tkWzG0IjKmD7idMlr94--
 
---aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx
+--4pWqFJ6OKLr5wcEpFUImo4hx9T5faw743
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WeZYACgkQWsYho5Hk
-nSBTlwf/UKOIilK+QTWjdNPICt6931qej73qUpCyoXPrpGem3p9JQ75TWAnwtpoH
-JrzeqtaAkV2BuGWkF22JtdALqQWlLXniKBBr8jvYK7oVBP51eFm1Yu70ta5lztOo
-Pr8SsTNW0/ey/4b8hygkpmQnuQIlOYWo1v+YK4IccEz9EbkyOVrg2aj/dvGzaVga
-TMWmmKtpAjB8Cy0Rn1Ygf/zxs8AvCKFhMRnz2jabe/dxUAsxw3lKiW3fiJ8I6OMv
-6Ra0kKf9nlZibQ70TUu/LX6X4rAf7U+SZ/IWAk1LoOtiySC6hn0r4pn9Oxvary2i
-AVXO0fgo63K2OiIFDldCsTiyluylJA==
-=0DaQ
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WeskACgkQWsYho5Hk
+nSCQuQf+JkHHJl+ru4ZRiwNhfTPNdVWtvR4eMC7SCP1BeXzYF5NcbHMUSD5PmfKv
+tB1F7Yw7lDi/HAN32jBXiBhWunFGnNm7WcYFGARSHUdx29vFPHU649yPQABxp5Az
+hqv4kr1EPjC9U+I0ST4qrsZ7f6Q0v8cbvbceG+Jg+12SAZcUEHkDxhta+V+UvNoD
+vAcVaJAfmj40Pk9nvf2NyRRBGt2iLojVuJcYGj/zrjcM+/BSwK/EQ9lOKlvsCj3Y
+RgvueejxLYvMum1gV+raComuYJYqucwSv6Ev7sfQAL5Kq0o5pvVu4RGqqWVoeQAa
+64rkfz+bT24J/MvwIqTSF2LJZrRiow==
+=zFpD
 -----END PGP SIGNATURE-----
 
---aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx--
+--4pWqFJ6OKLr5wcEpFUImo4hx9T5faw743--
