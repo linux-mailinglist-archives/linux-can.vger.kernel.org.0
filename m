@@ -2,34 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF528FE9B
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 10:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4D78FF28
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 11:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbfHPI6y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 04:58:54 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:34167 "EHLO
+        id S1726961AbfHPJil (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 05:38:41 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36633 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726753AbfHPI6y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 04:58:54 -0400
+        with ESMTP id S1726867AbfHPJik (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 05:38:40 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hyY4S-0004Bp-AK; Fri, 16 Aug 2019 10:58:52 +0200
+        id 1hyYgv-0008Nu-4x; Fri, 16 Aug 2019 11:38:37 +0200
 Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 734204466B1;
-        Fri, 16 Aug 2019 08:58:51 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dan Murphy <dmurphy@ti.com>, wg@grandegger.com
-Cc:     linux-can@vger.kernel.org
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C1F0B4466F4;
+        Fri, 16 Aug 2019 09:38:33 +0000 (UTC)
+To:     Dan Murphy <dmurphy@ti.com>, wg@grandegger.com, davem@davemloft.net
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20190509161109.10499-1-dmurphy@ti.com>
- <20190509161109.10499-4-dmurphy@ti.com>
- <9af58b1d-dda9-bb34-8797-37864e7d65fc@pengutronix.de>
+ <20190509161109.10499-3-dmurphy@ti.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -91,16 +91,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH v12 4/5] can: tcan4x5x: Add tcan4x5x driver to the kernel
-Message-ID: <9145f211-3b39-cc4f-c045-6ba07b603d71@pengutronix.de>
-Date:   Fri, 16 Aug 2019 10:58:46 +0200
+Subject: Re: [PATCH v12 3/5] dt-bindings: can: tcan4x5x: Add DT bindings for
+ TCAN4x5X driver
+Message-ID: <bdf06ead-a2e8-09a9-8cdd-49b54ec9da72@pengutronix.de>
+Date:   Fri, 16 Aug 2019 11:38:30 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <9af58b1d-dda9-bb34-8797-37864e7d65fc@pengutronix.de>
+In-Reply-To: <20190509161109.10499-3-dmurphy@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="M2BaqXkS2X67oyPxc7fQazSgGk7yf5bLi"
+ boundary="aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,47 +112,106 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---M2BaqXkS2X67oyPxc7fQazSgGk7yf5bLi
-Content-Type: multipart/mixed; boundary="GtEB6GB7JYjBclQU78lxRMo9Y2uebLShb";
+--aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx
+Content-Type: multipart/mixed; boundary="q6QniM5YBwprqSKHFOCHjmzVW0QcEIZcF";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>, wg@grandegger.com
-Cc: linux-can@vger.kernel.org
-Message-ID: <9145f211-3b39-cc4f-c045-6ba07b603d71@pengutronix.de>
-Subject: Re: [PATCH v12 4/5] can: tcan4x5x: Add tcan4x5x driver to the kernel
+To: Dan Murphy <dmurphy@ti.com>, wg@grandegger.com, davem@davemloft.net
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <bdf06ead-a2e8-09a9-8cdd-49b54ec9da72@pengutronix.de>
+Subject: Re: [PATCH v12 3/5] dt-bindings: can: tcan4x5x: Add DT bindings for
+ TCAN4x5X driver
 References: <20190509161109.10499-1-dmurphy@ti.com>
- <20190509161109.10499-4-dmurphy@ti.com>
- <9af58b1d-dda9-bb34-8797-37864e7d65fc@pengutronix.de>
-In-Reply-To: <9af58b1d-dda9-bb34-8797-37864e7d65fc@pengutronix.de>
+ <20190509161109.10499-3-dmurphy@ti.com>
+In-Reply-To: <20190509161109.10499-3-dmurphy@ti.com>
 
---GtEB6GB7JYjBclQU78lxRMo9Y2uebLShb
+--q6QniM5YBwprqSKHFOCHjmzVW0QcEIZcF
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 8/16/19 9:48 AM, Marc Kleine-Budde wrote:
-> On 5/9/19 6:11 PM, Dan Murphy wrote:
->> +static int regmap_spi_gather_write(void *context, const void *reg,
->> +				   size_t reg_len, const void *val,
->> +				   size_t val_len)
->> +{
->> +	struct device *dev =3D context;
->> +	struct spi_device *spi =3D to_spi_device(dev);
->> +	struct spi_message m;
->> +	u32 addr;
->> +	struct spi_transfer t[2] =3D {
->> +		{ .tx_buf =3D &addr, .len =3D reg_len, .cs_change =3D 0,},
->> +		{ .tx_buf =3D val, .len =3D val_len, },
->> +	};
->> +
->> +	addr =3D TCAN4X5X_WRITE_CMD | (*((u16 *)reg) << 8) | val_len >> 3;
+On 5/9/19 6:11 PM, Dan Murphy wrote:
+> DT binding documentation for TI TCAN4x5x driver.
 >=20
-> Why do you shift the len by 3? This means division by 8, but AFAICS the=
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> ---
+>=20
+> v12 - No changes - https://lore.kernel.org/patchwork/patch/1052300/
+>=20
+> v11 - No changes - https://lore.kernel.org/patchwork/patch/1051178/
+> v10 - No changes - https://lore.kernel.org/patchwork/patch/1050488/
+> v9 - No Changes - https://lore.kernel.org/patchwork/patch/1050118/
+> v8 - No Changes - https://lore.kernel.org/patchwork/patch/1047981/
+> v7 - Made device state optional - https://lore.kernel.org/patchwork/pat=
+ch/1047218/
+> v6 - No changes - https://lore.kernel.org/patchwork/patch/1042445/
+>=20
+>  .../devicetree/bindings/net/can/tcan4x5x.txt  | 37 +++++++++++++++++++=
 
-> chip expects the number of words (32 bit) you want to read.
+>  1 file changed, 37 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/tcan4x5x.=
+txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/D=
+ocumentation/devicetree/bindings/net/can/tcan4x5x.txt
+> new file mode 100644
+> index 000000000000..c388f7d9feb1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+> @@ -0,0 +1,37 @@
+> +Texas Instruments TCAN4x5x CAN Controller
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +This file provides device node information for the TCAN4x5x interface =
+contains.
+> +
+> +Required properties:
+> +	- compatible: "ti,tcan4x5x"
+> +	- reg: 0
+> +	- #address-cells: 1
+> +	- #size-cells: 0
+> +	- spi-max-frequency: Maximum frequency of the SPI bus the chip can
+> +			     operate at should be less than or equal to 18 MHz.
+> +	- data-ready-gpios: Interrupt GPIO for data and error reporting.
+> +	- device-wake-gpios: Wake up GPIO to wake up the TCAN device.
+> +
+> +See Documentation/devicetree/bindings/net/can/m_can.txt for additional=
 
-I see. Can you please test "[PATCH] can: tcan4x5x: fix data length in
-regmap write path", that I've just send to the mailinglist.
+> +required property details.
+> +
+> +Optional properties:
+> +	- reset-gpios: Hardwired output GPIO. If not defined then software
+> +		       reset.
+> +	- device-state-gpios: Input GPIO that indicates if the device is in
+> +			      a sleep state or if the device is active.
+> +
+> +Example:
+> +tcan4x5x: tcan4x5x@0 {
+> +		compatible =3D "ti,tcan4x5x";
+> +		reg =3D <0>;
+> +		#address-cells =3D <1>;
+> +		#size-cells =3D <1>;
+> +		spi-max-frequency =3D <10000000>;
+> +		bosch,mram-cfg =3D <0x0 0 0 32 0 0 1 1>;
+> +		data-ready-gpios =3D <&gpio1 14 GPIO_ACTIVE_LOW>;
+
+Can you convert this into a proper interrupt property? E.g.:
+
+>                 interrupt-parent =3D <&gpio4>;
+>                 interrupts =3D <13 0x2>;
+
+See:
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/b=
+indings/net/can/microchip,mcp251x.txt#L21
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tr=
+ee/drivers/net/can/spi/mcp251x.c?h=3Dmcp251x#n945
+
+> +		device-state-gpios =3D <&gpio3 21 GPIO_ACTIVE_HIGH>;
+> +		device-wake-gpios =3D <&gpio1 15 GPIO_ACTIVE_HIGH>;
+> +		reset-gpios =3D <&gpio1 27 GPIO_ACTIVE_LOW>;
+> +};
 
 Marc
 
@@ -162,23 +222,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---GtEB6GB7JYjBclQU78lxRMo9Y2uebLShb--
+--q6QniM5YBwprqSKHFOCHjmzVW0QcEIZcF--
 
---M2BaqXkS2X67oyPxc7fQazSgGk7yf5bLi
+--aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WcEYACgkQWsYho5Hk
-nSA87wgAubnpaEQkV/bakC2OQx3/KBaNAuO5El8ZauMD5gKJNyLFB+3eAM9gxjpe
-pfaYkSleaGE/KP5qnlTFZR89xlAovQ+yPScUjpqSxkPsG714VnGoDbYy0cDMHwrF
-tN2L7KOpQC4e/kxomsJAkDT0pDZCEM9n6PLoHqy9vb19jKrBkmeiONkp3+XvhgEz
-g4sWqKKLK0vMgfsq7eE4CaOmt1zIvC54JQfzCwGIulg5PafckqlIbPFZLYxuSk7/
-2s3+8TOXEfegX/+vliDLRtsUV47rds58uuFnt+Q9VcYxetiQXd4I2efFc3/qZr3d
-W4Lh3BUcsSnu+Nd2VKHZ3iS0ainQvg==
-=UOkh
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WeZYACgkQWsYho5Hk
+nSBTlwf/UKOIilK+QTWjdNPICt6931qej73qUpCyoXPrpGem3p9JQ75TWAnwtpoH
+JrzeqtaAkV2BuGWkF22JtdALqQWlLXniKBBr8jvYK7oVBP51eFm1Yu70ta5lztOo
+Pr8SsTNW0/ey/4b8hygkpmQnuQIlOYWo1v+YK4IccEz9EbkyOVrg2aj/dvGzaVga
+TMWmmKtpAjB8Cy0Rn1Ygf/zxs8AvCKFhMRnz2jabe/dxUAsxw3lKiW3fiJ8I6OMv
+6Ra0kKf9nlZibQ70TUu/LX6X4rAf7U+SZ/IWAk1LoOtiySC6hn0r4pn9Oxvary2i
+AVXO0fgo63K2OiIFDldCsTiyluylJA==
+=0DaQ
 -----END PGP SIGNATURE-----
 
---M2BaqXkS2X67oyPxc7fQazSgGk7yf5bLi--
+--aBUzk5kBxcksCMQiGzZKo8fIFHJb9btJx--
