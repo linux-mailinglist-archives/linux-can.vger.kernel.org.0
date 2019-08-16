@@ -2,36 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B42D18FB29
-	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 08:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F3A8FB51
+	for <lists+linux-can@lfdr.de>; Fri, 16 Aug 2019 08:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbfHPGhu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Aug 2019 02:37:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56867 "EHLO
+        id S1726958AbfHPGpZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Aug 2019 02:45:25 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48891 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726841AbfHPGht (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 02:37:49 -0400
+        with ESMTP id S1726696AbfHPGpZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Aug 2019 02:45:25 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1hyVrt-0006RV-Io; Fri, 16 Aug 2019 08:37:45 +0200
+        id 1hyVzG-0007Fp-6M; Fri, 16 Aug 2019 08:45:22 +0200
 Received: from [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1] (unknown [IPv6:2001:67c:670:202:595f:209f:a34b:fbc1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 905E24463ED;
-        Fri, 16 Aug 2019 06:37:42 +0000 (UTC)
-Subject: Re: [PATCH] can: flexcan: disable completely the ECC mechanism
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 243E3446402;
+        Fri, 16 Aug 2019 06:45:21 +0000 (UTC)
 To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 Cc:     "wg@grandegger.com" <wg@grandegger.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "stefan@agner.ch" <stefan@agner.ch>,
         dl-linux-imx <linux-imx@nxp.com>
-References: <20190815075806.23212-1-qiangqing.zhang@nxp.com>
+References: <20190815075638.23148-1-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,15 +92,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <18178f51-2a64-0401-839c-36f774a22fbe@pengutronix.de>
-Date:   Fri, 16 Aug 2019 08:37:30 +0200
+Subject: Re: [PATCH] can: flexcan: update hardware feature information for
+ i.MX8QM
+Message-ID: <6353240b-af7e-9695-bf0e-5889e5bc808e@pengutronix.de>
+Date:   Fri, 16 Aug 2019 08:45:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190815075806.23212-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190815075638.23148-1-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="18E0YIb4pnwpQXeRnATY6Y4QMQXHx0j2X"
+ boundary="jYhhSmBZsrhdtLAqrhRsH687kd9T7sFPZ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,38 +113,34 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---18E0YIb4pnwpQXeRnATY6Y4QMQXHx0j2X
-Content-Type: multipart/mixed; boundary="A3iWmuuPEigh9yYBMKcMtGNdLf2iiSztH";
+--jYhhSmBZsrhdtLAqrhRsH687kd9T7sFPZ
+Content-Type: multipart/mixed; boundary="ZAseZrHbqzqSnu6IldzSnjd6ef4yAsKdj";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Joakim Zhang <qiangqing.zhang@nxp.com>,
  "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 Cc: "wg@grandegger.com" <wg@grandegger.com>,
  "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "stefan@agner.ch" <stefan@agner.ch>, dl-linux-imx <linux-imx@nxp.com>
-Message-ID: <18178f51-2a64-0401-839c-36f774a22fbe@pengutronix.de>
-Subject: Re: [PATCH] can: flexcan: disable completely the ECC mechanism
-References: <20190815075806.23212-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20190815075806.23212-1-qiangqing.zhang@nxp.com>
+ dl-linux-imx <linux-imx@nxp.com>
+Message-ID: <6353240b-af7e-9695-bf0e-5889e5bc808e@pengutronix.de>
+Subject: Re: [PATCH] can: flexcan: update hardware feature information for
+ i.MX8QM
+References: <20190815075638.23148-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190815075638.23148-1-qiangqing.zhang@nxp.com>
 
---A3iWmuuPEigh9yYBMKcMtGNdLf2iiSztH
+--ZAseZrHbqzqSnu6IldzSnjd6ef4yAsKdj
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 8/15/19 10:00 AM, Joakim Zhang wrote:
-> The ECC(memory error detection and correction) mechanism can be
-> activated or not, controlled by the ECCDIS bit in CAN_MECR. When
-> disabled, updates on indications and reporting registers are stopped.
-> So if want to disable ECC completely, had better assert ECCDIS bit,
-> not just mask the related interrupts.
+On 8/15/19 9:58 AM, Joakim Zhang wrote:
+> Update hardware feature information for i.MX8QM.
 >=20
-> Fixes:cdce844865be("can: flexcan: add vf610 support for FlexCAN")
 > Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-Added to can.
+Squashed into "can: flexcan: add imx8qm support"
 
-tnx
+Tnx,
 Marc
 
 --=20
@@ -154,23 +150,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---A3iWmuuPEigh9yYBMKcMtGNdLf2iiSztH--
+--ZAseZrHbqzqSnu6IldzSnjd6ef4yAsKdj--
 
---18E0YIb4pnwpQXeRnATY6Y4QMQXHx0j2X
+--jYhhSmBZsrhdtLAqrhRsH687kd9T7sFPZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WTyoACgkQWsYho5Hk
-nSBqagf/XyBojzLJrtEUEfjyQK6/rbTt8TNegezyPeZcsxzB8G2VCrBXVpUoRtWq
-eOOo2vmFhSa+65hr0vDzDsWqRdSC8ce9RiSsV+D+DZP7ejWDYigaW5CrIVF3lx1u
-59SgXR5O2x7ZEye3e3X+jyax6Un28qH+v0BuUlcfrLuBzDQ8hvOQ+e1mvGH0csNM
-NJaZ9Zg/iyFQyyVC9Ae7emdZmMJUmCpoDc2e9srGiP60Tcv4fwKnTrdCMUEFMcbk
-GrTOihO+X2CP/ZHxQbUlsi8YB8tbTNV61ywtw1TCddtv/vAMLdyFJTcR2eP7VdE7
-vJ4ZMMVWXPxCcmoB5lkRPbBAhpZjYQ==
-=y+VK
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1WUPkACgkQWsYho5Hk
+nSBpdwgAhUQTA8ePGtDBuJygDJW1yzKKD4PGR7P1lsBDkufvrYBJe5+TsH9/uM0f
+92g/NuD4R8zgPqMUSJRC8QMYpnJ/O1fdFCmx7gdKza9E4wfHcawg18duk0H28QZv
+2IxGD5b5K12AUB4On4WCV95czfc5Ds948PFVVH6M5ztwDT/Zo9RAoqszTpX/OWYn
+hdAwbHjwfrhU5urD5gXVmQSRyZf6YNMQuzrUU1dVl3WV6O1J+t+guiXtWrZEma9k
+mSfBZukFIFiR+MclAc+cE8iyZtxT8j2SdZw/Omus/Yi/LjCn/oka2Nj5f3/6+LcM
+ZT5arN6YQQOOrW2jvxSq4ucC4kH2Sw==
+=FiKO
 -----END PGP SIGNATURE-----
 
---18E0YIb4pnwpQXeRnATY6Y4QMQXHx0j2X--
+--jYhhSmBZsrhdtLAqrhRsH687kd9T7sFPZ--
