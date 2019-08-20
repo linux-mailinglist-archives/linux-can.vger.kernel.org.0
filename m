@@ -2,196 +2,199 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3843295DB3
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 13:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783C995DFB
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 13:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729308AbfHTLrV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 07:47:21 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46355 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728283AbfHTLrV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Aug 2019 07:47:21 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1i02be-0008Lm-OU; Tue, 20 Aug 2019 13:47:18 +0200
-Received: from [IPv6:2001:67c:20a1:1192:1c6e:731:5705:ce35] (unknown [IPv6:2001:67c:20a1:1192:1c6e:731:5705:ce35])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B6E5F448415;
-        Tue, 20 Aug 2019 11:47:17 +0000 (UTC)
-To:     Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org
-Cc:     t.schluessler@krause.de, shc_work@mail.ru
-References: <20190819153818.29293-1-mkl@pengutronix.de>
- <52d24cdb-6c88-901e-a78b-b7f16dffeec9@geanix.com>
- <fbfdf46b-e0b0-07c0-7639-ca0418cf7c2d@pengutronix.de>
- <23407a19-27b4-1c26-747b-9c37f87a2c9b@geanix.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH 0/9] can: mcp251x: cleanups + fix various problems
-Message-ID: <b15604e3-49a4-a986-b8c9-1ccc3ff8e2c3@pengutronix.de>
-Date:   Tue, 20 Aug 2019 13:47:12 +0200
+        id S1728352AbfHTL4N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 07:56:13 -0400
+Received: from first.geanix.com ([116.203.34.67]:41566 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728657AbfHTL4M (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 07:56:12 -0400
+Received: from [192.168.100.95] (unknown [95.138.208.137])
+        by first.geanix.com (Postfix) with ESMTPSA id 81266270;
+        Tue, 20 Aug 2019 11:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1566302165; bh=pbJXTdVa12llp7/TdfLy2o60WHVrKas0Gs3f1H0OjOY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=O4Kq2Wd5K266Mys9UQoo8n4Y4gbxRmaq7I5HCWducONBW6+mOZ0iBUuMkq0xlRclv
+         IV91K0kKs3NLmCqYKcm7FprcSLst2lAkENSLlPeQqSQwBCJJwM4owaIOXUF/dFWJdJ
+         k1s4Vg2WXAUMBIvmjVvtGdGW0cPkgMttqG8B4bpPwLggxKlqDuQqcC6a0GFxZ8srNr
+         afPYj3cGWpdb11+4Q+eExJS3YqVqWem6UO03D28poFfs/S2L4NnvO8ljSyvGTi9Qai
+         EjZdtTigGVbaw5MkbpwKlFcxICPKb0/HRVX+xJ1Cn9w0vlsXMa5VJ6+L+7P5AeSOFg
+         JbxXOt/EZx4cA==
+Subject: Re: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
+ wakeup
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
+ <20190816081749.19300-2-qiangqing.zhang@nxp.com>
+ <dd8f5269-8403-702b-b054-e031423ffc73@geanix.com>
+ <DB7PR04MB4618A1F984F2281C66959B06E6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+From:   Sean Nyekjaer <sean@geanix.com>
+Message-ID: <35190c5b-f8be-8784-5b4f-32a691a6cffe@geanix.com>
+Date:   Tue, 20 Aug 2019 13:55:52 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <23407a19-27b4-1c26-747b-9c37f87a2c9b@geanix.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="8TOKUWfcunYNPlMAiRIzErGohYNs0pVK8"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <DB7PR04MB4618A1F984F2281C66959B06E6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---8TOKUWfcunYNPlMAiRIzErGohYNs0pVK8
-Content-Type: multipart/mixed; boundary="INqCwReVsAkD9zpSYZhkWvDjT8ibGQRdX";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org
-Cc: t.schluessler@krause.de, shc_work@mail.ru
-Message-ID: <b15604e3-49a4-a986-b8c9-1ccc3ff8e2c3@pengutronix.de>
-Subject: Re: [PATCH 0/9] can: mcp251x: cleanups + fix various problems
-References: <20190819153818.29293-1-mkl@pengutronix.de>
- <52d24cdb-6c88-901e-a78b-b7f16dffeec9@geanix.com>
- <fbfdf46b-e0b0-07c0-7639-ca0418cf7c2d@pengutronix.de>
- <23407a19-27b4-1c26-747b-9c37f87a2c9b@geanix.com>
-In-Reply-To: <23407a19-27b4-1c26-747b-9c37f87a2c9b@geanix.com>
 
---INqCwReVsAkD9zpSYZhkWvDjT8ibGQRdX
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 8/20/19 1:40 PM, Sean Nyekjaer wrote:
->=20
->=20
-> On 20/08/2019 13.37, Marc Kleine-Budde wrote:
->> On 8/20/19 9:10 AM, Sean Nyekjaer wrote:
->> [...]
->>>> Feel free to test the patches.
+>> Unfortunatly it's still possible to reproduce the deadlock with this patch...
 >>
->> Thanks for testing!
+>> [  689.921717] flexcan: probe of 2094000.flexcan failed with error -110
 >>
->>> While we are at it, could we remove the platform definition section i=
-n
->>> the header?
+>> My test setup:
+>> PC with CAN-USB dongle connected to can0 and can1.
 >>
->> Do you mean "struct mcp251x_platform_data"?
+>> PC:
+>> $ while true; do cansend can0 '123#DEADBEEF'; done
 >>
->> No, that's not possible, as it's still used in the kernel:
+>> iMX6ull:
+>> root@iwg26:~# systemctl suspend
 >>
->>> arch/arm/mach-pxa/icontrol.c:72:static struct mcp251x_platform_data m=
-cp251x_info =3D {
->>> arch/arm/mach-pxa/zeus.c:431:static struct mcp251x_platform_data zeus=
-_mcp2515_pdata =3D {
 >>
->=20
-> What I meant was the comment section in the mcp251x.c file, from line 3=
-2=20
-> to 53. :-)
->=20
-> Doesn't that belong in the Documentation section?
+>> [  365.858054] systemd[1]: Reached target Sleep.
+>> root@iwg26:~# [  365.939826] systemd[1]: Starting Suspend...
+>> [  366.115839] systemd-sleep[248]: Suspending system...
+>> [  366.517949] dpm_run_callback(): platform_pm_suspend+0x0/0x5c returns
+>> -110 [  366.518249] PM: Device 2094000.flexcan failed to suspend: error -110
+>> [  366.518406] PM: Some devices failed to suspend, or early wake event
+>> detected [  366.732162] dpm_run_callback():
+>> platform_pm_suspend+0x0/0x5c returns -110 [  366.732285] PM: Device
+>> 2090000.flexcan failed to suspend: error -110 [  366.732330] PM: Some
+>> devices failed to suspend, or early wake event detected [  366.890637]
+>> systemd-sleep[248]: System resumed.
+> 
+> CAN1, CAN0 suspended failed, then CAN0, CAN1 resumed back, so CAN0/CAN1 can work fine.
+> 
+>> [  366.923062] systemd[1]: Started Suspend.
+>> [  366.942819] systemd[1]: sleep.target: Unit not needed anymore. Stopping.
+>> [  366.954791] systemd[1]: Stopped target Sleep.
+>> [  366.962402] systemd[1]: Reached target Suspend.
+>> [  366.977546] systemd-logind[135]: Operation 'sleep' finished.
+>> [  366.979194] systemd[1]: suspend.target: Unit not needed anymore.
+>> Stopping.
+>> [  366.993831] systemd[1]: Stopped target Suspend.
+>> [  367.139972] systemd-networkd[220]: usb0: Lost carrier [  367.294077]
+>> systemd-networkd[220]: usb0: Gained carrier
+>>
+>> root@iwg26:~# candump can0 | head -n 2
+>>
+>>     can0  123   [4]  DE AD BE EF
+>>     can0  123   [4]  DE AD BE EF
+>> root@iwg26:~# candump can1 | head -n 2
+>>
+>>     can1  123   [4]  DE AD BE EF
+>>     can1  123   [4]  DE AD BE EF
+>> root@iwg26:~# systemctl suspend
+>>
+>> root@iwg26:~# [  385.106658] systemd[1]: Reached target Sleep.
+>> [  385.147602] systemd[1]: Starting Suspend...
+>> [  385.246421] systemd-sleep[260]: Suspending system...
+>> [  385.634733] dpm_run_callback(): platform_pm_suspend+0x0/0x5c returns
+>> -110 [  385.634855] PM: Device 2090000.flexcan failed to suspend: error -110
+>> [  385.634897] PM: Some devices failed to suspend, or early wake event
+>> detected [  385.856251] PM: noirq suspend of devices failed [  385.998364]
+>> systemd-sleep[260]: System resumed.
+> 
+> CAN0 suspended failed, CAN1 noirq suspended failed, then CAN1, CAN0 resumed back, so CAN0/CAN1 can work fine.
+> 
+>> [  386.023390] systemd[1]: Started Suspend.
+>> [  386.031570] systemd[1]: sleep.target: Unit not needed anymore. Stopping.
+>> [  386.055886] systemd[1]: Stopped target Sleep.
+>> [  386.061430] systemd[1]: Reached target Suspend.
+>> [  386.066142] systemd[1]: suspend.target: Unit not needed anymore.
+>> Stopping.
+>> [  386.112575] systemd-networkd[220]: usb0: Lost carrier [  386.116797]
+>> systemd-logind[135]: Operation 'sleep' finished.
+>> [  386.146161] systemd[1]: Stopped target Suspend.
+>> [  386.260866] systemd-networkd[220]: usb0: Gained carrier root@iwg26:~#
+>> candump can0 | head -n 2
+>>     can0  123   [4]  DE AD BE EF
+>>     can0  123   [4]  DE AD BE EF
+>> root@iwg26:~# candump can1 | head -n 2
+>>
+>>     can1  123   [4]  DE AD BE EF
+>>     can1  123   [4]  DE AD BE EF
+>> root@iwg26:~# systemctl suspend
+>>
+>> [  396.919303] systemd[1]: Reached target Sleep.
+>> root@iwg26:~# [  396.964722] systemd[1]: Starting Suspend...
+>> [  397.067336] systemd-sleep[268]: Suspending system...
+>> [  397.574571] PM: noirq suspend of devices failed [  397.834731] PM: noirq
+>> suspend of devices failed [  397.807996] systemd-networkd[220]: usb0: Lost
+>> carrier [  398.156295] dpm_run_callback(): platform_pm_suspend+0x0/0x5c
+>> returns -110 [  398.156339] PM: Device 2094000.flexcan failed to suspend:
+>> error -110 [  398.156509] PM: Some devices failed to suspend, or early wake
+>> event detected [  398.053555] systemd-sleep[268]: Failed to write
+>> /sys/power/state:
+>> Device or resource busy
+> 
+> But the log here is very strange and chaotic, it looks like CAN0 suspended failed, then resumed back, so CAN0 can work fine.
+> CAN1 noirq suspend failed, but have not resumed back, so CAN1 still in stop mode, cannot work. I think this may be other device noirq suspend failed
+> broke the resume of CAN1.
+> 
+> Could you do more debug to help locate the issue?
+> 
+>> [  398.074751] systemd[1]: systemd-suspend.service: Main process exited,
+>> code=exited, status=1/FAILURE [  398.076779] systemd[1]:
+> 
+>> systemd-suspend.service: Failed with result 'exit-code'.
+>> [  398.109255] systemd[1]: Failed to start Suspend.
+>> [  398.118704] systemd[1]: Dependency failed for Suspend.
+>> [  398.136283] systemd-logind[135]: Operation 'sleep' finished.
+>> [  398.137770] systemd[1]: suspend.target: Job suspend.target/start failed
+>> with result 'dependency'.
+>> [  398.139105] systemd[1]: sleep.target: Unit not needed anymore. Stopping.
+>> [  398.167590] systemd[1]: Stopped target Sleep.
+>> [  398.201558] systemd-networkd[220]: usb0: Gained carrier
+> 
+> Log here also strange.
+> 
+> Best Regards,
+> Joakim Zhang
+>> root@iwg26:~# candump can0 | head -n 2
+>>     can0  123   [4]  DE AD BE EF
+>>     can0  123   [4]  DE AD BE EF
+>> root@iwg26:~# candump can1 | head -n 2
+>>
+>> nothing on can1 anymore :-(
+>>
+>> root@iwg26:~# rmmod flexcan
+>> [  622.884746] systemd-networkd[220]: can1: Lost carrier [  623.046766]
+>> systemd-networkd[220]: can0: Lost carrier root@iwg26:~# insmod
+>> /mnt/flexcan.ko [  628.323981] flexcan 2094000.flexcan: registering netdev
+>> failed
+>>
+>> and can1 fails to register with:
+>> [  628.347485] flexcan: probe of 2094000.flexcan failed with error -110
+>>
+>> /Sean
 
-Hmm yes, but not
-"Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt" as
-it's devicetree bindings. So we need another document. What about
-removing this section, as no one should create new non-DT boards.
+I have added some more debug, same test setup:
+https://gist.github.com/sknsean/81208714de23aa3639d3e31dccb2f3e0
 
-Marc
+root@iwg26:~# systemctl suspend 
+ 
 
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+...
+https://gist.github.com/sknsean/2a786f1543305056d4de03d387872403
 
-
---INqCwReVsAkD9zpSYZhkWvDjT8ibGQRdX--
-
---8TOKUWfcunYNPlMAiRIzErGohYNs0pVK8
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1b3cAACgkQWsYho5Hk
-nSB8FQf/ZbfAZ00IKvDDPlHZkfg+hj6OHdL+0yRQ/6X4j61oXwtMRTIGLnbYbK/0
-CCZMuhVTHZAU5/J2EAUhhGqjr/VNL+O0v14rfbUrYH2KOkhjceAsXywaruKd8u/F
-KHm6pCkEsvS5Pi4H9Q8G2YT72ILVEiZNxV/E7SpMoUrYbhbpIDDMEs+e3BIQh8Ym
-Z8afkTD7UB9GTrbde18YvtgeYbPEZNp5ibTGnF3AzN2nd55N5zs9ehsiATWIl19s
-i5Onff+5CWbBClFtxLKJmvQyy00NtDCj8LKzWaC7zFk4lveDLd62FirGzckwCIpz
-+kO22PKzd1RKSP45qnK6TMYnAQC3aQ==
-=S0wX
------END PGP SIGNATURE-----
-
---8TOKUWfcunYNPlMAiRIzErGohYNs0pVK8--
+/Sean
