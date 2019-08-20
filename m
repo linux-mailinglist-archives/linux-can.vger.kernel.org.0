@@ -2,126 +2,203 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 666CC95C08
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 12:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160F095C35
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 12:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728771AbfHTKMP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 06:12:15 -0400
-Received: from mail-eopbgr150071.outbound.protection.outlook.com ([40.107.15.71]:22277
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728414AbfHTKMO (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Aug 2019 06:12:14 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AGFbcu7c3EVLnKClahCzZxWf0qQRUgbNp7pvioAot4NntzF0QOHMMiAutafhDbQOVB6joR5Y8WS/l6G/Dl2T4bsVTC4bqHQtwUNcdovvFBRgS+KCxq5gQfmcWdkiY/6SuDI6Zp1spAf4bGWEVAKlkfH4QNDW7ri+2b4asd3huSJ8SQcgBnJeqY1zqORhPoSKDdgR6cMRQI7edwHtxvbHYmIMifEkLHAq6xmRD1VhJKTBfFmDprA0pDPhqJSgWKjHbgPqtbn47pwnipLb7vr0SqWhMYbpXhWvnXgGA0lOOyQ0QrI2mH1FhBNPqtSTlyFY5t8UW7nnBPbZv45310ynCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o4liLgULSPCJjamHUmOfv+igLYE7QKhC2Kfj7yp9WGc=;
- b=SKpLu/QTBTzmUtDvDBtt+PUixEJgTpwT+ACfGuT4fZ8NKBFNF/VaB4TBjcNXSHcqQF0wS9CtnaWsTYynsh6/utVZrqhRfc/n6IEQtXkaF2vu9OrxOyChDW8mmQNbHFUBhKmAXhKkCICNArxCM0OsGglV2L27Bi5111htBPvxotIlb9FaFf1d0mcVmmPyut46EPAPhM9579wo5uu2sYFzpKRoEx0fkiGsRKC0bX+M0EwDukRoN3G08huUnSFo2pUuYfPYVvN1nou+RfemLofLwZ+kE07tCzaAhnLfrWdAorjHFkqc50IdywStM1qZzFYQ00F/m5CTDVei23WQjvfC8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o4liLgULSPCJjamHUmOfv+igLYE7QKhC2Kfj7yp9WGc=;
- b=O/ijceSE/Sbup69Q8WYEzt/JD86to/O6WY4QirLVY/aRw4yrnrdNiB9eLtN0ACdMZYZbztNm1sgcVzlyaKAvO9/9qMAR4K/BJ/13wsASbYh5PIrPye2kwpAiRnHnARyx9Z4PHnYVcyJTUW/6C/3NYZqcOEuqd9jMqemHp5ojHHw=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB4586.eurprd04.prod.outlook.com (52.135.139.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.18; Tue, 20 Aug 2019 10:12:10 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::c8ca:1c9c:6c3:fb6f]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::c8ca:1c9c:6c3:fb6f%4]) with mapi id 15.20.2178.018; Tue, 20 Aug 2019
- 10:12:10 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Sean Nyekjaer <sean@geanix.com>,
-        =?utf-8?B?TWFydGluIEh1bmRlYsO4bGw=?= <martin@geanix.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S1729351AbfHTKZq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 06:25:46 -0400
+Received: from first.geanix.com ([116.203.34.67]:38454 "EHLO first.geanix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728414AbfHTKZq (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 06:25:46 -0400
+Received: from [192.168.100.95] (unknown [95.138.208.137])
+        by first.geanix.com (Postfix) with ESMTPSA id BC73E27D;
+        Tue, 20 Aug 2019 10:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1566296738; bh=PRBYncQeB/7wv/3IPKIG7SGi1FMdOrcMuXs2yWJPv4o=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=EjNBWoFa7C2ioJ3zDKywM2NbCpZEYLXxB9kounRGbdrZADSWoRkvd7+k8TJUcwUrc
+         +FxIPgvMzDF6XUCRJHTddPiwVgk8FK2HPXJHQc0Y5OxF9iJw1N5zKH8dbaD2P6ghZB
+         YiXQ1UGNcPK//pe//qIaaFMlhhOEBdyFRfTLFQ+rx56k+LBBGdvxuycPHLMWoI2lu5
+         5C7PQBxgKJgZ9VSl2v4/HNWGVz0CNd8X5dINCer9UXsdOWYJIfD+SYQyM0Jt++Q6Gv
+         +uoIy8tNhKBc8ghrDKGGvMrQmxs6iuVwlAGhk8dRobpKAewwaIGxGlCFMFQO9zpDYs
+         tQ9S0vpLhwXwg==
+Subject: Re: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
+ wakeup
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH] can: flexcan: free error skb if enqueueing failed
-Thread-Topic: [PATCH] can: flexcan: free error skb if enqueueing failed
-Thread-Index: AQHVOz6WqaYXqa5m9EaSoEbJSx8JbacEArUAgAAE/EA=
-Date:   Tue, 20 Aug 2019 10:12:10 +0000
-Message-ID: <DB7PR04MB46189C38B1747F1C3AC4E58FE6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-References: <20190715185308.104333-1-martin@geanix.com>
- <6bddb702-e9ba-1c9e-7d7a-eb974d2e0fdd@geanix.com>
-In-Reply-To: <6bddb702-e9ba-1c9e-7d7a-eb974d2e0fdd@geanix.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 51a6881b-79f0-4a0a-921d-08d72556dd72
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB4586;
-x-ms-traffictypediagnostic: DB7PR04MB4586:
-x-microsoft-antispam-prvs: <DB7PR04MB45864F21EFAC9E3A0788E843E6AB0@DB7PR04MB4586.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:374;
-x-forefront-prvs: 013568035E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(396003)(346002)(366004)(39860400002)(136003)(13464003)(199004)(189003)(81156014)(81166006)(5660300002)(53936002)(26005)(4326008)(186003)(256004)(6246003)(53546011)(6506007)(305945005)(33656002)(8676002)(102836004)(6116002)(3846002)(25786009)(2906002)(476003)(11346002)(486006)(7736002)(71190400001)(478600001)(8936002)(71200400001)(74316002)(446003)(229853002)(76176011)(14454004)(99286004)(2501003)(110136005)(76116006)(7696005)(86362001)(54906003)(6436002)(66446008)(9686003)(64756008)(66476007)(52536014)(55016002)(66556008)(66066001)(66946007)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4586;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: YjvpybF6DCYV4zLOOupDS0QhTWuqXxPRLuAtTcAdwoHZ8DQvw2OrRJzv+K+rRHj2fB7FotGKtceOBKdf/0Q3FJhIW8Lum5ZzB27+kqVbsb2Pn9VMKcbNcsWalTTQKhefhkSdWNs9y1d7cSj1ExtEdnKTFE7L8+QsOfUIeFhEHkfCAyYt1UwKZ9KpQrXCkc+vSlsgs2/bbHEdE1j+xVCmA/fa2t85oFTGwtJ5vQp+pZ51wMX4/mKUVvfvA44iMq1UrLvYVejxaMN/WgGTXLR1IVEgNw85tM5KLWWQH4+uyxVU0b9jZZiK5odrO7Mi05qt6qd1vP3oreRhj4owWTAREkJoKA97M3RT2KSrE7kQvyI0BsQS3tp7rw4UOke2xXUpR6Qft9XOwTDlzQhNdHE2ItnqoIjm1SRlzpY81ZU6cx4=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
+ <20190816081749.19300-2-qiangqing.zhang@nxp.com>
+From:   Sean Nyekjaer <sean@geanix.com>
+Message-ID: <dd8f5269-8403-702b-b054-e031423ffc73@geanix.com>
+Date:   Tue, 20 Aug 2019 12:25:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51a6881b-79f0-4a0a-921d-08d72556dd72
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2019 10:12:10.7685
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AkEOZGLRnztoiyJX1NoIj4APl563DeNIx6FYM0x4vYP8NoAE0Eitv55sp+WO8H1fAcTTj0s7N3SiiMWnKd6CxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4586
+In-Reply-To: <20190816081749.19300-2-qiangqing.zhang@nxp.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNlYW4gTnlla2phZXIgPHNl
-YW5AZ2Vhbml4LmNvbT4NCj4gU2VudDogMjAxOeW5tDjmnIgyMOaXpSAxNzo1MA0KPiBUbzogTWFy
-dGluIEh1bmRlYsO4bGwgPG1hcnRpbkBnZWFuaXguY29tPjsgV29sZmdhbmcgR3JhbmRlZ2dlcg0K
-PiA8d2dAZ3JhbmRlZ2dlci5jb20+OyBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4
-LmRlPjsNCj4gbGludXgtY2FuQHZnZXIua2VybmVsLm9yZw0KPiBDYzogRGF2aWQgUyAuIE1pbGxl
-ciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IEpvYWtpbQ0K
-PiBaaGFuZyA8cWlhbmdxaW5nLnpoYW5nQG54cC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hd
-IGNhbjogZmxleGNhbjogZnJlZSBlcnJvciBza2IgaWYgZW5xdWV1ZWluZyBmYWlsZWQNCj4gDQo+
-IENDJ2luZyBKb2FraW0gWmhhbmcNCg0KTG9va3MgZ29vZCwgc28gYWRkIG15IHRhZzoNCkFja2Vk
-LWJ5OiBKb2FraW0gWmhhbmcgPHFpYW5ncWluZy56aGFuZ0BueHAuY29tPg0KDQpCZXN0IFJlZ2Fy
-ZHMsDQpKb2FraW0gWmhhbmcNCj4gT24gMTUvMDcvMjAxOSAyMC41MywgTWFydGluIEh1bmRlYsO4
-bGwgd3JvdGU6DQo+ID4gSWYgdGhlIGNhbGwgdG8gY2FuX3J4X29mZmxvYWRfcXVldWVfc29ydGVk
-KCkgZmFpbHMsIHRoZSBwYXNzZWQgc2tiDQo+ID4gaXNuJ3QgY29uc3VtZWQsIHNvIHRoZSBjYWxs
-ZXIgbXVzdCBkbyBzby4NCj4gPg0KPiA+IEZpeGVzOiAzMDE2NDc1OWRiMWIgKCJjYW46IGZsZXhj
-YW46IG1ha2UgdXNlIG9mIHJ4LW9mZmxvYWQncw0KPiA+IGlycV9vZmZsb2FkX2ZpZm8iKQ0KPiA+
-IFNpZ25lZC1vZmYtYnk6IE1hcnRpbiBIdW5kZWLDuGxsIDxtYXJ0aW5AZ2Vhbml4LmNvbT4NCj4g
-PiAtLS0NCj4gPiAgIGRyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMgfCA2ICsrKystLQ0KPiA+ICAg
-MSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gPg0KPiA+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9jYW4vZmxleGNhbi5jIGIvZHJpdmVycy9uZXQvY2Fu
-L2ZsZXhjYW4uYw0KPiA+IGluZGV4IDFjNjZmYjJhZDc2Yi4uMjFmMzllODA1ZDQyIDEwMDY0NA0K
-PiA+IC0tLSBhL2RyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMNCj4gPiArKysgYi9kcml2ZXJzL25l
-dC9jYW4vZmxleGNhbi5jDQo+ID4gQEAgLTY4OCw3ICs2ODgsOCBAQCBzdGF0aWMgdm9pZCBmbGV4
-Y2FuX2lycV9idXNfZXJyKHN0cnVjdCBuZXRfZGV2aWNlDQo+ICpkZXYsIHUzMiByZWdfZXNyKQ0K
-PiA+ICAgCWlmICh0eF9lcnJvcnMpDQo+ID4gICAJCWRldi0+c3RhdHMudHhfZXJyb3JzKys7DQo+
-ID4NCj4gPiAtCWNhbl9yeF9vZmZsb2FkX3F1ZXVlX3NvcnRlZCgmcHJpdi0+b2ZmbG9hZCwgc2ti
-LCB0aW1lc3RhbXApOw0KPiA+ICsJaWYgKGNhbl9yeF9vZmZsb2FkX3F1ZXVlX3NvcnRlZCgmcHJp
-di0+b2ZmbG9hZCwgc2tiLCB0aW1lc3RhbXApKQ0KPiA+ICsJCWtmcmVlX3NrYihza2IpOw0KPiA+
-ICAgfQ0KPiA+DQo+ID4gICBzdGF0aWMgdm9pZCBmbGV4Y2FuX2lycV9zdGF0ZShzdHJ1Y3QgbmV0
-X2RldmljZSAqZGV2LCB1MzIgcmVnX2VzcikNCj4gPiBAQCAtNzMyLDcgKzczMyw4IEBAIHN0YXRp
-YyB2b2lkIGZsZXhjYW5faXJxX3N0YXRlKHN0cnVjdCBuZXRfZGV2aWNlICpkZXYsDQo+IHUzMiBy
-ZWdfZXNyKQ0KPiA+ICAgCWlmICh1bmxpa2VseShuZXdfc3RhdGUgPT0gQ0FOX1NUQVRFX0JVU19P
-RkYpKQ0KPiA+ICAgCQljYW5fYnVzX29mZihkZXYpOw0KPiA+DQo+ID4gLQljYW5fcnhfb2ZmbG9h
-ZF9xdWV1ZV9zb3J0ZWQoJnByaXYtPm9mZmxvYWQsIHNrYiwgdGltZXN0YW1wKTsNCj4gPiArCWlm
-IChjYW5fcnhfb2ZmbG9hZF9xdWV1ZV9zb3J0ZWQoJnByaXYtPm9mZmxvYWQsIHNrYiwgdGltZXN0
-YW1wKSkNCj4gPiArCQlrZnJlZV9za2Ioc2tiKTsNCj4gPiAgIH0NCj4gPg0KPiA+ICAgc3RhdGlj
-IGlubGluZSBzdHJ1Y3QgZmxleGNhbl9wcml2ICpyeF9vZmZsb2FkX3RvX3ByaXYoc3RydWN0DQo+
-ID4gY2FuX3J4X29mZmxvYWQgKm9mZmxvYWQpDQo+ID4NCg==
+
+
+On 16/08/2019 10.20, Joakim Zhang wrote:
+> As reproted by Sean Nyekjaer below:
+> When suspending, when there is still can traffic on the interfaces the
+> flexcan immediately wakes the platform again. As it should :-). But it
+> throws this error msg:
+> [ 3169.378661] PM: noirq suspend of devices failed
+> 
+> On the way down to suspend the interface that throws the error message does
+> call flexcan_suspend but fails to call flexcan_noirq_suspend. That means the
+> flexcan_enter_stop_mode is called, but on the way out of suspend the driver
+> only calls flexcan_resume and skips flexcan_noirq_resume, thus it doesn't call
+> flexcan_exit_stop_mode. This leaves the flexcan in stop mode, and with the
+> current driver it can't recover from this even with a soft reboot, it requires
+> a hard reboot.
+> 
+> The best way to exit stop mode is in Wake Up interrupt context, and then
+> suspend() and resume() functions can be symmetric. However, stop mode
+> request and ack will be controlled by SCU(System Control Unit) firmware(manage
+> clock,power,stop mode, etc. by Cortex-M4 core) in coming i.MX8(QM/QXP). And SCU
+> firmware interface can't be available in interrupt context.
+> 
+> For compatibillity, the wake up mechanism can't be symmetric, so we need
+> in_stop_mode hack.
+> 
+> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
+> Reported-by: Sean Nyekjaer <sean@geanix.com>
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> 
+
+Unfortunatly it's still possible to reproduce the deadlock with this 
+patch...
+
+[  689.921717] flexcan: probe of 2094000.flexcan failed with error -110
+
+My test setup:
+PC with CAN-USB dongle connected to can0 and can1.
+
+PC:
+$ while true; do cansend can0 '123#DEADBEEF'; done
+
+iMX6ull:
+root@iwg26:~# systemctl suspend 
+ 
+
+[  365.858054] systemd[1]: Reached target Sleep.
+root@iwg26:~# [  365.939826] systemd[1]: Starting Suspend...
+[  366.115839] systemd-sleep[248]: Suspending system...
+[  366.517949] dpm_run_callback(): platform_pm_suspend+0x0/0x5c returns -110
+[  366.518249] PM: Device 2094000.flexcan failed to suspend: error -110
+[  366.518406] PM: Some devices failed to suspend, or early wake event 
+detected
+[  366.732162] dpm_run_callback(): platform_pm_suspend+0x0/0x5c returns -110
+[  366.732285] PM: Device 2090000.flexcan failed to suspend: error -110
+[  366.732330] PM: Some devices failed to suspend, or early wake event 
+detected
+[  366.890637] systemd-sleep[248]: System resumed.
+[  366.923062] systemd[1]: Started Suspend.
+[  366.942819] systemd[1]: sleep.target: Unit not needed anymore. Stopping.
+[  366.954791] systemd[1]: Stopped target Sleep.
+[  366.962402] systemd[1]: Reached target Suspend.
+[  366.977546] systemd-logind[135]: Operation 'sleep' finished.
+[  366.979194] systemd[1]: suspend.target: Unit not needed anymore. 
+Stopping.
+[  366.993831] systemd[1]: Stopped target Suspend.
+[  367.139972] systemd-networkd[220]: usb0: Lost carrier
+[  367.294077] systemd-networkd[220]: usb0: Gained carrier
+
+root@iwg26:~# candump can0 | head -n 2 
+
+   can0  123   [4]  DE AD BE EF
+   can0  123   [4]  DE AD BE EF
+root@iwg26:~# candump can1 | head -n 2 
+
+   can1  123   [4]  DE AD BE EF
+   can1  123   [4]  DE AD BE EF
+root@iwg26:~# systemctl suspend 
+
+root@iwg26:~# [  385.106658] systemd[1]: Reached target Sleep.
+[  385.147602] systemd[1]: Starting Suspend...
+[  385.246421] systemd-sleep[260]: Suspending system...
+[  385.634733] dpm_run_callback(): platform_pm_suspend+0x0/0x5c returns -110
+[  385.634855] PM: Device 2090000.flexcan failed to suspend: error -110
+[  385.634897] PM: Some devices failed to suspend, or early wake event 
+detected
+[  385.856251] PM: noirq suspend of devices failed
+[  385.998364] systemd-sleep[260]: System resumed.
+[  386.023390] systemd[1]: Started Suspend.
+[  386.031570] systemd[1]: sleep.target: Unit not needed anymore. Stopping.
+[  386.055886] systemd[1]: Stopped target Sleep.
+[  386.061430] systemd[1]: Reached target Suspend.
+[  386.066142] systemd[1]: suspend.target: Unit not needed anymore. 
+Stopping.
+[  386.112575] systemd-networkd[220]: usb0: Lost carrier
+[  386.116797] systemd-logind[135]: Operation 'sleep' finished.
+[  386.146161] systemd[1]: Stopped target Suspend.
+[  386.260866] systemd-networkd[220]: usb0: Gained carrier
+root@iwg26:~# candump can0 | head -n 2
+   can0  123   [4]  DE AD BE EF
+   can0  123   [4]  DE AD BE EF
+root@iwg26:~# candump can1 | head -n 2 
+
+   can1  123   [4]  DE AD BE EF
+   can1  123   [4]  DE AD BE EF
+root@iwg26:~# systemctl suspend 
+
+[  396.919303] systemd[1]: Reached target Sleep.
+root@iwg26:~# [  396.964722] systemd[1]: Starting Suspend...
+[  397.067336] systemd-sleep[268]: Suspending system...
+[  397.574571] PM: noirq suspend of devices failed
+[  397.834731] PM: noirq suspend of devices failed
+[  397.807996] systemd-networkd[220]: usb0: Lost carrier
+[  398.156295] dpm_run_callback(): platform_pm_suspend+0x0/0x5c returns -110
+[  398.156339] PM: Device 2094000.flexcan failed to suspend: error -110
+[  398.156509] PM: Some devices failed to suspend, or early wake event 
+detected
+[  398.053555] systemd-sleep[268]: Failed to write /sys/power/state: 
+Device or resource busy
+[  398.074751] systemd[1]: systemd-suspend.service: Main process exited, 
+code=exited, status=1/FAILURE
+[  398.076779] systemd[1]: systemd-suspend.service: Failed with result 
+'exit-code'.
+[  398.109255] systemd[1]: Failed to start Suspend.
+[  398.118704] systemd[1]: Dependency failed for Suspend.
+[  398.136283] systemd-logind[135]: Operation 'sleep' finished.
+[  398.137770] systemd[1]: suspend.target: Job suspend.target/start 
+failed with result 'dependency'.
+[  398.139105] systemd[1]: sleep.target: Unit not needed anymore. Stopping.
+[  398.167590] systemd[1]: Stopped target Sleep.
+[  398.201558] systemd-networkd[220]: usb0: Gained carrier
+
+root@iwg26:~# candump can0 | head -n 2
+   can0  123   [4]  DE AD BE EF
+   can0  123   [4]  DE AD BE EF
+root@iwg26:~# candump can1 | head -n 2
+
+nothing on can1 anymore :-(
+
+root@iwg26:~# rmmod flexcan
+[  622.884746] systemd-networkd[220]: can1: Lost carrier
+[  623.046766] systemd-networkd[220]: can0: Lost carrier
+root@iwg26:~# insmod /mnt/flexcan.ko
+[  628.323981] flexcan 2094000.flexcan: registering netdev failed
+
+and can1 fails to register with:
+[  628.347485] flexcan: probe of 2094000.flexcan failed with error -110
+
+/Sean
