@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2896957F4
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A47B957F7
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729261AbfHTHMR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 03:12:17 -0400
-Received: from first.geanix.com ([116.203.34.67]:54600 "EHLO first.geanix.com"
+        id S1729203AbfHTHM1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 03:12:27 -0400
+Received: from first.geanix.com ([116.203.34.67]:54680 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728777AbfHTHMR (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Aug 2019 03:12:17 -0400
+        id S1728947AbfHTHM1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 03:12:27 -0400
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 0134526E;
-        Tue, 20 Aug 2019 07:12:11 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 7EBD726E;
+        Tue, 20 Aug 2019 07:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1566285132; bh=24zW+Z0O0qZu6i+vfKxWBN5AsaaOpI+2jDl7NKi05x4=;
+        t=1566285141; bh=d5X/W7q5H/7pI+HgrH1HQjLizWQeiBPLAo/OfFluDq0=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=mahO6flAGFRKdujW7G7rezpO4a8qOXvdnuKARh4qje9Ux+JJbdewtEtKU6tTs6AJz
-         RVwnWlobYQhtGxt9qn0Iv7yeCu70mnTGoVTuLqr+kx4RJUbHCz5fxQHId8hy3iBvvz
-         lak85W37hzeo/Es/In8GFLcmTypfo0VpeulcKW6QTlm05PulqVjQqa/ebF5kbxX885
-         u3E0IfQUYsVsHeF7iaTv0n+jNsv9PK10ip0Ydsl+R46TmBnkV8umNdRrbS4W8iC+nO
-         3qbI0ZNOet7GihDN1OO/LQvtzlM8haIK2yM74UL2eb80YH7HZqPZqXTcoIYso5TCtI
-         yDmmOK8z6z12A==
-Subject: Re: [PATCH 2/9] can: mcp251x: remove unnecessary blank lines
+        b=QLcW1ZbygTTJyyC7vQRbZB/kXKkg6Lzb3R3l3bXjTURvY5oGgCW8Iovq/OZPNWEjN
+         81SealChSzOiHdog/MmwALbytQPsPANYdWJx2ZTd3KqSFbltO1CBG66zu2vKEUM8Au
+         i23rNM0wd1fNeVFr5JIpkbOST4ItNoj/hK4PEFW9xWtoKlkwVd4yPlqfpEcKWP5JVP
+         cJhkteOFkUbF1RmrwjtZdZRoASKhwcsByhajBPt1Nagu3CEBoVrQLstulzzhVgaXTh
+         pmbvSeekhLU286H9Ktlm24lzed/QLIr/dez2ZjsJKdsQg7rhK6V53u0k9wdUsFNgeE
+         RNtvUwsAMA5Gw==
+Subject: Re: [PATCH 3/9] can: mcp251x: avoid long lines
 To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
 Cc:     t.schluessler@krause.de, shc_work@mail.ru
 References: <20190819153818.29293-1-mkl@pengutronix.de>
- <20190819153818.29293-3-mkl@pengutronix.de>
+ <20190819153818.29293-4-mkl@pengutronix.de>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <9937351e-d03f-1294-7f93-0a10143d1b77@geanix.com>
-Date:   Tue, 20 Aug 2019 09:11:58 +0200
+Message-ID: <fdf57f64-fa5e-b32f-358e-a136c56ce775@geanix.com>
+Date:   Tue, 20 Aug 2019 09:12:07 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190819153818.29293-3-mkl@pengutronix.de>
+In-Reply-To: <20190819153818.29293-4-mkl@pengutronix.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
@@ -50,33 +50,36 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 19/08/2019 17.38, Marc Kleine-Budde wrote:
-> This patch removes unnecessary blank lines, so that checkpatch doesn't
-> complain anymore.
+> This patch fixes long lines in the driver.
 > 
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Acked-by: Sean Nyekjaer <sean@geanix.com>
 > ---
->   drivers/net/can/spi/mcp251x.c | 2 --
->   1 file changed, 2 deletions(-)
+>   drivers/net/can/spi/mcp251x.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-> index e59b10525f46..3ec0907a0ee7 100644
+> index 3ec0907a0ee7..0fd559510d75 100644
 > --- a/drivers/net/can/spi/mcp251x.c
 > +++ b/drivers/net/can/spi/mcp251x.c
-> @@ -74,7 +74,6 @@
->   #define RTS_TXB2		0x04
->   #define INSTRUCTION_RTS(n)	(0x80 | ((n) & 0x07))
->   
-> -
->   /* MPC251x registers */
->   #define CANSTAT	      0x0e
->   #define CANCTRL	      0x0f
-> @@ -907,7 +906,6 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
->   			}
->   			netif_wake_queue(net);
+> @@ -806,7 +806,8 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+>   			 * (The MCP2515/25625 does this automatically.)
+>   			 */
+>   			if (mcp251x_is_2510(spi))
+> -				mcp251x_write_bits(spi, CANINTF, CANINTF_RX0IF, 0x00);
+> +				mcp251x_write_bits(spi, CANINTF,
+> +						   CANINTF_RX0IF, 0x00);
 >   		}
-> -
+>   
+>   		/* receive buffer 1 */
+> @@ -1133,7 +1134,8 @@ static int mcp251x_can_probe(struct spi_device *spi)
+>   	ret = mcp251x_hw_probe(spi);
+>   	if (ret) {
+>   		if (ret == -ENODEV)
+> -			dev_err(&spi->dev, "Cannot initialize MCP%x. Wrong wiring?\n", priv->model);
+> +			dev_err(&spi->dev, "Cannot initialize MCP%x. Wrong wiring?\n",
+> +				priv->model);
+>   		goto error_probe;
 >   	}
->   	mutex_unlock(&priv->mcp_lock);
->   	return IRQ_HANDLED;
+>   
 > 
