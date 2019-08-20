@@ -2,43 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9ED95AB2
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 11:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE45795B90
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 11:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729434AbfHTJLF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 05:11:05 -0400
-Received: from first.geanix.com ([116.203.34.67]:33080 "EHLO first.geanix.com"
+        id S1729820AbfHTJuH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 05:50:07 -0400
+Received: from first.geanix.com ([116.203.34.67]:36282 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729194AbfHTJLF (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Aug 2019 05:11:05 -0400
+        id S1729763AbfHTJuG (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 05:50:06 -0400
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 4CD5826D;
-        Tue, 20 Aug 2019 09:10:59 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 6D9FD26E;
+        Tue, 20 Aug 2019 09:49:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1566292259; bh=dmvxfghRb+CluZgXEcNklhxE/ZtMdJJHUrKJYR+0P3A=;
+        t=1566294599; bh=majl3nyBvA4Hc7wv6h7n+t2Fd+WbI8G3CV7l7IjaXiY=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Sq6ZPs1MPczAYn78teDURij3Vgq2btC93C3H942O4VmblwtDZKXPGr4LQyN1vbNtp
-         W0XV0QhdKXeuwcBOkY+cZsBC0qC49hhQKp4IDwvSWeI2vbnNbLvUKqp4nuNOuH4S4w
-         IkRjpTref7oDKrHRsWCBktWnQ1zzpO08bzG/sDItHfrwmXAhphffN0nzxjlnHxOfpJ
-         NZz3l+sAxJkbJH8Vj5O3S9LF7xxe8hbsVfAhA0goKPQp/ejLQnnK6Tgf/GbYMTTyut
-         19TjBDF+vXzF00nLT8xZihI7SVC4Wh44uuK/vDxlFSr3wUwfC+32C9nMjKzplAc4pp
-         C0Cw/h7UnxzUA==
-Subject: Re: [PATCH 2/2] dt-bindings: can: flexcan: add can wakeup property
-To:     linux-can@vger.kernel.org, mkl@pengutronix.de
-Cc:     Rob Herring <robh@kernel.org>, netdev@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20190409083949.27917-1-sean@geanix.com>
- <20190409083949.27917-2-sean@geanix.com> <20190429173930.GA11283@bogus>
+        b=a3pD806N0396ONmRk31tMI1l7TyT2tNLFd0s2OPFFSDeKwLgadghDGo+oCCSz3j/A
+         iFRpWLfqPKKMYuEBhoex1QY/2XcxD2mmyKZdKSBfELzfzyHa3A0qAA1YPBsFHoBPai
+         8QYpjicVnRe3izUPnASMD2/cBfK1Lu7ZUibVFOrD1auox5K7IGq3fFVorPHzt0cG6+
+         DEij66Vcqog4L49guUho8SN4Mh5O8yRp02lNjsm3KoKeOgTVXWCBYunVBt7zvbU8AG
+         BGlV878gwTeQrlyZPoWz7faGIEQqaattlD66XUEVDsyLyrkodcp3HFpynY+gZs4Q9o
+         UnUV/gWdmJfSg==
+Subject: Re: [PATCH] can: flexcan: free error skb if enqueueing failed
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+References: <20190715185308.104333-1-martin@geanix.com>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <9e152f0d-fd1c-cb6f-2d9a-730804f8ec41@geanix.com>
-Date:   Tue, 20 Aug 2019 11:10:45 +0200
+Message-ID: <6bddb702-e9ba-1c9e-7d7a-eb974d2e0fdd@geanix.com>
+Date:   Tue, 20 Aug 2019 11:49:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190429173930.GA11283@bogus>
+In-Reply-To: <20190715185308.104333-1-martin@geanix.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
         autolearn=disabled version=3.4.2
@@ -48,22 +50,40 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+CC'ing Joakim Zhang
 
-
-On 29/04/2019 19.39, Rob Herring wrote:
-> On Tue,  9 Apr 2019 10:39:49 +0200, Sean Nyekjaer wrote:
->> add wakeup-source boolean property.
->>
->> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
->> ---
->>   Documentation/devicetree/bindings/net/can/fsl-flexcan.txt | 2 ++
->>   1 file changed, 2 insertions(+)
->>
+On 15/07/2019 20.53, Martin Hundebøll wrote:
+> If the call to can_rx_offload_queue_sorted() fails, the passed skb isn't
+> consumed, so the caller must do so.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
->
-This doesn't seem to be applied. PATCH 1/2 in this series is applied.
-
-In any case which repo does this patch belong to?
-
-/Sean
+> Fixes: 30164759db1b ("can: flexcan: make use of rx-offload's irq_offload_fifo")
+> Signed-off-by: Martin Hundebøll <martin@geanix.com>
+> ---
+>   drivers/net/can/flexcan.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 1c66fb2ad76b..21f39e805d42 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -688,7 +688,8 @@ static void flexcan_irq_bus_err(struct net_device *dev, u32 reg_esr)
+>   	if (tx_errors)
+>   		dev->stats.tx_errors++;
+>   
+> -	can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
+> +	if (can_rx_offload_queue_sorted(&priv->offload, skb, timestamp))
+> +		kfree_skb(skb);
+>   }
+>   
+>   static void flexcan_irq_state(struct net_device *dev, u32 reg_esr)
+> @@ -732,7 +733,8 @@ static void flexcan_irq_state(struct net_device *dev, u32 reg_esr)
+>   	if (unlikely(new_state == CAN_STATE_BUS_OFF))
+>   		can_bus_off(dev);
+>   
+> -	can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
+> +	if (can_rx_offload_queue_sorted(&priv->offload, skb, timestamp))
+> +		kfree_skb(skb);
+>   }
+>   
+>   static inline struct flexcan_priv *rx_offload_to_priv(struct can_rx_offload *offload)
+> 
