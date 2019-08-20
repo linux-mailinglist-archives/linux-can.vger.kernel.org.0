@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 225DC957FB
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A0395805
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728657AbfHTHNK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 03:13:10 -0400
-Received: from first.geanix.com ([116.203.34.67]:54880 "EHLO first.geanix.com"
+        id S1729182AbfHTHOZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 03:14:25 -0400
+Received: from first.geanix.com ([116.203.34.67]:55070 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726049AbfHTHNK (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Aug 2019 03:13:10 -0400
+        id S1726049AbfHTHOZ (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 03:14:25 -0400
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 2171C26E;
-        Tue, 20 Aug 2019 07:13:05 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 235D126E;
+        Tue, 20 Aug 2019 07:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1566285185; bh=z63fLAUmXYsxP138Z1aGwEDAut3RWh37rV7wCdcxi0Y=;
+        t=1566285260; bh=cnp9IYbVJZIIy6EGEBerdU5tu1Xa5s1WTnf+tFjgIcI=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=YdZbPQZhd39sQopN6+bM5PpWKlJjRSIMXa0Ass7oznoVqTsMbRF5Vbmf4k2kPCO+G
-         lsC/I4QyUTMoXjuV+yPjJTe15141A9gxQteMGJJNso//JCuVCN0l6505uNajFkj1Gy
-         gMovIIf4bCrrRf1ssYwPvZ6ACFQRBPPrY+eylrQBGE9cb/MPkYxkJmV77ZNfUzoF9M
-         EGygfW1S1fdB2HiSlukCty8nYed0RVD/AxSklOoQKQD1ksyQsyjzYK34Jf7it3B48I
-         gWZGhiZVrKpi2OlWgwuCm5q/YwP7yXREvfBb52wQ/02IQcLmNduGgGvMvybRCId5D9
-         qxE0mZut0wrjg==
-Subject: Re: [PATCH 4/9] can: mcp251x: fix print formating strings
+        b=O5n3MEBlzIhLEMAHf/AF3HUjswyby1aRlevSlPFO13aqzEr2V0UlsQ5Aa13zM/0oP
+         6xn51lsaN2hponQR5OLzpdMFD5sWEi+zG/9PltR91TbhEnVwUwHyuu7BL7UdCBeHEm
+         emVX15JWUuOMNIK0av+OmJJQGTs1fEiqdEnA+HAWZh40sZBjziAZfmStJq1atUiBgn
+         b+E5qs0kI7eqNAUS4b2dIcoxjcgcqiqQDhEthM0ZlOyo2c0R+qftqcYp2KgXkkcxHK
+         ZH5RNA7bEUHmhwjB6/M+Rumj9zx1XhL1focVIdqaqwP3aB6SQEZi3tDkcKhO4u2AeT
+         oXLGtsfXbO02w==
+Subject: Re: [PATCH 5/9] can: mcp251x: use u8 instead of uint8_t
 To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
 Cc:     t.schluessler@krause.de, shc_work@mail.ru
 References: <20190819153818.29293-1-mkl@pengutronix.de>
- <20190819153818.29293-5-mkl@pengutronix.de>
+ <20190819153818.29293-6-mkl@pengutronix.de>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <07086f13-c771-48cf-441e-7abc07069b6c@geanix.com>
-Date:   Tue, 20 Aug 2019 09:12:51 +0200
+Message-ID: <0a7ec3e0-5923-e7f2-5eef-3ab3a33bb3b6@geanix.com>
+Date:   Tue, 20 Aug 2019 09:14:06 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190819153818.29293-5-mkl@pengutronix.de>
+In-Reply-To: <20190819153818.29293-6-mkl@pengutronix.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
@@ -50,26 +50,54 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 19/08/2019 17.38, Marc Kleine-Budde wrote:
-> This patch fixes the print format strings in the driver.
+> This patch changes all the uint8_t in the arguments in several function
+> to u8.
 > 
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Acked-by: Sean Nyekjaer <sean@geanix.com>
 > ---
->   drivers/net/can/spi/mcp251x.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
+>   drivers/net/can/spi/mcp251x.c | 9 ++++-----
+>   1 file changed, 4 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-> index 0fd559510d75..d4ae47a0a850 100644
+> index d4ae47a0a850..44b57187a6f3 100644
 > --- a/drivers/net/can/spi/mcp251x.c
 > +++ b/drivers/net/can/spi/mcp251x.c
-> @@ -561,8 +561,7 @@ static int mcp251x_set_normal_mode(struct spi_device *spi)
->   		while (mcp251x_read_reg(spi, CANSTAT) & CANCTRL_REQOP_MASK) {
->   			schedule();
->   			if (time_after(jiffies, timeout)) {
-> -				dev_err(&spi->dev, "MCP251x didn't"
-> -					" enter in normal mode\n");
-> +				dev_err(&spi->dev, "MCP251x didn't enter in normal mode\n");
->   				return -EBUSY;
->   			}
->   		}
+> @@ -319,7 +319,7 @@ static int mcp251x_spi_trans(struct spi_device *spi, int len)
+>   	return ret;
+>   }
+>   
+> -static u8 mcp251x_read_reg(struct spi_device *spi, uint8_t reg)
+> +static u8 mcp251x_read_reg(struct spi_device *spi, u8 reg)
+>   {
+>   	struct mcp251x_priv *priv = spi_get_drvdata(spi);
+>   	u8 val = 0;
+> @@ -333,8 +333,7 @@ static u8 mcp251x_read_reg(struct spi_device *spi, uint8_t reg)
+>   	return val;
+>   }
+>   
+> -static void mcp251x_read_2regs(struct spi_device *spi, uint8_t reg,
+> -		uint8_t *v1, uint8_t *v2)
+> +static void mcp251x_read_2regs(struct spi_device *spi, u8 reg, u8 *v1, u8 *v2)
+>   {
+>   	struct mcp251x_priv *priv = spi_get_drvdata(spi);
+>   
+> @@ -347,7 +346,7 @@ static void mcp251x_read_2regs(struct spi_device *spi, uint8_t reg,
+>   	*v2 = priv->spi_rx_buf[3];
+>   }
+>   
+> -static void mcp251x_write_reg(struct spi_device *spi, u8 reg, uint8_t val)
+> +static void mcp251x_write_reg(struct spi_device *spi, u8 reg, u8 val)
+>   {
+>   	struct mcp251x_priv *priv = spi_get_drvdata(spi);
+>   
+> @@ -359,7 +358,7 @@ static void mcp251x_write_reg(struct spi_device *spi, u8 reg, uint8_t val)
+>   }
+>   
+>   static void mcp251x_write_bits(struct spi_device *spi, u8 reg,
+> -			       u8 mask, uint8_t val)
+> +			       u8 mask, u8 val)
+>   {
+>   	struct mcp251x_priv *priv = spi_get_drvdata(spi);
+>   
 > 
