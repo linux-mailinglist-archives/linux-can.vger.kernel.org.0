@@ -2,160 +2,73 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5444595811
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDB895959
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 10:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729265AbfHTHQX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 03:16:23 -0400
-Received: from first.geanix.com ([116.203.34.67]:55234 "EHLO first.geanix.com"
+        id S1729298AbfHTIWC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 04:22:02 -0400
+Received: from mx.krause.de ([88.79.216.98]:50209 "EHLO mx.krause.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726049AbfHTHQW (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Aug 2019 03:16:22 -0400
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 0667726E;
-        Tue, 20 Aug 2019 07:16:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1566285376; bh=qKKclbMPiiBiSs5hOno1OQFE+kET6BNO5Iq1xzhl0sE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=l0eHXxi0wSXmUXYnjpeVZbH5xOl9V0EEdEy6BNnST+deSxSgDJk+kz7QZZFPKZ3qE
-         C+QEFaQeHQbE+BfyfhhOkTb8CEZ1qF55LZy6AShZdk2sW2vCetLzF4jvrUdhoAOyf0
-         NY8g3lFLo0UsMc3wqfrJ8nctKKH81OooOqwa03bwcwvSyV3o3WY4SrECIB1bVF0N4S
-         m9DlqAplIW5WxVpT2QUsDqJGBU0Xytq1/6rmBiqs3oq8PW3+V/eE4bQkPuZtOcwe91
-         NPRLR5uMLrv1CU4zIUdXyFMeE0r0j5z+4fm332qbrsI4iIcAZ7+hpGTC/ZX5nNu3SR
-         EEFcfwqru7YQA==
-Subject: Re: [PATCH 9/9] can: mcp251x: remove custom DMA mapped buffer
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     t.schluessler@krause.de, shc_work@mail.ru
-References: <20190819153818.29293-1-mkl@pengutronix.de>
- <20190819153818.29293-10-mkl@pengutronix.de>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <3b74696e-3ff5-a790-547e-05b1f7abda1f@geanix.com>
-Date:   Tue, 20 Aug 2019 09:16:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728426AbfHTIWC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 04:22:02 -0400
+X-Greylist: delayed 330 seconds by postgrey-1.27 at vger.kernel.org; Tue, 20 Aug 2019 04:22:01 EDT
+Received: from [172.20.10.125] (port=25777 helo=mail.horstmanngroup.de)
+        by mx.krause.de with esmtps (TLSv1:AES256-SHA:256)
+        (Exim 4.82_1-5b7a7c0-XX)
+        (envelope-from <t.schluessler@krause.de>)
+        id 1hzzJc-0007iV-07; Tue, 20 Aug 2019 10:16:28 +0200
+Received: from HG-SRV-053.HG.local (172.20.10.125) by HG-SRV-053.HG.local
+ (172.20.10.125) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 20 Aug
+ 2019 10:16:27 +0200
+Received: from HG-SRV-053.HG.local ([::1]) by HG-SRV-053.HG.local ([::1]) with
+ mapi id 15.00.1367.000; Tue, 20 Aug 2019 10:16:27 +0200
+X-CTCH-RefID: str=0001.0A0C0209.5D5BAC5C.001C,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+From:   =?utf-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: RE: Add GPIO support for mcp251x driver
+Thread-Topic: Add GPIO support for mcp251x driver
+Thread-Index: AdVWmfxSduWoGL3+RY65gXm3I2iEOP//6gGA//7FmmA=
+Date:   Tue, 20 Aug 2019 08:16:27 +0000
+Message-ID: <ef7d794e0f9e4d2e8c3a32310d90d180@HG-SRV-053.HG.local>
+References: <73336c447238499985c2ca6df1075a52@HG-SRV-053.HG.local>
+ <fc7330ce-c277-088a-3a35-e8780c852f99@pengutronix.de>
+In-Reply-To: <fc7330ce-c277-088a-3a35-e8780c852f99@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.20.30.30]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20190819153818.29293-10-mkl@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 19/08/2019 17.38, Marc Kleine-Budde wrote:
-> There is no need to duplicate what SPI core already does, i.e. mapping buffers
-> for DMA capable transfers. This patch removes all related pices of code.
-> 
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Tested-by: Sean Nyekjaer <sean@geanix.com>
-> ---
->   drivers/net/can/spi/mcp251x.c | 58 ++++++-----------------------------
->   1 file changed, 10 insertions(+), 48 deletions(-)
-> 
-> diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-> index 0cdb88a9525f..78d44801a0b5 100644
-> --- a/drivers/net/can/spi/mcp251x.c
-> +++ b/drivers/net/can/spi/mcp251x.c
-> @@ -47,7 +47,6 @@
->   #include <linux/completion.h>
->   #include <linux/delay.h>
->   #include <linux/device.h>
-> -#include <linux/dma-mapping.h>
->   #include <linux/freezer.h>
->   #include <linux/interrupt.h>
->   #include <linux/io.h>
-> @@ -202,10 +201,6 @@
->   
->   #define DEVICE_NAME "mcp251x"
->   
-> -static int mcp251x_enable_dma; /* Enable SPI DMA. Default: 0 (Off) */
-> -module_param(mcp251x_enable_dma, int, 0444);
-> -MODULE_PARM_DESC(mcp251x_enable_dma, "Enable SPI DMA. Default: 0 (Off)");
-> -
->   static const struct can_bittiming_const mcp251x_bittiming_const = {
->   	.name = DEVICE_NAME,
->   	.tseg1_min = 3,
-> @@ -234,8 +229,6 @@ struct mcp251x_priv {
->   
->   	u8 *spi_tx_buf;
->   	u8 *spi_rx_buf;
-> -	dma_addr_t spi_tx_dma;
-> -	dma_addr_t spi_rx_dma;
->   
->   	struct sk_buff *tx_skb;
->   	int tx_len;
-> @@ -304,13 +297,6 @@ static int mcp251x_spi_trans(struct spi_device *spi, int len)
->   	int ret;
->   
->   	spi_message_init(&m);
-> -
-> -	if (mcp251x_enable_dma) {
-> -		t.tx_dma = priv->spi_tx_dma;
-> -		t.rx_dma = priv->spi_rx_dma;
-> -		m.is_dma_mapped = 1;
-> -	}
-> -
->   	spi_message_add_tail(&t, &m);
->   
->   	ret = spi_sync(spi, &m);
-> @@ -1101,42 +1087,18 @@ static int mcp251x_can_probe(struct spi_device *spi)
->   	priv->spi = spi;
->   	mutex_init(&priv->mcp_lock);
->   
-> -	/* If requested, allocate DMA buffers */
-> -	if (mcp251x_enable_dma) {
-> -		spi->dev.coherent_dma_mask = ~0;
-> -
-> -		/* Minimum coherent DMA allocation is PAGE_SIZE, so allocate
-> -		 * that much and share it between Tx and Rx DMA buffers.
-> -		 */
-> -		priv->spi_tx_buf = dmam_alloc_coherent(&spi->dev,
-> -						       PAGE_SIZE,
-> -						       &priv->spi_tx_dma,
-> -						       GFP_DMA);
-> -
-> -		if (priv->spi_tx_buf) {
-> -			priv->spi_rx_buf = (priv->spi_tx_buf + (PAGE_SIZE / 2));
-> -			priv->spi_rx_dma = (dma_addr_t)(priv->spi_tx_dma +
-> -							(PAGE_SIZE / 2));
-> -		} else {
-> -			/* Fall back to non-DMA */
-> -			mcp251x_enable_dma = 0;
-> -		}
-> +	priv->spi_tx_buf = devm_kzalloc(&spi->dev, SPI_TRANSFER_BUF_LEN,
-> +					GFP_KERNEL);
-> +	if (!priv->spi_tx_buf) {
-> +		ret = -ENOMEM;
-> +		goto error_probe;
->   	}
->   
-> -	/* Allocate non-DMA buffers */
-> -	if (!mcp251x_enable_dma) {
-> -		priv->spi_tx_buf = devm_kzalloc(&spi->dev, SPI_TRANSFER_BUF_LEN,
-> -						GFP_KERNEL);
-> -		if (!priv->spi_tx_buf) {
-> -			ret = -ENOMEM;
-> -			goto error_probe;
-> -		}
-> -		priv->spi_rx_buf = devm_kzalloc(&spi->dev, SPI_TRANSFER_BUF_LEN,
-> -						GFP_KERNEL);
-> -		if (!priv->spi_rx_buf) {
-> -			ret = -ENOMEM;
-> -			goto error_probe;
-> -		}
-> +	priv->spi_rx_buf = devm_kzalloc(&spi->dev, SPI_TRANSFER_BUF_LEN,
-> +					GFP_KERNEL);
-> +	if (!priv->spi_rx_buf) {
-> +		ret = -ENOMEM;
-> +		goto error_probe;
->   	}
->   
->   	SET_NETDEV_DEV(net, &spi->dev);
-> 
+TWFyYywNCg0KVGhhbmtzIGZvciB0aGUgcG9pbnRlci4NCg0KV2hhdCBkbyB5b3UgbWVhbiB3aXRo
+ICJwcm9wZXIiPyBDYW4ndCB3ZSBqdXN0IGFkZCB0aGUgcmVsZXZhbnQgZ3Bpb2NoaXBfIGNhbGxz
+IGluIG1jcDI1MXh4LmM/DQoNClJlZ2FyZHMNClRpbW8NCg0KDQoNCi0tLS0tT3JpZ2luYWwgTWVz
+c2FnZS0tLS0tDQpGcm9tOiBNYXJjIEtsZWluZS1CdWRkZSBbbWFpbHRvOm1rbEBwZW5ndXRyb25p
+eC5kZV0gDQpTZW50OiBNb25kYXksIEF1Z3VzdCAxOSwgMjAxOSA1OjA3IFBNDQpUbzogU2NobMO8
+w59sZXIsIFRpbW87IHdnQGdyYW5kZWdnZXIuY29tOyBsaW51eC1jYW5Admdlci5rZXJuZWwub3Jn
+DQpTdWJqZWN0OiBSZTogQWRkIEdQSU8gc3VwcG9ydCBmb3IgbWNwMjUxeCBkcml2ZXINCg0KT24g
+OC8xOS8xOSA0OjQ5IFBNLCBTY2hsw7zDn2xlciwgVGltbyB3cm90ZToNCj4gd2hhdCBkbyB5b3Ug
+dGhpbmsgd291bGQgYmUgdGhlIHJpZ2h0IHdheSB0byBjb250cm9sIHRoZSBHUElPcyBvZiB0aGUN
+Cj4gTUNQMjUxeC8yNTYyNSBmcm9tIHVzZXJsYW5kPw0KDQpZb3Ugd2FudCB0byBpbXBsZW1lbnQg
+YSBwcm9wZXIga2VybmVsIGRyaXZlciwgYXR0YWNoaW5nIHRoZSBHUElPcyB0byB0aGUga2VybmVs
+IEdQSU8gZnJhbWV3b3JrOiBTZWUNCg0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xp
+bnV4L2tlcm5lbC9naXQvbWtsL2xpbnV4LWNhbi1uZXh0LmdpdC9jb21taXQvP2g9bWNwMjV4eGZk
+JmlkPTU1ZWIzYWZhNWMyOWJkMGQ1MDQ2YTQwY2MwODAyYTQ5NTQwNmFjMTUNCg0KZm9yIGFuIGV4
+YW1wbGUuDQoNCj4gSXMgdGhpcyBzb21ldGhpbmcgdGhhdCBzaG91bGQgYmUgZG9uZQ0KPiB1c2lu
+ZyBhIFNJT0NERVZQUklWQVRFIGlvY3RsPyBXaGVyZSBzaG91bGQgdGhpcyBnZXQgZG9jdW1lbnRl
+ZD8gSSANCj4gY291bGQgaW1hZ2luZSBzb21ldGhpbmcgbGlrZSB0aGlzLCBidXQgYW0gbm90IHN1
+cmUgd2hldGhlciB0aGlzIGlzIHRoZSANCj4gcmlnaHQgd2F5IHRvIGdvLg0KDQpNYXJjDQoNCi0t
+IA0KUGVuZ3V0cm9uaXggZS5LLiAgICAgICAgICAgICAgICAgIHwgTWFyYyBLbGVpbmUtQnVkZGUg
+ICAgICAgICAgIHwNCkluZHVzdHJpYWwgTGludXggU29sdXRpb25zICAgICAgICB8IFBob25lOiAr
+NDktMjMxLTI4MjYtOTI0ICAgICB8DQpWZXJ0cmV0dW5nIFdlc3QvRG9ydG11bmQgICAgICAgICAg
+fCBGYXg6ICAgKzQ5LTUxMjEtMjA2OTE3LTU1NTUgfA0KQW10c2dlcmljaHQgSGlsZGVzaGVpbSwg
+SFJBIDI2ODYgIHwgaHR0cDovL3d3dy5wZW5ndXRyb25peC5kZSAgIHwNCg0K
