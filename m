@@ -2,41 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F0F95807
-	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5A49580C
+	for <lists+linux-can@lfdr.de>; Tue, 20 Aug 2019 09:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728947AbfHTHO5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Aug 2019 03:14:57 -0400
-Received: from first.geanix.com ([116.203.34.67]:55150 "EHLO first.geanix.com"
+        id S1728777AbfHTHP2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Aug 2019 03:15:28 -0400
+Received: from first.geanix.com ([116.203.34.67]:55196 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726049AbfHTHO5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Aug 2019 03:14:57 -0400
+        id S1726049AbfHTHP2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Aug 2019 03:15:28 -0400
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id C1AE526E;
-        Tue, 20 Aug 2019 07:14:51 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id D3D3C26E;
+        Tue, 20 Aug 2019 07:15:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1566285291; bh=PMa6IhGgZRRpYUhyyn3xjfMgo0+dc2IG3GNNCA4vWlk=;
+        t=1566285323; bh=0ucM5ANPdYAUrsAkG8mhory7oiKuvDEWw37eqHSMHHM=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=IJEv8xHrD+0PI2nCxO8BhK3pCC7fYeytBjy0bP2YQjmcWb9jwk1bm1kHuEc7caaMs
-         fyZ3qkUq9/BCAAKHn7rzrHB0eYHEMhWlnoxmlLHuPMOblZL+hbtVO0dIFQWVEwra2n
-         yConhfjFgTMO5o99FTWMBA6bjw0XYYeYWHPzh1AYH4FFKSJBSZguZkhCTKaaZkUcXt
-         8DzZcbZGpZdNEtAbF1XPFpJ28xT4clWRpCEsOEghmtdIvvX38EC3aZ/k4Sn+HnpBgt
-         gOQax8VEvRKAtRwnLkneyGU8t+TK5ocld7pf1G4ZblJJdiE2bWGl1a+SNaHnNsAuf8
-         3zy6fKkt/HMig==
-Subject: Re: [PATCH 6/9] can: mcp251x: mcp251x_hw_reset(): allow more time
- after a reset
+        b=JQWMTHDqktCBcIpwjKkazXXsF4uqS8kMrn1vgs0DMQd7W+/rYbM9q5UKLrBQCCfKK
+         NzwM/xTzFtHxpNf0besPmFGidHyZTIr4kCdo94G0gjmNkvUuixuZcJEUnQRBihNLRz
+         45Z0PsCa8gEw0w1MphShP5G/3/mN8UYilyHHGv2Tn5Khzzyl6L0k8nCk8H5mXQWkBK
+         XJBOqspwbQDszjv7UauNIBCAhwisSe8EbEodGKzZ+8e54S592PJK39KooR1I97SrC6
+         NfKpUNPv+AEU0JAc7chAr4Sg7cui6I+p5AtA0tFtCAinesPJi1eSOkiE5Inrik3I5a
+         ZUAuVvnaA2REQ==
+Subject: Re: [PATCH 7/9] can: mcp251x: Use dev_name() during
+ request_threaded_irq()
 To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     t.schluessler@krause.de, shc_work@mail.ru,
-        linux-stable <stable@vger.kernel.org>
+Cc:     t.schluessler@krause.de, shc_work@mail.ru
 References: <20190819153818.29293-1-mkl@pengutronix.de>
- <20190819153818.29293-7-mkl@pengutronix.de>
+ <20190819153818.29293-8-mkl@pengutronix.de>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <0ad8b13d-ea63-bc2e-55d2-fb279e51331f@geanix.com>
-Date:   Tue, 20 Aug 2019 09:14:38 +0200
+Message-ID: <6beb6d27-dbeb-02bb-af17-b77041d9870f@geanix.com>
+Date:   Tue, 20 Aug 2019 09:15:09 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190819153818.29293-7-mkl@pengutronix.de>
+In-Reply-To: <20190819153818.29293-8-mkl@pengutronix.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
@@ -52,52 +51,41 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 19/08/2019 17.38, Marc Kleine-Budde wrote:
-> Some boards take longer than 5ms to power up after a reset, so allow
-> some retries attempts before giving up.
+> From: Alexander Shiyan <shc_work@mail.ru>
 > 
-> Fixes: ff06d611a31c ("can: mcp251x: Improve mcp251x_hw_reset()")
-> Cc: linux-stable <stable@vger.kernel.org>
+> Passing driver name as name during request_threaded_irq() results in all
+> CAN IRQs have same name. This does not help much to easily identify which
+> IRQ belongs to which CAN instance. Therefore pass dev_name() during
+> request_threaded_irq() so that better identifiable name is listed for
+> CAN devices in cat /proc/interrupts output.
+> 
+> Output of cat /proc/interrupts
+> Before this patch:
+>    253:          2  gpio-mxc  13 Edge      mcp251x
+>    259:          2  gpio-mxc  19 Edge      mcp251x
+> After this patch:
+>    253:          2  gpio-mxc  13 Edge      spi1.1
+>    259:          2  gpio-mxc  19 Edge      spi1.2
+> 
+> Signed-off-by: Alexander Shiyan <shc_work@mail.ru>
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Tested-by: Sean Nyekjaer <sean@geanix.com>
 > ---
->   drivers/net/can/spi/mcp251x.c | 19 ++++++++++++++-----
->   1 file changed, 14 insertions(+), 5 deletions(-)
+>   drivers/net/can/spi/mcp251x.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-> index 44b57187a6f3..db69c04bac2d 100644
+> index db69c04bac2d..19756fb3921a 100644
 > --- a/drivers/net/can/spi/mcp251x.c
 > +++ b/drivers/net/can/spi/mcp251x.c
-> @@ -606,7 +606,7 @@ static int mcp251x_setup(struct net_device *net, struct spi_device *spi)
->   static int mcp251x_hw_reset(struct spi_device *spi)
->   {
->   	struct mcp251x_priv *priv = spi_get_drvdata(spi);
-> -	u8 reg;
-> +	unsigned long timeout;
->   	int ret;
+> @@ -940,7 +940,8 @@ static int mcp251x_open(struct net_device *net)
+>   	priv->tx_len = 0;
 >   
->   	/* Wait for oscillator startup timer after power up */
-> @@ -620,10 +620,19 @@ static int mcp251x_hw_reset(struct spi_device *spi)
->   	/* Wait for oscillator startup timer after reset */
->   	mdelay(MCP251X_OST_DELAY_MS);
->   
-> -	reg = mcp251x_read_reg(spi, CANSTAT);
-> -	if ((reg & CANCTRL_REQOP_MASK) != CANCTRL_REQOP_CONF)
-> -		return -ENODEV;
-> -
-> +	/* Wait for reset to finish */
-> +	timeout = jiffies + HZ;
-> +	while ((mcp251x_read_reg(spi, CANSTAT) & CANCTRL_REQOP_MASK) !=
-> +	       CANCTRL_REQOP_CONF) {
-> +		usleep_range(MCP251X_OST_DELAY_MS * 1000,
-> +			     MCP251X_OST_DELAY_MS * 1000 * 2);
-> +
-> +		if (time_after(jiffies, timeout)) {
-> +			dev_err(&spi->dev,
-> +				"MCP251x didn't enter in conf mode after reset\n");
-> +			return -EBUSY;
-> +		}
-> +	}
->   	return 0;
->   }
->   
+>   	ret = request_threaded_irq(spi->irq, NULL, mcp251x_can_ist,
+> -				   flags | IRQF_ONESHOT, DEVICE_NAME, priv);
+> +				   flags | IRQF_ONESHOT, dev_name(&spi->dev),
+> +				   priv);
+>   	if (ret) {
+>   		dev_err(&spi->dev, "failed to acquire irq %d\n", spi->irq);
+>   		mcp251x_power_enable(priv->transceiver, 0);
 > 
