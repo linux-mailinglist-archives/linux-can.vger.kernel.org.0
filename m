@@ -2,165 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C44E098491
-	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2019 21:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D448B98777
+	for <lists+linux-can@lfdr.de>; Thu, 22 Aug 2019 00:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730541AbfHUTc6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Aug 2019 15:32:58 -0400
-Received: from mout.web.de ([217.72.192.78]:56811 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729847AbfHUTas (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 21 Aug 2019 15:30:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1566415815;
-        bh=3lpmHRFKH7F6csdOCSSofXDaB6xUBXTTVPtUFzk3mTQ=;
-        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
-        b=Q+kKxxvSwaDq2hNsdqqQrOm0qV1rsKFBiQ7a1GulpVT2UVzmbzl7oh3lKHKkt6M9z
-         E6d3O3w/XwSZErQI3NY7EW7gG7i9JmKCNISmfMyhtvU4gYX5PIdoLGLeHzenYBi61N
-         cwZsSLQzkC8FCf9M28INRuUM3S7LCZEMxN7mzz7k=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([78.48.9.44]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MFc1h-1i3Z7j3v5p-00Ef3a; Wed, 21
- Aug 2019 21:30:15 +0200
-To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Allison Randal <allison@lohutok.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Enrico Weigelt <lkml@metux.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Weitao Hou <houweitaoo@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org
-From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: =?UTF-8?Q?=5bPATCH=5d_can=3a_Delete_unnecessary_checks_before_the_m?=
- =?UTF-8?B?YWNybyBjYWxsIOKAnGRldl9rZnJlZV9za2LigJ0=?=
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <27674907-fd2a-7f0c-84fd-d8b5124739a9@web.de>
-Date:   Wed, 21 Aug 2019 21:30:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731152AbfHUWiJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Aug 2019 18:38:09 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:38417 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731102AbfHUWiJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Aug 2019 18:38:09 -0400
+Received: by mail-io1-f69.google.com with SMTP id h4so4231473iol.5
+        for <linux-can@vger.kernel.org>; Wed, 21 Aug 2019 15:38:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=OvcLDGlyZApcuXSWwLIJL3Pm5pdGHjKfI+ox2HXsl2s=;
+        b=IQDP3k0pLuait3he9OJIxjA3vi92AUBoYdEbHtIXv2kSbAJwiFh41fhUelvgcPCsUp
+         JxDm7d2kgPg0owYHp8vtb3wPam2ufUauWdlxdjDb3cBH1Ogl9DlLwOHrYXYjBOQ80BOs
+         MnIGAlSTzybmKyo58LsGSYWILSFTsuRGPTIeQJm3Yzd+kAQOuK0QNqiBGuy/4ODK+V2R
+         tZjJ1/+jYHGMhp86gOo9WyycZiVogoU5ywqTVNS2xPLo9bRDgzsC8/IgU2dTQV2ld55c
+         9CmOQ0VOHYlbPN2wYYZtvQOscQ1KeUbL4Sip/niqkGhRpE2UN1cyNJ+8jujcdbtP2akj
+         b3dw==
+X-Gm-Message-State: APjAAAUYfrDRxSP55eyzg35AE7KnyKNyOvskLsRW90IU0MQw2zTipJ6f
+        Ir9Zp+wSDksnxYzLnIx0HSnMQRm2anJO2pUqvvoDTnZqcTe+
+X-Google-Smtp-Source: APXvYqzF6S4ovYIYizRMwKjYTxeAyYAFuZ3RLPgkDuWmKuaomtU0MLwdY0zj/iSpH2Nmhra60tQ1pRLr2dt1szURo0+kIj/j+tKV
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:3UUCaBDFFXjC3jkkiegfpEDT3e0kV/rF33z4mztvCPFs1e+I4pH
- zE8g62+GO6s/2u/BI4gYuH9TCH3+5p+Dx3QormIx/6A8L4RBX8L5Z7vvvuMPXZN72tXg8mr
- r9cN2+Bsoy2dtsuafeNJ/xmo9CCpg6dTQWouoQYc3OXtPMPU0OeJ3kq5tG+I47JVIzuCys+
- 6uiya24Xc8uHJnkoi82yQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:mABiV/a9xtY=:gyp8l8IKQUYwASclxPRe5P
- CUhnE9HbmTH6u7c7VY6vQbal2VQKbfh9lBTQo6pB4ekLGFDQrCTG1p4Q1BFRhKGXdVQc8ZsAL
- BySH2RUwLNKhv39T7nMGa/Wvuju71HwZgn/qNQgiV4liV0Dfntf0XuZ1JykeqASgFGXzurcJD
- vmd/DbQQaVBm9y3LxWYGbDdBl3/eFV/TZs0QCmkTNtg6LX6BxZLzMsDqCkRa5Ly0++C9b+3Un
- WxpvT1s+ZOCTZ0MHa5/VHecliRKqYSRFKokrJt+yaT+MF25i8QuTI8HbtRbYe2CzpOJkpNIIT
- TpaH5NpAQWPvU6YhiWnhtagTyjglB5K2jfPAXcAhAjy9bqAQ0duFVepHIx9FWnMH6boID1WXz
- L5pSaRqa4jL6pr4upr2BDs2dDleRqvO/SYbq1VryW6XIg486L8pO2Pgt7ory4N5lN64sRkyMY
- yXUUvGByATsTEHIYQS5UX61ReJ9Hho+iSOf377Yn7KEY4i+ycXvQFcesMJD+PREcOQN/f4z3V
- H9zWkdJ/rYB7Q5NdegrMDGhrxfe1sNT3YGaK/JApHWNJXmUBPhOswm4OqnLaMioVX3RqH+4hD
- nvhF7J/4yTkCP5zZ7uaSmpN1XFDlX6Qsl11rrcaHo6BIKBEX6dlsLFmFmAuByrbs51gSLLWiN
- omPPXpNGccAboqcOUc8+n3qpxiPPKFdBgzzFtOVAMoMVb2QIwibKC8Z/de5EOQV7eYOOXpJVE
- IjjaXGGDAe8tq1w/JBCICAQnxYZHRtvP/dgFCQjol4OsinzryAOXN3ayuLiS9nilpwQdTWRnN
- M/2KL0mkyTyHQtVy6G4+yth8+4x2yb9mKACakfpdVtsg1zuS0UEuxBsHMiC2REKZK/soASgHk
- Zp0+p6UoNXMSBS9soIuC53Eg5jQ1fFQDaDYip4uimylmQ6sIjCu9VL75Qdd1NAQXl9699GZ3H
- Vt1++gPq4TZjLwfbCM/V0mLINvMeoK1vyo7eyB4g0G4+VKlqhC5xfUiTLod+PBbTPcJXmOo0W
- KlW1b49m7PoZsz6YZwp13M57WfYwrTcMFBak/ajqfy9ugcnEKAAeetHBQ2dMpNWS61nCPzz5Q
- Yn4m0KNZdGtfsS/On2aojRkO08/vcGy5mxX6hAErOZGV+0q8/zKXT9aohsLdDzjBSPE3yiqRn
- 43d5g=
+X-Received: by 2002:a5e:a90f:: with SMTP id c15mr1900814iod.41.1566427088386;
+ Wed, 21 Aug 2019 15:38:08 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 15:38:08 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002b81b70590a83ad7@google.com>
+Subject: KASAN: null-ptr-deref Write in queue_work_on
+From:   syzbot <syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        wg@grandegger.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Wed, 21 Aug 2019 21:16:15 +0200
+Hello,
 
-The dev_kfree_skb() function performs also input parameter validation.
-Thus the test around the shown calls is not needed.
+syzbot found the following crash on:
 
-This issue was detected by using the Coccinelle software.
+HEAD commit:    6e625a1a Merge tag 'xtensa-20190816' of git://github.com/j..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=174e04ac600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3ff364e429585cf2
+dashboard link: https://syzkaller.appspot.com/bug?extid=017e491ae13c0068598a
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1327d9e2600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c4fc4c600000
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/net/can/spi/hi311x.c  | 3 +--
- drivers/net/can/spi/mcp251x.c | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+Bisection is inconclusive: the first bad commit could be any of:
 
-diff --git a/drivers/net/can/spi/hi311x.c b/drivers/net/can/spi/hi311x.c
-index 03a711c3221b..7c7c7e78214c 100644
-=2D-- a/drivers/net/can/spi/hi311x.c
-+++ b/drivers/net/can/spi/hi311x.c
-@@ -184,8 +184,7 @@ static void hi3110_clean(struct net_device *net)
+569dbb88 Linux 4.13
+  that is not the commit
 
- 	if (priv->tx_skb || priv->tx_len)
- 		net->stats.tx_errors++;
--	if (priv->tx_skb)
--		dev_kfree_skb(priv->tx_skb);
-+	dev_kfree_skb(priv->tx_skb);
- 	if (priv->tx_len)
- 		can_free_echo_skb(priv->net, 0);
- 	priv->tx_skb =3D NULL;
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index 12358f06d194..1c496d2adb45 100644
-=2D-- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -274,8 +274,7 @@ static void mcp251x_clean(struct net_device *net)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17520702600000
 
- 	if (priv->tx_skb || priv->tx_len)
- 		net->stats.tx_errors++;
--	if (priv->tx_skb)
--		dev_kfree_skb(priv->tx_skb);
-+	dev_kfree_skb(priv->tx_skb);
- 	if (priv->tx_len)
- 		can_free_echo_skb(priv->net, 0);
- 	priv->tx_skb =3D NULL;
-=2D-
-2.23.0
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KASAN: null-ptr-deref in test_and_set_bit  
+include/asm-generic/bitops-instrumented.h:143 [inline]
+BUG: KASAN: null-ptr-deref in queue_work_on+0xa6/0x210  
+kernel/workqueue.c:1517
+Write of size 8 at addr 0000000000000050 by task syz-executor935/9691
+
+CPU: 0 PID: 9691 Comm: syz-executor935 Not tainted 5.3.0-rc4+ #113
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  __kasan_report.cold+0x5/0x36 mm/kasan/report.c:486
+  kasan_report+0x12/0x17 mm/kasan/common.c:612
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x134/0x1a0 mm/kasan/generic.c:192
+  __kasan_check_write+0x14/0x20 mm/kasan/common.c:98
+  test_and_set_bit include/asm-generic/bitops-instrumented.h:143 [inline]
+  queue_work_on+0xa6/0x210 kernel/workqueue.c:1517
+  queue_work include/linux/workqueue.h:490 [inline]
+  schedule_work include/linux/workqueue.h:548 [inline]
+  slcan_write_wakeup+0x66/0x90 drivers/net/can/slcan.c:348
+  tty_wakeup+0xe9/0x120 drivers/tty/tty_io.c:535
+  pty_unthrottle+0x37/0x60 drivers/tty/pty.c:95
+  tty_unthrottle+0xab/0x110 drivers/tty/tty_ioctl.c:139
+  __tty_perform_flush+0x1b3/0x200 drivers/tty/tty_ioctl.c:861
+  n_tty_ioctl_helper+0x1cc/0x3b0 drivers/tty/tty_ioctl.c:937
+  n_tty_ioctl+0x59/0x370 drivers/tty/n_tty.c:2466
+  tty_ioctl+0xaf9/0x14f0 drivers/tty/tty_io.c:2666
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xdb6/0x13e0 fs/ioctl.c:696
+  ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x446859
+Code: e8 9c b4 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 eb 07 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f17a0a3fd18 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000006dbc38 RCX: 0000000000446859
+RDX: 0000000000000000 RSI: 000000000000540b RDI: 0000000000000003
+RBP: 00000000006dbc30 R08: 00007f17a0a40700 R09: 0000000000000000
+R10: 00007f17a0a40700 R11: 0000000000000246 R12: 00000000006dbc3c
+R13: 00007ffdfd0bdb5f R14: 00007f17a0a409c0 R15: 20c49ba5e353f7cf
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
