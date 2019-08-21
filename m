@@ -2,91 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E469724E
-	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2019 08:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87819746B
+	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2019 10:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbfHUGf5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Aug 2019 02:35:57 -0400
-Received: from first.geanix.com ([116.203.34.67]:45164 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727918AbfHUGf4 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 21 Aug 2019 02:35:56 -0400
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id C224926A;
-        Wed, 21 Aug 2019 06:35:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1566369346; bh=YPwhW34/k28LpUCy7tJRBbyRKn5+g7/hQM3WzFLxg+Y=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=hTxLcfBZ8UuBL9zUwiwb0VmdoV6tDdQL/Ncvr5B1tqmfdAg+62VKQ+R96FWZCT9A/
-         lBjm6uxOIGM0+yt6Lr0vS7GIfiqodG+n/kVuZq6ElivtIB89st7TDEw5ybZG5yV/Ag
-         wZlrY3xA1XueUk2EklBYjP4AgqPO0uHm8fdM6SQKW+68ZnniIlkPWQL+rW44v9+9fD
-         2GjjG1Wa8bVreQxE/kc9igBGnOJecYvmnCDgTElX1jXfzlQrqHqa3Oy6LmGiMUflvR
-         63aAHHg4fbVtlroyDKQBTM8v1nd0nbSZaNfMOOBTn6JUjaioy5/W4nSa2kczRU0dR8
-         mLl+989u2ni5w==
-Subject: Re: [PATCH 0/9] can: mcp251x: cleanups + fix various problems
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     t.schluessler@krause.de, shc_work@mail.ru
-References: <20190819153818.29293-1-mkl@pengutronix.de>
- <52d24cdb-6c88-901e-a78b-b7f16dffeec9@geanix.com>
- <fbfdf46b-e0b0-07c0-7639-ca0418cf7c2d@pengutronix.de>
- <23407a19-27b4-1c26-747b-9c37f87a2c9b@geanix.com>
- <b15604e3-49a4-a986-b8c9-1ccc3ff8e2c3@pengutronix.de>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <142148e7-e0e4-a999-c85a-358834ff4b53@geanix.com>
-Date:   Wed, 21 Aug 2019 08:35:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727018AbfHUIHY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Aug 2019 04:07:24 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35675 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfHUIHY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Aug 2019 04:07:24 -0400
+Received: by mail-oi1-f195.google.com with SMTP id a127so961028oii.2;
+        Wed, 21 Aug 2019 01:07:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XXpq27Y/6uOHBaJM2/YHsAGx1VCUbYjrhwaxusYnlJw=;
+        b=o1jqSF7AyFceYpB84QwGG/MUennbaN1YRWGjFn4cezDYeizsA/jyzALxvZVmMt+4N1
+         IguBw4hqR6Rla3M2m9LlTO/qT9xHs6sxka2RB+xPywEkPk18bTLNGJPqBJUX4QP6fK59
+         BJ7FWOeHTFGx3KJfwfYtL8xL2TTUN780w/YPaYOUKpd2R0yLvZ/KiXx+Q5SgTYO+eu4J
+         Ga0Gp4x/vRj3ifZI8jtc42hpez3kPe0jBoBJmuWD5SRJ5OjcEqPz81M6cuLlUDNGDa2a
+         lG7I7GDSrp3worYTyrbVByTo+bipNIuNFz1K7isFc72OCDRwJyXJrGwnZTWAh4eYn7Cc
+         Z2kw==
+X-Gm-Message-State: APjAAAWbJefHCCf7f4+LKnjeF7uFmRzLN6O1VSpGzNek1t54asUvk/63
+        gJjbPXENpjGoNErse9k7U5Krj6MHxe+jbnMuDQU=
+X-Google-Smtp-Source: APXvYqxwIS20ToA4PgbklgxDV0PjtaLxrQfkDOR9OgXyglBsXvEJDLz04KeHFTI7ZAKylzV1yWJ7pMMog5tBfstVXII=
+X-Received: by 2002:aca:3382:: with SMTP id z124mr3021580oiz.102.1566374843108;
+ Wed, 21 Aug 2019 01:07:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <b15604e3-49a4-a986-b8c9-1ccc3ff8e2c3@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
+References: <1543972625-11267-1-git-send-email-uli+renesas@fpond.eu>
+ <1543972625-11267-2-git-send-email-uli+renesas@fpond.eu> <20190316222547.GB1111@kunai>
+In-Reply-To: <20190316222547.GB1111@kunai>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 21 Aug 2019 10:07:12 +0200
+Message-ID: <CAMuHMdWzBzk_No3DnP2heb4HeS8xPwxYTA0LLid=07YiYxGY2w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: can: rcar_can: add r8a77995 (R-Car
+ D3) compatibility strings
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms+renesas@verge.net.au>,
+        Ulrich Hecht <ulrich.hecht+renesas@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Sat, Mar 16, 2019 at 11:25 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> On Wed, Dec 05, 2018 at 09:17:04AM +0800, Ulrich Hecht wrote:
+> > From: Ulrich Hecht <ulrich.hecht+renesas@gmail.com>
+> >
+> > Adds compatible strings for the R-Car CAN controller in the D3 SoC.
+> >
+> > Signed-off-by: Ulrich Hecht <ulrich.hecht+renesas@gmail.com>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>
+> Adding Marc to CC.
 
+Thanks, queuing in renesas-devel for v5.4.
 
-On 20/08/2019 13.47, Marc Kleine-Budde wrote:
-> On 8/20/19 1:40 PM, Sean Nyekjaer wrote:
->>
->>
->> On 20/08/2019 13.37, Marc Kleine-Budde wrote:
->>> On 8/20/19 9:10 AM, Sean Nyekjaer wrote:
->>> [...]
->>>>> Feel free to test the patches.
->>>
->>> Thanks for testing!
->>>
->>>> While we are at it, could we remove the platform definition section in
->>>> the header?
->>>
->>> Do you mean "struct mcp251x_platform_data"?
->>>
->>> No, that's not possible, as it's still used in the kernel:
->>>
->>>> arch/arm/mach-pxa/icontrol.c:72:static struct mcp251x_platform_data mcp251x_info = {
->>>> arch/arm/mach-pxa/zeus.c:431:static struct mcp251x_platform_data zeus_mcp2515_pdata = {
->>>
->>
->> What I meant was the comment section in the mcp251x.c file, from line 32
->> to 53. :-)
->>
->> Doesn't that belong in the Documentation section?
-> 
-> Hmm yes, but not
-> "Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt" as
-> it's devicetree bindings. So we need another document. What about
-> removing this section, as no one should create new non-DT boards.
-> 
-> Marc
-> 
+Gr{oetje,eeting}s,
 
-Agree :-)
+                        Geert
 
-/Sean
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
