@@ -2,41 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B87819746B
-	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2019 10:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7149746E
+	for <lists+linux-can@lfdr.de>; Wed, 21 Aug 2019 10:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727018AbfHUIHY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Aug 2019 04:07:24 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35675 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbfHUIHY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Aug 2019 04:07:24 -0400
-Received: by mail-oi1-f195.google.com with SMTP id a127so961028oii.2;
-        Wed, 21 Aug 2019 01:07:23 -0700 (PDT)
+        id S1726397AbfHUIHw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Aug 2019 04:07:52 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:42551 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbfHUIHw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Aug 2019 04:07:52 -0400
+Received: by mail-oi1-f194.google.com with SMTP id o6so932041oic.9;
+        Wed, 21 Aug 2019 01:07:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XXpq27Y/6uOHBaJM2/YHsAGx1VCUbYjrhwaxusYnlJw=;
-        b=o1jqSF7AyFceYpB84QwGG/MUennbaN1YRWGjFn4cezDYeizsA/jyzALxvZVmMt+4N1
-         IguBw4hqR6Rla3M2m9LlTO/qT9xHs6sxka2RB+xPywEkPk18bTLNGJPqBJUX4QP6fK59
-         BJ7FWOeHTFGx3KJfwfYtL8xL2TTUN780w/YPaYOUKpd2R0yLvZ/KiXx+Q5SgTYO+eu4J
-         Ga0Gp4x/vRj3ifZI8jtc42hpez3kPe0jBoBJmuWD5SRJ5OjcEqPz81M6cuLlUDNGDa2a
-         lG7I7GDSrp3worYTyrbVByTo+bipNIuNFz1K7isFc72OCDRwJyXJrGwnZTWAh4eYn7Cc
-         Z2kw==
-X-Gm-Message-State: APjAAAWbJefHCCf7f4+LKnjeF7uFmRzLN6O1VSpGzNek1t54asUvk/63
-        gJjbPXENpjGoNErse9k7U5Krj6MHxe+jbnMuDQU=
-X-Google-Smtp-Source: APXvYqxwIS20ToA4PgbklgxDV0PjtaLxrQfkDOR9OgXyglBsXvEJDLz04KeHFTI7ZAKylzV1yWJ7pMMog5tBfstVXII=
-X-Received: by 2002:aca:3382:: with SMTP id z124mr3021580oiz.102.1566374843108;
- Wed, 21 Aug 2019 01:07:23 -0700 (PDT)
+        bh=WZqnIYe/2c/ajXTD8EiT5JI5nkjLXp5DlHfyK3zU2oQ=;
+        b=q0XsOwKEl0CYQQkEvIlbcDh//d6BimANpcj2HcV8y0BNeEfdsxP7tg4O8qza0yTFnk
+         XFgYN++kpg6ge3YtMdSKYoSW0oT2yx8fZfFFlKwfTeZEn/ee9QBWBu6KL3VXnFeTfihx
+         g9V5le8OXuPWRTlxVJYmbjcd3iNl9T92H+iW4rgKjLzMukS440jL4MnUwwLC2zb/g0B1
+         Qan80dLktNrTJ+5VL2kNegZAZCVxT5xph2SEGU0gEDDhAD0LJkNzaDFx+lr4PnOOOMqt
+         fFgJY0rbgq+KOlslfQIDzUpc1DTK4YAyLq29VpJGG4PzPinJ+UQ5n4vwo4vB0QLIa+sB
+         z7MQ==
+X-Gm-Message-State: APjAAAVtDFjIPM24hmBClcQ8FMqPUqwMFGS3Yu+q91ZVbbiCjKMe1Leh
+        /dVOxIcKK62aywL98B1UDG1zoStg24IvEaX6AIs/8zWs
+X-Google-Smtp-Source: APXvYqxoI+hgDjdL/E+gan4wKwGP+MyOGksyEFPPGSSyP0ik9Mdkw6U/pqcEJ7/OLT7g1yMHeM7p2M/XYHD95ucb0ac=
+X-Received: by 2002:a54:478d:: with SMTP id o13mr2914919oic.54.1566374871627;
+ Wed, 21 Aug 2019 01:07:51 -0700 (PDT)
 MIME-Version: 1.0
 References: <1543972625-11267-1-git-send-email-uli+renesas@fpond.eu>
- <1543972625-11267-2-git-send-email-uli+renesas@fpond.eu> <20190316222547.GB1111@kunai>
-In-Reply-To: <20190316222547.GB1111@kunai>
+ <1543972625-11267-3-git-send-email-uli+renesas@fpond.eu> <20190316222637.GC1111@kunai>
+In-Reply-To: <20190316222637.GC1111@kunai>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 21 Aug 2019 10:07:12 +0200
-Message-ID: <CAMuHMdWzBzk_No3DnP2heb4HeS8xPwxYTA0LLid=07YiYxGY2w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: can: rcar_can: add r8a77995 (R-Car
+Date:   Wed, 21 Aug 2019 10:07:40 +0200
+Message-ID: <CAMuHMdX6hyVbT5yCUz0d9-OpL9cFJwVCnpuS+HAoneEAHO57gA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: can: rcar_canfd: add r8a77995 (R-Car
  D3) compatibility strings
 To:     Wolfram Sang <wsa@the-dreams.de>
 Cc:     Ulrich Hecht <uli+renesas@fpond.eu>,
@@ -54,11 +54,11 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Mar 16, 2019 at 11:25 PM Wolfram Sang <wsa@the-dreams.de> wrote:
-> On Wed, Dec 05, 2018 at 09:17:04AM +0800, Ulrich Hecht wrote:
+On Sat, Mar 16, 2019 at 11:26 PM Wolfram Sang <wsa@the-dreams.de> wrote:
+> On Wed, Dec 05, 2018 at 09:17:05AM +0800, Ulrich Hecht wrote:
 > > From: Ulrich Hecht <ulrich.hecht+renesas@gmail.com>
 > >
-> > Adds compatible strings for the R-Car CAN controller in the D3 SoC.
+> > Adds compatible strings for the R-Car CAN FD controller in the D3 SoC.
 > >
 > > Signed-off-by: Ulrich Hecht <ulrich.hecht+renesas@gmail.com>
 > > Acked-by: Rob Herring <robh@kernel.org>
