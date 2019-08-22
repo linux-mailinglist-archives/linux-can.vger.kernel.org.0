@@ -2,91 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE80B99374
-	for <lists+linux-can@lfdr.de>; Thu, 22 Aug 2019 14:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC6699645
+	for <lists+linux-can@lfdr.de>; Thu, 22 Aug 2019 16:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbfHVM3Y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Aug 2019 08:29:24 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42593 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732030AbfHVM3X (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Aug 2019 08:29:23 -0400
-Received: by mail-lf1-f68.google.com with SMTP id s19so4388805lfb.9
-        for <linux-can@vger.kernel.org>; Thu, 22 Aug 2019 05:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=Uh83TYpKL0GQ/nM6wFMlLCF+K/QQ+NWaS4ZIx2sQQvI0KNNqN/E6zTArGpXOLOBt/f
-         N6QFHzklBH631+fvsO6vTelavHgyHvvHVBwI+y20TBUOZtQ5/sT4JlP23bjtE/oA0X0A
-         xvXAKbCZ0pU5aA60LB4dH6xcUJXMTHD8lsxQmkm/vQ11xahFHBmNMIdacasF15YPXded
-         CUm/z2mtG67xtMwBBKPI8MsyFlOGkBdqomx6M8r6sJ/85QLiNUCv9kdIKNh8VC0ZCY5l
-         yK5dXChs/m/0WrIay4/uBCczsKiY1ayIx+UdL3eXQ5RZfdSnei35OgrfUOHzvU7muA6w
-         OR9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=VA2wP50/QDmeheVuR5vBZUMKOgiW10WY8PwSapjpUZwRTOZLfZ2pONb22T72jaSBMZ
-         VL9QvDHllgi/vRbaIgAoq5toc9qqsMS3D03a0B/OkobCtkY7zgajzQvamK1FagdWHP6X
-         muXvEtTrtN/Kkwzf1ICdz4Zd/kiEGaad37Md9mjAAlr82H0grlTh/oj6VX8jhYVuzsYp
-         lBzyp9rJGcmL8bLR768nkwV1i/Km3o8PyCj5qKFhuzTQSx7c40rrTYsX1UdMl8KerxUh
-         nvAgeJbLZ6DVdmZTh5hrKCIRQDJzJSu9ivwPgphrqJ0iVriEAsHIQIDdur9K3nhPhr+O
-         1XkA==
-X-Gm-Message-State: APjAAAWpMjGogatyJMs/rjUcOFUf2bndS1B1uDVHd06+MNCTZnZfTvoY
-        6ktkVNs4tegDClb2sbKbhiblV4f2vkipsD71Xv8=
-X-Google-Smtp-Source: APXvYqw9sQwSpmxjAXS7bfZJ09F9JlAGXMwoQhntJWPTMt4Hq9l+6KygepnFg49Lj9VXPBN7VHtr8pRnDUQyUgeXodI=
-X-Received: by 2002:a19:ed11:: with SMTP id y17mr21470359lfy.141.1566476961148;
- Thu, 22 Aug 2019 05:29:21 -0700 (PDT)
+        id S2387844AbfHVOUg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Aug 2019 10:20:36 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:37622 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732693AbfHVOUg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Aug 2019 10:20:36 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7MEKOU4130908;
+        Thu, 22 Aug 2019 09:20:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1566483624;
+        bh=amKlG2IVK/AlYef9CbdzVUck10xnAYyxWrzHwzN9Okc=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=TxGYKEJZHIJ5HyjcrPhdNq7xJLFAtzavONZP8av4iQ29PWP7OV8PlElv3T9vsRGo1
+         dqzVjpiSEat7GFuwJ7BZsM3ICYJeT/UCHXc4fJbMQYoMK505lS/rZeYPVRbeAdxTLj
+         yYGpyWIpMXBS+HRrtxMg3ksTsBbY8i6bAeN6kmQ0=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7MEKOUY063221
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Aug 2019 09:20:24 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 22
+ Aug 2019 09:20:24 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 22 Aug 2019 09:20:23 -0500
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7MEKNnV076638;
+        Thu, 22 Aug 2019 09:20:23 -0500
+Subject: Re: [PATCH v12 3/5] dt-bindings: can: tcan4x5x: Add DT bindings for
+ TCAN4x5X driver
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, <wg@grandegger.com>,
+        <davem@davemloft.net>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190509161109.10499-1-dmurphy@ti.com>
+ <20190509161109.10499-3-dmurphy@ti.com>
+ <bdf06ead-a2e8-09a9-8cdd-49b54ec9da72@pengutronix.de>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <ff9e007b-6e39-3d64-b62b-93c281d69113@ti.com>
+Date:   Thu, 22 Aug 2019 09:20:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Received: by 2002:a19:dc4f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:29:20
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <elenabaltach66@gmail.com>
-Date:   Thu, 22 Aug 2019 12:29:20 +0000
-Message-ID: <CAOGpsp6x-FLHmOKGyjMV8QnAdMQ5tZOzyu8q0D-N36-PB1LdEA@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <bdf06ead-a2e8-09a9-8cdd-49b54ec9da72@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+Marc
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+On 8/16/19 4:38 AM, Marc Kleine-Budde wrote:
+> On 5/9/19 6:11 PM, Dan Murphy wrote:
+>> DT binding documentation for TI TCAN4x5x driver.
+>>
+>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>> ---
+>>
+>> v12 - No changes - https://lore.kernel.org/patchwork/patch/1052300/
+>>
+>> v11 - No changes - https://lore.kernel.org/patchwork/patch/1051178/
+>> v10 - No changes - https://lore.kernel.org/patchwork/patch/1050488/
+>> v9 - No Changes - https://lore.kernel.org/patchwork/patch/1050118/
+>> v8 - No Changes - https://lore.kernel.org/patchwork/patch/1047981/
+>> v7 - Made device state optional - https://lore.kernel.org/patchwork/patch/1047218/
+>> v6 - No changes - https://lore.kernel.org/patchwork/patch/1042445/
+>>
+>>   .../devicetree/bindings/net/can/tcan4x5x.txt  | 37 +++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+>> new file mode 100644
+>> index 000000000000..c388f7d9feb1
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+>> @@ -0,0 +1,37 @@
+>> +Texas Instruments TCAN4x5x CAN Controller
+>> +================================================
+>> +
+>> +This file provides device node information for the TCAN4x5x interface contains.
+>> +
+>> +Required properties:
+>> +	- compatible: "ti,tcan4x5x"
+>> +	- reg: 0
+>> +	- #address-cells: 1
+>> +	- #size-cells: 0
+>> +	- spi-max-frequency: Maximum frequency of the SPI bus the chip can
+>> +			     operate at should be less than or equal to 18 MHz.
+>> +	- data-ready-gpios: Interrupt GPIO for data and error reporting.
+>> +	- device-wake-gpios: Wake up GPIO to wake up the TCAN device.
+>> +
+>> +See Documentation/devicetree/bindings/net/can/m_can.txt for additional
+>> +required property details.
+>> +
+>> +Optional properties:
+>> +	- reset-gpios: Hardwired output GPIO. If not defined then software
+>> +		       reset.
+>> +	- device-state-gpios: Input GPIO that indicates if the device is in
+>> +			      a sleep state or if the device is active.
+>> +
+>> +Example:
+>> +tcan4x5x: tcan4x5x@0 {
+>> +		compatible = "ti,tcan4x5x";
+>> +		reg = <0>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		spi-max-frequency = <10000000>;
+>> +		bosch,mram-cfg = <0x0 0 0 32 0 0 1 1>;
+>> +		data-ready-gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
+> Can you convert this into a proper interrupt property? E.g.:
+
+OK.  Do you want v13 or do you want patches on top for net-next?
+
+Dan
+
+
+>
+>>                  interrupt-parent = <&gpio4>;
+>>                  interrupts = <13 0x2>;
+> See:
+> https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt#L21
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tree/drivers/net/can/spi/mcp251x.c?h=mcp251x#n945
+
+This second link says it invalid
+
+Dan
+
+>
+>> +		device-state-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+>> +		device-wake-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+>> +		reset-gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
+>> +};
+> Marc
+>
