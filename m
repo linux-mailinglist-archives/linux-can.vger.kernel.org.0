@@ -2,127 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E49969B5DB
-	for <lists+linux-can@lfdr.de>; Fri, 23 Aug 2019 19:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5789D4E4
+	for <lists+linux-can@lfdr.de>; Mon, 26 Aug 2019 19:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404589AbfHWRvW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 23 Aug 2019 13:51:22 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:43432 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbfHWRvW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Aug 2019 13:51:22 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7NHpIdH026421;
-        Fri, 23 Aug 2019 12:51:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1566582678;
-        bh=kepUJMrNB0iOs6INlBu68+nYDwfVMm9VTcTnT8KbHlY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=XNb/2afuSvjMuE+D36OOrzQviu3Jff+z6ZUbBs5MySZxSPb85YhEnADfOEroWaru+
-         qr9AkXcUZ70PohsTV8FCf0n1q7e3buFjx0sHBLUOzE/y8K62zoPYYnt67JG+OJ9hHP
-         rEEVdkE96d5UPN6XexE6kLQuNz5UWR3nQ4ZBASi8=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7NHpIhr045591
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 23 Aug 2019 12:51:18 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 23
- Aug 2019 12:51:18 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 23 Aug 2019 12:51:17 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7NHpHYD051341;
-        Fri, 23 Aug 2019 12:51:17 -0500
-From:   Dan Murphy <dmurphy@ti.com>
-To:     <linux-can@vger.kernel.org>, <mkl@pengutronix.de>
-CC:     Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH 3/3] net: can: tcan4x5x: Remove checking the wake pin
-Date:   Fri, 23 Aug 2019 12:50:58 -0500
-Message-ID: <20190823175058.7442-3-dmurphy@ti.com>
-X-Mailer: git-send-email 2.22.0.214.g8dca754b1e
-In-Reply-To: <20190823175058.7442-1-dmurphy@ti.com>
-References: <20190823175058.7442-1-dmurphy@ti.com>
+        id S1732415AbfHZR02 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Aug 2019 13:26:28 -0400
+Received: from mga02.intel.com ([134.134.136.20]:53660 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729245AbfHZR02 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 26 Aug 2019 13:26:28 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Aug 2019 10:26:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,433,1559545200"; 
+   d="scan'208";a="182509729"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 26 Aug 2019 10:26:25 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 7385FBD; Mon, 26 Aug 2019 20:26:24 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        netdev@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/3] can: mcp251x: Use devm_clk_get_optional() to get the input clock
+Date:   Mon, 26 Aug 2019 20:26:21 +0300
+Message-Id: <20190826172623.79378-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.23.0.rc1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Remove checking the wake pin for every read/write call.
-The device is not explicitly put to sleep in the code
-and the POR interrupt is cleared during the init of
-the device.
+Simplify the code which fetches the input clock by using
+devm_clk_get_optional(). This comes with a small functional change: previously
+all errors were ignored when platform data is present. Now all errors are
+treated as errors. If no input clock is present devm_clk_get_optional() will
+return NULL instead of an error which matches the behavior of the old code.
 
-Signed-off-by: Dan Murphy <dmurphy@ti.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/net/can/m_can/tcan4x5x.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/net/can/spi/mcp251x.c | 30 ++++++++++++------------------
+ 1 file changed, 12 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index bb41e8d5f3a2..3db619209fe1 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -235,8 +235,6 @@ static u32 tcan4x5x_read_reg(struct m_can_classdev *cdev, int reg)
- 	struct tcan4x5x_priv *priv = cdev->device_data;
- 	u32 val;
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index 58992fd61cb9..e04b578f2b1f 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -1014,15 +1014,13 @@ static int mcp251x_can_probe(struct spi_device *spi)
+ 	struct clk *clk;
+ 	int freq, ret;
  
--	tcan4x5x_check_wake(priv);
--
- 	regmap_read(priv->regmap, priv->reg_offset + reg, &val);
+-	clk = devm_clk_get(&spi->dev, NULL);
+-	if (IS_ERR(clk)) {
+-		if (pdata)
+-			freq = pdata->oscillator_frequency;
+-		else
+-			return PTR_ERR(clk);
+-	} else {
+-		freq = clk_get_rate(clk);
+-	}
++	clk = devm_clk_get_optional(&spi->dev, NULL);
++	if (IS_ERR(clk))
++		return PTR_ERR(clk);
++
++	freq = clk_get_rate(clk);
++	if (freq == 0 && pdata)
++		freq = pdata->oscillator_frequency;
  
- 	return val;
-@@ -247,8 +245,6 @@ static u32 tcan4x5x_read_fifo(struct m_can_classdev *cdev, int addr_offset)
- 	struct tcan4x5x_priv *priv = cdev->device_data;
- 	u32 val;
+ 	/* Sanity check */
+ 	if (freq < 1000000 || freq > 25000000)
+@@ -1033,11 +1031,9 @@ static int mcp251x_can_probe(struct spi_device *spi)
+ 	if (!net)
+ 		return -ENOMEM;
  
--	tcan4x5x_check_wake(priv);
--
- 	regmap_read(priv->regmap, priv->mram_start + addr_offset, &val);
+-	if (!IS_ERR(clk)) {
+-		ret = clk_prepare_enable(clk);
+-		if (ret)
+-			goto out_free;
+-	}
++	ret = clk_prepare_enable(clk);
++	if (ret)
++		goto out_free;
  
- 	return val;
-@@ -258,8 +254,6 @@ static int tcan4x5x_write_reg(struct m_can_classdev *cdev, int reg, int val)
- {
- 	struct tcan4x5x_priv *priv = cdev->device_data;
+ 	net->netdev_ops = &mcp251x_netdev_ops;
+ 	net->flags |= IFF_ECHO;
+@@ -1122,8 +1118,7 @@ static int mcp251x_can_probe(struct spi_device *spi)
+ 	mcp251x_power_enable(priv->power, 0);
  
--	tcan4x5x_check_wake(priv);
--
- 	return regmap_write(priv->regmap, priv->reg_offset + reg, val);
- }
+ out_clk:
+-	if (!IS_ERR(clk))
+-		clk_disable_unprepare(clk);
++	clk_disable_unprepare(clk);
  
-@@ -268,8 +262,6 @@ static int tcan4x5x_write_fifo(struct m_can_classdev *cdev,
- {
- 	struct tcan4x5x_priv *priv = cdev->device_data;
+ out_free:
+ 	free_candev(net);
+@@ -1141,8 +1136,7 @@ static int mcp251x_can_remove(struct spi_device *spi)
  
--	tcan4x5x_check_wake(priv);
--
- 	return regmap_write(priv->regmap, priv->mram_start + addr_offset, val);
- }
+ 	mcp251x_power_enable(priv->power, 0);
  
-@@ -289,18 +281,13 @@ static int tcan4x5x_write_tcan_reg(struct m_can_classdev *cdev,
- {
- 	struct tcan4x5x_priv *priv = cdev->device_data;
+-	if (!IS_ERR(priv->clk))
+-		clk_disable_unprepare(priv->clk);
++	clk_disable_unprepare(priv->clk);
  
--	tcan4x5x_check_wake(priv);
--
- 	return regmap_write(priv->regmap, reg, val);
- }
+ 	free_candev(net);
  
- static int tcan4x5x_clear_interrupts(struct m_can_classdev *cdev)
- {
--	struct tcan4x5x_priv *tcan4x5x = cdev->device_data;
- 	int ret;
- 
--	tcan4x5x_check_wake(tcan4x5x);
--
- 	ret = tcan4x5x_write_tcan_reg(cdev, TCAN4X5X_STATUS,
- 				      TCAN4X5X_CLEAR_ALL_INT);
- 	if (ret)
 -- 
-2.22.0.214.g8dca754b1e
+2.23.0.rc1
 
