@@ -2,71 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B75E09D4E6
-	for <lists+linux-can@lfdr.de>; Mon, 26 Aug 2019 19:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09D99E6EE
+	for <lists+linux-can@lfdr.de>; Tue, 27 Aug 2019 13:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729138AbfHZR02 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Aug 2019 13:26:28 -0400
-Received: from mga07.intel.com ([134.134.136.100]:28145 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729131AbfHZR02 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 26 Aug 2019 13:26:28 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Aug 2019 10:26:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,433,1559545200"; 
-   d="scan'208";a="185020492"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 26 Aug 2019 10:26:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 8707A10B; Mon, 26 Aug 2019 20:26:24 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        netdev@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 3/3] can: mcp251x: Call wrapper instead of regulator_disable()
-Date:   Mon, 26 Aug 2019 20:26:23 +0300
-Message-Id: <20190826172623.79378-3-andriy.shevchenko@linux.intel.com>
+        id S1728312AbfH0Llp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 27 Aug 2019 07:41:45 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42827 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbfH0Llp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Aug 2019 07:41:45 -0400
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1i2Zr4-0000Z4-7V; Tue, 27 Aug 2019 13:41:42 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Alexander Shiyan <shc_work@mail.ru>, linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH] can: mcp251x: remove deprecated board file setup example
+Date:   Tue, 27 Aug 2019 13:41:36 +0200
+Message-Id: <20190827114136.15438-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.23.0.rc1
-In-Reply-To: <20190826172623.79378-1-andriy.shevchenko@linux.intel.com>
-References: <20190826172623.79378-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-There is no need to check for regulator presence in the ->suspend()
-since a wrapper does it for us. Due to this we may unconditionally set
-AFTER_SUSPEND_POWER flag.
+In the pre device-tree ARM aera there were board files that configured
+the system (instead of a device tree). A "struct spi_board_info" was
+used to describe the SPI bus.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+As new systems should be described via device trees, this patch removes
+the board setup example from the driver. The "struct
+mcp251x_platform_data" cannot be removed completely, as there are still
+some in-tree users of this file.
+
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251x.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/can/spi/mcp251x.c | 20 --------------------
+ 1 file changed, 20 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index 0b7e743ca0a0..6ee0ea51399a 100644
+index 58992fd61cb9..6e5831308c70 100644
 --- a/drivers/net/can/spi/mcp251x.c
 +++ b/drivers/net/can/spi/mcp251x.c
-@@ -1162,10 +1162,8 @@ static int __maybe_unused mcp251x_can_suspend(struct device *dev)
- 		priv->after_suspend = AFTER_SUSPEND_DOWN;
- 	}
+@@ -17,26 +17,6 @@
+  * - Sascha Hauer, Marc Kleine-Budde, Pengutronix
+  * - Simon Kallweit, intefo AG
+  * Copyright 2007
+- *
+- * Your platform definition file should specify something like:
+- *
+- * static struct mcp251x_platform_data mcp251x_info = {
+- *         .oscillator_frequency = 8000000,
+- * };
+- *
+- * static struct spi_board_info spi_board_info[] = {
+- *         {
+- *                 .modalias = "mcp2510",
+- *			// "mcp2515" or "mcp25625" depending on your controller
+- *                 .platform_data = &mcp251x_info,
+- *                 .irq = IRQ_EINT13,
+- *                 .max_speed_hz = 2*1000*1000,
+- *                 .chip_select = 2,
+- *         },
+- * };
+- *
+- * Please see mcp251x.h for a description of the fields in
+- * struct mcp251x_platform_data.
+  */
  
--	if (!IS_ERR_OR_NULL(priv->power)) {
--		regulator_disable(priv->power);
--		priv->after_suspend |= AFTER_SUSPEND_POWER;
--	}
-+	mcp251x_power_enable(priv->power, 0);
-+	priv->after_suspend |= AFTER_SUSPEND_POWER;
- 
- 	return 0;
- }
+ #include <linux/can/core.h>
 -- 
 2.23.0.rc1
 
