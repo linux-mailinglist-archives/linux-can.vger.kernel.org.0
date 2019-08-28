@@ -2,27 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED44E9FAE4
+	by mail.lfdr.de (Postfix) with ESMTP id 7937B9FAE2
 	for <lists+linux-can@lfdr.de>; Wed, 28 Aug 2019 08:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbfH1Gwi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1726475AbfH1Gwi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Wed, 28 Aug 2019 02:52:38 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36191 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51543 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726290AbfH1Gwi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Aug 2019 02:52:38 -0400
+        with ESMTP id S1726466AbfH1Gwh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Aug 2019 02:52:37 -0400
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i2rop-0002oO-Tw; Wed, 28 Aug 2019 08:52:35 +0200
+        id 1i2roq-0002oO-8L; Wed, 28 Aug 2019 08:52:36 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc:     kernel@pengutronix.de, Kurt Van Dijck <kurt.van.dijck@eia.be>,
+Cc:     kernel@pengutronix.de,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
         Oleksij Rempel <o.rempel@pengutronix.de>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 18/21] can: introduce REQUIRED_SIZE macro
-Date:   Wed, 28 Aug 2019 08:52:23 +0200
-Message-Id: <20190828065226.23604-19-mkl@pengutronix.de>
+Subject: [PATCH 19/21] can: add socket type for CAN_J1939
+Date:   Wed, 28 Aug 2019 08:52:24 +0200
+Message-Id: <20190828065226.23604-20-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.23.0.rc1
 In-Reply-To: <20190828065226.23604-1-mkl@pengutronix.de>
 References: <20190828065226.23604-1-mkl@pengutronix.de>
@@ -37,84 +38,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Kurt Van Dijck <kurt.van.dijck@eia.be>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-The size of this structure will be increased with J1939 support.
-To stay binary compatible, the REQUIRED_SIZE macro is introduced
-for existing CAN protocols.
+This patch is a preparation for SAE J1939 and adds CAN_J1939
+socket type.
 
-Signed-off-by: Kurt Van Dijck <kurt.van.dijck@eia.be>
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- include/linux/can/core.h | 8 ++++++++
- net/can/bcm.c            | 4 ++--
- net/can/raw.c            | 4 ++--
- 3 files changed, 12 insertions(+), 4 deletions(-)
+ include/uapi/linux/can.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/can/core.h b/include/linux/can/core.h
-index 708c10d3417a..e62381118c52 100644
---- a/include/linux/can/core.h
-+++ b/include/linux/can/core.h
-@@ -41,6 +41,14 @@ struct can_proto {
- 	struct proto *prot;
- };
+diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
+index 0afb7d8e867f..06d92d6be6e6 100644
+--- a/include/uapi/linux/can.h
++++ b/include/uapi/linux/can.h
+@@ -157,7 +157,8 @@ struct canfd_frame {
+ #define CAN_TP20	4 /* VAG Transport Protocol v2.0 */
+ #define CAN_MCNET	5 /* Bosch MCNet */
+ #define CAN_ISOTP	6 /* ISO 15765-2 Transport Protocol */
+-#define CAN_NPROTO	7
++#define CAN_J1939	7 /* SAE J1939 */
++#define CAN_NPROTO	8
  
-+/* required_size
-+ * macro to find the minimum size of a struct
-+ * that includes a requested member
-+ */
-+#define REQUIRED_SIZE(struct_type, member) \
-+	(offsetof(typeof(struct_type), member) + \
-+	 sizeof(((typeof(struct_type) *)(NULL))->member))
-+
- /* function prototypes for the CAN networklayer core (af_can.c) */
+ #define SOL_CAN_BASE 100
  
- extern int  can_proto_register(const struct can_proto *cp);
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 28fd1a1c8487..0ecd9942190d 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -1294,7 +1294,7 @@ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 		/* no bound device as default => check msg_name */
- 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
- 
--		if (msg->msg_namelen < sizeof(*addr))
-+		if (msg->msg_namelen < REQUIRED_SIZE(*addr, can_ifindex))
- 			return -EINVAL;
- 
- 		if (addr->can_family != AF_CAN)
-@@ -1536,7 +1536,7 @@ static int bcm_connect(struct socket *sock, struct sockaddr *uaddr, int len,
- 	struct net *net = sock_net(sk);
- 	int ret = 0;
- 
--	if (len < sizeof(*addr))
-+	if (len < REQUIRED_SIZE(*addr, can_ifindex))
- 		return -EINVAL;
- 
- 	lock_sock(sk);
-diff --git a/net/can/raw.c b/net/can/raw.c
-index fdbc36140e9b..dca73b0757a2 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -396,7 +396,7 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	int err = 0;
- 	int notify_enetdown = 0;
- 
--	if (len < sizeof(*addr))
-+	if (len < REQUIRED_SIZE(*addr, can_ifindex))
- 		return -EINVAL;
- 	if (addr->can_family != AF_CAN)
- 		return -EINVAL;
-@@ -733,7 +733,7 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	if (msg->msg_name) {
- 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
- 
--		if (msg->msg_namelen < sizeof(*addr))
-+		if (msg->msg_namelen < REQUIRED_SIZE(*addr, can_ifindex))
- 			return -EINVAL;
- 
- 		if (addr->can_family != AF_CAN)
 -- 
 2.23.0.rc1
 
