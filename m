@@ -2,33 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EB49FB39
-	for <lists+linux-can@lfdr.de>; Wed, 28 Aug 2019 09:11:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D879FC41
+	for <lists+linux-can@lfdr.de>; Wed, 28 Aug 2019 09:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbfH1HLh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Aug 2019 03:11:37 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:40815 "EHLO
+        id S1726297AbfH1Hxw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Aug 2019 03:53:52 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44151 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbfH1HLh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Aug 2019 03:11:37 -0400
+        with ESMTP id S1726290AbfH1Hxv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Aug 2019 03:53:51 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i2s7D-0005X5-Ta; Wed, 28 Aug 2019 09:11:36 +0200
+        id 1i2sm5-0002K6-GM; Wed, 28 Aug 2019 09:53:49 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:3131:bde3:f63d:f00c] (unknown [IPv6:2a03:f580:87bc:d400:3131:bde3:f63d:f00c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E839B44E5A7;
-        Wed, 28 Aug 2019 07:11:34 +0000 (UTC)
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc:     kernel@pengutronix.de
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 37AE344E634;
+        Wed, 28 Aug 2019 07:53:48 +0000 (UTC)
+Subject: Re: [PATCH 18/21] can: introduce REQUIRED_SIZE macro
+To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de
 References: <20190828065226.23604-1-mkl@pengutronix.de>
+ <20190828065226.23604-19-mkl@pengutronix.de>
+ <0c9554e4-55cc-3c51-68f6-3575e4d857b1@pengutronix.de>
+ <BC2B9C1E-FC4B-4B3F-B70A-6A57E0817C79@vandijck-laurijssen.be>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -90,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <769747b0-e0a1-ce5a-2944-eb6284b86b1b@pengutronix.de>
-Date:   Wed, 28 Aug 2019 09:11:29 +0200
+Message-ID: <f4f8ddb6-a4b1-f3ed-42e6-8f2d4b907b78@pengutronix.de>
+Date:   Wed, 28 Aug 2019 09:53:41 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190828065226.23604-1-mkl@pengutronix.de>
+In-Reply-To: <BC2B9C1E-FC4B-4B3F-B70A-6A57E0817C79@vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="6P25dtL5M4QKDLDDqHjJC2zef7nUax34U"
+ boundary="IpyYFSeoHm2akCiwexS0nAOM0linCQc61"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,52 +113,51 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---6P25dtL5M4QKDLDDqHjJC2zef7nUax34U
-Content-Type: multipart/mixed; boundary="BF8FpRbPHRtjfsfsk5ZJHy8CpNs6l9fU5";
+--IpyYFSeoHm2akCiwexS0nAOM0linCQc61
+Content-Type: multipart/mixed; boundary="NPUKpDA7GtCf6gcZHHLit2Ttvmuh1jTzo";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc: kernel@pengutronix.de
-Message-ID: <769747b0-e0a1-ce5a-2944-eb6284b86b1b@pengutronix.de>
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
+To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de
+Message-ID: <f4f8ddb6-a4b1-f3ed-42e6-8f2d4b907b78@pengutronix.de>
+Subject: Re: [PATCH 18/21] can: introduce REQUIRED_SIZE macro
 References: <20190828065226.23604-1-mkl@pengutronix.de>
-In-Reply-To: <20190828065226.23604-1-mkl@pengutronix.de>
+ <20190828065226.23604-19-mkl@pengutronix.de>
+ <0c9554e4-55cc-3c51-68f6-3575e4d857b1@pengutronix.de>
+ <BC2B9C1E-FC4B-4B3F-B70A-6A57E0817C79@vandijck-laurijssen.be>
+In-Reply-To: <BC2B9C1E-FC4B-4B3F-B70A-6A57E0817C79@vandijck-laurijssen.be>
 
---BF8FpRbPHRtjfsfsk5ZJHy8CpNs6l9fU5
+--NPUKpDA7GtCf6gcZHHLit2Ttvmuh1jTzo
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 8/28/19 8:52 AM, Marc Kleine-Budde wrote:
-> Hello,
->=20
-> this series add support for the J1939 protocol to the kernel.
->=20
-> SAE J1939 defines a higher layer protocol on CAN. It implements a more
-> sophisticated addressing scheme and extends the maximum packet size abo=
-ve 8
-> bytes. Several derived specifications exist, which differ from the orig=
-inal
-> J1939 on the application level, like MilCAN A, NMEA2000 and especially
-> ISO-11783 (ISOBUS). This last one specifies the so-called ETP (Extended=
+On 8/28/19 9:42 AM, Kurt Van Dijck wrote:
+> On 28 August 2019 08:56:48 GMT+02:00, Marc Kleine-Budde <mkl@pengutroni=
+x.de> wrote:
+>> On 8/28/19 8:52 AM, Marc Kleine-Budde wrote:
+>>> From: Kurt Van Dijck <kurt.van.dijck@eia.be>
+>>>
+>>> The size of this structure will be increased with J1939 support.
+>>> To stay binary compatible, the REQUIRED_SIZE macro is introduced
+>>> for existing CAN protocols.
+>>>
+>>> Signed-off-by: Kurt Van Dijck <kurt.van.dijck@eia.be>
+>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>>
+>> Kurt, can I change your S-o-b to "Kurt Van Dijck
+>> <dev.kurt@vandijck-laurijssen.be>"?
+>>
+>> For this and the following patch.
 
-> Transport Protocol) which is has been included in this implementation. =
-This
-> results in a maximum packet size of ((2 ^ 24) - 1) * 7 bytes =3D=3D 111=
- MiB.=20
->=20
-> Please test and give feedback.
+> Yes, you can.
+> It's equally mee, but the eia.be address is obsolete
 
-The complete git series is available at:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
-g/?h=3Dj1939
-
-git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git j193=
-9
+Done.
 
 Marc
-
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
 Industrial Linux Solutions        | Phone: +49-231-2826-924     |
@@ -162,23 +165,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---BF8FpRbPHRtjfsfsk5ZJHy8CpNs6l9fU5--
+--NPUKpDA7GtCf6gcZHHLit2Ttvmuh1jTzo--
 
---6P25dtL5M4QKDLDDqHjJC2zef7nUax34U
+--IpyYFSeoHm2akCiwexS0nAOM0linCQc61
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1mKSEACgkQWsYho5Hk
-nSAu5gf/Ri6hOOavci53BIYZ4zbKxmCBgtMysHkLXHHG63JQgMsT9GVDqL0bMeES
-iJTsANNaY6nN+mqpt5l1zqUXuYk7PL/anbGT6OtftjkKDSxKK7BrD+KVNw39DxMI
-6ZRoPL1LqgKwMq/1ABvhFqUXu5dP8OuqjqevOYIZjSff+kAHR0TklQZ05Op87PLg
-FJ7+ccsfxq5pr0orSB7KOj+DDVdJi9kaSCFSoBwajTSpVd1Z7eisx7Yge2PdywuT
-Dzn7mH/RM+R5yR/drNhKg2mkVUHmXKzfxrITgg+44vih9c+8lHoyqSytxo0y4GzZ
-cqcQjFvwDRJNyw81E2FA3csNnxf64Q==
-=J8/X
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1mMwUACgkQWsYho5Hk
+nSCNAAf8DK0kaAbA7pL2FsFfAnLruSbQALmPqxXfUTw6JLY0y5i2duUBiJu8Sn8r
+mX0bmRRaMx6B28yjl8jQCTxxBsplRSb+5NXnG4As5VEP0iqeasGhVU9KFP84A27S
+vN72T+1onTQdTZbSCSO83jdJDYzHFK9/EZErGur+kACqye9ZzEHcntbknZ0sAAii
++b6xdI3MPyHtCQXbBzcyuRiYudQGCg23/bLi7LydCptQnZsOiCe4eVcox0DVyUYq
+VFkCbGUKsGbbMRTBEb7nDQFyl75Fb83ikMN7Ip/Qkv8OjvmR03OCuGfAhIekgmXq
+pI08Vmb+keC64NDDPYbHj76TkomQ8A==
+=0rm6
 -----END PGP SIGNATURE-----
 
---6P25dtL5M4QKDLDDqHjJC2zef7nUax34U--
+--IpyYFSeoHm2akCiwexS0nAOM0linCQc61--
