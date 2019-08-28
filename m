@@ -2,26 +2,26 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 397F09FADD
-	for <lists+linux-can@lfdr.de>; Wed, 28 Aug 2019 08:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230BE9FAD2
+	for <lists+linux-can@lfdr.de>; Wed, 28 Aug 2019 08:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbfH1Gwa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1726233AbfH1Gwa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Wed, 28 Aug 2019 02:52:30 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48545 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43979 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726233AbfH1Gw3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Aug 2019 02:52:29 -0400
+        with ESMTP id S1726253AbfH1Gwa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Aug 2019 02:52:30 -0400
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i2roi-0002oO-9V; Wed, 28 Aug 2019 08:52:28 +0200
+        id 1i2roi-0002oO-Hv; Wed, 28 Aug 2019 08:52:28 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH 02/21] can: netns: give members of struct netns_can holding the statistics a sensible name
-Date:   Wed, 28 Aug 2019 08:52:07 +0200
-Message-Id: <20190828065226.23604-3-mkl@pengutronix.de>
+Subject: [PATCH 03/21] can: af_can: give variables holding CAN statistics a sensible name
+Date:   Wed, 28 Aug 2019 08:52:08 +0200
+Message-Id: <20190828065226.23604-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.23.0.rc1
 In-Reply-To: <20190828065226.23604-1-mkl@pengutronix.de>
 References: <20190828065226.23604-1-mkl@pengutronix.de>
@@ -36,179 +36,115 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch gives the members of the struct netns_can that are holding
-the statistics a sensible name, by renaming struct netns_can::can_stats
-into struct netns_can::pkg_stats and struct netns_can::can_pstats into
-struct netns_can::rcv_lists_stats.
+This patch rename the variables holding the CAN statistics (can_stats
+and can_pstats) to pkg_stats and rcv_lists_stats which reflect better
+their meaning.
 
 The conversion is done with:
 
 	sed -i \
-		-e "s:\(struct[^*]*\*\)can_stats;.*:\1pkg_stats;:" \
-		-e "s:\(struct[^*]*\*\)can_pstats;.*:\1rcv_lists_stats;:" \
-		-e "s/can\.can_stats/can.pkg_stats/g" \
-		-e "s/can\.can_pstats/can.rcv_lists_stats/g" \
-		net/can/*.[ch] \
-		include/net/netns/can.h
+		-e "s/can_stats\([^_]\)/pkg_stats\1/g" \
+		-e "s/can_pstats/rcv_lists_stats/g" \
+		net/can/af_can.c
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- include/net/netns/can.h |  4 ++--
- net/can/af_can.c        | 32 ++++++++++++++++----------------
- net/can/proc.c          | 14 +++++++-------
- 3 files changed, 25 insertions(+), 25 deletions(-)
+ net/can/af_can.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/include/net/netns/can.h b/include/net/netns/can.h
-index f2e5646e36f2..f684dea0a83e 100644
---- a/include/net/netns/can.h
-+++ b/include/net/netns/can.h
-@@ -31,8 +31,8 @@ struct netns_can {
- 	struct can_dev_rcv_lists *can_rx_alldev_list;
- 	spinlock_t can_rcvlists_lock;
- 	struct timer_list can_stattimer;/* timer for statistics update */
--	struct can_pkg_stats *can_stats;	/* packet statistics */
--	struct can_rcv_lists_stats *can_pstats;	/* receive list statistics */
-+	struct can_pkg_stats *pkg_stats;
-+	struct can_rcv_lists_stats *rcv_lists_stats;
- 
- 	/* CAN GW per-net gateway jobs */
- 	struct hlist_head cgw_list;
 diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 0da9e6a573c5..079b00b5e365 100644
+index 079b00b5e365..0eadded4a5aa 100644
 --- a/net/can/af_can.c
 +++ b/net/can/af_can.c
 @@ -198,7 +198,7 @@ int can_send(struct sk_buff *skb, int loop)
  {
  	struct sk_buff *newskb = NULL;
  	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
--	struct can_pkg_stats *can_stats = dev_net(skb->dev)->can.can_stats;
-+	struct can_pkg_stats *can_stats = dev_net(skb->dev)->can.pkg_stats;
+-	struct can_pkg_stats *can_stats = dev_net(skb->dev)->can.pkg_stats;
++	struct can_pkg_stats *pkg_stats = dev_net(skb->dev)->can.pkg_stats;
  	int err = -EINVAL;
  
  	if (skb->len == CAN_MTU) {
+@@ -285,8 +285,8 @@ int can_send(struct sk_buff *skb, int loop)
+ 		netif_rx_ni(newskb);
+ 
+ 	/* update statistics */
+-	can_stats->tx_frames++;
+-	can_stats->tx_frames_delta++;
++	pkg_stats->tx_frames++;
++	pkg_stats->tx_frames_delta++;
+ 
+ 	return 0;
+ 
 @@ -441,7 +441,7 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
  	struct receiver *r;
  	struct hlist_head *rl;
  	struct can_dev_rcv_lists *d;
--	struct can_rcv_lists_stats *can_pstats = net->can.can_pstats;
-+	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
+-	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
++	struct can_rcv_lists_stats *rcv_lists_stats = net->can.rcv_lists_stats;
  	int err = 0;
  
  	/* insert new receiver  (dev,canid,mask) -> (func,data) */
+@@ -473,9 +473,9 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+ 		hlist_add_head_rcu(&r->list, rl);
+ 		d->entries++;
+ 
+-		can_pstats->rcv_entries++;
+-		if (can_pstats->rcv_entries_max < can_pstats->rcv_entries)
+-			can_pstats->rcv_entries_max = can_pstats->rcv_entries;
++		rcv_lists_stats->rcv_entries++;
++		if (rcv_lists_stats->rcv_entries_max < rcv_lists_stats->rcv_entries)
++			rcv_lists_stats->rcv_entries_max = rcv_lists_stats->rcv_entries;
+ 	} else {
+ 		kmem_cache_free(rcv_cache, r);
+ 		err = -ENODEV;
 @@ -515,7 +515,7 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
  {
  	struct receiver *r = NULL;
  	struct hlist_head *rl;
--	struct can_rcv_lists_stats *can_pstats = net->can.can_pstats;
-+	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
+-	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
++	struct can_rcv_lists_stats *rcv_lists_stats = net->can.rcv_lists_stats;
  	struct can_dev_rcv_lists *d;
  
  	if (dev && dev->type != ARPHRD_CAN)
-@@ -655,7 +655,7 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+@@ -559,8 +559,8 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+ 	hlist_del_rcu(&r->list);
+ 	d->entries--;
+ 
+-	if (can_pstats->rcv_entries > 0)
+-		can_pstats->rcv_entries--;
++	if (rcv_lists_stats->rcv_entries > 0)
++		rcv_lists_stats->rcv_entries--;
+ 
+ 	/* remove device structure requested by NETDEV_UNREGISTER */
+ 	if (d->remove_on_zero_entries && !d->entries) {
+@@ -655,12 +655,12 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
  {
  	struct can_dev_rcv_lists *d;
  	struct net *net = dev_net(dev);
--	struct can_pkg_stats *can_stats = net->can.can_stats;
-+	struct can_pkg_stats *can_stats = net->can.pkg_stats;
+-	struct can_pkg_stats *can_stats = net->can.pkg_stats;
++	struct can_pkg_stats *pkg_stats = net->can.pkg_stats;
  	int matches;
  
  	/* update statistics */
-@@ -837,12 +837,12 @@ static int can_pernet_init(struct net *net)
- 		kzalloc(sizeof(*net->can.can_rx_alldev_list), GFP_KERNEL);
- 	if (!net->can.can_rx_alldev_list)
- 		goto out;
--	net->can.can_stats = kzalloc(sizeof(*net->can.can_stats), GFP_KERNEL);
--	if (!net->can.can_stats)
--		goto out_free_alldev_list;
--	net->can.can_pstats = kzalloc(sizeof(*net->can.can_pstats), GFP_KERNEL);
--	if (!net->can.can_pstats)
--		goto out_free_can_stats;
-+	net->can.pkg_stats = kzalloc(sizeof(*net->can.pkg_stats), GFP_KERNEL);
-+	if (!net->can.pkg_stats)
-+		goto out_free_rx_alldev_list;
-+	net->can.rcv_lists_stats = kzalloc(sizeof(*net->can.rcv_lists_stats), GFP_KERNEL);
-+	if (!net->can.rcv_lists_stats)
-+		goto out_free_pkg_stats;
+-	can_stats->rx_frames++;
+-	can_stats->rx_frames_delta++;
++	pkg_stats->rx_frames++;
++	pkg_stats->rx_frames_delta++;
  
- 	if (IS_ENABLED(CONFIG_PROC_FS)) {
- 		/* the statistics are updated every second (timer triggered) */
-@@ -852,15 +852,15 @@ static int can_pernet_init(struct net *net)
- 			mod_timer(&net->can.can_stattimer,
- 				  round_jiffies(jiffies + HZ));
- 		}
--		net->can.can_stats->jiffies_init = jiffies;
-+		net->can.pkg_stats->jiffies_init = jiffies;
- 		can_init_proc(net);
+ 	/* create non-zero unique skb identifier together with *skb */
+ 	while (!(can_skb_prv(skb)->skbcnt))
+@@ -682,8 +682,8 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+ 	consume_skb(skb);
+ 
+ 	if (matches > 0) {
+-		can_stats->matches++;
+-		can_stats->matches_delta++;
++		pkg_stats->matches++;
++		pkg_stats->matches_delta++;
  	}
- 
- 	return 0;
- 
-- out_free_can_stats:
--	kfree(net->can.can_stats);
-- out_free_alldev_list:
-+ out_free_pkg_stats:
-+	kfree(net->can.pkg_stats);
-+ out_free_rx_alldev_list:
- 	kfree(net->can.can_rx_alldev_list);
-  out:
- 	return -ENOMEM;
-@@ -890,8 +890,8 @@ static void can_pernet_exit(struct net *net)
- 	rcu_read_unlock();
- 
- 	kfree(net->can.can_rx_alldev_list);
--	kfree(net->can.can_stats);
--	kfree(net->can.can_pstats);
-+	kfree(net->can.pkg_stats);
-+	kfree(net->can.rcv_lists_stats);
  }
- 
- /* af_can module init/exit functions */
-diff --git a/net/can/proc.c b/net/can/proc.c
-index d05e8c8b420d..30d8da4cef5d 100644
---- a/net/can/proc.c
-+++ b/net/can/proc.c
-@@ -78,8 +78,8 @@ static const char rx_list_name[][8] = {
- 
- static void can_init_stats(struct net *net)
- {
--	struct can_pkg_stats *can_stats = net->can.can_stats;
--	struct can_rcv_lists_stats *can_pstats = net->can.can_pstats;
-+	struct can_pkg_stats *can_stats = net->can.pkg_stats;
-+	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
- 	/*
- 	 * This memset function is called from a timer context (when
- 	 * can_stattimer is active which is the default) OR in a process
-@@ -119,7 +119,7 @@ static unsigned long calc_rate(unsigned long oldjif, unsigned long newjif,
- void can_stat_update(struct timer_list *t)
- {
- 	struct net *net = from_timer(net, t, can.can_stattimer);
--	struct can_pkg_stats *can_stats = net->can.can_stats;
-+	struct can_pkg_stats *can_stats = net->can.pkg_stats;
- 	unsigned long j = jiffies; /* snapshot */
- 
- 	/* restart counting in timer context on user request */
-@@ -212,8 +212,8 @@ static void can_print_recv_banner(struct seq_file *m)
- static int can_stats_proc_show(struct seq_file *m, void *v)
- {
- 	struct net *net = m->private;
--	struct can_pkg_stats *can_stats = net->can.can_stats;
--	struct can_rcv_lists_stats *can_pstats = net->can.can_pstats;
-+	struct can_pkg_stats *can_stats = net->can.pkg_stats;
-+	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
- 
- 	seq_putc(m, '\n');
- 	seq_printf(m, " %8ld transmitted frames (TXF)\n", can_stats->tx_frames);
-@@ -274,8 +274,8 @@ static int can_stats_proc_show(struct seq_file *m, void *v)
- static int can_reset_stats_proc_show(struct seq_file *m, void *v)
- {
- 	struct net *net = m->private;
--	struct can_rcv_lists_stats *can_pstats = net->can.can_pstats;
--	struct can_pkg_stats *can_stats = net->can.can_stats;
-+	struct can_rcv_lists_stats *can_pstats = net->can.rcv_lists_stats;
-+	struct can_pkg_stats *can_stats = net->can.pkg_stats;
- 
- 	user_reset = 1;
  
 -- 
 2.23.0.rc1
