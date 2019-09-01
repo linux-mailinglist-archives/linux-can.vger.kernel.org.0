@@ -2,101 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E36A39DD
-	for <lists+linux-can@lfdr.de>; Fri, 30 Aug 2019 17:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F14A4C70
+	for <lists+linux-can@lfdr.de>; Mon,  2 Sep 2019 00:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727993AbfH3PFG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Aug 2019 11:05:06 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:34982 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727979AbfH3PFF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Aug 2019 11:05:05 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7UF4sOo010446;
-        Fri, 30 Aug 2019 10:04:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1567177494;
-        bh=vGcpWtukrbpuDBpmlVsjWrokX3hrE5cSHe33YFa+CcY=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=gVtoCFXjsA3qhnPQ1Z4AN8MQj1vDs1Y54cFHfU/+ztnlb2JWQ5Smhjpce82ATVHiN
-         rYUwTRv2fs1Y5INkNpq0WixIishfRYh78tJPEkN2041bClK3mVsILkwAzQ59h48ky+
-         jWpCszqFyw7WGFcQjc+T82jtqUXDlKqFTImqWLKo=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7UF4skv075525
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 30 Aug 2019 10:04:54 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 30
- Aug 2019 10:04:53 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 30 Aug 2019 10:04:53 -0500
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7UF4r9w119892;
-        Fri, 30 Aug 2019 10:04:53 -0500
-Subject: Re: [PATCH 1/3] dt-bindings: can: tcan4x5x: Update binding to use
- interrupt property
-To:     <linux-can@vger.kernel.org>, <mkl@pengutronix.de>,
-        <davem@davemloft.net>, <wg@grandegger.com>
-References: <20190823175058.7442-1-dmurphy@ti.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <198c7ca1-c8c8-379e-f63d-4b8c0f0692fc@ti.com>
-Date:   Fri, 30 Aug 2019 10:04:53 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729037AbfIAWMF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 1 Sep 2019 18:12:05 -0400
+Received: from smtp7.web4u.cz ([81.91.87.87]:32855 "EHLO mx-8.mail.web4u.cz"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728942AbfIAWMF (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 1 Sep 2019 18:12:05 -0400
+X-Greylist: delayed 410 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Sep 2019 18:12:02 EDT
+Received: from mx-8.mail.web4u.cz (localhost [127.0.0.1])
+        by mx-8.mail.web4u.cz (Postfix) with ESMTP id DD91A1FF1CD;
+        Mon,  2 Sep 2019 00:05:07 +0200 (CEST)
+Received: from baree.pikron.com (unknown [89.102.8.6])
+        (Authenticated sender: ppisa@pikron.com)
+        by mx-8.mail.web4u.cz (Postfix) with ESMTPA id 9E2081FF1C0;
+        Mon,  2 Sep 2019 00:05:07 +0200 (CEST)
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: qemu can packet lost
+Date:   Mon, 2 Sep 2019 00:05:07 +0200
+User-Agent: KMail/1.9.10
+Cc:     "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+References: <20190829124837.GA14689@pengutronix.de>
+In-Reply-To: <20190829124837.GA14689@pengutronix.de>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-In-Reply-To: <20190823175058.7442-1-dmurphy@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: Text/Plain;
+  charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Disposition: inline
+Message-Id: <201909020005.07414.pisa@cmp.felk.cvut.cz>
+X-W4U-Auth: 19a8360822da03ff2c08761b6fb24aacf1a38046
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Marc
+Hello Oleksij,
 
-On 8/23/19 12:50 PM, Dan Murphy wrote:
-> Remove the data-ready-gpio property in favor of the DT standard
-> interrupt-parent and interrupts.
+thanks for report and suggestion.
+I cannot promiss anything due to lack of financing
+and people for this project. I am aware that QEMU CAN
+bus support initial KISS design. I am happy that it
+has some use in this form. I have invested my personal
+time to mentor RTEMS CAN QEMU GSoC slot and then to
+rewrite code to the mainline acceptable state.
+
+There are much more to think about:
+ - back pressure mechanism from CanBusClientState
+   in real CAN network it is realized by real speed
+   limits and overload frames. But overload frames are
+   internal mechanism which is not exposed by SocketCAN
+   interfaces.
+ - more CAN interfaces, it would be great to have Zynq
+   and i.MX6 support to emulate real automotive related
+   targets
+ - CAN FD support, without really well paid contract for university
+   or my company or other consortium, I would not invest my personal time
+   to any closed source CAN FD core or work. My life and time is too precious
+   for me to work on and support project which could be closed/blocked/destroyed
+   by random manager or professor (as happend already too much times to me).
+   So my plan and hope is to find time, energy or even financing to continue
+   work on opensource CAN FD core which design has started at our university
+   and Mr. Ille and I invest our personal time into
+       see http://canbus.pages.fel.cvut.cz/
+
+   Actual progress from January is complete CAN protocol control
+   redesign and cleanup up to the state that core passes basic real hardware
+   tests (Zynq and PC+PCIe Altera/Intel) again. So it is time to start again
+   with review process for open-firmare entry inclusion and then
+   discussion about driver changes to make it ready for mainline.
+   CAN FD for QEMU comes to the mind only after progress on this side.
+
+Best wishes,
+
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://dce.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa (alternatively http://pikron.com/ )
+
+
+
+On Thursday 29 of August 2019 14:48:37 Oleksij Rempel wrote:
+> Hi all,
 >
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> ---
->   Documentation/devicetree/bindings/net/can/tcan4x5x.txt | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+> Just in case some one has similar problem. Current QEMU with CAN support
+> is not totally realistic when it comes to sending frames. When the QEMU
+> is attached to a vcan, then it sends out the CAN frames as fast as it
+> could. Another QEMU attached to the same vcan tends to drop frames
+> during reception.
+>
+> One of the ways to fix it is to send packets from QEMU with proper
+> packet rate. For example the hw/net/can/can_sja1000.c could delay the TX
+> complete interrupt based on the configured CAN bit timing and CAN frame
+> length.
+>
+> In case some one has time to do it:
+>
+> This function can be used to calculate the frame length:
+>
+>   https://github.com/linux-can/can-utils/blob/master/canframelen.c#L239
+>
+> I think CFL_WORSTCASE is good enough :)
+>
+> and this example shows how to properly delay and interrupt call in QEMU:
+>
+>   https://github.com/qemu/qemu/blob/master/hw/net/e1000.c#L270
+>
+> regards,
+> Oleksij & Marc
 
-Since we are changing the binding we should probably get this series in 
-before the first patch series gets into mainline.
-
-Dan
-
-
-> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> index c388f7d9feb1..27e1b4cebfbd 100644
-> --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> @@ -10,8 +10,10 @@ Required properties:
->   	- #size-cells: 0
->   	- spi-max-frequency: Maximum frequency of the SPI bus the chip can
->   			     operate at should be less than or equal to 18 MHz.
-> -	- data-ready-gpios: Interrupt GPIO for data and error reporting.
->   	- device-wake-gpios: Wake up GPIO to wake up the TCAN device.
-> +	- interrupt-parent: the phandle to the interrupt controller which provides
-> +                    the interrupt.
-> +	- interrupts: interrupt specification for data-ready.
->   
->   See Documentation/devicetree/bindings/net/can/m_can.txt for additional
->   required property details.
-> @@ -30,7 +32,8 @@ tcan4x5x: tcan4x5x@0 {
->   		#size-cells = <1>;
->   		spi-max-frequency = <10000000>;
->   		bosch,mram-cfg = <0x0 0 0 32 0 0 1 1>;
-> -		data-ready-gpios = <&gpio1 14 GPIO_ACTIVE_LOW>;
-> +		interrupt-parent = <&gpio1>;
-> +		interrupts = <14 GPIO_ACTIVE_LOW>;
->   		device-state-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
->   		device-wake-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
->   		reset-gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
