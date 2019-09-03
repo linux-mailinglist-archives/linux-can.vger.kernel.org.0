@@ -2,35 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC17A651D
-	for <lists+linux-can@lfdr.de>; Tue,  3 Sep 2019 11:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47015A6600
+	for <lists+linux-can@lfdr.de>; Tue,  3 Sep 2019 11:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728386AbfICJ0P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Sep 2019 05:26:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54543 "EHLO
+        id S1728592AbfICJql (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Sep 2019 05:46:41 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35383 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726840AbfICJ0P (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Sep 2019 05:26:15 -0400
+        with ESMTP id S1728094AbfICJql (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Sep 2019 05:46:41 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i554n-0004iL-9J; Tue, 03 Sep 2019 11:26:13 +0200
+        id 1i55OZ-00082T-KD; Tue, 03 Sep 2019 11:46:39 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51] (unknown [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D364452697;
-        Tue,  3 Sep 2019 09:26:12 +0000 (UTC)
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc:     kernel@pengutronix.de
-References: <20190828065226.23604-1-mkl@pengutronix.de>
- <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D0AD44526E9;
+        Tue,  3 Sep 2019 09:46:37 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kernel@pengutronix.de,
+        linux-can@vger.kernel.org
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -92,15 +89,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <80f42661-48d3-09a0-3323-8ac4a0bda74a@pengutronix.de>
-Date:   Tue, 3 Sep 2019 11:26:07 +0200
+Subject: pull-request: can-next 2019-09-03
+Message-ID: <a6751a50-f15d-612d-783b-a706098ea90e@pengutronix.de>
+Date:   Tue, 3 Sep 2019 11:46:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="YzYkUUWkv3DjG0fay7nXxlZ4rfqXF1ndp"
+ boundary="vaDxWTXAQZUBmXN3l4EPTj0zWvk0zWOIh"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,62 +108,134 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---YzYkUUWkv3DjG0fay7nXxlZ4rfqXF1ndp
-Content-Type: multipart/mixed; boundary="Ddn71g92ndJs20EXrzvUyhJwj0ohxicPV";
+--vaDxWTXAQZUBmXN3l4EPTj0zWvk0zWOIh
+Content-Type: multipart/mixed; boundary="umTbpMyEde8J6VOsRiiHQD4IMgq6CRYyh";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc: kernel@pengutronix.de
-Message-ID: <80f42661-48d3-09a0-3323-8ac4a0bda74a@pengutronix.de>
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
-References: <20190828065226.23604-1-mkl@pengutronix.de>
- <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
-In-Reply-To: <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net, kernel@pengutronix.de, linux-can@vger.kernel.org
+Message-ID: <a6751a50-f15d-612d-783b-a706098ea90e@pengutronix.de>
+Subject: pull-request: can-next 2019-09-03
 
---Ddn71g92ndJs20EXrzvUyhJwj0ohxicPV
+--umTbpMyEde8J6VOsRiiHQD4IMgq6CRYyh
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 8/28/19 11:56 AM, Oliver Hartkopp wrote:
-> Hi Marc,
->=20
-> this series only refactores & prepares the PF_CAN infrastructure to add=
-=20
-> the J1939 support ;-)
->=20
-> Btw. I think I can find some time for a review on Friday.
+Hello David,
 
-Have you found time to look at the patches?
+this is a pull request for net-next/master consisting of 15 patches.
+
+The first patch is by Christer Beskow, targets the kvaser_pciefd driver
+and fixes the PWM generator's frequency.
+
+The next three patches are by Dan Murphy, the tcan4x5x is updated to use
+a proper interrupts/interrupt-parent DT binding to specify the devices
+IRQ line. Further the unneeded wake ups of the device is removed from
+the driver.
+
+A patch by me for the mcp25xx driver removes the deprecated board file
+setup example. Three patches by Andy Shevchenko simplify clock handling,
+update the driver from OF to device property API and simplify the
+mcp251x_can_suspend() function.
+
+The remaining 7 patches are by me and clean up checkpatch warnings in
+the generic CAN device infrastructure.
 
 regards,
 Marc
 
+---
+
+The following changes since commit 67538eb5c00f08d7fe27f1bb703098b17302bd=
+c0:
+
+  Merge branch 'mvpp2-per-cpu-buffers' (2019-09-02 12:07:46 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git ta=
+gs/linux-can-next-for-5.4-20190903
+
+for you to fetch changes up to 13ecee77fa810b21beaf3023e921525c55f88b04:
+
+  can: dev: can_dev_init(): convert from printk(KERN_INFO) to pr_info (20=
+19-09-03 10:28:13 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.4-20190903
+
+----------------------------------------------------------------
+Andy Shevchenko (3):
+      can: mcp251x: Use devm_clk_get_optional() to get the input clock
+      can: mcp251x: Make use of device property API
+      can: mcp251x: Call wrapper instead of regulator_disable()
+
+Christer Beskow (1):
+      can: kvaser_pciefd: the PWM generator is running at the bus frequen=
+cy of the system.
+
+Dan Murphy (3):
+      dt-bindings: can: tcan4x5x: Update binding to use interrupt propert=
+y
+      can: tcan4x5x: Remove data-ready gpio interrupt
+      can: tcan4x5x: Remove checking the wake pin
+
+Marc Kleine-Budde (8):
+      can: mcp251x: remove deprecated board file setup example
+      can: dev: convert block comments to network style comments
+      can: dev: avoid long lines
+      can: dev: remove unnecessary parentheses
+      can: dev: remove unnecessary blank line
+      can: dev: can_restart(): convert NULL pointer check
+      can: dev: can_dellink(): remove return at end of void function
+      can: dev: can_dev_init(): convert from printk(KERN_INFO) to pr_info=
+
+
+ .../devicetree/bindings/net/can/tcan4x5x.txt       |   7 +-
+ drivers/net/can/dev.c                              | 131 +++++++++------=
+------
+ drivers/net/can/kvaser_pciefd.c                    |   6 +-
+ drivers/net/can/m_can/tcan4x5x.c                   |  24 +---
+ drivers/net/can/spi/mcp251x.c                      |  68 +++--------
+ include/linux/can/dev.h                            |   3 +-
+ include/linux/can/rx-offload.h                     |  13 +-
+ 7 files changed, 97 insertions(+), 155 deletions(-)
+
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
 Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |-
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---Ddn71g92ndJs20EXrzvUyhJwj0ohxicPV--
 
---YzYkUUWkv3DjG0fay7nXxlZ4rfqXF1ndp
+
+
+
+
+
+
+
+
+
+--umTbpMyEde8J6VOsRiiHQD4IMgq6CRYyh--
+
+--vaDxWTXAQZUBmXN3l4EPTj0zWvk0zWOIh
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1uMa8ACgkQWsYho5Hk
-nSAn1wf/SitHPyDdGPwVKPhyumQa8/rpvkqCl1H34sQ97pHSkjOQ6v+kdmMn0tJb
-mzFtN1sGsOcOD+Vd+8MihLLlGvGjpPlWP3ILp0WC39PfVsASrj2sZohrxyh9gMRL
-u/2NSB8FcCrsGe5GK2cRFQJnTKfimqyTEs1RQU/HUDIqDrbrgvebrW0/FN1FoOtN
-Y1+HZU/t4lKAhSdiNzPA4H87/iKipZG9JzrWoIrwndYJpmNW8ynVOWlaO18H21Rl
-1PEU2VtpVmtmJji6lQL0UIRIwg2Tybtqm9MIjllqJ5sRc+mU9lwiptQobTcaGAP+
-q/Xkg1f8VvYXOn07EKCOXE09r40D3w==
-=r2SP
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1uNncACgkQWsYho5Hk
+nSAXAgf+M4Tbgs1aNVymcDBEGZAU/P8w0MKYV70ebTbXE8CGG6H8aepP7Lh7fKwH
+AvqbhN+7QrBoK8wcaQFdggFzf7saWUCF+1lVsjIXPRXyenW7Lhq7xFMBocMf8+z4
+gKQlWcxkZVrVaF+pYeSzQTE8CF8e7KWWBMwSUPj9FkETj3ltqs5dOBWHnqClqHVL
+bM50Va7h6Q1ysJgwFf9/25Nvl8VVcasD3xZ1GdH3i4ZOyTeE6sR/uSoEXe1r/8Rb
+GXGpayZIL1v2pkMWxbC+euOUCxFyMM8AFbuivI0tKxE7FIYuftd21o7k2VzyzveK
+Wp+2BSYHMUPRhUJnAGltGLhPjJBkhA==
+=qTle
 -----END PGP SIGNATURE-----
 
---YzYkUUWkv3DjG0fay7nXxlZ4rfqXF1ndp--
+--vaDxWTXAQZUBmXN3l4EPTj0zWvk0zWOIh--
