@@ -2,41 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C30A7E30
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 10:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03195A7EF9
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 11:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729205AbfIDIpQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Sep 2019 04:45:16 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43341 "EHLO
+        id S1729045AbfIDJM1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Sep 2019 05:12:27 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35561 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbfIDIpQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 04:45:16 -0400
+        with ESMTP id S1727447AbfIDJM0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 05:12:26 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5QuZ-0006Ep-S4; Wed, 04 Sep 2019 10:45:07 +0200
+        id 1i5RKz-0001c3-3r; Wed, 04 Sep 2019 11:12:25 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51] (unknown [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AD386452F9E;
-        Wed,  4 Sep 2019 08:45:00 +0000 (UTC)
-Subject: Re: [PATCH 21/21] can: add support of SAE J1939 protocol
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2322A452FE0;
+        Wed,  4 Sep 2019 09:12:24 +0000 (UTC)
 To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        kbuild test robot <lkp@intel.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Elenita Hinds <ecathinds@gmail.com>, kernel@pengutronix.de,
-        Bastian Stender <bst@pengutronix.de>
+        "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de
 References: <20190828065226.23604-1-mkl@pengutronix.de>
- <20190828065226.23604-22-mkl@pengutronix.de>
- <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
+ <20190828065226.23604-14-mkl@pengutronix.de>
+ <18ba191d-4052-05a0-fc61-403b619befca@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -99,15 +92,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <f9870d7a-a733-801f-fa81-ea058cc53c36@pengutronix.de>
-Date:   Wed, 4 Sep 2019 10:44:55 +0200
+Subject: Re: [PATCH 13/21] can: introduce CAN midlayer private and allocate it
+ automatically
+Message-ID: <7e073d36-1c63-44a3-20ec-e69973de528a@pengutronix.de>
+Date:   Wed, 4 Sep 2019 11:12:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
+In-Reply-To: <18ba191d-4052-05a0-fc61-403b619befca@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq"
+ boundary="WXQnpytOdNthdOB4noCwWqeyklqHhh5KH"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -118,37 +113,160 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq
-Content-Type: multipart/mixed; boundary="tTy1YXSyp0Ux4rRKxLpVugSw4yGahch3D";
+--WXQnpytOdNthdOB4noCwWqeyklqHhh5KH
+Content-Type: multipart/mixed; boundary="8ct1063FAQe7u2exzJqhwH15YA3iYnTKN";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
- Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>,
- Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
- kbuild test robot <lkp@intel.com>,
- Maxime Jayat <maxime.jayat@mobile-devices.fr>,
- Robin van der Gracht <robin@protonic.nl>, Elenita Hinds
- <ecathinds@gmail.com>, kernel@pengutronix.de,
- Bastian Stender <bst@pengutronix.de>
-Message-ID: <f9870d7a-a733-801f-fa81-ea058cc53c36@pengutronix.de>
-Subject: Re: [PATCH 21/21] can: add support of SAE J1939 protocol
+ "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de
+Message-ID: <7e073d36-1c63-44a3-20ec-e69973de528a@pengutronix.de>
+Subject: Re: [PATCH 13/21] can: introduce CAN midlayer private and allocate it
+ automatically
 References: <20190828065226.23604-1-mkl@pengutronix.de>
- <20190828065226.23604-22-mkl@pengutronix.de>
- <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
-In-Reply-To: <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
+ <20190828065226.23604-14-mkl@pengutronix.de>
+ <18ba191d-4052-05a0-fc61-403b619befca@hartkopp.net>
+In-Reply-To: <18ba191d-4052-05a0-fc61-403b619befca@hartkopp.net>
 
---tTy1YXSyp0Ux4rRKxLpVugSw4yGahch3D
+--8ct1063FAQe7u2exzJqhwH15YA3iYnTKN
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/3/19 9:55 PM, Oliver Hartkopp wrote:
-> Hi Marc, hi Oleksij,
+On 9/4/19 6:15 AM, Oliver Hartkopp wrote:
 >=20
-> compiled on top of latest net-next tree:
+> On 28/08/2019 08.52, Marc Kleine-Budde wrote:
+>> This patch introduces the CAN midlayer private structure ("struct
+>> can_ml_priv") which should be used to hold protocol specific per devic=
+e
+>> data structures. For now it's only member is "struct can_dev_rcv_lists=
+".
+>=20
+>> diff --git a/include/linux/can/can-ml.h b/include/linux/can/can-ml.h
+>> new file mode 100644
+>> index 000000000000..2786b04251ea
+>> --- /dev/null
+>> +++ b/include/linux/can/can-ml.h
+>> @@ -0,0 +1,23 @@
+>=20
+> Dual license (GPLv2 / BSD) SPDX identifier missing here
+> /* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
 
-Fixed
+I've copied the header from af_can.h.
+
+>=20
+>> +/*
+>> + * Copyright (C) 2017 Pengutronix, Marc Kleine-Budde <kernel@pengutro=
+nix.de>
+>> + *
+>> + * This program is free software; you can redistribute it and/or
+>> + * modify it under the terms of the GNU General Public License
+>> + * version 2, as published by the Free Software Foundation.
+>> + *
+>> + * This program is distributed in the hope that it will be useful,
+>> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+>> + * GNU General Public License for more details.
+>> + *
+>> + */
+>> +#ifndef CAN_ML_H
+>> +#define CAN_ML_H
+>> +
+>> +#include "../../net/can/af_can.h"
+>=20
+> Arg!
+>=20
+> Move
+>=20
+> /* per device receive filters linked at dev->ml_priv */
+> struct can_dev_rcv_lists {
+> 	struct hlist_head rx[RX_MAX];
+> 	struct hlist_head rx_sff[CAN_SFF_RCV_ARRAY_SZ];
+> 	struct hlist_head rx_eff[CAN_EFF_RCV_ARRAY_SZ];
+> 	int entries;
+> };
+>=20
+> from af_can.h here.
+
+done
+> I always tried to separate the CAN network layer from the CAN driver=20
+> stuff. But this "deep include" smells fishy.
+>=20
+> I applied these changes on my tree (on top of all your patches):
+
+Squashed into patch 13.
+
+> diff --git a/include/linux/can/can-ml.h b/include/linux/can/can-ml.h
+> index 9861946fe4ae..6bda2efcd570 100644
+> --- a/include/linux/can/can-ml.h
+> +++ b/include/linux/can/can-ml.h
+> @@ -14,7 +14,22 @@
+>   #ifndef CAN_ML_H
+>   #define CAN_ML_H
+>=20
+> -#include "../../net/can/af_can.h"
+> +#include <linux/can.h>
+> +#include <linux/list.h>
+> +
+> +#define CAN_SFF_RCV_ARRAY_SZ (1 << CAN_SFF_ID_BITS)
+> +#define CAN_EFF_RCV_HASH_BITS 10
+> +#define CAN_EFF_RCV_ARRAY_SZ (1 << CAN_EFF_RCV_HASH_BITS)
+> +
+> +enum { RX_ERR, RX_ALL, RX_FIL, RX_INV, RX_MAX };
+> +
+> +/* per device receive filters linked at dev->ml_priv */
+> +struct can_dev_rcv_lists {
+> +	struct hlist_head rx[RX_MAX];
+> +	struct hlist_head rx_sff[CAN_SFF_RCV_ARRAY_SZ];
+> +	struct hlist_head rx_eff[CAN_EFF_RCV_ARRAY_SZ];
+> +	int entries;
+> +};
+>=20
+>   struct can_ml_priv {
+>   	struct can_dev_rcv_lists dev_rcv_lists;
+> diff --git a/net/can/af_can.h b/net/can/af_can.h
+> index 56a31a99bc6e..7c2d9161e224 100644
+> --- a/net/can/af_can.h
+> +++ b/net/can/af_can.h
+> @@ -60,20 +60,6 @@ struct receiver {
+>   	struct rcu_head rcu;
+>   };
+>=20
+> -#define CAN_SFF_RCV_ARRAY_SZ (1 << CAN_SFF_ID_BITS)
+> -#define CAN_EFF_RCV_HASH_BITS 10
+> -#define CAN_EFF_RCV_ARRAY_SZ (1 << CAN_EFF_RCV_HASH_BITS)
+> -
+> -enum { RX_ERR, RX_ALL, RX_FIL, RX_INV, RX_MAX };
+> -
+> -/* per device receive filters linked at dev->ml_priv */
+> -struct can_dev_rcv_lists {
+> -	struct hlist_head rx[RX_MAX];
+> -	struct hlist_head rx_sff[CAN_SFF_RCV_ARRAY_SZ];
+> -	struct hlist_head rx_eff[CAN_EFF_RCV_ARRAY_SZ];
+> -	int entries;
+> -};
+> -
+>   /* statistic structures */
+>=20
+>   /* can be reset e.g. by can_init_stats() */
+> diff --git a/net/can/proc.c b/net/can/proc.c
+> index 560fa3c132bf..d3697105daec 100644
+> --- a/net/can/proc.c
+> +++ b/net/can/proc.c
+> @@ -46,6 +46,7 @@
+>   #include <linux/rcupdate.h>
+>   #include <linux/if_arp.h>
+>   #include <linux/can/core.h>
+> +#include <linux/can/can-ml.h>
+>=20
+>   #include "af_can.h"
+>=20
+>=20
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net> attribution is =
+
+> welcome in can-ml.h
+
+added
 
 Marc
 
@@ -159,23 +277,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---tTy1YXSyp0Ux4rRKxLpVugSw4yGahch3D--
+--8ct1063FAQe7u2exzJqhwH15YA3iYnTKN--
 
---nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq
+--WXQnpytOdNthdOB4noCwWqeyklqHhh5KH
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1veYcACgkQWsYho5Hk
-nSBiyggAjdKgwixTtAwTu7NhFRNaqy7wbKkotFIGOmJHyuWBQB1oVqCbiBdtb0Gi
-ijJMKxEZnF4NL0WoNeYuIBUZYYYa0gsb9K4bJk0t+ud5rWOAwsOTykm7mOcOTLE7
-pytg1rxTA6VTRU5/Mgqe4eI83HzPE0o01ZsfL3JHC/cstiiOI15pZt8A5IkYGeq8
-1jiqeEz4la5u+xP+crazGpamLarYJodf01vrEaG0PIa4ty9sjdHM6wFF7BY+ZLVT
-6Dkm+KGCl/zUeyHyP9hGrvO4g92oZd9zwdHycwK9qHuHOw0p1ZRH8ka3nm8AB7ck
-zTIxorXvcUhKMkTfr3AGh1FLmmrTfw==
-=48F/
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1vf/MACgkQWsYho5Hk
+nSCv3gf7BVpCplyg4o5Vhqn8RSzjpSzde4ijUQxLdxIZu8HBg9CldOkFX6UBq1rv
+9/FEkS8Nm0SeRLUY8azULJxobGK0SON3ppMPWCHfrz3kjkF96inJRVw3QfzcG2Fw
+cUsNEf/aOTI+YpTgapqkXP0qoCFtbOHEVWT3qGdutPp6ldi8ROclZXL0MOitkIIl
+5+qb0zifbG1nqz9bmCQ8U8AWSxg7f2xHnAs6hm+dwQRLXbMQBLFo2MXZu9Razz9o
+I4ylg/ljP2nI6SFvFJqPu9RkMOBuiY9FPF5u643XKwJpFC6oIpOCznLHdFHKTAPS
+YKHIFbBmeQv/8dNhL2RbXZizhupGiQ==
+=abBo
 -----END PGP SIGNATURE-----
 
---nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq--
+--WXQnpytOdNthdOB4noCwWqeyklqHhh5KH--
