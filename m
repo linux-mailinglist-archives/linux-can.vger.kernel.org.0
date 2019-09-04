@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FAFA80AD
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 12:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF226A8103
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 13:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726304AbfIDKua (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Sep 2019 06:50:30 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37321 "EHLO
+        id S1727387AbfIDLYY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Sep 2019 07:24:24 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56863 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbfIDKua (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 06:50:30 -0400
+        with ESMTP id S1725840AbfIDLYY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 07:24:24 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5Srs-0005Mr-6M; Wed, 04 Sep 2019 12:50:28 +0200
+        id 1i5TOf-00007q-Ud; Wed, 04 Sep 2019 13:24:22 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51] (unknown [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 02971453152;
-        Wed,  4 Sep 2019 10:50:26 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5B58245319E;
+        Wed,  4 Sep 2019 11:24:19 +0000 (UTC)
+Subject: Re: [PATCH v2 18/21] can: introduce CAN_REQUIRED_SIZE macro
 To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc:     kernel@pengutronix.de
-References: <20190828065226.23604-1-mkl@pengutronix.de>
- <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
- <80f42661-48d3-09a0-3323-8ac4a0bda74a@pengutronix.de>
- <c3ed7db0-3d80-a17c-6c9e-0a4f821ed5db@hartkopp.net>
- <47797657-653b-8600-e896-98953f90b10d@pengutronix.de>
- <2578c177-0bf2-6acc-e197-83ef78b4dafb@hartkopp.net>
- <4a240257-c65f-110b-5cb1-5b8a91ee1ee4@pengutronix.de>
+Cc:     kernel@pengutronix.de, Kurt Van Dijck <kurt.van.dijck@eia.be>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+References: <20190904104405.21675-1-mkl@pengutronix.de>
+ <20190904104405.21675-19-mkl@pengutronix.de>
+ <6ebf3ac9-e18b-d36e-1a4f-bf8629859eaa@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,16 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
-Message-ID: <2a284fa8-5fd8-4e9e-aad4-347feb7941d7@pengutronix.de>
-Date:   Wed, 4 Sep 2019 12:50:22 +0200
+Message-ID: <e83a3458-7448-8f67-973e-d5f696f69ab9@pengutronix.de>
+Date:   Wed, 4 Sep 2019 13:23:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <4a240257-c65f-110b-5cb1-5b8a91ee1ee4@pengutronix.de>
+In-Reply-To: <6ebf3ac9-e18b-d36e-1a4f-bf8629859eaa@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="k13eSnK9DiCBURcdvwMDnrzl8ql3l70bI"
+ boundary="urLMMN0aUhA6BgemUb6Q68AwGq43xtkqz"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,111 +114,45 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---k13eSnK9DiCBURcdvwMDnrzl8ql3l70bI
-Content-Type: multipart/mixed; boundary="7YAVDQt3gNoYhwiWqTTTtAIJO0Yu4YBUw";
+--urLMMN0aUhA6BgemUb6Q68AwGq43xtkqz
+Content-Type: multipart/mixed; boundary="u3cHiakaeIjMUD8yLNWggqmNwXwZ6WeGy";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
  "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc: kernel@pengutronix.de
-Message-ID: <2a284fa8-5fd8-4e9e-aad4-347feb7941d7@pengutronix.de>
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
-References: <20190828065226.23604-1-mkl@pengutronix.de>
- <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
- <80f42661-48d3-09a0-3323-8ac4a0bda74a@pengutronix.de>
- <c3ed7db0-3d80-a17c-6c9e-0a4f821ed5db@hartkopp.net>
- <47797657-653b-8600-e896-98953f90b10d@pengutronix.de>
- <2578c177-0bf2-6acc-e197-83ef78b4dafb@hartkopp.net>
- <4a240257-c65f-110b-5cb1-5b8a91ee1ee4@pengutronix.de>
-In-Reply-To: <4a240257-c65f-110b-5cb1-5b8a91ee1ee4@pengutronix.de>
+Cc: kernel@pengutronix.de, Kurt Van Dijck <kurt.van.dijck@eia.be>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ Oleksij Rempel <o.rempel@pengutronix.de>
+Message-ID: <e83a3458-7448-8f67-973e-d5f696f69ab9@pengutronix.de>
+Subject: Re: [PATCH v2 18/21] can: introduce CAN_REQUIRED_SIZE macro
+References: <20190904104405.21675-1-mkl@pengutronix.de>
+ <20190904104405.21675-19-mkl@pengutronix.de>
+ <6ebf3ac9-e18b-d36e-1a4f-bf8629859eaa@hartkopp.net>
+In-Reply-To: <6ebf3ac9-e18b-d36e-1a4f-bf8629859eaa@hartkopp.net>
 
---7YAVDQt3gNoYhwiWqTTTtAIJO0Yu4YBUw
+--u3cHiakaeIjMUD8yLNWggqmNwXwZ6WeGy
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/4/19 12:26 PM, Marc Kleine-Budde wrote:
-> On 9/4/19 12:25 PM, Oliver Hartkopp wrote:
->> Hi Marc,
+On 9/4/19 12:49 PM, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 04/09/2019 12.44, Marc Kleine-Budde wrote:
+>> From: Kurt Van Dijck <kurt.van.dijck@eia.be>
 >>
->> On 04/09/2019 09.15, Marc Kleine-Budde wrote:
->>> On 9/3/19 6:16 PM, Oliver Hartkopp wrote:
+>> The size of this structure will be increased with J1939 support. To st=
+ay
+>> binary compatible, the CAN_REQUIRED_SIZE macro is introduced for
+>> existing CAN protocols.
 >>
->>>> Some patches do not work alone out of that sequence. Does it make se=
-nse
->>>> to squash them into one?
->>>
->>> Yes, the patches build on top of each other, but the series is
->>> bisectable. The criterium is to have one change per patch and the tre=
-e
->>> can be compiled before and after the patch. Smaller changes and thus
->>> patches are usually easier to review.
->>>
->>> It would be nice to have the "renaming things" patches separate, for =
-the
->>> above reasons. But the introduction of the mid-layer should stay
->>> separate: introduce it and allocate the mid-layer memory, switch the
->>> framework over to make use of it and finally remove all left overs.
->>>
->>>> squash patches 1-4 into one ?
->>>
->>> See above.
->>
->> Ah, I've just seen that the sequence first renamed the structs and the=
-n=20
->> the variable names step-by-step.
->>
->> That is indeed the best approach ... forget my remarks about squashing=
-=20
->> these patches.
->>
->> You can add my Acked-by for all of these renaming patches too.
+>> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>=20
+> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-The current status is:
-
-
-> squash patches 1-4 into one ?
-
-Not squashed, Acked-by added.
-
-> 5 ok
-
-Acked-by added.
-
-> squash patches 6-7 into one ?
-
-Not squashed, Acked-by added.
-
-> squash patches 8-9 into one ?
-
-Not squashed, Acked-by added.
-
-> 10 ok
-
-Acked-by added.
-
-> 11 ok - but my mail address is wrong :/
-
-Acked-by added, fixed email address.
-
-> 12 already ok
-
-Acked-by added.
-
-> squash patches 13-15 into one ?
-
-13 has S-o-b
-14/15 not squashed, Acked-by added.
-
-> 16-17 ok
-> 18 Shouldn't it be CAN_REQUIRED_SIZE() ??
-
-Fixed, No Acked-by for now.
-
-> 19-21 ok
-
-Acked-by added.
-
+Tnx,
 Marc
 
 --=20
@@ -230,23 +162,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---7YAVDQt3gNoYhwiWqTTTtAIJO0Yu4YBUw--
+--u3cHiakaeIjMUD8yLNWggqmNwXwZ6WeGy--
 
---k13eSnK9DiCBURcdvwMDnrzl8ql3l70bI
+--urLMMN0aUhA6BgemUb6Q68AwGq43xtkqz
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1vlu4ACgkQWsYho5Hk
-nSDfcwgAmdsTJ8DUt6VeTs//REaq77Y+BGvbDGSUaFUinxMIsp4oq4xiXNU+BJct
-fMaTwrxFBJt3FYozFFnkEZTaNsTdC5npX9nVYt08udzFH0hmNnOLNjRwxDDGS/an
-2WekBaJYdUZMbK5g/Qv8mLOMIjMd2XtMKhTvXWTX/+s1QMu44fFVfvYx59V5ANuF
-GiUXdHL3mVEyvLiC+n18qgJeHk+YpPdZ9suW09/nQBi2IyemvcoYQoaM8BNKbRHz
-SRfCAimYqPNlCAZi5aYqgt91DdBs+fVxt/EGfrupkqlwaHly0/bjb/fSRGcv8C1j
-fOkASZOtyy/ttKVSIdH338pg8UFrsQ==
-=/gSw
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1vnqcACgkQWsYho5Hk
+nSA5Fwf/WHNAi84no9+tO8xEz1cri6RFRI61v9IK3kLd9ojIO406w5KKC+7T2OLC
+NX1+14Kl9WeLa4nKHqTQ2O928f9MJBXhXadQ71GRCQY9TveYLdscxdYLb2kL4kpP
+/BNBh7cV9ApyDIB0p2b/H/wSrLjd6qZozBrsCGw2psj261AgGD0ZVDRhEm0TXCaO
+d+vbq/zH/OzrpnMI34A1YFP3ZCL41y9zg5vKf6E2ZHYc5FKnoFd0wfoJtAorcn5u
+tutySiap26QiHDdoS8i0/av3us/IEwiZlYWxq8fUlvCgF3uUU2/jYOJ/H+l9i7ad
+H+7+v9bl1939cCZzPsFTPt4oNyHSKQ==
+=vb55
 -----END PGP SIGNATURE-----
 
---k13eSnK9DiCBURcdvwMDnrzl8ql3l70bI--
+--urLMMN0aUhA6BgemUb6Q68AwGq43xtkqz--
