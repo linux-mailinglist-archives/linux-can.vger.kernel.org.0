@@ -2,35 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1759A7C76
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 09:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C30A7E30
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 10:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728209AbfIDHPp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Sep 2019 03:15:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43285 "EHLO
+        id S1729205AbfIDIpQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Sep 2019 04:45:16 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43341 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727787AbfIDHPp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 03:15:45 -0400
+        with ESMTP id S1726358AbfIDIpQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 04:45:16 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5PW3-0005cT-QH; Wed, 04 Sep 2019 09:15:44 +0200
+        id 1i5QuZ-0006Ep-S4; Wed, 04 Sep 2019 10:45:07 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51] (unknown [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6C7E9452EFB;
-        Wed,  4 Sep 2019 07:15:42 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AD386452F9E;
+        Wed,  4 Sep 2019 08:45:00 +0000 (UTC)
+Subject: Re: [PATCH 21/21] can: add support of SAE J1939 protocol
 To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc:     kernel@pengutronix.de
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        kbuild test robot <lkp@intel.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Elenita Hinds <ecathinds@gmail.com>, kernel@pengutronix.de,
+        Bastian Stender <bst@pengutronix.de>
 References: <20190828065226.23604-1-mkl@pengutronix.de>
- <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
- <80f42661-48d3-09a0-3323-8ac4a0bda74a@pengutronix.de>
- <c3ed7db0-3d80-a17c-6c9e-0a4f821ed5db@hartkopp.net>
+ <20190828065226.23604-22-mkl@pengutronix.de>
+ <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -93,16 +99,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
-Message-ID: <47797657-653b-8600-e896-98953f90b10d@pengutronix.de>
-Date:   Wed, 4 Sep 2019 09:15:26 +0200
+Message-ID: <f9870d7a-a733-801f-fa81-ea058cc53c36@pengutronix.de>
+Date:   Wed, 4 Sep 2019 10:44:55 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <c3ed7db0-3d80-a17c-6c9e-0a4f821ed5db@hartkopp.net>
+In-Reply-To: <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="JvLxE10UKC2VmSKcYZRKAk2gOOx4Idmt0"
+ boundary="nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,90 +118,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---JvLxE10UKC2VmSKcYZRKAk2gOOx4Idmt0
-Content-Type: multipart/mixed; boundary="GBUjaZ9Dd6TOHBMAdo6edTlalzEXqOShg";
+--nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq
+Content-Type: multipart/mixed; boundary="tTy1YXSyp0Ux4rRKxLpVugSw4yGahch3D";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>,
- "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc: kernel@pengutronix.de
-Message-ID: <47797657-653b-8600-e896-98953f90b10d@pengutronix.de>
-Subject: Re: [PATCH 00/21] Add support for the J1939 Protocol
+ Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ kbuild test robot <lkp@intel.com>,
+ Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+ Robin van der Gracht <robin@protonic.nl>, Elenita Hinds
+ <ecathinds@gmail.com>, kernel@pengutronix.de,
+ Bastian Stender <bst@pengutronix.de>
+Message-ID: <f9870d7a-a733-801f-fa81-ea058cc53c36@pengutronix.de>
+Subject: Re: [PATCH 21/21] can: add support of SAE J1939 protocol
 References: <20190828065226.23604-1-mkl@pengutronix.de>
- <a101ddf0-5150-dd48-e456-3571cfc7036b@hartkopp.net>
- <80f42661-48d3-09a0-3323-8ac4a0bda74a@pengutronix.de>
- <c3ed7db0-3d80-a17c-6c9e-0a4f821ed5db@hartkopp.net>
-In-Reply-To: <c3ed7db0-3d80-a17c-6c9e-0a4f821ed5db@hartkopp.net>
+ <20190828065226.23604-22-mkl@pengutronix.de>
+ <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
+In-Reply-To: <ae1439da-52c4-298b-e6da-11868b54283d@hartkopp.net>
 
---GBUjaZ9Dd6TOHBMAdo6edTlalzEXqOShg
+--tTy1YXSyp0Ux4rRKxLpVugSw4yGahch3D
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/3/19 6:16 PM, Oliver Hartkopp wrote:
-> yes I've gone through most of it.
-
-tnx
-
-> Some patches do not work alone out of that sequence. Does it make sense=
-=20
-> to squash them into one?
-
-Yes, the patches build on top of each other, but the series is
-bisectable. The criterium is to have one change per patch and the tree
-can be compiled before and after the patch. Smaller changes and thus
-patches are usually easier to review.
-
-It would be nice to have the "renaming things" patches separate, for the
-above reasons. But the introduction of the mid-layer should stay
-separate: introduce it and allocate the mid-layer memory, switch the
-framework over to make use of it and finally remove all left overs.
-
-> squash patches 1-4 into one ?
-
-See above.
-
-> 5 ok
-
-Tnx, added your Acked-by.
-
-> squash patches 6-7 into one ?
-> squash patches 8-9 into one ?
-
-See above
-
-> 10 ok
-
-Tnx, added your Acked-by.
-
-> 11 ok - but my mail address is wrong :/
-
-Doh - Fixed.
-
-> 12 already ok
-> squash patches 13-15 into one ?
-
-No, see above.
-
-> 16-17 ok
-
-Tnx, added your Acked-by.
-
-> 18 Shouldn't it be CAN_REQUIRED_SIZE() ??
-
-Good point. Fixed.
-
-> 19-21 ok
-
-Tnx, added your Acked-by.
-
-> ok -> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+On 9/3/19 9:55 PM, Oliver Hartkopp wrote:
+> Hi Marc, hi Oleksij,
 >=20
-> I'll take a closer look into 21 - but no need to slow down the upstream=
-=20
-> process for that.
+> compiled on top of latest net-next tree:
 
-Tnx,
+Fixed
+
 Marc
 
 --=20
@@ -206,23 +159,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---GBUjaZ9Dd6TOHBMAdo6edTlalzEXqOShg--
+--tTy1YXSyp0Ux4rRKxLpVugSw4yGahch3D--
 
---JvLxE10UKC2VmSKcYZRKAk2gOOx4Idmt0
+--nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1vZI8ACgkQWsYho5Hk
-nSC7+Af+N9SMKeLHyD2F6pjwfPJq1TzUgrQYiy9XMVRcb7cs/QN/NPhvGVRVStqm
-pmPZJFRzGkcaTt8v4dOsRwvBHCVBpknmC0if9WcLdZ31MhCnqf7u6u3ljyFcPzgC
-tnHF/mab9FxU3Zj6I7JpRkc8WiRcOh/8ud9DC2njWg4wzKxY6UVeBvHkY5ZxaW3d
-u/tDteiVc1xS+4tLYwYwKuOI5JciWOGU2qdxD9tr1qjkn2A9uR6qAqejxHggXYaU
-5k8A9kQt8Gby3gpN1cpzTg6pg8/jQKhijhxbY6lVkhiNkWG9UHbuPAf7HMrG3l/y
-iJmjWkzYLsdxKaCmSoNYSah9MG2oiQ==
-=YwnB
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1veYcACgkQWsYho5Hk
+nSBiyggAjdKgwixTtAwTu7NhFRNaqy7wbKkotFIGOmJHyuWBQB1oVqCbiBdtb0Gi
+ijJMKxEZnF4NL0WoNeYuIBUZYYYa0gsb9K4bJk0t+ud5rWOAwsOTykm7mOcOTLE7
+pytg1rxTA6VTRU5/Mgqe4eI83HzPE0o01ZsfL3JHC/cstiiOI15pZt8A5IkYGeq8
+1jiqeEz4la5u+xP+crazGpamLarYJodf01vrEaG0PIa4ty9sjdHM6wFF7BY+ZLVT
+6Dkm+KGCl/zUeyHyP9hGrvO4g92oZd9zwdHycwK9qHuHOw0p1ZRH8ka3nm8AB7ck
+zTIxorXvcUhKMkTfr3AGh1FLmmrTfw==
+=48F/
 -----END PGP SIGNATURE-----
 
---JvLxE10UKC2VmSKcYZRKAk2gOOx4Idmt0--
+--nwfSbq4HbN9Bbi25jHt7U70z3L2v3lAYq--
