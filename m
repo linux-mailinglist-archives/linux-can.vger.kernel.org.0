@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74FB6A8082
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 12:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FBCA8087
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 12:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729537AbfIDKoL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Sep 2019 06:44:11 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56587 "EHLO
+        id S1729565AbfIDKoM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Sep 2019 06:44:12 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39525 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729587AbfIDKoL (ORCPT
+        with ESMTP id S1729590AbfIDKoL (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 06:44:11 -0400
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5Sll-0003XS-JI; Wed, 04 Sep 2019 12:44:09 +0200
+        id 1i5Sll-0003XS-U0; Wed, 04 Sep 2019 12:44:10 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
         Oleksij Rempel <o.rempel@pengutronix.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v2 09/21] can: af_can: rename find_dev_rcv_lists() to can_dev_rcv_lists_find()
-Date:   Wed,  4 Sep 2019 12:43:53 +0200
-Message-Id: <20190904104405.21675-10-mkl@pengutronix.de>
+Subject: [PATCH v2 10/21] can: af_can: give variable holding the CAN receiver and the receiver list a sensible name
+Date:   Wed,  4 Sep 2019 12:43:54 +0200
+Message-Id: <20190904104405.21675-11-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.23.0.rc1
 In-Reply-To: <20190904104405.21675-1-mkl@pengutronix.de>
 References: <20190904104405.21675-1-mkl@pengutronix.de>
@@ -37,59 +37,238 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch add the commonly used prefix "can_" to the find_dev_rcv_lists()
-function and moves the "find" to the end, as the function returns a struct
-can_dev_rcv_list. This improves the overall readability of the code.
+This patch gives the variables holding the CAN receiver and the receiver
+list a better name by renaming them from "r to "rcv" and "rl" to
+"recv_list".
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/af_can.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ net/can/af_can.c | 101 +++++++++++++++++++++++------------------------
+ 1 file changed, 50 insertions(+), 51 deletions(-)
 
 diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 0b008187a840..a5bb364cbf61 100644
+index a5bb364cbf61..36c7b4311936 100644
 --- a/net/can/af_can.c
 +++ b/net/can/af_can.c
-@@ -298,8 +298,8 @@ EXPORT_SYMBOL(can_send);
- 
- /* af_can rx path */
- 
--static struct can_dev_rcv_lists *find_dev_rcv_lists(struct net *net,
--						    struct net_device *dev)
-+static struct can_dev_rcv_lists *can_dev_rcv_lists_find(struct net *net,
-+							struct net_device *dev)
+@@ -438,8 +438,8 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+ 		    canid_t mask, void (*func)(struct sk_buff *, void *),
+ 		    void *data, char *ident, struct sock *sk)
  {
- 	if (!dev)
- 		return net->can.rx_alldev_list;
-@@ -458,7 +458,7 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+-	struct receiver *r;
+-	struct hlist_head *rl;
++	struct receiver *rcv;
++	struct hlist_head *rcv_list;
+ 	struct can_dev_rcv_lists *dev_rcv_lists;
+ 	struct can_rcv_lists_stats *rcv_lists_stats = net->can.rcv_lists_stats;
+ 	int err = 0;
+@@ -452,32 +452,32 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+ 	if (dev && !net_eq(net, dev_net(dev)))
+ 		return -ENODEV;
+ 
+-	r = kmem_cache_alloc(rcv_cache, GFP_KERNEL);
+-	if (!r)
++	rcv = kmem_cache_alloc(rcv_cache, GFP_KERNEL);
++	if (!rcv)
+ 		return -ENOMEM;
  
  	spin_lock(&net->can.rcvlists_lock);
  
--	dev_rcv_lists = find_dev_rcv_lists(net, dev);
-+	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
+ 	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
  	if (dev_rcv_lists) {
- 		rl = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
+-		rl = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
++		rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
  
-@@ -526,7 +526,7 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+-		r->can_id  = can_id;
+-		r->mask    = mask;
+-		r->matches = 0;
+-		r->func    = func;
+-		r->data    = data;
+-		r->ident   = ident;
+-		r->sk      = sk;
++		rcv->can_id = can_id;
++		rcv->mask = mask;
++		rcv->matches = 0;
++		rcv->func = func;
++		rcv->data = data;
++		rcv->ident = ident;
++		rcv->sk = sk;
  
- 	spin_lock(&net->can.rcvlists_lock);
+-		hlist_add_head_rcu(&r->list, rl);
++		hlist_add_head_rcu(&rcv->list, rcv_list);
+ 		dev_rcv_lists->entries++;
  
--	dev_rcv_lists = find_dev_rcv_lists(net, dev);
-+	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
- 	if (!dev_rcv_lists) {
- 		pr_err("BUG: receive list not found for dev %s, id %03X, mask %03X\n",
- 		       DNAME(dev), can_id, mask);
-@@ -671,7 +671,7 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
- 	matches = can_rcv_filter(net->can.rx_alldev_list, skb);
+ 		rcv_lists_stats->rcv_entries++;
+ 		if (rcv_lists_stats->rcv_entries_max < rcv_lists_stats->rcv_entries)
+ 			rcv_lists_stats->rcv_entries_max = rcv_lists_stats->rcv_entries;
+ 	} else {
+-		kmem_cache_free(rcv_cache, r);
++		kmem_cache_free(rcv_cache, rcv);
+ 		err = -ENODEV;
+ 	}
  
- 	/* find receive list for this device */
--	dev_rcv_lists = find_dev_rcv_lists(net, dev);
-+	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
- 	if (dev_rcv_lists)
- 		matches += can_rcv_filter(dev_rcv_lists, skb);
+@@ -490,10 +490,10 @@ EXPORT_SYMBOL(can_rx_register);
+ /* can_rx_delete_receiver - rcu callback for single receiver entry removal */
+ static void can_rx_delete_receiver(struct rcu_head *rp)
+ {
+-	struct receiver *r = container_of(rp, struct receiver, rcu);
+-	struct sock *sk = r->sk;
++	struct receiver *rcv = container_of(rp, struct receiver, rcu);
++	struct sock *sk = rcv->sk;
  
+-	kmem_cache_free(rcv_cache, r);
++	kmem_cache_free(rcv_cache, rcv);
+ 	if (sk)
+ 		sock_put(sk);
+ }
+@@ -513,8 +513,8 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+ 		       canid_t mask, void (*func)(struct sk_buff *, void *),
+ 		       void *data)
+ {
+-	struct receiver *r = NULL;
+-	struct hlist_head *rl;
++	struct receiver *rcv = NULL;
++	struct hlist_head *rcv_list;
+ 	struct can_rcv_lists_stats *rcv_lists_stats = net->can.rcv_lists_stats;
+ 	struct can_dev_rcv_lists *dev_rcv_lists;
+ 
+@@ -533,29 +533,28 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+ 		goto out;
+ 	}
+ 
+-	rl = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
++	rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
+ 
+ 	/* Search the receiver list for the item to delete.  This should
+ 	 * exist, since no receiver may be unregistered that hasn't
+ 	 * been registered before.
+ 	 */
+-	hlist_for_each_entry_rcu(r, rl, list) {
+-		if (r->can_id == can_id && r->mask == mask &&
+-		    r->func == func && r->data == data)
++	hlist_for_each_entry_rcu(rcv, rcv_list, list) {
++		if (rcv->can_id == can_id && rcv->mask == mask &&
++		    rcv->func == func && rcv->data == data)
+ 			break;
+ 	}
+ 
+ 	/* Check for bugs in CAN protocol implementations using af_can.c:
+-	 * 'r' will be NULL if no matching list item was found for removal.
++	 * 'rcv' will be NULL if no matching list item was found for removal.
+ 	 */
+-
+-	if (!r) {
++	if (!rcv) {
+ 		WARN(1, "BUG: receive list entry not found for dev %s, id %03X, mask %03X\n",
+ 		     DNAME(dev), can_id, mask);
+ 		goto out;
+ 	}
+ 
+-	hlist_del_rcu(&r->list);
++	hlist_del_rcu(&rcv->list);
+ 	dev_rcv_lists->entries--;
+ 
+ 	if (rcv_lists_stats->rcv_entries > 0)
+@@ -571,23 +570,23 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+ 	spin_unlock(&net->can.rcvlists_lock);
+ 
+ 	/* schedule the receiver item for deletion */
+-	if (r) {
+-		if (r->sk)
+-			sock_hold(r->sk);
+-		call_rcu(&r->rcu, can_rx_delete_receiver);
++	if (rcv) {
++		if (rcv->sk)
++			sock_hold(rcv->sk);
++		call_rcu(&rcv->rcu, can_rx_delete_receiver);
+ 	}
+ }
+ EXPORT_SYMBOL(can_rx_unregister);
+ 
+-static inline void deliver(struct sk_buff *skb, struct receiver *r)
++static inline void deliver(struct sk_buff *skb, struct receiver *rcv)
+ {
+-	r->func(skb, r->data);
+-	r->matches++;
++	rcv->func(skb, rcv->data);
++	rcv->matches++;
+ }
+ 
+ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buff *skb)
+ {
+-	struct receiver *r;
++	struct receiver *rcv;
+ 	int matches = 0;
+ 	struct can_frame *cf = (struct can_frame *)skb->data;
+ 	canid_t can_id = cf->can_id;
+@@ -597,9 +596,9 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+ 
+ 	if (can_id & CAN_ERR_FLAG) {
+ 		/* check for error message frame entries only */
+-		hlist_for_each_entry_rcu(r, &dev_rcv_lists->rx[RX_ERR], list) {
+-			if (can_id & r->mask) {
+-				deliver(skb, r);
++		hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_ERR], list) {
++			if (can_id & rcv->mask) {
++				deliver(skb, rcv);
+ 				matches++;
+ 			}
+ 		}
+@@ -607,23 +606,23 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+ 	}
+ 
+ 	/* check for unfiltered entries */
+-	hlist_for_each_entry_rcu(r, &dev_rcv_lists->rx[RX_ALL], list) {
+-		deliver(skb, r);
++	hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_ALL], list) {
++		deliver(skb, rcv);
+ 		matches++;
+ 	}
+ 
+ 	/* check for can_id/mask entries */
+-	hlist_for_each_entry_rcu(r, &dev_rcv_lists->rx[RX_FIL], list) {
+-		if ((can_id & r->mask) == r->can_id) {
+-			deliver(skb, r);
++	hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_FIL], list) {
++		if ((can_id & rcv->mask) == rcv->can_id) {
++			deliver(skb, rcv);
+ 			matches++;
+ 		}
+ 	}
+ 
+ 	/* check for inverted can_id/mask entries */
+-	hlist_for_each_entry_rcu(r, &dev_rcv_lists->rx[RX_INV], list) {
+-		if ((can_id & r->mask) != r->can_id) {
+-			deliver(skb, r);
++	hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_INV], list) {
++		if ((can_id & rcv->mask) != rcv->can_id) {
++			deliver(skb, rcv);
+ 			matches++;
+ 		}
+ 	}
+@@ -633,16 +632,16 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+ 		return matches;
+ 
+ 	if (can_id & CAN_EFF_FLAG) {
+-		hlist_for_each_entry_rcu(r, &dev_rcv_lists->rx_eff[effhash(can_id)], list) {
+-			if (r->can_id == can_id) {
+-				deliver(skb, r);
++		hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx_eff[effhash(can_id)], list) {
++			if (rcv->can_id == can_id) {
++				deliver(skb, rcv);
+ 				matches++;
+ 			}
+ 		}
+ 	} else {
+ 		can_id &= CAN_SFF_MASK;
+-		hlist_for_each_entry_rcu(r, &dev_rcv_lists->rx_sff[can_id], list) {
+-			deliver(skb, r);
++		hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx_sff[can_id], list) {
++			deliver(skb, rcv);
+ 			matches++;
+ 		}
+ 	}
 -- 
 2.23.0.rc1
 
