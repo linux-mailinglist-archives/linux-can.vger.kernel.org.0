@@ -2,40 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 056C8A82CE
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 14:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3D2A8320
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 14:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbfIDMaQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Sep 2019 08:30:16 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:55631 "EHLO
+        id S1729565AbfIDMmG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Sep 2019 08:42:06 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54603 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbfIDMaQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 08:30:16 -0400
+        with ESMTP id S1727675AbfIDMmF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 08:42:05 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5UQL-0006wA-5r; Wed, 04 Sep 2019 14:30:09 +0200
+        id 1i5Ubn-0000XW-Ou; Wed, 04 Sep 2019 14:41:59 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51] (unknown [IPv6:2a03:f580:87bc:d400:746e:2448:cd8f:dc51])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 016A045321C;
-        Wed,  4 Sep 2019 12:30:03 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5449745325E;
+        Wed,  4 Sep 2019 12:41:57 +0000 (UTC)
+To:     Thomas.Kopp@microchip.com, martin@sperl.org,
+        linux-can <linux-can@vger.kernel.org>
+References: <6bb64740-bd74-6465-c017-5d0581f32101@sperl.org>
+ <042C443F-731D-45B5-A092-2F041F0EADCF@sperl.org>
+ <3AD46AF4-5589-4B28-9539-EB47B146B60D@sperl.org>
+ <E88D73B8-00F9-48EA-9F2D-7F29FE22756F@sperl.org>
+ <ECB8C3DB-E220-4E41-915D-E06F6CFCA8E8@sperl.org>
+ <8A2E6272-0C56-4163-9A0E-1334E5A8B1C8@sperl.org>
+ <74119C0B-8A5C-45AD-9919-E8E8479253E1@sperl.org>
+ <9cd721b8-ed38-2ea6-49e6-b89614970cec@sperl.org>
+ <5DE21741-C968-40BF-BE42-32C963F673C6@sperl.org>
+ <B346DB94-FCF3-4F85-8568-905C6EA0E1AA@sperl.org>
+ <MN2PR11MB3645AE47B236AD42961F2CB9FBB90@MN2PR11MB3645.namprd11.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kernel@pengutronix.de,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Bastian Stender <bst@pengutronix.de>,
-        Elenita Hinds <ecathinds@gmail.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <ore@pengutronix.de>,
-        David Jander <david@protonic.nl>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,15 +99,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: pull-request: can-next 2019-09-04 j1939
-Message-ID: <d56029d4-2d4c-3cb3-0e5b-e28866db87f1@pengutronix.de>
-Date:   Wed, 4 Sep 2019 14:29:56 +0200
+Subject: Re: MCP25XXFD Linux driver status
+Message-ID: <70e48799-e20b-4b9c-8a05-42fa39d66bac@pengutronix.de>
+Date:   Wed, 4 Sep 2019 14:41:52 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <MN2PR11MB3645AE47B236AD42961F2CB9FBB90@MN2PR11MB3645.namprd11.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="gxFURhHboClmdQqNh66DFNgv0T72J1UIn"
+ boundary="Ho3hDtTxAODhJmlHQVKuCwREVh4k8HtfG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,202 +119,110 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---gxFURhHboClmdQqNh66DFNgv0T72J1UIn
-Content-Type: multipart/mixed; boundary="7jhhL6AeQNjl7rWVrrLihX2llfScyTDCn";
+--Ho3hDtTxAODhJmlHQVKuCwREVh4k8HtfG
+Content-Type: multipart/mixed; boundary="WvnycoYLlVZrrr2C5jMWKPqJ9g4IXKFCV";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net, kernel@pengutronix.de, linux-can@vger.kernel.org,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- Bastian Stender <bst@pengutronix.de>, Elenita Hinds <ecathinds@gmail.com>,
- Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
- Maxime Jayat <maxime.jayat@mobile-devices.fr>,
- Robin van der Gracht <robin@protonic.nl>, Oleksij Rempel
- <ore@pengutronix.de>, David Jander <david@protonic.nl>
-Message-ID: <d56029d4-2d4c-3cb3-0e5b-e28866db87f1@pengutronix.de>
-Subject: pull-request: can-next 2019-09-04 j1939
+To: Thomas.Kopp@microchip.com, martin@sperl.org,
+ linux-can <linux-can@vger.kernel.org>
+Message-ID: <70e48799-e20b-4b9c-8a05-42fa39d66bac@pengutronix.de>
+Subject: Re: MCP25XXFD Linux driver status
+References: <6bb64740-bd74-6465-c017-5d0581f32101@sperl.org>
+ <042C443F-731D-45B5-A092-2F041F0EADCF@sperl.org>
+ <3AD46AF4-5589-4B28-9539-EB47B146B60D@sperl.org>
+ <E88D73B8-00F9-48EA-9F2D-7F29FE22756F@sperl.org>
+ <ECB8C3DB-E220-4E41-915D-E06F6CFCA8E8@sperl.org>
+ <8A2E6272-0C56-4163-9A0E-1334E5A8B1C8@sperl.org>
+ <74119C0B-8A5C-45AD-9919-E8E8479253E1@sperl.org>
+ <9cd721b8-ed38-2ea6-49e6-b89614970cec@sperl.org>
+ <5DE21741-C968-40BF-BE42-32C963F673C6@sperl.org>
+ <B346DB94-FCF3-4F85-8568-905C6EA0E1AA@sperl.org>
+ <MN2PR11MB3645AE47B236AD42961F2CB9FBB90@MN2PR11MB3645.namprd11.prod.outlook.com>
+In-Reply-To: <MN2PR11MB3645AE47B236AD42961F2CB9FBB90@MN2PR11MB3645.namprd11.prod.outlook.com>
 
---7jhhL6AeQNjl7rWVrrLihX2llfScyTDCn
+--WvnycoYLlVZrrr2C5jMWKPqJ9g4IXKFCV
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-Hello David,
+On 9/3/19 6:28 PM, Thomas.Kopp@microchip.com wrote:
+> I finally started with reviewing and testing the MCP25xxFD driver (way
+> later than originally planned=E2=80=A6)
 
-this is a pull request for net-next/master consisting of 21 patches.
+I'm familiar with this situation :/
 
-the first 12 patches are by me and target the CAN core infrastructure.
-They clean up the names of variables , structs and struct members,
-convert can_rx_register() to use max() instead of open coding it and
-remove unneeded code from the can_pernet_exit() callback.
+> To start with: I don=E2=80=99t have any background in Kernel developmen=
+t (my
+> background is mainly bare-metal firmware for 8bit/small 32-bit CM0+
+> devices), so I=E2=80=99ll be focusing on device specifics of the 2517/1=
+8 and
+> things that seem strange to me and might end up asking stupid questions=
 
-The next three patches are also by me and they introduce and make use of
-the CAN midlayer private structure. It is used to hold protocol specific
-per device data structures.
+> about kernel-specifics.
 
-The next patch is by Oleksij Rempel, switches the
-&net->can.rcvlists_lock from a spin_lock() to a spin_lock_bh(), so that
-it can be used from NAPI (soft IRQ) context.
+=2E..there are no stupid questions.
 
-The next 4 patches are by Kurt Van Dijck, he first updates his email
-address via mailmap and then extends sockaddr_can to include j1939
-members.
+> I noticed that Marc is currently working on implementing changes and
+> fixes here:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/=
+log/?h=3Dmcp25xxfd-rpi
 
-The final patch is the collective effort of many entities (The j1939
-authors: Oliver Hartkopp, Bastian Stender, Elenita Hinds, kbuild test
-robot, Kurt Van Dijck, Maxime Jayat, Robin van der Gracht, Oleksij
-Rempel, Marc Kleine-Budde). It adds support of SAE J1939 protocol to the
-CAN networking stack.
+For now it's just random hacking. However that yielded some fixes I want
+to upstream. That's why I asked for the correct branch in Martin's repo
+to send pull request to.
 
-SAE J1939 is the vehicle bus recommended practice used for communication
-and diagnostics among vehicle components. Originating in the car and
-heavy-duty truck industry in the United States, it is now widely used in
-other parts of the world.
+> Is development progressing there now?
 
-regards,
+I hope it's progressing, but for now I'm happy to keep the upstream at
+Martin's repo. It has a much larger user base than linux-can-next.
+
+> Should I base feedback my feedback on the latest release from Martin or=
+
+> on the latest code from you Marc?
+
+Use Martin's latest release for now.
+
+> I did find that previous feedback seems to be scattered around mailing
+> lists and dedicated distribution list. In what way is the feedback
+> preferred? Comments/Questions to a specific distribution list? Patches?=
+
+
+I'm interested in mainline development only. Please use this mailinglist
+here. Post patches using git send-email.
+
+The rest will settle in :)
+
+> As for the hardware: I=E2=80=99ll mainly be testing with our SAMA5D27 p=
+roducts,
+> but also have a couple RPIs lying around to test with.
+
 Marc
-
-P.S.: This pull request doesn't invalidate my last pull request:
-      "pull-request: can-next 2019-09-03".
-
----
-
-The following changes since commit 2c1f9e26344483e2c74e80ef708d9c7fd2e543=
-f4:
-
-  Merge branch '100GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/=
-jkirsher/next-queue (2019-09-03 21:51:25 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git ta=
-gs/linux-can-next-for-5.4-20190904
-
-for you to fetch changes up to 9d71dd0c70099914fcd063135da3c580865e924c:
-
-  can: add support of SAE J1939 protocol (2019-09-04 14:22:33 +0200)
-
-----------------------------------------------------------------
-linux-can-next-for-5.4-20190904
-
-----------------------------------------------------------------
-Kurt Van Dijck (4):
-      mailmap: update email address
-      can: introduce CAN_REQUIRED_SIZE macro
-      can: add socket type for CAN_J1939
-      can: extend sockaddr_can to include j1939 members
-
-Marc Kleine-Budde (15):
-      can: netns: give structs holding the CAN statistics a sensible name=
-
-      can: netns: give members of struct netns_can holding the statistics=
- a sensible name
-      can: af_can: give variables holding CAN statistics a sensible name
-      can: proc: give variables holding CAN statistics a sensible name
-      can: netns: remove "can_" prefix from members struct netns_can
-      can: af_can: give variable holding the CAN per device receive lists=
- a sensible name
-      can: proc: give variable holding the CAN per device receive lists a=
- sensible name
-      can: af_can: rename find_rcv_list() to can_rcv_list_find()
-      can: af_can: rename find_dev_rcv_lists() to can_dev_rcv_lists_find(=
-)
-      can: af_can: give variable holding the CAN receiver and the receive=
-r list a sensible name
-      can: af_can: can_rx_register(): use max() instead of open coding it=
-
-      can: af_can: can_pernet_exit(): no need to iterate over and cleanup=
- registered CAN devices
-      can: introduce CAN midlayer private and allocate it automatically
-      can: make use of preallocated can_ml_priv for per device struct can=
-_dev_rcv_lists
-      can: af_can: remove NULL-ptr checks from users of can_dev_rcv_lists=
-_find()
-
-Oleksij Rempel (1):
-      can: af_can: use spin_lock_bh() for &net->can.rcvlists_lock
-
-The j1939 authors (1):
-      can: add support of SAE J1939 protocol
-
- .mailmap                           |    1 +
- Documentation/networking/index.rst |    1 +
- Documentation/networking/j1939.rst |  422 ++++++++
- MAINTAINERS                        |   10 +
- drivers/net/can/dev.c              |   24 +-
- drivers/net/can/slcan.c            |    6 +-
- drivers/net/can/vcan.c             |    7 +-
- drivers/net/can/vxcan.c            |    4 +-
- include/linux/can/can-ml.h         |   68 ++
- include/linux/can/core.h           |    8 +
- include/net/netns/can.h            |   14 +-
- include/uapi/linux/can.h           |   20 +-
- include/uapi/linux/can/j1939.h     |   99 ++
- net/can/Kconfig                    |    2 +
- net/can/Makefile                   |    2 +
- net/can/af_can.c                   |  302 +++---
- net/can/af_can.h                   |   19 +-
- net/can/bcm.c                      |    4 +-
- net/can/j1939/Kconfig              |   15 +
- net/can/j1939/Makefile             |   10 +
- net/can/j1939/address-claim.c      |  230 ++++
- net/can/j1939/bus.c                |  333 ++++++
- net/can/j1939/j1939-priv.h         |  338 ++++++
- net/can/j1939/main.c               |  403 +++++++
- net/can/j1939/socket.c             | 1160 +++++++++++++++++++++
- net/can/j1939/transport.c          | 2027 ++++++++++++++++++++++++++++++=
-++++++
- net/can/proc.c                     |  163 +--
- net/can/raw.c                      |    4 +-
- 28 files changed, 5398 insertions(+), 298 deletions(-)
- create mode 100644 Documentation/networking/j1939.rst
- create mode 100644 include/linux/can/can-ml.h
- create mode 100644 include/uapi/linux/can/j1939.h
- create mode 100644 net/can/j1939/Kconfig
- create mode 100644 net/can/j1939/Makefile
- create mode 100644 net/can/j1939/address-claim.c
- create mode 100644 net/can/j1939/bus.c
- create mode 100644 net/can/j1939/j1939-priv.h
- create mode 100644 net/can/j1939/main.c
- create mode 100644 net/can/j1939/socket.c
- create mode 100644 net/can/j1939/transport.c
 
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
 Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |-
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
+--WvnycoYLlVZrrr2C5jMWKPqJ9g4IXKFCV--
 
-
-
-
-
-
-
-
-
-
-
-
---7jhhL6AeQNjl7rWVrrLihX2llfScyTDCn--
-
---gxFURhHboClmdQqNh66DFNgv0T72J1UIn
+--Ho3hDtTxAODhJmlHQVKuCwREVh4k8HtfG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1vrkQACgkQWsYho5Hk
-nSBcfwf+Lj+UN6ZZKihUPvDBcRvcC3awc2ad/h7wkYuWvNuMJ0o6OdDjWve+IujB
-RD+VpaF68tOiDkKLiaPoLvTM3+/7y/p3yJTcl73FbVDskMZcpKMphLx9S0bOLmp1
-PCsU1DUq8qXdHeD8zJutOTu/iIeJWWi5M8z5B39cz8LW5WuiglJHbGhwKoJjWBXz
-fL7eNcxxD4UI48hOtGQEl11UYN3JfemCID8xKkuN001I6vnk0py9Rxl4xBZ6+30R
-0r4qOTwzq12EJ/hmCjck8sxYvDiEws2zsN7NloBiBrTQJUtyJWVlp6BdA7Wk+CDF
-M0O0jhUIpER/T0uIlQ1ubM29L8vUvQ==
-=9kyu
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1vsRAACgkQWsYho5Hk
+nSARsAf/cn/f6ICxwblO8fH0cQ65NlELqmxARMfwVy7BALRSfkKdgo1SNdKL1QNg
+ErVvp8w3DzQvx8gF3x4zKmmPDDFZPTrNjP7ADasFVgfZby3Kfs9wctA25QKwpDit
+iP3JaBpvvysKG6m6p61jH/cSm1/hYRwJB8FlURwYDEKEMNXmYbpCcdu9dnmQW2Lr
+4AVTplK0H1Z3p3GjIWh8GZEZDg4W1vUIWtbpeZBagU5M3Vb2k7aY04IA1vhCDMjh
+dp60woQcgV6Qzb+I9W0Ug2DItc0WZDLrcRRrwAZ/RHx9yeNBvQJ0QfGphATYvVfS
+rW0QoJYE8+5rREdAMMjezKtpn+W5EQ==
+=l12l
 -----END PGP SIGNATURE-----
 
---gxFURhHboClmdQqNh66DFNgv0T72J1UIn--
+--Ho3hDtTxAODhJmlHQVKuCwREVh4k8HtfG--
