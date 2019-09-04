@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D091BA808C
-	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 12:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521F0A808D
+	for <lists+linux-can@lfdr.de>; Wed,  4 Sep 2019 12:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729590AbfIDKoP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1729640AbfIDKoP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Wed, 4 Sep 2019 06:44:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:42343 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53567 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729609AbfIDKoO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 06:44:14 -0400
+        with ESMTP id S1729616AbfIDKoP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Sep 2019 06:44:15 -0400
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5Slp-0003XS-1R; Wed, 04 Sep 2019 12:44:13 +0200
+        id 1i5Slp-0003XS-BF; Wed, 04 Sep 2019 12:44:13 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
         Oleksij Rempel <o.rempel@pengutronix.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v2 14/21] can: make use of preallocated can_ml_priv for per device struct can_dev_rcv_lists
-Date:   Wed,  4 Sep 2019 12:43:58 +0200
-Message-Id: <20190904104405.21675-15-mkl@pengutronix.de>
+Subject: [PATCH v2 15/21] can: af_can: remove NULL-ptr checks from users of can_dev_rcv_lists_find()
+Date:   Wed,  4 Sep 2019 12:43:59 +0200
+Message-Id: <20190904104405.21675-16-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.23.0.rc1
 In-Reply-To: <20190904104405.21675-1-mkl@pengutronix.de>
 References: <20190904104405.21675-1-mkl@pengutronix.de>
@@ -37,165 +37,88 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch removes the old method of allocating the per device protocol
-specific memory via a netdevice_notifier. This had the drawback, that
-the allocation can fail, leading to a lot of null pointer checks in the
-code. This also makes the live cycle management of this memory quite
-complicated.
-
-This patch switches from the allocating the struct can_dev_rcv_lists in
-a NETDEV_REGISTER call to using the dev->ml_priv, which is allocated by
-the driver since the previous patch.
+Since using the "struct can_ml_priv" for the per device "struct
+dev_rcv_lists" the call can_dev_rcv_lists_find() cannot fail anymore.
+This patch simplifies af_can by removing the NULL pointer checks from
+the dev_rcv_lists returned by can_dev_rcv_lists_find().
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev.c      |  2 ++
- drivers/net/can/slcan.c    |  1 +
- drivers/net/can/vcan.c     |  1 +
- drivers/net/can/vxcan.c    |  1 +
- include/linux/can/can-ml.h |  1 -
- net/can/af_can.c           | 45 ++++++--------------------------------
- 6 files changed, 12 insertions(+), 39 deletions(-)
+ net/can/af_can.c | 45 ++++++++++++++++-----------------------------
+ 1 file changed, 16 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index 9e688dc29521..b429550c4cc2 100644
---- a/drivers/net/can/dev.c
-+++ b/drivers/net/can/dev.c
-@@ -746,6 +746,8 @@ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
- 	priv = netdev_priv(dev);
- 	priv->dev = dev;
- 
-+	dev->ml_priv = (void *)priv + ALIGN(sizeof_priv, NETDEV_ALIGN);
-+
- 	if (echo_skb_max) {
- 		priv->echo_skb_max = echo_skb_max;
- 		priv->echo_skb = (void *)priv +
-diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 5b2e95425e69..bb6032211043 100644
---- a/drivers/net/can/slcan.c
-+++ b/drivers/net/can/slcan.c
-@@ -536,6 +536,7 @@ static struct slcan *slc_alloc(void)
- 
- 	dev->base_addr  = i;
- 	sl = netdev_priv(dev);
-+	dev->ml_priv = (void *)sl + ALIGN(sizeof(*sl), NETDEV_ALIGN);
- 
- 	/* Initialize channel control data */
- 	sl->magic = SLCAN_MAGIC;
-diff --git a/drivers/net/can/vcan.c b/drivers/net/can/vcan.c
-index 6973ae09a37a..39ca14b0585d 100644
---- a/drivers/net/can/vcan.c
-+++ b/drivers/net/can/vcan.c
-@@ -153,6 +153,7 @@ static void vcan_setup(struct net_device *dev)
- 	dev->addr_len		= 0;
- 	dev->tx_queue_len	= 0;
- 	dev->flags		= IFF_NOARP;
-+	dev->ml_priv		= netdev_priv(dev);
- 
- 	/* set flags according to driver capabilities */
- 	if (echo)
-diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-index 4c3eed796432..d6ba9426be4d 100644
---- a/drivers/net/can/vxcan.c
-+++ b/drivers/net/can/vxcan.c
-@@ -147,6 +147,7 @@ static void vxcan_setup(struct net_device *dev)
- 	dev->flags		= (IFF_NOARP|IFF_ECHO);
- 	dev->netdev_ops		= &vxcan_netdev_ops;
- 	dev->needs_free_netdev	= true;
-+	dev->ml_priv		= netdev_priv(dev) + ALIGN(sizeof(struct vxcan_priv), NETDEV_ALIGN);
- }
- 
- /* forward declaration for rtnl_create_link() */
-diff --git a/include/linux/can/can-ml.h b/include/linux/can/can-ml.h
-index 0a9d778de8af..79ccf6bfa232 100644
---- a/include/linux/can/can-ml.h
-+++ b/include/linux/can/can-ml.h
-@@ -55,7 +55,6 @@ struct can_dev_rcv_lists {
- 	struct hlist_head rx[RX_MAX];
- 	struct hlist_head rx_sff[CAN_SFF_RCV_ARRAY_SZ];
- 	struct hlist_head rx_eff[CAN_EFF_RCV_ARRAY_SZ];
--	int remove_on_zero_entries;
- 	int entries;
- };
- 
 diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 723299daa04e..6ed85e2f72f0 100644
+index 6ed85e2f72f0..25f0d510e1bf 100644
 --- a/net/can/af_can.c
 +++ b/net/can/af_can.c
-@@ -302,10 +302,12 @@ EXPORT_SYMBOL(can_send);
- static struct can_dev_rcv_lists *can_dev_rcv_lists_find(struct net *net,
- 							struct net_device *dev)
- {
--	if (!dev)
-+	if (dev) {
-+		struct can_ml_priv *ml_priv = dev->ml_priv;
-+		return &ml_priv->dev_rcv_lists;
-+	} else {
- 		return net->can.rx_alldev_list;
--	else
--		return (struct can_dev_rcv_lists *)dev->ml_priv;
-+	}
- }
+@@ -462,28 +462,22 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+ 	spin_lock(&net->can.rcvlists_lock);
  
- /**
-@@ -561,12 +563,6 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
- 	if (rcv_lists_stats->rcv_entries > 0)
- 		rcv_lists_stats->rcv_entries--;
- 
--	/* remove device structure requested by NETDEV_UNREGISTER */
--	if (dev_rcv_lists->remove_on_zero_entries && !dev_rcv_lists->entries) {
--		kfree(dev_rcv_lists);
--		dev->ml_priv = NULL;
--	}
+ 	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
+-	if (dev_rcv_lists) {
+-		rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
 -
-  out:
+-		rcv->can_id = can_id;
+-		rcv->mask = mask;
+-		rcv->matches = 0;
+-		rcv->func = func;
+-		rcv->data = data;
+-		rcv->ident = ident;
+-		rcv->sk = sk;
+-
+-		hlist_add_head_rcu(&rcv->list, rcv_list);
+-		dev_rcv_lists->entries++;
+-
+-		rcv_lists_stats->rcv_entries++;
+-		rcv_lists_stats->rcv_entries_max = max(rcv_lists_stats->rcv_entries_max,
+-						       rcv_lists_stats->rcv_entries);
+-	} else {
+-		kmem_cache_free(rcv_cache, rcv);
+-		err = -ENODEV;
+-	}
++	rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
++
++	rcv->can_id = can_id;
++	rcv->mask = mask;
++	rcv->matches = 0;
++	rcv->func = func;
++	rcv->data = data;
++	rcv->ident = ident;
++	rcv->sk = sk;
+ 
++	hlist_add_head_rcu(&rcv->list, rcv_list);
++	dev_rcv_lists->entries++;
++
++	rcv_lists_stats->rcv_entries++;
++	rcv_lists_stats->rcv_entries_max = max(rcv_lists_stats->rcv_entries_max,
++					       rcv_lists_stats->rcv_entries);
  	spin_unlock(&net->can.rcvlists_lock);
  
-@@ -788,41 +784,14 @@ static int can_notifier(struct notifier_block *nb, unsigned long msg,
- 			void *ptr)
- {
- 	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
--	struct can_dev_rcv_lists *dev_rcv_lists;
+ 	return err;
+@@ -530,12 +524,6 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+ 	spin_lock(&net->can.rcvlists_lock);
  
- 	if (dev->type != ARPHRD_CAN)
- 		return NOTIFY_DONE;
+ 	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
+-	if (!dev_rcv_lists) {
+-		pr_err("BUG: receive list not found for dev %s, id %03X, mask %03X\n",
+-		       DNAME(dev), can_id, mask);
+-		goto out;
+-	}
+-
+ 	rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
  
- 	switch (msg) {
- 	case NETDEV_REGISTER:
--
--		/* create new dev_rcv_lists for this device */
--		dev_rcv_lists = kzalloc(sizeof(*dev_rcv_lists), GFP_KERNEL);
--		if (!dev_rcv_lists)
--			return NOTIFY_DONE;
--		BUG_ON(dev->ml_priv);
--		dev->ml_priv = dev_rcv_lists;
--
--		break;
--
--	case NETDEV_UNREGISTER:
--		spin_lock(&dev_net(dev)->can.rcvlists_lock);
--
--		dev_rcv_lists = dev->ml_priv;
--		if (dev_rcv_lists) {
--			if (dev_rcv_lists->entries)
--				dev_rcv_lists->remove_on_zero_entries = 1;
--			else {
--				kfree(dev_rcv_lists);
--				dev->ml_priv = NULL;
--			}
--		} else {
--			pr_err("can: notifier: receive list not found for dev %s\n",
--			       dev->name);
--		}
--
--		spin_unlock(&dev_net(dev)->can.rcvlists_lock);
--
-+		WARN(!dev->ml_priv,
-+		     "No CAN mid layer private allocated, please fix your driver and use alloc_candev()!\n");
- 		break;
- 	}
+ 	/* Search the receiver list for the item to delete.  This should
+@@ -668,8 +656,7 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+ 
+ 	/* find receive list for this device */
+ 	dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
+-	if (dev_rcv_lists)
+-		matches += can_rcv_filter(dev_rcv_lists, skb);
++	matches += can_rcv_filter(dev_rcv_lists, skb);
+ 
+ 	rcu_read_unlock();
  
 -- 
 2.23.0.rc1
