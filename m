@@ -2,36 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A43AAC7E
-	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2019 21:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C819AAD33
+	for <lists+linux-can@lfdr.de>; Thu,  5 Sep 2019 22:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729395AbfIETy1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Sep 2019 15:54:27 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49407 "EHLO
+        id S2391699AbfIEUjr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Sep 2019 16:39:47 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58729 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbfIETy1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Sep 2019 15:54:27 -0400
+        with ESMTP id S2391638AbfIEUjr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Sep 2019 16:39:47 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1i5xpl-0004yu-2w; Thu, 05 Sep 2019 21:54:21 +0200
+        id 1i5yXf-0001LK-Gk; Thu, 05 Sep 2019 22:39:43 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8939:9282:92f5:a228] (unknown [IPv6:2a03:f580:87bc:d400:8939:9282:92f5:a228])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 209D7454131;
-        Thu,  5 Sep 2019 19:54:11 +0000 (UTC)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
-        bst@pengutronix.de, ecathinds@gmail.com,
-        dev.kurt@vandijck-laurijssen.be, maxime.jayat@mobile-devices.fr,
-        robin@protonic.nl, ore@pengutronix.de, david@protonic.nl
-References: <d56029d4-2d4c-3cb3-0e5b-e28866db87f1@pengutronix.de>
- <20190905.121813.2071644369326938083.davem@davemloft.net>
- <c83d495c-1259-ee69-c6e9-638a5a05225e@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8671F45417F;
+        Thu,  5 Sep 2019 20:39:41 +0000 (UTC)
+To:     Sean Nyekjaer <sean@geanix.com>, s.hauer@pengutronix.de,
+        miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org,
+        linux-can <linux-can@vger.kernel.org>
+References: <6a333d0f-09b2-d0d1-a3a5-955b31b6291e@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,16 +90,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: pull-request: can-next 2019-09-04 j1939
-Message-ID: <d82697b1-d413-2bdf-c56b-b79b316e6ea4@pengutronix.de>
-Date:   Thu, 5 Sep 2019 21:54:01 +0200
+Subject: Re: [Bug] mtd: rawnand: gpmi
+Message-ID: <9db42086-027f-e096-44d7-6d39b8af94ee@pengutronix.de>
+Date:   Thu, 5 Sep 2019 22:39:36 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <c83d495c-1259-ee69-c6e9-638a5a05225e@hartkopp.net>
+In-Reply-To: <6a333d0f-09b2-d0d1-a3a5-955b31b6291e@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="2bOo1gurArEGgeyp08Lx8N29h9HonDV4C"
+ boundary="5dQik6L09IRMXXsePXfzC0PhJe2enN51h"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,41 +110,32 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---2bOo1gurArEGgeyp08Lx8N29h9HonDV4C
-Content-Type: multipart/mixed; boundary="tzXRTBFKmQXL9BbyQn5RMHEZqKyv9fqh3";
+--5dQik6L09IRMXXsePXfzC0PhJe2enN51h
+Content-Type: multipart/mixed; boundary="fXrJmMosEU8RMe8VehDddG5VVSRdBvTWf";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, bst@pengutronix.de,
- ecathinds@gmail.com, dev.kurt@vandijck-laurijssen.be,
- maxime.jayat@mobile-devices.fr, robin@protonic.nl, ore@pengutronix.de,
- david@protonic.nl
-Message-ID: <d82697b1-d413-2bdf-c56b-b79b316e6ea4@pengutronix.de>
-Subject: Re: pull-request: can-next 2019-09-04 j1939
-References: <d56029d4-2d4c-3cb3-0e5b-e28866db87f1@pengutronix.de>
- <20190905.121813.2071644369326938083.davem@davemloft.net>
- <c83d495c-1259-ee69-c6e9-638a5a05225e@hartkopp.net>
-In-Reply-To: <c83d495c-1259-ee69-c6e9-638a5a05225e@hartkopp.net>
+To: Sean Nyekjaer <sean@geanix.com>, s.hauer@pengutronix.de,
+ miquel.raynal@bootlin.com, linux-mtd@lists.infradead.org,
+ linux-can <linux-can@vger.kernel.org>
+Message-ID: <9db42086-027f-e096-44d7-6d39b8af94ee@pengutronix.de>
+Subject: Re: [Bug] mtd: rawnand: gpmi
+References: <6a333d0f-09b2-d0d1-a3a5-955b31b6291e@geanix.com>
+In-Reply-To: <6a333d0f-09b2-d0d1-a3a5-955b31b6291e@geanix.com>
 
---tzXRTBFKmQXL9BbyQn5RMHEZqKyv9fqh3
+--fXrJmMosEU8RMe8VehDddG5VVSRdBvTWf
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/5/19 8:11 PM, Oliver Hartkopp wrote:
->>> this is a pull request for net-next/master consisting of 21 patches.
+On 9/5/19 10:26 PM, Sean Nyekjaer wrote:
+> I have been troubleshooting some CAN problems on our imx6ull with a raw=
+=20
+> nand flash.
+> I normally run with a 4.19 series kernel, but to verify those CAN=20
+> problems have been resolved in newer kernels i have been trying ~5.3-rc=
+6.
 
-> Great news! So you need to update your slides for ELCE 2019 ;-)
-
-That was the secret masterplan :) However the slides are not written, yet=
-=2E
-
-> https://osseu19.sched.com/event/TLNC/introduction-to-the-j1939-kernel-s=
-tack-marc-kleine-budde-pengutronix
->=20
-> I will be there too - looking forward to meet you in person again.
-
-Oh nice to see you, and everyone else!
+What kind of CAN problem? (Cc +=3D linux-can).
 
 Marc
 
@@ -159,23 +146,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---tzXRTBFKmQXL9BbyQn5RMHEZqKyv9fqh3--
+--fXrJmMosEU8RMe8VehDddG5VVSRdBvTWf--
 
---2bOo1gurArEGgeyp08Lx8N29h9HonDV4C
+--5dQik6L09IRMXXsePXfzC0PhJe2enN51h
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1xZ9kACgkQWsYho5Hk
-nSD3aAf+KfbkEIKfumRasCML4OCMpHZyWVup44x80N7Y7/bUprhTAMfYkYV3dsuZ
-I73CAkmFFwDKxaw/FvrRhrbWVKvg/C6M8ydur59jfy+FduzommLnDy6WsWb84tY9
-GVBcFCd+BVQfMiLvylIzyRuiKPUWPoYb9Bc0LxDlfZB+pmT7Zo4tBDzOpcVaNda5
-1cu0VIuDj+0gxRf69Nw/n3Sv/U8ixXIA18KBw1U7GzkXL+Sk6CiJDCZlYd1tZkJG
-En30Sk0wCfRgmxbh29zvn55HToJUn0o6q+bUmBEFnUnrppfy7PQvthjI3Nq8HdNA
-0X6feBINVCukGSdm17odHBUesWgtFQ==
-=VKXa
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1xcogACgkQWsYho5Hk
+nSBz7Af/ai1hQLjrzTi/jsQDJRAIf4qjhJW/doaHYZAleBEBs4wZqVh4ncWt4Ura
+gR9AKbL3jTS4qsxWat/F7oL87jTPik3Yz36PsPLz1nrKL5C5xyIS6h82TJgfF9d3
+ujULqt17EZ5xHPWc6Qumv1hgJ0seTNooA2xjVoJqxLnuI22ipKsRhj/rR4r679AT
+fAYoUZPiokn26FtT9eAFfyoEVcfXqHU8QoIY78NcPoGGxG9mIuKLh3r/V5aBWyBe
+0uU5f16jwy1eUMKGbRRdrvgGW40qxkyYzDqp/Xc2i4tMeSdH4r8K03VN9y0gAImB
+BY1WRlAtP4bdehj0rHITUGzA3YQzZQ==
+=cMqv
 -----END PGP SIGNATURE-----
 
---2bOo1gurArEGgeyp08Lx8N29h9HonDV4C--
+--5dQik6L09IRMXXsePXfzC0PhJe2enN51h--
