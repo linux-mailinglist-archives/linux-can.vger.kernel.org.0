@@ -2,129 +2,189 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00ABEAB085
-	for <lists+linux-can@lfdr.de>; Fri,  6 Sep 2019 04:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D427AB2DA
+	for <lists+linux-can@lfdr.de>; Fri,  6 Sep 2019 09:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731583AbfIFCLn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Sep 2019 22:11:43 -0400
-Received: from mail-eopbgr20041.outbound.protection.outlook.com ([40.107.2.41]:54306
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728507AbfIFCLn (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 5 Sep 2019 22:11:43 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZfPoen2BobU/psjfIpHPOSqT6EJGKvmbrjdbfEMLqZUmumxc9JURQxuOptaV5WzLXr/pIscYHXnFjdrzi3x4/Vces0QGJaf83YjhKrNEBc9LtWvQJr8vrTiVXIQCnV7QnQpeK1/8azjRbeB4z3ew0VzKFTzqsueZWlVrWVgQsqGidBJj42CIGjO4/4unakpO5K3rseHY8ClGp9VWUCZ3sk+DbFu4NwTtKX5mruTBWWCBk7azsKIsdePU0ecKKTHn/nT7wjVnFZGPcWvib0RzV/VTT3KjMnmV1JoirexxsIlJQZ45gU54j81r1+w3sbtAhdnm3HRf+znGDz46Iaayzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3VaHZP8AWdnQ9/m4YzrvvMpBnqKnFqLOLD/uoUYSLpQ=;
- b=LY7c8oifDSKRfBIt2u6Bu9OUjliItc5rxSoLOy1N4P0J6J6ufOXhmMJc8oCfdelcvUjmsyKzl8d8xwtWt4MUn4FOHWCilygNd7f6yor0eP62XM3r87d0G7ue081345uNV9w0MQZwWBqELGd6SZUMBKQfvOPVs1/nTbN1TSiH7++QcS6BrPSwcmAg2cRBqfA8nlEMqZqX97VclWZ+r++RPD/b1OLcS4F8zVF/m1XECCwcDCkXqKsYdj1/Qlo0i3s8uNdnToi8EZkgn0sttWY1rct14Suegq1GyiXkoETKq22pEoQiUZeZaNS7hUu3wMCrMQHic/i1LVtyt6a9YpiiPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3VaHZP8AWdnQ9/m4YzrvvMpBnqKnFqLOLD/uoUYSLpQ=;
- b=kHQ8173cfp0C9A9Zi81vquiAE5R4CuQc6ceuYzAdS82Hq2AyHG6OeFSoQNdFKyLDMwag+G/QcsUbteg+JnVTH6sbRU/E+Ws7A7vvLS7IUSE8WeEypaqJUXj1ZoFE4iN7LSMNYd/clYYcdy7daZWoGseqvPJnJq4JH/vLgaJ/KFQ=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB5035.eurprd04.prod.outlook.com (20.176.234.13) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.20; Fri, 6 Sep 2019 02:11:38 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::29e4:47d:7a2b:a6c6]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::29e4:47d:7a2b:a6c6%7]) with mapi id 15.20.2220.022; Fri, 6 Sep 2019
- 02:11:38 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Sean Nyekjaer <sean@geanix.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        =?utf-8?B?TWFydGluIEh1bmRlYsO4bGw=?= <martin@geanix.com>
-Subject: RE: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
- wakeup
-Thread-Topic: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
- wakeup
-Thread-Index: AQHVVAt+uezYlHzMP0yJKoK3YxkiS6cD2xAAgAAKUjCAAA71AIAMq3CAgAEuS9CACueJAIAAERoggABp3ICAAM1yoA==
-Date:   Fri, 6 Sep 2019 02:11:37 +0000
-Message-ID: <DB7PR04MB461874ED80BCEA892249661AE6BA0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
- <20190816081749.19300-2-qiangqing.zhang@nxp.com>
- <dd8f5269-8403-702b-b054-e031423ffc73@geanix.com>
- <DB7PR04MB4618A1F984F2281C66959B06E6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <35190c5b-f8be-8784-5b4f-32a691a6cffe@geanix.com>
- <6a9bc081-334a-df91-3a23-b74a6cdd3633@geanix.com>
- <DB7PR04MB4618E527339B69AEAD46FB06E6A20@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <588ab34d-613d-ac01-7949-921140ca4543@geanix.com>
- <DB7PR04MB461868320DA0B25CC8255213E6BB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <1655f342-7aaf-5e36-d141-d00eee84f3ec@geanix.com>
-In-Reply-To: <1655f342-7aaf-5e36-d141-d00eee84f3ec@geanix.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 81246f94-a7d6-4ff3-daf3-08d7326f8cde
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR04MB5035;
-x-ms-traffictypediagnostic: DB7PR04MB5035:|DB7PR04MB5035:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB5035BA4B6A5B52EBC3F26A6AE6BA0@DB7PR04MB5035.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0152EBA40F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(136003)(39860400002)(366004)(396003)(13464003)(199004)(189003)(229853002)(8936002)(52536014)(6246003)(66446008)(64756008)(66556008)(66476007)(81166006)(7736002)(2201001)(305945005)(76116006)(81156014)(8676002)(66946007)(66066001)(99286004)(9686003)(53546011)(76176011)(14444005)(102836004)(186003)(53936002)(26005)(316002)(71190400001)(71200400001)(54906003)(6506007)(110136005)(7696005)(256004)(446003)(476003)(6436002)(2501003)(55016002)(486006)(11346002)(6116002)(3846002)(66574012)(14454004)(478600001)(74316002)(86362001)(5660300002)(33656002)(2906002)(25786009)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5035;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 7y1HEJgnon2rMcjobt5tr7OaXTVKk1nEnAWnMN0r6SEPjPcOvRKjx+L2Ltp2pI2XI0DALVIUllpcF9xnVfhtwKywu2DEMxw6fV3QaYBJr7PjfEj009zuNbN4NN9PTo50tJglFkf2Zm0t98COifp+Q4IxQEv4A454A6LyhOwyGPW4ggC72Qh3lvaYqqeQyBr0wmaV1DVSSIXmsAWMKenrmp/WUlgDkd1r0Pj2oX89kbiOhMDLXlj/eD6oeShfXM59PC+u1aTTOYb0NkPTxuA5rL8fAvwcGVuXW1BWDzDgvvat0WFMM9wsPJxTncvbQD4/3JLPl8czZIOgHW0sm9HtfH0bkvCkz/X1NGm+8h5vffkrVHA6UGp7X8zy6bBbd2MJSM0gSPuaDLbKqRJJiGrCorGWGh/jEei8D2ea6+aTInI=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2404197AbfIFHBm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Sep 2019 03:01:42 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36461 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391691AbfIFHBl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Sep 2019 03:01:41 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1i68FW-0005JX-Hk; Fri, 06 Sep 2019 09:01:38 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:8939:9282:92f5:a228] (unknown [IPv6:2a03:f580:87bc:d400:8939:9282:92f5:a228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CEA4D454475;
+        Fri,  6 Sep 2019 07:01:33 +0000 (UTC)
+To:     =?UTF-8?Q?Sean_Nyekj=c3=a6r?= <sean@geanix.com>
+Cc:     s.hauer@pengutronix.de, miquel.raynal@bootlin.com,
+        linux-mtd@lists.infradead.org,
+        linux-can <linux-can@vger.kernel.org>
+References: <6a333d0f-09b2-d0d1-a3a5-955b31b6291e@geanix.com>
+ <9db42086-027f-e096-44d7-6d39b8af94ee@pengutronix.de>
+ <E8555824-943E-45B4-A0ED-D42E13156EEC@geanix.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [Bug] mtd: rawnand: gpmi
+Message-ID: <a861dd9d-8aa3-c084-a850-efba5efa6f87@pengutronix.de>
+Date:   Fri, 6 Sep 2019 09:01:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 81246f94-a7d6-4ff3-daf3-08d7326f8cde
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2019 02:11:38.0379
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: muP3PIiW2E2T7XzHIVsAiZQdR5QlDcYSOobPwDnRJt8h/p0O9hYPIMRQBFDtN8GZm1FHZsNy9J7ZjmsrLD3spA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5035
+In-Reply-To: <E8555824-943E-45B4-A0ED-D42E13156EEC@geanix.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="q523e3DEDk2YYo7dcVYCGwHdFZCMBUvJv"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNlYW4gTnlla2phZXIgPHNl
-YW5AZ2Vhbml4LmNvbT4NCj4gU2VudDogMjAxOeW5tDnmnIg15pelIDIxOjE4DQo+IFRvOiBKb2Fr
-aW0gWmhhbmcgPHFpYW5ncWluZy56aGFuZ0BueHAuY29tPjsgbWtsQHBlbmd1dHJvbml4LmRlOw0K
-PiBsaW51eC1jYW5Admdlci5rZXJuZWwub3JnDQo+IENjOiB3Z0BncmFuZGVnZ2VyLmNvbTsgbmV0
-ZGV2QHZnZXIua2VybmVsLm9yZzsgZGwtbGludXgtaW14DQo+IDxsaW51eC1pbXhAbnhwLmNvbT47
-IE1hcnRpbiBIdW5kZWLDuGxsIDxtYXJ0aW5AZ2Vhbml4LmNvbT4NCj4gU3ViamVjdDogUmU6IFtQ
-QVRDSCBSRVBPU1QgMS8yXSBjYW46IGZsZXhjYW46IGZpeCBkZWFkbG9jayB3aGVuIHVzaW5nIHNl
-bGYNCj4gd2FrZXVwDQo+IA0KPiANCj4gDQo+IE9uIDA1LzA5LzIwMTkgMDkuMTAsIEpvYWtpbSBa
-aGFuZyB3cm90ZToNCj4gPiBIaSBTZWFuLA0KPiA+DQo+ID4gQ291bGQgeW91IHVwZGF0ZSBsYXN0
-ZXN0IGZsZXhjYW4gZHJpdmVyIHVzaW5nIGxpbnV4LWNhbi1uZXh0L2ZsZXhjYW4gYW5kIHRoZW4N
-Cj4gbWVyZ2UgYmVsb3cgdHdvIHBhdGNoZXMgZnJvbSBsaW51eC1jYW4vdGVzdGluZz8NCj4gPiBk
-MGI1MzYxNjcxNmUgKEhFQUQgLT4gdGVzdGluZywgb3JpZ2luL3Rlc3RpbmcpIGNhbjogZmxleGNh
-bjogYWRkIExQU1INCj4gPiBtb2RlIHN1cHBvcnQgZm9yIGkuTVg3RCA4MDNlYjZiYWQ2NWIgY2Fu
-OiBmbGV4Y2FuOiBmaXggZGVhZGxvY2sgd2hlbg0KPiA+IHVzaW5nIHNlbGYgd2FrZXVwDQo+ID4N
-Cj4gPiBCZXN0IFJlZ2FyZHMsDQo+ID4gSm9ha2ltIFpoYW5nDQo+IA0KPiBUaGUgdGVzdGluZyBi
-cmFuY2ggaGF2ZSBzb21lIFVCSSBidWdzLCB3aGVuIHN1c3BlbmRpbmcgaXQgY3Jhc2hlcy4uLg0K
-PiBTbyB3aWxsIGhhdmUgdG8gbGVhdmUgdGhpcywgdW50aWwgdGhleSBhcmUgcmVzb2x2ZWQgOi0p
-DQoNCkkgdGhpbmsgeW91IGNhbiBmaW5kIHRoZSBiYXNlIGFuZCBjaGVycnktcGljayBhbGwgYWJv
-dmUgZmxleGNhbiByZWxhdGVkIGxhdGVzdCBwYXRjaGVzIHRvIHlvdXIgbG9jYWwgc3RhYmxlIHRy
-ZWUuDQpJIGRpZCB0aGlzIGFuZCB0ZXN0IHdha2V1cCBmdW5jdGlvbiBvbiBpLk1YOFFNL1FYUCBi
-ZWZvcmUuDQoNCkJUVywgSSB0aGluayB3aXRob3V0IENBTiBGRCByZWxhdGVkIHBhdGNoZXMsIHlv
-dSBzdGlsbCBjYW4gdGVzdCB3YWtldXAgZnVuY3Rpb24gb24gaS5NWDYvNyB3aXRoIHRoaXMgcGF0
-Y2gobWF5IG5lZWQgZml4IG1lcmdlIGNvbmZsaWN0cykNClRoaXMgcGF0Y2ggaGFzIGJlZW4gbWVy
-Z2VkIGludG8gb3VyIDQuMTkga2VybmVsIGFuZCBwYXNzZWQgdGhlIHdha2V1cCB0ZXN0IGZvciBp
-Lk1YNi83LzguIEkgd2VudCB0aHJvdWdoIHRoZSBmbGV4Y2FuIHN1c3BlbmQvcmVzdW1lIHByb2Nl
-c3MgYWdhaW4sDQphbmQgbm90IGZpbmQgbG9naWNhbCBpc3N1ZS4gSWYgeW91IG1ldCB3YWtldXAg
-ZmFpbHVyZSwgY291bGQgeW91IGhlbHAgdG8gbG9jYXRlIHRoZSBwcm9ibGVtIG1vcmUgYWNjdXJh
-dGUuIEZhaWx1cmUgbG9nIHlvdSBwcm92aWRlZCBsYXN0IHRpbWUsIHN0cmFuZ2UNCmFuZCBpbGxv
-Z2ljYWwuDQoNClRoYW5rcyBhIGxvdCEg8J+Yig0KIAkNCkJlc3QgUmVnYXJkcywNCkpvYWtpbSBa
-aGFuZw0KPiAvU2Vhbg0K
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--q523e3DEDk2YYo7dcVYCGwHdFZCMBUvJv
+Content-Type: multipart/mixed; boundary="a1TTesxWp0zXy6L0ILxW6m8RIkCckApNW";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: =?UTF-8?Q?Sean_Nyekj=c3=a6r?= <sean@geanix.com>
+Cc: s.hauer@pengutronix.de, miquel.raynal@bootlin.com,
+ linux-mtd@lists.infradead.org, linux-can <linux-can@vger.kernel.org>
+Message-ID: <a861dd9d-8aa3-c084-a850-efba5efa6f87@pengutronix.de>
+Subject: Re: [Bug] mtd: rawnand: gpmi
+References: <6a333d0f-09b2-d0d1-a3a5-955b31b6291e@geanix.com>
+ <9db42086-027f-e096-44d7-6d39b8af94ee@pengutronix.de>
+ <E8555824-943E-45B4-A0ED-D42E13156EEC@geanix.com>
+In-Reply-To: <E8555824-943E-45B4-A0ED-D42E13156EEC@geanix.com>
+
+--a1TTesxWp0zXy6L0ILxW6m8RIkCckApNW
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 9/5/19 10:58 PM, Sean Nyekj=C3=A6r wrote:
+> On 5 Sep 2019, at 22.39, Marc Kleine-Budde <mkl@pengutronix.de
+> <mailto:mkl@pengutronix.de>> wrote:
+>=20
+>> On 9/5/19 10:26 PM, Sean Nyekjaer wrote:
+>>> I have been troubleshooting some CAN problems on our imx6ull with a r=
+aw
+>>> nand flash.
+>>> I normally run with a 4.19 series kernel, but to verify those CAN
+>>> problems have been resolved in newer kernels i have been trying ~5.3-=
+rc6.
+>>
+>> What kind of CAN problem? (Cc +=3D linux-can).
+
+> The deadlock problem when suspending/waking with flexcan...
+
+Oh right, should have looked at your name :)
+
+> This was supposed to fix it:
+>=20
+> =E2=80=9Ccan: flexcan: fix deadlock when using self wakeup=E2=80=9D
+>=20
+> But I can=E2=80=99t easily (in my setup) verify it when ubi/nand is fai=
+ling :)
+
+Sascha has Maintainer Duties on his todo for today anyways.
+
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--a1TTesxWp0zXy6L0ILxW6m8RIkCckApNW--
+
+--q523e3DEDk2YYo7dcVYCGwHdFZCMBUvJv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl1yBEcACgkQWsYho5Hk
+nSAU2Qf+NxAEwmNL2UIBizdB7BC1gEfkYs9b7YQnAX0s/xCTBm71xi97S30pGGja
+VWWTISrD9Sp3BM582I+5/rpjslgDqO0Tn5LL9tTQC6GBUOv+Drjy5F3hcu5Vgcqq
++ZIyTiM6/3eVrA0oXWqvVhrqpXUKprJGx0PVtXT1c6vhOejO1C8ZDNFdFDD5Qx3h
+hDLXeLU5e4v6hPelxqNyKZmekqGdhGzYNfKgx3h/8opLegTDn8SuUG08apVEpDGy
+l5xEmYCWiogEWLY8XRcEHsiqqjBN79aLGhcMR0Jkh0b6vmAvt1iSZyY7f0t8S2pL
+lLljghdmZFPv2Bxhj8rVwD7gafRnTw==
+=t8xa
+-----END PGP SIGNATURE-----
+
+--q523e3DEDk2YYo7dcVYCGwHdFZCMBUvJv--
