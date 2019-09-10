@@ -2,80 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D21AE4EF
-	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2019 09:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0F4AED67
+	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2019 16:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729170AbfIJHxL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Sep 2019 03:53:11 -0400
-Received: from first.geanix.com ([116.203.34.67]:34944 "EHLO first.geanix.com"
+        id S1729132AbfIJOmH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Sep 2019 10:42:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:38637 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbfIJHxK (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 10 Sep 2019 03:53:10 -0400
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id E6A7863F8C;
-        Tue, 10 Sep 2019 07:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1568101957; bh=JWpMCBOZzAtqev9tXfl5tAGFLKML/ZFox/BCoTvX3yk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=BH5vAOUrDlJBeQw2NpdpaWtrPZj8ZxHuxUTuvdjBmvbI5v1JFTf73Wvv76Y3V9/zm
-         sjoR1u1hPMvdsIykouomn14Sk7V4aOsaTF0FT0xiehVS/kmL24SQ+X5j6y5E5AbMrq
-         kpWBCKUxXWsZaTWBLrykrZY00HH2vuVBfFeGYC9CRFnjvE5hHhWX3MoGRaDhsp8ul3
-         UfcNHhvWup2YwZrIq+mvE01F8GGRocNvHrJsxTAOBpGXmKlK2PFv6jZIN7wxiy0Z+y
-         XtVWYlIYhWuLzooFUHxhD4vp8ugFg3ghPIykkVhh97lSFm40csg4y9sBG8NmXkxqBc
-         0pdxYWVSC2aVQ==
-Subject: Re: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
- wakeup
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
-References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
- <20190816081749.19300-2-qiangqing.zhang@nxp.com>
- <dd8f5269-8403-702b-b054-e031423ffc73@geanix.com>
- <DB7PR04MB4618A1F984F2281C66959B06E6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <35190c5b-f8be-8784-5b4f-32a691a6cffe@geanix.com>
- <6a9bc081-334a-df91-3a23-b74a6cdd3633@geanix.com>
- <DB7PR04MB4618E527339B69AEAD46FB06E6A20@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <588ab34d-613d-ac01-7949-921140ca4543@geanix.com>
- <DB7PR04MB461868320DA0B25CC8255213E6BB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <739eee2e-2919-93b4-24fe-8d0d198ae042@geanix.com>
-Date:   Tue, 10 Sep 2019 09:52:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.0
+        id S2393023AbfIJOmG (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 10 Sep 2019 10:42:06 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46SSQY2r3lz9s4Y;
+        Wed, 11 Sep 2019 00:41:21 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1568126523;
+        bh=OgL1E3Bn836EI/U9TfNLgjcy9EiqKvLZ4vknVwwsPfE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QJtFt4FJe9ZV89RhMLsPUEIccr+G9wrvlU5ZTHMDm9G/iJg50qjvIS/SAF+2F8d7G
+         qYnIhgShhNf07dQNvuFku8heFGfZ7gh7tZsJxvzMhdtqusRMaulcw8MyOU5KLEjQgb
+         0S607N0fz3QwuumuwUl3YfwgVcmtsU8IRXAmTN0oxq2nFBNYCOt2JPf2Ee5RertKLn
+         4wI79U0DuEmJzLmAw31DBljOo57JxH0AVgeBdISYMZa2+UPVLNL+Wx0woNzd7yLDVV
+         j8g3J73gCLk4NHGCmQDkAbe2NTCW/SGjQzVR8JS3+cbmVqYi0ytTys6vc14Cg5O3q8
+         YOU7JR+ReQFMw==
+Date:   Wed, 11 Sep 2019 00:41:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        The j1939 authors <linux-can@vger.kernel.org>,
+        Bastian Stender <bst@pengutronix.de>,
+        Elenita Hinds <ecathinds@gmail.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        kbuild test robot <lkp@intel.com>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: linux-next: Signed-off-by missing for commit in the net-next tree
+Message-ID: <20190911004103.3480fa40@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <DB7PR04MB461868320DA0B25CC8255213E6BB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
+Content-Type: multipart/signed; boundary="Sig_/9Jn59mgO98rup=kQiyX7Z.U";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+--Sig_/9Jn59mgO98rup=kQiyX7Z.U
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 05/09/2019 09.10, Joakim Zhang wrote:
-> Hi Sean,
-> 
-> Could you update lastest flexcan driver using linux-can-next/flexcan and then merge below two patches from linux-can/testing?
-> d0b53616716e (HEAD -> testing, origin/testing) can: flexcan: add LPSR mode support for i.MX7D
-> 803eb6bad65b can: flexcan: fix deadlock when using self wakeup
-> 
-> Best Regards,
-> Joakim Zhang
+Commit
 
-Hi
+  9d71dd0c7009 ("can: add support of SAE J1939 protocol")
 
-I reverted 2 commits on thw nand driver and got the testing kernel to work.
+is missing a Signed-off-by from its author.
 
-I can confirm the issue is resolved with this patch :-)
+[Not sure if I should complain about this one ...]
 
-/Sean
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9Jn59mgO98rup=kQiyX7Z.U
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl13tf8ACgkQAVBC80lX
+0Gz1XQgAghJMDzpTB959LAyRnZ2BTcdjC1I1Ql+yI07GFjjckCpckq6nNv+XJQ8V
+8v0zFk21GxHe4iiFr5TENfSfALy1o8hw1lqjfilqQk9q8E6RjkNrVE+j6rnEVG95
+iLE41mafTnm/T6b2sUBdLPQ8hkir6ToIcLeEQp8k3naw1cEqa7dG1D07nRiOFDoU
+OzQREKHCUpFGmbne150OlvNIBzM5tQmicoRALm6dAwGckksLMeGwtES07coQsSqZ
+dMydcYHuHSfMLzrail0URBEN2Llw75EZxKc+Y6XJhNhQLYhuKiERhZ0ZtWykz82i
+cvM+OQfoJINzEz+OyEne3/nLz1azEg==
+=F1hC
+-----END PGP SIGNATURE-----
+
+--Sig_/9Jn59mgO98rup=kQiyX7Z.U--
