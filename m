@@ -2,306 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD48AE33F
-	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2019 07:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D21AE4EF
+	for <lists+linux-can@lfdr.de>; Tue, 10 Sep 2019 09:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390836AbfIJF3v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Sep 2019 01:29:51 -0400
-Received: from mga06.intel.com ([134.134.136.31]:2363 "EHLO mga06.intel.com"
+        id S1729170AbfIJHxL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Sep 2019 03:53:11 -0400
+Received: from first.geanix.com ([116.203.34.67]:34944 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390801AbfIJF3u (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 10 Sep 2019 01:29:50 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 22:29:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,487,1559545200"; 
-   d="scan'208";a="191710580"
-Received: from pipin.fi.intel.com ([10.237.72.175])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Sep 2019 22:29:48 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, davem@davemloft.net,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Subject: [PATCH 2/2] NET: m_can: add PCI glue driver
-Date:   Tue, 10 Sep 2019 08:29:44 +0300
-Message-Id: <20190910052944.338148-2-felipe.balbi@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190910052944.338148-1-felipe.balbi@linux.intel.com>
-References: <20190910052944.338148-1-felipe.balbi@linux.intel.com>
+        id S1726317AbfIJHxK (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 10 Sep 2019 03:53:10 -0400
+Received: from [192.168.100.95] (unknown [95.138.208.137])
+        by first.geanix.com (Postfix) with ESMTPSA id E6A7863F8C;
+        Tue, 10 Sep 2019 07:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1568101957; bh=JWpMCBOZzAtqev9tXfl5tAGFLKML/ZFox/BCoTvX3yk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=BH5vAOUrDlJBeQw2NpdpaWtrPZj8ZxHuxUTuvdjBmvbI5v1JFTf73Wvv76Y3V9/zm
+         sjoR1u1hPMvdsIykouomn14Sk7V4aOsaTF0FT0xiehVS/kmL24SQ+X5j6y5E5AbMrq
+         kpWBCKUxXWsZaTWBLrykrZY00HH2vuVBfFeGYC9CRFnjvE5hHhWX3MoGRaDhsp8ul3
+         UfcNHhvWup2YwZrIq+mvE01F8GGRocNvHrJsxTAOBpGXmKlK2PFv6jZIN7wxiy0Z+y
+         XtVWYlIYhWuLzooFUHxhD4vp8ugFg3ghPIykkVhh97lSFm40csg4y9sBG8NmXkxqBc
+         0pdxYWVSC2aVQ==
+Subject: Re: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
+ wakeup
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>
+References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
+ <20190816081749.19300-2-qiangqing.zhang@nxp.com>
+ <dd8f5269-8403-702b-b054-e031423ffc73@geanix.com>
+ <DB7PR04MB4618A1F984F2281C66959B06E6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <35190c5b-f8be-8784-5b4f-32a691a6cffe@geanix.com>
+ <6a9bc081-334a-df91-3a23-b74a6cdd3633@geanix.com>
+ <DB7PR04MB4618E527339B69AEAD46FB06E6A20@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <588ab34d-613d-ac01-7949-921140ca4543@geanix.com>
+ <DB7PR04MB461868320DA0B25CC8255213E6BB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+From:   Sean Nyekjaer <sean@geanix.com>
+Message-ID: <739eee2e-2919-93b4-24fe-8d0d198ae042@geanix.com>
+Date:   Tue, 10 Sep 2019 09:52:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <DB7PR04MB461868320DA0B25CC8255213E6BB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
+        autolearn=disabled version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Some intel platforms support an MCAN controller attached to the PCI
-bus. This minimal driver adds support for those.
 
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
----
- drivers/net/can/m_can/Kconfig     |   7 +
- drivers/net/can/m_can/Makefile    |   1 +
- drivers/net/can/m_can/m_can_pci.c | 222 ++++++++++++++++++++++++++++++
- 3 files changed, 230 insertions(+)
- create mode 100644 drivers/net/can/m_can/m_can_pci.c
 
-diff --git a/drivers/net/can/m_can/Kconfig b/drivers/net/can/m_can/Kconfig
-index fba73338bc38..c7fbea72491c 100644
---- a/drivers/net/can/m_can/Kconfig
-+++ b/drivers/net/can/m_can/Kconfig
-@@ -13,4 +13,11 @@ config CAN_M_CAN_PLATFORM
- 	   Say Y here if you want to support Bosch M_CAN controller connected
- 	   to the platform bus.
- 
-+config CAN_M_CAN_PCI
-+	tristate "Generic PCI Bus based M_CAN driver"
-+	depends on PCI
-+	---help---
-+	   Say Y here if you want to support Bosch M_CAN controller connected
-+	   to the pci bus.
-+
- endif
-diff --git a/drivers/net/can/m_can/Makefile b/drivers/net/can/m_can/Makefile
-index ac568be3de98..104de5cb6d79 100644
---- a/drivers/net/can/m_can/Makefile
-+++ b/drivers/net/can/m_can/Makefile
-@@ -5,3 +5,4 @@
- 
- obj-$(CONFIG_CAN_M_CAN) += m_can.o
- obj-$(CONFIG_CAN_M_CAN_PLATFORM) += m_can_platform.o
-+obj-$(CONFIG_CAN_M_CAN_PCI) += m_can_pci.o
-diff --git a/drivers/net/can/m_can/m_can_pci.c b/drivers/net/can/m_can/m_can_pci.c
-new file mode 100644
-index 000000000000..fc6dfc334d34
---- /dev/null
-+++ b/drivers/net/can/m_can/m_can_pci.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * m_can_pci.c - PCI Specific M_CAN Glue
-+ *
-+ * Copyright (C) 2018 Intel Corporation - https://www.intel.com
-+ * Author: Felipe Balbi <felipe.balbi@linux.intel.com>
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/can/dev.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/netdevice.h>
-+#include <linux/pci.h>
-+#include <linux/pm_runtime.h>
-+
-+#include "m_can.h"
-+
-+#define PCI_DEVICE_ID_INTEL_EHL_1	 0x4bc1
-+#define PCI_DEVICE_ID_INTEL_EHL_2	 0x4bc2
-+
-+#define M_CAN_PCI_MMIO_BAR		0
-+#define M_CAN_MRAM_OFFSET		0x800
-+
-+#define M_CAN_CLOCK_FREQ_EHL		100000000
-+
-+static void m_can_init_mram_conf(struct m_can_priv *priv)
-+{
-+	priv->mcfg[MRAM_SIDF].off = 0;
-+	priv->mcfg[MRAM_SIDF].num = 128;
-+	priv->mcfg[MRAM_XIDF].off = priv->mcfg[MRAM_SIDF].off +
-+		priv->mcfg[MRAM_SIDF].num * SIDF_ELEMENT_SIZE;
-+	priv->mcfg[MRAM_XIDF].num = 64;
-+	priv->mcfg[MRAM_RXF0].off = priv->mcfg[MRAM_XIDF].off +
-+		priv->mcfg[MRAM_XIDF].num * XIDF_ELEMENT_SIZE;
-+	priv->mcfg[MRAM_RXF0].num = 64 &
-+		(RXFC_FS_MASK >> RXFC_FS_SHIFT);
-+	priv->mcfg[MRAM_RXF1].off = priv->mcfg[MRAM_RXF0].off +
-+		priv->mcfg[MRAM_RXF0].num * RXF0_ELEMENT_SIZE;
-+	priv->mcfg[MRAM_RXF1].num = 0 &
-+		(RXFC_FS_MASK >> RXFC_FS_SHIFT);
-+	priv->mcfg[MRAM_RXB].off = priv->mcfg[MRAM_RXF1].off +
-+		priv->mcfg[MRAM_RXF1].num * RXF1_ELEMENT_SIZE;
-+	priv->mcfg[MRAM_RXB].num = 64;
-+	priv->mcfg[MRAM_TXE].off = priv->mcfg[MRAM_RXB].off +
-+		priv->mcfg[MRAM_RXB].num * RXB_ELEMENT_SIZE;
-+	priv->mcfg[MRAM_TXE].num = 0;
-+	priv->mcfg[MRAM_TXB].off = priv->mcfg[MRAM_TXE].off +
-+		priv->mcfg[MRAM_TXE].num * TXE_ELEMENT_SIZE;
-+	priv->mcfg[MRAM_TXB].num = 16 &
-+		(TXBC_NDTB_MASK >> TXBC_NDTB_SHIFT);
-+
-+	dev_dbg(priv->device,
-+			"mram_base %p sidf 0x%x %d xidf 0x%x %d rxf0 0x%x %d rxf1 0x%x %d rxb 0x%x %d txe 0x%x %d txb 0x%x %d\n",
-+			priv->mram_base,
-+			priv->mcfg[MRAM_SIDF].off, priv->mcfg[MRAM_SIDF].num,
-+			priv->mcfg[MRAM_XIDF].off, priv->mcfg[MRAM_XIDF].num,
-+			priv->mcfg[MRAM_RXF0].off, priv->mcfg[MRAM_RXF0].num,
-+			priv->mcfg[MRAM_RXF1].off, priv->mcfg[MRAM_RXF1].num,
-+			priv->mcfg[MRAM_RXB].off, priv->mcfg[MRAM_RXB].num,
-+			priv->mcfg[MRAM_TXE].off, priv->mcfg[MRAM_TXE].num,
-+			priv->mcfg[MRAM_TXB].off, priv->mcfg[MRAM_TXB].num);
-+
-+	m_can_init_ram(priv);
-+}
-+
-+static int m_can_pci_probe(struct pci_dev *pci,
-+		const struct pci_device_id *id)
-+{
-+	struct m_can_priv *priv;
-+	struct net_device *net;
-+	struct device *dev;
-+	void __iomem *base;
-+	int ret;
-+
-+	ret = pcim_enable_device(pci);
-+	if (ret)
-+		return ret;
-+
-+	pci_set_master(pci);
-+
-+	ret = pcim_iomap_regions(pci, BIT(M_CAN_PCI_MMIO_BAR), pci_name(pci));
-+	if (ret)
-+		return ret;
-+
-+	dev = &pci->dev;
-+
-+	base = pcim_iomap_table(pci)[M_CAN_PCI_MMIO_BAR];
-+
-+	if (!base) {
-+		dev_err(dev, "failed to map BARs\n");
-+		return -ENOMEM;
-+	}
-+
-+	net = alloc_m_can_dev(1);
-+	if (!net)
-+		return -ENOMEM;
-+
-+	ret = pci_alloc_irq_vectors(pci, 1, 1, PCI_IRQ_ALL_TYPES);
-+	if (ret < 0)
-+		return ret;
-+
-+	priv = netdev_priv(net);
-+	net->irq = pci_irq_vector(pci, 0);
-+	priv->device = dev;
-+	priv->can.clock.freq = id->driver_data;
-+	priv->mram_base = base + M_CAN_MRAM_OFFSET;
-+
-+	pci_set_drvdata(pci, net);
-+	SET_NETDEV_DEV(net, dev);
-+
-+	ret = m_can_dev_setup(dev, net, base);
-+	if (ret)
-+		goto err;
-+
-+	ret = register_m_can_dev(net);
-+	if (ret)
-+		goto err;
-+
-+	m_can_init_mram_conf(priv);
-+	devm_can_led_init(net);
-+
-+	pm_runtime_set_autosuspend_delay(dev, 1000);
-+	pm_runtime_use_autosuspend(dev);
-+	pm_runtime_put_noidle(dev);
-+	pm_runtime_allow(dev);
-+
-+	return 0;
-+
-+err:
-+	pm_runtime_disable(&pci->dev);
-+	pci_free_irq_vectors(pci);
-+	return ret;
-+}
-+
-+static void m_can_pci_remove(struct pci_dev *pci)
-+{
-+	struct net_device *dev = pci_get_drvdata(pci);
-+
-+	pm_runtime_forbid(&pci->dev);
-+	pm_runtime_get_noresume(&pci->dev);
-+
-+	pci_free_irq_vectors(pci);
-+	unregister_m_can_dev(dev);
-+	free_m_can_dev(dev);
-+}
-+
-+static __maybe_unused int m_can_pci_suspend(struct device *dev)
-+{
-+	struct pci_dev *pdev = container_of(dev, struct pci_dev, dev);
-+	struct net_device *ndev = pci_get_drvdata(pdev);
-+	struct m_can_priv *priv = netdev_priv(ndev);
-+
-+	if (netif_running(ndev)) {
-+		netif_stop_queue(ndev);
-+		netif_device_detach(ndev);
-+		m_can_stop(ndev);
-+		m_can_clk_stop(priv);
-+	}
-+
-+	priv->can.state = CAN_STATE_SLEEPING;
-+
-+	return 0;
-+}
-+
-+static __maybe_unused int m_can_pci_resume(struct device *dev)
-+{
-+	struct pci_dev *pdev = container_of(dev, struct pci_dev, dev);
-+	struct net_device *ndev = pci_get_drvdata(pdev);
-+	struct m_can_priv *priv = netdev_priv(ndev);
-+
-+	priv->can.state = CAN_STATE_ERROR_ACTIVE;
-+
-+	if (netif_running(ndev)) {
-+		int ret;
-+
-+		ret = m_can_clk_start(priv);
-+		if (ret)
-+			return ret;
-+
-+		m_can_init_ram(priv);
-+		m_can_start(ndev);
-+		netif_device_attach(ndev);
-+		netif_start_queue(ndev);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops m_can_pci_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(m_can_pci_suspend, m_can_pci_resume)
-+};
-+
-+static const struct pci_device_id m_can_pci_id_table[] = {
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHL_1),
-+	  M_CAN_CLOCK_FREQ_EHL, },
-+
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHL_2),
-+	  M_CAN_CLOCK_FREQ_EHL, },
-+
-+	{  }	/* Terminating Entry */
-+};
-+MODULE_DEVICE_TABLE(pci, m_can_pci_id_table);
-+
-+static struct pci_driver m_can_pci_driver = {
-+	.name		= "m_can_pci",
-+	.probe		= m_can_pci_probe,
-+	.remove		= m_can_pci_remove,
-+	.id_table	= m_can_pci_id_table,
-+	.driver = {
-+		.pm = &m_can_pci_pm_ops,
-+	}
-+};
-+
-+MODULE_AUTHOR("Felipe Balbi <felipe.balbi@linux.intel.com>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("CAN bus driver for Bosch M_CAN controller on PCI bus");
-+
-+module_pci_driver(m_can_pci_driver);
--- 
-2.23.0
+On 05/09/2019 09.10, Joakim Zhang wrote:
+> Hi Sean,
+> 
+> Could you update lastest flexcan driver using linux-can-next/flexcan and then merge below two patches from linux-can/testing?
+> d0b53616716e (HEAD -> testing, origin/testing) can: flexcan: add LPSR mode support for i.MX7D
+> 803eb6bad65b can: flexcan: fix deadlock when using self wakeup
+> 
+> Best Regards,
+> Joakim Zhang
 
+Hi
+
+I reverted 2 commits on thw nand driver and got the testing kernel to work.
+
+I can confirm the issue is resolved with this patch :-)
+
+/Sean
