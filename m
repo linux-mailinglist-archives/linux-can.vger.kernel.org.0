@@ -2,84 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2247AB3C50
-	for <lists+linux-can@lfdr.de>; Mon, 16 Sep 2019 16:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50273B3E73
+	for <lists+linux-can@lfdr.de>; Mon, 16 Sep 2019 18:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728068AbfIPOP7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Sep 2019 10:15:59 -0400
-Received: from smtp1-g21.free.fr ([212.27.42.1]:33911 "EHLO smtp1-g21.free.fr"
+        id S1726386AbfIPQKo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 Sep 2019 12:10:44 -0400
+Received: from mail.iot.bzh ([51.75.236.24]:22043 "EHLO mail.iot.bzh"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727989AbfIPOP7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 16 Sep 2019 10:15:59 -0400
-Received: from linux-dev.peak.localnet (unknown [185.109.201.203])
-        (Authenticated sender: stephane.grosjean)
-        by smtp1-g21.free.fr (Postfix) with ESMTPSA id 90F9CB005A8;
-        Mon, 16 Sep 2019 16:15:54 +0200 (CEST)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH] can/peak_pciefd: provide hw timestamps in rx skbs
-Date:   Mon, 16 Sep 2019 16:15:44 +0200
-Message-Id: <20190916141544.6591-1-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726282AbfIPQKo (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 16 Sep 2019 12:10:44 -0400
+Received: from [10.18.0.57] (laubervilliers-656-1-70-194.w82-127.abo.wanadoo.fr [82.127.244.194])
+        by mail.iot.bzh (Postfix) with ESMTPSA id 7653D40078
+        for <linux-can@vger.kernel.org>; Mon, 16 Sep 2019 18:10:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
+        t=1568650237; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q8lLWpZ9OERyVKMLO7Kk8qE8Ah9hg+MSz4nEoLlOwKY=;
+        b=ct9Myym0tkoDqNF/5gZ5dHmebgSP/BSs/STIEtsKpT4YBEJZnIi5oWiFPZMLHoAxt+P5NN
+        sgIsnuEObnlugcgud/qF8ZioNuhQqqYfMGLHEn+/L0+NUe+rPiZK1L1ExuPWlqFuuHLZhA
+        3JBEV+H7TYmUB0qDQYxga9cIzT/iLIftTkATjz2YLD8HApuiVIaZgBXIVSS45DMOXRA1RJ
+        RLdXSBn46O5dp1y+RBPGKaHKJYb/iolGMuhfOdl3fplOnY8FSDxy5GT5vkuP3WmIhxUdY0
+        wz+ULL7n8nmabfPm6Y/81EAZtFNCV2iVMI5L/qeOj6MVSbgveEBLJTqWRZCv5w==
+From:   "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+Subject: Re: Signed signal value in CAN bus
+To:     linux-can@vger.kernel.org
+References: <2cea4753-c7b6-94a7-360f-30534591fd9f@iot.bzh>
+ <20190913091711.GA22960@x1.vandijck-laurijssen.be>
+Organization: IOTBZH
+Message-ID: <98f94702-87fa-853d-0319-eb3cc3ce9d13@iot.bzh>
+Date:   Mon, 16 Sep 2019 18:10:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20190913091711.GA22960@x1.vandijck-laurijssen.be>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-PEAK-System's CAN FD interfaces based on an IP core provide a timestamp for
-each CAN and STATUS message received. This patch transfers these received
-timestamps (clocked in microseconds) to hardware timestamps (clocked in
-nanoseconds) in the corresponding skbs raised to the network layer.
+Thanks Kurt,
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/peak_canfd/peak_canfd.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+We will  figure it out. Probably implementing several common decoding 
+method.
 
-diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
-index 6b0c6a99fc8d..f0b276ed64e4 100644
---- a/drivers/net/can/peak_canfd/peak_canfd.c
-+++ b/drivers/net/can/peak_canfd/peak_canfd.c
-@@ -232,6 +232,17 @@ static int pucan_setup_rx_barrier(struct peak_canfd_priv *priv)
- 	return pucan_write_cmd(priv);
- }
- 
-+static int pucan_netif_rx(struct sk_buff *skb, __le32 ts_low, __le32 ts_high)
-+{
-+	struct skb_shared_hwtstamps *hwts = skb_hwtstamps(skb);
-+	u64 ts_us = ((u64)(le32_to_cpu(ts_high)) << 32) + le32_to_cpu(ts_low);
-+
-+	/* IP core timestamps are µs. */
-+	hwts->hwtstamp = ns_to_ktime(ts_us * NSEC_PER_USEC);
-+
-+	return netif_rx(skb);
-+}
-+
- /* handle the reception of one CAN frame */
- static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
- 			       struct pucan_rx_msg *msg)
-@@ -299,7 +310,7 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
- 	stats->rx_bytes += cf->len;
- 	stats->rx_packets++;
- 
--	netif_rx(skb);
-+	pucan_netif_rx(skb, msg->ts_low, msg->ts_high);
- 
- 	return 0;
- }
-@@ -393,7 +404,7 @@ static int pucan_handle_status(struct peak_canfd_priv *priv,
- 
- 	stats->rx_packets++;
- 	stats->rx_bytes += cf->can_dlc;
--	netif_rx(skb);
-+	pucan_netif_rx(skb, msg->ts_low, msg->ts_high);
- 
- 	return 0;
- }
+On 13/09/2019 11:17, Kurt Van Dijck wrote:
+> Hi,
+> On vr, 13 sep 2019 10:38:23 +0200, Romain Forlot [IoT.bzh] wrote:
+>> Hi everyone,
+>>
+>> I have a question about signed numbers in CAN, but I try to handle sign of a
+>> signal's value whenever it is a signed value.
+>>
+>> I would like to have something that works in any cases obviously but for
+>> what I found, signed value in CAN bus isn't standardized.
+>>
+>> You can have:
+>>
+>>   * signal on N-1 bits, with the subtracted bit representing the sign
+>>   * either with 1's complement
+>>   * or 2's complement.
+>>
+>> You could have some bitfield not encoded within classics bytes but in 3 or
+>> 13 bits by example, so it could complicate the computing of the signed value
+>> depending on the chosen method.
+> A common method is to define a range, like -1000 to 1000 to be encoded
+> into 0..2000 unsigned.
+> In this example, you require 11bits.
+> The advantages of doing so are:
+> 1) it's not so difficult to convert to/from bitfields, i.e.
+>     as you found, properly decoding a negative number from an 11bit value
+>     is a bit obscure.
+> 2) it leaves explicit room for special/fault codes, above the defined range.
+>
+> Kind regards,
+> Kurt
+>
 -- 
-2.20.1
+Romain Forlot - Embedded Engineer - IoT.bzh
+romain.forlot@iot.bzh  -www.iot.bzh  - +33675142438
 
