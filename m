@@ -2,70 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A07CDB1B0D
-	for <lists+linux-can@lfdr.de>; Fri, 13 Sep 2019 11:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2247AB3C50
+	for <lists+linux-can@lfdr.de>; Mon, 16 Sep 2019 16:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727325AbfIMJog (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 Sep 2019 05:44:36 -0400
-Received: from first.geanix.com ([116.203.34.67]:50662 "EHLO first.geanix.com"
+        id S1728068AbfIPOP7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 Sep 2019 10:15:59 -0400
+Received: from smtp1-g21.free.fr ([212.27.42.1]:33911 "EHLO smtp1-g21.free.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726558AbfIMJog (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 13 Sep 2019 05:44:36 -0400
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 53BCC6503C;
-        Fri, 13 Sep 2019 09:43:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1568367829; bh=3wWbBizKQzuoPs4Ml3JVzYjHkna3WkG4j9LAsyU+jzM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=QQ6SOKjC4LGCjbjgEXrl/5CY9BzowOHa1w6oai65AAgpJl+n7XG8xhub8mSegVl8H
-         ZzuR0qGCVIkkAUDojR8++vQrDD0XOGmovazoxbqhjkNzSXwKe+t68WzRR6qNAbj2AQ
-         E5fKmIkMPxMNgGBWtZsPX6q7O8gjrJ2PEZO3O4p3AGRiCM4EwqpaVHFE3Slf6kYEeh
-         dSrIxS6RwV2/u22fIyP3MMOdNY9EzKZh/yaWy218E69S/xJwepRXrOAQbjtboQATkJ
-         LI/aT9xI9dGe+/ODxH4bg7TG6Zq8LRx6XG2qUpXTfVnsPyezzixlFwGCOIQVFi6vGG
-         4qvRFbS5cyDtQ==
-Subject: Re: [PATCH] can: flexcan: free error skb if enqueueing failed
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
-References: <20190715185308.104333-1-martin@geanix.com>
- <d5f8811e-4b85-776a-668f-33f64ec6ef16@geanix.com>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <c40b4b92-8768-6d26-7224-03e5096b4237@geanix.com>
-Date:   Fri, 13 Sep 2019 11:44:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.0
+        id S1727989AbfIPOP7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 16 Sep 2019 10:15:59 -0400
+Received: from linux-dev.peak.localnet (unknown [185.109.201.203])
+        (Authenticated sender: stephane.grosjean)
+        by smtp1-g21.free.fr (Postfix) with ESMTPSA id 90F9CB005A8;
+        Mon, 16 Sep 2019 16:15:54 +0200 (CEST)
+From:   Stephane Grosjean <s.grosjean@peak-system.com>
+To:     linux-can Mailing List <linux-can@vger.kernel.org>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [PATCH] can/peak_pciefd: provide hw timestamps in rx skbs
+Date:   Mon, 16 Sep 2019 16:15:44 +0200
+Message-Id: <20190916141544.6591-1-s.grosjean@peak-system.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <d5f8811e-4b85-776a-668f-33f64ec6ef16@geanix.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 77834cc0481d
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+PEAK-System's CAN FD interfaces based on an IP core provide a timestamp for
+each CAN and STATUS message received. This patch transfers these received
+timestamps (clocked in microseconds) to hardware timestamps (clocked in
+nanoseconds) in the corresponding skbs raised to the network layer.
 
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+---
+ drivers/net/can/peak_canfd/peak_canfd.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-On 01/08/2019 09.59, Martin Hundebøll wrote:
-> On 15/07/2019 20.53, Martin Hundebøll wrote:
->> If the call to can_rx_offload_queue_sorted() fails, the passed skb isn't
->> consumed, so the caller must do so.
->>
->> Fixes: 30164759db1b ("can: flexcan: make use of rx-offload's 
->> irq_offload_fifo")
->> Signed-off-by: Martin Hundebøll <martin@geanix.com>
-> 
-> Ping.
+diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
+index 6b0c6a99fc8d..f0b276ed64e4 100644
+--- a/drivers/net/can/peak_canfd/peak_canfd.c
++++ b/drivers/net/can/peak_canfd/peak_canfd.c
+@@ -232,6 +232,17 @@ static int pucan_setup_rx_barrier(struct peak_canfd_priv *priv)
+ 	return pucan_write_cmd(priv);
+ }
+ 
++static int pucan_netif_rx(struct sk_buff *skb, __le32 ts_low, __le32 ts_high)
++{
++	struct skb_shared_hwtstamps *hwts = skb_hwtstamps(skb);
++	u64 ts_us = ((u64)(le32_to_cpu(ts_high)) << 32) + le32_to_cpu(ts_low);
++
++	/* IP core timestamps are µs. */
++	hwts->hwtstamp = ns_to_ktime(ts_us * NSEC_PER_USEC);
++
++	return netif_rx(skb);
++}
++
+ /* handle the reception of one CAN frame */
+ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
+ 			       struct pucan_rx_msg *msg)
+@@ -299,7 +310,7 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
+ 	stats->rx_bytes += cf->len;
+ 	stats->rx_packets++;
+ 
+-	netif_rx(skb);
++	pucan_netif_rx(skb, msg->ts_low, msg->ts_high);
+ 
+ 	return 0;
+ }
+@@ -393,7 +404,7 @@ static int pucan_handle_status(struct peak_canfd_priv *priv,
+ 
+ 	stats->rx_packets++;
+ 	stats->rx_bytes += cf->can_dlc;
+-	netif_rx(skb);
++	pucan_netif_rx(skb, msg->ts_low, msg->ts_high);
+ 
+ 	return 0;
+ }
+-- 
+2.20.1
 
-Hi Marc
-
-Any problems with this? Besides time ;-)
-
-We really need this to be back ported to 4.19, soon...
-
-/Sean
