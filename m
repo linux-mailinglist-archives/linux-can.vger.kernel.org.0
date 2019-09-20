@@ -2,147 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AF9B8009
-	for <lists+linux-can@lfdr.de>; Thu, 19 Sep 2019 19:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35212B897C
+	for <lists+linux-can@lfdr.de>; Fri, 20 Sep 2019 04:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390917AbfISRcR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Sep 2019 13:32:17 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:15037 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388951AbfISRcQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Sep 2019 13:32:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1568914331;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=fjgcfhIKkIHhmIc1K7HZ6UmpIaPw8uQ2R2Hsqe9ZzEQ=;
-        b=D/Az5R0HzkW8IPoUw1MSIjIE86EOh9XnRcVhBiXqTZNqdC43fL9WVOKBSJ3Ro/yjzR
-        PPR3VyKtIvRyr5iPiYO7VCX5osu096OFMbCFH/lJU9FrpPdlr9UEE/RaDzaIjz4TPxS1
-        6PreNVnDe1uCqYaMLFam++/qV0zcM6ZOpcoJxV3LFH0huoHc+HxiJmrvuZtGrAI6o75k
-        FuuXwrjYjNOvuxBPYc55RF4oVlIX1W0CqtAH8/IXTh5Zl8OCdCfpd1KiWBHGYhzIhtKc
-        3ZSpVqZfTKMl48JRyX1i7vq2fkLC6AwTbkD1BD5J8aRDumniM7o5BpIZq0DPFH/E4ixL
-        6E6A==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJUsh6k0zX"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 44.27.0 DYNA|AUTH)
-        with ESMTPSA id j0667fv8JHW9Cta
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Thu, 19 Sep 2019 19:32:09 +0200 (CEST)
-Subject: Re: [PATCH] can: don't use deprecated license identifiers
-To:     yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc:     mkl@pengutronix.de, wg@grandegger.com
-References: <20190919135304.14757-1-yegorslists@googlemail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <20e7b276-3955-d262-b65c-806e99f5ebc2@hartkopp.net>
-Date:   Thu, 19 Sep 2019 19:32:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20190919135304.14757-1-yegorslists@googlemail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S2394710AbfITCo5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 Sep 2019 22:44:57 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:33290 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388350AbfITCo4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Sep 2019 22:44:56 -0400
+Received: by mail-io1-f65.google.com with SMTP id m11so12846595ioo.0;
+        Thu, 19 Sep 2019 19:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=sq73DcwGjyNmmgxGHw+k0dldxyOr7gBfelRaWt6f/sI=;
+        b=mU4mom415tumOzOlJX5UYVvszXzNI8OeaB9j5CpxyZiC2hZczbAeYMRxgZ2wdNp1Hb
+         e0/S4Jr5p69syNrqQjw78QYV1TCAJbNxLiPKQx0zI38u5U003BD+e+YUVOL3FtPGwFi5
+         1Vl5j/WRznRIe7aRxZBUnewmy6+lsVRp7xy4XAeHhsIeCJp3X9p2oBnvNA13NtXhcmtR
+         3ISLKBi0tuAyGTckZoXvDAblKVIMHsGPVVSGcEPfA2mWiD0heol4yLiLoloKxv4cVgko
+         SYLvGAyGJn1mB/T7D85zgvoFzD9uyiw64xSHQB8Yl6am1d4W/3PS+OjylC1pzKWSyN34
+         d71A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sq73DcwGjyNmmgxGHw+k0dldxyOr7gBfelRaWt6f/sI=;
+        b=jBYBoEfNQN5JKwJXRqjFxyQNCgsyYDLqJ/Y7N3ICIcjJVsMcDA7EsAvEoJMe5DG+3B
+         Vu9Q8wCKefUKEr6yX2Shz2YfwFpfczqTT7jG8UDvgb2Sye+ccgPvQtIhI0i3WbvGeUWo
+         DNVA1aQ92stajVyyyNThq6mXXpuue+YYLYv/1nn2/JC69dWf/ubwFNcJTCBWFJbBh5Ab
+         lGDPJCLGIsIh1Yd15tlCc9uWwhWyK68QH0xwY0cW9p7u3WWNf5Oi75ex/ixQqXk4GLO4
+         +i67tyzMXdgco9a5hchLx71FWqmxNsAHUEIld7qSezUOpY7E2SXFof6Uk3XQY9KftVWg
+         z1uA==
+X-Gm-Message-State: APjAAAXf7lzk6y4UeYkyX6eW1xHEvc2atjYFrpiv+ubgbxOxjwQV+zL/
+        f+XPqfr0nHjIqNIybsLssD4=
+X-Google-Smtp-Source: APXvYqy1d9AIVd0rkjbrgoInrlqMcm8Ak9F/O7xocoraAdmwNmGsmgzo2PH1zC9UCfF+OqwGymXXMA==
+X-Received: by 2002:a6b:254:: with SMTP id 81mr16130169ioc.17.1568947495860;
+        Thu, 19 Sep 2019 19:44:55 -0700 (PDT)
+Received: from cs-dulles.cs.umn.edu (cs-dulles.cs.umn.edu. [128.101.35.54])
+        by smtp.googlemail.com with ESMTPSA id b8sm453375ior.49.2019.09.19.19.44.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 19:44:55 -0700 (PDT)
+From:   Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     emamd001@umn.edu, smccaman@umn.edu, kjlu@umn.edu,
+        Navid Emamdoost <navid.emamdoost@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] can: gs_usb: prevent memory leak
+Date:   Thu, 19 Sep 2019 21:44:38 -0500
+Message-Id: <20190920024445.28214-1-navid.emamdoost@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+In gs_can_open if usb_submit_urb fails the allocated urb should be
+released.
 
+Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+---
+ drivers/net/can/usb/gs_usb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 19/09/2019 15.53, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> GPL-2.0 license identifier changed to GPL-2.0-only in SPDX v3.0.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
+index bd6eb9967630..2f74f6704c12 100644
+--- a/drivers/net/can/usb/gs_usb.c
++++ b/drivers/net/can/usb/gs_usb.c
+@@ -623,6 +623,7 @@ static int gs_can_open(struct net_device *netdev)
+ 					   rc);
+ 
+ 				usb_unanchor_urb(urb);
++				usb_free_urb(urb);
+ 				break;
+ 			}
+ 
+-- 
+2.17.1
 
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-
-Thanks Yegor!
-
-Best,
-Oliver
-
-> ---
->   include/uapi/linux/can/bcm.h     | 2 +-
->   include/uapi/linux/can/error.h   | 2 +-
->   include/uapi/linux/can/gw.h      | 2 +-
->   include/uapi/linux/can/j1939.h   | 2 +-
->   include/uapi/linux/can/netlink.h | 2 +-
->   include/uapi/linux/can/raw.h     | 2 +-
->   include/uapi/linux/can/vxcan.h   | 2 +-
->   7 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/uapi/linux/can/bcm.h b/include/uapi/linux/can/bcm.h
-> index 0fb328d93148..dd2b925b09ac 100644
-> --- a/include/uapi/linux/can/bcm.h
-> +++ b/include/uapi/linux/can/bcm.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
-> +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
->   /*
->    * linux/can/bcm.h
->    *
-> diff --git a/include/uapi/linux/can/error.h b/include/uapi/linux/can/error.h
-> index bfc4b5d22a5e..34633283de64 100644
-> --- a/include/uapi/linux/can/error.h
-> +++ b/include/uapi/linux/can/error.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
-> +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
->   /*
->    * linux/can/error.h
->    *
-> diff --git a/include/uapi/linux/can/gw.h b/include/uapi/linux/can/gw.h
-> index 3aea5388c8e4..c2190bbe21d8 100644
-> --- a/include/uapi/linux/can/gw.h
-> +++ b/include/uapi/linux/can/gw.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
-> +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
->   /*
->    * linux/can/gw.h
->    *
-> diff --git a/include/uapi/linux/can/j1939.h b/include/uapi/linux/can/j1939.h
-> index c32325342d30..df6e821075c1 100644
-> --- a/include/uapi/linux/can/j1939.h
-> +++ b/include/uapi/linux/can/j1939.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
->   /*
->    * j1939.h
->    *
-> diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/netlink.h
-> index 1bc70d3a4d39..6f598b73839e 100644
-> --- a/include/uapi/linux/can/netlink.h
-> +++ b/include/uapi/linux/can/netlink.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
->   /*
->    * linux/can/netlink.h
->    *
-> diff --git a/include/uapi/linux/can/raw.h b/include/uapi/linux/can/raw.h
-> index be3b36e7ff61..6a11d308eb5c 100644
-> --- a/include/uapi/linux/can/raw.h
-> +++ b/include/uapi/linux/can/raw.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause) */
-> +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) */
->   /*
->    * linux/can/raw.h
->    *
-> diff --git a/include/uapi/linux/can/vxcan.h b/include/uapi/linux/can/vxcan.h
-> index 066812d118a2..4fa9d8777a07 100644
-> --- a/include/uapi/linux/can/vxcan.h
-> +++ b/include/uapi/linux/can/vxcan.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
->   #ifndef _UAPI_CAN_VXCAN_H
->   #define _UAPI_CAN_VXCAN_H
->   
-> 
