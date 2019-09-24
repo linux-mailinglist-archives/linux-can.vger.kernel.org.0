@@ -2,32 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D13EBBAE8
-	for <lists+linux-can@lfdr.de>; Mon, 23 Sep 2019 20:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B145ABC144
+	for <lists+linux-can@lfdr.de>; Tue, 24 Sep 2019 07:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438018AbfIWSFx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Sep 2019 14:05:53 -0400
-Received: from dvalin.narfation.org ([213.160.73.56]:38386 "EHLO
-        dvalin.narfation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390851AbfIWSFx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Sep 2019 14:05:53 -0400
-X-Greylist: delayed 572 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Sep 2019 14:05:50 EDT
-Received: from sven-edge.localnet (unknown [IPv6:2a00:1ca0:1480:f9fc::4065])
-        by dvalin.narfation.org (Postfix) with ESMTPSA id D9AF31FFAB;
-        Mon, 23 Sep 2019 17:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1569259611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JUegENmeIHHiT+O9uIIOxc1zWJHPwvIxI2SvuwGf54A=;
-        b=dVWTU2YRhbvNTjzU5zWqJuZwGuXdr2Y5i4h8fAIbmfcxuBJK1ZG+fGo/W/YblVDINcKj0n
-        B670FTOeqbkbbqdtvLu3HbF2eoleJzXw6Dgnm1/VfifonzNleM7VytHWdyYL6G301L3qIC
-        tdTHwh8/l2Z9JQUVmzRFgWWvKZS3wUo=
-From:   Sven Eckelmann <sven@narfation.org>
-To:     b.a.t.m.a.n@lists.open-mesh.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S2409031AbfIXFPt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 24 Sep 2019 01:15:49 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:59954 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408781AbfIXFPt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 24 Sep 2019 01:15:49 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 8D3DD60A05; Tue, 24 Sep 2019 05:15:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1569302147;
+        bh=azdN6vc/PGfI2bjrfNHt+vK3hA51rRmp/zu9UwVEnFE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=OLBplSJ8QK2fuDQ89srMfDYzbHh19cEyYIPeEsii4HRtIELHAPm2/Bj4HjIWZXbrz
+         /ghU6UC7s7RGXH9PaTA2M7cO0Y+Tl1Tpz4nk04oTdOYa9q6gh8IfvMgAhybAQw24qA
+         +MsumvlYAN0nGHMUT7XPSltgWncFxCom6omq3DHw=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from tynnyri.adurom.net (tynnyri.adurom.net [51.15.11.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6A1EF602F0;
+        Tue, 24 Sep 2019 05:15:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1569302146;
+        bh=azdN6vc/PGfI2bjrfNHt+vK3hA51rRmp/zu9UwVEnFE=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=V0LrSJ65dpf3rFn2VjpBmfRFfW6ofjXym1S9bUV43cIfh1B+Izf9IeMywVs7MWDvQ
+         Q4eVfHhYpjXfey9K+PrTenhrts+tzG6/7DcQlcBpDeIdqCt24Fw+fYZPsGUAXoDwsn
+         B9wbiz9mXwVc2iXDjEl8E1xHTX6aJcLeBzwEzFvY=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6A1EF602F0
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Michael Grzeschik <m.grzeschik@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -42,90 +59,48 @@ Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
         Jiri Kosina <trivial@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        lvs-devel@vger.kernel.org, rds-devel@oss.oracle.com
-Subject: Re: [PATCH trivial 1/2] net: Fix Kconfig indentation
-Date:   Mon, 23 Sep 2019 19:56:12 +0200
-Message-ID: <2354684.0ZvKvX0iQ3@sven-edge>
-In-Reply-To: <20190923155243.6997-1-krzk@kernel.org>
+        b.a.t.m.a.n@lists.open-mesh.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com
+Subject: Re: [PATCH trivial 2/2] drivers: net: Fix Kconfig indentation
 References: <20190923155243.6997-1-krzk@kernel.org>
+        <20190923155243.6997-2-krzk@kernel.org>
+Date:   Tue, 24 Sep 2019 08:15:39 +0300
+In-Reply-To: <20190923155243.6997-2-krzk@kernel.org> (Krzysztof Kozlowski's
+        message of "Mon, 23 Sep 2019 17:52:43 +0200")
+Message-ID: <87sgomi8as.fsf@tynnyri.adurom.net>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2306317.z6aVZVsvuq"; micalg="pgp-sha512"; protocol="application/pgp-signature"
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=narfation.org;
-        s=20121; t=1569259612;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JUegENmeIHHiT+O9uIIOxc1zWJHPwvIxI2SvuwGf54A=;
-        b=x1TVkKv99+ozAK7NGhKJppOQTZ3rt6BG5uCQ9jX1Cu6VwaJ1Z9e2XjHeZoi0ylFmE0Qgv2
-        uPumTYEhEqN0pwscCMrxg05p8YgwwZxS95AE3BnKHxJCx8DfTCCPdTAyKbC6OzxnJqzLC+
-        xMuRoeIhRMuvm0RcjlgRZSLiQKlXzBQ=
-ARC-Seal: i=1; s=20121; d=narfation.org; t=1569259612; a=rsa-sha256;
-        cv=none;
-        b=sC+Bw4VcxyWYjzxCJPweIGNX+Yyrk334W9KKcHzvmcS/hWk8OQo5sJew0irtt83lHu620y
-        GR1yOu+K+tFNotiu7Ji8FKdtPcJdPj6tP5KcJpiNcjdVnKzc1GUdEDf7J4u+rCReuDLD9y
-        a6G6B/KjsDql8SBNK00XkdLiqUmNeNQ=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sven smtp.mailfrom=sven@narfation.org
+Content-Type: text/plain
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
---nextPart2306317.z6aVZVsvuq
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Krzysztof Kozlowski <krzk@kernel.org> writes:
 
-On Monday, 23 September 2019 17:52:42 CEST Krzysztof Kozlowski wrote:
-> --- a/net/batman-adv/Kconfig
-> +++ b/net/batman-adv/Kconfig
-> @@ -12,11 +12,11 @@ config BATMAN_ADV
->         depends on NET
->         select LIBCRC32C
->         help
-> -          B.A.T.M.A.N. (better approach to mobile ad-hoc networking) is
-> -          a routing protocol for multi-hop ad-hoc mesh networks. The
-> -          networks may be wired or wireless. See
-> -          https://www.open-mesh.org/ for more information and user space
-> -          tools.
-> +         B.A.T.M.A.N. (better approach to mobile ad-hoc networking) is
-> +         a routing protocol for multi-hop ad-hoc mesh networks. The
-> +         networks may be wired or wireless. See
-> +         https://www.open-mesh.org/ for more information and user space
-> +         tools.
->  
->  config BATMAN_ADV_BATMAN_V
->         bool "B.A.T.M.A.N. V protocol"
+> Adjust indentation from spaces to tab (+optional two spaces) as in
+> coding style with command like:
+>     $ sed -e 's/^        /\t/' -i */Kconfig
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Acked-by: Sven Eckelmann <sven@narfation.org>
+[...]
 
-Kind regards,
-	Sven
+>  drivers/net/wireless/ath/Kconfig              |   2 +-
+>  drivers/net/wireless/ath/ar5523/Kconfig       |   4 +-
+>  drivers/net/wireless/ath/ath6kl/Kconfig       |   2 +-
+>  drivers/net/wireless/ath/ath9k/Kconfig        |   2 +-
+>  drivers/net/wireless/ath/carl9170/Kconfig     |   6 +-
+>  drivers/net/wireless/atmel/Kconfig            |  32 ++---
+>  drivers/net/wireless/intel/ipw2x00/Kconfig    | 116 +++++++++---------
+>  drivers/net/wireless/intel/iwlegacy/Kconfig   |   6 +-
+>  drivers/net/wireless/intel/iwlwifi/Kconfig    |   6 +-
+>  drivers/net/wireless/ralink/rt2x00/Kconfig    |  24 ++--
 
---nextPart2306317.z6aVZVsvuq
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+I hope this goes through net or net-next, less chances of conflits then.
 
------BEGIN PGP SIGNATURE-----
+Acked-by: Kalle Valo <kvalo@codeaurora.org>
 
-iQIzBAABCgAdFiEEF10rh2Elc9zjMuACXYcKB8Eme0YFAl2JBzwACgkQXYcKB8Em
-e0YTVg/+PgtfvbyO8UPeEG3nkvaRcMywQsGWWB2nkRfHXA+QnFghJNXsvPHonkd+
-QQ1E5I3loiK90VFbdRR8R0o5G57WPTFAivY334UAL1m5qOZT1bMKwI971dT0GCny
-a9+BhZEjt729e7WlSOvkT/v7BHo8lxyHH5+x33dxMJF0oSD5UDdH8VZX9PCBTJ1g
-4+O3e18WyQdsXFi3G2N75DcT+OhRle2P7T6yfgD0Ro5ViMqeTigsdmw+kpq8x8IK
-fyUN3oo5vqFnH3sEEXFshmxAqAVjPjzzoRYTFTupTw8yDOTL2REIgU75HZ0WP2w6
-eQ03/+7hKhujukr4V/bwVPMf6WJ1mi9+cz88Op8BkY/UgFgAYJSUhnfeoLo1pK6q
-ewEwagQfFibXUqtebAoam3z20Mb7rnrUmQJbUvPLQatL76qUaonJp3yxUMnrOWo+
-GmDWR4zgHgwatjOBeGCPBuF3PBMPWe1NBrA0EF7+33gZu6pttf3Z6XLNUWCw3unx
-xQCR1dn7VzUA+/FdFZfVoUlGBPeqWzqdyp3Os2ymDHJRp6jZWTd2gX6KvldvWTDR
-dU2SmyvoOovNLFWyBd7rC7vud0aWMJUHypD2IlEMCPprnu+m33Lhqx8nrbF/goZL
-drH0F1BJDs5jlWehfTwnnaNdqZEuzamWT8GEJAUBj8Iq5R6+35s=
-=OS2O
------END PGP SIGNATURE-----
-
---nextPart2306317.z6aVZVsvuq--
-
-
-
+-- 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
