@@ -2,155 +2,169 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DBC6BDA57
-	for <lists+linux-can@lfdr.de>; Wed, 25 Sep 2019 10:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3530BDD63
+	for <lists+linux-can@lfdr.de>; Wed, 25 Sep 2019 13:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731859AbfIYI64 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Sep 2019 04:58:56 -0400
-Received: from mail-eopbgr20117.outbound.protection.outlook.com ([40.107.2.117]:46101
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730048AbfIYI6u (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 25 Sep 2019 04:58:50 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mLJIkwBCAPJ7HVsjmxGn0Z19hzBUpXqaaz2heBSm08xQG//pqhmQL4UlyjCNu/7xAXJLv3VqS0HfIUm3/5TTWgY8zgGPCsA978tyxm8FoHS9MA3sb/XUDBhN/bodGbVwA+pafN+keIYzIFZJcB/bnCFpD29HZwBcW01APfn+Z6/VIq7dUlAiB1xVtoWeVAFhD7IO5inqNBJ521sjMuAU+Lmsvy28eB6NNKJeEclgeRaPcYkb6wFKAczZizpRttPi9Ay2Gc0vEddrdOckF1IGuY5LUEj6hYBIicvwVPJi8JYMamc5TQawAaESZ/wZwfMvII9WzUhEhmX7JMY+LC4z+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=joJMWMYl6OickdL6ydA4gp8/4e8Gr7ixcgLiqvj646c=;
- b=MrHI22tQbuk6bbk7jGwpfbLg7N/z3TxVv0Ub2UKkYJQGallPIb336WQDtcY+ijMSH3Nd6Id0g2szVIO1yVQXb+R58ddpFyw0rX1RtjhPEZxlY6K24gQzRIi5db0JAHVpfW2UDtg6YNN8HO63PQJc7BYEIU3haxfBrYLPM/HVA53baYxX1HdeOS6DwHs15tUSHtMBzCwa/u88l/IOnrZx2mKEv4f9OJR8Ww9jZAXJnojyAPadjnGx3vROw6pESIqmEXjU/bnpIxEC7hxqLxgr6Pcp81gQMnnGVVpVnouISW2Swt+QW+8bU2GmjQQnMW5G5Mygdmg7R57IjhsYBoKmpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=victronenergy.com; dmarc=pass action=none
- header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=joJMWMYl6OickdL6ydA4gp8/4e8Gr7ixcgLiqvj646c=;
- b=LYi9R2q0LK+cOoIuls7dmMRytfo0Cq2RWNMZnDiH+Y+Z7IVP4sSaWm6uiivf2MUwjfVXxhIpmtYSBSGQU80qqFrt/xhF6fLgZDqeGuaDhA1bgdVwG3yhmcPMe1nCKgvsTpisGGCATF8mA05wpcKk8BzLHAE3HrNC6FEt7KtDxLo=
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com (10.173.82.19) by
- VI1PR0701MB2095.eurprd07.prod.outlook.com (10.169.131.11) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.15; Wed, 25 Sep 2019 08:58:45 +0000
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::dc92:2e0d:561a:fbb1]) by VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::dc92:2e0d:561a:fbb1%8]) with mapi id 15.20.2305.013; Wed, 25 Sep 2019
- 08:58:45 +0000
-From:   Jeroen Hofstee <jhofstee@victronenergy.com>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] can: peakcan: report bus recovery as well
-Thread-Topic: [PATCH] can: peakcan: report bus recovery as well
-Thread-Index: AQHVc39v0tTWHby5B0usrbVxGOnW3Q==
-Date:   Wed, 25 Sep 2019 08:58:45 +0000
-Message-ID: <20190925085824.4708-1-jhofstee@victronenergy.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.126.8.10]
-x-clientproxiedby: AM4PR05CA0017.eurprd05.prod.outlook.com (2603:10a6:205::30)
- To VI1PR0701MB2623.eurprd07.prod.outlook.com (2603:10a6:801:b::19)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jhofstee@victronenergy.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a9bd05d1-0421-426a-0ee6-08d74196923b
-x-ms-traffictypediagnostic: VI1PR0701MB2095:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0701MB2095938EB9C47D7B2F5F2003C0870@VI1PR0701MB2095.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
-x-forefront-prvs: 01713B2841
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(366004)(396003)(39850400004)(346002)(376002)(189003)(199004)(6486002)(3846002)(2501003)(316002)(71200400001)(8676002)(66476007)(66446008)(386003)(71190400001)(6506007)(8936002)(2351001)(66946007)(36756003)(2906002)(81166006)(64756008)(26005)(52116002)(25786009)(7416002)(50226002)(7736002)(186003)(86362001)(66556008)(66066001)(4326008)(5660300002)(81156014)(478600001)(6916009)(2616005)(476003)(5640700003)(54906003)(305945005)(102836004)(99286004)(256004)(6512007)(14454004)(14444005)(486006)(1076003)(6116002)(6436002);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2095;H:VI1PR0701MB2623.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: victronenergy.com does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5WwiJFfoY91coQWmyHXbG3Y2ltBdvR76TNUgn7PSDZ6fBaoBRjb/2mWZEmx+CWGDO6L9+LEho9BY2khoFxeV5ITtaa5PQGEodEL/VGjCUeaXfhswoJJ80an/v6/Mo03XDhRtI7bQEjrdPwXeCSRcYrI/uHVwJkanc8/5VWkUraNP17oO7bq48JkKRfGDEVJ/erTpDjsJNvOyNrBhRAQ5u/iANWuomMzIIxaI+Cok/FiEzEqsNeOZvjhMUje7ooJ2kK6Btp42IS+bonD1kOyxoKvRychoxhwn1SkFpMQrR2EGtpaCaK5SXdliKsclfuRVsbFfEIPwNgagCOrggS6anaq1aki4CDDhvuhxLnzEnpRh3xyqkAC4CrNi0QkEBIGScjW3rT/78Zl92hoZkUbEJTDlsktfmCUxKJbapyk8DrU=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: victronenergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9bd05d1-0421-426a-0ee6-08d74196923b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2019 08:58:45.2837
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 60b95f08-3558-4e94-b0f8-d690c498e225
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sN+I546nx7q3rU/9hiNhfI4y8rEMmKsCv1N4Yt3fYz0xZSsc3RSAhXFKw2zcRJt/cexsR/dVSmjFz4Eddr/q01HZY2i9PmROhFay51HB1cE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2095
+        id S2404748AbfIYLqO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Sep 2019 07:46:14 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:36416 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391225AbfIYLqO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Sep 2019 07:46:14 -0400
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190925114611epoutp0219b2956906062069e29668d186a384ff~Hq99wcIL91249112491epoutp02J
+        for <linux-can@vger.kernel.org>; Wed, 25 Sep 2019 11:46:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190925114611epoutp0219b2956906062069e29668d186a384ff~Hq99wcIL91249112491epoutp02J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1569411971;
+        bh=HS47KaLUho15X7wWEEKA9dUhxdfUuW8/TC3l0iwl1rI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=qyGAW8VU6XqAtwwWXNODM4FZ8zrQjsAAQQV8i/dW16oNiQkl+oIKcBhsfo8+deGwO
+         DzQ+JUL6V8ZmgPSGaUatfhb4npi8rajfgmWmwoJpSVqSVjqDx1FIbUtW+QeDS2hDXt
+         6rANX3OFHi5GXJxNMIO/fF/0jUf3nPpps4S58vyo=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20190925114610epcas5p3f604e0aa42b25c89757c0f19b5ee5949~Hq981wlmF1049010490epcas5p3n;
+        Wed, 25 Sep 2019 11:46:10 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        36.19.04647.2835B8D5; Wed, 25 Sep 2019 20:46:10 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758~Hq98GF5Gj1049110491epcas5p3y;
+        Wed, 25 Sep 2019 11:46:09 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190925114609epsmtrp251be14c041d0996b412a4014cb09c426~Hq98FVKyJ1880618806epsmtrp2e;
+        Wed, 25 Sep 2019 11:46:09 +0000 (GMT)
+X-AuditID: b6c32a49-743ff70000001227-f7-5d8b53824e25
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B1.36.04081.1835B8D5; Wed, 25 Sep 2019 20:46:09 +0900 (KST)
+Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
+        [107.108.83.125]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190925114607epsmtip2a54c7283b1b38a6bdaa5dfccdaed83a5~Hq96b5ac10143401434epsmtip2T;
+        Wed, 25 Sep 2019 11:46:07 +0000 (GMT)
+From:   Pankaj Sharma <pankj.sharma@samsung.com>
+To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
+        pankaj.dubey@samsung.com, rcsekar@samsung.com,
+        Pankaj Sharma <pankj.sharma@samsung.com>,
+        Sriram Dash <sriram.dash@samsung.com>
+Subject: [PATCH] can: m_can: add support for one shot mode
+Date:   Wed, 25 Sep 2019 17:15:04 +0530
+Message-Id: <1569411904-6319-1-git-send-email-pankj.sharma@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEIsWRmVeSWpSXmKPExsWy7bCmpm5TcHeswbU9QhZzzrewWBz4cZzF
+        YtX3qcwWl3fNYbN4sfY6q8X6RVNYLI4tELNYtPULu8XyrvvMFrMu7GC1uLGe3WLpvZ2sDjwe
+        W1beZPL4eOk2o8edH0sZPfr/Gnj0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxu+mg2wFX0Uq
+        Hp15z9zA2CvYxcjBISFgInHsekEXIxeHkMBuRonLZ04zQzifGCV+P7jLBuF8Y5R4+qYZKMMJ
+        1rHy82x2iMReRon7r9awQDgtTBJb3v0Fq2IT0JO49H4yG4gtIhAqsax3AitIEbNAE5NE1+Ze
+        sCJhASuJNXd2MoHYLAKqEg2dvYwgNq+Au8SNfwvYINbJSdw81wl2lITABjaJp6/+QSVcJO5M
+        +MIOYQtLvDq+BcqWkvj8bi9UTbbEwt39LBCfVki0zRCGCNtLHLgyByzMLKApsX6XPkiYWYBP
+        ovf3EyaIal6JjjYhiGo1ialP3zFC2DISdx5tZoMo8ZA4dL8QJCwkECvx/8xHlgmMMrMQZi5g
+        ZFzFKJlaUJybnlpsWmCYl1quV5yYW1yal66XnJ+7iRGcErQ8dzDOOudziFGAg1GJh9eBtStW
+        iDWxrLgy9xCjBAezkgjvLBmgEG9KYmVValF+fFFpTmrxIUZpDhYlcd5JrFdjhATSE0tSs1NT
+        C1KLYLJMHJxSDYzKf8p2BJxptn3++J9GxILm6kQ+Qb33+3uffUvWaBG72PrhmI/r4QjnPpP/
+        t/eWe+tlLNE+q1NuILEoe6F4buQhwc3KN2YwnzXecHZDnKz7w1cPTr9YciVXcNLO+tj+B7Vr
+        LW38Chd8XLIufsKF6GbGlb4CkX5bP5mFVF6+9XPjiUs/s5x31norsRRnJBpqMRcVJwIAOnfC
+        mgUDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKLMWRmVeSWpSXmKPExsWy7bCSvG5jcHesweIGaYs551tYLA78OM5i
+        ser7VGaLy7vmsFm8WHud1WL9oiksFscWiFks2vqF3WJ5131mi1kXdrBa3FjPbrH03k5WBx6P
+        LStvMnl8vHSb0ePOj6WMHv1/DTz6tqxi9Pi8SS6ALYrLJiU1J7MstUjfLoEr43fTQbaCryIV
+        j868Z25g7BXsYuTkkBAwkVj5eTZ7FyMXh5DAbkaJ2y03GLsYOYASMhKLP1dD1AhLrPz3nB3E
+        FhJoYpJYec0IxGYT0JO49H4yG4gtIhAusXNCFxOIzSzQwyTRejcBxBYWsJJYc2cnWJxFQFWi
+        obOXEcTmFXCXuPFvARvEfDmJm+c6mScw8ixgZFjFKJlaUJybnltsWGCYl1quV5yYW1yal66X
+        nJ+7iREceFqaOxgvL4k/xCjAwajEw+vA2hUrxJpYVlyZe4hRgoNZSYR3lgxQiDclsbIqtSg/
+        vqg0J7X4EKM0B4uSOO/TvGORQgLpiSWp2ampBalFMFkmDk6pBsZyJ93SbO51987kK7K/tw/Z
+        uTgg5Mf+nKbbr6ZkeGyY4rhkTvMhvpWe02+8cZY9VbFOYOLT/SlsT6Vmlj9d9kr0qtepVwL5
+        n0Vu8Zp8nCV+dtU3Dpka2e3mWTec3yucuDp7AtfhNUznT58qebU6+4/U/lin8OV5Yu59MX7y
+        J5fvOLOypPnllo5jSizFGYmGWsxFxYkA34eIDDgCAAA=
+X-CMS-MailID: 20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758
+References: <CGME20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758@epcas5p3.samsung.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-While the state changes are reported when the error counters increase
-and decrease, there is no event when the bus recovers and the error
-counters decrease again. So add those as well.
+According to the CAN Specification (see ISO 11898-1:2015, 8.3.4
+Recovery Management), the M_CAN provides means for automatic
+retransmission of frames that have lost arbitration or that
+have been disturbed by errors during transmission. By default
+automatic retransmission is enabled.
 
-Change the state going downward to be ERROR_PASSIVE -> ERROR_WARNING ->
-ERROR_ACTIVE instead of directly to ERROR_ACTIVE again.
+The Bosch MCAN controller has support for disabling automatic
+retransmission.
 
-Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-Cc: Stephane Grosjean <s.grosjean@peak-system.com>
+To support time-triggered communication as described in ISO
+11898-1:2015, chapter 9.2, the automatic retransmission may be
+disabled via CCCR.DAR.
+
+CAN_CTRLMODE_ONE_SHOT is used for disabling automatic retransmission.
+
+Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
+Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
 ---
- drivers/net/can/usb/peak_usb/pcan_usb.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/net/can/m_can/m_can.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/=
-peak_usb/pcan_usb.c
-index 617da295b6c1..dd2a7f529012 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-@@ -436,8 +436,8 @@ static int pcan_usb_decode_error(struct pcan_usb_msg_co=
-ntext *mc, u8 n,
- 		}
- 		if ((n & PCAN_USB_ERROR_BUS_LIGHT) =3D=3D 0) {
- 			/* no error (back to active state) */
--			mc->pdev->dev.can.state =3D CAN_STATE_ERROR_ACTIVE;
--			return 0;
-+			new_state =3D CAN_STATE_ERROR_ACTIVE;
-+			break;
- 		}
- 		break;
-=20
-@@ -460,9 +460,9 @@ static int pcan_usb_decode_error(struct pcan_usb_msg_co=
-ntext *mc, u8 n,
- 		}
-=20
- 		if ((n & PCAN_USB_ERROR_BUS_HEAVY) =3D=3D 0) {
--			/* no error (back to active state) */
--			mc->pdev->dev.can.state =3D CAN_STATE_ERROR_ACTIVE;
--			return 0;
-+			/* no error (back to warning state) */
-+			new_state =3D CAN_STATE_ERROR_WARNING;
-+			break;
- 		}
- 		break;
-=20
-@@ -501,6 +501,11 @@ static int pcan_usb_decode_error(struct pcan_usb_msg_c=
-ontext *mc, u8 n,
- 		mc->pdev->dev.can.can_stats.error_warning++;
- 		break;
-=20
-+	case CAN_STATE_ERROR_ACTIVE:
-+		cf->can_id |=3D CAN_ERR_CRTL;
-+		cf->data[1] =3D CAN_ERR_CRTL_ACTIVE;
-+		break;
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index deb274a19ba0..e7165404ba8a 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -150,6 +150,7 @@ enum m_can_mram_cfg {
+ #define CCCR_CME_CANFD_BRS	0x2
+ #define CCCR_TXP		BIT(14)
+ #define CCCR_TEST		BIT(7)
++#define CCCR_DAR		BIT(6)
+ #define CCCR_MON		BIT(5)
+ #define CCCR_CSR		BIT(4)
+ #define CCCR_CSA		BIT(3)
+@@ -1123,7 +1124,7 @@ static void m_can_chip_config(struct net_device *dev)
+ 	if (priv->version == 30) {
+ 	/* Version 3.0.x */
+ 
+-		cccr &= ~(CCCR_TEST | CCCR_MON |
++		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_DAR |
+ 			(CCCR_CMR_MASK << CCCR_CMR_SHIFT) |
+ 			(CCCR_CME_MASK << CCCR_CME_SHIFT));
+ 
+@@ -1133,7 +1134,7 @@ static void m_can_chip_config(struct net_device *dev)
+ 	} else {
+ 	/* Version 3.1.x or 3.2.x */
+ 		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_BRSE | CCCR_FDOE |
+-			  CCCR_NISO);
++			  CCCR_NISO | CCCR_DAR);
+ 
+ 		/* Only 3.2.x has NISO Bit implemented */
+ 		if (priv->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+@@ -1153,6 +1154,10 @@ static void m_can_chip_config(struct net_device *dev)
+ 	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+ 		cccr |= CCCR_MON;
+ 
++	/* Disable Auto Retransmission (all versions) */
++	if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
++		cccr |= CCCR_DAR;
 +
- 	default:
- 		/* CAN_STATE_MAX (trick to handle other errors) */
- 		cf->can_id |=3D CAN_ERR_CRTL;
---=20
+ 	/* Write config */
+ 	m_can_write(priv, M_CAN_CCCR, cccr);
+ 	m_can_write(priv, M_CAN_TEST, test);
+@@ -1291,7 +1296,8 @@ static int m_can_dev_setup(struct platform_device *pdev, struct net_device *dev,
+ 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+ 					CAN_CTRLMODE_LISTENONLY |
+ 					CAN_CTRLMODE_BERR_REPORTING |
+-					CAN_CTRLMODE_FD;
++					CAN_CTRLMODE_FD |
++					CAN_CTRLMODE_ONE_SHOT;
+ 
+ 	/* Set properties depending on M_CAN version */
+ 	switch (priv->version) {
+-- 
 2.17.1
 
