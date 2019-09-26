@@ -2,66 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB140C110F
-	for <lists+linux-can@lfdr.de>; Sat, 28 Sep 2019 16:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A3CC1120
+	for <lists+linux-can@lfdr.de>; Sat, 28 Sep 2019 17:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfI1ObE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 28 Sep 2019 10:31:04 -0400
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:46942 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725876AbfI1ObE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 28 Sep 2019 10:31:04 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01451;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0TdeNtUM_1569681047;
-Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0TdeNtUM_1569681047)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 28 Sep 2019 22:30:59 +0800
-From:   Wen Yang <wenyang@linux.alibaba.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     xlpang@linux.alibaba.com, Wen Yang <wenyang@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Franklin S Cooper Jr <fcooper@ti.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] can: dev: add missing of_node_put after calling of_get_child_by_name
-Date:   Sat, 28 Sep 2019 22:29:05 +0800
-Message-Id: <20190928142905.34832-1-wenyang@linux.alibaba.com>
-X-Mailer: git-send-email 2.23.0
+        id S1728430AbfI1PJo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 28 Sep 2019 11:09:44 -0400
+Received: from [129.146.181.251] ([129.146.181.251]:38170 "EHLO
+        issue-4015.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726026AbfI1PJo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 28 Sep 2019 11:09:44 -0400
+Received: from localhost (localhost [IPv6:::1])
+        by issue-4015.localdomain (Postfix) with SMTP id 280CB8581328
+        for <linux-can@vger.kernel.org>; Thu, 26 Sep 2019 14:05:25 +0000 (GMT)
+From:   linux-can@vger.kernel.org
+Reply-To: prodawez@teleworm.us
+To:     linux-can@vger.kernel.org,
+        =?utf-8?Q?=D0=97=D0=B4=D1=80=D0=B0=D0=B2=D1=81=D1=82=D0?=@issue-4015.localdomain,
+        _=D0=92=D0=B0=D1=81?=@=?utf-8?Q?=B2=D1=83=D0=B9=D1=82=D0=B5.localdomain,
+        =?utf-8?Q?_=D0=B8=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81=D1?=@issue-4015.localdomain,
+        =?utf-8?Q?=83=D1=8E=D1=82_=D0=BA=D0=BB=D0=B8=D0=B5=D0=BD?=@issue-4015.localdomain,
+        =?utf-8?Q?=D1=82=D1=81=D0=BA=D0=B8=D0=B5_=D0=B1=D0=B0=D0?=@issue-4015.localdomain,
+        =?utf-8?Q?=B7=D1=8B_=D0=B4=D0=B0=D0=BD=D0=BD=D1=8B=D1=85?=@issue-4015.localdomain,
+        =?utf-8?Q?=3F?=@issue-4015.localdomain
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8";
 Content-Transfer-Encoding: 8bit
+Message-Id: <20190926140526.280CB8581328@issue-4015.localdomain>
+Date:   Thu, 26 Sep 2019 14:05:25 +0000 (GMT)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-of_node_put needs to be called when the device node which is got
-from of_get_child_by_name finished using.
-
-fixes: 2290aefa2e90 ("can: dev: Add support for limiting configured bitrate")
-Signed-off-by: Wen Yang <wenyang@linux.alibaba.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Franklin S Cooper Jr <fcooper@ti.com>
-Cc: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/net/can/dev.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index ac86be5..1c88c36 100644
---- a/drivers/net/can/dev.c
-+++ b/drivers/net/can/dev.c
-@@ -848,6 +848,7 @@ void of_can_transceiver(struct net_device *dev)
- 		return;
- 
- 	ret = of_property_read_u32(dn, "max-bitrate", &priv->bitrate_max);
-+	of_node_put(dn);
- 	if ((ret && ret != -EINVAL) || (!ret && !priv->bitrate_max))
- 		netdev_warn(dev, "Invalid value for transceiver max bitrate. Ignoring bitrate limit.\n");
- }
--- 
-1.8.3.1
+Здравствуйте! Вас интересуют клиентские базы данных?
 
