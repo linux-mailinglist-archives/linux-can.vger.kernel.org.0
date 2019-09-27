@@ -2,159 +2,353 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E47BEDD2
-	for <lists+linux-can@lfdr.de>; Thu, 26 Sep 2019 10:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C163EC0AC8
+	for <lists+linux-can@lfdr.de>; Fri, 27 Sep 2019 20:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729879AbfIZIuz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Sep 2019 04:50:55 -0400
-Received: from mail-eopbgr20136.outbound.protection.outlook.com ([40.107.2.136]:40672
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728138AbfIZIuy (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 26 Sep 2019 04:50:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hg4S9HMETM9aYEgLIzaWpebCRsexab/6mTtPRfuuSUAjEyQqCe3MXQMVlrOckVjvDoho1C+GfERQ+MJUQ+axD693rrcZlYiAnBP3xxDnttKvcIiDFlB25hiOX4DZStE7JTdWaXAYDFzzW183iQHD8+r0+CY5uHN3m8El7eiqMStxOc2RjMsmtooT3GkR0MKhrCQQsHgvYQVP/aVVJVWjoqfE8MBDM3NvvLb9Bt+rC1jX/egjAQfnSTkoIZyVfh1HvgZFxqEKGNs3+8Y/6gerLR5gvb9hQW6B9nt0lG0+7HGUHMz5s7lOOnKGBZlEgzNpygiM/A+v9v/eDwCB1Fk5Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KjgjRvBII55wK0heY11+LtK3tTjCxkN9i6QBHWCKhV8=;
- b=j6jIq3/b51xbXVNxOMV6Mx8pvpN0Hbb67yoExWlMoQGR/6HdukZgrhCrAttZ16vB6oEC/8Aga1rXBCDHqWFRXyv+PKERLYyJ6fomz27RBxp8527pAtqroywvMdWrORtb1ZTaQ8GqZ9KzbfZVk75e4s2NCzOigDrwxLV2Xtmx8Dkx2GAwsRv+adVbCez78L78bpg9AFnCiPU7NJelGq4sFDfEhubi4hrZtEIA50X8FbUMdwq+jJ3wzGMaAZPkI1hHWkhr6Ftg947+6/jNshOydwloFRoR3TebJSjGwuo/yr2rZFoYqn6ndcuuUaWkOpX+EHG53AEDHBW8c8o4GYymaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=victronenergy.com; dmarc=pass action=none
- header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KjgjRvBII55wK0heY11+LtK3tTjCxkN9i6QBHWCKhV8=;
- b=dvIb6VXs6VdfDmZY29T49qP05jj/rS9Ty82CcFa8vp2lMmq7VkL1PwEchHrNnQ1EEvwfcabDRalrUje/IC9DxyfROeuHTp6QGhDfqjHG6ue1FJt8I4XYzZYIr87MYNM6f3vMQ3tmNBCvEVM8kynllpoDRTGhS+JBcatNO+DBQdU=
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com (10.173.82.19) by
- VI1PR0701MB2144.eurprd07.prod.outlook.com (10.169.137.13) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.15; Thu, 26 Sep 2019 08:50:51 +0000
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::dc92:2e0d:561a:fbb1]) by VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::dc92:2e0d:561a:fbb1%8]) with mapi id 15.20.2305.017; Thu, 26 Sep 2019
- 08:50:51 +0000
-From:   Jeroen Hofstee <jhofstee@victronenergy.com>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] can: C_CAN: add bus recovery events
-Thread-Topic: [PATCH 2/2] can: C_CAN: add bus recovery events
-Thread-Index: AQHVdEd/zjaw3kBMJka/V+TNHW0MWQ==
-Date:   Thu, 26 Sep 2019 08:50:51 +0000
-Message-ID: <20190926085005.24805-3-jhofstee@victronenergy.com>
-References: <20190926085005.24805-1-jhofstee@victronenergy.com>
-In-Reply-To: <20190926085005.24805-1-jhofstee@victronenergy.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [213.126.8.10]
-x-clientproxiedby: AM4PR08CA0074.eurprd08.prod.outlook.com
- (2603:10a6:205:2::45) To VI1PR0701MB2623.eurprd07.prod.outlook.com
- (2603:10a6:801:b::19)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jhofstee@victronenergy.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1fbff855-7b8d-4f17-0341-08d7425ea222
-x-ms-traffictypediagnostic: VI1PR0701MB2144:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0701MB21445409C22EC328559AD074C0860@VI1PR0701MB2144.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:138;
-x-forefront-prvs: 0172F0EF77
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(366004)(396003)(39850400004)(136003)(346002)(199004)(189003)(446003)(14444005)(50226002)(99286004)(76176011)(8676002)(81166006)(81156014)(52116002)(2906002)(14454004)(186003)(8936002)(478600001)(6512007)(5640700003)(6486002)(6436002)(66066001)(2351001)(102836004)(26005)(25786009)(1076003)(4326008)(2616005)(386003)(6506007)(486006)(86362001)(54906003)(316002)(2501003)(5660300002)(305945005)(11346002)(71200400001)(7736002)(71190400001)(3846002)(66476007)(6916009)(66556008)(64756008)(66446008)(66946007)(476003)(256004)(36756003)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2144;H:VI1PR0701MB2623.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: victronenergy.com does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: t1A1fU3IwAdPWdIjJsW2/3yBLpH3lLVHA3kuIBxLoXNc+nODNKJwlM6jbMkVSGeNCC+1Q3JINUlhGtoC50oCQ6x+qfkMEHVFQomYHL2AmQGS8zVfrszCXJmMa3+shCh7vDmNbeV6o3TL19rTFg/HOAhIehDJw69a+48Ncs33jaS11sHTF4KvZhm5VhO5gHbgZ4/ccDE+8PK1nrIOb+VNtNrL6M/qxRo3n3qk+jXoTrQDIMpxpnjuY9j0WxNCJC+iQo+cRjaE6nRDBKtyRjdQPKMx/Vruhoq9ey2LrlhVGwP2jrTXqlLzvjuC4CGg47geBas8X/tqT+fB5SSmDPCrb0T0SD64fcCbtALc4oOGvTstTiZXVCAuntMutRQTI9MQ+o08e/SgjD8zIwL1Ih4c2r7ufAEmk/1crH5V80/XKpA=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726883AbfI0SIZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Sep 2019 14:08:25 -0400
+Received: from 1.mo68.mail-out.ovh.net ([46.105.41.146]:46195 "EHLO
+        1.mo68.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726033AbfI0SIZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Sep 2019 14:08:25 -0400
+X-Greylist: delayed 8400 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Sep 2019 14:08:23 EDT
+Received: from player687.ha.ovh.net (unknown [10.109.146.166])
+        by mo68.mail-out.ovh.net (Postfix) with ESMTP id 8F4BA143A24
+        for <linux-can@vger.kernel.org>; Fri, 27 Sep 2019 16:30:43 +0200 (CEST)
+Received: from sk2.org (unknown [65.39.69.237])
+        (Authenticated sender: steve@sk2.org)
+        by player687.ha.ovh.net (Postfix) with ESMTPSA id 7A2E5A476CBE;
+        Fri, 27 Sep 2019 14:30:32 +0000 (UTC)
+From:   Stephen Kitt <steve@sk2.org>
+To:     linux-doc@vger.kernel.org
+Cc:     corbet@lwn.net, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-afs@lists.infradead.org, kvm@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] docs: use flexible array members, not zero-length
+Date:   Fri, 27 Sep 2019 16:29:27 +0200
+Message-Id: <20190927142927.27968-1-steve@sk2.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: victronenergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1fbff855-7b8d-4f17-0341-08d7425ea222
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Sep 2019 08:50:51.3120
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 60b95f08-3558-4e94-b0f8-d690c498e225
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NV+qaWnoCx4/XgQdwkGcN9d5EakyNb+hKEyjBS1rCaWTF5oJYXnZ9ThAz/IGgiKGSwgQoPfD9xUAiLOl4fc/teuYl3xFK2VNpiJziuMQ688=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2144
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 2095018254973357452
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrfeeigdejiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-While the state is update when the error counters increase and decrease,
-there is no event when the bus recovers and the error counters decrease
-again. So add that event as well.
+Update the docs throughout to remove zero-length arrays, replacing
+them with C99 flexible array members. GCC will then ensure that the
+arrays are always the last element in the struct.
 
-Change the state going downward to be ERROR_PASSIVE -> ERROR_WARNING ->
-ERROR_ACTIVE instead of directly to ERROR_ACTIVE again.
-
-Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+Cc: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
- drivers/net/can/c_can/c_can.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ Documentation/bpf/btf.rst                     |  2 +-
+ Documentation/digsig.txt                      |  4 ++--
+ Documentation/driver-api/connector.rst        |  2 +-
+ Documentation/driver-api/usb/URB.rst          |  2 +-
+ .../filesystems/autofs-mount-control.txt      |  2 +-
+ Documentation/filesystems/autofs.txt          |  2 +-
+ Documentation/filesystems/fiemap.txt          |  2 +-
+ Documentation/hwspinlock.txt                  |  2 +-
+ Documentation/networking/can.rst              |  2 +-
+ Documentation/networking/rxrpc.txt            |  2 +-
+ Documentation/remoteproc.txt                  |  4 ++--
+ Documentation/virt/kvm/api.txt                | 24 +++++++++----------
+ Documentation/x86/boot.rst                    |  4 ++--
+ 13 files changed, 27 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_can.c
-index 502a181d02e7..5cfaab18e10b 100644
---- a/drivers/net/can/c_can/c_can.c
-+++ b/drivers/net/can/c_can/c_can.c
-@@ -912,6 +912,9 @@ static int c_can_handle_state_change(struct net_device =
-*dev,
- 	struct can_berr_counter bec;
-=20
- 	switch (error_type) {
-+	case C_CAN_NO_ERROR:
-+		priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-+		break;
- 	case C_CAN_ERROR_WARNING:
- 		/* error warning state */
- 		priv->can.can_stats.error_warning++;
-@@ -942,6 +945,13 @@ static int c_can_handle_state_change(struct net_device=
- *dev,
- 				ERR_CNT_RP_SHIFT;
-=20
- 	switch (error_type) {
-+	case C_CAN_NO_ERROR:
-+		/* error warning state */
-+		cf->can_id |=3D CAN_ERR_CRTL;
-+		cf->data[1] =3D CAN_ERR_CRTL_ACTIVE;
-+		cf->data[6] =3D bec.txerr;
-+		cf->data[7] =3D bec.rxerr;
-+		break;
- 	case C_CAN_ERROR_WARNING:
- 		/* error warning state */
- 		cf->can_id |=3D CAN_ERR_CRTL;
-@@ -1080,11 +1090,17 @@ static int c_can_poll(struct napi_struct *napi, int=
- quota)
- 	/* handle bus recovery events */
- 	if ((!(curr & STATUS_BOFF)) && (last & STATUS_BOFF)) {
- 		netdev_dbg(dev, "left bus off state\n");
--		priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-+		work_done +=3D c_can_handle_state_change(dev, C_CAN_ERROR_PASSIVE);
- 	}
-+
- 	if ((!(curr & STATUS_EPASS)) && (last & STATUS_EPASS)) {
- 		netdev_dbg(dev, "left error passive state\n");
--		priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
-+		work_done +=3D c_can_handle_state_change(dev, C_CAN_ERROR_WARNING);
-+	}
-+
-+	if ((!(curr & STATUS_EWARN)) && (last & STATUS_EWARN)) {
-+		netdev_dbg(dev, "left error warning state\n");
-+		work_done +=3D c_can_handle_state_change(dev, C_CAN_NO_ERROR);
- 	}
-=20
- 	/* handle lec errors on the bus */
---=20
-2.17.1
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 4d565d202ce3..24ce50fc1fc1 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -670,7 +670,7 @@ func_info for each specific ELF section.::
+         __u32   sec_name_off; /* offset to section name */
+         __u32   num_info;
+         /* Followed by num_info * record_size number of bytes */
+-        __u8    data[0];
++        __u8    data[];
+      };
+ 
+ Here, num_info must be greater than 0.
+diff --git a/Documentation/digsig.txt b/Documentation/digsig.txt
+index f6a8902d3ef7..d7479f98a27e 100644
+--- a/Documentation/digsig.txt
++++ b/Documentation/digsig.txt
+@@ -31,7 +31,7 @@ Public key and signature consist of header and MPIs::
+ 		time_t		timestamp;	/* key made, always 0 for now */
+ 		uint8_t		algo;
+ 		uint8_t		nmpi;
+-		char		mpi[0];
++		char		mpi[];
+ 	} __packed;
+ 
+ 	struct signature_hdr {
+@@ -41,7 +41,7 @@ Public key and signature consist of header and MPIs::
+ 		uint8_t		hash;
+ 		uint8_t		keyid[8];
+ 		uint8_t		nmpi;
+-		char		mpi[0];
++		char		mpi[];
+ 	} __packed;
+ 
+ keyid equals to SHA1[12-19] over the total key content.
+diff --git a/Documentation/driver-api/connector.rst b/Documentation/driver-api/connector.rst
+index c100c7482289..1f187028c7e1 100644
+--- a/Documentation/driver-api/connector.rst
++++ b/Documentation/driver-api/connector.rst
+@@ -49,7 +49,7 @@ be dereferenced to `struct cn_msg *`::
+ 	__u32			ack;
+ 
+ 	__u32			len;	/* Length of the following data */
+-	__u8			data[0];
++	__u8			data[];
+   };
+ 
+ Connector interfaces
+diff --git a/Documentation/driver-api/usb/URB.rst b/Documentation/driver-api/usb/URB.rst
+index 61a54da9fce9..8aca9c39e9a0 100644
+--- a/Documentation/driver-api/usb/URB.rst
++++ b/Documentation/driver-api/usb/URB.rst
+@@ -82,7 +82,7 @@ Some of the fields in struct :c:type:`urb` are::
+ 
+     // ISO only: packets are only "best effort"; each can have errors
+ 	int error_count;                // number of errors
+-	struct usb_iso_packet_descriptor iso_frame_desc[0];
++	struct usb_iso_packet_descriptor iso_frame_desc[];
+   };
+ 
+ Your driver must create the "pipe" value using values from the appropriate
+diff --git a/Documentation/filesystems/autofs-mount-control.txt b/Documentation/filesystems/autofs-mount-control.txt
+index acc02fc57993..1c5cf1ecd90d 100644
+--- a/Documentation/filesystems/autofs-mount-control.txt
++++ b/Documentation/filesystems/autofs-mount-control.txt
+@@ -194,7 +194,7 @@ struct autofs_dev_ioctl {
+ 		struct args_ismountpoint	ismountpoint;
+ 	};
+ 
+-	char path[0];
++	char path[];
+ };
+ 
+ The ioctlfd field is a mount point file descriptor of an autofs mount
+diff --git a/Documentation/filesystems/autofs.txt b/Documentation/filesystems/autofs.txt
+index 3af38c7fd26d..0766089b81f1 100644
+--- a/Documentation/filesystems/autofs.txt
++++ b/Documentation/filesystems/autofs.txt
+@@ -455,7 +455,7 @@ Each ioctl is passed a pointer to an `autofs_dev_ioctl` structure:
+ 			struct args_ismountpoint	ismountpoint;
+ 		};
+ 
+-                char path[0];
++                char path[];
+         };
+ 
+ For the **OPEN_MOUNT** and **IS_MOUNTPOINT** commands, the target
+diff --git a/Documentation/filesystems/fiemap.txt b/Documentation/filesystems/fiemap.txt
+index f6d9c99103a4..172c94377fb3 100644
+--- a/Documentation/filesystems/fiemap.txt
++++ b/Documentation/filesystems/fiemap.txt
+@@ -22,7 +22,7 @@ struct fiemap {
+ 				    * mapped (out) */
+ 	__u32	fm_extent_count; /* size of fm_extents array (in) */
+ 	__u32	fm_reserved;
+-	struct fiemap_extent fm_extents[0]; /* array of mapped extents (out) */
++	struct fiemap_extent fm_extents[]; /* array of mapped extents (out) */
+ };
+ 
+ 
+diff --git a/Documentation/hwspinlock.txt b/Documentation/hwspinlock.txt
+index 6f03713b7003..a37e7c24ff26 100644
+--- a/Documentation/hwspinlock.txt
++++ b/Documentation/hwspinlock.txt
+@@ -439,7 +439,7 @@ implementation using the hwspin_lock_register() API.
+ 		const struct hwspinlock_ops *ops;
+ 		int base_id;
+ 		int num_locks;
+-		struct hwspinlock lock[0];
++		struct hwspinlock lock[];
+ 	};
+ 
+ struct hwspinlock_device contains an array of hwspinlock structs, each
+diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
+index 2fd0b51a8c52..ceb40a9d2044 100644
+--- a/Documentation/networking/can.rst
++++ b/Documentation/networking/can.rst
+@@ -705,7 +705,7 @@ The broadcast manager sends responses to user space in the same form:
+             struct timeval ival1, ival2;    /* count and subsequent interval */
+             canid_t can_id;                 /* unique can_id for task */
+             __u32 nframes;                  /* number of can_frames following */
+-            struct can_frame frames[0];
++            struct can_frame frames[];
+     };
+ 
+ The aligned payload 'frames' uses the same basic CAN frame structure defined
+diff --git a/Documentation/networking/rxrpc.txt b/Documentation/networking/rxrpc.txt
+index 180e07d956a7..b1fff6870c1b 100644
+--- a/Documentation/networking/rxrpc.txt
++++ b/Documentation/networking/rxrpc.txt
+@@ -518,7 +518,7 @@ form:
+ 		uint8_t		kvno;		/* key version number */
+ 		uint8_t		__pad[3];
+ 		uint8_t		session_key[8];	/* DES session key */
+-		uint8_t		ticket[0];	/* the encrypted ticket */
++		uint8_t		ticket[];	/* the encrypted ticket */
+ 	};
+ 
+ Where the ticket blob is just appended to the above structure.
+diff --git a/Documentation/remoteproc.txt b/Documentation/remoteproc.txt
+index 03c3d2e568b0..77b1493759b2 100644
+--- a/Documentation/remoteproc.txt
++++ b/Documentation/remoteproc.txt
+@@ -274,7 +274,7 @@ The resource table begins with this header::
+ 	u32 ver;
+ 	u32 num;
+ 	u32 reserved[2];
+-	u32 offset[0];
++	u32 offset[];
+   } __packed;
+ 
+ Immediately following this header are the resource entries themselves,
+@@ -291,7 +291,7 @@ each of which begins with the following resource entry header::
+    */
+   struct fw_rsc_hdr {
+ 	u32 type;
+-	u8 data[0];
++	u8 data[];
+   } __packed;
+ 
+ Some resources entries are mere announcements, where the host is informed
+diff --git a/Documentation/virt/kvm/api.txt b/Documentation/virt/kvm/api.txt
+index 136f1eef3712..0b8955152362 100644
+--- a/Documentation/virt/kvm/api.txt
++++ b/Documentation/virt/kvm/api.txt
+@@ -192,7 +192,7 @@ Errors:
+ 
+ struct kvm_msr_list {
+ 	__u32 nmsrs; /* number of msrs in entries */
+-	__u32 indices[0];
++	__u32 indices[];
+ };
+ 
+ The user fills in the size of the indices array in nmsrs, and in return
+@@ -566,7 +566,7 @@ struct kvm_msrs {
+ 	__u32 nmsrs; /* number of msrs in entries */
+ 	__u32 pad;
+ 
+-	struct kvm_msr_entry entries[0];
++	struct kvm_msr_entry entries[];
+ };
+ 
+ struct kvm_msr_entry {
+@@ -626,7 +626,7 @@ struct kvm_cpuid_entry {
+ struct kvm_cpuid {
+ 	__u32 nent;
+ 	__u32 padding;
+-	struct kvm_cpuid_entry entries[0];
++	struct kvm_cpuid_entry entries[];
+ };
+ 
+ 
+@@ -649,7 +649,7 @@ signal mask.
+ /* for KVM_SET_SIGNAL_MASK */
+ struct kvm_signal_mask {
+ 	__u32 len;
+-	__u8  sigset[0];
++	__u8  sigset[];
+ };
+ 
+ 
+@@ -1403,7 +1403,7 @@ Returns: 0 on success, -1 on error
+ struct kvm_cpuid2 {
+ 	__u32 nent;
+ 	__u32 padding;
+-	struct kvm_cpuid_entry2 entries[0];
++	struct kvm_cpuid_entry2 entries[];
+ };
+ 
+ #define KVM_CPUID_FLAG_SIGNIFCANT_INDEX		BIT(0)
+@@ -1516,7 +1516,7 @@ On arm/arm64, GSI routing has the following limitation:
+ struct kvm_irq_routing {
+ 	__u32 nr;
+ 	__u32 flags;
+-	struct kvm_irq_routing_entry entries[0];
++	struct kvm_irq_routing_entry entries[];
+ };
+ 
+ No flags are specified so far, the corresponding field must be set to zero.
+@@ -2868,7 +2868,7 @@ Errors:
+ 
+ struct kvm_reg_list {
+ 	__u64 n; /* number of registers in reg[] */
+-	__u64 reg[0];
++	__u64 reg[];
+ };
+ 
+ This ioctl returns the guest registers that are supported for the
+@@ -2997,7 +2997,7 @@ Returns: 0 on success, -1 on error
+ struct kvm_cpuid2 {
+ 	__u32 nent;
+ 	__u32 flags;
+-	struct kvm_cpuid_entry2 entries[0];
++	struct kvm_cpuid_entry2 entries[];
+ };
+ 
+ The member 'flags' is used for passing flags from userspace.
+@@ -3889,8 +3889,8 @@ struct kvm_nested_state {
+ 	} hdr;
+ 
+ 	union {
+-		struct kvm_vmx_nested_state_data vmx[0];
+-		struct kvm_svm_nested_state_data svm[0];
++		struct kvm_vmx_nested_state_data vmx[];
++		struct kvm_svm_nested_state_data svm[];
+ 	} data;
+ };
+ 
+@@ -4016,7 +4016,7 @@ Returns: 0 on success, -1 on error
+ struct kvm_cpuid2 {
+ 	__u32 nent;
+ 	__u32 padding;
+-	struct kvm_cpuid_entry2 entries[0];
++	struct kvm_cpuid_entry2 entries[];
+ };
+ 
+ struct kvm_cpuid_entry2 {
+@@ -4110,7 +4110,7 @@ struct kvm_pmu_event_filter {
+ 	__u32 fixed_counter_bitmap;
+ 	__u32 flags;
+ 	__u32 pad[4];
+-	__u64 events[0];
++	__u64 events[];
+ };
+ 
+ This ioctl restricts the set of PMU events that the guest can program.
+diff --git a/Documentation/x86/boot.rst b/Documentation/x86/boot.rst
+index 08a2f100c0e6..1110c1a7337b 100644
+--- a/Documentation/x86/boot.rst
++++ b/Documentation/x86/boot.rst
+@@ -790,13 +790,13 @@ Protocol:	2.09+
+   The 64-bit physical pointer to NULL terminated single linked list of
+   struct setup_data. This is used to define a more extensible boot
+   parameters passing mechanism. The definition of struct setup_data is
+-  as follow::
++  as follows::
+ 
+ 	struct setup_data {
+ 		u64 next;
+ 		u32 type;
+ 		u32 len;
+-		u8  data[0];
++		u8  data[];
+ 	};
+ 
+   Where, the next is a 64-bit physical pointer to the next node of
+-- 
+2.20.1
 
