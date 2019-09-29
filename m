@@ -2,133 +2,277 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CCFC13F2
-	for <lists+linux-can@lfdr.de>; Sun, 29 Sep 2019 10:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4DAC1408
+	for <lists+linux-can@lfdr.de>; Sun, 29 Sep 2019 11:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728629AbfI2IcN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 29 Sep 2019 04:32:13 -0400
-Received: from mail-eopbgr40082.outbound.protection.outlook.com ([40.107.4.82]:39566
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728534AbfI2IcN (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 29 Sep 2019 04:32:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TCThQFPqnPDcdhtoTGY77umj88JXpQ/psERJy4jWNn07ow1pJHwAiYXmUoFSuNW/xcigWQBj5l4YeFLHEXlGde3Bi6UKll83cR9LVfeX4LaRXm08TWhoySoLY0ab0ho6gYWFSYxh2L26bGltVdz4008de6s0rZ/M7qgJWiG48gVppT48MZT3/MQNU9Mc/OkZtz4a8UDR0e2L2hrjknLVZm7CM/xecCKSo3i1mOiduYxu2+SkPEzrhMjmEyMsbRLVPyvCfhYIwHlz59YKVaWsCytF06xufoyhnyaQMetwhDaYOM5n0OSh3mJuodT11EFp4NLLPy/aVWPK+SBzlJs9tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WYem4RTc+eilK6F0KQ15VUaK80oNHofbUpusgnLEBv4=;
- b=Ky/Z1L5JpphelUzbqOXy8YKUZNWlAJcfs/36J4jern85ZZ/WtbBfXdoxJAB1lKuDVpj+p3Fo+PhXUPeWbsNS0nhkLdZvyfI6cO7GIwaIrsCnD83brWg/589NLZSoudQhTRB5B9yOYJED5pRPlBiL9a/O0cHjI6t9mx4Ym+L25jiY/29NkJVgNLYL7N1nFwgl8V8eG0YtluFefaJ7tXFpgxShMVprlaqAWgSnYcvquMVizVi2ol4rCy3L2h8sMo2WqZu41vdustht0qwGoCjxgJ8ftwcpAoxhiGbdW6vEWcw7cbtSnQSwawaf24NLLscn4MDzyNNvmL2kDf27hW5ANQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WYem4RTc+eilK6F0KQ15VUaK80oNHofbUpusgnLEBv4=;
- b=hJVBI4oLl2RAZAOWBxRjG5dO3gedZIgyB3hfYjkAIuWKuyqYTtb0e5dNiCdCs1COMjg/yytQMj7AozHFP5RQcD8qAlEjXN+ZwMkNxVWj2ueSgC9HYDQq7oAJaQNoNF48Zplfp4MqLk9WRrSUooCdNa+uYMU6lojdLjaE0dqEK+o=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB4889.eurprd04.prod.outlook.com (20.176.234.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.15; Sun, 29 Sep 2019 08:32:09 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::1872:ad0f:4271:ad61]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::1872:ad0f:4271:ad61%6]) with mapi id 15.20.2284.028; Sun, 29 Sep 2019
- 08:32:09 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "sean@geanix.com" <sean@geanix.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: [PATCH] can: flexcan: use devm_platform_ioremap_resource() to
- simplify code
-Thread-Topic: [PATCH] can: flexcan: use devm_platform_ioremap_resource() to
- simplify code
-Thread-Index: AQHVdqBiRC4zmV56FkeU7Oqk/q2FUg==
-Date:   Sun, 29 Sep 2019 08:32:09 +0000
-Message-ID: <20190929082854.11952-1-qiangqing.zhang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.17.1
-x-clientproxiedby: SG2PR06CA0124.apcprd06.prod.outlook.com
- (2603:1096:1:1d::26) To DB7PR04MB4618.eurprd04.prod.outlook.com
- (2603:10a6:5:38::23)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ba19475d-3c0c-4ba7-9ba1-08d744b78471
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: DB7PR04MB4889:|DB7PR04MB4889:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB4889AD7D21E8D9814953E544E6830@DB7PR04MB4889.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:913;
-x-forefront-prvs: 017589626D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(366004)(376002)(39860400002)(396003)(189003)(199004)(110136005)(8936002)(66556008)(66946007)(6486002)(3846002)(8676002)(5660300002)(99286004)(64756008)(2501003)(81166006)(54906003)(66476007)(86362001)(71200400001)(81156014)(66446008)(2906002)(66066001)(316002)(6512007)(71190400001)(6436002)(6116002)(50226002)(2616005)(52116002)(256004)(486006)(4326008)(305945005)(25786009)(102836004)(7736002)(36756003)(1076003)(476003)(6506007)(26005)(186003)(386003)(14454004)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4889;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SVVDvRmThRbt7lIDUToHbnMGrjp+IQXPKgoViVgof5B4YvMq9R39cZoT3PwHj9D34ghsb9xLlFqcEo/apv1/A25aLxsPIOAJh6KEAIXI/uhod1f23+oUH0vmALhec2pE0/K50WlHrjlDDXeRm7A3coM5JnITn4WtNgR/RsUOkTWWi14eCyM8rlDPEPauLOiUjba/wAqwpgUIg8A6ygRc7aNq+VZn1mnaSdECigXDx8IJjUch+iNgldkI83WtvCUV1aHo9uQBDJujJXnQ4n8rkBUJzSRjvZV7ME1myREh1U0CKERwulvXs4RmckTYtp5U1Q8N6pBGw57XJOMGEgLzGR9sfKbYuOVmo4EI0N5tf/LBA4Gc2WF9kSlWsYszvk74mn/VXMcpg2zjKKosIAqhdeerh6zaw8hftc9zw4aM8so=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1728901AbfI2JGD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 29 Sep 2019 05:06:03 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:22076 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbfI2JGD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Sep 2019 05:06:03 -0400
+Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
+  Thomas.Kopp@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Thomas.Kopp@microchip.com";
+  x-sender="Thomas.Kopp@microchip.com"; x-conformance=spf_only;
+  x-record-type="v=spf1"; x-record-text="v=spf1 mx
+  a:ushub1.microchip.com a:smtpout.microchip.com
+  a:mx1.microchip.iphmx.com a:mx2.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa6.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Thomas.Kopp@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Thomas.Kopp@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: hgJPKTn2rqhX66Yzg4fM7EVauB9YMkcf8+3OR0R1qJt5oHNcj5zfrGPFjWcHQPxoq/7BIjIBwI
+ ECgBJZ3uCOU61kOYPkY2eLuaMIcKbsofRNa8c9VAjJaypst+684UVDgiZ04Rvt8PxP6W5/IyrV
+ g/T/kFO3ilNI1q2wVE2APp+dl+PgoCQUhRtd+WeETTaHCJ/40M7/DFTpCfR853NklJQaRsorcn
+ 4eJI9/wrg2E+reCpsaueL8RNGSS9nZLscxWPyN38XakMz1hphj3a1tngTVshdAvS6tkbKosMrx
+ z5k=
+X-IronPort-AV: E=Sophos;i="5.64,562,1559545200"; 
+   d="scan'208";a="48071961"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Sep 2019 02:06:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Sun, 29 Sep 2019 02:05:59 -0700
+Received: from HNO-LT-M43677A.fritz.box (10.10.85.251) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Sun, 29 Sep 2019 02:05:58 -0700
+From:   Thomas Kopp <thomas.kopp@microchip.com>
+To:     <linux-can@vger.kernel.org>
+CC:     <martin@sperl.org>, <mkl@pengutronix.de>,
+        <thomas.kopp@microchip.com>
+Subject: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names to match DS
+Date:   Sun, 29 Sep 2019 11:05:43 +0200
+Message-ID: <20190929090543.438-1-thomas.kopp@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba19475d-3c0c-4ba7-9ba1-08d744b78471
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2019 08:32:09.2693
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +rnt0TwX8kvF1ggXYqe4QF38P9k29CYYL8IpUieTIFluxznXbgsqYS+wX4jNWlFUrlAUiXrqeZAs/4ccn44Tew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4889
+Content-Type: text/plain
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use the new helper devm_platform_ioremap_resource() which wraps the
-platform_get_resource() and devm_ioremap_resource() together to simplify
-the code.
+Fixing a couple MCP25xxFD reg/bit definitions, switching to the names used in the DS.
+Patch is against the latest from Martin Sperl's github
 
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
 ---
- drivers/net/can/flexcan.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ .../can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c    |   4 +-
+ .../net/can/spi/mcp25xxfd/mcp25xxfd_regs.h    | 104 +++++++++---------
+ 2 files changed, 54 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index b3edaf6a5a61..3cfa6037f03c 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -1507,7 +1507,6 @@ static int flexcan_probe(struct platform_device *pdev=
-)
- 	struct net_device *dev;
- 	struct flexcan_priv *priv;
- 	struct regulator *reg_xceiver;
--	struct resource *mem;
- 	struct clk *clk_ipg =3D NULL, *clk_per =3D NULL;
- 	struct flexcan_regs __iomem *regs;
- 	int err, irq;
-@@ -1538,12 +1537,11 @@ static int flexcan_probe(struct platform_device *pd=
-ev)
- 		clock_freq =3D clk_get_rate(clk_per);
+diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c
+index e17254af1d89..990c3a77da9d 100644
+--- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c
++++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c
+@@ -144,8 +144,8 @@ static int mcp25xxfd_can_fifo_setup_rxfilter(struct mcp25xxfd_can_priv *cpriv)
+ 	for (c = 0, f = cpriv->fifos.rx.start; c < cpriv->fifos.rx.count;
+ 	     c++, f++) {
+ 		/* set up filter config - we can use the mask of filter 0 */
+-		filter_con[c] = MCP25XXFD_CAN_FIFOCON_FLTEN(0) |
+-			(f << MCP25XXFD_CAN_FILCON_SHIFT(0));
++		filter_con[c] = MCP25XXFD_CAN_FLTCON_FLTEN(0) |
++			(f << MCP25XXFD_CAN_FLTCON_SHIFT(0));
  	}
-=20
--	mem =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	irq =3D platform_get_irq(pdev, 0);
- 	if (irq <=3D 0)
- 		return -ENODEV;
-=20
--	regs =3D devm_ioremap_resource(&pdev->dev, mem);
-+	regs =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(regs))
- 		return PTR_ERR(regs);
-=20
---=20
+ 
+ 	/* and set up filter control */
+diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regs.h b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regs.h
+index f8495e0325c2..3767539208ca 100644
+--- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regs.h
++++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regs.h
+@@ -53,15 +53,15 @@
+ #  define MCP25XXFD_IOCON_INTOD			BIT(30)
+ #define MCP25XXFD_CRC				MCP25XXFD_SFR_BASE(0x08)
+ #  define MCP25XXFD_CRC_MASK			GENMASK(15, 0)
+-#  define MCP25XXFD_CRC_CRCERRIE		BIT(16)
+-#  define MCP25XXFD_CRC_FERRIE			BIT(17)
+-#  define MCP25XXFD_CRC_CRCERRIF		BIT(24)
+-#  define MCP25XXFD_CRC_FERRIF			BIT(25)
++#  define MCP25XXFD_CRC_CRCERRIF		BIT(16)
++#  define MCP25XXFD_CRC_FERRIF			BIT(17)
++#  define MCP25XXFD_CRC_CRCERRIE		BIT(24)
++#  define MCP25XXFD_CRC_FERRIE			BIT(25)
+ #define MCP25XXFD_ECCCON			MCP25XXFD_SFR_BASE(0x0C)
+ #  define MCP25XXFD_ECCCON_ECCEN		BIT(0)
+ #  define MCP25XXFD_ECCCON_SECIE		BIT(1)
+ #  define MCP25XXFD_ECCCON_DEDIE		BIT(2)
+-#  define MCP25XXFD_ECCCON_PARITY_BITS		6
++#  define MCP25XXFD_ECCCON_PARITY_BITS		7
+ #  define MCP25XXFD_ECCCON_PARITY_SHIFT		8
+ #  define MCP25XXFD_ECCCON_PARITY_MASK					\
+ 	GENMASK(MCP25XXFD_ECCCON_PARITY_SHIFT				\
+@@ -70,7 +70,7 @@
+ #define MCP25XXFD_ECCSTAT			MCP25XXFD_SFR_BASE(0x10)
+ #  define MCP25XXFD_ECCSTAT_SECIF		BIT(1)
+ #  define MCP25XXFD_ECCSTAT_DEDIF		BIT(2)
+-#  define MCP25XXFD_ECCSTAT_ERRADDR_SHIFT	8
++#  define MCP25XXFD_ECCSTAT_ERRADDR_SHIFT	16
+ #  define MCP25XXFD_ECCSTAT_ERRADDR_MASK				\
+ 	GENMASK(MCP25XXFD_ECCSTAT_ERRADDR_SHIFT + 11,			\
+ 		MCP25XXFD_ECCSTAT_ERRADDR_SHIFT)
+@@ -115,11 +115,11 @@
+ #  define MCP25XXFD_CAN_CON_SERR2LOM		BIT(18)
+ #  define MCP25XXFD_CAN_CON_STEF		BIT(19)
+ #  define MCP25XXFD_CAN_CON_TXQEN		BIT(20)
+-#  define MCP25XXFD_CAN_CON_OPMODE_BITS		3
++#  define MCP25XXFD_CAN_CON_OPMOD_BITS		3
+ #  define MCP25XXFD_CAN_CON_OPMOD_SHIFT		21
+ #  define MCP25XXFD_CAN_CON_OPMOD_MASK					\
+ 	GENMASK(MCP25XXFD_CAN_CON_OPMOD_SHIFT +				\
+-		MCP25XXFD_CAN_CON_OPMODE_BITS - 1,			\
++		MCP25XXFD_CAN_CON_OPMOD_BITS - 1,			\
+ 		MCP25XXFD_CAN_CON_OPMOD_SHIFT)
+ #  define MCP25XXFD_CAN_CON_REQOP_BITS		3
+ #  define MCP25XXFD_CAN_CON_REQOP_SHIFT		24
+@@ -136,7 +136,7 @@
+ #    define MCP25XXFD_CAN_CON_MODE_CAN2_0	6
+ #    define MCP25XXFD_CAN_CON_MODE_RESTRICTED	7
+ #  define MCP25XXFD_CAN_CON_ABAT		BIT(27)
+-#  define MCP25XXFD_CAN_CON_TXBWS_BITS		3
++#  define MCP25XXFD_CAN_CON_TXBWS_BITS		4
+ #  define MCP25XXFD_CAN_CON_TXBWS_SHIFT		28
+ #  define MCP25XXFD_CAN_CON_TXBWS_MASK					\
+ 	GENMASK(MCP25XXFD_CAN_CON_TXBWS_SHIFT +				\
+@@ -218,13 +218,13 @@
+ 		MCP25XXFD_CAN_DBTCFG_BRP_BITS - 1,			\
+ 		MCP25XXFD_CAN_DBTCFG_BRP_SHIFT)
+ #define MCP25XXFD_CAN_TDC			MCP25XXFD_CAN_SFR_BASE(0x0C)
+-#  define MCP25XXFD_CAN_TDC_TDCV_BITS		5
++#  define MCP25XXFD_CAN_TDC_TDCV_BITS		6
+ #  define MCP25XXFD_CAN_TDC_TDCV_SHIFT		0
+ #  define MCP25XXFD_CAN_TDC_TDCV_MASK					\
+ 	GENMASK(MCP25XXFD_CAN_TDC_TDCV_SHIFT +				\
+ 		MCP25XXFD_CAN_TDC_TDCV_BITS - 1,			\
+ 		MCP25XXFD_CAN_TDC_TDCV_SHIFT)
+-#  define MCP25XXFD_CAN_TDC_TDCO_BITS		5
++#  define MCP25XXFD_CAN_TDC_TDCO_BITS		7
+ #  define MCP25XXFD_CAN_TDC_TDCO_SHIFT		8
+ #  define MCP25XXFD_CAN_TDC_TDCO_MASK					\
+ 	GENMASK(MCP25XXFD_CAN_TDC_TDCO_SHIFT +				\
+@@ -413,8 +413,8 @@
+ #  define MCP25XXFD_CAN_BDIAG1_NBIT0ERR		BIT(16)
+ #  define MCP25XXFD_CAN_BDIAG1_NBIT1ERR		BIT(17)
+ #  define MCP25XXFD_CAN_BDIAG1_NACKERR		BIT(18)
+-#  define MCP25XXFD_CAN_BDIAG1_NSTUFERR		BIT(19)
+-#  define MCP25XXFD_CAN_BDIAG1_NFORMERR		BIT(20)
++#  define MCP25XXFD_CAN_BDIAG1_NFORMERR		BIT(19)
++#  define MCP25XXFD_CAN_BDIAG1_NSTUFERR		BIT(20)
+ #  define MCP25XXFD_CAN_BDIAG1_NCRCERR		BIT(21)
+ #  define MCP25XXFD_CAN_BDIAG1_TXBOERR		BIT(23)
+ #  define MCP25XXFD_CAN_BDIAG1_DBIT0ERR		BIT(24)
+@@ -442,7 +442,7 @@
+ #  define MCP25XXFD_CAN_TEFSTA_TEFNEIF		BIT(0)
+ #  define MCP25XXFD_CAN_TEFSTA_TEFHIF		BIT(1)
+ #  define MCP25XXFD_CAN_TEFSTA_TEFFIF		BIT(2)
+-#  define MCP25XXFD_CAN_TEFSTA_TEVOVIF		BIT(3)
++#  define MCP25XXFD_CAN_TEFSTA_TEFOVIF		BIT(3)
+ #define MCP25XXFD_CAN_TEFUA			MCP25XXFD_CAN_SFR_BASE(0x48)
+ #define MCP25XXFD_CAN_RESERVED			MCP25XXFD_CAN_SFR_BASE(0x4C)
+ #define MCP25XXFD_CAN_TXQCON			MCP25XXFD_CAN_SFR_BASE(0x50)
+@@ -561,47 +561,47 @@
+ 	MCP25XXFD_CAN_SFR_BASE(0x64 + 12 * ((x) - 1))
+ #define MCP25XXFD_CAN_FLTCON(x)						\
+ 	MCP25XXFD_CAN_SFR_BASE(0x1D0 + ((x) & 0x1c))
+-#  define MCP25XXFD_CAN_FILCON_SHIFT(x)		(((x) & 3) * 8)
+-#  define MCP25XXFD_CAN_FILCON_BITS(x)		MCP25XXFD_CAN_FILCON_BITS_
+-#  define MCP25XXFD_CAN_FILCON_BITS_		4
++#  define MCP25XXFD_CAN_FLTCON_SHIFT(x)		(((x) & 3) * 8)
++#  define MCP25XXFD_CAN_FLTCON_BITS(x)		MCP25XXFD_CAN_FLTCON_BITS_
++#  define MCP25XXFD_CAN_FLTCON_BITS_		5
+ 	/* avoid macro reuse warning, so do not use GENMASK as above */
+-#  define MCP25XXFD_CAN_FILCON_MASK(x)					\
+-	(GENMASK(MCP25XXFD_CAN_FILCON_BITS_ - 1, 0) <<			\
+-	 MCP25XXFD_CAN_FILCON_SHIFT(x))
+-#  define MCP25XXFD_CAN_FIFOCON_FLTEN(x)				\
+-	BIT(7 + MCP25XXFD_CAN_FILCON_SHIFT(x))
++#  define MCP25XXFD_CAN_FLTCON_MASK(x)					\
++	(GENMASK(MCP25XXFD_CAN_FLTCON_BITS_ - 1, 0) <<			\
++	 MCP25XXFD_CAN_FLTCON_SHIFT(x))
++#  define MCP25XXFD_CAN_FLTCON_FLTEN(x)				\
++	BIT(7 + MCP25XXFD_CAN_FLTCON_SHIFT(x))
+ #define MCP25XXFD_CAN_FLTOBJ(x)						\
+ 	MCP25XXFD_CAN_SFR_BASE(0x1F0 + 8 * (x))
+-#  define MCP25XXFD_CAN_FILOBJ_SID_BITS		11
+-#  define MCP25XXFD_CAN_FILOBJ_SID_SHIFT	0
+-#  define MCP25XXFD_CAN_FILOBJ_SID_MASK					\
+-	GENMASK(MCP25XXFD_CAN_FILOBJ_SID_SHIFT +			\
+-		MCP25XXFD_CAN_FILOBJ_SID_BITS - 1,			\
+-		MCP25XXFD_CAN_FILOBJ_SID_SHIFT)
+-#  define MCP25XXFD_CAN_FILOBJ_EID_BITS		18
+-#  define MCP25XXFD_CAN_FILOBJ_EID_SHIFT	12
+-#  define MCP25XXFD_CAN_FILOBJ_EID_MASK					\
+-	GENMASK(MCP25XXFD_CAN_FILOBJ_EID_SHIFT +			\
+-		MCP25XXFD_CAN_FILOBJ_EID_BITS - 1,			\
+-		MCP25XXFD_CAN_FILOBJ_EID_SHIFT)
+-#  define MCP25XXFD_CAN_FILOBJ_SID11		BIT(29)
+-#  define MCP25XXFD_CAN_FILOBJ_EXIDE		BIT(30)
++#  define MCP25XXFD_CAN_FLTOBJ_SID_BITS		11
++#  define MCP25XXFD_CAN_FLTOBJ_SID_SHIFT	0
++#  define MCP25XXFD_CAN_FLTOBJ_SID_MASK					\
++	GENMASK(MCP25XXFD_CAN_FLTOBJ_SID_SHIFT +			\
++		MCP25XXFD_CAN_FLTOBJ_SID_BITS - 1,			\
++		MCP25XXFD_CAN_FLTOBJ_SID_SHIFT)
++#  define MCP25XXFD_CAN_FLTOBJ_EID_BITS		18
++#  define MCP25XXFD_CAN_FLTOBJ_EID_SHIFT	11
++#  define MCP25XXFD_CAN_FLTOBJ_EID_MASK					\
++	GENMASK(MCP25XXFD_CAN_FLTOBJ_EID_SHIFT +			\
++		MCP25XXFD_CAN_FLTOBJ_EID_BITS - 1,			\
++		MCP25XXFD_CAN_FLTOBJ_EID_SHIFT)
++#  define MCP25XXFD_CAN_FLTOBJ_SID11		BIT(29)
++#  define MCP25XXFD_CAN_FLTOBJ_EXIDE		BIT(30)
+ #define MCP25XXFD_CAN_FLTMASK(x)					\
+ 	MCP25XXFD_CAN_SFR_BASE(0x1F4 + 8 * (x))
+-#  define MCP25XXFD_CAN_FILMASK_MSID_BITS	11
+-#  define MCP25XXFD_CAN_FILMASK_MSID_SHIFT	0
+-#  define MCP25XXFD_CAN_FILMASK_MSID_MASK				\
+-	GENMASK(MCP25XXFD_CAN_FILMASK_MSID_SHIFT +			\
+-		MCP25XXFD_CAN_FILMASK_MSID_BITS - 1,			\
+-		MCP25XXFD_CAN_FILMASK_MSID_SHIFT)
+-#  define MCP25XXFD_CAN_FILMASK_MEID_BITS	18
+-#  define MCP25XXFD_CAN_FILMASK_MEID_SHIFT	12
+-#  define MCP25XXFD_CAN_FILMASK_MEID_MASK				\
+-	GENMASK(MCP25XXFD_CAN_FILMASK_MEID_SHIFT +			\
+-		MCP25XXFD_CAN_FILMASK_MEID_BITS - 1,			\
+-		MCP25XXFD_CAN_FILMASK_MEID_SHIFT)
+-#  define MCP25XXFD_CAN_FILMASK_MSID11		BIT(29)
+-#  define MCP25XXFD_CAN_FILMASK_MIDE		BIT(30)
++#  define MCP25XXFD_CAN_MASK_MSID_BITS	11
++#  define MCP25XXFD_CAN_MASK_MSID_SHIFT	0
++#  define MCP25XXFD_CAN_MASK_MSID_MASK				\
++	GENMASK(MCP25XXFD_CAN_MASK_MSID_SHIFT +			\
++		MCP25XXFD_CAN_MASK_MSID_BITS - 1,			\
++		MCP25XXFD_CAN_MASK_MSID_SHIFT)
++#  define MCP25XXFD_CAN_MASK_MEID_BITS	18
++#  define MCP25XXFD_CAN_MASK_MEID_SHIFT	11
++#  define MCP25XXFD_CAN_MASK_MEID_MASK				\
++	GENMASK(MCP25XXFD_CAN_MASK_MEID_SHIFT +			\
++		MCP25XXFD_CAN_MASK_MEID_BITS - 1,			\
++		MCP25XXFD_CAN_MASK_MEID_SHIFT)
++#  define MCP25XXFD_CAN_MASK_MSID11		BIT(29)
++#  define MCP25XXFD_CAN_MASK_MIDE		BIT(30)
+ 
+ /* the FIFO Objects in SRAM */
+ #define MCP25XXFD_SRAM_SIZE 2048
+@@ -666,8 +666,8 @@ struct mcp25xxfd_can_obj_tef {
+ 	GENMASK(MCP25XXFD_CAN_OBJ_FLAGS_SEQ_SHIFT +			\
+ 		MCP25XXFD_CAN_OBJ_FLAGS_SEQX_BITS - 1,			\
+ 		MCP25XXFD_CAN_OBJ_FLAGS_SEQ_SHIFT)
+-#define MCP25XXFD_CAN_OBJ_FLAGS_FILHIT_BITS	11
+-#define MCP25XXFD_CAN_OBJ_FLAGS_FILHIT_SHIFT	5
++#define MCP25XXFD_CAN_OBJ_FLAGS_FILHIT_BITS	5
++#define MCP25XXFD_CAN_OBJ_FLAGS_FILHIT_SHIFT	11
+ #define MCP25XXFD_CAN_OBJ_FLAGS_FILHIT_MASK				\
+ 	GENMASK(MCP25XXFD_CAN_FLAGS_FILHIT_SHIFT +			\
+ 		MCP25XXFD_CAN_FLAGS_FILHIT_BITS - 1,			\
+-- 
 2.17.1
 
