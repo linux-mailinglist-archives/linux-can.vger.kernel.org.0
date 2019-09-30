@@ -2,70 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BD5C1E6D
-	for <lists+linux-can@lfdr.de>; Mon, 30 Sep 2019 11:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07E5C2597
+	for <lists+linux-can@lfdr.de>; Mon, 30 Sep 2019 19:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730563AbfI3JtX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 Sep 2019 05:49:23 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:3235 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728581AbfI3JtW (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 30 Sep 2019 05:49:22 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4A6D356F2F55C9DA981A;
-        Mon, 30 Sep 2019 17:49:20 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Mon, 30 Sep 2019
- 17:49:11 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>
-CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] can: grcan: use devm_platform_ioremap_resource() to simplify code
-Date:   Mon, 30 Sep 2019 17:49:09 +0800
-Message-ID: <20190930094909.49672-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1729960AbfI3RBA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 30 Sep 2019 13:01:00 -0400
+Received: from ms.lwn.net ([45.79.88.28]:49970 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729640AbfI3RA7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 30 Sep 2019 13:00:59 -0400
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id E5B149A9;
+        Mon, 30 Sep 2019 17:00:58 +0000 (UTC)
+Date:   Mon, 30 Sep 2019 11:00:57 -0600
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     linux-doc@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-afs@lists.infradead.org,
+        kvm@vger.kernel.org,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>
+Subject: Re: [PATCH] docs: use flexible array members, not zero-length
+Message-ID: <20190930110057.1b11d798@lwn.net>
+In-Reply-To: <20190928105557.221fb119@heffalump.sk2.org>
+References: <20190927142927.27968-1-steve@sk2.org>
+        <20190928011639.7c983e77@lwn.net>
+        <20190928105557.221fb119@heffalump.sk2.org>
+Organization: LWN.net
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify the code a bit.
-This is detected by coccinelle.
+On Sat, 28 Sep 2019 10:55:57 +0200
+Stephen Kitt <steve@sk2.org> wrote:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/net/can/grcan.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+> Wouldn’t it be better to update the docs simultaneously in each patch which
+> fixes a structure? Or is that unworkable with current development practices?
 
-diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index b8f1f2b69dd3..378200b682fa 100644
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -1652,7 +1652,6 @@ static int grcan_setup_netdev(struct platform_device *ofdev,
- static int grcan_probe(struct platform_device *ofdev)
- {
- 	struct device_node *np = ofdev->dev.of_node;
--	struct resource *res;
- 	u32 sysid, ambafreq;
- 	int irq, err;
- 	void __iomem *base;
-@@ -1672,8 +1671,7 @@ static int grcan_probe(struct platform_device *ofdev)
- 		goto exit_error;
- 	}
- 
--	res = platform_get_resource(ofdev, IORESOURCE_MEM, 0);
--	base = devm_ioremap_resource(&ofdev->dev, res);
-+	base = devm_platform_ioremap_resource(ofdev, 0);
- 	if (IS_ERR(base)) {
- 		err = PTR_ERR(base);
- 		goto exit_error;
--- 
-2.20.1
+Definitely update the two together.  The doc fix should just go through
+the appropriate maintainer with the code change.
 
+Thanks,
 
+jon
