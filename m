@@ -2,130 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 218C8C3872
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 17:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93316C4232
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 23:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731893AbfJAPD1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 11:03:27 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:44889 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726987AbfJAPD0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 11:03:26 -0400
-Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
-  Thomas.Kopp@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Thomas.Kopp@microchip.com";
-  x-sender="Thomas.Kopp@microchip.com"; x-conformance=spf_only;
-  x-record-type="v=spf1"; x-record-text="v=spf1 mx
-  a:ushub1.microchip.com a:smtpout.microchip.com
-  a:mx1.microchip.iphmx.com a:mx2.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa3.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Thomas.Kopp@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa3.microchip.iphmx.com; spf=Pass smtp.mailfrom=Thomas.Kopp@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: yDZHfvlc+N2gMyeRFyi0NKHh96Mh3hdqCdG9F7JxchIhJvTk/bIiAHLkqYFxZi2RMQau6bzdrR
- 6yoO7YPzG8xv7IISIoseMNPuOYq2u5I9PldyjA4quhEkhNi+auyMnydRx69V0gZOjvRNFJbghL
- 60gNs6vbjfl/VaQRSfvE2d2KykipaDIryIx2vJbbg2IvFjjPwiPYBuGNOpmhXyIC2Rci2lNeGn
- GlXIReBmVvaMx5eQg/kFrDBfg2ZFb0onMvxI7+YtXJhyCyrqubJJxWicxaD+uW5zabdeBPgAme
- sr8=
-X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="51265322"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Oct 2019 08:03:12 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 1 Oct 2019 08:03:12 -0700
-Received: from NAM03-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5 via Frontend
- Transport; Tue, 1 Oct 2019 08:03:11 -0700
+        id S1726793AbfJAVBT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 17:01:19 -0400
+Received: from mail-eopbgr140109.outbound.protection.outlook.com ([40.107.14.109]:15239
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726402AbfJAVBT (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 1 Oct 2019 17:01:19 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g6ck7uyE0Dkq95QYScEgcwTkIxro0UENbfdG1iNfhhASPLMItffzbfBYhRgr7OqfrBSfREJTGD/2JR5zF6FiIbDhU7sM6EaIz1BNc1LifeuFXRnohFHTjpo5rDPPoLmIpYRq+IDJ3BUkDA5ULgmaowqy4ZmoDfpfM5WHpExfBpb4/OyZlWkkU8JZjOVVrzUqnbse26ArjGfijRiymGJDOfWTkHya2jrPseRzJG2B9xOWcsezqx9YRBpS1XPjMiFloPSFTzPw8dZoEvjnZ2NXRkJ52Meh+DnWS/gYAOOkrjkqXq8bm1QXqSQEtSGE1j1OQA5VJh3ZAflsmmEcqujjnQ==
+ b=d1Lb6CThIR+LsHjZRgNbMG5AgBkje4do/fJ9UL0QU0pF6LeYP7KQqcCTltymq3TMHdELRrYtXnhU6IL17pvNO5D/VTkGXPKGdritK1wqt8Bb1TIfBaUFfPUXhOOz9GOcVb7SMzoghS1z6k5WnGessqxavkpKv0BO3qxA/H48GGTpw4mopJrCQApwelFKGrW4CU0wu2E8i59n/yA8eC2ylDSXcec09fQD3niiiCxYF8iTeEwRWlhAucFThEyZm7/OA6mNr1sBxaq2SlGAGJOUZDl8SHavbcm7MwR/0+WmebJu4pcZM28/KZNo0XKLmzcrClu8RGYTA/huvUAQVin6MA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iBNLCkloqFUirGB2TQSscgGDvIdgsTD1zdaAsVmFpPU=;
- b=G3i7f2dVaB6aPYf+6AzMmlkgGbPB+t/b8/FWN9aDPwCE/5hM5wRLshbjFVtj4UGd7x6BfstHGu1Ex9GEfzG1QSfM+yq6M+trlpDx52nvrWgOh19QodHUVvHnEc9+b2v2J5c8ndWE0xNR+CJfblzNPR+6YN+ER+RX8VfB8aagi2C1OUP/vZ65LqXMPm4osxbm3REAwIRpfuVx1a/cad0Ceboyu6ZNa2aYGIty6/CGQrRW9QhHLSewFYD5+hehkPVPeYROth9PaF9nYO/LHtUNV8HZO7KYEDIkcpoKYprVPNR3QEnfX97OtDWGZqS3t+HO7bqzNwyMP8/TDgyJOEoZwQ==
+ bh=rWbLOBYY/t0ktMjZQKe/uaVE6+Xx+fHJX4HerU+eQvc=;
+ b=gy1u3BjLDXq9uMcaI/IaQmA9T0eGoVLBxcGFHR5Zk8nQxYu3wYpWIaAOurTAvQk2o+naiSgrAQVG1Iqb1K0FO+YlLIazZSzn1GmcmKKmi5sX8FFARAFwxAEI+tQwFvxUSCi0xdF51D/INRdKXlKqjRK6AelyT4UgjQj7aHvVmKZVGRp2EeNZ0wS5v13hVANjL2Gqht3zdL3VIhT9clEy2Q80sj10NTbR36kRD/Llqn0+hPG+qQjT+sLDT+DKjW31FA5teO+RGhpQBD61DtcZjsFy51HuXkMspBH2udbv1hxBl3z0m0+I0Fqar55viK7sb8nd0RqUgPxlqkjZMa78TQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=victronenergy.com; dmarc=pass action=none
+ header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iBNLCkloqFUirGB2TQSscgGDvIdgsTD1zdaAsVmFpPU=;
- b=dmfC34use8oCb4K9xtPKTACaDX4It6Z/F3n5jB+qTxoN59g+39rc3ZcAN6DHTfmEd6CjeO0Is2qmXMMOErTa4KvODjHKZW5KpvsFPkJjcKr0dNw6eBhmkcLUGLi2vkex/urLe3tcRIlOPtqpRdMgIrqjrzT/1I6EvkH59vL1j4Q=
-Received: from MN2PR11MB3645.namprd11.prod.outlook.com (20.178.254.13) by
- MN2PR11MB4207.namprd11.prod.outlook.com (52.135.37.97) with Microsoft SMTP
+ bh=rWbLOBYY/t0ktMjZQKe/uaVE6+Xx+fHJX4HerU+eQvc=;
+ b=u2umR7FMArFZ+wYFLUqcfF2lrTaX0rBpx7qQ3yHj5vffy3D3tOv3V4i3XDH/4e2c0WVDS+5VXZv/k4FNwKud2tYzjx2uImzRG0wPyf3WyF4TCOf2si9SllINcy18Kcft6IUNU3mSf0EaEkPl/hi/xW7HlYeZ1QmChkkDIL+j9UU=
+Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com (10.173.82.19) by
+ VI1PR0701MB2813.eurprd07.prod.outlook.com (10.173.71.21) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Tue, 1 Oct 2019 15:03:09 +0000
-Received: from MN2PR11MB3645.namprd11.prod.outlook.com
- ([fe80::59b3:bc3a:7644:4bb7]) by MN2PR11MB3645.namprd11.prod.outlook.com
- ([fe80::59b3:bc3a:7644:4bb7%5]) with mapi id 15.20.2305.017; Tue, 1 Oct 2019
- 15:03:09 +0000
-From:   <Thomas.Kopp@microchip.com>
-To:     <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
-CC:     <martin@sperl.org>
-Subject: RE: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
- to match DS
-Thread-Topic: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
- to match DS
-Thread-Index: AQHVdqUjF7hjphGu7UiinQOz6qXn8adF2hwAgAAJoZA=
-Date:   Tue, 1 Oct 2019 15:03:09 +0000
-Message-ID: <MN2PR11MB36455F34635586DDE2C1026FFB9D0@MN2PR11MB3645.namprd11.prod.outlook.com>
-References: <20190929090543.438-1-thomas.kopp@microchip.com>
- <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
-In-Reply-To: <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
+ 15.20.2305.15; Tue, 1 Oct 2019 21:01:15 +0000
+Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com
+ ([fe80::dc92:2e0d:561a:fbb1]) by VI1PR0701MB2623.eurprd07.prod.outlook.com
+ ([fe80::dc92:2e0d:561a:fbb1%8]) with mapi id 15.20.2305.017; Tue, 1 Oct 2019
+ 21:01:14 +0000
+From:   Jeroen Hofstee <jhofstee@victronenergy.com>
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     Jeroen Hofstee <jhofstee@victronenergy.com>
+Subject: [PATCH v2 0/2] can: CAN_C changes
+Thread-Topic: [PATCH v2 0/2] can: CAN_C changes
+Thread-Index: AQHVeJtcqMb5w4t4uE2y7LYrQkKKrA==
+Date:   Tue, 1 Oct 2019 21:01:14 +0000
+Message-ID: <20191001210054.14588-1-jhofstee@victronenergy.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [93.241.63.210]
+x-originating-ip: [2001:1c01:3bc5:4e00:5c2:1c3a:9351:514c]
+x-clientproxiedby: AM0PR05CA0060.eurprd05.prod.outlook.com
+ (2603:10a6:208:be::37) To VI1PR0701MB2623.eurprd07.prod.outlook.com
+ (2603:10a6:801:b::19)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=jhofstee@victronenergy.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.17.1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7d8166f2-7477-42d9-19ab-08d7468078fb
-x-ms-traffictypediagnostic: MN2PR11MB4207:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <MN2PR11MB42074FBA930F1B582945E600FB9D0@MN2PR11MB4207.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-office365-filtering-correlation-id: 3f335d90-f5ef-4ea3-9648-08d746b27ee1
+x-ms-traffictypediagnostic: VI1PR0701MB2813:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0701MB2813CB2B1C4E9EE46F51F78EC09D0@VI1PR0701MB2813.eurprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:506;
 x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(346002)(366004)(376002)(136003)(189003)(199004)(66556008)(305945005)(66446008)(4326008)(6246003)(71190400001)(71200400001)(110136005)(8936002)(5660300002)(186003)(64756008)(316002)(81166006)(81156014)(8676002)(7696005)(6506007)(2906002)(74316002)(102836004)(52536014)(33656002)(66476007)(66946007)(7736002)(76116006)(76176011)(26005)(478600001)(14454004)(25786009)(229853002)(9686003)(3846002)(4744005)(66066001)(6116002)(966005)(476003)(11346002)(6436002)(256004)(99286004)(55016002)(6306002)(446003)(486006)(86362001)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR11MB4207;H:MN2PR11MB3645.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(396003)(366004)(39850400004)(136003)(376002)(199004)(189003)(99286004)(316002)(46003)(6436002)(6486002)(386003)(6506007)(6916009)(5640700003)(186003)(102836004)(7736002)(305945005)(52116002)(86362001)(14454004)(478600001)(107886003)(4326008)(25786009)(8936002)(6512007)(81166006)(81156014)(8676002)(66446008)(66556008)(14444005)(66946007)(36756003)(2351001)(50226002)(64756008)(1076003)(66476007)(256004)(2906002)(486006)(5660300002)(476003)(2616005)(71200400001)(2501003)(6116002)(71190400001);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2813;H:VI1PR0701MB2623.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: victronenergy.com does not
+ designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j3IQa7Kn+Rvpc9yOQJIEILAgr4tWIEpfiLf02+n2x/G0u6XlY5cr7I06lNIwNt/LtOjIHO1Z1MVNi+AZmLIlJbgPUVIwBT90XKLyH51/2MaUZtX6ZknMExLIpoSUhiR83Y8KLuJkPJVNQETq/EOAvYfYU8omwhpMstg3dGrPFlA8TuBDyR2zDwaW8agNdegBwPmkrxizohLdcNGuE4j5inAYIqQcn4EHI5zFhIcjSZRNZtZYishSrUM0adRS3l88BG2hv7TJYBbAfdlAc8FH0BG2NRyf40BMSc/rIEkLIk+AN0D9fix1kxD+EcN7EqY0j/qTruHRavTervKiWF8jkz8yQIF+K307ubX1mupQ9BCnBEQ0DNWYbdWss9MLERZ33JozhUEqATsYrO50/RNEvWnTm9FKIhlivcc/UeJNHLTwTAyMEQx84CEe9lRm1Xc2JA78bWH1xkdSK5tfsoX/6Q==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: dIb4R5daLDf9c16X0bAvE7+OFA3TO1LAQdmlvPihVYx3+fxu0i3S3pSWLRxixr85D5fUmMucCoQcASz5qCOMfuZHWNCdZfVXgDzSpfIhwMJOIF3W8fSjzs5o9id989P3mZvzvWVcP+u7E1UzktvXMP/YveD2WLc8QMgs/Umar/PC4c8Ja5wcMI3A+UR8wmuGwcpI145yJ+zQLwWHrgQ0Ha7FVwvMu54mx1ayuO88V2BEZv23T3b2HOnpt8+sVNTEPaRZxAZx2USWdOziJ+76Qtql1Jebfw7wur4KWsm5prO+pcElwHARfVQ2oHyZyRwQ9GfOleejaIqd0nFVgaejUZtoLTAkHl8E9w0dQNs3bFDxl8XZg7hou5CWHOPdFVXXI1aNQVfbvVCkgGwk3EQv7PN3MqMAM5rZRCyhqDWtvuA=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d8166f2-7477-42d9-19ab-08d7468078fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 15:03:09.4635
+X-OriginatorOrg: victronenergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f335d90-f5ef-4ea3-9648-08d746b27ee1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:01:14.7698
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-id: 60b95f08-3558-4e94-b0f8-d690c498e225
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h2lvnsGbzwAq8FV791E7n7Bs/eS6xO2IhUUeQT8hIljt4pS3JE3NxvzFUsqYZUOy8afpSF3u3Et9qH/1dWUzZRyGVjKzwHmvnBwjVRSnt94=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4207
+X-MS-Exchange-CrossTenant-userprincipalname: O9OY2NnXGzglEyxdBnA8gkiOaYWeudIItgS/3GIXSSgEEHBVsJEyLSaBTZVSAUYkTomhlYjqwcvgACRpLsBr+5WptrxeMErbqEmUBde4fSw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2813
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-PiA+IEZpeGluZyBhIGNvdXBsZSBNQ1AyNXh4RkQgcmVnL2JpdCBkZWZpbml0aW9ucywgc3dpdGNo
-aW5nIHRvIHRoZSBuYW1lcw0KPiB1c2VkIGluIHRoZSBEUy4NCj4gPiBQYXRjaCBpcyBhZ2FpbnN0
-IHRoZSBsYXRlc3QgZnJvbSBNYXJ0aW4gU3BlcmwncyBnaXRodWINCj4gDQo+IFdoaWNoIG9uZSBp
-cyB0aGUgbGF0ZXN0IGJyYW5jaD8NCg0KRnJvbSB3aGF0IEkndmUgc2VlbiBodHRwczovL2dpdGh1
-Yi5jb20vbXNwZXJsL2xpbnV4LXJwaS90cmVlL3Vwc3RyZWFtLTUuMi1tYXN0ZXItODBmMjMtbWNw
-MjV4eGZkLXY4LjIvZHJpdmVycy9uZXQvY2FuL3NwaSBzZWVtcyB0byBiZSB0aGUgbmV3ZXN0IGJy
-YW5jaC4gRm9yIHRoZSBNQ1AyNXh4RkQgc3R1ZmYgdGhhdCBzZWVtcyB0byBiZSBvbiBwYXIgd2l0
-aCBodHRwczovL2dpdGh1Yi5jb20vbXNwZXJsL2xpbnV4LXJwaS90cmVlL3JwaS00LjE5Lnktc3Bp
-LWJjbTI4MzVhdXgrbWNwMjV4eGZkdjguMi9kcml2ZXJzL25ldC9jYW4vc3BpIA0KDQoNCkJlc3Qg
-UmVnYXJkcywNClRob21hcw0K
+This includes two patches for the C_CAN. The first one is D_CAN
+specific though. The state issue is easily reproducable, with
+nothing connected to the CAN-bus, do:
+
+ip link set can0 up type can bitrate 250000
+cansend can0 123#1122334455667788
+ifconfig can0 down
+ifconfig can0 up
+ip -details link show can0
+
+2: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEF=
+AULT group default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can state ERROR-ACTIVE (berr-counter tx 128 rx 0) restart-ms 0
+      bitrate 250000 sample-point 0.875
+      tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+      c_can: tseg1 2..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
+      clock 24000000numtxqueues 1 gso_max_size 65536 gso_max_segs 65535
+
+And then the interface reports it is error active, while the
+error counters reveal it is actually error passive.
+
+After this patch it is:
+2: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode DEF=
+AULT group default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0=20
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0=20
+	  bitrate 250000 sample-point 0.875
+	  tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+	  c_can: tseg1 2..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
+	  clock 24000000numtxqueues 1 gso_max_size 65536 gso_max_segs 65535
+
+The other patch adds events when the state is going down and goes through
+error warning again when the bus recovers.
+
+v2:
+  * rename the static software_reset to c_can_software_reset
+  * fix typo s/update/updated in the commit description
+  * add tags from Kurt Van Dijck
+
+Jeroen Hofstee (2):
+  can: D_CAN: perform a sofware reset on open
+  can: C_CAN: add bus recovery events
+
+ drivers/net/can/c_can/c_can.c | 46 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 44 insertions(+), 2 deletions(-)
+
+--=20
+2.17.1
+
