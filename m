@@ -2,36 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAAFC365E
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 15:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB75C3709
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 16:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388461AbfJANxR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 09:53:17 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:45411 "EHLO
+        id S2389054AbfJAOWZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 10:22:25 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51031 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726898AbfJANxQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 09:53:16 -0400
+        with ESMTP id S2388894AbfJAOWZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 10:22:25 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFIaZ-0005zk-Ec
-        for linux-can@vger.kernel.org; Tue, 01 Oct 2019 15:53:15 +0200
+        id 1iFJ2c-0000nD-2v; Tue, 01 Oct 2019 16:22:14 +0200
 Received: from [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07] (unknown [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7AE2245E099
-        for <linux-can@vger.kernel.org>; Tue,  1 Oct 2019 13:53:14 +0000 (UTC)
-To:     linux-can@vger.kernel.org
-References: <1569871843-28655-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <1569871843-28655-3-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <6aa6d0f0-e424-0874-19c8-73a8344a1458@pengutronix.de>
- <20191001102217.GA25141@x1.vandijck-laurijssen.be>
- <64ecd986-441d-3018-337c-69bdc7fe5470@pengutronix.de>
- <20191001134703.GC32369@x1.vandijck-laurijssen.be>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 69FBE45E0D7;
+        Tue,  1 Oct 2019 14:22:11 +0000 (UTC)
+To:     Thomas.Kopp@microchip.com, linux-can@vger.kernel.org,
+        martin@sperl.org
+References: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,16 +89,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
-Message-ID: <6286892e-002d-007c-8006-c1e3c5d9872c@pengutronix.de>
-Date:   Tue, 1 Oct 2019 15:53:04 +0200
+Subject: Re: can: mcp25xxfd: Reset/Initialization of device
+Message-ID: <64b2f9c9-ff3b-82dd-473e-2f1ea2f383f8@pengutronix.de>
+Date:   Tue, 1 Oct 2019 16:22:07 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191001134703.GC32369@x1.vandijck-laurijssen.be>
+In-Reply-To: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="BMphMwwrzdbtacFByYts4BLiHDqoZbK9k"
+ boundary="pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,131 +109,67 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---BMphMwwrzdbtacFByYts4BLiHDqoZbK9k
-Content-Type: multipart/mixed; boundary="ASn2pRTK5vtdWx6sHq901bqZk4CJgUynv";
+--pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq
+Content-Type: multipart/mixed; boundary="Olu9kKV10EKF38Ko7PVpJifwY0h2eNyRA";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: linux-can@vger.kernel.org
-Message-ID: <6286892e-002d-007c-8006-c1e3c5d9872c@pengutronix.de>
-Subject: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
-References: <1569871843-28655-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <1569871843-28655-3-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <6aa6d0f0-e424-0874-19c8-73a8344a1458@pengutronix.de>
- <20191001102217.GA25141@x1.vandijck-laurijssen.be>
- <64ecd986-441d-3018-337c-69bdc7fe5470@pengutronix.de>
- <20191001134703.GC32369@x1.vandijck-laurijssen.be>
-In-Reply-To: <20191001134703.GC32369@x1.vandijck-laurijssen.be>
+To: Thomas.Kopp@microchip.com, linux-can@vger.kernel.org, martin@sperl.org
+Message-ID: <64b2f9c9-ff3b-82dd-473e-2f1ea2f383f8@pengutronix.de>
+Subject: Re: can: mcp25xxfd: Reset/Initialization of device
+References: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
+In-Reply-To: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
 
---ASn2pRTK5vtdWx6sHq901bqZk4CJgUynv
+--Olu9kKV10EKF38Ko7PVpJifwY0h2eNyRA
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 10/1/19 3:47 PM, Kurt Van Dijck wrote:
-> On di, 01 okt 2019 15:12:58 +0200, Marc Kleine-Budde wrote:
->> On 10/1/19 12:22 PM, Kurt Van Dijck wrote:
->>> On di, 01 okt 2019 11:40:09 +0200, Marc Kleine-Budde wrote:
->>>> On 9/30/19 9:30 PM, Kurt Van Dijck wrote:
->>>>> The napi-handler defers c_can reception to softirq, but it is hard =
-to
->>>>> control the RT priority of the CAN recv end inside a softirq.
->>>>> Using an irqthread allows precise control of it's RT priority.
->>>>> Having the quota still around in the IRQ thread allows to restrict
->>>>> the work_done per cycle.
->>>>>
->>>>> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
->>>>
->>>> NACK, not pushing CAN frames though NAPI results in very strange thi=
-ngs,
->>>> such like package reordering.
->>>
->>> This becomes interesting.
->>> Would you mind elaborating a bit on that.
->>>
->>> I'm currently trying to avoid CAN overflows on an RT system, where
->>> I eleveated the can irq thread above the others.
->>
->> RT with PREEMPT_RT?
+On 9/29/19 11:49 AM, Thomas.Kopp@microchip.com wrote:
+> When testing the driver and using up/down multiple times on the CAN
+> interface I encountered errors with the TEF setup. I noticed that a
+> device reset (spi command) is only performed when loading the module
+> (in _mcp25xxfd_clock_probe during the initial clock setup.)
+
+> Is there a preference whether or not using up on the interface should
+> bring the device into a default state or is this only expected when
+> loading the module?
+
+I usually get all resources (clocks, regulators, ...), calculate all
+internal stuff during probe. Do a basic check, if the device is
+available, i.e. read a status register..., but not configure the device.
+
+Then I do a complete re-initialization of the chip during .ndo_open.
+
+> Are there any limits to how long up can/should take?
+
+How long does it take? :)
+
+> If a default state is desired after using up, I see two options to do t=
+his:
+
+Yes, better if a ifdown; ifup fixes a strange problem, than a rmmod;
+modprobe.
+
+> 1) Perform the reset procedure the same way it is done during loading
+> of the module including setting up the clock again.
+> 2) Bring all Registers to their default state "manually" and preserve
+> whatever clock was configured initially.
+
+I'd prefer 1), as _all_ registers should be in the default state (unless
+they are unaffected by the chip reset).
+
+> If 1) is used, stop can be simplified to perform a reset as well, no
+
+By "stop" you mean the .ndo_stop callback? Better not do a softreset,
+but shut down the device properly (manually).
+
+> need to care about resetting fifos etc. This is likely more time
+> consuming though. Doing it this way is time consuming because we need
+> to do the OSC setup again every time.
 >=20
-> yes.
->=20
->>
->>> Then I discovered that the softirqd waits a lot before being schedule=
-d,
->>> but this one deal with all others too, so I started to question the w=
-hole
->>> softirq thing because its a garbage can for all postponed work.
->>> Mirgrating to a threaded irq seems wise to me then.
->>
->> AFAIC you're only allowed to use netif_receive_skb() from softirq, i.e=
-=2E
->> the NAPI context, see the documentation:
->>
->>     https://elixir.bootlin.com/linux/latest/source/net/core/dev.c#L526=
-5
->>
->> I'm not sure about threated IRQ handlers....but from hard-IRQ context,=
-
->> you should use netif_rx():
->>
->>     https://elixir.bootlin.com/linux/latest/source/net/core/dev.c#L454=
-4
->>
->> and netif_rx_ni() from threaded IRQ context:
->>
->>     https://elixir.bootlin.com/linux/latest/source/net/core/dev.c#L455=
-7
->=20
-> Thanks, I'll take a look at that.
->=20
->>
->> Please switch on all lockdep stuff and watch out for "softirq abc
->> pending" messages.
->=20
-> I got rid of the local_softirq_pending() after I elevated softirqd to
-> above the cpu-consuming RT threads.
-
-:D That's considered a HACK :)
-
->>> If a single thread reads all the incoming messages from the chip,
->>> the are received in order, I assume. Who would reorder the packets?
->>> Is synchronizing rx/tx paths handled in napi? they depend on differen=
-t
->>> softirqs, if I remember well.
->>
->> If, for the above reasons you have to use netif_rx(_ni)() and are on a=
-
->> multicore system, the packets might be delivered on different CPUs and=
-
->> processed in the wrong order. I have to google for more details...
->=20
-> I see. I live in beaglebone singlecore world, but I don't want to break=
-
-> multicore operation either.
-
->> What about reading the packet from the hardware in IRQ context and
->> putting them into the networking stack in NAPI. The rx-offload does
->> basically this.
->=20
-> I'll look at this
-> Thanks for the pointers
-
-The flexcan and the ti_hecc drivers are converted to rx-offload. If your
-hardware has mailboxes with timestamps make use
-can_rx_offload_add_timestamp():
-
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/flexcan.c#=
-L1281
-
-If your hardware offers the CAN frames in proper order use
-can_rx_offload_add_fifo():
-
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/flexcan.c#=
-L1285
-
-Drop me a note, if you need more hints.
+> 2) will usually be faster (assuming decent SPI speeds). The downside
+> is, that it's heavy on the SPI and we need to have default values for
+> all the registers for each supported device.
 
 Marc
 
@@ -249,23 +180,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---ASn2pRTK5vtdWx6sHq901bqZk4CJgUynv--
+--Olu9kKV10EKF38Ko7PVpJifwY0h2eNyRA--
 
---BMphMwwrzdbtacFByYts4BLiHDqoZbK9k
+--pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TWkAACgkQWsYho5Hk
-nSBj1wgAgl9dTWKG75yPndk2Lxix3v1T1JEtn1yzPlfmbEr+zIFqsizIFUP9E1ZB
-XhIyaAsZJAqKzVSGsWTgb2fp0fkcmBijqyPFCRdCmz06il/pp6Oeo5LH0vLbwsNN
-BO7FYetu9rEUYaWHHjTRY0CbPnTOOLA3O2KoHi9SBaONjlIuCpunuJEU88CUgAqd
-0HQj6Df65nq6+PzXI0nyEJuBmHlbCObq7kKlZi3vZN+vqd1XynASTwG2VImEAG7N
-mVuyXFcEGcDEDw9iIaooy/fyf4861Kdwa8NlkzbvhqM4jJOFd17dmUnuoSEYjPL4
-vD5p44Phupg1XTffprjh8UlCRavOgQ==
-=bJiZ
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TYQ8ACgkQWsYho5Hk
+nSDhigf+NzQCGuqXon2SWeT0LiwyBVEmMkz/n6srniNE1p4Jm0lunFvIiDFUQSxT
+1w408FaofW007N6LvXfCzhOD/4nCxkEaZDsxSTfyzE4rhIQI67gwBw0h/T+bLQcl
+Jq6064VqtglWxlofFIH065gsexx2t3QV/BqozC2W4/lioURZdGsgwFyRxNfYRNEE
+saaZ6rN6vxMY6G7l/YkSA4SY5TS/4Nz/3VE8H4dox76WvEAYF2+zhrS8SJXNGxQQ
+Pb8kGUEr5ibXGp9WSaZ1MJD5Jt0YiCbrsVK7K/feId6ubcyyaOGFo84EVVWkazRY
+h2djZxLH2MTxnnjXzR4NHKmNHo8wXA==
+=poP+
 -----END PGP SIGNATURE-----
 
---BMphMwwrzdbtacFByYts4BLiHDqoZbK9k--
+--pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq--
