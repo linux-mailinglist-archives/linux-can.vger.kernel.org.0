@@ -2,86 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D96C3123
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 12:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CE3C316F
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 12:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725765AbfJAKWW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 06:22:22 -0400
-Received: from relay-b01.edpnet.be ([212.71.1.221]:42087 "EHLO
-        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbfJAKWW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 06:22:22 -0400
-X-ASG-Debug-ID: 1569925338-0a7ff54e9759acb0001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.119.18.adsl.dyn.edpnet.net [77.109.119.18]) by relay-b01.edpnet.be with ESMTP id vIHGIWV7ZLGUJdgH; Tue, 01 Oct 2019 12:22:18 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.119.18.adsl.dyn.edpnet.net[77.109.119.18]
-X-Barracuda-Apparent-Source-IP: 77.109.119.18
-Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 31F87A1E2DA;
-        Tue,  1 Oct 2019 12:22:18 +0200 (CEST)
-Date:   Tue, 1 Oct 2019 12:22:17 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
-Message-ID: <20191001102217.GA25141@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
-Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-References: <1569871843-28655-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <1569871843-28655-3-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <6aa6d0f0-e424-0874-19c8-73a8344a1458@pengutronix.de>
+        id S1730006AbfJAK3w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 06:29:52 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:44267 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730596AbfJAK3l (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 06:29:41 -0400
+Received: by mail-lj1-f193.google.com with SMTP id m13so12723432ljj.11;
+        Tue, 01 Oct 2019 03:29:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RoOu79csZ7AqaXDAqptQ6zp2k96qP4QNOgQPeyZoDFU=;
+        b=cgGcquKF1cfyWqEb9ldWejkaQT6zudCzEaGNI+vUHfEMQhhAkfuFDYgVyoMc9JtQ2+
+         KKbqDJfQz9LTLIXWy/Hm5EKq5SRr/+C2xqxXbnls5zcAoxT9aBgVSvYq0TGCYI23gTMP
+         3HaNlpQZNwumwdEPhKQkAP1KfUenFUlWeMcLah+XYIymewDXKPpST9vdnigh3MvkMjUI
+         IzeR0ajNnOg1qfohQtNILehWi2Dt0Qu1itA3PtyjGwrfCCAoNVLa7uDWb/wtnA7PNo79
+         Q7YbxYk3bWpqdqxd0wnGUZY5v13WTu5lTO3utfcSO/b1l6Law15gHiMGhIzzRYu26yvN
+         h6/Q==
+X-Gm-Message-State: APjAAAUBN8urKuaCnifJsh15z3FcKcwnIbAQQZ7RYtUzZ6S/UrkHmhdA
+        TxFGsijYAIukkQw5rLJ8GZAjBRzc
+X-Google-Smtp-Source: APXvYqy54GRLDR5EEHOlj/ts7fyXJ1b7P32u2lWL1YXUKM8Is2BNjEzZ/abrty6SnVfrkSVKNGC1hw==
+X-Received: by 2002:a2e:58a:: with SMTP id 132mr14673453ljf.132.1569925778036;
+        Tue, 01 Oct 2019 03:29:38 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id 196sm3881434ljj.76.2019.10.01.03.29.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Oct 2019 03:29:37 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@xi.terra>)
+        id 1iFFPd-000361-5P; Tue, 01 Oct 2019 12:29:45 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/2] can: fix use-after-free on USB disconnect
+Date:   Tue,  1 Oct 2019 12:29:12 +0200
+Message-Id: <20191001102914.4567-1-johan@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6aa6d0f0-e424-0874-19c8-73a8344a1458@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.119.18.adsl.dyn.edpnet.net[77.109.119.18]
-X-Barracuda-Start-Time: 1569925338
-X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1330
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.8927 1.0000 3.1482
-X-Barracuda-Spam-Score: 3.15
-X-Barracuda-Spam-Status: No, SCORE=3.15 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.76996
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On di, 01 okt 2019 11:40:09 +0200, Marc Kleine-Budde wrote:
-> On 9/30/19 9:30 PM, Kurt Van Dijck wrote:
-> > The napi-handler defers c_can reception to softirq, but it is hard to
-> > control the RT priority of the CAN recv end inside a softirq.
-> > Using an irqthread allows precise control of it's RT priority.
-> > Having the quota still around in the IRQ thread allows to restrict
-> > the work_done per cycle.
-> > 
-> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> 
-> NACK, not pushing CAN frames though NAPI results in very strange things,
-> such like package reordering.
+Syzbot reported a use-after-free on disconnect in mcba_usb and a quick
+grep revealed a similar issue in usb_8dev.
 
-This becomes interesting.
-Would you mind elaborating a bit on that.
+Compile-tested only.
 
-I'm currently trying to avoid CAN overflows on an RT system, where
-I eleveated the can irq thread above the others.
-Then I discovered that the softirqd waits a lot before being scheduled,
-but this one deal with all others too, so I started to question the whole
-softirq thing because its a garbage can for all postponed work.
-Mirgrating to a threaded irq seems wise to me then.
+Johan
 
-If a single thread reads all the incoming messages from the chip,
-the are received in order, I assume. Who would reorder the packets?
-Is synchronizing rx/tx paths handled in napi? they depend on different
-softirqs, if I remember well.
 
-Kind regards,
+Johan Hovold (2):
+  can: mcba_usb: fix use-after-free on disconnect
+  can: usb_8dev: fix use-after-free on disconnect
 
-Kurt
+ drivers/net/can/usb/mcba_usb.c | 3 +--
+ drivers/net/can/usb/usb_8dev.c | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
+
+-- 
+2.23.0
+
