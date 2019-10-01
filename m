@@ -2,33 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7663AC3729
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 16:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B97C377A
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 16:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389006AbfJAOXC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 10:23:02 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51731 "EHLO
+        id S2389092AbfJAOcP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 10:32:15 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60427 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388915AbfJAOW7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 10:22:59 -0400
+        with ESMTP id S1727018AbfJAOcP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 10:32:15 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFJ3E-0000tZ-SP; Tue, 01 Oct 2019 16:22:52 +0200
+        id 1iFJCG-0001t2-Hd; Tue, 01 Oct 2019 16:32:12 +0200
 Received: from [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07] (unknown [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A7EE845E0E0;
-        Tue,  1 Oct 2019 14:22:51 +0000 (UTC)
-Subject: Re: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
- to match DS
-To:     Thomas Kopp <thomas.kopp@microchip.com>, linux-can@vger.kernel.org
-Cc:     martin@sperl.org
-References: <20190929090543.438-1-thomas.kopp@microchip.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 338FE45E0ED;
+        Tue,  1 Oct 2019 14:32:09 +0000 (UTC)
+Subject: Re: [PATCH 1/2] can: D_CAN: perform a sofware reset on open
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20190926085005.24805-1-jhofstee@victronenergy.com>
+ <20190926085005.24805-2-jhofstee@victronenergy.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
-Date:   Tue, 1 Oct 2019 16:22:48 +0200
+Message-ID: <b30e9834-a324-ad97-2050-df9600a95347@pengutronix.de>
+Date:   Tue, 1 Oct 2019 16:32:03 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190929090543.438-1-thomas.kopp@microchip.com>
+In-Reply-To: <20190926085005.24805-2-jhofstee@victronenergy.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng"
+ boundary="CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,29 +114,100 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng
-Content-Type: multipart/mixed; boundary="wWmaYj0SOWhKpi6INkUWwRY13Q27bp4j7";
+--CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY
+Content-Type: multipart/mixed; boundary="3ZbNhm0xQ9KhHL5eB4JjdEL0J6uGELmxM";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Thomas Kopp <thomas.kopp@microchip.com>, linux-can@vger.kernel.org
-Cc: martin@sperl.org
-Message-ID: <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
-Subject: Re: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
- to match DS
-References: <20190929090543.438-1-thomas.kopp@microchip.com>
-In-Reply-To: <20190929090543.438-1-thomas.kopp@microchip.com>
+To: Jeroen Hofstee <jhofstee@victronenergy.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+Message-ID: <b30e9834-a324-ad97-2050-df9600a95347@pengutronix.de>
+Subject: Re: [PATCH 1/2] can: D_CAN: perform a sofware reset on open
+References: <20190926085005.24805-1-jhofstee@victronenergy.com>
+ <20190926085005.24805-2-jhofstee@victronenergy.com>
+In-Reply-To: <20190926085005.24805-2-jhofstee@victronenergy.com>
 
---wWmaYj0SOWhKpi6INkUWwRY13Q27bp4j7
+--3ZbNhm0xQ9KhHL5eB4JjdEL0J6uGELmxM
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/29/19 11:05 AM, Thomas Kopp wrote:
-> Fixing a couple MCP25xxFD reg/bit definitions, switching to the names u=
-sed in the DS.
-> Patch is against the latest from Martin Sperl's github
+On 9/26/19 10:50 AM, Jeroen Hofstee wrote:
+> When the C_CAN interface is closed it is put in power down mode, but
+> does not reset the error counters / state. So reset the D_CAN on open,
+> so the reported state and the actual state match.
+>=20
+> According to [1], the C_CAN module doesn't have the software reset.
+>=20
+> [1] http://www.bosch-semiconductors.com/media/ip_modules/pdf_2/c_can_fd=
+8/users_manual_c_can_fd8_r210_1.pdf
+>=20
+> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+> ---
+>  drivers/net/can/c_can/c_can.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>=20
+> diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_ca=
+n.c
+> index 606b7d8ffe13..502a181d02e7 100644
+> --- a/drivers/net/can/c_can/c_can.c
+> +++ b/drivers/net/can/c_can/c_can.c
+> @@ -52,6 +52,7 @@
+>  #define CONTROL_EX_PDR		BIT(8)
+> =20
+>  /* control register */
+> +#define CONTROL_SWR		BIT(15)
+>  #define CONTROL_TEST		BIT(7)
+>  #define CONTROL_CCE		BIT(6)
+>  #define CONTROL_DISABLE_AR	BIT(5)
+> @@ -569,6 +570,26 @@ static void c_can_configure_msg_objects(struct net=
+_device *dev)
+>  				   IF_MCONT_RCV_EOB);
+>  }
+> =20
+> +static int software_reset(struct net_device *dev)
 
-Which one is the latest branch?
+Please add the common prefix "c_can_" to the function
+
+> +{
+> +	struct c_can_priv *priv =3D netdev_priv(dev);
+> +	int retry =3D 0;
+> +
+> +	if (priv->type !=3D BOSCH_D_CAN)
+> +		return 0;
+> +
+> +	priv->write_reg(priv, C_CAN_CTRL_REG, CONTROL_SWR | CONTROL_INIT);
+> +	while (priv->read_reg(priv, C_CAN_CTRL_REG) & CONTROL_SWR) {
+> +		msleep(20);
+> +		if (retry++ > 100) {
+> +			netdev_err(dev, "CCTRL: software reset failed\n");
+> +			return -EIO;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Configure C_CAN chip:
+>   * - enable/disable auto-retransmission
+> @@ -578,6 +599,11 @@ static void c_can_configure_msg_objects(struct net=
+_device *dev)
+>  static int c_can_chip_config(struct net_device *dev)
+>  {
+>  	struct c_can_priv *priv =3D netdev_priv(dev);
+> +	int err;
+> +
+> +	err =3D software_reset(dev);
+> +	if (err)
+> +		return err;
+> =20
+>  	/* enable automatic retransmission */
+>  	priv->write_reg(priv, C_CAN_CTRL_REG, CONTROL_ENABLE_AR);
+>=20
 
 Marc
 
@@ -143,23 +218,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---wWmaYj0SOWhKpi6INkUWwRY13Q27bp4j7--
+--3ZbNhm0xQ9KhHL5eB4JjdEL0J6uGELmxM--
 
---JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng
+--CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TYTgACgkQWsYho5Hk
-nSBK5gf/SAC13ZdnIULNAGjZdVoyieiI/Xxo27oxVSliMV34tNRnLXdfZ+G02K6R
-vhrgCIvsTrX6iEuRf9eus/yZ7l3u9MU73lQimNB8lc30vHzeStV3QJ3zJXHBRsbA
-TGusYZsyLqb+QE31GFXuei9OgU7NnbbGEaXnCVlJzxbc5yOlRrR0MUh7bocl87E1
-lkwJkcrNzacbtl1Q0/zMFFB7ab6FQMd+L+Ts/NSe5sVnzO9kjBnaTVu1zZFAz+Mu
-LjqZUFEFZqL71Cy7el5uCPbcEywsJrgsbq0c0nISMzfw/jTd9lnYMA1rRmsmCsoF
-/rWTi90nT+TH6NyTuHjo5kksQAq+1g==
-=QcRo
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TY2MACgkQWsYho5Hk
+nSCnNQf/fxP6RyApeEeqNzd2tEzG8NZnyfj8qcFnLbEt8R/6DbhV/7a2gZ0RQiTN
+ZypaH/G/JOX8Vf7dKOUrB0OfSYg9ep3zWm5K4iNsvugOB8WmoXRMgnt6qXBRBE1j
+hZehejAMuERtPqOX7qFVh8YsksVlkJKQtZi5gSVYiDJ3f/7ZivLmfDA4UKKvD1a9
+eeNNPLu6DS658FQcMmkel90cVh+PMMlvRkhAWUtJzfVYRfZvxIBKapZFIWiEh15s
+25bwQ697aTj5taKsSpaHFIDRAsheLInWPi/ziAjimeB0RsrQEncfw9LfqddiLNB+
+QnEHZoNXFMhnnekcHO2FzFkG66QW/g==
+=by5s
 -----END PGP SIGNATURE-----
 
---JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng--
+--CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY--
