@@ -2,31 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB75C3709
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 16:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7663AC3729
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 16:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389054AbfJAOWZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 10:22:25 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51031 "EHLO
+        id S2389006AbfJAOXC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 10:23:02 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51731 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388894AbfJAOWZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 10:22:25 -0400
+        with ESMTP id S2388915AbfJAOW7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 10:22:59 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFJ2c-0000nD-2v; Tue, 01 Oct 2019 16:22:14 +0200
+        id 1iFJ3E-0000tZ-SP; Tue, 01 Oct 2019 16:22:52 +0200
 Received: from [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07] (unknown [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 69FBE45E0D7;
-        Tue,  1 Oct 2019 14:22:11 +0000 (UTC)
-To:     Thomas.Kopp@microchip.com, linux-can@vger.kernel.org,
-        martin@sperl.org
-References: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A7EE845E0E0;
+        Tue,  1 Oct 2019 14:22:51 +0000 (UTC)
+Subject: Re: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
+ to match DS
+To:     Thomas Kopp <thomas.kopp@microchip.com>, linux-can@vger.kernel.org
+Cc:     martin@sperl.org
+References: <20190929090543.438-1-thomas.kopp@microchip.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -89,16 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: can: mcp25xxfd: Reset/Initialization of device
-Message-ID: <64b2f9c9-ff3b-82dd-473e-2f1ea2f383f8@pengutronix.de>
-Date:   Tue, 1 Oct 2019 16:22:07 +0200
+Message-ID: <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
+Date:   Tue, 1 Oct 2019 16:22:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
+In-Reply-To: <20190929090543.438-1-thomas.kopp@microchip.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq"
+ boundary="JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,67 +110,29 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq
-Content-Type: multipart/mixed; boundary="Olu9kKV10EKF38Ko7PVpJifwY0h2eNyRA";
+--JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng
+Content-Type: multipart/mixed; boundary="wWmaYj0SOWhKpi6INkUWwRY13Q27bp4j7";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Thomas.Kopp@microchip.com, linux-can@vger.kernel.org, martin@sperl.org
-Message-ID: <64b2f9c9-ff3b-82dd-473e-2f1ea2f383f8@pengutronix.de>
-Subject: Re: can: mcp25xxfd: Reset/Initialization of device
-References: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB36430CCBAE5F8DDFD4CA704DFB830@DM6PR11MB3643.namprd11.prod.outlook.com>
+To: Thomas Kopp <thomas.kopp@microchip.com>, linux-can@vger.kernel.org
+Cc: martin@sperl.org
+Message-ID: <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
+Subject: Re: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
+ to match DS
+References: <20190929090543.438-1-thomas.kopp@microchip.com>
+In-Reply-To: <20190929090543.438-1-thomas.kopp@microchip.com>
 
---Olu9kKV10EKF38Ko7PVpJifwY0h2eNyRA
+--wWmaYj0SOWhKpi6INkUWwRY13Q27bp4j7
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/29/19 11:49 AM, Thomas.Kopp@microchip.com wrote:
-> When testing the driver and using up/down multiple times on the CAN
-> interface I encountered errors with the TEF setup. I noticed that a
-> device reset (spi command) is only performed when loading the module
-> (in _mcp25xxfd_clock_probe during the initial clock setup.)
+On 9/29/19 11:05 AM, Thomas Kopp wrote:
+> Fixing a couple MCP25xxFD reg/bit definitions, switching to the names u=
+sed in the DS.
+> Patch is against the latest from Martin Sperl's github
 
-> Is there a preference whether or not using up on the interface should
-> bring the device into a default state or is this only expected when
-> loading the module?
-
-I usually get all resources (clocks, regulators, ...), calculate all
-internal stuff during probe. Do a basic check, if the device is
-available, i.e. read a status register..., but not configure the device.
-
-Then I do a complete re-initialization of the chip during .ndo_open.
-
-> Are there any limits to how long up can/should take?
-
-How long does it take? :)
-
-> If a default state is desired after using up, I see two options to do t=
-his:
-
-Yes, better if a ifdown; ifup fixes a strange problem, than a rmmod;
-modprobe.
-
-> 1) Perform the reset procedure the same way it is done during loading
-> of the module including setting up the clock again.
-> 2) Bring all Registers to their default state "manually" and preserve
-> whatever clock was configured initially.
-
-I'd prefer 1), as _all_ registers should be in the default state (unless
-they are unaffected by the chip reset).
-
-> If 1) is used, stop can be simplified to perform a reset as well, no
-
-By "stop" you mean the .ndo_stop callback? Better not do a softreset,
-but shut down the device properly (manually).
-
-> need to care about resetting fifos etc. This is likely more time
-> consuming though. Doing it this way is time consuming because we need
-> to do the OSC setup again every time.
->=20
-> 2) will usually be faster (assuming decent SPI speeds). The downside
-> is, that it's heavy on the SPI and we need to have default values for
-> all the registers for each supported device.
+Which one is the latest branch?
 
 Marc
 
@@ -180,23 +143,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---Olu9kKV10EKF38Ko7PVpJifwY0h2eNyRA--
+--wWmaYj0SOWhKpi6INkUWwRY13Q27bp4j7--
 
---pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq
+--JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TYQ8ACgkQWsYho5Hk
-nSDhigf+NzQCGuqXon2SWeT0LiwyBVEmMkz/n6srniNE1p4Jm0lunFvIiDFUQSxT
-1w408FaofW007N6LvXfCzhOD/4nCxkEaZDsxSTfyzE4rhIQI67gwBw0h/T+bLQcl
-Jq6064VqtglWxlofFIH065gsexx2t3QV/BqozC2W4/lioURZdGsgwFyRxNfYRNEE
-saaZ6rN6vxMY6G7l/YkSA4SY5TS/4Nz/3VE8H4dox76WvEAYF2+zhrS8SJXNGxQQ
-Pb8kGUEr5ibXGp9WSaZ1MJD5Jt0YiCbrsVK7K/feId6ubcyyaOGFo84EVVWkazRY
-h2djZxLH2MTxnnjXzR4NHKmNHo8wXA==
-=poP+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TYTgACgkQWsYho5Hk
+nSBK5gf/SAC13ZdnIULNAGjZdVoyieiI/Xxo27oxVSliMV34tNRnLXdfZ+G02K6R
+vhrgCIvsTrX6iEuRf9eus/yZ7l3u9MU73lQimNB8lc30vHzeStV3QJ3zJXHBRsbA
+TGusYZsyLqb+QE31GFXuei9OgU7NnbbGEaXnCVlJzxbc5yOlRrR0MUh7bocl87E1
+lkwJkcrNzacbtl1Q0/zMFFB7ab6FQMd+L+Ts/NSe5sVnzO9kjBnaTVu1zZFAz+Mu
+LjqZUFEFZqL71Cy7el5uCPbcEywsJrgsbq0c0nISMzfw/jTd9lnYMA1rRmsmCsoF
+/rWTi90nT+TH6NyTuHjo5kksQAq+1g==
+=QcRo
 -----END PGP SIGNATURE-----
 
---pwMJa3UQ7M4J1R3q2JEqydCMLNp5PHFfq--
+--JWyz4iVMkH9DLu6Ld46E0T0UfO4MUcVng--
