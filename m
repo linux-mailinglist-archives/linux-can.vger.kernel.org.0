@@ -2,36 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AF4C47AD
-	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3A0C47AB
+	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbfJBGSR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Oct 2019 02:18:17 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54851 "EHLO
+        id S1727478AbfJBGSQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Oct 2019 02:18:16 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36645 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726965AbfJBGSR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:17 -0400
+        with ESMTP id S1726965AbfJBGSQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:16 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFXxi-0007OE-6H; Wed, 02 Oct 2019 08:18:10 +0200
+        id 1iFXxm-0007OP-1v; Wed, 02 Oct 2019 08:18:14 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07] (unknown [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DF6D445E746;
-        Wed,  2 Oct 2019 06:18:05 +0000 (UTC)
-Subject: Re: [PATCH v1] can: mcp251x: Add missed array marker for properties
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-can@vger.kernel.org
-Cc:     kbuild test robot <lkp@intel.com>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>
-References: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A923745E747;
+        Wed,  2 Oct 2019 06:18:12 +0000 (UTC)
+Subject: Re: [PATCH] can/peak_pciefd: provide hw timestamps in rx skbs
+To:     Stephane Grosjean <s.grosjean@peak-system.com>,
+        linux-can Mailing List <linux-can@vger.kernel.org>
+References: <20190916141544.6591-1-s.grosjean@peak-system.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,15 +90,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <900a9f20-450d-9b0b-56e5-e7d9916d8a88@pengutronix.de>
-Date:   Tue, 1 Oct 2019 21:43:38 +0200
+Message-ID: <c1c81129-f3e3-bea9-be4b-c356c7c1d198@pengutronix.de>
+Date:   Tue, 1 Oct 2019 21:52:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20190916141544.6591-1-s.grosjean@peak-system.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ"
+ boundary="y628D2aluA6CWUdm2TIPzqc3NC6A7URqH"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,45 +109,36 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ
-Content-Type: multipart/mixed; boundary="8wWM5PFAxae12Gl34CTkkH6cXjFNbBcOx";
+--y628D2aluA6CWUdm2TIPzqc3NC6A7URqH
+Content-Type: multipart/mixed; boundary="P9BNmo5S8VCuBSUQCTV2PB2MbyIn7JMdk";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-can@vger.kernel.org
-Cc: kbuild test robot <lkp@intel.com>, Daniel Mack <daniel@zonque.org>,
- Haojian Zhuang <haojian.zhuang@gmail.com>,
- Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>
-Message-ID: <900a9f20-450d-9b0b-56e5-e7d9916d8a88@pengutronix.de>
-Subject: Re: [PATCH v1] can: mcp251x: Add missed array marker for properties
-References: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+To: Stephane Grosjean <s.grosjean@peak-system.com>,
+ linux-can Mailing List <linux-can@vger.kernel.org>
+Message-ID: <c1c81129-f3e3-bea9-be4b-c356c7c1d198@pengutronix.de>
+Subject: Re: [PATCH] can/peak_pciefd: provide hw timestamps in rx skbs
+References: <20190916141544.6591-1-s.grosjean@peak-system.com>
+In-Reply-To: <20190916141544.6591-1-s.grosjean@peak-system.com>
 
---8wWM5PFAxae12Gl34CTkkH6cXjFNbBcOx
+--P9BNmo5S8VCuBSUQCTV2PB2MbyIn7JMdk
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/7/19 6:33 PM, Andy Shevchenko wrote:
-> Properties structure is an array where the last, NULL one,
-> used as a terminator.
->=20
-> Fixes: c5176177e860 ("can: mcp251x: Get rid of legacy platform data")
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->=20
-> Marc, depending on your flow, since the culprit is in testing branch, c=
-onsider
-> either follow up fixup, or folding it into the previous patch.
+On 9/16/19 4:15 PM, Stephane Grosjean wrote:
+> PEAK-System's CAN FD interfaces based on an IP core provide a timestamp=
+ for
+> each CAN and STATUS message received. This patch transfers these receiv=
+ed
+> timestamps (clocked in microseconds) to hardware timestamps (clocked in=
 
-Folded into your previous commit.
+> nanoseconds) in the corresponding skbs raised to the network layer.
+>=20
+> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 
-tnx,
+Applied to can-next.
+
+Tnx,
 Marc
 
 --=20
@@ -161,23 +148,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---8wWM5PFAxae12Gl34CTkkH6cXjFNbBcOx--
+--P9BNmo5S8VCuBSUQCTV2PB2MbyIn7JMdk--
 
---Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ
+--y628D2aluA6CWUdm2TIPzqc3NC6A7URqH
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TrGoACgkQWsYho5Hk
-nSBjEQf9GutyzdCTxqAYm89e9pREdW17+LWy4JNBZWnJ0nw5Uh6EgoaYcRlyTp7f
-s7UQLjFU4wKn3xkt+0DJK9nAhvc+6Rd7KC6+w/k4nhevjLQL22cH3xQmXumjepVN
-clkAvFUdixzLkOrhzo6JQFQqRFaUIVlLyCHvQfAgcuMvCmTlch8KvPtu0mFFpIuQ
-v+XfCzFMgb7ZEOCQgwHzluRe8nWZ5bL9xLDdyMf2vV/0YbUKRBLczquSW/gYMMzL
-JKyj9gwKWXFyDzmtmRuhNrdUsxjrEdc5K8axDwoarvIK4pcLJjKLrUcnQPgVoo3f
-mhKLSnav69p6dwE1fH3aVPs2MWyHVw==
-=vVxF
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TroAACgkQWsYho5Hk
+nSB9VggAi37VPhw1RtLfv4h/DidnCRbLWwDs6kdpfRZehC7vsTmox5w1OXAve21H
+/B+fhm6z/0Yua8d9A7WWrIoAD0kyMNGc18x7XJdr2khL5XvDZscSwF2RexjCa9RB
+OHcfJvDKreFxeNmnacASKCrrs2PximsVqu2/LqxjzTqO7vdHz0nSbWWQke45iKuB
+HB4EBbanQZNLQJG5/X9w19I8zGLki0/RTEhZkOhoUt3Yzkr464i92fVXMdcTofnB
+GnRzLb11Y59AmJX1GRPxkWMvean6cNn8tbKDmo1HvqYFROmhepwWNIsMv8jqzuJh
+gbjWbfx8vCL2wYIXUoeUoLmb5VpSWA==
+=hYXK
 -----END PGP SIGNATURE-----
 
---Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ--
+--y628D2aluA6CWUdm2TIPzqc3NC6A7URqH--
