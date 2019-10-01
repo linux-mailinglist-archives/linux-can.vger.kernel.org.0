@@ -2,32 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3A0C47AB
-	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2416C47B0
+	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbfJBGSQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Oct 2019 02:18:16 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36645 "EHLO
+        id S1727500AbfJBGSZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Oct 2019 02:18:25 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40983 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726965AbfJBGSQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:16 -0400
+        with ESMTP id S1727495AbfJBGSZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:25 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFXxm-0007OP-1v; Wed, 02 Oct 2019 08:18:14 +0200
+        id 1iFXxs-0007P4-NB; Wed, 02 Oct 2019 08:18:20 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07] (unknown [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A923745E747;
-        Wed,  2 Oct 2019 06:18:12 +0000 (UTC)
-Subject: Re: [PATCH] can/peak_pciefd: provide hw timestamps in rx skbs
-To:     Stephane Grosjean <s.grosjean@peak-system.com>,
-        linux-can Mailing List <linux-can@vger.kernel.org>
-References: <20190916141544.6591-1-s.grosjean@peak-system.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BED0E45E748;
+        Wed,  2 Oct 2019 06:18:15 +0000 (UTC)
+Subject: Re: [PATCH][next] can: fix resource leak of skb on error return paths
+To:     Colin King <colin.king@canonical.com>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190918101156.24370-1-colin.king@canonical.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -90,15 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <c1c81129-f3e3-bea9-be4b-c356c7c1d198@pengutronix.de>
-Date:   Tue, 1 Oct 2019 21:52:32 +0200
+Message-ID: <720cf73f-8df0-6cee-33bd-41aa8b72dd8d@pengutronix.de>
+Date:   Tue, 1 Oct 2019 22:04:10 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190916141544.6591-1-s.grosjean@peak-system.com>
+In-Reply-To: <20190918101156.24370-1-colin.king@canonical.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="y628D2aluA6CWUdm2TIPzqc3NC6A7URqH"
+ boundary="CTyUqY7dF4NYv8qQMfCoH5TKwo74Fmcw4"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,36 +115,41 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---y628D2aluA6CWUdm2TIPzqc3NC6A7URqH
-Content-Type: multipart/mixed; boundary="P9BNmo5S8VCuBSUQCTV2PB2MbyIn7JMdk";
+--CTyUqY7dF4NYv8qQMfCoH5TKwo74Fmcw4
+Content-Type: multipart/mixed; boundary="iTitcsbzqupLWeTCytjwOQ2RGKHJiXriV";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Stephane Grosjean <s.grosjean@peak-system.com>,
- linux-can Mailing List <linux-can@vger.kernel.org>
-Message-ID: <c1c81129-f3e3-bea9-be4b-c356c7c1d198@pengutronix.de>
-Subject: Re: [PATCH] can/peak_pciefd: provide hw timestamps in rx skbs
-References: <20190916141544.6591-1-s.grosjean@peak-system.com>
-In-Reply-To: <20190916141544.6591-1-s.grosjean@peak-system.com>
+To: Colin King <colin.king@canonical.com>,
+ Robin van der Gracht <robin@protonic.nl>,
+ Oleksij Rempel <linux@rempel-privat.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ "David S . Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <720cf73f-8df0-6cee-33bd-41aa8b72dd8d@pengutronix.de>
+Subject: Re: [PATCH][next] can: fix resource leak of skb on error return paths
+References: <20190918101156.24370-1-colin.king@canonical.com>
+In-Reply-To: <20190918101156.24370-1-colin.king@canonical.com>
 
---P9BNmo5S8VCuBSUQCTV2PB2MbyIn7JMdk
+--iTitcsbzqupLWeTCytjwOQ2RGKHJiXriV
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/16/19 4:15 PM, Stephane Grosjean wrote:
-> PEAK-System's CAN FD interfaces based on an IP core provide a timestamp=
- for
-> each CAN and STATUS message received. This patch transfers these receiv=
-ed
-> timestamps (clocked in microseconds) to hardware timestamps (clocked in=
-
-> nanoseconds) in the corresponding skbs raised to the network layer.
+On 9/18/19 12:11 PM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 >=20
-> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+> Currently the error return paths do not free skb and this results
+> in a memory leak. Fix this by freeing them before the return.
+>=20
+> Addresses-Coverity: ("Resource leak")
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Applied to can-next.
+Added to can.
 
-Tnx,
+tnx.
 Marc
 
 --=20
@@ -148,23 +159,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---P9BNmo5S8VCuBSUQCTV2PB2MbyIn7JMdk--
+--iTitcsbzqupLWeTCytjwOQ2RGKHJiXriV--
 
---y628D2aluA6CWUdm2TIPzqc3NC6A7URqH
+--CTyUqY7dF4NYv8qQMfCoH5TKwo74Fmcw4
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TroAACgkQWsYho5Hk
-nSB9VggAi37VPhw1RtLfv4h/DidnCRbLWwDs6kdpfRZehC7vsTmox5w1OXAve21H
-/B+fhm6z/0Yua8d9A7WWrIoAD0kyMNGc18x7XJdr2khL5XvDZscSwF2RexjCa9RB
-OHcfJvDKreFxeNmnacASKCrrs2PximsVqu2/LqxjzTqO7vdHz0nSbWWQke45iKuB
-HB4EBbanQZNLQJG5/X9w19I8zGLki0/RTEhZkOhoUt3Yzkr464i92fVXMdcTofnB
-GnRzLb11Y59AmJX1GRPxkWMvean6cNn8tbKDmo1HvqYFROmhepwWNIsMv8jqzuJh
-gbjWbfx8vCL2wYIXUoeUoLmb5VpSWA==
-=hYXK
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TsToACgkQWsYho5Hk
+nSDMAQgAmSfPZWyQfnRGyicy3zeAXVdnUuYYS+3L81Gh7rpek12D4bHy9KAepag7
+M+FhBQySmrmYNu+dx3j8OzszIcSF0ad+JWU06ZarPaHQAuCX6Q8y/FJ3gPyy6VJv
+pa8xV6Nq1SbklDsdeeaXBZmQvMeoXAafDJlfIvZ7Wx9oKn8aoUcL7meAOIZoeGwc
+Ttpx2tjnWNYTtz+lG+3p20aV7WqSGKUXWERhjZ/AUSyADFfViA+1a+3ytO0ynWSm
+QFAxmu+2kNpiYwoPG8qaZQ0gJv1IRdiURoNz3Lik+MwGJsBWn4Z0nzUtrfxJuNJi
+M1B/Uwwfhs10MCWZc8ynWHRLcFO+iQ==
+=sDnQ
 -----END PGP SIGNATURE-----
 
---y628D2aluA6CWUdm2TIPzqc3NC6A7URqH--
+--CTyUqY7dF4NYv8qQMfCoH5TKwo74Fmcw4--
