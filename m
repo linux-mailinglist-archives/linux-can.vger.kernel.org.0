@@ -2,239 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B97C377A
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 16:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218C8C3872
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 17:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389092AbfJAOcP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 10:32:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60427 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbfJAOcP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 10:32:15 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iFJCG-0001t2-Hd; Tue, 01 Oct 2019 16:32:12 +0200
-Received: from [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07] (unknown [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 338FE45E0ED;
-        Tue,  1 Oct 2019 14:32:09 +0000 (UTC)
-Subject: Re: [PATCH 1/2] can: D_CAN: perform a sofware reset on open
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190926085005.24805-1-jhofstee@victronenergy.com>
- <20190926085005.24805-2-jhofstee@victronenergy.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <b30e9834-a324-ad97-2050-df9600a95347@pengutronix.de>
-Date:   Tue, 1 Oct 2019 16:32:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1731893AbfJAPD1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 11:03:27 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:44889 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726987AbfJAPD0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 11:03:26 -0400
+Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
+  Thomas.Kopp@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Thomas.Kopp@microchip.com";
+  x-sender="Thomas.Kopp@microchip.com"; x-conformance=spf_only;
+  x-record-type="v=spf1"; x-record-text="v=spf1 mx
+  a:ushub1.microchip.com a:smtpout.microchip.com
+  a:mx1.microchip.iphmx.com a:mx2.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa3.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Thomas.Kopp@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa3.microchip.iphmx.com; spf=Pass smtp.mailfrom=Thomas.Kopp@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: yDZHfvlc+N2gMyeRFyi0NKHh96Mh3hdqCdG9F7JxchIhJvTk/bIiAHLkqYFxZi2RMQau6bzdrR
+ 6yoO7YPzG8xv7IISIoseMNPuOYq2u5I9PldyjA4quhEkhNi+auyMnydRx69V0gZOjvRNFJbghL
+ 60gNs6vbjfl/VaQRSfvE2d2KykipaDIryIx2vJbbg2IvFjjPwiPYBuGNOpmhXyIC2Rci2lNeGn
+ GlXIReBmVvaMx5eQg/kFrDBfg2ZFb0onMvxI7+YtXJhyCyrqubJJxWicxaD+uW5zabdeBPgAme
+ sr8=
+X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
+   d="scan'208";a="51265322"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Oct 2019 08:03:12 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 1 Oct 2019 08:03:12 -0700
+Received: from NAM03-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Tue, 1 Oct 2019 08:03:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g6ck7uyE0Dkq95QYScEgcwTkIxro0UENbfdG1iNfhhASPLMItffzbfBYhRgr7OqfrBSfREJTGD/2JR5zF6FiIbDhU7sM6EaIz1BNc1LifeuFXRnohFHTjpo5rDPPoLmIpYRq+IDJ3BUkDA5ULgmaowqy4ZmoDfpfM5WHpExfBpb4/OyZlWkkU8JZjOVVrzUqnbse26ArjGfijRiymGJDOfWTkHya2jrPseRzJG2B9xOWcsezqx9YRBpS1XPjMiFloPSFTzPw8dZoEvjnZ2NXRkJ52Meh+DnWS/gYAOOkrjkqXq8bm1QXqSQEtSGE1j1OQA5VJh3ZAflsmmEcqujjnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBNLCkloqFUirGB2TQSscgGDvIdgsTD1zdaAsVmFpPU=;
+ b=G3i7f2dVaB6aPYf+6AzMmlkgGbPB+t/b8/FWN9aDPwCE/5hM5wRLshbjFVtj4UGd7x6BfstHGu1Ex9GEfzG1QSfM+yq6M+trlpDx52nvrWgOh19QodHUVvHnEc9+b2v2J5c8ndWE0xNR+CJfblzNPR+6YN+ER+RX8VfB8aagi2C1OUP/vZ65LqXMPm4osxbm3REAwIRpfuVx1a/cad0Ceboyu6ZNa2aYGIty6/CGQrRW9QhHLSewFYD5+hehkPVPeYROth9PaF9nYO/LHtUNV8HZO7KYEDIkcpoKYprVPNR3QEnfX97OtDWGZqS3t+HO7bqzNwyMP8/TDgyJOEoZwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBNLCkloqFUirGB2TQSscgGDvIdgsTD1zdaAsVmFpPU=;
+ b=dmfC34use8oCb4K9xtPKTACaDX4It6Z/F3n5jB+qTxoN59g+39rc3ZcAN6DHTfmEd6CjeO0Is2qmXMMOErTa4KvODjHKZW5KpvsFPkJjcKr0dNw6eBhmkcLUGLi2vkex/urLe3tcRIlOPtqpRdMgIrqjrzT/1I6EvkH59vL1j4Q=
+Received: from MN2PR11MB3645.namprd11.prod.outlook.com (20.178.254.13) by
+ MN2PR11MB4207.namprd11.prod.outlook.com (52.135.37.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.20; Tue, 1 Oct 2019 15:03:09 +0000
+Received: from MN2PR11MB3645.namprd11.prod.outlook.com
+ ([fe80::59b3:bc3a:7644:4bb7]) by MN2PR11MB3645.namprd11.prod.outlook.com
+ ([fe80::59b3:bc3a:7644:4bb7%5]) with mapi id 15.20.2305.017; Tue, 1 Oct 2019
+ 15:03:09 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
+CC:     <martin@sperl.org>
+Subject: RE: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
+ to match DS
+Thread-Topic: [PATCH] can: mcp25xxfd: fix register definitions, cleanup names
+ to match DS
+Thread-Index: AQHVdqUjF7hjphGu7UiinQOz6qXn8adF2hwAgAAJoZA=
+Date:   Tue, 1 Oct 2019 15:03:09 +0000
+Message-ID: <MN2PR11MB36455F34635586DDE2C1026FFB9D0@MN2PR11MB3645.namprd11.prod.outlook.com>
+References: <20190929090543.438-1-thomas.kopp@microchip.com>
+ <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
+In-Reply-To: <1ae4347d-1ffe-5106-38fd-511b9e5ff215@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [93.241.63.210]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7d8166f2-7477-42d9-19ab-08d7468078fb
+x-ms-traffictypediagnostic: MN2PR11MB4207:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <MN2PR11MB42074FBA930F1B582945E600FB9D0@MN2PR11MB4207.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0177904E6B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(396003)(346002)(366004)(376002)(136003)(189003)(199004)(66556008)(305945005)(66446008)(4326008)(6246003)(71190400001)(71200400001)(110136005)(8936002)(5660300002)(186003)(64756008)(316002)(81166006)(81156014)(8676002)(7696005)(6506007)(2906002)(74316002)(102836004)(52536014)(33656002)(66476007)(66946007)(7736002)(76116006)(76176011)(26005)(478600001)(14454004)(25786009)(229853002)(9686003)(3846002)(4744005)(66066001)(6116002)(966005)(476003)(11346002)(6436002)(256004)(99286004)(55016002)(6306002)(446003)(486006)(86362001)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR11MB4207;H:MN2PR11MB3645.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: j3IQa7Kn+Rvpc9yOQJIEILAgr4tWIEpfiLf02+n2x/G0u6XlY5cr7I06lNIwNt/LtOjIHO1Z1MVNi+AZmLIlJbgPUVIwBT90XKLyH51/2MaUZtX6ZknMExLIpoSUhiR83Y8KLuJkPJVNQETq/EOAvYfYU8omwhpMstg3dGrPFlA8TuBDyR2zDwaW8agNdegBwPmkrxizohLdcNGuE4j5inAYIqQcn4EHI5zFhIcjSZRNZtZYishSrUM0adRS3l88BG2hv7TJYBbAfdlAc8FH0BG2NRyf40BMSc/rIEkLIk+AN0D9fix1kxD+EcN7EqY0j/qTruHRavTervKiWF8jkz8yQIF+K307ubX1mupQ9BCnBEQ0DNWYbdWss9MLERZ33JozhUEqATsYrO50/RNEvWnTm9FKIhlivcc/UeJNHLTwTAyMEQx84CEe9lRm1Xc2JA78bWH1xkdSK5tfsoX/6Q==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20190926085005.24805-2-jhofstee@victronenergy.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d8166f2-7477-42d9-19ab-08d7468078fb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 15:03:09.4635
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: h2lvnsGbzwAq8FV791E7n7Bs/eS6xO2IhUUeQT8hIljt4pS3JE3NxvzFUsqYZUOy8afpSF3u3Et9qH/1dWUzZRyGVjKzwHmvnBwjVRSnt94=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4207
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY
-Content-Type: multipart/mixed; boundary="3ZbNhm0xQ9KhHL5eB4JjdEL0J6uGELmxM";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>,
- "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-Message-ID: <b30e9834-a324-ad97-2050-df9600a95347@pengutronix.de>
-Subject: Re: [PATCH 1/2] can: D_CAN: perform a sofware reset on open
-References: <20190926085005.24805-1-jhofstee@victronenergy.com>
- <20190926085005.24805-2-jhofstee@victronenergy.com>
-In-Reply-To: <20190926085005.24805-2-jhofstee@victronenergy.com>
-
---3ZbNhm0xQ9KhHL5eB4JjdEL0J6uGELmxM
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 9/26/19 10:50 AM, Jeroen Hofstee wrote:
-> When the C_CAN interface is closed it is put in power down mode, but
-> does not reset the error counters / state. So reset the D_CAN on open,
-> so the reported state and the actual state match.
->=20
-> According to [1], the C_CAN module doesn't have the software reset.
->=20
-> [1] http://www.bosch-semiconductors.com/media/ip_modules/pdf_2/c_can_fd=
-8/users_manual_c_can_fd8_r210_1.pdf
->=20
-> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-> ---
->  drivers/net/can/c_can/c_can.c | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
->=20
-> diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_ca=
-n.c
-> index 606b7d8ffe13..502a181d02e7 100644
-> --- a/drivers/net/can/c_can/c_can.c
-> +++ b/drivers/net/can/c_can/c_can.c
-> @@ -52,6 +52,7 @@
->  #define CONTROL_EX_PDR		BIT(8)
-> =20
->  /* control register */
-> +#define CONTROL_SWR		BIT(15)
->  #define CONTROL_TEST		BIT(7)
->  #define CONTROL_CCE		BIT(6)
->  #define CONTROL_DISABLE_AR	BIT(5)
-> @@ -569,6 +570,26 @@ static void c_can_configure_msg_objects(struct net=
-_device *dev)
->  				   IF_MCONT_RCV_EOB);
->  }
-> =20
-> +static int software_reset(struct net_device *dev)
-
-Please add the common prefix "c_can_" to the function
-
-> +{
-> +	struct c_can_priv *priv =3D netdev_priv(dev);
-> +	int retry =3D 0;
-> +
-> +	if (priv->type !=3D BOSCH_D_CAN)
-> +		return 0;
-> +
-> +	priv->write_reg(priv, C_CAN_CTRL_REG, CONTROL_SWR | CONTROL_INIT);
-> +	while (priv->read_reg(priv, C_CAN_CTRL_REG) & CONTROL_SWR) {
-> +		msleep(20);
-> +		if (retry++ > 100) {
-> +			netdev_err(dev, "CCTRL: software reset failed\n");
-> +			return -EIO;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * Configure C_CAN chip:
->   * - enable/disable auto-retransmission
-> @@ -578,6 +599,11 @@ static void c_can_configure_msg_objects(struct net=
-_device *dev)
->  static int c_can_chip_config(struct net_device *dev)
->  {
->  	struct c_can_priv *priv =3D netdev_priv(dev);
-> +	int err;
-> +
-> +	err =3D software_reset(dev);
-> +	if (err)
-> +		return err;
-> =20
->  	/* enable automatic retransmission */
->  	priv->write_reg(priv, C_CAN_CTRL_REG, CONTROL_ENABLE_AR);
->=20
-
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---3ZbNhm0xQ9KhHL5eB4JjdEL0J6uGELmxM--
-
---CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TY2MACgkQWsYho5Hk
-nSCnNQf/fxP6RyApeEeqNzd2tEzG8NZnyfj8qcFnLbEt8R/6DbhV/7a2gZ0RQiTN
-ZypaH/G/JOX8Vf7dKOUrB0OfSYg9ep3zWm5K4iNsvugOB8WmoXRMgnt6qXBRBE1j
-hZehejAMuERtPqOX7qFVh8YsksVlkJKQtZi5gSVYiDJ3f/7ZivLmfDA4UKKvD1a9
-eeNNPLu6DS658FQcMmkel90cVh+PMMlvRkhAWUtJzfVYRfZvxIBKapZFIWiEh15s
-25bwQ697aTj5taKsSpaHFIDRAsheLInWPi/ziAjimeB0RsrQEncfw9LfqddiLNB+
-QnEHZoNXFMhnnekcHO2FzFkG66QW/g==
-=by5s
------END PGP SIGNATURE-----
-
---CxEYVO550M7s3e8MDS4Ep5pJEHYG80ajY--
+PiA+IEZpeGluZyBhIGNvdXBsZSBNQ1AyNXh4RkQgcmVnL2JpdCBkZWZpbml0aW9ucywgc3dpdGNo
+aW5nIHRvIHRoZSBuYW1lcw0KPiB1c2VkIGluIHRoZSBEUy4NCj4gPiBQYXRjaCBpcyBhZ2FpbnN0
+IHRoZSBsYXRlc3QgZnJvbSBNYXJ0aW4gU3BlcmwncyBnaXRodWINCj4gDQo+IFdoaWNoIG9uZSBp
+cyB0aGUgbGF0ZXN0IGJyYW5jaD8NCg0KRnJvbSB3aGF0IEkndmUgc2VlbiBodHRwczovL2dpdGh1
+Yi5jb20vbXNwZXJsL2xpbnV4LXJwaS90cmVlL3Vwc3RyZWFtLTUuMi1tYXN0ZXItODBmMjMtbWNw
+MjV4eGZkLXY4LjIvZHJpdmVycy9uZXQvY2FuL3NwaSBzZWVtcyB0byBiZSB0aGUgbmV3ZXN0IGJy
+YW5jaC4gRm9yIHRoZSBNQ1AyNXh4RkQgc3R1ZmYgdGhhdCBzZWVtcyB0byBiZSBvbiBwYXIgd2l0
+aCBodHRwczovL2dpdGh1Yi5jb20vbXNwZXJsL2xpbnV4LXJwaS90cmVlL3JwaS00LjE5Lnktc3Bp
+LWJjbTI4MzVhdXgrbWNwMjV4eGZkdjguMi9kcml2ZXJzL25ldC9jYW4vc3BpIA0KDQoNCkJlc3Qg
+UmVnYXJkcywNClRob21hcw0K
