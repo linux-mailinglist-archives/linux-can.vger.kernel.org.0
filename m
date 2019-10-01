@@ -2,123 +2,182 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99076C427D
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 23:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79AF4C47AD
+	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726829AbfJAVRq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 17:17:46 -0400
-Received: from mail-eopbgr60124.outbound.protection.outlook.com ([40.107.6.124]:42755
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726681AbfJAVRp (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 1 Oct 2019 17:17:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NiBpETAOBqpSTBWjLVYdj2+OHEjZk69x5g15iPq5ADKixIr1Xt5PeuKdDTdA4BvVGXSAe8ABGUBLBpEYMBqonCGt98lOQ6PzgIsCu9XjsrhU6TF9RYxEVy3ykIw8XSTVoVh3zDnGxqbR2iTLgf3iMLWJYQrmR4Dxu8DIFsjmQnbRHqYUXyUo1d4t2K2YBeACdqNOAQ2GTtDRzZ/X2T005KeqHKE3ab1VdgB7AwYmTkgDD3NvYkKVvr02tzGh5lhr9NskyMsA1AmHQq54VG2zX55jQuW/q1d8SVPiim0sKkg4ZQWJhhPcAQjP19kXj91XcqkOglNhWLJyXOR29GiSdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iZQMoEdwZW9fbH8RS0CdA4ktON/JljHylgfHUJi0U/A=;
- b=fRROq4FheC0eBt7eEhyoJ3X5S9cw8zVy+ajpWBrbC+SopjDFbAcfZDyu5KeJpnhf0fZ7RrABvGggoLHG3qrXi/LADE7PFj3PTSLxWnpwv0djCEWa2eTnxGjj/5Dh7yjr1mIU2Z70lpifPIdzztu89dSNaNy8du76qaik5tT+bKhDfASnENjfpwQblI8pWN1OA5FNq5RSTI/0Wq4O2/xQIvIXXx6KQF2PPNGskgozxoHbiNrZf7r4ALiecEvlISmWbzRdl3cZ2iryIV04zRIpH2fXqRnV57DlWUYUcO39iM3Og9f4FlVw6517g3JWCIdWRKVw7hK4c80/fnLvHzZung==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=victronenergy.com; dmarc=pass action=none
- header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iZQMoEdwZW9fbH8RS0CdA4ktON/JljHylgfHUJi0U/A=;
- b=OBGRDUKOLl7rAMXm5o9IU3KUBAiobamK25F/k34HufZjCSn6QvXOPUW+pZXLJX3APZuxblFRWf9NsINdHkzM4js3io9/VXtMiw1N03prgYT8FswFNTQTG6GGKwZ8xJmXUiYaMIR9PxDedhyMT54JlUSYxwa3w4oHLdBm7jsVHm4=
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com (10.173.82.19) by
- VI1PR0701MB2173.eurprd07.prod.outlook.com (10.169.135.6) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.9; Tue, 1 Oct 2019 21:17:01 +0000
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::dc92:2e0d:561a:fbb1]) by VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::dc92:2e0d:561a:fbb1%8]) with mapi id 15.20.2305.017; Tue, 1 Oct 2019
- 21:17:01 +0000
-From:   Jeroen Hofstee <jhofstee@victronenergy.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] can: D_CAN: perform a sofware reset on open
-Thread-Topic: [PATCH 1/2] can: D_CAN: perform a sofware reset on open
-Thread-Index: AQHVdEd7etT22gKeN0iCyvC9ZUyGFadF4WyAgABxJIA=
-Date:   Tue, 1 Oct 2019 21:17:01 +0000
-Message-ID: <04f38523-07fb-4ea9-3031-932176f68660@victronenergy.com>
-References: <20190926085005.24805-1-jhofstee@victronenergy.com>
- <20190926085005.24805-2-jhofstee@victronenergy.com>
- <b30e9834-a324-ad97-2050-df9600a95347@pengutronix.de>
-In-Reply-To: <b30e9834-a324-ad97-2050-df9600a95347@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-x-originating-ip: [2001:1c01:3bc5:4e00:5c2:1c3a:9351:514c]
-x-clientproxiedby: AM3PR07CA0066.eurprd07.prod.outlook.com
- (2603:10a6:207:4::24) To VI1PR0701MB2623.eurprd07.prod.outlook.com
- (2603:10a6:801:b::19)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jhofstee@victronenergy.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1b3cc6b0-6ec7-420c-2b04-08d746b4b32f
-x-ms-traffictypediagnostic: VI1PR0701MB2173:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <VI1PR0701MB2173085A7D0C7702493FCA7BC09D0@VI1PR0701MB2173.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(4636009)(346002)(396003)(39850400004)(376002)(366004)(136003)(199004)(189003)(186003)(446003)(305945005)(486006)(2501003)(36756003)(6486002)(6436002)(2616005)(7736002)(102836004)(11346002)(476003)(6506007)(53546011)(386003)(86362001)(52116002)(6306002)(81156014)(6512007)(76176011)(8676002)(46003)(229853002)(81166006)(31686004)(6246003)(110136005)(256004)(31696002)(316002)(65806001)(99286004)(71200400001)(71190400001)(14454004)(54906003)(66556008)(25786009)(8936002)(4326008)(65956001)(2906002)(5660300002)(478600001)(58126008)(966005)(66446008)(66476007)(64756008)(6116002)(66946007)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2173;H:VI1PR0701MB2623.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: victronenergy.com does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: j4CShGhBO0bHbTXSi5VnyOog+8t/L2ecCnNLiURcXN21wDVXhsyzBlvy59IYrojjOHpj/54pfzvQoK9XtPtpbyHlPzuVPRnc6gWa81Dac+RueX61OAixEOGVLiEm61xX5kPLcvf9MIT9qWLxW5jaq5WKCdiboETZuFYysJpfMyckwBHMnMoCIDzs7t0GZ6cfw2HarFI2upbVhMiDcDKSkjtlHF10VQuTXOJy/RmONp/gsBHPVOarzThfY3Pccuj7BXlQzzO/56TX2EMYnCuT/V5Xe7wobat014iGBHx2Q/VxUdzhLQKoRSSvmWMjKzg+zZo4IbR3kyZZGKIt41acYh27NEVAevHPRX/Tv/6ft+isA8XR52mjJk043thskItbgRT+8gjPGz29PDIlGCV0QI/3PYnSZaslRBuJdeHdszrYacLSxKqpgxaftLLZn7F7qIyULTbYc5Pxn24UR1lx6g==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A7F7F6AD8CEF9145A094951C873E3341@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727481AbfJBGSR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Oct 2019 02:18:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54851 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726965AbfJBGSR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:17 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iFXxi-0007OE-6H; Wed, 02 Oct 2019 08:18:10 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07] (unknown [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DF6D445E746;
+        Wed,  2 Oct 2019 06:18:05 +0000 (UTC)
+Subject: Re: [PATCH v1] can: mcp251x: Add missed array marker for properties
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-can@vger.kernel.org
+Cc:     kbuild test robot <lkp@intel.com>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>
+References: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <900a9f20-450d-9b0b-56e5-e7d9916d8a88@pengutronix.de>
+Date:   Tue, 1 Oct 2019 21:43:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: victronenergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b3cc6b0-6ec7-420c-2b04-08d746b4b32f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 21:17:01.2773
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 60b95f08-3558-4e94-b0f8-d690c498e225
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vN2YWlS255ZHWCUYNNTrvi0b4ZJDhlMZ+bueY1PUKOiEzPFQj+US24UJnBsGtYZyiAhzWHTfvm74hwq2ySTcx8ZjB4CkCNwoIT/yng62hy0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2173
+In-Reply-To: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGVsbG8gTWFyYywNCg0KT24gMTAvMS8xOSA0OjMyIFBNLCBNYXJjIEtsZWluZS1CdWRkZSB3cm90
-ZToNCj4gT24gOS8yNi8xOSAxMDo1MCBBTSwgSmVyb2VuIEhvZnN0ZWUgd3JvdGU6DQo+PiBXaGVu
-IHRoZSBDX0NBTiBpbnRlcmZhY2UgaXMgY2xvc2VkIGl0IGlzIHB1dCBpbiBwb3dlciBkb3duIG1v
-ZGUsIGJ1dA0KPj4gZG9lcyBub3QgcmVzZXQgdGhlIGVycm9yIGNvdW50ZXJzIC8gc3RhdGUuIFNv
-IHJlc2V0IHRoZSBEX0NBTiBvbiBvcGVuLA0KPj4gc28gdGhlIHJlcG9ydGVkIHN0YXRlIGFuZCB0
-aGUgYWN0dWFsIHN0YXRlIG1hdGNoLg0KPj4NCj4+IEFjY29yZGluZyB0byBbMV0sIHRoZSBDX0NB
-TiBtb2R1bGUgZG9lc24ndCBoYXZlIHRoZSBzb2Z0d2FyZSByZXNldC4NCj4+DQo+PiBbMV0gaHR0
-cDovL3d3dy5ib3NjaC1zZW1pY29uZHVjdG9ycy5jb20vbWVkaWEvaXBfbW9kdWxlcy9wZGZfMi9j
-X2Nhbl9mZDgvdXNlcnNfbWFudWFsX2NfY2FuX2ZkOF9yMjEwXzEucGRmDQo+Pg0KPj4gU2lnbmVk
-LW9mZi1ieTogSmVyb2VuIEhvZnN0ZWUgPGpob2ZzdGVlQHZpY3Ryb25lbmVyZ3kuY29tPg0KPj4g
-LS0tDQo+PiAgIGRyaXZlcnMvbmV0L2Nhbi9jX2Nhbi9jX2Nhbi5jIHwgMjYgKysrKysrKysrKysr
-KysrKysrKysrKysrKysNCj4+ICAgMSBmaWxlIGNoYW5nZWQsIDI2IGluc2VydGlvbnMoKykNCj4+
-DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvY2FuL2NfY2FuL2NfY2FuLmMgYi9kcml2ZXJz
-L25ldC9jYW4vY19jYW4vY19jYW4uYw0KPj4gaW5kZXggNjA2YjdkOGZmZTEzLi41MDJhMTgxZDAy
-ZTcgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL25ldC9jYW4vY19jYW4vY19jYW4uYw0KPj4gKysr
-IGIvZHJpdmVycy9uZXQvY2FuL2NfY2FuL2NfY2FuLmMNCj4+IEBAIC01Miw2ICs1Miw3IEBADQo+
-PiAgICNkZWZpbmUgQ09OVFJPTF9FWF9QRFIJCUJJVCg4KQ0KPj4gICANCj4+ICAgLyogY29udHJv
-bCByZWdpc3RlciAqLw0KPj4gKyNkZWZpbmUgQ09OVFJPTF9TV1IJCUJJVCgxNSkNCj4+ICAgI2Rl
-ZmluZSBDT05UUk9MX1RFU1QJCUJJVCg3KQ0KPj4gICAjZGVmaW5lIENPTlRST0xfQ0NFCQlCSVQo
-NikNCj4+ICAgI2RlZmluZSBDT05UUk9MX0RJU0FCTEVfQVIJQklUKDUpDQo+PiBAQCAtNTY5LDYg
-KzU3MCwyNiBAQCBzdGF0aWMgdm9pZCBjX2Nhbl9jb25maWd1cmVfbXNnX29iamVjdHMoc3RydWN0
-IG5ldF9kZXZpY2UgKmRldikNCj4+ICAgCQkJCSAgIElGX01DT05UX1JDVl9FT0IpOw0KPj4gICB9
-DQo+PiAgIA0KPj4gK3N0YXRpYyBpbnQgc29mdHdhcmVfcmVzZXQoc3RydWN0IG5ldF9kZXZpY2Ug
-KmRldikNCj4gUGxlYXNlIGFkZCB0aGUgY29tbW9uIHByZWZpeCAiY19jYW5fIiB0byB0aGUgZnVu
-Y3Rpb24NCg0KRmluZSB3aXRoIG1lLCBJIGRpZCBzZW50IGEgdjIuDQoNClJlZ2FyZHMsDQpKZXJv
-ZW4NCg0K
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ
+Content-Type: multipart/mixed; boundary="8wWM5PFAxae12Gl34CTkkH6cXjFNbBcOx";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-can@vger.kernel.org
+Cc: kbuild test robot <lkp@intel.com>, Daniel Mack <daniel@zonque.org>,
+ Haojian Zhuang <haojian.zhuang@gmail.com>,
+ Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>
+Message-ID: <900a9f20-450d-9b0b-56e5-e7d9916d8a88@pengutronix.de>
+Subject: Re: [PATCH v1] can: mcp251x: Add missed array marker for properties
+References: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20190907163338.6032-1-andriy.shevchenko@linux.intel.com>
+
+--8wWM5PFAxae12Gl34CTkkH6cXjFNbBcOx
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+
+On 9/7/19 6:33 PM, Andy Shevchenko wrote:
+> Properties structure is an array where the last, NULL one,
+> used as a terminator.
+>=20
+> Fixes: c5176177e860 ("can: mcp251x: Get rid of legacy platform data")
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Cc: Daniel Mack <daniel@zonque.org>
+> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>=20
+> Marc, depending on your flow, since the culprit is in testing branch, c=
+onsider
+> either follow up fixup, or folding it into the previous patch.
+
+Folded into your previous commit.
+
+tnx,
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--8wWM5PFAxae12Gl34CTkkH6cXjFNbBcOx--
+
+--Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TrGoACgkQWsYho5Hk
+nSBjEQf9GutyzdCTxqAYm89e9pREdW17+LWy4JNBZWnJ0nw5Uh6EgoaYcRlyTp7f
+s7UQLjFU4wKn3xkt+0DJK9nAhvc+6Rd7KC6+w/k4nhevjLQL22cH3xQmXumjepVN
+clkAvFUdixzLkOrhzo6JQFQqRFaUIVlLyCHvQfAgcuMvCmTlch8KvPtu0mFFpIuQ
+v+XfCzFMgb7ZEOCQgwHzluRe8nWZ5bL9xLDdyMf2vV/0YbUKRBLczquSW/gYMMzL
+JKyj9gwKWXFyDzmtmRuhNrdUsxjrEdc5K8axDwoarvIK4pcLJjKLrUcnQPgVoo3f
+mhKLSnav69p6dwE1fH3aVPs2MWyHVw==
+=vVxF
+-----END PGP SIGNATURE-----
+
+--Q94js2GOOizbSBN9SA52kWmW3YX8leOoQ--
