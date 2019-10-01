@@ -2,34 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7179AC353F
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 15:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C094C3541
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 15:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726326AbfJANMb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 09:12:31 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59921 "EHLO
+        id S2387651AbfJANNH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Oct 2019 09:13:07 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40651 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387648AbfJANMb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 09:12:31 -0400
+        with ESMTP id S1726860AbfJANNG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 09:13:06 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFHx7-0001GB-Bt
-        for linux-can@vger.kernel.org; Tue, 01 Oct 2019 15:12:29 +0200
+        id 1iFHxg-0001KA-Ke; Tue, 01 Oct 2019 15:13:04 +0200
 Received: from [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07] (unknown [IPv6:2001:67c:670:202:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 760B345E008
-        for <linux-can@vger.kernel.org>; Tue,  1 Oct 2019 13:12:28 +0000 (UTC)
-To:     linux-can@vger.kernel.org
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5780945E00F;
+        Tue,  1 Oct 2019 13:13:02 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
+To:     linux-can@vger.kernel.org,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 References: <1569871843-28655-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
  <1569871843-28655-3-git-send-email-dev.kurt@vandijck-laurijssen.be>
  <6aa6d0f0-e424-0874-19c8-73a8344a1458@pengutronix.de>
  <20191001102217.GA25141@x1.vandijck-laurijssen.be>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -91,16 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
-Message-ID: <54551082-b309-41f4-57eb-4d42118326d3@pengutronix.de>
-Date:   Tue, 1 Oct 2019 15:12:17 +0200
+Message-ID: <64ecd986-441d-3018-337c-69bdc7fe5470@pengutronix.de>
+Date:   Tue, 1 Oct 2019 15:12:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
 In-Reply-To: <20191001102217.GA25141@x1.vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Zj1hwqB9f2keTnvkiXlgXI41wcPbf7Kwy"
+ boundary="O2XU9tMB2eH8XYcWTLWyDw346opK4Prrx"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,12 +111,13 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Zj1hwqB9f2keTnvkiXlgXI41wcPbf7Kwy
-Content-Type: multipart/mixed; boundary="DtLGZ0SCE4UQtIeGT1YmZQAvSPZTsw8BD";
+--O2XU9tMB2eH8XYcWTLWyDw346opK4Prrx
+Content-Type: multipart/mixed; boundary="75Pr92TxgeYwRNgkhAW1qjrt6hKGhUEec";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: linux-can@vger.kernel.org
-Message-ID: <54551082-b309-41f4-57eb-4d42118326d3@pengutronix.de>
+To: linux-can@vger.kernel.org,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Message-ID: <64ecd986-441d-3018-337c-69bdc7fe5470@pengutronix.de>
 Subject: Re: [PATCH 2/3] net can c_can: replace napi-hanlder with irqthread
 References: <1569871843-28655-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
  <1569871843-28655-3-git-send-email-dev.kurt@vandijck-laurijssen.be>
@@ -124,9 +125,9 @@ References: <1569871843-28655-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
  <20191001102217.GA25141@x1.vandijck-laurijssen.be>
 In-Reply-To: <20191001102217.GA25141@x1.vandijck-laurijssen.be>
 
---DtLGZ0SCE4UQtIeGT1YmZQAvSPZTsw8BD
+--75Pr92TxgeYwRNgkhAW1qjrt6hKGhUEec
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
 On 10/1/19 12:22 PM, Kurt Van Dijck wrote:
@@ -199,23 +200,25 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---DtLGZ0SCE4UQtIeGT1YmZQAvSPZTsw8BD--
 
---Zj1hwqB9f2keTnvkiXlgXI41wcPbf7Kwy
+
+--75Pr92TxgeYwRNgkhAW1qjrt6hKGhUEec--
+
+--O2XU9tMB2eH8XYcWTLWyDw346opK4Prrx
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TULEACgkQWsYho5Hk
-nSBAdgf/fJh2giflkRk8TJYK3BMRhUxBTm0IDSNErUUuVcIHT7KTs/2kJHPsv0mz
-y7xMU0EfUx+hTf8UuNSBeJlMbIrcCtb+PTqG43UlwZ1fCQOdmPmU316/rXKoirDR
-HDP79LfoDUZLgjo1BdRH2NRkwj6H/aX1QEimuxdcaUP6JjmBNK3YTy7/p6xpdnL2
-uMs2cYh9VjR+8Yy45NXFQVRNb7IqMvlHHb/aMDA1zT/0+9N+qHmsJzX0tQ44nV8/
-UNLH9ksBICpb6VUq/sAGrXChUxdo+uOZuWA7idqmXXNST7r4j9B8k0Cbv8sCciWl
-AAbmRT6bPECR4fV03n421p7RIyBx2w==
-=UyYc
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TUNoACgkQWsYho5Hk
+nSD+igf/RBxhKhZ7me7nK2UHKMwTOJWnW/fnwz5TvqtDE9/m5M/yUTVle2TZwZFP
+oNpkNNYDUfNXt5AQ79CaDBOQhmjMLsYoa+guaXBSmyT1x2cr1wySN53Fs4K9g+KK
+SaYqhf8YCrWebdMM+na0G58aCvIsbUTpLM5fxmjHIS1wEEMKSYJuuEmptUEld8Wd
+OK7/Imxy4pkclSOM+fD5g1yz5PKN73DNPwjE9yDsL+CWJjuUBvVWw/pHjIrCtj6V
+gKkthtbHGbijvajvXPe9puJVXyfjQZLslFh0WXT1K7XgTT/GXPSMjPJNKq/t3qAG
+reIh+TIaioZWK2ZOpiv/B1kKQq44Ww==
+=Tshs
 -----END PGP SIGNATURE-----
 
---Zj1hwqB9f2keTnvkiXlgXI41wcPbf7Kwy--
+--O2XU9tMB2eH8XYcWTLWyDw346opK4Prrx--
