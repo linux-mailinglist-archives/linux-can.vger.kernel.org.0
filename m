@@ -2,31 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E392CC47AE
-	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B454C47B6
+	for <lists+linux-can@lfdr.de>; Wed,  2 Oct 2019 08:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbfJBGSX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Oct 2019 02:18:23 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49195 "EHLO
+        id S1727564AbfJBGSp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Oct 2019 02:18:45 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48863 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726965AbfJBGSX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:23 -0400
+        with ESMTP id S1727563AbfJBGSp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Oct 2019 02:18:45 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iFXxs-0007P7-Lf; Wed, 02 Oct 2019 08:18:20 +0200
+        id 1iFXy2-0007R1-4r; Wed, 02 Oct 2019 08:18:30 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07] (unknown [IPv6:2a03:f580:87bc:d400:8d54:a7be:bff4:2a07])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A100345E749;
-        Wed,  2 Oct 2019 06:18:19 +0000 (UTC)
-To:     yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc:     socketcan@hartkopp.net, wg@grandegger.com
-References: <20190919135304.14757-1-yegorslists@googlemail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A440D45E74A;
+        Wed,  2 Oct 2019 06:18:22 +0000 (UTC)
+Subject: Re: [PATCH] can: gs_usb: prevent memory leak
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     emamd001@umn.edu, smccaman@umn.edu, kjlu@umn.edu,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190920024445.28214-1-navid.emamdoost@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -89,16 +98,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH] can: don't use deprecated license identifiers
-Message-ID: <32fc0212-9d3a-02f5-d80f-bd4a453404fa@pengutronix.de>
-Date:   Tue, 1 Oct 2019 22:14:43 +0200
+Message-ID: <0b3ac5bb-af87-92ab-1b87-c419bbb85395@pengutronix.de>
+Date:   Tue, 1 Oct 2019 22:23:45 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190919135304.14757-1-yegorslists@googlemail.com>
+In-Reply-To: <20190920024445.28214-1-navid.emamdoost@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="DhA1eDFMHnEniFXFCtX53xl28fsgILmOV"
+ boundary="wdn5ZD10inilur2w3Zvl7mKcpLj8aU6ma"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,43 +117,39 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---DhA1eDFMHnEniFXFCtX53xl28fsgILmOV
-Content-Type: multipart/mixed; boundary="jzx7J1iZ2KxJPgXTb8RYZ7A1GQU1mBrqp";
+--wdn5ZD10inilur2w3Zvl7mKcpLj8aU6ma
+Content-Type: multipart/mixed; boundary="NwQBjjnI9b4xRZrJx2I05muuYH8ly50eB";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc: socketcan@hartkopp.net, wg@grandegger.com
-Message-ID: <32fc0212-9d3a-02f5-d80f-bd4a453404fa@pengutronix.de>
-Subject: Re: [PATCH] can: don't use deprecated license identifiers
-References: <20190919135304.14757-1-yegorslists@googlemail.com>
-In-Reply-To: <20190919135304.14757-1-yegorslists@googlemail.com>
+To: Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc: emamd001@umn.edu, smccaman@umn.edu, kjlu@umn.edu,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Alexios Zavras <alexios.zavras@intel.com>,
+ Allison Randal <allison@lohutok.net>, Thomas Gleixner <tglx@linutronix.de>,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <0b3ac5bb-af87-92ab-1b87-c419bbb85395@pengutronix.de>
+Subject: Re: [PATCH] can: gs_usb: prevent memory leak
+References: <20190920024445.28214-1-navid.emamdoost@gmail.com>
+In-Reply-To: <20190920024445.28214-1-navid.emamdoost@gmail.com>
 
---jzx7J1iZ2KxJPgXTb8RYZ7A1GQU1mBrqp
+--NwQBjjnI9b4xRZrJx2I05muuYH8ly50eB
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/19/19 3:53 PM, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+On 9/20/19 4:44 AM, Navid Emamdoost wrote:
+> In gs_can_open if usb_submit_urb fails the allocated urb should be
+> released.
 >=20
-> GPL-2.0 license identifier changed to GPL-2.0-only in SPDX v3.0.
->=20
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+> ---
+>  drivers/net/can/usb/gs_usb.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-I've changed "include/uapi/linux/can.h" and added it to the patch:
-
-> --- a/include/uapi/linux/can.h
-> +++ b/include/uapi/linux/can.h
-> @@ -1,4 +1,4 @@
-> -/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-=
-3-Clause) */
-> +/* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR=
- BSD-3-Clause) */
->  /*
->   * linux/can.h
->   *
-
-Oliver, I've added your Acked-by to the patch.
+Added Fixes line and added stable@v.k.o on Cc.
 
 Marc
 
@@ -156,23 +160,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---jzx7J1iZ2KxJPgXTb8RYZ7A1GQU1mBrqp--
+--NwQBjjnI9b4xRZrJx2I05muuYH8ly50eB--
 
---DhA1eDFMHnEniFXFCtX53xl28fsgILmOV
+--wdn5ZD10inilur2w3Zvl7mKcpLj8aU6ma
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2Ts7MACgkQWsYho5Hk
-nSD/LQf/XZy3CdD7M8A7btd6QCyG4XMzQrDRA+CgYOxhy4LGyCvXB9Lqb6YvZ24r
-3OwAlGk28kGIvUlzZKISrBp1vdMtg9ty1eT9ygF7LkWqBvPcQ0WcM2Q+IfhosGiF
-MrQIOiG0aFLc2t6OENfSQAoA1nGaxywl6u1uHs67IIu7PlR3m4vhRoNX1xUr9QaJ
-2Epitc1+whpRHD/9XyUr6FhXzVz0ulqhTRzp72f3O8+4UTO9wbsIf4fPCZlNYai9
-i2FPApLmftfjp0AjktPkv8VTxjs2foncvN3sgfOofWXLJgNyGkoEm/mAVvfyDjFv
-OTMB9F5j+vomt0d93PHPN7V6Hv7NUA==
-=bEvg
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2TtdEACgkQWsYho5Hk
+nSAwVAf9GmrmybB6sGdFeeuEu1gPZWBmusuRT8oot0ESFihdrc/cPY9RvB6RAmAO
+qsqeZKr5kqa/sX82LJGFKdho7Hb5QvgKl/h36jRNYsyhLbzVT9dhyG0BIY1AP7Jf
+fTRrhj8Q2agZwkbpVVEEQRmufLAWPvXcKK5PDqgCAMAtO7xOijQ8VKKLOp1mG72Y
+3zjubgHh0m9CZ4JPe/z13VT72pfYi/ZmpnzgDF2/f9Fokvh7k8QpwkEkhqgB/iXJ
+ciyBwYPLjqW1ntQOr1im1Xl6DkSNL4FgU1amxhQNOu0bw7XDxG+TgEOPdirNN50Z
+P1bfTjJp+8AriIiHhWpFgBznAVR2Dw==
+=PU+i
 -----END PGP SIGNATURE-----
 
---DhA1eDFMHnEniFXFCtX53xl28fsgILmOV--
+--wdn5ZD10inilur2w3Zvl7mKcpLj8aU6ma--
