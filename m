@@ -2,87 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D43C316A
-	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 12:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA02C31B1
+	for <lists+linux-can@lfdr.de>; Tue,  1 Oct 2019 12:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730753AbfJAK3m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Oct 2019 06:29:42 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40220 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730006AbfJAK3l (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 06:29:41 -0400
-Received: by mail-lf1-f67.google.com with SMTP id d17so9452530lfa.7;
-        Tue, 01 Oct 2019 03:29:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XEBOz+FE2mSzj8bTRRBXElsPNG8TwUlMu3OH4VYCIKE=;
-        b=naeKcQB6yQnQ+b9vyQKNOIoHnXnYPnL5nFnfd+2afwOHI8jPJhslaKcYNYm3eUOksW
-         qYqcm3wnmSJG73TcFrcfKzDalgyfVAYgS7XVDNVQCAhXJfSt6ku2C0xqocvyt83s3g4/
-         S5MGIbLHFhgyuHCAN3VDiY+CWmWmIbFKNCVHbNOhNODfZ6J0OkGTf/sW4nipFZ+whHfj
-         TRkaTevcseTGMtmHbrmREwc5DJRme7kmfIgnOBqSIhgPA6/4eCyKFBHppwhE8qWtTBbg
-         7TgqvqDE3KOoZthtIQUMyVPvqwgJYSHKZUwo4J6qM6YnMD2gWm+feWbHNaCPN9b/xJ4I
-         3FJw==
-X-Gm-Message-State: APjAAAVf+Xdari43MNKHE1WBsILbeA+ZydlnicUs7SAI4rBphLoYfI8F
-        AC6+NhIRVUy/R0gNkoEJ+lw=
-X-Google-Smtp-Source: APXvYqyTHGCN3wYKNli04woh59rO57J3qnF9hWbaIix7kDk0xpaeXe/u/OtF/L7xZBxd3GVR+r4haw==
-X-Received: by 2002:a19:2313:: with SMTP id j19mr12881735lfj.138.1569925779217;
-        Tue, 01 Oct 2019 03:29:39 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id t16sm3920399ljj.29.2019.10.01.03.29.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Oct 2019 03:29:37 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iFFPe-00036A-2a; Tue, 01 Oct 2019 12:29:46 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>
-Subject: [PATCH 2/2] can: usb_8dev: fix use-after-free on disconnect
-Date:   Tue,  1 Oct 2019 12:29:14 +0200
-Message-Id: <20191001102914.4567-3-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191001102914.4567-1-johan@kernel.org>
-References: <20191001102914.4567-1-johan@kernel.org>
+        id S1730619AbfJAKof convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 1 Oct 2019 06:44:35 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60137 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726885AbfJAKof (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Oct 2019 06:44:35 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iFFdu-0000tI-3F; Tue, 01 Oct 2019 12:44:30 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iFFds-0008HI-2B; Tue, 01 Oct 2019 12:44:28 +0200
+Date:   Tue, 1 Oct 2019 12:44:28 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] can: fix resource leak of skb on error return paths
+Message-ID: <20191001104428.welkedinv7322tq4@pengutronix.de>
+References: <20190918101156.24370-1-colin.king@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20190918101156.24370-1-colin.king@canonical.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:40:48 up 136 days, 16:58, 90 users,  load average: 0.09, 0.06,
+ 0.07
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The driver was accessing its driver data after having freed it.
+On Wed, Sep 18, 2019 at 11:11:56AM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> Currently the error return paths do not free skb and this results
+> in a memory leak. Fix this by freeing them before the return.
+> 
+> Addresses-Coverity: ("Resource leak")
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-Cc: stable <stable@vger.kernel.org>     # 3.9
-Cc: Bernd Krumboeck <b.krumboeck@gmail.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/can/usb/usb_8dev.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-index d596a2ad7f78..8fa224b28218 100644
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -996,9 +996,8 @@ static void usb_8dev_disconnect(struct usb_interface *intf)
- 		netdev_info(priv->netdev, "device disconnected\n");
- 
- 		unregister_netdev(priv->netdev);
--		free_candev(priv->netdev);
--
- 		unlink_all_urbs(priv);
-+		free_candev(priv->netdev);
- 	}
- 
- }
+> ---
+>  net/can/j1939/socket.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+> index 37c1040bcb9c..5c6eabcb5df1 100644
+> --- a/net/can/j1939/socket.c
+> +++ b/net/can/j1939/socket.c
+> @@ -909,8 +909,10 @@ void j1939_sk_errqueue(struct j1939_session *session,
+>  	memset(serr, 0, sizeof(*serr));
+>  	switch (type) {
+>  	case J1939_ERRQUEUE_ACK:
+> -		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_ACK))
+> +		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_ACK)) {
+> +			kfree_skb(skb);
+>  			return;
+> +		}
+>  
+>  		serr->ee.ee_errno = ENOMSG;
+>  		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
+> @@ -918,8 +920,10 @@ void j1939_sk_errqueue(struct j1939_session *session,
+>  		state = "ACK";
+>  		break;
+>  	case J1939_ERRQUEUE_SCHED:
+> -		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED))
+> +		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED)) {
+> +			kfree_skb(skb);
+>  			return;
+> +		}
+>  
+>  		serr->ee.ee_errno = ENOMSG;
+>  		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
+> -- 
+> 2.20.1
+> 
+> 
+
 -- 
-2.23.0
-
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
