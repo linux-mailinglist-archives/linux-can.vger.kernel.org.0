@@ -2,33 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11762CC441
-	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2019 22:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A633ACC45B
+	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2019 22:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387452AbfJDUdq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Oct 2019 16:33:46 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52965 "EHLO
+        id S1725826AbfJDUmW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Oct 2019 16:42:22 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46369 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731273AbfJDUdq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Oct 2019 16:33:46 -0400
+        with ESMTP id S1725730AbfJDUmW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Oct 2019 16:42:22 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iGUGm-0003bM-DD; Fri, 04 Oct 2019 22:33:44 +0200
+        id 1iGUOt-0004Td-9U; Fri, 04 Oct 2019 22:42:07 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5] (unknown [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B3C8E46043E;
-        Fri,  4 Oct 2019 20:33:42 +0000 (UTC)
-Subject: Re: [PATCH] can: xilinx_can: avoid non-requested bus error frames
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc:     Michal Simek <michal.simek@xilinx.com>, linux-can@vger.kernel.org,
-        Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-References: <20191004090256.13931-1-anssi.hannula@bitwise.fi>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1919A46044D;
+        Fri,  4 Oct 2019 20:42:01 +0000 (UTC)
+Subject: Re: [PATCH] can: m_can: add support for one shot mode
+To:     Pankaj Sharma <pankj.sharma@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wg@grandegger.com, davem@davemloft.net,
+        eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
+        pankaj.dubey@samsung.com, rcsekar@samsung.com,
+        Sriram Dash <sriram.dash@samsung.com>
+References: <CGME20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758@epcas5p3.samsung.com>
+ <1569411904-6319-1-git-send-email-pankj.sharma@samsung.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,15 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <8ce13d5e-32b7-cfb3-8f50-b9f79e1b32a8@pengutronix.de>
-Date:   Fri, 4 Oct 2019 22:33:37 +0200
+Message-ID: <79c10dd5-0c44-ce70-9cb9-bb61e12362d4@pengutronix.de>
+Date:   Fri, 4 Oct 2019 22:41:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191004090256.13931-1-anssi.hannula@bitwise.fi>
+In-Reply-To: <1569411904-6319-1-git-send-email-pankj.sharma@samsung.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="hLDYgJr0GDEkMlqdi7URFWXb60dIwXRzc"
+ boundary="KNQy1s7aRV0JZ6kdubpXOlfBA6UqZcVRZ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,236 +115,51 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---hLDYgJr0GDEkMlqdi7URFWXb60dIwXRzc
-Content-Type: multipart/mixed; boundary="Lu0Xc1OQUGjvpSL6ho9bqIf27vZAhb6yo";
+--KNQy1s7aRV0JZ6kdubpXOlfBA6UqZcVRZ
+Content-Type: multipart/mixed; boundary="C0sk6Yrc1aVlsFK5RaDCUm86gcx4AHX9F";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Anssi Hannula <anssi.hannula@bitwise.fi>
-Cc: Michal Simek <michal.simek@xilinx.com>, linux-can@vger.kernel.org,
- Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>
-Message-ID: <8ce13d5e-32b7-cfb3-8f50-b9f79e1b32a8@pengutronix.de>
-Subject: Re: [PATCH] can: xilinx_can: avoid non-requested bus error frames
-References: <20191004090256.13931-1-anssi.hannula@bitwise.fi>
-In-Reply-To: <20191004090256.13931-1-anssi.hannula@bitwise.fi>
+To: Pankaj Sharma <pankj.sharma@samsung.com>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: wg@grandegger.com, davem@davemloft.net, eugen.hristev@microchip.com,
+ ludovic.desroches@microchip.com, pankaj.dubey@samsung.com,
+ rcsekar@samsung.com, Sriram Dash <sriram.dash@samsung.com>
+Message-ID: <79c10dd5-0c44-ce70-9cb9-bb61e12362d4@pengutronix.de>
+Subject: Re: [PATCH] can: m_can: add support for one shot mode
+References: <CGME20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758@epcas5p3.samsung.com>
+ <1569411904-6319-1-git-send-email-pankj.sharma@samsung.com>
+In-Reply-To: <1569411904-6319-1-git-send-email-pankj.sharma@samsung.com>
 
---Lu0Xc1OQUGjvpSL6ho9bqIf27vZAhb6yo
+--C0sk6Yrc1aVlsFK5RaDCUm86gcx4AHX9F
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/4/19 11:02 AM, Anssi Hannula wrote:
-> Userspace can signal with CAN_CTRLMODE_BERR_REPORTING whether they need=
-
-> reporting of bus errors (CAN_ERR_BUSERROR) or not.
+On 9/25/19 1:45 PM, Pankaj Sharma wrote:
+> According to the CAN Specification (see ISO 11898-1:2015, 8.3.4
+> Recovery Management), the M_CAN provides means for automatic
+> retransmission of frames that have lost arbitration or that
+> have been disturbed by errors during transmission. By default
+> automatic retransmission is enabled.
 >=20
-> However, xilinx_can driver currently always sends CAN_ERR_BUSERROR
-> frames to userspace on bus errors.
+> The Bosch MCAN controller has support for disabling automatic
+> retransmission.
 >=20
-> To improve performance on error conditions when bus error reporting is
-> not needed, avoid sending CAN_ERR_BUSERROR frames unless requested via
-> CAN_CTRLMODE_BERR_REPORTING.
+> To support time-triggered communication as described in ISO
+> 11898-1:2015, chapter 9.2, the automatic retransmission may be
+> disabled via CCCR.DAR.
 >=20
-> The error interrupt is still kept enabled as there is no dedicated stat=
-e
-> transition interrupt, but just disabling error frame submission still
-> yields a significant performance improvement. In a simple test with
-> continuous bus errors and no userspace programs reading/writing CAN I
-> saw system CPU load reduced by 1/3.
+> CAN_CTRLMODE_ONE_SHOT is used for disabling automatic retransmission.
 >=20
-> Tested on a ZynqMP board with CAN-FD v1.0.
->=20
-> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-> ---
->  drivers/net/can/xilinx_can.c | 84 +++++++++++++++++++-----------------=
+> Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
+> Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
 
->  1 file changed, 45 insertions(+), 39 deletions(-)
->=20
-> diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.=
-c
-> index 911b34316c9d..9b9ec07f7e5b 100644
-> --- a/drivers/net/can/xilinx_can.c
-> +++ b/drivers/net/can/xilinx_can.c
-> @@ -471,6 +471,10 @@ static int xcan_chip_start(struct net_device *ndev=
-)
->  		return err;
-> =20
->  	/* Enable interrupts */
-> +	/* We enable the ERROR interrupt even with CAN_CTRLMODE_BERR_REPORTIN=
-G
-> +	 * disabled as there is no dedicated interrupt for a state change to
-> +	 * ERROR_WARNING/ERROR_PASSIVE.
-> +	 */
->  	ier =3D XCAN_IXR_TXOK_MASK | XCAN_IXR_BSOFF_MASK |
->  		XCAN_IXR_WKUP_MASK | XCAN_IXR_SLP_MASK |
->  		XCAN_IXR_ERROR_MASK | XCAN_IXR_RXOFLW_MASK |
-> @@ -981,11 +985,10 @@ static void xcan_err_interrupt(struct net_device =
-*ndev, u32 isr)
->  {
->  	struct xcan_priv *priv =3D netdev_priv(ndev);
->  	struct net_device_stats *stats =3D &ndev->stats;
-> -	struct can_frame *cf;
-> -	struct sk_buff *skb;
-> +	struct can_frame cf;
->  	u32 err_status;
-> =20
-> -	skb =3D alloc_can_err_skb(ndev, &cf);
-> +	memset(&cf, 0, sizeof(cf));
+The patch does not apply to net-next/master. Please use net-next/master
+as a base for patches introducing new features.
 
-You can use C99 initializers instead of the memset.
+I've ported the patch and applied it.
 
-> =20
->  	err_status =3D priv->read_reg(priv, XCAN_ESR_OFFSET);
->  	priv->write_reg(priv, XCAN_ESR_OFFSET, err_status);
-> @@ -996,32 +999,27 @@ static void xcan_err_interrupt(struct net_device =
-*ndev, u32 isr)
->  		/* Leave device in Config Mode in bus-off state */
->  		priv->write_reg(priv, XCAN_SRR_OFFSET, XCAN_SRR_RESET_MASK);
->  		can_bus_off(ndev);
-> -		if (skb)
-> -			cf->can_id |=3D CAN_ERR_BUSOFF;
-> +		cf.can_id |=3D CAN_ERR_BUSOFF;
->  	} else {
->  		enum can_state new_state =3D xcan_current_error_state(ndev);
-> =20
->  		if (new_state !=3D priv->can.state)
-> -			xcan_set_error_state(ndev, new_state, skb ? cf : NULL);
-> +			xcan_set_error_state(ndev, new_state, &cf);
->  	}
-> =20
->  	/* Check for Arbitration lost interrupt */
->  	if (isr & XCAN_IXR_ARBLST_MASK) {
->  		priv->can.can_stats.arbitration_lost++;
-> -		if (skb) {
-> -			cf->can_id |=3D CAN_ERR_LOSTARB;
-> -			cf->data[0] =3D CAN_ERR_LOSTARB_UNSPEC;
-> -		}
-> +		cf.can_id |=3D CAN_ERR_LOSTARB;
-> +		cf.data[0] =3D CAN_ERR_LOSTARB_UNSPEC;
->  	}
-> =20
->  	/* Check for RX FIFO Overflow interrupt */
->  	if (isr & XCAN_IXR_RXOFLW_MASK) {
->  		stats->rx_over_errors++;
->  		stats->rx_errors++;
-> -		if (skb) {
-> -			cf->can_id |=3D CAN_ERR_CRTL;
-> -			cf->data[1] |=3D CAN_ERR_CRTL_RX_OVERFLOW;
-> -		}
-> +		cf.can_id |=3D CAN_ERR_CRTL;
-> +		cf.data[1] |=3D CAN_ERR_CRTL_RX_OVERFLOW;
->  	}
-> =20
->  	/* Check for RX Match Not Finished interrupt */
-> @@ -1029,68 +1027,76 @@ static void xcan_err_interrupt(struct net_devic=
-e *ndev, u32 isr)
->  		stats->rx_dropped++;
->  		stats->rx_errors++;
->  		netdev_err(ndev, "RX match not finished, frame discarded\n");
-> -		if (skb) {
-> -			cf->can_id |=3D CAN_ERR_CRTL;
-> -			cf->data[1] |=3D CAN_ERR_CRTL_UNSPEC;
-> -		}
-> +		cf.can_id |=3D CAN_ERR_CRTL;
-> +		cf.data[1] |=3D CAN_ERR_CRTL_UNSPEC;
->  	}
-> =20
->  	/* Check for error interrupt */
->  	if (isr & XCAN_IXR_ERROR_MASK) {
-> -		if (skb)
-> -			cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> +		bool berr_reporting =3D !!(priv->can.ctrlmode &
-> +					 CAN_CTRLMODE_BERR_REPORTING);
-
-Please use if() instead of !!
-
-> +
-> +		if (berr_reporting)
-> +			cf.can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> =20
->  		/* Check for Ack error interrupt */
->  		if (err_status & XCAN_ESR_ACKER_MASK) {
->  			stats->tx_errors++;
-> -			if (skb) {
-> -				cf->can_id |=3D CAN_ERR_ACK;
-> -				cf->data[3] =3D CAN_ERR_PROT_LOC_ACK;
-> +			if (berr_reporting) {
-> +				cf.can_id |=3D CAN_ERR_ACK;
-> +				cf.data[3] =3D CAN_ERR_PROT_LOC_ACK;
->  			}
->  		}
-> =20
->  		/* Check for Bit error interrupt */
->  		if (err_status & XCAN_ESR_BERR_MASK) {
->  			stats->tx_errors++;
-> -			if (skb) {
-> -				cf->can_id |=3D CAN_ERR_PROT;
-> -				cf->data[2] =3D CAN_ERR_PROT_BIT;
-> +			if (berr_reporting) {
-> +				cf.can_id |=3D CAN_ERR_PROT;
-> +				cf.data[2] =3D CAN_ERR_PROT_BIT;
->  			}
->  		}
-> =20
->  		/* Check for Stuff error interrupt */
->  		if (err_status & XCAN_ESR_STER_MASK) {
->  			stats->rx_errors++;
-> -			if (skb) {
-> -				cf->can_id |=3D CAN_ERR_PROT;
-> -				cf->data[2] =3D CAN_ERR_PROT_STUFF;
-> +			if (berr_reporting) {
-> +				cf.can_id |=3D CAN_ERR_PROT;
-> +				cf.data[2] =3D CAN_ERR_PROT_STUFF;
->  			}
->  		}
-> =20
->  		/* Check for Form error interrupt */
->  		if (err_status & XCAN_ESR_FMER_MASK) {
->  			stats->rx_errors++;
-> -			if (skb) {
-> -				cf->can_id |=3D CAN_ERR_PROT;
-> -				cf->data[2] =3D CAN_ERR_PROT_FORM;
-> +			if (berr_reporting) {
-> +				cf.can_id |=3D CAN_ERR_PROT;
-> +				cf.data[2] =3D CAN_ERR_PROT_FORM;
->  			}
->  		}
-> =20
->  		/* Check for CRC error interrupt */
->  		if (err_status & XCAN_ESR_CRCER_MASK) {
->  			stats->rx_errors++;
-> -			if (skb) {
-> -				cf->can_id |=3D CAN_ERR_PROT;
-> -				cf->data[3] =3D CAN_ERR_PROT_LOC_CRC_SEQ;
-> +			if (berr_reporting) {
-> +				cf.can_id |=3D CAN_ERR_PROT;
-> +				cf.data[3] =3D CAN_ERR_PROT_LOC_CRC_SEQ;
->  			}
->  		}
->  		priv->can.can_stats.bus_error++;
->  	}
-> =20
-> -	if (skb) {
-> -		stats->rx_packets++;
-> -		stats->rx_bytes +=3D cf->can_dlc;
-> -		netif_rx(skb);
-> +	if (cf.can_id) {
-> +		struct can_frame *skb_cf;
-> +		struct sk_buff *skb =3D alloc_can_err_skb(ndev, &skb_cf);
-> +
-> +		if (skb) {
-> +			skb_cf->can_id |=3D cf.can_id;
-> +			memcpy(skb_cf->data, cf.data, CAN_ERR_DLC);
-> +			stats->rx_packets++;
-> +			stats->rx_bytes +=3D CAN_ERR_DLC;
-> +			netif_rx(skb);
-> +		}
->  	}
-> =20
->  	netdev_dbg(ndev, "%s: error status register:0x%x\n",
-
-I've send a v2 which incorporates these changes.
-
-regards,
+tnx,
 Marc
 
 --=20
@@ -349,23 +169,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---Lu0Xc1OQUGjvpSL6ho9bqIf27vZAhb6yo--
+--C0sk6Yrc1aVlsFK5RaDCUm86gcx4AHX9F--
 
---hLDYgJr0GDEkMlqdi7URFWXb60dIwXRzc
+--KNQy1s7aRV0JZ6kdubpXOlfBA6UqZcVRZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2XrKEACgkQWsYho5Hk
-nSDRmAgAoizkIlv4bcZuHXKDeG5Ac9xl0R3yq79JPpCNFY+tlX/K4MJDFqu3Vp2J
-t2zeVcGewS/JrIgho8ZhTmTjdnwnz6lBnVELroqB1O2CsRzzm4RxGbjjA3uBdluK
-dJLHpeZoJAgvYxQ87cnZlk785vuFk8p5DsbwXGSMElcHBssPlDWmcpY9bSjJqfjd
-+kHYxXIDQwVTOpWaB4ZGY2hzb+56m+I9Jziq6oH7bZ5FIm3/HBxAvaPTQpPPMXdb
-hcwMZ/YTC9CKo0y//4/XfvAdKQCGeGX3WU1FEMV2g9zgjPX2yCTwyHYSNiQHeB7V
-IzJWUqfCc5RChlh3AvV9eCy4bOf6Zw==
-=0TuP
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2XrpUACgkQWsYho5Hk
+nSC4LAf7B4D1ThldgsPxULZ3DKSuz6NzsNyzmfPiB85aempNbun/Jr9BaZxdY1sJ
+VwW9wMqfuT6krH2G6NfOW9YCaRboco831q01faLJz6oXoMnH7WO96Zwsb3kcVHn5
+suLbiPqDLlobXBQpNMFFN/aBwAhy50v2sRFtgw/m5EMgHDE5928YgnLfEMB2lU97
+7gH4yCfc76FVC/RGAqEqqfEARw3QHrs0EoDZSLAYxvCl5sToaUC/OTibdHAuFKuc
+g381dbKE+1gRmvyBNc2xAncdxoGGjXcoHQ7vtobX2V/gI/EbR3JyKZQeQGmPdmfu
+3QYHjMld48w9XHZCHPS6CwRBk16haw==
+=7nvC
 -----END PGP SIGNATURE-----
 
---hLDYgJr0GDEkMlqdi7URFWXb60dIwXRzc--
+--KNQy1s7aRV0JZ6kdubpXOlfBA6UqZcVRZ--
