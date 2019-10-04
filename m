@@ -2,35 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA92CC45E
-	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2019 22:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5C1CC49B
+	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2019 23:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbfJDUpN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Oct 2019 16:45:13 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44853 "EHLO
+        id S1730341AbfJDVKo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Oct 2019 17:10:44 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42909 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbfJDUpN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Oct 2019 16:45:13 -0400
+        with ESMTP id S1728781AbfJDVKn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Oct 2019 17:10:43 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iGURp-0004ek-Hv; Fri, 04 Oct 2019 22:45:09 +0200
+        id 1iGUqW-0006xR-VO; Fri, 04 Oct 2019 23:10:41 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5] (unknown [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 76E0B460453;
-        Fri,  4 Oct 2019 20:45:07 +0000 (UTC)
-Subject: Re: [PATCH 0/2] can: fix use-after-free on USB disconnect
-To:     Johan Hovold <johan@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20191001102914.4567-1-johan@kernel.org>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3DDDC460480;
+        Fri,  4 Oct 2019 21:10:39 +0000 (UTC)
+Subject: Re: [PATCH] can: flexcan: use devm_platform_ioremap_resource() to
+ simplify code
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sean@geanix.com" <sean@geanix.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+References: <20190929082854.11952-1-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -93,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <ba71cc15-ac3f-66cd-fffe-214080867ea2@pengutronix.de>
-Date:   Fri, 4 Oct 2019 22:45:03 +0200
+Message-ID: <246a3760-d8e0-cc52-6d46-f6f4c350ea51@pengutronix.de>
+Date:   Fri, 4 Oct 2019 23:10:35 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191001102914.4567-1-johan@kernel.org>
+In-Reply-To: <20190929082854.11952-1-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy"
+ boundary="OuQhmicYX9t4n2PLAXo3R8NEu2Gq0dsEJ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,31 +114,35 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy
-Content-Type: multipart/mixed; boundary="QBkhT7RqXdjN9avIuHHtOSG3z3WkEt6c7";
+--OuQhmicYX9t4n2PLAXo3R8NEu2Gq0dsEJ
+Content-Type: multipart/mixed; boundary="iKbLX40TPLku3VHIdDyM7ISs763CJx9Wl";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Johan Hovold <johan@kernel.org>, Wolfgang Grandegger <wg@grandegger.com>
-Cc: "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-Message-ID: <ba71cc15-ac3f-66cd-fffe-214080867ea2@pengutronix.de>
-Subject: Re: [PATCH 0/2] can: fix use-after-free on USB disconnect
-References: <20191001102914.4567-1-johan@kernel.org>
-In-Reply-To: <20191001102914.4567-1-johan@kernel.org>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: "wg@grandegger.com" <wg@grandegger.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "sean@geanix.com" <sean@geanix.com>, dl-linux-imx <linux-imx@nxp.com>
+Message-ID: <246a3760-d8e0-cc52-6d46-f6f4c350ea51@pengutronix.de>
+Subject: Re: [PATCH] can: flexcan: use devm_platform_ioremap_resource() to
+ simplify code
+References: <20190929082854.11952-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20190929082854.11952-1-qiangqing.zhang@nxp.com>
 
---QBkhT7RqXdjN9avIuHHtOSG3z3WkEt6c7
+--iKbLX40TPLku3VHIdDyM7ISs763CJx9Wl
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/1/19 12:29 PM, Johan Hovold wrote:
-> Syzbot reported a use-after-free on disconnect in mcba_usb and a quick
-> grep revealed a similar issue in usb_8dev.
+On 9/29/19 10:32 AM, Joakim Zhang wrote:
+> Use the new helper devm_platform_ioremap_resource() which wraps the
+> platform_get_resource() and devm_ioremap_resource() together to simplif=
+y
+> the code.
 >=20
-> Compile-tested only.
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-Applied to can.
+Applied to linux-can-next.
 
 tnx,
 Marc
@@ -148,23 +154,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---QBkhT7RqXdjN9avIuHHtOSG3z3WkEt6c7--
+--iKbLX40TPLku3VHIdDyM7ISs763CJx9Wl--
 
---BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy
+--OuQhmicYX9t4n2PLAXo3R8NEu2Gq0dsEJ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2Xr08ACgkQWsYho5Hk
-nSB91wf8Dgn4I3se1HZozX4bYj71NMqKqekWNgAbm7VKvxLHdRs9YME0522cfOI1
-zk0OxfDv9Dnh/4aF0btqP8ia7+QV513E0jecBEfaMAiouu7cT2xxorB5lUdKdRnN
-fxlNd/N2SSjXU8bx+5seF1+TmDgyoie6VK2A6mbn7cjSSecMcL/uLjY22dRJ/er/
-oG8/8y1rMc0SCW5QSgvaBVx1wpUwdHEIPJgoioxLabK4XkY3DzfF5enPbXvbrCi0
-g6KbiyAbOaAjvEzSxmTcXyYjvMNDGFOkGhMH1Qy0y1t4x3apqPeQ4l1hrGQ8otNb
-PAvJB97ehE90HD9Ptxu/UEF2vNvgqw==
-=GoKp
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2XtUsACgkQWsYho5Hk
+nSAa3Qf9GOnHb7vZe2FZVqafL8p7QAJPAhLPLgFL9OuVcggBhLNKM0w2w/pBf9x9
+IkcMbFWJkkn3VL4ONq+q10MFcjvXt5uanZyExeKyV37Ze8NRhYaGytBn8kO+KAs1
+gWjhLgtCZecxLAZ5MomS4T7SKo2w0i2xX+y42J62CDnZAy52DenyHyZ2XHKPC6tw
+lH51ljfaDkTFez2ykuecYXXCWT97lImOl+myPBk4WIUpbOpWTq5VYz2GgvLsYkFL
+lAGwE4hv4UU7Kb6f2px3EwBCt/p8EJfymtVUZOK1R5Q0e9HBHClVTopvOH6yDBN4
+2ZTcHiBhvZ+tiwR5ZdnZbt7N5+9s/g==
+=f3bq
 -----END PGP SIGNATURE-----
 
---BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy--
+--OuQhmicYX9t4n2PLAXo3R8NEu2Gq0dsEJ--
