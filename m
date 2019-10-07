@@ -2,34 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 373F4CE524
-	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2019 16:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4383DCE56E
+	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2019 16:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728014AbfJGOWh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Oct 2019 10:22:37 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57627 "EHLO
+        id S1727745AbfJGOia (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 7 Oct 2019 10:38:30 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60697 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727324AbfJGOWh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Oct 2019 10:22:37 -0400
+        with ESMTP id S1727324AbfJGOia (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Oct 2019 10:38:30 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iHTuF-0004Xi-Ot; Mon, 07 Oct 2019 16:22:35 +0200
+        id 1iHU9Y-0006Np-KL; Mon, 07 Oct 2019 16:38:24 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:191f:bdfd:8a67:a1ba] (unknown [IPv6:2a03:f580:87bc:d400:191f:bdfd:8a67:a1ba])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4384C461891;
-        Mon,  7 Oct 2019 14:22:34 +0000 (UTC)
-Subject: Re: [PATCH v2] can: xilinx_can: avoid non-requested bus error frames
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>, linux-can@vger.kernel.org
-Cc:     michal.simek@xilinx.com, appana.durga.rao@xilinx.com
-References: <20191004203033.4582-1-mkl@pengutronix.de>
- <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C741D4618BE;
+        Mon,  7 Oct 2019 14:38:18 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kernel@pengutronix.de,
+        linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Bastian Stender <bst@pengutronix.de>,
+        Elenita Hinds <ecathinds@gmail.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <ore@pengutronix.de>,
+        David Jander <david@protonic.nl>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -91,15 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <f0bc3ca9-73e1-66cf-76f7-c5505ed5dd9e@pengutronix.de>
-Date:   Mon, 7 Oct 2019 16:22:30 +0200
+Subject: pull-request: can-next 2019-10-07
+Message-ID: <2ffa00e7-d447-9216-587d-30396a47ca64@pengutronix.de>
+Date:   Mon, 7 Oct 2019 16:38:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ"
+ boundary="G2zGIErEkGqwCcMiesMRCS1O5a2VRBjRB"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,64 +116,160 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ
-Content-Type: multipart/mixed; boundary="UI7r0RKiWi7L03nC6shAbuT3SJgaPOMfE";
+--G2zGIErEkGqwCcMiesMRCS1O5a2VRBjRB
+Content-Type: multipart/mixed; boundary="UQ2pdH5nZsxFmUghxOUXTaFmFt77m1Lgr";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Anssi Hannula <anssi.hannula@bitwise.fi>, linux-can@vger.kernel.org
-Cc: michal.simek@xilinx.com, appana.durga.rao@xilinx.com
-Message-ID: <f0bc3ca9-73e1-66cf-76f7-c5505ed5dd9e@pengutronix.de>
-Subject: Re: [PATCH v2] can: xilinx_can: avoid non-requested bus error frames
-References: <20191004203033.4582-1-mkl@pengutronix.de>
- <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
-In-Reply-To: <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net, kernel@pengutronix.de, linux-can@vger.kernel.org,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Bastian Stender <bst@pengutronix.de>, Elenita Hinds <ecathinds@gmail.com>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+ Robin van der Gracht <robin@protonic.nl>, Oleksij Rempel
+ <ore@pengutronix.de>, David Jander <david@protonic.nl>
+Message-ID: <2ffa00e7-d447-9216-587d-30396a47ca64@pengutronix.de>
+Subject: pull-request: can-next 2019-10-07
 
---UI7r0RKiWi7L03nC6shAbuT3SJgaPOMfE
+--UQ2pdH5nZsxFmUghxOUXTaFmFt77m1Lgr
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 10/7/19 12:24 PM, Anssi Hannula wrote:
->> taking up Anssi Hannula's work.
->>
->> changes since v1:
->> - xcan_err_interrupt(): use C99 initializers instead of memset() to
->>   initialize struct can_frame cf.
->> - xcan_err_interrupt(): convert initialization of berr_reporting to us=
-e
->>   "if".
->>
->> Please test.
->=20
-> Thanks, I tried it on my HW and it seems to work like v1.
+Hello David,
 
-Thanks for testing,
+this is a pull request for net-next/master consisting of 12 patches.
+
+The first patch is by Andy Shevchenko for the mcp251x driver and removes
+the legacy platform data from all in-tree users and the driver.
+
+The next two patches target the peak_canfd driver, the first one is by
+me and fixes several checkpatch warnings, the second one is by Stephane
+Grosjean and adds hardware timestamps to the rx skbs.
+
+Followed by two patches for the xilinx_can driver. Again the first is by
+me and fixes checkpatch warnings, the second one is by Anssi Hannula and
+avoids non-requested bus error frames, which improves performance.
+
+Pankaj Sharma's patch for the m_can driver adds support for the one shot
+mode.
+
+YueHaibing provides a patch for the grcan driver to use
+devm_platform_ioremap_resource() to simplify code.
+
+Joakim Zhang provides a similar patch for the flexcan driver.
+
+The last 4 patches are by me and target the rx-offload infrastructure.
+The first 3 fix checkpatch warnings, the last one removes a no-op
+function.
+
+regards,
 Marc
+
+---
+
+The following changes since commit 056ddc38e94105a7ee982ca06cc19448fc927f=
+6f:
+
+  Merge branch 'stmmac-next' (2019-10-06 18:46:31 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git ta=
+gs/linux-can-next-for-5.5-20191007
+
+for you to fetch changes up to f6008d6897270b492ec1b0a21814f9a99a113b17:
+
+  can: rx-offload: can_rx_offload_reset(): remove no-op function (2019-10=
+-07 16:34:39 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.5-20191007
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      can: mcp251x: Get rid of legacy platform data
+
+Anssi Hannula (1):
+      can: xilinx_can: avoid non-requested bus error frames
+
+Joakim Zhang (1):
+      can: flexcan: use devm_platform_ioremap_resource() to simplify code=
+
+
+Marc Kleine-Budde (6):
+      can: peak_canfd: fix checkpatch warnings
+      can: xilinx_can: fix checkpatch warnings
+      can: rx-offload: fix long lines
+      can: rx-offload: can_rx_offload_compare(): fix typo
+      can: rx-offload: can_rx_offload_irq_offload_timestamp(): don't use =
+assignment in if condition
+      can: rx-offload: can_rx_offload_reset(): remove no-op function
+
+Pankaj Sharma (1):
+      can: m_can: add support for one shot mode
+
+Stephane Grosjean (1):
+      can: peak_canfd: provide hw timestamps in rx skbs
+
+YueHaibing (1):
+      can: grcan: use devm_platform_ioremap_resource() to simplify code
+
+ arch/arm/mach-pxa/icontrol.c                  |  9 +--
+ arch/arm/mach-pxa/zeus.c                      |  9 +--
+ drivers/net/can/flexcan.c                     |  4 +-
+ drivers/net/can/grcan.c                       |  4 +-
+ drivers/net/can/m_can/m_can.c                 | 12 +++-
+ drivers/net/can/peak_canfd/peak_canfd.c       | 25 +++++--
+ drivers/net/can/peak_canfd/peak_canfd_user.h  |  3 +-
+ drivers/net/can/peak_canfd/peak_pciefd_main.c |  6 +-
+ drivers/net/can/rx-offload.c                  | 55 ++++++++-------
+ drivers/net/can/spi/mcp251x.c                 |  9 ++-
+ drivers/net/can/xilinx_can.c                  | 98 ++++++++++++++-------=
+------
+ include/linux/can/platform/mcp251x.h          | 22 ------
+ include/linux/can/rx-offload.h                |  1 -
+ 13 files changed, 131 insertions(+), 126 deletions(-)
+ delete mode 100644 include/linux/can/platform/mcp251x.h
 
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
 Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |-
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---UI7r0RKiWi7L03nC6shAbuT3SJgaPOMfE--
 
---hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ
+
+
+
+
+
+
+
+
+
+
+
+
+
+--UQ2pdH5nZsxFmUghxOUXTaFmFt77m1Lgr--
+
+--G2zGIErEkGqwCcMiesMRCS1O5a2VRBjRB
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2bSiYACgkQWsYho5Hk
-nSC6ygf7BJSmn+4p6FUDBYmwkrIo7BPbR+tGPq0H+mMGj2uIsPhayNwVGOm/9/3P
-fj1lazl2Z0M/dwPwfTRI8G6YtnGxykqmSQ/00MvBiZ0RHWQGpJqc/GQpg74CAo83
-WFN4BrHN0hltKsIF/j80ifhAMJ8S7vElHE724/Yu1j71Q2cOQEHjoPK/VjvEZag+
-WKC8C4OJ6vedZY5g1MiGQgFO1TL97/eCMtRs0nOzjczSzoHsxkPRFZYSAe5rDpCd
-QBGZTiYgR0XCYe+vFUvpYUhxOZHNPg1nLiFqdCjpREslzY07ELljRvdgXZXmZicR
-StJ2m1ifvlhMoQ8V1l1y1kLFs7PYcA==
-=hMLc
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2bTdYACgkQWsYho5Hk
+nSDSewf8CiX6VmyRk3LllGGOB+tpb6CSj4XYfGVvVIbSNz8d0r6atMNMEVRHnJS7
+P5CJ1qH+DSzz8POkEvyrjttmaKRsSLe5wCGhKUssErd7OEloB47jhL/GdSbgz7vy
+nGo1WTht3avdIJfjlV7g5oTlXBCk8EVxCaGCgIpWfn6S9NfeCpZ0eAegWH+vjGTv
+kLzpJd519cD4j0yCMyKWl+SyfaUBHQJyr07x1xUH9W6jyj0vhMj5wIOuRgjKfhBP
+tL0LZ170I+eRMqMNkP4MpXgfCuY2ndw4X7mxNYtbPAfjAooHUF0Vkcg/OLua0BZ+
++GxaIeCwHTo2HwjBiDlBvkU0Qd5Azg==
+=HN/L
 -----END PGP SIGNATURE-----
 
---hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ--
+--G2zGIErEkGqwCcMiesMRCS1O5a2VRBjRB--
