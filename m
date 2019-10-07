@@ -2,32 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F18CE516
-	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2019 16:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373F4CE524
+	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2019 16:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727324AbfJGOVA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Oct 2019 10:21:00 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53567 "EHLO
+        id S1728014AbfJGOWh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 7 Oct 2019 10:22:37 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57627 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727490AbfJGOVA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Oct 2019 10:21:00 -0400
+        with ESMTP id S1727324AbfJGOWh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Oct 2019 10:22:37 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iHTsf-0004Hm-8T; Mon, 07 Oct 2019 16:20:57 +0200
+        id 1iHTuF-0004Xi-Ot; Mon, 07 Oct 2019 16:22:35 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:191f:bdfd:8a67:a1ba] (unknown [IPv6:2a03:f580:87bc:d400:191f:bdfd:8a67:a1ba])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2606146188A;
-        Mon,  7 Oct 2019 14:20:55 +0000 (UTC)
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     linux-can@vger.kernel.org, davem@davemloft.net
-References: <20190910052944.338148-1-felipe.balbi@linux.intel.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4384C461891;
+        Mon,  7 Oct 2019 14:22:34 +0000 (UTC)
+Subject: Re: [PATCH v2] can: xilinx_can: avoid non-requested bus error frames
+To:     Anssi Hannula <anssi.hannula@bitwise.fi>, linux-can@vger.kernel.org
+Cc:     michal.simek@xilinx.com, appana.durga.rao@xilinx.com
+References: <20191004203033.4582-1-mkl@pengutronix.de>
+ <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -90,17 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 1/2] NET: m_can: split into core library and platform
- adaptation
-Message-ID: <89bd27a9-8b16-84c3-cd7e-453f1b4a5b95@pengutronix.de>
-Date:   Mon, 7 Oct 2019 16:20:49 +0200
+Message-ID: <f0bc3ca9-73e1-66cf-76f7-c5505ed5dd9e@pengutronix.de>
+Date:   Mon, 7 Oct 2019 16:22:30 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190910052944.338148-1-felipe.balbi@linux.intel.com>
+In-Reply-To: <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="0C1uS0BVkYHUHKzKPoUQKwLEwoCA9pOQf"
+ boundary="hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,41 +110,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0C1uS0BVkYHUHKzKPoUQKwLEwoCA9pOQf
-Content-Type: multipart/mixed; boundary="dVHxPg3gWgFlzhmQPv6R3oWBS2sZkj877";
+--hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ
+Content-Type: multipart/mixed; boundary="UI7r0RKiWi7L03nC6shAbuT3SJgaPOMfE";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Felipe Balbi <felipe.balbi@linux.intel.com>,
- Wolfgang Grandegger <wg@grandegger.com>
-Cc: linux-can@vger.kernel.org, davem@davemloft.net
-Message-ID: <89bd27a9-8b16-84c3-cd7e-453f1b4a5b95@pengutronix.de>
-Subject: Re: [PATCH 1/2] NET: m_can: split into core library and platform
- adaptation
-References: <20190910052944.338148-1-felipe.balbi@linux.intel.com>
-In-Reply-To: <20190910052944.338148-1-felipe.balbi@linux.intel.com>
+To: Anssi Hannula <anssi.hannula@bitwise.fi>, linux-can@vger.kernel.org
+Cc: michal.simek@xilinx.com, appana.durga.rao@xilinx.com
+Message-ID: <f0bc3ca9-73e1-66cf-76f7-c5505ed5dd9e@pengutronix.de>
+Subject: Re: [PATCH v2] can: xilinx_can: avoid non-requested bus error frames
+References: <20191004203033.4582-1-mkl@pengutronix.de>
+ <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
+In-Reply-To: <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
 
---dVHxPg3gWgFlzhmQPv6R3oWBS2sZkj877
+--UI7r0RKiWi7L03nC6shAbuT3SJgaPOMfE
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/10/19 7:29 AM, Felipe Balbi wrote:
-> A future patch will add PCI-based m_can driver. This patch makes that
-> a lot simpler.
+On 10/7/19 12:24 PM, Anssi Hannula wrote:
+>> taking up Anssi Hannula's work.
+>>
+>> changes since v1:
+>> - xcan_err_interrupt(): use C99 initializers instead of memset() to
+>>   initialize struct can_frame cf.
+>> - xcan_err_interrupt(): convert initialization of berr_reporting to us=
+e
+>>   "if".
+>>
+>> Please test.
 >=20
-> Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+> Thanks, I tried it on my HW and it seems to work like v1.
 
-Sorry, but with my pull request linux-can-next-for-5.4-20190820, the
-m_can driver has been modified a bit. An abstraction layer for non mmio
-devices was added. Please rebase your patches to
-linux-can-next-for-5.5-20191007.
-
-You'll find this tag on the linux-can-next git repo on kernel.org
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
-g/?h=3Dlinux-can-next-for-5.5-20191007
-
-regards,
+Thanks for testing,
 Marc
 
 --=20
@@ -155,23 +151,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---dVHxPg3gWgFlzhmQPv6R3oWBS2sZkj877--
+--UI7r0RKiWi7L03nC6shAbuT3SJgaPOMfE--
 
---0C1uS0BVkYHUHKzKPoUQKwLEwoCA9pOQf
+--hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2bScEACgkQWsYho5Hk
-nSCNiwf/ZVbT2kLWpZVmwd60+2x1QHpWSIMcvrPGbXG94xVZA75shfq+ojJd6BAc
-PP8Oj/a4lhWnS7rPcAa3d9T7HgBqVUnlaFUPQDufqFVes8rwLyIrSyz7SGs2g6zu
-GJZ7yNXG02g45AyDEARmxbbiiPmZoH+LW+N3nmqClgWAu0uoHQT0yRbLSgdAozu+
-W9tjZ1odTOAngCNAWMLoMdLH1/x0xfRAosCUJYorVVa4rcdIeBkoSToej1s4WvbG
-CZD72Emyog1dppBufgpRX2OQiN8JDHs0Leh80FnaWz4HNKHwaTBiPGudSb7olEWL
-iCX+FQXwAlwWPijoUvcXUGXXTYYrEw==
-=KQRk
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2bSiYACgkQWsYho5Hk
+nSC6ygf7BJSmn+4p6FUDBYmwkrIo7BPbR+tGPq0H+mMGj2uIsPhayNwVGOm/9/3P
+fj1lazl2Z0M/dwPwfTRI8G6YtnGxykqmSQ/00MvBiZ0RHWQGpJqc/GQpg74CAo83
+WFN4BrHN0hltKsIF/j80ifhAMJ8S7vElHE724/Yu1j71Q2cOQEHjoPK/VjvEZag+
+WKC8C4OJ6vedZY5g1MiGQgFO1TL97/eCMtRs0nOzjczSzoHsxkPRFZYSAe5rDpCd
+QBGZTiYgR0XCYe+vFUvpYUhxOZHNPg1nLiFqdCjpREslzY07ELljRvdgXZXmZicR
+StJ2m1ifvlhMoQ8V1l1y1kLFs7PYcA==
+=hMLc
 -----END PGP SIGNATURE-----
 
---0C1uS0BVkYHUHKzKPoUQKwLEwoCA9pOQf--
+--hjtOcEuFt3yZBCD0ZV5JWhCeX8eWrEjNZ--
