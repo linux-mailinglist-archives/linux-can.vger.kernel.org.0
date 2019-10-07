@@ -2,188 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4D0CC4AD
-	for <lists+linux-can@lfdr.de>; Fri,  4 Oct 2019 23:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB13CDF36
+	for <lists+linux-can@lfdr.de>; Mon,  7 Oct 2019 12:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725826AbfJDVQD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Oct 2019 17:16:03 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43381 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728781AbfJDVQC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Oct 2019 17:16:02 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iGUvW-0007U1-7y; Fri, 04 Oct 2019 23:15:50 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5] (unknown [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 10AD2460498;
-        Fri,  4 Oct 2019 21:15:45 +0000 (UTC)
-Subject: Re: [PATCH] can: peakcan: report bus recovery as well
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190925085824.4708-1-jhofstee@victronenergy.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <ec53be09-bb1e-90b5-cb0a-f9f0643df800@pengutronix.de>
-Date:   Fri, 4 Oct 2019 23:15:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1727252AbfJGKYx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 7 Oct 2019 06:24:53 -0400
+Received: from mail.bitwise.fi ([109.204.228.163]:37612 "EHLO mail.bitwise.fi"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbfJGKYx (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 7 Oct 2019 06:24:53 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.bitwise.fi (Postfix) with ESMTP id 74A9E60045;
+        Mon,  7 Oct 2019 13:24:51 +0300 (EEST)
+X-Virus-Scanned: Debian amavisd-new at mail.bitwise.fi
+Received: from mail.bitwise.fi ([127.0.0.1])
+        by localhost (mail.bitwise.fi [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id oLtXDYRFVOhG; Mon,  7 Oct 2019 13:24:49 +0300 (EEST)
+Received: from [192.168.5.238] (fw1.dmz.bitwise.fi [192.168.69.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: anssiha)
+        by mail.bitwise.fi (Postfix) with ESMTPSA id 0C14C60047;
+        Mon,  7 Oct 2019 13:24:49 +0300 (EEST)
+Subject: Re: [PATCH v2] can: xilinx_can: avoid non-requested bus error frames
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     michal.simek@xilinx.com, appana.durga.rao@xilinx.com
+References: <20191004203033.4582-1-mkl@pengutronix.de>
+From:   Anssi Hannula <anssi.hannula@bitwise.fi>
+Message-ID: <29b77145-4fe1-c39b-3dae-286582f28962@bitwise.fi>
+Date:   Mon, 7 Oct 2019 13:24:48 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190925085824.4708-1-jhofstee@victronenergy.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="blD1oht6kpsNjdxWBp7jdd3QmfVUbVoj0"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20191004203033.4582-1-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---blD1oht6kpsNjdxWBp7jdd3QmfVUbVoj0
-Content-Type: multipart/mixed; boundary="Hzn4Rg2vCRtx4pOqGCZy6T2HKK0vQYBmy";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: Stephane Grosjean <s.grosjean@peak-system.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>,
- "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thomas Gleixner <tglx@linutronix.de>,
- "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-Message-ID: <ec53be09-bb1e-90b5-cb0a-f9f0643df800@pengutronix.de>
-Subject: Re: [PATCH] can: peakcan: report bus recovery as well
-References: <20190925085824.4708-1-jhofstee@victronenergy.com>
-In-Reply-To: <20190925085824.4708-1-jhofstee@victronenergy.com>
+On 4.10.2019 23.30, Marc Kleine-Budde wrote:
+> From: Anssi Hannula <anssi.hannula@bitwise.fi>
+>
+> Userspace can signal with CAN_CTRLMODE_BERR_REPORTING whether they need
+> reporting of bus errors (CAN_ERR_BUSERROR) or not.
+>
+> However, xilinx_can driver currently always sends CAN_ERR_BUSERROR
+> frames to userspace on bus errors.
+>
+> To improve performance on error conditions when bus error reporting is
+> not needed, avoid sending CAN_ERR_BUSERROR frames unless requested via
+> CAN_CTRLMODE_BERR_REPORTING.
+>
+> The error interrupt is still kept enabled as there is no dedicated state
+> transition interrupt, but just disabling error frame submission still
+> yields a significant performance improvement. In a simple test with
+> continuous bus errors and no userspace programs reading/writing CAN I
+> saw system CPU load reduced by 1/3.
+>
+> Tested on a ZynqMP board with CAN-FD v1.0.
+>
+> Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+> Hello,
+>
+> taking up Anssi Hannula's work.
+>
+> changes since v1:
+> - xcan_err_interrupt(): use C99 initializers instead of memset() to
+>   initialize struct can_frame cf.
+> - xcan_err_interrupt(): convert initialization of berr_reporting to use
+>   "if".
+>
+> Please test.
 
---Hzn4Rg2vCRtx4pOqGCZy6T2HKK0vQYBmy
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 9/25/19 10:58 AM, Jeroen Hofstee wrote:
-> While the state changes are reported when the error counters increase
-> and decrease, there is no event when the bus recovers and the error
-> counters decrease again. So add those as well.
->=20
-> Change the state going downward to be ERROR_PASSIVE -> ERROR_WARNING ->=
-
-> ERROR_ACTIVE instead of directly to ERROR_ACTIVE again.
->=20
-> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-> Cc: Stephane Grosjean <s.grosjean@peak-system.com>
-
-Applied to linux-can.
-
-Tnx,
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+Thanks, I tried it on my HW and it seems to work like v1.
 
 
---Hzn4Rg2vCRtx4pOqGCZy6T2HKK0vQYBmy--
+> regards,
+> Marc
+>
+>  drivers/net/can/xilinx_can.c | 89 +++++++++++++++++++-----------------
+>  1 file changed, 48 insertions(+), 41 deletions(-)
+[...]
 
---blD1oht6kpsNjdxWBp7jdd3QmfVUbVoj0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+-- 
+Anssi Hannula / Bitwise Oy
++358 503803997
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2Xtn0ACgkQWsYho5Hk
-nSDsvwf/b5OxYblVd6n3qKvWtkl9kos5IEohPhx6O5pj8FH0zCFELZPETMMpU28s
-64UZBviNw3Ieg5cX08730ghOQ8+spxg6Vm7HIE5hbKBOWs9HSlMU13hRmjRrRZIU
-DIpPi+d3AZXejCVwHUPn5fwL5MT1G75pSF/d0FTEVaA4S8PudNybplo4TG9E4Lc8
-006jAABbN9K4PJjZn1qJHF1Zq15R4bpLkbACBxLmhRAdsNz1X2jt8aoNRWBWpScA
-gFr7o88x512Tq8SdnhRLd9zYA/UYLbXRlxGU1TQ2ihaO1wGcLjqBIfmJpx10ivS9
-dblb7NcFg3SUNbzmJ3D6TAvvD68wLg==
-=9q2E
------END PGP SIGNATURE-----
-
---blD1oht6kpsNjdxWBp7jdd3QmfVUbVoj0--
