@@ -2,129 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F063D00F9
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 21:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 795BDD01C2
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 21:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726439AbfJHTKH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 15:10:07 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:35346 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727126AbfJHTKH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 15:10:07 -0400
-Received: by mail-qk1-f194.google.com with SMTP id w2so17882497qkf.2
-        for <linux-can@vger.kernel.org>; Tue, 08 Oct 2019 12:10:07 -0700 (PDT)
+        id S1730743AbfJHTzk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 15:55:40 -0400
+Received: from mail-ed1-f42.google.com ([209.85.208.42]:42838 "EHLO
+        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730555AbfJHTzT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 15:55:19 -0400
+Received: by mail-ed1-f42.google.com with SMTP id y91so16802686ede.9
+        for <linux-can@vger.kernel.org>; Tue, 08 Oct 2019 12:55:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=ePSlhooqChX4fVVIbFvScvsQAbfEIxryil+whkE9JE8=;
-        b=WMDKc4NV//mdrbyntOgFVtgJY7BauL/5Yb/+3kvhq+deCGOkF1hxa8tYpVCvPHmfgj
-         iK0t6lcZWzfipPa0TbKXtzTbOAu88Lh/Ij+n7p3VYB8urbLMBdWtqmqxVmpd35ydVyVg
-         Vc7KEwV4UlR/T+g0K5D+1nLKO5hC/Ggcygw6PLV41qRpOY3ziyfe2zEBSDO+Jnz2jOjO
-         V3vhnB2uwgUdDMELYJhrUZtjp668nlId9WoZATQsUtQBJvgaGkNEoZZwSb84nreygSer
-         3MGwy6YFJsCRq2EGQzRf8T2/aYyzTw6y8M3uKZQXZ46fYt/gFi1JzRla45gYQ5pKOXXP
-         eqHg==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
+        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
+         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
+         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
+         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
+         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
+         wXZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=ePSlhooqChX4fVVIbFvScvsQAbfEIxryil+whkE9JE8=;
-        b=lSACBolyPaxBsolrm75lkAVS4QzsTL74gZsV5WX5njE0dCl2VGvx53qVeQyWh4FGa9
-         spuIZpHFdZPrf1ZTyr3ohY7ryKXzbWNdqVGq6o9kPJpoS2a5rUN3Ys9k9Q5MROeZ+o/n
-         ebjvKZ8D2bn7AGLQMoo+FdVqywv2q/x4kaSBh8mFtU0TT09qck6+kppw7OWiDGJUljpW
-         TK1wwJ8RIxc6rdYveP+t43qo1NrwAYm47yNEyLsLDd784vTJljX54bO3TMFv71r1EOVa
-         Qze8IphJi4yiT3Z7mHpueQlimN06K+xxuf1SmtH6ZrN9/FG+a2V+xA2KxDqifRTwiyJG
-         02Gg==
-X-Gm-Message-State: APjAAAV8yDb/w70nDFgPNbIA8iD/vKwxgIH9o2rWIhqVvciJZD4MXMxZ
-        itkhHTEUPDH9ruE565YYD7G+sg==
-X-Google-Smtp-Source: APXvYqxzITZfdOYKiUbNU0krG9XG5T4pWjHcTizU+O9Abn0BrQX+V9IPHR1h/8P8sKrRcO80sluImg==
-X-Received: by 2002:a37:65d2:: with SMTP id z201mr3093983qkb.355.1570561806647;
-        Tue, 08 Oct 2019 12:10:06 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id q44sm9020770qtk.16.2019.10.08.12.10.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2019 12:10:06 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 12:09:53 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kernel@pengutronix.de,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Bastian Stender <bst@pengutronix.de>,
-        Elenita Hinds <ecathinds@gmail.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <ore@pengutronix.de>,
-        David Jander <david@protonic.nl>
-Subject: Re: pull-request: can-next 2019-10-07
-Message-ID: <20191008120953.515a3dbd@cakuba.netronome.com>
-In-Reply-To: <2ffa00e7-d447-9216-587d-30396a47ca64@pengutronix.de>
-References: <2ffa00e7-d447-9216-587d-30396a47ca64@pengutronix.de>
-Organization: Netronome Systems, Ltd.
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
+        b=bphwDEuXkatI4+c++caC7BA+/vf01nOgOODD4TkZ/hasjm3MtJXGgXFLaivxbCUA5n
+         b2Nq9TQUskGiaib8EIQUGBRjHd/iUuX7YDrOXxKJkJ6dJTx6wxycDqmatWNMAwcCFuHt
+         O5rwCedgUFh7N6oggGKU1yWyNMtB2OMe7jH7k6SVt1cpDqVoHay+IUDVyg3nRSrRLcp8
+         UVyOkwMvYvbi2js/fvHIdJzRuxLGXmX82dpxDsZCfFk2G9oDvhdnIUDCTGJ2qBIPdDN/
+         rPN3mVfhHJ93JzbQWHto828Hm+wjNpYWBSXXZcyp0rpvhUYrtjU76K6PhoY1pegx/IY6
+         /WAg==
+X-Gm-Message-State: APjAAAW7kVWDrRZBRdcVuhVGFLZHeKy5Bk+aNBffdVHHV0PqljsC75R4
+        HmpF0NlAwD0PJ4SUiZY7im/0tgExiF1QQriW5mA=
+X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
+X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
+ Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
+ -0700 (PDT)
+Reply-To: moneygram.1820@outlook.fr
+From:   MONEY GRAM <currency1000000@gmail.com>
+Date:   Tue, 8 Oct 2019 20:55:16 +0100
+Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
+Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 7 Oct 2019 16:38:14 +0200, Marc Kleine-Budde wrote:
-> Hello David,
-> 
-> this is a pull request for net-next/master consisting of 12 patches.
-> 
-> The first patch is by Andy Shevchenko for the mcp251x driver and removes
-> the legacy platform data from all in-tree users and the driver.
-> 
-> The next two patches target the peak_canfd driver, the first one is by
-> me and fixes several checkpatch warnings, the second one is by Stephane
-> Grosjean and adds hardware timestamps to the rx skbs.
-> 
-> Followed by two patches for the xilinx_can driver. Again the first is by
-> me and fixes checkpatch warnings, the second one is by Anssi Hannula and
-> avoids non-requested bus error frames, which improves performance.
-> 
-> Pankaj Sharma's patch for the m_can driver adds support for the one shot
-> mode.
-> 
-> YueHaibing provides a patch for the grcan driver to use
-> devm_platform_ioremap_resource() to simplify code.
-> 
-> Joakim Zhang provides a similar patch for the flexcan driver.
-> 
-> The last 4 patches are by me and target the rx-offload infrastructure.
-> The first 3 fix checkpatch warnings, the last one removes a no-op
-> function.
+HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
+M.T.C.N:78393135
 
-Hi Marc,
+Attn: Beneficiary,
 
-I think the correction should have been s/Substract/Subtract/,
-sorry for the nit pick.
+This is to inform you that the America Embassy office was instructed
+to transfer your fund $980,000.00 U.S Dollars compensating all the
+SCAM VICTIMS and your email was found as one of the VICTIMS. by
+America security leading team and America representative officers so
+between today the 8th of October till 1ST Of December 2019 you will
+be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
+that we have already sent the $6,000 dollars this morning to avoid
+cancellation of your payment, remain the total sum of $980,000.00.
 
-Would you be able to fix that up or do you prefer to do a follow up?
+You have only six hours to call this office upon the receipt of this
+email the maximum amount you will be receiving per a day starting from
+today's $6,000 and the Money Transfer Control Number of today is
+below.
 
-commit 8e7f9a874626a1aec191b34c2b983f76275d0448
-Author: Marc Kleine-Budde <mkl@pengutronix.de>
-Date:   Mon Oct 7 10:00:25 2019 +0200
+NOTE; The sent $6,000 is on hold because of the instruction from IMF
+office, they asked us to place it on hold by requesting the (Clean
+Bill Record Certificate) which will cost you $25 in order to fulfill
+all the necessary obligation to avoid any hitches while sending you
+the payment through MONEY GRAM money transfer, the necessary
+obligation I mean here is to obtain the (Clean Bill Record
+Certificate)
 
-    can: rx-offload: can_rx_offload_compare(): fix typo
-    
-    This patch fixes a typo found by checkpatch.
-    
-    Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Below is the information of today track it in our
 
-diff --git a/drivers/net/can/rx-offload.c b/drivers/net/can/rx-offload.c
-index 0daa8c7fe83b..8db07587ce3c 100644
---- a/drivers/net/can/rx-offload.c
-+++ b/drivers/net/can/rx-offload.c
-@@ -109,7 +109,7 @@ static int can_rx_offload_compare(struct sk_buff *a, struct sk_buff *b)
-        cb_a = can_rx_offload_get_cb(a);
-        cb_b = can_rx_offload_get_cb(b);
- 
--       /* Substract two u32 and return result as int, to keep
-+       /* Substact two u32 and return result as int, to keep
-         * difference steady around the u32 overflow.
-         */
-        return cb_b->timestamp - cb_a->timestamp;
+websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
+to see is available to pick up by the receiver, but if we didn't here
+from you soon we'll pickup it up from line for security reason to
+avoid hackers stealing the money online.
+
+Money Transfer Control Number M.T.C.N)::78393135
+SENDERS FIRST NAME: John
+SENDERS LAST NAME: Chun
+SENDERS COUNTRY...BENIN REPUBLIC
+TEXT QUESTION: A
+ANSWER: B
+AMOUNT: $6,000
+
+We need the below details from you, to enable us place the payment to
+your name and transfer the fund to you.
+
+(Full Receivers name)...................
+(You're Country)................................
+(Address)......................................
+(Phone NuMBER-...............................
+(You're Age)............................
+(OCCUPATION)..REAL ESTATE..................
+(A Copy of Your ID CARD).SEE ATTACHMENTS.............
+
+HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
+AND THAT IS ALL YOU HAVE TO DO ASAP.
+
+The payment will be sending to below information, such as:
+
+Receiver.............. ALAN UDE
+Country................Benin Republic
+Amount: ....................$25
+Question: .....................A
+Answer:................... B
+Sender...............Name:
+MTCN :..............
+
+According to the instruction and order we received from IMF the their
+requested $25 must be made directly to the above info's.
+
+Furthermore you are advised to call us as the instruction was passed
+that within 6hours without hearing from you, Count your payment
+canceled. Number to call is below listed manager director office of
+release order:
+DR.ALAN UDE
+Director MONEY GRAM-Benin
