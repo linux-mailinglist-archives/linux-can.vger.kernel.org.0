@@ -2,36 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E48CF75A
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491A5CF76C
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730376AbfJHKnI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 06:43:08 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44707 "EHLO
+        id S1730008AbfJHKsx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 06:48:53 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54647 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730016AbfJHKnH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:43:07 -0400
+        with ESMTP id S1729790AbfJHKsx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:48:53 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iHmxN-0007wo-48; Tue, 08 Oct 2019 12:43:05 +0200
+        id 1iHn2w-0008Sc-Rf; Tue, 08 Oct 2019 12:48:50 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40] (unknown [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EE060462311;
-        Tue,  8 Oct 2019 10:43:03 +0000 (UTC)
-Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
- after status IRQ
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EF8EC46231B;
+        Tue,  8 Oct 2019 10:48:49 +0000 (UTC)
 To:     linux-can@vger.kernel.org,
         Joe Burmeister <joe.burmeister@devtank.co.uk>,
         Wolfgang Grandegger <wg@grandegger.com>
 References: <20191008095707.23902-1-mkl@pengutronix.de>
- <d9211654-8b60-d0a1-31fa-c922f9cbc23a@pengutronix.de>
- <20191008102403.GA21036@x1.vandijck-laurijssen.be>
+ <20191008102524.GB21036@x1.vandijck-laurijssen.be>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,15 +91,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <679a2d58-4b88-39fb-50d8-80488c3e6158@pengutronix.de>
-Date:   Tue, 8 Oct 2019 12:42:59 +0200
+Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
+ after status IRQ
+Message-ID: <df3b602f-d07d-db7c-8c1e-e27eb1c3c92f@pengutronix.de>
+Date:   Tue, 8 Oct 2019 12:48:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191008102403.GA21036@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191008102524.GB21036@x1.vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft"
+ boundary="fxdXO8itjTsiChIUhf4KYsbLEZXdG0yoQ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,66 +112,57 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft
-Content-Type: multipart/mixed; boundary="d5XmOVZCuEgNMtyDyLQ1DVPIVtLMNUZDV";
+--fxdXO8itjTsiChIUhf4KYsbLEZXdG0yoQ
+Content-Type: multipart/mixed; boundary="nIvubemKKhEUwQ7I5tMqhgYPHFpPY3oVE";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: linux-can@vger.kernel.org, Joe Burmeister <joe.burmeister@devtank.co.uk>,
  Wolfgang Grandegger <wg@grandegger.com>
-Message-ID: <679a2d58-4b88-39fb-50d8-80488c3e6158@pengutronix.de>
+Message-ID: <df3b602f-d07d-db7c-8c1e-e27eb1c3c92f@pengutronix.de>
 Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
  after status IRQ
 References: <20191008095707.23902-1-mkl@pengutronix.de>
- <d9211654-8b60-d0a1-31fa-c922f9cbc23a@pengutronix.de>
- <20191008102403.GA21036@x1.vandijck-laurijssen.be>
-In-Reply-To: <20191008102403.GA21036@x1.vandijck-laurijssen.be>
+ <20191008102524.GB21036@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191008102524.GB21036@x1.vandijck-laurijssen.be>
 
---d5XmOVZCuEgNMtyDyLQ1DVPIVtLMNUZDV
+--nIvubemKKhEUwQ7I5tMqhgYPHFpPY3oVE
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 10/8/19 12:24 PM, Kurt Van Dijck wrote:
-> On di, 08 okt 2019 12:02:15 +0200, Marc Kleine-Budde wrote:
->> On 10/8/19 11:57 AM, Marc Kleine-Budde wrote:
->>> From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
->>>
->>> When the status register is read without status IRQ pending, it may g=
-et
->>> into a state that it goes into busoff state without having its irq
->>> activated, so the driver will never know.
+On 10/8/19 12:25 PM, Kurt Van Dijck wrote:
+> On di, 08 okt 2019 11:57:07 +0200, Marc Kleine-Budde wrote:
+>> From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 >>
->> Can you help rephrasing the patch description.
->>
->> I understand the problem is that we should only read the status regist=
-er
->> if there is a status IRQ. But what are the consequences regarding the
->> busoff state?
->=20
-> busoff is the last irq you'll get :-)
-> If you miss that one, you'll never catch in again.
->=20
-> The observation is that you have some bus errors, but the driver doesn'=
+>> When the status register is read without status IRQ pending, it may ge=
 t
-> know that the chip went in busoff, so it will never wake up again.
+>> into a state that it goes into busoff state without having its irq
+>> activated, so the driver wil never know.
+>>
+>> Thanks to Wolfgang and Joe for bringing up the first idea.
+>>
+>> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+>> Cc: Wolfgang Grandegger <wg@grandegger.com>
+>> Cc: Joe Burmeister <joe.burmeister@devtank.co.uk>
+>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>> ---
+>> Hello,
+>>
+>> as mentioned in another mail, I'll take this patch for the can branch =
+to
+>> fix this problem before switching to rx-offload.
 >=20
-> Only solution is to set link down & up again.
->=20
-> What's your opinion about this one:
+> I understand. It's cleaner.
 
-Perfect, now it's easier to understand the problem.
+Usualy I say use top-of-tree, but having the fix backported to -stable
+(with no extra effort from my side) is a good idea.
 
-> When the status register is read without the status IRQ pending, the
-> chip may not raise the interrupt line for an upcoming status interrupt
-> and the driver may miss a status interrupt.
-> It is critical that the BUSOFF status interrupt is informed to the
-                                                     ^^^^^^^^
-replaced by forwarded
+> I didn't do so as 90% of this patch will dissappear when we merge the 2=
 
-> higher layers, since no more interrupts will follow without
-> intervention.
+> halves together and migrate to rx-offload.
 
-added to linux-can.
+ACK. But I'd like to fix a known problem (with already a patch
+available) first, before switching the driver to rx-offload.
 
 Marc
 
@@ -183,23 +173,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---d5XmOVZCuEgNMtyDyLQ1DVPIVtLMNUZDV--
+--nIvubemKKhEUwQ7I5tMqhgYPHFpPY3oVE--
 
---wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft
+--fxdXO8itjTsiChIUhf4KYsbLEZXdG0yoQ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2caDMACgkQWsYho5Hk
-nSCxkwf/WEuKgwbU2Sy2mrpMcoTz82/dk/Q8ohyyxcNIH5AIALSjf10D7zEBAe4w
-YC2FTTTDzpeLdrOymUFYS4r/dMVbzFHj8zq1X87UA/i1fmSFgONp3BSU+zpFV82A
-zTrj67MVXGPQJ7CSI3yCm18Rq4/lNbaCjQTS2X6LlH+Om+tTcrkAr2GdRYhiam74
-ChwoQC60Y1dRfkwU8D4GBvIgxTJaVV1m+BIpJ6mhgwb3FyjSxfA+7/8uZNtXG4DM
-6Ga4do12Fy3eMEL0kqzXZrn3wW5J9Wi3Fqq+JVlfI18LHRSnajvSRSh3eVhrgZHK
-fNC6LtEFrOlF64QhjhUvkZFTGFLFGA==
-=IE1s
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2caYwACgkQWsYho5Hk
+nSDUBAf8ChUi3yOoIW+bi6eCSfMF2WyAcUZ24kamqZgPfptAIemyGVdVQwXtRgiD
+LeUg2CLdF+T5CAXjRaMfEH1NTSNcIoIbOBP6ueLJJgJPtIu/J0gFiJWkq1fsoCMM
+oxw0qGrDV0XO/LYdhRutriDPRcj+UeEO2aNk/LU3HMHLBFGPfWoq+NgOKwwH/BR1
+dHE/aV1AaDgRCOvettvtNuKvKssf1tEbkDNculELjriUNR3pcE69Zi4j9IXjovtq
+MPRSoTceumRI2/ZYrIlxN5VeyyUyRNb6jLe+mMmhbm8FVzVc/rpc7FXDKxYDFr//
+42GPyxv4HYqBeQoTbBEImpeL5gKVUQ==
+=y1Hf
 -----END PGP SIGNATURE-----
 
---wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft--
+--fxdXO8itjTsiChIUhf4KYsbLEZXdG0yoQ--
