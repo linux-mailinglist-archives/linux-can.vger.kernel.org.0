@@ -2,208 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2793ECFECE
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A313D0032
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 19:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728429AbfJHQUn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 12:20:43 -0400
-Received: from mga14.intel.com ([192.55.52.115]:13909 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726066AbfJHQUn (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 8 Oct 2019 12:20:43 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 09:20:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="223283510"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Oct 2019 09:20:41 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 569421A2; Tue,  8 Oct 2019 19:20:40 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Russell King <linux@armlinux.org.uk>
-Subject: [PATCH v2] can: mcp251x: Get rid of legacy platform data
-Date:   Tue,  8 Oct 2019 19:20:39 +0300
-Message-Id: <20191008162039.58458-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
+        id S1726439AbfJHRyi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 13:54:38 -0400
+Received: from relay-b03.edpnet.be ([212.71.1.220]:57526 "EHLO
+        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726320AbfJHRyh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 13:54:37 -0400
+X-ASG-Debug-ID: 1570557275-0a88186e2048f68b0001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.105.74.adsl.dyn.edpnet.net [77.109.105.74]) by relay-b03.edpnet.be with ESMTP id 21rWNEaMpeVVQhsO; Tue, 08 Oct 2019 19:54:35 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.105.74.adsl.dyn.edpnet.net[77.109.105.74]
+X-Barracuda-Apparent-Source-IP: 77.109.105.74
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 1970CA49185;
+        Tue,  8 Oct 2019 19:54:35 +0200 (CEST)
+Date:   Tue, 8 Oct 2019 19:54:33 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Joe Burmeister <joe.burmeister@devtank.co.uk>
+Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
+Message-ID: <20191008175433.GA19084@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [PATCH v3 0/4] can: c_can/rx-offload
+Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        Joe Burmeister <joe.burmeister@devtank.co.uk>
+References: <20191008080711.GA20524@x1.vandijck-laurijssen.be>
+ <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
+ <20191008082404.GC20524@x1.vandijck-laurijssen.be>
+ <a7579a05-53a6-00b8-e084-1025d5e9adbe@pengutronix.de>
+ <20191008103247.GC21036@x1.vandijck-laurijssen.be>
+ <558f7402-73cb-770a-7a24-5d417d5b2bb7@pengutronix.de>
+ <20191008111253.GF21036@x1.vandijck-laurijssen.be>
+ <06e01ef4-5e5f-e2fc-6827-df36a8e5c109@pengutronix.de>
+ <20191008125922.GG21036@x1.vandijck-laurijssen.be>
+ <b8f4936d-7e3a-d2ba-5649-9ff044dc78b2@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b8f4936d-7e3a-d2ba-5649-9ff044dc78b2@pengutronix.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 77.109.105.74.adsl.dyn.edpnet.net[77.109.105.74]
+X-Barracuda-Start-Time: 1570557275
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1435
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: SPAM GLOBAL 1.0000 1.0000 4.3430
+X-Barracuda-Spam-Score: 4.34
+X-Barracuda-Spam-Status: No, SCORE=4.34 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.77225
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Instead of using legacy platform data, switch to use device properties.
-For clock frequency we are using well established clock-frequency property.
+On di, 08 okt 2019 15:55:35 +0200, Marc Kleine-Budde wrote:
+> On 10/8/19 2:59 PM, Kurt Van Dijck wrote:
+> > On di, 08 okt 2019 13:30:12 +0200, Marc Kleine-Budde wrote:
+> >> On 10/8/19 1:12 PM, Kurt Van Dijck wrote:
+> >>> On di, 08 okt 2019 12:39:45 +0200, Marc Kleine-Budde wrote:
+> >>>> On 10/8/19 12:32 PM, Kurt Van Dijck wrote:
+> >>>>> On di, 08 okt 2019 10:32:18 +0200, Marc Kleine-Budde wrote:
+> >>>>>> On 10/8/19 10:24 AM, Kurt Van Dijck wrote:
+> >>>>
+> >>>> Tnx. Can you test the c_can branch from linux-can-next?
+> >>>
+> >>> That's the hard part, I can not advance kernel version at this point.
+> >>> So a long-term test is out of question at this point.
+> >>>
+> >>> Funcionally, the rx-offload patch does the same as my inplace fifo patch
+> >>> and that worked fine.
+> >>>
+> >>> I'll see where I can get with a bench test.
+> >>
+> >> You're using v4.9? I can backport all needed patches.
+> > 
+> > Yes, v4.9.
+> > 
+> > If you would be able to backport them, then I add them here and I'll
+> > test. That's probably the easiest.
+> 
+> try:
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=for-kurt
 
-Users, two for now, are also converted here.
+Thanks for the backport.
 
-Cc: Daniel Mack <daniel@zonque.org>
-Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-Cc: Russell King <linux@armlinux.org.uk>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fix issues kbuild bot complains about
+It compiles and CAN works. I put it on a test machine now, but since it's
+logically equivalent to my ad-hoc skb_queue, I expect no long-term surprises.
+My test machine may need no to stop due to bad weather conditions.
 
- arch/arm/mach-pxa/icontrol.c         |  9 +++++----
- arch/arm/mach-pxa/zeus.c             |  9 +++++----
- drivers/net/can/spi/mcp251x.c        |  9 ++++-----
- include/linux/can/platform/mcp251x.h | 22 ----------------------
- 4 files changed, 14 insertions(+), 35 deletions(-)
- delete mode 100644 include/linux/can/platform/mcp251x.h
-
-diff --git a/arch/arm/mach-pxa/icontrol.c b/arch/arm/mach-pxa/icontrol.c
-index 865b10344ea2..0474a4b1394d 100644
---- a/arch/arm/mach-pxa/icontrol.c
-+++ b/arch/arm/mach-pxa/icontrol.c
-@@ -12,6 +12,7 @@
- 
- #include <linux/irq.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/gpio.h>
- 
- #include <asm/mach-types.h>
-@@ -22,7 +23,6 @@
- 
- #include <linux/spi/spi.h>
- #include <linux/spi/pxa2xx_spi.h>
--#include <linux/can/platform/mcp251x.h>
- #include <linux/regulator/machine.h>
- 
- #include "generic.h"
-@@ -69,8 +69,9 @@ static struct pxa2xx_spi_chip mcp251x_chip_info4 = {
- 	.gpio_cs        = ICONTROL_MCP251x_nCS4
- };
- 
--static struct mcp251x_platform_data mcp251x_info = {
--	.oscillator_frequency = 16E6,
-+static const struct property_entry mcp251x_properties[] = {
-+	PROPERTY_ENTRY_U32("clock-frequency", 16000000),
-+	{}
- };
- 
- static struct spi_board_info mcp251x_board_info[] = {
-@@ -79,7 +80,7 @@ static struct spi_board_info mcp251x_board_info[] = {
- 		.max_speed_hz    = 6500000,
- 		.bus_num         = 3,
- 		.chip_select     = 0,
--		.platform_data   = &mcp251x_info,
-+		.properties      = mcp251x_properties,
- 		.controller_data = &mcp251x_chip_info1,
- 		.irq             = PXA_GPIO_TO_IRQ(ICONTROL_MCP251x_nIRQ1)
- 	},
-diff --git a/arch/arm/mach-pxa/zeus.c b/arch/arm/mach-pxa/zeus.c
-index da113c8eefbf..b27fc7ac9cea 100644
---- a/arch/arm/mach-pxa/zeus.c
-+++ b/arch/arm/mach-pxa/zeus.c
-@@ -13,6 +13,7 @@
- #include <linux/leds.h>
- #include <linux/irq.h>
- #include <linux/pm.h>
-+#include <linux/property.h>
- #include <linux/gpio.h>
- #include <linux/gpio/machine.h>
- #include <linux/serial_8250.h>
-@@ -27,7 +28,6 @@
- #include <linux/platform_data/i2c-pxa.h>
- #include <linux/platform_data/pca953x.h>
- #include <linux/apm-emulation.h>
--#include <linux/can/platform/mcp251x.h>
- #include <linux/regulator/fixed.h>
- #include <linux/regulator/machine.h>
- 
-@@ -428,14 +428,15 @@ static struct gpiod_lookup_table can_regulator_gpiod_table = {
- 	},
- };
- 
--static struct mcp251x_platform_data zeus_mcp2515_pdata = {
--	.oscillator_frequency	= 16*1000*1000,
-+static const struct property_entry mcp251x_properties[] = {
-+	PROPERTY_ENTRY_U32("clock-frequency", 16000000),
-+	{}
- };
- 
- static struct spi_board_info zeus_spi_board_info[] = {
- 	[0] = {
- 		.modalias	= "mcp2515",
--		.platform_data	= &zeus_mcp2515_pdata,
-+		.properties	= mcp251x_properties,
- 		.irq		= PXA_GPIO_TO_IRQ(ZEUS_CAN_GPIO),
- 		.max_speed_hz	= 1*1000*1000,
- 		.bus_num	= 3,
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index bee9f7b8dad6..f569fd44bbeb 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -22,7 +22,6 @@
- #include <linux/can/core.h>
- #include <linux/can/dev.h>
- #include <linux/can/led.h>
--#include <linux/can/platform/mcp251x.h>
- #include <linux/clk.h>
- #include <linux/completion.h>
- #include <linux/delay.h>
-@@ -986,19 +985,19 @@ MODULE_DEVICE_TABLE(spi, mcp251x_id_table);
- static int mcp251x_can_probe(struct spi_device *spi)
- {
- 	const void *match = device_get_match_data(&spi->dev);
--	struct mcp251x_platform_data *pdata = dev_get_platdata(&spi->dev);
- 	struct net_device *net;
- 	struct mcp251x_priv *priv;
- 	struct clk *clk;
--	int freq, ret;
-+	u32 freq;
-+	int ret;
- 
- 	clk = devm_clk_get_optional(&spi->dev, NULL);
- 	if (IS_ERR(clk))
- 		return PTR_ERR(clk);
- 
- 	freq = clk_get_rate(clk);
--	if (freq == 0 && pdata)
--		freq = pdata->oscillator_frequency;
-+	if (freq == 0)
-+		device_property_read_u32(&spi->dev, "clock-frequency", &freq);
- 
- 	/* Sanity check */
- 	if (freq < 1000000 || freq > 25000000)
-diff --git a/include/linux/can/platform/mcp251x.h b/include/linux/can/platform/mcp251x.h
-deleted file mode 100644
-index 9e5ac27fb6c1..000000000000
---- a/include/linux/can/platform/mcp251x.h
-+++ /dev/null
-@@ -1,22 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _CAN_PLATFORM_MCP251X_H
--#define _CAN_PLATFORM_MCP251X_H
--
--/*
-- *
-- * CAN bus driver for Microchip 251x CAN Controller with SPI Interface
-- *
-- */
--
--#include <linux/spi/spi.h>
--
--/*
-- * struct mcp251x_platform_data - MCP251X SPI CAN controller platform data
-- * @oscillator_frequency:       - oscillator frequency in Hz
-- */
--
--struct mcp251x_platform_data {
--	unsigned long oscillator_frequency;
--};
--
--#endif /* !_CAN_PLATFORM_MCP251X_H */
--- 
-2.23.0
-
+Kind regards,
+Kurt
