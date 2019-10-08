@@ -2,176 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80601CF6C9
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52AFCF6E6
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729944AbfJHKLg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 06:11:36 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41741 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729790AbfJHKLf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:11:35 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iHmSr-00051g-B6; Tue, 08 Oct 2019 12:11:33 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40] (unknown [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3EC4E4622C4;
-        Tue,  8 Oct 2019 10:11:32 +0000 (UTC)
-Subject: Re: [PATCH 1/2] can/peak_usb: fix a potential out-of-sync while
- decoding packets
-To:     Stephane Grosjean <s.grosjean@peak-system.com>,
-        linux-can Mailing List <linux-can@vger.kernel.org>
-References: <20191008083545.4569-1-s.grosjean@peak-system.com>
- <20191008083545.4569-2-s.grosjean@peak-system.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <482c0c97-49ba-7932-5676-8d5357fd948e@pengutronix.de>
-Date:   Tue, 8 Oct 2019 12:11:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730056AbfJHKVF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 06:21:05 -0400
+Received: from mail-eopbgr30080.outbound.protection.outlook.com ([40.107.3.80]:61422
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729790AbfJHKVE (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 8 Oct 2019 06:21:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RkgrUsj121XOTBvAwtKEnTZsFt8/IRXsHQPForIk4lAtcH68rNS+IMd5WSTj4OQzFl6uHXBspZGfmeot4Tctk5Y7vEV9ZHAq2sx7rhcPdmbupYziaD4l3CMhoI723lTyWDhb7LNcy3oNUjuy9dZ5IWEONqWu+I1YScw8xi+2IJI1GXHZt+hPRYYnoQUj9v1P/5mmjXDg2gwnyNhadX1/w8jjWBnZLHsi9fDEusNfHvdYU+zsYWwAOidsovG/ak18ua3Ga9dTp/C0jVWanq2wpa2zQHHI3mNp+vdaAiwW9mZu8iktu5f3d31nSJp+lxGo3/gNvXYetto8/xcpJPF4IA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eAXvZH0SC4IvclOFg9qdJiVXICY/bqoZh2mfnaphjeA=;
+ b=ToDzhoP8Ji/oEBz6J1vhYDEJ3okQoXlQUpka040/le4sMnNTnCR4ZXlFGbyvr21QTKv56AieFGUbdnSbyLi4Ma+0oI+EQcnjdT3mEiSvLZSqOPopF3eW7c5apfA24KjTokhkqleHU3Ffy/pATlvCY6VXTsHmp4l4rwXnYaP2sDxkx/3EHevEmGCxpSraYEBHDdtHFXkV87tXRLnm23FsRnb4MBKp0unYy197SW8vO8aL/hnqa78AxjkWzKxJNAyc3egsNW8/RxD4jTz+wk5WVEy/vts7zzdx8UWEc2F5TaNu6WTEvMWqBAWuBwRRbmNFQ1roBIz3Kqugh511pN5NJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eAXvZH0SC4IvclOFg9qdJiVXICY/bqoZh2mfnaphjeA=;
+ b=cNRIf2tEYWZvtTxuLQ3HROl4IgItL5iUliR1Qft2hCJYwhMfLGRDOL9pfIxHeIp6NjLXtel19nQf/GGSXbdw/7b0iPi/hmMSpNGzXNJHhZZhgk7qfvdMLcC+o9AboQThmRIbayzv6AGFB0ofqBwOo5gwsLvyMAbT6uqoXIBKx84=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB4604.eurprd04.prod.outlook.com (52.135.138.16) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.23; Tue, 8 Oct 2019 10:21:00 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::79f1:61a7:4076:8679]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::79f1:61a7:4076:8679%3]) with mapi id 15.20.2327.026; Tue, 8 Oct 2019
+ 10:21:00 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     Sean Nyekjaer <sean@geanix.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        =?utf-8?B?TWFydGluIEh1bmRlYsO4bGw=?= <martin@geanix.com>
+Subject: RE: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
+ wakeup
+Thread-Topic: [PATCH REPOST 1/2] can: flexcan: fix deadlock when using self
+ wakeup
+Thread-Index: AQHVVAt+uezYlHzMP0yJKoK3YxkiS6cD2xAAgAAKUjCAAA71AIAMq3CAgAEuS9CACueJAIAAERoggAfqqoCALCoiMA==
+Date:   Tue, 8 Oct 2019 10:20:59 +0000
+Message-ID: <DB7PR04MB4618DEF0873D110536724818E69A0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+References: <20190816081749.19300-1-qiangqing.zhang@nxp.com>
+ <20190816081749.19300-2-qiangqing.zhang@nxp.com>
+ <dd8f5269-8403-702b-b054-e031423ffc73@geanix.com>
+ <DB7PR04MB4618A1F984F2281C66959B06E6AB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <35190c5b-f8be-8784-5b4f-32a691a6cffe@geanix.com>
+ <6a9bc081-334a-df91-3a23-b74a6cdd3633@geanix.com>
+ <DB7PR04MB4618E527339B69AEAD46FB06E6A20@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <588ab34d-613d-ac01-7949-921140ca4543@geanix.com>
+ <DB7PR04MB461868320DA0B25CC8255213E6BB0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <739eee2e-2919-93b4-24fe-8d0d198ae042@geanix.com>
+In-Reply-To: <739eee2e-2919-93b4-24fe-8d0d198ae042@geanix.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bdda9318-9a42-420b-5811-08d74bd93712
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: DB7PR04MB4604:|DB7PR04MB4604:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB46041326210F55765DFECB0CE69A0@DB7PR04MB4604.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
+x-forefront-prvs: 01842C458A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(376002)(396003)(346002)(366004)(136003)(13464003)(189003)(199004)(86362001)(4744005)(486006)(14444005)(66574012)(2201001)(256004)(33656002)(6436002)(66066001)(9686003)(99286004)(8676002)(54906003)(478600001)(305945005)(25786009)(7736002)(74316002)(55016002)(26005)(71190400001)(186003)(71200400001)(110136005)(316002)(64756008)(6506007)(7696005)(6116002)(66446008)(66946007)(3846002)(52536014)(81156014)(76176011)(229853002)(102836004)(5660300002)(14454004)(53546011)(66556008)(6246003)(476003)(76116006)(11346002)(2906002)(2501003)(81166006)(8936002)(446003)(66476007)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4604;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OAh/j24/cg30GrvLICCM3Q20g43Yz8FISa6fbTr1T2DOwHWuu8bmp7HYl6BkTC9Uh9gvVENaQpcJbi7zrFQnKpjFN6pa69gD2oyyVhkFfNkUzy5A3YH2vA3ThpXTmN2blmi/s80FwH4+ExP0EsxNOYtcwfZtvM/aMShG9Tl6owROe2wwNLNrDBIIR42laao4BdNgVAkDxdC1FKShRKiyafYYAeihHKIY5BYl8iRrA1bGgVz93pvX8FHY58AUy3zUOtImW/Xw4ebMaeqeF08jMjdznnNCeuSZFijd3BKSe2iF9OoWaFbhVfwvKj3X6syu3tqZhEW2hmZhOXjsCUUPl8ED4btGUmh/Vn75M4LflT7yY0quHgTakXcvCSlSazZWK/5dp/+t89SC57lQelQk3vQSsDmHdbFEa+K6QXF1sV8=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20191008083545.4569-2-s.grosjean@peak-system.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdda9318-9a42-420b-5811-08d74bd93712
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2019 10:20:59.8451
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BJL3tA/hP4UnxMEuzkDGSAq8/eb/24iSDq5dt0Nm9iFvjB7uJ4Ot1nppxP125qfk37XSML3diURN0bKfIA/eCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4604
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR
-Content-Type: multipart/mixed; boundary="lpdx2LcByHSaGiqAntwy8Df6JK1xnXq3a";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Stephane Grosjean <s.grosjean@peak-system.com>,
- linux-can Mailing List <linux-can@vger.kernel.org>
-Message-ID: <482c0c97-49ba-7932-5676-8d5357fd948e@pengutronix.de>
-Subject: Re: [PATCH 1/2] can/peak_usb: fix a potential out-of-sync while
- decoding packets
-References: <20191008083545.4569-1-s.grosjean@peak-system.com>
- <20191008083545.4569-2-s.grosjean@peak-system.com>
-In-Reply-To: <20191008083545.4569-2-s.grosjean@peak-system.com>
-
---lpdx2LcByHSaGiqAntwy8Df6JK1xnXq3a
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 10/8/19 10:35 AM, Stephane Grosjean wrote:
-> When decoding a buffer received from PCAN-USB, the first timestamp read=
- in
-> a packet is a 16-bit coded time base, and the next ones are an 8-bit
-> offset to this base, regardless of the type of packet read.
->=20
-> This patch corrects a potential loss of synchronization by using a
-> timestamp index read from the buffer, rather than an index of received
-> data packets, to determine on the sizeof the timestamp to be read from =
-the
-> packet being decoded.
->=20
-> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
-
-Added to linux-can.
-
-tnx,
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
-
-
---lpdx2LcByHSaGiqAntwy8Df6JK1xnXq3a--
-
---P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2cYM8ACgkQWsYho5Hk
-nSBySQgAtNoijYypQjEk0H1kK4Z9hDahwuQ+bU+jZxZrQjAI9jr1SXIDjYah2EWk
-mDshSAJ40J7FUbiuBgg4qPNZrFzt27t3LUOmtKGW0OU0dMWw2kqAFphIwu9cn34p
-HfHo33r3UvzxA08RPfgeuOltVYRfvrD3Rf7uX+K1Y9T4uESqe5ghYM4zTHZgD4Xc
-kg8rqUy4vgF4hRja0YlMkF2XZXH92vHX7Nkye4MLiRM4eNJAH/c95XzlC9HsYuUS
-vXD9UZQ50VELsexJiyPP59QAGpt7gwBMJ2C9sFqAbHB3QTsIjmmZ0TW8Aq9wVIwY
-qCwMCgfhvhVDW6ADNp93Uh2ZfIpNOw==
-=I2kV
------END PGP SIGNATURE-----
-
---P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR--
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNlYW4gTnlla2phZXIgPHNl
+YW5AZ2Vhbml4LmNvbT4NCj4gU2VudDogMjAxOeW5tDnmnIgxMOaXpSAxNTo1Mw0KPiBUbzogSm9h
+a2ltIFpoYW5nIDxxaWFuZ3FpbmcuemhhbmdAbnhwLmNvbT47IG1rbEBwZW5ndXRyb25peC5kZTsN
+Cj4gbGludXgtY2FuQHZnZXIua2VybmVsLm9yZw0KPiBDYzogd2dAZ3JhbmRlZ2dlci5jb207IG5l
+dGRldkB2Z2VyLmtlcm5lbC5vcmc7IGRsLWxpbnV4LWlteA0KPiA8bGludXgtaW14QG54cC5jb20+
+OyBNYXJ0aW4gSHVuZGViw7hsbCA8bWFydGluQGdlYW5peC5jb20+DQo+IFN1YmplY3Q6IFJlOiBb
+UEFUQ0ggUkVQT1NUIDEvMl0gY2FuOiBmbGV4Y2FuOiBmaXggZGVhZGxvY2sgd2hlbiB1c2luZyBz
+ZWxmDQo+IHdha2V1cA0KPiANCj4gDQo+IA0KPiBPbiAwNS8wOS8yMDE5IDA5LjEwLCBKb2FraW0g
+Wmhhbmcgd3JvdGU6DQo+ID4gSGkgU2VhbiwNCj4gPg0KPiA+IENvdWxkIHlvdSB1cGRhdGUgbGFz
+dGVzdCBmbGV4Y2FuIGRyaXZlciB1c2luZyBsaW51eC1jYW4tbmV4dC9mbGV4Y2FuIGFuZCB0aGVu
+DQo+IG1lcmdlIGJlbG93IHR3byBwYXRjaGVzIGZyb20gbGludXgtY2FuL3Rlc3Rpbmc/DQo+ID4g
+ZDBiNTM2MTY3MTZlIChIRUFEIC0+IHRlc3RpbmcsIG9yaWdpbi90ZXN0aW5nKSBjYW46IGZsZXhj
+YW46IGFkZCBMUFNSDQo+ID4gbW9kZSBzdXBwb3J0IGZvciBpLk1YN0QgODAzZWI2YmFkNjViIGNh
+bjogZmxleGNhbjogZml4IGRlYWRsb2NrIHdoZW4NCj4gPiB1c2luZyBzZWxmIHdha2V1cA0KPiA+
+DQo+ID4gQmVzdCBSZWdhcmRzLA0KPiA+IEpvYWtpbSBaaGFuZw0KPiANCj4gSGkNCj4gDQo+IEkg
+cmV2ZXJ0ZWQgMiBjb21taXRzIG9uIHRodyBuYW5kIGRyaXZlciBhbmQgZ290IHRoZSB0ZXN0aW5n
+IGtlcm5lbCB0byB3b3JrLg0KPiANCj4gSSBjYW4gY29uZmlybSB0aGUgaXNzdWUgaXMgcmVzb2x2
+ZWQgd2l0aCB0aGlzIHBhdGNoIDotKQ0KDQpIaSBNYXJjLA0KDQpIb3cgYWJvdXQgdGhlc2UgdHdv
+IGZpeGVzIGZvciBGbGV4Y2FuPw0KDQpCZXN0IFJlZ2FyZHMsDQpKb2FraW0gWmhhbmcNCj4gL1Nl
+YW4NCg==
