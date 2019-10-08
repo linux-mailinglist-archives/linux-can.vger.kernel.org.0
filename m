@@ -2,37 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5D5CF73F
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E48CF75A
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730717AbfJHKjy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 06:39:54 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46799 "EHLO
+        id S1730376AbfJHKnI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 06:43:08 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44707 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730715AbfJHKjx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:39:53 -0400
+        with ESMTP id S1730016AbfJHKnH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:43:07 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iHmuF-0007OM-CI; Tue, 08 Oct 2019 12:39:51 +0200
+        id 1iHmxN-0007wo-48; Tue, 08 Oct 2019 12:43:05 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40] (unknown [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 532A2462305;
-        Tue,  8 Oct 2019 10:39:50 +0000 (UTC)
-Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EE060462311;
+        Tue,  8 Oct 2019 10:43:03 +0000 (UTC)
+Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
+ after status IRQ
 To:     linux-can@vger.kernel.org,
-        Joe Burmeister <joe.burmeister@devtank.co.uk>
-References: <20191008075226.12544-1-mkl@pengutronix.de>
- <20191008080711.GA20524@x1.vandijck-laurijssen.be>
- <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
- <20191008082404.GC20524@x1.vandijck-laurijssen.be>
- <a7579a05-53a6-00b8-e084-1025d5e9adbe@pengutronix.de>
- <20191008103247.GC21036@x1.vandijck-laurijssen.be>
+        Joe Burmeister <joe.burmeister@devtank.co.uk>,
+        Wolfgang Grandegger <wg@grandegger.com>
+References: <20191008095707.23902-1-mkl@pengutronix.de>
+ <d9211654-8b60-d0a1-31fa-c922f9cbc23a@pengutronix.de>
+ <20191008102403.GA21036@x1.vandijck-laurijssen.be>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -95,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <558f7402-73cb-770a-7a24-5d417d5b2bb7@pengutronix.de>
-Date:   Tue, 8 Oct 2019 12:39:45 +0200
+Message-ID: <679a2d58-4b88-39fb-50d8-80488c3e6158@pengutronix.de>
+Date:   Tue, 8 Oct 2019 12:42:59 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191008103247.GC21036@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191008102403.GA21036@x1.vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="K6kPc2fNRP8jdyCk1EaFH0HZj5qBSDz29"
+ boundary="wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,75 +113,66 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---K6kPc2fNRP8jdyCk1EaFH0HZj5qBSDz29
-Content-Type: multipart/mixed; boundary="KrQb4SWAHdAGoFaCelTL64IZjwElqCTnz";
+--wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft
+Content-Type: multipart/mixed; boundary="d5XmOVZCuEgNMtyDyLQ1DVPIVtLMNUZDV";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: linux-can@vger.kernel.org, Joe Burmeister <joe.burmeister@devtank.co.uk>
-Message-ID: <558f7402-73cb-770a-7a24-5d417d5b2bb7@pengutronix.de>
-Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
-References: <20191008075226.12544-1-mkl@pengutronix.de>
- <20191008080711.GA20524@x1.vandijck-laurijssen.be>
- <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
- <20191008082404.GC20524@x1.vandijck-laurijssen.be>
- <a7579a05-53a6-00b8-e084-1025d5e9adbe@pengutronix.de>
- <20191008103247.GC21036@x1.vandijck-laurijssen.be>
-In-Reply-To: <20191008103247.GC21036@x1.vandijck-laurijssen.be>
+To: linux-can@vger.kernel.org, Joe Burmeister <joe.burmeister@devtank.co.uk>,
+ Wolfgang Grandegger <wg@grandegger.com>
+Message-ID: <679a2d58-4b88-39fb-50d8-80488c3e6158@pengutronix.de>
+Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
+ after status IRQ
+References: <20191008095707.23902-1-mkl@pengutronix.de>
+ <d9211654-8b60-d0a1-31fa-c922f9cbc23a@pengutronix.de>
+ <20191008102403.GA21036@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191008102403.GA21036@x1.vandijck-laurijssen.be>
 
---KrQb4SWAHdAGoFaCelTL64IZjwElqCTnz
+--d5XmOVZCuEgNMtyDyLQ1DVPIVtLMNUZDV
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/8/19 12:32 PM, Kurt Van Dijck wrote:
-> On di, 08 okt 2019 10:32:18 +0200, Marc Kleine-Budde wrote:
->> On 10/8/19 10:24 AM, Kurt Van Dijck wrote:
->>>>>> taking up Kurt's work. I've cleaned up the rx-offload and c_can pa=
-tches
->>>>>> a bit. Untested as I don't have any hardware at hand.
->>>>>
->>>>> I had created equivalent code (skb_queue in isr, skb_dequeue in nap=
-i
->>>>> handler) running on a 4.9 kernel since some days now. I didn't obse=
-rve
->>>>> any problems yet.
->>>>
->>>> This is based on the patches you send around.
->>>> Anyways can you send me your currently working version?
+On 10/8/19 12:24 PM, Kurt Van Dijck wrote:
+> On di, 08 okt 2019 12:02:15 +0200, Marc Kleine-Budde wrote:
+>> On 10/8/19 11:57 AM, Marc Kleine-Budde wrote:
+>>> From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 >>>
->>> I know. My first attempt was to backport rx-offload, but this was mor=
-e
->>> work than expected, so I created this patch, doing the skb_queue insi=
-de
->>> c_can driver directly. I wrote that patch with the latest rx-offload.=
-c
->>> side-by-side.
->>>
->>> I just wrote it this way quickly so I could go ahead and test the mow=
-er,
->>> upgrading to a more recent kernel is scheduled within a few months or=
-
->>> so.
+>>> When the status register is read without status IRQ pending, it may g=
+et
+>>> into a state that it goes into busoff state without having its irq
+>>> activated, so the driver will never know.
 >>
->> Ok, so which variant should be integrated into the kernel?
+>> Can you help rephrasing the patch description.
+>>
+>> I understand the problem is that we should only read the status regist=
+er
+>> if there is a status IRQ. But what are the consequences regarding the
+>> busoff state?
 >=20
-> The maintenance of a linear skb_queue by itself felt not that complicat=
-ed.
-> The napi part however requires more attention.
+> busoff is the last irq you'll get :-)
+> If you miss that one, you'll never catch in again.
 >=20
-> My ad-hoc skb_queue implementation feels dirty given the rx-offload wor=
-k.
-> The risk of having duplicated napi-handlers convinced me to use
-> rx-offload, and I'm still convinced of that.
+> The observation is that you have some bus errors, but the driver doesn'=
+t
+> know that the chip went in busoff, so it will never wake up again.
 >=20
-> So I vote for the rx-offload variant.
+> Only solution is to set link down & up again.
+>=20
+> What's your opinion about this one:
 
-Tnx. Can you test the c_can branch from linux-can-next?
+Perfect, now it's easier to understand the problem.
 
-> As said, I created my ad-hoc skb_queue because rx-offload wasn't in v4.=
-9.
+> When the status register is read without the status IRQ pending, the
+> chip may not raise the interrupt line for an upcoming status interrupt
+> and the driver may miss a status interrupt.
+> It is critical that the BUSOFF status interrupt is informed to the
+                                                     ^^^^^^^^
+replaced by forwarded
 
-IC
+> higher layers, since no more interrupts will follow without
+> intervention.
+
+added to linux-can.
 
 Marc
 
@@ -193,23 +183,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---KrQb4SWAHdAGoFaCelTL64IZjwElqCTnz--
+--d5XmOVZCuEgNMtyDyLQ1DVPIVtLMNUZDV--
 
---K6kPc2fNRP8jdyCk1EaFH0HZj5qBSDz29
+--wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2cZ3EACgkQWsYho5Hk
-nSBXfwf/XuhkIVYs0OPgAbwB4r7vhSOgd22fL1L1Rn8YKO1vUl2ERNuXzckfPjli
-ZgYR2xgkner190PfZerQVEo28Cu2aHjkXxfYc97eetB+rHmpG3PCVCvKzVGEOQCX
-JeT3nh/uUzsE9EBOvXgXe4Bv3IoioRd76hDhPJoYQW2SGlHBnS3g857TTG8fndEM
-Dev+dkLDDXNQ53n2NRND+03TLDUO3V6B5aEafXPp6YtZ121/UHbWJo/i8FF7F6Ad
-v7ZjeVrq6HZBvDvUQq6Fwu/JOa4s1MS0Ik6D5TVPv24SmvrbhRgCh1Sw4EwOcAhp
-ySSn0JRnv/kOgODzbRfDwJRq2t5G4A==
-=9+sD
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2caDMACgkQWsYho5Hk
+nSCxkwf/WEuKgwbU2Sy2mrpMcoTz82/dk/Q8ohyyxcNIH5AIALSjf10D7zEBAe4w
+YC2FTTTDzpeLdrOymUFYS4r/dMVbzFHj8zq1X87UA/i1fmSFgONp3BSU+zpFV82A
+zTrj67MVXGPQJ7CSI3yCm18Rq4/lNbaCjQTS2X6LlH+Om+tTcrkAr2GdRYhiam74
+ChwoQC60Y1dRfkwU8D4GBvIgxTJaVV1m+BIpJ6mhgwb3FyjSxfA+7/8uZNtXG4DM
+6Ga4do12Fy3eMEL0kqzXZrn3wW5J9Wi3Fqq+JVlfI18LHRSnajvSRSh3eVhrgZHK
+fNC6LtEFrOlF64QhjhUvkZFTGFLFGA==
+=IE1s
 -----END PGP SIGNATURE-----
 
---K6kPc2fNRP8jdyCk1EaFH0HZj5qBSDz29--
+--wOt1duB6n8jTXQxGwou9bqqKtxslwd1ft--
