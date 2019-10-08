@@ -2,33 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4827ECF454
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 09:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60FCCF456
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 09:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730177AbfJHHwe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 03:52:34 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52707 "EHLO
+        id S1730209AbfJHHzj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 03:55:39 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:59579 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730209AbfJHHwd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 03:52:33 -0400
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        with ESMTP id S1730177AbfJHHzj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 03:55:39 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iHkIJ-0005p5-0e; Tue, 08 Oct 2019 09:52:31 +0200
+        id 1iHkLJ-00065Y-Pc; Tue, 08 Oct 2019 09:55:37 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:5a5:4172:f956:f0ed] (unknown [IPv6:2a03:f580:87bc:d400:5a5:4172:f956:f0ed])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7C08646213E;
+        Tue,  8 Oct 2019 07:55:36 +0000 (UTC)
+Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v3 4/4] can: c_can: use rx-offload in IRQ handler
-Date:   Tue,  8 Oct 2019 09:52:26 +0200
-Message-Id: <20191008075226.12544-5-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191008075226.12544-1-mkl@pengutronix.de>
+        Joe Burmeister <joe.burmeister@devtank.co.uk>
 References: <20191008075226.12544-1-mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <3c802e26-00cd-c03f-1850-ba4adb40c092@pengutronix.de>
+Date:   Tue, 8 Oct 2019 09:55:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+In-Reply-To: <20191008075226.12544-1-mkl@pengutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="nuesY1UR7Nio0bxOtHwUGpVixjbQBFhDM"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
@@ -37,253 +109,65 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--nuesY1UR7Nio0bxOtHwUGpVixjbQBFhDM
+Content-Type: multipart/mixed; boundary="qX6ZsATeGlnC3pFLVEIr4mrBmlOffzFB7";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org
+Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ Joe Burmeister <joe.burmeister@devtank.co.uk>
+Message-ID: <3c802e26-00cd-c03f-1850-ba4adb40c092@pengutronix.de>
+Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
+References: <20191008075226.12544-1-mkl@pengutronix.de>
+In-Reply-To: <20191008075226.12544-1-mkl@pengutronix.de>
 
-When the IRQ handler schedules a NAPI softirq to read all CAN msgs from
-the CAN chip, that softirq may come way later due to scheduling and
-cause hardware buffer overlows.
+--qX6ZsATeGlnC3pFLVEIr4mrBmlOffzFB7
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-This is especially bizarre on an RT system where you can elevate the CAN
-IRQ handler priority, but the actual reading is done in softirq, and
-depends again on other softirq work. This makes it impossible to
-rectify.
+On 10/8/19 9:52 AM, Marc Kleine-Budde wrote:
+> taking up Kurt's work. I've cleaned up the rx-offload and c_can patches=
 
-This commit moves all HW access into the irq handler, which will queue
-using can_rx_offload.
+> a bit. Untested as I don't have any hardware at hand.
 
-Because the INT_REG is only read once per irq routine, the lost busoff
-condition due to repetive reading is now gone too.
+Feel free to test the patches.
 
-Cc: Joe Burmeister <joe.burmeister@devtank.co.uk>
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/c_can/c_can.c | 85 ++++++++++++++++++-----------------
- drivers/net/can/c_can/c_can.h |  4 +-
- 2 files changed, 46 insertions(+), 43 deletions(-)
+They need some cleanups included in my latest pull request
+linux-can-next-for-5.5-20191007.
 
-diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_can.c
-index 537a2f1febdf..16d266b10305 100644
---- a/drivers/net/can/c_can/c_can.c
-+++ b/drivers/net/can/c_can/c_can.c
-@@ -97,6 +97,9 @@
- #define BTR_TSEG2_SHIFT		12
- #define BTR_TSEG2_MASK		(0x7 << BTR_TSEG2_SHIFT)
- 
-+/* interrupt register */
-+#define INT_STS_PENDING		0x8000
-+
- /* brp extension register */
- #define BRP_EXT_BRPE_MASK	0x0f
- #define BRP_EXT_BRPE_SHIFT	0
-@@ -169,9 +172,6 @@
- /* Wait for ~1 sec for INIT bit */
- #define INIT_WAIT_MS		1000
- 
--/* napi related */
--#define C_CAN_NAPI_WEIGHT	C_CAN_MSG_OBJ_RX_NUM
--
- /* c_can lec values */
- enum c_can_lec_type {
- 	LEC_NO_ERROR = 0,
-@@ -384,7 +384,7 @@ static int c_can_handle_lost_msg_obj(struct net_device *dev,
- 	frame->can_id |= CAN_ERR_CRTL;
- 	frame->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
- 
--	netif_receive_skb(skb);
-+	can_rx_offload_receive_skb(&priv->offload, skb);
- 	return 1;
- }
- 
-@@ -436,7 +436,7 @@ static int c_can_read_msg_object(struct net_device *dev, int iface, u32 ctrl)
- 	stats->rx_packets++;
- 	stats->rx_bytes += frame->can_dlc;
- 
--	netif_receive_skb(skb);
-+	can_rx_offload_receive_skb(&priv->offload, skb);
- 	return 0;
- }
- 
-@@ -948,7 +948,7 @@ static int c_can_handle_state_change(struct net_device *dev,
- 
- 	stats->rx_packets++;
- 	stats->rx_bytes += cf->can_dlc;
--	netif_receive_skb(skb);
-+	can_rx_offload_receive_skb(&priv->offload, skb);
- 
- 	return 1;
- }
-@@ -1018,21 +1018,32 @@ static int c_can_handle_bus_err(struct net_device *dev,
- 
- 	stats->rx_packets++;
- 	stats->rx_bytes += cf->can_dlc;
--	netif_receive_skb(skb);
-+	can_rx_offload_receive_skb(&priv->offload, skb);
- 	return 1;
- }
- 
--static int c_can_poll(struct napi_struct *napi, int quota)
-+static irqreturn_t c_can_isr(int irq, void *dev_id)
- {
--	struct net_device *dev = napi->dev;
-+	struct net_device *dev = dev_id;
- 	struct c_can_priv *priv = netdev_priv(dev);
- 	u16 curr, last = priv->last_status;
- 	int work_done = 0;
-+	int reg_int;
- 
--	priv->last_status = curr = priv->read_reg(priv, C_CAN_STS_REG);
--	/* Ack status on C_CAN. D_CAN is self clearing */
--	if (priv->type != BOSCH_D_CAN)
--		priv->write_reg(priv, C_CAN_STS_REG, LEC_UNUSED);
-+	reg_int = priv->read_reg(priv, C_CAN_INT_REG);
-+	if (!reg_int)
-+		return IRQ_NONE;
-+
-+	/* Only read the status register if a status interrupt was pending */
-+	if (reg_int & INT_STS_PENDING) {
-+		priv->last_status = curr = priv->read_reg(priv, C_CAN_STS_REG);
-+		/* Ack status on C_CAN. D_CAN is self clearing */
-+		if (priv->type != BOSCH_D_CAN)
-+			priv->write_reg(priv, C_CAN_STS_REG, LEC_UNUSED);
-+	} else {
-+		/* no change detected ... */
-+		curr = last;
-+	}
- 
- 	/* handle state changes */
- 	if ((curr & STATUS_EWARN) && (!(last & STATUS_EWARN))) {
-@@ -1065,33 +1076,18 @@ static int c_can_poll(struct napi_struct *napi, int quota)
- 	work_done += c_can_handle_bus_err(dev, curr & LEC_MASK);
- 
- 	/* Handle Tx/Rx events. We do this unconditionally */
--	work_done += c_can_do_rx_poll(dev, (quota - work_done));
-+	work_done += c_can_do_rx_poll(dev, C_CAN_MSG_OBJ_RX_NUM);
- 	c_can_do_tx(dev);
- 
- end:
--	if (work_done < quota) {
--		napi_complete_done(napi, work_done);
--		/* enable all IRQs if we are not in bus off state */
--		if (priv->can.state != CAN_STATE_BUS_OFF)
--			c_can_irq_control(priv, true);
--	}
-+	/* disable all IRQs if we are in bus off state */
-+	if (priv->can.state == CAN_STATE_BUS_OFF)
-+		c_can_irq_control(priv, false);
- 
--	return work_done;
--}
-+	if (work_done)
-+		return IRQ_HANDLED;
- 
--static irqreturn_t c_can_isr(int irq, void *dev_id)
--{
--	struct net_device *dev = (struct net_device *)dev_id;
--	struct c_can_priv *priv = netdev_priv(dev);
--
--	if (!priv->read_reg(priv, C_CAN_INT_REG))
--		return IRQ_NONE;
--
--	/* disable all interrupts and schedule the NAPI */
--	c_can_irq_control(priv, false);
--	napi_schedule(&priv->napi);
--
--	return IRQ_HANDLED;
-+	return IRQ_NONE;
- }
- 
- static int c_can_open(struct net_device *dev)
-@@ -1124,7 +1120,7 @@ static int c_can_open(struct net_device *dev)
- 
- 	can_led_event(dev, CAN_LED_EVENT_OPEN);
- 
--	napi_enable(&priv->napi);
-+	can_rx_offload_enable(&priv->offload);
- 	/* enable status change, error and module interrupts */
- 	c_can_irq_control(priv, true);
- 	netif_start_queue(dev);
-@@ -1146,7 +1142,7 @@ static int c_can_close(struct net_device *dev)
- 	struct c_can_priv *priv = netdev_priv(dev);
- 
- 	netif_stop_queue(dev);
--	napi_disable(&priv->napi);
-+	can_rx_offload_disable(&priv->offload);
- 	c_can_stop(dev);
- 	free_irq(dev->irq, dev);
- 	close_candev(dev);
-@@ -1169,7 +1165,6 @@ struct net_device *alloc_c_can_dev(void)
- 		return NULL;
- 
- 	priv = netdev_priv(dev);
--	netif_napi_add(dev, &priv->napi, c_can_poll, C_CAN_NAPI_WEIGHT);
- 
- 	priv->dev = dev;
- 	priv->can.bittiming_const = &c_can_bittiming_const;
-@@ -1261,9 +1256,6 @@ EXPORT_SYMBOL_GPL(c_can_power_up);
- 
- void free_c_can_dev(struct net_device *dev)
- {
--	struct c_can_priv *priv = netdev_priv(dev);
--
--	netif_napi_del(&priv->napi);
- 	free_candev(dev);
- }
- EXPORT_SYMBOL_GPL(free_c_can_dev);
-@@ -1292,14 +1284,21 @@ int register_c_can_dev(struct net_device *dev)
- 	dev->flags |= IFF_ECHO;	/* we support local echo */
- 	dev->netdev_ops = &c_can_netdev_ops;
- 
--	err = register_candev(dev);
-+	err = can_rx_offload_add_manual(dev, &priv->offload,
-+					C_CAN_MSG_OBJ_RX_NUM);
- 	if (err)
- 		goto register_exit_runtime_disable;
- 
-+	err = register_candev(dev);
-+	if (err)
-+		goto register_exit_offload_del;
-+
- 	devm_can_led_init(dev);
- 
- 	return 0;
- 
-+ register_exit_offload_del:
-+	can_rx_offload_del(&priv->offload);
-  register_exit_runtime_disable:
- 	c_can_pm_runtime_disable(priv);
- 
-@@ -1313,6 +1312,8 @@ void unregister_c_can_dev(struct net_device *dev)
- 
- 	unregister_candev(dev);
- 
-+	can_rx_offload_del(&priv->offload);
-+
- 	c_can_pm_runtime_disable(priv);
- }
- EXPORT_SYMBOL_GPL(unregister_c_can_dev);
-diff --git a/drivers/net/can/c_can/c_can.h b/drivers/net/can/c_can/c_can.h
-index 8acdc7fa4792..770e944df84b 100644
---- a/drivers/net/can/c_can/c_can.h
-+++ b/drivers/net/can/c_can/c_can.h
-@@ -22,6 +22,8 @@
- #ifndef C_CAN_H
- #define C_CAN_H
- 
-+#include <linux/can/rx-offload.h>
-+
- /* message object split */
- #define C_CAN_NO_OF_OBJECTS	32
- #define C_CAN_MSG_OBJ_RX_NUM	16
-@@ -194,7 +196,7 @@ struct c_can_raminit {
- /* c_can private data structure */
- struct c_can_priv {
- 	struct can_priv can;	/* must be the first member */
--	struct napi_struct napi;
-+	struct can_rx_offload offload;
- 	struct net_device *dev;
- 	struct device *device;
- 	atomic_t tx_active;
--- 
-2.23.0
+The patches are available in the c_can branch on linux-can-next:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
+g/?h=3Dc_can
+
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--qX6ZsATeGlnC3pFLVEIr4mrBmlOffzFB7--
+
+--nuesY1UR7Nio0bxOtHwUGpVixjbQBFhDM
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2cQPIACgkQWsYho5Hk
+nSDpMggAni37FMXZjBuKB7eOjyVA2BO/mFJJX89puFyac4p4b62YO2urMTPwLIpU
+jOCZLUdB2V59FyrwuenhCD90+sriqxOuR0RVvvu89JdGUFhkCxV041rROOjIl2Sw
+ISDDfqWOPoNBZuX1MnfO+YGa4UhQeHYQh7Ac8QbNtrUjCC2XwZiyZouMuDqYG9D/
+so1SqZibG3LBPCVe3TPQvGBuXDxT8EGFVxYgJqcOZx+rUXBQP8uoOps9r8xetef9
+gsj2o9UGcMP74d5CiqoOO2ocOSe69Anyy6G6FCb7u+TmDBRE7l3PQ6+Xdfvd3mku
+eitIySkbMLpHFf3hH1sEcJbGcZ8ZRA==
+=tU/m
+-----END PGP SIGNATURE-----
+
+--nuesY1UR7Nio0bxOtHwUGpVixjbQBFhDM--
