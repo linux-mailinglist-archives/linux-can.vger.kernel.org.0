@@ -2,33 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DEBCF6B6
-	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80601CF6C9
+	for <lists+linux-can@lfdr.de>; Tue,  8 Oct 2019 12:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730317AbfJHKCY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Oct 2019 06:02:24 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54561 "EHLO
+        id S1729944AbfJHKLg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Oct 2019 06:11:36 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:41741 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730199AbfJHKCY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:02:24 -0400
+        with ESMTP id S1729790AbfJHKLf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Oct 2019 06:11:35 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iHmJx-0003hv-Lj; Tue, 08 Oct 2019 12:02:21 +0200
+        id 1iHmSr-00051g-B6; Tue, 08 Oct 2019 12:11:33 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40] (unknown [IPv6:2a03:f580:87bc:d400:5c56:5f:3a91:7a40])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 434E04622B1;
-        Tue,  8 Oct 2019 10:02:20 +0000 (UTC)
-To:     linux-can@vger.kernel.org
-Cc:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Joe Burmeister <joe.burmeister@devtank.co.uk>,
-        Wolfgang Grandegger <wg@grandegger.com>
-References: <20191008095707.23902-1-mkl@pengutronix.de>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3EC4E4622C4;
+        Tue,  8 Oct 2019 10:11:32 +0000 (UTC)
+Subject: Re: [PATCH 1/2] can/peak_usb: fix a potential out-of-sync while
+ decoding packets
+To:     Stephane Grosjean <s.grosjean@peak-system.com>,
+        linux-can Mailing List <linux-can@vger.kernel.org>
+References: <20191008083545.4569-1-s.grosjean@peak-system.com>
+ <20191008083545.4569-2-s.grosjean@peak-system.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,17 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
- after status IRQ
-Message-ID: <d9211654-8b60-d0a1-31fa-c922f9cbc23a@pengutronix.de>
-Date:   Tue, 8 Oct 2019 12:02:15 +0200
+Message-ID: <482c0c97-49ba-7932-5676-8d5357fd948e@pengutronix.de>
+Date:   Tue, 8 Oct 2019 12:11:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191008095707.23902-1-mkl@pengutronix.de>
+In-Reply-To: <20191008083545.4569-2-s.grosjean@peak-system.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="LXggD0CeK2eD3TRBDBZy6xcTdMCGRvPom"
+ boundary="P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,39 +111,41 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---LXggD0CeK2eD3TRBDBZy6xcTdMCGRvPom
-Content-Type: multipart/mixed; boundary="1BuTQNaiOc1hrotSiOh6JrHI2FtwgArwd";
+--P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR
+Content-Type: multipart/mixed; boundary="lpdx2LcByHSaGiqAntwy8Df6JK1xnXq3a";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: linux-can@vger.kernel.org
-Cc: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
- Joe Burmeister <joe.burmeister@devtank.co.uk>,
- Wolfgang Grandegger <wg@grandegger.com>
-Message-ID: <d9211654-8b60-d0a1-31fa-c922f9cbc23a@pengutronix.de>
-Subject: Re: [PATCH v2] can: c_can: c_can_poll(): only read status register
- after status IRQ
-References: <20191008095707.23902-1-mkl@pengutronix.de>
-In-Reply-To: <20191008095707.23902-1-mkl@pengutronix.de>
+To: Stephane Grosjean <s.grosjean@peak-system.com>,
+ linux-can Mailing List <linux-can@vger.kernel.org>
+Message-ID: <482c0c97-49ba-7932-5676-8d5357fd948e@pengutronix.de>
+Subject: Re: [PATCH 1/2] can/peak_usb: fix a potential out-of-sync while
+ decoding packets
+References: <20191008083545.4569-1-s.grosjean@peak-system.com>
+ <20191008083545.4569-2-s.grosjean@peak-system.com>
+In-Reply-To: <20191008083545.4569-2-s.grosjean@peak-system.com>
 
---1BuTQNaiOc1hrotSiOh6JrHI2FtwgArwd
+--lpdx2LcByHSaGiqAntwy8Df6JK1xnXq3a
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/8/19 11:57 AM, Marc Kleine-Budde wrote:
-> From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+On 10/8/19 10:35 AM, Stephane Grosjean wrote:
+> When decoding a buffer received from PCAN-USB, the first timestamp read=
+ in
+> a packet is a 16-bit coded time base, and the next ones are an 8-bit
+> offset to this base, regardless of the type of packet read.
 >=20
-> When the status register is read without status IRQ pending, it may get=
+> This patch corrects a potential loss of synchronization by using a
+> timestamp index read from the buffer, rather than an index of received
+> data packets, to determine on the sizeof the timestamp to be read from =
+the
+> packet being decoded.
+>=20
+> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 
-> into a state that it goes into busoff state without having its irq
-> activated, so the driver will never know.
+Added to linux-can.
 
-Can you help rephrasing the patch description.
-
-I understand the problem is that we should only read the status register
-if there is a status IRQ. But what are the consequences regarding the
-busoff state?
-
+tnx,
 Marc
 
 --=20
@@ -154,23 +155,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---1BuTQNaiOc1hrotSiOh6JrHI2FtwgArwd--
+--lpdx2LcByHSaGiqAntwy8Df6JK1xnXq3a--
 
---LXggD0CeK2eD3TRBDBZy6xcTdMCGRvPom
+--P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2cXqcACgkQWsYho5Hk
-nSBVOQgApGvR0VJn9uWw7N73rHxS37V2Ex+zQvOQ2mqWR+6Il+QA0HIrvLdtNKjX
-uozAYeeZ/lLN61+yZzuSXpbzDarZuaKqYa9xKjTqi6mful5KzcuISaw24s9enD9Y
-w9Iwz/uYfTZ+gxLjikycxFyua+3zGl4M/9QZRL/ae6QF7qPhIS42QE0HraTEnl0Y
-Uq9Ber92jo97QdXBa6KAAT143h9445Nn9rQJFlLu9YZ41c8NjDvIk7JF1n5mGL4I
-o0sbsIkvCT9zxyqi5i4adbBI4BE2uCICY3p6kZZUlCTEtC2nr0biQ9B6hbebQc7P
-pSzMIFxX/v5rs1Ewx/Y222TIbOm0PA==
-=BwMV
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2cYM8ACgkQWsYho5Hk
+nSBySQgAtNoijYypQjEk0H1kK4Z9hDahwuQ+bU+jZxZrQjAI9jr1SXIDjYah2EWk
+mDshSAJ40J7FUbiuBgg4qPNZrFzt27t3LUOmtKGW0OU0dMWw2kqAFphIwu9cn34p
+HfHo33r3UvzxA08RPfgeuOltVYRfvrD3Rf7uX+K1Y9T4uESqe5ghYM4zTHZgD4Xc
+kg8rqUy4vgF4hRja0YlMkF2XZXH92vHX7Nkye4MLiRM4eNJAH/c95XzlC9HsYuUS
+vXD9UZQ50VELsexJiyPP59QAGpt7gwBMJ2C9sFqAbHB3QTsIjmmZ0TW8Aq9wVIwY
+qCwMCgfhvhVDW6ADNp93Uh2ZfIpNOw==
+=I2kV
 -----END PGP SIGNATURE-----
 
---LXggD0CeK2eD3TRBDBZy6xcTdMCGRvPom--
+--P4Q0yKZnPYsAYWP2TF0185YH7g90sIsIR--
