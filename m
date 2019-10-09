@@ -2,36 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C42D0FCF
-	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 15:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4114D0FE4
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 15:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731338AbfJINSY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 09:18:24 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:33593 "EHLO
+        id S1731145AbfJINU7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Oct 2019 09:20:59 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55253 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731333AbfJINSX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 09:18:23 -0400
+        with ESMTP id S1731175AbfJINU7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 09:20:59 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iIBrB-00032D-Ni; Wed, 09 Oct 2019 15:18:21 +0200
+        id 1iIBth-0003SO-9I; Wed, 09 Oct 2019 15:20:57 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:f5:eb93:ca3c:b4e2] (unknown [IPv6:2a03:f580:87bc:d400:f5:eb93:ca3c:b4e2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 25D594637E6;
-        Wed,  9 Oct 2019 13:18:18 +0000 (UTC)
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190924184437.10607-1-jhofstee@victronenergy.com>
- <20190924184437.10607-2-jhofstee@victronenergy.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4C85F4637F0;
+        Wed,  9 Oct 2019 13:20:53 +0000 (UTC)
+Subject: Re: [PATCH] can-rx-offload: free echo_skb when not queued
+To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org
+References: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -94,16 +90,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 1/7] can: rx-offload: continue on error
-Message-ID: <134ddb8e-a231-922d-f554-ca77ce0c16af@pengutronix.de>
-Date:   Wed, 9 Oct 2019 15:18:12 +0200
+Message-ID: <bbf6fa6e-665c-2bb5-4d73-c5734ed78e27@pengutronix.de>
+Date:   Wed, 9 Oct 2019 15:20:48 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190924184437.10607-2-jhofstee@victronenergy.com>
+In-Reply-To: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="BXNKZd3qMlXdhqpqPUPu9DyJyHZxPf3Ik"
+ boundary="7J1De0nDzHf5Au1oiDwHBClt6uGJ5XsjQ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,138 +109,29 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---BXNKZd3qMlXdhqpqPUPu9DyJyHZxPf3Ik
-Content-Type: multipart/mixed; boundary="KNwgur7TmfQkHy3BGycM90HOnustJrKiJ";
+--7J1De0nDzHf5Au1oiDwHBClt6uGJ5XsjQ
+Content-Type: multipart/mixed; boundary="tbIWL315qaTiWwCE6ibjrW4uL8sbQ0VTo";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>,
- "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-Message-ID: <134ddb8e-a231-922d-f554-ca77ce0c16af@pengutronix.de>
-Subject: Re: [PATCH 1/7] can: rx-offload: continue on error
-References: <20190924184437.10607-1-jhofstee@victronenergy.com>
- <20190924184437.10607-2-jhofstee@victronenergy.com>
-In-Reply-To: <20190924184437.10607-2-jhofstee@victronenergy.com>
+To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ linux-can@vger.kernel.org
+Message-ID: <bbf6fa6e-665c-2bb5-4d73-c5734ed78e27@pengutronix.de>
+Subject: Re: [PATCH] can-rx-offload: free echo_skb when not queued
+References: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+In-Reply-To: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 
---KNwgur7TmfQkHy3BGycM90HOnustJrKiJ
+--tbIWL315qaTiWwCE6ibjrW4uL8sbQ0VTo
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Hello Jeroen,
+On 10/2/19 9:28 AM, Kurt Van Dijck wrote:
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-I'm currently looking at the rx-offload error handling in detail.
+Applied to linux-can.
 
-TLDR: I've added the patch to linux-can.
-
-Thanks,
+Tnx,
 Marc
-
-For the record, the details:
-
-On 9/24/19 8:45 PM, Jeroen Hofstee wrote:
-> While can_rx_offload_offload_one will call mailbox_read to discard
-> the mailbox in case of an error,
-
-Yes.
-
-can_rx_offload_offload_one() will read into the discard mailbox in case
-of an error.
-
-Currently there are two kinds of errors:
-1) the rx-offoad skb queue (between the IRQ handler and the NAPI)
-   is full
-2) alloc_can_skb() fails to allocate a skb, due to OOM
-
-> can_rx_offload_irq_offload_timestamp bails out in the error case.
-
-Yes, in case of an error both can_rx_offload_irq_offload_timestamp() and
-can_rx_offload_irq_offload_fifo() will stop reading mailboxes, add the
-already filled skbs to the queue and schedule NAPI if needed.
-
-Currently both can_rx_offload_irq_offload_timestamp() and
-can_rx_offload_irq_offload_fifo() will return the number of queued
-mailboxes.
-
-This means in case of queue overflow or OOM, only one mailbox is
-discaded, before can_rx_offload_irq_offload_*() returning the number of
-successfully queued mailboxes so far.
-
-Looking at the flexcan driver:
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/flexcan.c#=
-L867
-
-> 		while ((reg_iflag =3D flexcan_read_reg_iflag_rx(priv))) {
-> 			handled =3D IRQ_HANDLED;
-> 			ret =3D can_rx_offload_irq_offload_timestamp(&priv->offload,
-> 								   reg_iflag);
-> 			if (!ret)
-> 				break;
-> 		}
-[...]
-> 		if (reg_iflag1 & FLEXCAN_IFLAG_RX_FIFO_AVAILABLE) {
-> 			handled =3D IRQ_HANDLED;
-> 			can_rx_offload_irq_offload_fifo(&priv->offload);
-> 		}
-
-This means for the timestamp mode, at least one mailbox is discarded or
-if the error occurred after reading one or more mailboxes the while loop
-will try again. If the error persists a second mailbox is discarded.
-
-For the fifo mode, only one mailbox is discarded.
-
-Then the flexcan's IRQ is exited. If there are messages in mailboxes are
-pending another IRQ is triggered.... I doubt that this is a good idea.
-
-On the other hand the ti_hecc driver:
-
-> 		/* offload RX mailboxes and let NAPI deliver them */
-> 		while ((rx_pending =3D hecc_read(priv, HECC_CANRMP))) {
-> 			can_rx_offload_irq_offload_timestamp(&priv->offload,
-> 							     rx_pending);
-> 			hecc_write(priv, HECC_CANRMP, rx_pending);
-> 		}
-
-The error is ignored and the _all_ mailboxes are discarded (given the
-error persists).
-
-> Since it is typically called from a while loop, all message will
-> eventually be discarded. So lets continue on error instead to discard
-> them directly.
-
-After reading my own code and writing it up, your patch totally makes sen=
-se.
-
-If there is a shortage of resources, queue overrun or OOM, it makes no
-sense to return from the IRQ handler, if a mailbox is still active as it
-will trigger the IRQ again. Entering the IRQ handler again probably
-doesn't give the system time to recover from the resource problem.
-
-> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-> ---
->  drivers/net/can/rx-offload.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/rx-offload.c b/drivers/net/can/rx-offload.=
-c
-> index e6a668ee7730..39df41280e2d 100644
-> --- a/drivers/net/can/rx-offload.c
-> +++ b/drivers/net/can/rx-offload.c
-> @@ -158,7 +158,7 @@ int can_rx_offload_irq_offload_timestamp(struct can=
-_rx_offload *offload, u64 pen
-> =20
->  		skb =3D can_rx_offload_offload_one(offload, i);
->  		if (!skb)
-> -			break;
-> +			continue;
-> =20
->  		__skb_queue_add_sort(&skb_queue, skb, can_rx_offload_compare);
->  	}
->=20
 
 --=20
 Pengutronix e.K.                  | Marc Kleine-Budde           |
@@ -254,23 +140,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---KNwgur7TmfQkHy3BGycM90HOnustJrKiJ--
+--tbIWL315qaTiWwCE6ibjrW4uL8sbQ0VTo--
 
---BXNKZd3qMlXdhqpqPUPu9DyJyHZxPf3Ik
+--7J1De0nDzHf5Au1oiDwHBClt6uGJ5XsjQ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2d3hQACgkQWsYho5Hk
-nSBm/Qf/db/9uepOMhA4XKlFASkkpWMbqzjYRhEwCqR2+SPQscKUaCLawPTQFOMS
-LN46ygYSRhbiQ8hSI1DwVwfY/alylL3KP4JqRnuawdj98Vi+HR4ywPG5b4cxlguQ
-7qmip9bFAgODJCGN43tU3DZ+3yBPG75nRO5BCpcu84TV3HxdZ8TbCrPEjTrhwzdF
-aDkMPVSRqe8h3t5KMC3BXgW2MTz7y+ThixpAJUmdeYIDEXS2l0VHWCCXlaeX+/PC
-f9xoa57oKxt1CTHAmQFLjCgJ896+otSkrRwzfM0njNR5pC6zgi88MPQyQZYlC43r
-zgnL87JBES2oqQ22tILFSMFWY/69lA==
-=SEml
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2d3rAACgkQWsYho5Hk
+nSCpiQf/bB09O3bYdKKUHrzPY1nIMDMTJAnp9G0KZ9WMkAA/LIk07bAuu6+iY4lk
+iiKWFs7SuezClkzaHJktth5ijVIO3yXxkfW/33kBLtoguaNTQZQBXyJaQEvyQDHh
+vZUN8pNW8qIebLdQQe5V0k+Ii3hVFZzOFo6ZAfcCluLntK1UZglNzhm+RrF5GXiT
+kmWG5mLoGdddS/pxhTbo+7aw3tPNr/+WZ3hytvbp00mMICmaPpmUQi0y7AkhO6ED
+eWc76gdsxqMO1Yu7rs8KOF1DmbhgGz3ysFPOLOd9n7ypu52jkJsj73xobgT+35n8
+Bg85MVcA23yTJxPPoAS71rnCpZvZSQ==
+=8whP
 -----END PGP SIGNATURE-----
 
---BXNKZd3qMlXdhqpqPUPu9DyJyHZxPf3Ik--
+--7J1De0nDzHf5Au1oiDwHBClt6uGJ5XsjQ--
