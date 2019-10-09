@@ -2,176 +2,211 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B51D08DE
-	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 09:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8CED0955
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 10:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725942AbfJIHyQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 03:54:16 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36099 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfJIHyQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 03:54:16 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iI6nV-0005vK-JM; Wed, 09 Oct 2019 09:54:13 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:c0ba:f7df:a30d:f61c] (unknown [IPv6:2a03:f580:87bc:d400:c0ba:f7df:a30d:f61c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0BC54463404;
-        Wed,  9 Oct 2019 07:54:09 +0000 (UTC)
-Subject: Re: [PATCH] net: can: xilinx_can: Fix flags field initialization for
- axi can
-To:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        wg@grandegger.com, davem@davemloft.net, michal.simek@xilinx.com,
-        anssi.hannula@bitwise.fi
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <1570606187-30935-1-git-send-email-appana.durga.rao@xilinx.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <3c2561b8-e000-6806-d8ec-0e3162256884@pengutronix.de>
-Date:   Wed, 9 Oct 2019 09:54:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725953AbfJIINJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Oct 2019 04:13:09 -0400
+Received: from mail-eopbgr80042.outbound.protection.outlook.com ([40.107.8.42]:33604
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725903AbfJIINJ (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 9 Oct 2019 04:13:09 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ie+gXpu59pc5RI1PZTCcRpIgSEEQdcRV5PBh+pQSPInqhDnJ4gQBN+9stEtnzHucLed0Jeb5rvXCzr2RvF4cxmzzGxS4OXzgNSzYVHPoQtlceCfptNlcgvhBeRSiAduqLVfWx0llvrqjaLDoazlxnkuW+1yQlxmg1MafSLzF8MpWyDZWddteEXHHEtxFSSeSOf5blTWF0Z9qAaey4D3jy11/GISEyBp6nbvVsLWFHwomM/v9TNh1J0iTmzmCcx9bbn13LZpkGZAr2TLu6MjQVrxSaYXqGhl2hvD2GawOXl7QKOOjq4mcdmUKWiQZD4yLcGmW1fPGXbk7AQD+CCcNZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6dE81pV3R3Gu9X4sjJO2GPXoUbqXxePTPB+Mttz3jfk=;
+ b=V1asElSHcln0ck2t6rmfXLa1nfa9XmMutFVYqxEeSq7P1rYoZYLSmaBiUu7geX4N/Nk67jZR2yzDrqxGXcGBboj+mhxfrmG2Jr8+ZY4L03cZvysNNLKDfeJR3446k+Gz6w8QBeDio48iQzKGseJ1kfRP3e4l6WmJvhI6D1ctm7KA1hWi4B7Llta8iEwHBrJtUnyYXQWBMeb9ADWsZ4X38tg0ZHbot61yqL7+y9MWZvuGu+uKr2/fdbxkA0LQJ8J9jF5g7M6xlZsBsg7rFMzTorAhSneo6g23L14pomHB40Sh8jTZbL1tAJzJUuTtsiYSIUokYFM4sEwabLG/4V/pKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6dE81pV3R3Gu9X4sjJO2GPXoUbqXxePTPB+Mttz3jfk=;
+ b=WtkfkF17INAId/dgsfBttGo0kWhk8FIpjFPvNVpxTAoXCL0YHyMY0NhmAnkNDI512/Bf99Ah3ZZIpYNEEvgddg4//SpLdgrBOj2/zO5+qq1WXC8oVxa5XX1ApTCekTZtJ9QF6Cp1p7K6ERiEe3qOikMep8KQW8Qst/NYJZMnunE=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB5081.eurprd04.prod.outlook.com (20.176.236.212) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.16; Wed, 9 Oct 2019 08:13:04 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::79f1:61a7:4076:8679]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::79f1:61a7:4076:8679%3]) with mapi id 15.20.2327.026; Wed, 9 Oct 2019
+ 08:13:04 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sean@geanix.com" <sean@geanix.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: [PATCH V4 1/2] can: flexcan: fix deadlock when using self wakeup
+Thread-Topic: [PATCH V4 1/2] can: flexcan: fix deadlock when using self wakeup
+Thread-Index: AQHVfnlfcicpFKT7vkKHRAXdf1SEkw==
+Date:   Wed, 9 Oct 2019 08:13:04 +0000
+Message-ID: <20191009080956.29128-1-qiangqing.zhang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: SG2PR06CA0108.apcprd06.prod.outlook.com
+ (2603:1096:3:14::34) To DB7PR04MB4618.eurprd04.prod.outlook.com
+ (2603:10a6:5:38::23)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c24905fd-8835-4d40-0668-08d74c908230
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: DB7PR04MB5081:|DB7PR04MB5081:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB50814EA4645954CB9DF02F02E6950@DB7PR04MB5081.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 018577E36E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(376002)(136003)(366004)(39860400002)(199004)(189003)(54534003)(54906003)(36756003)(6512007)(6116002)(66476007)(6486002)(26005)(7736002)(2906002)(66556008)(64756008)(66446008)(3846002)(186003)(81156014)(81166006)(99286004)(14444005)(50226002)(5024004)(2501003)(256004)(110136005)(2616005)(476003)(478600001)(486006)(8676002)(66946007)(6436002)(25786009)(305945005)(71200400001)(71190400001)(1076003)(316002)(102836004)(386003)(66066001)(5660300002)(6506007)(4326008)(14454004)(8936002)(86362001)(52116002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5081;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: R/gXN3bJo8+9fvRUMZYnz6aKpB32ouyb1NS2xBxjWaw+SnmyVtPOeS4CbgmwF3gQVm+5bVYaBfkaV/2mkbdnoT/pPqybU3snezdYCY6IXFO1N2v/KbqPiXOtZsdUmoJmj6cLkh0YJkOzn8E8pavqWRTVeRoPwBU0b66LElSX1EZlyL2BjpvdGGmb3z2YhcxilPgtgxu8ryauFo6aRLbmyLHEMz4QAQpv3185S10uRXazxg9J1XYg3XSxcu5hTcp4nxUsQoSN7ma+vSvTnxNDS47iTSOBz3gE6l3o3+Xr27jmjtUcsIAUo5128Wf9JN39e82C/tn/LJWze+GCIFz5Iy7QBGy2QoTnsce12AaWJbw0BofFGpAzj5lQt+zIG5h6iLSxC919M5pLyyqyry57SfLfXwzxO584z6z7i7q33lA=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <1570606187-30935-1-git-send-email-appana.durga.rao@xilinx.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="NbeugTb5NOyzNTbzLQ7ijx5aylvtxlhL7"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c24905fd-8835-4d40-0668-08d74c908230
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2019 08:13:04.5178
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SI3HyCBemQp2Cpy0fTwPXvab7OJYAS2LEZS3hc6zwStSDD6KDSTB8oN9CGlP1s6r0LM0cTejrJLL820v9uOnkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5081
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---NbeugTb5NOyzNTbzLQ7ijx5aylvtxlhL7
-Content-Type: multipart/mixed; boundary="3DNHAcZaSiHUxGiTGrNdgWkeeEAUazueV";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
- wg@grandegger.com, davem@davemloft.net, michal.simek@xilinx.com,
- anssi.hannula@bitwise.fi
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Message-ID: <3c2561b8-e000-6806-d8ec-0e3162256884@pengutronix.de>
-Subject: Re: [PATCH] net: can: xilinx_can: Fix flags field initialization for
- axi can
-References: <1570606187-30935-1-git-send-email-appana.durga.rao@xilinx.com>
-In-Reply-To: <1570606187-30935-1-git-send-email-appana.durga.rao@xilinx.com>
+As reproted by Sean Nyekjaer below:
+When suspending, when there is still can traffic on the interfaces the
+flexcan immediately wakes the platform again. As it should :-). But it
+throws this error msg:
+[ 3169.378661] PM: noirq suspend of devices failed
 
---3DNHAcZaSiHUxGiTGrNdgWkeeEAUazueV
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+On the way down to suspend the interface that throws the error message does
+call flexcan_suspend but fails to call flexcan_noirq_suspend. That means th=
+e
+flexcan_enter_stop_mode is called, but on the way out of suspend the driver
+only calls flexcan_resume and skips flexcan_noirq_resume, thus it doesn't c=
+all
+flexcan_exit_stop_mode. This leaves the flexcan in stop mode, and with the
+current driver it can't recover from this even with a soft reboot, it requi=
+res
+a hard reboot.
 
-On 10/9/19 9:29 AM, Appana Durga Kedareswara rao wrote:
-> AXI CANIP doesn't support tx fifo empty interrupt feature(TXFEMP),
-> update the flags filed in the driver for AXI CAN case accordingly.
->=20
-> Fixes: 3281b380ec9f ("can: xilinx_can: Fix flags field initialization f=
-or axi can and canps")
-> Reported-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-> Signed-off-by: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.co=
-m>
+The best way to exit stop mode is in Wake Up interrupt context, and then
+suspend() and resume() functions can be symmetric. However, stop mode
+request and ack will be controlled by SCU(System Control Unit) firmware(man=
+age
+clock,power,stop mode, etc. by Cortex-M4 core) in coming i.MX8(QM/QXP). And=
+ SCU
+firmware interface can't be available in interrupt context.
 
-Included in linux-can.
+For compatibillity, the wake up mechanism can't be symmetric, so we need
+in_stop_mode hack.
 
-thanks,
-Marc
+Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
+Reported-by: Sean Nyekjaer <sean@geanix.com>
+Tested-by: Sean Nyekjaer <sean@geanix.com>
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 
+Changelog:
+V1->V2:
+	* add Reported-by tag.
+	* rebase on patch: can:flexcan:fix stop mode acknowledgment.
+V2->V3:
+	* rebase on linux-can/testing.
+	* change into patch set.
+V3->V4:
+	* add Tested-by tag.
+---
+ drivers/net/can/flexcan.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 1cd5179cb876..24cc386c4bce 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -286,6 +286,7 @@ struct flexcan_priv {
+ 	const struct flexcan_devtype_data *devtype_data;
+ 	struct regulator *reg_xceiver;
+ 	struct flexcan_stop_mode stm;
++	bool in_stop_mode;
+=20
+ 	/* Read and Write APIs */
+ 	u32 (*read)(void __iomem *addr);
+@@ -1670,6 +1671,8 @@ static int __maybe_unused flexcan_suspend(struct devi=
+ce *device)
+ 			err =3D flexcan_enter_stop_mode(priv);
+ 			if (err)
+ 				return err;
++
++			priv->in_stop_mode =3D true;
+ 		} else {
+ 			err =3D flexcan_chip_disable(priv);
+ 			if (err)
+@@ -1696,6 +1699,15 @@ static int __maybe_unused flexcan_resume(struct devi=
+ce *device)
+ 		netif_device_attach(dev);
+ 		netif_start_queue(dev);
+ 		if (device_may_wakeup(device)) {
++			if (priv->in_stop_mode) {
++				flexcan_enable_wakeup_irq(priv, false);
++				err =3D flexcan_exit_stop_mode(priv);
++				if (err)
++					return err;
++
++				priv->in_stop_mode =3D false;
++			}
++
+ 			disable_irq_wake(dev->irq);
+ 		} else {
+ 			err =3D pm_runtime_force_resume(device);
+@@ -1732,6 +1744,11 @@ static int __maybe_unused flexcan_noirq_suspend(stru=
+ct device *device)
+ 	struct net_device *dev =3D dev_get_drvdata(device);
+ 	struct flexcan_priv *priv =3D netdev_priv(dev);
+=20
++	/* Need to enable wakeup interrupt in noirq suspend stage. Otherwise,
++	 * it will trigger continuously wakeup interrupt if the wakeup event
++	 * comes before noirq suspend stage, and simultaneously it has enter
++	 * the stop mode.
++	 */
+ 	if (netif_running(dev) && device_may_wakeup(device))
+ 		flexcan_enable_wakeup_irq(priv, true);
+=20
+@@ -1744,11 +1761,17 @@ static int __maybe_unused flexcan_noirq_resume(stru=
+ct device *device)
+ 	struct flexcan_priv *priv =3D netdev_priv(dev);
+ 	int err;
+=20
++	/* Need to exit stop mode in noirq resume stage. Otherwise, it will
++	 * trigger continuously wakeup interrupt if the wakeup event comes,
++	 * and simultaneously it has still in stop mode.
++	 */
+ 	if (netif_running(dev) && device_may_wakeup(device)) {
+ 		flexcan_enable_wakeup_irq(priv, false);
+ 		err =3D flexcan_exit_stop_mode(priv);
+ 		if (err)
+ 			return err;
++
++		priv->in_stop_mode =3D false;
+ 	}
+=20
+ 	return 0;
 --=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+2.17.1
 
-
---3DNHAcZaSiHUxGiTGrNdgWkeeEAUazueV--
-
---NbeugTb5NOyzNTbzLQ7ijx5aylvtxlhL7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2dkh0ACgkQWsYho5Hk
-nSAKcgf/R6XDRK7dHqEqpiGyYTWZcVW4jLMda+2jBqiNSf7H0g9JvPApXLNMMJyu
-arWrKcWMDVkYjL31zoqmaeSjbrQ1/KV4OmMAPr5ox937nYGcYYVk4eeJMjeGWYaU
-fysA9cGnOy8l0SJyFL4jUiouury4zd0/ZPQzOmPGBde9SmsSq2cQ2BebpXo7UeIO
-WPT8GO98RR9pMnVGDjXWKzN8FUR+kqhDAOHL+5jJO5nnu+lzWMsjcMgvzcguRGJh
-5FGD6KtAP3rlIiRwxw0p4UAek4qNCizG4dfzi2LPIvb4gYiuB7J9nAy9snEaDh3V
-pkUvLSlwJXLj7HPM7raECUhmJMD/fw==
-=l153
------END PGP SIGNATURE-----
-
---NbeugTb5NOyzNTbzLQ7ijx5aylvtxlhL7--
