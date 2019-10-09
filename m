@@ -2,33 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DA3D08AE
-	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 09:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC18D08BB
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 09:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728528AbfJIHqN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 03:46:13 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39603 "EHLO
+        id S1725879AbfJIHrL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Oct 2019 03:47:11 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55707 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbfJIHqM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 03:46:12 -0400
+        with ESMTP id S1725440AbfJIHrK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 03:47:10 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iI6fi-000521-WD; Wed, 09 Oct 2019 09:46:11 +0200
+        id 1iI6ge-00056b-Nu; Wed, 09 Oct 2019 09:47:08 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:c0ba:f7df:a30d:f61c] (unknown [IPv6:2a03:f580:87bc:d400:c0ba:f7df:a30d:f61c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D19F34633E4;
-        Wed,  9 Oct 2019 07:46:09 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 080574633E9;
+        Wed,  9 Oct 2019 07:47:07 +0000 (UTC)
 Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
 To:     linux-can@vger.kernel.org,
         Joe Burmeister <joe.burmeister@devtank.co.uk>
-References: <20191008080711.GA20524@x1.vandijck-laurijssen.be>
- <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
+References: <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
  <20191008082404.GC20524@x1.vandijck-laurijssen.be>
  <a7579a05-53a6-00b8-e084-1025d5e9adbe@pengutronix.de>
  <20191008103247.GC21036@x1.vandijck-laurijssen.be>
@@ -38,6 +37,7 @@ References: <20191008080711.GA20524@x1.vandijck-laurijssen.be>
  <20191008125922.GG21036@x1.vandijck-laurijssen.be>
  <b8f4936d-7e3a-d2ba-5649-9ff044dc78b2@pengutronix.de>
  <20191008175433.GA19084@x1.vandijck-laurijssen.be>
+ <20191009074338.GA23530@x1.vandijck-laurijssen.be>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -100,15 +100,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <4f3a5699-5174-e1e1-9ef4-3f37a3c59b99@pengutronix.de>
-Date:   Wed, 9 Oct 2019 09:46:05 +0200
+Message-ID: <ae7105ce-e25e-b79b-20d3-582d57b37cd1@pengutronix.de>
+Date:   Wed, 9 Oct 2019 09:47:04 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191008175433.GA19084@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191009074338.GA23530@x1.vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="7m18smMCtxc6LbFqaCvODLaGoyQJx033R"
+ boundary="9WEjbuCJyfaYgM6COYmS85fnPPJdD1Wrj"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -119,15 +119,14 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---7m18smMCtxc6LbFqaCvODLaGoyQJx033R
-Content-Type: multipart/mixed; boundary="vuwWXNBl74elS2mmi16sN6bgccgysE4xP";
+--9WEjbuCJyfaYgM6COYmS85fnPPJdD1Wrj
+Content-Type: multipart/mixed; boundary="7fJ86CdXMRkgWI3X3DQwlXBaHgAOVK1MG";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: linux-can@vger.kernel.org, Joe Burmeister <joe.burmeister@devtank.co.uk>
-Message-ID: <4f3a5699-5174-e1e1-9ef4-3f37a3c59b99@pengutronix.de>
+Message-ID: <ae7105ce-e25e-b79b-20d3-582d57b37cd1@pengutronix.de>
 Subject: Re: [PATCH v3 0/4] can: c_can/rx-offload
-References: <20191008080711.GA20524@x1.vandijck-laurijssen.be>
- <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
+References: <002eccee-3357-2ed8-5ba8-6f1a39b345bc@pengutronix.de>
  <20191008082404.GC20524@x1.vandijck-laurijssen.be>
  <a7579a05-53a6-00b8-e084-1025d5e9adbe@pengutronix.de>
  <20191008103247.GC21036@x1.vandijck-laurijssen.be>
@@ -137,28 +136,27 @@ References: <20191008080711.GA20524@x1.vandijck-laurijssen.be>
  <20191008125922.GG21036@x1.vandijck-laurijssen.be>
  <b8f4936d-7e3a-d2ba-5649-9ff044dc78b2@pengutronix.de>
  <20191008175433.GA19084@x1.vandijck-laurijssen.be>
-In-Reply-To: <20191008175433.GA19084@x1.vandijck-laurijssen.be>
+ <20191009074338.GA23530@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191009074338.GA23530@x1.vandijck-laurijssen.be>
 
---vuwWXNBl74elS2mmi16sN6bgccgysE4xP
+--7fJ86CdXMRkgWI3X3DQwlXBaHgAOVK1MG
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 10/8/19 7:54 PM, Kurt Van Dijck wrote:
-> Thanks for the backport.
+On 10/9/19 9:43 AM, Kurt Van Dijck wrote:
+>> It compiles and CAN works. I put it on a test machine now, but since i=
+t's
+>> logically equivalent to my ad-hoc skb_queue, I expect no long-term sur=
+prises.
+>> My test machine may need no to stop due to bad weather conditions.
+>=20
+> I observed a CAN overflow, which should not have occured.
+> I'll investigate a bit further.
 
-np
+Thanks.
 
-> It compiles and CAN works. I put it on a test machine now, but since it=
-'s
-> logically equivalent to my ad-hoc skb_queue, I expect no long-term surp=
-rises.
-
-We tend to say: If it's not tested it's not working....
-
-> My test machine may need no to stop due to bad weather conditions.
-
-Hope everything is alright!
+At least you survived the bad weather. :)
 
 Marc
 
@@ -169,23 +167,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---vuwWXNBl74elS2mmi16sN6bgccgysE4xP--
+--7fJ86CdXMRkgWI3X3DQwlXBaHgAOVK1MG--
 
---7m18smMCtxc6LbFqaCvODLaGoyQJx033R
+--9WEjbuCJyfaYgM6COYmS85fnPPJdD1Wrj
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2dkD0ACgkQWsYho5Hk
-nSA+Agf7BVFw0phzclS4JhqMRlBubHLWTN7ewa1yG8Y74SyHv+64OExTKL1Ha2zQ
-G7WQPaS1X93McYHGuoFXEE4bEWPKm/hFLIAb3U3xi4LgFffzXnjbkBrDC/0pzb2a
-dB0GDBwRYKRyMNx6Tr+2oAn5RDPEZ3rs9fXpaBhG1hqeR510/WTy9C/LDJdPlRwI
-dTq5wqN59LyMSdag40rkd+vq+g6KHw6uKqbNgC8WqKFaAJ5aNUOSKN6ZUD3CdaJn
-EkhgoJZa8cQjHpl6HPehrjx95Ac+GPjNedRfRwumV+j4F6VOysfE9K/wVDlLw+Wg
-CFlD9C9CbTzHPGjGyP8gW0JMkGP5vg==
-=SCGR
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2dkHgACgkQWsYho5Hk
+nSA+jgf/XaQ3iBIOAbhqbLuS7cSrd+8d0pqz4hON/d4fg6LsbH3vlaAowN4KrCW+
+drSrUFYgoRleGr4rKDZGcoYZkhONCxu3nkL5WQ2/PEXSZmbr0n57z2wEGOvZYvIt
+iZuasV2NJVh4383FuPXoNoScwgrBOFUS9CWVVOKOVYAiIDAoxkvbzytvcZnCtGC5
+rPpFPBSpm929iDrLm+59wBfie41W8OT+rWVU+dIZAbbgXHk1MHQDPZLsGrK1VJI4
+It8+YdKard9xAY8S80LULtJOV4OlF6E7QYCoXVcf78N0H8mF+h+AondVl0TU31uQ
+vlae8IyuFNFe+SKGZamK+j6YRrIyvg==
+=TwzG
 -----END PGP SIGNATURE-----
 
---7m18smMCtxc6LbFqaCvODLaGoyQJx033R--
+--9WEjbuCJyfaYgM6COYmS85fnPPJdD1Wrj--
