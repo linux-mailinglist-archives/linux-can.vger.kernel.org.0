@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DADB1D0FF1
-	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 15:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CBDD1080
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 15:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729883AbfJINXc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 09:23:32 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56915 "EHLO
+        id S1731255AbfJINsA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Oct 2019 09:48:00 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33077 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731083AbfJINXb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 09:23:31 -0400
+        with ESMTP id S1731254AbfJINr7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 09:47:59 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iIBw9-0003f0-8H; Wed, 09 Oct 2019 15:23:29 +0200
+        id 1iICJp-0006cL-DQ; Wed, 09 Oct 2019 15:47:57 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:f5:eb93:ca3c:b4e2] (unknown [IPv6:2a03:f580:87bc:d400:f5:eb93:ca3c:b4e2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3D6264637F7;
-        Wed,  9 Oct 2019 13:23:28 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D17A046385F;
+        Wed,  9 Oct 2019 13:47:55 +0000 (UTC)
 Subject: Re: [PATCH] can-rx-offload: free echo_skb when not queued
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <20191008081815.GB20524@x1.vandijck-laurijssen.be>
- <4996dc74-bbf4-a667-60bf-c77f79f8fb3b@victronenergy.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>
+References: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+ <bbf6fa6e-665c-2bb5-4d73-c5734ed78e27@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -92,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <e833beec-515f-ab65-b87a-2c68a305859c@pengutronix.de>
-Date:   Wed, 9 Oct 2019 15:23:23 +0200
+Message-ID: <135b3582-d7c2-a4a1-9956-1560e3c928db@pengutronix.de>
+Date:   Wed, 9 Oct 2019 15:47:51 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <4996dc74-bbf4-a667-60bf-c77f79f8fb3b@victronenergy.com>
+In-Reply-To: <bbf6fa6e-665c-2bb5-4d73-c5734ed78e27@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Xo5l0daGy0cdCtSZYuZeev5Wj0jBRfmxK"
+ boundary="bgcE9fbkGFaObe6vRRAJQAlR1OrjdtUHg"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,64 +111,35 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Xo5l0daGy0cdCtSZYuZeev5Wj0jBRfmxK
-Content-Type: multipart/mixed; boundary="72z1pTHsIEYa2i5hreiXjQxvxICogZ6dr";
+--bgcE9fbkGFaObe6vRRAJQAlR1OrjdtUHg
+Content-Type: multipart/mixed; boundary="5YQcDhgc7AWytKJKYNqPf6tsAvHdGtp0r";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <e833beec-515f-ab65-b87a-2c68a305859c@pengutronix.de>
+To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ linux-can@vger.kernel.org, Jeroen Hofstee <jhofstee@victronenergy.com>
+Message-ID: <135b3582-d7c2-a4a1-9956-1560e3c928db@pengutronix.de>
 Subject: Re: [PATCH] can-rx-offload: free echo_skb when not queued
 References: <1570001287-32420-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <20191008081815.GB20524@x1.vandijck-laurijssen.be>
- <4996dc74-bbf4-a667-60bf-c77f79f8fb3b@victronenergy.com>
-In-Reply-To: <4996dc74-bbf4-a667-60bf-c77f79f8fb3b@victronenergy.com>
+ <bbf6fa6e-665c-2bb5-4d73-c5734ed78e27@pengutronix.de>
+In-Reply-To: <bbf6fa6e-665c-2bb5-4d73-c5734ed78e27@pengutronix.de>
 
---72z1pTHsIEYa2i5hreiXjQxvxICogZ6dr
+--5YQcDhgc7AWytKJKYNqPf6tsAvHdGtp0r
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 10/8/19 10:24 AM, Jeroen Hofstee wrote:
-> Hello Kurt,
+On 10/9/19 3:20 PM, Marc Kleine-Budde wrote:
+> On 10/2/19 9:28 AM, Kurt Van Dijck wrote:
+>> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 >=20
-> On 10/8/19 10:18 AM, Kurt Van Dijck wrote:
->> Ping
->> Marc,
->>
->> Did you look over this one.
->> I had it in a seperate thread as it covers an isolated thing.
->>
->>> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
->>> ---
->>>   drivers/net/can/rx-offload.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/net/can/rx-offload.c b/drivers/net/can/rx-offloa=
-d.c
->>> index e6a668e..a8acb2a 100644
->>> --- a/drivers/net/can/rx-offload.c
->>> +++ b/drivers/net/can/rx-offload.c
->>> @@ -238,6 +238,7 @@ unsigned int can_rx_offload_get_echo_skb(struct c=
-an_rx_offload *offload,
->>>  =20
->>>   	err =3D can_rx_offload_queue_sorted(offload, skb, timestamp);
->>>   	if (err) {
->>> +		kfree_skb(skb);
->> Am I right that the skb would have been lost in case the queue reached=
+> Applied to linux-can.
 
->> it max length and you're dropping messages?
->>
->>>   		stats->rx_errors++;
->>>   		stats->tx_fifo_errors++;
->>>   	}
->>> --=20
->>> 1.8.5.rc3
->>>
-> for what it is worth, I looked at it and I think is correct,
-> but completely untested..
+I think I'll move the kfree() to can_rx_offload_queue_sorted().
 
-Should I add your Acked-by to the patch?
+There are several places already and the risk it too high, that it's
+forgotten.
+
+Opinions?
 
 Marc
 
@@ -179,23 +150,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---72z1pTHsIEYa2i5hreiXjQxvxICogZ6dr--
+--5YQcDhgc7AWytKJKYNqPf6tsAvHdGtp0r--
 
---Xo5l0daGy0cdCtSZYuZeev5Wj0jBRfmxK
+--bgcE9fbkGFaObe6vRRAJQAlR1OrjdtUHg
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2d30sACgkQWsYho5Hk
-nSCgIwf7B0tU85DLmub7WL83R9rJPHxEcSKzYPYguUCrkpE5BnBsZ9f7s+Sa4Q6g
-SG10esEKvX9ScVAktcihxU8ScHFqdi4/Fn6wWKPFyKw1qbpxtXMaA/dOp4YesTgw
-0Jrms7ph+fXR/d96AxvQiUhzbkJfuVXTBRJW8mFwPG1V3zLjZLNQ5sbCD64KfnLC
-a3e0kU9J5TO5cH7HEHgP+/jF+pc7RFdn3b/pjzgtGK3XMg9EA18YYTr0i4wYVX+9
-2aU1qw+itGj/HtXhc96EdkhIMpDvg/SL9YQO8MOuXPB/+4LoeTRYyggRKL1T/DFH
-0Hzg4lzTlAyIk2XgA1ukozmjnmBviA==
-=qhTR
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2d5QcACgkQWsYho5Hk
+nSAo2Qf+NAnCTls+h/lo8HZBP3exhy8cW7UqEugdsT7RmTgYwAmOKRjz56wXE+bK
++McnFCax/Fnku+iUnUrAoSzxY0TsoAxm7AoDHW/9YoBQj41DtirUTfCeS5KwobGT
+veomwyVjxmKOklnoSvhU1LAIZ6TkaDl+q6onnqKJOv3tEbgwqWpxt0Hg/2ddxY+E
+TafoB5NKWYWbmXig9LdlOtfY4KLn+bPkmJW3B9O4UA6J5UxtykmFj4guIMN4soe+
+3YXru+ZGz6ooaarYCr1guPjwJAYIFlR6h6zk10sCcbm8riwHXB99Xy1wn9XanyIi
+tKOE2hUJh7/m61SK9ko9NbR7zdlgxA==
+=tKXW
 -----END PGP SIGNATURE-----
 
---Xo5l0daGy0cdCtSZYuZeev5Wj0jBRfmxK--
+--bgcE9fbkGFaObe6vRRAJQAlR1OrjdtUHg--
