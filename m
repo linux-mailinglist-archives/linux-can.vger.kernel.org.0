@@ -2,43 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BA6D0631
-	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 06:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F09CD0826
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 09:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725446AbfJIEBv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 00:01:51 -0400
-Received: from mail-eopbgr760045.outbound.protection.outlook.com ([40.107.76.45]:6185
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726634AbfJIEBv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 9 Oct 2019 00:01:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xz9BOPl6Ew177J9PQnLn8hyH7R3x8gbb9TSBTkLiXoPn1b0YOfve5C8RxAFBTcwXkOVVrk7AiMxs6lafeyG+AoeTrdXGLnIqH0xwjgCBIrTHhtfrelvwm/2rfVoyORQxwoPJiPPIm8wogQ5w5b2uien9QcfeizKBN+Vf9idlbGs3/XBGmAuptkd/raraKX5AcPx4FCOolDjOHo1GakUj11tuMkUU7d+xcQcYmkrTNoBSHIlwvIWOHewYiwo05FNGYVRHqr2ikd5xpEP5++GNnR44iwBfcHz8Og0672CUQSr92cIHPp9sWuKPlC0rpTlABSTmNELTTioiFhy2LNXb6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ly8G9LcrcvsETdjgjuFC5NZAcfqXX/l7tuhYYBMFK5s=;
- b=CmOMpWhP2QYAIVXXPsY0aLP79VcMhjehqI9fkFwiDXwA7TEl7RauF1uPX+mnSz9ULR/qs4OyAUO+814uF/HZSk+ZZSqZfyP8oPU6c6weYN15pnmBsc2TPnnPxFJOLKHp8CpTktJP6XQI/maB654Vvn+h4AaWvgcbkxssB6F3fub41aH6ybluYdOibuXSAEsoybqlm8RqgognVr6Logexcv92Xwq1Y62DenfxBcsVG2O1cSxHz1Rg9dm9Hp3xp2WpVaQSRrrJki+L8om5vMonXm+4lC1VCVAekDlS3dG1lOVXgXpqZ8GUriOo+yUvSJ2CVBHpzkqjLdLxeX7MZ49DIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
- dkim=pass header.d=xilinx.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ly8G9LcrcvsETdjgjuFC5NZAcfqXX/l7tuhYYBMFK5s=;
- b=EKnmGtZ0FILycPL4gQmBVBWeaaP1t+WSsH2vV38kCJ/cE8StFp6LCDQo+QDJuiu8E8gvCsrP8T47FiDPHbVqp9mSjtwyWVwhbq3SC4/w887Es90e9eQCyIf/rCxQarcdEu5gFtc/OGynH5HThXgz8FoMaBehRN2iVlfYWpmlSuc=
-Received: from MN2PR02MB6400.namprd02.prod.outlook.com (52.132.173.155) by
- MN2PR02MB6237.namprd02.prod.outlook.com (52.132.175.157) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.23; Wed, 9 Oct 2019 04:01:47 +0000
-Received: from MN2PR02MB6400.namprd02.prod.outlook.com
- ([fe80::2490:5890:f2e7:14b3]) by MN2PR02MB6400.namprd02.prod.outlook.com
- ([fe80::2490:5890:f2e7:14b3%7]) with mapi id 15.20.2327.026; Wed, 9 Oct 2019
- 04:01:46 +0000
-From:   Appana Durga Kedareswara Rao <appanad@xilinx.com>
-To:     Anssi Hannula <anssi.hannula@bitwise.fi>
-CC:     "wg@grandegger.com" <wg@grandegger.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        id S1725879AbfJIHSB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Oct 2019 03:18:01 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37545 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725440AbfJIHSB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 03:18:01 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iI6EP-0001UZ-PG; Wed, 09 Oct 2019 09:17:57 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:3041:7636:c70e:730f] (unknown [IPv6:2a03:f580:87bc:d400:3041:7636:c70e:730f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 08A70463372;
+        Wed,  9 Oct 2019 07:17:53 +0000 (UTC)
+Subject: Re: [PATCH 2/6] net: can: xilinx_can: Fix flags field initialization
+ for axi can and canps
+To:     Appana Durga Kedareswara Rao <appanad@xilinx.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc:     "wg@grandegger.com" <wg@grandegger.com>,
         "davem@davemloft.net" <davem@davemloft.net>,
         Michal Simek <michals@xilinx.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -46,91 +36,207 @@ CC:     "wg@grandegger.com" <wg@grandegger.com>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: RE: [PATCH 2/6] net: can: xilinx_can: Fix flags field initialization
- for axi can and canps
-Thread-Topic: [PATCH 2/6] net: can: xilinx_can: Fix flags field initialization
- for axi can and canps
-Thread-Index: AQHVesCfvo8HLFt+ZUeAzSH0lYp+g6dRtjlA
-Date:   Wed, 9 Oct 2019 04:01:46 +0000
-Message-ID: <MN2PR02MB64004059908C95EB5E16746FDC950@MN2PR02MB6400.namprd02.prod.outlook.com>
 References: <1552908766-26753-1-git-send-email-appana.durga.rao@xilinx.com>
  <1552908766-26753-3-git-send-email-appana.durga.rao@xilinx.com>
  <d1bedb13-f66f-b0fd-bd6d-9f95b64fc405@bitwise.fi>
-In-Reply-To: <d1bedb13-f66f-b0fd-bd6d-9f95b64fc405@bitwise.fi>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=appanad@xilinx.com; 
-x-originating-ip: [149.199.50.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f817d37c-2925-4ae3-d3b8-08d74c6d678d
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: MN2PR02MB6237:|MN2PR02MB6237:
-x-ms-exchange-purlcount: 1
-x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR02MB6237CCE23E1B30DDF6C19AD0DC950@MN2PR02MB6237.namprd02.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 018577E36E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39850400004)(396003)(366004)(346002)(136003)(376002)(189003)(199004)(316002)(33656002)(3846002)(25786009)(99286004)(66476007)(64756008)(71200400001)(66066001)(66556008)(71190400001)(66446008)(14454004)(76176011)(66946007)(6916009)(7696005)(478600001)(256004)(186003)(9686003)(54906003)(966005)(6116002)(486006)(305945005)(74316002)(2906002)(26005)(6306002)(6436002)(55016002)(229853002)(8936002)(8676002)(5660300002)(11346002)(476003)(7736002)(446003)(86362001)(52536014)(6506007)(81156014)(102836004)(4326008)(6246003)(81166006)(76116006);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR02MB6237;H:MN2PR02MB6400.namprd02.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: xilinx.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Tdet2NC6j08bD+Ac/zD69NxVPx8IqaOLGYRtifzcbihgiS7znq4vc+6i3A2+K1rZr3Zdy9lbAblMeNS2dJrrh3NxQWeR1ZkSrbh07qAME5iXLTSYVxbnZLzBengxDnSAwp5LR1yjtV/iEPX4HMz35L5iSVASrNMx1Pmd41NrkoGWsWQSOjA50bKIUst+7j9edjW/5v1KjZmU9VPWtR17mnWsPcAIoxa78f8ChFIarUNt0Bgby8S7vQmg5ONHngdTgKY2js3GKy8AkIOFSXI5j2MJHr8RQQCDZ3VXwXNL9VSumY6MxNkoSnq24jTQgT6eG05nGIUQ0MKCUjeMLIV3/klzfCWo+hHjTyTN5IFvsNlQQa9Xkh/VWChjXVR/SRyR4PO0d8w9L7WCHsCFBwTNOsw4eBNWtZ5trSCWurNLBF9K3bGKQTf83pQLJhIot4oWyLPeLuNaDYuxh0DVuwHC4A==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <MN2PR02MB64004059908C95EB5E16746FDC950@MN2PR02MB6400.namprd02.prod.outlook.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <644fb76f-8169-4911-2293-92ae2dfe4e1c@pengutronix.de>
+Date:   Wed, 9 Oct 2019 09:17:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f817d37c-2925-4ae3-d3b8-08d74c6d678d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2019 04:01:46.6080
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AKLUxWvQmXHFpP/HCAaqg+lGtMUYnKmvsBQXpX5MY3mvAOUGBDjXSdcRCWlv2OJQ3rLFpP5ZhpYpEmYQagG1Gg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6237
+In-Reply-To: <MN2PR02MB64004059908C95EB5E16746FDC950@MN2PR02MB6400.namprd02.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="o6gGPgD5ZTyYWoRyGFKHldQgJZ9IWZIQR"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGksDQoNCjxTbmlwPg0KPiBPbiAxOC4zLjIwMTkgMTMuMzIsIEFwcGFuYSBEdXJnYSBLZWRhcmVz
-d2FyYSByYW8gd3JvdGU6DQo+ID4gQVhJIENBTiBJUCBhbmQgQ0FOUFMgSVAgc3VwcG9ydHMgdHgg
-ZmlmbyBlbXB0eSBmZWF0dXJlLCB0aGlzIHBhdGNoDQo+ID4gdXBkYXRlcyB0aGUgZmxhZ3MgZmll
-bGQgZm9yIHRoZSBzYW1lLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQXBwYW5hIER1cmdhIEtl
-ZGFyZXN3YXJhIHJhbw0KPiA+IDxhcHBhbmEuZHVyZ2EucmFvQHhpbGlueC5jb20+DQo+ID4gLS0t
-DQo+ID4gIGRyaXZlcnMvbmV0L2Nhbi94aWxpbnhfY2FuLmMgfCAyICsrDQo+ID4gIDEgZmlsZSBj
-aGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25l
-dC9jYW4veGlsaW54X2Nhbi5jDQo+ID4gYi9kcml2ZXJzL25ldC9jYW4veGlsaW54X2Nhbi5jIGlu
-ZGV4IDJkZTUxYWMuLjIyNTY5ZWYgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvY2FuL3hp
-bGlueF9jYW4uYw0KPiA+ICsrKyBiL2RyaXZlcnMvbmV0L2Nhbi94aWxpbnhfY2FuLmMNCj4gPiBA
-QCAtMTQyOCw2ICsxNDI4LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIHhjYW5f
-ZGV2X3BtX29wcw0KPiA9DQo+ID4geyAgfTsNCj4gPg0KPiA+ICBzdGF0aWMgY29uc3Qgc3RydWN0
-IHhjYW5fZGV2dHlwZV9kYXRhIHhjYW5fenlucV9kYXRhID0gew0KPiA+ICsJLmZsYWdzID0gWENB
-Tl9GTEFHX1RYRkVNUCwNCj4gPiAgCS5iaXR0aW1pbmdfY29uc3QgPSAmeGNhbl9iaXR0aW1pbmdf
-Y29uc3QsDQo+ID4gIAkuYnRyX3RzMl9zaGlmdCA9IFhDQU5fQlRSX1RTMl9TSElGVCwNCj4gPiAg
-CS5idHJfc2p3X3NoaWZ0ID0gWENBTl9CVFJfU0pXX1NISUZULA0KPiANCj4gVGhhbmtzIGZvciBj
-YXRjaGluZyB0aGlzLCB0aGlzIGxpbmUgc2VlbWVkIHRvIGhhdmUgYmVlbiBpbmNvcnJlY3RseSBy
-ZW1vdmVkIGJ5DQo+IG15IDllNWYxYjI3M2UgKCJjYW46IHhpbGlueF9jYW46IGFkZCBzdXBwb3J0
-IGZvciBYaWxpbnggQ0FOIEZEIGNvcmUiKS4NCj4gDQo+IEJ1dDoNCj4gDQo+ID4gQEAgLTE0MzUs
-NiArMTQzNiw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgeGNhbl9kZXZ0eXBlX2RhdGENCj4gPiB4
-Y2FuX3p5bnFfZGF0YSA9IHsgIH07DQo+ID4NCj4gPiAgc3RhdGljIGNvbnN0IHN0cnVjdCB4Y2Fu
-X2RldnR5cGVfZGF0YSB4Y2FuX2F4aV9kYXRhID0gew0KPiA+ICsJLmZsYWdzID0gWENBTl9GTEFH
-X1RYRkVNUCwNCj4gPiAgCS5iaXR0aW1pbmdfY29uc3QgPSAmeGNhbl9iaXR0aW1pbmdfY29uc3Qs
-DQo+ID4gIAkuYnRyX3RzMl9zaGlmdCA9IFhDQU5fQlRSX1RTMl9TSElGVCwNCj4gPiAgCS5idHJf
-c2p3X3NoaWZ0ID0gWENBTl9CVFJfU0pXX1NISUZULA0KPiANCj4gDQo+IEFyZSB5b3Ugc3VyZSB0
-aGlzIGlzIHJpZ2h0Pw0KPiBJbiB0aGUgZG9jdW1lbnRhdGlvbiBbMV0gdGhlcmUgZG9lcyBub3Qg
-c2VlbSB0byBiZSBhbnkgVFhGRU1QIGludGVycnVwdCwgaXQNCj4gd291bGQgYmUgaW50ZXJydXB0
-IGJpdCAxNCBidXQgQVhJIENBTiA1LjAgc2VlbXMgdG8gb25seSBnbyB1cCB0byAxMS4NCj4gDQo+
-IE9yIG1heWJlIGl0IGlzIHVuZG9jdW1lbnRlZCBvciB0aGVyZSBpcyBhIG5ld2VyIHZlcnNpb24g
-c29tZXdoZXJlPw0KDQpTb3JyeSBmb3IgdGhlIGRlbGF5IGluIHRoZSByZXBseS4gDQpBZ3JlZSBU
-WEZFTVAgaW50ZXJydXB0IGZlYXR1cmUgaXMgbm90IHN1cHBvcnRlZCBieSB0aGUgU29mdCBJUCBD
-QU4uDQpTaW5jZSB0aGlzIHBhdGNoIGFscmVhZHkgZ290IGFwcGxpZWQgd2lsbCBzZW5kIGEgc2Vw
-YXJhdGUgcGF0Y2ggdG8gZml4IHRoaXMuDQoNClJlZ2FyZHMsDQpLZWRhci4NCg0KPiANCj4gWzFd
-DQo+IGh0dHBzOi8vd3d3LnhpbGlueC5jb20vc3VwcG9ydC9kb2N1bWVudGF0aW9uL2lwX2RvY3Vt
-ZW50YXRpb24vY2FuL3Y1XzANCj4gL3BnMDk2LWNhbi5wZGYNCj4gDQo+IC0tDQo+IEFuc3NpIEhh
-bm51bGEgLyBCaXR3aXNlIE95DQo+ICszNTggNTAzODAzOTk3DQoNCg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--o6gGPgD5ZTyYWoRyGFKHldQgJZ9IWZIQR
+Content-Type: multipart/mixed; boundary="r6Se4r1d84yFfg5K20EFRv9UIXwPXokF8";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Appana Durga Kedareswara Rao <appanad@xilinx.com>,
+ Anssi Hannula <anssi.hannula@bitwise.fi>
+Cc: "wg@grandegger.com" <wg@grandegger.com>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ Michal Simek <michals@xilinx.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <644fb76f-8169-4911-2293-92ae2dfe4e1c@pengutronix.de>
+Subject: Re: [PATCH 2/6] net: can: xilinx_can: Fix flags field initialization
+ for axi can and canps
+References: <1552908766-26753-1-git-send-email-appana.durga.rao@xilinx.com>
+ <1552908766-26753-3-git-send-email-appana.durga.rao@xilinx.com>
+ <d1bedb13-f66f-b0fd-bd6d-9f95b64fc405@bitwise.fi>
+ <MN2PR02MB64004059908C95EB5E16746FDC950@MN2PR02MB6400.namprd02.prod.outlook.com>
+In-Reply-To: <MN2PR02MB64004059908C95EB5E16746FDC950@MN2PR02MB6400.namprd02.prod.outlook.com>
+
+--r6Se4r1d84yFfg5K20EFRv9UIXwPXokF8
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+
+On 10/9/19 6:01 AM, Appana Durga Kedareswara Rao wrote:
+> Hi,
+>=20
+> <Snip>
+>> On 18.3.2019 13.32, Appana Durga Kedareswara rao wrote:
+>>> AXI CAN IP and CANPS IP supports tx fifo empty feature, this patch
+>>> updates the flags field for the same.
+>>>
+>>> Signed-off-by: Appana Durga Kedareswara rao
+>>> <appana.durga.rao@xilinx.com>
+>>> ---
+>>>  drivers/net/can/xilinx_can.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/net/can/xilinx_can.c
+>>> b/drivers/net/can/xilinx_can.c index 2de51ac..22569ef 100644
+>>> --- a/drivers/net/can/xilinx_can.c
+>>> +++ b/drivers/net/can/xilinx_can.c
+>>> @@ -1428,6 +1428,7 @@ static const struct dev_pm_ops xcan_dev_pm_ops
+>> =3D
+>>> {  };
+>>>
+>>>  static const struct xcan_devtype_data xcan_zynq_data =3D {
+>>> +	.flags =3D XCAN_FLAG_TXFEMP,
+>>>  	.bittiming_const =3D &xcan_bittiming_const,
+>>>  	.btr_ts2_shift =3D XCAN_BTR_TS2_SHIFT,
+>>>  	.btr_sjw_shift =3D XCAN_BTR_SJW_SHIFT,
+>>
+>> Thanks for catching this, this line seemed to have been incorrectly re=
+moved by
+>> my 9e5f1b273e ("can: xilinx_can: add support for Xilinx CAN FD core").=
+
+>>
+>> But:
+>>
+>>> @@ -1435,6 +1436,7 @@ static const struct xcan_devtype_data
+>>> xcan_zynq_data =3D {  };
+>>>
+>>>  static const struct xcan_devtype_data xcan_axi_data =3D {
+>>> +	.flags =3D XCAN_FLAG_TXFEMP,
+>>>  	.bittiming_const =3D &xcan_bittiming_const,
+>>>  	.btr_ts2_shift =3D XCAN_BTR_TS2_SHIFT,
+>>>  	.btr_sjw_shift =3D XCAN_BTR_SJW_SHIFT,
+>>
+>>
+>> Are you sure this is right?
+>> In the documentation [1] there does not seem to be any TXFEMP interrup=
+t, it
+>> would be interrupt bit 14 but AXI CAN 5.0 seems to only go up to 11.
+>>
+>> Or maybe it is undocumented or there is a newer version somewhere?
+>=20
+> Sorry for the delay in the reply.=20
+> Agree TXFEMP interrupt feature is not supported by the Soft IP CAN.
+> Since this patch already got applied will send a separate patch to fix =
+this.
+
+Please base your patch on net/master and add the appropriate fixes tag:
+
+Fixes: 3281b380ec9f ("can: xilinx_can: Fix flags field initialization for=
+ axi can and canps")
+
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--r6Se4r1d84yFfg5K20EFRv9UIXwPXokF8--
+
+--o6gGPgD5ZTyYWoRyGFKHldQgJZ9IWZIQR
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2diZ0ACgkQWsYho5Hk
+nSDwGwf+Oxe0LBV8cKXYL5gwSl2c4iMUIorM6JCFmH1Uavtlp11+g91f3qyPCpyq
+MVHHsIeBIbta2dN1oBY7tGBmBH5s4MNdxhFlc8EajUeYf6sZBD+BK243TSJVC7hF
+pjVtdIEhiPkZcveLzF2TIaBMVPqLiJyKmsJvgVlXLUY9TYOi7BGqu0NoTvEOjNJ9
+HThgvSUH/zfJrWIT5m6DMxg+39QacVCjfTtlXIhefPsr/F6IPZ855qItY9mNGsPh
+2qC24k6Pq70Q4h7uGtKO+/dU1Uy0Ru/t7BOlhzcEG/cwVuLE/x3tW2ccnNKdeBoq
+MLDHd+vQ3kqakVr4m010yE8l/cBiPA==
+=mgwU
+-----END PGP SIGNATURE-----
+
+--o6gGPgD5ZTyYWoRyGFKHldQgJZ9IWZIQR--
