@@ -2,41 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8DBD087A
-	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 09:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34B7D0899
+	for <lists+linux-can@lfdr.de>; Wed,  9 Oct 2019 09:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727766AbfJIHkw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 03:40:52 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59923 "EHLO
+        id S1729575AbfJIHlw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 9 Oct 2019 03:41:52 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40639 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbfJIHkw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 03:40:52 -0400
+        with ESMTP id S1730470AbfJIHlv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 03:41:51 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iI6aT-000473-NX; Wed, 09 Oct 2019 09:40:45 +0200
+        id 1iI6bS-0004Or-5y; Wed, 09 Oct 2019 09:41:46 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:c0ba:f7df:a30d:f61c] (unknown [IPv6:2a03:f580:87bc:d400:c0ba:f7df:a30d:f61c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 96BBF4633C5;
-        Wed,  9 Oct 2019 07:40:42 +0000 (UTC)
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kernel@pengutronix.de,
-        linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Bastian Stender <bst@pengutronix.de>,
-        Elenita Hinds <ecathinds@gmail.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <ore@pengutronix.de>,
-        David Jander <david@protonic.nl>
-References: <2ffa00e7-d447-9216-587d-30396a47ca64@pengutronix.de>
- <20191008120953.515a3dbd@cakuba.netronome.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8AB814633CE;
+        Wed,  9 Oct 2019 07:41:44 +0000 (UTC)
+Subject: Re: [PATCH v2] can: mcp251x: Get rid of legacy platform data
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-can@vger.kernel.org
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>
+References: <20191008162039.58458-1-andriy.shevchenko@linux.intel.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -99,16 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: pull-request: can-next 2019-10-07
-Message-ID: <1196c661-5145-4931-031b-13b16249d632@pengutronix.de>
-Date:   Wed, 9 Oct 2019 09:40:38 +0200
+Message-ID: <b0cbee28-7e4c-894a-1251-d981f883e3cc@pengutronix.de>
+Date:   Wed, 9 Oct 2019 09:41:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191008120953.515a3dbd@cakuba.netronome.com>
+In-Reply-To: <20191008162039.58458-1-andriy.shevchenko@linux.intel.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="VUbsAWRtBp9W8DFzy5mWxLdBxWS0jO2sD"
+ boundary="oaPzcWawqgTfT02eXHjmhMJAcAlZOcq6c"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -119,77 +113,43 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---VUbsAWRtBp9W8DFzy5mWxLdBxWS0jO2sD
-Content-Type: multipart/mixed; boundary="GfjgU16etsgk1AHcE1guZ0fzL3X7cKcIC";
+--oaPzcWawqgTfT02eXHjmhMJAcAlZOcq6c
+Content-Type: multipart/mixed; boundary="LtgBeiNOEv3Ua8jHFcOFU8u4xT6Ht1cB1";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jakub Kicinski <jakub.kicinski@netronome.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kernel@pengutronix.de,
- linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
- Bastian Stender <bst@pengutronix.de>, Elenita Hinds <ecathinds@gmail.com>,
- Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
- Maxime Jayat <maxime.jayat@mobile-devices.fr>,
- Robin van der Gracht <robin@protonic.nl>, Oleksij Rempel
- <ore@pengutronix.de>, David Jander <david@protonic.nl>
-Message-ID: <1196c661-5145-4931-031b-13b16249d632@pengutronix.de>
-Subject: Re: pull-request: can-next 2019-10-07
-References: <2ffa00e7-d447-9216-587d-30396a47ca64@pengutronix.de>
- <20191008120953.515a3dbd@cakuba.netronome.com>
-In-Reply-To: <20191008120953.515a3dbd@cakuba.netronome.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-can@vger.kernel.org
+Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang
+ <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>,
+ Russell King <linux@armlinux.org.uk>
+Message-ID: <b0cbee28-7e4c-894a-1251-d981f883e3cc@pengutronix.de>
+Subject: Re: [PATCH v2] can: mcp251x: Get rid of legacy platform data
+References: <20191008162039.58458-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20191008162039.58458-1-andriy.shevchenko@linux.intel.com>
 
---GfjgU16etsgk1AHcE1guZ0fzL3X7cKcIC
+--LtgBeiNOEv3Ua8jHFcOFU8u4xT6Ht1cB1
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/8/19 9:09 PM, Jakub Kicinski wrote:
-> On Mon, 7 Oct 2019 16:38:14 +0200, Marc Kleine-Budde wrote:
->> Hello David,
->>
->> this is a pull request for net-next/master consisting of 12 patches.
->>
->> The first patch is by Andy Shevchenko for the mcp251x driver and remov=
-es
->> the legacy platform data from all in-tree users and the driver.
->>
->> The next two patches target the peak_canfd driver, the first one is by=
+On 10/8/19 6:20 PM, Andy Shevchenko wrote:
+> Instead of using legacy platform data, switch to use device properties.=
 
->> me and fixes several checkpatch warnings, the second one is by Stephan=
-e
->> Grosjean and adds hardware timestamps to the rx skbs.
->>
->> Followed by two patches for the xilinx_can driver. Again the first is =
-by
->> me and fixes checkpatch warnings, the second one is by Anssi Hannula a=
-nd
->> avoids non-requested bus error frames, which improves performance.
->>
->> Pankaj Sharma's patch for the m_can driver adds support for the one sh=
-ot
->> mode.
->>
->> YueHaibing provides a patch for the grcan driver to use
->> devm_platform_ioremap_resource() to simplify code.
->>
->> Joakim Zhang provides a similar patch for the flexcan driver.
->>
->> The last 4 patches are by me and target the rx-offload infrastructure.=
-
->> The first 3 fix checkpatch warnings, the last one removes a no-op
->> function.
+> For clock frequency we are using well established clock-frequency prope=
+rty.
 >=20
-> Hi Marc,
+> Users, two for now, are also converted here.
 >=20
-> I think the correction should have been s/Substract/Subtract/,
-> sorry for the nit pick.
+> Cc: Daniel Mack <daniel@zonque.org>
+> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: fix issues kbuild bot complains about
 
-Thanks for noticing that. checkpatch wasn't complaining about my new
-typo though :)
+I've asked David not to merge, so I'll include v2 in my new pull request.=
 
-> Would you be able to fix that up or do you prefer to do a follow up?
-
-As another patch from the pull request is broken, I've asked David to
-not merge it. I've squashed your fix into the original patch.
 
 Thanks,
 Marc
@@ -201,23 +161,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---GfjgU16etsgk1AHcE1guZ0fzL3X7cKcIC--
+--LtgBeiNOEv3Ua8jHFcOFU8u4xT6Ht1cB1--
 
---VUbsAWRtBp9W8DFzy5mWxLdBxWS0jO2sD
+--oaPzcWawqgTfT02eXHjmhMJAcAlZOcq6c
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2djvYACgkQWsYho5Hk
-nSDg8wf/YBpCDX9enE+SKB1cCRgc+Am6QaAyPuHl1lX1Je+gIr3GOs88ZDkP8HKS
-MfkGbvbkh8ntJlRzZ/6q8yJjIscYmcYlV0Ev14yzvKHJBru2Vn9DXU+uRA8UHhnO
-BoZMnBnac5bJS75sJO+BJI96A50YXoQY1pOC0IA/VkTiruV1XrP11q8Vsif7C6KW
-3LO+bkIdCzvBUYJyZeUwZ+sgT2J4Z8CEk7GcngGfzKxfs3CBMBbaYPRWHm7KVEiJ
-KdKHVEcTo9foBjZQnC5A4MXYEM53HQHfe+df6HzPaJfs4iStfgGVy68pHoLmtyWP
-aOvIJdWLoCPdJwAEDFcyIJsV7AhMHA==
-=hw2I
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2djzQACgkQWsYho5Hk
+nSDmnwf8CsRLXIxI+LgkDK7sRD/Zi5OFo+0wamB+JiC9yExypc/9I8ep5AK7V2KE
+2J3iAJ8ztpZDK4qfC9RQJCwccWvAzMHFA+NauExrKYVLWAigYbBXWwAPj2VwDWvs
+wUtv542JxR9YGRObPRwnvppm6O6I4dJpFhK91AM/65gjokyVOQ45IzDrfcg6OR4B
+TGFpAnXFE2cqxnj3d7fJPhQba+FND0/XaBdm8h4YdpHYXN0VxMyx7Z55k7p4TT3r
+5415yGMPgdOvDy2E6DLZxO5FtrO+Q1LS2RrhN7/c5cEQHk+Rrz8mBnIxpGpQPfoi
+RV4GVjEgbnTGEHrBMW+xUT4lwxG7PQ==
+=LSi5
 -----END PGP SIGNATURE-----
 
---VUbsAWRtBp9W8DFzy5mWxLdBxWS0jO2sD--
+--oaPzcWawqgTfT02eXHjmhMJAcAlZOcq6c--
