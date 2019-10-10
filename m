@@ -2,40 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 602BBD29AF
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 14:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08BBD29E1
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 14:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387615AbfJJMjq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Oct 2019 08:39:46 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36027 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733191AbfJJMjq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 08:39:46 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k20so4746348oih.3;
-        Thu, 10 Oct 2019 05:39:45 -0700 (PDT)
+        id S2387871AbfJJMqp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 08:46:45 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41397 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387801AbfJJMqp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 08:46:45 -0400
+Received: by mail-oi1-f196.google.com with SMTP id w65so4748960oiw.8;
+        Thu, 10 Oct 2019 05:46:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=arKu8+1LbG7MDGBNwfTmuA7CC9g505hUgH6IFotM2/c=;
-        b=ozzbx5KuOwxx9ymQfTA5dIfKSbLpTBH/1SWzQFOBtsthgF1REwaCG80ioBULdcrCNU
-         HtxxY5oJC7BbZs1Mh9BM0HhSYTp5i7JHgnvHADbJZ9axOTRMl0j59caNWogA5SVphBda
-         sGPB3iXPXA4vah/NssUt+M8q1tX58veWwLGKJtajauL98sjiprbx5OfKm5SolkBQr78n
-         dSgzvv1w24ecw31A0ETigRMKXwbRSu8EX2ePufk6qaOeyIF9tpQV/YwkZwVqnwtW2uTb
-         eKqKZfYtPq3U1Y+9JMDkKVUX6xv3aNQu4OcnUexZC1UyQm7uZnwuvH5CAXs8dbriVyGV
-         tDkQ==
-X-Gm-Message-State: APjAAAVYncBcl1XVU7jStUu/kfleVAOmqUpsWgFN5QuEnqiWkrrPWycB
-        O/9xFykl1+aBlPtWhueeqjCePPMOzc0CVDpi7rE=
-X-Google-Smtp-Source: APXvYqzLakd1QGm7NlmSwapT6TqYzAQXmi83jiIwGm36dogCfBtD/ZpLsuYI0+LM1pEbcYjGZ3PCR/ajFAp6sXXFXsQ=
-X-Received: by 2002:aca:882:: with SMTP id 124mr7307124oii.54.1570711185364;
- Thu, 10 Oct 2019 05:39:45 -0700 (PDT)
+        bh=KBn66BbTwmZUU2I9k2ufbx3Ra36HrnXvwheScStJ0QE=;
+        b=JXtC0r3C4L9ICBChGPcuh2xdFbu+uO4rsckR5QWitNrkFsvVbMulR18p37ktMoprqi
+         xJ+sGdWiMqEmtkTljTKjR6I4lqX6gC2yJfvCByYeCiZ4NqS9X82122F8aCwMs0+ML6dQ
+         N5BtaS6/QHBTSnmI4mjnabqu/eq34wCMdfckFDyPVC9s7eCz4KSAHgg1KUSEUG9uHWe4
+         Xmnspv4FrHAxOoROWn/x6z3lb2bA8LXAMoFEmBMAjI0yUM4DkC9JApaMD3H/zIJUL9OC
+         HCHdC//HbETpBlb1GNpdixeoNfJUPQuGtsWH8Fyud4Hf3p6QGEUdH56l8EembqPsCXoq
+         jcpA==
+X-Gm-Message-State: APjAAAU5d8CLOMa48g4jKZSfEg23VvrEHWv/vcsWKvFgzV2ViMF8aELJ
+        4FPG/hFa2erD1v0cqV6tmB+NUwNtsWSc0agzSVc=
+X-Google-Smtp-Source: APXvYqw8mgz4KShDIMTVq66wDgob36QaVSEI9Z5S3L/3RMDk2QtBAHM49smvIMzPZ/LUfdYnBDR2vegq9wiIwn0La0w=
+X-Received: by 2002:aca:882:: with SMTP id 124mr7330818oii.54.1570711604017;
+ Thu, 10 Oct 2019 05:46:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <1570711049-5691-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570711049-5691-2-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570711049-5691-2-git-send-email-fabrizio.castro@bp.renesas.com>
+References: <1570711049-5691-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570711049-5691-3-git-send-email-fabrizio.castro@bp.renesas.com>
+In-Reply-To: <1570711049-5691-3-git-send-email-fabrizio.castro@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Oct 2019 14:39:34 +0200
-Message-ID: <CAMuHMdXDoTVhrroTZJ0RW62BHf2atwzw4AJrc6YTp441i4aH4A@mail.gmail.com>
-Subject: Re: [PATCH net-next 1/3] dt-bindings: can: rcar_can: Add r8a774b1 support
+Date:   Thu, 10 Oct 2019 14:46:32 +0200
+Message-ID: <CAMuHMdV5XUPSrgoDm62p0f_B1TtvhMyOX3NVho=QVqdesq31jg@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/3] dt-bindings: can: rcar_canfd: document
+ r8a774b1 support
 To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
 Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -60,13 +61,39 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Fabrizio,
+
 On Thu, Oct 10, 2019 at 2:37 PM Fabrizio Castro
 <fabrizio.castro@bp.renesas.com> wrote:
-> Document RZ/G2N (r8a774b1) SoC specific bindings.
+> Document the support for rcar_canfd on R8A774B1 SoC devices.
 >
 > Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
 
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
+> +++ b/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
+> @@ -5,6 +5,7 @@ Required properties:
+>  - compatible: Must contain one or more of the following:
+>    - "renesas,rcar-gen3-canfd" for R-Car Gen3 and RZ/G2 compatible controllers.
+>    - "renesas,r8a774a1-canfd" for R8A774A1 (RZ/G2M) compatible controller.
+> +  - "renesas,r8a774b1-canfd" for R8A774B1 (RZ/G2N) compatible controller.
+>    - "renesas,r8a774c0-canfd" for R8A774C0 (RZ/G2E) compatible controller.
+>    - "renesas,r8a7795-canfd" for R8A7795 (R-Car H3) compatible controller.
+>    - "renesas,r8a7796-canfd" for R8A7796 (R-Car M3-W) compatible controller.
+
+The above looks good, but I think you forgot to add R8A774B1 to the
+paragraph talking about the CAN FD clock below.
+With that fixed:
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+While at it, the example in the bindings says the CANFD clock should be
+configured to 40 MHz, which matches what is used in the various DTS files.
+However, the Hardware User's Manual states it should be 80 MHz, except
+for R-Car D3.
+Is that correct?
+
+Thanks!
 
 Gr{oetje,eeting}s,
 
