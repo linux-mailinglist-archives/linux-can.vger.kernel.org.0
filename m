@@ -2,38 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFFDD1B57
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 00:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3E9D2221
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 09:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731736AbfJIWBz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Oct 2019 18:01:55 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59339 "EHLO
+        id S1732992AbfJJHvu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 03:51:50 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48129 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730815AbfJIWBz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Oct 2019 18:01:55 -0400
+        with ESMTP id S1726864AbfJJHvu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 03:51:50 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iIK1p-0005Fi-7D; Thu, 10 Oct 2019 00:01:53 +0200
+        id 1iITEj-0000om-5s; Thu, 10 Oct 2019 09:51:49 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:a936:4bb2:bd47:1f85] (unknown [IPv6:2a03:f580:87bc:d400:a936:4bb2:bd47:1f85])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 50C5D463BF2;
-        Wed,  9 Oct 2019 22:01:52 +0000 (UTC)
-To:     =?UTF-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>,
-        "wg@grandegger.com" <wg@grandegger.com>,
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D7AF6464076;
+        Thu, 10 Oct 2019 07:51:47 +0000 (UTC)
+Subject: Re: [PATCH 0/7] can: ti_hecc changes
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <73336c447238499985c2ca6df1075a52@HG-SRV-053.HG.local>
- <fc7330ce-c277-088a-3a35-e8780c852f99@pengutronix.de>
- <ef7d794e0f9e4d2e8c3a32310d90d180@HG-SRV-053.HG.local>
- <c84b55f8-c22b-3dbc-208d-e63b6c60c8e0@pengutronix.de>
- <e75d6bcd96e0414b99c4d24a41163369@HG-SRV-053.HG.local>
- <a65d9365-fe29-423e-bae0-2bfefb773e69@pengutronix.de>
- <c1dc8274b8bd4214b27a3ddddf54284c@HG-SRV-053.HG.local>
+References: <20190924184437.10607-1-jhofstee@victronenergy.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -96,16 +90,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: Add GPIO support for mcp251x driver
-Message-ID: <27efa196-05be-cf23-db49-45458c66a88f@pengutronix.de>
-Date:   Thu, 10 Oct 2019 00:01:47 +0200
+Message-ID: <c322f1ec-d0ef-39af-fa9a-dafd5a07d8ba@pengutronix.de>
+Date:   Thu, 10 Oct 2019 09:51:39 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <c1dc8274b8bd4214b27a3ddddf54284c@HG-SRV-053.HG.local>
+In-Reply-To: <20190924184437.10607-1-jhofstee@victronenergy.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="p8NAP5WKEY3TTmOP6tu5qYDXpy1zKbkoL"
+ boundary="ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,61 +109,57 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---p8NAP5WKEY3TTmOP6tu5qYDXpy1zKbkoL
-Content-Type: multipart/mixed; boundary="ylekiNGOvGEUSx7s5Q1B46uhbo0EJxnqp";
+--ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ
+Content-Type: multipart/mixed; boundary="tPPtpJvqMesEE8ENLv3NSrtjNNIxTlVhO";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: =?UTF-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>,
- "wg@grandegger.com" <wg@grandegger.com>,
+To: Jeroen Hofstee <jhofstee@victronenergy.com>,
  "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <27efa196-05be-cf23-db49-45458c66a88f@pengutronix.de>
-Subject: Re: Add GPIO support for mcp251x driver
-References: <73336c447238499985c2ca6df1075a52@HG-SRV-053.HG.local>
- <fc7330ce-c277-088a-3a35-e8780c852f99@pengutronix.de>
- <ef7d794e0f9e4d2e8c3a32310d90d180@HG-SRV-053.HG.local>
- <c84b55f8-c22b-3dbc-208d-e63b6c60c8e0@pengutronix.de>
- <e75d6bcd96e0414b99c4d24a41163369@HG-SRV-053.HG.local>
- <a65d9365-fe29-423e-bae0-2bfefb773e69@pengutronix.de>
- <c1dc8274b8bd4214b27a3ddddf54284c@HG-SRV-053.HG.local>
-In-Reply-To: <c1dc8274b8bd4214b27a3ddddf54284c@HG-SRV-053.HG.local>
+Message-ID: <c322f1ec-d0ef-39af-fa9a-dafd5a07d8ba@pengutronix.de>
+Subject: Re: [PATCH 0/7] can: ti_hecc changes
+References: <20190924184437.10607-1-jhofstee@victronenergy.com>
+In-Reply-To: <20190924184437.10607-1-jhofstee@victronenergy.com>
 
---ylekiNGOvGEUSx7s5Q1B46uhbo0EJxnqp
+--tPPtpJvqMesEE8ENLv3NSrtjNNIxTlVhO
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/9/19 3:51 PM, Schl=C3=BC=C3=9Fler, Timo wrote:
-> Please find attached a first try. I tested all GPIOs with a MCP2515
-> connected to a Raspberry Pi 3 Model B.
+On 9/24/19 8:45 PM, Jeroen Hofstee wrote:
+> * Marc Kleine-Budde suggested to release the rx mailboxes a bit earlier=
+,
+>   that is included here. It is preceded by a small change in rx-offload=
 
-Please send patches vis git send-email if you email setup allows. This
-makes review easier.
+>   to make it clear that all mailboxes are read. It is not a functional
+>   change.
+> * The CAN protocol kernel (CPK) should be stopped when the interface
+>   goes down.
+> * The tx path has a (harmless) race for HECC_CANMIM. Just keep it set.
+> * The interface state keeping can lack resulting in wrong interface sta=
+tes,
+>   the state is now based on the interrupt flags and are updated directl=
+y.
+> * The driver lacked a manner to lower the state again. This is added
+>   based on the error counters.
+>=20
+> Jeroen Hofstee (7):
+>   can: rx-offload: continue on error
+>   can: ti_hecc: release the mailbox a bit earlier
+>   can: ti_hecc: stop the CPK on down
+>   can: ti_hecc: keep MIM and MD set
+>   can: ti_hecc: add fifo underflow error reporting
+>   can: ti_hecc: properly report state changes
+>   can: ti_hecc: add missing state changes
+>=20
+>  drivers/net/can/rx-offload.c |   2 +-
+>  drivers/net/can/ti_hecc.c    | 208 +++++++++++++++++++++--------------=
 
-> I have two questions:
-> 1. How to handle power management? Does the driver have to restore
-> the previous gpio state?
+>  2 files changed, 126 insertions(+), 84 deletions(-)
+>=20
 
-I'm not sure if a framework takes care of this. Have you had a look at
-other GPIO drivers in drivers/gpio:
+Applied to linux-can.
 
-gpio-74x164.c
-gpio-max3191x.c
-gpio-max7301.c
-gpio-mc33880.c
-gpio-xra1403.c
-
-> 2. I used spi_device.modalias as name for the gpiochip because that
-> translates nicely to mcp{251{0,5},25625} at least when loaded by the
-> device tree. I didn't test but suppose that the same name will be
-> used when loaded without device tree. Is that correct?
-Other driers use spi->modalias, too:
-
-=2E/gpio-74x164.c:135:    chip->gpio_chip.label =3D spi->modalias;
-=2E/gpio-max3191x.c:418:  max3191x->gpio.label =3D spi->modalias;
-
-So I think this is ok.
-
-regards,
+Thanks,
 Marc
 
 --=20
@@ -180,23 +169,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---ylekiNGOvGEUSx7s5Q1B46uhbo0EJxnqp--
+--tPPtpJvqMesEE8ENLv3NSrtjNNIxTlVhO--
 
---p8NAP5WKEY3TTmOP6tu5qYDXpy1zKbkoL
+--ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2eWMsACgkQWsYho5Hk
-nSA2pggAngm/iMKxmcJ9l1u0nOd+A9JFYVw4gT7FdKk/MxulbJyVXLZaunIW2hEx
-UULSwckgTt18clIYdDQfFd5wo7PKqkNbF8el5/AU9wPjOcveLEvj6jd/yP2OXEqG
-oP+/ARNsQ9/Dw7jHtkQjrcVrGflmkMtoN8u6XO2zfAmR/2V/viHRuPZ0CU9FnOol
-tooEYztI+7QNAjh+JHXmwtCjAZne+X69Q2nB+pYrHUTk2gyZsKNo6RGgTGfkVL5z
-oBIzwb1DM73I8kX6BQzVDWfoZOiRY+dDZpEis2kUAn482T9bedeKxwaMPrF7ndKJ
-uoxb0lgYwp5w/rG/tOxa0OK35j+uyg==
-=aNeF
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2e4wsACgkQWsYho5Hk
+nSC7owf/dJTs9aqjLW9iIsZGopvimYZozD61r3TV0/mIJa9Cs4AnfMepsqGax5DL
+rOINZX8DxYkJxPeFOmitZ+B14OKdRF2zA4BE12IJp2YWtiMQ4hwsDYxPQOWZfPJb
+Ngd5/HruDeNervmCYQyI9AuoeLRsLiZYKNVoBOzPLbhtRmmBIxiQc7QHfNgRhqbx
+ybrQEGbjwNhfVPGvtEc+MGPACxo1vK4yZUbmVQnzvcmG8Os1if+ZSHgHr6Mw0p9r
+39tYWyAiES9q3js/Xoea2cXkEdFsS2BJJmsv3WyfRQW1cEpFGoCrnU3MYTU1rWgw
+kflAQCUqgQo9Q1l9XvD2EQhypBGQ+g==
+=FSI9
 -----END PGP SIGNATURE-----
 
---p8NAP5WKEY3TTmOP6tu5qYDXpy1zKbkoL--
+--ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ--
