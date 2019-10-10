@@ -2,106 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F08BBD29E1
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 14:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA84D2A78
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 15:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387871AbfJJMqp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Oct 2019 08:46:45 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41397 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387801AbfJJMqp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 08:46:45 -0400
-Received: by mail-oi1-f196.google.com with SMTP id w65so4748960oiw.8;
-        Thu, 10 Oct 2019 05:46:44 -0700 (PDT)
+        id S2387683AbfJJNK2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 09:10:28 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33598 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733300AbfJJNKZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 09:10:25 -0400
+Received: by mail-wm1-f67.google.com with SMTP id r17so7112067wme.0
+        for <linux-can@vger.kernel.org>; Thu, 10 Oct 2019 06:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GO77O9NugfDMF3sM0pFxjAVwqVXEKORDEOteZl6SPpM=;
+        b=CGCreGJpdYxCMpEc/r9slhW8rmU4TymtGsZBbMvDrYU9kNDYb/svfNqW4a9C3bf+BM
+         kbbK67I1e9UwX3fKfloVVqGUficTgv9o2fidC9QOglrpEVTLPie7uGXXXMLngCYMp9E6
+         e1G7SoSNqGaXSVVCXpOpdpvb0A8fMNBKZxZ0BtpQtjukZwxsZRCmNZI4BAshhKy/TpMX
+         cw6GUcF4zQkxYbiYk8Zc9Q5BgmsPWwDaAcit4uR9TdxpIZhjqfdPdhnWI4FmlB59CCrQ
+         jL4JcdQ1JsmKakx8RnWJPmM+NlHwOF4if6xijGII/IpnJBxXJ+ZMDdPqVJen2xHSCBhr
+         7XbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KBn66BbTwmZUU2I9k2ufbx3Ra36HrnXvwheScStJ0QE=;
-        b=JXtC0r3C4L9ICBChGPcuh2xdFbu+uO4rsckR5QWitNrkFsvVbMulR18p37ktMoprqi
-         xJ+sGdWiMqEmtkTljTKjR6I4lqX6gC2yJfvCByYeCiZ4NqS9X82122F8aCwMs0+ML6dQ
-         N5BtaS6/QHBTSnmI4mjnabqu/eq34wCMdfckFDyPVC9s7eCz4KSAHgg1KUSEUG9uHWe4
-         Xmnspv4FrHAxOoROWn/x6z3lb2bA8LXAMoFEmBMAjI0yUM4DkC9JApaMD3H/zIJUL9OC
-         HCHdC//HbETpBlb1GNpdixeoNfJUPQuGtsWH8Fyud4Hf3p6QGEUdH56l8EembqPsCXoq
-         jcpA==
-X-Gm-Message-State: APjAAAU5d8CLOMa48g4jKZSfEg23VvrEHWv/vcsWKvFgzV2ViMF8aELJ
-        4FPG/hFa2erD1v0cqV6tmB+NUwNtsWSc0agzSVc=
-X-Google-Smtp-Source: APXvYqw8mgz4KShDIMTVq66wDgob36QaVSEI9Z5S3L/3RMDk2QtBAHM49smvIMzPZ/LUfdYnBDR2vegq9wiIwn0La0w=
-X-Received: by 2002:aca:882:: with SMTP id 124mr7330818oii.54.1570711604017;
- Thu, 10 Oct 2019 05:46:44 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GO77O9NugfDMF3sM0pFxjAVwqVXEKORDEOteZl6SPpM=;
+        b=iXitXrzHPHSrV+Ix6P5oOYcuOq2Y3KQ4ATQw2MsCV9XJoWZT+WLa/3JKflniiHTasA
+         vxT/gOLZg1dycaxNa3Z2c3x27IjwRllv0QOYKdrguQsqbChyRi2Mh3t4UuA0PKxPL5u8
+         bMLAFhFbsUH8CyEqFeVFOWNyxGFzPozLBOKdqkt8wHGemlNt3y69wB2cnUndgkGeKaXC
+         h7lkCOKYYSklSyhxqwZ2u5FScZ+VfokEhF6b5tDMogT613HUvRruBbQu6ZFRPf0Ev91g
+         HrnJnAlxGY6xwtYi3+7zWqO55qZ5nGYZnXX8dG/6mNP6S/4mRzwNQ8n9eHaVBVekMUlf
+         b9Wg==
+X-Gm-Message-State: APjAAAWY5yzrOcG//LttFDiyZh+2HtR31s7GPmqiG6KgJPMhuHFk8Xi/
+        AHGEtlJ9y8ruAzqSVQ/sLiR1Z3LmuZiISGJ7rq+GVw==
+X-Google-Smtp-Source: APXvYqz37xeAxTc9n4Vw6+baO3ezaqmb44jTN53afpnazNh08T2YGGy0G+RdMm3GW6VpJFx3Vu2hAyZqrm4Tj/MIr/c=
+X-Received: by 2002:a7b:c3cf:: with SMTP id t15mr7388687wmj.85.1570713023114;
+ Thu, 10 Oct 2019 06:10:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <1570711049-5691-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570711049-5691-3-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570711049-5691-3-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Oct 2019 14:46:32 +0200
-Message-ID: <CAMuHMdV5XUPSrgoDm62p0f_B1TtvhMyOX3NVho=QVqdesq31jg@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] dt-bindings: can: rcar_canfd: document
- r8a774b1 support
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Received: by 2002:adf:efc4:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:10:22
+ -0700 (PDT)
+Reply-To: sunrisefundingltd50@gmail.com
+From:   "Coryna Rizky Amelia, SST" <coryna_fk@ub.ac.id>
+Date:   Thu, 10 Oct 2019 14:10:22 +0100
+Message-ID: <CADotR_p9GxtkfVe36w7PBHwuwOdZcV4TCMOT+O50+azDL8EhmA@mail.gmail.com>
+Subject: Apply For Financial investment at a lower rate 2%
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Fabrizio,
-
-On Thu, Oct 10, 2019 at 2:37 PM Fabrizio Castro
-<fabrizio.castro@bp.renesas.com> wrote:
-> Document the support for rcar_canfd on R8A774B1 SoC devices.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-
-Thanks for your patch!
-
-> --- a/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-> +++ b/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-> @@ -5,6 +5,7 @@ Required properties:
->  - compatible: Must contain one or more of the following:
->    - "renesas,rcar-gen3-canfd" for R-Car Gen3 and RZ/G2 compatible controllers.
->    - "renesas,r8a774a1-canfd" for R8A774A1 (RZ/G2M) compatible controller.
-> +  - "renesas,r8a774b1-canfd" for R8A774B1 (RZ/G2N) compatible controller.
->    - "renesas,r8a774c0-canfd" for R8A774C0 (RZ/G2E) compatible controller.
->    - "renesas,r8a7795-canfd" for R8A7795 (R-Car H3) compatible controller.
->    - "renesas,r8a7796-canfd" for R8A7796 (R-Car M3-W) compatible controller.
-
-The above looks good, but I think you forgot to add R8A774B1 to the
-paragraph talking about the CAN FD clock below.
-With that fixed:
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-While at it, the example in the bindings says the CANFD clock should be
-configured to 40 MHz, which matches what is used in the various DTS files.
-However, the Hardware User's Manual states it should be 80 MHz, except
-for R-Car D3.
-Is that correct?
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Hello,
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+We are private lenders based in UK.
+Do you need a loan (credit) as soon as possible. Are you in search of
+money to solve your personal needs or finance your business venture,
+then get Your desired loan today! Consult us at Sunrise Funding Ltd.
+
+* We offer personal loan & huge capital loan at 2% interest rate to
+the general public both locally and internationally.
+* Credit amount range from $5,000.00 -- $500,000.00 and above.
+* Special $10,000,000.00 Loan offer for huge project also available.
+* Loan period of 6 months -- 10 years.
+* Loan is granted 24 hours after approval and accredited, directly in
+hand or bank account.
+
+Please note that you are advised to contact us for more details via
+the following e-mail address below;
+
+EMAIL : sunrisefundingltd50@gmail.com
+FIRM : Sunrise Funding Ltd UK.
