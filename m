@@ -2,180 +2,303 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D498ED3070
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 20:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E81D3235
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 22:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfJJSdl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Oct 2019 14:33:41 -0400
-Received: from mail-eopbgr50112.outbound.protection.outlook.com ([40.107.5.112]:21506
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726387AbfJJSdk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 10 Oct 2019 14:33:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O5oLW7HZq0lqKAt6pDeC4fmE7X+Ofdb9RjMaHIdr+wnK5ZC16QQ2pQrqu/KwmSSZTHbvitgtQ3CAxcQBXk5Wgjx/sGRyW6PRqFhrDjL5de/ARAi3oFRu/N+yR1kisz2JXpmrrmOdgl/gNcQYGc9ndKAGkRkHm0ZVwq7tYMu/37fcUtyU4xeaBeLPFvfW4xXMKF3hZCh8L1lSt0YYZ37l0PhvSCUSJSCfY9VxQrOZ3wpfhONrxYWvEaaJzsKHrbxDbHlKdpMfMQee1TbbOAQcVC54FroyZxe+9LeaISkKTylZHSx8IQB20WvhCMMdRd27XZqbBhdmJYjODg6R6HHWPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2bP6MBnRP3KJ3RvmMoyrpk+mFaCOf0Q+jxRsWuvedfE=;
- b=kB/KQB766OBBha5UD8RZtVYGL9TIAiVJdWrFwGT8Hwg+pF0ZDpMGqOYmx/QL4fNyVuDKhKKMpPxFSgE9x/LRpATcgfk3OqYeJucu+1vMTYBT7qxFBCdZ9j+kZvNzNUffUsSKf7MBzp1g0BS8QXN1qLyBmBgNNN89OSp6FJTc/OyTmidQj+jeAZs4tLE2hprVttx9dKGXs+V+daCafK4DsxwWpFc9icfMvawmp+G0WyAz3GfSXCmpd0ZxB6jriPJpHpmcIBNmOuIlyb8bP2boD2kYxI9hPTDwTvZUi349uPaKgVTTOd1ZAqlXhzwFJJ13kXqnZFowP5jc4tb4i5qmHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=victronenergy.com; dmarc=pass action=none
- header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2bP6MBnRP3KJ3RvmMoyrpk+mFaCOf0Q+jxRsWuvedfE=;
- b=0fmOAB0+j03pN4MC7wLqas5w9ngNJTg2rmxCe9DFvcMS0Vatmi5I+5qfPvFa7C0cz+vLX0IkAHdTcO/KvKCGrZg16P9+taecwqrDJVWCGG1o1UdQosRoWotbDx/QOh4XsMbcgXD3AG7ATw/Qv2oFYBSrlluBB432oV0zLsZxXyM=
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com (10.173.82.19) by
- VI1PR0701MB2383.eurprd07.prod.outlook.com (10.168.140.137) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.13; Thu, 10 Oct 2019 18:31:55 +0000
-Received: from VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::49b7:a244:d3e4:396c]) by VI1PR0701MB2623.eurprd07.prod.outlook.com
- ([fe80::49b7:a244:d3e4:396c%9]) with mapi id 15.20.2347.016; Thu, 10 Oct 2019
- 18:31:55 +0000
-From:   Jeroen Hofstee <jhofstee@victronenergy.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: [PATCH v2] can: ti_hecc: add fifo overflow error reporting
-Thread-Topic: [PATCH v2] can: ti_hecc: add fifo overflow error reporting
-Thread-Index: AQHVf4Lm9AlGYOjOLEacvFBHpPhAhadUMvOA
-Date:   Thu, 10 Oct 2019 18:31:55 +0000
-Message-ID: <abf0d3b4-c2eb-3444-bbbe-e17cde4048f9@victronenergy.com>
-References: <20191010155341.5991-1-mkl@pengutronix.de>
-In-Reply-To: <20191010155341.5991-1-mkl@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1726076AbfJJU3b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 16:29:31 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48523 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725951AbfJJU3b (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 16:29:31 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iIf3u-0005lQ-OZ; Thu, 10 Oct 2019 22:29:26 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:d889:c8b8:5209:79fb] (unknown [IPv6:2a03:f580:87bc:d400:d889:c8b8:5209:79fb])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E580546493A;
+        Thu, 10 Oct 2019 20:29:21 +0000 (UTC)
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-can <linux-can@vger.kernel.org>
+Cc:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+References: <20191010121750.27237-1-mkl@pengutronix.de>
+ <20191010121750.27237-25-mkl@pengutronix.de>
+ <dfdbefb3-48c4-0830-9627-146da062a01a@pengutronix.de>
+ <694ef4e8-166b-7eeb-4d6e-39a0ecacc93f@victronenergy.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH 24/29] can: ti_hecc: add fifo underflow error reporting
+Message-ID: <0c58e9a7-4cb8-dc75-14b8-9b33290916da@pengutronix.de>
+Date:   Thu, 10 Oct 2019 22:29:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
-x-originating-ip: [2001:1c01:3bc5:4e00:963:dff1:1c4c:eaac]
-x-clientproxiedby: AM3PR07CA0143.eurprd07.prod.outlook.com
- (2603:10a6:207:8::29) To VI1PR0701MB2623.eurprd07.prod.outlook.com
- (2603:10a6:801:b::19)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jhofstee@victronenergy.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 234efc02-afaf-48cd-8b96-08d74db020c2
-x-ms-traffictypediagnostic: VI1PR0701MB2383:
-x-microsoft-antispam-prvs: <VI1PR0701MB2383A3326D0B9DAF8BF22497C0940@VI1PR0701MB2383.eurprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 018632C080
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(39850400004)(346002)(396003)(366004)(376002)(189003)(199004)(316002)(486006)(66476007)(65956001)(6116002)(25786009)(66946007)(446003)(58126008)(31686004)(2906002)(6512007)(65806001)(71200400001)(8676002)(476003)(2616005)(53546011)(11346002)(71190400001)(66556008)(64756008)(305945005)(386003)(66446008)(81166006)(6486002)(6506007)(81156014)(86362001)(2501003)(110136005)(46003)(7736002)(36756003)(256004)(5660300002)(14444005)(6246003)(14454004)(99286004)(8936002)(31696002)(52116002)(76176011)(102836004)(6436002)(229853002)(478600001)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:VI1PR0701MB2383;H:VI1PR0701MB2623.eurprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: victronenergy.com does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: QOXXN6GrnIW2oVrvuN2j2bMNhyVHs2cBeaM9GJkDEnq3j/tQO19fbGOpUxUYDVhpXUZDL8kqxLEYgh0ddndS9dQog1GOZp2IoTos/bTM+kPTJYMxAexbDbIPnn1kO+uiW0JnpxuN4wkH0xwPwLBj/mOifCka/1qJVtNMrmxbAtYO4T5jWcVc6FrThEGC1w1EtWsYYvLwydDcRxYMFt1pOb5XSPaiA2atsPpcRciojosrSkWLvUuutCyN/+8nDxLdmX5R76q8HdOvH8p82teyb8ZNxBqwSjoFwBf9n9DKY0F/qacELrKbP/yz8USIBApg9IMHOhsRaPyoBdL/r/UwHL6uLGbAU4Bbdje8ZzkXX3GqGbT8+j0AbhtoS2O29JsJZQ31Qj6VBwhTzttJHH9T2o9MHk+ebGpfsJ4tlFxbzUU=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <618CB16215999449894412FBB0ACD3DB@eurprd07.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: victronenergy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 234efc02-afaf-48cd-8b96-08d74db020c2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2019 18:31:55.7227
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 60b95f08-3558-4e94-b0f8-d690c498e225
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +zH3RFQLfauUTG2aHrYV/VaRPmZAl3AYY26kJITpZtq8ffr5SHPj6hq/BU0A06jTwLSOBkaNVUXKsRklrci+mXsNCu2nAgvLG0vkg/7lLOw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB2383
+In-Reply-To: <694ef4e8-166b-7eeb-4d6e-39a0ecacc93f@victronenergy.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="peiOrQAva8kwdDkS179PcizzSElKs5aYS"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGVsbG8gTWFyYywNCg0KT24gMTAvMTAvMTkgNTo1MyBQTSwgTWFyYyBLbGVpbmUtQnVkZGUgd3Jv
-dGU6DQo+IEZyb206IEplcm9lbiBIb2ZzdGVlIDxqaG9mc3RlZUB2aWN0cm9uZW5lcmd5LmNvbT4N
-Cj4NCj4gV2hlbiB0aGUgcnggRklGTyBvdmVyZmxvd3MgdGhlIHRpX2hlY2Mgd291bGQgc2lsZW50
-bHkgZHJvcCB0aGVtIHNpbmNlDQo+IHRoZSBvdmVyd3JpdGUgcHJvdGVjdGlvbiBpcyBlbmFibGVk
-IGZvciBhbGwgbWFpbGJveGVzLiBTbyBkaXNhYmxlIGl0DQo+IGZvciB0aGUgbG93ZXN0IHByaW9y
-aXR5IG1haWxib3ggYW5kIGluY3JlbWVudCB0aGUgcnhfb3Zlcl9lcnJvcnMgd2hlbg0KPiByZWNl
-aXZlIG1lc3NhZ2UgbG9zdCBpcyBzZXQuIERyb3AgdGhlIG1lc3NhZ2UgaXRzZWxmIGluIHRoYXQg
-Y2FzZSwNCj4gc2luY2UgaXQgbWlnaHQgYmUgcGFydGlhbGx5IHVwZGF0ZWQuDQo+DQo+IFNpZ25l
-ZC1vZmYtYnk6IEplcm9lbiBIb2ZzdGVlIDxqaG9mc3RlZUB2aWN0cm9uZW5lcmd5LmNvbT4NCj4g
-U2lnbmVkLW9mZi1ieTogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBwZW5ndXRyb25peC5kZT4NCj4g
-LS0tDQo+IEhlbGxvLA0KPg0KPiBjaGFuZ2VzIHNpbmNlIHYxOg0KPiAtIGludHJvZHVjZSBIRUND
-X1JYX0xBU1RfTUJPWCBhbmQgbWFrZSB1c2Ugb2YgaXQNCj4gLSBjaGVjayBmb3Igb3ZlcmZsb3cg
-b25seSBpZiBIRUNDX1JYX0xBU1RfTUJPWCBpcyByZWFkDQo+IC0gbW92ZSBvdmVyZmxvdyBjaGVj
-ayB0byBiZWdpbm5pbmcgb2YgdGlfaGVjY19tYWlsYm94X3JlYWQoKQ0KPg0KPiBNYXJjDQo+DQo+
-ICAgZHJpdmVycy9uZXQvY2FuL3RpX2hlY2MuYyB8IDM0ICsrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMjkgaW5zZXJ0aW9ucygrKSwgNSBkZWxl
-dGlvbnMoLSkNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L2Nhbi90aV9oZWNjLmMgYi9k
-cml2ZXJzL25ldC9jYW4vdGlfaGVjYy5jDQo+IGluZGV4IDZlYTI5MTI2YzYwYi4uODc4MTVhNWI5
-MTcwIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL25ldC9jYW4vdGlfaGVjYy5jDQo+ICsrKyBiL2Ry
-aXZlcnMvbmV0L2Nhbi90aV9oZWNjLmMNCj4gQEAgLTczLDYgKzczLDcgQEAgTU9EVUxFX1ZFUlNJ
-T04oSEVDQ19NT0RVTEVfVkVSU0lPTik7DQo+ICAgICovDQo+ICAgI2RlZmluZSBIRUNDX01BWF9S
-WF9NQk9YCShIRUNDX01BWF9NQUlMQk9YRVMgLSBIRUNDX01BWF9UWF9NQk9YKQ0KPiAgICNkZWZp
-bmUgSEVDQ19SWF9GSVJTVF9NQk9YCShIRUNDX01BWF9NQUlMQk9YRVMgLSAxKQ0KPiArI2RlZmlu
-ZSBIRUNDX1JYX0xBU1RfTUJPWAkoSEVDQ19NQVhfVFhfTUJPWCkNCj4gICANCg0KVGhhdCBmaW5l
-IG9mIGNvdXJzZSwgd2hlbiBub3QgYmVpbmcgZmFtaWxpYXIgd2l0aA0KdGhlIGRyaXZlciBpdCBt
-YWtlcyB0aGluZ3MgY2xlYXJlci4NCg0KDQo+ICAgLyogVEkgSEVDQyBtb2R1bGUgcmVnaXN0ZXJz
-ICovDQo+ICAgI2RlZmluZSBIRUNDX0NBTk1FCQkweDAJLyogTWFpbGJveCBlbmFibGUgKi8NCj4g
-QEAgLTgyLDcgKzgzLDcgQEAgTU9EVUxFX1ZFUlNJT04oSEVDQ19NT0RVTEVfVkVSU0lPTik7DQo+
-ICAgI2RlZmluZSBIRUNDX0NBTlRBCQkweDEwCS8qIFRyYW5zbWlzc2lvbiBhY2tub3dsZWRnZSAq
-Lw0KPiAgICNkZWZpbmUgSEVDQ19DQU5BQQkJMHgxNAkvKiBBYm9ydCBhY2tub3dsZWRnZSAqLw0K
-PiAgICNkZWZpbmUgSEVDQ19DQU5STVAJCTB4MTgJLyogUmVjZWl2ZSBtZXNzYWdlIHBlbmRpbmcg
-Ki8NCj4gLSNkZWZpbmUgSEVDQ19DQU5STUwJCTB4MUMJLyogUmVtb3RlIG1lc3NhZ2UgbG9zdCAq
-Lw0KPiArI2RlZmluZSBIRUNDX0NBTlJNTAkJMHgxQwkvKiBSZWNlaXZlIG1lc3NhZ2UgbG9zdCAq
-Lw0KPiAgICNkZWZpbmUgSEVDQ19DQU5SRlAJCTB4MjAJLyogUmVtb3RlIGZyYW1lIHBlbmRpbmcg
-Ki8NCj4gICAjZGVmaW5lIEhFQ0NfQ0FOR0FNCQkweDI0CS8qIFNFQ0Mgb25seTpHbG9iYWwgYWNj
-ZXB0YW5jZSBtYXNrICovDQo+ICAgI2RlZmluZSBIRUNDX0NBTk1DCQkweDI4CS8qIE1hc3RlciBj
-b250cm9sICovDQo+IEBAIC0zODUsOCArMzg2LDE1IEBAIHN0YXRpYyB2b2lkIHRpX2hlY2Nfc3Rh
-cnQoc3RydWN0IG5ldF9kZXZpY2UgKm5kZXYpDQo+ICAgCS8qIEVuYWJsZSB0eCBpbnRlcnJ1cHRz
-ICovDQo+ICAgCWhlY2Nfc2V0X2JpdChwcml2LCBIRUNDX0NBTk1JTSwgQklUKEhFQ0NfTUFYX1RY
-X01CT1gpIC0gMSk7DQo+ICAgDQo+IC0JLyogUHJldmVudCBtZXNzYWdlIG92ZXItd3JpdGUgJiBF
-bmFibGUgaW50ZXJydXB0cyAqLw0KPiAtCWhlY2Nfd3JpdGUocHJpdiwgSEVDQ19DQU5PUEMsIEhF
-Q0NfU0VUX1JFRyk7DQo+ICsJLyogUHJldmVudCBtZXNzYWdlIG92ZXItd3JpdGUgdG8gY3JlYXRl
-IGEgcnggZmlmbywgYnV0IG5vdCBmb3INCj4gKwkgKiB0aGUgbG93ZXN0IHByaW9yaXR5IG1haWxi
-b3gsIHNpbmNlIHRoYXQgYWxsb3dzIGRldGVjdGluZw0KPiArCSAqIG92ZXJmbG93cyBpbnN0ZWFk
-IG9mIHRoZSBoYXJkd2FyZSBzaWxlbnRseSBkcm9wcGluZyB0aGUNCj4gKwkgKiBtZXNzYWdlcy4N
-Cj4gKwkgKi8NCj4gKwltYnhfbWFzayA9IH5CSVQoSEVDQ19SWF9MQVNUX01CT1gpOw0KPiArCWhl
-Y2Nfd3JpdGUocHJpdiwgSEVDQ19DQU5PUEMsIG1ieF9tYXNrKTsNCj4gKw0KPiArCS8qIEVuYWJs
-ZSBpbnRlcnJ1cHRzICovDQo+ICAgCWlmIChwcml2LT51c2VfaGVjYzFpbnQpIHsNCj4gICAJCWhl
-Y2Nfd3JpdGUocHJpdiwgSEVDQ19DQU5NSUwsIEhFQ0NfU0VUX1JFRyk7DQo+ICAgCQloZWNjX3dy
-aXRlKHByaXYsIEhFQ0NfQ0FOR0lNLCBIRUNDX0NBTkdJTV9ERUZfTUFTSyB8DQo+IEBAIC01MzEs
-OCArNTM5LDIyIEBAIHN0YXRpYyB1bnNpZ25lZCBpbnQgdGlfaGVjY19tYWlsYm94X3JlYWQoc3Ry
-dWN0IGNhbl9yeF9vZmZsb2FkICpvZmZsb2FkLA0KPiAgIHsNCj4gICAJc3RydWN0IHRpX2hlY2Nf
-cHJpdiAqcHJpdiA9IHJ4X29mZmxvYWRfdG9fcHJpdihvZmZsb2FkKTsNCj4gICAJdTMyIGRhdGEs
-IG1ieF9tYXNrOw0KPiArCWludCByZXQgPSAxOw0KPiAgIA0KPiAgIAltYnhfbWFzayA9IEJJVCht
-Ynhubyk7DQo+ICsNCj4gKwkvKiBjaGVjayBpZiB0aGUgbGFzdCBtYWlsYm94IGhhcyBiZWVuIG92
-ZXJ3cml0dGVuICovDQo+ICsJaWYgKHVubGlrZWx5KG1ieG5vID09IEhFQ0NfUlhfTEFTVF9NQk9Y
-KSkgew0KPiArCQlkYXRhID0gaGVjY19yZWFkKHByaXYsIEhFQ0NfQ0FOUk1MKTsNCj4gKwkJaWYg
-KHVubGlrZWx5KGRhdGEgJiBtYnhfbWFzaykpIHsNCj4gKwkJCW9mZmxvYWQtPmRldi0+c3RhdHMu
-cnhfb3Zlcl9lcnJvcnMrKzsNCj4gKwkJCW9mZmxvYWQtPmRldi0+c3RhdHMucnhfZXJyb3JzKys7
-DQo+ICsNCj4gKwkJCXJldCA9IDA7DQo+ICsJCQlnb3RvIG1hcmtfYXNrX3JlYWQ7DQo+ICsJCX0N
-Cj4gKwl9DQo+ICsNCg0KDQpUaGlzIGlzbid0IHJpZ2h0IHRob3VnaCwgZHVyaW5nIHRoZSBjb2Rl
-IGJlbG93IHRoZSBtc2cgbWlnaHQsDQpnZXQgb3ZlcndyaXR0ZW4sIHNvIHdlIGNhbiBlbmQgdXAg
-d2l0aCBhIGNvcnJ1cHQgbWVzc2FnZS4NCihhcyBpbiBjYW5JZCBmcm9tIG9uZSwgYW5kIHRoZSBk
-YXRhIGZyb20gdGhlIG92ZXJ3cml0dGVuIG9uZSkuDQpUaGF0IGlzIG5vdCBnb29kLiBBbmQgSSBk
-aWQgYWN0dWFsbHkgdGVzdCB0aGF0IHRvIG1ha2Ugc3VyZQ0KdjEgZGlkbid0IGhhdmUgc3VjaCBh
-IHJhY2UuIChpdCBpcyByYXRoZXIgZWFzeSB0byBhY3R1YWxseSB0cmlnZ2VyKS4NCg0KSSByZWFs
-bHkgZG91YnQgaWYgdGhlcmUgaXMgc29tZXRoaW5nIHRvIGp1c3RpZnkgdG8gdHJlYXQgdGhlDQpI
-RUNDX1JYX0xBU1RfTUJPWCBzcGVjaWFsbHkuIEl0IGlzIGEgY29tcGFyaXNvbiB2ZXJzdXMgYSBi
-aXQNCmNoZWNrIG9mIHdoaWNoIHRoZSBtYXNrIGlzIGFscmVhZHkgYXZhaWxhYmxlLi4uLi4gSSBs
-aWtlIHYxIG1vcmUNCmFjdHVhbGx5LCBqdXN0IGJlY2F1c2UgaXQgaXMgc2ltcGxlciAvIGxlc3Mg
-Y29kZS4uLg0KDQpJIGhhdmUgbXkgZG91YnRzIGFib3V0IHRoZSBlcnJvciBjb3VudGVyLCBzZWUg
-dGhlIG90aGVyIG1haWwuDQpJIGRvbid0IGtub3cgd2hpY2ggc291cmNlIGhhcyB0aGUgdWx0aW1h
-dGUgZGVmaW5pdGlvbiwgSSBqdXN0DQpnb29nbGVkIGZvciB0aGVtLg0KDQoNCj4gICAJZGF0YSA9
-IGhlY2NfcmVhZF9tYngocHJpdiwgbWJ4bm8sIEhFQ0NfQ0FOTUlEKTsNCj4gICAJaWYgKGRhdGEg
-JiBIRUNDX0NBTk1JRF9JREUpDQo+ICAgCQljZi0+Y2FuX2lkID0gKGRhdGEgJiBDQU5fRUZGX01B
-U0spIHwgQ0FOX0VGRl9GTEFHOw0KPiBAQCAtNTUyLDkgKzU3NCwxMSBAQCBzdGF0aWMgdW5zaWdu
-ZWQgaW50IHRpX2hlY2NfbWFpbGJveF9yZWFkKHN0cnVjdCBjYW5fcnhfb2ZmbG9hZCAqb2ZmbG9h
-ZCwNCj4gICAJfQ0KPiAgIA0KPiAgIAkqdGltZXN0YW1wID0gaGVjY19yZWFkX3N0YW1wKHByaXYs
-IG1ieG5vKTsNCj4gKw0KPiArIG1hcmtfYXNfcmVhZDoNCj4gICAJaGVjY193cml0ZShwcml2LCBI
-RUNDX0NBTlJNUCwgbWJ4X21hc2spOw0KPiAgIA0KPiAtCXJldHVybiAxOw0KPiArCXJldHVybiBy
-ZXQ7DQo+ICAgfQ0KPiAgIA0KPiAgIHN0YXRpYyBpbnQgdGlfaGVjY19lcnJvcihzdHJ1Y3QgbmV0
-X2RldmljZSAqbmRldiwgaW50IGludF9zdGF0dXMsDQo+IEBAIC04ODQsNyArOTA4LDcgQEAgc3Rh
-dGljIGludCB0aV9oZWNjX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAg
-DQo+ICAgCXByaXYtPm9mZmxvYWQubWFpbGJveF9yZWFkID0gdGlfaGVjY19tYWlsYm94X3JlYWQ7
-DQo+ICAgCXByaXYtPm9mZmxvYWQubWJfZmlyc3QgPSBIRUNDX1JYX0ZJUlNUX01CT1g7DQo+IC0J
-cHJpdi0+b2ZmbG9hZC5tYl9sYXN0ID0gSEVDQ19NQVhfVFhfTUJPWDsNCj4gKwlwcml2LT5vZmZs
-b2FkLm1iX2xhc3QgPSBIRUNDX1JYX0xBU1RfTUJPWDsNCj4gICAJZXJyID0gY2FuX3J4X29mZmxv
-YWRfYWRkX3RpbWVzdGFtcChuZGV2LCAmcHJpdi0+b2ZmbG9hZCk7DQo+ICAgCWlmIChlcnIpIHsN
-Cj4gICAJCWRldl9lcnIoJnBkZXYtPmRldiwgImNhbl9yeF9vZmZsb2FkX2FkZF90aW1lc3RhbXAo
-KSBmYWlsZWRcbiIpOw0KDQoNClJlZ2FyZHMsDQoNCkplcm9lbg0KDQo=
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--peiOrQAva8kwdDkS179PcizzSElKs5aYS
+Content-Type: multipart/mixed; boundary="UWw7XaTsCkn5srHEdZoUGzuAL6HSnmXvZ";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Jeroen Hofstee <jhofstee@victronenergy.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ linux-can <linux-can@vger.kernel.org>
+Cc: =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+ Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "kernel@pengutronix.de" <kernel@pengutronix.de>
+Message-ID: <0c58e9a7-4cb8-dc75-14b8-9b33290916da@pengutronix.de>
+Subject: Re: [PATCH 24/29] can: ti_hecc: add fifo underflow error reporting
+References: <20191010121750.27237-1-mkl@pengutronix.de>
+ <20191010121750.27237-25-mkl@pengutronix.de>
+ <dfdbefb3-48c4-0830-9627-146da062a01a@pengutronix.de>
+ <694ef4e8-166b-7eeb-4d6e-39a0ecacc93f@victronenergy.com>
+In-Reply-To: <694ef4e8-166b-7eeb-4d6e-39a0ecacc93f@victronenergy.com>
+
+--UWw7XaTsCkn5srHEdZoUGzuAL6HSnmXvZ
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+
+On 10/10/19 7:51 PM, Jeroen Hofstee wrote:
+>>> When the rx fifo overflows the ti_hecc would silently drop them since=
+
+>>> the overwrite protection is enabled for all mailboxes. So disable it
+>>> for the lowest priority mailbox and increment the rx_fifo_errors when=
+
+>>> receive message lost is set. Drop the message itself in that case,
+>>> since it might be partially updated.
+>> Is that your observation or does the data sheet say anything to this
+>> situation?
+>=20
+> I couldn't find in the data sheet, so I simply tested it, by allowing
+> the highest mailbox to be overwritten and send a stream alternating
+> with messages will all bits set and all cleared. That does end with
+> canids from one message combined with data from another.
+
+I see. This is why the register is called overwrite _protection_ control.=
+
+
+>>> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>>> ---
+>>>  drivers/net/can/ti_hecc.c | 21 +++++++++++++++++----
+>>>  1 file changed, 17 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+>>> index 6ea29126c60b..c2d83ada203a 100644
+>>> --- a/drivers/net/can/ti_hecc.c
+>>> +++ b/drivers/net/can/ti_hecc.c
+>>> @@ -82,7 +82,7 @@ MODULE_VERSION(HECC_MODULE_VERSION);
+>>>  #define HECC_CANTA		0x10	/* Transmission acknowledge */
+>>>  #define HECC_CANAA		0x14	/* Abort acknowledge */
+>>>  #define HECC_CANRMP		0x18	/* Receive message pending */
+>>> -#define HECC_CANRML		0x1C	/* Remote message lost */
+>>> +#define HECC_CANRML		0x1C	/* Receive message lost */
+>>>  #define HECC_CANRFP		0x20	/* Remote frame pending */
+>>>  #define HECC_CANGAM		0x24	/* SECC only:Global acceptance mask */
+>>>  #define HECC_CANMC		0x28	/* Master control */
+>>> @@ -385,8 +385,17 @@ static void ti_hecc_start(struct net_device *nde=
+v)
+>>>  	/* Enable tx interrupts */
+>>>  	hecc_set_bit(priv, HECC_CANMIM, BIT(HECC_MAX_TX_MBOX) - 1);
+>>> =20
+>>> -	/* Prevent message over-write & Enable interrupts */
+>>> -	hecc_write(priv, HECC_CANOPC, HECC_SET_REG);
+>>> +	/* Prevent message over-write to create a rx fifo, but not for
+>>> +	 * the lowest priority mailbox, since that allows detecting
+>>> +	 * overflows instead of the hardware silently dropping the
+>>> +	 * messages. The lowest rx mailbox is one above the tx ones,
+>>> +	 * hence its mbxno is the number of tx mailboxes.
+>>> +	 */
+>>> +	mbxno =3D HECC_MAX_TX_MBOX;
+>>> +	mbx_mask =3D ~BIT(mbxno);
+>>> +	hecc_write(priv, HECC_CANOPC, mbx_mask);
+>>> +
+>>> +	/* Enable interrupts */
+>>>  	if (priv->use_hecc1int) {
+>>>  		hecc_write(priv, HECC_CANMIL, HECC_SET_REG);
+>>>  		hecc_write(priv, HECC_CANGIM, HECC_CANGIM_DEF_MASK |
+>>> @@ -531,6 +540,7 @@ static unsigned int ti_hecc_mailbox_read(struct c=
+an_rx_offload *offload,
+>>>  {
+>>>  	struct ti_hecc_priv *priv =3D rx_offload_to_priv(offload);
+>>>  	u32 data, mbx_mask;
+>>> +	int lost;
+>>> =20
+>>>  	mbx_mask =3D BIT(mbxno);
+>>>  	data =3D hecc_read_mbx(priv, mbxno, HECC_CANMID);
+>>> @@ -552,9 +562,12 @@ static unsigned int ti_hecc_mailbox_read(struct =
+can_rx_offload *offload,
+>>>  	}
+>>> =20
+>>>  	*timestamp =3D hecc_read_stamp(priv, mbxno);
+>>> +	lost =3D hecc_read(priv, HECC_CANRML) & mbx_mask;
+>>> +	if (unlikely(lost))
+>>> +		priv->offload.dev->stats.rx_fifo_errors++;
+>> In the flexcan and at91_can driver we're incrementing the following er=
+rors:
+>> 			dev->stats.rx_over_errors++;
+>> 			dev->stats.rx_errors++;
+>=20
+> I understood it as follows, see[1] e.g.:
+>
+> rx_errors -> link level errors, not really applicable to CAN
+> (perhaps in single shot mode or if you want)
+
+I increment this for CRC, bit stuffing and all the other bus errors. As
+well as on HW FIFO overflows.
+
+> rx_over_errors -> the hardware itself cannot keep up.
+> Not applicable for CAN.
+
+If the HW FIFO overflows for whatever reason, I increment this.
+
+> rx_fifo_errors -> the software driver cannot keep up.
+> So I picked that one.
+
+If the rx-offload queue reaches it's limit I increment this.
+
+> rx_dropped -> software is dropping on purpose based on limits etc.
+>=20
+> But I might be wrong.
+
+rx-offload used this if the skb cannot be allocated.
+
+Basically the kernel doc gives a general description of these values but
+says: look at the driver for exact meaning :)
+
+I wanted to keep it similar with the CAN drivers.
+
+>> You can save the register access if you only check for overflows if
+>> reading from the lowest prio mailbox.
+>>
+>> If you're discarding the data if the mailbox is marked as overflow
+>> there's no need to read the data in the first place.
+>>
+>=20
+> Mind it that you don't cause a race! The bit can become set
+> during reading of the data, it should be check _after_ we
+> have a copy of the mailbox.
+
+Right. My understanding of the bit was wrong.
+
+In the flexcan HW there is a similar bit. It says there was an overflow
+in this mailbox. But a coherence mechanism guarantees that the mailbox
+is not changed by the CAN core, while the ARM accesses it.
+
+> You can do a double check, one
+> before one after, but since there should be no fifo overflow
+> anyway, there is no reason to optimize for that path. (@250k
+> I cannot get more then 3 messages in the fifo...).
+Thanks for the explanations,
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--UWw7XaTsCkn5srHEdZoUGzuAL6HSnmXvZ--
+
+--peiOrQAva8kwdDkS179PcizzSElKs5aYS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2flJgACgkQWsYho5Hk
+nSATiwf7B4n2aQwOaGGAmvyo0oepF77hTYtWMbhXScg5GPcLICNSsCtrkW4EYUy0
+CxSh0F0pPCkBd6EvDWqLAdLmJ2ZrA5juNKP2bkKklNZtDyQ5i26wyS4XtS+vush1
+oS1tMRvH8DQsKO5BTPeakI/2Ysq5+X0RRazxudJuXOyA/rciM9zcKJzzXIQPgkyT
+7OhX2JhJ029Qxdn9qPjLB9I835I1Cfl+B0hu3x/FiCWkMSpCeauWGaat8j/rEb71
+L2CHs5e7En1dxm/m7GuHFe+qNIf977eNtzMAiDF3pXyQ46T/i9Mk7rr0ix+73La5
+BI6Rx2E2gpc58r2n4dJVEvKdWW0p2g==
+=6/qO
+-----END PGP SIGNATURE-----
+
+--peiOrQAva8kwdDkS179PcizzSElKs5aYS--
