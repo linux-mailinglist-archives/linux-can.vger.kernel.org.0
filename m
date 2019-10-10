@@ -2,34 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C6DD2850
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 13:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24766D2878
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 13:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728549AbfJJLmu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Oct 2019 07:42:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47839 "EHLO
+        id S1733064AbfJJLzb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 07:55:31 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54079 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726523AbfJJLmt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 07:42:49 -0400
+        with ESMTP id S1727737AbfJJLza (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 07:55:30 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iIWqC-0002fN-GA; Thu, 10 Oct 2019 13:42:44 +0200
+        id 1iIX2V-000417-Tn; Thu, 10 Oct 2019 13:55:27 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:98aa:d46c:8ec2:3bba] (unknown [IPv6:2a03:f580:87bc:d400:98aa:d46c:8ec2:3bba])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CB629464420;
-        Thu, 10 Oct 2019 11:42:41 +0000 (UTC)
-Subject: Re: [mkl-can:testing 26/28] drivers/net//can/ti_hecc.c:644:3: error:
- 'ndev' undeclared; did you mean 'cdev'?
-To:     kbuild test robot <lkp@intel.com>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>
-Cc:     kbuild-all@01.org, linux-can@vger.kernel.org
-References: <201910101931.Xj73FpUo%lkp@intel.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 705CC46443C;
+        Thu, 10 Oct 2019 11:55:26 +0000 (UTC)
+Subject: Re: [PATCH] can: j1939: fix memory leak if filters was set
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
+Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20191010105031.3507-1-o.rempel@pengutronix.de>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -92,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <4cd1d556-3bca-73fe-367d-401b7324067b@pengutronix.de>
-Date:   Thu, 10 Oct 2019 13:42:22 +0200
+Message-ID: <55b73887-4626-3b40-e390-a1f10f790167@pengutronix.de>
+Date:   Thu, 10 Oct 2019 13:55:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <201910101931.Xj73FpUo%lkp@intel.com>
+In-Reply-To: <20191010105031.3507-1-o.rempel@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="1XiJtBzdzORmNOvbdx7vmd4vhps5A46Zo"
+ boundary="urWE0DKEUTsohPxqPMnFQUAvksq39xTEa"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,55 +111,31 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---1XiJtBzdzORmNOvbdx7vmd4vhps5A46Zo
-Content-Type: multipart/mixed; boundary="MLlRmW4UIkY9IA76IbAcqYepoIs6tvi4B";
+--urWE0DKEUTsohPxqPMnFQUAvksq39xTEa
+Content-Type: multipart/mixed; boundary="rz9XHY0Jcg8xb8yFCOmWkUjd2OadJ3GVT";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: kbuild test robot <lkp@intel.com>,
- Jeroen Hofstee <jhofstee@victronenergy.com>
-Cc: kbuild-all@01.org, linux-can@vger.kernel.org
-Message-ID: <4cd1d556-3bca-73fe-367d-401b7324067b@pengutronix.de>
-Subject: Re: [mkl-can:testing 26/28] drivers/net//can/ti_hecc.c:644:3: error:
- 'ndev' undeclared; did you mean 'cdev'?
-References: <201910101931.Xj73FpUo%lkp@intel.com>
-In-Reply-To: <201910101931.Xj73FpUo%lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+ dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
+Cc: kernel@pengutronix.de, linux-can@vger.kernel.org, netdev@vger.kernel.org
+Message-ID: <55b73887-4626-3b40-e390-a1f10f790167@pengutronix.de>
+Subject: Re: [PATCH] can: j1939: fix memory leak if filters was set
+References: <20191010105031.3507-1-o.rempel@pengutronix.de>
+In-Reply-To: <20191010105031.3507-1-o.rempel@pengutronix.de>
 
---MLlRmW4UIkY9IA76IbAcqYepoIs6tvi4B
+--rz9XHY0Jcg8xb8yFCOmWkUjd2OadJ3GVT
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/10/19 1:07 PM, kbuild test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.g=
-it testing
-> head:   07be0319976deca19f037e6f22913fe010cb8f92
-> commit: e49a7bac2b83c6e5c7a8bf3a2b3ad7e26dfedd7e [26/28] can: ti_hecc: =
-properly report state changes
-> config: arm-allmodconfig (attached as .config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 7.4.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git checkout e49a7bac2b83c6e5c7a8bf3a2b3ad7e26dfedd7e
->         # save the attached .config to linux build tree
->         GCC_VERSION=3D7.4.0 make.cross ARCH=3Darm=20
+On 10/10/19 12:50 PM, Oleksij Rempel wrote:
+> Filters array is coped from user space and linked to the j1939 socket.
+> On socket release this memory was not freed.
 >=20
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
->=20
-> All errors (new ones prefixed by >>):
->=20
->    drivers/net//can/ti_hecc.c: In function 'change_state':
->>> drivers/net//can/ti_hecc.c:644:3: error: 'ndev' undeclared (first use=
- in this function); did you mean 'cdev'?
->       ndev->stats.rx_fifo_errors++;
->       ^~~~
->       cdev
->    drivers/net//can/ti_hecc.c:644:3: note: each undeclared identifier i=
-s reported only once for each function it appears in
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Fixed.
+Applied to linux-can.
 
 Tnx,
 Marc
@@ -171,23 +147,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---MLlRmW4UIkY9IA76IbAcqYepoIs6tvi4B--
+--rz9XHY0Jcg8xb8yFCOmWkUjd2OadJ3GVT--
 
---1XiJtBzdzORmNOvbdx7vmd4vhps5A46Zo
+--urWE0DKEUTsohPxqPMnFQUAvksq39xTEa
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2fGR4ACgkQWsYho5Hk
-nSBLiwf/UpdL9Bd3STkCvSzeYwnPmhR4JUcW9FTwXrU0nEO79aXXo6J2ZRhqfaYi
-Dc7nT+ZtYlFIa2ndOaCRyFTlmNBsVang4MV1d1UqxCvoJZqJ5sb7M54XGhuRajyv
-SvmvozUAH+5Er5c7Wrg1OUqvwvCdF8g1sd2DrKfeCWha/j718nSfFYDTAeTipc5k
-sXpC9yMD581wjWbIYKaYp4RvmkLLLCaZd+giwlzsArFbybq1Rn7O0WrZVLoCOSbo
-0LJ8YA6fovsACKwfLh5EgLHdDlmqsGsnoPV1Hs9v6Rpv4Z24dLa1+zcL+7pJAG+V
-OdzKXh0FpDOG1xAw3Li6h20jsnFnWw==
-=RTsx
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2fHCoACgkQWsYho5Hk
+nSCwKgf+Mi2PcO1MZv8YzRHOyjp7JmZ3v8pehiZ7Njia2EHwawie9flk9MHxhecJ
+VAoFml52szEaZg2h2gbRYyr99zS93oBBZgQTOHDL7V2RSVWm9gcZjjDvkui7b9kq
+9s3ySH5aN0ifzX080XDy6pU2HZF4ywlETRYdZYSYk0eG8lTh4eBDT3ggwJUSUjSs
+3HtaqAldsrw6Tdm1cJg69KFnHnWCtHfQVKWttCettt1J7BtKDj2uzfMsFSIAcKIg
+9lQnGqP6gtuNxCGFBqe2UBp2wpt3xmCr37arcIg5v+WbIcRf9If9oGWILTNAgZj4
+m6i4k/8AIx619UugHIFAxkHE6xMlSQ==
+=SCDC
 -----END PGP SIGNATURE-----
 
---1XiJtBzdzORmNOvbdx7vmd4vhps5A46Zo--
+--urWE0DKEUTsohPxqPMnFQUAvksq39xTEa--
