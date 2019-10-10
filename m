@@ -2,145 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7754D2E31
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 17:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE13D2E42
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 18:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbfJJPxo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Oct 2019 11:53:44 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52311 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbfJJPxo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 11:53:44 -0400
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iIal5-0004vS-7X; Thu, 10 Oct 2019 17:53:43 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v2] can: ti_hecc: add fifo overflow error reporting
-Date:   Thu, 10 Oct 2019 17:53:41 +0200
-Message-Id: <20191010155341.5991-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.23.0
+        id S1726007AbfJJQCT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 12:02:19 -0400
+Received: from mga04.intel.com ([192.55.52.120]:16445 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725978AbfJJQCT (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 10 Oct 2019 12:02:19 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Oct 2019 09:01:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,280,1566889200"; 
+   d="scan'208";a="224012491"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 10 Oct 2019 09:01:51 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iIasx-0001Zv-9o; Fri, 11 Oct 2019 00:01:51 +0800
+Date:   Fri, 11 Oct 2019 00:00:53 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     kbuild-all@01.org, linux-can@vger.kernel.org
+Subject: [mkl-can-next:mcp25xxfd 42/57]
+ drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regmap.c:93:8-10: WARNING:
+ PTR_ERR_OR_ZERO can be used
+Message-ID: <201910110051.ekDMnRer%lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Jeroen Hofstee <jhofstee@victronenergy.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git mcp25xxfd
+head:   fc940214e54b37f338dc9e308cd6501b96fcdb0a
+commit: 7de255ffe2cc75da3518d110717ca5ef0bf5073f [42/57] can: mcp25xxfd: add regmap infrastructure
 
-When the rx FIFO overflows the ti_hecc would silently drop them since
-the overwrite protection is enabled for all mailboxes. So disable it
-for the lowest priority mailbox and increment the rx_over_errors when
-receive message lost is set. Drop the message itself in that case,
-since it might be partially updated.
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+coccinelle warnings: (new ones prefixed by >>)
+
+>> drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regmap.c:93:8-10: WARNING: PTR_ERR_OR_ZERO can be used
+
+Please review and possibly fold the followup patch.
+
 ---
-Hello,
-
-changes since v1:
-- introduce HECC_RX_LAST_MBOX and make use of it
-- check for overflow only if HECC_RX_LAST_MBOX is read
-- move overflow check to beginning of ti_hecc_mailbox_read()
-
-Marc
-
- drivers/net/can/ti_hecc.c | 34 +++++++++++++++++++++++++++++-----
- 1 file changed, 29 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-index 6ea29126c60b..87815a5b9170 100644
---- a/drivers/net/can/ti_hecc.c
-+++ b/drivers/net/can/ti_hecc.c
-@@ -73,6 +73,7 @@ MODULE_VERSION(HECC_MODULE_VERSION);
-  */
- #define HECC_MAX_RX_MBOX	(HECC_MAX_MAILBOXES - HECC_MAX_TX_MBOX)
- #define HECC_RX_FIRST_MBOX	(HECC_MAX_MAILBOXES - 1)
-+#define HECC_RX_LAST_MBOX	(HECC_MAX_TX_MBOX)
- 
- /* TI HECC module registers */
- #define HECC_CANME		0x0	/* Mailbox enable */
-@@ -82,7 +83,7 @@ MODULE_VERSION(HECC_MODULE_VERSION);
- #define HECC_CANTA		0x10	/* Transmission acknowledge */
- #define HECC_CANAA		0x14	/* Abort acknowledge */
- #define HECC_CANRMP		0x18	/* Receive message pending */
--#define HECC_CANRML		0x1C	/* Remote message lost */
-+#define HECC_CANRML		0x1C	/* Receive message lost */
- #define HECC_CANRFP		0x20	/* Remote frame pending */
- #define HECC_CANGAM		0x24	/* SECC only:Global acceptance mask */
- #define HECC_CANMC		0x28	/* Master control */
-@@ -385,8 +386,15 @@ static void ti_hecc_start(struct net_device *ndev)
- 	/* Enable tx interrupts */
- 	hecc_set_bit(priv, HECC_CANMIM, BIT(HECC_MAX_TX_MBOX) - 1);
- 
--	/* Prevent message over-write & Enable interrupts */
--	hecc_write(priv, HECC_CANOPC, HECC_SET_REG);
-+	/* Prevent message over-write to create a rx fifo, but not for
-+	 * the lowest priority mailbox, since that allows detecting
-+	 * overflows instead of the hardware silently dropping the
-+	 * messages.
-+	 */
-+	mbx_mask = ~BIT(HECC_RX_LAST_MBOX);
-+	hecc_write(priv, HECC_CANOPC, mbx_mask);
-+
-+	/* Enable interrupts */
- 	if (priv->use_hecc1int) {
- 		hecc_write(priv, HECC_CANMIL, HECC_SET_REG);
- 		hecc_write(priv, HECC_CANGIM, HECC_CANGIM_DEF_MASK |
-@@ -531,8 +539,22 @@ static unsigned int ti_hecc_mailbox_read(struct can_rx_offload *offload,
- {
- 	struct ti_hecc_priv *priv = rx_offload_to_priv(offload);
- 	u32 data, mbx_mask;
-+	int ret = 1;
- 
- 	mbx_mask = BIT(mbxno);
-+
-+	/* check if the last mailbox has been overwritten */
-+	if (unlikely(mbxno == HECC_RX_LAST_MBOX)) {
-+		data = hecc_read(priv, HECC_CANRML);
-+		if (unlikely(data & mbx_mask)) {
-+			offload->dev->stats.rx_over_errors++;
-+			offload->dev->stats.rx_errors++;
-+
-+			ret = 0;
-+			goto mark_ask_read;
-+		}
-+	}
-+
- 	data = hecc_read_mbx(priv, mbxno, HECC_CANMID);
- 	if (data & HECC_CANMID_IDE)
- 		cf->can_id = (data & CAN_EFF_MASK) | CAN_EFF_FLAG;
-@@ -552,9 +574,11 @@ static unsigned int ti_hecc_mailbox_read(struct can_rx_offload *offload,
- 	}
- 
- 	*timestamp = hecc_read_stamp(priv, mbxno);
-+
-+ mark_as_read:
- 	hecc_write(priv, HECC_CANRMP, mbx_mask);
- 
--	return 1;
-+	return ret;
- }
- 
- static int ti_hecc_error(struct net_device *ndev, int int_status,
-@@ -884,7 +908,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
- 
- 	priv->offload.mailbox_read = ti_hecc_mailbox_read;
- 	priv->offload.mb_first = HECC_RX_FIRST_MBOX;
--	priv->offload.mb_last = HECC_MAX_TX_MBOX;
-+	priv->offload.mb_last = HECC_RX_LAST_MBOX;
- 	err = can_rx_offload_add_timestamp(ndev, &priv->offload);
- 	if (err) {
- 		dev_err(&pdev->dev, "can_rx_offload_add_timestamp() failed\n");
--- 
-2.23.0
-
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
