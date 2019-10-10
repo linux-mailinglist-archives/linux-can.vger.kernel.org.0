@@ -2,32 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3E9D2221
-	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 09:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C8DD2246
+	for <lists+linux-can@lfdr.de>; Thu, 10 Oct 2019 10:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732992AbfJJHvu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Oct 2019 03:51:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48129 "EHLO
+        id S1733089AbfJJIIQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Oct 2019 04:08:16 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36505 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726864AbfJJHvu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 03:51:50 -0400
+        with ESMTP id S1727196AbfJJIIQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Oct 2019 04:08:16 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iITEj-0000om-5s; Thu, 10 Oct 2019 09:51:49 +0200
+        id 1iITUa-0002U8-E3; Thu, 10 Oct 2019 10:08:12 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:a936:4bb2:bd47:1f85] (unknown [IPv6:2a03:f580:87bc:d400:a936:4bb2:bd47:1f85])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D7AF6464076;
-        Thu, 10 Oct 2019 07:51:47 +0000 (UTC)
-Subject: Re: [PATCH 0/7] can: ti_hecc changes
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <20190924184437.10607-1-jhofstee@victronenergy.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4791E4640A7;
+        Thu, 10 Oct 2019 08:08:08 +0000 (UTC)
+To:     =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        Sean Nyekjaer <sean@geanix.com>
+References: <20190715185308.104333-1-martin@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -90,15 +92,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <c322f1ec-d0ef-39af-fa9a-dafd5a07d8ba@pengutronix.de>
-Date:   Thu, 10 Oct 2019 09:51:39 +0200
+Subject: Re: [PATCH] can: flexcan: free error skb if enqueueing failed
+Message-ID: <e3f0c5a2-e93b-5eaa-518e-b5651c302ea3@pengutronix.de>
+Date:   Thu, 10 Oct 2019 10:08:03 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20190924184437.10607-1-jhofstee@victronenergy.com>
+In-Reply-To: <20190715185308.104333-1-martin@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ"
+ boundary="toEBBwY3wjijzcRdoFQ14mpch1pQ5SGWX"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,57 +112,36 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ
-Content-Type: multipart/mixed; boundary="tPPtpJvqMesEE8ENLv3NSrtjNNIxTlVhO";
+--toEBBwY3wjijzcRdoFQ14mpch1pQ5SGWX
+Content-Type: multipart/mixed; boundary="mXWb766kwOLC8dXhv3fNyuMMB30u8LOkc";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <c322f1ec-d0ef-39af-fa9a-dafd5a07d8ba@pengutronix.de>
-Subject: Re: [PATCH 0/7] can: ti_hecc changes
-References: <20190924184437.10607-1-jhofstee@victronenergy.com>
-In-Reply-To: <20190924184437.10607-1-jhofstee@victronenergy.com>
+To: =?UTF-8?Q?Martin_Hundeb=c3=b8ll?= <martin@geanix.com>,
+ Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+ Sean Nyekjaer <sean@geanix.com>
+Message-ID: <e3f0c5a2-e93b-5eaa-518e-b5651c302ea3@pengutronix.de>
+Subject: Re: [PATCH] can: flexcan: free error skb if enqueueing failed
+References: <20190715185308.104333-1-martin@geanix.com>
+In-Reply-To: <20190715185308.104333-1-martin@geanix.com>
 
---tPPtpJvqMesEE8ENLv3NSrtjNNIxTlVhO
+--mXWb766kwOLC8dXhv3fNyuMMB30u8LOkc
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/24/19 8:45 PM, Jeroen Hofstee wrote:
-> * Marc Kleine-Budde suggested to release the rx mailboxes a bit earlier=
-,
->   that is included here. It is preceded by a small change in rx-offload=
-
->   to make it clear that all mailboxes are read. It is not a functional
->   change.
-> * The CAN protocol kernel (CPK) should be stopped when the interface
->   goes down.
-> * The tx path has a (harmless) race for HECC_CANMIM. Just keep it set.
-> * The interface state keeping can lack resulting in wrong interface sta=
-tes,
->   the state is now based on the interrupt flags and are updated directl=
-y.
-> * The driver lacked a manner to lower the state again. This is added
->   based on the error counters.
+On 7/15/19 8:53 PM, Martin Hundeb=C3=B8ll wrote:
+> If the call to can_rx_offload_queue_sorted() fails, the passed skb isn'=
+t
+> consumed, so the caller must do so.
 >=20
-> Jeroen Hofstee (7):
->   can: rx-offload: continue on error
->   can: ti_hecc: release the mailbox a bit earlier
->   can: ti_hecc: stop the CPK on down
->   can: ti_hecc: keep MIM and MD set
->   can: ti_hecc: add fifo underflow error reporting
->   can: ti_hecc: properly report state changes
->   can: ti_hecc: add missing state changes
->=20
->  drivers/net/can/rx-offload.c |   2 +-
->  drivers/net/can/ti_hecc.c    | 208 +++++++++++++++++++++--------------=
+> Fixes: 30164759db1b ("can: flexcan: make use of rx-offload's irq_offloa=
+d_fifo")
+> Signed-off-by: Martin Hundeb=C3=B8ll <martin@geanix.com>
 
->  2 files changed, 126 insertions(+), 84 deletions(-)
->=20
+I've fixed the problem by adding the kfree_skb() to
+can_rx_offload_queue_sorted().
 
-Applied to linux-can.
-
-Thanks,
 Marc
 
 --=20
@@ -169,23 +151,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---tPPtpJvqMesEE8ENLv3NSrtjNNIxTlVhO--
+--mXWb766kwOLC8dXhv3fNyuMMB30u8LOkc--
 
---ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ
+--toEBBwY3wjijzcRdoFQ14mpch1pQ5SGWX
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2e4wsACgkQWsYho5Hk
-nSC7owf/dJTs9aqjLW9iIsZGopvimYZozD61r3TV0/mIJa9Cs4AnfMepsqGax5DL
-rOINZX8DxYkJxPeFOmitZ+B14OKdRF2zA4BE12IJp2YWtiMQ4hwsDYxPQOWZfPJb
-Ngd5/HruDeNervmCYQyI9AuoeLRsLiZYKNVoBOzPLbhtRmmBIxiQc7QHfNgRhqbx
-ybrQEGbjwNhfVPGvtEc+MGPACxo1vK4yZUbmVQnzvcmG8Os1if+ZSHgHr6Mw0p9r
-39tYWyAiES9q3js/Xoea2cXkEdFsS2BJJmsv3WyfRQW1cEpFGoCrnU3MYTU1rWgw
-kflAQCUqgQo9Q1l9XvD2EQhypBGQ+g==
-=FSI9
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2e5uMACgkQWsYho5Hk
+nSBybAf/Xc8YaWP7iCnpPTHOJHwl7YCUWbOqKm8dY1C1tqjV0A7y37M2W8aEfhzB
+G8FHQheCyiv9Gxh3Tx1saICa+7ckopeUkxaWhOTaoMNLpmr7KDoCZI5XDB56S20A
+D7/0zZ8FC6J3wek0UiJOVtpITgta0VCF2DQB9E87yyNv/4ldX8oVGnapIJwwJJ7C
+heQ/OzJYSys/6wxaG0Gq1BvBYh9MKDaafhmyAqEhXubcUgFRcPActpXvm6HJ7WTl
+Zd7Lpr4pKXm7wPN4dY3GJ8Hrv+FynVcCTuP2LJaceYYpltguvqO3+5qilTJfcEQU
+wNf+7FfEPOD5+HgaCO6qfKK5DMszjQ==
+=9FU9
 -----END PGP SIGNATURE-----
 
---ioQYwWtcz2LESP1xJrHVHzgJVPEONPsZZ--
+--toEBBwY3wjijzcRdoFQ14mpch1pQ5SGWX--
