@@ -2,34 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53464D3DA8
-	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2019 12:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196F0D3DC2
+	for <lists+linux-can@lfdr.de>; Fri, 11 Oct 2019 12:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727289AbfJKKrL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 11 Oct 2019 06:47:11 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57629 "EHLO
+        id S1727176AbfJKKy2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 11 Oct 2019 06:54:28 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54461 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726885AbfJKKrL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Oct 2019 06:47:11 -0400
+        with ESMTP id S1727653AbfJKKy1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Oct 2019 06:54:27 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iIsRu-0005kU-66; Fri, 11 Oct 2019 12:47:06 +0200
+        id 1iIsZ0-0006RU-Id; Fri, 11 Oct 2019 12:54:26 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:cd07:cad1:6073:f005] (unknown [IPv6:2a03:f580:87bc:d400:cd07:cad1:6073:f005])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 02780465035;
-        Fri, 11 Oct 2019 10:47:03 +0000 (UTC)
-Subject: Re: [PATCH] can: mcp25xxfd: fix ptr_ret.cocci warnings
-To:     kbuild test robot <lkp@intel.com>
-Cc:     kbuild-all@01.org, linux-can@vger.kernel.org
-References: <201910110051.ekDMnRer%lkp@intel.com>
- <20191010160055.hhad46lcrqpkccka@332d0cec05f4>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AC463465045;
+        Fri, 11 Oct 2019 10:54:25 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <20191010155341.5991-1-mkl@pengutronix.de>
+ <abf0d3b4-c2eb-3444-bbbe-e17cde4048f9@victronenergy.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -91,15 +90,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <bbfbfbf4-9d97-08fe-fa78-bb4c7b0e5841@pengutronix.de>
-Date:   Fri, 11 Oct 2019 12:46:54 +0200
+Subject: Re: [PATCH v2] can: ti_hecc: add fifo overflow error reporting
+Message-ID: <7828f3e6-3a8a-ff90-1bea-a49719e46db3@pengutronix.de>
+Date:   Fri, 11 Oct 2019 12:54:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191010160055.hhad46lcrqpkccka@332d0cec05f4>
+In-Reply-To: <abf0d3b4-c2eb-3444-bbbe-e17cde4048f9@victronenergy.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="avXe3OXGTr1oYUVclULI5mRFIX6OUaSs5"
+ boundary="a2BKDhyXYaz5NL9mYFZPWVvvKImXmZuUG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,67 +110,89 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---avXe3OXGTr1oYUVclULI5mRFIX6OUaSs5
-Content-Type: multipart/mixed; boundary="G5Df9kLEvQygKAuwCIwleeCwFBljwx3bK";
+--a2BKDhyXYaz5NL9mYFZPWVvvKImXmZuUG
+Content-Type: multipart/mixed; boundary="x1mwHCRtcH9zJaCH0XJRnoJagrdIOmLak";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: kbuild test robot <lkp@intel.com>
-Cc: kbuild-all@01.org, linux-can@vger.kernel.org
-Message-ID: <bbfbfbf4-9d97-08fe-fa78-bb4c7b0e5841@pengutronix.de>
-Subject: Re: [PATCH] can: mcp25xxfd: fix ptr_ret.cocci warnings
-References: <201910110051.ekDMnRer%lkp@intel.com>
- <20191010160055.hhad46lcrqpkccka@332d0cec05f4>
-In-Reply-To: <20191010160055.hhad46lcrqpkccka@332d0cec05f4>
+To: Jeroen Hofstee <jhofstee@victronenergy.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <7828f3e6-3a8a-ff90-1bea-a49719e46db3@pengutronix.de>
+Subject: Re: [PATCH v2] can: ti_hecc: add fifo overflow error reporting
+References: <20191010155341.5991-1-mkl@pengutronix.de>
+ <abf0d3b4-c2eb-3444-bbbe-e17cde4048f9@victronenergy.com>
+In-Reply-To: <abf0d3b4-c2eb-3444-bbbe-e17cde4048f9@victronenergy.com>
 
---G5Df9kLEvQygKAuwCIwleeCwFBljwx3bK
+--x1mwHCRtcH9zJaCH0XJRnoJagrdIOmLak
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/10/19 6:00 PM, kbuild test robot wrote:
-> From: kbuild test robot <lkp@intel.com>
+On 10/10/19 8:31 PM, Jeroen Hofstee wrote:
+>>   drivers/net/can/ti_hecc.c | 34 +++++++++++++++++++++++++++++-----
+>>   1 file changed, 29 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+>> index 6ea29126c60b..87815a5b9170 100644
+>> --- a/drivers/net/can/ti_hecc.c
+>> +++ b/drivers/net/can/ti_hecc.c
+[...]
+>> @@ -531,8 +539,22 @@ static unsigned int ti_hecc_mailbox_read(struct c=
+an_rx_offload *offload,
+>>   {
+>>   	struct ti_hecc_priv *priv =3D rx_offload_to_priv(offload);
+>>   	u32 data, mbx_mask;
+>> +	int ret =3D 1;
+>>  =20
+>>   	mbx_mask =3D BIT(mbxno);
+>> +
+>> +	/* check if the last mailbox has been overwritten */
+>> +	if (unlikely(mbxno =3D=3D HECC_RX_LAST_MBOX)) {
+>> +		data =3D hecc_read(priv, HECC_CANRML);
+>> +		if (unlikely(data & mbx_mask)) {
+>> +			offload->dev->stats.rx_over_errors++;
+>> +			offload->dev->stats.rx_errors++;
+>> +
+>> +			ret =3D 0;
+>> +			goto mark_ask_read;
+>> +		}
+>> +	}
+>> +
 >=20
-> drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regmap.c:93:8-10: WARNING: PTR_=
-ERR_OR_ZERO can be used
 >=20
->=20
->  Use PTR_ERR_OR_ZERO rather than if(IS_ERR(...)) + PTR_ERR
->=20
-> Generated by: scripts/coccinelle/api/ptr_ret.cocci
->=20
-> Fixes: 7de255ffe2cc ("can: mcp25xxfd: add regmap infrastructure")
-> Signed-off-by: kbuild test robot <lkp@intel.com>
-> ---
->=20
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-n=
-ext.git mcp25xxfd
-> head:   fc940214e54b37f338dc9e308cd6501b96fcdb0a
-> commit: 7de255ffe2cc75da3518d110717ca5ef0bf5073f [42/57] can: mcp25xxfd=
-: add regmap infrastructure
->=20
->  mcp25xxfd_regmap.c |    5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->=20
-> --- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regmap.c
-> +++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regmap.c
-> @@ -90,8 +90,5 @@ int mcp25xxfd_regmap_init(struct mcp25xx
->  {
->  	priv->map =3D devm_regmap_init(&priv->spi->dev, &mcp25xxfd_bus,
->  					priv, &mcp25xxfd_regmap);
-> -        if (IS_ERR(priv->map))
-> -                return PTR_ERR(priv->map);
-> -
-> -	return 0;
-> +        return PTR_ERR_OR_ZERO(priv->map);
+> This isn't right though, during the code below the msg might,
+> get overwritten, so we can end up with a corrupt message.
+> (as in canId from one, and the data from the overwritten one).
+> That is not good. And I did actually test that to make sure
+> v1 didn't have such a race. (it is rather easy to actually trigger).
 
-Please use tabs instead of spaces for indention.
+I'm doing the check at the end now.
 
-I've fixes this while sqashing this into the original patch.
+> I really doubt if there is something to justify to treat the
+> HECC_RX_LAST_MBOX specially. It is a comparison versus a bit
+> check of which the mask is already available.....
 
->  }
->=20
+You miss the point that we will read the HECC_CANRML register for
+_every_ mailbox and reading a register from a peripheral is much more
+expensive then first checking if we're working on the last RX mailbox at
+all.
 
-tnx
+> I like v1 more actually, just because it is simpler / less code...
+
+v3 looks quite nice now.
+
+> I have my doubts about the error counter, see the other mail.
+> I don't know which source has the ultimate definition, I just
+> googled for them.
+
+I've moved the error counter handling to rx-offload now.
+
+The kernel doc always says:
+
+"See the network driver for the exact meaning of this value."
+
+https://elixir.bootlin.com/linux/latest/source/Documentation/ABI/testing/=
+sysfs-class-net-statistics#L54
+
 Marc
 
 --=20
@@ -180,23 +202,25 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---G5Df9kLEvQygKAuwCIwleeCwFBljwx3bK--
 
---avXe3OXGTr1oYUVclULI5mRFIX6OUaSs5
+
+--x1mwHCRtcH9zJaCH0XJRnoJagrdIOmLak--
+
+--a2BKDhyXYaz5NL9mYFZPWVvvKImXmZuUG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2gXaEACgkQWsYho5Hk
-nSC2zQf/SolntPVOiXjhaGHTmLykzk2cfp2YbTQgLkJYFZBIFRtzYqNzP6fR+C7i
-utqtDUM4uplhcB6XExfOSLj96QRiReeiuornB743jO37vt87Bvrfvi4K5bcbXBGo
-Hm7ZAa0MGLv6V2Ypm+LFkPCdBumFLPE6hREfPwzS+ayIIARUMlRDdOl6dHL2ognr
-PEdTfEcqI/24CP1DErqkhGOfFgeNL7df+gJwRnnolUs9QHOB1O/zh1S/hC5b1fSp
-YOCXxwym/Fbenigc721/tE5IC6KdyJEplcy4IUGdIEGYgGb+IbsCBN9iZ3xmpmWw
-1zP4oIp0xO7X/M7nDUypzUCVFjopAA==
-=G12C
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2gX10ACgkQWsYho5Hk
+nSANJwf8CNuZzW2wOWptmgXn7GHS7r/uQdh4uHcPbRvJpAba8C5aHVOTc5+uG5aD
+cO6qPkAy5TcanajaDJzbz2qYss5JgYnGDreWsk7htxnjgF/AXFWfU3McL5PphvPH
+UcY861QwgEwiK8sL0Tp5K3fgfO8pr+PrpuFgUZZ1zJ8mUiZzcVOaBZf3on/gnjlh
+kbVDnr9PVSXd5ZG+Q1Qy3sPcsccXB1UN6UGksTaEYP4Cu0yxzyD9BcINWfaKowpr
+ZZ58ShGRVuyqU2kWoSc++NUPDx0k73ZobwIjyo8CYl5avqq8mnjR2GCs7koiWs6c
+mL2OANzDwKr1K/Btbvj9E3EyqaCHOA==
+=/CS1
 -----END PGP SIGNATURE-----
 
---avXe3OXGTr1oYUVclULI5mRFIX6OUaSs5--
+--a2BKDhyXYaz5NL9mYFZPWVvvKImXmZuUG--
