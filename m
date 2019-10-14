@@ -2,173 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D66D613F
-	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2019 13:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFA6D6152
+	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2019 13:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730138AbfJNLZj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 14 Oct 2019 07:25:39 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:38243 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726573AbfJNLZi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Oct 2019 07:25:38 -0400
+        id S1729363AbfJNLar (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 14 Oct 2019 07:30:47 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:11280 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726573AbfJNLar (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Oct 2019 07:30:47 -0400
 Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191014112534epoutp02830d46638578776e2e8e58c9a27d4684~Nf8ZUgnmc1908919089epoutp020
-        for <linux-can@vger.kernel.org>; Mon, 14 Oct 2019 11:25:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191014112534epoutp02830d46638578776e2e8e58c9a27d4684~Nf8ZUgnmc1908919089epoutp020
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191014113044epoutp0189be0b20d815609a1a33c03af5e53d64~NgA57Ve3X2736627366epoutp01F
+        for <linux-can@vger.kernel.org>; Mon, 14 Oct 2019 11:30:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191014113044epoutp0189be0b20d815609a1a33c03af5e53d64~NgA57Ve3X2736627366epoutp01F
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1571052334;
-        bh=hTQaHSOqj4sU/pT0l/ISHmiDV0BTtmWO7XPAAgh3lbs=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=a13vBRzpfY2U59nAja5PoV2tfW7S+NT4OgVYbU6epEHqa5zK7n0z+bPK5+FoaAjYa
-         kaetwPPgGPobcCGlSX07ZAmm+NnWc8RaIy0J0IgMXzLoo65fM/YpfIncLPsUr78PHB
-         AwPrxQfIx/WRFo3gVOVb+2ycbd1i04iX3vEEG0LA=
+        s=mail20170921; t=1571052644;
+        bh=mAMSwg0MGY35MVh1mHoEbPeplNKRC2VmwZX0t8+ADIw=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=j1IHxgjoOpXdF3nAfBupwihiUCtdrJzsO6fMyLS7wycwrcw3CDl//7eW7dQCtz4yL
+         8SUskwTQjY821NMyoYEV52Ga4tTnSYfmvQXQYYQcC+Hjp6DqNkBNcsDH2RbTBxUpSO
+         etF5L4aq23m+BjCoHsuCmnEgT07+n743oC7HarjM=
 Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20191014112534epcas5p2876869cfd34c41d5445c9f94c5845e5b~Nf8YoAhW80758507585epcas5p2A;
-        Mon, 14 Oct 2019 11:25:34 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20191014113044epcas5p1212c6e4a3af23a83adfe53e8a4342a41~NgA5br2LC2844828448epcas5p18;
+        Mon, 14 Oct 2019 11:30:44 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
         epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CB.F5.04480.D2B54AD5; Mon, 14 Oct 2019 20:25:34 +0900 (KST)
+        4B.07.04480.46C54AD5; Mon, 14 Oct 2019 20:30:44 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191014112533epcas5p1c18bb35f34950256b625e467924b2acd~Nf8YJihFn2990029900epcas5p10;
-        Mon, 14 Oct 2019 11:25:33 +0000 (GMT)
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20191014113043epcas5p482215422b46c008b4198893fb2a43899~NgA5EFPhu2792327923epcas5p4x;
+        Mon, 14 Oct 2019 11:30:43 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191014112533epsmtrp2334246f8d030707ba7616a333064e926~Nf8YIjuX43164431644epsmtrp2d;
-        Mon, 14 Oct 2019 11:25:33 +0000 (GMT)
-X-AuditID: b6c32a4b-cbbff70000001180-63-5da45b2dcdf9
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        20191014113043epsmtrp21c97371cf877df6d29370a78187b4094~NgA5C5cZU0178601786epsmtrp2v;
+        Mon, 14 Oct 2019 11:30:43 +0000 (GMT)
+X-AuditID: b6c32a4b-ca3ff70000001180-90-5da45c64c4b2
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D0.C1.04081.D2B54AD5; Mon, 14 Oct 2019 20:25:33 +0900 (KST)
-Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
-        [107.108.83.125]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191014112531epsmtip23d1a77b4d5d0c40bbaba04801a1da67a~Nf8WHwat02272122721epsmtip2H;
-        Mon, 14 Oct 2019 11:25:31 +0000 (GMT)
-From:   Pankaj Sharma <pankj.sharma@samsung.com>
-To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
-        pankaj.dubey@samsung.com, rcsekar@samsung.com,
-        Pankaj Sharma <pankj.sharma@samsung.com>,
-        Sriram Dash <sriram.dash@samsung.com>
-Subject: [PATCH v2] can: m_can: add support for one shot mode
-Date:   Mon, 14 Oct 2019 16:54:48 +0530
-Message-Id: <1571052288-22554-1-git-send-email-pankj.sharma@samsung.com>
-X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMIsWRmVeSWpSXmKPExsWy7bCmhq5e9JJYg7udjBZzzrewWBz4cZzF
-        YtX3qcwWl3fNYbN4sfY6q8X6RVNYLI4tELNYtPULu8XyrvvMFrMu7GC1uLGe3WLpvZ2sDjwe
-        W1beZPL4eOk2o8edH0sZPfr/Gnj0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxrbDl5gK2kQr
-        7t14xdzAOFmwi5GTQ0LARGLbuhb2LkYuDiGB3YwSv1bfhnI+MUr8X/6KEcL5xijR9KGXFaal
-        o3M3mC0ksJdRYukKP4iiFiaJRXeOgiXYBPQkLr2fzAZiiwiESizrncAKUsQs0MQk0bW5lxkk
-        ISxgK/F/dgsTiM0ioCpxYtVedhCbV8BDYtGHLhaIbXISN891MoM0SwhsYJP4P+clVMJFYsb8
-        DewQtrDEq+NboGwpic/v9rJB2NkSC3f3A9VzANkVEm0zhCHC9hIHrswBCzMLaEqs36UPEmYW
-        4JPo/f2ECaKaV6KjTQiiWk1i6tN3jBC2jMSdR5uhhntI7PyyghESDrES0+ftYZnAKDMLYegC
-        RsZVjJKpBcW56anFpgXGeanlesWJucWleel6yfm5mxjBSUHLewfjpnM+hxgFOBiVeHgV0hbH
-        CrEmlhVX5h5ilOBgVhLhZZiwIFaINyWxsiq1KD++qDQntfgQozQHi5I47yTWqzFCAumJJanZ
-        qakFqUUwWSYOTqkGxriy/T+aJCsSZz0JtrYqMzq3u8CJZ8c/Nlm3b5HnHm9KUCjpO7J+0o3W
-        96bBm1ZUfbed9+VfZqrvvbnJfboquwpF5p8Kv6yz9cjTM+Uicbr326TXZU4M+i59fYLXLE7e
-        6Tnml1LWsT3eddNo8wVpaZ6IG5NvzrDbnJ7rN2357vN8srqX395j9FViKc5INNRiLipOBAD5
-        LeB8BgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKLMWRmVeSWpSXmKPExsWy7bCSvK5u9JJYg/c/pCzmnG9hsTjw4ziL
-        xarvU5ktLu+aw2bxYu11Vov1i6awWBxbIGaxaOsXdovlXfeZLWZd2MFqcWM9u8XSeztZHXg8
-        tqy8yeTx8dJtRo87P5YyevT/NfDo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujG2HLzEVtIlW
-        3LvxirmBcbJgFyMnh4SAiURH527WLkYuDiGB3YwSW282M3YxcgAlZCQWf66GqBGWWPnvOTuI
-        LSTQxCSx6ZQeiM0moCdx6f1kNhBbRCBcYueELiYQm1mgh0mi9W4CiC0sYCvxf3YLWJxFQFXi
-        xKq9YHN4BTwkFn3oYoGYLydx81wn8wRGngWMDKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS
-        83M3MYIDT0tzB+PlJfGHGAU4GJV4eE8kL44VYk0sK67MPcQowcGsJMLLMGFBrBBvSmJlVWpR
-        fnxRaU5q8SFGaQ4WJXHep3nHIoUE0hNLUrNTUwtSi2CyTBycUg2MrFWKUVvfzb9Vf/zKSy+l
-        rIVzjBapKwk23QrNX8DzZcr0D6+K3CQWTFOP7j+XwC+eYCqiybDqWbP6TP2Cnv+TV6VIL+5q
-        +lj9/+PNSpX0P0syluVcNrH+W8C0bfOOoCU/Zz2J1Nqan3DA0ne/wPI76dc2r/tbr3RhmWT+
-        0r/zJiyYvuf67qhMFSWW4oxEQy3mouJEAGBJnEA4AgAA
-X-CMS-MailID: 20191014112533epcas5p1c18bb35f34950256b625e467924b2acd
+        46.F1.04081.36C54AD5; Mon, 14 Oct 2019 20:30:43 +0900 (KST)
+Received: from pankjsharma02 (unknown [107.111.85.32]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191014113041epsmtip16d627a16c89daf1c1c715a3995934dcc~NgA3Tsah33130331303epsmtip1N;
+        Mon, 14 Oct 2019 11:30:41 +0000 (GMT)
+From:   "pankj.sharma" <pankj.sharma@samsung.com>
+To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
+Cc:     <wg@grandegger.com>, <davem@davemloft.net>,
+        <eugen.hristev@microchip.com>, <ludovic.desroches@microchip.com>,
+        <pankaj.dubey@samsung.com>, <rcsekar@samsung.com>,
+        "'Sriram Dash'" <sriram.dash@samsung.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+In-Reply-To: <79c10dd5-0c44-ce70-9cb9-bb61e12362d4@pengutronix.de>
+Subject: RE: [PATCH] can: m_can: add support for one shot mode
+Date:   Mon, 14 Oct 2019 17:00:40 +0530
+Message-ID: <001b01d58282$d0a03fa0$71e0bee0$@samsung.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-us
+Thread-Index: AQK+j4JJ4HkhOxWJfJCfQUyc5gk6xQFleCA9AYcBKFSlcIHnQA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPKsWRmVeSWpSXmKPExsWy7bCmlm5KzJJYg2UdLBZzzrewWBz4cZzF
+        YtX3qcwWl3fNYbN4sfY6q8X6RVNYLI4tELNYtPULu8WsCztYLW6sZ7dYem8nqwO3x5aVN5k8
+        Pl66zehx58dSRo/+vwYefVtWMXp83iQXwBbFZZOSmpNZllqkb5fAldE9qYe54B9PRfeBPuYG
+        xpVcXYycHBICJhKP5r9hAbGFBHYzShxZr9LFyAVkf2KUeLB1OyOE841R4uLBGcwwHTMO7YdK
+        7GWU+D73JwuE85pRYvHR+WwgVWwC+hJTmv6CzRUR0JP4PWERE0gRs8BaJon+JV9Yuxg5ODgF
+        nCTal2qD1AgL2ElM/jCBFcRmEVCV+PbhGxNICa+ApcSTVlmQMK+AoMTJmU/ARjILaEssW/ga
+        6iAFiZ9Pl7FCxMUlXh49wg6x1kmi8dYJdpC1EgLd7BINSyHukRBwkVj44CI7hC0s8er4Fihb
+        SuLzu71sEHa2xMLd/SwgN0gIVEi0zRCGCNtLHLgyByzMLKApsX6XPsRaPone30+YIKp5JTra
+        hCCq1SSmPn3HCGHLSNx5tJkNosRD4tD9wgmMirOQ/DULyV+zkPwyC2HXAkaWVYySqQXFuemp
+        xaYFxnmp5XrFibnFpXnpesn5uZsYwclKy3sH46ZzPocYBTgYlXh4FdIWxwqxJpYVV+YeYpTg
+        YFYS4WWYsCBWiDclsbIqtSg/vqg0J7X4EKM0B4uSOO8k1qsxQgLpiSWp2ampBalFMFkmDk6p
+        BsZpAsbH1x8TmPuhSI5dlXXD+hubP2Ud/R696f2vy55uM9SP/5rxc+2ZHzciQz4pzPTtZz1p
+        mVdwZbPpHcl2je4nT9x4nL+YNWqkfnksf3Sr0bpA0SzxWc16skKRylEz37GuMlo+R0z55czE
+        sA/8jFoCIeLpO80+1N87HvGj5YHE9XuHa5vbVISUWIozEg21mIuKEwEVtVQjUgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSnG5yzJJYg29H1CzmnG9hsTjw4ziL
+        xarvU5ktLu+aw2bxYu11Vov1i6awWBxbIGaxaOsXdotZF3awWtxYz26x9N5OVgdujy0rbzJ5
+        fLx0m9Hjzo+ljB79fw08+rasYvT4vEkugC2KyyYlNSezLLVI3y6BK+PUlBtMBa94KvZei29g
+        nMjVxcjJISFgIjHj0H7GLkYuDiGB3YwSjTcuAjkcQAkZicWfqyFqhCVW/nvODlHzklFiYXs3
+        K0iCTUBfYkrTXxYQW0RAT+L3hEVMIDazwHYmiR17yyAazjNKnG3dxwwylFPASaJ9qTZIjbCA
+        ncTkDxPA5rAIqEp8+/CNCaSEV8BS4kmrLEiYV0BQ4uTMJywQI7Ulnt58CmcvW/iaGeI2BYmf
+        T5exQsTFJV4ePcIOcY6TROOtE+wTGIVnIRk1C8moWUhGzULSvoCRZRWjZGpBcW56brFhgWFe
+        arlecWJucWleul5yfu4mRnDUaWnuYLy8JP4QowAHoxIP74nkxbFCrIllxZW5hxglOJiVRHgZ
+        JiyIFeJNSaysSi3Kjy8qzUktPsQozcGiJM77NO9YpJBAemJJanZqakFqEUyWiYNTqoExm2vi
+        NZOyTFMOjzdFKTvbQ6oiNj7nX1LtOK3nitTayik3bPPmzDFdeOOt65QnnmYxQS9LJysnCdZb
+        Fa++LBb7/N3enXmN3bW71hxhfit1rCHswrlddzISNnz+duWPQtdLvarevQ27OR88vhi47B7r
+        6TDphgiBph3/hBOMZwjtXN9R+vqN64clSizFGYmGWsxFxYkANrLXDbYCAAA=
+X-CMS-MailID: 20191014113043epcas5p482215422b46c008b4198893fb2a43899
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
-X-CMS-RootMailID: 20191014112533epcas5p1c18bb35f34950256b625e467924b2acd
-References: <CGME20191014112533epcas5p1c18bb35f34950256b625e467924b2acd@epcas5p1.samsung.com>
+X-CMS-RootMailID: 20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758
+References: <CGME20190925114609epcas5p305e259619c7fe8cdc75d9fd27f34e758@epcas5p3.samsung.com>
+        <1569411904-6319-1-git-send-email-pankj.sharma@samsung.com>
+        <79c10dd5-0c44-ce70-9cb9-bb61e12362d4@pengutronix.de>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-According to the CAN Specification (see ISO 11898-1:2015, 8.3.4
-Recovery Management), the M_CAN provides means for automatic
-retransmission of frames that have lost arbitration or that
-have been disturbed by errors during transmission. By default
-automatic retransmission is enabled.
+> From: Marc Kleine-Budde <mkl=40pengutronix.de>
+> Subject: Re: =5BPATCH=5D can: m_can: add support for one shot mode
+>=20
+> On 9/25/19 1:45 PM, Pankaj Sharma wrote:
+> > According to the CAN Specification (see ISO 11898-1:2015, 8.3.4
+> > Recovery Management), the M_CAN provides means for automatic
+> > retransmission of frames that have lost arbitration or that have been
+> > disturbed by errors during transmission. By default automatic
+> > retransmission is enabled.
+> >
+> > The Bosch MCAN controller has support for disabling automatic
+> > retransmission.
+> >
+> > To support time-triggered communication as described in ISO
+> > 11898-1:2015, chapter 9.2, the automatic retransmission may be
+> > disabled via CCCR.DAR.
+> >
+> > CAN_CTRLMODE_ONE_SHOT is used for disabling automatic retransmission.
+> >
+> > Signed-off-by: Pankaj Sharma <pankj.sharma=40samsung.com>
+> > Signed-off-by: Sriram Dash <sriram.dash=40samsung.com>
+>=20
+> The patch does not apply to net-next/master. Please use net-next/master a=
+s a
+> base for patches introducing new features.
+>=20
 
-The Bosch MCAN controller has support for disabling automatic
-retransmission.
+Thank you for the information.
 
-To support time-triggered communication as described in ISO
-11898-1:2015, chapter 9.2, the automatic retransmission may be
-disabled via CCCR.DAR.
+> I've ported the patch and applied it.
+>=20
 
-CAN_CTRLMODE_ONE_SHOT is used for disabling automatic retransmission.
+We are not able to get the patch in the net-next/master branch.
+Sent patch v2 after rebasing to net-next/master
+https://lore.kernel.org/patchwork/patch/1139214/
 
-Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
-Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
----
+> tnx,
+> Marc
+>=20
+> --
+> Pengutronix e.K.                  =7C Marc Kleine-Budde           =7C
+> Industrial Linux Solutions        =7C Phone: +49-231-2826-924     =7C
+> Vertretung West/Dortmund          =7C Fax:   +49-5121-206917-5555 =7C
+> Amtsgericht Hildesheim, HRA 2686  =7C http://www.pengutronix.de   =7C
 
-changes in v2:
- - rebase to net-next
-
- drivers/net/can/m_can/m_can.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 386e7eb..7efafee 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -123,6 +123,7 @@ enum m_can_reg {
- #define CCCR_CME_CANFD_BRS	0x2
- #define CCCR_TXP		BIT(14)
- #define CCCR_TEST		BIT(7)
-+#define CCCR_DAR		BIT(6)
- #define CCCR_MON		BIT(5)
- #define CCCR_CSR		BIT(4)
- #define CCCR_CSA		BIT(3)
-@@ -1173,7 +1174,7 @@ static void m_can_chip_config(struct net_device *dev)
- 	if (cdev->version == 30) {
- 	/* Version 3.0.x */
- 
--		cccr &= ~(CCCR_TEST | CCCR_MON |
-+		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_DAR |
- 			(CCCR_CMR_MASK << CCCR_CMR_SHIFT) |
- 			(CCCR_CME_MASK << CCCR_CME_SHIFT));
- 
-@@ -1183,7 +1184,7 @@ static void m_can_chip_config(struct net_device *dev)
- 	} else {
- 	/* Version 3.1.x or 3.2.x */
- 		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_BRSE | CCCR_FDOE |
--			  CCCR_NISO);
-+			  CCCR_NISO | CCCR_DAR);
- 
- 		/* Only 3.2.x has NISO Bit implemented */
- 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-@@ -1203,6 +1204,10 @@ static void m_can_chip_config(struct net_device *dev)
- 	if (cdev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
- 		cccr |= CCCR_MON;
- 
-+	/* Disable Auto Retransmission (all versions) */
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-+		cccr |= CCCR_DAR;
-+
- 	/* Write config */
- 	m_can_write(cdev, M_CAN_CCCR, cccr);
- 	m_can_write(cdev, M_CAN_TEST, test);
-@@ -1348,7 +1353,8 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
- 	m_can_dev->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
- 					CAN_CTRLMODE_LISTENONLY |
- 					CAN_CTRLMODE_BERR_REPORTING |
--					CAN_CTRLMODE_FD;
-+					CAN_CTRLMODE_FD |
-+					CAN_CTRLMODE_ONE_SHOT;
- 
- 	/* Set properties depending on M_CAN version */
- 	switch (m_can_dev->version) {
--- 
-2.7.4
 
