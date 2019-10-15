@@ -2,81 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABBFD692E
-	for <lists+linux-can@lfdr.de>; Mon, 14 Oct 2019 20:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB44D6F59
+	for <lists+linux-can@lfdr.de>; Tue, 15 Oct 2019 07:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732708AbfJNSKi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 14 Oct 2019 14:10:38 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:42484 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732457AbfJNSKh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Oct 2019 14:10:37 -0400
-Received: by mail-oi1-f196.google.com with SMTP id i185so14480042oif.9;
-        Mon, 14 Oct 2019 11:10:37 -0700 (PDT)
+        id S1726689AbfJOF5u (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Oct 2019 01:57:50 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:37138 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbfJOF5u (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Oct 2019 01:57:50 -0400
+Received: by mail-ed1-f68.google.com with SMTP id r4so16820006edy.4
+        for <linux-can@vger.kernel.org>; Mon, 14 Oct 2019 22:57:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+dEWfTewt7R9RPkQAlrQgcj1STfoqf3Bg7CtuX6pXcc=;
+        b=XKoW+37/mB+Yqe8NNl4kODT5jbFVZMlxj0JzDJznPsAhffJWy3GpoXcr0hhJb5VVC3
+         hCa/wNHwk/W/RE+5rjPktivUUv3rwSY11L7hH60TziQ41mg7HrWBoU8NCebmu8rJFIVr
+         2atccDpovKo2liFFWRJRkexnOs/s2rRsf8MiAKMSMU+v86SO+1MvMyEQOd5ZFqVWbqn5
+         e9e2ZrQeL+fK8vu69FoUV9SFPGmepwzZGvCiHqfHCKY68Io8TDsfi4t94W00aYvur9pA
+         QvHiP4Whx0RfUW1ap5DrPGP/1WClPDAJpCb+OX2xHHjAISt0f6if3yBXdDsEBKM0qSgK
+         +vdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=brydErWP+N2L9d45tYVCDfdcZY1kzeEdeJQZ2XYUiZo=;
-        b=TXPVhyeXjtUdUYpjGtu4SE7rID1M0RgSDE6WBllbzcrMmr4tbz5KiIX5iwxQ5mz/xM
-         nXbvcAIdnC51YHEFya/fomT1XhlUkqyhCyutDYysXVfYVZLcyXj58XTCUmXI3fGOZHYX
-         H4VFDw486Tcg3gntoMrFzfvrca5WRiDpMug8JewydoDYijIvtczq2BQOuLXHGJMnq842
-         o4oKXay3/RwpHeLZJ+oaZxtWvhdFI4/8AOdIbV80Fhz4DJHEK3nOIqeA5+COCzSJrel9
-         7hAE1NZ1s1gjuv6OPytIHlrVRvTWZnDDvXG+8DD66eSucexYYgU6w3q45Z4zIGQlJbVV
-         kNmA==
-X-Gm-Message-State: APjAAAWm3Id9Liyoi0K1egrnZrB9KKmVU97yNjES8heJo2IPaisOYfzK
-        +vcXosHbhPRMAbO+2i7QEA==
-X-Google-Smtp-Source: APXvYqw5KLzQfOtdpfE9+NWsb+KZJWl/E35ubmw5Tmx1d08+KqazubLPhRc7Qqi25jW0DFupNKrczw==
-X-Received: by 2002:aca:5786:: with SMTP id l128mr283018oib.34.1571076636754;
-        Mon, 14 Oct 2019 11:10:36 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n127sm5791292oia.0.2019.10.14.11.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 11:10:36 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 13:10:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>,
-        Magnus Damm <magnus.damm@gmail.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: Re: [PATCH net-next v2 2/3] dt-bindings: can: rcar_canfd: document
- r8a774b1 support
-Message-ID: <20191014181035.GA2613@bogus>
-References: <1570717560-7431-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1570717560-7431-3-git-send-email-fabrizio.castro@bp.renesas.com>
+        bh=+dEWfTewt7R9RPkQAlrQgcj1STfoqf3Bg7CtuX6pXcc=;
+        b=lVPCsYz4hNGAjDMeuwBR6oXEl1hhqTUugNGhSIJd4Ja2WlTtv4570J4vH9DQ3jZWBy
+         eSoYsA3hcor5AbDib6zQ/vgHVSPGBhndWrTnKoc6h8TKo6jW0hUkr6SdNlUHrx2vDUuE
+         ZKNl30GZxNYIIBtqisMm2TKIYdKxoi2gHlmiWhBRltEB6I0j2ooV+ixtUd2fhtudYgEC
+         gVXl2RjAKsVb9qLs7fdEclStsjgp2j6Rh/WZYKYhAh5rMvstNXBMQ2IgzoKk9nrJ054L
+         gQbJY8be10uKGmVSg3TEUbzTnH3nHoC/EIGPVAAAALbIl3WRR0irZxYj509jczDj+MNS
+         EoKQ==
+X-Gm-Message-State: APjAAAU6tzh8xjmlCDCVK4QEeSwmvgCvd30i9bZMRXDxtU8Pw69Uslrr
+        /zNXFruILiX3Z8wZcq/aeLdwnw==
+X-Google-Smtp-Source: APXvYqwPP2OQtbMJgFsKI1Fn0SmCDt4h7hlgMbPCaER/eZIM88e8JB3Qs4CXw2bL9m3OA/v94kIbXA==
+X-Received: by 2002:a50:f315:: with SMTP id p21mr31564386edm.83.1571119068326;
+        Mon, 14 Oct 2019 22:57:48 -0700 (PDT)
+Received: from netronome.com (penelope-musen.rivierenbuurt.horms.nl. [2001:470:7eb3:404:c685:8ff:fe7c:9971])
+        by smtp.gmail.com with ESMTPSA id c15sm3529833edl.16.2019.10.14.22.57.32
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 14 Oct 2019 22:57:47 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 07:57:22 +0200
+From:   Simon Horman <simon.horman@netronome.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     Pankaj Sharma <pankj.sharma@samsung.com>, kbuild-all@lists.01.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net,
+        eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
+        pankaj.dubey@samsung.com, rcsekar@samsung.com,
+        Sriram Dash <sriram.dash@samsung.com>
+Subject: Re: [PATCH] can: m_can: fix boolreturn.cocci warnings
+Message-ID: <20191015055718.mypn63s2ovgwipk3@netronome.com>
+References: <1571052844-22633-1-git-send-email-pankj.sharma@samsung.com>
+ <20191014150428.xhhc43ovkxm6oxf2@332d0cec05f4>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1570717560-7431-3-git-send-email-fabrizio.castro@bp.renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191014150428.xhhc43ovkxm6oxf2@332d0cec05f4>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 10 Oct 2019 15:25:59 +0100, Fabrizio Castro wrote:
-> Document the support for rcar_canfd on R8A774B1 SoC devices.
+On Mon, Oct 14, 2019 at 11:04:28PM +0800, kbuild test robot wrote:
+> From: kbuild test robot <lkp@intel.com>
 > 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> drivers/net/can/m_can/m_can.c:783:9-10: WARNING: return of 0/1 in function 'is_protocol_err' with return type bool
+> 
+>  Return statements in functions returning bool should use
+>  true/false instead of 1/0.
+> Generated by: scripts/coccinelle/misc/boolreturn.cocci
+> 
+> Fixes: 46946163ac61 ("can: m_can: add support for handling arbitration error")
+> CC: Pankaj Sharma <pankj.sharma@samsung.com>
+> Signed-off-by: kbuild test robot <lkp@intel.com>
 > ---
-> v1->v2:
-> * Added the R8A774B1 to the clock paragraph according to Geert's comment
 > 
->  Documentation/devicetree/bindings/net/can/rcar_canfd.txt | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> url:    https://github.com/0day-ci/linux/commits/Pankaj-Sharma/can-m_can-add-support-for-handling-arbitration-error/20191014-193532
+> 
+>  m_can.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -780,9 +780,9 @@ static inline bool is_lec_err(u32 psr)
+>  static inline bool is_protocol_err(u32 irqstatus)
+>  {
+>  	if (irqstatus & IR_ERR_LEC_31X)
+> -		return 1;
+> +		return true;
+>  	else
+> -		return 0;
+> +		return false;
+>  }
+>  
+>  static int m_can_handle_protocol_error(struct net_device *dev, u32 irqstatus)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+<2c>
+Perhaps the following is a nicer way to express this (completely untested):
+
+	return !!(irqstatus & IR_ERR_LEC_31X);
+</2c>
