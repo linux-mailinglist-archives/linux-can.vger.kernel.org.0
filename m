@@ -2,96 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8705D788D
-	for <lists+linux-can@lfdr.de>; Tue, 15 Oct 2019 16:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED45D7ADD
+	for <lists+linux-can@lfdr.de>; Tue, 15 Oct 2019 18:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732733AbfJOObM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Oct 2019 10:31:12 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:49136 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732087AbfJOObM (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 15 Oct 2019 10:31:12 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 92D10AC8FF81A9E06E9B;
-        Tue, 15 Oct 2019 22:31:10 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Tue, 15 Oct 2019
- 22:31:00 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <wsa+renesas@sang-engineering.com>, <horms+renesas@verge.net.au>,
-        <swboyd@chromium.org>, <fabrizio.castro@bp.renesas.com>,
-        <geert+renesas@glider.be>, <yuehaibing@huawei.com>,
-        <nikita.yoush@cogentembedded.com>
-CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net-next] can: rcar: use devm_platform_ioremap_resource() to simplify code
-Date:   Tue, 15 Oct 2019 22:30:47 +0800
-Message-ID: <20191015143047.19440-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1727644AbfJOQK3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Oct 2019 12:10:29 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:36557 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727458AbfJOQK3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Oct 2019 12:10:29 -0400
+Received: by mail-ed1-f66.google.com with SMTP id h2so18577249edn.3
+        for <linux-can@vger.kernel.org>; Tue, 15 Oct 2019 09:10:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4wsH/H4/IvZbw1PBfApeIo2ldu5dbGC9/0sEtLu5BHw=;
+        b=0Cs2fQ+11eH0QVgZsZWadHdiWihinDAvgb4Ioa7gYg4yiKnVsD04fCFg5y4sFuUKN7
+         102tkBCNYur4z4uin78NLBgAn6ngTyCMIDplIkzTuA07sL+HHbwHG9+TN5zEoU84YMmP
+         wqlTflVW7GYFjZBoch+//tLKDt6mdgJ3UHe/P7JCkaa21fZ3SIZngSBo8J6qU3AUDdLP
+         SFXpoSqI1ldXa0sCrS9IDsB0ZUfWVWMIrB7iz6Fi9jQ05Pc/EMaYErfEeMKnO5Uw1knM
+         aqmOfiwXL+5RtQn76aKnrUNVyh7xChRvYRzL8VVfSHP7sHtZC4zPwkSBtSoqh3syzD/1
+         9bsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4wsH/H4/IvZbw1PBfApeIo2ldu5dbGC9/0sEtLu5BHw=;
+        b=V8kSBQb7YwOnusWkp9NDe25KL5mVjQaYIBYdrx+0Cc2UvhXAmwZ+4V6CyelAd4wTUd
+         qs6KTDlZZS1uxbamfciWKPhIXCSpTQTJKAHge8UphrSoCXYR8dZV2Zx6EDY5exGGSsat
+         Duemhn1vK2DKlYN9oTLWuReb4qnqgjVJ42XOZf0F7uPPINu4VGiqwvcz/tcAFY3MrL8n
+         KuB29J4yYg2R0Nr9aE+to049UQyFGTuE1xagw/K98+lFC/tM58j2MRaANAR/5UvtTAFD
+         8qu7fqIcuF7jG25WflmU1QnM9bv5lfbyGNCzcHjtHwVgG6CSBgU0Udtyg/nXKWxPwCZm
+         qudw==
+X-Gm-Message-State: APjAAAUNLiYlzrknxxdelHg5pwIgiRi+CTmql+HkzzF9b5ntDXgd65ez
+        TNIYKnAuvZrAMm5nW0DOTvkG3Q==
+X-Google-Smtp-Source: APXvYqxRdcnRI22r9M7UXPsBCBGbEnHT8bpl3u0lG8avm96l2X0z/fb7buBkQh5xPEYJUZLYEf060g==
+X-Received: by 2002:a17:906:1cd8:: with SMTP id i24mr34165866ejh.149.1571155827144;
+        Tue, 15 Oct 2019 09:10:27 -0700 (PDT)
+Received: from netronome.com (penelope-musen.rivierenbuurt.horms.nl. [2001:470:7eb3:404:c685:8ff:fe7c:9971])
+        by smtp.gmail.com with ESMTPSA id dt4sm2793092ejb.45.2019.10.15.09.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2019 09:10:26 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 18:10:23 +0200
+From:   Simon Horman <simon.horman@netronome.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] can: ifi: use devm_platform_ioremap_resource()
+ to simplify code
+Message-ID: <20191015161022.mtgohberdmhkbo46@netronome.com>
+References: <20191015142046.24844-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191015142046.24844-1-yuehaibing@huawei.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify the code a bit.
-This is detected by coccinelle.
+On Tue, Oct 15, 2019 at 10:20:46PM +0800, YueHaibing wrote:
+> Use devm_platform_ioremap_resource() to simplify the code a bit.
+> This is detected by coccinelle.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/net/can/rcar/rcar_can.c   | 4 +---
- drivers/net/can/rcar/rcar_canfd.c | 4 +---
- 2 files changed, 2 insertions(+), 6 deletions(-)
+Reviewed-by: Simon Horman <simon.horman@netronome.com>
 
-diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
-index bf5adea..4857590 100644
---- a/drivers/net/can/rcar/rcar_can.c
-+++ b/drivers/net/can/rcar/rcar_can.c
-@@ -744,7 +744,6 @@ static int rcar_can_probe(struct platform_device *pdev)
- {
- 	struct rcar_can_priv *priv;
- 	struct net_device *ndev;
--	struct resource *mem;
- 	void __iomem *addr;
- 	u32 clock_select = CLKR_CLKP1;
- 	int err = -ENODEV;
-@@ -759,8 +758,7 @@ static int rcar_can_probe(struct platform_device *pdev)
- 		goto fail;
- 	}
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	addr = devm_ioremap_resource(&pdev->dev, mem);
-+	addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(addr)) {
- 		err = PTR_ERR(addr);
- 		goto fail;
-diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
-index edaa1ca..de59dd6 100644
---- a/drivers/net/can/rcar/rcar_canfd.c
-+++ b/drivers/net/can/rcar/rcar_canfd.c
-@@ -1630,7 +1630,6 @@ static void rcar_canfd_channel_remove(struct rcar_canfd_global *gpriv, u32 ch)
- 
- static int rcar_canfd_probe(struct platform_device *pdev)
- {
--	struct resource *mem;
- 	void __iomem *addr;
- 	u32 sts, ch, fcan_freq;
- 	struct rcar_canfd_global *gpriv;
-@@ -1704,8 +1703,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
- 		/* CANFD clock is further divided by (1/2) within the IP */
- 		fcan_freq /= 2;
- 
--	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	addr = devm_ioremap_resource(&pdev->dev, mem);
-+	addr = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(addr)) {
- 		err = PTR_ERR(addr);
- 		goto fail_dev;
--- 
-2.7.4
-
-
+> ---
+>  drivers/net/can/ifi_canfd/ifi_canfd.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/can/ifi_canfd/ifi_canfd.c b/drivers/net/can/ifi_canfd/ifi_canfd.c
+> index fedd927..04d59be 100644
+> --- a/drivers/net/can/ifi_canfd/ifi_canfd.c
+> +++ b/drivers/net/can/ifi_canfd/ifi_canfd.c
+> @@ -942,13 +942,11 @@ static int ifi_canfd_plat_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct net_device *ndev;
+>  	struct ifi_canfd_priv *priv;
+> -	struct resource *res;
+>  	void __iomem *addr;
+>  	int irq, ret;
+>  	u32 id, rev;
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	addr = devm_ioremap_resource(dev, res);
+> +	addr = devm_platform_ioremap_resource(pdev, 0);
+>  	irq = platform_get_irq(pdev, 0);
+>  	if (IS_ERR(addr) || irq < 0)
+>  		return -EINVAL;
+> -- 
+> 2.7.4
+> 
+> 
