@@ -2,30 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 032BFD7876
-	for <lists+linux-can@lfdr.de>; Tue, 15 Oct 2019 16:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8705D788D
+	for <lists+linux-can@lfdr.de>; Tue, 15 Oct 2019 16:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732717AbfJOO2O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Oct 2019 10:28:14 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:46992 "EHLO huawei.com"
+        id S1732733AbfJOObM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Oct 2019 10:31:12 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:49136 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732599AbfJOO2O (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 15 Oct 2019 10:28:14 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id ED3DD887B1F37F537092;
-        Tue, 15 Oct 2019 22:28:11 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 15 Oct 2019
- 22:28:04 +0800
+        id S1732087AbfJOObM (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 15 Oct 2019 10:31:12 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 92D10AC8FF81A9E06E9B;
+        Tue, 15 Oct 2019 22:31:10 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Tue, 15 Oct 2019
+ 22:31:00 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
 To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <mripard@kernel.org>, <wens@csie.org>
+        <wsa+renesas@sang-engineering.com>, <horms+renesas@verge.net.au>,
+        <swboyd@chromium.org>, <fabrizio.castro@bp.renesas.com>,
+        <geert+renesas@glider.be>, <yuehaibing@huawei.com>,
+        <nikita.yoush@cogentembedded.com>
 CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH net-next] can: sun4i: use devm_platform_ioremap_resource() to simplify code
-Date:   Tue, 15 Oct 2019 22:27:44 +0800
-Message-ID: <20191015142744.25236-1-yuehaibing@huawei.com>
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next] can: rcar: use devm_platform_ioremap_resource() to simplify code
+Date:   Tue, 15 Oct 2019 22:30:47 +0800
+Message-ID: <20191015143047.19440-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -41,31 +43,54 @@ This is detected by coccinelle.
 
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/net/can/sun4i_can.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/can/rcar/rcar_can.c   | 4 +---
+ drivers/net/can/rcar/rcar_canfd.c | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/can/sun4i_can.c b/drivers/net/can/sun4i_can.c
-index f4cd881..e3ba8ab 100644
---- a/drivers/net/can/sun4i_can.c
-+++ b/drivers/net/can/sun4i_can.c
-@@ -771,7 +771,6 @@ static int sun4ican_remove(struct platform_device *pdev)
- static int sun4ican_probe(struct platform_device *pdev)
+diff --git a/drivers/net/can/rcar/rcar_can.c b/drivers/net/can/rcar/rcar_can.c
+index bf5adea..4857590 100644
+--- a/drivers/net/can/rcar/rcar_can.c
++++ b/drivers/net/can/rcar/rcar_can.c
+@@ -744,7 +744,6 @@ static int rcar_can_probe(struct platform_device *pdev)
  {
- 	struct device_node *np = pdev->dev.of_node;
+ 	struct rcar_can_priv *priv;
+ 	struct net_device *ndev;
 -	struct resource *mem;
- 	struct clk *clk;
  	void __iomem *addr;
- 	int err, irq;
-@@ -791,8 +790,7 @@ static int sun4ican_probe(struct platform_device *pdev)
- 		goto exit;
+ 	u32 clock_select = CLKR_CLKP1;
+ 	int err = -ENODEV;
+@@ -759,8 +758,7 @@ static int rcar_can_probe(struct platform_device *pdev)
+ 		goto fail;
  	}
  
 -	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 -	addr = devm_ioremap_resource(&pdev->dev, mem);
 +	addr = devm_platform_ioremap_resource(pdev, 0);
  	if (IS_ERR(addr)) {
- 		err = -EBUSY;
- 		goto exit;
+ 		err = PTR_ERR(addr);
+ 		goto fail;
+diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+index edaa1ca..de59dd6 100644
+--- a/drivers/net/can/rcar/rcar_canfd.c
++++ b/drivers/net/can/rcar/rcar_canfd.c
+@@ -1630,7 +1630,6 @@ static void rcar_canfd_channel_remove(struct rcar_canfd_global *gpriv, u32 ch)
+ 
+ static int rcar_canfd_probe(struct platform_device *pdev)
+ {
+-	struct resource *mem;
+ 	void __iomem *addr;
+ 	u32 sts, ch, fcan_freq;
+ 	struct rcar_canfd_global *gpriv;
+@@ -1704,8 +1703,7 @@ static int rcar_canfd_probe(struct platform_device *pdev)
+ 		/* CANFD clock is further divided by (1/2) within the IP */
+ 		fcan_freq /= 2;
+ 
+-	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	addr = devm_ioremap_resource(&pdev->dev, mem);
++	addr = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(addr)) {
+ 		err = PTR_ERR(addr);
+ 		goto fail_dev;
 -- 
 2.7.4
 
