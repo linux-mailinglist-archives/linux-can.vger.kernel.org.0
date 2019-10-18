@@ -2,45 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9A4DC7D5
-	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2019 16:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA0CDC81B
+	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2019 17:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404764AbfJROxe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Oct 2019 10:53:34 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37459 "EHLO
+        id S2390228AbfJRPJe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Oct 2019 11:09:34 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55285 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732002AbfJROxe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Oct 2019 10:53:34 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        with ESMTP id S1726299AbfJRPJe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Oct 2019 11:09:34 -0400
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1iLTdF-0000FD-No; Fri, 18 Oct 2019 16:53:33 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1iLTdF-0002gR-FJ; Fri, 18 Oct 2019 16:53:33 +0200
-Date:   Fri, 18 Oct 2019 16:53:33 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iLTsi-0002LM-M8; Fri, 18 Oct 2019 17:09:32 +0200
+To:     Robert Schwebel <r.schwebel@pengutronix.de>,
+        "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
 Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: Questions around J1939 backport to old kernel
-Message-ID: <20191018145333.a27j7d7f4zf3bqjd@pengutronix.de>
 References: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
+ <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: Questions around J1939 backport to old kernel
+Message-ID: <d32e1f1b-99cd-cef2-4028-e178a4787f91@pengutronix.de>
+Date:   Fri, 18 Oct 2019 17:09:17 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hibgeasp36gk66m2"
-Content-Disposition: inline
-In-Reply-To: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:56:04 up 153 days, 20:14, 99 users,  load average: 0.12, 0.05,
- 0.01
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
+In-Reply-To: <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT"
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
@@ -48,76 +102,68 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT
+Content-Type: multipart/mixed; boundary="jOCBHOcQXLfc272WJxjxcKs3ia2rFndKQ";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Robert Schwebel <r.schwebel@pengutronix.de>,
+ "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <d32e1f1b-99cd-cef2-4028-e178a4787f91@pengutronix.de>
+Subject: Re: Questions around J1939 backport to old kernel
+References: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
+ <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
+In-Reply-To: <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
 
---hibgeasp36gk66m2
+--jOCBHOcQXLfc272WJxjxcKs3ia2rFndKQ
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 10/18/19 4:49 PM, Robert Schwebel wrote:
+> On Fri, Oct 18, 2019 at 12:07:34PM +0200, Romain Forlot [IoT.bzh] wrote=
+:
+>> I am wondering what the cost is to backport the j1939 module to an old=
 
-On Fri, Oct 18, 2019 at 12:07:34PM +0200, Romain Forlot [IoT.bzh] wrote:
-> Hi,
+>> version like a v4.14 LTSI version.
+>>
+>> And what the impact is of backporting the whole CAN stack on the CAN d=
+rivers
+>> ? Are there any modifications to drivers once the CAN stack is updated=
+ ?
 >=20
-> I am wondering what the cost is to backport the j1939 module to an old
-> version like a v4.14 LTSI version.
+> Could you start using & testing it on current mainline kernels?
 
-The backport should be quite easy:
+Which CAN adapter are you planing to use?
 
-git cherry-pick -sx `git rev-list --reverse 2c1f9e26344483e2c74e80ef708d9c7=
-fd2e543f4..9d71dd0c70099914fcd063135da3c580865e924c`
-
-=2E..but it isn't :/ Some CAN patches are missing. We'll backport the stack=
- to
-v4.14.150 (or newer) and send a follow up mail.
-
-However, the driver for the CAN adapter needs proper RX/TX frame ordering,
-otherwise the stack will explode.
-
-This is fixed in flexcan mainline. And involves a handful of patches. Other
-drivers probably need more fixing. Some CAN hardware may even lack the hard=
-ware
-support for proper ordering, that is time stamping registers.
-
-> And what the impact is of backporting the whole CAN stack on the CAN driv=
-ers?
-
-The stack has no impact on the drivers, but requirements on proper RX/TX
-ordering, see above.
-
-> Are there any modifications to drivers once the CAN stack is updated ?
-
-Yes, as long as they don't have proper RX/TX ordering.
-
-So, which CAN driver are you planing to use?
-
-Regards,
-Oleksij & Marc
+regards,
+Marc
 
 --=20
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
---hibgeasp36gk66m2
+
+--jOCBHOcQXLfc272WJxjxcKs3ia2rFndKQ--
+
+--sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl2p0ewACgkQ4omh9DUa
-UbOV8BAAqzl9vVwesyucxqMuBxdR3J1AkY2WFgeHJvA0T0+GTjnXfvqgRw0lUL7M
-+uUx0dGUWTrQeU21/I9DEU1PxPOG7mZeqx3DHn+DMJGUduz2LexIG02LRIriUZfI
-7SExeaf9QMtJxjBbtvXAGIdTpRblM85c4TQc/Ad5K04mCDenQSjF/Kv2bGHPNoYA
-Zvvh3fJj2QNewEgzCddQlrQ9vKd/0Cl0N0vyNV1sGtGNlOtECrk1mibiYsspPuaA
-c+vAUwMHpu87Mo4OE+YaXnjuS8CVfbYHR7I+Z+iwfvmL7GIrX81BZV7uz5bYSw9V
-mJyzkLuPiv1gtijcByY2fWhO2oikhc9Zqp4WDekx8BMzKWiHYfNrEx7r9zP4niUO
-pVy8eiWWZTX97la0MZmvVPoD0WIbDMy3NbGQVUzPjKG+hIEsULyWKxrB25d3nfPG
-wiY2h1SBaot5DnrUzrnkrrdIaLSnHRA38FEwozRdAdgac1t327/9BN2neYtFBNbG
-XoiTQVnKjS29LvjLkm7Ye0urlbR0Yc5Y079zk5RKejFe5PMaTx4OqnXBhurcrjuB
-dAs9gITKjfICS9FYyusy9et6xxITWohRGu/M8BO7unkVQV0uJdtTCD1weQcEc8bp
-oYRTkvp8yT7w8taUSkwCnk702HH3L9xgy3j6Z9dVuLXTRG5j2YQ=
-=ypp9
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2p1aIACgkQWsYho5Hk
+nSDp6wf/Z7st3Ntmn2QR+UBwvxlX1srUm3sPoKGIdWH4C0t0k/7//bCuFmneY7Vu
+BBfKugAh9CD4+CaIWrGhn0EUUlBAksciINhv5oASZNwoZ0QCnTg9rV2E6z2Ls/09
+bMtY9eEW39dvDJPmyzecwfAwcS8TgH36A/9Rcnx/T1PzA6m1+5ats/WbE6BbVS1U
+VKVoLKXRjMPxc7eKIm/DrCJ/iZFEWcbehsG0oAvydrb0rYMu7ZTY4lg+bjtH0LT7
+SpPybqywBsdSlVUEzztg65T+rSKiUebu3UPwUCwgGWJqm7x2C4DPpjOJIMXtWwh7
+SwRN0dfc5Lto1rMaB4d0Ic2rKO7hjA==
+=MnRb
 -----END PGP SIGNATURE-----
 
---hibgeasp36gk66m2--
+--sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT--
