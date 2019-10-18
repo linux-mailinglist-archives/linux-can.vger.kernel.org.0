@@ -2,74 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 650F4DBEF3
-	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2019 09:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423DADC21F
+	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2019 12:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504878AbfJRHwU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Oct 2019 03:52:20 -0400
-Received: from zaovasilisa.ru ([88.200.194.99]:46823 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2504820AbfJRHwP (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 18 Oct 2019 03:52:15 -0400
-X-Greylist: delayed 39671 seconds by postgrey-1.27 at vger.kernel.org; Fri, 18 Oct 2019 03:51:51 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id CC3F818647F;
-        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
-Received: from [72.215.151.127] by 127.0.0.1 with ESMTP id 72A686FDC7F; Thu, 17 Oct 2019 18:59:02 +0600
-Message-ID: <735ui-$$-55e3--c$i$-l0-18w85$-6@8d6h1006syk>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     links@q.vu
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 18:59:02 GMT
-X-Mailer: AOL 7.0 for Windows US sub 118
+        id S2391195AbfJRKHx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Oct 2019 06:07:53 -0400
+Received: from mail.iot.bzh ([51.75.236.24]:3612 "EHLO mail.iot.bzh"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731332AbfJRKHx (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 18 Oct 2019 06:07:53 -0400
+Received: from [10.18.0.57] (unknown [10.18.0.57])
+        by mail.iot.bzh (Postfix) with ESMTPSA id DC8D440099
+        for <linux-can@vger.kernel.org>; Fri, 18 Oct 2019 12:07:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
+        t=1571393266; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=10gI+nNus9Pvk2M/3cuayK7Lj+q9ulnQZJqHzo6wN8Y=;
+        b=Rq7P6pPHmJOEi8yjZNJlGkDuak0EvQvlDQG6Yvi5ynGP7ok7Jx1+veo25XoSHuopiHRztK
+        WpWzfCVKoV+bRb0gPhRQdhRsz3AP8+eoWJ47Gf/qPYb+AMumlkL1nnZyPYulRufs9q7qb6
+        D5yc9mGPCsjzWdCmtu3Lo5UBzouVEkGa/EPRLLIcHdLjKGWPY62bEKgjtdSr+WBfDtUXnc
+        TXlCJuQWZuSUsgrdqGljdrpxnjrk8lRMu4wR4ZOoISetk0f8b3Z8LHOsTjcqRqvRp1+28h
+        bvpfBvF2/MTyw1PgBrUTYhaPY2hNWVLHlpF1Dy2qLp3fvQ2tQNBtLw8G7as5Rg==
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+From:   "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+Subject: Questions around J1939 backport to old kernel
+Organization: IOTBZH
+Message-ID: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
+Date:   Fri, 18 Oct 2019 12:07:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi,
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+I am wondering what the cost is to backport the j1939 module to an old 
+version like a v4.14 LTSI version.
 
-Dear Sir / Madam
+And what the impact is of backporting the whole CAN stack on the CAN 
+drivers ? Are there any modifications to drivers once the CAN stack is 
+updated ?
 
+Thanks.
 
-
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
-
-
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
+-- 
+Romain Forlot - Embedded Engineer - IoT.bzh
+romain.forlot@iot.bzh - www.iot.bzh - +33675142438
 
