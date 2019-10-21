@@ -2,168 +2,176 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA0CDC81B
-	for <lists+linux-can@lfdr.de>; Fri, 18 Oct 2019 17:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35E1DEB8D
+	for <lists+linux-can@lfdr.de>; Mon, 21 Oct 2019 14:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390228AbfJRPJe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Oct 2019 11:09:34 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:55285 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726299AbfJRPJe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Oct 2019 11:09:34 -0400
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iLTsi-0002LM-M8; Fri, 18 Oct 2019 17:09:32 +0200
-To:     Robert Schwebel <r.schwebel@pengutronix.de>,
-        "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
- <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: Questions around J1939 backport to old kernel
-Message-ID: <d32e1f1b-99cd-cef2-4028-e178a4787f91@pengutronix.de>
-Date:   Fri, 18 Oct 2019 17:09:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT"
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        id S1728218AbfJUMFR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Oct 2019 08:05:17 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:38323 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727985AbfJUMFR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Oct 2019 08:05:17 -0400
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191021120514epoutp013199629b74f4f113f2a7138ce5f98b1f~PqABWxXEK3168031680epoutp01e
+        for <linux-can@vger.kernel.org>; Mon, 21 Oct 2019 12:05:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191021120514epoutp013199629b74f4f113f2a7138ce5f98b1f~PqABWxXEK3168031680epoutp01e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1571659514;
+        bh=eION/f0Ms9Y49xzcf6LTMM0EdjvsR4RvafdknSwNs2k=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=N36qU5OrYTP3gqJa9Z/kHl3omqRINNbGFE7BCSfdBW0D0d+v5nlU572qg23ba+JIV
+         c96J02APiH/Qi7wwWCfHMMEefTZ10KQ/OpA9FbNwhvNQJBMsUfLThXdbaHKETXdf/s
+         GDmhz6S2NKELzlsDZELIExbmmq8vgKOslJ8dlxTc=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20191021120513epcas5p14267e3272efd912f4d743c3941bd1bf1~PqAAwvva40695206952epcas5p13;
+        Mon, 21 Oct 2019 12:05:13 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0E.A7.04480.9FE9DAD5; Mon, 21 Oct 2019 21:05:13 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60~PqAAec8Xk1113111131epcas5p2I;
+        Mon, 21 Oct 2019 12:05:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191021120513epsmtrp16f2e2f34d3c8bc7e51b53b96e0e16197~PqAAduvk42573625736epsmtrp1h;
+        Mon, 21 Oct 2019 12:05:13 +0000 (GMT)
+X-AuditID: b6c32a4b-cbbff70000001180-8c-5dad9ef9e249
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        36.CF.04081.9FE9DAD5; Mon, 21 Oct 2019 21:05:13 +0900 (KST)
+Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
+        [107.108.83.125]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191021120511epsmtip231b786b1a318310976b8dac13f821ad4~Pp-_tQGCt0303503035epsmtip2s;
+        Mon, 21 Oct 2019 12:05:11 +0000 (GMT)
+From:   Pankaj Sharma <pankj.sharma@samsung.com>
+To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
+        pankaj.dubey@samsung.com, rcsekar@samsung.com,
+        Pankaj Sharma <pankj.sharma@samsung.com>,
+        Sriram Dash <sriram.dash@samsung.com>
+Subject: [PATCH v3] can: m_can: add support for one shot mode
+Date:   Mon, 21 Oct 2019 17:34:40 +0530
+Message-Id: <1571659480-29109-1-git-send-email-pankj.sharma@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEIsWRmVeSWpSXmKPExsWy7bCmuu7PeWtjDW7c1baYc76FxeLAj+Ms
+        Fqu+T2W2uLxrDpvFi7XXWS3WL5rCYnFsgZjFoq1f2C2Wd91ntph1YQerxY317BZL7+1kdeDx
+        2LLyJpPHx0u3GT3u/FjK6NH/18Cjb8sqRo/Pm+QC2KK4bFJSczLLUov07RK4Mqb0NDEVXBSt
+        OLt/EmsD4wXBLkZODgkBE4kTt9rZuhi5OIQEdjNKXLp6hAUkISTwiVHi9ZtSiMQ3Ronbyyew
+        wHRceg5TtJdR4taKMIiiFiaJwytugyXYBPQkLr2fzAZiiwiESizrncAKUsQs0MQk0bW5lxkk
+        ISxgK7H50l8mEJtFQFXi5M83YHFeAQ+JtrnT2SC2yUncPNfJDNIsIbCFTWLulaesEAkXiQXb
+        jjFD2MISr45vYYewpSRe9rdB2dkSC3f3A13EAWRXSLTNEIYI20scuDIHLMwsoCmxfpc+SJhZ
+        gE+i9/cTJohqXomONiGIajWJqU/fMULYMhJ3Hm2GusxD4sO2E6yQcIiVePbrB/sERplZCEMX
+        MDKuYpRMLSjOTU8tNi0wzkst1ytOzC0uzUvXS87P3cQITgla3jsYN53zOcQowMGoxMPrMH1N
+        rBBrYllxZe4hRgkOZiUR3jsGa2OFeFMSK6tSi/Lji0pzUosPMUpzsCiJ805ivRojJJCeWJKa
+        nZpakFoEk2Xi4JRqYMxqduK7L7gx1/X45s//X76y2fnroovk51kt/poT7fbUFr/6dzma40C+
+        +wTWTeqV935ayBe+O5z9WTFkhe0N5uDw05KT2ssfnTnuLPTvQNP5PbYW33TNT/77INVmGWe0
+        8Pjre5suPhWYk/uk+q26xF6drmsTv/h3re+sm+9WkulZ8PWZDduP44uVWIozEg21mIuKEwGT
+        6kdcBQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGLMWRmVeSWpSXmKPExsWy7bCSvO7PeWtjDXoahC3mnG9hsTjw4ziL
+        xarvU5ktLu+aw2bxYu11Vov1i6awWBxbIGaxaOsXdovlXfeZLWZd2MFqcWM9u8XSeztZHXg8
+        tqy8yeTx8dJtRo87P5YyevT/NfDo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujCk9TUwFF0Ur
+        zu6fxNrAeEGwi5GTQ0LAROLS8yMsXYxcHEICuxkl2mavYu5i5ABKyEgs/lwNUSMssfLfc3aI
+        miYmiR1/T7OAJNgE9CQuvZ/MBmKLCIRL7JzQxQRiMwv0MEm03k0AsYUFbCU2X/oLFmcRUJU4
+        +fMNM4jNK+Ah0TZ3OhvEAjmJm+c6mScw8ixgZFjFKJlaUJybnltsWGCYl1quV5yYW1yal66X
+        nJ+7iREcelqaOxgvL4k/xCjAwajEw+swfU2sEGtiWXFl7iFGCQ5mJRHeOwZrY4V4UxIrq1KL
+        8uOLSnNSiw8xSnOwKInzPs07FikkkJ5YkpqdmlqQWgSTZeLglGpgVMm69XBxHOvrD5dzUp9f
+        CH6goOzYplnvPbPUjcuq6tvRcJ/Dz3gXrFvGG115vbGv8pqc0+c3rfEdG1/Pmme708bo01Sp
+        6a17r7/Ybnm9XuvvpZOvvDwmLo+dlPpfax3/mcIz8VfqLnbcuj/xvr6veMiCV8k/4pOtjf5M
+        /fauvOncRPt3YtmntiuxFGckGmoxFxUnAgB+bzbDOQIAAA==
+X-CMS-MailID: 20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60
+References: <CGME20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60@epcas5p2.samsung.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT
-Content-Type: multipart/mixed; boundary="jOCBHOcQXLfc272WJxjxcKs3ia2rFndKQ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Robert Schwebel <r.schwebel@pengutronix.de>,
- "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <d32e1f1b-99cd-cef2-4028-e178a4787f91@pengutronix.de>
-Subject: Re: Questions around J1939 backport to old kernel
-References: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
- <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
-In-Reply-To: <20191018144932.kipdgmmvdciucfcw@pengutronix.de>
+According to the CAN Specification (see ISO 11898-1:2015, 8.3.4
+Recovery Management), the M_CAN provides means for automatic
+retransmission of frames that have lost arbitration or that
+have been disturbed by errors during transmission. By default
+automatic retransmission is enabled.
 
---jOCBHOcQXLfc272WJxjxcKs3ia2rFndKQ
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+The Bosch MCAN controller has support for disabling automatic
+retransmission.
 
-On 10/18/19 4:49 PM, Robert Schwebel wrote:
-> On Fri, Oct 18, 2019 at 12:07:34PM +0200, Romain Forlot [IoT.bzh] wrote=
-:
->> I am wondering what the cost is to backport the j1939 module to an old=
+To support time-triggered communication as described in ISO
+11898-1:2015, chapter 9.2, the automatic retransmission may be
+disabled via CCCR.DAR.
 
->> version like a v4.14 LTSI version.
->>
->> And what the impact is of backporting the whole CAN stack on the CAN d=
-rivers
->> ? Are there any modifications to drivers once the CAN stack is updated=
- ?
->=20
-> Could you start using & testing it on current mainline kernels?
+CAN_CTRLMODE_ONE_SHOT is used for disabling automatic retransmission.
 
-Which CAN adapter are you planing to use?
+Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
+Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
+---
 
-regards,
-Marc
+changes in v3: 
+- resolving build errors for net-next branch
 
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+changes in v2:
+- rebase to net-next
 
+ drivers/net/can/m_can/m_can.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
---jOCBHOcQXLfc272WJxjxcKs3ia2rFndKQ--
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 562c8317e3aa..75e7490c4299 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -123,6 +123,7 @@ enum m_can_reg {
+ #define CCCR_CME_CANFD_BRS	0x2
+ #define CCCR_TXP		BIT(14)
+ #define CCCR_TEST		BIT(7)
++#define CCCR_DAR		BIT(6)
+ #define CCCR_MON		BIT(5)
+ #define CCCR_CSR		BIT(4)
+ #define CCCR_CSA		BIT(3)
+@@ -1135,7 +1136,7 @@ static void m_can_chip_config(struct net_device *dev)
+ 	if (cdev->version == 30) {
+ 	/* Version 3.0.x */
+ 
+-		cccr &= ~(CCCR_TEST | CCCR_MON |
++		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_DAR |
+ 			(CCCR_CMR_MASK << CCCR_CMR_SHIFT) |
+ 			(CCCR_CME_MASK << CCCR_CME_SHIFT));
+ 
+@@ -1145,7 +1146,7 @@ static void m_can_chip_config(struct net_device *dev)
+ 	} else {
+ 	/* Version 3.1.x or 3.2.x */
+ 		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_BRSE | CCCR_FDOE |
+-			  CCCR_NISO);
++			  CCCR_NISO | CCCR_DAR);
+ 
+ 		/* Only 3.2.x has NISO Bit implemented */
+ 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
+@@ -1165,6 +1166,10 @@ static void m_can_chip_config(struct net_device *dev)
+ 	if (cdev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+ 		cccr |= CCCR_MON;
+ 
++	/* Disable Auto Retransmission (all versions) */
++	if (cdev->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
++		cccr |= CCCR_DAR;
++
+ 	/* Write config */
+ 	m_can_write(cdev, M_CAN_CCCR, cccr);
+ 	m_can_write(cdev, M_CAN_TEST, test);
+@@ -1310,7 +1315,8 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
+ 	m_can_dev->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+ 					CAN_CTRLMODE_LISTENONLY |
+ 					CAN_CTRLMODE_BERR_REPORTING |
+-					CAN_CTRLMODE_FD;
++					CAN_CTRLMODE_FD |
++					CAN_CTRLMODE_ONE_SHOT;
+ 
+ 	/* Set properties depending on M_CAN version */
+ 	switch (m_can_dev->version) {
+-- 
+2.17.1
 
---sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2p1aIACgkQWsYho5Hk
-nSDp6wf/Z7st3Ntmn2QR+UBwvxlX1srUm3sPoKGIdWH4C0t0k/7//bCuFmneY7Vu
-BBfKugAh9CD4+CaIWrGhn0EUUlBAksciINhv5oASZNwoZ0QCnTg9rV2E6z2Ls/09
-bMtY9eEW39dvDJPmyzecwfAwcS8TgH36A/9Rcnx/T1PzA6m1+5ats/WbE6BbVS1U
-VKVoLKXRjMPxc7eKIm/DrCJ/iZFEWcbehsG0oAvydrb0rYMu7ZTY4lg+bjtH0LT7
-SpPybqywBsdSlVUEzztg65T+rSKiUebu3UPwUCwgGWJqm7x2C4DPpjOJIMXtWwh7
-SwRN0dfc5Lto1rMaB4d0Ic2rKO7hjA==
-=MnRb
------END PGP SIGNATURE-----
-
---sfOquzUYDT7qOejJyryQ8QfV1ViNrQlxT--
