@@ -2,176 +2,177 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D35E1DEB8D
-	for <lists+linux-can@lfdr.de>; Mon, 21 Oct 2019 14:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84294DEBC3
+	for <lists+linux-can@lfdr.de>; Mon, 21 Oct 2019 14:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbfJUMFR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Oct 2019 08:05:17 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:38323 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727985AbfJUMFR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Oct 2019 08:05:17 -0400
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191021120514epoutp013199629b74f4f113f2a7138ce5f98b1f~PqABWxXEK3168031680epoutp01e
-        for <linux-can@vger.kernel.org>; Mon, 21 Oct 2019 12:05:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191021120514epoutp013199629b74f4f113f2a7138ce5f98b1f~PqABWxXEK3168031680epoutp01e
+        id S1727256AbfJUMN4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Oct 2019 08:13:56 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:35322 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728536AbfJUMNz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Oct 2019 08:13:55 -0400
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20191021121352epoutp049b8ebb45347313def2b73494f3375a95~PqHji2f8I1056810568epoutp04W
+        for <linux-can@vger.kernel.org>; Mon, 21 Oct 2019 12:13:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20191021121352epoutp049b8ebb45347313def2b73494f3375a95~PqHji2f8I1056810568epoutp04W
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1571659514;
-        bh=eION/f0Ms9Y49xzcf6LTMM0EdjvsR4RvafdknSwNs2k=;
+        s=mail20170921; t=1571660032;
+        bh=IO3ukgqRMSs5HK7E5ErftQstNvRbP6iQqkoooqC05YU=;
         h=From:To:Cc:Subject:Date:References:From;
-        b=N36qU5OrYTP3gqJa9Z/kHl3omqRINNbGFE7BCSfdBW0D0d+v5nlU572qg23ba+JIV
-         c96J02APiH/Qi7wwWCfHMMEefTZ10KQ/OpA9FbNwhvNQJBMsUfLThXdbaHKETXdf/s
-         GDmhz6S2NKELzlsDZELIExbmmq8vgKOslJ8dlxTc=
+        b=WI3RzQXU+oT9fDSOsey1vJ3z+3O5bHF+XP1oju1lqDfmXGM3nAHJDz0Inn/bxgVln
+         m18hzfJNyk7Hsb93YukqRFVWZv9CR2Vurwj3F7hLoRWsJySGS38jWVhXvqBmJ+8rKE
+         c6BASP12vqcLKnW5SqmO3MKEAUZ7WAZ9QNIAX74U=
 Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
         epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20191021120513epcas5p14267e3272efd912f4d743c3941bd1bf1~PqAAwvva40695206952epcas5p13;
-        Mon, 21 Oct 2019 12:05:13 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        20191021121351epcas5p13ef60321fe49e17a3b527b6b0758b0eb~PqHjHSFGq1391813918epcas5p1l;
+        Mon, 21 Oct 2019 12:13:51 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
         epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        0E.A7.04480.9FE9DAD5; Mon, 21 Oct 2019 21:05:13 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60~PqAAec8Xk1113111131epcas5p2I;
-        Mon, 21 Oct 2019 12:05:13 +0000 (GMT)
+        76.B8.04480.FF0ADAD5; Mon, 21 Oct 2019 21:13:51 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78~PqHieWDCw2562125621epcas5p3D;
+        Mon, 21 Oct 2019 12:13:50 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191021120513epsmtrp16f2e2f34d3c8bc7e51b53b96e0e16197~PqAAduvk42573625736epsmtrp1h;
-        Mon, 21 Oct 2019 12:05:13 +0000 (GMT)
-X-AuditID: b6c32a4b-cbbff70000001180-8c-5dad9ef9e249
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191021121350epsmtrp21c0fb01e88a9a1b608b6a547ab25a28e~PqHidg0CO2033120331epsmtrp2B;
+        Mon, 21 Oct 2019 12:13:50 +0000 (GMT)
+X-AuditID: b6c32a4b-cbbff70000001180-82-5dada0ff2a7a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        36.CF.04081.9FE9DAD5; Mon, 21 Oct 2019 21:05:13 +0900 (KST)
+        C2.00.04081.EF0ADAD5; Mon, 21 Oct 2019 21:13:50 +0900 (KST)
 Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
-        [107.108.83.125]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191021120511epsmtip231b786b1a318310976b8dac13f821ad4~Pp-_tQGCt0303503035epsmtip2s;
-        Mon, 21 Oct 2019 12:05:11 +0000 (GMT)
+        [107.108.83.125]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191021121348epsmtip1c366be94b1f5180dae6dd06ecf441435~PqHgSjX1e1119511195epsmtip1K;
+        Mon, 21 Oct 2019 12:13:48 +0000 (GMT)
 From:   Pankaj Sharma <pankj.sharma@samsung.com>
 To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
         eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
         pankaj.dubey@samsung.com, rcsekar@samsung.com,
+        jhofstee@victronenergy.com, simon.horman@netronome.com,
         Pankaj Sharma <pankj.sharma@samsung.com>,
         Sriram Dash <sriram.dash@samsung.com>
-Subject: [PATCH v3] can: m_can: add support for one shot mode
-Date:   Mon, 21 Oct 2019 17:34:40 +0530
-Message-Id: <1571659480-29109-1-git-send-email-pankj.sharma@samsung.com>
+Subject: [PATCH v2] can: m_can: add support for handling arbitration error
+Date:   Mon, 21 Oct 2019 17:43:36 +0530
+Message-Id: <1571660016-29726-1-git-send-email-pankj.sharma@samsung.com>
 X-Mailer: git-send-email 2.7.4
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEIsWRmVeSWpSXmKPExsWy7bCmuu7PeWtjDW7c1baYc76FxeLAj+Ms
-        Fqu+T2W2uLxrDpvFi7XXWS3WL5rCYnFsgZjFoq1f2C2Wd91ntph1YQerxY317BZL7+1kdeDx
-        2LLyJpPHx0u3GT3u/FjK6NH/18Cjb8sqRo/Pm+QC2KK4bFJSczLLUov07RK4Mqb0NDEVXBSt
-        OLt/EmsD4wXBLkZODgkBE4kTt9rZuhi5OIQEdjNKXLp6hAUkISTwiVHi9ZtSiMQ3Ronbyyew
-        wHRceg5TtJdR4taKMIiiFiaJwytugyXYBPQkLr2fzAZiiwiESizrncAKUsQs0MQk0bW5lxkk
-        ISxgK7H50l8mEJtFQFXi5M83YHFeAQ+JtrnT2SC2yUncPNfJDNIsIbCFTWLulaesEAkXiQXb
-        jjFD2MISr45vYYewpSRe9rdB2dkSC3f3A13EAWRXSLTNEIYI20scuDIHLMwsoCmxfpc+SJhZ
-        gE+i9/cTJohqXomONiGIajWJqU/fMULYMhJ3Hm2GusxD4sO2E6yQcIiVePbrB/sERplZCEMX
-        MDKuYpRMLSjOTU8tNi0wzkst1ytOzC0uzUvXS87P3cQITgla3jsYN53zOcQowMGoxMPrMH1N
-        rBBrYllxZe4hRgkOZiUR3jsGa2OFeFMSK6tSi/Lji0pzUosPMUpzsCiJ805ivRojJJCeWJKa
-        nZpakFoEk2Xi4JRqYMxqduK7L7gx1/X45s//X76y2fnroovk51kt/poT7fbUFr/6dzma40C+
-        +wTWTeqV935ayBe+O5z9WTFkhe0N5uDw05KT2ssfnTnuLPTvQNP5PbYW33TNT/77INVmGWe0
-        8Pjre5suPhWYk/uk+q26xF6drmsTv/h3re+sm+9WkulZ8PWZDduP44uVWIozEg21mIuKEwGT
-        6kdcBQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGLMWRmVeSWpSXmKPExsWy7bCSvO7PeWtjDXoahC3mnG9hsTjw4ziL
-        xarvU5ktLu+aw2bxYu11Vov1i6awWBxbIGaxaOsXdovlXfeZLWZd2MFqcWM9u8XSeztZHXg8
-        tqy8yeTx8dJtRo87P5YyevT/NfDo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujCk9TUwFF0Ur
-        zu6fxNrAeEGwi5GTQ0LAROLS8yMsXYxcHEICuxkl2mavYu5i5ABKyEgs/lwNUSMssfLfc3aI
-        miYmiR1/T7OAJNgE9CQuvZ/MBmKLCIRL7JzQxQRiMwv0MEm03k0AsYUFbCU2X/oLFmcRUJU4
-        +fMNM4jNK+Ah0TZ3OhvEAjmJm+c6mScw8ixgZFjFKJlaUJybnltsWGCYl1quV5yYW1yal66X
-        nJ+7iREcelqaOxgvL4k/xCjAwajEw+swfU2sEGtiWXFl7iFGCQ5mJRHeOwZrY4V4UxIrq1KL
-        8uOLSnNSiw8xSnOwKInzPs07FikkkJ5YkpqdmlqQWgSTZeLglGpgVMm69XBxHOvrD5dzUp9f
-        CH6goOzYplnvPbPUjcuq6tvRcJ/Dz3gXrFvGG115vbGv8pqc0+c3rfEdG1/Pmme708bo01Sp
-        6a17r7/Ybnm9XuvvpZOvvDwmLo+dlPpfax3/mcIz8VfqLnbcuj/xvr6veMiCV8k/4pOtjf5M
-        /fauvOncRPt3YtmntiuxFGckGmoxFxUnAgB+bzbDOQIAAA==
-X-CMS-MailID: 20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjleLIzCtJLcpLzFFi42LZdlhTQ/f/grWxBhsnq1nMOd/CYnHgx3EW
+        ixXv97FarPo+ldni8q45bBYv1l5ntVi/aAqLxbEFYhaLtn5ht1jedZ/ZYtaFHawWN3ZyWtxY
+        z26x9N5OVgc+jy0rbzJ5fLx0m9Hjzo+ljB7Tux8ye/T/NfDo27KK0ePzJjmPSQc/sAdwRHHZ
+        pKTmZJalFunbJXBlnNo+kblgpmjFlx/trA2M5wS7GDk5JARMJJqe72LrYuTiEBLYzSix/t01
+        KOcTo8S8J30sEM43Rom+5x9Zuxg5wFoO7SuBiO9llDi1+jsjhNPCJDHhx0N2kLlsAnoSl95P
+        ZgOxRQRCJZb1TmAFKWIW2MMksXb6arCEsICXxIwzx8FsFgFViWt7ljCC2LwCHhJ79u9igzhQ
+        TuLmuU5mkGYJgTNsEp3vJrNCJFwk1r5/wg5hC0u8Or4FypaS+PxuL1RztsTC3f0sEGdXSLTN
+        EIYI20scuDIHLMwsoCmxfpc+SJhZgE+i9/cTJohqXomONiGIajWJqU/fMULYMhJ3Hm2GGu4h
+        8frNPLBjhARiJZa+P842gVFmFsLQBYyMqxglUwuKc9NTi00LjPNSy/WKE3OLS/PS9ZLzczcx
+        glOHlvcOxk3nfA4xCnAwKvHwOkxfEyvEmlhWXJl7iFGCg1lJhPeOwdpYId6UxMqq1KL8+KLS
+        nNTiQ4zSHCxK4ryTWK/GCAmkJ5akZqemFqQWwWSZODilGhjjP1yQXaQ31y3x2n/OC5/nXaoP
+        +Lluq3JjbMz7mDSzpWdnbbMUuPL2wAfv07NUHuQcdjR78Sxqs7Gn7tSeA6FNE3RE1dg9Zduf
+        5Lwt8st33Hqb6/vphfK6+xvXLZSrzjnWFdoUeYRxwgcH3e8B1gyyF4/YMl73tuEtLPoqf/qb
+        o9iuWQ2vvq5XYinOSDTUYi4qTgQAZU62DxkDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOLMWRmVeSWpSXmKPExsWy7bCSnO6/BWtjDY52GFjMOd/CYnHgx3EW
+        ixXv97FarPo+ldni8q45bBYv1l5ntVi/aAqLxbEFYhaLtn5ht1jedZ/ZYtaFHawWN3ZyWtxY
+        z26x9N5OVgc+jy0rbzJ5fLx0m9Hjzo+ljB7Tux8ye/T/NfDo27KK0ePzJjmPSQc/sAdwRHHZ
+        pKTmZJalFunbJXBlnNo+kblgpmjFlx/trA2M5wS7GDk4JARMJA7tK+li5OQQEtjNKNHe7QsR
+        lpFY/LkaJCwhICyx8t9zdoiSJiaJNfdlQGw2AT2JS+8ns4HYIgLhEjsndDF1MXJxMAucYJI4
+        9uMuK0hCWMBLYsaZ42BFLAKqEtf2LGEEsXkFPCT27N/FBrFATuLmuU7mCYw8CxgZVjFKphYU
+        56bnFhsWGOallusVJ+YWl+al6yXn525iBAenluYOxstL4g8xCnAwKvHwOkxfEyvEmlhWXJl7
+        iFGCg1lJhPeOwdpYId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rxP845FCgmkJ5akZqemFqQWwWSZ
+        ODilGhgTzZ5e6Z1XJH9n2kp7u5+Xlnaetn5+jG3fhJrkLSEmgVXVpjdin82cuq4s86Lspcwt
+        flPdOb7bc32e2bch7MXHe5qFQhN9big0RfRZqb2M/FxTv3Nvu4P/inJmLvGrAmc/WKlfyT/3
+        NmJfzCSNuQ9WWFlZcfrusWXNCZvtOjXK4Aqv7xr2L/+UWIozEg21mIuKEwHx7U4MSgIAAA==
+X-CMS-MailID: 20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
-X-CMS-RootMailID: 20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60
-References: <CGME20191021120513epcas5p2fd23f5dbdff6a0e6aa3b0726b30e4b60@epcas5p2.samsung.com>
+X-CMS-RootMailID: 20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78
+References: <CGME20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78@epcas5p3.samsung.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-According to the CAN Specification (see ISO 11898-1:2015, 8.3.4
-Recovery Management), the M_CAN provides means for automatic
-retransmission of frames that have lost arbitration or that
-have been disturbed by errors during transmission. By default
-automatic retransmission is enabled.
+The Bosch MCAN hardware (3.1.0 and above) supports interrupt flag to
+detect Protocol error in arbitration phase.
 
-The Bosch MCAN controller has support for disabling automatic
-retransmission.
+Transmit error statistics is currently not updated from the MCAN driver.
+Protocol error in arbitration phase is a TX error and the network
+statistics should be updated accordingly.
 
-To support time-triggered communication as described in ISO
-11898-1:2015, chapter 9.2, the automatic retransmission may be
-disabled via CCCR.DAR.
-
-CAN_CTRLMODE_ONE_SHOT is used for disabling automatic retransmission.
+The member "tx_error" of "struct net_device_stats" should be incremented
+as arbitration is a transmit protocol error. Also "arbitration_lost" of
+"struct can_device_stats" should be incremented to report arbitration
+lost.
 
 Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
 Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
 ---
 
-changes in v3: 
-- resolving build errors for net-next branch
-
 changes in v2:
-- rebase to net-next
+- common m_can_ prefix for is_protocol_err function
+- handling stats even if the allocation of the skb fails
+- resolving build errors on net-next branch
 
- drivers/net/can/m_can/m_can.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/net/can/m_can/m_can.c | 37 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 562c8317e3aa..75e7490c4299 100644
+index 75e7490c4299..a736297a875f 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -123,6 +123,7 @@ enum m_can_reg {
- #define CCCR_CME_CANFD_BRS	0x2
- #define CCCR_TXP		BIT(14)
- #define CCCR_TEST		BIT(7)
-+#define CCCR_DAR		BIT(6)
- #define CCCR_MON		BIT(5)
- #define CCCR_CSR		BIT(4)
- #define CCCR_CSA		BIT(3)
-@@ -1135,7 +1136,7 @@ static void m_can_chip_config(struct net_device *dev)
- 	if (cdev->version == 30) {
- 	/* Version 3.0.x */
+@@ -778,6 +778,38 @@ static inline bool is_lec_err(u32 psr)
+ 	return psr && (psr != LEC_UNUSED);
+ }
  
--		cccr &= ~(CCCR_TEST | CCCR_MON |
-+		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_DAR |
- 			(CCCR_CMR_MASK << CCCR_CMR_SHIFT) |
- 			(CCCR_CME_MASK << CCCR_CME_SHIFT));
- 
-@@ -1145,7 +1146,7 @@ static void m_can_chip_config(struct net_device *dev)
- 	} else {
- 	/* Version 3.1.x or 3.2.x */
- 		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_BRSE | CCCR_FDOE |
--			  CCCR_NISO);
-+			  CCCR_NISO | CCCR_DAR);
- 
- 		/* Only 3.2.x has NISO Bit implemented */
- 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-@@ -1165,6 +1166,10 @@ static void m_can_chip_config(struct net_device *dev)
- 	if (cdev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
- 		cccr |= CCCR_MON;
- 
-+	/* Disable Auto Retransmission (all versions) */
-+	if (cdev->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-+		cccr |= CCCR_DAR;
++static inline bool m_can_is_protocol_err(u32 irqstatus)
++{
++	return irqstatus & IR_ERR_LEC_31X;
++}
 +
- 	/* Write config */
- 	m_can_write(cdev, M_CAN_CCCR, cccr);
- 	m_can_write(cdev, M_CAN_TEST, test);
-@@ -1310,7 +1315,8 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
- 	m_can_dev->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
- 					CAN_CTRLMODE_LISTENONLY |
- 					CAN_CTRLMODE_BERR_REPORTING |
--					CAN_CTRLMODE_FD;
-+					CAN_CTRLMODE_FD |
-+					CAN_CTRLMODE_ONE_SHOT;
++static int m_can_handle_protocol_error(struct net_device *dev, u32 irqstatus)
++{
++	struct net_device_stats *stats = &dev->stats;
++	struct m_can_classdev *cdev = netdev_priv(dev);
++	struct can_frame *cf;
++	struct sk_buff *skb;
++
++	/* propagate the error condition to the CAN stack */
++	skb = alloc_can_err_skb(dev, &cf);
++	if (unlikely(!skb)) {
++		netdev_dbg(dev, "allocation of skb failed\n");
++		stats->tx_errors++;
++		return 0;
++	}
++	if (cdev->version >= 31 && (irqstatus & IR_PEA)) {
++		netdev_dbg(dev, "Protocol error in Arbitration fail\n");
++		stats->tx_errors++;
++		cdev->can.can_stats.arbitration_lost++;
++		cf->can_id |= CAN_ERR_LOSTARB;
++		cf->data[0] |= CAN_ERR_LOSTARB_UNSPEC;
++	}
++
++	netif_receive_skb(skb);
++
++	return 1;
++}
++
+ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
+ 				   u32 psr)
+ {
+@@ -792,6 +824,11 @@ static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstatus,
+ 	    is_lec_err(psr))
+ 		work_done += m_can_handle_lec_err(dev, psr & LEC_UNUSED);
  
- 	/* Set properties depending on M_CAN version */
- 	switch (m_can_dev->version) {
++	/* handle protocol errors in arbitration phase */
++	if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
++	    m_can_is_protocol_err(irqstatus))
++		work_done += m_can_handle_protocol_error(dev, irqstatus);
++
+ 	/* other unproccessed error interrupts */
+ 	m_can_handle_other_err(dev, irqstatus);
+ 
 -- 
 2.17.1
 
