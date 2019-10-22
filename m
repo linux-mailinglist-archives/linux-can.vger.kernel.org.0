@@ -2,141 +2,236 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7B6E04FA
-	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2019 15:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CCFE06CD
+	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2019 16:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387746AbfJVN3L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Oct 2019 09:29:11 -0400
-Received: from mail-eopbgr00048.outbound.protection.outlook.com ([40.107.0.48]:57927
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387488AbfJVN3K (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 22 Oct 2019 09:29:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FEaby9D34gYYxhDVhq4/vwwGNKGGIcxW6dj5GHIAuZp2A8a9qABPdcaRJrLujdvq2OagaOgBec33s+Yjmm3/O+G28BuBIS77T3aTaD8h4Q84R1ftB/iGcowyg2p96n4JH7yXSH4KKjxXigfVen2jkZDaW7R3nnI3D1JDyOsxwDhy8ghpIQTnW6xvDzWJzYq6j34J4XlnMzQOUm9qroCygcAnLSjE2aBsY7dXnXvZcuSdeWNJ8FDvQd0KM1S8T1GRj/Me1AhFSfQkvCHrQ4f300ekcnAIdSfN9oA61z/KJNY4YXnS4ue7hCw8JSri5tKoOofJbKZvukprECYMtRooiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2F9+zLNPVrsJgY2++L21LW7YAByYeTOEMklEAqvCTV8=;
- b=WH/xFmDQcUv+z62LvwPuBp+rHfoFk1pRo8v2AAqC+xJRMUM9eybaYocMUnhCSsQeGy1EEgVkGdhZfnClxAHn0elolU1ZnNQq8sPMI79B3IN9GOJNrOZ0kbI2OhcPQNsobuVnMPyLb76SsIcjHLkhY7IxVTrI5zSkbTE+0vJbUo5IQYCLCXDi72eUFvMWvn145JsmlTFsdInBEKPfuHBGWam3qUYTLV4DH1OBwIrqniwfFx+ER268fFSVplWUTy9Y1ckWI6bSI2Ss5FWTWpgTv8w1tJOrDxHTk/E2L41XwiJku4SQ1W8P8sqX4zi4Q9y2/qPW+Lsv2r1OnO1Ge2CXpg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=peak-system.com; dmarc=pass action=none
- header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2F9+zLNPVrsJgY2++L21LW7YAByYeTOEMklEAqvCTV8=;
- b=ZaNLcEZzjb/W1owY2+rTmxlllcSifwbB/aB96Hf7741skhMvxCS0DsbZ9q7epwOA8+9fG9kdAnG/5TchdCmOZGbzekpBowdYsIYZbJ65lE/zPUbMWq+AF0Qg0naLXXiWFoWTGWMX8+zm+1/uverkRKUUVKrJafaU4hUlQmBBRZc=
-Received: from AM6PR03MB4006.eurprd03.prod.outlook.com (20.177.37.97) by
- AM6PR03MB4805.eurprd03.prod.outlook.com (20.177.199.206) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2367.24; Tue, 22 Oct 2019 13:29:07 +0000
-Received: from AM6PR03MB4006.eurprd03.prod.outlook.com
- ([fe80::e93e:a46a:3c6a:c0f7]) by AM6PR03MB4006.eurprd03.prod.outlook.com
- ([fe80::e93e:a46a:3c6a:c0f7%7]) with mapi id 15.20.2347.028; Tue, 22 Oct 2019
- 13:29:07 +0000
-From:   =?utf-8?B?U3TDqXBoYW5lIEdyb3NqZWFu?= <s.grosjean@peak-system.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     linux-can Mailing List <linux-can@vger.kernel.org>
-Subject: RE: [PATCH 2/2] can/peak_usb/pcan_usb: add support of rxerr/txerr
- counters
-Thread-Topic: [PATCH 2/2] can/peak_usb/pcan_usb: add support of rxerr/txerr
- counters
-Thread-Index: AQHVfbPIskM4lsaY10OX0UftlC6fNqdQjXSAgAsbXvCACxUWwA==
-Date:   Tue, 22 Oct 2019 13:29:06 +0000
-Message-ID: <AM6PR03MB4006585791DD38A32C401BA2D6680@AM6PR03MB4006.eurprd03.prod.outlook.com>
-References: <20191008083545.4569-1-s.grosjean@peak-system.com>
- <20191008083545.4569-3-s.grosjean@peak-system.com>
- <4416597c-6db7-057d-36b5-dc4b2c15117f@pengutronix.de>
- <AM6PR03MB4006315428304DA4419935E4D6930@AM6PR03MB4006.eurprd03.prod.outlook.com>
-In-Reply-To: <AM6PR03MB4006315428304DA4419935E4D6930@AM6PR03MB4006.eurprd03.prod.outlook.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=s.grosjean@peak-system.com; 
-x-originating-ip: [185.109.201.203]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 609c52d2-3fbf-4dcb-9079-08d756f3d090
-x-ms-traffictypediagnostic: AM6PR03MB4805:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <AM6PR03MB4805ED2BD8379F4AF593381FD6680@AM6PR03MB4805.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 01986AE76B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(136003)(376002)(396003)(366004)(39840400004)(199004)(189003)(13464003)(256004)(14444005)(446003)(186003)(26005)(102836004)(11346002)(6506007)(53546011)(76176011)(15974865002)(486006)(476003)(66066001)(7696005)(66574012)(52536014)(85202003)(316002)(5660300002)(966005)(14454004)(508600001)(71190400001)(71200400001)(25786009)(305945005)(74316002)(8936002)(81166006)(85182001)(81156014)(86362001)(8676002)(7736002)(229853002)(4326008)(6246003)(99286004)(3846002)(2906002)(64756008)(55016002)(9686003)(6306002)(66446008)(76116006)(66946007)(66476007)(66556008)(6916009)(6116002)(6436002)(33656002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR03MB4805;H:AM6PR03MB4006.eurprd03.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: peak-system.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: O70JlsPWKWXdJ/lkqWvYr9xTzPacqqTadYqJM+ZeyfM5MNdZ70b9YUVU7G2aZocwwKLpW2vWQCEEHa1EyJSLTxsns4EGjVohoRH5gE0LAfQfz1XsCj8SSf7RWEqupiscjS15tJ8MCpSRWdBPHlEOrGnmj80U2Am8LbRC/rxFEsfJnw46SnFdgUoFqnxxRZQW3EJ8oI8wcG9PB927to5+XpenIKQ237wHuoXrWBBLfshIAdZ0lgsc5H+FIbcGC5ys+OArPwEplwiel7yMjaDtZNxQbGGmrK96Jl0XFMFGLfyPv8SnUAYWsUUpaueCnWjKFBtmHrJZYh9cVUB6N+nqpEpN5tzu/eXc31LBcKR0d2WO33N+jztjkUATsiWWlAw7aHB4y57kJHAKxdpOHMjGko2OKjFH2wztn5zUOuFqmYwWszxvxN/5ydPzgGBLHcWDqNOLLjCewRShBuFLpEx10roJYgfStcvLDPGmn/rhefI=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1732105AbfJVOx4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Oct 2019 10:53:56 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:41427 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726955AbfJVOx4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Oct 2019 10:53:56 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iMvXk-0008DA-LL; Tue, 22 Oct 2019 16:53:52 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:dcd0:3ded:5374:df72] (unknown [IPv6:2a03:f580:87bc:d400:dcd0:3ded:5374:df72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EAB6246CA77;
+        Tue, 22 Oct 2019 14:53:48 +0000 (UTC)
+To:     Vincent Prince <vincent.prince.fr@gmail.com>
+Cc:     jiri@resnulli.us, jhs@mojatatu.com, netdev@vger.kernel.org,
+        dave.taht@gmail.com, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, xiyou.wangcong@gmail.com,
+        davem@davemloft.net
+References: <20190327165632.10711-1-mkl@pengutronix.de>
+ <1571750597-14030-1-git-send-email-vincent.prince.fr@gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXzuQENBFxSzJYBCAC58uHRFEjVVE3J
+ 31eyEQT6H1zSFCccTMPO/ewwAnotQWo98Bc67ecmprcnjRjSUKTbyY/eFxS21JnC4ZB0pJKx
+ MNwK6zq71wLmpseXOgjufuG3kvCgwHLGf/nkBHXmSINHvW00eFK/kJBakwHEbddq8Dr4ewmr
+ G7yr8d6A3CSn/qhOYWhIxNORK3SVo4Io7ExNX/ljbisGsgRzsWvY1JlN4sabSNEr7a8YaqTd
+ 2CfFe/5fPcQRGsfhAbH2pVGigr7JddONJPXGE7XzOrx5KTwEv19H6xNe+D/W3FwjZdO4TKIo
+ vcZveSDrFWOi4o2Te4O5OB/2zZbNWPEON8MaXi9zABEBAAGJA3IEGAEKACYWIQTBQAugs5ie
+ b7x9W1wrXuIRxYrqVAUCXFLMlgIbAgUJAeKNmgFACRArXuIRxYrqVMB0IAQZAQoAHRYhBJrx
+ JF84Dn3PPNRrhVrGIaOR5J0gBQJcUsyWAAoJEFrGIaOR5J0grw4H/itil/yryJCvzi6iuZHS
+ suSHHOiEf+UQHib1MLP96LM7FmDabjVSmJDpH4TsMu17A0HTG+bPMAdeia0+q9FWSvSHYW8D
+ wNhfkb8zojpa37qBpVpiNy7r6BKGSRSoFOv6m/iIoRJuJ041AEKao6djj/FdQF8OV1EtWKRO
+ +nE2bNuDCcwHkhHP+FHExdzhKSmnIsMjGpGwIQKN6DxlJ7fN4W7UZFIQdSO21ei+akinBo4K
+ O0uNCnVmePU1UzrwXKG2sS2f97A+sZE89vkc59NtfPHhofI3JkmYexIF6uqLA3PumTqLQ2Lu
+ bywPAC3YNphlhmBrG589p+sdtwDQlpoH9O7NeBAAg/lyGOUUIONrheii/l/zR0xxr2TDE6tq
+ 6HZWdtjWoqcaky6MSyJQIeJ20AjzdV/PxMkd8zOijRVTnlK44bcfidqFM6yuT1bvXAO6NOPy
+ pvBRnfP66L/xECnZe7s07rXpNFy72XGNZwhj89xfpK4a9E8HQcOD0mNtCJaz7TTugqBOsQx2
+ 45VPHosmhdtBQ6/gjlf2WY9FXb5RyceeSuK4lVrz9uZB+fUHBge/giOSsrqFo/9fWAZsE67k
+ 6Mkdbpc7ZQwxelcpP/giB9N+XAfBsffQ8q6kIyuFV4ILsIECCIA4nt1rYmzphv6t5J6PmlTq
+ TzW9jNzbYANoOFAGnjzNRyc9i8UiLvjhTzaKPBOkQfhStEJaZrdSWuR/7Tt2wZBBoNTsgNAw
+ A+cEu+SWCvdX7vNpsCHMiHtcEmVt5R0Tex1Ky87EfXdnGR2mDi6Iyxi3MQcHez3C61Ga3Baf
+ P8UtXR6zrrrlX22xXtpNJf4I4Z6RaLpB/avIXTFXPbJ8CUUbVD2R2mZ/jyzaTzgiABDZspbS
+ gw17QQUrKqUog0nHXuaGGA1uvreHTnyBWx5P8FP7rhtvYKhw6XdJ06ns+2SFcQv0Bv6PcSDK
+ aRXmnW+OsDthn84x1YkfGIRJEPvvmiOKQsFEiB4OUtTX2pheYmZcZc81KFfJMmE8Z9+LT6Ry
+ uSS5AQ0EXFLNDgEIAL14qAzTMCE1PwRrYJRI/RSQGAGF3HLdYvjbQd9Ozzg02K3mNCF2Phb1
+ cjsbMk/V6WMxYoZCEtCh4X2GjQG2GDDW4KC9HOa8cTmr9Vcno+f+pUle09TMzWDgtnH92WKx
+ d0FIQev1zDbxU7lk1dIqyOjjpyhmR8Put6vgunvuIjGJ/GapHL/O0yjVlpumtmow6eME2muc
+ TeJjpapPWBGcy/8VU4LM8xMeMWv8DtQML5ogyJxZ0Smt+AntIzcF9miV2SeYXA3OFiojQstF
+ vScN7owL1XiQ3UjJotCp6pUcSVgVv0SgJXbDo5Nv87M2itn68VPfTu2uBBxRYqXQovsR++kA
+ EQEAAYkCPAQYAQoAJhYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUs0OAhsMBQkB4o0iAAoJ
+ ECte4hHFiupUbioQAJ40bEJmMOF28vFcGvQrpI+lfHJGk9zSrh4F4SlJyOVWV1yWyUAINr8w
+ v1aamg2nAppZ16z4nAnGU/47tWZ4P8blLVG8x4SWzz3D7MCy1FsQBTrWGLqWldPhkBAGp2VH
+ xDOK4rLhuQWx3H5zd3kPXaIgvHI3EliWaQN+u2xmTQSJN75I/V47QsaPvkm4TVe3JlB7l1Fg
+ OmSvYx31YC+3slh89ayjPWt8hFaTLnB9NaW9bLhs3E2ESF9Dei0FRXIt3qnFV/hnETsx3X4h
+ KEnXxhSRDVeURP7V6P/z3+WIfddVKZk5ZLHi39fJpxvsg9YLSfStMJ/cJfiPXk1vKdoa+FjN
+ 7nGAZyF6NHTNhsI7aHnvZMDavmAD3lK6CY+UBGtGQA3QhrUc2cedp1V53lXwor/D/D3Wo9wY
+ iSXKOl4fFCh2Peo7qYmFUaDdyiCxvFm+YcIeMZ8wO5udzkjDtP4lWKAn4tUcdcwMOT5d0I3q
+ WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
+ lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
+ QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
+Subject: Re: [PATCH v2] net: sch_generic: Use pfifo_fast as fallback scheduler
+ for CAN hardware
+Message-ID: <84b8ce24-fe5d-ead0-0d1d-03ea24b36f71@pengutronix.de>
+Date:   Tue, 22 Oct 2019 16:53:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: peak-system.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 609c52d2-3fbf-4dcb-9079-08d756f3d090
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2019 13:29:06.3636
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: D6n82MXAx+EBcuWpwS+zdJrZbR5Y1opVIxgMdmlqkmxT7A+6BI+a9h6cWDZtCh8aVCrzMMgghKd3jtM0MTLyqUkaEgipIjZP2XsL4tupSjE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR03MB4805
+In-Reply-To: <1571750597-14030-1-git-send-email-vincent.prince.fr@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="zsdubcn26iXCvlyTNyB5qRMGbtp1jgx74"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-UGluZw0KDQoNCuKAlCBTdMOpcGhhbmUNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0K
-PiBGcm9tOiBTdMOpcGhhbmUgR3Jvc2plYW4NCj4gU2VudDogbWFyZGkgMTUgb2N0b2JyZSAyMDE5
-IDE0OjIxDQo+IFRvOiBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPg0KPiBD
-YzogbGludXgtY2FuIE1haWxpbmcgTGlzdCA8bGludXgtY2FuQHZnZXIua2VybmVsLm9yZz4NCj4g
-U3ViamVjdDogUkU6IFtQQVRDSCAyLzJdIGNhbi9wZWFrX3VzYi9wY2FuX3VzYjogYWRkIHN1cHBv
-cnQgb2YgcnhlcnIvdHhlcnINCj4gY291bnRlcnMNCj4NCj4gSGVsbG8gTWFyYywNCj4NCj4gU2Vl
-IG15IGNvbW1lbnRzIGJlbG93Lg0KPg0KPiBUaGFuayB5b3UsDQo+DQo+IOKAlCBTdMOpcGhhbmUN
-Cj4NCj4gPiA+ICAvKg0KPiA+ID4gICAqIHN0YXJ0IGludGVyZmFjZQ0KPiA+ID4gICAqLw0KPiA+
-ID4gIHN0YXRpYyBpbnQgcGNhbl91c2Jfc3RhcnQoc3RydWN0IHBlYWtfdXNiX2RldmljZSAqZGV2
-KSAgew0KPiA+ID4gIHN0cnVjdCBwY2FuX3VzYiAqcGRldiA9IGNvbnRhaW5lcl9vZihkZXYsIHN0
-cnVjdCBwY2FuX3VzYiwgZGV2KTsNCj4gPiA+ICtpbnQgZXJyOw0KPiA+ID4NCj4gPiA+ICAvKiBu
-dW1iZXIgb2YgYml0cyB1c2VkIGluIHRpbWVzdGFtcHMgcmVhZCBmcm9tIGFkYXB0ZXIgc3RydWN0
-ICovDQo+ID4gPiAgcGVha191c2JfaW5pdF90aW1lX3JlZigmcGRldi0+dGltZV9yZWYsICZwY2Fu
-X3VzYik7DQo+ID4gPg0KPiA+ID4gK3BkZXYtPmJlYy5yeGVyciA9IDA7DQo+ID4gPiArcGRldi0+
-YmVjLnR4ZXJyID0gMDsNCj4gPiA+ICsNCj4gPiA+ICsvKiBiZSBub3RpZmllZCBvbiBhbnkgZXJy
-b3IgY291bnRlciBjaGFuZ2UgKi8NCj4gPg0KPiA+IERvZXMgdGhlIGRldmljZSBvZmZlciB0aGUg
-cG9zc2liaWxpdHkgdG8gcmVhZCB0aGUgZXJyb3IgY291bnRlcnM/IElmDQo+ID4gc28gcGxlYXNl
-IGRvIGl0IGluIHBjYW5fdXNiX2dldF9iZXJyX2NvdW50ZXIoKS4NCj4gPg0KPg0KPiBOb3BlISBU
-aGUgdmFsdWUgb2YgdGhlIGVycm9yIGNvdW50ZXJzIGNhbiBvbmx5IGJlIG9idGFpbmVkIHRocm91
-Z2ggdGhlDQo+IGJlbG93ICJidXMgZXJyb3IiIG5vdGlmaWNhdGlvbiBtZWNoYW5pc206DQo+DQo+
-ID4gPiArZXJyID0gcGNhbl91c2Jfc2V0X2Vycl9mcmFtZShkZXYsIFBDQU5fVVNCX0VSUl9FQ0Mg
-fA0KPiA+ID4gKyAgICAgUENBTl9VU0JfRVJSX1JYRVJSIHwNCj4gPiBQQ0FOX1VTQl9FUlJfVFhF
-UlIgfA0KPiA+ID4gKyAgICAgUENBTl9VU0JfRVJSX1JYRVJSX0NOVCB8DQo+ID4gPiArICAgICBQ
-Q0FOX1VTQl9FUlJfVFhFUlJfQ05UKTsNCj4gPg0KPiA+IEJldHRlciBvbmx5IGVuYWJsZSBidXMg
-ZXJyb3JzLCBpZiB0aGUgdXNlciBoYXMgcmVxdWVzdGVkIHRoZW0uIFNlZToNCj4gPg0KPiA+DQo+
-ID4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvbGF0ZXN0L3NvdXJjZS9kcml2ZXJz
-L25ldC9jYW4vc2phMTAwMA0KPiA+IC9zamExMA0KPiA+IDAwLmMjTDE1Mg0KPiA+DQo+DQo+IE9r
-LiAgQnV0IHRoaXMgYWxzbyBtZWFucyB0aGF0IHRoZSByeC90eCBlcnIgY291bnRlcnMgd2lsbCBh
-bHdheXMgYmUgMCBpZiB1c2VyDQo+IGRpZG4ndCByZXF1ZXN0ICJiZXJyLXJlcG9ydGluZyBvbiIu
-IElzIHRoaXMgb2s/DQo+DQo+ID4gPiAraWYgKGVycikNCj4gPiA+ICtuZXRkZXZfd2FybihkZXYt
-Pm5ldGRldiwNCj4gPiA+ICsgICAgIkNBTiBidXMgZXJyb3IgY291bnRlcnMgbm90IGF2YWlsYWJs
-ZSAoZXJyICV1KVxuIiwNCj4gPiA+ICsgICAgZXJyKTsNCj4gPiA+ICsNCj4gPiA+ICAvKiBpZiBy
-ZXZpc2lvbiBncmVhdGVyIHRoYW4gMywgY2FuIHB1dCBzaWxlbnQgbW9kZSBvbi9vZmYgKi8NCj4g
-PiA+ICBpZiAoZGV2LT5kZXZpY2VfcmV2ID4gMykgew0KPiA+ID4gLWludCBlcnI7DQo+ID4gPiAt
-DQo+ID4gPiAgZXJyID0gcGNhbl91c2Jfc2V0X3NpbGVudChkZXYsDQo+ID4gPiAgZGV2LT5jYW4u
-Y3RybG1vZGUgJg0KPiA+IENBTl9DVFJMTU9ERV9MSVNURU5PTkxZKTsNCj4gPiA+ICBpZiAoZXJy
-KQ0KPiA+ID4gQEAgLTkwNiw0ICsxMDUwLDUgQEAgY29uc3Qgc3RydWN0IHBlYWtfdXNiX2FkYXB0
-ZXIgcGNhbl91c2IgPSB7DQo+ID4gPiAgLmRldl9lbmNvZGVfbXNnID0gcGNhbl91c2JfZW5jb2Rl
-X21zZywNCj4gPiA+ICAuZGV2X3N0YXJ0ID0gcGNhbl91c2Jfc3RhcnQsDQo+ID4gPiAgLmRldl9y
-ZXN0YXJ0X2FzeW5jID0gcGNhbl91c2JfcmVzdGFydF9hc3luYywNCj4gPiA+ICsuZG9fZ2V0X2Jl
-cnJfY291bnRlciA9IHBjYW5fdXNiX2dldF9iZXJyX2NvdW50ZXIsDQo+ID4gPiAgfTsNCj4gPiA+
-DQo+ID4NCj4gPiBNYXJjDQo+ID4NCj4gPiAtLQ0KPiA+IFBlbmd1dHJvbml4IGUuSy4gICAgICAg
-ICAgICAgICAgICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAgICAgICAgICB8DQo+ID4gSW5kdXN0cmlh
-bCBMaW51eCBTb2x1dGlvbnMgICAgICAgIHwgUGhvbmU6ICs0OS0yMzEtMjgyNi05MjQgICAgIHwN
-Cj4gPiBWZXJ0cmV0dW5nIFdlc3QvRG9ydG11bmQgICAgICAgICAgfCBGYXg6ICAgKzQ5LTUxMjEt
-MjA2OTE3LTU1NTUgfA0KPiA+IEFtdHNnZXJpY2h0IEhpbGRlc2hlaW0sIEhSQSAyNjg2ICB8IGh0
-dHA6Ly93d3cucGVuZ3V0cm9uaXguZGUgICB8DQoNCg0KLS0NClBFQUstU3lzdGVtIFRlY2huaWsg
-R21iSA0KU2l0eiBkZXIgR2VzZWxsc2NoYWZ0IERhcm1zdGFkdCAtIEhSQiA5MTgzDQpHZXNjaGFl
-ZnRzZnVlaHJ1bmc6IEFsZXhhbmRlciBHYWNoIC8gVXdlIFdpbGhlbG0NClVuc2VyZSBEYXRlbnNj
-aHV0emVya2xhZXJ1bmcgbWl0IHdpY2h0aWdlbiBIaW53ZWlzZW4NCnp1ciBCZWhhbmRsdW5nIHBl
-cnNvbmVuYmV6b2dlbmVyIERhdGVuIGZpbmRlbiBTaWUgdW50ZXINCnd3dy5wZWFrLXN5c3RlbS5j
-b20vRGF0ZW5zY2h1dHouNDgzLjAuaHRtbA0K
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--zsdubcn26iXCvlyTNyB5qRMGbtp1jgx74
+Content-Type: multipart/mixed; boundary="Edn5yA9Yie6iVjLu0MWeeLlGcHPppl7aV";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Prince <vincent.prince.fr@gmail.com>
+Cc: jiri@resnulli.us, jhs@mojatatu.com, netdev@vger.kernel.org,
+ dave.taht@gmail.com, linux-can@vger.kernel.org, kernel@pengutronix.de,
+ xiyou.wangcong@gmail.com, davem@davemloft.net
+Message-ID: <84b8ce24-fe5d-ead0-0d1d-03ea24b36f71@pengutronix.de>
+Subject: Re: [PATCH v2] net: sch_generic: Use pfifo_fast as fallback scheduler
+ for CAN hardware
+References: <20190327165632.10711-1-mkl@pengutronix.de>
+ <1571750597-14030-1-git-send-email-vincent.prince.fr@gmail.com>
+In-Reply-To: <1571750597-14030-1-git-send-email-vincent.prince.fr@gmail.com>
+
+--Edn5yA9Yie6iVjLu0MWeeLlGcHPppl7aV
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+
+On 10/22/19 3:23 PM, Vincent Prince wrote:
+> Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+
+please include a patch description. I.e. this one:
+
+-------->8-------->8-------->8-------->8-------->8-------->8-------->8---=
+-----
+There is networking hardware that isn't based on Ethernet for layers 1 an=
+d 2.
+
+For example CAN.
+
+CAN is a multi-master serial bus standard for connecting Electronic Contr=
+ol
+Units [ECUs] also known as nodes. A frame on the CAN bus carries up to 8 =
+bytes
+of payload. Frame corruption is detected by a CRC. However frame loss due=
+ to
+corruption is possible, but a quite unusual phenomenon.
+
+While fq_codel works great for TCP/IP, it doesn't for CAN. There are a lo=
+t of
+legacy protocols on top of CAN, which are not build with flow control or =
+high
+CAN frame drop rates in mind.
+
+When using fq_codel, as soon as the queue reaches a certain delay based l=
+ength,
+skbs from the head of the queue are silently dropped. Silently meaning th=
+at the
+user space using a send() or similar syscall doesn't get an error. Howeve=
+r
+TCP's flow control algorithm will detect dropped packages and adjust the
+bandwidth accordingly.
+
+When using fq_codel and sending raw frames over CAN, which is the common =
+use
+case, the user space thinks the package has been sent without problems, b=
+ecause
+send() returned without an error. pfifo_fast will drop skbs, if the queue=
+
+length exceeds the maximum. But with this scheduler the skbs at the tail =
+are
+dropped, an error (-ENOBUFS) is propagated to user space. So that the use=
+r
+space can slow down the package generation.
+
+On distributions, where fq_codel is made default via CONFIG_DEFAULT_NET_S=
+CH
+during compile time, or set default during runtime with sysctl
+net.core.default_qdisc (see [1]), we get a bad user experience. In my tes=
+t case
+with pfifo_fast, I can transfer thousands of million CAN frames without a=
+ frame
+drop. On the other hand with fq_codel there is more then one lost CAN fra=
+me per
+thousand frames.
+
+As pointed out fq_codel is not suited for CAN hardware, so this patch cha=
+nges
+attach_one_default_qdisc() to use pfifo_fast for "ARPHRD_CAN" network dev=
+ices.
+
+During transition of a netdev from down to up state the default queuing
+discipline is attached by attach_default_qdiscs() with the help of
+attach_one_default_qdisc(). This patch modifies attach_one_default_qdisc(=
+) to
+attach the pfifo_fast (pfifo_fast_ops) if the network device type is
+"ARPHRD_CAN".
+-------->8-------->8-------->8-------->8-------->8-------->8-------->8---=
+-----
+
+Marc
+
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--Edn5yA9Yie6iVjLu0MWeeLlGcHPppl7aV--
+
+--zsdubcn26iXCvlyTNyB5qRMGbtp1jgx74
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2vF/gACgkQWsYho5Hk
+nSDInQgAhPBoaT5/gW5yo1b+h7hjTZfw1hsbXp9s527FYOBvinI78dP9HiMa/FTV
+eYdP4bnnCLFN7+YIM4ZaNYEur+GDpCnQsQSUJjfNZ78F/j11AYI5+O/OwRzdQtxj
+DRuavT0zNE1E0kw/lW/Kfl/Iryv3q42TkMzByy9n7sy9mH+jJ/+MdNL9l8OBJjOI
+bdYtCfFkQduc1SxqB9Q4QzwalGfuUDRQ2J3bqU3AhRiIOcEIcuhvdrW78QG9mLv0
+fVCnJAMo2vXM0TnnyEn9mT7xh2uJtieDkKLi6GEgZUyH3+aZyQr4vc709yetryaU
+5x+FTLKlK4bWZUAao/52goo+s67J9g==
+=vr+P
+-----END PGP SIGNATURE-----
+
+--zsdubcn26iXCvlyTNyB5qRMGbtp1jgx74--
