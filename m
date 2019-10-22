@@ -2,160 +2,170 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4928E07CA
-	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2019 17:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAABE095A
+	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2019 18:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387973AbfJVPru (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Oct 2019 11:47:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46160 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387922AbfJVPru (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 22 Oct 2019 11:47:50 -0400
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 37E52214B2;
-        Tue, 22 Oct 2019 15:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571759269;
-        bh=AejEtY/BzekHga8zdI53AO/Lgt0U9aGhqsnmnZTTvEk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uIwo/poRGQ2nZ+Ll0BT/EKjrLOkddCaonISjJKhlgNes7MYBprmOjkz0hJ5OVg9cU
-         SQwcO1uSROrdizd+ThAd4149harMVJFT99FKVFGco96K5/coENG9iWDFQHEpNGGv7T
-         uPkDFfV/Iu1SCgCew3BL5GqvjsqY5Ahn2GhbVQJU=
-From:   Maxime Ripard <mripard@kernel.org>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH] dt-bindings: can: Convert Allwinner A10 CAN controller to a schema
-Date:   Tue, 22 Oct 2019 17:47:45 +0200
-Message-Id: <20191022154745.41865-1-mripard@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        id S1731374AbfJVQnG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Oct 2019 12:43:06 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:37768 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731229AbfJVQnG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Oct 2019 12:43:06 -0400
+Received: by mail-pg1-f196.google.com with SMTP id p1so10290852pgi.4
+        for <linux-can@vger.kernel.org>; Tue, 22 Oct 2019 09:43:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version;
+        bh=nkVrDvzvamUhKUyDlbSG714oOuADJJI2pdjXrKcXnQU=;
+        b=LB3uq77/wBrJ7rZY1aD/Zq6EpCxIMqq6cvi906rvBaLM+b1aFA+BOrxjWk90err85e
+         5ZCk0daBfxCYIc/xA9rZwJ9Zf47LsEoVAGlmQTWNPipy/pN2f1K7rx1Cx46FTBmfHLvP
+         Ec4b+f9CgFQkEZu6EDQeyctzb/54erD9xjN3tiYCfFYQJhAUj7m+9pRDClFYXCctn6GS
+         POOXW835v1n4XqDD29BN4I/N6tWGNtC2R1/5y7tm0K+ok8epRHSYQ/VmQnpsZ1LlZtLZ
+         +RYGbACX96PMh5ZsbHYJBujrVPQWNoUX0i+h79SFtaIzF8aH0C3qCu1uRcfyeDa5JNtL
+         wK/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version;
+        bh=nkVrDvzvamUhKUyDlbSG714oOuADJJI2pdjXrKcXnQU=;
+        b=L/2nZ6oDO7FfMeCTBme5UGibEc7SrWMz3DkYZ0lMDbiEIiCk/KQGuvZ9//vih6xQCl
+         X8BXHpH2sucZJBv/mhe8UYYcDh5vOenF3xhMeWM1yj8qsyGE6X6McO6jvUK8uW/ELi9h
+         iS34oNAbyZcosWBtr6rh9BOrt5D3MQJopMZzuqeSf541e3wP6127iA8jzF+a5uGAlGhQ
+         jkkr2Je90oyt3S2oSuEsktnASD5X2QinfnJFpJOm4xI1pUv6Q0SAxLiHfIuG65wukUyc
+         f9YGRmAZ4X5k+diPKSGG3T4P/NmUuCVxcz4Kvcpbfn1SSajHw9ifJAaRFpYX0LyhY2rk
+         1RWg==
+X-Gm-Message-State: APjAAAX6Q+hkpiJMUP7wIDKb4pmGBeYdaFzg50NDMZgakJtHuBRmeAxb
+        8LIpJZ7mCylTYleqWqrTI3wqYA==
+X-Google-Smtp-Source: APXvYqxS1uR03v5dyUIQkA2nbzFXO7CAPSu+u6rjFGmYHqSSOv+4b6Q52hV4kfMkFyulzRVfUfpRpg==
+X-Received: by 2002:a17:90a:aa0a:: with SMTP id k10mr5728439pjq.13.1571762583946;
+        Tue, 22 Oct 2019 09:43:03 -0700 (PDT)
+Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
+        by smtp.gmail.com with ESMTPSA id v9sm19545509pfe.109.2019.10.22.09.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Oct 2019 09:43:03 -0700 (PDT)
+Date:   Tue, 22 Oct 2019 09:42:54 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Vincent Prince <vincent.prince.fr@gmail.com>, jiri@resnulli.us,
+        jhs@mojatatu.com, netdev@vger.kernel.org, dave.taht@gmail.com,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        xiyou.wangcong@gmail.com, davem@davemloft.net
+Subject: Re: [PATCH v2] net: sch_generic: Use pfifo_fast as fallback
+ scheduler for CAN hardware
+Message-ID: <20191022094254.489fd6a4@hermes.lan>
+In-Reply-To: <84b8ce24-fe5d-ead0-0d1d-03ea24b36f71@pengutronix.de>
+References: <20190327165632.10711-1-mkl@pengutronix.de>
+        <1571750597-14030-1-git-send-email-vincent.prince.fr@gmail.com>
+        <84b8ce24-fe5d-ead0-0d1d-03ea24b36f71@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ boundary="Sig_/cSZTQjfWRzwB_dzkMRe0vsm"; protocol="application/pgp-signature"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The older Allwinner SoCs have a CAN controller that is supported in Linux,
-with a matching Device Tree binding.
+--Sig_/cSZTQjfWRzwB_dzkMRe0vsm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Now that we have the DT validation in place, let's convert the device tree
-bindings for that controller over to a YAML schemas.
+On Tue, 22 Oct 2019 16:53:44 +0200
+Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- .../net/can/allwinner,sun4i-a10-can.yaml      | 51 +++++++++++++++++++
- .../devicetree/bindings/net/can/sun4i_can.txt | 36 -------------
- 2 files changed, 51 insertions(+), 36 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/can/allwinner,sun4i-a10-can.yaml
- delete mode 100644 Documentation/devicetree/bindings/net/can/sun4i_can.txt
+> On 10/22/19 3:23 PM, Vincent Prince wrote:
+> > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com> =20
+>=20
+> please include a patch description. I.e. this one:
+>=20
+> -------->8-------->8-------->8-------->8-------->8-------->8-------->8---=
+----- =20
+> There is networking hardware that isn't based on Ethernet for layers 1 an=
+d 2.
+>=20
+> For example CAN.
+>=20
+> CAN is a multi-master serial bus standard for connecting Electronic Contr=
+ol
+> Units [ECUs] also known as nodes. A frame on the CAN bus carries up to 8 =
+bytes
+> of payload. Frame corruption is detected by a CRC. However frame loss due=
+ to
+> corruption is possible, but a quite unusual phenomenon.
+>=20
+> While fq_codel works great for TCP/IP, it doesn't for CAN. There are a lo=
+t of
+> legacy protocols on top of CAN, which are not build with flow control or =
+high
+> CAN frame drop rates in mind.
+>=20
+> When using fq_codel, as soon as the queue reaches a certain delay based l=
+ength,
+> skbs from the head of the queue are silently dropped. Silently meaning th=
+at the
+> user space using a send() or similar syscall doesn't get an error. However
+> TCP's flow control algorithm will detect dropped packages and adjust the
+> bandwidth accordingly.
+>=20
+> When using fq_codel and sending raw frames over CAN, which is the common =
+use
+> case, the user space thinks the package has been sent without problems, b=
+ecause
+> send() returned without an error. pfifo_fast will drop skbs, if the queue
+> length exceeds the maximum. But with this scheduler the skbs at the tail =
+are
+> dropped, an error (-ENOBUFS) is propagated to user space. So that the user
+> space can slow down the package generation.
+>=20
+> On distributions, where fq_codel is made default via CONFIG_DEFAULT_NET_S=
+CH
+> during compile time, or set default during runtime with sysctl
+> net.core.default_qdisc (see [1]), we get a bad user experience. In my tes=
+t case
+> with pfifo_fast, I can transfer thousands of million CAN frames without a=
+ frame
+> drop. On the other hand with fq_codel there is more then one lost CAN fra=
+me per
+> thousand frames.
+>=20
+> As pointed out fq_codel is not suited for CAN hardware, so this patch cha=
+nges
+> attach_one_default_qdisc() to use pfifo_fast for "ARPHRD_CAN" network dev=
+ices.
+>=20
+> During transition of a netdev from down to up state the default queuing
+> discipline is attached by attach_default_qdiscs() with the help of
+> attach_one_default_qdisc(). This patch modifies attach_one_default_qdisc(=
+) to
+> attach the pfifo_fast (pfifo_fast_ops) if the network device type is
+> "ARPHRD_CAN".
+> -------->8-------->8-------->8-------->8-------->8-------->8-------->8---=
+----- =20
+>=20
+> Marc
+>=20
 
-diff --git a/Documentation/devicetree/bindings/net/can/allwinner,sun4i-a10-can.yaml b/Documentation/devicetree/bindings/net/can/allwinner,sun4i-a10-can.yaml
-new file mode 100644
-index 000000000000..770af7c46114
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/can/allwinner,sun4i-a10-can.yaml
-@@ -0,0 +1,51 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/can/allwinner,sun4i-a10-can.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner A10 CAN Controller Device Tree Bindings
-+
-+maintainers:
-+  - Chen-Yu Tsai <wens@csie.org>
-+  - Maxime Ripard <maxime.ripard@bootlin.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: allwinner,sun7i-a20-can
-+          - const: allwinner,sun4i-a10-can
-+      - const: allwinner,sun4i-a10-can
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/sun7i-a20-ccu.h>
-+
-+    can0: can@1c2bc00 {
-+        compatible = "allwinner,sun7i-a20-can",
-+                     "allwinner,sun4i-a10-can";
-+        reg = <0x01c2bc00 0x400>;
-+        interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&ccu CLK_APB1_CAN>;
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/net/can/sun4i_can.txt b/Documentation/devicetree/bindings/net/can/sun4i_can.txt
-deleted file mode 100644
-index f69845e6feaf..000000000000
---- a/Documentation/devicetree/bindings/net/can/sun4i_can.txt
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Allwinner A10/A20 CAN controller Device Tree Bindings
-------------------------------------------------------
--
--Required properties:
--- compatible: "allwinner,sun4i-a10-can"
--- reg: physical base address and size of the Allwinner A10/A20 CAN register map.
--- interrupts: interrupt specifier for the sole interrupt.
--- clock: phandle and clock specifier.
--
--Example
---------
--
--SoC common .dtsi file:
--
--	can0_pins_a: can0@0 {
--		allwinner,pins = "PH20","PH21";
--		allwinner,function = "can";
--		allwinner,drive = <0>;
--		allwinner,pull = <0>;
--	};
--...
--	can0: can@1c2bc00 {
--		compatible = "allwinner,sun4i-a10-can";
--		reg = <0x01c2bc00 0x400>;
--		interrupts = <0 26 4>;
--		clocks = <&apb1_gates 4>;
--		status = "disabled";
--	};
--
--Board specific .dts file:
--
--	can0: can@1c2bc00 {
--		pinctrl-names = "default";
--		pinctrl-0 = <&can0_pins_a>;
--		status = "okay";
--	};
--- 
-2.23.0
+Why not fix fq_codel to return the same errors as other qdisc?
 
+--Sig_/cSZTQjfWRzwB_dzkMRe0vsm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEn2/DRbBb5+dmuDyPgKd/YJXN5H4FAl2vMY4ACgkQgKd/YJXN
+5H4DEw/6A5WQx5UEkUNdYv9o0hUoXG/XuoK79mLiT+ztPHyshcfn4YnWisakhEIZ
+pZrNt9Q5fUWbCZImw4T850QMctZv+hQg5SPne/Zm0NbHKJgxXPcTp78qxLbjw5FT
+ehavDlrAsJTTXd+F9E8RQegKPi/PcsBWzdEmT/hq6RhAhhjQQtkm3lVuIfvvLMwb
+qf8WU2+iKcAMJGc7pdTDwZNUpfVHZ7bsYVmoE8EGCeaBmB5TrqkObDQhZ9iQ/75B
+NWHbU0wcoR1F7IuAHyQm6+vCyDKQqx1tf13izA8ojnl1ZZk782R2iv+3dYgBqlc1
+jePIM2I5QfyUhGbzm0Fa/YeYlSC6t51fcuXN8/vl+Gw2+tqfo3QibrGA26mqClHO
+RIhrUw0Za8ZMxzvUvbT5wp+HWp8fAAFdxvcElzb2bj60vcxunh/gulg7au7ekE2x
+xaXirU3EfHGSU/QxqbiQ+wcraNR7TdnS4IGiRwmIPbhRtWRO/Dn7/saXlm41WmEC
+9Xh0DGj2DCptVFZbSpO05m2fIDNex3FzHHh44BfQ6HysHRcbrn8TqPckmmsPGSOw
+kWiHwAXf7UMMgI7LmJ6BH015/pItRwAKOTg2iQbWnToA/maDXxMynG0HZUOqNHv+
+xzF/1p0YeZy8dI12oQTbArQQwTkWTA70yNBk/iKdppemDcgXa/c=
+=8aNr
+-----END PGP SIGNATURE-----
+
+--Sig_/cSZTQjfWRzwB_dzkMRe0vsm--
