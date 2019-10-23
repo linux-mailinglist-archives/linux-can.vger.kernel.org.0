@@ -2,89 +2,137 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4E8E1429
-	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 10:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFBBE1843
+	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 12:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390316AbfJWI13 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Oct 2019 04:27:29 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:45076 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390260AbfJWI13 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 04:27:29 -0400
-Received: by mail-lf1-f68.google.com with SMTP id v8so14738739lfa.12;
-        Wed, 23 Oct 2019 01:27:27 -0700 (PDT)
+        id S2390386AbfJWKwO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Oct 2019 06:52:14 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52379 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390566AbfJWKwO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 06:52:14 -0400
+Received: by mail-wm1-f67.google.com with SMTP id r19so20706787wmh.2;
+        Wed, 23 Oct 2019 03:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=+i1c7z/vrQkTB+2yIcwqOcwIXxSz3gP95Leb8EuF86o=;
+        b=nVIVOcWX+X/egZal8mSWnoQ08UC0P+Vm7Sh51vcDrw3IEF2+2Cs9bCiGtoQZ1MeSM2
+         pEZP7CBrlu5OXc5BsYmfF0J6ou921SInevWNcWDrRnFQeXMe3FCi+fMdTubs/g/ad/JS
+         gyOizrOeAs9eyO3UqYgk5evhHKNPjNUhcNkHrzdLRROQZ8efJYdnTMuc15BGIiFZN5N0
+         GvYUf2ezPdP32EL767P6HACchFxGFzp4Swe/i9QrfYW/FD3KALceoi1clabNF9SXFaFl
+         7vO56nqicz3GlaUU/ZRJOiWSZYUj+WLzY73qIHZX9ad56wt4GkszkK5LIx/6CxpdF3sB
+         +I9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+BrgSnZCer5UhRsZl4X7zqgqCerRzQvBH6cwLmm1CnM=;
-        b=HI/6Ls542Gr4OKd2Ngr8Ak3SU1zpNWkkmq+6GBvXR8AHzw+qZOmWsyGKHHxpnEOnpz
-         YLSzpQGx67Xkx/cXesSM20PlRkyOrX9/RUsnb6PV63EEq8hY6YFHYMgCFl+iaW28J6qB
-         5ZPNIh0Reh509Rddtku+ngn+DbbVK/k8PXxIIOTek1XmebPVTCL4D/inITSNk0PoQ98o
-         1P4IGRJ4AOL5D/08h9OJKNG148BhQDovoUDgjeU5t19FPRuovYRjBhHNI1YneNu7VUvA
-         O9DzPPieGsRlCxQLD/O42wqtFakq+kfpP6TE8m0PhigGhmRELZYU3KzY347tHU0dX3gH
-         bFbg==
-X-Gm-Message-State: APjAAAXlui92r8iAVPdlkt5Vr9e9sF3n+np3ABK/yGuIToOuIFyjeG6X
-        ViAWiZ1HcUKsWJrvy9Asgh6esPiW
-X-Google-Smtp-Source: APXvYqw+9/yUnQGsArwINEUVGFu4MzLP/NJVoAT3Vw0w3glyFhkEnq2gFz1VWCtf6lPdUnJevJNOzg==
-X-Received: by 2002:ac2:5507:: with SMTP id j7mr22043724lfk.75.1571819247001;
-        Wed, 23 Oct 2019 01:27:27 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id n3sm9001439lfl.62.2019.10.23.01.27.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Oct 2019 01:27:26 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iNBza-00064N-Md; Wed, 23 Oct 2019 10:27:42 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        syzbot+863724e7128e14b26732@syzkaller.appspotmail.com
-Subject: [PATCH] can: peak_usb: fix slab info leak
-Date:   Wed, 23 Oct 2019 10:27:05 +0200
-Message-Id: <20191023082705.23283-1-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <0000000000007a638805951153c5@google.com>
-References: <0000000000007a638805951153c5@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+         :references;
+        bh=+i1c7z/vrQkTB+2yIcwqOcwIXxSz3gP95Leb8EuF86o=;
+        b=jBWUprAWTAIlvR1t6hLuxGvZ+2xXuo4hC+2k9yVp1j0R5q+9wzAG741jFVM5B+RoHP
+         I0/OE1qfTNqYCElLcQD/h/0cfcH/v0g66YvyZlDolBMiP7W+jfUirx0EdqZg9xmHnhoz
+         xrAKJ4b6/h6P+eFGKkMHg1c1+xgDxUKJcPjSX33EJc+DcWS3WZhq6lcXk63gsgEO5nP0
+         idHxUoOBYUvfVQTLhOlTsvcsuclEB5PqQVhAxTGELnJzrrZHr1Kxmqga53Rv9gbtAZg2
+         urchXqjAydRrpHuiA3VoNsySuAngQ02EmPb9q7DQ/x/MRP81A3u9ZmgOFzDneIyiznca
+         T98Q==
+X-Gm-Message-State: APjAAAU/bpPLM+Hmu1XgHMPG1vH0omHcsvFpjkv3oB/ObdWDgRtmA60z
+        r3cGFCws5YKiFDAstQT5iMg=
+X-Google-Smtp-Source: APXvYqxF4jxwjd99RwNkgbX3vx0Ih0xjymBplxPaMsoe/BwE5pju2gtoJdmmdtsvKXYcd9mhg7wqSg==
+X-Received: by 2002:a1c:410a:: with SMTP id o10mr7280835wma.117.1571827931585;
+        Wed, 23 Oct 2019 03:52:11 -0700 (PDT)
+Received: from VM-VPR.corporate.saft.org ([80.215.206.132])
+        by smtp.gmail.com with ESMTPSA id 143sm35148526wmb.33.2019.10.23.03.52.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 23 Oct 2019 03:52:11 -0700 (PDT)
+From:   Vincent Prince <vincent.prince.fr@gmail.com>
+To:     mkl@pengutronix.de
+Cc:     dave.taht@gmail.com, davem@davemloft.net, jhs@mojatatu.com,
+        jiri@resnulli.us, kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, xiyou.wangcong@gmail.com,
+        Vincent Prince <vincent.prince.fr@gmail.com>
+Subject: [PATCH v4] net: sch_generic: Use pfifo_fast as fallback scheduler for CAN hardware
+Date:   Wed, 23 Oct 2019 12:52:00 +0200
+Message-Id: <1571827920-9024-1-git-send-email-vincent.prince.fr@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20190327165632.10711-1-mkl@pengutronix.de>
+References: <20190327165632.10711-1-mkl@pengutronix.de>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fix a small slab info leak due to a failure to clear the command buffer
-at allocation.
+There is networking hardware that isn't based on Ethernet for layers 1 and 2.
 
-The first 16 bytes of the command buffer are always sent to the device
-in pcan_usb_send_cmd() even though only the first two may have been
-initialised in case no argument payload is provided (e.g. when waiting
-for a response).
+For example CAN.
 
-Fixes: bb4785551f64 ("can: usb: PEAK-System Technik USB adapters driver core")
-Cc: stable <stable@vger.kernel.org>     # 3.4
-Reported-by: syzbot+863724e7128e14b26732@syzkaller.appspotmail.com
-Signed-off-by: Johan Hovold <johan@kernel.org>
+CAN is a multi-master serial bus standard for connecting Electronic Control
+Units [ECUs] also known as nodes. A frame on the CAN bus carries up to 8 bytes
+of payload. Frame corruption is detected by a CRC. However frame loss due to
+corruption is possible, but a quite unusual phenomenon.
+
+While fq_codel works great for TCP/IP, it doesn't for CAN. There are a lot of
+legacy protocols on top of CAN, which are not build with flow control or high
+CAN frame drop rates in mind.
+
+When using fq_codel, as soon as the queue reaches a certain delay based length,
+skbs from the head of the queue are silently dropped. Silently meaning that the
+user space using a send() or similar syscall doesn't get an error. However
+TCP's flow control algorithm will detect dropped packages and adjust the
+bandwidth accordingly.
+
+When using fq_codel and sending raw frames over CAN, which is the common use
+case, the user space thinks the package has been sent without problems, because
+send() returned without an error. pfifo_fast will drop skbs, if the queue
+length exceeds the maximum. But with this scheduler the skbs at the tail are
+dropped, an error (-ENOBUFS) is propagated to user space. So that the user
+space can slow down the package generation.
+
+On distributions, where fq_codel is made default via CONFIG_DEFAULT_NET_SCH
+during compile time, or set default during runtime with sysctl
+net.core.default_qdisc (see [1]), we get a bad user experience. In my test case
+with pfifo_fast, I can transfer thousands of million CAN frames without a frame
+drop. On the other hand with fq_codel there is more then one lost CAN frame per
+thousand frames.
+
+As pointed out fq_codel is not suited for CAN hardware, so this patch changes
+attach_one_default_qdisc() to use pfifo_fast for "ARPHRD_CAN" network devices.
+
+During transition of a netdev from down to up state the default queuing
+discipline is attached by attach_default_qdiscs() with the help of
+attach_one_default_qdisc(). This patch modifies attach_one_default_qdisc() to
+attach the pfifo_fast (pfifo_fast_ops) if the network device type is
+"ARPHRD_CAN".
+
+[1] https://github.com/systemd/systemd/issues/9194
+
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
 ---
- drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index 65dce642b86b..0b7766b715fd 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -750,7 +750,7 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
- 	dev = netdev_priv(netdev);
+Changes in v4: 
+ - add Marc credit to commit log
  
- 	/* allocate a buffer large enough to send commands */
--	dev->cmd_buf = kmalloc(PCAN_USB_MAX_CMD_LEN, GFP_KERNEL);
-+	dev->cmd_buf = kzalloc(PCAN_USB_MAX_CMD_LEN, GFP_KERNEL);
- 	if (!dev->cmd_buf) {
- 		err = -ENOMEM;
- 		goto lbl_free_candev;
+Changes in v3:
+ - add description
+
+Changes in v2:
+ - reformat patch
+
+ net/sched/sch_generic.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index 77b289d..dfb2982 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -1008,6 +1008,8 @@ static void attach_one_default_qdisc(struct net_device *dev,
+ 
+ 	if (dev->priv_flags & IFF_NO_QUEUE)
+ 		ops = &noqueue_qdisc_ops;
++	else if(dev->type == ARPHRD_CAN)
++		ops = &pfifo_fast_ops;
+ 
+ 	qdisc = qdisc_create_dflt(dev_queue, ops, TC_H_ROOT, NULL);
+ 	if (!qdisc) {
 -- 
-2.23.0
+2.7.4
 
