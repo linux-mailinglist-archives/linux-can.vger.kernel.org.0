@@ -2,112 +2,241 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4067FE0CF0
-	for <lists+linux-can@lfdr.de>; Tue, 22 Oct 2019 21:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F43E1308
+	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 09:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731436AbfJVT64 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Oct 2019 15:58:56 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39366 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732972AbfJVT64 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Oct 2019 15:58:56 -0400
-Received: by mail-lf1-f67.google.com with SMTP id 195so14100050lfj.6
-        for <linux-can@vger.kernel.org>; Tue, 22 Oct 2019 12:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2NR3jvIoLvk4owe/bXBwmzK3qDEbNAfGkvCvOzU6x1M=;
-        b=DIPhKw3zDXV2AsqyH+yb3IVKFzmYMWA55sUhNX0ssK//Y6GGaTjvyMMI3CVJZDf6M3
-         2J+1q5rbmzgbRLfO0et/E6mmWyLkdu/fy99lvIJvXG+ZmycMsH4obkmZHKC3dDEZVawI
-         rIV+9q60TGW/cb0p98/TJH1jVxJ8GpltI61f6OwsqXX2MEfH76tRL/7MFYFod5yF5xXt
-         zrfzMcSIlGmBAurWOS/Dk0BRBiwc1VuGEVjzgheb86j7DP/0pomJGEwctyBnOm7OGUgp
-         sjaa5iizNdXp2DkmsP1yTPnN7HTpp3ihogErSU0EZcXfmjvH5g1CQBAgEv/V9w3KkKlp
-         cg5w==
+        id S2389224AbfJWHZM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Oct 2019 03:25:12 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:45493 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389118AbfJWHZJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 03:25:09 -0400
+Received: by mail-il1-f200.google.com with SMTP id w9so11697241ilo.12
+        for <linux-can@vger.kernel.org>; Wed, 23 Oct 2019 00:25:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2NR3jvIoLvk4owe/bXBwmzK3qDEbNAfGkvCvOzU6x1M=;
-        b=NJsBZMiiMRx4lu6Koyf2xbGmzkGEPFv5bzZO9nUDvg7nvcDVYr4oB7kmdkkrAiCQdw
-         BuP5K/XwjD6bR+ZkhBbmVkHnz5BWosh6cNiVAA1ImfsrWvQ6LP+iNIfYQIPYRQ4VaTKA
-         qUtttRgyHGJpy3T2dL9tM5ognIPCCHgx4UfpHQlG6Q3ZhREHW4CX3iTetHGQCH6FZl24
-         2wUK+amM21X4/ZNZlm/MmPIGaLCFaOhXN6QYKYm5zoDf5gAl2ZMN7zKvr/h3I1KjcOit
-         0sUjt0JIYfcAZoWiBO51D7/8yKlnQgxT/YP7bV+sseDkYwlIfBY1l6atCEp8A2q5qCiG
-         Wm8A==
-X-Gm-Message-State: APjAAAUUl40XySkA3Dtv3Obu54eMQt5W8IgH+ch3WLU9ItzOl9OYfxYJ
-        ZuDAX25BjIH1CAL6+eV7vKbdgB5/qPlBtjMwdNs=
-X-Google-Smtp-Source: APXvYqyv9oKQD4ZGTVjT+etuhCdVr/khRXnz6pJfb9AWngnG3QCMDx586RX5LzJXUq3VHpYQWNal6A4l6GWNIcp5h+Q=
-X-Received: by 2002:a19:ae18:: with SMTP id f24mr20744438lfc.186.1571774334181;
- Tue, 22 Oct 2019 12:58:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xKcQJBIQc2/Cq0PCnsJB9k+HD99LAu+MTvjpMZVDV+8=;
+        b=dSlA3jcHsGe3UFyjphy7S8egBSkp19Kmd89//7K8Ps9+0NsnI6SctdnmSyujedsqkZ
+         P2mq/tsyjDb4gef/VeGgwYVUMDHUNB1+5g5l0jD/Wtox+NYQnmgk/lQ+waLQ5qs0/9f+
+         OlhOxm7oU6pFeH73tYFB8hmIJEqRoVGOK2aeK25eKqnGl32Mz9zRfvpBU4bvkdBzRSuc
+         7rCitkcKSguj0YdV1p2BHZNHSK+tNua+KRQJeN/uq9YE/ZcyJh0EFyC9KAjVlayQMto8
+         0MV05KUPBWzwwXSf2YkZwVg1yM4cXiTa6rJzExdF8si6QFWrR0C1Pddn3s7sHQfleujU
+         +5Uw==
+X-Gm-Message-State: APjAAAXs3oyfb7Z4tuyjhi32d71TpqcUEsjDZTWOGqi4JVR0lkpKjwwQ
+        00AsDT+kkhLr+uj2kulxuBwvpSvA3yoAdc1oRRBcKfZ9AZKB
+X-Google-Smtp-Source: APXvYqxrecml2exqGoKbJ6ci8PpL1A6Hc4nQaYc0W9iq/OAENApmbjVtblhllVKN2oKbuuRtZeMS/LulN8hGJYhKHpkyqtpMqyIc
 MIME-Version: 1.0
-References: <CAHChkrv6cKgNam-znKu_wOZm-y6gNkONmGWP6RFZpiSprq5_gQ@mail.gmail.com>
- <896bd824-1149-4229-a703-d2c946acd92b@pengutronix.de> <20191017074727.GA700@x1.vandijck-laurijssen.be>
- <CAHChkrsBMQy+=dQv-0JYqp7jrg3UvmQ_4JdR9WYrjAioNxfigw@mail.gmail.com>
- <CAHChkrs8iH4+2ZiQUjaD7B9CcqjfbeRG-_3R2uT+FWGSr5kGPA@mail.gmail.com> <20191017211604.GB27587@x1.vandijck-laurijssen.be>
-In-Reply-To: <20191017211604.GB27587@x1.vandijck-laurijssen.be>
-From:   Elenita Hinds <ecathinds@gmail.com>
-Date:   Tue, 22 Oct 2019 14:58:42 -0500
-Message-ID: <CAHChkrtRD-KLct4BU1mq7MRL3N7YKfNpoDERRnN6SG9d7dzptw@mail.gmail.com>
-Subject: Re: c_can/d_can driver question
-To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a92:8408:: with SMTP id l8mr14466789ild.107.1571815507042;
+ Wed, 23 Oct 2019 00:25:07 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 00:25:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f32b3c05958ed0eb@google.com>
+Subject: INFO: task hung in register_netdevice_notifier (2)
+From:   syzbot <syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sorry for the delay.  Responses below ..
+Hello,
 
-On Thu, Oct 17, 2019 at 4:16 PM Kurt Van Dijck
-<dev.kurt@vandijck-laurijssen.be> wrote:
->
-> Hey,
->
-> On do, 17 okt 2019 15:37:04 -0500, Elenita Hinds wrote:
-> > I pulled in the c_can patches from the for-kurt branch (63574e9 thru
-> > bf01f717) and tested on my device.
-> > The number of overruns are noticeably fewer; however, the overall
-> > system performance seems to have slowed down. For example,
-> > the console response and Bluetooth data rate are noticeably slower.
->
-> You now give more precedence to CAN and less to console etc. ?
-> >
-[eh]  No. The priorities are the same or however Linux handles
-interrupt priorities.
+syzbot found the following crash on:
 
-> > I also noticed that while the number of overruns decreased, the number
-> > of errors increased:
->
-> You have an interesting setup. I suspect that the FIFO is filled, and
-> does drop messages, although that is recorded in the statistics?
->
-> Would you want to try branch c_can-v4.9 in github.com/kurt-vd/linux?
-> I improved the reception a bit, and increased the FIFO size.
+HEAD commit:    3b7c59a1 Merge tag 'pinctrl-v5.4-2' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=131abff7600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=420126a10fdda0f1
+dashboard link: https://syzkaller.appspot.com/bug?extid=355f8edb2ff45d5f95fa
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-[eh]  I pulled the c_can-v4.9 changes (delta from v4.9) and the
-behavior is the same --
-the number of overruns is reduced (about 0.011% loss compared to about
-0.32%) but the number
-of errors is increased (used to be the same number as the overruns).
-I still see a slight degradation
-in system performance.
-I also tried the c_can-more-objects branch (increased the message
-objects to 64) and this also
-improved CAN handling (about to 0.004% overruns).
-Then I combined both IRQ-rxoffload and more-objects changes together
-and the number of overruns
-is further reduced (loss is close to 0%).
+Unfortunately, I don't have any reproducer for this crash yet.
 
-> Besides that, can you give more details about your system and your load?
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com
 
-[eh] System is similar to Beagleboard Black: TI AM335x.
-From 'top', running about 0% idle, with sys about 44%, usr about 43%,
-sirq about 9%.
-Load average: 4.70 4.88 4.04
-Let me know if you need more info.
+INFO: task syz-executor.3:12938 blocked for more than 143 seconds.
+       Not tainted 5.4.0-rc4+ #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+syz-executor.3  D28568 12938  12570 0x00000004
+Call Trace:
+  context_switch kernel/sched/core.c:3384 [inline]
+  __schedule+0x94f/0x1e70 kernel/sched/core.c:4069
+  schedule+0xd9/0x260 kernel/sched/core.c:4136
+  rwsem_down_write_slowpath+0x70b/0xf90 kernel/locking/rwsem.c:1238
+  __down_write kernel/locking/rwsem.c:1392 [inline]
+  down_write+0x13c/0x150 kernel/locking/rwsem.c:1535
+  register_netdevice_notifier+0x7e/0x650 net/core/dev.c:1644
+  bcm_init+0x1a8/0x220 net/can/bcm.c:1451
+  can_create+0x288/0x4b0 net/can/af_can.c:167
+  __sock_create+0x3d8/0x730 net/socket.c:1418
+  sock_create net/socket.c:1469 [inline]
+  __sys_socket+0x103/0x220 net/socket.c:1511
+  __do_sys_socket net/socket.c:1520 [inline]
+  __se_sys_socket net/socket.c:1518 [inline]
+  __x64_sys_socket+0x73/0xb0 net/socket.c:1518
+  do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459ef9
+Code: Bad RIP value.
+RSP: 002b:00007f95783e1c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459ef9
+RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f95783e26d4
+R13: 00000000004c8f16 R14: 00000000004e02c0 R15: 00000000ffffffff
+INFO: task syz-executor.3:12940 blocked for more than 143 seconds.
+       Not tainted 5.4.0-rc4+ #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+syz-executor.3  D29112 12940  12570 0x00000004
+Call Trace:
+  context_switch kernel/sched/core.c:3384 [inline]
+  __schedule+0x94f/0x1e70 kernel/sched/core.c:4069
+  schedule+0xd9/0x260 kernel/sched/core.c:4136
+  rwsem_down_write_slowpath+0x70b/0xf90 kernel/locking/rwsem.c:1238
+  __down_write kernel/locking/rwsem.c:1392 [inline]
+  down_write+0x13c/0x150 kernel/locking/rwsem.c:1535
+  register_netdevice_notifier+0x7e/0x650 net/core/dev.c:1644
+  bcm_init+0x1a8/0x220 net/can/bcm.c:1451
+  can_create+0x288/0x4b0 net/can/af_can.c:167
+  __sock_create+0x3d8/0x730 net/socket.c:1418
+  sock_create net/socket.c:1469 [inline]
+  __sys_socket+0x103/0x220 net/socket.c:1511
+  __do_sys_socket net/socket.c:1520 [inline]
+  __se_sys_socket net/socket.c:1518 [inline]
+  __x64_sys_socket+0x73/0xb0 net/socket.c:1518
+  do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459ef9
+Code: Bad RIP value.
+RSP: 002b:00007f95783c0c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459ef9
+RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
+RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f95783c16d4
+R13: 00000000004c8f16 R14: 00000000004e02c0 R15: 00000000ffffffff
 
->
-> Kind regards,
-> Kurt
+Showing all locks held in the system:
+1 lock held by khungtaskd/1070:
+  #0: ffffffff88fab040 (rcu_read_lock){....}, at:  
+debug_show_all_locks+0x5f/0x27e kernel/locking/lockdep.c:5337
+2 locks held by rs:main Q:Reg/8631:
+  #0: ffff88809a078d60 (&f->f_pos_lock){+.+.}, at: __fdget_pos+0xee/0x110  
+fs/file.c:801
+  #1: ffff88821637c428 (sb_writers#3){.+.+}, at: file_start_write  
+include/linux/fs.h:2882 [inline]
+  #1: ffff88821637c428 (sb_writers#3){.+.+}, at: vfs_write+0x485/0x5d0  
+fs/read_write.c:557
+1 lock held by rsyslogd/8633:
+  #0: ffff8880a9391120 (&f->f_pos_lock){+.+.}, at: __fdget_pos+0xee/0x110  
+fs/file.c:801
+2 locks held by getty/8723:
+  #0: ffff888096a75090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f1d2e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+2 locks held by getty/8724:
+  #0: ffff8880a181f090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f392e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+2 locks held by getty/8725:
+  #0: ffff88809ccbf090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f292e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+2 locks held by getty/8726:
+  #0: ffff888092816090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f152e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+2 locks held by getty/8727:
+  #0: ffff8880a10bc090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f2d2e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+2 locks held by getty/8728:
+  #0: ffff888091055090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f312e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+2 locks held by getty/8729:
+  #0: ffff8880a4f5c090 (&tty->ldisc_sem){++++}, at:  
+ldsem_down_read+0x33/0x40 drivers/tty/tty_ldsem.c:340
+  #1: ffffc90005f092e0 (&ldata->atomic_read_lock){+.+.}, at:  
+n_tty_read+0x232/0x1c10 drivers/tty/n_tty.c:2156
+3 locks held by kworker/u4:2/12751:
+3 locks held by kworker/u4:8/30968:
+1 lock held by syz-executor.3/12938:
+  #0: ffffffff89996388 (pernet_ops_rwsem){++++}, at:  
+register_netdevice_notifier+0x7e/0x650 net/core/dev.c:1644
+1 lock held by syz-executor.3/12940:
+  #0: ffffffff89996388 (pernet_ops_rwsem){++++}, at:  
+register_netdevice_notifier+0x7e/0x650 net/core/dev.c:1644
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 PID: 1070 Comm: khungtaskd Not tainted 5.4.0-rc4+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  nmi_cpu_backtrace.cold+0x70/0xb2 lib/nmi_backtrace.c:101
+  nmi_trigger_cpumask_backtrace+0x23b/0x28b lib/nmi_backtrace.c:62
+  arch_trigger_cpumask_backtrace+0x14/0x20 arch/x86/kernel/apic/hw_nmi.c:38
+  trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+  check_hung_uninterruptible_tasks kernel/hung_task.c:205 [inline]
+  watchdog+0x9d0/0xef0 kernel/hung_task.c:289
+  kthread+0x361/0x430 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 30777 Comm: kworker/u4:4 Not tainted 5.4.0-rc4+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: bat_events batadv_nc_worker
+RIP: 0010:hlock_class kernel/locking/lockdep.c:163 [inline]
+RIP: 0010:mark_lock+0xca/0x1220 kernel/locking/lockdep.c:3643
+Code: 20 66 81 e3 ff 1f 0f b7 db be 08 00 00 00 48 89 d8 48 c1 f8 06 48 8d  
+3c c5 a0 e9 77 8a e8 4e 73 55 00 48 0f a3 1d 46 12 1f 09 <0f> 83 be 00 00  
+00 48 69 db b0 00 00 00 48 81 c3 c0 ed 77 8a 48 8d
+RSP: 0018:ffff888058de7ad8 EFLAGS: 00000047
+RAX: 0000000000000001 RBX: 0000000000000029 RCX: ffffffff8158d752
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff8a77e9a0
+RBP: ffff888058de7b28 R08: 1ffffffff14efd34 R09: fffffbfff14efd35
+R10: fffffbfff14efd34 R11: ffffffff8a77e9a7 R12: 0000000000000008
+R13: ffff888022a00d28 R14: 0000000000000000 R15: 0000000000020029
+FS:  0000000000000000(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000459ecf CR3: 000000009451c000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  mark_usage kernel/locking/lockdep.c:3592 [inline]
+  __lock_acquire+0x538/0x4a00 kernel/locking/lockdep.c:3909
+  lock_acquire+0x190/0x410 kernel/locking/lockdep.c:4487
+  rcu_lock_acquire include/linux/rcupdate.h:208 [inline]
+  rcu_read_lock include/linux/rcupdate.h:599 [inline]
+  batadv_nc_purge_orig_hash net/batman-adv/network-coding.c:407 [inline]
+  batadv_nc_worker+0x117/0x760 net/batman-adv/network-coding.c:718
+  process_one_work+0x9af/0x1740 kernel/workqueue.c:2269
+  worker_thread+0x98/0xe40 kernel/workqueue.c:2415
+  kthread+0x361/0x430 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
