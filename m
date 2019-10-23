@@ -2,58 +2,141 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 013C0E1CCA
-	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 15:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB5AE1D06
+	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 15:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392059AbfJWNgO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Oct 2019 09:36:14 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40391 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392058AbfJWNgK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 09:36:10 -0400
-Received: by mail-wm1-f66.google.com with SMTP id b24so19663860wmj.5
-        for <linux-can@vger.kernel.org>; Wed, 23 Oct 2019 06:36:09 -0700 (PDT)
+        id S2406004AbfJWNo0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Oct 2019 09:44:26 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38008 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405958AbfJWNo0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 09:44:26 -0400
+Received: by mail-wm1-f67.google.com with SMTP id 3so19735855wmi.3;
+        Wed, 23 Oct 2019 06:44:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=dVgB2gHwyu9BrwAHrTVrhxxTLMnU+GjkCtVmW3QXNgU=;
-        b=Zp1rNYOb7wPsdMPdMbYe//+9NYjGitazC3K4MBrZR7qVyf3SurlVK/iVTX8rXrD1MV
-         duJiT6vf8/dVRyCoGAADOWO6mdvdO7LXMGSTBsL1aPHRptzHVSr6EVhNUNTbTuXzEcJM
-         CBCb+Jmcnci8Xj7Z+C2D9+RBLni3QkUE+aLyNfm640DulCjNSyCQlNWPphsu43/xiaCJ
-         jGtO0Rf565kxFLQCtlztfZCV3214dAbiLSZKIvSf0BlByQ/4iOlt67agx4AGUfiCjZMI
-         RoTZ6xCVKLtvHbzydaTmcuGrVnWq27zH7gygGQ2YGfnHqhgxkVmC2lGKxGSiWzVcr6KU
-         QN9A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=kOZNOUL7Crs+vgeopZXTqJHfGfBbo4sRox+E2s/0PYc=;
+        b=cXqaHbD47dElXBXIwj9WpEP9i9EEzoab/fA2mAS3AXK3Ud40BI68ZzUJNFw0DgCWo2
+         BMXKYDiZfdTAaYDg3b89qrRRsWL1anjp5CBsJoH2S4Pn0N+6gCjBx+D06MFJRVla86Fl
+         HvkayEv8aCczmkCdkk0+T5Ji0N7acjbTHPjDt2Nbk/L62E06vqw1HCuSufWCV4yuCBEq
+         w/G9aXPwbXmoA3+yFVa9N+PyFZfhH6ddrFRmLCuviRqsYhLHqfO22zAkpEFSf/tppLxh
+         LdTEe0y9hMvEad9XoMYJukVQ75R8A+Ym7F7NG1a1E1qgd/JxrR0ST7BTJ77ydGLYGNMX
+         3Gnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=dVgB2gHwyu9BrwAHrTVrhxxTLMnU+GjkCtVmW3QXNgU=;
-        b=pHqXqIJquB5UPnNfBOk6RUVuq/QJ7ezJpN5aexK/3JQ6+RAaizs+dppUuW4cchD+yO
-         x/WL2HI6E/uRRtVhC73vteBMUsf2+UhzcOcIYJZbkMTXAXnoL+GFDXuJGlyVA/EFaU3S
-         /tGqnz0ItRZZ6MDCTRSFuKXtojpYQY5XD5L31VQlyBNUxhW57D4vj//ukQ7Bhf90bAVo
-         T83MlgIAdv9c1coHWBzZwmPC7FDbDqa7DMBe+x5/G1j88SXVqiTqM5nqy/gZ+dWC2gjC
-         8MprDmaPTp7SeM8MudmHjQ7ERKBM/+qRqKSf3h/GQluenPbRUbB4YYOXFTIkDDOprl+q
-         dRNQ==
-X-Gm-Message-State: APjAAAXT2xoGh564hh9ryLzevbczXon0lZViJ+EBtPI2KGknPILjZDan
-        R4tmtLDkhOWDrNOjHbu0mNDI5bBdMjLjDC7mSh0=
-X-Google-Smtp-Source: APXvYqzu60dP5ZzLHoNcR4C1Z90wK3ujHk4eIk60CblS8nkYpWGmu8JElmh7udCx+t1YVbQaCRFZhRaASS5NgAdsuk0=
-X-Received: by 2002:a7b:ce84:: with SMTP id q4mr4860246wmj.36.1571837768313;
- Wed, 23 Oct 2019 06:36:08 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a5d:400a:0:0:0:0:0 with HTTP; Wed, 23 Oct 2019 06:36:07
- -0700 (PDT)
-Reply-To: mrs.lisarobinson746@gmail.com
-From:   "Mrs. Lisa" <helpdesk.eit.ac.nz@gmail.com>
-Date:   Wed, 23 Oct 2019 06:36:07 -0700
-Message-ID: <CAK7Er8aKyL3H-yzE3WwHqgdy-pvjcQoKmcraD43WMg3fDh48xQ@mail.gmail.com>
-Subject: Mrs. Lisa Charity Donation
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=kOZNOUL7Crs+vgeopZXTqJHfGfBbo4sRox+E2s/0PYc=;
+        b=sFiOLtVcP93+AqTlSZqqMKkbBwOVIagvZ9RtmCYu0xYorTDdHcOwmjHzgrOAmcR79C
+         hnceAI1TrhRYMg8WSH/SliN+i1U40VvdjQVgGArG9WPaKEfhAanK/PdwyV3b5mXYs63w
+         IGq0AMEH9cU1lC5rdS11UF5bC00QM+QsUEzUGs/btWSWvJHIV/7CcmrKinsWDfrL7ezR
+         7vpR/bkTah6zhTSsfdE7ucvpSzhGsdXdEnNLKO+QzkMulFPrQklcfnCnW5QSc/7fJSt1
+         ggy3/1jueWj90/f3zjUPPKPJEXKUicfZdIzoVduXaQ1trYZJWDB2V8uadz46aww5SbZZ
+         8bIQ==
+X-Gm-Message-State: APjAAAWM4zHxf6gT64/MKVJqKLXC+xHg0kQHa1V+e/5+W0MxpTtp/9JG
+        CVb5GARicQ7jgQeQvrh8fJQ=
+X-Google-Smtp-Source: APXvYqx/+EFhS6vLTSVsls6EmtBiRjY5ntt9y8h6qB7h3ydj8zR+dIIK8yc7NwiC9Pupk0eee4/qFg==
+X-Received: by 2002:a05:600c:1150:: with SMTP id z16mr6666293wmz.153.1571838264574;
+        Wed, 23 Oct 2019 06:44:24 -0700 (PDT)
+Received: from VM-VPR.corporate.saft.org (i19-lef01-ix2-176-180-80-120.dsl.dyn.abo.bbox.fr. [176.180.80.120])
+        by smtp.gmail.com with ESMTPSA id s10sm15375553wrn.46.2019.10.23.06.44.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 23 Oct 2019 06:44:24 -0700 (PDT)
+From:   Vincent Prince <vincent.prince.fr@gmail.com>
+To:     mkl@pengutronix.de
+Cc:     dave.taht@gmail.com, davem@davemloft.net, jhs@mojatatu.com,
+        jiri@resnulli.us, kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, xiyou.wangcong@gmail.com,
+        Vincent Prince <vincent.prince.fr@gmail.com>
+Subject: [PATCH v5] net: sch_generic: Use pfifo_fast as fallback scheduler for CAN hardware
+Date:   Wed, 23 Oct 2019 15:44:20 +0200
+Message-Id: <1571838260-19186-1-git-send-email-vincent.prince.fr@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20190327165632.10711-1-mkl@pengutronix.de>
+References: <20190327165632.10711-1-mkl@pengutronix.de>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+There is networking hardware that isn't based on Ethernet for layers 1 and 2.
+
+For example CAN.
+
+CAN is a multi-master serial bus standard for connecting Electronic Control
+Units [ECUs] also known as nodes. A frame on the CAN bus carries up to 8 bytes
+of payload. Frame corruption is detected by a CRC. However frame loss due to
+corruption is possible, but a quite unusual phenomenon.
+
+While fq_codel works great for TCP/IP, it doesn't for CAN. There are a lot of
+legacy protocols on top of CAN, which are not build with flow control or high
+CAN frame drop rates in mind.
+
+When using fq_codel, as soon as the queue reaches a certain delay based length,
+skbs from the head of the queue are silently dropped. Silently meaning that the
+user space using a send() or similar syscall doesn't get an error. However
+TCP's flow control algorithm will detect dropped packages and adjust the
+bandwidth accordingly.
+
+When using fq_codel and sending raw frames over CAN, which is the common use
+case, the user space thinks the package has been sent without problems, because
+send() returned without an error. pfifo_fast will drop skbs, if the queue
+length exceeds the maximum. But with this scheduler the skbs at the tail are
+dropped, an error (-ENOBUFS) is propagated to user space. So that the user
+space can slow down the package generation.
+
+On distributions, where fq_codel is made default via CONFIG_DEFAULT_NET_SCH
+during compile time, or set default during runtime with sysctl
+net.core.default_qdisc (see [1]), we get a bad user experience. In my test case
+with pfifo_fast, I can transfer thousands of million CAN frames without a frame
+drop. On the other hand with fq_codel there is more then one lost CAN frame per
+thousand frames.
+
+As pointed out fq_codel is not suited for CAN hardware, so this patch changes
+attach_one_default_qdisc() to use pfifo_fast for "ARPHRD_CAN" network devices.
+
+During transition of a netdev from down to up state the default queuing
+discipline is attached by attach_default_qdiscs() with the help of
+attach_one_default_qdisc(). This patch modifies attach_one_default_qdisc() to
+attach the pfifo_fast (pfifo_fast_ops) if the network device type is
+"ARPHRD_CAN".
+
+[1] https://github.com/systemd/systemd/issues/9194
+
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+Acked-by: Dave Taht <dave.taht@gmail.com>
+---
+Changes in v5:
+ - add previous ack
+
+Changes in v4: 
+ - add Marc credit to commit log
+ 
+Changes in v3:
+ - add description
+
+Changes in v2:
+ - reformat patch
+
+ net/sched/sch_generic.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+index 77b289d..dfb2982 100644
+--- a/net/sched/sch_generic.c
++++ b/net/sched/sch_generic.c
+@@ -1008,6 +1008,8 @@ static void attach_one_default_qdisc(struct net_device *dev,
+ 
+ 	if (dev->priv_flags & IFF_NO_QUEUE)
+ 		ops = &noqueue_qdisc_ops;
++	else if(dev->type == ARPHRD_CAN)
++		ops = &pfifo_fast_ops;
+ 
+ 	qdisc = qdisc_create_dflt(dev_queue, ops, TC_H_ROOT, NULL);
+ 	if (!qdisc) {
 -- 
-I am Lisa Robinson, you have a donation of $1,200,000.00 USD. Contact
-me now for more information.
+2.7.4
+
