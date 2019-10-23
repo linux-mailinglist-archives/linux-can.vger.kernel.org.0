@@ -2,32 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC77DE1360
-	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 09:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0D8E1375
+	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 09:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389995AbfJWHqq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Oct 2019 03:46:46 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:55064 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389298AbfJWHqq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 03:46:46 -0400
-X-ASG-Debug-ID: 1571816801-0a881812f4719640001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.77.221.wls.msr91gen3.adsl.dyn.edpnet.net [77.109.77.221]) by relay-b03.edpnet.be with ESMTP id tV6NawN76YnLcRgl; Wed, 23 Oct 2019 09:46:41 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.77.221.wls.msr91gen3.adsl.dyn.edpnet.net[77.109.77.221]
-X-Barracuda-Apparent-Source-IP: 77.109.77.221
-Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id DCE04A9FE0B;
-        Wed, 23 Oct 2019 09:46:40 +0200 (CEST)
-Date:   Wed, 23 Oct 2019 09:46:38 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Elenita Hinds <ecathinds@gmail.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+        id S2390000AbfJWHx2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Oct 2019 03:53:28 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37581 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727574AbfJWHx2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 03:53:28 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iNBSQ-0001zr-Vx; Wed, 23 Oct 2019 09:53:27 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:dcd0:3ded:5374:df72] (unknown [IPv6:2a03:f580:87bc:d400:dcd0:3ded:5374:df72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3A18D46D14F;
+        Wed, 23 Oct 2019 07:53:26 +0000 (UTC)
 Subject: Re: c_can/d_can driver question
-Message-ID: <20191023074638.GA10750@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: c_can/d_can driver question
-Mail-Followup-To: Elenita Hinds <ecathinds@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+To:     Elenita Hinds <ecathinds@gmail.com>, linux-can@vger.kernel.org
 References: <CAHChkrv6cKgNam-znKu_wOZm-y6gNkONmGWP6RFZpiSprq5_gQ@mail.gmail.com>
  <896bd824-1149-4229-a703-d2c946acd92b@pengutronix.de>
  <20191017074727.GA700@x1.vandijck-laurijssen.be>
@@ -35,94 +33,143 @@ References: <CAHChkrv6cKgNam-znKu_wOZm-y6gNkONmGWP6RFZpiSprq5_gQ@mail.gmail.com>
  <CAHChkrs8iH4+2ZiQUjaD7B9CcqjfbeRG-_3R2uT+FWGSr5kGPA@mail.gmail.com>
  <20191017211604.GB27587@x1.vandijck-laurijssen.be>
  <CAHChkrtRD-KLct4BU1mq7MRL3N7YKfNpoDERRnN6SG9d7dzptw@mail.gmail.com>
+ <20191023074638.GA10750@x1.vandijck-laurijssen.be>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <2bca6e10-4c56-f946-dc4a-daf1aceabd9c@pengutronix.de>
+Date:   Wed, 23 Oct 2019 09:53:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHChkrtRD-KLct4BU1mq7MRL3N7YKfNpoDERRnN6SG9d7dzptw@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.77.221.wls.msr91gen3.adsl.dyn.edpnet.net[77.109.77.221]
-X-Barracuda-Start-Time: 1571816801
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 2492
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5016 1.0000 0.7500
-X-Barracuda-Spam-Score: 0.75
-X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.77522
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <20191023074638.GA10750@x1.vandijck-laurijssen.be>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="IEtjPJGLLuSRdAabSdHqf3SGghmIjkv6K"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On di, 22 okt 2019 14:58:42 -0500, Elenita Hinds wrote:
-> Sorry for the delay.  Responses below ..
-> 
-> On Thu, Oct 17, 2019 at 4:16 PM Kurt Van Dijck
-> <dev.kurt@vandijck-laurijssen.be> wrote:
-> >
-> > Hey,
-> >
-> > On do, 17 okt 2019 15:37:04 -0500, Elenita Hinds wrote:
-> > > I pulled in the c_can patches from the for-kurt branch (63574e9 thru
-> > > bf01f717) and tested on my device.
-> > > The number of overruns are noticeably fewer; however, the overall
-> > > system performance seems to have slowed down. For example,
-> > > the console response and Bluetooth data rate are noticeably slower.
-> >
-> > You now give more precedence to CAN and less to console etc. ?
-> > >
-> [eh]  No. The priorities are the same or however Linux handles
-> interrupt priorities.
-> 
-> > > I also noticed that while the number of overruns decreased, the number
-> > > of errors increased:
-> >
-> > You have an interesting setup. I suspect that the FIFO is filled, and
-> > does drop messages, although that is recorded in the statistics?
-> >
-> > Would you want to try branch c_can-v4.9 in github.com/kurt-vd/linux?
-> > I improved the reception a bit, and increased the FIFO size.
-> 
-> [eh]  I pulled the c_can-v4.9 changes (delta from v4.9) and the
-> behavior is the same --
-> the number of overruns is reduced (about 0.011% loss compared to about
-> 0.32%) but the number
-> of errors is increased (used to be the same number as the overruns).
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--IEtjPJGLLuSRdAabSdHqf3SGghmIjkv6K
+Content-Type: multipart/mixed; boundary="DSjxqIb9aLzrJ6iLEb83jbme47ElymLQF";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Elenita Hinds <ecathinds@gmail.com>, linux-can@vger.kernel.org
+Message-ID: <2bca6e10-4c56-f946-dc4a-daf1aceabd9c@pengutronix.de>
+Subject: Re: c_can/d_can driver question
+References: <CAHChkrv6cKgNam-znKu_wOZm-y6gNkONmGWP6RFZpiSprq5_gQ@mail.gmail.com>
+ <896bd824-1149-4229-a703-d2c946acd92b@pengutronix.de>
+ <20191017074727.GA700@x1.vandijck-laurijssen.be>
+ <CAHChkrsBMQy+=dQv-0JYqp7jrg3UvmQ_4JdR9WYrjAioNxfigw@mail.gmail.com>
+ <CAHChkrs8iH4+2ZiQUjaD7B9CcqjfbeRG-_3R2uT+FWGSr5kGPA@mail.gmail.com>
+ <20191017211604.GB27587@x1.vandijck-laurijssen.be>
+ <CAHChkrtRD-KLct4BU1mq7MRL3N7YKfNpoDERRnN6SG9d7dzptw@mail.gmail.com>
+ <20191023074638.GA10750@x1.vandijck-laurijssen.be>
+In-Reply-To: <20191023074638.GA10750@x1.vandijck-laurijssen.be>
 
-Did you look for CAN bus errors yet?
-	$ ip link set can0 type can berr-reporting
-	$ ip link set can0 up
-and then
-	$candump -e any,0~0,#FFFFFFFF
+--DSjxqIb9aLzrJ6iLEb83jbme47ElymLQF
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-If you experience bus problems, the cpu may have troubles following
-them.
+On 10/23/19 9:46 AM, Kurt Van Dijck wrote:
+> That is good news for me.  I'll grab the 'more-objects' branch also.
+> Where did you get it?
 
-> I still see a slight degradation
-> in system performance.
-> I also tried the c_can-more-objects branch (increased the message
-> objects to 64) and this also
-> improved CAN handling (about to 0.004% overruns).
-> Then I combined both IRQ-rxoffload and more-objects changes together
-> and the number of overruns
-> is further reduced (loss is close to 0%).
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/lo=
+g/?h=3Dc_can-more-objects
 
-That is good news for me.  I'll grab the 'more-objects' branch also.
-Where did you get it?
+Marc
 
-> 
-> > Besides that, can you give more details about your system and your load?
-> 
-> [eh] System is similar to Beagleboard Black: TI AM335x.
-> From 'top', running about 0% idle, with sys about 44%, usr about 43%,
-> sirq about 9%.
-> Load average: 4.70 4.88 4.04
-> Let me know if you need more info.
-> 
-> >
-> > Kind regards,
-> > Kurt
+--=20
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+
+
+--DSjxqIb9aLzrJ6iLEb83jbme47ElymLQF--
+
+--IEtjPJGLLuSRdAabSdHqf3SGghmIjkv6K
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2wBvEACgkQWsYho5Hk
+nSBtiAf7BJg5OfvHB3EE/hA+iFE5IKRKLfmTSOPkUJ/kpNNX5mVZZ2eRP9+MAo2l
+Vk8RY9TsuTFsdisObv/J0Jt+RmgYDWV9DS1vq1V/EDjKXKydlyYOElSyhFT1LGOa
+1KAOfOcytipSCzXr7yB5s6mjP77sPvOXfid5dxJWCFTdF+/D6wwghwM52LfRWopn
+kfCRuTk0wh/7W94ehdrxpkAozjr73sbMWXc8XG+9oxrSgXkGxQkQcV3ZBQPIgkiv
+74ZG2Doo69dVUsbU2lS8FXUKi1sZZwR4XblFCzNEZe8YelvM8lE2K7OeYxquTKwK
+gwtuchhqo7nH2hMDXdBr8/2602FwvA==
+=yUXN
+-----END PGP SIGNATURE-----
+
+--IEtjPJGLLuSRdAabSdHqf3SGghmIjkv6K--
