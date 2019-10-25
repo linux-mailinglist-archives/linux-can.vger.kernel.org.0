@@ -2,91 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 840A3E49A9
-	for <lists+linux-can@lfdr.de>; Fri, 25 Oct 2019 13:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC30E4BB9
+	for <lists+linux-can@lfdr.de>; Fri, 25 Oct 2019 15:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727874AbfJYLQc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Oct 2019 07:16:32 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:43363 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfJYLQc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Oct 2019 07:16:32 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c2so1861160wrr.10
-        for <linux-can@vger.kernel.org>; Fri, 25 Oct 2019 04:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=aggsABIYRRLswIwxQlk1bc5yL6gnA80dLaHTc+5bzIY=;
-        b=ZfEnKerJnYGRWOAiA9ZGyMPPaOei4svG9M9ngzt/VRWxfhX1aGYgh7sICeNUFn1fR7
-         t7icu56KqU/9tCId7Kbi7XkVfxv6YB4BLQPMyse3pLgbKdOBq2RnyADMVQmd7OK9ZdfE
-         snsj1mRqO6GJrZCrrYszrJDK3DbAA75l/ppva5wwEcTvIw7vEnNc/cev+coPLU2L0ekv
-         3wsk9Ftia043GAUvXZsDZix9D2JBQbktFGsKUG9Q4cii8tapwG9WaH+FCQQldf7eurht
-         ucacZH6tfAmoBM06Wt/OCCtxtKp6bw0SPtuv54rM6jCPZXz5rxqyFhaMA2mYwITH16OH
-         8b5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aggsABIYRRLswIwxQlk1bc5yL6gnA80dLaHTc+5bzIY=;
-        b=fpVOi4NfT0UHToOfpFvnnJ7GIGB1/Wyz0btZcabx7dcVw3X2R+kq3cbu3XQ0Ptef53
-         sptwi7yHt9fJEdAk19rCEsOizo/UC3YRX6l/GbT6Z/VIQGAryk6/hrpp78CH1Y5Mf/Mv
-         ShwxOwWVzJPgUiavu3KK5MkRhFK8Ktvd0cEX5gHgI2RXyOoM92uEcK4GCOUI6U9uf5Ze
-         Iu3WIUuTipeqg2DqQ1TqNyROsc2tTGTi0IRtUeDh/ZNiKFTLxESdou6GduSvCkWst2mi
-         OLyU1Un3D2/ACfIHPHbQAxcQtbQX/WeK9NdUGqt1FtnRR0bh32jt/qpw7TYOs2t7Z9Le
-         iG+Q==
-X-Gm-Message-State: APjAAAXtNEkIAeusesMyKffYa5LKl0UvckbfjAwvfdQ+hB2rAR40V1Xd
-        fOcDVqWLCEbFnxTOQ0pmX7YV9Q==
-X-Google-Smtp-Source: APXvYqye0bMzabbhMdyIpkhP6DJpiYxdibp9PiqfCR0Gpk686vQs9d9QZOMBWqPETxqNqJFJXkTTxw==
-X-Received: by 2002:a5d:544d:: with SMTP id w13mr2562396wrv.19.1572002189723;
-        Fri, 25 Oct 2019 04:16:29 -0700 (PDT)
-Received: from netronome.com (fred-musen.rivierenbuurt.horms.nl. [2001:470:7eb3:404:a2a4:c5ff:fe4c:9ce9])
-        by smtp.gmail.com with ESMTPSA id v20sm1571589wml.26.2019.10.25.04.16.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 04:16:29 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 13:16:27 +0200
-From:   Simon Horman <simon.horman@netronome.com>
-To:     Pankaj Sharma <pankj.sharma@samsung.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net,
-        eugen.hristev@microchip.com, ludovic.desroches@microchip.com,
-        pankaj.dubey@samsung.com, rcsekar@samsung.com,
-        jhofstee@victronenergy.com, Sriram Dash <sriram.dash@samsung.com>
-Subject: Re: [PATCH v2] can: m_can: add support for handling arbitration error
-Message-ID: <20191025111626.GA31153@netronome.com>
-References: <CGME20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78@epcas5p3.samsung.com>
- <1571660016-29726-1-git-send-email-pankj.sharma@samsung.com>
+        id S2409294AbfJYNER (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Oct 2019 09:04:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:34345 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407256AbfJYNER (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Oct 2019 09:04:17 -0400
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iNzGJ-0000ca-4r; Fri, 25 Oct 2019 15:04:15 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iNzGI-0000Lv-6t; Fri, 25 Oct 2019 15:04:14 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
+        wg@grandegger.com
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2] j1939: transport: make sure EOMA is send with the total message size set
+Date:   Fri, 25 Oct 2019 15:04:13 +0200
+Message-Id: <20191025130413.1298-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1571660016-29726-1-git-send-email-pankj.sharma@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 05:43:36PM +0530, Pankaj Sharma wrote:
-> The Bosch MCAN hardware (3.1.0 and above) supports interrupt flag to
-> detect Protocol error in arbitration phase.
-> 
-> Transmit error statistics is currently not updated from the MCAN driver.
-> Protocol error in arbitration phase is a TX error and the network
-> statistics should be updated accordingly.
-> 
-> The member "tx_error" of "struct net_device_stats" should be incremented
-> as arbitration is a transmit protocol error. Also "arbitration_lost" of
-> "struct can_device_stats" should be incremented to report arbitration
-> lost.
-> 
-> Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
-> Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
-> ---
-> 
-> changes in v2:
-> - common m_can_ prefix for is_protocol_err function
-> - handling stats even if the allocation of the skb fails
-> - resolving build errors on net-next branch
+We was sending malformed EOMA with total message size set to 0. So, fix this
+bug and add sanity check to the RX path.
 
-No objections from my side.
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ net/can/j1939/transport.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index fe000ea757ea..e5f1a56994c6 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -1273,9 +1273,27 @@ j1939_xtp_rx_abort(struct j1939_priv *priv, struct sk_buff *skb,
+ static void
+ j1939_xtp_rx_eoma_one(struct j1939_session *session, struct sk_buff *skb)
+ {
++	struct j1939_sk_buff_cb *skcb = j1939_skb_to_cb(skb);
++	const u8 *dat;
++	int len;
++
+ 	if (j1939_xtp_rx_cmd_bad_pgn(session, skb))
+ 		return;
+ 
++	dat = skb->data;
++
++	if (skcb->addr.type == J1939_ETP)
++		len = j1939_etp_ctl_to_size(dat);
++	else
++		len = j1939_tp_ctl_to_size(dat);
++
++	if (session->total_message_size != len) {
++		netdev_warn_once(session->priv->ndev,
++				 "%s: 0x%p: Incorrect size. Expected: %i; got: %i.\n",
++				 __func__, session, session->total_message_size,
++				 len);
++	}
++
+ 	netdev_dbg(session->priv->ndev, "%s: 0x%p\n", __func__, session);
+ 
+ 	session->pkt.tx_acked = session->pkt.total;
+@@ -1432,7 +1450,7 @@ j1939_session *j1939_session_fresh_new(struct j1939_priv *priv,
+ 	skcb = j1939_skb_to_cb(skb);
+ 	memcpy(skcb, rel_skcb, sizeof(*skcb));
+ 
+-	session = j1939_session_new(priv, skb, skb->len);
++	session = j1939_session_new(priv, skb, size);
+ 	if (!session) {
+ 		kfree_skb(skb);
+ 		return NULL;
+-- 
+2.23.0
+
