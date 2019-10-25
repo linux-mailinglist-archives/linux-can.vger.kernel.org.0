@@ -2,141 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB5AE1D06
-	for <lists+linux-can@lfdr.de>; Wed, 23 Oct 2019 15:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111A6E44AB
+	for <lists+linux-can@lfdr.de>; Fri, 25 Oct 2019 09:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406004AbfJWNo0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Oct 2019 09:44:26 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:38008 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405958AbfJWNo0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Oct 2019 09:44:26 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 3so19735855wmi.3;
-        Wed, 23 Oct 2019 06:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=kOZNOUL7Crs+vgeopZXTqJHfGfBbo4sRox+E2s/0PYc=;
-        b=cXqaHbD47dElXBXIwj9WpEP9i9EEzoab/fA2mAS3AXK3Ud40BI68ZzUJNFw0DgCWo2
-         BMXKYDiZfdTAaYDg3b89qrRRsWL1anjp5CBsJoH2S4Pn0N+6gCjBx+D06MFJRVla86Fl
-         HvkayEv8aCczmkCdkk0+T5Ji0N7acjbTHPjDt2Nbk/L62E06vqw1HCuSufWCV4yuCBEq
-         w/G9aXPwbXmoA3+yFVa9N+PyFZfhH6ddrFRmLCuviRqsYhLHqfO22zAkpEFSf/tppLxh
-         LdTEe0y9hMvEad9XoMYJukVQ75R8A+Ym7F7NG1a1E1qgd/JxrR0ST7BTJ77ydGLYGNMX
-         3Gnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=kOZNOUL7Crs+vgeopZXTqJHfGfBbo4sRox+E2s/0PYc=;
-        b=sFiOLtVcP93+AqTlSZqqMKkbBwOVIagvZ9RtmCYu0xYorTDdHcOwmjHzgrOAmcR79C
-         hnceAI1TrhRYMg8WSH/SliN+i1U40VvdjQVgGArG9WPaKEfhAanK/PdwyV3b5mXYs63w
-         IGq0AMEH9cU1lC5rdS11UF5bC00QM+QsUEzUGs/btWSWvJHIV/7CcmrKinsWDfrL7ezR
-         7vpR/bkTah6zhTSsfdE7ucvpSzhGsdXdEnNLKO+QzkMulFPrQklcfnCnW5QSc/7fJSt1
-         ggy3/1jueWj90/f3zjUPPKPJEXKUicfZdIzoVduXaQ1trYZJWDB2V8uadz46aww5SbZZ
-         8bIQ==
-X-Gm-Message-State: APjAAAWM4zHxf6gT64/MKVJqKLXC+xHg0kQHa1V+e/5+W0MxpTtp/9JG
-        CVb5GARicQ7jgQeQvrh8fJQ=
-X-Google-Smtp-Source: APXvYqx/+EFhS6vLTSVsls6EmtBiRjY5ntt9y8h6qB7h3ydj8zR+dIIK8yc7NwiC9Pupk0eee4/qFg==
-X-Received: by 2002:a05:600c:1150:: with SMTP id z16mr6666293wmz.153.1571838264574;
-        Wed, 23 Oct 2019 06:44:24 -0700 (PDT)
-Received: from VM-VPR.corporate.saft.org (i19-lef01-ix2-176-180-80-120.dsl.dyn.abo.bbox.fr. [176.180.80.120])
-        by smtp.gmail.com with ESMTPSA id s10sm15375553wrn.46.2019.10.23.06.44.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 23 Oct 2019 06:44:24 -0700 (PDT)
-From:   Vincent Prince <vincent.prince.fr@gmail.com>
-To:     mkl@pengutronix.de
-Cc:     dave.taht@gmail.com, davem@davemloft.net, jhs@mojatatu.com,
-        jiri@resnulli.us, kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, xiyou.wangcong@gmail.com,
-        Vincent Prince <vincent.prince.fr@gmail.com>
-Subject: [PATCH v5] net: sch_generic: Use pfifo_fast as fallback scheduler for CAN hardware
-Date:   Wed, 23 Oct 2019 15:44:20 +0200
-Message-Id: <1571838260-19186-1-git-send-email-vincent.prince.fr@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20190327165632.10711-1-mkl@pengutronix.de>
-References: <20190327165632.10711-1-mkl@pengutronix.de>
+        id S2407160AbfJYHjC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Oct 2019 03:39:02 -0400
+Received: from mail.iot.bzh ([51.75.236.24]:39789 "EHLO mail.iot.bzh"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406055AbfJYHjC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 25 Oct 2019 03:39:02 -0400
+Received: from [10.18.0.57] (unknown [10.18.0.57])
+        by mail.iot.bzh (Postfix) with ESMTPSA id B6A0D40078;
+        Fri, 25 Oct 2019 09:38:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
+        t=1571989135; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V5gyaukWNKKWxImyC0Ht3SP6ii6Wv3hK7hk4qqKgZHE=;
+        b=V4rcYibe931la26vKiO8/fdhjqpR/0FRuoe012EKhrfwST3JyRcLeVQw+QkWYMHHCWQJiu
+        NtyueaG2sEsEFmVSlRoerUOiM5yr97XuW7TPDfJt5a+zR20kUeDmNANC5hU+ZsA9rL19qG
+        YpJI2H/D5dxCeYMnzVKAKuWVc/waPjXZwZD1H1Kwooc012SBWyVhTcGa8PM8SkaM6SYx8P
+        +JQR8lzW8D8S8xcYzvqB7MMV7GThpMDzeCRt9QELEaiRrUvKMyvYPnnXVGeq/XV7/iyEiA
+        LVgSYRFynhDF8tji7RAobPDKjIgwuoq+hiBBjPuZClwbi2phxMJ52ksU7f3fMQ==
+Subject: Re: Questions around J1939 backport to old kernel
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
+ <20191018145333.a27j7d7f4zf3bqjd@pengutronix.de>
+From:   "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+Organization: IOTBZH
+Message-ID: <72a6f8b2-38e3-a54b-d719-10471d4d260b@iot.bzh>
+Date:   Fri, 25 Oct 2019 09:38:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191018145333.a27j7d7f4zf3bqjd@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-There is networking hardware that isn't based on Ethernet for layers 1 and 2.
+I used it in the mainline kernel without troubles. This is a a very good 
+job, thanks.
 
-For example CAN.
+Ok, thanks for the answer. May be I  will work on it in the next few 
+months. Let's see. I'll keep you informed.
 
-CAN is a multi-master serial bus standard for connecting Electronic Control
-Units [ECUs] also known as nodes. A frame on the CAN bus carries up to 8 bytes
-of payload. Frame corruption is detected by a CRC. However frame loss due to
-corruption is possible, but a quite unusual phenomenon.
+Regards.
 
-While fq_codel works great for TCP/IP, it doesn't for CAN. There are a lot of
-legacy protocols on top of CAN, which are not build with flow control or high
-CAN frame drop rates in mind.
-
-When using fq_codel, as soon as the queue reaches a certain delay based length,
-skbs from the head of the queue are silently dropped. Silently meaning that the
-user space using a send() or similar syscall doesn't get an error. However
-TCP's flow control algorithm will detect dropped packages and adjust the
-bandwidth accordingly.
-
-When using fq_codel and sending raw frames over CAN, which is the common use
-case, the user space thinks the package has been sent without problems, because
-send() returned without an error. pfifo_fast will drop skbs, if the queue
-length exceeds the maximum. But with this scheduler the skbs at the tail are
-dropped, an error (-ENOBUFS) is propagated to user space. So that the user
-space can slow down the package generation.
-
-On distributions, where fq_codel is made default via CONFIG_DEFAULT_NET_SCH
-during compile time, or set default during runtime with sysctl
-net.core.default_qdisc (see [1]), we get a bad user experience. In my test case
-with pfifo_fast, I can transfer thousands of million CAN frames without a frame
-drop. On the other hand with fq_codel there is more then one lost CAN frame per
-thousand frames.
-
-As pointed out fq_codel is not suited for CAN hardware, so this patch changes
-attach_one_default_qdisc() to use pfifo_fast for "ARPHRD_CAN" network devices.
-
-During transition of a netdev from down to up state the default queuing
-discipline is attached by attach_default_qdiscs() with the help of
-attach_one_default_qdisc(). This patch modifies attach_one_default_qdisc() to
-attach the pfifo_fast (pfifo_fast_ops) if the network device type is
-"ARPHRD_CAN".
-
-[1] https://github.com/systemd/systemd/issues/9194
-
-Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
-Acked-by: Dave Taht <dave.taht@gmail.com>
----
-Changes in v5:
- - add previous ack
-
-Changes in v4: 
- - add Marc credit to commit log
- 
-Changes in v3:
- - add description
-
-Changes in v2:
- - reformat patch
-
- net/sched/sch_generic.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 77b289d..dfb2982 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1008,6 +1008,8 @@ static void attach_one_default_qdisc(struct net_device *dev,
- 
- 	if (dev->priv_flags & IFF_NO_QUEUE)
- 		ops = &noqueue_qdisc_ops;
-+	else if(dev->type == ARPHRD_CAN)
-+		ops = &pfifo_fast_ops;
- 
- 	qdisc = qdisc_create_dflt(dev_queue, ops, TC_H_ROOT, NULL);
- 	if (!qdisc) {
+On 18/10/2019 16:53, Oleksij Rempel wrote:
+> Hi,
+>
+> On Fri, Oct 18, 2019 at 12:07:34PM +0200, Romain Forlot [IoT.bzh] wrote:
+>> Hi,
+>>
+>> I am wondering what the cost is to backport the j1939 module to an old
+>> version like a v4.14 LTSI version.
+> The backport should be quite easy:
+>
+> git cherry-pick -sx `git rev-list --reverse 2c1f9e26344483e2c74e80ef708d9c7fd2e543f4..9d71dd0c70099914fcd063135da3c580865e924c`
+>
+> ...but it isn't :/ Some CAN patches are missing. We'll backport the stack to
+> v4.14.150 (or newer) and send a follow up mail.
+>
+> However, the driver for the CAN adapter needs proper RX/TX frame ordering,
+> otherwise the stack will explode.
+>
+> This is fixed in flexcan mainline. And involves a handful of patches. Other
+> drivers probably need more fixing. Some CAN hardware may even lack the hardware
+> support for proper ordering, that is time stamping registers.
+>
+>> And what the impact is of backporting the whole CAN stack on the CAN drivers?
+> The stack has no impact on the drivers, but requirements on proper RX/TX
+> ordering, see above.
+>
+>> Are there any modifications to drivers once the CAN stack is updated ?
+> Yes, as long as they don't have proper RX/TX ordering.
+>
+> So, which CAN driver are you planing to use?
+>
+> Regards,
+> Oleksij & Marc
+>
 -- 
-2.7.4
+Romain Forlot - Embedded Engineer - IoT.bzh
+romain.forlot@iot.bzh - www.iot.bzh - +33675142438
 
