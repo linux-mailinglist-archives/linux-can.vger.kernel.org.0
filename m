@@ -2,93 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 145EAE5809
-	for <lists+linux-can@lfdr.de>; Sat, 26 Oct 2019 04:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B2CE5F34
+	for <lists+linux-can@lfdr.de>; Sat, 26 Oct 2019 21:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbfJZCUq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Oct 2019 22:20:46 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:39742 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfJZCUq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Oct 2019 22:20:46 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id DBAD314B79F99;
-        Fri, 25 Oct 2019 19:20:45 -0700 (PDT)
-Date:   Fri, 25 Oct 2019 19:20:45 -0700 (PDT)
-Message-Id: <20191025.192045.1462505833001638832.davem@davemloft.net>
-To:     vincent.prince.fr@gmail.com
-Cc:     mkl@pengutronix.de, dave.taht@gmail.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, xiyou.wangcong@gmail.com
-Subject: Re: [PATCH v5] net: sch_generic: Use pfifo_fast as fallback
- scheduler for CAN hardware
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <1571838260-19186-1-git-send-email-vincent.prince.fr@gmail.com>
-References: <20190327165632.10711-1-mkl@pengutronix.de>
-        <1571838260-19186-1-git-send-email-vincent.prince.fr@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 25 Oct 2019 19:20:46 -0700 (PDT)
+        id S1726442AbfJZT1g (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 26 Oct 2019 15:27:36 -0400
+Received: from mail-io1-f50.google.com ([209.85.166.50]:38260 "EHLO
+        mail-io1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfJZT1g (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Oct 2019 15:27:36 -0400
+Received: by mail-io1-f50.google.com with SMTP id u8so6186479iom.5
+        for <linux-can@vger.kernel.org>; Sat, 26 Oct 2019 12:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suburbanembedded.com; s=google;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=OYZDMz5ZgJoHfvEfxz5+F9hIL9uxpFJNChR1bgrWrf4=;
+        b=TkJxD17JwJCaJk1O92kqNrqA37SYwUb6TcSGxz/YgzuzRhSz19EjgHS2qBHOgQU/HP
+         utjrAPJrQ2jFzGQF1+0I/Mp3JYA+mTUNOU+LwnOs6hx4m35eBkB5cXPU1NdoPEIjBaKX
+         0nQ65nyWFUsfm2RfY48YXt3pGDpm5csKpFbK06y6qV8JctXDW6bnq8vg1vhvKpzJrSO0
+         sDWO68LfEE1NiXhx4abrSweBjDEwqWHI5dtbVGEFcAk/kf/Ka3QyTjEUFgIs7IqzY+50
+         EwVjRRoQh6Uj6Fn/F4HBZB14lGIj5u0TbSrAdhvXxgorVFwuSGPiaR+MnkNWyK8clINq
+         roxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=OYZDMz5ZgJoHfvEfxz5+F9hIL9uxpFJNChR1bgrWrf4=;
+        b=M4T1R6kWQikPXj4TvqcGlWsvst6Nqt0Qb5v40kH15lO2+EyiLYm9pMA7hrtReLObl9
+         dC5ndWc2iZ1a1qvemHRhjXSY3O6MGqONkqVd9I4F0yAs+7Kb5XfL0FVB1QJ5qXFnTR2Q
+         CZYmGbQ2+O9/RKXWvXtG0rTmXofE8KeUY2aHyeMcEOEHBqO2PhYRw5l9H7zy/4j4mSWx
+         RNX3z70xTreemd5mb7CatAFKMnl6AF+9WLztmTNBP596KfnO5Efiwr91QOE2KqCG9BFC
+         6IDS2e9Ri+alUTxmDPoEdHxtQCcZgINXofWK3KECjeVap9neZvN1CzstdO2WpfBdqQwW
+         maYw==
+X-Gm-Message-State: APjAAAXTdX++C5Ahfk505/+NDxf9eNib1kvwZXkJCdVUZPx+lqMlopYU
+        cGKq+EhZmte56rOOlbcmt56GuCxWO0iQKTbbWUJaVqZ1SW7D+g==
+X-Google-Smtp-Source: APXvYqyJrwxbWx+Ii/mPl/jgf6tcIBO5J92qYmfc4hIKis/IhfK0qGttCIsRgqqJAHSNxk6SjWCJ0C7ecXlGh0ibNFA=
+X-Received: by 2002:a02:9f8b:: with SMTP id a11mr10690715jam.10.1572118055623;
+ Sat, 26 Oct 2019 12:27:35 -0700 (PDT)
+MIME-Version: 1.0
+From:   Jacob Schloss <jacob.schloss@suburbanembedded.com>
+Date:   Sat, 26 Oct 2019 12:27:25 -0700
+Message-ID: <CACj_+4Y8904tbswy76Fpp6wGKZPdNpSrfDq6BvfTAGzs4zHT8w@mail.gmail.com>
+Subject: CAN FD support in slcan - protocol extension?
+To:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vincent Prince <vincent.prince.fr@gmail.com>
-Date: Wed, 23 Oct 2019 15:44:20 +0200
+Hi,
 
-> There is networking hardware that isn't based on Ethernet for layers 1 and 2.
-> 
-> For example CAN.
-> 
-> CAN is a multi-master serial bus standard for connecting Electronic Control
-> Units [ECUs] also known as nodes. A frame on the CAN bus carries up to 8 bytes
-> of payload. Frame corruption is detected by a CRC. However frame loss due to
-> corruption is possible, but a quite unusual phenomenon.
-> 
-> While fq_codel works great for TCP/IP, it doesn't for CAN. There are a lot of
-> legacy protocols on top of CAN, which are not build with flow control or high
-> CAN frame drop rates in mind.
-> 
-> When using fq_codel, as soon as the queue reaches a certain delay based length,
-> skbs from the head of the queue are silently dropped. Silently meaning that the
-> user space using a send() or similar syscall doesn't get an error. However
-> TCP's flow control algorithm will detect dropped packages and adjust the
-> bandwidth accordingly.
-> 
-> When using fq_codel and sending raw frames over CAN, which is the common use
-> case, the user space thinks the package has been sent without problems, because
-> send() returned without an error. pfifo_fast will drop skbs, if the queue
-> length exceeds the maximum. But with this scheduler the skbs at the tail are
-> dropped, an error (-ENOBUFS) is propagated to user space. So that the user
-> space can slow down the package generation.
-> 
-> On distributions, where fq_codel is made default via CONFIG_DEFAULT_NET_SCH
-> during compile time, or set default during runtime with sysctl
-> net.core.default_qdisc (see [1]), we get a bad user experience. In my test case
-> with pfifo_fast, I can transfer thousands of million CAN frames without a frame
-> drop. On the other hand with fq_codel there is more then one lost CAN frame per
-> thousand frames.
-> 
-> As pointed out fq_codel is not suited for CAN hardware, so this patch changes
-> attach_one_default_qdisc() to use pfifo_fast for "ARPHRD_CAN" network devices.
-> 
-> During transition of a netdev from down to up state the default queuing
-> discipline is attached by attach_default_qdiscs() with the help of
-> attach_one_default_qdisc(). This patch modifies attach_one_default_qdisc() to
-> attach the pfifo_fast (pfifo_fast_ops) if the network device type is
-> "ARPHRD_CAN".
-> 
-> [1] https://github.com/systemd/systemd/issues/9194
-> 
-> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
-> Acked-by: Dave Taht <dave.taht@gmail.com>
+We've made a little CAN-USB adapter that is mostly compatible with the
+Lawicel AB text mode protocol that is common for serial-to-can
+adapters, but with some extensions for CAN FD.
 
-Applied to net-next.
+https://github.com/suburbanembedded/hadoucan-fw
+https://www.tindie.com/products/suburbanembedded/hadou-can-usb-can-fd-adapter/
+
+User Guide
+https://drive.google.com/open?id=1MtYEAVDF2ImoV_6nmfjP3o9sGMMwxck2wRqLRCWhaTU
+
+The device supports CAN FD, and I arbitrarily picked a new ascii
+command to support sending and receiving CAN FD packets, but it would
+be interesting if we could standardize FD support and add it to slcan.
+
+Right now I'm using 'd' for an FD message with an 11 bit id, 'D' for a
+FD message with a 29 bit id, and permitting FD frames to have DLC
+codes 9-F. I can change that if needed. BRS is enabled separately via
+a config setting.
+
+Does it make sense to try and coordinate an extension to the text mode
+protocol? I'd like to be able to send CAN FD frames through
+slcand/cansend etc and keep compatibility with any new hardware that
+might start coming out.
+
+Thanks,
+Jacob Schloss
