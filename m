@@ -2,213 +2,227 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C753E962B
-	for <lists+linux-can@lfdr.de>; Wed, 30 Oct 2019 06:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D36E96AC
+	for <lists+linux-can@lfdr.de>; Wed, 30 Oct 2019 07:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbfJ3Fzp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Oct 2019 01:55:45 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:26872 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbfJ3Fzp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Oct 2019 01:55:45 -0400
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20191030055542epoutp0101c02e4dd51ac8df630da60805e11dc6~SVw8S0T990557005570epoutp01U
-        for <linux-can@vger.kernel.org>; Wed, 30 Oct 2019 05:55:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20191030055542epoutp0101c02e4dd51ac8df630da60805e11dc6~SVw8S0T990557005570epoutp01U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1572414942;
-        bh=v9h7l+9XbROld5p1fEnR71nPrxXtqtEH/w4luax7RBY=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=dnkHMiCiXmr6QoyNDEVX6RPjc3hhoLLNapYiV6B0tes6XvVN7gxmDYIqZb5YNLS1N
-         AkDGG/ey3TOw5RqbO+CIKeRlZ+16FvGGDx8sb8sEsX2kguEcLa41drgPL/mmlxpNty
-         8ShkEWR79IPOtuP0ALW1RuZ7wnB/+aL/JOz6/8ro=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20191030055541epcas5p248f15823c998f81471f7a93d070e9888~SVw7nc8go1928219282epcas5p2g;
-        Wed, 30 Oct 2019 05:55:41 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        17.7F.48302.DD529BD5; Wed, 30 Oct 2019 14:55:41 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191030055540epcas5p10e67b586ff6203f7f291bf0cae729113~SVw6xtQto2223522235epcas5p1c;
-        Wed, 30 Oct 2019 05:55:40 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191030055540epsmtrp16f2629896b10f187f42259b68e167fe0~SVw6wwr5K0745807458epsmtrp1k;
-        Wed, 30 Oct 2019 05:55:40 +0000 (GMT)
-X-AuditID: b6c32a4a-327ff7000001bcae-7e-5db925ddeb80
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DF.BE.24756.CD529BD5; Wed, 30 Oct 2019 14:55:40 +0900 (KST)
-Received: from pankjsharma02 (unknown [107.111.84.17]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191030055538epsmtip18de7aefd13579f364ac8a8ec4cc9843c~SVw46mPSr1365013650epsmtip1Y;
-        Wed, 30 Oct 2019 05:55:38 +0000 (GMT)
-From:   "pankj.sharma" <pankj.sharma@samsung.com>
-To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
-Cc:     <wg@grandegger.com>, <davem@davemloft.net>,
-        <eugen.hristev@microchip.com>, <ludovic.desroches@microchip.com>,
-        <pankaj.dubey@samsung.com>, <rcsekar@samsung.com>,
-        <jhofstee@victronenergy.com>, <simon.horman@netronome.com>,
-        "'Sriram Dash'" <sriram.dash@samsung.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-In-Reply-To: <89d7b65f-e8cf-9241-5642-ab3446b464a5@pengutronix.de>
-Subject: RE: [PATCH v2] can: m_can: add support for handling arbitration
- error
-Date:   Wed, 30 Oct 2019 11:25:20 +0530
-Message-ID: <00dd01d58ee6$a8ce43d0$fa6acb70$@samsung.com>
-MIME-Version: 1.0
+        id S1727469AbfJ3GqL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Oct 2019 02:46:11 -0400
+Received: from mail-eopbgr140079.outbound.protection.outlook.com ([40.107.14.79]:55276
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726187AbfJ3Gp7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 30 Oct 2019 02:45:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a958T7kWkZ1qz62I5A0qOAjugdNJtrGZYenCQWkBdE70ur8SUgptAwLl7GmHRRuEfSp/oC0kTE3Z6TjZ2/5aMkUA8wo7lWuxIgYBHE5M0ExCHB496I/n2z79WKs+arZU4Xx/A2R6kQScqagsBw33YXLokUqXnEo600Pu1AmS+WFOe5M4QEjTC5/Byiod72YGv/ktJ4ErtkpluMIR+5AyOyqqMNVqcXesJ1nMzy6QFab9uPVFvEHFjl3IktOi7RJg86lVQRI9fifLTf7GCwe3lXV+Uv8TYn+UWiA8znrF9WahEdhvfSpPogeJ8JUimpq3b5/o/cTFOnluZCUc3LWyuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y8C/1PYWRCO4sHPCmyAt7nANIhX8Oh3mI0PmMRsM7+Q=;
+ b=gi9i7nHzI+/hYzTufsdOsKRD2976s59Q0xOhssAvW6HQt2lXlvEJLAgGTaKEudMLLq958U24JX8X58aBqRATQ66fwVU9b0XtfHXwHaL04o2SYPZPJDOUN1O/6+EaNxRl76FC4uPPBzCJpGpAR1n9MwyPUC6Uaa6JHl24d2yQe7qmrPlaJYuLltuIs9V1OcP7GxrfmvhPbVXTIvzm20EmL89dXbGoACoa4nKIyseCio4BJKftG2CSwi+Zuy9rBn3Xt58NJqdQxYi81gFjVRKVeR+4QiRYyjXYIReMZ6gG0lK7/42z05ttNeziCcErvQTtLliKXH3McVjx9n52yiA+wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=y8C/1PYWRCO4sHPCmyAt7nANIhX8Oh3mI0PmMRsM7+Q=;
+ b=JZgQAnQPsoQW4UM6nyL7I/gJfn0olMDjAnABV6l2uzh3wWd+bRj+EK4Z537+F2xYz3dfhx+1VoE5ltgc30RvBWEjTNUPdtihYuzDmMFpX8GdtmGESloPPBGIAOH/UBLhxOAzLjPOIE3f7iafFNnz+/RXa6HnQntjv2tSqiZ1U4k=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB4666.eurprd04.prod.outlook.com (52.135.133.14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.24; Wed, 30 Oct 2019 06:45:54 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::79f1:61a7:4076:8679]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::79f1:61a7:4076:8679%3]) with mapi id 15.20.2367.031; Wed, 30 Oct 2019
+ 06:45:54 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sean@geanix.com" <sean@geanix.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: [RFC PATCH] can: dev: Add check for the minimum value of a bit time
+Thread-Topic: [RFC PATCH] can: dev: Add check for the minimum value of a bit
+ time
+Thread-Index: AQHVju2tAMAfAIze9E+YwIGuZQPJNg==
+Date:   Wed, 30 Oct 2019 06:45:54 +0000
+Message-ID: <20191030064245.12923-1-qiangqing.zhang@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: SG2PR02CA0042.apcprd02.prod.outlook.com
+ (2603:1096:3:18::30) To DB7PR04MB4618.eurprd04.prod.outlook.com
+ (2603:10a6:5:38::23)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 521b00a7-18be-4cdb-ace3-08d75d04cfc5
+x-ms-traffictypediagnostic: DB7PR04MB4666:|DB7PR04MB4666:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB7PR04MB46669672F561362444F1BAB2E6600@DB7PR04MB4666.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 02065A9E77
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(346002)(396003)(376002)(136003)(189003)(199004)(81166006)(2501003)(486006)(99286004)(8676002)(86362001)(66446008)(2616005)(66556008)(5660300002)(476003)(7736002)(66476007)(50226002)(64756008)(81156014)(4326008)(305945005)(66946007)(6506007)(26005)(386003)(14444005)(25786009)(256004)(316002)(36756003)(102836004)(66066001)(6512007)(186003)(3846002)(54906003)(6436002)(1076003)(71190400001)(6486002)(110136005)(14454004)(2906002)(478600001)(52116002)(66574012)(8936002)(71200400001)(6116002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4666;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8yF72A6FvZ7/O2sOnoCmggy41TC6bXz/F1dmaehXpYaTghqAIkfIiyPADGN/zakORakyTkIGA4CxrDMPmH0DowlpNNnpV02Sq8y3g5SP2rTZKmaPMbE1wlfqJHIxGxvqEvUsmPoMdEzBvaETMnKA8vGEXkXMZxTdTRil1HaX8ZO8y7hN21W5mBL1tcKxpXsbBRkyXaKCHCpqwR6w2DgCGBLy3jXgd5tMmXY9yWM/FGDC7uoorXSsVifO5jxfOtxcPyVDwehSrH3Q9jvSLoaIQAdLdz5EAlMk37BZW+hfL4KU+dzzJFAltuKJriGrTx9PJWAumMVHvO2y+F0K7iiyuTTNrOM0F7PRcrsCouggbXm7hZWANXGRwQ5vYCB3liWNB99G+27kvk1wuYImI2AO4r0omlVKcNw09WE7FkYp8zHFkxjfisVAfK/FvsRVMorp
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-us
-Thread-Index: AQI3yvUU2phHfNfUXWQjh97goU7vHgHmcqhyAiT9Gy2mjdss4A==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHeXfO2c5Wq9O28tFEamGi4mahdaKoqD4cwg9GRCGKjTyo6VR2
-        yjQirURLa4Yl1TCZk4ZN09C55qVldpEw8k5GKl0UtIWV81ZLqO0s8tvvufzf//OHl8RkQ0QA
-        mZpxitVlaNKVQgluexYaEjEa3JIQebdVQVf0FOB0x2IXTtd8cxC0ZaEcowdaK4T05IO3BN1g
-        uonTL43raFPzrIg29NoJerhFTA83iOh7Yy3EXiljvf9OwPzof4+YkcV7iLlV8hFjSpciGb3V
-        ghhXYxBT9vS7KJaMk+xKYtNTs1mdevdxScqwqR5l1QblNC3oUT6qhGIkJoGKgvZbH7BiJCFl
-        VBuCsbsuIV/MIDC/NSG+mEcweMkl+icZ73H4Bo8RzOkf+SROBEVF1ZhnS0ip4ebFJdzDCkoF
-        7usmgYcxyimA23MKD4upfdD7vd3bl1OxUGQ0eh1wKhieDi94WUrtAKfTgvG8Bl7dGcf5d8LB
-        XOXE+Is2wM8JM8H3/WDqxXMR77sPymarCc9xQNWLoKanWsgLDsBv25hPLIcvXVZftACYKi30
-        cRpUtZX+NSP/cg4U3pbz7T3QMVjhbWNUKDS0qnnbVXDNPS7gt6VwuVDGb2+G8olpxHMgjHxq
-        8h3AgPNrJXEdbTQsC2ZYFsywLIzhv5kR4Rbkz2Zx2mSWi87amsGeUXEaLXc6I1l1IlPbiLyf
-        LeygHZnfxHQiikTKldKOUHuCjNBkc7naTgQkplRI+17bEmTSJE3uWVaXmag7nc5ynWg9iSv9
-        pGXEULyMStacYtNYNovV/ZsKSHFAProMfYlrHZ2H/OPUHSPnJzJ/zUS3PYlxb2va1Fy8KSRP
-        ZT1HChS7uiu/dXPoyP606dUw8EnYfHRSW15QbHy4Jzww2hQvSbwQWXcFum7Mu0ZdtqvBtXk1
-        i0H4zoESN25ZOrx9bbvJLg7Un5wzRFi3qqM/rzgmfxKV5MjZWZBd16/EuRTNljBMx2n+AIbc
-        RvFoAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSnO4d1Z2xBnM2SFvMOd/CYnHgx3EW
-        ixXv97FarPo+ldni8q45bBYv1l5ntVi/aAqLxbEFYhaLtn5ht5h1YQerxY2dnBY31rNbLL23
-        k9WB12PLyptMHh8v3Wb0uPNjKaPH9O6HzB79fw08+rasYvT4vEnOY9LBD+wBHFFcNimpOZll
-        qUX6dglcGW//sRYclq14uGIZWwPjNvEuRk4OCQETiSfn9zF2MXJxCAnsZpT4NGcaaxcjB1BC
-        RmLx52qIGmGJlf+es0PUvGSUuD7vNRNIgk1AX2JK018WEFtEQE/i94RFTCBFzALfmSTmblnJ
-        BtFxgVHi3qoPbCBVnAJOEhc+7AHrFhbwk9izcAMjiM0ioCpx8MZ3dhCbV8BS4vXrVcwQtqDE
-        yZlPwDYwC2hLPL35FM5etvA1M8R5ChI/ny5jhYiLS7w8eoQd4iIniUlfFrNOYBSehWTULCSj
-        ZiEZNQtJ+wJGllWMkqkFxbnpucWGBYZ5qeV6xYm5xaV56XrJ+bmbGMERqqW5g/HykvhDjAIc
-        jEo8vAc0d8QKsSaWFVfmHmKU4GBWEuG9eGZbrBBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHep3nH
-        IoUE0hNLUrNTUwtSi2CyTBycUg2M0642GwuFLDKykC7iFGwQ6MxIiHWQjRHacEZgWuUe9tRl
-        9z+sMPryLuDB4pkyd3lfPNyyd8sqZfnXEayrNP8E2ny4vTd5msraJbe1jge5yP7Tkpmx7kZX
-        avrEgtI1e434bB/OlWqqd336feYMRUtmszUyGks+B/m5S9yJ2quR2vbhUqLaNLZsJZbijERD
-        Leai4kQA0nWDIswCAAA=
-X-CMS-MailID: 20191030055540epcas5p10e67b586ff6203f7f291bf0cae729113
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78
-References: <CGME20191021121350epcas5p3313e54a3bc5c8600c52a6db299893f78@epcas5p3.samsung.com>
-        <1571660016-29726-1-git-send-email-pankj.sharma@samsung.com>
-        <89d7b65f-e8cf-9241-5642-ab3446b464a5@pengutronix.de>
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 521b00a7-18be-4cdb-ace3-08d75d04cfc5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2019 06:45:54.6063
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lf+qB9E+ZLkOAn59kq/0w1TVWhMz8Sb9kTqGxYiB7NvHTkRifn1C5DlGQU9SGKF+AApZnBR1s0C+YrpS2FWMQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4666
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> From: Marc Kleine-Budde <mkl=40pengutronix.de>
-> Subject: Re: =5BPATCH v2=5D can: m_can: add support for handling arbitrat=
-ion error
->=20
-> On 10/21/19 2:13 PM, Pankaj Sharma wrote:
-> > The Bosch MCAN hardware (3.1.0 and above) supports interrupt flag to
-> > detect Protocol error in arbitration phase.
-> >
-> > Transmit error statistics is currently not updated from the MCAN driver=
-.
-> > Protocol error in arbitration phase is a TX error and the network
-> > statistics should be updated accordingly.
-> >
-> > The member =22tx_error=22 of =22struct net_device_stats=22 should be
-> > incremented as arbitration is a transmit protocol error. Also
-> > =22arbitration_lost=22 of =22struct can_device_stats=22 should be incre=
-mented
-> > to report arbitration lost.
-> >
-> > Signed-off-by: Pankaj Sharma <pankj.sharma=40samsung.com>
-> > Signed-off-by: Sriram Dash <sriram.dash=40samsung.com>
-> > ---
-> >
-> > changes in v2:
-> > - common m_can_ prefix for is_protocol_err function
-> > - handling stats even if the allocation of the skb fails
-> > - resolving build errors on net-next branch
-> >
-> >  drivers/net/can/m_can/m_can.c =7C 37
-> > +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 37 insertions(+)
-> >
-> > diff --git a/drivers/net/can/m_can/m_can.c
-> > b/drivers/net/can/m_can/m_can.c index 75e7490c4299..a736297a875f
-> > 100644
-> > --- a/drivers/net/can/m_can/m_can.c
-> > +++ b/drivers/net/can/m_can/m_can.c
-> > =40=40 -778,6 +778,38 =40=40 static inline bool is_lec_err(u32 psr)
-> >  	return psr && (psr =21=3D LEC_UNUSED);
-> >  =7D
-> >
-> > +static inline bool m_can_is_protocol_err(u32 irqstatus) =7B
-> > +	return irqstatus & IR_ERR_LEC_31X;
-> > +=7D
-> > +
-> > +static int m_can_handle_protocol_error(struct net_device *dev, u32
-> > +irqstatus) =7B
-> > +	struct net_device_stats *stats =3D &dev->stats;
-> > +	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> > +	struct can_frame *cf;
-> > +	struct sk_buff *skb;
-> > +
-> > +	/* propagate the error condition to the CAN stack */
-> > +	skb =3D alloc_can_err_skb(dev, &cf);
-> > +	if (unlikely(=21skb)) =7B
-> > +		netdev_dbg(dev, =22allocation of skb failed=5Cn=22);
-> > +		stats->tx_errors++;
-> > +		return 0;
-> > +	=7D
-> > +	if (cdev->version >=3D 31 && (irqstatus & IR_PEA)) =7B
-> > +		netdev_dbg(dev, =22Protocol error in Arbitration fail=5Cn=22);
-> > +		stats->tx_errors++;
-> > +		cdev->can.can_stats.arbitration_lost++;
->=20
-> If the skb allocation fails, you miss the stats here.
+As ISO 11898-1 said: The total number of time quanta in a nominal bit
+time shall be programmable at least from 8 to 25 for implementation that
+are not FD enabled. For implementations that are FD enabled, the total
+number of time quanta in a data bit time shall be programmable at least
+from 5 to 25 and in a nominal bit time at least from 8 to 80.
 
-Alright. We shall handle the stats even when skb fails.=20
-Shall post in upcoming revision.
+So the minimum value for nominal bit time is 8 and for data bit time is
+5, had better ensure the minimum value of a bit time.
 
->=20
-> > +		cf->can_id =7C=3D CAN_ERR_LOSTARB;
-> > +		cf->data=5B0=5D =7C=3D CAN_ERR_LOSTARB_UNSPEC;
-> > +	=7D
-> > +
-> > +	netif_receive_skb(skb);
-> > +
-> > +	return 1;
-> > +=7D
-> > +
-> >  static int m_can_handle_bus_errors(struct net_device *dev, u32 irqstat=
-us,
-> >  				   u32 psr)
-> >  =7B
-> > =40=40 -792,6 +824,11 =40=40 static int m_can_handle_bus_errors(struct
-> net_device *dev, u32 irqstatus,
-> >  	    is_lec_err(psr))
-> >  		work_done +=3D m_can_handle_lec_err(dev, psr & LEC_UNUSED);
-> >
-> > +	/* handle protocol errors in arbitration phase */
-> > +	if ((cdev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) &&
-> > +	    m_can_is_protocol_err(irqstatus))
-> > +		work_done +=3D m_can_handle_protocol_error(dev, irqstatus);
-> > +
-> >  	/* other unproccessed error interrupts */
-> >  	m_can_handle_other_err(dev, irqstatus);
->=20
-> Marc
->=20
-> --
-> Pengutronix e.K.                  =7C Marc Kleine-Budde           =7C
-> Industrial Linux Solutions        =7C Phone: +49-231-2826-924     =7C
-> Vertretung West/Dortmund          =7C Fax:   +49-5121-206917-5555 =7C
-> Amtsgericht Hildesheim, HRA 2686  =7C
-> https://protect2.fireeye.com/url?k=3Dcb5c4e6130fb99cd.cb5dc52e-
-> 7d616d604aa6cbcf&u=3Dhttp://www.pengutronix.de   =7C
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+---
+ drivers/net/can/dev.c | 37 +++++++++++++++++++++++++++++--------
+ 1 file changed, 29 insertions(+), 8 deletions(-)
 
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index ac86be52b461..69e693c79579 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -115,7 +115,8 @@ can_update_sample_point(const struct can_bittiming_cons=
+t *btc,
+ 	return best_sample_point;
+ }
+=20
+-static int can_calc_bittiming(struct net_device *dev, struct can_bittiming=
+ *bt,
++static int can_calc_bittiming(struct net_device *dev, bool is_data_bt,
++			      struct can_bittiming *bt,
+ 			      const struct can_bittiming_const *btc)
+ {
+ 	struct can_priv *priv =3D netdev_priv(dev);
+@@ -147,6 +148,14 @@ static int can_calc_bittiming(struct net_device *dev, =
+struct can_bittiming *bt,
+ 	     tseg >=3D (btc->tseg1_min + btc->tseg2_min) * 2; tseg--) {
+ 		tsegall =3D CAN_CALC_SYNC_SEG + tseg / 2;
+=20
++		/* the total number of time quanta in a data bit time
++		 * (SYNC_SEG + TSEG1 + TSEG2) shall be programmable at least 5.
++		 * the total number of time quanta in a nominal bit time
++		 * (SYNC_SEG + TSEG1 + TSEG2) shall be programmable at least 8.
++		 */
++		if ((is_data_bt && tsegall < 5) || (!is_data_bt && tsegall < 8))
++			continue;
++
+ 		/* Compute all possible tseg choices (tseg=3Dtseg1+tseg2) */
+ 		brp =3D priv->clock.freq / (tsegall * bt->bitrate) + tseg % 2;
+=20
+@@ -228,7 +237,8 @@ static int can_calc_bittiming(struct net_device *dev, s=
+truct can_bittiming *bt,
+ 	return 0;
+ }
+ #else /* !CONFIG_CAN_CALC_BITTIMING */
+-static int can_calc_bittiming(struct net_device *dev, struct can_bittiming=
+ *bt,
++static int can_calc_bittiming(struct net_device *dev, bool is_data_bt,
++			      struct can_bittiming *bt,
+ 			      const struct can_bittiming_const *btc)
+ {
+ 	netdev_err(dev, "bit-timing calculation not available\n");
+@@ -241,7 +251,8 @@ static int can_calc_bittiming(struct net_device *dev, s=
+truct can_bittiming *bt,
+  * prescaler value brp. You can find more information in the header
+  * file linux/can/netlink.h.
+  */
+-static int can_fixup_bittiming(struct net_device *dev, struct can_bittimin=
+g *bt,
++static int can_fixup_bittiming(struct net_device *dev, bool is_data_bt,
++			       struct can_bittiming *bt,
+ 			       const struct can_bittiming_const *btc)
+ {
+ 	struct can_priv *priv =3D netdev_priv(dev);
+@@ -269,6 +280,15 @@ static int can_fixup_bittiming(struct net_device *dev,=
+ struct can_bittiming *bt,
+ 		return -EINVAL;
+=20
+ 	alltseg =3D bt->prop_seg + bt->phase_seg1 + bt->phase_seg2 + 1;
++
++	/* the total number of time quanta in a data bit time
++	 * (SYNC_SEG + TSEG1 + TSEG2) shall be programmable at least 5.
++	 * the total number of time quanta in a nominal bit time
++	 * (SYNC_SEG + TSEG1 + TSEG2) shall be programmable at least 8.
++	 */
++	if ((is_data_bt && alltseg < 5) || (!is_data_bt && alltseg < 8))
++		return -EINVAL;
++
+ 	bt->bitrate =3D priv->clock.freq / (bt->brp * alltseg);
+ 	bt->sample_point =3D ((tseg1 + 1) * 1000) / alltseg;
+=20
+@@ -295,7 +315,8 @@ can_validate_bitrate(struct net_device *dev, struct can=
+_bittiming *bt,
+ 	return 0;
+ }
+=20
+-static int can_get_bittiming(struct net_device *dev, struct can_bittiming =
+*bt,
++static int can_get_bittiming(struct net_device *dev, bool is_data_bt,
++			     struct can_bittiming *bt,
+ 			     const struct can_bittiming_const *btc,
+ 			     const u32 *bitrate_const,
+ 			     const unsigned int bitrate_const_cnt)
+@@ -308,9 +329,9 @@ static int can_get_bittiming(struct net_device *dev, st=
+ruct can_bittiming *bt,
+ 	 * provided directly which are then checked and fixed up.
+ 	 */
+ 	if (!bt->tq && bt->bitrate && btc)
+-		err =3D can_calc_bittiming(dev, bt, btc);
++		err =3D can_calc_bittiming(dev, is_data_bt, bt, btc);
+ 	else if (bt->tq && !bt->bitrate && btc)
+-		err =3D can_fixup_bittiming(dev, bt, btc);
++		err =3D can_fixup_bittiming(dev, is_data_bt, bt, btc);
+ 	else if (!bt->tq && bt->bitrate && bitrate_const)
+ 		err =3D can_validate_bitrate(dev, bt, bitrate_const,
+ 					   bitrate_const_cnt);
+@@ -944,7 +965,7 @@ static int can_changelink(struct net_device *dev, struc=
+t nlattr *tb[],
+ 			return -EOPNOTSUPP;
+=20
+ 		memcpy(&bt, nla_data(data[IFLA_CAN_BITTIMING]), sizeof(bt));
+-		err =3D can_get_bittiming(dev, &bt,
++		err =3D can_get_bittiming(dev, false, &bt,
+ 					priv->bittiming_const,
+ 					priv->bitrate_const,
+ 					priv->bitrate_const_cnt);
+@@ -1035,7 +1056,7 @@ static int can_changelink(struct net_device *dev, str=
+uct nlattr *tb[],
+=20
+ 		memcpy(&dbt, nla_data(data[IFLA_CAN_DATA_BITTIMING]),
+ 		       sizeof(dbt));
+-		err =3D can_get_bittiming(dev, &dbt,
++		err =3D can_get_bittiming(dev, true, &dbt,
+ 					priv->data_bittiming_const,
+ 					priv->data_bitrate_const,
+ 					priv->data_bitrate_const_cnt);
+--=20
+2.17.1
 
