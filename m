@@ -2,136 +2,191 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B2FCEF46C
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 05:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5530DEF470
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 05:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730192AbfKEETI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Nov 2019 23:19:08 -0500
-Received: from pb-smtp1.pobox.com ([64.147.108.70]:63866 "EHLO
-        pb-smtp1.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729711AbfKEETH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Nov 2019 23:19:07 -0500
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id ABF58213F0;
-        Mon,  4 Nov 2019 23:19:05 -0500 (EST)
-        (envelope-from daniel.santos@pobox.com)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=subject:to:cc
-        :references:from:message-id:date:mime-version:in-reply-to
-        :content-type:content-transfer-encoding; s=sasl; bh=av1lnHToyGo6
-        FmR0FJnwAm38bwA=; b=gb2BK17TuDHrGYDyWfdfL0vfQucBMKcASfqjetR/Klh+
-        Rf7Fcx5whufGQUxaz3kE3BQ3e5rM4bNrct/S1M27lksYjJPZSnlf8o1im6Ww+HGD
-        1rWrMGO52UicH4aJpW5QpZKhzJW3kjRyb57ZhSmH0gexZ0N98cNT27kVUaFJt6Y=
-DomainKey-Signature: a=rsa-sha1; c=nofws; d=pobox.com; h=subject:to:cc
-        :references:from:message-id:date:mime-version:in-reply-to
-        :content-type:content-transfer-encoding; q=dns; s=sasl; b=KyKnPJ
-        bX3gswXiS8DKlUabzrqMxMqEQlYxXwDRNU7Es/lKUWY55ORomz5ZgROjHF7I0Jwq
-        e3RujiEd+8rA1wI90M3baHhO8+TK0K3FwIAH/KWXuDcq1n8ngAPyH+51akbDbP+V
-        V9ERsrBmDWomavE6Fv4SBT/RbxWdqgFqi9aDw=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-        by pb-smtp1.pobox.com (Postfix) with ESMTP id 9ECEE213EF;
-        Mon,  4 Nov 2019 23:19:05 -0500 (EST)
-        (envelope-from daniel.santos@pobox.com)
-Received: from [192.168.0.8] (unknown [76.85.7.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 9D951213EE;
-        Mon,  4 Nov 2019 23:19:04 -0500 (EST)
-        (envelope-from daniel.santos@pobox.com)
-Subject: Re: CAN FD support in slcan - protocol extension?
-To:     Jacob Schloss <jacob.schloss@suburbanembedded.com>
-Cc:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <CACj_+4Y8904tbswy76Fpp6wGKZPdNpSrfDq6BvfTAGzs4zHT8w@mail.gmail.com>
- <97900bc5-48cc-b167-203d-ec7735009009@victronenergy.com>
- <CACj_+4aLfS9frR-sVkr1YcpYk+3pMZ85ALOrMWN2k=pVwJDLJw@mail.gmail.com>
- <3839c2b0-e6d3-98db-f774-6165f0c1cdcc@victronenergy.com>
- <5d51f507-d52d-2711-ef8e-180402f3dade@pobox.com>
- <CACj_+4ZmGEphoH0iu8jyemO3y25S7WtqgPLH1h6oFj46KegRog@mail.gmail.com>
-From:   Daniel Santos <daniel.santos@pobox.com>
-Message-ID: <60486fef-f18d-1c3a-a0ef-c3dd673cdf6c@pobox.com>
-Date:   Mon, 4 Nov 2019 22:15:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1730176AbfKEEWK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Nov 2019 23:22:10 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:32991 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729711AbfKEEWK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Nov 2019 23:22:10 -0500
+Received: by mail-il1-f197.google.com with SMTP id z14so17601113ill.0
+        for <linux-can@vger.kernel.org>; Mon, 04 Nov 2019 20:22:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mfqj3TAcqyeNHSygRN5iCrmZSIKmIlsm8ENduZpG8I4=;
+        b=BEu4rXC4pNj7egALOb7vvGFyXEryPKm0MCIjUnnov6HptlMaQ2FsIUnAssYgu8JyIX
+         a9zBlfd8MEjCON2FT+Jpns5LF+8/k1dHF7RBP6sGkcht9Bu2Rb8cTn3vwSVsN5cWG3Uv
+         gMqhL/yARUukFsl3wj4A9wV4FS4J2CNS006klnmGkLDnVPL+Vy6z/auQDyay9P0f3Z0G
+         pTWp2ezNToYKFTsXgH/ioZhY2AurzfD/vCMF4ybZhPjeNIeIIvW4v0zn7Xhl7Bl4DXQK
+         UCbX47fSgYFs7m4NBmr8vYOJnb4qdeLpCtpGRoQ6FZE9iggy8ooeB/in14teSbqdBTnT
+         Z3hA==
+X-Gm-Message-State: APjAAAX6ucWuiBEOMpF48r9hSDj/UgA7twKoWXk3ULYgr/7PHnusTtSH
+        +fN1osdAwaaWqWrnrQ+V0mwZymHtoC3LFzCIR6jOwpDsPQW8
+X-Google-Smtp-Source: APXvYqxtvoStetphLczcQ+YRxqQAUArXJTjBMya9Bo8pT8gfoSsLq13s5OggyOyY6WFOFI3Ju1Yq+YUcSokpUWH/Rxn37lK+N1u2
 MIME-Version: 1.0
-In-Reply-To: <CACj_+4ZmGEphoH0iu8jyemO3y25S7WtqgPLH1h6oFj46KegRog@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Pobox-Relay-ID: 67294854-FF83-11E9-802B-C28CBED8090B-06139138!pb-smtp1.pobox.com
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a5d:804e:: with SMTP id b14mr8314550ior.77.1572927729535;
+ Mon, 04 Nov 2019 20:22:09 -0800 (PST)
+Date:   Mon, 04 Nov 2019 20:22:09 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009393ba059691c6a3@google.com>
+Subject: KASAN: use-after-free Read in j1939_session_get_by_addr
+From:   syzbot <syzbot+d9536adc269404a984f8@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Jacob,
+Hello,
 
-On 11/4/19 3:29 PM, Jacob Schloss wrote:
->> I have been forced to modify the USB protocol because I need get 2Mbps
->> of CAN to work on FS USB and the current protocol won't get there.  I
->> cobbled together a crude bit-packed mechanism, but I had forgotten abo=
-ut
->> the FD CAN 64-byte payload scenario!  Since this is still in flux it
->> would be a perfect time to design a better protocol.  I haven't used
->> slcan and I don't know about it's protocol, other than it would have t=
-o
->> be ascii-based.
->>
->> Given all of this, I *think* I'll design the USB protocol to always
->> re-submit dropped bulk IN URBs and drop any CAN/FD frames that are
->> received in excess of the device's internal buffer.  I *think* I would
->> rather do that than design a re-sync mechanism for when a bulk IN URB =
-is
->> dropped (i.e., instead of dropping the frames in that failed URB).
->>
->> I'm working by the general assumption that the device is attached to a
->> hub that is HS and that the bottleneck will be between the device and
->> the first hub.
->>
->> Daniel
->>
-> Hi Daniel,
->
-> Sounds interesting, I'll take a look at the repo, and will look at
-> what it would take for my firmware to be multi-protocol.
+syzbot found the following crash on:
 
-I'll be doing a destructive commit to master soon and my USB protocol is
-not currently working correctly.=C2=A0 I've tagged where I am for histori=
-cal
-purposes as original-master, but it's not pretty at the moment.
+HEAD commit:    a99d8080 Linux 5.4-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14d0cc58e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c5e2eca3f31f9bf
+dashboard link: https://syzkaller.appspot.com/bug?extid=d9536adc269404a984f8
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1796b4dce00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142798dce00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+d9536adc269404a984f8@syzkaller.appspotmail.com
+
+vcan0: j1939_xtp_rx_abort_one: 0x00000000a2ba57cc: 0x00000: (3) A timeout  
+occurred and this is the connection abort to close the session.
+vcan0: j1939_xtp_rx_abort_one: 0x00000000f495a5ef: 0x00000: (3) A timeout  
+occurred and this is the connection abort to close the session.
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3a8b/0x4a00  
+kernel/locking/lockdep.c:3828
+Read of size 8 at addr ffff888094225080 by task ksoftirqd/0/9
+
+CPU: 0 PID: 9 Comm: ksoftirqd/0 Not tainted 5.4.0-rc6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
+  __kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
+  kasan_report+0x12/0x20 mm/kasan/common.c:634
+  __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:132
+  __lock_acquire+0x3a8b/0x4a00 kernel/locking/lockdep.c:3828
+  lock_acquire+0x190/0x410 kernel/locking/lockdep.c:4487
+  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
+  _raw_spin_lock_bh+0x33/0x50 kernel/locking/spinlock.c:175
+  spin_lock_bh include/linux/spinlock.h:343 [inline]
+  j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
+  j1939_session_get_by_addr+0x2d/0x60 net/can/j1939/transport.c:530
+  j1939_xtp_rx_abort_one+0x8d/0x100 net/can/j1939/transport.c:1242
+  j1939_xtp_rx_abort net/can/j1939/transport.c:1270 [inline]
+  j1939_tp_cmd_recv net/can/j1939/transport.c:1943 [inline]
+  j1939_tp_recv+0x513/0x9b0 net/can/j1939/transport.c:1973
+  j1939_can_recv+0x4bb/0x620 net/can/j1939/main.c:100
+  deliver net/can/af_can.c:568 [inline]
+  can_rcv_filter+0x292/0x8e0 net/can/af_can.c:602
+  can_receive+0x2e7/0x530 net/can/af_can.c:659
+  can_rcv+0x133/0x1b0 net/can/af_can.c:685
+  __netif_receive_skb_one_core+0x113/0x1a0 net/core/dev.c:4929
+  __netif_receive_skb+0x2c/0x1d0 net/core/dev.c:5043
+  process_backlog+0x206/0x750 net/core/dev.c:5874
+  napi_poll net/core/dev.c:6311 [inline]
+  net_rx_action+0x508/0x1120 net/core/dev.c:6379
+  __do_softirq+0x262/0x98c kernel/softirq.c:292
+  run_ksoftirqd kernel/softirq.c:603 [inline]
+  run_ksoftirqd+0x8e/0x110 kernel/softirq.c:595
+  smpboot_thread_fn+0x6a3/0xa40 kernel/smpboot.c:165
+  kthread+0x361/0x430 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 9736:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:510 [inline]
+  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:483
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:524
+  kmem_cache_alloc_trace+0x158/0x790 mm/slab.c:3550
+  kmalloc include/linux/slab.h:556 [inline]
+  kzalloc include/linux/slab.h:690 [inline]
+  j1939_priv_create net/can/j1939/main.c:122 [inline]
+  j1939_netdev_start+0xa4/0x550 net/can/j1939/main.c:251
+  j1939_sk_bind+0x65a/0x8e0 net/can/j1939/socket.c:438
+  __sys_bind+0x239/0x290 net/socket.c:1647
+  __do_sys_bind net/socket.c:1658 [inline]
+  __se_sys_bind net/socket.c:1656 [inline]
+  __x64_sys_bind+0x73/0xb0 net/socket.c:1656
+  do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+Freed by task 9:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  kasan_set_free_info mm/kasan/common.c:332 [inline]
+  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:471
+  kasan_slab_free+0xe/0x10 mm/kasan/common.c:480
+  __cache_free mm/slab.c:3425 [inline]
+  kfree+0x10a/0x2c0 mm/slab.c:3756
+  __j1939_priv_release net/can/j1939/main.c:154 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  j1939_priv_put+0x8b/0xb0 net/can/j1939/main.c:159
+  j1939_session_destroy net/can/j1939/transport.c:271 [inline]
+  __j1939_session_release net/can/j1939/transport.c:280 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  j1939_session_put+0x12c/0x180 net/can/j1939/transport.c:285
+  j1939_xtp_rx_abort_one+0xc7/0x100 net/can/j1939/transport.c:1261
+  j1939_xtp_rx_abort net/can/j1939/transport.c:1269 [inline]
+  j1939_tp_cmd_recv net/can/j1939/transport.c:1943 [inline]
+  j1939_tp_recv+0x4fb/0x9b0 net/can/j1939/transport.c:1973
+  j1939_can_recv+0x4bb/0x620 net/can/j1939/main.c:100
+  deliver net/can/af_can.c:568 [inline]
+  can_rcv_filter+0x292/0x8e0 net/can/af_can.c:602
+  can_receive+0x2e7/0x530 net/can/af_can.c:659
+  can_rcv+0x133/0x1b0 net/can/af_can.c:685
+  __netif_receive_skb_one_core+0x113/0x1a0 net/core/dev.c:4929
+  __netif_receive_skb+0x2c/0x1d0 net/core/dev.c:5043
+  process_backlog+0x206/0x750 net/core/dev.c:5874
+  napi_poll net/core/dev.c:6311 [inline]
+  net_rx_action+0x508/0x1120 net/core/dev.c:6379
+  __do_softirq+0x262/0x98c kernel/softirq.c:292
+
+The buggy address belongs to the object at ffff888094224000
+  which belongs to the cache kmalloc-8k of size 8192
+The buggy address is located 4224 bytes inside of
+  8192-byte region [ffff888094224000, ffff888094226000)
+The buggy address belongs to the page:
+page:ffffea0002508900 refcount:1 mapcount:0 mapping:ffff8880aa4021c0  
+index:0x0 compound_mapcount: 0
+flags: 0x1fffc0000010200(slab|head)
+raw: 01fffc0000010200 ffffea000252a808 ffffea000232f808 ffff8880aa4021c0
+raw: 0000000000000000 ffff888094224000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff888094224f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888094225000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff888094225080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                    ^
+  ffff888094225100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888094225180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-> I suppose
-> stream sync loss will be rare, and could do a USB reset as a worst
-> case recovery. This is my first USB device, so haven't done much error
-> / stream sync recovery on USB yet, just UART where I needed explicit
-> synchronization.
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Well I haven't thoroughly analyzed this yet, but my current notation is
-adding a serial number to each URB, probably 8-bits, for ordering.=C2=A0
-iirc, bulk URBs are only dropped when there is insufficient bandwidth
-because they don't get allocated bandwidth like isochonus URBs do --
-something I'm generally not counting.=C2=A0 (I don't consider myself a=C2=
-=A0 USB
-expert, so if anything I say is wrong please correct me.)=C2=A0 I'm only
-planning on supporting this from device to host for now, since the heavy
-throughput will almost always be when used as a sniffer.=C2=A0 Host to de=
-vice
-I'm leaving as-is.
-
-So my current notion is to just queue up out-of-order bulk IN URBs on
-the host side and wait until any missing ones are retransmitted in order
-to resume the stream.
-
-> I need to do some more hardening on my device side.
-> It would be difficult for my code as-is to resync on a failed USB
-> packet since the payload is just dumped in a FIFO that the app is
-> waiting on and the application part doesn't even really know it is USB
-> or where the packet boundaries are. Probably just need to add some
-> event hooks for errors the app can use.
->
-> - Jacob
->
-I don't like how frame buffers work in candleLight or candy right now at
-all.=C2=A0 I'll restructure this when I implement the FD CAN support.
-
-Daniel
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
