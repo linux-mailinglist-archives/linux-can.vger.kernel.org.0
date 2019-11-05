@@ -2,187 +2,173 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B78BF06C4
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 21:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 907C6F085C
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 22:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727401AbfKEUUF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 Nov 2019 15:20:05 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60953 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726368AbfKEUUF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Nov 2019 15:20:05 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iS5J4-0008Nr-MT; Tue, 05 Nov 2019 21:20:02 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:591d:c131:e96:905c] (unknown [IPv6:2a03:f580:87bc:d400:591d:c131:e96:905c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 131054755C7;
-        Tue,  5 Nov 2019 20:20:01 +0000 (UTC)
-Subject: Re: [PATCH v3 1/3] can: mcp251x: Correctly handle restart-ms
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>,
-        linux-can@vger.kernel.org
-References: <1570801101-27864-1-git-send-email-schluessler@krause.de>
- <b1831201-b94e-6d0d-3194-94ced931f7b0@pengutronix.de>
- <4041ff15-c88f-163f-ebd6-73ddee163436@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <69de9a4f-751c-cda9-20df-b8174ae7b7bc@pengutronix.de>
-Date:   Tue, 5 Nov 2019 21:19:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730168AbfKEVaK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 Nov 2019 16:30:10 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:46685 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730030AbfKEVaK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Nov 2019 16:30:10 -0500
+Received: by mail-il1-f198.google.com with SMTP id i74so19809783ild.13
+        for <linux-can@vger.kernel.org>; Tue, 05 Nov 2019 13:30:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=1xkanS+/tT8hR6RPQXjHlC3jGkbXrPci9yKxX6hZLBs=;
+        b=LhQjCqlV6iNS4J8sp7Kfwf7HEaMw9juzpS0HJiClie2wGE5/vIGqYQCLkgKqrTN3fz
+         Y7/yhpPjQM3V4dvGT4//T86HvJ+fBoHAfopIpVktjCEarlX2ggto1x0lWidnAhRAJOWf
+         kc1N3nlexyLo6gmhAiBjVHRyRc3mMhWJwwVslW8cjpX7iwHa+osRRSx1fa+1ESaWN/36
+         QalUU5TuJvJIMEo6MSfWMaKWuC1C/yu5odkhyR24/tv7r0RkN8xqJPCM01C/oMuaVwmZ
+         Jf9NNdOJqnHsZfuUwMACmOQHZxO00VQ4/oHX7Xx9LPU/4jLEtoJO4C5cWAgDl0QKnBeM
+         bncw==
+X-Gm-Message-State: APjAAAUDlZHy4ZCC4dKfI1yUSIlkuaXab+bR2jpATkZA1FXFyvQjzjtc
+        8xDPTWbUNdICFN1DGYf3XblvUB2CfPsrjDJYlwHfjUhzMbil
+X-Google-Smtp-Source: APXvYqxW0UxrmegVMqG77ZjE2Pn1zkX0CYaF3xrMaltdjM3HIpoHKlF/HTAbmWtXzBL0sW/Im6X5G2ADbqivW97fgwHc6xVcx3ZZ
 MIME-Version: 1.0
-In-Reply-To: <4041ff15-c88f-163f-ebd6-73ddee163436@hartkopp.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="B5LJZaZ1dA4OwjvEqQR4ZrjiqH1UY6khC"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Received: by 2002:a92:99d1:: with SMTP id t78mr34831691ilk.122.1572989409341;
+ Tue, 05 Nov 2019 13:30:09 -0800 (PST)
+Date:   Tue, 05 Nov 2019 13:30:09 -0800
+In-Reply-To: <0000000000005ed7710596937e86@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fabba10596a022a4@google.com>
+Subject: Re: KASAN: use-after-free Read in j1939_xtp_rx_abort_one
+From:   syzbot <syzbot+db4869ba599c0de9b13e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---B5LJZaZ1dA4OwjvEqQR4ZrjiqH1UY6khC
-Content-Type: multipart/mixed; boundary="lVj0t6dQoUkqpzot0ZTgdeQ6RqlX56WQ6";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>,
- linux-can@vger.kernel.org
-Message-ID: <69de9a4f-751c-cda9-20df-b8174ae7b7bc@pengutronix.de>
-Subject: Re: [PATCH v3 1/3] can: mcp251x: Correctly handle restart-ms
-References: <1570801101-27864-1-git-send-email-schluessler@krause.de>
- <b1831201-b94e-6d0d-3194-94ced931f7b0@pengutronix.de>
- <4041ff15-c88f-163f-ebd6-73ddee163436@hartkopp.net>
-In-Reply-To: <4041ff15-c88f-163f-ebd6-73ddee163436@hartkopp.net>
+syzbot has found a reproducer for the following crash on:
 
---lVj0t6dQoUkqpzot0ZTgdeQ6RqlX56WQ6
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+HEAD commit:    a99d8080 Linux 5.4-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15565bcce00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=896c87b73c6fcda6
+dashboard link: https://syzkaller.appspot.com/bug?extid=db4869ba599c0de9b13e
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1435c078e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=139a3542e00000
 
-On 11/5/19 9:18 PM, Oliver Hartkopp wrote:
-> On 05/11/2019 19.49, Marc Kleine-Budde wrote:
->=20
-> Case 1:
->> I think we discussed that quite some time ago. Back in the days we
->> decided that if the controller does support automatic restart via the
->> "128 occurrences of 11 consecutive recessive bits" and restart-ms is >=
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+db4869ba599c0de9b13e@syzkaller.appspotmail.com
 
->> 0, we'll let the controller do the restart.
->=20
-> Case 2:
->> If restart-ms is 0, we'll shut down the controller and wait for a manu=
-al
->> restart.
->=20
-> Case 3:
-> When a CAN controller does not support automatic restart and enters=20
-> BUS_OFF state, we restart the CAN controller after restart-ms msecs.
->=20
-> Right?
+vcan0: j1939_tp_rxtimer: 0x00000000533cdfdb: rx timeout, send abort
+vcan0: j1939_xtp_rx_abort_one: 0x00000000533cdfdb: 0x00000: (3) A timeout  
+occurred and this is the connection abort to close the session.
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x96/0x1be0  
+kernel/locking/lockdep.c:3828
+Read of size 8 at addr ffff888097f09080 by task ksoftirqd/1/16
 
-ACK
+CPU: 1 PID: 16 Comm: ksoftirqd/1 Not tainted 5.4.0-rc6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x1d8/0x2f8 lib/dump_stack.c:113
+  print_address_description+0x75/0x5c0 mm/kasan/report.c:374
+  __kasan_report+0x14b/0x1c0 mm/kasan/report.c:506
+  kasan_report+0x26/0x50 mm/kasan/common.c:634
+  __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:132
+  __lock_acquire+0x96/0x1be0 kernel/locking/lockdep.c:3828
+  lock_acquire+0x158/0x250 kernel/locking/lockdep.c:4487
+  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
+  _raw_spin_lock_bh+0x34/0x50 kernel/locking/spinlock.c:175
+  spin_lock_bh include/linux/spinlock.h:343 [inline]
+  j1939_session_list_lock net/can/j1939/transport.c:238 [inline]
+  j1939_session_get_by_addr net/can/j1939/transport.c:530 [inline]
+  j1939_xtp_rx_abort_one+0x89/0x3f0 net/can/j1939/transport.c:1242
+  j1939_xtp_rx_abort net/can/j1939/transport.c:1270 [inline]
+  j1939_tp_cmd_recv net/can/j1939/transport.c:1940 [inline]
+  j1939_tp_recv+0x648/0xb80 net/can/j1939/transport.c:1973
+  j1939_can_recv+0x424/0x650 net/can/j1939/main.c:100
+  deliver net/can/af_can.c:568 [inline]
+  can_rcv_filter+0x3c0/0x8b0 net/can/af_can.c:602
+  can_receive+0x2ac/0x3b0 net/can/af_can.c:659
+  can_rcv+0xe4/0x220 net/can/af_can.c:685
+  __netif_receive_skb_one_core net/core/dev.c:4929 [inline]
+  __netif_receive_skb+0x136/0x370 net/core/dev.c:5043
+  process_backlog+0x4d8/0x930 net/core/dev.c:5874
+  napi_poll net/core/dev.c:6311 [inline]
+  net_rx_action+0x5ef/0x10d0 net/core/dev.c:6379
+  __do_softirq+0x333/0x7c4 arch/x86/include/asm/paravirt.h:766
+  run_ksoftirqd+0x64/0xf0 kernel/softirq.c:603
+  smpboot_thread_fn+0x5b3/0x9a0 kernel/smpboot.c:165
+  kthread+0x332/0x350 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-> Just to show the entire picture.
+Allocated by task 7892:
+  save_stack mm/kasan/common.c:69 [inline]
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc+0x11c/0x1b0 mm/kasan/common.c:510
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:524
+  kmem_cache_alloc_trace+0x221/0x2f0 mm/slab.c:3550
+  kmalloc include/linux/slab.h:556 [inline]
+  kzalloc include/linux/slab.h:690 [inline]
+  j1939_priv_create net/can/j1939/main.c:122 [inline]
+  j1939_netdev_start+0x177/0x730 net/can/j1939/main.c:251
+  j1939_sk_bind+0x2c0/0xac0 net/can/j1939/socket.c:438
+  __sys_bind+0x2c2/0x3a0 net/socket.c:1647
+  __do_sys_bind net/socket.c:1658 [inline]
+  __se_sys_bind net/socket.c:1656 [inline]
+  __x64_sys_bind+0x7a/0x90 net/socket.c:1656
+  do_syscall_64+0xf7/0x1c0 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-Thanks,
-Marc
+Freed by task 7891:
+  save_stack mm/kasan/common.c:69 [inline]
+  set_track mm/kasan/common.c:77 [inline]
+  kasan_set_free_info mm/kasan/common.c:332 [inline]
+  __kasan_slab_free+0x12a/0x1e0 mm/kasan/common.c:471
+  kasan_slab_free+0xe/0x10 mm/kasan/common.c:480
+  __cache_free mm/slab.c:3425 [inline]
+  kfree+0x115/0x200 mm/slab.c:3756
+  __j1939_priv_release net/can/j1939/main.c:154 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  j1939_priv_put net/can/j1939/main.c:159 [inline]
+  j1939_netdev_stop+0x20c/0x230 net/can/j1939/main.c:291
+  j1939_sk_release+0x61f/0x7e0 net/can/j1939/socket.c:580
+  __sock_release net/socket.c:590 [inline]
+  sock_close+0xe1/0x260 net/socket.c:1268
+  __fput+0x2e4/0x740 fs/file_table.c:280
+  ____fput+0x15/0x20 fs/file_table.c:313
+  task_work_run+0x17e/0x1b0 kernel/task_work.c:113
+  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+  exit_to_usermode_loop arch/x86/entry/common.c:163 [inline]
+  prepare_exit_to_usermode+0x459/0x580 arch/x86/entry/common.c:194
+  syscall_return_slowpath+0x113/0x4a0 arch/x86/entry/common.c:274
+  do_syscall_64+0x11f/0x1c0 arch/x86/entry/common.c:300
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+The buggy address belongs to the object at ffff888097f08000
+  which belongs to the cache kmalloc-8k of size 8192
+The buggy address is located 4224 bytes inside of
+  8192-byte region [ffff888097f08000, ffff888097f0a000)
+The buggy address belongs to the page:
+page:ffffea00025fc200 refcount:1 mapcount:0 mapping:ffff8880aa4021c0  
+index:0x0 compound_mapcount: 0
+flags: 0x1fffc0000010200(slab|head)
+raw: 01fffc0000010200 ffffea000251a608 ffffea0002500e08 ffff8880aa4021c0
+raw: 0000000000000000 ffff888097f08000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
 
+Memory state around the buggy address:
+  ffff888097f08f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888097f09000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff888097f09080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                    ^
+  ffff888097f09100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888097f09180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
---lVj0t6dQoUkqpzot0ZTgdeQ6RqlX56WQ6--
-
---B5LJZaZ1dA4OwjvEqQR4ZrjiqH1UY6khC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3B2WwACgkQWsYho5Hk
-nSA6TggAjKfQNJHUIHb826xN2nCPHJDXEc2E+qAP3YTWXbwXWw83Nn5I6CZeQbSq
-tXEsFE7muegFZ4aRvpYsTrsshWd2EmAeNxYg62YqwRy758QgQwnCbrzNw9uIPc5h
-0z/SwwPmhPhiVvhVr0iFNppJS5Uk5PveZXFSSfIQhm68ImvgJeDkhc26EYeqF1di
-q6pXRStBWt6eXlWRS2u0pa3E+PpdV0AOcY98UoT+gxTSxeOMkJgIRgK8UfW4py8J
-iAJ/s/YC6LwnDXDHkKNvbWTg01VpvhZEULq2s6P9sh71s03wKucLMW6iIcPhz0RX
-QtiFzqY/43Uy9kqmMSy0L7TuLU3VfA==
-=2JE2
------END PGP SIGNATURE-----
-
---B5LJZaZ1dA4OwjvEqQR4ZrjiqH1UY6khC--
