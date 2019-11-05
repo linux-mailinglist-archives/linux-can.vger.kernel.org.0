@@ -2,31 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4DDF0553
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 19:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0813F0560
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 19:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390432AbfKEStp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 Nov 2019 13:49:45 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51301 "EHLO
+        id S2390640AbfKESwQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 Nov 2019 13:52:16 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55557 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390755AbfKEStp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Nov 2019 13:49:45 -0500
+        with ESMTP id S2390482AbfKESwQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Nov 2019 13:52:16 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iS3tf-00084H-Ap; Tue, 05 Nov 2019 19:49:43 +0100
+        id 1iS3w6-0008Ra-St; Tue, 05 Nov 2019 19:52:14 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:591d:c131:e96:905c] (unknown [IPv6:2a03:f580:87bc:d400:591d:c131:e96:905c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1DC7147550F;
-        Tue,  5 Nov 2019 18:49:41 +0000 (UTC)
-To:     =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>,
-        linux-can@vger.kernel.org
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 16F96475517;
+        Tue,  5 Nov 2019 18:52:14 +0000 (UTC)
+Subject: Re: [PATCH v3 3/3] can: mcp251x: Add GPIO support
+To:     =?UTF-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 References: <1570801101-27864-1-git-send-email-schluessler@krause.de>
+ <1570801101-27864-3-git-send-email-schluessler@krause.de>
+ <c00ad0e9-08ae-ddbe-a0ad-6ab5ee5bff41@pengutronix.de>
+ <ce2e1ba6e3654a8fac3c35f301ef7802@HG-SRV-053.HG.local>
+ <e5e1aefc-208f-8457-27ff-90d94964230f@pengutronix.de>
+ <5fe5b1d031b84141aa736b707020841a@HG-SRV-053.HG.local>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -89,16 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH v3 1/3] can: mcp251x: Correctly handle restart-ms
-Message-ID: <b1831201-b94e-6d0d-3194-94ced931f7b0@pengutronix.de>
-Date:   Tue, 5 Nov 2019 19:49:36 +0100
+Message-ID: <f081de07-c7a0-285b-f13e-04d399182210@pengutronix.de>
+Date:   Tue, 5 Nov 2019 19:52:10 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1570801101-27864-1-git-send-email-schluessler@krause.de>
+In-Reply-To: <5fe5b1d031b84141aa736b707020841a@HG-SRV-053.HG.local>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="vkfLJPTGuoR72m0UO0mbeDGuhWgRK7nQW"
+ boundary="TNil3cVKoLeM4fQjLjsqao8qW1hcVGRrM"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,47 +114,53 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---vkfLJPTGuoR72m0UO0mbeDGuhWgRK7nQW
-Content-Type: multipart/mixed; boundary="YiQCY6d9HMmXVpi5Y0I6TorQsvGj0Y6d9";
+--TNil3cVKoLeM4fQjLjsqao8qW1hcVGRrM
+Content-Type: multipart/mixed; boundary="nfTxjDOCRCSYUIisIAExpr0ENpvfY2Tc5";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>,
- linux-can@vger.kernel.org
-Message-ID: <b1831201-b94e-6d0d-3194-94ced931f7b0@pengutronix.de>
-Subject: Re: [PATCH v3 1/3] can: mcp251x: Correctly handle restart-ms
+To: =?UTF-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <f081de07-c7a0-285b-f13e-04d399182210@pengutronix.de>
+Subject: Re: [PATCH v3 3/3] can: mcp251x: Add GPIO support
 References: <1570801101-27864-1-git-send-email-schluessler@krause.de>
-In-Reply-To: <1570801101-27864-1-git-send-email-schluessler@krause.de>
+ <1570801101-27864-3-git-send-email-schluessler@krause.de>
+ <c00ad0e9-08ae-ddbe-a0ad-6ab5ee5bff41@pengutronix.de>
+ <ce2e1ba6e3654a8fac3c35f301ef7802@HG-SRV-053.HG.local>
+ <e5e1aefc-208f-8457-27ff-90d94964230f@pengutronix.de>
+ <5fe5b1d031b84141aa736b707020841a@HG-SRV-053.HG.local>
+In-Reply-To: <5fe5b1d031b84141aa736b707020841a@HG-SRV-053.HG.local>
 
---YiQCY6d9HMmXVpi5Y0I6TorQsvGj0Y6d9
+--nfTxjDOCRCSYUIisIAExpr0ENpvfY2Tc5
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/11/19 3:38 PM, Timo Schl=C3=BC=C3=9Fler wrote:
-> Always stop device when CAN_STATE_BUS_OFF is entered because the restar=
-t is
-> issued automatically through can.do_set_mode depending on restart-ms. O=
-therwise
-> the device re-enters CAN_STATE_ERROR_ACTIVE automatically after "128 oc=
-curences
-> of 11 consecutive recessive bits". Also fixes potential race condition =
-by
-> resetting force_quit before enabling interrupts.
+On 10/11/19 5:16 PM, Schl=C3=BC=C3=9Fler, Timo wrote:
+> On 10/11/19 4:40 PM, Marc Kleine-Budde wrote:
+>> Just the gpio changes is ok.
+>=20
+> To be able to restore the GPIO state after reset, the private
+> structure contains a variable to hold the current value of the output
+> control register:
+>=20
+>> +#ifdef CONFIG_GPIOLIB
+>> +	struct gpio_chip gpio;
+>> +	u8 reg_bfpctrl;
+>> +#endif
+>=20
+> reg_bfpctrl is touched in the _request, _free, _set and _set_multiple
+> functions. Should I add #ifdefs around the accesses, include the
+> variable always in the struct or should I add the #ifdef for those
+> functions again?
 
-I've moved the race condition fix into a separate patch, which was part
-of today's pull request.
+Hmm. I see. Then just make no-op functions for setup, remove and restore.=
 
-I'm not sure about the restart-ms, though.
 
-I think we discussed that quite some time ago. Back in the days we
-decided that if the controller does support automatic restart via the
-"128 occurrences of 11 consecutive recessive bits" and restart-ms is >
-0, we'll let the controller do the restart.
+>> +
+>> +	priv->reg_bfpctrl =3D priv->reg_bfpctrl | bit;
+>> +
 
-If restart-ms is 0, we'll shut down the controller and wait for a manual
-restart.
-
-However we can discuss if this is still the best solution.
+I've cleaned up the driver a bit and send a v4.
 
 regards,
 Marc
@@ -161,23 +172,23 @@ Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
 Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
 
---YiQCY6d9HMmXVpi5Y0I6TorQsvGj0Y6d9--
+--nfTxjDOCRCSYUIisIAExpr0ENpvfY2Tc5--
 
---vkfLJPTGuoR72m0UO0mbeDGuhWgRK7nQW
+--TNil3cVKoLeM4fQjLjsqao8qW1hcVGRrM
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3BxEEACgkQWsYho5Hk
-nSDyHgf+KppZrkHNocITLYEvCrHqkmFXw2Bi+OPmwem5tJkqL63tGpkgGpmERfRE
-wMIhUbw0DAuu5ggE/O+khf37/aWXMAKtllPcwgyJaZM3fV8Q65xegpcYsaj/WXLE
-S8YAoJ0oVbaI7Yx/VUsyCD83HPWZ9WBS2ntKffzOGbbqRyrdJePye99E5IL5ADBb
-lTzqfh0O2Ba1ZZxDPnuDA+nrskBsKuZ6e26vG6MkbZbWtLKdzcEdaHlbS8K8WZu5
-AXIhwdLyhms2nF/cL9Wb6CapSLpQ9RYtaXu8slTJFbItRfr/X9aV696YMJCKpFJ0
-IoQnUbFKTYbZ0MCOVLK14u7eLdozbA==
-=S2n5
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3BxNoACgkQWsYho5Hk
+nSB9Owf9G+VoiHcNt5+oczdE/mL06T7ueB0NJYrn1Z82pXD4Pydtxkwc+uinbxqo
+ZeXSqywVRlhU2aBAmT5lUkt8zXxgR5Q5tL4eVjmnXgeT6zdvS50mVbGzT7C27wEz
+UJqjETK6WqTtCyDmN+8QRO9bnnWWRb9DasDiyhElEc+fbutrxsg7hQDxVjrajJG5
+CMbZe9VXk7EOO4CgvYi8gVz4ulG9rk/GgoVoB2YpXI+76C6py/8++abodPsKHAHq
+gVlyNudoCgqDKD5FGmfJig8dHGCD8inAo6Uf79ZNzS6ihkAhbL+bH3qopXyCNzDK
+h8RU+myVemkzkKP6lqPRDQwWkx6jRw==
+=makz
 -----END PGP SIGNATURE-----
 
---vkfLJPTGuoR72m0UO0mbeDGuhWgRK7nQW--
+--TNil3cVKoLeM4fQjLjsqao8qW1hcVGRrM--
