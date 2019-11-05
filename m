@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19359EF476
-	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 05:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5861EF506
+	for <lists+linux-can@lfdr.de>; Tue,  5 Nov 2019 06:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730394AbfKEEWM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Nov 2019 23:22:12 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:52476 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730305AbfKEEWL (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Nov 2019 23:22:11 -0500
-Received: by mail-io1-f70.google.com with SMTP id o5so1494524iob.19
-        for <linux-can@vger.kernel.org>; Mon, 04 Nov 2019 20:22:11 -0800 (PST)
+        id S1725991AbfKEFcK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 Nov 2019 00:32:10 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:51825 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfKEFcK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Nov 2019 00:32:10 -0500
+Received: by mail-il1-f197.google.com with SMTP id x2so14169884ilk.18
+        for <linux-can@vger.kernel.org>; Mon, 04 Nov 2019 21:32:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=X9lW8ii3GGZ4Cig/UC9Hwb9iVEyqtiyLpsfWPVzv+AU=;
-        b=U2b8ym68nzOvlVPG8IPoc0hjSR6reMzvk21WgaogX2hRm8r1dOxGpIba7rR5sEUHmg
-         ZnVltdpXcevQXpUiRgR+WyJgw/suOJW4nmj2QHAaJBYUwX6gorvT6TcnZZIjjZ3OX7he
-         8PmAWVFQmjhYkKhdstY4fOGO7l9r0Dsaa3kmBrWCyzWBOY5tYxV2+L10vKW3QXFaHEDw
-         mx8bgU3tLaaRmT4s7sVKCw+lLEGfP4v3OPE6UadKwDZIxjAFYfZuuZ8QZMk/0HLr3KGc
-         Iy52JztMPMF813m9toXT9GtHxAKe7eR1miDqQ1l93iV0JC4avf63ah1kpgq4sybjvAYI
-         mzMA==
-X-Gm-Message-State: APjAAAUS0QrfKkAYlKt1Y5PcaBrQaV++oNL2li9cYEXoNpELMuIl8w5R
-        GaJZLBmotMOpxonfDQRiqjUI7HJ2KUi6Y/agPXTQX79+6u4z
-X-Google-Smtp-Source: APXvYqxN5W1l5tyGdgaW+GmFjSDeL5UI9n+R9bdebBqjvYKj96bA0+NJN7OVDS7UtkpUkfqSJduFphaddA7Pm10TgnhgvBEJvIy3
+        bh=rOD589s+behik/fM/S/zlRKK0lDbx/9FlPGrpt7I8kQ=;
+        b=BiRoa978ZZqEDKf5x0nSXYGPGfnHtO83bI3nwYwK0Ubo2/7miMM0CFHTfIGC6UBZxm
+         g5imLDKGcmPSPp0ENVaP/rXYSOfY+87tEwsP6za6x3/nYsEpN81joref237pK57pdjyF
+         isLNbOfehlx2j8wRqaw5ENzXYenHp+wW2rkp8h8U8i57kEgjX2asJ7wyBsbBDf41b7XE
+         dlKCigP7ZeTKJQVkeclvFh4CSIKS97iWoweF5kvQf0rZpDecbLVo+4z9Yk+v2y8VCQPi
+         EmfigLn8VNLIfKQ25a0A2DyWbO/wVdQP868esCWzzLWJBHHHhxWHteknw2xDNDjHnaLx
+         BEzQ==
+X-Gm-Message-State: APjAAAVwnUocTjdKRwiPBKTsbhKdb2iIqtO/blxSI/7BwP8CbXyWP5hY
+        8j14vRYsi3cjTLwqTOHgcSr3Nz6oiXbLwq6Jip30RCsPooiS
+X-Google-Smtp-Source: APXvYqwgHZtMNRpbmvXw5Mt2nq6mL4W4z3czLET8VXiU3mQjQeYAkRRBZ0HR/7PdfdjzHdHW1jR8bg+JsAfTfZq3C83qnFlREJyy
 MIME-Version: 1.0
-X-Received: by 2002:a6b:38c5:: with SMTP id f188mr26602776ioa.235.1572927730568;
- Mon, 04 Nov 2019 20:22:10 -0800 (PST)
-Date:   Mon, 04 Nov 2019 20:22:10 -0800
+X-Received: by 2002:a92:8408:: with SMTP id l8mr33356179ild.107.1572931928723;
+ Mon, 04 Nov 2019 21:32:08 -0800 (PST)
+Date:   Mon, 04 Nov 2019 21:32:08 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a367e3059691c6b4@google.com>
-Subject: general protection fault in j1939_sk_bind
-From:   syzbot <syzbot+4857323ec1bb236f6a45@syzkaller.appspotmail.com>
+Message-ID: <000000000000de1eec059692c021@google.com>
+Subject: KASAN: use-after-free Write in j1939_sock_pending_del
+From:   syzbot <syzbot+07bb74aeafc88ba7d5b4@syzkaller.appspotmail.com>
 To:     davem@davemloft.net, kernel@pengutronix.de,
         linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
@@ -52,77 +52,149 @@ syzbot found the following crash on:
 
 HEAD commit:    a99d8080 Linux 5.4-rc6
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12a6b844e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=169c59b2e00000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=896c87b73c6fcda6
-dashboard link: https://syzkaller.appspot.com/bug?extid=4857323ec1bb236f6a45
+dashboard link: https://syzkaller.appspot.com/bug?extid=07bb74aeafc88ba7d5b4
 compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110a8b8ae00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16fd7044e00000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+4857323ec1bb236f6a45@syzkaller.appspotmail.com
+Reported-by: syzbot+07bb74aeafc88ba7d5b4@syzkaller.appspotmail.com
 
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 8341 Comm: syz-executor.0 Not tainted 5.4.0-rc6 #0
+vcan0: j1939_xtp_rx_abort_one: 0x00000000b4d8b78c: 0x00000: (2) System  
+resources were needed for another task so this connection managed session  
+was terminated.
+vcan0: j1939_xtp_rx_abort_one: 0x00000000dadb7e22: 0x00000: (2) System  
+resources were needed for another task so this connection managed session  
+was terminated.
+==================================================================
+BUG: KASAN: use-after-free in atomic_sub_return  
+include/asm-generic/atomic-instrumented.h:159 [inline]
+BUG: KASAN: use-after-free in atomic_dec_return  
+include/linux/atomic-fallback.h:455 [inline]
+BUG: KASAN: use-after-free in j1939_sock_pending_del+0x20/0x70  
+net/can/j1939/socket.c:73
+Write of size 4 at addr ffff8880a4a2e4c0 by task ksoftirqd/1/16
+
+CPU: 1 PID: 16 Comm: ksoftirqd/1 Not tainted 5.4.0-rc6 #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
-RIP: 0010:__lock_acquire+0x86/0x1be0 kernel/locking/lockdep.c:3828
-Code: 8a 04 30 84 c0 0f 85 66 12 00 00 83 3d 92 24 66 07 00 0f 84 91 12 00  
-00 83 3d 35 a6 34 07 00 74 34 48 8b 44 24 10 48 c1 e8 03 <80> 3c 30 00 74  
-14 48 8b 7c 24 10 e8 fa 13 54 00 48 be 00 00 00 00
-RSP: 0018:ffff88809865fb80 EFLAGS: 00010006
-RAX: 0000000000000218 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 00000000000010c0
-RBP: ffff88809865fcd8 R08: 0000000000000001 R09: 0000000000000000
-R10: fffffbfff117cc5d R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff888098654700
-FS:  00007f68f3c1c700(0000) GS:ffff8880aea00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000075c000 CR3: 00000000a96a2000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
-  lock_acquire+0x158/0x250 kernel/locking/lockdep.c:4487
-  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
-  _raw_spin_lock_bh+0x34/0x50 kernel/locking/spinlock.c:175
-  spin_lock_bh include/linux/spinlock.h:343 [inline]
-  j1939_jsk_del net/can/j1939/socket.c:90 [inline]
-  j1939_sk_bind+0x387/0xac0 net/can/j1939/socket.c:421
-  __sys_bind+0x2c2/0x3a0 net/socket.c:1647
-  __do_sys_bind net/socket.c:1658 [inline]
-  __se_sys_bind net/socket.c:1656 [inline]
-  __x64_sys_bind+0x7a/0x90 net/socket.c:1656
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x1d8/0x2f8 lib/dump_stack.c:113
+  print_address_description+0x75/0x5c0 mm/kasan/report.c:374
+  __kasan_report+0x14b/0x1c0 mm/kasan/report.c:506
+  kasan_report+0x26/0x50 mm/kasan/common.c:634
+  check_memory_region_inline mm/kasan/generic.c:182 [inline]
+  check_memory_region+0x2cf/0x2e0 mm/kasan/generic.c:192
+  __kasan_check_write+0x14/0x20 mm/kasan/common.c:98
+  atomic_sub_return include/asm-generic/atomic-instrumented.h:159 [inline]
+  atomic_dec_return include/linux/atomic-fallback.h:455 [inline]
+  j1939_sock_pending_del+0x20/0x70 net/can/j1939/socket.c:73
+  __j1939_session_drop net/can/j1939/transport.c:257 [inline]
+  j1939_session_destroy net/can/j1939/transport.c:270 [inline]
+  __j1939_session_release net/can/j1939/transport.c:280 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  j1939_session_put+0xd2/0x150 net/can/j1939/transport.c:285
+  j1939_xtp_rx_abort_one+0xd3/0x3f0 net/can/j1939/transport.c:1261
+  j1939_xtp_rx_abort net/can/j1939/transport.c:1269 [inline]
+  j1939_tp_cmd_recv net/can/j1939/transport.c:1940 [inline]
+  j1939_tp_recv+0x633/0xb80 net/can/j1939/transport.c:1973
+  j1939_can_recv+0x424/0x650 net/can/j1939/main.c:100
+  deliver net/can/af_can.c:568 [inline]
+  can_rcv_filter+0x3c0/0x8b0 net/can/af_can.c:602
+  can_receive+0x2ac/0x3b0 net/can/af_can.c:659
+  can_rcv+0xe4/0x220 net/can/af_can.c:685
+  __netif_receive_skb_one_core net/core/dev.c:4929 [inline]
+  __netif_receive_skb+0x136/0x370 net/core/dev.c:5043
+  process_backlog+0x4d8/0x930 net/core/dev.c:5874
+  napi_poll net/core/dev.c:6311 [inline]
+  net_rx_action+0x5ef/0x10d0 net/core/dev.c:6379
+  __do_softirq+0x333/0x7c4 arch/x86/include/asm/paravirt.h:766
+  run_ksoftirqd+0x64/0xf0 kernel/softirq.c:603
+  smpboot_thread_fn+0x5b3/0x9a0 kernel/smpboot.c:165
+  kthread+0x332/0x350 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 8435:
+  save_stack mm/kasan/common.c:69 [inline]
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc+0x11c/0x1b0 mm/kasan/common.c:510
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:524
+  __do_kmalloc mm/slab.c:3655 [inline]
+  __kmalloc+0x254/0x340 mm/slab.c:3664
+  kmalloc include/linux/slab.h:561 [inline]
+  sk_prot_alloc+0xb0/0x290 net/core/sock.c:1605
+  sk_alloc+0x38/0x950 net/core/sock.c:1659
+  can_create+0x1de/0x480 net/can/af_can.c:157
+  __sock_create+0x5cc/0x910 net/socket.c:1418
+  sock_create net/socket.c:1469 [inline]
+  __sys_socket+0xe7/0x2e0 net/socket.c:1511
+  __do_sys_socket net/socket.c:1520 [inline]
+  __se_sys_socket net/socket.c:1518 [inline]
+  __x64_sys_socket+0x7a/0x90 net/socket.c:1518
   do_syscall_64+0xf7/0x1c0 arch/x86/entry/common.c:290
   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45a219
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f68f3c1bc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045a219
-RDX: 0000000000000018 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f68f3c1c6d4
-R13: 00000000004c057e R14: 00000000004d2c50 R15: 00000000ffffffff
-Modules linked in:
----[ end trace bc0dd162dace32c7 ]---
-RIP: 0010:__lock_acquire+0x86/0x1be0 kernel/locking/lockdep.c:3828
-Code: 8a 04 30 84 c0 0f 85 66 12 00 00 83 3d 92 24 66 07 00 0f 84 91 12 00  
-00 83 3d 35 a6 34 07 00 74 34 48 8b 44 24 10 48 c1 e8 03 <80> 3c 30 00 74  
-14 48 8b 7c 24 10 e8 fa 13 54 00 48 be 00 00 00 00
-RSP: 0018:ffff88809865fb80 EFLAGS: 00010006
-RAX: 0000000000000218 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 00000000000010c0
-RBP: ffff88809865fcd8 R08: 0000000000000001 R09: 0000000000000000
-R10: fffffbfff117cc5d R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: ffff888098654700
-FS:  00007f68f3c1c700(0000) GS:ffff8880aea00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000075c000 CR3: 00000000a96a2000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+Freed by task 16:
+  save_stack mm/kasan/common.c:69 [inline]
+  set_track mm/kasan/common.c:77 [inline]
+  kasan_set_free_info mm/kasan/common.c:332 [inline]
+  __kasan_slab_free+0x12a/0x1e0 mm/kasan/common.c:471
+  kasan_slab_free+0xe/0x10 mm/kasan/common.c:480
+  __cache_free mm/slab.c:3425 [inline]
+  kfree+0x115/0x200 mm/slab.c:3756
+  sk_prot_free net/core/sock.c:1642 [inline]
+  __sk_destruct+0x523/0x620 net/core/sock.c:1726
+  sk_destruct net/core/sock.c:1741 [inline]
+  __sk_free+0x35d/0x430 net/core/sock.c:1752
+  sock_wfree+0x106/0x140 net/core/sock.c:1968
+  skb_release_head_state+0x100/0x210 net/core/skbuff.c:652
+  skb_release_all net/core/skbuff.c:663 [inline]
+  __kfree_skb+0x25/0x170 net/core/skbuff.c:679
+  kfree_skb net/core/skbuff.c:697 [inline]
+  skb_queue_purge+0x1a6/0x260 net/core/skbuff.c:3078
+  j1939_session_destroy net/can/j1939/transport.c:269 [inline]
+  __j1939_session_release net/can/j1939/transport.c:280 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  j1939_session_put+0x7f/0x150 net/can/j1939/transport.c:285
+  j1939_xtp_rx_abort_one+0xd3/0x3f0 net/can/j1939/transport.c:1261
+  j1939_xtp_rx_abort net/can/j1939/transport.c:1269 [inline]
+  j1939_tp_cmd_recv net/can/j1939/transport.c:1940 [inline]
+  j1939_tp_recv+0x633/0xb80 net/can/j1939/transport.c:1973
+  j1939_can_recv+0x424/0x650 net/can/j1939/main.c:100
+  deliver net/can/af_can.c:568 [inline]
+  can_rcv_filter+0x3c0/0x8b0 net/can/af_can.c:602
+  can_receive+0x2ac/0x3b0 net/can/af_can.c:659
+  can_rcv+0xe4/0x220 net/can/af_can.c:685
+  __netif_receive_skb_one_core net/core/dev.c:4929 [inline]
+  __netif_receive_skb+0x136/0x370 net/core/dev.c:5043
+  process_backlog+0x4d8/0x930 net/core/dev.c:5874
+  napi_poll net/core/dev.c:6311 [inline]
+  net_rx_action+0x5ef/0x10d0 net/core/dev.c:6379
+  __do_softirq+0x333/0x7c4 arch/x86/include/asm/paravirt.h:766
+
+The buggy address belongs to the object at ffff8880a4a2e000
+  which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1216 bytes inside of
+  2048-byte region [ffff8880a4a2e000, ffff8880a4a2e800)
+The buggy address belongs to the page:
+page:ffffea0002928b80 refcount:1 mapcount:0 mapping:ffff8880aa400e00  
+index:0x0
+flags: 0x1fffc0000000200(slab)
+raw: 01fffc0000000200 ffffea0002a48588 ffffea0002443f48 ffff8880aa400e00
+raw: 0000000000000000 ffff8880a4a2e000 0000000100000001 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8880a4a2e380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8880a4a2e400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff8880a4a2e480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                            ^
+  ffff8880a4a2e500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8880a4a2e580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
 ---
