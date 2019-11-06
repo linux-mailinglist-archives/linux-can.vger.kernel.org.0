@@ -2,128 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7252FF1899
-	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2019 15:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D843DF18F3
+	for <lists+linux-can@lfdr.de>; Wed,  6 Nov 2019 15:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbfKFO0i (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 6 Nov 2019 09:26:38 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:28622 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbfKFO0h (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 6 Nov 2019 09:26:37 -0500
-X-Greylist: delayed 11629 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Nov 2019 09:26:36 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1573050395;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=2fbJNKf8X1yF8e0yTX4Gq7NWfQBwt8jDtbIAr0+veiA=;
-        b=jeqtzFff85BYS5SzlSrRh3C+21oxevrrXzsXf1X+DyvDWPkRUkoKe1WHP71pKi2YQR
-        mIPk5VbgwoSsgnbTzjRB6AYvYnEeFqs5VogU16Dk97wnryvCTqPDRBeP1pU5UJZXk7dF
-        a1ar+v/z+zkj0pr9IpIjy18jbHSN9deCA0M/BtJ7Fg5taeLm2dtwMCHgehuq+laqW0Kn
-        LvENIFuLpOiEAV/SXZq0++ltv+iAlO4vCw3o3b97I9ZqoiWwFC7bt/2pac8gugT9OGtE
-        3Gpni/v3G76gE9KLf+3PrMNnq+22Laz78MuqUBWbygADJMQ+im9ShmwtPVBtgZoD1nJY
-        TQNQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJV8h+lyA="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.40.177]
-        by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
-        with ESMTPSA id C03a03vA6EQSNor
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Wed, 6 Nov 2019 15:26:28 +0100 (CET)
-Subject: Re: Fwd: Return value of write() in BUS-OFF state
-To:     Kurt Van Dijck <kurt@vandijck-laurijssen.be>, jara.beran@gmail.com,
-        linux-can@vger.kernel.org
-References: <CADNXvDw5KDju9pHaRY1_6T-GgoOo=T2i4FZJRvd0GuP0jZis=g@mail.gmail.com>
- <CADNXvDy5qj0=tUQ1h_aN4UuCRtnXQ+4y55+JSKneyx9-C1CyBA@mail.gmail.com>
- <7e91f790-22f5-070c-f56d-a432779c7e4d@hartkopp.net>
- <D5447E34-0D39-470F-A4FF-D9530F91359E@vandijck-laurijssen.be>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <f11ebe09-1ce9-0b4c-2c6c-f6a0d2383696@hartkopp.net>
-Date:   Wed, 6 Nov 2019 15:26:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727034AbfKFOnG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Wed, 6 Nov 2019 09:43:06 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51807 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727028AbfKFOnG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 6 Nov 2019 09:43:06 -0500
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iSMWW-0006gX-BQ; Wed, 06 Nov 2019 15:43:04 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1iSMWV-0008AX-U5; Wed, 06 Nov 2019 15:43:03 +0100
+Date:   Wed, 6 Nov 2019 15:43:03 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     =?utf-8?Q?Cl=C3=A9ment?= VIEL <vielclement@gmail.com>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: synchronization problem on old version of j1939 stack
+Message-ID: <20191106144303.GA8323@pengutronix.de>
+References: <CAN1pBYmvcxFoM_zPZYeoUociEJBYHEfMmnspLfSL2=BKiu4Wbg@mail.gmail.com>
+ <20191106100715.GA10500@pengutronix.de>
+ <CAN1pBYnQBsNrSxuB3Ety08_ecQtZLpQAE-MN9BtwZ4HtnMiuUw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <D5447E34-0D39-470F-A4FF-D9530F91359E@vandijck-laurijssen.be>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <CAN1pBYnQBsNrSxuB3Ety08_ecQtZLpQAE-MN9BtwZ4HtnMiuUw@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 15:35:45 up 56 days,  3:23, 292 users,  load average: 26.38, 20.23,
+ 19.54
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 06/11/2019 12.23, Kurt Van Dijck wrote:
+On Wed, Nov 06, 2019 at 02:29:29PM +0100, Clément VIEL wrote:
+> Hi Oleksij
+> >
+> > Hi Clément,
+> >
+> > On Wed, Nov 06, 2019 at 10:32:48AM +0100, Clément VIEL wrote:
+> > > Hi all,
+> > >
+> > > I am currently using a very old version of the j1939 stack. It was
+> > > forked in 2014 and now running on a custom 3.10.17 kernel. We are
+> > > experiencing a lot of synchronization problem that cause kernel
+> > > panics.
+> > > Doing diffs with the mainline version shows that the whole stack has
+> > > changed a lot, I noticed, this first mail concerning j1939 on this
+> > > mailing list is from 2018.
+> > >  My question is very simple. Did synchronization problems were
+> > > encountered and corrected before the j1939 entered the mainline ?
+> >
+> > What do you mean with synchronization problem? Do you have a tests case
+> > for your issue?
 > 
+> By synchronization I mean that in the old version of j1939 it seems
+> that the some functions
+> and pointers are not fully protected by locks whereas in the mainline
+> version it seems that there are more
+> locking.
 > 
-> On 6 November 2019 12:12:39 GMT+01:00, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->> Hello Jaroslav,
->>
->> On 05/11/2019 22.46, Jaroslav Beran wrote:
->>
->>> So far I've learned this issue is most probably caused by upper (net
->>> and can) layers (so this is not specific for certain controller
->>> driver). When a driver calls can_bus_off, it sets carrier-off and
->>> triggers linkwatch_* actions that deactivate net queues and
->> substitute
->>> a struct qdisc with `noop_qdisc`. Upon sending a frame, it's enqueue
->>> function - noop_enqueue - just returns NET_XMIT_CN, which is
->>> transformed by net_xmit_errno macro to zero, that's passed by
->>> net/can/af_can.c:can_send up to a userspace caller of write as
->>> success.
->>
->> Hm.
->>
->>> According to description for qdisc return codes in
->>> include/linux/netdevice.h, NET_XMIT_CN stands for `congestion
->>> notification` and further
->>>
->>> /* NET_XMIT_CN is special. It does not guarantee that this packet is
->> lost. It
->>>    * indicates that the device will soon be dropping packets, or
->> already drops
->>>    * some packets of the same priority; prompting us to send less
->> aggressively. */
->>>
->>>
->>> Is this behavior appropriate for a node in BUS-OFF state? I'd rather
->>> expect such controller would be always dropping all frames (not just
->>> soon and some) until reset.
->>
->> The common use of the net_xmit_errno macro probably really does not fit
->>
->> to the CAN specialties ...
->>
->>> In current situation a caller of write gets success even if his frame
->>> is lost for sure. Is there any specific reason for this? Of course he
->>> can be notified by receiving error frame, but why don't just return
->>> error in can_send?
->>
->> Yes. It makes sense to forward the carrier-off state that is thankfully
->>
->> provided by the linkwatch triggers to the user space.
->>
->> Looking to man(2) send we should provide -ENOBUFS in the case of
->> carrier-off state, right?
-> ENOBUFS seems a bad indication. What about ENETDOWN instead?
+> I give you an example. In the mainline version, there is a function
+> named j1939_ecu_get_by_name that calls ecu_find_by_name_locked
+> whereas in our version there just a function named j1939_ecu_find_by_name.
+> 
+> In the mailine, there is a lot of lock protection that lacks in our version.
+> 
+> I do not have test case because its a client that feeds  us with these
+> kernel panics and they cannot tell what manipulation they did.
+> 
+> I hope its more clear now.
 
-ENETDOWN shows that the interface is "down" which does not fit the 
-current situation.
+In the latest stack the resource management was mostly reworked. In my
+tests setups I was not able to reproduce any j1939_ecu_find_by_name
+related issues any more. On other hand google started to tests this
+stack with syzbot and found lots new bugs. 
 
-The interface is "up" but the carrier is "off".
+In any case, I would recommend you to update the kernel. Some fixed issues
+were not directly in j1939. Drivers and CAN framework need fixes as well.
 
-man(2) send says:
+UAPI was changed and you application will need some rework. Since this
+UAPI is upstream now, we should keep it compatible with coming kernel
+versions. So, you should be safe now by using it.
 
-ENOBUFS
-       The output queue for a network interface was full.  This  gener‐
-       ally  indicates  that the interface has stopped sending, but may
-       be caused by transient congestion.  (Normally, this does not oc‐
-       cur  in  Linux.  Packets are just silently dropped when a device
-       queue overflows.)
-
-Fits to me !?
-
-Best,
-Oliver
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
