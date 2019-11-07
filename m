@@ -2,162 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAB5F2990
-	for <lists+linux-can@lfdr.de>; Thu,  7 Nov 2019 09:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88C6F2EA0
+	for <lists+linux-can@lfdr.de>; Thu,  7 Nov 2019 13:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733267AbfKGIpU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Nov 2019 03:45:20 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59517 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727120AbfKGIpU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Nov 2019 03:45:20 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iSdPr-0004cs-1V; Thu, 07 Nov 2019 09:45:19 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:591d:c131:e96:905c] (unknown [IPv6:2a03:f580:87bc:d400:591d:c131:e96:905c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CE8EF47682E;
-        Thu,  7 Nov 2019 08:45:16 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-References: <20191105163215.30194-1-mkl@pengutronix.de>
-To:     David Miller <davem@davemloft.net>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: request: merge net/master into net-next/master
-Message-ID: <e9b0dcdb-15c3-6f4d-36db-f62c055c15d0@pengutronix.de>
-Date:   Thu, 7 Nov 2019 09:45:08 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727142AbfKGM5q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Nov 2019 07:57:46 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:41683 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbfKGM5q (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Nov 2019 07:57:46 -0500
+Received: by mail-pf1-f194.google.com with SMTP id p26so2642634pfq.8
+        for <linux-can@vger.kernel.org>; Thu, 07 Nov 2019 04:57:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=CenMgMhmVHd87U1RWjXhLJq6VgiF+BXIOe7omCE7A5M=;
+        b=coU5V5pXAnM7G9KyoSEUHHTz66KNz5zL6UBvPNwsg7E0AXUTg/+UwmLX4lGtVrGBmE
+         MxY4YGoy4b7wRthJN0yR5ObTU6/Trf66lHAjn6ph/vhacn+Xn6ZtzvBo4BZmws0+T7Rw
+         41V/bxl97fYtrQFO/uOUy/co/wTREqafQk2JP/OjdbUxyuo2DqfAN7Wm4jOef2G6dxAv
+         CnLRrcjqMPa3b8yAQMFxKoswjAW0/puMOfeETbePePqjDixiQRTQx2R8ghIWgW613Dwy
+         Haspaw5YJIbz4raoeMa67e5YmZKf1Ong5SEfa5XbREa4eN5e94ioMoKZyYwISmZrz6j1
+         yrOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=CenMgMhmVHd87U1RWjXhLJq6VgiF+BXIOe7omCE7A5M=;
+        b=PvgBCIfEtMlnqev3BsiFnozYHUK/VHaPqyvPn+5hJ6gd4SU9SqiF3UZqFHE021h4JI
+         NgW4YpQjcSdkruBhZDizYGn70V5mqaGbYvAid/jjuRkvct5fIi27bAQVlsNdq1IxLsmZ
+         i7PNf1lkXzPc0G7t2scZ6wtzpJgWw+qvjWXoYRdMdh9XK6VfxeRq2jQXE7xiULi9UvJY
+         EbcP++ifj5ZBU5vf4dL9V1ybbPFl8eCiJWr+x0h+KHZKAnjCClPhbUK9WOyocBMczxdn
+         KCMMo2rhBVT7GD6jcy5d+GhQh4UpCB/hDVtdvZd2fXOO1hdu9tdy7E81gvKwYdEmuTXQ
+         SQ8A==
+X-Gm-Message-State: APjAAAWb/1n0in/b/UpdkYqpsrXT7og5dSGwcYUUzavkT1llrmw29rXb
+        Oib3P+h6PDV1Gto05DUH82ss1V6BqEw1rYiqjMNL1+OT2KI=
+X-Google-Smtp-Source: APXvYqwKnHXMI2Y4Qo1ZVNW/tOLysGX5uFa2rRxtsL+yraPWG5u4r1QeUK8lRewkDLEF4hlGbG53Yrjtrqsd1gnKyIY=
+X-Received: by 2002:a63:d951:: with SMTP id e17mr4225591pgj.243.1573131463605;
+ Thu, 07 Nov 2019 04:57:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191105163215.30194-1-mkl@pengutronix.de>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="HKj7hgBb3ce11eaCMRacIeChDPCtbGX9L"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <CADNXvDw5KDju9pHaRY1_6T-GgoOo=T2i4FZJRvd0GuP0jZis=g@mail.gmail.com>
+ <CADNXvDy5qj0=tUQ1h_aN4UuCRtnXQ+4y55+JSKneyx9-C1CyBA@mail.gmail.com>
+ <7e91f790-22f5-070c-f56d-a432779c7e4d@hartkopp.net> <D5447E34-0D39-470F-A4FF-D9530F91359E@vandijck-laurijssen.be>
+ <f11ebe09-1ce9-0b4c-2c6c-f6a0d2383696@hartkopp.net> <CADNXvDzewkO8L-3LYNtt=JsMTmf8rw5uOaquF5mB2OS_5fKaTA@mail.gmail.com>
+ <85e46c24-0b0c-3109-3ee9-07914cca6d7b@hartkopp.net> <20191106215943.GA5341@x1.vandijck-laurijssen.be>
+ <CADNXvDzwe9nYpfaDb-m191RvPoZXa9GixbXjZ-ZP7UoMnXV9Lw@mail.gmail.com>
+In-Reply-To: <CADNXvDzwe9nYpfaDb-m191RvPoZXa9GixbXjZ-ZP7UoMnXV9Lw@mail.gmail.com>
+From:   Jaroslav Beran <jara.beran@gmail.com>
+Date:   Thu, 7 Nov 2019 13:57:30 +0100
+Message-ID: <CADNXvDyy=AF0a0FBWyXwLwpazqOxx4nqEOLD9XvEw8vbk4Ts7Q@mail.gmail.com>
+Subject: Fwd: Fwd: Return value of write() in BUS-OFF state
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---HKj7hgBb3ce11eaCMRacIeChDPCtbGX9L
-Content-Type: multipart/mixed; boundary="MKs5C95F5GZHx9RBCe1cpgOpBrzJTinzJ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: David Miller <davem@davemloft.net>
-Cc: netdev@vger.kernel.org, linux-can@vger.kernel.org
-Message-ID: <e9b0dcdb-15c3-6f4d-36db-f62c055c15d0@pengutronix.de>
-Subject: request: merge net/master into net-next/master
-References: <20191105163215.30194-1-mkl@pengutronix.de>
-In-Reply-To: <20191105163215.30194-1-mkl@pengutronix.de>
-
---MKs5C95F5GZHx9RBCe1cpgOpBrzJTinzJ
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-
-Hello David,
-
-I've some patches for net-next/master rely on some CAN related changes
-in net/master. Can you please merge net/master into net-next/master to
-avoid merge conflicts.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
+---------- Forwarded message ---------
+From: Jaroslav Beran <jara.beran@gmail.com>
+Date: Wed, Nov 6, 2019 at 11:09 PM
+Subject: Re: Fwd: Return value of write() in BUS-OFF state
+To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
 
---MKs5C95F5GZHx9RBCe1cpgOpBrzJTinzJ--
+On Wed, Nov 6, 2019 at 10:59 PM Kurt Van Dijck
+<dev.kurt@vandijck-laurijssen.be> wrote:
+>
+> On wo, 06 nov 2019 22:15:50 +0100, Oliver Hartkopp wrote:
+> >
+> >
+> >
+> > On 06/11/2019 18.23, Jaroslav Beran wrote:
+> > >On Wed, Nov 6, 2019 at 3:26 PM Oliver Hartkopp <socketcan@hartkopp.net=
+> wrote:
+> > >>
+> > >>
+> > >>
+> > >>On 06/11/2019 12.23, Kurt Van Dijck wrote:
+> > >>>
+> > >>>
+> > >>>On 6 November 2019 12:12:39 GMT+01:00, Oliver Hartkopp <socketcan@ha=
+rtkopp.net> wrote:
+> > >>>>Hello Jaroslav,
+> > >>>>
+> > >>>>On 05/11/2019 22.46, Jaroslav Beran wrote:
+> > >>>>
+> > >>>>>So far I've learned this issue is most probably caused by upper (n=
+et
+> > >>>>>and can) layers (so this is not specific for certain controller
+> > >>>>>driver). When a driver calls can_bus_off, it sets carrier-off and
+> > >>>>>triggers linkwatch_* actions that deactivate net queues and
+> > >>>>substitute
+> > >>>>>a struct qdisc with `noop_qdisc`. Upon sending a frame, it's enque=
+ue
+> > >>>>>function - noop_enqueue - just returns NET_XMIT_CN, which is
+> > >>>>>transformed by net_xmit_errno macro to zero, that's passed by
+> > >>>>>net/can/af_can.c:can_send up to a userspace caller of write as
+> > >>>>>success.
+> > >>>>
+> > >>>>Hm.
+> > >>>>
+> > >>>>>According to description for qdisc return codes in
+> > >>>>>include/linux/netdevice.h, NET_XMIT_CN stands for `congestion
+> > >>>>>notification` and further
+> > >>>>>
+> > >>>>>/* NET_XMIT_CN is special. It does not guarantee that this packet =
+is
+> > >>>>lost. It
+> > >>>>>    * indicates that the device will soon be dropping packets, or
+> > >>>>already drops
+> > >>>>>    * some packets of the same priority; prompting us to send less
+> > >>>>aggressively. */
+> > >>>>>
+> > >>>>>
+> > >>>>>Is this behavior appropriate for a node in BUS-OFF state? I'd rath=
+er
+> > >>>>>expect such controller would be always dropping all frames (not ju=
+st
+> > >>>>>soon and some) until reset.
+> > >>>>
+> > >>>>The common use of the net_xmit_errno macro probably really does not=
+ fit
+> > >>>>
+> > >>>>to the CAN specialties ...
+> > >>>>
+> > >>>>>In current situation a caller of write gets success even if his fr=
+ame
+> > >>>>>is lost for sure. Is there any specific reason for this? Of course=
+ he
+> > >>>>>can be notified by receiving error frame, but why don't just retur=
+n
+> > >>>>>error in can_send?
+> > >>>>
+> > >>>>Yes. It makes sense to forward the carrier-off state that is thankf=
+ully
+> > >>>>
+> > >>>>provided by the linkwatch triggers to the user space.
+> > >>>>
+> > >>>>Looking to man(2) send we should provide -ENOBUFS in the case of
+> > >>>>carrier-off state, right?
+> > >>>ENOBUFS seems a bad indication. What about ENETDOWN instead?
+> > >>
+> > >>ENETDOWN shows that the interface is "down" which does not fit the
+> > >>current situation.
+>
+> ack. ENETDOWN was a bad suggestion.
+>
+> > >>
+> > >>The interface is "up" but the carrier is "off".
+> > >>
+> > >>man(2) send says:
+> > >>
+> > >>ENOBUFS
+> > >>        The output queue for a network interface was full.  This  gen=
+er=E2=80=90
+> > >>        ally  indicates  that the interface has stopped sending, but =
+may
+> > >>        be caused by transient congestion.  (Normally, this does not =
+oc=E2=80=90
+> > >>        cur  in  Linux.  Packets are just silently dropped when a dev=
+ice
+> > >>        queue overflows.)
+> > >>
+> > >>Fits to me !?
+> > >>
+> > >
+> > >I don't know, neither option doesn't perfectly fit for the carrier-off
+> > >state to me.
+> > >
+> > >What about choosing another code like ENOSPC or EIO to distinguish
+> > >bus-off from other recoverable conditions?
+> >
+> > I must admit that the ability to distinguish the return values would be
+> > cool.
+>
+> ack. busoff is completely different from 'on buffers'
+>
+> >
+> > But when you check the man pages from either send() or write() you'll s=
+ee
+> > that ENOSPC or EIO have a description that fit even worse.
+>
+> ENETUNREACH? I'm just picking values that suit more.
 
---HKj7hgBb3ce11eaCMRacIeChDPCtbGX9L
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3D2ZQACgkQWsYho5Hk
-nSCMDgf+JNUIVXxfjXJNLUjdda6Stnw/lN7FGszbSnHDlXfFisLRqs1QHHnI8rtD
-iYC1Fnf8CS1KrAtCtQvXpy1roDpVZFq8lfodY136FTahWECAxwjOxgbngo+4k5x2
-QJwF/0d6Z0a9s2z6xm4i/9y4w0xQRXait5JDZ15v0fo2g/gzBJQsHrim3VNslR4n
-/2jvcLbyoxqJZx1FUKZxyqVdNnfwTkEL12e6eyrnd/d3wYuo7EeyjxYEJv7pxwIA
-rBTjypWU2MPfpYPVX37T7nKuBNU9NltsbBC4V2XM6olE3F48cucnH8kU+2+bwczt
-WG/T7a00Wip+rlqPUHSP2coaHHNkXg==
-=euAR
------END PGP SIGNATURE-----
-
---HKj7hgBb3ce11eaCMRacIeChDPCtbGX9L--
+Yeah, I couldn't find anything better than ENETUNREACH. Already sent a patc=
+h.
