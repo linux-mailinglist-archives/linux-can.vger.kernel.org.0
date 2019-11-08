@@ -2,77 +2,176 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4D3F50FA
-	for <lists+linux-can@lfdr.de>; Fri,  8 Nov 2019 17:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C226F5223
+	for <lists+linux-can@lfdr.de>; Fri,  8 Nov 2019 18:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbfKHQWe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Nov 2019 11:22:34 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:27021 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfKHQWe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Nov 2019 11:22:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1573230149;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=EBKnJqcBu05XovwwN8SQLXu7rDqGqkxMDV3Nbj8Fze8=;
-        b=c5VQ/eXPFc2lrIHqyyPuMo11YD9eI2VKHwimBZLH1c1tWHpDZRcH4LdtPEXfpDZvtd
-        Gg2p9NQv5QxRVidHaojFqZItfsUpLW/FIO1njiusyEJX9YIvs4uI4QqscbD/r07VFFsM
-        8UZJI5VZ0MecK0wlDuIYljUyQSaY6TtoB3w+mogdCngR7p6h+nBFtHAJChMNhKhYvk7t
-        Ejg/Pqcr8TPC8z5A1VcI3S/NmYm5pxKhoZzvWMy0cdNIH2d8Wdo6rzrPXdo0Lw+/w/o4
-        REWfHa4EzsAUw1xSE88V1pno+sHaDHw6U/Tfod8TP97N/5nJ7cDX/JgQiZBxKe4citRP
-        zY3w==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGX8h5mE1Q"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 44.29.0 DYNA|AUTH)
-        with ESMTPSA id C03a03vA8GMRV4D
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve secp521r1 with 521 ECDH bits, eq. 15360 bits RSA))
-        (Client did not present a certificate);
-        Fri, 8 Nov 2019 17:22:27 +0100 (CET)
-Subject: Re: j1939: ELCE Lyon talk
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <20191108081331.cny5nlwq26ycgxug@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <b35500a0-b8cd-f9d5-f1c7-30a1c7926e07@hartkopp.net>
-Date:   Fri, 8 Nov 2019 17:22:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727959AbfKHREP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Nov 2019 12:04:15 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:44816 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728914AbfKHREO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Nov 2019 12:04:14 -0500
+Received: by mail-io1-f70.google.com with SMTP id q13so5798248iot.11
+        for <linux-can@vger.kernel.org>; Fri, 08 Nov 2019 09:04:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=s7s+0AUIh85QJo5bIS6QtBdWuP0XF27aERvqgQ8hEgw=;
+        b=XUTLwX5LWbaTTMk6NxYbwjodaOoRkG9G/fsjUKMUQ7vpgY2JEIE8RHrcgDxu+s/m70
+         zy2oq81jZ8vcgev8g1MvLIJmLl4euopiz5qJQwsQpT/ZYiwdjLn8EbT3cRz9vx8QNllm
+         qft3+V2MGmqHH4Ub4VUVkQ6D9zfw94j0fpKCDYHN8X2oUkbLGP1P3/1o2MWZmnSeLR2I
+         Mkx06+Zfj6wcB2zjViV0CU4dk5IgCBiFL3NZo1tZqG3s7qExO/wToWLimgv/v9m45rTa
+         WppNbDaEdOiibThHk3Sx4jNF6ZwhScxG/AqWJvwvxiXpKcGGvVYcrJrC6nu2hKUxaEKN
+         r+9w==
+X-Gm-Message-State: APjAAAXFgLHupQRzEWlppPc1/x5FRdfY+WrxHu+mygg/9GmXOEYBA3/0
+        oAoc8BRBj1ExwAAejTElBMOZVAP7yD+Kzdmz+WhxHuHeG1Ms
+X-Google-Smtp-Source: APXvYqx+2483goQJH3/cpm8N4DuiOA1eSgQWI2TcafX7e5/N7Y8JNnxclkD+QFHfXEwadHc3wiUuWt8g62R3dNYkNh8zQ1Z73n7q
 MIME-Version: 1.0
-In-Reply-To: <20191108081331.cny5nlwq26ycgxug@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:9891:: with SMTP id a17mr14106877ill.292.1573232652212;
+ Fri, 08 Nov 2019 09:04:12 -0800 (PST)
+Date:   Fri, 08 Nov 2019 09:04:12 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006264c60596d8c5fa@google.com>
+Subject: KASAN: use-after-free Read in j1939_session_deactivate
+From:   syzbot <syzbot+a47537d3964ef6c874e1@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oleksij,
+Hello,
 
-On 08/11/2019 09.13, Oleksij Rempel wrote:
-> In case some one missed it, here is our talk on youtube:
-> "Introduction to the J1939 Kernel Stack - Marc Kleine-Budde, Pengutronix"
-> https://youtu.be/3NfN8B4-w8w
+syzbot found the following crash on:
 
-Very nice! Thanks for the URL :-)
+HEAD commit:    847120f8 Merge branch 'for-linus' of git://git.kernel.org/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11077272e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8c5e2eca3f31f9bf
+dashboard link: https://syzkaller.appspot.com/bug?extid=a47537d3964ef6c874e1
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+userspace arch: i386
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164973b4e00000
 
-Just for the records: The SocketCAN history started somewhere in 2001 at 
-Volkswagen Group Research and we were able to contribute it to the OSS 
-community in 2006. Jan Kiszka (today SIEMENS) created the project name 
-"SocketCAN" on a German OSS site BerliOS "Berlin Open Source“ where the 
-code for Linux 2.4.x and 2.6.x was uploaded for further development.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+a47537d3964ef6c874e1@syzkaller.appspotmail.com
 
-On 2008-01-28 the CAN netlayer bits and the virtual CAN driver was 
-accepted by Dave Miller for upstream - which finally went into Linux 
-2.6.25. Since Linux 3.3 we have a framework for CAN hardware drivers in 
-place (with netlink configuration).
+vcan0: j1939_xtp_rx_abort_one: 0x0000000017fc679a: 0x00000: (2) System  
+resources were needed for another task so this connection managed session  
+was terminated.
+vcan0: j1939_tp_rxtimer: 0x000000000eaf12e4: abort rx timeout. Force  
+session deactivation
+==================================================================
+BUG: KASAN: use-after-free in j1939_session_deactivate+0x80/0x90  
+net/can/j1939/transport.c:1033
+Read of size 8 at addr ffff88809958dc00 by task ksoftirqd/0/9
 
-For those who want to know more about the CAN netlayer functionalities:
+CPU: 0 PID: 9 Comm: ksoftirqd/0 Not tainted 5.4.0-rc6+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x197/0x210 lib/dump_stack.c:118
+  print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
+  __kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
+  kasan_report+0x12/0x20 mm/kasan/common.c:634
+  __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:132
+  j1939_session_deactivate+0x80/0x90 net/can/j1939/transport.c:1033
+  j1939_session_deactivate_activate_next+0x17/0x50  
+net/can/j1939/transport.c:1041
+  j1939_tp_rxtimer+0xc8/0x27b net/can/j1939/transport.c:1150
+  __run_hrtimer kernel/time/hrtimer.c:1514 [inline]
+  __hrtimer_run_queues+0x364/0xe40 kernel/time/hrtimer.c:1576
+  hrtimer_run_softirq+0x17e/0x270 kernel/time/hrtimer.c:1593
+  __do_softirq+0x262/0x98c kernel/softirq.c:292
+  run_ksoftirqd kernel/softirq.c:603 [inline]
+  run_ksoftirqd+0x8e/0x110 kernel/softirq.c:595
+  smpboot_thread_fn+0x6a3/0xa40 kernel/smpboot.c:165
+  kthread+0x361/0x430 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-https://wiki.automotivelinux.org/_media/agl-distro/agl2017-socketcan-print.pdf
+Allocated by task 9265:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:510 [inline]
+  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:483
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:524
+  kmem_cache_alloc_trace+0x158/0x790 mm/slab.c:3550
+  kmalloc include/linux/slab.h:556 [inline]
+  kzalloc include/linux/slab.h:690 [inline]
+  j1939_session_new+0x81/0x3f0 net/can/j1939/transport.c:1384
+  j1939_tp_send+0x249/0x750 net/can/j1939/transport.c:1846
+  j1939_sk_send_loop net/can/j1939/socket.c:995 [inline]
+  j1939_sk_sendmsg+0xb76/0x1450 net/can/j1939/socket.c:1100
+  sock_sendmsg_nosec net/socket.c:637 [inline]
+  sock_sendmsg+0xd7/0x130 net/socket.c:657
+  ___sys_sendmsg+0x803/0x920 net/socket.c:2311
+  __sys_sendmsg+0x105/0x1d0 net/socket.c:2356
+  __compat_sys_sendmsg net/compat.c:642 [inline]
+  __do_compat_sys_sendmsg net/compat.c:649 [inline]
+  __se_compat_sys_sendmsg net/compat.c:646 [inline]
+  __ia32_compat_sys_sendmsg+0x7a/0xb0 net/compat.c:646
+  do_syscall_32_irqs_on arch/x86/entry/common.c:333 [inline]
+  do_fast_syscall_32+0x27b/0xdb3 arch/x86/entry/common.c:404
+  entry_SYSENTER_compat+0x70/0x7f arch/x86/entry/entry_64_compat.S:139
 
-Best regards,
-Oliver
+Freed by task 9:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  kasan_set_free_info mm/kasan/common.c:332 [inline]
+  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:471
+  kasan_slab_free+0xe/0x10 mm/kasan/common.c:480
+  __cache_free mm/slab.c:3425 [inline]
+  kfree+0x10a/0x2c0 mm/slab.c:3756
+  j1939_session_destroy net/can/j1939/transport.c:272 [inline]
+  __j1939_session_release net/can/j1939/transport.c:280 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  j1939_session_put+0x134/0x180 net/can/j1939/transport.c:285
+  j1939_session_deactivate_locked net/can/j1939/transport.c:1021 [inline]
+  j1939_session_deactivate_locked+0x245/0x2f0 net/can/j1939/transport.c:1009
+  j1939_session_deactivate+0x3d/0x90 net/can/j1939/transport.c:1032
+  j1939_session_deactivate_activate_next+0x17/0x50  
+net/can/j1939/transport.c:1041
+  j1939_tp_rxtimer+0xc8/0x27b net/can/j1939/transport.c:1150
+  __run_hrtimer kernel/time/hrtimer.c:1514 [inline]
+  __hrtimer_run_queues+0x364/0xe40 kernel/time/hrtimer.c:1576
+  hrtimer_run_softirq+0x17e/0x270 kernel/time/hrtimer.c:1593
+  __do_softirq+0x262/0x98c kernel/softirq.c:292
 
+The buggy address belongs to the object at ffff88809958dc00
+  which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 0 bytes inside of
+  512-byte region [ffff88809958dc00, ffff88809958de00)
+The buggy address belongs to the page:
+page:ffffea0002656340 refcount:1 mapcount:0 mapping:ffff8880aa400a80  
+index:0x0
+flags: 0x1fffc0000000200(slab)
+raw: 01fffc0000000200 ffffea00028faa88 ffffea0002a31c48 ffff8880aa400a80
+raw: 0000000000000000 ffff88809958d000 0000000100000004 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff88809958db00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff88809958db80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ffff88809958dc00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                    ^
+  ffff88809958dc80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff88809958dd00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
