@@ -2,32 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DFBF7160
-	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2019 11:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB67F71E3
+	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2019 11:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfKKKIw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Nov 2019 05:08:52 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53005 "EHLO
+        id S1726955AbfKKK2V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Nov 2019 05:28:21 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60589 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726768AbfKKKIw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Nov 2019 05:08:52 -0500
+        with ESMTP id S1726810AbfKKK2V (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Nov 2019 05:28:21 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iU6cr-0006zH-Nf; Mon, 11 Nov 2019 11:08:49 +0100
+        id 1iU6vj-0000mC-JC; Mon, 11 Nov 2019 11:28:19 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:fcf3:94db:a77f:e6a3] (unknown [IPv6:2a03:f580:87bc:d400:fcf3:94db:a77f:e6a3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AD86447A0A9;
-        Mon, 11 Nov 2019 10:08:46 +0000 (UTC)
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "sean@geanix.com" <sean@geanix.com>,
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 958FD47A0E3;
+        Mon, 11 Nov 2019 10:28:18 +0000 (UTC)
+To:     Drew Fustini <pdp7pdp7@gmail.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <DB7PR04MB4618BF9DE9152B2F1D49A702E6740@DB7PR04MB4618.eurprd04.prod.outlook.com>
+References: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -90,16 +89,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: Wake up issue about Flexcan driver in v5.4 kernel
-Message-ID: <bcbae072-3aec-34f7-9b7e-58d78000bd39@pengutronix.de>
-Date:   Mon, 11 Nov 2019 11:08:41 +0100
+Subject: Re: mcp251x: read oscillator frequency?
+Message-ID: <9d854335-366a-0b7f-1985-5e1d3245d33a@pengutronix.de>
+Date:   Mon, 11 Nov 2019 11:28:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <DB7PR04MB4618BF9DE9152B2F1D49A702E6740@DB7PR04MB4618.eurprd04.prod.outlook.com>
+In-Reply-To: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="mhoREVIxmN65ur2rnClNULuGZWyn1gNM7"
+ boundary="sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,91 +109,91 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---mhoREVIxmN65ur2rnClNULuGZWyn1gNM7
-Content-Type: multipart/mixed; boundary="bwejrZt9Ct50E0vGA92jp6EkAPY22KIZl";
+--sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR
+Content-Type: multipart/mixed; boundary="ct5SSazXureljYJpWYQXdTwXkx9FOTaCO";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>, "sean@geanix.com"
- <sean@geanix.com>, "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <bcbae072-3aec-34f7-9b7e-58d78000bd39@pengutronix.de>
-Subject: Re: Wake up issue about Flexcan driver in v5.4 kernel
-References: <DB7PR04MB4618BF9DE9152B2F1D49A702E6740@DB7PR04MB4618.eurprd04.prod.outlook.com>
-In-Reply-To: <DB7PR04MB4618BF9DE9152B2F1D49A702E6740@DB7PR04MB4618.eurprd04.prod.outlook.com>
+To: Drew Fustini <pdp7pdp7@gmail.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <9d854335-366a-0b7f-1985-5e1d3245d33a@pengutronix.de>
+Subject: Re: mcp251x: read oscillator frequency?
+References: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
+In-Reply-To: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
 
---bwejrZt9Ct50E0vGA92jp6EkAPY22KIZl
+--ct5SSazXureljYJpWYQXdTwXkx9FOTaCO
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 11/11/19 10:48 AM, Joakim Zhang wrote:
-> I came across a strange phenomenon about wake up in Flexcan driver with=
-
-> v5.4 kernel, I connected two i.MX7D-SDB board.
+On 11/11/19 12:09 AM, Drew Fustini wrote:
+> Hello, I'm looking at mcp251x driver and it does not seem to read the
+> device tree property=C2=A0
+> mcp251x,oscillator-frequency.=C2=A0=C2=A0
 >=20
-> I found that CAN frame which try to wake up the system will not be
-> received at another side in order. Like below case:
->=20
-> Sender: cangen can0 -vv
-> =C2=A0 can0=C2=A0 4D9=C2=A0=C2=A0 [8]=C2=A0 89 72 0C 5F C8 15 2D 3A
-> =C2=A0 can0=C2=A0 0AA=C2=A0=C2=A0 [8]=C2=A0 B7 DC 14 61 7F A0 8E 40
-> =C2=A0 can0=C2=A0 304=C2=A0=C2=A0 [8]=C2=A0 42 5C D7 3B D6 1D 36 56
-> =C2=A0 can0=C2=A0 0D9=C2=A0=C2=A0 [7]=C2=A0 B0 C3 1B 7B 9B 3A 19
-> =C2=A0 can0=C2=A0 66B=C2=A0=C2=A0 [8]=C2=A0 8A B0 D9 56 00 46 76 48
-> =C2=A0 can0=C2=A0 22D=C2=A0=C2=A0 [8]=C2=A0 44 4B FD 53 B2 D3 A5 33
-> =C2=A0 can0=C2=A0 47E=C2=A0=C2=A0 [8]=C2=A0 B9 6B 72 0B 4C 15 96 72
-> =C2=A0 can0=C2=A0 54C=C2=A0=C2=A0 [3]=C2=A0 3F BE 8F
-> =C2=A0 can0=C2=A0 7C1=C2=A0=C2=A0 [8]=C2=A0 EE A7 B4 11 6C 80 8F 7D
-> =C2=A0 can0=C2=A0 5D6=C2=A0=C2=A0 [5]=C2=A0 EB 20 1E 3E DB
-> =C2=A0 can0=C2=A0 794=C2=A0=C2=A0 [8]=C2=A0 B1 56 9E 13 6D 88 CE 52
-> =C2=A0 can0=C2=A0 584=C2=A0=C2=A0 [1]=C2=A0 08
->=20
-> =C2=A0
->=20
-> Receiver: candump can0 &
-> =C2=A0 can0=C2=A0 0AA=C2=A0=C2=A0 [8]=C2=A0 B7 DC 14 61 7F A0 8E 40
-> =C2=A0 can0=C2=A0 304=C2=A0=C2=A0 [8]=C2=A0 42 5C D7 3B D6 1D 36 56
-> =C2=A0 can0=C2=A0 0D9=C2=A0=C2=A0 [7]=C2=A0 B0 C3 1B 7B 9B 3A 19
-> =C2=A0 can0=C2=A0 66B=C2=A0=C2=A0 [8]=C2=A0 8A B0 D9 56 00 46 76 48
-> =C2=A0 can0=C2=A0 22D=C2=A0=C2=A0 [8]=C2=A0 44 4B FD 53 B2 D3 A5 33
-> =C2=A0 can0=C2=A0 4D9=C2=A0=C2=A0 [8]=C2=A0 89 72 0C 5F C8 15 2D 3A
-> =C2=A0 can0=C2=A0 47E=C2=A0=C2=A0 [8]=C2=A0 B9 6B 72 0B 4C 15 96 72
-> =C2=A0 can0=C2=A0 54C=C2=A0=C2=A0 [3]=C2=A0 3F BE 8F
-> =C2=A0 can0=C2=A0 7C1=C2=A0=C2=A0 [8]=C2=A0 EE A7 B4 11 6C 80 8F 7D
-> =C2=A0 can0=C2=A0 5D6=C2=A0=C2=A0 [5]=C2=A0 EB 20 1E 3E DB
-> =C2=A0 can0=C2=A0 794=C2=A0=C2=A0 [8]=C2=A0 B1 56 9E 13 6D 88 CE 52
-> =C2=A0 can0=C2=A0 584=C2=A0=C2=A0 [1]=C2=A0 08
->=20
-> You can see that wake up frame(can0=C2=A0 4D9=C2=A0=C2=A0 [8]=C2=A0 89 =
-72 0C 5F C8 15 2D 3A)
-> will be received at 6^th , it=E2=80=99s hard to understand.
+> I have a problem where I have MCP2515 with a 16MHz oscillator.=C2=A0 Ho=
+wever,
+> it is getting configured with a 8MHz clock despite
+> having=C2=A0mcp251x,oscillator-frequency defined as 16MHz:
+> https://github.com/pdp7/bb.org-overlays/blob/patch-1/src/arm/PB-MCP2515=
+-SPI1.dts
 
-- What did you do before wakeup?
-  - Clean reboot?
-  - ifdown/ifup?
-  - sending other packets?
-- Does this happen on every wakeup?
-- Is the wake up frame always "received" as 6th frame?
-- Is the situation the same, if you add some delay between the frames,
-  using the "cangen -g option"?
-- How big can you make the -g until the frames are received in order
-  again?
+I assume you get the 8MHz clock rate from the "ip" output, right?
 
-The reception path works like this:
-In the interrupt handler the rx-offload reads all mailboxes based on the
-iflag register. It iterates over all set mailboxes, starting with the
-first. All mailboxes are read including the rx-timestamp, sorted and
-added into a queue. At the end of the IRQ handler the queue is added to
-the per device queue thats read in the NAPI and pushed into the
-networking stack.
+> ip -details -statistics link show can0
+> 8: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode=
+ DEFAULT group default qlen 10
+>     link/can  promiscuity 0 minmtu 0 maxmtu 0=20
+>     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0=20
+> 	  bitrate 500000 sample-point 0.875=20
+> 	  tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+> 	  usb_8dev: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
+> 	  clock 32000000=20
+                ^^^^^^^^
 
-Maybe something with the timestamp of the first packet is wrong, as the
-counter is only 16 bits wide, it will overflow quite often.
+Like here? (example output from a different CAN controller)
 
-Maybe you can trace_printk the mailbox number, timestamp and can_id in
-mailbox_read() and analyse output after wakeup. Feel free to post the
-output of the tracer here.
+> 	  re-started bus-errors arbit-lost error-warn error-pass bus-off
+> 	  0          0          0          0          0          0         num=
+txqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535=20
+>     RX: bytes  packets  errors  dropped overrun mcast  =20
+>     0          0        0       0       0       0      =20
+>     TX: bytes  packets  errors  dropped carrier collsns=20
+>     0          0        0       0       0       0      =20
 
-regards,
+It's due to this line in the code:
+
+https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp251=
+x.c#L1065
+
+where only the half of the external osc frequency is stored. That value
+is displayed in the user space by the "ip" command.
+
+> I would appreciate any advice on whether a patch for mcp251x.c to
+> read=C2=A0mcp251x,oscillator-frequency would be a good way to solve thi=
+s issue.
+
+Looking at the datasheet[1] of the mcp2515 page 40, equation 5-2, I
+think this is correct. As the timequanta is calculated by:
+
+    Tq =3D (2 * Brp) / fosc
+
+On other words:
+
+    Tq =3D Brp / (fosc / 2)
+
+We have no means of expressing the additional "/2" during the bit timing
+calculation, but to store the fosc/2 as the "effective" oscillator
+frequency.
+
+I successfully got a mcp25625 (which is basically a mcp2515 with
+internal phy) running on a rapsi using the frequency printed on the
+oscillator in the DT-overlay.
+
+[1]
+http://ww1.microchip.com/downloads/en/DeviceDoc/MCP2515-Stand-Alone-CAN-C=
+ontroller-with-SPI-20001801J.pdf
+
+hth,
 Marc
 
 --=20
@@ -204,23 +203,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---bwejrZt9Ct50E0vGA92jp6EkAPY22KIZl--
+--ct5SSazXureljYJpWYQXdTwXkx9FOTaCO--
 
---mhoREVIxmN65ur2rnClNULuGZWyn1gNM7
+--sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3JMykACgkQWsYho5Hk
-nSCKvwf/VHaABdVhbEgdQdbA+PDypnevXW4SqvyGSJ2jNmxUcDFlG3zMEARAsmYN
-dYGs+GzAPMQ8i3GUvRMZEPDISk5SV/yooSII9CTA4GX8ZGGRVBwVYqf8/pEy3fKI
-rKhEgG3CqfiFqt75llIVLqaxyfmyZ2N5iFg1JrDWfSOrAR5hGm0ZOCQdslNF6YwI
-2fND0yPjGL7MH0YqZW+oLz51b6UGfo4dm280J3lbfIMc8vTm3d7a4hVRyUBwU/Oo
-iNPuIqmHJh5P/ECEQ/LDCruyBJJ+VgJcQLV04kt1EH5ZKuVq4l8y5z08O5fZdP4E
-HiQOUbgI+Vt9OAJlEHjEJPiAJvqUeg==
-=E+Mk
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3JN74ACgkQWsYho5Hk
+nSBF1Qf/R5AQc9vjCoSD8UWvOBTWEbVPa6cr0UGrYk8GQ6Ff54v7KvByXiEV7DIj
+IeuZthUW3AC4Ft757U21vNvdsqD2B9E6sSwzuMXTxgIlhqByjKzcZSmd421iPH5o
+1+fqktDwWkPiUlz8dEPYXVukrev58LVYZ8+Ua0xG2UeKyFqRb+KMFgtyEDlmgL5D
+jMo0Qa8zGmEEzxLIiitdcG+WRpSOx8CtYyoGpAQ592b7Un2+F+5T9r63yWaYkwqp
+16VRDsb3mYi/ZXWX5/SmTeQxQxXw/BmKtjJnthxJVTBiprUxmPLJTxuC3q3FCH9G
+q/1Bo7EqwbS5O/0LBLDWASvmHTC86Q==
+=robP
 -----END PGP SIGNATURE-----
 
---mhoREVIxmN65ur2rnClNULuGZWyn1gNM7--
+--sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR--
