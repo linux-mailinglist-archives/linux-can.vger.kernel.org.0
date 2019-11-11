@@ -2,224 +2,162 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB67F71E3
-	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2019 11:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F97F7253
+	for <lists+linux-can@lfdr.de>; Mon, 11 Nov 2019 11:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbfKKK2V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Nov 2019 05:28:21 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60589 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726810AbfKKK2V (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Nov 2019 05:28:21 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iU6vj-0000mC-JC; Mon, 11 Nov 2019 11:28:19 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:fcf3:94db:a77f:e6a3] (unknown [IPv6:2a03:f580:87bc:d400:fcf3:94db:a77f:e6a3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 958FD47A0E3;
-        Mon, 11 Nov 2019 10:28:18 +0000 (UTC)
-To:     Drew Fustini <pdp7pdp7@gmail.com>,
+        id S1726889AbfKKKg4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Nov 2019 05:36:56 -0500
+Received: from mail-eopbgr30049.outbound.protection.outlook.com ([40.107.3.49]:57543
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726887AbfKKKg4 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 11 Nov 2019 05:36:56 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O/DDDfSvZNioDSMWR5lz+ZRgRUisFaC7GfxYAEO1ldnMr35fyFN59n2RDVhPAiVj+2fpOQ+UQi1cO/3iur7E4IN3zMMcARTO5Rc2tQeOmJ4Fr1lfiIXYbkT42Bkfzoo5IBiViB9wOON2BlT3Flljim5AWfOYM8dkip2xBE76jPbU7ecuik0346SC/PvL8mkjhFJXBOxzM4KhYT26UuwdrpEvL8TaiofE8sruXqnJcw9iG1pFvvyTUPcJ0Gddf1vWZ62PivFfFMBLkV9rGSD7vV918K3CzdBsqclSWVHDu+S5CheM65MFN6GZofi7tv0vU6tRPBV056FQ9pHlIxixaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IBv7zT/3PPUG9ciO0czGnN0ytYBItQNo7l+pHezljSc=;
+ b=G6UbK0TZi8rWBjO6E76+c+ki4vB5hZUFaL0oCTqdVwUE9KnQ0MjHr69+8gWP2y6sRVSndn8Do+HWCVmL+Jb/cNgyx3eKRJyy7XVD1kN68BBTawvumYIh3Uf2YOIxbMHCQ6xUkOgI7ELlGVUfQQGXR3jjEG12Yq/hoglqoRMfdoPNd9/PA7GXc81FVsBAOiQUCJ1UXwCFA5f1QPmYPPgpyN51EOQ2OcsqyPRh+h522jxDXzik3R8NReodwlzxK0F+49FlmunzX9X1Q8vkbRClQc975AR3X7nkpd1SKpKapA9WXEVO5W42iE7zhKQAo+AHqtTHBROEmZwfItNQspZNKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IBv7zT/3PPUG9ciO0czGnN0ytYBItQNo7l+pHezljSc=;
+ b=lWDh4OM5lg0f2s19rA1jXiXiGQA7jxlXhHWNZDx5dukEkbA4wjzIBRfO2dC246XErZdgT9ADsvEPtRMjkOYev/szsL+bo+giGQuvVL+zJ4EZDEN2t+Yo0dvhiyo6d1scCD3CPT+fz9ZH+qyZz4LDJoDk1gJy2qRMcvK+8dkm+C8=
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
+ DB7PR04MB5036.eurprd04.prod.outlook.com (20.176.234.220) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2430.22; Mon, 11 Nov 2019 10:36:51 +0000
+Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::1c96:c591:7d51:64e6]) by DB7PR04MB4618.eurprd04.prod.outlook.com
+ ([fe80::1c96:c591:7d51:64e6%4]) with mapi id 15.20.2430.027; Mon, 11 Nov 2019
+ 10:36:51 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "sean@geanix.com" <sean@geanix.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: mcp251x: read oscillator frequency?
-Message-ID: <9d854335-366a-0b7f-1985-5e1d3245d33a@pengutronix.de>
-Date:   Mon, 11 Nov 2019 11:28:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+Subject: RE: Wake up issue about Flexcan driver in v5.4 kernel
+Thread-Topic: Wake up issue about Flexcan driver in v5.4 kernel
+Thread-Index: AdWYdOEh/tYWI8MXSASMqe9cVeZH0AAAx0KAAAByFCA=
+Date:   Mon, 11 Nov 2019 10:36:51 +0000
+Message-ID: <DB7PR04MB461893DB29EE914EEEF410CDE6740@DB7PR04MB4618.eurprd04.prod.outlook.com>
+References: <DB7PR04MB4618BF9DE9152B2F1D49A702E6740@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <bcbae072-3aec-34f7-9b7e-58d78000bd39@pengutronix.de>
+In-Reply-To: <bcbae072-3aec-34f7-9b7e-58d78000bd39@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=qiangqing.zhang@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: ea76eb8d-a7bd-4a47-c572-08d766931052
+x-ms-traffictypediagnostic: DB7PR04MB5036:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <DB7PR04MB5036A8BDBDD7072CBB27B91DE6740@DB7PR04MB5036.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 0218A015FA
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(39860400002)(136003)(396003)(366004)(189003)(199004)(13464003)(9686003)(14444005)(478600001)(6306002)(74316002)(486006)(64756008)(66446008)(66946007)(76116006)(3846002)(66476007)(55016002)(966005)(66556008)(6246003)(6436002)(6116002)(2201001)(110136005)(33656002)(316002)(86362001)(14454004)(7736002)(102836004)(81166006)(81156014)(2906002)(52536014)(26005)(76176011)(71200400001)(71190400001)(53546011)(6506007)(66066001)(5660300002)(229853002)(8676002)(476003)(99286004)(186003)(11346002)(8936002)(25786009)(256004)(2501003)(7696005)(305945005)(446003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5036;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QzsLeSw9WagoKGzc58Lz3uR9b5zkzlQZSjalbo62/eep/YD0i60althL9awsXojzPzAJx07gQMTn64Rc/p7yepG17WjBIiPZi5l6JmsUAvzttoHdtFT7fH6P2nECqVQrB/tzCyYEOXhb7kIPpGsG9Nc9FylYlYwJ64+LqugGXoMfKQuyu1AUyuOPAD85aGH82XPIeM5P533BXt2noJPQe3gaCH9WpKr2Yz33gkj1r08SWr/4QdtSpR7/wU5/kQph89iI7kAWIHkOi5kx/6CTabDkiEKrd1vN9sFsc92seD4v64A/upphT8VL0yCzDx1qc3kK2/dR0H0QENu2UPjrIiw/Z9+kULz2XnVxwBGVna/PGEMzXZZovcpq7zvpaVFl00u+p+dfmec29wxBJygc/lX3rFJ6SlfGpN+oNN6qBzUp6DVbdIP+Kgp7quDvTeYVfeaRZbCom6c0XcIzTXAQykJXbk6Iy6RqAJrAQgaEMCA=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea76eb8d-a7bd-4a47-c572-08d766931052
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2019 10:36:51.4711
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7sphxIJPNBC9ouo0R/eQeF+k7JbaxZcVqkEA3vAQSkC52HZ3p2cdtTag7H46mCyq6vMxYX8Zft7nM5uruEyxew==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5036
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR
-Content-Type: multipart/mixed; boundary="ct5SSazXureljYJpWYQXdTwXkx9FOTaCO";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Drew Fustini <pdp7pdp7@gmail.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <9d854335-366a-0b7f-1985-5e1d3245d33a@pengutronix.de>
-Subject: Re: mcp251x: read oscillator frequency?
-References: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
-In-Reply-To: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
-
---ct5SSazXureljYJpWYQXdTwXkx9FOTaCO
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-
-On 11/11/19 12:09 AM, Drew Fustini wrote:
-> Hello, I'm looking at mcp251x driver and it does not seem to read the
-> device tree property=C2=A0
-> mcp251x,oscillator-frequency.=C2=A0=C2=A0
->=20
-> I have a problem where I have MCP2515 with a 16MHz oscillator.=C2=A0 Ho=
-wever,
-> it is getting configured with a 8MHz clock despite
-> having=C2=A0mcp251x,oscillator-frequency defined as 16MHz:
-> https://github.com/pdp7/bb.org-overlays/blob/patch-1/src/arm/PB-MCP2515=
--SPI1.dts
-
-I assume you get the 8MHz clock rate from the "ip" output, right?
-
-> ip -details -statistics link show can0
-> 8: can0: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state UP mode=
- DEFAULT group default qlen 10
->     link/can  promiscuity 0 minmtu 0 maxmtu 0=20
->     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0=20
-> 	  bitrate 500000 sample-point 0.875=20
-> 	  tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
-> 	  usb_8dev: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
-> 	  clock 32000000=20
-                ^^^^^^^^
-
-Like here? (example output from a different CAN controller)
-
-> 	  re-started bus-errors arbit-lost error-warn error-pass bus-off
-> 	  0          0          0          0          0          0         num=
-txqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535=20
->     RX: bytes  packets  errors  dropped overrun mcast  =20
->     0          0        0       0       0       0      =20
->     TX: bytes  packets  errors  dropped carrier collsns=20
->     0          0        0       0       0       0      =20
-
-It's due to this line in the code:
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/can/spi/mcp251=
-x.c#L1065
-
-where only the half of the external osc frequency is stored. That value
-is displayed in the user space by the "ip" command.
-
-> I would appreciate any advice on whether a patch for mcp251x.c to
-> read=C2=A0mcp251x,oscillator-frequency would be a good way to solve thi=
-s issue.
-
-Looking at the datasheet[1] of the mcp2515 page 40, equation 5-2, I
-think this is correct. As the timequanta is calculated by:
-
-    Tq =3D (2 * Brp) / fosc
-
-On other words:
-
-    Tq =3D Brp / (fosc / 2)
-
-We have no means of expressing the additional "/2" during the bit timing
-calculation, but to store the fosc/2 as the "effective" oscillator
-frequency.
-
-I successfully got a mcp25625 (which is basically a mcp2515 with
-internal phy) running on a rapsi using the frequency printed on the
-oscillator in the DT-overlay.
-
-[1]
-http://ww1.microchip.com/downloads/en/DeviceDoc/MCP2515-Stand-Alone-CAN-C=
-ontroller-with-SPI-20001801J.pdf
-
-hth,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---ct5SSazXureljYJpWYQXdTwXkx9FOTaCO--
-
---sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3JN74ACgkQWsYho5Hk
-nSBF1Qf/R5AQc9vjCoSD8UWvOBTWEbVPa6cr0UGrYk8GQ6Ff54v7KvByXiEV7DIj
-IeuZthUW3AC4Ft757U21vNvdsqD2B9E6sSwzuMXTxgIlhqByjKzcZSmd421iPH5o
-1+fqktDwWkPiUlz8dEPYXVukrev58LVYZ8+Ua0xG2UeKyFqRb+KMFgtyEDlmgL5D
-jMo0Qa8zGmEEzxLIiitdcG+WRpSOx8CtYyoGpAQ592b7Un2+F+5T9r63yWaYkwqp
-16VRDsb3mYi/ZXWX5/SmTeQxQxXw/BmKtjJnthxJVTBiprUxmPLJTxuC3q3FCH9G
-q/1Bo7EqwbS5O/0LBLDWASvmHTC86Q==
-=robP
------END PGP SIGNATURE-----
-
---sN2GM0ldctUNuVUW9YfWwQ1eYbOu9S7ZR--
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE1hcmMgS2xlaW5lLUJ1ZGRl
+IDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IDIwMTnlubQxMeaciDEx5pelIDE4OjA5DQo+
+IFRvOiBKb2FraW0gWmhhbmcgPHFpYW5ncWluZy56aGFuZ0BueHAuY29tPjsgc2VhbkBnZWFuaXgu
+Y29tOw0KPiBsaW51eC1jYW5Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBXYWtlIHVw
+IGlzc3VlIGFib3V0IEZsZXhjYW4gZHJpdmVyIGluIHY1LjQga2VybmVsDQo+IA0KPiBPbiAxMS8x
+MS8xOSAxMDo0OCBBTSwgSm9ha2ltIFpoYW5nIHdyb3RlOg0KPiA+IEkgY2FtZSBhY3Jvc3MgYSBz
+dHJhbmdlIHBoZW5vbWVub24gYWJvdXQgd2FrZSB1cCBpbiBGbGV4Y2FuIGRyaXZlcg0KPiA+IHdp
+dGgNCj4gPiB2NS40IGtlcm5lbCwgSSBjb25uZWN0ZWQgdHdvIGkuTVg3RC1TREIgYm9hcmQuDQo+
+ID4NCj4gPiBJIGZvdW5kIHRoYXQgQ0FOIGZyYW1lIHdoaWNoIHRyeSB0byB3YWtlIHVwIHRoZSBz
+eXN0ZW0gd2lsbCBub3QgYmUNCj4gPiByZWNlaXZlZCBhdCBhbm90aGVyIHNpZGUgaW4gb3JkZXIu
+IExpa2UgYmVsb3cgY2FzZToNCj4gPg0KPiA+IFNlbmRlcjogY2FuZ2VuIGNhbjAgLXZ2DQo+ID4g
+wqAgY2FuMMKgIDREOcKgwqAgWzhdwqAgODkgNzIgMEMgNUYgQzggMTUgMkQgM0ENCj4gPiDCoCBj
+YW4wwqAgMEFBwqDCoCBbOF3CoCBCNyBEQyAxNCA2MSA3RiBBMCA4RSA0MA0KPiA+IMKgIGNhbjDC
+oCAzMDTCoMKgIFs4XcKgIDQyIDVDIEQ3IDNCIEQ2IDFEIDM2IDU2DQo+ID4gwqAgY2FuMMKgIDBE
+OcKgwqAgWzddwqAgQjAgQzMgMUIgN0IgOUIgM0EgMTkNCj4gPiDCoCBjYW4wwqAgNjZCwqDCoCBb
+OF3CoCA4QSBCMCBEOSA1NiAwMCA0NiA3NiA0OA0KPiA+IMKgIGNhbjDCoCAyMkTCoMKgIFs4XcKg
+IDQ0IDRCIEZEIDUzIEIyIEQzIEE1IDMzDQo+ID4gwqAgY2FuMMKgIDQ3RcKgwqAgWzhdwqAgQjkg
+NkIgNzIgMEIgNEMgMTUgOTYgNzINCj4gPiDCoCBjYW4wwqAgNTRDwqDCoCBbM13CoCAzRiBCRSA4
+Rg0KPiA+IMKgIGNhbjDCoCA3QzHCoMKgIFs4XcKgIEVFIEE3IEI0IDExIDZDIDgwIDhGIDdEDQo+
+ID4gwqAgY2FuMMKgIDVENsKgwqAgWzVdwqAgRUIgMjAgMUUgM0UgREINCj4gPiDCoCBjYW4wwqAg
+Nzk0wqDCoCBbOF3CoCBCMSA1NiA5RSAxMyA2RCA4OCBDRSA1Mg0KPiA+IMKgIGNhbjDCoCA1ODTC
+oMKgIFsxXcKgIDA4DQo+ID4NCj4gPg0KPiA+DQo+ID4gUmVjZWl2ZXI6IGNhbmR1bXAgY2FuMCAm
+DQo+ID4gwqAgY2FuMMKgIDBBQcKgwqAgWzhdwqAgQjcgREMgMTQgNjEgN0YgQTAgOEUgNDANCj4g
+PiDCoCBjYW4wwqAgMzA0wqDCoCBbOF3CoCA0MiA1QyBENyAzQiBENiAxRCAzNiA1Ng0KPiA+IMKg
+IGNhbjDCoCAwRDnCoMKgIFs3XcKgIEIwIEMzIDFCIDdCIDlCIDNBIDE5DQo+ID4gwqAgY2FuMMKg
+IDY2QsKgwqAgWzhdwqAgOEEgQjAgRDkgNTYgMDAgNDYgNzYgNDgNCj4gPiDCoCBjYW4wwqAgMjJE
+wqDCoCBbOF3CoCA0NCA0QiBGRCA1MyBCMiBEMyBBNSAzMw0KPiA+IMKgIGNhbjDCoCA0RDnCoMKg
+IFs4XcKgIDg5IDcyIDBDIDVGIEM4IDE1IDJEIDNBDQo+ID4gwqAgY2FuMMKgIDQ3RcKgwqAgWzhd
+wqAgQjkgNkIgNzIgMEIgNEMgMTUgOTYgNzINCj4gPiDCoCBjYW4wwqAgNTRDwqDCoCBbM13CoCAz
+RiBCRSA4Rg0KPiA+IMKgIGNhbjDCoCA3QzHCoMKgIFs4XcKgIEVFIEE3IEI0IDExIDZDIDgwIDhG
+IDdEDQo+ID4gwqAgY2FuMMKgIDVENsKgwqAgWzVdwqAgRUIgMjAgMUUgM0UgREINCj4gPiDCoCBj
+YW4wwqAgNzk0wqDCoCBbOF3CoCBCMSA1NiA5RSAxMyA2RCA4OCBDRSA1Mg0KPiA+IMKgIGNhbjDC
+oCA1ODTCoMKgIFsxXcKgIDA4DQo+ID4NCj4gPiBZb3UgY2FuIHNlZSB0aGF0IHdha2UgdXAgZnJh
+bWUoY2FuMMKgIDREOcKgwqAgWzhdwqAgODkgNzIgMEMgNUYgQzggMTUgMkQNCj4gPiAzQSkgd2ls
+bCBiZSByZWNlaXZlZCBhdCA2XnRoICwgaXTigJlzIGhhcmQgdG8gdW5kZXJzdGFuZC4NCj4gDQo+
+IC0gV2hhdCBkaWQgeW91IGRvIGJlZm9yZSB3YWtldXA/DQo+ICAgLSBDbGVhbiByZWJvb3Q/DQo+
+ICAgLSBpZmRvd24vaWZ1cD8NCg0KCUNsZWFuIGJvb3QNCg0KCVNlbmRlciBzaWRlOg0KCWlwIGxp
+bmsgc2V0IGNhbjAgdXAgdHlwZSBjYW4gYml0cmF0ZSAxMDAwMDAwDQoJZWNobyBlbmFibGVkID4g
+L3N5cy9idXMvcGxhdGZvcm0vZHJpdmVycy9mbGV4Y2FuLzMwYTEwMDAwLmNhb3dlci93YWtldXAN
+CgljYW5kdW1wIGNhbjAgJg0KCWVjaG8gbWVtID4gL3N5cy9wb3dlci9zdGF0ZQ0KDQoJUmVjZWl2
+ZSBzaWRlOg0KCWlwIGxpbmsgc2V0IGNhbjAgdXAgdHlwZSBjYW4gYml0cmF0ZSAxMDAwMDAwDQoJ
+Y2FuZ2VuIGNhbjAgLXZ2DQoNCj4gICAtIHNlbmRpbmcgb3RoZXIgcGFja2V0cz8NCglOby4NCj4g
+LSBEb2VzIHRoaXMgaGFwcGVuIG9uIGV2ZXJ5IHdha2V1cD8NCglZZXMuDQo+IC0gSXMgdGhlIHdh
+a2UgdXAgZnJhbWUgYWx3YXlzICJyZWNlaXZlZCIgYXMgNnRoIGZyYW1lPw0KCU5vLCBkaWZmZXJl
+bnQgd2l0aCBkaWZmZXJlbnQgZnJhbWUgZ2FwLg0KPiAtIElzIHRoZSBzaXR1YXRpb24gdGhlIHNh
+bWUsIGlmIHlvdSBhZGQgc29tZSBkZWxheSBiZXR3ZWVuIHRoZSBmcmFtZXMsDQo+ICAgdXNpbmcg
+dGhlICJjYW5nZW4gLWcgb3B0aW9uIj8NCglUaGUgc2l0dWF0aW9uIGlzIGRpZmZlcmVudCB3aXRo
+IGRpZmZlcmVudCAiY2FuZ2VuIC1nIG9wdGlvbiINCj4gLSBIb3cgYmlnIGNhbiB5b3UgbWFrZSB0
+aGUgLWcgdW50aWwgdGhlIGZyYW1lcyBhcmUgcmVjZWl2ZWQgaW4gb3JkZXINCj4gICBhZ2Fpbj8N
+CglJIGFtIG5vdCBzdXJlLCBJIGNhbiBkbyBhIHRlc3QgbGF0ZXIuDQoNCj4gVGhlIHJlY2VwdGlv
+biBwYXRoIHdvcmtzIGxpa2UgdGhpczoNCj4gSW4gdGhlIGludGVycnVwdCBoYW5kbGVyIHRoZSBy
+eC1vZmZsb2FkIHJlYWRzIGFsbCBtYWlsYm94ZXMgYmFzZWQgb24gdGhlIGlmbGFnDQo+IHJlZ2lz
+dGVyLiBJdCBpdGVyYXRlcyBvdmVyIGFsbCBzZXQgbWFpbGJveGVzLCBzdGFydGluZyB3aXRoIHRo
+ZSBmaXJzdC4gQWxsIG1haWxib3hlcw0KPiBhcmUgcmVhZCBpbmNsdWRpbmcgdGhlIHJ4LXRpbWVz
+dGFtcCwgc29ydGVkIGFuZCBhZGRlZCBpbnRvIGEgcXVldWUuIEF0IHRoZSBlbmQNCj4gb2YgdGhl
+IElSUSBoYW5kbGVyIHRoZSBxdWV1ZSBpcyBhZGRlZCB0byB0aGUgcGVyIGRldmljZSBxdWV1ZSB0
+aGF0cyByZWFkIGluIHRoZQ0KPiBOQVBJIGFuZCBwdXNoZWQgaW50byB0aGUgbmV0d29ya2luZyBz
+dGFjay4NCj4gDQo+IE1heWJlIHNvbWV0aGluZyB3aXRoIHRoZSB0aW1lc3RhbXAgb2YgdGhlIGZp
+cnN0IHBhY2tldCBpcyB3cm9uZywgYXMgdGhlDQo+IGNvdW50ZXIgaXMgb25seSAxNiBiaXRzIHdp
+ZGUsIGl0IHdpbGwgb3ZlcmZsb3cgcXVpdGUgb2Z0ZW4uDQo+IA0KPiBNYXliZSB5b3UgY2FuIHRy
+YWNlX3ByaW50ayB0aGUgbWFpbGJveCBudW1iZXIsIHRpbWVzdGFtcCBhbmQgY2FuX2lkIGluDQo+
+IG1haWxib3hfcmVhZCgpIGFuZCBhbmFseXNlIG91dHB1dCBhZnRlciB3YWtldXAuIEZlZWwgZnJl
+ZSB0byBwb3N0IHRoZSBvdXRwdXQNCj4gb2YgdGhlIHRyYWNlciBoZXJlLg0KDQoJSSBhbHNvIHN1
+c3BlY3QgdGhpcywgYnV0IEkgY2hlY2sgdGhlIGZsb3cgb2YgdGhlIHJlY2VpdmUgcGF0aCBpcyB0
+aGUgc2FtZSB3aXRoIHY0LjE0IGFuZCB2NC4xOS4NCglBbm90aGVyIHRoaW5nIGNvbmZ1c2VkIG1l
+IGlzIHRoYXQgaG93IGRvZXMgdGhlIGRyaXZlciBoYW5kbGUgdGhlIGNvdW50ZXIgb3ZlcmZsb3cu
+IElmIHRoZSBjb3VudGVyIG92ZXJmbG93IGluIG9uZSByb3VuZCBtYWlsYm94IHJlYWQsIHRoZSBy
+ZWNlaXZlIG9yZGVyIGlzIG5vdCBjb25zaXN0ZW50IHdpdGggcmVhbGl0eS4gSSBkbyBub3QgdGhl
+IGhhbmRsZSBvZiB0aGlzIGNhc2UgaW4gZHJpdmVyLg0KCUkgd2lsbCB1c2UgdGhlIHRyYWNlX3By
+aW50aygpIHRvIHBvc3QgdGhlIG91dHB1dCBoZXJlLg0KDQpCZXN0IFJlZ2FyZHMsDQpKb2FraW0g
+WmhhbmcNCj4gcmVnYXJkcywNCj4gTWFyYw0KPiANCj4gLS0NCj4gUGVuZ3V0cm9uaXggZS5LLiAg
+ICAgICAgICAgICAgICAgfCBNYXJjIEtsZWluZS1CdWRkZSAgICAgICAgICAgfA0KPiBFbWJlZGRl
+ZCBMaW51eCAgICAgICAgICAgICAgICAgICB8IGh0dHBzOi8vd3d3LnBlbmd1dHJvbml4LmRlICB8
+DQo+IFZlcnRyZXR1bmcgV2VzdC9Eb3J0bXVuZCAgICAgICAgIHwgUGhvbmU6ICs0OS0yMzEtMjgy
+Ni05MjQgICAgIHwNCj4gQW10c2dlcmljaHQgSGlsZGVzaGVpbSwgSFJBIDI2ODYgfCBGYXg6ICAg
+KzQ5LTUxMjEtMjA2OTE3LTU1NTUgfA0KDQo=
