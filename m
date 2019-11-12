@@ -2,41 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA47F9A45
-	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2019 21:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25270F9A60
+	for <lists+linux-can@lfdr.de>; Tue, 12 Nov 2019 21:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfKLULN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Nov 2019 15:11:13 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43627 "EHLO
+        id S1726008AbfKLUPL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Nov 2019 15:15:11 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47473 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbfKLULN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Nov 2019 15:11:13 -0500
+        with ESMTP id S1726910AbfKLUPL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Nov 2019 15:15:11 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iUcVK-0004Ng-W9; Tue, 12 Nov 2019 21:11:11 +0100
+        id 1iUcZB-0004nb-LP; Tue, 12 Nov 2019 21:15:09 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:fcf3:94db:a77f:e6a3] (unknown [IPv6:2a03:f580:87bc:d400:fcf3:94db:a77f:e6a3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F2B1847B46D;
-        Tue, 12 Nov 2019 20:11:08 +0000 (UTC)
-Subject: Re: [PATCH v1 1/9] can: af_can: export can_sock_destruct()
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        dev.kurt@vandijck-laurijssen.be, wg@grandegger.com,
-        netdev@vger.kernel.org, kernel@pengutronix.de,
-        linux-can@vger.kernel.org
-References: <20191112111600.18719-1-o.rempel@pengutronix.de>
- <20191112111600.18719-2-o.rempel@pengutronix.de>
- <20191112113724.pff6atmyii5ri4my@pengutronix.de>
- <1da06748-6233-b65e-9b02-da5a867a4ecb@pengutronix.de>
- <20191112114539.zjluqnpo3cynhssi@pengutronix.de>
- <5e561756-26b4-9a71-8fe2-c876e0e7d1af@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CCB4E47B48B;
+        Tue, 12 Nov 2019 20:15:08 +0000 (UTC)
+To:     Drew Fustini <pdp7pdp7@gmail.com>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
+ <9d854335-366a-0b7f-1985-5e1d3245d33a@pengutronix.de>
+ <20191111183912.GA7051@x1>
+ <e61a86f9-c201-458c-2522-a8044e93bc08@pengutronix.de>
+ <20191112064624.GA13873@x1>
+ <8557f946-bb99-5ff8-5651-91757dc958ba@pengutronix.de>
+ <CAEf4M_CR647GpFs67ebZ50WWhWhO_pkWabukbaW8GfOj4s4O3w@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -99,15 +95,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <70a410f6-d57b-7586-b645-35d97680ac0b@pengutronix.de>
-Date:   Tue, 12 Nov 2019 21:10:50 +0100
+Subject: Re: mcp251x: read oscillator frequency?
+Message-ID: <a2a012ad-6b3a-cf37-c79c-c3c473a975b5@pengutronix.de>
+Date:   Tue, 12 Nov 2019 21:15:04 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <5e561756-26b4-9a71-8fe2-c876e0e7d1af@hartkopp.net>
+In-Reply-To: <CAEf4M_CR647GpFs67ebZ50WWhWhO_pkWabukbaW8GfOj4s4O3w@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="eMNh1igYGG4bzUYbu2KYGP7gB78exY0oT"
+ boundary="agLplSJsvOoJYbo6qC176LTo9bl6aGpOa"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -118,68 +115,78 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---eMNh1igYGG4bzUYbu2KYGP7gB78exY0oT
-Content-Type: multipart/mixed; boundary="CvSg4F7QtbR3ei47g1qefK1E9FliPeTyP";
+--agLplSJsvOoJYbo6qC176LTo9bl6aGpOa
+Content-Type: multipart/mixed; boundary="Wc6lNNkTEK0hwmLoxshfJb697yhwB6Ahb";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
- dev.kurt@vandijck-laurijssen.be, wg@grandegger.com, netdev@vger.kernel.org,
- kernel@pengutronix.de, linux-can@vger.kernel.org
-Message-ID: <70a410f6-d57b-7586-b645-35d97680ac0b@pengutronix.de>
-Subject: Re: [PATCH v1 1/9] can: af_can: export can_sock_destruct()
-References: <20191112111600.18719-1-o.rempel@pengutronix.de>
- <20191112111600.18719-2-o.rempel@pengutronix.de>
- <20191112113724.pff6atmyii5ri4my@pengutronix.de>
- <1da06748-6233-b65e-9b02-da5a867a4ecb@pengutronix.de>
- <20191112114539.zjluqnpo3cynhssi@pengutronix.de>
- <5e561756-26b4-9a71-8fe2-c876e0e7d1af@hartkopp.net>
-In-Reply-To: <5e561756-26b4-9a71-8fe2-c876e0e7d1af@hartkopp.net>
+To: Drew Fustini <pdp7pdp7@gmail.com>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <a2a012ad-6b3a-cf37-c79c-c3c473a975b5@pengutronix.de>
+Subject: Re: mcp251x: read oscillator frequency?
+References: <CAEf4M_AVk=2cZJ4LQ8QdnNa=6se4bCLkBPLFY5qR=ECpaq7ZKg@mail.gmail.com>
+ <9d854335-366a-0b7f-1985-5e1d3245d33a@pengutronix.de>
+ <20191111183912.GA7051@x1>
+ <e61a86f9-c201-458c-2522-a8044e93bc08@pengutronix.de>
+ <20191112064624.GA13873@x1>
+ <8557f946-bb99-5ff8-5651-91757dc958ba@pengutronix.de>
+ <CAEf4M_CR647GpFs67ebZ50WWhWhO_pkWabukbaW8GfOj4s4O3w@mail.gmail.com>
+In-Reply-To: <CAEf4M_CR647GpFs67ebZ50WWhWhO_pkWabukbaW8GfOj4s4O3w@mail.gmail.com>
 
---CvSg4F7QtbR3ei47g1qefK1E9FliPeTyP
+--Wc6lNNkTEK0hwmLoxshfJb697yhwB6Ahb
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 11/12/19 7:24 PM, Oliver Hartkopp wrote:
+On 11/12/19 7:42 PM, Drew Fustini wrote:
+> On Tue, Nov 12, 2019 at 12:44 AM Marc Kleine-Budde <mkl@pengutronix.de>=
+ wrote:
+>> Can you send the output of
+>>
+>>     cat /sys/kernel/debug/clk/clk_summary
+>>
+>> Once before loading the module and once after loading it.
 >=20
->=20
-> On 12/11/2019 12.45, Uwe Kleine-K=C3=B6nig wrote:
->> Hello Marc,
->>
->> On Tue, Nov 12, 2019 at 12:39:27PM +0100, Marc Kleine-Budde wrote:
->>> On 11/12/19 12:37 PM, Uwe Kleine-K=C3=B6nig wrote:
->>>> On Tue, Nov 12, 2019 at 12:15:52PM +0100, Oleksij Rempel wrote:
->>>>> +EXPORT_SYMBOL(can_sock_destruct);
->>>>
->>>> If the users are only expected to be another can module, it might ma=
-ke
->>>> sense to use a namespace here?!
->>>
->>> How?
->>
->> Use
->>
->> 	EXPORT_SYMBOL_NS(can_sock_destruct, CAN)
->>
->> instead of the plain EXPORT_SYMBOL, and near the declaration of
->> can_sock_destruct or in the source that makes use of the symbol add:
->>
->> 	MODULE_IMPORT_NS(CAN);
->>
->> See https://lwn.net/Articles/760045/ for some details.
->=20
-> Looks nice! Good idea!
->=20
-> But I would tend to introduce the symbol namespaces for this and the=20
-> other (existing) symbols via can-next and not within this patch set tha=
-t=20
-> addresses the j1939 fixes.
+> I moved the target for the mcp2515 clock from 'target-path =3D "/";' to=
 
-So I should take this series as is?
+> 'target =3D <&scm_clocks>;' and 'clk_get_rate(clk) now returns 16MHz:
 
-And the CAN namespace is introduced later?
+\o/ yeay \o/
+
+> fragment@4 {
+>     target =3D <&scm_clocks>;
+>     __overlay__ {
+>         mcp2515_clock: mcp2515_clock {
+>             compatible =3D "fixed-clock";
+>             #clock-cells =3D <0>;
+>             clock-frequency =3D <16000000>;
+>         };
+>     };
+> };
+>=20
+> Here is the current overlay:
+> https://gist.github.com/pdp7/56174646bb9d075b041f24de2bb01973
+>=20
+> dmesg shows it is working correctly:
+> [   60.089957] mcp251x_can_probe: clk_get_rate(clk)=3D16000000
+>=20
+> I guess the issue was I targeting the wrong node for the clock to be
+> found with clk_get_rate().
+
+I should definitely learn something about DT overlays. I just used
+ready-to-use raspi mcp2515 overlay.
+
+> Here is the clk_summary with it working correctly:
+>=20
+> debian@beaglebone:/opt/source/bb.org-overlays$ cat
+> /sys/kernel/debug/clk/clk_summary
+>    clock                         enable_cnt  prepare_cnt        rate
+> accuracy   phase
+> -----------------------------------------------------------------------=
+-----------------
+>  mcp2515_clock                            1            1    16000000
+>        0 0
+
+This is after module loading?
 
 Marc
 
@@ -190,23 +197,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---CvSg4F7QtbR3ei47g1qefK1E9FliPeTyP--
+--Wc6lNNkTEK0hwmLoxshfJb697yhwB6Ahb--
 
---eMNh1igYGG4bzUYbu2KYGP7gB78exY0oT
+--agLplSJsvOoJYbo6qC176LTo9bl6aGpOa
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3LEcsACgkQWsYho5Hk
-nSBWKQgAlpFLnk1A4pZ8fJOB6EwY8rRPzA7ZllnjJa6ziGM0/6pUyHsgs8ap9nNM
-8WcdGEYo/Os6sEO6Cg0X1AhTtDHlQwA3Sn2lQ2Mi8wZ2AAHoljhHK4bKOlDjTK5R
-UAFZEgv4ey3nIgXayFK6QL5JPQ3BPkrftwXtgCu8wmw8OBUtg2bl7mcYUiaxKhom
-Fv0SupnrUv69pB+MLfugrnAFpbXTnceSBZX07TiOT+/cVM4IFYXv+0x/L909vEnL
-vBcy0T0iHmtU5cRCmMXNh6f+Jkvaw60QADdTSMr2B8Q5CQ3uecKFjf3q+XF8T2OM
-e14Xk8KpoWrKvC8x4m57Ir0Mn25kQg==
-=hXkj
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3LEsgACgkQWsYho5Hk
+nSCwbQf/fyqSD/CkOFLKDAGe7fa9g00t73zXYLbbXyFujCzU/OgmIvd6PcQnL1lI
+0sBS0LlhoIoZfNsgHg2NsBrj90SW5OS+PuW+0pHRDp0ayBCgA1+zFgoys4+dF/y9
+ADOF49dPJgfs9h+fsuZhrEKGNF7t2/Y54r74T2+Uz1N2MHClO+CDvvocmwi2ljRY
+x0hPTEm38DmC/GWZBWTdA7GHmMsC/Tp34zu7UHIGKMKxhV8XyNsYdPjaS+dcgmVI
+f0Wd9UYzCitgLRgw9jpPVhmdJi2Ihr21bXlvx3vm+vSAiK7IFnFZNoslyRRTtb6G
+C0KAcPNv7VzmqEuJeONYXkCzrS4OpA==
+=+Qls
 -----END PGP SIGNATURE-----
 
---eMNh1igYGG4bzUYbu2KYGP7gB78exY0oT--
+--agLplSJsvOoJYbo6qC176LTo9bl6aGpOa--
