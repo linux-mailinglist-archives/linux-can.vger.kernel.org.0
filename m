@@ -2,149 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D64B1000CB
-	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2019 09:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63701100BF3
+	for <lists+linux-can@lfdr.de>; Mon, 18 Nov 2019 20:05:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbfKRIyT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 18 Nov 2019 03:54:19 -0500
-Received: from mail-eopbgr60062.outbound.protection.outlook.com ([40.107.6.62]:1358
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726371AbfKRIyT (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 18 Nov 2019 03:54:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A4TjTRPEMZFtOZU2BtxLiENuOWrhIkgUMuw5QiwCK3dauigFXo5NPvFYLRTGhkweBhynDRSgKlWxXe9tQBwVxLbqATgCoc7juepc8v63Cw5btFxur09M80UfhKOzRksfpM+wSMMSEJPwt/f+i9ToI/Mlg/ISMY2/KsZcxmh3d5INJ6cD8ItsswMfFY0WPcMJVsID/xLgLVdi+B3byqAqPM/831S4fJq19c/ApP8EWXcHCerzovou+L9CRWYzi6F0Db0JOuno6WffZMmHsPIvpHyf1i4mF4vqTfqQQyMSWfeC0iZxOxXxFyQbmZtBAVr6vgXG0FWXisPH9NcDEmRqew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NRtOagBVXfx3t6PsKh8mHHsaeyLQ6+SgHz4jj36/8JY=;
- b=WQFj7zIssIO/9cmXElcx5aJGY9RHittwBnPAW1bfIdrKMexVwBd0y5dgNjHN13tSfCYm+nki9F4sC98YeVt7LVyRvogewi28Aq0rzyzqlqZCpF1qhLkSChBV32rd5Ja4ThjrJZ/E/XwGYWONvvwQFTs60XbF+A0J0MG8vbSb2epdpeCjd66eQdH53ZESvAX82aQs9cYtf+a/gky69Lia2DR1dssCbq+YeVKysN6/S7FkT7tNatG2fYSXPsN719jPE0/zC95cRu8iBpIkL8JizGwcuygHyZxAiXI+fXfxNv+71kxFKQ8K33VzV5Fd4fFoIxpvf16FEGhxfiihykvWGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NRtOagBVXfx3t6PsKh8mHHsaeyLQ6+SgHz4jj36/8JY=;
- b=GFUr3Nnk/ER42/8pV6T1wmDUWDJnw1bkZ3HcJ6pYt78st9ChrpggEq9Bh+usk2F3/Cl8OXM3zqFUOpDruBH2ZveF/nt2oMOkAyufuD4rD6ZZKyepC9qZmafl7vuW7c3klqXbe98x3veTlTMC3cGuiIrQ5lOAtjGiQQebl+FaGv0=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB4731.eurprd04.prod.outlook.com (20.176.233.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.30; Mon, 18 Nov 2019 08:54:11 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::1c96:c591:7d51:64e6]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::1c96:c591:7d51:64e6%4]) with mapi id 15.20.2451.029; Mon, 18 Nov 2019
- 08:54:11 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Sean Nyekjaer <sean@geanix.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH 1/3] can: flexcan: fix deadlock when using self wakeup
-Thread-Topic: [PATCH 1/3] can: flexcan: fix deadlock when using self wakeup
-Thread-Index: AQHVm3IDm0rriooN3k2DjIsf/kbhcKeL8V8AgAQ78GCAAGYugIAAAcOwgAAGSYCAAARFgA==
-Date:   Mon, 18 Nov 2019 08:54:11 +0000
-Message-ID: <DB7PR04MB46180F8FDF27E7DAB77206FBE64D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-References: <20191115050032.25928-1-qiangqing.zhang@nxp.com>
- <9870ec21-b664-522e-e0df-290ab56fbb32@geanix.com>
- <DB7PR04MB4618220095E1F844A44DB480E64D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <16a0aa7b-875e-8dd9-085c-3341d3f1ac51@geanix.com>
- <DB7PR04MB461895F57FD4F360A723D2FAE64D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <12e03487-d468-c009-72c7-88804e87e256@geanix.com>
-In-Reply-To: <12e03487-d468-c009-72c7-88804e87e256@geanix.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 244b9858-bdf1-48ab-c135-08d76c04e198
-x-ms-traffictypediagnostic: DB7PR04MB4731:|DB7PR04MB4731:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB4731145DA23076FE7A8F371AE64D0@DB7PR04MB4731.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0225B0D5BC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(189003)(199004)(13464003)(11346002)(99286004)(5660300002)(81156014)(81166006)(8676002)(8936002)(6116002)(26005)(76116006)(2501003)(14454004)(52536014)(74316002)(7736002)(66446008)(66946007)(66476007)(66556008)(64756008)(186003)(102836004)(53546011)(6506007)(2906002)(33656002)(54906003)(110136005)(256004)(14444005)(76176011)(7696005)(316002)(478600001)(3846002)(446003)(305945005)(476003)(486006)(71190400001)(66066001)(9686003)(86362001)(4326008)(229853002)(55016002)(71200400001)(6436002)(6246003)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4731;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hY/FlZaNX6+3oiy3/dsqd27Vk+ZL64qwCXogsquzmssI2RQWzsFqwPSpEiZ2APr8IDsrKgcDMkiua3/wv9ZKiFFecLsezYwGfwRsrl6hwtXV++0UZI0QPwgUbR54f7DAhmGZYTHEuIdus/SH9WLc7Pcz4+erWYCLS6pWO67bZpl6tRylgssz17GhBE8v0p5KbmDKMUsDUWh9RPUdBhOsM81fQN7uy3Odm7SDvwnuToVp/ScR49ZqL6PCjmAgSqmMsAOiTzvKlAOuGM43Sm0uI/6nXSP4AE1gmXfz3ap9PPe9iFr04HU5qDOUmWuvEuL7hNdXHhUV6Hd2H97rLeTZNMmnagNU1yWUFFUJYt8p76VePQgq/XwWyY6CrExIa7UQB/55AuunYtiC7EG1+J8w6jGYW1/W6/FzVW9Y6M1tLS00762Uj5+3jkng0zTy05yQ
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726475AbfKRTFK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 18 Nov 2019 14:05:10 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:41720 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726427AbfKRTFK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 18 Nov 2019 14:05:10 -0500
+Received: by mail-il1-f199.google.com with SMTP id o185so17043844ila.8
+        for <linux-can@vger.kernel.org>; Mon, 18 Nov 2019 11:05:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=JN/WIzRL3xgiIAMfN7W4EDclVvEnXiBKfc2rvVhShA0=;
+        b=ECQCCApz0ii+t9MTHWKOuO57CrAB3GXu0sl3Mlar8uAQtnyy5hRIK29IrRbrsQ4me0
+         PpeS+HKuLbhXyWrS05FnWBCPSTcDQcWvHnBxVb5HPQQRmlU78BJMnrF6co1ItgyLPUeH
+         lFux+DLIounMLLRYMMIHOjq85uHX6wVqWQZSQQrPeMg1p6xWjtgJ1SA/3p2q7Qbe2hOh
+         fBWKIjHJvZzqPiHWZ/wqhhVhzmaTiUB9koYmCGDA6YTvT6lXYHZo3Jgsw9Ylt6dQqsZw
+         d+r0YnKQbjXYWRt6coiXNdvCnGqH1JL7YhWA4NBWmEt/3coqG6UYheUk4mngtTsvsBZL
+         eY0A==
+X-Gm-Message-State: APjAAAW1KkpcWzw4AmlsgVAj9iCoFxPai25+KzQYWRe0zYhU+0299skV
+        y+jmcFg298z4Plu40rhY8OVcRcr1ubbAmg6i8h9xh13XyCUw
+X-Google-Smtp-Source: APXvYqzQv3IIi/EFnLlvpMQdjMEXk2J9nVzgCVUHWEnLUbkGSRF3p8znLbD8SbilYWbLCnXsHJtBk7RT8Zz8xLBUcMmQ/qQ2wWkW
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 244b9858-bdf1-48ab-c135-08d76c04e198
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2019 08:54:11.6318
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PHMUPGbGc43nNRI3FWuBboqTkADvvyiPQWt1Rw+JLv/o57VyUrsTbvjxXR+8uO/xI3j8hqCc350GxPdw6ZGuig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4731
+X-Received: by 2002:a92:6611:: with SMTP id a17mr18116394ilc.208.1574103909400;
+ Mon, 18 Nov 2019 11:05:09 -0800 (PST)
+Date:   Mon, 18 Nov 2019 11:05:09 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005c08d10597a3a05d@google.com>
+Subject: KMSAN: uninit-value in can_receive
+From:   syzbot <syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNlYW4gTnlla2phZXIgPHNl
-YW5AZ2Vhbml4LmNvbT4NCj4gU2VudDogMjAxOeW5tDEx5pyIMTjml6UgMTY6MjINCj4gVG86IEpv
-YWtpbSBaaGFuZyA8cWlhbmdxaW5nLnpoYW5nQG54cC5jb20+OyBta2xAcGVuZ3V0cm9uaXguZGUN
-Cj4gQ2M6IGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5vcmc7IGRsLWxpbnV4LWlteCA8bGludXgtaW14
-QG54cC5jb20+Ow0KPiBuZXRkZXZAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFU
-Q0ggMS8zXSBjYW46IGZsZXhjYW46IGZpeCBkZWFkbG9jayB3aGVuIHVzaW5nIHNlbGYgd2FrZXVw
-DQo+IA0KPiANCj4gDQo+IE9uIDE4LzExLzIwMTkgMDkuMDQsIEpvYWtpbSBaaGFuZyB3cm90ZToN
-Cj4gPj4+PiBIaSBKb2FraW0gYW5kIE1hcmMNCj4gPj4+Pg0KPiA+Pj4+IFdlIGhhdmUgcXVpdGUg
-YSBmZXcgZGV2aWNlcyBpbiB0aGUgZmllbGQgd2hlcmUgZmxleGNhbiBpcyBzdHVjayBpbg0KPiBT
-dG9wLU1vZGUuDQo+ID4+Pj4gV2UgZG8gbm90IGhhdmUgdGhlIHBvc3NpYmlsaXR5IHRvIGNvbGQg
-cmVib290IHRoZW0sIGFuZCBob3QgcmVib290DQo+ID4+Pj4gd2lsbCBub3QgZ2V0IGZsZXhjYW4g
-b3V0IG9mIHN0b3AtbW9kZS4NCj4gPj4+PiBTbyBmbGV4Y2FuIGNvbWVzIHVwIHdpdGg6DQo+ID4+
-Pj4gWyAgMjc5LjQ0NDA3N10gZmxleGNhbjogcHJvYmUgb2YgMjA5MDAwMC5mbGV4Y2FuIGZhaWxl
-ZCB3aXRoIGVycm9yDQo+ID4+Pj4gLTExMCBbICAyNzkuNTAxNDA1XSBmbGV4Y2FuOiBwcm9iZSBv
-ZiAyMDk0MDAwLmZsZXhjYW4gZmFpbGVkIHdpdGgNCj4gPj4+PiBlcnJvciAtMTEwDQo+ID4+Pj4N
-Cj4gPj4+PiBUaGV5IGFyZSBvbiwgZGUzNTc4YzE5OGM2ICgiY2FuOiBmbGV4Y2FuOiBhZGQgc2Vs
-ZiB3YWtldXAgc3VwcG9ydCIpDQo+ID4+Pj4NCj4gPj4+PiBXb3VsZCBpdCBiZSBhIHNvbHV0aW9u
-IHRvIGFkZCBhIGNoZWNrIGluIHRoZSBwcm9iZSBmdW5jdGlvbiB0byBwdWxsDQo+ID4+Pj4gaXQg
-b3V0IG9mIHN0b3AtbW9kZT8NCj4gPj4+DQo+ID4+PiBIaSBTZWFuLA0KPiA+Pj4NCj4gPj4+IFNv
-ZnQgcmVzZXQgY2Fubm90IGJlIGFwcGxpZWQgd2hlbiBjbG9ja3MgYXJlIHNodXQgZG93biBpbiBh
-IGxvdyBwb3dlcg0KPiBtb2RlLg0KPiA+PiBUaGUgbW9kdWxlIHNob3VsZCBiZSBmaXJzdCByZW1v
-dmVkIGZyb20gbG93IHBvd2VyIG1vZGUsIGFuZCB0aGVuIHNvZnQNCj4gPj4gcmVzZXQgY2FuIGJl
-IGFwcGxpZWQuDQo+ID4+PiBBbmQgZXhpdCBmcm9tIHN0b3AgbW9kZSBoYXBwZW5zIHdoZW4gdGhl
-IFN0b3AgbW9kZSByZXF1ZXN0IGlzDQo+ID4+PiByZW1vdmVkLA0KPiA+PiBvciB3aGVuIGFjdGl2
-aXR5IGlzIGRldGVjdGVkIG9uIHRoZSBDQU4gYnVzIGFuZCB0aGUgU2VsZiBXYWtlIFVwDQo+ID4+
-IG1lY2hhbmlzbSBpcyBlbmFibGVkLg0KPiA+Pj4NCj4gPj4+IFNvIGZyb20gbXkgcG9pbnQgb2Yg
-dmlldywgd2UgY2FuIGFkZCBhIGNoZWNrIGluIHRoZSBwcm9iZSBmdW5jdGlvbg0KPiA+Pj4gdG8g
-cHVsbCBpdCBvdXQgb2Ygc3RvcCBtb2RlLCBzaW5jZSBjb250cm9sbGVyIGFjdHVhbGx5IGNvdWxk
-IGJlDQo+ID4+PiBzdHVjayBpbiBzdG9wIG1vZGUNCj4gPj4gaWYgc3VzcGVuZC9yZXN1bWUgZmFp
-bGVkIGFuZCB1c2VycyBqdXN0IHdhbnQgYSB3YXJtIHJlc2V0IGZvciB0aGUgc3lzdGVtLg0KPiA+
-Pg0KPiA+PiBFeGFjdGx5IHdoYXQgSSB0aG91Z2h0IGNvdWxkIGJlIGRvbmUgOikNCj4gPj4NCj4g
-Pj4+DQo+ID4+PiBDb3VsZCB5b3UgcGxlYXNlIHRlbGwgbWUgaG93IGNhbiBJIGdlbmVyYXRlIGEg
-d2FybSByZXNldD8gQUZBSUssDQo+ID4+PiBib3RoDQo+ID4+ICJyZWJvb3QiIGNvbW1hbmQgcHV0
-IGludG8gcHJvbXB0IGFuZCBSU1QgS0VZIGluIG91ciBFVksgYm9hcmQgYWxsDQo+ID4+IHBsYXkg
-YSByb2xlIG9mIGNvbGQgcmVzZXQuDQo+ID4+DQo+ID4+IFdhcm0gcmVzZXQgaXMganVzdCBgcmVi
-b290YCA6LSkgQ29sZCBpcyBwb3dlcm9mZi4uLg0KPiA+DQo+ID4gSSBhZGQgdGhlIGNvZGUgZmxl
-eGNhbl9lbnRlcl9zdG9wX21vZGUocHJpdikgYXQgdGhlIGVuZCBvZiB0aGUgcHJvYmUNCj4gZnVu
-Y3Rpb24sICdyZWJvb3QnIHRoZSBzeXN0ZW0gZGlyZWN0bHkgYWZ0ZXIgc3lzdGVtIGFjdGl2ZS4N
-Cj4gPiBIb3dldmVyLCBJIGRvIG5vdCBtZWV0IHRoZSBwcm9iZSBlcnJvciwgaXQgY2FuIHByb2Jl
-IHN1Y2Nlc3NmdWxseS4gRG8geW91DQo+IGtub3cgdGhlIHJlYXNvbj8NCj4gDQo+IFlvdSB3aWxs
-IGhhdmUgdG8gZ2V0IGl0IGluIHRoZSBkZWFkbG9jayBzaXR1YXRpb24gZmlyc3QgOikNCg0KQXMg
-eW91IHNhaWQsIGlmIHdlIG5lZWQgZ2V0IGl0IGludG8gdGhlIGRlYWRsb2NrIHNpdHVhdGlvbiBm
-aXJzdCwgdGhlbiB0aGlzIHBhdGNoIGhhcyBmaXhlZCBpdCwgdGhhdCBtZWFucyB0aGUgcHJvYmxl
-bSBnb2VzIGF3YXk/DQoNCldpdGggdGhpcyBwYXRjaCwgaWYgQ0FOIGVudGVyIHN0b3AgbW9kZSB3
-aGVuIHN1c3BlbmQsIGl0IGNlcnRhaW5seSBjYW4gZXhpdCBzdG9wIG1vZGUgd2hlbiByZXN1bWUu
-IFVubGVzcyBzdWNoIGFjdGl2aXR5IG9jY3VycywgQ0FOIGVudGVyDQpzdG9wIG1vZGUsIGhvd2V2
-ZXIgc3lzdGVtIGhhbmcgYmVmb3JlIGl0IGV4aXQgc3RvcCBtb2RlLiBSaWdodD8gDQpTbyBJIGRv
-IG5vdCBrbm93IGhvdyB0byByZXByb2R1Y2UgdGhpcyBpc3N1ZSBhZnRlciBhcHBseWluZyB0aGlz
-IHBhdGNoLiANCg0KQW5kIHRoZSBjYXNlIEkgbWVudGlvbmVkIGluIGxhc3QgcmVzcG9uc2UsIENB
-TiBlbnRlciBzdG9wIG1vZGUgYXQgdGhlIGVuZCBvZiBwcm9iZSBmdW5jdGlvbiwgdGhlbiAicmVi
-b290IiB0aGUgc3lzdGVtIHNob3VsZCBiZSB0aGUgc2FtZSBzaXR1YXRpb24NCndpdGggIiBUaGlz
-IGNhbiBiZSBhY2hpZXZlZCBieSB1c2luZyBkZTM1NzhjMTk4YzYgYW5kIHNlbmRpbmcgY2FuIG1l
-c3NhZ2VzIHRvIGJvdGggY2FuIGludGVyZmFjZXMgd2hpbGUgY2FsbGluZyBzdXNwZW5kLiIgVGhl
-IGFpbSBpcyBib3RoIHRoYXQgbGV0IGNvbnRyb2xsZXINCmVudGVyIHN0b3AgbW9kZSwgdGhlbiAn
-cmVib290JyB0aGUgc3lzdGVtLiBSaWdodD8NCg0KQmVzdCBSZWdhcmRzLA0KSm9ha2ltIFpoYW5n
-DQo+IFRoaXMgY2FuIGJlIGFjaGlldmVkIGJ5IHVzaW5nIGRlMzU3OGMxOThjNiBhbmQgc2VuZGlu
-ZyBjYW4gbWVzc2FnZXMgdG8gYm90aA0KPiBjYW4gaW50ZXJmYWNlcyB3aGlsZSBjYWxsaW5nIHN1
-c3BlbmQuDQo+IA0KPiAvU2Vhbg0K
+Hello,
+
+syzbot found the following crash on:
+
+HEAD commit:    9c6a7162 kmsan: remove unneeded annotations in bio
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=14563416e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9e324dfe9c7b0360
+dashboard link: https://syzkaller.appspot.com/bug?extid=b02ff0707a97e4e79ebb
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in can_receive+0x23c/0x5e0 net/can/af_can.c:649
+CPU: 1 PID: 3490 Comm: syz-executor.2 Not tainted 5.4.0-rc5+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x128/0x220 mm/kmsan/kmsan_report.c:108
+  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:245
+  can_receive+0x23c/0x5e0 net/can/af_can.c:649
+  can_rcv+0x188/0x3a0 net/can/af_can.c:685
+  __netif_receive_skb_one_core net/core/dev.c:5010 [inline]
+  __netif_receive_skb net/core/dev.c:5124 [inline]
+  process_backlog+0x12e8/0x1410 net/core/dev.c:5955
+  napi_poll net/core/dev.c:6392 [inline]
+  net_rx_action+0x7a6/0x1aa0 net/core/dev.c:6460
+  __do_softirq+0x4a1/0x83a kernel/softirq.c:293
+  do_softirq_own_stack+0x49/0x80 arch/x86/entry/entry_64.S:1093
+  </IRQ>
+  do_softirq kernel/softirq.c:338 [inline]
+  __local_bh_enable_ip+0x184/0x1d0 kernel/softirq.c:190
+  local_bh_enable+0x36/0x40 include/linux/bottom_half.h:32
+  rcu_read_unlock_bh include/linux/rcupdate.h:688 [inline]
+  __dev_queue_xmit+0x38e8/0x4200 net/core/dev.c:3900
+  dev_queue_xmit+0x4b/0x60 net/core/dev.c:3906
+  packet_snd net/packet/af_packet.c:2959 [inline]
+  packet_sendmsg+0x82d7/0x92e0 net/packet/af_packet.c:2984
+  sock_sendmsg_nosec net/socket.c:637 [inline]
+  sock_sendmsg net/socket.c:657 [inline]
+  ___sys_sendmsg+0x14ff/0x1590 net/socket.c:2311
+  __sys_sendmsg net/socket.c:2356 [inline]
+  __do_sys_sendmsg net/socket.c:2365 [inline]
+  __se_sys_sendmsg+0x305/0x460 net/socket.c:2363
+  __x64_sys_sendmsg+0x4a/0x70 net/socket.c:2363
+  do_syscall_64+0xb6/0x160 arch/x86/entry/common.c:291
+  entry_SYSCALL_64_after_hwframe+0x63/0xe7
+RIP: 0033:0x45a639
+Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ff1b9c14c78 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045a639
+RDX: 0000000000000050 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff1b9c156d4
+R13: 00000000004c8acf R14: 00000000004df078 R15: 00000000ffffffff
+
+Uninit was created at:
+  kmsan_save_stack_with_flags mm/kmsan/kmsan.c:151 [inline]
+  kmsan_internal_poison_shadow+0x60/0x120 mm/kmsan/kmsan.c:134
+  kmsan_slab_alloc+0xaa/0x120 mm/kmsan/kmsan_hooks.c:88
+  slab_alloc_node mm/slub.c:2799 [inline]
+  __kmalloc_node_track_caller+0xd7b/0x1390 mm/slub.c:4407
+  __kmalloc_reserve net/core/skbuff.c:141 [inline]
+  __alloc_skb+0x306/0xa10 net/core/skbuff.c:209
+  alloc_skb include/linux/skbuff.h:1050 [inline]
+  alloc_skb_with_frags+0x18c/0xa80 net/core/skbuff.c:5662
+  sock_alloc_send_pskb+0xafd/0x10a0 net/core/sock.c:2244
+  packet_alloc_skb net/packet/af_packet.c:2807 [inline]
+  packet_snd net/packet/af_packet.c:2902 [inline]
+  packet_sendmsg+0x6785/0x92e0 net/packet/af_packet.c:2984
+  sock_sendmsg_nosec net/socket.c:637 [inline]
+  sock_sendmsg net/socket.c:657 [inline]
+  ___sys_sendmsg+0x14ff/0x1590 net/socket.c:2311
+  __sys_sendmsg net/socket.c:2356 [inline]
+  __do_sys_sendmsg net/socket.c:2365 [inline]
+  __se_sys_sendmsg+0x305/0x460 net/socket.c:2363
+  __x64_sys_sendmsg+0x4a/0x70 net/socket.c:2363
+  do_syscall_64+0xb6/0x160 arch/x86/entry/common.c:291
+  entry_SYSCALL_64_after_hwframe+0x63/0xe7
+=====================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
