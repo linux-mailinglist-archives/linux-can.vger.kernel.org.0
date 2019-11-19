@@ -2,94 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B8610273D
-	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2019 15:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D69481029D5
+	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2019 17:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727912AbfKSOrM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Nov 2019 09:47:12 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:33978 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727693AbfKSOrM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Nov 2019 09:47:12 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAJEl3L1127708;
-        Tue, 19 Nov 2019 08:47:03 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1574174823;
-        bh=OXUbZruzHdM6LcZR/07PxuUSjLDUqi60DA1vaZg2jFs=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=my9n7z/+Rv8yLMeHxUFRDKMKyXZCTkd2eq1EOENBQJhIjjv+X2MCk+ILG43vMY/NV
-         OzT4NwDWpErX+LIvRquDkBzX9slilH2Ze8hsSjOylwIjXAt5BPPbCh9LGE2yx2QCyR
-         YA8OKf8gkUrwNRlae7WFchWC2WpNlYRdPXV9pRjU=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAJEl2VQ068335
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 Nov 2019 08:47:03 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 19
- Nov 2019 08:47:01 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 19 Nov 2019 08:47:01 -0600
-Received: from [10.250.33.226] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAJEl1j4013921;
-        Tue, 19 Nov 2019 08:47:01 -0600
-Subject: Re: [PATCH 2/2] can: m_can_platform: remove unnecessary
- m_can_class_resume() call
-To:     Pankaj Sharma <pankj.sharma@samsung.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <rcsekar@samsung.com>, <pankaj.dubey@samsung.com>,
-        Sriram Dash <sriram.dash@samsung.com>
-References: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
- <CGME20191119102201epcas5p4e215c25d5d07269a7afb1f86fac0be65@epcas5p4.samsung.com>
- <1574158838-4616-3-git-send-email-pankj.sharma@samsung.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <0af3a926-fa28-2ddd-a6ef-1c516f674fc9@ti.com>
-Date:   Tue, 19 Nov 2019 08:45:30 -0600
+        id S1728264AbfKSQxg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Nov 2019 11:53:36 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42741 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727560AbfKSQxg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Nov 2019 11:53:36 -0500
+Received: by mail-pl1-f194.google.com with SMTP id j12so12046233plt.9;
+        Tue, 19 Nov 2019 08:53:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=0ikEmW1Uo4O0wTwEpbsw1vK5uaPUtxj8nWEOCJAitRY=;
+        b=QeA77eS6veKPZIsveG+jfcWwHV5debSGbGZJ1W14Wq82ggxzASoK28i/diQ7gbK4kl
+         h9Jc04PxNHmr527ewTCO94EU/wosCb3x9UXFXudKwnLMTp/v1o3tQ+0PfIbw+EXVwdbp
+         33QVUIdZPTVrDePLgB8KvLgIonuH19FhjXA31t4ZxhXtiTr7BNPCN04oelDG5pgKObTM
+         M5Toh7Q9ymkkgT6UvMoLgfC9sitLbTkDw0h78F7XvanRQtQs1Uml2zX29tQGqGA/e05d
+         WLTNWVxl8T7tHEntbz/iYGVRKDGLGhtQqYMuU4JTTYiNMmzFBniAlZIN+sbwDtpDSsbq
+         WsGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0ikEmW1Uo4O0wTwEpbsw1vK5uaPUtxj8nWEOCJAitRY=;
+        b=dBoLqCv3zXUM2clTvqnSYaQNIVNOzMD9CPBTj7pxR4LU2mBEVWyFxFzi3BqLGbyxTm
+         uJsoocevINa3RzHuquiLQPGLPpXO1/0LHCwXUzTQWhui7F8Tnv/E3WN5xaJC2zmez9NS
+         WRoapJt96ewKY8LHRLONvaW0DnIztlt1CyEfCdlNMu2zIizapWBzb0CkLhpmvr0eppYA
+         XaP7wfA6qRxKDK8U+aN33dBYO7OJdw89W16B0ksXIWQtljydPaVcF4XMe3+nZ3Vr1E5e
+         lQKlo+C5d1WkBLiWc5W3f4TNFlEHdWXXaIBZl7VrKiQQ7ALSevzpBA9zlBg8Nf8COC+9
+         hKbQ==
+X-Gm-Message-State: APjAAAVx33wjz5hxrVILoWsBJhy3ArMv3pUx38ITINItCA6q0Od6TXse
+        WdXVYeLGA+MkjYqPmq6fA8Y=
+X-Google-Smtp-Source: APXvYqygJkmb3ADs33SkUCsYqyMgEU1MYC1EWxOPKO8Eu1XEONdfouHXmzYzmNtpFSyFYX23ceHM1g==
+X-Received: by 2002:a17:90a:8401:: with SMTP id j1mr7728686pjn.39.1574182415755;
+        Tue, 19 Nov 2019 08:53:35 -0800 (PST)
+Received: from ?IPv6:2620:15c:2c1:200:55c7:81e6:c7d8:94b? ([2620:15c:2c1:200:55c7:81e6:c7d8:94b])
+        by smtp.gmail.com with ESMTPSA id u65sm25969583pfb.35.2019.11.19.08.53.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Nov 2019 08:53:34 -0800 (PST)
+Subject: Re: KMSAN: uninit-value in can_receive
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        syzbot <syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com>,
+        davem@davemloft.net, glider@google.com, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <0000000000005c08d10597a3a05d@google.com>
+ <a5f73d92-fdf2-2590-c863-39a181dca8e1@hartkopp.net>
+ <deedd609-6f3b-8035-47e1-252ab221faa1@pengutronix.de>
+ <7934bc2b-597f-0bb3-be2d-32f3b07b4de9@hartkopp.net>
+ <7f5c4546-0c1a-86ae-581e-0203b5fca446@pengutronix.de>
+ <1f7d6ea7-152e-ff18-549c-b196d8b5e3a7@hartkopp.net>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <9e06266a-67f3-7352-7b87-2b9144c7c9a9@gmail.com>
+Date:   Tue, 19 Nov 2019 08:53:33 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1574158838-4616-3-git-send-email-pankj.sharma@samsung.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <1f7d6ea7-152e-ff18-549c-b196d8b5e3a7@hartkopp.net>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Pankaj
 
-On 11/19/19 4:20 AM, Pankaj Sharma wrote:
-> The function m_can_runtime_resume() is getting recursively called from
-> m_can_class_resume(). This results in a lock up.
->
-> We need not call m_can_class_resume() during m_can_runtime_resume().
->
-> Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
->
-> Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
-> Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
-> ---
->   drivers/net/can/m_can/m_can_platform.c | 2 --
->   1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-> index 2eaa354..38ea5e6 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -166,8 +166,6 @@ static int __maybe_unused m_can_runtime_resume(struct device *dev)
->   	if (err)
->   		clk_disable_unprepare(mcan_class->hclk);
->   
-> -	m_can_class_resume(dev);
-> -
->   	return err;
->   }
->   
-Acked-by: Dan Murphy <dmurphy@ti.com>
+
+On 11/18/19 11:35 PM, Oliver Hartkopp wrote:
+> 
+
+> 
+> See ioctl$ifreq https://syzkaller.appspot.com/x/log.txt?x=14563416e00000
+> 
+> 23:11:34 executing program 2:
+> r0 = socket(0x200000000000011, 0x3, 0x0)
+> ioctl$ifreq_SIOCGIFINDEX_vcan(r0, 0x8933, &(0x7f0000000040)={'vxcan1\x00', <r1=>0x0})
+> bind$packet(r0, &(0x7f0000000300)={0x11, 0xc, r1}, 0x14)
+> sendmmsg(r0, &(0x7f0000000d00), 0x400004e, 0x0)
+> 
+> We only can receive skbs from (v(x))can devices.
+> No matter if someone wrote to them via PF_CAN or PF_PACKET.
+> We check for ETH_P_CAN(FD) type and ARPHRD_CAN dev type at rx time.
+
+And what entity sets the can_skb_prv(skb)->skbcnt to zero exactly ?
+
+> 
+>>> We additionally might think about introducing a check whether we have a
+>>> can_skb_reserve() created skbuff.
+>>>
+>>> But even if someone forged a skbuff without this reserved space the
+>>> access to can_skb_prv(skb)->skbcnt would point into some CAN frame
+>>> content - which is still no access to uninitialized content, right?
+> 
+> So this question remains still valid whether we have a false positive from KMSAN here.
+
+I do not believe it is a false positive.
+
+It seems CAN relies on some properties of low level drivers using alloc_can_skb() or similar function.
+
+Why not simply fix this like that ?
+
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index 128d37a4c2e0ba5d8db69fcceec8cbd6a79380df..3e71a78d82af84caaacd0ef512b5e894efbf4852 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -647,8 +647,9 @@ static void can_receive(struct sk_buff *skb, struct net_device *dev)
+        pkg_stats->rx_frames_delta++;
+ 
+        /* create non-zero unique skb identifier together with *skb */
+-       while (!(can_skb_prv(skb)->skbcnt))
++       do {
+                can_skb_prv(skb)->skbcnt = atomic_inc_return(&skbcounter);
++       } while (!(can_skb_prv(skb)->skbcnt));
+ 
+        rcu_read_lock();
+ 
+
+
