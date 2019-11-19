@@ -2,133 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAFB1021AD
-	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2019 11:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E88E21021FC
+	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2019 11:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbfKSKJF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Nov 2019 05:09:05 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34476 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727545AbfKSKJF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Nov 2019 05:09:05 -0500
-Received: by mail-qk1-f193.google.com with SMTP id 205so17274459qkk.1
-        for <linux-can@vger.kernel.org>; Tue, 19 Nov 2019 02:09:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kthzsFDv3BtXMmmJRQd1qCPqKASHhxamk1aLgY0fuLQ=;
-        b=kPWwFSfnlnu9XmSpJkG19s/iNALUrvrShZ1C2Czk8j+q0g1ifRmXzjO7YHXd0Q1dOX
-         Ken9OddoZlUkmrM9m+umBzKw13kRR7mNzFg1wI+oC8dS+YLk616rxc5Sg81P5atJpGYd
-         qSO9RCZZX9iN4OJKVboKydfL/0ODVcP/UVn+Ts03/6e7WHZEzvm/d7lj5rlvE/wBFAAM
-         VyYt0jJPsXOrT4UMMEdVd5dQ6guTn7n0ZMGStIqBOF5PwnXSg/TNiFkg31py0Zypjp5j
-         vrSh7+Qq3R1ZqjtFGdovVZ0OaPYXl/RW7Jox8/Ua90XBVBAgc/coO/Zw1cCQa2J3oKOU
-         Ydhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kthzsFDv3BtXMmmJRQd1qCPqKASHhxamk1aLgY0fuLQ=;
-        b=LHGYOUSo+gG+2vKz8ioQTY3GzSaUe6CXKW1/BtqrdvCzIRUgyZcN90/SpUCk/f2MDs
-         /if69wvk9y0c8/a324xP1PNK7hBfCu/7Vy7XdtF6bvHFVVy9Acv3ZApS3qSLtKTdLQKo
-         VMbPHU+tQt80GcorKU34Ndo0cN8wLK54D6+Ui5FwhRE/m339//bKzqhQuV4Vm2GTP5T5
-         ScDG7JHht+v6yH9dcmN4hLIkSmbYBtzR5xLxHO2/7LDOiq92EZFSWqV2ZhCAU52ev5NG
-         nBqFs6mE/I8E93b4PPWeXw8pOPvKYruXz7V55lBpfEUk5OeGjyM2az3Gk/0L98xnsoSG
-         CPFg==
-X-Gm-Message-State: APjAAAWDIt1ppr+Mi0pc5j8BZC+sFQU4qOZjglWlgwSf6a+iUsNtkbW6
-        vN2pGmBGzmvqr9e1PnHCW6MNmyXg0EMDLn2/evIfLA==
-X-Google-Smtp-Source: APXvYqz3sW+a1UoaZIdKYgIlbIKJ5VYWfPjuUI7mT8jMQMykt/NPr28fXvPHFDM4PpsUCVdsAZOz5StnaJQW1bzfBxo=
-X-Received: by 2002:a37:6156:: with SMTP id v83mr27936505qkb.43.1574158143641;
- Tue, 19 Nov 2019 02:09:03 -0800 (PST)
-MIME-Version: 1.0
-References: <0000000000005c08d10597a3a05d@google.com> <a5f73d92-fdf2-2590-c863-39a181dca8e1@hartkopp.net>
- <deedd609-6f3b-8035-47e1-252ab221faa1@pengutronix.de> <7934bc2b-597f-0bb3-be2d-32f3b07b4de9@hartkopp.net>
- <7f5c4546-0c1a-86ae-581e-0203b5fca446@pengutronix.de> <1f7d6ea7-152e-ff18-549c-b196d8b5e3a7@hartkopp.net>
-In-Reply-To: <1f7d6ea7-152e-ff18-549c-b196d8b5e3a7@hartkopp.net>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 19 Nov 2019 11:08:52 +0100
-Message-ID: <CACT4Y+acOwzqwrJ1OSStRkvdxsmM4RY6mz4qDEFAUpMM2P-FiQ@mail.gmail.com>
-Subject: Re: KMSAN: uninit-value in can_receive
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Alexander Potapenko <glider@google.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        syzbot <syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726590AbfKSKVj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Nov 2019 05:21:39 -0500
+Received: from mailout2.samsung.com ([203.254.224.25]:59088 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725798AbfKSKVj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Nov 2019 05:21:39 -0500
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191119102134epoutp029ff57df1c31124de381cc9dc3fbd6cc7~YiSy47U0z0051300513epoutp02W
+        for <linux-can@vger.kernel.org>; Tue, 19 Nov 2019 10:21:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191119102134epoutp029ff57df1c31124de381cc9dc3fbd6cc7~YiSy47U0z0051300513epoutp02W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1574158894;
+        bh=uCgzGWyFzgjRsvAX5UZu+DD982M4BidQDfFHXZHUOjE=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=SiatQt28JBjV40Dngw/jwg3Xol8Q0Ek1ijKEX82HlZzp7TX2wQcQ7e05co+emyE2n
+         YKt+u4PLEg06ebKseb/RUVMY1fDPXRjQbi8eOhoGn2+k1vxvrmgzclX08OZIqS4V2c
+         IDdkdlLra2UiaoN5asdtjS+KmxUMyu/0nMRPwoHU=
+Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20191119102134epcas5p1ddd019c6add2a087b34c2f69e47ca858~YiSya8dj50680006800epcas5p12;
+        Tue, 19 Nov 2019 10:21:34 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7F.FF.04403.E22C3DD5; Tue, 19 Nov 2019 19:21:34 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5~YiSyCrGId1219312193epcas5p4W;
+        Tue, 19 Nov 2019 10:21:34 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191119102134epsmtrp132b131ec9761c632b733472a08efaf68~YiSyB4M--1898818988epsmtrp1y;
+        Tue, 19 Nov 2019 10:21:34 +0000 (GMT)
+X-AuditID: b6c32a4a-3cbff70000001133-ca-5dd3c22e6a2e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        89.55.03814.D22C3DD5; Tue, 19 Nov 2019 19:21:33 +0900 (KST)
+Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
+        [107.108.83.125]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191119102132epsmtip15691e0e546327ad2810a7f0d08744f05~YiSwoXjCE0108901089epsmtip1z;
+        Tue, 19 Nov 2019 10:21:32 +0000 (GMT)
+From:   Pankaj Sharma <pankj.sharma@samsung.com>
+To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        dmurphy@ti.com, rcsekar@samsung.com, pankaj.dubey@samsung.com,
+        Pankaj Sharma <pankj.sharma@samsung.com>
+Subject: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
+Date:   Tue, 19 Nov 2019 15:50:36 +0530
+Message-Id: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJIsWRmVeSWpSXmKPExsWy7bCmlq7eocuxBlPaJS3mnG9hseg+vYXV
+        YtX3qcwWl3fNYbNYv2gKi8WxBWIWi7Z+YbdY3nWf2WLWhR2sFkvv7WR14PLYsvImk8fHS7cZ
+        Pfr/Gnj0bVnF6HH8xnYmj8+b5ALYorhsUlJzMstSi/TtErgydkwyLOgUrJi47QRbA+Mf3i5G
+        Tg4JAROJ148OsncxcnEICexmlDi19BkzhPOJUeLet18sIFVCAt8YJZZvZoPpuDK/FapjL6PE
+        mpPfoTpamCS+v1vODlLFJqAncen9ZLAOEYFQiWW9E1hBipgFVjNK3JnxkhkkISzgKvH3ezdY
+        EYuAqsTkMxPB4rwC7hLvN55ih1gnJ3HzXCfYBgmBJWwSu69eZoZIuEgcub+FEcIWlnh1fAtU
+        g5TEy/42KDtbYuHufqAfOIDsCom2GcIQYXuJA1fmgIWZBTQl1u/SBwkzC/BJ9P5+wgRRzSvR
+        0SYEUa0mMfXpO6hFMhJ3HsECwkNi8oID0ACKlXj7agrTBEaZWQhDFzAyrmKUTC0ozk1PLTYt
+        MMpLLdcrTswtLs1L10vOz93ECE4AWl47GJed8znEKMDBqMTDe0LlcqwQa2JZcWXuIUYJDmYl
+        EV6/RxdihXhTEiurUovy44tKc1KLDzFKc7AoifNOYr0aIySQnliSmp2aWpBaBJNl4uCUamCc
+        Hs01acEC/bulOel9T5Xvac4SeHs9+HOw1oRSVveNKyXEP1pYfHC8sFXv0dkfKh15H+fF7dc0
+        W1V5Lm3//3t7dv97sbIxS8q0PHIGx4r6lVub3YRe53I3XM5fvixccsILMaOiJV35jev8hXef
+        /zybN/3aEoPuIwIakx9PZuzovrlW37h1/QpfJZbijERDLeai4kQADge38PwCAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprLLMWRmVeSWpSXmKPExsWy7bCSnK7uocuxBm/WW1nMOd/CYtF9egur
+        xarvU5ktLu+aw2axftEUFotjC8QsFm39wm6xvOs+s8WsCztYLZbe28nqwOWxZeVNJo+Pl24z
+        evT/NfDo27KK0eP4je1MHp83yQWwRXHZpKTmZJalFunbJXBl7JhkWNApWDFx2wm2BsY/vF2M
+        nBwSAiYSV+a3sncxcnEICexmlLj/8wpbFyMHUEJGYvHnaogaYYmV/55D1TQxSUz4v5sNJMEm
+        oCdx6f1kMFtEIFxi54QuJpAiZoHNjBLXu2eygiSEBVwl/n7vBitiEVCVmHxmIjOIzSvgLvF+
+        4yl2iA1yEjfPdTJPYORZwMiwilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjONC0tHYw
+        njgRf4hRgINRiYf3hMrlWCHWxLLiytxDjBIczEoivH6PLsQK8aYkVlalFuXHF5XmpBYfYpTm
+        YFES55XPPxYpJJCeWJKanZpakFoEk2Xi4JRqYAyuEns4/2BVF2vSNm6XK68PytnsKPgh+2RP
+        wx2bCXse2O+18Oas3XiH83hIQ4l77KcE+22Pw2Wmbg++dfL76XRnJaUfk89f+3bzWabH1i1z
+        Z76RSbrGINSsd2PjGbMDheaXJa69VGk95yJRanUrkOXJnKU9Lt0TJhzc9GzJ8c3mSsyFE90P
+        25sqsRRnJBpqMRcVJwIAw12JMTACAAA=
+X-CMS-MailID: 20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5
+References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 8:36 AM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> On 18/11/2019 22.15, Marc Kleine-Budde wrote:
-> > On 11/18/19 9:49 PM, Oliver Hartkopp wrote:
-> >>
-> >>
-> >> On 18/11/2019 21.29, Marc Kleine-Budde wrote:
-> >>> On 11/18/19 9:25 PM, Oliver Hartkopp wrote:
-> >>
-> >>>>> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> >>>>> Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
-> >>>>>
-> >>>>> =====================================================
-> >>>>> BUG: KMSAN: uninit-value in can_receive+0x23c/0x5e0 net/can/af_can.c:649
-> >>>>> CPU: 1 PID: 3490 Comm: syz-executor.2 Not tainted 5.4.0-rc5+ #0
-> >>
-> >>>>
-> >>>> In line 649 of 5.4.0-rc5+ we can find a while() statement:
-> >>>>
-> >>>> while (!(can_skb_prv(skb)->skbcnt))
-> >>>>    can_skb_prv(skb)->skbcnt = atomic_inc_return(&skbcounter);
-> >>>>
-> >>>> In linux/include/linux/can/skb.h we see:
-> >>>>
-> >>>> static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb)
-> >>>> {
-> >>>>    return (struct can_skb_priv *)(skb->head);
-> >>>> }
-> >>>>
-> >>>> IMO accessing can_skb_prv(skb)->skbcnt at this point is a valid
-> >>>> operation which has no uninitialized value.
-> >>>>
-> >>>> Can this probably be a false positive of KMSAN?
-> >>>
-> >>> The packet is injected via the packet socket into the kernel. Where does
-> >>> skb->head point to in this case? When the skb is a proper
-> >>> kernel-generated skb containing a CAN-2.0 or CAN-FD frame skb->head is
-> >>> maybe properly initialized?
-> >>
-> >> The packet is either received via vcan or vxcan which checks via
-> >> can_dropped_invalid_skb() if we have a valid ETH_P_CAN type skb.
-> >
-> > According to the call stack it's injected into the kernel via a packet
-> > socket and not via v(x)can.
->
-> See ioctl$ifreq https://syzkaller.appspot.com/x/log.txt?x=14563416e00000
->
-> 23:11:34 executing program 2:
-> r0 = socket(0x200000000000011, 0x3, 0x0)
-> ioctl$ifreq_SIOCGIFINDEX_vcan(r0, 0x8933,
-> &(0x7f0000000040)={'vxcan1\x00', <r1=>0x0})
-> bind$packet(r0, &(0x7f0000000300)={0x11, 0xc, r1}, 0x14)
-> sendmmsg(r0, &(0x7f0000000d00), 0x400004e, 0x0)
->
-> We only can receive skbs from (v(x))can devices.
-> No matter if someone wrote to them via PF_CAN or PF_PACKET.
-> We check for ETH_P_CAN(FD) type and ARPHRD_CAN dev type at rx time.
->
-> >> We additionally might think about introducing a check whether we have a
-> >> can_skb_reserve() created skbuff.
-> >>
-> >> But even if someone forged a skbuff without this reserved space the
-> >> access to can_skb_prv(skb)->skbcnt would point into some CAN frame
-> >> content - which is still no access to uninitialized content, right?
->
-> So this question remains still valid whether we have a false positive
-> from KMSAN here.
+The current code is failing while clock prepare enable because of not
+getting proper clock from platform device. 
 
-+Alex, please check re KMSAN false positive.
-Oliver, Marc, where this skbcnt should have been initialized in this case?
+[    0.852089] Call trace:
+[    0.854516]  0xffff0000fa22a668
+[    0.857638]  clk_prepare+0x20/0x34
+[    0.861019]  m_can_runtime_resume+0x2c/0xe4
+[    0.865180]  pm_generic_runtime_resume+0x28/0x38
+[    0.869770]  __rpm_callback+0x16c/0x1bc
+[    0.873583]  rpm_callback+0x24/0x78
+[    0.877050]  rpm_resume+0x428/0x560
+[    0.880517]  __pm_runtime_resume+0x7c/0xa8
+[    0.884593]  m_can_clk_start.isra.9.part.10+0x1c/0xa8
+[    0.889618]  m_can_class_register+0x138/0x370
+[    0.893950]  m_can_plat_probe+0x120/0x170
+[    0.897939]  platform_drv_probe+0x4c/0xa0
+[    0.901924]  really_probe+0xd8/0x31c
+[    0.905477]  driver_probe_device+0x58/0xe8
+[    0.909551]  device_driver_attach+0x68/0x70
+[    0.913711]  __driver_attach+0x9c/0xf8
+[    0.917437]  bus_for_each_dev+0x50/0xa0
+[    0.921251]  driver_attach+0x20/0x28
+[    0.924804]  bus_add_driver+0x148/0x1fc
+[    0.928617]  driver_register+0x6c/0x124
+[    0.932431]  __platform_driver_register+0x48/0x50
+[    0.937113]  m_can_plat_driver_init+0x18/0x20
+[    0.941446]  do_one_initcall+0x4c/0x19c
+[    0.945259]  kernel_init_freeable+0x1d0/0x280
+[    0.949591]  kernel_init+0x10/0x100
+[    0.953057]  ret_from_fork+0x10/0x18
+[    0.956614] Code: 00000000 00000000 00000000 00000000 (fa22a668) 
+[    0.962681] ---[ end trace 881f71bd609de763 ]---
+[    0.967301] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+
+A device driver for CAN controller hardware registers itself with the
+Linux network layer as a network device. So, the driver data for m_can
+should ideally be of type net_device. 
+
+Further even when passing the proper net device in probe function the
+code was hanging because of the function m_can_runtime_resume() getting
+recursively called from m_can_class_resume().
+
+Pankaj Sharma (2):
+  can: m_can_platform: set net_device structure as driver data
+  can: m_can_platform: remove unnecessary m_can_class_resume() call
+
+ drivers/net/can/m_can/m_can_platform.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+-- 
+2.7.4
+
