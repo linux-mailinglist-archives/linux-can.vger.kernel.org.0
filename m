@@ -2,125 +2,167 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F16D5102200
-	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2019 11:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFFC102529
+	for <lists+linux-can@lfdr.de>; Tue, 19 Nov 2019 14:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbfKSKWE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Nov 2019 05:22:04 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:59386 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727479AbfKSKWE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Nov 2019 05:22:04 -0500
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20191119102202epoutp02a3d3b75a88cfecfcdc84f544a3cde809~YiTMKHOR30213202132epoutp02D
-        for <linux-can@vger.kernel.org>; Tue, 19 Nov 2019 10:22:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20191119102202epoutp02a3d3b75a88cfecfcdc84f544a3cde809~YiTMKHOR30213202132epoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1574158922;
-        bh=giaC8e3t68Zws4SFTQRyK+lQ99Gv3gmyFIFl7bI7GhU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4ZMl20juRNpdutESt5gT44wIwV5BjoWLrgaAPmvchTscCx0nPImNGG3li7206cFU
-         kNUyr0Dr68N73MuxBv2jARQZOE87Y/6/FdJVkgRpxUkGmBrUEFXJLx+GfW2ygW1+iI
-         9rqcU1rxghAq8yFVN4MQRQ50Sf8tjgg4LMdeFEjE=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20191119102201epcas5p26e77afa93f5e79ac27a673f94431a2e5~YiTLyUUqf1672116721epcas5p2G;
-        Tue, 19 Nov 2019 10:22:01 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1F.00.04403.942C3DD5; Tue, 19 Nov 2019 19:22:01 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20191119102201epcas5p4e215c25d5d07269a7afb1f86fac0be65~YiTLYkMH12821228212epcas5p4p;
-        Tue, 19 Nov 2019 10:22:01 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191119102201epsmtrp251279e5a4f57d71f101ea270c40c4340~YiTLXrDY82129221292epsmtrp2j;
-        Tue, 19 Nov 2019 10:22:01 +0000 (GMT)
-X-AuditID: b6c32a4a-3cbff70000001133-0b-5dd3c2493a40
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6F.55.03814.942C3DD5; Tue, 19 Nov 2019 19:22:01 +0900 (KST)
-Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
-        [107.108.83.125]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20191119102159epsmtip1dba7c7040027ecf90e7da6f8ef02b58f~YiTJux4Sh3094930949epsmtip1c;
-        Tue, 19 Nov 2019 10:21:59 +0000 (GMT)
-From:   Pankaj Sharma <pankj.sharma@samsung.com>
-To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        dmurphy@ti.com, rcsekar@samsung.com, pankaj.dubey@samsung.com,
-        Pankaj Sharma <pankj.sharma@samsung.com>,
-        Sriram Dash <sriram.dash@samsung.com>
-Subject: [PATCH 2/2] can: m_can_platform: remove unnecessary
- m_can_class_resume() call
-Date:   Tue, 19 Nov 2019 15:50:38 +0530
-Message-Id: <1574158838-4616-3-git-send-email-pankj.sharma@samsung.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFIsWRmVeSWpSXmKPExsWy7bCmuq7nocuxBt+PKFnMOd/CYtF9egur
-        xarvU5ktLu+aw2axftEUFotjC8QsFm39wm6xvOs+s8WsCztYLW6sZ7dYem8nqwO3x5aVN5k8
-        Pl66zejR/9fAo2/LKkaP4ze2M3l83iQXwBbFZZOSmpNZllqkb5fAlfF40yS2ghb2is6vJxgb
-        GJvYuhg5OSQETCQ2TpzJ0sXIxSEksJtRovfoYTYI5xOjxIe2G4wQzjdGiUnfprDDtExrOc4M
-        kdjLKNG3aSErhNPCJNE28w8zSBWbgJ7EpfeTwZaICIRKLOudAFbELHCJUWLO+RWsIAlhgQiJ
-        bT2zgIo4OFgEVCUmbwgHCfMKuEtsbz8HdaCcxM1znWAzOQU8JB7MmMkEMkdC4AibxOxbJ5hB
-        eiUEXCR2zLSHqBeWeHV8C9SlUhKf3+2FmpMtsXB3PwtEeYVE2wxhiLC9xIErc8DCzAKaEut3
-        6YOEmQX4JHp/P2GCqOaV6GgTgqhWk5j69B0jhC0jcefRZqjhHhIPb0+FhuJsRokXj9axTmCU
-        nYUwdQEj4ypGydSC4tz01GLTAqO81HK94sTc4tK8dL3k/NxNjOAUoeW1g3HZOZ9DjAIcjEo8
-        vCdULscKsSaWFVfmHmKU4GBWEuH1e3QhVog3JbGyKrUoP76oNCe1+BCjNAeLkjjvJNarMUIC
-        6YklqdmpqQWpRTBZJg5OqQZGu+rco5Hrph8r26U5W1uCyfehXuSanf+9QmYssnZaGuH5Yp7K
-        DC7XI+dr1eY3PXqbIifHe1JAbP0T6e8bllX9LDMVLRBm7PcP3fV4DetZk1nvs93Fn6nPWfSt
-        YxPXBuWK0rsl677x3H50e8us1TkWCoq2fZV3r551fL/3ZmC5skX45zMxfCHiSizFGYmGWsxF
-        xYkAUDndcg0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJLMWRmVeSWpSXmKPExsWy7bCSnK7nocuxBl8XcVrMOd/CYtF9egur
-        xarvU5ktLu+aw2axftEUFotjC8QsFm39wm6xvOs+s8WsCztYLW6sZ7dYem8nqwO3x5aVN5k8
-        Pl66zejR/9fAo2/LKkaP4ze2M3l83iQXwBbFZZOSmpNZllqkb5fAlfF40yS2ghb2is6vJxgb
-        GJvYuhg5OSQETCSmtRxn7mLk4hAS2M0osf38TMYuRg6ghIzE4s/VEDXCEiv/PWeHqGliklj8
-        7AIzSIJNQE/i0vvJYINEBMIldk7oYgIpYha4wyjx4/88VpCEsECYxPIPW9hAhrIIqEpM3hAO
-        EuYVcJfY3n4O6gg5iZvnOsFmcgp4SDyYMZMJxBYCqvmz+RnLBEa+BYwMqxglUwuKc9Nziw0L
-        jPJSy/WKE3OLS/PS9ZLzczcxggNUS2sH44kT8YcYBTgYlXh4T6hcjhViTSwrrsw9xCjBwawk
-        wuv36EKsEG9KYmVValF+fFFpTmrxIUZpDhYlcV75/GORQgLpiSWp2ampBalFMFkmDk6pBsby
-        bTPZd3Ltb16cbPLgvn6ffeiMX72ne92rVOffvFe6J2H/oRNqcoJ7EiycdsQ7xS3bv3+Zb6XD
-        6iBh+chLh7T4NGufb95Xox0U/V1u2oFZ/ZV8zH2xstv/P7b/aliT5vmLISz4w6vzM8oqEmbY
-        LpzzOORt4MzD6v6c9gd44rUm/LDl0/mueUOJpTgj0VCLuag4EQBMiBZnTAIAAA==
-X-CMS-MailID: 20191119102201epcas5p4e215c25d5d07269a7afb1f86fac0be65
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20191119102201epcas5p4e215c25d5d07269a7afb1f86fac0be65
-References: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
-        <CGME20191119102201epcas5p4e215c25d5d07269a7afb1f86fac0be65@epcas5p4.samsung.com>
+        id S1727591AbfKSNGr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Nov 2019 08:06:47 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:44169 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727016AbfKSNGr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Nov 2019 08:06:47 -0500
+Received: by mail-wr1-f65.google.com with SMTP id f2so23751595wrs.11
+        for <linux-can@vger.kernel.org>; Tue, 19 Nov 2019 05:06:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BXAjKFuZ2J5bEJ5Ci9XH9Iuw9uldXME0/nOmHAeBpPg=;
+        b=FGH64pUv7L4k1wYLHnzXzfs9Trglnx1fxq7uOhVedhgNEZF6IswBdUCcl9I0o4E2ak
+         MptlTWbWTJJk4hPPWVNmuBM3nEZfv/OofsYqV9nUxfOD51xV9PdU+er5zUSOcSOlsvn6
+         pbpQy/fZ/EOMh5IX3LX18DUv0hh5TlOKMzYhEZOtz+rtId7Kxk9TwmKXtGMsE33dl3Yk
+         BK59MGktwWdbYMgedMxUetHmULCALWW6qNwLapgN4DuF2NG1ike4PR/VGK9+b5I8iVln
+         fgFltLIp2iQX3xb4xxzXHse/JMjUxZx6+IpNX4r3/am5/a1UB62m+asL6FPyQQ+x8SWx
+         3bNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BXAjKFuZ2J5bEJ5Ci9XH9Iuw9uldXME0/nOmHAeBpPg=;
+        b=aG2whBp1dI25FCoSMgjCYd1pAcDPgoNoVQ0qTC2VZMOHUazc61wiXqJRbt5CqoyOYT
+         5pOiUnbJeX8mKRIyr38rsT2G8Pzcnbd3EGRBQonn9qoPnhvLkD7rHnu/c0sXiVSfgpuV
+         opeYHdmVR2sQx3qkOdO4pikBbBTDk9dm1YW/2/xk/qS6EIvbzda4IrZWjGKec4fEPzmw
+         pzuyQCZQT6qDagzk4/urW2nrnA4FlZKVRcAkRePlqq+EUM9FPZ9X1Z8VCpy6ZUu0gWjm
+         BaqZl/4027987xgr/CC7ouMuqBBv4S1K6g78gw4EI2Ghi9gJFHwlbDPWp0t2QopTNyHA
+         DF1Q==
+X-Gm-Message-State: APjAAAWBwsUa3q2yx9EUFUpqy5Cq773Ck/0MoxFEBpThGuTV7vH6nwZs
+        8JvdIRFc0Jk3X/Vhoi4INClsZKfLvkpfvNR5LzC9YQ==
+X-Google-Smtp-Source: APXvYqw6YFAcVgME859vXzGYJJg3Rr77oImJu5osjLQZBrlRjH8P8cfixx/Atojd+9DYeySruan22SClckObv3Qcf3w=
+X-Received: by 2002:a05:6000:18c:: with SMTP id p12mr9183399wrx.154.1574168803860;
+ Tue, 19 Nov 2019 05:06:43 -0800 (PST)
+MIME-Version: 1.0
+References: <0000000000005c08d10597a3a05d@google.com> <a5f73d92-fdf2-2590-c863-39a181dca8e1@hartkopp.net>
+ <deedd609-6f3b-8035-47e1-252ab221faa1@pengutronix.de> <7934bc2b-597f-0bb3-be2d-32f3b07b4de9@hartkopp.net>
+ <7f5c4546-0c1a-86ae-581e-0203b5fca446@pengutronix.de> <1f7d6ea7-152e-ff18-549c-b196d8b5e3a7@hartkopp.net>
+ <CACT4Y+acOwzqwrJ1OSStRkvdxsmM4RY6mz4qDEFAUpMM2P-FiQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+acOwzqwrJ1OSStRkvdxsmM4RY6mz4qDEFAUpMM2P-FiQ@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 19 Nov 2019 14:06:31 +0100
+Message-ID: <CAG_fn=VhSv0sgzn6f_rYUpF45cpc=LMw3qMYeZ06FCmMGURwsQ@mail.gmail.com>
+Subject: Re: KMSAN: uninit-value in can_receive
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        syzbot <syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The function m_can_runtime_resume() is getting recursively called from
-m_can_class_resume(). This results in a lock up.
+On Tue, Nov 19, 2019 at 11:09 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Tue, Nov 19, 2019 at 8:36 AM Oliver Hartkopp <socketcan@hartkopp.net> =
+wrote:
+> > On 18/11/2019 22.15, Marc Kleine-Budde wrote:
+> > > On 11/18/19 9:49 PM, Oliver Hartkopp wrote:
+> > >>
+> > >>
+> > >> On 18/11/2019 21.29, Marc Kleine-Budde wrote:
+> > >>> On 11/18/19 9:25 PM, Oliver Hartkopp wrote:
+> > >>
+> > >>>>> IMPORTANT: if you fix the bug, please add the following tag to th=
+e commit:
+> > >>>>> Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.co=
+m
+> > >>>>>
+> > >>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> > >>>>> BUG: KMSAN: uninit-value in can_receive+0x23c/0x5e0 net/can/af_ca=
+n.c:649
+> > >>>>> CPU: 1 PID: 3490 Comm: syz-executor.2 Not tainted 5.4.0-rc5+ #0
+> > >>
+> > >>>>
+> > >>>> In line 649 of 5.4.0-rc5+ we can find a while() statement:
+> > >>>>
+> > >>>> while (!(can_skb_prv(skb)->skbcnt))
+> > >>>>    can_skb_prv(skb)->skbcnt =3D atomic_inc_return(&skbcounter);
+> > >>>>
+> > >>>> In linux/include/linux/can/skb.h we see:
+> > >>>>
+> > >>>> static inline struct can_skb_priv *can_skb_prv(struct sk_buff *skb=
+)
+> > >>>> {
+> > >>>>    return (struct can_skb_priv *)(skb->head);
+> > >>>> }
+> > >>>>
+> > >>>> IMO accessing can_skb_prv(skb)->skbcnt at this point is a valid
+> > >>>> operation which has no uninitialized value.
+> > >>>>
+> > >>>> Can this probably be a false positive of KMSAN?
+> > >>>
+> > >>> The packet is injected via the packet socket into the kernel. Where=
+ does
+> > >>> skb->head point to in this case? When the skb is a proper
+> > >>> kernel-generated skb containing a CAN-2.0 or CAN-FD frame skb->head=
+ is
+> > >>> maybe properly initialized?
+> > >>
+> > >> The packet is either received via vcan or vxcan which checks via
+> > >> can_dropped_invalid_skb() if we have a valid ETH_P_CAN type skb.
+> > >
+> > > According to the call stack it's injected into the kernel via a packe=
+t
+> > > socket and not via v(x)can.
+> >
+> > See ioctl$ifreq https://syzkaller.appspot.com/x/log.txt?x=3D14563416e00=
+000
+> >
+> > 23:11:34 executing program 2:
+> > r0 =3D socket(0x200000000000011, 0x3, 0x0)
+> > ioctl$ifreq_SIOCGIFINDEX_vcan(r0, 0x8933,
+> > &(0x7f0000000040)=3D{'vxcan1\x00', <r1=3D>0x0})
+> > bind$packet(r0, &(0x7f0000000300)=3D{0x11, 0xc, r1}, 0x14)
+> > sendmmsg(r0, &(0x7f0000000d00), 0x400004e, 0x0)
+> >
+> > We only can receive skbs from (v(x))can devices.
+> > No matter if someone wrote to them via PF_CAN or PF_PACKET.
+> > We check for ETH_P_CAN(FD) type and ARPHRD_CAN dev type at rx time.
+> >
+> > >> We additionally might think about introducing a check whether we hav=
+e a
+> > >> can_skb_reserve() created skbuff.
+> > >>
+> > >> But even if someone forged a skbuff without this reserved space the
+> > >> access to can_skb_prv(skb)->skbcnt would point into some CAN frame
+> > >> content - which is still no access to uninitialized content, right?
+> >
+> > So this question remains still valid whether we have a false positive
+> > from KMSAN here.
+>
+> +Alex, please check re KMSAN false positive.
+Unfortunately syzbot didn't give a repro for this bug. I've tried
+replaying the log, but it didn't work (or maybe the bug is fixed
+already).
+> Oliver, Marc, where this skbcnt should have been initialized in this case=
+?
 
-We need not call m_can_class_resume() during m_can_runtime_resume().
 
-Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
 
-Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
-Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
----
- drivers/net/can/m_can/m_can_platform.c | 2 --
- 1 file changed, 2 deletions(-)
+--=20
+Alexander Potapenko
+Software Engineer
 
-diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-index 2eaa354..38ea5e6 100644
---- a/drivers/net/can/m_can/m_can_platform.c
-+++ b/drivers/net/can/m_can/m_can_platform.c
-@@ -166,8 +166,6 @@ static int __maybe_unused m_can_runtime_resume(struct device *dev)
- 	if (err)
- 		clk_disable_unprepare(mcan_class->hclk);
- 
--	m_can_class_resume(dev);
--
- 	return err;
- }
- 
--- 
-2.7.4
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
