@@ -2,206 +2,174 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9AE1039AF
-	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2019 13:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 778E8103A2A
+	for <lists+linux-can@lfdr.de>; Wed, 20 Nov 2019 13:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbfKTMMB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Nov 2019 07:12:01 -0500
-Received: from mail-eopbgr790085.outbound.protection.outlook.com ([40.107.79.85]:45216
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729574AbfKTML7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 20 Nov 2019 07:11:59 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mPY3LAofNWs7+BVxP8qfvQQriTXfVBls5u0Y7iBwWrc6fcYYztwkyCFeauzy9zwxM8uPJf3Z0btuqJmrd+B6lnT+GSbjkTA0fF5bGndqoRhLlKko9opY+PznYtDgqS7zm9g6C7nM03aj+3v/M3HXymPDMm3+Im8P3y+h87qTSGWxJ+JYjhcXrYsSi/roIhNxsFskFmWDM1TH64vON0m4cyEfKNjfL51OUH1j3ryw7Cm+MVbXcDhn+55w95i2RgXh361YbKGC6xBH+zaPmFKQQFOLT2bYG9hs6sEoeMDGwQr90CZDvLj2eFMCTwXdaOj1bvit9GehzazHcQYQleDcmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NV0+L/clYw+7icfp7edhnVTXuRkGNbhl90CiS8Eqxao=;
- b=IoO2AHO9EUqHKJBgqxSFuj94XvzvyUvbwidtFSFHcrWULQRVwegMOoTZHH3+v5h+9GCdAFz5YlX/7UwW0UGZ6wV/pgj/otVmcoes5CXf6clcAg4DWzeuP3oWhwkRrCWmqY6BpP061JF1NrxVgBrzaB7O8gLjLqYPRwnw23wCQdPZQ9CYvXq5OECvZ1WCC7Oj85WU0S1EKMWSake21S+oTx+hNIEO5i15NjCv1TGTuSichF1y0ru76fcKeYPUr5iH6rHHONBc01TQuyoAt6yUJbHABBCx3wY3Tn/QjH6bzyppQ6o0HNBm/63w4ZapMQ0M/1JnYO94d2Y5NxfdW4Zbkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=grandegger.com smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NV0+L/clYw+7icfp7edhnVTXuRkGNbhl90CiS8Eqxao=;
- b=Si6hVoPEY6qq0HtsdmRN4zBVv48LEzB9fgskEkdUTjlJ602+qwfy17TCh/TSi/govZtvXgdKrAOcnC7bmtfus9Y7S25cboYKVVgF+jfiBHwkuAqME0Dx+3LbzkHF3oqgfrNtbvC36ffCKc8MTKkasnQL4bQET6Xa5/t8OVOvqLE=
-Received: from MWHPR0201CA0103.namprd02.prod.outlook.com
- (2603:10b6:301:75::44) by BYAPR02MB5944.namprd02.prod.outlook.com
- (2603:10b6:a03:124::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2451.30; Wed, 20 Nov
- 2019 12:11:56 +0000
-Received: from BL2NAM02FT021.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e46::200) by MWHPR0201CA0103.outlook.office365.com
- (2603:10b6:301:75::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2474.17 via Frontend
- Transport; Wed, 20 Nov 2019 12:11:55 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; grandegger.com; dkim=none (message not signed)
- header.d=none;grandegger.com; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT021.mail.protection.outlook.com (10.152.77.158) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2474.17
- via Frontend Transport; Wed, 20 Nov 2019 12:11:55 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1iXOpu-0000gy-IO; Wed, 20 Nov 2019 04:11:54 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1iXOpp-0002hM-Ev; Wed, 20 Nov 2019 04:11:49 -0800
-Received: from [10.140.6.6] (helo=xhdappanad40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1iXOpe-0002fi-Nh; Wed, 20 Nov 2019 04:11:39 -0800
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        michal.simek@xilinx.com, appanad@xilinx.com
+        id S1727876AbfKTMhr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Nov 2019 07:37:47 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45239 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727736AbfKTMhr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Nov 2019 07:37:47 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iXPEu-0005Wx-3t; Wed, 20 Nov 2019 13:37:44 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:7957:e6e8:9a3f:15ac] (unknown [IPv6:2a03:f580:87bc:d400:7957:e6e8:9a3f:15ac])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7958B480196;
+        Wed, 20 Nov 2019 12:37:40 +0000 (UTC)
+To:     Srinivas Neeli <srinivas.neeli@xilinx.com>, wg@grandegger.com,
+        davem@davemloft.net, michal.simek@xilinx.com, appanad@xilinx.com
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        git@xilinx.com, nagasure@xilinx.com,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH 2/2] can: xilinx_can: Fix usage of skb memory
-Date:   Wed, 20 Nov 2019 17:41:05 +0530
-Message-Id: <1574251865-19592-3-git-send-email-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574251865-19592-1-git-send-email-srinivas.neeli@xilinx.com>
+        git@xilinx.com, nagasure@xilinx.com
 References: <1574251865-19592-1-git-send-email-srinivas.neeli@xilinx.com>
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(136003)(376002)(39860400002)(189003)(199004)(70586007)(81166006)(106002)(6666004)(4326008)(81156014)(36386004)(36756003)(50226002)(6636002)(16586007)(8676002)(70206006)(48376002)(966005)(305945005)(5660300002)(2616005)(478600001)(6306002)(8936002)(316002)(107886003)(50466002)(9786002)(7696005)(51416003)(76176011)(486006)(44832011)(336012)(11346002)(446003)(426003)(186003)(26005)(476003)(356004)(126002)(2906002)(47776003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR02MB5944;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+ <1574251865-19592-3-git-send-email-srinivas.neeli@xilinx.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH 2/2] can: xilinx_can: Fix usage of skb memory
+Message-ID: <30572daa-1c75-37a2-20f5-c1f818acc603@pengutronix.de>
+Date:   Wed, 20 Nov 2019 13:37:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f67bdc69-b2ca-4351-2c71-08d76db2d5c6
-X-MS-TrafficTypeDiagnostic: BYAPR02MB5944:
-X-MS-Exchange-PUrlCount: 1
-X-Microsoft-Antispam-PRVS: <BYAPR02MB59446C54A61F5B276AF4257CAF4F0@BYAPR02MB5944.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
-X-Forefront-PRVS: 02272225C5
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dclRN9gZ0qYUmtOZcQYzkes7QVJEAHDgw8DOFnbDTZCIE/SiJhI4St5OsGJhYqEuItJn4TQBoNNSgcV9HFdNG5vQhu9zrvDe7pdE4c1R8H3VhUJB46O+dDtc/dYev2FwRhF9kaX+uXkWvsFKhJznabCFazkL1wVPte7LVd+4OUkZ6c4lch8lUWevynBnPmO4ZFXtCYLbVo3eC+adlYidnE/CDkQi3VVDOve+YJK7dvWDm6k8HvdnXSmymsqncVGVH4BVxbx6xeoFrKz7mZ1R8QD8qGWCx7ASmOarULkCr3z3g17GjSyey5T0idNppClqCQRTvCmpwAyum878l4bGWhxK3qRlQDbQANf8d4YR7zjeoDF/MCa/XqUPT0ZZMlyWeLy2abv7++DOIE6fBQ0dSPbPAMaj0cDeUUylmlP+d19yow1bUs7WKWSALEGeasjsQKLi5/qgJ2fAQzpI/NYx21GKCc973n8L7QWd9jAZZsY=
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2019 12:11:55.1963
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f67bdc69-b2ca-4351-2c71-08d76db2d5c6
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5944
+In-Reply-To: <1574251865-19592-3-git-send-email-srinivas.neeli@xilinx.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="VJ7JV65o8ehgq8fGg8Ur0l68J44ivsOpz"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-As per linux can framework, driver not allowed to touch the skb memory
-after can_put_echo_skb() call.
-This patch fixes the same.
-https://www.spinics.net/lists/linux-can/msg02199.html
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--VJ7JV65o8ehgq8fGg8Ur0l68J44ivsOpz
+Content-Type: multipart/mixed; boundary="hle4YSMSiBFJwCiISAd8u83kxFrR0E3Xa";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Srinivas Neeli <srinivas.neeli@xilinx.com>, wg@grandegger.com,
+ davem@davemloft.net, michal.simek@xilinx.com, appanad@xilinx.com
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ git@xilinx.com, nagasure@xilinx.com
+Message-ID: <30572daa-1c75-37a2-20f5-c1f818acc603@pengutronix.de>
+Subject: Re: [PATCH 2/2] can: xilinx_can: Fix usage of skb memory
+References: <1574251865-19592-1-git-send-email-srinivas.neeli@xilinx.com>
+ <1574251865-19592-3-git-send-email-srinivas.neeli@xilinx.com>
+In-Reply-To: <1574251865-19592-3-git-send-email-srinivas.neeli@xilinx.com>
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
-Signed-off-by: Michal Simek <michal.simek@xilinx.com>
----
- drivers/net/can/xilinx_can.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+--hle4YSMSiBFJwCiISAd8u83kxFrR0E3Xa
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index c5f05b994435..536b0f8272f6 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -191,6 +191,8 @@ struct xcan_devtype_data {
-  * @bus_clk:			Pointer to struct clk
-  * @can_clk:			Pointer to struct clk
-  * @devtype:			Device type specific constants
-+ * @cfd:			Variable to struct canfd_frame
-+ * @is_canfd:			For checking canfd or not
-  */
- struct xcan_priv {
- 	struct can_priv can;
-@@ -208,6 +210,8 @@ struct xcan_priv {
- 	struct clk *bus_clk;
- 	struct clk *can_clk;
- 	struct xcan_devtype_data devtype;
-+	struct canfd_frame cfd;
-+	bool is_canfd;
- };
- 
- /* CAN Bittiming constants as per Xilinx CAN specs */
-@@ -543,14 +547,13 @@ static int xcan_do_set_mode(struct net_device *ndev, enum can_mode mode)
- /**
-  * xcan_write_frame - Write a frame to HW
-  * @priv:		Driver private data structure
-- * @skb:		sk_buff pointer that contains data to be Txed
-+ * @cf:			canfd_frame pointer that contains data to be Txed
-  * @frame_offset:	Register offset to write the frame to
-  */
--static void xcan_write_frame(struct xcan_priv *priv, struct sk_buff *skb,
-+static void xcan_write_frame(struct xcan_priv *priv, struct canfd_frame *cf,
- 			     int frame_offset)
- {
- 	u32 id, dlc, data[2] = {0, 0};
--	struct canfd_frame *cf = (struct canfd_frame *)skb->data;
- 	u32 ramoff, dwindex = 0, i;
- 
- 	/* Watch carefully on the bit sequence */
-@@ -581,7 +584,7 @@ static void xcan_write_frame(struct xcan_priv *priv, struct sk_buff *skb,
- 	}
- 
- 	dlc = can_len2dlc(cf->len) << XCAN_DLCR_DLC_SHIFT;
--	if (can_is_canfd_skb(skb)) {
-+	if (priv->is_canfd) {
- 		if (cf->flags & CANFD_BRS)
- 			dlc |= XCAN_DLCR_BRS_MASK;
- 		dlc |= XCAN_DLCR_EDL_MASK;
-@@ -633,6 +636,9 @@ static int xcan_start_xmit_fifo(struct sk_buff *skb, struct net_device *ndev)
- 	struct xcan_priv *priv = netdev_priv(ndev);
- 	unsigned long flags;
- 
-+	priv->cfd = *((struct canfd_frame *)skb->data);
-+	priv->is_canfd = can_is_canfd_skb(skb);
-+
- 	/* Check if the TX buffer is full */
- 	if (unlikely(priv->read_reg(priv, XCAN_SR_OFFSET) &
- 			XCAN_SR_TXFLL_MASK))
-@@ -644,7 +650,7 @@ static int xcan_start_xmit_fifo(struct sk_buff *skb, struct net_device *ndev)
- 
- 	priv->tx_head++;
- 
--	xcan_write_frame(priv, skb, XCAN_TXFIFO_OFFSET);
-+	xcan_write_frame(priv, &priv->cfd, XCAN_TXFIFO_OFFSET);
- 
- 	/* Clear TX-FIFO-empty interrupt for xcan_tx_interrupt() */
- 	if (priv->tx_max > 1)
-@@ -671,6 +677,9 @@ static int xcan_start_xmit_mailbox(struct sk_buff *skb, struct net_device *ndev)
- 	struct xcan_priv *priv = netdev_priv(ndev);
- 	unsigned long flags;
- 
-+	priv->cfd = *((struct canfd_frame *)skb->data);
-+	priv->is_canfd = can_is_canfd_skb(skb);
-+
- 	if (unlikely(priv->read_reg(priv, XCAN_TRR_OFFSET) &
- 		     BIT(XCAN_TX_MAILBOX_IDX)))
- 		return -ENOSPC;
-@@ -681,7 +690,7 @@ static int xcan_start_xmit_mailbox(struct sk_buff *skb, struct net_device *ndev)
- 
- 	priv->tx_head++;
- 
--	xcan_write_frame(priv, skb,
-+	xcan_write_frame(priv, &priv->cfd,
- 			 XCAN_TXMSG_FRAME_OFFSET(XCAN_TX_MAILBOX_IDX));
- 
- 	/* Mark buffer as ready for transmit */
--- 
-2.7.4
+On 11/20/19 1:11 PM, Srinivas Neeli wrote:
+> As per linux can framework, driver not allowed to touch the skb memory
+> after can_put_echo_skb() call.
+> This patch fixes the same.
+> https://www.spinics.net/lists/linux-can/msg02199.html
 
+NACK.
+
+Don't make a copy of the CAN frame, move the can_put_echo_skb() after
+you don't need the skb anymore.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--hle4YSMSiBFJwCiISAd8u83kxFrR0E3Xa--
+
+--VJ7JV65o8ehgq8fGg8Ur0l68J44ivsOpz
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3VM4wACgkQWsYho5Hk
+nSBrPggAplHwHyBXpA/MuKwjV84TSemich3Q5fZBolKKoLgLUsbjoFC8Ca5zRciK
+VM6IAyZWEHq4xuh5T2gcPegBYt1eQm1ECa2J1UNFpfAoY7YB28+L8H6ncQrE9QdC
+nZS+6F4PMdGAYMJ0HzWE9NAom62sw/8A18MuYV4zgFapX1BuiWxe3QFbh02bHAtV
+AuFI2B7NtM/M/p+pswzxii9y7BB0g4qvz0jJgQHh4W5I8nKrMZyKx+ulCQRaV4mA
+qqBRyCYbtVexQBru5181nsuHxDish1KASQP5OCAD48Ip763mOcqmRTYuG4Wp3HAk
++Gl47CTBvwWDWgA+larxa1AMq1wBGA==
+=SK8i
+-----END PGP SIGNATURE-----
+
+--VJ7JV65o8ehgq8fGg8Ur0l68J44ivsOpz--
