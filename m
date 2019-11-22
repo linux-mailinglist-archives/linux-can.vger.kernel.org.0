@@ -2,34 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9665F107452
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2019 15:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B530010747E
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2019 16:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfKVO4T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 22 Nov 2019 09:56:19 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49499 "EHLO
+        id S1726046AbfKVPFL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 22 Nov 2019 10:05:11 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51495 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726046AbfKVO4T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Nov 2019 09:56:19 -0500
+        with ESMTP id S1726045AbfKVPFK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Nov 2019 10:05:10 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iYALw-0007JM-Op; Fri, 22 Nov 2019 15:56:08 +0100
+        id 1iYAUY-0008IA-3u; Fri, 22 Nov 2019 16:05:02 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:941f:8f59:5279:2337] (unknown [IPv6:2a03:f580:87bc:d400:941f:8f59:5279:2337])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B2FB94819BF;
-        Fri, 22 Nov 2019 14:56:07 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D097C4819D3;
+        Fri, 22 Nov 2019 15:05:00 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Pankaj Sharma <pankj.sharma@samsung.com>, linux-can@vger.kernel.org
 Cc:     wg@grandegger.com, dmurphy@ti.com, rcsekar@samsung.com,
-        pankaj.dubey@samsung.com
+        pankaj.dubey@samsung.com, Dan Murphy <dmurphy@ti.com>
 References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
  <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -92,15 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
 Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
-Message-ID: <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
-Date:   Fri, 22 Nov 2019 15:56:02 +0100
+Message-ID: <8d89c748-ca73-8822-d7b1-bd4bffc61e73@pengutronix.de>
+Date:   Fri, 22 Nov 2019 16:04:55 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+In-Reply-To: <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="WbJi57JshuCrMT849Hnrby652bYoNf05B"
+ boundary="7UjMuKb8qrIqYPkV2NFwybPcP6tJXUjnd"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,75 +112,31 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---WbJi57JshuCrMT849Hnrby652bYoNf05B
-Content-Type: multipart/mixed; boundary="0yKmq8RI8pX4qr3dLDqaRfcxmRSBygRYU";
+--7UjMuKb8qrIqYPkV2NFwybPcP6tJXUjnd
+Content-Type: multipart/mixed; boundary="xvjtXETUOSSdbCEEsEXUuipgmNGZG5C7b";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Pankaj Sharma <pankj.sharma@samsung.com>, linux-can@vger.kernel.org
 Cc: wg@grandegger.com, dmurphy@ti.com, rcsekar@samsung.com,
- pankaj.dubey@samsung.com
-Message-ID: <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
+ pankaj.dubey@samsung.com, Dan Murphy <dmurphy@ti.com>
+Message-ID: <8d89c748-ca73-8822-d7b1-bd4bffc61e73@pengutronix.de>
 Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
 References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
  <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
-In-Reply-To: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+ <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
+In-Reply-To: <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
 
---0yKmq8RI8pX4qr3dLDqaRfcxmRSBygRYU
+--xvjtXETUOSSdbCEEsEXUuipgmNGZG5C7b
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/19/19 11:20 AM, Pankaj Sharma wrote:
-> The current code is failing while clock prepare enable because of not
-> getting proper clock from platform device.=20
->=20
-> [    0.852089] Call trace:
-> [    0.854516]  0xffff0000fa22a668
-> [    0.857638]  clk_prepare+0x20/0x34
-> [    0.861019]  m_can_runtime_resume+0x2c/0xe4
-> [    0.865180]  pm_generic_runtime_resume+0x28/0x38
-> [    0.869770]  __rpm_callback+0x16c/0x1bc
-> [    0.873583]  rpm_callback+0x24/0x78
-> [    0.877050]  rpm_resume+0x428/0x560
-> [    0.880517]  __pm_runtime_resume+0x7c/0xa8
-> [    0.884593]  m_can_clk_start.isra.9.part.10+0x1c/0xa8
-> [    0.889618]  m_can_class_register+0x138/0x370
-> [    0.893950]  m_can_plat_probe+0x120/0x170
-> [    0.897939]  platform_drv_probe+0x4c/0xa0
-> [    0.901924]  really_probe+0xd8/0x31c
-> [    0.905477]  driver_probe_device+0x58/0xe8
-> [    0.909551]  device_driver_attach+0x68/0x70
-> [    0.913711]  __driver_attach+0x9c/0xf8
-> [    0.917437]  bus_for_each_dev+0x50/0xa0
-> [    0.921251]  driver_attach+0x20/0x28
-> [    0.924804]  bus_add_driver+0x148/0x1fc
-> [    0.928617]  driver_register+0x6c/0x124
-> [    0.932431]  __platform_driver_register+0x48/0x50
-> [    0.937113]  m_can_plat_driver_init+0x18/0x20
-> [    0.941446]  do_one_initcall+0x4c/0x19c
-> [    0.945259]  kernel_init_freeable+0x1d0/0x280
-> [    0.949591]  kernel_init+0x10/0x100
-> [    0.953057]  ret_from_fork+0x10/0x18
-> [    0.956614] Code: 00000000 00000000 00000000 00000000 (fa22a668)=20
-> [    0.962681] ---[ end trace 881f71bd609de763 ]---
-> [    0.967301] Kernel panic - not syncing: Attempted to kill init! exit=
-code=3D0x0000000b
->=20
-> A device driver for CAN controller hardware registers itself with the
-> Linux network layer as a network device. So, the driver data for m_can
-> should ideally be of type net_device.=20
->=20
-> Further even when passing the proper net device in probe function the
-> code was hanging because of the function m_can_runtime_resume() getting=
+On 11/22/19 3:56 PM, Marc Kleine-Budde wrote:
+> For the m_can driver I'm looking for a maintainer. Would be fine if
+> someone has a look at the mmio and someone else at the spi part.
 
-> recursively called from m_can_class_resume().
->=20
-> Pankaj Sharma (2):
->   can: m_can_platform: set net_device structure as driver data
->   can: m_can_platform: remove unnecessary m_can_class_resume() call
-
-For the m_can driver I'm looking for a maintainer. Would be fine if
-someone has a look at the mmio and someone else at the spi part.
+Speaking of the SPI part, can someone (at TI maybe) supply me a
+TCAN4550EVM or BOOSTXL-CANFD-LIN for extended testing?
 
 Marc
 
@@ -190,23 +147,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---0yKmq8RI8pX4qr3dLDqaRfcxmRSBygRYU--
+--xvjtXETUOSSdbCEEsEXUuipgmNGZG5C7b--
 
---WbJi57JshuCrMT849Hnrby652bYoNf05B
+--7UjMuKb8qrIqYPkV2NFwybPcP6tJXUjnd
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3X9wIACgkQWsYho5Hk
-nSCbBwf/YzSZGICT73cxIHh/d0ZNN5pG6kyvpiJ80AAtNX12f2KfN5gmnnqmcvS5
-eTZkSNjQ9dlQBnM7lvr2MjMA0YZY/wp3OZNQ0p+LXFwGHZxFRU1i84elaUVCkB+c
-Gs+tRQ8GccjXt1sjhOqFcZJqGmAYvN24gGIsGKJbSNMNTnqj0wn5KrQlesTDKZGH
-AhPBLk02a8tT6HvBOak6in4s+Ys2Nc0akE40ebZtXNN89ZdD0V4mCqUPcLgXt0AT
-7jeV5x1XgtbxWHSQjH/pfnz86KlVF9X9fOQRfyTDQDkl63xynYthKLVVC35XgWF8
-7wyFtKXR8VcuY95KmIhpvyYesxOVuQ==
-=J8US
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3X+RcACgkQWsYho5Hk
+nSDe9Qf/QELGNXfvu3BS3cTzx3WutGss6ID0ojWRThJMNHA0KO9vfdYJwAjcyGsg
+7nncGojx0poqf/HqjNoD3zeKRJAogeTG/NnR3JfobUxAdPxPISVM287yNngQLBg+
+u86tjFmNXQx9qQKdfRjpLf7TMaV8mbfGja/juygVcfYPU2xv/bFJnCMg5cKW4Xlq
+F6nFNmELkej2OwWwpXkkk5/4+lAcDrAFAexRBwFR43sDOQHw+7efVvDWm8xXPrhU
+GLXjAA1GC/5RyfC+pfkjVNzMNHuK8pTVIvb6r1Y2qCKXJkn9ad3RsCAKdjGMXQ0f
+YNGpSTd/LwCmEXimy9T7EzCK0owciw==
+=Qtgb
 -----END PGP SIGNATURE-----
 
---WbJi57JshuCrMT849Hnrby652bYoNf05B--
+--7UjMuKb8qrIqYPkV2NFwybPcP6tJXUjnd--
