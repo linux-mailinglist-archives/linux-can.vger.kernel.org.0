@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DFF1078B1
-	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2019 20:53:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB2B10789C
+	for <lists+linux-can@lfdr.de>; Fri, 22 Nov 2019 20:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727551AbfKVTw0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 22 Nov 2019 14:52:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50076 "EHLO mail.kernel.org"
+        id S1727182AbfKVTvc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 22 Nov 2019 14:51:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727606AbfKVTtu (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 22 Nov 2019 14:49:50 -0500
+        id S1727755AbfKVTuK (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 22 Nov 2019 14:50:10 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4AC4C2075B;
-        Fri, 22 Nov 2019 19:49:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2B74220658;
+        Fri, 22 Nov 2019 19:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574452190;
-        bh=zS1CtbHCBF4bK+RK/MZJvOJkzdCeTQNOmmZaInhmvGE=;
+        s=default; t=1574452210;
+        bh=c5HhzdphgRaTvhSBfxDuC9x7xYliYqvSW/d3UW62tzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lDs+YMTf1y/gF4vcovX9Gx1KUcpHgX0mNrSxf1Ir8GeWcbCZXM0RNPdoyqTuszUke
-         TjkIdTXx72NBwLIYwmVMDm+kSDOOtLUxW/N1uu4tRsLgP4bHBbZkU8NqHOFXOwfjKm
-         uuHqPG6eHZx9S/YB9g1PyVnp3lzdME+plOLc3IP0=
+        b=gkrnhGDBGiCpe6i5IfkoVT+zLZaoHxihIxwBCbY9IsT3/jbVdGQ7PTVhf6HpPoy6W
+         IeksYOtt2qCtH0jb8xVR5t07GqQ929L8FeK7NItJlS8bERfOONfoTZccg6Z/swQy5s
+         q0UdN1D2JEd7G3id9Uwk+bt2K4GAOaX5Est/CfAk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jouni Hogander <jouni.hogander@unikie.com>,
@@ -31,12 +31,12 @@ Cc:     Jouni Hogander <jouni.hogander@unikie.com>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 15/21] slcan: Fix memory leak in error path
-Date:   Fri, 22 Nov 2019 14:49:25 -0500
-Message-Id: <20191122194931.24732-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 10/13] slcan: Fix memory leak in error path
+Date:   Fri, 22 Nov 2019 14:49:55 -0500
+Message-Id: <20191122194958.24926-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122194931.24732-1-sashal@kernel.org>
-References: <20191122194931.24732-1-sashal@kernel.org>
+In-Reply-To: <20191122194958.24926-1-sashal@kernel.org>
+References: <20191122194958.24926-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -83,7 +83,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 5d067c1b987f8..49427f44dc5ba 100644
+index eb7173713bbcb..a2c4048c07bec 100644
 --- a/drivers/net/can/slcan.c
 +++ b/drivers/net/can/slcan.c
 @@ -613,6 +613,7 @@ static int slcan_open(struct tty_struct *tty)
