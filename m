@@ -2,111 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF7810DD22
-	for <lists+linux-can@lfdr.de>; Sat, 30 Nov 2019 09:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C272610DDCB
+	for <lists+linux-can@lfdr.de>; Sat, 30 Nov 2019 14:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbfK3IqJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 30 Nov 2019 03:46:09 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:34443 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbfK3IqI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 30 Nov 2019 03:46:08 -0500
-Received: by mail-il1-f197.google.com with SMTP id l13so10976461ils.1
-        for <linux-can@vger.kernel.org>; Sat, 30 Nov 2019 00:46:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=755V43H68p2tB3xp7z2VrFVq47sZugs1GcV9p/fBxfQ=;
-        b=CHWQbWqe+fLG32ja6Sbqh3BDILvyHRC6NJeCmgprBfiMsIrGgZkemBQkM4xI0jAwtm
-         MlPGW6BF/JZLI3grmTlj3ca8mgdczuK2MbXHwa9/XXInB1fjX+YZfFPJWLMg1iVLc4eC
-         spJg+6hsjg1texWiX/hfu8xdyg+L10npmjtEB8EfnRnx0wuh63muvkM9pqI0AxTTqDoS
-         z/D7Dp1x2gpEV9wKrjxN88lhCySZ6h+By5MQK2Igsnkt1NfK0SEaxsuMjcghuGq/LJqR
-         /7IBBZlZaLxVvZmYRCFIfpOUgX9aRGLbKnMeTzdBx4qzkLHQGI7qXHiRy8Y+AWXfkBJA
-         TLmg==
-X-Gm-Message-State: APjAAAVdhIBt3nnl5TuKMogJEw4lU2qu63CVOVXYglPW/cAlv0UUaGmI
-        gQCcONUPiZsAB/N+EC0zHaBobKqo/uzJlSO/fuakdKyZnQem
-X-Google-Smtp-Source: APXvYqyjqt3aSbwdxMnttBcZrjWgclXwi32UoowlUZT0C8OBaP9a5TW7YFBcaq37TSB19/+USUg/7p122pZsv4arndgt52/T6xTI
+        id S1725957AbfK3Nbp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 30 Nov 2019 08:31:45 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51375 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725811AbfK3Nbp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 30 Nov 2019 08:31:45 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ib2qV-0004UT-50; Sat, 30 Nov 2019 14:31:35 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:b491:f6ed:2bc4:a39a] (unknown [IPv6:2a03:f580:87bc:d400:b491:f6ed:2bc4:a39a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 96F1F48312D;
+        Mon, 25 Nov 2019 20:19:21 +0000 (UTC)
+Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
+To:     Sriram Dash <sriram.dash@samsung.com>,
+        'Pankaj Sharma' <pankj.sharma@samsung.com>,
+        linux-can@vger.kernel.org
+Cc:     wg@grandegger.com, dmurphy@ti.com, rcsekar@samsung.com,
+        pankaj.dubey@samsung.com
+References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
+ <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+ <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
+ <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXzuQENBFxSzJYBCAC58uHRFEjVVE3J
+ 31eyEQT6H1zSFCccTMPO/ewwAnotQWo98Bc67ecmprcnjRjSUKTbyY/eFxS21JnC4ZB0pJKx
+ MNwK6zq71wLmpseXOgjufuG3kvCgwHLGf/nkBHXmSINHvW00eFK/kJBakwHEbddq8Dr4ewmr
+ G7yr8d6A3CSn/qhOYWhIxNORK3SVo4Io7ExNX/ljbisGsgRzsWvY1JlN4sabSNEr7a8YaqTd
+ 2CfFe/5fPcQRGsfhAbH2pVGigr7JddONJPXGE7XzOrx5KTwEv19H6xNe+D/W3FwjZdO4TKIo
+ vcZveSDrFWOi4o2Te4O5OB/2zZbNWPEON8MaXi9zABEBAAGJA3IEGAEKACYWIQTBQAugs5ie
+ b7x9W1wrXuIRxYrqVAUCXFLMlgIbAgUJAeKNmgFACRArXuIRxYrqVMB0IAQZAQoAHRYhBJrx
+ JF84Dn3PPNRrhVrGIaOR5J0gBQJcUsyWAAoJEFrGIaOR5J0grw4H/itil/yryJCvzi6iuZHS
+ suSHHOiEf+UQHib1MLP96LM7FmDabjVSmJDpH4TsMu17A0HTG+bPMAdeia0+q9FWSvSHYW8D
+ wNhfkb8zojpa37qBpVpiNy7r6BKGSRSoFOv6m/iIoRJuJ041AEKao6djj/FdQF8OV1EtWKRO
+ +nE2bNuDCcwHkhHP+FHExdzhKSmnIsMjGpGwIQKN6DxlJ7fN4W7UZFIQdSO21ei+akinBo4K
+ O0uNCnVmePU1UzrwXKG2sS2f97A+sZE89vkc59NtfPHhofI3JkmYexIF6uqLA3PumTqLQ2Lu
+ bywPAC3YNphlhmBrG589p+sdtwDQlpoH9O7NeBAAg/lyGOUUIONrheii/l/zR0xxr2TDE6tq
+ 6HZWdtjWoqcaky6MSyJQIeJ20AjzdV/PxMkd8zOijRVTnlK44bcfidqFM6yuT1bvXAO6NOPy
+ pvBRnfP66L/xECnZe7s07rXpNFy72XGNZwhj89xfpK4a9E8HQcOD0mNtCJaz7TTugqBOsQx2
+ 45VPHosmhdtBQ6/gjlf2WY9FXb5RyceeSuK4lVrz9uZB+fUHBge/giOSsrqFo/9fWAZsE67k
+ 6Mkdbpc7ZQwxelcpP/giB9N+XAfBsffQ8q6kIyuFV4ILsIECCIA4nt1rYmzphv6t5J6PmlTq
+ TzW9jNzbYANoOFAGnjzNRyc9i8UiLvjhTzaKPBOkQfhStEJaZrdSWuR/7Tt2wZBBoNTsgNAw
+ A+cEu+SWCvdX7vNpsCHMiHtcEmVt5R0Tex1Ky87EfXdnGR2mDi6Iyxi3MQcHez3C61Ga3Baf
+ P8UtXR6zrrrlX22xXtpNJf4I4Z6RaLpB/avIXTFXPbJ8CUUbVD2R2mZ/jyzaTzgiABDZspbS
+ gw17QQUrKqUog0nHXuaGGA1uvreHTnyBWx5P8FP7rhtvYKhw6XdJ06ns+2SFcQv0Bv6PcSDK
+ aRXmnW+OsDthn84x1YkfGIRJEPvvmiOKQsFEiB4OUtTX2pheYmZcZc81KFfJMmE8Z9+LT6Ry
+ uSS5AQ0EXFLNDgEIAL14qAzTMCE1PwRrYJRI/RSQGAGF3HLdYvjbQd9Ozzg02K3mNCF2Phb1
+ cjsbMk/V6WMxYoZCEtCh4X2GjQG2GDDW4KC9HOa8cTmr9Vcno+f+pUle09TMzWDgtnH92WKx
+ d0FIQev1zDbxU7lk1dIqyOjjpyhmR8Put6vgunvuIjGJ/GapHL/O0yjVlpumtmow6eME2muc
+ TeJjpapPWBGcy/8VU4LM8xMeMWv8DtQML5ogyJxZ0Smt+AntIzcF9miV2SeYXA3OFiojQstF
+ vScN7owL1XiQ3UjJotCp6pUcSVgVv0SgJXbDo5Nv87M2itn68VPfTu2uBBxRYqXQovsR++kA
+ EQEAAYkCPAQYAQoAJhYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUs0OAhsMBQkB4o0iAAoJ
+ ECte4hHFiupUbioQAJ40bEJmMOF28vFcGvQrpI+lfHJGk9zSrh4F4SlJyOVWV1yWyUAINr8w
+ v1aamg2nAppZ16z4nAnGU/47tWZ4P8blLVG8x4SWzz3D7MCy1FsQBTrWGLqWldPhkBAGp2VH
+ xDOK4rLhuQWx3H5zd3kPXaIgvHI3EliWaQN+u2xmTQSJN75I/V47QsaPvkm4TVe3JlB7l1Fg
+ OmSvYx31YC+3slh89ayjPWt8hFaTLnB9NaW9bLhs3E2ESF9Dei0FRXIt3qnFV/hnETsx3X4h
+ KEnXxhSRDVeURP7V6P/z3+WIfddVKZk5ZLHi39fJpxvsg9YLSfStMJ/cJfiPXk1vKdoa+FjN
+ 7nGAZyF6NHTNhsI7aHnvZMDavmAD3lK6CY+UBGtGQA3QhrUc2cedp1V53lXwor/D/D3Wo9wY
+ iSXKOl4fFCh2Peo7qYmFUaDdyiCxvFm+YcIeMZ8wO5udzkjDtP4lWKAn4tUcdcwMOT5d0I3q
+ WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
+ lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
+ QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
+Message-ID: <559d983b-7e7b-85fd-b51c-7b354080eae4@pengutronix.de>
+Date:   Mon, 25 Nov 2019 21:19:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:7981:: with SMTP id u123mr22876500ilc.138.1575103568232;
- Sat, 30 Nov 2019 00:46:08 -0800 (PST)
-Date:   Sat, 30 Nov 2019 00:46:08 -0800
-In-Reply-To: <0000000000008c5bfa05988b29dd@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab4c4b05988c6085@google.com>
-Subject: Re: general protection fault in j1939_jsk_del (2)
-From:   syzbot <syzbot+99e9e1b200a1e363237d@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-syzbot has found a reproducer for the following crash on:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx
+Content-Type: multipart/mixed; boundary="owBdmpKg6yQsr0CRTEhYn0KrtPtINtAer";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Sriram Dash <sriram.dash@samsung.com>,
+ 'Pankaj Sharma' <pankj.sharma@samsung.com>, linux-can@vger.kernel.org
+Cc: wg@grandegger.com, dmurphy@ti.com, rcsekar@samsung.com,
+ pankaj.dubey@samsung.com
+Message-ID: <559d983b-7e7b-85fd-b51c-7b354080eae4@pengutronix.de>
+Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
+References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
+ <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+ <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
+ <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
+In-Reply-To: <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
 
-HEAD commit:    81b6b964 Merge branch 'master' of git://git.kernel.org/pub..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=14d2aabce00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=333b76551307b2a0
-dashboard link: https://syzkaller.appspot.com/bug?extid=99e9e1b200a1e363237d
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1671bcdae00000
+--owBdmpKg6yQsr0CRTEhYn0KrtPtINtAer
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+99e9e1b200a1e363237d@syzkaller.appspotmail.com
+On 11/25/19 9:53 AM, Sriram Dash wrote:
+>> For the m_can driver I'm looking for a maintainer. Would be fine if so=
+meone
+>> has a look at the mmio and someone else at the spi part.
 
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 9409 Comm: syz-executor.0 Not tainted 5.4.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:__lock_acquire+0x1254/0x4a00 kernel/locking/lockdep.c:3828
-Code: 00 0f 85 96 24 00 00 48 81 c4 f0 00 00 00 5b 41 5c 41 5d 41 5e 41 5f  
-5d c3 48 b8 00 00 00 00 00 fc ff df 4c 89 f2 48 c1 ea 03 <80> 3c 02 00 0f  
-85 0b 28 00 00 49 81 3e 20 e9 77 8a 0f 84 5f ee ff
-RSP: 0018:ffff8880a393fb48 EFLAGS: 00010006
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000218 RSI: 0000000000000000 RDI: 0000000000000001
-RBP: ffff8880a393fc60 R08: 0000000000000001 R09: 0000000000000001
-R10: fffffbfff146dba0 R11: ffff8880a084e300 R12: 00000000000010c0
-R13: 0000000000000000 R14: 00000000000010c0 R15: 0000000000000000
-FS:  00007f996d50d700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000075c000 CR3: 000000008f718000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-  lock_acquire+0x190/0x410 kernel/locking/lockdep.c:4485
-  __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
-  _raw_spin_lock_bh+0x33/0x50 kernel/locking/spinlock.c:175
-  spin_lock_bh include/linux/spinlock.h:343 [inline]
-  j1939_jsk_del+0x32/0x210 net/can/j1939/socket.c:89
-  j1939_sk_bind+0x2ea/0x8f0 net/can/j1939/socket.c:448
-  __sys_bind+0x239/0x290 net/socket.c:1648
-  __do_sys_bind net/socket.c:1659 [inline]
-  __se_sys_bind net/socket.c:1657 [inline]
-  __x64_sys_bind+0x73/0xb0 net/socket.c:1657
-  do_syscall_64+0xfa/0x790 arch/x86/entry/common.c:294
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45a679
-Code: ad b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 7b b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f996d50cc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 000000000045a679
-RDX: 0000000000000018 RSI: 00000000200000c0 RDI: 0000000000000003
-RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f996d50d6d4
-R13: 00000000004c09e9 R14: 00000000004d37d0 R15: 00000000ffffffff
-Modules linked in:
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 9409 at kernel/locking/mutex.c:1419  
-mutex_trylock+0x279/0x2f0 kernel/locking/mutex.c:1427
+> I am currently working on MMIO MCAN for some of our customers.
+> We have some improvements lined up in the coming future related to m_ca=
+n.
+> I am happy to take up the maintainership for the mmio part.
 
+That would be fantastic. Can you send a patch against MAINTAINERS?
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--owBdmpKg6yQsr0CRTEhYn0KrtPtINtAer--
+
+--e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3cN0EACgkQWsYho5Hk
+nSDjkwgAlcP1HrUclnoyiRFUr/omwI9HKQgMetLuF6uFtxAmyyMYdK5LJxX6+Qdg
+k1pac6dIKXI8pdiSQ+46VTCXwxmAmzFP3CicFUt88WtKVEibm+WxPQFnmcBb8fgg
++UUHVgau3Iekn6dL08uipBh1aC6p6ONqPD6rY3xAHsc/kjYHPhHegfqrQxcrH3fe
+ck/EiLXh5EQfPEDv1YAVcYgRgn/Pr7f6L/0rAgqK3yE+WsqLKIzhFESElY6YlIjb
+q+awi1FE6jjXeO1eTGIx9bcICUDP/3sIXsO9JB+K42SvhB4bJ2HgHKksQw/WdnJf
+3wDyxkIhyNyziHg0FywJf74RcApvfw==
+=0PPw
+-----END PGP SIGNATURE-----
+
+--e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx--
