@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EC310AD09
-	for <lists+linux-can@lfdr.de>; Wed, 27 Nov 2019 10:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D075C10AD0F
+	for <lists+linux-can@lfdr.de>; Wed, 27 Nov 2019 10:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbfK0J7G (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Nov 2019 04:59:06 -0500
-Received: from first.geanix.com ([116.203.34.67]:40484 "EHLO first.geanix.com"
+        id S1727071AbfK0J7f (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Nov 2019 04:59:35 -0500
+Received: from first.geanix.com ([116.203.34.67]:40536 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbfK0J7G (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 27 Nov 2019 04:59:06 -0500
+        id S1726240AbfK0J7e (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 27 Nov 2019 04:59:34 -0500
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 77787932E2;
-        Wed, 27 Nov 2019 09:55:19 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id ECD98932E2;
+        Wed, 27 Nov 2019 09:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1574848519; bh=550yh0WqHSwAJsBZEPoNt0ZuxTL9MA4Pwlz0992BOXE=;
+        t=1574848548; bh=pCBMs1+4TyKgx4Yf4XCivsPLFaR7wIHPML0iaaZtTIo=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=WTsZlUP2lWiAV9RUJtjShma22mtGWV3DYx/De4zeZx+w0dSOxt7ewoQIGv4rb5e7Z
-         cONYh2wSlTKjTn28AaoLSp0kCtqCAIuurl12UFoN8OtOrIsWF7FvfEMlo77O+yU0lK
-         tVfiZjeMizR5jSSAp7Ch+wLbx5Cowv0jQzTKPccESrHF9YstlrX5jqWOHHU4Fp3XIn
-         x4evgqnEYmZjjJ5dZ6Heus+Clh0aU2nJeMsnjERLdwxJ+amb27y10nee0M9yooDau7
-         7fQSD4D0LUSG80Q9wElQDZYcPk3Ls+Cx5osQXqLRIguIMyDrMiZS7e7ciGri/7oyOY
-         5QZXJ1D7DnHng==
-Subject: Re: [PATCH V2 2/4] can: flexcan: try to exit stop mode during probe
- stage
+        b=RA+u824bqYGCua2R5aq1z0Y0toxOngDc1Wa6ao9/XOvRCWedchdZff1W9TtkMGL+a
+         Qfc3ZjkDqQY7Vnw8K0tHPrsJRsqWac0tUZM/STvg9RrFwL4GtDGWgYYTrHNE+9Ktz9
+         B68NKgPT/k/GbdznZXMf4VX7eL0l9uiYAKQZx/X7SuQNw1mGecyDp5kGCXtz+Rr3sl
+         oToyWAFNHeDHN4fLtNAh7fSCqPBTQtNb6J5dIWtmnKEaqn3fgPgQ9yqZhmS8W+/yar
+         e/MUGpked3UhZvwCl8evJZJ5EN8/NZ/gpk+qusbF8Ymj4XSISNGYOULHuyEV2fdD0v
+         4Vf3Qb+uyWlIg==
+Subject: Re: [PATCH V2 3/4] can: flexcan: change the way of stop mode
+ acknowledgment
 To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
         "mkl@pengutronix.de" <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 Cc:     dl-linux-imx <linux-imx@nxp.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>
 References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
- <20191127055334.1476-3-qiangqing.zhang@nxp.com>
+ <20191127055334.1476-4-qiangqing.zhang@nxp.com>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <5fe4918e-2ec1-0b88-1f02-3c2d39c99e07@geanix.com>
-Date:   Wed, 27 Nov 2019 10:58:24 +0100
+Message-ID: <9924005b-6136-534d-4a5d-e41716803038@geanix.com>
+Date:   Wed, 27 Nov 2019 10:58:53 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191127055334.1476-3-qiangqing.zhang@nxp.com>
+In-Reply-To: <20191127055334.1476-4-qiangqing.zhang@nxp.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
@@ -54,74 +54,149 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 27/11/2019 06.56, Joakim Zhang wrote:
-> CAN controller could be stucked in stop mode once it enters stop mode
-> when suspend, and then it fails to exit stop mode when resume. Only code
-> reset can get CAN out of stop mode, so add stop mode remove request
-> during probe stage for other methods(soft reset from chip level,
-> unbind/bind driver, etc) to let CAN active again. MCR[LPMACK] will be
-> checked when enable CAN in register_flexcandev().
+> Stop mode is entered when Stop mode is requested at chip level and
+> MCR[LPM_ACK] is asserted by the FlexCAN.
 > 
-> Suggested-by: Sean Nyekjaer <sean@geanix.com>
+> Double check with IP owner, should poll MCR[LPM_ACK] for stop mode
+> acknowledgment, not the acknowledgment from chip level which is used
+> for glitch filter.
+> 
+> Fixes: 5f186c257fa4(can: flexcan: fix stop mode acknowledgment)
 > Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 Tested-by: Sean Nyekjaer <sean@geanix.com>
 > ------
 > ChangeLog:
-> 	V1->V2: new add.
+> 	V1->V2: no change.
 > ---
->   drivers/net/can/flexcan.c | 28 ++++++++++++++++++++++------
->   1 file changed, 22 insertions(+), 6 deletions(-)
+>   drivers/net/can/flexcan.c | 64 ++++++++++++++++++++-------------------
+>   1 file changed, 33 insertions(+), 31 deletions(-)
 > 
 > diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-> index 2297663cacb2..5d5ed28d3005 100644
+> index 5d5ed28d3005..d178146b3da5 100644
 > --- a/drivers/net/can/flexcan.c
 > +++ b/drivers/net/can/flexcan.c
-> @@ -449,6 +449,13 @@ static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
->   	return 0;
+> @@ -388,6 +388,34 @@ static struct flexcan_mb __iomem *flexcan_get_mb(const struct flexcan_priv *priv
+>   		(&priv->regs->mb[bank][priv->mb_size * mb_index]);
 >   }
 >   
-> +static void flexcan_try_exit_stop_mode(struct flexcan_priv *priv)
+> +static int flexcan_enter_low_power_ack(struct flexcan_priv *priv)
 > +{
-> +	/* remove stop request */
-> +	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-> +			   1 << priv->stm.req_bit, 0);
+> +	struct flexcan_regs __iomem *regs = priv->regs;
+> +	unsigned int timeout = FLEXCAN_TIMEOUT_US / 10;
+> +
+> +	while (timeout-- && !(priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+> +		udelay(10);
+> +
+> +	if (!(priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+> +		return -ETIMEDOUT;
+> +
+> +	return 0;
 > +}
 > +
->   static inline void flexcan_error_irq_enable(const struct flexcan_priv *priv)
+> +static int flexcan_exit_low_power_ack(struct flexcan_priv *priv)
+> +{
+> +	struct flexcan_regs __iomem *regs = priv->regs;
+> +	unsigned int timeout = FLEXCAN_TIMEOUT_US / 10;
+> +
+> +	while (timeout-- && (priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+> +		udelay(10);
+> +
+> +	if (priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK)
+> +		return -ETIMEDOUT;
+> +
+> +	return 0;
+> +}
+> +
+>   static void flexcan_enable_wakeup_irq(struct flexcan_priv *priv, bool enable)
 >   {
 >   	struct flexcan_regs __iomem *regs = priv->regs;
-> @@ -1649,6 +1656,21 @@ static int flexcan_probe(struct platform_device *pdev)
->   	priv->devtype_data = devtype_data;
->   	priv->reg_xceiver = reg_xceiver;
+> @@ -406,7 +434,6 @@ static void flexcan_enable_wakeup_irq(struct flexcan_priv *priv, bool enable)
+>   static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
+>   {
+>   	struct flexcan_regs __iomem *regs = priv->regs;
+> -	unsigned int ackval;
+>   	u32 reg_mcr;
 >   
-> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE) {
-> +		err = flexcan_setup_stop_mode(pdev);
-> +		if (err)
-> +			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
-> +
-> +		/* CAN controller could be stucked in stop mode once it enters
-> +		 * stop mode when suspend, and then it fails to exit stop
-> +		 * mode when resume. Only code reset can get CAN out of stop
-> +		 * mode, so add stop mode remove request here for other methods
-> +		 * (soft reset, bind, etc) to let CAN active again. MCR[LPMACK]
-> +		 * will be checked when enable CAN in register_flexcandev().
-> +		 */
-> +		flexcan_try_exit_stop_mode(priv);
-> +	}
-> +
->   	pm_runtime_get_noresume(&pdev->dev);
->   	pm_runtime_set_active(&pdev->dev);
->   	pm_runtime_enable(&pdev->dev);
-> @@ -1661,12 +1683,6 @@ static int flexcan_probe(struct platform_device *pdev)
+>   	reg_mcr = priv->read(&regs->mcr);
+> @@ -418,35 +445,24 @@ static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
+>   			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
 >   
->   	devm_can_led_init(dev);
->   
-> -	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE) {
-> -		err = flexcan_setup_stop_mode(pdev);
-> -		if (err)
-> -			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
-> -	}
+>   	/* get stop acknowledgment */
+> -	if (regmap_read_poll_timeout(priv->stm.gpr, priv->stm.ack_gpr,
+> -				     ackval, ackval & (1 << priv->stm.ack_bit),
+> -				     0, FLEXCAN_TIMEOUT_US))
+> -		return -ETIMEDOUT;
 > -
->   	return 0;
+> -	return 0;
+> +	return flexcan_enter_low_power_ack(priv);
+>   }
 >   
->    failed_register:
+>   static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
+>   {
+>   	struct flexcan_regs __iomem *regs = priv->regs;
+> -	unsigned int ackval;
+>   	u32 reg_mcr;
+>   
+>   	/* remove stop request */
+>   	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+>   			   1 << priv->stm.req_bit, 0);
+>   
+> -	/* get stop acknowledgment */
+> -	if (regmap_read_poll_timeout(priv->stm.gpr, priv->stm.ack_gpr,
+> -				     ackval, !(ackval & (1 << priv->stm.ack_bit)),
+> -				     0, FLEXCAN_TIMEOUT_US))
+> -		return -ETIMEDOUT;
+> -
+>   	reg_mcr = priv->read(&regs->mcr);
+>   	reg_mcr &= ~FLEXCAN_MCR_SLF_WAK;
+>   	priv->write(reg_mcr, &regs->mcr);
+>   
+> -	return 0;
+> +	/* get stop acknowledgment */
+> +	return flexcan_exit_low_power_ack(priv);
+>   }
+>   
+>   static void flexcan_try_exit_stop_mode(struct flexcan_priv *priv)
+> @@ -512,39 +528,25 @@ static inline int flexcan_transceiver_disable(const struct flexcan_priv *priv)
+>   static int flexcan_chip_enable(struct flexcan_priv *priv)
+>   {
+>   	struct flexcan_regs __iomem *regs = priv->regs;
+> -	unsigned int timeout = FLEXCAN_TIMEOUT_US / 10;
+>   	u32 reg;
+>   
+>   	reg = priv->read(&regs->mcr);
+>   	reg &= ~FLEXCAN_MCR_MDIS;
+>   	priv->write(reg, &regs->mcr);
+>   
+> -	while (timeout-- && (priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+> -		udelay(10);
+> -
+> -	if (priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK)
+> -		return -ETIMEDOUT;
+> -
+> -	return 0;
+> +	return flexcan_exit_low_power_ack(priv);
+>   }
+>   
+>   static int flexcan_chip_disable(struct flexcan_priv *priv)
+>   {
+>   	struct flexcan_regs __iomem *regs = priv->regs;
+> -	unsigned int timeout = FLEXCAN_TIMEOUT_US / 10;
+>   	u32 reg;
+>   
+>   	reg = priv->read(&regs->mcr);
+>   	reg |= FLEXCAN_MCR_MDIS;
+>   	priv->write(reg, &regs->mcr);
+>   
+> -	while (timeout-- && !(priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+> -		udelay(10);
+> -
+> -	if (!(priv->read(&regs->mcr) & FLEXCAN_MCR_LPM_ACK))
+> -		return -ETIMEDOUT;
+> -
+> -	return 0;
+> +	return flexcan_enter_low_power_ack(priv);
+>   }
+>   
+>   static int flexcan_chip_freeze(struct flexcan_priv *priv)
 > 
