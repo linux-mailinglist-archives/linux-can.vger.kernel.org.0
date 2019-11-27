@@ -2,95 +2,118 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23ED810AAB2
-	for <lists+linux-can@lfdr.de>; Wed, 27 Nov 2019 07:40:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7029010AAB1
+	for <lists+linux-can@lfdr.de>; Wed, 27 Nov 2019 07:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbfK0Gkm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Nov 2019 01:40:42 -0500
-Received: from first.geanix.com ([116.203.34.67]:58564 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726078AbfK0Gkl (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 27 Nov 2019 01:40:41 -0500
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 78E3093BC7;
-        Wed, 27 Nov 2019 06:36:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1574836616; bh=m6L8+qGugw3q8FPvETvljHDnaCR8sWkrrBBhIrvpWAM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=DEM7kUruWPJZRkJcyKP9lG3Tc1TUWv5ZCljZH6bM0rFngNW+m7WmxTbD8FV95fPSt
-         0x79QtnaydwTYJulrw/t+WibAaZ8F1rZv08fXW3pfl6s1zLnHTZBb4MaVAKWeJDLt6
-         wQJO+wt9XgZP+uVktOIKZ1sgjlkk1M8T5ugAVhlju//OpIAIXUzf00oj7a+HTDVOYg
-         G35cxAaXiW0mH7ewh2+oKjlXPlbTtihQNuSCGTim8y0yRWWAoxhWOfwjeYMwGLJnkJ
-         NpKJn4ccPryhKimlAFldgw8Cht+DCewoE70QzPfFwnVxSp+JyVenosb9sPSrPKyRAP
-         bH1ETM6zAkwkQ==
-Subject: Re: Devicetree for can tcan4x5x
-To:     Dan Murphy <dmurphy@ti.com>, Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <e5892c08-03a5-60a6-61e0-6b75e248e172@geanix.com>
- <eb7aaa46-3cc8-4ed3-adcf-aaa95c8dd197@ti.com>
- <80e8f758-e240-f1b4-f0e2-3a53b2f22b99@geanix.com>
- <d95c2d97-991e-6ba3-6d4a-3ea42463abc9@ti.com>
- <4e5e34c1-d153-7fe2-a42f-f766099389da@ti.com>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <236f6a5f-722c-34f4-e1c4-6c89a86a3399@geanix.com>
-Date:   Wed, 27 Nov 2019 07:40:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <4e5e34c1-d153-7fe2-a42f-f766099389da@ti.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on b0d531b295e6
+        id S1726026AbfK0Gki (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Nov 2019 01:40:38 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36303 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbfK0Gkh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Nov 2019 01:40:37 -0500
+Received: by mail-lj1-f195.google.com with SMTP id k15so23121765lja.3
+        for <linux-can@vger.kernel.org>; Tue, 26 Nov 2019 22:40:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unikie-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=7Hx7Vhduz/UsYHX/DRmequlgtaFr1wLpbrhQYEY2PXQ=;
+        b=dkF4NKS/XwR5YnKo2hoYVsKy+ghhxT6VFw7zLw8YuUBffZmzTnz20W2yP+kqa2sXN4
+         /VlG5EG+XBRumr2GZXvPa5rUeSH8Igxkn0Gg68V3nCxS2OMBvZnTcijLhn8rkghqccNO
+         /6zkAIjCm1D3VyaODjxNkOXy09IVNZl/XWmIkpxIy7HMZM4XadJ9WhxwqgPv4bZrGOJ6
+         hQiJxL3TKt1CpqXymXe72KHvxs1er9qT8ZdBEkZa6vlsGp7EtF6Uwa6QK3ZSxhjBf3IQ
+         GWEPmuCEncey2MyET5T58NVPokiU+11znY8mUpu/An1XUH+yk7/EiULorxv82zgYVVVn
+         h0nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7Hx7Vhduz/UsYHX/DRmequlgtaFr1wLpbrhQYEY2PXQ=;
+        b=stqBzVb9bpIfGAo8UoZrDI6PTZEsPGd7Hr3lY/7R8ZWiSlqL7d85hGOMmbxd1gyFl+
+         MAU2zM/81v1jWyCkrW3noRE9K3XMP/T4iJRsKjQBVd76pWvZIZFCqd39eA9hCZIrywcw
+         /B2TKTy6OdWq5jaxKynhceTmRZb+f/mKXAiawh+6SzdbyfQTNEmSmKee0lR++nNzPr9h
+         t+H8Jyk1wXFz9vJfIOerq9+fjCJIQAey8TzpU5zcD1RgQ6Mc+A2M6FXXDqt4tXsiri5U
+         BABgf3fR4LCHSGbSWCajTlWS1y3nTd2Q/X0IFzTDinx44iyt//bdlA74s/rfynfwq3f9
+         5LXw==
+X-Gm-Message-State: APjAAAXS3hBGc5kPaWbbwidIwWuRjyq+GuIXxpiE82ihsOmc+qhT1+pt
+        RlmESI+GkfrTMIgB4hrb8GxkmkMo3yQ=
+X-Google-Smtp-Source: APXvYqxvJeZ7Ku7p64HoP7/trDPLjIGxALKBrnZu1RfMLVt1DRwMQyZ10eUs6ekdgN0IY2xgfcfXWg==
+X-Received: by 2002:a2e:89c2:: with SMTP id c2mr29531947ljk.161.1574836833843;
+        Tue, 26 Nov 2019 22:40:33 -0800 (PST)
+Received: from localhost.localdomain ([109.204.235.119])
+        by smtp.gmail.com with ESMTPSA id i8sm6319437lfl.80.2019.11.26.22.40.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Nov 2019 22:40:33 -0800 (PST)
+From:   jouni.hogander@unikie.com
+To:     linux-can@vger.kernel.org
+Cc:     Jouni Hogander <jouni.hogander@unikie.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        David Miller <davem@davemloft.net>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] slcan: Fix use-after-free Read in slcan_open
+Date:   Wed, 27 Nov 2019 08:40:26 +0200
+Message-Id: <20191127064026.14138-1-jouni.hogander@unikie.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+From: Jouni Hogander <jouni.hogander@unikie.com>
 
+Slcan_open doesn't clean-up device which registration failed from the
+slcan_devs device list. On next open this list is iterated and freed
+device is accessed. Fix this by calling slc_free_netdev in error path.
 
-On 26/11/2019 17.55, Dan Murphy wrote:
->>>
->>>
->> Let me check with our HW guys here to see if that is acceptable.
->>
->> If it is we will need to update the DT doc and the code.
-> 
-> Got a response and it reminded me why I made it required.  Can't control 
-> CAN activity and did not want to reset the chip every time I need to do 
-> a SPI write/read.  So you might want to think about having the HW guys 
-> wire up the wake up line.
-> 
-> The device looks for a transition to wake up. It should be OK to wire it 
-> to ground, I believe. It will not stay awake, but note that once you put 
-> it to sleep, your only option to wake it will be
-> 
-> 1)      CAN activity (out of your control)
-> 2)      Reset pin toggle
-> 
-> Dan
+Driver/net/can/slcan.c is derived from slip.c. Use-after-free error was
+identified in slip_open by syzboz. Same bug is in slcan.c. Here is the
+trace from the Syzbot slip report:
 
-Hi Dan,
+__dump_stack lib/dump_stack.c:77 [inline]
+dump_stack+0x197/0x210 lib/dump_stack.c:118
+print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
+__kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
+kasan_report+0x12/0x20 mm/kasan/common.c:634
+__asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:132
+sl_sync drivers/net/slip/slip.c:725 [inline]
+slip_open+0xecd/0x11b7 drivers/net/slip/slip.c:801
+tty_ldisc_open.isra.0+0xa3/0x110 drivers/tty/tty_ldisc.c:469
+tty_set_ldisc+0x30e/0x6b0 drivers/tty/tty_ldisc.c:596
+tiocsetd drivers/tty/tty_io.c:2334 [inline]
+tty_ioctl+0xe8d/0x14f0 drivers/tty/tty_io.c:2594
+vfs_ioctl fs/ioctl.c:46 [inline]
+file_ioctl fs/ioctl.c:509 [inline]
+do_vfs_ioctl+0xdb6/0x13e0 fs/ioctl.c:696
+ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
+__do_sys_ioctl fs/ioctl.c:720 [inline]
+__se_sys_ioctl fs/ioctl.c:718 [inline]
+__x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
+do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
+entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-I could get them to wire the WAKE line, but not in the first batch I 
-have received.
-We have wired the nWKRQ for wake-on-can, but I suspect it's linked to 
-sleep mode. :-S
+Fixes: ed50e1600b44 ("slcan: Fix memory leak in error path")
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: David Miller <davem@davemloft.net>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Jouni Hogander <jouni.hogander@unikie.com>
+---
+ drivers/net/can/slcan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Does the CAN transceiver go into sleep mode by it self? Or is it 
-something in the driver that does that?
-Or only when suspending?
-(I can't find it in the datasheet or driver)
+diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+index 0a9f42e5fedf..2e57122f02fb 100644
+--- a/drivers/net/can/slcan.c
++++ b/drivers/net/can/slcan.c
+@@ -617,6 +617,7 @@ static int slcan_open(struct tty_struct *tty)
+ 	sl->tty = NULL;
+ 	tty->disc_data = NULL;
+ 	clear_bit(SLF_INUSE, &sl->flags);
++	slc_free_netdev(sl->dev);
+ 	free_netdev(sl->dev);
+ 
+ err_exit:
+-- 
+2.17.1
 
-I guess this have confused the hw guys:
-
-Section "8.3.6 WAKE Pin" in the datasheet states:
-"If local wake-up functionality is not needed in the end application,
-
-WAKE can be tied directly to V SUP or GND."
-and it can be controlled by setting the following bits: 16'h0800[31:30]
-
-/Sean
