@@ -2,44 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA7C10AA9A
-	for <lists+linux-can@lfdr.de>; Wed, 27 Nov 2019 07:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23ED810AAB2
+	for <lists+linux-can@lfdr.de>; Wed, 27 Nov 2019 07:40:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbfK0GMt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Nov 2019 01:12:49 -0500
-Received: from first.geanix.com ([116.203.34.67]:57816 "EHLO first.geanix.com"
+        id S1726092AbfK0Gkm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Nov 2019 01:40:42 -0500
+Received: from first.geanix.com ([116.203.34.67]:58564 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726026AbfK0GMt (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 27 Nov 2019 01:12:49 -0500
+        id S1726078AbfK0Gkl (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 27 Nov 2019 01:40:41 -0500
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 0928893B1C;
-        Wed, 27 Nov 2019 06:09:04 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 78E3093BC7;
+        Wed, 27 Nov 2019 06:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1574834944; bh=emaCv2J/HHG0hWeBdetGv++669/Op4JbuFqbXvfzMrY=;
+        t=1574836616; bh=m6L8+qGugw3q8FPvETvljHDnaCR8sWkrrBBhIrvpWAM=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=JiLeNeeG1zjXa+qq+M6lYOIR0LUax596aJIruSTqO21+KrggRfsxonHoJ+PCZcUOL
-         hb+8LP8vrwNgYDYzVpdiEQ7AJ231cATtlC76V0WKRTQMIUgisuGUri2O6ufzqw2D5J
-         Y4ri/ZH2PHuA9o1/AZx5q8KLInW4jDY+JAgKpWYkrmUK6R/NmsVq7i+n/MKGfegKC9
-         LA4oVJ/LMDXa3w0c8TcVd7tS8/IVMRrD36nRil+/mZkQ1Qab+x61Hpa4MCWOhxvnBy
-         bo0zNa72MIQWkf7cvwmkhzw1NP+JPXiupqAxtH+jONeIib9tblmsIKiqcrM2p4JmWv
-         jV/E2p68hqucg==
-Subject: Re: [PATCH V2 0/4] can: flexcan: fixes for stop mode
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
+        b=DEM7kUruWPJZRkJcyKP9lG3Tc1TUWv5ZCljZH6bM0rFngNW+m7WmxTbD8FV95fPSt
+         0x79QtnaydwTYJulrw/t+WibAaZ8F1rZv08fXW3pfl6s1zLnHTZBb4MaVAKWeJDLt6
+         wQJO+wt9XgZP+uVktOIKZ1sgjlkk1M8T5ugAVhlju//OpIAIXUzf00oj7a+HTDVOYg
+         G35cxAaXiW0mH7ewh2+oKjlXPlbTtihQNuSCGTim8y0yRWWAoxhWOfwjeYMwGLJnkJ
+         NpKJn4ccPryhKimlAFldgw8Cht+DCewoE70QzPfFwnVxSp+JyVenosb9sPSrPKyRAP
+         bH1ETM6zAkwkQ==
+Subject: Re: Devicetree for can tcan4x5x
+To:     Dan Murphy <dmurphy@ti.com>, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <e5892c08-03a5-60a6-61e0-6b75e248e172@geanix.com>
+ <eb7aaa46-3cc8-4ed3-adcf-aaa95c8dd197@ti.com>
+ <80e8f758-e240-f1b4-f0e2-3a53b2f22b99@geanix.com>
+ <d95c2d97-991e-6ba3-6d4a-3ea42463abc9@ti.com>
+ <4e5e34c1-d153-7fe2-a42f-f766099389da@ti.com>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <e936b9b1-d602-ac38-213c-7272df529bef@geanix.com>
-Date:   Wed, 27 Nov 2019 07:12:08 +0100
+Message-ID: <236f6a5f-722c-34f4-e1c4-6c89a86a3399@geanix.com>
+Date:   Wed, 27 Nov 2019 07:40:00 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <4e5e34c1-d153-7fe2-a42f-f766099389da@ti.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
         autolearn=disabled version=3.4.2
@@ -51,26 +52,45 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 
-On 27/11/2019 06.56, Joakim Zhang wrote:
-> 	Could you help check the patch set? With your suggestions, I
-> have cooked a patch to exit stop mode during probe stage.
+On 26/11/2019 17.55, Dan Murphy wrote:
+>>>
+>>>
+>> Let me check with our HW guys here to see if that is acceptable.
+>>
+>> If it is we will need to update the DT doc and the code.
 > 
-> 	IMHO, I think this patch is unneed, now in flexcan driver,
-> enter stop mode when suspend, and then exit stop mode when resume.
-> AFAIK, as long as flexcan_suspend has been called, flexcan_resume will
-> be called, unless the system hang during suspend/resume. If so, only
-> code reset can activate OS again. Could you please tell me how does CAN
-> stucked in stop mode at your side?
+> Got a response and it reminded me why I made it required.  Can't control 
+> CAN activity and did not want to reset the chip every time I need to do 
+> a SPI write/read.  So you might want to think about having the HW guys 
+> wire up the wake up line.
+> 
+> The device looks for a transition to wake up. It should be OK to wire it 
+> to ground, I believe. It will not stay awake, but note that once you put 
+> it to sleep, your only option to wake it will be
+> 
+> 1)      CAN activity (out of your control)
+> 2)      Reset pin toggle
+> 
+> Dan
 
-Hi Joakim,
+Hi Dan,
 
-Thanks I'll test this :-)
-Guess I will have do some hacking to get it stuck in stop mode.
+I could get them to wire the WAKE line, but not in the first batch I 
+have received.
+We have wired the nWKRQ for wake-on-can, but I suspect it's linked to 
+sleep mode. :-S
 
-We have a lot of devices in the field that doesn't have:
-"can: flexcan: fix deadlock when using self wakeup"
+Does the CAN transceiver go into sleep mode by it self? Or is it 
+something in the driver that does that?
+Or only when suspending?
+(I can't find it in the datasheet or driver)
 
-And they have traffic on both CAN interfaces, that way it's quite easy 
-to get them stuck in stop mode.
+I guess this have confused the hw guys:
+
+Section "8.3.6 WAKE Pin" in the datasheet states:
+"If local wake-up functionality is not needed in the end application,
+
+WAKE can be tied directly to V SUP or GND."
+and it can be controlled by setting the following bits: 16'h0800[31:30]
 
 /Sean
