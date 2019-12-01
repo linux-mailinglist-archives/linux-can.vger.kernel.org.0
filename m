@@ -2,179 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C272610DDCB
-	for <lists+linux-can@lfdr.de>; Sat, 30 Nov 2019 14:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A0710E2DC
+	for <lists+linux-can@lfdr.de>; Sun,  1 Dec 2019 19:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbfK3Nbp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 30 Nov 2019 08:31:45 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51375 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbfK3Nbp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 30 Nov 2019 08:31:45 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ib2qV-0004UT-50; Sat, 30 Nov 2019 14:31:35 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:b491:f6ed:2bc4:a39a] (unknown [IPv6:2a03:f580:87bc:d400:b491:f6ed:2bc4:a39a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 96F1F48312D;
-        Mon, 25 Nov 2019 20:19:21 +0000 (UTC)
-Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
-To:     Sriram Dash <sriram.dash@samsung.com>,
-        'Pankaj Sharma' <pankj.sharma@samsung.com>,
-        linux-can@vger.kernel.org
-Cc:     wg@grandegger.com, dmurphy@ti.com, rcsekar@samsung.com,
-        pankaj.dubey@samsung.com
-References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
- <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
- <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
- <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <559d983b-7e7b-85fd-b51c-7b354080eae4@pengutronix.de>
-Date:   Mon, 25 Nov 2019 21:19:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727266AbfLASP1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 1 Dec 2019 13:15:27 -0500
+Received: from mtax.cdmx.gob.mx ([187.141.35.197]:14798 "EHLO mtax.cdmx.gob.mx"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727237AbfLASP1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 1 Dec 2019 13:15:27 -0500
+X-Greylist: delayed 6377 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Dec 2019 13:15:26 EST
+X-NAI-Header: Modified by McAfee Email Gateway (4500)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
+        t=1575217539; h=DKIM-Filter:X-Virus-Scanned:
+         Content-Type:MIME-Version:Content-Transfer-Encoding:
+         Content-Description:Subject:To:From:Date:Message-Id:
+         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
+         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
+         X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
+         X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=M
+        8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs4
+        8=; b=L72Np4PXngPQLu2llTVdJXOvFePCj0SYFjA/lqboDt39
+        6T/Jgojs3OUDhcT70vjO+i3F34QPFBfsCgsgVvE7gDYKOiTcge
+        7o8xjWHTqZx3KQYrYvnyOxI+xGDels/s6Rlx/ganV+Q60YKUZW
+        2fgMma4ew+c+0mp7hCzLCHvG2Ak=
+Received: from cdmx.gob.mx (correo.cdmx.gob.mx [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
+        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
+         id 217f_5c8b_0d14d1f2_bbc9_43ac_b806_53e2a87c4175;
+        Sun, 01 Dec 2019 10:25:38 -0600
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id CBA4E1E2B5D;
+        Sun,  1 Dec 2019 10:17:50 -0600 (CST)
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id j3P3bzw8GOwz; Sun,  1 Dec 2019 10:17:50 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id 710071E2B4C;
+        Sun,  1 Dec 2019 10:12:43 -0600 (CST)
+DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx 710071E2B4C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
+        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1575216763;
+        bh=M8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs48=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Message-Id;
+        b=XH3I7AvebIXuSPtf0sBTVk8AO0DN81eDZxkk9EBuOVTBXznclDEOTq+d8NEYTDY8W
+         drJbFMs4BrHgwSlSUkz8Vqn1NYiN3In0LztZN3A+iFbrxqXwlZ2yo8/+ZRHyjH2nQD
+         KR59r7vxDDmwWa8BjNDdFol6zZI6dd/Hg118pXzY=
+X-Virus-Scanned: amavisd-new at cdmx.gob.mx
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Zx-zjTz0y5sd; Sun,  1 Dec 2019 10:12:43 -0600 (CST)
+Received: from [192.168.0.104] (unknown [188.125.168.160])
+        by cdmx.gob.mx (Postfix) with ESMTPSA id D6CEF1E2790;
+        Sun,  1 Dec 2019 10:03:35 -0600 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Congratulations
+To:     Recipients <aac-styfe@cdmx.gob.mx>
+From:   "Bishop Johnr" <aac-styfe@cdmx.gob.mx>
+Date:   Sun, 01 Dec 2019 17:03:23 +0100
+Message-Id: <20191201160335.D6CEF1E2790@cdmx.gob.mx>
+X-AnalysisOut: [v=2.2 cv=U7TiNaju c=1 sm=1 tr=0 p=6K-Ig8iNAUou4E5wYCEA:9 p]
+X-AnalysisOut: [=zRI05YRXt28A:10 a=T6zFoIZ12MK39YzkfxrL7A==:117 a=9152RP8M]
+X-AnalysisOut: [6GQqDhC/mI/QXQ==:17 a=8nJEP1OIZ-IA:10 a=pxVhFHJ0LMsA:10 a=]
+X-AnalysisOut: [pGLkceISAAAA:8 a=wPNLvfGTeEIA:10 a=M8O0W8wq6qAA:10 a=Ygvjr]
+X-AnalysisOut: [iKHvHXA2FhpO6d-:22]
+X-SAAS-TrackingID: 189e3ed5.0.104999533.00-2374.176567721.s12p02m005.mxlogic.net
+X-NAI-Spam-Flag: NO
+X-NAI-Spam-Threshold: 3
+X-NAI-Spam-Score: -5000
+X-NAI-Spam-Rules: 1 Rules triggered
+        WHITELISTED=-5000
+X-NAI-Spam-Version: 2.3.0.9418 : core <6686> : inlines <7165> : streams
+ <1840193> : uri <2949748>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx
-Content-Type: multipart/mixed; boundary="owBdmpKg6yQsr0CRTEhYn0KrtPtINtAer";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sriram Dash <sriram.dash@samsung.com>,
- 'Pankaj Sharma' <pankj.sharma@samsung.com>, linux-can@vger.kernel.org
-Cc: wg@grandegger.com, dmurphy@ti.com, rcsekar@samsung.com,
- pankaj.dubey@samsung.com
-Message-ID: <559d983b-7e7b-85fd-b51c-7b354080eae4@pengutronix.de>
-Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
-References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
- <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
- <24bfd497-c338-e1e2-e9c5-53d76fcc4abf@pengutronix.de>
- <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
-In-Reply-To: <028101d5a36d$c693b7b0$53bb2710$@samsung.com>
-
---owBdmpKg6yQsr0CRTEhYn0KrtPtINtAer
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 11/25/19 9:53 AM, Sriram Dash wrote:
->> For the m_can driver I'm looking for a maintainer. Would be fine if so=
-meone
->> has a look at the mmio and someone else at the spi part.
-
-> I am currently working on MMIO MCAN for some of our customers.
-> We have some improvements lined up in the coming future related to m_ca=
-n.
-> I am happy to take up the maintainership for the mmio part.
-
-That would be fantastic. Can you send a patch against MAINTAINERS?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Money was donated to you by Mr and Mrs Allen and Violet Large, just contact=
+ them with this email for more information =
 
 
---owBdmpKg6yQsr0CRTEhYn0KrtPtINtAer--
-
---e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3cN0EACgkQWsYho5Hk
-nSDjkwgAlcP1HrUclnoyiRFUr/omwI9HKQgMetLuF6uFtxAmyyMYdK5LJxX6+Qdg
-k1pac6dIKXI8pdiSQ+46VTCXwxmAmzFP3CicFUt88WtKVEibm+WxPQFnmcBb8fgg
-+UUHVgau3Iekn6dL08uipBh1aC6p6ONqPD6rY3xAHsc/kjYHPhHegfqrQxcrH3fe
-ck/EiLXh5EQfPEDv1YAVcYgRgn/Pr7f6L/0rAgqK3yE+WsqLKIzhFESElY6YlIjb
-q+awi1FE6jjXeO1eTGIx9bcICUDP/3sIXsO9JB+K42SvhB4bJ2HgHKksQw/WdnJf
-3wDyxkIhyNyziHg0FywJf74RcApvfw==
-=0PPw
------END PGP SIGNATURE-----
-
---e5c51EQQs6lwy0z8b6xJrT8hhH8VSGhrx--
+EMail: allenandvioletlargeaward@gmail.com
