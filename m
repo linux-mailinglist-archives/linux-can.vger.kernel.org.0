@@ -2,35 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9673210FB38
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2019 10:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 416B510FB39
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2019 10:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbfLCJ6z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Dec 2019 04:58:55 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36703 "EHLO
+        id S1726086AbfLCJ7F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Dec 2019 04:59:05 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45321 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfLCJ6z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Dec 2019 04:58:55 -0500
+        with ESMTP id S1725939AbfLCJ7E (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Dec 2019 04:59:04 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ic4xG-0004Wf-Ii; Tue, 03 Dec 2019 10:58:50 +0100
+        id 1ic4xH-0004We-Po; Tue, 03 Dec 2019 10:58:51 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 60FED4873B0;
-        Tue,  3 Dec 2019 09:54:45 +0000 (UTC)
-Subject: Re: [PATCH] slcan: Fix use-after-free Read in slcan_open
-To:     jouni.hogander@unikie.com, linux-can@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-References: <20191127064026.14138-1-jouni.hogander@unikie.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 52F1A4873B3;
+        Tue,  3 Dec 2019 09:55:05 +0000 (UTC)
+Subject: Re: [PATCH] MAINTAINERS: add myself as maintainer of MCAN MMIO device
+ driver
+To:     Sriram Dash <sriram.dash@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
+        wg@grandegger.com
+Cc:     mchehab+samsung@kernel.org, davem@davemloft.net,
+        gregkh@linuxfoundation.org, robh@kernel.org, dmurphy@ti.com,
+        rcsekar@samsung.com, pankaj.dubey@samsung.com,
+        pankj.sharma@samsung.com
+References: <CGME20191203043533epcas5p19bfc21e2b03db7f27c6d84cda6824d27@epcas5p1.samsung.com>
+ <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -93,15 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <76c8f6da-5249-9e25-b667-86dd286d3e95@pengutronix.de>
-Date:   Tue, 3 Dec 2019 10:54:35 +0100
+Message-ID: <9c9b1f4d-e092-957a-150c-41f2348810e5@pengutronix.de>
+Date:   Tue, 3 Dec 2019 10:55:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191127064026.14138-1-jouni.hogander@unikie.com>
+In-Reply-To: <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Np5baEdA3vAJB4sRzFQrsdfkZiGi35rYB"
+ boundary="AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,71 +116,37 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Np5baEdA3vAJB4sRzFQrsdfkZiGi35rYB
-Content-Type: multipart/mixed; boundary="HMB82KnoQObXT2FjawTBFC0Sp6GInHDlK";
+--AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo
+Content-Type: multipart/mixed; boundary="PMj6IRNcR0cQVRbqraVAABpoCo0rGJrMh";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: jouni.hogander@unikie.com, linux-can@vger.kernel.org
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- David Miller <davem@davemloft.net>, Oliver Hartkopp
- <socketcan@hartkopp.net>, Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Message-ID: <76c8f6da-5249-9e25-b667-86dd286d3e95@pengutronix.de>
-Subject: Re: [PATCH] slcan: Fix use-after-free Read in slcan_open
-References: <20191127064026.14138-1-jouni.hogander@unikie.com>
-In-Reply-To: <20191127064026.14138-1-jouni.hogander@unikie.com>
+To: Sriram Dash <sriram.dash@samsung.com>, linux-kernel@vger.kernel.org,
+ linux-can@vger.kernel.org, wg@grandegger.com
+Cc: mchehab+samsung@kernel.org, davem@davemloft.net,
+ gregkh@linuxfoundation.org, robh@kernel.org, dmurphy@ti.com,
+ rcsekar@samsung.com, pankaj.dubey@samsung.com, pankj.sharma@samsung.com
+Message-ID: <9c9b1f4d-e092-957a-150c-41f2348810e5@pengutronix.de>
+Subject: Re: [PATCH] MAINTAINERS: add myself as maintainer of MCAN MMIO device
+ driver
+References: <CGME20191203043533epcas5p19bfc21e2b03db7f27c6d84cda6824d27@epcas5p1.samsung.com>
+ <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
+In-Reply-To: <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
 
---HMB82KnoQObXT2FjawTBFC0Sp6GInHDlK
+--PMj6IRNcR0cQVRbqraVAABpoCo0rGJrMh
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/27/19 7:40 AM, jouni.hogander@unikie.com wrote:
-> From: Jouni Hogander <jouni.hogander@unikie.com>
+On 12/3/19 5:29 AM, Sriram Dash wrote:
+> Since we are actively working on MMIO MCAN device driver,
+> as discussed with Marc, I am adding myself as a maintainer.
 >=20
-> Slcan_open doesn't clean-up device which registration failed from the
-> slcan_devs device list. On next open this list is iterated and freed
-> device is accessed. Fix this by calling slc_free_netdev in error path.
->=20
-> Driver/net/can/slcan.c is derived from slip.c. Use-after-free error was=
-
-> identified in slip_open by syzboz. Same bug is in slcan.c. Here is the
-> trace from the Syzbot slip report:
->=20
-> __dump_stack lib/dump_stack.c:77 [inline]
-> dump_stack+0x197/0x210 lib/dump_stack.c:118
-> print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c=
-:374
-> __kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
-> kasan_report+0x12/0x20 mm/kasan/common.c:634
-> __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:132
-> sl_sync drivers/net/slip/slip.c:725 [inline]
-> slip_open+0xecd/0x11b7 drivers/net/slip/slip.c:801
-> tty_ldisc_open.isra.0+0xa3/0x110 drivers/tty/tty_ldisc.c:469
-> tty_set_ldisc+0x30e/0x6b0 drivers/tty/tty_ldisc.c:596
-> tiocsetd drivers/tty/tty_io.c:2334 [inline]
-> tty_ioctl+0xe8d/0x14f0 drivers/tty/tty_io.c:2594
-> vfs_ioctl fs/ioctl.c:46 [inline]
-> file_ioctl fs/ioctl.c:509 [inline]
-> do_vfs_ioctl+0xdb6/0x13e0 fs/ioctl.c:696
-> ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
-> __do_sys_ioctl fs/ioctl.c:720 [inline]
-> __se_sys_ioctl fs/ioctl.c:718 [inline]
-> __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
-> do_syscall_64+0xfa/0x760 arch/x86/entry/common.c:290
-> entry_SYSCALL_64_after_hwframe+0x49/0xbe
->=20
-> Fixes: ed50e1600b44 ("slcan: Fix memory leak in error path")
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: David Miller <davem@davemloft.net>
-> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Signed-off-by: Jouni Hogander <jouni.hogander@unikie.com>
+> Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
 > ---
 
 Added to linux-can.
 
-tnx,
+Tnx,
 Marc
 
 --=20
@@ -186,23 +156,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---HMB82KnoQObXT2FjawTBFC0Sp6GInHDlK--
+--PMj6IRNcR0cQVRbqraVAABpoCo0rGJrMh--
 
---Np5baEdA3vAJB4sRzFQrsdfkZiGi35rYB
+--AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3mMNsACgkQWsYho5Hk
-nSDj9ggAgSXMu/RgWD6fmOr4fymCxZ0hZpo8L7LVTI8OXPPC5K6iddGC4J/lRaRM
-lmPLkSyzjWVx6QIf/Uk6EgHveo29mdAmGXgZAAFM8UXOJtdE4xXPCRGdnZgr3pNl
-Y1UrV1osjXogVxZWtnxD6/05JrvnrN+y4dkW3pgVP1YKYNVGu/YWQhwF944jt2ex
-4uqPkd+Rd9N/J5V3Qyozm4R/NMBPbTmoF9aLuwq9SS2OqAMg2DR0wHdFacpPhqxD
-gbo/Mi9prvnmkaXPrhZRxdmmFNf8miNl8oHmbyVJ8pqoZgAZcgF3Nvnhp597qp1c
-9gdabU0tWtxnXASDi5lvjaMz6gK9Sg==
-=M5Ca
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3mMPUACgkQWsYho5Hk
+nSCPqwgAuOqh+sGM+elUOahNy8zlT0jJUsD5IlZDpXrkto1wfFfTpcp9iDNYWaIx
+uM19pwnc09Jg+S7pkHSFWIGDM0JExgKGwyJ47G04tA4PzBLqcmIUfVbEE8rmzYYQ
+1MQtmkx62Kms3v2OG/Wv1NPWLGAroeD9X+l+pq+jjvrKygZ5QCezj4CNZqwz6KHv
+vmm+U0zNuaR6WjHOrSBVE3MM4gAjhQrBhNsT6F0jaCobatj7lGIrVRA8f9PCRr7H
+0AOXpK9yNyI684MByoxzxqLjDayTREUTFjcEUdtY9ORzf+pdvp4BUTc1Y7PzS0oP
+dZRqRYbMMTq9R2cHzc9pqN357KW62A==
+=a+Sh
 -----END PGP SIGNATURE-----
 
---Np5baEdA3vAJB4sRzFQrsdfkZiGi35rYB--
+--AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo--
