@@ -2,28 +2,29 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DC9110361
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2019 18:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C798A1103C0
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2019 18:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbfLCRZZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Dec 2019 12:25:25 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59927 "EHLO
+        id S1726738AbfLCRmZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Dec 2019 12:42:25 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60315 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726190AbfLCRZY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Dec 2019 12:25:24 -0500
+        with ESMTP id S1726074AbfLCRmZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Dec 2019 12:42:25 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1icBvM-00046c-DB; Tue, 03 Dec 2019 18:25:20 +0100
+        id 1icCBq-0005oE-IA; Tue, 03 Dec 2019 18:42:22 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B7EE488902;
-        Tue,  3 Dec 2019 17:25:13 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4F629488926;
+        Tue,  3 Dec 2019 17:42:21 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
         "sean@geanix.com" <sean@geanix.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
@@ -31,7 +32,7 @@ Cc:     dl-linux-imx <linux-imx@nxp.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>
 References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
  <20191127055334.1476-2-qiangqing.zhang@nxp.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -94,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
 Subject: Re: [PATCH V2 1/4] can: flexcan: fix deadlock when using self wakeup
-Message-ID: <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
-Date:   Tue, 3 Dec 2019 18:25:08 +0100
+Message-ID: <cad4be61-b409-093a-9f05-9de691bc4a10@pengutronix.de>
+Date:   Tue, 3 Dec 2019 18:42:16 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191127055334.1476-2-qiangqing.zhang@nxp.com>
+In-Reply-To: <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="PKayGHV2gg8Z94eZQ1tNw1WwQqsSV4IO3"
+ boundary="ZdprwuE3cNf2makzjCF94lWLWaF8l5zOZ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,107 +114,116 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---PKayGHV2gg8Z94eZQ1tNw1WwQqsSV4IO3
-Content-Type: multipart/mixed; boundary="Nv7MMgsx683NBRKaM98Gg11Sfx4N7sx65";
+--ZdprwuE3cNf2makzjCF94lWLWaF8l5zOZ
+Content-Type: multipart/mixed; boundary="rXgueoG2aS9fXa7QTPleYh8Uui2FgnUQM";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Joakim Zhang <qiangqing.zhang@nxp.com>, "sean@geanix.com"
  <sean@geanix.com>, "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 Cc: dl-linux-imx <linux-imx@nxp.com>,
  "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
+Message-ID: <cad4be61-b409-093a-9f05-9de691bc4a10@pengutronix.de>
 Subject: Re: [PATCH V2 1/4] can: flexcan: fix deadlock when using self wakeup
 References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
  <20191127055334.1476-2-qiangqing.zhang@nxp.com>
-In-Reply-To: <20191127055334.1476-2-qiangqing.zhang@nxp.com>
+ <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
+In-Reply-To: <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
 
---Nv7MMgsx683NBRKaM98Gg11Sfx4N7sx65
+--rXgueoG2aS9fXa7QTPleYh8Uui2FgnUQM
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 11/27/19 6:56 AM, Joakim Zhang wrote:
-> From: Sean Nyekjaer <sean@geanix.com>
->=20
-> When suspending, when there is still can traffic on the interfaces the
-> flexcan immediately wakes the platform again. As it should :-). But it
-> throws this error msg:
-> [ 3169.378661] PM: noirq suspend of devices failed
->=20
-> On the way down to suspend the interface that throws the error message =
-does
-> call flexcan_suspend but fails to call flexcan_noirq_suspend. That mean=
-s the
-> flexcan_enter_stop_mode is called, but on the way out of suspend the dr=
-iver
-> only calls flexcan_resume and skips flexcan_noirq_resume, thus it doesn=
-'t call
-> flexcan_exit_stop_mode. This leaves the flexcan in stop mode, and with =
-the
-> current driver it can't recover from this even with a soft reboot, it r=
-equires
-> a hard reboot.
->=20
-> This patch can fix deadlock when using self wakeup, it happenes to be
-> able to fix another issue that frames out-of-order in first IRQ handler=
+On 12/3/19 6:25 PM, Marc Kleine-Budde wrote:
+> On 11/27/19 6:56 AM, Joakim Zhang wrote:
+>> From: Sean Nyekjaer <sean@geanix.com>
+>>
+>> When suspending, when there is still can traffic on the interfaces the=
 
-> run after wakeup.
+>> flexcan immediately wakes the platform again. As it should :-). But it=
+
+>> throws this error msg:
+>> [ 3169.378661] PM: noirq suspend of devices failed
+>>
+>> On the way down to suspend the interface that throws the error message=
+ does
+>> call flexcan_suspend but fails to call flexcan_noirq_suspend. That mea=
+ns the
+>> flexcan_enter_stop_mode is called, but on the way out of suspend the d=
+river
+>> only calls flexcan_resume and skips flexcan_noirq_resume, thus it does=
+n't call
+>> flexcan_exit_stop_mode. This leaves the flexcan in stop mode, and with=
+ the
+>> current driver it can't recover from this even with a soft reboot, it =
+requires
+>> a hard reboot.
+>>
+>> This patch can fix deadlock when using self wakeup, it happenes to be
+>> able to fix another issue that frames out-of-order in first IRQ handle=
+r
+>> run after wakeup.
+>>
+>> In wakeup case, after system resume, frames received out-of-order in
+>> first IRQ handler, the problem is wakeup latency from frame reception =
+to
+>> IRQ handler is much bigger than the counter overflow. This means it's
+>> impossible to sort the CAN frames by timestamp. The reason is that con=
+troller
+>> exits stop mode during noirq resume, then it can receive the frame imm=
+ediately.
+>> If noirq reusme stage consumes much time, it will extend interrupt res=
+ponse
+>> time. So exit stop mode during resume stage instead of noirq resume ca=
+n
+>> fix this issue.
+>>
+>> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
+>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+>> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+>> ------
+>> ChangeLog:
+>> 	V1->V2: no change.
+>> ---
+>>  drivers/net/can/flexcan.c | 19 +++++++++++--------
+>>  1 file changed, 11 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+>> index 2efa06119f68..2297663cacb2 100644
+>> --- a/drivers/net/can/flexcan.c
+>> +++ b/drivers/net/can/flexcan.c
+>> @@ -134,8 +134,7 @@
+>>  	(FLEXCAN_ESR_ERR_BUS | FLEXCAN_ESR_ERR_STATE)
+>>  #define FLEXCAN_ESR_ALL_INT \
+>>  	(FLEXCAN_ESR_TWRN_INT | FLEXCAN_ESR_RWRN_INT | \
+>> -	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT | \
+>> -	 FLEXCAN_ESR_WAK_INT)
+>> +	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT)
 >=20
-> In wakeup case, after system resume, frames received out-of-order in
-> first IRQ handler, the problem is wakeup latency from frame reception t=
-o
-> IRQ handler is much bigger than the counter overflow. This means it's
-> impossible to sort the CAN frames by timestamp. The reason is that cont=
-roller
-> exits stop mode during noirq resume, then it can receive the frame imme=
-diately.
-> If noirq reusme stage consumes much time, it will extend interrupt resp=
-onse
-> time. So exit stop mode during resume stage instead of noirq resume can=
+> Why do you remove the FLEXCAN_ESR_WAK_INT from the FLEXCAN_ESR_ALL_INT?=
 
-> fix this issue.
 >=20
-> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-> ------
-> ChangeLog:
-> 	V1->V2: no change.
-> ---
->  drivers/net/can/flexcan.c | 19 +++++++++++--------
->  1 file changed, 11 insertions(+), 8 deletions(-)
+>> =20
+>>  /* FLEXCAN interrupt flag register (IFLAG) bits */
+>>  /* Errata ERR005829 step7: Reserve first valid MB */
+>> @@ -960,6 +959,12 @@ static irqreturn_t flexcan_irq(int irq, void *dev=
+_id)
+>> =20
+>>  	reg_esr =3D priv->read(&regs->esr);
+>> =20
+>> +	/* ACK wakeup interrupt */
+>> +	if (reg_esr & FLEXCAN_ESR_WAK_INT) {
+>> +		handled =3D IRQ_HANDLED;
+>> +		priv->write(reg_esr & FLEXCAN_ESR_WAK_INT, &regs->esr);
+>> +	}
+>> +
 >=20
-> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-> index 2efa06119f68..2297663cacb2 100644
-> --- a/drivers/net/can/flexcan.c
-> +++ b/drivers/net/can/flexcan.c
-> @@ -134,8 +134,7 @@
->  	(FLEXCAN_ESR_ERR_BUS | FLEXCAN_ESR_ERR_STATE)
->  #define FLEXCAN_ESR_ALL_INT \
->  	(FLEXCAN_ESR_TWRN_INT | FLEXCAN_ESR_RWRN_INT | \
-> -	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT | \
-> -	 FLEXCAN_ESR_WAK_INT)
-> +	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT)
+> If FLEXCAN_ESR_WAK_INT stays in FLEXCAN_ESR_ALL_INT, you don't need tha=
+t
+> explicit ACK here.
 
-Why do you remove the FLEXCAN_ESR_WAK_INT from the FLEXCAN_ESR_ALL_INT?
-
-> =20
->  /* FLEXCAN interrupt flag register (IFLAG) bits */
->  /* Errata ERR005829 step7: Reserve first valid MB */
-> @@ -960,6 +959,12 @@ static irqreturn_t flexcan_irq(int irq, void *dev_=
-id)
-> =20
->  	reg_esr =3D priv->read(&regs->esr);
-> =20
-> +	/* ACK wakeup interrupt */
-> +	if (reg_esr & FLEXCAN_ESR_WAK_INT) {
-> +		handled =3D IRQ_HANDLED;
-> +		priv->write(reg_esr & FLEXCAN_ESR_WAK_INT, &regs->esr);
-> +	}
-> +
-
-If FLEXCAN_ESR_WAK_INT stays in FLEXCAN_ESR_ALL_INT, you don't need that
-explicit ACK here.
+Otherwise this patch is OK. With this patch the flexcan_suspend() and
+flexcan_resume() look finally symmetric. \o/
 
 Marc
 
@@ -224,23 +234,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---Nv7MMgsx683NBRKaM98Gg11Sfx4N7sx65--
+--rXgueoG2aS9fXa7QTPleYh8Uui2FgnUQM--
 
---PKayGHV2gg8Z94eZQ1tNw1WwQqsSV4IO3
+--ZdprwuE3cNf2makzjCF94lWLWaF8l5zOZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3mmnQACgkQWsYho5Hk
-nSDGqwf+NGmScvoOPWrugXTvRo95qR0IXLvwNrC6qoiajnIfD4uNT5+u/Yo1JnA4
-qiSN6RNzgrRKxC55ko4D6kGlLKFMEk+bhyU/dnj51C8b+1xmn/2K557uxy5ZJOu+
-yHT0xaB6aC3GMXLrmsPHWVmAkjgyOlsebxYyIwyPMRR1i0bGLSNsVuaePwS3pt5x
-xbkY1i+A8DI177Tzymmrqm7vNcS4X39xCFt4OCs/rluNsF5sW14ryg6RrZKfX47b
-urRa7aPawe9M8phgxcJSrxEWNzCUZvXmS3jUSCEr+TgRIHu99eLTw3/fisOlOtys
-2MFm6TC1jdQkLmDM7580EHtlo/P74A==
-=CRL3
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3mnngACgkQWsYho5Hk
+nSCbbAf9GTNY32FjDHxCFGnQ2gEBruslKHFI/9nxoXsH5SLr1gcj766MWXGsJXYO
+6QpXSNpjedsL5jxeyZbDCWY2nyZeg4jYFKf5zPbH5HoOaWziVqyi+HgmJA2V2kqS
+PnEqbE4pr9h3RyKB8IfUZ9PLjUH6SHWbl8EsLKhwJ+uWJh0TgUZ0b3aJz4lJEflB
+am3djIVh+vu2xmY6KwgZ54uTSV8QCJEuXlfZ4sR00+SqndpbfnKuKXt0b4wSQdbR
+Fc2n1JCwY4OUYYa9uDmEr24VP9eS5qpjIB1iztxjA8A3LLagRGWqmH9ZyvCoQpuy
+RlTUlW9gXDYrEoeZexkxVu7rjaEs7w==
+=3CZG
 -----END PGP SIGNATURE-----
 
---PKayGHV2gg8Z94eZQ1tNw1WwQqsSV4IO3--
+--ZdprwuE3cNf2makzjCF94lWLWaF8l5zOZ--
