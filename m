@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 416B510FB39
-	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2019 10:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B84810FB62
+	for <lists+linux-can@lfdr.de>; Tue,  3 Dec 2019 11:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726086AbfLCJ7F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Dec 2019 04:59:05 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:45321 "EHLO
+        id S1726060AbfLCKH7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Dec 2019 05:07:59 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40585 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfLCJ7E (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Dec 2019 04:59:04 -0500
+        with ESMTP id S1725773AbfLCKH7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Dec 2019 05:07:59 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ic4xH-0004We-Po; Tue, 03 Dec 2019 10:58:51 +0100
+        id 1ic560-0005np-35; Tue, 03 Dec 2019 11:07:52 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 52F1A4873B3;
-        Tue,  3 Dec 2019 09:55:05 +0000 (UTC)
-Subject: Re: [PATCH] MAINTAINERS: add myself as maintainer of MCAN MMIO device
- driver
-To:     Sriram Dash <sriram.dash@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        wg@grandegger.com
-Cc:     mchehab+samsung@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, robh@kernel.org, dmurphy@ti.com,
-        rcsekar@samsung.com, pankaj.dubey@samsung.com,
-        pankj.sharma@samsung.com
-References: <CGME20191203043533epcas5p19bfc21e2b03db7f27c6d84cda6824d27@epcas5p1.samsung.com>
- <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8E67B4873E6;
+        Tue,  3 Dec 2019 10:07:50 +0000 (UTC)
+Subject: Re: [PATCH] can: ucan: fix non-atomic allocation in completion
+ handler
+To:     Johan Hovold <johan@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>
+References: <20191128182603.22004-1-johan@kernel.org>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -97,15 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <9c9b1f4d-e092-957a-150c-41f2348810e5@pengutronix.de>
-Date:   Tue, 3 Dec 2019 10:55:01 +0100
+Message-ID: <6bb1865a-ecfd-6fb4-0621-0fa2c7693aec@pengutronix.de>
+Date:   Tue, 3 Dec 2019 11:07:46 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
+In-Reply-To: <20191128182603.22004-1-johan@kernel.org>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo"
+ boundary="JnoY2PbaAEAL5dQV9OIN73qLYQw3HAP20"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,37 +115,42 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo
-Content-Type: multipart/mixed; boundary="PMj6IRNcR0cQVRbqraVAABpoCo0rGJrMh";
+--JnoY2PbaAEAL5dQV9OIN73qLYQw3HAP20
+Content-Type: multipart/mixed; boundary="aW3TfrPLtE7jtOJRGUnuzATBqHuU3ZHsv";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sriram Dash <sriram.dash@samsung.com>, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org, wg@grandegger.com
-Cc: mchehab+samsung@kernel.org, davem@davemloft.net,
- gregkh@linuxfoundation.org, robh@kernel.org, dmurphy@ti.com,
- rcsekar@samsung.com, pankaj.dubey@samsung.com, pankj.sharma@samsung.com
-Message-ID: <9c9b1f4d-e092-957a-150c-41f2348810e5@pengutronix.de>
-Subject: Re: [PATCH] MAINTAINERS: add myself as maintainer of MCAN MMIO device
- driver
-References: <CGME20191203043533epcas5p19bfc21e2b03db7f27c6d84cda6824d27@epcas5p1.samsung.com>
- <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
-In-Reply-To: <1575347349-32689-1-git-send-email-sriram.dash@samsung.com>
+To: Johan Hovold <johan@kernel.org>, Wolfgang Grandegger <wg@grandegger.com>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable <stable@vger.kernel.org>,
+ Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+ Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+ Philipp Tomsich <philipp.tomsich@theobroma-systems.com>
+Message-ID: <6bb1865a-ecfd-6fb4-0621-0fa2c7693aec@pengutronix.de>
+Subject: Re: [PATCH] can: ucan: fix non-atomic allocation in completion
+ handler
+References: <20191128182603.22004-1-johan@kernel.org>
+In-Reply-To: <20191128182603.22004-1-johan@kernel.org>
 
---PMj6IRNcR0cQVRbqraVAABpoCo0rGJrMh
+--aW3TfrPLtE7jtOJRGUnuzATBqHuU3ZHsv
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/3/19 5:29 AM, Sriram Dash wrote:
-> Since we are actively working on MMIO MCAN device driver,
-> as discussed with Marc, I am adding myself as a maintainer.
+On 11/28/19 7:26 PM, Johan Hovold wrote:
+> USB completion handlers are called in atomic context and must
+> specifically not allocate memory using GFP_KERNEL.
 >=20
-> Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
-> ---
+> Fixes: 9f2d3eae88d2 ("can: ucan: add driver for Theobroma Systems UCAN =
+devices")
+> Cc: stable <stable@vger.kernel.org>     # 4.19
+> Cc: Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>
+> Cc: Martin Elshuber <martin.elshuber@theobroma-systems.com>
+> Cc: Philipp Tomsich <philipp.tomsich@theobroma-systems.com>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
 Added to linux-can.
 
-Tnx,
+tnx,
 Marc
 
 --=20
@@ -156,23 +160,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---PMj6IRNcR0cQVRbqraVAABpoCo0rGJrMh--
+--aW3TfrPLtE7jtOJRGUnuzATBqHuU3ZHsv--
 
---AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo
+--JnoY2PbaAEAL5dQV9OIN73qLYQw3HAP20
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3mMPUACgkQWsYho5Hk
-nSCPqwgAuOqh+sGM+elUOahNy8zlT0jJUsD5IlZDpXrkto1wfFfTpcp9iDNYWaIx
-uM19pwnc09Jg+S7pkHSFWIGDM0JExgKGwyJ47G04tA4PzBLqcmIUfVbEE8rmzYYQ
-1MQtmkx62Kms3v2OG/Wv1NPWLGAroeD9X+l+pq+jjvrKygZ5QCezj4CNZqwz6KHv
-vmm+U0zNuaR6WjHOrSBVE3MM4gAjhQrBhNsT6F0jaCobatj7lGIrVRA8f9PCRr7H
-0AOXpK9yNyI684MByoxzxqLjDayTREUTFjcEUdtY9ORzf+pdvp4BUTc1Y7PzS0oP
-dZRqRYbMMTq9R2cHzc9pqN357KW62A==
-=a+Sh
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3mM/IACgkQWsYho5Hk
+nSCuTgf/fwPYT7PvRKMrRRKbuCiqAnUaOvo85yVfBkEzrLkcIkXCaCpxvncLjJ+W
+xhfittVwuCMkM1ed/W6M3a90qn48XR8tlfqoL4TK9rpNczgeowZg7/iHOM8Jdofs
+nSOG9xGmd2oz3cZH6nd7pkEswRLqNZ8qgmxxxOSvT/17w2fFqVsZqZJ+jQOci6um
+dGpsA6Nf9rmX2+ibTLBdp/Ley+27eZ1ezgrsGFPokaHumMpJLlNw08EbtGfAzAjO
++VXcPDXZWgN6wHIOJpSjsMpsOk1IuTLwP98bdUWI/TBKJl8uuHDaj2zqZ+G0JvZA
+UC7QgRTucSHb2HoBa+xyDB6EzCHcOg==
+=8qrr
 -----END PGP SIGNATURE-----
 
---AgPODyPcIAY4cJ8CKaolPkD5tAQR8qlUo--
+--JnoY2PbaAEAL5dQV9OIN73qLYQw3HAP20--
