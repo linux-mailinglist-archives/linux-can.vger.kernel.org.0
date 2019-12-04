@@ -2,44 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 723CC1123B2
-	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2019 08:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD899112501
+	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2019 09:31:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbfLDHw5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Dec 2019 02:52:57 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56045 "EHLO
+        id S1726679AbfLDIbP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Dec 2019 03:31:15 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43439 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbfLDHw5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Dec 2019 02:52:57 -0500
+        with ESMTP id S1726217AbfLDIbO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Dec 2019 03:31:14 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1icPSw-0006y8-72; Wed, 04 Dec 2019 08:52:54 +0100
+        id 1icQ3z-0002nE-Aq; Wed, 04 Dec 2019 09:31:11 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 94B34488E72;
-        Wed,  4 Dec 2019 07:52:51 +0000 (UTC)
-Subject: Re: [PATCH V2] can: xilinx_can: Fix missing Rx can packets on
- CANFD2.0
-To:     Naga Sureshkumar Relli <nagasure@xilinx.com>,
-        Srinivas Neeli <sneeli@xilinx.com>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        Michal Simek <michals@xilinx.com>,
-        Appana Durga Kedareswara Rao <appanad@xilinx.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        git <git@xilinx.com>
-References: <1575375396-3403-1-git-send-email-srinivas.neeli@xilinx.com>
- <MN2PR02MB5727E5E2BF394AC2898D5E1FAF5D0@MN2PR02MB5727.namprd02.prod.outlook.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 18891488F0F;
+        Wed,  4 Dec 2019 08:31:10 +0000 (UTC)
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "sean@geanix.com" <sean@geanix.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
+ <20191127055334.1476-2-qiangqing.zhang@nxp.com>
+ <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
+ <DB7PR04MB46183730127339DAC15ABF33E65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -102,15 +95,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <528491f5-d28a-2f0a-0621-ab343e4ff7e5@pengutronix.de>
-Date:   Wed, 4 Dec 2019 08:52:47 +0100
+Subject: Re: [PATCH V2 1/4] can: flexcan: fix deadlock when using self wakeup
+Message-ID: <b4ce5a7a-7fc0-edb2-608e-4030ce6428a2@pengutronix.de>
+Date:   Wed, 4 Dec 2019 09:31:05 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <MN2PR02MB5727E5E2BF394AC2898D5E1FAF5D0@MN2PR02MB5727.namprd02.prod.outlook.com>
+In-Reply-To: <DB7PR04MB46183730127339DAC15ABF33E65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="EsHhqYijumrOCWNOGfOVtR88b93OMXvMp"
+ boundary="gNfDjcm1x9HHDAIkEGdoHJkH587wTN8L3"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -121,40 +115,100 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---EsHhqYijumrOCWNOGfOVtR88b93OMXvMp
-Content-Type: multipart/mixed; boundary="6jAZiqs74AMe09G2oX3Cjn13Nl4WWl9FO";
+--gNfDjcm1x9HHDAIkEGdoHJkH587wTN8L3
+Content-Type: multipart/mixed; boundary="RsU4ZEJsDnWk1wNwXlT3btpEzfioQ0U3D";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Naga Sureshkumar Relli <nagasure@xilinx.com>,
- Srinivas Neeli <sneeli@xilinx.com>, "wg@grandegger.com" <wg@grandegger.com>,
- "davem@davemloft.net" <davem@davemloft.net>,
- Michal Simek <michals@xilinx.com>,
- Appana Durga Kedareswara Rao <appanad@xilinx.com>
-Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- git <git@xilinx.com>
-Message-ID: <528491f5-d28a-2f0a-0621-ab343e4ff7e5@pengutronix.de>
-Subject: Re: [PATCH V2] can: xilinx_can: Fix missing Rx can packets on
- CANFD2.0
-References: <1575375396-3403-1-git-send-email-srinivas.neeli@xilinx.com>
- <MN2PR02MB5727E5E2BF394AC2898D5E1FAF5D0@MN2PR02MB5727.namprd02.prod.outlook.com>
-In-Reply-To: <MN2PR02MB5727E5E2BF394AC2898D5E1FAF5D0@MN2PR02MB5727.namprd02.prod.outlook.com>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, "sean@geanix.com"
+ <sean@geanix.com>, "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <b4ce5a7a-7fc0-edb2-608e-4030ce6428a2@pengutronix.de>
+Subject: Re: [PATCH V2 1/4] can: flexcan: fix deadlock when using self wakeup
+References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
+ <20191127055334.1476-2-qiangqing.zhang@nxp.com>
+ <b77829d5-9eda-a244-3ee8-2ccdbdfb6524@pengutronix.de>
+ <DB7PR04MB46183730127339DAC15ABF33E65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+In-Reply-To: <DB7PR04MB46183730127339DAC15ABF33E65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
 
---6jAZiqs74AMe09G2oX3Cjn13Nl4WWl9FO
+--RsU4ZEJsDnWk1wNwXlT3btpEzfioQ0U3D
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/4/19 4:59 AM, Naga Sureshkumar Relli wrote:
-> Reviewed-by: Naga Sureshkumar Relli	<naga.sureshkumar.relli@xilinx.com>=
+On 12/4/19 2:58 AM, Joakim Zhang wrote:
+> [...]
+>>>  drivers/net/can/flexcan.c | 19 +++++++++++--------
+>>>  1 file changed, 11 insertions(+), 8 deletions(-)
+>>>
+>>> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+>>> index 2efa06119f68..2297663cacb2 100644
+>>> --- a/drivers/net/can/flexcan.c
+>>> +++ b/drivers/net/can/flexcan.c
+>>> @@ -134,8 +134,7 @@
+>>>  	(FLEXCAN_ESR_ERR_BUS | FLEXCAN_ESR_ERR_STATE)  #define
+>>> FLEXCAN_ESR_ALL_INT \
+>>>  	(FLEXCAN_ESR_TWRN_INT | FLEXCAN_ESR_RWRN_INT | \
+>>> -	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT | \
+>>> -	 FLEXCAN_ESR_WAK_INT)
+>>> +	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT)
+>>
+>> Why do you remove the FLEXCAN_ESR_WAK_INT from the
+>> FLEXCAN_ESR_ALL_INT?
+>>
+>>>
+>>>  /* FLEXCAN interrupt flag register (IFLAG) bits */
+>>>  /* Errata ERR005829 step7: Reserve first valid MB */ @@ -960,6
+>>> +959,12 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+>>>
+>>>  	reg_esr =3D priv->read(&regs->esr);
+>>>
+>>> +	/* ACK wakeup interrupt */
+>>> +	if (reg_esr & FLEXCAN_ESR_WAK_INT) {
+>>> +		handled =3D IRQ_HANDLED;
+>>> +		priv->write(reg_esr & FLEXCAN_ESR_WAK_INT, &regs->esr);
+>>> +	}
+>>> +
+>>
+>> If FLEXCAN_ESR_WAK_INT stays in FLEXCAN_ESR_ALL_INT, you don't need
+>> that explicit ACK here.
+>=20
+> Hi Marc,
+>=20
+> I remove the FLEXCAN_ESR_WAK_INT from the FLEXCAN_ESR_ALL_INT since
+> FLEXCAN_ESR_ALL_INT is for all bus error and state change IRQ
+> sources, wakeup interrupt does not belong to these. If you think this
+> does not need, I can remove this change.
 
+I see, makes sense.
 
-Added to the patch.
+Make this a separate patch. Move the FLEXCAN_ESR_WAK_INT from the
+FLEXCAN_ESR_ALL_INT, but add it to the existing ack of the interrupts.
+Like this:
 
-tnx,
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index b6f675a5e2d9..74f622b40b61 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -960,10 +960,10 @@ static irqreturn_t flexcan_irq(int irq, void *dev=
+_id)
+> =20
+>         reg_esr =3D priv->read(&regs->esr);
+> =20
+> -       /* ACK all bus error and state change IRQ sources */
+> -       if (reg_esr & FLEXCAN_ESR_ALL_INT) {
+> +       /* ACK all bus error, state change and wake IRQ sources */
+> +       if (reg_esr & (FLEXCAN_ESR_ALL_INT | FLEXCAN_ESR_WAK_INT)) {
+>                 handled =3D IRQ_HANDLED;
+> -               priv->write(reg_esr & FLEXCAN_ESR_ALL_INT, &regs->esr);=
+
+> +               priv->write(reg_esr & (FLEXCAN_ESR_ALL_INT | FLEXCAN_ES=
+R_WAK_INT), &regs->esr);
+>         }
+> =20
+>         /* state change interrupt or broken error state quirk fix is en=
+abled */
+
 Marc
 
 --=20
@@ -164,23 +218,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---6jAZiqs74AMe09G2oX3Cjn13Nl4WWl9FO--
+--RsU4ZEJsDnWk1wNwXlT3btpEzfioQ0U3D--
 
---EsHhqYijumrOCWNOGfOVtR88b93OMXvMp
+--gNfDjcm1x9HHDAIkEGdoHJkH587wTN8L3
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3nZc8ACgkQWsYho5Hk
-nSC5xAf9E2O7Hpw8B7UnryAqewMRYuZNLn45EgXEkrrYc5HbpEIGtcdlCIZ5YEqf
-cb912bh159h/0mR7EorVvV4b4RCMnQPyCEAJ4cfwMLjzT0obZTiwtvQ9dQ0V2Av8
-TOSetZz0WRgly0LPy8HsGjmTUsXl57hfwrQp656nInYwbDm3LJRr90/rNE9PBOch
-M895jgoxPM0eXujRUOVN+gf/dJ7xV+5Qks+7cHhlI33CwyMfwXBhLo1gOAxdTOL6
-w95DvQfgO2jJieAv7ETIcpBbOaf23z8yMJ6BJciWTpgPBI1O+XSfXDWQGKCAkCb4
-nRNnRFbIPK+y2TgO3JDLK630H5Twkg==
-=FpiZ
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3nbskACgkQWsYho5Hk
+nSCM+Qf+O704RSvmyOPEQZDym+oL1w3DRt7iDaIrOET+5giecvKBt+xRX2ogTzqI
+BQnYlT4wf40FNlEi62/TJ3EBLEQS8FBH54hEtofn+JKm0yyf3ITpO/xSX0sGqr/+
+gC7a8eWCCo6Ypmdtw7kELWiKANXDmgd2RQMXLxwMKMiEa99DPrh/Bxf0kjZ/cVfm
+ptkQxARsOVxii03vlwA7w86bkHRLU15XZVhDMuXnI5YRTdL0+z85BR6lzW3CPFR3
+XifJ3jlWnDLh4g8BUG6OsJHhoj8HMuC0El2vcVTKEJBx6MUYvpU5Csl8AvbNmAAi
+MRTSL0LuB9cuQMCvPv55PY1+NRsBTg==
+=5XGv
 -----END PGP SIGNATURE-----
 
---EsHhqYijumrOCWNOGfOVtR88b93OMXvMp--
+--gNfDjcm1x9HHDAIkEGdoHJkH587wTN8L3--
