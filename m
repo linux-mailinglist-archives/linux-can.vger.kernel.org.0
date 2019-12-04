@@ -2,29 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DBA112632
-	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2019 09:59:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 744451126FC
+	for <lists+linux-can@lfdr.de>; Wed,  4 Dec 2019 10:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbfLDI77 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Dec 2019 03:59:59 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57067 "EHLO
+        id S1727136AbfLDJU5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Dec 2019 04:20:57 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35163 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbfLDI76 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Dec 2019 03:59:58 -0500
+        with ESMTP id S1725922AbfLDJU4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Dec 2019 04:20:56 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1icQVn-0005VV-Ji; Wed, 04 Dec 2019 09:59:55 +0100
+        id 1icQq5-0008Eq-Jw; Wed, 04 Dec 2019 10:20:53 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7C531488F54;
-        Wed,  4 Dec 2019 08:59:52 +0000 (UTC)
-Subject: Re: [PATCH V2 4/4] can: flexcan: add LPSR mode support
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 89751488F8D;
+        Wed,  4 Dec 2019 09:20:52 +0000 (UTC)
 To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
         "sean@geanix.com" <sean@geanix.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
@@ -94,15 +93,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <28bce2f5-8d49-d803-60c7-a8dec87a4fa6@pengutronix.de>
-Date:   Wed, 4 Dec 2019 09:59:47 +0100
+Subject: Re: [PATCH V2 4/4] can: flexcan: add LPSR mode support
+Message-ID: <31323458-7807-3e7c-7689-19cb38a23647@pengutronix.de>
+Date:   Wed, 4 Dec 2019 10:20:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
 In-Reply-To: <20191127055334.1476-5-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="2XN7p9j71DSfZTsmLheCRczCVheTB7GqJ"
+ boundary="PRA8ZkKg6F55VabPrUOVJ2U2Z1bz6urPZ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,21 +113,21 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---2XN7p9j71DSfZTsmLheCRczCVheTB7GqJ
-Content-Type: multipart/mixed; boundary="NnMIR6Dd7WD9g2IYaDxYlHl9Y0q0ZZSJ4";
+--PRA8ZkKg6F55VabPrUOVJ2U2Z1bz6urPZ
+Content-Type: multipart/mixed; boundary="3Yw3h1SthmN1G4RDLVxweoiEw4YwermQL";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Joakim Zhang <qiangqing.zhang@nxp.com>, "sean@geanix.com"
  <sean@geanix.com>, "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 Cc: dl-linux-imx <linux-imx@nxp.com>,
  "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <28bce2f5-8d49-d803-60c7-a8dec87a4fa6@pengutronix.de>
+Message-ID: <31323458-7807-3e7c-7689-19cb38a23647@pengutronix.de>
 Subject: Re: [PATCH V2 4/4] can: flexcan: add LPSR mode support
 References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
  <20191127055334.1476-5-qiangqing.zhang@nxp.com>
 In-Reply-To: <20191127055334.1476-5-qiangqing.zhang@nxp.com>
 
---NnMIR6Dd7WD9g2IYaDxYlHl9Y0q0ZZSJ4
+--3Yw3h1SthmN1G4RDLVxweoiEw4YwermQL
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
@@ -183,63 +183,10 @@ t device *device)
 >  		} else {
 > -			err =3D flexcan_chip_disable(priv);
 > +			flexcan_chip_stop(dev);
-> +
-> +			err =3D pm_runtime_force_suspend(device);
->  			if (err)
->  				return err;
-> =20
-> -			err =3D pm_runtime_force_suspend(device);
-> +			pinctrl_pm_select_sleep_state(device);
 
-Please add error handling for pinctrl_pm_select_sleep_state().
-
->  		}
->  		netif_stop_queue(dev);
->  		netif_device_detach(dev);
->  	}
->  	priv->can.state =3D CAN_STATE_SLEEPING;
-> =20
-> -	return err;
-> +	return 0;
->  }
-> =20
->  static int __maybe_unused flexcan_resume(struct device *device)
->  {
->  	struct net_device *dev =3D dev_get_drvdata(device);
->  	struct flexcan_priv *priv =3D netdev_priv(dev);
-> -	int err =3D 0;
-> +	int err;
-> =20
->  	priv->can.state =3D CAN_STATE_ERROR_ACTIVE;
->  	if (netif_running(dev)) {
-> @@ -1749,15 +1752,19 @@ static int __maybe_unused flexcan_resume(struct=
- device *device)
->  			if (err)
->  				return err;
->  		} else {
-> +			pinctrl_pm_select_default_state(device);
-
-same here
-
-> +
->  			err =3D pm_runtime_force_resume(device);
->  			if (err)
->  				return err;
-> =20
-> -			err =3D flexcan_chip_enable(priv);
-> +			err =3D flexcan_chip_start(dev);
-> +			if (err)
-> +				return err;
->  		}
->  	}
-> =20
-> -	return err;
-> +	return 0;
->  }
-> =20
->  static int __maybe_unused flexcan_runtime_suspend(struct device *devic=
-e)
->=20
+chip_stop calls chip_disable, but doesn't propagate the error value.
+Please create a seperate patch to propagate the error value of chip_stop(=
+).
 
 Marc
 
@@ -250,23 +197,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---NnMIR6Dd7WD9g2IYaDxYlHl9Y0q0ZZSJ4--
+--3Yw3h1SthmN1G4RDLVxweoiEw4YwermQL--
 
---2XN7p9j71DSfZTsmLheCRczCVheTB7GqJ
+--PRA8ZkKg6F55VabPrUOVJ2U2Z1bz6urPZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3ndYMACgkQWsYho5Hk
-nSCb2gf+MoTZgmlx34RO9exffzTEtK/zhDd42ftubN7UwqHW+Tb/VWdHEEyU+4ko
-kFLF862M1m0nIdLeHrCSxZMRXK6Fesa9RjhFXTCib8RTBpEMez3fbUN1bhAe/VAm
-9R6fCYZQJGX0gmvZWmBEkHR92DdLZcMw0Q/Aomy+MBP/NvUVFLp1o7Nqj6uv4sOZ
-azKuEyWgplU14Wr3VNSrHqee3BnCP/MQIwDUcE0CTxHwS+8aqq6Of51CQlUGuhf1
-8/sBWdn/tMermH5tsKvdyNHbdTMtBW0F5YUUlFNNBKcM/+rgx+B6/M3hUsUuNFp5
-SNOxYlrZU6Yg6LuZGh7g4/k3aIZYEA==
-=v/Df
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3nenAACgkQWsYho5Hk
+nSCGOQf+M1wxA/XcsWP/GrINFbFzCrJECkp9AA/lPfxO27RLUq7eiC5iLEqw44QM
+Vt7BHH3200lRgbaiCvBbZAefBPju2PKAnN3xITYaNz4iyXT+zrga+HX01toYsWVp
+/kv8w9huCnfI1c1IfkK+44r1XxTEXl3FQqg6rc/TG7rgvs0BeuG0uXiLKaZyKpNT
+ys+11R4ZZAetOjMP9ub4OFUF1l0OM5xcNfWLC+t/SnW4A3rVE7PZ4B7w53VrmWAg
+AcZU2S5cLeGrGgS1GD54YHtP6+tRkdaBcsVepc+aeK6C67A3aAnQS/mYoicHajuq
+oSPdRR2JB16z2JFrLD+fhCoGjAcQsQ==
+=Hd3Y
 -----END PGP SIGNATURE-----
 
---2XN7p9j71DSfZTsmLheCRczCVheTB7GqJ--
+--PRA8ZkKg6F55VabPrUOVJ2U2Z1bz6urPZ--
