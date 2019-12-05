@@ -2,37 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9861143BC
-	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 16:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A36A0114503
+	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 17:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729450AbfLEPgE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Dec 2019 10:36:04 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51927 "EHLO
+        id S1726257AbfLEQnq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Dec 2019 11:43:46 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54417 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbfLEPgE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Dec 2019 10:36:04 -0500
+        with ESMTP id S1726028AbfLEQnq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Dec 2019 11:43:46 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ictAb-0007Ei-Dv; Thu, 05 Dec 2019 16:35:57 +0100
+        id 1icuEC-0005e7-Or; Thu, 05 Dec 2019 17:43:44 +0100
 Received: from [IPv6:2001:67c:670:202:c1c2:3766:121d:8496] (unknown [IPv6:2001:67c:670:202:c1c2:3766:121d:8496])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C1282489EC9;
-        Thu,  5 Dec 2019 15:35:54 +0000 (UTC)
-To:     Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Sriram Dash <sriram.dash@samsung.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 62F4E489F53;
+        Thu,  5 Dec 2019 16:43:43 +0000 (UTC)
+To:     Dan Murphy <dmurphy@ti.com>, linux-can <linux-can@vger.kernel.org>
 References: <20191204175112.7308-1-dmurphy@ti.com>
  <20191204175112.7308-2-dmurphy@ti.com>
  <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
  <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
  <809b9ff1-88e3-4e46-33e0-856db37898b2@pengutronix.de>
  <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
+ <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
+ <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -96,15 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
 Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
-Message-ID: <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
-Date:   Thu, 5 Dec 2019 16:35:50 +0100
+Message-ID: <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
+Date:   Thu, 5 Dec 2019 17:43:35 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
+In-Reply-To: <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Wc3YXHL1XLvzdI9vz7XTtzADIEYftsVJw"
+ boundary="Zim0zwEiUbCs76idnHyMP1pAlJXcdJlVL"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,14 +115,12 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Wc3YXHL1XLvzdI9vz7XTtzADIEYftsVJw
-Content-Type: multipart/mixed; boundary="dTwGmQcY3cJl9phvti4yfNLUSimxXhLDz";
+--Zim0zwEiUbCs76idnHyMP1pAlJXcdJlVL
+Content-Type: multipart/mixed; boundary="9z1pHMIDl0ej7G0J35puo2xfAM37WKKV2";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, Sriram Dash <sriram.dash@samsung.com>
-Message-ID: <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
+To: Dan Murphy <dmurphy@ti.com>, linux-can <linux-can@vger.kernel.org>
+Message-ID: <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
 Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
 References: <20191204175112.7308-1-dmurphy@ti.com>
  <20191204175112.7308-2-dmurphy@ti.com>
@@ -130,52 +128,57 @@ References: <20191204175112.7308-1-dmurphy@ti.com>
  <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
  <809b9ff1-88e3-4e46-33e0-856db37898b2@pengutronix.de>
  <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
-In-Reply-To: <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
+ <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
+ <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
+In-Reply-To: <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
 
---dTwGmQcY3cJl9phvti4yfNLUSimxXhLDz
+--9z1pHMIDl0ej7G0J35puo2xfAM37WKKV2
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 12/5/19 4:01 PM, Dan Murphy wrote:
->> Dan, what about maintainerchip of the tcan4x5?
+I've added the ML back on Cc, due to the SPI discussion below...
+
+On 12/5/19 4:47 PM, Dan Murphy wrote:
+>>> As far as a device what country do you reside in?
+>> Germany, I'll drop you the address in a private Mail.
+
+I've send it in a separate mail.
+
+> Sounds good! I emailed our HW guys to see if we can get you a complete =
+
+> test setup.
+
+Nice, I just need the SPI-Chip.
+
+> I had a MSP430 with firmware on it that transmit and received CAN frame=
+s=20
+> so I could run the cangen commands.
+
+I've several CAN devices at home test against, I've no need for
+microcontrollers yet. :D
+
+> But I make no promises on that level of hardware support.=C2=A0 At the =
+very=20
+> least maybe an EVM.
 >=20
-> Ooops that was buried in my inbox.
->=20
-> It only makes sense for someone from TI to take maintainership of the=20
-> TCAN device.
+> When I get time I am also going to try to get rid of the regmap calls i=
+n=20
+> the driver to speed up the through put.
 
-Sriram Dash (Cc'ed) is maintainer of the MMIO driver:
+Regmap is good, If you want to speedup things you should read stuff in
+bulk. See the mcp25xxfd driver I'm currently re-writing. But the
+mcp25xxfd is a SPI-only device, which makes things easier.
 
-> +F:     Documentation/devicetree/bindings/net/can/m_can.txt            =
-                                                                         =
-                                                                  =20
-> +F:     drivers/net/can/m_can/m_can.c                                  =
-                                                                         =
-                                                                  =20
-> +F:     drivers/net/can/m_can/m_can.h                                  =
-                                                                         =
-                                                                  =20
-> +F:     drivers/net/can/m_can/m_can_platform.c                         =
-                                                                         =
-                                                                  =20
+Here I read all pending RX mailboxes in one or two goes (depending if we
+have a wrap around in the RAM) and then handle all in one go.
 
-See:
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/tr=
+ee/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c?h=3Dmcp25xxfd#n1148
 
-> Do I need to submit a patch to the maintainers file or is the authorshi=
-p=20
-> enough?
+Doing individual SPI register accesses kills performance, not regmap.
 
-Yes, please send a patch, see Sriram's patch as an example:
-
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git/commi=
-t/?h=3Dlinux-can-fixes-for-5.5-20191203&id=3D8c2a58568d6d952f7c7f1dac125b=
-33dc8414627b
-
-> As far as a device what country do you reside in?
-
-Germany, I'll drop you the address in a private Mail.
-
+regards,
 Marc
 
 --=20
@@ -185,23 +188,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---dTwGmQcY3cJl9phvti4yfNLUSimxXhLDz--
+--9z1pHMIDl0ej7G0J35puo2xfAM37WKKV2--
 
---Wc3YXHL1XLvzdI9vz7XTtzADIEYftsVJw
+--Zim0zwEiUbCs76idnHyMP1pAlJXcdJlVL
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3pI9YACgkQWsYho5Hk
-nSChZwf9GVUthIYenwb3wykFFV+orR1ib18vyom95EkMPLE8A0gkVpORZNVyuW/0
-flw90u5CDPJEargPlGsjsnqdXpOTByAbHJLeoJIZGY5ILBuYQzPVS1YWzxHShX/O
-U3R5qRG14DnY2b9dhbOUM91ri9ZL3arIh5BNwdIjzsari+LopKBdKCJr6LSO0wcx
-bJ7QYKCbQossyRLVdKY9lZfLGAGFhgj6hGk+N4qzx+d6o5nu7JuSDZ1qQp+hBUYl
-pxhJPR/kRyHbNLiIXFDaRUcPrNqGWg20W/2U2R2kygk8agvuOjnitiKeaqZq4yMJ
-7LMoeSmJz/KDnGi3miLxYr1FO6yR9A==
-=iM6m
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3pM7cACgkQWsYho5Hk
+nSCElgf+NlQQUK1rYF8OPqGOGvOzNN2PUuTYgsiy96UBhOhwhyEXxmYSJ5crgJPB
+ORwffyw/oODgUmwMbR2FXT3QMkUN/sdLu5FcHqzMYCrjlTkmrPwNQFFZA3cZuKb9
+FyMMTN0Ce0fU+3YqcNd229y5vg2m5NP12TPpvMbqnr9y8hIAvYX7v3hqZnEbmSnp
+cEWnWzHUu81+Wz+wYfKRRk6u8GUr9ihwvcxIpQ+Td2Uf7E1dTiNPJkpyqUz4Z3wn
+EiBonsN6ZTKnCFT7Q/Qm8vHevHtqLJ/J6hW7SvGExWrumJZwGgBW1qdOJpKIG3HQ
+EJ1De1EvU81JCyjaIW48a0dSxnsptA==
+=FU2v
 -----END PGP SIGNATURE-----
 
---Wc3YXHL1XLvzdI9vz7XTtzADIEYftsVJw--
+--Zim0zwEiUbCs76idnHyMP1pAlJXcdJlVL--
