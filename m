@@ -2,40 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E389113C71
-	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 08:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F54113C74
+	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 08:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbfLEHga (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Dec 2019 02:36:30 -0500
-Received: from first.geanix.com ([116.203.34.67]:53928 "EHLO first.geanix.com"
+        id S1726028AbfLEHjL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Dec 2019 02:39:11 -0500
+Received: from first.geanix.com ([116.203.34.67]:54004 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725963AbfLEHga (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 5 Dec 2019 02:36:30 -0500
+        id S1725974AbfLEHjL (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 5 Dec 2019 02:39:11 -0500
 Received: from [192.168.100.11] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 3C0B794C87;
-        Thu,  5 Dec 2019 07:32:09 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 914D1953E8;
+        Thu,  5 Dec 2019 07:34:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1575531129; bh=pjRejVCBSXyWKSVlDgJqVcDW2GIzM7pbOOQEU1x8JCQ=;
+        t=1575531290; bh=XbIajKPVT2fR30jFuGrcwHs68nEKP6G3Cuhw2nq0YFA=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=f9e7HwqUnpdm35/Pjkhuu1mHyyqKgTh+OAV4IhPJP2FmOq9etwFZ5Kz3UmyMNMQ97
-         aLb6lF9MRtsMcNkA7VoIRVz99nuhrhOu3GEozgKUfyeGB2NkDyBEpNz8PbqLb9CWho
-         uW95ixQYFwuyKSeMNGLtdraOF1z23+97jKCEWa+F3GdNaIrmZH1IjskBdV7gtqLlUd
-         niHGOweF6pUp7euTMXf5j70xTXoQID7+462yy7pAc6qLX4buGEP++MzS9Oanci2wpO
-         LCV5/5zcPOhdCydFEMEgnPXPm2jth+GsSErpnx1Wm1yoCw2W80lkZEx9gFdJYqRZvG
-         slTNDuOEc+n4A==
-Subject: Re: [PATCH 1/2] dt-bindings: tcan4x5x: Make wake-gpio an optional
- gpio
+        b=JdglDZs2l8DyRblENAgzqwGsMttzZOeFnixlWC/GDFP68ZWF50NsLkM3dEQgL4wGD
+         5omcRdSPkjwkIg39aGRoSC2IZeckB02CJXOvRVqKo2os+PnTgiM01tS3hsiaGaZ/xS
+         M71bsRzhorDBkRO4MzlkrP82lROB4lyMD8rGXutVVdRJVbpJ4W6+p83ZQh8syy8dxK
+         8Q16QJ81GhOLzK9xcbUJhGjB6Sl06vZMDRd++M1/rhmJXle3sriVjdajrLlZpwLnwa
+         pDi2GiwymDi5jQM7FGHOk3Ob8ifZVWwvVxK6ZI9wJ/SyutLMbqa1PqdX33FoubAJz6
+         AHxAvqbbMXmww==
+Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
 To:     Dan Murphy <dmurphy@ti.com>, mkl@pengutronix.de
 Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+        devicetree@vger.kernel.org
 References: <20191204175112.7308-1-dmurphy@ti.com>
+ <20191204175112.7308-2-dmurphy@ti.com>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <d34673db-cc43-6e1d-6f4a-07b25c2c8f7b@geanix.com>
-Date:   Thu, 5 Dec 2019 08:36:26 +0100
+Message-ID: <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
+Date:   Thu, 5 Dec 2019 08:39:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191204175112.7308-1-dmurphy@ti.com>
+In-Reply-To: <20191204175112.7308-2-dmurphy@ti.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
@@ -51,35 +51,22 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 04/12/2019 18.51, Dan Murphy wrote:
-> The wake-up of the device can be configured as an optional
-> feature of the device.  Move the wake-up gpio from a requried
-> property to an optional property.
+> The device has the ability to disable the wake-up pin option.
+> The wake-up pin can be either force to GND or Vsup and does not have to
+> be tied to a GPIO.  In order for the device to not use the wake-up feature
+> write the register to disable the WAKE_CONFIG option.
 > 
 > Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> CC: Rob Herring <robh@kernel.org>
+> CC: Sean Nyekjaer <sean@geanix.com>
 Reviewed-by: Sean Nyekjaer <sean@geanix.com>
 > ---
->   Documentation/devicetree/bindings/net/can/tcan4x5x.txt | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> index 27e1b4cebfbd..7cf5ef7acba4 100644
-> --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> @@ -10,7 +10,6 @@ Required properties:
->   	- #size-cells: 0
->   	- spi-max-frequency: Maximum frequency of the SPI bus the chip can
->   			     operate at should be less than or equal to 18 MHz.
-> -	- device-wake-gpios: Wake up GPIO to wake up the TCAN device.
->   	- interrupt-parent: the phandle to the interrupt controller which provides
->                       the interrupt.
->   	- interrupts: interrupt specification for data-ready.
-> @@ -23,6 +22,7 @@ Optional properties:
->   		       reset.
->   	- device-state-gpios: Input GPIO that indicates if the device is in
->   			      a sleep state or if the device is active.
-> +	- device-wake-gpios: Wake up GPIO to wake up the TCAN device.
->   
->   Example:
->   tcan4x5x: tcan4x5x@0 {
-> 
+
+
+Hi Dan,
+
+I would add tcan4x5x to the subject of this patch ->
+"net: m_can: tcan4x5x Make wake-up gpio an optional"
+
+Will be testing this during this or the next week...
+
+/Sean
