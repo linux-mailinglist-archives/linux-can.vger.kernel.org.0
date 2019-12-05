@@ -2,95 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E141114867
-	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 21:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBA5114869
+	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 21:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730382AbfLEU4H (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Dec 2019 15:56:07 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:33049 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730905AbfLEU4G (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Dec 2019 15:56:06 -0500
-Received: by mail-lj1-f193.google.com with SMTP id 21so5230782ljr.0
-        for <linux-can@vger.kernel.org>; Thu, 05 Dec 2019 12:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=4TwRmWHgFj9WbyxNrZ+etk7I6uTDgVHvLjHkyyBiRsE=;
-        b=RVYfx20k52bMvGexm9qzXw8/Hv9rW7ftVCKAUkJbn0eEp2Kbbi1cpSq3xuzLb0ECDV
-         b+lOt0aaba7g6fxBXqqoC7ieUTKzckQUODDDWEum1WWm0xj7ypxSAwhKUs0D+ZyDLxcU
-         Bgt+h/H+U0l8Thgpb7RewUNRFrjqyJps+MCoTqHV8b6tCQdjxodPg7mxzIA/zqhI4oZy
-         LZpD/0jyMlwD/Epeqo+4WaksE5CztF9itcZJUhQbX/qHLMfJSYpJQr9QpLBCxSRGEM+j
-         CMiW4dtbhYTe1n2PxwMHf93szcENH2Qc7O+JbaXB1P7oJA4aC9nxxZrvKONtaCvO5QXb
-         KI0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=4TwRmWHgFj9WbyxNrZ+etk7I6uTDgVHvLjHkyyBiRsE=;
-        b=cORnAGHFOOYG57PlXAFoxb1Qq7Gw37mpo5YmFyWbdbaEMffgp9YCSOQEciLKDMmMy5
-         sBVXwWGxyK0SMAZ3GyaedynItvL7WvV3xAD3yVWtzcqF3zsDbCdOZG+qGr7JVCMsoVJ+
-         /lqngKAHlAn/PnHCBDXV1QsrotNs33rNWRrEIDnrDcvyjFCGInEVk39DGdZFtlWc94zz
-         e9J36fBnqOELR09hx1HIe+0WiupFjBWvGPobTNzPuLo52LVp0A+Ez6GRd+xv+Mj2DDim
-         gmuCV7lSIuPl0kz7aWFHMB43YahbcuYOk3IBAZbQ3W+88pTx8qTj/UCRydRD4JGcK6yn
-         Hyww==
-X-Gm-Message-State: APjAAAVgnkzXjnKfykRENX7kIZ4BxapNTYl2PA2chSRG3gUbnbnT6uyG
-        d9BIl0f1hl/A4jW/ecFeWaFrl+vtfOkuFke45A6zGpY6
-X-Google-Smtp-Source: APXvYqwOBDXmFIQxtsvkT6/HkSUKlhDzfSlSwuptdyyEK0mQP9oq2rkjlunJrVG+hhAAN6xwMkAwxmnlCegfyZXW8Tg=
-X-Received: by 2002:a2e:9008:: with SMTP id h8mr6869765ljg.217.1575579364594;
- Thu, 05 Dec 2019 12:56:04 -0800 (PST)
+        id S1731099AbfLEU7m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Dec 2019 15:59:42 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:36690 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731085AbfLEU7l (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Dec 2019 15:59:41 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB5KxUNi054523;
+        Thu, 5 Dec 2019 14:59:30 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1575579570;
+        bh=GbqjKH8YsKnW/N3x6Qpx0YEAwoifburiSHjzAMeEXSg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=AmlfDNrL7P3G3IBt/RgKKVFZKcVF06+vhDiDD85phTg95uGuFNezljJg2xa6IIP6S
+         CAeRmH68TY+7T/0OGjQyCb9E/LgHPHSgimnZ8q0xj1HiFp4G+gDF5fbyflN+0rhoRG
+         joDxO1KmAjsiFftZWCYChc5MSLaaspmNzWxFa0Ac=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB5KxUl0040632;
+        Thu, 5 Dec 2019 14:59:30 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 5 Dec
+ 2019 14:59:30 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 5 Dec 2019 14:59:30 -0600
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB5KxUVW129738;
+        Thu, 5 Dec 2019 14:59:30 -0600
+Subject: Re: [PATCH 0/2] can: m_can_platform: Bug fix of kernel panic for
+To:     Pankaj Sharma <pankj.sharma@samsung.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <rcsekar@samsung.com>, <pankaj.dubey@samsung.com>
+References: <CGME20191119102134epcas5p4d3c1b18203e2001c189b9fa7a0e3aab5@epcas5p4.samsung.com>
+ <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <f0550b0b-6681-75a3-c58a-28f5b7ca0821@ti.com>
+Date:   Thu, 5 Dec 2019 14:57:26 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-From:   Elenita Hinds <ecathinds@gmail.com>
-Date:   Thu, 5 Dec 2019 14:55:53 -0600
-Message-ID: <CAHChkrstQdjVcWtvX4oeUOQfZS3-G_RPWb8Y82Zvaku40dM_qA@mail.gmail.com>
-Subject: can-utils jacd questions
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1574158838-4616-1-git-send-email-pankj.sharma@samsung.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi all,
+Pankaj
 
-I am hoping to re-use the can-utils' jacd as default Address Claiming
-daemon but runs into some issues:
+On 11/19/19 4:20 AM, Pankaj Sharma wrote:
+> The current code is failing while clock prepare enable because of not
+> getting proper clock from platform device.
+> A device driver for CAN controller hardware registers itself with the
+> Linux network layer as a network device. So, the driver data for m_can
+> should ideally be of type net_device.
+>
+> Further even when passing the proper net device in probe function the
+> code was hanging because of the function m_can_runtime_resume() getting
+> recursively called from m_can_class_resume().
+>
+> Pankaj Sharma (2):
+>    can: m_can_platform: set net_device structure as driver data
+>    can: m_can_platform: remove unnecessary m_can_class_resume() call
 
-(1) " err(0, <string>, ...) " is called in several places, even though
-looking at the code logic, there is no error and the program should be
-able to continue. The program exits because err()  never returns.
-For example:
-    if ((s.current_sa < J1939_IDLE_ADDR) && !(addr[s.current_sa].flags
-& F_USE)) {
-         if (s.verbose)
-            err(0, "forget saved address 0x%02x", s.current_sa);  <<
-         s.current_sa = J1939_IDLE_ADDR;
-     }
+Did you CC: linux-stable for these?  We are probably going to have 
+customers picking up 5.4 LTS and would need these bug fixes.
 
-A few more examples:
-     if (s.verbose)
-         err(0, "ready for %s:%016llx", s.intf, (long long)s.name);  <<
-    .  .  .  .
+Or at the very least see if the stable automation will pick these up.
 
-     if (s.state == STATE_REQ_SENT) {
-                if (s.verbose)
-                     err(0, "jacd: request sent, pending for 1250 ms");  <<
-                schedule_itimer(1250);
-                s.state = STATE_REQ_PENDING;
-      }
-
-(2) The socket is configured to also set the SO_BINDTODEVICE option.
-In our system, this requires the program to have root permissions to
-run but we'd rather not do this for security reasons. Is this option
-required? What are the side-effects if this option is not set? Can it
-be made optional such that the program does not exit if the
-setsockoption(SO_BINDTODEVICE) call fails (seems to work without it)?
-
-(3) The claimed address is only saved to a file when the program
-terminates.  What is the reason for this? Can it not be saved after
-one is claimed already so that another process can  read it real-time
-if needed? Also, in cases of a program crash or a power outage, the
-claimed address is still saved.
+Dan
 
 
-Thanks in advance,
-Elenita
