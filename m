@@ -2,104 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5D8114026
-	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 12:32:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B7411416F
+	for <lists+linux-can@lfdr.de>; Thu,  5 Dec 2019 14:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbfLELca (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Dec 2019 06:32:30 -0500
-Received: from first.geanix.com ([116.203.34.67]:36216 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729018AbfLELca (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 5 Dec 2019 06:32:30 -0500
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id BA429378;
-        Thu,  5 Dec 2019 11:32:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1575545546; bh=wMxZmNxsosLnmhaJ4IotGzJVo81drt1nz897yLHZcag=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Pr//vjJHUaATVEBS7brHtlkbwZQrMrbk2QuA9rHoAy0ezps/PktgE1+eFkdMH6FOA
-         MV4T+0paXPqoOaFDfZPH84677t92+f0YoSbNnBKFIjjTjGK4yN4Gaepjw5fPBmwEec
-         Qfy5Cf5nB99T5CRY9HfIF0PLd20JfN9vQwBCwa/zhKoBXTD8eCM7A8xRUnAgCtm4Qo
-         fjZ6u2RxVFT1zhhk2PV/nhywYJH6o0XeaHMm1rpNGkfjXdNk/eCUhsrm70kGgwZYSE
-         E4R+qx0n4O+D7SDTOJXmZ/LP62aqGRM0JK6jV9v32hv4yN1NRvxhiS/jjsuBhR49xH
-         h91ZEFfD1ejUA==
-Subject: Re: [PATCH V2 2/4] can: flexcan: try to exit stop mode during probe
- stage
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
- <20191127055334.1476-3-qiangqing.zhang@nxp.com>
- <ad7e7b15-26f3-daa1-02d2-782ff548756d@pengutronix.de>
- <DB7PR04MB46180C5F1EAC7C4A69A45E0CE65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <d68b2b79-34ec-eb4c-cf4b-047b5157d5e3@pengutronix.de>
- <a1ded645-9e12-d939-7920-8e79983b02a0@geanix.com>
- <DB7PR04MB46184164EAC5719BDCF3822CE65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <e7bef254-9762-0b77-1ace-2040113982ec@geanix.com>
- <DB7PR04MB461820120FF61E08B8B5B0B5E65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <3a4102bc-8a86-3425-e227-590c005df044@geanix.com>
-Date:   Thu, 5 Dec 2019 12:32:27 +0100
+        id S1729099AbfLEN2R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Dec 2019 08:28:17 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:52320 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729048AbfLEN2Q (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Dec 2019 08:28:16 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB5DS8rd109614;
+        Thu, 5 Dec 2019 07:28:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1575552488;
+        bh=7JZvZPT9dAnniPhNx/k+WuJDCz1xGhlz+enp4fhaaso=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=LO4WnFjFJZYlztPxOqGoBcNW2PzIim+nRdQu8VoL+BtGNe7lQoVreWr3LB0BhKZy5
+         cbCYg61lZ96gzOU5/YnV142mFAzF61b7e6sgS/00kjiwUgGljbZGQ67WXMxZiDkJ7B
+         F7julAaklTk8wGJ3ZxEAWwFhTQgG+VLPxCyfZKE8=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB5DS8mX002799;
+        Thu, 5 Dec 2019 07:28:08 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 5 Dec
+ 2019 07:28:08 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 5 Dec 2019 07:28:08 -0600
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB5DS8kr052362;
+        Thu, 5 Dec 2019 07:28:08 -0600
+Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
+To:     Sean Nyekjaer <sean@geanix.com>, <mkl@pengutronix.de>
+CC:     <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20191204175112.7308-1-dmurphy@ti.com>
+ <20191204175112.7308-2-dmurphy@ti.com>
+ <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
+Date:   Thu, 5 Dec 2019 07:26:05 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <DB7PR04MB461820120FF61E08B8B5B0B5E65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
+In-Reply-To: <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 8b5b6f358cc9
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Marc
 
-
-On 05/12/2019 12.19, Joakim Zhang wrote:
-> 
->> -----Original Message-----
->> From: Sean Nyekjaer <sean@geanix.com>
->> Sent: 2019年12月5日 19:12
->> To: Joakim Zhang <qiangqing.zhang@nxp.com>; Marc Kleine-Budde
->> <mkl@pengutronix.de>; linux-can@vger.kernel.org
->> Cc: dl-linux-imx <linux-imx@nxp.com>; netdev@vger.kernel.org
->> Subject: Re: [PATCH V2 2/4] can: flexcan: try to exit stop mode during probe
->> stage
+On 12/5/19 1:39 AM, Sean Nyekjaer wrote:
+>
+>
+> On 04/12/2019 18.51, Dan Murphy wrote:
+>> The device has the ability to disable the wake-up pin option.
+>> The wake-up pin can be either force to GND or Vsup and does not have to
+>> be tied to a GPIO.  In order for the device to not use the wake-up 
+>> feature
+>> write the register to disable the WAKE_CONFIG option.
 >>
->>
->>
->> On 05/12/2019 12.04, Joakim Zhang wrote:
->>> Hi Sean,
->>>
->>> At my side, both Power-On-Reset and reboot from console can get CAN-IP out
->> of stop mode, HW is i.MX7D-SDB/i.MX8QXP-mek.
->>> I think HW design could make difference.
->>>
->>> We more care about how does CAN-IP stuck in stop mode, could you please
->> explain in details? We want figure out the root cause.
->>
->> When running only with the first stop mode commit:
->> de3578c198c6 ("can: flexcan: add self wakeup support") And there is incoming
->> traffic on both CAN lines.
->> I happens when going into suspend.
->> Then the CAN-IP is stuck in stop mode..
-> 
-> That means with below patch then CAN-IP could not been stuck in stop mode, right?
-> 	can: flexcan: fix deadlock when using self wakeup
-Yes :)
-> 
-> If yes, I think we don't need check stop mode in probe stage, since issue has disappeared automatically.
+>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>> CC: Sean Nyekjaer <sean@geanix.com>
+> Reviewed-by: Sean Nyekjaer <sean@geanix.com>
+>> ---
+>
+>
+> Hi Dan,
+>
+> I would add tcan4x5x to the subject of this patch ->
+> "net: m_can: tcan4x5x Make wake-up gpio an optional"
+>
+Do you want me to submit v2 with the $subject change?
 
-If one have devices deployed where:
-"can: flexcan: fix deadlock when using self wakeup" isn't applied.
-They could have devices stuck in stop-mode.
+Or would you fix it up when committing it?
 
-That's what i meant by this patch doesn't do any harm to have the check 
-included.
+Dan
 
-/Sean
