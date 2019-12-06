@@ -2,82 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 742AD1150BF
-	for <lists+linux-can@lfdr.de>; Fri,  6 Dec 2019 14:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5A71150DA
+	for <lists+linux-can@lfdr.de>; Fri,  6 Dec 2019 14:13:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfLFNDY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Dec 2019 08:03:24 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:45118 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbfLFNDY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Dec 2019 08:03:24 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB6D3ISA076395;
-        Fri, 6 Dec 2019 07:03:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1575637398;
-        bh=pMO67o5EunVtPw0glSznfDYQcbOKVEcJ3rZmSNFDOeI=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=FDCxCND8+MJE9hsIuxCKeHQhpM4RkJdmmV2t6tnhJYJ9Pyum0GstyehzQ4jTdk6qg
-         BfPvd8LYnVpnm1cfU52jrSs1gaFFQILC2V5mE229YSvumsdUaINDAnGldVmf0i0Z+j
-         Gbyy+wg+WNkwPG+wMlYqMucPBEdt6ELjSZ5+kZzE=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xB6D3IXX114949
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 6 Dec 2019 07:03:18 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 6 Dec
- 2019 07:03:17 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 6 Dec 2019 07:03:17 -0600
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB6D3HRs038624;
-        Fri, 6 Dec 2019 07:03:17 -0600
-Subject: Re: tcan4x5x
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sean Nyekjaer <sean@geanix.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <c16a87a4-5021-b25f-076c-18aa7b482baf@geanix.com>
- <354a10d7-f515-26af-e023-478c975bcb9a@geanix.com>
- <3c6ac0e8-afe3-c713-52df-aa45694a8702@pengutronix.de>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <1f84e965-1ed3-4c1a-d014-c99f6c74620d@ti.com>
-Date:   Fri, 6 Dec 2019 07:01:13 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726171AbfLFNNY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Dec 2019 08:13:24 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53281 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726168AbfLFNNY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Dec 2019 08:13:24 -0500
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1idDQ9-00047p-6V; Fri, 06 Dec 2019 14:13:21 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH] can: j1939: Fix address claim code example
+Date:   Fri,  6 Dec 2019 14:13:19 +0100
+Message-Id: <20191206131319.20585-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <3c6ac0e8-afe3-c713-52df-aa45694a8702@pengutronix.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sean
+During development the define J1939_PGN_ADDRESS_REQUEST was renamed to
+J1939_PGN_REQUEST. It was forgotten to adjust the documentation
+accordingly.
 
-On 12/6/19 6:52 AM, Marc Kleine-Budde wrote:
-> On 12/6/19 1:50 PM, Sean Nyekjaer wrote:
->> A usleep_range(700, 1000); right after the reset pin is put low will fix
->> the non talking device "Unsupported version number:  0".
->>
->> But i still have this on first probe, gone on second:
->> tcan4x5x spi2.0 (unnamed net_device) (uninitialized):
->> Failed to init  module
-> Please send a patch.
->
-> Marc
->
-I am wondering if you need to increase the timeout in the m_can.c when 
-reading the CCCR register.
+This patch fixes the name of the symbol.
 
-Right now it is at 10us.  That was working for me on my setup and for 
-MMIO devices but may be needed to be longer for faster processors.
+Reported-by: https://github.com/linux-can/can-utils/issues/159#issuecomment-556538798
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ Documentation/networking/j1939.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Dan
+diff --git a/Documentation/networking/j1939.rst b/Documentation/networking/j1939.rst
+index dc60b13fcd09..f5be243d250a 100644
+--- a/Documentation/networking/j1939.rst
++++ b/Documentation/networking/j1939.rst
+@@ -339,7 +339,7 @@ To claim an address following code example can be used:
+ 			.pgn = J1939_PGN_ADDRESS_CLAIMED,
+ 			.pgn_mask = J1939_PGN_PDU1_MAX,
+ 		}, {
+-			.pgn = J1939_PGN_ADDRESS_REQUEST,
++			.pgn = J1939_PGN_REQUEST,
+ 			.pgn_mask = J1939_PGN_PDU1_MAX,
+ 		}, {
+ 			.pgn = J1939_PGN_ADDRESS_COMMANDED,
+-- 
+2.24.0
 
