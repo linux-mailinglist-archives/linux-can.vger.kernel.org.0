@@ -2,37 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 782BC115082
-	for <lists+linux-can@lfdr.de>; Fri,  6 Dec 2019 13:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010981150A6
+	for <lists+linux-can@lfdr.de>; Fri,  6 Dec 2019 13:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbfLFMln (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Dec 2019 07:41:43 -0500
-Received: from first.geanix.com ([116.203.34.67]:33354 "EHLO first.geanix.com"
+        id S1726157AbfLFMu2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Dec 2019 07:50:28 -0500
+Received: from first.geanix.com ([116.203.34.67]:33692 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726124AbfLFMln (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 6 Dec 2019 07:41:43 -0500
+        id S1726128AbfLFMu2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 6 Dec 2019 07:50:28 -0500
 Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 35A7A3CB;
-        Fri,  6 Dec 2019 12:41:35 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id CB3273C0;
+        Fri,  6 Dec 2019 12:50:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1575636095; bh=7BZWYpCmULHB3xADzuP8jUXs4gXKSrqxbIMDnH85WSk=;
-        h=To:From:Subject:Date;
-        b=O17xxUePyGtEZz88kmgu3puDXzDIrYpBNEn1PXwJM0Nx/aKBvbz6se+goYlk3gcIS
-         xLD/XRjIZXqT+1+fRqHUG3154L3D5n33VDqfKtfD5tdUXzJLmQ5Ald7tlZPKKujNp1
-         kAl4loOKJYyAwlCZQs8aS6S9935Ts/sQkg7+mzWOB49mIAEKisUNQ4MMJHzN6Hitqu
-         ZUhlSkRvur6UjzM7wLWGLYs3M+ss0Of+7CArkn7/L7SQ2smMa/iQadTdbtKdwROtai
-         AT2tDAczqdej1Vf/OTXYi7ndDK7hVVwZfl00HKKIJhJ92IqoYPa+oXsUP41Ny3dEub
-         NtlZjXTrXZLFg==
+        t=1575636619; bh=jL21vQLUybDxx+cUdDV6eKWCwwsmmhPl/Wag/E26BMw=;
+        h=Subject:From:To:References:Date:In-Reply-To;
+        b=JoXcJ4z6qWRzP+2NX2jpnSctu6Q9G8qSC2YBtDcnyoUksEGmhK7szt3hypzflAGct
+         PbwrzuAHvwW5ephe0MWrgbJLOKd0WZNpLfzMP2V7bwnmO9KOpK+E3LarYNO4z0Grxl
+         +4TF6jp0Cer+wN3NZ+Bd1wh5A6otwrakEH3EKKSE5nMNG455kFyZv2eR0NBCLIbwe6
+         HbUydFVhXnnvmb+qtrIoKeA1PVwtvaYp18o+zhiiHusiJxkS1aIBmWmFmucOHx063q
+         zL/dCyW0vbHM2HC15XJJi9Fgxhbvu+TuJ1i/du5N2j+4LJGfLvIU03FVeAu+qbXEsQ
+         Y6MoGrwKwaWUw==
+Subject: Re: tcan4x5x
+From:   Sean Nyekjaer <sean@geanix.com>
 To:     Dan Murphy <dmurphy@ti.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-From:   Sean Nyekjaer <sean@geanix.com>
-Subject: tcan4x5x
-Message-ID: <c16a87a4-5021-b25f-076c-18aa7b482baf@geanix.com>
-Date:   Fri, 6 Dec 2019 13:41:40 +0100
+References: <c16a87a4-5021-b25f-076c-18aa7b482baf@geanix.com>
+Message-ID: <354a10d7-f515-26af-e023-478c975bcb9a@geanix.com>
+Date:   Fri, 6 Dec 2019 13:50:24 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <c16a87a4-5021-b25f-076c-18aa7b482baf@geanix.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 8bit
@@ -45,82 +47,83 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Dan,
-
-3. Questions or comments :)
-
-All tests have been run with "net: m_can: Make wake-up gpio an optional" 
-applied.
-
-1.
- From Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-reset-gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
-The reset gpio is ACTIVE_HIGH works if changed to this in my device-tree.
-I could do the patch for this if desired :)
 
 
-2.
- From Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-- device-state-gpios: Input GPIO that indicates if the device is in
-  a sleep state or if the device is active.
+On 06/12/2019 13.41, Sean Nyekjaer wrote:
+> Hi Dan,
+> 
+> 3. Questions or comments :)
+> 
+> All tests have been run with "net: m_can: Make wake-up gpio an optional" 
+> applied.
+> 
+> 1.
+>  From Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+> reset-gpios = <&gpio1 27 GPIO_ACTIVE_LOW>;
+> The reset gpio is ACTIVE_HIGH works if changed to this in my device-tree.
+> I could do the patch for this if desired :)
+> 
+> 
+> 2.
+>  From Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+> - device-state-gpios: Input GPIO that indicates if the device is in
+>   a sleep state or if the device is active.
+> 
+> What pin is that exactly on the tcan4550 chip? I can't find a pin that 
+> is matches this functionality.
+> 
+> 3.
+> When my board is booted, the reset line to the tcan4x5x is high.
+> At 1. probe it's failing because it can't talk to the tcan device. We 
+> are not waiting the required 700 μs described in the datasheet.
+> root@iwg26:/data/root# insmod tcan4x5x.ko
+> 
+> [  148.764733] tcan4x5x spi2.0: no clock found
+> 
+> [  148.768989] tcan4x5x spi2.0: no CAN clock source defined
+> 
+> [  148.807644] tcan4x5x spi2.0: Unsupported version number:  0
+> 
+> [  148.814117] tcan4x5x spi2.0: Probe failed, err=-22
+> 
+> [  148.829416] tcan4x5x: probe of spi2.0 failed with error -22
+> 
+> 
+> Second probe
+> root@iwg26:/data/root# rmmod tcan4x5x; insmod tcan4x5x.ko
+> 
+> [  180.351252] tcan4x5x spi2.0: no clock found
+> 
+> [  180.355506] tcan4x5x spi2.0: no CAN clock source defined
+> 
+> [  180.395946] tcan4x5x spi2.0 (unnamed net_device) (uninitialized): 
+> Failed to init module
+> 
+> [  180.655459] tcan4x5x spi2.0: m_can device registered (irq=84, 
+> version=32)
+> 
+> [  180.662629] tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
+> 
+> Third probe (everthing seems fine)
+> root@iwg26:/data/root# rmmod tcan4x5x; insmod tcan4x5x.ko
+> 
+> [  208.240726] tcan4x5x spi2.0: no clock found
+> 
+> [  208.244980] tcan4x5x spi2.0: no CAN clock source defined
+> 
+> [  208.542998] tcan4x5x spi2.0: m_can device registered (irq=84, 
+> version=32)
+> 
+> [  208.550140] tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
+> 
+> 
+> I will try with a usleep >700us to fix this :)
 
-What pin is that exactly on the tcan4550 chip? I can't find a pin that 
-is matches this functionality.
+A usleep_range(700, 1000); right after the reset pin is put low will fix 
+the non talking device "Unsupported version number:  0".
 
-3.
-When my board is booted, the reset line to the tcan4x5x is high.
-At 1. probe it's failing because it can't talk to the tcan device. We 
-are not waiting the required 700 μs described in the datasheet.
-root@iwg26:/data/root# insmod tcan4x5x.ko
+But i still have this on first probe, gone on second:
+tcan4x5x spi2.0 (unnamed net_device) (uninitialized):
+Failed to init  module
 
-[  148.764733] tcan4x5x spi2.0: no clock found
-
-[  148.768989] tcan4x5x spi2.0: no CAN clock source defined
-
-[  148.807644] tcan4x5x spi2.0: Unsupported version number:  0
-
-[  148.814117] tcan4x5x spi2.0: Probe failed, err=-22
-
-[  148.829416] tcan4x5x: probe of spi2.0 failed with error -22
-
-
-Second probe
-root@iwg26:/data/root# rmmod tcan4x5x; insmod tcan4x5x.ko
-
-[  180.351252] tcan4x5x spi2.0: no clock found
-
-[  180.355506] tcan4x5x spi2.0: no CAN clock source defined
-
-[  180.395946] tcan4x5x spi2.0 (unnamed net_device) (uninitialized): 
-Failed to init module
-
-[  180.655459] tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
-
-[  180.662629] tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
-
-Third probe (everthing seems fine)
-root@iwg26:/data/root# rmmod tcan4x5x; insmod tcan4x5x.ko
-
-[  208.240726] tcan4x5x spi2.0: no clock found
-
-[  208.244980] tcan4x5x spi2.0: no CAN clock source defined
-
-[  208.542998] tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
-
-[  208.550140] tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
-
-
-I will try with a usleep >700us to fix this :)
-
-
--- 
-Best regards,
-Sean Nyekjær
-Embedded Linux Consultant
-
-+45 42427326
-sean@geanix.com
-
-Geanix ApS
-https://geanix.com
-DK39600706
+/Sean
