@@ -2,113 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB756114CE9
-	for <lists+linux-can@lfdr.de>; Fri,  6 Dec 2019 08:52:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE26C114DD7
+	for <lists+linux-can@lfdr.de>; Fri,  6 Dec 2019 09:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbfLFHwa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Dec 2019 02:52:30 -0500
-Received: from mail-eopbgr00047.outbound.protection.outlook.com ([40.107.0.47]:9347
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726642AbfLFHw3 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 6 Dec 2019 02:52:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LTWSivkBfGCept3R2dvtvIzJyo1cmE81JTFFCcaCziSGygaNKLljJ2QSLTuGg3eAZVlSV5dX6lBG+kJoRaOO5voSvNiFm4a/muLr/qB3JdRnDOXlxJnnqj5zUSAmm/IZY/NvMnR56LMPTPk8IsDEds/kR1eJKCx3Klzd17ywEy8KNiAuI4tfO7c1HAgIAEOY0jpVqmDmtHwEUtC8iHMf2XtsIJxsEnkfarU0/gXnItpViko7vekjzfj2u1UK0mQA3UqkaD+fC1l4hcbFrp9zgzPATpRgqolU+Av4Zxd+fsg8orx96dUN7QN/k3Cq/jedlA0nn5PZaNZDKKONhhMhVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TVEpKG8puljaqTCN4/V2TScUTZDB7X/mcZPg4SdNbtc=;
- b=HFSBim6NE5WdIdEup3eiaE8FzFXDEIwEmd5kgbmKOOh5yXOszVYFOjWqnrST/tZ9IVq4cR3QqGL4ET2gRDXNNPpYTJdLfRe/QTEWJtvAlUj8yfIuB3lusrei6d+5/+6wxNGqmftfOZRWatC7zl2TH9XHJuIN3UbGaLCDAkKFV9suX2eYsM5Q2ahQeb2gZ9ulIvrgLkH+2b5fperr4TMPhebOYWxG/4goOhu7Pmw1lqq12ZIm2+KtJYcbOgE+2ifbikUpcXSLt2vABemNFk/eBo4/wpaQniHCDJ0JPFikJBbYavaTdIBrRgPdyLmDLCTNFszlKwkFpK2dHy8Fp13+RQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TVEpKG8puljaqTCN4/V2TScUTZDB7X/mcZPg4SdNbtc=;
- b=bIGlEARiPeAIQc4X9XVJjHJWVPiBzsguXX3RXBRh14s9ZQdSW7BowQzdb/+J9UisNopHZF1v2+i5Sd/3shtTwCbz6ifjDlroyTSM4J4Oo80JdViW20t51fVUgNjDP8PeH/x1RiP6CS/6C4ad3R9wmsAZVNmwft93gkAGaVPlKRM=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB4155.eurprd04.prod.outlook.com (52.134.108.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.14; Fri, 6 Dec 2019 07:52:24 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::1c96:c591:7d51:64e6]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::1c96:c591:7d51:64e6%4]) with mapi id 15.20.2516.017; Fri, 6 Dec 2019
- 07:52:23 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "sean@geanix.com" <sean@geanix.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: RE: [PATCH V3 0/6] can: flexcan: fixes for stop mode
-Thread-Topic: [PATCH V3 0/6] can: flexcan: fixes for stop mode
-Thread-Index: AQHVqpcC9+9ZZuOr5E+r+rwXW/eLZKesvbgQ
-Date:   Fri, 6 Dec 2019 07:52:23 +0000
-Message-ID: <DB7PR04MB4618D19B51F80DDE74BEA3CAE65F0@DB7PR04MB4618.eurprd04.prod.outlook.com>
-References: <20191204113249.3381-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20191204113249.3381-1-qiangqing.zhang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 0654e4c9-0d16-4b76-9634-08d77a213b15
-x-ms-traffictypediagnostic: DB7PR04MB4155:|DB7PR04MB4155:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB41550A7BA1A23A95B1DAE01CE65F0@DB7PR04MB4155.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0243E5FD68
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(366004)(396003)(39860400002)(136003)(13464003)(189003)(199004)(7696005)(99286004)(25786009)(11346002)(76176011)(110136005)(54906003)(186003)(316002)(4326008)(478600001)(6506007)(71190400001)(53546011)(102836004)(14454004)(81156014)(26005)(71200400001)(86362001)(76116006)(66946007)(64756008)(66476007)(66556008)(66446008)(33656002)(74316002)(8936002)(52536014)(5660300002)(229853002)(9686003)(2906002)(8676002)(305945005)(81166006)(55016002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB4155;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: c1QEGC7iH5bY1qEoLKx24BKEhTWhrBbTHC5I2c30bxKNc/lTPffV2298cW17aBiy5rmwfGjIfGuTujhhCdKoBndfE9v3uo3Qibn+/3KNGWYVK6Pu04PSQAjHB7IEKL2r5rDkQtyR+4jM+9CBDL4CQDI9eqQLno2Fvcc7l/WorTZJnvWQZBtkxRF/t5+gqQV0CC5sWpffIv+UkdhlPABVYh05bT8KBuMirp/JASYkjr+k2EwPRoUuSb300sJ8Mq+V15wD2wJ4dtLg9Smt7L8RaC0rsCFR1Q/4hHW2ManREmvqjW2fSVM683MgcFedARi+MgPLV7/nkB0SZC0PZWM/qRpA0E9jUCG3adgAcD2BbqyV6/JtneR5+8iaMSB89/39YY4fhpp3kB3JO2YzFtcmrWr/5vH8Q/aGutti+Fk93qpT77vik/xCLdMgxFLa6Zwy2NBljX3qyh0W07a6yuINlZWajDPxPSpvlCp+TyALPROYM1aJDBFgbQhcCc5kk3aC
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1726168AbfLFI73 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Dec 2019 03:59:29 -0500
+Received: from relay-b01.edpnet.be ([212.71.1.221]:50488 "EHLO
+        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726109AbfLFI73 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Dec 2019 03:59:29 -0500
+X-ASG-Debug-ID: 1575622765-0a7ff5137e126f770001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (94.105.105.111.dyn.edpnet.net [94.105.105.111]) by relay-b01.edpnet.be with ESMTP id Z3dbCApwdtvE4CEz; Fri, 06 Dec 2019 09:59:25 +0100 (CET)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 94.105.105.111.dyn.edpnet.net[94.105.105.111]
+X-Barracuda-Apparent-Source-IP: 94.105.105.111
+Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id D4655BA08DF;
+        Fri,  6 Dec 2019 09:59:20 +0100 (CET)
+Date:   Fri, 6 Dec 2019 09:59:23 +0100
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Elenita Hinds <ecathinds@gmail.com>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: can-utils jacd questions
+Message-ID: <20191206085923.GA4896@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: can-utils jacd questions
+Mail-Followup-To: Elenita Hinds <ecathinds@gmail.com>,
+        linux-can@vger.kernel.org
+References: <CAHChkrstQdjVcWtvX4oeUOQfZS3-G_RPWb8Y82Zvaku40dM_qA@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0654e4c9-0d16-4b76-9634-08d77a213b15
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2019 07:52:23.9544
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UVsppLxPBf7sfBzYmITEGCvpbaqt5Tq+gfDTvxExfefgS5dZiy+q91lSlb22p9EhuXIckKfw8tQByK1kHCbogw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4155
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHChkrstQdjVcWtvX4oeUOQfZS3-G_RPWb8Y82Zvaku40dM_qA@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 94.105.105.111.dyn.edpnet.net[94.105.105.111]
+X-Barracuda-Start-Time: 1575622765
+X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 2223
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5017 1.0000 0.7500
+X-Barracuda-Spam-Score: 0.75
+X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.78484
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEpvYWtpbSBaaGFuZyA8cWlh
-bmdxaW5nLnpoYW5nQG54cC5jb20+DQo+IFNlbnQ6IDIwMTnE6jEy1MI0yNUgMTk6MzYNCj4gVG86
-IG1rbEBwZW5ndXRyb25peC5kZTsgc2VhbkBnZWFuaXguY29tOyBsaW51eC1jYW5Admdlci5rZXJu
-ZWwub3JnDQo+IENjOiBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPjsgbmV0ZGV2QHZn
-ZXIua2VybmVsLm9yZzsgSm9ha2ltIFpoYW5nDQo+IDxxaWFuZ3FpbmcuemhhbmdAbnhwLmNvbT4N
-Cj4gU3ViamVjdDogW1BBVENIIFYzIDAvNl0gY2FuOiBmbGV4Y2FuOiBmaXhlcyBmb3Igc3RvcCBt
-b2RlDQo+IA0KPiBIaSBNYXJjLA0KPiANCj4gICAgSSByZW1vdmVkIHRoZSBwYXRjaCAoY2FuOiBm
-bGV4Y2FuOiB0cnkgdG8gZXhpdCBzdG9wIG1vZGUgZHVyaW5nIHByb2JlIHN0YWdlKQ0KPiBvdXQg
-b2YgdGhpcyBwYXRjaCBzZXQgZm9yIG5vdy4gVGhpcyBwYXRjaCBzaG91bGQgZnVydGhlciBkaXNj
-dXNzIHdpdGggU2VhbiBhbmQgSQ0KPiB3aWxsIHByZXBhcmUgaXQgYWNjb3JkaW5nIHRvIGZpbmFs
-IGNvbmNsdXNpb24uIFRoYW5rcy4NCg0KSGkgTWFyYywNCg0KQWZ0ZXIgZGlzY3Vzc2VkIHdpdGgg
-U2VhbiwgQ0FOLUlQIHN0dWNrIGluIHN0b3AgbW9kZSBkaXNhcHBlYXJlZCB3aXRoIHBhdGNoKGNh
-bjogZmxleGNhbjogZml4IGRlYWRsb2NrIHdoZW4gdXNpbmcgc2VsZiB3YWtldXApLCBzbyBJIHRo
-aW5rIHdlIGRvbid0IG5lZWQNCmFub3RoZXIgcGF0Y2ggdG8gZml4IHRoZSBzYW1lIGlzc3VlLiBC
-dXQgdGhpcyBmaXggcGF0Y2ggaGFkIGJldHRlciBnbyB0byBzdGFibGUgdHJlZS4NCg0KQW55IGNv
-bW1lbnRzIGFib3V0IHRoaXMgcGF0Y2ggc2V0Pw0KDQpCZXN0IFJlZ2FyZHMsDQpKb2FraW0gWmhh
-bmcNCj4gUmVnYXJkcywNCj4gSm9ha2ltIFpoYW5nDQo+IA0KPiBKb2FraW0gWmhhbmcgKDUpOg0K
-PiAgIGNhbjogZmxleGNhbjogQWNrIHdha2V1cCBpbnRlcnJ1cHQgc2VwYXJhdGVseQ0KPiAgIGNh
-bjogZmxleGNhbjogYWRkIGxvdyBwb3dlciBlbnRlci9leGl0IGFja25vd2xlZGdtZW50IGhlbHBl
-cg0KPiAgIGNhbjogZmxleGNhbjogY2hhbmdlIHRoZSB3YXkgb2Ygc3RvcCBtb2RlIGFja25vd2xl
-ZGdtZW50DQo+ICAgY2FuOiBmbGV4Y2FuOiBwcm9wYWdhdGUgZXJyb3IgdmFsdWUgb2YgZmxleGNh
-bl9jaGlwX3N0b3AoKQ0KPiAgIGNhbjogZmxleGNhbjogYWRkIExQU1IgbW9kZSBzdXBwb3J0DQo+
-IA0KPiBTZWFuIE55ZWtqYWVyICgxKToNCj4gICBjYW46IGZsZXhjYW46IGZpeCBkZWFkbG9jayB3
-aGVuIHVzaW5nIHNlbGYgd2FrZXVwDQo+IA0KPiAgZHJpdmVycy9uZXQvY2FuL2ZsZXhjYW4uYyB8
-IDEzMSArKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLQ0KPiAgMSBmaWxlIGNo
-YW5nZWQsIDc5IGluc2VydGlvbnMoKyksIDUyIGRlbGV0aW9ucygtKQ0KPiANCj4gLS0NCj4gMi4x
-Ny4xDQoNCg==
+Hi,
+
+On do, 05 dec 2019 14:55:53 -0600, Elenita Hinds wrote:
+> Hi all,
+> 
+> I am hoping to re-use the can-utils' jacd as default Address Claiming
+> daemon but runs into some issues:
+> 
+> (1) " err(0, <string>, ...) " is called in several places, even though
+> looking at the code logic, there is no error and the program should be
+> able to continue. The program exits because err()  never returns.
+> For example:
+
+commit 791b6de7 introduced the problem.
+it replaced all error(x, y, sss) calls with err(y, sss)
+but it should have become warn(y, sss) when x=0.
+
+Feel free to fix that.
+
+> (2) The socket is configured to also set the SO_BINDTODEVICE option.
+> In our system, this requires the program to have root permissions to
+> run but we'd rather not do this for security reasons. Is this option
+> required? What are the side-effects if this option is not set? Can it
+> be made optional such that the program does not exit if the
+> setsockoption(SO_BINDTODEVICE) call fails (seems to work without it)?
+
+It appears on first sight that SO_BINDTODEVICE isn't strictly necessary
+since bind() will have sockaddr_can.can_ifindex set anyway.
+In that case, rather then ignore the result,
+remove the call to SO_BINDTODEVICE completely.
+
+> 
+> (3) The claimed address is only saved to a file when the program
+> terminates.  What is the reason for this? Can it not be saved after
+> one is claimed already so that another process can  read it real-time
+> if needed?
+
+That should not be necessary.
+At time of writing jacd, you could consult 'ip addr show can0' to find
+out. I'm not sure what option remained to find it.
+I believe you can, from another program, bind() with the same name, and
+then getsockname() will return the complete sockaddr_can with SA filled
+in.
+
+> Also, in cases of a program crash or a power outage, the
+> claimed address is still saved.
+
+That is a true remark.
+Given a power outage (the program never crashes :-) ),
+and looking at the code, +10 years later, I would now write to a temp file,
+and rename() the file to make it an atomic operation.
+Doing that regularly, or upon change, would be an improvement.
+
+Kurt
+> 
+> 
+> Thanks in advance,
+> Elenita
