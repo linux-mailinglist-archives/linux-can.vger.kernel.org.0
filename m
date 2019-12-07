@@ -2,33 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1977115C42
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 13:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4F9115C4D
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 14:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbfLGMwA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 07:52:00 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46461 "EHLO
+        id S1726469AbfLGNEI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 08:04:08 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45349 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfLGMwA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 07:52:00 -0500
+        with ESMTP id S1726307AbfLGNEI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 08:04:08 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1idZZ1-0003TT-70; Sat, 07 Dec 2019 13:51:59 +0100
+        id 1idZkd-0004dI-W4; Sat, 07 Dec 2019 14:04:00 +0100
 Received: from [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400] (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 536A648AF42;
-        Sat,  7 Dec 2019 12:51:57 +0000 (UTC)
-Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
-To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc:     =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>
-References: <20191105190840.20410-1-mkl@pengutronix.de>
- <20191105190840.20410-5-mkl@pengutronix.de>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E540F48AF4F;
+        Sat,  7 Dec 2019 13:03:57 +0000 (UTC)
+Subject: Re: [PATCH 1/2] net: m_can: tcan4x5x: add required delay after reset
+To:     Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
+        linux-can@vger.kernel.org, robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, martin@geanix.com
+References: <20191206152923.470980-1-sean@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,15 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
-Date:   Sat, 7 Dec 2019 13:51:53 +0100
+Message-ID: <6f0a5077-360c-39a2-0103-fb91355bcc88@pengutronix.de>
+Date:   Sat, 7 Dec 2019 14:03:53 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191105190840.20410-5-mkl@pengutronix.de>
+In-Reply-To: <20191206152923.470980-1-sean@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="VtCmflk9ggrX4nITnBL9Bk86ystUZx185"
+ boundary="037xotzaQ81uAHyUJC18ttpJLKLr9UUAB"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,35 +110,33 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---VtCmflk9ggrX4nITnBL9Bk86ystUZx185
-Content-Type: multipart/mixed; boundary="j4B1oyZlP0GBRzkWn4SozUZos3eriuYR1";
+--037xotzaQ81uAHyUJC18ttpJLKLr9UUAB
+Content-Type: multipart/mixed; boundary="8pIXE54iNIOiLSPJQGeEfo4PYenFIws6e";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Cc: =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>
-Message-ID: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
-Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
-References: <20191105190840.20410-1-mkl@pengutronix.de>
- <20191105190840.20410-5-mkl@pengutronix.de>
-In-Reply-To: <20191105190840.20410-5-mkl@pengutronix.de>
+To: Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
+ linux-can@vger.kernel.org, robh+dt@kernel.org
+Cc: devicetree@vger.kernel.org, martin@geanix.com
+Message-ID: <6f0a5077-360c-39a2-0103-fb91355bcc88@pengutronix.de>
+Subject: Re: [PATCH 1/2] net: m_can: tcan4x5x: add required delay after reset
+References: <20191206152923.470980-1-sean@geanix.com>
+In-Reply-To: <20191206152923.470980-1-sean@geanix.com>
 
---j4B1oyZlP0GBRzkWn4SozUZos3eriuYR1
+--8pIXE54iNIOiLSPJQGeEfo4PYenFIws6e
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/5/19 8:08 PM, Marc Kleine-Budde wrote:
-> From: Timo Schl=C3=BC=C3=9Fler <schluessler@krause.de>
+On 12/6/19 4:29 PM, Sean Nyekjaer wrote:
+> According to section "8.3.8 RST Pin" in the datasheet we are required t=
+o
+> wait >700us after the device is reset.
 >=20
-> The mcp251x variants feature 3 general purpose digital inputs and 2
-> outputs. With this patch they are accessible through the gpio framework=
-=2E
->=20
-> Signed-off-by: Timo Schl=C3=BC=C3=9Fler <schluessler@krause.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 
-Timo, can you test if the driver works for you?
+applied both to linux-can.
 
+tnx,
 Marc
 
 --=20
@@ -148,23 +146,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---j4B1oyZlP0GBRzkWn4SozUZos3eriuYR1--
+--8pIXE54iNIOiLSPJQGeEfo4PYenFIws6e--
 
---VtCmflk9ggrX4nITnBL9Bk86ystUZx185
+--037xotzaQ81uAHyUJC18ttpJLKLr9UUAB
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3roGkACgkQWsYho5Hk
-nSAvrAgAoTukZ6QJf32QwODyiCPhlcsV/ugs2zflIO8EdBRMtBm2sebUUBlKBWBo
-HjjVa67Uh+0MHVu8r+qKEiCjwXHw+PuYypu0bXDtdNw0KQKitNqWacemvpvFhYRV
-Q7Y533M5cr2M/KkDgcKSK7SuTKDOHDFQ3cLiQcQ7YTNKHrcjtmIPYlVeN1QONtqv
-tDzWZHBkgxTOigbEaFGd+0cEauiyvymS+jO/gllm42a38bqLKY+pt8fZ/XeyMJvT
-RbSEktbLk0bi1gldUpIrgt2uX8/uf1KdE0DZr0WLnO7p0WGPAxtvAxyKmfz5L5ey
-7I3JiFdLRW+WWB/YT1nuMDiH/0GZaQ==
-=dkVF
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3rozoACgkQWsYho5Hk
+nSCZ0wf8D6qn40jVeWEz+iBDDJOcy5pb1ySVRyNrshhg0LWDhcCrGDO44ynhgbsC
+zXHKxGoAVuUNWSHKIck6e3+Y3zaQYa9pKr1Nn7WGPtjgUbF7/TQmS86amwvMIFbu
+iyDsNi+pIPJWq8QRKy7yM5U3BxrDL7/yLf65YA2oon2QLx99pPAiPvFMXscQZA6Q
+vO0kS6/LFHnNUhvh58gUdj4w11aN8L3s5OZ933TUA/LU9knffng0kuS0MNDqPfUC
+3HnXohNC7tSjx4X2nIxfPZfMPPlVKdAaLFyDcvB5BgqY7g9JH/DBJCaJslbZD11i
+8cUkgYsBHjCA6RU8buonjjZCIWfWaA==
+=+Aib
 -----END PGP SIGNATURE-----
 
---VtCmflk9ggrX4nITnBL9Bk86ystUZx185--
+--037xotzaQ81uAHyUJC18ttpJLKLr9UUAB--
