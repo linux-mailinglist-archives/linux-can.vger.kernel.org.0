@@ -2,33 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4F9115C4D
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 14:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C68AA115C4E
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 14:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726469AbfLGNEI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 08:04:08 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:45349 "EHLO
+        id S1726400AbfLGNFm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 08:05:42 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33329 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfLGNEI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 08:04:08 -0500
+        with ESMTP id S1726307AbfLGNFm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 08:05:42 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1idZkd-0004dI-W4; Sat, 07 Dec 2019 14:04:00 +0100
+        id 1idZmF-0004ob-3l; Sat, 07 Dec 2019 14:05:39 +0100
 Received: from [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400] (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E540F48AF4F;
-        Sat,  7 Dec 2019 13:03:57 +0000 (UTC)
-Subject: Re: [PATCH 1/2] net: m_can: tcan4x5x: add required delay after reset
-To:     Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
-        linux-can@vger.kernel.org, robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, martin@geanix.com
-References: <20191206152923.470980-1-sean@geanix.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 855DA48AF56;
+        Sat,  7 Dec 2019 13:05:36 +0000 (UTC)
+Subject: Re: [PATCH v1] can: j1939: j1939_sk_bind(): take priv after lock is
+ held
+To:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
+Cc:     syzbot+99e9e1b200a1e363237d@syzkaller.appspotmail.com,
+        kernel@pengutronix.de, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20191206141835.20557-1-o.rempel@pengutronix.de>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <6f0a5077-360c-39a2-0103-fb91355bcc88@pengutronix.de>
-Date:   Sat, 7 Dec 2019 14:03:53 +0100
+Message-ID: <45a5246e-8bf2-3312-5931-18e525d78f4b@pengutronix.de>
+Date:   Sat, 7 Dec 2019 14:05:32 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191206152923.470980-1-sean@geanix.com>
+In-Reply-To: <20191206141835.20557-1-o.rempel@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="037xotzaQ81uAHyUJC18ttpJLKLr9UUAB"
+ boundary="zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,33 +113,31 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---037xotzaQ81uAHyUJC18ttpJLKLr9UUAB
-Content-Type: multipart/mixed; boundary="8pIXE54iNIOiLSPJQGeEfo4PYenFIws6e";
+--zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO
+Content-Type: multipart/mixed; boundary="uuoC5PUj9c5LTGrBHp3YYnFeNlNDpw7XZ";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
- linux-can@vger.kernel.org, robh+dt@kernel.org
-Cc: devicetree@vger.kernel.org, martin@geanix.com
-Message-ID: <6f0a5077-360c-39a2-0103-fb91355bcc88@pengutronix.de>
-Subject: Re: [PATCH 1/2] net: m_can: tcan4x5x: add required delay after reset
-References: <20191206152923.470980-1-sean@geanix.com>
-In-Reply-To: <20191206152923.470980-1-sean@geanix.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+ dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
+Cc: syzbot+99e9e1b200a1e363237d@syzkaller.appspotmail.com,
+ kernel@pengutronix.de, linux-can@vger.kernel.org, netdev@vger.kernel.org
+Message-ID: <45a5246e-8bf2-3312-5931-18e525d78f4b@pengutronix.de>
+Subject: Re: [PATCH v1] can: j1939: j1939_sk_bind(): take priv after lock is
+ held
+References: <20191206141835.20557-1-o.rempel@pengutronix.de>
+In-Reply-To: <20191206141835.20557-1-o.rempel@pengutronix.de>
 
---8pIXE54iNIOiLSPJQGeEfo4PYenFIws6e
+--uuoC5PUj9c5LTGrBHp3YYnFeNlNDpw7XZ
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/6/19 4:29 PM, Sean Nyekjaer wrote:
-> According to section "8.3.8 RST Pin" in the datasheet we are required t=
-o
-> wait >700us after the device is reset.
->=20
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+On 12/6/19 3:18 PM, Oleksij Rempel wrote:
+> syzbot reproduced following crash:
 
-applied both to linux-can.
+applied to linux-can.
 
-tnx,
+Tnx,
 Marc
 
 --=20
@@ -146,23 +147,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---8pIXE54iNIOiLSPJQGeEfo4PYenFIws6e--
+--uuoC5PUj9c5LTGrBHp3YYnFeNlNDpw7XZ--
 
---037xotzaQ81uAHyUJC18ttpJLKLr9UUAB
+--zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3rozoACgkQWsYho5Hk
-nSCZ0wf8D6qn40jVeWEz+iBDDJOcy5pb1ySVRyNrshhg0LWDhcCrGDO44ynhgbsC
-zXHKxGoAVuUNWSHKIck6e3+Y3zaQYa9pKr1Nn7WGPtjgUbF7/TQmS86amwvMIFbu
-iyDsNi+pIPJWq8QRKy7yM5U3BxrDL7/yLf65YA2oon2QLx99pPAiPvFMXscQZA6Q
-vO0kS6/LFHnNUhvh58gUdj4w11aN8L3s5OZ933TUA/LU9knffng0kuS0MNDqPfUC
-3HnXohNC7tSjx4X2nIxfPZfMPPlVKdAaLFyDcvB5BgqY7g9JH/DBJCaJslbZD11i
-8cUkgYsBHjCA6RU8buonjjZCIWfWaA==
-=+Aib
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3ro50ACgkQWsYho5Hk
+nSC6dQf/Wsll9DQlJcLCgcrNOJQBdo5t9PP+M0YBPqFWw7Lf4a9VlyGZNRUw8Y9M
+4LRvCnEthSUNNHY6Yu4goCKs9HoumXFQwQZeEih/rEM84LsT8KFvgy8aTCqeiQcl
+yv8cCyCDT1DyOYsY50sjypduPWct1JjYT/WD7DGm2nR2tUFVws2qn9kcnK8EV5jF
+BixcCDdYs+pXb0mWd+aLopyRYRysl5hlD79+FGtuXaZRuxNdUBxZwEEk5AC7yZg4
+exYwzVCi1R4PTu7XtzjxF2D6td1lgY/ms2ws7/QRCyRKZK9V4M/g18+CisbVQYuY
+Ax2rsRMLDHvlWwh1kdA9aaMZeCbuvQ==
+=FI+m
 -----END PGP SIGNATURE-----
 
---037xotzaQ81uAHyUJC18ttpJLKLr9UUAB--
+--zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO--
