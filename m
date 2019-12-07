@@ -2,40 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B37E115C63
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 14:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7B1115CF7
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 15:11:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbfLGNon (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 08:44:43 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36811 "EHLO
+        id S1726403AbfLGOLK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 09:11:10 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:32969 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfLGNon (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 08:44:43 -0500
+        with ESMTP id S1726399AbfLGOLJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 09:11:09 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1idaO1-0007q6-Ai; Sat, 07 Dec 2019 14:44:41 +0100
+        id 1idana-0003Hs-PT; Sat, 07 Dec 2019 15:11:06 +0100
 Received: from [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400] (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A607148AF70;
-        Sat,  7 Dec 2019 13:44:39 +0000 (UTC)
-Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
+        by smtp.blackshift.org (Postfix) with ESMTPSA id ECE3748AFD7;
+        Sat,  7 Dec 2019 14:11:04 +0000 (UTC)
+Subject: Re: [PATCH V3 0/6] can: flexcan: fixes for stop mode
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "sean@geanix.com" <sean@geanix.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20191204113249.3381-1-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dan Murphy <dmurphy@ti.com>, linux-can <linux-can@vger.kernel.org>
-References: <20191204175112.7308-1-dmurphy@ti.com>
- <20191204175112.7308-2-dmurphy@ti.com>
- <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
- <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
- <809b9ff1-88e3-4e46-33e0-856db37898b2@pengutronix.de>
- <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
- <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
- <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
- <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,15 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <aee4a9f8-ed4a-11e3-2bf9-de3a21bb24c1@pengutronix.de>
-Date:   Sat, 7 Dec 2019 14:44:35 +0100
+Message-ID: <67da1a42-f3d3-6ac1-e5f9-211d2da00ba3@pengutronix.de>
+Date:   Sat, 7 Dec 2019 15:10:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
+In-Reply-To: <20191204113249.3381-1-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh"
+ boundary="ycQUMqggH0Flcqx6hA22owqu8FToNnCwG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,46 +112,49 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh
-Content-Type: multipart/mixed; boundary="59d8yiQyFokz7nGJPbtZXTE67vuuPpaKw";
+--ycQUMqggH0Flcqx6hA22owqu8FToNnCwG
+Content-Type: multipart/mixed; boundary="G5HJZyHAi8udaunguHWzlGTRXiIoaL1et";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>, linux-can <linux-can@vger.kernel.org>
-Message-ID: <aee4a9f8-ed4a-11e3-2bf9-de3a21bb24c1@pengutronix.de>
-Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
-References: <20191204175112.7308-1-dmurphy@ti.com>
- <20191204175112.7308-2-dmurphy@ti.com>
- <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
- <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
- <809b9ff1-88e3-4e46-33e0-856db37898b2@pengutronix.de>
- <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
- <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
- <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
- <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
-In-Reply-To: <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, "sean@geanix.com"
+ <sean@geanix.com>, "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <67da1a42-f3d3-6ac1-e5f9-211d2da00ba3@pengutronix.de>
+Subject: Re: [PATCH V3 0/6] can: flexcan: fixes for stop mode
+References: <20191204113249.3381-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20191204113249.3381-1-qiangqing.zhang@nxp.com>
 
---59d8yiQyFokz7nGJPbtZXTE67vuuPpaKw
+--G5HJZyHAi8udaunguHWzlGTRXiIoaL1et
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/5/19 5:43 PM, Marc Kleine-Budde wrote:
->> Sounds good! I emailed our HW guys to see if we can get you a complete=
-=20
->> test setup.
+On 12/4/19 12:36 PM, Joakim Zhang wrote:
+> Hi Marc,
 >=20
-> Nice, I just need the SPI-Chip.
+>    I removed the patch (can: flexcan: try to exit stop mode during prob=
+e stage)
+> out of this patch set for now. This patch should further discuss with S=
+ean and
+> I will prepare it according to final conclusion. Thanks.
+>=20
+> Regards,
+> Joakim Zhang
+>=20
+> Joakim Zhang (5):
+>   can: flexcan: Ack wakeup interrupt separately
+>   can: flexcan: add low power enter/exit acknowledgment helper
+>   can: flexcan: change the way of stop mode acknowledgment
 
-To be precise, the SPI-Chip on a devel board, something like TCAN4550EVM
-or BOOSTXL-CANFD-LIN. No need for a microcontroller.
+Above 3 applied to linux-can.
 
->> I had a MSP430 with firmware on it that transmit and received CAN fram=
-es=20
->> so I could run the cangen commands.
+>   can: flexcan: propagate error value of flexcan_chip_stop()
+>   can: flexcan: add LPSR mode support
 
-regards,
+Above 2 applied to linux-can-next
+
 Marc
-
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
@@ -163,23 +162,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---59d8yiQyFokz7nGJPbtZXTE67vuuPpaKw--
+--G5HJZyHAi8udaunguHWzlGTRXiIoaL1et--
 
---00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh
+--ycQUMqggH0Flcqx6hA22owqu8FToNnCwG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3rrMMACgkQWsYho5Hk
-nSCHrwgAnMaBcqon7D1Yth8CcRaJZJIhH/jYGv6EyTbPaEB2Q12sFwkWDYTBOyft
-ftWO6Fll8n4EJY1iln1ZcSTI55LK2fC36GniTp3fDHSzZND9s+l46WL66f+uuX2i
-WILigQ/X2/bmGSxMdQCLojJmioiZV2mcepZyncqBW2FSNrsVqS/A/4R8Jl6YP9WX
-EQlB4SagZO9ZPyyQg80eWHauve1BEX+MUed5Fm3mo0Ng6j7rSyT2096zT0csQbU3
-XGoJu7VkQ/IMti0MWyhQ8JYepmxBVaTllCuN1kchygW3JFWyB/eRazugAjNpJjMx
-imP/6Km+fip2Mbbo6OrTzoZCkMvXxg==
-=FbHh
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3rsu4ACgkQWsYho5Hk
+nSCAiAgAqw7anwYTOjePxi2RpKgP+6rrr23CWyoohozVvX0MoXS2mQj25thcAB48
+I95OiAlWeI6hsBEtjmjjS0EwR+bM/yoZ8ThewvfcYtOhqCLpxepi9dFT47WVvDXR
+KFZFAr97s+n1gnOmkVDxUmEnE8jGTTQlxrOtptz+WsipWcFbt6pL2kQGsmdiMjyr
+WKzP5eCpno3QVJzAsaLxevmHvNMOjTJ59RY1pMwRcyGcFsHn0R8C9RBA9qAe6k3M
+sK13Vhz5p6MmiOpw7xaFYpID0jHg5O3MnLOIwKFkuqQrmHTDL+sfCH+I0bL+0fMz
+eKwPyX8jFunfW+69iZpyFca6idhsiw==
+=vNel
 -----END PGP SIGNATURE-----
 
---00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh--
+--ycQUMqggH0Flcqx6hA22owqu8FToNnCwG--
