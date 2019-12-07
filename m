@@ -2,100 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5339115D35
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 15:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7A5115DFD
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 19:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbfLGOkk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 09:40:40 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:41333 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbfLGOkj (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 09:40:39 -0500
-Received: by mail-pj1-f68.google.com with SMTP id ca19so3969432pjb.8;
-        Sat, 07 Dec 2019 06:40:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=dJSkc7mHy0Apqqs0LOjlNBmO4HliOsLD/T1QQYCdge0=;
-        b=JyikBE6LfTErMnXoY2J7brZ22XidEnntk3Ppx7Q0+EPwbg43lZiK2Yka3L/J6PxB0S
-         1ucxh4+rFD5eFPnKDL9xE7n4Bwv6cKcJgeXw8eMxNrAv8hejyMlVbjFyeJAeaTJUXsS0
-         COWPlU8WEs5vKtLDQyddg7xDBDvtRMVuQPOyVMU7i8NS2++KR9awdNic92RJZlbu0ByH
-         t+JAlXn2HodC3SBMHdytNVqRih6zILWWstixUp7OLU3nzQCIyqKL3GfFOnkJjqtg60Kf
-         O82ySCpooMwCCB7WMUimPNT4Q2wjShP/mct4fqAFVrTii+uP5uphFKp7CLcJ0L5j2tV2
-         gIhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dJSkc7mHy0Apqqs0LOjlNBmO4HliOsLD/T1QQYCdge0=;
-        b=FtaqwWTEuDDWHZQO7jUHJ5O4e1oNxkozL/6gXq4uQZR7l0JrpBqKpbpPWi41f3P6+S
-         GRmXhTp1dJYR+pnHI8OSmoW7FvDSTCj/gMH+TlqP+PGPvLpIK+R38ljAvsClRkpbwdLK
-         Qhg6t1WzlLvCS5nBH7bkXkgzGVMTtOhmU2v5YcwevBzFaE0JpgLzK0TxWLf4ShGgopkR
-         kxBFXgLStwVzljapu3bByqFBKUwAPXCfx/bngMfQNo78kjPPb+0hDH9npIAIexEoUFj5
-         uynR1g1FeLKlIA4o24GLEQMQNg1cvsoH+VpaPQnSjkLtiqwz4QGgg5gLub5OZG+vGx4N
-         z4oA==
-X-Gm-Message-State: APjAAAXCG9fKMA/IKwBTSSavzVmjgaoYUYlX/HYemX9THpN0SbpyBOOJ
-        x8ksR2MCN4hKIQ5JSFETpio=
-X-Google-Smtp-Source: APXvYqyhI1pG5nAXc/pHudbfYrkR33RqCzn2sb/j7axjYc+uYRSF61b+kjuWISg7fALPS8zdpquqLw==
-X-Received: by 2002:a17:90a:9f04:: with SMTP id n4mr21892610pjp.76.1575729639021;
-        Sat, 07 Dec 2019 06:40:39 -0800 (PST)
-Received: from localhost.localdomain ([222.209.84.125])
-        by smtp.gmail.com with ESMTPSA id 23sm6925126pjx.29.2019.12.07.06.40.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 07 Dec 2019 06:40:38 -0800 (PST)
-From:   Xiaolong Huang <butterflyhuangxx@gmail.com>
-To:     wg@grandegger.com, mkl@pengutronix.de
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Xiaolong Huang <butterflyhuangxx@gmail.com>
-Subject: [PATCH] can: kvaser_usb: kvaser_usb_leaf: Fix some info-leaks to USB devices
-Date:   Sat,  7 Dec 2019 22:40:24 +0800
-Message-Id: <1575729624-5917-1-git-send-email-butterflyhuangxx@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726479AbfLGSev (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 13:34:51 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:18584 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726455AbfLGSev (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 13:34:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1575743689;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=qkzcm/u/g06v36cxv1WSehZMTdc3TOfw7DEqiWu/Ans=;
+        b=Wv0zQcdiBFRjVCpAEC70ZVAAlzX8tf+zVNH+bK+eEvho8RS0gQXBZKdHMLUG2DQp0X
+        rnUT6G2R9Y9PUBteDofdBg8IMo0v+SokNX9zkSccaixBNqFkfNXVuTLF2Rryb0Y071Nx
+        4tN89g1kOPqeP7tdIPdSgrw26X860w55bW11Mnkkc63MD/cq9Zxc650Jf0BDi12oL6hL
+        c5DCu1B9a1SjSmJoWviXwQHeXJ8iSwKdQUVrSkZ5NdLVQitmnUdxp2NkXPxCRfWk6KEn
+        +gN6rKen08kQoXt1KfBek3aCpRa7PU3RPM7LMPdSKEFhI96RP6yHYXsDiCbFEmLMe5Z5
+        wOgA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0lO8DsfULo/S3TWrm2OM="
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+        by smtp.strato.de (RZmta 46.0.2 DYNA|AUTH)
+        with ESMTPSA id 90101evB7IYiHD0
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sat, 7 Dec 2019 19:34:44 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org, dvyukov@google.com, mkl@pengutronix.de
+Cc:     syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com,
+        glider@google.com, syzkaller-bugs@googlegroups.com,
+        netdev@vger.kernel.org, o.rempel@pengutronix.de,
+        eric.dumazet@gmail.com, Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH] can: ensure an initialized headroom in outgoing CAN sk_buffs
+Date:   Sat,  7 Dec 2019 19:34:18 +0100
+Message-Id: <20191207183418.28868-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Uninitialized Kernel memory can leak to USB devices.
+KMSAN sysbot detected a read access to an untinitialized value in the headroom
+of an outgoing CAN related sk_buff. When using CAN sockets this area is filled
+appropriately - but when using a packet socket this initialization is missing.
 
-Using kzalloc() instead of kmalloc()
+The problematic read access occurs in the CAN receive path which can only be
+triggered when the sk_buff is sent through a (virtual) CAN interface. So we
+check in the sending path whether we need to perform the missing
+initializations.
 
-Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
+Fixes: d3b58c47d330d ("can: replace timestamp as unique skb attribute")
+Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/can/dev.h | 35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-index 07d2f3a..ae4c37e 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
-@@ -608,7 +608,7 @@ static int kvaser_usb_leaf_simple_cmd_async(struct kvaser_usb_net_priv *priv,
- 	struct kvaser_cmd *cmd;
- 	int err;
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 9b3c720a31b1..8f86e7a1f8e9 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -18,6 +18,7 @@
+ #include <linux/can/error.h>
+ #include <linux/can/led.h>
+ #include <linux/can/netlink.h>
++#include <linux/can/skb.h>
+ #include <linux/netdevice.h>
  
--	cmd = kmalloc(sizeof(*cmd), GFP_ATOMIC);
-+	cmd = kzalloc(sizeof(*cmd), GFP_ATOMIC);
- 	if (!cmd)
- 		return -ENOMEM;
+ /*
+@@ -91,6 +92,37 @@ struct can_priv {
+ #define get_can_dlc(i)		(min_t(__u8, (i), CAN_MAX_DLC))
+ #define get_canfd_dlc(i)	(min_t(__u8, (i), CANFD_MAX_DLC))
  
-@@ -1140,7 +1140,7 @@ static int kvaser_usb_leaf_set_opt_mode(const struct kvaser_usb_net_priv *priv)
- 	struct kvaser_cmd *cmd;
- 	int rc;
++/* Check for outgoing skbs that have not been created by the CAN subsystem */
++static inline bool can_check_skb_headroom(struct net_device *dev,
++					  struct sk_buff *skb)
++{
++	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
++	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
++		return true;
++
++	/* af_packet does not apply CAN skb specific settings */
++	if (skb->ip_summed == CHECKSUM_NONE) {
++
++		/* init headroom */
++		can_skb_prv(skb)->ifindex = dev->ifindex;
++		can_skb_prv(skb)->skbcnt = 0;
++
++		skb->ip_summed = CHECKSUM_UNNECESSARY;
++
++		/* preform proper loopback on capable devices */
++		if (dev->flags & IFF_ECHO)
++			skb->pkt_type = PACKET_LOOPBACK;
++		else
++			skb->pkt_type = PACKET_HOST;
++
++		skb_reset_mac_header(skb);
++		skb_reset_network_header(skb);
++		skb_reset_transport_header(skb);
++	}
++
++	return false;
++}
++
+ /* Drop a given socketbuffer if it does not contain a valid CAN frame. */
+ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 					  struct sk_buff *skb)
+@@ -108,6 +140,9 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 	} else
+ 		goto inval_skb;
  
--	cmd = kmalloc(sizeof(*cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
++	if (can_check_skb_headroom(dev, skb))
++		goto inval_skb;
++
+ 	return false;
  
-@@ -1206,7 +1206,7 @@ static int kvaser_usb_leaf_flush_queue(struct kvaser_usb_net_priv *priv)
- 	struct kvaser_cmd *cmd;
- 	int rc;
- 
--	cmd = kmalloc(sizeof(*cmd), GFP_KERNEL);
-+	cmd = kzalloc(sizeof(*cmd), GFP_KERNEL);
- 	if (!cmd)
- 		return -ENOMEM;
- 
+ inval_skb:
 -- 
-2.7.4
+2.20.1
 
