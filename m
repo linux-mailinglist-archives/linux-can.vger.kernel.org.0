@@ -2,35 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CC211615D
-	for <lists+linux-can@lfdr.de>; Sun,  8 Dec 2019 11:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F2B11615F
+	for <lists+linux-can@lfdr.de>; Sun,  8 Dec 2019 11:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbfLHK31 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 8 Dec 2019 05:29:27 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57263 "EHLO
+        id S1726044AbfLHK3f (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 8 Dec 2019 05:29:35 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:38611 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbfLHK31 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 8 Dec 2019 05:29:27 -0500
+        with ESMTP id S1725978AbfLHK3e (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 8 Dec 2019 05:29:34 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1idtoU-0001gx-Rl; Sun, 08 Dec 2019 11:29:18 +0100
+        id 1idtoh-0001hI-Hk; Sun, 08 Dec 2019 11:29:31 +0100
 Received: from [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400] (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6C29948B44B;
-        Sun,  8 Dec 2019 10:29:10 +0000 (UTC)
-Subject: Re: [PATCH 1/2] MAINTAINERS: Add myself as a maintainer for MMIO
- m_can
-To:     Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org, wg@grandegger.com,
-        sriram.dash@samsung.com
-Cc:     davem@davemloft.net, gregkh@linuxfoundation.org, robh@kernel.org
-References: <20191205175716.9905-1-dmurphy@ti.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3512C48B44C;
+        Sun,  8 Dec 2019 10:29:28 +0000 (UTC)
+To:     Sean Nyekjaer <sean@geanix.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
+ <20191127055334.1476-3-qiangqing.zhang@nxp.com>
+ <ad7e7b15-26f3-daa1-02d2-782ff548756d@pengutronix.de>
+ <DB7PR04MB46180C5F1EAC7C4A69A45E0CE65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <d68b2b79-34ec-eb4c-cf4b-047b5157d5e3@pengutronix.de>
+ <a1ded645-9e12-d939-7920-8e79983b02a0@geanix.com>
+ <DB7PR04MB46184164EAC5719BDCF3822CE65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <e7bef254-9762-0b77-1ace-2040113982ec@geanix.com>
+ <DB7PR04MB461820120FF61E08B8B5B0B5E65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <3a4102bc-8a86-3425-e227-590c005df044@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -93,15 +101,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <cc269adc-2958-40de-79d7-08e8502d20da@pengutronix.de>
-Date:   Sat, 7 Dec 2019 21:20:23 +0100
+Subject: Re: [PATCH V2 2/4] can: flexcan: try to exit stop mode during probe
+ stage
+Message-ID: <2c8f83aa-e7e6-ba15-1e42-2cb834da1c48@pengutronix.de>
+Date:   Sat, 7 Dec 2019 21:32:05 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191205175716.9905-1-dmurphy@ti.com>
+In-Reply-To: <3a4102bc-8a86-3425-e227-590c005df044@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="mHanN6RRAWF1zeK9k7ypMpJm07ZfONxwd"
+ boundary="1u3OiIJVChW5nBIxb1gbCrznEs9U3YilY"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,33 +122,60 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---mHanN6RRAWF1zeK9k7ypMpJm07ZfONxwd
-Content-Type: multipart/mixed; boundary="CJBfEN1ahpCWQlpoXSlengL6NIpVUBXz9";
+--1u3OiIJVChW5nBIxb1gbCrznEs9U3YilY
+Content-Type: multipart/mixed; boundary="TRsCnnnD2zkhgd5ksc59sKqdnvLPx4gYe";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org, wg@grandegger.com, sriram.dash@samsung.com
-Cc: davem@davemloft.net, gregkh@linuxfoundation.org, robh@kernel.org
-Message-ID: <cc269adc-2958-40de-79d7-08e8502d20da@pengutronix.de>
-Subject: Re: [PATCH 1/2] MAINTAINERS: Add myself as a maintainer for MMIO
- m_can
-References: <20191205175716.9905-1-dmurphy@ti.com>
-In-Reply-To: <20191205175716.9905-1-dmurphy@ti.com>
+To: Sean Nyekjaer <sean@geanix.com>, Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <2c8f83aa-e7e6-ba15-1e42-2cb834da1c48@pengutronix.de>
+Subject: Re: [PATCH V2 2/4] can: flexcan: try to exit stop mode during probe
+ stage
+References: <20191127055334.1476-1-qiangqing.zhang@nxp.com>
+ <20191127055334.1476-3-qiangqing.zhang@nxp.com>
+ <ad7e7b15-26f3-daa1-02d2-782ff548756d@pengutronix.de>
+ <DB7PR04MB46180C5F1EAC7C4A69A45E0CE65D0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <d68b2b79-34ec-eb4c-cf4b-047b5157d5e3@pengutronix.de>
+ <a1ded645-9e12-d939-7920-8e79983b02a0@geanix.com>
+ <DB7PR04MB46184164EAC5719BDCF3822CE65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <e7bef254-9762-0b77-1ace-2040113982ec@geanix.com>
+ <DB7PR04MB461820120FF61E08B8B5B0B5E65C0@DB7PR04MB4618.eurprd04.prod.outlook.com>
+ <3a4102bc-8a86-3425-e227-590c005df044@geanix.com>
+In-Reply-To: <3a4102bc-8a86-3425-e227-590c005df044@geanix.com>
 
---CJBfEN1ahpCWQlpoXSlengL6NIpVUBXz9
+--TRsCnnnD2zkhgd5ksc59sKqdnvLPx4gYe
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 12/5/19 6:57 PM, Dan Murphy wrote:
-> Since I refactored the code to create a m_can framework and we
-> have a MMIO MCAN IP as well add myself to help maintain the code.
+On 12/5/19 12:32 PM, Sean Nyekjaer wrote:
+>> If yes, I think we don't need check stop mode in probe stage, since
+>> issue has disappeared automatically.
 >=20
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> If one have devices deployed where:
+> "can: flexcan: fix deadlock when using self wakeup" isn't applied.
+> They could have devices stuck in stop-mode.
 
-Added both to linx-can.
+Ok.
 
-Tnx,
+But both patches:
+
+    can: flexcan: fix deadlock when using self wakeup
+    can: flexcan: try to exit stop mode during probe stage
+
+are not yet mainline, so if "can: flexcan: fix deadlock when using self
+wakeup" fixes the problem and goes into stable we don't need "can:
+flexcan: try to exit stop mode during probe stage", right?
+
+> That's what i meant by this patch doesn't do any harm to have the check=
+=20
+> included.
+
+I don't want to have code in the driver that serves no purpose.
+
+regards,
 Marc
 
 --=20
@@ -148,23 +185,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---CJBfEN1ahpCWQlpoXSlengL6NIpVUBXz9--
+--TRsCnnnD2zkhgd5ksc59sKqdnvLPx4gYe--
 
---mHanN6RRAWF1zeK9k7ypMpJm07ZfONxwd
+--1u3OiIJVChW5nBIxb1gbCrznEs9U3YilY
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3sCYcACgkQWsYho5Hk
-nSD1Qgf/Zx6RAkgrsyksNV0iG4AVsaMXmiqI0ZQVdnPiZw8x6+5h3sEMygArf8Js
-lEsDDLLr/pnJ6vX+kku5cfo05ItEJR6aAlYf/I9NEEicYtmndEAeikOkxetQ2UT+
-eO2NzBVo9yjUvV83I0GEFZYs3W7WwoNa3vz7TnB0OvI7Af+jraFZI071gxvixNM6
-gNCOUr849l0+eUrLwju1VauvenGAPZdDzS59XI1bGeCOUtbcdaqXMWokf1TK5gmC
-XSJ/HbM5Ca6D50vYdQXv4sGoC6HfqyKA9GJE56j1F7BvHsZgOX2COpJJ/U/e1gGC
-TjFEzwovei7adZh2kFRg97Mz5+1YOQ==
-=wI2k
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3sDEUACgkQWsYho5Hk
+nSCcywf/QK7QMPeN7cJ+hTYoU8s1lhJpyqKXDiA3WiREr0oxVuyi77xlEOA4g2FS
+DAxb+fc7TbHef0wJbhgkdDcaswUxRxhNPE4vyEVQHbtbcp15cXCar53yaMJ1zKse
+HQZvEBWHgR09tQoz6MNgb9bibqWGhYQseKacL73Pb6NJScCtqN6I286n/SHnWlWi
+NTaXN3sR2k/rzZfKn5HTq4na/YTEdMQD+MoN8du1OJTcqdeKZ5n1jSV2GHM3JrWI
+9fyotrQNyi6Qlhaiqs1lWE/SSZ03zbkP/Kz9CPTqFPrVjzqQvpTCXrPMje8a5/ia
+Ulx+vcvQlMZOS2OhR3DkqN+7kSE6eQ==
+=nx0N
 -----END PGP SIGNATURE-----
 
---mHanN6RRAWF1zeK9k7ypMpJm07ZfONxwd--
+--1u3OiIJVChW5nBIxb1gbCrznEs9U3YilY--
