@@ -2,127 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7A5115DFD
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 19:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8D9115E45
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 20:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbfLGSev (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 13:34:51 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:18584 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726455AbfLGSev (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 13:34:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1575743689;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=qkzcm/u/g06v36cxv1WSehZMTdc3TOfw7DEqiWu/Ans=;
-        b=Wv0zQcdiBFRjVCpAEC70ZVAAlzX8tf+zVNH+bK+eEvho8RS0gQXBZKdHMLUG2DQp0X
-        rnUT6G2R9Y9PUBteDofdBg8IMo0v+SokNX9zkSccaixBNqFkfNXVuTLF2Rryb0Y071Nx
-        4tN89g1kOPqeP7tdIPdSgrw26X860w55bW11Mnkkc63MD/cq9Zxc650Jf0BDi12oL6hL
-        c5DCu1B9a1SjSmJoWviXwQHeXJ8iSwKdQUVrSkZ5NdLVQitmnUdxp2NkXPxCRfWk6KEn
-        +gN6rKen08kQoXt1KfBek3aCpRa7PU3RPM7LMPdSKEFhI96RP6yHYXsDiCbFEmLMe5Z5
-        wOgA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0lO8DsfULo/S3TWrm2OM="
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-        by smtp.strato.de (RZmta 46.0.2 DYNA|AUTH)
-        with ESMTPSA id 90101evB7IYiHD0
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Sat, 7 Dec 2019 19:34:44 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org, dvyukov@google.com, mkl@pengutronix.de
-Cc:     syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com,
-        glider@google.com, syzkaller-bugs@googlegroups.com,
-        netdev@vger.kernel.org, o.rempel@pengutronix.de,
-        eric.dumazet@gmail.com, Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH] can: ensure an initialized headroom in outgoing CAN sk_buffs
-Date:   Sat,  7 Dec 2019 19:34:18 +0100
-Message-Id: <20191207183418.28868-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.20.1
+        id S1726718AbfLGTqC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 14:46:02 -0500
+Received: from mx.krause.de ([88.79.216.98]:48424 "EHLO mx.krause.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726489AbfLGTqC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 7 Dec 2019 14:46:02 -0500
+X-Greylist: delayed 358 seconds by postgrey-1.27 at vger.kernel.org; Sat, 07 Dec 2019 14:46:01 EST
+Received: from [172.20.10.125] (port=6106 helo=mail.horstmanngroup.de)
+        by mx.krause.de with esmtps (TLSv1:AES256-SHA:256)
+        (Exim 4.82_1-5b7a7c0-XX)
+        (envelope-from <t.schluessler@krause.de>)
+        id 1idfvk-0004bJ-1w; Sat, 07 Dec 2019 20:39:52 +0100
+Received: from HG-SRV-053.HG.local (172.20.10.125) by HG-SRV-053.HG.local
+ (172.20.10.125) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Sat, 7 Dec
+ 2019 20:39:52 +0100
+Received: from HG-SRV-053.HG.local ([::1]) by HG-SRV-053.HG.local ([::1]) with
+ mapi id 15.00.1367.000; Sat, 7 Dec 2019 20:39:52 +0100
+X-CTCH-RefID: str=0001.0A0C0209.5DEC0008.0042,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+From:   =?utf-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
+Thread-Topic: [PATCH v4 4/4] can: mcp251x: add GPIO support
+Thread-Index: AQHVlAx16WZ4Fg24GEakbYkr3OtTR6euwVaAgABx/IA=
+Date:   Sat, 7 Dec 2019 19:39:52 +0000
+Message-ID: <A75EE596-C8A0-411C-A7F1-5F694C9C21DA@krause.de>
+References: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
+In-Reply-To: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <63B69570D0687E4E8EDD4F71DC55E2C6@HG.local>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-KMSAN sysbot detected a read access to an untinitialized value in the headroom
-of an outgoing CAN related sk_buff. When using CAN sockets this area is filled
-appropriately - but when using a packet socket this initialization is missing.
-
-The problematic read access occurs in the CAN receive path which can only be
-triggered when the sk_buff is sent through a (virtual) CAN interface. So we
-check in the sending path whether we need to perform the missing
-initializations.
-
-Fixes: d3b58c47d330d ("can: replace timestamp as unique skb attribute")
-Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/linux/can/dev.h | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 9b3c720a31b1..8f86e7a1f8e9 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -18,6 +18,7 @@
- #include <linux/can/error.h>
- #include <linux/can/led.h>
- #include <linux/can/netlink.h>
-+#include <linux/can/skb.h>
- #include <linux/netdevice.h>
- 
- /*
-@@ -91,6 +92,37 @@ struct can_priv {
- #define get_can_dlc(i)		(min_t(__u8, (i), CAN_MAX_DLC))
- #define get_canfd_dlc(i)	(min_t(__u8, (i), CANFD_MAX_DLC))
- 
-+/* Check for outgoing skbs that have not been created by the CAN subsystem */
-+static inline bool can_check_skb_headroom(struct net_device *dev,
-+					  struct sk_buff *skb)
-+{
-+	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
-+	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
-+		return true;
-+
-+	/* af_packet does not apply CAN skb specific settings */
-+	if (skb->ip_summed == CHECKSUM_NONE) {
-+
-+		/* init headroom */
-+		can_skb_prv(skb)->ifindex = dev->ifindex;
-+		can_skb_prv(skb)->skbcnt = 0;
-+
-+		skb->ip_summed = CHECKSUM_UNNECESSARY;
-+
-+		/* preform proper loopback on capable devices */
-+		if (dev->flags & IFF_ECHO)
-+			skb->pkt_type = PACKET_LOOPBACK;
-+		else
-+			skb->pkt_type = PACKET_HOST;
-+
-+		skb_reset_mac_header(skb);
-+		skb_reset_network_header(skb);
-+		skb_reset_transport_header(skb);
-+	}
-+
-+	return false;
-+}
-+
- /* Drop a given socketbuffer if it does not contain a valid CAN frame. */
- static inline bool can_dropped_invalid_skb(struct net_device *dev,
- 					  struct sk_buff *skb)
-@@ -108,6 +140,9 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
- 	} else
- 		goto inval_skb;
- 
-+	if (can_check_skb_headroom(dev, skb))
-+		goto inval_skb;
-+
- 	return false;
- 
- inval_skb:
--- 
-2.20.1
-
+PiBPbiAxMi83LzE5IDI6MTEgUE0sIE1hcmMgS2xlaW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXgu
+ZGU+IHdyb3RlOg0KDQo+IO+7v09uIDExLzUvMTkgODowOCBQTSwgTWFyYyBLbGVpbmUtQnVkZGUg
+d3JvdGU6DQo+PiBGcm9tOiBUaW1vIFNjaGzDvMOfbGVyIDxzY2hsdWVzc2xlckBrcmF1c2UuZGU+
+DQo+PiANCj4+IFRoZSBtY3AyNTF4IHZhcmlhbnRzIGZlYXR1cmUgMyBnZW5lcmFsIHB1cnBvc2Ug
+ZGlnaXRhbCBpbnB1dHMgYW5kIDINCj4+IG91dHB1dHMuIFdpdGggdGhpcyBwYXRjaCB0aGV5IGFy
+ZSBhY2Nlc3NpYmxlIHRocm91Z2ggdGhlIGdwaW8gZnJhbWV3b3JrLg0KPj4gDQo+PiBTaWduZWQt
+b2ZmLWJ5OiBUaW1vIFNjaGzDvMOfbGVyIDxzY2hsdWVzc2xlckBrcmF1c2UuZGU+DQo+PiBTaWdu
+ZWQtb2ZmLWJ5OiBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPg0KPiANCj4g
+VGltbywgY2FuIHlvdSB0ZXN0IGlmIHRoZSBkcml2ZXIgd29ya3MgZm9yIHlvdT8NCg0KWWVzLCBJ
+IGhvcGUgdGhhdCBJIGNhbiB0ZXN0IGl0IG9uIE1vbmRheS4NCg0KUmVnYXJkcw0KVGltbw==
