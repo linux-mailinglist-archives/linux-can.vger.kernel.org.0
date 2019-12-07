@@ -2,32 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99828115C40
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 13:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1977115C42
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 13:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbfLGMqJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 07:46:09 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:34025 "EHLO
+        id S1726289AbfLGMwA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 07:52:00 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46461 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfLGMqJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 07:46:09 -0500
+        with ESMTP id S1726263AbfLGMwA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 07:52:00 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1idZTL-00033J-0f; Sat, 07 Dec 2019 13:46:07 +0100
+        id 1idZZ1-0003TT-70; Sat, 07 Dec 2019 13:51:59 +0100
 Received: from [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400] (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8AA2B48AF3C;
-        Sat,  7 Dec 2019 12:46:03 +0000 (UTC)
-Subject: Re: [PATCH 0/2 v2] can/peak_usb/pcan_usb: add rxerr/txerr support
-To:     Stephane Grosjean <s.grosjean@peak-system.com>,
-        linux-can Mailing List <linux-can@vger.kernel.org>
-References: <20191206153803.17725-1-s.grosjean@peak-system.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 536A648AF42;
+        Sat,  7 Dec 2019 12:51:57 +0000 (UTC)
+Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
+To:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc:     =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>
+References: <20191105190840.20410-1-mkl@pengutronix.de>
+ <20191105190840.20410-5-mkl@pengutronix.de>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -90,15 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <e4fe9dd7-61ea-5fa8-9a63-3f5f35dabf6d@pengutronix.de>
-Date:   Sat, 7 Dec 2019 13:45:53 +0100
+Message-ID: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
+Date:   Sat, 7 Dec 2019 13:51:53 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191206153803.17725-1-s.grosjean@peak-system.com>
+In-Reply-To: <20191105190840.20410-5-mkl@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="f9K5QkKRiNu3bRRJ9huNy42A1wUevSHjY"
+ boundary="VtCmflk9ggrX4nITnBL9Bk86ystUZx185"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,40 +110,35 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---f9K5QkKRiNu3bRRJ9huNy42A1wUevSHjY
-Content-Type: multipart/mixed; boundary="IA0dk2hByoI4009Fl10CEd1uVu35tCDdu";
+--VtCmflk9ggrX4nITnBL9Bk86ystUZx185
+Content-Type: multipart/mixed; boundary="j4B1oyZlP0GBRzkWn4SozUZos3eriuYR1";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Stephane Grosjean <s.grosjean@peak-system.com>,
- linux-can Mailing List <linux-can@vger.kernel.org>
-Message-ID: <e4fe9dd7-61ea-5fa8-9a63-3f5f35dabf6d@pengutronix.de>
-Subject: Re: [PATCH 0/2 v2] can/peak_usb/pcan_usb: add rxerr/txerr support
-References: <20191206153803.17725-1-s.grosjean@peak-system.com>
-In-Reply-To: <20191206153803.17725-1-s.grosjean@peak-system.com>
+To: "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
+Cc: =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>
+Message-ID: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
+Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
+References: <20191105190840.20410-1-mkl@pengutronix.de>
+ <20191105190840.20410-5-mkl@pengutronix.de>
+In-Reply-To: <20191105190840.20410-5-mkl@pengutronix.de>
 
---IA0dk2hByoI4009Fl10CEd1uVu35tCDdu
+--j4B1oyZlP0GBRzkWn4SozUZos3eriuYR1
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/6/19 4:38 PM, Stephane Grosjean wrote:
-> This series of two patches provides support for CAN error counters rxer=
-r/
-> txerr when the CAN-USB PCAN-USB interface of PEAK-System GmbH is used t=
-o
-> access the CAN bus.
+On 11/5/19 8:08 PM, Marc Kleine-Budde wrote:
+> From: Timo Schl=C3=BC=C3=9Fler <schluessler@krause.de>
 >=20
-> The first patch documents former numeric values used in commands sent t=
-o
-> the PCAN-USB device.
+> The mcp251x variants feature 3 general purpose digital inputs and 2
+> outputs. With this patch they are accessible through the gpio framework=
+=2E
 >=20
-> The second one activates the bus event notification feature in the PCAN=
--USB
-> to receive specific packets.
+> Signed-off-by: Timo Schl=C3=BC=C3=9Fler <schluessler@krause.de>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Applied to linux-can-next.
+Timo, can you test if the driver works for you?
 
-Tnx,
 Marc
 
 --=20
@@ -152,23 +148,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---IA0dk2hByoI4009Fl10CEd1uVu35tCDdu--
+--j4B1oyZlP0GBRzkWn4SozUZos3eriuYR1--
 
---f9K5QkKRiNu3bRRJ9huNy42A1wUevSHjY
+--VtCmflk9ggrX4nITnBL9Bk86ystUZx185
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3rnwEACgkQWsYho5Hk
-nSAoEAf+OYAsyQYq+3NgaK9MMOQ4ONjvd7/sOj+IqUuMhrfeYlnZCYMr/WXyKgW5
-A8LX2gnQsuffRRA8YwuGA8goZ4NDtF+1x01HK8vbFyZGQ0kvYQyVNIMWhrRLAZMc
-8OHOtiBGDmwRwcuwwf05GXGJJS7kt2BVPqfDTi950pVWURHWi2VqmOhCtBcIyn7X
-4GxWG5DA6wZYXkDK23U01GqzdlcIhJWHMh0CvE0jmIb5UP4JlFSGRVwtcymQUJx9
-/zqyJu3JiQL+ZxZuYS56aqjXYeGl1gbOG8UJPCsf8Dcg4+648o38LJC2/e84VvZa
-vDsN9LI6FM6vlhhdoe572AESrp92Ew==
-=HeyT
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3roGkACgkQWsYho5Hk
+nSAvrAgAoTukZ6QJf32QwODyiCPhlcsV/ugs2zflIO8EdBRMtBm2sebUUBlKBWBo
+HjjVa67Uh+0MHVu8r+qKEiCjwXHw+PuYypu0bXDtdNw0KQKitNqWacemvpvFhYRV
+Q7Y533M5cr2M/KkDgcKSK7SuTKDOHDFQ3cLiQcQ7YTNKHrcjtmIPYlVeN1QONtqv
+tDzWZHBkgxTOigbEaFGd+0cEauiyvymS+jO/gllm42a38bqLKY+pt8fZ/XeyMJvT
+RbSEktbLk0bi1gldUpIrgt2uX8/uf1KdE0DZr0WLnO7p0WGPAxtvAxyKmfz5L5ey
+7I3JiFdLRW+WWB/YT1nuMDiH/0GZaQ==
+=dkVF
 -----END PGP SIGNATURE-----
 
---f9K5QkKRiNu3bRRJ9huNy42A1wUevSHjY--
+--VtCmflk9ggrX4nITnBL9Bk86ystUZx185--
