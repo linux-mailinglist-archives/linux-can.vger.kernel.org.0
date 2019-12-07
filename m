@@ -2,37 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C68AA115C4E
-	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 14:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B37E115C63
+	for <lists+linux-can@lfdr.de>; Sat,  7 Dec 2019 14:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbfLGNFm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 7 Dec 2019 08:05:42 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:33329 "EHLO
+        id S1726397AbfLGNon (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 7 Dec 2019 08:44:43 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36811 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbfLGNFm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 08:05:42 -0500
+        with ESMTP id S1726371AbfLGNon (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 7 Dec 2019 08:44:43 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1idZmF-0004ob-3l; Sat, 07 Dec 2019 14:05:39 +0100
+        id 1idaO1-0007q6-Ai; Sat, 07 Dec 2019 14:44:41 +0100
 Received: from [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400] (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 855DA48AF56;
-        Sat,  7 Dec 2019 13:05:36 +0000 (UTC)
-Subject: Re: [PATCH v1] can: j1939: j1939_sk_bind(): take priv after lock is
- held
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
-Cc:     syzbot+99e9e1b200a1e363237d@syzkaller.appspotmail.com,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20191206141835.20557-1-o.rempel@pengutronix.de>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A607148AF70;
+        Sat,  7 Dec 2019 13:44:39 +0000 (UTC)
+Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dan Murphy <dmurphy@ti.com>, linux-can <linux-can@vger.kernel.org>
+References: <20191204175112.7308-1-dmurphy@ti.com>
+ <20191204175112.7308-2-dmurphy@ti.com>
+ <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
+ <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
+ <809b9ff1-88e3-4e46-33e0-856db37898b2@pengutronix.de>
+ <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
+ <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
+ <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
+ <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -94,15 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <45a5246e-8bf2-3312-5931-18e525d78f4b@pengutronix.de>
-Date:   Sat, 7 Dec 2019 14:05:32 +0100
+Message-ID: <aee4a9f8-ed4a-11e3-2bf9-de3a21bb24c1@pengutronix.de>
+Date:   Sat, 7 Dec 2019 14:44:35 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191206141835.20557-1-o.rempel@pengutronix.de>
+In-Reply-To: <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO"
+ boundary="00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,31 +116,44 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO
-Content-Type: multipart/mixed; boundary="uuoC5PUj9c5LTGrBHp3YYnFeNlNDpw7XZ";
+--00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh
+Content-Type: multipart/mixed; boundary="59d8yiQyFokz7nGJPbtZXTE67vuuPpaKw";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
- dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
-Cc: syzbot+99e9e1b200a1e363237d@syzkaller.appspotmail.com,
- kernel@pengutronix.de, linux-can@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <45a5246e-8bf2-3312-5931-18e525d78f4b@pengutronix.de>
-Subject: Re: [PATCH v1] can: j1939: j1939_sk_bind(): take priv after lock is
- held
-References: <20191206141835.20557-1-o.rempel@pengutronix.de>
-In-Reply-To: <20191206141835.20557-1-o.rempel@pengutronix.de>
+To: Dan Murphy <dmurphy@ti.com>, linux-can <linux-can@vger.kernel.org>
+Message-ID: <aee4a9f8-ed4a-11e3-2bf9-de3a21bb24c1@pengutronix.de>
+Subject: Re: [PATCH 2/2] net: m_can: Make wake-up gpio an optional
+References: <20191204175112.7308-1-dmurphy@ti.com>
+ <20191204175112.7308-2-dmurphy@ti.com>
+ <b9eaa5c4-13bc-295f-dcbf-d2a846243682@geanix.com>
+ <827b022e-9188-7bcf-25e3-3777df3b08a5@ti.com>
+ <809b9ff1-88e3-4e46-33e0-856db37898b2@pengutronix.de>
+ <76e96337-bbcf-89f1-2f1c-45144c15cb5b@ti.com>
+ <e945f9da-f5a1-64b9-3c5e-5ca249fbed16@pengutronix.de>
+ <7d45cd07-194f-2471-a804-2729343e91eb@ti.com>
+ <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
+In-Reply-To: <d5910b4e-0a0d-362d-ce42-68144c58b7e8@pengutronix.de>
 
---uuoC5PUj9c5LTGrBHp3YYnFeNlNDpw7XZ
+--59d8yiQyFokz7nGJPbtZXTE67vuuPpaKw
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/6/19 3:18 PM, Oleksij Rempel wrote:
-> syzbot reproduced following crash:
+On 12/5/19 5:43 PM, Marc Kleine-Budde wrote:
+>> Sounds good! I emailed our HW guys to see if we can get you a complete=
+=20
+>> test setup.
+>=20
+> Nice, I just need the SPI-Chip.
 
-applied to linux-can.
+To be precise, the SPI-Chip on a devel board, something like TCAN4550EVM
+or BOOSTXL-CANFD-LIN. No need for a microcontroller.
 
-Tnx,
+>> I had a MSP430 with firmware on it that transmit and received CAN fram=
+es=20
+>> so I could run the cangen commands.
+
+regards,
 Marc
 
 --=20
@@ -147,23 +163,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---uuoC5PUj9c5LTGrBHp3YYnFeNlNDpw7XZ--
+--59d8yiQyFokz7nGJPbtZXTE67vuuPpaKw--
 
---zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO
+--00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3ro50ACgkQWsYho5Hk
-nSC6dQf/Wsll9DQlJcLCgcrNOJQBdo5t9PP+M0YBPqFWw7Lf4a9VlyGZNRUw8Y9M
-4LRvCnEthSUNNHY6Yu4goCKs9HoumXFQwQZeEih/rEM84LsT8KFvgy8aTCqeiQcl
-yv8cCyCDT1DyOYsY50sjypduPWct1JjYT/WD7DGm2nR2tUFVws2qn9kcnK8EV5jF
-BixcCDdYs+pXb0mWd+aLopyRYRysl5hlD79+FGtuXaZRuxNdUBxZwEEk5AC7yZg4
-exYwzVCi1R4PTu7XtzjxF2D6td1lgY/ms2ws7/QRCyRKZK9V4M/g18+CisbVQYuY
-Ax2rsRMLDHvlWwh1kdA9aaMZeCbuvQ==
-=FI+m
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3rrMMACgkQWsYho5Hk
+nSCHrwgAnMaBcqon7D1Yth8CcRaJZJIhH/jYGv6EyTbPaEB2Q12sFwkWDYTBOyft
+ftWO6Fll8n4EJY1iln1ZcSTI55LK2fC36GniTp3fDHSzZND9s+l46WL66f+uuX2i
+WILigQ/X2/bmGSxMdQCLojJmioiZV2mcepZyncqBW2FSNrsVqS/A/4R8Jl6YP9WX
+EQlB4SagZO9ZPyyQg80eWHauve1BEX+MUed5Fm3mo0Ng6j7rSyT2096zT0csQbU3
+XGoJu7VkQ/IMti0MWyhQ8JYepmxBVaTllCuN1kchygW3JFWyB/eRazugAjNpJjMx
+imP/6Km+fip2Mbbo6OrTzoZCkMvXxg==
+=FbHh
 -----END PGP SIGNATURE-----
 
---zK88azG4d9z8EORMOzhEmBFJhkgfPcvUO--
+--00Plp9iyJeerLVqxu0cTBssb4IJCJo1nh--
