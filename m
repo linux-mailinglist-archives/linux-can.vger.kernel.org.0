@@ -2,113 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFDB4116DB3
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 14:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F976117121
+	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 17:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727522AbfLINKq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Dec 2019 08:10:46 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:56654 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727038AbfLINKq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Dec 2019 08:10:46 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB9DAWVe115332;
-        Mon, 9 Dec 2019 07:10:32 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1575897032;
-        bh=rdbpZjsUQQhv+Oqsq+Jl1/FdVDV8VTijGJa/8NFEMog=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=pjQQccEVTjq3Qz+n8UA0PGeo3pPupHprMvzFifbNltEEKmXHzIRVGBLNiW8lOXLKv
-         i1fNLyyrhDPHqshHFyq2pR0iu2ZjsnJ+v+sHQQzLuaOdcnS7I5LOLGC9Ljtzerk73V
-         DyyrAC9wMedJ1wQy5y6BbqVPGgZJQAh+x2t8s4us=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB9DAWRT079748;
-        Mon, 9 Dec 2019 07:10:32 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 9 Dec
- 2019 07:10:32 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Mon, 9 Dec 2019 07:10:32 -0600
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB9DAWZn040502;
-        Mon, 9 Dec 2019 07:10:32 -0600
-Subject: Re: [PATCH] can: m_can: remove double clearing of clock stop request
- bit
-To:     Sriram Dash <sriram.dash@samsung.com>,
-        "'Sean Nyekjaer'" <sean@geanix.com>
-CC:     <martin@geanix.com>, <pankj.sharma@samsung.com>,
-        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
-References: <CGME20191209091507epcas5p4f54c5c836c7fb84039ad540808820d21@epcas5p4.samsung.com>
- <20191209091449.909319-1-sean@geanix.com>
- <019301d5ae74$4d9b4b40$e8d1e1c0$@samsung.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <73ad838e-d0a5-374d-4356-2c191baec883@ti.com>
-Date:   Mon, 9 Dec 2019 07:08:24 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726483AbfLIQGD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Dec 2019 11:06:03 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37481 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbfLIQGD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Dec 2019 11:06:03 -0500
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ieLXs-0008Vc-MX; Mon, 09 Dec 2019 17:06:00 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v2] can: ensure an initialized headroom in outgoing CAN sk_buffs
+Date:   Mon,  9 Dec 2019 17:05:59 +0100
+Message-Id: <20191209160559.2710-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <019301d5ae74$4d9b4b40$e8d1e1c0$@samsung.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Sean
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-On 12/9/19 3:37 AM, Sriram Dash wrote:
->> From: linux-can-owner@vger.kernel.org <linux-can-
->> owner@vger.kernel.org> On Behalf Of Sean Nyekjaer
->> Sent: 09 December 2019 14:45
->> Subject: [PATCH] can: m_can: remove double clearing of clock stop request
->> bit
->>
->> In m_can_config_endisable the CSA bit cleared 2 times while enabling
->> configuration mode.
->>
->> According to the datasheet:
->> If a Read-Modify-Write operation is performed in Standby mode a CSR = 1
->> will be read back but a 0 should be written to it.
->>
->> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> Acked-by: Sriram Dash <sriram.dash@samsung.com>
+KMSAN sysbot detected a read access to an untinitialized value in the headroom
+of an outgoing CAN related sk_buff. When using CAN sockets this area is filled
+appropriately - but when using a packet socket this initialization is missing.
 
-I am not sure that this code is doing what you ask.
+The problematic read access occurs in the CAN receive path which can only be
+triggered when the sk_buff is sent through a (virtual) CAN interface. So we
+check in the sending path whether we need to perform the missing
+initializations.
 
-I think this commit message needs to indicate that you are removing the 
-duplicate clearing of the CSR bit
+Fixes: d3b58c47d330d ("can: replace timestamp as unique skb attribute")
+Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Changes since v1
+- rename to can_skb_headroom_valid()
+- reverse logic
+- move to dev.c
 
-Because the same code check and clears the CSR bit on line 379 as well.
+ drivers/net/can/dev.c   | 30 ++++++++++++++++++++++++++++++
+ include/linux/can/dev.h |  5 +++++
+ 2 files changed, 35 insertions(+)
 
-
->
->> ---
->>   drivers/net/can/m_can/m_can.c | 4 ----
->>   1 file changed, 4 deletions(-)
->>
->> diff --git a/drivers/net/can/m_can/m_can.c
->> b/drivers/net/can/m_can/m_can.c index 02c5795b7393..4edc6f6e5165
->> 100644
->> --- a/drivers/net/can/m_can/m_can.c
->> +++ b/drivers/net/can/m_can/m_can.c
->> @@ -380,10 +380,6 @@ void m_can_config_endisable(struct
->> m_can_classdev *cdev, bool enable)
->>   		cccr &= ~CCCR_CSR;
->>
->>   	if (enable) {
->> -		/* Clear the Clock stop request if it was set */
->> -		if (cccr & CCCR_CSR)
->> -			cccr &= ~CCCR_CSR;
->> -
-
-I need to test this on the TCAN part.  This was added specifically for it.
-
-Dan
-
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index 6ee06a49fb4c..14f1d9ee28a5 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -403,6 +403,36 @@ void can_change_state(struct net_device *dev, struct can_frame *cf,
+ }
+ EXPORT_SYMBOL_GPL(can_change_state);
+ 
++/* Check for outgoing skbs that have not been created by the CAN subsystem */
++bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
++{
++	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
++	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
++		return false;
++
++	/* af_packet does not apply CAN skb specific settings */
++	if (skb->ip_summed == CHECKSUM_NONE) {
++		/* init headroom */
++		can_skb_prv(skb)->ifindex = dev->ifindex;
++		can_skb_prv(skb)->skbcnt = 0;
++
++		skb->ip_summed = CHECKSUM_UNNECESSARY;
++
++		/* preform proper loopback on capable devices */
++		if (dev->flags & IFF_ECHO)
++			skb->pkt_type = PACKET_LOOPBACK;
++		else
++			skb->pkt_type = PACKET_HOST;
++
++		skb_reset_mac_header(skb);
++		skb_reset_network_header(skb);
++		skb_reset_transport_header(skb);
++	}
++
++	return true;
++}
++EXPORT_SYMBOL_GPL(can_skb_headroom_valid);
++
+ /* Local echo of CAN messages
+  *
+  * CAN network devices *should* support a local echo functionality
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 9b3c720a31b1..ca087894458b 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -91,6 +91,8 @@ struct can_priv {
+ #define get_can_dlc(i)		(min_t(__u8, (i), CAN_MAX_DLC))
+ #define get_canfd_dlc(i)	(min_t(__u8, (i), CANFD_MAX_DLC))
+ 
++bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb);
++
+ /* Drop a given socketbuffer if it does not contain a valid CAN frame. */
+ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 					  struct sk_buff *skb)
+@@ -108,6 +110,9 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+ 	} else
+ 		goto inval_skb;
+ 
++	if (!can_skb_headroom_valid(dev, skb))
++		goto inval_skb;
++
+ 	return false;
+ 
+ inval_skb:
+-- 
+2.24.0
 
