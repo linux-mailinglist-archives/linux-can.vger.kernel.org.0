@@ -2,173 +2,158 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A167117364
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 19:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78697117520
+	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 20:01:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbfLISC4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Dec 2019 13:02:56 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:35015 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726342AbfLISC4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Dec 2019 13:02:56 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ieNMy-0007zu-KL; Mon, 09 Dec 2019 19:02:52 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5472F48C0CB;
-        Mon,  9 Dec 2019 18:02:51 +0000 (UTC)
-Subject: Re: [PATCH 2/2] can: m_can: tcan4x5x: reset device before register
- access
-To:     Sean Nyekjaer <sean@geanix.com>, Dan Murphy <dmurphy@ti.com>,
-        linux-can@vger.kernel.org
-Cc:     martin@geanix.com
-References: <20191209084808.908116-1-sean@geanix.com>
- <20191209084808.908116-2-sean@geanix.com>
- <233a4bad-1439-3e7c-18c5-a7b5c5bb1a0c@ti.com>
- <3196f5db-6b05-6e11-764f-04506bb92149@geanix.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <51897527-8015-554c-e8e7-d542d9cc1bc5@pengutronix.de>
-Date:   Mon, 9 Dec 2019 19:02:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726665AbfLITBH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Dec 2019 14:01:07 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:24722 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbfLITBH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 9 Dec 2019 14:01:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1575918065;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=A+CXK1XYb7hPHcQRhLEJ+qV2+rey+TcEOw54adaNl4U=;
+        b=S7WXaSw/RuhMzlQOo1WCp9L1GZYgGnQITUA1gF5NwrzuWRf7G6FpU6ZhJswlRsW54u
+        vEhkuRviet8ZbcijF0YbPt7n1V3HXjE6mR7Wer3XMHajM3+rVb3TvlDMhE8D1NaI7aVR
+        hpt0kifbqiJXQuNn0CNtYXK71oNRF46oilbNF4LZT3iC9+5loQhI2PykRkSGbe+vxzsE
+        3WFIyp1fYir57woc4/KP1EwhCTQWOoNq3AcTIJzgpYZNdmaZETbTmrH7S6VM70hNAKrm
+        XiK7TZTOyxU2GX4b9noQ6F5NPmLsmRLGQtU8HZgo/6gbJD3nx1CGn24G60obbvn++tpX
+        BCpA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJU8h5kkUC"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 46.0.2 DYNA|AUTH)
+        with ESMTPSA id 90101evB9J13Mkm
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Mon, 9 Dec 2019 20:01:03 +0100 (CET)
+Subject: Re: [PATCH v2] can: ensure an initialized headroom in outgoing CAN
+ sk_buffs
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
+References: <20191209160559.2710-1-mkl@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <4f9579b3-a4ff-0190-02ae-0b6a912eb6b1@hartkopp.net>
+Date:   Mon, 9 Dec 2019 20:00:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <3196f5db-6b05-6e11-764f-04506bb92149@geanix.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="Xl2b4eiMZr1L03NomjLqkKGESmIO3r4pT"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20191209160559.2710-1-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Xl2b4eiMZr1L03NomjLqkKGESmIO3r4pT
-Content-Type: multipart/mixed; boundary="AQUl1JKZfq9E28ih51eFm3VZWV5lHiqKY";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>, Dan Murphy <dmurphy@ti.com>,
- linux-can@vger.kernel.org
-Cc: martin@geanix.com
-Message-ID: <51897527-8015-554c-e8e7-d542d9cc1bc5@pengutronix.de>
-Subject: Re: [PATCH 2/2] can: m_can: tcan4x5x: reset device before register
- access
-References: <20191209084808.908116-1-sean@geanix.com>
- <20191209084808.908116-2-sean@geanix.com>
- <233a4bad-1439-3e7c-18c5-a7b5c5bb1a0c@ti.com>
- <3196f5db-6b05-6e11-764f-04506bb92149@geanix.com>
-In-Reply-To: <3196f5db-6b05-6e11-764f-04506bb92149@geanix.com>
-
---AQUl1JKZfq9E28ih51eFm3VZWV5lHiqKY
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 12/9/19 6:14 PM, Sean Nyekjaer wrote:
-> I'm also removing the 700us delay after reset I added in the previous=20
-> patch, ups.
-
-Please make all further patches based on linux-can/mater, as "can:
-m_can: tcan4x5x: add required delay after reset" is already mainline.
-
-Regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---AQUl1JKZfq9E28ih51eFm3VZWV5lHiqKY--
+On 09/12/2019 17.05, Marc Kleine-Budde wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> KMSAN sysbot detected a read access to an untinitialized value in the headroom
+> of an outgoing CAN related sk_buff. When using CAN sockets this area is filled
+> appropriately - but when using a packet socket this initialization is missing.
+> 
+> The problematic read access occurs in the CAN receive path which can only be
+> triggered when the sk_buff is sent through a (virtual) CAN interface. So we
+> check in the sending path whether we need to perform the missing
+> initializations.
+> 
+> Fixes: d3b58c47d330d ("can: replace timestamp as unique skb attribute")
+> Reported-by: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+> Changes since v1
+> - rename to can_skb_headroom_valid()
+> - reverse logic
+> - move to dev.c
 
---Xl2b4eiMZr1L03NomjLqkKGESmIO3r4pT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+Applying this patch and also my v1 patch to Linux 4.1 fails in both 
+cases due to cosmetic changes (int to bool, comment style clean-up).
 
------BEGIN PGP SIGNATURE-----
+So we can not create a patch which is more convenient to be applied to 
+stable Linux 4.1+ anyway.
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3ujEMACgkQWsYho5Hk
-nSDKcQgAp5egw2N8XztbxHXJCehq45ib40aveV/WAgSR07x4TU0TEzI0IHgDISrw
-5NJM8F0kyYOWSI4lZnMODEYh0/B0zNxMeQAqCrPEx6xH5Ak0J8VIx03SKQDfkVbw
-bTlcJMJ4prFKcKzXLJqQp0Ukti6D9y/iCPKyfkHBBEqXIY9g2auzzO4ArgcxdvL0
-yLM8nUZT1Ti261LNRQWbqK2wMs5jM02hNd1Vlrta6fvf1DSDBdDyJFaah2bUQtwl
-eXZvPWoSYpJFtn6cBJjuxa6js8kvG7OLpXTajiJ8vBbOiQKI633cGOhjs0RTLR0C
-b/2FUSVrXyPhIgyDmTUw5ji/iFrJtA==
-=5gw2
------END PGP SIGNATURE-----
+Feel free to add
 
---Xl2b4eiMZr1L03NomjLqkKGESmIO3r4pT--
+Cc: linux-stable <stable@vger.kernel.org> # >= v4.1
+
+Thanks,
+Oliver
+
+> 
+>   drivers/net/can/dev.c   | 30 ++++++++++++++++++++++++++++++
+>   include/linux/can/dev.h |  5 +++++
+>   2 files changed, 35 insertions(+)
+> 
+> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+> index 6ee06a49fb4c..14f1d9ee28a5 100644
+> --- a/drivers/net/can/dev.c
+> +++ b/drivers/net/can/dev.c
+> @@ -403,6 +403,36 @@ void can_change_state(struct net_device *dev, struct can_frame *cf,
+>   }
+>   EXPORT_SYMBOL_GPL(can_change_state);
+>   
+> +/* Check for outgoing skbs that have not been created by the CAN subsystem */
+> +bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb)
+> +{
+> +	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
+> +	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
+> +		return false;
+> +
+> +	/* af_packet does not apply CAN skb specific settings */
+> +	if (skb->ip_summed == CHECKSUM_NONE) {
+> +		/* init headroom */
+> +		can_skb_prv(skb)->ifindex = dev->ifindex;
+> +		can_skb_prv(skb)->skbcnt = 0;
+> +
+> +		skb->ip_summed = CHECKSUM_UNNECESSARY;
+> +
+> +		/* preform proper loopback on capable devices */
+> +		if (dev->flags & IFF_ECHO)
+> +			skb->pkt_type = PACKET_LOOPBACK;
+> +		else
+> +			skb->pkt_type = PACKET_HOST;
+> +
+> +		skb_reset_mac_header(skb);
+> +		skb_reset_network_header(skb);
+> +		skb_reset_transport_header(skb);
+> +	}
+> +
+> +	return true;
+> +}
+> +EXPORT_SYMBOL_GPL(can_skb_headroom_valid);
+> +
+>   /* Local echo of CAN messages
+>    *
+>    * CAN network devices *should* support a local echo functionality
+> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+> index 9b3c720a31b1..ca087894458b 100644
+> --- a/include/linux/can/dev.h
+> +++ b/include/linux/can/dev.h
+> @@ -91,6 +91,8 @@ struct can_priv {
+>   #define get_can_dlc(i)		(min_t(__u8, (i), CAN_MAX_DLC))
+>   #define get_canfd_dlc(i)	(min_t(__u8, (i), CANFD_MAX_DLC))
+>   
+> +bool can_skb_headroom_valid(struct net_device *dev, struct sk_buff *skb);
+> +
+>   /* Drop a given socketbuffer if it does not contain a valid CAN frame. */
+>   static inline bool can_dropped_invalid_skb(struct net_device *dev,
+>   					  struct sk_buff *skb)
+> @@ -108,6 +110,9 @@ static inline bool can_dropped_invalid_skb(struct net_device *dev,
+>   	} else
+>   		goto inval_skb;
+>   
+> +	if (!can_skb_headroom_valid(dev, skb))
+> +		goto inval_skb;
+> +
+>   	return false;
+>   
+>   inval_skb:
+> 
