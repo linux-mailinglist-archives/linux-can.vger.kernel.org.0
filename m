@@ -2,36 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D511175A0
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 20:24:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6E51175DA
+	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 20:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbfLITYr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Dec 2019 14:24:47 -0500
-Received: from first.geanix.com ([116.203.34.67]:43968 "EHLO first.geanix.com"
+        id S1726522AbfLITaA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Dec 2019 14:30:00 -0500
+Received: from first.geanix.com ([116.203.34.67]:44464 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726783AbfLITYr (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 9 Dec 2019 14:24:47 -0500
+        id S1726342AbfLIT37 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 9 Dec 2019 14:29:59 -0500
 Received: from zen.localdomain (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id 9B55F44B;
-        Mon,  9 Dec 2019 19:24:24 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 38F83406;
+        Mon,  9 Dec 2019 19:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1575919464; bh=1IP+7+dztezCswzJlo5kNtGBW7HEn7JRLfIkOk06rqU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=GznADVki4PVYvwy4sWbuOsrAg5wPIlFk7u77AIdOd912//jriioQunRviVVWq9Dwd
-         9l6JI55fsJ8bO24Qi0NNqd0aP7l3ldnL8FrFlNj63D7nFDxBuumYlzakj7q5MwSjj/
-         w5wAVUHerebxqdCmaxg3c4n5uPXfEUEQfqY4UuzKaQ8tsZPzi8BC7WMKg7w2fGGIQR
-         e4xVuCfTszDrnJtkD1G/CJGL6fhwfQMtmbpy6GV70Gck8FHHShCLD8m2F3cn84BQay
-         xq560LaMp9U2PGGpYUhuAn+EikvyCCNj/dWfFNXL4JJvRri/7b0XmxVYArHYmpZLbv
-         StvfO0Em+IlxA==
+        t=1575919777; bh=sRQSN5mNkMyQPICJpBmI7K06zjXe8V0ws1KCQs7Mz/8=;
+        h=From:To:Cc:Subject:Date;
+        b=AMp46wk1EkKy7NbscP228kR5qC2zKws5RYrayNE+ooImiqu+wrifN/EVy4Pd5oFYw
+         MRyR0qodpGFQDT1Ra35MG6ggw0pzqK+/Obqbp+9E+3aqQwdkSEnXMtAe4gTy3ak6pm
+         xoRACkdCROjtNAG9rwbNbC+aio/PEfGwZCBO4xbJs3yOgvrfrOSC4bjPg0GY+vf4q4
+         0aYSJNx9Xq2nTd+7D6kj9nkdD6K3pl9HLLPFeAnFRxNltso8nCoiCo5KpwqJh7NFgg
+         GG/pWq6eGbdmtcy+2ECcjD7jlO0M8mCnn5/WlTyiFlqOCdRJTplRCpaA8VneDmy7W2
+         n8yaQM6tOSP/Q==
 From:   Sean Nyekjaer <sean@geanix.com>
-To:     mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
+To:     sriram.dash@samsung.com, pankj.sharma@samsung.com,
+        mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
 Cc:     Sean Nyekjaer <sean@geanix.com>, martin@geanix.com
-Subject: [PATCH v2 2/2] can: m_can: tcan4x5x: reset device before register access
-Date:   Mon,  9 Dec 2019 20:24:40 +0100
-Message-Id: <20191209192440.998659-2-sean@geanix.com>
+Subject: [PATCH v2] can: m_can: remove double clearing of clock stop request bit
+Date:   Mon,  9 Dec 2019 20:29:49 +0100
+Message-Id: <20191209192949.998976-1-sean@geanix.com>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191209192440.998659-1-sean@geanix.com>
-References: <20191209192440.998659-1-sean@geanix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
@@ -43,39 +42,38 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It's a good idea to reset a ip-block/spi device before using it,
-this patch will reset the device.
+In m_can_config_endisable the CSR bit cleared 2 times while enabling
+configuration mode.
+The CSR should always be cleared when writing to the CCCR register.
+
+According to the datasheet:
+If a Read-Modify-Write operation is performed in Standby mode a
+CSR = 1 will be read back but a 0 should be written to it.
 
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+Acked-by: Sriram Dash <sriram.dash@samsung.com>
 ---
 Changes since v1:
- - Added toggle of reset pin with required delay
- - Only toggle reset pin if it exist
+ - Changed CSA -> CSR bit in the commit msg
 
- drivers/net/can/m_can/tcan4x5x.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/net/can/m_can/m_can.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index 3c30209ca84c..5b26e494a7db 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -363,8 +363,15 @@ static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 02c5795b7393..4edc6f6e5165 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -380,10 +380,6 @@ void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
+ 		cccr &= ~CCCR_CSR;
  
- 	tcan4x5x->reset_gpio = devm_gpiod_get_optional(cdev->dev, "reset",
- 						       GPIOD_OUT_LOW);
--	if (IS_ERR(tcan4x5x->reset_gpio))
-+	if (IS_ERR(tcan4x5x->reset_gpio)) {
- 		tcan4x5x->reset_gpio = NULL;
-+	} else {
-+		gpiod_set_value(tcan4x5x->reset_gpio, 1);
-+
-+		/* tpulse_width minimum 30us */
-+		usleep_range(30, 100);
-+		gpiod_set_value(tcan4x5x->reset_gpio, 0);
-+	}
- 
- 	usleep_range(700, 1000);
- 
+ 	if (enable) {
+-		/* Clear the Clock stop request if it was set */
+-		if (cccr & CCCR_CSR)
+-			cccr &= ~CCCR_CSR;
+-
+ 		/* enable m_can configuration */
+ 		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
+ 		udelay(5);
 -- 
 2.24.0
 
