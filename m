@@ -2,39 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E69117732
-	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 21:15:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B46117733
+	for <lists+linux-can@lfdr.de>; Mon,  9 Dec 2019 21:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbfLIUPp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 9 Dec 2019 15:15:45 -0500
-Received: from first.geanix.com ([116.203.34.67]:48892 "EHLO first.geanix.com"
+        id S1726342AbfLIUQ0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 9 Dec 2019 15:16:26 -0500
+Received: from first.geanix.com ([116.203.34.67]:48998 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726342AbfLIUPp (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 9 Dec 2019 15:15:45 -0500
-Received: from zen.localdomain (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id 42208451;
-        Mon,  9 Dec 2019 20:15:22 +0000 (UTC)
+        id S1726366AbfLIUQ0 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 9 Dec 2019 15:16:26 -0500
+Received: from [192.168.100.11] (unknown [95.138.208.137])
+        by first.geanix.com (Postfix) with ESMTPSA id 44769451;
+        Mon,  9 Dec 2019 20:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1575922522; bh=8yiQkWpmX2p4bdPVGyfpRWoILGxZXOkUqL9+2QIEQeE=;
-        h=From:To:Cc:Subject:Date;
-        b=lT7VDc8LzCjUmGeQODrqdtW/FxVD9qfnIDDxaSHmOlS7ypvU2k7R2WIy7RO7TMxFm
-         s+cCpdF4KafQ+xhqfCix4xPGZ+X3rtaRg3YTT0UCOI7/6oQSb0gMGqV6ci5OCgb+8f
-         TJh64jlCeUMNQniIHuOpLK5MMqLROC2zLh9SbB5xi4Bbn/vsq08xnoptmZWHshm2j+
-         c19LiSBX8vJhnCjFSwZWWF6cR/5EZdEnR6Bgd7BDQCk8LMvLCeZuoMrNkZ8Yxd4EYV
-         aOTqns3Ab22QrQ2BV9mzEP89w8Wc21kFeEoxNbwTp64utTEOF78gEVkql/hIeTRYm6
-         BF/BDO6p+gIqw==
+        t=1575922563; bh=Jqt/5VaxgcfXSRVLY9I9uoV5fQ6rr4ATEKYtE1Dn86U=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=F5+IVmS9IHxGKoKZcdf8RG+ZTZ60jIQ/xXELC6QoWKtU0GcK2iejaGxYo7HwmZ+CJ
+         wqhCTbeUdbgSDG1i/sS9P1v/ZML73nnqLyaYquuRoP5J8C3icIUytcJZust6sceTFE
+         r4i0E28PdgZp68X3nV0yLzROQ2A4N0SXT3MjBBakdhDlh6CrtP+4qUa1UHvdUnue7y
+         AzClEJg+qr+SSWULokhRSpkMdrG6ZhkVD5z0N1tW8n+sY4TfbFuNwXDb1xwQXdBkkn
+         s2wtQMpbIH7VxDgLaFqZpNZkn6ENTOG+fKtz6BT1eIuVHGYeALeh7Q4KjnSiBtFyVN
+         6m6ULK7do3F3w==
+Subject: Re: [PATCH v2] can: m_can: remove double clearing of clock stop
+ request bit
+To:     Dan Murphy <dmurphy@ti.com>, sriram.dash@samsung.com,
+        pankj.sharma@samsung.com, mkl@pengutronix.de,
+        linux-can@vger.kernel.org
+Cc:     martin@geanix.com
+References: <20191209192949.998976-1-sean@geanix.com>
+ <cdf36996-376a-4755-75ff-27c441a317ad@ti.com>
+ <8382275e-c878-6dd2-cd78-9f4615d299ee@geanix.com>
+ <edab9b5b-ce12-632d-9c23-af5692d082c7@ti.com>
 From:   Sean Nyekjaer <sean@geanix.com>
-To:     sriram.dash@samsung.com, pankj.sharma@samsung.com,
-        mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     Sean Nyekjaer <sean@geanix.com>, martin@geanix.com
-Subject: [PATCH v3] can: m_can: remove double clearing of clock stop request bit
-Date:   Mon,  9 Dec 2019 21:15:28 +0100
-Message-Id: <20191209201528.999698-1-sean@geanix.com>
-X-Mailer: git-send-email 2.24.0
+Message-ID: <b5645be3-8203-eb65-13db-260bb7e27b11@geanix.com>
+Date:   Mon, 9 Dec 2019 21:16:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <edab9b5b-ce12-632d-9c23-af5692d082c7@ti.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,UNPARSEABLE_RELAY,URIBL_BLOCKED
+X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
         autolearn=disabled version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 8b5b6f358cc9
 Sender: linux-can-owner@vger.kernel.org
@@ -42,32 +52,20 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Removal of duplicate code
 
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Acked-by: Sriram Dash <sriram.dash@samsung.com>
----
-Changes since v2:
- - Changed commit msg not to confuse :)
 
- drivers/net/can/m_can/m_can.c | 4 ----
- 1 file changed, 4 deletions(-)
+On 09/12/2019 21.10, Dan Murphy wrote:
+> 
+> Its only confusing because what you are changing is for the MCAN IP code 
+> and is not specific to TCAN.  The change affects all devices that 
+> register to the m_can framework.
+> 
+> Referencing the TCAN data sheet for the Bosch IP implementation is not 
+> correct.
+> 
+> All the commit message should say is basically what the $subject says 
+> because that is all it is doing.
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 02c5795b7393..4edc6f6e5165 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -380,10 +380,6 @@ void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
- 		cccr &= ~CCCR_CSR;
- 
- 	if (enable) {
--		/* Clear the Clock stop request if it was set */
--		if (cccr & CCCR_CSR)
--			cccr &= ~CCCR_CSR;
--
- 		/* enable m_can configuration */
- 		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
- 		udelay(5);
--- 
-2.24.0
+Just posted V3 with a simpler commit msg :)
 
+/Sean
