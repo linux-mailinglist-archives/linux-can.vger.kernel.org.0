@@ -2,125 +2,194 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD39118203
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 09:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BD1118240
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 09:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbfLJIRc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Dec 2019 03:17:32 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.218]:31812 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727082AbfLJIRc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 03:17:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1575965850;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=6BfFBaL7x9fY9oDbUOqYHs7IIfiz+3OW6uXMBFTuijA=;
-        b=WfocWTkKX/Ms9rcAKDH8Wciso36XwRXO4j9wMuCVxFCZGAQSOfkDjiu45D8ZrTgNPj
-        1SEiiQBYowNEvvGyqAZYXnbMXWbIuj4C3Q0SL+0FDjjKJ5IT7pbbCbn4bFJtjsqzhPy2
-        0slHtYF9iRJ7t8Fd6i7dwmIqn0GJuajXGS5fDkZtshaZbV9Y23c8u+nijwrKTHfITLhz
-        Hsiq4kvsjhGrh+as2mvyTYLEFSgzp8QfJ1d8tFvDLMG48FNwexKtEDBKOugNvPnwuVm0
-        5jfgrSaf4RW0P9xdeFKZ9Rg4h0R/RNuhNxernZotG+bt1T8FeTnrYaMP7DzqwntJ4Mve
-        E9ow==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVch5lE1y"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 46.0.2 DYNA|AUTH)
-        with ESMTPSA id 90101evBA8HHNy6
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 10 Dec 2019 09:17:17 +0100 (CET)
-Subject: Re: [mkl-can:testing 1/1] include/linux/can/dev.h:113: undefined
- reference to `can_skb_headroom_valid'
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-can@vger.kernel.org
-References: <201912100437.GUTrZafq%lkp@intel.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <30412963-6133-6114-d76d-6792093267b6@hartkopp.net>
-Date:   Tue, 10 Dec 2019 09:17:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726883AbfLJIb7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Dec 2019 03:31:59 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47359 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbfLJIb7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 03:31:59 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ieavz-0001AG-Kt; Tue, 10 Dec 2019 09:31:55 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9DB4748C917;
+        Tue, 10 Dec 2019 08:31:53 +0000 (UTC)
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "sean@geanix.com" <sean@geanix.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20191210071252.26165-1-qiangqing.zhang@nxp.com>
+ <20191210071252.26165-2-qiangqing.zhang@nxp.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH 2/2] can: flexcan: disable clocks during stop mode
+Message-ID: <3ccfc7ac-b860-8254-ad39-66e2f50a5f3c@pengutronix.de>
+Date:   Tue, 10 Dec 2019 09:31:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <201912100437.GUTrZafq%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20191210071252.26165-2-qiangqing.zhang@nxp.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="lnW7fl0OROBhIE49JrvV35DXoVT6kEWG6"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--lnW7fl0OROBhIE49JrvV35DXoVT6kEWG6
+Content-Type: multipart/mixed; boundary="jK4mD1wBQRjuOpIGsEtNuO9txxU9hNrzI";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, "sean@geanix.com"
+ <sean@geanix.com>, "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <3ccfc7ac-b860-8254-ad39-66e2f50a5f3c@pengutronix.de>
+Subject: Re: [PATCH 2/2] can: flexcan: disable clocks during stop mode
+References: <20191210071252.26165-1-qiangqing.zhang@nxp.com>
+ <20191210071252.26165-2-qiangqing.zhang@nxp.com>
+In-Reply-To: <20191210071252.26165-2-qiangqing.zhang@nxp.com>
 
-I built a Linux 5.5 rc1 with your patch without any problems. Any idea 
-about this kbuild test failure?
+--jK4mD1wBQRjuOpIGsEtNuO9txxU9hNrzI
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-So far vcan.o was not linked to dev.o as we only had the inline 
-functions can_dropped_invalid_skb() and can_create_echo_skb() in dev.h.
-
-dev.o contains all the netlink stuff for real CAN hardware which we are 
-now linking as a whole.
-
-Should we stay with can_skb_headroom_valid() as an inline function and 
-do the clean-up later?
-
-Regards,
-Oliver
-
-
-On 09/12/2019 21.44, kbuild test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git testing
-> head:   c2e15330b56ee5a41ad98c7266de21a3af259647
-> commit: c2e15330b56ee5a41ad98c7266de21a3af259647 [1/1] can: ensure an initialized headroom in outgoing CAN sk_buffs
-> config: x86_64-randconfig-s0-20191210 (attached as .config)
-> compiler: gcc-6 (Debian 6.3.0-18+deb9u1) 6.3.0 20170516
-> reproduce:
->          git checkout c2e15330b56ee5a41ad98c7266de21a3af259647
->          # save the attached .config to linux build tree
->          make ARCH=x86_64
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     ld: drivers/net/can/vcan.o: in function `can_dropped_invalid_skb':
->>> include/linux/can/dev.h:113: undefined reference to `can_skb_headroom_valid'
-> 
-> vim +113 include/linux/can/dev.h
-> 
->      95	
->      96	/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
->      97	static inline bool can_dropped_invalid_skb(struct net_device *dev,
->      98						  struct sk_buff *skb)
->      99	{
->     100		const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
->     101	
->     102		if (skb->protocol == htons(ETH_P_CAN)) {
->     103			if (unlikely(skb->len != CAN_MTU ||
->     104				     cfd->len > CAN_MAX_DLEN))
->     105				goto inval_skb;
->     106		} else if (skb->protocol == htons(ETH_P_CANFD)) {
->     107			if (unlikely(skb->len != CANFD_MTU ||
->     108				     cfd->len > CANFD_MAX_DLEN))
->     109				goto inval_skb;
->     110		} else
->     111			goto inval_skb;
->     112	
->   > 113		if (!can_skb_headroom_valid(dev, skb))
->     114			goto inval_skb;
->     115	
->     116		return false;
->     117	
->     118	inval_skb:
->     119		kfree_skb(skb);
->     120		dev->stats.tx_dropped++;
->     121		return true;
->     122	}
->     123	
-> 
+On 12/10/19 8:16 AM, Joakim Zhang wrote:
+> Disable clocks during CAN in stop mode.
+>=20
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 > ---
-> 0-DAY kernel test infrastructure                 Open Source Technology Center
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
-> 
+>  drivers/net/can/flexcan.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 6c1ccf9f6c08..d767f85c80d3 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -1786,10 +1786,16 @@ static int __maybe_unused flexcan_noirq_suspend=
+(struct device *device)
+>  {
+>  	struct net_device *dev =3D dev_get_drvdata(device);
+>  	struct flexcan_priv *priv =3D netdev_priv(dev);
+> +	int err;
+> =20
+> -	if (netif_running(dev) && device_may_wakeup(device))
+> +	if (netif_running(dev) && device_may_wakeup(device)) {
+>  		flexcan_enable_wakeup_irq(priv, true);
+> =20
+> +		err =3D pm_runtime_force_suspend(device);
+> +		if (err)
+> +			return err;
+> +	}
+
+What about moving the pm_runtime_force_suspend() call for both cases
+"device_may_wakeup()" and "!device_may_wakeup()" into the
+flexcan_noirq_suspend() handler?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--jK4mD1wBQRjuOpIGsEtNuO9txxU9hNrzI--
+
+--lnW7fl0OROBhIE49JrvV35DXoVT6kEWG6
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vV/MACgkQWsYho5Hk
+nSC9FQf/c5s7hkfr8XM4tHz8Oet950Rfzdp94c/sbauUbbXx5VmVnd+IpsLbpiga
+WhsSOrEHZBFU++Pk+AP323n3yqbbou9X5g7G/oV5d/5Z/o5gAtHPzvhuGcg5HEdZ
+uzUoVc14SY8QvYhUD0CU5bcmMYq6QhYf/9ySGWwsSQaRy6s5RDmbzFfooZ0pFjL0
+BVPdoXZHS74s8N0OQi0HeJvYXIDopzUcTt/1nLunFIEWdDkjzGcXamMBjgJI2QBg
+289oIFNwm89y+uM0mS1EAOi02hbFnEiJV7lvRCw9GIsuqpvHZA1PVb3M7sGp+bWo
+Do7jAhfa2jUW0WzOBaBXJrYKR8fCTQ==
+=uXSH
+-----END PGP SIGNATURE-----
+
+--lnW7fl0OROBhIE49JrvV35DXoVT6kEWG6--
