@@ -2,34 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F26C118E05
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 17:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E958118E13
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 17:46:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727535AbfLJQoH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Dec 2019 11:44:07 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37573 "EHLO
+        id S1727178AbfLJQqQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Dec 2019 11:46:16 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:52161 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727541AbfLJQoG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 11:44:06 -0500
+        with ESMTP id S1727525AbfLJQqQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 11:46:16 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ieic7-0005NI-EE; Tue, 10 Dec 2019 17:43:55 +0100
+        id 1ieieL-0005Yf-4T; Tue, 10 Dec 2019 17:46:13 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 45FFE48CE99;
-        Tue, 10 Dec 2019 16:43:53 +0000 (UTC)
-Subject: Re: [PATCH v3] can: m_can: remove double clearing of clock stop
- request bit
-To:     Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
-        pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     martin@geanix.com
-References: <20191209201528.999698-1-sean@geanix.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 13CAB48CE9F;
+        Tue, 10 Dec 2019 16:46:12 +0000 (UTC)
+Subject: Re: [PATCH v2] can: tcan4x5x: Turn on the power before parsing the
+ config
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20191210163204.28225-1-dmurphy@ti.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -92,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <950e117e-0fe8-f840-780c-f5201d859397@pengutronix.de>
-Date:   Tue, 10 Dec 2019 17:43:48 +0100
+Message-ID: <5c6cba4b-efc1-6982-aa6f-c5e90fbb5aa4@pengutronix.de>
+Date:   Tue, 10 Dec 2019 17:46:06 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191209201528.999698-1-sean@geanix.com>
+In-Reply-To: <20191210163204.28225-1-dmurphy@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU"
+ boundary="pP3GmhQynuFVQhOpVFpKVBofGaQQdp8Kb"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,60 +111,37 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU
-Content-Type: multipart/mixed; boundary="3nkP87qF92wgkL2lkE5gqWze0MV55HQhM";
+--pP3GmhQynuFVQhOpVFpKVBofGaQQdp8Kb
+Content-Type: multipart/mixed; boundary="RYWLW15WZQLM7id6xO88q6TUEsbe5fZ7O";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
- pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc: martin@geanix.com
-Message-ID: <950e117e-0fe8-f840-780c-f5201d859397@pengutronix.de>
-Subject: Re: [PATCH v3] can: m_can: remove double clearing of clock stop
- request bit
-References: <20191209201528.999698-1-sean@geanix.com>
-In-Reply-To: <20191209201528.999698-1-sean@geanix.com>
+To: Dan Murphy <dmurphy@ti.com>
+Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+Message-ID: <5c6cba4b-efc1-6982-aa6f-c5e90fbb5aa4@pengutronix.de>
+Subject: Re: [PATCH v2] can: tcan4x5x: Turn on the power before parsing the
+ config
+References: <20191210163204.28225-1-dmurphy@ti.com>
+In-Reply-To: <20191210163204.28225-1-dmurphy@ti.com>
 
---3nkP87qF92wgkL2lkE5gqWze0MV55HQhM
+--RYWLW15WZQLM7id6xO88q6TUEsbe5fZ7O
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/9/19 9:15 PM, Sean Nyekjaer wrote:
-> Removal of duplicate code
+On 12/10/19 5:32 PM, Dan Murphy wrote:
+> The parse config function now performs action on the device either
+> reading or writing and a reset.  If the regulator is managed it needs
+> to be turned on.  So turn on the regulator if available if the parsing
+> fails then turn off the regulator.
+>=20
+> Fixes: a5235f3c7c23 ("can: tcan45x: Make wake-up GPIO an optional GPIO"=
+)
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
 
-This descrption is a bit short. Is should be a whole sentence and
-explain why you make this change.
+Applied to linux-can.
 
 Marc
->=20
-> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> Acked-by: Sriram Dash <sriram.dash@samsung.com>
-> ---
-> Changes since v2:
->  - Changed commit msg not to confuse :)
->=20
->  drivers/net/can/m_can/m_can.c | 4 ----
->  1 file changed, 4 deletions(-)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_ca=
-n.c
-> index 02c5795b7393..4edc6f6e5165 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -380,10 +380,6 @@ void m_can_config_endisable(struct m_can_classdev =
-*cdev, bool enable)
->  		cccr &=3D ~CCCR_CSR;
-> =20
->  	if (enable) {
-> -		/* Clear the Clock stop request if it was set */
-> -		if (cccr & CCCR_CSR)
-> -			cccr &=3D ~CCCR_CSR;
-> -
->  		/* enable m_can configuration */
->  		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
->  		udelay(5);
->=20
-
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -173,23 +150,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---3nkP87qF92wgkL2lkE5gqWze0MV55HQhM--
+--RYWLW15WZQLM7id6xO88q6TUEsbe5fZ7O--
 
---xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU
+--pP3GmhQynuFVQhOpVFpKVBofGaQQdp8Kb
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vy0QACgkQWsYho5Hk
-nSCY3Qf/Rc7JXXhhm03nD6osRR2kqpqAJ862ZodVXW/tmx5CFmjdMDCOuYBJXEYE
-tcycv5+ZEPyyyk0qf3Cw1UAYE6D1QDh4hnIWa2XSujt5nDKbclLprKKd6bsuWMXD
-MJusWZ2t5TtX3TRAbyqQqTKT1IroDKkuVmFdcMiIRu0/K69ibOYyuxYx0Tt3RrUo
-9WkI7a0osfyxPT3fhovUxTZdzvQiKUiY78JKq8ccRxTQA2F1T4KEzt+Essw6Zr8u
-jnotz7FiESQibKSNRi2ItkIup+WyxZOpZdNS+bi5k7GJV5f2tcv6qZFF+l21P1BK
-wtmUmAtvpOQKBiHuaOhxC8/ltztNwg==
-=x/kH
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vy88ACgkQWsYho5Hk
+nSBbyQf/SYPgQ9W4VJnUTBNv/mbIkTXCd+PsI7uo5464zX0WGbdiFVEttBLFUezz
+fDowEqMFi7jkTi7rS5fUkOH9fL5Oi5oQHIhB5AGwTVFUOmQQwFwspPM3rdiygNOM
+nTs3skR8FzwV56IvXvbxAiNuQWOaqNDiOLcHBhivSUcmfJ3lToDsP5HBqIU8u8Ct
+f+aBe1Mn+x1vhmWfZRAcVUXvUUsOMm4ZS9X7wvcZqPIMOCUKp/vItpQHNnIXRQ02
+ykXJtDt1e9ZAw8ZKxpcxPlQAic7GVXDgbVOAAhIycQosBCd9ueODWCh1fIk8VjIt
+MUGOieZ9M4/eNGKwQwLpC0AEDRPh8Q==
+=UP1A
 -----END PGP SIGNATURE-----
 
---xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU--
+--pP3GmhQynuFVQhOpVFpKVBofGaQQdp8Kb--
