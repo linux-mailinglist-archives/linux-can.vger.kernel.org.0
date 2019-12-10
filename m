@@ -2,34 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 172DA1184EB
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 11:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94658118503
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 11:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727039AbfLJKYo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Dec 2019 05:24:44 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50547 "EHLO
+        id S1727039AbfLJK2L (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Dec 2019 05:28:11 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55121 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbfLJKYo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 05:24:44 -0500
+        with ESMTP id S1726574AbfLJK2L (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 05:28:11 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iech9-0002Fc-BP; Tue, 10 Dec 2019 11:24:43 +0100
+        id 1ieckR-0002h6-BX; Tue, 10 Dec 2019 11:28:07 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 887F948CA7C;
-        Tue, 10 Dec 2019 10:24:42 +0000 (UTC)
-Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
-To:     =?UTF-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>
-Cc:     "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-References: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
- <A75EE596-C8A0-411C-A7F1-5F694C9C21DA@krause.de>
- <8ed73361acfa4d6aba703a6164d2d4b9@HG-SRV-053.HG.local>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 121C948CA8E;
+        Tue, 10 Dec 2019 10:28:05 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-can@vger.kernel.org
+References: <201912100437.GUTrZafq%lkp@intel.com>
+ <30412963-6133-6114-d76d-6792093267b6@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -92,15 +91,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <8214d2f3-ad44-5572-389f-4daa7ca0686a@pengutronix.de>
-Date:   Tue, 10 Dec 2019 11:24:38 +0100
+Subject: Re: [mkl-can:testing 1/1] include/linux/can/dev.h:113: undefined
+ reference to `can_skb_headroom_valid'
+Message-ID: <43ac04e3-c9ed-e361-4eaa-67bb2998fec2@pengutronix.de>
+Date:   Tue, 10 Dec 2019 11:28:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <8ed73361acfa4d6aba703a6164d2d4b9@HG-SRV-053.HG.local>
+In-Reply-To: <30412963-6133-6114-d76d-6792093267b6@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="JjUXfBAIkFxHsklPr4uaJMnHbbtgrH0Sc"
+ boundary="fVLdfeYDD7JKGxRn0gAqhpQ2hcdwn9cAn"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,36 +112,41 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---JjUXfBAIkFxHsklPr4uaJMnHbbtgrH0Sc
-Content-Type: multipart/mixed; boundary="Q7LGEacsmr6sKw7zrlMQGbR1t18Wlmseu";
+--fVLdfeYDD7JKGxRn0gAqhpQ2hcdwn9cAn
+Content-Type: multipart/mixed; boundary="3GUdckkqmqd1WogVTIKtb776QqvZIsxSZ";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: =?UTF-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>
-Cc: "linux-can @ vger . kernel . org" <linux-can@vger.kernel.org>
-Message-ID: <8214d2f3-ad44-5572-389f-4daa7ca0686a@pengutronix.de>
-Subject: Re: [PATCH v4 4/4] can: mcp251x: add GPIO support
-References: <e33b49a7-823e-5960-4d83-71ecf259ba87@pengutronix.de>
- <A75EE596-C8A0-411C-A7F1-5F694C9C21DA@krause.de>
- <8ed73361acfa4d6aba703a6164d2d4b9@HG-SRV-053.HG.local>
-In-Reply-To: <8ed73361acfa4d6aba703a6164d2d4b9@HG-SRV-053.HG.local>
+To: Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+ linux-can@vger.kernel.org
+Message-ID: <43ac04e3-c9ed-e361-4eaa-67bb2998fec2@pengutronix.de>
+Subject: Re: [mkl-can:testing 1/1] include/linux/can/dev.h:113: undefined
+ reference to `can_skb_headroom_valid'
+References: <201912100437.GUTrZafq%lkp@intel.com>
+ <30412963-6133-6114-d76d-6792093267b6@hartkopp.net>
+In-Reply-To: <30412963-6133-6114-d76d-6792093267b6@hartkopp.net>
 
---Q7LGEacsmr6sKw7zrlMQGbR1t18Wlmseu
+--3GUdckkqmqd1WogVTIKtb776QqvZIsxSZ
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/10/19 11:23 AM, Schl=C3=BC=C3=9Fler, Timo wrote:
-> On 12/07/19 8:40 PM, Timo Schl=C3=BC=C3=9Fler wrote:
->>> Timo, can you test if the driver works for you?
->> Yes, I hope that I can test it on Monday.
+On 12/10/19 9:17 AM, Oliver Hartkopp wrote:
+> I built a Linux 5.5 rc1 with your patch without any problems. Any idea =
+
+> about this kbuild test failure?
 >=20
-> I tested the driver. Everything works as it should.
-> I didn't test the suspend/resume functions, as this is
-> not implemented for the Raspberry Pi.
+> So far vcan.o was not linked to dev.o as we only had the inline=20
+> functions can_dropped_invalid_skb() and can_create_echo_skb() in dev.h.=
 
-Thanks, I'll add your Tested-by then.
 
-regards,
+I think the problem is that you can build the some drivers without
+activating CAN_DEV. This means the dev.c is not compied, thus the symbol
+is not available.
+
+For linux-can-next, I suggest to drop the optional CAN_DEV and compile
+it unconditionally if CAN is switched on.
+
 Marc
 
 --=20
@@ -150,23 +156,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---Q7LGEacsmr6sKw7zrlMQGbR1t18Wlmseu--
+--3GUdckkqmqd1WogVTIKtb776QqvZIsxSZ--
 
---JjUXfBAIkFxHsklPr4uaJMnHbbtgrH0Sc
+--fVLdfeYDD7JKGxRn0gAqhpQ2hcdwn9cAn
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vcmYACgkQWsYho5Hk
-nSAyeAgAn1tXWLhy/5SLXHdaZ1eCyJ/uZODkdF669EMuDSZufnsY5qC1+XZltupk
-KTYbVqdKVRrU3GzWIw//VsMlgGCjb2iuuFJ/h00nBg4ceyjZMzldZN3emhaFKV80
-vZkXxRKsWf/lREd9JIFAcsttsoap7MObbBaWwW/vyVVq7PfkEjSBKsPdTCXA02LQ
-fqOkmn9ADB3mfRlfvtM6F8L5/tDcaF5b4bgvX4laZFRHJc359Qu/dHXyM0x4SY2y
-1vcO3VcmEcpndtBbMbi8i/ysLsJ36gYNimUHS2lSZn2J7V+PwPmMJWPjA5bajOGx
-u12xlMx8uJsSlAN4c/+kEtH9ZHPiXw==
-=wGnA
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vczEACgkQWsYho5Hk
+nSAvggf/fARORphHDYJZxXqSuQq/GXeeEA8gd4SEsRTAsZ38PpEd4GR/3C/+ghV/
+coEw40d8PJpmp5TLreXVsTS53uOJN52nzPDyYdtJx7rbiRPDRew0KshbZbsrOFif
+rsNvG4ypmuIFQN75el20qoZruICGEnXCyzw5Il8rEJY18d84DtvWxT3mE6TJhFRJ
+u7GIx4V5R+tI8Lys14jRiBrPbCZXrNAe+TIL9T20CmW566Mq1d5empkyJjSK6+6/
+mCWSKziLdPukaLaIYh7+X1fVZI5HI7QTKaCvOEzti3N7beFE/v6Mi6S1Mh9fH3do
+dFhr5FoRLXEC/mUTvKt0qMPYJxb7Ig==
+=iOeh
 -----END PGP SIGNATURE-----
 
---JjUXfBAIkFxHsklPr4uaJMnHbbtgrH0Sc--
+--fVLdfeYDD7JKGxRn0gAqhpQ2hcdwn9cAn--
