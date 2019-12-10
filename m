@@ -2,37 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF883118DAA
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 17:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F26C118E05
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 17:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbfLJQgG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Dec 2019 11:36:06 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60559 "EHLO
+        id S1727535AbfLJQoH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Dec 2019 11:44:07 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37573 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbfLJQgF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 11:36:05 -0500
+        with ESMTP id S1727541AbfLJQoG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 11:44:06 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ieiUO-0004f3-R3; Tue, 10 Dec 2019 17:35:56 +0100
+        id 1ieic7-0005NI-EE; Tue, 10 Dec 2019 17:43:55 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e] (unknown [IPv6:2a03:f580:87bc:d400:858e:130c:14c0:366e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5AF5E48CE81;
-        Tue, 10 Dec 2019 16:35:54 +0000 (UTC)
-Subject: Re: [PATCH][next] can: tcan45x: Fix inconsistent IS_ERR and PTR_ERR
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sean Nyekjaer <sean@geanix.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191210150532.GA12732@embeddedor>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 45FFE48CE99;
+        Tue, 10 Dec 2019 16:43:53 +0000 (UTC)
+Subject: Re: [PATCH v3] can: m_can: remove double clearing of clock stop
+ request bit
+To:     Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
+        pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc:     martin@geanix.com
+References: <20191209201528.999698-1-sean@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -95,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <095ab519-8dd9-4971-83ae-85e96c796d11@pengutronix.de>
-Date:   Tue, 10 Dec 2019 17:35:44 +0100
+Message-ID: <950e117e-0fe8-f840-780c-f5201d859397@pengutronix.de>
+Date:   Tue, 10 Dec 2019 17:43:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191210150532.GA12732@embeddedor>
+In-Reply-To: <20191209201528.999698-1-sean@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="R9XkPeRyhuEFt6TFKubqSxxwhq61N3wMA"
+ boundary="xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,41 +111,60 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---R9XkPeRyhuEFt6TFKubqSxxwhq61N3wMA
-Content-Type: multipart/mixed; boundary="CejTD8dxQvWUIgUTNgihNi1N7v5kDiLMf";
+--xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU
+Content-Type: multipart/mixed; boundary="3nkP87qF92wgkL2lkE5gqWze0MV55HQhM";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
- Dan Murphy <dmurphy@ti.com>, Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>, Sean Nyekjaer <sean@geanix.com>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <095ab519-8dd9-4971-83ae-85e96c796d11@pengutronix.de>
-Subject: Re: [PATCH][next] can: tcan45x: Fix inconsistent IS_ERR and PTR_ERR
-References: <20191210150532.GA12732@embeddedor>
-In-Reply-To: <20191210150532.GA12732@embeddedor>
+To: Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
+ pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc: martin@geanix.com
+Message-ID: <950e117e-0fe8-f840-780c-f5201d859397@pengutronix.de>
+Subject: Re: [PATCH v3] can: m_can: remove double clearing of clock stop
+ request bit
+References: <20191209201528.999698-1-sean@geanix.com>
+In-Reply-To: <20191209201528.999698-1-sean@geanix.com>
 
---CejTD8dxQvWUIgUTNgihNi1N7v5kDiLMf
+--3nkP87qF92wgkL2lkE5gqWze0MV55HQhM
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 12/10/19 4:05 PM, Gustavo A. R. Silva wrote:
-> Fix inconsistent IS_ERR and PTR_ERR in tcan4x5x_parse_config.
->=20
-> The proper pointer to be passed as argument is tcan4x5x->device_wake_gp=
-io.
->=20
-> This bug was detected with the help of Coccinelle.
->=20
-> Fixes: 2de497356955 ("can: tcan45x: Make wake-up GPIO an optional GPIO"=
-)
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+On 12/9/19 9:15 PM, Sean Nyekjaer wrote:
+> Removal of duplicate code
 
-Applied to linux-can.
+This descrption is a bit short. Is should be a whole sentence and
+explain why you make this change.
 
-Tnx,
 Marc
+>=20
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> Acked-by: Sriram Dash <sriram.dash@samsung.com>
+> ---
+> Changes since v2:
+>  - Changed commit msg not to confuse :)
+>=20
+>  drivers/net/can/m_can/m_can.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>=20
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_ca=
+n.c
+> index 02c5795b7393..4edc6f6e5165 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -380,10 +380,6 @@ void m_can_config_endisable(struct m_can_classdev =
+*cdev, bool enable)
+>  		cccr &=3D ~CCCR_CSR;
+> =20
+>  	if (enable) {
+> -		/* Clear the Clock stop request if it was set */
+> -		if (cccr & CCCR_CSR)
+> -			cccr &=3D ~CCCR_CSR;
+> -
+>  		/* enable m_can configuration */
+>  		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
+>  		udelay(5);
+>=20
+
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -157,23 +173,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---CejTD8dxQvWUIgUTNgihNi1N7v5kDiLMf--
+--3nkP87qF92wgkL2lkE5gqWze0MV55HQhM--
 
---R9XkPeRyhuEFt6TFKubqSxxwhq61N3wMA
+--xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vyWAACgkQWsYho5Hk
-nSDQoAf4gHv21bwcm2rpLFf7ZB0YPYaPWz7fcDxQ7KpM7BOeuh9AVn/6EpV3mVEz
-W/QEKztlw91dD9V4FXb5POetjW34wZ2xpBV6tn225avbl5DBQvhFw9G9BUVcQSua
-pJDaYM8j3Rbgloh13uqiROCosKtFf0ObL7VoSjEa3zAFSP9V3cA/12TLMHu0yO6i
-WV3uLLL4HbBPgB43oVXJ/BMoF5ebzk61Zqtwd3ztht5W5xFyflrtyZ/f93I9eLSW
-HvufQOVGs573rIndn6yobXrFX8D/7TwJIyZDNv+KcK4GPKZcIMx64vhMNBpLVkVR
-NRyixv0vtF/2GO3oS28D6wjn7ZhQ
-=MmTk
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3vy0QACgkQWsYho5Hk
+nSCY3Qf/Rc7JXXhhm03nD6osRR2kqpqAJ862ZodVXW/tmx5CFmjdMDCOuYBJXEYE
+tcycv5+ZEPyyyk0qf3Cw1UAYE6D1QDh4hnIWa2XSujt5nDKbclLprKKd6bsuWMXD
+MJusWZ2t5TtX3TRAbyqQqTKT1IroDKkuVmFdcMiIRu0/K69ibOYyuxYx0Tt3RrUo
+9WkI7a0osfyxPT3fhovUxTZdzvQiKUiY78JKq8ccRxTQA2F1T4KEzt+Essw6Zr8u
+jnotz7FiESQibKSNRi2ItkIup+WyxZOpZdNS+bi5k7GJV5f2tcv6qZFF+l21P1BK
+wtmUmAtvpOQKBiHuaOhxC8/ltztNwg==
+=x/kH
 -----END PGP SIGNATURE-----
 
---R9XkPeRyhuEFt6TFKubqSxxwhq61N3wMA--
+--xnoX4aesp6NGt9kHAo9w5j500oqdt0nBU--
