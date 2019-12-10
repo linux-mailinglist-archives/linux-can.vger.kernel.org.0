@@ -2,102 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6044A118C85
-	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 16:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7FA118C45
+	for <lists+linux-can@lfdr.de>; Tue, 10 Dec 2019 16:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727494AbfLJP3K (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Dec 2019 10:29:10 -0500
-Received: from gateway32.websitewelcome.com ([192.185.145.113]:39792 "EHLO
-        gateway32.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727486AbfLJP3K (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 10:29:10 -0500
-X-Greylist: delayed 1478 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Dec 2019 10:29:09 EST
-Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
-        by gateway32.websitewelcome.com (Postfix) with ESMTP id 0C532880EC0
-        for <linux-can@vger.kernel.org>; Tue, 10 Dec 2019 09:04:31 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id eh3uiqtqOW4freh3uiCepc; Tue, 10 Dec 2019 09:04:31 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=di6itqzy1Kz6qTiVDOx+IF2EnF+F8GJNKypw7OnCAyA=; b=erGq0mpwB/ttMA8iQzgnj6nRSo
-        +hvbQTfkTsD27mUp9UFIBDHI+BI28AiDkknua5jG2WGDSkz7QjmuB5pUmnQ1/EPO7bvGAqiFsKNbv
-        7JhHdQOKIZKtC8JbB1o9uqePw2KMJppguDO4R8zIV8Y5RylMmucnrgIRiE6BisnsLJA26BDckQsK3
-        n/V39u4QiRRB1Z+vVH4HML3zdh+fBi1S45x0FatjeCPHrIvfXTboKDEcQ5qx+tdmVqjLulGF1Yp0n
-        wKDvCXjjCiBPdr9SQLESOUzgA1NaxQi96mutVxOeyMV839FA4kIz5aLYzxOnIPWyRU/BHag+gfcKu
-        zH/v63zA==;
-Received: from [187.192.35.14] (port=36632 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1ieh3s-000Syo-0a; Tue, 10 Dec 2019 09:04:28 -0600
-Date:   Tue, 10 Dec 2019 09:05:32 -0600
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Dan Murphy <dmurphy@ti.com>,
+        id S1727272AbfLJPQJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Dec 2019 10:16:09 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:55768 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727223AbfLJPQI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Dec 2019 10:16:08 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBAFFiD7105272;
+        Tue, 10 Dec 2019 09:15:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1575990944;
+        bh=SPqMpDNgTazLOmVVu6pQbTE2uwLvoIZ+26juZp6eI9Y=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=fZXzPK2KFdy3xInOpXTsY1pPEtcjBrTOztIfg0dvQkTa9IopH059JXDkcwoucJQ5M
+         J+qv/8EtpIEWS/kIzP5kePnzoj1zoL6YGP8RO0mnQC0kw9NwczBHECRoAkYYRxxOk/
+         XT/a/JKX9CwAAQGwNc9Np2i9D07lHxDIlnKmbVRY=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBAFFikx055545
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 Dec 2019 09:15:44 -0600
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 10
+ Dec 2019 09:15:43 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 10 Dec 2019 09:15:43 -0600
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBAFFh7d024012;
+        Tue, 10 Dec 2019 09:15:43 -0600
+Subject: Re: [PATCH][next] can: tcan45x: Fix inconsistent IS_ERR and PTR_ERR
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Sean Nyekjaer <sean@geanix.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH][next] can: tcan45x: Fix inconsistent IS_ERR and PTR_ERR
-Message-ID: <20191210150532.GA12732@embeddedor>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20191210150532.GA12732@embeddedor>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <f1c40cbe-28de-55e9-ec19-9401f2c0de03@ti.com>
+Date:   Tue, 10 Dec 2019 09:13:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.35.14
-X-Source-L: No
-X-Exim-ID: 1ieh3s-000Syo-0a
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.35.14]:36632
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 6
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <20191210150532.GA12732@embeddedor>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fix inconsistent IS_ERR and PTR_ERR in tcan4x5x_parse_config.
+Gustavo
 
-The proper pointer to be passed as argument is tcan4x5x->device_wake_gpio.
+On 12/10/19 9:05 AM, Gustavo A. R. Silva wrote:
+> Fix inconsistent IS_ERR and PTR_ERR in tcan4x5x_parse_config.
+>
+> The proper pointer to be passed as argument is tcan4x5x->device_wake_gpio.
+>
+> This bug was detected with the help of Coccinelle.
+>
+> Fixes: 2de497356955 ("can: tcan45x: Make wake-up GPIO an optional GPIO")
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> ---
+>   drivers/net/can/m_can/tcan4x5x.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
+> index 4e1789ea2bc3..6676ecec48c3 100644
+> --- a/drivers/net/can/m_can/tcan4x5x.c
+> +++ b/drivers/net/can/m_can/tcan4x5x.c
+> @@ -355,7 +355,7 @@ static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
+>   	tcan4x5x->device_wake_gpio = devm_gpiod_get(cdev->dev, "device-wake",
+>   						    GPIOD_OUT_HIGH);
+>   	if (IS_ERR(tcan4x5x->device_wake_gpio)) {
+> -		if (PTR_ERR(tcan4x5x->power) == -EPROBE_DEFER)
+> +		if (PTR_ERR(tcan4x5x->device_wake_gpio) == -EPROBE_DEFER)
+>   			return -EPROBE_DEFER;
+>   
+>   		tcan4x5x_disable_wake(cdev);
 
-This bug was detected with the help of Coccinelle.
 
-Fixes: 2de497356955 ("can: tcan45x: Make wake-up GPIO an optional GPIO")
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/net/can/m_can/tcan4x5x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index 4e1789ea2bc3..6676ecec48c3 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -355,7 +355,7 @@ static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
- 	tcan4x5x->device_wake_gpio = devm_gpiod_get(cdev->dev, "device-wake",
- 						    GPIOD_OUT_HIGH);
- 	if (IS_ERR(tcan4x5x->device_wake_gpio)) {
--		if (PTR_ERR(tcan4x5x->power) == -EPROBE_DEFER)
-+		if (PTR_ERR(tcan4x5x->device_wake_gpio) == -EPROBE_DEFER)
- 			return -EPROBE_DEFER;
- 
- 		tcan4x5x_disable_wake(cdev);
--- 
-2.23.0
+Acked-by: Dan Murphy <dmurphy@ti.com>
 
