@@ -2,34 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BAF411A608
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 09:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C736411A618
+	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 09:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbfLKIlf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Dec 2019 03:41:35 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47693 "EHLO
+        id S1726988AbfLKImV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 03:42:21 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51267 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfLKIlf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Dec 2019 03:41:35 -0500
+        with ESMTP id S1726845AbfLKImV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Dec 2019 03:42:21 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iexYi-0003AQ-A0; Wed, 11 Dec 2019 09:41:24 +0100
+        id 1iexZa-0003QL-Cz; Wed, 11 Dec 2019 09:42:18 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:4009:4a02:9726:d32a] (unknown [IPv6:2a03:f580:87bc:d400:4009:4a02:9726:d32a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4144548D8CA;
-        Wed, 11 Dec 2019 08:41:22 +0000 (UTC)
-Subject: Re: [PATCH v4] can: m_can: remove double clearing of clock stop
- request bit
-To:     Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
-        pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     martin@geanix.com
-References: <20191211063227.84259-1-sean@geanix.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 883A448D8D5;
+        Wed, 11 Dec 2019 08:42:17 +0000 (UTC)
+Subject: Re: [PATCH v3 1/2] can: m_can: tcan4x5x: put the device out of
+ standby before register access
+To:     Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
+        linux-can@vger.kernel.org
+Cc:     martin@geanix.com, stable@vger.kernel.org
+References: <20191211064208.84656-1-sean@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -92,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <65673d33-0c7d-5402-b6ee-cc622573c80c@pengutronix.de>
-Date:   Wed, 11 Dec 2019 09:41:18 +0100
+Message-ID: <8b1682ad-c291-252e-c768-63a7a4801aff@pengutronix.de>
+Date:   Wed, 11 Dec 2019 09:42:13 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191211063227.84259-1-sean@geanix.com>
+In-Reply-To: <20191211064208.84656-1-sean@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw"
+ boundary="e6vz8528PE2mMsHSDAv42MmP46Kr29LHk"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,38 +111,45 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw
-Content-Type: multipart/mixed; boundary="RnqjgYmPbpNsSioYPpZYtEfFi65LrnsCu";
+--e6vz8528PE2mMsHSDAv42MmP46Kr29LHk
+Content-Type: multipart/mixed; boundary="InbDMWiVVpm24VjPoua8Ud02RL7xL9V8F";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
- pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc: martin@geanix.com
-Message-ID: <65673d33-0c7d-5402-b6ee-cc622573c80c@pengutronix.de>
-Subject: Re: [PATCH v4] can: m_can: remove double clearing of clock stop
- request bit
-References: <20191211063227.84259-1-sean@geanix.com>
-In-Reply-To: <20191211063227.84259-1-sean@geanix.com>
+To: Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc: martin@geanix.com, stable@vger.kernel.org
+Message-ID: <8b1682ad-c291-252e-c768-63a7a4801aff@pengutronix.de>
+Subject: Re: [PATCH v3 1/2] can: m_can: tcan4x5x: put the device out of
+ standby before register access
+References: <20191211064208.84656-1-sean@geanix.com>
+In-Reply-To: <20191211064208.84656-1-sean@geanix.com>
 
---RnqjgYmPbpNsSioYPpZYtEfFi65LrnsCu
+--InbDMWiVVpm24VjPoua8Ud02RL7xL9V8F
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/11/19 7:32 AM, Sean Nyekjaer wrote:
-> The CSR bit is already cleared when arriving here so remove this sectio=
-n of
-> duplicate code.
-> The registers set in m_can_config_endisable() is set to same exact
-> values as before this patch.
+On 12/11/19 7:42 AM, Sean Nyekjaer wrote:
+> The m_can tries to detect if Non ISO Operation is available while in st=
+andby,
+> this function results in the following error:
 >=20
+> tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init mo=
+dule
+> tcan4x5x spi2.0: m_can device registered (irq=3D84, version=3D32)
+> tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
+>=20
+> When the tcan device comes out of reset it comes out in standby mode.
+> The m_can driver tries to access the control register but fails due to
+> the device is in standby mode.
+> So this patch will put the tcan device in normal mode before the m_can
+> driver does the initialization.
+>=20
+> Fixes: a229abeed7f7 ("can: tcan4x5x: Turn on the power before parsing t=
+he config")
+> Cc: stable@vger.kernel.org
 > Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-> Acked-by: Sriram Dash <sriram.dash@samsung.com>
-> Acked-by: Dan Murphy <dmurphy@ti.com>
 
-Nitpick: You should put your S-o-b at the end of the list.
-
-Applied to linux-can.
+Applied both to linux-can.
 
 Tnx,
 Marc
@@ -154,23 +161,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---RnqjgYmPbpNsSioYPpZYtEfFi65LrnsCu--
+--InbDMWiVVpm24VjPoua8Ud02RL7xL9V8F--
 
---dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw
+--e6vz8528PE2mMsHSDAv42MmP46Kr29LHk
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3wq64ACgkQWsYho5Hk
-nSBcIAf9Hf6taOft5LVI/ktmh9l07EPg1EPAvQuNCDPaxaiwxV6B0Wyw9QTHGNUk
-DYDh4qb6j6VF+coEpkPbEDRXNKyZ9EDBmR3iVOBuyhanpUzu3GJMvvbJn7I+Xe3+
-FnEG52yQ0K5BDMazBSlYLNBosxZTh1ivdQ4t+iOtrOb3SkyQ1VkgI4ehrlzExXFD
-NcSXiD6RNMfVZ0LiCSgh4Us1RYGuJFATgIK0duJgCNI77ogM0dySyDoZPVzlAY0Y
-B4FXOb2uRC2q5fz7xBGPuTPMYhQRraOGUgARf/Mqvlac5J12Bx70mYg9purJWq+K
-XY6lZqjqo+IB5y1tPGItDSlhGP0Mqg==
-=cBd3
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3wq+UACgkQWsYho5Hk
+nSCxcwf+ODt3N+sCojcpPqcPXwWN8xD94PmPUHZlmwDmh1xki6jwINyiBAYKg3rb
+0OuXuPoGjBC4wF5LDb7uIvfB4cRoUTX8EUIKImUcsUhlY3R27oVQYjyIpVNaAecE
+wvll5UDlBhX+CObprWY+F7elMIABicoZzIgDnCAehaxfGtD5tEdmmoN4rosv1ody
+0IAmdt2e1DBBj7+pWhVLEG1cgQhGHuqSKk1qYJg1N7QrB9hlc2+peVq3x+jKjZDX
+KA3fqv42CsJlaM2Y6PYPsUaVCG+X7bV6O5NoGuGni+E8EuVvkxTyb8NH4Yt/0rxC
+8pHppsWPzBozh9tNSvdFobm2aHZwvw==
+=GkFP
 -----END PGP SIGNATURE-----
 
---dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw--
+--e6vz8528PE2mMsHSDAv42MmP46Kr29LHk--
