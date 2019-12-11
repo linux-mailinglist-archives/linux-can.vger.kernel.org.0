@@ -2,41 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF8211A685
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 10:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6427211A693
+	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 10:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727829AbfLKJNL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Dec 2019 04:13:11 -0500
-Received: from first.geanix.com ([116.203.34.67]:46082 "EHLO first.geanix.com"
+        id S1728477AbfLKJPP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 04:15:15 -0500
+Received: from first.geanix.com ([116.203.34.67]:46172 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727253AbfLKJNL (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 11 Dec 2019 04:13:11 -0500
+        id S1728265AbfLKJPP (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 11 Dec 2019 04:15:15 -0500
 Received: from [192.168.100.11] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 66492449;
-        Wed, 11 Dec 2019 09:12:41 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id BB89E449;
+        Wed, 11 Dec 2019 09:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1576055561; bh=YxISBxVYxSRK+XP0WAd8zfV2chhV6asFXIr1+s+IZL8=;
+        t=1576055682; bh=hlvg9nzkKBtVGCPyBLHi8sUQLlwEqSyARhD5ReY1bUU=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=A9NdXoTg5wWJzYYcrajVz//tTfiRe52uB5nOdYxB5S0Vv+WbmIFdwA0X+epDZA0rY
-         LnH+mGcC0NN6AW7Hl4a7Z74M+gYqJjSCNQxQbqi6kVvV+gedgOiybDVcFhPUlaFVVW
-         jncZaIGBIc1x+f+nSBtYCXeiVoJEkSiLM3pq8l8pXBAmltoh411BM34b/6GZDJWpW6
-         dMLu9bj9X5cYcKu4MGvjq7zxtg7nG323qX6Fub0uazM025O8w9F3Q0qNdSpPo44gyf
-         H5mOlVC292vqGoJDNlnoH3Yv3cPlsHHk1pS/V9ACHFYv6kYL/m5xqQRA1oeT6pWGZD
-         wrFccN4eBd1nw==
-Subject: Re: [PATCH v3 1/2] can: m_can: tcan4x5x: put the device out of
- standby before register access
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, dmurphy@ti.com,
-        linux-can@vger.kernel.org
-Cc:     martin@geanix.com, stable@vger.kernel.org
-References: <20191211064208.84656-1-sean@geanix.com>
- <8b1682ad-c291-252e-c768-63a7a4801aff@pengutronix.de>
+        b=giQ2x+4tplSPbPqZUdRdKVhvomeaQ+y/DNaV+a6QLr3oLImCbAYa0yM8mlxitAz/J
+         jE2k2cwoA672eHkEIf4ZoklAIEqjO3JDtFyFkJAEpeUvKsMk/JlrjrrEVsYeZpr6xQ
+         L/uxm2/bnsHhQPg4sPe3FDMyqC46yOelq4fBPg0rs3bvqxjIjjQmsyThlQJGTdyhjF
+         OV/vbCDseFuT2BAL+6nWXmSF35zhgchOL3bJv4Ayb+b+9MGIg1gYafJJRKS5Pv5O6M
+         PBfvVGYFMSk3Sdr7173VksZRjhIkiDezntUw6+63A2XUr86q8gXuqVN1t0E3+4dngr
+         p65yKdh+6lpRA==
+Subject: Re: [PATCH v4] can: m_can: remove double clearing of clock stop
+ request bit
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, sriram.dash@samsung.com,
+        pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc:     martin@geanix.com
+References: <20191211063227.84259-1-sean@geanix.com>
+ <65673d33-0c7d-5402-b6ee-cc622573c80c@pengutronix.de>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <bc0014ec-7302-97f4-5d71-8d029b0fb1fb@geanix.com>
-Date:   Wed, 11 Dec 2019 10:13:07 +0100
+Message-ID: <4f61d319-0e49-4af7-4daa-95be8f531f59@geanix.com>
+Date:   Wed, 11 Dec 2019 10:15:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <8b1682ad-c291-252e-c768-63a7a4801aff@pengutronix.de>
+In-Reply-To: <65673d33-0c7d-5402-b6ee-cc622573c80c@pengutronix.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US-large
 Content-Transfer-Encoding: 7bit
@@ -51,32 +51,21 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 
-On 11/12/2019 09.42, Marc Kleine-Budde wrote:
-> On 12/11/19 7:42 AM, Sean Nyekjaer wrote:
->> The m_can tries to detect if Non ISO Operation is available while in standby,
->> this function results in the following error:
+On 11/12/2019 09.41, Marc Kleine-Budde wrote:
+> On 12/11/19 7:32 AM, Sean Nyekjaer wrote:
+>> The CSR bit is already cleared when arriving here so remove this section of
+>> duplicate code.
+>> The registers set in m_can_config_endisable() is set to same exact
+>> values as before this patch.
 >>
->> tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init module
->> tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
->> tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
->>
->> When the tcan device comes out of reset it comes out in standby mode.
->> The m_can driver tries to access the control register but fails due to
->> the device is in standby mode.
->> So this patch will put the tcan device in normal mode before the m_can
->> driver does the initialization.
->>
->> Fixes: a229abeed7f7 ("can: tcan4x5x: Turn on the power before parsing the config")
->> Cc: stable@vger.kernel.org
 >> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+>> Acked-by: Sriram Dash <sriram.dash@samsung.com>
+>> Acked-by: Dan Murphy <dmurphy@ti.com>
 > 
-> Applied both to linux-can.
+> Nitpick: You should put your S-o-b at the end of the list.
 > 
 
-Oh, the commit id for "can: tcan4x5x: Turn on the power before parsing 
-the config" have changed, since this morning :)
+New rule to me :)
+Will remember next time
 
-The new commit is 0d38aa7d1090
-
-Thanks
 /Sean
