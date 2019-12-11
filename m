@@ -2,93 +2,175 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B30411A4A7
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 07:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAF411A608
+	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 09:41:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727187AbfLKGm0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Dec 2019 01:42:26 -0500
-Received: from first.geanix.com ([116.203.34.67]:40042 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727777AbfLKGm0 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 11 Dec 2019 01:42:26 -0500
-Received: from zen.localdomain (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id AC8BD471;
-        Wed, 11 Dec 2019 06:41:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1576046517; bh=HBoukt/PSwdaxzGzn7309yDi6mpTvYjKMcv1r21lKEU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=hHEWh5N3QvJJa7+gJmDbWYNGwPP6g7ce2oLfQ2+9IHqkUQRR8fnNqcsgS5cE+6x2O
-         waam0GKQUl97sNlEND80d6DTU5FYFS84b57uWPTNcPwtyT/dnIiHAecZulQiOK266c
-         GoF/rNZ0NH7PleW2TZyaIdMKml8qj7dBByqv4nj8XEl3W0JdOPq6tL9iYVRBtoJePc
-         g4IFqMO/iobdvXNw0BCjyvxmlHfzNQLYGg+3bJmXPL1W/64bdYUUzTPQ4F3YH1G5un
-         XNG+tEf39urCDUG8gcJRlup6xX6CBNbU+Gf4IoMMvQ/kJjQPZAhEi2hu+7TcD61ybG
-         fYQ3g3NoIOEXA==
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     Sean Nyekjaer <sean@geanix.com>, martin@geanix.com
-Subject: [PATCH v3 2/2] can: m_can: tcan4x5x: reset device before register access
-Date:   Wed, 11 Dec 2019 07:42:08 +0100
-Message-Id: <20191211064208.84656-2-sean@geanix.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191211064208.84656-1-sean@geanix.com>
-References: <20191211064208.84656-1-sean@geanix.com>
+        id S1726845AbfLKIlf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 03:41:35 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47693 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfLKIlf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Dec 2019 03:41:35 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iexYi-0003AQ-A0; Wed, 11 Dec 2019 09:41:24 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:4009:4a02:9726:d32a] (unknown [IPv6:2a03:f580:87bc:d400:4009:4a02:9726:d32a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4144548D8CA;
+        Wed, 11 Dec 2019 08:41:22 +0000 (UTC)
+Subject: Re: [PATCH v4] can: m_can: remove double clearing of clock stop
+ request bit
+To:     Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
+        pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc:     martin@geanix.com
+References: <20191211063227.84259-1-sean@geanix.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <65673d33-0c7d-5402-b6ee-cc622573c80c@pengutronix.de>
+Date:   Wed, 11 Dec 2019 09:41:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 8b5b6f358cc9
+In-Reply-To: <20191211063227.84259-1-sean@geanix.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It's a good idea to reset a ip-block/spi device before using it,
-this patch will reset the device.
-And a generic reset function if needed elsewhere.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw
+Content-Type: multipart/mixed; boundary="RnqjgYmPbpNsSioYPpZYtEfFi65LrnsCu";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Sean Nyekjaer <sean@geanix.com>, sriram.dash@samsung.com,
+ pankj.sharma@samsung.com, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc: martin@geanix.com
+Message-ID: <65673d33-0c7d-5402-b6ee-cc622573c80c@pengutronix.de>
+Subject: Re: [PATCH v4] can: m_can: remove double clearing of clock stop
+ request bit
+References: <20191211063227.84259-1-sean@geanix.com>
+In-Reply-To: <20191211063227.84259-1-sean@geanix.com>
 
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
----
-Changes since v2:
- - added reset function
+--RnqjgYmPbpNsSioYPpZYtEfFi65LrnsCu
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
- drivers/net/can/m_can/tcan4x5x.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+On 12/11/19 7:32 AM, Sean Nyekjaer wrote:
+> The CSR bit is already cleared when arriving here so remove this sectio=
+n of
+> duplicate code.
+> The registers set in m_can_config_endisable() is set to same exact
+> values as before this patch.
+>=20
+> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+> Acked-by: Sriram Dash <sriram.dash@samsung.com>
+> Acked-by: Dan Murphy <dmurphy@ti.com>
 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index 1f04fec7723d..b5d2ea0999c1 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -166,6 +166,18 @@ static void tcan4x5x_check_wake(struct tcan4x5x_priv *priv)
- 	}
- }
- 
-+static void tcan4x5x_reset(struct tcan4x5x_priv *priv)
-+{
-+	if (priv->reset_gpio) {
-+		gpiod_set_value(priv->reset_gpio, 1);
-+
-+		/* tpulse_width minimum 30us */
-+		usleep_range(30, 100);
-+		gpiod_set_value(priv->reset_gpio, 0);
-+		usleep_range(700, 1000);
-+	}
-+}
-+
- static int regmap_spi_gather_write(void *context, const void *reg,
- 				   size_t reg_len, const void *val,
- 				   size_t val_len)
-@@ -365,8 +377,8 @@ static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
- 						       GPIOD_OUT_LOW);
- 	if (IS_ERR(tcan4x5x->reset_gpio))
- 		tcan4x5x->reset_gpio = NULL;
--
--	usleep_range(700, 1000);
-+	else
-+		tcan4x5x_reset(tcan4x5x);
- 
- 	tcan4x5x->device_state_gpio = devm_gpiod_get_optional(cdev->dev,
- 							      "device-state",
--- 
-2.24.0
+Nitpick: You should put your S-o-b at the end of the list.
 
+Applied to linux-can.
+
+Tnx,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--RnqjgYmPbpNsSioYPpZYtEfFi65LrnsCu--
+
+--dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3wq64ACgkQWsYho5Hk
+nSBcIAf9Hf6taOft5LVI/ktmh9l07EPg1EPAvQuNCDPaxaiwxV6B0Wyw9QTHGNUk
+DYDh4qb6j6VF+coEpkPbEDRXNKyZ9EDBmR3iVOBuyhanpUzu3GJMvvbJn7I+Xe3+
+FnEG52yQ0K5BDMazBSlYLNBosxZTh1ivdQ4t+iOtrOb3SkyQ1VkgI4ehrlzExXFD
+NcSXiD6RNMfVZ0LiCSgh4Us1RYGuJFATgIK0duJgCNI77ogM0dySyDoZPVzlAY0Y
+B4FXOb2uRC2q5fz7xBGPuTPMYhQRraOGUgARf/Mqvlac5J12Bx70mYg9purJWq+K
+XY6lZqjqo+IB5y1tPGItDSlhGP0Mqg==
+=cBd3
+-----END PGP SIGNATURE-----
+
+--dZ0w3piaPp4RqUq98issEzMdiD4p2S1zw--
