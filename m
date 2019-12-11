@@ -2,34 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A882711AC2E
+	by mail.lfdr.de (Postfix) with ESMTP id C4CB411AC2F
 	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 14:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729370AbfLKNjq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Dec 2019 08:39:46 -0500
-Received: from first.geanix.com ([116.203.34.67]:59112 "EHLO first.geanix.com"
+        id S1727477AbfLKNjr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 08:39:47 -0500
+Received: from first.geanix.com ([116.203.34.67]:59122 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727477AbfLKNjq (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 11 Dec 2019 08:39:46 -0500
+        id S1729438AbfLKNjr (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 11 Dec 2019 08:39:47 -0500
 Received: from zen.localdomain (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id C294F490;
-        Wed, 11 Dec 2019 13:39:15 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id EC52B492;
+        Wed, 11 Dec 2019 13:39:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1576071555; bh=n8KMzkyatEmC+ppomN03f4PXJ10jfUzY8wTimoNWANQ=;
-        h=From:To:Cc:Subject:Date;
-        b=bDooYxSIFP4PbfEf82sg94k8WE0P4bJfsGa/BWbVG1x3vUcbPhuFkFkQSu2VsTITV
-         GvZPkM15aymlf3zFa3jTWuCfPRzjWrbVOljCx5qR3eZE/JfKeo6FNpxC7GJA3teG3v
-         ZYH2HcldSFFe2Cl1FVTVUX/84w2/o2QfaSGhn/fIXqeIiZ1h2/UQAIxmzGSWvdR9jn
-         zoo933PHnRtBkxOT7tYG+c7CQwg0MUl5cHSPiwTF2RqMYqAHqCXOwFua9UVdm4zDKQ
-         72V/2Zo1bm4++fSV4N6fJL0JyCpDyHABB+ildRi1jmoAIxBa6KPQksonU+GuzZuCQV
-         SFlhax0lYV2HA==
+        t=1576071557; bh=k7+VnL953BuPTam1Gvl66O35k7Un5e3sIaK+MDU/6uQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=O+avZxUTwgllHyqpBtffKBotjFUmSOQ4VHzSahzyjmu9GeLbVkTl9p8nfnXoMKF9F
+         8mssreXjNlSlFyHKGdKrZDnooskSmN74Hkpi4ym47OUDHqlk4dCx7s38xL7gUhEAxw
+         daBn4O5AxxJ6sHaHZH7TIOYG0vnquLpzDFXgNV38gI39hyzk4mWKbUgw3f0+3iMlfj
+         xDxKDMhF467m07f+YTZZR7vJECWCwIcaxGRUlIcaK8a0SK/3PxSM0yfAmyizqeS10Q
+         l/0EKbvEHOur+/XzFRvFiU8BanolkHZkAzl2i90WrAnQOcCBhv5bdHKzQ3GLM0eD/G
+         1IGghPH1shmGg==
 From:   Sean Nyekjaer <sean@geanix.com>
 To:     mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     Sean Nyekjaer <sean@geanix.com>, martin@geanix.com
-Subject: [PATCH v5 1/2] can: tcan4x5x: reset device before register access
-Date:   Wed, 11 Dec 2019 14:39:25 +0100
-Message-Id: <20191211133926.319015-1-sean@geanix.com>
+Cc:     Sean Nyekjaer <sean@geanix.com>, martin@geanix.com,
+        stable@vger.kernel.org
+Subject: [PATCH v5 2/2] can: tcan4x5x: put the device out of standby before register access
+Date:   Wed, 11 Dec 2019 14:39:26 +0100
+Message-Id: <20191211133926.319015-2-sean@geanix.com>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191211133926.319015-1-sean@geanix.com>
+References: <20191211133926.319015-1-sean@geanix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
@@ -41,79 +44,49 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-It's a good idea to reset a ip-block/spi device before using it, this
-patch will reset the device.
+The m_can tries to detect if Non ISO Operation is available while in
+standby, this function results in the following error:
 
-And a generic reset function if needed elsewhere.
+tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init module
+tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
+tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
 
+When the tcan device comes out of reset it comes out in standby mode.
+The m_can driver tries to access the control register but fails due to
+the device is in standby mode.
+
+So this patch will put the tcan device in normal mode before the m_can
+driver does the initialization.
+
+Fixes: 5443c226ba91 ("can: tcan4x5x: Add tcan4x5x driver to the kernel")
+Cc: stable@vger.kernel.org
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
 Changes since v3:
- - added reset if the reset_gpio is not avaliable
+ - Fixed fixes tag
 
 Changes since v4:
- - added error handling for the SPI I/O
+ - None
 
- drivers/net/can/m_can/tcan4x5x.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+ drivers/net/can/m_can/tcan4x5x.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index b6b2feca9e8f..032d110e0870 100644
+index 032d110e0870..3a3359ad3723 100644
 --- a/drivers/net/can/m_can/tcan4x5x.c
 +++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -166,6 +166,27 @@ static void tcan4x5x_check_wake(struct tcan4x5x_priv *priv)
- 	}
- }
+@@ -485,6 +485,10 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+ 	if (ret)
+ 		goto out_power;
  
-+static int tcan4x5x_reset(struct tcan4x5x_priv *priv)
-+{
-+	int ret = 0;
-+
-+	if (priv->reset_gpio) {
-+		gpiod_set_value(priv->reset_gpio, 1);
-+
-+		/* tpulse_width minimum 30us */
-+		usleep_range(30, 100);
-+		gpiod_set_value(priv->reset_gpio, 0);
-+	} else {
-+		ret = regmap_write(priv->regmap, TCAN4X5X_CONFIG, TCAN4X5X_SW_RESET);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	usleep_range(700, 1000);
-+
-+	return ret;
-+}
-+
- static int regmap_spi_gather_write(void *context, const void *reg,
- 				   size_t reg_len, const void *val,
- 				   size_t val_len)
-@@ -351,6 +372,7 @@ static int tcan4x5x_disable_wake(struct m_can_classdev *cdev)
- static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
- {
- 	struct tcan4x5x_priv *tcan4x5x = cdev->device_data;
-+	int ret;
- 
- 	tcan4x5x->device_wake_gpio = devm_gpiod_get(cdev->dev, "device-wake",
- 						    GPIOD_OUT_HIGH);
-@@ -363,10 +385,13 @@ static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
- 
- 	tcan4x5x->reset_gpio = devm_gpiod_get_optional(cdev->dev, "reset",
- 						       GPIOD_OUT_LOW);
--	if (IS_ERR(tcan4x5x->reset_gpio))
-+	if (IS_ERR(tcan4x5x->reset_gpio)) {
- 		tcan4x5x->reset_gpio = NULL;
-+	}
- 
--	usleep_range(700, 1000);
-+	ret = tcan4x5x_reset(tcan4x5x);
++	ret = tcan4x5x_init(mcan_class);
 +	if (ret)
-+		return ret;
- 
- 	tcan4x5x->device_state_gpio = devm_gpiod_get_optional(cdev->dev,
- 							      "device-state",
++		goto out_power;
++
+ 	ret = m_can_class_register(mcan_class);
+ 	if (ret)
+ 		goto out_power;
 -- 
 2.24.0
 
