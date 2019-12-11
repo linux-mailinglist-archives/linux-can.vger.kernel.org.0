@@ -2,36 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 653E511ACA2
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 14:59:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0103011ACDE
+	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 15:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727554AbfLKN7F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Dec 2019 08:59:05 -0500
-Received: from first.geanix.com ([116.203.34.67]:60074 "EHLO first.geanix.com"
+        id S1729686AbfLKOEC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 09:04:02 -0500
+Received: from first.geanix.com ([116.203.34.67]:60288 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729513AbfLKN7E (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 11 Dec 2019 08:59:04 -0500
+        id S1729118AbfLKOEB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 11 Dec 2019 09:04:01 -0500
 Received: from zen.localdomain (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id 5C2FF493;
-        Wed, 11 Dec 2019 13:58:34 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 60AA7490;
+        Wed, 11 Dec 2019 14:03:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1576072714; bh=P9AdXLCyi/6osF9N7RGIs5PjvCgfv3ixgbp9vw4DyIw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LZmwyzeaz1zN1ZsFfD1xJqi0uqN0b1s6NWn8CeZezJeWoxn4L0jOf0fTrEl9PWkK+
-         1RhQzRpAWGM1b+lTqUcF2Lq6UzMNOn1njk1/kstcKYuDlmwRJjo/l2dUxhbkkhKZsT
-         1c9WMvjz7KybRFj9XXWcBe03qgfVqbEhIpAe1ke3JnIyWxBOysUZoRS1OgZB9qzPgd
-         V0l8Wr+OM9v1LXdd3KK8tPi5lLmze+pY/EnP5ndBPcvQucyg6weps2e7sd4Bo2EJFk
-         5dsSRMMDAnKMhDG29maWIWkB3ZDw35VzGhccIppoSGq3Tjf+wPsKWqxj4Cr8bsFQj2
-         0lTLpXS9L7GCg==
+        t=1576073011; bh=mu00ivLCk4ZkEa4sx9AqXK90V3ztVOr4pFUkVSstv3U=;
+        h=From:To:Cc:Subject:Date;
+        b=KcVvLM4qiTLhs+OP2wC3UoQOKXxeRV1zemsrCWlms4ycxaKKPbH2G0lHbA55RBPt9
+         Jj7zyVwSrNJTp58iVACF5Mfm1iEu/nu58igA3bjPMGmrYJ/LWsk7H1/ndm4yH7Lssg
+         q/MnKcqA/P3CmkOrhYMETw/4ewFFcovW/93y/qkG4naz/THudjm6fps0YbQbQtMkLh
+         RGwQOueAmb7Nexb8q9c1Ddum1wTa6P5mEDDsFuGJ7iBP/eWzIXPCIU4M1KFf0m1VoG
+         p4uLrRnAa6RBWtrcx9dFhBHf9XUaNfCwq7fi7XHPf1AcW336OzXkBlGUmabzefvfkw
+         BhZgbwh0vVC8A==
 From:   Sean Nyekjaer <sean@geanix.com>
 To:     mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     Sean Nyekjaer <sean@geanix.com>, stable@vger.kernel.org
-Subject: [PATCH v6 2/2] can: tcan4x5x: put the device out of standby before register access
-Date:   Wed, 11 Dec 2019 14:58:52 +0100
-Message-Id: <20191211135852.320650-2-sean@geanix.com>
+Cc:     Sean Nyekjaer <sean@geanix.com>, martin@geanix.com,
+        esben@geanix.com
+Subject: [PATCH] can: tcan4x5x: remove redundant return statement
+Date:   Wed, 11 Dec 2019 15:03:55 +0100
+Message-Id: <20191211140355.321479-1-sean@geanix.com>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191211135852.320650-1-sean@geanix.com>
-References: <20191211135852.320650-1-sean@geanix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
@@ -43,54 +42,24 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The m_can tries to detect if Non ISO Operation is available while in
-standby, this function results in the following error:
-
-tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init module
-tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
-tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
-
-When the tcan device comes out of reset it comes out in standby mode.
-The m_can driver tries to access the control register but fails due to
-the device is in standby mode.
-
-So this patch will put the tcan device in normal mode before the m_can
-driver does the initialization.
-
-Fixes: 5443c226ba91 ("can: tcan4x5x: Add tcan4x5x driver to the kernel")
-Cc: stable@vger.kernel.org
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
-Changes since v3:
- - Fixed fixes tag
-
-Changes since v4:
- - None
-
-Changes since v5:
- - None
-
- Sorry for the mess :)
-
- drivers/net/can/m_can/tcan4x5x.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/can/m_can/tcan4x5x.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index dcfa85edc787..8ed2813f227e 100644
+index 8ed2813f227e..9a33fcaaf067 100644
 --- a/drivers/net/can/m_can/tcan4x5x.c
 +++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -482,6 +482,10 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+@@ -329,8 +329,6 @@ static int tcan4x5x_clear_interrupts(struct m_can_classdev *cdev)
  
- 	tcan4x5x_power_enable(priv->power, 1);
+ 	ret = tcan4x5x_write_tcan_reg(cdev, TCAN4X5X_ERROR_STATUS,
+ 				      TCAN4X5X_CLEAR_ALL_INT);
+-	if (ret)
+-		return ret;
  
-+	ret = tcan4x5x_init(mcan_class);
-+	if (ret)
-+		goto out_power;
-+
- 	ret = m_can_class_register(mcan_class);
- 	if (ret)
- 		goto out_power;
+ 	return ret;
+ }
 -- 
 2.24.0
 
