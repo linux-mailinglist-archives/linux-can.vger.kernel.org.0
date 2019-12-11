@@ -2,117 +2,206 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 260B611AA58
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 12:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C45011AA7D
+	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 13:10:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728370AbfLKL6N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Wed, 11 Dec 2019 06:58:13 -0500
-Received: from smtpx.feld.cvut.cz ([147.32.192.33]:33763 "EHLO
-        smtpx.feld.cvut.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727365AbfLKL6N (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Dec 2019 06:58:13 -0500
-X-Greylist: delayed 548 seconds by postgrey-1.27 at vger.kernel.org; Wed, 11 Dec 2019 06:58:11 EST
-Received: from localhost (styx [192.168.200.7])
-        by smtpx.feld.cvut.cz (Postfix) with ESMTP id 3766242C93;
-        Wed, 11 Dec 2019 12:49:02 +0100 (CET)
-X-Virus-Scanned: IMAP STYX AMAVIS
-Received: from smtpx.feld.cvut.cz ([192.168.200.2])
-        by localhost (styx.feld.cvut.cz [192.168.200.7]) (amavisd-new, port 10060)
-        with ESMTP id NyC2ijDlYOOD; Wed, 11 Dec 2019 12:49:00 +0100 (CET)
-Received: from imap.feld.cvut.cz (imap.feld.cvut.cz [147.32.192.34])
-        by smtpx.feld.cvut.cz (Postfix) with ESMTP id DFC5442BEB;
-        Wed, 11 Dec 2019 12:48:59 +0100 (CET)
-Received: from wsh by steelpick.2x.cz with local (Exim 4.93-RC1)
-        (envelope-from <michal.sojka@cvut.cz>)
-        id 1if0UF-0001jP-IN; Wed, 11 Dec 2019 12:48:59 +0100
-From:   Michal Sojka <michal.sojka@cvut.cz>
-To:     linux-can@vger.kernel.org
-Cc:     Bernd Krumboeck <b.krumboeck@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: usb_8dev - WARN_ON(in_irq())
-Date:   Wed, 11 Dec 2019 12:48:59 +0100
-Message-ID: <87immnaxqs.fsf@steelpick.2x.cz>
+        id S1728030AbfLKMKP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 07:10:15 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:49031 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727365AbfLKMKP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Dec 2019 07:10:15 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1if0om-0004rc-2Q; Wed, 11 Dec 2019 13:10:12 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:4009:4a02:9726:d32a] (unknown [IPv6:2a03:f580:87bc:d400:4009:4a02:9726:d32a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C14F048DBCE;
+        Wed, 11 Dec 2019 12:10:08 +0000 (UTC)
+Subject: Re: [PATCH v3 1/2] can: m_can: tcan4x5x: put the device out of
+ standby before register access
+To:     Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
+        linux-can@vger.kernel.org
+Cc:     martin@geanix.com, stable@vger.kernel.org
+References: <20191211064208.84656-1-sean@geanix.com>
+ <8b1682ad-c291-252e-c768-63a7a4801aff@pengutronix.de>
+ <bc0014ec-7302-97f4-5d71-8d029b0fb1fb@geanix.com>
+ <41d13619-fab8-ca19-c340-c80cd80d117e@pengutronix.de>
+ <ae996f9a-e50d-8f31-7457-c7fb461f5c9e@geanix.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <614104a2-b667-62aa-4e1d-abcef89a257e@pengutronix.de>
+Date:   Wed, 11 Dec 2019 13:10:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <ae996f9a-e50d-8f31-7457-c7fb461f5c9e@geanix.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="XxAOnP1qt2uP2wrNijAFq0J5yPApjsWqp"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dear all,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--XxAOnP1qt2uP2wrNijAFq0J5yPApjsWqp
+Content-Type: multipart/mixed; boundary="lWn3h5s88mOdAmgNIGfSemHhAfY5opEXT";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc: martin@geanix.com, stable@vger.kernel.org
+Message-ID: <614104a2-b667-62aa-4e1d-abcef89a257e@pengutronix.de>
+Subject: Re: [PATCH v3 1/2] can: m_can: tcan4x5x: put the device out of
+ standby before register access
+References: <20191211064208.84656-1-sean@geanix.com>
+ <8b1682ad-c291-252e-c768-63a7a4801aff@pengutronix.de>
+ <bc0014ec-7302-97f4-5d71-8d029b0fb1fb@geanix.com>
+ <41d13619-fab8-ca19-c340-c80cd80d117e@pengutronix.de>
+ <ae996f9a-e50d-8f31-7457-c7fb461f5c9e@geanix.com>
+In-Reply-To: <ae996f9a-e50d-8f31-7457-c7fb461f5c9e@geanix.com>
 
-I use usb_8dev USB2CAN converter and I'm getting non-killable processes
-and the following warnings in dmesg. Any idea, how to fix it?
+--lWn3h5s88mOdAmgNIGfSemHhAfY5opEXT
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-Thanks
--Michal
+On 12/11/19 12:28 PM, Sean Nyekjaer wrote:
+> On 11/12/2019 10.44, Marc Kleine-Budde wrote:
+>> On 12/11/19 10:13 AM, Sean Nyekjaer wrote:
+>>>>> When the tcan device comes out of reset it comes out in standby mod=
+e.
+>>>>> The m_can driver tries to access the control register but fails due=
+ to
+>>>>> the device is in standby mode.
+>>>>> So this patch will put the tcan device in normal mode before the m_=
+can
+>>>>> driver does the initialization.
+>>>>>
+>>>>> Fixes: a229abeed7f7 ("can: tcan4x5x: Turn on the power before parsi=
+ng the config")
+>>>>> Cc: stable@vger.kernel.org
+>>>>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+>>>>
+>>>> Applied both to linux-can.
+>>>
+>>> Oh, the commit id for "can: tcan4x5x: Turn on the power before parsin=
+g
+>>> the config" have changed, since this morning :)
+>>
+>> Ahh, I see.
+>>
+>> Until there is a pull request (including a tag) the testing branch is
+>> subject to rebase. Meaning, when there is a patch, that needs update I=
+'m
+>> happy to squash things into it.
+>>
+>> I'm squashing there two commits into one:
+>=20
+> It's two different authors :-)
 
-Dec 11 10:27:38 kernel: usb 1-5.2: new full-speed USB device number 12 using xhci_hcd
-Dec 11 10:27:38 kernel: usb 1-5.2: New USB device found, idVendor=0483, idProduct=1234, bcdDevice= 1.00
-Dec 11 10:27:38 kernel: usb 1-5.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-Dec 11 10:27:38 kernel: usb 1-5.2: Product: USB2CAN converter
-Dec 11 10:27:38 kernel: usb 1-5.2: Manufacturer: 8Devices
-Dec 11 10:27:38 kernel: usb 1-5.2: SerialNumber: 7272B673
-Dec 11 10:27:38 kernel: usb_8dev 1-5.2:1.0 can0: firmware: 2.1, hardware: 2.0
-...
-Dec 11 10:28:54 kernel: ------------[ cut here ]------------
-Dec 11 10:28:54 kernel: WARNING: CPU: 5 PID: 0 at net/core/skbuff.c:651 skb_release_head_state.cold+0xc/0x17
-Dec 11 10:28:54 kernel: Modules linked in: can_raw can xt_conntrack xt_MASQUERADE nf_conntrack_netlink nft_counter xt_addrtype nft_compat nft_chain_nat nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 nf_tables nfnetlink br_netfilter bridge stp llc xfrm_user xfrm_algo ctr ccm rfcomm fuse cpufreq_userspace cpufreq_powersave cpufreq_conservative squashfs bnep uinput snd_hda_codec_realtek snd_hda_codec_generic iwlmvm btusb btrtl btbcm btintel x86_pkg_temp_thermal snd_hda_intel mac80211 intel_powerclamp coretemp libarc4 bluetooth snd_hda_codec kvm_intel snd_hda_core iwlwifi binfmt_misc drbg snd_hwdep dell_laptop kvm snd_pcm_oss ledtrig_audio dell_wmi uvcvideo videobuf2_vmalloc mei_wdt videobuf2_memops snd_mixer_oss ansi_cprng nls_ascii dell_smbios videobuf2_v4l2 efi_pstore irqbypass nls_cp437 intel_rapl_msr snd_pcm videobuf2_common iTCO_wdt snd_timer usb_8dev dcdbas ecdh_generic vfat ecc joydev videodev iTCO_vendor_support intel_cstate dell_smm_hwmon crc16 fat can_dev snd mei_me rtsx_pci_ms cfg80211
-Dec 11 10:28:54 kernel:  sparse_keymap serio_raw dell_wmi_descriptor wmi_bmof mc intel_wmi_thunderbolt tpm_crb efivars memstick mei watchdog intel_uncore intel_rapl_perf soundcore processor_thermal_device intel_rapl_common intel_pch_thermal intel_soc_dts_iosf battery tpm_tis tpm_tis_core dell_smo8800 tpm int3403_thermal int340x_thermal_zone dell_rbtn rng_core acpi_pad rfkill ac evdev int3400_thermal acpi_thermal_rel sch_fq_codel vcan ecryptfs i2c_dev nfsd parport_pc auth_rpcgss ppdev nfs_acl lockd lp parport grace loop sunrpc dm_crypt efivarfs ip_tables x_tables autofs4 hid_generic usbhid hid btrfs zstd_decompress zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c crc32c_generic raid1 raid0 multipath linear md_mod dm_mirror dm_region_hash dm_log dm_mod crct10dif_pclmul crc32_pclmul crc32c_intel i915 ghash_clmulni_intel xhci_pci xhci_hcd rtsx_pci_sdmmc i2c_algo_bit mmc_core drm_kms_helper usbcore ahci libahci aesni_intel e1000e libata drm
-Dec 11 10:28:54 kernel:  rtsx_pci nvme psmouse aes_x86_64 scsi_mod crypto_simd cryptd glue_helper nvme_core ptp i2c_i801 pps_core mfd_core usb_common wmi video button
-Dec 11 10:28:54 kernel: CPU: 5 PID: 0 Comm: swapper/5 Not tainted 5.3.0-1-amd64 #1 Debian 5.3.7-1
-Dec 11 10:28:54 kernel: Hardware name: Dell Inc. Latitude E5470/06DNG5, BIOS 1.21.6 10/02/2019
-Dec 11 10:28:54 kernel: RIP: 0010:skb_release_head_state.cold+0xc/0x17
-Dec 11 10:28:54 kernel: Code: 54 24 08 e8 1c 57 ae ff 0f 0b 48 8b 54 24 08 48 8b 74 24 10 4c 63 4c 24 1c e9 b2 93 ff ff 48 c7 c7 60 4b c6 8d e8 fa 56 ae ff <0f> 0b 48 8b 43 60 e9 1d 9e ff ff 44 89 ce 48 c7 c7 c8 6a d0 8d e8
-Dec 11 10:28:54 kernel: RSP: 0018:ffffb8cf401c8cb8 EFLAGS: 00010046
-Dec 11 10:28:54 kernel: RAX: 0000000000000024 RBX: ffff93e8bb326d00 RCX: 0000000000000000
-Dec 11 10:28:54 kernel: RDX: 0000000000000000 RSI: ffff93e8bdb57688 RDI: ffff93e8bdb57688
-Dec 11 10:28:54 kernel: RBP: ffff93e8bb326d00 R08: ffff93e8bdb57688 R09: 0000000000000004
-Dec 11 10:28:54 kernel: R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff8d413959
-Dec 11 10:28:54 kernel: R13: ffff93e8bb326d00 R14: 0000000000000082 R15: ffff93e8bdb6b64c
-Dec 11 10:28:54 kernel: FS:  0000000000000000(0000) GS:ffff93e8bdb40000(0000) knlGS:0000000000000000
-Dec 11 10:28:54 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-Dec 11 10:28:54 kernel: CR2: 00000042084c6000 CR3: 0000000344a0a005 CR4: 00000000003606e0
-Dec 11 10:28:54 kernel: DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-Dec 11 10:28:54 kernel: DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Dec 11 10:28:54 kernel: Call Trace:
-Dec 11 10:28:54 kernel:  <IRQ>
-Dec 11 10:28:54 kernel:  skb_release_all+0xe/0x30
-Dec 11 10:28:54 kernel:  kfree_skb+0x32/0xa0
-Dec 11 10:28:54 kernel:  enqueue_to_backlog+0x99/0x230
-Dec 11 10:28:54 kernel:  ? recalibrate_cpu_khz+0x10/0x10
-Dec 11 10:28:54 kernel:  netif_rx_internal+0x41/0x100
-Dec 11 10:28:54 kernel:  netif_rx+0x18/0xb0
-Dec 11 10:28:54 kernel:  can_get_echo_skb+0x32/0x60 [can_dev]
-Dec 11 10:28:54 kernel:  usb_8dev_write_bulk_callback+0x7d/0xb0 [usb_8dev]
-Dec 11 10:28:54 kernel:  __usb_hcd_giveback_urb+0x6f/0x120 [usbcore]
-Dec 11 10:28:54 kernel:  xhci_giveback_urb_in_irq.isra.0+0x76/0xf0 [xhci_hcd]
-Dec 11 10:28:54 kernel:  xhci_td_cleanup+0xfd/0x140 [xhci_hcd]
-Dec 11 10:28:54 kernel:  xhci_irq+0xbb0/0x1cf0 [xhci_hcd]
-Dec 11 10:28:54 kernel:  __handle_irq_event_percpu+0x48/0x180
-Dec 11 10:28:54 kernel:  handle_irq_event_percpu+0x31/0x80
-Dec 11 10:28:54 kernel:  handle_irq_event+0x3c/0x5c
-Dec 11 10:28:54 kernel:  handle_edge_irq+0x98/0x1e0
-Dec 11 10:28:54 kernel:  handle_irq+0x1f/0x30
-Dec 11 10:28:54 kernel:  do_IRQ+0x4b/0xd0
-Dec 11 10:28:54 kernel:  common_interrupt+0xf/0xf
-Dec 11 10:28:54 kernel:  </IRQ>
-Dec 11 10:28:54 kernel: RIP: 0010:cpuidle_enter_state+0xc4/0x420
-Dec 11 10:28:54 kernel: Code: e8 c1 39 ae ff 80 7c 24 0f 00 74 17 9c 58 0f 1f 44 00 00 f6 c4 02 0f 85 39 03 00 00 31 ff e8 33 50 b4 ff fb 66 0f 1f 44 00 00 <45> 85 e4 0f 89 cf 01 00 00 c7 45 10 00 00 00 00 48 83 c4 18 44 89
-Dec 11 10:28:54 kernel: RSP: 0018:ffffb8cf400d7e68 EFLAGS: 00000246 ORIG_RAX: ffffffffffffffdd
-Dec 11 10:28:54 kernel: RAX: ffff93e8bdb6a580 RBX: ffffffff8debab60 RCX: 000000000000001f
-Dec 11 10:28:54 kernel: RDX: 0000000000000000 RSI: 000000002f32b87a RDI: 0000000000000000
-Dec 11 10:28:54 kernel: RBP: ffff93e8bdb74400 R08: 000000584dd590cb R09: 0000000000000082
-Dec 11 10:28:54 kernel: R10: ffff93e8bdb69504 R11: ffff93e8bdb694e4 R12: 0000000000000004
-Dec 11 10:28:54 kernel: R13: 000000584dd590cb R14: 0000000000000004 R15: ffff93e8bb635d00
-Dec 11 10:28:54 kernel:  ? cpuidle_enter_state+0x9f/0x420
-Dec 11 10:28:54 kernel:  cpuidle_enter+0x29/0x40
-Dec 11 10:28:54 kernel:  do_idle+0x1dc/0x270
-Dec 11 10:28:54 kernel:  cpu_startup_entry+0x19/0x20
-Dec 11 10:28:54 kernel:  start_secondary+0x160/0x1b0
-Dec 11 10:28:54 kernel:  secondary_startup_64+0xa4/0xb0
-Dec 11 10:28:54 kernel: ---[ end trace 6b8bc0481012eb0c ]---
-...
-Dec 11 10:28:54 kernel: usb_8dev 1-5.2:1.0 can0: Tx URB aborted (-2)
+No problem with me. I don't want to have a known broken patch in one
+pull request that gets fixed by another patch in that pull request.
 
+So we have to sort this out. :)
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--lWn3h5s88mOdAmgNIGfSemHhAfY5opEXT--
+
+--XxAOnP1qt2uP2wrNijAFq0J5yPApjsWqp
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl3w3JwACgkQWsYho5Hk
+nSDPGgf/UmqXKjwHmO8s3BLkZLhLkBYhuAgk+koBMIQBoc2HzujiT9ga6srvrYo2
+ch4GNT1YwZIXsWFmo5o4XZtsd7rmYL/qK/M2GGbXI+nj/MCBxLQ4cruo36Aa6aWp
+nowqvt24mBUjPWR+TnNVrd2YavSHijp/jDbXqJR17ixyam47hlF79L/cMvG3R2ld
+vaKf6F+D7BQ1QkDe9vsk7UO8dOoCr3crpMixn4mbRiUz3rpLhpDYi8YxD1e0vptP
+CFZ4dZeOoPm4JPVUrIvb1lj16z/m+NJBx9wunW2yXDBHXk6aLZ1yPiMOQw9kuT51
+daHvdSl2uPJmOIxL2GOIt4C+CmHXMg==
+=Fws0
+-----END PGP SIGNATURE-----
+
+--XxAOnP1qt2uP2wrNijAFq0J5yPApjsWqp--
