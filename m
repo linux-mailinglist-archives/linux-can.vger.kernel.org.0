@@ -2,34 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AD611AC7C
-	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 14:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 037A311AC7E
+	for <lists+linux-can@lfdr.de>; Wed, 11 Dec 2019 14:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbfLKNxs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Dec 2019 08:53:48 -0500
-Received: from first.geanix.com ([116.203.34.67]:59712 "EHLO first.geanix.com"
+        id S1729118AbfLKNxv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Dec 2019 08:53:51 -0500
+Received: from first.geanix.com ([116.203.34.67]:59724 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727554AbfLKNxr (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 11 Dec 2019 08:53:47 -0500
+        id S1727554AbfLKNxv (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 11 Dec 2019 08:53:51 -0500
 Received: from zen.localdomain (unknown [85.184.140.241])
-        by first.geanix.com (Postfix) with ESMTPSA id 6F93C490;
-        Wed, 11 Dec 2019 13:53:17 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 7E771492;
+        Wed, 11 Dec 2019 13:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1576072397; bh=U8QpgxahOSSPGiWpwWNLRPCmOKuTvv6GVTGmkkpGSLw=;
-        h=From:To:Cc:Subject:Date;
-        b=de/UYgaHJ1/tdR0T0uL0jVQwzlpE7u4RLMdq1vbamUnb+HqoMuwX18vw/3NdsEvuN
-         hoAgpSH6WDHpO8+PnoUH2qh2lIMnUHFfQGZe+ocKz0lYvvQSGAl14gE6jC5jx+9kbI
-         KuebJshucjJrNgB2SgAh1DXjopvS1r99lf7fZEm9Oy6euWzmi4SPsy94IdS9q8xtR6
-         MsxruyoNkl9HGnGXmjclIQsYgrhdF4q9lsawIoYx42XYvynPb7/QoZgXGcw+w+f5/g
-         OQNL0OAVl0YR/sQX46iurJfflFgfGy0RGCbRuHm1T8RHQri6+IAyWF2rHH/7UHI9PB
-         h9MWvCHXy1W0g==
+        t=1576072398; bh=x37RrImUycmmLa+gn+Tnt5kcAwZNg5NLbu1avv6oeOo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=fU9W3Hwkf8BfQx6LIxoU0+7GMQr5TaJ/7ff+yFkY16fex62AYzGBetghf/h1EfgKC
+         YXbcjnlnwVV9tD5CA8QJXF9QIFo/FUrPB/80TkJmYVQIk8qK4QoaX0RYcutVcSI5FN
+         d04sczg0mCn8yAREK3mlCM+Sz5kksfKgCr66SfW5j1tA8ADeBT7LfCI2T+TK83f+xb
+         X5VHxwUd9Xl9eQ6jbQXLpy9Xd44P2t3tiWj9bKunOSsRYt+fMziFco8S9n7VW3Cw2J
+         ZQaydVQPgk9xoDyTQlJiQ+pooxs8IVZuKmcjm+z97tKSJIag192h8mj0K1S+D4N99/
+         MrdKbt6PWw0/Q==
 From:   Sean Nyekjaer <sean@geanix.com>
 To:     mkl@pengutronix.de, dmurphy@ti.com, linux-can@vger.kernel.org
-Cc:     Sean Nyekjaer <sean@geanix.com>, stable@vger.kernel.org
-Subject: [PATCH v6 1/2] can: tcan4x5x: put the device out of standby before register access
-Date:   Wed, 11 Dec 2019 14:53:39 +0100
-Message-Id: <20191211135340.320004-1-sean@geanix.com>
+Cc:     Sean Nyekjaer <sean@geanix.com>,
+        Sriram Dash <sriram.dash@samsung.com>
+Subject: [PATCH v6 2/2] can: m_can: remove double clearing of clock stop request bit
+Date:   Wed, 11 Dec 2019 14:53:40 +0100
+Message-Id: <20191211135340.320004-2-sean@geanix.com>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191211135340.320004-1-sean@geanix.com>
+References: <20191211135340.320004-1-sean@geanix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=4.0 tests=BAYES_00,DKIM_SIGNED,
@@ -41,52 +44,42 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The m_can tries to detect if Non ISO Operation is available while in
-standby, this function results in the following error:
+The CSR bit is already cleared when arriving here so remove this section of
+duplicate code.
+The registers set in m_can_config_endisable() is set to same exact
+values as before this patch.
 
-tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init module
-tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
-tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
-
-When the tcan device comes out of reset it comes out in standby mode.
-The m_can driver tries to access the control register but fails due to
-the device is in standby mode.
-
-So this patch will put the tcan device in normal mode before the m_can
-driver does the initialization.
-
-Fixes: 5443c226ba91 ("can: tcan4x5x: Add tcan4x5x driver to the kernel")
-Cc: stable@vger.kernel.org
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Acked-by: Sriram Dash <sriram.dash@samsung.com>
+Acked-by: Dan Murphy <dmurphy@ti.com>
 ---
 Changes since v3:
- - added reset if the reset_gpio is not avaliable
+ - Fixed fixes tag
 
 Changes since v4:
- - added error handling for the SPI I/O
+ - None
 
 Changes since v5:
- - Removed braces for single statement if's
+ - None
 
- drivers/net/can/m_can/tcan4x5x.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/can/m_can/m_can.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index c1b83dc26c3a..295dbb73c69e 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -484,6 +484,10 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 	if (ret)
- 		goto out_power;
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 02c5795b7393..4edc6f6e5165 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -380,10 +380,6 @@ void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
+ 		cccr &= ~CCCR_CSR;
  
-+	ret = tcan4x5x_init(mcan_class);
-+	if (ret)
-+		goto out_power;
-+
- 	ret = m_can_class_register(mcan_class);
- 	if (ret)
- 		goto out_power;
+ 	if (enable) {
+-		/* Clear the Clock stop request if it was set */
+-		if (cccr & CCCR_CSR)
+-			cccr &= ~CCCR_CSR;
+-
+ 		/* enable m_can configuration */
+ 		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
+ 		udelay(5);
 -- 
 2.24.0
 
