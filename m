@@ -2,106 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CAE11D20F
-	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2019 17:18:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564A011D8CB
+	for <lists+linux-can@lfdr.de>; Thu, 12 Dec 2019 22:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729247AbfLLQSL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 12 Dec 2019 11:18:11 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:54824 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729591AbfLLQSK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Dec 2019 11:18:10 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBCGHvLv077744;
-        Thu, 12 Dec 2019 10:17:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576167477;
-        bh=nkLQXRQ87/SfQSBWWiilrp7/xPrpCi1hyGz8PEvF/Ss=;
-        h=From:To:CC:Subject:Date;
-        b=MePKYqk8/SzAObjqBi4Ei8Jj/L7n8dXOapx3cZPfRREr2XbqjHMo6qeDpjL7JMINx
-         aorcAwPvlEPWZENyarLXp1EPYBvJm2qxB1jHrZijLpIj8QeJWoDQo3inBbCpxzaSvI
-         Napit0EFcN1FLgXCYEA5W99U2Xu74ez1rBaoyGY8=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBCGHvK9122783
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Dec 2019 10:17:57 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
- Dec 2019 10:17:57 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 12 Dec 2019 10:17:57 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBCGHvpu030666;
-        Thu, 12 Dec 2019 10:17:57 -0600
-From:   Dan Murphy <dmurphy@ti.com>
-To:     <linux-kernel@vger.kernel.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <wg@grandegger.com>,
-        <sriram.dash@samsung.com>
-CC:     Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH linux-can/testing] can: tcan4x5x: Disable the INH pin device-state GPIO is unavailable
-Date:   Thu, 12 Dec 2019 10:15:36 -0600
-Message-ID: <20191212161536.23264-1-dmurphy@ti.com>
-X-Mailer: git-send-email 2.23.0
+        id S1731011AbfLLVuC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 12 Dec 2019 16:50:02 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:35973 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730784AbfLLVuB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Dec 2019 16:50:01 -0500
+Received: by mail-lj1-f196.google.com with SMTP id r19so348521ljg.3
+        for <linux-can@vger.kernel.org>; Thu, 12 Dec 2019 13:50:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jk5bFxBhX7PUL81FsEDZPx549vAJojW0agpKD5s82ck=;
+        b=TnKFKZwcS1jHqbmJoYSorHCIm1cQovqAMCWDsRHY0anJXb65PW+E6rDEp85wsfPWZZ
+         xvAUol/kkv7jr8QAhTFTHucT1E/ieuISJHa/Xn7hxRkIEPf1CouQdKbXU1HwWobAkyuw
+         ICmkcSyfAN0x1gkHUbCXsiNOKulW6cqDlX/7scUbZ/vN/RCAAHTA77sks54Czn9L3x3D
+         DLBC+b5kCfhYSFzShgIplaPgEP+Ys2g9xUor9pxd2jAZ61c1QYYxNaQjN9jWEeJDyXHz
+         8I/R6P+1fCS79rkWaPdQ1NgRyByEPptRy9jYlyqCineIpuPMqBy8ltkz5AjLZiz7Czq5
+         pLrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jk5bFxBhX7PUL81FsEDZPx549vAJojW0agpKD5s82ck=;
+        b=kVOSibEBu67Gx1HgAMELHLaEB0bidFm9Hi3LS0BCxGEreQ3zgWI+pvQ/1I/2fZzMEJ
+         cgmGpeINdtSSLTpMj/VDSs8RbIxmfO5VFBzoo5crNcf9TouhYNpzrgBtvcxMG3lh+T/O
+         VaUUQ9bCK499/I4HjKOnAdZRnewnrMni8MEON5rZpD20HP3UeJRSOHbMkC0Q7f8pt15+
+         DPj8a8G3MqbZdHM1Br9rlxqPqpK5PSLEqxCh8zVU1tMhS2Qe2Mu4Junz94f1jONdE1PF
+         ZZj1iJrsbgMZInbukNsyV3U7A/ZbY4JAWx+j8jHKgaQjefepjakpMufafijLcgWC9gf2
+         +wdw==
+X-Gm-Message-State: APjAAAV0XncP80UjslxRJb/hMSUxUVgD0uUfr6olVBp7s54YP9GXka/l
+        to2JljjGE2EGP4UuyRRHO9P/vxsAQCmSvYG4THnYGAxn
+X-Google-Smtp-Source: APXvYqwu+FHJaOqhy+PWawwQrYhbMazUSnrUxnTDIcOAaezv3uPoDbcVOYXZ1DsvWP3j6Zaw40/5JDAJgGL7FgMEmGY=
+X-Received: by 2002:a05:651c:3dc:: with SMTP id f28mr7793352ljp.35.1576187399800;
+ Thu, 12 Dec 2019 13:49:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <CAHChkrstQdjVcWtvX4oeUOQfZS3-G_RPWb8Y82Zvaku40dM_qA@mail.gmail.com>
+ <20191206085923.GA4896@x1.vandijck-laurijssen.be> <CAHChkruBV2btmtk4FdfJ3-VvidGy5Z0hHhno4pPNuxMoDKAYtQ@mail.gmail.com>
+In-Reply-To: <CAHChkruBV2btmtk4FdfJ3-VvidGy5Z0hHhno4pPNuxMoDKAYtQ@mail.gmail.com>
+From:   Elenita Hinds <ecathinds@gmail.com>
+Date:   Thu, 12 Dec 2019 15:49:48 -0600
+Message-ID: <CAHChkrtv9+hw30ymjMu9M-CpEnT__WWz7OmVCtxwCwyH42jJyg@mail.gmail.com>
+Subject: Re: can-utils jacd questions
+To:     dev.kurt@vandijck-laurijssen.be
+Cc:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-If the device state GPIO is not connected to the host then disable the
-INH output from the TCAN device per section 8.3.5 of the data sheet.
+Hi Kurt,
 
-Signed-off-by: Dan Murphy <dmurphy@ti.com>
----
- drivers/net/can/m_can/tcan4x5x.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+I tried using getsockname() to retrieve the source address that was
+successfully claimed by jacd but was always getting 0xfe (I was
+expecting it to be 0xf9 as claimed by jacd).
+Is getsockname() expected to be functional for J1939 with kernel v5.4?
+Is there another way to retrieving the dynamically claimed address real-time?
 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index b5d2ea0999c1..6a1f242d1876 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -102,6 +102,7 @@
- #define TCAN4X5X_MODE_NORMAL BIT(7)
- 
- #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
-+#define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
- 
- #define TCAN4X5X_SW_RESET BIT(2)
- 
-@@ -360,6 +361,15 @@ static int tcan4x5x_disable_wake(struct m_can_classdev *cdev)
- 				  TCAN4X5X_DISABLE_WAKE_MSK, 0x00);
- }
- 
-+static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
-+{
-+	struct tcan4x5x_priv *tcan4x5x = cdev->device_data;
-+
-+	return regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
-+				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
-+
-+}
-+
- static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
- {
- 	struct tcan4x5x_priv *tcan4x5x = cdev->device_data;
-@@ -383,8 +393,10 @@ static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
- 	tcan4x5x->device_state_gpio = devm_gpiod_get_optional(cdev->dev,
- 							      "device-state",
- 							      GPIOD_IN);
--	if (IS_ERR(tcan4x5x->device_state_gpio))
-+	if (IS_ERR(tcan4x5x->device_state_gpio)) {
- 		tcan4x5x->device_state_gpio = NULL;
-+		tcan4x5x_disable_state(cdev);
-+	}
- 
- 	return 0;
- }
--- 
-2.23.0
+--elenita
 
+
+>
+> On Fri, Dec 6, 2019 at 2:59 AM Kurt Van Dijck
+> <dev.kurt@vandijck-laurijssen.be> wrote:
+> >
+> > Hi,
+> >
+> > On do, 05 dec 2019 14:55:53 -0600, Elenita Hinds wrote:
+> > > Hi all,
+> > >
+> > > I am hoping to re-use the can-utils' jacd as default Address Claiming
+> > > daemon but runs into some issues:
+> > >
+> > > (1) " err(0, <string>, ...) " is called in several places, even though
+> > > looking at the code logic, there is no error and the program should be
+> > > able to continue. The program exits because err()  never returns.
+> > > For example:
+> >
+> > commit 791b6de7 introduced the problem.
+> > it replaced all error(x, y, sss) calls with err(y, sss)
+> > but it should have become warn(y, sss) when x=0.
+> >
+> > Feel free to fix that.
+> >
+> > > (2) The socket is configured to also set the SO_BINDTODEVICE option.
+> > > In our system, this requires the program to have root permissions to
+> > > run but we'd rather not do this for security reasons. Is this option
+> > > required? What are the side-effects if this option is not set? Can it
+> > > be made optional such that the program does not exit if the
+> > > setsockoption(SO_BINDTODEVICE) call fails (seems to work without it)?
+> >
+> > It appears on first sight that SO_BINDTODEVICE isn't strictly necessary
+> > since bind() will have sockaddr_can.can_ifindex set anyway.
+> > In that case, rather then ignore the result,
+> > remove the call to SO_BINDTODEVICE completely.
+> >
+> > >
+> > > (3) The claimed address is only saved to a file when the program
+> > > terminates.  What is the reason for this? Can it not be saved after
+> > > one is claimed already so that another process can  read it real-time
+> > > if needed?
+> >
+> > That should not be necessary.
+> > At time of writing jacd, you could consult 'ip addr show can0' to find
+> > out. I'm not sure what option remained to find it.
+> > I believe you can, from another program, bind() with the same name, and
+> > then getsockname() will return the complete sockaddr_can with SA filled
+> > in.
+> >
+> > > Also, in cases of a program crash or a power outage, the
+> > > claimed address is still saved.
+> >
+> > That is a true remark.
+> > Given a power outage (the program never crashes :-) ),
+> > and looking at the code, +10 years later, I would now write to a temp file,
+> > and rename() the file to make it an atomic operation.
+> > Doing that regularly, or upon change, would be an improvement.
+> >
+> > Kurt
+> > >
+> > >
+> > > Thanks in advance,
+> > > Elenita
