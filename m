@@ -2,121 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D84311DF0F
-	for <lists+linux-can@lfdr.de>; Fri, 13 Dec 2019 09:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E04F111DF66
+	for <lists+linux-can@lfdr.de>; Fri, 13 Dec 2019 09:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725818AbfLMIGs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 Dec 2019 03:06:48 -0500
-Received: from relay-b02.edpnet.be ([212.71.1.222]:36378 "EHLO
-        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbfLMIGr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Dec 2019 03:06:47 -0500
-X-ASG-Debug-ID: 1576224404-0a7b8d6ce0db4a0001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (94.105.105.111.dyn.edpnet.net [94.105.105.111]) by relay-b02.edpnet.be with ESMTP id zZU9jLxAyV8AR1cr; Fri, 13 Dec 2019 09:06:44 +0100 (CET)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 94.105.105.111.dyn.edpnet.net[94.105.105.111]
-X-Barracuda-Apparent-Source-IP: 94.105.105.111
-Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 092A3BBD059;
-        Fri, 13 Dec 2019 09:06:44 +0100 (CET)
-Date:   Fri, 13 Dec 2019 09:06:40 +0100
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Elenita Hinds <ecathinds@gmail.com>, linux-can@vger.kernel.org
-Subject: Re: can-utils jacd questions
-Message-ID: <20191213080640.GA22400@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: can-utils jacd questions
-Mail-Followup-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-        Elenita Hinds <ecathinds@gmail.com>, linux-can@vger.kernel.org
-References: <CAHChkrstQdjVcWtvX4oeUOQfZS3-G_RPWb8Y82Zvaku40dM_qA@mail.gmail.com>
- <20191206085923.GA4896@x1.vandijck-laurijssen.be>
- <CAHChkruBV2btmtk4FdfJ3-VvidGy5Z0hHhno4pPNuxMoDKAYtQ@mail.gmail.com>
- <CAHChkrtv9+hw30ymjMu9M-CpEnT__WWz7OmVCtxwCwyH42jJyg@mail.gmail.com>
- <20191213070253.a6dhb6vjmwlm6fqc@pengutronix.de>
- <20191213072434.2cezzjvnohmpntha@pengutronix.de>
+        id S1725818AbfLMI12 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 13 Dec 2019 03:27:28 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:30463 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725793AbfLMI11 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Dec 2019 03:27:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1576225646;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=iJQ/bLe3SScKbO9UgZNa180MQAXsSSAn6KdPADZJU8A=;
+        b=IytaOoSay8d9z7UWzA9ren6n8l6K9Ft0y++xEeHOd9SubbrlkDV8R96C5IlqWS1xiy
+        bb8TVJjrSKTh1ebxeq2kAIhRE1el3qnbDLUjDmvyom3JNRSuGxR4PD/D4aUA4BvJcJB2
+        hPniAOC4PAp+1178w+HQC4mevFGMv03vUFAGSerFEYL3oeMblxtVcU19JPyN9rckqe+W
+        G3k6aCEB/lw2iu4Bw8Bt2z1cp+jnYiwVI/Wc34sVwAnnntQf9L8sqetJ7Ifinb0tBkNK
+        sz47ZSYdhKmE8r0UT86ghguLJAbmC+WU5POx84ltpMlFpQ6zvk4b0qF/PV7Cn9mfzb76
+        79Tg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVMh+mCA="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 46.0.7 DYNA|AUTH)
+        with ESMTPSA id x04ebavBD8RP3I2
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 13 Dec 2019 09:27:25 +0100 (CET)
+Subject: Re: usb_8dev - WARN_ON(in_irq())
+To:     Michal Sojka <michal.sojka@cvut.cz>, linux-can@vger.kernel.org
+Cc:     Bernd Krumboeck <b.krumboeck@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+References: <87immnaxqs.fsf@steelpick.2x.cz>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <c09f9e7c-5267-51a6-4a0b-8f3d2c5b9183@hartkopp.net>
+Date:   Fri, 13 Dec 2019 09:27:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191213072434.2cezzjvnohmpntha@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 94.105.105.111.dyn.edpnet.net[94.105.105.111]
-X-Barracuda-Start-Time: 1576224404
-X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 2859
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5415 1.0000 0.7500
-X-Barracuda-Spam-Score: 0.75
-X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.78628
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <87immnaxqs.fsf@steelpick.2x.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On vr, 13 dec 2019 08:24:34 +0100, Oleksij Rempel wrote:
-> On Fri, Dec 13, 2019 at 08:02:53AM +0100, Oleksij Rempel wrote:
-> > Hi Elenita,
-> > 
-> > On Thu, Dec 12, 2019 at 03:49:48PM -0600, Elenita Hinds wrote:
-> > > Hi Kurt,
-> > > 
-> > > I tried using getsockname() to retrieve the source address that was
-> > > successfully claimed by jacd but was always getting 0xfe (I was
-> > > expecting it to be 0xf9 as claimed by jacd).
-> > > Is getsockname() expected to be functional for J1939 with kernel v5.4?
-> > > Is there another way to retrieving the dynamically claimed address real-time?
-> > 
-> > Current stack implementation will return on getsockname(sock, ...) and
-> > getpeername(sock, ...) values provided by user via bind() and/or connect(). If
-> > we configure the socket by name, then address are automatically resolved
-> > over address claim cache.
+Hi Michal,
+
+On 11/12/2019 12.48, Michal Sojka wrote:
+
+> I use usb_8dev USB2CAN converter and I'm getting non-killable processes
+> and the following warnings in dmesg. Any idea, how to fix it?
+
 > 
-> Hm.. this sentence  can be misinterpreted. I'll rephrase it:
-> 
-> The address are automatically resolved for internal use. And could be
-> potentially resolved for get[sock,peer]name() as well.
+> Dec 11 10:27:38 kernel: usb 1-5.2: new full-speed USB device number 12 using xhci_hcd
+> Dec 11 10:27:38 kernel: usb 1-5.2: New USB device found, idVendor=0483, idProduct=1234, bcdDevice= 1.00
+> Dec 11 10:27:38 kernel: usb 1-5.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> Dec 11 10:27:38 kernel: usb 1-5.2: Product: USB2CAN converter
+> Dec 11 10:27:38 kernel: usb 1-5.2: Manufacturer: 8Devices
+> Dec 11 10:27:38 kernel: usb 1-5.2: SerialNumber: 7272B673
+> Dec 11 10:27:38 kernel: usb_8dev 1-5.2:1.0 can0: firmware: 2.1, hardware: 2.0
 
-While being sure that it is possible, looking back at the kernel code,
-I realised that the effective address is never cached per socket, which
-is good.
-> 
-> > The question is, should we return some thing different?
-> > If yes, it will be interesting to know, why is it needed? What is the
-> > use case?
+Is this the new version with the blue housing?
+https://www.8devices.com/products/usb2can_korlan
 
-It started with:
-> > > > > > (3) The claimed address is only saved to a file when the program
-> > > > > > terminates.  What is the reason for this? Can it not be saved after
-> > > > > > one is claimed already so that another process can  read it real-time
-> > > > > > if needed?
-> > > > >
-> > > > > That should not be necessary.
-> > > > > At time of writing jacd, you could consult 'ip addr show can0' to find
-> > > > > out. I'm not sure what option remained to find it.
-> > > > > I believe you can, from another program, bind() with the same name, and
-> > > > > then getsockname() will return the complete sockaddr_can with SA filled
-> > > > > in.
+> ...
+> Dec 11 10:28:54 kernel: ------------[ cut here ]------------
+> Dec 11 10:28:54 kernel: WARNING: CPU: 5 PID: 0 at net/core/skbuff.c:651 skb_release_head_state.cold+0xc/0x17
 
-Getting the response from the kernel would eliminate a cache effect, but
-I'm wrong there, a result via getsockname() is equally subject to
-caching.
+> Dec 11 10:28:54 kernel: CPU: 5 PID: 0 Comm: swapper/5 Not tainted 5.3.0-1-amd64 #1 Debian 5.3.7-1
 
-> > > > > > Also, in cases of a program crash or a power outage, the
-> > > > > > claimed address is still saved.
-> > > > >
-> > > > > That is a true remark.
-> > > > > Given a power outage (the program never crashes :-) ),
-> > > > > and looking at the code, +10 years later, I would now write to a temp file,
-> > > > > and rename() the file to make it an atomic operation.
-> > > > > Doing that regularly, or upon change, would be an improvement.
+> Dec 11 10:28:54 kernel: RIP: 0010:skb_release_head_state.cold+0xc/0x17
+> Dec 11 10:28:54 kernel: Code: 54 24 08 e8 1c 57 ae ff 0f 0b 48 8b 54 24 08 48 8b 74 24 10 4c 63 4c 24 1c e9 b2 93 ff ff 48 c7 c7 60 4b c6 8d e8 fa 56 ae ff <0f> 0b 48 8b 43 60 e9 1d 9e ff ff 44 89 ce 48 c7 c7 c8 6a d0 8d e8
+> Dec 11 10:28:54 kernel: RSP: 0018:ffffb8cf401c8cb8 EFLAGS: 00010046
+> Dec 11 10:28:54 kernel: RAX: 0000000000000024 RBX: ffff93e8bb326d00 RCX: 0000000000000000
+> Dec 11 10:28:54 kernel: RDX: 0000000000000000 RSI: ffff93e8bdb57688 RDI: ffff93e8bdb57688
+> Dec 11 10:28:54 kernel: RBP: ffff93e8bb326d00 R08: ffff93e8bdb57688 R09: 0000000000000004
+> Dec 11 10:28:54 kernel: R10: 0000000000000000 R11: 0000000000000001 R12: ffffffff8d413959
+> Dec 11 10:28:54 kernel: R13: ffff93e8bb326d00 R14: 0000000000000082 R15: ffff93e8bdb6b64c
+> Dec 11 10:28:54 kernel: FS:  0000000000000000(0000) GS:ffff93e8bdb40000(0000) knlGS:0000000000000000
+> Dec 11 10:28:54 kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> Dec 11 10:28:54 kernel: CR2: 00000042084c6000 CR3: 0000000344a0a005 CR4: 00000000003606e0
+> Dec 11 10:28:54 kernel: DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> Dec 11 10:28:54 kernel: DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Dec 11 10:28:54 kernel: Call Trace:
+> Dec 11 10:28:54 kernel:  <IRQ>
+> Dec 11 10:28:54 kernel:  skb_release_all+0xe/0x30
+> Dec 11 10:28:54 kernel:  kfree_skb+0x32/0xa0
+> Dec 11 10:28:54 kernel:  enqueue_to_backlog+0x99/0x230
+> Dec 11 10:28:54 kernel:  ? recalibrate_cpu_khz+0x10/0x10
+> Dec 11 10:28:54 kernel:  netif_rx_internal+0x41/0x100
+> Dec 11 10:28:54 kernel:  netif_rx+0x18/0xb0
+> Dec 11 10:28:54 kernel:  can_get_echo_skb+0x32/0x60 [can_dev]
+> Dec 11 10:28:54 kernel:  usb_8dev_write_bulk_callback+0x7d/0xb0 [usb_8dev]
+> Dec 11 10:28:54 kernel:  __usb_hcd_giveback_urb+0x6f/0x120 [usbcore]
 
-Since saving the address in a cache file from jacd is good practise to guard against
-power failures, the quick solution is to use that cache file from
-anywhere you want.
+Did you do anything weird (e.g. pulling the USB plug on the run) to get 
+this problem?
 
-Kind regards,
-Kurt
+Best,
+Oliver
