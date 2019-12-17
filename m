@@ -2,33 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E53D1122B6A
-	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2019 13:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B76A122B6E
+	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2019 13:26:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbfLQMYy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Dec 2019 07:24:54 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:55749 "EHLO
+        id S1726920AbfLQM01 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Dec 2019 07:26:27 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56793 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbfLQMYx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Dec 2019 07:24:53 -0500
+        with ESMTP id S1726383AbfLQM01 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Dec 2019 07:26:27 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ihBuG-0004e4-44; Tue, 17 Dec 2019 13:24:52 +0100
+        id 1ihBvl-0004tZ-6L; Tue, 17 Dec 2019 13:26:25 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:80c5:62b8:1b6b:1f31] (unknown [IPv6:2a03:f580:87bc:d400:80c5:62b8:1b6b:1f31])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DC8244919F6;
-        Tue, 17 Dec 2019 12:24:50 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 403324919FC;
+        Tue, 17 Dec 2019 12:26:24 +0000 (UTC)
+Subject: Re: [RFC] c_can: improve latency and avoid packet loss
 To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
         linux-can@vger.kernel.org
-Cc:     Andrejs Cainikovs <Andrejs.Cainikovs@netmodule.com>
 References: <1576584994-15873-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <1576584994-15873-11-git-send-email-dev.kurt@vandijck-laurijssen.be>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,16 +90,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH 10/10] can: c_can: configurable amount of D_CAN RX objects
-Message-ID: <5f42d18a-710d-0807-9e20-f47d5e91c82c@pengutronix.de>
-Date:   Tue, 17 Dec 2019 13:24:47 +0100
+Message-ID: <c0272077-c3c1-f106-ef51-fee546368ba6@pengutronix.de>
+Date:   Tue, 17 Dec 2019 13:26:19 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <1576584994-15873-11-git-send-email-dev.kurt@vandijck-laurijssen.be>
+In-Reply-To: <1576584994-15873-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="hdnguF8Jo2JMIHjlpqpLpHY1rDGjXlz9F"
+ boundary="19oV5gr767EUeUif4h928L0PwHOZJrgth"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,40 +109,42 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---hdnguF8Jo2JMIHjlpqpLpHY1rDGjXlz9F
-Content-Type: multipart/mixed; boundary="xr0CN4xNbVynFKS1mcd57P2WUKfHo5OR0";
+--19oV5gr767EUeUif4h928L0PwHOZJrgth
+Content-Type: multipart/mixed; boundary="Lh05lquron3dsi6i0DgXPu7zu13TcjcIJ";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
  linux-can@vger.kernel.org
-Cc: Andrejs Cainikovs <Andrejs.Cainikovs@netmodule.com>
-Message-ID: <5f42d18a-710d-0807-9e20-f47d5e91c82c@pengutronix.de>
-Subject: Re: [PATCH 10/10] can: c_can: configurable amount of D_CAN RX objects
+Message-ID: <c0272077-c3c1-f106-ef51-fee546368ba6@pengutronix.de>
+Subject: Re: [RFC] c_can: improve latency and avoid packet loss
 References: <1576584994-15873-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
- <1576584994-15873-11-git-send-email-dev.kurt@vandijck-laurijssen.be>
-In-Reply-To: <1576584994-15873-11-git-send-email-dev.kurt@vandijck-laurijssen.be>
+In-Reply-To: <1576584994-15873-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 
---xr0CN4xNbVynFKS1mcd57P2WUKfHo5OR0
+--Lh05lquron3dsi6i0DgXPu7zu13TcjcIJ
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
 On 12/17/19 1:16 PM, Kurt Van Dijck wrote:
-> From: Andrejs Cainikovs <Andrejs.Cainikovs@netmodule.com>
+> This series is my attempt to make avoid packet loss on a D_CAN chip.
 >=20
-> Make number of D_CAN RX message objects configurable. This will allow
-> having bigger (or smaller) RX buffer instead of 50/50 split for RX/TX.
+> It consists of adding a manual mode to rx-offload, with a temporary que=
+ue
+> for use during ISR.
+> The c_can ISR is re-organized to use rx-offload in manual mode.
+>=20
+> This reduced the packet loss on our product _almost_ completely.
+>=20
+> Finally, I added the commits in can-next/c_can-more-objects.
 
-You want to avoid large HW queues due to buffer bloat, so make the
-number of TX mailboxes a reasonable default. e.g. 4 or 8.
+Nice. However I don't like the Kconfig options, make it dependent on the
+DT compatible. See the individual mails.
 
-> Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@netmodule.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> ---
+> I observed no more packet loss since (monitoring for +/- 6 weeks).
+> Our product runs a v4.9 kernel, on which I tuned the code.
+> This series is a forward-ported version of it, on top of can-next.
 
-NACK, no Kconfig option, please make the number of RX/TX mailboxes
-dependent on the DT compatible.
+How many RX/TX mailboxes are you using?
 
 Marc
 
@@ -155,23 +155,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---xr0CN4xNbVynFKS1mcd57P2WUKfHo5OR0--
+--Lh05lquron3dsi6i0DgXPu7zu13TcjcIJ--
 
---hdnguF8Jo2JMIHjlpqpLpHY1rDGjXlz9F
+--19oV5gr767EUeUif4h928L0PwHOZJrgth
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl34yQ8ACgkQWsYho5Hk
-nSC4UwgAsgR1DhxQEO4Xk8w2XY0gCOIRsGsqLO6GBb9Uoja3OvJg8MacYJN0tiRC
-ZvKt/YXX2CUNVIwVIICa6n3awY1uQP9xOXTG/zs+VjYv24aGhaJgiiWPWSlInToM
-OQkayF0hnwo9s03wCLLEFPNt47+Dyc1YLCNdt4+aZZtoQJfn2/9zZYhnftNh8NY4
-cBtqbfcs4+3nHtBIgo95yLihQztCHc1+FwmtsR1U0wrBteTczU/z9Vy9Vf+f1IaY
-fMJozSwEc4O2+WZ38GGJndZjY1L8Sec+sHBdlgRIf6k3n0UnfDPaE0+R7/LlyNhN
-8imqe4fexUsCtbAUcQL8D3BhJBe3nQ==
-=ezF1
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl34yWsACgkQWsYho5Hk
+nSAVhwgAsQM6gxLlt/wuzdS7Cgs/Q++K0IrZZSdJJ0+/3dAVS6kePurBnltrWTre
+5PSiazBzyUpbKDKRIqCuwg/1+f80/+K+qKMBE97B4jH/8j8zuG+EYGA09Vf/566U
+gNmYkp+O4DeZTZu7ZWNiuIsiugwFhztrvkxrxIpQxgqeIA2+DAdv8JJGuqUU5x8H
+Bzh8e1TolyL8PsGktfS1ilvB1sZ2Ev2gdejzy3rZ2pKknpuLNa4xxJbFDaSE5rPm
+sJ7GFq3IZY46T0BGYUEpcLEYwD5z2/SRB9ngUNqJZVUD/4P4+hQUESt96tbrsoUL
+OKRT+ViPnGAaeDzfiUOWXl/mT0voVQ==
+=KKbU
 -----END PGP SIGNATURE-----
 
---hdnguF8Jo2JMIHjlpqpLpHY1rDGjXlz9F--
+--19oV5gr767EUeUif4h928L0PwHOZJrgth--
