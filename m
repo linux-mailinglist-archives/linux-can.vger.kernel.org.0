@@ -2,118 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 231D9122948
-	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2019 11:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CFD122B19
+	for <lists+linux-can@lfdr.de>; Tue, 17 Dec 2019 13:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727419AbfLQKzd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Dec 2019 05:55:33 -0500
-Received: from mail-out.m-online.net ([212.18.0.10]:33044 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726655AbfLQKzd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Dec 2019 05:55:33 -0500
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 47cZmc4xBSz1rhst;
-        Tue, 17 Dec 2019 11:55:28 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 47cZmc3rF3z1r0nK;
-        Tue, 17 Dec 2019 11:55:28 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id ll8K6KUbaWSd; Tue, 17 Dec 2019 11:55:26 +0100 (CET)
-X-Auth-Info: K5ByCDnBjagriUvqlQw2v8N2kB/VJ5364lfN0UTVlo8=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Tue, 17 Dec 2019 11:55:26 +0100 (CET)
-Subject: Re: [PATCH] can: m_can: Fix default pinmux glitch at init
-To:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        linux-can@vger.kernel.org
-Cc:     Bich Hemon <bich.hemon@st.com>,
-        "J . D . Schroeder" <jay.schroeder@garmin.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Roger Quadros <rogerq@ti.com>,
-        linux-stable <stable@vger.kernel.org>
-References: <20191217100740.2687835-1-marex@denx.de>
- <8b2e0a40-cf23-58a5-4f52-215015c61ea8@ti.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <3c48dd07-154e-bc47-4aff-73769d9efa22@denx.de>
-Date:   Tue, 17 Dec 2019 11:55:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <8b2e0a40-cf23-58a5-4f52-215015c61ea8@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1727868AbfLQMRF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Dec 2019 07:17:05 -0500
+Received: from relay-b01.edpnet.be ([212.71.1.221]:34932 "EHLO
+        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727857AbfLQMRF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Dec 2019 07:17:05 -0500
+X-ASG-Debug-ID: 1576585022-0a7ff5137d1cda580001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.77.154.static.edpnet.net [77.109.77.154]) by relay-b01.edpnet.be with ESMTP id DuxcrgXgRtCchFA5 for <linux-can@vger.kernel.org>; Tue, 17 Dec 2019 13:17:02 +0100 (CET)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.77.154.static.edpnet.net[77.109.77.154]
+X-Barracuda-Apparent-Source-IP: 77.109.77.154
+Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 44AC5BCD8EE;
+        Tue, 17 Dec 2019 13:17:02 +0100 (CET)
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     linux-can@vger.kernel.org
+Subject: [RFC] c_can: improve latency and avoid packet loss
+Date:   Tue, 17 Dec 2019 13:16:24 +0100
+X-ASG-Orig-Subj: [RFC] c_can: improve latency and avoid packet loss
+Message-Id: <1576584994-15873-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+X-Mailer: git-send-email 1.8.5.rc3
+X-Barracuda-Connect: 77.109.77.154.static.edpnet.net[77.109.77.154]
+X-Barracuda-Start-Time: 1576585022
+X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 590
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: SPAM GLOBAL 0.9987 1.0000 4.3284
+X-Barracuda-Spam-Score: 4.33
+X-Barracuda-Spam-Status: No, SCORE=4.33 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.78715
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 12/17/19 11:42 AM, Grygorii Strashko wrote:
-> 
-> 
-> On 17/12/2019 12:07, Marek Vasut wrote:
->> The current code causes a slight glitch on the pinctrl settings when
->> used.
->> Since commit ab78029 (drivers/pinctrl: grab default handles from
->> device core),
->> the device core will automatically set the default pins. This causes
->> the pins
->> to be momentarily set to the default and then to the sleep state in
->> register_m_can_dev(). By adding an optional "enable" state, boards can
->> set the
->> default pin state to be disabled and avoid the glitch when the switch
->> from
->> default to sleep first occurs. If the "enable" state is not available
->> pinctrl_get_select() falls back to using the "default" pinctrl state.
->>
->> Fixes: c9b3bce18da4 ("can: m_can: select pinctrl state in each
->> suspend/resume function")
->> Signed-off-by: Marek Vasut <marex@denx.de>
->> Cc: Bich Hemon <bich.hemon@st.com>
->> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
->> Cc: J.D. Schroeder <jay.schroeder@garmin.com>
->> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
->> Cc: Roger Quadros <rogerq@ti.com>
->> Cc: linux-stable <stable@vger.kernel.org>
->> To: linux-can@vger.kernel.org
->> ---
->> NOTE: This is commit 033365191136 ("can: c_can: Fix default pinmux
->> glitch at init")
->>        adapted for m_can driver.
->> ---
->>   drivers/net/can/m_can/m_can.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/net/can/m_can/m_can.c
->> b/drivers/net/can/m_can/m_can.c
->> index 02c5795b73936..afb6760b17427 100644
->> --- a/drivers/net/can/m_can/m_can.c
->> +++ b/drivers/net/can/m_can/m_can.c
->> @@ -1243,12 +1243,20 @@ static void m_can_chip_config(struct
->> net_device *dev)
->>   static void m_can_start(struct net_device *dev)
->>   {
->>       struct m_can_classdev *cdev = netdev_priv(dev);
->> +    struct pinctrl *p;
->>         /* basic m_can configuration */
->>       m_can_chip_config(dev);
->>         cdev->can.state = CAN_STATE_ERROR_ACTIVE;
->>   +    /* Attempt to use "active" if available else use "default" */
->> +    p = pinctrl_get_select(cdev->dev, "active");
->> +    if (!IS_ERR(p))
->> +        pinctrl_put(p);
->> +    else
->> +        pinctrl_pm_select_default_state(cdev->dev);
->> +
->>       m_can_enable_all_interrupts(cdev);
->>   }
->>  
-> 
-> May be init state should be used - #define PINCTRL_STATE_INIT "init"
-> instead?
+This series is my attempt to make avoid packet loss on a D_CAN chip.
 
-I'm not sure I quite understand -- how ?
+It consists of adding a manual mode to rx-offload, with a temporary queue
+for use during ISR.
+The c_can ISR is re-organized to use rx-offload in manual mode.
+
+This reduced the packet loss on our product _almost_ completely.
+
+Finally, I added the commits in can-next/c_can-more-objects.
+
+I observed no more packet loss since (monitoring for +/- 6 weeks).
+Our product runs a v4.9 kernel, on which I tuned the code.
+This series is a forward-ported version of it, on top of can-next.
+
+Kind regards,
+Kurt
+
+
