@@ -2,76 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD541248FF
-	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2019 15:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C86C124B21
+	for <lists+linux-can@lfdr.de>; Wed, 18 Dec 2019 16:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbfLROD5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Dec 2019 09:03:57 -0500
-Received: from first.geanix.com ([116.203.34.67]:41822 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726858AbfLROD5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 18 Dec 2019 09:03:57 -0500
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id BBFB95B2;
-        Wed, 18 Dec 2019 14:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1576677776; bh=Yiwwv2yYC5oBNyk7+/HqeIxYF+mMdh5a1RnnwxxWSLI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=RRpizVX76J1LFhNbsy5YnRWJDvTdPxiPuH00bOo68DlglcZMx/wwaioH6MN9rSAH3
-         hKNTOyd9VJsZg3GZuvlEz72UuD+uE1vSQSO6LvW0Og4F/T5cPLRa3AylJ8CXYSlDMB
-         cJtjuehDR+kyPg7Bpa8IJZaFIaC0A7nBnDeO/sFDs0L9OGv99n+3UWA4paMYqGHjJa
-         0OwChoaB6F+HlUgNSIY8mNXEsQJeXSRV6R7A+6+rbetqu0KOeWK4N/OUxJOETMLsNL
-         T30p0POfvT/cFmq8KiNZ4jDqzqyOWidPoK+6cskwVeQXyBM87r7FxtOhk5Th/6Vjoj
-         A2OdsIkqzoCpA==
-Subject: Re: [PATCH V2 1/2] can: flexcan: disable runtime PM if register
- flexcandev failed
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20191210085721.9853-1-qiangqing.zhang@nxp.com>
- <DB7PR04MB46181D2F1538A53B4F1892E2E6500@DB7PR04MB4618.eurprd04.prod.outlook.com>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <935f466b-a9c9-de73-be12-6ebb7b77e058@geanix.com>
-Date:   Wed, 18 Dec 2019 15:03:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1727177AbfLRPOC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Dec 2019 10:14:02 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:39182 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727171AbfLRPNy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Dec 2019 10:13:54 -0500
+Received: by mail-il1-f196.google.com with SMTP id x5so1983651ila.6
+        for <linux-can@vger.kernel.org>; Wed, 18 Dec 2019 07:13:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
+        b=Q3vp2fJ40VWpq9rX2ikiWTUrhuiQJXzCeUu43e1oIIOk8rzGCPMljco+W3g3Sdt7mK
+         0zMp27lNXT81ott0dYeyE6wCdI4c1wfi5qCqRmoGIMvdtgle/6NMWI0GJrkD30CBojRq
+         hZbdgtbn9F/6uhvfSLkMdN7NhUpQoMVScRn9uDFKZJxofy0MWDF6kZw53YXeVt8sjWjA
+         Dd9TBzj4Ogplv/txGap2r0I252pQP7l7XSY4YOVhZ7qL539zlqhtO9W4mad505PIZ9Xp
+         yYy+XyL34oyC2pvEIWTDP8EMj+Gj6Cu0eHyc7GTPTD7Enq1rjLHU3JyAyX8LQzaLW/WP
+         +a+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
+        b=UOch/c/Gw8D1O4SJqTLy223bdNWhxB0RfMTT7zbJ12XilI0Hnk/Z/PNICy9BuacFjF
+         sYkXlu0LNW/cUA/7ozBg3ruPArqXdpIZQIiE+yWqJDCaSrFyi4xqVjmLY3l4kmCELa/3
+         6/VaeUdPdayCKm2g9jLigvov34dz0z0KiNDbdFVLImhliTFxnQZdsq5MKQlGSpkHs/ow
+         Ha8JoIzr6OO9dmkA3ChpUz0eMPPArehmdfmP+v8VNJ6gFXO1kyxtOjERipGMAXZuAxZD
+         ash3gXBWsCarQMjKBm+J0mMWPT4Ktc1UupQ6ln4r9L6V7ivySZrhqTNCpvdHyg3TVGB0
+         s1OA==
+X-Gm-Message-State: APjAAAWkjadndTWwSZvYXlI1PeTFQ2vUTX4R1SHawpSip0H2HgK1THE/
+        /X8SaJgaqZ7k6ttcnBaZReCl5nr9yH3ltInYvA==
+X-Google-Smtp-Source: APXvYqzpDMY1kfzvQTGFYFDuSf5Wkv4RFsY3uCP+mpqq6wLn7kqjCTzLCYufYBbbmMCBsVo5PHwr9dpQEEDI7K8RY00=
+X-Received: by 2002:a92:cc90:: with SMTP id x16mr2363556ilo.269.1576682033220;
+ Wed, 18 Dec 2019 07:13:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <DB7PR04MB46181D2F1538A53B4F1892E2E6500@DB7PR04MB4618.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,URIBL_BLOCKED
-        autolearn=disabled version=3.4.2
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on 8b5b6f358cc9
+Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:13:52
+ -0800 (PST)
+Reply-To: dhl.expresscourier102156@outlook.fr
+From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
+Date:   Wed, 18 Dec 2019 16:13:52 +0100
+Message-ID: <CABHzvrnY8Lhdw4Y2q97jvAVrRpM9CVLFkw=Ved7y1GhGqHiAdw@mail.gmail.com>
+Subject: I WANT TO YOU TO TREAT THIS EMAIL VERY URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Attn Dear.
 
+Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
+ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
+=9900, as
+approved this morning, Date, 18/12/2019. Through the Intruction from
+INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
 
-On 17/12/2019 07.36, Joakim Zhang wrote:
-> 
-> Hi Sean,
-> 
-> Have you found time to test this patch set? Thanks :-)
-> 
-> Best Regards,
-> Joakim Zhang
-> 
+REGISTRATION NO :EG58945
+PARCEL NUMBER: 140479
+Delivery Schuleded now,
+Finally all we required from you is your ATM Card Proccessing Delivery
+fees $19.00 only which you must send to this DHL service to enable us
+dispatch the parcel to your destination today.
 
-Hi Joakim
+Here is our receiving payment details.
+You are advised to send it Via Money Gram Service.
 
-Sorry for the delay :)
+Receiver's Name--------Alan Ude
+Country-------Benin Republic.
+City/ Address--------Cotonou
+Test Question--------In God
+Answer-------We Trust
+Amount------------$US19.00 only
+Mtcn-------------
+Sender's Name-------
 
-I have tested this patchset and found no issues...
+Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
+Is Due for delivery to your address today upon confirmation of
+required fee from you asap.
 
-Just a heads up when adding "ChangeLog:" do it under the "---" and above 
-the diff. That way the ChangeLog doesn't end up in the commit msg...
+Call us on this phone number for any inquiry. +229 62819378
+Awaiting your urgent response.
 
-/Sean
-
-
+MS. MARYANNA B. THOMASON, Shipment director, DHL Express
+Courier Company-Benin
