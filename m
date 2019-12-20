@@ -2,89 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC9F1279A5
-	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2019 11:50:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F404127EE4
+	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2019 16:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbfLTKuk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Fri, 20 Dec 2019 05:50:40 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43683 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbfLTKuk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Dec 2019 05:50:40 -0500
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1iiFri-0007Bu-SQ; Fri, 20 Dec 2019 11:50:38 +0100
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1iiFre-0008KM-Uv; Fri, 20 Dec 2019 11:50:34 +0100
-Date:   Fri, 20 Dec 2019 11:50:34 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Michael Frampton <Michael.Frampton@infact.co.nz>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: Backporting J1939 and mcp25xxfd
-Message-ID: <20191220105034.c3eblysltpgcvqu2@pengutronix.de>
-References: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
+        id S1727432AbfLTPBc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Dec 2019 10:01:32 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46320 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727362AbfLTPBc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Dec 2019 10:01:32 -0500
+Received: by mail-oi1-f196.google.com with SMTP id p67so4610560oib.13;
+        Fri, 20 Dec 2019 07:01:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+iJQh1B5KXxx5DhyusKnyQJixmTQKTrZ2Rj0CaEWDOQ=;
+        b=Jhhhe0bADpO+zDdWsoOS0FQ92wou+1qHWGn4xQ9e0H+P19Foffdon215FeLrt5cIKS
+         5FLT+bS1rIfyk40JXxUVXD9E1rZ9fcyaYo4tNKOtVZ6UarGXp0Hc4QLYsEaGyRgC7UJi
+         hUglpC1CUwVhpUk65yoNL46yN4aOxMK4nXj3Hz5SzCfKQzOKFVk3tgdeBmm9LMMMxi0F
+         LNfI2kgMh/HZhAj+6uhre8ezTV5y24Pjw29PDz4002GP74qUHyo6X4qUlEYQh77dpZaz
+         5tBuZZA1NzBMb2NlK0EykCcjSF6Ea34Zvgjxl/cEa59SLpl8qNgooMAQOsITCLNxpEPQ
+         Tocg==
+X-Gm-Message-State: APjAAAU/FqDVg3uMegNZIT6MbEQR80ExtFwX6+E7xDKgmLkGOcdsRmsF
+        ZnsE+yFMy8+FYdPwtZWLDo47WFfGN8n8Trin8pxbQpWs
+X-Google-Smtp-Source: APXvYqwWJiewRz8Q9MAA6yfhGHK2rHY5vZ6rtov/p5xg5x7TBF8tOOvwQWl8evm8v0Pc3phtj7/JsDolMsD8M2faC1w=
+X-Received: by 2002:aca:36c5:: with SMTP id d188mr4050927oia.54.1576854091491;
+ Fri, 20 Dec 2019 07:01:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 11:35:36 up 35 days,  1:54, 36 users,  load average: 0.27, 0.13,
- 0.04
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <1570717560-7431-1-git-send-email-fabrizio.castro@bp.renesas.com>
+ <1570717560-7431-2-git-send-email-fabrizio.castro@bp.renesas.com>
+ <20191014181016.GA1927@bogus> <TY1PR01MB17708F6646BD736C52A22BFCC0530@TY1PR01MB1770.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY1PR01MB17708F6646BD736C52A22BFCC0530@TY1PR01MB1770.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 20 Dec 2019 16:01:20 +0100
+Message-ID: <CAMuHMdV+1g9Oh9YPSsRQYO0=k8DYoaBhthY0HxSUVW9=L5jeFA@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/3] dt-bindings: can: rcar_can: Add r8a774b1 support
+To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Simon Horman <horms@verge.net.au>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Michael,
+Hi Fabrizio,
 
-On Fri, Dec 20, 2019 at 02:16:36AM +0000, Michael Frampton wrote:
-> Hi,
-> 
-> I'm interested in porting the J1939 code and MCP2517 driver to an
-> older kernel. I'm planning on using the Qualcomm 4.14 kernel.
-> 
-> Is it possible that working versions of this code has already been
-> backported to an earlier kernel release, which I could then merge into
-> 4.14?
+On Wed, Dec 18, 2019 at 4:15 PM Fabrizio Castro
+<fabrizio.castro@bp.renesas.com> wrote:
+> Do you think you can take this patch?
 
-As far as I know - no.
+Sure, queuing in renesas-dt-bindings-for-v5.6.
 
-> I saw that Romain Forlot has asked a similar question here a
-> couple of months ago
-> https://www.spinics.net/lists/linux-can/msg02539.html but the thread
-> was abandoned.
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: 14 October 2019 19:10
+> > Subject: Re: [PATCH net-next v2 1/3] dt-bindings: can: rcar_can: Add r8a774b1 support
+> >
+> > On Thu, 10 Oct 2019 15:25:58 +0100, Fabrizio Castro wrote:
+> > > Document RZ/G2N (r8a774b1) SoC specific bindings.
+> > >
+> > > Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > ---
+> > > v1->v2:
+> > > * No change
+> > >
+> > >  Documentation/devicetree/bindings/net/can/rcar_can.txt | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > >
+> >
+> > Acked-by: Rob Herring <robh@kernel.org>
 
-It needs more time then we actually expected. It will be great if you
-can spend time on it. If you will be able to get a working patch set, we
-can publish it here as a topic branch. In this case you will get more
-testers and fixes.
+Gr{oetje,eeting}s,
 
-> Oleksij Rempel mentioned that there is potentially and
-> issue with Rx/Tx frame ordering, is this still the case?
+                        Geert
 
-Yes. Needed CAN patches should be backported as well.
-
-> Thanks very much.  --Mike
-
-You are welcome!
-
-Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
