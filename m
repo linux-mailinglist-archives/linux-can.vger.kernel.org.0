@@ -2,195 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F365D126FF0
-	for <lists+linux-can@lfdr.de>; Thu, 19 Dec 2019 22:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1051D127365
+	for <lists+linux-can@lfdr.de>; Fri, 20 Dec 2019 03:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727024AbfLSVrK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Dec 2019 16:47:10 -0500
-Received: from mail-out.m-online.net ([212.18.0.10]:47174 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726998AbfLSVrJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Dec 2019 16:47:09 -0500
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 47f57Y1ptfz1rfPj;
-        Thu, 19 Dec 2019 22:47:05 +0100 (CET)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 47f57Y0qsWz1qr2L;
-        Thu, 19 Dec 2019 22:47:05 +0100 (CET)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id 8yaAPI4GqET6; Thu, 19 Dec 2019 22:47:03 +0100 (CET)
-X-Auth-Info: 1hwxtGEbUucigG4e/a2ZeNDNRl3Jd1grguVEnD2LKuM=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 19 Dec 2019 22:47:03 +0100 (CET)
-Subject: Re: [PATCH] can: m_can: Fix default pinmux glitch at init
-To:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        linux-can@vger.kernel.org
-Cc:     Bich Hemon <bich.hemon@st.com>,
-        "J . D . Schroeder" <jay.schroeder@garmin.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Roger Quadros <rogerq@ti.com>,
-        linux-stable <stable@vger.kernel.org>
-References: <20191217100740.2687835-1-marex@denx.de>
- <8b2e0a40-cf23-58a5-4f52-215015c61ea8@ti.com>
- <3c48dd07-154e-bc47-4aff-73769d9efa22@denx.de>
- <be0d0b55-c287-3252-e188-cbaedd5d426c@ti.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <b875d2a3-a39d-b00b-3558-96cab1e00165@denx.de>
-Date:   Thu, 19 Dec 2019 22:47:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <be0d0b55-c287-3252-e188-cbaedd5d426c@ti.com>
-Content-Type: text/plain; charset=utf-8
+        id S1726986AbfLTCRo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 Dec 2019 21:17:44 -0500
+Received: from mail-eopbgr1360122.outbound.protection.outlook.com ([40.107.136.122]:40794
+        "EHLO AUS01-ME1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726963AbfLTCRn (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 19 Dec 2019 21:17:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aeyS9yv/7OhhnjFJPYjqM1jCpf69YA9BexFr6nWwokLxd363XBRJHLvf1bTU0rTGJGOqlx7OoPLVbuCt7npocrSA3OseZG2M4tOGmbMWcDsIcY4uPE3yx520sKejKt/MznJSyydTJaNlCc7mGi9VYhxLd3/wfsDMnJWCBi80wtq+Gcnip5bIShrBSsUVyyxOgqsNs/ZS5rDT1hwt7ecTWEpU2EXKv+nmvjhguLyNTo+v7N5pLvdqnNelGN38sSQakEOWnJnxlUEN+B3A0SaiYkx9J0z4/tK57Fc/9KqMbsVwiz5McuX4ttja61/vkGuipR84UJ2aY7jR9kX6emX8DA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBBElCxbxZj5QBpvX4Liukx8loJZM2+bo4Y3r7KDgnU=;
+ b=fJleooj//OwABXWReQi3xlnSvCv+69Hhb2NdpndlX+NR0Wr6MIHS8xL3Ib1gveWKozviQGg7hfixxJ1dRZEJ9HEIFsH/SIk81NNU+m0ahyXLsJtYNARa6kGhq3MO4BgFXrBzBSq4zn/YyA+Jqa3/+Sacj/bGJf9gvXV+J6gxr9Z/6LzYoyoKTKX2QkPaJyh/w7+IMl9u4Qh6n5FfzsrvuHQkfkYBRGZ4bZjY92lMLai0EIJtB3/WrcYXkabitSrEyazMJt4o6mCzkpVMCiOH+ro/psIdO07ITIjnl0q6ELclID4BIHoCBA6RPNI/7EPZepg1o2rjJZZvg3XoTecX3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infact.co.nz; dmarc=pass action=none header.from=infact.co.nz;
+ dkim=pass header.d=infact.co.nz; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=infactltd.onmicrosoft.com; s=selector2-infactltd-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iBBElCxbxZj5QBpvX4Liukx8loJZM2+bo4Y3r7KDgnU=;
+ b=La5V7S6fSuA77dHXiFZbGwGK8lMLgcQ7XjeoYLFHsoIvAH3Ejp00A+uXoQQnqmEvaUnN2WkSCE3LneqTXeZ8CPc3SjYEwXOzLDLtO2oKM9ZkK8s/Bk28ZowGeJYkPWEGfn01mMgrM4qstKf6SKZO6QQ+v40QHHgSOB8Vdg9U6Hg=
+Received: from SYXPR01MB1230.ausprd01.prod.outlook.com (10.171.37.20) by
+ SYXPR01MB1327.ausprd01.prod.outlook.com (10.175.211.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2559.16; Fri, 20 Dec 2019 02:16:37 +0000
+Received: from SYXPR01MB1230.ausprd01.prod.outlook.com
+ ([fe80::bc07:7cf7:d07f:b48b]) by SYXPR01MB1230.ausprd01.prod.outlook.com
+ ([fe80::bc07:7cf7:d07f:b48b%12]) with mapi id 15.20.2559.012; Fri, 20 Dec
+ 2019 02:16:36 +0000
+From:   Michael Frampton <Michael.Frampton@infact.co.nz>
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: Backporting J1939 and mcp25xxfd
+Thread-Topic: Backporting J1939 and mcp25xxfd
+Thread-Index: AdW22y0uJchY1T2lRXyiqyq7qbqcaQ==
+Date:   Fri, 20 Dec 2019 02:16:36 +0000
+Message-ID: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Michael.Frampton@infact.co.nz; 
+x-originating-ip: [203.86.200.239]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5a7a0083-8913-498b-beac-08d784f2a44d
+x-ms-traffictypediagnostic: SYXPR01MB1327:
+x-microsoft-antispam-prvs: <SYXPR01MB1327B07F1F732C4B555927C4A12D0@SYXPR01MB1327.ausprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 025796F161
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(396003)(366004)(346002)(39830400003)(376002)(199004)(189003)(26005)(186003)(7696005)(76116006)(6506007)(55016002)(6916009)(9686003)(71200400001)(2906002)(8936002)(86362001)(5660300002)(81166006)(81156014)(8676002)(52536014)(966005)(4744005)(316002)(33656002)(66946007)(64756008)(66446008)(66476007)(66556008)(508600001);DIR:OUT;SFP:1102;SCL:1;SRVR:SYXPR01MB1327;H:SYXPR01MB1230.ausprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: infact.co.nz does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HtekI9SV9+jRJLmS60Lo7vO1/A1zdqPvjMGdLjYLlgBY2r+n3KmQIJOIbFLurcGQDNEijcGFQqSrRrI8A33IHbE15i8ISmCYlhDwMrnceUmzQgilZvWFZ/sb49JqjTuVDiDV57HbqByf4lBhp4jm9MEVB+AHv15NN2RwawOZu1rApXzOFnxBnfKTkBgLylCdIwxi7VA3pSITaYx/O7elfwRgyFvZJkYaVLfBj07Bt73Dpt4qdsXNhChelEj368Pt47vDQYv7bxGUhNxnKCq4tgsiFkCcEApUfwwjuVTPUUYxOYILxQZJhD30i4TUFYJN5NVhCkkpdLDqbOmyiugZyVIBNu9hl0elQyq5HQI8l9KinPs9/UvRzom0xr5Kftd9A3+cHBt9ZrT/0vwHatgjPabL6JIc6yopYK4kZEObeoK56/vtsKlCjfG6pE2oqMySJ4Dk4lKj3ALl1aKiGJpxJv0oPM1HKKffmxTq1zeBzMI=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: infact.co.nz
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a7a0083-8913-498b-beac-08d784f2a44d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2019 02:16:36.8505
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d3186c43-3bd7-42ae-90de-3e94668e5828
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /MmSgaDhzalOpnynXd7qPuKT6e98xsaEbDPvFErEdaIye+XoYNPEFhNIqcstA72RtJHK5X2LrFUE6RkuBT+hrpPASIP+eyfG0IyAdm1LFJQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SYXPR01MB1327
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 12/19/19 2:37 PM, Grygorii Strashko wrote:
-> 
-> 
-> On 17/12/2019 12:55, Marek Vasut wrote:
->> On 12/17/19 11:42 AM, Grygorii Strashko wrote:
->>>
->>>
->>> On 17/12/2019 12:07, Marek Vasut wrote:
->>>> The current code causes a slight glitch on the pinctrl settings when
->>>> used.
->>>> Since commit ab78029 (drivers/pinctrl: grab default handles from
->>>> device core),
->>>> the device core will automatically set the default pins. This causes
->>>> the pins
->>>> to be momentarily set to the default and then to the sleep state in
->>>> register_m_can_dev(). By adding an optional "enable" state, boards can
->>>> set the
->>>> default pin state to be disabled and avoid the glitch when the switch
->>>> from
->>>> default to sleep first occurs. If the "enable" state is not available
->>>> pinctrl_get_select() falls back to using the "default" pinctrl state.
->>>>
->>>> Fixes: c9b3bce18da4 ("can: m_can: select pinctrl state in each
->>>> suspend/resume function")
->>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>> Cc: Bich Hemon <bich.hemon@st.com>
->>>> Cc: Grygorii Strashko <grygorii.strashko@ti.com>
->>>> Cc: J.D. Schroeder <jay.schroeder@garmin.com>
->>>> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
->>>> Cc: Roger Quadros <rogerq@ti.com>
->>>> Cc: linux-stable <stable@vger.kernel.org>
->>>> To: linux-can@vger.kernel.org
->>>> ---
->>>> NOTE: This is commit 033365191136 ("can: c_can: Fix default pinmux
->>>> glitch at init")
->>>>         adapted for m_can driver.
->>>> ---
->>>>    drivers/net/can/m_can/m_can.c | 8 ++++++++
->>>>    1 file changed, 8 insertions(+)
->>>>
->>>> diff --git a/drivers/net/can/m_can/m_can.c
->>>> b/drivers/net/can/m_can/m_can.c
->>>> index 02c5795b73936..afb6760b17427 100644
->>>> --- a/drivers/net/can/m_can/m_can.c
->>>> +++ b/drivers/net/can/m_can/m_can.c
->>>> @@ -1243,12 +1243,20 @@ static void m_can_chip_config(struct
->>>> net_device *dev)
->>>>    static void m_can_start(struct net_device *dev)
->>>>    {
->>>>        struct m_can_classdev *cdev = netdev_priv(dev);
->>>> +    struct pinctrl *p;
->>>>          /* basic m_can configuration */
->>>>        m_can_chip_config(dev);
->>>>          cdev->can.state = CAN_STATE_ERROR_ACTIVE;
->>>>    +    /* Attempt to use "active" if available else use "default" */
->>>> +    p = pinctrl_get_select(cdev->dev, "active");
->>>> +    if (!IS_ERR(p))
->>>> +        pinctrl_put(p);
->>>> +    else
->>>> +        pinctrl_pm_select_default_state(cdev->dev);
->>>> +
->>>>        m_can_enable_all_interrupts(cdev);
->>>>    }
->>>>   
->>>
->>> May be init state should be used - #define PINCTRL_STATE_INIT "init"
->>> instead?
->>
->> I'm not sure I quite understand -- how ?
->>
-> 
-> Sry, for delayed reply.
-> 
-> I've looked at m_can code and think issue is a little bit deeper
->  (but I might be wrong as i'm not can expert and below based on code
-> review).
-> 
-> First, what going on:
-> probe:
->  really_probe()
->   pinctrl_bind_pins()
->         if (IS_ERR(dev->pins->init_state)) {
->         ret = pinctrl_select_state(dev->pins->p,
->                        dev->pins->default_state);
->     } else {
->         ret = pinctrl_select_state(dev->pins->p, dev->pins->init_state);
->     }
->   [GS] So at this point default_state or init_state is set
-> 
->   ret = dev->bus->probe(dev);
->        m_can_plat_probe()
->      m_can_class_register()
->         m_can_clk_start()
->           pm_runtime_get_sync()
->         m_can_runtime_resume()
->   [GS] Still default_state or init_state is active
-> 
->        register_m_can_dev()
->   [GS] at this point m_can netdev is registered, which may lead to
-> .ndo_open = m_can_open() call
-> 
->          m_can_clk_stop()
->            pm_runtime_put_sync()
->   [GS] if .ndo_open() was called before it will be a nop
->         m_can_runtime_suspend()
->          m_can_class_suspend()
-> 
->             if (netif_running(ndev)) {
->                 netif_stop_queue(ndev);
->                 netif_device_detach(ndev);
->                 m_can_stop(ndev);
->                 m_can_clk_stop(cdev);
->   [GS] if .ndo_open() was called before it will lead to deadlock here
->       So, most probably, it will cause deadlock in case of "ifconfig
-> <m_can_dev> up down" case
->             }
-> 
->             pinctrl_pm_select_sleep_state(dev);
->   [GS] at this point sleep_state will be set - i assume it's the root
-> cause of your glitch.
->        Note - As per code, the pinctrl default_state will never ever
-> configured again, so if after
->        probe m_can will go through PM runtime suspend/resume cycle it
-> will not work any more.
-> 
->   pinctrl_init_done()
->   [GS] will do nothing in case !init_state
-> 
-> As per above, if sleep_state is defined the m_can seems should not work
-> at all without your patch,
-> as there is no code path to switch back sleep_state->default_state.
-> And over all PM runtime m_can code is mixed with System suspend code and
-> so not correct.
-> 
-> Also, the very good question - Is it really required to toggle pinctrl
-> states as part of PM runtime?
-> (usually it's enough to handle it only during System suspend).
+Hi,
 
-I suspect this discussion is somewhat a separate topic from what this
-patch is trying to fix ?
+I'm interested in porting the J1939 code and MCP2517 driver to an older ker=
+nel. I'm planning on using the Qualcomm 4.14 kernel.
+
+Is it possible that working versions of this code has already been backport=
+ed to an earlier kernel release, which I could then merge into 4.14? I saw =
+that Romain Forlot has asked a similar question here a couple of months ago=
+ https://www.spinics.net/lists/linux-can/msg02539.html but the thread was a=
+bandoned. Oleksij Rempel mentioned that there is potentially and issue with=
+ Rx/Tx frame ordering, is this still the case?
+
+Thanks very much.
+--Mike
+
+--
+Michael Frampton
+Electronics & Software Engineer  |    inFact Limited
++64 3 3777 316                                |    +64 27 313 81 93
