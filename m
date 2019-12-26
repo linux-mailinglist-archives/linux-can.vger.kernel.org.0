@@ -2,67 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBD612ADD9
-	for <lists+linux-can@lfdr.de>; Thu, 26 Dec 2019 19:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24FE12AE1A
+	for <lists+linux-can@lfdr.de>; Thu, 26 Dec 2019 19:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbfLZSRC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Dec 2019 13:17:02 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:33823 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726453AbfLZSRC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Dec 2019 13:17:02 -0500
-Received: by mail-io1-f67.google.com with SMTP id z193so23859568iof.1;
-        Thu, 26 Dec 2019 10:17:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Gx5/mxf2OcyKOraLNib62q7dUwuhxVBq/hiHG9gDOK8=;
-        b=pk3SukjcL9lz9I+NLsAD6xSDkIh+l1BHtMPeVLjbD8W0lyUg/2JEXVdlQuh2Eo8yxZ
-         Ya8lzJGMORbtvzItMFvPYj/lMFJd6/vIcbV4ItCRyt734HPHLlLRJ/fbCe6ZbI/vpiSV
-         GASX2lR1jmWqBTNkMwcvO0T1Fo8uXiRkNwHXP6C85EhHShUbdwiTgUTwFLGy79Tkz8E3
-         P0Y9vmH9KbWgm0ANYGWFRTuC4dI5O+R/kiS9BZ+V/t2n6uEpicu+mDh3Oq7JfF/nU5dp
-         R8dy6QPpEk3Ary429LMUG8RmOf2GtNPE9uukqPXv6wJe41wD368GgDugkjOeR+QqrLuv
-         fJjA==
-X-Gm-Message-State: APjAAAX17blroC4aV+OpYhkH7VCv6cz2A/eeN59J8C/MXN4FLlnVquU7
-        f6WyZHJ5r5+4k4aP8zED1dci080=
-X-Google-Smtp-Source: APXvYqywCS38qHT/w3F29zB4n5zSCbDc7ESbj0sPmDiuvsMs6M1VwKhBVvcGbNbgh5Juegluk0s9vw==
-X-Received: by 2002:a02:81cc:: with SMTP id r12mr36440392jag.93.1577384221519;
-        Thu, 26 Dec 2019 10:17:01 -0800 (PST)
-Received: from localhost ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id c3sm8768833ioc.63.2019.12.26.10.17.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2019 10:17:00 -0800 (PST)
-Date:   Thu, 26 Dec 2019 11:16:59 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     pisa@cmp.felk.cvut.cz
-Cc:     devicetree@vger.kernel.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org, socketcan@hartkopp.net,
-        wg@grandegger.com, davem@davemloft.net, mark.rutland@arm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.jerabek01@gmail.com, ondrej.ille@gmail.com,
-        jnovak@fel.cvut.cz, jara.beran@gmail.com, porazil@pikron.com
-Subject: Re: [PATCH v3 1/6] dt-bindings: vendor-prefix: add prefix for Czech
- Technical University in Prague.
-Message-ID: <20191226181659.GA7471@bogus>
-References: <cover.1576922226.git.pisa@cmp.felk.cvut.cz>
- <af3f3bef1a82dff51316fdbcba518e5658808ed8.1576922226.git.pisa@cmp.felk.cvut.cz>
+        id S1726480AbfLZS7V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Dec 2019 13:59:21 -0500
+Received: from informare.org ([217.11.52.70]:43662 "EHLO informare.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726839AbfLZS7V (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 26 Dec 2019 13:59:21 -0500
+Received: (qmail 8852 invoked from network); 26 Dec 2019 18:52:37 -0000
+Received: from unknown (HELO ?192.168.178.40?) (faber@faberman.de@87.123.203.102)
+  by 0 with ESMTPA; 26 Dec 2019 18:52:37 -0000
+To:     linux-can@vger.kernel.org
+Cc:     stable@vger.kernel.org
+From:   Florian Faber <faber@faberman.de>
+Subject: [PATCH] mscan: fix rx path lockup when returning from polling to irq
+ mode
+Message-ID: <860de41f-bb60-728b-7602-90dced920c27@faberman.de>
+Date:   Thu, 26 Dec 2019 19:51:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af3f3bef1a82dff51316fdbcba518e5658808ed8.1576922226.git.pisa@cmp.felk.cvut.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Dec 21, 2019 at 03:07:30PM +0100, pisa@cmp.felk.cvut.cz wrote:
-> From: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> 
-> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+Under load, the RX side of the mscan driver can get stuck while TX still
+works. Restarting the interface locks up the system. This behaviour 
+could be reproduced reliably on a MPC5121e based system.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The patch fixes the return value of the NAPI polling function (should be
+the number of processed packets, not constant 1) and the condition under
+which IRQs are enabled again after polling is finished.
+
+With this patch, no more lockups were observed over a test period of ten 
+days.
+
+Signed-off-by: Florian Faber <faber@faberman.de>
+---
+diff -uprN a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/mscan.c
+--- a/drivers/net/can/mscan/mscan.c
++++ b/drivers/net/can/mscan/mscan.c
+@@ -381,10 +381,9 @@ static int mscan_rx_poll(struct napi_str
+         struct net_device *dev = napi->dev;
+         struct mscan_regs __iomem *regs = priv->reg_base;
+         struct net_device_stats *stats = &dev->stats;
+-       int npackets = 0;
+-       int ret = 1;
++	int work_done = 0;
+         struct sk_buff *skb;
+         struct can_frame *frame;
+         u8 canrflg;
+
+-       while (npackets < quota) {
++	while (work_done < quota) {
+		canrflg = in_8(&regs->canrflg);
+		if (!(canrflg & (MSCAN_RXF | MSCAN_ERR_IF)))
+@@ -408,15 +409,16 @@ static int mscan_rx_poll(struct napi_str
+
+                 stats->rx_packets++;
+                 stats->rx_bytes += frame->can_dlc;
+-               npackets++;
++		work_done++;
+                 netif_receive_skb(skb);
+         }
+
+-       if (!(in_8(&regs->canrflg) & (MSCAN_RXF | MSCAN_ERR_IF))) {
+-               napi_complete(&priv->napi);
+-               clear_bit(F_RX_PROGRESS, &priv->flags);
+-               if (priv->can.state < CAN_STATE_BUS_OFF)
+-                       out_8(&regs->canrier, priv->shadow_canrier);
+-               ret = 0;
++	if (work_done < quota) {
++		if (likely(napi_complete_done(&priv->napi, work_done))) {
++			clear_bit(F_RX_PROGRESS, &priv->flags);
++			if (priv->can.state < CAN_STATE_BUS_OFF)
++				out_8(&regs->canrier, priv->shadow_canrier);
++		}
+         }
+-       return ret;
++
++	return work_done;
+}
+-- 
+Machines can do the work, so people have time to think.
