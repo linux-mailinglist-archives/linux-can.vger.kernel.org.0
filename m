@@ -2,35 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D449312AC2B
-	for <lists+linux-can@lfdr.de>; Thu, 26 Dec 2019 13:14:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E8B12AC3B
+	for <lists+linux-can@lfdr.de>; Thu, 26 Dec 2019 13:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbfLZMOl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Dec 2019 07:14:41 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49991 "EHLO
+        id S1726074AbfLZMft (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Dec 2019 07:35:49 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51875 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726060AbfLZMOl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Dec 2019 07:14:41 -0500
+        with ESMTP id S1725954AbfLZMft (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Dec 2019 07:35:49 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ikS2I-0001li-Ez; Thu, 26 Dec 2019 13:14:38 +0100
-Received: from [172.18.242.164] (unknown [46.183.103.8])
+        id 1ikSMl-0003iC-Hk; Thu, 26 Dec 2019 13:35:47 +0100
+Received: from [IPv6:2a01:598:9181:b3dc:74ff:529f:48cb:eb82] (unknown [IPv6:2a01:598:9181:b3dc:74ff:529f:48cb:eb82])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8BB50496459;
-        Thu, 26 Dec 2019 12:14:36 +0000 (UTC)
-Subject: Re: [PATCH v3] can: ensure an initialized headroom in outgoing CAN
- sk_buffs
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Cc:     syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
-References: <20191210103130.11201-1-mkl@pengutronix.de>
- <ea12de3d-e258-f4a7-6219-71995dbe8134@hartkopp.net>
- <202358df-df7b-b999-b820-33006ba0b264@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A305849646E;
+        Thu, 26 Dec 2019 12:35:40 +0000 (UTC)
+Subject: Re: Backporting J1939 and mcp25xxfd
+To:     Michael Frampton <Michael.Frampton@infact.co.nz>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -93,15 +90,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <8992a653-11e7-b907-3dfe-2d7c3d33bf89@pengutronix.de>
-Date:   Thu, 19 Dec 2019 10:24:15 +0100
+Message-ID: <1d927384-84b1-45ff-91aa-b6d42134c8c8@pengutronix.de>
+Date:   Thu, 26 Dec 2019 13:34:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <202358df-df7b-b999-b820-33006ba0b264@hartkopp.net>
+In-Reply-To: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="rdrCwwqoNOiLZFRPwwBAqgHcX0kp74zAN"
+ boundary="9AKe91KXVZVkHbGFnnKusb1QaZG1yiFHv"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,40 +109,30 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---rdrCwwqoNOiLZFRPwwBAqgHcX0kp74zAN
-Content-Type: multipart/mixed; boundary="xTf8uyLs5083l5P3sxNefbHfOVwC3jkzT";
+--9AKe91KXVZVkHbGFnnKusb1QaZG1yiFHv
+Content-Type: multipart/mixed; boundary="a3g51Clkig6F2O7MyyyCgrCO7X2UN6uLC";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Cc: syzbot+b02ff0707a97e4e79ebb@syzkaller.appspotmail.com
-Message-ID: <8992a653-11e7-b907-3dfe-2d7c3d33bf89@pengutronix.de>
-Subject: Re: [PATCH v3] can: ensure an initialized headroom in outgoing CAN
- sk_buffs
-References: <20191210103130.11201-1-mkl@pengutronix.de>
- <ea12de3d-e258-f4a7-6219-71995dbe8134@hartkopp.net>
- <202358df-df7b-b999-b820-33006ba0b264@hartkopp.net>
-In-Reply-To: <202358df-df7b-b999-b820-33006ba0b264@hartkopp.net>
+To: Michael Frampton <Michael.Frampton@infact.co.nz>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <1d927384-84b1-45ff-91aa-b6d42134c8c8@pengutronix.de>
+Subject: Re: Backporting J1939 and mcp25xxfd
+References: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
+In-Reply-To: <SYXPR01MB12301FF2AEF360FD9F013AA1A12D0@SYXPR01MB1230.ausprd01.prod.outlook.com>
 
---xTf8uyLs5083l5P3sxNefbHfOVwC3jkzT
+--a3g51Clkig6F2O7MyyyCgrCO7X2UN6uLC
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/16/19 7:03 PM, Oliver Hartkopp wrote:
->> When do you want to push it upstream?
+On 12/20/19 3:16 AM, Michael Frampton wrote:
+> I'm interested in porting the J1939 code and MCP2517 driver to an
+> older kernel. I'm planning on using the Qualcomm 4.14 kernel.
 
-I'm on Holidays now, so probably at the Congress.
+Keep in mind, the mcp25xxfd driver is not yet finished. So the branches
+on net-next are subject to rebase.
 
-> ... together with the hint for the stable trees
->=20
-> Cc: linux-stable <stable@vger.kernel.org> # >=3D v4.1
->=20
->> The patch is ok for me.
->> Do you need another Acked-by or Tested-by tag?
->=20
-> Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-
-Tnx,
+regards,
 Marc
 
 --=20
@@ -155,23 +142,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---xTf8uyLs5083l5P3sxNefbHfOVwC3jkzT--
+--a3g51Clkig6F2O7MyyyCgrCO7X2UN6uLC--
 
---rdrCwwqoNOiLZFRPwwBAqgHcX0kp74zAN
+--9AKe91KXVZVkHbGFnnKusb1QaZG1yiFHv
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl37Qb8ACgkQWsYho5Hk
-nSARCgf+PRvw9n4GfMXXsnl0tFYuCqDNMeI/UsCFBTD30UjLmJ/9IjgTo1FfMt2U
-W4iTjEmHVZwQ1c4ZUv4aBUdv034n7eQr7ztFf8KnPsz8DBE0Racb7Qe2s4YhFVl3
-koJ5TNiSWuRaCB0oec0kQjfpo95tRkQJ8REElPSUJCaj2swz03f0UI0PImjmLzNY
-icRXleskTVFcLaxWnMPNbKUBvOsTEonjc68Ko4bLNkWgOQN4x4k8qRvWRZZzXnit
-X1FJvl/8IffguLAoDfo5wiCbUS3WOR21izduOFzoj/b43Qci+Z3cf7rx1vXZltv7
-Bt/hjU3DAhs3YH4nbfwdMlq7euV10A==
-=b2kj
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4EqNYACgkQWsYho5Hk
+nSAQjQf8DFgWkaaP0sm/FZ/Y51TFDvoqGZMqwoQWWXkzIO8K6U0m6h/zAvTVPxXh
+aDfvyGcsZ07FKlDubCurM7vZELvVqauOrHdagFr6Zc00zHWaJYLASkRjJKsjtPDP
+ib02f4//voqg/KpBVqmHYdxLQusyO9cUeYHB64d3xA38qT6tBO+7a1slgmFW45B3
+rwz+gqvg1yNe/+rJ+YIf0/bE/uBo5IwZ55UJrMAgPRwrgKaqTv8VyrT+ArUSgh70
+o7q8VkeVz9ArQ2iejBH6h+7wmBnG0oJfQrhGod7+9qK5EWj3sGggVeO8dU82zoNj
+RBoBiWVZ0r7csPhA6Y5sWtsQNGlPxg==
+=JGbp
 -----END PGP SIGNATURE-----
 
---rdrCwwqoNOiLZFRPwwBAqgHcX0kp74zAN--
+--9AKe91KXVZVkHbGFnnKusb1QaZG1yiFHv--
