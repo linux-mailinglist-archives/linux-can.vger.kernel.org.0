@@ -2,33 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D3A12C317
-	for <lists+linux-can@lfdr.de>; Sun, 29 Dec 2019 16:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AE512C31E
+	for <lists+linux-can@lfdr.de>; Sun, 29 Dec 2019 16:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfL2PSc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 29 Dec 2019 10:18:32 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57199 "EHLO
+        id S1726230AbfL2PcV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 29 Dec 2019 10:32:21 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50323 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbfL2PSb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Dec 2019 10:18:31 -0500
+        with ESMTP id S1726189AbfL2PcV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Dec 2019 10:32:21 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ilaKq-0008D7-32; Sun, 29 Dec 2019 16:18:28 +0100
+        id 1ilaYD-0000ir-5w; Sun, 29 Dec 2019 16:32:17 +0100
 Received: from [IPv6:2001:67c:20a1:1192:74ff:529f:48cb:eb82] (unknown [IPv6:2001:67c:20a1:1192:74ff:529f:48cb:eb82])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D666D4976B4;
-        Sun, 29 Dec 2019 15:18:25 +0000 (UTC)
-Subject: Re: [PATCH v6 1/2] can: tcan4x5x: reset device before register access
-To:     Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
-        linux-can@vger.kernel.org
-References: <20191211135852.320650-1-sean@geanix.com>
- <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F25F84976C3;
+        Sun, 29 Dec 2019 15:32:14 +0000 (UTC)
+To:     Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org, wg@grandegger.com,
+        sriram.dash@samsung.com
+References: <20191212161536.23264-1-dmurphy@ti.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -91,15 +90,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <e32c5b67-2202-5310-714a-68c804abf952@pengutronix.de>
-Date:   Sun, 29 Dec 2019 16:18:12 +0100
+Subject: Re: [PATCH linux-can/testing] can: tcan4x5x: Disable the INH pin
+ device-state GPIO is unavailable
+Message-ID: <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
+Date:   Sun, 29 Dec 2019 16:32:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
+In-Reply-To: <20191212161536.23264-1-dmurphy@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7"
+ boundary="N1nesT42QyOxVEMMoQougOQqY8SIbiSL0"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,36 +111,89 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7
-Content-Type: multipart/mixed; boundary="7dlGcm6FfKbyGyUJuXdmSGH1sqAy2t4EU";
+--N1nesT42QyOxVEMMoQougOQqY8SIbiSL0
+Content-Type: multipart/mixed; boundary="av7eADa9mYDcTsXodHZDp6AFIW6KEoww7";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
- linux-can@vger.kernel.org
-Message-ID: <e32c5b67-2202-5310-714a-68c804abf952@pengutronix.de>
-Subject: Re: [PATCH v6 1/2] can: tcan4x5x: reset device before register access
-References: <20191211135852.320650-1-sean@geanix.com>
- <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
-In-Reply-To: <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
+To: Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org,
+ linux-can@vger.kernel.org, wg@grandegger.com, sriram.dash@samsung.com
+Message-ID: <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
+Subject: Re: [PATCH linux-can/testing] can: tcan4x5x: Disable the INH pin
+ device-state GPIO is unavailable
+References: <20191212161536.23264-1-dmurphy@ti.com>
+In-Reply-To: <20191212161536.23264-1-dmurphy@ti.com>
 
---7dlGcm6FfKbyGyUJuXdmSGH1sqAy2t4EU
+--av7eADa9mYDcTsXodHZDp6AFIW6KEoww7
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
-On 12/11/19 3:18 PM, Dan Murphy wrote:
-> Sean
+On 12/12/19 5:15 PM, Dan Murphy wrote:
+> If the device state GPIO is not connected to the host then disable the
+> INH output from the TCAN device per section 8.3.5 of the data sheet.
 >=20
-> On 12/11/19 7:58 AM, Sean Nyekjaer wrote:
->> It's a good idea to reset a ip-block/spi device before using it, this
->> patch will reset the device.
->>
->> And a generic reset function if needed elsewhere.
->>
->> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
->> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> ---
 
-Applied both to linux-can.
+Applied to linux-can. With some changes...
+
+>  drivers/net/can/m_can/tcan4x5x.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/t=
+can4x5x.c
+> index b5d2ea0999c1..6a1f242d1876 100644
+> --- a/drivers/net/can/m_can/tcan4x5x.c
+> +++ b/drivers/net/can/m_can/tcan4x5x.c
+> @@ -102,6 +102,7 @@
+>  #define TCAN4X5X_MODE_NORMAL BIT(7)
+> =20
+>  #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
+> +#define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
+> =20
+>  #define TCAN4X5X_SW_RESET BIT(2)
+> =20
+> @@ -360,6 +361,15 @@ static int tcan4x5x_disable_wake(struct m_can_clas=
+sdev *cdev)
+>  				  TCAN4X5X_DISABLE_WAKE_MSK, 0x00);
+>  }
+> =20
+> +static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
+> +{
+> +	struct tcan4x5x_priv *tcan4x5x =3D cdev->device_data;
+> +
+> +	return regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
+> +				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
+> +
+
+Removed the stray line while applying.
+
+> +}
+> +
+>  static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
+>  {
+>  	struct tcan4x5x_priv *tcan4x5x =3D cdev->device_data;
+> @@ -383,8 +393,10 @@ static int tcan4x5x_parse_config(struct m_can_clas=
+sdev *cdev)
+>  	tcan4x5x->device_state_gpio =3D devm_gpiod_get_optional(cdev->dev,
+>  							      "device-state",
+>  							      GPIOD_IN);
+> -	if (IS_ERR(tcan4x5x->device_state_gpio))
+> +	if (IS_ERR(tcan4x5x->device_state_gpio)) {
+>  		tcan4x5x->device_state_gpio =3D NULL;
+> +		tcan4x5x_disable_state(cdev);
+> +	}
+For some reason, this hunk doesn't apply, due to the additional:
+
+>> 	tcan4x5x->power =3D devm_regulator_get_optional(cdev->dev,
+>> 						      "vsup");
+
+I've applied the patch manually.
+
+> =20
+>  	return 0;
+>  }
+>=20
 
 Marc
 
@@ -150,23 +204,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---7dlGcm6FfKbyGyUJuXdmSGH1sqAy2t4EU--
+--av7eADa9mYDcTsXodHZDp6AFIW6KEoww7--
 
---Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7
+--N1nesT42QyOxVEMMoQougOQqY8SIbiSL0
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4Iw7QACgkQWsYho5Hk
-nSCoowf+II65M1HR3u3i7Vox3JmZrs/4ACFV3vhEBOqpI+o3c+2q4UIoCRQBSav7
-fPbt4u68c8anrXbV7NshcmjLsBriIrfV8AmNZICOWDd0iIPE2Ro8/HipJ1c18PXQ
-mHco8ygG9J2frmIw8rcXsr+TR9xLPx2QawAs4D/PJDAs9yJdBKBBjzMqtsp615IV
-PRFMJd+cMNsd60PEkIOajvzCRlxDDFr0yS45eMbeZXB0Yyiot+6usB5UK3jNHRhE
-12SNb3GPi5QyenvWnU14TOdoAYCX8w9YxCwEi0ajSQD3azKdzn2LdliwhxSK842N
-ztkwTgPgh6WcXdjrI2VqrjFlcPuOnQ==
-=Z+dp
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4IxvgACgkQWsYho5Hk
+nSDFkAgAh/d0YN3ZLCS7Edg2Caf0/2aoBAnjAnyPTEMN0T8VxWDaKWme8EOkMSWw
+ypXN1WdSb550yQwpGdmZpbMM8wRBancV5IZ3pwjaw9/cNYVzaCxcXTCWP/BUD13Y
+W9WW1SatZhHlbvDPP9XBFsxXWh7Fyac7lSAsYu/JberBTtDPrJKzXirrGcDEeh4I
+/vCoT3plKv8YAIqFZSjx0CyqGlH5QYQzJnVvYFk40Sp4FMbu8UZ4L4OMQrbL+EtX
+m2fEkFZXI6DfpNHxM3/VfM0DYTt7ip6icFjb3qld559TNx5yf1S+y0qwZ76TPO4I
+1vMMaaRdn2CC9/nPBf+q65T+se4AAw==
+=KyXS
 -----END PGP SIGNATURE-----
 
---Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7--
+--N1nesT42QyOxVEMMoQougOQqY8SIbiSL0--
