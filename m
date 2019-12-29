@@ -2,33 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AE512C31E
-	for <lists+linux-can@lfdr.de>; Sun, 29 Dec 2019 16:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE32212C343
+	for <lists+linux-can@lfdr.de>; Sun, 29 Dec 2019 17:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbfL2PcV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 29 Dec 2019 10:32:21 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50323 "EHLO
+        id S1726647AbfL2QGC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 29 Dec 2019 11:06:02 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48013 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726189AbfL2PcV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Dec 2019 10:32:21 -0500
+        with ESMTP id S1726455AbfL2QGC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Dec 2019 11:06:02 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ilaYD-0000ir-5w; Sun, 29 Dec 2019 16:32:17 +0100
+        id 1ilb4m-0003LQ-Qp; Sun, 29 Dec 2019 17:05:56 +0100
 Received: from [IPv6:2001:67c:20a1:1192:74ff:529f:48cb:eb82] (unknown [IPv6:2001:67c:20a1:1192:74ff:529f:48cb:eb82])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F25F84976C3;
-        Sun, 29 Dec 2019 15:32:14 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 59FAE4976DA;
+        Sun, 29 Dec 2019 16:05:54 +0000 (UTC)
+Subject: Re: [PATCH linux-can/testing] can: tcan4x5x: Disable the INH pin
+ device-state GPIO is unavailable
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org,
         linux-can@vger.kernel.org, wg@grandegger.com,
         sriram.dash@samsung.com
 References: <20191212161536.23264-1-dmurphy@ti.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -90,17 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH linux-can/testing] can: tcan4x5x: Disable the INH pin
- device-state GPIO is unavailable
-Message-ID: <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
-Date:   Sun, 29 Dec 2019 16:32:08 +0100
+Message-ID: <afa5c681-bbd1-a6f6-2b58-4f24c924144e@pengutronix.de>
+Date:   Sun, 29 Dec 2019 17:05:47 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191212161536.23264-1-dmurphy@ti.com>
+In-Reply-To: <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="N1nesT42QyOxVEMMoQougOQqY8SIbiSL0"
+ boundary="ErfGB2JhlV9tFPSlfmfTApANASHC9q8AV"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,89 +112,50 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---N1nesT42QyOxVEMMoQougOQqY8SIbiSL0
-Content-Type: multipart/mixed; boundary="av7eADa9mYDcTsXodHZDp6AFIW6KEoww7";
+--ErfGB2JhlV9tFPSlfmfTApANASHC9q8AV
+Content-Type: multipart/mixed; boundary="ufP7ELgO2JCaYT0AOrvlkGTfNb0k9Qwz8";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org,
  linux-can@vger.kernel.org, wg@grandegger.com, sriram.dash@samsung.com
-Message-ID: <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
+Message-ID: <afa5c681-bbd1-a6f6-2b58-4f24c924144e@pengutronix.de>
 Subject: Re: [PATCH linux-can/testing] can: tcan4x5x: Disable the INH pin
  device-state GPIO is unavailable
 References: <20191212161536.23264-1-dmurphy@ti.com>
-In-Reply-To: <20191212161536.23264-1-dmurphy@ti.com>
+ <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
+In-Reply-To: <b0560413-525c-39ba-30ce-816c098e51ab@pengutronix.de>
 
---av7eADa9mYDcTsXodHZDp6AFIW6KEoww7
+--ufP7ELgO2JCaYT0AOrvlkGTfNb0k9Qwz8
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/12/19 5:15 PM, Dan Murphy wrote:
-> If the device state GPIO is not connected to the host then disable the
-> INH output from the TCAN device per section 8.3.5 of the data sheet.
+On 12/29/19 4:32 PM, Marc Kleine-Budde wrote:
+> On 12/12/19 5:15 PM, Dan Murphy wrote:
+>>  static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
+>>  {
+>>  	struct tcan4x5x_priv *tcan4x5x =3D cdev->device_data;
+>> @@ -383,8 +393,10 @@ static int tcan4x5x_parse_config(struct m_can_cla=
+ssdev *cdev)
+>>  	tcan4x5x->device_state_gpio =3D devm_gpiod_get_optional(cdev->dev,
+>>  							      "device-state",
+>>  							      GPIOD_IN);
+>> -	if (IS_ERR(tcan4x5x->device_state_gpio))
+>> +	if (IS_ERR(tcan4x5x->device_state_gpio)) {
+>>  		tcan4x5x->device_state_gpio =3D NULL;
+>> +		tcan4x5x_disable_state(cdev);
+>> +	}
+> For some reason, this hunk doesn't apply, due to the additional:
 >=20
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> ---
+>>> 	tcan4x5x->power =3D devm_regulator_get_optional(cdev->dev,
+>>> 						      "vsup");
 
-Applied to linux-can. With some changes...
+=2E..which was my fault. :) Please have a look at
 
->  drivers/net/can/m_can/tcan4x5x.c | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/t=
-can4x5x.c
-> index b5d2ea0999c1..6a1f242d1876 100644
-> --- a/drivers/net/can/m_can/tcan4x5x.c
-> +++ b/drivers/net/can/m_can/tcan4x5x.c
-> @@ -102,6 +102,7 @@
->  #define TCAN4X5X_MODE_NORMAL BIT(7)
-> =20
->  #define TCAN4X5X_DISABLE_WAKE_MSK	(BIT(31) | BIT(30))
-> +#define TCAN4X5X_DISABLE_INH_MSK	BIT(9)
-> =20
->  #define TCAN4X5X_SW_RESET BIT(2)
-> =20
-> @@ -360,6 +361,15 @@ static int tcan4x5x_disable_wake(struct m_can_clas=
-sdev *cdev)
->  				  TCAN4X5X_DISABLE_WAKE_MSK, 0x00);
->  }
-> =20
-> +static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
-> +{
-> +	struct tcan4x5x_priv *tcan4x5x =3D cdev->device_data;
-> +
-> +	return regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
-> +				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
-> +
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git/log/?h=3D=
+testing
 
-Removed the stray line while applying.
-
-> +}
-> +
->  static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
->  {
->  	struct tcan4x5x_priv *tcan4x5x =3D cdev->device_data;
-> @@ -383,8 +393,10 @@ static int tcan4x5x_parse_config(struct m_can_clas=
-sdev *cdev)
->  	tcan4x5x->device_state_gpio =3D devm_gpiod_get_optional(cdev->dev,
->  							      "device-state",
->  							      GPIOD_IN);
-> -	if (IS_ERR(tcan4x5x->device_state_gpio))
-> +	if (IS_ERR(tcan4x5x->device_state_gpio)) {
->  		tcan4x5x->device_state_gpio =3D NULL;
-> +		tcan4x5x_disable_state(cdev);
-> +	}
-For some reason, this hunk doesn't apply, due to the additional:
-
->> 	tcan4x5x->power =3D devm_regulator_get_optional(cdev->dev,
->> 						      "vsup");
-
-I've applied the patch manually.
-
-> =20
->  	return 0;
->  }
->=20
+=2E..if I've collected every m_can related patch.
 
 Marc
 
@@ -204,23 +166,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---av7eADa9mYDcTsXodHZDp6AFIW6KEoww7--
+--ufP7ELgO2JCaYT0AOrvlkGTfNb0k9Qwz8--
 
---N1nesT42QyOxVEMMoQougOQqY8SIbiSL0
+--ErfGB2JhlV9tFPSlfmfTApANASHC9q8AV
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4IxvgACgkQWsYho5Hk
-nSDFkAgAh/d0YN3ZLCS7Edg2Caf0/2aoBAnjAnyPTEMN0T8VxWDaKWme8EOkMSWw
-ypXN1WdSb550yQwpGdmZpbMM8wRBancV5IZ3pwjaw9/cNYVzaCxcXTCWP/BUD13Y
-W9WW1SatZhHlbvDPP9XBFsxXWh7Fyac7lSAsYu/JberBTtDPrJKzXirrGcDEeh4I
-/vCoT3plKv8YAIqFZSjx0CyqGlH5QYQzJnVvYFk40Sp4FMbu8UZ4L4OMQrbL+EtX
-m2fEkFZXI6DfpNHxM3/VfM0DYTt7ip6icFjb3qld559TNx5yf1S+y0qwZ76TPO4I
-1vMMaaRdn2CC9/nPBf+q65T+se4AAw==
-=KyXS
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4IztsACgkQWsYho5Hk
+nSCOhgf/eM4Q5w75fCd1N0GJIHlTB7jFNfp36CQKpHfG2TsG8U+1Qvi3dd3wccpY
+zA8IY2Fej45LnSCSGy4/PsVYRBgf9WM0OmVhSDeUU4T1pHyqz0mI+BS5CUBltG7N
+llqWTnDHrHQPEgEy8a1/I/5DWFDoKBzV2ywL1Hcof9jQ+ZcKYmUptPOBkXtZbfkq
+uciVc+y6q32gaHBi55a7dCOC1/b1YWxb24oe2NDbjfqWbmCATU9M+s6cGZXC3YOJ
+CkpaoMOJyI4DTklME2udP/viWE7qOfEMWzaeHzyRJnlLmcR/rEll9cxIZ6ILvf0L
+Hj8WgBj5uNhX+KC/UkJx2vbMOcmHTw==
+=sUMO
 -----END PGP SIGNATURE-----
 
---N1nesT42QyOxVEMMoQougOQqY8SIbiSL0--
+--ErfGB2JhlV9tFPSlfmfTApANASHC9q8AV--
