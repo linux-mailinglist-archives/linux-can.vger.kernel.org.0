@@ -2,197 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA0912AEC2
-	for <lists+linux-can@lfdr.de>; Thu, 26 Dec 2019 22:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D3A12C317
+	for <lists+linux-can@lfdr.de>; Sun, 29 Dec 2019 16:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbfLZVPM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Dec 2019 16:15:12 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:49105 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfLZVPM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Dec 2019 16:15:12 -0500
-Received: by mail-il1-f198.google.com with SMTP id u14so12313609ilq.15
-        for <linux-can@vger.kernel.org>; Thu, 26 Dec 2019 13:15:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=q/kM3hNHvC7xHvrXTsOHwQHfpns6WCQHWB8i90xjZpI=;
-        b=uPH9f4PJxUuhUhg8M2oHN42OiXmaxABqTC9SzSWWmReyFERIwFGG17tegPAzp7ei6j
-         MkyxlrgQMdSLVNT+VUAKXM5N3DQkjyZK0lFgcxwxFx3t9iSUhAwYzBCKnCouHCvPEW77
-         Tqdlhy4uDzODezKLJvmjUvCmFL8tgGSP5f6q1aHN02cm6ltSJ6XivDdKWzfIS09Hexev
-         zCMXJ8T8URcYNq5SfqZPZy+mmS9JqrMRRGlnPEyVZii94x29ZNsnXwcXcMwYNFJoUwzQ
-         3L5K+SBxLBjY+UjBg6FaW48TFcpcqHdW+fY77BasBUPl6XpmJcg7hk70SmKkwRYPM+Aq
-         YqtA==
-X-Gm-Message-State: APjAAAU08PCDl3M26fJ8u/PUZVe+oDPpWlrZhet0PPoegDVya82gS4+g
-        in9er4C9dOa2rMFZNvtNNz4FJEDX3lk5IVkSW+EKsvqkysD2
-X-Google-Smtp-Source: APXvYqw0eXL0knSBDFLS9zNPnFLDEUdeUcUkwol8Z+hx4ADXhrZNKbJUGsPo+SVwWmOU2FxfYsAB6nj71/7KydpYAgXbI+hYH1Im
+        id S1726535AbfL2PSc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 29 Dec 2019 10:18:32 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57199 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726410AbfL2PSb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 29 Dec 2019 10:18:31 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ilaKq-0008D7-32; Sun, 29 Dec 2019 16:18:28 +0100
+Received: from [IPv6:2001:67c:20a1:1192:74ff:529f:48cb:eb82] (unknown [IPv6:2001:67c:20a1:1192:74ff:529f:48cb:eb82])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D666D4976B4;
+        Sun, 29 Dec 2019 15:18:25 +0000 (UTC)
+Subject: Re: [PATCH v6 1/2] can: tcan4x5x: reset device before register access
+To:     Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
+        linux-can@vger.kernel.org
+References: <20191211135852.320650-1-sean@geanix.com>
+ <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <e32c5b67-2202-5310-714a-68c804abf952@pengutronix.de>
+Date:   Sun, 29 Dec 2019 16:18:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a5e:840f:: with SMTP id h15mr33848611ioj.286.1577394911270;
- Thu, 26 Dec 2019 13:15:11 -0800 (PST)
-Date:   Thu, 26 Dec 2019 13:15:11 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005b5fc7059aa1df89@google.com>
-Subject: KASAN: use-after-free Read in j1939_tp_txtimer
-From:   syzbot <syzbot+5322482fe520b02aea30@syzkaller.appspotmail.com>
-To:     bst@pengutronix.de, davem@davemloft.net,
-        dev.kurt@vandijck-laurijssen.be, ecathinds@gmail.com,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        lkp@intel.com, maxime.jayat@mobile-devices.fr, mkl@pengutronix.de,
-        netdev@vger.kernel.org, o.rempel@pengutronix.de, robin@protonic.nl,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7
+Content-Type: multipart/mixed; boundary="7dlGcm6FfKbyGyUJuXdmSGH1sqAy2t4EU";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
+ linux-can@vger.kernel.org
+Message-ID: <e32c5b67-2202-5310-714a-68c804abf952@pengutronix.de>
+Subject: Re: [PATCH v6 1/2] can: tcan4x5x: reset device before register access
+References: <20191211135852.320650-1-sean@geanix.com>
+ <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
+In-Reply-To: <8d0b7661-6413-1ee5-4225-323bd8be102d@ti.com>
 
-syzbot found the following crash on:
+--7dlGcm6FfKbyGyUJuXdmSGH1sqAy2t4EU
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    46cf053e Linux 5.5-rc3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=158ac866e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ed9d672709340e35
-dashboard link: https://syzkaller.appspot.com/bug?extid=5322482fe520b02aea30
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11af21fee00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116b4ec1e00000
+On 12/11/19 3:18 PM, Dan Murphy wrote:
+> Sean
+>=20
+> On 12/11/19 7:58 AM, Sean Nyekjaer wrote:
+>> It's a good idea to reset a ip-block/spi device before using it, this
+>> patch will reset the device.
+>>
+>> And a generic reset function if needed elsewhere.
+>>
+>> Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-The bug was bisected to:
+Applied both to linux-can.
 
-commit 9d71dd0c70099914fcd063135da3c580865e924c
-Author: The j1939 authors <linux-can@vger.kernel.org>
-Date:   Mon Oct 8 09:48:36 2018 +0000
+Marc
 
-     can: add support of SAE J1939 protocol
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=124d0ac1e00000
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=114d0ac1e00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=164d0ac1e00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+5322482fe520b02aea30@syzkaller.appspotmail.com
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-
-==================================================================
-BUG: KASAN: use-after-free in memcpy include/linux/string.h:380 [inline]
-BUG: KASAN: use-after-free in j1939_session_tx_dat  
-net/can/j1939/transport.c:790 [inline]
-BUG: KASAN: use-after-free in j1939_xtp_txnext_transmiter  
-net/can/j1939/transport.c:847 [inline]
-BUG: KASAN: use-after-free in j1939_tp_txtimer+0x777/0x1b00  
-net/can/j1939/transport.c:1095
-Read of size 7 at addr ffff88809073d917 by task ksoftirqd/0/9
-
-CPU: 0 PID: 9 Comm: ksoftirqd/0 Not tainted 5.5.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x197/0x210 lib/dump_stack.c:118
-  print_address_description.constprop.0.cold+0xd4/0x30b mm/kasan/report.c:374
-  __kasan_report.cold+0x1b/0x41 mm/kasan/report.c:506
-  kasan_report+0x12/0x20 mm/kasan/common.c:639
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x134/0x1a0 mm/kasan/generic.c:192
-  memcpy+0x24/0x50 mm/kasan/common.c:125
-  memcpy include/linux/string.h:380 [inline]
-  j1939_session_tx_dat net/can/j1939/transport.c:790 [inline]
-  j1939_xtp_txnext_transmiter net/can/j1939/transport.c:847 [inline]
-  j1939_tp_txtimer+0x777/0x1b00 net/can/j1939/transport.c:1095
-  __run_hrtimer kernel/time/hrtimer.c:1517 [inline]
-  __hrtimer_run_queues+0x364/0xe40 kernel/time/hrtimer.c:1579
-  hrtimer_run_softirq+0x17e/0x270 kernel/time/hrtimer.c:1596
-  __do_softirq+0x262/0x98c kernel/softirq.c:292
-  run_ksoftirqd kernel/softirq.c:603 [inline]
-  run_ksoftirqd+0x8e/0x110 kernel/softirq.c:595
-  smpboot_thread_fn+0x6a3/0xa40 kernel/smpboot.c:165
-  kthread+0x361/0x430 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Allocated by task 16:
-  save_stack+0x23/0x90 mm/kasan/common.c:72
-  set_track mm/kasan/common.c:80 [inline]
-  __kasan_kmalloc mm/kasan/common.c:513 [inline]
-  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:486
-  kasan_slab_alloc+0xf/0x20 mm/kasan/common.c:521
-  slab_post_alloc_hook mm/slab.h:584 [inline]
-  slab_alloc_node mm/slab.c:3263 [inline]
-  kmem_cache_alloc_node+0x138/0x740 mm/slab.c:3575
-  __alloc_skb+0xd5/0x5e0 net/core/skbuff.c:197
-  alloc_skb include/linux/skbuff.h:1049 [inline]
-  j1939_tp_tx_dat_new+0x38/0x530 net/can/j1939/transport.c:568
-  j1939_tp_tx_dat net/can/j1939/transport.c:606 [inline]
-  j1939_session_tx_dat net/can/j1939/transport.c:791 [inline]
-  j1939_xtp_txnext_transmiter net/can/j1939/transport.c:847 [inline]
-  j1939_tp_txtimer+0x7a7/0x1b00 net/can/j1939/transport.c:1095
-  __run_hrtimer kernel/time/hrtimer.c:1517 [inline]
-  __hrtimer_run_queues+0x364/0xe40 kernel/time/hrtimer.c:1579
-  hrtimer_run_softirq+0x17e/0x270 kernel/time/hrtimer.c:1596
-  __do_softirq+0x262/0x98c kernel/softirq.c:292
-
-Freed by task 16:
-  save_stack+0x23/0x90 mm/kasan/common.c:72
-  set_track mm/kasan/common.c:80 [inline]
-  kasan_set_free_info mm/kasan/common.c:335 [inline]
-  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:474
-  kasan_slab_free+0xe/0x10 mm/kasan/common.c:483
-  __cache_free mm/slab.c:3426 [inline]
-  kmem_cache_free+0x86/0x320 mm/slab.c:3694
-  kfree_skbmem net/core/skbuff.c:623 [inline]
-  kfree_skbmem+0xfb/0x1c0 net/core/skbuff.c:617
-  __kfree_skb net/core/skbuff.c:680 [inline]
-  consume_skb net/core/skbuff.c:838 [inline]
-  consume_skb+0x103/0x410 net/core/skbuff.c:832
-  vcan_tx+0x29f/0x7f0 drivers/net/can/vcan.c:110
-  __netdev_start_xmit include/linux/netdevice.h:4447 [inline]
-  netdev_start_xmit include/linux/netdevice.h:4461 [inline]
-  xmit_one net/core/dev.c:3420 [inline]
-  dev_hard_start_xmit+0x1a3/0x9b0 net/core/dev.c:3436
-  __dev_queue_xmit+0x2b05/0x35c0 net/core/dev.c:4013
-  dev_queue_xmit+0x18/0x20 net/core/dev.c:4046
-  can_send+0x439/0x890 net/can/af_can.c:277
-  j1939_send_one+0x29d/0x360 net/can/j1939/main.c:340
-  j1939_tp_tx_dat net/can/j1939/transport.c:615 [inline]
-  j1939_session_tx_dat net/can/j1939/transport.c:791 [inline]
-  j1939_xtp_txnext_transmiter net/can/j1939/transport.c:847 [inline]
-  j1939_tp_txtimer+0x5a9/0x1b00 net/can/j1939/transport.c:1095
-  __run_hrtimer kernel/time/hrtimer.c:1517 [inline]
-  __hrtimer_run_queues+0x364/0xe40 kernel/time/hrtimer.c:1579
-  hrtimer_run_softirq+0x17e/0x270 kernel/time/hrtimer.c:1596
-  __do_softirq+0x262/0x98c kernel/softirq.c:292
-
-The buggy address belongs to the object at ffff88809073d840
-  which belongs to the cache skbuff_head_cache of size 224
-The buggy address is located 215 bytes inside of
-  224-byte region [ffff88809073d840, ffff88809073d920)
-The buggy address belongs to the page:
-page:ffffea000241cf40 refcount:1 mapcount:0 mapping:ffff88821b774e00  
-index:0x0
-raw: 00fffe0000000200 ffffea00026df588 ffffea00023d9308 ffff88821b774e00
-raw: 0000000000000000 ffff88809073d0c0 000000010000000c 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff88809073d800: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
-  ffff88809073d880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff88809073d900: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
-                          ^
-  ffff88809073d980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809073da00: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-==================================================================
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--7dlGcm6FfKbyGyUJuXdmSGH1sqAy2t4EU--
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4Iw7QACgkQWsYho5Hk
+nSCoowf+II65M1HR3u3i7Vox3JmZrs/4ACFV3vhEBOqpI+o3c+2q4UIoCRQBSav7
+fPbt4u68c8anrXbV7NshcmjLsBriIrfV8AmNZICOWDd0iIPE2Ro8/HipJ1c18PXQ
+mHco8ygG9J2frmIw8rcXsr+TR9xLPx2QawAs4D/PJDAs9yJdBKBBjzMqtsp615IV
+PRFMJd+cMNsd60PEkIOajvzCRlxDDFr0yS45eMbeZXB0Yyiot+6usB5UK3jNHRhE
+12SNb3GPi5QyenvWnU14TOdoAYCX8w9YxCwEi0ajSQD3azKdzn2LdliwhxSK842N
+ztkwTgPgh6WcXdjrI2VqrjFlcPuOnQ==
+=Z+dp
+-----END PGP SIGNATURE-----
+
+--Kqn3iSs1xsw0396CbfpQeUXerAcHfWDw7--
