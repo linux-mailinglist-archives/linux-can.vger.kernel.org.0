@@ -2,28 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D8612E58B
-	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2020 12:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D816C12E633
+	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2020 13:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728156AbgABLME (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Jan 2020 06:12:04 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60665 "EHLO
+        id S1728304AbgABMjD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Jan 2020 07:39:03 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54401 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728115AbgABLMD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jan 2020 06:12:03 -0500
+        with ESMTP id S1728274AbgABMjD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jan 2020 07:39:03 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1imyOX-0006zL-2Q; Thu, 02 Jan 2020 12:12:01 +0100
+        id 1imzki-0006Kg-KQ; Thu, 02 Jan 2020 13:39:00 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:c097:3b50:f886:b2e] (unknown [IPv6:2a03:f580:87bc:d400:c097:3b50:f886:b2e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C1C5549A0B9;
-        Thu,  2 Jan 2020 11:11:59 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8131749A134;
+        Thu,  2 Jan 2020 12:38:59 +0000 (UTC)
 To:     Dan Murphy <dmurphy@ti.com>
 Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
@@ -92,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
 Subject: Re: [PATCH v2] can: tcan4x5x: Turn on the power before parsing the
  config
-Message-ID: <32ea95b2-25fe-8c26-cc90-9f9264e0d8f5@pengutronix.de>
-Date:   Thu, 2 Jan 2020 12:11:52 +0100
+Message-ID: <4a2e80f0-13c5-df7b-65af-25f86ca48f2a@pengutronix.de>
+Date:   Thu, 2 Jan 2020 13:38:55 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
 In-Reply-To: <20191210163204.28225-1-dmurphy@ti.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Di8rHTXB2rcggZJiDjV7RER7SlJVMpnFs"
+ boundary="gZi7TfwV0CRbGkF9I4vj7UoxElcfrKbDR"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,22 +111,22 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Di8rHTXB2rcggZJiDjV7RER7SlJVMpnFs
-Content-Type: multipart/mixed; boundary="q6xRA7IIHSCP9XlJg1YgufvurNBMMGnOB";
+--gZi7TfwV0CRbGkF9I4vj7UoxElcfrKbDR
+Content-Type: multipart/mixed; boundary="coBL95FV6eyGNpCrrK4NMQqNOfZpzPW3X";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Dan Murphy <dmurphy@ti.com>
 Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org
-Message-ID: <32ea95b2-25fe-8c26-cc90-9f9264e0d8f5@pengutronix.de>
+Message-ID: <4a2e80f0-13c5-df7b-65af-25f86ca48f2a@pengutronix.de>
 Subject: Re: [PATCH v2] can: tcan4x5x: Turn on the power before parsing the
  config
 References: <20191210163204.28225-1-dmurphy@ti.com>
 In-Reply-To: <20191210163204.28225-1-dmurphy@ti.com>
 
---q6xRA7IIHSCP9XlJg1YgufvurNBMMGnOB
+--coBL95FV6eyGNpCrrK4NMQqNOfZpzPW3X
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
 
 On 12/10/19 5:32 PM, Dan Murphy wrote:
@@ -134,65 +134,27 @@ On 12/10/19 5:32 PM, Dan Murphy wrote:
 > reading or writing and a reset.  If the regulator is managed it needs
 > to be turned on.  So turn on the regulator if available if the parsing
 > fails then turn off the regulator.
->=20
-> Fixes: a5235f3c7c23 ("can: tcan45x: Make wake-up GPIO an optional GPIO"=
-)
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> ---
->=20
-> v2 - Added error handling and moved regulator_get to probe
->=20
->  drivers/net/can/m_can/tcan4x5x.c | 17 ++++++++++-------
->  1 file changed, 10 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/t=
-can4x5x.c
-> index 4e1789ea2bc3..ddf7db498241 100644
-> --- a/drivers/net/can/m_can/tcan4x5x.c
-> +++ b/drivers/net/can/m_can/tcan4x5x.c
-> @@ -374,11 +374,6 @@ static int tcan4x5x_parse_config(struct m_can_clas=
-sdev *cdev)
->  	if (IS_ERR(tcan4x5x->device_state_gpio))
->  		tcan4x5x->device_state_gpio =3D NULL;
-> =20
-> -	tcan4x5x->power =3D devm_regulator_get_optional(cdev->dev,
-> -						      "vsup");
-> -	if (PTR_ERR(tcan4x5x->power) =3D=3D -EPROBE_DEFER)
-> -		return -EPROBE_DEFER;
-> -
->  	return 0;
->  }
-> =20
-> @@ -412,6 +407,12 @@ static int tcan4x5x_can_probe(struct spi_device *s=
-pi)
->  	if (!priv)
->  		return -ENOMEM;
-> =20
-> +	priv->power =3D devm_regulator_get_optional(&spi->dev, "vsup");
-> +	if (PTR_ERR(priv->power) =3D=3D -EPROBE_DEFER)
-> +		return -EPROBE_DEFER;
-> +	else
-> +		priv->power =3D NULL;
-> +
 
-BTW: you are leaking the netdev allocated with m_can_class_allocate_dev()=
-=2E
+Another BTW:
+Consider converting the switching of the vsup to runtime_pm.
 
-In order to fix this:
+Yet another one:
+Why do you disable the clocks in the error path of tcan4x5x_can_probe(),
+but never enable them?
 
-- introduce a m_can_class_free_dev() function that calls the
-  free_candev().
-- fix error path in tcan4x5x_can_probe() and m_can_plat_probe() by
-  adding the missing m_can_class_free_dev()
-- remove the free_candev() from the error path in m_can_class_register()
-  it makes no sense that this function free a ressource it has not
-  allocated
-- remove the free_candev() from m_can_class_unregister()
-  it makes no sense that this function free a ressource it has not
-  allocated
-- add needed m_can_class_free_dev() to tcan4x5x_can_remove() and
-  m_can_plat_remove()
+> out_clk:
+> 	if (!IS_ERR(mcan_class->cclk)) {
+> 		clk_disable_unprepare(mcan_class->cclk);
+> 		clk_disable_unprepare(mcan_class->hclk);
+> 	}
 
+- please move the clock handling from the m_can.c to the individual
+  driver
+- please move the clock handling to runtime_pm in the individual driver
+- remove the obsolete m_can_class_get_clocks()
+- make runtime_pm mandatory
+
+regards,
 Marc
 
 --=20
@@ -202,23 +164,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---q6xRA7IIHSCP9XlJg1YgufvurNBMMGnOB--
+--coBL95FV6eyGNpCrrK4NMQqNOfZpzPW3X--
 
---Di8rHTXB2rcggZJiDjV7RER7SlJVMpnFs
+--gZi7TfwV0CRbGkF9I4vj7UoxElcfrKbDR
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4Nz/gACgkQWsYho5Hk
-nSCpKwf/ZHsmy0A40kM8GPLEqFNrKr1+0fshcdbJnyiDzKvAPXuix0GsWQ3vDCaJ
-WhfJLCKsUlNYokayw1MCv1jRj20QfkjXLeVnf8ygr8uU+BSgFCk76+8ZUpi0iqOh
-6329aYUA6W0+aJ57D9wr1SfcmOMF9CWIXTpfX7fKLbjpa0S3FTwIgubYDeX1t3hT
-XA82dejocKG8pTzWnPEjZqTqKQ2MKFzphdwRB2Skvfmoe9Ke3IS98h/BKw6ciosz
-dAJ5RBidNUao6NFVqj4IBJSlBFYtuPj9TAn7p0uNXxCUNYa5Mnfqc4MFIgGxkEKx
-rrsHl3tnEfSNRr0+J5kt+ltf9ZbFaw==
-=/g3H
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4N5F8ACgkQWsYho5Hk
+nSDtHgf9Fuf8bub7UBmK2jcLUq6z/osEin6/bLXyIr4fp7ynFdmK8UMLrrCnmmhQ
+JRcv0H+M4b8en91CE/9mBWOC+ZJ8+YVuZvAVyKd8EKzTM5zR87mo7BCDySZ07cFH
+qH3aBrn2Sq8++79T9d/1UmA0rPQ43bLvnZg3w7BqOF1ZZzmQ/D81QkccYCXh91Kd
+RFOmwWUtgY2C5KBOIcI0kiU+bwVvHablhfJKeZMw90v/bGdDbAFCXo7YakTfkyNF
+BXQ5h8bkij7OEKv8esC+8VtIivy8hwLzabGMB/ewwN5xI2tGAvMX49TFiEM/t51H
+DQH+BxTY9wB5TrnqdiXl0hBYdzr3pw==
+=7WTX
 -----END PGP SIGNATURE-----
 
---Di8rHTXB2rcggZJiDjV7RER7SlJVMpnFs--
+--gZi7TfwV0CRbGkF9I4vj7UoxElcfrKbDR--
