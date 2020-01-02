@@ -2,74 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9135512E86F
-	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2020 17:09:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DF912E881
+	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2020 17:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbgABQJf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Jan 2020 11:09:35 -0500
-Received: from first.geanix.com ([116.203.34.67]:51890 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728678AbgABQJf (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 2 Jan 2020 11:09:35 -0500
-Received: from [192.168.100.95] (unknown [95.138.208.137])
-        by first.geanix.com (Postfix) with ESMTPSA id 04A04753;
-        Thu,  2 Jan 2020 16:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1577981363; bh=m8fuwRp3fKASi2WchSnLIZHMD40mpj8Tf45qZtKc6hE=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=Han7x36upLq/kkyUcQI7VxVCG70bcnnWwFdxxiuc6jEWYhmjIHkY3rBG8Srsqqgxd
-         ug+uzbdcGULpvfJOh8mP0wOQ8UURnvwyLFM87/fd/t1QtHPe6IHL5WxplCifIZ9zIg
-         4Jbwb9K1Ya/TtgBLHfXtGkvwxOPUAjZhnyAjtm1KMI0PJ7HTh/6W6xoFgn3ePOTwSR
-         WbLHT2ksj0SNkrqFg3dsNXb15cVnAwZJUjmbMyKR+bfsawVLmfDjtGFTnCk3HPic5A
-         QYglAF7xAtBzJOtoOVI29l36G37NUQ6M5pkdj+39J07XuO7C0YJc6HqrInzYMkV+dt
-         /HwJSKlAi/4DQ==
-Subject: Re: [PATCH v2 1/2] can: m_can: tcan4x5x: put the device out of
- standby before register access
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     dmurphy@ti.com, martin@geanix.com, stable@vger.kernel.org
-References: <20191209192440.998659-1-sean@geanix.com>
- <d58b9d08-dbd8-b73e-dae1-286c1a3ce8f2@pengutronix.de>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <973df29f-c930-c6b2-17c4-3e3b468f3bf0@geanix.com>
-Date:   Thu, 2 Jan 2020 17:09:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1728853AbgABQJs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Jan 2020 11:09:48 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50575 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728817AbgABQJp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jan 2020 11:09:45 -0500
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1in32a-0000mM-QQ; Thu, 02 Jan 2020 17:09:40 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Christer Beskow <chbe@kvaser.com>,
+        Nicklas Johansson <extnj@kvaser.com>,
+        Martin Henriksson <mh@kvaser.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 7/9] can: kvaser_usb: fix interface sanity check
+Date:   Thu,  2 Jan 2020 17:09:32 +0100
+Message-Id: <20200102160934.1524-8-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200102160934.1524-1-mkl@pengutronix.de>
+References: <20200102160934.1524-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <d58b9d08-dbd8-b73e-dae1-286c1a3ce8f2@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,URIBL_BLOCKED autolearn=disabled version=3.4.3
-X-Spam-Checker-Version: SpamAssassin 3.4.3 (2019-12-06) on ea2d15de10a4
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+From: Johan Hovold <johan@kernel.org>
 
+Make sure to use the current alternate setting when verifying the
+interface descriptors to avoid binding to an invalid interface.
 
-On 02/01/2020 16.46, Marc Kleine-Budde wrote:
-> On 12/9/19 8:24 PM, Sean Nyekjaer wrote:
->> The m_can tries to detect of niso (canfd) is available while in standby,
->> this function results in the following error:
->>
->> tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init module
->> tcan4x5x spi2.0: m_can device registered (irq=84, version=32)
->> tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
-> 
-> Can you add the missing error handling to m_can_config_endisable(), and
-> handle this error correctly in all its callers?
-> 
-> Marc
-> 
+Failing to do so could cause the driver to misbehave or trigger a WARN()
+in usb_submit_urb() that kernels with panic_on_warn set would choke on.
 
-Hi Marc
+Fixes: aec5fb2268b7 ("can: kvaser_usb: Add support for Kvaser USB hydra family")
+Cc: stable <stable@vger.kernel.org>     # 4.19
+Cc: Jimmy Assarsson <extja@kvaser.com>
+Cc: Christer Beskow <chbe@kvaser.com>
+Cc: Nicklas Johansson <extnj@kvaser.com>
+Cc: Martin Henriksson <mh@kvaser.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry if this was a bit of mess :)
-Version 6 of this patch is already applied....
-https://www.spinics.net/lists/linux-can/msg03186.html
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+index 5fc0be564274..7ab87a758754 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -1590,7 +1590,7 @@ static int kvaser_usb_hydra_setup_endpoints(struct kvaser_usb *dev)
+ 	struct usb_endpoint_descriptor *ep;
+ 	int i;
+ 
+-	iface_desc = &dev->intf->altsetting[0];
++	iface_desc = dev->intf->cur_altsetting;
+ 
+ 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+ 		ep = &iface_desc->endpoint[i].desc;
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+index ae4c37e1bb75..1b9957f12459 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -1310,7 +1310,7 @@ static int kvaser_usb_leaf_setup_endpoints(struct kvaser_usb *dev)
+ 	struct usb_endpoint_descriptor *endpoint;
+ 	int i;
+ 
+-	iface_desc = &dev->intf->altsetting[0];
++	iface_desc = dev->intf->cur_altsetting;
+ 
+ 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+ 		endpoint = &iface_desc->endpoint[i].desc;
+-- 
+2.24.1
 
-Do you want me to add more error handling than this?
-
-/Sean
