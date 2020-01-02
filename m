@@ -2,32 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 688AC12E751
-	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2020 15:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D176712E83F
+	for <lists+linux-can@lfdr.de>; Thu,  2 Jan 2020 16:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728551AbgABOkq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 2 Jan 2020 09:40:46 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50227 "EHLO
+        id S1728665AbgABPrF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 2 Jan 2020 10:47:05 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54303 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728487AbgABOkp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jan 2020 09:40:45 -0500
+        with ESMTP id S1728561AbgABPrE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 2 Jan 2020 10:47:04 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1in1eU-0001Bb-7h; Thu, 02 Jan 2020 15:40:42 +0100
+        id 1in2gf-0007CO-KP; Thu, 02 Jan 2020 16:47:01 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:c097:3b50:f886:b2e] (unknown [IPv6:2a03:f580:87bc:d400:c097:3b50:f886:b2e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2224D49A1EE;
-        Thu,  2 Jan 2020 14:40:41 +0000 (UTC)
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20191210163204.28225-1-dmurphy@ti.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 72A3449A23F;
+        Thu,  2 Jan 2020 15:47:00 +0000 (UTC)
+To:     Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com,
+        linux-can@vger.kernel.org
+Cc:     martin@geanix.com, stable@vger.kernel.org
+References: <20191209192440.998659-1-sean@geanix.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
@@ -90,17 +90,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Subject: Re: [PATCH v2] can: tcan4x5x: Turn on the power before parsing the
- config
-Message-ID: <a59d4384-9cb9-baaa-e5f4-1e2111e295c9@pengutronix.de>
-Date:   Thu, 2 Jan 2020 15:40:36 +0100
+Subject: Re: [PATCH v2 1/2] can: m_can: tcan4x5x: put the device out of
+ standby before register access
+Message-ID: <d58b9d08-dbd8-b73e-dae1-286c1a3ce8f2@pengutronix.de>
+Date:   Thu, 2 Jan 2020 16:46:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191210163204.28225-1-dmurphy@ti.com>
+In-Reply-To: <20191209192440.998659-1-sean@geanix.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="0KU4DLo8SwRpHjvSqkuatOgkkGHa7Ksz3"
+ boundary="bk90h3EihotBQbuOoPzh7VMn1HGgzQ4DV"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,35 +111,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0KU4DLo8SwRpHjvSqkuatOgkkGHa7Ksz3
-Content-Type: multipart/mixed; boundary="0eQF700mEiUNKSVyqGioPj8OHXiNmWw4A";
+--bk90h3EihotBQbuOoPzh7VMn1HGgzQ4DV
+Content-Type: multipart/mixed; boundary="EsO2yfAbvCsPUQ50DqRrCMBVO4aDHuNX1";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Dan Murphy <dmurphy@ti.com>
-Cc: linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-Message-ID: <a59d4384-9cb9-baaa-e5f4-1e2111e295c9@pengutronix.de>
-Subject: Re: [PATCH v2] can: tcan4x5x: Turn on the power before parsing the
- config
-References: <20191210163204.28225-1-dmurphy@ti.com>
-In-Reply-To: <20191210163204.28225-1-dmurphy@ti.com>
+To: Sean Nyekjaer <sean@geanix.com>, dmurphy@ti.com, linux-can@vger.kernel.org
+Cc: martin@geanix.com, stable@vger.kernel.org
+Message-ID: <d58b9d08-dbd8-b73e-dae1-286c1a3ce8f2@pengutronix.de>
+Subject: Re: [PATCH v2 1/2] can: m_can: tcan4x5x: put the device out of
+ standby before register access
+References: <20191209192440.998659-1-sean@geanix.com>
+In-Reply-To: <20191209192440.998659-1-sean@geanix.com>
 
---0eQF700mEiUNKSVyqGioPj8OHXiNmWw4A
+--EsO2yfAbvCsPUQ50DqRrCMBVO4aDHuNX1
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/10/19 5:32 PM, Dan Murphy wrote:
-> The parse config function now performs action on the device either
-> reading or writing and a reset.
+On 12/9/19 8:24 PM, Sean Nyekjaer wrote:
+> The m_can tries to detect of niso (canfd) is available while in standby=
+,
+> this function results in the following error:
+>=20
+> tcan4x5x spi2.0 (unnamed net_device) (uninitialized): Failed to init mo=
+dule
+> tcan4x5x spi2.0: m_can device registered (irq=3D84, version=3D32)
+> tcan4x5x spi2.0 can2: TCAN4X5X successfully initialized.
 
-BTW n+1:
-Why is the function called parse_config? I don't see any parsing going on=
-=2E
-
-Please add it directly to the tcan4x5x_can_probe() function.
+Can you add the missing error handling to m_can_config_endisable(), and
+handle this error correctly in all its callers?
 
 Marc
+
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
@@ -147,23 +150,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---0eQF700mEiUNKSVyqGioPj8OHXiNmWw4A--
+--EsO2yfAbvCsPUQ50DqRrCMBVO4aDHuNX1--
 
---0KU4DLo8SwRpHjvSqkuatOgkkGHa7Ksz3
+--bk90h3EihotBQbuOoPzh7VMn1HGgzQ4DV
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4OAOQACgkQWsYho5Hk
-nSCsXggAs4T5UKkkEcJzPQRv5NjpqncQ4dQpvNmXevnS+1syYyvrOf3ZIW5rA5ke
-8mpmvsGotKjKQ4W+oVA4nY5S0xlIT2AuQFlx5aQAOkcxgEinb6qzyx1N+tXAPftT
-Q4dqRJXZFqEvWSIUqMryrGa7Iq85ZkDM08TGjDcxm+/lA/5UHevCv7ULEb5W6/qo
-C/XwTSnS0LprV40VCSG1i67RCVNJGLJLmWvjTZ9jgQq+90g/tHqCdWRQznsTBnIO
-zwTVuNGti9183PIMMUtI88IkWTKqif547lrbxJQs7HBGPbAKBqX/4k3OUJzRUMoh
-86AC2wQbYrF5erohGcTfGZgQyoX1Fg==
-=83Gt
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4OEG4ACgkQWsYho5Hk
+nSDTVAf8D0t4VeoPmZdnqafB92TkUl6FZiP/oJFclMEmtW++RozQnuXK/qNiKe0x
+anEzTn2FXUCkVSlKxY4Enj9bEMPMtGEO17riJOXSdZO3TX2I4iTXgpdj2rW8hDj7
+sDrPGa4VoYaDaaSPrd045hsdenfSvdMPg+aCINDyZdUS+cIPHaACxH/gClqtlwfn
+2tZaXwDtFvaxeWqbAByzafp6IHNtRiukvqgswr2eya0eJmUivJuCMy+P3sebnznf
+yzZCb4MN+A80X8LXrgzHDRak6UzPx9iv6AbKEisRl0vufEghJFU76w24Q3JBDzLG
+V7WeMB1g6xzEWj+NZbmheA6q0veIJA==
+=QNq3
 -----END PGP SIGNATURE-----
 
---0KU4DLo8SwRpHjvSqkuatOgkkGHa7Ksz3--
+--bk90h3EihotBQbuOoPzh7VMn1HGgzQ4DV--
