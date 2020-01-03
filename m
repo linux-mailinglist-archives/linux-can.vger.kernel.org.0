@@ -2,100 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7034912FD9F
-	for <lists+linux-can@lfdr.de>; Fri,  3 Jan 2020 21:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DC712FF52
+	for <lists+linux-can@lfdr.de>; Sat,  4 Jan 2020 00:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728698AbgACUTr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 3 Jan 2020 15:19:47 -0500
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:33871 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728648AbgACUTq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Jan 2020 15:19:46 -0500
-Received: by mail-qv1-f66.google.com with SMTP id o18so16703022qvf.1
-        for <linux-can@vger.kernel.org>; Fri, 03 Jan 2020 12:19:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
-         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
-         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
-         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
-         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
-         nOKQ==
+        id S1726229AbgACXyD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 3 Jan 2020 18:54:03 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:32894 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726703AbgACXyD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Jan 2020 18:54:03 -0500
+Received: by mail-il1-f196.google.com with SMTP id v15so38004023iln.0
+        for <linux-can@vger.kernel.org>; Fri, 03 Jan 2020 15:54:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=PcmR9Ykc40DOzkue73Y+GXkwHhLgVPIQe3nkrEXRxnogzwoj2EQ14gEFrtX42DiMjF
-         IHasiIqtivFzhHM3gu8Lt790Q8RmdQ11U7aoRIlV4BaMu1pGZKVnP7syiFfaLY/82LKR
-         8GDv7RxQNYR5idrQjfII4YVPpqgUNsAuM8Q1000kZz1vCz1IDGs9bQLzmZBNbjqzHyTO
-         2fhPAlsky9Y5gACKuY1XhE7cgusC60P+jEtIoTo2VfRVloXRj3vmp10iGK/xJigudlj3
-         Bli9+wpffiIJkjLjCU45Ll0bILPOm56pKItXxcNEKa1vKBfQEDGQ5QzNwuIJU0puwLy+
-         7ZPw==
-X-Gm-Message-State: APjAAAXMfLHIM0JajYEaslUBQG/FTvBCSYEss0vm5+4XKGA7qZFdN71P
-        k30GL0YR6NoHdMD40KHS14mcEqsF8FMX9MtJkbo=
-X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
-X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
- Fri, 03 Jan 2020 12:19:45 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DLv6sevWK4SOmkrjtAjyOZj+Qda5b1Jn7x8aH9qo+K8=;
+        b=bEf0tVPbpgF/RGuqlLh5UtD1vhy+eDFlC7KGKLXVS674lc7EH+GBU9tkLbgZVtM/5e
+         OpwZx9ICQaWtDoLIaP6Xqy+DUZCF5I7ORFQizQTYTf3a9QGZ9E5PXKW2sVnRrqKfKCkE
+         1cw+ailsa9nRMQ3aYNVtYcCitT182A9sXc/lOBy/PkMHLNysPEXxttrKLZE7sypkJqyi
+         QTiPR7Dn3M/cqdLUcAucJKrWnYzQaGZ9IKrBAuUjLzd2ZPlS7f/ZzVXeDw8VFMZPf9X/
+         QpPObPsFOabJDuk4Yf+OgY7K+47esC9tWV9jlDKMrh8MZZiDsZDcmDBRDbZxL37Qz5uM
+         CsEA==
+X-Gm-Message-State: APjAAAVeI60uvmr7NBS55mWK7DHDs6dquLG0vIq3H5j2fgQfCsivWdVv
+        0jJD9gT9zDmAI94oVeVRi8nrOYk=
+X-Google-Smtp-Source: APXvYqwzvIvTSw+08igxW88ZKlnle7Vljynmn+nJqkEK3/37mfoYruGatizwWPUfgkRXthev9vK1Mg==
+X-Received: by 2002:a92:1f16:: with SMTP id i22mr79917790ile.206.1578095642552;
+        Fri, 03 Jan 2020 15:54:02 -0800 (PST)
+Received: from rob-hp-laptop ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id g12sm12418558iom.5.2020.01.03.15.54.01
+        for <linux-can@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jan 2020 15:54:01 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 2219b7
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Fri, 03 Jan 2020 16:53:59 -0700
+Date:   Fri, 3 Jan 2020 16:53:59 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     pisa@cmp.felk.cvut.cz
+Cc:     devicetree@vger.kernel.org, mkl@pengutronix.de,
+        linux-can@vger.kernel.org, socketcan@hartkopp.net,
+        wg@grandegger.com, davem@davemloft.net, mark.rutland@arm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.jerabek01@gmail.com, ondrej.ille@gmail.com,
+        jnovak@fel.cvut.cz, jara.beran@gmail.com, porazil@pikron.com
+Subject: Re: [PATCH v3 2/6] dt-bindings: net: can: binding for CTU CAN FD
+ open-source IP core.
+Message-ID: <20200103235359.GA23875@bogus>
+References: <cover.1576922226.git.pisa@cmp.felk.cvut.cz>
+ <61533d59378822f8c808abf193b40070810d3d35.1576922226.git.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:19:45 +0100
-Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61533d59378822f8c808abf193b40070810d3d35.1576922226.git.pisa@cmp.felk.cvut.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dear Friend
+On Sat, Dec 21, 2019 at 03:07:31PM +0100, pisa@cmp.felk.cvut.cz wrote:
+> From: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> 
+> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> ---
+>  .../devicetree/bindings/net/can/ctu,ctucanfd.txt   | 61 ++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/ctu,ctucanfd.txt
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
+Bindings are moving DT schema format now. Not something I'd require on a 
+respin I've already reviewed, but OTOH it's been 10 months to respin 
+from v2. So:
 
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
+If you have a v4, then please convert to a schema.
 
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
-
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
-
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
-
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
+Rob
