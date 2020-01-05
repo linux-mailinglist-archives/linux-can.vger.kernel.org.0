@@ -2,82 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DC712FF52
-	for <lists+linux-can@lfdr.de>; Sat,  4 Jan 2020 00:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2546E130815
+	for <lists+linux-can@lfdr.de>; Sun,  5 Jan 2020 14:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726229AbgACXyD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 3 Jan 2020 18:54:03 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:32894 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726703AbgACXyD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Jan 2020 18:54:03 -0500
-Received: by mail-il1-f196.google.com with SMTP id v15so38004023iln.0
-        for <linux-can@vger.kernel.org>; Fri, 03 Jan 2020 15:54:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DLv6sevWK4SOmkrjtAjyOZj+Qda5b1Jn7x8aH9qo+K8=;
-        b=bEf0tVPbpgF/RGuqlLh5UtD1vhy+eDFlC7KGKLXVS674lc7EH+GBU9tkLbgZVtM/5e
-         OpwZx9ICQaWtDoLIaP6Xqy+DUZCF5I7ORFQizQTYTf3a9QGZ9E5PXKW2sVnRrqKfKCkE
-         1cw+ailsa9nRMQ3aYNVtYcCitT182A9sXc/lOBy/PkMHLNysPEXxttrKLZE7sypkJqyi
-         QTiPR7Dn3M/cqdLUcAucJKrWnYzQaGZ9IKrBAuUjLzd2ZPlS7f/ZzVXeDw8VFMZPf9X/
-         QpPObPsFOabJDuk4Yf+OgY7K+47esC9tWV9jlDKMrh8MZZiDsZDcmDBRDbZxL37Qz5uM
-         CsEA==
-X-Gm-Message-State: APjAAAVeI60uvmr7NBS55mWK7DHDs6dquLG0vIq3H5j2fgQfCsivWdVv
-        0jJD9gT9zDmAI94oVeVRi8nrOYk=
-X-Google-Smtp-Source: APXvYqwzvIvTSw+08igxW88ZKlnle7Vljynmn+nJqkEK3/37mfoYruGatizwWPUfgkRXthev9vK1Mg==
-X-Received: by 2002:a92:1f16:: with SMTP id i22mr79917790ile.206.1578095642552;
-        Fri, 03 Jan 2020 15:54:02 -0800 (PST)
-Received: from rob-hp-laptop ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id g12sm12418558iom.5.2020.01.03.15.54.01
-        for <linux-can@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2020 15:54:01 -0800 (PST)
-Received: from rob (uid 1000)
-        (envelope-from rob@rob-hp-laptop)
-        id 2219b7
-        by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Fri, 03 Jan 2020 16:53:59 -0700
-Date:   Fri, 3 Jan 2020 16:53:59 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     pisa@cmp.felk.cvut.cz
-Cc:     devicetree@vger.kernel.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org, socketcan@hartkopp.net,
-        wg@grandegger.com, davem@davemloft.net, mark.rutland@arm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.jerabek01@gmail.com, ondrej.ille@gmail.com,
-        jnovak@fel.cvut.cz, jara.beran@gmail.com, porazil@pikron.com
-Subject: Re: [PATCH v3 2/6] dt-bindings: net: can: binding for CTU CAN FD
- open-source IP core.
-Message-ID: <20200103235359.GA23875@bogus>
-References: <cover.1576922226.git.pisa@cmp.felk.cvut.cz>
- <61533d59378822f8c808abf193b40070810d3d35.1576922226.git.pisa@cmp.felk.cvut.cz>
+        id S1726376AbgAENBM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 5 Jan 2020 08:01:12 -0500
+Received: from [103.12.81.30] ([103.12.81.30]:10000 "EHLO asav.customs.go.id"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726029AbgAENBM (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 5 Jan 2020 08:01:12 -0500
+X-Greylist: delayed 6048 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 Jan 2020 08:01:11 EST
+Received: from asav.customs.go.id (localhost [127.0.0.1])
+        by asav.customs.go.id (Postfix) with ESMTPS id 361A261EE53F;
+        Sun,  5 Jan 2020 17:26:58 +0700 (WIB)
+Received: from asav.customs.go.id (localhost [127.0.0.1])
+        by asav.customs.go.id (Postfix) with ESMTPS id 55EA5620BE23;
+        Sun,  5 Jan 2020 16:41:55 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 asav.customs.go.id 55EA5620BE23
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=customs.go.id;
+        s=vmail; t=1578217315;
+        bh=W9zkYEg26ebrp7dEvEOGVC6GX12JcU6HYilgpyPqAt4=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=sNSF1x77rLgVH33e0An54bgVtjSwSS0uYtsk05fwMQ7bVzGaPor0hsOs7MnVJSP8F
+         1EQHa8ODffUYDI8SO+hxDzuXdDKgVyydVObNK8uRSOcJ1FH0kd09cT+Co7DDjBOZzk
+         OzO+bAOYCJxc0OkUqz3hzgMKBJ4o1/cX2d4zM7+0=
+Received: from [192.168.43.142] (unknown [1.38.52.31])
+        by asav.customs.go.id (Postfix) with ESMTPSA id 40BDC61FAE7E;
+        Sun,  5 Jan 2020 16:41:37 +0700 (WIB)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <61533d59378822f8c808abf193b40070810d3d35.1576922226.git.pisa@cmp.felk.cvut.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hello 
+To:     Recipients <bcbelawan@customs.go.id>
+From:   bcbelawan@customs.go.id
+Date:   Sun, 05 Jan 2020 01:44:17 -0800
+Reply-To: abigail4charity@gmail.com
+Message-Id: <20200105094138.40BDC61FAE7E@asav.customs.go.id>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Dec 21, 2019 at 03:07:31PM +0100, pisa@cmp.felk.cvut.cz wrote:
-> From: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> 
-> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> ---
->  .../devicetree/bindings/net/can/ctu,ctucanfd.txt   | 61 ++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/ctu,ctucanfd.txt
-
-Bindings are moving DT schema format now. Not something I'd require on a 
-respin I've already reviewed, but OTOH it's been 10 months to respin 
-from v2. So:
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-If you have a v4, then please convert to a schema.
-
-Rob
+Can i have a word with you privately?
