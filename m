@@ -2,78 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FD1133011
-	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2020 20:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DAE5133059
+	for <lists+linux-can@lfdr.de>; Tue,  7 Jan 2020 21:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728718AbgAGT4j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 7 Jan 2020 14:56:39 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43150 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728630AbgAGT4h (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jan 2020 14:56:37 -0500
-Received: by mail-ed1-f65.google.com with SMTP id dc19so597487edb.10
-        for <linux-can@vger.kernel.org>; Tue, 07 Jan 2020 11:56:35 -0800 (PST)
+        id S1728672AbgAGUJr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 7 Jan 2020 15:09:47 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45011 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728358AbgAGUJr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 7 Jan 2020 15:09:47 -0500
+Received: by mail-lj1-f195.google.com with SMTP id u71so837421lje.11
+        for <linux-can@vger.kernel.org>; Tue, 07 Jan 2020 12:09:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
-        b=m/Udengj3famfT4AeeQ1IRW+yMW7VasUnASahB37i/PoeHrkRBk2CGyFKYNukmjW7S
-         L8SRka5Jakx3oOkJPsG2IofN9vOqI+MJeZI3Q0YE0hhIfxJgla/Mvi4GlBIJ0+PXKJyR
-         fGhtIsUmeS9lphgKJPwASTV0Wis5x+akjvA6FztTMBR/K8fgi7sOjdtLa1OeTeeGw/oC
-         WuhGv+1qsxod0shrSr56iRhzuujf6ypC8mQV8JosjFfNeYtuq3xDGNFupimiXFOQL0SO
-         8SxYRsEAywqZcf7WmcQRmN/Qkf20W+/a6rRSJl252WjsQoa/SZxLvQ4mGRJVkfZ3ex9s
-         ABpA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=mGvpsYZRfzmSW6VEI7Bbv6XX35SEGTyEBRh+5Oj7BvM=;
+        b=iCeT4ZGgO9IzW7n5rdaK+vDEUUtRahqyQ0eZiwuUmtUqLv+1A6I8O8wUmv3mksT+tc
+         cLGDX7CdNMHydLNWF1JL/3LoZQpPNDMGIlqP9Y6G5pkdkkadPwyCcmbY6/SDS4UQzKCU
+         AwGJw7t5djWgbJ21HUS0rDs5j65fRML5qxJZkUcBx1MmWfvMRR1b94PefS3MZT68I/8n
+         vfXoAsCQ0Ww5DzR4zXoXT4YWGWH9OGlDAsoyYxzvmVaHI0vp+zTadL/g8HhbZY7ZNF63
+         OG9t5fsZepEUm/0U2PrNtIq/Ra9JIuJ+R52+FRcj1UPl30zf3OSYs6tkx3vQPTzS0DoZ
+         DTzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
-        b=Xgu/ka0Onognn5v/0msoVmE/AfT1CvzxvvdFN9dkkj2m+Pb4sqBJo984ckhwucM4b4
-         rwdu5IT/yEb76JQvxB8TtQk6Lgml8piNMXkwYk0dNls7PAbGS/IydtXSWN/RpVRwQyqa
-         83Idab5RW1NC6+tpmV8FITm5IalZHqDXOVvIS3nBALqGZa0Gj8v06wPGczw6aW7e+87L
-         YMocU8+34y7ID+oc177bRTF/y3A0IPZ+b8S27NwChOPUS/5TiihyHbCAkOzbgfrlIqua
-         qNa+CjG+DRGAkI7FcCPNgjwmisTTinv3nmnEBd4zYVFsa0+Lbnb9ApTgaRJ1TdNdBY5f
-         lXwQ==
-X-Gm-Message-State: APjAAAUA42q01oG1jBAdHUMQusN2phC6vwzP3H/lzRmwftLctaxgFpFR
-        WW+oFltX8Ov5i+ScVS0JTDqzfL6Y9XtlziaT5CM=
-X-Google-Smtp-Source: APXvYqzNbcT08PcgNHBR6CjdjGMonF1aREtl3FixKkalZzLFfyP3YZsjOtPyVn2SjFoUiZ8TzNVIEuitC7fnDU0d3Kk=
-X-Received: by 2002:a17:907:20ef:: with SMTP id rh15mr1111482ejb.325.1578426995176;
- Tue, 07 Jan 2020 11:56:35 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=mGvpsYZRfzmSW6VEI7Bbv6XX35SEGTyEBRh+5Oj7BvM=;
+        b=NQVLM/+9K6yfeXOU9hhy2O+zmWWFDDIQKQUsIM10VPRFb5bRzyee6MxjoreYE5zjtb
+         +JCj5Ep2b6OC40qarOw5JxFRg8Np+d3uDHHvLufc7WX++Qijrvc3C3pxgdEbHMq5Arx4
+         UgobRPJQin7iiM76dS7H266BMecZunppCRa76bI2v80msfTxreJXB+Bgpazzn4kGoIie
+         jVbQiCOXGYPPNLElybU/LNf7cXflVy2Pp84PK96DqaNKfJdXN+EPbUMf8vjkqv6X1j4e
+         YF92EbuyNMj/r2dWMOqzRdem3Om4Qe/UPbH8j1C1eVhSrBjbCqb1IZyVju4dT1dRaMUc
+         rIHg==
+X-Gm-Message-State: APjAAAV+qo6r9i3tEQV9X2OWBHUPLfzKTMpcqoA7ClBpIAjTYGtY39/e
+        Cgsn0i91ncG71enQpR6il011pB+fZF/kWc66r/A=
+X-Google-Smtp-Source: APXvYqzrfS8JDlKFV7c8U1JDKYOAJ5lA6gvM55K5BL3+od4XtwOecI1eCzXkQ/yCgakSc9NG7IU3IX7i49oVW+FoY9Y=
+X-Received: by 2002:a2e:93d5:: with SMTP id p21mr752077ljh.50.1578427785320;
+ Tue, 07 Jan 2020 12:09:45 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:56:34
- -0800 (PST)
-Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
-From:   "Dr. William Johnson" <currency1000000@gmail.com>
-Date:   Tue, 7 Jan 2020 20:56:34 +0100
-Message-ID: <CAPqfnSEyU1pBR_7HT2g1KK7i8caLMBQ8yPA8KRDVm+MN-K_Z4w@mail.gmail.com>
-Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
- worth $15.8Million US DOLLARS now.
-To:     undisclosed-recipients:;
+References: <c0272077-c3c1-f106-ef51-fee546368ba6@pengutronix.de>
+ <1576596206-27260-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+ <CAHChkrviSWcA0KS6jrzfPgE0ygs3tup1GseOeLto6OvLOgH2iw@mail.gmail.com> <20200107190655.GA17976@x1.vandijck-laurijssen.be>
+In-Reply-To: <20200107190655.GA17976@x1.vandijck-laurijssen.be>
+From:   Elenita Hinds <ecathinds@gmail.com>
+Date:   Tue, 7 Jan 2020 14:09:33 -0600
+Message-ID: <CAHChkru-9uYo1wrdf8PQUv3AQcsQCag7PR7TCsR3g2xEoHjbzA@mail.gmail.com>
+Subject: Re: [RFC v3] c_can: improve latency and avoid packet loss
+To:     Elenita Hinds <ecathinds@gmail.com>, linux-can@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-ATTN Dear Beneficiary.
-Goodnews
-I have Registered your Prepaid ATM Master Card
-worth $15.800,000.00 US DOLLARS with Courier company
-asigned to deliver it to you today.
-So contact Dhl office New York to receive your Prepaid ATM Master Card
-worth $15.8Million US DOLLARS now.
-Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
-Email. dhlexpresscouriercompany.nyusa@gmail.com
-Call the office +(202) 890-8752
-Rec-Confirmed your mailing address to the office as I listed below.
-Your Full Name--------------
-House Address-----------
-Your working Phone Number----------------
-ID copy-------------------------
-Sex-----------------------------
-Note,delivery fee to your address is only $25.00. send it to this
-company urgent on itunes card today so that DHL will deliver this
-Prepaid ATM Master Card to you today according to our finally
-agreement.
-Thanks for coperations,
-Dr. William Johnson
+Yeah, I also think the current split (8TX) is good and will probably
+work for most applications.
+
+Thanks,
+Elenita
+
+On Tue, Jan 7, 2020 at 1:06 PM Kurt Van Dijck
+<dev.kurt@vandijck-laurijssen.be> wrote:
+>
+> On di, 07 jan 2020 10:58:26 -0600, Elenita Hinds wrote:
+> > Hi,
+> > I've been testing version 4 of this patch series on our product and it
+> > looks good so far (only 1 packet loss at the beginning of each tests
+> > after hours of run, which is insignificant). On my end, the 64 message
+> > objects plus setting the TI chip's CPU frequency scaling/governor to
+> > 'performance' (from ondemand which apparently had issues)  made a huge
+> > difference.
+>
+> Thanks for sharing your results. It confirms that it really improved.
+> >
+> > I'm assuming there is no other way to make the RX/TX split configurable?
+>
+> I understood from Marc on 17 Dec that one would want to avoid large HW
+> queues.
+> Making it configurable from Kconfig seems not appropriate.
+> From device-tree seems possible.
+> I considered that 8 TX queue is good enough, and assign the
+> remaining HW space to recv.
+>
+> I honestly see no reason anymore to make it adustable, other than
+> that I choose a bad fixed value.
+> How would you want to make the tx/rx split?
+>
+> Kind regards,
+> Kurt
