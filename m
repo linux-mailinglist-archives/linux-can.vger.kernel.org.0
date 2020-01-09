@@ -2,75 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF42136182
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 21:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224F213628F
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 22:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728277AbgAIUDi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Jan 2020 15:03:38 -0500
-Received: from relay-b01.edpnet.be ([212.71.1.221]:55990 "EHLO
-        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728298AbgAIUDi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jan 2020 15:03:38 -0500
-X-ASG-Debug-ID: 1578600215-0a7ff5137d2f8c060001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.104.28.adsl.dyn.edpnet.net [77.109.104.28]) by relay-b01.edpnet.be with ESMTP id aCZF7qO2B6CDuv2i; Thu, 09 Jan 2020 21:03:35 +0100 (CET)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.104.28.adsl.dyn.edpnet.net[77.109.104.28]
-X-Barracuda-Apparent-Source-IP: 77.109.104.28
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 4F32FC36217;
-        Thu,  9 Jan 2020 21:03:35 +0100 (CET)
-Date:   Thu, 9 Jan 2020 21:03:34 +0100
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     linux-input@vger.kernel.org
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [RFC] input: cap11xx: plasma globe proof
-Message-ID: <20200109200334.GA19438@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [RFC] input: cap11xx: plasma globe proof
-Mail-Followup-To: linux-input@vger.kernel.org, linux-can@vger.kernel.org
-References: <1577647277-8298-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1577647277-8298-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.104.28.adsl.dyn.edpnet.net[77.109.104.28]
-X-Barracuda-Start-Time: 1578600215
-X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 814
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: SPAM GLOBAL 0.9963 1.0000 4.2994
-X-Barracuda-Spam-Score: 4.30
-X-Barracuda-Spam-Status: No, SCORE=4.30 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.79234
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+        id S1728974AbgAIVbI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Jan 2020 16:31:08 -0500
+Received: from foss.arm.com ([217.140.110.172]:37060 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725763AbgAIVbI (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 9 Jan 2020 16:31:08 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59B6931B;
+        Thu,  9 Jan 2020 13:31:07 -0800 (PST)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB1DB3F534;
+        Thu,  9 Jan 2020 13:31:06 -0800 (PST)
+Date:   Thu, 09 Jan 2020 21:31:05 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        dmaengine@vger.kernel.org, eugen.hristev@microchip.com,
+        jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
+        lee.jones@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
+        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
+        mchehab@kernel.org, miquel.raynal@bootlin.com, mkl@pengutronix.de,
+        netdev@vger.kernel.org, nicolas.ferre@microchip.com,
+        pmeerw@pmeerw.net, radu_nicolae.pirea@upb.ro,
+        richard.genoud@gmail.com, richard@nod.at, robh+dt@kernel.org,
+        tudor.ambarus@microchip.com, vigneshr@ti.com, vkoul@kernel.org,
+        wg@grandegger.com
+Subject: Applied "dt-bindings: spi_atmel: add microchip,sam9x60-spi" to the spi tree
+In-Reply-To: <1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
+Message-Id: <applied-1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
+X-Patchwork-Hint: ignore
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Ping?
+The patch
 
-On zo, 29 dec 2019 20:21:11 +0100, Kurt Van Dijck wrote:
-> Hey,
-> 
-> I built a raspberry-pi wakeup for my kids. Recently, one of them bought
-> a plasma globe. That globe leaves an electrostatic field that disturbes
-> the cap11xx when it operates with default settings.
-> So I grabbed the datasheet and started modifying the configuration.
-> This is the result that should apply to other scenarios as well.
-> 
-> The patch series improves the cap11xx in 2 ways.
-> It adds support for a cap1208 as on the explorer hat of Pimoroni,
-> and allows to run in polling mode (the explorer hat omitted the irq,
-> or I didn't find it).
-> It then exposes the major configuration parts of the chip so one can
-> tune it to her/his needs.
-> 
-> Please feel free to comment
-> 
-> Kind regards,
-> Kurt
-> 
+   dt-bindings: spi_atmel: add microchip,sam9x60-spi
+
+has been applied to the spi tree at
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
+From 0a1eb761ff30cdc089bcc94e1bd540b6956487c5 Mon Sep 17 00:00:00 2001
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
+Date: Wed, 8 Jan 2020 14:55:19 +0200
+Subject: [PATCH] dt-bindings: spi_atmel: add microchip,sam9x60-spi
+
+Add microchip,sam9x60-spi to DT bindings documentation.
+
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/devicetree/bindings/spi/spi_atmel.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi_atmel.txt b/Documentation/devicetree/bindings/spi/spi_atmel.txt
+index f99c733d75c1..5bb4a8f1df7a 100644
+--- a/Documentation/devicetree/bindings/spi/spi_atmel.txt
++++ b/Documentation/devicetree/bindings/spi/spi_atmel.txt
+@@ -1,7 +1,7 @@
+ Atmel SPI device
+ 
+ Required properties:
+-- compatible : should be "atmel,at91rm9200-spi".
++- compatible : should be "atmel,at91rm9200-spi" or "microchip,sam9x60-spi".
+ - reg: Address and length of the register set for the device
+ - interrupts: Should contain spi interrupt
+ - cs-gpios: chipselects (optional for SPI controller version >= 2 with the
+-- 
+2.20.1
+
