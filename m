@@ -2,140 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B613D13597A
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 13:51:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A9E135F79
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 18:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgAIMvJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Jan 2020 07:51:09 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24940 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725308AbgAIMvJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jan 2020 07:51:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578574268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fac4VqTnxrQkaCEJdCtkFmsn4oN/rNYvc/9xIScQoz4=;
-        b=AxSqMTOYVhFW3WvLPSVIgWmSgEuiePMqyLHoAfdO7CKVcEbNRj3zTgv1Ht2iJNVlwddRft
-        vPEE6OALLEX0KPAioBKNnCiif3nd2StfIqubsTUewHoYquX6YQbNXN5XTcraVLWr8aclzg
-        H/Q62UpRH2uApN5lv13QS0coPdwmuo0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-396-_kaj9ArDOx-Z2_T2gQsS5Q-1; Thu, 09 Jan 2020 07:51:06 -0500
-X-MC-Unique: _kaj9ArDOx-Z2_T2gQsS5Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5AC421856A8F;
-        Thu,  9 Jan 2020 12:51:05 +0000 (UTC)
-Received: from ovpn-117-103.ams2.redhat.com (ovpn-117-103.ams2.redhat.com [10.36.117.103])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3E05F27BD9;
-        Thu,  9 Jan 2020 12:51:04 +0000 (UTC)
-Message-ID: <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
+        id S2388212AbgAIRjw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Jan 2020 12:39:52 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53889 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728220AbgAIRjw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jan 2020 12:39:52 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1ipbmh-0002Ei-Da; Thu, 09 Jan 2020 18:39:51 +0100
 Subject: Re: [BUG] pfifo_fast may cause out-of-order CAN frame transmission
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>, linux-can@vger.kernel.org,
+To:     Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
 Cc:     Sascha Hauer <kernel@pengutronix.de>
-Date:   Thu, 09 Jan 2020 13:51:03 +0100
-In-Reply-To: <661cc33a-5f65-2769-cc1a-65791cb4b131@pengutronix.de>
 References: <661cc33a-5f65-2769-cc1a-65791cb4b131@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+ <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <779d3346-0344-9064-15d5-4d565647a556@pengutronix.de>
+Date:   Thu, 9 Jan 2020 18:39:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
+In-Reply-To: <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 2020-01-08 at 15:55 +0100, Ahmad Fatoum wrote:
-> I've run into an issue of CAN frames being sent out-of-order on an i.MX6 Dual
-> with Linux v5.5-rc5. Bisecting has lead me down to this commit:
+Hello Paolo,
+
+On 1/9/20 1:51 PM, Paolo Abeni wrote:
+> On Wed, 2020-01-08 at 15:55 +0100, Ahmad Fatoum wrote:
+>> I've run into an issue of CAN frames being sent out-of-order on an i.MX6 Dual
+>> with Linux v5.5-rc5. Bisecting has lead me down to this commit:
 > 
-> ba27b4cdaaa ("net: dev: introduce support for sch BYPASS for lockless qdisc")
+> Thank you for the report.
+
+Thanks for the prompt patch. :-)
+
+> The code is only build-tested, could you please try it in your setup?
+
+Issue still persists, albeit appears to have become much less frequent. Took 2 million
+frames till first two were swapped. What I usually saw was a swap every few thousand
+frames at least and quite often more frequent than that. Might just be noise though.
+
+Thanks
+Ahmad
+
 > 
-> With it, using pfifo_fast, every few hundred frames, FlexCAN's .ndo_start_xmit is
-> passed frames in an order different from how userspace stuffed them into the same
-> socket.
+> Thanks,
 > 
-> Reverting it fixes the issue as does booting with maxcpus=1 or using pfifo
-> instead of pfifo_fast.
+> Paolo
+> ---
+> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+> index fceddf89592a..df460fe0773a 100644
+> --- a/include/net/sch_generic.h
+> +++ b/include/net/sch_generic.h
+> @@ -158,7 +158,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+>  	if (qdisc->flags & TCQ_F_NOLOCK) {
+>  		if (!spin_trylock(&qdisc->seqlock))
+>  			return false;
+> -		WRITE_ONCE(qdisc->empty, false);
+>  	} else if (qdisc_is_running(qdisc)) {
+>  		return false;
+>  	}
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 0ad39c87b7fd..3c46575a5af5 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3625,6 +3625,8 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
+>  			qdisc_run_end(q);
+>  		} else {
+>  			rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
+> +			if (rc != NET_XMIT_DROP && READ_ONCE(q->empty))
+> +				WRITE_ONCE(q->empty, false);
+>  			qdisc_run(q);
+>  		}
+>  
 > 
-> According to [1], such reordering shouldn't be happening.
 > 
-> Details on my setup:
-> Kernel version: v5.5-rc5, (occurs much more often with LOCKDEP turned on)
-> CAN-Bitrate: 250 kbit/s
-> CAN frames are generated with:
-> cangen canX -I2 -L1 -Di -i -g0.12 -p 100
-> which keeps polling after ENOBUFS until socket is writable, sends out a CAN
-> frame with one incrementing payload byte and then waits 120 usec before repeating.
-> 
-> Please let me know if any additional info is needed.
 
-Thank you for the report.
-
-I think there is a possible race condition in the 'empty' flag update
-schema:
-
-CPU 0					CPU1
-(running e.g. net_tx_action)		(can xmit)
-
-qdisc_run()				__dev_xmit_skb()
-pfifo_fast_dequeue				
-// queue is empty, returns NULL
-WRITE_ONCE(qdisc->empty, true);
-					pfifo_fast_enqueue
-					qdisc_run_begin() 	
-					// still locked by CPU 0,
-					// return false and do nothing, 
-					// qdisc->empty is still true
-
-					(next can xmit)
-					// BYPASS code path
-					sch_direct_xmit()
-					// send pkt 2
-					__qdisc_run()
-					// send pkt 1
-
-The following patch try to addresses the above, clearing 'empty' flag
-in a more aggressive way. We can end-up skipping the bypass
-optimization more often than strictly needed in some contended
-scenarios, but I guess that is preferrable to the current issue.
-
-The code is only build-tested, could you please try it in your setup?
-
-Thanks,
-
-Paolo
----
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index fceddf89592a..df460fe0773a 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -158,7 +158,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		if (!spin_trylock(&qdisc->seqlock))
- 			return false;
--		WRITE_ONCE(qdisc->empty, false);
- 	} else if (qdisc_is_running(qdisc)) {
- 		return false;
- 	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 0ad39c87b7fd..3c46575a5af5 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3625,6 +3625,8 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 			qdisc_run_end(q);
- 		} else {
- 			rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
-+			if (rc != NET_XMIT_DROP && READ_ONCE(q->empty))
-+				WRITE_ONCE(q->empty, false);
- 			qdisc_run(q);
- 		}
- 
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
