@@ -2,81 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 009FB1360E5
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 20:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF42136182
+	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 21:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgAITQw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 9 Jan 2020 14:16:52 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:59229 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728971AbgAITQw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jan 2020 14:16:52 -0500
-X-Originating-IP: 91.224.148.103
-Received: from xps13 (unknown [91.224.148.103])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 6E53C240003;
-        Thu,  9 Jan 2020 19:16:45 +0000 (UTC)
-Date:   Thu, 9 Jan 2020 20:16:44 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <vkoul@kernel.org>,
-        <eugen.hristev@microchip.com>, <jic23@kernel.org>,
-        <knaack.h@gmx.de>, <lars@metafoo.de>, <pmeerw@pmeerw.net>,
-        <mchehab@kernel.org>, <lee.jones@linaro.org>,
-        <richard.genoud@gmail.com>, <radu_nicolae.pirea@upb.ro>,
-        <tudor.ambarus@microchip.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <wg@grandegger.com>, <mkl@pengutronix.de>, <a.zummo@towertech.it>,
-        <broonie@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <linux-media@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>
-Subject: Re: [PATCH 07/16] dt-bindings: atmel-nand: add
- microchip,sam9x60-pmecc
-Message-ID: <20200109201644.34c6b936@xps13>
-In-Reply-To: <1578488123-26127-8-git-send-email-claudiu.beznea@microchip.com>
-References: <1578488123-26127-1-git-send-email-claudiu.beznea@microchip.com>
-        <1578488123-26127-8-git-send-email-claudiu.beznea@microchip.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728277AbgAIUDi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 9 Jan 2020 15:03:38 -0500
+Received: from relay-b01.edpnet.be ([212.71.1.221]:55990 "EHLO
+        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728298AbgAIUDi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 9 Jan 2020 15:03:38 -0500
+X-ASG-Debug-ID: 1578600215-0a7ff5137d2f8c060001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.104.28.adsl.dyn.edpnet.net [77.109.104.28]) by relay-b01.edpnet.be with ESMTP id aCZF7qO2B6CDuv2i; Thu, 09 Jan 2020 21:03:35 +0100 (CET)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.104.28.adsl.dyn.edpnet.net[77.109.104.28]
+X-Barracuda-Apparent-Source-IP: 77.109.104.28
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 4F32FC36217;
+        Thu,  9 Jan 2020 21:03:35 +0100 (CET)
+Date:   Thu, 9 Jan 2020 21:03:34 +0100
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     linux-input@vger.kernel.org
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [RFC] input: cap11xx: plasma globe proof
+Message-ID: <20200109200334.GA19438@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [RFC] input: cap11xx: plasma globe proof
+Mail-Followup-To: linux-input@vger.kernel.org, linux-can@vger.kernel.org
+References: <1577647277-8298-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1577647277-8298-1-git-send-email-dev.kurt@vandijck-laurijssen.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 77.109.104.28.adsl.dyn.edpnet.net[77.109.104.28]
+X-Barracuda-Start-Time: 1578600215
+X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 814
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: SPAM GLOBAL 0.9963 1.0000 4.2994
+X-Barracuda-Spam-Score: 4.30
+X-Barracuda-Spam-Status: No, SCORE=4.30 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.79234
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Claudiu,
+Ping?
 
-Claudiu Beznea <claudiu.beznea@microchip.com> wrote on Wed, 8 Jan 2020
-14:55:14 +0200:
-
-> Add microchip,sam9x60-pmecc to DT bindings documentation.
+On zo, 29 dec 2019 20:21:11 +0100, Kurt Van Dijck wrote:
+> Hey,
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  Documentation/devicetree/bindings/mtd/atmel-nand.txt | 1 +
->  1 file changed, 1 insertion(+)
+> I built a raspberry-pi wakeup for my kids. Recently, one of them bought
+> a plasma globe. That globe leaves an electrostatic field that disturbes
+> the cap11xx when it operates with default settings.
+> So I grabbed the datasheet and started modifying the configuration.
+> This is the result that should apply to other scenarios as well.
 > 
-> diff --git a/Documentation/devicetree/bindings/mtd/atmel-nand.txt b/Documentation/devicetree/bindings/mtd/atmel-nand.txt
-> index 68b51dc58816..3aa297c97ab6 100644
-> --- a/Documentation/devicetree/bindings/mtd/atmel-nand.txt
-> +++ b/Documentation/devicetree/bindings/mtd/atmel-nand.txt
-> @@ -57,6 +57,7 @@ Required properties:
->  	"atmel,at91sam9g45-pmecc"
->  	"atmel,sama5d4-pmecc"
->  	"atmel,sama5d2-pmecc"
-> +	"microchip,sam9x60-pmecc"
->  - reg: should contain 2 register ranges. The first one is pointing to the PMECC
->         block, and the second one to the PMECC_ERRLOC block.
->  
-
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miquèl
+> The patch series improves the cap11xx in 2 ways.
+> It adds support for a cap1208 as on the explorer hat of Pimoroni,
+> and allows to run in polling mode (the explorer hat omitted the irq,
+> or I didn't find it).
+> It then exposes the major configuration parts of the chip so one can
+> tune it to her/his needs.
+> 
+> Please feel free to comment
+> 
+> Kind regards,
+> Kurt
+> 
