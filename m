@@ -2,118 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF371368B5
-	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2020 09:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEF4136E46
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2020 14:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbgAJICH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 10 Jan 2020 03:02:07 -0500
-Received: from relay.felk.cvut.cz ([147.32.80.7]:56367 "EHLO
-        relay.felk.cvut.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726401AbgAJICH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Jan 2020 03:02:07 -0500
-X-Greylist: delayed 1845 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Jan 2020 03:02:03 EST
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 00A7TWwh036195;
-        Fri, 10 Jan 2020 08:29:32 +0100 (CET)
-        (envelope-from pisa@cmp.felk.cvut.cz)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 00A7TWdf028346;
-        Fri, 10 Jan 2020 08:29:32 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 00A7TVpw028343;
-        Fri, 10 Jan 2020 08:29:31 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 2/6] dt-bindings: net: can: binding for CTU CAN FD open-source IP core.
-Date:   Fri, 10 Jan 2020 08:29:31 +0100
-User-Agent: KMail/1.9.10
-Cc:     devicetree@vger.kernel.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org, socketcan@hartkopp.net,
-        wg@grandegger.com, davem@davemloft.net, mark.rutland@arm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.jerabek01@gmail.com, ondrej.ille@gmail.com,
-        jnovak@fel.cvut.cz, jara.beran@gmail.com, porazil@pikron.com
-References: <cover.1576922226.git.pisa@cmp.felk.cvut.cz> <61533d59378822f8c808abf193b40070810d3d35.1576922226.git.pisa@cmp.felk.cvut.cz> <20200103235359.GA23875@bogus>
-In-Reply-To: <20200103235359.GA23875@bogus>
-X-KMail-QuotePrefix: > 
+        id S1727822AbgAJNkO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 10 Jan 2020 08:40:14 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:33685 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727639AbgAJNkO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Jan 2020 08:40:14 -0500
+Received: from localhost (lfbn-lyo-1-1670-129.w90-65.abo.wanadoo.fr [90.65.102.129])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 29C1E240016;
+        Fri, 10 Jan 2020 13:40:01 +0000 (UTC)
+Date:   Fri, 10 Jan 2020 14:40:01 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
+        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
+        vkoul@kernel.org, eugen.hristev@microchip.com, jic23@kernel.org,
+        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
+        mchehab@kernel.org, lee.jones@linaro.org, richard.genoud@gmail.com,
+        radu_nicolae.pirea@upb.ro, tudor.ambarus@microchip.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        wg@grandegger.com, mkl@pengutronix.de, a.zummo@towertech.it,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH 03/16] dt-bindings: atmel-tcb: add microchip,<chip>-tcb
+Message-ID: <20200110134001.GD1027187@piout.net>
+References: <1578488123-26127-1-git-send-email-claudiu.beznea@microchip.com>
+ <1578488123-26127-4-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Message-Id: <202001100829.31344.pisa@cmp.felk.cvut.cz>
-X-FELK-MailScanner-Information: 
-X-MailScanner-ID: 00A7TWwh036195
-X-FELK-MailScanner: Found to be clean
-X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
-        score=-0.223, required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.28,
-        SPF_HELO_NONE 0.00, SPF_NONE 0.00)
-X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
-X-FELK-MailScanner-Watermark: 1579246176.70847@vVg9umV9GG6Cdpbc0Ybbpg
-X-Spam-Status: No
+In-Reply-To: <1578488123-26127-4-git-send-email-claudiu.beznea@microchip.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Rob,
+On 08/01/2020 14:55:10+0200, Claudiu Beznea wrote:
+> Add microchip,<chip>-tcb to DT bindings documentation. This is for
+> microchip,sam9x60-tcb.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/atmel-tcb.txt | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/atmel-tcb.txt b/Documentation/devicetree/bindings/mfd/atmel-tcb.txt
+> index c4a83e364cb6..e1713e41f6e0 100644
+> --- a/Documentation/devicetree/bindings/mfd/atmel-tcb.txt
+> +++ b/Documentation/devicetree/bindings/mfd/atmel-tcb.txt
+> @@ -1,6 +1,7 @@
+>  * Device tree bindings for Atmel Timer Counter Blocks
+> -- compatible: Should be "atmel,<chip>-tcb", "simple-mfd", "syscon".
+> -  <chip> can be "at91rm9200" or "at91sam9x5"
+> +- compatible: Should be "atmel,<chip>-tcb", "microchip,<chip>-tcb",
+> +  "simple-mfd", "syscon".
+> +  <chip> can be "at91rm9200", "at91sam9x5" or "sam9x60"
 
-thanks much for review.
+atmel,sam9x60-tcb, microchip,at91rm9200-tcb and microchip,at91sam9x5-tcb
+are not allowed and the documentation should reflect that.
 
-On Saturday 04 of January 2020 00:53:59 Rob Herring wrote:
-> On Sat, Dec 21, 2019 at 03:07:31PM +0100, pisa@cmp.felk.cvut.cz wrote:
-> > From: Pavel Pisa <pisa@cmp.felk.cvut.cz>
-> >  .../devicetree/bindings/net/can/ctu,ctucanfd.txt   | 61
->
-> Bindings are moving DT schema format now. Not something I'd require on a
-> respin I've already reviewed, but OTOH it's been 10 months to respin
-> from v2. So:
+It would probably be easier to do that on top of the yaml conversion
+here:
+https://lore.kernel.org/lkml/20191009224006.5021-2-alexandre.belloni@bootlin.com/
 
-Please, can you send me pointer to some CAN or other bindings
-doc which is well formed according to future direction?
-I have not dig deeper but I have not found relevant discussion
-about introduction of DT schema format.
-
-> If you have a v4, then please convert to a schema.
-
-I expect that we need at least one more iteration.
-When recheck, I have found that I have forgot to update
-paths in RST documentation when moved from standalone
-automatic CI build into kernel tree
-
-[PATCH v3 6/6] docs: ctucanfd: CTU CAN FD open-source IP core documentation.
-https://lkml.org/lkml/2019/12/21/96
-
-And the most important is review of the driver core to allow
-the project (http://canbus.pages.fel.cvut.cz/) to move forward.
-
-[PATCH v3 3/6] can: ctucanfd: add support for CTU CAN FD open-source IP core - 
-bus independent part.
-https://lkml.org/lkml/2019/12/21/95
-
-The code has no errors and a few questionable warnings reported by
-4.19 patchcheck (we have run many iterations of it to cleanup code)
-but 5.4 kernel patchcheck is more strict as I noticed
-after submission and reports a few more warnings and some of them
-could be easily resolved.
-
-What makes me to feel good is that CTU CAN FD IP core development
-stabilized, there are only changes to better cover the core by test
-framework and more than one month there is no commit disturbing CI build
-process of IP core integration for Xilinx Zynq. CI builds complete
-driver and FPGA design and then deploys and runs tests between multiple
-CTU CAN FD cores and against OpenCores SJA1000 cores with FD tolerance
-
-https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/pipelines
-
-https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/-/jobs/51334
-
-The second link points to one of many logs of test running on MZ_APO
-(Xilinx Zynq) education kits designed for Department of Control Engineering 
-https://dce.fel.cvut.cz/en at PiKRON.com. MZ_APO kist are used in Computer 
-Architectures and Real-time Systems Programming courses.
-
-Thanks for help,
-
-Pavel
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
