@@ -2,103 +2,118 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 224F213628F
-	for <lists+linux-can@lfdr.de>; Thu,  9 Jan 2020 22:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF371368B5
+	for <lists+linux-can@lfdr.de>; Fri, 10 Jan 2020 09:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728974AbgAIVbI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 9 Jan 2020 16:31:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:37060 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgAIVbI (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 9 Jan 2020 16:31:08 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 59B6931B;
-        Thu,  9 Jan 2020 13:31:07 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB1DB3F534;
-        Thu,  9 Jan 2020 13:31:06 -0800 (PST)
-Date:   Thu, 09 Jan 2020 21:31:05 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     alexandre.belloni@bootlin.com, a.zummo@towertech.it,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, eugen.hristev@microchip.com,
-        jic23@kernel.org, knaack.h@gmx.de, lars@metafoo.de,
-        lee.jones@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, ludovic.desroches@microchip.com,
-        Mark Brown <broonie@kernel.org>, mark.rutland@arm.com,
-        mchehab@kernel.org, miquel.raynal@bootlin.com, mkl@pengutronix.de,
-        netdev@vger.kernel.org, nicolas.ferre@microchip.com,
-        pmeerw@pmeerw.net, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, richard@nod.at, robh+dt@kernel.org,
-        tudor.ambarus@microchip.com, vigneshr@ti.com, vkoul@kernel.org,
-        wg@grandegger.com
-Subject: Applied "dt-bindings: spi_atmel: add microchip,sam9x60-spi" to the spi tree
-In-Reply-To: <1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
-Message-Id: <applied-1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com>
-X-Patchwork-Hint: ignore
+        id S1726549AbgAJICH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 10 Jan 2020 03:02:07 -0500
+Received: from relay.felk.cvut.cz ([147.32.80.7]:56367 "EHLO
+        relay.felk.cvut.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726401AbgAJICH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 10 Jan 2020 03:02:07 -0500
+X-Greylist: delayed 1845 seconds by postgrey-1.27 at vger.kernel.org; Fri, 10 Jan 2020 03:02:03 EST
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 00A7TWwh036195;
+        Fri, 10 Jan 2020 08:29:32 +0100 (CET)
+        (envelope-from pisa@cmp.felk.cvut.cz)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 00A7TWdf028346;
+        Fri, 10 Jan 2020 08:29:32 +0100
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 00A7TVpw028343;
+        Fri, 10 Jan 2020 08:29:31 +0100
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 2/6] dt-bindings: net: can: binding for CTU CAN FD open-source IP core.
+Date:   Fri, 10 Jan 2020 08:29:31 +0100
+User-Agent: KMail/1.9.10
+Cc:     devicetree@vger.kernel.org, mkl@pengutronix.de,
+        linux-can@vger.kernel.org, socketcan@hartkopp.net,
+        wg@grandegger.com, davem@davemloft.net, mark.rutland@arm.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.jerabek01@gmail.com, ondrej.ille@gmail.com,
+        jnovak@fel.cvut.cz, jara.beran@gmail.com, porazil@pikron.com
+References: <cover.1576922226.git.pisa@cmp.felk.cvut.cz> <61533d59378822f8c808abf193b40070810d3d35.1576922226.git.pisa@cmp.felk.cvut.cz> <20200103235359.GA23875@bogus>
+In-Reply-To: <20200103235359.GA23875@bogus>
+X-KMail-QuotePrefix: > 
+MIME-Version: 1.0
+Content-Type: Text/Plain;
+  charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202001100829.31344.pisa@cmp.felk.cvut.cz>
+X-FELK-MailScanner-Information: 
+X-MailScanner-ID: 00A7TWwh036195
+X-FELK-MailScanner: Found to be clean
+X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
+        score=-0.223, required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.28,
+        SPF_HELO_NONE 0.00, SPF_NONE 0.00)
+X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
+X-FELK-MailScanner-Watermark: 1579246176.70847@vVg9umV9GG6Cdpbc0Ybbpg
+X-Spam-Status: No
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The patch
+Hello Rob,
 
-   dt-bindings: spi_atmel: add microchip,sam9x60-spi
+thanks much for review.
 
-has been applied to the spi tree at
+On Saturday 04 of January 2020 00:53:59 Rob Herring wrote:
+> On Sat, Dec 21, 2019 at 03:07:31PM +0100, pisa@cmp.felk.cvut.cz wrote:
+> > From: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> >  .../devicetree/bindings/net/can/ctu,ctucanfd.txt   | 61
+>
+> Bindings are moving DT schema format now. Not something I'd require on a
+> respin I've already reviewed, but OTOH it's been 10 months to respin
+> from v2. So:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.6
+Please, can you send me pointer to some CAN or other bindings
+doc which is well formed according to future direction?
+I have not dig deeper but I have not found relevant discussion
+about introduction of DT schema format.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+> If you have a v4, then please convert to a schema.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+I expect that we need at least one more iteration.
+When recheck, I have found that I have forgot to update
+paths in RST documentation when moved from standalone
+automatic CI build into kernel tree
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+[PATCH v3 6/6] docs: ctucanfd: CTU CAN FD open-source IP core documentation.
+https://lkml.org/lkml/2019/12/21/96
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+And the most important is review of the driver core to allow
+the project (http://canbus.pages.fel.cvut.cz/) to move forward.
 
-Thanks,
-Mark
+[PATCH v3 3/6] can: ctucanfd: add support for CTU CAN FD open-source IP core - 
+bus independent part.
+https://lkml.org/lkml/2019/12/21/95
 
-From 0a1eb761ff30cdc089bcc94e1bd540b6956487c5 Mon Sep 17 00:00:00 2001
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
-Date: Wed, 8 Jan 2020 14:55:19 +0200
-Subject: [PATCH] dt-bindings: spi_atmel: add microchip,sam9x60-spi
+The code has no errors and a few questionable warnings reported by
+4.19 patchcheck (we have run many iterations of it to cleanup code)
+but 5.4 kernel patchcheck is more strict as I noticed
+after submission and reports a few more warnings and some of them
+could be easily resolved.
 
-Add microchip,sam9x60-spi to DT bindings documentation.
+What makes me to feel good is that CTU CAN FD IP core development
+stabilized, there are only changes to better cover the core by test
+framework and more than one month there is no commit disturbing CI build
+process of IP core integration for Xilinx Zynq. CI builds complete
+driver and FPGA design and then deploys and runs tests between multiple
+CTU CAN FD cores and against OpenCores SJA1000 cores with FD tolerance
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/1578488123-26127-13-git-send-email-claudiu.beznea@microchip.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- Documentation/devicetree/bindings/spi/spi_atmel.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/pipelines
 
-diff --git a/Documentation/devicetree/bindings/spi/spi_atmel.txt b/Documentation/devicetree/bindings/spi/spi_atmel.txt
-index f99c733d75c1..5bb4a8f1df7a 100644
---- a/Documentation/devicetree/bindings/spi/spi_atmel.txt
-+++ b/Documentation/devicetree/bindings/spi/spi_atmel.txt
-@@ -1,7 +1,7 @@
- Atmel SPI device
- 
- Required properties:
--- compatible : should be "atmel,at91rm9200-spi".
-+- compatible : should be "atmel,at91rm9200-spi" or "microchip,sam9x60-spi".
- - reg: Address and length of the register set for the device
- - interrupts: Should contain spi interrupt
- - cs-gpios: chipselects (optional for SPI controller version >= 2 with the
--- 
-2.20.1
+https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/-/jobs/51334
 
+The second link points to one of many logs of test running on MZ_APO
+(Xilinx Zynq) education kits designed for Department of Control Engineering 
+https://dce.fel.cvut.cz/en at PiKRON.com. MZ_APO kist are used in Computer 
+Architectures and Real-time Systems Programming courses.
+
+Thanks for help,
+
+Pavel
