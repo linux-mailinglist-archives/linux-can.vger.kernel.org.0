@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B647139D9A
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jan 2020 00:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D9F139DC1
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jan 2020 01:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728961AbgAMXog (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 13 Jan 2020 18:44:36 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45957 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728894AbgAMXog (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Jan 2020 18:44:36 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 59so10752444otp.12
-        for <linux-can@vger.kernel.org>; Mon, 13 Jan 2020 15:44:35 -0800 (PST)
+        id S1728714AbgANAFI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 13 Jan 2020 19:05:08 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38627 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728810AbgANAFI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 13 Jan 2020 19:05:08 -0500
+Received: by mail-oi1-f193.google.com with SMTP id l9so10117242oii.5
+        for <linux-can@vger.kernel.org>; Mon, 13 Jan 2020 16:05:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1hWr5fTf0UvM/FdokqnbY78OahK5vgKtckbIjPFsKcM=;
-        b=EB/Svwhu9PurDnkMsiR2ZxdYV2YmdAOFH6tvgzAb50fsSSchJiO3LOszBbMW8KtOlg
-         yDqIxu5tOIq0YqaBM0mF/oSM6BdoyWZZwFTVIw4wKQNZo2XZziFIwgjnqnPk7o8B/irC
-         RRJ15EMBbkJt41w7UP9JJ9lXfdlqNscExg/Q65XoxHGw1lSnWGq+oQLtSt2bDyG2juhT
-         k5gqnhsrFrd2UO8jC6bxhmOENhXP8aHyewy/lNFcOTIXhbErfviW6gF9r4udcwPevw3j
-         tnAhXVNfBq9FQNdycI4P85wbJ6nCH/V4UhYRRFKz4+ijFyTB/yF9Ta+LSRzD7cBsiX9t
-         GLuA==
-X-Gm-Message-State: APjAAAUrdy6ckxEywyb+H9Jx9PugIwuGjl2SLOFxEJIofq7XpJKmc+BV
-        RTpVOr6bD/i/70u0EKDbfM/iPB2skQ==
-X-Google-Smtp-Source: APXvYqwjePq/BAwp6fXJVhzoe+ZROFTJOyS/q4V6a4m+PpeLh8276Ipx4TGFf46UvH6DIfA04TWorQ==
-X-Received: by 2002:a05:6830:18ce:: with SMTP id v14mr10086768ote.36.1578959074830;
-        Mon, 13 Jan 2020 15:44:34 -0800 (PST)
+        bh=7d1TijNzzm5olBqQ6BOPTTjVLO96fK38vWoVBLQU76w=;
+        b=UAfvN1fsC7JiKwxr3BBI9sk39xdla+g4A1pZYhASf87aHF8qJU++p3dNJNjh7hiAWi
+         kqVeoX9qSlr3IzCJ4CKOdktE7cMrSQu7u5j9bW7pfPIHgOdhi1+cTCv2GPdWimkkMP6f
+         Fzhz+3IiUdA8NoTX21MXx9MyAi4c0sSp4NYAtZivujwWOLENBh2kj5tvmTcYwEL57lqn
+         iWO+1Wgr4+ynhBqsV+fyrKoquUCntC4fRYkbnljinyZCCeSdxhIWd5tgPHdzEeBz3Na5
+         lICzPbN1tvHIVswJmbkC1PTp/hWvcB9DCNq/B8lEfOUvPRTEatfsKeboCRdTT9QP/c7v
+         eEqw==
+X-Gm-Message-State: APjAAAUXXElqmbG4nr1tIoWnZWxrnAKn5sodiFsJXuFtJVBA6uRaDTsq
+        xRCdFWbROlZcf9qaVRmjsSqXF1+9uw==
+X-Google-Smtp-Source: APXvYqxg7/t7PVQOTmxNJSQSkqHIRYqheBUtHSROrhuqMDxVgnwPDUQzJ3/PgwXuSieW4+4RhIFZVw==
+X-Received: by 2002:aca:2407:: with SMTP id n7mr14996073oic.14.1578960307301;
+        Mon, 13 Jan 2020 16:05:07 -0800 (PST)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v14sm4704544oto.16.2020.01.13.15.44.33
+        by smtp.gmail.com with ESMTPSA id j26sm4779693otq.18.2020.01.13.16.05.04
         for <linux-can@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 15:44:34 -0800 (PST)
+        Mon, 13 Jan 2020 16:05:06 -0800 (PST)
 Received: from rob (uid 1000)
         (envelope-from rob@rob-hp-laptop)
-        id 223f23
+        id 2219d0
         by rob-hp-laptop (DragonFly Mail Agent v0.11);
-        Mon, 13 Jan 2020 17:25:51 -0600
-Date:   Mon, 13 Jan 2020 17:25:51 -0600
+        Mon, 13 Jan 2020 17:23:10 -0600
+Date:   Mon, 13 Jan 2020 17:23:10 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
@@ -57,27 +57,26 @@ Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
         linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
         linux-can@vger.kernel.org, linux-rtc@vger.kernel.org,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: [PATCH v2 05/17] dt-bindings: atmel-isi: add
- microchip,sam9x60-isi
-Message-ID: <20200113232550.GA2344@bogus>
+Subject: Re: [PATCH v2 02/17] dt-bindings: at_xdmac: add microchip,sam9x60-dma
+Message-ID: <20200113232310.GA30698@bogus>
 References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
- <1578673089-3484-6-git-send-email-claudiu.beznea@microchip.com>
+ <1578673089-3484-3-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1578673089-3484-6-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1578673089-3484-3-git-send-email-claudiu.beznea@microchip.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 10 Jan 2020 18:17:57 +0200, Claudiu Beznea wrote:
-> Add microchip,sam9x60-isi to DT bindings documentation.
+On Fri, 10 Jan 2020 18:17:54 +0200, Claudiu Beznea wrote:
+> Add microchip,sam9x60-dma to DT bindings documentation.
 > 
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
->  Documentation/devicetree/bindings/media/atmel-isi.txt | 2 +-
+>  Documentation/devicetree/bindings/dma/atmel-xdma.txt | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 
