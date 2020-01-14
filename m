@@ -2,100 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C0313A925
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jan 2020 13:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4BC13AC59
+	for <lists+linux-can@lfdr.de>; Tue, 14 Jan 2020 15:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728951AbgANMVQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Jan 2020 07:21:16 -0500
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:60729 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726053AbgANMVQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jan 2020 07:21:16 -0500
-Received: from [IPv6:2001:420:44c1:2577:11b:d594:936e:b16a]
- ([IPv6:2001:420:44c1:2577:11b:d594:936e:b16a])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id rLBviFvU2pLtbrLByieypI; Tue, 14 Jan 2020 13:21:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1579004473; bh=el/sCcXKoLi1FEc8sscgQSjCYSmbdJMyDT1iZnQSnSU=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=LjQRYpxPLh+sE48zdnmzx1dYwbjH4bXf1Ow+L9xGtnyLYk22ootoKM/W9LPRAIgKT
-         LLdOswZfIOJ19EhGCDm2XmYZWdtI6Xuyl8dC5s7pZAnPOnHvgDHSBKUIFmgTQIhTVG
-         ij0tC8LIc6YqFte/+lbYjCbxQhtShNEKnJZi5/TjgcBt3gomJpQPEu7aOO69F69zpN
-         OZPkGFql/MkFGntWAnRLCI4yBg5FtwfYVadZ5t73EwJzQSaPTnFRe9rfkiRcwhvAGE
-         0ir1vP7bKiXOEArWvvZbnMYeMemda8rYy6AiZUejTxhRAkSw6FHwz7VxGtoaJJalpD
-         AZAylzCO9BqGw==
-Subject: Re: [PATCH v2 05/17] dt-bindings: atmel-isi: add
- microchip,sam9x60-isi
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        vkoul@kernel.org, eugen.hristev@microchip.com, jic23@kernel.org,
-        knaack.h@gmx.de, lars@metafoo.de, pmeerw@pmeerw.net,
-        mchehab@kernel.org, lee.jones@linaro.org,
-        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
-        tudor.ambarus@microchip.com, miquel.raynal@bootlin.com,
-        richard@nod.at, vigneshr@ti.com, wg@grandegger.com,
-        mkl@pengutronix.de, a.zummo@towertech.it
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-rtc@vger.kernel.org
-References: <1578673089-3484-1-git-send-email-claudiu.beznea@microchip.com>
- <1578673089-3484-6-git-send-email-claudiu.beznea@microchip.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <58d0a872-9f9e-ab64-b9e4-d6548b05142b@xs4all.nl>
-Date:   Tue, 14 Jan 2020 13:21:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726106AbgANOdZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 14 Jan 2020 09:33:25 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49890 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725994AbgANOdZ (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 14 Jan 2020 09:33:25 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 1DC9CBAFA;
+        Tue, 14 Jan 2020 14:33:22 +0000 (UTC)
+From:   Richard Palethorpe <rpalethorpe@suse.com>
+To:     linux-can@vger.kernel.org
+Cc:     Richard Palethorpe <rpalethorpe@suse.com>,
+        syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Tyler Hall <tylerwhall@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
+Subject: [PATCH] can, slip: Protect tty->disc_data access with RCU
+Date:   Tue, 14 Jan 2020 15:32:44 +0100
+Message-Id: <20200114143244.20739-1-rpalethorpe@suse.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <0000000000002b81b70590a83ad7@google.com>
+References: <0000000000002b81b70590a83ad7@google.com>
 MIME-Version: 1.0
-In-Reply-To: <1578673089-3484-6-git-send-email-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfDyyJ8A46d/VZ6mWF8HvSJL6XohAbYvGlIDN2xY5sRpRC0AJZrnUH0YX0+FSqCMhFZjpHxOyHfMDslHdlLv97QcDoHwck2Z9TrOv5t+lopMv/NRf0PUV
- 55QN8cKR2GeYA535VmrhiJJ3ojVhCtZHdqwlNqcXOOfA1jLuIJ84iCZRAPBbM5rNAMNY7EvoyTG6hFaMVlzvbuZ37zENLdycB1+4kebYsziUTwZWtoZuAnMk
- LMyouB9mCtPGzmRTzeL74XvIxJXSiMOXKUukMY9CZcdbxL+hqcyNHH1cvq0Ae2LxwdzWO4GARzgfg1BRhHkpDrmwNAST/Nzpp1yk+mYmUHUeCKMDd8m74vHt
- kAndHbAOE1qpMQD5koRQwLbarJX8A/2eAFJTImw2pecQ7825zIoL2og3ZAauw5oPkPbp/rESm4VQrrwIzQZTIdS19wLJw93WlMa24o0M4Pe9Z5x+vxoRp8Xp
- MMUfb2fVE69KZls7TdCcam6e05Yvra1yqVNR1HEStwiaFBzk/jI1Bo9NFI5Glm7TYVnbqxqMkf306iQCOo0qEXlt+P7vZcEiAVvNC8QVCAnZ33xDCOO1P0MJ
- t0xckD3lecqem5SKtKLXefkxwFCHpcH207vyGk/FUL9CikGLulLMLG70jX9Ld1ENlKvZKk+13vUDiYXETUhOLvxSM6cMGAGAw9ZxxcdL4ipi7AhZ8LDj/Hos
- Mkt9jvglBTYomM/KU9sebjVWgPJeviHg+luR+JN4Q5LWheX1ajixs/F7bHRcZ6vELvkzMcco4AX3I2EuQF4KMcH1Q96bO+BppQYyR75cNBcTiu6LbkouxWVm
- MW4NsCXcJ0fzeQoSgXBZIfj4wzfcvGDsqbwGk6u+aW6XLHkGAEIwPAz0wqV7xfW4B3Tt72thIoZ7yEUcb1NqMczIB0lX1EeMNRmoxXWuOAXv/Y3kllOdMvVM
- Ar5uaZEBf2ZZJczJNl00ZE/cL98RXshGjLQcLmOO0cOB+ZAxxE+2AbyLSmra4urIpIuGwP7z7WLnDrpuqSoBI65/nkfakNI++OOqwtpqiY5+Ovy2sTlhvJMP
- NKQilXVls4YsoomtfMm326htDEL8iehi87LtyVzJDdVEbpDuB6M944CpeFCi1lvlbLZKp/xm9YleC7sbhMLQVs92SnXK+0ICEfNtNZ1N8vaiu7fVSr1BFLjZ
- 8jCShZPcvKBaXW12eRihzGqkWpLj65UlbQwlDHhc7D924tsjBZuhfWnz7g69Vb/e/iBiBa4o3+DHoJJhFax7VwFnU7KuBXXDdERSFtOo/S6RRxadrFshFakC
- uUzp6UW6M/OChwP1r3uaki5uIkuF9f7/Jnmdj1J/6ho0dIxRF3nVLa/XFeZ5FVlRe4UOcaC31YtX32Em/eD2YPZuHMSsTxORpfBZpdDOFMwv4NAg26A=
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 1/10/20 5:17 PM, Claudiu Beznea wrote:
-> Add microchip,sam9x60-isi to DT bindings documentation.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  Documentation/devicetree/bindings/media/atmel-isi.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/atmel-isi.txt b/Documentation/devicetree/bindings/media/atmel-isi.txt
-> index 332513a151cc..8924c7545b63 100644
-> --- a/Documentation/devicetree/bindings/media/atmel-isi.txt
-> +++ b/Documentation/devicetree/bindings/media/atmel-isi.txt
-> @@ -2,7 +2,7 @@ Atmel Image Sensor Interface (ISI)
->  ----------------------------------
->  
->  Required properties for ISI:
-> -- compatible: must be "atmel,at91sam9g45-isi".
-> +- compatible: must be "atmel,at91sam9g45-isi" or "microchip,sam9x60-isi".
->  - reg: physical base address and length of the registers set for the device.
->  - interrupts: should contain IRQ line for the ISI.
->  - clocks: list of clock specifiers, corresponding to entries in the clock-names
-> 
+write_wakeup can happen in parallel with close where tty->disc_data is set
+to NULL. So we a) need to check if tty->disc_data is NULL and b) ensure it
+is an atomic operation. Otherwise accessing tty->disc_data could result in
+a NULL pointer deref or access to some random location.
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+This problem was found by Syzkaller on slcan, but the same issue appears to
+exist in slip where slcan was copied from.
 
-Regards,
+A fix which didn't use RCU was posted by Hillf Danton.
 
-	Hans
+Fixes: 661f7fda21b1 ("slip: Fix deadlock in write_wakeup")
+Fixes: a8e83b17536a ("slcan: Port write_wakeup deadlock fix from slip")
+Reported-by: syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com
+Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Tyler Hall <tylerwhall@gmail.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: syzkaller@googlegroups.com
+---
+
+Note, that mabye RCU should also applied to receive_buf as that also happens
+in interrupt context. So if the pointer assignment is split by the compiler
+then sl may point somewhere unexpected?
+
+ drivers/net/can/slcan.c | 11 +++++++++--
+ drivers/net/slip/slip.c | 11 +++++++++--
+ 2 files changed, 18 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+index 2e57122f02fb..ee029aae69d4 100644
+--- a/drivers/net/can/slcan.c
++++ b/drivers/net/can/slcan.c
+@@ -344,7 +344,14 @@ static void slcan_transmit(struct work_struct *work)
+  */
+ static void slcan_write_wakeup(struct tty_struct *tty)
+ {
+-	struct slcan *sl = tty->disc_data;
++	struct slcan *sl;
++
++	rcu_read_lock();
++	sl = rcu_dereference(tty->disc_data);
++	rcu_read_unlock();
++
++	if (!sl)
++		return;
+ 
+ 	schedule_work(&sl->tx_work);
+ }
+@@ -644,7 +651,7 @@ static void slcan_close(struct tty_struct *tty)
+ 		return;
+ 
+ 	spin_lock_bh(&sl->lock);
+-	tty->disc_data = NULL;
++	rcu_assign_pointer(tty->disc_data, NULL);
+ 	sl->tty = NULL;
+ 	spin_unlock_bh(&sl->lock);
+ 
+diff --git a/drivers/net/slip/slip.c b/drivers/net/slip/slip.c
+index 2a91c192659f..dfed9f0b8646 100644
+--- a/drivers/net/slip/slip.c
++++ b/drivers/net/slip/slip.c
+@@ -452,7 +452,14 @@ static void slip_transmit(struct work_struct *work)
+  */
+ static void slip_write_wakeup(struct tty_struct *tty)
+ {
+-	struct slip *sl = tty->disc_data;
++	struct slip *sl;
++
++	rcu_read_lock();
++	sl = rcu_dereference(tty->disc_data);
++	rcu_read_unlock();
++
++	if (!sl)
++		return;
+ 
+ 	schedule_work(&sl->tx_work);
+ }
+@@ -882,7 +889,7 @@ static void slip_close(struct tty_struct *tty)
+ 		return;
+ 
+ 	spin_lock_bh(&sl->lock);
+-	tty->disc_data = NULL;
++	rcu_assign_pointer(tty->disc_data, NULL);
+ 	sl->tty = NULL;
+ 	spin_unlock_bh(&sl->lock);
+ 
+-- 
+2.24.0
+
