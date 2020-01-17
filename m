@@ -2,149 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBD4140B54
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jan 2020 14:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB0F140D71
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jan 2020 16:09:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbgAQNqN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 Jan 2020 08:46:13 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:42549 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726688AbgAQNqN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jan 2020 08:46:13 -0500
-Received: by mail-io1-f72.google.com with SMTP id e7so15078745iog.9
-        for <linux-can@vger.kernel.org>; Fri, 17 Jan 2020 05:46:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=6yTFvZSIUTFje0iuJnrv+aFaKQQ7ngAb+Df8VB7qUuE=;
-        b=QSka/U0k99Y95+9Ziu8cFNo1efvw1JQHtA9/8QFlZwkLZjVnIRDm/cwzKj6ZGfWSzK
-         KLkl9ZZzCtyRn+AV96L+3keL5CTCPpOLB1H2p8L5K9lK99tZdbjagPAYzHUuo1vJfZzF
-         3ia6UUa4uZ2lyNzoeMMKYHpAFteW+alodnMtbRfKkg95OjN02itI5wBL9Q5UTeu9XgPC
-         XY8YI+VABv3A1vOY+PUwPNjpZl45VG9vzNq9eZ9p1Uv1XG8n0NJIyJJIeQ5VjIK8dNlB
-         g+71WHxdaecr+Bj/EvW3FddeUPCjx0rEdhlaz69iWUXm6jnIpw9v3E/Y8ZDX2vXSoDeb
-         4pVg==
-X-Gm-Message-State: APjAAAVSKHRLSGVB6t/O/mjK0IabXx+n93Tf//yOcuzkowRRELts0XyM
-        +RJpQs7Tvg11uYgwFyRU6Zldgb2k+55xxH0Jqf1S0cNHe4yP
-X-Google-Smtp-Source: APXvYqxGuic3bOydwwi/re48vM4+4utcWXYqsSf8/oQciD92zM4NBaFfeVipZ8ahJOjxWMX5uvXia/u/ukkMhiS7X6s2W7BrGeRv
+        id S1728739AbgAQPJa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Jan 2020 10:09:30 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:22108 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728512AbgAQPJ3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jan 2020 10:09:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1579273767;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=HL4s5nll/xO8bB5emC78oqFiY2gTAwyypU3rIYh6U90=;
+        b=CdOFq4QbOxF7ybsWR9s9eF6xwpYnlW5jrkAYrtU59EASJCNohzMhalhz89nDWQ6ShW
+        ejV6yuZYfY7lJrxSZiCxD8Jed+qL9y/wUoq5VkiyQo3v5kjdpvp+Sx5Mr/o/WCvRgp9q
+        AGSGGMld5v6IZjLlb+9A8DdbaEW2ye8IAVQ1TIh3F2wfV9Nae/8kNky+k+cnxT8PhsDA
+        0N1UGoZ7GOrcYHjI3f1Odo5BWsoXxtDuqm/207aCEx3iyGPdp3NJGheckWYmnKXHX2Vg
+        QWnh8XkHojBHJZai3bVvWn9dpirDldEb84vAlF1TJolVHFc9hAcHvn5Z7IQKp7Y/YbN3
+        T2Aw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKNteTQLYO"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.40.177]
+        by smtp.strato.de (RZmta 46.1.4 DYNA|AUTH)
+        with ESMTPSA id 3013f9w0HF6PTCu
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 17 Jan 2020 16:06:25 +0100 (CET)
+Subject: Re: VCAN and CAN-FD DLC versus data length
+To:     Andre Naujoks <nautsch2@gmail.com>, linux-can@vger.kernel.org
+References: <ec6ffa3c-b208-b76a-d1ac-afd2fb1182a7@gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <444ec681-0591-daf2-84ac-feed5c18ecf9@hartkopp.net>
+Date:   Fri, 17 Jan 2020 16:06:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-X-Received: by 2002:a5e:dd03:: with SMTP id t3mr30554369iop.128.1579268772517;
- Fri, 17 Jan 2020 05:46:12 -0800 (PST)
-Date:   Fri, 17 Jan 2020 05:46:12 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000030dddb059c562a3f@google.com>
-Subject: general protection fault in can_rx_register
-From:   syzbot <syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dev.kurt@vandijck-laurijssen.be,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org,
-        o.rempel@pengutronix.de, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <ec6ffa3c-b208-b76a-d1ac-afd2fb1182a7@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Andre,
 
-syzbot found the following crash on:
+On 17/01/2020 14.26, Andre Naujoks wrote:
 
-HEAD commit:    f5ae2ea6 Fix built-in early-load Intel microcode alignment
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1033df15e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cfbb8fa33f49f9f3
-dashboard link: https://syzkaller.appspot.com/bug?extid=c3ea30e1e2485573f953
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/  
-c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13204f15e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=138f5db9e00000
+> If I send a CAN-FD frame with a length, which is not directly 
+> representable by the DLC field, the vcan driver conserves this value. 
+> E.g. a Length of 11 is sent and received in userspace, even though there 
+> is no DLC representation for 11.
+> 
+> I talked to a colleague about this and we could not think of a case, in 
+> which this behaviour presents a problem. It is just a small discrepancy 
+> from how a real CAN would behave.
 
-The bug was bisected to:
+Right.
 
-commit 9868b5d44f3df9dd75247acd23dddff0a42f79be
-Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Date:   Mon Oct 8 09:48:33 2018 +0000
+Last time when we changed the can-gw we had a discussion about this 
+"sanitizing" of CAN specific data length here:
 
-     can: introduce CAN_REQUIRED_SIZE macro
+https://marc.info/?l=linux-can&m=156537620228658
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=129bfdb9e00000
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=119bfdb9e00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=169bfdb9e00000
+1. When we get a CAN skb from the real CAN interface this is correct (in 
+CAN length)
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com
-Fixes: 9868b5d44f3d ("can: introduce CAN_REQUIRED_SIZE macro")
+2. When we send stuff to the real CAN interface the value is fixed 
+before writing the content into the CAN controllers registers.
 
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 9593 Comm: syz-executor302 Not tainted 5.5.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:hlist_add_head_rcu include/linux/rculist.h:528 [inline]
-RIP: 0010:can_rx_register+0x43b/0x600 net/can/af_can.c:476
-Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 74 08 48 89 df e8 89 22 8a fa 4c  
-89 33 4d 89 e5 49 c1 ed 03 48 b8 00 00 00 00 00 fc ff df <41> 80 7c 05 00  
-00 74 08 4c 89 e7 e8 c5 21 8a fa 4d 8b 34 24 4c 89
-RSP: 0018:ffffc90003e27d00 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff8880a77336c8 RCX: ffff88809306a100
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a77336c0
-RBP: ffffc90003e27d58 R08: ffffffff87289cd6 R09: fffff520007c4f94
-R10: fffff520007c4f94 R11: 0000000000000000 R12: 0000000000000008
-R13: 0000000000000001 R14: ffff88809fbcf000 R15: ffff8880a7733690
-FS:  00007fb132f26700(0000) GS:ffff8880aec00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000178f590 CR3: 00000000996d6000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-  raw_enable_filters net/can/raw.c:189 [inline]
-  raw_enable_allfilters net/can/raw.c:255 [inline]
-  raw_bind+0x326/0x1230 net/can/raw.c:428
-  __sys_bind+0x2bd/0x3a0 net/socket.c:1649
-  __do_sys_bind net/socket.c:1660 [inline]
-  __se_sys_bind net/socket.c:1658 [inline]
-  __x64_sys_bind+0x7a/0x90 net/socket.c:1658
-  do_syscall_64+0xf7/0x1c0 arch/x86/entry/common.c:294
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x446ba9
-Code: e8 0c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 5b 07 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fb132f25d98 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
-RAX: ffffffffffffffda RBX: 00000000006dbc88 RCX: 0000000000446ba9
-RDX: 0000000000000008 RSI: 0000000020000180 RDI: 0000000000000003
-RBP: 00000000006dbc80 R08: 00007fb132f26700 R09: 0000000000000000
-R10: 00007fb132f26700 R11: 0000000000000246 R12: 00000000006dbc8c
-R13: 0000000000000000 R14: 0000000000000000 R15: 068500100000003c
-Modules linked in:
----[ end trace 0dedabb13ca8e7d7 ]---
-RIP: 0010:hlist_add_head_rcu include/linux/rculist.h:528 [inline]
-RIP: 0010:can_rx_register+0x43b/0x600 net/can/af_can.c:476
-Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 74 08 48 89 df e8 89 22 8a fa 4c  
-89 33 4d 89 e5 49 c1 ed 03 48 b8 00 00 00 00 00 fc ff df <41> 80 7c 05 00  
-00 74 08 4c 89 e7 e8 c5 21 8a fa 4d 8b 34 24 4c 89
-RSP: 0018:ffffc90003e27d00 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff8880a77336c8 RCX: ffff88809306a100
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a77336c0
-RBP: ffffc90003e27d58 R08: ffffffff87289cd6 R09: fffff520007c4f94
-R10: fffff520007c4f94 R11: 0000000000000000 R12: 0000000000000008
-R13: 0000000000000001 R14: ffff88809fbcf000 R15: ffff8880a7733690
-FS:  00007fb132f26700(0000) GS:ffff8880aec00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000178f590 CR3: 00000000996d6000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> cansend from the can-utils package actually makes sure not to use a data 
+> length, which is not directly representable. This is the output of a 
+> candump oagainst a patched version, which does not "fix" the length.
+> 
+> $ candump any & ./patched-cansend vcan0 123##011223344556677889900AA
+>    vcan0  123  [11]  11 22 33 44 55 66 77 88 99 00 AA
 
+Yes. vcan is just forwarding frames without sanitizing. And even the 
+can-gw can be used to (intentionally) create weird values in the length 
+field - but makes sure that the length boundaries of CAN (0 .. 8) and 
+CAN FD (0 .. 64) are met.
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+So using the len value e.g. in a for-statement never lets you write 
+outside the CAN(FD) frame data[].
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Does anyone have a real case, which would warrant a patch to the vcan 
+> driver to change this? Or should the CAN stack even return EINVAL on a 
+> data length, that is not representable?
+
+As we had that discussion in the URL above and I can't see anything 
+breaking I would tend to leave it as-is.
+
+When we would sanitize the vcan skb flow we might end up with many 
+skb_copy() cases instead of skb_clone() (permormance!). And as people 
+may create skbs with PF_PACKET we are also not able to fix-up the length 
+until it reaches the driver layer anyway.
+
+Does that fit for you?
+
+Best,
+Oliver
