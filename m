@@ -2,82 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D7E1409AB
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jan 2020 13:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA32C1409B1
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jan 2020 13:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbgAQMYc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 Jan 2020 07:24:32 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:45985 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727195AbgAQMYc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jan 2020 07:24:32 -0500
-Received: by mail-io1-f72.google.com with SMTP id c23so14929785ioi.12
-        for <linux-can@vger.kernel.org>; Fri, 17 Jan 2020 04:24:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=LQuU3kHZ1FMuiRxbMaZ9AWO1eIyspLIkHsPMvZ1a484=;
-        b=SM8Zg/ByQthC1cXf3weUFGTHhBgkhCmzetL2R97SPd0sBhMihE1qkzY/aI0EzLFivz
-         sdCInLfi67745qYrlb6U8eMl7F4M/ndV3Kqm0KqAu+JGQqpqmd3dLhf0ASFg3TfbQ0tS
-         NlBXPlfCFW3dpdfFCkiVjIr5F2mhYRZ49a3LSKN1dEwRElIQKxu6ScbLXIVX6Hns0SEo
-         eWbrEX5/M3rh/uRkAdInW274GabVjOF1plopKCutCyiIE0Yajn62DBizZH3l7J23nRVF
-         xEUabaWos5sqFNZ2WInTPoy8eQO7BAMRrvpPvy5gl3dENk67lZ3Bj9veF2o/zE/pSReW
-         PXbQ==
-X-Gm-Message-State: APjAAAWYKZ8GMTBDhjhxLurMsVr1fTbbcm/8S/76KlDG5IWH26dDVEqs
-        clSRyXKys6ukko05L6twwnEVsLErndtGyo68dIiuH4BhHT+w
-X-Google-Smtp-Source: APXvYqyizADGiZmu7qE8essoa//THW2fVjAdL/z3dW7wzWY+DLnaSeKqxd8KXmc+23FipRNQPYaYKw3Hz1wz3iZ0YNvN1H/wXfn7
+        id S1726979AbgAQM0W (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Jan 2020 07:26:22 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:59135 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726917AbgAQM0V (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jan 2020 07:26:21 -0500
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1isQhg-0003K3-GN; Fri, 17 Jan 2020 13:26:20 +0100
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1isQhg-0004Ek-6l; Fri, 17 Jan 2020 13:26:20 +0100
+Date:   Fri, 17 Jan 2020 13:26:20 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     syzbot <syzbot+db4869ba599c0de9b13e@syzkaller.appspotmail.com>
+Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: KASAN: use-after-free Read in j1939_xtp_rx_abort_one
+Message-ID: <20200117122620.GC11961@pengutronix.de>
+References: <0000000000005ed7710596937e86@google.com>
+ <000000000000a0ef18059c082789@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:8f41:: with SMTP id r62mr30597631iod.140.1579263871310;
- Fri, 17 Jan 2020 04:24:31 -0800 (PST)
-Date:   Fri, 17 Jan 2020 04:24:31 -0800
-In-Reply-To: <20200117122429.GB11961@pengutronix.de>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000e637b059c55069e@google.com>
-Subject: Re: Re: general protection fault in j1939_sk_bind
-From:   syzbot <syzbot+4857323ec1bb236f6a45@syzkaller.appspotmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, o.rempel@pengutronix.de,
-        toggle-mailboxes@pengutronix.de, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <000000000000a0ef18059c082789@google.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 13:25:42 up 128 days,  1:13, 352 users,  load average: 10,18,
+ 10,27, 14,06
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> On Fri, Jan 17, 2020 at 01:06:01AM -0800, syzbot wrote:
->> syzbot suspects this bug was fixed by commit:
+On Mon, Jan 13, 2020 at 08:42:02AM -0800, syzbot wrote:
+> syzbot suspects this bug was fixed by commit:
+> 
+> commit ddeeb7d4822ed06d79fc15e822b70dce3fa77e39
+> Author: Oleksij Rempel <o.rempel@pengutronix.de>
+> Date:   Sat Nov 9 15:11:18 2019 +0000
+> 
+>     can: j1939: j1939_can_recv(): add priv refcounting
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15a7ec76e00000
+> start commit:   de620fb9 Merge branch 'for-5.4-fixes' of git://git.kernel...
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f9ff8f11e66c1fb1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=db4869ba599c0de9b13e
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=113e0d72e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=136aa6e8e00000
+> 
+> If the result looks correct, please mark the bug fixed by replying with:
 
->> commit 00d4e14d2e4caf5f7254a505fee5eeca8cd37bd4
->> Author: Oleksij Rempel <o.rempel@pengutronix.de>
->> Date:   Fri Dec 6 14:18:35 2019 +0000
+#syz fix: can: j1939: j1939_can_recv(): add priv refcounting
 
->>      can: j1939: j1939_sk_bind(): take priv after lock is held
-
->> bisection log:   
->> https://syzkaller.appspot.com/x/bisect.txt?x=1001b266e00000
->> start commit:   32ef9553 Merge tag 'fsnotify_for_v5.5-rc1' of  
->> git://git.ke..
->> git tree:       upstream
->> kernel config:   
->> https://syzkaller.appspot.com/x/.config?x=c2e464ae414aee8c
->> dashboard link:  
->> https://syzkaller.appspot.com/bug?extid=4857323ec1bb236f6a45
->> syz repro:       
->> https://syzkaller.appspot.com/x/repro.syz?x=177c34a2e00000
-
->> If the result looks correct, please mark the bug fixed by replying with:
-
-> #syz fix: can: j1939: j1939_sk_bind(): take priv after lock is held
-
-Your 'fix:' command is accepted, but please keep  
-syzkaller-bugs@googlegroups.com mailing list in CC next time. It serves as  
-a history of what happened with each bug report. Thank you.
-
-
-> --
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
