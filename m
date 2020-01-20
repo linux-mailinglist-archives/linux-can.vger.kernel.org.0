@@ -2,224 +2,169 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE54314272D
-	for <lists+linux-can@lfdr.de>; Mon, 20 Jan 2020 10:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D773142F39
+	for <lists+linux-can@lfdr.de>; Mon, 20 Jan 2020 17:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgATJXR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Jan 2020 04:23:17 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:46231 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726039AbgATJXK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Jan 2020 04:23:10 -0500
-Received: by mail-qk1-f193.google.com with SMTP id r14so29400558qke.13
-        for <linux-can@vger.kernel.org>; Mon, 20 Jan 2020 01:23:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=+drl7LyyZzQ3Le0+6nOIotpvZ8Ybc/8gJ2Qh+5zlDLU=;
-        b=jUcNuoDQUieW2IaNkSuxM3KcUhV324LuFUUrQ9zebkohA2XLZUuelDZobz3BlCqPI6
-         ucRumVGc0kPCkZhFBCye8PWQoNRgITflmy9cZBnBSz9VmP8eU0aHm/tGnFSOKaAZdVSO
-         PxbCzb4piUbvBnXt1YV6yWuNjjEf1VkODTnkGrr2y3cjCCrXqTwYJ3ieEIk84c0Buiqy
-         yfxXan44+434anwTrDLOhAncpI+ujcWesyfyV4YVvFncu+JwQGeImApWR8rneHEgt63e
-         j93KzSiNVm9sKTYscfVN1yMvL6XI+Fsa6e4C5KJ/o7RpFk30GNJIf6DwsMKkl0PHiFec
-         LbEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=+drl7LyyZzQ3Le0+6nOIotpvZ8Ybc/8gJ2Qh+5zlDLU=;
-        b=IQTsirMCGNoSuT5OxkKh0pXUHjOqhF62iBxKKSxBYpgAbJAA9yay2013aM63puRlUD
-         mgqs2iTVd/8MVJhyKK/ukrheNl4toXr7hs1JvIEqlGC31hjHewuDzL8XbJR234N+YpIu
-         ub5kfZrja9TNLxwqBjAqIPEO4X2u9hSYPC3NyGEj8egzSvxBRI0mbRtr6vxXTcREqn6o
-         94Z4qlutEsu7K8N+0Q3QzHDwOci2RsXhDyEGjxxYvJvCveBvTJgB2xwQQkiI/zlAc85w
-         R6HrgG4JLH/inAJ627zRNpRlFVkxq7eTqFQ50GgZgP6nxwJxD0Gnp4QP5jgphvyM3qv4
-         JpNw==
-X-Gm-Message-State: APjAAAWj40hqvAOBSDBv+3cjDyW/8Rkb+SKjkrNY296JsLQimZV4usQo
-        0rjYx4IPD7bfJYRhwnc7XQ3nbHBE0IcxiABgAV7Bqh2U
-X-Google-Smtp-Source: APXvYqzyRAeiny/5VvFFvMyO0C2nxWNX7+AyAtmfBHbm2UMLuYEf8laTqYsljsMIakg/kRj73d40W0PPsqs+UFSqv5I=
-X-Received: by 2002:a37:5841:: with SMTP id m62mr49294755qkb.256.1579512188826;
- Mon, 20 Jan 2020 01:23:08 -0800 (PST)
+        id S1727285AbgATQGV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Jan 2020 11:06:21 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57509 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726626AbgATQGV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Jan 2020 11:06:21 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1itZZE-0002YP-G7; Mon, 20 Jan 2020 17:06:20 +0100
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [BUG] pfifo_fast may cause out-of-order CAN frame transmission
+To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <661cc33a-5f65-2769-cc1a-65791cb4b131@pengutronix.de>
+ <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
+ <779d3346-0344-9064-15d5-4d565647a556@pengutronix.de>
+ <1b70f56b72943bf5dfd2813565373e8c1b639c31.camel@redhat.com>
+ <53ce1ab4-3346-2367-8aa5-85a89f6897ec@pengutronix.de>
+ <57a2352dfc442ea2aa9cd653f8e09db277bf67c7.camel@redhat.com>
+Message-ID: <b012e914-fc1a-5a45-f28b-e9d4d4dfc0fe@pengutronix.de>
+Date:   Mon, 20 Jan 2020 17:06:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-References: <00000000000030dddb059c562a3f@google.com> <55ad363b-1723-28aa-78b1-8aba5565247e@hartkopp.net>
- <20200120091146.GD11138@x1.vandijck-laurijssen.be>
-In-Reply-To: <20200120091146.GD11138@x1.vandijck-laurijssen.be>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 20 Jan 2020 10:22:57 +0100
-Message-ID: <CACT4Y+a+GusEA1Gs+z67uWjtwBRp_s7P4Wd_SMmgpCREnDu3kg@mail.gmail.com>
-Subject: Re: general protection fault in can_rx_register
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        o.rempel@pengutronix.de,
-        syzbot <syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <57a2352dfc442ea2aa9cd653f8e09db277bf67c7.camel@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 10:11 AM Kurt Van Dijck
-<dev.kurt@vandijck-laurijssen.be> wrote:
->
-> If bisect was right with this:
->
-> > >The bug was bisected to:
-> > >
-> > >commit 9868b5d44f3df9dd75247acd23dddff0a42f79be
-> > >Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > >Date:   Mon Oct 8 09:48:33 2018 +0000
-> > >
-> > >     can: introduce CAN_REQUIRED_SIZE macro
->
-> Then I'd start looking in malformed sockaddr_can data instead.
->
-> Is this code what triggers the bug?
-> > >C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=138f5db9e00000
+Hello Paolo,
 
-yes
+On 1/16/20 1:40 PM, Paolo Abeni wrote:
+> I'm sorry for this trial & error experience. I tried to reproduce the
+> issue on top of the vcan virtual device, but it looks like it requires
+> the timing imposed by a real device, and it's missing here (TL;DR: I
+> can't reproduce the issue locally).
 
-> Kind regards,
-> Kurt
->
-> On vr, 17 jan 2020 21:02:48 +0100, Oliver Hartkopp wrote:
-> > Hi Marc, Oleksij, Kurt,
-> >
-> > On 17/01/2020 14.46, syzbot wrote:
-> > >Hello,
-> > >
-> > >syzbot found the following crash on:
-> > >
-> > >HEAD commit:    f5ae2ea6 Fix built-in early-load Intel microcode alignment
-> > >git tree:       upstream
-> > >console output: https://syzkaller.appspot.com/x/log.txt?x=1033df15e00000
-> > >kernel config:  https://syzkaller.appspot.com/x/.config?x=cfbb8fa33f49f9f3
-> > >dashboard link:
-> > >https://syzkaller.appspot.com/bug?extid=c3ea30e1e2485573f953
-> > >compiler:       clang version 10.0.0
-> > >(https://github.com/llvm/llvm-project/
-> > >c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-> > >syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13204f15e00000
-> > >C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=138f5db9e00000
-> > >
-> > >The bug was bisected to:
-> > >
-> > >commit 9868b5d44f3df9dd75247acd23dddff0a42f79be
-> > >Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > >Date:   Mon Oct 8 09:48:33 2018 +0000
-> > >
-> > >     can: introduce CAN_REQUIRED_SIZE macro
-> > >
-> > >bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=129bfdb9e00000
-> > >final crash:    https://syzkaller.appspot.com/x/report.txt?x=119bfdb9e00000
-> > >console output: https://syzkaller.appspot.com/x/log.txt?x=169bfdb9e00000
-> > >
-> > >IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > >Reported-by: syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com
-> > >Fixes: 9868b5d44f3d ("can: introduce CAN_REQUIRED_SIZE macro")
-> > >
-> > >kasan: CONFIG_KASAN_INLINE enabled
-> > >kasan: GPF could be caused by NULL-ptr deref or user memory access
-> > >general protection fault: 0000 [#1] PREEMPT SMP KASAN
-> > >CPU: 0 PID: 9593 Comm: syz-executor302 Not tainted 5.5.0-rc6-syzkaller #0
-> > >Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > >Google 01/01/2011
-> > >RIP: 0010:hlist_add_head_rcu include/linux/rculist.h:528 [inline]
-> > >RIP: 0010:can_rx_register+0x43b/0x600 net/can/af_can.c:476
-> >
-> > include/linux/rculist.h:528 is
-> >
-> > struct hlist_node *first = h->first;
-> >
-> > which would mean that 'h' must be NULL.
-> >
-> > But the h parameter is rcv_list from
-> > rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
-> >
-> > Which can not return NULL - at least when dev_rcv_lists is a proper pointer
-> > to the dev_rcv_lists provided by can_dev_rcv_lists_find().
-> >
-> > So either dev->ml_priv is NULL in the case of having a CAN interface (here
-> > vxcan) or we have not allocated net->can.rx_alldev_list in can_pernet_init()
-> > properly (which would lead to an -ENOMEM which is reported to whom?).
-> >
-> > Hm. I'm lost. Any ideas?
-> >
-> > Regards,
-> > Oliver
-> >
-> >
-> > >Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 74 08 48 89 df e8 89 22 8a fa 4c
-> > >89 33 4d 89 e5 49 c1 ed 03 48 b8 00 00 00 00 00 fc ff df <41> 80 7c 05 00
-> > >00 74 08 4c 89 e7 e8 c5 21 8a fa 4d 8b 34 24 4c 89
-> > >RSP: 0018:ffffc90003e27d00 EFLAGS: 00010202
-> > >RAX: dffffc0000000000 RBX: ffff8880a77336c8 RCX: ffff88809306a100
-> > >RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a77336c0
-> > >RBP: ffffc90003e27d58 R08: ffffffff87289cd6 R09: fffff520007c4f94
-> > >R10: fffff520007c4f94 R11: 0000000000000000 R12: 0000000000000008
-> > >R13: 0000000000000001 R14: ffff88809fbcf000 R15: ffff8880a7733690
-> > >FS:  00007fb132f26700(0000) GS:ffff8880aec00000(0000)
-> > >knlGS:0000000000000000
-> > >CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > >CR2: 000000000178f590 CR3: 00000000996d6000 CR4: 00000000001406f0
-> > >DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > >DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > >Call Trace:
-> > >  raw_enable_filters net/can/raw.c:189 [inline]
-> > >  raw_enable_allfilters net/can/raw.c:255 [inline]
-> > >  raw_bind+0x326/0x1230 net/can/raw.c:428
-> > >  __sys_bind+0x2bd/0x3a0 net/socket.c:1649
-> > >  __do_sys_bind net/socket.c:1660 [inline]
-> > >  __se_sys_bind net/socket.c:1658 [inline]
-> > >  __x64_sys_bind+0x7a/0x90 net/socket.c:1658
-> > >  do_syscall_64+0xf7/0x1c0 arch/x86/entry/common.c:294
-> > >  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > >RIP: 0033:0x446ba9
-> > >Code: e8 0c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7
-> > >48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-> > >ff 0f 83 5b 07 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-> > >RSP: 002b:00007fb132f25d98 EFLAGS: 00000246 ORIG_RAX: 0000000000000031
-> > >RAX: ffffffffffffffda RBX: 00000000006dbc88 RCX: 0000000000446ba9
-> > >RDX: 0000000000000008 RSI: 0000000020000180 RDI: 0000000000000003
-> > >RBP: 00000000006dbc80 R08: 00007fb132f26700 R09: 0000000000000000
-> > >R10: 00007fb132f26700 R11: 0000000000000246 R12: 00000000006dbc8c
-> > >R13: 0000000000000000 R14: 0000000000000000 R15: 068500100000003c
-> > >Modules linked in:
-> > >---[ end trace 0dedabb13ca8e7d7 ]---
-> > >RIP: 0010:hlist_add_head_rcu include/linux/rculist.h:528 [inline]
-> > >RIP: 0010:can_rx_register+0x43b/0x600 net/can/af_can.c:476
-> > >Code: 48 89 d8 48 c1 e8 03 42 80 3c 28 00 74 08 48 89 df e8 89 22 8a fa 4c
-> > >89 33 4d 89 e5 49 c1 ed 03 48 b8 00 00 00 00 00 fc ff df <41> 80 7c 05 00
-> > >00 74 08 4c 89 e7 e8 c5 21 8a fa 4d 8b 34 24 4c 89
-> > >RSP: 0018:ffffc90003e27d00 EFLAGS: 00010202
-> > >RAX: dffffc0000000000 RBX: ffff8880a77336c8 RCX: ffff88809306a100
-> > >RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880a77336c0
-> > >RBP: ffffc90003e27d58 R08: ffffffff87289cd6 R09: fffff520007c4f94
-> > >R10: fffff520007c4f94 R11: 0000000000000000 R12: 0000000000000008
-> > >R13: 0000000000000001 R14: ffff88809fbcf000 R15: ffff8880a7733690
-> > >FS:  00007fb132f26700(0000) GS:ffff8880aec00000(0000)
-> > >knlGS:0000000000000000
-> > >CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > >CR2: 000000000178f590 CR3: 00000000996d6000 CR4: 00000000001406f0
-> > >DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > >DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > >
-> > >
-> > >---
-> > >This bug is generated by a bot. It may contain errors.
-> > >See https://goo.gl/tpsmEJ for more information about syzbot.
-> > >syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > >syzbot will keep track of this bug report. See:
-> > >https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > >For information about bisection process see:
-> > >https://goo.gl/tpsmEJ#bisection
-> > >syzbot can test patches for this bug, for details see:
-> > >https://goo.gl/tpsmEJ#testing-patches
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/20200120091146.GD11138%40x1.vandijck-laurijssen.be.
+No worries. I don't mind testing.
+
+> 
+> Code wise, the 2nd patch closed a possible race, but it dumbly re-
+> opened the one addressed by the first attempt - the 'empty' field must
+> be cleared prior to the trylock operation, or we may end-up with such
+> field set and the queue not empty.
+> 
+> So, could you please try the following code?
+
+Unfortunately, I still see observe reodering.
+
+Thanks
+Ahmad
+
+> 
+> Many thanks!
+> ---
+> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+> index 6a70845bd9ab..fb365fbf65f8 100644
+> --- a/include/net/pkt_sched.h
+> +++ b/include/net/pkt_sched.h
+> @@ -113,7 +113,7 @@ bool sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
+>  		     struct net_device *dev, struct netdev_queue *txq,
+>  		     spinlock_t *root_lock, bool validate);
+>  
+> -void __qdisc_run(struct Qdisc *q);
+> +int __qdisc_run(struct Qdisc *q);
+>  
+>  static inline void qdisc_run(struct Qdisc *q)
+>  {
+> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+> index fceddf89592a..df460fe0773a 100644
+> --- a/include/net/sch_generic.h
+> +++ b/include/net/sch_generic.h
+> @@ -158,7 +158,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+>  	if (qdisc->flags & TCQ_F_NOLOCK) {
+>  		if (!spin_trylock(&qdisc->seqlock))
+>  			return false;
+> -		WRITE_ONCE(qdisc->empty, false);
+>  	} else if (qdisc_is_running(qdisc)) {
+>  		return false;
+>  	}
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 0ad39c87b7fd..41e89796cc6b 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3624,10 +3624,23 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
+>  end_run:
+>  			qdisc_run_end(q);
+>  		} else {
+> +			int quota = 0;
+> +
+>  			rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
+> -			qdisc_run(q);
+> +			if (READ_ONCE(q->empty))
+> +				WRITE_ONCE(q->empty, false);
+> +			if (!qdisc_run_begin(q))
+> +				goto out;
+> +
+> +			if (likely(!test_bit(__QDISC_STATE_DEACTIVATED,
+> +					     &q->state)))
+> +				quota = __qdisc_run(q);
+> +			if (quota > 0)
+> +				WRITE_ONCE(q->empty, true);
+> +			qdisc_run_end(q);
+>  		}
+>  
+> +out:
+>  		if (unlikely(to_free))
+>  			kfree_skb_list(to_free);
+>  		return rc;
+> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+> index 5ab696efca95..1bd2c4e9c4c2 100644
+> --- a/net/sched/sch_generic.c
+> +++ b/net/sched/sch_generic.c
+> @@ -376,7 +376,7 @@ static inline bool qdisc_restart(struct Qdisc *q, int *packets)
+>  	return sch_direct_xmit(skb, q, dev, txq, root_lock, validate);
+>  }
+>  
+> -void __qdisc_run(struct Qdisc *q)
+> +int __qdisc_run(struct Qdisc *q)
+>  {
+>  	int quota = dev_tx_weight;
+>  	int packets;
+> @@ -388,6 +388,7 @@ void __qdisc_run(struct Qdisc *q)
+>  			break;
+>  		}
+>  	}
+> +	return quota;
+>  }
+>  
+>  unsigned long dev_trans_start(struct net_device *dev)
+> @@ -649,12 +650,9 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+>  
+>  		skb = __skb_array_consume(q);
+>  	}
+> -	if (likely(skb)) {
+> -		qdisc_update_stats_at_dequeue(qdisc, skb);
+> -	} else {
+> -		WRITE_ONCE(qdisc->empty, true);
+> -	}
+>  
+> +	if (likely(skb))
+> +		qdisc_update_stats_at_dequeue(qdisc, skb);
+>  	return skb;
+>  }
+>  
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
