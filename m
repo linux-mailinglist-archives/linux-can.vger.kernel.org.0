@@ -2,169 +2,94 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D773142F39
-	for <lists+linux-can@lfdr.de>; Mon, 20 Jan 2020 17:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C624314323A
+	for <lists+linux-can@lfdr.de>; Mon, 20 Jan 2020 20:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727285AbgATQGV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Jan 2020 11:06:21 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57509 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgATQGV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Jan 2020 11:06:21 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1itZZE-0002YP-G7; Mon, 20 Jan 2020 17:06:20 +0100
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [BUG] pfifo_fast may cause out-of-order CAN frame transmission
-To:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <661cc33a-5f65-2769-cc1a-65791cb4b131@pengutronix.de>
- <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
- <779d3346-0344-9064-15d5-4d565647a556@pengutronix.de>
- <1b70f56b72943bf5dfd2813565373e8c1b639c31.camel@redhat.com>
- <53ce1ab4-3346-2367-8aa5-85a89f6897ec@pengutronix.de>
- <57a2352dfc442ea2aa9cd653f8e09db277bf67c7.camel@redhat.com>
-Message-ID: <b012e914-fc1a-5a45-f28b-e9d4d4dfc0fe@pengutronix.de>
-Date:   Mon, 20 Jan 2020 17:06:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1726982AbgATTcB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Jan 2020 14:32:01 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:35261 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727071AbgATTcA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Jan 2020 14:32:00 -0500
+Received: by mail-ed1-f65.google.com with SMTP id f8so625591edv.2
+        for <linux-can@vger.kernel.org>; Mon, 20 Jan 2020 11:31:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=kLfnsSTIjE2YEe6HI6GtqXd6cMnhTRLMcstoRngEtLrpsW8Des52P9cJGak3H8TgGi
+         7pI7x0ReUsZVA5020Qw65cEVulbgAqf7PV7Yj5z98jIQHYXuhdjNseji1wTJmoRk9owd
+         jH0nw85bxKb6JNDbbMZz77rTtrhB/lrp1T9+1Yzp1e0fAmiYnPF2y/wqE3N2vxlEpqDg
+         Q62+v45VGQo8fprIjkXGYdl8n0+0lt4RTeTWLmEirmHeh05e1zsbOQ1RyEmjVmqN0eJc
+         PRg9w7tG3wGqyiL8Rgrtjody799fKx6nbHvtMQHhCmcCncWFfzoetJS1edNfQP320vCH
+         Vilg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=HL6EMXe9Z7645ryxttWgih2ZukuZEdU+oL6bZZ8GZV5PobUlRLP5qs7ZZLRVQs0ZGI
+         Oo8C4IMI+ImLYTtSX+qFSZdxWy2s+jr8omHYarSSx0NPLxxdh7j2rVl/p+vS12/6h4bO
+         5qKl0LxZY6pPveUm6E89yneNrU7Ydf2IHs0f43KoQJdTYn33uRdIOKGQL/PmQbu4yHfs
+         7QGzKi4MD+0P1TXy6Mzek86QpcD/Orr1/FeVz6Zr4IcZkr99EC3XsrpJYKhqYzpb8HWy
+         Q+mMjYR5/bs6R0UD1sMAq8217m8b50chods6DUSVjlr6p5DWKPZsg/xvHOIuiCTzcy0+
+         8RjA==
+X-Gm-Message-State: APjAAAV+sVuc4DyyAMUPu35ZoB/H5AS1xvma3kosjyB6mLZghTBSQf1E
+        WEgXj12yfu6PJ83MB4qE20O3tDjek6LgDJGXH4E=
+X-Google-Smtp-Source: APXvYqwPh6D8ihOXjaVWGs/0GLulEekGPU0xOOyxhr7PagnLX+E8xWeQy/UQ09ZNp2jZFCCt0xVGiodDu+D5No4niKg=
+X-Received: by 2002:a05:6402:505:: with SMTP id m5mr609398edv.15.1579548719077;
+ Mon, 20 Jan 2020 11:31:59 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <57a2352dfc442ea2aa9cd653f8e09db277bf67c7.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:31:57
+ -0800 (PST)
+Reply-To: mcclainejohn.13@gmail.com
+From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
+Date:   Mon, 20 Jan 2020 20:31:57 +0100
+Message-ID: <CAOE+jAB9Cv76tHqc-hO92yWjVshCsALoX=zT1ruNmX+0-Bjyxw@mail.gmail.com>
+Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
+ valued the sum of $12.8Million United States Dollars
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Paolo,
+Attn: Dear Beneficiary,
 
-On 1/16/20 1:40 PM, Paolo Abeni wrote:
-> I'm sorry for this trial & error experience. I tried to reproduce the
-> issue on top of the vcan virtual device, but it looks like it requires
-> the timing imposed by a real device, and it's missing here (TL;DR: I
-> can't reproduce the issue locally).
+I wish to inform you that the diplomatic agent conveying your ATM CARD
+valued the sum of $12.8Million United States Dollars has misplaced
+your address and he is currently stranded at (George Bush
+International Airport) Houston Texas USA now
+We required you to reconfirm the following information's below to him
+so that he can deliver your Payment CARD to you today or tomorrow
+morning as information provided with open communications via email and
+telephone for security reasons.
+HERE IS THE DETAILS  HE NEED FROM YOU URGENT
+YOUR FULL NAME:========
+ADDRESS:========
+MOBILE NO:========
+NAME OF YOUR NEAREST AIRPORT:========
+A COPY OF YOUR IDENTIFICATION :========
 
-No worries. I don't mind testing.
+Note; do contact the diplomatic agent immediately through the
+information's listed below
+Contact Person: Diplomatic Agent, Mr. Mcclaine John
+EMAIL: mcclainejohn.13@gmail.com
+Tel:(223) 777-7518
 
-> 
-> Code wise, the 2nd patch closed a possible race, but it dumbly re-
-> opened the one addressed by the first attempt - the 'empty' field must
-> be cleared prior to the trylock operation, or we may end-up with such
-> field set and the queue not empty.
-> 
-> So, could you please try the following code?
+Contact the diplomatic agent immediately
+because he is waiting to hear from you today with the needed information's.
 
-Unfortunately, I still see observe reodering.
+NOTE: The Diplomatic agent does not know that the content of the
+consignment box is $12.800,000,00 Million United States Dollars and on
+no circumstances should you let him know the content. The consignment
+was moved from here as family treasures, so never allow him to open
+the box. Please I have paid delivery fees for you but the only money
+you must send to Mcclaine John is your ATM CARD delivery fee $25.00
+only. text Him as you contact Him Immediately
 
-Thanks
-Ahmad
-
-> 
-> Many thanks!
-> ---
-> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
-> index 6a70845bd9ab..fb365fbf65f8 100644
-> --- a/include/net/pkt_sched.h
-> +++ b/include/net/pkt_sched.h
-> @@ -113,7 +113,7 @@ bool sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
->  		     struct net_device *dev, struct netdev_queue *txq,
->  		     spinlock_t *root_lock, bool validate);
->  
-> -void __qdisc_run(struct Qdisc *q);
-> +int __qdisc_run(struct Qdisc *q);
->  
->  static inline void qdisc_run(struct Qdisc *q)
->  {
-> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-> index fceddf89592a..df460fe0773a 100644
-> --- a/include/net/sch_generic.h
-> +++ b/include/net/sch_generic.h
-> @@ -158,7 +158,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
->  	if (qdisc->flags & TCQ_F_NOLOCK) {
->  		if (!spin_trylock(&qdisc->seqlock))
->  			return false;
-> -		WRITE_ONCE(qdisc->empty, false);
->  	} else if (qdisc_is_running(qdisc)) {
->  		return false;
->  	}
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 0ad39c87b7fd..41e89796cc6b 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -3624,10 +3624,23 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
->  end_run:
->  			qdisc_run_end(q);
->  		} else {
-> +			int quota = 0;
-> +
->  			rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
-> -			qdisc_run(q);
-> +			if (READ_ONCE(q->empty))
-> +				WRITE_ONCE(q->empty, false);
-> +			if (!qdisc_run_begin(q))
-> +				goto out;
-> +
-> +			if (likely(!test_bit(__QDISC_STATE_DEACTIVATED,
-> +					     &q->state)))
-> +				quota = __qdisc_run(q);
-> +			if (quota > 0)
-> +				WRITE_ONCE(q->empty, true);
-> +			qdisc_run_end(q);
->  		}
->  
-> +out:
->  		if (unlikely(to_free))
->  			kfree_skb_list(to_free);
->  		return rc;
-> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-> index 5ab696efca95..1bd2c4e9c4c2 100644
-> --- a/net/sched/sch_generic.c
-> +++ b/net/sched/sch_generic.c
-> @@ -376,7 +376,7 @@ static inline bool qdisc_restart(struct Qdisc *q, int *packets)
->  	return sch_direct_xmit(skb, q, dev, txq, root_lock, validate);
->  }
->  
-> -void __qdisc_run(struct Qdisc *q)
-> +int __qdisc_run(struct Qdisc *q)
->  {
->  	int quota = dev_tx_weight;
->  	int packets;
-> @@ -388,6 +388,7 @@ void __qdisc_run(struct Qdisc *q)
->  			break;
->  		}
->  	}
-> +	return quota;
->  }
->  
->  unsigned long dev_trans_start(struct net_device *dev)
-> @@ -649,12 +650,9 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
->  
->  		skb = __skb_array_consume(q);
->  	}
-> -	if (likely(skb)) {
-> -		qdisc_update_stats_at_dequeue(qdisc, skb);
-> -	} else {
-> -		WRITE_ONCE(qdisc->empty, true);
-> -	}
->  
-> +	if (likely(skb))
-> +		qdisc_update_stats_at_dequeue(qdisc, skb);
->  	return skb;
->  }
->  
-> 
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks,
+with Regards.
+Prof, William Roberts
+Director DHL COURIER SERVICES-Benin
