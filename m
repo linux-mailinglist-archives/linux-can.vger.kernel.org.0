@@ -2,155 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9101143863
-	for <lists+linux-can@lfdr.de>; Tue, 21 Jan 2020 09:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63637143E63
+	for <lists+linux-can@lfdr.de>; Tue, 21 Jan 2020 14:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728913AbgAUIgM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 21 Jan 2020 03:36:12 -0500
-Received: from relay-b01.edpnet.be ([212.71.1.221]:33575 "EHLO
-        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728831AbgAUIgM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 21 Jan 2020 03:36:12 -0500
-X-ASG-Debug-ID: 1579595768-0a7ff5137c3b1fe50001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be ([77.109.89.38]) by relay-b01.edpnet.be with ESMTP id EJYwLFMUGYbaNCj7; Tue, 21 Jan 2020 09:36:08 +0100 (CET)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: UNKNOWN[77.109.89.38]
-X-Barracuda-Apparent-Source-IP: 77.109.89.38
-Received: from x1.vandijck-laurijssen.be (74.250-240-81.adsl-static.isp.belgacom.be [81.240.250.74])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 7E2F4C67F07;
-        Tue, 21 Jan 2020 09:36:08 +0100 (CET)
-Date:   Tue, 21 Jan 2020 09:35:59 +0100
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
+        id S1729224AbgAUNnf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 21 Jan 2020 08:43:35 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47976 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729098AbgAUNnf (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 21 Jan 2020 08:43:35 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 415FEAE85;
+        Tue, 21 Jan 2020 13:43:32 +0000 (UTC)
+From:   Richard Palethorpe <rpalethorpe@suse.com>
+To:     linux-can@vger.kernel.org
+Cc:     Richard Palethorpe <rpalethorpe@suse.com>,
+        syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        o.rempel@pengutronix.de,
-        syzbot <syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: general protection fault in can_rx_register
-Message-ID: <20200121083559.GE14537@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: general protection fault in can_rx_register
-Mail-Followup-To: Oliver Hartkopp <socketcan@hartkopp.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, o.rempel@pengutronix.de,
-        syzbot <syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-References: <00000000000030dddb059c562a3f@google.com>
- <55ad363b-1723-28aa-78b1-8aba5565247e@hartkopp.net>
- <20200120091146.GD11138@x1.vandijck-laurijssen.be>
- <CACT4Y+a+GusEA1Gs+z67uWjtwBRp_s7P4Wd_SMmgpCREnDu3kg@mail.gmail.com>
- <8332ec7f-2235-fdf6-9bda-71f789c57b37@hartkopp.net>
- <2a676c0e-20f2-61b5-c72b-f51947bafc7d@hartkopp.net>
- <20200121083035.GD14537@x1.vandijck-laurijssen.be>
+        "David S. Miller" <davem@davemloft.net>,
+        Tyler Hall <tylerwhall@gmail.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
+Subject: [PATCH v3] can, slip: Protect tty->disc_data in write_wakeup and close with RCU
+Date:   Tue, 21 Jan 2020 14:42:58 +0100
+Message-Id: <20200121134258.18013-1-rpalethorpe@suse.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20200121083035.GD14537@x1.vandijck-laurijssen.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: UNKNOWN[77.109.89.38]
-X-Barracuda-Start-Time: 1579595768
-X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 3533
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: SPAM GLOBAL 0.9309 1.0000 3.5604
-X-Barracuda-Spam-Score: 3.56
-X-Barracuda-Spam-Status: No, SCORE=3.56 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.79477
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On di, 21 jan 2020 09:30:35 +0100, Kurt Van Dijck wrote:
-> On ma, 20 jan 2020 23:35:16 +0100, Oliver Hartkopp wrote:
-> > Answering myself ...
-> > 
-> > On 20/01/2020 23.02, Oliver Hartkopp wrote:
-> > 
-> > >
-> > >Added some code to check whether dev->ml_priv is NULL:
-> > >
-> > >~/linux$ git diff
-> > >diff --git a/net/can/af_can.c b/net/can/af_can.c
-> > >index 128d37a4c2e0..6fb4ae4c359e 100644
-> > >--- a/net/can/af_can.c
-> > >+++ b/net/can/af_can.c
-> > >@@ -463,6 +463,10 @@ int can_rx_register(struct net *net, struct
-> > >net_device *dev, canid_t can_id,
-> > >         spin_lock_bh(&net->can.rcvlists_lock);
-> > >
-> > >         dev_rcv_lists = can_dev_rcv_lists_find(net, dev);
-> > >+       if (!dev_rcv_lists) {
-> > >+               pr_err("dev_rcv_lists == NULL! %p\n", dev);
-> > >+               goto out_unlock;
-> > >+       }
-> > >         rcv_list = can_rcv_list_find(&can_id, &mask, dev_rcv_lists);
-> > >
-> > >         rcv->can_id = can_id;
-> > >@@ -479,6 +483,7 @@ int can_rx_register(struct net *net, struct net_device
-> > >*dev, canid_t can_id,
-> > >         rcv_lists_stats->rcv_entries++;
-> > >         rcv_lists_stats->rcv_entries_max =
-> > >max(rcv_lists_stats->rcv_entries_max,
-> > >
-> > >rcv_lists_stats->rcv_entries);
-> > >+out_unlock:
-> > >         spin_unlock_bh(&net->can.rcvlists_lock);
-> > >
-> > >         return err;
-> > >
-> > >And the output (after some time) is:
-> > >
-> > >[  758.505841] netlink: 'crash': attribute type 1 has an invalid length.
-> > >[  758.508045] bond7148: (slave vxcan1): The slave device specified does
-> > >not support setting the MAC address
-> > >[  758.508057] bond7148: (slave vxcan1): Error -22 calling dev_set_mtu
-> > >[  758.532025] bond10413: (slave vxcan1): The slave device specified does
-> > >not support setting the MAC address
-> > >[  758.532043] bond10413: (slave vxcan1): Error -22 calling dev_set_mtu
-> > >[  758.532254] dev_rcv_lists == NULL! 000000006b9d257f
-> > >[  758.547392] netlink: 'crash': attribute type 1 has an invalid length.
-> > >[  758.549310] bond7145: (slave vxcan1): The slave device specified does
-> > >not support setting the MAC address
-> > >[  758.549313] bond7145: (slave vxcan1): Error -22 calling dev_set_mtu
-> > >[  758.550464] netlink: 'crash': attribute type 1 has an invalid length.
-> > >[  758.552301] bond7146: (slave vxcan1): The slave device specified does
-> > >not support setting the MAC address
-> > >
-> > >So we can see that we get a ml_priv pointer which is NULL which should not
-> > >be possible due to this:
-> > >
-> > >https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/can/dev.c#n743
-> > 
-> > This reference doesn't point to the right code as vxcan has its own handling
-> > do assign ml_priv in vxcan.c .
-> > 
-> > >Btw. the variable 'size' is set two times at the top of alloc_candev_mqs()
-> > >depending on echo_skb_max. This looks wrong.
-> > 
-> > No. It looks right as I did not get behind the ALIGN() macro at first sight.
-> > 
-> > But it is still open why dev->ml_priv is not set correctly in vxcan.c as all
-> > the settings for .priv_size and in vxcan_setup look fine.
-> 
-> Maybe I got completely lost:
-> Shouldn't can_ml_priv and vxcan_priv not be similar?
-> Where is the dev_rcv_lists in the vxcan case?
+write_wakeup can happen in parallel with close/hangup where tty->disc_data
+is set to NULL and the netdevice is freed thus also freeing
+disc_data. write_wakeup accesses disc_data so we must prevent close from
+freeing the netdev while write_wakeup has a non-NULL view of
+tty->disc_data.
 
-IMHO, net/can/af_can.c:306 is wrong in the vxcan case.
+We also need to make sure that accesses to disc_data are atomic. Which can
+all be done with RCU.
 
-> 
-> > 
-> > Best regards,
-> > Oliver
+This problem was found by Syzkaller on SLCAN, but the same issue is
+reproducible with the SLIP line discipline using an LTP test based on the
+Syzkaller reproducer.
+
+A fix which didn't use RCU was posted by Hillf Danton.
+
+Fixes: 661f7fda21b1 ("slip: Fix deadlock in write_wakeup")
+Fixes: a8e83b17536a ("slcan: Port write_wakeup deadlock fix from slip")
+Reported-by: syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com
+Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Tyler Hall <tylerwhall@gmail.com>
+Cc: linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: syzkaller@googlegroups.com
+---
+
+V2: Added proper RCU grace period
+V3: Changed commit description
+
+This patch creates a Sparse warning concerning the RCU address space. I'm not
+sure what to do about that.
+
+ drivers/net/can/slcan.c | 12 ++++++++++--
+ drivers/net/slip/slip.c | 12 ++++++++++--
+ 2 files changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
+index 2e57122f02fb..2f5c287eac95 100644
+--- a/drivers/net/can/slcan.c
++++ b/drivers/net/can/slcan.c
+@@ -344,9 +344,16 @@ static void slcan_transmit(struct work_struct *work)
+  */
+ static void slcan_write_wakeup(struct tty_struct *tty)
+ {
+-	struct slcan *sl = tty->disc_data;
++	struct slcan *sl;
++
++	rcu_read_lock();
++	sl = rcu_dereference(tty->disc_data);
++	if (!sl)
++		goto out;
+ 
+ 	schedule_work(&sl->tx_work);
++out:
++	rcu_read_unlock();
+ }
+ 
+ /* Send a can_frame to a TTY queue. */
+@@ -644,10 +651,11 @@ static void slcan_close(struct tty_struct *tty)
+ 		return;
+ 
+ 	spin_lock_bh(&sl->lock);
+-	tty->disc_data = NULL;
++	rcu_assign_pointer(tty->disc_data, NULL);
+ 	sl->tty = NULL;
+ 	spin_unlock_bh(&sl->lock);
+ 
++	synchronize_rcu();
+ 	flush_work(&sl->tx_work);
+ 
+ 	/* Flush network side */
+diff --git a/drivers/net/slip/slip.c b/drivers/net/slip/slip.c
+index 2a91c192659f..61d7e0d1d77d 100644
+--- a/drivers/net/slip/slip.c
++++ b/drivers/net/slip/slip.c
+@@ -452,9 +452,16 @@ static void slip_transmit(struct work_struct *work)
+  */
+ static void slip_write_wakeup(struct tty_struct *tty)
+ {
+-	struct slip *sl = tty->disc_data;
++	struct slip *sl;
++
++	rcu_read_lock();
++	sl = rcu_dereference(tty->disc_data);
++	if (!sl)
++		goto out;
+ 
+ 	schedule_work(&sl->tx_work);
++out:
++	rcu_read_unlock();
+ }
+ 
+ static void sl_tx_timeout(struct net_device *dev)
+@@ -882,10 +889,11 @@ static void slip_close(struct tty_struct *tty)
+ 		return;
+ 
+ 	spin_lock_bh(&sl->lock);
+-	tty->disc_data = NULL;
++	rcu_assign_pointer(tty->disc_data, NULL);
+ 	sl->tty = NULL;
+ 	spin_unlock_bh(&sl->lock);
+ 
++	synchronize_rcu();
+ 	flush_work(&sl->tx_work);
+ 
+ 	/* VSV = very important to remove timers */
+-- 
+2.24.0
+
