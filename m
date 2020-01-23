@@ -2,119 +2,182 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7641462BB
-	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2020 08:38:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386FA146673
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jan 2020 12:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgAWHif (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 23 Jan 2020 02:38:35 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:54658 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbgAWHif (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Jan 2020 02:38:35 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00N7cG5V040330;
-        Thu, 23 Jan 2020 01:38:16 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1579765096;
-        bh=+3fXqcctM4dNh7tgCXPjwPubIvB6hs8YxTRU7AzutRk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=mbeg9XgepZonrW1hQIw7gajr0qSxQQboBeue0IYJbJMm1keAa72SugKcqLG9zVXS0
-         +/wucmukAmdUWSXS1TUMevXdKQy89omXtpS4/MIuyVbaBfFn8sn/syzbcnurcxLyek
-         TeWKXuxjudNzQyqYiE0Xyc66WPOYqNlKZBeYzwww=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00N7cGqC059359
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 23 Jan 2020 01:38:16 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 23
- Jan 2020 01:38:16 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 23 Jan 2020 01:38:15 -0600
-Received: from [172.24.190.4] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00N7cAwc040274;
-        Thu, 23 Jan 2020 01:38:11 -0600
-Subject: Re: [PATCH 1/3] dt-bindings: net: can: m_can: Add Documentation for
- stb-gpios
-To:     Dan Murphy <dmurphy@ti.com>, Sekhar Nori <nsekhar@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>
-CC:     <catalin.marinas@arm.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <davem@davemloft.net>, <mkl@pengutronix.de>,
-        <wg@grandegger.com>, <sriram.dash@samsung.com>, <nm@ti.com>,
-        <t-kristo@ti.com>
+        id S1726743AbgAWLSV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 23 Jan 2020 06:18:21 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47563 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbgAWLSV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Jan 2020 06:18:21 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iuaUt-0002lI-UB; Thu, 23 Jan 2020 12:18:04 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:197e:2d9b:882c:b51d] (unknown [IPv6:2a03:f580:87bc:d400:197e:2d9b:882c:b51d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 897304A8DB2;
+        Thu, 23 Jan 2020 11:17:56 +0000 (UTC)
+Subject: Re: [PATCH 0/3] Add Support for MCAN in AM654x-idk
+To:     Faiz Abbas <faiz_abbas@ti.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org
+Cc:     catalin.marinas@arm.com, mark.rutland@arm.com, robh+dt@kernel.org,
+        davem@davemloft.net, wg@grandegger.com, sriram.dash@samsung.com,
+        dmurphy@ti.com, nm@ti.com, t-kristo@ti.com
 References: <20200122080310.24653-1-faiz_abbas@ti.com>
- <20200122080310.24653-2-faiz_abbas@ti.com>
- <c3b0eeb8-bd78-aa96-4783-62dc93f03bfe@ti.com>
- <8fc7c343-267d-c91c-0381-60990cfc35e8@ti.com>
- <f834087b-da1c-88a0-93fe-bc72c8ac71ff@ti.com>
-From:   Faiz Abbas <faiz_abbas@ti.com>
-Message-ID: <57baeedc-9f51-7b92-f190-c0bbd8525a16@ti.com>
-Date:   Thu, 23 Jan 2020 13:09:41 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <e3025ab6-04b5-3eba-5e0d-70caabee26fb@pengutronix.de>
+Date:   Thu, 23 Jan 2020 12:17:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <f834087b-da1c-88a0-93fe-bc72c8ac71ff@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20200122080310.24653-1-faiz_abbas@ti.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="NYPXrD8dZpuBhFWGBbPAmL2QzBA7ljtTf"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--NYPXrD8dZpuBhFWGBbPAmL2QzBA7ljtTf
+Content-Type: multipart/mixed; boundary="QyFCGrPkezEuEBS1nbpXxyDGG5wrx8uVJ";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Faiz Abbas <faiz_abbas@ti.com>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ netdev@vger.kernel.org, linux-can@vger.kernel.org
+Cc: catalin.marinas@arm.com, mark.rutland@arm.com, robh+dt@kernel.org,
+ davem@davemloft.net, wg@grandegger.com, sriram.dash@samsung.com,
+ dmurphy@ti.com, nm@ti.com, t-kristo@ti.com
+Message-ID: <e3025ab6-04b5-3eba-5e0d-70caabee26fb@pengutronix.de>
+Subject: Re: [PATCH 0/3] Add Support for MCAN in AM654x-idk
+References: <20200122080310.24653-1-faiz_abbas@ti.com>
+In-Reply-To: <20200122080310.24653-1-faiz_abbas@ti.com>
 
-On 22/01/20 8:04 pm, Dan Murphy wrote:
-> Sekhar
-> 
-> On 1/22/20 8:24 AM, Sekhar Nori wrote:
->> On 22/01/20 7:05 PM, Dan Murphy wrote:
->>> Faiz
->>>
->>> On 1/22/20 2:03 AM, Faiz Abbas wrote:
->>>> The CAN transceiver on some boards has an STB pin which is
->>>> used to control its standby mode. Add an optional property
->>>> stb-gpios to toggle the same.
->>>>
->>>> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
->>>> Signed-off-by: Sekhar Nori <nsekhar@ti.com>
->>>> ---
->>>>    Documentation/devicetree/bindings/net/can/m_can.txt | 2 ++
->>>>    1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/net/can/m_can.txt
->>>> b/Documentation/devicetree/bindings/net/can/m_can.txt
->>>> index ed614383af9c..cc8ba3f7a2aa 100644
->>>> --- a/Documentation/devicetree/bindings/net/can/m_can.txt
->>>> +++ b/Documentation/devicetree/bindings/net/can/m_can.txt
->>>> @@ -48,6 +48,8 @@ Optional Subnode:
->>>>                  that can be used for CAN/CAN-FD modes. See
->>>>                
->>>> Documentation/devicetree/bindings/net/can/can-transceiver.txt
->>>>                  for details.
->>>> +stb-gpios        : gpio node to toggle the STB (standby) signal on
->>>> the transceiver
->>>> +
->>> The m_can.txt is for the m_can framework.  If this is specific to the
->>> platform then it really does not belong here.
->>>
->>> If the platform has specific nodes then maybe we need a
->>> m_can_platform.txt binding for specific platform nodes.  But I leave
->>> that decision to Rob.
->> Since this is transceiver enable, should this not be in
->> Documentation/devicetree/bindings/net/can/can-transceiver.txt?
-> 
+--QyFCGrPkezEuEBS1nbpXxyDGG5wrx8uVJ
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-The transceiver node is just a node without an associated device. I had
-tried to convert it to a phy implementation but that idea got shot down
-here:
+On 1/22/20 9:03 AM, Faiz Abbas wrote:
+> This series adds driver patches to support MCAN in TI's AM654x-idk.
+>=20
+> Faiz Abbas (3):
+>   dt-bindings: net: can: m_can: Add Documentation for stb-gpios
+>   can: m_can: m_can_platform: Add support for enabling transceiver
+>     through the STB line
+>   arm64: defconfig: Add Support for Bosch M_CAN controllers
+>=20
+>  Documentation/devicetree/bindings/net/can/m_can.txt |  2 ++
+>  arch/arm64/configs/defconfig                        |  3 +++
+>  drivers/net/can/m_can/m_can_platform.c              | 12 ++++++++++++
+>  3 files changed, 17 insertions(+)
 
-https://lore.kernel.org/patchwork/patch/1006238/
+What about adding support for xceiver-supply as done in several other
+drivers (ti_hecc.c, flexcan.c, mcp251x.c)? And using this for the stb lin=
+e?
 
-Thanks,
-Faiz
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--QyFCGrPkezEuEBS1nbpXxyDGG5wrx8uVJ--
+
+--NYPXrD8dZpuBhFWGBbPAmL2QzBA7ljtTf
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl4pgOAACgkQWsYho5Hk
+nSC/egf/eNjB8/lL8muUSORGL2cgcDJIY77iCCdmjkPckQ0gG//AAseZ6T8y/rph
+I66pOuysdn2ON8V1N5aeFefGwxF9T9bNvjJe1vsSHqIdLNUmpstuHMKs7jgKQxPE
+ublvNPRh/XtrQ2/ERSFApv55CqA2+9VwSSKAPFKmhrmyUHuZCVlPPWCF06AkuLac
+sZaFffTh0ZCNuq5XoGiZPJWDJ8IjLN//nH/eBrCZpd9omTqC84EUFBW8aV7F2gZa
+quhtzwoufrEFUUAqdkQlFHvTOeiMnHmJhSx0PLetoscDBc7dVoajELf9pUmaAGBt
+/fa70dou1CkvLPpdYxpUUrrzi/3qRw==
+=0YB1
+-----END PGP SIGNATURE-----
+
+--NYPXrD8dZpuBhFWGBbPAmL2QzBA7ljtTf--
