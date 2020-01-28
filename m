@@ -2,158 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A1314B911
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 15:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7EA14BEE9
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 18:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729857AbgA1O01 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jan 2020 09:26:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53836 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726989AbgA1O00 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:26:26 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D273C207FD;
-        Tue, 28 Jan 2020 14:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580221585;
-        bh=4YVSFGvrEhTYt7QF1aKqFLgF6yffFb0U7rnqeQu6t7U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m7VUTOVSjsm5Yo3s8k4sA0L6XMOOeBhw7SyDgNUKYxAJOya8mL1ohRwIXq1plYKIY
-         KDIaaxE/CmfL6qmonqy3FcufdxNtA7zVLjuitk9/abILv6R7woeax1ucX1j8Iz4awr
-         qfG5xZ5IBw+R0NSMW/ko8kGicaoF2bB8Fx5fMIfc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Tyler Hall <tylerwhall@gmail.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller@googlegroups.com
-Subject: [PATCH 4.19 01/92] can, slip: Protect tty->disc_data in write_wakeup and close with RCU
-Date:   Tue, 28 Jan 2020 15:07:29 +0100
-Message-Id: <20200128135809.516072484@linuxfoundation.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200128135809.344954797@linuxfoundation.org>
-References: <20200128135809.344954797@linuxfoundation.org>
-User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
+        id S1726111AbgA1RuV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jan 2020 12:50:21 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:15437 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726066AbgA1RuU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jan 2020 12:50:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1580233819;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=Date:Message-ID:Subject:From:To:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=ZxWID2W5P8b9MAcRxowFP2OC3Jd3xfQJkkW9zZZZyEI=;
+        b=mX3++FUenIVVsa6RdNS2b9EyjM0nc13gofxPMaFJkHihulhk9Ity9EhZlsrdDpu96M
+        1Cg4NNtin0Abax5g8j2l7T15I+Sgewa26VPcUWzRmw0xJvC6Wrxo0rwJcIazipQF6KO8
+        PAcrSHU4IBYc+70HBjfraS1mUddbZkiDSqb9+mg/qte28ZWg+J26UXMU6hLZhjeuqg+7
+        chC2h+uoH38DXJSB9mpU3MZ+zA9HJHtyCYVRA2NyfOB5jqXiB/m3vKHGyhep2WVD4IXn
+        UHzW+bPfc/GikSXKMWSD6b1s3uyF9zk5wBWCH8+Uo3qzESk1yAWpBI6ecyRVz4gjuQSZ
+        PPSQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJU8h5lk0M"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 46.1.7 DYNA|AUTH)
+        with ESMTPSA id R0798bw0SHoIEoa
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate)
+        for <linux-can@vger.kernel.org>;
+        Tue, 28 Jan 2020 18:50:18 +0100 (CET)
+To:     linux-can <linux-can@vger.kernel.org>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Tutorial to use the M_CAN IP cores with a STM32MP157A-DK1 dev kit
+Message-ID: <392f401a-f785-094d-2043-37197312c08c@hartkopp.net>
+Date:   Tue, 28 Jan 2020 18:50:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Richard Palethorpe <rpalethorpe@suse.com>
+To whom it may concern ...
 
-[ Upstream commit 0ace17d56824165c7f4c68785d6b58971db954dd ]
+I was searching for a development kit that allows SocketCAN testing with 
+a Bosch M_CAN IP core.
 
-write_wakeup can happen in parallel with close/hangup where tty->disc_data
-is set to NULL and the netdevice is freed thus also freeing
-disc_data. write_wakeup accesses disc_data so we must prevent close from
-freeing the netdev while write_wakeup has a non-NULL view of
-tty->disc_data.
+The STM32MP157A-DK1 dev kit contains a M_CAN and a MTT_CAN (time 
+triggered) IP core but has no CAN transceivers and no device tree 
+configuration to access the CAN rx/tx lines of the two CAN interfaces.
 
-We also need to make sure that accesses to disc_data are atomic. Which can
-all be done with RCU.
+The tutorial can be found here:
 
-This problem was found by Syzkaller on SLCAN, but the same issue is
-reproducible with the SLIP line discipline using an LTP test based on the
-Syzkaller reproducer.
+https://github.com/hartkopp/M_CAN-on-STM32MP157A-DK1
 
-A fix which didn't use RCU was posted by Hillf Danton.
-
-Fixes: 661f7fda21b1 ("slip: Fix deadlock in write_wakeup")
-Fixes: a8e83b17536a ("slcan: Port write_wakeup deadlock fix from slip")
-Reported-by: syzbot+017e491ae13c0068598a@syzkaller.appspotmail.com
-Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Tyler Hall <tylerwhall@gmail.com>
-Cc: linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: syzkaller@googlegroups.com
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/can/slcan.c |   12 ++++++++++--
- drivers/net/slip/slip.c |   12 ++++++++++--
- 2 files changed, 20 insertions(+), 4 deletions(-)
-
---- a/drivers/net/can/slcan.c
-+++ b/drivers/net/can/slcan.c
-@@ -343,9 +343,16 @@ static void slcan_transmit(struct work_s
-  */
- static void slcan_write_wakeup(struct tty_struct *tty)
- {
--	struct slcan *sl = tty->disc_data;
-+	struct slcan *sl;
-+
-+	rcu_read_lock();
-+	sl = rcu_dereference(tty->disc_data);
-+	if (!sl)
-+		goto out;
- 
- 	schedule_work(&sl->tx_work);
-+out:
-+	rcu_read_unlock();
- }
- 
- /* Send a can_frame to a TTY queue. */
-@@ -640,10 +647,11 @@ static void slcan_close(struct tty_struc
- 		return;
- 
- 	spin_lock_bh(&sl->lock);
--	tty->disc_data = NULL;
-+	rcu_assign_pointer(tty->disc_data, NULL);
- 	sl->tty = NULL;
- 	spin_unlock_bh(&sl->lock);
- 
-+	synchronize_rcu();
- 	flush_work(&sl->tx_work);
- 
- 	/* Flush network side */
---- a/drivers/net/slip/slip.c
-+++ b/drivers/net/slip/slip.c
-@@ -452,9 +452,16 @@ static void slip_transmit(struct work_st
-  */
- static void slip_write_wakeup(struct tty_struct *tty)
- {
--	struct slip *sl = tty->disc_data;
-+	struct slip *sl;
-+
-+	rcu_read_lock();
-+	sl = rcu_dereference(tty->disc_data);
-+	if (!sl)
-+		goto out;
- 
- 	schedule_work(&sl->tx_work);
-+out:
-+	rcu_read_unlock();
- }
- 
- static void sl_tx_timeout(struct net_device *dev)
-@@ -882,10 +889,11 @@ static void slip_close(struct tty_struct
- 		return;
- 
- 	spin_lock_bh(&sl->lock);
--	tty->disc_data = NULL;
-+	rcu_assign_pointer(tty->disc_data, NULL);
- 	sl->tty = NULL;
- 	spin_unlock_bh(&sl->lock);
- 
-+	synchronize_rcu();
- 	flush_work(&sl->tx_work);
- 
- 	/* VSV = very important to remove timers */
-
-
+Have fun,
+Oliver
