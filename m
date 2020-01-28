@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B32DD14B600
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 15:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0624C14BAE5
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 15:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727411AbgA1OBV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jan 2020 09:01:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47314 "EHLO mail.kernel.org"
+        id S1729512AbgA1ONk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jan 2020 09:13:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727408AbgA1OBU (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:01:20 -0500
+        id S1729353AbgA1ONj (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 28 Jan 2020 09:13:39 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1AA40205F4;
-        Tue, 28 Jan 2020 14:01:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E41F524688;
+        Tue, 28 Jan 2020 14:13:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580220079;
-        bh=EwXjGWs7thXZw3btPUQgVqg1lZbS3AAmMapr0MrHlx0=;
+        s=default; t=1580220818;
+        bh=N53L2593G9AItP5Hfi5f6AE/8lIDgtBvs63EpGa8FJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uo05UiWNsDq7e9NcKTvTHkEJZa20ocirsdOzTx6gXX6ssczHZ6Ts6nWwpUqoEAU77
-         8hQB/OTd9709P9VwP0StclpIWLay50cvu+o3pVBezOzdLJB3ihwUSzHC57HikRlsEK
-         5otskJyHpA4YmsXzXcJ0iiZEACE+TAyhAbbNks1E=
+        b=AjhnUc/7pBLAljg5qn4P3Cq9GYEwVJfE2C5Zv0fs2RZ9Ad6CzEb4+1Zhnf+5TtXgw
+         +9hhFyRyz+JTmyEHsJg1tpuGAlDi190jkMET6fXmW8M1lYczv37PYv4nJ2MUxJO/5l
+         pTM57e7qA3nSs7xq0TgTCU6lPbeUgQdXdxdrutE8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,15 +34,13 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "David S. Miller" <davem@davemloft.net>,
         Tyler Hall <tylerwhall@gmail.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, syzkaller@googlegroups.com
-Subject: [PATCH 5.4 001/104] can, slip: Protect tty->disc_data in write_wakeup and close with RCU
-Date:   Tue, 28 Jan 2020 14:59:22 +0100
-Message-Id: <20200128135817.462851820@linuxfoundation.org>
+Subject: [PATCH 4.4 160/183] can, slip: Protect tty->disc_data in write_wakeup and close with RCU
+Date:   Tue, 28 Jan 2020 15:06:19 +0100
+Message-Id: <20200128135845.698951055@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200128135817.238524998@linuxfoundation.org>
-References: <20200128135817.238524998@linuxfoundation.org>
+In-Reply-To: <20200128135829.486060649@linuxfoundation.org>
+References: <20200128135829.486060649@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -109,7 +107,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  }
  
  /* Send a can_frame to a TTY queue. */
-@@ -644,10 +651,11 @@ static void slcan_close(struct tty_struc
+@@ -640,10 +647,11 @@ static void slcan_close(struct tty_struc
  		return;
  
  	spin_lock_bh(&sl->lock);
@@ -142,7 +140,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  }
  
  static void sl_tx_timeout(struct net_device *dev)
-@@ -882,10 +889,11 @@ static void slip_close(struct tty_struct
+@@ -887,10 +894,11 @@ static void slip_close(struct tty_struct
  		return;
  
  	spin_lock_bh(&sl->lock);
