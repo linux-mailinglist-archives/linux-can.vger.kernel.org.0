@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0624C14BAE5
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 15:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5434514B982
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 15:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729512AbgA1ONk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jan 2020 09:13:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35318 "EHLO mail.kernel.org"
+        id S1732391AbgA1OZy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jan 2020 09:25:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729353AbgA1ONj (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 28 Jan 2020 09:13:39 -0500
+        id S1730766AbgA1OZx (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 28 Jan 2020 09:25:53 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E41F524688;
-        Tue, 28 Jan 2020 14:13:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4BC3224686;
+        Tue, 28 Jan 2020 14:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580220818;
+        s=default; t=1580221552;
         bh=N53L2593G9AItP5Hfi5f6AE/8lIDgtBvs63EpGa8FJM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AjhnUc/7pBLAljg5qn4P3Cq9GYEwVJfE2C5Zv0fs2RZ9Ad6CzEb4+1Zhnf+5TtXgw
-         +9hhFyRyz+JTmyEHsJg1tpuGAlDi190jkMET6fXmW8M1lYczv37PYv4nJ2MUxJO/5l
-         pTM57e7qA3nSs7xq0TgTCU6lPbeUgQdXdxdrutE8=
+        b=pQT6KO8YfrkCE3fqpJLz480OFcjDxuk8e5gt99WfhlLXrmnUpRNoNhymUTVrbKhUs
+         C/b6O3Ll3SCixCG2EHLG6CXvwkA47KnPhkRWp/uq2i7XTBhwugmIbI0KoB/byEAoKa
+         QgBRCbwUEJBsa0AMRtQtyHCBBLl/r0N09FfidYiI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "David S. Miller" <davem@davemloft.net>,
         Tyler Hall <tylerwhall@gmail.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, syzkaller@googlegroups.com
-Subject: [PATCH 4.4 160/183] can, slip: Protect tty->disc_data in write_wakeup and close with RCU
-Date:   Tue, 28 Jan 2020 15:06:19 +0100
-Message-Id: <20200128135845.698951055@linuxfoundation.org>
+Subject: [PATCH 4.9 234/271] can, slip: Protect tty->disc_data in write_wakeup and close with RCU
+Date:   Tue, 28 Jan 2020 15:06:23 +0100
+Message-Id: <20200128135909.978871848@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200128135829.486060649@linuxfoundation.org>
-References: <20200128135829.486060649@linuxfoundation.org>
+In-Reply-To: <20200128135852.449088278@linuxfoundation.org>
+References: <20200128135852.449088278@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
