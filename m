@@ -2,63 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7EA14BEE9
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jan 2020 18:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D45C14C494
+	for <lists+linux-can@lfdr.de>; Wed, 29 Jan 2020 03:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbgA1RuV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jan 2020 12:50:21 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:15437 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726066AbgA1RuU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jan 2020 12:50:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1580233819;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=Date:Message-ID:Subject:From:To:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=ZxWID2W5P8b9MAcRxowFP2OC3Jd3xfQJkkW9zZZZyEI=;
-        b=mX3++FUenIVVsa6RdNS2b9EyjM0nc13gofxPMaFJkHihulhk9Ity9EhZlsrdDpu96M
-        1Cg4NNtin0Abax5g8j2l7T15I+Sgewa26VPcUWzRmw0xJvC6Wrxo0rwJcIazipQF6KO8
-        PAcrSHU4IBYc+70HBjfraS1mUddbZkiDSqb9+mg/qte28ZWg+J26UXMU6hLZhjeuqg+7
-        chC2h+uoH38DXJSB9mpU3MZ+zA9HJHtyCYVRA2NyfOB5jqXiB/m3vKHGyhep2WVD4IXn
-        UHzW+bPfc/GikSXKMWSD6b1s3uyF9zk5wBWCH8+Uo3qzESk1yAWpBI6ecyRVz4gjuQSZ
-        PPSQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJU8h5lk0M"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 46.1.7 DYNA|AUTH)
-        with ESMTPSA id R0798bw0SHoIEoa
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate)
-        for <linux-can@vger.kernel.org>;
-        Tue, 28 Jan 2020 18:50:18 +0100 (CET)
-To:     linux-can <linux-can@vger.kernel.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Tutorial to use the M_CAN IP cores with a STM32MP157A-DK1 dev kit
-Message-ID: <392f401a-f785-094d-2043-37197312c08c@hartkopp.net>
-Date:   Tue, 28 Jan 2020 18:50:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726443AbgA2CXi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jan 2020 21:23:38 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:39059 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbgA2CXi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jan 2020 21:23:38 -0500
+Received: by mail-qt1-f194.google.com with SMTP id c5so2570791qtj.6;
+        Tue, 28 Jan 2020 18:23:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=fmN/pVtssbxT3Pr5E1F9HLzDYsx7npNCg2efVd+HMmU=;
+        b=QBgG2VEcnqZ+75WvmHHQDCu0DVOaEAm7gKkBtuRdPRSKVXgX7VybeZ6nSLCtbnBGtq
+         UPVZ5p/NRTacrxdm5LOn4YTS2RVxkbdNuklfw+tLMQ+NiSlws8WfKkZwbZMzuIe9u+6Y
+         rZgDvgO+PVkVs2vq8JRpRjJH1/MsHkCzVjaixUzXAbRKytiUfzhbhtLtshPPtoxy4GZW
+         3aWiQyPZfblfd/QTJrOBONXR0xCc9BTQJ9o6cy3Ig6+BkO7WsfeO7+oBoR0E0Wt16W1X
+         j+y8zzyP1Cpt+XsC/ZfbuZKwf7xX/PfmsyOXcchNJZBhN5LdhCDuYFpq5W/IyOBOUWsR
+         6Z9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=fmN/pVtssbxT3Pr5E1F9HLzDYsx7npNCg2efVd+HMmU=;
+        b=t9bDXe4AykBwGpF6oD5ObnRVMfN4Wc+YG9oQDI1kuq2PCsGt9oinO5NLV/qJH5zfYC
+         6eFBoVtDoG8tCTqqoIvE7Z27wqMDk9SMZpM2jErRmRtp2y3kD6vvJTNU5ChEoHgYFbMr
+         2i1aKjvQFjT9auLz6hEMa0f3mgPVX8B8EISQ/toOwqMIpLcAHpgJDANuT8K5kgS4g3ZR
+         n7VVEUysByw+WrcnW7Gk9JKovk34RT28MLo/9p8ujGRqB1arULeZsHJtvYe4JNmIKWq4
+         BUBLe4hmEv1jeVxAK9WLhA7KrX2PkviPEn48xdKCBxxp58ITUfhajup/KEC8a7/YDKFD
+         ghcw==
+X-Gm-Message-State: APjAAAW16TcPd218SAqhSlmzcRvjYHPzgd7VVorN/nNwpaCGdtNrvBmA
+        0uRrn59Cjlyt3Ox2ixFQOiQ=
+X-Google-Smtp-Source: APXvYqyNA49ujrtKNcqXZwElb1RXS2xg+isb9ANhOquR30a4f55p2QQEwGGEfffQDYg2TuhvAW7OWg==
+X-Received: by 2002:ac8:71cf:: with SMTP id i15mr24882255qtp.383.1580264617446;
+        Tue, 28 Jan 2020 18:23:37 -0800 (PST)
+Received: from localhost ([209.222.10.104])
+        by smtp.gmail.com with ESMTPSA id f10sm241377qkk.70.2020.01.28.18.23.36
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 28 Jan 2020 18:23:37 -0800 (PST)
+From:   Wu Bo <wubo.oduw@gmail.com>
+Cc:     Wu Bo <wubo.oduw@gmail.com>, Dan Murphy <dmurphy@ti.com>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] can: m_can: the state change mistake
+Date:   Wed, 29 Jan 2020 10:23:29 +0800
+Message-Id: <20200129022330.21248-1-wubo.oduw@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-To whom it may concern ...
+The new state is change to CAN_STATE_ERROR_WARNING, but the value of
+switch case is CAN_STATE_ERROR_ACTIVE.
 
-I was searching for a development kit that allows SocketCAN testing with 
-a Bosch M_CAN IP core.
+Signed-off-by: Wu Bo <wubo.oduw@gmail.com>
+---
+ drivers/net/can/m_can/m_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The STM32MP157A-DK1 dev kit contains a M_CAN and a MTT_CAN (time 
-triggered) IP core but has no CAN transceivers and no device tree 
-configuration to access the CAN rx/tx lines of the two CAN interfaces.
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 02c5795b7393..63887e23d89c 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -665,7 +665,7 @@ static int m_can_handle_state_change(struct net_device *dev,
+ 	unsigned int ecr;
+ 
+ 	switch (new_state) {
+-	case CAN_STATE_ERROR_ACTIVE:
++	case CAN_STATE_ERROR_WARNING:
+ 		/* error warning state */
+ 		cdev->can.can_stats.error_warning++;
+ 		cdev->can.state = CAN_STATE_ERROR_WARNING;
+@@ -694,7 +694,7 @@ static int m_can_handle_state_change(struct net_device *dev,
+ 	__m_can_get_berr_counter(dev, &bec);
+ 
+ 	switch (new_state) {
+-	case CAN_STATE_ERROR_ACTIVE:
++	case CAN_STATE_ERROR_WARNING:
+ 		/* error warning state */
+ 		cf->can_id |= CAN_ERR_CRTL;
+ 		cf->data[1] = (bec.txerr > bec.rxerr) ?
+-- 
+2.17.1
 
-The tutorial can be found here:
-
-https://github.com/hartkopp/M_CAN-on-STM32MP157A-DK1
-
-Have fun,
-Oliver
