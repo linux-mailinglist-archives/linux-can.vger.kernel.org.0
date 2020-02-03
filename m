@@ -2,144 +2,237 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C7E1507C6
-	for <lists+linux-can@lfdr.de>; Mon,  3 Feb 2020 14:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 086F7150857
+	for <lists+linux-can@lfdr.de>; Mon,  3 Feb 2020 15:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbgBCNxA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 3 Feb 2020 08:53:00 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58791 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726913AbgBCNxA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Feb 2020 08:53:00 -0500
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iyc9p-0003ea-B2; Mon, 03 Feb 2020 14:52:57 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:9ccc:854a:ce4:c322] (unknown [IPv6:2a03:f580:87bc:d400:9ccc:854a:ce4:c322])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 705FD4AF775;
-        Mon,  3 Feb 2020 13:52:55 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     dev.kurt@vandijck-laurijssen.be, Netdev <netdev@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-can@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        wg@grandegger.com
-References: <20200124132656.22156-1-o.rempel@pengutronix.de>
- <CA+G9fYsxOouFBgCBacXzdimJUfZ3DXVAia6XL7kCvcQX7qgOnA@mail.gmail.com>
- <7ee9df43-2efb-ba57-c8a9-301bae12c0d7@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
- use skb_clone()
-Message-ID: <b0aa1582-98d0-6929-da8d-879151c49654@pengutronix.de>
-Date:   Mon, 3 Feb 2020 14:52:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727775AbgBCO0a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 3 Feb 2020 09:26:30 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:56103 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727570AbgBCO0a (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Feb 2020 09:26:30 -0500
+Received: by mail-wm1-f66.google.com with SMTP id q9so16107510wmj.5;
+        Mon, 03 Feb 2020 06:26:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=itc17noPW/qOhrB9VNLS0A5datkiWJZoXQQ/RMMvGb4=;
+        b=FbNok9t4h4HordSj02XMpfiliSEX/NEn7M/qQw4hIQva8jsU3WQviiJSjLhX+6YeRy
+         at3YDSIScg4u6USeTZoyyod7EX0vNf7RZebnmNNt5/JlrQN7yifzR8r+Qt42C5u2D7bv
+         reYfzBlc1rqRWf9QOFH1sqOxNFQLqnq7eMKQ2e8L+tpXRGn24pKhzQc3UKL7jO89pwc4
+         mlfzI8iRBFbNbJ1cAH8yJbYpovJF8AqOTtMo8Ly0Pm0STpPdDeNxS4ewgOk8lf60JJDd
+         9FIJdRru1KH+JGpRuVpORWRcqIhfNOpjvYL3/Xufe2zvAU0reYrtWTcvIW7u18emmhkY
+         xrRg==
+X-Gm-Message-State: APjAAAVibx/mvqo6d3q6OWw43mzJVILP+zu2DZRdMBTY6BCUP/L/DDs9
+        sZf1/+gAkKPqJKnhhTrbuJs9En3bSA==
+X-Google-Smtp-Source: APXvYqxc2RMlFnmFy5Opti+9z+rRZLxfxDLV3D5FBrtAkPSVjJL0S3CbhEJWd5zGMozHNjHKt12opQ==
+X-Received: by 2002:a1c:96c4:: with SMTP id y187mr30487850wmd.112.1580739987385;
+        Mon, 03 Feb 2020 06:26:27 -0800 (PST)
+Received: from rob-hp-laptop ([212.187.182.166])
+        by smtp.gmail.com with ESMTPSA id 18sm22963441wmf.1.2020.02.03.06.26.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Feb 2020 06:26:26 -0800 (PST)
+Received: (nullmailer pid 27658 invoked by uid 1000);
+        Mon, 03 Feb 2020 14:26:25 -0000
+Date:   Mon, 3 Feb 2020 14:26:25 +0000
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        mark.rutland@arm.com, sriram.dash@samsung.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: net: can: Convert M_CAN to json-schema
+Message-ID: <20200203142625.GA19020@bogus>
+References: <20200124155542.2053-1-benjamin.gaignard@st.com>
 MIME-Version: 1.0
-In-Reply-To: <7ee9df43-2efb-ba57-c8a9-301bae12c0d7@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200124155542.2053-1-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2/3/20 2:48 PM, Marc Kleine-Budde wrote:
->>> WARNING: CPU: 0 PID: 293 at lib/refcount.c:25 refcount_warn_saturate+0x108/0x174
->>> refcount_t: addition on 0; use-after-free.
->>
->> FYI,
->> This issue noticed in our Linaro test farm
->> On linux next version 5.5.0-next-20200203 running on beagleboard x15 arm device.
->>
->> Thanks for providing fix for this case.
+On Fri, Jan 24, 2020 at 04:55:42PM +0100, Benjamin Gaignard wrote:
+> Convert M_CAN bindings to json-schema
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+>  .../bindings/net/can/can-transceiver.txt           |  24 ----
+>  .../devicetree/bindings/net/can/m_can.txt          |  75 ----------
+>  .../devicetree/bindings/net/can/m_can.yaml         | 151 +++++++++++++++++++++
+>  3 files changed, 151 insertions(+), 99 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/can-transceiver.txt
 
-Please look closely at your backtraces, they are totally unrelated. It
-seems the whole culprit in your testcase fails with:
+No chance other controllers aren't going to have a transceiver?
 
-> [    0.000000] OF: ERROR: Bad of_node_put() on /ocp/interconnect@4a000000/segment@0/target-module@8000/cm_core@0/l4per-cm@1700/l4per-clkctrl@28
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/m_can.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/can/m_can.yaml
 
-...the rest are subsequent faults.
+bosch,m_can.yaml
 
-> Can we add your Tested-by to the patch?
+> diff --git a/Documentation/devicetree/bindings/net/can/m_can.yaml b/Documentation/devicetree/bindings/net/can/m_can.yaml
+> new file mode 100644
+> index 000000000000..efdbed81af29
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/m_can.yaml
+> @@ -0,0 +1,151 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/m_can.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bosch MCAN controller Bindings
+> +
+> +description: Bosch MCAN controller for CAN bus
+> +
+> +maintainers:
+> +  -  Sriram Dash <sriram.dash@samsung.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: bosch,m_can
+> +
+> +  reg:
+> +    items:
+> +      - description: M_CAN registers map
+> +      - description: message RAM
+> +
+> +  reg-names:
+> +    items:
+> +      - const: m_can
+> +      - const: message_ram
+> +
+> +  interrupts:
+> +    items:
+> +      - description: interrupt line0
+> +      - description: interrupt line1
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: int0
+> +      - const: int1
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    items:
+> +      - description: peripheral clock
+> +      - description: bus clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: hclk
+> +      - const: cclk
+> +
+> +  bosch,mram-cfg:
+> +    description: |
+> +                 Message RAM configuration data.
+> +                 Multiple M_CAN instances can share the same Message RAM
+> +                 and each element(e.g Rx FIFO or Tx Buffer and etc) number
+> +                 in Message RAM is also configurable, so this property is
+> +                 telling driver how the shared or private Message RAM are
+> +                 used by this M_CAN controller.
+> +
+> +                 The format should be as follows:
+> +                 <offset sidf_elems xidf_elems rxf0_elems rxf1_elems rxb_elems txe_elems txb_elems>
+> +                 The 'offset' is an address offset of the Message RAM where
+> +                 the following elements start from. This is usually set to
+> +                 0x0 if you're using a private Message RAM. The remain cells
+> +                 are used to specify how many elements are used for each FIFO/Buffer.
+> +
+> +                 M_CAN includes the following elements according to user manual:
+> +                 11-bit Filter	0-128 elements / 0-128 words
+> +                 29-bit Filter	0-64 elements / 0-128 words
+> +                 Rx FIFO 0	0-64 elements / 0-1152 words
+> +                 Rx FIFO 1	0-64 elements / 0-1152 words
+> +                 Rx Buffers	0-64 elements / 0-1152 words
+> +                 Tx Event FIFO	0-32 elements / 0-64 words
+> +                 Tx Buffers	0-32 elements / 0-576 words
+> +
+> +                 Please refer to 2.4.1 Message RAM Configuration in Bosch
+> +                 M_CAN user manual for details.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/int32-matrix
 
-Answering myself: NO!
+Looks like uint32-array based on the constraints.
 
-Marc
-
--- 
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> +      - items:
+> +         items:
+> +           - description: The 'offset' is an address offset of the Message RAM
+> +                          where the following elements start from. This is usually
+> +                          set to 0x0 if you're using a private Message RAM.
+> +             default: 0
+> +           - description: 11-bit Filter 0-128 elements / 0-128 words
+> +             minimum: 0
+> +             maximum: 128
+> +           - description: 29-bit Filter 0-64 elements / 0-128 words
+> +             minimum: 0
+> +             maximum: 64
+> +           - description: Rx FIFO 0 0-64 elements / 0-1152 words
+> +             minimum: 0
+> +             maximum: 64
+> +           - description: Rx FIFO 1 0-64 elements / 0-1152 words
+> +             minimum: 0
+> +             maximum: 64
+> +           - description: Rx Buffers 0-64 elements / 0-1152 words
+> +             minimum: 0
+> +             maximum: 64
+> +           - description: Tx Event FIFO 0-32 elements / 0-64 words
+> +             minimum: 0
+> +             maximum: 32
+> +           - description: Tx Buffers 0-32 elements / 0-576 words
+> +             minimum: 0
+> +             maximum: 32
+> +        maxItems: 1
+> +
+> +  can-transceiver:
+> +    type: object
+> +
+> +    properties:
+> +      max-bitrate:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: a positive non 0 value that determines the max speed that
+> +                     CAN/CAN-FD can run.
+> +        minimum: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +  - clocks
+> +  - clock-names
+> +  - bosch,mram-cfg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx6sx-clock.h>
+> +    can@20e8000 {
+> +      compatible = "bosch,m_can";
+> +      reg = <0x020e8000 0x4000>, <0x02298000 0x4000>;
+> +      reg-names = "m_can", "message_ram";
+> +      interrupts = <0 114 0x04>, <0 114 0x04>;
+> +      interrupt-names = "int0", "int1";
+> +      clocks = <&clks IMX6SX_CLK_CANFD>,
+> +               <&clks IMX6SX_CLK_CANFD>;
+> +      clock-names = "hclk", "cclk";
+> +      bosch,mram-cfg = <0x0 0 0 32 0 0 0 1>;
+> +
+> +      can-transceiver {
+> +        max-bitrate = <5000000>;
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.15.0
+> 
