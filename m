@@ -2,212 +2,159 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26048150798
-	for <lists+linux-can@lfdr.de>; Mon,  3 Feb 2020 14:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B64C1507AD
+	for <lists+linux-can@lfdr.de>; Mon,  3 Feb 2020 14:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbgBCNnv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 3 Feb 2020 08:43:51 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:32974 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727275AbgBCNnu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Feb 2020 08:43:50 -0500
-Received: by mail-lj1-f193.google.com with SMTP id y6so14704485lji.0
-        for <linux-can@vger.kernel.org>; Mon, 03 Feb 2020 05:43:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0oZvLE0wV4+dIhVzJgWhi9Otxqj1OjNQ2STMZT4lrsQ=;
-        b=FGlzeSoFcdzAK9/RZVx2dbmIManF4yO11To1sJ8dSAL6BqjVr0npej5BNrFf1qQfPO
-         t9RYpcozJ5bGCsw3Hy9wQcu+WexOvlM95fHhXe41fOwZxEhaRq5z6rye0GDcGTP3O3rp
-         XZkq8/3OurmZRup722kZMrV867kd52f5X5sSpAAtzM/aDLcOiVQQyzK6oT8jsv4M5oBx
-         jqSp7o6eQTLQuqT7zqqwgXrJN8EJLU0Sm/wULFlZyPgtL9B3wtip7+MJ8YTvLrFhcr0d
-         SkfnC0zTdrq4PJqOFtBpn+GgKAwraRxmFVOTTXTkGsVVHZl5DwARdEeXapVQ3KKuRgH0
-         N7ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0oZvLE0wV4+dIhVzJgWhi9Otxqj1OjNQ2STMZT4lrsQ=;
-        b=MYAU2bQJ0iuZSFfVHj5E+AdYxd+IKcDmTbb28LQMAcZlf84uJcsGTbqfkazlo2plEW
-         7uwqMbyCBwjvcpkm48KGFSy2i1qiQFQx0Q0oAmfoa1s7bMabUIrYcvLbDYPLfnnHMMss
-         p2efelZm9Y8lKccm6i5VHfzCF1InEdMMiPPrcRRD3jGEG6HMxHHC/c6LX4vA4C1qmsNy
-         ac9rEg1e9YoC18lV8AUcLkaLfxdXMRRt6ODq6hn8cQsmY/3uFb5knJ1w2gw5b2gxRi/f
-         3M05C2v2cfLwHJVUtn3WUjrKXBEbWKW1rmCJXpr62781znbElJPZxGvOVa70i64L6a1i
-         1VRQ==
-X-Gm-Message-State: APjAAAXuCcUrRVdE8p4bra8qFuCHnZmHe1mHQBylzTFmcNSIz4YGuFw4
-        vgh1JhwjD8H2BG8GFaeIJhgwiVweY10rdv+1kdmvIAMypb4=
-X-Google-Smtp-Source: APXvYqxDgAFxjGt4n1sPSbTTgTVYTNCCPllor6LZmhF9sHF00c5HSINZ3D5pbul6brCy2H0gvG3ldaEWdOOPusa6c+Y=
-X-Received: by 2002:a2e:8e70:: with SMTP id t16mr13903334ljk.73.1580737426568;
- Mon, 03 Feb 2020 05:43:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20200124132656.22156-1-o.rempel@pengutronix.de>
-In-Reply-To: <20200124132656.22156-1-o.rempel@pengutronix.de>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 3 Feb 2020 19:13:35 +0530
-Message-ID: <CA+G9fYsxOouFBgCBacXzdimJUfZ3DXVAia6XL7kCvcQX7qgOnA@mail.gmail.com>
+        id S1727755AbgBCNsL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 3 Feb 2020 08:48:11 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54547 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727606AbgBCNsK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Feb 2020 08:48:10 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1iyc58-0002zm-Ps; Mon, 03 Feb 2020 14:48:06 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:9ccc:854a:ce4:c322] (unknown [IPv6:2a03:f580:87bc:d400:9ccc:854a:ce4:c322])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 85B8C4AF765;
+        Mon,  3 Feb 2020 13:48:04 +0000 (UTC)
 Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
  use skb_clone()
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
-        wg@grandegger.com, Pengutronix Kernel Team <kernel@pengutronix.de>,
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     dev.kurt@vandijck-laurijssen.be, wg@grandegger.com,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
         linux-can@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
         lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+References: <20200124132656.22156-1-o.rempel@pengutronix.de>
+ <CA+G9fYsxOouFBgCBacXzdimJUfZ3DXVAia6XL7kCvcQX7qgOnA@mail.gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <7ee9df43-2efb-ba57-c8a9-301bae12c0d7@pengutronix.de>
+Date:   Mon, 3 Feb 2020 14:48:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CA+G9fYsxOouFBgCBacXzdimJUfZ3DXVAia6XL7kCvcQX7qgOnA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 24 Jan 2020 at 18:57, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
->
-> All user space generated SKBs are owned by a socket (unless injected
-> into the key via AF_PACKET). If a socket is closed, all associated skbs
-> will be cleaned up.
->
-> This leads to a problem when a CAN driver calls can_put_echo_skb() on a
-> unshared SKB. If the socket is closed prior to the TX complete handler,
-> can_get_echo_skb() and the subsequent delivering of the echo SKB to
-> all registered callbacks, a SKB with a refcount of 0 is delivered.
->
-> To avoid the problem, in can_get_echo_skb() the original SKB is now
-> always cloned, regardless of shared SKB or not. If the process exists it
-> can now safely discard its SKBs, without disturbing the delivery of the
-> echo SKB.
->
-> The problem shows up in the j1939 stack, when it clones the
-> incoming skb, which detects the already 0 refcount.
->
-> We can easily reproduce this with following example:
->
-> testj1939 -B -r can0: &
-> cansend can0 1823ff40#0123
->
-> WARNING: CPU: 0 PID: 293 at lib/refcount.c:25 refcount_warn_saturate+0x108/0x174
-> refcount_t: addition on 0; use-after-free.
+On 2/3/20 2:43 PM, Naresh Kamboju wrote:
+> On Fri, 24 Jan 2020 at 18:57, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>>
+>> All user space generated SKBs are owned by a socket (unless injected
+>> into the key via AF_PACKET). If a socket is closed, all associated skbs
+>> will be cleaned up.
+>>
+>> This leads to a problem when a CAN driver calls can_put_echo_skb() on a
+>> unshared SKB. If the socket is closed prior to the TX complete handler,
+>> can_get_echo_skb() and the subsequent delivering of the echo SKB to
+>> all registered callbacks, a SKB with a refcount of 0 is delivered.
+>>
+>> To avoid the problem, in can_get_echo_skb() the original SKB is now
+>> always cloned, regardless of shared SKB or not. If the process exists it
+>> can now safely discard its SKBs, without disturbing the delivery of the
+>> echo SKB.
+>>
+>> The problem shows up in the j1939 stack, when it clones the
+>> incoming skb, which detects the already 0 refcount.
+>>
+>> We can easily reproduce this with following example:
+>>
+>> testj1939 -B -r can0: &
+>> cansend can0 1823ff40#0123
+>>
+>> WARNING: CPU: 0 PID: 293 at lib/refcount.c:25 refcount_warn_saturate+0x108/0x174
+>> refcount_t: addition on 0; use-after-free.
+> 
+> FYI,
+> This issue noticed in our Linaro test farm
+> On linux next version 5.5.0-next-20200203 running on beagleboard x15 arm device.
+> 
+> Thanks for providing fix for this case.
 
-FYI,
-This issue noticed in our Linaro test farm
-On linux next version 5.5.0-next-20200203 running on beagleboard x15 arm device.
+Can we add your Tested-by to the patch?
 
-Thanks for providing fix for this case.
-
-Warning log.
-[    0.013414] ------------[ cut here ]------------
-[    0.013420] WARNING: CPU: 0 PID: 0 at
-/usr/src/kernel/lib/refcount.c:25 refcount_warn_saturate+0x108/0x174
-[    0.013424] refcount_t: addition on 0; use-after-free.
-[    0.013427] Modules linked in:
-[    0.013435] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.5.0-next-20200203 #1
-[    0.013439] Hardware name: Generic DRA74X (Flattened Device Tree)
-[    0.013442] Backtrace:
-[    0.013448] [<c040fac4>] (dump_backtrace) from [<c040fdf8>]
-(show_stack+0x20/0x24)
-[    0.013452]  r7:c23f2e68 r6:00000000 r5:600000d3 r4:c23f2e68
-[    0.013456] [<c040fdd8>] (show_stack) from [<c14144d0>]
-(dump_stack+0xe8/0x114)
-[    0.013459] [<c14143e8>] (dump_stack) from [<c04595cc>] (__warn+0x100/0x118)
-[    0.013463]  r10:efca9a50 r9:c0957770 r8:00000019 r7:c1c2343c
-r6:00000009 r5:00000000
-[    0.013467]  r4:c2201b7c r3:be2d277f
-[    0.013470] [<c04594cc>] (__warn) from [<c0459668>]
-(warn_slowpath_fmt+0x84/0xc0)
-[    0.013474]  r9:00000009 r8:c0957770 r7:00000019 r6:c1c2343c
-r5:c1c2345c r4:c2208708
-[    0.013478] [<c04595e8>] (warn_slowpath_fmt) from [<c0957770>]
-(refcount_warn_saturate+0x108/0x174)
-[    0.013481]  r9:c2a36014 r8:c2a35c56 r7:c2a35c56 r6:00000007
-r5:efca9a50 r4:efca9a70
-[    0.013485] [<c0957668>] (refcount_warn_saturate) from [<c1419a30>]
-(kobject_get+0xa8/0xac)
-[    0.013489] [<c1419988>] (kobject_get) from [<c112aa6c>]
-(of_node_get+0x24/0x2c)
-[    0.013492]  r4:efca9a44
-[    0.013495] [<c112aa48>] (of_node_get) from [<c11298fc>]
-(of_fwnode_get+0x44/0x50)
-[    0.013499]  r5:efca9a50 r4:00000007
-[    0.013502] [<c11298b8>] (of_fwnode_get) from [<c0cbbdc8>]
-(fwnode_get_nth_parent+0x3c/0x6c)
-[    0.013507] [<c0cbbd8c>] (fwnode_get_nth_parent) from [<c1428624>]
-(fwnode_full_name_string+0x3c/0xa8)
-[    0.013510]  r7:c2a35c56 r6:c1c54319 r5:c189c7d0 r4:00000007
-[    0.013514] [<c14285e8>] (fwnode_full_name_string) from
-[<c142a04c>] (device_node_string+0x48c/0x4ec)
-[    0.013518]  r10:ffffffff r9:c1bde730 r8:efca9a44 r7:c2a35c56
-r6:c1c54319 r5:c2a36014
-[    0.013521]  r4:c2208708
-[    0.013525] [<c1429bc4>] (device_node_string) from [<c142bc1c>]
-(pointer+0x43c/0x4e0)
-[    0.013529]  r10:c2a36014 r9:c2201d3c r8:c2201e90 r7:00000002
-r6:00000000 r5:c2a36014
-[    0.013532]  r4:c2a35c56
-[    0.013535] [<c142b7e0>] (pointer) from [<c142be88>] (vsnprintf+0x1c8/0x414)
-[    0.013539]  r7:00000002 r6:c1d5b4e8 r5:c1d5b4e6 r4:c2a35c56
-[    0.013542] [<c142bcc0>] (vsnprintf) from [<c142c0e8>] (vscnprintf+0x14/0x2c)
-[    0.013546]  r10:00000000 r9:00000000 r8:ffffffff r7:c2a352e8
-r6:00000028 r5:600000d3
-[    0.013549]  r4:000003e0
-[    0.013553] [<c142c0d4>] (vscnprintf) from [<c04db300>]
-(vprintk_store+0x44/0x220)
-[    0.013556]  r5:600000d3 r4:c2a352e8
-[    0.013560] [<c04db2bc>] (vprintk_store) from [<c04db8a0>]
-(vprintk_emit+0xa0/0x2fc)
-[    0.013564]  r10:00000001 r9:ffffffff r8:00000000 r7:00000000
-r6:00000028 r5:600000d3
-[    0.013567]  r4:c2a352e8
-[    0.013571] [<c04db800>] (vprintk_emit) from [<c04dbb2c>]
-(vprintk_default+0x30/0x38)
-[    0.013575]  r10:efca9a44 r9:00000001 r8:00000000 r7:ffffe000
-r6:c2201e8c r5:c1d5b4c4
-[    0.013578]  r4:c21aa590
-[    0.013582] [<c04dbafc>] (vprintk_default) from [<c04dc9d4>]
-(vprintk_func+0xe0/0x168)
-[    0.013585] [<c04dc8f4>] (vprintk_func) from [<c04dc1ec>] (printk+0x40/0x5c)
-[    0.013589]  r7:00000000 r6:c23d2350 r5:efca9a44 r4:c2208708
-[    0.013592] [<c04dc1ac>] (printk) from [<c112b7c8>]
-(of_node_release+0xb0/0xcc)
-[    0.013596]  r3:00000008 r2:00000000 r1:efca9a44 r0:c1d5b4c4
-[    0.013599]  r4:efca9a70
-[    0.013602] [<c112b718>] (of_node_release) from [<c1419c28>]
-(kobject_put+0x11c/0x23c)
-[    0.013606]  r5:c2422cb8 r4:efca9a70
-[    0.013609] [<c1419b0c>] (kobject_put) from [<c112aa98>]
-(of_node_put+0x24/0x28)
-[    0.013613]  r7:e98f7980 r6:c2201ef4 r5:00000000 r4:e98f7940
-[    0.013616] [<c112aa74>] (of_node_put) from [<c20474a0>]
-(of_clk_init+0x1a4/0x248)
-[    0.013620] [<c20472fc>] (of_clk_init) from [<c20140dc>]
-(omap_clk_init+0x4c/0x68)
-[    0.013624]  r10:efc8b8c0 r9:c2433054 r8:00000000 r7:c2208700
-r6:00000066 r5:c20dab64
-[    0.013627]  r4:c2434500
-[    0.013631] [<c2014090>] (omap_clk_init) from [<c2014afc>]
-(omap4_sync32k_timer_init+0x18/0x3c)
-[    0.013634]  r5:c20dab64 r4:c2433000
-[    0.013638] [<c2014ae4>] (omap4_sync32k_timer_init) from
-[<c2014de8>] (omap5_realtime_timer_init+0x1c/0x258)
-[    0.013642] [<c2014dcc>] (omap5_realtime_timer_init) from
-[<c2005954>] (time_init+0x30/0x44)
-[    0.013645]  r9:c2433054 r8:00000000 r7:c2208700 r6:00000066
-r5:c20dab64 r4:c2433000
-[    0.013649] [<c2005924>] (time_init) from [<c20012dc>]
-(start_kernel+0x590/0x720)
-[    0.013652] [<c2000d4c>] (start_kernel) from [<00000000>] (0x0)
-[    0.013656]  r10:30c5387d r9:412fc0f2 r8:8ffdc000 r7:00000000
-r6:30c0387d r5:00000000
-[    0.013659]  r4:c2000330
-[    0.013662] irq event stamp: 0
-[    0.013665] hardirqs last  enabled at (0): [<00000000>] 0x0
-[    0.013669] hardirqs last disabled at (0): [<00000000>] 0x0
-[    0.013672] softirqs last  enabled at (0): [<00000000>] 0x0
-[    0.013676] softirqs last disabled at (0): [<00000000>] 0x0
-[    0.013679] ---[ end trace ec9a61ce578d03f8 ]---
-[    0.013683] ------------[ cut here ]------------a
-
-full test log link,
-https://lkft.validation.linaro.org/scheduler/job/1158386#L3711
-
+regards,
+Marc
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
