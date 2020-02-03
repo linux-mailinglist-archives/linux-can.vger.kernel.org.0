@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B64C1507AD
-	for <lists+linux-can@lfdr.de>; Mon,  3 Feb 2020 14:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C7E1507C6
+	for <lists+linux-can@lfdr.de>; Mon,  3 Feb 2020 14:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727755AbgBCNsL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 3 Feb 2020 08:48:11 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54547 "EHLO
+        id S1727860AbgBCNxA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 3 Feb 2020 08:53:00 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58791 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727606AbgBCNsK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Feb 2020 08:48:10 -0500
+        with ESMTP id S1726913AbgBCNxA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Feb 2020 08:53:00 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1iyc58-0002zm-Ps; Mon, 03 Feb 2020 14:48:06 +0100
+        id 1iyc9p-0003ea-B2; Mon, 03 Feb 2020 14:52:57 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:9ccc:854a:ce4:c322] (unknown [IPv6:2a03:f580:87bc:d400:9ccc:854a:ce4:c322])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 85B8C4AF765;
-        Mon,  3 Feb 2020 13:48:04 +0000 (UTC)
-Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
- use skb_clone()
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 705FD4AF775;
+        Mon,  3 Feb 2020 13:52:55 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     dev.kurt@vandijck-laurijssen.be, wg@grandegger.com,
+Cc:     dev.kurt@vandijck-laurijssen.be, Netdev <netdev@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, linux-can@vger.kernel.org,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-can@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
+        wg@grandegger.com
 References: <20200124132656.22156-1-o.rempel@pengutronix.de>
  <CA+G9fYsxOouFBgCBacXzdimJUfZ3DXVAia6XL7kCvcQX7qgOnA@mail.gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <7ee9df43-2efb-ba57-c8a9-301bae12c0d7@pengutronix.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,14 +95,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  WATP4wFI8QktNBqF3VY47HFwF9PtNuOZIqeAquKezywUc5KqKdqEWCPx9pfLxBAh3GW2Zfjp
  lP6A5upKs2ktDZOC2HZXP4IJ1GTk8hnfS4ade8s9FNcwu9m3JlxcGKLPq5DnIbPVQI1UUR4F
  QyAqTtIdSpeFYbvH8D7pO4lxLSz2ZyBMk+aKKs6GL5MqEci8OcFW
-Message-ID: <7ee9df43-2efb-ba57-c8a9-301bae12c0d7@pengutronix.de>
-Date:   Mon, 3 Feb 2020 14:48:02 +0100
+Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
+ use skb_clone()
+Message-ID: <b0aa1582-98d0-6929-da8d-879151c49654@pengutronix.de>
+Date:   Mon, 3 Feb 2020 14:52:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYsxOouFBgCBacXzdimJUfZ3DXVAia6XL7kCvcQX7qgOnA@mail.gmail.com>
+In-Reply-To: <7ee9df43-2efb-ba57-c8a9-301bae12c0d7@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
@@ -114,43 +115,27 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2/3/20 2:43 PM, Naresh Kamboju wrote:
-> On Fri, 24 Jan 2020 at 18:57, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+On 2/3/20 2:48 PM, Marc Kleine-Budde wrote:
+>>> WARNING: CPU: 0 PID: 293 at lib/refcount.c:25 refcount_warn_saturate+0x108/0x174
+>>> refcount_t: addition on 0; use-after-free.
 >>
->> All user space generated SKBs are owned by a socket (unless injected
->> into the key via AF_PACKET). If a socket is closed, all associated skbs
->> will be cleaned up.
+>> FYI,
+>> This issue noticed in our Linaro test farm
+>> On linux next version 5.5.0-next-20200203 running on beagleboard x15 arm device.
 >>
->> This leads to a problem when a CAN driver calls can_put_echo_skb() on a
->> unshared SKB. If the socket is closed prior to the TX complete handler,
->> can_get_echo_skb() and the subsequent delivering of the echo SKB to
->> all registered callbacks, a SKB with a refcount of 0 is delivered.
->>
->> To avoid the problem, in can_get_echo_skb() the original SKB is now
->> always cloned, regardless of shared SKB or not. If the process exists it
->> can now safely discard its SKBs, without disturbing the delivery of the
->> echo SKB.
->>
->> The problem shows up in the j1939 stack, when it clones the
->> incoming skb, which detects the already 0 refcount.
->>
->> We can easily reproduce this with following example:
->>
->> testj1939 -B -r can0: &
->> cansend can0 1823ff40#0123
->>
->> WARNING: CPU: 0 PID: 293 at lib/refcount.c:25 refcount_warn_saturate+0x108/0x174
->> refcount_t: addition on 0; use-after-free.
-> 
-> FYI,
-> This issue noticed in our Linaro test farm
-> On linux next version 5.5.0-next-20200203 running on beagleboard x15 arm device.
-> 
-> Thanks for providing fix for this case.
+>> Thanks for providing fix for this case.
 
-Can we add your Tested-by to the patch?
+Please look closely at your backtraces, they are totally unrelated. It
+seems the whole culprit in your testcase fails with:
 
-regards,
+> [    0.000000] OF: ERROR: Bad of_node_put() on /ocp/interconnect@4a000000/segment@0/target-module@8000/cm_core@0/l4per-cm@1700/l4per-clkctrl@28
+
+...the rest are subsequent faults.
+
+> Can we add your Tested-by to the patch?
+
+Answering myself: NO!
+
 Marc
 
 -- 
