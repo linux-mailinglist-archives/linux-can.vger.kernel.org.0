@@ -2,72 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E68151AEF
-	for <lists+linux-can@lfdr.de>; Tue,  4 Feb 2020 14:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A7D151D94
+	for <lists+linux-can@lfdr.de>; Tue,  4 Feb 2020 16:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727215AbgBDNHt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Feb 2020 08:07:49 -0500
-Received: from mail-il1-f179.google.com ([209.85.166.179]:38169 "EHLO
-        mail-il1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727149AbgBDNHs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Feb 2020 08:07:48 -0500
-Received: by mail-il1-f179.google.com with SMTP id f5so15787813ilq.5
-        for <linux-can@vger.kernel.org>; Tue, 04 Feb 2020 05:07:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=B/x4R2YjWm8e4cIWY2ISXYlFX6nVenfC/Dz7ahvAC8g=;
-        b=RW6dTvOh6K4eJy4e21R91q3lP4rWwYlWFrvsrae1jGZ/JIUz1+cJ7VKmTojyEeV22J
-         Nu48M/cvzjcL8IKTNs3w7XoiXipnloVOk0QYNSnlGeUV1+V+VV85ncPx3C9b9U3K0+fT
-         8Rtd4KhvPaZJsYDv40wz8bDqTfxv/sOewm2sFsaOIEZk4oAcM5TlDnlKrTX85eCCV8+9
-         t3GQSYpv9F2Sd+v83g9kJpfpRcdNbrkoarVYIU5G37eHERPbU+p4iUwHm+OiekDagl4l
-         bvN32l8yB+SrNWS8G1ZNZQjUGn6FSB4Ljwpkzc5W5nJadeMxBqbT5YlPlznrvZgFZnSg
-         HYNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=B/x4R2YjWm8e4cIWY2ISXYlFX6nVenfC/Dz7ahvAC8g=;
-        b=JMPBe83JTZefMpkjzHzfEo6mC2mE+h2vWAvamPe60Sk1M+Y+cfPaPUY1CcbBI9ZAGL
-         9gYWdqzVnu2c2Llh0wY/JdNtBle+u71rSCE8q3wqWBne0YM7Afqi5wy7zRtAfbZsSL27
-         mQhlyr2Lk5nJFvK3z4wBcRFmNQ6XnxcgJqOxOeL62mw8BOYbsYu18qCLUcYKGAFpqM+S
-         mDq33z4bLtZ2SND8xpITCxK/KImNxmRKUr3/CRX1ohD5ChmDTNyf9ouVkx+AAEg95gOW
-         zB5491jPZc7cWHR0UYqVL7sChB0R8jzmaCjvOKHfo1GNMSwmv3rDtjfb7/EWNaUzVNl/
-         zxkg==
-X-Gm-Message-State: APjAAAX55N+n/yzbJCASXeQ1f+M7/Rxdne9RUFbRdAL53Q9tLlOCs4fF
-        ohowOT7bueY9IKH6P8aZZAmYmtRWmMw8pcmfzA2khsJM4hk=
-X-Google-Smtp-Source: APXvYqzZKmB1TfyE8/gZ0bKxj1DaSOeKDnD/77t9d0Hhagwv98xFK1EbJodn4EYvrhvrkfpxv4dG1RzCcPcQh5P6vBI=
-X-Received: by 2002:a92:d642:: with SMTP id x2mr20547656ilp.169.1580821668011;
- Tue, 04 Feb 2020 05:07:48 -0800 (PST)
+        id S1727308AbgBDPpv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Feb 2020 10:45:51 -0500
+Received: from smtp1-g21.free.fr ([212.27.42.1]:46461 "EHLO smtp1-g21.free.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727221AbgBDPpv (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 4 Feb 2020 10:45:51 -0500
+Received: from linux-dev.peak.localnet (unknown [185.109.201.203])
+        (Authenticated sender: stephane.grosjean)
+        by smtp1-g21.free.fr (Postfix) with ESMTPSA id BFE20B0051B;
+        Tue,  4 Feb 2020 16:45:31 +0100 (CET)
+From:   Stephane Grosjean <s.grosjean@peak-system.com>
+To:     linux-can Mailing List <linux-can@vger.kernel.org>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [PATCH] can/peak_canfd: fix echo management when loopback is on
+Date:   Tue,  4 Feb 2020 16:33:57 +0100
+Message-Id: <20200204153357.25424-1-s.grosjean@peak-system.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-From:   "Lev R. Oshvang ." <levonshe@gmail.com>
-Date:   Tue, 4 Feb 2020 15:07:37 +0200
-Message-ID: <CAP22eLHKe=0FEoS3DfRK8Oi6k2xntCvxQPVpXhau_bnuOAs71A@mail.gmail.com>
-Subject: Help to set up can net interface on Dell 3200 Intel Atom
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi All,
+Echo management is driven by PUCAN_MSG_LOOPED_BACK bit, while loopback
+frames are identified with PUCAN_MSG_SELF_RECEIVE bit. Those bits are set
+for each outgoing frame written to the IP core so that a copy of each one
+will be placed into the rx path. Thus,
 
-I have with DELL 3002 Edge server
-It has can and can_raw drivers loaded at boot time
-It does not have /boot/config.txt file
+- when PUCAN_MSG_LOOPED_BACK is set then the rx frame is an echo of a
+  previously sent frame,
+- when PUCAN_MSG_LOOPED_BACK+PUCAN_MSG_SELF_RECEIVE are set, then the rx
+  frame is an echo AND a loopback frame. Therefore, this frame must be
+  put into the socket rx path too.
 
-Unfortunately, I do not have kernel sources and kernel config file is
-not present in /proc, so I do not know which exactly chip is on b
-oard and board specs says only:
+This patch fixes how CAN frames are handled when these are sent while the
+CAN interface is configured in "loopback on" mode.
 
-(CAN2.0 A/B/FD) 1Mbps (CAN2.0), 5Mbps (CAN-FD).
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+---
+ drivers/net/can/peak_canfd/peak_canfd.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
+index 10aa3e457c33..40c33b8a5fda 100644
+--- a/drivers/net/can/peak_canfd/peak_canfd.c
++++ b/drivers/net/can/peak_canfd/peak_canfd.c
+@@ -262,8 +262,7 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
+ 		cf_len = get_can_dlc(pucan_msg_get_dlc(msg));
+ 
+ 	/* if this frame is an echo, */
+-	if ((rx_msg_flags & PUCAN_MSG_LOOPED_BACK) &&
+-	    !(rx_msg_flags & PUCAN_MSG_SELF_RECEIVE)) {
++	if (rx_msg_flags & PUCAN_MSG_LOOPED_BACK) {
+ 		unsigned long flags;
+ 
+ 		spin_lock_irqsave(&priv->echo_lock, flags);
+@@ -277,7 +276,13 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
+ 		netif_wake_queue(priv->ndev);
+ 
+ 		spin_unlock_irqrestore(&priv->echo_lock, flags);
+-		return 0;
++
++		/* if this frame is only an echo, stop here. Otherwise,
++		 * continue to push this application self-received frame into
++		 * its own rx queue.
++		 */
++		if (!(rx_msg_flags & PUCAN_MSG_SELF_RECEIVE))
++			return 0;
+ 	}
+ 
+ 	/* otherwise, it should be pushed into rx fifo */
+-- 
+2.20.1
 
-I tried to set it up but get the following error
-
-
-root@5HCF902:~# ip link add dev can0 type can
-RTNETLINK answers: Operation not supported
-
-
-Thanks in advance.
