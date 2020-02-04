@@ -2,81 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A7D151D94
-	for <lists+linux-can@lfdr.de>; Tue,  4 Feb 2020 16:45:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1747151DD4
+	for <lists+linux-can@lfdr.de>; Tue,  4 Feb 2020 17:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbgBDPpv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Feb 2020 10:45:51 -0500
-Received: from smtp1-g21.free.fr ([212.27.42.1]:46461 "EHLO smtp1-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727221AbgBDPpv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 4 Feb 2020 10:45:51 -0500
-Received: from linux-dev.peak.localnet (unknown [185.109.201.203])
-        (Authenticated sender: stephane.grosjean)
-        by smtp1-g21.free.fr (Postfix) with ESMTPSA id BFE20B0051B;
-        Tue,  4 Feb 2020 16:45:31 +0100 (CET)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH] can/peak_canfd: fix echo management when loopback is on
-Date:   Tue,  4 Feb 2020 16:33:57 +0100
-Message-Id: <20200204153357.25424-1-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727318AbgBDQIJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Feb 2020 11:08:09 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.219]:32228 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727290AbgBDQII (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Feb 2020 11:08:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1580832487;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:Cc:From:References:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=dnmKkvklBRlUEO6cgwTlIGKbLytLLThurAQnhE5GoIs=;
+        b=BdhlXBic/z4MmjRFiYcTDGHfULN9WOV4/MprRYxcr7YaEEi/uCm2C3lSxn7MVrUCaU
+        VvnhgrbJQZNbCeP00UP32yArlKnfyND/+ILfQP5hBzpvY3hnS02GFQNAtMuExl31DZfl
+        J1Ey+vB+VGXMIgTMvVSoyBDzfzM7ZCRerSJ2JK+vHv+DN2XLz8q3BjhDETCGEhM2OLk7
+        0pZ3Z8JMelA8++yF45v0A82pLnnygiQrk+aZS4Z+XdbEzSBUtdrYkM+gTcODkNtuBp8e
+        YHrHVUNYSeaicTIlVDAt5TuH7HULHZk7+U8htVEyipJpArrMH6EZwLVHiehU1w8fO9KI
+        0jJA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJUsh6k0go"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
+        with ESMTPSA id g084e8w14G86D87
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 4 Feb 2020 17:08:06 +0100 (CET)
+Subject: Re: Help to set up can net interface on Dell 3200 Intel Atom
+To:     "Lev R. Oshvang ." <levonshe@gmail.com>
+References: <CAP22eLHKe=0FEoS3DfRK8Oi6k2xntCvxQPVpXhau_bnuOAs71A@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Message-ID: <f2f20f9f-7810-e555-f6d0-11fc0510491c@hartkopp.net>
+Date:   Tue, 4 Feb 2020 17:08:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP22eLHKe=0FEoS3DfRK8Oi6k2xntCvxQPVpXhau_bnuOAs71A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Echo management is driven by PUCAN_MSG_LOOPED_BACK bit, while loopback
-frames are identified with PUCAN_MSG_SELF_RECEIVE bit. Those bits are set
-for each outgoing frame written to the IP core so that a copy of each one
-will be placed into the rx path. Thus,
+On 04/02/2020 14.07, Lev R. Oshvang . wrote:
 
-- when PUCAN_MSG_LOOPED_BACK is set then the rx frame is an echo of a
-  previously sent frame,
-- when PUCAN_MSG_LOOPED_BACK+PUCAN_MSG_SELF_RECEIVE are set, then the rx
-  frame is an echo AND a loopback frame. Therefore, this frame must be
-  put into the socket rx path too.
+> I have with DELL 3002 Edge server
+> It has can and can_raw drivers loaded at boot time
+> It does not have /boot/config.txt file
+> 
+> Unfortunately, I do not have kernel sources and kernel config file is
+> not present in /proc, so I do not know which exactly chip is on b
+> oard and board specs says only:
+> 
+> (CAN2.0 A/B/FD) 1Mbps (CAN2.0), 5Mbps (CAN-FD).
 
-This patch fixes how CAN frames are handled when these are sent while the
-CAN interface is configured in "loopback on" mode.
+https://topics-cdn.dell.com/pdf/dell-edge-gateway-3000-series_Specifications2_de-de.pdf
+says that there is a 
+https://www.microchip.com/wwwproducts/en/ATSAME70N19 Cortex-M7 which 
+handles the CAN FD controller.
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/peak_canfd/peak_canfd.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+The ATSAME70N19 is connected somehow to the Intel Atom-Prozessor E3805.
 
-diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
-index 10aa3e457c33..40c33b8a5fda 100644
---- a/drivers/net/can/peak_canfd/peak_canfd.c
-+++ b/drivers/net/can/peak_canfd/peak_canfd.c
-@@ -262,8 +262,7 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
- 		cf_len = get_can_dlc(pucan_msg_get_dlc(msg));
- 
- 	/* if this frame is an echo, */
--	if ((rx_msg_flags & PUCAN_MSG_LOOPED_BACK) &&
--	    !(rx_msg_flags & PUCAN_MSG_SELF_RECEIVE)) {
-+	if (rx_msg_flags & PUCAN_MSG_LOOPED_BACK) {
- 		unsigned long flags;
- 
- 		spin_lock_irqsave(&priv->echo_lock, flags);
-@@ -277,7 +276,13 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
- 		netif_wake_queue(priv->ndev);
- 
- 		spin_unlock_irqrestore(&priv->echo_lock, flags);
--		return 0;
-+
-+		/* if this frame is only an echo, stop here. Otherwise,
-+		 * continue to push this application self-received frame into
-+		 * its own rx queue.
-+		 */
-+		if (!(rx_msg_flags & PUCAN_MSG_SELF_RECEIVE))
-+			return 0;
- 	}
- 
- 	/* otherwise, it should be pushed into rx fifo */
--- 
-2.20.1
+So I won't assume, that you can access the CAN controller from the Intel 
+CPU.
+
+> I tried to set it up but get the following error
+> 
+> 
+> root@5HCF902:~# ip link add dev can0 type can
+> RTNETLINK answers: Operation not supported
+
+You can not "add" a real CAN interface with "ip link add ..." - this 
+works only for virtual CANs.
+
+Try
+
+ip -det link show
+
+where some CAN interface (e.g. can0) should be visible, if you have one.
+
+Regards,
+Oliver
 
