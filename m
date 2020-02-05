@@ -2,159 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A262615297E
-	for <lists+linux-can@lfdr.de>; Wed,  5 Feb 2020 11:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A359D153047
+	for <lists+linux-can@lfdr.de>; Wed,  5 Feb 2020 13:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgBEK7J (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 Feb 2020 05:59:09 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.217]:30199 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728034AbgBEK7J (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Feb 2020 05:59:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1580900344;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ON+SE/dbY9jNeXiCw6HJVP2NphqizN9nGH/HUUCa+qk=;
-        b=IChmWN6ogjYx6RLTffM2B3qb8C4SPUVVJmmCBz+aWwScV/jFmPB5xzJKQWaLh15HvM
-        3ZcBllKN/oFeISZV/AhM6+G0yWnxHpOULiuH5nXoGSTLZ9lGkNRTH58oGmF2w/1QN4Mz
-        Yqy7EccxXyEh7IDVM6MlBa8mgCju+u/q+z/Z+n8JtzpyyirVnuY4KVLeSoR7XlwE8VB4
-        xbQGgM5xr0GU4lvtrj4ZSIQ+UzY0Wes7Hrd+aybRrSGGyJ/ErJ/A3nj3NaX1Nw7c4H/h
-        jznbvEGIFOjRSciB6tckVLh2deKf87VDwHTFB1AZqEnlHfPywqcNH8SkTuLsPdnIxUYp
-        zqvg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVMh7kiA="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id g084e8w15Ax3Fr5
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 5 Feb 2020 11:59:03 +0100 (CET)
-Subject: Re: usb_8dev - WARN_ON(in_irq())
-To:     Gediminas Simanskis <gediminas@rusoku.com>,
-        linux-can@vger.kernel.org, info@8devices.com
-Cc:     Michal Sojka <michal.sojka@cvut.cz>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>
-References: <87h8245gyv.fsf@steelpick.2x.cz>
- <7429cd37-f4dd-247c-7fa3-259801f20944@rusoku.com>
- <8aaec717-0ff7-922b-6969-482363d2790b@hartkopp.net>
- <03fe333a-7a7b-e9b6-fd9e-3d433c2f3cb3@rusoku.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <72ef9952-df01-aa84-a186-93d578b06818@hartkopp.net>
-Date:   Wed, 5 Feb 2020 11:58:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726961AbgBEMA2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 Feb 2020 07:00:28 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:40273 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726277AbgBEMA2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 Feb 2020 07:00:28 -0500
+Received: by mail-io1-f65.google.com with SMTP id x1so1808872iop.7
+        for <linux-can@vger.kernel.org>; Wed, 05 Feb 2020 04:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KwiioqXR/LAmLMy4eVTgqxd9guiQxMzOjkdBtckfJ50=;
+        b=YeE8T3Ie5/YEc19xH6/q6DS563laEG2IhM/yHLUKSbrJ+IVCTjQTJwiDQ5ug70ARAe
+         AqGGu86T0cvLKNDPpevel3J/8RdgopX0fdoQGvXBYXxtFxwuzM0qeXQc+AbhRuj0LxXp
+         QCOcGNCrlBJzjUeKZylU3Pu3hOyIl/tvgK8Lrs9nUkuqtLuVyFn+DUdordzJof4Gyv0m
+         XDNpAHAC6K8rsJFx496q4ru8QpYAwmxXXFZs/iJaV1evys73XmJ+/8YWjcdtohsk7SXR
+         2KRTlWy29tM1+u8rgWk6+rwht0/X/dI0S183+JjLQRcCvRrkI/X8BYB3mvlFFAY4pIOI
+         CDxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KwiioqXR/LAmLMy4eVTgqxd9guiQxMzOjkdBtckfJ50=;
+        b=Yak13hN6yqnc3xiTdcmu7c8jk3P5VK03xZjheF8gHh8z/Xs1huPvPxZbeiHHoLG1MG
+         852+v1tNJhg3BPFuE8U36H7jssf/gd3C8xs9kE7jJGaHNLkkaqpcSerhWl8FFrQgCj/N
+         lSx+/ort2bFW5dgIkj8kxgH3GdvsSjUMOm1NMFbaZQhPMVbA2Ah4YDvRh4BWo72Ji59/
+         DE/Jc7nBt0PT8oLKkoF2K3c8DsbaJuUqbDQbz5Jtx0sl3+JO+Jf0+w9gAW6pOAAdGGCF
+         hy8XKmLpg5bAugiZJbm7nno78TInXHU1OtdQ+P1k18v/FY8lrcXuR89QSnMYJaNXHOxB
+         jljA==
+X-Gm-Message-State: APjAAAVzxpfQTCcHU5EqqplonbD41ojH+Jcg3i1XKy0NUXSS2YF260Hc
+        CvuurfEAvm3DjIQLTUnvPsdthdr20tiRJUNke2hcWLGfXOw=
+X-Google-Smtp-Source: APXvYqwRn8fb0jbSDkrRM7kUV95YSgh56LC1y7vMdTgE5opXpBrfuSnh06f3/pvc7s6lg65Y2ZWBEwmGUmw6FjJjpDs=
+X-Received: by 2002:a05:6602:2201:: with SMTP id n1mr27203355ion.32.1580904026467;
+ Wed, 05 Feb 2020 04:00:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <03fe333a-7a7b-e9b6-fd9e-3d433c2f3cb3@rusoku.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CAP22eLHKe=0FEoS3DfRK8Oi6k2xntCvxQPVpXhau_bnuOAs71A@mail.gmail.com>
+ <f2f20f9f-7810-e555-f6d0-11fc0510491c@hartkopp.net>
+In-Reply-To: <f2f20f9f-7810-e555-f6d0-11fc0510491c@hartkopp.net>
+From:   "Lev R. Oshvang ." <levonshe@gmail.com>
+Date:   Wed, 5 Feb 2020 14:00:15 +0200
+Message-ID: <CAP22eLE4L53Qcf0tK4X0kieKxw_=jtoh_qvnUpeq1yUy_cvBsw@mail.gmail.com>
+Subject: Re: Help to set up can net interface on Dell 3200 Intel Atom
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Gediminas,
+Hi Oliver,
 
-thanks for the information!
+I tried command which is proposed in Dell manual
+https://www.dell.com/support/manuals/il/en/ilbsdt1/dell-edge-gateway-3000-series/dell-edge_gateway-3002-install_manual/can-module?guid=guid-b6b7f697-0a5c-4b9c-acfe-9b436ca90bdc&lang=en-us
 
-I've put info [at] 8devices.com into the recipients list as the Linux 
-driver has to do the "right thing" when it gets the "Tx URB aborted 
-(-2)" information.
+or i in /dev/ttyACM*; do udevadm info $i | grep -q
+03eb_2404_USB_CAN_FD && echo "path:
+                                    /dev/$(basename $i)"; done
 
-And so far I did not see anything like this with the old 'white' USB2CAN 
-adapter with FW 1.7.
+It prints the device  /dev/ttyACM0 is present.
 
-As long as we don't know how to react on this new feedback from the USB 
-device, it is hard to think about a fix ...
+Can I use it as serial CAN  device?
+I am novice to CAN devices. Now I understand that can and can_raw are
+only generic drivers and I need real driver.
+I wrote to Microchip support, perhaps they have driver for this box.
 
-Best regards,
-Oliver
+But still I do not understand why can driver is loaded at boot time I
+used to think that only real hardware cause the driver to appear.
 
+   16.727375] r8169 0000:02:00.0: can't disable ASPM; OS doesn't have
+ASPM control
+[   16.742055] r8169 0000:04:00.0: can't disable ASPM; OS doesn't have
+ASPM control
+[   16.824470] peak_usb 1-2:1.0 can0: attached to PCAN-USB channel 0
+(device 255)
+[   30.661705] can: controller area network core (rev 20120528 abi 9)
+[   30.678155] can: raw protocol (rev 20120528)
 
-On 04/02/2020 20.54, Gediminas Simanskis wrote:
-> Hi Oliver,
-> 
-> I remember that in some conditions usb2can began to flood with messages 
-> like this (CANAL_STATUSMSG_xx).
-> In normal state these messages should be disabled via init string.
-> 
-> I don't have acces to Korlan firmware.
-> 
+I saw these lines in dmesg and now I thing they apperead because CAN
+support was not a module but built-in in kernel configuration.
+Regards,
+Lev
+
+On Tue, Feb 4, 2020 at 6:08 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>
+> On 04/02/2020 14.07, Lev R. Oshvang . wrote:
+>
+> > I have with DELL 3002 Edge server
+> > It has can and can_raw drivers loaded at boot time
+> > It does not have /boot/config.txt file
+> >
+> > Unfortunately, I do not have kernel sources and kernel config file is
+> > not present in /proc, so I do not know which exactly chip is on b
+> > oard and board specs says only:
+> >
+> > (CAN2.0 A/B/FD) 1Mbps (CAN2.0), 5Mbps (CAN-FD).
+>
+> https://topics-cdn.dell.com/pdf/dell-edge-gateway-3000-series_Specifications2_de-de.pdf
+> says that there is a
+> https://www.microchip.com/wwwproducts/en/ATSAME70N19 Cortex-M7 which
+> handles the CAN FD controller.
+>
+> The ATSAME70N19 is connected somehow to the Intel Atom-Prozessor E3805.
+>
+> So I won't assume, that you can access the CAN controller from the Intel
+> CPU.
+>
+> > I tried to set it up but get the following error
+> >
+> >
+> > root@5HCF902:~# ip link add dev can0 type can
+> > RTNETLINK answers: Operation not supported
+>
+> You can not "add" a real CAN interface with "ip link add ..." - this
+> works only for virtual CANs.
+>
+> Try
+>
+> ip -det link show
+>
+> where some CAN interface (e.g. can0) should be visible, if you have one.
+>
 > Regards,
-> Gediminas
-> 
-> On 2020-02-04 19:52, Oliver Hartkopp wrote:
->> Hello Gediminas,
->>
->> I took a look into the old firmware of the former USB_8DEV adapter 
->> with the white housing which had a CANAL_STATUSMSG_BUSLIGHT (== 0x02) 
->> return value:
->>
->> https://github.com/krumboeck/usb2can_firmware/blob/master/main.c#L227
->>
->> Is this the right place to search for the value that is checked in the 
->> kernel here:
->> https://elixir.bootlin.com/linux/v5.5.1/source/drivers/net/can/usb/usb_8dev.c#L581 
->>
->>
->> ??
->>
->> can0: Tx URB aborted (-2)
->>
->> At least the status is *only* printed in 
->> usb_8dev_write_bulk_callback() and the echo skb handling is still 
->> performed as there was a zero status (== ok?!?).
->>
->> Do you have an idea how to proceed with the driver in the case the 
->> user has the newer
->> https://www.8devices.com/products/usb2can_korlan
->> device?
->>
->> Best regards,
->> Oliver
->>
->> On 13/12/2019 18.20, Gediminas Simanskis wrote:
->>> Seems like to USB2CAN buffer overflow and firmware crashing.
->>>
->>> Gediminas
->>>
->>> On 2019-12-13 18:27, Michal Sojka wrote:
->>>> On Fri, Dec 13 2019, Michal Sojka wrote:
->>>>> Hi Oliver,
->>>>>
->>>>> On Fri, Dec 13 2019, Oliver Hartkopp wrote:
->>>>>> Did you do anything weird (e.g. pulling the USB plug on the run) 
->>>>>> to get
->>>>>> this problem?
->>>>> No, I just connected it to an ECU and started sending messages on the
->>>>> bus. The behaviour was like if the messages were not acknowledged, 
->>>>> i.e.,
->>>>> initially, candump on my laptop showed the messages sent, but after 
->>>>> some
->>>>> time (perhaps after TX buffers were full), candump stopped. I was also
->>>>> not able to see any messages sent by the ECU (both before and after I
->>>>> sent my messages).
->>>>>
->>>>> When I used the same ECU and all the wiring with peak_usb, 
->>>>> communication
->>>>> with the ECU was without any problems.
->>>> I did more investigation - I was able to fix the problem by adding a
->>>> terminator resistor to the bus.
->>>>
->>>> However, the problem can be easily reproduced by the following sequence
->>>> of commands, when the USB2CAN is not connected to any bus:
->>>>
->>>>      ip link set can0 up txqueuelen 1000 type can bitrate 500000
->>>>      candump can0
->>>>      cangen -v -g 50 can0
->>>>
->>>> when candump stops printing the messages, run:
->>>>
->>>>      ip link set down dev can0
->>>>
->>>> and the warnings appear in dmesg. I was also trying this with latest
->>>> mainline kernel, which includes the fix for use-after-free, and the
->>>> warnings are still there.
->>>>
->>>> -Michal
+> Oliver
+>
