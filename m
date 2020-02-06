@@ -2,48 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E4F15457D
-	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2020 14:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E86FA1549F8
+	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2020 18:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727415AbgBFNyc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Feb 2020 08:54:32 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:9877 "EHLO
+        id S1727754AbgBFRG5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Feb 2020 12:06:57 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:35466 "EHLO
         mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726765AbgBFNyb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Feb 2020 08:54:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1580997265;
+        with ESMTP id S1727060AbgBFRG4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Feb 2020 12:06:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581008815;
         s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ave1gAK8sLZuiFoip2En3iCBvSsZ5Qzm2o3nuVsoOvM=;
-        b=UEqwZZb08tjacDMEItUIAYb/P1KTTD+1rgz1jxyY2ji8vIKXMqTgszfjrtEkDsRWJI
-        ++rFZMuWJB68mMKqvbBLDbusU0lSjS9nMRs+9Joh+dS+DWFCapoH5iS4tTqg9EF9f0y5
-        FNt45pIS1e30+M3bu9dIBWq7ZG6LdMqQ7S67lgqIJahPXWwy7h/N0QPHxi7i7zYIznOw
-        l6tbTTI2qLtVHjBoK+IWH1pcY9T9w/9UauhovYXXlDh1lsbZTqM+ZioHKwclueto1fEd
-        4dsBk1xGKm46pEW8SvVvdnVota05iZrmb3gY/OOpJ1No4rVt+B3lOLVcmP1b7R4CGR2x
-        NXpw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1q3jXdVqE32oRVrGn+26OxA=="
+        bh=Xekbzm1y2eWDWsDBv6FcjQ0BHpS6U3SXQC6QFTLcRj0=;
+        b=bodMkOqa9AHbl4fMPWmMPbQ4F7vmhA2GU0dVZ/+Y3J8CrjgZChOsIEDq5e6yfCi98g
+        9PLwQgVG+7DjjVxQ89NK1OCg3zzA3h+MpUI0M++/i/WjGZh6E85OoEl2+g9obfvGMXgF
+        IBmEpQUGVgBd393VE6sEYWh4RLI8hLapPS7CGWL8Z1I8A1t95NIKZk3IYK/+I5MdrqJq
+        U9FZEdU7EL3RZfgppwoSvoKPh5DvfDo3DnMdy9tJD3DZCy8YiXuBuyC676I+hjyQnx2y
+        nFYX0S6C82Qkh4cMGSW1tpZ7fxW90iRse1Fm0wuc4nCs0ZErHJApRVn56TOheaZY2cNL
+        Q6wA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJU8h6kUuM"
 X-RZG-CLASS-ID: mo00
-Received: from [10.180.51.222]
-        by smtp.strato.de (RZmta 46.1.12 AUTH)
-        with ESMTPSA id g084e8w16DsPJzZ
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
+        with ESMTPSA id g084e8w16H6oKc1
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Thu, 6 Feb 2020 14:54:25 +0100 (CET)
-Subject: Re: Help to set up can net interface on Dell 3200 Intel Atom
-To:     "Lev R. Oshvang ." <levonshe@gmail.com>
-Cc:     linux-can@vger.kernel.org,
-        Yegor Yefremov <yegorslists@googlemail.com>
-References: <CAP22eLHKe=0FEoS3DfRK8Oi6k2xntCvxQPVpXhau_bnuOAs71A@mail.gmail.com>
- <f2f20f9f-7810-e555-f6d0-11fc0510491c@hartkopp.net>
- <CAP22eLE4L53Qcf0tK4X0kieKxw_=jtoh_qvnUpeq1yUy_cvBsw@mail.gmail.com>
+        Thu, 6 Feb 2020 18:06:50 +0100 (CET)
+Subject: Re: [BUG] pfifo_fast may cause out-of-order CAN frame transmission
+To:     Paolo Abeni <pabeni@redhat.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <661cc33a-5f65-2769-cc1a-65791cb4b131@pengutronix.de>
+ <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
+ <779d3346-0344-9064-15d5-4d565647a556@pengutronix.de>
+ <1b70f56b72943bf5dfd2813565373e8c1b639c31.camel@redhat.com>
+ <53ce1ab4-3346-2367-8aa5-85a89f6897ec@pengutronix.de>
+ <57a2352dfc442ea2aa9cd653f8e09db277bf67c7.camel@redhat.com>
+ <b012e914-fc1a-5a45-f28b-e9d4d4dfc0fe@pengutronix.de>
+ <ef6b4e00-75fe-70f6-6b57-7bdbaa1aac33@pengutronix.de>
+ <13e8950e8537e549f6afb6e254ec75a7462ce648.camel@redhat.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <ff1f70f5-55a6-d0e8-6cde-9c341226ee7f@hartkopp.net>
-Date:   Thu, 6 Feb 2020 14:54:20 +0100
+Message-ID: <5e9b81f5-018d-0680-2d0b-55ff3bfb978f@hartkopp.net>
+Date:   Thu, 6 Feb 2020 18:06:44 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAP22eLE4L53Qcf0tK4X0kieKxw_=jtoh_qvnUpeq1yUy_cvBsw@mail.gmail.com>
+In-Reply-To: <13e8950e8537e549f6afb6e254ec75a7462ce648.camel@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -52,110 +59,44 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Lev,
+Hi Paolo,
 
-On 05/02/2020 13.00, Lev R. Oshvang . wrote:
-
-> I tried command which is proposed in Dell manual
-> https://www.dell.com/support/manuals/il/en/ilbsdt1/dell-edge-gateway-3000-series/dell-edge_gateway-3002-install_manual/can-module?guid=guid-b6b7f697-0a5c-4b9c-acfe-9b436ca90bdc&lang=en-us
+On 06/02/2020 14.21, Paolo Abeni wrote:
+> On Tue, 2020-02-04 at 17:25 +0100, Ahmad Fatoum wrote:
+>> Hello Paolo,
+>>
+>> On 1/20/20 5:06 PM, Ahmad Fatoum wrote:
+>>> Hello Paolo,
+>>>
+>>> On 1/16/20 1:40 PM, Paolo Abeni wrote:
+>>>> I'm sorry for this trial & error experience. I tried to reproduce the
+>>>> issue on top of the vcan virtual device, but it looks like it requires
+>>>> the timing imposed by a real device, and it's missing here (TL;DR: I
+>>>> can't reproduce the issue locally).
+>>>
+>>> No worries. I don't mind testing.
+>>>
+>>>> Code wise, the 2nd patch closed a possible race, but it dumbly re-
+>>>> opened the one addressed by the first attempt - the 'empty' field must
+>>>> be cleared prior to the trylock operation, or we may end-up with such
+>>>> field set and the queue not empty.
+>>>>
+>>>> So, could you please try the following code?
+>>>
+>>> Unfortunately, I still see observe reodering.
+>>
+>> Any news?
 > 
-> or i in /dev/ttyACM*; do udevadm info $i | grep -q
-> 03eb_2404_USB_CAN_FD && echo "path:
->                                      /dev/$(basename $i)"; done
-> 
-> It prints the device  /dev/ttyACM0 is present.
-> 
-> Can I use it as serial CAN  device?
+> I'm unable to find any better solution than a revert. That will cost
+> some small performace regression, so I'm a bit reluctant to go ahead.
+> If there is agreement I can post the revert.
 
-Looks weird.
+Is it possible that the current pfifo_fast handling has some additional 
+problems:
 
-As already answered by Yegor you might have a SLCAN device here.
+https://marc.info/?l=linux-netdev&m=158092393613669&w=2
 
-> I am novice to CAN devices. Now I understand that can and can_raw are
-> only generic drivers and I need real driver.
-> I wrote to Microchip support, perhaps they have driver for this box.
-> 
-> But still I do not understand why can driver is loaded at boot time I
-> used to think that only real hardware cause the driver to appear.
-> 
->     16.727375] r8169 0000:02:00.0: can't disable ASPM; OS doesn't have
-> ASPM control
-> [   16.742055] r8169 0000:04:00.0: can't disable ASPM; OS doesn't have
-> ASPM control
-> [   16.824470] peak_usb 1-2:1.0 can0: attached to PCAN-USB channel 0
-> (device 255)
+Or is this unrelated?
 
-But this looks like a 'real' PCAN USB adapter
-https://www.peak-system.com/PCAN-USB.199.0.html
-
-which you should be able to configure by setting a bitrate and start to 
-work.
-
-Can you post the output of
-
-ip -det link show can0
-
-and
-
-lsmod | grep can
-
-and
-
-lsmod | grep peak
-
-?
-
-Regards,
+Best,
 Oliver
-
-
-> [   30.661705] can: controller area network core (rev 20120528 abi 9)
-> [   30.678155] can: raw protocol (rev 20120528)
-> 
-> I saw these lines in dmesg and now I thing they apperead because CAN
-> support was not a module but built-in in kernel configuration.
-> Regards,
-> Lev
-> 
-> On Tue, Feb 4, 2020 at 6:08 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->>
->> On 04/02/2020 14.07, Lev R. Oshvang . wrote:
->>
->>> I have with DELL 3002 Edge server
->>> It has can and can_raw drivers loaded at boot time
->>> It does not have /boot/config.txt file
->>>
->>> Unfortunately, I do not have kernel sources and kernel config file is
->>> not present in /proc, so I do not know which exactly chip is on b
->>> oard and board specs says only:
->>>
->>> (CAN2.0 A/B/FD) 1Mbps (CAN2.0), 5Mbps (CAN-FD).
->>
->> https://topics-cdn.dell.com/pdf/dell-edge-gateway-3000-series_Specifications2_de-de.pdf
->> says that there is a
->> https://www.microchip.com/wwwproducts/en/ATSAME70N19 Cortex-M7 which
->> handles the CAN FD controller.
->>
->> The ATSAME70N19 is connected somehow to the Intel Atom-Prozessor E3805.
->>
->> So I won't assume, that you can access the CAN controller from the Intel
->> CPU.
->>
->>> I tried to set it up but get the following error
->>>
->>>
->>> root@5HCF902:~# ip link add dev can0 type can
->>> RTNETLINK answers: Operation not supported
->>
->> You can not "add" a real CAN interface with "ip link add ..." - this
->> works only for virtual CANs.
->>
->> Try
->>
->> ip -det link show
->>
->> where some CAN interface (e.g. can0) should be visible, if you have one.
->>
->> Regards,
->> Oliver
->>
