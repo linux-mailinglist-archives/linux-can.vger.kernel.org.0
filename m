@@ -2,101 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E86FA1549F8
-	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2020 18:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B68154D77
+	for <lists+linux-can@lfdr.de>; Thu,  6 Feb 2020 21:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727754AbgBFRG5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 Feb 2020 12:06:57 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:35466 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727060AbgBFRG4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Feb 2020 12:06:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1581008815;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=Xekbzm1y2eWDWsDBv6FcjQ0BHpS6U3SXQC6QFTLcRj0=;
-        b=bodMkOqa9AHbl4fMPWmMPbQ4F7vmhA2GU0dVZ/+Y3J8CrjgZChOsIEDq5e6yfCi98g
-        9PLwQgVG+7DjjVxQ89NK1OCg3zzA3h+MpUI0M++/i/WjGZh6E85OoEl2+g9obfvGMXgF
-        IBmEpQUGVgBd393VE6sEYWh4RLI8hLapPS7CGWL8Z1I8A1t95NIKZk3IYK/+I5MdrqJq
-        U9FZEdU7EL3RZfgppwoSvoKPh5DvfDo3DnMdy9tJD3DZCy8YiXuBuyC676I+hjyQnx2y
-        nFYX0S6C82Qkh4cMGSW1tpZ7fxW90iRse1Fm0wuc4nCs0ZErHJApRVn56TOheaZY2cNL
-        Q6wA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJU8h6kUuM"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 46.1.12 DYNA|AUTH)
-        with ESMTPSA id g084e8w16H6oKc1
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Thu, 6 Feb 2020 18:06:50 +0100 (CET)
-Subject: Re: [BUG] pfifo_fast may cause out-of-order CAN frame transmission
-To:     Paolo Abeni <pabeni@redhat.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <661cc33a-5f65-2769-cc1a-65791cb4b131@pengutronix.de>
- <7717e4470f6881bbc92645c72ad7f6ec71360796.camel@redhat.com>
- <779d3346-0344-9064-15d5-4d565647a556@pengutronix.de>
- <1b70f56b72943bf5dfd2813565373e8c1b639c31.camel@redhat.com>
- <53ce1ab4-3346-2367-8aa5-85a89f6897ec@pengutronix.de>
- <57a2352dfc442ea2aa9cd653f8e09db277bf67c7.camel@redhat.com>
- <b012e914-fc1a-5a45-f28b-e9d4d4dfc0fe@pengutronix.de>
- <ef6b4e00-75fe-70f6-6b57-7bdbaa1aac33@pengutronix.de>
- <13e8950e8537e549f6afb6e254ec75a7462ce648.camel@redhat.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <5e9b81f5-018d-0680-2d0b-55ff3bfb978f@hartkopp.net>
-Date:   Thu, 6 Feb 2020 18:06:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727984AbgBFUpk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 Feb 2020 15:45:40 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:38343 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727972AbgBFUpj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 Feb 2020 15:45:39 -0500
+Received: by mail-pj1-f68.google.com with SMTP id j17so494516pjz.3;
+        Thu, 06 Feb 2020 12:45:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=T1ngJTNlZxERh60vPjrLNV/Vk1r1+t/IfAuzUHqs6AE=;
+        b=gxwGl/Tr463nIBcxt040C/p0Q/o+tybQ+E1tfZkmFMmqdIlosAbqLw3G9qj72KfkOB
+         wo95ctoRVWkhi0BmC3wvYJk72Te615hYJfxWguGNxguNscrsY7NQmI+KKneOljTr//qz
+         OfQBnrGC1AkRR5sVY751zx4vGqO8zwXhQRWbBniWpggOmEf5FegW7YtO2MFT4m24cuqs
+         7+PO/GH7Chc852pDO54hh3R9YRX8XXh4Csrs3wD67ckPZ3BdVY5nHMMn6ZIb5YZZrkDB
+         9fmpgE0GC0fk6AuqPvXrfN0t9D7gTCqa7mFiWDC4EE+h9+RS0Dh1iXMrYuasv4GzZ1Ni
+         uXDQ==
+X-Gm-Message-State: APjAAAVmaUL5YKoOZbH1tTBYnghIHLJjzPOF7KqdNao4TTLnAlFMJT35
+        iXj1WHh6Aq5+CZ6ATcu10g==
+X-Google-Smtp-Source: APXvYqznJpweiJKL3aDfMJ802+43g2YmmQmhHstj1DGetYn8bdZRWJosqYnLRb7RZxOqXbOSU/+waA==
+X-Received: by 2002:a17:902:444:: with SMTP id 62mr5363236ple.209.1581021938443;
+        Thu, 06 Feb 2020 12:45:38 -0800 (PST)
+Received: from rob-hp-laptop (63-158-47-182.dia.static.qwest.net. [63.158.47.182])
+        by smtp.gmail.com with ESMTPSA id a18sm271188pfl.138.2020.02.06.12.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2020 12:45:37 -0800 (PST)
+Received: (nullmailer pid 8727 invoked by uid 1000);
+        Thu, 06 Feb 2020 19:05:26 -0000
+Date:   Thu, 6 Feb 2020 19:05:26 +0000
+From:   Rob Herring <robh@kernel.org>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        mark.rutland@arm.com, sriram.dash@samsung.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindinsg: net: can: Convert can-transceiver to
+ json-schema
+Message-ID: <20200206190526.GA29141@bogus>
+References: <20200203150353.23903-1-benjamin.gaignard@st.com>
+ <20200203150353.23903-2-benjamin.gaignard@st.com>
 MIME-Version: 1.0
-In-Reply-To: <13e8950e8537e549f6afb6e254ec75a7462ce648.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200203150353.23903-2-benjamin.gaignard@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Paolo,
-
-On 06/02/2020 14.21, Paolo Abeni wrote:
-> On Tue, 2020-02-04 at 17:25 +0100, Ahmad Fatoum wrote:
->> Hello Paolo,
->>
->> On 1/20/20 5:06 PM, Ahmad Fatoum wrote:
->>> Hello Paolo,
->>>
->>> On 1/16/20 1:40 PM, Paolo Abeni wrote:
->>>> I'm sorry for this trial & error experience. I tried to reproduce the
->>>> issue on top of the vcan virtual device, but it looks like it requires
->>>> the timing imposed by a real device, and it's missing here (TL;DR: I
->>>> can't reproduce the issue locally).
->>>
->>> No worries. I don't mind testing.
->>>
->>>> Code wise, the 2nd patch closed a possible race, but it dumbly re-
->>>> opened the one addressed by the first attempt - the 'empty' field must
->>>> be cleared prior to the trylock operation, or we may end-up with such
->>>> field set and the queue not empty.
->>>>
->>>> So, could you please try the following code?
->>>
->>> Unfortunately, I still see observe reodering.
->>
->> Any news?
+On Mon, Feb 03, 2020 at 04:03:52PM +0100, Benjamin Gaignard wrote:
+> Convert can-transceiver property to json-schema
 > 
-> I'm unable to find any better solution than a revert. That will cost
-> some small performace regression, so I'm a bit reluctant to go ahead.
-> If there is agreement I can post the revert.
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+>  .../bindings/net/can/can-transceiver.txt           | 24 ----------------------
+>  .../bindings/net/can/can-transceiver.yaml          | 23 +++++++++++++++++++++
+>  2 files changed, 23 insertions(+), 24 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/can-transceiver.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/can/can-transceiver.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/can-transceiver.txt b/Documentation/devicetree/bindings/net/can/can-transceiver.txt
+> deleted file mode 100644
+> index 0011f53ff159..000000000000
+> --- a/Documentation/devicetree/bindings/net/can/can-transceiver.txt
+> +++ /dev/null
+> @@ -1,24 +0,0 @@
+> -Generic CAN transceiver Device Tree binding
+> -------------------------------
+> -
+> -CAN transceiver typically limits the max speed in standard CAN and CAN FD
+> -modes. Typically these limitations are static and the transceivers themselves
+> -provide no way to detect this limitation at runtime. For this situation,
+> -the "can-transceiver" node can be used.
+> -
+> -Required Properties:
+> - max-bitrate:	a positive non 0 value that determines the max
+> -		speed that CAN/CAN-FD can run. Any other value
+> -		will be ignored.
+> -
+> -Examples:
+> -
+> -Based on Texas Instrument's TCAN1042HGV CAN Transceiver
+> -
+> -m_can0 {
+> -	....
+> -	can-transceiver {
+> -		max-bitrate = <5000000>;
+> -	};
+> -	...
+> -};
+> diff --git a/Documentation/devicetree/bindings/net/can/can-transceiver.yaml b/Documentation/devicetree/bindings/net/can/can-transceiver.yaml
+> new file mode 100644
+> index 000000000000..73bb084a45a8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/can-transceiver.yaml
+> @@ -0,0 +1,23 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/can-transceiver.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CAN transceiver Bindings
+> +
+> +description: CAN transceiver generic properties bindings
+> +
+> +maintainers:
+> +  - Rob Herring <robh@kernel.org>
+> +
+> +properties:
+> +  can-transceiver:
+> +    type: object
 
-Is it possible that the current pfifo_fast handling has some additional 
-problems:
+I think we want to drop this (or define $nodename) and then do:
 
-https://marc.info/?l=linux-netdev&m=158092393613669&w=2
+can-transceiver:
+  $ref: can-transceiver.yaml#
 
-Or is this unrelated?
+in the users.
 
-Best,
-Oliver
+> +
+> +    properties:
+> +      max-bitrate:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        description: a positive non 0 value that determines the max speed that
+> +                     CAN/CAN-FD can run.
+> +        minimum: 1
+> -- 
+> 2.15.0
+> 
