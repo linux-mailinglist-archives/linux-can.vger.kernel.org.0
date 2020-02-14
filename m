@@ -2,178 +2,216 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 974CC15D48C
-	for <lists+linux-can@lfdr.de>; Fri, 14 Feb 2020 10:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE1215D4C9
+	for <lists+linux-can@lfdr.de>; Fri, 14 Feb 2020 10:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgBNJSk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Feb 2020 04:18:40 -0500
-Received: from mail-am6eur05on2075.outbound.protection.outlook.com ([40.107.22.75]:6173
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727965AbgBNJSk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 14 Feb 2020 04:18:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/VVo4GqCaY6zM4sgvxSsHWBbAKmZRFzjpkj6Jgyll0iVJAd36cny5y5f7LmTDfN85OtkfNux3vi0iijvivSUpeVBUXM8/GptgOZiFzwWKuPLQHaROrNPmjc6AR2TqhAAjUvZii23EGqdRHDOpi0JMZ/+Ibt5oB73hPpruornjJc4BFnXnqnJQGs4/FiY/alwUkpwDjjumbfJXlCNsEG9GZQY5sVeT9FS2rCDnI5jYk9DNhVttX/m4A5dHjxaB0JMx1dyNF8C9aKA8oSJvqfmGjoVv5GUmi8BrqTUJS7UaDX8Tonrb1WWHXiTw5Dst/PqBLbXvteEH+0RtsOTnbqhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NcfT3iE7tClRRcStTa2OIJKwXBFdna72+6VUZs/zPUc=;
- b=AFcJHuwEdSjVL0O+90eEl30xU/3y7zXzXk7Z3/7recRSKslXGaacPrgB8VI4ncGh8EcdMXSwckVSpWyr/tv9AX79+WClDYKmhOCjmev8gN9sUG/9dNGAE6JVL8pSh0SFvgK0GUrlB5Uq/P5Cu7LNaYdTPhLIr/N+yD6Jzc+aEtIe03dXYlGDhecqH6+GLSnM1SAJh92rCjDGiR8OUK4lkgBznvYcnCNE+uWZO+eH4Ee64Ezau+MVnRd4w/fnc1F4XSfcaM1xNbB6vGvGyaAuzsQemxUmTVzOgYdIi19EM08xaB2cv4WzWUOJIrvl/xY/TdVurm9LcxxQrrXBo44r2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NcfT3iE7tClRRcStTa2OIJKwXBFdna72+6VUZs/zPUc=;
- b=qG25l1luZO7+PYD0+sQ+e9GNm0S0G6WTCzh12cwUtrv93F/FotO7ldbrBixMQurV/5YiwnF/BhSkfBXt88F+Ic8SE87W7SGw7Y8pMYxvxogQSHDVJ3eB01OC8KdhlYAi6a8/3Y3JtiBjMs7aVfZobAyTi+ml6GlMVwR5nLhNFyU=
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com (52.135.139.151) by
- DB7PR04MB5948.eurprd04.prod.outlook.com (20.178.106.213) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.25; Fri, 14 Feb 2020 09:18:23 +0000
-Received: from DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::5cb4:81c8:1618:5ca]) by DB7PR04MB4618.eurprd04.prod.outlook.com
- ([fe80::5cb4:81c8:1618:5ca%7]) with mapi id 15.20.2729.025; Fri, 14 Feb 2020
- 09:18:23 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Pankaj Bansal <pankaj.bansal@nxp.com>
-Subject: RE: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
-Thread-Topic: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
-Thread-Index: AQHVOIgqonFULiHPO0eSKFSJ3ULGeqbbAsWQgAAINwCAAC3BgIE/m36AgABmuxCAAHloAIAAB/CA
-Date:   Fri, 14 Feb 2020 09:18:23 +0000
-Message-ID: <DB7PR04MB46187A6B5A8EC3A1D73D69FFE6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
+        id S1729007AbgBNJd3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Feb 2020 04:33:29 -0500
+Received: from ssl.serverraum.org ([176.9.125.105]:42807 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728807AbgBNJd3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Feb 2020 04:33:29 -0500
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 0377522FB6;
+        Fri, 14 Feb 2020 10:33:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1581672806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=N8SmNhdMY8qx5pj4Vo7NJU1TqLaS1FwOIi0U+8UWf5U=;
+        b=jow0IQnY/XW+UNNnWLTz3oPkgWsBjbx5QarPXEvfjcXyo5jTi2/Pc8APgpo1py3JkTQH25
+        +ceZVCZRfr396NDXbVRE6xj5EqfytE1zdhKoqxEbqKUmDNAKj7QGAZaQU1lHatPrZJDd/p
+        iCNOUe/Usk3mCHLzvA8wuSi7RGL2TyA=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Fri, 14 Feb 2020 10:33:25 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, wg@grandegger.com,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        Pankaj Bansal <pankaj.bansal@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>
+Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
+In-Reply-To: <DB7PR04MB46187A6B5A8EC3A1D73D69FFE6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
 References: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
  <20200213192027.4813-1-michael@walle.cc>
  <DB7PR04MB461896B6CC3EDC7009BCD741E6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
  <2322fb83486c678917957d9879e27e63@walle.cc>
-In-Reply-To: <2322fb83486c678917957d9879e27e63@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=qiangqing.zhang@nxp.com; 
-x-originating-ip: [222.93.234.203]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: fc0667f8-affe-4a9a-14f8-08d7b12ed77c
-x-ms-traffictypediagnostic: DB7PR04MB5948:|DB7PR04MB5948:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB594836269F8E345194C8508BE6150@DB7PR04MB5948.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 03137AC81E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10001)(10009020)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(189003)(199004)(81166006)(86362001)(81156014)(6506007)(53546011)(4326008)(9686003)(55016002)(5660300002)(186003)(8676002)(26005)(45080400002)(966005)(478600001)(6916009)(66476007)(64756008)(33656002)(316002)(54906003)(71200400001)(52536014)(76116006)(7696005)(8936002)(66556008)(2906002)(66446008)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR04MB5948;H:DB7PR04MB4618.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Ll4BRR3tgNw2oTulTOpkD3gbQzSqUrUcR9sz08UnVz4tgWf2JU9965qzKzmkG2AVCM0wMYMIpinJFFqwusjtPItRkEv9Hm9vud4fzjHFnXWKlnnEqpgLB5dpnJ0nGVt+DHQqyqhoEy4cl2eT54UXlB042xVgm7TxVd0vBNMaaXJ/blxh04/ZFp9+ZkNtsTQNwYAptp6h8iLHgmzSzzKvTMQa/EIWsqXaf/UrjgYdm5E8uKSjOODG8qozz1mTo65k5Kz9VCnbZLLdEgCH+MCVu7CIHiMOrmXS/iCHU3InOxWDih1BdE3zvu2Q4b+DAexEbTNc7p595vK+p/rAW8TLwVYjVEyU7YVGu+tUOvciM21OAuNqg1+XQzfeMCOoKczNdl/i1YpDkhBsUActvxabIOTf977KMTIp9irpuHGy8P1QBr2QcHCdBLu7ftthLyl5V9XBNkgtUTdMb7NkbE7ilSwg5r6rIiWDsAScwtRHsBv35zwMQJ6Q10J3CzsWDlT5YKCnIl3wwOemUDJs8wZM2/Rliyp9fszwR0ZgRe8b0jwr4qcYHxP3NvzTpXreOlAEfg85XwRfM+iA9MH5WoyQKrAMeBBqH0C/ze0ny1yLA0VFRkB5H8y3ma/8+c4qsLEY
-x-ms-exchange-antispam-messagedata: yKl4TsaFY7tyF4BR4aLbCEBYO2Zo4GDU8BzggMBLzyWhlMPz6VpJ3JopOta4tpTngHlagEe/dTRmychyC2pEva0JApZbcSYv85Z0R9QJoa98MN71Wu18BH8y4J5PDjGsU6HicicziDWpA4VqnWFf+g==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc0667f8-affe-4a9a-14f8-08d7b12ed77c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Feb 2020 09:18:23.7510
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /p/iiYsH9dcH9drjjbysMB4mfHEf2vBE4z1SBTcaqlQ9P4KQBl743D94PILgjKPbX8c2XRrLRWymi0r5Ctm9ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5948
+ <DB7PR04MB46187A6B5A8EC3A1D73D69FFE6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
+Message-ID: <bf671072ce479049eb354d44f3617383@walle.cc>
+X-Sender: michael@walle.cc
+User-Agent: Roundcube Webmail/1.3.10
+X-Spamd-Bar: /
+X-Spam-Status: No, score=-0.10
+X-Rspamd-Server: web
+X-Spam-Score: -0.10
+X-Rspamd-Queue-Id: 0377522FB6
+X-Spamd-Result: default: False [-0.10 / 15.00];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DKIM_SIGNED(0.00)[];
+         RCPT_COUNT_SEVEN(0.00)[7];
+         NEURAL_HAM(-0.00)[-0.904];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         MID_RHS_MATCH_FROM(0.00)[]
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQoNCkJlc3QgUmVnYXJkcywNCkpvYWtpbSBaaGFuZw0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2Fn
-ZS0tLS0tDQo+IEZyb206IE1pY2hhZWwgV2FsbGUgPG1pY2hhZWxAd2FsbGUuY2M+DQo+IFNlbnQ6
-IDIwMjDlubQy5pyIMTTml6UgMTY6NDMNCj4gVG86IEpvYWtpbSBaaGFuZyA8cWlhbmdxaW5nLnpo
-YW5nQG54cC5jb20+DQo+IENjOiBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRl
-Pjsgd2dAZ3JhbmRlZ2dlci5jb207DQo+IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWNh
-bkB2Z2VyLmtlcm5lbC5vcmc7IFBhbmthaiBCYW5zYWwNCj4gPHBhbmthai5iYW5zYWxAbnhwLmNv
-bT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAwLzhdIGNhbjogZmxleGNhbjogYWRkIENBTiBGRCBz
-dXBwb3J0IGZvciBOWFAgRmxleGNhbg0KPiANCj4gSGkgSm9ha2ltLA0KPiANCj4gQW0gMjAyMC0w
-Mi0xNCAwMjo1NSwgc2NocmllYiBKb2FraW0gWmhhbmc6DQo+ID4gSGkgTWljaGFsLA0KPiA+DQo+
-ID4+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+IEZyb206IE1pY2hhZWwgV2FsbGUg
-PG1pY2hhZWxAd2FsbGUuY2M+DQo+ID4+IFNlbnQ6IDIwMjDlubQy5pyIMTTml6UgMzoyMA0KPiA+
-PiBUbzogTWFyYyBLbGVpbmUtQnVkZGUgPG1rbEBwZW5ndXRyb25peC5kZT4NCj4gPj4gQ2M6IEpv
-YWtpbSBaaGFuZyA8cWlhbmdxaW5nLnpoYW5nQG54cC5jb20+OyB3Z0BncmFuZGVnZ2VyLmNvbTsN
-Cj4gPj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgbGludXgtY2FuQHZnZXIua2VybmVsLm9yZzsg
-UGFua2FqIEJhbnNhbA0KPiA+PiA8cGFua2FqLmJhbnNhbEBueHAuY29tPjsgTWljaGFlbCBXYWxs
-ZSA8bWljaGFlbEB3YWxsZS5jYz4NCj4gPj4gU3ViamVjdDogUmU6IFtQQVRDSCAwLzhdIGNhbjog
-ZmxleGNhbjogYWRkIENBTiBGRCBzdXBwb3J0IGZvciBOWFANCj4gPj4gRmxleGNhbg0KPiA+Pg0K
-PiA+PiBIaSwNCj4gPj4NCj4gPj4gPj4+IEFyZSB5b3UgcHJlcGFyZWQgdG8gYWRkIGJhY2sgdGhl
-c2UgcGF0Y2hlcyBhcyB0aGV5IGFyZSBuZWNlc3NhcnkNCj4gPj4gPj4+IGZvciBGbGV4Y2FuIENB
-TiBGRD8gQW5kIHRoaXMgRmxleGNhbiBDQU4gRkQgcGF0Y2ggc2V0IGlzIGJhc2VkIG9uDQo+ID4+
-ID4+PiB0aGVzZSBwYXRjaGVzLg0KPiA+PiA+Pg0KPiA+PiA+PiBZZXMsIHRoZXNlIHBhdGNoZXMg
-d2lsbCBiZSBhZGRlZCBiYWNrLg0KPiA+PiA+DQo+ID4+ID5JJ3ZlIGNsZWFuZWQgdXAgdGhlIGZp
-cnN0IHBhdGNoIGEgYml0LCBhbmQgcHVzaGVkIGV2ZXJ5dGhpbmcgdG8gdGhlDQo+ID4+ID50ZXN0
-aW5nIGJyYW5jaC4gQ2FuIHlvdSBnaXZlIGl0IGEgdGVzdC4NCj4gPj4NCj4gPj4gV2hhdCBoYXBw
-ZW5kIHRvIHRoYXQgYnJhbmNoPyBGV0lXIEkndmUganVzdCB0cmllZCB0aGUgcGF0Y2hlcyBvbiBh
-DQo+ID4+IGN1c3RvbSBib2FyZCB3aXRoIGEgTFMxMDI4QSBTb0MuIEJvdGggQ0FOIGFuZCBDQU4t
-RkQgYXJlIHdvcmtpbmcuDQo+ID4+IEkndmUgdGVzdGVkIGFnYWluc3QgYSBQZWFrdGVjaCBVU0Ig
-Q0FOIGFkYXB0ZXIuIEknZCBsb3ZlIHRvIHNlZSB0aGVzZQ0KPiA+PiBwYXRjaGVzIHVwc3RyZWFt
-LCBiZWNhdXNlIG91ciBib2FyZCBhbHNvIG9mZmVycyBDQU4gYW5kIGJhc2ljIHN1cHBvcnQNCj4g
-Pj4gZm9yIGl0IGp1c3QgbWFkZSBpdCB1cHN0cmVhbSBbMV0uDQo+ID4gVGhlIEZsZXhDQU4gQ0FO
-IEZEIHJlbGF0ZWQgcGF0Y2hlcyBoYXZlIHN0YXllZCBpbg0KPiA+IGxpbnV4LWNhbi1uZXh0L2Zs
-ZXhjYW4gYnJhbmNoIGZvciBhIGxvbmcgdGltZSwgSSBzdGlsbCBkb24ndCBrbm93IHdoeQ0KPiA+
-IE1hcmMgZG9lc24ndCBtZXJnZSB0aGVtIGludG8gTGludXggbWFpbmxpbmUuDQo+ID4gaHR0cHM6
-Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJG
-JTJGZ2l0Lg0KPiA+DQo+IGtlcm5lbC5vcmclMkZwdWIlMkZzY20lMkZsaW51eCUyRmtlcm5lbCUy
-RmdpdCUyRm1rbCUyRmxpbnV4LWNhbi1uZXh0LmcNCj4gPg0KPiBpdCUyRnRyZWUlMkYlM0ZoJTNE
-ZmxleGNhbiZhbXA7ZGF0YT0wMiU3QzAxJTdDcWlhbmdxaW5nLnpoYW5nJTQwbg0KPiB4cC5jbw0K
-PiA+DQo+IG0lN0M5NGRjYTQ0NzJhNTg0NDEwYjNiOTA4ZDdiMTI5ZGIyNyU3QzY4NmVhMWQzYmMy
-YjRjNmZhOTJjZDk5Yw0KPiA1YzMwMTYzDQo+ID4NCj4gNSU3QzAlN0MwJTdDNjM3MTcyNjY1NjQy
-MDc5MTkyJmFtcDtzZGF0YT03N3RHNlZ1UUNpJTJGWlhCS2IyMw0KPiA4JTJGZE5TVjMNCj4gPiBO
-VUlGck01WTBlOXlqMEozb3MlM0QmYW1wO3Jlc2VydmVkPTANCj4gPiBBbHNvIG11c3QgaG9wZSB0
-aGF0IHRoaXMgcGF0Y2ggc2V0IGNhbiBiZSB1cHN0cmVhbWVkIHNvb24uIDotKQ0KPiANCj4gSSd2
-ZSB0b29rIHRoZW0gZnJvbSB0aGlzIGJyYW5jaCBhbmQgYXBwbGllZCB0aGVtIHRvIHRoZSBsYXRl
-c3QgbGludXggbWFzdGVyLg0KPiANCj4gVGh1cywNCj4gDQo+IFRlc3RlZC1ieTogTWljaGFlbCBX
-YWxsZSA8bWljaGFlbEB3YWxsZS5jYz4NCj4gDQo+IA0KPiA+PiBJZiB0aGVzZSBwYXRjaGVzIGFy
-ZSB1cHN0cmVhbSwgb25seSB0aGUgZGV2aWNlIHRyZWUgbm9kZXMgc2VlbXMgdG8gYmUNCj4gPj4g
-bWlzc2luZy4NCj4gPj4gSSBkb24ndCBrbm93IHdoYXQgaGFzIGhhcHBlbmVkIHRvIFsyXS4gQnV0
-IHRoZSBwYXRjaCBkb2Vzbid0IHNlZW0gdG8NCj4gPj4gYmUgbmVjZXNzYXJ5Lg0KPiA+IFllcywg
-dGhpcyBwYXRjaCBpcyB1bm5lY2Vzc2FyeS4gSSBoYXZlIE5BQ0tlZCB0aGlzIHBhdGNoIGZvciB0
-aGF0LA0KPiA+IGFjY29yZGluZyB0byBGbGV4Q0FOIEludGVncmF0ZWQgR3VpZGUsIENUUkwxW0NM
-S1NSQ109MCBzZWxlY3QNCj4gPiBvc2NpbGxhdG9yIGNsb2NrIGFuZCBDVFJMMVtDTEtTUkNdPTEg
-c2VsZWN0IHBlcmlwaGVyYWwgY2xvY2suDQo+ID4gQnV0IGl0IGlzIGFjdHVhbGx5IGRlY2lkZWQg
-YnkgU29DIGludGVncmF0aW9uLCBmb3IgaS5NWCwgdGhlIGRlc2lnbiBpcw0KPiA+IGRpZmZlcmVu
-dC4NCj4gDQo+IG9rIHRoYW5rcyBmb3IgY2xhcmlmeWluZy4NCj4gDQo+ID4gSSBoYXZlIG5vdCB1
-cHN0cmVhbSBpLk1YIEZsZXhDQU4gZGV2aWNlIHRyZWUgbm9kZXMsIHNpbmNlIGl0J3MNCj4gPiBk
-ZXBlbmRlbmN5IGhhdmUgbm90IHVwc3RyZWFtZWQgeWV0Lg0KPiA+DQo+ID4+IFBhbmthaiBhbHJl
-YWR5IHNlbmQgYSBwYXRjaCB0byBhZGQgdGhlIGRldmljZSBub2RlIHRvIHRoZSBMUzEwMjhBIFsz
-XS4NCj4gPj4gVGhhdHMgYmFzaWNhbGx5IHRoZSBzYW1lIEkndmUgdXNlZCwgb25seSB0aGF0IG1p
-bmUgZGlkbid0IGhhZCB0aGUNCj4gPj4gImZzbCxsczEwMjhhcjEtZmxleGNhbiIgY29tcGF0aWJs
-aXR5IHN0cmluZywgYnV0IG9ubHkgdGhlDQo+ID4+ICJseDIxNjBhcjEtZmxleGNhbiINCj4gPj4g
-d2hpY2ggaXMgdGhlIGNvcnJlY3Qgd2F5IHRvIHVzZSBpdCwgcmlnaHQ/DQo+ID4gWW91IGNhbiBz
-ZWUgYmVsb3cgdGFibGUgZnJvbSBGbGV4Q0FOIGRyaXZlciwgImZzbCxseDIxNjBhcjEtZmxleGNh
-biINCj4gPiBzdXBwb3J0cyBDQU4gRkQsIHlvdSBjYW4gdXNlIHRoaXMgY29tcGF0aWJsZSBzdHJp
-bmcuDQo+IA0KPiBjb3JyZWN0LiBJJ3ZlIGFscmVhZHkgYSBwYXRjaCB0aGF0IGRvZXMgZXhhY3Rs
-eSB0aGlzIDspIFdobyB3b3VsZCB0YWtlIHRoZSBwYXRjaA0KPiBmb3IgYWRkaW5nIHRoZSBMUzEw
-MjhBIGNhbiBkZXZpY2UgdHJlZSBub2RlcyB0byBsczEwMjhhLmR0c2k/IFlvdSBvciBTaGF3bg0K
-PiBHdW8/DQpTb3JyeSwgSSBtaXNzZWQgdGhlIGxpbmtbM10sIHdlIHVzdWFsbHkgd3JpdGUgaXQg
-dGhpcyB3YXk6DQoJCQljb21wYXRpYmxlID0gImZzbCxsczEwMjhhcjEtZmxleGNhbiIsImZzbCxs
-eDIxNjBhcjEtZmxleGNhbiI7DQpQbGVhc2Ugc2VuZCBwYXRjaCB0byBTaGF3biBHdW8sIGhlIHdp
-bGwgcmV2aWV3IHRoZSBkZXZpY2UgdHJlZS4NCg0KPiA+IHN0YXRpYyBjb25zdCBzdHJ1Y3Qgb2Zf
-ZGV2aWNlX2lkIGZsZXhjYW5fb2ZfbWF0Y2hbXSA9IHsNCj4gPiAJeyAuY29tcGF0aWJsZSA9ICJm
-c2wsaW14OHFtLWZsZXhjYW4iLCAuZGF0YSA9DQo+ID4gJmZzbF9pbXg4cW1fZGV2dHlwZV9kYXRh
-LCB9LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxpbXg2cS1mbGV4Y2FuIiwgLmRhdGEgPSAm
-ZnNsX2lteDZxX2RldnR5cGVfZGF0YSwNCj4gPiB9LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZz
-bCxpbXgyOC1mbGV4Y2FuIiwgLmRhdGEgPSAmZnNsX2lteDI4X2RldnR5cGVfZGF0YSwNCj4gPiB9
-LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxpbXg1My1mbGV4Y2FuIiwgLmRhdGEgPSAmZnNs
-X2lteDI1X2RldnR5cGVfZGF0YSwNCj4gPiB9LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxp
-bXgzNS1mbGV4Y2FuIiwgLmRhdGEgPSAmZnNsX2lteDI1X2RldnR5cGVfZGF0YSwNCj4gPiB9LA0K
-PiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxpbXgyNS1mbGV4Y2FuIiwgLmRhdGEgPSAmZnNsX2lt
-eDI1X2RldnR5cGVfZGF0YSwNCj4gPiB9LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxwMTAx
-MC1mbGV4Y2FuIiwgLmRhdGEgPSAmZnNsX3AxMDEwX2RldnR5cGVfZGF0YSwNCj4gPiB9LA0KPiA+
-IAl7IC5jb21wYXRpYmxlID0gImZzbCx2ZjYxMC1mbGV4Y2FuIiwgLmRhdGEgPSAmZnNsX3ZmNjEw
-X2RldnR5cGVfZGF0YSwNCj4gPiB9LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxsczEwMjFh
-cjItZmxleGNhbiIsIC5kYXRhID0NCj4gPiAmZnNsX2xzMTAyMWFfcjJfZGV2dHlwZV9kYXRhLCB9
-LA0KPiA+IAl7IC5jb21wYXRpYmxlID0gImZzbCxseDIxNjBhcjEtZmxleGNhbiIsIC5kYXRhID0N
-Cj4gPiAmZnNsX2x4MjE2MGFfcjFfZGV2dHlwZV9kYXRhLCB9LA0KPiA+IAl7IC8qIHNlbnRpbmVs
-ICovIH0sDQo+ID4gfTsNCj4gPg0KPiANCj4gLW1pY2hhZWwNCg==
+Am 2020-02-14 10:18, schrieb Joakim Zhang:
+> Best Regards,
+> Joakim Zhang
+> 
+>> -----Original Message-----
+>> From: Michael Walle <michael@walle.cc>
+>> Sent: 2020年2月14日 16:43
+>> To: Joakim Zhang <qiangqing.zhang@nxp.com>
+>> Cc: Marc Kleine-Budde <mkl@pengutronix.de>; wg@grandegger.com;
+>> netdev@vger.kernel.org; linux-can@vger.kernel.org; Pankaj Bansal
+>> <pankaj.bansal@nxp.com>
+>> Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP 
+>> Flexcan
+>> 
+>> Hi Joakim,
+>> 
+>> Am 2020-02-14 02:55, schrieb Joakim Zhang:
+>> > Hi Michal,
+>> >
+>> >> -----Original Message-----
+>> >> From: Michael Walle <michael@walle.cc>
+>> >> Sent: 2020年2月14日 3:20
+>> >> To: Marc Kleine-Budde <mkl@pengutronix.de>
+>> >> Cc: Joakim Zhang <qiangqing.zhang@nxp.com>; wg@grandegger.com;
+>> >> netdev@vger.kernel.org; linux-can@vger.kernel.org; Pankaj Bansal
+>> >> <pankaj.bansal@nxp.com>; Michael Walle <michael@walle.cc>
+>> >> Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP
+>> >> Flexcan
+>> >>
+>> >> Hi,
+>> >>
+>> >> >>> Are you prepared to add back these patches as they are necessary
+>> >> >>> for Flexcan CAN FD? And this Flexcan CAN FD patch set is based on
+>> >> >>> these patches.
+>> >> >>
+>> >> >> Yes, these patches will be added back.
+>> >> >
+>> >> >I've cleaned up the first patch a bit, and pushed everything to the
+>> >> >testing branch. Can you give it a test.
+>> >>
+>> >> What happend to that branch? FWIW I've just tried the patches on a
+>> >> custom board with a LS1028A SoC. Both CAN and CAN-FD are working.
+>> >> I've tested against a Peaktech USB CAN adapter. I'd love to see these
+>> >> patches upstream, because our board also offers CAN and basic support
+>> >> for it just made it upstream [1].
+>> > The FlexCAN CAN FD related patches have stayed in
+>> > linux-can-next/flexcan branch for a long time, I still don't know why
+>> > Marc doesn't merge them into Linux mainline.
+>> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.
+>> >
+>> kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fmkl%2Flinux-can-next.g
+>> >
+>> it%2Ftree%2F%3Fh%3Dflexcan&amp;data=02%7C01%7Cqiangqing.zhang%40n
+>> xp.co
+>> >
+>> m%7C94dca4472a584410b3b908d7b129db27%7C686ea1d3bc2b4c6fa92cd99c
+>> 5c30163
+>> >
+>> 5%7C0%7C0%7C637172665642079192&amp;sdata=77tG6VuQCi%2FZXBKb23
+>> 8%2FdNSV3
+>> > NUIFrM5Y0e9yj0J3os%3D&amp;reserved=0
+>> > Also must hope that this patch set can be upstreamed soon. :-)
+>> 
+>> I've took them from this branch and applied them to the latest linux 
+>> master.
+>> 
+>> Thus,
+>> 
+>> Tested-by: Michael Walle <michael@walle.cc>
+>> 
+>> 
+>> >> If these patches are upstream, only the device tree nodes seems to be
+>> >> missing.
+>> >> I don't know what has happened to [2]. But the patch doesn't seem to
+>> >> be necessary.
+>> > Yes, this patch is unnecessary. I have NACKed this patch for that,
+>> > according to FlexCAN Integrated Guide, CTRL1[CLKSRC]=0 select
+>> > oscillator clock and CTRL1[CLKSRC]=1 select peripheral clock.
+>> > But it is actually decided by SoC integration, for i.MX, the design is
+>> > different.
+>> 
+>> ok thanks for clarifying.
+>> 
+>> > I have not upstream i.MX FlexCAN device tree nodes, since it's
+>> > dependency have not upstreamed yet.
+>> >
+>> >> Pankaj already send a patch to add the device node to the LS1028A [3].
+>> >> Thats basically the same I've used, only that mine didn't had the
+>> >> "fsl,ls1028ar1-flexcan" compatiblity string, but only the
+>> >> "lx2160ar1-flexcan"
+>> >> which is the correct way to use it, right?
+>> > You can see below table from FlexCAN driver, "fsl,lx2160ar1-flexcan"
+>> > supports CAN FD, you can use this compatible string.
+>> 
+>> correct. I've already a patch that does exactly this ;) Who would take 
+>> the patch
+>> for adding the LS1028A can device tree nodes to ls1028a.dtsi? You or 
+>> Shawn
+>> Guo?
+> Sorry, I missed the link[3], we usually write it this way:
+> 			compatible = "fsl,ls1028ar1-flexcan","fsl,lx2160ar1-flexcan";
+> Please send patch to Shawn Guo, he will review the device tree.
+
+As far as I know, there should be no undocumented binding. Eg. the 
+ls1028ar1-flexcan
+is neither in the source nor in the device tree binding documentation, 
+thus wouldn't
+be accepted.
+
+Thus either there should be another ls1028ar1-flexcan in the 
+flexcan_of_match table
+and the node should only contain that string or the node should only 
+contain
+fsl,lx2160ar1-flexcan. Is there any advantage of the first option?
+
+
+-michael
+
+
+> 
+>> > static const struct of_device_id flexcan_of_match[] = {
+>> > 	{ .compatible = "fsl,imx8qm-flexcan", .data =
+>> > &fsl_imx8qm_devtype_data, },
+>> > 	{ .compatible = "fsl,imx6q-flexcan", .data = &fsl_imx6q_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,imx28-flexcan", .data = &fsl_imx28_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,imx53-flexcan", .data = &fsl_imx25_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,imx35-flexcan", .data = &fsl_imx25_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,imx25-flexcan", .data = &fsl_imx25_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,p1010-flexcan", .data = &fsl_p1010_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,vf610-flexcan", .data = &fsl_vf610_devtype_data,
+>> > },
+>> > 	{ .compatible = "fsl,ls1021ar2-flexcan", .data =
+>> > &fsl_ls1021a_r2_devtype_data, },
+>> > 	{ .compatible = "fsl,lx2160ar1-flexcan", .data =
+>> > &fsl_lx2160a_r1_devtype_data, },
+>> > 	{ /* sentinel */ },
+>> > };
+>> >
+>> 
+>> -michael
