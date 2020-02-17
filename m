@@ -2,113 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B6D1615EA
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2020 16:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FF6161705
+	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2020 17:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728142AbgBQPPu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Feb 2020 10:15:50 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:43576 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726833AbgBQPPu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Feb 2020 10:15:50 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01HFFTk5125091;
-        Mon, 17 Feb 2020 09:15:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1581952529;
-        bh=sesL32PDsZi01y0X5NncQMWx/LULUnsHSmLX5Wya1Xc=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=gCgf3hT+IcPMAv4XKF0sDStZbR0mz80E4QENsSIj7d/a/S0T9abzOcR9XKl/l4VRP
-         2SmDJfX6EVy8ENek08jsvgB0YRJuZdn2JrQ2R1I74ByocsVYcggHmzoqhPB3jhe/ry
-         f8Pk6FCS1OW8+2L6kaPAZzzqZsr6mp6T8TUrhg6o=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01HFFTfv119247
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 17 Feb 2020 09:15:29 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 17
- Feb 2020 09:15:28 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Mon, 17 Feb 2020 09:15:28 -0600
-Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01HFFSIB067034;
-        Mon, 17 Feb 2020 09:15:28 -0600
-Subject: Re: [PATCH v2 2/3] can: m_can: m_can_platform: Add support for
- enabling transceiver
-To:     Faiz Abbas <faiz_abbas@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>
-CC:     <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <catalin.marinas@arm.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <mkl@pengutronix.de>, <wg@grandegger.com>,
-        <sriram.dash@samsung.com>
-References: <20200217142836.23702-1-faiz_abbas@ti.com>
- <20200217142836.23702-3-faiz_abbas@ti.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <250f905a-33c3-dd17-15c9-e282299dd742@ti.com>
-Date:   Mon, 17 Feb 2020 09:10:47 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727614AbgBQQKm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Feb 2020 11:10:42 -0500
+Received: from mga18.intel.com ([134.134.136.126]:5521 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726866AbgBQQKm (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 17 Feb 2020 11:10:42 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Feb 2020 08:10:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,453,1574150400"; 
+   d="scan'208";a="239109401"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 17 Feb 2020 08:10:40 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6FE0F73; Mon, 17 Feb 2020 18:10:39 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] can: mcp251x: Use readx_poll_timeout() helper
+Date:   Mon, 17 Feb 2020 18:10:38 +0200
+Message-Id: <20200217161038.25009-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-In-Reply-To: <20200217142836.23702-3-faiz_abbas@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Faiz
+We may use special helper macro to poll IO till condition or timeout occurs.
 
-On 2/17/20 8:28 AM, Faiz Abbas wrote:
-> CAN transceivers on some boards have a standby line which can be
-> toggled to enable/disable the transceiver. Model this as an optional
-> fixed xceiver regulator.
->
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> Acked-by: Sriram Dash <sriram.dash@samsung.com>
-> ---
->   drivers/net/can/m_can/m_can_platform.c | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-> index 38ea5e600fb8..719468fab507 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -6,6 +6,7 @@
->   // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
->   
->   #include <linux/platform_device.h>
-> +#include <linux/regulator/consumer.h>
->   
->   #include "m_can.h"
->   
-> @@ -57,6 +58,7 @@ static int m_can_plat_probe(struct platform_device *pdev)
->   {
->   	struct m_can_classdev *mcan_class;
->   	struct m_can_plat_priv *priv;
-> +	struct regulator *reg_xceiver;
->   	struct resource *res;
->   	void __iomem *addr;
->   	void __iomem *mram_addr;
-> @@ -111,6 +113,10 @@ static int m_can_plat_probe(struct platform_device *pdev)
->   
->   	m_can_init_ram(mcan_class);
->   
-> +	reg_xceiver = devm_regulator_get_optional(&pdev->dev, "xceiver");
-> +	if (PTR_ERR(reg_xceiver) == -EPROBE_DEFER)
-> +		return -EPROBE_DEFER;
-> +
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/can/spi/mcp251x.c | 62 +++++++++++++++++------------------
+ 1 file changed, 31 insertions(+), 31 deletions(-)
 
-Where is this regulator enabled?
-
-Shouldn't the regulator be managed by runtime PM as well?
-
-Dan
+diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
+index 5009ff294941..5f6fa1cf506a 100644
+--- a/drivers/net/can/spi/mcp251x.c
++++ b/drivers/net/can/spi/mcp251x.c
+@@ -29,6 +29,7 @@
+ #include <linux/freezer.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+@@ -345,6 +346,13 @@ static void mcp251x_write_bits(struct spi_device *spi, u8 reg,
+ 	mcp251x_spi_trans(spi, 4);
+ }
+ 
++static u8 mcp251x_read_stat(struct spi_device *spi)
++{
++	return mcp251x_read_reg(spi, CANSTAT) & CANCTRL_REQOP_MASK;
++}
++#define mcp251x_read_stat_poll_timeout(addr, val, cond, delay_us, timeout_us) \
++	readx_poll_timeout(mcp251x_read_stat, addr, val, cond, delay_us, timeout_us)
++
+ static void mcp251x_hw_tx_frame(struct spi_device *spi, u8 *buf,
+ 				int len, int tx_buf_idx)
+ {
+@@ -471,7 +479,8 @@ static void mcp251x_hw_sleep(struct spi_device *spi)
+ /* May only be called when device is sleeping! */
+ static int mcp251x_hw_wake(struct spi_device *spi)
+ {
+-	unsigned long timeout;
++	u8 value;
++	int ret;
+ 
+ 	/* Force wakeup interrupt to wake device, but don't execute IST */
+ 	disable_irq(spi->irq);
+@@ -484,14 +493,12 @@ static int mcp251x_hw_wake(struct spi_device *spi)
+ 	mcp251x_write_reg(spi, CANCTRL, CANCTRL_REQOP_CONF);
+ 
+ 	/* Wait for the device to enter config mode */
+-	timeout = jiffies + HZ;
+-	while ((mcp251x_read_reg(spi, CANSTAT) & CANCTRL_REQOP_MASK) !=
+-			CANCTRL_REQOP_CONF) {
+-		schedule();
+-		if (time_after(jiffies, timeout)) {
+-			dev_err(&spi->dev, "MCP251x didn't enter in config mode\n");
+-			return -EBUSY;
+-		}
++	ret = mcp251x_read_stat_poll_timeout(spi, value, value == CANCTRL_REQOP_CONF,
++					     MCP251X_OST_DELAY_MS * 1000,
++					     USEC_PER_SEC);
++	if (ret) {
++		dev_err(&spi->dev, "MCP251x didn't enter in config mode\n");
++		return ret;
+ 	}
+ 
+ 	/* Disable and clear pending interrupts */
+@@ -546,7 +553,8 @@ static int mcp251x_do_set_mode(struct net_device *net, enum can_mode mode)
+ static int mcp251x_set_normal_mode(struct spi_device *spi)
+ {
+ 	struct mcp251x_priv *priv = spi_get_drvdata(spi);
+-	unsigned long timeout;
++	u8 value;
++	int ret;
+ 
+ 	/* Enable interrupts */
+ 	mcp251x_write_reg(spi, CANINTE,
+@@ -564,13 +572,12 @@ static int mcp251x_set_normal_mode(struct spi_device *spi)
+ 		mcp251x_write_reg(spi, CANCTRL, CANCTRL_REQOP_NORMAL);
+ 
+ 		/* Wait for the device to enter normal mode */
+-		timeout = jiffies + HZ;
+-		while (mcp251x_read_reg(spi, CANSTAT) & CANCTRL_REQOP_MASK) {
+-			schedule();
+-			if (time_after(jiffies, timeout)) {
+-				dev_err(&spi->dev, "MCP251x didn't enter in normal mode\n");
+-				return -EBUSY;
+-			}
++		ret = mcp251x_read_stat_poll_timeout(spi, value, value == 0,
++						     MCP251X_OST_DELAY_MS * 1000,
++						     USEC_PER_SEC);
++		if (ret) {
++			dev_err(&spi->dev, "MCP251x didn't enter in normal mode\n");
++			return ret;
+ 		}
+ 	}
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
+@@ -614,7 +621,7 @@ static int mcp251x_setup(struct net_device *net, struct spi_device *spi)
+ static int mcp251x_hw_reset(struct spi_device *spi)
+ {
+ 	struct mcp251x_priv *priv = spi_get_drvdata(spi);
+-	unsigned long timeout;
++	u8 value;
+ 	int ret;
+ 
+ 	/* Wait for oscillator startup timer after power up */
+@@ -629,19 +636,12 @@ static int mcp251x_hw_reset(struct spi_device *spi)
+ 	mdelay(MCP251X_OST_DELAY_MS);
+ 
+ 	/* Wait for reset to finish */
+-	timeout = jiffies + HZ;
+-	while ((mcp251x_read_reg(spi, CANSTAT) & CANCTRL_REQOP_MASK) !=
+-	       CANCTRL_REQOP_CONF) {
+-		usleep_range(MCP251X_OST_DELAY_MS * 1000,
+-			     MCP251X_OST_DELAY_MS * 1000 * 2);
+-
+-		if (time_after(jiffies, timeout)) {
+-			dev_err(&spi->dev,
+-				"MCP251x didn't enter in conf mode after reset\n");
+-			return -EBUSY;
+-		}
+-	}
+-	return 0;
++	ret = mcp251x_read_stat_poll_timeout(spi, value, value == CANCTRL_REQOP_CONF,
++					     MCP251X_OST_DELAY_MS * 1000,
++					     USEC_PER_SEC);
++	if (ret)
++		dev_err(&spi->dev, "MCP251x didn't enter in conf mode after reset\n");
++	return ret;
+ }
+ 
+ static int mcp251x_hw_probe(struct spi_device *spi)
+-- 
+2.25.0
 
