@@ -2,253 +2,146 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5327160DC0
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2020 09:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2561613FA
+	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2020 14:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbgBQIsn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Feb 2020 03:48:43 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:39245 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728245AbgBQIsm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Feb 2020 03:48:42 -0500
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id ADCCC22EDB;
-        Mon, 17 Feb 2020 09:48:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1581929318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lmv78YX43oFqZ1EkelBJynUL5eO5zMYR3H3XHE3crkc=;
-        b=OwLLXFrjLYlP0vqj1wHEfbbvmt+cqsP9ZR5ftV67LfIW3DB5c1aT59coxFl6p2ECFVBiiV
-        fURaZzLukk5X86wKr/3XKAclU/9joJedKYSd5gLvzlZFDW2gcHMIAfUvHTDjrQqxyuceN7
-        B+VzH7AyoyOE/h4Fv3DTjeJmY/M0vQI=
+        id S1728614AbgBQNwe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Feb 2020 08:52:34 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:60064 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726710AbgBQNwe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Feb 2020 08:52:34 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01HDqCYC046134;
+        Mon, 17 Feb 2020 07:52:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1581947532;
+        bh=+byLAupfUW+GTMI0YH08CXSZf3dS/A6iBoU8mYL7Bjs=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=HURDfCsN2H10t7joYw6Uc17TbFSzb3Bapj1w2k5EsFytBbtFsNE9Ny8ytRK5p2oF+
+         nktDfWEC01tDiWJfk602k506HngSFs22HRsrfGjm16bvB3ZbUYwepME7vLxUSYHmzQ
+         16vYOXQYxGv0LZT4rKidGd0bxJb6KgY4O1fDvNi8=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01HDqCNK060998
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Feb 2020 07:52:12 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 17
+ Feb 2020 07:52:11 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 17 Feb 2020 07:52:11 -0600
+Received: from [172.24.190.4] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01HDq6xY041711;
+        Mon, 17 Feb 2020 07:52:07 -0600
+Subject: Re: [PATCH 1/3] dt-bindings: net: can: m_can: Add Documentation for
+ stb-gpios
+To:     Rob Herring <robh@kernel.org>
+CC:     Dan Murphy <dmurphy@ti.com>, Sekhar Nori <nsekhar@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <catalin.marinas@arm.com>, <mark.rutland@arm.com>,
+        <davem@davemloft.net>, <mkl@pengutronix.de>, <wg@grandegger.com>,
+        <sriram.dash@samsung.com>, <nm@ti.com>, <t-kristo@ti.com>
+References: <20200122080310.24653-1-faiz_abbas@ti.com>
+ <20200122080310.24653-2-faiz_abbas@ti.com>
+ <c3b0eeb8-bd78-aa96-4783-62dc93f03bfe@ti.com>
+ <8fc7c343-267d-c91c-0381-60990cfc35e8@ti.com>
+ <f834087b-da1c-88a0-93fe-bc72c8ac71ff@ti.com>
+ <57baeedc-9f51-7b92-f190-c0bbd8525a16@ti.com> <20200203120610.GA9303@bogus>
+From:   Faiz Abbas <faiz_abbas@ti.com>
+Message-ID: <15ae4d0e-10cf-7b4b-6487-8b64f885f184@ti.com>
+Date:   Mon, 17 Feb 2020 19:23:52 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+In-Reply-To: <20200203120610.GA9303@bogus>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Date:   Mon, 17 Feb 2020 09:48:36 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, wg@grandegger.com,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        Pankaj Bansal <pankaj.bansal@nxp.com>
-Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
-In-Reply-To: <20200217071349.GC7973@dragon>
-References: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
- <20200213192027.4813-1-michael@walle.cc>
- <DB7PR04MB461896B6CC3EDC7009BCD741E6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <2322fb83486c678917957d9879e27e63@walle.cc>
- <DB7PR04MB46187A6B5A8EC3A1D73D69FFE6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <bf671072ce479049eb354d44f3617383@walle.cc>
- <DB7PR04MB46183F74C137B644A229B632E6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <78789949f2a9dc532ec461768fbd3a60@walle.cc> <20200217071349.GC7973@dragon>
-Message-ID: <0d02f6cee0d3a680f246e8fea40f6699@walle.cc>
-X-Sender: michael@walle.cc
-User-Agent: Roundcube Webmail/1.3.10
-X-Spamd-Bar: /
-X-Spam-Status: No, score=-0.10
-X-Rspamd-Server: web
-X-Spam-Score: -0.10
-X-Rspamd-Queue-Id: ADCCC22EDB
-X-Spamd-Result: default: False [-0.10 / 15.00];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_SEVEN(0.00)[7];
-         NEURAL_HAM(-0.00)[-0.914];
-         RCVD_COUNT_ZERO(0.00)[0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         MID_RHS_MATCH_FROM(0.00)[]
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Shawn,
+Rob,
 
-Am 2020-02-17 08:13, schrieb Shawn Guo:
-> On Fri, Feb 14, 2020 at 11:02:46AM +0100, Michael Walle wrote:
->> 
->> Hi Joakim, Hi Shawn,
->> 
->> 
->> Am 2020-02-14 10:56, schrieb Joakim Zhang:
->> > > -----Original Message-----
->> > > From: Michael Walle <michael@walle.cc>
->> > > Sent: 2020年2月14日 17:33
->> > > To: Joakim Zhang <qiangqing.zhang@nxp.com>
->> > > Cc: Marc Kleine-Budde <mkl@pengutronix.de>; wg@grandegger.com;
->> > > netdev@vger.kernel.org; linux-can@vger.kernel.org; Pankaj Bansal
->> > > <pankaj.bansal@nxp.com>; Shawn Guo <shawnguo@kernel.org>
->> > > Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP
->> > > Flexcan
->> > >
->> > > Am 2020-02-14 10:18, schrieb Joakim Zhang:
->> > > > Best Regards,
->> > > > Joakim Zhang
->> > > >
->> > > >> -----Original Message-----
->> > > >> From: Michael Walle <michael@walle.cc>
->> > > >> Sent: 2020年2月14日 16:43
->> > > >> To: Joakim Zhang <qiangqing.zhang@nxp.com>
->> > > >> Cc: Marc Kleine-Budde <mkl@pengutronix.de>; wg@grandegger.com;
->> > > >> netdev@vger.kernel.org; linux-can@vger.kernel.org; Pankaj Bansal
->> > > >> <pankaj.bansal@nxp.com>
->> > > >> Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP
->> > > >> Flexcan
->> > > >>
->> > > >> Hi Joakim,
->> > > >>
->> > > >> Am 2020-02-14 02:55, schrieb Joakim Zhang:
->> > > >> > Hi Michal,
->> > > >> >
->> > > >> >> -----Original Message-----
->> > > >> >> From: Michael Walle <michael@walle.cc>
->> > > >> >> Sent: 2020年2月14日 3:20
->> > > >> >> To: Marc Kleine-Budde <mkl@pengutronix.de>
->> > > >> >> Cc: Joakim Zhang <qiangqing.zhang@nxp.com>; wg@grandegger.com;
->> > > >> >> netdev@vger.kernel.org; linux-can@vger.kernel.org; Pankaj Bansal
->> > > >> >> <pankaj.bansal@nxp.com>; Michael Walle <michael@walle.cc>
->> > > >> >> Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP
->> > > >> >> Flexcan
->> > > >> >>
->> > > >> >> Hi,
->> > > >> >>
->> > > >> >> >>> Are you prepared to add back these patches as they are
->> > > >> >> >>> necessary for Flexcan CAN FD? And this Flexcan CAN FD patch
->> > > >> >> >>> set is based on these patches.
->> > > >> >> >>
->> > > >> >> >> Yes, these patches will be added back.
->> > > >> >> >
->> > > >> >> >I've cleaned up the first patch a bit, and pushed everything to
->> > > >> >> >the testing branch. Can you give it a test.
->> > > >> >>
->> > > >> >> What happend to that branch? FWIW I've just tried the patches on a
->> > > >> >> custom board with a LS1028A SoC. Both CAN and CAN-FD are working.
->> > > >> >> I've tested against a Peaktech USB CAN adapter. I'd love to see
->> > > >> >> these patches upstream, because our board also offers CAN and
->> > > >> >> basic support for it just made it upstream [1].
->> > > >> > The FlexCAN CAN FD related patches have stayed in
->> > > >> > linux-can-next/flexcan branch for a long time, I still don't know
->> > > >> > why Marc doesn't merge them into Linux mainline.
->> > > >> > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.
->> > > >> >
->> > > >>
->> > > kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fmkl%2Flinux-can-next.
->> > > >> g
->> > > >> >
->> > > >>
->> > > it%2Ftree%2F%3Fh%3Dflexcan&amp;data=02%7C01%7Cqiangqing.zhang%40n
->> > > >> xp.co
->> > > >> >
->> > > >>
->> > > m%7C94dca4472a584410b3b908d7b129db27%7C686ea1d3bc2b4c6fa92cd99c
->> > > >> 5c30163
->> > > >> >
->> > > >>
->> > > 5%7C0%7C0%7C637172665642079192&amp;sdata=77tG6VuQCi%2FZXBKb23
->> > > >> 8%2FdNSV3
->> > > >> > NUIFrM5Y0e9yj0J3os%3D&amp;reserved=0
->> > > >> > Also must hope that this patch set can be upstreamed soon. :-)
->> > > >>
->> > > >> I've took them from this branch and applied them to the latest linux
->> > > >> master.
->> > > >>
->> > > >> Thus,
->> > > >>
->> > > >> Tested-by: Michael Walle <michael@walle.cc>
->> > > >>
->> > > >>
->> > > >> >> If these patches are upstream, only the device tree nodes seems to
->> > > >> >> be missing.
->> > > >> >> I don't know what has happened to [2]. But the patch doesn't seem
->> > > >> >> to be necessary.
->> > > >> > Yes, this patch is unnecessary. I have NACKed this patch for that,
->> > > >> > according to FlexCAN Integrated Guide, CTRL1[CLKSRC]=0 select
->> > > >> > oscillator clock and CTRL1[CLKSRC]=1 select peripheral clock.
->> > > >> > But it is actually decided by SoC integration, for i.MX, the design
->> > > >> > is different.
->> > > >>
->> > > >> ok thanks for clarifying.
->> > > >>
->> > > >> > I have not upstream i.MX FlexCAN device tree nodes, since it's
->> > > >> > dependency have not upstreamed yet.
->> > > >> >
->> > > >> >> Pankaj already send a patch to add the device node to the LS1028A [3].
->> > > >> >> Thats basically the same I've used, only that mine didn't had the
->> > > >> >> "fsl,ls1028ar1-flexcan" compatiblity string, but only the
->> > > >> >> "lx2160ar1-flexcan"
->> > > >> >> which is the correct way to use it, right?
->> > > >> > You can see below table from FlexCAN driver, "fsl,lx2160ar1-flexcan"
->> > > >> > supports CAN FD, you can use this compatible string.
->> > > >>
->> > > >> correct. I've already a patch that does exactly this ;) Who would
->> > > >> take the patch for adding the LS1028A can device tree nodes to
->> > > >> ls1028a.dtsi? You or Shawn Guo?
->> > > > Sorry, I missed the link[3], we usually write it this way:
->> > > > 			compatible = "fsl,ls1028ar1-flexcan","fsl,lx2160ar1-flexcan";
->> > > > Please send patch to Shawn Guo, he will review the device tree.
->> > >
->> > > As far as I know, there should be no undocumented binding. Eg. the
->> > > ls1028ar1-flexcan is neither in the source nor in the device tree
->> > > binding
->> > > documentation, thus wouldn't be accepted.
->> > >
->> > > Thus either there should be another ls1028ar1-flexcan in the
->> > > flexcan_of_match
->> > > table and the node should only contain that string or the node
->> > > should only
->> > > contain fsl,lx2160ar1-flexcan. Is there any advantage of the first
->> > > option?
->> > From the FlexCAN
->> > binding(Documentation/devicetree/bindings/net/can/fsl-flexcan.txt)
->> > - compatible : Should be "fsl,<processor>-flexcan"
->> >
->> >   An implementation should also claim any of the following compatibles
->> >   that it is fully backwards compatible with:
->> >
->> >   - fsl,p1010-flexcan
->> >
->> > You also can check imx6ul.dtsi imx7s.dtsi etc.
->> >
->> > Sorry :-(, I also don't know the advantage, it's just that we're used
->> > to writing it that way. You can check nodes of other devices.
->> > It's unnecessary to add compatible string for each SoCs since they may
->> > share the same IP. And dts had batter have a SoC specific compatible
->> > string. It's just my understanding.
->> 
->> Ah thanks. So Pankaj's patch [1] seems to be correct (at least 
->> according
->> to the description in the device tree documentation).
->> 
->> Shawn, whats your opinion?
+On 03/02/20 5:36 pm, Rob Herring wrote:
+> On Thu, Jan 23, 2020 at 01:09:41PM +0530, Faiz Abbas wrote:
+>> Hi,
+>>
+>> On 22/01/20 8:04 pm, Dan Murphy wrote:
+>>> Sekhar
+>>>
+>>> On 1/22/20 8:24 AM, Sekhar Nori wrote:
+>>>> On 22/01/20 7:05 PM, Dan Murphy wrote:
+>>>>> Faiz
+>>>>>
+>>>>> On 1/22/20 2:03 AM, Faiz Abbas wrote:
+>>>>>> The CAN transceiver on some boards has an STB pin which is
+>>>>>> used to control its standby mode. Add an optional property
+>>>>>> stb-gpios to toggle the same.
+>>>>>>
+>>>>>> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
+>>>>>> Signed-off-by: Sekhar Nori <nsekhar@ti.com>
+>>>>>> ---
+>>>>>>    Documentation/devicetree/bindings/net/can/m_can.txt | 2 ++
+>>>>>>    1 file changed, 2 insertions(+)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>>> b/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>>> index ed614383af9c..cc8ba3f7a2aa 100644
+>>>>>> --- a/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>>> +++ b/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>>> @@ -48,6 +48,8 @@ Optional Subnode:
+>>>>>>                  that can be used for CAN/CAN-FD modes. See
+>>>>>>                
+>>>>>> Documentation/devicetree/bindings/net/can/can-transceiver.txt
+>>>>>>                  for details.
+>>>>>> +stb-gpios        : gpio node to toggle the STB (standby) signal on
+>>>>>> the transceiver
+>>>>>> +
+>>>>> The m_can.txt is for the m_can framework.  If this is specific to the
+>>>>> platform then it really does not belong here.
+>>>>>
+>>>>> If the platform has specific nodes then maybe we need a
+>>>>> m_can_platform.txt binding for specific platform nodes.  But I leave
+>>>>> that decision to Rob.
+>>>> Since this is transceiver enable, should this not be in
+>>>> Documentation/devicetree/bindings/net/can/can-transceiver.txt?
+>>>
+>>
+>> The transceiver node is just a node without an associated device. I had
+>> tried to convert it to a phy implementation but that idea got shot down
+>> here:
+>>
+>> https://lore.kernel.org/patchwork/patch/1006238/
 > 
-> My opinion is that all compatibles should be defined explicitly in
-> bindings doc.  In above example, the possible values of <processor>
-> should be given.  This must be done anyway, as we are moving to
-> json-schema bindings.
+> Nodes and drivers are not a 1-1 thing. Is the transceiver a separate h/w 
+> device? If so, then it should be a separate node and properties of that 
+> device go in its node. 
 
-But if they are listed in the document, they also have to be in the
-of_device_id table, correct? Which somehow contradicts the talk Pankaj
-mentioned [1,2]. Eg.
+The transceiver is indeed a separate device.
 
-   compatible = "fsl,ls1028ar1-flexcan","fsl,lx2160ar1-flexcan";
+Also, nothing is stopping you from using the PHY
+> binding without using the kernel's PHY framework.
 
-Doesn't make any sense, because the "fsl,ls1028ar1-flexcan" is alreay
-in the driver and the fallback "fsl,lx2160ar1-flexcan" isn't needed.
+The phy framework seemed like the best code reuse to implement it.
 
-OTOH the talk is already 2 to 3 years old and things might have changed
-since then.
+> 
+> As to whether it should be a separate phy driver, I think probably the 
+> wrong decision was made. We always seem to start out with no PHY on 
+> these things and the complexity just grows until we need one. 
+> 
 
--michael
+We should be able to handle two properties (one max-datarate and the
+other regulator node) for now. If we have to add more complex parts then
+maybe we can think about the driver. I am just adding a xceiver
+regulator for now.
 
-[1] https://elinux.org/images/0/0e/OSELAS.Presentation-ELCE2017-DT.pdf
-[2] https://www.youtube.com/watch?v=6iguKSJJfxo
+Thanks,
+Faiz
