@@ -2,131 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F38161C8E
-	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2020 21:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F251F161C70
+	for <lists+linux-can@lfdr.de>; Mon, 17 Feb 2020 21:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729468AbgBQU7j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Feb 2020 15:59:39 -0500
-Received: from gateway34.websitewelcome.com ([192.185.149.222]:33533 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727300AbgBQU7j (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Feb 2020 15:59:39 -0500
-X-Greylist: delayed 1500 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Feb 2020 15:59:38 EST
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 9F0A6A3475
-        for <linux-can@vger.kernel.org>; Mon, 17 Feb 2020 14:09:49 -0600 (CST)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 3miDjPm5USl8q3miDj6qwl; Mon, 17 Feb 2020 14:09:49 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vHceqN2sfu9/dun1wAVisIIuaP0oWbPTBe15FV0Ep7k=; b=Sy87GQ6f+8H2i0L06NBJWgrn++
-        rUw2BwxRHTrbMJC/ri+w3KZGetwhbP+bqzS8J3KZuync1nQ9jUNxWzlbN5j28m4B9HRzwHJwbaKhw
-        443xGyx6HnAGZiLt66hahset5y/AfSUPxiE4ELEvMlDUdSbU5MLZPV6klhQ4wsCL+Ygf2fB4qTv1J
-        I4oq+mlOgjCNw8HjEOdZ836EIaMyGJ1KgllIZ9SpLBR17b2zjo+u9nzbQ64qRZd7RXpp8Fgqxx3wH
-        R2ZQ9kUibgw3qxmOSz3jHp4jT+LhK5nCjoVUE/PItMBHjhIRQFOM4eXyltvVNtCTae5HYgB3FvICn
-        wdzlEClQ==;
-Received: from [200.68.140.26] (port=7630 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1j3miC-000TtM-3r; Mon, 17 Feb 2020 14:09:48 -0600
-Date:   Mon, 17 Feb 2020 14:12:29 -0600
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH][next] can: peak_canfd: replace zero-length array with
- flexible-array member
-Message-ID: <20200217201229.GA9608@embeddedor>
+        id S1728088AbgBQUtd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 Feb 2020 15:49:33 -0500
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:36414 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727300AbgBQUtc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Feb 2020 15:49:32 -0500
+Received: by mail-lj1-f178.google.com with SMTP id r19so20363312ljg.3
+        for <linux-can@vger.kernel.org>; Mon, 17 Feb 2020 12:49:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=AhIb+PRqxJBDadI+d40gQyaLj/ZCjL6ux0hC6u7Gwog=;
+        b=Owxs6GS22nWiTkr/gyZkMIfrWshavT2VrRrnnVFbsd840HGhfsFy4orGMy6kWS44Ct
+         azPzT201nUXFgBLDhA2f7SRJXstUynaPfvZ6k7e+8J5fL0urd471IoCFEajvHWaSjVZk
+         mmPrNZTXCZ9kFe05J3p9oMTiO/UvS2uay5R2IbbylY/wHTs4jWdp+yPCW0OFCL4/NKNU
+         iKBBd06ydkqUU8wG/y0545AZc7uqniCh9pQcSwv1Z6VrcbnfL4Oc3t+fqbiMHH/08DP9
+         Qb5tsceHO4pSVL75shEq/dmW/36ZcUfxAX6Ngq91FkApRy+DGWUDULpYd4nDQgVMZYJJ
+         hQpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=AhIb+PRqxJBDadI+d40gQyaLj/ZCjL6ux0hC6u7Gwog=;
+        b=BxC2NRo/HquU9XteIQKnJu+muy2WIf/ejF0Wo9rD8dqwo3Bfs2n/8+WbJh0xn/g0zi
+         cQviT7JXvaqWYuuLtGhREBH1KULGfBsUsjBJnkqVKeutfF+h3qnVDgv+8Pr1FoYsgLeV
+         7L6ilUul1BLWo6MkxgcoLdo3VWfmTXglB+F9rVjn7Dcc64blDfNueUno6W4GSdqIVod6
+         yaEgFHPcQlUrBerCh7MuJC3fSYYpCWurz4+3vlIWtWMi7KjY+9CxMz26S++pwLw4C1PW
+         zxyyZeLlywPA2TYGU+UIeck+IvfDGhngr8Kidf7BNk7DpiTue4HerrVN7RqInelsd/mw
+         7Ytg==
+X-Gm-Message-State: APjAAAUghE8AeR2q3dm73RsYj43wAtkN7IysvJQT1eS7/J/kefgCtZrv
+        owQm0WxLlxybkh7gLsipHEAJuQZXYBeUTK3MCIq1gZhx
+X-Google-Smtp-Source: APXvYqzgPnImCCWWMEMyHpIsik/uc+m69HSENZ0wF+t5qQOVt4HsbzjLcTA74sAhaGzemoqnHAKcZnTfW906QS3Junw=
+X-Received: by 2002:a2e:b6ce:: with SMTP id m14mr10194617ljo.99.1581972570116;
+ Mon, 17 Feb 2020 12:49:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 200.68.140.26
-X-Source-L: No
-X-Exim-ID: 1j3miC-000TtM-3r
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [200.68.140.26]:7630
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 17
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+From:   Elenita Hinds <ecathinds@gmail.com>
+Date:   Mon, 17 Feb 2020 14:49:18 -0600
+Message-ID: <CAHChkrtxFyzZz2yTAOvui=-j5QA3=2_Qoe6whWe+TDzZJk4QVA@mail.gmail.com>
+Subject: J1939: Unable to receive and transmit multi-frame messages
+To:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The current codebase makes use of the zero-length array language
-extension to the C90 standard, but the preferred mechanism to declare
-variable-length types such as these ones is a flexible array member[1][2],
-introduced in C99:
+Hi,
 
-struct foo {
-        int stuff;
-        struct boo array[];
-};
+Back when I was using just the J1939 branch (before it got re-written
+and mainlined), I was able to receive and transmit multi-frame
+messages.  Upgrading to kernel v5.4, this is no longer the case.
 
-By making use of the mechanism above, we will get a compiler warning
-in case the flexible array does not occur last in the structure, which
-will help us prevent some kind of undefined behavior bugs from being
-inadvertently introduced[3] to the codebase from now on.
+For the receive part, it is failing in j1939_tp_im_involved_anydir()
+call, which is the first thing called by j1939_tp_recv(). The socket
+is set to promiscuous mode; has no problem receiving ALL the  8-byte
+long messages but fails on longer ones. There should not be any
+difference with how the socket is setup as far as the message length
+goes  but is there a new step needed in order to receive the
+multi-frame messages as well?
 
-Also, notice that, dynamic memory allocations won't be affected by
-this change:
+The  same question applies for the transmit side.
 
-"Flexible array members have incomplete type, and so the sizeof operator
-may not be applied. As a quirk of the original implementation of
-zero-length arrays, sizeof evaluates to zero."[1]
+Thanks for the help!
 
-This issue was found with the help of Coccinelle.
-
-[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-[2] https://github.com/KSPP/linux/issues/21
-[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/net/can/peak_canfd/peak_pciefd_main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/peak_canfd/peak_pciefd_main.c b/drivers/net/can/peak_canfd/peak_pciefd_main.c
-index d08a3d559114..6ad83a881039 100644
---- a/drivers/net/can/peak_canfd/peak_pciefd_main.c
-+++ b/drivers/net/can/peak_canfd/peak_pciefd_main.c
-@@ -146,7 +146,7 @@ struct pciefd_rx_dma {
- 	__le32 irq_status;
- 	__le32 sys_time_low;
- 	__le32 sys_time_high;
--	struct pucan_rx_msg msg[0];
-+	struct pucan_rx_msg msg[];
- } __packed __aligned(4);
- 
- /* Tx Link record */
-@@ -194,7 +194,7 @@ struct pciefd_board {
- 	struct pci_dev *pci_dev;
- 	int can_count;
- 	spinlock_t cmd_lock;		/* 64-bits cmds must be atomic */
--	struct pciefd_can *can[0];	/* array of network devices */
-+	struct pciefd_can *can[];	/* array of network devices */
- };
- 
- /* supported device ids. */
--- 
-2.25.0
-
+--elenita
