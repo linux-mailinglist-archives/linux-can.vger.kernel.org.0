@@ -2,85 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A32E9162370
-	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2020 10:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D381624DF
+	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2020 11:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726360AbgBRJd5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Feb 2020 04:33:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43404 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbgBRJd5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 18 Feb 2020 04:33:57 -0500
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E4C8A20722;
-        Tue, 18 Feb 2020 09:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582018436;
-        bh=K36RDAcdA5MabXG47exlTsMpZKm6WyeaQQyW6jWnhCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L9bL+/4yW0jhUgqaTD0QPEIhUsewMfhj9+WJtdmiKXtwOTGZA92D9dL3eAjBjjgLX
-         mWc16CQ+64dnjveWLqv/sumLTuspB6LSkDBwptVYGX0JgAK3kvzKMqW4Z9vgVgdnp2
-         HmU3WkwU9nJks1a6eJD7kiLvfZfXBbzityqETXVE=
-Date:   Tue, 18 Feb 2020 17:33:51 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, wg@grandegger.com,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        Pankaj Bansal <pankaj.bansal@nxp.com>
-Subject: Re: [PATCH 0/8] can: flexcan: add CAN FD support for NXP Flexcan
-Message-ID: <20200218093346.GC6075@dragon>
-References: <24eb5c67-4692-1002-2468-4ae2e1a6b68b@pengutronix.de>
- <20200213192027.4813-1-michael@walle.cc>
- <DB7PR04MB461896B6CC3EDC7009BCD741E6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <2322fb83486c678917957d9879e27e63@walle.cc>
- <DB7PR04MB46187A6B5A8EC3A1D73D69FFE6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <bf671072ce479049eb354d44f3617383@walle.cc>
- <DB7PR04MB46183F74C137B644A229B632E6150@DB7PR04MB4618.eurprd04.prod.outlook.com>
- <78789949f2a9dc532ec461768fbd3a60@walle.cc>
- <20200217071349.GC7973@dragon>
- <0d02f6cee0d3a680f246e8fea40f6699@walle.cc>
+        id S1726360AbgBRKrB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 18 Feb 2020 05:47:01 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56003 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726298AbgBRKrB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Feb 2020 05:47:01 -0500
+Received: from soja.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:13da])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <o.rempel@pengutronix.de>)
+        id 1j40P5-0006yl-J0; Tue, 18 Feb 2020 11:46:59 +0100
+Subject: Re: J1939: Unable to receive and transmit multi-frame messages
+To:     Elenita Hinds <ecathinds@gmail.com>, linux-can@vger.kernel.org
+References: <CAHChkrtxFyzZz2yTAOvui=-j5QA3=2_Qoe6whWe+TDzZJk4QVA@mail.gmail.com>
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+Message-ID: <b7ed0f9e-117b-9555-8420-6cb41315a9b7@pengutronix.de>
+Date:   Tue, 18 Feb 2020 11:46:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d02f6cee0d3a680f246e8fea40f6699@walle.cc>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAHChkrtxFyzZz2yTAOvui=-j5QA3=2_Qoe6whWe+TDzZJk4QVA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:13da
+X-SA-Exim-Mail-From: o.rempel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 09:48:36AM +0100, Michael Walle wrote:
-> > My opinion is that all compatibles should be defined explicitly in
-> > bindings doc.  In above example, the possible values of <processor>
-> > should be given.  This must be done anyway, as we are moving to
-> > json-schema bindings.
-> 
-> But if they are listed in the document, they also have to be in the
-> of_device_id table, correct?
+Hi,
 
-I do not think so.  Documenting compatibles used in DTS now doesn't
-necessarily mean we need to use it in kernel driver right away.
-Bindings doc is a specification for device tree, not kernel.  With the
-compatible in DTS and bindings, kernel can start using it at any time
-when there is a need, like dealing with SoC quirks or bugs found later.
+On 17.02.20 21:49, Elenita Hinds wrote:
+> Hi,
+> 
+> Back when I was using just the J1939 branch (before it got re-written
+> and mainlined), I was able to receive and transmit multi-frame
+> messages.  Upgrading to kernel v5.4, this is no longer the case.
 
-Shawn
+The upstreamed version is not binary compatible to the old version. Please make sure your 
+application is properly updated.
 
-> Which somehow contradicts the talk Pankaj
-> mentioned [1,2]. Eg.
-> 
->   compatible = "fsl,ls1028ar1-flexcan","fsl,lx2160ar1-flexcan";
-> 
-> Doesn't make any sense, because the "fsl,ls1028ar1-flexcan" is alreay
-> in the driver and the fallback "fsl,lx2160ar1-flexcan" isn't needed.
-> 
-> OTOH the talk is already 2 to 3 years old and things might have changed
-> since then.
-> 
-> -michael
-> 
-> [1] https://elinux.org/images/0/0e/OSELAS.Presentation-ELCE2017-DT.pdf
-> [2] https://www.youtube.com/watch?v=6iguKSJJfxo
+> For the receive part, it is failing in j1939_tp_im_involved_anydir()
+> call, which is the first thing called by j1939_tp_recv(). The socket
+> is set to promiscuous mode; has no problem receiving ALL the  8-byte
+> long messages but fails on longer ones. There should not be any
+> difference with how the socket is setup as far as the message length
+> goes  but is there a new step needed in order to receive the
+> multi-frame messages as well?
+
+The TP/ETP (multi-frame message) is the core functionality of j1939 stack. The 
+functionality can be tested with cat-utils. See:
+https://github.com/linux-can/can-utils/blob/master/can-j1939-kickstart.md
+
+Please make sure you have all recent fixes:
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/net/can/j1939
+
+If you still have some issue, please provide code example, so we able to reproduce it.
+
+Kind regards,
+Oleksij Rempel
+
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
