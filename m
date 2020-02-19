@@ -2,79 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F4416346D
-	for <lists+linux-can@lfdr.de>; Tue, 18 Feb 2020 22:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A1F164513
+	for <lists+linux-can@lfdr.de>; Wed, 19 Feb 2020 14:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbgBRVLk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 18 Feb 2020 16:11:40 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:35925 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbgBRVLk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 18 Feb 2020 16:11:40 -0500
-Received: by mail-ot1-f66.google.com with SMTP id j20so21004981otq.3;
-        Tue, 18 Feb 2020 13:11:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VF+9+FNI4E+Nip5+V6ijEpNvKUP4upuNUFTZZUsRCXg=;
-        b=ETmDyBQgdFxE+CzThVrH7bKsR3aHm3IdXSdhFT+8Px9cad/jN4LsKMmGPQWqVTf6gk
-         um3xP1rVIGVQjRS1+yitl99MffVU3EAGCs/XjN2lHE1QLs5+eL6Be670Irvy20rDnhYJ
-         BBrfssXVFKYm2H0PWVVtiIUJ4qiVALFtBNGt/Zq2TuUGrHXLSWnpHcshLuE5V3tIU67Z
-         pi/c5ACBqcWckdVpNan0WKa6B0sFIP0C9gIVM5jAWXiEkH1hde9xfGrOxIp3/+CxCKg2
-         6Mjg+ULMQC0rSpb/WFj++KjJZe+64x+Ky9D5PPaQemY3DGyzQQawWwlA6ORaxJmTFbYI
-         819w==
-X-Gm-Message-State: APjAAAWERIzDwy4yrnEcCrEdBQAnFFLBIsAtonfZzId0TEoVB0CgVZj4
-        6gX404SiV5pjCpSobYgHaA==
-X-Google-Smtp-Source: APXvYqwJzVO7Tt+nwt33yTfdT7FBGZHp27tmMJKxVMqskFLak+pv0Qur7ZcoIPtKeYrxDLetf1E5GQ==
-X-Received: by 2002:a05:6830:138b:: with SMTP id d11mr16239453otq.38.1582060299527;
-        Tue, 18 Feb 2020 13:11:39 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id r10sm1732782otn.37.2020.02.18.13.11.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 13:11:38 -0800 (PST)
-Received: (nullmailer pid 12310 invoked by uid 1000);
-        Tue, 18 Feb 2020 21:11:38 -0000
-Date:   Tue, 18 Feb 2020 15:11:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        robh+dt@kernel.org, mark.rutland@arm.com, sriram.dash@samsung.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v4 2/2] dt-bindings: net: can: Convert M_CAN to
- json-schema
-Message-ID: <20200218211138.GA12217@bogus>
-References: <20200207100306.20997-1-benjamin.gaignard@st.com>
- <20200207100306.20997-3-benjamin.gaignard@st.com>
+        id S1726723AbgBSNMQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 19 Feb 2020 08:12:16 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47262 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726622AbgBSNMQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 19 Feb 2020 08:12:16 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01JDC3LO065242;
+        Wed, 19 Feb 2020 07:12:03 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582117923;
+        bh=B/O91ZYHGjTEacr23ckeGZ3NbDZ9epolpD1ChKHO78s=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=NHM1TGu+mOsa6kL8O4ZCmpz5we8vGZ1NRM8JYIcwGE+HCeI9MakLQvq/312aHfpNP
+         uomBnpwDmNBivJM6qH7XSevgqXu8AKNhYbtLzfZbT9EtzNRQIavKtBe0YHdJMsbJU+
+         iL4FAP2OksTNoEMkTCELFG7FXnq/3zqV119d1rgQ=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01JDC37c096025
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 19 Feb 2020 07:12:03 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 19
+ Feb 2020 07:12:03 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 19 Feb 2020 07:12:03 -0600
+Received: from [10.250.65.13] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01JDC2QZ056606;
+        Wed, 19 Feb 2020 07:12:03 -0600
+Subject: Re: [PATCH linux-master 0/3] MCAN updates for clock discovery
+To:     <linux-kernel@vger.kernel.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <wg@grandegger.com>,
+        <sriram.dash@samsung.com>
+CC:     <davem@davemloft.net>
+References: <20200131183433.11041-1-dmurphy@ti.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <a97ed7ef-e95a-af32-4d01-2ed7c2c08c20@ti.com>
+Date:   Wed, 19 Feb 2020 07:07:19 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200207100306.20997-3-benjamin.gaignard@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200131183433.11041-1-dmurphy@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 7 Feb 2020 11:03:06 +0100, Benjamin Gaignard wrote:
-> Convert M_CAN bindings to json-schema
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> ---
-> version 4:
-> - remove useless ref to can-transceiver.yaml
-> 
-> version 3:
-> - move can-transceive node into bosch,m_can.yaml bindings
->  .../devicetree/bindings/net/can/bosch,m_can.yaml   | 144 +++++++++++++++++++++
->  .../devicetree/bindings/net/can/m_can.txt          |  75 -----------
->  2 files changed, 144 insertions(+), 75 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
->  delete mode 100644 Documentation/devicetree/bindings/net/can/m_can.txt
-> 
+Bump
 
-Applied, thanks.
-
-Rob
+On 1/31/20 12:34 PM, Dan Murphy wrote:
+> Hello
+>
+> These are the initial fixes for issues found in and requested in
+> https://lore.kernel.org/patchwork/patch/1165091/
+>
+> For the clock discovery and initialization.
+>
+> Dan
+>
+> Dan Murphy (3):
+>    can: tcan4x5x: Move clock init to TCAN driver
+>    can: m_can_platform: Move clock discovery and init to platform
+>    can: m_can: Remove unused clock function from the framework
+>
+>   drivers/net/can/m_can/m_can.c          | 16 ------
+>   drivers/net/can/m_can/m_can.h          |  3 -
+>   drivers/net/can/m_can/m_can_platform.c | 37 +++++++++---
+>   drivers/net/can/m_can/tcan4x5x.c       | 78 +++++++++++++++++++-------
+>   4 files changed, 89 insertions(+), 45 deletions(-)
+>
