@@ -2,73 +2,87 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C96C5170FA0
-	for <lists+linux-can@lfdr.de>; Thu, 27 Feb 2020 05:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D451727D5
+	for <lists+linux-can@lfdr.de>; Thu, 27 Feb 2020 19:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728323AbgB0EX2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 Feb 2020 23:23:28 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:36922 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728221AbgB0EX2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 Feb 2020 23:23:28 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 4AB5315B4632B;
-        Wed, 26 Feb 2020 20:23:27 -0800 (PST)
-Date:   Wed, 26 Feb 2020 20:23:26 -0800 (PST)
-Message-Id: <20200226.202326.295871777946911500.davem@davemloft.net>
-To:     mkl@pengutronix.de
-Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com,
-        dvyukov@google.com, j.vosburgh@gmail.com, vfalico@gmail.com,
-        andy@greyhouse.net, stable@vger.kernel.org
-Subject: Re: [PATCH] bonding: do not enslave CAN devices
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <767580d8-1c93-907b-609c-4c1c049b7c42@pengutronix.de>
-References: <20200130133046.2047-1-socketcan@hartkopp.net>
-        <767580d8-1c93-907b-609c-4c1c049b7c42@pengutronix.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 26 Feb 2020 20:23:27 -0800 (PST)
+        id S1729504AbgB0Snv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 Feb 2020 13:43:51 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:35872 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726805AbgB0Snv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Feb 2020 13:43:51 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01RIhinI024769;
+        Thu, 27 Feb 2020 12:43:44 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582829024;
+        bh=yQMhnAs6/2i4Vbzp9EeB7/iL+FC+fpQaF/PdQma5zCc=;
+        h=From:To:CC:Subject:Date;
+        b=cptdtmKNqL2P3tjADAMcVPvuRBdXnEY+VkexzgJPvN7srZgpuCaOmEh55kiyOTIZ0
+         dMvDYJvXo/OdqwDy06zwyhuG2VE2HBiN2InBGKeS/RbJpcw9pLeG7nNviyInrGZrNg
+         rBRpa0zG6BclDPvLycK+BJC1fAsD9/zF2KaAJqV4=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01RIhiE3011352
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Feb 2020 12:43:44 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 27
+ Feb 2020 12:43:44 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 27 Feb 2020 12:43:43 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01RIhh0Q113174;
+        Thu, 27 Feb 2020 12:43:43 -0600
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <mkl@pengutronix.de>, <wg@grandegger.com>
+CC:     <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: [RESEND PATCH can-next 1/2] can: tcan4x5x: Rename parse_config function
+Date:   Thu, 27 Feb 2020 12:38:28 -0600
+Message-ID: <20200227183829.21854-1-dmurphy@ti.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Tue, 25 Feb 2020 21:32:41 +0100
+Rename the tcan4x5x_parse_config function to tcan4x5x_get_gpios since
+the function retrieves the gpio configurations from the firmware.
 
-> On 1/30/20 2:30 PM, Oliver Hartkopp wrote:
->> Since commit 8df9ffb888c ("can: make use of preallocated can_ml_priv for per
->> device struct can_dev_rcv_lists") the device specific CAN receive filter lists
->> are stored in netdev_priv() and dev->ml_priv points to these filters.
->> 
->> In the bug report Syzkaller enslaved a vxcan1 CAN device and accessed the
->> bonding device with a PF_CAN socket which lead to a crash due to an access of
->> an unhandled bond_dev->ml_priv pointer.
->> 
->> Deny to enslave CAN devices by the bonding driver as the resulting bond_dev
->> pretends to be a CAN device by copying dev->type without really being one.
->> 
->> Reported-by: syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com
->> Fixes: 8df9ffb888c ("can: make use of preallocated can_ml_priv for per
->> device struct can_dev_rcv_lists")
->> Cc: linux-stable <stable@vger.kernel.org> # >= v5.4
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> What's the preferred to upstream this? I could take this via the
-> linux-can tree.
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
+---
+ drivers/net/can/m_can/tcan4x5x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-What I don't get is why the PF_CAN is blindly dereferencing a device
-assuming what is behind bond_dev->ml_priv.
+diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
+index 9821babef55e..37d53ecc560b 100644
+--- a/drivers/net/can/m_can/tcan4x5x.c
++++ b/drivers/net/can/m_can/tcan4x5x.c
+@@ -381,7 +381,7 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
+ 				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
+ }
+ 
+-static int tcan4x5x_parse_config(struct m_can_classdev *cdev)
++static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
+ {
+ 	struct tcan4x5x_priv *tcan4x5x = cdev->device_data;
+ 	int ret;
+@@ -507,7 +507,7 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = tcan4x5x_parse_config(mcan_class);
++	ret = tcan4x5x_get_gpios(mcan_class);
+ 	if (ret)
+ 		goto out_power;
+ 
+-- 
+2.25.0
 
-If it assumes a device it access is CAN then it should check the
-device by comparing the netdev_ops or via some other means.
-
-This restriction seems arbitrary.
