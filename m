@@ -2,55 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 430A51753D0
-	for <lists+linux-can@lfdr.de>; Mon,  2 Mar 2020 07:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3E5175547
+	for <lists+linux-can@lfdr.de>; Mon,  2 Mar 2020 09:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbgCBGaK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Mar 2020 01:30:10 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:39953 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726282AbgCBGaJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Mar 2020 01:30:09 -0500
-Received: by mail-io1-f71.google.com with SMTP id m24so7506348iol.7
-        for <linux-can@vger.kernel.org>; Sun, 01 Mar 2020 22:30:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=4YYMt/NmjzWA++n+f1JrmgMPppH69EcF6rf66gBwOAQ=;
-        b=AHhaRnprmw+65BzW3KjO+/p2YgWNa2x/jhsIkSwcI5toF0ZQGP8DF4q9NQ4tuamhrz
-         l8IGzzK1I0v7i7EFC74IWG+3bAEhJKKoRwdUmx1a9myq+ax2LF55sn0CyaSj4fF2dJFM
-         BpiCh9YsABG38m+OS7TrTfR+GJ54pQ9AMhzFrcEjqKP7cCLIi1eb/bukkRrQh3/xR0Ke
-         vgiy0S6H4cRuVfwAJV6O2lg+uKsbJnMlY+C9SNA3k99Km8Z5Zcx5rP5HsEicSMLX2W32
-         5gcxYPOUa4qj90sUS7QQXqaLhITnDtC7mY20lKSsDR5/PJOv61koO9KnrItpOIoztaSC
-         hhUw==
-X-Gm-Message-State: APjAAAXs/7SZRc3INe+M0w1ceoSsZnx06RycsXyezGPfdJULOj99oJGF
-        secj37v5NXGEglDQnFnQXz+UEv6VkuUJcfrah8hCKbOwMwIt
-X-Google-Smtp-Source: APXvYqxO00LLlC0E59VXlspGx5WEkQ2/lGhvq9JtGOFZlbtjoSv4GLYjpozDO1f5VgJgyv2k+3MwmO9OuUPzoUF9IW31DADJl64C
+        id S1726382AbgCBIPU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Mar 2020 03:15:20 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:47434 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726313AbgCBIPU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Mar 2020 03:15:20 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0228Esbw067966;
+        Mon, 2 Mar 2020 02:14:54 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1583136894;
+        bh=TdhMpVGavBMp+rXwCQqseldtj1O3C6Ev8oQyZs2QgMQ=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=DRENygLrbKRMRypHzLIXHGsOsqoyTlJ5Vkm+EKAVOcFMmK11FULvxBUIHsDLXKN+K
+         aNo3jq8jEpTzrBm/UgzqoEZeGBAui6BEtEkGbb++n3N/HIJ+K6sBoq0MpMThKZ84My
+         V/LeFhUvoK7C5lFZaA2WubDIoF2vtwevBqu9Gh70=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0228EsA4016695;
+        Mon, 2 Mar 2020 02:14:54 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 2 Mar
+ 2020 02:14:54 -0600
+Received: from localhost.localdomain (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 2 Mar 2020 02:14:54 -0600
+Received: from [10.24.69.157] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 0228EnLq073051;
+        Mon, 2 Mar 2020 02:14:50 -0600
+Subject: Re: [PATCH v2 1/3] dt-bindings: m_can: Add Documentation for
+ transceiver regulator
+From:   Faiz Abbas <faiz_abbas@ti.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <catalin.marinas@arm.com>, <mark.rutland@arm.com>,
+        <wg@grandegger.com>, <sriram.dash@samsung.com>, <dmurphy@ti.com>
+References: <20200217142836.23702-1-faiz_abbas@ti.com>
+ <20200217142836.23702-2-faiz_abbas@ti.com> <20200219203529.GA21085@bogus>
+ <a987bcd7-ca1c-dfda-72f3-cd2004a87ea5@ti.com>
+ <20b86553-9b98-1a9d-3757-54174aa67c62@pengutronix.de>
+ <72e4b1f4-e7f1-cccd-6327-0c8ab6f9f9a7@ti.com>
+Message-ID: <679bdfd3-5325-b903-de5f-1beb5b577d73@ti.com>
+Date:   Mon, 2 Mar 2020 13:46:42 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a703:: with SMTP id b3mr8643903iod.95.1583130609317;
- Sun, 01 Mar 2020 22:30:09 -0800 (PST)
-Date:   Sun, 01 Mar 2020 22:30:09 -0800
-In-Reply-To: <0000000000000e4f720598bb95f8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000099fb63059fd95165@google.com>
-Subject: Re: KASAN: use-after-free Read in slcan_open
-From:   syzbot <syzbot+b5ec6fd05ab552a78532@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dvyukov@google.com, jouni.hogander@unikie.com,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com, wg@grandegger.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <72e4b1f4-e7f1-cccd-6327-0c8ab6f9f9a7@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This bug is marked as fixed by commit:
-slcan: Fix use-after-free Read in slcan_open
-But I can't find it in any tested tree for more than 90 days.
-Is it a correct commit? Please update it by replying:
-#syz fix: exact-commit-title
-Until then the bug is still considered open and
-new crashes with the same signature are ignored.
+Marc,
+
+On 26/02/20 2:40 pm, Faiz Abbas wrote:
+> Hi Marc,
+> 
+> On 21/02/20 2:01 pm, Marc Kleine-Budde wrote:
+>> On 2/21/20 9:31 AM, Faiz Abbas wrote:
+>>> Hi Rob,
+>>>
+>>> On 20/02/20 2:05 am, Rob Herring wrote:
+>>>> On Mon, Feb 17, 2020 at 07:58:34PM +0530, Faiz Abbas wrote:
+>>>>> Some CAN transceivers have a standby line that needs to be asserted
+>>>>> before they can be used. Model this GPIO lines as an optional
+>>>>> fixed-regulator node. Document bindings for the same.
+>>>>>
+>>>>> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
+>>>>> ---
+>>>>>  Documentation/devicetree/bindings/net/can/m_can.txt | 3 +++
+>>>>>  1 file changed, 3 insertions(+)
+>>>>
+>>>> This has moved to DT schema in my tree, so please adjust it and resend.
+>>>
+>>> Ok.
+>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/net/can/m_can.txt b/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>> index ed614383af9c..f17e2a5207dc 100644
+>>>>> --- a/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>> +++ b/Documentation/devicetree/bindings/net/can/m_can.txt
+>>>>> @@ -48,6 +48,9 @@ Optional Subnode:
+>>>>>  			  that can be used for CAN/CAN-FD modes. See
+>>>>>  			  Documentation/devicetree/bindings/net/can/can-transceiver.txt
+>>>>>  			  for details.
+>>>>> +
+>>>>> +- xceiver-supply: Regulator that powers the CAN transceiver.
+>>>>
+>>>> The supply for a transceiver should go in the transceiver node.
+>>>>
+>>>
+>>> Marc, while I have you here, do you agree with this?
+>>
+>> I'll look into the details later today.
+>>
+> 
+> Sure. Be sure to take another look at my attempt to use the transceiver
+> with a phy driver some time ago.
+> 
+> https://lore.kernel.org/patchwork/patch/1006238/
+> 
+
+Do you have any comments?
+
+Thanks,
+Faiz
