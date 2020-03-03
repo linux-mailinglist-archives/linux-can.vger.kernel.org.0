@@ -2,58 +2,73 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA2617638D
-	for <lists+linux-can@lfdr.de>; Mon,  2 Mar 2020 20:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BB2176E54
+	for <lists+linux-can@lfdr.de>; Tue,  3 Mar 2020 06:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727360AbgCBTMv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Mar 2020 14:12:51 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:52426 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727126AbgCBTMu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Mar 2020 14:12:50 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id D19491457E372;
-        Mon,  2 Mar 2020 11:12:49 -0800 (PST)
-Date:   Mon, 02 Mar 2020 11:12:49 -0800 (PST)
-Message-Id: <20200302.111249.471862054833131096.davem@davemloft.net>
-To:     socketcan@hartkopp.net
-Cc:     mkl@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com,
-        dvyukov@google.com, j.vosburgh@gmail.com, vfalico@gmail.com,
-        andy@greyhouse.net, stable@vger.kernel.org
-Subject: Re: [PATCH] bonding: do not enslave CAN devices
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <d6d9368d-b468-3946-ac63-abedf6758154@hartkopp.net>
-References: <767580d8-1c93-907b-609c-4c1c049b7c42@pengutronix.de>
-        <20200226.202326.295871777946911500.davem@davemloft.net>
-        <d6d9368d-b468-3946-ac63-abedf6758154@hartkopp.net>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 02 Mar 2020 11:12:50 -0800 (PST)
+        id S1726970AbgCCFFp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Mar 2020 00:05:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37596 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726164AbgCCFFn (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 3 Mar 2020 00:05:43 -0500
+Received: from kicinski-fedora-PC1C0HJN.thefacebook.com (unknown [163.114.132.128])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B7FAA24677;
+        Tue,  3 Mar 2020 05:05:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583211943;
+        bh=YKuFkA8JhBWYv/JqO9oERMYAqNIi/rWMpSE9Gvuhm14=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=R0NAKLJTcp+rEXL8L60u4xYpcknERPDYXkhq6E1FMEQN+fVjiLe8o5SbCEK25oi9r
+         giDcFnJrm3U90enqJvDWZ0gIVz4eN3QLT9gtchVRdYP02JxSG3TPKSxvuMwTq3ZEaq
+         dRYlDdb2JAGR8drJ7YJs4uVceDxthv1RMQyPT/Oo=
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     davem@davemloft.net
+Cc:     netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org
+Subject: [PATCH net 06/16] can: add missing attribute validation for termination
+Date:   Mon,  2 Mar 2020 21:05:16 -0800
+Message-Id: <20200303050526.4088735-7-kuba@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200303050526.4088735-1-kuba@kernel.org>
+References: <20200303050526.4088735-1-kuba@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
-Date: Mon, 2 Mar 2020 09:45:41 +0100
+Add missing attribute validation for IFLA_CAN_TERMINATION
+to the netlink policy.
 
-> I don't know yet whether it makes sense to have CAN bonding/team
-> devices. But if so we would need some more investigation. For now
-> disabling CAN interfaces for bonding/team devices seems to be
-> reasonable.
+Fixes: 12a6075cabc0 ("can: dev: add CAN interface termination API")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: Wolfgang Grandegger <wg@grandegger.com>
+CC: Marc Kleine-Budde <mkl@pengutronix.de>
+CC: Oliver Hartkopp <socketcan@hartkopp.net>
+CC: linux-can@vger.kernel.org
+---
+ drivers/net/can/dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Every single interesting device that falls into a special use case
-like CAN is going to be tempted to add a similar check.
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index 6ee06a49fb4c..68834a2853c9 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -883,6 +883,7 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
+ 				= { .len = sizeof(struct can_bittiming) },
+ 	[IFLA_CAN_DATA_BITTIMING_CONST]
+ 				= { .len = sizeof(struct can_bittiming_const) },
++	[IFLA_CAN_TERMINATION]	= { .type = NLA_U16 },
+ };
+ 
+ static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+-- 
+2.24.1
 
-I don't want to set this precedence.
-
-Check that the devices you get passed are actually CAN devices, it's
-easy, just compare the netdev_ops and make sure they equal the CAN
-ones.
