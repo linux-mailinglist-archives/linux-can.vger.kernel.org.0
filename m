@@ -2,66 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD06217816F
-	for <lists+linux-can@lfdr.de>; Tue,  3 Mar 2020 20:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D02178383
+	for <lists+linux-can@lfdr.de>; Tue,  3 Mar 2020 20:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388192AbgCCSCZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Mar 2020 13:02:25 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:36616 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388200AbgCCSCY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Mar 2020 13:02:24 -0500
-Received: by mail-il1-f196.google.com with SMTP id b17so79642iln.3
-        for <linux-can@vger.kernel.org>; Tue, 03 Mar 2020 10:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=rWpLQsbmbMPrMUVQPBwUKuoBpty7mJcArZ7e/e/W7bvs7R4KPqSwQmj9GM7uZ/P/JA
-         fd0EHh92ojw+X3p8L/GjbUlw4/jQzaMeh9r9VdGfcG+/uvBhVd62JfNxWRiDbgAbEI7n
-         EPLPsXQVTt27LNIvtUgz4yGakbGJoBZs9gSmWGjR/7W/B+izNwtVf3Ddlx23uBy6Ix3Y
-         3eosZs6aZwypUga9k2sXEeOQf/k/BrOFOnX4tIeEcaDRre8il8wgbODpEJJQfuNyd2F2
-         BwV3wX4NmRVM90mn7+1RSdW+1GDJ4yTFha28VweSDsgt1fGWEOl3Kia7xCsKaDBztJFO
-         9++w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=42VRx4KA+cD1ZZnhz/34yl/kjJSKnU+ahvHX6e7S6BM=;
-        b=IEBqYdwnTVASVj3B2yPG0Z5YiK9kQwPoikMoLEOaJlr+x+RnHUoIVx9gmGrnJFwAlV
-         mRWyPb5JhpHQLYcQxrw/4kmafeADrc5zoUYkPhefg/hXrX/srJWtdD2XBjumzRah/C+E
-         je4P4p+eBoBZLhSZu14UTx6oSeBjHQFsZQBtlkgHor8+L8OhKL+VELj1DgECgAivWPJZ
-         /GjrXSuChhWQSU9vbHid5JOd3wAWjSv2s4bjPY+ttY+Fg9ewvvY/VjQ7f4IgV4G4xHB1
-         l31aze/e13XKxrVx+Qx8CEdgGVc6gw27XV54ShIQxr7TgKtcavpTSH46wyimDE90eEyP
-         bSIw==
-X-Gm-Message-State: ANhLgQ1VPsTb9W9ArnoXh7c9N8NNcTKw7GaISsKMibOpSoUwQ16fI6mV
-        ns0NoQADZ1GyfkccUHEGqwm5ncYz9XsUkPf653Y=
-X-Google-Smtp-Source: ADFU+vufx3mScNQpsj7vjge/q2kd/14QLpfKCfLAKFz+SWD9GQS+7I/BDXVvPR5fGqJPQEzDwI9rbAa/5C8kUjyBLzA=
-X-Received: by 2002:a92:8117:: with SMTP id e23mr5791187ild.220.1583258544094;
- Tue, 03 Mar 2020 10:02:24 -0800 (PST)
+        id S1729148AbgCCT6w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Mar 2020 14:58:52 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:19005 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728002AbgCCT6v (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Mar 2020 14:58:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583265527;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=8Hy1XQLrJGsksa411iFwtMtrZlW3bx5jx6/bcEnxtb4=;
+        b=sBcGbiT8AYYFcnVmC+hMtzuAg4bK/te2JNS9bVe4bYliNcrh+168VzQPkAN91UBosN
+        RVWlRdNceAileGqFjXzk3h9vkVOkqgrmSzpL/ilhxT3O22bMxz8xMRLw2RxE7HylMZxZ
+        qutdL/2TVvlXo/3a3rnjNKMJEWiEsl7nGJwzfl9IgYRVBR7BHPw+xDQtZ/tDPqqEt+iy
+        mHebCfHl/eMUBwpHGTYvdEvvG7J+rFlv1Uz7ewQGjcw18HK6msa+79UZITD1vk1Ujvwg
+        wl/4sF+CsXZYlmJlJgqoUIhW9hkejaMv1IyTql51DhYk2aiCm2bekiV5Bv67I1ZQvR8t
+        7Z5g==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVch5lU8W"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.1.177]
+        by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
+        with ESMTPSA id e0a4ffw23JwYE3G
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 3 Mar 2020 20:58:34 +0100 (CET)
+Subject: Re: [PATCH net 06/16] can: add missing attribute validation for
+ termination
+To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
+Cc:     netdev@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+References: <20200303050526.4088735-1-kuba@kernel.org>
+ <20200303050526.4088735-7-kuba@kernel.org>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <c5842943-f11b-0d42-d03d-71930a7ecc3e@hartkopp.net>
+Date:   Tue, 3 Mar 2020 20:58:30 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Received: by 2002:a02:9f04:0:0:0:0:0 with HTTP; Tue, 3 Mar 2020 10:02:23 -0800 (PST)
-Reply-To: dr.challynoah@gmail.com
-From:   DR CHALLY NOAH <mayorabrahamedge404@gmail.com>
-Date:   Tue, 3 Mar 2020 19:02:23 +0100
-Message-ID: <CALqVJWc-Ynp146M3e4svoAmw8eSN73Vh3UD9giJiH92cuQ27NA@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200303050526.4088735-7-kuba@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Dear,
-What Have Kept You Waiting To Claim Your $600,000.00 USD Compensation Award?
-This said fund was issued out by the UNITED NATIONS To compensate
-you.Please If You Have Not Claim Your Fund (Award),Kindly contact me
-at   DR.CHALLYNOAH@GMAIL.COM   for further details on how to proceed your
-fund (award)release to you or better still reply back Immediately You
-Receive This Information For An Urgent Confirmation And Release Of Your
-Fund To You Without Delays, as your email was listed among those to be
-compensated this year.Congratulations..
-Best Regards,
-Dr Chally Noah.
-Minister Of Finance On Foreign Remittance:
+
+
+On 03/03/2020 06.05, Jakub Kicinski wrote:
+> Add missing attribute validation for IFLA_CAN_TERMINATION
+> to the netlink policy.
+> 
+> Fixes: 12a6075cabc0 ("can: dev: add CAN interface termination API")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: Wolfgang Grandegger <wg@grandegger.com>
+> CC: Marc Kleine-Budde <mkl@pengutronix.de>
+> CC: Oliver Hartkopp <socketcan@hartkopp.net>
+> CC: linux-can@vger.kernel.org
+> ---
+>   drivers/net/can/dev.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+> index 6ee06a49fb4c..68834a2853c9 100644
+> --- a/drivers/net/can/dev.c
+> +++ b/drivers/net/can/dev.c
+> @@ -883,6 +883,7 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
+>   				= { .len = sizeof(struct can_bittiming) },
+>   	[IFLA_CAN_DATA_BITTIMING_CONST]
+>   				= { .len = sizeof(struct can_bittiming_const) },
+> +	[IFLA_CAN_TERMINATION]	= { .type = NLA_U16 },
+>   };
+>   
+>   static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+Thanks Jakub for catching all these missing defs!
+
+Best regards,
+Oliver
