@@ -2,52 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D02178383
-	for <lists+linux-can@lfdr.de>; Tue,  3 Mar 2020 20:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 567AB179CD2
+	for <lists+linux-can@lfdr.de>; Thu,  5 Mar 2020 01:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729148AbgCCT6w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Mar 2020 14:58:52 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:19005 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728002AbgCCT6v (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Mar 2020 14:58:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583265527;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=8Hy1XQLrJGsksa411iFwtMtrZlW3bx5jx6/bcEnxtb4=;
-        b=sBcGbiT8AYYFcnVmC+hMtzuAg4bK/te2JNS9bVe4bYliNcrh+168VzQPkAN91UBosN
-        RVWlRdNceAileGqFjXzk3h9vkVOkqgrmSzpL/ilhxT3O22bMxz8xMRLw2RxE7HylMZxZ
-        qutdL/2TVvlXo/3a3rnjNKMJEWiEsl7nGJwzfl9IgYRVBR7BHPw+xDQtZ/tDPqqEt+iy
-        mHebCfHl/eMUBwpHGTYvdEvvG7J+rFlv1Uz7ewQGjcw18HK6msa+79UZITD1vk1Ujvwg
-        wl/4sF+CsXZYlmJlJgqoUIhW9hkejaMv1IyTql51DhYk2aiCm2bekiV5Bv67I1ZQvR8t
-        7Z5g==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVch5lU8W"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
-        with ESMTPSA id e0a4ffw23JwYE3G
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 3 Mar 2020 20:58:34 +0100 (CET)
-Subject: Re: [PATCH net 06/16] can: add missing attribute validation for
- termination
-To:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc:     netdev@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-References: <20200303050526.4088735-1-kuba@kernel.org>
- <20200303050526.4088735-7-kuba@kernel.org>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <c5842943-f11b-0d42-d03d-71930a7ecc3e@hartkopp.net>
-Date:   Tue, 3 Mar 2020 20:58:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S2388612AbgCEA2E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Mar 2020 19:28:04 -0500
+Received: from mail.comune.nogara.vr.it ([46.21.176.248]:37770 "EHLO
+        mail.comune.nogara.vr.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388468AbgCEA2E (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Mar 2020 19:28:04 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.comune.nogara.vr.it (Postfix) with ESMTP id 79C93C7263;
+        Thu,  5 Mar 2020 01:26:31 +0100 (CET)
+Received: from mail.comune.nogara.vr.it ([127.0.0.1])
+        by localhost (mail.comune.nogara.vr.it [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id N_v4ObBonbbA; Thu,  5 Mar 2020 01:26:30 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.comune.nogara.vr.it (Postfix) with ESMTP id B259BC7282;
+        Thu,  5 Mar 2020 01:26:29 +0100 (CET)
+X-Virus-Scanned: amavisd-new at comune.nogara.vr.it
+Received: from mail.comune.nogara.vr.it ([127.0.0.1])
+        by localhost (mail.comune.nogara.vr.it [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6sZc_1TaL_x4; Thu,  5 Mar 2020 01:26:28 +0100 (CET)
+Received: from mail.comune.nogara.vr.it (mail.comune.nogara.vr.it [192.168.35.12])
+        by mail.comune.nogara.vr.it (Postfix) with ESMTP id CC6CDC7263;
+        Thu,  5 Mar 2020 01:26:27 +0100 (CET)
+Date:   Thu, 5 Mar 2020 01:26:27 +0100 (CET)
+From:   Maria Alessandra Filippi <maria.filippi@comune.nogara.vr.it>
+Reply-To: "mrsmariaelisabethschaeffler11@gmail.com" 
+          <mrsmariaelisabethschaeffler11@gmail.com>
+Message-ID: <2118138416.225062.1583367987738.JavaMail.zimbra@comune.nogara.vr.it>
+Subject: 
 MIME-Version: 1.0
-In-Reply-To: <20200303050526.4088735-7-kuba@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [105.112.107.184]
+X-Mailer: Zimbra 8.0.6_GA_5922 (zclient/8.0.6_GA_5922)
+Thread-Topic: 
+Thread-Index: nWXW4Ljjsy3ZtU1PlTKMh/n7XuAtdA==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
@@ -55,37 +48,14 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 
-On 03/03/2020 06.05, Jakub Kicinski wrote:
-> Add missing attribute validation for IFLA_CAN_TERMINATION
-> to the netlink policy.
-> 
-> Fixes: 12a6075cabc0 ("can: dev: add CAN interface termination API")
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: Wolfgang Grandegger <wg@grandegger.com>
-> CC: Marc Kleine-Budde <mkl@pengutronix.de>
-> CC: Oliver Hartkopp <socketcan@hartkopp.net>
-> CC: linux-can@vger.kernel.org
-> ---
->   drivers/net/can/dev.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-> index 6ee06a49fb4c..68834a2853c9 100644
-> --- a/drivers/net/can/dev.c
-> +++ b/drivers/net/can/dev.c
-> @@ -883,6 +883,7 @@ static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
->   				= { .len = sizeof(struct can_bittiming) },
->   	[IFLA_CAN_DATA_BITTIMING_CONST]
->   				= { .len = sizeof(struct can_bittiming_const) },
-> +	[IFLA_CAN_TERMINATION]	= { .type = NLA_U16 },
->   };
->   
->   static int can_validate(struct nlattr *tb[], struct nlattr *data[],
+Hallo,
 
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Ich bin Frau Maria Elisabeth Schaeffler, eine deutsche Wirtschaftsmagnatin, Investorin und Philanthropin. Ich bin der Vorsitzende von Wipro Limited. Ich habe 25 Prozent meines pers&ouml;nlichen Verm&ouml;gens f&uuml;r wohlt&auml;tige Zwecke ausgegeben. Und ich habe auch versprochen, den Rest von 25% in diesem Jahr 2020 an Einzelpersonen zu verschenken. Ich habe beschlossen, 1.000.000,00 Euro an Sie zu spenden. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich f&uuml;r weitere Informationen.
 
-Thanks Jakub for catching all these missing defs!
+Sie k&ouml;nnen auch mehr &uuml;ber mich &uuml;ber den Link unten lesen
 
-Best regards,
-Oliver
+https://en.wikipedia.org/wiki/Maria-Elisabeth_Schaeffler
+Herzlicher Gruss
+Gesch&auml;ftsf&uuml;hrer Wipro Limited
+Maria-Elisabeth_Schaeffler
+E-Mail: mrsmariaelisabethschaeffler11@gmail.com
