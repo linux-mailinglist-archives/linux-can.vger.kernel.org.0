@@ -2,98 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C406F17C486
-	for <lists+linux-can@lfdr.de>; Fri,  6 Mar 2020 18:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA9E17C6DB
+	for <lists+linux-can@lfdr.de>; Fri,  6 Mar 2020 21:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbgCFReU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Mar 2020 12:34:20 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:42072 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbgCFReU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Mar 2020 12:34:20 -0500
-Received: by mail-qk1-f194.google.com with SMTP id e11so3028351qkg.9
-        for <linux-can@vger.kernel.org>; Fri, 06 Mar 2020 09:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j9iXnTXkoGFhQUol/W+rdWLl/5ChlK9yt0cmxdRBJ3c=;
-        b=Xh/fN/i5kGVcaw/0azSplxmG8yxkacb+P9xpOnwDuZCr1P3fV2uNpvEPPn0H9SoZG4
-         ao+Z9EUl06XfzOpzdv7RpAAJ0wosszU8ASQtvuZM2k+2aZ4FMyRpGdvSsb4gfD9yicFS
-         q2QNFLiPdlVZla0bFhUo9APW6bFs+FSvyeNrbGlgNMbDnIGRlyR1KWiN8xj813cUP8xD
-         hithzXtUwbJYRxTt1u6L7BjUoFzcGRissfTIqiN1OsKr3/YFnrSk4A2W1xGyr6uaroZk
-         OrurUWobG/fRF5N9pMbZO0thIMP2n9JpQUJVTK/LX42hCpNfCZ7nUsTqkWm6OGtNraHQ
-         zDPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j9iXnTXkoGFhQUol/W+rdWLl/5ChlK9yt0cmxdRBJ3c=;
-        b=ZFFtHw8BCiYxiac15JcatAIZ779egrj8pP/6l5NnojzDyT7MJMyAfiuM3DqKoWHE2Z
-         N7PBCYCDv3JjF/ZUnGqbsJmQVgsHQWXDdALn5u+ht4Zjrl2XyNcp5QZx9BhZPx7qHmcq
-         3aNRF6IrRrN4mAJKAiemvSEmAbESFe5kVPf/CLySWGywK+M6QQDfMow0PAbIAvFHub8U
-         MhwI+iccGPik6uZseqn9lGACRoHH/66JyB9HFMuY39P1UNZ1M77dBnBIraNUVxEcAKcX
-         aIKxg8p4L32grIhRkOqZ5s1JZu7l6947Os4IUbRzbiPTrO8IwGNiJGoPgu5l8lo4OISq
-         79JA==
-X-Gm-Message-State: ANhLgQ1sFSbSYVGTeIq+P0vQTPK1MPuSw5U9pyA6E4ZG15PNIZWwJBjj
-        ZbY7vBOfijwIsPkoQUdDRXvDh4Nl02WZYCylQz+I5nTn/Fk=
-X-Google-Smtp-Source: ADFU+vuK25acNQDMR/FrwH8IkK14YR6EkiTNaDdtt/wnFZxnOyPoNNt8JWSN/fCUgW6hb35+vemPuzC/LB/f8HDfLHo=
-X-Received: by 2002:a37:ef14:: with SMTP id j20mr2795259qkk.43.1583516057510;
- Fri, 06 Mar 2020 09:34:17 -0800 (PST)
+        id S1726359AbgCFUNC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Mar 2020 15:13:02 -0500
+Received: from mout.gmx.net ([212.227.15.15]:35731 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726185AbgCFUNC (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 6 Mar 2020 15:13:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1583525581;
+        bh=jP7cH0kJ6sWqinrLxiRjfTrsZY2Bw3CJMr+9cpkl1GE=;
+        h=X-UI-Sender-Class:To:From:Subject:Date;
+        b=LVeD1GG5qhe9fKWsT5iWX1/eWxw7bMQf9hGr9J+8+eyn82bdD4O9WTTMtj0G0kNqQ
+         huh+juRxWUeJAzzZqQjT3En+0CPWJVvL4PNlQqQfpNqKI4zne6PaPAkZkWTNoCVC7X
+         2yXP6vS/D3dO5w7ng0MSvFyocfTWhYTF8jJQxMDU=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.106] ([84.176.153.207]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Md6Qr-1jj5vb3Iot-00aILM for
+ <linux-can@vger.kernel.org>; Fri, 06 Mar 2020 21:13:00 +0100
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+From:   =?UTF-8?Q?Andr=c3=a9_Hartmann?= <aha_1980@gmx.de>
+Subject: Need help in interpreting ip status output
+Message-ID: <a6c8ef8c-5c72-7a2b-98df-0a30057c5fdc@gmx.de>
+Date:   Fri, 6 Mar 2020 21:13:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-References: <767580d8-1c93-907b-609c-4c1c049b7c42@pengutronix.de>
- <20200226.202326.295871777946911500.davem@davemloft.net> <d6d9368d-b468-3946-ac63-abedf6758154@hartkopp.net>
- <20200302.111249.471862054833131096.davem@davemloft.net> <03ff979e-a621-c9a3-9be3-13677c147f91@pengutronix.de>
-In-Reply-To: <03ff979e-a621-c9a3-9be3-13677c147f91@pengutronix.de>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 6 Mar 2020 18:34:05 +0100
-Message-ID: <CACT4Y+brat=HBcptYy_=13ny40TuM=Y2XNUXja_zH4Z1Mwen4w@mail.gmail.com>
-Subject: Re: [PATCH] bonding: do not enslave CAN devices
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     David Miller <davem@davemloft.net>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        syzbot <syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com>,
-        j.vosburgh@gmail.com, vfalico@gmail.com,
-        Andy Gospodarek <andy@greyhouse.net>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:+ArRgi3C4hTw45E4p6ti6RBNqx1qSawMBUfIaD6fj75DcawY2ET
+ kLPSk+4cJf36sBGtzrI3hRuISAPb4MJvDnwsg8cl2N5dkEfCR7WaWOCIgz0SsIRopDwnGPm
+ TjxAH5BnXdpDRLysDpNfICV+8Z9PB3rOoy7AF7vv5CRU9nfeevu7l93gdECC+OYMRo/0pJz
+ 0NGDmT0wt8PDbzYDwGk7w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1tJR1kUHufw=:jmxhE47ilwPvparr1rIQtM
+ gGLxmK088LIse40/4nIkYritlZN0AsQCr1BFwzzyJ/XvVx1+vb6xIXYBzoZLjjELn9PEyo8IG
+ VqD3ETfHEslHgmpexopQLp9SVwooaLsDWgfi4HYRih9GPaZ5mEHC/cqUbuHXgw5mEaxneznPs
+ 8GuWmj7LAAi5e8QoJDl78eDBzK78avWKR33BdaUW469kR11x4o6JuaCvw3pysGlYFuDPP2r0d
+ 70ga3rO7c2ujOVHV+H6B5pOkHnimldJJ1fi0ftt4rECMj83zpWIWSgcSBzsFgtJdjhsaGrP0l
+ igH/u2F72+E3hssXqvilU50olj6RVIr6CjnMB+9HQ9QEBYGc/kCx9UT9CndywDkT7mDpl3+X5
+ +K5xb5vA7Fl5wX6LyrAN30FsOthwCLHS8WF9mg3IOLSXm+Myo6sHNKXeNdktYs3NCWZE/sdqb
+ iTfKXeBf42g+XRfZiXtBbiiVS4QEzlWGEBqbHXi7+la44jHVbFd5vXnm2bQHXiFO42pwK/1U+
+ mREqfIkgAXTH9OhgD+K7Os+wmwQvvnNWtTdJj7VI9XTfT1CL6i+MINyuimrQSu1M1SSIs4u/g
+ j1dnyvkuKh3zpTtjVCEkCcqzWjpC0IJltXihzStVPZ/1Qs49arQ5m6BdkEZsZa7uNW54Va06f
+ kyHIvImhgytx31pMHoEbt81ZWiO8x+ExigLDM8YPnP3cjuDvK4uy/nj0bPVIHMI6EbKDb4sAe
+ u7o4KrptaivPTfVDzUCr5cp/VWisZ/oW+6iAvUwMXABc4XNlG+0tTBhkXer6O4swamv8Gp3s/
+ 6dVhboB+qflot6w8TcTXWcGTpdryBHnwA9Z+GqPCTITZ0rs4QjlbIsMRxeY1GbLAcW1xk7u54
+ AP66F1sWknnZtMx9pj8cQzuZfDP8m1vEdkDQaJkaasG/RqC3sGpxpFqOk7o8vtJzOUCITT6uy
+ crmzjeCtHf0FQeLbjqs6RhESlYGzBhpiIGtV51REnUiCRSTXQVRxDy4JfWxBeE2ADC3CKcABe
+ wr84XVyw7g0QOialG5zzhjCb8jaKO0POrHaj0rPIlQJ/xfovG5sOy0BCyh73m0P2YC12XkL6y
+ WcUNsH7NkKEmv1lZLX/RDHmvozNHa96N8ONM46N4ot+IOjKYDPsAlUbDDCvMz32RO4k4wGSpe
+ psCVGFDoAOXHXdpaAb6+xGqeitWOi0CWEDD2pBc8JNEEAG8hea2Tcldsbt+WzRldw5hwQbF58
+ zVzfxGhgtkhriKyTr
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Mar 6, 2020 at 3:12 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 3/2/20 8:12 PM, David Miller wrote:
-> > From: Oliver Hartkopp <socketcan@hartkopp.net>
-> > Date: Mon, 2 Mar 2020 09:45:41 +0100
-> >
-> >> I don't know yet whether it makes sense to have CAN bonding/team
-> >> devices. But if so we would need some more investigation. For now
-> >> disabling CAN interfaces for bonding/team devices seems to be
-> >> reasonable.
-> >
-> > Every single interesting device that falls into a special use case
-> > like CAN is going to be tempted to add a similar check.
-> >
-> > I don't want to set this precedence.
-> >
-> > Check that the devices you get passed are actually CAN devices, it's
-> > easy, just compare the netdev_ops and make sure they equal the CAN
-> > ones.
->
-> Sorry, I'm not really sure how to implement this check.
->
-> Should I maintain a list of all netdev_ops of all the CAN devices (=
-> whitelist) and the compare against that list? Having a global list of
-> pointers to network devices remind me of the old days of kernel-2.4.
+Hi all,
 
-I think Dave means something like this:
+can someone help me interpreting the following ip output:
 
-$ grep "netdev_ops == " drivers/net/*/*.c net/*/*.c
-drivers/net/hyperv/netvsc_drv.c: if (event_dev->netdev_ops == &device_ops)
-drivers/net/ppp/ppp_generic.c: if (dev->netdev_ops == &ppp_netdev_ops)
-net/dsa/slave.c: return dev->netdev_ops == &dsa_slave_netdev_ops;
-net/openvswitch/vport-internal_dev.c: return netdev->netdev_ops ==
-&internal_dev_netdev_ops;
+ip -s link show can1
+      3: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state
+UNKNOWN mode DEFAULT group default qlen 100
+          link/can
+          RX: bytes  packets  errors  dropped overrun mcast
+          0          9987413  1       74      1       0
+          TX: bytes  packets  errors  dropped carrier collsns
+          0          0        0       0       0       0
+
+I'm especially interested in the meaning of the
+
+* 1 errors
+* 74 dropped
+* 1 overrun
+
+fields.
+
+Thanks and best regards,
+Andr=C3=A9
