@@ -2,58 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4EA17A725
-	for <lists+linux-can@lfdr.de>; Thu,  5 Mar 2020 15:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C243117BFFD
+	for <lists+linux-can@lfdr.de>; Fri,  6 Mar 2020 15:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbgCEOJS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 5 Mar 2020 09:09:18 -0500
-Received: from mail.11d02.mspz7.gob.ec ([181.211.254.254]:37544 "EHLO
-        mail.11d02.mspz7.gob.ec" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726079AbgCEOJS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Mar 2020 09:09:18 -0500
-X-Greylist: delayed 8006 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 09:09:18 EST
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.11d02.mspz7.gob.ec (Postfix) with ESMTP id 501621461A2;
-        Thu,  5 Mar 2020 05:17:30 -0500 (-05)
-Received: from mail.11d02.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d02.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RHzXHyt2sriG; Thu,  5 Mar 2020 05:17:30 -0500 (-05)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.11d02.mspz7.gob.ec (Postfix) with ESMTP id 478311473A2;
-        Thu,  5 Mar 2020 04:42:07 -0500 (-05)
-X-Virus-Scanned: amavisd-new at 11d02.mspz7.gob.ec
-Received: from mail.11d02.mspz7.gob.ec ([127.0.0.1])
-        by localhost (mail.11d02.mspz7.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QvRnGlO8Bnnw; Thu,  5 Mar 2020 04:42:06 -0500 (-05)
-Received: from [10.22.221.193] (unknown [105.0.4.26])
-        by mail.11d02.mspz7.gob.ec (Postfix) with ESMTPSA id 1B5EB14596E;
-        Thu,  5 Mar 2020 04:12:35 -0500 (-05)
-Content-Type: text/plain; charset="utf-8"
+        id S1726788AbgCFONA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Mar 2020 09:13:00 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33595 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726733AbgCFONA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Mar 2020 09:13:00 -0500
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1jADig-0003CP-2N; Fri, 06 Mar 2020 15:12:54 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:124:7ee3:e89c:2c00] (unknown [IPv6:2a03:f580:87bc:d400:124:7ee3:e89c:2c00])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 821DA4C8161;
+        Fri,  6 Mar 2020 14:12:50 +0000 (UTC)
+Subject: Re: [PATCH] bonding: do not enslave CAN devices
+To:     David Miller <davem@davemloft.net>, socketcan@hartkopp.net
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        syzbot+c3ea30e1e2485573f953@syzkaller.appspotmail.com,
+        dvyukov@google.com, j.vosburgh@gmail.com, vfalico@gmail.com,
+        andy@greyhouse.net, stable@vger.kernel.org
+References: <767580d8-1c93-907b-609c-4c1c049b7c42@pengutronix.de>
+ <20200226.202326.295871777946911500.davem@davemloft.net>
+ <d6d9368d-b468-3946-ac63-abedf6758154@hartkopp.net>
+ <20200302.111249.471862054833131096.davem@davemloft.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
+Message-ID: <03ff979e-a621-c9a3-9be3-13677c147f91@pengutronix.de>
+Date:   Fri, 6 Mar 2020 15:12:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeitsspende_von_2=2E000=2E000_Millionen_Euro?=
-To:     Recipients <alex.zari@11d02.mspz7.gob.ec>
-From:   ''Michael Weirsky'' <alex.zari@11d02.mspz7.gob.ec>
-Date:   Thu, 05 Mar 2020 11:05:37 +0200
-Reply-To: mikeweirskyspende@gmail.com
-Message-Id: <20200305091243.1B5EB14596E@mail.11d02.mspz7.gob.ec>
+In-Reply-To: <20200302.111249.471862054833131096.davem@davemloft.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Lieber Freund,
+On 3/2/20 8:12 PM, David Miller wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> Date: Mon, 2 Mar 2020 09:45:41 +0100
+> 
+>> I don't know yet whether it makes sense to have CAN bonding/team
+>> devices. But if so we would need some more investigation. For now
+>> disabling CAN interfaces for bonding/team devices seems to be
+>> reasonable.
+> 
+> Every single interesting device that falls into a special use case
+> like CAN is going to be tempted to add a similar check.
+> 
+> I don't want to set this precedence.
+> 
+> Check that the devices you get passed are actually CAN devices, it's
+> easy, just compare the netdev_ops and make sure they equal the CAN
+> ones.
 
-Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen.
-Das ist dein Spendencode: [MW530342019]
-www.youtube.com/watch?v=un8yRTmrYMY
+Sorry, I'm not really sure how to implement this check.
 
-Antworten Sie mit dem SPENDE-CODE an diese 
+Should I maintain a list of all netdev_ops of all the CAN devices (=
+whitelist) and the compare against that list? Having a global list of
+pointers to network devices remind me of the old days of kernel-2.4.
 
-E-Mail:mikeweirskyspende@gmail.com
+regards,
+Marc
 
-Ich hoffe, Sie und Ihre Familie glücklich zu machen.
-
-Grüße
-Herr Mike Weirsky
+-- 
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
