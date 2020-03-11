@@ -2,168 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0156C182251
-	for <lists+linux-can@lfdr.de>; Wed, 11 Mar 2020 20:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3909182332
+	for <lists+linux-can@lfdr.de>; Wed, 11 Mar 2020 21:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731034AbgCKTap (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Mar 2020 15:30:45 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:36416 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731003AbgCKTap (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Mar 2020 15:30:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1583955043;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:References:Cc:To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=l18MpIsB9q16u6b9MPJIA+vfpOtAUjifpyFVXMg3LXs=;
-        b=MuY/4GrY/jOWoAq0klEQVn/PNdMJd3XLpjlrZ6sM+2r7v+QbndtElEdWEGRmiJEDNj
-        acNbi4GZawLgQz/hMvP/Dz0Zoli95VB3j3HImeugrpPxPZRDcCQZ3dyuX5S5lLnPI++B
-        yMfMaSP79VL5D7moRTYfCmajx5YM+zSaLy7NNIgCH2Cz63QgFd0IFCK72tWtjMFmmXVu
-        8pdyUlo5McxTuCUEkOcwWHbhBPI6E0FAvxoIKBotLeWm2iyj7JwsBr04Y+YnDSzJYAtS
-        CMbidwTSNAMrK08Fisk3BjXXhrKCpUMJdYqBsKO/9RTd1PWTvPBiw1Ps69oUvxh0wwDW
-        oaKQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVch6kE2u"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.1.177]
-        by smtp.strato.de (RZmta 46.2.0 DYNA|AUTH)
-        with ESMTPSA id e0a4ffw2BJUgch5
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 11 Mar 2020 20:30:42 +0100 (CET)
-Subject: Re: usb_8dev - WARN_ON(in_irq()) [#00560]
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     support@8devices.com
-Cc:     linux-can@vger.kernel.org, Michal Sojka <michal.sojka@cvut.cz>
-References: <87h8245gyv.fsf@steelpick.2x.cz>
- <7429cd37-f4dd-247c-7fa3-259801f20944@rusoku.com>
- <8aaec717-0ff7-922b-6969-482363d2790b@hartkopp.net>
- <03fe333a-7a7b-e9b6-fd9e-3d433c2f3cb3@rusoku.com>
- <72ef9952-df01-aa84-a186-93d578b06818@hartkopp.net>
-Message-ID: <b8f4f956-0718-7f05-b0f1-53ba9ed55328@hartkopp.net>
-Date:   Wed, 11 Mar 2020 20:30:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S2387401AbgCKURE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Mar 2020 16:17:04 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:57325 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731102AbgCKURE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Mar 2020 16:17:04 -0400
+Received: by mail-il1-f197.google.com with SMTP id x10so2225403ilo.23
+        for <linux-can@vger.kernel.org>; Wed, 11 Mar 2020 13:17:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Hk8leBLQn5EO2E5GYez0a5lDH0bgTVJ9Yjc9wD197GA=;
+        b=awPeZ6EI0RnDDjyKnRJ0IjsoCbuoYYfFhgvpJkdVLpyooYMYbO1FTiAhpgRnUjreQl
+         wZDhLY+NKQG0XlHQTem8uNY1dvHOZ37Y8N8Uw24NuzcICVm6CX54K2MoXz4TdAyokMkQ
+         zXZiGXOTSUjYFo0Ygm7ZtdXWVAhApkIdPx1Ks3mnl3hxLJa1D42u8yFJ4yuEQ+pxQnby
+         04eA4bt4fr51HyWM/YBuaSwPgLBG73SF9b9mQjaBb66u84RKbtOcmn9TpqmSbkrpUEsm
+         20gRBANIW2cLhlLzIKjqTQZ+CNEAzMg+580Ou9kZAeuu6rPzGfRV4PJfbK7d8b87rJvn
+         1SAw==
+X-Gm-Message-State: ANhLgQ23t4zzyzJDUPbZ8/p3BzI8jvRI77WQUf/exL2WVLwAbojUT1c6
+        Xn4Df8NW5VnlvM13bE6v56OUOIBN+i5VNagyA0mgWcmiDygE
+X-Google-Smtp-Source: ADFU+vuCk0oLjsQRK1OQUGd8tOfOULwTEpr37d1F6UYTw6+1J+u2VViJHjd/h7gGWV9DvDuMYhL3fUTIAi3lVakXW/slGPEJZJ+Y
 MIME-Version: 1.0
-In-Reply-To: <72ef9952-df01-aa84-a186-93d578b06818@hartkopp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a02:962e:: with SMTP id c43mr4679555jai.26.1583957823254;
+ Wed, 11 Mar 2020 13:17:03 -0700 (PDT)
+Date:   Wed, 11 Mar 2020 13:17:03 -0700
+In-Reply-To: <00000000000030395e059f6aaa09@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000064f9a805a099eb8a@google.com>
+Subject: Re: general protection fault in j1939_netdev_start
+From:   syzbot <syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com>
+To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
+        davem@davemloft.net, jiri@mellanox.com, jiri@resnulli.us,
+        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        mareklindner@neomailbox.ch, mkl@pengutronix.de,
+        netdev@vger.kernel.org, robin@protonic.nl, socketcan@hartkopp.net,
+        sven@narfation.org, sw@simonwunderlich.de,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Andrejus,
+syzbot has bisected this bug to:
 
-thanks for investigating this issue!
+commit 8330f73fe9742f201f467639f8356cf58756fb9f
+Author: Jiri Pirko <jiri@mellanox.com>
+Date:   Wed Sep 4 07:40:47 2019 +0000
 
-For updates please reply to this mail to 'all', so that the progress 
-remains documented on the mailing list.
+    rocker: add missing init_net check in FIB notifier
 
-Many thanks,
-Oliver
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=165cdcb1e00000
+start commit:   63623fd4 Merge tag 'for-linus' of git://git.kernel.org/pub..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=155cdcb1e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=115cdcb1e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9833e26bab355358
+dashboard link: https://syzkaller.appspot.com/bug?extid=f03d384f3455d28833eb
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162b8331e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f10a2de00000
 
-On 05/02/2020 11.58, Oliver Hartkopp wrote:
+Reported-by: syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com
+Fixes: 8330f73fe974 ("rocker: add missing init_net check in FIB notifier")
 
-> I've put info [at] 8devices.com into the recipients list as the Linux 
-> driver has to do the "right thing" when it gets the "Tx URB aborted 
-> (-2)" information.
-> 
-> And so far I did not see anything like this with the old 'white' USB2CAN 
-> adapter with FW 1.7.
-> 
-> As long as we don't know how to react on this new feedback from the USB 
-> device, it is hard to think about a fix ...
-> 
-> Best regards,
-> Oliver
-> 
-> 
-> On 04/02/2020 20.54, Gediminas Simanskis wrote:
->> Hi Oliver,
->>
->> I remember that in some conditions usb2can began to flood with 
->> messages like this (CANAL_STATUSMSG_xx).
->> In normal state these messages should be disabled via init string.
->>
->> I don't have acces to Korlan firmware.
->>
->> Regards,
->> Gediminas
->>
->> On 2020-02-04 19:52, Oliver Hartkopp wrote:
->>> Hello Gediminas,
->>>
->>> I took a look into the old firmware of the former USB_8DEV adapter 
->>> with the white housing which had a CANAL_STATUSMSG_BUSLIGHT (== 0x02) 
->>> return value:
->>>
->>> https://github.com/krumboeck/usb2can_firmware/blob/master/main.c#L227
->>>
->>> Is this the right place to search for the value that is checked in 
->>> the kernel here:
->>> https://elixir.bootlin.com/linux/v5.5.1/source/drivers/net/can/usb/usb_8dev.c#L581 
->>>
->>>
->>> ??
->>>
->>> can0: Tx URB aborted (-2)
->>>
->>> At least the status is *only* printed in 
->>> usb_8dev_write_bulk_callback() and the echo skb handling is still 
->>> performed as there was a zero status (== ok?!?).
->>>
->>> Do you have an idea how to proceed with the driver in the case the 
->>> user has the newer
->>> https://www.8devices.com/products/usb2can_korlan
->>> device?
->>>
->>> Best regards,
->>> Oliver
->>>
->>> On 13/12/2019 18.20, Gediminas Simanskis wrote:
->>>> Seems like to USB2CAN buffer overflow and firmware crashing.
->>>>
->>>> Gediminas
->>>>
->>>> On 2019-12-13 18:27, Michal Sojka wrote:
->>>>> On Fri, Dec 13 2019, Michal Sojka wrote:
->>>>>> Hi Oliver,
->>>>>>
->>>>>> On Fri, Dec 13 2019, Oliver Hartkopp wrote:
->>>>>>> Did you do anything weird (e.g. pulling the USB plug on the run) 
->>>>>>> to get
->>>>>>> this problem?
->>>>>> No, I just connected it to an ECU and started sending messages on the
->>>>>> bus. The behaviour was like if the messages were not acknowledged, 
->>>>>> i.e.,
->>>>>> initially, candump on my laptop showed the messages sent, but 
->>>>>> after some
->>>>>> time (perhaps after TX buffers were full), candump stopped. I was 
->>>>>> also
->>>>>> not able to see any messages sent by the ECU (both before and after I
->>>>>> sent my messages).
->>>>>>
->>>>>> When I used the same ECU and all the wiring with peak_usb, 
->>>>>> communication
->>>>>> with the ECU was without any problems.
->>>>> I did more investigation - I was able to fix the problem by adding a
->>>>> terminator resistor to the bus.
->>>>>
->>>>> However, the problem can be easily reproduced by the following 
->>>>> sequence
->>>>> of commands, when the USB2CAN is not connected to any bus:
->>>>>
->>>>>      ip link set can0 up txqueuelen 1000 type can bitrate 500000
->>>>>      candump can0
->>>>>      cangen -v -g 50 can0
->>>>>
->>>>> when candump stops printing the messages, run:
->>>>>
->>>>>      ip link set down dev can0
->>>>>
->>>>> and the warnings appear in dmesg. I was also trying this with latest
->>>>> mainline kernel, which includes the fix for use-after-free, and the
->>>>> warnings are still there.
->>>>>
->>>>> -Michal
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
