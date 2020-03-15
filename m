@@ -2,81 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE633184AB9
-	for <lists+linux-can@lfdr.de>; Fri, 13 Mar 2020 16:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85524185B1B
+	for <lists+linux-can@lfdr.de>; Sun, 15 Mar 2020 08:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbgCMP3M (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 Mar 2020 11:29:12 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59015 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726591AbgCMP3M (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Mar 2020 11:29:12 -0400
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jCmFC-0005OH-91; Fri, 13 Mar 2020 16:29:02 +0100
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jCmFA-0006fb-4a; Fri, 13 Mar 2020 16:29:00 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
-        wg@grandegger.com
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com,
-        linux-stable <stable@vger.kernel.org>, kernel@pengutronix.de,
+        id S1727722AbgCOHyN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 15 Mar 2020 03:54:13 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33736 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727654AbgCOHyN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 15 Mar 2020 03:54:13 -0400
+Received: by mail-wr1-f66.google.com with SMTP id a25so17322258wrd.0;
+        Sun, 15 Mar 2020 00:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=krZuLH5aA8NwXAZfipidEOIflgKvPBY7kHSi8m+OXmY=;
+        b=plSZ2YEqBywE95sMwb5/g9rxew5HtQN7TGswA23clZ5u+Lsfp1NPfjiJQQBn+w4NGu
+         P2Z1SsxnPhFEiv3BS49M0E7zeantBSJO6jVMlY97YJH0ntQwqXYroHFojNgIzGH5UEhf
+         QF92dp8zrcBCJ6yzUDFzPQxGbSdOnKZkf1nYHFkz4maNzdSEeOtdRLD8h4pERMSLqxpD
+         9tBdEscrUMNhN4Gfj+Y8uMH8NPLSZOjEIyl5j0s5i5do1nBTM6rjYptgaUIZa79DnCpT
+         szjX/bQOop0i1sCtFA6UqgSILpUvcrs6OOIu4woffBwLaO9oIl39UDHNoABe0GujGOnJ
+         zuhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=krZuLH5aA8NwXAZfipidEOIflgKvPBY7kHSi8m+OXmY=;
+        b=qoZEs6eeIP6/ETf4YdhuYyJHik25v2PyRc8gji+ajW4jXOxA2aJRaf7LRjOJ+GLMgn
+         aDo5D6gH4rcoy+Mthkqw9DyNrHOKBG4nzkNuSgme1ZiDd0WOObvbcBp/ai0/zC45rboB
+         eX6Ka6dM3NyfycvhOV5Vwj9IsHOeAxYvEMpaGGWXKSDGHeNpbW6pOCb/0+JBVB78t/02
+         Px5BYk/NXxnBYfbG+x/eykcWwyhUbclSx97dc7ELe4QL6oQ1JPBlUGcyzcRHiGJauEQm
+         IqN36B2oddSyOWLxpU4D5rV1ds46EvhOYeq/At6FRbBC6QXNQK+KwBwhfySoK2WqRNcL
+         +Sow==
+X-Gm-Message-State: ANhLgQ2M9+9xnuXFnj0cP6e0iYdig3UlXZ8NN+3/vG0spV9PbJAJQmZh
+        HEocSKslcD2qZl4pfPo5aIY=
+X-Google-Smtp-Source: ADFU+vtHChFjhT4bEeZSnYpEU/ALFDqNPkSpBIGVQaE1mDIrUUJukwiaOltooyAjRU2TukDAL8FKMA==
+X-Received: by 2002:a05:6000:c:: with SMTP id h12mr22936862wrx.168.1584258850781;
+        Sun, 15 Mar 2020 00:54:10 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:2d6c:6c00:888a:952a:33bc:a081])
+        by smtp.gmail.com with ESMTPSA id k126sm24716601wme.4.2020.03.15.00.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Mar 2020 00:54:10 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        David Jander <david@protonic.nl>
-Subject: [PATCH v1] can: j1939: socket: j1939_sk_bind(): make sure ml_priv is allocated
-Date:   Fri, 13 Mar 2020 16:28:59 +0100
-Message-Id: <20200313152859.25588-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust to MCAN MMIO schema conversion
+Date:   Sun, 15 Mar 2020 08:53:56 +0100
+Message-Id: <20200315075356.8596-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds check to ensure that the struct net_device::ml_priv is
-allocated, as it is used later by the j1939 stack.
+Commit 824674b59f72 ("dt-bindings: net: can: Convert M_CAN to json-schema")
+missed to adjust the MCAN MMIO DEVICE DRIVER entry in MAINTAINERS.
 
-The allocation is done by all mainline CAN network drivers, but when using
-bond or team devices this is not the case.
+Since then, ./scripts/get_maintainer.pl --self-test complains:
 
-Bail out if no ml_priv is allocated.
+  warning: no file matches \
+  F: Documentation/devicetree/bindings/net/can/m_can.txt
 
-Reported-by: syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Cc: linux-stable <stable@vger.kernel.org> # >= v5.4
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Update MAINTAINERS entry to location of converted schema.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- net/can/j1939/socket.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+applies cleanly on next-20200313
 
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index b9a17c2ee16f..27542de233c7 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -467,6 +467,14 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 			goto out_release_sock;
- 		}
- 
-+		if (!ndev->ml_priv) {
-+			netdev_warn_once(ndev,
-+					 "No CAN mid layer private allocated, please fix your driver and use alloc_candev()!\n");
-+			dev_put(ndev);
-+			ret = -ENODEV;
-+			goto out_release_sock;
-+		}
-+
- 		priv = j1939_netdev_start(ndev);
- 		dev_put(ndev);
- 		if (IS_ERR(priv)) {
+Benjamin, please ack.
+Rob, please pick this patch (it is not urgent, though).
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 32a95d162f06..ebc3d91294c6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10323,7 +10323,7 @@ M:	Dan Murphy <dmurphy@ti.com>
+ M:	Sriram Dash <sriram.dash@samsung.com>
+ L:	linux-can@vger.kernel.org
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/net/can/m_can.txt
++F:	Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+ F:	drivers/net/can/m_can/m_can.c
+ F:	drivers/net/can/m_can/m_can.h
+ F:	drivers/net/can/m_can/m_can_platform.c
 -- 
-2.25.1
+2.17.1
 
