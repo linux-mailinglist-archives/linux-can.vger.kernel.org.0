@@ -2,96 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85524185B1B
-	for <lists+linux-can@lfdr.de>; Sun, 15 Mar 2020 08:54:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D685C186618
+	for <lists+linux-can@lfdr.de>; Mon, 16 Mar 2020 09:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbgCOHyN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 15 Mar 2020 03:54:13 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:33736 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727654AbgCOHyN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 15 Mar 2020 03:54:13 -0400
-Received: by mail-wr1-f66.google.com with SMTP id a25so17322258wrd.0;
-        Sun, 15 Mar 2020 00:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=krZuLH5aA8NwXAZfipidEOIflgKvPBY7kHSi8m+OXmY=;
-        b=plSZ2YEqBywE95sMwb5/g9rxew5HtQN7TGswA23clZ5u+Lsfp1NPfjiJQQBn+w4NGu
-         P2Z1SsxnPhFEiv3BS49M0E7zeantBSJO6jVMlY97YJH0ntQwqXYroHFojNgIzGH5UEhf
-         QF92dp8zrcBCJ6yzUDFzPQxGbSdOnKZkf1nYHFkz4maNzdSEeOtdRLD8h4pERMSLqxpD
-         9tBdEscrUMNhN4Gfj+Y8uMH8NPLSZOjEIyl5j0s5i5do1nBTM6rjYptgaUIZa79DnCpT
-         szjX/bQOop0i1sCtFA6UqgSILpUvcrs6OOIu4woffBwLaO9oIl39UDHNoABe0GujGOnJ
-         zuhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=krZuLH5aA8NwXAZfipidEOIflgKvPBY7kHSi8m+OXmY=;
-        b=qoZEs6eeIP6/ETf4YdhuYyJHik25v2PyRc8gji+ajW4jXOxA2aJRaf7LRjOJ+GLMgn
-         aDo5D6gH4rcoy+Mthkqw9DyNrHOKBG4nzkNuSgme1ZiDd0WOObvbcBp/ai0/zC45rboB
-         eX6Ka6dM3NyfycvhOV5Vwj9IsHOeAxYvEMpaGGWXKSDGHeNpbW6pOCb/0+JBVB78t/02
-         Px5BYk/NXxnBYfbG+x/eykcWwyhUbclSx97dc7ELe4QL6oQ1JPBlUGcyzcRHiGJauEQm
-         IqN36B2oddSyOWLxpU4D5rV1ds46EvhOYeq/At6FRbBC6QXNQK+KwBwhfySoK2WqRNcL
-         +Sow==
-X-Gm-Message-State: ANhLgQ2M9+9xnuXFnj0cP6e0iYdig3UlXZ8NN+3/vG0spV9PbJAJQmZh
-        HEocSKslcD2qZl4pfPo5aIY=
-X-Google-Smtp-Source: ADFU+vtHChFjhT4bEeZSnYpEU/ALFDqNPkSpBIGVQaE1mDIrUUJukwiaOltooyAjRU2TukDAL8FKMA==
-X-Received: by 2002:a05:6000:c:: with SMTP id h12mr22936862wrx.168.1584258850781;
-        Sun, 15 Mar 2020 00:54:10 -0700 (PDT)
-Received: from felia.fritz.box ([2001:16b8:2d6c:6c00:888a:952a:33bc:a081])
-        by smtp.gmail.com with ESMTPSA id k126sm24716601wme.4.2020.03.15.00.54.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Mar 2020 00:54:10 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>,
+        id S1729921AbgCPIFq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 16 Mar 2020 04:05:46 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:4442 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729745AbgCPIFq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Mar 2020 04:05:46 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02G7vZsG023088;
+        Mon, 16 Mar 2020 09:05:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=74p6j09OgCD44qKERldrfn1TGhnsclJWh4IGsQrPgUs=;
+ b=NOO+6cnr0gI9l59bNS7o++DFseCA5paZlami+ViY1zcsWowTSrCxjbugKLYdzh/iDMDJ
+ +V/vXWUWwMj7VqYkO2V+Rx3+i8vuFNBbM7RBG0vU3yEfUIZbnL8RBM84CVeIEX+XhnRh
+ gLEOHX/Udwi2x8K7bw9PMIOikLyRunp/magUpPp6DCNlbCNEX9YmSnCGnqdybEnbHLh7
+ /fWx5Fv+bnhnB2OhrFgicDQgo80cBOZq3cHc4kBCfKnBVZnPCWmQ0So+sluy86vVoOo9
+ MMzc98iysNKWk7vaZgqclhuFWMs72lcVJY2ykvLhEB72oixGMKtqK1C9GJAkB25i+UPN ew== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2yrqaye8pm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 16 Mar 2020 09:05:30 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4847F100039;
+        Mon, 16 Mar 2020 09:05:29 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 36DE821E687;
+        Mon, 16 Mar 2020 09:05:29 +0100 (CET)
+Received: from SFHDAG3NODE3.st.com (10.75.127.9) by SFHDAG3NODE3.st.com
+ (10.75.127.9) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 16 Mar
+ 2020 09:05:28 +0100
+Received: from SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476]) by
+ SFHDAG3NODE3.st.com ([fe80::3507:b372:7648:476%20]) with mapi id
+ 15.00.1347.000; Mon, 16 Mar 2020 09:05:28 +0100
+From:   Benjamin GAIGNARD <benjamin.gaignard@st.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Rob Herring <robh@kernel.org>
-Cc:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Joe Perches <joe@perches.com>, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: adjust to MCAN MMIO schema conversion
-Date:   Sun, 15 Mar 2020 08:53:56 +0100
-Message-Id: <20200315075356.8596-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
+CC:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Joe Perches <joe@perches.com>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: adjust to MCAN MMIO schema conversion
+Thread-Topic: [PATCH] MAINTAINERS: adjust to MCAN MMIO schema conversion
+Thread-Index: AQHV+p7q/dc7FHitnU+am9MRNeQXR6hKzU0A
+Date:   Mon, 16 Mar 2020 08:05:28 +0000
+Message-ID: <28f8b502-1f33-1da2-e2b8-3a727db58eea@st.com>
+References: <20200315075356.8596-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20200315075356.8596-1-lukas.bulwahn@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.44]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2B429A41A546874391B681CDAA92AAC5@st.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-16_02:2020-03-12,2020-03-16 signatures=0
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Commit 824674b59f72 ("dt-bindings: net: can: Convert M_CAN to json-schema")
-missed to adjust the MCAN MMIO DEVICE DRIVER entry in MAINTAINERS.
-
-Since then, ./scripts/get_maintainer.pl --self-test complains:
-
-  warning: no file matches \
-  F: Documentation/devicetree/bindings/net/can/m_can.txt
-
-Update MAINTAINERS entry to location of converted schema.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-applies cleanly on next-20200313
-
-Benjamin, please ack.
-Rob, please pick this patch (it is not urgent, though).
-
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 32a95d162f06..ebc3d91294c6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10323,7 +10323,7 @@ M:	Dan Murphy <dmurphy@ti.com>
- M:	Sriram Dash <sriram.dash@samsung.com>
- L:	linux-can@vger.kernel.org
- S:	Maintained
--F:	Documentation/devicetree/bindings/net/can/m_can.txt
-+F:	Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
- F:	drivers/net/can/m_can/m_can.c
- F:	drivers/net/can/m_can/m_can.h
- F:	drivers/net/can/m_can/m_can_platform.c
--- 
-2.17.1
-
+DQoNCk9uIDMvMTUvMjAgODo1MyBBTSwgTHVrYXMgQnVsd2FobiB3cm90ZToNCj4gQ29tbWl0IDgy
+NDY3NGI1OWY3MiAoImR0LWJpbmRpbmdzOiBuZXQ6IGNhbjogQ29udmVydCBNX0NBTiB0byBqc29u
+LXNjaGVtYSIpDQo+IG1pc3NlZCB0byBhZGp1c3QgdGhlIE1DQU4gTU1JTyBERVZJQ0UgRFJJVkVS
+IGVudHJ5IGluIE1BSU5UQUlORVJTLg0KPg0KPiBTaW5jZSB0aGVuLCAuL3NjcmlwdHMvZ2V0X21h
+aW50YWluZXIucGwgLS1zZWxmLXRlc3QgY29tcGxhaW5zOg0KPg0KPiAgICB3YXJuaW5nOiBubyBm
+aWxlIG1hdGNoZXMgXA0KPiAgICBGOiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
+bmV0L2Nhbi9tX2Nhbi50eHQNCj4NCj4gVXBkYXRlIE1BSU5UQUlORVJTIGVudHJ5IHRvIGxvY2F0
+aW9uIG9mIGNvbnZlcnRlZCBzY2hlbWEuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IEx1a2FzIEJ1bHdh
+aG4gPGx1a2FzLmJ1bHdhaG5AZ21haWwuY29tPg0KUmV2aWV3ZWQtYnk6IEJlbmphbWluIEdhaWdu
+YXJkIDxiZW5qYW1pbi5nYWlnbmFyZEBzdC5jb20+DQoNClRoYW5rcw0KPiAtLS0NCj4gYXBwbGll
+cyBjbGVhbmx5IG9uIG5leHQtMjAyMDAzMTMNCj4NCj4gQmVuamFtaW4sIHBsZWFzZSBhY2suDQo+
+IFJvYiwgcGxlYXNlIHBpY2sgdGhpcyBwYXRjaCAoaXQgaXMgbm90IHVyZ2VudCwgdGhvdWdoKS4N
+Cj4NCj4gICBNQUlOVEFJTkVSUyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
+b24oKyksIDEgZGVsZXRpb24oLSkNCj4NCj4gZGlmZiAtLWdpdCBhL01BSU5UQUlORVJTIGIvTUFJ
+TlRBSU5FUlMNCj4gaW5kZXggMzJhOTVkMTYyZjA2Li5lYmMzZDkxMjk0YzYgMTAwNjQ0DQo+IC0t
+LSBhL01BSU5UQUlORVJTDQo+ICsrKyBiL01BSU5UQUlORVJTDQo+IEBAIC0xMDMyMyw3ICsxMDMy
+Myw3IEBAIE06CURhbiBNdXJwaHkgPGRtdXJwaHlAdGkuY29tPg0KPiAgIE06CVNyaXJhbSBEYXNo
+IDxzcmlyYW0uZGFzaEBzYW1zdW5nLmNvbT4NCj4gICBMOglsaW51eC1jYW5Admdlci5rZXJuZWwu
+b3JnDQo+ICAgUzoJTWFpbnRhaW5lZA0KPiAtRjoJRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2Jp
+bmRpbmdzL25ldC9jYW4vbV9jYW4udHh0DQo+ICtGOglEb2N1bWVudGF0aW9uL2RldmljZXRyZWUv
+YmluZGluZ3MvbmV0L2Nhbi9ib3NjaCxtX2Nhbi55YW1sDQo+ICAgRjoJZHJpdmVycy9uZXQvY2Fu
+L21fY2FuL21fY2FuLmMNCj4gICBGOglkcml2ZXJzL25ldC9jYW4vbV9jYW4vbV9jYW4uaA0KPiAg
+IEY6CWRyaXZlcnMvbmV0L2Nhbi9tX2Nhbi9tX2Nhbl9wbGF0Zm9ybS5jDQo=
