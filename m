@@ -2,96 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE62E18E3E5
-	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2020 20:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D73518E48A
+	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2020 21:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727533AbgCUTPb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 21 Mar 2020 15:15:31 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35723 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbgCUTPb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Mar 2020 15:15:31 -0400
-Received: by mail-lj1-f194.google.com with SMTP id u12so10170348ljo.2
-        for <linux-can@vger.kernel.org>; Sat, 21 Mar 2020 12:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pJJ83mfyTCqAJF6csSa3R1PY4jhPT+4ET2XKanu9T4c=;
-        b=lS7nC9oTJN9FVrGjbIa34p9+854bj+fba7vDh8x6jIFDm6Lgjl1L3Zz3sAq4/BP7IH
-         c7+/40GCYQe/2dxMewfAm+bdQAeJxG/8Cw0PAO5c9sZmDjdB8Fp5tpyN7DGNJ66bsP/u
-         IY8io4LuqA2Uk7hh1NKYN9mZmgUWvTAZcWVuKrp82ibBGbpNHTNgyDiVBTXzjQA6u9Jy
-         EUW800vt5yzGg8hIe0FiJIlUvuGMmd1/8nt7u1oK27/CCVKwZisWPV31REhZp03EN3FH
-         mUsKZikSrdEAnDYaNFdRD8wGjGSA+7keDbMc/RFOyn5ri1p8I1xfzVmGNHE+N4evj/Q/
-         H9oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pJJ83mfyTCqAJF6csSa3R1PY4jhPT+4ET2XKanu9T4c=;
-        b=IBzO/sChNpJyUvRpvCPiqFv1yR6WDa2RbaB1fdtxv67+z4wI/115hCqbGzk+nC6+TY
-         WWcghXi0uQZj4Uowtdstlu3g7FuTh8nk1s2WpZvkjx2xW6E8ejdTVyy4jOMGSMSA2Wyh
-         155fglZtca+LQZgZvtLJP8E4C7w6JPnTxAggcSxh/JWg/VG4oV7GwqlUpEcV6FTDjhuA
-         CEwfKladT0kq9ttu3RLxlPGm/55HAnezeL76sK7k+wtjNFhnD7A8omUtnbfqJ6CsPygL
-         3mRbCxQ1T9iXfIVfTpcvhiXstysRWQYvRM6mYCS/iF8jTQQzFLsfsZ+uhAVMpwCQSxZo
-         lTMQ==
-X-Gm-Message-State: ANhLgQ0Uc8W5YJ2dac8ZbAQmO0cG9MT+tyYhBXHLmg5kl6XzpmUsy24f
-        oPkfYRBr1NVOXZADymjZNv8q9CkR9EB7vRBMiUwfUq8w
-X-Google-Smtp-Source: ADFU+vu7WCq/rxgeiGRAcAjnNGIgv1mErzkdA+mIjxPXG2hkxr6vYWC8R9YQ0qgjvAxUERfEYlXxad2E9Q0UkhxbHP4=
-X-Received: by 2002:a2e:87c5:: with SMTP id v5mr9166862ljj.166.1584818128887;
- Sat, 21 Mar 2020 12:15:28 -0700 (PDT)
-MIME-Version: 1.0
+        id S1727039AbgCUUvd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 21 Mar 2020 16:51:33 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:24093 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbgCUUvd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Mar 2020 16:51:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1584823891;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=demMsJlTuSYmvRYsjx6MOlj6N9RsRB0y9bAk3soRURk=;
+        b=PYR4cLnrfAOiUv+nOhW06OEvCEfq0WBcvY3zwylNLNDpYKCNh2vPkcLSOUNMDtTp4/
+        iSMNUr5YBV0QWoadm6xC9oZlfQ+zrL2kAx5ZaJn+ar1VUaF9cYhWMPiy589aUOlQgl35
+        4Gl2LT6Dcn6SWukX7UJwfFy1JqM3a2qnu01yAcnTgMvbmfhC/PKDOgUecSCZGLYwJHGQ
+        Rk/fPTV6T/zbLObx+fI0Co1D50cqyQzHTdsaEPpQhyJ8PgUHdr5+9rmpJGJrqsDOsH9F
+        dhaV+kWmwGS2KpG0xd49U+u3Ve8x/hXnCwPTxPGpJJPpk09IWY6Z3k4DwSBKZ+grPI5e
+        ZnGA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGXsh6kk/L"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
+        with ESMTPSA id R0105bw2LKpV73L
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sat, 21 Mar 2020 21:51:31 +0100 (CET)
+Subject: Re: How to send a CAN message while in a kernel module?
+To:     Robert Barrows <robb.barrows@gmail.com>
+Cc:     linux-can@vger.kernel.org
 References: <CAOHJ0jSS=g4rQtXGkEFocafEqQAtxEOvq5eSXBC2FY_Esb23OA@mail.gmail.com>
  <2cb68f43-a551-c69d-b43f-3b044b948142@hartkopp.net>
-In-Reply-To: <2cb68f43-a551-c69d-b43f-3b044b948142@hartkopp.net>
-From:   Robert Barrows <robb.barrows@gmail.com>
-Date:   Sat, 21 Mar 2020 14:15:17 -0500
-Message-ID: <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
-Subject: Re: How to send a CAN message while in a kernel module?
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+ <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <ead77f42-f0f9-9b5a-ce5a-5e7f641d8a14@hartkopp.net>
+Date:   Sat, 21 Mar 2020 21:51:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> You don't use sockets from INSIDE the kernel.
-> If you want to send CAN frames from inside the kernel you should use the
-> can_send() function from af_can.c
-Great to know! I Will look at that right away, any example(s) you could point
-me towards?
+On 21/03/2020 20.15, Robert Barrows wrote:
+>> You don't use sockets from INSIDE the kernel.
+>> If you want to send CAN frames from inside the kernel you should use the
+>> can_send() function from af_can.c
+> Great to know! I Will look at that right away, any example(s) you could point
+> me towards?
+> 
 
-> Is your requirement to send "some content" in a very defined time slot
-> OR do you need to send the time as content?
-Use case:
-I need to send the epoch seconds as close to the zeroth of the second
-as possible, there are some legacy cards that use this packet to set their
-clocks, and I am attempting a solution to improve their accuracy without
-modifying their firmware.
-Hence I have a kernel module that can run a function with sub 10uS accuracy,
-the function of choice would spit out a CAN packet with the epoch seconds in
-it.
+You mainly need to look at raw_sendmsg() from linux/net/can/raw.c
 
-> Sending CAN frames in a very precise (hrtimer) manner can be done with
-> the broadcast manager (aka CAN_BCM) sockets.
->
-> See:
-> https://elixir.bootlin.com/linux/latest/source/Documentation/networking/can.rst#L677
->
-> 1. You can send fixed CAN frames and also a sequence of up to 256
-> (different) CAN frames at a precisely defined time with a CAN_BCM TX job.
+Create a skb and set can_skb_reserve() and the other stuff and finally 
+put your CAN frame content into the skb->data and invoke can_send().
 
-struct timeval ival1, ival2;    /* count and subsequent interval */
-Unfortunately, this doesn't look like it fits my use case, would have been nice
-to do from user space though.  This looks like it can send out evenly spaced
-packets. And I need to send one packet at a precise clock time.
+You will at least need
 
-> 2. You can generate the timestamp in user space and send it via CAN_RAW
-> socket.
+#include <linux/netdevice.h>
+#include <linux/skbuff.h>
+#include <linux/can.h>
+#include <linux/can/core.h>
+#include <linux/can/skb.h>
 
-This also wont work due to the use case.
+Of course you don't have a sk reference as you don't have a socket in place.
 
-> 3. You write your own kernel module o_O :)
+So you maybe should check the content of alloc_can_skb() from 
+linux/drivers/net/can/dev.c and use netdev_alloc_skb() or alloc_skb() 
+instead of sock_alloc_send_skb() which needs sk to take care of socket 
+specific memory quotas.
 
-Here we are :)
+If you are unsure just post the code for a review.
+
+Best,
+Oliver
+
