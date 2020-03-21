@@ -2,78 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A5018CCB6
-	for <lists+linux-can@lfdr.de>; Fri, 20 Mar 2020 12:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F7018E14A
+	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2020 13:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727000AbgCTLV6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Mar 2020 07:21:58 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:36809 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbgCTLV6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Mar 2020 07:21:58 -0400
-Received: by mail-oi1-f195.google.com with SMTP id k18so6106976oib.3
-        for <linux-can@vger.kernel.org>; Fri, 20 Mar 2020 04:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=gXr8iqrFPWrUhIliERP+Rlw7D9XFBjLMvK5JfWrCwC1wCwV70lx2adPhEP+5LqtKBG
-         O7JxXe77iNTDDKteRIXyf/+5d6XSEUrRv+eG+L2zubgUkC+eWkybCOuucPHhc0ShVd1L
-         7mmc4fyfvf0Od1Bi4HewoE3FoNz+THwrf6rX53/BkajGTcaqNUtHUSKj+8dpdvKadb4o
-         I6t5k90iaDwdED7mSjm4SxMxu1mD1nZuxQ9ZeNQ+a6TGw/3h7X0TvsVG77lyIB9Bk3MP
-         RcyvjUdW1zADACdtH+UIpYKPK/PGfBGesTi7w5wMvW1LxvX8cJVM9F6GMvVusKZ+9xMh
-         9qFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=6w+aFSJ+2vZ3lBtg9xVXLOFVqSNoMPd625E7FNYobb8=;
-        b=bB9Unh3FicjHyUgeODk5Vb8aErOUl9t8JrJd7BbpSFZu3ZgfChZIQwGmJnt7SlJp8Y
-         tUepZ9sjKwHUhr9Tg6ibz1P6sAHfR0+mA7PzN/XXTMrla1SOTfJ5rZ7Sx0nSgLim9hvd
-         S2VgaH9KBIZtmJ2xrCZJUkzj8ugIN8jr1bBf56xVsmV7BamaJK9axzvE5llIqmN0sQ5L
-         fOskIM0vxa8Zblsji3OHl171jb6PMWBAPeyRNfTBJENkTciXEOVjm+H+HfHN40EDk+Ur
-         nJ8x07hKf5ZpiFWxYrkgeHrUlTbU4lSjwegqNmE05+9UJPvfMhG57WEkUAwuq0bN0X92
-         3Ibw==
-X-Gm-Message-State: ANhLgQ2gJy3PynaIdHsKIPt9mC/2x9pKYv3f8LtSzh2+BZOG6/sxsGCT
-        SgUKKQdw4hM00ELwMwUfIjRrMSTSk6LwtQpr3ok=
-X-Google-Smtp-Source: ADFU+vsEhnx2OvxntOwweiY4ejI8hgMnvqEI1mkGNtS4be2GVSqcT+fJU/MBEybdWCiYRkYwkzCyurhmJwBn7Zr4Sgs=
-X-Received: by 2002:aca:210c:: with SMTP id 12mr5681362oiz.0.1584703317715;
- Fri, 20 Mar 2020 04:21:57 -0700 (PDT)
+        id S1727317AbgCUMiz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 21 Mar 2020 08:38:55 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.221]:22233 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726607AbgCUMiz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Mar 2020 08:38:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1584794330;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=wtB8/ERINB4blKOqfY5lTlPZAmXRPVhQ5Fj+8xfzxX0=;
+        b=UwI2bV07u0YlHr9wsbLMw3KJKPa2MZTMLo8Viquc7n2BTpAuq3weRfQmPUUbTkrI2Z
+        PSf/QHhhtLD9E19PvEmzl6z11g1+QcgqtBz8EjzYVk+o05EuFk3wJDcYLd2E2b2hPpZa
+        GE6go+9bRnI98QDGJtmvokE1Gk0xS4V0XdlBUlLeDCbX3rlRHQex5lUtf26M5zWwejBh
+        0OfFSAqXnJINkcIJG6REmVp49eJGg0PcjLBLO2HcTnSoL521M5tkpWhHAT+gbA5XOEBQ
+        sKqxeWHSLNWbYjHLmrHu/CpNSU+hlNzw7fhxjHxJPvbMqxwSGXbo3kMSdWYjpxQa/tfv
+        V1UQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGXsh6kk/L"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
+        with ESMTPSA id R0105bw2LCcn6Zn
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sat, 21 Mar 2020 13:38:49 +0100 (CET)
+Subject: Re: Need help in interpreting ip status output
+To:     =?UTF-8?Q?Andr=c3=a9_Hartmann?= <aha_1980@gmx.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <a6c8ef8c-5c72-7a2b-98df-0a30057c5fdc@gmx.de>
+ <f029f731-25bc-a3f0-c5a9-380012a16839@gmx.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <86b34b1b-7bda-e481-2087-1be8e64d2fed@hartkopp.net>
+Date:   Sat, 21 Mar 2020 13:38:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Received: by 2002:a05:6838:40c6:0:0:0:0 with HTTP; Fri, 20 Mar 2020 04:21:57
- -0700 (PDT)
-From:   ECOWAS COMMITEE <ecowasmonitoringcommitteeabj@gmail.com>
-Date:   Fri, 20 Mar 2020 11:21:57 +0000
-Message-ID: <CAHHubrYVO=2YdPqKZhJ+2V5OGE9v-76hg5HAnvmVr7enpkq_MA@mail.gmail.com>
-Subject: HAPPY SURVIVAL OF CORONAVIRUS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <f029f731-25bc-a3f0-c5a9-380012a16839@gmx.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dear Sir/Madam
+Hi André,
 
-HAPPY SURVIVAL OF CORONAVIRUS
+I have an idea ;-)
 
-We the West African Monitoring Committee of the West African Economic
-Community(ECOWAS)are contacting you for a business transaction which
-we feel will be of great interest to you.
+On 12/03/2020 18.43, André Hartmann wrote:
 
-Our duty is to see to the coming in and out of funds into this sub
-region.There is a fund which we confiscated worth of $12.5 million
-dollars.We will like you to receive this fund on your name in your
-account and as well helping us in the investment.
+>> can someone help me interpreting the following ip output:
+>>
+>> ip -s link show can1
+>>       3: can1: <NOARP,UP,LOWER_UP,ECHO> mtu 16 qdisc pfifo_fast state 
+>> UNKNOWN mode DEFAULT group default qlen 100
+>>           link/can
+>>           RX: bytes  packets  errors  dropped overrun mcast
+>>           0          9987413  1       74      1       0
+>>           TX: bytes  packets  errors  dropped carrier collsns
+>>           0          0        0       0       0       0
+>>
+>> I'm especially interested in the meaning of the
+>>
+>> * 1 errors
+>> * 74 dropped
+>> * 1 overrun
 
-You are advised to contact us as soon as you get this message for
-details of the transaction if you find it interesting.
+E.g. if you look into
+linux/drivers/net/can/sja1000/sja1000.c
+you can see that an overrun error also triggers the error counter to 
+increase - that's why both are set to 1.
 
-Best Regards,
+The reason for the overrun error is a notification from the CAN 
+controller itself. It tells us that the received CAN frame has not been 
+read from the controller until the next CAN frame arrived.
 
-Mr John Aka
+The dropped counter usually indicates that the CAN driver did not get a 
+skbuff data structure (e.g. out of memory condition).
 
-Chairman
-ECOWAS
-West African Monitoring Committee
-Tel 00225 6716 6756
-Abidjan Cote D'Ivoire
+This is NOT good. What CAN hardware/setup are you using?
+
+Regards,
+Oliver
