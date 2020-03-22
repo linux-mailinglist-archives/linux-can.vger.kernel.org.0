@@ -2,85 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D73518E48A
-	for <lists+linux-can@lfdr.de>; Sat, 21 Mar 2020 21:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CE818EB50
+	for <lists+linux-can@lfdr.de>; Sun, 22 Mar 2020 19:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727039AbgCUUvd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 21 Mar 2020 16:51:33 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:24093 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgCUUvd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Mar 2020 16:51:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1584823891;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=demMsJlTuSYmvRYsjx6MOlj6N9RsRB0y9bAk3soRURk=;
-        b=PYR4cLnrfAOiUv+nOhW06OEvCEfq0WBcvY3zwylNLNDpYKCNh2vPkcLSOUNMDtTp4/
-        iSMNUr5YBV0QWoadm6xC9oZlfQ+zrL2kAx5ZaJn+ar1VUaF9cYhWMPiy589aUOlQgl35
-        4Gl2LT6Dcn6SWukX7UJwfFy1JqM3a2qnu01yAcnTgMvbmfhC/PKDOgUecSCZGLYwJHGQ
-        Rk/fPTV6T/zbLObx+fI0Co1D50cqyQzHTdsaEPpQhyJ8PgUHdr5+9rmpJGJrqsDOsH9F
-        dhaV+kWmwGS2KpG0xd49U+u3Ve8x/hXnCwPTxPGpJJPpk09IWY6Z3k4DwSBKZ+grPI5e
-        ZnGA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGXsh6kk/L"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
-        with ESMTPSA id R0105bw2LKpV73L
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Sat, 21 Mar 2020 21:51:31 +0100 (CET)
-Subject: Re: How to send a CAN message while in a kernel module?
-To:     Robert Barrows <robb.barrows@gmail.com>
-Cc:     linux-can@vger.kernel.org
-References: <CAOHJ0jSS=g4rQtXGkEFocafEqQAtxEOvq5eSXBC2FY_Esb23OA@mail.gmail.com>
- <2cb68f43-a551-c69d-b43f-3b044b948142@hartkopp.net>
- <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <ead77f42-f0f9-9b5a-ce5a-5e7f641d8a14@hartkopp.net>
-Date:   Sat, 21 Mar 2020 21:51:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1726137AbgCVSDO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 22 Mar 2020 14:03:14 -0400
+Received: from mail-lj1-f182.google.com ([209.85.208.182]:42282 "EHLO
+        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbgCVSDO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 22 Mar 2020 14:03:14 -0400
+Received: by mail-lj1-f182.google.com with SMTP id q19so11958568ljp.9
+        for <linux-can@vger.kernel.org>; Sun, 22 Mar 2020 11:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u2AXZsjEUb2X/d09TiU2NYwG/Irul7C95J4MmLUKjbg=;
+        b=Kc79FVb7/ubhjUcPv5nGeraXBp5fvl2xERklFykAh1IJyf82Wdpqy2R5nB+KGY4Mql
+         1+lNYjoVuOY08pJ7FmU5Fv2j+K+PMJ7nSB4jbLopwZhSiW/1hvCv4R3Qy3s/ERH33rIY
+         KgSK1V0wHQoJA1lsQvaJ6AnplVbzli8gfxcoCnT+ff6FG8lL99ORCn/ypl/oJQAqrTY3
+         tYnIvfK6Khvu7nHY2+H8wrhQMM8NS7JShAj3+xMBBBlw2O5BEsCPXcOTOAm/obHIr2/p
+         Z4PWvJvJPmSAyNTzCbFu4VzgMu7Dlp8OBfYZDpG6GAC0IJrZlufSJLpfGK9FESP2ZQyt
+         G9mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u2AXZsjEUb2X/d09TiU2NYwG/Irul7C95J4MmLUKjbg=;
+        b=ENOCuKRaMJ4mlSfmdfdFpV/LkwvtFVKRTbW8Hr25tL1ADUwE2sn3QRUB6Nq3NN6mY7
+         HIb8shSCDItalGXDPwW5Pi2lKSJ+/c+9YSpgEN1O+gkfM/yVIY1h8EZYwRF/XuS1nk4P
+         wi0XmyON7cgXsPh7wX3BWmFMUsg/JE6RZoOdQT6I5i2GO6vL/l53ID80hDYrPVJbDpJ8
+         39J3lpBcIvv0hMVSaicMwsMNub0e6EBFoYNH9kiVUR7VO5CWGRj3VbgdWuYObDKtkiu5
+         ByHdopAkGJP5FDiMQvjCjuJ2jk1V9huDkNZ3wvp4hq+gOkEulwI+jALRmZcQoLF72uXo
+         OhPg==
+X-Gm-Message-State: ANhLgQ1nud/dh7BA9WncfynVz9qmkOCoN8AOu7wD3pBCM7CYs01H53zP
+        KMpZKsJYn9wf37BF4LTmiNVD5TyVRZmhv7p3R8xiu/t+2SY=
+X-Google-Smtp-Source: ADFU+vuQDcjZ3IULXfJx27rZMGfCBvcL3W0ewTpiC4GXVOIJ/ewG/GPLY7ItlJwe6SG5tAzViy69o008NRq7hG+EtnA=
+X-Received: by 2002:a2e:8e98:: with SMTP id z24mr10647407ljk.66.1584900192438;
+ Sun, 22 Mar 2020 11:03:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAOHJ0jSS=g4rQtXGkEFocafEqQAtxEOvq5eSXBC2FY_Esb23OA@mail.gmail.com>
+ <2cb68f43-a551-c69d-b43f-3b044b948142@hartkopp.net> <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
+ <ead77f42-f0f9-9b5a-ce5a-5e7f641d8a14@hartkopp.net>
+In-Reply-To: <ead77f42-f0f9-9b5a-ce5a-5e7f641d8a14@hartkopp.net>
+From:   Robert Barrows <robb.barrows@gmail.com>
+Date:   Sun, 22 Mar 2020 13:03:01 -0500
+Message-ID: <CAOHJ0jQq80B64O6nG-aNSUhUrczVL0r4GZj-AUWcs4coiERG+Q@mail.gmail.com>
+Subject: Re: How to send a CAN message while in a kernel module?
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 21/03/2020 20.15, Robert Barrows wrote:
->> You don't use sockets from INSIDE the kernel.
->> If you want to send CAN frames from inside the kernel you should use the
->> can_send() function from af_can.c
-> Great to know! I Will look at that right away, any example(s) you could point
-> me towards?
-> 
+Thank you for all the direction Oliver,  I think I am on the correct path,
+but now have can_send returning with a "-1" (ERESTART). I used raw_sendmsg
+as a template for this and cut out (hopefully) unneeded code, but I am
+concerned I cut out something I needed.  Would you mind taking another look?
 
-You mainly need to look at raw_sendmsg() from linux/net/can/raw.c
+Thanks.
 
-Create a skb and set can_skb_reserve() and the other stuff and finally 
-put your CAN frame content into the skb->data and invoke can_send().
+int SendCanTime(struct timespec *tsCurrentTime) {
 
-You will at least need
+  struct sk_buff *skb;
+  struct can_frame *frame = kmalloc(sizeof (struct can_frame), GFP_KERNEL);
+  struct net_device *dev;
+  int err = 0;
+  int thetime = tsCurrentTime->tv_sec;
 
-#include <linux/netdevice.h>
-#include <linux/skbuff.h>
-#include <linux/can.h>
-#include <linux/can/core.h>
-#include <linux/can/skb.h>
+  // Set up can frame
+  frame->can_id = 0x00050F93 | CAN_EFF_FLAG;
+  frame->can_dlc = 6;
+  frame->data[0] = 0x00;
+  frame->data[1] = 0x02;
+  memcpy(frame->data+2, &thetime, sizeof(int));
 
-Of course you don't have a sk reference as you don't have a socket in place.
+  // Find the netdevice named can0
+  read_lock(&dev_base_lock);
+  dev = first_net_device(&init_net);
+  while (!strcmp(dev->name, "can0")) {
+    printk(KERN_INFO "found [%s]\n", dev->name);
+    dev = next_net_device(dev);
+  }
+  read_unlock(&dev_base_lock);
 
-So you maybe should check the content of alloc_can_skb() from 
-linux/drivers/net/can/dev.c and use netdev_alloc_skb() or alloc_skb() 
-instead of sock_alloc_send_skb() which needs sk to take care of socket 
-specific memory quotas.
+  if (!dev)
+    return -ENXIO;
 
-If you are unsure just post the code for a review.
+  // Create skb
+  skb = alloc_can_skb(dev, &frame);
+  if (!skb)
+    goto put_dev;
 
-Best,
-Oliver
+  skb->dev = dev;
 
+  err = can_send(skb, 0);
+
+  dev_put(dev);
+
+  if (err)
+    goto send_failed;
+
+  return 0;
+
+//kfree_skb(skb);
+put_dev:
+  dev_put(dev);
+send_failed:
+  return err;
+
+}
+                                                                               ^
