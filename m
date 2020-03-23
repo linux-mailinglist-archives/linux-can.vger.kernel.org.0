@@ -2,107 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6D218F1EB
-	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2020 10:36:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF8818F38C
+	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2020 12:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727696AbgCWJgF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Mar 2020 05:36:05 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53947 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727695AbgCWJgF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Mar 2020 05:36:05 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1jGJV5-0003lY-2F; Mon, 23 Mar 2020 10:36:03 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:2889:600f:6b64:f22e] (unknown [IPv6:2a03:f580:87bc:d400:2889:600f:6b64:f22e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C94AD4D2B63;
-        Mon, 23 Mar 2020 09:36:01 +0000 (UTC)
-Subject: Re: PCI/PCIe cards and MSI support
-To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <DB6PR03MB3093A117F99170BDD81CBC1FD6F40@DB6PR03MB3093.eurprd03.prod.outlook.com>
- <20200319140127.GD2538@x1.vandijck-laurijssen.be>
- <DB6PR03MB3093B3487EC5FCFBFCDB4D6AD6F00@DB6PR03MB3093.eurprd03.prod.outlook.com>
- <375f841b-05a3-f1ab-a582-4796d4448029@pengutronix.de>
- <DB6PR03MB3093D18BB366D78BA9D384D1D6F00@DB6PR03MB3093.eurprd03.prod.outlook.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
- zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
- QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
- 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
- Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
- XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
- nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
- Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
- eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
- kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
- ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
- CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
- iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
- Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
- Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
- tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
- yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
- BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
- mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
- 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
- Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
- 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
-Message-ID: <45fe5f0a-9b74-a673-40e9-c3e361c625d5@pengutronix.de>
-Date:   Mon, 23 Mar 2020 10:35:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728098AbgCWLQX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 Mar 2020 07:16:23 -0400
+Received: from mout.gmx.net ([212.227.15.19]:56449 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728011AbgCWLQX (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 23 Mar 2020 07:16:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1584962179;
+        bh=Tc549tqZasCAKt97/gfAuJExiX7T9a6y21ylWVQyI2E=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Mjd4LkBYg9PZ3EdOhiuspK0rRXvt1rqip/VWsQUbcNPhXz8xZlNpUSk96S9SG2/S6
+         Zu9TwD6uEXktmDo5EykSssJDsZ2ojKMz1LxVRzuUgwozGZrrLWZPdn4fJYbij4aV7h
+         gzVF2AuxDDto9qcEdBsnGRZrCOPOSOdZLJt/063I=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.103] ([84.176.144.33]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MYeMj-1imS1Y0eBf-00ViY1; Mon, 23
+ Mar 2020 12:16:19 +0100
+Subject: Re: Need help in interpreting ip status output
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     Alex Blasche <alexander.blasche@qt.io>
+References: <a6c8ef8c-5c72-7a2b-98df-0a30057c5fdc@gmx.de>
+ <f029f731-25bc-a3f0-c5a9-380012a16839@gmx.de>
+ <86b34b1b-7bda-e481-2087-1be8e64d2fed@hartkopp.net>
+ <75a1a6b5-141e-e741-f6c2-bab5e9e4e541@gmx.de>
+ <2cd75c78-cec7-09c0-ea80-fbedf37d37d5@pengutronix.de>
+From:   =?UTF-8?Q?Andr=c3=a9_Hartmann?= <aha_1980@gmx.de>
+Message-ID: <ece51328-6b3d-c8c3-0a38-cea39f71270c@gmx.de>
+Date:   Mon, 23 Mar 2020 12:16:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <DB6PR03MB3093D18BB366D78BA9D384D1D6F00@DB6PR03MB3093.eurprd03.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <2cd75c78-cec7-09c0-ea80-fbedf37d37d5@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:v2iSFhjEiOzCOrzC6XYywA/Ti4EIRSYAXOR4mXMDCyehyBWyBWN
+ TVH9c2+xvK8QTY9H9WWCws8gX7afAvkQRGpRcM+G0bnwD8BzfvJFwXAc7JTx55zx2G6dG5r
+ O2P0FAP6uVpsG1I++ONqKp9xJjANpdNhlxf7OxvMwS32E8LP4BbjLVy1npC/8avvvtpf/iX
+ l36TqttaZPPfEe/UGOyFw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:93KbyXMvhG8=:1yuUxSwGEBIZAEjWMqcUvb
+ Ypz5R8I5QlNHkwAnjVcW2MB5ZyDEay4EZsBzNqBqR7QfdCUVqP5zX/pwLaIoYvI8kWgAjsh3v
+ 5twNjYjY1pk6+wT4CkMCRRBQPcuDoJL2g1rq1UTgnsc+V+4coJTiX4c8k6Gws+I0/4e2TjaIt
+ wBBY3mm+9ZR1K6mbYfQloByLOVKVCOzj2X3Oh8lsUIOswUqR8jRbkIiiUuiVUUXI9bp5NQLis
+ yRN430nEnCUipq6T8ljh8SjG9xVd/LTKEFwnPJxnxwk0hemI3IaQkQFSOVqyLptw966PJ97FU
+ rgJAAH5JG4LsbH28M6vjXeZmsyq/Ii7aamQqCbCIONm1Lr8Woa0hny+EA8rciq30hJRAy+vHv
+ Zk2oLGCDbSUFvPRAxm+D2rQ8MkBBufm44JUNnQSPgXPWK4hwuaiGYSgtIjF3BOQcTz+fK7BY9
+ Iq0RQKPfyH+evD9mitFW0iegMEAfWJhs8dss7392Qy10oh8ne3WNQ1WmrgyFIBRK8MBQOj4WK
+ uV/cABDXRYbva1kP7ZZqgOWJHJ+yGVUBlk98hc5TsGr1fsTZBN6tObhO63hBWYELjIqDUjzpV
+ k9EdDgTQWRXfyYzPyRHldjI6iMzT1lF7ScuPvRHaGji5WmSMBccbyQ2o3Tp9zlOwxyOJgjm3l
+ s+whE2N1rYjbv7wnlCxM+qtlE6SzECgzdMxovVCaZaTLaS3EMMNZbsYPEbjVE7HtJtD6QJ4VS
+ FZN4Jxuv9ApCPwhmGpodctKVfaQnMszN5BigsgUYi4qSv8twWAB3mrfvcu/TW6QBp5fuVsEwp
+ l4tM58K5dvDk3lNodDNp9PMoDkS/ZrIScS3AQjJt8z77+bac+rdFHK9/R2qLR5GG+pXEWtAd+
+ BMBsA/vLm+E+6nkzXcRFY9GqoXuOKjje0zFl7ru7NWl9k/wWP5q+KgUBH11OEQrixXynKdYZv
+ 5Mhm8utXS52pMMJ59K1CiKltiLlf9qhXGlSfKynQo2ws+tWzRLFX78yXu73/T2j0+s0dhWXB/
+ YrkGZplp72jld5YTtf7FjETYcWnRsnAz3lW4qtIqCsXTfBH0cfQQhXazNuO5fnUwlS5pUt3/t
+ JrA3YaQ4w8w4I1ifaJioS6K0W71nVnahskuPpb8gaPRW53mlTnV7fUlJyOE6mWUXN+YnknZCV
+ Ie0g+KeDjDfJQEnlXsvaBSx/CYGKuuonJiSd+fYbF6aXVx1ldTC1FSB6x5HKuy8jE1h1kX36D
+ td0c2DwQ8i/FSJYso
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 3/23/20 10:25 AM, Stéphane Grosjean wrote:
-> When switching in MSI mode, we've noticed that once CAN0 is closed
-> (i.e., once its own interrupt is freed), all other CANs on the same card no longer receive interrupts (i.e., the handler is never called again).
+Thanks Marc! I'll forward this information.
 
-Is it the free_irq() or the other code called on ifdown? Comment out the
-free_irq() and check what happens.
+Best regards,
+Andr=C3=A9
 
-> This issue doesn't exist when any other CANx then CAN0 is closed.
-> 
-> The reason of this is not clear. What we know is that this issue doesn't
->  exist under Windows for any of our (CAN 2.0 as well as CAN FD) cards. On the contrary, the issue is the same for all of our CAN 2.0 / CAN FD cards under Linux.
-> 
-> Up to now, the only workaround we have to run in MSI mode is to
-> request_irq() when probing the devices (starting from CAN0) *AND*
-> free_irq() in the opposite order (ending with CAN0)  when removing the module.
-> 
-> Obvioulsy, enabling/disabling hw interrupts is always done when the can interface is put to up/down.
-> 
-> The "only" side effect is that all MSI interupt levels allocated by the
-> driver are requested, even if their corresponding interfaces are not UP.
+On 23.03.20 08:44, Marc Kleine-Budde wrote:
+> On 3/21/20 4:19 PM, Andr=C3=A9 Hartmann wrote:
+>> Actually it's not my system. The report is from a customer doing a full
+>> load test on an iMX8: https://bugreports.qt.io/browse/QTBUG-82610
+>
+> Which exact kernel are you using?
+> Don't run any applications and/or kernel logs over the serial console.
+>
+>> I guess the customer should try a more recent Kernel than 4.14 first?
+>
+> Ack.
+>
+> Marc
+>
 
-Which drivers have this problem?
-
-Marc
-
--- 
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
