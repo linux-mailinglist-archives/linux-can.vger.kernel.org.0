@@ -2,126 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4213C18F02E
-	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2020 08:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E55818F067
+	for <lists+linux-can@lfdr.de>; Mon, 23 Mar 2020 08:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727384AbgCWHTP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Mar 2020 03:19:15 -0400
-Received: from mout.gmx.net ([212.227.15.15]:41471 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727380AbgCWHTP (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 23 Mar 2020 03:19:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1584947950;
-        bh=RCJyHiLzrQez05FSKflTKcMqVIDwt92g9SrNyWJLWes=;
-        h=X-UI-Sender-Class:Subject:To:References:From:Date:In-Reply-To;
-        b=KICCQt+ZaDUx6dW/0oAoldOSh2cBzdDkZU//BzaPbXP5X8BftfCdMvfGvwb36KTwv
-         DYWnkQG8ONSZOdUsTN0nHpsLnuzei4mq+7Nl4v3vSeUxAiwMCYVzdB9nowD3EnH4QY
-         wzxFpDvJ7jg9ZwDl5CApgI2txcSRdDa3h9j3UPVM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.103] ([84.176.144.33]) by mail.gmx.com (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MbirE-1jp4gC0V8Y-00dJ88; Mon, 23
- Mar 2020 08:19:10 +0100
+        id S1727430AbgCWHoo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 Mar 2020 03:44:44 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57551 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727422AbgCWHon (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Mar 2020 03:44:43 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1jGHlJ-0000RB-Kj; Mon, 23 Mar 2020 08:44:41 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:2889:600f:6b64:f22e] (unknown [IPv6:2a03:f580:87bc:d400:2889:600f:6b64:f22e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3E98F4D2A43;
+        Mon, 23 Mar 2020 07:44:40 +0000 (UTC)
 Subject: Re: Need help in interpreting ip status output
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Alex Blasche <alexander.blasche@qt.io>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
+To:     =?UTF-8?Q?Andr=c3=a9_Hartmann?= <aha_1980@gmx.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     Alex Blasche <alexander.blasche@qt.io>
 References: <a6c8ef8c-5c72-7a2b-98df-0a30057c5fdc@gmx.de>
  <f029f731-25bc-a3f0-c5a9-380012a16839@gmx.de>
  <86b34b1b-7bda-e481-2087-1be8e64d2fed@hartkopp.net>
  <75a1a6b5-141e-e741-f6c2-bab5e9e4e541@gmx.de>
- <fe141541-7e79-3bee-8c75-29e6f9f3bc4e@hartkopp.net>
-From:   =?UTF-8?Q?Andr=c3=a9_Hartmann?= <aha_1980@gmx.de>
-Message-ID: <42667b7b-59be-051b-eeca-da5b5b843221@gmx.de>
-Date:   Mon, 23 Mar 2020 08:19:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
+Message-ID: <2cd75c78-cec7-09c0-ea80-fbedf37d37d5@pengutronix.de>
+Date:   Mon, 23 Mar 2020 08:44:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <fe141541-7e79-3bee-8c75-29e6f9f3bc4e@hartkopp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <75a1a6b5-141e-e741-f6c2-bab5e9e4e541@gmx.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:CuOlBh7QNZHkmd1VcgRNRb0PA/i/MV1w+F3IVC2BqUu8pFxDfH5
- yqrU/03Bw7FZqPXz8MgUhV2k9EykZbALlEPFxV51GfkJSZ9w7Xy2IocET9lAm9e7XPfapU1
- q7iZBYo7eOH7y/skew921/bHukm0dZk2/IXlAZbWONEZBwmZAo8D8LZ1TrUwzWkOqpNO2Te
- Q2adruO2EiF6189x4V2Xw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pW9Vry20u4s=:kYU0Mlr9Ltqy17ibAJT2bm
- yrxHH0+CAul8iE2vID2MT2QZDaXWxtdov57CNWKIHqALLaSWb68pKAKJ6hx51WDPBtpANa6a2
- sXSTwSnkCwI9DmbS4/v7ZlyNVniGkJAm0KcV24Fk52JYmQkuakyBaQW1HOvjclF1Y7/zzjpHZ
- c1IhSU9PRy4rjFzZDOWfdDL+5IA2q+8y0tZQEnlz7lx6CxUijDWBm5i3a9woE6LxDTlX7LKns
- 0t73FbJ6otdlugdh96ehDzTICI8NJoJBZO4GH3SSEMi2CPawh6nJ2VyhiDWpNzoAXmYfpVeyu
- EoCHNQ7/rsTDTHAsWyhvn+o7VUC+1ywOQtZ1IAzs0RR6UtNRn0T5E/DUKbMMrmV0OM2B2wN94
- fDh4p/UgUf4Dx/cpWPDxCLqGuw80Jzf19Cw7oiOl+EKjh3MsG90MygdqaockF0fNinD76h0Td
- eeN+bG/2EkwgWCPpwWruunxlYRM2nvxeTVmjKQGSgcBglvC55lQc/+qR3Q5ZDRipgWC8uxo+G
- 3BHxldsFAqJzXS0LSBy6QBUYfxjTvAvLodkvCpkhYkmQTNy9w4d/oNFk95fyaB2GeJhRo7BX5
- 63/GGTmb6BEGkly9dTnDnq5QVIoIpZG93GiBQFap7OlNjOb1WXJDrBELrVRmpIl7QNdQKh7Y2
- MK3TovKCpQUVvPgNN8D7jMf9/Zk3ZT5uGKBcNZaJysN5cInD3GXk7MKyzr5pRso4z0fLdRuRe
- 39JnbNHM2jRA/WeMsgE2eMdn6D8xCyganeuoMcZfV9hcuGwMdaahCQWjyO1McapcQmKhmux6j
- m5bFcwjCB2VwBhU9+PIBdFQvb3x3J5LU+MVUbGSbCsenZhb1qNZ5P93jAJ+5zP+CgGgK7ukpC
- vsc9RMS+fTJKfdxzmnJxRk9bHZJx/Cr9fzya99TCCEeymp6wls+gNSbBqQHEOlbVPop/vM/1k
- axkTtlmOHT0QxhniDf0GipzqJQcGQQ+5HEXOZwBP0fgbWCnKT0XEEWSmflVRp8vkaGnenpkJd
- EMxLsaFgWKhjghiWfecHud1Ri04Ehxjwd2ujhZWF30jr52mXfSUlr7y65kHYFfI/VGtOk6iT6
- cOA3gVPHuIa+fPXc2MWD2oxuXrtV8dFQuZKokDG+wXkLwA/VuGrSrwOMh86lThnAZCyfNZzLN
- hMxoazbseU4niCyQZl8RG7jp9BPM6i5ic6Bisiu7idaemSRUcGyDM7fSUV9ZVxpIP5BCpYFYT
- vWc0jrQj5iy5QUagL
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thanks Oliver.
+On 3/21/20 4:19 PM, André Hartmann wrote:
+> Actually it's not my system. The report is from a customer doing a full
+> load test on an iMX8: https://bugreports.qt.io/browse/QTBUG-82610
 
-Reading the log it indeed seems a good idea to try a newer Kernel.
+Which exact kernel are you using?
+Don't run any applications and/or kernel logs over the serial console.
 
-Marc, do you have any further comments?
+> I guess the customer should try a more recent Kernel than 4.14 first?
 
-Thanks and best regards,
-Andr=C3=A9
+Ack.
 
-On 21.03.20 18:04, Oliver Hartkopp wrote:
-> + Marc
->
-> Hi Andr=C3=A9,
->
-> On 21/03/2020 16.19, Andr=C3=A9 Hartmann wrote:
->
->>> On 12/03/2020 18.43, Andr=C3=A9 Hartmann wrote:
->>>
->>>>> can someone help me interpreting the following ip output:
->
->>> The reason for the overrun error is a notification from the CAN
->>> controller itself. It tells us that the received CAN frame has not bee=
-n
->>> read from the controller until the next CAN frame arrived.
->>
->> Ok, that's what I thought too, thanks for the confirmation.
->>
->>> The dropped counter usually indicates that the CAN driver did not get =
-a
->>> skbuff data structure (e.g. out of memory condition).
->>>
->>> This is NOT good. What CAN hardware/setup are you using?
->>
->> Actually it's not my system. The report is from a customer doing a full
->> load test on an iMX8: https://bugreports.qt.io/browse/QTBUG-82610
->
-> Thanks for the link!
->
->> I guess the customer should try a more recent Kernel than 4.14 first?
->
-> The FlexCAN driver (which is used in the IMX8 AFAIK) had a remarkable
-> number of changes last year:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/d=
-rivers/net/can/flexcan.c
->
->
-> So I would definitely suggest an update.
-> I added Marc to this thread as he was very active on the FlexCAN
-> improvements.
->
-> Best,
-> Oliver
+Marc
 
+-- 
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
