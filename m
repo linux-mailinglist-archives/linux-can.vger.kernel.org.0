@@ -2,204 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BF21903B2
-	for <lists+linux-can@lfdr.de>; Tue, 24 Mar 2020 03:56:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D4F19062A
+	for <lists+linux-can@lfdr.de>; Tue, 24 Mar 2020 08:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbgCXC4F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Mar 2020 22:56:05 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:39486 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727047AbgCXC4F (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Mar 2020 22:56:05 -0400
-Received: by mail-lf1-f65.google.com with SMTP id j15so11969782lfk.6
-        for <linux-can@vger.kernel.org>; Mon, 23 Mar 2020 19:56:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=oxWAPx5/f6CdTX/W6//xSc3O58WL1ISSs1ON7g5EjdQ=;
-        b=U44N0SvabSLzgFgARkmEofz58CynP92mZ/kB5gs40KRBnzLvP8HAUCfjaeMkpGd4rz
-         l3s7pXPgfqK1a0mtFvZTJLHuX9XGk+V/R+94533kIh8d9tsRURowpHv3yzr397L9qiVK
-         o3aGLi2ncUlP4T5yFSDmzqCYJ7NOc26MVV9wASboCHqwvY+JS2mmqdo+36FMpugbxYY4
-         4EC+UFjK/sirXyx4LvvcU9t9tcWDoc3f1WyxgIpKpBygyDWm6G2/h3m1POEIsOX4G6iN
-         9VkyZ8kJLD8ULbFYxv4HxWSrPE3fzq4KzyFabUd9IMALI1k+Ol2eAMwvuXvlXmtLkXya
-         rncA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=oxWAPx5/f6CdTX/W6//xSc3O58WL1ISSs1ON7g5EjdQ=;
-        b=tvYXvGDipUj+Mp9WuYZbJP0vO0ZToSwa4umWvujPGQSl+ZOIfH3Lpb+hyn2ch5JMGI
-         dpNAct+cMEiOfhswvGvlVlh9/oVga6aAvw0AnGeZojmtNGzi4wRy29OY8TVlY2KuSybF
-         7scdYVRZhlUbnzW9EJhc29vYwGdimvdWNvXzyFTZ670mj+zCoWUQrtdQy/0Oor5j1BrI
-         7HSxyGPqzYlzP3tNAg9zITXNyeMWDwDPzLgMgC5t61d6L7pBI26fwva6hPX6CqCgWhOl
-         lheqFHjiD7tLeT1IVreTf8Yui5svIde9h77B1IdNF4J35+1DaM7ADmnV+y/9g8cBOG71
-         gaPQ==
-X-Gm-Message-State: ANhLgQ37nU4YIuNzpJmACBe7nYU3TYlxZW2VsRuffOChpJ+xrE1TendH
-        tMUAGq3scdrIOUtVWZFvbcz/VH393zXcqW+JsXjb45zOYV4=
-X-Google-Smtp-Source: ADFU+vvZn2acR9OLOos+hWY+adxv8gDZCofRPKaCZ9lDuUcyMaI2VsEt2A1PjJJpgXIRK+XXsDU9mx3s892tl0RyOaM=
-X-Received: by 2002:a19:6449:: with SMTP id b9mr15077007lfj.5.1585018561971;
- Mon, 23 Mar 2020 19:56:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAOHJ0jSS=g4rQtXGkEFocafEqQAtxEOvq5eSXBC2FY_Esb23OA@mail.gmail.com>
- <2cb68f43-a551-c69d-b43f-3b044b948142@hartkopp.net> <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
- <ead77f42-f0f9-9b5a-ce5a-5e7f641d8a14@hartkopp.net> <CAOHJ0jQq80B64O6nG-aNSUhUrczVL0r4GZj-AUWcs4coiERG+Q@mail.gmail.com>
- <a152f1b1-f9e4-cae2-4dc4-d651f84eb11b@hartkopp.net>
-In-Reply-To: <a152f1b1-f9e4-cae2-4dc4-d651f84eb11b@hartkopp.net>
-From:   Robert Barrows <robb.barrows@gmail.com>
-Date:   Mon, 23 Mar 2020 21:55:50 -0500
-Message-ID: <CAOHJ0jTFiJRvunaKNjaqcsFJ0JdB8CJJor4tG9x-4mcOH6i=Tw@mail.gmail.com>
+        id S1725951AbgCXHUY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 24 Mar 2020 03:20:24 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.162]:18997 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725869AbgCXHUY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 24 Mar 2020 03:20:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1585034418;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:Cc:From:References:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=Ws33BR3VVtwvW1/bQlDfJMZzUU4IjkMtWIpe8Jr1G1w=;
+        b=HtcHB7t3LWWbMSWLAtmjM976rHdMDdeMBhgzIQ1/xM9LLj3VBBhycJAaXYU9grbZ+d
+        v311yX/ZdLVI4+n9M9+YN16veu5+0HSewe1NvK5GRLphBGIigNiva/y0LKov+M/q2dH9
+        +Ru1/3ykxmyj25CnEI0NEhnZ3IDiVDQgCdCYzCwxON7ROfUlUbW2AP7B0QDtYh7JIAhH
+        pe2rh4jDPXyuLKE0a0gH/enIYUsmAJsZi9n42hrYGw2ro7r2QsEnrjnOz60/fSFzgRVW
+        KnkxCgNov7CENYqRHEibsDPLzX5HGPBuscQSW9P1OwJ4zB1cwXhGOZb5heQvpKLSlgL/
+        RpFQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJUsh5lE7q"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
+        with ESMTPSA id R0105bw2O7KHCmd
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 24 Mar 2020 08:20:17 +0100 (CET)
 Subject: Re: How to send a CAN message while in a kernel module?
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+To:     Robert Barrows <robb.barrows@gmail.com>
+References: <CAOHJ0jSS=g4rQtXGkEFocafEqQAtxEOvq5eSXBC2FY_Esb23OA@mail.gmail.com>
+ <2cb68f43-a551-c69d-b43f-3b044b948142@hartkopp.net>
+ <CAOHJ0jRQx2U1APx92DTGFGzGLY9+tds3R4Sz8Tz8+LToWx_44g@mail.gmail.com>
+ <ead77f42-f0f9-9b5a-ce5a-5e7f641d8a14@hartkopp.net>
+ <CAOHJ0jQq80B64O6nG-aNSUhUrczVL0r4GZj-AUWcs4coiERG+Q@mail.gmail.com>
+ <5edb635d-f248-6c79-766c-d818de52c229@hartkopp.net>
+ <CAOHJ0jTksLTcRuvx8xarRdcCA4oKKggi1pYQy725Lf-Zav6xGw@mail.gmail.com>
+ <a8ebf3b8-3a7e-596d-7b83-5ce772d093a8@hartkopp.net>
+ <CAOHJ0jQmfUMW2tE_xQvm8RmH-KBzGZ=rxG--kCJ0_yabE3FbYA@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can <linux-can@vger.kernel.org>
+Message-ID: <dce40c51-4329-09d7-5c5f-b527ebcb13ba@hartkopp.net>
+Date:   Tue, 24 Mar 2020 08:20:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAOHJ0jQmfUMW2tE_xQvm8RmH-KBzGZ=rxG--kCJ0_yabE3FbYA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thank you for all the help it seems I have everything working and am able to
-hit sub 20uS accuracy.  Is there any concern with my HR timer ISR interrupting
-a currently pending CAN message that is only partially done, thus sending my
-packet in "the middle" of another one?  Or is each packet in the can driver
-sent as an atomic event?
-
-If you are curious, here were my initial results:
-
- (1584977760.000001)  can0  00050F93   [6]  00 02 5F D7 78 5E
- (1584977761.999995)  can0  00050F93   [6]  00 02 61 D7 78 5E
- (1584977763.999993)  can0  00050F93   [6]  00 02 63 D7 78 5E
- (1584977766.000002)  can0  00050F93   [6]  00 02 65 D7 78 5E
- (1584977767.999996)  can0  00050F93   [6]  00 02 67 D7 78 5E
- (1584977769.999999)  can0  00050F93   [6]  00 02 69 D7 78 5E
- (1584977772.000002)  can0  00050F93   [6]  00 02 6B D7 78 5E
- (1584977774.000001)  can0  00050F93   [6]  00 02 6D D7 78 5E
- (1584977776.000000)  can0  00050F93   [6]  00 02 6F D7 78 5E
- (1584977778.000000)  can0  00050F93   [6]  00 02 71 D7 78 5E
- (1584977779.999997)  can0  00050F93   [6]  00 02 73 D7 78 5E
- (1584977781.999999)  can0  00050F93   [6]  00 02 75 D7 78 5E
- (1584977783.999996)  can0  00050F93   [6]  00 02 77 D7 78 5E
- (1584977786.000022)  can0  00050F93   [6]  00 02 79 D7 78 5E
- (1584977788.000000)  can0  00050F93   [6]  00 02 7B D7 78 5E
-
-And my current functioning code:
-
-int SendCanTime(struct timespec *tsCurrentTime) {
-
-  struct can_frame frame;
-  struct can_frame *cf = &frame;
-  struct sk_buff *skb;
-  int thetime = tsCurrentTime->tv_sec;
-  struct net_device *dev;
-  int err;
-
-  // Find the netdevice named can0
-  dev = __dev_get_by_name(&init_net,"can0");
-  if (!dev)
-    return -ENXIO;
-
-  // Create skb
-  skb = alloc_can_skb(dev, &cf);
-  if (!skb) {
-    dev_put(dev);
-    return 1;
-  }
-
-  skb->dev = dev;
-
-  // Set up can frame
-  cf->can_id = 0x00050F93 | CAN_EFF_FLAG;
-  cf->can_dlc = 6;
-  cf->data[0] = 0x00;
-  cf->data[1] = 0x02;
-  memcpy(cf->data+2, &thetime, sizeof(int));
-
-  err = can_send(skb, 1);
-
-  if(err) {
-    dev_put(skb->dev);
 
 
-    return 1;
-  }
-  return 0;
-}
+On 23/03/2020 22.37, Robert Barrows wrote:
+>> The CAN controller gets the frame from a FIFO (netdev tx queue) which
+>> has a length of 10 elements by default.
+> Any way I can force my way to the head of the queue?  I see
+> skb->priority but I thought that was for TCP packets.
 
-                                                                               ^
+Yes.
 
-                                                                               ^
+>> But when you generate additional traffic (e.g. with cangen) you might
+>> get some jitter.
+>> Is this relevant on your box / use-case?
+> It is possible there could be a lot of packets flying around and I would
+> like to keep my jitter <100uS. Any tips?
 
+Please take a look into slide 41 - 45 of this PDF:
+https://wiki.automotivelinux.org/_media/agl-distro/agl2017-socketcan-print.pdf
 
-On Sun, Mar 22, 2020 at 1:55 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->
->
->
-> On 22/03/2020 19.03, Robert Barrows wrote:
-> > Thank you for all the direction Oliver,  I think I am on the correct path,
-> > but now have can_send returning with a "-1" (ERESTART). I used raw_sendmsg
-> > as a template for this and cut out (hopefully) unneeded code, but I am
-> > concerned I cut out something I needed.  Would you mind taking another look?
-> >
-> > Thanks.
-> >
-> > int SendCanTime(struct timespec *tsCurrentTime) {
-> >
-> >    struct sk_buff *skb;
-> >    struct can_frame *frame = kmalloc(sizeof (struct can_frame), GFP_KERNEL);
-> >    struct net_device *dev;
-> >    int err = 0;
-> >    int thetime = tsCurrentTime->tv_sec;
-> >
-> >    // Set up can frame
-> >    frame->can_id = 0x00050F93 | CAN_EFF_FLAG;
-> >    frame->can_dlc = 6;
-> >    frame->data[0] = 0x00;
-> >    frame->data[1] = 0x02;
-> >    memcpy(frame->data+2, &thetime, sizeof(int));
-> >
-> >    // Find the netdevice named can0
-> >    read_lock(&dev_base_lock);
-> >    dev = first_net_device(&init_net);
-> >    while (!strcmp(dev->name, "can0")) {
-> >      printk(KERN_INFO "found [%s]\n", dev->name);
-> >      dev = next_net_device(dev);
-> >    }
-> >    read_unlock(&dev_base_lock);
->
-> What does this return when you don't have can0 in the system??
->
-> You should use
->   __dev_get_by_name()
-> here.
-> https://elixir.bootlin.com/linux/latest/source/net/core/dev.c#L762
->
-> And check for success :-)
->
->
-> >
-> >    if (!dev)
-> >      return -ENXIO;
-> >
-> >    // Create skb
-> >    skb = alloc_can_skb(dev, &frame);
-> >    if (!skb)
-> >      goto put_dev;
-> >
-> >    skb->dev = dev;
-> >
-> >    err = can_send(skb, 0);
-> >
-> >    dev_put(dev);
-> >
-> >    if (err)
-> >      goto send_failed;
-> >
-> >    return 0;
-> >
-> > //kfree_skb(skb);
-> > put_dev:
-> >    dev_put(dev);
-> > send_failed:
-> >    return err;
-> >
-> > }
-> >                                                                                 ^
-> >
+The academic report about this can be found here
+http://rtime.felk.cvut.cz/can/socketcan-qdisc-final.pdf
+
+You still have to cope with the txqueue length of 10 so you probably 
+need to create a setup that drains the tx queue before your 
+jitter/time-sensitive CAN frame is enqueued.
+
+Another option would be to implement multiple tx queues on CAN drivers - 
+but that has not been focused AFAIK.
+
+Best,
+Oliver
