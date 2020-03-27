@@ -2,171 +2,188 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC07919478C
-	for <lists+linux-can@lfdr.de>; Thu, 26 Mar 2020 20:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FACB1954DC
+	for <lists+linux-can@lfdr.de>; Fri, 27 Mar 2020 11:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgCZTit (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Mar 2020 15:38:49 -0400
-Received: from relay-b02.edpnet.be ([212.71.1.222]:42575 "EHLO
-        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726067AbgCZTis (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Mar 2020 15:38:48 -0400
-X-ASG-Debug-ID: 1585251523-0a7b8d4fde1b0080001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be ([77.109.89.38]) by relay-b02.edpnet.be with ESMTP id hMcZ6byrq52YiS8d; Thu, 26 Mar 2020 20:38:43 +0100 (CET)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: UNKNOWN[77.109.89.38]
-X-Barracuda-Apparent-Source-IP: 77.109.89.38
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 7984DDB8BBA;
-        Thu, 26 Mar 2020 20:38:43 +0100 (CET)
-Date:   Thu, 26 Mar 2020 20:38:37 +0100
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Felix Riemann <Felix.Riemann@sma.de>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        id S1726518AbgC0KJJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Mar 2020 06:09:09 -0400
+Received: from mail-eopbgr40120.outbound.protection.outlook.com ([40.107.4.120]:24462
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726027AbgC0KJJ (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 27 Mar 2020 06:09:09 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Co6QGs5HotDk2cN/5l7v9N3JbRPFLxgd6ugV9yK6Okouwqm3v5g25VnIIR7w0QOSLkxkI9+xU3xMIrshM/8ZIKWYaNl35gFbnLDKjkBDeavI2eb/EAyyZeJK95M6LUOryqOmUGFbc7+YByMH6fXcQ6Ypz9kI2bEcdzkqxbpwSuULQNXIUDR+cQAvmK5gSnVQhFaKUmkNazUAa5ZmDVOMpnTsunmk0JRK2hc04CKufVGOobmweJm/z2qyqU1R1Gh46qrFstu0RswrGFiIhFgm2oeI7AwFTBMplKJ4IKV9PXTRqIyPrGSC3vIaTt7NEzgNEIulvTuiKHpQwxK+5MmC0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZM7t4pXvS0m54EGzI/rXXiipkR1KLRR4ga7mu8VA6TQ=;
+ b=fAsNnEC/3WIDWd2bjkLMUIroEUhERp3vYl+KYBxy8ce1TQ98xsfqK8tk0zbQ/suASPI4X4oKPDzZQYYLZMCfxEvlFurtjumBkcihENvXbhGhRSKEeJgRHlo1li5etV/zDnSt2iGBlYbIeSq5i+yVNOd8VcUFyPmjDqLPqsORrMjZRrOuACfdG5u2WcJoJPcyXG2mozld56RNnbbk/3j63fjoDeDAdIZUm6ELM+2zZQ2WXkVrzP+wcc8d/W3l3EHr488l3elHHWxSKSorlOoFLdvw8ereLwCMjwggX474JSu5TD4AHd/RC9CEpfCsYOr7mLF0z33tF7b72J4bvRqMjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sma.de; dmarc=pass action=none header.from=sma.de; dkim=pass
+ header.d=sma.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sma.de; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZM7t4pXvS0m54EGzI/rXXiipkR1KLRR4ga7mu8VA6TQ=;
+ b=zXpL0c0fB3QGCMugL472mR/HJpERdx+27JvjFRNjGZ2xKKEl4497owdD7QnuEnohHyZ17It8hpwzYN5uW7GvBHWxN/NLyNGYcXDf5QBsmksKVDCoJrKG9SvA/Ty48xZV/hA0r+vZRYpJfe6jPkOu6uN1R267tNMOsYws1t996pc=
+Received: from AM0PR04MB5427.eurprd04.prod.outlook.com (20.178.114.156) by
+ AM0PR04MB7025.eurprd04.prod.outlook.com (10.186.130.211) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2835.22; Fri, 27 Mar 2020 10:09:04 +0000
+Received: from AM0PR04MB5427.eurprd04.prod.outlook.com
+ ([fe80::bd71:151e:5804:252c]) by AM0PR04MB5427.eurprd04.prod.outlook.com
+ ([fe80::bd71:151e:5804:252c%5]) with mapi id 15.20.2856.019; Fri, 27 Mar 2020
+ 10:09:04 +0000
+From:   Felix Riemann <Felix.Riemann@sma.de>
+To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Andre Kalb <Andre.Kalb@sma.de>
-Subject: Re: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
+Subject: RE: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
  disabled
-Message-ID: <20200326193837.GF760@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
+Thread-Topic: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
  disabled
-Mail-Followup-To: Felix Riemann <Felix.Riemann@sma.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andre Kalb <Andre.Kalb@sma.de>
+Thread-Index: AQHWA1tqGNdHGBlIIU2zdPpKElX6gKha4XMAgAAHV9CAAFzIgIAA8mwA
+Date:   Fri, 27 Mar 2020 10:09:03 +0000
+Message-ID: <AM0PR04MB542742337A89900E12A8732288CC0@AM0PR04MB5427.eurprd04.prod.outlook.com>
 References: <20200326104318.15086-1-felix.riemann@sma.de>
  <20200326134015.GC27785@x1.vandijck-laurijssen.be>
  <AM0PR04MB5427D3BF64C3D3DA3961920488CF0@AM0PR04MB5427.eurprd04.prod.outlook.com>
+ <20200326193837.GF760@x1.vandijck-laurijssen.be>
+In-Reply-To: <20200326193837.GF760@x1.vandijck-laurijssen.be>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Felix.Riemann@sma.de; 
+x-originating-ip: [93.209.170.183]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8818d673-2471-40dc-a419-08d7d236e0fb
+x-ms-traffictypediagnostic: AM0PR04MB7025:|AM0PR04MB7025:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB70253C0D485A50124CD2CFFA88CC0@AM0PR04MB7025.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0355F3A3AE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB5427.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(136003)(39860400002)(366004)(396003)(346002)(376002)(55016002)(66446008)(9686003)(478600001)(33656002)(76116006)(64756008)(2906002)(316002)(26005)(66476007)(5660300002)(71200400001)(66556008)(7696005)(66946007)(54906003)(6506007)(86362001)(6916009)(966005)(8676002)(186003)(81166006)(81156014)(4326008)(52536014)(8936002)(6606295002);DIR:OUT;SFP:1102;
+received-spf: None (protection.outlook.com: sma.de does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xsTKFTj5mOOysTbdTcbw2GzoxfhuYWX699wYkAushXH8YE5uR7FZF9Btk7RNxdrp7u6Fwzad1WzfTQVwHufj3mUFenhD06jGI7RldIxY6uKArgyONVlH5CbW3vK7WqIUvN3+wCErVfy3mE/AtO7biFHyaJbOX8D8gh9B8Mj+J7VuEulMfNUO8tgl47ROqTgz0GrGpsoXAGnmYnRCUe8bFHkG2R768h9CLDcZu/md4e3pAtLDsy3LpMi9vNtn6tlDWaiVIymMW3tKlmxl6cKaW/7qgr89+6nbBc9j3BzGaAornQmikR1KK7gDhkeoKaeWgwdeHDJCgIZOocazrPhcnoF1WWaaOaTzRbN5QMhJhU/ta5yjLBKWD9I02bXdfZ9cwQ6wyekDWYiBzgRVg+1AF01tDR7zkB5+fS6WO6hv68r/dxoFoTlH+prfCYmKNQ8qVLa7NSMwhhT1ECm9JbF6lqegej8jWAa9rUl0GY9wl66TdcOYAdo6TpnmX+SRw4jrcQAUZyj3qZzVzrNPiPWq1MQXTMX6WO5kS/Upop9fek43Qzw5+/yqZTVu73BVh6yOvu+tRq8G0sCaXHFlqx3aoA==
+x-ms-exchange-antispam-messagedata: W8W8D6+ZBpiXyhC15W4cMWhFLrdxsbAAf8PzZMLoTCfVpQh/krL6kkCHo4jMhuLWUUAU6e+BJgFEzT2Cqrv5mbakNSIeD7rhZt6bGMh/UYp137o1FWjpeSA73TtPqOTecCPhAupIf1qUcJ56iNSDHQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <AM0PR04MB5427D3BF64C3D3DA3961920488CF0@AM0PR04MB5427.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: UNKNOWN[77.109.89.38]
-X-Barracuda-Start-Time: 1585251523
-X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 4885
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5548 1.0000 0.7500
-X-Barracuda-Spam-Score: 1.25
-X-Barracuda-Spam-Status: No, SCORE=1.25 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=BSF_RULE7568M
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.80815
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.50 BSF_RULE7568M          Custom Rule 7568M
+X-OriginatorOrg: sma.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8818d673-2471-40dc-a419-08d7d236e0fb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2020 10:09:04.0279
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a059b96c-2829-4d11-8837-4cc1ff84735d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Wf80skUx01ifMQOGtorJOC1O6KmeaVtCaXhBGwM0zUKEeZSqldO8yELWGFNJZX0V
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7025
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Interesting topic.
-
-After the bus-off problem, I also attacked the overflow problems. No
-idea why this patch series got stalled. I activated the complete 64
-message buffers of the D_CAN hardware (only 64 of the 128 being present
-in the IP for some reason I don't know) and modified the IRQ to use
-rx-offload. That may affect the circumstances under load, I admit.
-
-Whould you mind trying that series, just for reference, in your setup?
-If your hypothesis is right, my observations do not survive your
-busload.
-
-Kind regards,
-Kurt
-
-On do, 26 mrt 2020 14:49:23 +0000, Felix Riemann wrote:
-> Hi Kurt,
-> 
-> yes that would be 3cb3eaac52c0f145d895f4b6c22834d5f02b8569.
-> 
-> I tried your patch as well, since the description matched the problem pretty well. However, I could still produce the hang on our board (based on AM3352) especially if the bus off occurs while the bus load is very high.
-> 
-> What I could see was the worker being triggered by the interrupt with the bus being in passive mode. When the worker then re-enabled the interrupt the hardware had already entered init mode due to the bus-off but nor would it trigger again nor would the interrupt register indicate a pending IRQ. The status register also indicates an error (LEC != 0x7).
-> 
-> A first attempt to fix/workaround this placed the check just before the worker re-enables the interrupts. But even this setup could reproduce the problem, although it took longer to do so.  So the timing around enabling the interrupts seems to matter here. Actually, adding a printout at the top of the worker where your patch checks the value of the sie_pending atomic seems to increase the chances of making it happen on my board, but that's just a feeling I got while cleaning up my patch.
-> 
-> Regards,
-> 
-> Felix
-> 
-> -----Original Message-----
-> From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> Sent: Thursday, March 26, 2020 2:40 PM
-> 
-> This patch looks very familiar.
-> I tried this 6 months ago, when I got a setup where I could reproduce this within minutes.
-> 
-> This patch didn't solve my problem, and I fixed my problem with reading the ISR register only once in the IRQ, and _not_ 2nd time in napi handler.
-> Reading the ISR in C_CAN is consuming the info, so unless the there is more state to clear (such as received message buffers), the interrupt cause is assumed to be known, and the C_CAN proceeds to the next interrupt cause.
-> I've not experienced a single problem since, where before the fix, I'd experience a few occurances every month.
-> We have an am3358 (beaglebone-like hardware).
-> 
-> I believe I submitted a patch for that.
-> 
-> Re-scheduling the napi is a workaround, IMHO.
-> 
-> Kurt
-> 
-> On do, 26 mrt 2020 11:43:18 +0100, Felix Riemann wrote:
-> > There are appears to be a race condition where interrupts caused by
-> > bus offs get lost if it occurs while interrupts are disabled or being
-> > re-enabled.
-> >
-> > This tries to avoid the deadlock by rescheduling the NAPI worker to
-> > handle the bus-off condition.
-> >
-> > Signed-off-by: Felix Riemann <felix.riemann@sma.de>
-> > Reviewed-by: Andre Kalb <andre.kalb@sma.de>
-> > ---
-> >  drivers/net/can/c_can/c_can.c | 19 ++++++++++++++++++-
-> >  1 file changed, 18 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/net/can/c_can/c_can.c
-> > b/drivers/net/can/c_can/c_can.c index 8e9f5620c9a2..0952ac0b9123
-> > 100644
-> > --- a/drivers/net/can/c_can/c_can.c
-> > +++ b/drivers/net/can/c_can/c_can.c
-> > @@ -1123,8 +1123,25 @@ static int c_can_poll(struct napi_struct *napi, int quota)
-> >  if (work_done < quota) {
-> >  napi_complete_done(napi, work_done);
-> >  /* enable all IRQs if we are not in bus off state */
-> > -if (priv->can.state != CAN_STATE_BUS_OFF)
-> > +if (priv->can.state != CAN_STATE_BUS_OFF) {
-> > +u32 ctrl;
-> >  c_can_irq_control(priv, true);
-> > +
-> > +/* There appears to be a race condition when the device
-> > + * enters bus off while interrupts are off or being
-> > + * re-enabled causing the bus off to get lost.
-> > + * This tries to avoid this condition.
-> > + */
-> > +ctrl = priv->read_reg(priv, C_CAN_CTRL_REG);
-> > +
-> > +if (ctrl & CONTROL_INIT) {
-> > +netdev_warn(dev, "lost bus off\n");
-> > +c_can_irq_control(priv, false);
-> > +/* Reschedule worker to handle bus off */
-> > +atomic_set(&priv->sie_pending, 1);
-> > +napi_reschedule(napi);
-> > +}
-> > +}
-> >  }
-> >
-> >  return work_done;
-> > --
-> > 2.26.0
-> >
-> ___________________________________________________
-> 
-> SMA Solar Technology AG
-> Aufsichtsrat: Dr. Erik Ehrentraut (Vorsitzender)
-> Vorstand: Ulrich Hadding, Dr.-Ing. Juergen Reinert
-> Handelsregister: Amtsgericht Kassel HRB 3972
-> Sitz der Gesellschaft: 34266 Niestetal
-> USt-ID-Nr. DE 113 08 59 54
-> WEEE-Reg.-Nr. DE 95881150
-> ___________________________________________________
+SXMgaXQgdGhpcyBvbmU/DQpodHRwczovL21hcmMuaW5mby8/bD1saW51eC1jYW4mbT0xNTc2ODM1
+Nzk1MTgyODINCg0KSXQgc2VlbXMgdG8gYmUgbWlzc2luZyBwYXRjaCA2IGluIHRoZSBzZXJpZXMu
+DQoNClJlZ2FyZHMsDQpGZWxpeA0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTog
+S3VydCBWYW4gRGlqY2sNClNlbnQ6IFRodXJzZGF5LCBNYXJjaCAyNiwgMjAyMCA4OjM5IFBNDQoN
+CkludGVyZXN0aW5nIHRvcGljLg0KDQpBZnRlciB0aGUgYnVzLW9mZiBwcm9ibGVtLCBJIGFsc28g
+YXR0YWNrZWQgdGhlIG92ZXJmbG93IHByb2JsZW1zLiBObw0KaWRlYSB3aHkgdGhpcyBwYXRjaCBz
+ZXJpZXMgZ290IHN0YWxsZWQuIEkgYWN0aXZhdGVkIHRoZSBjb21wbGV0ZSA2NA0KbWVzc2FnZSBi
+dWZmZXJzIG9mIHRoZSBEX0NBTiBoYXJkd2FyZSAob25seSA2NCBvZiB0aGUgMTI4IGJlaW5nIHBy
+ZXNlbnQNCmluIHRoZSBJUCBmb3Igc29tZSByZWFzb24gSSBkb24ndCBrbm93KSBhbmQgbW9kaWZp
+ZWQgdGhlIElSUSB0byB1c2UNCnJ4LW9mZmxvYWQuIFRoYXQgbWF5IGFmZmVjdCB0aGUgY2lyY3Vt
+c3RhbmNlcyB1bmRlciBsb2FkLCBJIGFkbWl0Lg0KDQpXaG91bGQgeW91IG1pbmQgdHJ5aW5nIHRo
+YXQgc2VyaWVzLCBqdXN0IGZvciByZWZlcmVuY2UsIGluIHlvdXIgc2V0dXA/DQpJZiB5b3VyIGh5
+cG90aGVzaXMgaXMgcmlnaHQsIG15IG9ic2VydmF0aW9ucyBkbyBub3Qgc3Vydml2ZSB5b3VyDQpi
+dXNsb2FkLg0KDQpLaW5kIHJlZ2FyZHMsDQpLdXJ0DQoNCk9uIGRvLCAyNiBtcnQgMjAyMCAxNDo0
+OToyMyArMDAwMCwgRmVsaXggUmllbWFubiB3cm90ZToNCj4gSGkgS3VydCwNCj4NCj4geWVzIHRo
+YXQgd291bGQgYmUgM2NiM2VhYWM1MmMwZjE0NWQ4OTVmNGI2YzIyODM0ZDVmMDJiODU2OS4NCj4N
+Cj4gSSB0cmllZCB5b3VyIHBhdGNoIGFzIHdlbGwsIHNpbmNlIHRoZSBkZXNjcmlwdGlvbiBtYXRj
+aGVkIHRoZSBwcm9ibGVtIHByZXR0eSB3ZWxsLiBIb3dldmVyLCBJIGNvdWxkIHN0aWxsIHByb2R1
+Y2UgdGhlIGhhbmcgb24gb3VyIGJvYXJkIChiYXNlZCBvbiBBTTMzNTIpIGVzcGVjaWFsbHkgaWYg
+dGhlIGJ1cyBvZmYgb2NjdXJzIHdoaWxlIHRoZSBidXMgbG9hZCBpcyB2ZXJ5IGhpZ2guDQo+DQo+
+IFdoYXQgSSBjb3VsZCBzZWUgd2FzIHRoZSB3b3JrZXIgYmVpbmcgdHJpZ2dlcmVkIGJ5IHRoZSBp
+bnRlcnJ1cHQgd2l0aCB0aGUgYnVzIGJlaW5nIGluIHBhc3NpdmUgbW9kZS4gV2hlbiB0aGUgd29y
+a2VyIHRoZW4gcmUtZW5hYmxlZCB0aGUgaW50ZXJydXB0IHRoZSBoYXJkd2FyZSBoYWQgYWxyZWFk
+eSBlbnRlcmVkIGluaXQgbW9kZSBkdWUgdG8gdGhlIGJ1cy1vZmYgYnV0IG5vciB3b3VsZCBpdCB0
+cmlnZ2VyIGFnYWluIG5vciB3b3VsZCB0aGUgaW50ZXJydXB0IHJlZ2lzdGVyIGluZGljYXRlIGEg
+cGVuZGluZyBJUlEuIFRoZSBzdGF0dXMgcmVnaXN0ZXIgYWxzbyBpbmRpY2F0ZXMgYW4gZXJyb3Ig
+KExFQyAhPSAweDcpLg0KPg0KPiBBIGZpcnN0IGF0dGVtcHQgdG8gZml4L3dvcmthcm91bmQgdGhp
+cyBwbGFjZWQgdGhlIGNoZWNrIGp1c3QgYmVmb3JlIHRoZSB3b3JrZXIgcmUtZW5hYmxlcyB0aGUg
+aW50ZXJydXB0cy4gQnV0IGV2ZW4gdGhpcyBzZXR1cCBjb3VsZCByZXByb2R1Y2UgdGhlIHByb2Js
+ZW0sIGFsdGhvdWdoIGl0IHRvb2sgbG9uZ2VyIHRvIGRvIHNvLiAgU28gdGhlIHRpbWluZyBhcm91
+bmQgZW5hYmxpbmcgdGhlIGludGVycnVwdHMgc2VlbXMgdG8gbWF0dGVyIGhlcmUuIEFjdHVhbGx5
+LCBhZGRpbmcgYSBwcmludG91dCBhdCB0aGUgdG9wIG9mIHRoZSB3b3JrZXIgd2hlcmUgeW91ciBw
+YXRjaCBjaGVja3MgdGhlIHZhbHVlIG9mIHRoZSBzaWVfcGVuZGluZyBhdG9taWMgc2VlbXMgdG8g
+aW5jcmVhc2UgdGhlIGNoYW5jZXMgb2YgbWFraW5nIGl0IGhhcHBlbiBvbiBteSBib2FyZCwgYnV0
+IHRoYXQncyBqdXN0IGEgZmVlbGluZyBJIGdvdCB3aGlsZSBjbGVhbmluZyB1cCBteSBwYXRjaC4N
+Cj4NCj4gUmVnYXJkcywNCj4NCj4gRmVsaXgNCj4NCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
+LS0NCj4gRnJvbTogS3VydCBWYW4gRGlqY2sgPGRldi5rdXJ0QHZhbmRpamNrLWxhdXJpanNzZW4u
+YmU+DQo+IFNlbnQ6IFRodXJzZGF5LCBNYXJjaCAyNiwgMjAyMCAyOjQwIFBNDQo+DQo+IFRoaXMg
+cGF0Y2ggbG9va3MgdmVyeSBmYW1pbGlhci4NCj4gSSB0cmllZCB0aGlzIDYgbW9udGhzIGFnbywg
+d2hlbiBJIGdvdCBhIHNldHVwIHdoZXJlIEkgY291bGQgcmVwcm9kdWNlIHRoaXMgd2l0aGluIG1p
+bnV0ZXMuDQo+DQo+IFRoaXMgcGF0Y2ggZGlkbid0IHNvbHZlIG15IHByb2JsZW0sIGFuZCBJIGZp
+eGVkIG15IHByb2JsZW0gd2l0aCByZWFkaW5nIHRoZSBJU1IgcmVnaXN0ZXIgb25seSBvbmNlIGlu
+IHRoZSBJUlEsIGFuZCBfbm90XyAybmQgdGltZSBpbiBuYXBpIGhhbmRsZXIuDQo+IFJlYWRpbmcg
+dGhlIElTUiBpbiBDX0NBTiBpcyBjb25zdW1pbmcgdGhlIGluZm8sIHNvIHVubGVzcyB0aGUgdGhl
+cmUgaXMgbW9yZSBzdGF0ZSB0byBjbGVhciAoc3VjaCBhcyByZWNlaXZlZCBtZXNzYWdlIGJ1ZmZl
+cnMpLCB0aGUgaW50ZXJydXB0IGNhdXNlIGlzIGFzc3VtZWQgdG8gYmUga25vd24sIGFuZCB0aGUg
+Q19DQU4gcHJvY2VlZHMgdG8gdGhlIG5leHQgaW50ZXJydXB0IGNhdXNlLg0KPiBJJ3ZlIG5vdCBl
+eHBlcmllbmNlZCBhIHNpbmdsZSBwcm9ibGVtIHNpbmNlLCB3aGVyZSBiZWZvcmUgdGhlIGZpeCwg
+SSdkIGV4cGVyaWVuY2UgYSBmZXcgb2NjdXJhbmNlcyBldmVyeSBtb250aC4NCj4gV2UgaGF2ZSBh
+biBhbTMzNTggKGJlYWdsZWJvbmUtbGlrZSBoYXJkd2FyZSkuDQo+DQo+IEkgYmVsaWV2ZSBJIHN1
+Ym1pdHRlZCBhIHBhdGNoIGZvciB0aGF0Lg0KPg0KPiBSZS1zY2hlZHVsaW5nIHRoZSBuYXBpIGlz
+IGEgd29ya2Fyb3VuZCwgSU1ITy4NCj4NCj4gS3VydA0KPg0KPiBPbiBkbywgMjYgbXJ0IDIwMjAg
+MTE6NDM6MTggKzAxMDAsIEZlbGl4IFJpZW1hbm4gd3JvdGU6DQo+ID4gVGhlcmUgYXJlIGFwcGVh
+cnMgdG8gYmUgYSByYWNlIGNvbmRpdGlvbiB3aGVyZSBpbnRlcnJ1cHRzIGNhdXNlZCBieQ0KPiA+
+IGJ1cyBvZmZzIGdldCBsb3N0IGlmIGl0IG9jY3VycyB3aGlsZSBpbnRlcnJ1cHRzIGFyZSBkaXNh
+YmxlZCBvciBiZWluZw0KPiA+IHJlLWVuYWJsZWQuDQo+ID4NCj4gPiBUaGlzIHRyaWVzIHRvIGF2
+b2lkIHRoZSBkZWFkbG9jayBieSByZXNjaGVkdWxpbmcgdGhlIE5BUEkgd29ya2VyIHRvDQo+ID4g
+aGFuZGxlIHRoZSBidXMtb2ZmIGNvbmRpdGlvbi4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IEZl
+bGl4IFJpZW1hbm4gPGZlbGl4LnJpZW1hbm5Ac21hLmRlPg0KPiA+IFJldmlld2VkLWJ5OiBBbmRy
+ZSBLYWxiIDxhbmRyZS5rYWxiQHNtYS5kZT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy9uZXQvY2Fu
+L2NfY2FuL2NfY2FuLmMgfCAxOSArKysrKysrKysrKysrKysrKystDQo+ID4gIDEgZmlsZSBjaGFu
+Z2VkLCAxOCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0
+IGEvZHJpdmVycy9uZXQvY2FuL2NfY2FuL2NfY2FuLmMNCj4gPiBiL2RyaXZlcnMvbmV0L2Nhbi9j
+X2Nhbi9jX2Nhbi5jIGluZGV4IDhlOWY1NjIwYzlhMi4uMDk1MmFjMGI5MTIzDQo+ID4gMTAwNjQ0
+DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvY2FuL2NfY2FuL2NfY2FuLmMNCj4gPiArKysgYi9kcml2
+ZXJzL25ldC9jYW4vY19jYW4vY19jYW4uYw0KPiA+IEBAIC0xMTIzLDggKzExMjMsMjUgQEAgc3Rh
+dGljIGludCBjX2Nhbl9wb2xsKHN0cnVjdCBuYXBpX3N0cnVjdCAqbmFwaSwgaW50IHF1b3RhKQ0K
+PiA+ICBpZiAod29ya19kb25lIDwgcXVvdGEpIHsNCj4gPiAgbmFwaV9jb21wbGV0ZV9kb25lKG5h
+cGksIHdvcmtfZG9uZSk7DQo+ID4gIC8qIGVuYWJsZSBhbGwgSVJRcyBpZiB3ZSBhcmUgbm90IGlu
+IGJ1cyBvZmYgc3RhdGUgKi8NCj4gPiAtaWYgKHByaXYtPmNhbi5zdGF0ZSAhPSBDQU5fU1RBVEVf
+QlVTX09GRikNCj4gPiAraWYgKHByaXYtPmNhbi5zdGF0ZSAhPSBDQU5fU1RBVEVfQlVTX09GRikg
+ew0KPiA+ICt1MzIgY3RybDsNCj4gPiAgY19jYW5faXJxX2NvbnRyb2wocHJpdiwgdHJ1ZSk7DQo+
+ID4gKw0KPiA+ICsvKiBUaGVyZSBhcHBlYXJzIHRvIGJlIGEgcmFjZSBjb25kaXRpb24gd2hlbiB0
+aGUgZGV2aWNlDQo+ID4gKyAqIGVudGVycyBidXMgb2ZmIHdoaWxlIGludGVycnVwdHMgYXJlIG9m
+ZiBvciBiZWluZw0KPiA+ICsgKiByZS1lbmFibGVkIGNhdXNpbmcgdGhlIGJ1cyBvZmYgdG8gZ2V0
+IGxvc3QuDQo+ID4gKyAqIFRoaXMgdHJpZXMgdG8gYXZvaWQgdGhpcyBjb25kaXRpb24uDQo+ID4g
+KyAqLw0KPiA+ICtjdHJsID0gcHJpdi0+cmVhZF9yZWcocHJpdiwgQ19DQU5fQ1RSTF9SRUcpOw0K
+PiA+ICsNCj4gPiAraWYgKGN0cmwgJiBDT05UUk9MX0lOSVQpIHsNCj4gPiArbmV0ZGV2X3dhcm4o
+ZGV2LCAibG9zdCBidXMgb2ZmXG4iKTsNCj4gPiArY19jYW5faXJxX2NvbnRyb2wocHJpdiwgZmFs
+c2UpOw0KPiA+ICsvKiBSZXNjaGVkdWxlIHdvcmtlciB0byBoYW5kbGUgYnVzIG9mZiAqLw0KPiA+
+ICthdG9taWNfc2V0KCZwcml2LT5zaWVfcGVuZGluZywgMSk7DQo+ID4gK25hcGlfcmVzY2hlZHVs
+ZShuYXBpKTsNCj4gPiArfQ0KPiA+ICt9DQo+ID4gIH0NCj4gPg0KPiA+ICByZXR1cm4gd29ya19k
+b25lOw0KPiA+IC0tDQo+ID4gMi4yNi4wDQo+ID4NCj4gX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+DQo+IFNNQSBTb2xhciBUZWNobm9sb2d5IEFH
+DQo+IEF1ZnNpY2h0c3JhdDogRHIuIEVyaWsgRWhyZW50cmF1dCAoVm9yc2l0emVuZGVyKQ0KPiBW
+b3JzdGFuZDogVWxyaWNoIEhhZGRpbmcsIERyLi1JbmcuIEp1ZXJnZW4gUmVpbmVydA0KPiBIYW5k
+ZWxzcmVnaXN0ZXI6IEFtdHNnZXJpY2h0IEthc3NlbCBIUkIgMzk3Mg0KPiBTaXR6IGRlciBHZXNl
+bGxzY2hhZnQ6IDM0MjY2IE5pZXN0ZXRhbA0KPiBVU3QtSUQtTnIuIERFIDExMyAwOCA1OSA1NA0K
+PiBXRUVFLVJlZy4tTnIuIERFIDk1ODgxMTUwDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXw0KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fDQoNClNNQSBTb2xhciBUZWNobm9sb2d5IEFHDQpBdWZzaWNo
+dHNyYXQ6IERyLiBFcmlrIEVocmVudHJhdXQgKFZvcnNpdHplbmRlcikNClZvcnN0YW5kOiBVbHJp
+Y2ggSGFkZGluZywgRHIuLUluZy4gSnVlcmdlbiBSZWluZXJ0DQpIYW5kZWxzcmVnaXN0ZXI6IEFt
+dHNnZXJpY2h0IEthc3NlbCBIUkIgMzk3Mg0KU2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiAzNDI2NiBO
+aWVzdGV0YWwNClVTdC1JRC1Oci4gREUgMTEzIDA4IDU5IDU0DQpXRUVFLVJlZy4tTnIuIERFIDk1
+ODgxMTUwDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X18NCg==
