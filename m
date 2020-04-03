@@ -2,110 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F2619B67D
-	for <lists+linux-can@lfdr.de>; Wed,  1 Apr 2020 21:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B899E19D17C
+	for <lists+linux-can@lfdr.de>; Fri,  3 Apr 2020 09:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732651AbgDATl0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 1 Apr 2020 15:41:26 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:26140 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732560AbgDATl0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 1 Apr 2020 15:41:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1585770082;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=A0+JzdAiPU3XNZx6W/Snqv56H9zh2dsABEt6Hx1ngMI=;
-        b=i6kZyLrJBAUC8gMM7PqUCM5OEj8XYA8zfa8z8zxJBBnjoDOJ3Eg/694nVj8Xtz/OoQ
-        3zmHhxMHCGXRIotF3xMB8X2T/ImTLhxk4bNhJkMHKC7vKOcGO4vWgh55ji1Q7b2uMb65
-        n87+767woKAVr3cvOEEg9QfWA6bSJxKoqFY3u3x3I63UmEu5ub38k6v9BOjB45xbcIGz
-        vARRHNza75SI+7uCp28oN/kUUzMKOwmBJPK+NWEanbOTmvfJ4PfKFElXK7L68ZUvVnUu
-        4TcsQAbhZyCLs/MinT4Pdo1XZfw+GnfbRigFsLi5mqHbvlhNXVyAs/3DUF7S4H5ZOwXI
-        zkRg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGX8h5lU+m"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 46.2.1 DYNA|AUTH)
-        with ESMTPSA id D07898w31JfEI2y
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 1 Apr 2020 21:41:14 +0200 (CEST)
-Subject: Re: [PATCH v2] slcan: Don't transmit uninitialized stack data in
- padding
-To:     Richard Palethorpe <rpalethorpe@suse.com>,
+        id S2389758AbgDCHvq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 3 Apr 2020 03:51:46 -0400
+Received: from condef-05.nifty.com ([202.248.20.70]:33934 "EHLO
+        condef-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389281AbgDCHvq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 3 Apr 2020 03:51:46 -0400
+X-Greylist: delayed 361 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Apr 2020 03:51:44 EDT
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-05.nifty.com with ESMTP id 0337cjfP002825
+        for <linux-can@vger.kernel.org>; Fri, 3 Apr 2020 16:38:45 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 0337bnR8018752;
+        Fri, 3 Apr 2020 16:37:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 0337bnR8018752
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1585899470;
+        bh=kd64Egtcv7z+eNdTYSdkDz1izi5aQNUps8DVTK9PF4s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0anGhdcPT5b4H1i35chsiMv+k2P947lf69UkgT33PdrESwTDs1uDWHfzUYrFlXReZ
+         2CVNN9d6cPtDKFl4FAHFdNXanLYzJhac87krTrDce1RNEz3RGY9PlRvP8Pw/jLvGNW
+         /9LLTPjPbNoIuPE8fXraN4q4pJ7FrKqHVs9UG+dwRzSbGLCVDboKP5pQuwrcwIzdlU
+         C1tFIofg9AqvEXZNv8E5A2e1aNY9Umzwr1WM11O5ZDO5KRLMIfJP2s866/tHtiInM6
+         zPJvV0RXfswm2c6P3OhNyzdSa25/J++x3l37j+S2EqbsSWhmeHQt95xT7nIUa5a/kQ
+         7S7zQ8atPJhFw==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-can@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, netdev@vger.kernel.org,
-        security@kernel.org, wg@grandegger.com, mkl@pengutronix.de,
-        davem@davemloft.net
-References: <20200401100639.20199-1-rpalethorpe@suse.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <4ec16ff5-7126-ffa2-491f-520606a038a9@hartkopp.net>
-Date:   Wed, 1 Apr 2020 21:41:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20200401100639.20199-1-rpalethorpe@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] net: can: remove "WITH Linux-syscall-note" from SPDX tag of C files
+Date:   Fri,  3 Apr 2020 16:37:41 +0900
+Message-Id: <20200403073741.18352-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The "WITH Linux-syscall-note" exception is intended for UAPI headers.
 
+See LICENSES/exceptions/Linux-syscall-note
 
-On 01/04/2020 12.06, Richard Palethorpe wrote:
-> struct can_frame contains some padding which is not explicitly zeroed in
-> slc_bump. This uninitialized data will then be transmitted if the stack
-> initialization hardening feature is not enabled (CONFIG_INIT_STACK_ALL).
-> 
-> This commit just zeroes the whole struct including the padding.
-> 
-> Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
-> Fixes: a1044e36e457 ("can: add slcan driver for serial/USB-serial CAN adapters")
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: security@kernel.org
-> Cc: wg@grandegger.com
-> Cc: mkl@pengutronix.de
-> Cc: davem@davemloft.net
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+ net/can/bcm.c  | 2 +-
+ net/can/gw.c   | 2 +-
+ net/can/proc.c | 2 +-
+ net/can/raw.c  | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index c96fa0f33db3..d94b20933339 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ /*
+  * bcm.c - Broadcast Manager to filter/send (cyclic) CAN content
+  *
+diff --git a/net/can/gw.c b/net/can/gw.c
+index 65d60c93af29..49b4e3d91ad6 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ /* gw.c - CAN frame Gateway/Router/Bridge with netlink interface
+  *
+  * Copyright (c) 2019 Volkswagen Group Electronic Research
+diff --git a/net/can/proc.c b/net/can/proc.c
+index e6881bfc3ed1..a4eb06c9eb70 100644
+--- a/net/can/proc.c
++++ b/net/can/proc.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ /*
+  * proc.c - procfs support for Protocol family CAN core module
+  *
+diff --git a/net/can/raw.c b/net/can/raw.c
+index 59c039d73c6d..ab104cc18562 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
++// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
+ /* raw.c - Raw sockets for protocol family CAN
+  *
+  * Copyright (c) 2002-2007 Volkswagen Group Electronic Research
+-- 
+2.17.1
 
-> ---
-> 
-> V2: Reviewed by Kees and Fixes tag added.
-> 
-> As mentioned in V1; The following unfinished test can reproduce the bug:
-> https://github.com/richiejp/ltp/blob/pty-slcan/testcases/kernel/pty/pty04.c
-> 
-> 
->   drivers/net/can/slcan.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-> index a3664281a33f..4dfa459ef5c7 100644
-> --- a/drivers/net/can/slcan.c
-> +++ b/drivers/net/can/slcan.c
-> @@ -148,7 +148,7 @@ static void slc_bump(struct slcan *sl)
->   	u32 tmpid;
->   	char *cmd = sl->rbuff;
->   
-> -	cf.can_id = 0;
-> +	memset(&cf, 0, sizeof(cf));
->   
->   	switch (*cmd) {
->   	case 'r':
-> @@ -187,8 +187,6 @@ static void slc_bump(struct slcan *sl)
->   	else
->   		return;
->   
-> -	*(u64 *) (&cf.data) = 0; /* clear payload */
-> -
->   	/* RTR frames may have a dlc > 0 but they never have any data bytes */
->   	if (!(cf.can_id & CAN_RTR_FLAG)) {
->   		for (i = 0; i < cf.can_dlc; i++) {
-> 
