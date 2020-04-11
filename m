@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 967A91A5153
-	for <lists+linux-can@lfdr.de>; Sat, 11 Apr 2020 14:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E561A50AB
+	for <lists+linux-can@lfdr.de>; Sat, 11 Apr 2020 14:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbgDKMQ5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 11 Apr 2020 08:16:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51402 "EHLO mail.kernel.org"
+        id S1728430AbgDKMUI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 11 Apr 2020 08:20:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728160AbgDKMQ5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 11 Apr 2020 08:16:57 -0400
+        id S1728929AbgDKMUH (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 11 Apr 2020 08:20:07 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 57B4B20644;
-        Sat, 11 Apr 2020 12:16:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D4AB120644;
+        Sat, 11 Apr 2020 12:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586607416;
+        s=default; t=1586607607;
         bh=EmfY0OTG7JZDE8KriKilKrAHF7WbXWBGs5/1e/lrTow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EknbZN8V4zl/2D7qudtICkum+53KytjJkKejc23m1PbcK9fTPbAGL6W7Qq+SX/46V
-         0G6DYkQjMexd9t14sfTsYmO9Lerv+0cldQffvxnaZE9x14v2hbDU08eLYxFFCzZSvu
-         QPjIrrc8ISzE1VNuWC9rIqXIPT6qDQnnO1r3fpKI=
+        b=RJzVYaYmkzDh88xwbDyOCT/KiQpwdZQy+QjP7qfyQ7jEfWiDaOqT9vYenlnFGwIWg
+         9JUwzpnCOFUJbrP5ws+1LKibAOAYdsfpIW8bomQQT4FSBZ8y7/MfoETdqgnJ8VgdqO
+         pFo+J2wZ7uN8o4uAryYhJ7zvVOlqlYXyc7EZlohw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kees Cook <keescook@chromium.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, security@kernel.org, wg@grandegger.com,
         mkl@pengutronix.de, davem@davemloft.net
-Subject: [PATCH 5.4 11/41] slcan: Dont transmit uninitialized stack data in padding
-Date:   Sat, 11 Apr 2020 14:09:20 +0200
-Message-Id: <20200411115504.898395559@linuxfoundation.org>
+Subject: [PATCH 5.5 10/44] slcan: Dont transmit uninitialized stack data in padding
+Date:   Sat, 11 Apr 2020 14:09:30 +0200
+Message-Id: <20200411115457.729173605@linuxfoundation.org>
 X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200411115504.124035693@linuxfoundation.org>
-References: <20200411115504.124035693@linuxfoundation.org>
+In-Reply-To: <20200411115456.934174282@linuxfoundation.org>
+References: <20200411115456.934174282@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
