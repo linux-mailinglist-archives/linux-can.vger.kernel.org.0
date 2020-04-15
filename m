@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 782401A9ECC
-	for <lists+linux-can@lfdr.de>; Wed, 15 Apr 2020 14:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9211A9DE9
+	for <lists+linux-can@lfdr.de>; Wed, 15 Apr 2020 13:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S368160AbgDOMBh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 15 Apr 2020 08:01:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42784 "EHLO mail.kernel.org"
+        id S2409413AbgDOLsE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Apr 2020 07:48:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409347AbgDOLrf (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:47:35 -0400
+        id S2409408AbgDOLsB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:48:01 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 31D8E20775;
-        Wed, 15 Apr 2020 11:47:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C874821707;
+        Wed, 15 Apr 2020 11:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951248;
-        bh=kPuYz+x66mnO8Bd+2a9Rx3mEP4MAbIx/RUKWkxGi07U=;
+        s=default; t=1586951280;
+        bh=WLolElHMTnMxmTQuBmH3/DlNfQo9VbUZguyx/Au5DVM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oPjXhTM1UH+ntKeocrsU1rIzfOhmJdMwEfsKri9f+O8Ao+fvH/Xud7u09pzMFc+Qt
-         1ZW8guaQrHN9+9biOcPjylA66ZWcM08KTtDjlF/pXz1HPUm9JldKq51rXVRGoPn4Su
-         7zqzPNfzOzQosSHVUfz1rY8ZCMLPBH7b6FIbmnto=
+        b=KdjnGJLatJHjh2Z6Qm/+ZFWnD7MMNySakahJIE/oIu0Vo6zbOGPMcLUo14om+eD2R
+         VAkCHR3Kl7NF5gSkUB9Es4eXggVhGDp1rpfM6tpOVIgFksP0zljlQn8dpFkOAJyPfz
+         b3gMHSoi9C7ftqfkMageemdWUQa1Eob0cujAheMA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Richard Palethorpe <rpalethorpe@suse.com>,
@@ -30,12 +30,12 @@ Cc:     Richard Palethorpe <rpalethorpe@suse.com>,
         netdev@vger.kernel.org, security@kernel.org, wg@grandegger.com,
         mkl@pengutronix.de, davem@davemloft.net,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 14/30] slcan: Don't transmit uninitialized stack data in padding
-Date:   Wed, 15 Apr 2020 07:46:55 -0400
-Message-Id: <20200415114711.15381-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 10/21] slcan: Don't transmit uninitialized stack data in padding
+Date:   Wed, 15 Apr 2020 07:47:37 -0400
+Message-Id: <20200415114748.15713-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114711.15381-1-sashal@kernel.org>
-References: <20200415114711.15381-1-sashal@kernel.org>
+In-Reply-To: <20200415114748.15713-1-sashal@kernel.org>
+References: <20200415114748.15713-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -72,7 +72,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 7c37b96ff22a7..c5a616395c490 100644
+index 94b37c60fdd06..d0435c7631ff9 100644
 --- a/drivers/net/can/slcan.c
 +++ b/drivers/net/can/slcan.c
 @@ -147,7 +147,7 @@ static void slc_bump(struct slcan *sl)
