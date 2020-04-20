@@ -2,92 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BE31AFD0C
-	for <lists+linux-can@lfdr.de>; Sun, 19 Apr 2020 20:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817341B0C4D
+	for <lists+linux-can@lfdr.de>; Mon, 20 Apr 2020 15:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbgDSSOk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 19 Apr 2020 14:14:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37082 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726440AbgDSSOk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 19 Apr 2020 14:14:40 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3440920771;
-        Sun, 19 Apr 2020 18:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587320079;
-        bh=bOt9BTn/I9BtpLW6MYPux7kH7zXf1KQ4OwttSbOUgxw=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=F96kxGnwb5hbRo2uaveExMkh4pG5tmsfXC/X4f7LcIR9NVVk3+CXqwPimCRGIZsLq
-         200DZ+NlYkyxPrNFkbuYootDCzDqqWFu0hJkAVPZpKUAgkDDPBPfI6mIZvHi8k+VtM
-         aJNXnDOzYimf/GSU7Z8wIQIZEF7kJxvbDOxdjZqA=
-Content-Type: text/plain; charset="utf-8"
+        id S1726316AbgDTNNc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Apr 2020 09:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726050AbgDTNNc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Apr 2020 09:13:32 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC50C061A0C;
+        Mon, 20 Apr 2020 06:13:30 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id ng8so4566134pjb.2;
+        Mon, 20 Apr 2020 06:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=1TAgcxIt86/pBZoXVfOkKX7rv0NrEGvRTPnHP44Lt+w=;
+        b=WWDlb6SFnnPcrUNjIa1hQgMf2be2Ej55anqWOXEjcohow9GEJAFR8b2vFR/+Z6b3Ay
+         ES6An7SYMLfKug3SNa/XyetLtJEmclrWAMjyWRWOP6nkoPcnCBeBl18P8Akes2xDHlYf
+         y0vPqjQrRHxOBfxM9QeY5WcBYBnidKhOAlY2mo1DI64fwJK2LAEp9MgulN/oFINeDUTQ
+         5M2MmSFQWHC2GMkIBOyf0ULo0o/m9S9qmj+NKeugqEFi3T2nxXWnBsx4RPFCw20cKMaJ
+         FJ4Ks0a7HYY4CzGfhQjFwnSbKWA6c98nn0IjRp8aCRkzAlBLj1FH3WfKtL7YgSIwqjQZ
+         PBOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=1TAgcxIt86/pBZoXVfOkKX7rv0NrEGvRTPnHP44Lt+w=;
+        b=V4mtj8XeFYNc/JADQ9zMYxVhz9YkS7S1ITt7YVMnAgDSLFKXA2ZfcLzSWt7dYugJfX
+         SETF7Ej9A2KqIfB6NiXxU5cvUuAZJO+DnQtbEhWRv4ekehjTIhmUzqCPPZbfV+fJYbG0
+         tYW+//ghQ4aK1DMC/8eEyPbC8TbR4Fifk/a0pqfnWezZhcZ46f0Zv17dCsgfpke0iQSX
+         pePEA+q4Bog86928zvxXPFHhJpm180BfTEdil9YLPiGmx7YVLsFIs6n3d8nmPs3mQGGL
+         plzDaGRDkXpp8JSBxLYWPtMWJ08w9AMwwtIF08TXH79Jsas3ePsLhq3NR7SNGxIOgGBX
+         CsBQ==
+X-Gm-Message-State: AGi0PuZeBysAtgM9bsapfVOoyO1Cx/ge4vqUxhbQGcRWW/AB5gxNDd2i
+        P/WFjFaBDicPi6Rl9S3tLN4=
+X-Google-Smtp-Source: APiQypJU5VK8wVTpvE19z47A8p3kMYjIqaAA/yNAWadv9cPJFQp+9mZYnwvBoQhFFvunoy0bECEV6w==
+X-Received: by 2002:a17:90a:32ea:: with SMTP id l97mr21405427pjb.50.1587388410421;
+        Mon, 20 Apr 2020 06:13:30 -0700 (PDT)
+Received: from localhost (89.208.244.140.16clouds.com. [89.208.244.140])
+        by smtp.gmail.com with ESMTPSA id o187sm1052194pfb.12.2020.04.20.06.13.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 20 Apr 2020 06:13:29 -0700 (PDT)
+Date:   Mon, 20 Apr 2020 21:13:27 +0800
+From:   Dejin Zheng <zhengdejin5@gmail.com>
+To:     Markus Elfring <Markus.Elfring@web.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Coccinelle <cocci@systeme.lip6.fr>
+Subject: Re: [PATCH net-next v1] can: ti_hecc: convert to
+ devm_platform_ioremap_resource_byname()
+Message-ID: <20200420131327.GA8103@nuc8i5>
+References: <08979629-d9b8-6656-222f-4e84667651a1@web.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200416005549.9683-2-robh@kernel.org>
-References: <20200416005549.9683-1-robh@kernel.org> <20200416005549.9683-2-robh@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: Remove cases of 'allOf' containing a '$ref'
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Danie l Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 19 Apr 2020 11:14:38 -0700
-Message-ID: <158732007844.132238.3936257450130949073@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <08979629-d9b8-6656-222f-4e84667651a1@web.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Quoting Rob Herring (2020-04-15 17:55:49)
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords. The json-schema library doesn't yet support this, but the
-> tooling now does a fixup for this and either way works.
->=20
-> This has been a constant source of review comments, so let's change this
-> treewide so everyone copies the simpler syntax.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/clock/fixed-factor-clock.yaml    |   5 +-
+On Sun, Apr 19, 2020 at 06:19:12PM +0200, Markus Elfring wrote:
+> > use devm_platform_ioremap_resource_byname() to simplify code,
+> > it contains platform_get_resource_byname() and
+> > devm_ioremap_resource(), and also remove some duplicate error
+> > message.
+> 
+> How do you think about a wording variant like the following?
+> 
+>    Use the function “devm_platform_ioremap_resource_byname” to simplify
+>    source code which calls the functions “platform_get_resource_byname”
+>    and “devm_ioremap_resource”.
+>    Remove also a few error messages which became unnecessary with this
+>    software refactoring.
+>
+Markus, Thank you very much！yes, your comments is better. I will send
+the patch v2. Thanks again!
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org> # clock
+> 
+> Will any more contributors get into the development mood to achieve
+> similar collateral evolution by the means of the semantic patch language?
+> Would you like to increase applications of the Coccinelle software?
+>
+I want, but currently I don't have much free time, sorry！
+
+BR,
+Dejin
+> Regards,
+> Markus
