@@ -2,62 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 790D51BA297
-	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2020 13:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0D61BA4CB
+	for <lists+linux-can@lfdr.de>; Mon, 27 Apr 2020 15:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbgD0Llf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 27 Apr 2020 07:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S1727056AbgD0Ncl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 27 Apr 2020 09:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726899AbgD0Lle (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Apr 2020 07:41:34 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96520C061BD3
-        for <linux-can@vger.kernel.org>; Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id c2so3621389iow.7
-        for <linux-can@vger.kernel.org>; Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=uI1U3pP4FazEZaTfkDGgaf1Qyb1hL6AlgZB9tozzlJtw0tc2p0xAeW9BNdbY4A2XuL
-         JYn8lE6gg3HqjBgRaTT8CTSOLDZ9E79yDyBM0EGnWldSdHyzrk+BT/7frJGn/PAhMIrE
-         VCZdq7yfljhgiOOYhIeLP2AIIFXvLFMREe3IREMgf/Wimn5okrCaqK4gkS0+n2Tqfq3c
-         EFYh4cYLyK3nIET0YOm2adzDe5W5QN3hsgSvwW72euh+PRPDs3oxC82+7cfg/ZGTOz8/
-         eTagf6SblJMWIJeJ59y/zg3//EVOq9RPByBfKkQCDUJB6vE62XJLcx9qUgZNIxoYrz8S
-         JAeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=F+HbPvxQnRBlqBFKy/zn6110uxUPAWY6eSsMY6+ckPY=;
-        b=PDuJpSHQLnL9iogMzAIcrG2ae3bSNJ+YcHkAUAAud7U1nAp4aoDSxxd6CiCj7aAQwm
-         7V0FzOEgim4n7Q9B7YfQm5j/b6m8KCfMoF/XK2Lk9BY+GrBq5ZQcNfFOtO9QYHrEc9qF
-         brfnz0/lw+x2JA142/SjRPxFRkQQEbdIdOiZQf8mG4mMMi7Cd2HleNVOmMLEvbQMtkdS
-         vISRccoLZX9bbUDPAahntX035m7bUpYI2yRZfxinLcT/XZWCHSLpBsEjLDp3wy8IoaRA
-         LHuo3DXO8jgOUsRUOpZchP45DxeHvkxzMCW5dsyX5G606XJnBugkBYr7kaMhoPaUzk8B
-         a40A==
-X-Gm-Message-State: AGi0PuZzD6OBn3crSzQlZR/JvmKVcBtH1LK0SOl0mjzH404yCrMpUaGn
-        L08NQ9yZ7aCWroJq5b9VbzgemfRQPMvdQKbg5iM=
-X-Google-Smtp-Source: APiQypJWdjzUZMbeRoAX94bUJV0IgwyoF5kUG7iPo3CBzKxW8lStFNsM/6tz3An/TyzRuH2Qw14DtavsVumw6JVLls0=
-X-Received: by 2002:a6b:7d4a:: with SMTP id d10mr4072296ioq.70.1587987694042;
- Mon, 27 Apr 2020 04:41:34 -0700 (PDT)
+        with ESMTP id S1726651AbgD0Ncl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 27 Apr 2020 09:32:41 -0400
+Received: from relay.felk.cvut.cz (relay.felk.cvut.cz [IPv6:2001:718:2:1611:0:1:0:70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 518FDC0610D5
+        for <linux-can@vger.kernel.org>; Mon, 27 Apr 2020 06:32:40 -0700 (PDT)
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 03RDUYf1024047;
+        Mon, 27 Apr 2020 15:30:34 +0200 (CEST)
+        (envelope-from pisa@cmp.felk.cvut.cz)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 03RDUYKC013358;
+        Mon, 27 Apr 2020 15:30:34 +0200
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 03RDUYfF013357;
+        Mon, 27 Apr 2020 15:30:34 +0200
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     "Lev R. Oshvang ." <levonshe@gmail.com>
+Subject: Re: Are there any netfilter modules for use with Socket CAN
+Date:   Mon, 27 Apr 2020 15:30:33 +0200
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org,
+        Rostislav =?utf-8?q?Lisov=C3=BD?= <lisovy@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+References: <CAP22eLGTc6K1auF5JOofTKy83uTOq0hK_qb8fgJ=J78njwWjVA@mail.gmail.com> <202004262215.36557.pisa@cmp.felk.cvut.cz> <CAP22eLEq1FJWLgT+-NvG=geLiKeEasgz7WZFkhXYuTbeio2t8g@mail.gmail.com>
+In-Reply-To: <CAP22eLEq1FJWLgT+-NvG=geLiKeEasgz7WZFkhXYuTbeio2t8g@mail.gmail.com>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Received: by 2002:a5d:8f89:0:0:0:0:0 with HTTP; Mon, 27 Apr 2020 04:41:33
- -0700 (PDT)
-Reply-To: convy0090@gmail.com
-From:   Ruben CONVY <andrewboccc@gmail.com>
-Date:   Mon, 27 Apr 2020 12:41:33 +0100
-Message-ID: <CAHVC0+Ag87TMCmfNNwWbxXOFxn5166q8GG5wEfPjwtixj9=EXQ@mail.gmail.com>
-Subject: Why continued silence 2
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202004271530.33887.pisa@cmp.felk.cvut.cz>
+X-FELK-MailScanner-Information: 
+X-MailScanner-ID: 03RDUYf1024047
+X-FELK-MailScanner: Found to be clean
+X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached, score=-0.1,
+        required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.40,
+        SPF_HELO_NONE 0.00, SPF_NONE 0.00)
+X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
+X-FELK-MailScanner-Watermark: 1588599037.28557@/QC6f5j2wT3r23fzecskGg
+X-Spam-Status: No
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Did you receive my previous email regarding your family inheritance?
-Reply strictly through: convy0090@gmail.com
-Best Regards,
-Ruben CONVY
+Hello Lev,
+
+On Monday 27 of April 2020 12:31:36 Lev R. Oshvang . wrote:
+> On Sun, Apr 26, 2020 at 11:17 PM Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
+> > Dear Lev,
+> >
+> > On Sunday 26 of April 2020 14:07:08 Lev R. Oshvang . wrote:
+> > > >From my google search I did not find any netfilter /iptable rule which
+> > >
+> > > allows to filter on CAN fields,  message ID and other.
+> > > Please point me in the right direction.
+> >
+> > I am not sure if this can help, but Rostislav Lisovy
+> > has implemented linux-devel/net/sched/em_canid.c
+> > which has been merged around Linux kernel version 3.6
+> > and is still there. It allows to classify CAN frames
+> > for purpose of queening disciplines. There is report
+> > with documentation how to use it
+> >
+> > https://rtime.felk.cvut.cz/can/socketcan-qdisc-final.pdf
+> >
+> > I am not sure if this can be used for netfilter.
+> >
+> > For sure CAN Gateway allows separation of real and virtual
+> > can network and full control on IDs which are passed.
+>
+> Hi Pavel,
+> Thanks for the info.
+> I read again cangw man page. It clearly states that filter might be
+> applied to incoming CAN traffic.
+> It does not answer my question of whether anybody uses Netfilter for
+> outgoing CAN messages?
+
+the use described in our report is for outgoing traffic to classify
+CAN frames to different output queues according to IDs to resolve
+different kind of buffering of different kind of CAN traffic.
+I.e. for best effort RT data ensure that only last one
+is sent and previous are forgottent if not sent in a time.
+For service data ensure that FIFO depth is long enough
+to hold all data etc.
+
+If I remember, it could be used to block some applications
+or nodes to send some IDs etc...
+
+What is your idea, need for use?
+
+Best wishes,
+
+Pavel
