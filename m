@@ -2,290 +2,240 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 077B21BD7E8
-	for <lists+linux-can@lfdr.de>; Wed, 29 Apr 2020 11:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4EF1C01B9
+	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2020 18:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgD2JG0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 29 Apr 2020 05:06:26 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:44096 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726457AbgD2JGZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 29 Apr 2020 05:06:25 -0400
-X-ASG-Debug-ID: 1588151180-0a88181dee62b250001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.105.74.adsl.dyn.edpnet.net [77.109.105.74]) by relay-b03.edpnet.be with ESMTP id F9BCp4gbmcUah82V; Wed, 29 Apr 2020 11:06:20 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.105.74.adsl.dyn.edpnet.net[77.109.105.74]
-X-Barracuda-Apparent-Source-IP: 77.109.105.74
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 9B0BBE8F9DA;
-        Wed, 29 Apr 2020 11:06:20 +0200 (CEST)
-Date:   Wed, 29 Apr 2020 11:06:18 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Felix Riemann <Felix.Riemann@sma.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andre Kalb <Andre.Kalb@sma.de>
-Subject: Re: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
- disabled
-Message-ID: <20200429090618.GB27733@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
- disabled
-Mail-Followup-To: Felix Riemann <Felix.Riemann@sma.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andre Kalb <Andre.Kalb@sma.de>
-References: <20200326104318.15086-1-felix.riemann@sma.de>
- <20200326134015.GC27785@x1.vandijck-laurijssen.be>
- <AM0PR04MB5427D3BF64C3D3DA3961920488CF0@AM0PR04MB5427.eurprd04.prod.outlook.com>
- <20200326193837.GF760@x1.vandijck-laurijssen.be>
- <AM0PR04MB542742337A89900E12A8732288CC0@AM0PR04MB5427.eurprd04.prod.outlook.com>
- <20200330070203.GE22500@x1.vandijck-laurijssen.be>
- <AM0PR04MB54271EA5CC205263750BDBD288CB0@AM0PR04MB5427.eurprd04.prod.outlook.com>
- <20200429084733.GA27733@x1.vandijck-laurijssen.be>
+        id S1728539AbgD3QIG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 30 Apr 2020 12:08:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726761AbgD3QEh (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 30 Apr 2020 12:04:37 -0400
+Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D1A81208D5;
+        Thu, 30 Apr 2020 16:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588262676;
+        bh=htL5CBKoN0WCDcYQWi30eM6Fpz9wSc9gmJDRu0SQ/NI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=unU5CxMku37iTcODJkr/My/DCiuY6c7gGAUz/nAMxHPid7wUgnKJN7TIkX32+xzAE
+         LaNUyPunTxlMUmMWOxf8nrGoMgwV6nioZLtQ6AY+8pCNjmTJpZEtKL/ngWXECpueqz
+         gmp7pUE+yyWwIAa56XTDl09fGP1NFHQBOR2lpjN0=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jUBft-00AxE8-VJ; Thu, 30 Apr 2020 18:04:33 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        devel@driverdev.osuosl.org, coreteam@netfilter.org,
+        netfilter-devel@vger.kernel.org,
+        Ishizaki Kou <kou.ishizaki@toshiba.co.jp>,
+        netdev@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Florian Westphal <fw@strlen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-wireless@vger.kernel.org, Geoff Levand <geoff@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-can@vger.kernel.org, Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-sctp@vger.kernel.org, Vlad Yasevich <vyasevich@gmail.com>,
+        rds-devel@oss.oracle.com,
+        Ioana Radulescu <ruxandra.radulescu@nxp.com>,
+        David Howells <dhowells@redhat.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        linux-rdma@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-x25@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 00/37] net: manually convert files to ReST format - part 2
+Date:   Thu, 30 Apr 2020 18:03:55 +0200
+Message-Id: <cover.1588261997.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200429084733.GA27733@x1.vandijck-laurijssen.be>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.105.74.adsl.dyn.edpnet.net[77.109.105.74]
-X-Barracuda-Start-Time: 1588151180
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 11266
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5599 1.0000 0.7500
-X-Barracuda-Spam-Score: 1.25
-X-Barracuda-Spam-Status: No, SCORE=1.25 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=BSF_RULE7568M, INFO_TLD
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.81507
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 INFO_TLD               URI: Contains an URL in the INFO top-level domain
-        0.50 BSF_RULE7568M          Custom Rule 7568M
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I have the impression that the recv path is covered, at least the null
-ptr would have caused issued earlier already.
-Would the problem arise in c_can_do_tx fetching a NULL echo_skb?
+That's the second part of my work to convert the networking
+text files into ReST. it is based on today's linux-next (next-20200430).
 
-Kurt
+The full series (including those ones) are at:
 
-On wo, 29 apr 2020 10:47:33 +0200, Kurt Van Dijck wrote:
-> 
-> Hi,
-> 
-> On ma, 30 mrt 2020 17:30:08 +0000, Felix Riemann wrote:
-> > Hi Kurt,
-> > 
-> > tried to give it a try. However, after starting a few (4 - 5) cangen  instances to increase bus load it panics:
-> 
-> It would be more helpful if you had a verbose stacktrace.
-> 
-> Kurt
-> 
-> > 
-> > [  207.259295] Unable to handle kernel NULL pointer dereference at virtual address 00000000
-> > [  207.267433] pgd = d2bd4866
-> > [  207.270153] [00000000] *pgd=8ca25831, *pte=00000000, *ppte=00000000
-> > [  207.276469] Internal error: Oops: 817 [#1] PREEMPT ARM
-> > [  207.281633] Modules linked in: cfg80211 rfkill lm75 musb_dsps musb_hdrc usbcore phy_am335x phy_generic usb_common phy_am335x_control gpio_keys xt_owner iptable_filter ip_tables can_raw
-> > [  207.298189] CPU: 0 PID: 782 Comm: cangen Not tainted 5.5.11-00013-gcdf175eb0ffc #7
-> > [  207.305793] Hardware name: Generic AM33XX (Flattened Device Tree)
-> > [  207.311942] PC is at can_rx_offload_irq_receive_skb+0x54/0x78
-> > [  207.317722] LR is at c_can_isr+0x52c/0x5b0
-> > [  207.321838] pc : [<c04856f4>]    lr : [<c04875f8>]    psr: 80070193
-> > [  207.328133] sp : cde6fd30  ip : 00000008  fp : cf4ec5c8
-> > [  207.333383] r10: 00000000  r9 : 00000000  r8 : cf4ec4e0
-> > [  207.338633] r7 : 00000001  r6 : 00000000  r5 : 00000039  r4 : cf4ec000
-> > [  207.345192] r3 : cf4ec5c8  r2 : cf4ec5dc  r1 : 00000000  r0 : cf4ec5dc
-> > [  207.351752] Flags: Nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> > [  207.359010] Control: 10c5387d  Table: 8cb50019  DAC: 00000051
-> > [  207.364785] Process cangen (pid: 782, stack limit = 0x7ef64b0d)
-> > [  207.370734] Stack: (0xcde6fd30 to 0xcde70000)
-> > [  207.375116] fd20:                                     00000000 cf4ec000 00000000 00000000
-> > [  207.383341] fd40: cde6fd7f 8d12c45f cd82ed80 cc864c80 cf3a9310 00000030 00000001 ffffe000
-> > [  207.391566] fd60: cf3a9300 cde6fda0 00000000 c0165450 cf3a9300 cde6fda0 00010002 c0a04248
-> > [  207.399790] fd80: cf3a9310 cf3a9300 00000001 00000000 cde6e000 8ec8018f 000000e8 c01655f4
-> > [  207.408014] fda0: 00000000 8d12c45f cf3a9300 cf3a9310 cf01f400 c01656a4 cf3a9300 cf3a9310
-> > [  207.416239] fdc0: cf01f400 c0169520 00000000 00000000 cf01f400 c0164720 00000000 c0164dac
-> > [  207.424463] fde0: c01128c4 20070113 ffffffff cde6fe2c 00000000 c0101a8c 00020837 cfecd200
-> > [  207.432687] fe00: cfcb9000 00214200 8ec8018f 0000ec80 00000000 cfecd200 00000000 00000000
-> > [  207.440911] fe20: 8ec8018f 000000e8 20070113 cde6fe48 00020837 c01128c4 20070113 ffffffff
-> > [  207.449136] fe40: 00000051 bf000000 8ec8018f cca261ac 00000000 c0203830 cde6fee4 cf79e0b0
-> > [  207.457359] fe60: 00000000 c0206358 cfecd200 00000001 cde6fee4 cdcba300 ce38e188 000000ec
-> > [  207.465584] fe80: c0a04248 c01de0d0 00023b20 ce38e18c 000000e8 00280000 ce37e720 00000000
-> > [  207.473807] fea0: 00000000 8d12c45f 00000011 00000000 000000ec c0a04248 b6e61000 00000040
-> > [  207.482032] fec0: 000000dd cc8b7000 cc8b703c c0206b80 c0a04248 00000000 cdcba840 00000010
-> > [  207.490256] fee0: 00000000 cf79e0b0 00000054 00100cca 000000de b6e6b000 ccb52db8 ccb52db8
-> > [  207.498479] ff00: 00000000 00000000 00000000 00000000 cca261ac cc8b703c 00000000 8d12c45f
-> > [  207.506704] ff20: ce694570 cde6ffb0 b6e61de4 cf79e0b0 00000054 cd944000 cc8b7000 80000007
-> > [  207.514928] ff40: cc8b703c c0110c44 cdcba840 00000010 00000010 c022c9f4 00000000 00000010
-> > [  207.523152] ff60: cdcba840 00000007 c0a08e38 b6e61de4 cde6ffb0 10c53c7d 00000000 00023b20
-> > [  207.531375] ff80: 00023b20 c0110f94 00000000 00000010 00000000 00000004 c0101204 b6e61de4
-> > [  207.539599] ffa0: 60070010 ffffffff 10c5387d c01020c8 bea8fbc8 00000000 00000010 00000000
-> > [  207.547822] ffc0: 00000000 00000010 00000000 00000003 00000000 00000000 00023b20 00023b20
-> > [  207.556047] ffe0: b6e61de4 bea8fb78 00011454 b6e61de4 60070010 ffffffff 00000000 00000000
-> > [  207.564287] [<c04856f4>] (can_rx_offload_irq_receive_skb) from [<cf4ec000>] (0xcf4ec000)
-> > [  207.572428] Code: e58430e8 e8bd8010 e5932018 e2830014 (e5810000)
-> > [  207.578557] ---[ end trace 67a8f60eda872c72 ]---
-> > [  207.583199] Kernel panic - not syncing: Fatal exception in interrupt
-> > 
-> > I also noticed two things while building the patchset.
-> > The GPL export of can_rx_offload_irq_receive_skb uses the wrong name in the second patch and patch 5 prevents the c_can driver from being built as a module as it references the unexported __can_get_echo_skb function.
-> > 
-> > Regards,
-> > 
-> > Felix
-> > 
-> > 
-> > > -----Original Message-----
-> > > From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > > Sent: Monday, March 30, 2020 9:02 AM
-> > >
-> > > On vr, 27 mrt 2020 10:09:03 +0000, Felix Riemann wrote:
-> > > > Is it this one?
-> > > > https://marc.info/?l=linux-can&m=157683579518282
-> > >
-> > > yes
-> > >
-> > > >
-> > > > It seems to be missing patch 6 in the series.
-> > >
-> > > you can get there via
-> > > https://github.com/kurt-vd/linux, branch c_can-next
-> > >
-> > > Kurt
-> > >
-> > > >
-> > > > Regards,
-> > > > Felix
-> > > >
-> > > > -----Original Message-----
-> > > > From: Kurt Van Dijck
-> > > > Sent: Thursday, March 26, 2020 8:39 PM
-> > > >
-> > > > Interesting topic.
-> > > >
-> > > > After the bus-off problem, I also attacked the overflow problems. No
-> > > > idea why this patch series got stalled. I activated the complete 64
-> > > > message buffers of the D_CAN hardware (only 64 of the 128 being
-> > > > present in the IP for some reason I don't know) and modified the IRQ
-> > > > to use rx-offload. That may affect the circumstances under load, I admit.
-> > > >
-> > > > Whould you mind trying that series, just for reference, in your setup?
-> > > > If your hypothesis is right, my observations do not survive your
-> > > > busload.
-> > > >
-> > > > Kind regards,
-> > > > Kurt
-> > > >
-> > > > On do, 26 mrt 2020 14:49:23 +0000, Felix Riemann wrote:
-> > > > > Hi Kurt,
-> > > > >
-> > > > > yes that would be 3cb3eaac52c0f145d895f4b6c22834d5f02b8569.
-> > > > >
-> > > > > I tried your patch as well, since the description matched the problem pretty
-> > > well. However, I could still produce the hang on our board (based on AM3352)
-> > > especially if the bus off occurs while the bus load is very high.
-> > > > >
-> > > > > What I could see was the worker being triggered by the interrupt with the
-> > > bus being in passive mode. When the worker then re-enabled the interrupt the
-> > > hardware had already entered init mode due to the bus-off but nor would it
-> > > trigger again nor would the interrupt register indicate a pending IRQ. The status
-> > > register also indicates an error (LEC != 0x7).
-> > > > >
-> > > > > A first attempt to fix/workaround this placed the check just before the
-> > > worker re-enables the interrupts. But even this setup could reproduce the
-> > > problem, although it took longer to do so.  So the timing around enabling the
-> > > interrupts seems to matter here. Actually, adding a printout at the top of the
-> > > worker where your patch checks the value of the sie_pending atomic seems to
-> > > increase the chances of making it happen on my board, but that's just a feeling I
-> > > got while cleaning up my patch.
-> > > > >
-> > > > > Regards,
-> > > > >
-> > > > > Felix
-> > > > >
-> > > > > -----Original Message-----
-> > > > > From: Kurt Van Dijck <mailto:dev.kurt@vandijck-laurijssen.be>
-> > > > > Sent: Thursday, March 26, 2020 2:40 PM
-> > > > >
-> > > > > This patch looks very familiar.
-> > > > > I tried this 6 months ago, when I got a setup where I could reproduce this
-> > > within minutes.
-> > > > >
-> > > > > This patch didn't solve my problem, and I fixed my problem with reading the
-> > > ISR register only once in the IRQ, and _not_ 2nd time in napi handler.
-> > > > > Reading the ISR in C_CAN is consuming the info, so unless the there is more
-> > > state to clear (such as received message buffers), the interrupt cause is assumed
-> > > to be known, and the C_CAN proceeds to the next interrupt cause.
-> > > > > I've not experienced a single problem since, where before the fix, I'd
-> > > experience a few occurances every month.
-> > > > > We have an am3358 (beaglebone-like hardware).
-> > > > >
-> > > > > I believe I submitted a patch for that.
-> > > > >
-> > > > > Re-scheduling the napi is a workaround, IMHO.
-> > > > >
-> > > > > Kurt
-> > > > >
-> > > > > On do, 26 mrt 2020 11:43:18 +0100, Felix Riemann wrote:
-> > > > > > There are appears to be a race condition where interrupts caused
-> > > > > > by bus offs get lost if it occurs while interrupts are disabled or
-> > > > > > being re-enabled.
-> > > > > >
-> > > > > > This tries to avoid the deadlock by rescheduling the NAPI worker
-> > > > > > to handle the bus-off condition.
-> > > > > >
-> > > > > > Signed-off-by: Felix Riemann <mailto:felix.riemann@sma.de>
-> > > > > > Reviewed-by: Andre Kalb <mailto:andre.kalb@sma.de>
-> > > > > > ---
-> > > > > >  drivers/net/can/c_can/c_can.c | 19 ++++++++++++++++++-
-> > > > > >  1 file changed, 18 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/net/can/c_can/c_can.c
-> > > > > > b/drivers/net/can/c_can/c_can.c index 8e9f5620c9a2..0952ac0b9123
-> > > > > > 100644
-> > > > > > --- a/drivers/net/can/c_can/c_can.c
-> > > > > > +++ b/drivers/net/can/c_can/c_can.c
-> > > > > > @@ -1123,8 +1123,25 @@ static int c_can_poll(struct napi_struct
-> > > > > > *napi, int quota)  if (work_done < quota) {
-> > > > > > napi_complete_done(napi, work_done);
-> > > > > >  /* enable all IRQs if we are not in bus off state */ -if
-> > > > > > (priv->can.state != CAN_STATE_BUS_OFF)
-> > > > > > +if (priv->can.state != CAN_STATE_BUS_OFF) {
-> > > > > > +u32 ctrl;
-> > > > > >  c_can_irq_control(priv, true);
-> > > > > > +
-> > > > > > +/* There appears to be a race condition when the device
-> > > > > > + * enters bus off while interrupts are off or being
-> > > > > > + * re-enabled causing the bus off to get lost.
-> > > > > > + * This tries to avoid this condition.
-> > > > > > + */
-> > > > > > +ctrl = priv->read_reg(priv, C_CAN_CTRL_REG);
-> > > > > > +
-> > > > > > +if (ctrl & CONTROL_INIT) {
-> > > > > > +netdev_warn(dev, "lost bus off\n"); c_can_irq_control(priv,
-> > > > > > +false);
-> > > > > > +/* Reschedule worker to handle bus off */
-> > > > > > +atomic_set(&priv->sie_pending, 1); napi_reschedule(napi); } }
-> > > > > >  }
-> > > > > >
-> > > > > >  return work_done;
-> > > > > > --
-> > > > > > 2.26.0
-> > ___________________________________________________
-> > 
-> > SMA Solar Technology AG
-> > Aufsichtsrat: Dr. Erik Ehrentraut (Vorsitzender)
-> > Vorstand: Ulrich Hadding, Dr.-Ing. Juergen Reinert
-> > Handelsregister: Amtsgericht Kassel HRB 3972
-> > Sitz der Gesellschaft: 34266 Niestetal
-> > USt-ID-Nr. DE 113 08 59 54
-> > WEEE-Reg.-Nr. DE 95881150
-> > ___________________________________________________
+	https://git.linuxtv.org/mchehab/experimental.git/log/?h=net-docs
+
+I should be sending the remaining patches (another /38 series)
+after getting those merged at -next.
+
+The documents, converted to HTML via the building system are at:
+
+	https://www.infradead.org/~mchehab/kernel_docs/networking/
+
+Mauro Carvalho Chehab (37):
+  docs: networking: convert l2tp.txt to ReST
+  docs: networking: convert lapb-module.txt to ReST
+  docs: networking: convert ltpc.txt to ReST
+  docs: networking: convert mac80211-injection.txt to ReST
+  docs: networking: convert mpls-sysctl.txt to ReST
+  docs: networking: convert multiqueue.txt to ReST
+  docs: networking: convert netconsole.txt to ReST
+  docs: networking: convert netdev-features.txt to ReST
+  docs: networking: convert netdevices.txt to ReST
+  docs: networking: convert netfilter-sysctl.txt to ReST
+  docs: networking: convert netif-msg.txt to ReST
+  docs: networking: convert nf_conntrack-sysctl.txt to ReST
+  docs: networking: convert nf_flowtable.txt to ReST
+  docs: networking: convert openvswitch.txt to ReST
+  docs: networking: convert operstates.txt to ReST
+  docs: networking: convert packet_mmap.txt to ReST
+  docs: networking: convert phonet.txt to ReST
+  docs: networking: convert pktgen.txt to ReST
+  docs: networking: convert PLIP.txt to ReST
+  docs: networking: convert ppp_generic.txt to ReST
+  docs: networking: convert proc_net_tcp.txt to ReST
+  docs: networking: convert radiotap-headers.txt to ReST
+  docs: networking: convert ray_cs.txt to ReST
+  docs: networking: convert rds.txt to ReST
+  docs: networking: convert regulatory.txt to ReST
+  docs: networking: convert rxrpc.txt to ReST
+  docs: networking: convert sctp.txt to ReST
+  docs: networking: convert secid.txt to ReST
+  docs: networking: convert seg6-sysctl.txt to ReST
+  docs: networking: convert skfp.txt to ReST
+  docs: networking: convert strparser.txt to ReST
+  docs: networking: convert switchdev.txt to ReST
+  docs: networking: convert tc-actions-env-rules.txt to ReST
+  docs: networking: convert tcp-thin.txt to ReST
+  docs: networking: convert team.txt to ReST
+  docs: networking: convert timestamping.txt to ReST
+  docs: networking: convert tproxy.txt to ReST
+
+ .../admin-guide/kernel-parameters.txt         |    2 +-
+ Documentation/admin-guide/serial-console.rst  |    2 +-
+ Documentation/filesystems/afs.rst             |    2 +-
+ Documentation/networking/bonding.rst          |    2 +-
+ Documentation/networking/can.rst              |    2 +-
+ .../networking/checksum-offloads.rst          |    2 +-
+ Documentation/networking/index.rst            |   37 +
+ Documentation/networking/ip-sysctl.rst        |    2 +-
+ .../networking/{l2tp.txt => l2tp.rst}         |  145 ++-
+ .../{lapb-module.txt => lapb-module.rst}      |  120 +-
+ .../networking/{ltpc.txt => ltpc.rst}         |   45 +-
+ ...1-injection.txt => mac80211-injection.rst} |   41 +-
+ .../{mpls-sysctl.txt => mpls-sysctl.rst}      |   17 +-
+ .../{multiqueue.txt => multiqueue.rst}        |   41 +-
+ .../{netconsole.txt => netconsole.rst}        |  125 +-
+ ...etdev-features.txt => netdev-features.rst} |   19 +-
+ .../{netdevices.txt => netdevices.rst}        |   21 +-
+ ...filter-sysctl.txt => netfilter-sysctl.rst} |   11 +-
+ Documentation/networking/netif-msg.rst        |   95 ++
+ Documentation/networking/netif-msg.txt        |   79 --
+ ...ack-sysctl.txt => nf_conntrack-sysctl.rst} |   51 +-
+ .../{nf_flowtable.txt => nf_flowtable.rst}    |   55 +-
+ .../{openvswitch.txt => openvswitch.rst}      |   23 +-
+ .../{operstates.txt => operstates.rst}        |   45 +-
+ Documentation/networking/packet_mmap.rst      | 1084 +++++++++++++++++
+ Documentation/networking/packet_mmap.txt      | 1061 ----------------
+ .../networking/{phonet.txt => phonet.rst}     |   56 +-
+ .../networking/{pktgen.txt => pktgen.rst}     |  316 ++---
+ .../networking/{PLIP.txt => plip.rst}         |   43 +-
+ .../{ppp_generic.txt => ppp_generic.rst}      |   52 +-
+ .../{proc_net_tcp.txt => proc_net_tcp.rst}    |   23 +-
+ ...iotap-headers.txt => radiotap-headers.rst} |   99 +-
+ .../networking/{ray_cs.txt => ray_cs.rst}     |  101 +-
+ Documentation/networking/{rds.txt => rds.rst} |  295 +++--
+ .../{regulatory.txt => regulatory.rst}        |   29 +-
+ .../networking/{rxrpc.txt => rxrpc.rst}       |  306 ++---
+ .../networking/{sctp.txt => sctp.rst}         |   37 +-
+ .../networking/{secid.txt => secid.rst}       |    6 +
+ Documentation/networking/seg6-sysctl.rst      |   26 +
+ Documentation/networking/seg6-sysctl.txt      |   18 -
+ .../networking/{skfp.txt => skfp.rst}         |  153 ++-
+ .../{strparser.txt => strparser.rst}          |   85 +-
+ .../{switchdev.txt => switchdev.rst}          |  114 +-
+ .../networking/tc-actions-env-rules.rst       |   29 +
+ .../networking/tc-actions-env-rules.txt       |   24 -
+ .../networking/{tcp-thin.txt => tcp-thin.rst} |    5 +
+ .../networking/{team.txt => team.rst}         |    6 +
+ .../{timestamping.txt => timestamping.rst}    |  154 ++-
+ .../networking/{tproxy.txt => tproxy.rst}     |   55 +-
+ MAINTAINERS                                   |   14 +-
+ drivers/net/Kconfig                           |    4 +-
+ drivers/net/appletalk/Kconfig                 |    2 +-
+ drivers/net/ethernet/toshiba/ps3_gelic_net.c  |    2 +-
+ drivers/net/ethernet/toshiba/spider_net.c     |    2 +-
+ drivers/net/fddi/Kconfig                      |    2 +-
+ drivers/net/plip/Kconfig                      |    2 +-
+ drivers/net/wireless/Kconfig                  |    2 +-
+ drivers/staging/fsl-dpaa2/ethsw/README        |    2 +-
+ include/linux/netdev_features.h               |    2 +-
+ include/net/cfg80211.h                        |    2 +-
+ include/uapi/linux/errqueue.h                 |    2 +-
+ net/Kconfig                                   |    2 +-
+ net/core/pktgen.c                             |    2 +-
+ net/lapb/Kconfig                              |    2 +-
+ net/mac80211/tx.c                             |    2 +-
+ net/netfilter/Kconfig                         |    2 +-
+ net/rxrpc/Kconfig                             |    6 +-
+ net/rxrpc/sysctl.c                            |    2 +-
+ net/wireless/radiotap.c                       |    2 +-
+ samples/pktgen/README.rst                     |    2 +-
+ 70 files changed, 2864 insertions(+), 2357 deletions(-)
+ rename Documentation/networking/{l2tp.txt => l2tp.rst} (79%)
+ rename Documentation/networking/{lapb-module.txt => lapb-module.rst} (74%)
+ rename Documentation/networking/{ltpc.txt => ltpc.rst} (86%)
+ rename Documentation/networking/{mac80211-injection.txt => mac80211-injection.rst} (67%)
+ rename Documentation/networking/{mpls-sysctl.txt => mpls-sysctl.rst} (82%)
+ rename Documentation/networking/{multiqueue.txt => multiqueue.rst} (76%)
+ rename Documentation/networking/{netconsole.txt => netconsole.rst} (66%)
+ rename Documentation/networking/{netdev-features.txt => netdev-features.rst} (95%)
+ rename Documentation/networking/{netdevices.txt => netdevices.rst} (89%)
+ rename Documentation/networking/{netfilter-sysctl.txt => netfilter-sysctl.rst} (62%)
+ create mode 100644 Documentation/networking/netif-msg.rst
+ delete mode 100644 Documentation/networking/netif-msg.txt
+ rename Documentation/networking/{nf_conntrack-sysctl.txt => nf_conntrack-sysctl.rst} (85%)
+ rename Documentation/networking/{nf_flowtable.txt => nf_flowtable.rst} (76%)
+ rename Documentation/networking/{openvswitch.txt => openvswitch.rst} (95%)
+ rename Documentation/networking/{operstates.txt => operstates.rst} (87%)
+ create mode 100644 Documentation/networking/packet_mmap.rst
+ delete mode 100644 Documentation/networking/packet_mmap.txt
+ rename Documentation/networking/{phonet.txt => phonet.rst} (82%)
+ rename Documentation/networking/{pktgen.txt => pktgen.rst} (62%)
+ rename Documentation/networking/{PLIP.txt => plip.rst} (92%)
+ rename Documentation/networking/{ppp_generic.txt => ppp_generic.rst} (91%)
+ rename Documentation/networking/{proc_net_tcp.txt => proc_net_tcp.rst} (83%)
+ rename Documentation/networking/{radiotap-headers.txt => radiotap-headers.rst} (70%)
+ rename Documentation/networking/{ray_cs.txt => ray_cs.rst} (65%)
+ rename Documentation/networking/{rds.txt => rds.rst} (59%)
+ rename Documentation/networking/{regulatory.txt => regulatory.rst} (94%)
+ rename Documentation/networking/{rxrpc.txt => rxrpc.rst} (85%)
+ rename Documentation/networking/{sctp.txt => sctp.rst} (64%)
+ rename Documentation/networking/{secid.txt => secid.rst} (87%)
+ create mode 100644 Documentation/networking/seg6-sysctl.rst
+ delete mode 100644 Documentation/networking/seg6-sysctl.txt
+ rename Documentation/networking/{skfp.txt => skfp.rst} (68%)
+ rename Documentation/networking/{strparser.txt => strparser.rst} (80%)
+ rename Documentation/networking/{switchdev.txt => switchdev.rst} (84%)
+ create mode 100644 Documentation/networking/tc-actions-env-rules.rst
+ delete mode 100644 Documentation/networking/tc-actions-env-rules.txt
+ rename Documentation/networking/{tcp-thin.txt => tcp-thin.rst} (97%)
+ rename Documentation/networking/{team.txt => team.rst} (67%)
+ rename Documentation/networking/{timestamping.txt => timestamping.rst} (89%)
+ rename Documentation/networking/{tproxy.txt => tproxy.rst} (70%)
+
+-- 
+2.25.4
+
+
