@@ -2,74 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF761C0722
-	for <lists+linux-can@lfdr.de>; Thu, 30 Apr 2020 21:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0C41C261B
+	for <lists+linux-can@lfdr.de>; Sat,  2 May 2020 16:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbgD3T46 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 30 Apr 2020 15:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726338AbgD3T46 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 30 Apr 2020 15:56:58 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4006CC035495;
-        Thu, 30 Apr 2020 12:56:58 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 4DE7A1289CE3F;
-        Thu, 30 Apr 2020 12:56:55 -0700 (PDT)
-Date:   Thu, 30 Apr 2020 12:56:54 -0700 (PDT)
-Message-Id: <20200430.125654.335144341485365161.davem@davemloft.net>
-To:     mchehab+huawei@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, devel@driverdev.osuosl.org, coreteam@netfilter.org,
-        netfilter-devel@vger.kernel.org, kou.ishizaki@toshiba.co.jp,
-        netdev@vger.kernel.org, paulus@samba.org,
-        linuxppc-dev@lists.ozlabs.org, marcelo.leitner@gmail.com,
-        kadlec@netfilter.org, johannes@sipsolutions.net, fw@strlen.de,
-        gregkh@linuxfoundation.org, kuba@kernel.org,
-        benh@kernel.crashing.org, linux-wireless@vger.kernel.org,
-        geoff@infradead.org, mpe@ellerman.id.au, linux-can@vger.kernel.org,
-        ioana.ciornei@nxp.com, linux-sctp@vger.kernel.org,
-        vyasevich@gmail.com, rds-devel@oss.oracle.com,
-        ruxandra.radulescu@nxp.com, dhowells@redhat.com,
-        pablo@netfilter.org, kvalo@codeaurora.org,
-        santosh.shilimkar@oracle.com, socketcan@hartkopp.net,
-        nhorman@tuxdriver.com, courmisch@gmail.com,
-        linux-rdma@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-x25@vger.kernel.org, mkl@pengutronix.de
-Subject: Re: [PATCH 00/37] net: manually convert files to ReST format -
- part 2
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <cover.1588261997.git.mchehab+huawei@kernel.org>
-References: <cover.1588261997.git.mchehab+huawei@kernel.org>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 30 Apr 2020 12:56:56 -0700 (PDT)
+        id S1728254AbgEBO1A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 2 May 2020 10:27:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728020AbgEBO1A (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 2 May 2020 10:27:00 -0400
+Received: from localhost (p5486C608.dip0.t-ipconnect.de [84.134.198.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 388E324969;
+        Sat,  2 May 2020 14:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588429619;
+        bh=K+s5i8Ccp51nBc59RG/W0ZP/68DE7QAVr0ZSUob2qHA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=r5wcyDexfab2nZ7DFyB5Y5bbcYvPVZMTevWt15zUs9b6nXeAZkMr4tAs3W+8/8cWg
+         o4QN34DhSUm/tBWq7J5rUTs95ex2V4oLc0MxqSt6jkvovn6SrdBVnzlAB44Yf52NXu
+         qaoGIeMC/qqu327nA2eGzn0h793vfKJ82MW3q08Y=
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel@pengutronix.de, Wolfram Sang <wsa@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] can: mscan: mpc5xxx_can: update contact email
+Date:   Sat,  2 May 2020 16:26:56 +0200
+Message-Id: <20200502142657.19199-1-wsa@kernel.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Date: Thu, 30 Apr 2020 18:03:55 +0200
+The 'pengutronix' address is defunct for years. Use the proper contact
+address.
 
-> That's the second part of my work to convert the networking
-> text files into ReST. it is based on today's linux-next (next-20200430).
-> 
-> The full series (including those ones) are at:
-> 
-> 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=net-docs
-> 
-> I should be sending the remaining patches (another /38 series)
-> after getting those merged at -next.
-> 
-> The documents, converted to HTML via the building system are at:
-> 
-> 	https://www.infradead.org/~mchehab/kernel_docs/networking/
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
+---
+ drivers/net/can/mscan/mpc5xxx_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Series applied to net-next, thank you.
+diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/mpc5xxx_can.c
+index e4f4b5c9ebd6..e254e04ae257 100644
+--- a/drivers/net/can/mscan/mpc5xxx_can.c
++++ b/drivers/net/can/mscan/mpc5xxx_can.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2004-2005 Andrey Volkov <avolkov@varma-el.com>,
+  *                         Varma Electronics Oy
+  * Copyright (C) 2008-2009 Wolfgang Grandegger <wg@grandegger.com>
+- * Copyright (C) 2009 Wolfram Sang, Pengutronix <w.sang@pengutronix.de>
++ * Copyright (C) 2009 Wolfram Sang, Pengutronix <kernel@pengutronix.de>
+  */
+ 
+ #include <linux/kernel.h>
+-- 
+2.20.1
+
