@@ -2,68 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E56E91C509D
-	for <lists+linux-can@lfdr.de>; Tue,  5 May 2020 10:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFD51C53C6
+	for <lists+linux-can@lfdr.de>; Tue,  5 May 2020 12:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725915AbgEEImD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 May 2020 04:42:03 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:3792 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725766AbgEEImC (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 5 May 2020 04:42:02 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 132FA4D18162402A46E4;
-        Tue,  5 May 2020 16:41:59 +0800 (CST)
-Received: from localhost (10.166.215.154) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Tue, 5 May 2020
- 16:41:53 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <jhofstee@victronenergy.com>
-CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH net-next] can: c_can: Remove unused inline function
-Date:   Tue, 5 May 2020 16:41:49 +0800
-Message-ID: <20200505084149.23848-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1728608AbgEEKz5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 5 May 2020 06:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728180AbgEEKz5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 5 May 2020 06:55:57 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02037C061A0F
+        for <linux-can@vger.kernel.org>; Tue,  5 May 2020 03:55:57 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id c16so1839501ilr.3
+        for <linux-can@vger.kernel.org>; Tue, 05 May 2020 03:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Rkj4CrSP5w35qSP8L44iPSXnVJZBJdTqHdNJXxgmfnI=;
+        b=hNIw56jvcL2nKwVBWVNzxkKJiDZYInInHC4jro8ClbkvoJ9+I4OwpJ1JJWLy+t/7/z
+         uyGBLVS49qwGEUYwC6HhcKNjaSw4dqu7Ut+Z57Vn+LSJ+xakl/qs8iXqgJuAQBu6fuj/
+         5hMgW3dpxkGcUqKCZeTt4CwFytrhCS2vIxWZ/4IFERnggNi9gC+MfHMUCFf32QX6DYQb
+         nUbkqPUnSBglfLtX4M5Uh5nYZAHEBU1ebiVI5/hK+D/3w2MJdMq315oQW/y9zDiyGFy8
+         HlQm34oMozZMUV+bvGuhD3mnqWqqUqSsWo8LZERsGrKJxxL+g8CH8fmxBFXEH/8mw19f
+         MKZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Rkj4CrSP5w35qSP8L44iPSXnVJZBJdTqHdNJXxgmfnI=;
+        b=EHffA/0kvYMPIkuBm6ZIkfo2iZdA9yknYA0iqzcN5OiwwiqTpp4exJ55lFvgMeWKws
+         OarmFU6j4p4wGK/M46nGqUl4goFrJxgt8Ljq5JnwIN7FuXiZJgazAG7/NR5g6tCH/7gL
+         iEmHajozp3HDj06l7T3Xfz63QrPPkFI0yAdwZz6/4hHbhxoPI+Y9YNnOhVB6qwaD5D/U
+         OxgK6VGhdaDQObT41H0VKR7piivXEMgl58b0O95PjUehoKo+iK1IbfV8lOz+f4YUOV7S
+         TNJ3FQUINkcf4G/7/8ZjaqM8+e7IQk0giF/YHgLN/LTCLOPzA2fN8VJXer3SY8YBKlwG
+         PmbQ==
+X-Gm-Message-State: AGi0PuaWncb/uxS1aLh5q+u9hvYeY0zndE7myzA8AxegJQm7c7f8MkLj
+        AxQjuU3z0Y/ntRXBU3eged6sLI9z8c1z5KtIzc4=
+X-Google-Smtp-Source: APiQypLnRlAbX52Ox0vc9jWv4+S1a9RUr9TKTbYmVda1RVtWDpy1GLVI/B0ArEvQyqdgXzREJbvCxVWUJ0ScyyYoTwY=
+X-Received: by 2002:a92:3d85:: with SMTP id k5mr3120645ilf.26.1588676156173;
+ Tue, 05 May 2020 03:55:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.166.215.154]
-X-CFilter-Loop: Reflected
+Received: by 2002:a05:6602:6c1:0:0:0:0 with HTTP; Tue, 5 May 2020 03:55:55
+ -0700 (PDT)
+Reply-To: serenabuafohi@gmail.com
+From:   Serena Buafoh <modesecdossongui@gmail.com>
+Date:   Tue, 5 May 2020 12:55:55 +0200
+Message-ID: <CAJxL6vdAK4at1Mvh4qDOpZpgBwsswz5SWQAb+X_KK51WKz_rnA@mail.gmail.com>
+Subject: =?UTF-8?B?SGVqIG1pbiBrw6RyYSw=?=
+To:     serenabuafohi@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-commit 524369e2391f ("can: c_can: remove obsolete STRICT_FRAME_ORDERING Kconfig option")
-left behind this, remove it.
+--=20
+Min k=C3=A4ra,
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/net/can/c_can/c_can.c | 9 ---------
- 1 file changed, 9 deletions(-)
+Jag vill finansiera ett v=C3=A4lg=C3=B6renhetsprojekt i ditt land till f=C3=
+=B6rm=C3=A5n
+f=C3=B6r de mindre privilegierade. Bekr=C3=A4fta ditt intresse om du kan ha=
+ntera
+ett s=C3=A5dant projekt =C3=A4rligt. Jag kommer att ge dig mer information =
+n=C3=A4r
+jag har svarat.
+Gud v=C3=A4lsigne dig.
 
-diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_can.c
-index 8e9f5620c9a2..1ccdbe89585b 100644
---- a/drivers/net/can/c_can/c_can.c
-+++ b/drivers/net/can/c_can/c_can.c
-@@ -356,15 +356,6 @@ static void c_can_setup_tx_object(struct net_device *dev, int iface,
- 	}
- }
- 
--static inline void c_can_activate_all_lower_rx_msg_obj(struct net_device *dev,
--						       int iface)
--{
--	int i;
--
--	for (i = C_CAN_MSG_OBJ_RX_FIRST; i <= C_CAN_MSG_RX_LOW_LAST; i++)
--		c_can_object_get(dev, iface, i, IF_COMM_CLR_NEWDAT);
--}
--
- static int c_can_handle_lost_msg_obj(struct net_device *dev,
- 				     int iface, int objno, u32 ctrl)
- {
--- 
-2.17.1
-
-
+H=C3=A4lsningar,
+Serena Buafoh,
