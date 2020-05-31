@@ -2,44 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 642BF1E6FD8
-	for <lists+linux-can@lfdr.de>; Fri, 29 May 2020 01:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EEA1E99CE
+	for <lists+linux-can@lfdr.de>; Sun, 31 May 2020 20:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437408AbgE1W75 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 28 May 2020 18:59:57 -0400
-Received: from mail.bnv.gob.ve ([201.249.200.115]:44422 "EHLO
-        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2437397AbgE1W7z (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 28 May 2020 18:59:55 -0400
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 3830638E1509;
-        Thu, 28 May 2020 14:55:26 -0400 (-04)
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id JtMKUd6TO587; Thu, 28 May 2020 14:55:26 -0400 (-04)
-Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
-        by correo.bnv.gob.ve (Postfix) with ESMTP id 1B9B738E0662;
-        Thu, 28 May 2020 13:32:38 -0400 (-04)
-X-Virus-Scanned: amavisd-new at bnv.gob.ve
-Received: from correo.bnv.gob.ve ([127.0.0.1])
-        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hoxaWsoJmjh7; Thu, 28 May 2020 13:32:38 -0400 (-04)
-Received: from [10.19.23.127] (unknown [105.0.4.230])
-        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 047A338E0A16;
-        Thu, 28 May 2020 12:30:03 -0400 (-04)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726081AbgEaSNd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 31 May 2020 14:13:33 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:59120 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726008AbgEaSNc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 31 May 2020 14:13:32 -0400
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 49ZmdQ2W0Wz1qt45;
+        Sun, 31 May 2020 20:13:30 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 49ZmdQ255Mz1qqkv;
+        Sun, 31 May 2020 20:13:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id HoNjqIhEksUP; Sun, 31 May 2020 20:13:29 +0200 (CEST)
+X-Auth-Info: vxCAS1ROIM8fR4Brhp1BA3uXvCqixzFIDdagacFSm9Y=
+Received: from desktop.lan (ip-86-49-35-8.net.upcbroadband.cz [86.49.35.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Sun, 31 May 2020 20:13:29 +0200 (CEST)
+From:   Marek Vasut <marex@denx.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: [PATCH] can: m_can: Set pinmux into "default" state on start
+Date:   Sun, 31 May 2020 20:13:24 +0200
+Message-Id: <20200531181324.383930-1-marex@denx.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Spende von 2.000.000,00 Euro
-To:     Recipients <manuel@info.com>
-From:   "manuel franco" <manuel@info.com>
-Date:   Thu, 28 May 2020 18:29:51 +0200
-Reply-To: manuelfrancospende11@gmail.com
-Message-Id: <20200528163006.047A338E0A16@correo.bnv.gob.ve>
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Ich bin Manuel Franco, ich spende Ihnen 2.000.000,00 Euro. Nehmen Sie jetzt Kontakt mit mir auf, damit wir fortfahren können.
+On systems like stm32mp1 where pins have both "default" and "sleep" pinmux
+states in DT, the pins are in "sleep" state by default. Switch the pins into
+the "default" state when bringing the interface up in m_can_start(), because
+otherwise no CAN communication is possible. This replicates the behavior of
+the resume path, which does the same.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+To: linux-can@vger.kernel.org
+---
+ drivers/net/can/m_can/m_can.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 02c5795b7393..76fadf2b8ac2 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1247,6 +1247,8 @@ static void m_can_start(struct net_device *dev)
+ 	/* basic m_can configuration */
+ 	m_can_chip_config(dev);
+ 
++	pinctrl_pm_select_default_state(cdev->dev);
++
+ 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+ 	m_can_enable_all_interrupts(cdev);
+-- 
+2.25.1
+
