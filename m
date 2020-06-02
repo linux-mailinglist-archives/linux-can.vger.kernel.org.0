@@ -2,76 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EEA1E99CE
-	for <lists+linux-can@lfdr.de>; Sun, 31 May 2020 20:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAFA1EB957
+	for <lists+linux-can@lfdr.de>; Tue,  2 Jun 2020 12:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726081AbgEaSNd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 31 May 2020 14:13:33 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:59120 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbgEaSNc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 31 May 2020 14:13:32 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 49ZmdQ2W0Wz1qt45;
-        Sun, 31 May 2020 20:13:30 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 49ZmdQ255Mz1qqkv;
-        Sun, 31 May 2020 20:13:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id HoNjqIhEksUP; Sun, 31 May 2020 20:13:29 +0200 (CEST)
-X-Auth-Info: vxCAS1ROIM8fR4Brhp1BA3uXvCqixzFIDdagacFSm9Y=
-Received: from desktop.lan (ip-86-49-35-8.net.upcbroadband.cz [86.49.35.8])
+        id S1726648AbgFBKP2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Jun 2020 06:15:28 -0400
+Received: from ssl.serverraum.org ([176.9.125.105]:58441 "EHLO
+        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbgFBKP2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Jun 2020 06:15:28 -0400
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Sun, 31 May 2020 20:13:29 +0200 (CEST)
-From:   Marek Vasut <marex@denx.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Subject: [PATCH] can: m_can: Set pinmux into "default" state on start
-Date:   Sun, 31 May 2020 20:13:24 +0200
-Message-Id: <20200531181324.383930-1-marex@denx.de>
-X-Mailer: git-send-email 2.25.1
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 38C8B22F2D;
+        Tue,  2 Jun 2020 12:15:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1591092921;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FKb5F58jpdTDxau8IJCImFMyi7/5CE9+wavDsjQgsrs=;
+        b=U7FhAzj2GZPxpsYh2b5f6Y1Ri/JYMK4DOTaZ3bfJ16QPbRmD2bbXsshywv79ibT81nwgth
+        X7C6K/SrA1tttFEqyb2cVhiquaUpQUNR8gLyCOzL2efubABErkLJt1a7kVUjnopgiMERN+
+        7ImMpT93yz6A7GPlMuXPgdlUkWsOeYo=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 02 Jun 2020 12:15:21 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>, mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH linux-can-next/flexcan] can: flexcan: fix TDC feature
+In-Reply-To: <DB8PR04MB6795F7E28A9964A121A06140E6D80@DB8PR04MB6795.eurprd04.prod.outlook.com>
+References: <20200416093126.15242-1-qiangqing.zhang@nxp.com>
+ <20200416093126.15242-2-qiangqing.zhang@nxp.com>
+ <DB8PR04MB6795F7E28A9964A121A06140E6D80@DB8PR04MB6795.eurprd04.prod.outlook.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <d5579883c7e9ab3489ec08a73c407982@walle.cc>
+X-Sender: michael@walle.cc
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On systems like stm32mp1 where pins have both "default" and "sleep" pinmux
-states in DT, the pins are in "sleep" state by default. Switch the pins into
-the "default" state when bringing the interface up in m_can_start(), because
-otherwise no CAN communication is possible. This replicates the behavior of
-the resume path, which does the same.
+Hi Marc,
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Alexandre Torgue <alexandre.torgue@st.com>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-To: linux-can@vger.kernel.org
----
- drivers/net/can/m_can/m_can.c | 2 ++
- 1 file changed, 2 insertions(+)
+Am 2020-04-16 11:41, schrieb Joakim Zhang:
+> Hi Marc,
+> 
+> How about FlexCAN FD patch set, it is pending for a long time. Many
+> work would base on it, we are happy to see it in upstream mainline
+> ASAP.
+> 
+> Michael Walle also gives out the test-by tag:
+> 	Tested-by: Michael Walle <michael@walle.cc>
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 02c5795b7393..76fadf2b8ac2 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1247,6 +1247,8 @@ static void m_can_start(struct net_device *dev)
- 	/* basic m_can configuration */
- 	m_can_chip_config(dev);
- 
-+	pinctrl_pm_select_default_state(cdev->dev);
-+
- 	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
- 
- 	m_can_enable_all_interrupts(cdev);
--- 
-2.25.1
+There seems to be no activity for months here. Any reason for that? Is
+there anything we can do to speed things up?
 
+-michael
