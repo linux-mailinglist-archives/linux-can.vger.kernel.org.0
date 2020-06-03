@@ -2,132 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B63EA1EC8E8
-	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2020 07:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEF41ED158
+	for <lists+linux-can@lfdr.de>; Wed,  3 Jun 2020 15:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725828AbgFCFnr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Jun 2020 01:43:47 -0400
-Received: from conssluserg-03.nifty.com ([210.131.2.82]:59920 "EHLO
-        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725275AbgFCFnq (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Jun 2020 01:43:46 -0400
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 0535hXwY013494;
-        Wed, 3 Jun 2020 14:43:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 0535hXwY013494
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1591163014;
-        bh=eYbXXE03UGyzUA1dzqoqgfejB0APNGcA6B1VKTAlTkc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=zdOPR6DeUyzI/dyjwBHuWoyq8YGjWFCOy4pfG/HhnfvzwPKNkIYGEJ8BhT6LO2BXK
-         0j4a3dSus6TnF+7LFZ9tkYW428wzRBe1DRNp0TWNGN+a5Ot0YOfAAUW+ZSQYgkDGm0
-         62E+np3omSA2lEScuy1k1o95rHV5ZB80kXA3BI33ly2JBOgs6h5WUsW4Xh+6BI99QS
-         CmaVpZGdnX3Tybb8TukMcSWN6zDxBH1eGQ29+p8akRZXL3D5xyRME/eONQR26FysnG
-         xS94zfRMjogznu21nILC1i7PoTHewet6aKpkd8oT/WkTYol4+mJp6CmZduCPxSn8ud
-         7s1QrauKw3nlA==
-X-Nifty-SrcIP: [209.85.222.41]
-Received: by mail-ua1-f41.google.com with SMTP id v25so444801uau.4;
-        Tue, 02 Jun 2020 22:43:33 -0700 (PDT)
-X-Gm-Message-State: AOAM532ifWKxHBAU/5s9TRBTisYQXs2W1mtoNFDJkLdQqFckna7Gk+5r
-        uifN4AHHehpVIyC2iq8aKLWyi57wXhbmIP1+Qcc=
-X-Google-Smtp-Source: ABdhPJwjuoXJOhkpEsk11pOSGEpVGsineig5/WGSrJwhwKvpNEfQUfdp0FRnLcltvrWedPQcwhKp/Kl1HKxDbDeyPJg=
-X-Received: by 2002:ab0:7619:: with SMTP id o25mr6775847uap.109.1591163012351;
- Tue, 02 Jun 2020 22:43:32 -0700 (PDT)
+        id S1726032AbgFCNtK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 Jun 2020 09:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725986AbgFCNst (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Jun 2020 09:48:49 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171E0C08C5CB
+        for <linux-can@vger.kernel.org>; Wed,  3 Jun 2020 06:48:49 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id z206so1363649lfc.6
+        for <linux-can@vger.kernel.org>; Wed, 03 Jun 2020 06:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
+         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
+         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
+         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
+         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
+         iC3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=nFGMLh1gqaZ31z1/WtC5VjjxZyJfEsX2ReAFD81SS8vuHDyKZzjxtPXf9UeuuXyYsK
+         2GpyKHb/KmNsXGEczZfwpWc+RF/CTgJ5p+C49xt2UcbRcNmVYlnf7Yp7sVhFSKuWPFLR
+         gCwA+ainAVj+fre1PANd74uo2lTL7AInqoUzWpRe5mnYsP/wKW4z5odHPHSLoD8BdyA0
+         6S3R0+dqREjUwcRKEHGJIxjV+5wZRWNNRlmlOaT4WeLsqezmQrMraw9W+AKMGW7glNq2
+         HoK4UISiBaV0ef6wTSSyulo719Opt4UJhafisIgvuN9+NNNc0mpNpToFMAMdCC7Hj72C
+         DQNg==
+X-Gm-Message-State: AOAM533sCh4WZI1qaojfBKzJ0kv0xt0CEJtgqxm9qFNQhp7eJpgEfOzV
+        cildkLPm/IUQDhO3UuvEIl/5F+xazCg7pVqJCmQ=
+X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
+X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
+ Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200403073741.18352-1-masahiroy@kernel.org> <f45febfa-a19a-0d76-d545-6427e5f1ce1e@hartkopp.net>
-In-Reply-To: <f45febfa-a19a-0d76-d545-6427e5f1ce1e@hartkopp.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 3 Jun 2020 14:42:55 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQjSyLDgZcj9d3Vqo6VJafVFtkvCi-wEWpE7qes-kLwmw@mail.gmail.com>
-Message-ID: <CAK7LNAQjSyLDgZcj9d3Vqo6VJafVFtkvCi-wEWpE7qes-kLwmw@mail.gmail.com>
-Subject: Re: [PATCH] net: can: remove "WITH Linux-syscall-note" from SPDX tag
- of C files
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:48:46 +0100
+X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
+Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Apr 3, 2020 at 11:35 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->
->
->
-> On 03/04/2020 09.37, Masahiro Yamada wrote:
-> > The "WITH Linux-syscall-note" exception is intended for UAPI headers.
-> >
-> > See LICENSES/exceptions/Linux-syscall-note
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
->
-> Thanks Masahiro!
-
-
-Any chance for this patch picked up?
-
-
-
->
->
-> > ---
-> >
-> >   net/can/bcm.c  | 2 +-
-> >   net/can/gw.c   | 2 +-
-> >   net/can/proc.c | 2 +-
-> >   net/can/raw.c  | 2 +-
-> >   4 files changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/net/can/bcm.c b/net/can/bcm.c
-> > index c96fa0f33db3..d94b20933339 100644
-> > --- a/net/can/bcm.c
-> > +++ b/net/can/bcm.c
-> > @@ -1,4 +1,4 @@
-> > -// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-> > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> >   /*
-> >    * bcm.c - Broadcast Manager to filter/send (cyclic) CAN content
-> >    *
-> > diff --git a/net/can/gw.c b/net/can/gw.c
-> > index 65d60c93af29..49b4e3d91ad6 100644
-> > --- a/net/can/gw.c
-> > +++ b/net/can/gw.c
-> > @@ -1,4 +1,4 @@
-> > -// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-> > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> >   /* gw.c - CAN frame Gateway/Router/Bridge with netlink interface
-> >    *
-> >    * Copyright (c) 2019 Volkswagen Group Electronic Research
-> > diff --git a/net/can/proc.c b/net/can/proc.c
-> > index e6881bfc3ed1..a4eb06c9eb70 100644
-> > --- a/net/can/proc.c
-> > +++ b/net/can/proc.c
-> > @@ -1,4 +1,4 @@
-> > -// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-> > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> >   /*
-> >    * proc.c - procfs support for Protocol family CAN core module
-> >    *
-> > diff --git a/net/can/raw.c b/net/can/raw.c
-> > index 59c039d73c6d..ab104cc18562 100644
-> > --- a/net/can/raw.c
-> > +++ b/net/can/raw.c
-> > @@ -1,4 +1,4 @@
-> > -// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
-> > +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> >   /* raw.c - Raw sockets for protocol family CAN
-> >    *
-> >    * Copyright (c) 2002-2007 Volkswagen Group Electronic Research
-> >
-
-
-
 -- 
-Best Regards
-Masahiro Yamada
+OUR GOLDEN OPPORTUNITY
+
+Hello Dear Friend,
+
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
+
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
+
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
+
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
