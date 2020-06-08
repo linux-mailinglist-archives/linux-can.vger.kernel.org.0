@@ -2,93 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1DA1F15BF
-	for <lists+linux-can@lfdr.de>; Mon,  8 Jun 2020 11:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9CB1F1B00
+	for <lists+linux-can@lfdr.de>; Mon,  8 Jun 2020 16:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729181AbgFHJoW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 8 Jun 2020 05:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729144AbgFHJoV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Jun 2020 05:44:21 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F94C08C5C3;
-        Mon,  8 Jun 2020 02:44:21 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l26so14651714wme.3;
-        Mon, 08 Jun 2020 02:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NXI0Z0J/4ooSNFN2GwSVlyNdAvGywcRXeFQ5674Mtzc=;
-        b=r4puKIU7t9t/z+Akeod8D0rhFdVAmL/DY1c4jq8ct0lJu6WcDcmDglH2T3nsaLueoh
-         FYqSCosvbu7c0507caUgc8lPWCxfNOJBR1NNb+E9V2372WvWAqBrSfgKH0+uRFP59I6m
-         OrY4syPydx3wueiiSOjsaeEfC8VD0l57zSAuCbHlyOpVnB5qrvDsl1rrS0yc3xht9Q98
-         eqqxs8zSHCyrU4X2e3+7YJKeCai2Ux6gFUS2KzsfjiPFzapXmPMBixsnWTXtKGSTMWwq
-         8NjaS5aZSDjHwq+j+4zWD/pj/BUNzIthnKixB0NCrgvuy7u2NoSrqk/UBmGnsZcWOV3W
-         P4Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NXI0Z0J/4ooSNFN2GwSVlyNdAvGywcRXeFQ5674Mtzc=;
-        b=BOuc6YuXwAAX4zEx0DPo3tmH5jGNt3/rNMMJzBqOWccFl8Hlm4KLidfQ/rcQoCNQV8
-         s6lwpz44PVqAd23mEcS9tocwccSeSE3ZnHOyLQ6CTPiD8Om3P902eJfDrRqGOeL0fEYn
-         thhYOeYqW5yzyOrtmgKHxGgDDhJDeXMqW24SgiQMEdftMRy0hgl+Xxofttfv0zYpqxJL
-         ZOSM9UsaChTOV7YfTNmPEQTvNhgTtB0DNTX0mqGZyeTIO5rs3Ti0zYEv8pSiJTH3zByJ
-         PSjgIaLx1YDhKgY3JvJ2KUlrdhRui9fwvxJt8iYah4Wg22tE+LvLHxFzz7cymphGFhwk
-         FxAw==
-X-Gm-Message-State: AOAM533Mu4nBgrHyW9GZ2um3twRshOX+eWYVEN9u44r9NJXtW/OieW6t
-        e3iMp9YnkOg/wgzMnGvUU7k=
-X-Google-Smtp-Source: ABdhPJyhhWTEMpHKx5xQFfbXhw9ERansrUFCr10VFQiatRUTj4yVSTkoPUwZkwxzRuhA6tnFNbtzhw==
-X-Received: by 2002:a7b:cb11:: with SMTP id u17mr2312826wmj.84.1591609460016;
-        Mon, 08 Jun 2020 02:44:20 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:181:90d0:6ce1:d6aa:6a23:353b])
-        by smtp.gmail.com with ESMTPSA id y37sm26415505wrd.55.2020.06.08.02.44.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jun 2020 02:44:19 -0700 (PDT)
-From:   Richard Genoud <richard.genoud@gmail.com>
-To:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
+        id S1729280AbgFHO2F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Jun 2020 10:28:05 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47952 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbgFHO2F (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Jun 2020 10:28:05 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 058ERrIT017802;
+        Mon, 8 Jun 2020 09:27:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1591626473;
+        bh=n+zne9QKzwemtxYh0/9VvDSOvejbuyJsP12nNN1zU1E=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=QjUIRsYGB8DUlHu8T9JuZT87fmocvHzbrJfiIv+e1lTh44XrjpmNVrVynJbZ4issO
+         1PTyabe3TuPTi6iaYpKvZkZ3jPA0M6cmz/D2ydX+MGi/5fDkhJVArfj4+l3oNyaw89
+         DMk3CUg4XSIuQKRrVqKjrEOhEvJXQ+4ZqwWNULcE=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 058ERr5s078294
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 8 Jun 2020 09:27:53 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 8 Jun
+ 2020 09:27:52 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 8 Jun 2020 09:27:52 -0500
+Received: from [10.250.52.63] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 058ERqtI037595;
+        Mon, 8 Jun 2020 09:27:52 -0500
+Subject: Re: [PATCH] can: m_can_platform: fix m_can_runtime_suspend()
+To:     Richard Genoud <richard.genoud@gmail.com>,
+        Sriram Dash <sriram.dash@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Faiz Abbas <faiz_abbas@ti.com>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Genoud <richard.genoud@gmail.com>
-Subject: [PATCH] can: m_can_platform: fix m_can_runtime_suspend()
-Date:   Mon,  8 Jun 2020 11:43:48 +0200
-Message-Id: <20200608094348.12650-1-richard.genoud@gmail.com>
-X-Mailer: git-send-email 2.20.1
+CC:     <linux-can@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200608094348.12650-1-richard.genoud@gmail.com>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <b9510aa6-d865-7c4f-6730-dcd207bdb753@ti.com>
+Date:   Mon, 8 Jun 2020 09:27:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200608094348.12650-1-richard.genoud@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since commit f524f829b75a ("can: m_can: Create a m_can platform
-framework"), the can peripheral on STM32MP1 wasn't working anymore.
+Richard
 
-The reason was a bad copy/paste maneuver that added a call to
-m_can_class_suspend() in m_can_runtime_suspend().
+On 6/8/20 4:43 AM, Richard Genoud wrote:
+> Since commit f524f829b75a ("can: m_can: Create a m_can platform
+> framework"), the can peripheral on STM32MP1 wasn't working anymore.
+>
+> The reason was a bad copy/paste maneuver that added a call to
+> m_can_class_suspend() in m_can_runtime_suspend().
 
-Tested on STM32MP157C-DK2 and emSBC-Argon
+Are you sure it was a copy paste error?
 
-Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
-Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
----
- drivers/net/can/m_can/m_can_platform.c | 2 --
- 1 file changed, 2 deletions(-)
+Probably don't want to have an unfounded cause unless you know for 
+certain it was this.
 
-diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-index 38ea5e600fb8..e6d0cb9ee02f 100644
---- a/drivers/net/can/m_can/m_can_platform.c
-+++ b/drivers/net/can/m_can/m_can_platform.c
-@@ -144,8 +144,6 @@ static int __maybe_unused m_can_runtime_suspend(struct device *dev)
- 	struct net_device *ndev = dev_get_drvdata(dev);
- 	struct m_can_classdev *mcan_class = netdev_priv(ndev);
- 
--	m_can_class_suspend(dev);
--
- 	clk_disable_unprepare(mcan_class->cclk);
- 	clk_disable_unprepare(mcan_class->hclk);
- 
+Dan
+
+
