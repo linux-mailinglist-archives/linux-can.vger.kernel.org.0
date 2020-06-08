@@ -2,116 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495071EEFF8
-	for <lists+linux-can@lfdr.de>; Fri,  5 Jun 2020 05:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1DA1F15BF
+	for <lists+linux-can@lfdr.de>; Mon,  8 Jun 2020 11:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgFEDcr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 4 Jun 2020 23:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
+        id S1729181AbgFHJoW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Jun 2020 05:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727988AbgFEDcr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Jun 2020 23:32:47 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52980C08C5C0;
-        Thu,  4 Jun 2020 20:32:46 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id d7so8792594ioq.5;
-        Thu, 04 Jun 2020 20:32:46 -0700 (PDT)
+        with ESMTP id S1729144AbgFHJoV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Jun 2020 05:44:21 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F94C08C5C3;
+        Mon,  8 Jun 2020 02:44:21 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l26so14651714wme.3;
+        Mon, 08 Jun 2020 02:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=IJPenuFpVQx0seln/2dhfFsuGNNRm+UZljRAm/AqGEU=;
-        b=MiErTzzaT/PL3m/OS3OyrwrC6z+MwypmJk0i8+CZtkeIpwIXb7dASWDz86qGp6MT3G
-         FJvG3eA5rF2AYahvF/mv6FgxBmKfg8+qVxthXvdCfEHFxx+PEvmgH6PG1LOUmNnsNDdO
-         K3R/oh7eckba8nnLxO1cRHHHxzX5U1T3lUJxurEp87Vs/UMKzL1VIFFIbUCgxHxaLgMG
-         iOzoi+A5aN8b69VblICG9RmWlASoQWhTFoK9BPj5zFfcKROqMe/EYFIdIeLZFMqN3ej7
-         krWP1MD9yZ3dT5ECXByCFKtdNm/m0W/pH0zCzRfbz5JS7Er8Dr1mygmBzN4dFGhMxxdo
-         E2lg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NXI0Z0J/4ooSNFN2GwSVlyNdAvGywcRXeFQ5674Mtzc=;
+        b=r4puKIU7t9t/z+Akeod8D0rhFdVAmL/DY1c4jq8ct0lJu6WcDcmDglH2T3nsaLueoh
+         FYqSCosvbu7c0507caUgc8lPWCxfNOJBR1NNb+E9V2372WvWAqBrSfgKH0+uRFP59I6m
+         OrY4syPydx3wueiiSOjsaeEfC8VD0l57zSAuCbHlyOpVnB5qrvDsl1rrS0yc3xht9Q98
+         eqqxs8zSHCyrU4X2e3+7YJKeCai2Ux6gFUS2KzsfjiPFzapXmPMBixsnWTXtKGSTMWwq
+         8NjaS5aZSDjHwq+j+4zWD/pj/BUNzIthnKixB0NCrgvuy7u2NoSrqk/UBmGnsZcWOV3W
+         P4Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IJPenuFpVQx0seln/2dhfFsuGNNRm+UZljRAm/AqGEU=;
-        b=pemwabohi3DmsBiPuqrJsICyos5WLcDERDAbxr9DsTsqAR7956ezWoqi8PkBxtyBU5
-         xhCW4GDueiUJM6Dn5wire6sHG+/bkSMu1RH4VUv4lfTyMEcgnLAK9y+pEl0QZ9QmzvMi
-         IzTDJR7pdn2tDBr8eswJ135JgiLDIOw18J13iuwdcUe4zteQyThAcP402uFRV5suGBB5
-         1QFZKPajh6mNx1iVUyHWno5KzZ3pFB+wiO5vo/2Rwxtrxw6WE19TSwSmv4sYxblso4kP
-         L07RwdS99scb++++X9o3UOFm+nCvgj0DvX+01eH5P6vI/iHjzDCtgEA5oYIHnaScm3z1
-         IN2A==
-X-Gm-Message-State: AOAM531grXGrk88lGCJ5B7XAXfC0QtzAnQZ9SY3ucB1tFCoqJtYWM/Db
-        RRoOM0/Sa0bbrAmaTma1AH8=
-X-Google-Smtp-Source: ABdhPJwRa2Z/m55HcVea1dDNvCKek/cSG6DIqGXdC4XhaAbVQRT83cYwoF0le9D7FEU0ikAN8oZ0TQ==
-X-Received: by 2002:a6b:39c3:: with SMTP id g186mr6519042ioa.91.1591327965688;
-        Thu, 04 Jun 2020 20:32:45 -0700 (PDT)
-Received: from cs-u-kase.dtc.umn.edu (cs-u-kase.cs.umn.edu. [160.94.64.2])
-        by smtp.googlemail.com with ESMTPSA id c72sm2464004ilg.3.2020.06.04.20.32.44
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NXI0Z0J/4ooSNFN2GwSVlyNdAvGywcRXeFQ5674Mtzc=;
+        b=BOuc6YuXwAAX4zEx0DPo3tmH5jGNt3/rNMMJzBqOWccFl8Hlm4KLidfQ/rcQoCNQV8
+         s6lwpz44PVqAd23mEcS9tocwccSeSE3ZnHOyLQ6CTPiD8Om3P902eJfDrRqGOeL0fEYn
+         thhYOeYqW5yzyOrtmgKHxGgDDhJDeXMqW24SgiQMEdftMRy0hgl+Xxofttfv0zYpqxJL
+         ZOSM9UsaChTOV7YfTNmPEQTvNhgTtB0DNTX0mqGZyeTIO5rs3Ti0zYEv8pSiJTH3zByJ
+         PSjgIaLx1YDhKgY3JvJ2KUlrdhRui9fwvxJt8iYah4Wg22tE+LvLHxFzz7cymphGFhwk
+         FxAw==
+X-Gm-Message-State: AOAM533Mu4nBgrHyW9GZ2um3twRshOX+eWYVEN9u44r9NJXtW/OieW6t
+        e3iMp9YnkOg/wgzMnGvUU7k=
+X-Google-Smtp-Source: ABdhPJyhhWTEMpHKx5xQFfbXhw9ERansrUFCr10VFQiatRUTj4yVSTkoPUwZkwxzRuhA6tnFNbtzhw==
+X-Received: by 2002:a7b:cb11:: with SMTP id u17mr2312826wmj.84.1591609460016;
+        Mon, 08 Jun 2020 02:44:20 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:181:90d0:6ce1:d6aa:6a23:353b])
+        by smtp.gmail.com with ESMTPSA id y37sm26415505wrd.55.2020.06.08.02.44.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 20:32:45 -0700 (PDT)
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-To:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Mon, 08 Jun 2020 02:44:19 -0700 (PDT)
+From:   Richard Genoud <richard.genoud@gmail.com>
+To:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     emamd001@umn.edu, wu000273@umn.edu, kjlu@umn.edu, smccaman@umn.edu,
-        Navid Emamdoost <navid.emamdoost@gmail.com>
-Subject: [PATCH] can: xilinx_can: handle failure cases of pm_runtime_get_sync
-Date:   Thu,  4 Jun 2020 22:32:39 -0500
-Message-Id: <20200605033239.60664-1-navid.emamdoost@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Faiz Abbas <faiz_abbas@ti.com>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Richard Genoud <richard.genoud@gmail.com>
+Subject: [PATCH] can: m_can_platform: fix m_can_runtime_suspend()
+Date:   Mon,  8 Jun 2020 11:43:48 +0200
+Message-Id: <20200608094348.12650-1-richard.genoud@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Calling pm_runtime_get_sync increments the counter even in case of
-failure, causing incorrect ref count. Call pm_runtime_put if
-pm_runtime_get_sync fails.
+Since commit f524f829b75a ("can: m_can: Create a m_can platform
+framework"), the can peripheral on STM32MP1 wasn't working anymore.
 
-Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+The reason was a bad copy/paste maneuver that added a call to
+m_can_class_suspend() in m_can_runtime_suspend().
+
+Tested on STM32MP157C-DK2 and emSBC-Argon
+
+Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
+Signed-off-by: Richard Genoud <richard.genoud@gmail.com>
 ---
- drivers/net/can/xilinx_can.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/can/m_can/m_can_platform.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
-index c1dbab8c896d..748ff70f6a7b 100644
---- a/drivers/net/can/xilinx_can.c
-+++ b/drivers/net/can/xilinx_can.c
-@@ -1391,7 +1391,7 @@ static int xcan_open(struct net_device *ndev)
- 	if (ret < 0) {
- 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
- 			   __func__, ret);
--		return ret;
-+		goto err;
- 	}
+diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+index 38ea5e600fb8..e6d0cb9ee02f 100644
+--- a/drivers/net/can/m_can/m_can_platform.c
++++ b/drivers/net/can/m_can/m_can_platform.c
+@@ -144,8 +144,6 @@ static int __maybe_unused m_can_runtime_suspend(struct device *dev)
+ 	struct net_device *ndev = dev_get_drvdata(dev);
+ 	struct m_can_classdev *mcan_class = netdev_priv(ndev);
  
- 	ret = request_irq(ndev->irq, xcan_interrupt, priv->irq_flags,
-@@ -1475,6 +1475,7 @@ static int xcan_get_berr_counter(const struct net_device *ndev,
- 	if (ret < 0) {
- 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
- 			   __func__, ret);
-+		pm_runtime_put(priv->dev);
- 		return ret;
- 	}
+-	m_can_class_suspend(dev);
+-
+ 	clk_disable_unprepare(mcan_class->cclk);
+ 	clk_disable_unprepare(mcan_class->hclk);
  
-@@ -1789,7 +1790,7 @@ static int xcan_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
- 			   __func__, ret);
--		goto err_pmdisable;
-+		goto err_disableclks;
- 	}
- 
- 	if (priv->read_reg(priv, XCAN_SR_OFFSET) != XCAN_SR_CONFIG_MASK) {
-@@ -1824,7 +1825,6 @@ static int xcan_probe(struct platform_device *pdev)
- 
- err_disableclks:
- 	pm_runtime_put(priv->dev);
--err_pmdisable:
- 	pm_runtime_disable(&pdev->dev);
- err_free:
- 	free_candev(ndev);
--- 
-2.17.1
-
