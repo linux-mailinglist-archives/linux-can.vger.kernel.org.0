@@ -2,154 +2,166 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A2E1F4F5B
-	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2020 09:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6872F1F4F5C
+	for <lists+linux-can@lfdr.de>; Wed, 10 Jun 2020 09:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgFJHo5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 10 Jun 2020 03:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S1726560AbgFJHo7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 10 Jun 2020 03:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbgFJHo5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Jun 2020 03:44:57 -0400
+        with ESMTP id S1726558AbgFJHo6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Jun 2020 03:44:58 -0400
 Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8920AC03E96F
-        for <linux-can@vger.kernel.org>; Wed, 10 Jun 2020 00:44:55 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id d10so620352pgn.4
-        for <linux-can@vger.kernel.org>; Wed, 10 Jun 2020 00:44:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A5AC03E96B
+        for <linux-can@vger.kernel.org>; Wed, 10 Jun 2020 00:44:58 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id e18so614147pgn.7
+        for <linux-can@vger.kernel.org>; Wed, 10 Jun 2020 00:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=3N8ySBXCAGSToWzkhjg9Ns1STm80jOJIgncP/xxN3eY=;
-        b=xoSGSnf+KLwKshKMBjlYrdmyp9I/mKgs/ehf+r0czh6W2sBdz19OUpRNf2jQNbZ8eI
-         XkpysDx8EabZpnTU0HzEI/WZZPkbYy6KjWFQPNuGSlDBhar4Rim+IjgczRpmssPjGaFq
-         5q+EEIbBcHSXNKMOCUpXLtEVG1qvGo9eU766WhzeR7aL/XssyIVigCIRHKMCWPBiOhr4
-         JfdZ8qF3+/t9Gt3fAM9CmfdZYsK7qNR0xNu9WCYztpKPmUxdeoiZWjekG5yH7MTzKmP/
-         dwSSvI89/7/RxJqGYOFBW9hIxiwSogU/vjrni1TdE7bcElzLght6o7xpzpwUEl+hEVk6
-         D16A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=D5wpVa2/XN6m1sQCYfcdRcpjlnTpDyn4pCl/sB+sGr4=;
+        b=FaW2IaQV+r7P93uoAgYFbVSHwrlIAWFar4ukwDRizxpruAAEKLbT9ZGCuAfcFtiqvp
+         5VXnwr8XZGqv2p3st1VhCev8QV4uIiwctrNGcNbHTEKDApc6JHt/dPdTrtLiU6eSBple
+         zAGfJigjnXkTY2elpzC5cg6jN4Wo+6BTLaDECUjQP9bNfdGCHpfRqEbHCWiomgDRE7o8
+         if6XsSeKwq3PEy7bH9D8sIKKIFJvLzfNpjwxEnbNcqyerScSyfp0SRMzS9yJFS5Y4ZxQ
+         SsS4PVNdDod5XCVZCPd5DOnkSaAEqPiFyUhznmTz4n1dE5WagBkg4H5rs+tyUR0rJjcN
+         +iOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=3N8ySBXCAGSToWzkhjg9Ns1STm80jOJIgncP/xxN3eY=;
-        b=RWTFTVrE9j8fIcvSteVRZ3q6+l0R1qL0Fh8FbmSduCUncRZpa550iNiw5hCMlGi3bQ
-         b3AmaQ0un/EmXJo78/Kf0sWYxEcn1fkyGxZkNpxxEEHeWW21s1BSI4XZvB0Dgfp9TM+E
-         I5T57sw+5nce/Vd1ttrT0qvAe+ISJruKhCDXMKFgfRrXiDoRo8KbM3WlQzs8i2QrQuC9
-         DAsKAuc08jE0yqE0E28Lk2Hgt0l+e3+GgpageDvuwYV+Yczl2xO4gCQKT8qXqHzMPsTP
-         rIfhlAlWlKncWGw4gO0ZxJY3YnaMovyVHhADpftJFojp7op+7YNErKwQpxVwtXOQmlsq
-         NKjw==
-X-Gm-Message-State: AOAM53141NjfRimkPOzYG6eCXfkbSkaxmsBnHoBzwIASZmIheZnL2lBW
-        pjyQnptN2YzPlHZBwoFy8+bCv4rBAw==
-X-Google-Smtp-Source: ABdhPJzoYmIM8knPdWEYW86S20yr4Ag0e99GnUnirnhqSIY4sncQXGP46ZktYkt2XLetXnM3Hw3f9w==
-X-Received: by 2002:aa7:859a:: with SMTP id w26mr1547654pfn.10.1591775094260;
-        Wed, 10 Jun 2020 00:44:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=D5wpVa2/XN6m1sQCYfcdRcpjlnTpDyn4pCl/sB+sGr4=;
+        b=UmEn4bI5aL0pD1mMC0npcFk1Tn4aCGq+bAAao16iAzt7x2YcGMvygMQjjBeZ2qkJ5x
+         QB8BV+YkAT3Svb2qK2Gwb9gDKsVflvuNgRoPqAKMi4mFFTEmnw48uJUAIaghurDZtSv1
+         dRZJDbbfa0n9NsGdrtoNGxR8zUo8PrN4nwpIGMjZCRrPl1xEImo0lRmPnhL+GLEa65zX
+         pm0rvCzhPxqeH3iisdZxijNj+8sUFNqoPqQOb+D4N/JpuqircuU8OGRAmv0iepoUNwVL
+         0A/x2K0tkSQsy9YmcXtei0rSoah5ExW2OV8MVoY0qebJ0jLup3GXvLPG5J2QV+AFunPO
+         W33Q==
+X-Gm-Message-State: AOAM532G7Gq0L/cB81FQTwnBlaCkMZ2XwMbd4S7YZt12bai6o4LgBp1w
+        NvKVdpZfVcpfRL6q8RDIr+Nw
+X-Google-Smtp-Source: ABdhPJya/wYkffZ4Vj8lRPI/HtA8nIXm2uBjOxPrm+Yv/cNoJmPxD97LW4CdEjzJO0QIMzAR+RiNXQ==
+X-Received: by 2002:a65:46cc:: with SMTP id n12mr1664976pgr.80.1591775097893;
+        Wed, 10 Jun 2020 00:44:57 -0700 (PDT)
 Received: from Mani-XPS-13-9360.localdomain ([2409:4072:630f:1dba:c41:a14e:6586:388a])
-        by smtp.gmail.com with ESMTPSA id a20sm11516795pff.147.2020.06.10.00.44.50
+        by smtp.gmail.com with ESMTPSA id a20sm11516795pff.147.2020.06.10.00.44.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2020 00:44:53 -0700 (PDT)
+        Wed, 10 Jun 2020 00:44:57 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     wg@grandegger.com, mkl@pengutronix.de
 Cc:     kernel@martin.sperl.org, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-Date:   Wed, 10 Jun 2020 13:14:36 +0530
-Message-Id: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 1/6] dt-bindings: can: Document devicetree bindings for MCP25XXFD
+Date:   Wed, 10 Jun 2020 13:14:37 +0530
+Message-Id: <20200610074442.10808-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
+References: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+From: Martin Sperl <kernel@martin.sperl.org>
 
-This series adds CAN network driver support for Microchip MCP25XXFD CAN
-Controller with MCP2517FD as the target controller version. This series is
-mostly inspired (or taken) from the previous iterations posted by Martin Sperl.
-I've trimmed down the parts which are not necessary for the initial version
-to ease review. Still the series is relatively huge but I hope to get some
-reviews (post -rcX ofc!).
+Add devicetree YAML bindings for Microchip MCP25XXFD CAN controller.
 
-Link to the origial series posted by Martin:
-https://www.spinics.net/lists/devicetree/msg284462.html
-
-I've not changed the functionality much but done some considerable amount of
-cleanups and also preserved the authorship of Martin for all the patches he has
-posted earlier. This series has been tested on 96Boards RB3 platform by myself
-and Martin has tested the previous version on Rpi3 with external MCP2517FD
-controller.
-
-Thanks,
-Mani
-
-Manivannan Sadhasivam (1):
-  MAINTAINERS: Add entry for Microchip MCP25XXFD CAN network driver
-
-Martin Sperl (5):
-  dt-bindings: can: Document devicetree bindings for MCP25XXFD
-  can: mcp25xxfd: Add Microchip MCP25XXFD CAN-FD driver infrastructure
-  can: mcp25xxfd: Add support for CAN reception
-  can: mcp25xxfd: Add CAN transmission support
-  can: mcp25xxfd: Optimize TEF read by avoiding unnecessary SPI
-    transfers
-
- .../bindings/net/can/microchip,mcp25xxfd.yaml |  82 +++
- MAINTAINERS                                   |   8 +
- drivers/net/can/spi/Kconfig                   |   2 +
- drivers/net/can/spi/Makefile                  |   2 +
- drivers/net/can/spi/mcp25xxfd/Kconfig         |   5 +
- drivers/net/can/spi/mcp25xxfd/Makefile        |  11 +
- .../net/can/spi/mcp25xxfd/mcp25xxfd_base.c    | 177 +++++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_base.h    |  14 +
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can.c | 538 ++++++++++++++
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can.h |  52 ++
- .../can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c    | 305 ++++++++
- .../can/spi/mcp25xxfd/mcp25xxfd_can_fifo.h    |  16 +
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_id.h  |  69 ++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c | 674 ++++++++++++++++++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_int.h |  18 +
- .../can/spi/mcp25xxfd/mcp25xxfd_can_priv.h    | 144 ++++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_rx.c  | 233 ++++++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_rx.h  |  18 +
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_tx.c  | 653 +++++++++++++++++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_can_tx.h  |  86 +++
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_cmd.c | 226 ++++++
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_cmd.h |  84 +++
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_crc.c |  31 +
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_crc.h |  15 +
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_ecc.c |  74 ++
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_ecc.h |  16 +
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_int.c |  71 ++
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd_int.h |  15 +
- .../net/can/spi/mcp25xxfd/mcp25xxfd_priv.h    |  50 ++
- .../net/can/spi/mcp25xxfd/mcp25xxfd_regs.h    | 661 +++++++++++++++++
- 30 files changed, 4350 insertions(+)
+Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
+[mani: converted to YAML binding]
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ .../bindings/net/can/microchip,mcp25xxfd.yaml | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
- create mode 100644 drivers/net/can/spi/mcp25xxfd/Kconfig
- create mode 100644 drivers/net/can/spi/mcp25xxfd/Makefile
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_base.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_base.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_fifo.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_fifo.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_id.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_int.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_priv.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_rx.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_rx.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_tx.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_can_tx.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_cmd.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_cmd.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_crc.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_crc.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_ecc.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_ecc.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_int.c
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_int.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_priv.h
- create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd_regs.h
 
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
+new file mode 100644
+index 000000000000..7b87ec328515
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
+@@ -0,0 +1,82 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/microchip,mcp25xxfd.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microchip MCP25XXFD stand-alone CAN controller binding
++
++maintainers:
++  -  Martin Sperl <kernel@martin.sperl.org>
++  -  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++
++properties:
++  compatible:
++    const: microchip,mcp2517fd
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  gpio-controller: true
++
++  "#gpio-cells":
++    const: 2
++
++  vdd-supply:
++    description: Regulator that powers the CAN controller
++
++  xceiver-supply:
++    description: Regulator that powers the CAN transceiver
++
++  microchip,clock-out-div:
++    description: Clock output pin divider
++    allOf:
++      - $ref: /schemas/types.yaml#/definitions/uint32
++    enum: [0, 1, 2, 4, 10]
++    default: 10
++
++  microchip,clock-div2:
++    description: Divide the internal clock by 2
++    type: boolean
++
++  microchip,gpio-open-drain:
++    description: Enable open-drain for all pins
++    type: boolean
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++  - gpio-controller
++  - vdd-supply
++  - xceiver-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    spi {
++           #address-cells = <1>;
++           #size-cells = <0>;
++
++           can0: can@1 {
++                   compatible = "microchip,mcp2517fd";
++                   reg = <1>;
++                   clocks = <&clk24m>;
++                   interrupt-parent = <&gpio4>;
++                   interrupts = <13 0x8>;
++                   vdd-supply = <&reg5v0>;
++                   xceiver-supply = <&reg5v0>;
++                   gpio-controller;
++                   #gpio-cells = <2>;
++           };
++    };
++
++...
 -- 
 2.17.1
 
