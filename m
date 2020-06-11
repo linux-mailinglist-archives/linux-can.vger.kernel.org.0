@@ -2,38 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B011F6C25
-	for <lists+linux-can@lfdr.de>; Thu, 11 Jun 2020 18:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD2C1F6EC4
+	for <lists+linux-can@lfdr.de>; Thu, 11 Jun 2020 22:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726279AbgFKQ0b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 11 Jun 2020 12:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49858 "EHLO
+        id S1726251AbgFKUa2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 11 Jun 2020 16:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbgFKQ0a (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Jun 2020 12:26:30 -0400
+        with ESMTP id S1725873AbgFKUa2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Jun 2020 16:30:28 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A090C08C5C1
-        for <linux-can@vger.kernel.org>; Thu, 11 Jun 2020 09:26:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF7AC08C5C1
+        for <linux-can@vger.kernel.org>; Thu, 11 Jun 2020 13:30:27 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1jjQ24-0003I6-Fv; Thu, 11 Jun 2020 18:26:24 +0200
+        id 1jjTqD-0000ZS-B1; Thu, 11 Jun 2020 22:30:25 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:b44d:6713:e0e9:e23c] (unknown [IPv6:2a03:f580:87bc:d400:b44d:6713:e0e9:e23c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 97DA2513E61;
-        Thu, 11 Jun 2020 16:26:22 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D8028513FA5;
+        Thu, 11 Jun 2020 20:30:23 +0000 (UTC)
 Subject: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         wg@grandegger.com
 Cc:     kernel@martin.sperl.org, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -57,14 +58,14 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
  Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
  6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
-Message-ID: <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
-Date:   Thu, 11 Jun 2020 18:26:19 +0200
+Message-ID: <ed3f66c0-28e5-9bfc-729b-457d564638f9@pengutronix.de>
+Date:   Thu, 11 Jun 2020 22:30:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.1
 MIME-Version: 1.0
-In-Reply-To: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
@@ -75,33 +76,25 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 6/10/20 9:44 AM, Manivannan Sadhasivam wrote:
-> Hello,
-> 
-> This series adds CAN network driver support for Microchip MCP25XXFD CAN
-> Controller with MCP2517FD as the target controller version. This series is
-> mostly inspired (or taken) from the previous iterations posted by Martin Sperl.
-> I've trimmed down the parts which are not necessary for the initial version
-> to ease review. Still the series is relatively huge but I hope to get some
-> reviews (post -rcX ofc!).
-> 
-> Link to the origial series posted by Martin:
-> https://www.spinics.net/lists/devicetree/msg284462.html
-> 
-> I've not changed the functionality much but done some considerable amount of
-> cleanups and also preserved the authorship of Martin for all the patches he has
-> posted earlier. This series has been tested on 96Boards RB3 platform by myself
-> and Martin has tested the previous version on Rpi3 with external MCP2517FD
-> controller.
+On 6/11/20 6:26 PM, Marc Kleine-Budde wrote:
+> I initially started looking at Martin's driver and it was not using several
+> modern CAN driver infrastructures. I then posted some cleanup patches but Martin
+> was not working on the driver any more. Then I decided to rewrite the driver,
+> that is the one I'm hoping to mainline soon.
 
-I initially started looking at Martin's driver and it was not using several
-modern CAN driver infrastructures. I then posted some cleanup patches but Martin
-was not working on the driver any more. Then I decided to rewrite the driver,
-that is the one I'm hoping to mainline soon.
+Seems the driver still suffers from the same problems the last time I looked at it:
 
-Can you give it a try?
+I'm on a raspi4 with a mcp2518fd connected to spi0 cs0 and cs1.
 
-https://github.com/marckleinebudde/linux/commits/v5.6-rpi/mcp25xxfd-20200607-41
+Running a canfdtest -vg can0; canfdtest -v can1. It  runs into this problem on a
+unloaded system and scaling_governor=performance  within minutes:
+
+> Jun 11 21:27:08 rpi4 kernel: mcp25xxfd spi0.0 can1: Something is wrong - we got a TEF interrupt but we were not able to detect a finished fifo
+> Jun 11 21:27:08 rpi4 kernel: mcp25xxfd spi0.0 can1: Something is wrong - we got a TEF interrupt but we were not able to detect a finished fifo
+> Jun 11 21:27:08 rpi4 kernel: mcp25xxfd spi0.0 can1: tefif: fifo 6 not pending - tef data: id: 00000078 flags: 00000c08, ts: 0addbed3 - this may be a problem with spi signal quality- try reducing spi-clock speed if this can get reproduced
+> Jun 11 21:27:08 rpi4 kernel: mcp25xxfd spi0.0 can1: tefif: fifo 7 not pending - tef data: id: 00000078 flags: 00000e08, ts: 0addc2e5 - this may be a problem with spi signal quality- try reducing spi-clock speed if this can get reproduced
+> Jun 11 21:27:08 rpi4 kernel: mcp25xxfd spi0.0 can1: tefif: fifo 1 not pending - tef data: id: 00000078 flags: 00000208, ts: 0addc701 - this may be a problem with spi signal quality- try reducing spi-clock speed if this can get reproduced
+> Jun 11 21:27:08 rpi4 kernel: mcp25xxfd spi0.0 can1: tefif: fifo 2 not pending - tef data: id: 00000078 flags: 00000408, ts: 0addcb1b - this may be a problem with spi signal quality- try reducing spi-clock speed if this can get reproduced
 
 Marc
 
