@@ -2,188 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA8D1F9BFE
-	for <lists+linux-can@lfdr.de>; Mon, 15 Jun 2020 17:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051231FA440
+	for <lists+linux-can@lfdr.de>; Tue, 16 Jun 2020 01:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730516AbgFOPbY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Jun 2020 11:31:24 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:37268 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730492AbgFOPbX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Jun 2020 11:31:23 -0400
-X-ASG-Debug-ID: 1592235079-0a881821b51102cb0001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be ([213.219.130.186]) by relay-b03.edpnet.be with ESMTP id 4XBwtOcUDeZiENZK; Mon, 15 Jun 2020 17:31:19 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: UNKNOWN[213.219.130.186]
-X-Barracuda-Apparent-Source-IP: 213.219.130.186
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id A25F2F5AFDB;
-        Mon, 15 Jun 2020 17:31:12 +0200 (CEST)
-Date:   Mon, 15 Jun 2020 17:31:09 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Felix Riemann <Felix.Riemann@sma.de>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andre Kalb <Andre.Kalb@sma.de>
-Subject: Re: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
- disabled
-Message-ID: <20200615153109.GB28894@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH] can: c_can: Handle lost bus-off interrupt while IRQs are
- disabled
-Mail-Followup-To: Felix Riemann <Felix.Riemann@sma.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andre Kalb <Andre.Kalb@sma.de>
-References: <20200326193837.GF760@x1.vandijck-laurijssen.be>
- <AM0PR04MB542742337A89900E12A8732288CC0@AM0PR04MB5427.eurprd04.prod.outlook.com>
- <20200330070203.GE22500@x1.vandijck-laurijssen.be>
- <AM0PR04MB54271EA5CC205263750BDBD288CB0@AM0PR04MB5427.eurprd04.prod.outlook.com>
- <20200429084733.GA27733@x1.vandijck-laurijssen.be>
- <20200429090618.GB27733@x1.vandijck-laurijssen.be>
- <AM0PR04MB6273640802E04C4009CE5BC588830@AM0PR04MB6273.eurprd04.prod.outlook.com>
- <20200612071044.GA25294@x1.vandijck-laurijssen.be>
- <20200612074253.GB25294@x1.vandijck-laurijssen.be>
- <AM0PR04MB62731627E4FC7368DB5051D4889C0@AM0PR04MB6273.eurprd04.prod.outlook.com>
+        id S1726795AbgFOXg1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 15 Jun 2020 19:36:27 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:41330 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726763AbgFOXg1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Jun 2020 19:36:27 -0400
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id DAEFE3633AA0;
+        Mon, 15 Jun 2020 17:55:06 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id jf94gQ1eUUbn; Mon, 15 Jun 2020 17:55:06 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 8BCF43633A66;
+        Mon, 15 Jun 2020 17:55:06 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id KleZlbyWK1MW; Mon, 15 Jun 2020 17:55:06 -0400 (-04)
+Received: from [10.122.16.20] (unknown [105.12.7.63])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 762A63633A6B;
+        Mon, 15 Jun 2020 17:54:57 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <AM0PR04MB62731627E4FC7368DB5051D4889C0@AM0PR04MB6273.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: UNKNOWN[213.219.130.186]
-X-Barracuda-Start-Time: 1592235079
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 4397
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5211 1.0000 0.7500
-X-Barracuda-Spam-Score: 0.75
-X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.82569
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: donation of Euro 2,000,000.00.
+To:     Recipients <manuel@info.com>
+From:   "manuel franco" <manuel@info.com>
+Date:   Mon, 15 Jun 2020 23:54:48 +0200
+Reply-To: manuelfrancospende22@gmail.com
+Message-Id: <20200615215457.762A63633A6B@correo.bnv.gob.ve>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On ma, 15 jun 2020 11:11:17 +0000, Felix Riemann wrote:
-> 
-> Hi Kurt,
-> 
-> see below.
-> 
-> > -----Original Message-----
-> >
-> > Hi Felix,
-> >
-> > Next question comes up.
-> > See inline.
-> >
-> > On vr, 12 jun 2020 09:10:44 +0200, Kurt Van Dijck wrote:
-> > > Thanks for verifying,
-> > >
-> > > I'll take a look how that can happen.
-> > >
-> > > I think packet loss is better (less packets lost) than before.
-> > >
-> > > Kurt
-> > >
-> > > On wo, 10 jun 2020 08:08:28 +0000, Felix Riemann wrote:
-> > > > Hi Kurt,
-> > > >
-> > > > > -----Original Message-----
-> > > > >
-> > > > > I have the impression that the recv path is covered, at least the
-> > > > > null ptr would have caused issued earlier already.
-> > > > > Would the problem arise in c_can_do_tx fetching a NULL echo_skb?
-> > > >
-> > > > It really looks like it.
-> > > >
-> > > > Adding a BUG_ON to the loop in c_can_do_tx triggers with a NULL skb
-> > returned by __can_get_echo_skb().
-> > > >
-> > > > For testing I replaced the BUG_ON with a check that skips the skb if that
-> > happens (not sure if that would be a valid fix in that place):
-> > > >
-> > > > while ((obj = c_can_ffs64(pend))) {
-> > > > pend &= ~((u64)1 << (obj - 1));
-> > > > c_can_inval_tx_object(dev, IF_RX, obj); idx = obj -
-> > > > priv->obj.send_frst; skb = __can_get_echo_skb(dev, idx, &len);
-> > > > if(!skb)
-> >
-> > It would be interesting to know idx and priv->tx_active here.
-> 
-> That's the statistic over about 1600 lines I captured. First number is number of occurrences:
+You have a donation of Euro 2,000,000.00.
 
-just double-check:
-These are all when __can_get_echo_skb returned NULL?
+My name is Manuel Franco from the United States.
 
-> 
->     992 can0: Skip @ idx 0, tx_active: 0x1
->     255 can0: Skip @ idx 0, tx_active: 0x3
->     250 can0: Skip @ idx 1, tx_active: 0x2
->      11 can0: Skip @ idx 0, tx_active: 0x7
->      10 can0: Skip @ idx 1, tx_active: 0x6
->       8 can0: Skip @ idx 7, tx_active: 0x80
->       8 can0: Skip @ idx 6, tx_active: 0xc0
->       8 can0: Skip @ idx 2, tx_active: 0x6
->       6 can0: Skip @ idx 1, tx_active: 0xe
->       5 can0: Skip @ idx 2, tx_active: 0x4
->       5 can0: Skip @ idx 0, tx_active: 0xf
->       4 can0: Skip @ idx 2, tx_active: 0xc
->       4 can0: Skip @ idx 0, tx_active: 0x3f
->       3 can0: Skip @ idx 6, tx_active: 0x40
->       3 can0: Skip @ idx 3, tx_active: 0xc
->       3 can0: Skip @ idx 2, tx_active: 0xfc
->       3 can0: Skip @ idx 2, tx_active: 0x3c
->       3 can0: Skip @ idx 0, tx_active: 0x1f
->       2 can0: Skip @ idx 5, tx_active: 0x3e
->       2 can0: Skip @ idx 4, tx_active: 0x3e
->       2 can0: Skip @ idx 3, tx_active: 0xf8
->       2 can0: Skip @ idx 3, tx_active: 0x3e
->       2 can0: Skip @ idx 2, tx_active: 0x3e
->       2 can0: Skip @ idx 1, tx_active: 0x3e
->       2 can0: Skip @ idx 1, tx_active: 0x1e
->       1 can0: Skip @ idx 7, tx_active: 0xf0
->       1 can0: Skip @ idx 6, tx_active: 0xf0
->       1 can0: Skip @ idx 6, tx_active: 0x78
->       1 can0: Skip @ idx 6, tx_active: 0x70
->       1 can0: Skip @ idx 5, tx_active: 0xf0
->       1 can0: Skip @ idx 5, tx_active: 0x78
->       1 can0: Skip @ idx 5, tx_active: 0x70
->       1 can0: Skip @ idx 5, tx_active: 0x38
->       1 can0: Skip @ idx 5, tx_active: 0x20
->       1 can0: Skip @ idx 4, tx_active: 0xf0
->       1 can0: Skip @ idx 4, tx_active: 0x38
->       1 can0: Skip @ idx 4, tx_active: 0x1c
->       1 can0: Skip @ idx 3, tx_active: 0xfc
->       1 can0: Skip @ idx 3, tx_active: 0xe
->       1 can0: Skip @ idx 3, tx_active: 0x8
->       1 can0: Skip @ idx 3, tx_active: 0x78
->       1 can0: Skip @ idx 3, tx_active: 0x38
->       1 can0: Skip @ idx 3, tx_active: 0x1c
->       1 can0: Skip @ idx 2, tx_active: 0xe
->       1 can0: Skip @ idx 2, tx_active: 0x7c
->       1 can0: Skip @ idx 2, tx_active: 0x1c
->       1 can0: Skip @ idx 1, tx_active: 0xfe
->       1 can0: Skip @ idx 0, tx_active: 0xff
->       1 can0: Skip @ idx 0, tx_active: 0x7f
-> 
-> I used atomic_read to get the value of tx_active.
-> 
-> Regards,
-> 
-> Felix
-> ___________________________________________________
-> 
-> SMA Solar Technology AG
-> Aufsichtsrat: Uwe Kleinkauf (Vorsitzender)
-> Vorstand: Ulrich Hadding, Dr.-Ing. Juergen Reinert
-> Handelsregister: Amtsgericht Kassel HRB 3972
-> Sitz der Gesellschaft: 34266 Niestetal
-> USt-ID-Nr. DE 113 08 59 54
-> WEEE-Reg.-Nr. DE 95881150
-> ___________________________________________________
+I won the America lottery worth $768 million and I am donating a portion of it to just 5 lucky people and a few Orphanage homes as a memorandum of goodwill to humanity.email: manuelfrancospende@gmail.com
