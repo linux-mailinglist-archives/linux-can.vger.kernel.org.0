@@ -2,109 +2,166 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17031FD2FE
-	for <lists+linux-can@lfdr.de>; Wed, 17 Jun 2020 18:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D6E1FD88F
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2020 00:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgFQQ7S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 Jun 2020 12:59:18 -0400
-Received: from relay-b02.edpnet.be ([212.71.1.222]:46199 "EHLO
-        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbgFQQ7S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Jun 2020 12:59:18 -0400
-X-ASG-Debug-ID: 1592413155-0a7b8d5f421573b30001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be ([213.219.130.186]) by relay-b02.edpnet.be with ESMTP id 6FAs6WMCRd9eJOIK; Wed, 17 Jun 2020 18:59:15 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: UNKNOWN[213.219.130.186]
-X-Barracuda-Apparent-Source-IP: 213.219.130.186
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 9D7CFF5FA5D;
-        Wed, 17 Jun 2020 18:59:08 +0200 (CEST)
-Date:   Wed, 17 Jun 2020 18:59:02 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        wg@grandegger.com, kernel@martin.sperl.org,
+        id S1726909AbgFQWQ7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 Jun 2020 18:16:59 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:33870 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726919AbgFQWQ7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Jun 2020 18:16:59 -0400
+Received: by mail-il1-f194.google.com with SMTP id x18so3916181ilp.1;
+        Wed, 17 Jun 2020 15:16:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/dcY53hMYQl/W+BZuZm5AIbg/CG1JMRTeXapBxnAQnQ=;
+        b=cCD97buxR44ylCSMBDeJRaiGlYT7TPaUN6hqN5+C/w2NXW4ALb8n6hDmqw8UXg7AEV
+         bvugJmJhcevikmtf/A/h7QlekyEELynR9CI7r3aU8ZHmE6fbZP3uprHmhzRQMOGeLDw5
+         olEh3WH3TffXcVEyRfujtkzvZJi5BL0BFBqVkxH5uLEqfKSZQBfvQjcAHt+sTmv6efLb
+         EGWU81wphAGUTN4Pw8CBeYfQE2IbuJjHhsCn8U6leidgbOt/KUs7IUY07fROUuC741kz
+         DUQ+5kYD4VjKNna69fwX5fweIHiO2ndKF5rT7KZhBuD1Zvp2R31RLXZh3XvOImk93SIG
+         fo6w==
+X-Gm-Message-State: AOAM530gm0LOvzxXcavQstZci8sU0gfr0dw+3J3XH1iK3JIQKaA5w/tz
+        9aUI1FUyjzmeYUDBXlABtg==
+X-Google-Smtp-Source: ABdhPJy/RDAuO2ERCKKVsMEchWk9PFvHKMyA40PezXAcNnCIINfQN0maDzTb8FiPAk/8JZR1aEbqIg==
+X-Received: by 2002:a92:db01:: with SMTP id b1mr1140964iln.233.1592432218330;
+        Wed, 17 Jun 2020 15:16:58 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id c62sm523052ill.62.2020.06.17.15.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 15:16:57 -0700 (PDT)
+Received: (nullmailer pid 2931941 invoked by uid 1000);
+        Wed, 17 Jun 2020 22:16:56 -0000
+Date:   Wed, 17 Jun 2020 16:16:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     wg@grandegger.com, mkl@pengutronix.de, kernel@martin.sperl.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-Message-ID: <20200617165902.GB14228@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        wg@grandegger.com, kernel@martin.sperl.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
- <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [RESEND PATCH 1/6] dt-bindings: can: Document devicetree
+ bindings for MCP25XXFD
+Message-ID: <20200617221656.GA2927781@bogus>
+References: <20200610074711.10969-1-manivannan.sadhasivam@linaro.org>
+ <20200610074711.10969-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: UNKNOWN[213.219.130.186]
-X-Barracuda-Start-Time: 1592413155
-X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 2219
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5260 1.0000 0.7500
-X-Barracuda-Spam-Score: 0.75
-X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.82618
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <20200610074711.10969-2-manivannan.sadhasivam@linaro.org>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On do, 11 jun 2020 18:26:19 +0200, Marc Kleine-Budde wrote:
-> On 6/10/20 9:44 AM, Manivannan Sadhasivam wrote:
-> > Hello,
-> > 
-> > This series adds CAN network driver support for Microchip MCP25XXFD CAN
-> > Controller with MCP2517FD as the target controller version. This series is
-> > mostly inspired (or taken) from the previous iterations posted by Martin Sperl.
-> > I've trimmed down the parts which are not necessary for the initial version
-> > to ease review. Still the series is relatively huge but I hope to get some
-> > reviews (post -rcX ofc!).
-> > 
-> > Link to the origial series posted by Martin:
-> > https://www.spinics.net/lists/devicetree/msg284462.html
-> > 
-> > I've not changed the functionality much but done some considerable amount of
-> > cleanups and also preserved the authorship of Martin for all the patches he has
-> > posted earlier. This series has been tested on 96Boards RB3 platform by myself
-> > and Martin has tested the previous version on Rpi3 with external MCP2517FD
-> > controller.
+On Wed, Jun 10, 2020 at 01:17:06PM +0530, Manivannan Sadhasivam wrote:
+> From: Martin Sperl <kernel@martin.sperl.org>
 > 
-> I initially started looking at Martin's driver and it was not using several
-> modern CAN driver infrastructures. I then posted some cleanup patches but Martin
-> was not working on the driver any more. Then I decided to rewrite the driver,
-> that is the one I'm hoping to mainline soon.
+> Add devicetree YAML bindings for Microchip MCP25XXFD CAN controller.
 > 
-> Can you give it a try?
+> Signed-off-by: Martin Sperl <kernel@martin.sperl.org>
+> [mani: converted to YAML binding]
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../bindings/net/can/microchip,mcp25xxfd.yaml | 82 +++++++++++++++++++
+>  1 file changed, 82 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
 > 
-> https://github.com/marckleinebudde/linux/commits/v5.6-rpi/mcp25xxfd-20200607-41
+> diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
+> new file mode 100644
+> index 000000000000..7b87ec328515
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/can/microchip,mcp25xxfd.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip MCP25XXFD stand-alone CAN controller binding
+> +
+> +maintainers:
+> +  -  Martin Sperl <kernel@martin.sperl.org>
+> +  -  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,mcp2517fd
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  vdd-supply:
+> +    description: Regulator that powers the CAN controller
+> +
+> +  xceiver-supply:
+> +    description: Regulator that powers the CAN transceiver
+> +
+> +  microchip,clock-out-div:
+> +    description: Clock output pin divider
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32
 
-Hi Marc,
+You can drop the 'allOf' now.
 
-I'm in the process of getting a Variscite imx8m mini SOM online, with
-MCP2517FD. The 4.19 kernel that comes with it, has a driver that is
-clearly inspired by the one of Martin Sperl (not investigated too much
-yet). I have problems of probing the chip when the bus is under full
-load (under not full load, the probing only occasionally fails) due to
-the modeswitch test.
+> +    enum: [0, 1, 2, 4, 10]
+> +    default: 10
+> +
+> +  microchip,clock-div2:
+> +    description: Divide the internal clock by 2
+> +    type: boolean
+> +
+> +  microchip,gpio-open-drain:
+> +    description: Enable open-drain for all pins
+> +    type: boolean
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +  - gpio-controller
 
-Is there a real difference in yours between the rpi and sunxi branches?
-Is there much evolution since -36 or would you mind to backport your
-latest -42 to 4.19?
+And '#gpio-cells'?
 
-I will work on this the upcoming days. I can't do extensive tests, but
-rather a works-for-me test that includes bitrate probe.
-I only have 1 such board right now, and no other FD hardware.
-
-Kurt
+> +  - vdd-supply
+> +  - xceiver-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    spi {
+> +           #address-cells = <1>;
+> +           #size-cells = <0>;
+> +
+> +           can0: can@1 {
+> +                   compatible = "microchip,mcp2517fd";
+> +                   reg = <1>;
+> +                   clocks = <&clk24m>;
+> +                   interrupt-parent = <&gpio4>;
+> +                   interrupts = <13 0x8>;
+> +                   vdd-supply = <&reg5v0>;
+> +                   xceiver-supply = <&reg5v0>;
+> +                   gpio-controller;
+> +                   #gpio-cells = <2>;
+> +           };
+> +    };
+> +
+> +...
+> -- 
+> 2.17.1
 > 
-> Marc
