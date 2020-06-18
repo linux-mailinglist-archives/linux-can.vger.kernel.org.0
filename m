@@ -2,132 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDE21FD8F4
-	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2020 00:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA1E1FEE24
+	for <lists+linux-can@lfdr.de>; Thu, 18 Jun 2020 10:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgFQWgu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 Jun 2020 18:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
+        id S1728615AbgFRIzu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Jun 2020 04:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgFQWgu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Jun 2020 18:36:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19967C06174E
-        for <linux-can@vger.kernel.org>; Wed, 17 Jun 2020 15:36:50 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1jlgfZ-0001JN-LG; Thu, 18 Jun 2020 00:36:33 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:21d2:558:c34a:b7bf] (unknown [IPv6:2a03:f580:87bc:d400:21d2:558:c34a:b7bf])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 746EC51B84C;
-        Wed, 17 Jun 2020 22:36:31 +0000 (UTC)
-Subject: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        wg@grandegger.com, kernel@martin.sperl.org,
+        with ESMTP id S1728852AbgFRIzn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Jun 2020 04:55:43 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050DEC0613ED
+        for <linux-can@vger.kernel.org>; Thu, 18 Jun 2020 01:55:41 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id b201so2505175pfb.0
+        for <linux-can@vger.kernel.org>; Thu, 18 Jun 2020 01:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bD+k/71u8ehtJTB/BfPHQSZXrBCbz3j42tBcsHer+pc=;
+        b=XIoxWHiq6wFH2Q4rKPjZbpDTtMZUUxXaqOIOfCZc46/aabF3E+FLUQc2JP+DFmNg3Z
+         Io04YnjNr3iIYoMsgpwcYbm3HWzTnyaQR8asCJTUmZq05R2nDZZ/cjYreN1csbYQeMwx
+         IqDgU7EpjpDytHFWxPjZNW2LHSvLSx47Y8tILYBSyTev7/b71tl2kLgYgBeEHuQUUp+0
+         nEFbD1NFHIW66S0o9fqRDWL0DZCOt5WkXszK3fDptKYRf9DCos8fHA72AHJfVQA7AaKZ
+         4kNdnYOfwXwHIyaYn/xO2D4xBeuO1Y+neyApEzfEGNN1OrS7TJovSH8UQzH1rfRmyD46
+         Xllw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bD+k/71u8ehtJTB/BfPHQSZXrBCbz3j42tBcsHer+pc=;
+        b=XqHfRumQB0HGvbOYvqezz2YLb9D2Sxa+8MLjAmDPL1HqDMfSg9MM2XnSQV42tJDx3/
+         kFSeO86X3IcvPhwMKrctbjHhw54LbxNvtA1brI15l3u2aC6QIDFqqvqYYGNIVgTQRIVw
+         CeI2C9w8nBK8a//cNtPUw5uaUGyrMK+Z1pmWyNdFbut1NnTwq2ZrcAmDX607zTmFFhw2
+         +1dJvLxklJ9B3syk3i9cW3ysy39O6vEjqPa/CGhJS+GbKoDJqJdD412WwzPrRYds/a3J
+         hMwsOBusjnXipJtNoDZMxcPcPepRXdXvxIYvnfdtJ5khJL4hyTSxGgz8r/H0Ro4gf+tv
+         bjng==
+X-Gm-Message-State: AOAM533qNc0+0YHdHGES8fVZZptlORxOvodPmGeKe2XXmfFyx8523VOZ
+        b6Q+jgaO27RH3IUc6964UXfZ
+X-Google-Smtp-Source: ABdhPJwpBS38djhjYupgYTEAVkCqPNakXAMmYdvNAvb8uT0GZ4JqP+WK/Ds5JalxsgdaNkXTKlaIBw==
+X-Received: by 2002:a62:37c1:: with SMTP id e184mr2628635pfa.238.1592470541355;
+        Thu, 18 Jun 2020 01:55:41 -0700 (PDT)
+Received: from mani ([103.59.133.81])
+        by smtp.gmail.com with ESMTPSA id j12sm2273422pfd.21.2020.06.18.01.55.38
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 18 Jun 2020 01:55:40 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 14:25:33 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     wg@grandegger.com, kernel@martin.sperl.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
+Message-ID: <20200618085533.GA26093@mani>
 References: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
  <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
- <20200617165902.GB14228@x1.vandijck-laurijssen.be>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
- zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
- QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
- 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
- Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
- XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
- nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
- Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
- eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
- kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
- ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
- CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
- iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
- Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
- Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
- tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
- yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
- BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
- mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
- 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
- Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
- 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
-Message-ID: <2e80e2ed-d63d-5cc6-e1c6-e0c9e75c218e@pengutronix.de>
-Date:   Thu, 18 Jun 2020 00:36:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200617165902.GB14228@x1.vandijck-laurijssen.be>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 6/17/20 6:59 PM, Kurt Van Dijck wrote:
-> I'm in the process of getting a Variscite imx8m mini SOM online, with
+Hi,
 
-Have your heard about the imx8m plus? It has CAN cores! We have a board in the
-office to play with. :)
-
-> MCP2517FD. The 4.19 kernel that comes with it, has a driver that is
-
-You shall not start projects with 1,5 years old kernel.
-And you probably shall not use vendor kernel for new projects.
-:D
-
-> clearly inspired by the one of Martin Sperl (not investigated too much
-> yet). I have problems of probing the chip when the bus is under full
-> load (under not full load, the probing only occasionally fails) due to
-> the modeswitch test.
+On 0611, Marc Kleine-Budde wrote:
+> On 6/10/20 9:44 AM, Manivannan Sadhasivam wrote:
+> > Hello,
+> > 
+> > This series adds CAN network driver support for Microchip MCP25XXFD CAN
+> > Controller with MCP2517FD as the target controller version. This series is
+> > mostly inspired (or taken) from the previous iterations posted by Martin Sperl.
+> > I've trimmed down the parts which are not necessary for the initial version
+> > to ease review. Still the series is relatively huge but I hope to get some
+> > reviews (post -rcX ofc!).
+> > 
+> > Link to the origial series posted by Martin:
+> > https://www.spinics.net/lists/devicetree/msg284462.html
+> > 
+> > I've not changed the functionality much but done some considerable amount of
+> > cleanups and also preserved the authorship of Martin for all the patches he has
+> > posted earlier. This series has been tested on 96Boards RB3 platform by myself
+> > and Martin has tested the previous version on Rpi3 with external MCP2517FD
+> > controller.
 > 
-> Is there a real difference in yours between the rpi and sunxi branches?
+> I initially started looking at Martin's driver and it was not using several
+> modern CAN driver infrastructures. I then posted some cleanup patches but Martin
+> was not working on the driver any more. Then I decided to rewrite the driver,
+> that is the one I'm hoping to mainline soon.
+> 
 
-The sunxi branch has some sunxi SPI driver improvements, the rpi branch some for
-the raspi SPI drivers. All branches with the same -xx should have the same
-mcp25xxfd driver.
+So how should we proceed from here? It is okay for me to work on adding some
+features and also fixing the issues you've reported so far. But I want to reach
+a consensus before moving forward.
 
-With the exception the latest version is v5.6-rpi/mcp25xxfd-20200607-41, which
-is cleaned up for mainlining (it has the logging and dump stuff removed).
+If you think that it makes sense to go with your set of patches, then I need an
+estimate on when you'll post the first revision.
 
-> Is there much evolution since -36 or would you mind to backport your
-> latest -42 to 4.19?
+> Can you give it a try?
+> 
+> https://github.com/marckleinebudde/linux/commits/v5.6-rpi/mcp25xxfd-20200607-41
+> 
 
-Not much, some bus off cleanups, however I've backported all changes to
-v4.19-rpi/mcp25xxfd-20200429-41 (debug and log is still included).
+Sure thing. Will do.
 
-When you port this to your mx8 take all from (including)
+Thanks,
+Mani
 
-    097701d1ea4f can: dev: avoid long lines
-to
-    v4.19-rpi/mcp25xxfd-20200429-41
-
-> I will work on this the upcoming days. I can't do extensive tests, but
-> rather a works-for-me test that includes bitrate probe.
-> I only have 1 such board right now, and no other FD hardware.
-
-Great, looking for feedback! Especially how the driver copes with your fully
-loaded bus test.
-
-regards,
-Marc
-
--- 
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
