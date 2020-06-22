@@ -2,104 +2,160 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4E62037EE
-	for <lists+linux-can@lfdr.de>; Mon, 22 Jun 2020 15:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38ADE203844
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jun 2020 15:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728972AbgFVN02 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Jun 2020 09:26:28 -0400
-Received: from relay-b01.edpnet.be ([212.71.1.221]:33775 "EHLO
-        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728154AbgFVN01 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jun 2020 09:26:27 -0400
-X-ASG-Debug-ID: 1592832383-0a7ff575a81bd1840001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be ([213.219.130.186]) by relay-b01.edpnet.be with ESMTP id aOuD0TggWwZpQl9y; Mon, 22 Jun 2020 15:26:23 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: UNKNOWN[213.219.130.186]
-X-Barracuda-Apparent-Source-IP: 213.219.130.186
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 04E7EF6A2C6;
-        Mon, 22 Jun 2020 15:26:15 +0200 (CEST)
-Date:   Mon, 22 Jun 2020 15:26:08 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        wg@grandegger.com, kernel@martin.sperl.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-Message-ID: <20200622132608.GD3077@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        wg@grandegger.com, kernel@martin.sperl.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
- <20200617165902.GB14228@x1.vandijck-laurijssen.be>
- <2e80e2ed-d63d-5cc6-e1c6-e0c9e75c218e@pengutronix.de>
- <20200618123055.GA17496@x1.vandijck-laurijssen.be>
- <c8267280-e7a9-8171-d714-fa392ccb5537@pengutronix.de>
- <20200622102559.GA3077@x1.vandijck-laurijssen.be>
- <c5fc46c1-abaf-cf67-abb6-0077bafdff3a@pengutronix.de>
- <20200622123031.GB3077@x1.vandijck-laurijssen.be>
- <20200622124347.GC3077@x1.vandijck-laurijssen.be>
- <0ae54858-0eb5-b3b8-c793-00a8b99c8aa5@pengutronix.de>
+        id S1729253AbgFVNiI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Jun 2020 09:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729250AbgFVNiH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jun 2020 09:38:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF82C061573
+        for <linux-can@vger.kernel.org>; Mon, 22 Jun 2020 06:38:07 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1jnMeE-000722-6I; Mon, 22 Jun 2020 15:38:06 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:789c:8c3:eaa5:9d1b] (unknown [IPv6:2a03:f580:87bc:d400:789c:8c3:eaa5:9d1b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EFB1151EF30;
+        Mon, 22 Jun 2020 13:38:04 +0000 (UTC)
+Subject: Re: [PATCH] can: mcp25xxfd: add listen-only mode
+To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        linux-can@vger.kernel.org
+References: <20200622122047.9494-1-dev.kurt@vandijck-laurijssen.be>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
+Message-ID: <24a81519-9628-6626-77e6-22dbd5253954@pengutronix.de>
+Date:   Mon, 22 Jun 2020 15:38:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200622122047.9494-1-dev.kurt@vandijck-laurijssen.be>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0ae54858-0eb5-b3b8-c793-00a8b99c8aa5@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: UNKNOWN[213.219.130.186]
-X-Barracuda-Start-Time: 1592832383
-X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1081
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: SPAM GLOBAL 1.0000 1.0000 4.3430
-X-Barracuda-Spam-Score: 4.34
-X-Barracuda-Spam-Status: No, SCORE=4.34 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.82729
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On ma, 22 jun 2020 14:54:15 +0200, Marc Kleine-Budde wrote:
-> On 6/22/20 2:43 PM, Kurt Van Dijck wrote:
-> > I get RX-0: FIFO overflows in listen-only mode (back-to-back burst of
-> > the single other node).
-> 
-> Single other node? Who's ACKing the CAN frames?
+On 6/22/20 2:20 PM, Kurt Van Dijck wrote:
+> This commit enables listen-only mode, which works internally like CANFD mode.
 
-hence the back-to-back burst.
+Does the controller distinguish between CAN-2.0 listen only and CAN-FD listen
+only mode?
 
-> 
-> > The SPI peripheral does not use DMA :-(.
-> 
-> The SPI messages are quite small, so DMA wont help either. Getting rid of the
-> IRQ and polling for completion is the way to go.
-> 
-> > Do you have, by accident, some freescale SPI fixes lying around?
-> 
-> nope
-> 
-> > It's not the biggest problem on my side, but is proves the system not
-> > being guarded against load.
-> 
-> Do you have freq scaling activated?
+If listen only means CAN-FD...should we add a check to open() if CAN_CTRLMODE_FD
+and CAN_CTRLMODE_LISTENONLY is both set (or unset).
 
-Not yet.
+Please compile with #define DEBUG and look in dmesg the size of the objects in
+the mailbox. Maybe it's worth not allocating any TEF and TX mailbox and using
+more RX instead.
 
-The device tree needs upgrading ... grrr
+We have to convert the driver from using a bit mask to modulo to get from the
+tail and head to the actual index inside the RAM.
 
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> ---
+>  drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 > 
-> Marc
+> diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+> index c744a0bf2faa..f3bc7d0f1f94 100644
+> --- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+> +++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+> @@ -392,7 +392,8 @@ static int mcp25xxfd_ring_alloc(struct mcp25xxfd_priv *priv)
+>  	int ram_free, i;
+>  
+>  	tef_obj_size = sizeof(struct mcp25xxfd_hw_tef_obj);
+> -	if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
+> +	/* listen-only mode works like FD mode */
+> +	if (priv->can.ctrlmode & (CAN_CTRLMODE_FD | CAN_CTRLMODE_LISTENONLY)) {
+>  		tx_obj_num = MCP25XXFD_TX_OBJ_NUM_CANFD;
+>  		tx_obj_size = sizeof(struct mcp25xxfd_hw_tx_obj_canfd);
+>  		rx_obj_size = sizeof(struct mcp25xxfd_hw_rx_obj_canfd);
+> @@ -807,7 +808,7 @@ mcp25xxfd_chip_rx_fifo_init_one(const struct mcp25xxfd_priv *priv,
+>  		MCP25XXFD_REG_FIFOCON_RXOVIE |
+>  		MCP25XXFD_REG_FIFOCON_TFNRFNIE;
+>  
+> -	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+> +	if (priv->can.ctrlmode & (CAN_CTRLMODE_FD | CAN_CTRLMODE_LISTENONLY))
+>  		fifo_con |= FIELD_PREP(MCP25XXFD_REG_FIFOCON_PLSIZE_MASK,
+>  				       MCP25XXFD_REG_FIFOCON_PLSIZE_64);
+>  	else
+> @@ -857,7 +858,7 @@ static int mcp25xxfd_chip_fifo_init(const struct mcp25xxfd_priv *priv)
+>  		MCP25XXFD_REG_FIFOCON_TXEN |
+>  		MCP25XXFD_REG_FIFOCON_TXATIE;
+>  
+> -	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+> +	if (priv->can.ctrlmode & (CAN_CTRLMODE_FD | CAN_CTRLMODE_LISTENONLY))
+>  		val |= FIELD_PREP(MCP25XXFD_REG_FIFOCON_PLSIZE_MASK,
+>  				  MCP25XXFD_REG_FIFOCON_PLSIZE_64);
+>  	else
+> @@ -930,7 +931,9 @@ static u8 mcp25xxfd_get_normal_mode(const struct mcp25xxfd_priv *priv)
+>  {
+>  	u8 mode;
+>  
+> -	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+> +	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+> +		mode = MCP25XXFD_REG_CON_MODE_LISTENONLY;
+> +	else if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+>  		mode = MCP25XXFD_REG_CON_MODE_MIXED;
+>  	else
+>  		mode = MCP25XXFD_REG_CON_MODE_CAN2_0;
+> @@ -2778,6 +2781,7 @@ static int mcp25xxfd_probe(struct spi_device *spi)
+>  	priv->can.bittiming_const = &mcp25xxfd_bittiming_const;
+>  	priv->can.data_bittiming_const = &mcp25xxfd_data_bittiming_const;
+>  	priv->can.ctrlmode_supported = CAN_CTRLMODE_FD |
+> +		CAN_CTRLMODE_LISTENONLY |
+>  		CAN_CTRLMODE_BERR_REPORTING | CAN_CTRLMODE_FD_NON_ISO;
+
+please sort this list following (I know it currently isn't):
+
+https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/netlink.h#L95
+
+>  	priv->ndev = ndev;
+>  	priv->spi = spi;
 > 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+Marc
+
+-- 
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
