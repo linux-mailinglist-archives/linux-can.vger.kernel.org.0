@@ -2,125 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EF1201FDC
-	for <lists+linux-can@lfdr.de>; Sat, 20 Jun 2020 04:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD052034C9
+	for <lists+linux-can@lfdr.de>; Mon, 22 Jun 2020 12:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731980AbgFTCoB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Jun 2020 22:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbgFTCoB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Jun 2020 22:44:01 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E841BC06174E
-        for <linux-can@vger.kernel.org>; Fri, 19 Jun 2020 19:44:00 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d8so4757347plo.12
-        for <linux-can@vger.kernel.org>; Fri, 19 Jun 2020 19:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FLWT276u2aO9qAHRs8E3h1+NnyUeXGvQciwY1qNzilY=;
-        b=St45XTuKxoL4qMh9JNrnVKhDLmDM/4iTL6bjKrYy6QLHEttboehyDjG/4XA+Gsf0G8
-         /FxzQPFCADOTO4HhEohMQFuErk9XKheVZxB0wabwPgFl8XhHeVJmWC+O80H6XV+9I5y9
-         fN11ubcOXio/kR1AC7BNPDb6DObr/oVvnTiiLcPTIAB7ixfyTnPaqAlZTu72XIBJEp+O
-         LYwzPMmErpNCUiEcmHaLOCZReZEhoe7hfTcBOAAip/9v8I0NTKU2b76BUe8L88yaCoiN
-         RYtUhjLps0ByxhH9miMu9OUZd+OgSyjvwtMNp1bikf8oYlYWQKFyZIKS1WiB7QB+k3sm
-         n7Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FLWT276u2aO9qAHRs8E3h1+NnyUeXGvQciwY1qNzilY=;
-        b=K0qwH++Zzd+dyDV5P09Kn/I3wIEds2WOMIOkD7cVEuL4UJt1M4WS7G4kLSLzPLUyTI
-         ScXrM0A/Xi4csqtC35y182Y6YNmGYrvXPE5pGodfXFMm/2TEjUANk5O02v6lERxiQ2NH
-         GALbxQlTv2/SvRTGxcPvFgyDD27Stz1QoELwEBqGmP28HudsodIrCo5QEv+5d7gRG8Ja
-         WdsUfLFUrb8A2mYdZSEKwr+l3MEKhqhR1fNamnojusOJm85bPefnXXSGLGNMHylvOJt0
-         bL5P844wT5mNg5AYtZ9mNFro536dnN4N89troSNBxTRMiC3mLnzlBbsOS1hgpmUIp7+y
-         woOw==
-X-Gm-Message-State: AOAM533cBPay8zkI6NbOXXtsRjbd+Kw3scdd0ZPzOP/HsnppgV+q9Gg1
-        G5sFAVrZNi1l/hLo0RednpPH
-X-Google-Smtp-Source: ABdhPJz6e7aQ/jZVXcpBHCTWXtwI2uKAN2v8I1+qswnVkdxua9YKvO35sIeZLTi24n5yfLWTxU4m7g==
-X-Received: by 2002:a17:902:7b90:: with SMTP id w16mr10287749pll.339.1592621040019;
-        Fri, 19 Jun 2020 19:44:00 -0700 (PDT)
-Received: from Mani-XPS-13-9360 ([2409:4072:629d:f5bf:4d81:efb6:335e:3953])
-        by smtp.gmail.com with ESMTPSA id w10sm6113168pgm.70.2020.06.19.19.43.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Jun 2020 19:43:59 -0700 (PDT)
-Date:   Sat, 20 Jun 2020 08:13:51 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+        id S1727873AbgFVK0S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Jun 2020 06:26:18 -0400
+Received: from relay-b02.edpnet.be ([212.71.1.222]:44108 "EHLO
+        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727082AbgFVK0R (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Jun 2020 06:26:17 -0400
+X-ASG-Debug-ID: 1592821574-0a7b8d7b58395dd0001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be ([213.219.130.186]) by relay-b02.edpnet.be with ESMTP id 7mCYZTARDg2OtGBc; Mon, 22 Jun 2020 12:26:14 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: UNKNOWN[213.219.130.186]
+X-Barracuda-Apparent-Source-IP: 213.219.130.186
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 93BBAF69EFE;
+        Mon, 22 Jun 2020 12:26:06 +0200 (CEST)
+Date:   Mon, 22 Jun 2020 12:25:59 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     wg@grandegger.com, kernel@martin.sperl.org,
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        wg@grandegger.com, kernel@martin.sperl.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
-Message-ID: <20200620024351.GA18455@Mani-XPS-13-9360>
+Message-ID: <20200622102559.GA3077@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [PATCH 0/6] Add Microchip MCP25XXFD CAN driver
+Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        wg@grandegger.com, kernel@martin.sperl.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20200610074442.10808-1-manivannan.sadhasivam@linaro.org>
  <fbbca009-3c53-6aa9-94ed-7e9e337c31a4@pengutronix.de>
- <20200618085533.GA26093@mani>
+ <20200617165902.GB14228@x1.vandijck-laurijssen.be>
+ <2e80e2ed-d63d-5cc6-e1c6-e0c9e75c218e@pengutronix.de>
+ <20200618123055.GA17496@x1.vandijck-laurijssen.be>
+ <c8267280-e7a9-8171-d714-fa392ccb5537@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200618085533.GA26093@mani>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <c8267280-e7a9-8171-d714-fa392ccb5537@pengutronix.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: UNKNOWN[213.219.130.186]
+X-Barracuda-Start-Time: 1592821574
+X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1248
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: SPAM GLOBAL 0.9857 1.0000 4.1774
+X-Barracuda-Spam-Score: 4.18
+X-Barracuda-Spam-Status: No, SCORE=4.18 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.82726
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 02:25:33PM +0530, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> On 0611, Marc Kleine-Budde wrote:
-> > On 6/10/20 9:44 AM, Manivannan Sadhasivam wrote:
-> > > Hello,
-> > > 
-> > > This series adds CAN network driver support for Microchip MCP25XXFD CAN
-> > > Controller with MCP2517FD as the target controller version. This series is
-> > > mostly inspired (or taken) from the previous iterations posted by Martin Sperl.
-> > > I've trimmed down the parts which are not necessary for the initial version
-> > > to ease review. Still the series is relatively huge but I hope to get some
-> > > reviews (post -rcX ofc!).
-> > > 
-> > > Link to the origial series posted by Martin:
-> > > https://www.spinics.net/lists/devicetree/msg284462.html
-> > > 
-> > > I've not changed the functionality much but done some considerable amount of
-> > > cleanups and also preserved the authorship of Martin for all the patches he has
-> > > posted earlier. This series has been tested on 96Boards RB3 platform by myself
-> > > and Martin has tested the previous version on Rpi3 with external MCP2517FD
-> > > controller.
-> > 
-> > I initially started looking at Martin's driver and it was not using several
-> > modern CAN driver infrastructures. I then posted some cleanup patches but Martin
-> > was not working on the driver any more. Then I decided to rewrite the driver,
-> > that is the one I'm hoping to mainline soon.
-> > 
-> 
-> So how should we proceed from here? It is okay for me to work on adding some
-> features and also fixing the issues you've reported so far. But I want to reach
-> a consensus before moving forward.
-> 
-> If you think that it makes sense to go with your set of patches, then I need an
-> estimate on when you'll post the first revision.
-> 
+Hey Marc,
 
-Ping!
+On do, 18 jun 2020 14:35:28 +0200, Marc Kleine-Budde wrote:
+> On 6/18/20 2:30 PM, Kurt Van Dijck wrote:
+> > On do, 18 jun 2020 00:36:29 +0200, Marc Kleine-Budde wrote:
+> >> On 6/17/20 6:59 PM, Kurt Van Dijck wrote:
+> >>> I'm in the process of getting a Variscite imx8m mini SOM online, with
+> >>
+> >> Have your heard about the imx8m plus? It has CAN cores! We have a board in the
+> >> office to play with. :)
+> >>
+> >>> MCP2517FD. The 4.19 kernel that comes with it, has a driver that is
+> >>
+> >> You shall not start projects with 1,5 years old kernel.
+> >> And you probably shall not use vendor kernel for new projects.
+> >> :D
+> > 
+> > your rpi kernel starts of v4.19.119 (or so), where the variscite starts
+> > of v4.19.35.
+> 
+> You're missing some stable backports for the kernel then.
+> 
+> > The result was quite some list of merge conflicts, on top of a vendor
+> > kernel, so I took your advise and switched to the latest and greatest
+> > 5.7.3.
+> 
+> \o/
 
-> > Can you give it a try?
-> > 
-> > https://github.com/marckleinebudde/linux/commits/v5.6-rpi/mcp25xxfd-20200607-41
-> > 
-> 
-> Sure thing. Will do.
-> 
-> Thanks,
-> Mani
-> 
-> > Marc
-> > 
-> > -- 
-> > Pengutronix e.K.                 | Marc Kleine-Budde           |
-> > Embedded Linux                   | https://www.pengutronix.de  |
-> > Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> > Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+I got my board up with a 5.7, despite device-tree problems completely
+unrelated to CAN.
+It seems to work well with a fully-loaded CAN bus (cangen -g0 ...).
+So that is a real improvement.
+I will need to add the listen-only mode soon.
+
+Kurt
