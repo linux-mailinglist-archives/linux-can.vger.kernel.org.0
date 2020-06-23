@@ -2,149 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5229D204B66
-	for <lists+linux-can@lfdr.de>; Tue, 23 Jun 2020 09:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D7C20507A
+	for <lists+linux-can@lfdr.de>; Tue, 23 Jun 2020 13:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731158AbgFWHkw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Jun 2020 03:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
+        id S1732528AbgFWLQ4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Jun 2020 07:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731054AbgFWHkw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Jun 2020 03:40:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83BCC061573
-        for <linux-can@vger.kernel.org>; Tue, 23 Jun 2020 00:40:51 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1jndY2-0002Yv-KO
-        for linux-can@vger.kernel.org; Tue, 23 Jun 2020 09:40:50 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:789c:8c3:eaa5:9d1b] (unknown [IPv6:2a03:f580:87bc:d400:789c:8c3:eaa5:9d1b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EAD3851FAA5
-        for <linux-can@vger.kernel.org>; Tue, 23 Jun 2020 07:40:49 +0000 (UTC)
-Subject: Re: [PATCH] can: mcp25xxfd: add listen-only mode
-To:     linux-can@vger.kernel.org
-References: <20200622122047.9494-1-dev.kurt@vandijck-laurijssen.be>
- <24a81519-9628-6626-77e6-22dbd5253954@pengutronix.de>
- <20200623051527.GE3077@x1.vandijck-laurijssen.be>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
- zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
- QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
- 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
- Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
- XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
- nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
- Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
- eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
- kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
- ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
- CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
- iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
- Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
- Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
- tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
- yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
- BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
- mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
- 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
- Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
- 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
-Message-ID: <10e4e6f0-d400-fd7f-5c99-33637cdc8dbc@pengutronix.de>
-Date:   Tue, 23 Jun 2020 09:40:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        with ESMTP id S1732517AbgFWLQw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Jun 2020 07:16:52 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448E2C0617BA
+        for <linux-can@vger.kernel.org>; Tue, 23 Jun 2020 04:16:51 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id s10so139300wrw.12
+        for <linux-can@vger.kernel.org>; Tue, 23 Jun 2020 04:16:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=E6E/hlNpiM6PnoAOVZ+7voPc9wpxPmWA12rEiYoj/bAUsYe0AJbyTzI9pZwPUUDdPP
+         2sshPYcb9oIsA99JTikTl0u76qfHNPIW2jIbz6C+DLselDK71HuKa++SqaGTSZ4p4+te
+         gTQ9UTEVmk4+r2eFXVbrvBf8ptXVBuknudxlYS3vrFAv18ZetPr28ECYav3lG+E2L5JM
+         St9yzES6OGBMLQpZbQAQLmSOp9Akg+wflxGB71dvTLo/TJoexQV6LE+g+JoBlfC2QAg7
+         b+ja973yyVQOwbfrTF90BaaIQGUXchEhek4sdIUmlBpL8Ak1D79EOMoTbcuGCplWvTHT
+         W4hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=UT07JkcVzXW8Cc2AghQSpjZ9sS/lxpc3Yz6/Io6SgAvlUJcczuxEm9EGZq/FPHHmzH
+         PM/RwSYJgrdsC64L0pp5LEAH73awROP7pvB4dFu1k4aTjmiysGGhZUhPDcNwomlQzLui
+         Pwv2V7iBFafn8a9U66XsYJv/9zev/5f7QRP9YWMWDx9IKBLYFShDRdO1Z5xN+YDYv4OO
+         l3PClQWAvb0TbcUA3SYVQSXYmgLruP6dT1bdok+cFpdwe2gEclVTE1ZjnZliEG3lf+sU
+         VSOlKMwzeThKEIOiyOmYmjfiM7K5AJEcQTdbyts53bUEzIuLrFnWfa+CCtiUGLTJ3/E9
+         eGVA==
+X-Gm-Message-State: AOAM531okIzQ5Hs4UKOVfZ/I075ii4iI9A9vtCsbAfAfYi20Z1QGmBon
+        T3NRMAu/Q9n3EESrsuEYzKSQzMqXaRqeGK7vg1w=
+X-Google-Smtp-Source: ABdhPJzZ1QWBbLEVEJDiR8ozgNL3BKht/bHhiiCQZFbEUfR5i8VLBKqhwlX7a4NXmF6FqxDOEk5UW9nntOQTLpvDlps=
+X-Received: by 2002:a5d:62d1:: with SMTP id o17mr24071305wrv.162.1592911009833;
+ Tue, 23 Jun 2020 04:16:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200623051527.GE3077@x1.vandijck-laurijssen.be>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:16:49
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <paulwiliam782@gmail.com>
+Date:   Tue, 23 Jun 2020 12:16:49 +0100
+Message-ID: <CAHqcnY16ZzcoYpU31SEco0sXeb2W5Dq2VVpzQr8ZENW9eKiFTA@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 6/23/20 7:15 AM, Kurt Van Dijck wrote:
-> On ma, 22 jun 2020 15:38:03 +0200, Marc Kleine-Budde wrote:
->> On 6/22/20 2:20 PM, Kurt Van Dijck wrote:
->>> This commit enables listen-only mode, which works internally like CANFD mode.
->>
->> Does the controller distinguish between CAN-2.0 listen only and CAN-FD listen
->> only mode?
-> 
-> Nope, Listen-only is a 3rd mode, and from the manual, it's similar to
-> CANFD mode.
->>
->> If listen only means CAN-FD...should we add a check to open() if CAN_CTRLMODE_FD
->> and CAN_CTRLMODE_LISTENONLY is both set (or unset).
-> 
-> The difference between CAN-FD and CAN-2.0 is in CAN-2.0, the chip will
-> send error frames on CAN-FD frame.
-> That looks obvious.
-> In listen-only mode, no acks or error-frames are sent, so the difference
-> is not really relevant in listen-only mode.
+Greetings From Mrs. Sarah Koffi
 
-ACK
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
 
-> On the host side however, in listen-only mode with no CAN_CTRLMODE_FD,
-> you could find CAN-FD packets in your socket.
-> I think we could improve and filter them out in software during the
-> receive handler.
-> If we think that is necessary.
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
 
-ACK
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
 
-> It would strictly be correct, but I tend to be a bit more tolerant on
-> the input, and discard the difference.
-> That's why I didn't add the code. and because it's usually easy to make
-> mistakes and it easily becomes a monster.
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
 
-ACK
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
 
->> Please compile with #define DEBUG and look in dmesg the size of the objects in
->> the mailbox. Maybe it's worth not allocating any TEF and TX mailbox and using
->> more RX instead.
-> and have runtime defined sizes. I'm not convinced that this improves the
-> driver. I'm sure it makes it more complex.
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
 
-The driver already has different sized RX and TX objects depending on CAN-2.0
-and CAN-FD modes. (8 vs. 64 bytes of data). And it uses 8 TX and 32 RX object
-for CAN-2.0, while it's 4 TX and 16 RX for CAN-FD.
+I will wait to hear from you so as to give you details.With love from
 
-But you're right, optimization for listen only can be done later.
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
 
->> We have to convert the driver from using a bit mask to modulo to get from the
->> tail and head to the actual index inside the RAM.
-> 
-> I confess not having studied the chip nor your driver in that detail.
-> Your plan sounds good. I would not postpone submitting the driver for
-> improvements like that, given that other approaches exists in vendor
-> kernels.
-> It sounds like a next iteration to me.
-
-ACK. Currently the driver only supports a power-of-2 for RX and TX mailboxes.
-With converting from a mask to a modulo, this would increase the RX mailboxes
-from 16 to 22 in the CAN-FD mode.
-
-I've added your patch with minor modifications to the series, mostly changing
-the order of CAN_CTRLMODE_LISTENONLY and CAN_CTRLMODE_FD.
-
-regards,
-Marc
-
--- 
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Mrs. Sarah Koffi
