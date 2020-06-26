@@ -2,96 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F84420A0A3
-	for <lists+linux-can@lfdr.de>; Thu, 25 Jun 2020 16:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F03720B3D1
+	for <lists+linux-can@lfdr.de>; Fri, 26 Jun 2020 16:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405310AbgFYON1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Jun 2020 10:13:27 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:59130 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405286AbgFYON0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Jun 2020 10:13:26 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05PED89d080994;
-        Thu, 25 Jun 2020 09:13:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1593094389;
-        bh=c6PIE6h1Ufcsj4xy/cCCsvdAlZ7BD5W5ZeCScWioTrw=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=tQiZiMozPUWwnxGVHJ/sGU1dx9qJ6xHUp906daw8ywtnshytoODlNyDnDplGDsuki
-         zIm4SK60ONHWazNWRRgbwJ/XrVUcc69FlzzdCRLT0297+GzkvC2+H5WI9YmPdVWg+b
-         hnxJFnjGcEC7GWsVq6EG5S3zB6AnE72CI+PhkW6Q=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05PED3Nn073800
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 25 Jun 2020 09:13:08 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 25
- Jun 2020 09:13:04 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 25 Jun 2020 09:13:04 -0500
-Received: from [10.250.52.63] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05PED3Te095056;
-        Thu, 25 Jun 2020 09:13:03 -0500
-Subject: Re: [PATCH BUGFIX] can: m_can: make m_can driver work with sleep
- state pinconfig
-To:     =?UTF-8?Q?Lothar_Wa=c3=9fmann?= <LW@KARO-electronics.de>
-CC:     Sriram Dash <sriram.dash@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200625142435.50371e2f@ipc1.ka-ro>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <9416850b-73c3-9b1c-6dd0-c49665ab3ec1@ti.com>
-Date:   Thu, 25 Jun 2020 09:13:03 -0500
+        id S1726618AbgFZOl7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Jun 2020 10:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbgFZOl7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Jun 2020 10:41:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43853C03E979
+        for <linux-can@vger.kernel.org>; Fri, 26 Jun 2020 07:41:59 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1jopYD-0002NG-ES; Fri, 26 Jun 2020 16:41:57 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:91ce:cb25:a5b8:f43f] (unknown [IPv6:2a03:f580:87bc:d400:91ce:cb25:a5b8:f43f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B8EEA522612;
+        Fri, 26 Jun 2020 14:41:55 +0000 (UTC)
+Subject: Re: [PATCH v41 3/3] can: mcp25xxfd: initial commit
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     linux-can@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
+References: <20200622114603.965371-1-mkl@pengutronix.de>
+ <20200622114603.965371-4-mkl@pengutronix.de>
+ <20200626133243.GA8333@Mani-XPS-13-9360>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
+Message-ID: <fdb6e441-fed5-435e-553c-1fc0a6bfb8f7@pengutronix.de>
+Date:   Fri, 26 Jun 2020 16:41:53 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200625142435.50371e2f@ipc1.ka-ro>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200626133243.GA8333@Mani-XPS-13-9360>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Lothar
+On 6/26/20 3:32 PM, Manivannan Sadhasivam wrote:
+> On Mon, Jun 22, 2020 at 01:46:03PM +0200, Marc Kleine-Budde wrote:
+>> This patch add support for the Microchip MCP25xxFD SPI CAN controller family.
+>>
+>> Pending-Tested-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+>> Pending-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> Could you please split this patch into multiple ones? Having ~4k lines for a
+> patch makes it difficult to review. I know that some parts are difficult to
+> split (happened with my series as well) but anything below 1k should be fine.
 
-On 6/25/20 7:24 AM, Lothar Waßmann wrote:
-> Hi,
->
-> When trying to use the m_can driver on an stm32mp15 based system, I
-> found that I could not send or receive any data.
-> Analyzing the pinctrl registers revealed, that the pins were
-> configured for sleep state even when the can interfaces were in use.
->
-> Looking at the m_can_platform.c driver I found that:
->
-> commit f524f829b75a ("can: m_can: Create a m_can platform framework")
->
-> introduced a call to m_can_class_suspend() in the m_can_runtime_suspend()
-> function which wasn't there in the original code and which causes the
-> pins used by the controller to be configured for sleep state.
->
-> commit 0704c5743694 ("can: m_can_platform: remove unnecessary m_can_class_resume() call")
-> already removed a bogus call to m_can_class_resume() from the
-> m_can_runtime_resume() function, but failed to remove the matching
-> call to m_can_class_suspend() from the m_can_runtime_suspend() function.
->
-> Removing the bogus call to m_can_class_suspend() in the
-> m_can_runtime_suspend() function fixes this.
+For now I split the regmap and crc16 into one patch, the core file into a
+separate patch.
 
-Thank you for the patch Richard G has already submitted a similar patch
+See:
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=mcp25xxfd-45
 
-https://lore.kernel.org/patchwork/patch/1253401/
+If you want to have it in smaller pieces I'll need more time to figure out a
+sensible way to split the driver.
 
-Dan
+regards,
+Marc
 
-
+-- 
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
