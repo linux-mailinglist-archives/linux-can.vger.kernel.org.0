@@ -2,105 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F0320C3F0
-	for <lists+linux-can@lfdr.de>; Sat, 27 Jun 2020 21:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38FC20C473
+	for <lists+linux-can@lfdr.de>; Sat, 27 Jun 2020 23:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbgF0T4M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Sat, 27 Jun 2020 15:56:12 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:40866 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725900AbgF0T4M (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Jun 2020 15:56:12 -0400
-X-ASG-Debug-ID: 1593287768-0a8818764c5edf00001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.122.82.adsl.dyn.edpnet.net [77.109.122.82]) by relay-b03.edpnet.be with ESMTP id haIFge6aoDwQ1Bk5; Sat, 27 Jun 2020 21:56:08 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.122.82.adsl.dyn.edpnet.net[77.109.122.82]
-X-Barracuda-Apparent-Source-IP: 77.109.122.82
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 6CCE2F7552C;
-        Sat, 27 Jun 2020 21:56:08 +0200 (CEST)
-Date:   Sat, 27 Jun 2020 21:56:05 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Subject: Re: [PATCH v41 3/3] can: mcp25xxfd: initial commit
-Message-ID: <20200627195605.GC30275@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH v41 3/3] can: mcp25xxfd: initial commit
-Mail-Followup-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-References: <20200622114603.965371-1-mkl@pengutronix.de>
- <20200622114603.965371-4-mkl@pengutronix.de>
- <20200626133243.GA8333@Mani-XPS-13-9360>
+        id S1725912AbgF0V6T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 27 Jun 2020 17:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725907AbgF0V6T (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 27 Jun 2020 17:58:19 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3EDC061794
+        for <linux-can@vger.kernel.org>; Sat, 27 Jun 2020 14:58:19 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id r8so11209953oij.5
+        for <linux-can@vger.kernel.org>; Sat, 27 Jun 2020 14:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=gZEEKeF25WB3FEGIMO9NYN2kqSU0uHnC77hiZFKmx40qwL5+qOMrLfZsVxXJ3weHR+
+         gswsZRZIc8AKyfzoHJ4DT8qtMlqA4FlSsDbQu64DRlnABYuuSxlFMoPrGuZKB9NfFmfq
+         VGJTgT+A8go8/gxOwGwzEAZ7lL4WeIW/E6+eo/v9w/T/nW0E2+UiLVYmL6UFFcmE5ctd
+         PdAjdkW2MjHygnVjS2xbgFFTurnxl6j4st9s5oiTW8adEbhpPGXrRXeDvN82pEikC9cZ
+         yOVHPOKmENB6jBFEbFO8QsHKxU60Wzxm5hoBtxtMS1fO50nR/zTwD//5uWdiYZkIu8/r
+         zQzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=hDm0J70xfMLbVvceQHwxPddZCp69UMTk2d0jtKg2a8s=;
+        b=Vc/Cb4wwdyMUsBlExVApoXsWAV4LBWWv4mmg0/W3eocKhIGZFu0NxuAcZQ6ZEpGvxe
+         pglH1BkwiRIAzCZWmgP2WQySGsg2uVtn1OK4uThqtAi1AbAJTCs5WZXnmCt68eFhGRez
+         HJfRfuKM7Se0kb06blonSz1gCwmRs6RTWgYxrKqJE0oBuQ42j7a8Y5sqJj6GHBLETCiz
+         nMyZTPJmqG/+vyJzs0VrIRlEKq9e8ldVVJnVGVvLO4Zsw8j0KNa7vZjWpCyOhXzuOPqP
+         LvJOtAk/o2BlhBcgGfQ5bzRQ2Zv1uyDySp6TwHt+sJmalV7Z8BZhkPJ3dX1BUwPzVhzP
+         KnTg==
+X-Gm-Message-State: AOAM532HCPTEd5c/ZeWQM4dIzIYNCruLdxUn1G/IQhjDb54Ml7UKL+Og
+        69pZQS3wIeWyF1amU+8AmLN82KErxP38iRRmUTlmuIM2sEQ=
+X-Google-Smtp-Source: ABdhPJxmZ0gQz7CTeiFrI3fFzMgTbUNbRuQkmss82qCdwBfNFt0MLo2IvcWx3lGUmIbpluUbgoamBByUVfVXgM//ZIg=
+X-Received: by 2002:a05:6808:1c9:: with SMTP id x9mr7432079oic.16.1593294721972;
+ Sat, 27 Jun 2020 14:52:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20200626133243.GA8333@Mani-XPS-13-9360>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.122.82.adsl.dyn.edpnet.net[77.109.122.82]
-X-Barracuda-Start-Time: 1593287768
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 2128
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.8850 1.0000 3.0675
-X-Barracuda-Spam-Score: 3.07
-X-Barracuda-Spam-Status: No, SCORE=3.07 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.82850
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Received: by 2002:a4a:c7:0:0:0:0:0 with HTTP; Sat, 27 Jun 2020 14:52:01 -0700 (PDT)
+Reply-To: un.org@i.ua
+From:   helen <courtfederalhigh@gmail.com>
+Date:   Sat, 27 Jun 2020 22:52:01 +0100
+Message-ID: <CACEnAPy7s5RzhbSki+FAT+bazdh+aAgcgAies9_XSam9h+jx3w@mail.gmail.com>
+Subject: 
+To:     ebkrumme@hotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On vr, 26 jun 2020 19:02:43 +0530, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> On Mon, Jun 22, 2020 at 01:46:03PM +0200, Marc Kleine-Budde wrote:
-> > This patch add support for the Microchip MCP25xxFD SPI CAN controller family.
-> > 
-> > Pending-Tested-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > Pending-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> 
-> Could you please split this patch into multiple ones? Having ~4k lines for a
-> patch makes it difficult to review. I know that some parts are difficult to
-> split (happened with my series as well) but anything below 1k should be fine.
+MONEY-GRAM TRANSFERRED PAYMENT INFO:
 
-IMHO, there is a huge difference between a complete new driver of 4k
-lines and a change of 100 lines.
-It's useless to add a non-functional driver, only to add functionality
-later on.
+Below is the sender=E2=80=99s information
 
-You're right concerning real changes to a driver.
 
-Just my opinion ...
 
-From what I see, Marc did a good job, providing minimal functionality in
-the first series. now, the driver can evolve (like adding listen-only :-) )
+1. MG. REFERENCE NO#: 36360857
 
-Kurt
+2. SENDER'S NAME: Johnson Williams
 
-> 
-> Thanks,
-> Mani
-> 
-> > ---
-> >  drivers/net/can/spi/Kconfig                   |    2 +
-> >  drivers/net/can/spi/Makefile                  |    1 +
-> >  drivers/net/can/spi/mcp25xxfd/Kconfig         |   17 +
-> >  drivers/net/can/spi/mcp25xxfd/Makefile        |    8 +
-> >  .../net/can/spi/mcp25xxfd/mcp25xxfd-core.c    | 2890 +++++++++++++++++
-> >  .../net/can/spi/mcp25xxfd/mcp25xxfd-crc16.c   |   89 +
-> >  .../net/can/spi/mcp25xxfd/mcp25xxfd-regmap.c  |  554 ++++
-> >  drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h     |  828 +++++
-> >  8 files changed, 4389 insertions(+)
-> >  create mode 100644 drivers/net/can/spi/mcp25xxfd/Kconfig
-> >  create mode 100644 drivers/net/can/spi/mcp25xxfd/Makefile
-> >  create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-> >  create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd-crc16.c
-> >  create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd-regmap.c
-> >  create mode 100644 drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
-> > 
+3. AMOUNT TO PICKUP: US$10,000
+
+
+
+Go to any Money Gram office near you and pick up the payment Track the
+
+Reference Number by visiting and click the link below
+
+(https://secure.moneygram.com/embed/track) and enter the Reference
+
+Number: 36360857 and the Last Name: Williams, you will find the payment
+
+available for pickup instantly.
+
+Yours Sincerely,
+
+Mrs. Helen Marvis
+United Nations Liaison Office
+Directorate for International Payments
