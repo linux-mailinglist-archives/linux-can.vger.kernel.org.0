@@ -2,282 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D64B214B08
-	for <lists+linux-can@lfdr.de>; Sun,  5 Jul 2020 09:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5BB214BD6
+	for <lists+linux-can@lfdr.de>; Sun,  5 Jul 2020 12:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbgGEH43 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 5 Jul 2020 03:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S1726840AbgGEKfV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 5 Jul 2020 06:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725967AbgGEH41 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Jul 2020 03:56:27 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD808C061794
-        for <linux-can@vger.kernel.org>; Sun,  5 Jul 2020 00:56:26 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 08064BC127;
-        Sun,  5 Jul 2020 07:56:17 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, dmurphy@ti.com,
-        sriram.dash@samsung.com, hpeter@gmail.com, masahiroy@kernel.org,
-        leon@kernel.org, krzk@kernel.org, kvalo@codeaurora.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] Replace HTTP links with HTTPS ones: CAN network drivers
-Date:   Sun,  5 Jul 2020 09:56:06 +0200
-Message-Id: <20200705075606.22802-1-grandmaster@al2klimov.de>
+        with ESMTP id S1726355AbgGEKfV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 5 Jul 2020 06:35:21 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25594C061794
+        for <linux-can@vger.kernel.org>; Sun,  5 Jul 2020 03:35:21 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1js1zD-0008RR-9i; Sun, 05 Jul 2020 12:35:03 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:44c0:f67d:f3f1:540c] (unknown [IPv6:2a03:f580:87bc:d400:44c0:f67d:f3f1:540c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 24E5A529203;
+        Sun,  5 Jul 2020 10:34:57 +0000 (UTC)
+Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: CAN network drivers
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
+        robh+dt@kernel.org, dmurphy@ti.com, sriram.dash@samsung.com,
+        hpeter@gmail.com, masahiroy@kernel.org, leon@kernel.org,
+        krzk@kernel.org, kvalo@codeaurora.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200705075606.22802-1-grandmaster@al2klimov.de>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJcUsSbBQkM366zAAoJECte4hHF
+ iupUgkAP/2RdxKPZ3GMqag33jKwKAbn/fRqAFWqUH9TCsRH3h6+/uEPnZdzhkL4a9p/6OeJn
+ Z6NXqgsyRAOTZsSFcwlfxLNHVxBWm8pMwrBecdt4lzrjSt/3ws2GqxPsmza1Gs61lEdYvLST
+ Ix2vPbB4FAfE0kizKAjRZzlwOyuHOr2ilujDsKTpFtd8lV1nBNNn6HBIBR5ShvJnwyUdzuby
+ tOsSt7qJEvF1x3y49bHCy3uy+MmYuoEyG6zo9udUzhVsKe3hHYC2kfB16ZOBjFC3lH2U5An+
+ yQYIIPZrSWXUeKjeMaKGvbg6W9Oi4XEtrwpzUGhbewxCZZCIrzAH2hz0dUhacxB201Y/faY6
+ BdTS75SPs+zjTYo8yE9Y9eG7x/lB60nQjJiZVNvZ88QDfVuLl/heuIq+fyNajBbqbtBT5CWf
+ mOP4Dh4xjm3Vwlz8imWW/drEVJZJrPYqv0HdPbY8jVMpqoe5jDloyVn3prfLdXSbKPexlJaW
+ 5tnPd4lj8rqOFShRnLFCibpeHWIumqrIqIkiRA9kFW3XMgtU6JkIrQzhJb6Tc6mZg2wuYW0d
+ Wo2qvdziMgPkMFiWJpsxM9xPk9BBVwR+uojNq5LzdCsXQ2seG0dhaOTaaIDWVS8U/V8Nqjrl
+ 6bGG2quo5YzJuXKjtKjZ4R6k762pHJ3tnzI/jnlc1sXz
+Message-ID: <7d4f2aa8-b63a-1c2d-961f-3ab1dbb386cd@pengutronix.de>
+Date:   Sun, 5 Jul 2020 12:34:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200705075606.22802-1-grandmaster@al2klimov.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+On 7/5/20 9:56 AM, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+>           If both the HTTP and HTTPS versions
+>           return 200 OK and serve the same content:
+>             Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-          If both the HTTP and HTTPS versions
-          return 200 OK and serve the same content:
-            Replace HTTP with HTTPS.
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
+regards,
+Marc
 
- If there are any URLs to be removed completely or at least not HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See https://lkml.org/lkml/2020/6/26/837
-
- Documentation/devicetree/bindings/net/can/grcan.txt |  2 +-
- drivers/net/can/grcan.c                             |  2 +-
- drivers/net/can/m_can/m_can.c                       |  2 +-
- drivers/net/can/m_can/m_can.h                       |  2 +-
- drivers/net/can/m_can/m_can_platform.c              |  2 +-
- drivers/net/can/m_can/tcan4x5x.c                    |  2 +-
- drivers/net/can/sja1000/Kconfig                     | 12 ++++++------
- drivers/net/can/sja1000/tscan1.c                    |  2 +-
- drivers/net/can/slcan.c                             |  2 +-
- drivers/net/can/ti_hecc.c                           |  4 ++--
- drivers/net/can/usb/Kconfig                         |  6 +++---
- 11 files changed, 19 insertions(+), 19 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/can/grcan.txt b/Documentation/devicetree/bindings/net/can/grcan.txt
-index 34ef3498f887..d05b5c80d2b4 100644
---- a/Documentation/devicetree/bindings/net/can/grcan.txt
-+++ b/Documentation/devicetree/bindings/net/can/grcan.txt
-@@ -25,4 +25,4 @@ Optional properties:
- 	a bug workaround is activated.
- 
- For further information look in the documentation for the GLIB IP core library:
--http://www.gaisler.com/products/grlib/grip.pdf
-+https://www.gaisler.com/products/grlib/grip.pdf
-diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
-index 378200b682fa..c6be0ed9ae90 100644
---- a/drivers/net/can/grcan.c
-+++ b/drivers/net/can/grcan.c
-@@ -8,7 +8,7 @@
-  * VHDL IP core library.
-  *
-  * Full documentation of the GRCAN core can be found here:
-- * http://www.gaisler.com/products/grlib/grip.pdf
-+ * https://www.gaisler.com/products/grlib/grip.pdf
-  *
-  * See "Documentation/devicetree/bindings/net/can/grcan.txt" for information on
-  * open firmware properties.
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 02c5795b7393..d7d6e5111e0d 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -2,7 +2,7 @@
- // CAN bus driver for Bosch M_CAN controller
- // Copyright (C) 2014 Freescale Semiconductor, Inc.
- //      Dong Aisheng <b29396@freescale.com>
--// Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
-+// Copyright (C) 2018-19 Texas Instruments Incorporated - https://www.ti.com/
- 
- /* Bosch M_CAN user manual can be obtained from:
-  * http://www.bosch-semiconductors.de/media/pdf_1/ipmodules_1/m_can/
-diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-index 49f42b50627a..30a1a030ce17 100644
---- a/drivers/net/can/m_can/m_can.h
-+++ b/drivers/net/can/m_can/m_can.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /* CAN bus driver for Bosch M_CAN controller
-- * Copyright (C) 2018 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2018 Texas Instruments Incorporated - https://www.ti.com/
-  */
- 
- #ifndef _CAN_M_CAN_H_
-diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-index 38ea5e600fb8..1905b7108429 100644
---- a/drivers/net/can/m_can/m_can_platform.c
-+++ b/drivers/net/can/m_can/m_can_platform.c
-@@ -3,7 +3,7 @@
- // Copyright (C) 2014 Freescale Semiconductor, Inc.
- //	Dong Aisheng <b29396@freescale.com>
- //
--// Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
-+// Copyright (C) 2018-19 Texas Instruments Incorporated - https://www.ti.com/
- 
- #include <linux/platform_device.h>
- 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index eacd428e07e9..d36ac51cde8c 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- // SPI to CAN driver for the Texas Instruments TCAN4x5x
--// Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
-+// Copyright (C) 2018-19 Texas Instruments Incorporated - https://www.ti.com/
- 
- #include <linux/regmap.h>
- #include <linux/spi/spi.h>
-diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
-index 110071b26921..0a9558db3088 100644
---- a/drivers/net/can/sja1000/Kconfig
-+++ b/drivers/net/can/sja1000/Kconfig
-@@ -12,14 +12,14 @@ config CAN_EMS_PCI
- 	help
- 	  This driver is for the one, two or four channel CPC-PCI,
- 	  CPC-PCIe and CPC-104P cards from EMS Dr. Thomas Wuensche
--	  (http://www.ems-wuensche.de).
-+	  (https://www.ems-wuensche.de).
- 
- config CAN_EMS_PCMCIA
- 	tristate "EMS CPC-CARD Card"
- 	depends on PCMCIA
- 	help
- 	  This driver is for the one or two channel CPC-CARD cards from
--	  EMS Dr. Thomas Wuensche (http://www.ems-wuensche.de).
-+	  EMS Dr. Thomas Wuensche (https://www.ems-wuensche.de).
- 
- config CAN_F81601
- 	tristate "Fintek F81601 PCIE to 2 CAN Controller"
-@@ -44,7 +44,7 @@ config CAN_PEAK_PCI
- 	help
- 	  This driver is for the PCAN-PCI/PCIe/miniPCI cards
- 	  (1, 2, 3 or 4 channels) from PEAK-System Technik
--	  (http://www.peak-system.com).
-+	  (https://www.peak-system.com).
- 
- config CAN_PEAK_PCIEC
- 	bool "PEAK PCAN-ExpressCard Cards"
-@@ -63,7 +63,7 @@ config CAN_PEAK_PCMCIA
- 	depends on HAS_IOPORT_MAP
- 	help
- 	  This driver is for the PCAN-PC Card PCMCIA adapter (1 or 2 channels)
--	  from PEAK-System (http://www.peak-system.com). To compile this
-+	  from PEAK-System (https://www.peak-system.com). To compile this
- 	  driver as a module, choose M here: the module will be called
- 	  peak_pcmcia.
- 
-@@ -97,7 +97,7 @@ config CAN_SJA1000_PLATFORM
- 	  This driver adds support for the SJA1000 chips connected to
- 	  the "platform bus" (Linux abstraction for directly to the
- 	  processor attached devices).  Which can be found on various
--	  boards from Phytec (http://www.phytec.de) like the PCM027,
-+	  boards from Phytec (https://www.phytec.de) like the PCM027,
- 	  PCM038. It also provides the OpenFirmware "platform bus" found
- 	  on embedded systems with OpenFirmware bindings, e.g. if you
- 	  have a PowerPC based system you may want to enable this option.
-@@ -107,7 +107,7 @@ config CAN_TSCAN1
- 	depends on ISA
- 	help
- 	  This driver is for Technologic Systems' TSCAN-1 PC104 boards.
--	  http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1
-+	  https://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1
- 	  The driver supports multiple boards and automatically configures them:
- 	  PLD IO base addresses are read from jumpers JP1 and JP2,
- 	  IRQ numbers are read from jumpers JP4 and JP5,
-diff --git a/drivers/net/can/sja1000/tscan1.c b/drivers/net/can/sja1000/tscan1.c
-index 6ea802c66124..e0b7a4fd8faf 100644
---- a/drivers/net/can/sja1000/tscan1.c
-+++ b/drivers/net/can/sja1000/tscan1.c
-@@ -8,7 +8,7 @@
- /*
-  * References:
-  * - Getting started with TS-CAN1, Technologic Systems, Jun 2009
-- *	http://www.embeddedarm.com/documentation/ts-can1-manual.pdf
-+ *	https://www.embeddedarm.com/documentation/ts-can1-manual.pdf
-  */
- 
- #include <linux/init.h>
-diff --git a/drivers/net/can/slcan.c b/drivers/net/can/slcan.c
-index 91cdc0a2b1a7..b7127d58d3e9 100644
---- a/drivers/net/can/slcan.c
-+++ b/drivers/net/can/slcan.c
-@@ -18,7 +18,7 @@
-  * General Public License for more details.
-  *
-  * You should have received a copy of the GNU General Public License along
-- * with this program; if not, see http://www.gnu.org/licenses/gpl.html
-+ * with this program; if not, see https://www.gnu.org/licenses/gpl.html
-  *
-  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-index 94b1491b569f..1c51639d2085 100644
---- a/drivers/net/can/ti_hecc.c
-+++ b/drivers/net/can/ti_hecc.c
-@@ -2,9 +2,9 @@
-  * TI HECC (CAN) device driver
-  *
-  * This driver supports TI's HECC (High End CAN Controller module) and the
-- * specs for the same is available at <http://www.ti.com>
-+ * specs for the same is available at <https://www.ti.com>
-  *
-- * Copyright (C) 2009 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2009 Texas Instruments Incorporated - https://www.ti.com/
-  * Copyright (C) 2019 Jeroen Hofstee <jhofstee@victronenergy.com>
-  *
-  * This program is free software; you can redistribute it and/or
-diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-index 77fa830fe7dd..da60ee47be19 100644
---- a/drivers/net/can/usb/Kconfig
-+++ b/drivers/net/can/usb/Kconfig
-@@ -6,13 +6,13 @@ config CAN_8DEV_USB
- 	tristate "8 devices USB2CAN interface"
- 	help
- 	  This driver supports the USB2CAN interface
--	  from 8 devices (http://www.8devices.com).
-+	  from 8 devices (https://www.8devices.com).
- 
- config CAN_EMS_USB
- 	tristate "EMS CPC-USB/ARM7 CAN/USB interface"
- 	help
- 	  This driver is for the one channel CPC-USB/ARM7 CAN/USB interface
--	  from EMS Dr. Thomas Wuensche (http://www.ems-wuensche.de).
-+	  from EMS Dr. Thomas Wuensche (https://www.ems-wuensche.de).
- 
- config CAN_ESD_USB2
- 	tristate "ESD USB/2 CAN/USB interface"
-@@ -100,7 +100,7 @@ config CAN_PEAK_USB
- 	  PCAN-Chip USB        CAN-FD to USB stamp module
- 	  PCAN-USB X6          6 CAN-FD channels USB adapter
- 
--	  (see also http://www.peak-system.com).
-+	  (see also https://www.peak-system.com).
- 
- config CAN_UCAN
- 	tristate "Theobroma Systems UCAN interface"
 -- 
-2.27.0
-
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
