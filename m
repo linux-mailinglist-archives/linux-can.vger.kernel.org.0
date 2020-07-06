@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A12021590E
-	for <lists+linux-can@lfdr.de>; Mon,  6 Jul 2020 16:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142F4215A65
+	for <lists+linux-can@lfdr.de>; Mon,  6 Jul 2020 17:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729264AbgGFOC0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 6 Jul 2020 10:02:26 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:49899 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729327AbgGFOCW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Jul 2020 10:02:22 -0400
-Received: by mail-io1-f69.google.com with SMTP id d20so23633973iom.16
-        for <linux-can@vger.kernel.org>; Mon, 06 Jul 2020 07:02:21 -0700 (PDT)
+        id S1729317AbgGFPMs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 6 Jul 2020 11:12:48 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:53941 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729286AbgGFPMZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 6 Jul 2020 11:12:25 -0400
+Received: by mail-io1-f70.google.com with SMTP id g11so23181801ioc.20
+        for <linux-can@vger.kernel.org>; Mon, 06 Jul 2020 08:12:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=aMczGxmM1HSulrVavn4v21RrI9KjwYjRm8s4w2PRZ1Q=;
-        b=rbXI13WaDkSxqu6pyEAazwljdRCGdffQOuvp+CJ4wF1KIbiU1OP7RiojN1oj2SJBU4
-         srY5z/F2uqCIIaQXUGXfCCaALgHnPm3wX7TFue5X0G7E710iFMt6+Yv6j//btuhH8hro
-         Lxdm3ypXfxqkKXPEPHUuDMux8dRfM6ZXTy0Xt9wD2+G0CwbTnT3291BmnNXhTRvTEhJg
-         GzpTEfWzmOZFYyscNvjDMcmHSMjYRfaDEiVib6jcpX677k/ltJRwINoIj66HieGbmRv2
-         OEiv7NxQ92mn9ViIINsgurCn19B4UHtCDhFT18kYBMtK+okPkUudGU2ELjdUfGMf8hGt
-         Hntg==
-X-Gm-Message-State: AOAM5316Gr6vFvLmPS6lAuZ4aYBocNx4xzFmVs0DjTEnDjo//PJXNRGt
-        qwxN4BsiCg2dzPJRFPXsQzP/DWlBBsYWTaIu3rf9NuD6+07y
-X-Google-Smtp-Source: ABdhPJxI0WQtefc+nPpG3hrsh6K0ZrgDh6grcPRrjp7GvPJAI+qzrwipOkbC9/RoWiTQsZp5iDBquWyBmAxmN35HAmW8WBATmzGO
+        bh=A8AMKY8aPzdRnisOHV7tznqt6RcTPKGq2mtLpSQhRdM=;
+        b=rl815cgZ+C2S9n2xyVOudCM33a8oRjzqlAOIamAfRJJS7mZ2cVdis9GhpblvJQWOd2
+         Y04NAnc2vnmK/X/arHHQRiaXjfRStonKZGt+E5chN7ExUeS0UAVTzf483DqRqxwK6c56
+         A/1rzHwn5JknaW8MZFMq+EmHfTuCt4moLe/pBCgdWJHOYiELhG63n1ncOr7JTindHlIm
+         Y9WC/2IBKN1JsrAfk6eDcPeUFka1ght3euFQjYuJgJPVBTjj12hbPYSHQeDsPPh2g6z9
+         NL4iU2RYBAVaHeRf6ABBO3K55cePFaTDICbI2XJeHluzNCstwIBmQ11bQ43TgEJLRLxc
+         ctqA==
+X-Gm-Message-State: AOAM532970rpJ6sauVNqK94iAJQk3jz19jjMpWpBasEKU1pi/2Ef8swv
+        /60rmeiAsRYLQ+Yx+1DOrCQdhGuse3I+3zy04CGPqYv8ds8b
+X-Google-Smtp-Source: ABdhPJwKIbZpsvpXV+5Ek9wHgpR6MvEdpzwlMpofnHIEydYavIzgAr+goB0Sh77D4pLypL9fiFObLqRjAuesafDVFtmcTwHhFk0n
 MIME-Version: 1.0
-X-Received: by 2002:a02:a797:: with SMTP id e23mr26260311jaj.81.1594044139724;
- Mon, 06 Jul 2020 07:02:19 -0700 (PDT)
-Date:   Mon, 06 Jul 2020 07:02:19 -0700
+X-Received: by 2002:a92:c530:: with SMTP id m16mr31740900ili.300.1594048343040;
+ Mon, 06 Jul 2020 08:12:23 -0700 (PDT)
+Date:   Mon, 06 Jul 2020 08:12:23 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b4698a05a9c65284@google.com>
-Subject: INFO: task hung in rwlock_bug
-From:   syzbot <syzbot+5c3a96e9b26271b2db8c@syzkaller.appspotmail.com>
+Message-ID: <0000000000003dea2205a9c74d50@google.com>
+Subject: INFO: task hung in pcpu_alloc
+From:   syzbot <syzbot+9b3b388c8ccd4c8bae92@syzkaller.appspotmail.com>
 To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         linux-kernel@vger.kernel.org, mkl@pengutronix.de,
         netdev@vger.kernel.org, socketcan@hartkopp.net,
@@ -49,41 +49,34 @@ Hello,
 
 syzbot found the following crash on:
 
-HEAD commit:    115a5416 Merge branch 'fixes' of git://git.kernel.org/pub/..
+HEAD commit:    caffb99b Merge git://git.kernel.org/pub/scm/linux/kernel/g..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12b5067e100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9a8d9fdac44b778b
-dashboard link: https://syzkaller.appspot.com/bug?extid=5c3a96e9b26271b2db8c
+console output: https://syzkaller.appspot.com/x/log.txt?x=11df10ee100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b3368ce0cc5f5ace
+dashboard link: https://syzkaller.appspot.com/bug?extid=9b3b388c8ccd4c8bae92
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
 Unfortunately, I don't have any reproducer for this crash yet.
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+5c3a96e9b26271b2db8c@syzkaller.appspotmail.com
+Reported-by: syzbot+9b3b388c8ccd4c8bae92@syzkaller.appspotmail.com
 
-INFO: task syz-executor.3:19435 blocked for more than 143 seconds.
+INFO: task syz-executor.1:28515 blocked for more than 143 seconds.
       Not tainted 5.7.0-rc6-syzkaller #0
 "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-syz-executor.3  D29864 19435   7571 0x00000004
+syz-executor.1  D28392 28515   7206 0x00000004
 Call Trace:
  context_switch kernel/sched/core.c:3367 [inline]
  __schedule+0x937/0x1ff0 kernel/sched/core.c:4083
+ rwsem_down_write_slowpath+0x90a/0xf90 kernel/locking/rwsem.c:1216
  __sched_text_start+0x8/0x8
- atomic_try_cmpxchg include/asm-generic/atomic-instrumented.h:694 [inline]
- queued_spin_lock include/asm-generic/qspinlock.h:78 [inline]
- do_raw_spin_lock+0x129/0x2e0 kernel/locking/spinlock_debug.c:113
- rwlock_bug.part.0+0x90/0x90 include/linux/sched.h:1329
  schedule+0xd0/0x2a0 kernel/sched/core.c:4158
  rwsem_down_write_slowpath+0x706/0xf90 kernel/locking/rwsem.c:1235
+ pcpu_alloc+0xfed/0x13b0 mm/percpu.c:1703
  rwsem_mark_wake+0x8d0/0x8d0 include/linux/compiler.h:199
  lock_acquire+0x1f2/0x8f0 kernel/locking/lockdep.c:4934
  register_netdevice_notifier+0x1e/0x270 net/core/dev.c:1729
- pcpu_region_overlap mm/percpu.c:564 [inline]
- pcpu_block_update_hint_alloc+0x742/0xb00 mm/percpu.c:877
  lock_release+0x800/0x800 kernel/locking/lockdep.c:4689
- atomic64_cmpxchg include/asm-generic/atomic-instrumented.h:1463 [inline]
- atomic_long_cmpxchg_release include/asm-generic/atomic-long.h:424 [inline]
- __mutex_unlock_slowpath+0xe2/0x660 kernel/locking/mutex.c:1249
  __down_write kernel/locking/rwsem.c:1389 [inline]
  down_write+0x137/0x150 kernel/locking/rwsem.c:1532
  atomic64_try_cmpxchg include/asm-generic/atomic-instrumented.h:1504 [inline]
@@ -110,32 +103,26 @@ Call Trace:
  __do_sys_socket net/socket.c:1535 [inline]
  __se_sys_socket net/socket.c:1533 [inline]
  __x64_sys_socket+0x6f/0xb0 net/socket.c:1533
+ __trace_hardirqs_on_caller kernel/locking/lockdep.c:3657 [inline]
+ lockdep_hardirqs_on+0x463/0x620 kernel/locking/lockdep.c:3702
  do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
  entry_SYSCALL_64_after_hwframe+0x49/0xb3
-INFO: task syz-executor.3:19444 blocked for more than 143 seconds.
+INFO: task syz-executor.1:28577 blocked for more than 143 seconds.
       Not tainted 5.7.0-rc6-syzkaller #0
 "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-syz-executor.3  D29864 19444   7571 0x00000004
+syz-executor.1  D28392 28577   7206 0x00000004
 Call Trace:
  context_switch kernel/sched/core.c:3367 [inline]
  __schedule+0x937/0x1ff0 kernel/sched/core.c:4083
+ rwsem_down_write_slowpath+0x90a/0xf90 kernel/locking/rwsem.c:1216
  __sched_text_start+0x8/0x8
- atomic_try_cmpxchg include/asm-generic/atomic-instrumented.h:694 [inline]
- queued_spin_lock include/asm-generic/qspinlock.h:78 [inline]
- do_raw_spin_lock+0x129/0x2e0 kernel/locking/spinlock_debug.c:113
- rwsem_optimistic_spin+0x550/0x550 include/linux/compiler.h:226
- rwlock_bug.part.0+0x90/0x90 include/linux/sched.h:1329
  schedule+0xd0/0x2a0 kernel/sched/core.c:4158
  rwsem_down_write_slowpath+0x706/0xf90 kernel/locking/rwsem.c:1235
+ pcpu_alloc+0xfed/0x13b0 mm/percpu.c:1703
  rwsem_mark_wake+0x8d0/0x8d0 include/linux/compiler.h:199
  lock_acquire+0x1f2/0x8f0 kernel/locking/lockdep.c:4934
  register_netdevice_notifier+0x1e/0x270 net/core/dev.c:1729
- pcpu_region_overlap mm/percpu.c:564 [inline]
- pcpu_block_update_hint_alloc+0x742/0xb00 mm/percpu.c:877
  lock_release+0x800/0x800 kernel/locking/lockdep.c:4689
- atomic64_cmpxchg include/asm-generic/atomic-instrumented.h:1463 [inline]
- atomic_long_cmpxchg_release include/asm-generic/atomic-long.h:424 [inline]
- __mutex_unlock_slowpath+0xe2/0x660 kernel/locking/mutex.c:1249
  __down_write kernel/locking/rwsem.c:1389 [inline]
  down_write+0x137/0x150 kernel/locking/rwsem.c:1532
  atomic64_try_cmpxchg include/asm-generic/atomic-instrumented.h:1504 [inline]
@@ -162,11 +149,42 @@ Call Trace:
  __do_sys_socket net/socket.c:1535 [inline]
  __se_sys_socket net/socket.c:1533 [inline]
  __x64_sys_socket+0x6f/0xb0 net/socket.c:1533
+ __trace_hardirqs_on_caller kernel/locking/lockdep.c:3657 [inline]
+ lockdep_hardirqs_on+0x463/0x620 kernel/locking/lockdep.c:3702
  do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
  entry_SYSCALL_64_after_hwframe+0x49/0xb3
-INFO: lockdep is turned off.
+
+Showing all locks held in the system:
+3 locks held by kworker/u4:0/7:
+ #0: ffff8880ae637998 (&rq->lock){-.-.}-{2:2}, at: newidle_balance+0x9be/0xdb0 kernel/sched/fair.c:10512
+ #1: ffffffff899bea80 (rcu_read_lock){....}-{1:2}, at: __update_idle_core+0x42/0x3e0 kernel/sched/fair.c:5969
+ #2: ffff8880ae627598 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x55/0x1a0 kernel/time/timer.c:936
+1 lock held by khungtaskd/1131:
+ #0: ffffffff899bea80 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:5754
+1 lock held by in:imklog/6746:
+ #0: ffff8880a68f8bb0 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:826
+2 locks held by agetty/6968:
+ #0: ffff88809fe6f098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x22/0x80 drivers/tty/tty_ldisc.c:267
+ #1: ffffc90000fb42e8 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x220/0x1b30 drivers/tty/n_tty.c:2156
+3 locks held by kworker/u4:1/3824:
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: __write_once_size include/linux/compiler.h:226 [inline]
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:855 [inline]
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:40 [inline]
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:615 [inline]
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
+ #0: ffff8880a9771938 ((wq_completion)netns){+.+.}-{0:0}, at: process_one_work+0x844/0x16a0 kernel/workqueue.c:2239
+ #1: ffffc90007defdc0 (net_cleanup_work){+.+.}-{0:0}, at: process_one_work+0x878/0x16a0 kernel/workqueue.c:2243
+ #2: ffffffff8a57aaf0 (pernet_ops_rwsem){++++}-{3:3}, at: cleanup_net+0x9b/0xa50 net/core/net_namespace.c:565
+1 lock held by syz-executor.1/28515:
+ #0: ffffffff8a57aaf0 (pernet_ops_rwsem){++++}-{3:3}, at: register_netdevice_notifier+0x1e/0x270 net/core/dev.c:1729
+1 lock held by syz-executor.1/28577:
+ #0: ffffffff8a57aaf0 (pernet_ops_rwsem){++++}-{3:3}, at: register_netdevice_notifier+0x1e/0x270 net/core/dev.c:1729
+
+=============================================
+
 NMI backtrace for cpu 1
-CPU: 1 PID: 1140 Comm: khungtaskd Not tainted 5.7.0-rc6-syzkaller #0
+CPU: 1 PID: 1131 Comm: khungtaskd Not tainted 5.7.0-rc6-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 Call Trace:
  __dump_stack lib/dump_stack.c:77 [inline]
@@ -183,42 +201,50 @@ Call Trace:
  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
 Sending NMI from CPU 1 to CPUs 0:
 NMI backtrace for cpu 0
-CPU: 0 PID: 37 Comm: kworker/u4:2 Not tainted 5.7.0-rc6-syzkaller #0
+CPU: 0 PID: 4128 Comm: systemd-journal Not tainted 5.7.0-rc6-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: krdsd rds_connect_worker
-RIP: 0010:ib_net include/net/inet_hashtables.h:95 [inline]
-RIP: 0010:inet_csk_find_open_port net/ipv4/inet_connection_sock.c:226 [inline]
-RIP: 0010:inet_csk_get_port+0xccc/0x2590 net/ipv4/inet_connection_sock.c:312
-Code: 30 4d 85 ed 0f 84 1d 01 00 00 e8 ff 32 dc fa 49 83 ed 30 0f 84 0e 01 00 00 e8 f0 32 dc fa 4c 89 e8 48 c1 e8 03 42 80 3c 30 00 <0f> 85 69 13 00 00 4d 39 65 00 75 ac e8 d3 32 dc fa 49 8d 7d 08 48
-RSP: 0018:ffffc90000e479b8 EFLAGS: 00000246
-RAX: 1ffff11014ca0520 RBX: 000000000000aed1 RCX: ffffffff815a8879
-RDX: 0000000000000000 RSI: ffffffff869703a0 RDI: ffffc9000588c9e8
-RBP: ffffc90000e47b20 R08: 0000000000000004 R09: fffff520001c8f2a
-R10: 0000000000000003 R11: fffff520001c8f29 R12: ffff888051efa180
-R13: ffff8880a6502900 R14: dffffc0000000000 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
+RIP: 0010:__debug_check_no_obj_freed lib/debugobjects.c:958 [inline]
+RIP: 0010:debug_check_no_obj_freed+0x107/0x449 lib/debugobjects.c:998
+Code: 10 4c 8b 38 4d 85 ff 0f 84 26 02 00 00 31 ed 4c 89 f8 48 c1 e8 03 80 3c 18 00 0f 85 2d 02 00 00 49 8d 7f 18 83 c5 01 4d 8b 27 <48> 89 f8 48 c1 e8 03 80 3c 18 00 0f 85 29 02 00 00 4d 8b 77 18 4c
+RSP: 0018:ffffc90001677bf0 EFLAGS: 00000006
+RAX: 1ffff1101225c9ab RBX: dffffc0000000000 RCX: ffffffff815a8709
+RDX: 1ffffffff19128ff RSI: 0000000000000082 RDI: ffff8880912e4d70
+RBP: 0000000000000005 R08: 0000000000000004 R09: fffff520002cef6d
+R10: 0000000000000003 R11: fffff520002cef6c R12: ffff888050a8bbd0
+R13: ffffffff8c8947e8 R14: ffff88820550e8e8 R15: ffff8880912e4d58
+FS:  00007f9721f0e8c0(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f28f326b000 CR3: 000000008b084000 CR4: 00000000001406f0
+CR2: 00007f971f87e000 CR3: 0000000093734000 CR4: 00000000001426f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
- inet_csk_listen_stop+0xb20/0xb20 net/ipv4/inet_connection_sock.c:1041
- lock_downgrade+0x840/0x840 kernel/locking/lockdep.c:4579
- __inet6_bind+0x5d5/0x19c0 net/ipv6/af_inet6.c:404
- inet6_bind+0xf3/0x15c net/ipv6/af_inet6.c:454
- rds_tcp_conn_path_connect+0x39a/0x880 net/rds/tcp_connect.c:144
- rds_tcp_state_change+0x270/0x270 net/rds/tcp_connect.c:70
- lock_release+0x800/0x800 kernel/locking/lockdep.c:4689
- rds_connect_worker+0x1a5/0x2c0 net/rds/threads.c:176
- process_one_work+0x965/0x16a0 kernel/workqueue.c:2268
- lock_release+0x800/0x800 kernel/locking/lockdep.c:4689
- pwq_dec_nr_in_flight+0x310/0x310 kernel/workqueue.c:1198
- rwlock_bug.part.0+0x90/0x90 include/linux/sched.h:1329
- worker_thread+0x96/0xe20 kernel/workqueue.c:2414
- process_one_work+0x16a0/0x16a0 kernel/workqueue.c:2273
- kthread+0x388/0x470 kernel/kthread.c:268
- kthread_mod_delayed_work+0x1a0/0x1a0 kernel/kthread.c:1090
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
+ kmem_cache_free+0x185/0x320 mm/slab.c:3693
+ putname+0xe1/0x120 fs/namei.c:259
+ filename_lookup+0x282/0x3e0 fs/namei.c:2362
+ nd_jump_link+0x360/0x360 fs/namei.c:895
+ __phys_addr_symbol+0x2c/0x70 arch/x86/mm/physaddr.c:42
+ overlaps mm/usercopy.c:110 [inline]
+ check_kernel_text_object mm/usercopy.c:142 [inline]
+ __check_object_size mm/usercopy.c:289 [inline]
+ __check_object_size+0x171/0x437 mm/usercopy.c:256
+ audit_getname include/linux/audit.h:328 [inline]
+ getname_flags fs/namei.c:202 [inline]
+ getname_flags+0x275/0x5b0 fs/namei.c:128
+ security_prepare_creds+0xee/0x180 security/security.c:1604
+ user_path_at include/linux/namei.h:59 [inline]
+ do_faccessat+0x248/0x7a0 fs/open.c:398
+ __ia32_sys_fallocate+0xf0/0xf0 fs/open.c:338
+ trace_hardirqs_off_caller+0x55/0x230 kernel/trace/trace_preemptirq.c:73
+ do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
+RIP: 0033:0x7f97211ca9c7
+Code: 83 c4 08 48 3d 01 f0 ff ff 73 01 c3 48 8b 0d c8 d4 2b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 b8 15 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a1 d4 2b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffe13203578 EFLAGS: 00000246 ORIG_RAX: 0000000000000015
+RAX: ffffffffffffffda RBX: 00007ffe13206490 RCX: 00007f97211ca9c7
+RDX: 00007f9721c3ba00 RSI: 0000000000000000 RDI: 000056391a37a9a3
+RBP: 00007ffe132035b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000069 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000000 R14: 00007ffe13206490 R15: 00007ffe13203aa0
 
 
 ---
