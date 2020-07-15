@@ -2,97 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E265621FE3A
-	for <lists+linux-can@lfdr.de>; Tue, 14 Jul 2020 22:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177BC220AC6
+	for <lists+linux-can@lfdr.de>; Wed, 15 Jul 2020 13:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbgGNUKc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 14 Jul 2020 16:10:32 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:20786 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbgGNUKb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 14 Jul 2020 16:10:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1594757429;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=GNcdh9hbyCSYCE1dhM3aHIwRYOjxxn/mU4RGqzYVsko=;
-        b=hvMq0FtjXZ4ja0TuywxipPbO7azfGxH7OjuTLXyy6VhFPRT4qrOdDkKAsMlFVdtFq9
-        YT9PNq2F/LNh8bzxKgp5CQ5MNp+xONj78Vt59maynjmADTgIY8ZqoFuIWfFzCYH7mTme
-        CCXyAcxzAyuUia3pDuzOvJ8/e0DpQ7wV/gxIfCwxXsPPzWWBaNPZ7j+43SlV4yJPQEbw
-        F9a8IUc93tDHcIoNPoIbhxn5HR5pIKA7yQChmlxvyZB7xL8k6l14C4Rd6FfyP70HV4x/
-        v0ZlwWd3N7PTJlplBuTmU/FN6oHzbIcyrcraE5MH9/87eqp4j2OAKvVgPqswJDSitneJ
-        m8bQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKOdeVTdI="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
-        with ESMTPSA id R09ac6w6EKA9tgs
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 14 Jul 2020 22:10:09 +0200 (CEST)
-Subject: Re: [PATCH net-next] can: silence remove_proc_entry warning
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>, mkl@pengutronix.de,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1594709090-3203-1-git-send-email-zhangchangzhong@huawei.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <e2344833-b2f4-cc6f-4b6c-868afc3ced6e@hartkopp.net>
-Date:   Tue, 14 Jul 2020 22:10:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <1594709090-3203-1-git-send-email-zhangchangzhong@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1729576AbgGOLJT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 15 Jul 2020 07:09:19 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:37974 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729356AbgGOLJT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 15 Jul 2020 07:09:19 -0400
+X-IronPort-AV: E=Sophos;i="5.75,355,1589209200"; 
+   d="scan'208";a="52194034"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 15 Jul 2020 20:09:16 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8A99F4006CDA;
+        Wed, 15 Jul 2020 20:09:11 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 00/20] Add support for [H]SCIF/TMU/CMT/THS/SDHI/MSIOF/CAN[FD]/I2C/IIC/RWDT on R8A774E1
+Date:   Wed, 15 Jul 2020 12:08:50 +0100
+Message-Id: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi All,
 
+This patch series enables support for following on RZ/G2H SoC,
+* CPU OPP
+* THS
+* CMT/TMU
+* I2C/IIC
+* MSIOF
+* RWDT
+* SDHI
+* SCIF/HSCIF
+* CAN/CANFD
 
-On 14.07.20 08:44, Zhang Changzhong wrote:
-> If can_init_proc() fail to create /proc/net/can directory,
-> can_remove_proc() will trigger a warning:
-> 
-> WARNING: CPU: 6 PID: 7133 at fs/proc/generic.c:672 remove_proc_entry+0x17b0
-> Kernel panic - not syncing: panic_on_warn set ...
-> 
-> Fix to return early from can_remove_proc() if can proc_dir
-> does not exists.
-> 
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Cheers,
+Prabhakar
 
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Lad Prabhakar (14):
+  dt-bindings: thermal: rcar-gen3-thermal: Add r8a774e1 support
+  dt-bindings: timer: renesas,cmt: Document r8a774e1 CMT support
+  arm64: dts: renesas: r8a774e1: Add SCIF and HSCIF nodes
+  arm64: dts: renesas: r8a774e1: Add SDHI nodes
+  dt-bindings: i2c: renesas,i2c: Document r8a774e1 support
+  dt-bindings: i2c: renesas,iic: Document r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add I2C and IIC-DVFS support
+  dt-bindings: spi: renesas,sh-msiof: Add r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add MSIOF nodes
+  dt-bindings: watchdog: renesas,wdt: Document r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add RWDT node
+  dt-bindings: can: rcar_can: Document r8a774e1 support
+  dt-bindings: can: rcar_canfd: Document r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add CAN[FD] support
 
-Thanks!
+Marian-Cristian Rotariu (6):
+  arm64: dts: renesas: r8a774e1: Add operating points
+  thermal: rcar_gen3_thermal: Add r8a774e1 support
+  arm64: dts: renesas: r8a774e1: Add RZ/G2H thermal support
+  arm64: dts: renesas: r8a774e1: Add CMT device nodes
+  dt-bindings: timer: renesas,tmu: Document r8a774e1 bindings
+  arm64: dts: renesas: r8a774e1: Add TMU device nodes
 
-> ---
->   net/can/proc.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/can/proc.c b/net/can/proc.c
-> index e6881bf..077af42 100644
-> --- a/net/can/proc.c
-> +++ b/net/can/proc.c
-> @@ -471,6 +471,9 @@ void can_init_proc(struct net *net)
->    */
->   void can_remove_proc(struct net *net)
->   {
-> +	if (!net->can.proc_dir)
-> +		return;
-> +
->   	if (net->can.pde_version)
->   		remove_proc_entry(CAN_PROC_VERSION, net->can.proc_dir);
->   
-> @@ -498,6 +501,5 @@ void can_remove_proc(struct net *net)
->   	if (net->can.pde_rcvlist_sff)
->   		remove_proc_entry(CAN_PROC_RCVLIST_SFF, net->can.proc_dir);
->   
-> -	if (net->can.proc_dir)
-> -		remove_proc_entry("can", net->proc_net);
-> +	remove_proc_entry("can", net->proc_net);
->   }
-> 
+ .../devicetree/bindings/i2c/renesas,i2c.txt   |   1 +
+ .../devicetree/bindings/i2c/renesas,iic.txt   |   1 +
+ .../devicetree/bindings/net/can/rcar_can.txt  |   1 +
+ .../bindings/net/can/rcar_canfd.txt           |   1 +
+ .../bindings/spi/renesas,sh-msiof.yaml        |   1 +
+ .../bindings/thermal/rcar-gen3-thermal.yaml   |   1 +
+ .../bindings/timer/renesas,cmt.yaml           |   2 +
+ .../devicetree/bindings/timer/renesas,tmu.txt |   1 +
+ .../bindings/watchdog/renesas,wdt.yaml        |   1 +
+ arch/arm64/boot/dts/renesas/r8a774e1.dtsi     | 713 +++++++++++++++++-
+ drivers/thermal/rcar_gen3_thermal.c           |   4 +
+ 11 files changed, 715 insertions(+), 12 deletions(-)
+
+-- 
+2.17.1
+
