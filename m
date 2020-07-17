@@ -2,110 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9B5223B52
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 14:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5F1223B8C
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 14:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbgGQMWV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 Jul 2020 08:22:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34602 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbgGQMWV (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 17 Jul 2020 08:22:21 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB91820684;
-        Fri, 17 Jul 2020 12:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594988540;
-        bh=J1Qt3Lw28H9tRlMCjTFWuJ09Pp5bPH/VYq8pbZMeEGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LZg5ba3M7HTo/BL5R2W6pSAW7PllQcfqW8aFdAOarRZ7DLNXyk5Oj0PHLN+VCQX2h
-         q3uf68VE9AUxzajSmsN202GOx4mTbFJmPs5YIy9ULnckxHYoKrFfB3QD4iuNza9Ben
-         A8KTxVxAzC3bjpYziEm0coq8ezKTAhI/fuiSabdk=
-Date:   Fri, 17 Jul 2020 13:22:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 14/20] dt-bindings: spi: renesas,sh-msiof: Add r8a774e1
- support
-Message-ID: <20200717122209.GF4316@sirena.org.uk>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-15-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200717115915.GD4316@sirena.org.uk>
- <CA+V-a8sxtan=8NCpEryT9NzOqkPRyQBa-ozYNHvi8goaOJQ24w@mail.gmail.com>
+        id S1726557AbgGQMob convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 17 Jul 2020 08:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgGQMoa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 08:44:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80E7C061755
+        for <linux-can@vger.kernel.org>; Fri, 17 Jul 2020 05:44:30 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jwPip-0000fy-Uy; Fri, 17 Jul 2020 14:44:15 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jwPik-0002HZ-6Q; Fri, 17 Jul 2020 14:44:10 +0200
+Date:   Fri, 17 Jul 2020 14:44:10 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     trix@redhat.com
+Cc:     robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
+        socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, ecathinds@gmail.com, lkp@intel.com,
+        bst@pengutronix.de, maxime.jayat@mobile-devices.fr,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: j1939: fix double free in j1939_netdev_start
+Message-ID: <20200717124410.GA32124@pengutronix.de>
+References: <20200710134536.4399-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3yNHWXBV/QO9xKNm"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+V-a8sxtan=8NCpEryT9NzOqkPRyQBa-ozYNHvi8goaOJQ24w@mail.gmail.com>
-X-Cookie: No other warranty expressed or implied.
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200710134536.4399-1-trix@redhat.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:15:03 up 38 days, 20:41, 157 users,  load average: 0.23, 0.42,
+ 0.76
 User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Tom,
 
---3yNHWXBV/QO9xKNm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, Jul 10, 2020 at 06:45:36AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> clang static analysis flags this error
+> 
+> j1939/main.c:292:2: warning: Attempt to free released memory [unix.Malloc]
+>         kfree(priv);
+>         ^~~~~~~~~~~
+> 
+> The problem block of code is
+> 
+> 	ret = j1939_can_rx_register(priv);
+> 	if (ret < 0)
+> 		goto out_priv_put;
+> 
+> 	return priv;
+> 
+>  out_priv_put:
+> 	j1939_priv_set(ndev, NULL);
+> 	dev_put(ndev);
+> 	kfree(priv);
+> 
+> When j1939_can_rx_register fails, it frees priv via the
+> j1939_priv_put release function __j1939_priv_release.
 
-On Fri, Jul 17, 2020 at 01:15:13PM +0100, Lad, Prabhakar wrote:
-> On Fri, Jul 17, 2020 at 12:59 PM Mark Brown <broonie@kernel.org> wrote:
+In j1939_can_rx_register()...
 
-> > On Wed, Jul 15, 2020 at 12:09:04PM +0100, Lad Prabhakar wrote:
-> > > Document RZ/G2H (R8A774E1) SoC bindings.
+| static int j1939_can_rx_register(struct j1939_priv *priv)
+| {
+| 	struct net_device *ndev = priv->ndev;
+| 	int ret;
 
-> > Please in future could you split things like this up into per subsystem
-> > serieses?  That's a more normal approach and avoids the huge threads and
-> > CC lists.
+... the function in entered with ref counter == 1.
+(Due to kref_init(&priv->kref); in j1939_priv_create())
 
-> Sorry for doing this, In future I shall keep that in mind. (Wanted to
-> get in most patches for RZ/G2H in V5.9 window)
+|
+| 	j1939_priv_get(priv);
 
-If anything sending things as a big series touching lots of subsystems
-can slow things down as people figure out dependencies and who's going
-to actually apply things.
+... then the ref counter is increased by 1, resulting in 2.
 
---3yNHWXBV/QO9xKNm
-Content-Type: application/pgp-signature; name="signature.asc"
+| 	ret = can_rx_register(dev_net(ndev), ndev, J1939_CAN_ID, J1939_CAN_MASK,
+| 			      j1939_can_recv, priv, "j1939", NULL);
+| 	if (ret < 0) {
+| 		j1939_priv_put(priv);
 
------BEGIN PGP SIGNATURE-----
+And in case of an error, the ref counter is decreased by one again.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8Rl/AACgkQJNaLcl1U
-h9DhTAgAgzuxfwIeWNm0FDyt+K9Mfz5di6xytCvItNaaahcI/Ct9HEQCGPpgG+SN
-OegozumTbxf+HvdgEgg2JsMqKfoCid7/F/M/ywb24/SqHnpgIIKBA7U6bRF2PGMW
-JHXG/oHSBd5yyV6xurj6YfaJidh9KJO5afRb8yisffI8ge1n+X7F2GQZyWke45cp
-Ojag6elp7xYrRwC3ylAp2exRsoSw5SXYwqM4CNkrDEiXq1dKeePsm2vuxf6FmE4n
-WclrCd+/9oWAk7dIoJTBX4BxBudcZlk25Y55Q6GyA/bbGMBWef1vWvUNasjQef0d
-e/mSTsDdN+0RD9lg1rJ0RqtyHnDPhw==
-=mPyM
------END PGP SIGNATURE-----
+| 		return ret;
+| 	}
+|
+| 	return 0;
+| }
 
---3yNHWXBV/QO9xKNm--
+So we cannot see why clang thinks the memory is double free()d.
+
+> Since j1939_priv_put is used widely, remove the second
+> free from j1939_netdev_start.
+
+We might replace the manual kfree() and dev_put() by the dropping the
+last ref count and rely on the automatic cleanup.
+
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  net/can/j1939/main.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+> index 137054bff9ec..991a74bc491b 100644
+> --- a/net/can/j1939/main.c
+> +++ b/net/can/j1939/main.c
+> @@ -289,7 +289,6 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
+>   out_priv_put:
+>  	j1939_priv_set(ndev, NULL);
+>  	dev_put(ndev);
+> -	kfree(priv);
+>  
+>  	return ERR_PTR(ret);
+>  }
+
+regards,
+Oleksij & Marc
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
