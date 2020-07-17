@@ -2,148 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5F1223B8C
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 14:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0AC223C5A
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 15:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgGQMob convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Fri, 17 Jul 2020 08:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
+        id S1726670AbgGQNWU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Jul 2020 09:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgGQMoa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 08:44:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80E7C061755
-        for <linux-can@vger.kernel.org>; Fri, 17 Jul 2020 05:44:30 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jwPip-0000fy-Uy; Fri, 17 Jul 2020 14:44:15 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1jwPik-0002HZ-6Q; Fri, 17 Jul 2020 14:44:10 +0200
-Date:   Fri, 17 Jul 2020 14:44:10 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     trix@redhat.com
-Cc:     robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
-        socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, ecathinds@gmail.com, lkp@intel.com,
-        bst@pengutronix.de, maxime.jayat@mobile-devices.fr,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: j1939: fix double free in j1939_netdev_start
-Message-ID: <20200717124410.GA32124@pengutronix.de>
-References: <20200710134536.4399-1-trix@redhat.com>
+        with ESMTP id S1726777AbgGQNWS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 09:22:18 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77170C08C5DD
+        for <linux-can@vger.kernel.org>; Fri, 17 Jul 2020 06:22:17 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id r19so12527784ljn.12
+        for <linux-can@vger.kernel.org>; Fri, 17 Jul 2020 06:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Ss28C0+mM4ryhX0kbHHIUQ4RNo3GN12IhkPjDaqzOeE=;
+        b=NKRXiZK5Vg4lLt6JNcSMS4fVRZqGLbiD3ALj2er8z+jz02t/Me0ivmqvp1Eq4f7cto
+         iSCkX0wRPi8LV3a5neyPSxraBBE4AN80wprYFLY9UCrz8D/D0GmWu0Cvr7RSNz5TTQfy
+         O42+2QyiWUhRw462YRkD8gdgOs8f6GxEZIf1MLRpn6UV+LxJg0+4eZHnA8kUfaoVfV3v
+         fjyPwJSTHsX9XINiTWOt1p0/4oL6AsKumloGbenY15J2SvslvUBg1xIC0bVH5ORZxuMZ
+         2grQrDkqAtCVXtvSstlPbK9ERHW2+ZPX35PPQO5Z6elS8vuDABLJKbuilb5nmyf3rLCX
+         bh5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Ss28C0+mM4ryhX0kbHHIUQ4RNo3GN12IhkPjDaqzOeE=;
+        b=MZh1oxC3H+U+joIk4Yh7KN2aXNFnh0Mxtm8SsZy3daYV1Yf33H4knNLnZ8JPOANsQF
+         M/mud2viXMPeJejMtXLHpoDve1hfcRn0G1mFQs+dd6Ze6eNA3d/pURbm5xTkkHfnOELt
+         OUc7Xtcfda3oNhSLVhJ1qasYIZrGOV38Ptw+8pOMDCm0rPWKkcDOcnn9RGLtsmq9XtwD
+         k70mNXgEW3o4ejRoy/hrO0NI/DxsT9DrxjKw6BsJnKsJR8SUwLz9MRNJy21tfdvzJV0W
+         2UBphodsUt3Cd7Kjoz0zxiHFSRAR0dq/SKGCP8TbYzrLdfcO/19RbJsqGmHaCUfOJgG/
+         xtfg==
+X-Gm-Message-State: AOAM533qGWsOEXYfSPvq8o23Ntylwx2+7qEPE0xCI/5TH7hBFi+7YTuN
+        lJOgXrGgY3VLoirqk+3e+7+o5A==
+X-Google-Smtp-Source: ABdhPJyQdCUcPwXAnEcnnv4mCw6GTSBF7SR7eCeWoXfWqYtwdr9WVEBVseii+1OEhPnuCx8eUP3JQw==
+X-Received: by 2002:a2e:760f:: with SMTP id r15mr4331219ljc.275.1594992135764;
+        Fri, 17 Jul 2020 06:22:15 -0700 (PDT)
+Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
+        by smtp.gmail.com with ESMTPSA id 203sm1649722ljf.14.2020.07.17.06.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2020 06:22:15 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 15:22:14 +0200
+From:   Niklas <niklas.soderlund@ragnatech.se>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 02/20] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a774e1 support
+Message-ID: <20200717132214.GA177462@oden.dyn.berto.se>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20200710134536.4399-1-trix@redhat.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:15:03 up 38 days, 20:41, 157 users,  load average: 0.23, 0.42,
- 0.76
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1594811350-14066-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Tom,
+Hi Lad,
 
-On Fri, Jul 10, 2020 at 06:45:36AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+Thanks for your work.
+
+On 2020-07-15 12:08:52 +0100, Lad Prabhakar wrote:
+> Document RZ/G2H (R8A774E1) SoC bindings.
 > 
-> clang static analysis flags this error
-> 
-> j1939/main.c:292:2: warning: Attempt to free released memory [unix.Malloc]
->         kfree(priv);
->         ^~~~~~~~~~~
-> 
-> The problem block of code is
-> 
-> 	ret = j1939_can_rx_register(priv);
-> 	if (ret < 0)
-> 		goto out_priv_put;
-> 
-> 	return priv;
-> 
->  out_priv_put:
-> 	j1939_priv_set(ndev, NULL);
-> 	dev_put(ndev);
-> 	kfree(priv);
-> 
-> When j1939_can_rx_register fails, it frees priv via the
-> j1939_priv_put release function __j1939_priv_release.
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-In j1939_can_rx_register()...
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-| static int j1939_can_rx_register(struct j1939_priv *priv)
-| {
-| 	struct net_device *ndev = priv->ndev;
-| 	int ret;
-
-... the function in entered with ref counter == 1.
-(Due to kref_init(&priv->kref); in j1939_priv_create())
-
-|
-| 	j1939_priv_get(priv);
-
-... then the ref counter is increased by 1, resulting in 2.
-
-| 	ret = can_rx_register(dev_net(ndev), ndev, J1939_CAN_ID, J1939_CAN_MASK,
-| 			      j1939_can_recv, priv, "j1939", NULL);
-| 	if (ret < 0) {
-| 		j1939_priv_put(priv);
-
-And in case of an error, the ref counter is decreased by one again.
-
-| 		return ret;
-| 	}
-|
-| 	return 0;
-| }
-
-So we cannot see why clang thinks the memory is double free()d.
-
-> Since j1939_priv_put is used widely, remove the second
-> free from j1939_netdev_start.
-
-We might replace the manual kfree() and dev_put() by the dropping the
-last ref count and rely on the automatic cleanup.
-
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
 > ---
->  net/can/j1939/main.c | 1 -
->  1 file changed, 1 deletion(-)
+>  Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
-> index 137054bff9ec..991a74bc491b 100644
-> --- a/net/can/j1939/main.c
-> +++ b/net/can/j1939/main.c
-> @@ -289,7 +289,6 @@ struct j1939_priv *j1939_netdev_start(struct net_device *ndev)
->   out_priv_put:
->  	j1939_priv_set(ndev, NULL);
->  	dev_put(ndev);
-> -	kfree(priv);
->  
->  	return ERR_PTR(ret);
->  }
-
-regards,
-Oleksij & Marc
+> diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> index b1a55ae497de..f386f2a7c06c 100644
+> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> @@ -20,6 +20,7 @@ properties:
+>      enum:
+>        - renesas,r8a774a1-thermal # RZ/G2M
+>        - renesas,r8a774b1-thermal # RZ/G2N
+> +      - renesas,r8a774e1-thermal # RZ/G2H
+>        - renesas,r8a7795-thermal  # R-Car H3
+>        - renesas,r8a7796-thermal  # R-Car M3-W
+>        - renesas,r8a77961-thermal # R-Car M3-W+
+> -- 
+> 2.17.1
+> 
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Regards,
+Niklas Söderlund
