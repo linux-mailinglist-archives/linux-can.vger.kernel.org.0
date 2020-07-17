@@ -2,546 +2,249 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE032233C0
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 08:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B9922364F
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 09:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727990AbgGQGYy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 Jul 2020 02:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbgGQGYo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 02:24:44 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86202C08C5C0;
-        Thu, 16 Jul 2020 23:24:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=kbGmHpM4oj2iSBg8afJLPvPTqr4Oo7etdmQf4Gx3p6g=; b=enqk4z7AtkWvVVT0ktmRixHxYG
-        ZE6nr495nmVeqXTvqNhSZAk/LeaHFxGyOtXhcccmzRAlDjVvCGobT5rvHbv8NtqQVHaaC0xnJ3Hb9
-        Er4n5IYTU1mkuPplXbnndtuOcDytQpv+nxt2M2mW36ArSipGP+w85zBQ6rbtZjlLM/sDr+9hGxTHZ
-        Qlr1OYczhUpJGuvEig/YgFx4M/upAXCRfjYxwDUMHdHL9JWNfSAGdJfBWwKwwpLzh7X4CsuKqjYrI
-        r7j1ievIEPg0b6BeMmzWbCoFv1zqE/m3+gPFPm60upHtjdfqlSfIuBgAOyTb4MtC1WwSlbOkQ2ELx
-        UAjW3v0A==;
-Received: from [2001:4bb8:105:4a81:3772:912d:640:e6c6] (helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jwJnM-000576-Cm; Fri, 17 Jul 2020 06:24:33 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Chas Williams <3chas3@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, mptcp@lists.01.org
-Subject: [PATCH 22/22] net: make ->{get,set}sockopt in proto_ops optional
-Date:   Fri, 17 Jul 2020 08:23:31 +0200
-Message-Id: <20200717062331.691152-23-hch@lst.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200717062331.691152-1-hch@lst.de>
-References: <20200717062331.691152-1-hch@lst.de>
+        id S1726200AbgGQHzX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Jul 2020 03:55:23 -0400
+Received: from mail-eopbgr140054.outbound.protection.outlook.com ([40.107.14.54]:64612
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726105AbgGQHzW (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 17 Jul 2020 03:55:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BEJjJJHWojMxloh+BLkdzCRchP4KfcdV7DANDxhDkdFvnKVslEYGto7kKA7cxVWsOfFqFsaRAz+EuKsxGDwXVEJtHHtP1kAyz/0lL0RZ/Y9Gcv9FctUeCeWqGAwN3KWyZnuAf0Xi8q/+0sTCQ+L9NhYVHOYFqDcSvtVy1bngoILUxoRsTQizeobOGS7uI+jj4dZd43uaXChRX6u2Ngasqul8h8L67Zgd6id0dmKJUDoQXXMWdA65uLLxgoWEvzPBG0Xq9DqSJXSTK5IYhBBEUrlp4B7UImqNoMQuR5JyTfFDmrvSFvFBQPaulIY/SxbhLskglcVZt5V8AEibs4+pQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NS+5KrBS+y6dT2Lntp6xkD4guPOhpggfAq7P0XyXkYs=;
+ b=Uz400S1KlOsWwAgg4PXU9LDxqyONT5t6xHqU3gWYF0FaeMvIvLxtVuFGMAGIEOGvEJhDvuJ/k+97WUA5Xq7gCSFyGY55wBRFDnWM0qm5qvQ5r+rWDqdq1xanAy1lnYz91LT+B8onRk9wnd96lxFKRpZq1prDtv5SmVgqTrGTE/xJTuSljr8/FSE9Idi6QDfN0CjAfsfiJ0XXtAfw+d1kURu2g3/hDy5Q9pEd0zHPM788EZyEOh5zP2NkG+WSv5QzFmZHCtYOMX/F+baz8i6q3fZBVHtxGoTfOKU6Bwe6O4yhuAq3lcN/wYWyq8MsU2867TE3mP5RxtsExuqzv7F3Sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NS+5KrBS+y6dT2Lntp6xkD4guPOhpggfAq7P0XyXkYs=;
+ b=bVHfRJ79Q/SXE963iNk8dn/nwxA1SOqSk0XzTVwqt294pzqW+U6FnTcY3dJLUhwEjmBgB6pxyc9VrbECBhQ8b+rlNcGH5oOOA6ehqosqbEIJZi4bMPkoMgBqSGAWbBxNS21wXHbkJOvtJIukeZ1fZNk2TaaG+upRa8mK+jy0Qqs=
+Received: from DB7PR03MB5051.eurprd03.prod.outlook.com (2603:10a6:10:74::21)
+ by DB7PR03MB4634.eurprd03.prod.outlook.com (2603:10a6:10:1e::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Fri, 17 Jul
+ 2020 07:55:16 +0000
+Received: from DB7PR03MB5051.eurprd03.prod.outlook.com
+ ([fe80::2548:dd58:bbb5:40bb]) by DB7PR03MB5051.eurprd03.prod.outlook.com
+ ([fe80::2548:dd58:bbb5:40bb%3]) with mapi id 15.20.3174.027; Fri, 17 Jul 2020
+ 07:55:16 +0000
+From:   =?utf-8?B?U3TDqXBoYW5lIEdyb3NqZWFu?= <s.grosjean@peak-system.com>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Philipp Lehmann <leph1016@hs-karlsruhe.de>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "christian.sauer.w@sew-eurodrive.de" 
+        <christian.sauer.w@sew-eurodrive.de>
+Subject: RE: [Bug] Kernel Panic on Deletion of the network-namespace
+ containing the SocketCAN interface
+Thread-Topic: [Bug] Kernel Panic on Deletion of the network-namespace
+ containing the SocketCAN interface
+Thread-Index: AQHWW493uXW0NDKXQkWfuvBe3q5jjakKiT0AgADc6hA=
+Date:   Fri, 17 Jul 2020 07:55:16 +0000
+Message-ID: <DB7PR03MB505186792325DBBF2471EF1ED67C0@DB7PR03MB5051.eurprd03.prod.outlook.com>
+References: <20ea6d4c00dc4d5f99cd004677280369@hs-karlsruhe.de>
+ <88fb5401-746a-5589-650d-a88fde43b122@hartkopp.net>
+In-Reply-To: <88fb5401-746a-5589-650d-a88fde43b122@hartkopp.net>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: hartkopp.net; dkim=none (message not signed)
+ header.d=none;hartkopp.net; dmarc=none action=none
+ header.from=peak-system.com;
+x-originating-ip: [185.109.201.203]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2ded92a4-73c7-4f9a-af2a-08d82a26be46
+x-ms-traffictypediagnostic: DB7PR03MB4634:
+x-microsoft-antispam-prvs: <DB7PR03MB46349A5EA01F2A44ACACC606D67C0@DB7PR03MB4634.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GL8T1FGJj3Z6WvWGVvS7kP8iAnWezuniIPhDtjgCrR5xsOw7PljWyRQhZN9VGiKRap6QYnzz4EUeHkIdRc0zcecuEPseiMPa5xxzuzUKA3/dg68JUcUXyWfGbdrFjSbavlxCxMr+gZA/syxRzvRc3KAhl02vHYfLxhWPeWwKrC77pLy80lNtJqRASD5ZF6ToqWUKgBKeyxAzjUqCAchcukzPeaXcO9dNNS6v07MGq6rhcRu9jCbkmFc+lOn7jmsMAPY0tTgTEhc8HfCIg91fLsUzyJ3t2om+gN2+ZCm6NU/WQpGGBujreeqyZaXlxo2xYnz84QBWSdYS0YFx3nl8Yg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB5051.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39840400004)(376002)(366004)(136003)(396003)(346002)(54906003)(316002)(66556008)(52536014)(71200400001)(15974865002)(66476007)(66946007)(76116006)(66446008)(4326008)(64756008)(5660300002)(66574015)(83380400001)(55016002)(26005)(186003)(85182001)(110136005)(8676002)(8936002)(2906002)(7696005)(85202003)(508600001)(45080400002)(9686003)(6506007)(33656002)(86362001)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: jmbtbOvFpIbvPJfvPcmfl+o96CsuP+sFRAa2p9oqky7DDWOgCLVCJC4YJuaxL3XCw2yy0H8iDRwyrUkhGbSCPAzlcorYaoiQOU+02Z81esfYqDS3yXMA8wZwJ0IRD6Qet59QXkW4zC1QyzvUpahXpf5vuqN7craVn3u4ZTmYmt0LPLid3fjG24+k0C/Fu8v8uqBqtdqH6M4/Tw9RZG5SzjaLEgZkqhewEC+g/vSQ6i1+3Jn5TiYRHcTMojbLIC1K3LHDkIE+oNFg+ckb0Z8CBaX27P3pCCvde8/VqAn6cMOPR+MfuITskBs7HZ6DITVu/QQ9ouDdJXBMYqJU+vrCHDVVw/SA2SIJtvXR61nthk2NrLno0VsoMAMo6XxCYnIKeM4NqYjeJTG2WMU+qXpWZFLCSR/No0VGRVcnXJrzoVyKdWApbo0QQ+4AMpRQdTCT/2cZCPWKesrCEb31OSSIkiBpM/1J9lmG2ZrPbfg9bH2aRNV1REtrfuwi/u2DuZej
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-OriginatorOrg: peak-system.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB5051.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ded92a4-73c7-4f9a-af2a-08d82a26be46
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2020 07:55:16.1233
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oI+O09AnfTQFJlTWagwWysCosms9GOwr4/zRW7Rkva8shFORdUsGqkQVoVSrfi3qeV5a/96kcwdF2upJdS77assa5ULwPUtgjgBlWpD7Kpo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB4634
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Just check for a NULL method instead of wiring up
-sock_no_{get,set}sockopt.
-
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- crypto/af_alg.c             |  1 -
- crypto/algif_aead.c         |  4 ----
- crypto/algif_hash.c         |  4 ----
- crypto/algif_rng.c          |  2 --
- crypto/algif_skcipher.c     |  4 ----
- drivers/isdn/mISDN/socket.c |  2 --
- drivers/net/ppp/pppoe.c     |  2 --
- drivers/net/ppp/pptp.c      |  2 --
- include/net/sock.h          |  2 --
- net/appletalk/ddp.c         |  2 --
- net/bluetooth/bnep/sock.c   |  2 --
- net/bluetooth/cmtp/sock.c   |  2 --
- net/bluetooth/hidp/sock.c   |  2 --
- net/caif/caif_socket.c      |  2 --
- net/can/bcm.c               |  2 --
- net/core/sock.c             | 14 --------------
- net/key/af_key.c            |  2 --
- net/nfc/llcp_sock.c         |  2 --
- net/nfc/rawsock.c           |  4 ----
- net/packet/af_packet.c      |  2 --
- net/phonet/socket.c         |  2 --
- net/qrtr/qrtr.c             |  2 --
- net/smc/af_smc.c            |  9 +++++++--
- net/socket.c                |  4 ++++
- net/unix/af_unix.c          |  6 ------
- net/vmw_vsock/af_vsock.c    |  2 --
- 26 files changed, 11 insertions(+), 73 deletions(-)
-
-diff --git a/crypto/af_alg.c b/crypto/af_alg.c
-index 28fc323e3fe304..29f71428520b4b 100644
---- a/crypto/af_alg.c
-+++ b/crypto/af_alg.c
-@@ -335,7 +335,6 @@ static const struct proto_ops alg_proto_ops = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.sendpage	=	sock_no_sendpage,
- 	.sendmsg	=	sock_no_sendmsg,
-diff --git a/crypto/algif_aead.c b/crypto/algif_aead.c
-index 0ae000a61c7f5b..527d09a694627b 100644
---- a/crypto/algif_aead.c
-+++ b/crypto/algif_aead.c
-@@ -361,11 +361,9 @@ static struct proto_ops algif_aead_ops = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
- 	.accept		=	sock_no_accept,
--	.setsockopt	=	sock_no_setsockopt,
- 
- 	.release	=	af_alg_release,
- 	.sendmsg	=	aead_sendmsg,
-@@ -454,11 +452,9 @@ static struct proto_ops algif_aead_ops_nokey = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
- 	.accept		=	sock_no_accept,
--	.setsockopt	=	sock_no_setsockopt,
- 
- 	.release	=	af_alg_release,
- 	.sendmsg	=	aead_sendmsg_nokey,
-diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
-index e71727c25a7db7..50f7b22f1b4825 100644
---- a/crypto/algif_hash.c
-+++ b/crypto/algif_hash.c
-@@ -279,10 +279,8 @@ static struct proto_ops algif_hash_ops = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
--	.setsockopt	=	sock_no_setsockopt,
- 
- 	.release	=	af_alg_release,
- 	.sendmsg	=	hash_sendmsg,
-@@ -383,10 +381,8 @@ static struct proto_ops algif_hash_ops_nokey = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
--	.setsockopt	=	sock_no_setsockopt,
- 
- 	.release	=	af_alg_release,
- 	.sendmsg	=	hash_sendmsg_nokey,
-diff --git a/crypto/algif_rng.c b/crypto/algif_rng.c
-index 087c0ad09d382b..6300e0566dc560 100644
---- a/crypto/algif_rng.c
-+++ b/crypto/algif_rng.c
-@@ -101,11 +101,9 @@ static struct proto_ops algif_rng_ops = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
- 	.accept		=	sock_no_accept,
--	.setsockopt	=	sock_no_setsockopt,
- 	.sendmsg	=	sock_no_sendmsg,
- 	.sendpage	=	sock_no_sendpage,
- 
-diff --git a/crypto/algif_skcipher.c b/crypto/algif_skcipher.c
-index ec5567c87a6df4..c487887f46711e 100644
---- a/crypto/algif_skcipher.c
-+++ b/crypto/algif_skcipher.c
-@@ -188,11 +188,9 @@ static struct proto_ops algif_skcipher_ops = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
- 	.accept		=	sock_no_accept,
--	.setsockopt	=	sock_no_setsockopt,
- 
- 	.release	=	af_alg_release,
- 	.sendmsg	=	skcipher_sendmsg,
-@@ -281,11 +279,9 @@ static struct proto_ops algif_skcipher_ops_nokey = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.bind		=	sock_no_bind,
- 	.accept		=	sock_no_accept,
--	.setsockopt	=	sock_no_setsockopt,
- 
- 	.release	=	af_alg_release,
- 	.sendmsg	=	skcipher_sendmsg_nokey,
-diff --git a/drivers/isdn/mISDN/socket.c b/drivers/isdn/mISDN/socket.c
-index dff4132b3702c6..1b2b91479107bc 100644
---- a/drivers/isdn/mISDN/socket.c
-+++ b/drivers/isdn/mISDN/socket.c
-@@ -738,8 +738,6 @@ static const struct proto_ops base_sock_ops = {
- 	.recvmsg	= sock_no_recvmsg,
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.connect	= sock_no_connect,
- 	.socketpair	= sock_no_socketpair,
- 	.accept		= sock_no_accept,
-diff --git a/drivers/net/ppp/pppoe.c b/drivers/net/ppp/pppoe.c
-index beedaad082551b..d7f50b835050d1 100644
---- a/drivers/net/ppp/pppoe.c
-+++ b/drivers/net/ppp/pppoe.c
-@@ -1110,8 +1110,6 @@ static const struct proto_ops pppoe_ops = {
- 	.poll		= datagram_poll,
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.sendmsg	= pppoe_sendmsg,
- 	.recvmsg	= pppoe_recvmsg,
- 	.mmap		= sock_no_mmap,
-diff --git a/drivers/net/ppp/pptp.c b/drivers/net/ppp/pptp.c
-index acccb747aedad6..ee5058445d06e2 100644
---- a/drivers/net/ppp/pptp.c
-+++ b/drivers/net/ppp/pptp.c
-@@ -618,8 +618,6 @@ static const struct proto_ops pptp_ops = {
- 	.getname    = pptp_getname,
- 	.listen     = sock_no_listen,
- 	.shutdown   = sock_no_shutdown,
--	.setsockopt = sock_no_setsockopt,
--	.getsockopt = sock_no_getsockopt,
- 	.sendmsg    = sock_no_sendmsg,
- 	.recvmsg    = sock_no_recvmsg,
- 	.mmap       = sock_no_mmap,
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 3bd8bc578bf3e5..62e18fc8ac9f96 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1714,8 +1714,6 @@ int sock_no_getname(struct socket *, struct sockaddr *, int);
- int sock_no_ioctl(struct socket *, unsigned int, unsigned long);
- int sock_no_listen(struct socket *, int);
- int sock_no_shutdown(struct socket *, int);
--int sock_no_getsockopt(struct socket *, int , int, char __user *, int __user *);
--int sock_no_setsockopt(struct socket *, int, int, char __user *, unsigned int);
- int sock_no_sendmsg(struct socket *, struct msghdr *, size_t);
- int sock_no_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t len);
- int sock_no_recvmsg(struct socket *, struct msghdr *, size_t, int);
-diff --git a/net/appletalk/ddp.c b/net/appletalk/ddp.c
-index 15787e8c0629a0..1d48708c5a2eb5 100644
---- a/net/appletalk/ddp.c
-+++ b/net/appletalk/ddp.c
-@@ -1917,8 +1917,6 @@ static const struct proto_ops atalk_dgram_ops = {
- #endif
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.sendmsg	= atalk_sendmsg,
- 	.recvmsg	= atalk_recvmsg,
- 	.mmap		= sock_no_mmap,
-diff --git a/net/bluetooth/bnep/sock.c b/net/bluetooth/bnep/sock.c
-index cfd83c5521aecc..d515571b2afba9 100644
---- a/net/bluetooth/bnep/sock.c
-+++ b/net/bluetooth/bnep/sock.c
-@@ -182,8 +182,6 @@ static const struct proto_ops bnep_sock_ops = {
- 	.recvmsg	= sock_no_recvmsg,
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.connect	= sock_no_connect,
- 	.socketpair	= sock_no_socketpair,
- 	.accept		= sock_no_accept,
-diff --git a/net/bluetooth/cmtp/sock.c b/net/bluetooth/cmtp/sock.c
-index defdd4871919f3..96d49d9fae9643 100644
---- a/net/bluetooth/cmtp/sock.c
-+++ b/net/bluetooth/cmtp/sock.c
-@@ -185,8 +185,6 @@ static const struct proto_ops cmtp_sock_ops = {
- 	.recvmsg	= sock_no_recvmsg,
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.connect	= sock_no_connect,
- 	.socketpair	= sock_no_socketpair,
- 	.accept		= sock_no_accept,
-diff --git a/net/bluetooth/hidp/sock.c b/net/bluetooth/hidp/sock.c
-index 03be6a4baef30e..595fb3c9d6c361 100644
---- a/net/bluetooth/hidp/sock.c
-+++ b/net/bluetooth/hidp/sock.c
-@@ -233,8 +233,6 @@ static const struct proto_ops hidp_sock_ops = {
- 	.recvmsg	= sock_no_recvmsg,
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.connect	= sock_no_connect,
- 	.socketpair	= sock_no_socketpair,
- 	.accept		= sock_no_accept,
-diff --git a/net/caif/caif_socket.c b/net/caif/caif_socket.c
-index ef14da50a98191..b94ecd931002e7 100644
---- a/net/caif/caif_socket.c
-+++ b/net/caif/caif_socket.c
-@@ -981,7 +981,6 @@ static const struct proto_ops caif_seqpacket_ops = {
- 	.listen = sock_no_listen,
- 	.shutdown = sock_no_shutdown,
- 	.setsockopt = setsockopt,
--	.getsockopt = sock_no_getsockopt,
- 	.sendmsg = caif_seqpkt_sendmsg,
- 	.recvmsg = caif_seqpkt_recvmsg,
- 	.mmap = sock_no_mmap,
-@@ -1002,7 +1001,6 @@ static const struct proto_ops caif_stream_ops = {
- 	.listen = sock_no_listen,
- 	.shutdown = sock_no_shutdown,
- 	.setsockopt = setsockopt,
--	.getsockopt = sock_no_getsockopt,
- 	.sendmsg = caif_stream_sendmsg,
- 	.recvmsg = caif_stream_recvmsg,
- 	.mmap = sock_no_mmap,
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index c96fa0f33db39c..d14ea12affb112 100644
---- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -1648,8 +1648,6 @@ static const struct proto_ops bcm_ops = {
- 	.gettstamp     = sock_gettstamp,
- 	.listen        = sock_no_listen,
- 	.shutdown      = sock_no_shutdown,
--	.setsockopt    = sock_no_setsockopt,
--	.getsockopt    = sock_no_getsockopt,
- 	.sendmsg       = bcm_sendmsg,
- 	.recvmsg       = bcm_recvmsg,
- 	.mmap          = sock_no_mmap,
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 48655d5c4cf37a..d828bfe1c47dfa 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2783,20 +2783,6 @@ int sock_no_shutdown(struct socket *sock, int how)
- }
- EXPORT_SYMBOL(sock_no_shutdown);
- 
--int sock_no_setsockopt(struct socket *sock, int level, int optname,
--		    char __user *optval, unsigned int optlen)
--{
--	return -EOPNOTSUPP;
--}
--EXPORT_SYMBOL(sock_no_setsockopt);
--
--int sock_no_getsockopt(struct socket *sock, int level, int optname,
--		    char __user *optval, int __user *optlen)
--{
--	return -EOPNOTSUPP;
--}
--EXPORT_SYMBOL(sock_no_getsockopt);
--
- int sock_no_sendmsg(struct socket *sock, struct msghdr *m, size_t len)
- {
- 	return -EOPNOTSUPP;
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index b67ed3a8486c25..f13626c1a98592 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -3734,8 +3734,6 @@ static const struct proto_ops pfkey_ops = {
- 	.ioctl		=	sock_no_ioctl,
- 	.listen		=	sock_no_listen,
- 	.shutdown	=	sock_no_shutdown,
--	.setsockopt	=	sock_no_setsockopt,
--	.getsockopt	=	sock_no_getsockopt,
- 	.mmap		=	sock_no_mmap,
- 	.sendpage	=	sock_no_sendpage,
- 
-diff --git a/net/nfc/llcp_sock.c b/net/nfc/llcp_sock.c
-index 28604414dec1b7..6da1e2334bb697 100644
---- a/net/nfc/llcp_sock.c
-+++ b/net/nfc/llcp_sock.c
-@@ -921,8 +921,6 @@ static const struct proto_ops llcp_rawsock_ops = {
- 	.ioctl          = sock_no_ioctl,
- 	.listen         = sock_no_listen,
- 	.shutdown       = sock_no_shutdown,
--	.setsockopt     = sock_no_setsockopt,
--	.getsockopt     = sock_no_getsockopt,
- 	.sendmsg        = sock_no_sendmsg,
- 	.recvmsg        = llcp_sock_recvmsg,
- 	.mmap           = sock_no_mmap,
-diff --git a/net/nfc/rawsock.c b/net/nfc/rawsock.c
-index ba5ffd3badd324..b2061b6746eaa6 100644
---- a/net/nfc/rawsock.c
-+++ b/net/nfc/rawsock.c
-@@ -276,8 +276,6 @@ static const struct proto_ops rawsock_ops = {
- 	.ioctl          = sock_no_ioctl,
- 	.listen         = sock_no_listen,
- 	.shutdown       = sock_no_shutdown,
--	.setsockopt     = sock_no_setsockopt,
--	.getsockopt     = sock_no_getsockopt,
- 	.sendmsg        = rawsock_sendmsg,
- 	.recvmsg        = rawsock_recvmsg,
- 	.mmap           = sock_no_mmap,
-@@ -296,8 +294,6 @@ static const struct proto_ops rawsock_raw_ops = {
- 	.ioctl          = sock_no_ioctl,
- 	.listen         = sock_no_listen,
- 	.shutdown       = sock_no_shutdown,
--	.setsockopt     = sock_no_setsockopt,
--	.getsockopt     = sock_no_getsockopt,
- 	.sendmsg        = sock_no_sendmsg,
- 	.recvmsg        = rawsock_recvmsg,
- 	.mmap           = sock_no_mmap,
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 35aee9e980536d..c240fb5de3f014 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -4503,8 +4503,6 @@ static const struct proto_ops packet_ops_spkt = {
- 	.gettstamp =	sock_gettstamp,
- 	.listen =	sock_no_listen,
- 	.shutdown =	sock_no_shutdown,
--	.setsockopt =	sock_no_setsockopt,
--	.getsockopt =	sock_no_getsockopt,
- 	.sendmsg =	packet_sendmsg_spkt,
- 	.recvmsg =	packet_recvmsg,
- 	.mmap =		sock_no_mmap,
-diff --git a/net/phonet/socket.c b/net/phonet/socket.c
-index 87c60f83c18061..2599235d592e0b 100644
---- a/net/phonet/socket.c
-+++ b/net/phonet/socket.c
-@@ -439,8 +439,6 @@ const struct proto_ops phonet_dgram_ops = {
- 	.ioctl		= pn_socket_ioctl,
- 	.listen		= sock_no_listen,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.sendmsg	= pn_socket_sendmsg,
- 	.recvmsg	= sock_common_recvmsg,
- 	.mmap		= sock_no_mmap,
-diff --git a/net/qrtr/qrtr.c b/net/qrtr/qrtr.c
-index 24a8c3c6da0dca..0cb4adfc6641da 100644
---- a/net/qrtr/qrtr.c
-+++ b/net/qrtr/qrtr.c
-@@ -1208,8 +1208,6 @@ static const struct proto_ops qrtr_proto_ops = {
- 	.gettstamp	= sock_gettstamp,
- 	.poll		= datagram_poll,
- 	.shutdown	= sock_no_shutdown,
--	.setsockopt	= sock_no_setsockopt,
--	.getsockopt	= sock_no_getsockopt,
- 	.release	= qrtr_release,
- 	.mmap		= sock_no_mmap,
- 	.sendpage	= sock_no_sendpage,
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 9033215438384b..9711c9e0e515bf 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -1742,8 +1742,11 @@ static int smc_setsockopt(struct socket *sock, int level, int optname,
- 	/* generic setsockopts reaching us here always apply to the
- 	 * CLC socket
- 	 */
--	rc = smc->clcsock->ops->setsockopt(smc->clcsock, level, optname,
--					   optval, optlen);
-+	if (unlikely(!smc->clcsock->ops->setsockopt))
-+		rc = -EOPNOTSUPP;
-+	else
-+		rc = smc->clcsock->ops->setsockopt(smc->clcsock, level, optname,
-+						   optval, optlen);
- 	if (smc->clcsock->sk->sk_err) {
- 		sk->sk_err = smc->clcsock->sk->sk_err;
- 		sk->sk_error_report(sk);
-@@ -1808,6 +1811,8 @@ static int smc_getsockopt(struct socket *sock, int level, int optname,
- 
- 	smc = smc_sk(sock->sk);
- 	/* socket options apply to the CLC socket */
-+	if (unlikely(!smc->clcsock->ops->getsockopt))
-+		return -EOPNOTSUPP;
- 	return smc->clcsock->ops->getsockopt(smc->clcsock, level, optname,
- 					     optval, optlen);
- }
-diff --git a/net/socket.c b/net/socket.c
-index dec345982abbb6..93846568c2fb7a 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2131,6 +2131,8 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *optval,
- 
- 	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
- 		err = sock_setsockopt(sock, level, optname, optval, optlen);
-+	else if (unlikely(!sock->ops->setsockopt))
-+		err = -EOPNOTSUPP;
- 	else
- 		err = sock->ops->setsockopt(sock, level, optname, optval,
- 					    optlen);
-@@ -2175,6 +2177,8 @@ int __sys_getsockopt(int fd, int level, int optname, char __user *optval,
- 
- 	if (level == SOL_SOCKET)
- 		err = sock_getsockopt(sock, level, optname, optval, optlen);
-+	else if (unlikely(!sock->ops->getsockopt))
-+		err = -EOPNOTSUPP;
- 	else
- 		err = sock->ops->getsockopt(sock, level, optname, optval,
- 					    optlen);
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 3385a7a0b23133..181ea6fb56a617 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -714,8 +714,6 @@ static const struct proto_ops unix_stream_ops = {
- #endif
- 	.listen =	unix_listen,
- 	.shutdown =	unix_shutdown,
--	.setsockopt =	sock_no_setsockopt,
--	.getsockopt =	sock_no_getsockopt,
- 	.sendmsg =	unix_stream_sendmsg,
- 	.recvmsg =	unix_stream_recvmsg,
- 	.mmap =		sock_no_mmap,
-@@ -741,8 +739,6 @@ static const struct proto_ops unix_dgram_ops = {
- #endif
- 	.listen =	sock_no_listen,
- 	.shutdown =	unix_shutdown,
--	.setsockopt =	sock_no_setsockopt,
--	.getsockopt =	sock_no_getsockopt,
- 	.sendmsg =	unix_dgram_sendmsg,
- 	.recvmsg =	unix_dgram_recvmsg,
- 	.mmap =		sock_no_mmap,
-@@ -767,8 +763,6 @@ static const struct proto_ops unix_seqpacket_ops = {
- #endif
- 	.listen =	unix_listen,
- 	.shutdown =	unix_shutdown,
--	.setsockopt =	sock_no_setsockopt,
--	.getsockopt =	sock_no_getsockopt,
- 	.sendmsg =	unix_seqpacket_sendmsg,
- 	.recvmsg =	unix_seqpacket_recvmsg,
- 	.mmap =		sock_no_mmap,
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 626bf9044418cc..df204c6761c453 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -1202,8 +1202,6 @@ static const struct proto_ops vsock_dgram_ops = {
- 	.ioctl = sock_no_ioctl,
- 	.listen = sock_no_listen,
- 	.shutdown = vsock_shutdown,
--	.setsockopt = sock_no_setsockopt,
--	.getsockopt = sock_no_getsockopt,
- 	.sendmsg = vsock_dgram_sendmsg,
- 	.recvmsg = vsock_dgram_recvmsg,
- 	.mmap = sock_no_mmap,
--- 
-2.27.0
-
+SGVsbG8gZXZlcnlvbmUsDQoNCihhZGRlbmR1bSkNCg0KVGhlcmUncyBhIGZpcnN0IFdBUk5JTkcg
+a2VybmVsIG1lc3NhZ2UganVzdCB3aGVuIHRoZSBuYW1lc3BhY2UgaXMgZGVsZXRlZC4gVGhlIFdB
+Uk5JTkcgdHVybnMgaW50byBhIEJVRyAoa2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSkg
+d2hlbiByZW1vdmluZyB0aGUgaW50ZXJmYWNlIGl0c2VsZiAoZm9yIGV4YW1wbGUsIHdoZW4gdGhl
+IGRyaXZlciBtb2R1bGUgaXMgcmVtb3ZlZCBmcm9tIG1lbW9yeSkuIE5vdGUgdGhhdCB0aGUgaXNz
+dWUgb2NjdXJzIHdpdGggYWxsIG91ciBpbnRlcm5hbCBhcyB3ZWxsIGFzIFVTQiBDQU4gaW50ZXJm
+YWNlcy4NCg0KT2J2aW91c2x5LCB0aGUgcHJvYmxlbSBkb2Vzbid0IGFwcGVhciB3aGVuIHlvdSBw
+dXQgdGhlIGludGVyZmFjZSBiYWNrIGluIHRoZSByb290IG5hbWVzcGFjZSBiZWZvcmUgdGhlIGRl
+c3RydWN0aW9uLCBvciB3aGVuIHRoZSBpbnRlcmZhY2UgaXMgYSB0cnVlIEV0aGVybmV0IG5ldHdv
+cmsgaW50ZXJmYWNlLg0KDQpSZWdhcmRzLA0KDQotLSBTdMOpcGhhbmUNCg0KQ29udGV4dDoNCg0K
+JCB1bmFtZSAtYQ0KTGludXggbGludXgtZGV2IDUuNC4wLTM5LWdlbmVyaWMgIzQzLVVidW50dSBT
+TVAgRnJpIEp1biAxOSAxMDoyODozMSBVVEMgMjAyMCB4ODZfNjQgeDg2XzY0IHg4Nl82NCBHTlUv
+TGludXgNCg0KJCBkbWVzZyB8IGdyZXAgcGVha19wY2kNClsgICAxOS4wMjgwNDhdIHBlYWtfcGNp
+IDAwMDA6MGE6MDAuMDogZW5hYmxpbmcgZGV2aWNlICgwMTAwIC0+IDAxMDIpDQpbICAgMTkuMDM0
+MjgzXSBwZWFrX3BjaSAwMDAwOjBhOjAwLjA6IGNhbjYgYXQgcmVnX2Jhc2U9MHgwMDAwMDAwMDEz
+NmI4YjBiIGNmZ19iYXNlPTB4MDAwMDAwMDBiODI2NTk3YyBpcnE9MjcNClsgICAxOS4wMzQzNzhd
+IHBlYWtfcGNpIDAwMDA6MGE6MDAuMDogY2FuNyBhdCByZWdfYmFzZT0weDAwMDAwMDAwNmIzZGU5
+YTAgY2ZnX2Jhc2U9MHgwMDAwMDAwMGI4MjY1OTdjIGlycT0yNw0KDQojIGlwIG5ldG5zIGFkZCB0
+ZXN0DQojIGlwIGxpbmsgc2V0IGRldiBjYW42IG5ldG5zIHRlc3QNCiMgaXAgbmV0bnMgZGVsZXRl
+IHRlc3QNCg0KWyAxNzU1LjgwNTI0MV0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0t
+LS0tDQpbIDE3NTUuODA1MjUxXSBXQVJOSU5HOiBDUFU6IDggUElEOiAyNjM1IGF0IG5ldC9jb3Jl
+L2Rldi5jOjEwMDM5IG5ldGRldl9leGl0KzB4NDQvMHg1MA0KWyAxNzU1LjgwNTI1Ml0gTW9kdWxl
+cyBsaW5rZWQgaW46IHZib3huZXRhZHAoT0UpIHZib3huZXRmbHQoT0UpIHZib3hkcnYoT0UpIG1k
+NCBubHNfdXRmOCBjaWZzIGxpYmFyYzQgZnNjYWNoZSBsaWJkZXMgY2ZnODAyMTEgbmxzX2lzbzg4
+NTlfMSBpbnRlbF9yYXBsX21zciBpbnRlbF9yYXBsX2NvbW1vbiB4ODZfcGtnX3RlbXBfdGhlcm1h
+bCBpbnRlbF9wb3dlcmNsYW1wIGNvcmV0ZW1wIGt2bV9pbnRlbCBwZWFrX3VzYiA4ODEyYXUoT0Up
+IGpveWRldiBwbGluKE9FKSBrdm0gaW5wdXRfbGVkcyBwY2FuKE9FKSBlZWVwY193bWkgc25kX2hk
+YV9jb2RlY19oZG1pIHNuZF9oZGFfY29kZWNfcmVhbHRlayBub3V2ZWF1IHBjbWNpYSBzbmRfaGRh
+X2NvZGVjX2dlbmVyaWMgYXN1c193bWkgcGNtY2lhX2NvcmUgY3JjdDEwZGlmX3BjbG11bCBnaGFz
+aF9jbG11bG5pX2ludGVsIHBlYWtfcGNpIHNqYTEwMDAgcGVha19wY2llZmQgbGVkdHJpZ19hdWRp
+byB0dG0gYWVzbmlfaW50ZWwgZHJtX2ttc19oZWxwZXIgc25kX2hkYV9pbnRlbCBzbmRfaW50ZWxf
+ZHNwY2ZnIGZiX3N5c19mb3BzIHN5c2NvcHlhcmVhIHN5c2ZpbGxyZWN0IHN5c2ltZ2JsdCBjYW5f
+ZGV2IHNuZF9oZGFfY29kZWMgc25kX2hkYV9jb3JlIGNyeXB0b19zaW1kIHNuZF9od2RlcCBjcnlw
+dGQgc25kX3BjbSBnbHVlX2hlbHBlciBzbmRfc2VxX21pZGkgc25kX3NlcV9taWRpX2V2ZW50IHNu
+ZF9yYXdtaWRpIHNuZF9zZXEgc25kX3NlcV9kZXZpY2Ugc25kX3RpbWVyIHNwYXJzZV9rZXltYXAg
+aW50ZWxfY3N0YXRlIGludGVsX3JhcGxfcGVyZiBzbmQgdmlkZW8gbWVpX21lIG1laSBzb3VuZGNv
+cmUgd21pX2Jtb2YgaW50ZWxfd21pX3RodW5kZXJib2x0IG14bV93bWkgbWFjX2hpZCBzY2hfZnFf
+Y29kZWwgcGFycG9ydF9wYyBwcGRldiBscCBwYXJwb3J0IGRybSBpcF90YWJsZXMgeF90YWJsZXMg
+YXV0b2ZzNCBoaWRfZ2VuZXJpYyB1c2JoaWQgdWFzIHVzYl9zdG9yYWdlIGhpZCBjcmMzMl9wY2xt
+dWwgaWdiIGUxMDAwZQ0KWyAxNzU1LjgwNTMwNl0gIGFoY2kgaTJjX2k4MDEgaTJjX2FsZ29fYml0
+IGxwY19pY2ggbGliYWhjaSBkY2Egd21pDQpbIDE3NTUuODA1MzE1XSBDUFU6IDggUElEOiAyNjM1
+IENvbW06IGt3b3JrZXIvdTI0OjAgVGFpbnRlZDogRyAgICAgICAgICAgT0UgICAgIDUuNC4wLTM5
+LWdlbmVyaWMgIzQzLVVidW50dQ0KWyAxNzU1LjgwNTMxNl0gSGFyZHdhcmUgbmFtZTogQVNVUyBB
+bGwgU2VyaWVzL1g5OS1FIFdTLCBCSU9TIDQwMDEgMDUvMjcvMjAxOQ0KWyAxNzU1LjgwNTMxOV0g
+V29ya3F1ZXVlOiBuZXRucyBjbGVhbnVwX25ldA0KWyAxNzU1LjgwNTMyNF0gUklQOiAwMDEwOm5l
+dGRldl9leGl0KzB4NDQvMHg1MA0KWyAxNzU1LjgwNTMyN10gQ29kZTogOGIgYmIgMzAgMDEgMDAg
+MDAgZTggOGIgOWQgOTcgZmYgNDggODEgZmIgMDAgMjEgYmUgYjUgNzQgMTMgNDggOGIgODMgOTAg
+MDAgMDAgMDAgNDggODEgYzMgOTAgMDAgMDAgMDAgNDggMzkgYzMgNzUgMDMgNWIgNWQgYzMgPDBm
+PiAwYiBlYiBmOSAwZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCAwZiAxZiA0NCAwMCAwMCA1NSA0OCA4
+OSBlNSA0MQ0KWyAxNzU1LjgwNTMyOV0gUlNQOiAwMDE4OmZmZmZiMTJkMDE2OWZkYzggRUZMQUdT
+OiAwMDAxMDI4Nw0KWyAxNzU1LjgwNTMzMV0gUkFYOiBmZmZmOTYyNGM4YTcwMDUwIFJCWDogZmZm
+Zjk2MjQ3NjQyYTcxMCBSQ1g6IDAwMDAwMDAwODAxMDAwMGINClsgMTc1NS44MDUzMzNdIFJEWDog
+MDAwMDAwMDA4MDEwMDAwYyBSU0k6IDAwMDAwMDAwMDAwMDAwMDEgUkRJOiBmZmZmOTYyNGNkYzA2
+YTAwDQpbIDE3NTUuODA1MzM0XSBSQlA6IGZmZmZiMTJkMDE2OWZkZDAgUjA4OiAwMDAwMDAwMDAw
+MDAwMDAwIFIwOTogZmZmZmZmZmZiNGQyZTMwMA0KWyAxNzU1LjgwNTMzNV0gUjEwOiBmZmZmOTYy
+NGEwZDg0MDAwIFIxMTogMDAwMDAwMDAwMDAwMDAwMSBSMTI6IGZmZmZiMTJkMDE2OWZlMjANClsg
+MTc1NS44MDUzMzddIFIxMzogZmZmZmZmZmZiNWJlM2YyMCBSMTQ6IGZmZmZmZmZmYjViZTNmMjgg
+UjE1OiBmZmZmOTYyNDk4ZWEzOWQ4DQpbIDE3NTUuODA1MzM5XSBGUzogIDAwMDAwMDAwMDAwMDAw
+MDAoMDAwMCkgR1M6ZmZmZjk2MjRjZmEwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAw
+DQpbIDE3NTUuODA1MzQxXSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAw
+MDgwMDUwMDMzDQpbIDE3NTUuODA1MzQyXSBDUjI6IDAwMDA1NWZiYjU5Y2Q4ZTggQ1IzOiAwMDAw
+MDAwMDRhYTBhMDA2IENSNDogMDAwMDAwMDAwMDE2MDZlMA0KWyAxNzU1LjgwNTM0NF0gQ2FsbCBU
+cmFjZToNClsgMTc1NS44MDUzNTBdICBvcHNfZXhpdF9saXN0LmlzcmEuMCsweDNiLzB4NzANClsg
+MTc1NS44MDUzNTNdICBjbGVhbnVwX25ldCsweDFmMC8weDMwMA0KWyAxNzU1LjgwNTM1OV0gIHBy
+b2Nlc3Nfb25lX3dvcmsrMHgxZWIvMHgzYjANClsgMTc1NS44MDUzNjNdICB3b3JrZXJfdGhyZWFk
+KzB4NGQvMHg0MDANClsgMTc1NS44MDUzNjddICBrdGhyZWFkKzB4MTA0LzB4MTQwDQpbIDE3NTUu
+ODA1MzcwXSAgPyBwcm9jZXNzX29uZV93b3JrKzB4M2IwLzB4M2IwDQpbIDE3NTUuODA1MzczXSAg
+PyBrdGhyZWFkX3BhcmsrMHg5MC8weDkwDQpbIDE3NTUuODA1Mzc4XSAgcmV0X2Zyb21fZm9yaysw
+eDM1LzB4NDANClsgMTc1NS44MDUzODJdIC0tLVsgZW5kIHRyYWNlIDgzMmE3NWFkOTZmODEwNWUg
+XS0tLQ0KWyAxNzU1LjgwNTQxMF0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0t
+DQpbIDE3NTUuODA1NDE2XSBXQVJOSU5HOiBDUFU6IDggUElEOiAyNjM1IGF0IGZzL3Byb2MvcHJv
+Y19zeXNjdGwuYzoxNzE0IHJldGlyZV9zeXNjdGxfc2V0KzB4MTQvMHgxOA0KWyAxNzU1LjgwNTQx
+N10gTW9kdWxlcyBsaW5rZWQgaW46IHZib3huZXRhZHAoT0UpIHZib3huZXRmbHQoT0UpIHZib3hk
+cnYoT0UpIG1kNCBubHNfdXRmOCBjaWZzIGxpYmFyYzQgZnNjYWNoZSBsaWJkZXMgY2ZnODAyMTEg
+bmxzX2lzbzg4NTlfMSBpbnRlbF9yYXBsX21zciBpbnRlbF9yYXBsX2NvbW1vbiB4ODZfcGtnX3Rl
+bXBfdGhlcm1hbCBpbnRlbF9wb3dlcmNsYW1wIGNvcmV0ZW1wIGt2bV9pbnRlbCBwZWFrX3VzYiA4
+ODEyYXUoT0UpIGpveWRldiBwbGluKE9FKSBrdm0gaW5wdXRfbGVkcyBwY2FuKE9FKSBlZWVwY193
+bWkgc25kX2hkYV9jb2RlY19oZG1pIHNuZF9oZGFfY29kZWNfcmVhbHRlayBub3V2ZWF1IHBjbWNp
+YSBzbmRfaGRhX2NvZGVjX2dlbmVyaWMgYXN1c193bWkgcGNtY2lhX2NvcmUgY3JjdDEwZGlmX3Bj
+bG11bCBnaGFzaF9jbG11bG5pX2ludGVsIHBlYWtfcGNpIHNqYTEwMDAgcGVha19wY2llZmQgbGVk
+dHJpZ19hdWRpbyB0dG0gYWVzbmlfaW50ZWwgZHJtX2ttc19oZWxwZXIgc25kX2hkYV9pbnRlbCBz
+bmRfaW50ZWxfZHNwY2ZnIGZiX3N5c19mb3BzIHN5c2NvcHlhcmVhIHN5c2ZpbGxyZWN0IHN5c2lt
+Z2JsdCBjYW5fZGV2IHNuZF9oZGFfY29kZWMgc25kX2hkYV9jb3JlIGNyeXB0b19zaW1kIHNuZF9o
+d2RlcCBjcnlwdGQgc25kX3BjbSBnbHVlX2hlbHBlciBzbmRfc2VxX21pZGkgc25kX3NlcV9taWRp
+X2V2ZW50IHNuZF9yYXdtaWRpIHNuZF9zZXEgc25kX3NlcV9kZXZpY2Ugc25kX3RpbWVyIHNwYXJz
+ZV9rZXltYXAgaW50ZWxfY3N0YXRlIGludGVsX3JhcGxfcGVyZiBzbmQgdmlkZW8gbWVpX21lIG1l
+aSBzb3VuZGNvcmUgd21pX2Jtb2YgaW50ZWxfd21pX3RodW5kZXJib2x0IG14bV93bWkgbWFjX2hp
+ZCBzY2hfZnFfY29kZWwgcGFycG9ydF9wYyBwcGRldiBscCBwYXJwb3J0IGRybSBpcF90YWJsZXMg
+eF90YWJsZXMgYXV0b2ZzNCBoaWRfZ2VuZXJpYyB1c2JoaWQgdWFzIHVzYl9zdG9yYWdlIGhpZCBj
+cmMzMl9wY2xtdWwgaWdiIGUxMDAwZQ0KWyAxNzU1LjgwNTQ1NF0gIGFoY2kgaTJjX2k4MDEgaTJj
+X2FsZ29fYml0IGxwY19pY2ggbGliYWhjaSBkY2Egd21pDQpbIDE3NTUuODA1NDYwXSBDUFU6IDgg
+UElEOiAyNjM1IENvbW06IGt3b3JrZXIvdTI0OjAgVGFpbnRlZDogRyAgICAgICAgVyAgT0UgICAg
+IDUuNC4wLTM5LWdlbmVyaWMgIzQzLVVidW50dQ0KWyAxNzU1LjgwNTQ2MV0gSGFyZHdhcmUgbmFt
+ZTogQVNVUyBBbGwgU2VyaWVzL1g5OS1FIFdTLCBCSU9TIDQwMDEgMDUvMjcvMjAxOQ0KWyAxNzU1
+LjgwNTQ2M10gV29ya3F1ZXVlOiBuZXRucyBjbGVhbnVwX25ldA0KWyAxNzU1LjgwNTQ2N10gUklQ
+OiAwMDEwOnJldGlyZV9zeXNjdGxfc2V0KzB4MTQvMHgxOA0KWyAxNzU1LjgwNTQ2OV0gQ29kZTog
+MDAgMDAgMDAgMDAgNDkgYzcgNDAgNDggMDAgMDAgMDAgMDAgNDkgYzcgNDAgNTAgMDAgMDAgMDAg
+MDAgYzMgOTAgMGYgMWYgNDQgMDAgMDAgNTUgNDggOGIgNDcgNTggNDggODkgZTUgNDggODUgYzAg
+NzUgMDIgNWQgYzMgPDBmPiAwYiA1ZCBjMyAwZiAxZiA0NCAwMCAwMCA1NSA0OCA4OSBlNSA0OCA4
+MyBlYyA2MCA0OCA4OSA0YyAyNCA0OA0KWyAxNzU1LjgwNTQ3MV0gUlNQOiAwMDE4OmZmZmZiMTJk
+MDE2OWZkYzAgRUZMQUdTOiAwMDAxMDI4Mg0KWyAxNzU1LjgwNTQ3M10gUkFYOiBmZmZmOTYyNGE2
+OTdhZDU4IFJCWDogZmZmZjk2MjQ3NjQyYTY4MCBSQ1g6IDAwMDAwMDAwODAxNTAwMDkNClsgMTc1
+NS44MDU0NzVdIFJEWDogZmZmZjk2MjQ3NjQyYTZiMCBSU0k6IGZmZmZmZmZmYjViZmViNDggUkRJ
+OiBmZmZmOTYyNDc2NDJhNzMwDQpbIDE3NTUuODA1NDc2XSBSQlA6IGZmZmZiMTJkMDE2OWZkYzAg
+UjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogZmZmZmZmZmZiNDc3NmQwMA0KWyAxNzU1LjgwNTQ3
+N10gUjEwOiBmZmZmOTYyNGNhZDBhOWMwIFIxMTogMDAwMDAwMDAwMDAwMDAwMSBSMTI6IGZmZmZi
+MTJkMDE2OWZlMjANClsgMTc1NS44MDU0NzldIFIxMzogZmZmZmZmZmZiNWJmZWI0MCBSMTQ6IGZm
+ZmZmZmZmYjViZmViNDggUjE1OiBmZmZmOTYyNDk4ZWEzOWQ4DQpbIDE3NTUuODA1NDgxXSBGUzog
+IDAwMDAwMDAwMDAwMDAwMDAoMDAwMCkgR1M6ZmZmZjk2MjRjZmEwMDAwMCgwMDAwKSBrbmxHUzow
+MDAwMDAwMDAwMDAwMDAwDQpbIDE3NTUuODA1NDgyXSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAw
+MDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQpbIDE3NTUuODA1NDgzXSBDUjI6IDAwMDA1NWZiYjU5
+Y2Q4ZTggQ1IzOiAwMDAwMDAwMDRhYTBhMDA2IENSNDogMDAwMDAwMDAwMDE2MDZlMA0KWyAxNzU1
+LjgwNTQ4NV0gQ2FsbCBUcmFjZToNClsgMTc1NS44MDU0OTBdICBzeXNjdGxfbmV0X2V4aXQrMHgx
+NS8weDIwDQpbIDE3NTUuODA1NDkzXSAgb3BzX2V4aXRfbGlzdC5pc3JhLjArMHgzYi8weDcwDQpb
+IDE3NTUuODA1NDk2XSAgY2xlYW51cF9uZXQrMHgxZjAvMHgzMDANClsgMTc1NS44MDU1MDBdICBw
+cm9jZXNzX29uZV93b3JrKzB4MWViLzB4M2IwDQpbIDE3NTUuODA1NTAzXSAgd29ya2VyX3RocmVh
+ZCsweDRkLzB4NDAwDQpbIDE3NTUuODA1NTA3XSAga3RocmVhZCsweDEwNC8weDE0MA0KWyAxNzU1
+LjgwNTUxMF0gID8gcHJvY2Vzc19vbmVfd29yaysweDNiMC8weDNiMA0KWyAxNzU1LjgwNTUxMl0g
+ID8ga3RocmVhZF9wYXJrKzB4OTAvMHg5MA0KWyAxNzU1LjgwNTUxN10gIHJldF9mcm9tX2Zvcmsr
+MHgzNS8weDQwDQpbIDE3NTUuODA1NTIwXSAtLS1bIGVuZCB0cmFjZSA4MzJhNzVhZDk2ZjgxMDVm
+IF0tLS0NCg0KDQoNCuKAlCBTdMOpcGhhbmUNCg0KLS0tLS1NZXNzYWdlIGQnb3JpZ2luZS0tLS0t
+DQpEZSA6IGxpbnV4LWNhbi1vd25lckB2Z2VyLmtlcm5lbC5vcmcgPGxpbnV4LWNhbi1vd25lckB2
+Z2VyLmtlcm5lbC5vcmc+IERlIGxhIHBhcnQgZGUgT2xpdmVyIEhhcnRrb3BwDQpFbnZvecOpIDog
+amV1ZGkgMTYganVpbGxldCAyMDIwIDIwOjM4DQrDgCA6IFBoaWxpcHAgTGVobWFubiA8bGVwaDEw
+MTZAaHMta2FybHNydWhlLmRlPjsgd2dAZ3JhbmRlZ2dlci5jb207IG1rbEBwZW5ndXRyb25peC5k
+ZQ0KQ2MgOiBsaW51eC1jYW5Admdlci5rZXJuZWwub3JnOyBjaHJpc3RpYW4uc2F1ZXIud0BzZXct
+ZXVyb2RyaXZlLmRlDQpPYmpldCA6IFJlOiBbQnVnXSBLZXJuZWwgUGFuaWMgb24gRGVsZXRpb24g
+b2YgdGhlIG5ldHdvcmstbmFtZXNwYWNlIGNvbnRhaW5pbmcgdGhlIFNvY2tldENBTiBpbnRlcmZh
+Y2UNCg0KSGkgUGhpbGlwcCwNCg0KdGhhbmtzIGZvciB0aGUgcmVwb3J0IGFuZCBpdHMgcmVwcm9k
+dWNlciENCg0KSSBhc3N1bWVkIHRoZSBpbnRlcmZhY2VzIC0gYXQgbGVhc3QgaW4gdGhlIGNhc2Ug
+b2YgJ3JlYWwnIGhhcmR3YXJlIENBTiBpbnRlcmZhY2VzIC0gdG8gbWUgbW92ZWQgYmFjayB0byB0
+aGUgcm9vdCBuYW1lIHNwYWNlIC4uLiB3ZWxsLg0KDQpJJ2xsIHRha2UgYSBsb29rIGF0IGl0Lg0K
+DQpCZXN0IHJlZ2FyZHMsDQpPbGl2ZXINCg0KT24gMTYuMDcuMjAgMTg6NDYsIFBoaWxpcHAgTGVo
+bWFubiB3cm90ZToNCj4gSWYgYSBTb2NrZXRDQU4gSW50ZXJmYWNlIChUZXN0ZWQgd2l0aCBhIFBD
+QU4tVVNCIGFkYXB0ZXIpIGlzIG1vdmVkIGludG8gYSBuZXR3b3JrLW5hbWVzcGFjZSBhbmQgdGhl
+IG5ldHdvcmsgbmFtZXNwYWNlIGlzIGRlbGV0ZWQgYWZ0ZXJ3YXJkcywgd2l0aG91dCBtb3Zpbmcg
+dGhlIGRldmljZSBvdXQgb2YgdGhlIG5hbWVzcGFjZSBwcmlvciB0byB0aGUgZGVsZXRpb24uIFRo
+ZSBkZXZpY2UgY291bGQgbm90IGJlIGZvdW5kIGluIGFueSBvZiB0aGUgbmV0d29yayBuYW1lc3Bh
+Y2VzIGFmdGVyd2FyZHMsIG9ubHkgYSByZWJvb3Qgb2YgdGhlIHN5c3RlbSBmaXhlcyB0aGlzLiBJ
+ZiB0aGUgZGV2aWNlIGlzIGluc3RlYWQgcmVtb3ZlZCBmcm9tIHRoZSBVU0ItQnVzIHdpdGhvdXQg
+YSByZXN0YXJ0LCBhIGtlcm5lbCBwYW5pYyBpcyB0aGUgcmVzdWx0Lg0KPg0KPg0KPiBPdXRwdXQg
+b2YgdW5hbWUgLXIgW0xpbnV4IGNwYzR4IDUuNC4wLTQwLWdlbmVyaWMgIzQ0LVVidW50dSBTTVAg
+VHVlDQo+IEp1biAyMyAwMDowMTowNCBVVEMgMjAyMCB4ODZfNjQgeDg2XzY0IHg4Nl82NCBHTlUv
+TGludXhdDQo+DQo+DQo+IFRoZSBidWcgY291bGQgYmUgcmVwcm9kdWNlZCB3aXRoIHRoZSBmb2xs
+b3dpbmcgc3RlcHM6DQo+DQo+DQo+IDEuIENvbm5lY3QgdGhlIChVU0IpLVNvY2tldENBTiBkZXZp
+Y2UgdG8gdGhlIGhvc3QNCj4NCj4gMi4gQWRkIGEgbmV3IG5ldHdvcmsgbmFtZXNwYWNlIFtzdWRv
+IGlwIG5ldG5zIGFkZCB0ZXN0XSAzLiBNb3ZlIHRoZQ0KPiBDQU4taW50ZXJmYWNlIHRvIHRoZSBu
+ZXR3b3JrIG5hbWUtc3BhY2UgW3N1ZG8gaXAgbGluayBzZXQgZGV2IGNhbjANCj4gbmV0bnMgdGVz
+dF0gNC4gRGVsZXRlIHRoZSBuYW1lc3BhY2UgW3N1ZG8gaXAgbmV0bnMgZGVsZXRlIHRlc3RdIDUu
+DQo+IFJlbW92ZSB0aGUgYWRhcHRlciBmcm9tIHRoZSBVU0ItQnVzLiBJbiBtb3N0IGNhc2VzIHRo
+aXMgc2hvdWxkIHJlc3VsdA0KPiBpbiBhIGtlcm5lbCBwYW5pYw0KPg0KDQotLQ0KUEVBSy1TeXN0
+ZW0gVGVjaG5payBHbWJIDQpTaXR6IGRlciBHZXNlbGxzY2hhZnQgRGFybXN0YWR0IC0gSFJCIDkx
+ODMNCkdlc2NoYWVmdHNmdWVocnVuZzogQWxleGFuZGVyIEdhY2ggLyBVd2UgV2lsaGVsbQ0KVW5z
+ZXJlIERhdGVuc2NodXR6ZXJrbGFlcnVuZyBtaXQgd2ljaHRpZ2VuIEhpbndlaXNlbg0KenVyIEJl
+aGFuZGx1bmcgcGVyc29uZW5iZXpvZ2VuZXIgRGF0ZW4gZmluZGVuIFNpZSB1bnRlcg0Kd3d3LnBl
+YWstc3lzdGVtLmNvbS9EYXRlbnNjaHV0ei40ODMuMC5odG1sDQo=
