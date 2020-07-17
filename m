@@ -2,37 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A8F2239ED
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 13:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8857D223A90
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 13:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbgGQLDO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 Jul 2020 07:03:14 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.25]:8732 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbgGQLDO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 07:03:14 -0400
-X-Greylist: delayed 59124 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Jul 2020 07:03:11 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1594983790;
+        id S1726040AbgGQLc2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Jul 2020 07:32:28 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:23652 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725950AbgGQLc1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 07:32:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1594985542;
         s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        h=In-Reply-To:Date:Message-ID:References:Cc:To:From:Subject:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=VM+hpgSVJ2I2BAB45zReYoueoIQE1X8OeWdOs+G0xzE=;
-        b=KxU5FE7qGdjstI5Eblv3QDEq2VNdL/PQ3+hY9sxkbTNNhtDgICZ+EmvHWbvdYZ4Iti
-        kNGDekFHBFAW5pxg5QS2P5Uc9SgMqzd0s7Eo3Ot9L1YRFGlOP/YozXxKS5nv1EVTpthE
-        dLrp0OunfWELPtWvjEq6wVCjGXiQfeT5hHOuWjDWF14YR8cY1ab3byBs7lN9upXbMFgB
-        4wZ/RAfwzFfS8iFdbKG+IJOrFp668zvBxl7eU61SMSrutE8cUXQPm0WCWyLIQHIsYFWv
-        J1qWOXlNSgB9bCemStBmuxg5bdi0A6GRh3mgFw6WKbR5jJeWeqAtSv0DEqd1a6+qlO/i
-        1kjg==
+        bh=9UwNi0B5bicfNVF/eJweiWoI/D5diOSsXkMo5H3gqyE=;
+        b=I2q7BWoyYvk66h3xXP+7dPYGD+vN+hwDEPTEkYLTZi2S5L12YmdkBgorycXYSm4CbK
+        XXbXbtpbyqmY681OaD84xMn0cilaSBdM7lQ9taVE4I6VFvP2vNCU0qQL/iE80Zwjqq1r
+        XrVqV9SgxaEBJlbMzfr/UghrPZVagfqib2Fk/vdDBhxgbKyhbZCFsASVPvsLImGXT6jE
+        EZKKWnS9gb7Qx2UIQ5sgIyUbaHhY9iIVh2+Xy5eUduN5I2gWRfQ/PaHq9yS2SZRSNLCx
+        pzH48LL+9ycJ1vbvP7zSncQqVjihg39ChmRTt1xYj1V5hwLuz/hz322hBhCkTi4T2OmP
+        If9A==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVMh+lyA="
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.192.66]
         by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
-        with ESMTPSA id R09ac6w6HB341de
+        with ESMTPSA id R09ac6w6HBWE1jL
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Fri, 17 Jul 2020 13:03:04 +0200 (CEST)
+        Fri, 17 Jul 2020 13:32:14 +0200 (CEST)
 Subject: Re: [Bug] Kernel Panic on Deletion of the network-namespace
  containing the SocketCAN interface
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>,
         Philipp Lehmann <leph1016@hs-karlsruhe.de>,
         "wg@grandegger.com" <wg@grandegger.com>,
@@ -43,193 +43,264 @@ Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
 References: <20ea6d4c00dc4d5f99cd004677280369@hs-karlsruhe.de>
  <88fb5401-746a-5589-650d-a88fde43b122@hartkopp.net>
  <DB7PR03MB505186792325DBBF2471EF1ED67C0@DB7PR03MB5051.eurprd03.prod.outlook.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <925ff8f7-3d24-54d7-38c3-34f127965d3a@hartkopp.net>
-Date:   Fri, 17 Jul 2020 13:02:58 +0200
+ <925ff8f7-3d24-54d7-38c3-34f127965d3a@hartkopp.net>
+Message-ID: <7f1b53a6-299d-1c32-7a15-216019db6b8f@hartkopp.net>
+Date:   Fri, 17 Jul 2020 13:32:10 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <DB7PR03MB505186792325DBBF2471EF1ED67C0@DB7PR03MB5051.eurprd03.prod.outlook.com>
+In-Reply-To: <925ff8f7-3d24-54d7-38c3-34f127965d3a@hartkopp.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQoNCk9uIDE3LjA3LjIwIDA5OjU1LCBTdMOpcGhhbmUgR3Jvc2plYW4gd3JvdGU6DQo+IFRo
-ZXJlJ3MgYSBmaXJzdCBXQVJOSU5HIGtlcm5lbCBtZXNzYWdlIGp1c3Qgd2hlbiB0aGUgbmFt
-ZXNwYWNlIGlzIGRlbGV0ZWQuIFRoZSBXQVJOSU5HIHR1cm5zIGludG8gYSBCVUcgKGtlcm5l
-bCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UpIHdoZW4gcmVtb3ZpbmcgdGhlIGludGVyZmFj
-ZSBpdHNlbGYgKGZvciBleGFtcGxlLCB3aGVuIHRoZSBkcml2ZXIgbW9kdWxlIGlzIHJlbW92
-ZWQgZnJvbSBtZW1vcnkpLiBOb3RlIHRoYXQgdGhlIGlzc3VlIG9jY3VycyB3aXRoIGFsbCBv
-dXIgaW50ZXJuYWwgYXMgd2VsbCBhcyBVU0IgQ0FOIGludGVyZmFjZXMuDQo+IA0KPiBPYnZp
-b3VzbHksIHRoZSBwcm9ibGVtIGRvZXNuJ3QgYXBwZWFyIHdoZW4geW91IHB1dCB0aGUgaW50
-ZXJmYWNlIGJhY2sgaW4gdGhlIHJvb3QgbmFtZXNwYWNlIGJlZm9yZSB0aGUgZGVzdHJ1Y3Rp
-b24sIG9yIHdoZW4gdGhlIGludGVyZmFjZSBpcyBhIHRydWUgRXRoZXJuZXQgbmV0d29yayBp
-bnRlcmZhY2UuDQoNClllcy4gSSBjaGVja2VkIHRoYXQgd2l0aCBhbiBVU0IgRXRoZXJuZXQg
-aW50ZXJmYWNlIEkgaGF2ZSBhdCBoYW5kIGhlcmUgLSANCmFuZCB3aGVuIGRlbGV0aW5nIHRo
-ZSB0ZXN0IG5hbWVzcGFjZSBpdCBqdXN0IGVtZXJnZXMgaW4gdGhlIHJvb3QgDQpuYW1lc3Bh
-Y2UgYWdhaW4uDQoNClNvIEkgd29uZGVyIHdoYXQncyBtaXNzaW5nIGluIG91ciBjb25maWd1
-cmF0aW9uIGZvciBDQU4gaW50ZXJmYWNlcyB0aGF0IA0KdGhpcyB0cmFuc2l0aW9uIGlzIG5v
-dCBwZXJmb3JtZWQgOi0vDQoNCkJlc3QgcmVnYXJkcywNCk9saXZlcg0KDQoNCj4gQ29udGV4
-dDoNCj4gDQo+ICQgdW5hbWUgLWENCj4gTGludXggbGludXgtZGV2IDUuNC4wLTM5LWdlbmVy
-aWMgIzQzLVVidW50dSBTTVAgRnJpIEp1biAxOSAxMDoyODozMSBVVEMgMjAyMCB4ODZfNjQg
-eDg2XzY0IHg4Nl82NCBHTlUvTGludXgNCj4gDQo+ICQgZG1lc2cgfCBncmVwIHBlYWtfcGNp
-DQo+IFsgICAxOS4wMjgwNDhdIHBlYWtfcGNpIDAwMDA6MGE6MDAuMDogZW5hYmxpbmcgZGV2
-aWNlICgwMTAwIC0+IDAxMDIpDQo+IFsgICAxOS4wMzQyODNdIHBlYWtfcGNpIDAwMDA6MGE6
-MDAuMDogY2FuNiBhdCByZWdfYmFzZT0weDAwMDAwMDAwMTM2YjhiMGIgY2ZnX2Jhc2U9MHgw
-MDAwMDAwMGI4MjY1OTdjIGlycT0yNw0KPiBbICAgMTkuMDM0Mzc4XSBwZWFrX3BjaSAwMDAw
-OjBhOjAwLjA6IGNhbjcgYXQgcmVnX2Jhc2U9MHgwMDAwMDAwMDZiM2RlOWEwIGNmZ19iYXNl
-PTB4MDAwMDAwMDBiODI2NTk3YyBpcnE9MjcNCj4gDQo+ICMgaXAgbmV0bnMgYWRkIHRlc3QN
-Cj4gIyBpcCBsaW5rIHNldCBkZXYgY2FuNiBuZXRucyB0ZXN0DQo+ICMgaXAgbmV0bnMgZGVs
-ZXRlIHRlc3QNCj4gDQo+IFsgMTc1NS44MDUyNDFdIC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUg
-XS0tLS0tLS0tLS0tLQ0KPiBbIDE3NTUuODA1MjUxXSBXQVJOSU5HOiBDUFU6IDggUElEOiAy
-NjM1IGF0IG5ldC9jb3JlL2Rldi5jOjEwMDM5IG5ldGRldl9leGl0KzB4NDQvMHg1MA0KPiBb
-IDE3NTUuODA1MjUyXSBNb2R1bGVzIGxpbmtlZCBpbjogdmJveG5ldGFkcChPRSkgdmJveG5l
-dGZsdChPRSkgdmJveGRydihPRSkgbWQ0IG5sc191dGY4IGNpZnMgbGliYXJjNCBmc2NhY2hl
-IGxpYmRlcyBjZmc4MDIxMSBubHNfaXNvODg1OV8xIGludGVsX3JhcGxfbXNyIGludGVsX3Jh
-cGxfY29tbW9uIHg4Nl9wa2dfdGVtcF90aGVybWFsIGludGVsX3Bvd2VyY2xhbXAgY29yZXRl
-bXAga3ZtX2ludGVsIHBlYWtfdXNiIDg4MTJhdShPRSkgam95ZGV2IHBsaW4oT0UpIGt2bSBp
-bnB1dF9sZWRzIHBjYW4oT0UpIGVlZXBjX3dtaSBzbmRfaGRhX2NvZGVjX2hkbWkgc25kX2hk
-YV9jb2RlY19yZWFsdGVrIG5vdXZlYXUgcGNtY2lhIHNuZF9oZGFfY29kZWNfZ2VuZXJpYyBh
-c3VzX3dtaSBwY21jaWFfY29yZSBjcmN0MTBkaWZfcGNsbXVsIGdoYXNoX2NsbXVsbmlfaW50
-ZWwgcGVha19wY2kgc2phMTAwMCBwZWFrX3BjaWVmZCBsZWR0cmlnX2F1ZGlvIHR0bSBhZXNu
-aV9pbnRlbCBkcm1fa21zX2hlbHBlciBzbmRfaGRhX2ludGVsIHNuZF9pbnRlbF9kc3BjZmcg
-ZmJfc3lzX2ZvcHMgc3lzY29weWFyZWEgc3lzZmlsbHJlY3Qgc3lzaW1nYmx0IGNhbl9kZXYg
-c25kX2hkYV9jb2RlYyBzbmRfaGRhX2NvcmUgY3J5cHRvX3NpbWQgc25kX2h3ZGVwIGNyeXB0
-ZCBzbmRfcGNtIGdsdWVfaGVscGVyIHNuZF9zZXFfbWlkaSBzbmRfc2VxX21pZGlfZXZlbnQg
-c25kX3Jhd21pZGkgc25kX3NlcSBzbmRfc2VxX2RldmljZSBzbmRfdGltZXIgc3BhcnNlX2tl
-eW1hcCBpbnRlbF9jc3RhdGUgaW50ZWxfcmFwbF9wZXJmIHNuZCB2aWRlbyBtZWlfbWUgbWVp
-IHNvdW5kY29yZSB3bWlfYm1vZiBpbnRlbF93bWlfdGh1bmRlcmJvbHQgbXhtX3dtaSBtYWNf
-aGlkIHNjaF9mcV9jb2RlbCBwYXJwb3J0X3BjIHBwZGV2IGxwIHBhcnBvcnQgZHJtIGlwX3Rh
-YmxlcyB4X3RhYmxlcyBhdXRvZnM0IGhpZF9nZW5lcmljIHVzYmhpZCB1YXMgdXNiX3N0b3Jh
-Z2UgaGlkIGNyYzMyX3BjbG11bCBpZ2IgZTEwMDBlDQo+IFsgMTc1NS44MDUzMDZdICBhaGNp
-IGkyY19pODAxIGkyY19hbGdvX2JpdCBscGNfaWNoIGxpYmFoY2kgZGNhIHdtaQ0KPiBbIDE3
-NTUuODA1MzE1XSBDUFU6IDggUElEOiAyNjM1IENvbW06IGt3b3JrZXIvdTI0OjAgVGFpbnRl
-ZDogRyAgICAgICAgICAgT0UgICAgIDUuNC4wLTM5LWdlbmVyaWMgIzQzLVVidW50dQ0KPiBb
-IDE3NTUuODA1MzE2XSBIYXJkd2FyZSBuYW1lOiBBU1VTIEFsbCBTZXJpZXMvWDk5LUUgV1Ms
-IEJJT1MgNDAwMSAwNS8yNy8yMDE5DQo+IFsgMTc1NS44MDUzMTldIFdvcmtxdWV1ZTogbmV0
-bnMgY2xlYW51cF9uZXQNCj4gWyAxNzU1LjgwNTMyNF0gUklQOiAwMDEwOm5ldGRldl9leGl0
-KzB4NDQvMHg1MA0KPiBbIDE3NTUuODA1MzI3XSBDb2RlOiA4YiBiYiAzMCAwMSAwMCAwMCBl
-OCA4YiA5ZCA5NyBmZiA0OCA4MSBmYiAwMCAyMSBiZSBiNSA3NCAxMyA0OCA4YiA4MyA5MCAw
-MCAwMCAwMCA0OCA4MSBjMyA5MCAwMCAwMCAwMCA0OCAzOSBjMyA3NSAwMyA1YiA1ZCBjMyA8
-MGY+IDBiIGViIGY5IDBmIDFmIDg0IDAwIDAwIDAwIDAwIDAwIDBmIDFmIDQ0IDAwIDAwIDU1
-IDQ4IDg5IGU1IDQxDQo+IFsgMTc1NS44MDUzMjldIFJTUDogMDAxODpmZmZmYjEyZDAxNjlm
-ZGM4IEVGTEFHUzogMDAwMTAyODcNCj4gWyAxNzU1LjgwNTMzMV0gUkFYOiBmZmZmOTYyNGM4
-YTcwMDUwIFJCWDogZmZmZjk2MjQ3NjQyYTcxMCBSQ1g6IDAwMDAwMDAwODAxMDAwMGINCj4g
-WyAxNzU1LjgwNTMzM10gUkRYOiAwMDAwMDAwMDgwMTAwMDBjIFJTSTogMDAwMDAwMDAwMDAw
-MDAwMSBSREk6IGZmZmY5NjI0Y2RjMDZhMDANCj4gWyAxNzU1LjgwNTMzNF0gUkJQOiBmZmZm
-YjEyZDAxNjlmZGQwIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IGZmZmZmZmZmYjRkMmUz
-MDANCj4gWyAxNzU1LjgwNTMzNV0gUjEwOiBmZmZmOTYyNGEwZDg0MDAwIFIxMTogMDAwMDAw
-MDAwMDAwMDAwMSBSMTI6IGZmZmZiMTJkMDE2OWZlMjANCj4gWyAxNzU1LjgwNTMzN10gUjEz
-OiBmZmZmZmZmZmI1YmUzZjIwIFIxNDogZmZmZmZmZmZiNWJlM2YyOCBSMTU6IGZmZmY5NjI0
-OThlYTM5ZDgNCj4gWyAxNzU1LjgwNTMzOV0gRlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAwMDAp
-IEdTOmZmZmY5NjI0Y2ZhMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KPiBb
-IDE3NTUuODA1MzQxXSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAw
-MDgwMDUwMDMzDQo+IFsgMTc1NS44MDUzNDJdIENSMjogMDAwMDU1ZmJiNTljZDhlOCBDUjM6
-IDAwMDAwMDAwNGFhMGEwMDYgQ1I0OiAwMDAwMDAwMDAwMTYwNmUwDQo+IFsgMTc1NS44MDUz
-NDRdIENhbGwgVHJhY2U6DQo+IFsgMTc1NS44MDUzNTBdICBvcHNfZXhpdF9saXN0LmlzcmEu
-MCsweDNiLzB4NzANCj4gWyAxNzU1LjgwNTM1M10gIGNsZWFudXBfbmV0KzB4MWYwLzB4MzAw
-DQo+IFsgMTc1NS44MDUzNTldICBwcm9jZXNzX29uZV93b3JrKzB4MWViLzB4M2IwDQo+IFsg
-MTc1NS44MDUzNjNdICB3b3JrZXJfdGhyZWFkKzB4NGQvMHg0MDANCj4gWyAxNzU1LjgwNTM2
-N10gIGt0aHJlYWQrMHgxMDQvMHgxNDANCj4gWyAxNzU1LjgwNTM3MF0gID8gcHJvY2Vzc19v
-bmVfd29yaysweDNiMC8weDNiMA0KPiBbIDE3NTUuODA1MzczXSAgPyBrdGhyZWFkX3Bhcmsr
-MHg5MC8weDkwDQo+IFsgMTc1NS44MDUzNzhdICByZXRfZnJvbV9mb3JrKzB4MzUvMHg0MA0K
-PiBbIDE3NTUuODA1MzgyXSAtLS1bIGVuZCB0cmFjZSA4MzJhNzVhZDk2ZjgxMDVlIF0tLS0N
-Cj4gWyAxNzU1LjgwNTQxMF0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0t
-DQo+IFsgMTc1NS44MDU0MTZdIFdBUk5JTkc6IENQVTogOCBQSUQ6IDI2MzUgYXQgZnMvcHJv
-Yy9wcm9jX3N5c2N0bC5jOjE3MTQgcmV0aXJlX3N5c2N0bF9zZXQrMHgxNC8weDE4DQo+IFsg
-MTc1NS44MDU0MTddIE1vZHVsZXMgbGlua2VkIGluOiB2Ym94bmV0YWRwKE9FKSB2Ym94bmV0
-Zmx0KE9FKSB2Ym94ZHJ2KE9FKSBtZDQgbmxzX3V0ZjggY2lmcyBsaWJhcmM0IGZzY2FjaGUg
-bGliZGVzIGNmZzgwMjExIG5sc19pc284ODU5XzEgaW50ZWxfcmFwbF9tc3IgaW50ZWxfcmFw
-bF9jb21tb24geDg2X3BrZ190ZW1wX3RoZXJtYWwgaW50ZWxfcG93ZXJjbGFtcCBjb3JldGVt
-cCBrdm1faW50ZWwgcGVha191c2IgODgxMmF1KE9FKSBqb3lkZXYgcGxpbihPRSkga3ZtIGlu
-cHV0X2xlZHMgcGNhbihPRSkgZWVlcGNfd21pIHNuZF9oZGFfY29kZWNfaGRtaSBzbmRfaGRh
-X2NvZGVjX3JlYWx0ZWsgbm91dmVhdSBwY21jaWEgc25kX2hkYV9jb2RlY19nZW5lcmljIGFz
-dXNfd21pIHBjbWNpYV9jb3JlIGNyY3QxMGRpZl9wY2xtdWwgZ2hhc2hfY2xtdWxuaV9pbnRl
-bCBwZWFrX3BjaSBzamExMDAwIHBlYWtfcGNpZWZkIGxlZHRyaWdfYXVkaW8gdHRtIGFlc25p
-X2ludGVsIGRybV9rbXNfaGVscGVyIHNuZF9oZGFfaW50ZWwgc25kX2ludGVsX2RzcGNmZyBm
-Yl9zeXNfZm9wcyBzeXNjb3B5YXJlYSBzeXNmaWxscmVjdCBzeXNpbWdibHQgY2FuX2RldiBz
-bmRfaGRhX2NvZGVjIHNuZF9oZGFfY29yZSBjcnlwdG9fc2ltZCBzbmRfaHdkZXAgY3J5cHRk
-IHNuZF9wY20gZ2x1ZV9oZWxwZXIgc25kX3NlcV9taWRpIHNuZF9zZXFfbWlkaV9ldmVudCBz
-bmRfcmF3bWlkaSBzbmRfc2VxIHNuZF9zZXFfZGV2aWNlIHNuZF90aW1lciBzcGFyc2Vfa2V5
-bWFwIGludGVsX2NzdGF0ZSBpbnRlbF9yYXBsX3BlcmYgc25kIHZpZGVvIG1laV9tZSBtZWkg
-c291bmRjb3JlIHdtaV9ibW9mIGludGVsX3dtaV90aHVuZGVyYm9sdCBteG1fd21pIG1hY19o
-aWQgc2NoX2ZxX2NvZGVsIHBhcnBvcnRfcGMgcHBkZXYgbHAgcGFycG9ydCBkcm0gaXBfdGFi
-bGVzIHhfdGFibGVzIGF1dG9mczQgaGlkX2dlbmVyaWMgdXNiaGlkIHVhcyB1c2Jfc3RvcmFn
-ZSBoaWQgY3JjMzJfcGNsbXVsIGlnYiBlMTAwMGUNCj4gWyAxNzU1LjgwNTQ1NF0gIGFoY2kg
-aTJjX2k4MDEgaTJjX2FsZ29fYml0IGxwY19pY2ggbGliYWhjaSBkY2Egd21pDQo+IFsgMTc1
-NS44MDU0NjBdIENQVTogOCBQSUQ6IDI2MzUgQ29tbToga3dvcmtlci91MjQ6MCBUYWludGVk
-OiBHICAgICAgICBXICBPRSAgICAgNS40LjAtMzktZ2VuZXJpYyAjNDMtVWJ1bnR1DQo+IFsg
-MTc1NS44MDU0NjFdIEhhcmR3YXJlIG5hbWU6IEFTVVMgQWxsIFNlcmllcy9YOTktRSBXUywg
-QklPUyA0MDAxIDA1LzI3LzIwMTkNCj4gWyAxNzU1LjgwNTQ2M10gV29ya3F1ZXVlOiBuZXRu
-cyBjbGVhbnVwX25ldA0KPiBbIDE3NTUuODA1NDY3XSBSSVA6IDAwMTA6cmV0aXJlX3N5c2N0
-bF9zZXQrMHgxNC8weDE4DQo+IFsgMTc1NS44MDU0NjldIENvZGU6IDAwIDAwIDAwIDAwIDQ5
-IGM3IDQwIDQ4IDAwIDAwIDAwIDAwIDQ5IGM3IDQwIDUwIDAwIDAwIDAwIDAwIGMzIDkwIDBm
-IDFmIDQ0IDAwIDAwIDU1IDQ4IDhiIDQ3IDU4IDQ4IDg5IGU1IDQ4IDg1IGMwIDc1IDAyIDVk
-IGMzIDwwZj4gMGIgNWQgYzMgMGYgMWYgNDQgMDAgMDAgNTUgNDggODkgZTUgNDggODMgZWMg
-NjAgNDggODkgNGMgMjQgNDgNCj4gWyAxNzU1LjgwNTQ3MV0gUlNQOiAwMDE4OmZmZmZiMTJk
-MDE2OWZkYzAgRUZMQUdTOiAwMDAxMDI4Mg0KPiBbIDE3NTUuODA1NDczXSBSQVg6IGZmZmY5
-NjI0YTY5N2FkNTggUkJYOiBmZmZmOTYyNDc2NDJhNjgwIFJDWDogMDAwMDAwMDA4MDE1MDAw
-OQ0KPiBbIDE3NTUuODA1NDc1XSBSRFg6IGZmZmY5NjI0NzY0MmE2YjAgUlNJOiBmZmZmZmZm
-ZmI1YmZlYjQ4IFJESTogZmZmZjk2MjQ3NjQyYTczMA0KPiBbIDE3NTUuODA1NDc2XSBSQlA6
-IGZmZmZiMTJkMDE2OWZkYzAgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogZmZmZmZmZmZi
-NDc3NmQwMA0KPiBbIDE3NTUuODA1NDc3XSBSMTA6IGZmZmY5NjI0Y2FkMGE5YzAgUjExOiAw
-MDAwMDAwMDAwMDAwMDAxIFIxMjogZmZmZmIxMmQwMTY5ZmUyMA0KPiBbIDE3NTUuODA1NDc5
-XSBSMTM6IGZmZmZmZmZmYjViZmViNDAgUjE0OiBmZmZmZmZmZmI1YmZlYjQ4IFIxNTogZmZm
-Zjk2MjQ5OGVhMzlkOA0KPiBbIDE3NTUuODA1NDgxXSBGUzogIDAwMDAwMDAwMDAwMDAwMDAo
-MDAwMCkgR1M6ZmZmZjk2MjRjZmEwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAw
-DQo+IFsgMTc1NS44MDU0ODJdIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAw
-MDAwMDAwODAwNTAwMzMNCj4gWyAxNzU1LjgwNTQ4M10gQ1IyOiAwMDAwNTVmYmI1OWNkOGU4
-IENSMzogMDAwMDAwMDA0YWEwYTAwNiBDUjQ6IDAwMDAwMDAwMDAxNjA2ZTANCj4gWyAxNzU1
-LjgwNTQ4NV0gQ2FsbCBUcmFjZToNCj4gWyAxNzU1LjgwNTQ5MF0gIHN5c2N0bF9uZXRfZXhp
-dCsweDE1LzB4MjANCj4gWyAxNzU1LjgwNTQ5M10gIG9wc19leGl0X2xpc3QuaXNyYS4wKzB4
-M2IvMHg3MA0KPiBbIDE3NTUuODA1NDk2XSAgY2xlYW51cF9uZXQrMHgxZjAvMHgzMDANCj4g
-WyAxNzU1LjgwNTUwMF0gIHByb2Nlc3Nfb25lX3dvcmsrMHgxZWIvMHgzYjANCj4gWyAxNzU1
-LjgwNTUwM10gIHdvcmtlcl90aHJlYWQrMHg0ZC8weDQwMA0KPiBbIDE3NTUuODA1NTA3XSAg
-a3RocmVhZCsweDEwNC8weDE0MA0KPiBbIDE3NTUuODA1NTEwXSAgPyBwcm9jZXNzX29uZV93
-b3JrKzB4M2IwLzB4M2IwDQo+IFsgMTc1NS44MDU1MTJdICA/IGt0aHJlYWRfcGFyaysweDkw
-LzB4OTANCj4gWyAxNzU1LjgwNTUxN10gIHJldF9mcm9tX2ZvcmsrMHgzNS8weDQwDQo+IFsg
-MTc1NS44MDU1MjBdIC0tLVsgZW5kIHRyYWNlIDgzMmE3NWFkOTZmODEwNWYgXS0tLQ0KPiAN
-Cj4gDQo+IA0KPiDigJQgU3TDqXBoYW5lDQo+IA0KPiAtLS0tLU1lc3NhZ2UgZCdvcmlnaW5l
-LS0tLS0NCj4gRGUgOiBsaW51eC1jYW4tb3duZXJAdmdlci5rZXJuZWwub3JnIDxsaW51eC1j
-YW4tb3duZXJAdmdlci5rZXJuZWwub3JnPiBEZSBsYSBwYXJ0IGRlIE9saXZlciBIYXJ0a29w
-cA0KPiBFbnZvecOpIDogamV1ZGkgMTYganVpbGxldCAyMDIwIDIwOjM4DQo+IMOAIDogUGhp
-bGlwcCBMZWhtYW5uIDxsZXBoMTAxNkBocy1rYXJsc3J1aGUuZGU+OyB3Z0BncmFuZGVnZ2Vy
-LmNvbTsgbWtsQHBlbmd1dHJvbml4LmRlDQo+IENjIDogbGludXgtY2FuQHZnZXIua2VybmVs
-Lm9yZzsgY2hyaXN0aWFuLnNhdWVyLndAc2V3LWV1cm9kcml2ZS5kZQ0KPiBPYmpldCA6IFJl
-OiBbQnVnXSBLZXJuZWwgUGFuaWMgb24gRGVsZXRpb24gb2YgdGhlIG5ldHdvcmstbmFtZXNw
-YWNlIGNvbnRhaW5pbmcgdGhlIFNvY2tldENBTiBpbnRlcmZhY2UNCj4gDQo+IEhpIFBoaWxp
-cHAsDQo+IA0KPiB0aGFua3MgZm9yIHRoZSByZXBvcnQgYW5kIGl0cyByZXByb2R1Y2VyIQ0K
-PiANCj4gSSBhc3N1bWVkIHRoZSBpbnRlcmZhY2VzIC0gYXQgbGVhc3QgaW4gdGhlIGNhc2Ug
-b2YgJ3JlYWwnIGhhcmR3YXJlIENBTiBpbnRlcmZhY2VzIC0gdG8gbWUgbW92ZWQgYmFjayB0
-byB0aGUgcm9vdCBuYW1lIHNwYWNlIC4uLiB3ZWxsLg0KPiANCj4gSSdsbCB0YWtlIGEgbG9v
-ayBhdCBpdC4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gT2xpdmVyDQo+IA0KPiBPbiAxNi4w
-Ny4yMCAxODo0NiwgUGhpbGlwcCBMZWhtYW5uIHdyb3RlOg0KPj4gSWYgYSBTb2NrZXRDQU4g
-SW50ZXJmYWNlIChUZXN0ZWQgd2l0aCBhIFBDQU4tVVNCIGFkYXB0ZXIpIGlzIG1vdmVkIGlu
-dG8gYSBuZXR3b3JrLW5hbWVzcGFjZSBhbmQgdGhlIG5ldHdvcmsgbmFtZXNwYWNlIGlzIGRl
-bGV0ZWQgYWZ0ZXJ3YXJkcywgd2l0aG91dCBtb3ZpbmcgdGhlIGRldmljZSBvdXQgb2YgdGhl
-IG5hbWVzcGFjZSBwcmlvciB0byB0aGUgZGVsZXRpb24uIFRoZSBkZXZpY2UgY291bGQgbm90
-IGJlIGZvdW5kIGluIGFueSBvZiB0aGUgbmV0d29yayBuYW1lc3BhY2VzIGFmdGVyd2FyZHMs
-IG9ubHkgYSByZWJvb3Qgb2YgdGhlIHN5c3RlbSBmaXhlcyB0aGlzLiBJZiB0aGUgZGV2aWNl
-IGlzIGluc3RlYWQgcmVtb3ZlZCBmcm9tIHRoZSBVU0ItQnVzIHdpdGhvdXQgYSByZXN0YXJ0
-LCBhIGtlcm5lbCBwYW5pYyBpcyB0aGUgcmVzdWx0Lg0KPj4NCj4+DQo+PiBPdXRwdXQgb2Yg
-dW5hbWUgLXIgW0xpbnV4IGNwYzR4IDUuNC4wLTQwLWdlbmVyaWMgIzQ0LVVidW50dSBTTVAg
-VHVlDQo+PiBKdW4gMjMgMDA6MDE6MDQgVVRDIDIwMjAgeDg2XzY0IHg4Nl82NCB4ODZfNjQg
-R05VL0xpbnV4XQ0KPj4NCj4+DQo+PiBUaGUgYnVnIGNvdWxkIGJlIHJlcHJvZHVjZWQgd2l0
-aCB0aGUgZm9sbG93aW5nIHN0ZXBzOg0KPj4NCj4+DQo+PiAxLiBDb25uZWN0IHRoZSAoVVNC
-KS1Tb2NrZXRDQU4gZGV2aWNlIHRvIHRoZSBob3N0DQo+Pg0KPj4gMi4gQWRkIGEgbmV3IG5l
-dHdvcmsgbmFtZXNwYWNlIFtzdWRvIGlwIG5ldG5zIGFkZCB0ZXN0XSAzLiBNb3ZlIHRoZQ0K
-Pj4gQ0FOLWludGVyZmFjZSB0byB0aGUgbmV0d29yayBuYW1lLXNwYWNlIFtzdWRvIGlwIGxp
-bmsgc2V0IGRldiBjYW4wDQo+PiBuZXRucyB0ZXN0XSA0LiBEZWxldGUgdGhlIG5hbWVzcGFj
-ZSBbc3VkbyBpcCBuZXRucyBkZWxldGUgdGVzdF0gNS4NCj4+IFJlbW92ZSB0aGUgYWRhcHRl
-ciBmcm9tIHRoZSBVU0ItQnVzLiBJbiBtb3N0IGNhc2VzIHRoaXMgc2hvdWxkIHJlc3VsdA0K
-Pj4gaW4gYSBrZXJuZWwgcGFuaWMNCj4+DQo+IA0KPiAtLQ0KPiBQRUFLLVN5c3RlbSBUZWNo
-bmlrIEdtYkgNCj4gU2l0eiBkZXIgR2VzZWxsc2NoYWZ0IERhcm1zdGFkdCAtIEhSQiA5MTgz
-DQo+IEdlc2NoYWVmdHNmdWVocnVuZzogQWxleGFuZGVyIEdhY2ggLyBVd2UgV2lsaGVsbQ0K
-PiBVbnNlcmUgRGF0ZW5zY2h1dHplcmtsYWVydW5nIG1pdCB3aWNodGlnZW4gSGlud2Vpc2Vu
-DQo+IHp1ciBCZWhhbmRsdW5nIHBlcnNvbmVuYmV6b2dlbmVyIERhdGVuIGZpbmRlbiBTaWUg
-dW50ZXINCj4gd3d3LnBlYWstc3lzdGVtLmNvbS9EYXRlbnNjaHV0ei40ODMuMC5odG1sDQo+
-IA0K
+I found it!
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 90b59fc50dc9..add15461a9e2 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -10517,7 +10517,7 @@ static void __net_exit 
+default_device_exit(struct net *net)
+                         continue;
+
+                 /* Leave virtual devices for the generic cleanup */
+-               if (dev->rtnl_link_ops)
++               if ((dev->rtnl_link_ops) && (dev->type != ARPHRD_CAN))
+                         continue;
+
+                 /* Push remaining network devices to init_net */
+
+The problem is, that 'real' CAN interfaces use the rtnl_link_ops to 
+configure bitrates and other CAN controller specific settings.
+
+But the fact that rtnl_link_ops are available makes somebody thinking 
+this is only a virtual interface - and therefore the transition of the 
+interface back to the root namespace is skipped.
+
+The patch above fixes the issue but I'm not sure if we need a more 
+general solution here.
+
+Best,
+Oliver
+
+On 17.07.20 13:02, Oliver Hartkopp wrote:
+> 
+> 
+> On 17.07.20 09:55, Stéphane Grosjean wrote:
+>> There's a first WARNING kernel message just when the namespace is 
+>> deleted. The WARNING turns into a BUG (kernel NULL pointer 
+>> dereference) when removing the interface itself (for example, when the 
+>> driver module is removed from memory). Note that the issue occurs with 
+>> all our internal as well as USB CAN interfaces.
+>>
+>> Obviously, the problem doesn't appear when you put the interface back 
+>> in the root namespace before the destruction, or when the interface is 
+>> a true Ethernet network interface.
+> 
+> Yes. I checked that with an USB Ethernet interface I have at hand here - 
+> and when deleting the test namespace it just emerges in the root 
+> namespace again.
+> 
+> So I wonder what's missing in our configuration for CAN interfaces that 
+> this transition is not performed :-/
+> 
+> Best regards,
+> Oliver
+> 
+> 
+>> Context:
+>>
+>> $ uname -a
+>> Linux linux-dev 5.4.0-39-generic #43-Ubuntu SMP Fri Jun 19 10:28:31 
+>> UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+>>
+>> $ dmesg | grep peak_pci
+>> [   19.028048] peak_pci 0000:0a:00.0: enabling device (0100 -> 0102)
+>> [   19.034283] peak_pci 0000:0a:00.0: can6 at 
+>> reg_base=0x00000000136b8b0b cfg_base=0x00000000b826597c irq=27
+>> [   19.034378] peak_pci 0000:0a:00.0: can7 at 
+>> reg_base=0x000000006b3de9a0 cfg_base=0x00000000b826597c irq=27
+>>
+>> # ip netns add test
+>> # ip link set dev can6 netns test
+>> # ip netns delete test
+>>
+>> [ 1755.805241] ------------[ cut here ]------------
+>> [ 1755.805251] WARNING: CPU: 8 PID: 2635 at net/core/dev.c:10039 
+>> netdev_exit+0x44/0x50
+>> [ 1755.805252] Modules linked in: vboxnetadp(OE) vboxnetflt(OE) 
+>> vboxdrv(OE) md4 nls_utf8 cifs libarc4 fscache libdes cfg80211 
+>> nls_iso8859_1 intel_rapl_msr intel_rapl_common x86_pkg_temp_thermal 
+>> intel_powerclamp coretemp kvm_intel peak_usb 8812au(OE) joydev 
+>> plin(OE) kvm input_leds pcan(OE) eeepc_wmi snd_hda_codec_hdmi 
+>> snd_hda_codec_realtek nouveau pcmcia snd_hda_codec_generic asus_wmi 
+>> pcmcia_core crct10dif_pclmul ghash_clmulni_intel peak_pci sja1000 
+>> peak_pciefd ledtrig_audio ttm aesni_intel drm_kms_helper snd_hda_intel 
+>> snd_intel_dspcfg fb_sys_fops syscopyarea sysfillrect sysimgblt can_dev 
+>> snd_hda_codec snd_hda_core crypto_simd snd_hwdep cryptd snd_pcm 
+>> glue_helper snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq 
+>> snd_seq_device snd_timer sparse_keymap intel_cstate intel_rapl_perf 
+>> snd video mei_me mei soundcore wmi_bmof intel_wmi_thunderbolt mxm_wmi 
+>> mac_hid sch_fq_codel parport_pc ppdev lp parport drm ip_tables 
+>> x_tables autofs4 hid_generic usbhid uas usb_storage hid crc32_pclmul 
+>> igb e1000e
+>> [ 1755.805306]  ahci i2c_i801 i2c_algo_bit lpc_ich libahci dca wmi
+>> [ 1755.805315] CPU: 8 PID: 2635 Comm: kworker/u24:0 Tainted: 
+>> G           OE     5.4.0-39-generic #43-Ubuntu
+>> [ 1755.805316] Hardware name: ASUS All Series/X99-E WS, BIOS 4001 
+>> 05/27/2019
+>> [ 1755.805319] Workqueue: netns cleanup_net
+>> [ 1755.805324] RIP: 0010:netdev_exit+0x44/0x50
+>> [ 1755.805327] Code: 8b bb 30 01 00 00 e8 8b 9d 97 ff 48 81 fb 00 21 
+>> be b5 74 13 48 8b 83 90 00 00 00 48 81 c3 90 00 00 00 48 39 c3 75 03 
+>> 5b 5d c3 <0f> 0b eb f9 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 55 48 89 
+>> e5 41
+>> [ 1755.805329] RSP: 0018:ffffb12d0169fdc8 EFLAGS: 00010287
+>> [ 1755.805331] RAX: ffff9624c8a70050 RBX: ffff96247642a710 RCX: 
+>> 000000008010000b
+>> [ 1755.805333] RDX: 000000008010000c RSI: 0000000000000001 RDI: 
+>> ffff9624cdc06a00
+>> [ 1755.805334] RBP: ffffb12d0169fdd0 R08: 0000000000000000 R09: 
+>> ffffffffb4d2e300
+>> [ 1755.805335] R10: ffff9624a0d84000 R11: 0000000000000001 R12: 
+>> ffffb12d0169fe20
+>> [ 1755.805337] R13: ffffffffb5be3f20 R14: ffffffffb5be3f28 R15: 
+>> ffff962498ea39d8
+>> [ 1755.805339] FS:  0000000000000000(0000) GS:ffff9624cfa00000(0000) 
+>> knlGS:0000000000000000
+>> [ 1755.805341] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [ 1755.805342] CR2: 000055fbb59cd8e8 CR3: 000000004aa0a006 CR4: 
+>> 00000000001606e0
+>> [ 1755.805344] Call Trace:
+>> [ 1755.805350]  ops_exit_list.isra.0+0x3b/0x70
+>> [ 1755.805353]  cleanup_net+0x1f0/0x300
+>> [ 1755.805359]  process_one_work+0x1eb/0x3b0
+>> [ 1755.805363]  worker_thread+0x4d/0x400
+>> [ 1755.805367]  kthread+0x104/0x140
+>> [ 1755.805370]  ? process_one_work+0x3b0/0x3b0
+>> [ 1755.805373]  ? kthread_park+0x90/0x90
+>> [ 1755.805378]  ret_from_fork+0x35/0x40
+>> [ 1755.805382] ---[ end trace 832a75ad96f8105e ]---
+>> [ 1755.805410] ------------[ cut here ]------------
+>> [ 1755.805416] WARNING: CPU: 8 PID: 2635 at fs/proc/proc_sysctl.c:1714 
+>> retire_sysctl_set+0x14/0x18
+>> [ 1755.805417] Modules linked in: vboxnetadp(OE) vboxnetflt(OE) 
+>> vboxdrv(OE) md4 nls_utf8 cifs libarc4 fscache libdes cfg80211 
+>> nls_iso8859_1 intel_rapl_msr intel_rapl_common x86_pkg_temp_thermal 
+>> intel_powerclamp coretemp kvm_intel peak_usb 8812au(OE) joydev 
+>> plin(OE) kvm input_leds pcan(OE) eeepc_wmi snd_hda_codec_hdmi 
+>> snd_hda_codec_realtek nouveau pcmcia snd_hda_codec_generic asus_wmi 
+>> pcmcia_core crct10dif_pclmul ghash_clmulni_intel peak_pci sja1000 
+>> peak_pciefd ledtrig_audio ttm aesni_intel drm_kms_helper snd_hda_intel 
+>> snd_intel_dspcfg fb_sys_fops syscopyarea sysfillrect sysimgblt can_dev 
+>> snd_hda_codec snd_hda_core crypto_simd snd_hwdep cryptd snd_pcm 
+>> glue_helper snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq 
+>> snd_seq_device snd_timer sparse_keymap intel_cstate intel_rapl_perf 
+>> snd video mei_me mei soundcore wmi_bmof intel_wmi_thunderbolt mxm_wmi 
+>> mac_hid sch_fq_codel parport_pc ppdev lp parport drm ip_tables 
+>> x_tables autofs4 hid_generic usbhid uas usb_storage hid crc32_pclmul 
+>> igb e1000e
+>> [ 1755.805454]  ahci i2c_i801 i2c_algo_bit lpc_ich libahci dca wmi
+>> [ 1755.805460] CPU: 8 PID: 2635 Comm: kworker/u24:0 Tainted: G        
+>> W  OE     5.4.0-39-generic #43-Ubuntu
+>> [ 1755.805461] Hardware name: ASUS All Series/X99-E WS, BIOS 4001 
+>> 05/27/2019
+>> [ 1755.805463] Workqueue: netns cleanup_net
+>> [ 1755.805467] RIP: 0010:retire_sysctl_set+0x14/0x18
+>> [ 1755.805469] Code: 00 00 00 00 49 c7 40 48 00 00 00 00 49 c7 40 50 
+>> 00 00 00 00 c3 90 0f 1f 44 00 00 55 48 8b 47 58 48 89 e5 48 85 c0 75 
+>> 02 5d c3 <0f> 0b 5d c3 0f 1f 44 00 00 55 48 89 e5 48 83 ec 60 48 89 4c 
+>> 24 48
+>> [ 1755.805471] RSP: 0018:ffffb12d0169fdc0 EFLAGS: 00010282
+>> [ 1755.805473] RAX: ffff9624a697ad58 RBX: ffff96247642a680 RCX: 
+>> 0000000080150009
+>> [ 1755.805475] RDX: ffff96247642a6b0 RSI: ffffffffb5bfeb48 RDI: 
+>> ffff96247642a730
+>> [ 1755.805476] RBP: ffffb12d0169fdc0 R08: 0000000000000000 R09: 
+>> ffffffffb4776d00
+>> [ 1755.805477] R10: ffff9624cad0a9c0 R11: 0000000000000001 R12: 
+>> ffffb12d0169fe20
+>> [ 1755.805479] R13: ffffffffb5bfeb40 R14: ffffffffb5bfeb48 R15: 
+>> ffff962498ea39d8
+>> [ 1755.805481] FS:  0000000000000000(0000) GS:ffff9624cfa00000(0000) 
+>> knlGS:0000000000000000
+>> [ 1755.805482] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> [ 1755.805483] CR2: 000055fbb59cd8e8 CR3: 000000004aa0a006 CR4: 
+>> 00000000001606e0
+>> [ 1755.805485] Call Trace:
+>> [ 1755.805490]  sysctl_net_exit+0x15/0x20
+>> [ 1755.805493]  ops_exit_list.isra.0+0x3b/0x70
+>> [ 1755.805496]  cleanup_net+0x1f0/0x300
+>> [ 1755.805500]  process_one_work+0x1eb/0x3b0
+>> [ 1755.805503]  worker_thread+0x4d/0x400
+>> [ 1755.805507]  kthread+0x104/0x140
+>> [ 1755.805510]  ? process_one_work+0x3b0/0x3b0
+>> [ 1755.805512]  ? kthread_park+0x90/0x90
+>> [ 1755.805517]  ret_from_fork+0x35/0x40
+>> [ 1755.805520] ---[ end trace 832a75ad96f8105f ]---
+>>
+>>
+>>
+>> — Stéphane
+>>
+>> -----Message d'origine-----
+>> De : linux-can-owner@vger.kernel.org <linux-can-owner@vger.kernel.org> 
+>> De la part de Oliver Hartkopp
+>> Envoyé : jeudi 16 juillet 2020 20:38
+>> À : Philipp Lehmann <leph1016@hs-karlsruhe.de>; wg@grandegger.com; 
+>> mkl@pengutronix.de
+>> Cc : linux-can@vger.kernel.org; christian.sauer.w@sew-eurodrive.de
+>> Objet : Re: [Bug] Kernel Panic on Deletion of the network-namespace 
+>> containing the SocketCAN interface
+>>
+>> Hi Philipp,
+>>
+>> thanks for the report and its reproducer!
+>>
+>> I assumed the interfaces - at least in the case of 'real' hardware CAN 
+>> interfaces - to me moved back to the root name space ... well.
+>>
+>> I'll take a look at it.
+>>
+>> Best regards,
+>> Oliver
+>>
+>> On 16.07.20 18:46, Philipp Lehmann wrote:
+>>> If a SocketCAN Interface (Tested with a PCAN-USB adapter) is moved 
+>>> into a network-namespace and the network namespace is deleted 
+>>> afterwards, without moving the device out of the namespace prior to 
+>>> the deletion. The device could not be found in any of the network 
+>>> namespaces afterwards, only a reboot of the system fixes this. If the 
+>>> device is instead removed from the USB-Bus without a restart, a 
+>>> kernel panic is the result.
+>>>
+>>>
+>>> Output of uname -r [Linux cpc4x 5.4.0-40-generic #44-Ubuntu SMP Tue
+>>> Jun 23 00:01:04 UTC 2020 x86_64 x86_64 x86_64 GNU/Linux]
+>>>
+>>>
+>>> The bug could be reproduced with the following steps:
+>>>
+>>>
+>>> 1. Connect the (USB)-SocketCAN device to the host
+>>>
+>>> 2. Add a new network namespace [sudo ip netns add test] 3. Move the
+>>> CAN-interface to the network name-space [sudo ip link set dev can0
+>>> netns test] 4. Delete the namespace [sudo ip netns delete test] 5.
+>>> Remove the adapter from the USB-Bus. In most cases this should result
+>>> in a kernel panic
+>>>
+>>
+>> -- 
+>> PEAK-System Technik GmbH
+>> Sitz der Gesellschaft Darmstadt - HRB 9183
+>> Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
+>> Unsere Datenschutzerklaerung mit wichtigen Hinweisen
+>> zur Behandlung personenbezogener Daten finden Sie unter
+>> www.peak-system.com/Datenschutz.483.0.html
+>>
