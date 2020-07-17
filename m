@@ -2,229 +2,234 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06973223881
-	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 11:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A8F2239ED
+	for <lists+linux-can@lfdr.de>; Fri, 17 Jul 2020 13:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726550AbgGQJfX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 17 Jul 2020 05:35:23 -0400
-Received: from proxima.lasnet.de ([78.47.171.185]:53924 "EHLO
-        proxima.lasnet.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbgGQJfX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 05:35:23 -0400
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Jul 2020 05:35:19 EDT
-Received: from localhost.localdomain (p200300e9d737160bc31b0c5d63306033.dip0.t-ipconnect.de [IPv6:2003:e9:d737:160b:c31b:c5d:6330:6033])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id B77EDC0617;
-        Fri, 17 Jul 2020 11:26:35 +0200 (CEST)
-Subject: Re: [PATCH 05/22] net: remove compat_sock_common_{get,set}sockopt
-To:     Christoph Hellwig <hch@lst.de>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Chas Williams <3chas3@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        linux-sctp@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, mptcp@lists.01.org
-References: <20200717062331.691152-1-hch@lst.de>
- <20200717062331.691152-6-hch@lst.de>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-Message-ID: <52d031f9-70c2-89c1-941f-c8187a6a2b68@datenfreihafen.org>
-Date:   Fri, 17 Jul 2020 11:26:34 +0200
+        id S1725912AbgGQLDO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 17 Jul 2020 07:03:14 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.25]:8732 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbgGQLDO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 17 Jul 2020 07:03:14 -0400
+X-Greylist: delayed 59124 seconds by postgrey-1.27 at vger.kernel.org; Fri, 17 Jul 2020 07:03:11 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1594983790;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=VM+hpgSVJ2I2BAB45zReYoueoIQE1X8OeWdOs+G0xzE=;
+        b=KxU5FE7qGdjstI5Eblv3QDEq2VNdL/PQ3+hY9sxkbTNNhtDgICZ+EmvHWbvdYZ4Iti
+        kNGDekFHBFAW5pxg5QS2P5Uc9SgMqzd0s7Eo3Ot9L1YRFGlOP/YozXxKS5nv1EVTpthE
+        dLrp0OunfWELPtWvjEq6wVCjGXiQfeT5hHOuWjDWF14YR8cY1ab3byBs7lN9upXbMFgB
+        4wZ/RAfwzFfS8iFdbKG+IJOrFp668zvBxl7eU61SMSrutE8cUXQPm0WCWyLIQHIsYFWv
+        J1qWOXlNSgB9bCemStBmuxg5bdi0A6GRh3mgFw6WKbR5jJeWeqAtSv0DEqd1a6+qlO/i
+        1kjg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVMh+lyA="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.192.66]
+        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
+        with ESMTPSA id R09ac6w6HB341de
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 17 Jul 2020 13:03:04 +0200 (CEST)
+Subject: Re: [Bug] Kernel Panic on Deletion of the network-namespace
+ containing the SocketCAN interface
+To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>,
+        Philipp Lehmann <leph1016@hs-karlsruhe.de>,
+        "wg@grandegger.com" <wg@grandegger.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "christian.sauer.w@sew-eurodrive.de" 
+        <christian.sauer.w@sew-eurodrive.de>
+References: <20ea6d4c00dc4d5f99cd004677280369@hs-karlsruhe.de>
+ <88fb5401-746a-5589-650d-a88fde43b122@hartkopp.net>
+ <DB7PR03MB505186792325DBBF2471EF1ED67C0@DB7PR03MB5051.eurprd03.prod.outlook.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <925ff8f7-3d24-54d7-38c3-34f127965d3a@hartkopp.net>
+Date:   Fri, 17 Jul 2020 13:02:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200717062331.691152-6-hch@lst.de>
+In-Reply-To: <DB7PR03MB505186792325DBBF2471EF1ED67C0@DB7PR03MB5051.eurprd03.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello.
-
-On 17.07.20 08:23, Christoph Hellwig wrote:
-> Add the compat handling to sock_common_{get,set}sockopt instead,
-> keyed of in_compat_syscall().  This allow to remove the now unused
-> ->compat_{get,set}sockopt methods from struct proto_ops.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->   include/linux/net.h      |  6 ------
->   include/net/sock.h       |  4 ----
->   net/core/sock.c          | 30 ++++++------------------------
->   net/dccp/ipv4.c          |  4 ----
->   net/dccp/ipv6.c          |  2 --
->   net/ieee802154/socket.c  |  8 --------
->   net/ipv4/af_inet.c       |  6 ------
->   net/ipv6/af_inet6.c      |  4 ----
->   net/ipv6/ipv6_sockglue.c | 12 ++----------
->   net/ipv6/raw.c           |  2 --
->   net/l2tp/l2tp_ip.c       |  4 ----
->   net/l2tp/l2tp_ip6.c      |  2 --
->   net/mptcp/protocol.c     |  6 ------
->   net/phonet/socket.c      |  8 --------
->   net/sctp/ipv6.c          |  2 --
->   net/sctp/protocol.c      |  4 ----
->   16 files changed, 8 insertions(+), 96 deletions(-)
-> 
-> diff --git a/include/linux/net.h b/include/linux/net.h
-> index 016a9c5faa3479..858ff1d981540d 100644
-> --- a/include/linux/net.h
-> +++ b/include/linux/net.h
-> @@ -165,12 +165,6 @@ struct proto_ops {
->   				      int optname, char __user *optval, unsigned int optlen);
->   	int		(*getsockopt)(struct socket *sock, int level,
->   				      int optname, char __user *optval, int __user *optlen);
-> -#ifdef CONFIG_COMPAT
-> -	int		(*compat_setsockopt)(struct socket *sock, int level,
-> -				      int optname, char __user *optval, unsigned int optlen);
-> -	int		(*compat_getsockopt)(struct socket *sock, int level,
-> -				      int optname, char __user *optval, int __user *optlen);
-> -#endif
->   	void		(*show_fdinfo)(struct seq_file *m, struct socket *sock);
->   	int		(*sendmsg)   (struct socket *sock, struct msghdr *m,
->   				      size_t total_len);
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 4bf8841651486d..1fd7cf5fc7516c 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1744,10 +1744,6 @@ int sock_common_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->   			int flags);
->   int sock_common_setsockopt(struct socket *sock, int level, int optname,
->   				  char __user *optval, unsigned int optlen);
-> -int compat_sock_common_getsockopt(struct socket *sock, int level,
-> -		int optname, char __user *optval, int __user *optlen);
-> -int compat_sock_common_setsockopt(struct socket *sock, int level,
-> -		int optname, char __user *optval, unsigned int optlen);
->   
->   void sk_common_release(struct sock *sk);
->   
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index e085df79482520..018404d1762682 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -3199,23 +3199,14 @@ int sock_common_getsockopt(struct socket *sock, int level, int optname,
->   {
->   	struct sock *sk = sock->sk;
->   
-> -	return sk->sk_prot->getsockopt(sk, level, optname, optval, optlen);
-> -}
-> -EXPORT_SYMBOL(sock_common_getsockopt);
-> -
->   #ifdef CONFIG_COMPAT
-> -int compat_sock_common_getsockopt(struct socket *sock, int level, int optname,
-> -				  char __user *optval, int __user *optlen)
-> -{
-> -	struct sock *sk = sock->sk;
-> -
-> -	if (sk->sk_prot->compat_getsockopt != NULL)
-> +	if (in_compat_syscal() && sk->sk_prot->compat_getsockopt)
->   		return sk->sk_prot->compat_getsockopt(sk, level, optname,
->   						      optval, optlen);
-> +#endif
->   	return sk->sk_prot->getsockopt(sk, level, optname, optval, optlen);
->   }
-> -EXPORT_SYMBOL(compat_sock_common_getsockopt);
-> -#endif
-> +EXPORT_SYMBOL(sock_common_getsockopt);
->   
->   int sock_common_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
->   			int flags)
-> @@ -3240,23 +3231,14 @@ int sock_common_setsockopt(struct socket *sock, int level, int optname,
->   {
->   	struct sock *sk = sock->sk;
->   
-> -	return sk->sk_prot->setsockopt(sk, level, optname, optval, optlen);
-> -}
-> -EXPORT_SYMBOL(sock_common_setsockopt);
-> -
->   #ifdef CONFIG_COMPAT
-> -int compat_sock_common_setsockopt(struct socket *sock, int level, int optname,
-> -				  char __user *optval, unsigned int optlen)
-> -{
-> -	struct sock *sk = sock->sk;
-> -
-> -	if (sk->sk_prot->compat_setsockopt != NULL)
-> +	if (in_compat_syscall() && sk->sk_prot->compat_setsockopt)
->   		return sk->sk_prot->compat_setsockopt(sk, level, optname,
->   						      optval, optlen);
-> +#endif
->   	return sk->sk_prot->setsockopt(sk, level, optname, optval, optlen);
->   }
-> -EXPORT_SYMBOL(compat_sock_common_setsockopt);
-> -#endif
-> +EXPORT_SYMBOL(sock_common_setsockopt);
->   
->   void sk_common_release(struct sock *sk)
->   {
-> diff --git a/net/dccp/ipv4.c b/net/dccp/ipv4.c
-> index a7e989919c5307..316cc5ac0da72b 100644
-> --- a/net/dccp/ipv4.c
-> +++ b/net/dccp/ipv4.c
-> @@ -999,10 +999,6 @@ static const struct proto_ops inet_dccp_ops = {
->   	.recvmsg	   = sock_common_recvmsg,
->   	.mmap		   = sock_no_mmap,
->   	.sendpage	   = sock_no_sendpage,
-> -#ifdef CONFIG_COMPAT
-> -	.compat_setsockopt = compat_sock_common_setsockopt,
-> -	.compat_getsockopt = compat_sock_common_getsockopt,
-> -#endif
->   };
->   
->   static struct inet_protosw dccp_v4_protosw = {
-> diff --git a/net/dccp/ipv6.c b/net/dccp/ipv6.c
-> index 650187d688519c..b50f85a72cd5fc 100644
-> --- a/net/dccp/ipv6.c
-> +++ b/net/dccp/ipv6.c
-> @@ -1083,8 +1083,6 @@ static const struct proto_ops inet6_dccp_ops = {
->   	.sendpage	   = sock_no_sendpage,
->   #ifdef CONFIG_COMPAT
->   	.compat_ioctl	   = inet6_compat_ioctl,
-> -	.compat_setsockopt = compat_sock_common_setsockopt,
-> -	.compat_getsockopt = compat_sock_common_getsockopt,
->   #endif
->   };
->   
-> diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
-> index d93d4531aa9bc5..94ae9662133e30 100644
-> --- a/net/ieee802154/socket.c
-> +++ b/net/ieee802154/socket.c
-> @@ -423,10 +423,6 @@ static const struct proto_ops ieee802154_raw_ops = {
->   	.recvmsg	   = sock_common_recvmsg,
->   	.mmap		   = sock_no_mmap,
->   	.sendpage	   = sock_no_sendpage,
-> -#ifdef CONFIG_COMPAT
-> -	.compat_setsockopt = compat_sock_common_setsockopt,
-> -	.compat_getsockopt = compat_sock_common_getsockopt,
-> -#endif
->   };
->   
->   /* DGRAM Sockets (802.15.4 dataframes) */
-> @@ -986,10 +982,6 @@ static const struct proto_ops ieee802154_dgram_ops = {
->   	.recvmsg	   = sock_common_recvmsg,
->   	.mmap		   = sock_no_mmap,
->   	.sendpage	   = sock_no_sendpage,
-> -#ifdef CONFIG_COMPAT
-> -	.compat_setsockopt = compat_sock_common_setsockopt,
-> -	.compat_getsockopt = compat_sock_common_getsockopt,
-> -#endif
-
-For the ieee802154 part:
-
-Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
-
-regards
-Stefan Schmidt
+DQoNCk9uIDE3LjA3LjIwIDA5OjU1LCBTdMOpcGhhbmUgR3Jvc2plYW4gd3JvdGU6DQo+IFRo
+ZXJlJ3MgYSBmaXJzdCBXQVJOSU5HIGtlcm5lbCBtZXNzYWdlIGp1c3Qgd2hlbiB0aGUgbmFt
+ZXNwYWNlIGlzIGRlbGV0ZWQuIFRoZSBXQVJOSU5HIHR1cm5zIGludG8gYSBCVUcgKGtlcm5l
+bCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UpIHdoZW4gcmVtb3ZpbmcgdGhlIGludGVyZmFj
+ZSBpdHNlbGYgKGZvciBleGFtcGxlLCB3aGVuIHRoZSBkcml2ZXIgbW9kdWxlIGlzIHJlbW92
+ZWQgZnJvbSBtZW1vcnkpLiBOb3RlIHRoYXQgdGhlIGlzc3VlIG9jY3VycyB3aXRoIGFsbCBv
+dXIgaW50ZXJuYWwgYXMgd2VsbCBhcyBVU0IgQ0FOIGludGVyZmFjZXMuDQo+IA0KPiBPYnZp
+b3VzbHksIHRoZSBwcm9ibGVtIGRvZXNuJ3QgYXBwZWFyIHdoZW4geW91IHB1dCB0aGUgaW50
+ZXJmYWNlIGJhY2sgaW4gdGhlIHJvb3QgbmFtZXNwYWNlIGJlZm9yZSB0aGUgZGVzdHJ1Y3Rp
+b24sIG9yIHdoZW4gdGhlIGludGVyZmFjZSBpcyBhIHRydWUgRXRoZXJuZXQgbmV0d29yayBp
+bnRlcmZhY2UuDQoNClllcy4gSSBjaGVja2VkIHRoYXQgd2l0aCBhbiBVU0IgRXRoZXJuZXQg
+aW50ZXJmYWNlIEkgaGF2ZSBhdCBoYW5kIGhlcmUgLSANCmFuZCB3aGVuIGRlbGV0aW5nIHRo
+ZSB0ZXN0IG5hbWVzcGFjZSBpdCBqdXN0IGVtZXJnZXMgaW4gdGhlIHJvb3QgDQpuYW1lc3Bh
+Y2UgYWdhaW4uDQoNClNvIEkgd29uZGVyIHdoYXQncyBtaXNzaW5nIGluIG91ciBjb25maWd1
+cmF0aW9uIGZvciBDQU4gaW50ZXJmYWNlcyB0aGF0IA0KdGhpcyB0cmFuc2l0aW9uIGlzIG5v
+dCBwZXJmb3JtZWQgOi0vDQoNCkJlc3QgcmVnYXJkcywNCk9saXZlcg0KDQoNCj4gQ29udGV4
+dDoNCj4gDQo+ICQgdW5hbWUgLWENCj4gTGludXggbGludXgtZGV2IDUuNC4wLTM5LWdlbmVy
+aWMgIzQzLVVidW50dSBTTVAgRnJpIEp1biAxOSAxMDoyODozMSBVVEMgMjAyMCB4ODZfNjQg
+eDg2XzY0IHg4Nl82NCBHTlUvTGludXgNCj4gDQo+ICQgZG1lc2cgfCBncmVwIHBlYWtfcGNp
+DQo+IFsgICAxOS4wMjgwNDhdIHBlYWtfcGNpIDAwMDA6MGE6MDAuMDogZW5hYmxpbmcgZGV2
+aWNlICgwMTAwIC0+IDAxMDIpDQo+IFsgICAxOS4wMzQyODNdIHBlYWtfcGNpIDAwMDA6MGE6
+MDAuMDogY2FuNiBhdCByZWdfYmFzZT0weDAwMDAwMDAwMTM2YjhiMGIgY2ZnX2Jhc2U9MHgw
+MDAwMDAwMGI4MjY1OTdjIGlycT0yNw0KPiBbICAgMTkuMDM0Mzc4XSBwZWFrX3BjaSAwMDAw
+OjBhOjAwLjA6IGNhbjcgYXQgcmVnX2Jhc2U9MHgwMDAwMDAwMDZiM2RlOWEwIGNmZ19iYXNl
+PTB4MDAwMDAwMDBiODI2NTk3YyBpcnE9MjcNCj4gDQo+ICMgaXAgbmV0bnMgYWRkIHRlc3QN
+Cj4gIyBpcCBsaW5rIHNldCBkZXYgY2FuNiBuZXRucyB0ZXN0DQo+ICMgaXAgbmV0bnMgZGVs
+ZXRlIHRlc3QNCj4gDQo+IFsgMTc1NS44MDUyNDFdIC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUg
+XS0tLS0tLS0tLS0tLQ0KPiBbIDE3NTUuODA1MjUxXSBXQVJOSU5HOiBDUFU6IDggUElEOiAy
+NjM1IGF0IG5ldC9jb3JlL2Rldi5jOjEwMDM5IG5ldGRldl9leGl0KzB4NDQvMHg1MA0KPiBb
+IDE3NTUuODA1MjUyXSBNb2R1bGVzIGxpbmtlZCBpbjogdmJveG5ldGFkcChPRSkgdmJveG5l
+dGZsdChPRSkgdmJveGRydihPRSkgbWQ0IG5sc191dGY4IGNpZnMgbGliYXJjNCBmc2NhY2hl
+IGxpYmRlcyBjZmc4MDIxMSBubHNfaXNvODg1OV8xIGludGVsX3JhcGxfbXNyIGludGVsX3Jh
+cGxfY29tbW9uIHg4Nl9wa2dfdGVtcF90aGVybWFsIGludGVsX3Bvd2VyY2xhbXAgY29yZXRl
+bXAga3ZtX2ludGVsIHBlYWtfdXNiIDg4MTJhdShPRSkgam95ZGV2IHBsaW4oT0UpIGt2bSBp
+bnB1dF9sZWRzIHBjYW4oT0UpIGVlZXBjX3dtaSBzbmRfaGRhX2NvZGVjX2hkbWkgc25kX2hk
+YV9jb2RlY19yZWFsdGVrIG5vdXZlYXUgcGNtY2lhIHNuZF9oZGFfY29kZWNfZ2VuZXJpYyBh
+c3VzX3dtaSBwY21jaWFfY29yZSBjcmN0MTBkaWZfcGNsbXVsIGdoYXNoX2NsbXVsbmlfaW50
+ZWwgcGVha19wY2kgc2phMTAwMCBwZWFrX3BjaWVmZCBsZWR0cmlnX2F1ZGlvIHR0bSBhZXNu
+aV9pbnRlbCBkcm1fa21zX2hlbHBlciBzbmRfaGRhX2ludGVsIHNuZF9pbnRlbF9kc3BjZmcg
+ZmJfc3lzX2ZvcHMgc3lzY29weWFyZWEgc3lzZmlsbHJlY3Qgc3lzaW1nYmx0IGNhbl9kZXYg
+c25kX2hkYV9jb2RlYyBzbmRfaGRhX2NvcmUgY3J5cHRvX3NpbWQgc25kX2h3ZGVwIGNyeXB0
+ZCBzbmRfcGNtIGdsdWVfaGVscGVyIHNuZF9zZXFfbWlkaSBzbmRfc2VxX21pZGlfZXZlbnQg
+c25kX3Jhd21pZGkgc25kX3NlcSBzbmRfc2VxX2RldmljZSBzbmRfdGltZXIgc3BhcnNlX2tl
+eW1hcCBpbnRlbF9jc3RhdGUgaW50ZWxfcmFwbF9wZXJmIHNuZCB2aWRlbyBtZWlfbWUgbWVp
+IHNvdW5kY29yZSB3bWlfYm1vZiBpbnRlbF93bWlfdGh1bmRlcmJvbHQgbXhtX3dtaSBtYWNf
+aGlkIHNjaF9mcV9jb2RlbCBwYXJwb3J0X3BjIHBwZGV2IGxwIHBhcnBvcnQgZHJtIGlwX3Rh
+YmxlcyB4X3RhYmxlcyBhdXRvZnM0IGhpZF9nZW5lcmljIHVzYmhpZCB1YXMgdXNiX3N0b3Jh
+Z2UgaGlkIGNyYzMyX3BjbG11bCBpZ2IgZTEwMDBlDQo+IFsgMTc1NS44MDUzMDZdICBhaGNp
+IGkyY19pODAxIGkyY19hbGdvX2JpdCBscGNfaWNoIGxpYmFoY2kgZGNhIHdtaQ0KPiBbIDE3
+NTUuODA1MzE1XSBDUFU6IDggUElEOiAyNjM1IENvbW06IGt3b3JrZXIvdTI0OjAgVGFpbnRl
+ZDogRyAgICAgICAgICAgT0UgICAgIDUuNC4wLTM5LWdlbmVyaWMgIzQzLVVidW50dQ0KPiBb
+IDE3NTUuODA1MzE2XSBIYXJkd2FyZSBuYW1lOiBBU1VTIEFsbCBTZXJpZXMvWDk5LUUgV1Ms
+IEJJT1MgNDAwMSAwNS8yNy8yMDE5DQo+IFsgMTc1NS44MDUzMTldIFdvcmtxdWV1ZTogbmV0
+bnMgY2xlYW51cF9uZXQNCj4gWyAxNzU1LjgwNTMyNF0gUklQOiAwMDEwOm5ldGRldl9leGl0
+KzB4NDQvMHg1MA0KPiBbIDE3NTUuODA1MzI3XSBDb2RlOiA4YiBiYiAzMCAwMSAwMCAwMCBl
+OCA4YiA5ZCA5NyBmZiA0OCA4MSBmYiAwMCAyMSBiZSBiNSA3NCAxMyA0OCA4YiA4MyA5MCAw
+MCAwMCAwMCA0OCA4MSBjMyA5MCAwMCAwMCAwMCA0OCAzOSBjMyA3NSAwMyA1YiA1ZCBjMyA8
+MGY+IDBiIGViIGY5IDBmIDFmIDg0IDAwIDAwIDAwIDAwIDAwIDBmIDFmIDQ0IDAwIDAwIDU1
+IDQ4IDg5IGU1IDQxDQo+IFsgMTc1NS44MDUzMjldIFJTUDogMDAxODpmZmZmYjEyZDAxNjlm
+ZGM4IEVGTEFHUzogMDAwMTAyODcNCj4gWyAxNzU1LjgwNTMzMV0gUkFYOiBmZmZmOTYyNGM4
+YTcwMDUwIFJCWDogZmZmZjk2MjQ3NjQyYTcxMCBSQ1g6IDAwMDAwMDAwODAxMDAwMGINCj4g
+WyAxNzU1LjgwNTMzM10gUkRYOiAwMDAwMDAwMDgwMTAwMDBjIFJTSTogMDAwMDAwMDAwMDAw
+MDAwMSBSREk6IGZmZmY5NjI0Y2RjMDZhMDANCj4gWyAxNzU1LjgwNTMzNF0gUkJQOiBmZmZm
+YjEyZDAxNjlmZGQwIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IGZmZmZmZmZmYjRkMmUz
+MDANCj4gWyAxNzU1LjgwNTMzNV0gUjEwOiBmZmZmOTYyNGEwZDg0MDAwIFIxMTogMDAwMDAw
+MDAwMDAwMDAwMSBSMTI6IGZmZmZiMTJkMDE2OWZlMjANCj4gWyAxNzU1LjgwNTMzN10gUjEz
+OiBmZmZmZmZmZmI1YmUzZjIwIFIxNDogZmZmZmZmZmZiNWJlM2YyOCBSMTU6IGZmZmY5NjI0
+OThlYTM5ZDgNCj4gWyAxNzU1LjgwNTMzOV0gRlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAwMDAp
+IEdTOmZmZmY5NjI0Y2ZhMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KPiBb
+IDE3NTUuODA1MzQxXSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAw
+MDgwMDUwMDMzDQo+IFsgMTc1NS44MDUzNDJdIENSMjogMDAwMDU1ZmJiNTljZDhlOCBDUjM6
+IDAwMDAwMDAwNGFhMGEwMDYgQ1I0OiAwMDAwMDAwMDAwMTYwNmUwDQo+IFsgMTc1NS44MDUz
+NDRdIENhbGwgVHJhY2U6DQo+IFsgMTc1NS44MDUzNTBdICBvcHNfZXhpdF9saXN0LmlzcmEu
+MCsweDNiLzB4NzANCj4gWyAxNzU1LjgwNTM1M10gIGNsZWFudXBfbmV0KzB4MWYwLzB4MzAw
+DQo+IFsgMTc1NS44MDUzNTldICBwcm9jZXNzX29uZV93b3JrKzB4MWViLzB4M2IwDQo+IFsg
+MTc1NS44MDUzNjNdICB3b3JrZXJfdGhyZWFkKzB4NGQvMHg0MDANCj4gWyAxNzU1LjgwNTM2
+N10gIGt0aHJlYWQrMHgxMDQvMHgxNDANCj4gWyAxNzU1LjgwNTM3MF0gID8gcHJvY2Vzc19v
+bmVfd29yaysweDNiMC8weDNiMA0KPiBbIDE3NTUuODA1MzczXSAgPyBrdGhyZWFkX3Bhcmsr
+MHg5MC8weDkwDQo+IFsgMTc1NS44MDUzNzhdICByZXRfZnJvbV9mb3JrKzB4MzUvMHg0MA0K
+PiBbIDE3NTUuODA1MzgyXSAtLS1bIGVuZCB0cmFjZSA4MzJhNzVhZDk2ZjgxMDVlIF0tLS0N
+Cj4gWyAxNzU1LjgwNTQxMF0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0t
+DQo+IFsgMTc1NS44MDU0MTZdIFdBUk5JTkc6IENQVTogOCBQSUQ6IDI2MzUgYXQgZnMvcHJv
+Yy9wcm9jX3N5c2N0bC5jOjE3MTQgcmV0aXJlX3N5c2N0bF9zZXQrMHgxNC8weDE4DQo+IFsg
+MTc1NS44MDU0MTddIE1vZHVsZXMgbGlua2VkIGluOiB2Ym94bmV0YWRwKE9FKSB2Ym94bmV0
+Zmx0KE9FKSB2Ym94ZHJ2KE9FKSBtZDQgbmxzX3V0ZjggY2lmcyBsaWJhcmM0IGZzY2FjaGUg
+bGliZGVzIGNmZzgwMjExIG5sc19pc284ODU5XzEgaW50ZWxfcmFwbF9tc3IgaW50ZWxfcmFw
+bF9jb21tb24geDg2X3BrZ190ZW1wX3RoZXJtYWwgaW50ZWxfcG93ZXJjbGFtcCBjb3JldGVt
+cCBrdm1faW50ZWwgcGVha191c2IgODgxMmF1KE9FKSBqb3lkZXYgcGxpbihPRSkga3ZtIGlu
+cHV0X2xlZHMgcGNhbihPRSkgZWVlcGNfd21pIHNuZF9oZGFfY29kZWNfaGRtaSBzbmRfaGRh
+X2NvZGVjX3JlYWx0ZWsgbm91dmVhdSBwY21jaWEgc25kX2hkYV9jb2RlY19nZW5lcmljIGFz
+dXNfd21pIHBjbWNpYV9jb3JlIGNyY3QxMGRpZl9wY2xtdWwgZ2hhc2hfY2xtdWxuaV9pbnRl
+bCBwZWFrX3BjaSBzamExMDAwIHBlYWtfcGNpZWZkIGxlZHRyaWdfYXVkaW8gdHRtIGFlc25p
+X2ludGVsIGRybV9rbXNfaGVscGVyIHNuZF9oZGFfaW50ZWwgc25kX2ludGVsX2RzcGNmZyBm
+Yl9zeXNfZm9wcyBzeXNjb3B5YXJlYSBzeXNmaWxscmVjdCBzeXNpbWdibHQgY2FuX2RldiBz
+bmRfaGRhX2NvZGVjIHNuZF9oZGFfY29yZSBjcnlwdG9fc2ltZCBzbmRfaHdkZXAgY3J5cHRk
+IHNuZF9wY20gZ2x1ZV9oZWxwZXIgc25kX3NlcV9taWRpIHNuZF9zZXFfbWlkaV9ldmVudCBz
+bmRfcmF3bWlkaSBzbmRfc2VxIHNuZF9zZXFfZGV2aWNlIHNuZF90aW1lciBzcGFyc2Vfa2V5
+bWFwIGludGVsX2NzdGF0ZSBpbnRlbF9yYXBsX3BlcmYgc25kIHZpZGVvIG1laV9tZSBtZWkg
+c291bmRjb3JlIHdtaV9ibW9mIGludGVsX3dtaV90aHVuZGVyYm9sdCBteG1fd21pIG1hY19o
+aWQgc2NoX2ZxX2NvZGVsIHBhcnBvcnRfcGMgcHBkZXYgbHAgcGFycG9ydCBkcm0gaXBfdGFi
+bGVzIHhfdGFibGVzIGF1dG9mczQgaGlkX2dlbmVyaWMgdXNiaGlkIHVhcyB1c2Jfc3RvcmFn
+ZSBoaWQgY3JjMzJfcGNsbXVsIGlnYiBlMTAwMGUNCj4gWyAxNzU1LjgwNTQ1NF0gIGFoY2kg
+aTJjX2k4MDEgaTJjX2FsZ29fYml0IGxwY19pY2ggbGliYWhjaSBkY2Egd21pDQo+IFsgMTc1
+NS44MDU0NjBdIENQVTogOCBQSUQ6IDI2MzUgQ29tbToga3dvcmtlci91MjQ6MCBUYWludGVk
+OiBHICAgICAgICBXICBPRSAgICAgNS40LjAtMzktZ2VuZXJpYyAjNDMtVWJ1bnR1DQo+IFsg
+MTc1NS44MDU0NjFdIEhhcmR3YXJlIG5hbWU6IEFTVVMgQWxsIFNlcmllcy9YOTktRSBXUywg
+QklPUyA0MDAxIDA1LzI3LzIwMTkNCj4gWyAxNzU1LjgwNTQ2M10gV29ya3F1ZXVlOiBuZXRu
+cyBjbGVhbnVwX25ldA0KPiBbIDE3NTUuODA1NDY3XSBSSVA6IDAwMTA6cmV0aXJlX3N5c2N0
+bF9zZXQrMHgxNC8weDE4DQo+IFsgMTc1NS44MDU0NjldIENvZGU6IDAwIDAwIDAwIDAwIDQ5
+IGM3IDQwIDQ4IDAwIDAwIDAwIDAwIDQ5IGM3IDQwIDUwIDAwIDAwIDAwIDAwIGMzIDkwIDBm
+IDFmIDQ0IDAwIDAwIDU1IDQ4IDhiIDQ3IDU4IDQ4IDg5IGU1IDQ4IDg1IGMwIDc1IDAyIDVk
+IGMzIDwwZj4gMGIgNWQgYzMgMGYgMWYgNDQgMDAgMDAgNTUgNDggODkgZTUgNDggODMgZWMg
+NjAgNDggODkgNGMgMjQgNDgNCj4gWyAxNzU1LjgwNTQ3MV0gUlNQOiAwMDE4OmZmZmZiMTJk
+MDE2OWZkYzAgRUZMQUdTOiAwMDAxMDI4Mg0KPiBbIDE3NTUuODA1NDczXSBSQVg6IGZmZmY5
+NjI0YTY5N2FkNTggUkJYOiBmZmZmOTYyNDc2NDJhNjgwIFJDWDogMDAwMDAwMDA4MDE1MDAw
+OQ0KPiBbIDE3NTUuODA1NDc1XSBSRFg6IGZmZmY5NjI0NzY0MmE2YjAgUlNJOiBmZmZmZmZm
+ZmI1YmZlYjQ4IFJESTogZmZmZjk2MjQ3NjQyYTczMA0KPiBbIDE3NTUuODA1NDc2XSBSQlA6
+IGZmZmZiMTJkMDE2OWZkYzAgUjA4OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogZmZmZmZmZmZi
+NDc3NmQwMA0KPiBbIDE3NTUuODA1NDc3XSBSMTA6IGZmZmY5NjI0Y2FkMGE5YzAgUjExOiAw
+MDAwMDAwMDAwMDAwMDAxIFIxMjogZmZmZmIxMmQwMTY5ZmUyMA0KPiBbIDE3NTUuODA1NDc5
+XSBSMTM6IGZmZmZmZmZmYjViZmViNDAgUjE0OiBmZmZmZmZmZmI1YmZlYjQ4IFIxNTogZmZm
+Zjk2MjQ5OGVhMzlkOA0KPiBbIDE3NTUuODA1NDgxXSBGUzogIDAwMDAwMDAwMDAwMDAwMDAo
+MDAwMCkgR1M6ZmZmZjk2MjRjZmEwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAw
+DQo+IFsgMTc1NS44MDU0ODJdIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAw
+MDAwMDAwODAwNTAwMzMNCj4gWyAxNzU1LjgwNTQ4M10gQ1IyOiAwMDAwNTVmYmI1OWNkOGU4
+IENSMzogMDAwMDAwMDA0YWEwYTAwNiBDUjQ6IDAwMDAwMDAwMDAxNjA2ZTANCj4gWyAxNzU1
+LjgwNTQ4NV0gQ2FsbCBUcmFjZToNCj4gWyAxNzU1LjgwNTQ5MF0gIHN5c2N0bF9uZXRfZXhp
+dCsweDE1LzB4MjANCj4gWyAxNzU1LjgwNTQ5M10gIG9wc19leGl0X2xpc3QuaXNyYS4wKzB4
+M2IvMHg3MA0KPiBbIDE3NTUuODA1NDk2XSAgY2xlYW51cF9uZXQrMHgxZjAvMHgzMDANCj4g
+WyAxNzU1LjgwNTUwMF0gIHByb2Nlc3Nfb25lX3dvcmsrMHgxZWIvMHgzYjANCj4gWyAxNzU1
+LjgwNTUwM10gIHdvcmtlcl90aHJlYWQrMHg0ZC8weDQwMA0KPiBbIDE3NTUuODA1NTA3XSAg
+a3RocmVhZCsweDEwNC8weDE0MA0KPiBbIDE3NTUuODA1NTEwXSAgPyBwcm9jZXNzX29uZV93
+b3JrKzB4M2IwLzB4M2IwDQo+IFsgMTc1NS44MDU1MTJdICA/IGt0aHJlYWRfcGFyaysweDkw
+LzB4OTANCj4gWyAxNzU1LjgwNTUxN10gIHJldF9mcm9tX2ZvcmsrMHgzNS8weDQwDQo+IFsg
+MTc1NS44MDU1MjBdIC0tLVsgZW5kIHRyYWNlIDgzMmE3NWFkOTZmODEwNWYgXS0tLQ0KPiAN
+Cj4gDQo+IA0KPiDigJQgU3TDqXBoYW5lDQo+IA0KPiAtLS0tLU1lc3NhZ2UgZCdvcmlnaW5l
+LS0tLS0NCj4gRGUgOiBsaW51eC1jYW4tb3duZXJAdmdlci5rZXJuZWwub3JnIDxsaW51eC1j
+YW4tb3duZXJAdmdlci5rZXJuZWwub3JnPiBEZSBsYSBwYXJ0IGRlIE9saXZlciBIYXJ0a29w
+cA0KPiBFbnZvecOpIDogamV1ZGkgMTYganVpbGxldCAyMDIwIDIwOjM4DQo+IMOAIDogUGhp
+bGlwcCBMZWhtYW5uIDxsZXBoMTAxNkBocy1rYXJsc3J1aGUuZGU+OyB3Z0BncmFuZGVnZ2Vy
+LmNvbTsgbWtsQHBlbmd1dHJvbml4LmRlDQo+IENjIDogbGludXgtY2FuQHZnZXIua2VybmVs
+Lm9yZzsgY2hyaXN0aWFuLnNhdWVyLndAc2V3LWV1cm9kcml2ZS5kZQ0KPiBPYmpldCA6IFJl
+OiBbQnVnXSBLZXJuZWwgUGFuaWMgb24gRGVsZXRpb24gb2YgdGhlIG5ldHdvcmstbmFtZXNw
+YWNlIGNvbnRhaW5pbmcgdGhlIFNvY2tldENBTiBpbnRlcmZhY2UNCj4gDQo+IEhpIFBoaWxp
+cHAsDQo+IA0KPiB0aGFua3MgZm9yIHRoZSByZXBvcnQgYW5kIGl0cyByZXByb2R1Y2VyIQ0K
+PiANCj4gSSBhc3N1bWVkIHRoZSBpbnRlcmZhY2VzIC0gYXQgbGVhc3QgaW4gdGhlIGNhc2Ug
+b2YgJ3JlYWwnIGhhcmR3YXJlIENBTiBpbnRlcmZhY2VzIC0gdG8gbWUgbW92ZWQgYmFjayB0
+byB0aGUgcm9vdCBuYW1lIHNwYWNlIC4uLiB3ZWxsLg0KPiANCj4gSSdsbCB0YWtlIGEgbG9v
+ayBhdCBpdC4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gT2xpdmVyDQo+IA0KPiBPbiAxNi4w
+Ny4yMCAxODo0NiwgUGhpbGlwcCBMZWhtYW5uIHdyb3RlOg0KPj4gSWYgYSBTb2NrZXRDQU4g
+SW50ZXJmYWNlIChUZXN0ZWQgd2l0aCBhIFBDQU4tVVNCIGFkYXB0ZXIpIGlzIG1vdmVkIGlu
+dG8gYSBuZXR3b3JrLW5hbWVzcGFjZSBhbmQgdGhlIG5ldHdvcmsgbmFtZXNwYWNlIGlzIGRl
+bGV0ZWQgYWZ0ZXJ3YXJkcywgd2l0aG91dCBtb3ZpbmcgdGhlIGRldmljZSBvdXQgb2YgdGhl
+IG5hbWVzcGFjZSBwcmlvciB0byB0aGUgZGVsZXRpb24uIFRoZSBkZXZpY2UgY291bGQgbm90
+IGJlIGZvdW5kIGluIGFueSBvZiB0aGUgbmV0d29yayBuYW1lc3BhY2VzIGFmdGVyd2FyZHMs
+IG9ubHkgYSByZWJvb3Qgb2YgdGhlIHN5c3RlbSBmaXhlcyB0aGlzLiBJZiB0aGUgZGV2aWNl
+IGlzIGluc3RlYWQgcmVtb3ZlZCBmcm9tIHRoZSBVU0ItQnVzIHdpdGhvdXQgYSByZXN0YXJ0
+LCBhIGtlcm5lbCBwYW5pYyBpcyB0aGUgcmVzdWx0Lg0KPj4NCj4+DQo+PiBPdXRwdXQgb2Yg
+dW5hbWUgLXIgW0xpbnV4IGNwYzR4IDUuNC4wLTQwLWdlbmVyaWMgIzQ0LVVidW50dSBTTVAg
+VHVlDQo+PiBKdW4gMjMgMDA6MDE6MDQgVVRDIDIwMjAgeDg2XzY0IHg4Nl82NCB4ODZfNjQg
+R05VL0xpbnV4XQ0KPj4NCj4+DQo+PiBUaGUgYnVnIGNvdWxkIGJlIHJlcHJvZHVjZWQgd2l0
+aCB0aGUgZm9sbG93aW5nIHN0ZXBzOg0KPj4NCj4+DQo+PiAxLiBDb25uZWN0IHRoZSAoVVNC
+KS1Tb2NrZXRDQU4gZGV2aWNlIHRvIHRoZSBob3N0DQo+Pg0KPj4gMi4gQWRkIGEgbmV3IG5l
+dHdvcmsgbmFtZXNwYWNlIFtzdWRvIGlwIG5ldG5zIGFkZCB0ZXN0XSAzLiBNb3ZlIHRoZQ0K
+Pj4gQ0FOLWludGVyZmFjZSB0byB0aGUgbmV0d29yayBuYW1lLXNwYWNlIFtzdWRvIGlwIGxp
+bmsgc2V0IGRldiBjYW4wDQo+PiBuZXRucyB0ZXN0XSA0LiBEZWxldGUgdGhlIG5hbWVzcGFj
+ZSBbc3VkbyBpcCBuZXRucyBkZWxldGUgdGVzdF0gNS4NCj4+IFJlbW92ZSB0aGUgYWRhcHRl
+ciBmcm9tIHRoZSBVU0ItQnVzLiBJbiBtb3N0IGNhc2VzIHRoaXMgc2hvdWxkIHJlc3VsdA0K
+Pj4gaW4gYSBrZXJuZWwgcGFuaWMNCj4+DQo+IA0KPiAtLQ0KPiBQRUFLLVN5c3RlbSBUZWNo
+bmlrIEdtYkgNCj4gU2l0eiBkZXIgR2VzZWxsc2NoYWZ0IERhcm1zdGFkdCAtIEhSQiA5MTgz
+DQo+IEdlc2NoYWVmdHNmdWVocnVuZzogQWxleGFuZGVyIEdhY2ggLyBVd2UgV2lsaGVsbQ0K
+PiBVbnNlcmUgRGF0ZW5zY2h1dHplcmtsYWVydW5nIG1pdCB3aWNodGlnZW4gSGlud2Vpc2Vu
+DQo+IHp1ciBCZWhhbmRsdW5nIHBlcnNvbmVuYmV6b2dlbmVyIERhdGVuIGZpbmRlbiBTaWUg
+dW50ZXINCj4gd3d3LnBlYWstc3lzdGVtLmNvbS9EYXRlbnNjaHV0ei40ODMuMC5odG1sDQo+
+IA0K
