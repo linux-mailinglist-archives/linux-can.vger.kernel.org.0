@@ -2,99 +2,169 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6166D225D2A
-	for <lists+linux-can@lfdr.de>; Mon, 20 Jul 2020 13:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63473225FF4
+	for <lists+linux-can@lfdr.de>; Mon, 20 Jul 2020 14:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgGTLMO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 20 Jul 2020 07:12:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727094AbgGTLMN (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 20 Jul 2020 07:12:13 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 689E92073A;
-        Mon, 20 Jul 2020 11:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595243533;
-        bh=9Yy+1VjcfL5aQqBqsh+BDfHhT28teG125L+0sNy5ehc=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=hAnDisAU5CkKAmHpE/TlDXaSa61cF0JA6RYkNQwVsbS2KHEPnHbsA064m/XFR1u/T
-         z//PW9qlfb6Lwl2oAr78zQ6ONpyQ79rnqVCxfhGpQ0WbjKfNRt5Zp9J68zrYhDPdF8
-         wriqqXI+iRwPMIMpW2FBryFhRaNOpStEuiSEMfmY=
-Date:   Mon, 20 Jul 2020 12:12:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     devicetree@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-spi@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-In-Reply-To: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 00/20] Add support for [H]SCIF/TMU/CMT/THS/SDHI/MSIOF/CAN[FD]/I2C/IIC/RWDT on R8A774E1
-Message-Id: <159524352070.8289.9628744508547399473.b4-ty@kernel.org>
+        id S1728800AbgGTMsL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 20 Jul 2020 08:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728590AbgGTMsJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 20 Jul 2020 08:48:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F818C0619D5;
+        Mon, 20 Jul 2020 05:48:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=sKdt4hAbq/6qTa3tcNwXdqjggNwHsw7uOZ08Rf6czhk=; b=f5LLAO7/F+nm+9Gl7hfXp/Kox6
+        sXYuhXb2vkgDyYkwVEurXeRexxngk9Z2EHCb20Vm6cwQC0KkAdtVybwIWUYKPlRMRbsnYlZua+VzZ
+        Flsm7I6zi4O+te18djow1qkD4y6zW7eB+vdqOWXQqe40sAYXmcza0z+HCA79DX9OmZGLOhLwGhUFN
+        CkZ0dvcn3v1XJU220Xc46sbrIANYMzqY/4cDFUBrys3agNAh/rnUNwi19G0yCy4iST/MAWBuDJTgy
+        eAg7vhunPFR2F7DJnQOtye3bthglFnmml2ORTej2iPJzY9HBiUQo5UMJaII7PCL4D2XJQPwFgvOnM
+        oJ/gmolA==;
+Received: from [2001:4bb8:105:4a81:2a8f:15b1:2c3:7be7] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jxVCl-0004WH-1J; Mon, 20 Jul 2020 12:47:39 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-can@vger.kernel.org, dccp@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
+        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
+        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
+Subject: get rid of the address_space override in setsockopt
+Date:   Mon, 20 Jul 2020 14:47:13 +0200
+Message-Id: <20200720124737.118617-1-hch@lst.de>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 15 Jul 2020 12:08:50 +0100, Lad Prabhakar wrote:
-> This patch series enables support for following on RZ/G2H SoC,
-> * CPU OPP
-> * THS
-> * CMT/TMU
-> * I2C/IIC
-> * MSIOF
-> * RWDT
-> * SDHI
-> * SCIF/HSCIF
-> * CAN/CANFD
-> 
-> [...]
+Hi Dave,
 
-Applied to
+setsockopt is the last place in architecture-independ code that still
+uses set_fs to force the uaccess routines to operate on kernel pointers.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+This series adds a new sockptr_t type that can contained either a kernel
+or user pointer, and which has accessors that do the right thing, and
+then uses it for setsockopt, starting by refactoring some low-level
+helpers and moving them over to it before finally doing the main
+setsockopt method.
 
-Thanks!
+Note that I could not get the eBPF selftests to work, so this has been
+tested with a testing patch that always copies the data first and passes
+a kernel pointer.  This is something that works for most common sockopts
+(and is something that the ePBF support relies on), but unfortunately
+in various corner cases we either don't use the passed in length, or in
+one case actually copy data back from setsockopt, so we unfortunately
+can't just always do the copy in the highlevel code, which would have
+been much nicer.
 
-[1/1] spi: renesas,sh-msiof: Add r8a774e1 support
-      commit: b4f7f5f5470588e45e5d004f1dc4887af20f18c0
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Diffstt:
+ crypto/af_alg.c                           |    7 
+ drivers/crypto/chelsio/chtls/chtls_main.c |   18 -
+ drivers/isdn/mISDN/socket.c               |    4 
+ include/linux/bpfilter.h                  |    6 
+ include/linux/filter.h                    |    3 
+ include/linux/mroute.h                    |    5 
+ include/linux/mroute6.h                   |    8 
+ include/linux/net.h                       |    4 
+ include/linux/netfilter.h                 |    6 
+ include/linux/netfilter/x_tables.h        |    4 
+ include/linux/sockptr.h                   |  121 +++++++++++
+ include/net/inet_connection_sock.h        |    3 
+ include/net/ip.h                          |    7 
+ include/net/ipv6.h                        |    6 
+ include/net/sctp/structs.h                |    2 
+ include/net/sock.h                        |    7 
+ include/net/tcp.h                         |    6 
+ include/net/udp.h                         |    2 
+ include/net/xfrm.h                        |    8 
+ net/atm/common.c                          |    6 
+ net/atm/common.h                          |    2 
+ net/atm/pvc.c                             |    2 
+ net/atm/svc.c                             |    6 
+ net/ax25/af_ax25.c                        |    6 
+ net/bluetooth/hci_sock.c                  |    8 
+ net/bluetooth/l2cap_sock.c                |   22 +-
+ net/bluetooth/rfcomm/sock.c               |   12 -
+ net/bluetooth/sco.c                       |    6 
+ net/bpfilter/bpfilter_kern.c              |   11 -
+ net/bridge/netfilter/ebtables.c           |   46 +---
+ net/caif/caif_socket.c                    |    8 
+ net/can/j1939/socket.c                    |   12 -
+ net/can/raw.c                             |   16 -
+ net/core/filter.c                         |    6 
+ net/core/sock.c                           |   36 +--
+ net/dccp/dccp.h                           |    2 
+ net/dccp/proto.c                          |   20 -
+ net/decnet/af_decnet.c                    |   13 -
+ net/ieee802154/socket.c                   |    6 
+ net/ipv4/bpfilter/sockopt.c               |    8 
+ net/ipv4/ip_options.c                     |   43 +---
+ net/ipv4/ip_sockglue.c                    |   66 +++---
+ net/ipv4/ipmr.c                           |   14 -
+ net/ipv4/netfilter/arp_tables.c           |   33 +--
+ net/ipv4/netfilter/ip_tables.c            |   29 +-
+ net/ipv4/raw.c                            |    8 
+ net/ipv4/tcp.c                            |   30 +-
+ net/ipv4/tcp_ipv4.c                       |    4 
+ net/ipv4/udp.c                            |   11 -
+ net/ipv4/udp_impl.h                       |    4 
+ net/ipv6/ip6_flowlabel.c                  |  317 ++++++++++++++++--------------
+ net/ipv6/ip6mr.c                          |   17 -
+ net/ipv6/ipv6_sockglue.c                  |  203 +++++++++----------
+ net/ipv6/netfilter/ip6_tables.c           |   28 +-
+ net/ipv6/raw.c                            |   10 
+ net/ipv6/tcp_ipv6.c                       |    4 
+ net/ipv6/udp.c                            |    7 
+ net/ipv6/udp_impl.h                       |    4 
+ net/iucv/af_iucv.c                        |    4 
+ net/kcm/kcmsock.c                         |    6 
+ net/l2tp/l2tp_ppp.c                       |    4 
+ net/llc/af_llc.c                          |    4 
+ net/mptcp/protocol.c                      |   12 -
+ net/netfilter/ipvs/ip_vs_ctl.c            |    4 
+ net/netfilter/nf_sockopt.c                |    2 
+ net/netfilter/x_tables.c                  |   20 -
+ net/netlink/af_netlink.c                  |    4 
+ net/netrom/af_netrom.c                    |    4 
+ net/nfc/llcp_sock.c                       |    6 
+ net/packet/af_packet.c                    |   39 +--
+ net/phonet/pep.c                          |    4 
+ net/rds/af_rds.c                          |   30 +-
+ net/rds/rdma.c                            |   14 -
+ net/rds/rds.h                             |    6 
+ net/rose/af_rose.c                        |    4 
+ net/rxrpc/af_rxrpc.c                      |    8 
+ net/rxrpc/ar-internal.h                   |    4 
+ net/rxrpc/key.c                           |    9 
+ net/sctp/socket.c                         |    4 
+ net/smc/af_smc.c                          |    4 
+ net/socket.c                              |   20 -
+ net/tipc/socket.c                         |    8 
+ net/tls/tls_main.c                        |   17 -
+ net/vmw_vsock/af_vsock.c                  |    4 
+ net/x25/af_x25.c                          |    4 
+ net/xdp/xsk.c                             |    8 
+ net/xfrm/xfrm_state.c                     |    6 
+ 87 files changed, 855 insertions(+), 721 deletions(-)
