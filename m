@@ -2,223 +2,200 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 150DE22B6DF
-	for <lists+linux-can@lfdr.de>; Thu, 23 Jul 2020 21:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7557F22B748
+	for <lists+linux-can@lfdr.de>; Thu, 23 Jul 2020 22:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725979AbgGWTj6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 23 Jul 2020 15:39:58 -0400
-Received: from mail-db8eur05on2043.outbound.protection.outlook.com ([40.107.20.43]:44588
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725894AbgGWTj6 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 23 Jul 2020 15:39:58 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JK9eB18gOu3AgQI3WsHA+0nBDmP1WEc/35oqPnT6QvWTDFRxPfVUIFM7n+2a3SkcyIoIKDO2ctFZOtdln5tZ6/ntuwvfy00yEgQW3DmB+qgydrpOMUhMH+TwG9LqdGJF/hTueCU8MvYGjDPpuBkHx+NtCjathXP4rl1P+XrrdPTfT2wE0EqRGeq8zUL7palc5lz40ugJPwSC4Kjyb7VdscT+iSRr2PJIbQTNLAaWCY/GDvf3cf/k54qscQ8+6WGsJgJNRXZ9zNypRZz1/MNXJRkjw5reb+jfRxKUiwUgbnDX/yI3YqgqSMXHxNKSHB3Bw60jEUh72/QtNXdJIaRKsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aA/sk3UqbpQkSUWT6tDTbYdZXJSxX4iRJ4mJ7bDFvBM=;
- b=J/u3i4HE+wQ42uao2o+y4hEZirLrr4oQVl/0mnKgzb7O+3Hivf0QHlvNHIzZQtgp5h7p0QTkrpelGkZPmT4frvarYxh1ZkLR2QJeVUTxDjk1N3nlc+jfYPWPM8NixI0eqKiTNrdLWa0UhPaB9BixfwrYmPcZerA+JzNE3YtVFvX5okDyOi9Gf/MoRHvTIMl2IDeoJj9ghbch/P/Ri1D6bS31uK9tL/gAscFQh5H2ppABLMvv7F/WjWoyqZVPDYe34A0j85iZ0HqYV2lwO7BCI/30ZnrA904RiedZUM/SwdgvV0NGw1OYlgH7svGUgHyVWmMDQLhkSKjoowhojOm5ig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=peak-system.com; dmarc=pass action=none
- header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aA/sk3UqbpQkSUWT6tDTbYdZXJSxX4iRJ4mJ7bDFvBM=;
- b=rbxC1bLu6S+82OQykqvgitR07xiLcYL+hCDSsS3f0UhILQh2CjQYqaQUBBxaXIhMZfSCXFho6ml2Oi/Or9oiLtWEUNPuE/DXc27jNX7YL29wwAiYS7T5wcmddSMZeVExwss6IfmK6KAZxryoTnnGVGm2Fvsu79kDTajKzJUFMhU=
-Received: from VI1PR03MB5053.eurprd03.prod.outlook.com (2603:10a6:803:bb::18)
- by VI1PR03MB5055.eurprd03.prod.outlook.com (2603:10a6:803:c5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.21; Thu, 23 Jul
- 2020 19:39:53 +0000
-Received: from VI1PR03MB5053.eurprd03.prod.outlook.com
- ([fe80::6816:82a2:7f79:f1a9]) by VI1PR03MB5053.eurprd03.prod.outlook.com
- ([fe80::6816:82a2:7f79:f1a9%5]) with mapi id 15.20.3216.021; Thu, 23 Jul 2020
- 19:39:53 +0000
-From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: RE: About sysfs usage by socket-can drivers
-Thread-Topic: About sysfs usage by socket-can drivers
-Thread-Index: AQHWYSjQRUYGLa3AHkGWSYoBE7dosA==
-Date:   Thu, 23 Jul 2020 19:39:52 +0000
-Message-ID: <VI1PR03MB50531E485F82E3FD4D64C459D6760@VI1PR03MB5053.eurprd03.prod.outlook.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none
- header.from=peak-system.com;
-x-originating-ip: [89.158.154.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 500e270b-2312-4868-5b74-08d82f402bb1
-x-ms-traffictypediagnostic: VI1PR03MB5055:
-x-microsoft-antispam-prvs: <VI1PR03MB505509F58B7FB24ACE48995ED6760@VI1PR03MB5055.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: k265cKW08G2mZt4M2ZAqXc82sJafkApyeyzI8GGHUPzD6j4H+ufVuFQSvpIc9lJfQ8b2snAx660wWuvYNqnUn5yMrRr1/0S40jz+8Y33Z1kZxqzkWNmOgbC7tS9U7NU7FabJQriAMC+3SlbTyxnYhtvSDFEX2uY9c0SdFRDboXzcXZ1Sp+r1nnjzUGzk1SKIq4KQoIQkgrgMZxjQBb5fjcIaY4i3EyyHKbOy62uAzgkb82VsqTdZzx2B+y8To+oNIlvfdq3HSndGekYBzWz21OKfccOg7bGX7nOLPdbjCNMbEI60svVCHvdmiRkSmidqyUbJ4iYqw8SXorPaDSrcPPIVkS2HxkEq4Wi3aCKh9A1q90rNGPIEstSsG+cjtv7lrzctDGWiq5Ky7ddi05uNWg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB5053.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(376002)(39840400004)(346002)(396003)(136003)(6916009)(26005)(8936002)(66556008)(76116006)(53546011)(4326008)(6506007)(5660300002)(66476007)(66574015)(83380400001)(66946007)(64756008)(66446008)(8676002)(2906002)(33656002)(55016002)(9686003)(186003)(52536014)(86362001)(7696005)(508600001)(316002)(71200400001)(15974865002)(966005)(83080400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: btyB3SyYD0kzEV02W4llBfnI34aCKsnlipemx58Ox1b6RQW0D7fnhOuo4ZUKGrO5hL/2I2leCX4PZHVSLr+bgx5XTFV3bn7HNqGAQMPpkba/9AfkO6dfOwHi/VtxEsCWa9LZEGZaVkSJCgcpKB8k4xXwkM3MBwKcrHzqDmkblHN4nGa2oH2HIeSQl7WdXeOdDPNSs+BPfoEpNAl++JKUj8XPf9k/6h46c2GrGjx5gdFHNOhnfr/hQSAJs19WJOBNWVAavOUb6HG2PTxKPhBzSirVWNpaMMfJybqh78XVBHPvS531G6JqF6bYf4clX/mJs7FMtJ2FQ3rRV1ALxYrgtzDkjdgTfUFOUQcmKVJ5egG2OxyZ84T+lEu+6zv0j9x65qFC+gK34ZHldLGNgLTYrCfAs0+YWaqkBD8Lgx5Ul1B2gXZAgvRpr4VJI8AFpK72tGUq7CZiIgYZF3VYEI4pofDl5wHObjJApx7GK7oXKfb1F46pR0eq12GxM/7hk6LG
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1725979AbgGWUNT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 23 Jul 2020 16:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725894AbgGWUNT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Jul 2020 16:13:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AD8C0619DC
+        for <linux-can@vger.kernel.org>; Thu, 23 Jul 2020 13:13:18 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1jyhae-0007o7-IF; Thu, 23 Jul 2020 22:13:16 +0200
+Received: from [IPv6:2001:16b8:1e36:f100:f0de:7a6d:a7cc:eb2d] (unknown [IPv6:2001:16b8:1e36:f100:f0de:7a6d:a7cc:eb2d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 02AE3539860;
+        Thu, 23 Jul 2020 20:13:14 +0000 (UTC)
+To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <VI1PR03MB50531E485F82E3FD4D64C459D6760@VI1PR03MB5053.eurprd03.prod.outlook.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: About sysfs usage by socket-can drivers
+Message-ID: <f22b3382-da16-8bf3-02b4-e3fc818e504e@pengutronix.de>
+Date:   Thu, 23 Jul 2020 22:13:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: peak-system.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB5053.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 500e270b-2312-4868-5b74-08d82f402bb1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2020 19:39:52.8722
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 33lYbTnZlQjncs/4lHaummu7b3OU+V4qq5+ZkL/kkGH2qvYU74vWXN5p3d355lrP9/PJIgG93Q20vEvAlhLrWllmxrZStWmRUqlURiDAQOs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB5055
+In-Reply-To: <VI1PR03MB50531E485F82E3FD4D64C459D6760@VI1PR03MB5053.eurprd03.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="Bax9yCPcjsfaFa834DyRAp0nfzzXExHA9"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
-
->> We've several pending requests regarding:
-
->> - changing the default clock value,
-
-
-> The input clock rate for the CAN IP Core?
-
-Yes
-
->> - reading the bus load value,
-
-
->..as calculated by the USB device?
-
-or by the IP core, yes.
-
-
->> - using a flashed device id. to better control the can interface number,
-
-
->Can you make use of dev_id/dev_port
->https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L=
-1687
-
-Ok. I'll check that, thanks.
-
-
->> - identifying the (USB) channel
-
-
->Does udev offer all needed information? E.g.:
-
-Sorry, nope: identify the USB adapter <=3D> flash the LED (which USB device=
- corresponds to which canX)
-
-
->> Adding attributes under /sys/class/net/canX (or into a specific/private =
-group) could be a solution.
-
-
->Marc
-
----
-St=E9phane Grosjean
-PEAK-System France
-132, rue Andr=E9 Bisiaux
-F-54320 MAXEVILLE
-T=E9l : +(33) 9.72.54.51.97
-
-
-
-
-
-
-
-            De: Marc Kleine-Budde
-Envoy=E9: Jeudi 23 juillet 2020 17:23
-=C0: St=E9phane Grosjean
-Cc: linux-can@vger.kernel.org
-Objet: Re: About sysfs usage by socket-can drivers
-
-
-
-
-On 7/23/20 4:50 PM, St=E9phane Grosjean wrote:
-
-> We've several pending requests regarding:
-
-> - changing the default clock value,
-
-
-
-The input clock rate for the CAN IP Core?
-
-
-
-> - reading the bus load value,
-
-
-
-..as calculated by the USB device?
-
-
-
-> - using a flashed device id. to better control the can interface number,
-
-
-
-Can you make use of dev_id/dev_port
-
-https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L1=
-687
-
-
-
-> - identifying the (USB) channel
-
-
-
-Does udev offer all needed information? E.g.:
-
-
-
-    udevadm test /sys/class/net/can0
-
-
-
-> Adding attributes under /sys/class/net/canX (or into a specific/private g=
-roup) could be a solution.
-
-
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Bax9yCPcjsfaFa834DyRAp0nfzzXExHA9
+Content-Type: multipart/mixed; boundary="1Dhfad15FHctyHiO2uavH1Tuf5wLMoNXN";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <f22b3382-da16-8bf3-02b4-e3fc818e504e@pengutronix.de>
+Subject: Re: About sysfs usage by socket-can drivers
+References: <VI1PR03MB50531E485F82E3FD4D64C459D6760@VI1PR03MB5053.eurprd03.prod.outlook.com>
+In-Reply-To: <VI1PR03MB50531E485F82E3FD4D64C459D6760@VI1PR03MB5053.eurprd03.prod.outlook.com>
+
+--1Dhfad15FHctyHiO2uavH1Tuf5wLMoNXN
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 7/23/20 9:39 PM, St=C3=A9phane Grosjean wrote:
+>>> - changing the default clock value,
+>=20
+>> The input clock rate for the CAN IP Core?
+> Yes
+
+Can you query the possible clock rates? Either add to ethtool or make it =
+a CAN
+specific callback.
+
+>>> - reading the bus load value,
+>> ..as calculated by the USB device?
+>=20
+> or by the IP core, yes.
+
+maybe we can add this to ethtool's stats, otherwise to the CAN stats.
+
+>>> - using a flashed device id. to better control the can interface numb=
+er,
+>=20
+>> Can you make use of dev_id/dev_port
+>> https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice=
+=2Eh#L1687
+>=20
+> Ok. I'll check that, thanks.
+>=20
+>=20
+>>> - identifying the (USB) channel
+>=20
+>> Does udev offer all needed information? E.g.:
+>=20
+> Sorry, nope: identify the USB adapter <=3D> flash the LED (which USB de=
+vice corresponds to which canX)
+
+Use ethtool's set_phys_id for this:
+
+https://elixir.bootlin.com/linux/latest/source/drivers/net/can/usb/gs_usb=
+=2Ec#L762
+
+You can either implement a "activate blink", "deactivate blink" or "switc=
+h LED
+on", "switch LED off" (and I think the core will take care of blinking).
 
 Marc
 
-
-
---
-
+--=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
-
 Embedded Linux                   | https://www.pengutronix.de  |
-
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
+--1Dhfad15FHctyHiO2uavH1Tuf5wLMoNXN--
 
+--Bax9yCPcjsfaFa834DyRAp0nfzzXExHA9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl8Z71YACgkQqclaivrt
+76m4Jwf9E9w3fdgui0fE9p+sQfrHC7dVakZpE0M1t7PWJ8n3UT2SsqexWlw6Nj+N
+8esgT3lDhQOEL+BnqfmhiOau+x4Hcub7GSK80s71Js1xJUG8obA1Hz4fl7jWGoEZ
+AaDhRSM0+jLKe8YGfOLgIHf8YRA1rKd/bi6b2rRGKscRkZOIWFo7zhaD6jxU3F4I
+QkkJxRlAukkKWEn6LS6fjE9UDgdAmVZD6aO8acZ35MmM3NRrlDfLdP+/w54DDWh8
+tdYxzz+bz3+ITR81HCz+k7WWGw1bvVKs5Oc9S07p2vT5G/QHOwbc5xhX6YJ/Duwz
+5NS8i4YQn/c8gDV3BkEyxJA/v/BIWg==
+=tv4o
+-----END PGP SIGNATURE-----
 
---
-PEAK-System Technik GmbH
-Sitz der Gesellschaft Darmstadt - HRB 9183
-Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
-Unsere Datenschutzerklaerung mit wichtigen Hinweisen
-zur Behandlung personenbezogener Daten finden Sie unter
-www.peak-system.com/Datenschutz.483.0.html
+--Bax9yCPcjsfaFa834DyRAp0nfzzXExHA9--
