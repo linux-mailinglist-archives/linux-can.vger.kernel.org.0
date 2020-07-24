@@ -2,86 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8E622B85B
-	for <lists+linux-can@lfdr.de>; Thu, 23 Jul 2020 23:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD98D22C08C
+	for <lists+linux-can@lfdr.de>; Fri, 24 Jul 2020 10:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726331AbgGWVJT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 23 Jul 2020 17:09:19 -0400
-Received: from ssl.serverraum.org ([176.9.125.105]:36805 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726258AbgGWVJT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 23 Jul 2020 17:09:19 -0400
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 574F722F2E;
-        Thu, 23 Jul 2020 23:09:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1595538556;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bEcb6vSDQsnzOcchwltvx/jb9b32oo0bZooPAH9Llos=;
-        b=ui0IFJsnI3HhMAiLGNOtmSZ/mN1rN4nSr7rj1Ec3xxEJLSyNbdwfK6gvVUfYG3Vj1XABl6
-        gmsLvfbJXY3Sx6o3SA/+RTOxESV0i/bU5gbF8KZW1U9HJlImepJN5EqxPW3c7JlWM6Ww5a
-        pzijJaLr3INbI43QRGodgp64OLCIu6k=
+        id S1726573AbgGXIU3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 24 Jul 2020 04:20:29 -0400
+Received: from mx2.itam.mx ([148.205.229.36]:44468 "EHLO mx2.itam.mx"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726437AbgGXIU3 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 24 Jul 2020 04:20:29 -0400
+Received: from cronos.itam.mx (hydrus2b.itam.mx [148.205.228.143])
+        by mx2.itam.mx  with ESMTP id 06O8K19l018254-06O8K19n018254
+        (version=TLSv1.0 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Fri, 24 Jul 2020 03:20:01 -0500
+Received: from [10.28.175.153] (105.0.7.102) by cronos.itam.mx
+ (148.205.148.91) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 24 Jul
+ 2020 03:20:00 -0500
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 23 Jul 2020 23:09:15 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org,
-        dl-linux-imx <linux-imx@nxp.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH linux-can-next/flexcan] can: flexcan: fix TDC feature
-In-Reply-To: <e38cf40b-ead3-81de-0be7-18cca5ca1a0c@pengutronix.de>
-References: <20200416093126.15242-1-qiangqing.zhang@nxp.com>
- <20200416093126.15242-2-qiangqing.zhang@nxp.com>
- <DB8PR04MB6795F7E28A9964A121A06140E6D80@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <d5579883c7e9ab3489ec08a73c407982@walle.cc>
- <39b5d77bda519c4d836f44a554890bae@walle.cc>
- <e38cf40b-ead3-81de-0be7-18cca5ca1a0c@pengutronix.de>
-User-Agent: Roundcube Webmail/1.4.7
-Message-ID: <332a98a376e4becf9b10910138034be4@walle.cc>
-X-Sender: michael@walle.cc
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+To:     Recipients@vger.kernel.org
+From:   ''Tayeb@vger.kernel.org, Souami''@vger.kernel.org
+Date:   Fri, 24 Jul 2020 10:19:41 +0200
+Reply-To: <charlesjacksonjr001@gmail.com>
+Message-ID: <63249080-3370-4b2e-931f-45dfe03601cc@CRONOS.itam.mx>
+X-Originating-IP: [105.0.7.102]
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 2020-06-25 14:56, schrieb Marc Kleine-Budde:
-> On 6/25/20 2:37 PM, Michael Walle wrote:
->> Am 2020-06-02 12:15, schrieb Michael Walle:
->>> Hi Marc,
->>> 
->>> Am 2020-04-16 11:41, schrieb Joakim Zhang:
->>>> Hi Marc,
->>>> 
->>>> How about FlexCAN FD patch set, it is pending for a long time. Many
->>>> work would base on it, we are happy to see it in upstream mainline
->>>> ASAP.
->>>> 
->>>> Michael Walle also gives out the test-by tag:
->>>> 	Tested-by: Michael Walle <michael@walle.cc>
->>> 
->>> There seems to be no activity for months here. Any reason for that? 
->>> Is
->>> there anything we can do to speed things up?
->> 
->> ping.. There are no replies or anything. Sorry but this is really
->> annoying and frustrating.
->> 
->> Marc, is there anything wrong with the flexcan patches?
-> 
-> I've cleaned up the patches a bit, can you test this branch:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=flexcan
+Hallo
 
-Ping. Could we please try to get this into next soon?
+Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder für das Corona-Virus.
 
-See also
-https://lore.kernel.org/netdev/20200629181809.25338-1-michael@walle.cc/
+Dies ist Ihr Spendencode: [CJ530342019]
 
--michael
+www.youtube.com/watch?v=BSr8myiLPMQ
+
+Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
+
+charlesjacksonjr001@gmail.com
+
+Ich hoffe, dass Sie und Ihre Familie dies durchkommen
+
+
+Herr Charles Jackson
