@@ -2,69 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 532E922DD04
-	for <lists+linux-can@lfdr.de>; Sun, 26 Jul 2020 09:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF79C22DF0E
+	for <lists+linux-can@lfdr.de>; Sun, 26 Jul 2020 14:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbgGZHqv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 26 Jul 2020 03:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725789AbgGZHqv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 26 Jul 2020 03:46:51 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC30C0619D2;
-        Sun, 26 Jul 2020 00:46:50 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::460])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 9C3271277D61E;
-        Sun, 26 Jul 2020 00:30:02 -0700 (PDT)
-Date:   Sun, 26 Jul 2020 00:46:44 -0700 (PDT)
-Message-Id: <20200726.004644.71243023033363639.davem@davemloft.net>
-To:     hch@lst.de
-Cc:     kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kuznet@ms2.inr.ac.ru, yoshfuji@linux-ipv6.org, edumazet@google.com,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-sctp@vger.kernel.org, linux-hams@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-can@vger.kernel.org, dccp@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-wpan@vger.kernel.org, linux-s390@vger.kernel.org,
-        mptcp@lists.01.org, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
-        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: Re: get rid of the address_space override in setsockopt v2
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200726070311.GA16687@lst.de>
-References: <20200723060908.50081-1-hch@lst.de>
-        <20200724.154342.1433271593505001306.davem@davemloft.net>
-        <20200726070311.GA16687@lst.de>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 26 Jul 2020 00:30:03 -0700 (PDT)
+        id S1726042AbgGZMfX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 26 Jul 2020 08:35:23 -0400
+Received: from www.zeus03.de ([194.117.254.33]:39938 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726704AbgGZMfX (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 26 Jul 2020 08:35:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=onAeRnhffhF8ckRwRk4DsGKcuZ5Z
+        A3FW02cG3cQyVvk=; b=xOPdX7zIGdV+hLDlDtvJQrla1xgvXVqgjudDwZNJcY/y
+        UxH6Uxc3rBrfVuJ6qwDWL6hBSBtWw2GhDWVjKC9p7CtD5q6fULK7WI9rNWEzztj8
+        c6QmeBMw5XkrgpSXrqPG+G4nlMniocnv8rbnHt5MagEQJ3i3L88k/ge12XmPocY=
+Received: (qmail 40298 invoked from network); 26 Jul 2020 14:35:19 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jul 2020 14:35:19 +0200
+X-UD-Smtp-Session: l3s3148p1@D31ocFer/I8gAwDPXy27AOM4pzPBFrIA
+Date:   Sun, 26 Jul 2020 14:35:19 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 11/20] dt-bindings: i2c: renesas,i2c: Document r8a774e1
+ support
+Message-ID: <20200726123519.GC2484@ninjato>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZwgA9U+XZDXt4+m+"
+Content-Disposition: inline
+In-Reply-To: <1594811350-14066-12-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
-Date: Sun, 26 Jul 2020 09:03:11 +0200
 
-> On Fri, Jul 24, 2020 at 03:43:42PM -0700, David Miller wrote:
->> > Changes since v1:
->> >  - check that users don't pass in kernel addresses
->> >  - more bpfilter cleanups
->> >  - cosmetic mptcp tweak
->> 
->> Series applied to net-next, I'm build testing and will push this out when
->> that is done.
-> 
-> The buildbot found one warning with the isdn debug code after a few
-> days, here is what I think is the best fix:
+--ZwgA9U+XZDXt4+m+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I already fixed this in net-next.
+On Wed, Jul 15, 2020 at 12:09:01PM +0100, Lad Prabhakar wrote:
+> Document i2c controller for RZ/G2H (R8A774E1) SoC, which is compatible
+> with R-Car Gen3 SoC family.
+>=20
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renes=
+as.com>
+
+Applied to for-next, thanks!
+
+
+--ZwgA9U+XZDXt4+m+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8deIcACgkQFA3kzBSg
+KbZbZA//W705bUta/I2fFJX9THCgPXeyts2P3gy1nQcBJvGROOzL6jZJne4W6nHR
+fJdAUnOfyZMTkCvfgnGGrnCa2QRrIgIYmnx1ZpF+dONaPYJPkZOOXoven13LjohY
+0lswiHVVEsKsESNlA8agcPm9Gniuvb8jpzUfpaTOZd2VQr6vV7YSoq53HXOKka+s
+mXwwe5J31Mc/DnJ7Yu0bZYo9jyFdKg4xSXrTwAz5FK+OqdYEyY9Qnu3ne0JZ4k99
+xPaCx5h0DQcoR4rOqIi21dedGiJ7iRuao1sDBgq5X1BxHIzJ5q+1HW1xiwMTdj/d
+6xA2PN1HxqaZ3Ff6p0tamC5AgmjgMQrFJj2cFI+fF/1VWp62V3O8oNZ/5b3f7bP4
+4f5ZwCfNYTcGB9tJnDxqTsAHAXAhnxlNc56kCWEZhTzKDzE7gW+H6+90OZEtzeA5
+Akq7504HPVrlgmL52JBbNcunDvs1eTc9ROjPVYJPGu5BKrcB+m2a0HCwhi2nJRBT
+XE//0zGPvPpiq+wYvUiyxmrBWTE/qKJekKoyLUmEIYlaDy9IdDEes5m9yJFlmsAy
+tvXt/lsCak31bfhyHa6HQQ3O8tjC5h+DTpJ4G1zp4u3d1yqBJcobgbySqibzKalP
+BdwAoJP8ng3+Q1MBRngxSYyKZvv7J3uderjW7yq8BN8+KwjU+uE=
+=FNmn
+-----END PGP SIGNATURE-----
+
+--ZwgA9U+XZDXt4+m+--
