@@ -2,109 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F80123088D
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jul 2020 13:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5841230A5D
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jul 2020 14:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729003AbgG1LU1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 28 Jul 2020 07:20:27 -0400
-Received: from relay-b02.edpnet.be ([212.71.1.222]:39688 "EHLO
-        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728954AbgG1LUW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jul 2020 07:20:22 -0400
-X-ASG-Debug-ID: 1595935215-0a7b8d18321893a90001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.122.82.adsl.dyn.edpnet.net [77.109.122.82]) by relay-b02.edpnet.be with ESMTP id 4BDXYfSG3t3p7Eeq; Tue, 28 Jul 2020 13:20:15 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.122.82.adsl.dyn.edpnet.net[77.109.122.82]
-X-Barracuda-Apparent-Source-IP: 77.109.122.82
-Received: from [10.44.24.139] (unknown [188.188.88.139])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id AC7FDFB99E1;
-        Tue, 28 Jul 2020 13:20:14 +0200 (CEST)
-Date:   Tue, 28 Jul 2020 13:20:11 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <VI1PR03MB5053EF45CF182D93B68F3FC4D6730@VI1PR03MB5053.eurprd03.prod.outlook.com>
-References: <VI1PR03MB5053B1FB7A45D4243BD1F095D6760@VI1PR03MB5053.eurprd03.prod.outlook.com>,<20200724094502.GB27720@x1.vandijck-laurijssen.be> <VI1PR03MB5053EF45CF182D93B68F3FC4D6730@VI1PR03MB5053.eurprd03.prod.outlook.com>
+        id S1729133AbgG1Mif (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jul 2020 08:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728751AbgG1Mif (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jul 2020 08:38:35 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036B3C061794;
+        Tue, 28 Jul 2020 05:38:35 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id i92so2969272pje.0;
+        Tue, 28 Jul 2020 05:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Fie8IAXWZ8a1f4IBdyXwUsTRAo2+ebUYgUxfo3SFpeA=;
+        b=SK9b2UYTW6naBrk+5Nf+HITJ8jpZ5nTD3wTAGxb37B+Ugb0+FU9daPv5RE6+KoAdKb
+         A52m+AH2ReoUyWjImEbPFcuuY2un3gyDWbhZU3Z5HR0JGsEiqA1T1CGa3DXHpqaIo+m5
+         Yp/IiDKSzac3d2CIz1SHRkAOmLKJrf3CMXujw+d8OHQk39gqh5ocYCpYCuQkSEEneHAm
+         ziS1+TJqLiFpxeDVfdOszutkDUaX3v79cXpqfpA0wIdmevzMmXOzLcHJUYj7r6EU+272
+         JN0pGtGHdHUj2KWf+0LVVONbMmeHkrR8KXJzTrvsOILhKNNvPF/rp9yAIBgwpsLanTAP
+         6ywQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Fie8IAXWZ8a1f4IBdyXwUsTRAo2+ebUYgUxfo3SFpeA=;
+        b=PpRE7Qh/MGStL/wzh9eW9GRvp03r61bxU/vqgNIoaFgS0L8OmGZvHDI6ZquoWy3yP2
+         W8bABLImOFGPPP493mBxtaDfhA/DKkROyRL+1g22tujAl3J1bZaA/R3M1uEinw0TXHEg
+         EumFdq0x5L8Y8LaEv59ZBk77T+i5WJl9FhYye7aRe12wUCfDZTgQ1IuQ5RxWrwNq1xaX
+         qYqSKSeewlpbnC7rshoVeN90+MUkiGnS0+3Zl1VgwvgpD/x2vRpuMQFL8q76ZIucB0Hl
+         8VuUAO3yuJ7Ux9t3AkqgVumHWQ18wPraNG3yASDRR8sYZRB6YgsXuLuZo0CHhUlkJ9g6
+         puGg==
+X-Gm-Message-State: AOAM533mF+K82X6IOGhR+Z4Pv+TYImhSry56YCLVBPrwtzUzHcrztY0i
+        chp4MlHQ6BuFuPkCRvP3fQMw5kNIoBjg2g==
+X-Google-Smtp-Source: ABdhPJwekYhSoj1idJB4yjdyuS66TSlXyc2WtTJj9+6S091YCsU5daM2krAGtIehCsmH7jRufibfUw==
+X-Received: by 2002:a17:90b:30d0:: with SMTP id hi16mr4452970pjb.65.1595939914561;
+        Tue, 28 Jul 2020 05:38:34 -0700 (PDT)
+Received: from gmail.com ([2401:4900:2eef:ca92:3545:4a68:f406:d612])
+        by smtp.gmail.com with ESMTPSA id t17sm1684380pgu.30.2020.07.28.05.38.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 05:38:33 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 18:07:03 +0530
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <bjorn@helgaas.com>,
+        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v1] pch_can: use generic power management
+Message-ID: <20200728123703.GB1331847@gmail.com>
+References: <20200728085757.888620-1-vaibhavgupta40@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Subject: RE: About sysfs usage by socket-can drivers
-To:     =?ISO-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
-X-ASG-Orig-Subj: RE: About sysfs usage by socket-can drivers
-CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Message-ID: <5E128BFC-17C1-4671-B243-D6E70C3DD10C@vandijck-laurijssen.be>
-X-Barracuda-Connect: 77.109.122.82.adsl.dyn.edpnet.net[77.109.122.82]
-X-Barracuda-Start-Time: 1595935215
-X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1762
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.5110 1.0000 0.7500
-X-Barracuda-Spam-Score: 0.75
-X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.83520
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200728085757.888620-1-vaibhavgupta40@gmail.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This patch is compile-tested only.
 
-
-On 28 July 2020 09:31:52 GMT+02:00, "Stéphane Grosjean" <s.grosjean@peak-system.com> wrote:
->Thx for your answer Kurt! Even if properties are channel related, this
->could be a solution...
->
->But... creating a (new) channel tree under /devices looks weird,
->doesn't it?
-
-/sys/class/net/.... are symlinks to /sys/devices/..., not weird IMO
-
->And why it should be "easier" to add attributes there rather than under
->each /sys/class/net/can?
-
-Equally easy to add, much simpler to use in udev without race conditions.
-
-
->
->-- Stéphane
->
->
->De : Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
->Envoyé : vendredi 24 juillet 2020 11:45
->À : Stéphane Grosjean <s.grosjean@peak-system.com>
->Cc : Marc Kleine-Budde <mkl@pengutronix.de>; linux-can@vger.kernel.org
-><linux-can@vger.kernel.org>
->Objet : Re: About sysfs usage by socket-can drivers
->
->> We've several pending requests regarding:
->> - changing the default clock value,
->> - reading the bus load value,
->> - using a flashed device id. to better control the can interface
->number,
->> - identifying the (USB) channel
->> - ...
->
->I tend to look in the (in your case) usb device, and add properties
->there.
->After all, those are device-related properties, not?
->
->You could reach them via /sys/class/net/canX/device/...
->
->If you add them before the netdev is registered, you can use them in
->udev rules without race conditions.
->
->Kurt
->
->--
->PEAK-System Technik GmbH
->Sitz der Gesellschaft Darmstadt - HRB 9183
->Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
->Unsere Datenschutzerklaerung mit wichtigen Hinweisen
->zur Behandlung personenbezogener Daten finden Sie unter
->www.peak-system.com/Datenschutz.483.0.html
-
-Sent from a small mobile device
+Thanks
+Vaibhav Gupta
