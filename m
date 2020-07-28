@@ -2,69 +2,26 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B377230606
-	for <lists+linux-can@lfdr.de>; Tue, 28 Jul 2020 11:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 209C1230622
+	for <lists+linux-can@lfdr.de>; Tue, 28 Jul 2020 11:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728272AbgG1JAN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 28 Jul 2020 05:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbgG1JAM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 28 Jul 2020 05:00:12 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A538DC061794;
-        Tue, 28 Jul 2020 02:00:12 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id t6so11512775pgq.1;
-        Tue, 28 Jul 2020 02:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eXWDEkg4433DRZvcoGLFZLwDxOJJX9Wg+/QFW7sV+OE=;
-        b=emxPU/TIzPfj1TTUnuwUbMvATPs5XLnweOqB7/KY0b/Q41TG/uOC57PgMlZ7HE8UPp
-         VzhUlN0h8hJW8SZiX+cuwGOQoOeOm/kBDw/W7lf46h+xL5kcsNgomTpkwhYdovIRlp3f
-         fvGGba+i3cc82fgMGZ3DGf5BnnwD6UyQn8v5iaUgtnu/ULswv2CwuyeY393zna07UOTH
-         E3iT4FvwNUm1bWVWfvRWuD8R4YCTG9E9TU5nbn73oZVZ/+w7YPLc7Cm6Y2bRupbzKyWM
-         bkq7nLfljswYuCP8P1PbXzVG/MJoc9yY+f//Cls2C9IIsYdHvE/2eAdm2R4+KcfwQVl2
-         Q/6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eXWDEkg4433DRZvcoGLFZLwDxOJJX9Wg+/QFW7sV+OE=;
-        b=qK5GtmY+0bf9rWfPR0w8lEIhkuMdZTtB28CiJzEnE4OudCzLR70VV8O3rldlMgbdPr
-         s+QOHsduituE0sL8pE0KOg3GPHh+uVrZ2/il7nlSTm0621qH6JCUk9Re9YPjdakRf9IK
-         3CkzhuCcJCKo6aJzqnDPfFlOznkBE9RFeCL03LUoxdb9nEuL7ybPsgq59k0+hIApsgLg
-         yiANNM2PsHDXB8V7pDlP9NN7nDa3Xb8BF4PbxN+k3qVtkMD62y6Melnriltav7fX/pvK
-         sHlwTYTKbUrzzxr7DmiMCqn/7yRiF4wp3F8d99TD2XbtRgfLGS4dgrWgqZDE+3qYw2rL
-         3Ylw==
-X-Gm-Message-State: AOAM533A0I5Abze7Yoy/ey+SbtVoR6HQPfnR8+DWRlt4RCfYtP0+rTpy
-        bH58K5qyA5rE5YhcNexu+N0=
-X-Google-Smtp-Source: ABdhPJwofzJqI96SNcAW3qc+RKA54AqcQwu88f1RTCsajCDXpWPqPEh74QJSWZ0ijFUX9TKSrful8w==
-X-Received: by 2002:a63:3541:: with SMTP id c62mr833395pga.127.1595926812125;
-        Tue, 28 Jul 2020 02:00:12 -0700 (PDT)
-Received: from varodek.iballbatonwifi.com ([103.105.152.86])
-        by smtp.gmail.com with ESMTPSA id t11sm9306174pfh.35.2020.07.28.02.00.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2020 02:00:11 -0700 (PDT)
-From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Helgaas <bjorn@helgaas.com>,
-        Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: [PATCH v1] pch_can: use generic power management
-Date:   Tue, 28 Jul 2020 14:27:57 +0530
-Message-Id: <20200728085757.888620-1-vaibhavgupta40@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        id S1728371AbgG1JH5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 28 Jul 2020 05:07:57 -0400
+Received: from smtp6-g21.free.fr ([212.27.42.6]:63210 "EHLO smtp6-g21.free.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728365AbgG1JH5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 28 Jul 2020 05:07:57 -0400
+Received: from debian.peak-system.com (unknown [89.158.154.129])
+        (Authenticated sender: stephane.grosjean)
+        by smtp6-g21.free.fr (Postfix) with ESMTPSA id B6DA17803B5;
+        Tue, 28 Jul 2020 09:07:51 +0000 (UTC)
+From:   Stephane Grosjean <s.grosjean@peak-system.com>
+To:     linux-can Mailing List <linux-can@vger.kernel.org>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [PATCH] can/peak_usb: fix timestamp wrapping
+Date:   Tue, 28 Jul 2020 11:07:36 +0200
+Message-Id: <20200728090736.7628-1-s.grosjean@peak-system.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-can-owner@vger.kernel.org
@@ -72,180 +29,86 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Drivers using legacy power management .suspen()/.resume() callbacks
-have to manage PCI states and device's PM states themselves. They also
-need to take care of standard configuration registers.
+Fabian Inostroza <fabianinostrozap@gmail.com> has discovered a potential
+problem in the hardware timestamp reporting from the PCAN-USB USB CAN
+interface (only), related to the fact that a timestamp of an event may
+precede the timestamp used for synchronization when both records are part
+of the same USB packet. However, this case was used to detect the wrapping
+of the time counter.
 
-Switch to generic power management framework using a single
-"struct dev_pm_ops" variable to take the unnecessary load from the driver.
-This also avoids the need for the driver to directly call most of the PCI
-helper functions and device power state control functions, as through
-the generic framework PCI Core takes care of the necessary operations,
-and drivers are required to do only device-specific jobs.
+This patch details and fixes the two identified cases where this problem
+can occur.
 
-Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 ---
- drivers/net/can/pch_can.c | 63 +++++++++++++--------------------------
- 1 file changed, 21 insertions(+), 42 deletions(-)
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 51 ++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/can/pch_can.c b/drivers/net/can/pch_can.c
-index db41dddd5771..ca54a6e1c810 100644
---- a/drivers/net/can/pch_can.c
-+++ b/drivers/net/can/pch_can.c
-@@ -957,8 +957,7 @@ static void pch_can_remove(struct pci_dev *pdev)
- 	free_candev(priv->ndev);
- }
- 
--#ifdef CONFIG_PM
--static void pch_can_set_int_custom(struct pch_can_priv *priv)
-+static void __maybe_unused pch_can_set_int_custom(struct pch_can_priv *priv)
- {
- 	/* Clearing the IE, SIE and EIE bits of Can control register. */
- 	pch_can_bit_clear(&priv->regs->cont, PCH_CTRL_IE_SIE_EIE);
-@@ -969,14 +968,14 @@ static void pch_can_set_int_custom(struct pch_can_priv *priv)
- }
- 
- /* This function retrieves interrupt enabled for the CAN device. */
--static u32 pch_can_get_int_enables(struct pch_can_priv *priv)
-+static u32 __maybe_unused pch_can_get_int_enables(struct pch_can_priv *priv)
- {
- 	/* Obtaining the status of IE, SIE and EIE interrupt bits. */
- 	return (ioread32(&priv->regs->cont) & PCH_CTRL_IE_SIE_EIE) >> 1;
- }
- 
--static u32 pch_can_get_rxtx_ir(struct pch_can_priv *priv, u32 buff_num,
--			       enum pch_ifreg dir)
-+static u32 __maybe_unused pch_can_get_rxtx_ir(struct pch_can_priv *priv,
-+					      u32 buff_num, enum pch_ifreg dir)
- {
- 	u32 ie, enable;
- 
-@@ -997,8 +996,8 @@ static u32 pch_can_get_rxtx_ir(struct pch_can_priv *priv, u32 buff_num,
- 	return enable;
- }
- 
--static void pch_can_set_rx_buffer_link(struct pch_can_priv *priv,
--				       u32 buffer_num, int set)
-+static void __maybe_unused pch_can_set_rx_buffer_link(struct pch_can_priv *priv,
-+						      u32 buffer_num, int set)
- {
- 	iowrite32(PCH_CMASK_RX_TX_GET, &priv->regs->ifregs[0].cmask);
- 	pch_can_rw_msg_obj(&priv->regs->ifregs[0].creq, buffer_num);
-@@ -1013,7 +1012,8 @@ static void pch_can_set_rx_buffer_link(struct pch_can_priv *priv,
- 	pch_can_rw_msg_obj(&priv->regs->ifregs[0].creq, buffer_num);
- }
- 
--static u32 pch_can_get_rx_buffer_link(struct pch_can_priv *priv, u32 buffer_num)
-+static u32 __maybe_unused pch_can_get_rx_buffer_link(struct pch_can_priv *priv,
-+						     u32 buffer_num)
- {
- 	u32 link;
- 
-@@ -1027,20 +1027,19 @@ static u32 pch_can_get_rx_buffer_link(struct pch_can_priv *priv, u32 buffer_num)
- 	return link;
- }
- 
--static int pch_can_get_buffer_status(struct pch_can_priv *priv)
-+static int __maybe_unused pch_can_get_buffer_status(struct pch_can_priv *priv)
- {
- 	return (ioread32(&priv->regs->treq1) & 0xffff) |
- 	       (ioread32(&priv->regs->treq2) << 16);
- }
- 
--static int pch_can_suspend(struct pci_dev *pdev, pm_message_t state)
-+static int __maybe_unused pch_can_suspend(struct device *dev_d)
- {
- 	int i;
--	int retval;
- 	u32 buf_stat;	/* Variable for reading the transmit buffer status. */
- 	int counter = PCH_COUNTER_LIMIT;
- 
--	struct net_device *dev = pci_get_drvdata(pdev);
-+	struct net_device *dev = dev_get_drvdata(dev_d);
- 	struct pch_can_priv *priv = netdev_priv(dev);
- 
- 	/* Stop the CAN controller */
-@@ -1058,7 +1057,7 @@ static int pch_can_suspend(struct pci_dev *pdev, pm_message_t state)
- 		udelay(1);
- 	}
- 	if (!counter)
--		dev_err(&pdev->dev, "%s -> Transmission time out.\n", __func__);
-+		dev_err(dev_d, "%s -> Transmission time out.\n", __func__);
- 
- 	/* Save interrupt configuration and then disable them */
- 	priv->int_enables = pch_can_get_int_enables(priv);
-@@ -1081,35 +1080,16 @@ static int pch_can_suspend(struct pci_dev *pdev, pm_message_t state)
- 
- 	/* Disable all Receive buffers */
- 	pch_can_set_rx_all(priv, 0);
--	retval = pci_save_state(pdev);
--	if (retval) {
--		dev_err(&pdev->dev, "pci_save_state failed.\n");
--	} else {
--		pci_enable_wake(pdev, PCI_D3hot, 0);
--		pci_disable_device(pdev);
--		pci_set_power_state(pdev, pci_choose_state(pdev, state));
--	}
- 
--	return retval;
-+	return 0;
- }
- 
--static int pch_can_resume(struct pci_dev *pdev)
-+static int __maybe_unused pch_can_resume(struct device *dev_d)
- {
- 	int i;
--	int retval;
--	struct net_device *dev = pci_get_drvdata(pdev);
-+	struct net_device *dev = dev_get_drvdata(dev_d);
- 	struct pch_can_priv *priv = netdev_priv(dev);
- 
--	pci_set_power_state(pdev, PCI_D0);
--	pci_restore_state(pdev);
--	retval = pci_enable_device(pdev);
--	if (retval) {
--		dev_err(&pdev->dev, "pci_enable_device failed.\n");
--		return retval;
--	}
--
--	pci_enable_wake(pdev, PCI_D3hot, 0);
--
- 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
- 
- 	/* Disabling all interrupts. */
-@@ -1146,12 +1126,8 @@ static int pch_can_resume(struct pci_dev *pdev)
- 	/* Restore Run Mode */
- 	pch_can_set_run_mode(priv, PCH_CAN_RUN);
- 
--	return retval;
-+	return 0;
- }
--#else
--#define pch_can_suspend NULL
--#define pch_can_resume NULL
--#endif
- 
- static int pch_can_get_berr_counter(const struct net_device *dev,
- 				    struct can_berr_counter *bec)
-@@ -1252,13 +1228,16 @@ static int pch_can_probe(struct pci_dev *pdev,
- 	return rc;
- }
- 
-+static SIMPLE_DEV_PM_OPS(pch_can_pm_ops,
-+			 pch_can_suspend,
-+			 pch_can_resume);
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 0b7766b715fd..267ddc18ed51 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -130,14 +130,55 @@ void peak_usb_get_ts_time(struct peak_time_ref *time_ref, u32 ts, ktime_t *time)
+ 	/* protect from getting time before setting now */
+ 	if (ktime_to_ns(time_ref->tv_host)) {
+ 		u64 delta_us;
++		s64 delta_ts = 0;
 +
- static struct pci_driver pch_can_pci_driver = {
- 	.name = "pch_can",
- 	.id_table = pch_pci_tbl,
- 	.probe = pch_can_probe,
- 	.remove = pch_can_remove,
--	.suspend = pch_can_suspend,
--	.resume = pch_can_resume,
-+	.driver.pm = &pch_can_pm_ops,
- };
++		/* General case: dev_ts_1 < dev_ts_2 < ts, with:
++		 *
++		 * - dev_ts_1 = previous sync timestamp
++		 * - dev_ts_2 = last sync timestamp
++		 * - ts = event timestamp
++		 * - ts_period = known sync period (theoretical)
++		 *             ~ dev_ts2 - dev_ts1
++		 * *but*:
++		 *
++		 * - time counters wrap (see adapter->ts_used_bits)
++		 * - sometimes, dev_ts_1 < ts < dev_ts2
++		 *
++		 * "normal" case (sync time counters increase):
++		 * must take into account case when ts wraps (tsw)
++		 *
++		 *      < ts_period > <          >
++		 *     |             |            |
++		 *  ---+--------+----+-------0-+--+-->
++		 *     ts_dev_1 |    ts_dev_2  |
++		 *              ts             tsw
++		 */
++		if (time_ref->ts_dev_1 < time_ref->ts_dev_2) {
++			/* case when event time (tsw) wraps */
++			if (ts < time_ref->ts_dev_1)
++				delta_ts = 1 << time_ref->adapter->ts_used_bits;
++
++		/* Otherwise, sync time counter (ts_dev_2) has wrapped:
++		 * handle case when event time (tsn) hasn't.
++		 *
++		 *      < ts_period > <          >
++		 *     |             |            |
++		 *  ---+--------+--0-+---------+--+-->
++		 *     ts_dev_1 |    ts_dev_2  |
++		 *              tsn            ts
++		 */
++		} else if (time_ref->ts_dev_1 < ts) {
++			delta_ts = -(1 << time_ref->adapter->ts_used_bits);
++		}
  
- module_pci_driver(pch_can_pci_driver);
+-		delta_us = ts - time_ref->ts_dev_2;
+-		if (ts < time_ref->ts_dev_2)
+-			delta_us &= (1 << time_ref->adapter->ts_used_bits) - 1;
++		/* add delay between last sync and event timestamps */
++		delta_ts += (signed int)(ts - time_ref->ts_dev_2);
+ 
+-		delta_us += time_ref->ts_total;
++		/* add time from beginning to last sync */
++		delta_ts += time_ref->ts_total;
+ 
+-		delta_us *= time_ref->adapter->us_per_ts_scale;
++		/* convert ticks number into microseconds */
++		delta_us = delta_ts * time_ref->adapter->us_per_ts_scale;
+ 		delta_us >>= time_ref->adapter->us_per_ts_shift;
+ 
+ 		*time = ktime_add_us(time_ref->tv_host_0, delta_us);
 -- 
-2.27.0
+2.25.1
 
