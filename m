@@ -2,86 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D0823AD14
-	for <lists+linux-can@lfdr.de>; Mon,  3 Aug 2020 21:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BAA23AE24
+	for <lists+linux-can@lfdr.de>; Mon,  3 Aug 2020 22:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728069AbgHCTcw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 3 Aug 2020 15:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726906AbgHCTcv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 3 Aug 2020 15:32:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30B0C06174A;
-        Mon,  3 Aug 2020 12:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=tl6E9v7JdT5SPY6RMUgVUsix1wSI4Y22duyU2Vp5sVk=; b=o3dXV7G8FYbZAU/4Lg96+dolTO
-        DqoRG7LfpQE59kto5q1iSKTjpcj2KQjfXZvxPUY16QRZkDh7epiAhndKeQOJYEiwZDH1dLpThI/RR
-        0YXyYXpcpSyy2fQ0jAJYg9rXXvRnUnHGYc5zpTunKPoXC3O0yYG26lWEpt9G2IWLHnVvFgCSFzVcF
-        jbo+wP7Ibc7+21WihDdd6g+lxpyPGp4pvZ+8jYUpZvt70+bLfXqzb4A4vFPXTrE2EcmXq2wTl0Syo
-        qC20FgOvl8Ap6ocJcc4CrqRs6Spg1jZj35h998IC7L+Ntb6bGxopuich+GSzDEWTijX8DvWlpmqU8
-        91LjJiSg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k2gC2-0003qo-VT; Mon, 03 Aug 2020 19:32:25 +0000
-Subject: Re: [PATCH v4 4/6] can: ctucanfd: CTU CAN FD open-source IP core -
- PCI bus support.
-To:     pisa@cmp.felk.cvut.cz, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org, mkl@pengutronix.de,
-        socketcan@hartkopp.net
-Cc:     wg@grandegger.com, davem@davemloft.net, robh+dt@kernel.org,
-        mark.rutland@arm.com, c.emde@osadl.org, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.jerabek01@gmail.com, ondrej.ille@gmail.com,
-        jnovak@fel.cvut.cz, jara.beran@gmail.com, porazil@pikron.com
+        id S1728089AbgHCU3x (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 3 Aug 2020 16:29:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726725AbgHCU3w (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 3 Aug 2020 16:29:52 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C2BEC22B45;
+        Mon,  3 Aug 2020 20:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596486592;
+        bh=VNXrJoDu2nVwvK5pv8XXLArHar+98PGv944XMa5VqRo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NshCfN2Ba0b2nhmggzG3c76IhGP7zrRQp2Gn+JAqkTnw/o4d1QyNLZbSTu95u+iLa
+         h0eK2KyrS9nt5ONx4JXrbmac/+dsXhcUcyt44OfyAwIiZDl8GJ5sUoE/Lt/pN2WfuT
+         +1r+PeYuxJbTX4fECjsAasPf3/Hldbi+UGG1m75w=
+Date:   Mon, 3 Aug 2020 13:29:49 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     pisa@cmp.felk.cvut.cz
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        mkl@pengutronix.de, socketcan@hartkopp.net, wg@grandegger.com,
+        davem@davemloft.net, robh+dt@kernel.org, mark.rutland@arm.com,
+        c.emde@osadl.org, armbru@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.jerabek01@gmail.com,
+        ondrej.ille@gmail.com, jnovak@fel.cvut.cz, jara.beran@gmail.com,
+        porazil@pikron.com
+Subject: Re: [PATCH v4 0/6] CTU CAN FD open-source IP core SocketCAN driver,
+ PCI, platform integration and documentation
+Message-ID: <20200803132949.64884ff1@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <cover.1596408856.git.pisa@cmp.felk.cvut.cz>
 References: <cover.1596408856.git.pisa@cmp.felk.cvut.cz>
- <bad059402032f82fa63aa51d2122589a8a2cf6fd.1596408856.git.pisa@cmp.felk.cvut.cz>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <e4378bd9-6484-88bc-48d3-d7fdda62c844@infradead.org>
-Date:   Mon, 3 Aug 2020 12:32:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <bad059402032f82fa63aa51d2122589a8a2cf6fd.1596408856.git.pisa@cmp.felk.cvut.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 8/3/20 11:34 AM, pisa@cmp.felk.cvut.cz wrote:
-> diff --git a/drivers/net/can/ctucanfd/Kconfig b/drivers/net/can/ctucanfd/Kconfig
-> index 0620111d57fd..8a5f5d05fa72 100644
-> --- a/drivers/net/can/ctucanfd/Kconfig
-> +++ b/drivers/net/can/ctucanfd/Kconfig
-> @@ -15,4 +15,13 @@ config CAN_CTUCANFD
->  
->  if CAN_CTUCANFD
->  
-> +config CAN_CTUCANFD_PCI
-> +    tristate "CTU CAN-FD IP core PCI/PCIe driver"
-> +    depends on PCI
-> +	help
+On Mon,  3 Aug 2020 20:34:48 +0200 pisa@cmp.felk.cvut.cz wrote:
+> From: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> 
+> This driver adds support for the CTU CAN FD open-source IP core.
+> More documentation and core sources at project page
+> (https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core).
+> The core integration to Xilinx Zynq system as platform driver
+> is available (https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top).
+> Implementation on Intel FPGA based PCI Express board is available
+> from project (https://gitlab.fel.cvut.cz/canbus/pcie-ctu_can_fd).
+> The CTU CAN FD core emulation send for review for QEMU mainline.
+> Development repository for QEMU emulation - ctu-canfd branch of
+>   https://gitlab.fel.cvut.cz/canbus/qemu-canbus
+> 
+> More about CAN related projects used and developed at the Faculty
+> of the Electrical Engineering (http://www.fel.cvut.cz/en/)
+> of Czech Technical University (https://www.cvut.cz/en)
+> in Prague at http://canbus.pages.fel.cvut.cz/ .
 
-"help" should be indented with one tab only (no spaces).
+Patches 3 and 4 have warnings when built with W=1 C=1 flags.
 
-> +	  This driver adds PCI/PCIe support for CTU CAN-FD IP core.
-> +	  The project providing FPGA design for Intel EP4CGX15 based DB4CGX15
-> +	  PCIe board with PiKRON.com designed transceiver riser shield is available
-> +	  at https://gitlab.fel.cvut.cz/canbus/pcie-ctu_can_fd .
-
-help text should be indented with one tab + 2 spaces according to
-Documentation/process/coding-style.rst.
-
-> +
->  endif
-
-thanks.
--- 
-~Randy
-
+Please also remove the uses of static inline in C sources.
+Those are rarely necessary and hide unused code warnings.
