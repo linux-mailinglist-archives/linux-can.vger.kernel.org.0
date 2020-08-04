@@ -2,50 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 570C723B4D6
-	for <lists+linux-can@lfdr.de>; Tue,  4 Aug 2020 08:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52B623B784
+	for <lists+linux-can@lfdr.de>; Tue,  4 Aug 2020 11:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728826AbgHDGLY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 4 Aug 2020 02:11:24 -0400
-Received: from lx0001.riocuarto.gov.ar ([181.15.158.195]:52748 "EHLO
-        lx0001.riocuarto.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728119AbgHDGLY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Aug 2020 02:11:24 -0400
-X-Greylist: delayed 1397 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 Aug 2020 02:11:23 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.riocuarto.gov.ar (Postfix) with ESMTP id 75A346006E4F1;
-        Tue,  4 Aug 2020 02:44:00 -0300 (-03)
-Received: from lx0001.riocuarto.gov.ar ([127.0.0.1])
-        by localhost (zimbra.riocuarto.gov.ar [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id vhfTZ-6vFWMr; Tue,  4 Aug 2020 02:43:59 -0300 (-03)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.riocuarto.gov.ar (Postfix) with ESMTP id 7518A6006E4F4;
-        Tue,  4 Aug 2020 02:43:59 -0300 (-03)
-X-Virus-Scanned: amavisd-new at riocuarto.gov.ar
-Received: from lx0001.riocuarto.gov.ar ([127.0.0.1])
-        by localhost (zimbra.riocuarto.gov.ar [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id d9ukyGWFT_pC; Tue,  4 Aug 2020 02:43:59 -0300 (-03)
-Received: from zimbra.riocuarto.gov.ar (localhost [127.0.0.1])
-        by zimbra.riocuarto.gov.ar (Postfix) with ESMTP id 592286006E4EC;
-        Tue,  4 Aug 2020 02:43:57 -0300 (-03)
-Date:   Tue, 4 Aug 2020 02:43:57 -0300 (ART)
-From:   Jorge Meroni <jmeroni@riocuarto.gov.ar>
-Reply-To: DANIEL MADRE <danielsmadre6@gmail.com>
-Message-ID: <1424430895.1380255.1596519837325.JavaMail.zimbra@riocuarto.gov.ar>
-Subject: SPENDE
+        id S1729993AbgHDJSW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Aug 2020 05:18:22 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:58122 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725904AbgHDJSW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Aug 2020 05:18:22 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 10E1A1C0BDD; Tue,  4 Aug 2020 11:18:18 +0200 (CEST)
+Date:   Tue, 4 Aug 2020 11:18:17 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     pisa@cmp.felk.cvut.cz
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        mkl@pengutronix.de, socketcan@hartkopp.net, wg@grandegger.com,
+        davem@davemloft.net, robh+dt@kernel.org, mark.rutland@arm.com,
+        c.emde@osadl.org, armbru@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.jerabek01@gmail.com,
+        ondrej.ille@gmail.com, jnovak@fel.cvut.cz, jara.beran@gmail.com,
+        porazil@pikron.com
+Subject: Re: [PATCH v4 2/6] dt-bindings: net: can: binding for CTU CAN FD
+ open-source IP core.
+Message-ID: <20200804091817.yuf6s26bclehpwwi@duo.ucw.cz>
+References: <cover.1596408856.git.pisa@cmp.felk.cvut.cz>
+ <701442883f2b439637ff84544745725bdee7bcf8.1596408856.git.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [105.9.103.250]
-X-Mailer: Zimbra 8.8.15_GA_3918 (zclient/8.8.15_GA_3918)
-Thread-Index: lOn7nxhVHYuuYS0aMiBQi8nggZtlig==
-Thread-Topic: SPENDE
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="kyw4twhhtai4pjwf"
+Content-Disposition: inline
+In-Reply-To: <701442883f2b439637ff84544745725bdee7bcf8.1596408856.git.pisa@cmp.felk.cvut.cz>
+User-Agent: NeoMutt/20180716
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--kyw4twhhtai4pjwf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ich habe eine Spende von 5,5 Millionen Euro für Sie. Bitte antworten Sie.
+Hi!
+
+> The commit text again to make checkpatch happy.
+
+?
+
+
+> +    oneOf:
+> +      - items:
+> +          - const: ctu,ctucanfd
+> +          - const: ctu,canfd-2
+> +      - const: ctu,ctucanfd
+
+For consistency, can we have ctu,canfd-1, ctu,canfd-2?
+
+Best regards,
+									Pavel
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--kyw4twhhtai4pjwf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EARECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCXykn2QAKCRAw5/Bqldv6
+8kYCAJ4jA/qIYWq2pUyjiAJ/fOhTarpq6wCgxLuE0RfCV4mrqnFOk1DXh6CugEU=
+=4PoT
+-----END PGP SIGNATURE-----
+
+--kyw4twhhtai4pjwf--
