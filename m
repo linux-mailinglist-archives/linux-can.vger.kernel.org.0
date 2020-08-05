@@ -2,66 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F06823C26A
-	for <lists+linux-can@lfdr.de>; Wed,  5 Aug 2020 01:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C1D123C41B
+	for <lists+linux-can@lfdr.de>; Wed,  5 Aug 2020 05:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727094AbgHDXw3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 Aug 2020 19:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726011AbgHDXw2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 Aug 2020 19:52:28 -0400
-X-Greylist: delayed 86248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Aug 2020 16:52:27 PDT
-Received: from dockerbox (unknown [IPv6:2001:4800:7817:101:be76:4eff:fe04:a215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC72FC061756;
-        Tue,  4 Aug 2020 16:52:27 -0700 (PDT)
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by dockerbox (Postfix) with SMTP id 6F4DA5EC5A;
-        Mon,  7 Oct 2019 19:30:12 -0500 (CDT)
-Received: from [32.188.209.113] by 127.0.0.1 with SMTP; Mon, 07 Oct 2019 18:22:17 -0600
-Message-ID: <80v-q$4-o4pqyq0@6eeih174.p55>
-From:   "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
-Reply-To: "Mr Barrister Hans Erich" <dave@dbsoundfactory.com>
-To:     linkos@binet.lv
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Mon, 07 Oct 19 18:22:17 GMT
-X-Mailer: Microsoft Outlook Express 5.00.2615.200
+        id S1726515AbgHEDuu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 Aug 2020 23:50:50 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:9331 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726150AbgHEDuu (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 4 Aug 2020 23:50:50 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id A14A45A96A7C7BAC2659;
+        Wed,  5 Aug 2020 11:50:48 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.70) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Wed, 5 Aug 2020 11:50:47 +0800
+From:   Zhang Changzhong <zhangchangzhong@huawei.com>
+To:     <robin@protonic.nl>, <linux@rempel-privat.de>,
+        <kernel@pengutronix.de>, <socketcan@hartkopp.net>,
+        <mkl@pengutronix.de>, <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net 0/4] support multipacket broadcast message
+Date:   Wed, 5 Aug 2020 11:50:21 +0800
+Message-ID: <1596599425-5534-1-git-send-email-zhangchangzhong@huawei.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="_.A4476ECDD73A3"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.70]
+X-CFilter-Loop: Reflected
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Zhang Changzhong (4):
+  can: j1939: fix support for multipacket broadcast message
+  can: j1939: cancel rxtimer on multipacket broadcast session complete
+  can: j1939: abort multipacket broadcast session when timeout occurs
+  can: j1939: add rxtimer for multipacket broadcast session
 
---_.A4476ECDD73A3
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+ net/can/j1939/transport.c | 48 +++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 36 insertions(+), 12 deletions(-)
 
-Greetings
-
-My name is Barrister Hans Erich.
-
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
-
-Your full names --------
-
-
-Your urgent response will be appreciated
-
-Thank you and God bless you.
-
-Barrister Hans Erich
-
-Yours sincerely,
-Barrister Hans Erich
-CONTACT: hanserich9helmut@gmail.com
-
---_.A4476ECDD73A3--
+-- 
+2.9.5
 
