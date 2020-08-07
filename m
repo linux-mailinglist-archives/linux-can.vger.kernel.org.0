@@ -2,40 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C06B523EBB0
-	for <lists+linux-can@lfdr.de>; Fri,  7 Aug 2020 12:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC30623EBCD
+	for <lists+linux-can@lfdr.de>; Fri,  7 Aug 2020 13:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgHGKyX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Aug 2020 06:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S1728127AbgHGLAv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 Aug 2020 07:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728032AbgHGKxh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Aug 2020 06:53:37 -0400
+        with ESMTP id S1728004AbgHGLAK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Aug 2020 07:00:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561F0C0617A4
-        for <linux-can@vger.kernel.org>; Fri,  7 Aug 2020 03:52:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5B0C061756
+        for <linux-can@vger.kernel.org>; Fri,  7 Aug 2020 03:52:08 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1k3zym-0004nC-IY; Fri, 07 Aug 2020 12:52:04 +0200
+        id 1k3zym-0004n9-8h; Fri, 07 Aug 2020 12:52:04 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1k3zyk-0007Jp-9r; Fri, 07 Aug 2020 12:52:02 +0200
+        id 1k3zyk-0007Fv-0m; Fri, 07 Aug 2020 12:52:02 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
         wg@grandegger.com
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com,
-        linux-stable <stable@vger.kernel.org>, kernel@pengutronix.de,
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         David Jander <david@protonic.nl>
-Subject: [PATCH v1 3/5] can: j1939: socket: j1939_sk_bind(): make sure ml_priv is allocated
-Date:   Fri,  7 Aug 2020 12:51:58 +0200
-Message-Id: <20200807105200.26441-4-o.rempel@pengutronix.de>
+Subject: [PATCH v1 0/5] j1939 fixes 
+Date:   Fri,  7 Aug 2020 12:51:55 +0200
+Message-Id: <20200807105200.26441-1-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200807105200.26441-1-o.rempel@pengutronix.de>
-References: <20200807105200.26441-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
@@ -47,41 +43,23 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds check to ensure that the struct net_device::ml_priv is
-allocated, as it is used later by the j1939 stack.
+This patch set include different fixes reported by google syzkaller or
+other users.
 
-The allocation is done by all mainline CAN network drivers, but when using
-bond or team devices this is not the case.
+Oleksij Rempel (5):
+  can: j1939: transport: j1939_simple_recv(): ignore local J1939
+    messages send not by J1939 stack
+  can: j1939: transport: j1939_session_tx_dat(): fix use-after-free read
+    in j1939_tp_txtimer()
+  can: j1939: socket: j1939_sk_bind(): make sure ml_priv is allocated
+  can: j1939: transport: add j1939_session_skb_find_by_offset() function
+  can: j1939: transport: j1939_xtp_rx_dat_one(): compare own packets to
+    detect corruptions
 
-Bail out if no ml_priv is allocated.
+ net/can/j1939/socket.c    |  9 +++++++
+ net/can/j1939/transport.c | 56 +++++++++++++++++++++++++++++++++------
+ 2 files changed, 57 insertions(+), 8 deletions(-)
 
-Reported-by: syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Cc: linux-stable <stable@vger.kernel.org> # >= v5.4
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- net/can/j1939/socket.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index b9a17c2ee16f..27542de233c7 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -467,6 +467,14 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 			goto out_release_sock;
- 		}
- 
-+		if (!ndev->ml_priv) {
-+			netdev_warn_once(ndev,
-+					 "No CAN mid layer private allocated, please fix your driver and use alloc_candev()!\n");
-+			dev_put(ndev);
-+			ret = -ENODEV;
-+			goto out_release_sock;
-+		}
-+
- 		priv = j1939_netdev_start(ndev);
- 		dev_put(ndev);
- 		if (IS_ERR(priv)) {
 -- 
 2.28.0
 
