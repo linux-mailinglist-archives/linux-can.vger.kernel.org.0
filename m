@@ -2,87 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8EF723EA75
-	for <lists+linux-can@lfdr.de>; Fri,  7 Aug 2020 11:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06B523EBB0
+	for <lists+linux-can@lfdr.de>; Fri,  7 Aug 2020 12:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbgHGJgq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 Aug 2020 05:36:46 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:9352 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726382AbgHGJgq (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 7 Aug 2020 05:36:46 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 43F3866F4F5373A0D409;
-        Fri,  7 Aug 2020 17:36:44 +0800 (CST)
-Received: from [10.174.179.72] (10.174.179.72) by
- DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 7 Aug 2020 17:36:39 +0800
-Subject: Re: [PATCH net 0/4] support multipacket broadcast message
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-CC:     <robin@protonic.nl>, <linux@rempel-privat.de>,
-        <kernel@pengutronix.de>, <socketcan@hartkopp.net>,
-        <mkl@pengutronix.de>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-can@vger.kernel.org>
-References: <1596599425-5534-1-git-send-email-zhangchangzhong@huawei.com>
- <20200806161027.py5ged3a23xpmxgi@pengutronix.de>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Message-ID: <24c3daa5-8243-0b80-9f4c-aa5883cb75da@huawei.com>
-Date:   Fri, 7 Aug 2020 17:36:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1726073AbgHGKyX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 Aug 2020 06:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728032AbgHGKxh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 Aug 2020 06:53:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561F0C0617A4
+        for <linux-can@vger.kernel.org>; Fri,  7 Aug 2020 03:52:20 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1k3zym-0004nC-IY; Fri, 07 Aug 2020 12:52:04 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1k3zyk-0007Jp-9r; Fri, 07 Aug 2020 12:52:02 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
+        wg@grandegger.com
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com,
+        linux-stable <stable@vger.kernel.org>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        David Jander <david@protonic.nl>
+Subject: [PATCH v1 3/5] can: j1939: socket: j1939_sk_bind(): make sure ml_priv is allocated
+Date:   Fri,  7 Aug 2020 12:51:58 +0200
+Message-Id: <20200807105200.26441-4-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200807105200.26441-1-o.rempel@pengutronix.de>
+References: <20200807105200.26441-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20200806161027.py5ged3a23xpmxgi@pengutronix.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.72]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Oleksij,
+This patch adds check to ensure that the struct net_device::ml_priv is
+allocated, as it is used later by the j1939 stack.
 
-We have tested this j1939 stack according to SAE J1939-21. It works fine for
-most cases, but when we test multipacket broadcast message function we found
-the receiver can't receive those packets.
+The allocation is done by all mainline CAN network drivers, but when using
+bond or team devices this is not the case.
 
-You can reproduce on CAN bus or vcan, for vcan case use cangw to connect vcan0
-and vcan1:
-sudo cangw -A -s vcan0 -d vcan1 -e
-sudo cangw -A -s vcan1 -d vcan0 -e
+Bail out if no ml_priv is allocated.
 
-To reproduce it use following commands:
-testj1939 -B -r vcan1:0x90 &
-testj1939 -B -s20 vcan0:0x80 :,0x12300
+Reported-by: syzbot+f03d384f3455d28833eb@syzkaller.appspotmail.com
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Cc: linux-stable <stable@vger.kernel.org> # >= v5.4
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ net/can/j1939/socket.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Besides, candump receives correct packets while testj1939 receives nothing.
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index b9a17c2ee16f..27542de233c7 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -467,6 +467,14 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+ 			goto out_release_sock;
+ 		}
+ 
++		if (!ndev->ml_priv) {
++			netdev_warn_once(ndev,
++					 "No CAN mid layer private allocated, please fix your driver and use alloc_candev()!\n");
++			dev_put(ndev);
++			ret = -ENODEV;
++			goto out_release_sock;
++		}
++
+ 		priv = j1939_netdev_start(ndev);
+ 		dev_put(ndev);
+ 		if (IS_ERR(priv)) {
+-- 
+2.28.0
 
-Regards,
-Zhang Changzhong
-
-On 2020/8/7 0:10, Oleksij Rempel wrote:
-> Hello,
-> 
-> Thank you for your patches! Currently I'm busy, but I'll take a look at it as
-> soon possible.
-> 
-> btw. can you tell me about more of your use case/work. I would like to
-> have some feedback about this stack. You can write a personal message,
-> if it is not for public.
-> 
-> On Wed, Aug 05, 2020 at 11:50:21AM +0800, Zhang Changzhong wrote:
->> Zhang Changzhong (4):
->>   can: j1939: fix support for multipacket broadcast message
->>   can: j1939: cancel rxtimer on multipacket broadcast session complete
->>   can: j1939: abort multipacket broadcast session when timeout occurs
->>   can: j1939: add rxtimer for multipacket broadcast session
->>
->>  net/can/j1939/transport.c | 48 +++++++++++++++++++++++++++++++++++------------
->>  1 file changed, 36 insertions(+), 12 deletions(-)
-> 
-> Regards,
-> Oleksij
-> 
