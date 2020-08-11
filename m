@@ -2,22 +2,22 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5234241811
-	for <lists+linux-can@lfdr.de>; Tue, 11 Aug 2020 10:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B44241810
+	for <lists+linux-can@lfdr.de>; Tue, 11 Aug 2020 10:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgHKIPy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 Aug 2020 04:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        id S1728134AbgHKIPw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 Aug 2020 04:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728145AbgHKIPw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Aug 2020 04:15:52 -0400
+        with ESMTP id S1728000AbgHKIPv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 Aug 2020 04:15:51 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B2CC061787
-        for <linux-can@vger.kernel.org>; Tue, 11 Aug 2020 01:15:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99470C06174A
+        for <linux-can@vger.kernel.org>; Tue, 11 Aug 2020 01:15:51 -0700 (PDT)
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <l.stach@pengutronix.de>)
-        id 1k5PRi-00063D-Bp; Tue, 11 Aug 2020 10:15:46 +0200
+        id 1k5PRi-00063D-D8; Tue, 11 Aug 2020 10:15:46 +0200
 From:   Lucas Stach <l.stach@pengutronix.de>
 To:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -26,9 +26,11 @@ Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         Marek Vasut <marex@denx.de>, kernel@pengutronix.de,
         patchwork-lst@pengutronix.de
 Subject: [PATCH] can: m_can_platform: don't call m_can_class_suspend in runtime suspend
-Date:   Tue, 11 Aug 2020 10:15:44 +0200
-Message-Id: <20200811081545.19921-1-l.stach@pengutronix.de>
+Date:   Tue, 11 Aug 2020 10:15:45 +0200
+Message-Id: <20200811081545.19921-2-l.stach@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200811081545.19921-1-l.stach@pengutronix.de>
+References: <20200811081545.19921-1-l.stach@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
