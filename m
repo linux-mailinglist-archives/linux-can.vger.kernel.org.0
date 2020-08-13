@@ -2,189 +2,135 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA4F243B3A
-	for <lists+linux-can@lfdr.de>; Thu, 13 Aug 2020 16:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53457243D1F
+	for <lists+linux-can@lfdr.de>; Thu, 13 Aug 2020 18:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726499AbgHMOIo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 13 Aug 2020 10:08:44 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:45988 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbgHMOIo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Aug 2020 10:08:44 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07DE6fab136093;
-        Thu, 13 Aug 2020 14:08:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=xCZ6+5wBr9Kp/jc7JBCHhLKeSVLpCQDfnVyN5MY6Cy4=;
- b=y1mnDaTWaQfkKuNdswqR9EGh9nwLAS1FjtMJfH7JIuCMUf4Lsql1ByzvAo38WdSufi1A
- U2+Vh/l7Pg1Bupu8o3OxLnOs44f75gPudTq4lxsk0+2FyZ7cyx1TsNRCMCjRZ5q3LWqh
- kYaSGiZ1VPUQfOQYLTMlI8bsOw0MI0Xev8jsmrqdqtyubs/Kmb+KMbroZfCi0/yBiysK
- Dunuz+zY/aqQs2BCmQGU9I2PWyNW48RD2G4DIF951EOv551sZwAzgTXwp2Lqrj413B9c
- qz9P7awiachhScsTnUCDE18orK+a+DJ8hvm5oiF7B+CCeuKuBg20CugqXhKF43LPcq3P KA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 32smpnrtkf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 13 Aug 2020 14:08:18 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 07DDvYmQ191005;
-        Thu, 13 Aug 2020 14:06:17 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 32u3h5fjw7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Aug 2020 14:06:17 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 07DE6Ew1029177;
-        Thu, 13 Aug 2020 14:06:14 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 13 Aug 2020 14:06:13 +0000
-Date:   Thu, 13 Aug 2020 17:06:04 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andri Yngvason <andri.yngvason@marel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH net] can: peak_usb: add range checking in decode operations
-Message-ID: <20200813140604.GA456946@mwanda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9711 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 spamscore=0 suspectscore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008130105
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9711 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 lowpriorityscore=0
- bulkscore=0 impostorscore=0 phishscore=0 clxscore=1011 spamscore=0
- malwarescore=0 adultscore=0 mlxlogscore=999 mlxscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008130106
+        id S1726752AbgHMQSj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 13 Aug 2020 12:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbgHMQSi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 13 Aug 2020 12:18:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D851C061383
+        for <linux-can@vger.kernel.org>; Thu, 13 Aug 2020 09:18:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id d26so7310998yba.20
+        for <linux-can@vger.kernel.org>; Thu, 13 Aug 2020 09:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=CZZOdgRLVSI2SQumMEtqWFogrJhuJBY/r0BTePFJIaw=;
+        b=TkSVtekVqK74m+OE+DzpR0De5BgRUGHS9UwPPBXIovv/w+sj+lPnWYbHUh1w8xrq2l
+         esaZt2i0of+NA9fSy+EPonmtTYiHrhzxmftVIuEL8YA4CHiwymUXkG6DHznzt/36WFGa
+         SYhjpnJuyr9m4DqBM/Uw97DeKpmiRxG4tw48Y+t6E14sMuo7lPbFyp+VLpGyMxYdyK+d
+         kpwOuLPGFfasRlZTT2zJuzNbBWkfxh4wl5Eky/XRHv5zEQkuJCzEJVjU8b0Jvjc3uFGt
+         X51Nwy+8isRyR72cOnd9hcUY+kwx5fHjKMtt6XJt8TL+kpjLDFnnTGJymeIBlljYELI9
+         EYvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=CZZOdgRLVSI2SQumMEtqWFogrJhuJBY/r0BTePFJIaw=;
+        b=BoB8gVNFJTRVl9X7pXEzg1X4Hj9xN6EOk/PDGL7D+3+MQkOsd86PiKWp8HKKeD9Ihl
+         b2fxupvgCEtauaSQYns62fMibYQMO+ZpGxAVbq2wWY4zLl3MGZ+khyMUL/jvBGKy49yd
+         bmOAT6erQDyXMCHHD5/EezwRxBhFNudfSMWR1fdDOj7wfbvEy1bE40bDl4CYWzpF9Vfj
+         2EFX+3OVBMJPxbqx6Vw/1B5iS8iLrHQtcjKuN1gNQGdJel02QFEmy9vDKddUbwu9Ke9t
+         F8UqCSx/61wgK2xJgY0n4986mSU1oDfwLT7W6t2IaijGWZt2jgbf0lil3+n14sq0S+Mj
+         l+9Q==
+X-Gm-Message-State: AOAM532Yh0GzHsRJ0JXUU0u577QwBKlKBU/tVz59/cljV7YhyJa18VbL
+        Iyv9wTtFllGPia9Tpfvp05DHfmn8wsM7fA==
+X-Google-Smtp-Source: ABdhPJxtbch6smsWJKS8Jg8XZK7+C+0ljiIqiCrjVZ8fEqElh+cMO0K7oYpb6hKL5AUn82ZhKGTlLskMpAs4nA==
+X-Received: by 2002:a25:8891:: with SMTP id d17mr6982547ybl.209.1597335517194;
+ Thu, 13 Aug 2020 09:18:37 -0700 (PDT)
+Date:   Thu, 13 Aug 2020 09:18:34 -0700
+Message-Id: <20200813161834.4021638-1-edumazet@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
+Subject: [PATCH net] can: j1939: fix kernel-infoleak in j1939_sk_sock2sockaddr_can()
+From:   Eric Dumazet <edumazet@google.com>
+To:     "David S . Miller" <davem@davemloft.net>
+Cc:     netdev <netdev@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-These values come from skb->data so Smatch considers them untrusted.  I
-believe Smatch is correct but I don't have a way to test this.
+syzbot found that at least 2 bytes of kernel information
+were leaked during getsockname() on AF_CAN CAN_J1939 socket.
 
-The usb_if->dev[] array has 2 elements but the index is in the 0-15
-range without checks.  The cfd->len can be up to 255 but the maximum
-valid size is CANFD_MAX_DLEN (64) so that could lead to memory
-corruption.
+Since struct sockaddr_can has in fact two holes, simply
+clear the whole area before filling it with useful data.
 
-Fixes: 0a25e1f4f185 ("can: peak_usb: add support for PEAK new CANFD USB adapters")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+BUG: KMSAN: kernel-infoleak in kmsan_copy_to_user+0x81/0x90 mm/kmsan/kmsan_hooks.c:253
+CPU: 0 PID: 8466 Comm: syz-executor511 Not tainted 5.8.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x21c/0x280 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:121
+ kmsan_internal_check_memory+0x238/0x3d0 mm/kmsan/kmsan.c:423
+ kmsan_copy_to_user+0x81/0x90 mm/kmsan/kmsan_hooks.c:253
+ instrument_copy_to_user include/linux/instrumented.h:91 [inline]
+ _copy_to_user+0x18e/0x260 lib/usercopy.c:39
+ copy_to_user include/linux/uaccess.h:186 [inline]
+ move_addr_to_user+0x3de/0x670 net/socket.c:237
+ __sys_getsockname+0x407/0x5e0 net/socket.c:1909
+ __do_sys_getsockname net/socket.c:1920 [inline]
+ __se_sys_getsockname+0x91/0xb0 net/socket.c:1917
+ __x64_sys_getsockname+0x4a/0x70 net/socket.c:1917
+ do_syscall_64+0xad/0x160 arch/x86/entry/common.c:386
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x440219
+Code: Bad RIP value.
+RSP: 002b:00007ffe5ee150c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000033
+RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440219
+RDX: 0000000020000240 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 00000000006ca018 R08: 0000000000000000 R09: 00000000004002c8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401a20
+R13: 0000000000401ab0 R14: 0000000000000000 R15: 0000000000000000
+
+Local variable ----address@__sys_getsockname created at:
+ __sys_getsockname+0x91/0x5e0 net/socket.c:1894
+ __sys_getsockname+0x91/0x5e0 net/socket.c:1894
+
+Bytes 2-3 of 24 are uninitialized
+Memory access of size 24 starts at ffff8880ba2c7de8
+Data copied to user address 0000000020000100
+
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Cc: Robin van der Gracht <robin@protonic.nl>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: linux-can@vger.kernel.org
 ---
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 48 +++++++++++++++++-----
- 1 file changed, 37 insertions(+), 11 deletions(-)
+ net/can/j1939/socket.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index 47cc1ff5b88e..dee3e689b54d 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -468,12 +468,18 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb_fd_if *usb_if,
- 				     struct pucan_msg *rx_msg)
+diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+index 78ff9b3f1d40c732ba39b2402b5099ba84f8a4a5..3db0973e6d31ddf5267d8c56d3b8cedb800e78fd 100644
+--- a/net/can/j1939/socket.c
++++ b/net/can/j1939/socket.c
+@@ -553,6 +553,11 @@ static int j1939_sk_connect(struct socket *sock, struct sockaddr *uaddr,
+ static void j1939_sk_sock2sockaddr_can(struct sockaddr_can *addr,
+ 				       const struct j1939_sock *jsk, int peer)
  {
- 	struct pucan_rx_msg *rm = (struct pucan_rx_msg *)rx_msg;
--	struct peak_usb_device *dev = usb_if->dev[pucan_msg_get_channel(rm)];
--	struct net_device *netdev = dev->netdev;
-+	struct peak_usb_device *dev;
-+	struct net_device *netdev;
- 	struct canfd_frame *cfd;
- 	struct sk_buff *skb;
- 	const u16 rx_msg_flags = le16_to_cpu(rm->flags);
- 
-+	if (pucan_msg_get_channel(rm) >= ARRAY_SIZE(usb_if->dev))
-+		return -ENOMEM;
++	/* There are two holes (2 bytes and 3 bytes) to clear to avoid
++	 * leaking kernel information to user space.
++	*/
++	memset(addr, 0, J1939_MIN_NAMELEN);
 +
-+	dev = usb_if->dev[pucan_msg_get_channel(rm)];
-+	netdev = dev->netdev;
-+
- 	if (rx_msg_flags & PUCAN_MSG_EXT_DATA_LEN) {
- 		/* CANFD frame case */
- 		skb = alloc_canfd_skb(netdev, &cfd);
-@@ -519,15 +525,21 @@ static int pcan_usb_fd_decode_status(struct pcan_usb_fd_if *usb_if,
- 				     struct pucan_msg *rx_msg)
- {
- 	struct pucan_status_msg *sm = (struct pucan_status_msg *)rx_msg;
--	struct peak_usb_device *dev = usb_if->dev[pucan_stmsg_get_channel(sm)];
--	struct pcan_usb_fd_device *pdev =
--			container_of(dev, struct pcan_usb_fd_device, dev);
-+	struct pcan_usb_fd_device *pdev;
- 	enum can_state new_state = CAN_STATE_ERROR_ACTIVE;
- 	enum can_state rx_state, tx_state;
--	struct net_device *netdev = dev->netdev;
-+	struct peak_usb_device *dev;
-+	struct net_device *netdev;
- 	struct can_frame *cf;
- 	struct sk_buff *skb;
- 
-+	if (pucan_stmsg_get_channel(sm) >= ARRAY_SIZE(usb_if->dev))
-+		return -ENOMEM;
-+
-+	dev = usb_if->dev[pucan_stmsg_get_channel(sm)];
-+	pdev = container_of(dev, struct pcan_usb_fd_device, dev);
-+	netdev = dev->netdev;
-+
- 	/* nothing should be sent while in BUS_OFF state */
- 	if (dev->can.state == CAN_STATE_BUS_OFF)
- 		return 0;
-@@ -579,9 +591,14 @@ static int pcan_usb_fd_decode_error(struct pcan_usb_fd_if *usb_if,
- 				    struct pucan_msg *rx_msg)
- {
- 	struct pucan_error_msg *er = (struct pucan_error_msg *)rx_msg;
--	struct peak_usb_device *dev = usb_if->dev[pucan_ermsg_get_channel(er)];
--	struct pcan_usb_fd_device *pdev =
--			container_of(dev, struct pcan_usb_fd_device, dev);
-+	struct pcan_usb_fd_device *pdev;
-+	struct peak_usb_device *dev;
-+
-+	if (pucan_ermsg_get_channel(er) >= ARRAY_SIZE(usb_if->dev))
-+		return -EINVAL;
-+
-+	dev = usb_if->dev[pucan_ermsg_get_channel(er)];
-+	pdev = container_of(dev, struct pcan_usb_fd_device, dev);
- 
- 	/* keep a trace of tx and rx error counters for later use */
- 	pdev->bec.txerr = er->tx_err_cnt;
-@@ -595,11 +612,17 @@ static int pcan_usb_fd_decode_overrun(struct pcan_usb_fd_if *usb_if,
- 				      struct pucan_msg *rx_msg)
- {
- 	struct pcan_ufd_ovr_msg *ov = (struct pcan_ufd_ovr_msg *)rx_msg;
--	struct peak_usb_device *dev = usb_if->dev[pufd_omsg_get_channel(ov)];
--	struct net_device *netdev = dev->netdev;
-+	struct peak_usb_device *dev;
-+	struct net_device *netdev;
- 	struct can_frame *cf;
- 	struct sk_buff *skb;
- 
-+	if (pufd_omsg_get_channel(ov) >= ARRAY_SIZE(usb_if->dev))
-+		return -EINVAL;
-+
-+	dev = usb_if->dev[pufd_omsg_get_channel(ov)];
-+	netdev = dev->netdev;
-+
- 	/* allocate an skb to store the error frame */
- 	skb = alloc_can_err_skb(netdev, &cf);
- 	if (!skb)
-@@ -716,6 +739,9 @@ static int pcan_usb_fd_encode_msg(struct peak_usb_device *dev,
- 	u16 tx_msg_size, tx_msg_flags;
- 	u8 can_dlc;
- 
-+	if (cfd->len > CANFD_MAX_DLEN)
-+		return -EINVAL;
-+
- 	tx_msg_size = ALIGN(sizeof(struct pucan_tx_msg) + cfd->len, 4);
- 	tx_msg->size = cpu_to_le16(tx_msg_size);
- 	tx_msg->type = cpu_to_le16(PUCAN_MSG_CAN_TX);
+ 	addr->can_family = AF_CAN;
+ 	addr->can_ifindex = jsk->ifindex;
+ 	addr->can_addr.j1939.pgn = jsk->addr.pgn;
 -- 
-2.28.0
+2.28.0.220.ged08abb693-goog
 
