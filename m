@@ -2,89 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B2B2448A3
-	for <lists+linux-can@lfdr.de>; Fri, 14 Aug 2020 13:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B322244BA0
+	for <lists+linux-can@lfdr.de>; Fri, 14 Aug 2020 17:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbgHNLEm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 Aug 2020 07:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S1726926AbgHNPI0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 Aug 2020 11:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727900AbgHNLEh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Aug 2020 07:04:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC757C061389
-        for <linux-can@vger.kernel.org>; Fri, 14 Aug 2020 04:04:36 -0700 (PDT)
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1k6XVh-00040D-Hq; Fri, 14 Aug 2020 13:04:33 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oleksij Rempel <o.rempel@pengutronix.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 6/6] can: j1939: transport: j1939_xtp_rx_dat_one(): compare own packets to detect corruptions
-Date:   Fri, 14 Aug 2020 13:04:28 +0200
-Message-Id: <20200814110428.405051-7-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200814110428.405051-1-mkl@pengutronix.de>
-References: <20200814110428.405051-1-mkl@pengutronix.de>
+        with ESMTP id S1726185AbgHNPIZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 Aug 2020 11:08:25 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398C6C061384
+        for <linux-can@vger.kernel.org>; Fri, 14 Aug 2020 08:08:25 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id q75so11144068iod.1
+        for <linux-can@vger.kernel.org>; Fri, 14 Aug 2020 08:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6/s2FrX3sOZH7no5QOEmHRzOhQVsVJV+GlCWiadD/1Y=;
+        b=LEWYvBdNwTdiV0b8gagS099psX2ZTBY08MCdDLkfhQmHSUVkjzakpT0EfxfiCAYaE8
+         /OkkJXoSbJ6veoGQVa3lmvWYmhsJF9jcEWcztXamvh77ReCnPiG0d1cetjiChrUMi4vf
+         TvWqrjfc1wIT3ogVPxlvE7jo7QJHGBLIcpZF9Zoc/LQby6CVF9FdDkVFf5S99X97VslS
+         qPlRhUMonmBDJLxsx5hj8Hu3cAaDPX5T8Gh2CsbatiS3i39mWQ3efAOzsbdT7ZWO3T/q
+         jx1fhEqDviWXcPyOI2PZ5vjEBUV9/BV04FBlc7tKTj2Q9cBwg/KTZozPjg3a04C+IqT0
+         rhww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6/s2FrX3sOZH7no5QOEmHRzOhQVsVJV+GlCWiadD/1Y=;
+        b=ja+G3mEyvtdWZiCleU7Nf/GPjn8aKievXr4soynyjXV75LOZb2RmIQYfdIjPfhZLmL
+         DHtr5Ayh+q2C/OYbUBB2eqlip5hcjuaUvt6Fzw3AXkx6D7kFjgQbiHKgDcIgFKSRM+bY
+         QM8o4Wg7sb7UkaCudUoZyMExGODw7qxF9gZlRBBW3Ddrjdzob2OESqLZ5H7gB1iDqIoF
+         yk0On/ph4ee7oOHoL5mKtkwAGQVI7azh6jCmwwVjAlbQ1cf6r1be77fn7QSTZH0avy/f
+         P7OyDwhLWTn+fOcJvF4Qprb1fp0yZeZQen/zwoY56nGZwszd85D+ni28aNZdRn3JTMYb
+         OAxQ==
+X-Gm-Message-State: AOAM533Ya8pAFYaLWqzFpl4NPcORmoh1fiNBJ5FVei4EjMgXm337J4lR
+        IsnpdHmfccurQALrhcDE+HsroiTmnHLNL+GIgBN58Q==
+X-Google-Smtp-Source: ABdhPJzdGGuDLFD574yj/KgkS3PLqUK92XBd83rc5Qk4H3COqG6GLDYdIApTwhzmJJy7esoAuG0qE1EejRn5qkW3fKM=
+X-Received: by 2002:a02:3f0d:: with SMTP id d13mr3023467jaa.99.1597417702800;
+ Fri, 14 Aug 2020 08:08:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20200814110428.405051-1-mkl@pengutronix.de> <20200814110428.405051-2-mkl@pengutronix.de>
+ <CAG_fn=U8djv7NEWi5Zc+_=8Bh_srT4M6gObnVFLON+sEkWFv9w@mail.gmail.com>
+In-Reply-To: <CAG_fn=U8djv7NEWi5Zc+_=8Bh_srT4M6gObnVFLON+sEkWFv9w@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 14 Aug 2020 08:08:11 -0700
+Message-ID: <CANn89iLX_w0Bz211qPk_npCqq1NbBQsGMNZkkZQgC_qa7k+KaQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] can: j1939: fix kernel-infoleak in j1939_sk_sock2sockaddr_can()
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, syzbot <syzkaller@googlegroups.com>,
+        Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+On Fri, Aug 14, 2020 at 6:20 AM Alexander Potapenko <glider@google.com> wrote:
+>
+>
+>
+> On Fri, Aug 14, 2020, 13:04 Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>>
+>> From: Eric Dumazet <edumazet@google.com>
 
-Since the stack relays on receiving own packets, it was overwriting own
-transmit buffer from received packets.
+>>  net/can/j1939/socket.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+>> index 78ff9b3f1d40..b634b680177f 100644
+>> --- a/net/can/j1939/socket.c
+>> +++ b/net/can/j1939/socket.c
+>> @@ -553,6 +553,11 @@ static int j1939_sk_connect(struct socket *sock, struct sockaddr *uaddr,
+>>  static void j1939_sk_sock2sockaddr_can(struct sockaddr_can *addr,
+>>                                        const struct j1939_sock *jsk, int peer)
+>>  {
+>> +       /* There are two holes (2 bytes and 3 bytes) to clear to avoid
+>> +        * leaking kernel information to user space.
+>> +        */
+>
+>
+> Do we want to keep these "2 bytes and 3 bytes' in sync with the struct layout in the future? Maybe it's not worth it to mention the exact sizes?
 
-At least theoretically, the received echo buffer can be corrupt or
-changed and the session partner can request to resend previous data. In
-this case we will re-send bad data.
-
-With this patch we will stop to overwrite own TX buffer and use it for
-sanity checking.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/r/20200807105200.26441-6-o.rempel@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/j1939/transport.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 90a2baac8a4a..5cf107cb447c 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1792,7 +1792,20 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
- 	}
- 
- 	tpdat = se_skb->data;
--	memcpy(&tpdat[offset], &dat[1], nbytes);
-+	if (!session->transmission) {
-+		memcpy(&tpdat[offset], &dat[1], nbytes);
-+	} else {
-+		int err;
-+
-+		err = memcmp(&tpdat[offset], &dat[1], nbytes);
-+		if (err)
-+			netdev_err_once(priv->ndev,
-+					"%s: 0x%p: Data of RX-looped back packet (%*ph) doesn't match TX data (%*ph)!\n",
-+					__func__, session,
-+					nbytes, &dat[1],
-+					nbytes, &tpdat[offset]);
-+	}
-+
- 	if (packet == session->pkt.rx)
- 		session->pkt.rx++;
- 
--- 
-2.28.0
-
+struct is uapi, you will have a hard time trying to use these holes,
+since old kernels were sending crap/garbage/passwords ;)
