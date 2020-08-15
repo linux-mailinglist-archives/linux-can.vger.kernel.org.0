@@ -2,30 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3122B2453A0
+	by mail.lfdr.de (Postfix) with ESMTP id AB0FE2453A1
 	for <lists+linux-can@lfdr.de>; Sun, 16 Aug 2020 00:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728672AbgHOWDq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 15 Aug 2020 18:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S1729132AbgHOWDp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 15 Aug 2020 18:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728670AbgHOVvJ (ORCPT
+        with ESMTP id S1728672AbgHOVvJ (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Sat, 15 Aug 2020 17:51:09 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2177DC03B3DC
-        for <linux-can@vger.kernel.org>; Sat, 15 Aug 2020 02:21:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297EAC03B3E3
+        for <linux-can@vger.kernel.org>; Sat, 15 Aug 2020 02:21:29 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1k6sNN-000762-OZ; Sat, 15 Aug 2020 11:21:21 +0200
+        id 1k6sNR-000762-4Y; Sat, 15 Aug 2020 11:21:25 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: pull-request: can 2020-08-15
-Date:   Sat, 15 Aug 2020 11:21:12 +0200
-Message-Id: <20200815092116.424137-1-mkl@pengutronix.de>
+        kernel@pengutronix.de,
+        Zhang Changzhong <zhangchangzhong@huawei.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 2/4] can: j1939: cancel rxtimer on multipacket broadcast session complete
+Date:   Sat, 15 Aug 2020 11:21:14 +0200
+Message-Id: <20200815092116.424137-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200815092116.424137-1-mkl@pengutronix.de>
+References: <20200815092116.424137-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
@@ -37,42 +42,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello David,
+From: Zhang Changzhong <zhangchangzhong@huawei.com>
 
-this is a pull request of 4 patches for net/master.
+If j1939_xtp_rx_dat_one() receive last frame of multipacket broadcast message,
+j1939_session_timers_cancel() should be called to cancel rxtimer.
 
-All patches are by Zhang Changzhong and fix broadcast related problems in the
-j1939 CAN networking stack.
-
-regards,
-Marc
-
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Link: https://lore.kernel.org/r/1596599425-5534-3-git-send-email-zhangchangzhong@huawei.com
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ net/can/j1939/transport.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-The following changes since commit 4ca0d9ac3fd8f9f90b72a15d8da2aca3ffb58418:
-
-  bonding: show saner speed for broadcast mode (2020-08-14 20:39:33 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.9-20200815
-
-for you to fetch changes up to 0ae18a82686f9b9965a8ce0dd81371871b306ffe:
-
-  can: j1939: add rxtimer for multipacket broadcast session (2020-08-15 11:12:58 +0200)
-
-----------------------------------------------------------------
-linux-can-fixes-for-5.9-20200815
-
-----------------------------------------------------------------
-Zhang Changzhong (4):
-      can: j1939: fix support for multipacket broadcast message
-      can: j1939: cancel rxtimer on multipacket broadcast session complete
-      can: j1939: abort multipacket broadcast session when timeout occurs
-      can: j1939: add rxtimer for multipacket broadcast session
-
- net/can/j1939/transport.c | 48 +++++++++++++++++++++++++++++++++++------------
- 1 file changed, 36 insertions(+), 12 deletions(-)
-
-
+diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+index 868ecb2bfa45..2f3c3afd5071 100644
+--- a/net/can/j1939/transport.c
++++ b/net/can/j1939/transport.c
+@@ -1824,6 +1824,7 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+ 	}
+ 
+ 	if (final) {
++		j1939_session_timers_cancel(session);
+ 		j1939_session_completed(session);
+ 	} else if (do_cts_eoma) {
+ 		j1939_tp_set_rxtimeout(session, 1250);
+-- 
+2.28.0
 
