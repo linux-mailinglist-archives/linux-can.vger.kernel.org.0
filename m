@@ -2,22 +2,22 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A012452AF
-	for <lists+linux-can@lfdr.de>; Sat, 15 Aug 2020 23:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9712452B0
+	for <lists+linux-can@lfdr.de>; Sat, 15 Aug 2020 23:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729128AbgHOVyU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1729119AbgHOVyU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Sat, 15 Aug 2020 17:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729119AbgHOVwg (ORCPT
+        with ESMTP id S1729120AbgHOVwg (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Sat, 15 Aug 2020 17:52:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A96C03B3E1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A092C03B3E2
         for <linux-can@vger.kernel.org>; Sat, 15 Aug 2020 02:21:29 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1k6sNQ-000762-OQ; Sat, 15 Aug 2020 11:21:24 +0200
+        id 1k6sNR-000762-IJ; Sat, 15 Aug 2020 11:21:25 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
@@ -25,9 +25,9 @@ Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
         Zhang Changzhong <zhangchangzhong@huawei.com>,
         Oleksij Rempel <o.rempel@pengutronix.de>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 1/4] can: j1939: fix support for multipacket broadcast message
-Date:   Sat, 15 Aug 2020 11:21:13 +0200
-Message-Id: <20200815092116.424137-2-mkl@pengutronix.de>
+Subject: [PATCH 3/4] can: j1939: abort multipacket broadcast session when timeout occurs
+Date:   Sat, 15 Aug 2020 11:21:15 +0200
+Message-Id: <20200815092116.424137-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200815092116.424137-1-mkl@pengutronix.de>
 References: <20200815092116.424137-1-mkl@pengutronix.de>
@@ -44,74 +44,44 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Zhang Changzhong <zhangchangzhong@huawei.com>
 
-Currently j1939_tp_im_involved_anydir() in j1939_tp_recv() check the previously
-set flags J1939_ECU_LOCAL_DST and J1939_ECU_LOCAL_SRC of incoming skb, thus
-multipacket broadcast message was aborted by receive side because it may come
-from remote ECUs and have no exact dst address. Similarly, j1939_tp_cmd_recv()
-and j1939_xtp_rx_dat() didn't process broadcast message.
+If timeout occurs, j1939_tp_rxtimer() first calls hrtimer_start() to restart
+rxtimer, and then calls __j1939_session_cancel() to set session->state =
+J1939_SESSION_WAITING_ABORT. At next timeout expiration, because of the
+J1939_SESSION_WAITING_ABORT session state j1939_tp_rxtimer() will call
+j1939_session_deactivate_activate_next() to deactivate current session, and
+rxtimer won't be set.
 
-So fix it by checking and process broadcast message in j1939_tp_recv(),
-j1939_tp_cmd_recv() and j1939_xtp_rx_dat().
+But for multipacket broadcast session, __j1939_session_cancel() don't set
+session->state = J1939_SESSION_WAITING_ABORT, thus current session won't be
+deactivate and hrtimer_start() is called to start new rxtimer again and again.
+
+So fix it by moving session->state = J1939_SESSION_WAITING_ABORT out of if
+(!j1939_cb_is_broadcast(&session->skcb)) statement.
 
 Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
 Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-Link: https://lore.kernel.org/r/1596599425-5534-2-git-send-email-zhangchangzhong@huawei.com
+Link: https://lore.kernel.org/r/1596599425-5534-4-git-send-email-zhangchangzhong@huawei.com
 Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/j1939/transport.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ net/can/j1939/transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 5cf107cb447c..868ecb2bfa45 100644
+index 2f3c3afd5071..047118d5270b 100644
 --- a/net/can/j1939/transport.c
 +++ b/net/can/j1939/transport.c
-@@ -1673,8 +1673,12 @@ static void j1939_xtp_rx_rts(struct j1939_priv *priv, struct sk_buff *skb,
- 			return;
- 		}
- 		session = j1939_xtp_rx_rts_session_new(priv, skb);
--		if (!session)
-+		if (!session) {
-+			if (cmd == J1939_TP_CMD_BAM && j1939_sk_recv_match(priv, skcb))
-+				netdev_info(priv->ndev, "%s: failed to create TP BAM session\n",
-+					    __func__);
- 			return;
-+		}
- 	} else {
- 		if (j1939_xtp_rx_rts_session_active(session, skb)) {
- 			j1939_session_put(session);
-@@ -1865,6 +1869,13 @@ static void j1939_xtp_rx_dat(struct j1939_priv *priv, struct sk_buff *skb)
- 		else
- 			j1939_xtp_rx_dat_one(session, skb);
- 	}
-+
-+	if (j1939_cb_is_broadcast(skcb)) {
-+		session = j1939_session_get_by_addr(priv, &skcb->addr, false,
-+						    false);
-+		if (session)
-+			j1939_xtp_rx_dat_one(session, skb);
-+	}
- }
+@@ -1074,9 +1074,9 @@ static void __j1939_session_cancel(struct j1939_session *session,
+ 	lockdep_assert_held(&session->priv->active_session_list_lock);
  
- /* j1939 main intf */
-@@ -1956,7 +1967,7 @@ static void j1939_tp_cmd_recv(struct j1939_priv *priv, struct sk_buff *skb)
- 		if (j1939_tp_im_transmitter(skcb))
- 			j1939_xtp_rx_rts(priv, skb, true);
- 
--		if (j1939_tp_im_receiver(skcb))
-+		if (j1939_tp_im_receiver(skcb) || j1939_cb_is_broadcast(skcb))
- 			j1939_xtp_rx_rts(priv, skb, false);
- 
- 		break;
-@@ -2020,7 +2031,7 @@ int j1939_tp_recv(struct j1939_priv *priv, struct sk_buff *skb)
- {
- 	struct j1939_sk_buff_cb *skcb = j1939_skb_to_cb(skb);
- 
--	if (!j1939_tp_im_involved_anydir(skcb))
-+	if (!j1939_tp_im_involved_anydir(skcb) && !j1939_cb_is_broadcast(skcb))
- 		return 0;
- 
- 	switch (skcb->addr.pgn) {
+ 	session->err = j1939_xtp_abort_to_errno(priv, err);
++	session->state = J1939_SESSION_WAITING_ABORT;
+ 	/* do not send aborts on incoming broadcasts */
+ 	if (!j1939_cb_is_broadcast(&session->skcb)) {
+-		session->state = J1939_SESSION_WAITING_ABORT;
+ 		j1939_xtp_tx_abort(priv, &session->skcb,
+ 				   !session->transmission,
+ 				   err, session->skcb.addr.pgn);
 -- 
 2.28.0
 
