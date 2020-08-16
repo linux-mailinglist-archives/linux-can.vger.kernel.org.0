@@ -2,107 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD482245929
-	for <lists+linux-can@lfdr.de>; Sun, 16 Aug 2020 21:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E97B245A00
+	for <lists+linux-can@lfdr.de>; Mon, 17 Aug 2020 01:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729574AbgHPTID (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 16 Aug 2020 15:08:03 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:45739 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725873AbgHPTIB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 16 Aug 2020 15:08:01 -0400
-X-IronPort-AV: E=Sophos;i="5.76,321,1592838000"; 
-   d="scan'208";a="54478027"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 17 Aug 2020 04:08:00 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 30F2440062C7;
-        Mon, 17 Aug 2020 04:07:57 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH 3/3] ARM: dts: r8a7742: Add CAN support
-Date:   Sun, 16 Aug 2020 20:07:32 +0100
-Message-Id: <20200816190732.6905-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1726165AbgHPXFI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 16 Aug 2020 19:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbgHPXFH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 16 Aug 2020 19:05:07 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30A2C061786;
+        Sun, 16 Aug 2020 16:05:06 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 1CFC711E47940;
+        Sun, 16 Aug 2020 15:48:20 -0700 (PDT)
+Date:   Sun, 16 Aug 2020 16:05:05 -0700 (PDT)
+Message-Id: <20200816.160505.374966632241402758.davem@davemloft.net>
+To:     mkl@pengutronix.de
+Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: pull-request: can 2020-08-15
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200815092116.424137-1-mkl@pengutronix.de>
+References: <20200815092116.424137-1-mkl@pengutronix.de>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 16 Aug 2020 15:48:20 -0700 (PDT)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add the definitions for can0 and can1 to the r8a7742 SoC dtsi.
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Sat, 15 Aug 2020 11:21:12 +0200
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
----
- arch/arm/boot/dts/r8a7742.dtsi | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+> this is a pull request of 4 patches for net/master.
+> 
+> All patches are by Zhang Changzhong and fix broadcast related problems in the
+> j1939 CAN networking stack.
 
-diff --git a/arch/arm/boot/dts/r8a7742.dtsi b/arch/arm/boot/dts/r8a7742.dtsi
-index 009827708bf4..0fc52b27ae64 100644
---- a/arch/arm/boot/dts/r8a7742.dtsi
-+++ b/arch/arm/boot/dts/r8a7742.dtsi
-@@ -36,6 +36,14 @@
- 		clock-frequency = <0>;
- 	};
- 
-+	/* External CAN clock */
-+	can_clk: can {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		/* This value must be overridden by the board. */
-+		clock-frequency = <0>;
-+	};
-+
- 	cpus {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-@@ -951,6 +959,32 @@
- 			status = "disabled";
- 		};
- 
-+		can0: can@e6e80000 {
-+			compatible = "renesas,can-r8a7742",
-+				     "renesas,rcar-gen2-can";
-+			reg = <0 0xe6e80000 0 0x1000>;
-+			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 916>,
-+				 <&cpg CPG_CORE R8A7742_CLK_RCAN>, <&can_clk>;
-+			clock-names = "clkp1", "clkp2", "can_clk";
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 916>;
-+			status = "disabled";
-+		};
-+
-+		can1: can@e6e88000 {
-+			compatible = "renesas,can-r8a7742",
-+				     "renesas,rcar-gen2-can";
-+			reg = <0 0xe6e88000 0 0x1000>;
-+			interrupts = <GIC_SPI 187 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 915>,
-+				 <&cpg CPG_CORE R8A7742_CLK_RCAN>, <&can_clk>;
-+			clock-names = "clkp1", "clkp2", "can_clk";
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 915>;
-+			status = "disabled";
-+		};
-+
- 		pwm0: pwm@e6e30000 {
- 			compatible = "renesas,pwm-r8a7742", "renesas,pwm-rcar";
- 			reg = <0 0xe6e30000 0 0x8>;
--- 
-2.17.1
-
+Pulled, thanks Marc.
