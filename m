@@ -2,113 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 846B324734F
-	for <lists+linux-can@lfdr.de>; Mon, 17 Aug 2020 20:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8B624BD88
+	for <lists+linux-can@lfdr.de>; Thu, 20 Aug 2020 15:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387746AbgHQSyL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 Aug 2020 14:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730924AbgHQPv0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 Aug 2020 11:51:26 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821AAC061389
-        for <linux-can@vger.kernel.org>; Mon, 17 Aug 2020 08:51:26 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id u10so7724025plr.7
-        for <linux-can@vger.kernel.org>; Mon, 17 Aug 2020 08:51:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LxrN27i8J2SGQiEOg8NzmnxDOUrLOPaHAZLS+kOCQ1o=;
-        b=z63Ofpn2j5l/nEteC9xR+PEnvI58fACgy0WUoO9g7NMqNp6pCkT0laWYxX18QjBjsh
-         315kzORJosliJFj2MgJGMewssHRFFNZxpWLl81tsAOy2Mi4xdjnf+e0m38VSJyUs225S
-         mVfVeNO7/GaXl8W9BNjkHwrIRboRcwAo1eM7G+7zUEF5GTY/ofX/0+3xJR5i9hvRBOvo
-         dAOhyFj0b8pCUnU/JaK1U0AV85IuWDGy/2AobQ05bHfr9lR3zfidhX+BC2cU62sBdnm1
-         RGwspkGm/2QSBQlOayEPerHKXfS2XnUfB55fAqOqH2wwHAWWQTxFkoW3uwWCcMeMo8KT
-         bQ7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LxrN27i8J2SGQiEOg8NzmnxDOUrLOPaHAZLS+kOCQ1o=;
-        b=qWCVciXvqaYnSV8VUiR3ZO01lUQGzbzE/PfClNO1nk5cfbwC2MF8rQwu12BgtIJf9e
-         I/fBBBwZNcISoSk5jiQ28mbvkfJKOEOpz/1dsYvF7zVAHVQK4vKadrdxi3foYQxlxFsA
-         RBxFaNB9VIxsAhL46RtABZDKq/n8KuxO/9pHknWxfWqmyNzTEe4RhAXVZOLpY/+DeODW
-         gNY899HbgGc52fS/SH40hWbtkIf+Q+1xNu0KQD+7mKK4m5I2u8rYdkawvZxvXxg/ysu9
-         cXZeZmLEg/ojFWwAYR7Z7ExrNTM4zUymRm3jIvOHXsfhbiGQdzfjphbb7sSeamaKEdNQ
-         3w9g==
-X-Gm-Message-State: AOAM531NcXItxEvORqIBc3h6mSoN9IwgegWTVon2RnEI8v1C9NIf69pY
-        GUhKLBDpSl4170nPYvYKx367XAUSDyBz
-X-Google-Smtp-Source: ABdhPJwMBnn09MRW7S3SiX0Y0s6G1M6uOIVC0GBBGrHYAL2h1zRCITwgLMA8uZqAqk31sd0qva1aXg==
-X-Received: by 2002:a17:902:ead2:: with SMTP id p18mr5101698pld.259.1597679485927;
-        Mon, 17 Aug 2020 08:51:25 -0700 (PDT)
-Received: from Mani-XPS-13-9360 ([2409:4072:6c99:bd61:694e:f57a:7f55:36c0])
-        by smtp.gmail.com with ESMTPSA id m29sm18071105pgc.55.2020.08.17.08.51.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 17 Aug 2020 08:51:25 -0700 (PDT)
-Date:   Mon, 17 Aug 2020 21:21:20 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
-Subject: Re: [PATCH v41 3/3] can: mcp25xxfd: initial commit
-Message-ID: <20200817155120.GA2529@Mani-XPS-13-9360>
-References: <20200622114603.965371-1-mkl@pengutronix.de>
- <20200622114603.965371-4-mkl@pengutronix.de>
- <20200626133243.GA8333@Mani-XPS-13-9360>
- <fdb6e441-fed5-435e-553c-1fc0a6bfb8f7@pengutronix.de>
- <20200716132800.GH3271@Mani-XPS-13-9360>
+        id S1730358AbgHTNHk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 Aug 2020 09:07:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728219AbgHTNHV (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 20 Aug 2020 09:07:21 -0400
+Received: from localhost (p54b3333c.dip0.t-ipconnect.de [84.179.51.60])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F322B207BB;
+        Thu, 20 Aug 2020 13:07:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597928840;
+        bh=9T4WeDp0RYzmw5XlXp9uYtO1HytLjTO0M9v9kwsrWf0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UVlhYFh3XV1+TA5Oe6DIE5oEjDi94Rt10we1LK8ZozUWHc/cfLYVjjEniqZMmpRGL
+         cQQOx0q8nmki/LH94WEslevVWm1QLAzs5udMYpgNoi9QdzXtTConvoGjce6mzAC+S/
+         gWpulzQ8AH2xNYzOjoSTRBPMzFK7AT4GMfUBspl8=
+Date:   Thu, 20 Aug 2020 15:07:08 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel@pengutronix.de, Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] can: mscan: mpc5xxx_can: update contact email
+Message-ID: <20200820130707.GA11403@ninjato>
+References: <20200502142657.19199-1-wsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="huq684BweRXVnRxX"
 Content-Disposition: inline
-In-Reply-To: <20200716132800.GH3271@Mani-XPS-13-9360>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200502142657.19199-1-wsa@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 06:58:00PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Jun 26, 2020 at 04:41:53PM +0200, Marc Kleine-Budde wrote:
-> > On 6/26/20 3:32 PM, Manivannan Sadhasivam wrote:
-> > > On Mon, Jun 22, 2020 at 01:46:03PM +0200, Marc Kleine-Budde wrote:
-> > >> This patch add support for the Microchip MCP25xxFD SPI CAN controller family.
-> > >>
-> > >> Pending-Tested-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> > >> Pending-Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > >> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > > 
-> > > Could you please split this patch into multiple ones? Having ~4k lines for a
-> > > patch makes it difficult to review. I know that some parts are difficult to
-> > > split (happened with my series as well) but anything below 1k should be fine.
-> > 
-> > For now I split the regmap and crc16 into one patch, the core file into a
-> > separate patch.
-> > 
-> > See:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=mcp25xxfd-45
-> > 
-> > If you want to have it in smaller pieces I'll need more time to figure out a
-> > sensible way to split the driver.
-> > 
-> 
-> Can you please post the split version here so that I can do a formal review?
-> 
 
-Is there any update on the next iteration? I'd like to see this series moving
-forward :)
+--huq684BweRXVnRxX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Mani
+On Sat, May 02, 2020 at 04:26:56PM +0200, Wolfram Sang wrote:
+> The 'pengutronix' address is defunct for years. Use the proper contact
+> address.
+>=20
+> Signed-off-by: Wolfram Sang <wsa@kernel.org>
 
-> Thanks,
-> Mani
-> 
-> > regards,
-> > Marc
-> > 
-> > -- 
-> > Pengutronix e.K.                 | Marc Kleine-Budde           |
-> > Embedded Linux                   | https://www.pengutronix.de  |
-> > Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> > Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Ping?
+
+> ---
+>  drivers/net/can/mscan/mpc5xxx_can.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/mscan/mpc5xxx_can.c b/drivers/net/can/mscan/=
+mpc5xxx_can.c
+> index e4f4b5c9ebd6..e254e04ae257 100644
+> --- a/drivers/net/can/mscan/mpc5xxx_can.c
+> +++ b/drivers/net/can/mscan/mpc5xxx_can.c
+> @@ -5,7 +5,7 @@
+>   * Copyright (C) 2004-2005 Andrey Volkov <avolkov@varma-el.com>,
+>   *                         Varma Electronics Oy
+>   * Copyright (C) 2008-2009 Wolfgang Grandegger <wg@grandegger.com>
+> - * Copyright (C) 2009 Wolfram Sang, Pengutronix <w.sang@pengutronix.de>
+> + * Copyright (C) 2009 Wolfram Sang, Pengutronix <kernel@pengutronix.de>
+>   */
+> =20
+>  #include <linux/kernel.h>
+> --=20
+> 2.20.1
+>=20
+
+--huq684BweRXVnRxX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8+dXcACgkQFA3kzBSg
+Kbbitw/9F16nwRBCNgwSGqNwxfnuj1puuUpdtbdyXSh3CwYylq50zKpHrYTd232F
+qEyVjLzVCF+qfq5o9P3GkWb6jL/kAnB9GVz+jkoLxYpXpk+Z4x3hxTXo/6I3AeMm
+s9wY9Svr06xrsn8hqk7K0m4LWcSTwBOH4qMAhTykf8bWsom/+mX5eLStF8FzFF9/
+lmjNdZm38vZ4GAfD8INpS358dUMmKLrQ/sL5heWs8bLpwTLli+qDCFf3dHXOVr1b
+bt2vNqUdk9jAIp4oc4gRxFEpWxJmLzPl7bUqb41bnUfx+ARra/iQtMiODZgmmevL
+vy7tKrgH5y1Q9AFWZnyMqeCoi8NxwFS+kN7dERz/haBnocHHlzwPEcM3SfdU2A8o
+4Rvo7FdEdXLROQsZWUzJaYtEN/aEyNyNGPU3HYYxZ0zjU1O7sTRlsMTbeyJXPCit
+IxK77SEAZXSCP6oCwUqoZ303wAvL+YUxYU+CgKvn6nmJqj58+iN8t6z3VHA94Yyq
+tybtEz6dp3qN6dhLK7LB3vT4o6H0OhVgnuBEmqFf+o6t2m5xIBNjxyCnkDBvkxBH
+jHsBeUw0zynKxRt6x3zCvRZA2qL4nJ6WizyIm6uKd01fekTKTeM6NHTL91QNY+Rl
+cxAIXV+esUM4psPYJ37M3je60bVX0ymkFSoXQ3XxQORTCntFmkg=
+=Ucks
+-----END PGP SIGNATURE-----
+
+--huq684BweRXVnRxX--
