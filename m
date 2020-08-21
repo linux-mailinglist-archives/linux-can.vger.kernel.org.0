@@ -2,42 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAF524D57A
-	for <lists+linux-can@lfdr.de>; Fri, 21 Aug 2020 14:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EBB24D742
+	for <lists+linux-can@lfdr.de>; Fri, 21 Aug 2020 16:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgHUMzP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 21 Aug 2020 08:55:15 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:34586 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbgHUMzO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Aug 2020 08:55:14 -0400
-Received: by mail-ot1-f65.google.com with SMTP id k12so1489602otr.1;
-        Fri, 21 Aug 2020 05:55:13 -0700 (PDT)
+        id S1726993AbgHUOXh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 21 Aug 2020 10:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgHUOXg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 21 Aug 2020 10:23:36 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08874C061573;
+        Fri, 21 Aug 2020 07:23:36 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id i10so1115104ybt.11;
+        Fri, 21 Aug 2020 07:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cdaxvWi4S/8iVwLCKzXxlcoFNvM0MXvR3LgfOth28YM=;
+        b=H8fThCaiORW/A6/dBnOiF1aHybeA7nMJKaCWASyx7Qpxbq3FPXn/Z5um1ohc1TVj8J
+         AishFjqxIOJvvIAK7voJPc/EhLxf3j4BDIzuqUvnCyyat5xEpoRWhnnkH5WwrTroq4xQ
+         r8Upzp5AyZNkA620ZlgKimH/Q+mUE6Em11l8+NojkrgA4FUeH2VIKms6iGpA3nVyBOx/
+         B2QpdobNAG5BQecsBBoelQyBJZRPIgbXG6XfYHaOIQcC8AQHhtMSLKoUAtGmsG96kaA8
+         tOQUQlFX+jDd0IXYpi77m8wZ+wLDbjxpgi8gK2ett/pcAI9wZtGS0PPsMUoEffGlPPOy
+         i9Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JQTj75v+t4gH75KqZzioaSEXd+JGBRQy2YtcQ1vRxYw=;
-        b=XDH+dN7kZh0cMfSxRHTUWvvzopYLfF0xZYTcvPjh6PnIras/dEGjkjctlo6gZZ1/cw
-         I4dz2wLQr7zWik/V7LwKTuon1dc4eTx0k+dHdWPNX/jPADSTltNZ4VEMpMfQw1Cnsf/8
-         I46yujmmC8hx3414c5fbE8afJXh02N3zwafrwK7rLUnhcTEkeghwbxKJE630jjpY5/z2
-         xhBNK9zzJeWWkx26unUwFsuzIP0UNHT1WqmKBidFfxzXWJORFBU2jQzYCvle8tCfU/u/
-         jZ0jdiebu0rR9TLAq7FNNBJz0gQDRz5Kfd2LS5uXFTM4M8JHBnS5/Cv7VRP9SPzcD60r
-         CaFQ==
-X-Gm-Message-State: AOAM533+kyCHkGWyz4aAA6bDy3UlJeG64o9dLcp3ybXnkCr/ZEelY3OX
-        PwcqT07vkvDh8PO9CiLmcw5/5440dZ0dXGB8aI0=
-X-Google-Smtp-Source: ABdhPJxqc+ZD71mnoRQsfhaV3KFb+WFTtCicSB4qWqJ8DMecwf9Q2wNYJlJTt2ATIfQ0jf+/cKUpZoMekDAYtOdqD28=
-X-Received: by 2002:a9d:7d8c:: with SMTP id j12mr1858350otn.250.1598014513423;
- Fri, 21 Aug 2020 05:55:13 -0700 (PDT)
+        bh=cdaxvWi4S/8iVwLCKzXxlcoFNvM0MXvR3LgfOth28YM=;
+        b=N/vRlsmK20LWtuwwqXNB99yedR0WcueZKX4rePTRO2FsODHrldcQZ8qrkI/rEZKfsk
+         iumio0E7lKK8Brnujm4FQb+/Dq/GMIUSWOE4GL6Jq7srzGSYVEnt863rM8LVhrL+DItj
+         dBc9Kej1ZgWKd54dvadbAsTeLV9DXuZJSzARCvryvcYTweQTJAyjokAJ7haiw0DiWx7N
+         8qUxFNNfrzdDU0T1bZkQo8yFOY9lx7xM+YGbkt2W9tdixW2DVDkyusHmBhlGCRn2MUct
+         WDaNsMjTYOuWj6SsC/JkvLze5GiP6kzjskMc+LO0NH0/a21Rcc+GViu10jl/vtql/PYy
+         SbNw==
+X-Gm-Message-State: AOAM531Rln+dw4n5GQNT+hSTXBhjmzT1JRUnJb6M/oJBWYnV11+mE0JB
+        t6nNilRn8sDPMJdK1GIvK8IzpeV1BMP6nJW5fi4=
+X-Google-Smtp-Source: ABdhPJwFPfytP1/12rYImnxNWcaTXjulE7JutGzwE1bfpqb8FCG2JODT/EUADB/j4bZB4OEPY2qXKAuU5RvsXOQxWrw=
+X-Received: by 2002:a25:c743:: with SMTP id w64mr3856261ybe.127.1598019815346;
+ Fri, 21 Aug 2020 07:23:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20200816190732.6905-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20200816190732.6905-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 21 Aug 2020 14:55:02 +0200
-Message-ID: <CAMuHMdXmC0HuJP6fE5mLqTXn9En5moGf-0QEXfkFtiOcnAN5GA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ARM: dts: r8a7742: Add CAN support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+References: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20200816190732.6905-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdW2RTCi7rAa_tSsY7ukVM2xk6PYD526SRQU1Wd4SSz2Mw@mail.gmail.com>
+In-Reply-To: <CAMuHMdW2RTCi7rAa_tSsY7ukVM2xk6PYD526SRQU1Wd4SSz2Mw@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Fri, 21 Aug 2020 15:23:08 +0100
+Message-ID: <CA+V-a8u-DrpNPskCwFEfaxtfSHKDGfOhcVf+y4tZ+aw9jFj=eQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] pinctrl: sh-pfc: r8a7790: Add CAN pins, groups and functions
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -49,31 +65,44 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun, Aug 16, 2020 at 9:08 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add the definitions for can0 and can1 to the r8a7742 SoC dtsi.
+Hi Geert,
+
+Thank you for the review.
+
+On Fri, Aug 21, 2020 at 1:52 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
+> Hi Prabhakar,
+>
+> On Sun, Aug 16, 2020 at 9:07 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > Add pins, groups and functions for the CAN0 and CAN1 interface.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> Don't you want to add the CAN_CLK pins, too?
+>
+Will do. Would you prefer an incremental patch or a v2 ?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.10.
+Cheers,
+Prabhakar
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
