@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB75250520
-	for <lists+linux-can@lfdr.de>; Mon, 24 Aug 2020 19:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D16250475
+	for <lists+linux-can@lfdr.de>; Mon, 24 Aug 2020 19:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728249AbgHXRLq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Aug 2020 13:11:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40360 "EHLO mail.kernel.org"
+        id S1726870AbgHXRCy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Aug 2020 13:02:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728392AbgHXQhy (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:37:54 -0400
+        id S1728471AbgHXQii (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:38:38 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 735F022D70;
-        Mon, 24 Aug 2020 16:37:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF93222E03;
+        Mon, 24 Aug 2020 16:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598287030;
+        s=default; t=1598287097;
         bh=Y+dzBIhGF+kbEmw58dJ4IZaOWYovq8f4Yu+nhkSCnkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ov6q7qK3VBYSw1I08FHAy5RhExDJDcFUz0SVjqJdKN46zKfS0bDZ3pr9iGXX2x/Uz
-         szUYn1aNRK1iVzS4WTsk97pIzopuNOqpUHMOR5Pdh2MjhailubQE+bwyop4CqqoApR
-         4S/JTsPkA9dH719zfKcFcBYrsvopDntHVuNtYL1s=
+        b=QvH1BkrGmf1brHRm/nR3BgzZaM/5YvTu1w5ZmX20RJy5Hs3Mj9+mW0adWtUiJyFQX
+         H7+NbeKm5+MSoM27BlJ2GCmkup+3ain8LT1LcSiW0cT0U6zYIdh2UNuwo1rvXKL+8U
+         +3P6ClfMBYPsICgKZgJ9Q4FOrRMOKa15FVflbr8c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 26/54] can: j1939: transport: j1939_xtp_rx_dat_one(): compare own packets to detect corruptions
-Date:   Mon, 24 Aug 2020 12:36:05 -0400
-Message-Id: <20200824163634.606093-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 19/38] can: j1939: transport: j1939_xtp_rx_dat_one(): compare own packets to detect corruptions
+Date:   Mon, 24 Aug 2020 12:37:31 -0400
+Message-Id: <20200824163751.606577-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163634.606093-1-sashal@kernel.org>
-References: <20200824163634.606093-1-sashal@kernel.org>
+In-Reply-To: <20200824163751.606577-1-sashal@kernel.org>
+References: <20200824163751.606577-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
