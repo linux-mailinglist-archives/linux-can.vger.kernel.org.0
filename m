@@ -2,96 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D16250475
-	for <lists+linux-can@lfdr.de>; Mon, 24 Aug 2020 19:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61E9A250EDF
+	for <lists+linux-can@lfdr.de>; Tue, 25 Aug 2020 04:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726870AbgHXRCy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Aug 2020 13:02:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40072 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728471AbgHXQii (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:38:38 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF93222E03;
-        Mon, 24 Aug 2020 16:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598287097;
-        bh=Y+dzBIhGF+kbEmw58dJ4IZaOWYovq8f4Yu+nhkSCnkU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QvH1BkrGmf1brHRm/nR3BgzZaM/5YvTu1w5ZmX20RJy5Hs3Mj9+mW0adWtUiJyFQX
-         H7+NbeKm5+MSoM27BlJ2GCmkup+3ain8LT1LcSiW0cT0U6zYIdh2UNuwo1rvXKL+8U
-         +3P6ClfMBYPsICgKZgJ9Q4FOrRMOKa15FVflbr8c=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        id S1727003AbgHYCRC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 24 Aug 2020 22:17:02 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:45914 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726531AbgHYCRB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Aug 2020 22:17:01 -0400
+Received: by mail-il1-f193.google.com with SMTP id k4so9109246ilr.12;
+        Mon, 24 Aug 2020 19:17:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=cPaUYqeBD8duoMMFHhwQl/b6M7U9Dhl4gzL36hPNANM=;
+        b=PaUg8UVgFkV8xgWBE6u2tLN0ov0OGgqUSMY5FL/6y8QNWzcgVS0RMLjXmSxw1VRE/9
+         TZ1wuSpMryDW/TbNgREHclNA0kBCdo+0y3B2HjnS+YywKIYfryWG5jHbMIlUiFLzgUkc
+         cidX65NgG3tkk/m0GKVGTHxYUIQp8uW6Z3ooSne5Mn8rL2187+OfO4E843ZVOJc2sqpN
+         9a+e+TqsmWkHqDMISH8EcL5UIyWcnkCAihVXYrbMECV9KccJ7d3kbXmcg0/4ux/H03K8
+         mqOBRDvZQQNg6B3TVSY2o+AKwFnOCG9pTKuC3dH2i8msr0pXn9AvqRBFZji+k9qwHt3G
+         HW/Q==
+X-Gm-Message-State: AOAM531QSZaVeghvCMUC85RaDFy6R+F3SEmQilBhFKnh2OKAmgD4jK0o
+        Zvr4KNtxWuEFd/uuzuYf8jzD2wyBSUdH
+X-Google-Smtp-Source: ABdhPJy039p/D5ALU5plBARNf/qhTGH6VaZe6QqtAV1pNqKKbjtJR47Z1aYdm+9EkRB8JTK6peL8tQ==
+X-Received: by 2002:a92:5bcb:: with SMTP id c72mr6813468ilg.94.1598321820672;
+        Mon, 24 Aug 2020 19:17:00 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id 18sm1263026iog.31.2020.08.24.19.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 19:17:00 -0700 (PDT)
+Received: (nullmailer pid 3801477 invoked by uid 1000);
+        Tue, 25 Aug 2020 02:16:57 -0000
+Date:   Mon, 24 Aug 2020 20:16:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     devicetree@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        David Miller <davem@davemloft.net>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, mark.rutland@arm.com,
+        netdev@vger.kernel.org, armbru@redhat.com,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Carsten Emde <c.emde@osadl.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 19/38] can: j1939: transport: j1939_xtp_rx_dat_one(): compare own packets to detect corruptions
-Date:   Mon, 24 Aug 2020 12:37:31 -0400
-Message-Id: <20200824163751.606577-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200824163751.606577-1-sashal@kernel.org>
-References: <20200824163751.606577-1-sashal@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/6] dt-bindings: vendor-prefix: add prefix for the
+ Czech Technical University in Prague.
+Message-ID: <20200825021657.GA3801424@bogus>
+References: <cover.1597518433.git.ppisa@pikron.com>
+ <8d0674796f3c4ecfd6fcd66ae79bc3aeb93ace22.1597518433.git.ppisa@pikron.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <8d0674796f3c4ecfd6fcd66ae79bc3aeb93ace22.1597518433.git.ppisa@pikron.com>
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+On Sat, 15 Aug 2020 21:43:03 +0200, Pavel Pisa wrote:
+> The Czech Technical University in Prague (CTU) is one of
+> the biggest and oldest (founded 1707) technical universities
+> in Europe. The abbreviation in Czech language is ČVUT according
+> to official name in Czech language
+> 
+>   České vysoké učení technické v Praze
+> 
+> The English translation
+> 
+>   The Czech Technical University in Prague
+> 
+> The university pages in English
+> 
+>   https://www.cvut.cz/en
+> 
+> Signed-off-by: Pavel Pisa <pisa@cmp.felk.cvut.cz>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-[ Upstream commit e052d0540298bfe0f6cbbecdc7e2ea9b859575b2 ]
-
-Since the stack relays on receiving own packets, it was overwriting own
-transmit buffer from received packets.
-
-At least theoretically, the received echo buffer can be corrupt or
-changed and the session partner can request to resend previous data. In
-this case we will re-send bad data.
-
-With this patch we will stop to overwrite own TX buffer and use it for
-sanity checking.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Link: https://lore.kernel.org/r/20200807105200.26441-6-o.rempel@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/can/j1939/transport.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 9f99af5b0b11e..3e9c377b0dcce 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1769,7 +1769,20 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
- 	}
- 
- 	tpdat = se_skb->data;
--	memcpy(&tpdat[offset], &dat[1], nbytes);
-+	if (!session->transmission) {
-+		memcpy(&tpdat[offset], &dat[1], nbytes);
-+	} else {
-+		int err;
-+
-+		err = memcmp(&tpdat[offset], &dat[1], nbytes);
-+		if (err)
-+			netdev_err_once(priv->ndev,
-+					"%s: 0x%p: Data of RX-looped back packet (%*ph) doesn't match TX data (%*ph)!\n",
-+					__func__, session,
-+					nbytes, &dat[1],
-+					nbytes, &tpdat[offset]);
-+	}
-+
- 	if (packet == session->pkt.rx)
- 		session->pkt.rx++;
- 
--- 
-2.25.1
-
+Acked-by: Rob Herring <robh@kernel.org>
