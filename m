@@ -2,40 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 753F5251678
-	for <lists+linux-can@lfdr.de>; Tue, 25 Aug 2020 12:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38E1251677
+	for <lists+linux-can@lfdr.de>; Tue, 25 Aug 2020 12:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728117AbgHYKRw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 25 Aug 2020 06:17:52 -0400
-Received: from mga07.intel.com ([134.134.136.100]:60647 "EHLO mga07.intel.com"
+        id S1729586AbgHYKRt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Aug 2020 06:17:49 -0400
+Received: from mga06.intel.com ([134.134.136.31]:44646 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729761AbgHYKRs (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 25 Aug 2020 06:17:48 -0400
-IronPort-SDR: HlwF4+okgFV5dVyjQ3VZoKKHblry5yzGN4s6XOA1GYPi+GR2jzrw0a26GTXjGUueWnQiBCHmLi
- j/hLz+gmZS0A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="220344034"
+        id S1728117AbgHYKRo (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 25 Aug 2020 06:17:44 -0400
+IronPort-SDR: YMMivPtdzlw0paYti+VrNVEI7UqKyihN411PV9npH7KrpTj/UBdJpc523ohKOUCxymvSBKaGCN
+ HMPiPp/o0jyw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="217631618"
 X-IronPort-AV: E=Sophos;i="5.76,352,1592895600"; 
-   d="scan'208";a="220344034"
+   d="scan'208";a="217631618"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 03:17:43 -0700
-IronPort-SDR: zO5tX7u6BIxanDKKSBqiskYxioStbQvUHCO4WCf/WbSwK5Vq+psZjhGva1CPqilT+Q5jP4a4KH
- PmhrZWTpQ/2Q==
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 03:17:43 -0700
+IronPort-SDR: mTQ50+IjGTeW5yMuKKc/b/sEWL1PQcPOHJdffuIHwCFtVUW8u5RhU+zFC6bxRP4wEpbRcx0fjl
+ bo3CFXdsAk/g==
 X-IronPort-AV: E=Sophos;i="5.76,352,1592895600"; 
-   d="scan'208";a="499257119"
+   d="scan'208";a="322707985"
 Received: from jinalbex-wtg.gar.corp.intel.com (HELO pflykt-mobl1.ger.corp.intel.com) ([10.252.20.102])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 03:17:40 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 03:17:40 -0700
 Received: by pflykt-mobl1.ger.corp.intel.com (Postfix, from userid 1100)
-        id C7AAF321598; Tue, 25 Aug 2020 13:17:36 +0300 (EEST)
+        id C9959321596; Tue, 25 Aug 2020 13:17:36 +0300 (EEST)
 From:   Patrik Flykt <patrik.flykt@linux.intel.com>
 To:     linux-can@vger.kernel.org
 Cc:     wg@grandegger.com, mkl@pengutronix.de, dmurphy@ti.com,
         sriram.dash@samsung.com, jarkko.nikula@intel.com
-Subject: [PATCH 0/1] NET: mcan: Move runtime PM enable/disable to  m_can_platform
-Date:   Tue, 25 Aug 2020 13:17:35 +0300
-Message-Id: <20200825101736.158578-1-patrik.flykt@linux.intel.com>
+Subject: [PATCH 1/1] NET: mcan: Move runtime PM enable/disable to m_can_platform
+Date:   Tue, 25 Aug 2020 13:17:36 +0300
+Message-Id: <20200825101736.158578-2-patrik.flykt@linux.intel.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200825101736.158578-1-patrik.flykt@linux.intel.com>
+References: <20200825101736.158578-1-patrik.flykt@linux.intel.com>
 MIME-Version: 1.0
 Organization: Intel Finland Oy - BIC 0357606-4 - PL 281, 00181 Helsinki
 Content-Transfer-Encoding: 8bit
@@ -44,42 +46,64 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is a preparatory patch for upcoming PCI based M_CAN devices.
+The current PM implementation would cause PCI based drivers to
+enable PM twice, once when the pci device is added and a second
+time in m_can_class_register(). This will cause 'Unbalanced
+pm_runtime_enable!' to be logged, and is a situation that should
+be avoided.
 
-	Hi,
-
-This is a preparatory patch for modifying PM enabling due to PCI based
-M_CAN devices. As the functionality is right now, adding a PCI based
-M_CAN driver causes the core PCI functionality to call
-pm_runtime_enable() from pci_pm_init() when the PCI device is added.
-When the device is added, it is registered with m_can_class_register(),
-which ends up calling pm_runtime_enable() once more and causes the
-kernel to log an angry 'Unbalanced pm_runtime_enable!' message, as
-dev->power.disable_depth has gone down to zero.
-
-To resolve this situation, I have added a patch that moves runtime PM
-enabling from m_can.c to the m_can_platform.c driver, which currently
-is the only driver that ends up enabling runtime PM. Would this
-approach be appropriate, or should PM be enabled in some other way
-with PCI based M_CAN devices?
-
-Now, the actual sticky point is that there aren't yet any PCI based
-M_CAN devices upstream, but one is in the works. So if the change
-proposed works out, should this patch actually be sent in the patch
-set providing a PCI based M_CAN device?
+Therefore, in anticipation of PCI devices, move PM enabling out
+from M_CAN class registration to its currently only user, the
+m_can_platform driver.
 
 
-Thanks,
-
-	Patrik
-
-
-Patrik Flykt (1):
-  NET: mcan: Move runtime PM enable/disable to m_can_platform
-
+Signed-off-by: Patrik Flykt <patrik.flykt@linux.intel.com>
+---
  drivers/net/can/m_can/m_can.c          | 6 +-----
  drivers/net/can/m_can/m_can_platform.c | 3 +++
  2 files changed, 4 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 02c5795b7393..2c4d74113443 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1817,7 +1817,6 @@ int m_can_class_register(struct m_can_classdev *m_can_dev)
+ 	int ret;
+ 
+ 	if (m_can_dev->pm_clock_support) {
+-		pm_runtime_enable(m_can_dev->dev);
+ 		ret = m_can_clk_start(m_can_dev);
+ 		if (ret)
+ 			goto pm_runtime_fail;
+@@ -1847,11 +1846,8 @@ int m_can_class_register(struct m_can_classdev *m_can_dev)
+ clk_disable:
+ 	m_can_clk_stop(m_can_dev);
+ pm_runtime_fail:
+-	if (ret) {
+-		if (m_can_dev->pm_clock_support)
+-			pm_runtime_disable(m_can_dev->dev);
++	if (ret)
+ 		free_candev(m_can_dev->net);
+-	}
+ 
+ 	return ret;
+ }
+diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+index 38ea5e600fb8..1260e99b9322 100644
+--- a/drivers/net/can/m_can/m_can_platform.c
++++ b/drivers/net/can/m_can/m_can_platform.c
+@@ -111,7 +111,10 @@ static int m_can_plat_probe(struct platform_device *pdev)
+ 
+ 	m_can_init_ram(mcan_class);
+ 
++	pm_runtime_enable(mcan_class->dev);
+ 	ret = m_can_class_register(mcan_class);
++	if (ret)
++		pm_runtime_disable(mcan_class->dev);
+ 
+ failed_ret:
+ 	return ret;
 -- 
 2.27.0
 
