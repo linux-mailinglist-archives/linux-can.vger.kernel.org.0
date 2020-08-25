@@ -2,79 +2,87 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9AE250EEB
-	for <lists+linux-can@lfdr.de>; Tue, 25 Aug 2020 04:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19CDD2511C8
+	for <lists+linux-can@lfdr.de>; Tue, 25 Aug 2020 07:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726737AbgHYCVJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 24 Aug 2020 22:21:09 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40758 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725924AbgHYCVH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 24 Aug 2020 22:21:07 -0400
-Received: by mail-io1-f66.google.com with SMTP id q132so471131iod.7;
-        Mon, 24 Aug 2020 19:21:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rg7Bsd6p+mIyfsdifHuWk+4yWTHBPMjJ9LRnbA1nMVw=;
-        b=hHrM6wxP1vqP17b9vm5/ERu53XsAoH4t1NXupNTGhGlZIb+W3pbpWqN2uKVLtObtqP
-         tP/UYgG8wJO3Ic8PtNzAFkfC/c3210EYyE/ztissMVZeMGtJ4DM3ZNn66F0mmcnrwPms
-         zkypyCApFAJK5QXhEKuO0aWVJmCwDYN8nnhM2izfV/aFVW75HKtDD3B3BB6LtaPLJbDV
-         HtyGxAkDhhJqJyDkpCAaN9Hr03SNFGDHxpfMhyuzjI+VEJeGVNVFh3CejHo8oNYR8RsQ
-         qYjg7/vBil35x+diXI3vFWm2pOGhCF7Bnh4YoImrIdZsYEotop2I90lXZNmbT5gn6JGY
-         u1oQ==
-X-Gm-Message-State: AOAM53180JKe/SjT4MkyhUsDjMDXjBVPBjtRyS0RtwOl8rlR5Yxk6mZD
-        3NpSOUfiQuGNBm/blGY4/w==
-X-Google-Smtp-Source: ABdhPJwbSqh1z12wlvJULaLb/vP4/4rRUIPZFoP7kgCBcEhrK9NvGe+E689vQgXG7sj5IG0hXXN7uQ==
-X-Received: by 2002:a6b:d811:: with SMTP id y17mr7359240iob.199.1598322066291;
-        Mon, 24 Aug 2020 19:21:06 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id u68sm3268099ioe.18.2020.08.24.19.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 19:21:05 -0700 (PDT)
-Received: (nullmailer pid 3808092 invoked by uid 1000);
-        Tue, 25 Aug 2020 02:21:02 -0000
-Date:   Mon, 24 Aug 2020 20:21:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-gpio@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH 2/3] dt-bindings: can: rcar_can: Add r8a7742 support
-Message-ID: <20200825022102.GA3808062@bogus>
-References: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200816190732.6905-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1728126AbgHYFzE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 25 Aug 2020 01:55:04 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:57226 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgHYFzE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 25 Aug 2020 01:55:04 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07P5sofs048261;
+        Tue, 25 Aug 2020 00:54:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1598334890;
+        bh=duyqkgdZLKCTlkGLaMdgAkkMB3mW9knGedMzsy1T14E=;
+        h=From:To:CC:Subject:Date;
+        b=tOVdYnP+frzvJARr/LTTrYvwaapkKNRW883MplcBvowCq6km/wckDDt6wJBsYJ0t+
+         KrGPt8o9OAN+MLi0/aC/46wJm2NZmvH5BzAa6vq1Q9gDUU/ue67NjwTZJFmS2HRvvc
+         LoIoSV2XZ94Nz79g1MUxKy/X1QdeenvSyq+LGIME=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07P5so1X001719;
+        Tue, 25 Aug 2020 00:54:50 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 25
+ Aug 2020 00:54:49 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 25 Aug 2020 00:54:49 -0500
+Received: from a0230074-Latitude-E7470.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07P5silM040890;
+        Tue, 25 Aug 2020 00:54:45 -0500
+From:   Faiz Abbas <faiz_abbas@ti.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-can@vger.kernel.org>
+CC:     <kuba@kernel.org>, <davem@davemloft.net>, <mkl@pengutronix.de>,
+        <wg@grandegger.com>, <sriram.dash@samsung.com>, <dmurphy@ti.com>,
+        <faiz_abbas@ti.com>
+Subject: [PATCH v2] can: m_can: Set device to software init mode before closing
+Date:   Tue, 25 Aug 2020 11:24:42 +0530
+Message-ID: <20200825055442.16994-1-faiz_abbas@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200816190732.6905-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun, 16 Aug 2020 20:07:31 +0100, Lad Prabhakar wrote:
-> Document RZ/G1H (r8a7742) SoC specific bindings. The R8A7742 CAN module
-> is identical to R-Car Gen2 family.
-> 
-> No driver change is needed due to the fallback compatible value
-> "renesas,rcar-gen2-can".
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
-> ---
->  Documentation/devicetree/bindings/net/can/rcar_can.txt | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
+There might be some requests pending in the buffer when the
+interface close sequence occurs. In some devices, these
+pending requests might lead to the module not shutting down
+properly when m_can_clk_stop() is called.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Therefore, move the device to init state before potentially
+powering it down.
+
+Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
+---
+
+changes since v1: Rebased to latest mainline
+
+ drivers/net/can/m_can/m_can.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 02c5795b7393..d0c458f7f6e1 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1414,6 +1414,9 @@ static void m_can_stop(struct net_device *dev)
+ 	/* disable all interrupts */
+ 	m_can_disable_all_interrupts(cdev);
+ 
++	/* Set init mode to disengage from the network */
++	m_can_config_endisable(cdev, true);
++
+ 	/* set the state as STOPPED */
+ 	cdev->can.state = CAN_STATE_STOPPED;
+ }
+-- 
+2.17.1
+
