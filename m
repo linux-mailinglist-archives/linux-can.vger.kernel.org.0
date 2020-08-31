@@ -2,102 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9937A254B57
-	for <lists+linux-can@lfdr.de>; Thu, 27 Aug 2020 19:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCAA257725
+	for <lists+linux-can@lfdr.de>; Mon, 31 Aug 2020 12:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbgH0RA4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 Aug 2020 13:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
+        id S1726100AbgHaKKR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 Aug 2020 06:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgH0RA4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 Aug 2020 13:00:56 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4523C061264;
-        Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id q16so3334209ybk.6;
-        Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
+        with ESMTP id S1726081AbgHaKKP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 Aug 2020 06:10:15 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86C8C061573
+        for <linux-can@vger.kernel.org>; Mon, 31 Aug 2020 03:10:15 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 5so348858pgl.4
+        for <linux-can@vger.kernel.org>; Mon, 31 Aug 2020 03:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xn9e8QiSfQjfmv9dvYGGI9EBZKWaBpd/I2U5mUE1tdE=;
-        b=PS28p8gtpgp5Vzmtu8C8Fn69h9JbIZLvzinkhZ2VyIy3eTvrrbRHZKK4e0X+S2HoYc
-         2ht0sqrAPSZP5wC4rEdgvlanP38jwoYA5gvs1a6CG9GeHyR6ac+LqKIr0bwn7rKWAksT
-         +Jnz6WdeesntSn4mFO+1jVcTpyth5j7J+Vy/05SMpk56xcAWcqLVcn2GMXnukQUowFqk
-         +Lwbfs1JMDSfElZQK2Vus32IYWbcURmEHaMfH2pztvogga5OyHAjbpZP8CIrX0OXtSrc
-         MmZzCb5KDFWhzu+f2jWG6oR83iyADCOYDUjDiDurt8cV8fborBSzq1yr88HVmzwc8eiJ
-         tPxg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=92VzdJE+sZsdUfKOwsECwT33k8UVZAw/YGmwth83nOU=;
+        b=g2+UQ78lxADmOUQyRLNMtCoxw5I0SDDwCT9clHB3SjxI22NtJzh1GaNuPfyq+C+mKn
+         gE1LyXQcZzaiO3/QWx+ShsuLFp71IBuEGsrksOYUpfCk3TCT9c+AK3/C8xEzFYljHfae
+         WOPtaBFNuTa+0jl/MXHNIsgH2Hfpc9vEnKlmnLK5ALKht4nDumFgs2E42iYnA3dhprc9
+         6AO/ytvV+Qu1vtsuebM9q+Wz/7j1wkZsVFDEBG6h0Y/mSsI5po88ZBuUsvvGOGS+zmpj
+         XXaLb+TZ3vlLldIH1wDBVtde9g86yBI8vQkMbt8Bpjj3WU7KiqcZLsoRBlNyfK0/Kskf
+         1HRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xn9e8QiSfQjfmv9dvYGGI9EBZKWaBpd/I2U5mUE1tdE=;
-        b=UNPO/PjxGsd0qgUbgjV0iKkSk/VGkHudUh/q2d+Y/WJDNOX2Ff+b9u17hbAzBzH6ql
-         1Mfl0FPLCWKrN3pusNWV0XXVRiVPKfXYi6F0jQSgtcmoQZr6fSomLA3ISwOF77P8pzoF
-         mgcb9EWX0eSHE63Hdr/WGrcAhTQOvlDFi+h+PJGSZxHVHnvD49r2gwhULCl/f1Kc+2iG
-         3Kg9/M4m7345z75ZYhKLAMge7EiXcBctG6Mj805PLBBA4bw0Xxj4hazglEO7S1Ah8VC1
-         C/I0f9ouXYFeqJZznxawk/qPQVqI/hzDuMkWnjaI/3RTIYo+ALugl2VjhchkpCTTee/l
-         9/Vg==
-X-Gm-Message-State: AOAM530ER8RXWUHa6d2E04BJMBLotc2wdZiREVoBTTJTa0vEe/B6I9O8
-        nsx9+nFwMw1mCtYcWcBDiGyR/ty74FGYXJeJXXs=
-X-Google-Smtp-Source: ABdhPJzWiP13RDlFWXYqZS9M+n/syiQtjHPq+mDPjJNKGxrQjLeEpeZ4VcNxTZaUseudqJ0OnSwa50hS9cPCBO2SK/M=
-X-Received: by 2002:a25:e712:: with SMTP id e18mr28991911ybh.395.1598547655180;
- Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=92VzdJE+sZsdUfKOwsECwT33k8UVZAw/YGmwth83nOU=;
+        b=s6Tq7RdogvjkDgmEFIRWt30GBmIMdKZ56GA6C1wnPyDnhV1bc49AcODcECw56ZdcpL
+         Czzy123ERyGXIHmIMZeeXxqpmuD3YBCo40YS6Gp7JFzJRl0G17V+WzvE3U++GYVAkhEC
+         upqziim2V28WA3BJ4nX26G1WtC3jiXOL6LfZ1UncayFsDlwvxADZSeQmalhyP18yIkUC
+         MLEwbenzNGJs15cL4yMQn660k1yJrBMuD+IXfjebFzLVTcQBeZQT/bQuD+yD7Yum8hrs
+         DVSpLb47THLO+JzKV1NstU4fN9qA0Qq8OKBc8us8xZ5zw7/Nqnjk8B24i61mo8+X/YU4
+         gEng==
+X-Gm-Message-State: AOAM530uGf6sPqU78+ouuE6tOjDYhMCPSRZg61hRDR574GERXQpBC1vD
+        NAcnf7cm0Lt75S4cIu3c++gf
+X-Google-Smtp-Source: ABdhPJxp7xC38+du6bQoJJYbt/CmhN4oL/rpk4UzNuNAHNtJzwAC2t/him4N5NMZUdzJSCxDANClqA==
+X-Received: by 2002:a63:29c6:: with SMTP id p189mr680897pgp.148.1598868615115;
+        Mon, 31 Aug 2020 03:10:15 -0700 (PDT)
+Received: from mani ([2409:4072:70f:fdfa:1d6f:524d:c4d3:917e])
+        by smtp.gmail.com with ESMTPSA id 143sm7507188pfc.66.2020.08.31.03.10.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 31 Aug 2020 03:10:14 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 15:40:08 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
+Subject: Re: [PATCH v41 0/3] can: add mcp25xxfd support
+Message-ID: <20200831101008.GB11728@mani>
+References: <20200622114603.965371-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Thu, 27 Aug 2020 18:00:29 +0100
-Message-ID: <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
-Subject: Re: [PATCH 05/20] dt-bindings: timer: renesas,cmt: Document r8a774e1
- CMT support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200622114603.965371-1-mkl@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Daniel and Thomas,
+On 0622, Marc Kleine-Budde wrote:
+> Hello,
+> 
+> this series adds support for the Microchip MCP25xxFD SPI CAN controller family.
+> 
+> The series is available at:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/log/?h=mcp25xxfd-41
+> 
 
-On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/timer/renesas,cmt.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->
-Gentle ping.
+Ping! Can you please post the splitted version?
 
-Cheers,
-Prabhakar
+Thanks,
+Mani
+
+> regards,
+> Marc
+> 
+> 
