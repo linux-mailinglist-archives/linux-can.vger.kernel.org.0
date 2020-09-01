@@ -2,53 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5F1259DF5
-	for <lists+linux-can@lfdr.de>; Tue,  1 Sep 2020 20:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B403259DFE
+	for <lists+linux-can@lfdr.de>; Tue,  1 Sep 2020 20:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbgIASSo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Sep 2020 14:18:44 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43662 "EHLO
+        id S1730179AbgIASUf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Sep 2020 14:20:35 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:43950 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbgIASSo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Sep 2020 14:18:44 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 081IIJdU129290;
-        Tue, 1 Sep 2020 13:18:19 -0500
+        with ESMTP id S1726521AbgIASUc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Sep 2020 14:20:32 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 081IKM9T129956;
+        Tue, 1 Sep 2020 13:20:22 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1598984299;
-        bh=Lwpr36EMeIo7RDKJYQQHBLgJIbAH7X9PlRGuW+DsCBQ=;
+        s=ti-com-17Q1; t=1598984422;
+        bh=D1SwdTHk6TLH9N6r+z4UmBhX+znpYKWwPBdkI5tVGRY=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Nv5cPcLsgioS5l1vrTLAQ+yInCx63q4E/uw+foNS11imZzE67XLunt4AJWeeeeUzW
-         Jtus+jTOvtXAaCrLYM5KCWGtIw3OZt3XvFrnzlIsvclMwOG6cQHFR6aETXbjEIa+Fy
-         i18faZTQjyZfSB6udGu/r1zRI93LQI8eGKyuOSC0=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 081IIJJ9029682;
-        Tue, 1 Sep 2020 13:18:19 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+        b=XKlSEu9fB6/7Pxl68K7I2Jh31em0qGm5bimWKipsemp52IHk+c48KPvzYLxI0ymUl
+         walf+TD1UCPJlB4d/vZNSJK5HG6vfIXE7CKatwWWGU6Io8omqhpa++7+9Xh7GsK00k
+         MWRC9cj8JWGQjdo0vy8/yKCBdX2T6eFEkX0KTGQg=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 081IKMCN076464
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 1 Sep 2020 13:20:22 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 1 Sep
- 2020 13:18:19 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ 2020 13:20:22 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 1 Sep 2020 13:18:18 -0500
+ Frontend Transport; Tue, 1 Sep 2020 13:20:22 -0500
 Received: from [10.250.38.37] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 081IIIUY000741;
-        Tue, 1 Sep 2020 13:18:18 -0500
-Subject: Re: [PATCH v2] can: m_can: Set device to software init mode before
- closing
-To:     Faiz Abbas <faiz_abbas@ti.com>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>
-CC:     <kuba@kernel.org>, <davem@davemloft.net>, <mkl@pengutronix.de>,
-        <wg@grandegger.com>, <sriram.dash@samsung.com>
-References: <20200825055442.16994-1-faiz_abbas@ti.com>
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 081IKLH4004188;
+        Tue, 1 Sep 2020 13:20:21 -0500
+Subject: Re: [PATCH] can: m_can_platform: don't call m_can_class_suspend in
+ runtime suspend
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Marek Vasut <marex@denx.de>, <kernel@pengutronix.de>,
+        <patchwork-lst@pengutronix.de>
+References: <20200811081545.19921-1-l.stach@pengutronix.de>
+ <20200811081545.19921-2-l.stach@pengutronix.de>
 From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <3ec0825f-9963-3687-c9f2-8280176c58aa@ti.com>
-Date:   Tue, 1 Sep 2020 13:18:13 -0500
+Message-ID: <342496c0-4d87-3877-5d75-023c586d7076@ti.com>
+Date:   Tue, 1 Sep 2020 13:20:21 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200825055442.16994-1-faiz_abbas@ti.com>
+In-Reply-To: <20200811081545.19921-2-l.stach@pengutronix.de>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -58,37 +63,42 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Faiz
+Lucase
 
-On 8/25/20 12:54 AM, Faiz Abbas wrote:
-> There might be some requests pending in the buffer when the
-> interface close sequence occurs. In some devices, these
-> pending requests might lead to the module not shutting down
-> properly when m_can_clk_stop() is called.
+On 8/11/20 3:15 AM, Lucas Stach wrote:
+> 0704c5743694 (can: m_can_platform: remove unnecessary m_can_class_resume()
+> call) removed the m_can_class_resume() call in the runtime resume path
+> to get rid of a infinite recursion, so the runtime resume now only handles
+> the device clocks. Unfortunately it did not remove the complementary
+> m_can_class_suspend() call in the runtime suspend function, so those paths
+> are now unbalanced, which causes the pinctrl state to get stuck on the
+> "sleep" state, which breaks all CAN functionality on SoCs where this state
+> is defined. Remove the m_can_class_suspend() call to fix this.
 >
-> Therefore, move the device to init state before potentially
-> powering it down.
->
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> ---
->
-> changes since v1: Rebased to latest mainline
->
->   drivers/net/can/m_can/m_can.c | 3 +++
->   1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 02c5795b7393..d0c458f7f6e1 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1414,6 +1414,9 @@ static void m_can_stop(struct net_device *dev)
->   	/* disable all interrupts */
->   	m_can_disable_all_interrupts(cdev);
->   
-> +	/* Set init mode to disengage from the network */
-> +	m_can_config_endisable(cdev, true);
-> +
->   	/* set the state as STOPPED */
->   	cdev->can.state = CAN_STATE_STOPPED;
->   }
+> Fixes: 0704c5743694 (can: m_can_platform: remove unnecessary
+>                       m_can_class_resume() call)
+
+Not sure about this wrap around for the fixes in the commit msg.
+
+Otherwise
+
 Acked-by: Dan Murphy <dmurphy@ti.com>
+
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+>   drivers/net/can/m_can/m_can_platform.c | 2 --
+>   1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
+> index 38ea5e600fb8..e6d0cb9ee02f 100644
+> --- a/drivers/net/can/m_can/m_can_platform.c
+> +++ b/drivers/net/can/m_can/m_can_platform.c
+> @@ -144,8 +144,6 @@ static int __maybe_unused m_can_runtime_suspend(struct device *dev)
+>   	struct net_device *ndev = dev_get_drvdata(dev);
+>   	struct m_can_classdev *mcan_class = netdev_priv(ndev);
+>   
+> -	m_can_class_suspend(dev);
+> -
+>   	clk_disable_unprepare(mcan_class->cclk);
+>   	clk_disable_unprepare(mcan_class->hclk);
+>   
