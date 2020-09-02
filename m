@@ -2,189 +2,207 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F4125A63A
-	for <lists+linux-can@lfdr.de>; Wed,  2 Sep 2020 09:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A711325AA6F
+	for <lists+linux-can@lfdr.de>; Wed,  2 Sep 2020 13:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726301AbgIBHOm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Sep 2020 03:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726173AbgIBHOl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Sep 2020 03:14:41 -0400
-X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Sep 2020 00:14:41 PDT
-Received: from mailproxy03.manitu.net (mailproxy03.manitu.net [IPv6:2a00:1828:1000:1108::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012BDC061244
-        for <linux-can@vger.kernel.org>; Wed,  2 Sep 2020 00:14:40 -0700 (PDT)
-Received: from [IPv6:2001:a61:bb6:801:d448:3c0a:26b6:cbb1] (unknown [IPv6:2001:a61:bb6:801:d448:3c0a:26b6:cbb1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: wg@grandegger.com)
-        by mailproxy03.manitu.net (Postfix) with ESMTPSA id 3868AD46D77;
-        Wed,  2 Sep 2020 09:08:51 +0200 (CEST)
-Subject: Re: canfdtest on flexcan loopback
-To:     Pankaj Bansal <pankaj.bansal@nxp.com>,
-        "Pankaj Bansal (OSS)" <pankaj.bansal@oss.nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-References: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
-From:   Wolfgang Grandegger <wg@grandegger.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=wg@grandegger.com; prefer-encrypt=mutual; keydata=
- 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
- 8QEfHnPzgykCs2DOOQ==
-Message-ID: <54b51f10-0b80-c41f-11d2-e1caa851dd50@grandegger.com>
-Date:   Wed, 2 Sep 2020 09:08:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726323AbgIBLne (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Sep 2020 07:43:34 -0400
+Received: from mail-vi1eur05on2081.outbound.protection.outlook.com ([40.107.21.81]:62560
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726183AbgIBLnQ (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 2 Sep 2020 07:43:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M727TBKavBhwcd9HpNSWJShui5JDvWPth57qG2iU8NPTSUk63J36gkBK0Vwo6QffsLZfui8i88cl4QzrLRob7BqcOt59WqD4ZaVIW+llLbs65AHNAOra2pHtSpbgedPznjMuWBNIbesDL+m6D9ThB8jZqe57Y32CPjjSF7mQCBD9ZH/RLhVXcSRU738fs1vpQtGiIZDDmIZpc7EkC7F9oCMLWUfAVHQNwDnuI7FhxOuAz5CBSQXakA0nJXY6/9iRAAUMVn3D75EcZT70vYy/FPm2T9BR0oQaYp/16QogLcjQ6/s0oAx1xkD1eqO8V6dbsaCPnPDRsbAJ/V4KQ7zUOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZcuSETBioeklfoP3yGnudip+8j2onHgHWrbXvlEPCfw=;
+ b=f6UzAh/Ve0i1igEXSjHDnfBragFTnaVLGoioJU/hpd97sincdxumIuSSR77Vob58Yas76DZTle+NJCr0iH0O+xb1Fyd2bM5ENK5NbrtCo0KSbDIT/VE4DoEh02FjRm/m02zE0Mqb9T5cvRfAdq+hlvn0WDQcIglUf89JyiIX9VzPrJq7UpoPBVPh6c2nb5gfER554nXEa/TxLePJXerUwU0aFsHKzsg2aCvFai8CxC5We9vHDAxYC40pg3RooFJOqpi4XVdClL4CgHlv/Y0oYqox8ycKNfGm7VmR8OLOQTUiaos1kkxayDgQN6zjalYHRaKV0jNW+cFudPkAeEGE2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZcuSETBioeklfoP3yGnudip+8j2onHgHWrbXvlEPCfw=;
+ b=vY0P9L3oJAi/mwvJP3wwPwrKXB24+HVaO+YJoZ++WV/6XKGQEnOGIE0r12vuMMmVIPZI2ZFxn9QzpMPBIejXOAnXW3W+lnvYOFb/p1uB2Q5WwBkvRf3okbEZrWdcmF7TrVq+Mpf295w2DUCXcU2TrBkq0/nDzIdGXR/r5BaAeZg=
+Received: from VI1PR03MB5053.eurprd03.prod.outlook.com (2603:10a6:803:bb::18)
+ by VI1PR03MB4158.eurprd03.prod.outlook.com (2603:10a6:803:60::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.23; Wed, 2 Sep
+ 2020 11:43:12 +0000
+Received: from VI1PR03MB5053.eurprd03.prod.outlook.com
+ ([fe80::6816:82a2:7f79:f1a9]) by VI1PR03MB5053.eurprd03.prod.outlook.com
+ ([fe80::6816:82a2:7f79:f1a9%5]) with mapi id 15.20.3326.025; Wed, 2 Sep 2020
+ 11:43:12 +0000
+From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: TR: [PATCH] can/peak_usb: fix timestamp wrapping
+Thread-Topic: [PATCH] can/peak_usb: fix timestamp wrapping
+Thread-Index: AQHWZL6W2FUY3y8U7UCpLPF7h/8KzqlVcoTW
+Date:   Wed, 2 Sep 2020 11:43:11 +0000
+Message-ID: <VI1PR03MB50536800A01EB17C97D9B6BDD62F0@VI1PR03MB5053.eurprd03.prod.outlook.com>
+References: <20200728090736.7628-1-s.grosjean@peak-system.com>
+In-Reply-To: <20200728090736.7628-1-s.grosjean@peak-system.com>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none
+ header.from=peak-system.com;
+x-originating-ip: [89.158.155.184]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d73a7fe0-5050-4353-863b-08d84f355f17
+x-ms-traffictypediagnostic: VI1PR03MB4158:
+x-microsoft-antispam-prvs: <VI1PR03MB4158E567023A6243027ABE4BD62F0@VI1PR03MB4158.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2399;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 55JIAk4k7xaGpLNPNPEwd7PCqmZXWqsZhRT7MwC+Bs1iowllmP7XAFfTd89kH7VZmK6nHcPzHPxy7XT01k2H9RzSRRHNhQPsa14mGhmBY1fa27z0n8Xld04V27orV/rLbIc1o5tJkXZM2UskcTJn5etnuFj41z10D1yHZxJoR6dFVB7NGMKz6yVqCfUTQmCtYPsYBzXdp0MYM1pijlByfpPc6+Bt3PPPHTZp4HKknRI5CydVdy06IwqkN8YlEdu3w+RypDGStiy6Oc6PTm0LmUYgh2SqUf6PzioxIJGMuBTZbivnAmDdGQcWV8kbUmX1RvVxXjGcC1uKCA95ATIg+R3sltuTLGUri/uDCUxTxvHuAxVJiQzFYQOq/mA90Bs8KI7ch9x6zMwkOkDJZyA8GA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB5053.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(376002)(396003)(346002)(366004)(39840400004)(55016002)(316002)(8676002)(8936002)(6506007)(26005)(186003)(7696005)(5660300002)(86362001)(71200400001)(478600001)(4326008)(76116006)(91956017)(15974865002)(52536014)(2906002)(33656002)(6916009)(66946007)(9686003)(83380400001)(66556008)(66476007)(64756008)(66446008)(66574015);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: veIvm13EmKjkWzu03vjVH1kqqcNF0xlWkYGYYJJ8QBwJfu/jyCq2D8UBcwhT9skpHJcAM1FXfao4TjlZUNIb141RTpbPl/oqnJ57x4myS0Hmj01wuNPdwPwalRoSlXRb5RE0OsEoa3lopSqwuBikN547fn06KH2mQU6KWvpjJK7o4iXPUaRYiLEDo0sbDYnClxmv9GZhTthmCAXFb849dXScN5mTL3d1ji1JQr4CScuwvrP/2GSJ4Mu/9wW1EmVlCDqwRRxbMkWJulv8iAICNwA0JFc0jDmQKl2ZS81u/3NYut51d5nUIwKwTuuVLNb/L8l1fN1312M8BBHQPekM0imvPM+yv6TI4Zn5uQhNF8dKLrJkZ5aqRBPG2Yy5lBctig4ecZrByaw8cu6ul22hWq+Y7eQ8xkHviMKwb4nYGzlDarhp1T3RqVWwy9AzxlkNiRzQpyvBabJSKxTd2yQa1w9GvJ9N1p2aYUQ7BjMHejvQhP6tmUheCMGeMuKmmWbFB4/Y35MBzcndhfx6Mx0Xlk1M3rHdcOlACoxVvgHLszj+hc63vDdZVvzJompOqP/+VWVhrCCuZj9Tt2m01rZSnMeeWQcw4IJlOkUg/z7T1asaMA8wqfJQLdpTrfmv8ntn8DJdbbZMB6HcsQwfwnfwIQ==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: peak-system.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB5053.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d73a7fe0-5050-4353-863b-08d84f355f17
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2020 11:43:11.8534
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3g54xucFO6enGoA2F/R5oHmJuMnmaXRKAedBvbYNiymvDZ1nod228V5iGQhYfb3rvQGxm4tNEculohpVfeMgKiC9o6GnrWIvFVkyBs8F9f4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB4158
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Marc,
 
-Am 02.09.20 um 05:16 schrieb Pankaj Bansal:
-> Hi Marc et al,
-> 
-> I am running the canfdtest (can-utils-2020.02.04) on flexcan interface running in loopback mode:
-> 
-> # ip link set can1 up type can bitrate 125000 loopback on
-> # canfdtest -v -g can1
-> interface = can1, family = 29, type = 3, proto = 1
-> Databyte 0 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 1 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 2 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 3 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 4 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 5 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 6 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> Databyte 7 mismatch !
-> expected: 0077: [8] 01 02 03 04 05 06 07 08
-> received: 0077: [8] 00 01 02 03 04 05 06 07
-> 
-> Test messages sent and received: 0
-> Exiting...
-> 
-> However when I run cangen, then the order of frames is fine:
-> 
-> # candump can1 &
-> # cangen -n 100 can1
->   can1  4B2   [6]  65 BD 28 6D 49 0A
->   can1  4B2   [6]  65 BD 28 6D 49 0A
->   can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
->   can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
->   can1  397   [0]
->   can1  397   [0]
->   can1  3A2   [0]
->   can1  3A2   [0]
->   can1  143   [8]  22 A1 C5 56 FF 24 15 3A
->   can1  143   [8]  22 A1 C5 56 FF 24 15 3A
->   can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
->   can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
->   can1  393   [0]
->   can1  393   [0]
->   can1  5FC   [6]  42 CC F2 57 AE 22
->   can1  5FC   [6]  42 CC F2 57 AE 22
->   can1  08C   [7]  F8 2C BD 6F 8B 98 53
->   can1  08C   [7]  F8 2C BD 6F 8B 98 53
->   can1  4E1   [5]  3C 59 E1 3D 78
->   can1  4E1   [5]  3C 59 E1 3D 78
->   can1  6D6   [6]  5D AF EF 06 78 EA
->   can1  6D6   [6]  5D AF EF 06 78 EA
->   can1  217   [7]  10 DB EC 26 5A F3 49
->   can1  217   [7]  10 DB EC 26 5A F3 49
->   can1  072   [2]  59 18
->   can1  072   [2]  59 18
->   can1  5BF   [7]  91 BA 17 7F 52 F1 0D
->   can1  5BF   [7]  91 BA 17 7F 52 F1 0D
->   can1  307   [2]  C9 DA
->   can1  307   [2]  C9 DA
->   can1  628   [8]  B2 9B 31 26 B4 46 10 30
->   can1  628   [8]  B2 9B 31 26 B4 46 10 30
->   can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
->   can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
->   can1  330   [8]  0C BE 31 4B 06 FA 5C 78
->   can1  330   [8]  0C BE 31 4B 06 FA 5C 78
->   can1  142   [8]  7E E4 3E 69 59 7B 28 64
->   can1  142   [8]  7E E4 3E 69 59 7B 28 64
->   can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
->   can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
->   can1  3C1   [8]  2C EE 30 5B 80 79 51 13
->   can1  3C1   [8]  2C EE 30 5B 80 79 51 13
->   can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
->   can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
->   can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
->   can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
-> 
-> I am using the latest Linux-stable-rc kernel (v5.9-rc2).
-> 
-> Is this known issue/limitation with canfdtest application ?
+Any news about that patch?
 
-canfdtest normally runs on the DUT *and* a the host. The DUT receives
-the messages from the host, increments the frame data bytes and then
-sends them back to the host. With "loopback" mode, the data bytes are
-not incremented and that's what you see above.
+---
+St=E9phane Grosjean
+PEAK-System France
+132, rue Andr=E9 Bisiaux
+F-54320 MAXEVILLE
+T=E9l : +(33) 9.72.54.51.97
 
-Wolfgang
+
+De : Stephane Grosjean <s.grosjean@peak-system.com>
+Envoy=E9 : mardi 28 juillet 2020 11:07
+=C0 : linux-can Mailing List <linux-can@vger.kernel.org>
+Cc : St=E9phane Grosjean <s.grosjean@peak-system.com>
+Objet : [PATCH] can/peak_usb: fix timestamp wrapping
+
+Fabian Inostroza <fabianinostrozap@gmail.com> has discovered a potential
+problem in the hardware timestamp reporting from the PCAN-USB USB CAN
+interface (only), related to the fact that a timestamp of an event may
+precede the timestamp used for synchronization when both records are part
+of the same USB packet. However, this case was used to detect the wrapping
+of the time counter.
+
+This patch details and fixes the two identified cases where this problem
+can occur.
+
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 51 ++++++++++++++++++--
+ 1 file changed, 46 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can=
+/usb/peak_usb/pcan_usb_core.c
+index 0b7766b715fd..267ddc18ed51 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -130,14 +130,55 @@ void peak_usb_get_ts_time(struct peak_time_ref *time_=
+ref, u32 ts, ktime_t *time)
+        /* protect from getting time before setting now */
+        if (ktime_to_ns(time_ref->tv_host)) {
+                u64 delta_us;
++               s64 delta_ts =3D 0;
++
++               /* General case: dev_ts_1 < dev_ts_2 < ts, with:
++                *
++                * - dev_ts_1 =3D previous sync timestamp
++                * - dev_ts_2 =3D last sync timestamp
++                * - ts =3D event timestamp
++                * - ts_period =3D known sync period (theoretical)
++                *             ~ dev_ts2 - dev_ts1
++                * *but*:
++                *
++                * - time counters wrap (see adapter->ts_used_bits)
++                * - sometimes, dev_ts_1 < ts < dev_ts2
++                *
++                * "normal" case (sync time counters increase):
++                * must take into account case when ts wraps (tsw)
++                *
++                *      < ts_period > <          >
++                *     |             |            |
++                *  ---+--------+----+-------0-+--+-->
++                *     ts_dev_1 |    ts_dev_2  |
++                *              ts             tsw
++                */
++               if (time_ref->ts_dev_1 < time_ref->ts_dev_2) {
++                       /* case when event time (tsw) wraps */
++                       if (ts < time_ref->ts_dev_1)
++                               delta_ts =3D 1 << time_ref->adapter->ts_use=
+d_bits;
++
++               /* Otherwise, sync time counter (ts_dev_2) has wrapped:
++                * handle case when event time (tsn) hasn't.
++                *
++                *      < ts_period > <          >
++                *     |             |            |
++                *  ---+--------+--0-+---------+--+-->
++                *     ts_dev_1 |    ts_dev_2  |
++                *              tsn            ts
++                */
++               } else if (time_ref->ts_dev_1 < ts) {
++                       delta_ts =3D -(1 << time_ref->adapter->ts_used_bits=
+);
++               }
+
+-               delta_us =3D ts - time_ref->ts_dev_2;
+-               if (ts < time_ref->ts_dev_2)
+-                       delta_us &=3D (1 << time_ref->adapter->ts_used_bits=
+) - 1;
++               /* add delay between last sync and event timestamps */
++               delta_ts +=3D (signed int)(ts - time_ref->ts_dev_2);
+
+-               delta_us +=3D time_ref->ts_total;
++               /* add time from beginning to last sync */
++               delta_ts +=3D time_ref->ts_total;
+
+-               delta_us *=3D time_ref->adapter->us_per_ts_scale;
++               /* convert ticks number into microseconds */
++               delta_us =3D delta_ts * time_ref->adapter->us_per_ts_scale;
+                delta_us >>=3D time_ref->adapter->us_per_ts_shift;
+
+                *time =3D ktime_add_us(time_ref->tv_host_0, delta_us);
+--
+2.25.1
+
+
+--
+PEAK-System Technik GmbH
+Sitz der Gesellschaft Darmstadt - HRB 9183
+Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
+Unsere Datenschutzerklaerung mit wichtigen Hinweisen
+zur Behandlung personenbezogener Daten finden Sie unter
+www.peak-system.com/Datenschutz.483.0.html
+
+--
+PEAK-System Technik GmbH
+Sitz der Gesellschaft Darmstadt - HRB 9183
+Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
+Unsere Datenschutzerklaerung mit wichtigen Hinweisen
+zur Behandlung personenbezogener Daten finden Sie unter
+www.peak-system.com/Datenschutz.483.0.html
