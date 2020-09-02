@@ -2,254 +2,178 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C072A259F69
-	for <lists+linux-can@lfdr.de>; Tue,  1 Sep 2020 21:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5745425A3F4
+	for <lists+linux-can@lfdr.de>; Wed,  2 Sep 2020 05:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730218AbgIATuZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Sep 2020 15:50:25 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:40538 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728845AbgIATuY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Sep 2020 15:50:24 -0400
-Received: by mail-io1-f71.google.com with SMTP id f8so1740890iow.7
-        for <linux-can@vger.kernel.org>; Tue, 01 Sep 2020 12:50:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=QCcUk6PDJ66T5rY64nvFgrqzOsiBnvjDHR8LfK6QB6w=;
-        b=QRoGbzipzqRqPXZ378CgLZMVPHN2EJRrW8kQgN5pOYQR6C20Dvr+qUvCT1VpRmvqrI
-         RVHVRBV2UJor13eF49ARxnCKakcr1XJC+ni+mZzWpMNgs4f0G8wjcPvJJ2GxnDybV/BF
-         RVd8WoA+RpM4wnlDyPb/7rECDS34diWV53Owpu43jXzjLjSuhZ5RUsxTm7xWt06P6SuA
-         39nO7FHvENbrUu8YxEqF/Io0uV9xIuGSklQW1JfbfmAtEczQQt7srE/xJXsgwjDy0bhC
-         sG2PIc7O63fcj/W3pDqMoIrugzk27fyx110z/SOUYtvlm0AzTvo1RdM8nRXYKAwZRsUw
-         0L0g==
-X-Gm-Message-State: AOAM531AtUR6MgspUu5mhN/8+wm+vQUgOpziOx2ukvLWvwmgKuSmKYV8
-        NNk7gzDWPvmLhCArhoZJ0or96jJtWfgDpjtz3Nj5bkeT+Twu
-X-Google-Smtp-Source: ABdhPJxiYFujkpS7nBzuzp8GpXCF2cbV4LuRtjQLL2CXA/QBzPK3lBB9PlerEbjYZDQ9Sj8fB40lmIkZgytC4lHDz+r0+w2dkPEv
+        id S1726244AbgIBDQz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Sep 2020 23:16:55 -0400
+Received: from mail-eopbgr20077.outbound.protection.outlook.com ([40.107.2.77]:50498
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726212AbgIBDQw (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 1 Sep 2020 23:16:52 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rr8p67iVFjwsAjW61v/EmY8EXDnxI8EZr1D7Hlm7E/9alFwd8boFVHNHeuuZ7BlcI3wn9HpDxDJvCm7J182sM9bDJBGl0b0dHUEMs7/wYHx6DTUxFEIXDus/ZqP5/scYlv1u2EQqBZ4vlyqHfxqPuOolYHDR9Z1uAiH8ms0EMsU02nSL0iApeBgd5cZHafvNlF+LsHi1VFWNVI0B8EdMeXEm7FmLo4b1dqlE5T7aofn/PgUvZ7e24R7NHL3UxgRB737MzPlKLNnANJpFALppK0iqRQm/FMSxj/jo88cKeU42LAS592u43NLXlTly7oY6ITHPVha/SW+q/Wb6/v+DYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FEoXdF3XgUh2347AjTMlHMzkYpYY/KugoCmizwX6bqE=;
+ b=cqA5wZrvfmyAeD8EpGXmZhK70XbEtR5BjXbU+TUsDNB4qVGnTm/SVTWEoF5sn4FIQAeCrk9QZEHiVqUZClAly03aASJjwqOLBQke5b9FehVxMsmLdguOaEiPq2Q+GzdSsK+yhmbeXjArbDC4yG8DfxdczLVIhMYTOnG2qDDhegCC30zsvHrlploTvvKkrOB7JCYv+z/CsGekpCI/v4R+D3oI5bpL3GAz2LImpQwCYdTrHX8dhmhe+vrOLBTolt/Ejkoio2YKjZi3yZsIHNdJ+utrh24mvl4Z2rbEfNGbKfhtKoolc20mIuZCVEILymoH5Uu41L9KIkSc0mJ6ilLhIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FEoXdF3XgUh2347AjTMlHMzkYpYY/KugoCmizwX6bqE=;
+ b=aLTqf3lyPKFV7zWT1NEcz099qSGcPWNZqBjSiSqvj0ewgIgfRA3tKrW+19vPhnhmI0RSFqZzTteJBd1mM6BLtZPPp3DuWk0Jjg+zqNeFN6FopxnKeux59/jneIQ3SIKx4K7ZBQQrYLyY10OGucnNPJ2DtFrigwQ3q5WGIYONPOs=
+Received: from VI1PR04MB4093.eurprd04.prod.outlook.com (2603:10a6:803:40::33)
+ by VI1PR0402MB3728.eurprd04.prod.outlook.com (2603:10a6:803:1f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Wed, 2 Sep
+ 2020 03:16:47 +0000
+Received: from VI1PR04MB4093.eurprd04.prod.outlook.com
+ ([fe80::b0a0:b6c5:a4d5:7bd3]) by VI1PR04MB4093.eurprd04.prod.outlook.com
+ ([fe80::b0a0:b6c5:a4d5:7bd3%5]) with mapi id 15.20.3326.025; Wed, 2 Sep 2020
+ 03:16:47 +0000
+From:   Pankaj Bansal <pankaj.bansal@nxp.com>
+To:     "Pankaj Bansal (OSS)" <pankaj.bansal@oss.nxp.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: canfdtest on flexcan loopback
+Thread-Topic: canfdtest on flexcan loopback
+Thread-Index: AdaA1oPvF2ksseKmSLeb8OzLcaFJ8Q==
+Date:   Wed, 2 Sep 2020 03:16:47 +0000
+Message-ID: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: oss.nxp.com; dkim=none (message not signed)
+ header.d=none;oss.nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [49.36.130.45]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5030fdee-b24f-491b-2959-08d84eeea07b
+x-ms-traffictypediagnostic: VI1PR0402MB3728:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR0402MB37286A5C79EECD284125FD3AF12F0@VI1PR0402MB3728.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0LXltzZXRov96RwWxt1QfY5yLWhJmbd5Cov8YoQ7kvaz4PksWf2jCcn/ERMIB5cfuIBiVxtByplqPu7xVzxTB/cKdiXSgy6A2Qlo+MMbU4SeYk64HsOd9E2ZycZL1MlOE+TQ2AirHxrWtXo+D7D982QQUVqc3/xFM5EziEcjjaoZv2Bv9XDinGj6xJ3xo7iFTlIWrZsNJp3vtq8Qwf5OZezIFvVzcE0PWEufxvF+PI5lGeETNP357itIey6oOqxcCDS+4ikwAYIYOnGvOwnDFnzMnWJ1Cf1l/4GpkhcLvT6jcWqFUNNgI7ZOg99Yls+vJ8N16VSCxtp9owWvNb8UNA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4093.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(8676002)(4326008)(186003)(26005)(66556008)(64756008)(66446008)(66476007)(7696005)(8936002)(66946007)(86362001)(5660300002)(76116006)(6506007)(2906002)(83380400001)(3480700007)(110136005)(55016002)(71200400001)(54906003)(9686003)(52536014)(44832011)(478600001)(33656002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 2QB0EBadUNRxMiMh3Q9fw1TM2kcCm08p2h+EFOt5cHN5/59g1vIKGO3WKgQ8GKWF0EiHV8Gxo+j53FZKvAgT+SPQ6fLnQovzo1HawdAmVCqUgKexbm4Xz+sgtEAM6VNBpBsoPP2sn/enjaABs1/B3FfDN7B4aqrSgCdTUPd5iRH4W1RK4HRrlvmVM1yyfSWdKfc3DW4AqAjRkce+hMu8f7faPGuRrI6gIiIj/p5nlbNL1etvV6m1OXNx/v0waVrwVhPBz5lxjaZ1l2NJosGZcwkgmRhjlhYdeKm6oFwMinpwsIikt67I39Q5n9++Jj5HdgURgmOcu93Km5NqSgUhPagKZ4n30/KJpVcJTutOsohLXrAB8kkb4VXRepMZzf1eAGFj5iLhKs/t4fBBxQBPW6vVGlDpNCvLD5pPJOUYtBSexy5zOmrWFr4XVAIVMI/6qf2sr0uR2aY2WcaCg3DxZCzRK9+H7BxdL2cbzfS0GWFO/wuzWgdhtM2orDRYmeHvnPenlsMr6pSXbC4WqNdjgeNhJTcVcldRYzl4rv3eMnd7gCdC5bLmQ+HdS0Z5ncRdKkrdgDlguy2abl1tP1qoNsrTioTsLpz15X/WiqdQUCMGmwpoE/DIeEw8vJw7bd9nnmg5+4oZKU0XTx+ZnR9oTA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a02:820b:: with SMTP id o11mr2893214jag.136.1598989822335;
- Tue, 01 Sep 2020 12:50:22 -0700 (PDT)
-Date:   Tue, 01 Sep 2020 12:50:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005c1dc605ae45d401@google.com>
-Subject: INFO: task can't die in register_netdevice_notifier
-From:   syzbot <syzbot+df649192fec7dd1beaa7@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4093.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5030fdee-b24f-491b-2959-08d84eeea07b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2020 03:16:47.4104
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D2NAFTAcrFufahsT5GyCfTY/xfP2mFnoDZ7lToItM6/FLfoW1Q2dQXqNPnCRmr9Wo9ltpe7DNeWKnxRsG07XnQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3728
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Marc et al,
 
-syzbot found the following issue on:
+I am running the canfdtest (can-utils-2020.02.04) on flexcan interface runn=
+ing in loopback mode:
 
-HEAD commit:    b36c9697 Add linux-next specific files for 20200828
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16660271900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5e3cf99580b5542c
-dashboard link: https://syzkaller.appspot.com/bug?extid=df649192fec7dd1beaa7
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+# ip link set can1 up type can bitrate 125000 loopback on
+# canfdtest -v -g can1
+interface =3D can1, family =3D 29, type =3D 3, proto =3D 1
+Databyte 0 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 1 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 2 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 3 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 4 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 5 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 6 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
+Databyte 7 mismatch !
+expected: 0077: [8] 01 02 03 04 05 06 07 08
+received: 0077: [8] 00 01 02 03 04 05 06 07
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Test messages sent and received: 0
+Exiting...
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+df649192fec7dd1beaa7@syzkaller.appspotmail.com
+However when I run cangen, then the order of frames is fine:
 
-INFO: task syz-executor.4:10877 can't die for more than 143 seconds.
-task:syz-executor.4  state:D stack:29424 pid:10877 ppid:  6874 flags:0x00004004
-Call Trace:
- context_switch kernel/sched/core.c:3778 [inline]
- __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
- schedule+0xd0/0x2a0 kernel/sched/core.c:4602
- rwsem_down_write_slowpath+0x603/0xc60 kernel/locking/rwsem.c:1235
- __down_write kernel/locking/rwsem.c:1389 [inline]
- down_write+0x137/0x150 kernel/locking/rwsem.c:1532
- register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1814
- bcm_init+0x1a3/0x210 net/can/bcm.c:1451
- can_create+0x27c/0x4d0 net/can/af_can.c:168
- __sock_create+0x3ca/0x740 net/socket.c:1427
- sock_create net/socket.c:1478 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1520
- __do_sys_socket net/socket.c:1529 [inline]
- __se_sys_socket net/socket.c:1527 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1527
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x45d5b9
-Code: Bad RIP value.
-RSP: 002b:00007f336efccc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 0000000000032b40 RCX: 000000000045d5b9
-RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
-RBP: 000000000118cf80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118cf4c
-R13: 00007ffed071b14f R14: 00007f336efcd9c0 R15: 000000000118cf4c
-INFO: task syz-executor.4:10877 blocked for more than 143 seconds.
-      Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.4  state:D stack:29424 pid:10877 ppid:  6874 flags:0x00004004
-Call Trace:
- context_switch kernel/sched/core.c:3778 [inline]
- __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
- schedule+0xd0/0x2a0 kernel/sched/core.c:4602
- rwsem_down_write_slowpath+0x603/0xc60 kernel/locking/rwsem.c:1235
- __down_write kernel/locking/rwsem.c:1389 [inline]
- down_write+0x137/0x150 kernel/locking/rwsem.c:1532
- register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1814
- bcm_init+0x1a3/0x210 net/can/bcm.c:1451
- can_create+0x27c/0x4d0 net/can/af_can.c:168
- __sock_create+0x3ca/0x740 net/socket.c:1427
- sock_create net/socket.c:1478 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1520
- __do_sys_socket net/socket.c:1529 [inline]
- __se_sys_socket net/socket.c:1527 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1527
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x45d5b9
-Code: Bad RIP value.
-RSP: 002b:00007f336efccc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 0000000000032b40 RCX: 000000000045d5b9
-RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
-RBP: 000000000118cf80 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118cf4c
-R13: 00007ffed071b14f R14: 00007f336efcd9c0 R15: 000000000118cf4c
-INFO: task syz-executor.4:10881 can't die for more than 144 seconds.
-task:syz-executor.4  state:D stack:29792 pid:10881 ppid:  6874 flags:0x00000004
-Call Trace:
- context_switch kernel/sched/core.c:3778 [inline]
- __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
- schedule+0xd0/0x2a0 kernel/sched/core.c:4602
- rwsem_down_write_slowpath+0x603/0xc60 kernel/locking/rwsem.c:1235
- __down_write kernel/locking/rwsem.c:1389 [inline]
- down_write+0x137/0x150 kernel/locking/rwsem.c:1532
- register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1814
- bcm_init+0x1a3/0x210 net/can/bcm.c:1451
- can_create+0x27c/0x4d0 net/can/af_can.c:168
- __sock_create+0x3ca/0x740 net/socket.c:1427
- sock_create net/socket.c:1478 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1520
- __do_sys_socket net/socket.c:1529 [inline]
- __se_sys_socket net/socket.c:1527 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1527
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x45d5b9
-Code: Bad RIP value.
-RSP: 002b:00007f336edccc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 0000000000032b40 RCX: 000000000045d5b9
-RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
-RBP: 000000000118d0c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118d08c
-R13: 00007ffed071b14f R14: 00007f336edcd9c0 R15: 000000000118d08c
-INFO: task syz-executor.4:10881 blocked for more than 144 seconds.
-      Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.4  state:D stack:29792 pid:10881 ppid:  6874 flags:0x00000004
-Call Trace:
- context_switch kernel/sched/core.c:3778 [inline]
- __schedule+0x8e5/0x21e0 kernel/sched/core.c:4527
- schedule+0xd0/0x2a0 kernel/sched/core.c:4602
- rwsem_down_write_slowpath+0x603/0xc60 kernel/locking/rwsem.c:1235
- __down_write kernel/locking/rwsem.c:1389 [inline]
- down_write+0x137/0x150 kernel/locking/rwsem.c:1532
- register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1814
- bcm_init+0x1a3/0x210 net/can/bcm.c:1451
- can_create+0x27c/0x4d0 net/can/af_can.c:168
- __sock_create+0x3ca/0x740 net/socket.c:1427
- sock_create net/socket.c:1478 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1520
- __do_sys_socket net/socket.c:1529 [inline]
- __se_sys_socket net/socket.c:1527 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1527
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x45d5b9
-Code: Bad RIP value.
-RSP: 002b:00007f336edccc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 0000000000032b40 RCX: 000000000045d5b9
-RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
-RBP: 000000000118d0c0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118d08c
-R13: 00007ffed071b14f R14: 00007f336edcd9c0 R15: 000000000118d08c
+# candump can1 &
+# cangen -n 100 can1
+  can1  4B2   [6]  65 BD 28 6D 49 0A
+  can1  4B2   [6]  65 BD 28 6D 49 0A
+  can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
+  can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
+  can1  397   [0]
+  can1  397   [0]
+  can1  3A2   [0]
+  can1  3A2   [0]
+  can1  143   [8]  22 A1 C5 56 FF 24 15 3A
+  can1  143   [8]  22 A1 C5 56 FF 24 15 3A
+  can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
+  can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
+  can1  393   [0]
+  can1  393   [0]
+  can1  5FC   [6]  42 CC F2 57 AE 22
+  can1  5FC   [6]  42 CC F2 57 AE 22
+  can1  08C   [7]  F8 2C BD 6F 8B 98 53
+  can1  08C   [7]  F8 2C BD 6F 8B 98 53
+  can1  4E1   [5]  3C 59 E1 3D 78
+  can1  4E1   [5]  3C 59 E1 3D 78
+  can1  6D6   [6]  5D AF EF 06 78 EA
+  can1  6D6   [6]  5D AF EF 06 78 EA
+  can1  217   [7]  10 DB EC 26 5A F3 49
+  can1  217   [7]  10 DB EC 26 5A F3 49
+  can1  072   [2]  59 18
+  can1  072   [2]  59 18
+  can1  5BF   [7]  91 BA 17 7F 52 F1 0D
+  can1  5BF   [7]  91 BA 17 7F 52 F1 0D
+  can1  307   [2]  C9 DA
+  can1  307   [2]  C9 DA
+  can1  628   [8]  B2 9B 31 26 B4 46 10 30
+  can1  628   [8]  B2 9B 31 26 B4 46 10 30
+  can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
+  can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
+  can1  330   [8]  0C BE 31 4B 06 FA 5C 78
+  can1  330   [8]  0C BE 31 4B 06 FA 5C 78
+  can1  142   [8]  7E E4 3E 69 59 7B 28 64
+  can1  142   [8]  7E E4 3E 69 59 7B 28 64
+  can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
+  can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
+  can1  3C1   [8]  2C EE 30 5B 80 79 51 13
+  can1  3C1   [8]  2C EE 30 5B 80 79 51 13
+  can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
+  can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
+  can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
+  can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
 
-Showing all locks held in the system:
-2 locks held by kworker/u4:2/80:
- #0: ffff8880ae635f98 (&rq->lock){-.-.}-{2:2}, at: rq_lock kernel/sched/sched.h:1292 [inline]
- #0: ffff8880ae635f98 (&rq->lock){-.-.}-{2:2}, at: __schedule+0x232/0x21e0 kernel/sched/core.c:4445
- #1: ffff8880ae620ec8 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x2fb/0x400 kernel/sched/psi.c:833
-1 lock held by khungtaskd/1169:
- #0: ffffffff89c67640 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:5825
-1 lock held by in:imklog/6548:
- #0: ffff888093dd26b0 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:930
-2 locks held by rs:main Q:Reg/6549:
- #0: ffff88809deee130 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:930
- #1: ffff888098aea460 (sb_writers#4){.+.+}-{0:0}, at: file_start_write include/linux/fs.h:2790 [inline]
- #1: ffff888098aea460 (sb_writers#4){.+.+}-{0:0}, at: vfs_write+0x54f/0x730 fs/read_write.c:574
-3 locks held by kworker/u4:8/8625:
-1 lock held by syz-executor.4/10877:
- #0: ffffffff8a879430 (pernet_ops_rwsem){++++}-{3:3}, at: register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1814
-1 lock held by syz-executor.4/10881:
- #0: ffffffff8a879430 (pernet_ops_rwsem){++++}-{3:3}, at: register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1814
+I am using the latest Linux-stable-rc kernel (v5.9-rc2).
 
-=============================================
+Is this known issue/limitation with canfdtest application ?
 
-NMI backtrace for cpu 1
-CPU: 1 PID: 1169 Comm: khungtaskd Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- nmi_cpu_backtrace.cold+0x44/0xd7 lib/nmi_backtrace.c:105
- nmi_trigger_cpumask_backtrace+0x1b3/0x223 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:147 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:253 [inline]
- watchdog+0xd89/0xf30 kernel/hung_task.c:339
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 8625 Comm: kworker/u4:8 Not tainted 5.9.0-rc2-next-20200828-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: netns cleanup_net
-RIP: 0010:lock_acquire+0x1e/0xad0 kernel/locking/lockdep.c:4977
-Code: 66 90 66 2e 0f 1f 84 00 00 00 00 00 41 57 41 56 41 89 d6 41 55 49 89 fd 41 54 41 89 cc 48 b9 00 00 00 00 00 fc ff df 55 89 f5 <53> 44 89 c3 48 81 ec c0 00 00 00 48 8d 44 24 20 4c 89 0c 24 48 c7
-RSP: 0018:ffffc900065ffb40 EFLAGS: 00000246
-RAX: 0000000000000201 RBX: 0000000000010000 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff89a6be98
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 000000000000160f R11: 0000000000000001 R12: 0000000000000000
-R13: ffffffff89a6be98 R14: 0000000000000000 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8880ae600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f8fc077f000 CR3: 000000009f467000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- __raw_spin_lock include/linux/spinlock_api_smp.h:142 [inline]
- _raw_spin_lock+0x2a/0x40 kernel/locking/spinlock.c:151
- spin_lock include/linux/spinlock.h:354 [inline]
- nf_conntrack_lock net/netfilter/nf_conntrack_core.c:91 [inline]
- get_next_corpse net/netfilter/nf_conntrack_core.c:2204 [inline]
- nf_ct_iterate_cleanup+0x102/0x330 net/netfilter/nf_conntrack_core.c:2249
- nf_conntrack_cleanup_net_list+0x81/0x250 net/netfilter/nf_conntrack_core.c:2436
- ops_exit_list+0x10d/0x160 net/core/net_namespace.c:189
- cleanup_net+0x4ea/0xb10 net/core/net_namespace.c:603
- process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x3b5/0x4a0 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Regards,
+Pankaj Bansal
