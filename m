@@ -2,178 +2,189 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5745425A3F4
-	for <lists+linux-can@lfdr.de>; Wed,  2 Sep 2020 05:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F4125A63A
+	for <lists+linux-can@lfdr.de>; Wed,  2 Sep 2020 09:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgIBDQz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Sep 2020 23:16:55 -0400
-Received: from mail-eopbgr20077.outbound.protection.outlook.com ([40.107.2.77]:50498
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726212AbgIBDQw (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 1 Sep 2020 23:16:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rr8p67iVFjwsAjW61v/EmY8EXDnxI8EZr1D7Hlm7E/9alFwd8boFVHNHeuuZ7BlcI3wn9HpDxDJvCm7J182sM9bDJBGl0b0dHUEMs7/wYHx6DTUxFEIXDus/ZqP5/scYlv1u2EQqBZ4vlyqHfxqPuOolYHDR9Z1uAiH8ms0EMsU02nSL0iApeBgd5cZHafvNlF+LsHi1VFWNVI0B8EdMeXEm7FmLo4b1dqlE5T7aofn/PgUvZ7e24R7NHL3UxgRB737MzPlKLNnANJpFALppK0iqRQm/FMSxj/jo88cKeU42LAS592u43NLXlTly7oY6ITHPVha/SW+q/Wb6/v+DYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FEoXdF3XgUh2347AjTMlHMzkYpYY/KugoCmizwX6bqE=;
- b=cqA5wZrvfmyAeD8EpGXmZhK70XbEtR5BjXbU+TUsDNB4qVGnTm/SVTWEoF5sn4FIQAeCrk9QZEHiVqUZClAly03aASJjwqOLBQke5b9FehVxMsmLdguOaEiPq2Q+GzdSsK+yhmbeXjArbDC4yG8DfxdczLVIhMYTOnG2qDDhegCC30zsvHrlploTvvKkrOB7JCYv+z/CsGekpCI/v4R+D3oI5bpL3GAz2LImpQwCYdTrHX8dhmhe+vrOLBTolt/Ejkoio2YKjZi3yZsIHNdJ+utrh24mvl4Z2rbEfNGbKfhtKoolc20mIuZCVEILymoH5Uu41L9KIkSc0mJ6ilLhIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FEoXdF3XgUh2347AjTMlHMzkYpYY/KugoCmizwX6bqE=;
- b=aLTqf3lyPKFV7zWT1NEcz099qSGcPWNZqBjSiSqvj0ewgIgfRA3tKrW+19vPhnhmI0RSFqZzTteJBd1mM6BLtZPPp3DuWk0Jjg+zqNeFN6FopxnKeux59/jneIQ3SIKx4K7ZBQQrYLyY10OGucnNPJ2DtFrigwQ3q5WGIYONPOs=
-Received: from VI1PR04MB4093.eurprd04.prod.outlook.com (2603:10a6:803:40::33)
- by VI1PR0402MB3728.eurprd04.prod.outlook.com (2603:10a6:803:1f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Wed, 2 Sep
- 2020 03:16:47 +0000
-Received: from VI1PR04MB4093.eurprd04.prod.outlook.com
- ([fe80::b0a0:b6c5:a4d5:7bd3]) by VI1PR04MB4093.eurprd04.prod.outlook.com
- ([fe80::b0a0:b6c5:a4d5:7bd3%5]) with mapi id 15.20.3326.025; Wed, 2 Sep 2020
- 03:16:47 +0000
-From:   Pankaj Bansal <pankaj.bansal@nxp.com>
-To:     "Pankaj Bansal (OSS)" <pankaj.bansal@oss.nxp.com>,
+        id S1726301AbgIBHOm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Sep 2020 03:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726173AbgIBHOl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Sep 2020 03:14:41 -0400
+X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Sep 2020 00:14:41 PDT
+Received: from mailproxy03.manitu.net (mailproxy03.manitu.net [IPv6:2a00:1828:1000:1108::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012BDC061244
+        for <linux-can@vger.kernel.org>; Wed,  2 Sep 2020 00:14:40 -0700 (PDT)
+Received: from [IPv6:2001:a61:bb6:801:d448:3c0a:26b6:cbb1] (unknown [IPv6:2001:a61:bb6:801:d448:3c0a:26b6:cbb1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: wg@grandegger.com)
+        by mailproxy03.manitu.net (Postfix) with ESMTPSA id 3868AD46D77;
+        Wed,  2 Sep 2020 09:08:51 +0200 (CEST)
+Subject: Re: canfdtest on flexcan loopback
+To:     Pankaj Bansal <pankaj.bansal@nxp.com>,
+        "Pankaj Bansal (OSS)" <pankaj.bansal@oss.nxp.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
         Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: canfdtest on flexcan loopback
-Thread-Topic: canfdtest on flexcan loopback
-Thread-Index: AdaA1oPvF2ksseKmSLeb8OzLcaFJ8Q==
-Date:   Wed, 2 Sep 2020 03:16:47 +0000
-Message-ID: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: oss.nxp.com; dkim=none (message not signed)
- header.d=none;oss.nxp.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [49.36.130.45]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5030fdee-b24f-491b-2959-08d84eeea07b
-x-ms-traffictypediagnostic: VI1PR0402MB3728:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR0402MB37286A5C79EECD284125FD3AF12F0@VI1PR0402MB3728.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0LXltzZXRov96RwWxt1QfY5yLWhJmbd5Cov8YoQ7kvaz4PksWf2jCcn/ERMIB5cfuIBiVxtByplqPu7xVzxTB/cKdiXSgy6A2Qlo+MMbU4SeYk64HsOd9E2ZycZL1MlOE+TQ2AirHxrWtXo+D7D982QQUVqc3/xFM5EziEcjjaoZv2Bv9XDinGj6xJ3xo7iFTlIWrZsNJp3vtq8Qwf5OZezIFvVzcE0PWEufxvF+PI5lGeETNP357itIey6oOqxcCDS+4ikwAYIYOnGvOwnDFnzMnWJ1Cf1l/4GpkhcLvT6jcWqFUNNgI7ZOg99Yls+vJ8N16VSCxtp9owWvNb8UNA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4093.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(8676002)(4326008)(186003)(26005)(66556008)(64756008)(66446008)(66476007)(7696005)(8936002)(66946007)(86362001)(5660300002)(76116006)(6506007)(2906002)(83380400001)(3480700007)(110136005)(55016002)(71200400001)(54906003)(9686003)(52536014)(44832011)(478600001)(33656002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 2QB0EBadUNRxMiMh3Q9fw1TM2kcCm08p2h+EFOt5cHN5/59g1vIKGO3WKgQ8GKWF0EiHV8Gxo+j53FZKvAgT+SPQ6fLnQovzo1HawdAmVCqUgKexbm4Xz+sgtEAM6VNBpBsoPP2sn/enjaABs1/B3FfDN7B4aqrSgCdTUPd5iRH4W1RK4HRrlvmVM1yyfSWdKfc3DW4AqAjRkce+hMu8f7faPGuRrI6gIiIj/p5nlbNL1etvV6m1OXNx/v0waVrwVhPBz5lxjaZ1l2NJosGZcwkgmRhjlhYdeKm6oFwMinpwsIikt67I39Q5n9++Jj5HdgURgmOcu93Km5NqSgUhPagKZ4n30/KJpVcJTutOsohLXrAB8kkb4VXRepMZzf1eAGFj5iLhKs/t4fBBxQBPW6vVGlDpNCvLD5pPJOUYtBSexy5zOmrWFr4XVAIVMI/6qf2sr0uR2aY2WcaCg3DxZCzRK9+H7BxdL2cbzfS0GWFO/wuzWgdhtM2orDRYmeHvnPenlsMr6pSXbC4WqNdjgeNhJTcVcldRYzl4rv3eMnd7gCdC5bLmQ+HdS0Z5ncRdKkrdgDlguy2abl1tP1qoNsrTioTsLpz15X/WiqdQUCMGmwpoE/DIeEw8vJw7bd9nnmg5+4oZKU0XTx+ZnR9oTA==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+References: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
+From:   Wolfgang Grandegger <wg@grandegger.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=wg@grandegger.com; prefer-encrypt=mutual; keydata=
+ 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
+ 8QEfHnPzgykCs2DOOQ==
+Message-ID: <54b51f10-0b80-c41f-11d2-e1caa851dd50@grandegger.com>
+Date:   Wed, 2 Sep 2020 09:08:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4093.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5030fdee-b24f-491b-2959-08d84eeea07b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2020 03:16:47.4104
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: D2NAFTAcrFufahsT5GyCfTY/xfP2mFnoDZ7lToItM6/FLfoW1Q2dQXqNPnCRmr9Wo9ltpe7DNeWKnxRsG07XnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3728
+In-Reply-To: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc et al,
+Hello,
 
-I am running the canfdtest (can-utils-2020.02.04) on flexcan interface runn=
-ing in loopback mode:
+Am 02.09.20 um 05:16 schrieb Pankaj Bansal:
+> Hi Marc et al,
+> 
+> I am running the canfdtest (can-utils-2020.02.04) on flexcan interface running in loopback mode:
+> 
+> # ip link set can1 up type can bitrate 125000 loopback on
+> # canfdtest -v -g can1
+> interface = can1, family = 29, type = 3, proto = 1
+> Databyte 0 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 1 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 2 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 3 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 4 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 5 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 6 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> Databyte 7 mismatch !
+> expected: 0077: [8] 01 02 03 04 05 06 07 08
+> received: 0077: [8] 00 01 02 03 04 05 06 07
+> 
+> Test messages sent and received: 0
+> Exiting...
+> 
+> However when I run cangen, then the order of frames is fine:
+> 
+> # candump can1 &
+> # cangen -n 100 can1
+>   can1  4B2   [6]  65 BD 28 6D 49 0A
+>   can1  4B2   [6]  65 BD 28 6D 49 0A
+>   can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
+>   can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
+>   can1  397   [0]
+>   can1  397   [0]
+>   can1  3A2   [0]
+>   can1  3A2   [0]
+>   can1  143   [8]  22 A1 C5 56 FF 24 15 3A
+>   can1  143   [8]  22 A1 C5 56 FF 24 15 3A
+>   can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
+>   can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
+>   can1  393   [0]
+>   can1  393   [0]
+>   can1  5FC   [6]  42 CC F2 57 AE 22
+>   can1  5FC   [6]  42 CC F2 57 AE 22
+>   can1  08C   [7]  F8 2C BD 6F 8B 98 53
+>   can1  08C   [7]  F8 2C BD 6F 8B 98 53
+>   can1  4E1   [5]  3C 59 E1 3D 78
+>   can1  4E1   [5]  3C 59 E1 3D 78
+>   can1  6D6   [6]  5D AF EF 06 78 EA
+>   can1  6D6   [6]  5D AF EF 06 78 EA
+>   can1  217   [7]  10 DB EC 26 5A F3 49
+>   can1  217   [7]  10 DB EC 26 5A F3 49
+>   can1  072   [2]  59 18
+>   can1  072   [2]  59 18
+>   can1  5BF   [7]  91 BA 17 7F 52 F1 0D
+>   can1  5BF   [7]  91 BA 17 7F 52 F1 0D
+>   can1  307   [2]  C9 DA
+>   can1  307   [2]  C9 DA
+>   can1  628   [8]  B2 9B 31 26 B4 46 10 30
+>   can1  628   [8]  B2 9B 31 26 B4 46 10 30
+>   can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
+>   can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
+>   can1  330   [8]  0C BE 31 4B 06 FA 5C 78
+>   can1  330   [8]  0C BE 31 4B 06 FA 5C 78
+>   can1  142   [8]  7E E4 3E 69 59 7B 28 64
+>   can1  142   [8]  7E E4 3E 69 59 7B 28 64
+>   can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
+>   can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
+>   can1  3C1   [8]  2C EE 30 5B 80 79 51 13
+>   can1  3C1   [8]  2C EE 30 5B 80 79 51 13
+>   can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
+>   can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
+>   can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
+>   can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
+> 
+> I am using the latest Linux-stable-rc kernel (v5.9-rc2).
+> 
+> Is this known issue/limitation with canfdtest application ?
 
-# ip link set can1 up type can bitrate 125000 loopback on
-# canfdtest -v -g can1
-interface =3D can1, family =3D 29, type =3D 3, proto =3D 1
-Databyte 0 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 1 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 2 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 3 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 4 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 5 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 6 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
-Databyte 7 mismatch !
-expected: 0077: [8] 01 02 03 04 05 06 07 08
-received: 0077: [8] 00 01 02 03 04 05 06 07
+canfdtest normally runs on the DUT *and* a the host. The DUT receives
+the messages from the host, increments the frame data bytes and then
+sends them back to the host. With "loopback" mode, the data bytes are
+not incremented and that's what you see above.
 
-Test messages sent and received: 0
-Exiting...
-
-However when I run cangen, then the order of frames is fine:
-
-# candump can1 &
-# cangen -n 100 can1
-  can1  4B2   [6]  65 BD 28 6D 49 0A
-  can1  4B2   [6]  65 BD 28 6D 49 0A
-  can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
-  can1  7FF   [8]  8D 05 E2 50 B0 C0 8D 79
-  can1  397   [0]
-  can1  397   [0]
-  can1  3A2   [0]
-  can1  3A2   [0]
-  can1  143   [8]  22 A1 C5 56 FF 24 15 3A
-  can1  143   [8]  22 A1 C5 56 FF 24 15 3A
-  can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
-  can1  036   [8]  6D 5B 6C 6D E8 39 E6 5E
-  can1  393   [0]
-  can1  393   [0]
-  can1  5FC   [6]  42 CC F2 57 AE 22
-  can1  5FC   [6]  42 CC F2 57 AE 22
-  can1  08C   [7]  F8 2C BD 6F 8B 98 53
-  can1  08C   [7]  F8 2C BD 6F 8B 98 53
-  can1  4E1   [5]  3C 59 E1 3D 78
-  can1  4E1   [5]  3C 59 E1 3D 78
-  can1  6D6   [6]  5D AF EF 06 78 EA
-  can1  6D6   [6]  5D AF EF 06 78 EA
-  can1  217   [7]  10 DB EC 26 5A F3 49
-  can1  217   [7]  10 DB EC 26 5A F3 49
-  can1  072   [2]  59 18
-  can1  072   [2]  59 18
-  can1  5BF   [7]  91 BA 17 7F 52 F1 0D
-  can1  5BF   [7]  91 BA 17 7F 52 F1 0D
-  can1  307   [2]  C9 DA
-  can1  307   [2]  C9 DA
-  can1  628   [8]  B2 9B 31 26 B4 46 10 30
-  can1  628   [8]  B2 9B 31 26 B4 46 10 30
-  can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
-  can1  0B2   [8]  3F DF 63 74 94 6D 33 4B
-  can1  330   [8]  0C BE 31 4B 06 FA 5C 78
-  can1  330   [8]  0C BE 31 4B 06 FA 5C 78
-  can1  142   [8]  7E E4 3E 69 59 7B 28 64
-  can1  142   [8]  7E E4 3E 69 59 7B 28 64
-  can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
-  can1  511   [8]  B3 6E 72 1F 83 6D FF 3A
-  can1  3C1   [8]  2C EE 30 5B 80 79 51 13
-  can1  3C1   [8]  2C EE 30 5B 80 79 51 13
-  can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
-  can1  2D4   [8]  D2 6A 5F 00 DB ED D4 38
-  can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
-  can1  3F0   [8]  DF 66 77 38 18 A2 1D 4D
-
-I am using the latest Linux-stable-rc kernel (v5.9-rc2).
-
-Is this known issue/limitation with canfdtest application ?
-
-Regards,
-Pankaj Bansal
+Wolfgang
