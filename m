@@ -2,70 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9609125FAF5
-	for <lists+linux-can@lfdr.de>; Mon,  7 Sep 2020 15:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D70261519
+	for <lists+linux-can@lfdr.de>; Tue,  8 Sep 2020 18:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729336AbgIGNHh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Sep 2020 09:07:37 -0400
-Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:43077 "EHLO
-        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729351AbgIGNH3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Sep 2020 09:07:29 -0400
-Received: from p1.motec.com.au (n175-33-166-74.meb2.vic.optusnet.com.au [175.33.166.74])
-        (Authenticated sender: thomasaevans@optusnet.com.au)
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPA id 3D1E6824378;
-        Mon,  7 Sep 2020 23:07:01 +1000 (AEST)
-Reply-To: tom_usenet@optusnet.com.au
-Subject: Re: Questions about using multiple sockets
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        henrique ricardo figueira <henrislip@gmail.com>,
-        linux-can@vger.kernel.org
-References: <CAD1tVCN7-T=FHNQEz3Bp-0Kt3H6M1RokyUuw=e9sTLdXNWB=DQ@mail.gmail.com>
- <20200903054724.x6giher7ldmuvbac@pengutronix.de>
- <1116be40-25c4-002e-8455-5d5f86ac6e03@optusnet.com.au>
- <ebbe3d01-f36b-78e5-3a73-eee7f868b464@hartkopp.net>
- <20200907123356.GA15060@x1.vandijck-laurijssen.be>
-From:   Tom Evans <tom_usenet@optusnet.com.au>
-Message-ID: <18093198-d04c-e07e-9a92-306f9d0afbb7@optusnet.com.au>
-Date:   Mon, 7 Sep 2020 23:07:00 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
-MIME-Version: 1.0
-In-Reply-To: <20200907123356.GA15060@x1.vandijck-laurijssen.be>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-AU
-Content-Transfer-Encoding: 7bit
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=XJ9OtjpE c=1 sm=1 tr=0 cx=a_idp_d
-        a=sd228vxsjXR49agASWeIzg==:117 a=sd228vxsjXR49agASWeIzg==:17
-        a=IkcTkHD0fZMA:10 a=RSmzAf-M6YYA:10 a=Ye9q-bpsAAAA:8
-        a=neUsgK625uVJJ175li8A:9 a=QEXdDO2ut3YA:10
+        id S1731772AbgIHQnq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Sep 2020 12:43:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732022AbgIHQbi (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:31:38 -0400
+Received: from localhost.localdomain (unknown [194.230.155.174])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5ED822C9C;
+        Tue,  8 Sep 2020 14:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599577202;
+        bh=5e2FeFGeBsQ08Xbq+c6ro2JvZjXm8XuuPBlwX6Hax+g=;
+        h=From:To:Subject:Date:From;
+        b=qgJeyzEPOC/OZb4p2XNSaZQ1LKhhDQM0wSLJswkbINraU//gjo2q3iNVapN3KlpoX
+         LD+GSH763ArX4beMKDc/0Nj2S3pV0mCEZWbQmWOXULN3x+JV5TJFK99hlwhsNBhvOo
+         gvUcAsfw4BUb54G+Juq4Zw3m4IWCuT7C6nZvAl08=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dan Murphy <dmurphy@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: net: Correct interrupt flags in examples
+Date:   Tue,  8 Sep 2020 16:59:39 +0200
+Message-Id: <20200908145939.4569-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 7/9/20 10:33 pm, Kurt Van Dijck wrote:
->>
->> The 'problem' seems to be already introduced by that specific ECU ;-)
-> 
-> In my experience, it's hard to use 29bit CAN id's mixed with J1939.
-> But the 11bit CAN id range is free to use without any conflict with
-> j1939.
-> I've seen some uses of this 11bit id's.
+GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
+These are simple defines so they could be used in DTS but they will not
+have the same meaning:
+1. GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE
+2. GPIO_ACTIVE_LOW  = 1 = IRQ_TYPE_EDGE_RISING
 
-Just as long as all other devices on the bus are perfect and fully tested, and don't do what was in 
-one of the links I sent previously:
+Correct the interrupt flags, assuming the author of the code wanted some
+logical behavior behind the name "ACTIVE_xxx", this is:
+  ACTIVE_LOW  => IRQ_TYPE_LEVEL_LOW
+  ACTIVE_HIGH => IRQ_TYPE_LEVEL_HIGH
 
-https://electronics.stackexchange.com/questions/467932/is-it-possible-to-use-j1939-and-canopen-on-the-same-bus
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ Documentation/devicetree/bindings/net/can/tcan4x5x.txt | 2 +-
+ Documentation/devicetree/bindings/net/nfc/nxp-nci.txt  | 2 +-
+ Documentation/devicetree/bindings/net/nfc/pn544.txt    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-     Certain CAN nodes don't distinguish between 11 or 29 bit
-     internally.
+diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+index 3613c2c8f75d..0968b40aef1e 100644
+--- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
++++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+@@ -33,7 +33,7 @@ tcan4x5x: tcan4x5x@0 {
+ 		spi-max-frequency = <10000000>;
+ 		bosch,mram-cfg = <0x0 0 0 32 0 0 1 1>;
+ 		interrupt-parent = <&gpio1>;
+-		interrupts = <14 GPIO_ACTIVE_LOW>;
++		interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
+ 		device-state-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+ 		device-wake-gpios = <&gpio1 15 GPIO_ACTIVE_HIGH>;
+ 		reset-gpios = <&gpio1 27 GPIO_ACTIVE_HIGH>;
+diff --git a/Documentation/devicetree/bindings/net/nfc/nxp-nci.txt b/Documentation/devicetree/bindings/net/nfc/nxp-nci.txt
+index cfaf88998918..9e4dc510a40a 100644
+--- a/Documentation/devicetree/bindings/net/nfc/nxp-nci.txt
++++ b/Documentation/devicetree/bindings/net/nfc/nxp-nci.txt
+@@ -25,7 +25,7 @@ Example (for ARM-based BeagleBone with NPC100 NFC controller on I2C2):
+ 		clock-frequency = <100000>;
+ 
+ 		interrupt-parent = <&gpio1>;
+-		interrupts = <29 GPIO_ACTIVE_HIGH>;
++		interrupts = <29 IRQ_TYPE_LEVEL_HIGH>;
+ 
+ 		enable-gpios = <&gpio0 30 GPIO_ACTIVE_HIGH>;
+ 		firmware-gpios = <&gpio0 31 GPIO_ACTIVE_HIGH>;
+diff --git a/Documentation/devicetree/bindings/net/nfc/pn544.txt b/Documentation/devicetree/bindings/net/nfc/pn544.txt
+index 92f399ec22b8..2bd82562ce8e 100644
+--- a/Documentation/devicetree/bindings/net/nfc/pn544.txt
++++ b/Documentation/devicetree/bindings/net/nfc/pn544.txt
+@@ -25,7 +25,7 @@ Example (for ARM-based BeagleBone with PN544 on I2C2):
+ 		clock-frequency = <400000>;
+ 
+ 		interrupt-parent = <&gpio1>;
+-		interrupts = <17 GPIO_ACTIVE_HIGH>;
++		interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
+ 
+ 		enable-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
+ 		firmware-gpios = <&gpio3 19 GPIO_ACTIVE_HIGH>;
+-- 
+2.17.1
 
-There are a lot of CAN devices out there that work well enough in the limited environment they've 
-been tested in. But add anything else to the bus and change the traffic or addresses in use and you 
-might find they can't handle that. They might be demonstrably buggy, but it will still be your 
-fault. Especially if they throw a DTC and don't work until the vehicle gets back to the dealer to 
-clear it. BeenThereDoneThat.
-
-Tom
