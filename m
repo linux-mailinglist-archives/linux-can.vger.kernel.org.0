@@ -2,59 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F1B265386
-	for <lists+linux-can@lfdr.de>; Thu, 10 Sep 2020 23:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FB1265375
+	for <lists+linux-can@lfdr.de>; Thu, 10 Sep 2020 23:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728014AbgIJVg4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Sep 2020 17:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
+        id S1727864AbgIJVfZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Sep 2020 17:35:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730929AbgIJNjG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Sep 2020 09:39:06 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E7BC061786
-        for <linux-can@vger.kernel.org>; Thu, 10 Sep 2020 06:38:34 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d19so932247pld.0
-        for <linux-can@vger.kernel.org>; Thu, 10 Sep 2020 06:38:34 -0700 (PDT)
+        with ESMTP id S1730950AbgIJNkV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Sep 2020 09:40:21 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17584C06179F
+        for <linux-can@vger.kernel.org>; Thu, 10 Sep 2020 06:38:36 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 5so4267989pgl.4
+        for <linux-can@vger.kernel.org>; Thu, 10 Sep 2020 06:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=iLHRBASNYEmkuiDuFe0SBkN4vlTm2qDSJERpRCtFbFA=;
-        b=vEnJvArt/jV0tucYprJiUPmNwaW3jWlqQwEcsKSihRWgrM8pMPo1UEWkeD7wLyJ6B9
-         BqZCp3BAD57mPSKl6tForgxMWdF4TWrEL/PplwAsPWRmqm+kUipqzcyzUoi0opDv261Y
-         t+IgVsFA6a4onPVxt0ULMwUyVwm0ZpmLO77dcF/3juGtwdYUYWzLa3VgDl1msKV+/xuK
-         Yv+ddumuoJjCRfAzM+tEtm+Ux6JBXCl/gATaROEnpSnXRfVyf1esldpCG9WNjnvwNU48
-         srhGrK+ThsD48PMEom/iZ1ppJpptRtIP5GHMQIiwCXa33b6WX6sCWmWnP1MOK+gHFyEC
-         rgjQ==
+        bh=/0UJlMMYS97ZEd1pzZy1E70sLlZzGqr7O+AUirQ/jf8=;
+        b=JWLt/K0QwNvzoj6nxqKPcWAMMXsRyj3oN5+4omDOjxwKh6VeMqT0tOggHi3F5AYIbt
+         hyxo5lP35yLC+r5RRZWsGyW9UD6G6hm5mW+ADILi1Dx59pSfOnkl9/xG79xybquIlCoH
+         DyvTbrQzw43bvNGC6PdmN3nZHYQSm/Xd0bIqyFoCceAhDa5mfOugjvUD8i8vrGipBWg+
+         lrW5SQU3A/CUOJncDK5n26xHziFS7caOipKAve2w4lQ5me4Pe3f0dwnvCJTbfJyXp414
+         AhmAVU5GTrcKuNrA3ZaUk+yiBVryOa4cmozrqoePAqtkn7dyg53KoTrqedbYX86jouPV
+         yNoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=iLHRBASNYEmkuiDuFe0SBkN4vlTm2qDSJERpRCtFbFA=;
-        b=eX2tJokB0+ifeDh/V6YfKlKGi9qsPaMe5HlCAaQoNSvEX8QVNMJ+k91uGJJb37Ewz+
-         ZgtG7FqnrLlUMKe8IaoZJjKfqDf31UkKsA39T1hKKcRgnkkPP4Ww+BvieQ+z8W6TclPo
-         3rz/x9lRsjilM6hUbvC2CVIVW/g1/j88oULdPN83mE+cBuJedh9MuwXKMZ1tW0QlD7cO
-         Tf8CRgjdd82HgcfK3SG4blKGh2wr3ACWgmJ2fCt5JW8zYkxA1oayOJSIGg8/hbJDsVuE
-         Oq3YiGXtyVQnkTxOzi8OtO5ZB+OPVWAhuGpwIEQFKl8yPjbnwSf6tMOqVws2rcgduBQt
-         On4g==
-X-Gm-Message-State: AOAM531a76eVt+uTeVnXS//uRAAkApv/alDxWp9YZzxXdMj7sZG/a7Q2
-        6s1r4cYA8B9exg6PCOnX2BrZL6SUuKx8pxQ=
-X-Google-Smtp-Source: ABdhPJzeWOZ1pKO1jcd2dS9St5qDG+fGn/Dm3FoTJSpj456ARhGUf0y/P2YtXpGsHxYBpIY+z3cXKg==
-X-Received: by 2002:a17:90a:d3cd:: with SMTP id d13mr33821pjw.70.1599745105313;
-        Thu, 10 Sep 2020 06:38:25 -0700 (PDT)
+        bh=/0UJlMMYS97ZEd1pzZy1E70sLlZzGqr7O+AUirQ/jf8=;
+        b=qsv9jyjhTzl+eaFDMyCXoQP9DW7CqWICeQahFFBgesIhXby+U9Ot4NpM4wXSfNkcdr
+         Ca6P9dI6+IZKYepoHf3L8HPVTQsue9H3QOKubdxAwILl2qqhNw6n6ClGDLJ9+wwLnC//
+         P1MoHj+4oPT5uRsIKj6I5DdF/As6X1FmDTB4Q4ZApHRRI4NNDIyyTXR1lT9P1iEr/SRa
+         CMsbBrM6LlXVvLnvSOCIJjFvAOdNjXi2NFNR6wie1Oio2SALAhB6vmgygUxNQ3moGC4Z
+         tiwe/EI0EXPPjHBegOAOQf++pQBRsuCSgttt16wSZqRWF++F4IPiUuHxKt5bvVdd4bzk
+         dfrg==
+X-Gm-Message-State: AOAM532cEqja2Vpbic/Sqn6XY3mNfuNTK3J9HE+rJHD4W4y0LPXQI3Ly
+        Gii8uGi0qBatlnpGv+9QJ6rd
+X-Google-Smtp-Source: ABdhPJzqI5xjENQcYNVIlYz3X+XwkhIeEHTTbg43DOqqVs41K+m+0e9zySQ0dINzjL9/TNZ774pDzQ==
+X-Received: by 2002:a62:19c2:: with SMTP id 185mr5497347pfz.1.1599745115588;
+        Thu, 10 Sep 2020 06:38:35 -0700 (PDT)
 Received: from localhost.localdomain ([103.59.133.81])
-        by smtp.googlemail.com with ESMTPSA id o30sm5603801pgc.45.2020.09.10.06.38.22
+        by smtp.googlemail.com with ESMTPSA id o30sm5603801pgc.45.2020.09.10.06.38.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:38:24 -0700 (PDT)
+        Thu, 10 Sep 2020 06:38:35 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     wg@grandegger.com, mkl@pengutronix.de, robh+dt@kernel.org
 Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, dev.kurt@vandijck-laurijssen.be,
         o.rempel@pengutronix.de,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 2/6] dt-bindings: can: mcp25xxfd: document device tree bindings
-Date:   Thu, 10 Sep 2020 19:08:02 +0530
-Message-Id: <20200910133806.25077-3-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 5/6] can: mcp25xxfd: add listen-only mode
+Date:   Thu, 10 Sep 2020 19:08:05 +0530
+Message-Id: <20200910133806.25077-6-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
 References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
@@ -63,104 +63,72 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oleksij Rempel <o.rempel@pengutronix.de>
+From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 
-This patch adds the device-tree binding documentation for the Microchip
-MCP25xxFD SPI CAN controller family.
+This commit enables listen-only mode, which works internally like CANFD mode.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- .../bindings/net/can/microchip,mcp25xxfd.yaml | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
+ drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c | 16 ++++++++++------
+ 1 file changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
-new file mode 100644
-index 000000000000..aa2cad14d6d7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/can/microchip,mcp25xxfd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title:
-+  Microchip MCP2517FD and MCP2518FD stand-alone CAN controller device tree
-+  bindings
-+
-+maintainers:
-+  - Marc Kleine-Budde <mkl@pengutronix.de>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: microchip,mcp2517fd
-+        description: for MCP2517FD
-+      - const: microchip,mcp2518fd
-+        description: for MCP2518FD
-+      - const: microchip,mcp25xxfd
-+        description: to autodetect chip variant
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts-extended:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  vdd-supply:
-+    description: Regulator that powers the CAN controller.
-+    maxItems: 1
-+
-+  xceiver-supply:
-+    description: Regulator that powers the CAN transceiver.
-+    maxItems: 1
-+
-+  microchip,rx-int-gpios:
-+    description:
-+      GPIO phandle of GPIO connected to to INT1 pin of the MCP25XXFD, which
-+      signals a pending RX interrupt.
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    description:
-+      Must be half or less of "clocks" frequency.
-+    maximum: 20000000
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts-extended
-+  - clocks
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    spi0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        can@0 {
-+            compatible = "microchip,mcp25xxfd";
-+            reg = <0>;
-+            clocks = <&can0_osc>;
-+            pinctrl-names = "default";
-+            pinctrl-0 = <&can0_pins>;
-+            spi-max-frequency = <20000000>;
-+            interrupts-extended = <&gpio 13 IRQ_TYPE_LEVEL_LOW>;
-+            microchip,rx-int-gpios = <&gpio 27 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&reg5v0>;
-+            xceiver-supply = <&reg5v0>;
-+        };
-+    };
+diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+index eea3ef69f585..905ea98448cd 100644
+--- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
++++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+@@ -392,7 +392,8 @@ static int mcp25xxfd_ring_alloc(struct mcp25xxfd_priv *priv)
+ 	int ram_free, i;
+ 
+ 	tef_obj_size = sizeof(struct mcp25xxfd_hw_tef_obj);
+-	if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
++	/* listen-only mode works like FD mode */
++	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD)) {
+ 		tx_obj_num = MCP25XXFD_TX_OBJ_NUM_CANFD;
+ 		tx_obj_size = sizeof(struct mcp25xxfd_hw_tx_obj_canfd);
+ 		rx_obj_size = sizeof(struct mcp25xxfd_hw_rx_obj_canfd);
+@@ -807,7 +808,7 @@ mcp25xxfd_chip_rx_fifo_init_one(const struct mcp25xxfd_priv *priv,
+ 		MCP25XXFD_REG_FIFOCON_RXOVIE |
+ 		MCP25XXFD_REG_FIFOCON_TFNRFNIE;
+ 
+-	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
++	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD))
+ 		fifo_con |= FIELD_PREP(MCP25XXFD_REG_FIFOCON_PLSIZE_MASK,
+ 				       MCP25XXFD_REG_FIFOCON_PLSIZE_64);
+ 	else
+@@ -857,7 +858,7 @@ static int mcp25xxfd_chip_fifo_init(const struct mcp25xxfd_priv *priv)
+ 		MCP25XXFD_REG_FIFOCON_TXEN |
+ 		MCP25XXFD_REG_FIFOCON_TXATIE;
+ 
+-	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
++	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD))
+ 		val |= FIELD_PREP(MCP25XXFD_REG_FIFOCON_PLSIZE_MASK,
+ 				  MCP25XXFD_REG_FIFOCON_PLSIZE_64);
+ 	else
+@@ -930,7 +931,9 @@ static u8 mcp25xxfd_get_normal_mode(const struct mcp25xxfd_priv *priv)
+ {
+ 	u8 mode;
+ 
+-	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
++	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
++		mode = MCP25XXFD_REG_CON_MODE_LISTENONLY;
++	else if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+ 		mode = MCP25XXFD_REG_CON_MODE_MIXED;
+ 	else
+ 		mode = MCP25XXFD_REG_CON_MODE_CAN2_0;
+@@ -2767,8 +2770,9 @@ static int mcp25xxfd_probe(struct spi_device *spi)
+ 	priv->can.do_get_berr_counter = mcp25xxfd_get_berr_counter;
+ 	priv->can.bittiming_const = &mcp25xxfd_bittiming_const;
+ 	priv->can.data_bittiming_const = &mcp25xxfd_data_bittiming_const;
+-	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING |
+-		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
++	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
++		CAN_CTRLMODE_BERR_REPORTING | CAN_CTRLMODE_FD |
++		CAN_CTRLMODE_FD_NON_ISO;
+ 	priv->ndev = ndev;
+ 	priv->spi = spi;
+ 	priv->rx_int = rx_int;
 -- 
 2.17.1
 
