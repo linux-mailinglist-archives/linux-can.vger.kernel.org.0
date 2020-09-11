@@ -2,79 +2,114 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F360A265930
-	for <lists+linux-can@lfdr.de>; Fri, 11 Sep 2020 08:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B86D265998
+	for <lists+linux-can@lfdr.de>; Fri, 11 Sep 2020 08:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725497AbgIKGPM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Fri, 11 Sep 2020 02:15:12 -0400
-Received: from mail.flex.co.jp ([211.8.82.123]:50934 "EHLO www.flex.co.jp"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725468AbgIKGPM (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 11 Sep 2020 02:15:12 -0400
-Received: from live.com.mx ([103.89.89.225])
-        (authenticated bits=0)
-        by www.flex.co.jp (MTA) with ESMTP id 0898nZwi009284
-        for <linux-can@vger.kernel.org>; Wed, 9 Sep 2020 17:49:49 +0900
-Reply-To: powerinthewords@yahoo.co.jp
-From:   piyin.crhe@live.com.mx
-To:     linux-can@vger.kernel.org
-Subject: =?utf-8?Q?=5BSpam=5D?=
- We are still waiting for your email...
-Date:   09 Sep 2020 01:49:47 -0700
-Message-ID: <20200909014947.12CD0C5E42EAA690@live.com.mx>
+        id S1725497AbgIKGu5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 11 Sep 2020 02:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbgIKGu4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Sep 2020 02:50:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2178CC061573
+        for <linux-can@vger.kernel.org>; Thu, 10 Sep 2020 23:50:55 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kGctS-0007Mq-QE; Fri, 11 Sep 2020 08:50:46 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1kGctN-0005XU-8x; Fri, 11 Sep 2020 08:50:41 +0200
+Date:   Fri, 11 Sep 2020 08:50:41 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
+        socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] can: j1939: j1939_sk_bind(): return failure if
+ netdev is down
+Message-ID: <20200911065041.v4cetsbokqhdmbd4@pengutronix.de>
+References: <1599460308-18770-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8BIT
-X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
+In-Reply-To: <1599460308-18770-1-git-send-email-zhangchangzhong@huawei.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:47:40 up 300 days, 22:06, 291 users,  load average: 0.00, 0.04,
+ 0.06
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Dear Beneficiary,
+On Mon, Sep 07, 2020 at 02:31:48PM +0800, Zhang Changzhong wrote:
+> When a netdev down event occurs after a successful call to
+> j1939_sk_bind(), j1939_netdev_notify() can handle it correctly.
+> 
+> But if the netdev already in down state before calling j1939_sk_bind(),
+> j1939_sk_release() will stay in wait_event_interruptible() blocked
+> forever. Because in this case, j1939_netdev_notify() won't be called and
+> j1939_tp_txtimer() won't call j1939_session_cancel() or other function
+> to clear session for ENETDOWN error, this lead to mismatch of
+> j1939_session_get/put() and jsk->skb_pending will never decrease to
+> zero.
+> 
+> To reproduce it use following commands:
+> 1. ip link add dev vcan0 type vcan
+> 2. j1939acd -r 100,80-120 1122334455667788 vcan0
+> 3. presses ctrl-c and thread will be blocked forever
+> 
+> This patch adds check for ndev->flags in j1939_sk_bind() to avoid this
+> kind of situation and return with -ENETDOWN.
+> 
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
 
-We wish to inform you that a power of attorney was forwarded to 
-our office  by two gentlemen regarding your unclaimed fund of $56 
-Million Dollar. One of them is an American citizen named Mr. 
-Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
-citizen.We have be waiting for you to contact us since last year.
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-The document claims these gentlemen to be your authorized 
-representatives, and the power of attorney states that you are 
-already deceased.  It further states that your death was due to 
-lung cancer, with your date of death being January 27th, 2020.
+Thank you!
 
-They have now submitted a new account to replace the receiving 
-account that was in the original claim of funds. These funds have 
-remained unclaimed for quite some time and the need for 
-resolution is pressing. Below is the new account they have 
-submitted.
+> ---
+>  net/can/j1939/socket.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
+> index 1be4c89..f239665 100644
+> --- a/net/can/j1939/socket.c
+> +++ b/net/can/j1939/socket.c
+> @@ -475,6 +475,12 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+>  			goto out_release_sock;
+>  		}
+>  
+> +		if (!(ndev->flags & IFF_UP)) {
+> +			dev_put(ndev);
+> +			ret = -ENETDOWN;
+> +			goto out_release_sock;
+> +		}
+> +
+>  		priv = j1939_netdev_start(ndev);
+>  		dev_put(ndev);
+>  		if (IS_ERR(priv)) {
+> -- 
+> 2.9.5
+> 
+> 
 
-Account Name's :  Robert Porter /Wilhelm Berg
-Account: 5007-29 438 66
-IBAN-nr: SE4150000000050072943866
-Bic-kod: ESSESESS
-Skandinaviska Enskilda Banken. (SEB :)
-SWEDEN .
-
-In the event that you are in fact still alive, we ask that you 
-confirm your existence by responding to this email. You are to 
-view this as a matter requiring immediate attention and response. 
-We have 48 hr monitoring of all activities within Federal Reserve 
-Bank.On this regard,you will be directed to any of our office 
-center that you will go in person to sign the final papers,
-because we have our payment center in Europe,Asia,America and 
-Canada.You will go to any of the office that you will be directed 
-to with the copy of the documents of your fund.
-
-We have contacted the bank in the Sweden asking them to wait for 
-further directives from Federal Reserve Bank, prior to 
-authorizing any withdrawals in any form.  Our request is based 
-entirely on our attempt to verify that you are in fact deceased, 
-before money is wrongly disbursed.
-
-Your in Service,
-
-Robert Steven Kaplan
-2200 N Pearl St, Dallas, TX 75201, United States
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
