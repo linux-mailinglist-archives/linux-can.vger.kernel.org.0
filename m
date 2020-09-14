@@ -2,114 +2,62 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B86D265998
-	for <lists+linux-can@lfdr.de>; Fri, 11 Sep 2020 08:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FEA268343
+	for <lists+linux-can@lfdr.de>; Mon, 14 Sep 2020 05:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725497AbgIKGu5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Fri, 11 Sep 2020 02:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgIKGu4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Sep 2020 02:50:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2178CC061573
-        for <linux-can@vger.kernel.org>; Thu, 10 Sep 2020 23:50:55 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1kGctS-0007Mq-QE; Fri, 11 Sep 2020 08:50:46 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1kGctN-0005XU-8x; Fri, 11 Sep 2020 08:50:41 +0200
-Date:   Fri, 11 Sep 2020 08:50:41 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Zhang Changzhong <zhangchangzhong@huawei.com>
-Cc:     robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
-        socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] can: j1939: j1939_sk_bind(): return failure if
- netdev is down
-Message-ID: <20200911065041.v4cetsbokqhdmbd4@pengutronix.de>
-References: <1599460308-18770-1-git-send-email-zhangchangzhong@huawei.com>
+        id S1725976AbgINDzQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Sep 2020 23:55:16 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:12245 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725965AbgINDzO (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 13 Sep 2020 23:55:14 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 0F836860BB16A348464B;
+        Mon, 14 Sep 2020 11:55:12 +0800 (CST)
+Received: from huawei.com (10.175.113.32) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Mon, 14 Sep 2020
+ 11:55:05 +0800
+From:   Liu Shixin <liushixin2@huawei.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Liu Shixin <liushixin2@huawei.com>
+Subject: [PATCH -next] can: peak_usb: convert to use le32_add_cpu()
+Date:   Mon, 14 Sep 2020 12:17:44 +0800
+Message-ID: <20200914041744.3701840-1-liushixin2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <1599460308-18770-1-git-send-email-zhangchangzhong@huawei.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 08:47:40 up 300 days, 22:06, 291 users,  load average: 0.00, 0.04,
- 0.06
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.32]
+X-CFilter-Loop: Reflected
 Sender: linux-can-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 02:31:48PM +0800, Zhang Changzhong wrote:
-> When a netdev down event occurs after a successful call to
-> j1939_sk_bind(), j1939_netdev_notify() can handle it correctly.
-> 
-> But if the netdev already in down state before calling j1939_sk_bind(),
-> j1939_sk_release() will stay in wait_event_interruptible() blocked
-> forever. Because in this case, j1939_netdev_notify() won't be called and
-> j1939_tp_txtimer() won't call j1939_session_cancel() or other function
-> to clear session for ENETDOWN error, this lead to mismatch of
-> j1939_session_get/put() and jsk->skb_pending will never decrease to
-> zero.
-> 
-> To reproduce it use following commands:
-> 1. ip link add dev vcan0 type vcan
-> 2. j1939acd -r 100,80-120 1122334455667788 vcan0
-> 3. presses ctrl-c and thread will be blocked forever
-> 
-> This patch adds check for ndev->flags in j1939_sk_bind() to avoid this
-> kind of situation and return with -ENETDOWN.
-> 
-> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+Convert cpu_to_le32(le32_to_cpu(E1) + E2) to use le32_add_cpu().
 
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you!
-
-> ---
->  net/can/j1939/socket.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index 1be4c89..f239665 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -475,6 +475,12 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
->  			goto out_release_sock;
->  		}
->  
-> +		if (!(ndev->flags & IFF_UP)) {
-> +			dev_put(ndev);
-> +			ret = -ENETDOWN;
-> +			goto out_release_sock;
-> +		}
-> +
->  		priv = j1939_netdev_start(ndev);
->  		dev_put(ndev);
->  		if (IS_ERR(priv)) {
-> -- 
-> 2.9.5
-> 
-> 
-
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+index 1689ab387612..d8ebf35dea1c 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+@@ -186,7 +186,7 @@ static int pcan_msg_add_rec(struct pcan_usb_pro_msg *pm, int id, ...)
+ 
+ 	len = pc - pm->rec_ptr;
+ 	if (len > 0) {
+-		*pm->u.rec_cnt = cpu_to_le32(le32_to_cpu(*pm->u.rec_cnt) + 1);
++		le32_add_cpu(pm->u.rec_cnt, 1);
+ 		*pm->rec_ptr = id;
+ 
+ 		pm->rec_ptr = pc;
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+
