@@ -2,38 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D978269E81
-	for <lists+linux-can@lfdr.de>; Tue, 15 Sep 2020 08:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FC8269EF9
+	for <lists+linux-can@lfdr.de>; Tue, 15 Sep 2020 08:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbgIOGb1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Sep 2020 02:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S1726153AbgIOG5U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Sep 2020 02:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726031AbgIOGbZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Sep 2020 02:31:25 -0400
+        with ESMTP id S1726089AbgIOG5N (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Sep 2020 02:57:13 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6D6C06174A
-        for <linux-can@vger.kernel.org>; Mon, 14 Sep 2020 23:31:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC54C06174A
+        for <linux-can@vger.kernel.org>; Mon, 14 Sep 2020 23:57:12 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kI4Up-0002O4-Gx; Tue, 15 Sep 2020 08:31:19 +0200
+        id 1kI4tq-0005DY-Ox; Tue, 15 Sep 2020 08:57:10 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545] (unknown [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D1F3560990;
-        Tue, 15 Sep 2020 06:31:18 +0000 (UTC)
-Subject: Re: [PATCH net-next] can: kvaser_pciefd: Remove unused macro
- KVASER_PCIEFD_KCAN_CTRL_EFRAME
-To:     Wang Hai <wanghai38@huawei.com>, wg@grandegger.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200904131026.21817-1-wanghai38@huawei.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AFC3F5609D5;
+        Tue, 15 Sep 2020 06:57:07 +0000 (UTC)
+To:     Kirby Nankivell <kirby@kjn.com.au>
+References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +90,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <29cae48f-34be-b77f-4585-4439c4b626d8@pengutronix.de>
-Date:   Tue, 15 Sep 2020 08:31:03 +0200
+Cc:     linux-can <linux-can@vger.kernel.org>
+Subject: Re: MCP25xxFD Driver Error (-47)
+Message-ID: <61a5dd2e-7c80-3d33-34ef-7aaa4e8f2a7f@pengutronix.de>
+Date:   Tue, 15 Sep 2020 08:56:59 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200904131026.21817-1-wanghai38@huawei.com>
+In-Reply-To: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="WQj3l6yxrwAifG0JAx2vdVAH82PdGdxvd"
+ boundary="aKFIQ4e2afgB9dqWlHbbgnVKp3hDN1x7g"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,52 +111,200 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---WQj3l6yxrwAifG0JAx2vdVAH82PdGdxvd
-Content-Type: multipart/mixed; boundary="klCaL39Vp1Vu4qQxwSajHqp5hQKwA8q40";
+--aKFIQ4e2afgB9dqWlHbbgnVKp3hDN1x7g
+Content-Type: multipart/mixed; boundary="jw7wVftr5u4PJBnFEFRcXKpMumCXX5hhF";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Wang Hai <wanghai38@huawei.com>, wg@grandegger.com, davem@davemloft.net,
- kuba@kernel.org
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <29cae48f-34be-b77f-4585-4439c4b626d8@pengutronix.de>
-Subject: Re: [PATCH net-next] can: kvaser_pciefd: Remove unused macro
- KVASER_PCIEFD_KCAN_CTRL_EFRAME
-References: <20200904131026.21817-1-wanghai38@huawei.com>
-In-Reply-To: <20200904131026.21817-1-wanghai38@huawei.com>
+To: Kirby Nankivell <kirby@kjn.com.au>
+Cc: linux-can <linux-can@vger.kernel.org>
+Message-ID: <61a5dd2e-7c80-3d33-34ef-7aaa4e8f2a7f@pengutronix.de>
+Subject: Re: MCP25xxFD Driver Error (-47)
+References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
+In-Reply-To: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
 
---klCaL39Vp1Vu4qQxwSajHqp5hQKwA8q40
+--jw7wVftr5u4PJBnFEFRcXKpMumCXX5hhF
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/4/20 3:10 PM, Wang Hai wrote:
-> KVASER_PCIEFD_KCAN_CTRL_EFRAME is never used after it was introduced.
-> So better to remove it.
->=20
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wang Hai <wanghai38@huawei.com>
-> ---
->  drivers/net/can/kvaser_pciefd.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_p=
-ciefd.c
-> index 6f766918211a..c0b18ff107c7 100644
-> --- a/drivers/net/can/kvaser_pciefd.c
-> +++ b/drivers/net/can/kvaser_pciefd.c
-> @@ -131,7 +131,6 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe =
-devices");
-> =20
->  /* Kvaser KCAN definitions */
->  #define KVASER_PCIEFD_KCAN_CTRL_EFLUSH (4 << 29)
-> -#define KVASER_PCIEFD_KCAN_CTRL_EFRAME (5 << 29)
-> =20
->  #define KVASER_PCIEFD_KCAN_CMD_SEQ_SHIFT 16
->  /* Request status packet */
->=20
+On 8/28/20 11:53 AM, Kirby Nankivell wrote:
+> Thankyou for your contribution of a MCP25xxFD driver to the linux kerne=
+l. I am
+> only a hobbyist=C2=A0in this area (I am a mechanical engineer for work)=
+, but it has
+> certainly allowed me to pursue a project I could not have previously.
 
-I'd like to keep this for documentation purpose, too.
+Please use the linux-can mailinglist (Cc'ed) for community support.
+
+> I have been able to successfully=C2=A0integrate your patchset into my b=
+uildroot
+> environment, after several=C2=A0attempts -- In the end I was missing th=
+e rx offload
+> patch which solved my compile errors.
+>=20
+> I used the -47 release submitted to linux-can mailing list that was pub=
+lished on
+> the kernel.org <http://kernel.org> git / same as your github branch:
+> https://www.spinics.net/lists/linux-can/msg03712.html
+> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/=
+log/?h=3Dmcp25xxfd-47
+>=20
+> *Here is my boot dmesg:*
+> /[=C2=A0 =C2=A0 1.235223] CAN device driver interface/
+> /[=C2=A0 =C2=A0 1.239239] OF: /soc/spi@1c68000/mcp2518fd@1: #interrupt-=
+cells =3D 3 found -1/
+
+This looks like an error message! See comments about mcp2518 interrupts b=
+elow.
+
+> /[=C2=A0 =C2=A0 1.246482] spi_master spi0: will run message pump with r=
+ealtime priority/
+> /[=C2=A0 =C2=A0 1.291590] mcp25xxfd spi0.1 can0: MCP2518FD rev0.0 (-RX_=
+INT -MAB_NO_WARN
+> +CRC_REG +CRC_RX +CRC_TX +ECC -HD m:9.09MHz r:9.09MHz e:0.00MHz) succes=
+sfully
+> initialized./
+>=20
+> *However when I go to try and test:*
+> /# ip link set can0 up type can bitrate 500000 restart-ms 100 fd off/
+> /[=C2=A0 =C2=A077.424381] A link change request failed with some change=
+s committed
+> already. Interface can0 may have been left with an inconsistent configu=
+ration,
+> please check./
+> /RTNETLINK answers: Invalid argument/
+
+any output in the dmesg after this?
+
+> *Problem resolution:*
+> I found some issues with my interrupt wiring, which has since been fixe=
+d. But
+> this did not resolve the problem. After doing some research this error =
+seems
+> related to my choice of using a GPIO for my second chip-select (the har=
+dware CS
+> is being used for a display). This exact configuration was used for MCP=
+2515
+> bench testing so I am unsure if it is a driver issue or something else.=
+
+>=20
+> Of course I appreciate your time is valuable, however as the main autho=
+r of this
+> driver I wondered if you had any insight as to if this is a driver issu=
+e or a
+> hardware issue, or some suggestions for testing.
+>=20
+> Looking forward to your response,
+>=20
+> Regards,
+> Kirby
+>=20
+>=20
+> Below is some information about my setup and the relevant excerpt from =
+my device
+> tree.
+>=20
+> *Hardware:*
+> LicheePi Zero - Allwinner V3s
+> Buildroot - 5.7 Kernel
+
+I'm succeddfully running the mcp25xxfd driver on an allwinner h3:
+
+https://github.com/marckleinebudde/linux/blob/v4.19-sunxi/mcp25xxfd-20200=
+429-46/arch/arm/boot/dts/sun8i-h3-nanopi-easysolar-base-a10.dtsi#L102
+
+> Device Tree Excerpts:
+> DTS Clocks:
+> can0_osc_fixed: can0_osc_fixed {
+> 	#clock-cells =3D <0>;
+> 	compatible =3D "fixed-clock";
+> 	clock-frequency  =3D <20000000>;
+> };
+>=20
+> PIO:
+> spi0_pins: spi0 {
+> 	pins =3D "PC0", "PC1", "PC2", "PC3";
+> 	function =3D "spi0";
+> };
+>=20
+> spi0_cs1: spi0_cs1 {
+> 	pins =3D "PE21";
+> 	function =3D "gpio_out";
+> 	output-high;
+> };
+>=20
+> can0_pin_irq: can0_pin_irq {
+> 	pins =3D "PB0";
+> 	function =3D "irq";
+> 	bias-pull-up;
+> };
+>=20
+>=20
+> SPI:
+> spi0: spi@1c68000 {
+> 	#address-cells =3D <2>;
+> 	#size-cells =3D <0>;
+> 	compatible =3D "allwinner,sun8i-h3-spi";
+> 	reg =3D <0x01c68000 0x1000>;
+> 	interrupts =3D <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+> 	clocks =3D <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
+> 	clock-names =3D "ahb", "mod";
+> 	dmas =3D <&dma 23>, <&dma 23>;
+> 	dma-names =3D "rx", "tx";
+> 	pinctrl-names =3D "default", "default";
+> 	pinctrl-0 =3D <&spi0_pins>;
+> 	pinctrl-1 =3D <&spi0_cs1>;
+
+I'm not sure if this pinctrl works correctly this way, try:
+
+pinctrl-names =3D "default";
+pinctrl-0 =3D <&spi0_pins &spi0_cs1>;
+
+> 	cs-gpios =3D <0>, <&pio 4 21 0>; /* PE21 */
+> 	resets =3D <&ccu RST_BUS_SPI0>;
+> 	status =3D "disabled";
+> };
+>=20
+> SPI devices:
+> &spi0 {
+>        status =3D "okay";
+>=20
+>     display@0 {
+> 		reg =3D <0>;
+> 		compatible =3D "sitronix,st7796s";
+> 		spi-max-frequency =3D <50000000>;
+> 		rotation =3D <0>;
+> 		reset-gpios =3D <&pio 4 0 GPIO_ACTIVE_LOW>; //PE0
+> 		dc-gpios =3D <&pio 4 1 GPIO_ACTIVE_HIGH>; //PE1
+> 		debug =3D <0>;
+> 		status =3D "okay";
+>     };
+>=20
+> 	mcp2518fd@1 {
+> 		reg =3D <1>;
+> 		compatible =3D "microchip,mcp25xxfd";
+> 		pinctrl-names =3D "default";
+> 		pinctrl-0 =3D <&can0_pin_irq>;
+> 		spi-max-frequency =3D <9090909>;
+
+Why that frequency?
+
+> 		interrupt-parent =3D <&pio>;
+> 		interrupts-extended =3D <1 0 8>; //PB2 is IRQ - IRQ_TYPE_LOW =3D 8
+
+Using both interrupt-parent and interrupts-extended is wrong.
+
+For the allwinner H3 this works. Note: it uses a different interrupt pin.=
+
+
+interrupt-parent =3D <&pio>;
+interrupts =3D <0 21 IRQ_TYPE_LEVEL_LOW>; /* PA21 */
+
+> 		clocks =3D <&can0_osc_fixed>;
+> 		status =3D "okay";
+> 	};
+>=20
+> };
 
 Marc
 
@@ -170,23 +315,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---klCaL39Vp1Vu4qQxwSajHqp5hQKwA8q40--
+--jw7wVftr5u4PJBnFEFRcXKpMumCXX5hhF--
 
---WQj3l6yxrwAifG0JAx2vdVAH82PdGdxvd
+--aKFIQ4e2afgB9dqWlHbbgnVKp3hDN1x7g
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9gX6cACgkQqclaivrt
-76mcNAf/YqWcJptRhR3D20qE0obLgDg+vjc6NykOCZYzUa9m1fgA4h02/cB2Hh3n
-UJGOnqh2FtLgS/HuZiEn2ry851xGbWEed+6/Ec/bIw4DdTVlzzEi18a9XxAED6u5
-GmQ8qzBwJDfvTDV4EpcQ8x9lfRg6WbImTGOWTDC4u1ns50ihAMPCMkO4OgIh9y2h
-pjOImPM8nXumYLxTj4nCWg8phWxevbN8QhDGcWH7UbSF9NoVJqSsQpQXhW03Lm/U
-Nb9IBEaSvhJCUrSAxg18VynqAIxX/sM5jPcMg/sxf4OleyOtWzx2BcIfQiAPsGgP
-YJtF2dzo3L1Q5HQ2AsSLv2eH0/zgJw==
-=rVEo
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9gZbsACgkQqclaivrt
+76nD5Af/RFNfo7rU5u5Z+kTLQmDKuSPND5YcGrkCBCfshvR3JPNBmr69NqNOYiVo
+EBc6hoKOYyyiOMcaaijcluPz1Q5C+wX3C1kDWbAuBjNU27AqBFPMtogUPX8dAqU7
+NMjJ6yeFkiFTwaME0fx07FcsEvsBi4DkfBM0++TQ2VboWK/CW81MKEeToPn5P7cu
+rABTJ3MAsPmCj1+faE92tghZX2GR1ylXw+i8fUfsM6pQJohQ1dwxNGTrvDjS0les
+7Dmbx2ibspLZ+Bg+3Lwf5oIyIuVQrID4bXzrnJFLIfvPYmZAHY/opjTaMU7u6rWN
+tnj8Q1t04DJoN/VDaKdLyJNg9wpLlg==
+=0TXf
 -----END PGP SIGNATURE-----
 
---WQj3l6yxrwAifG0JAx2vdVAH82PdGdxvd--
+--aKFIQ4e2afgB9dqWlHbbgnVKp3hDN1x7g--
