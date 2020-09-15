@@ -2,29 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBF726B1FA
-	for <lists+linux-can@lfdr.de>; Wed, 16 Sep 2020 00:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB6626B1F8
+	for <lists+linux-can@lfdr.de>; Wed, 16 Sep 2020 00:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727136AbgIOWjA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Sep 2020 18:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S1727586AbgIOWi6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Sep 2020 18:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727047AbgIOWfa (ORCPT
+        with ESMTP id S1727136AbgIOWfa (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Tue, 15 Sep 2020 18:35:30 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EF9C06174A
-        for <linux-can@vger.kernel.org>; Tue, 15 Sep 2020 15:35:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2305C061788
+        for <linux-can@vger.kernel.org>; Tue, 15 Sep 2020 15:35:30 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kIJXs-0002Tb-CJ; Wed, 16 Sep 2020 00:35:28 +0200
+        id 1kIJXs-0002Tb-O5; Wed, 16 Sep 2020 00:35:28 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de
-Subject: [RFC]: can-next 2020-09-16
-Date:   Wed, 16 Sep 2020 00:34:50 +0200
-Message-Id: <20200915223527.1417033-1-mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de, Colin Ian King <colin.king@canonical.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 01/37] can: grcan: fix spelling mistake "buss" -> "bus"
+Date:   Wed, 16 Sep 2020 00:34:51 +0200
+Message-Id: <20200915223527.1417033-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200915223527.1417033-1-mkl@pengutronix.de>
+References: <20200915223527.1417033-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
@@ -36,15 +39,30 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+From: Colin Ian King <colin.king@canonical.com>
 
-during pengutronix annually techweek, I had time to look dig through the
-linux-can mailinglist and pick up some patches. This will be the next pull
-request to net-next.
+There is a spelling mistake in a netdev_err error message. Fix it.
 
-There will be a separate series for flexcan (soonish) and m_can (later).
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Link: https://lore.kernel.org/r/20200806105616.46790-1-colin.king@canonical.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/grcan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-regards,
-Marc
-
+diff --git a/drivers/net/can/grcan.c b/drivers/net/can/grcan.c
+index 378200b682fa..5d1f15843181 100644
+--- a/drivers/net/can/grcan.c
++++ b/drivers/net/can/grcan.c
+@@ -726,7 +726,7 @@ static void grcan_err(struct net_device *dev, u32 sources, u32 status)
+ 			txrx = "on rx ";
+ 			stats->rx_errors++;
+ 		}
+-		netdev_err(dev, "Fatal AHB buss error %s- halting device\n",
++		netdev_err(dev, "Fatal AHB bus error %s- halting device\n",
+ 			   txrx);
+ 
+ 		spin_lock_irqsave(&priv->lock, flags);
+-- 
+2.28.0
 
