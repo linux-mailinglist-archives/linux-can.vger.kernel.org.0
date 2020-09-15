@@ -2,30 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A2D26B1D1
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9A126B1D0
 	for <lists+linux-can@lfdr.de>; Wed, 16 Sep 2020 00:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727522AbgIOWg7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Sep 2020 18:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
+        id S1726985AbgIOWg5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Sep 2020 18:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727785AbgIOWfz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Sep 2020 18:35:55 -0400
+        with ESMTP id S1727788AbgIOWf4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Sep 2020 18:35:56 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29A8C061797
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8DFC061351
         for <linux-can@vger.kernel.org>; Tue, 15 Sep 2020 15:35:45 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kIJY7-0002Tb-RF; Wed, 16 Sep 2020 00:35:43 +0200
+        id 1kIJY8-0002Tb-4r; Wed, 16 Sep 2020 00:35:44 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 36/37] can: mcp25xxfd: add listen-only mode
-Date:   Wed, 16 Sep 2020 00:35:26 +0200
-Message-Id: <20200915223527.1417033-37-mkl@pengutronix.de>
+Subject: [PATCH 37/37] MAINTAINERS: Add entry for Microchip MCP25XXFD SPI-CAN network driver
+Date:   Wed, 16 Sep 2020 00:35:27 +0200
+Message-Id: <20200915223527.1417033-38-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200915223527.1417033-1-mkl@pengutronix.de>
 References: <20200915223527.1417033-1-mkl@pengutronix.de>
@@ -40,71 +40,36 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-This commit enables listen-only mode, which works internally like CANFD mode.
+Add MAINTAINERS entry for Microchip MCP25XXFD SPI-CAN network driver.
 
-Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Link: https://lore.kernel.org/r/20200910133806.25077-7-manivannan.sadhasivam@linaro.org
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-index 043259b3e04e..6ffa7af50119 100644
---- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-+++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-@@ -392,7 +392,8 @@ static int mcp25xxfd_ring_alloc(struct mcp25xxfd_priv *priv)
- 	int ram_free, i;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c99577961cc4..fcb63f0c9635 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10671,6 +10671,14 @@ L:	linux-input@vger.kernel.org
+ S:	Maintained
+ F:	drivers/hid/hid-mcp2221.c
  
- 	tef_obj_size = sizeof(struct mcp25xxfd_hw_tef_obj);
--	if (priv->can.ctrlmode & CAN_CTRLMODE_FD) {
-+	/* listen-only mode works like FD mode */
-+	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD)) {
- 		tx_obj_num = MCP25XXFD_TX_OBJ_NUM_CANFD;
- 		tx_obj_size = sizeof(struct mcp25xxfd_hw_tx_obj_canfd);
- 		rx_obj_size = sizeof(struct mcp25xxfd_hw_rx_obj_canfd);
-@@ -807,7 +808,7 @@ mcp25xxfd_chip_rx_fifo_init_one(const struct mcp25xxfd_priv *priv,
- 		MCP25XXFD_REG_FIFOCON_RXOVIE |
- 		MCP25XXFD_REG_FIFOCON_TFNRFNIE;
- 
--	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
-+	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD))
- 		fifo_con |= FIELD_PREP(MCP25XXFD_REG_FIFOCON_PLSIZE_MASK,
- 				       MCP25XXFD_REG_FIFOCON_PLSIZE_64);
- 	else
-@@ -857,7 +858,7 @@ static int mcp25xxfd_chip_fifo_init(const struct mcp25xxfd_priv *priv)
- 		MCP25XXFD_REG_FIFOCON_TXEN |
- 		MCP25XXFD_REG_FIFOCON_TXATIE;
- 
--	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
-+	if (priv->can.ctrlmode & (CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_FD))
- 		val |= FIELD_PREP(MCP25XXFD_REG_FIFOCON_PLSIZE_MASK,
- 				  MCP25XXFD_REG_FIFOCON_PLSIZE_64);
- 	else
-@@ -930,7 +931,9 @@ static u8 mcp25xxfd_get_normal_mode(const struct mcp25xxfd_priv *priv)
- {
- 	u8 mode;
- 
--	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-+		mode = MCP25XXFD_REG_CON_MODE_LISTENONLY;
-+	else if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
- 		mode = MCP25XXFD_REG_CON_MODE_MIXED;
- 	else
- 		mode = MCP25XXFD_REG_CON_MODE_CAN2_0;
-@@ -2787,8 +2790,9 @@ static int mcp25xxfd_probe(struct spi_device *spi)
- 	priv->can.do_get_berr_counter = mcp25xxfd_get_berr_counter;
- 	priv->can.bittiming_const = &mcp25xxfd_bittiming_const;
- 	priv->can.data_bittiming_const = &mcp25xxfd_data_bittiming_const;
--	priv->can.ctrlmode_supported = CAN_CTRLMODE_BERR_REPORTING |
--		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
-+		CAN_CTRLMODE_BERR_REPORTING | CAN_CTRLMODE_FD |
-+		CAN_CTRLMODE_FD_NON_ISO;
- 	priv->ndev = ndev;
- 	priv->spi = spi;
- 	priv->rx_int = rx_int;
++MCP25XXFD SPI-CAN NETWORK DRIVER
++M:	Marc Kleine-Budde <mkl@pengutronix.de>
++M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++L:	linux-can@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.yaml
++F:	drivers/net/can/spi/mcp25xxfd/
++
+ MCP4018 AND MCP4531 MICROCHIP DIGITAL POTENTIOMETER DRIVERS
+ M:	Peter Rosin <peda@axentia.se>
+ L:	linux-iio@vger.kernel.org
 -- 
 2.28.0
 
