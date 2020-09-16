@@ -2,39 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6235D26C68A
-	for <lists+linux-can@lfdr.de>; Wed, 16 Sep 2020 19:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0AA26C83E
+	for <lists+linux-can@lfdr.de>; Wed, 16 Sep 2020 20:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727571AbgIPRyQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Sep 2020 13:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
+        id S1728148AbgIPSn4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Sep 2020 14:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727630AbgIPRxQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Sep 2020 13:53:16 -0400
+        with ESMTP id S1727971AbgIPSW5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Sep 2020 14:22:57 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BAEC014D6A
-        for <linux-can@vger.kernel.org>; Wed, 16 Sep 2020 06:35:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CE7C03542C
+        for <linux-can@vger.kernel.org>; Wed, 16 Sep 2020 05:01:26 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kIXb2-00052R-H4; Wed, 16 Sep 2020 15:35:40 +0200
+        id 1kIW7j-0004DH-IF; Wed, 16 Sep 2020 14:01:19 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545] (unknown [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9B0B5561A7D;
-        Wed, 16 Sep 2020 13:35:38 +0000 (UTC)
-Subject: Re: MCP25xxFD Driver Error (-47)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 56FC15619CF;
+        Wed, 16 Sep 2020 12:01:17 +0000 (UTC)
+Subject: Re: canfdtest on flexcan loopback
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     wg@grandegger.com, pankaj.bansal@nxp.com,
+        pankaj.bansal@oss.nxp.com, linux-can@vger.kernel.org,
+        qiangqing.zhang@nxp.com, linux-kernel@vger.kernel.org,
+        vladimir.oltean@nxp.com
+References: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
+ <20200916110154.hp4up6yhyokduvf2@skbuf>
+ <20200916110448.dsla6vjzy4fvdr22@skbuf>
+ <12688d2b-a198-ef5e-dd8f-64957df36574@pengutronix.de>
+ <20200916114533.3hlthhfd7xmpamoa@skbuf>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Kirby Nankivell <kirby@kjn.com.au>
-Cc:     linux-can <linux-can@vger.kernel.org>
-References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
- <61a5dd2e-7c80-3d33-34ef-7aaa4e8f2a7f@pengutronix.de>
- <CAJPxYUQz6Foon+CbHW03CAjMTs7VYt8gmZYcr=hCgCmXzgMw5w@mail.gmail.com>
- <2f3b0c9f-8f02-a664-670e-f2cb59dfcaca@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -95,15 +99,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <5a717f39-8439-0c40-cbbf-14790d25df42@pengutronix.de>
-Date:   Wed, 16 Sep 2020 15:35:33 +0200
+Message-ID: <77d5c83d-1fb2-0d8a-f1ed-bec4857796e7@pengutronix.de>
+Date:   Wed, 16 Sep 2020 14:01:11 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <2f3b0c9f-8f02-a664-670e-f2cb59dfcaca@pengutronix.de>
+In-Reply-To: <20200916114533.3hlthhfd7xmpamoa@skbuf>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="FegD20WTiKpyAmR1Ephn89c7tfXPjYT3b"
+ boundary="qny4SQLZLyfiSaBs8qkx58TX9G54RuYEQ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,32 +118,39 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---FegD20WTiKpyAmR1Ephn89c7tfXPjYT3b
-Content-Type: multipart/mixed; boundary="nH0Zy7HZYmNVeFgYbYVwcMtGPzwKOTKA4";
+--qny4SQLZLyfiSaBs8qkx58TX9G54RuYEQ
+Content-Type: multipart/mixed; boundary="ZIYmYvGyMDl4HDZpeYWewusbQuD5zIB6t";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Kirby Nankivell <kirby@kjn.com.au>
-Cc: linux-can <linux-can@vger.kernel.org>
-Message-ID: <5a717f39-8439-0c40-cbbf-14790d25df42@pengutronix.de>
-Subject: Re: MCP25xxFD Driver Error (-47)
-References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
- <61a5dd2e-7c80-3d33-34ef-7aaa4e8f2a7f@pengutronix.de>
- <CAJPxYUQz6Foon+CbHW03CAjMTs7VYt8gmZYcr=hCgCmXzgMw5w@mail.gmail.com>
- <2f3b0c9f-8f02-a664-670e-f2cb59dfcaca@pengutronix.de>
-In-Reply-To: <2f3b0c9f-8f02-a664-670e-f2cb59dfcaca@pengutronix.de>
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: wg@grandegger.com, pankaj.bansal@nxp.com, pankaj.bansal@oss.nxp.com,
+ linux-can@vger.kernel.org, qiangqing.zhang@nxp.com,
+ linux-kernel@vger.kernel.org, vladimir.oltean@nxp.com
+Message-ID: <77d5c83d-1fb2-0d8a-f1ed-bec4857796e7@pengutronix.de>
+Subject: Re: canfdtest on flexcan loopback
+References: <VI1PR04MB4093944944C574B138371F51F12F0@VI1PR04MB4093.eurprd04.prod.outlook.com>
+ <20200916110154.hp4up6yhyokduvf2@skbuf>
+ <20200916110448.dsla6vjzy4fvdr22@skbuf>
+ <12688d2b-a198-ef5e-dd8f-64957df36574@pengutronix.de>
+ <20200916114533.3hlthhfd7xmpamoa@skbuf>
+In-Reply-To: <20200916114533.3hlthhfd7xmpamoa@skbuf>
 
---nH0Zy7HZYmNVeFgYbYVwcMtGPzwKOTKA4
+--ZIYmYvGyMDl4HDZpeYWewusbQuD5zIB6t
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/16/20 1:24 AM, Marc Kleine-Budde wrote:
-> Can you remove the display from the SPI and test again.
-> Can you try to limit the spi speed via DT even more, e.g. to 5MHz?
+On 9/16/20 1:45 PM, Vladimir Oltean wrote:
+> On Wed, Sep 16, 2020 at 01:32:49PM +0200, Marc Kleine-Budde wrote:
+>> Which driver are you using? The mainline driver only uses one TX buffe=
+r.
+>=20
+> Are there multiple flexcan drivers in circulation? Yes, the mainline
+> driver with a single priv->tx_mb.
 
-Meanwhile I've clicked a Lichee Pi Zero, let see how long it takes to arr=
-ive
-here. :)
+I assume nxp has several patches on their kernels. Are you using the main=
+line
+kernel or the one that's provided by nxp?
 
 Marc
 
@@ -150,23 +161,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---nH0Zy7HZYmNVeFgYbYVwcMtGPzwKOTKA4--
+--ZIYmYvGyMDl4HDZpeYWewusbQuD5zIB6t--
 
---FegD20WTiKpyAmR1Ephn89c7tfXPjYT3b
+--qny4SQLZLyfiSaBs8qkx58TX9G54RuYEQ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9iFKYACgkQqclaivrt
-76m4uAgApybuaDcNQbXOBgfAE6KKzveLk/jnXIh8B500HiP6iakxjB0pS62ponMI
-UJwrxxBliJ7yNlQ/OEaVOkywk+qy/l/sjU8gBW7ValdqvvgDPH6Aati7A7H6HVI4
-cHzuhn1CbvABVRwfyE5e9OtGGWjAFYDFPZLtZbatUe9h85y+djkjjbOyI5o8fLy1
-s1vzj/oyrHn1/26x1Wa5H554RxLMERFU9KQ9T7roAQm9yTnaYxd5aoA6y5L7o89/
-uLJDYrn7xW6Zy2lb7fhtwh/ma/pJjTIH6Q1wrNbOirvrzWzbVDpP2/Gs6VhGxxCw
-ramcHQfe8m7Ee1j6sKHFcJSb2/Cvuw==
-=MUwA
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9h/ocACgkQqclaivrt
+76n1iQf/ZZoTPrP6E/OQbBuIkW5G+s0H712CWffmeiEzQ/oEPQAYBZVYN4L70fax
+ku2rWfHg5QxgRwbBkTVfFkeIjLgggdQU95tKXJ3RKHXgyenK5ulFaltjpcF+Hxyw
+WXQ3KjVkFwotNxbVPzjoy6ju2QBDQBvgrHvR0ymoYowIwFfR80z0cz9kVpl9pEbb
+GCJu22dWIqiTK1us1Kh5uSR5tZKlemhWo7mDZyt+qKc/vWS/0C9uTk7WBe0N65h8
+bGxh7o4VwzjdG5kXecSvuLwS8pu7Ujdr739bFTqmFaxwAVpTd/yIvNxQAJCHqQTP
+bBheJBb5Ql25T4Mqtl65bVyWvzYrsQ==
+=YCS9
 -----END PGP SIGNATURE-----
 
---FegD20WTiKpyAmR1Ephn89c7tfXPjYT3b--
+--qny4SQLZLyfiSaBs8qkx58TX9G54RuYEQ--
