@@ -2,202 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3762E26CC18
-	for <lists+linux-can@lfdr.de>; Wed, 16 Sep 2020 22:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E0026D072
+	for <lists+linux-can@lfdr.de>; Thu, 17 Sep 2020 03:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728395AbgIPUjE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Sep 2020 16:39:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726827AbgIPRHz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Sep 2020 13:07:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9264C0073E5
-        for <linux-can@vger.kernel.org>; Wed, 16 Sep 2020 06:59:47 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kIXyJ-00083k-5w; Wed, 16 Sep 2020 15:59:43 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545] (unknown [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A40BE561AAE;
-        Wed, 16 Sep 2020 13:59:41 +0000 (UTC)
-Subject: Re: [PATCH 0/6] Add support for MCP25XXFD SPI-CAN Network driver
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        wg@grandegger.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        o.rempel@pengutronix.de
-References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
- <20200915161925.GA5660@linux>
- <20200915175838.GA12860@x1.vandijck-laurijssen.be>
- <20200916040732.GA4281@linux>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <277ce2a5-b8fc-46f3-6695-4be445d52927@pengutronix.de>
-Date:   Wed, 16 Sep 2020 15:59:37 +0200
+        id S1726054AbgIQBNk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Sep 2020 21:13:40 -0400
+Received: from mail-out.m-online.net ([212.18.0.9]:60272 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbgIQBNk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Sep 2020 21:13:40 -0400
+X-Greylist: delayed 482 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 21:13:38 EDT
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 4BsJg03z3Pz1qs4G;
+        Thu, 17 Sep 2020 03:05:25 +0200 (CEST)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 4BsJfr6Jl6z1qwSy;
+        Thu, 17 Sep 2020 03:05:24 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id FqgdTcnucdjh; Thu, 17 Sep 2020 03:05:23 +0200 (CEST)
+X-Auth-Info: QtW3ZCSFydW7Acop+OgmpJ4MGJ4Y9os5JMB4YDj5fGA=
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Thu, 17 Sep 2020 03:05:23 +0200 (CEST)
+Subject: Re: [PATCH] can: m_can: Set pinmux into "default" state on start
+From:   Marek Vasut <marex@denx.de>
+To:     linux-can@vger.kernel.org
+Cc:     Alexandre Torgue <alexandre.torgue@st.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>, dmurphy@ti.com,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        davem@davemloft.net, andrew@lunn.ch
+References: <20200531181324.383930-1-marex@denx.de>
+ <419338dc-870d-51a4-87ac-ceddcba046dc@denx.de>
+ <341ddbb5-d46a-813a-8fe9-b0d16ca25041@denx.de>
+Message-ID: <c0c2b01d-8cdb-713d-5b4a-cb5dd6e2dd9d@denx.de>
+Date:   Thu, 17 Sep 2020 03:04:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200916040732.GA4281@linux>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="mJlEsEUTJfeJx3zNDIDoS6WvI7Vtz3CLU"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
-Sender: linux-can-owner@vger.kernel.org
+In-Reply-To: <341ddbb5-d46a-813a-8fe9-b0d16ca25041@denx.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---mJlEsEUTJfeJx3zNDIDoS6WvI7Vtz3CLU
-Content-Type: multipart/mixed; boundary="BenN1sZK2vfxpO4rKDLK1GKtuFCgAgI1y";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- wg@grandegger.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- o.rempel@pengutronix.de
-Message-ID: <277ce2a5-b8fc-46f3-6695-4be445d52927@pengutronix.de>
-Subject: Re: [PATCH 0/6] Add support for MCP25XXFD SPI-CAN Network driver
-References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
- <20200915161925.GA5660@linux>
- <20200915175838.GA12860@x1.vandijck-laurijssen.be>
- <20200916040732.GA4281@linux>
-In-Reply-To: <20200916040732.GA4281@linux>
-
---BenN1sZK2vfxpO4rKDLK1GKtuFCgAgI1y
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 9/16/20 6:07 AM, Manivannan Sadhasivam wrote:
->>> Just a quick question: I don't see any activity on this specific driv=
-er for
->>> sometime (back in Martin days itself). Is it due to lack of reviewers=
- or
->>> it is due to the patch size (lines of code) so that nobody is interes=
-ted
->>> in reviewing?
+On 9/1/20 8:56 PM, Marek Vasut wrote:
+> On 8/9/20 1:01 PM, Marek Vasut wrote:
+>> On 5/31/20 8:13 PM, Marek Vasut wrote:
+>>> On systems like stm32mp1 where pins have both "default" and "sleep" pinmux
+>>> states in DT, the pins are in "sleep" state by default. Switch the pins into
+>>> the "default" state when bringing the interface up in m_can_start(), because
+>>> otherwise no CAN communication is possible. This replicates the behavior of
+>>> the resume path, which does the same.
+>>>
+>>> Signed-off-by: Marek Vasut <marex@denx.de>
+>>> Cc: Alexandre Torgue <alexandre.torgue@st.com>
+>>> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+>>> Cc: Wolfgang Grandegger <wg@grandegger.com>
+>>> To: linux-can@vger.kernel.org
+>>> ---
+>>>  drivers/net/can/m_can/m_can.c | 2 ++
+>>>  1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+>>> index 02c5795b7393..76fadf2b8ac2 100644
+>>> --- a/drivers/net/can/m_can/m_can.c
+>>> +++ b/drivers/net/can/m_can/m_can.c
+>>> @@ -1247,6 +1247,8 @@ static void m_can_start(struct net_device *dev)
+>>>  	/* basic m_can configuration */
+>>>  	m_can_chip_config(dev);
+>>>  
+>>> +	pinctrl_pm_select_default_state(cdev->dev);
+>>> +
+>>>  	cdev->can.state = CAN_STATE_ERROR_ACTIVE;
+>>>  
+>>>  	m_can_enable_all_interrupts(cdev);
+>>>
 >>
->> If you look around, there are currently several versions of mcp251x
->> driver around, shipped by hardware vendors who glue the chip on there
->> SOM etc.
->> Until something more-or-less clean becomes mainline, the effort remain=
-s
->> spread.
->>
->> A problem to import a complete driver is that ... its complete.
->> There was an suggestion to split into several patches, but that does n=
-ot
->> really affect the review work.
->>
->> The original driver failed to initialize under a loaded CAN bus, on my=
+>> Any news on this ?
+> 
+> Almost another month has passed by, ping ?
 
->> desk. The current driver is more cleanly written than the original
->> and it seems to survive more than 1 use case (although I have a MAB ov=
-erflow
->> report pending to investigate).
->> So, this is a good candidate for mainline.
->=20
-> I just saw that you've pushed these patches to your testing branch. Doe=
-s this
-> mean that you're going to include it in v5.10 PR?
-
-yes, that's the plan.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---BenN1sZK2vfxpO4rKDLK1GKtuFCgAgI1y--
-
---mJlEsEUTJfeJx3zNDIDoS6WvI7Vtz3CLU
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9iGkkACgkQqclaivrt
-76nvtgf9HPMdrcHKrKdpZEjE7Fo9oYg5VKtjPmSMzJj9tEzQRCQa1g60eEzSdGwK
-Sx7XwjZiJ2vgbjjIKQ2tNu0wcjLhUvMC8zia0Bm+jwny0btKvWjH7qitkyyvLHPx
-bmoMyvbq+qn6zT1+zhEWUcntM5Wc2NyHeyQZRhzsD3Tdul+niFChBv9K5f5hZj2i
-G3iyjQ6i6av6PKdLEsoH41+u7DOZn4FZBSNg1/yYdKHyXRvbx/Myu6IN3SRlhBqh
-XeLiJDkXe+DMCZB0+1STv1gQ2n+XWRK2kkFkDqI3H7uH4IOkFHavtA+c78q0tJ3W
-yY1pOnHSr2IT5Mh6Ld5i5heDAyc0DA==
-=hZNL
------END PGP SIGNATURE-----
-
---mJlEsEUTJfeJx3zNDIDoS6WvI7Vtz3CLU--
+Bump ?
