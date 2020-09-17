@@ -2,31 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C46D26D6A3
-	for <lists+linux-can@lfdr.de>; Thu, 17 Sep 2020 10:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8A626D730
+	for <lists+linux-can@lfdr.de>; Thu, 17 Sep 2020 10:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgIQIbP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 17 Sep 2020 04:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S1726180AbgIQIyY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 17 Sep 2020 04:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgIQIbO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Sep 2020 04:31:14 -0400
+        with ESMTP id S1726171AbgIQIyX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Sep 2020 04:54:23 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC17C06174A
-        for <linux-can@vger.kernel.org>; Thu, 17 Sep 2020 01:31:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EC3C06174A
+        for <linux-can@vger.kernel.org>; Thu, 17 Sep 2020 01:54:23 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kIpJo-0005vz-Cm; Thu, 17 Sep 2020 10:31:04 +0200
+        id 1kIpgL-00009h-Gy; Thu, 17 Sep 2020 10:54:21 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545] (unknown [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AEB2B56241B;
-        Thu, 17 Sep 2020 08:31:02 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id ADC5756246C;
+        Thu, 17 Sep 2020 08:54:19 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Kirby Nankivell <kirby@kjn.com.au>
 Cc:     linux-can <linux-can@vger.kernel.org>
 References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
@@ -34,7 +35,7 @@ References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
  <CAJPxYUQz6Foon+CbHW03CAjMTs7VYt8gmZYcr=hCgCmXzgMw5w@mail.gmail.com>
  <2f3b0c9f-8f02-a664-670e-f2cb59dfcaca@pengutronix.de>
  <CAJPxYUR4EgMYn9NNoOk_xLHVpPK1tv=gGFekEdTmD9c-rw-cwA@mail.gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <78c2239b-5d37-6804-b9fd-e6006db19cb5@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -96,15 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
 Subject: Re: MCP25xxFD Driver Error (-47)
-Message-ID: <78c2239b-5d37-6804-b9fd-e6006db19cb5@pengutronix.de>
-Date:   Thu, 17 Sep 2020 10:30:58 +0200
+Message-ID: <0b9d85f4-4a4b-c07c-0e37-e7dafc47adb8@pengutronix.de>
+Date:   Thu, 17 Sep 2020 10:54:15 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <CAJPxYUR4EgMYn9NNoOk_xLHVpPK1tv=gGFekEdTmD9c-rw-cwA@mail.gmail.com>
+In-Reply-To: <78c2239b-5d37-6804-b9fd-e6006db19cb5@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="6BDaKqezHwBQwN2N0k2FBuCsSsbVQGdaa"
+ boundary="0l8Wx8bBmST6TZdAadg5zxI4KFDmcivWK"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,347 +115,69 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---6BDaKqezHwBQwN2N0k2FBuCsSsbVQGdaa
-Content-Type: multipart/mixed; boundary="cX42s4dWClBW3rSLAOiyo2Rq2Gai6kmhe";
+--0l8Wx8bBmST6TZdAadg5zxI4KFDmcivWK
+Content-Type: multipart/mixed; boundary="OIQJfqq4GpMXlDdTdeBydzQiog3XkeBvo";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Kirby Nankivell <kirby@kjn.com.au>
 Cc: linux-can <linux-can@vger.kernel.org>
-Message-ID: <78c2239b-5d37-6804-b9fd-e6006db19cb5@pengutronix.de>
+Message-ID: <0b9d85f4-4a4b-c07c-0e37-e7dafc47adb8@pengutronix.de>
 Subject: Re: MCP25xxFD Driver Error (-47)
 References: <CAJPxYURwMdZqT+j10U4XRVesF43g6uyysCEncvyCJCp-83sNXg@mail.gmail.com>
  <61a5dd2e-7c80-3d33-34ef-7aaa4e8f2a7f@pengutronix.de>
  <CAJPxYUQz6Foon+CbHW03CAjMTs7VYt8gmZYcr=hCgCmXzgMw5w@mail.gmail.com>
  <2f3b0c9f-8f02-a664-670e-f2cb59dfcaca@pengutronix.de>
  <CAJPxYUR4EgMYn9NNoOk_xLHVpPK1tv=gGFekEdTmD9c-rw-cwA@mail.gmail.com>
-In-Reply-To: <CAJPxYUR4EgMYn9NNoOk_xLHVpPK1tv=gGFekEdTmD9c-rw-cwA@mail.gmail.com>
+ <78c2239b-5d37-6804-b9fd-e6006db19cb5@pengutronix.de>
+In-Reply-To: <78c2239b-5d37-6804-b9fd-e6006db19cb5@pengutronix.de>
 
---cX42s4dWClBW3rSLAOiyo2Rq2Gai6kmhe
+--OIQJfqq4GpMXlDdTdeBydzQiog3XkeBvo
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/17/20 2:23 AM, Kirby Nankivell wrote:
->     What about the spi0 node?
-
+On 9/17/20 10:30 AM, Marc Kleine-Budde wrote:
+>> The results were clear, there is some SPI issue that prevents me
+>> specifying=C2=A0above 8.8Mhz, even if the effective speed is detected =
+to be the same.
 >=20
-> 		spi0: spi@1c68000 {
-> 			#address-cells =3D <2>;
-> 			#size-cells =3D <0>;
-> 			compatible =3D "allwinner,sun8i-h3-spi";
-> 			reg =3D <0x01c68000 0x1000>;
-> 			interrupts =3D <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
-> 			clocks =3D <&ccu CLK_BUS_SPI0>, <&ccu CLK_SPI0>;
-> 			clock-names =3D "ahb", "mod";
-> 			dmas =3D <&dma 23>, <&dma 23>;
-> 			dma-names =3D "rx", "tx";
-> 			//num-cs =3D 2
-> 			pinctrl-names =3D "default", "default";
-> 			pinctrl-0 =3D <&spi0_pins>;
-> 			pinctrl-1 =3D <&spi0_cs1>;
-
-Please re-read my previous emails. This doesn't look correct, change this=
- to:
-
-pinctrl-names =3D "default";
-pinctrl-0 =3D <&spi0_pins &spi0_cs1>;
-
-> 			cs-gpios =3D <0>, <&pio 4 21 0>; /* PE21 */
-> 			resets =3D <&ccu RST_BUS_SPI0>;
-> 			status =3D "disabled";
+> Probably interger arithmetics :)
 >=20
-> 		};
-
-> I'm not sure where the Clock registers are generated - the CCU header d=
-oesn't
-> make sense to me?
-
-I don't understand what you mean by this.
-
->     > The clock frequency was chosen on your prior advice: being less t=
-han 50%
->     of the
->     > controller clock speed (10Mhz), and a factor of 600/2x as limited=
- by the
->     > Allwinner SPI peripheral, in this case; 600 / (2*34).
->     In my H3 DT, I configure the SPI core to 600 MHz, not sure if the V=
-3s
->     supports that.
+> 600 MHz / 8.823529 Mhz
 >=20
->     The driver will use the DT max frequency as an upper bound. If you =
-use a recent
->     kernel (v5.7 or newer) or have included my patch:
+> 600000000 / 8823529 =3D 68.0000031733 -> 69
 >=20
->     =C2=A0 =C2=A0 spi: spi-sun6i: sun6i_spi_transfer_one():
->     =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0fix setting of clock rate
+> The SPI host driver only supports even dividers.
 >=20
->     the spi host driver will pick up a proper clock rate.
+> -> 70
 >=20
-> Understood. I have been using the driver from your branch, but you say =
-this is
-> fixed in 5.7?
-
-The SPI host driver has a bug prior to v5.7, where it selects a higher cl=
-ock
-rate then requested.
-
->     >=C2=A0 =C2=A0 =C2=A0[ 1.255123] CAN device driver interface
->     >=C2=A0 =C2=A0 =C2=A0[ 1.259309] spi_master spi0: will run message =
-pump with realtime priority
->     >=C2=A0 =C2=A0 =C2=A0[ 1.304566] mcp25xxfd spi0.1 can0: MCP2518FD r=
-ev0.0 (-RX_INT -MAB_NO_WARN
->     >=C2=A0 =C2=A0 =C2=A0+CRC_REG +CRC_RX +CRC_TX +ECC -HD m:8.82MHz r:=
-8.82MHz e:8.33MHz)
->     >=C2=A0 =C2=A0 =C2=A0successfully initialized.
+> 600 MHz / 70 =3D 8.57 MHz
 >=20
->     "m:8.82MHz r:8.82MHz e:8.33MHz"
->=20
->     m =3D maximum as defined by DT
->     r =3D requested by driver
->     e =3D effective speed used by the host driver
->=20
-> Understood, so my clock divider=C2=A0looks wrong, do you know how I can=
- determine my
-> peripheral bus speed?
+> but your SPI host controller selects 8.33MHz...
 
-Why do you think your clock divider looks wrong? The speed of the periphe=
-ral is
-shown at "e", so it's 8.33 MHz in your case. It's probably 600 MHz / 72.
+On the H3 it works as expected:
 
-However, if you want to be sure, use a scope :)
+> [    7.937043] mcp25xxfd spi0.0 can0: MCP2518FD rev0.0 (+RX_INT -MAB_NO=
+_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:20.00MHz m:8.82MHz r:8.82MHz e:=
+8.57MHz) successfully initialized.
 
->     > However that was short lived; I couldn't receive a single message=
- (candump
->     500k)
->     > without getting a crc error:
->     >
->     >=C2=A0 =C2=A0 =C2=A0[ 48.469759] mcp25xxfd spi0.1 can0: CRC read e=
-rror at address 0x001c
->     >=C2=A0 =C2=A0 =C2=A0(length=3D4, data=3D00 00 1a 3f, CRC=3D0x1e7c)=
-=2E
->     >=C2=A0 =C2=A0 =C2=A0[ 48.479730] mcp25xxfd spi0.1 can0: IRQ handle=
-r returned -74
->     (intf=3D0x3f1a0002).
->=20
->     Can you compile the mcp25xxfd-regmap.c with adding a:
->=20
->     =C2=A0 =C2=A0 #define DEBUG
->=20
->     prior to any of the #include statements. That should give some more=
- debugging
->     output with enabled CRC mode. Please post that here.
+Request 8.82MHz -> Effective 8.57MHz
 
-Can you please recompile the drive with "#define DEBUG" added to the
-mcp25xxfd-regmap.c? As requested above?
+If you want 8.82MHz, you have to specify"spi-max-frequency =3D <8823530>;=
+" in the
+DT. This results in:
 
->     Can you remove the display from the SPI and test again.
->     Can you try to limit the spi speed via DT even more, e.g. to 5MHz?
->=20
-> I made a test image, max speed was configured to 5.0MHz, I tried a vari=
-ety of
-> SPI drivers - But I could not get the controller to initialise at this =
-speed - I
-> kept getting CRC errors in the boot dmesg.
+> [    8.074548] mcp25xxfd spi0.0 can0: MCP2518FD rev0.0 (+RX_INT -MAB_NO=
+_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:20.00MHz m:8.82MHz r:8.82MHz e:=
+8.82MHz) successfully initialized.
 
-With or without the display?
+600000000 / 8823530 =3D 67,9999954667 -> 68
 
-> I reverted and tried two different clock speeds:
->=20
-> Standard hardware test -=C2=A08.823529 MHz, your SPI driver, LCD connec=
-ted:
+600 MHz / 68 =3D 8.82 MHz
 
-> # ip link set can0 up type can bitrate 250000 restart-ms 100 fd off
-> # candump can0
->   can0  07B   [4]  04 04 00 00
->   can0  07B   [4]  04 04 00 00
->   can0  07B   [4]  04 04 00 00
->   can0  07B   [4]  04 04 00 00
->   can0  07B   [4]  04 04 00 00
->   can0  07B   [4]  04 04 00 00
->   can0  07B   [4]  04 04 00 00
->   can0  2AD   [3]  00 00 00
->   can0  542   [8]  01 00 00 00 00 00 00 00
->   can0  475   [3]  02 00 00
->=20
-> [   74.528042] mcp25xxfd spi0.1 can0: CRC read error at address 0x05a8 =
-(length=3D20, data=3Df0 02 00 00 01 00 00 00 a7 e8 9e 38 03 07 fe 00 00 0=
-0 00 00, CRC=3D0xdac2).
-> [   74.542264] mcp25xxfd spi0.1 can0: IRQ handler mcp25xxfd_handle_rxif=
-() returned -74.
-> [   74.550001] mcp25xxfd spi0.1 can0: IRQ handler returned -74 (intf=3D=
-0x3f1a0002).
-
-So CRC error with display attached.
-
-> _I decided then to keep the LCD driver builtin but physically disconnec=
-t the FPC
-> for the next tests._
-
-Can you try with the display attached, but with the display driver not lo=
-aded?
-
-> _20 mhz (using 5.7 standard spi)_
-
-As your mcp25xxfd is clocked with 20 MHz, the SPI speed is limited to 10 =
-MHz
-(per datasheet). Tests have shown, that the chip is not stable so the spe=
-ed is
-further reduced to 92.5% (in older versions of my driver) or even 85% in =
-the
-newest iteration.
-
-> [    1.189727] spi_master spi0: will run message pump with realtime pri=
-ority
-> [    1.234920] mcp25xxfd spi0.1 can0: MCP2518FD rev0.0 (-RX_INT -MAB_NO=
-_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD m:20.00MHz r:9.25MHz e:0.00MHz) s=
-uccessfully initialized.
-
-Here you see the mcp25xxfd driver requests ("r:") 9.25 MHz, that's 92.5% =
-of 10 MHz.
-
-So without the display it works?
-
-> then at 500K load test:
->=20
-> /[=C2=A0=C2=A0 17.568035] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-> /[=C2=A0=C2=A0 17.577187] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-> /[=C2=A0=C2=A0 17.588286] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-
-This can happen, due to too high load. To fix this, we have to optimize t=
-he
-V3s's SPI controller driver and/or the mcp25xxfd driver.
-
-> _20 mhz, using your spi driver branch_
->=20
-> /[=C2=A0=C2=A0=C2=A0 1.259449] spi_master spi0: will run message pump w=
-ith realtime priority/
-> /[=C2=A0=C2=A0=C2=A0 1.304714] mcp25xxfd spi0.1 can0: MCP2518FD rev0.0 =
-(-RX_INT -MAB_NO_WARN
-> +CRC_REG +CRC_RX +CRC_TX +ECC -HD m:20.00MHz r:9.25MHz e:8.33MHz) succe=
-ssfully
-> initialized./
-
-See above, just the mcp25xxfd driver requests ("r:") 9.25MHz, which resul=
-ts in
-effective ("e:") 9.09 MHz (600 MHz / 66).
-
-> then load testing at 500k:
->=20
-> /[=C2=A0=C2=A0 71.272776] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-> /[=C2=A0=C2=A0 71.283761] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-> /[=C2=A0=C2=A0 71.295123] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-
-
-> _8.823529 MHz =E2=80=93 using your spi driver_
->=20
-> /[=C2=A0=C2=A0=C2=A0 1.259338] spi_master spi0: will run message pump w=
-ith realtime priority/
->=20
-> /[=C2=A0=C2=A0=C2=A0 1.304622] mcp25xxfd spi0.1 can0: MCP2518FD rev0.0 =
-(-RX_INT -MAB_NO_WARN
-> +CRC_REG +CRC_RX +CRC_TX +ECC -HD m:8.82MHz r:8.82MHz e:8.33MHz) succes=
-sfully
-> initialized./
-
-=2E.. which results ("e:") in 8.33MHz
-
-> *NO RX issues*
-
-looks good.
-
-> _8.823529 MHz =E2=80=93 using 5.7 mainline spi driver
->=20
-> /[=C2=A0=C2=A0=C2=A0 1.259402] spi_master spi0: will run message pump w=
-ith realtime priority/
-> /[=C2=A0=C2=A0=C2=A0 1.304605] mcp25xxfd spi0.1 can0: MCP2518FD rev0.0 =
-(-RX_INT -MAB_NO_WARN
-> +CRC_REG +CRC_RX +CRC_TX +ECC -HD m:8.82MHz r:8.82MHz e:0.00MHz) succes=
-sfully
-> initialized./
-
-> //then load testing at 500k://
->=20
-> /[=C2=A0=C2=A0 33.235868] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-> /[=C2=A0=C2=A0 33.246714] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
-> /[=C2=A0=C2=A0 33.257608] mcp25xxfd spi0.1 can0: RX-0: FIFO overflow./
->=20
-> The results were clear, there is some SPI issue that prevents me
-> specifying=C2=A0above 8.8Mhz, even if the effective speed is detected t=
-o be the same.
-
-Probably interger arithmetics :)
-
-600 MHz / 8.823529 Mhz
-
-600000000 / 8823529 =3D 68.0000031733 -> 69
-
-The SPI host driver only supports even dividers.
-
--> 70
-
-600 MHz / 70 =3D 8.57 MHz
-
-but your SPI host controller selects 8.33MHz...
-
-Maybe your V3s has a different clock tree than the H3.
-
-please post the output of:
-
-> grep . /sys/kernel/debug/clk/spi0/clk_{parent,possible_parents,rate}
-> grep . $(for i in $(cat /sys/kernel/debug/clk/spi0/clk_possible_parents=
-); do echo /sys/kernel/debug/clk/$i/clk_rate;done)
-
-> Likewise lower speeds (5MHz would not enable).
-> Your allwinner spi branch at this speed is stable.
-
-> Additionally it was clear then that the LCD was affecting the SPI traff=
-ic from
-> the controller and likely the culprit of the CRC errors, I suspected th=
-at the
-> MISO pin on the LCD was not being properly tri-state when the CS for th=
-e display
-> was not being asserted.
-> And this was causing some noise,=C2=A0bit=C2=A0flipping or similar on t=
-he bus. It was also
-> likely in this case that I would probably see packet errors during oper=
-ation if
-> CRC was ignored.
-
-So better keep CRC enabled!
-
-> Luckily the LCD supports open ended mode and does not need MISO (DO) co=
-nnected
-> to function, also luckily is that I put zero ohm resistors on the board=
- before
-> the 0.35mm FPC connector. I removed the resistor to the LCD MISO pin an=
-d
-> reconfigured for open-ended mode.
-
-\o/
-
-> I can now successfully load test at high rates without packet drop or f=
-ailure
-> and the LCD works too!
-
-\o/
-
-> image.png
-> image.png
-> image.png
->=20
-> This is a pretty good outcome, thanks for your help! The SPI driver is =
-a bit
-> odd, I might try with a 40MHz XTAL and see what changes.
-
-With a 40MHz Xtal this you can increase the SPI clock to 40/2*85% =3D 17M=
-hz, which
-should result in 16.67 MHz (given 600 MHz SPI parent clock).
-
-> Please let me know if I can run any more tests to help!
-
-See above, let's have a look at your clock tree.
-
+regards.
 Marc
+
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
@@ -462,23 +185,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---cX42s4dWClBW3rSLAOiyo2Rq2Gai6kmhe--
+--OIQJfqq4GpMXlDdTdeBydzQiog3XkeBvo--
 
---6BDaKqezHwBQwN2N0k2FBuCsSsbVQGdaa
+--0l8Wx8bBmST6TZdAadg5zxI4KFDmcivWK
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9jHsIACgkQqclaivrt
-76mQCwf/YDV4FEKQN5fjIYCgWsAXyz4Fp1SztvRW9BAqUFcpwelSASNCu3mJgjx6
-UE7xj8sQCC5M2qVB9zzS1TPT+0btf3Vx1/NRnIQ71TmCGETMy2E4k86fdlt377X4
-ko/6Bkk7VmoktNIpE3KMXiwK3KOsbw6Di3Te2yHX68FRG8v28PzbvJf82tbxMzD7
-Y4jymF0eWff90KmoRDGsZ1dl40/veYrPiSK4nLIJue7F3JY1YDvc4pjDpEmvFw8R
-0v/qrBYwF3hB7LRZPwhstDUf+FeSYXeaXa4Y1rrTWHY1Wx1C0OzArVSRhF+kDQ8o
-7u4p8iEf6ouM+QR88yz/V/gUMME/EQ==
-=UZYB
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9jJDcACgkQqclaivrt
+76nvZwgAistYXC5v7GjcJei3fNx3TXoFnK0m/mn9xQZI9g1abOqH/9BN4hPsA1VQ
+lalWsrC2WHyr/dyy6x158Ew5Lyc2IDW2x2fw4+nY9A1/fMxuBwX9QmLEDi+JJOtH
+l+qj7ciXeNpGvhcXH6ATDFRUszcZcAv2+Cb5+Ir662tbQDdV9+xcSUeD+SOjt49c
+/NGL0lsiQyzSbT5bAclI7qH3adkqZ8hQ3JKeaP99uliaVd0hyGOOS0Kc+oFIJrvu
+tVDopA9BjiLsiPZR3XnEgFUxweT/DB7cM8PKk7nJVP9c7ZjH7DOK+Rh0/B8xZMId
+hnDzjbGFFv8/gReN5Ez6nCMCKnzGCg==
+=Jjba
 -----END PGP SIGNATURE-----
 
---6BDaKqezHwBQwN2N0k2FBuCsSsbVQGdaa--
+--0l8Wx8bBmST6TZdAadg5zxI4KFDmcivWK--
