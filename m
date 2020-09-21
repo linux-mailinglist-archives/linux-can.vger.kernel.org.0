@@ -2,28 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8218F2725D1
-	for <lists+linux-can@lfdr.de>; Mon, 21 Sep 2020 15:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4232725BD
+	for <lists+linux-can@lfdr.de>; Mon, 21 Sep 2020 15:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727212AbgIUNiy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Sep 2020 09:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S1727266AbgIUNiz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Sep 2020 09:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727197AbgIUNix (ORCPT
+        with ESMTP id S1727244AbgIUNix (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 21 Sep 2020 09:38:53 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23473C0613D9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE9FC061755
         for <linux-can@vger.kernel.org>; Mon, 21 Sep 2020 06:38:53 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kKM1r-0000ox-6u; Mon, 21 Sep 2020 15:38:51 +0200
+        id 1kKM1r-0000ox-Eb; Mon, 21 Sep 2020 15:38:51 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 11/38] can: dev: can_put_echo_skb(): propagate error in case of errors
-Date:   Mon, 21 Sep 2020 15:38:18 +0200
-Message-Id: <20200921133845.2249271-12-mkl@pengutronix.de>
+Subject: [PATCH 12/38] can: dev: can_change_state(): print human readable state change messages
+Date:   Mon, 21 Sep 2020 15:38:19 +0200
+Message-Id: <20200921133845.2249271-13-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200921133845.2249271-1-mkl@pengutronix.de>
 References: <20200921133845.2249271-1-mkl@pengutronix.de>
@@ -37,77 +37,59 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The function can_put_echo_skb() can fail for several reasons. It may
-fail due to OOM, but when it fails it's usually due to locking problems
-in the driver.
+In order to ease debugging let can_change_state() print the human readable
+state change messages. Also print the old and new state.
 
-In order to help developing and debugging of new drivers propagate error
-value in case of errors.
-
-Link: https://lore.kernel.org/r/20200915223527.1417033-12-mkl@pengutronix.de
+Link: https://lore.kernel.org/r/20200915223527.1417033-13-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev.c   | 11 +++++++----
- include/linux/can/dev.h |  4 ++--
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ drivers/net/can/dev.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index dd443e5d8cb7..77a5663693af 100644
+index 77a5663693af..e0caf969e342 100644
 --- a/drivers/net/can/dev.c
 +++ b/drivers/net/can/dev.c
-@@ -434,8 +434,8 @@ static void can_flush_echo_skb(struct net_device *dev)
-  * of the device driver. The driver must protect access to
-  * priv->echo_skb, if necessary.
-  */
--void can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
--		      unsigned int idx)
-+int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
-+		     unsigned int idx)
- {
- 	struct can_priv *priv = netdev_priv(dev);
- 
-@@ -446,13 +446,13 @@ void can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
- 	    (skb->protocol != htons(ETH_P_CAN) &&
- 	     skb->protocol != htons(ETH_P_CANFD))) {
- 		kfree_skb(skb);
--		return;
-+		return 0;
+@@ -371,6 +371,28 @@ static int can_rx_state_to_frame(struct net_device *dev, enum can_state state)
  	}
- 
- 	if (!priv->echo_skb[idx]) {
- 		skb = can_create_echo_skb(skb);
- 		if (!skb)
--			return;
-+			return -ENOMEM;
- 
- 		/* make settings for echo to reduce code in irq context */
- 		skb->pkt_type = PACKET_BROADCAST;
-@@ -465,7 +465,10 @@ void can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
- 		/* locking problem with netif_stop_queue() ?? */
- 		netdev_err(dev, "%s: BUG! echo_skb %d is occupied!\n", __func__, idx);
- 		kfree_skb(skb);
-+		return -EBUSY;
- 	}
-+
-+	return 0;
  }
- EXPORT_SYMBOL_GPL(can_put_echo_skb);
  
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 516892566ac9..ed0482b2f4b2 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -201,8 +201,8 @@ void can_bus_off(struct net_device *dev);
++static const char *can_get_state_str(const enum can_state state)
++{
++	switch (state) {
++	case CAN_STATE_ERROR_ACTIVE:
++		return "Error Active";
++	case CAN_STATE_ERROR_WARNING:
++		return "Error Warning";
++	case CAN_STATE_ERROR_PASSIVE:
++		return "Error Passive";
++	case CAN_STATE_BUS_OFF:
++		return "Bus Off";
++	case CAN_STATE_STOPPED:
++		return "Stopped";
++	case CAN_STATE_SLEEPING:
++		return "Sleeping";
++	default:
++		return "<unknown>";
++	}
++
++	return "<unknown>";
++}
++
  void can_change_state(struct net_device *dev, struct can_frame *cf,
- 		      enum can_state tx_state, enum can_state rx_state);
+ 		      enum can_state tx_state, enum can_state rx_state)
+ {
+@@ -382,7 +404,9 @@ void can_change_state(struct net_device *dev, struct can_frame *cf,
+ 		return;
+ 	}
  
--void can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
--		      unsigned int idx);
-+int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
-+		     unsigned int idx);
- struct sk_buff *__can_get_echo_skb(struct net_device *dev, unsigned int idx,
- 				   u8 *len_ptr);
- unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx);
+-	netdev_dbg(dev, "New error state: %d\n", new_state);
++	netdev_dbg(dev, "Controller changed from %s State (%d) into %s State (%d).\n",
++		   can_get_state_str(priv->state), priv->state,
++		   can_get_state_str(new_state), new_state);
+ 
+ 	can_update_state_error_stats(dev, new_state);
+ 	priv->state = new_state;
 -- 
 2.28.0
 
