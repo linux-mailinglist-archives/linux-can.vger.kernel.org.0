@@ -2,47 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F3027355E
-	for <lists+linux-can@lfdr.de>; Mon, 21 Sep 2020 23:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47271273673
+	for <lists+linux-can@lfdr.de>; Tue, 22 Sep 2020 01:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbgIUV5b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Sep 2020 17:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726452AbgIUV5b (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Sep 2020 17:57:31 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E470C061755;
-        Mon, 21 Sep 2020 14:57:31 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 554EF11E49F63;
-        Mon, 21 Sep 2020 14:40:43 -0700 (PDT)
-Date:   Mon, 21 Sep 2020 14:57:30 -0700 (PDT)
-Message-Id: <20200921.145730.111782422484758708.davem@davemloft.net>
-To:     mkl@pengutronix.de
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: pull-request: can-next 2020-09-21
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200921134557.2251383-1-mkl@pengutronix.de>
-References: <20200921134557.2251383-1-mkl@pengutronix.de>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [2620:137:e000::1:9]); Mon, 21 Sep 2020 14:40:43 -0700 (PDT)
+        id S1728819AbgIUXMV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Sep 2020 19:12:21 -0400
+Received: from mail.rusoil.net ([188.128.114.25]:58282 "EHLO mail.rusoil.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728741AbgIUXMV (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 21 Sep 2020 19:12:21 -0400
+X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:12:11 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.rusoil.net (Postfix) with ESMTP id 9EF1840C07;
+        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
+Received: from mail.rusoil.net ([127.0.0.1])
+        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id SVpSP78GR2pZ; Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.rusoil.net (Postfix) with ESMTP id 3D89E40D78;
+        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 3D89E40D78
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
+        s=maildkim; t=1600729693;
+        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
+         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
+         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
+X-Virus-Scanned: amavisd-new at mail.rusoil.net
+Received: from mail.rusoil.net ([127.0.0.1])
+        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id KLkCjnFIcNrK; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
+Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
+        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
+        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
+Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
+From:   Blue Oak Mortgage and Loans <em@rusoil.net>
+Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
+Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
+Subject: Wir finanzieren Projekte und Unternehmen
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.210.183.69]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
+Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
+Thread-Topic: Wir finanzieren Projekte und Unternehmen
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-Date: Mon, 21 Sep 2020 15:45:19 +0200
 
-> this is a pull request of 38 patches for net-next.
- ...
->   git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.10-20200921
 
-Pulled, thanks Marc.
+Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
+ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
+
+
+Eine kurze Einf=C3=BChrung.
+
+Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
+eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
+ Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
+n 2% pro Jahr.
+
+
+Darlehensverfahren
+
+1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
+dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
+
+2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
+nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
+ vorlegen.
+
+3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
+antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
+erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
+ den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
+he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
+ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
+
+4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
+nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
+m NC-Darlehensvertragsformular aufgef=C3=BChrt.
+
+Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
+App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
+re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
+n.
+
+WhatsApp: + 90-552-365-3483
+E-Mail: info@bluelmtg.net
