@@ -2,28 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347D12725C5
-	for <lists+linux-can@lfdr.de>; Mon, 21 Sep 2020 15:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E992725C2
+	for <lists+linux-can@lfdr.de>; Mon, 21 Sep 2020 15:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbgIUNjB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1727290AbgIUNjB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 21 Sep 2020 09:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727270AbgIUNi4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Sep 2020 09:38:56 -0400
+        with ESMTP id S1727274AbgIUNi5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Sep 2020 09:38:57 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB1BC0613CF
-        for <linux-can@vger.kernel.org>; Mon, 21 Sep 2020 06:38:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F610C061755
+        for <linux-can@vger.kernel.org>; Mon, 21 Sep 2020 06:38:57 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kKM1v-0000ox-1W; Mon, 21 Sep 2020 15:38:55 +0200
+        id 1kKM1v-0000ox-9A; Mon, 21 Sep 2020 15:38:55 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 23/38] can: spi: Kconfig: remove unneeded dependencies form Kconfig symbols
-Date:   Mon, 21 Sep 2020 15:38:30 +0200
-Message-Id: <20200921133845.2249271-24-mkl@pengutronix.de>
+Subject: [PATCH 24/38] dt-bindings: can: mcp251x: change example interrupt type to IRQ_TYPE_LEVEL_LOW
+Date:   Mon, 21 Sep 2020 15:38:31 +0200
+Message-Id: <20200921133845.2249271-25-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200921133845.2249271-1-mkl@pengutronix.de>
 References: <20200921133845.2249271-1-mkl@pengutronix.de>
@@ -37,42 +37,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since commits
+The MCP2515 datasheet clearly describes a level-triggered interrupt pin.
+Change example bindings accordingly.
 
-    653ee35ce6d5 ("can: hi311x: remove custom DMA mapped buffer")
-    Fixes: df58525df395 ("can: mcp251x: remove custom DMA mapped buffer")
-
-both the hi3111x and the mcp251x driver don't make use of the DMA API
-any more. So we can safely remove the HAS_DMA dependency.
-
-While we're here, remove the unneeded CAN_DEV and SPI dependencies from
-the CAN_HI311X symbol, as the parent menus already have these
-dependencies.
-
-Link: https://lore.kernel.org/r/20200915223527.1417033-24-mkl@pengutronix.de
+Link: https://lore.kernel.org/r/20200915223527.1417033-25-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/Kconfig | 2 --
- 1 file changed, 2 deletions(-)
+ Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/spi/Kconfig b/drivers/net/can/spi/Kconfig
-index f780c79aac6f..a332008d8495 100644
---- a/drivers/net/can/spi/Kconfig
-+++ b/drivers/net/can/spi/Kconfig
-@@ -4,13 +4,11 @@ menu "CAN SPI interfaces"
- 
- config CAN_HI311X
- 	tristate "Holt HI311x SPI CAN controllers"
--	depends on CAN_DEV && SPI && HAS_DMA
- 	help
- 	  Driver for the Holt HI311x SPI CAN controllers.
- 
- config CAN_MCP251X
- 	tristate "Microchip MCP251x and MCP25625 SPI CAN controllers"
--	depends on HAS_DMA
- 	help
- 	  Driver for the Microchip MCP251x and MCP25625 SPI CAN
- 	  controllers.
+diff --git a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
+index 5a0111d4de58..e689506ac38d 100644
+--- a/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
++++ b/Documentation/devicetree/bindings/net/can/microchip,mcp251x.txt
+@@ -19,7 +19,7 @@ Example:
+ 		reg = <1>;
+ 		clocks = <&clk24m>;
+ 		interrupt-parent = <&gpio4>;
+-		interrupts = <13 0x2>;
++		interrupts = <13 IRQ_TYPE_LEVEL_LOW>;
+ 		vdd-supply = <&reg5v0>;
+ 		xceiver-supply = <&reg5v0>;
+ 	};
 -- 
 2.28.0
 
