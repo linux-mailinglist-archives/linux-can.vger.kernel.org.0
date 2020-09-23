@@ -2,117 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 292C42754C9
-	for <lists+linux-can@lfdr.de>; Wed, 23 Sep 2020 11:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732102754DD
+	for <lists+linux-can@lfdr.de>; Wed, 23 Sep 2020 11:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgIWJur (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Sep 2020 05:50:47 -0400
-Received: from mail-db8eur05on2042.outbound.protection.outlook.com ([40.107.20.42]:27169
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726130AbgIWJur (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 23 Sep 2020 05:50:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fM6/sOQHt9ab93hY2LCzV4pAYKfNN756dZMvyiSwtPAJ3+bYmntxEJC5ZLVBNkPOZAwHrRLf7t8veRE/nJKTqAHzhiOsazynbzyEA8B1o+8/TH2oIkj36Q+hAsZqsXtbsTrI0dGx0ZaWIWwkY/EFocTjotXZfq9wqfaLCWgn2VkPk7ArVcET4upI0qB1srsB0Jc6K1nbycXZt0v68XiG07fqC2QB0ujI0C++CIDuhqKHPvRFfGkJ7DbmJ5oQmT5A+eKpcNvTFL5jCWGWfqGvMNixBTnpOkVG9KkpLm+YPgmITpEUYKA3ABWOTPixzO0meaAa1ZCHT1TI0w+l/Lbcdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IRDbkz/uucH5MqTpK6YLRtGIo0FXzl7H+XXvr3oPTR8=;
- b=mEFv0IvSG4zs1ZkQCOnOA+GXBaaikX21V1CVh3lmzkF5LEq4LRKjaSgLG6nhNeUtJHTiE5Y7Cl37Bg/84fKq1utvutldGfypAs00Phx4hH1bGF1bXATmzFpTYndO/y3lsayLJj1vBWYnQCk7Fh6LHllp6KXKwnA46IghAJAvNHoyM/ofhnXzxBLP6wrvYdsOqvA2s8QsVGvLrnjasZzQbSsG5WCrMYHQFLMJr5aSu9oNw49tJ+g+J6HpEXEQkzmn2XeimoEIgpkQ9Q1eRGpxCXVZ1x+YvKc7pEhwdE0d+SOQ1Frokio6PGdjG8ln9QGUbVCyY1lfUtmgiECJmBRnxw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IRDbkz/uucH5MqTpK6YLRtGIo0FXzl7H+XXvr3oPTR8=;
- b=aenpK4BbOlVDdv7wjp03xvJfabSVHQuOgx18mQGUDTauLY3dqjZUjv4PHHoeaAjte0sybd04+RgIw4oN9Egwgsx3BGsP+DFkw4aM/tlzwnfoILzF+r9xRQg8cEr8JwNpeBnn7x5DPVXXUYQAPwCikQYDA8UsTuc7hR4GAhwg14Y=
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
- by DB7PR04MB4105.eurprd04.prod.outlook.com (2603:10a6:5:26::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20; Wed, 23 Sep
- 2020 09:50:44 +0000
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::d12e:689a:169:fd68]) by DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::d12e:689a:169:fd68%8]) with mapi id 15.20.3412.022; Wed, 23 Sep 2020
- 09:50:44 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Michael Walle <michael@walle.cc>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: RE: [PATCH 20/20] can: flexcan: add lx2160ar1 support
-Thread-Topic: [PATCH 20/20] can: flexcan: add lx2160ar1 support
-Thread-Index: AQHWkO7pb02bDa3uBEmRZ3DevHIumql12SGAgAACdYCAAAJrAIAAAiWAgAADAbCAAApBAIAADnlg
-Date:   Wed, 23 Sep 2020 09:50:44 +0000
-Message-ID: <DB8PR04MB67955508817DE2D5B8B9BFEEE6380@DB8PR04MB6795.eurprd04.prod.outlook.com>
-References: <20200922144429.2613631-1-mkl@pengutronix.de>
- <20200922144429.2613631-21-mkl@pengutronix.de>
- <4ffe89fbb4c91a9587622862c3509180@walle.cc>
- <5b3c07ab-ca8c-d43d-f4e0-7155d358648d@pengutronix.de>
- <0e90e8234d38830749ad8de380837eb2@walle.cc>
- <8e2e2994-a3c8-cf06-012a-fcb0ac18a888@pengutronix.de>
- <DB8PR04MB67955FEC9B6A44A1A2C04DE8E6380@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <956dcdd5-b334-f5e5-dde1-bea07929f666@pengutronix.de>
-In-Reply-To: <956dcdd5-b334-f5e5-dde1-bea07929f666@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c7730258-4b57-4249-5d82-08d85fa623ea
-x-ms-traffictypediagnostic: DB7PR04MB4105:
-x-microsoft-antispam-prvs: <DB7PR04MB410549757B8C1C44A45F31DBE6380@DB7PR04MB4105.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: O/spNfcg6Ba+sj92/c+mPi9/PuEATgC2Cra8nqBs1bwje/ZPM0T9W3ep0eOICJzYlmFtXHVuvhV4lkSnkdtG825ixaRDyJavCoOJTS3E9jTPe213OlH36gx9K//mKv9kNvXLT4EXNBYeLiIDc0pxikPGKont+SRopMO++z+bh2vsXAHb0NubhZ+jTr713bnch1gTFAGFUxu3R4NxH2Xp5MS2VCdOEv/um3WRlNBFLt1ci1sFXn4DWQoxIy5X1wg/A/smBNPqu4Vxa5KK/LgqeDKfHC2A3RoJGS4JjCzOct0jUocz6m464IO7xi59b+4iLEvN9Kk9fVYGGDRq1+mz+x9rkEzbCYUc8/uwvkBS7e1yVFCK3SFEyrcx41SSKbf/DgxtUfRZysOjZAhB8d3Vnw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(136003)(39860400002)(346002)(376002)(6506007)(186003)(26005)(316002)(86362001)(83080400001)(71200400001)(478600001)(4326008)(966005)(55016002)(9686003)(33656002)(66946007)(52536014)(5660300002)(53546011)(110136005)(7696005)(8676002)(54906003)(2906002)(76116006)(8936002)(66556008)(64756008)(66446008)(66476007)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 4KdeoPTeTZedKQDAhoscsx0D1Aj6hsPUv86jz4o7v11MzT3lTGaunX0+/p8aOmka4rR84beRJ6W69QbKTV57myLvzbDFdTh4Ag4QLWYVUq7Wii0cHPofv5t5HwnTRXqPJrBmrPQyIH88e5hchuOyeNA/hbkiuLfNpxlP4Zj8ksuJwlD2aa/dy2BIAys6LMqwQYmlUxau06jYKPczm3aZ34BOC6k9/7SB7shCf06JLW4VgTbY3aVTBduQ8ZFAzpejU6UsvWM6WdH+bbx6a4QR0X2Dvw+AeS8lvy4rj1Cl0wD/isKQdwwitK8qFnRBLRkxRisuFH4Z/rugKbLV6817P21pA68AH545xU3NhtJDr1BpXcR/GRcFKa/viwCcpeGQqokgRoOWFG+wMBOPrw7FSeDqynW4GGxzoBsEPw++ZNf/KaaqYCaovOCfWxXiWjPrAv7rPChqfbYFuHwFI/Hz63jOFwQKmMk4AuO0jc8KC+KwRFyQ7iSqw/pUlkrAjpwnl4edQ9rPPsKWJ1LpA1E7r9qxeq9GS3O2ckekbID0ZuIKUjff/RGXRKNg1Rf5YFKLKLjRa5mF7JSbfhQ4x6qu6hbhFzQdyZLTT5dZ74mTaHoQ5bC5nrQ+fl/I5r7cBylJeGaJP9RlZo4dbxwoci6EcA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726360AbgIWJzC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Sep 2020 05:55:02 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:46890 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWJzB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Sep 2020 05:55:01 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08N9nviW155253;
+        Wed, 23 Sep 2020 09:54:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=TtfOk5yEqYhvyhIUPR8SGPo5Nf9CR0mBltqbFAIbdXc=;
+ b=xEVJRejqgjnwi7cWDb6oBuG6XP4kZpkdhQjnWKS0Zd3aMDumO2tCMV4SsyDDgs19/aqE
+ pIYLxfNzxCJIj+nfyqhD9pRg3hlDP1qYflRVYHu32JRr1YAH+jAbhVsNfUkIJ6YU3oau
+ fk07BlAdud5Fz5cNjenownPi8xQC1bRrV0vSzOO8KEhVeRUR4O2/1+yvKui2eWIYR7bH
+ 6on3qE9B1MRWH6EiCkrghe/PrJghUAYPIdz0YTDhxs63voFywffj4xXZghBXjn626FgM
+ VdmrFs/WoHzh5FhLCQWXOlXob1CR00W+pWVW55m3GWYBHyFI+xqH4gFLthupPtNlV/YP 2Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 33q5rgfvjx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Sep 2020 09:54:54 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08N9oNPf175336;
+        Wed, 23 Sep 2020 09:54:54 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 33nujpd7t8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Sep 2020 09:54:54 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08N9srxf010429;
+        Wed, 23 Sep 2020 09:54:53 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 23 Sep 2020 02:54:52 -0700
+Date:   Wed, 23 Sep 2020 12:54:47 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org
+Subject: [bug report] can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI
+ CAN
+Message-ID: <20200923095447.GA1464378@mwanda>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7730258-4b57-4249-5d82-08d85fa623ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2020 09:50:44.4219
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: regGPHdpyEWPnNIAEYPx1+LC8kXW6vy+qM/pNCxp1nn7XEWlBHzRYYz/ImAsMkfQLByCMwj15nF7WaPjXgigxw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4105
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 adultscore=0 spamscore=0 suspectscore=3
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009230076
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
+ clxscore=1011 suspectscore=3 phishscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009230076
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE1hcmMgS2xlaW5lLUJ1ZGRl
-IDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IDIwMjDlubQ55pyIMjPml6UgMTY6NTgNCj4g
-VG86IEpvYWtpbSBaaGFuZyA8cWlhbmdxaW5nLnpoYW5nQG54cC5jb20+OyBNaWNoYWVsIFdhbGxl
-DQo+IDxtaWNoYWVsQHdhbGxlLmNjPg0KPiBDYzoga2VybmVsQHBlbmd1dHJvbml4LmRlOyBsaW51
-eC1jYW5Admdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMjAvMjBdIGNhbjog
-ZmxleGNhbjogYWRkIGx4MjE2MGFyMSBzdXBwb3J0DQo+IA0KPiBPbiA5LzIzLzIwIDEwOjMxIEFN
-LCBKb2FraW0gWmhhbmcgd3JvdGU6DQo+ID4gSSBjaGVjayBsb2NhbGx5LCBmb3IgTFMxMDI4QSwg
-aXQgYWxzbyB1c2VzIHRoZSAiZnNsLGx4MjE2MGFyMS1mbGV4Y2FuIg0KPiA+IGNvbXBhdGlibGUg
-c3RyaW5nLCBzbyBJIHRoaW5rIExTMTAyOEEgc2hvdWxkIHJldXNlIElQIGNvcmUgZnJvbSBMWDIx
-NjBBLg0KPiANCj4gVGhpcyBtZWFucyBhdCBsZWFzdCB0aGUgSVAgY29yZSBpcyBjb21wYXRpYmxl
-IDopIEkgdGhpbmsgd2UgZG9uJ3Qga25vdyBmb3Igc3VyZSwgaWYNCj4gaXQncyB0aGUgc2FtZSB2
-ZXJzaW9uIG9mIHRoZSBJUCBjb3JlLg0KPiANCj4gPiBJIGFtIG1vcmUgZmFtaWxpYXIgdG8gaS5N
-WCwgSSB3aWxsIGFkZCBhIGNvbXBhdGlibGUgc3RyaW5nIGZvcg0KPiA+IGkuTVg4TVAsIHNpbmNl
-IGl0IGNvbmZpZ3VyZXMgRUNDLCBleHRyYSBwYXRjaGVzIGFyZSBuZWVkZWQuDQo+IA0KPiBPaw0K
-PiANCj4gPiBBZnRlciB0aGlzIHBhdGNoIHNldCBpcyBtZXJnZWQgaW50byBtYWlubGluZSwgSSB3
-aWxsIHNlbmQgb3V0IHJlbGF0ZWQNCj4gPiBwYXRjaGVzIHRvIGNvbW11bml0eS4NCj4gDQo+IEkg
-anVzdCBzZW5kIG91dCBhIHB1bGwgcmVxdWVzdCwgc28gZmVlbCBmcmVlIHRvIGJhc2UgeW91ciBw
-YXRjaGVzIG9uIHRoZSB0YWcNCj4gbGludXgtY2FuLW5leHQtZm9yLTUuMTAtMjAyMDA5MjMNCg0K
-T0ssIHRoYW5rcywgSSB3aWxsIHNlbmQgb3V0IHNvb24uDQoNCkJlc3QgUmVnYXJkcywNCkpvYWtp
-bSBaaGFuZw0KPiBNYXJjDQo+IA0KPiAtLQ0KPiBQZW5ndXRyb25peCBlLksuICAgICAgICAgICAg
-ICAgICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAgICAgICAgICB8DQo+IEVtYmVkZGVkIExpbnV4ICAg
-ICAgICAgICAgICAgICAgIHwgaHR0cHM6Ly93d3cucGVuZ3V0cm9uaXguZGUgIHwNCj4gVmVydHJl
-dHVuZyBXZXN0L0RvcnRtdW5kICAgICAgICAgfCBQaG9uZTogKzQ5LTIzMS0yODI2LTkyNCAgICAg
-fA0KPiBBbXRzZ2VyaWNodCBIaWxkZXNoZWltLCBIUkEgMjY4NiB8IEZheDogICArNDktNTEyMS0y
-MDY5MTctNTU1NSB8DQoNCg==
+Hello Marc Kleine-Budde,
+
+The patch 55e5b97f003e: "can: mcp25xxfd: add driver for Microchip
+MCP25xxFD SPI CAN" from Sep 18, 2020, leads to the following static
+checker Smatch warning:
+
+drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2271 mcp25xxfd_tx_obj_from_skb() warn: user controlled 'len' cast to postive rl = '(-249)-(-1),1-67'
+drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2272 mcp25xxfd_tx_obj_from_skb() error: 'memcpy()' 'hw_tx_obj->data' too small (64 vs 255)
+drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2272 mcp25xxfd_tx_obj_from_skb() error: 'memcpy()' 'cfd->data' too small (64 vs 255)
+drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2272 mcp25xxfd_tx_obj_from_skb() error: 'cfd->len' from user is not capped properly
+
+(Only one of these checks is published and it's disabled unless you
+run with the --spammy flag).
+
+drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+  2208  static void
+  2209  mcp25xxfd_tx_obj_from_skb(const struct mcp25xxfd_priv *priv,
+  2210                            struct mcp25xxfd_tx_obj *tx_obj,
+  2211                            const struct sk_buff *skb,
+  2212                            unsigned int seq)
+  2213  {
+  2214          const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Smatch distrusts all skb->data information.
+
+  2215          struct mcp25xxfd_hw_tx_obj_raw *hw_tx_obj;
+  2216          union mcp25xxfd_tx_obj_load_buf *load_buf;
+  2217          u8 dlc;
+  2218          u32 id, flags;
+  2219          int offset, len;
+  2220  
+  2221          if (cfd->can_id & CAN_EFF_FLAG) {
+  2222                  u32 sid, eid;
+  2223  
+  2224                  sid = FIELD_GET(MCP25XXFD_REG_FRAME_EFF_SID_MASK, cfd->can_id);
+  2225                  eid = FIELD_GET(MCP25XXFD_REG_FRAME_EFF_EID_MASK, cfd->can_id);
+  2226  
+  2227                  id = FIELD_PREP(MCP25XXFD_OBJ_ID_EID_MASK, eid) |
+  2228                          FIELD_PREP(MCP25XXFD_OBJ_ID_SID_MASK, sid);
+  2229  
+  2230                  flags = MCP25XXFD_OBJ_FLAGS_IDE;
+  2231          } else {
+  2232                  id = FIELD_PREP(MCP25XXFD_OBJ_ID_SID_MASK, cfd->can_id);
+  2233                  flags = 0;
+  2234          }
+  2235  
+  2236          /* Use the MCP2518FD mask even on the MCP2517FD. It doesn't
+  2237           * harm, only the lower 7 bits will be transferred into the
+  2238           * TEF object.
+  2239           */
+  2240          dlc = can_len2dlc(cfd->len);
+  2241          flags |= FIELD_PREP(MCP25XXFD_OBJ_FLAGS_SEQ_MCP2518FD_MASK, seq) |
+  2242                  FIELD_PREP(MCP25XXFD_OBJ_FLAGS_DLC, dlc);
+  2243  
+  2244          if (cfd->can_id & CAN_RTR_FLAG)
+  2245                  flags |= MCP25XXFD_OBJ_FLAGS_RTR;
+  2246  
+  2247          /* CANFD */
+  2248          if (can_is_canfd_skb(skb)) {
+  2249                  if (cfd->flags & CANFD_ESI)
+  2250                          flags |= MCP25XXFD_OBJ_FLAGS_ESI;
+  2251  
+  2252                  flags |= MCP25XXFD_OBJ_FLAGS_FDF;
+  2253  
+  2254                  if (cfd->flags & CANFD_BRS)
+  2255                          flags |= MCP25XXFD_OBJ_FLAGS_BRS;
+  2256          }
+  2257  
+  2258          load_buf = &tx_obj->buf;
+  2259          if (priv->devtype_data.quirks & MCP25XXFD_QUIRK_CRC_TX)
+  2260                  hw_tx_obj = &load_buf->crc.hw_tx_obj;
+  2261          else
+  2262                  hw_tx_obj = &load_buf->nocrc.hw_tx_obj;
+  2263  
+  2264          put_unaligned_le32(id, &hw_tx_obj->id);
+  2265          put_unaligned_le32(flags, &hw_tx_obj->flags);
+  2266  
+  2267          /* Clear data at end of CAN frame */
+  2268          offset = round_down(cfd->len, sizeof(u32));
+  2269          len = round_up(can_dlc2len(dlc), sizeof(u32)) - offset;
+
+Smatch thinks that "cfd->len" can be more than 64 which leads to setting
+"len" negative.
+
+  2270          if (MCP25XXFD_SANITIZE_CAN && len)
+  2271                  memset(hw_tx_obj->data + offset, 0x0, len);
+                                                              ^^^
+Which would corrupt memory.
+
+  2272          memcpy(hw_tx_obj->data, cfd->data, cfd->len);
+                                                   ^^^^^^^^
+Smatch thinks this can be more than 64.
+
+  2273  
+  2274          /* Number of bytes to be written into the RAM of the controller */
+  2275          len = sizeof(hw_tx_obj->id) + sizeof(hw_tx_obj->flags);
+
+regards,
+dan carpenter
