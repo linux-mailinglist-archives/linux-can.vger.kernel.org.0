@@ -2,95 +2,173 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 248D9275721
-	for <lists+linux-can@lfdr.de>; Wed, 23 Sep 2020 13:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CF7275726
+	for <lists+linux-can@lfdr.de>; Wed, 23 Sep 2020 13:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgIWL2S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Sep 2020 07:28:18 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:53106 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726595AbgIWL2S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Sep 2020 07:28:18 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08NBOlTZ027355;
-        Wed, 23 Sep 2020 11:28:02 GMT
+        id S1726422AbgIWL32 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Sep 2020 07:29:28 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:45718 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbgIWL32 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Sep 2020 07:29:28 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08NBPUt4068531;
+        Wed, 23 Sep 2020 11:29:24 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
  : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=uEf9FWNukK8RgzNDp5y3BawUGVfjd90oZWpVO7yCEVY=;
- b=hxf+7l2v6hG1i3NGSfiS7kzr3V85RO2HEJCnIGiTaEzMv1InK8FB89LExG/rRQ6pL/wz
- tNw9PeSYeO+kcCM/AWcWYVRJBtGsOl05D7TxLCgApZyKL+1sRPBz+wb6CKPosEUcE6hi
- ggoBswwKdaKakvoxp4iLkVRFTl5pFBb0p6jryq7Hq0W1D/xqx/+Z0wNELjTUOg0BWeIP
- Hxk6+ewbZBAaf7yFu01Q3zWfTGoqzXHBCT9oA7Zea7NHGrW1f23oJ2zIx8Ke9lDpzTJS
- howSL1Ohf6+vlFSi1pPtESbc6yjO0G7+LsAbKIvLAfc0D3XdTzRHJz807RrtMHRbXR3Q 2Q== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 33ndnuhx8b-1
+ bh=1LyCS0TwPjWG693aSmZssqp+wWWmNSUUEOJiKI472j4=;
+ b=MNxU++Q5zIw6qj6b3m4WJIs7dMzO7nxjMGLE8w+8CjcF9YH458vcx6oyt+5lK0sklZT5
+ o3XMdvUoyLhMCUtEdH13ui/L/MOMMNhXQgLs1HZnIVX1L3nVRWofKvtNYy24vl1lpynp
+ 9fHkSiQJWBvyh1HsZEwy6SUsRusOf27EIE8Zkf2Fs798Gm6daR3QJMuHkm8rVt3nW34x
+ QfsQxe87jja1+t/Lh+2MkJYrp7RuVx20lIumXTeUv0T2GevpHovZZjFwRQOxC3BA3lkD
+ KA1S3fy7B5IFWV0T7+lGNq5Zi7d66Xjfk7Ykx42NQynTR9lF5Iet/h01vCKj+zS35cgq JQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 33qcptxt66-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Sep 2020 11:28:02 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08NBPP0t136367;
-        Wed, 23 Sep 2020 11:28:02 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 33nux0yvfr-1
+        Wed, 23 Sep 2020 11:29:24 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08NBQPhh008670;
+        Wed, 23 Sep 2020 11:29:23 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 33nurugrwa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Sep 2020 11:28:01 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08NBS0x9032204;
-        Wed, 23 Sep 2020 11:28:00 GMT
+        Wed, 23 Sep 2020 11:29:23 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08NBTNEo019615;
+        Wed, 23 Sep 2020 11:29:23 GMT
 Received: from mwanda (/41.57.98.10)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 23 Sep 2020 04:27:59 -0700
-Date:   Wed, 23 Sep 2020 14:27:52 +0300
+        with ESMTP ; Wed, 23 Sep 2020 04:29:22 -0700
+Date:   Wed, 23 Sep 2020 14:29:17 +0300
 From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH net-next] can: mcp25xxfd: fix a leak in mcp25xxfd_ring_free()
-Message-ID: <20200923112752.GA1473821@mwanda>
+To:     mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org
+Subject: [bug report] can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI
+ CAN
+Message-ID: <20200923112917.GB1473821@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 phishscore=0 suspectscore=2 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009230092
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
+ phishscore=0 mlxlogscore=818 bulkscore=0 mlxscore=0 suspectscore=3
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009230092
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=2 bulkscore=0
- clxscore=1011 impostorscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 mlxlogscore=833
+ adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
  definitions=main-2009230092
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This loop doesn't free the first element of the array.  The "i > 0" has
-to be changed to "i >= 0".
+Hello Marc Kleine-Budde,
 
-Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The patch 55e5b97f003e: "can: mcp25xxfd: add driver for Microchip
+MCP25xxFD SPI CAN" from Sep 18, 2020, leads to the following static
+checker warning:
 
-diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-index bd2ba981ae36..7e094afaac04 100644
---- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-+++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-@@ -377,7 +377,7 @@ static void mcp25xxfd_ring_free(struct mcp25xxfd_priv *priv)
- {
- 	int i;
- 
--	for (i = ARRAY_SIZE(priv->rx) - 1; i > 0; i--) {
-+	for (i = ARRAY_SIZE(priv->rx) - 1; i >= 0; i--) {
- 		kfree(priv->rx[i]);
- 		priv->rx[i] = NULL;
- 	}
--- 
-2.28.0
+	drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2155 mcp25xxfd_irq()
+	error: uninitialized symbol 'set_normal_mode'.
 
+drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+  2074          do {
+  2075                  u32 intf_pending, intf_pending_clearable;
+  2076                  bool set_normal_mode;
+                        ^^^^^^^^^^^^^^^^^^^^
+  2077  
+  2078                  err = regmap_bulk_read(priv->map_reg, MCP25XXFD_REG_INT,
+  2079                                         &priv->regs_status,
+  2080                                         sizeof(priv->regs_status) /
+  2081                                         sizeof(u32));
+  2082                  if (err)
+  2083                          goto out_fail;
+  2084  
+  2085                  intf_pending = FIELD_GET(MCP25XXFD_REG_INT_IF_MASK,
+  2086                                           priv->regs_status.intf) &
+  2087                          FIELD_GET(MCP25XXFD_REG_INT_IE_MASK,
+  2088                                    priv->regs_status.intf);
+  2089  
+  2090                  if (!(intf_pending))
+  2091                          return handled;
+  2092  
+  2093                  /* Some interrupts must be ACKed in the
+  2094                   * MCP25XXFD_REG_INT register.
+  2095                   * - First ACK then handle, to avoid lost-IRQ race
+  2096                   *   condition on fast re-occurring interrupts.
+  2097                   * - Write "0" to clear active IRQs, "1" to all other,
+  2098                   *   to avoid r/m/w race condition on the
+  2099                   *   MCP25XXFD_REG_INT register.
+  2100                   */
+  2101                  intf_pending_clearable = intf_pending &
+  2102                          MCP25XXFD_REG_INT_IF_CLEARABLE_MASK;
+  2103                  if (intf_pending_clearable) {
+  2104                          err = regmap_update_bits(priv->map_reg,
+  2105                                                   MCP25XXFD_REG_INT,
+  2106                                                   MCP25XXFD_REG_INT_IF_MASK,
+  2107                                                   ~intf_pending_clearable);
+  2108                          if (err)
+  2109                                  goto out_fail;
+  2110                  }
+  2111  
+  2112                  if (intf_pending & MCP25XXFD_REG_INT_MODIF) {
+                                           ^^^^^^^^^^^^^^^^^^^^^^^
+This is BIT(3)
+
+  2113                          err = mcp25xxfd_handle(priv, modif, &set_normal_mode);
+                                                                    ^^^^^^^^^^^^^^^^
+  2114                          if (err)
+  2115                                  goto out_fail;
+  2116                  }
+  2117  
+  2118                  if (intf_pending & MCP25XXFD_REG_INT_RXIF) {
+  2119                          err = mcp25xxfd_handle(priv, rxif);
+  2120                          if (err)
+  2121                                  goto out_fail;
+  2122                  }
+  2123  
+  2124                  if (intf_pending & MCP25XXFD_REG_INT_TEFIF) {
+  2125                          err = mcp25xxfd_handle(priv, tefif);
+  2126                          if (err)
+  2127                                  goto out_fail;
+  2128                  }
+  2129  
+  2130                  if (intf_pending & MCP25XXFD_REG_INT_RXOVIF) {
+  2131                          err = mcp25xxfd_handle(priv, rxovif);
+  2132                          if (err)
+  2133                                  goto out_fail;
+  2134                  }
+  2135  
+  2136                  if (intf_pending & MCP25XXFD_REG_INT_TXATIF) {
+  2137                          err = mcp25xxfd_handle(priv, txatif);
+  2138                          if (err)
+  2139                                  goto out_fail;
+  2140                  }
+  2141  
+  2142                  if (intf_pending & MCP25XXFD_REG_INT_IVMIF) {
+  2143                          err = mcp25xxfd_handle(priv, ivmif);
+  2144                          if (err)
+  2145                                  goto out_fail;
+  2146                  }
+  2147  
+  2148                  if (intf_pending & MCP25XXFD_REG_INT_SERRIF) {
+  2149                          err = mcp25xxfd_handle(priv, serrif);
+  2150                          if (err)
+  2151                                  goto out_fail;
+  2152                  }
+  2153  
+  2154                  if (intf_pending & MCP25XXFD_REG_INT_ECCIF) {
+                                           ^^^^^^^^^^^^^^^^^^^^^^^
+This is BIT(8)
+
+  2155                          err = mcp25xxfd_handle(priv, eccif, set_normal_mode);
+                                                                    ^^^^^^^^^^^^^^^^
+This might not be initialized if BIT(8) is set but BIT(3) is not.
+
+  2156                          if (err)
+  2157                                  goto out_fail;
+
+regards,
+dan carpenter
