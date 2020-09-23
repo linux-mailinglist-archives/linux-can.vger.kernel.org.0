@@ -2,173 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CF7275726
-	for <lists+linux-can@lfdr.de>; Wed, 23 Sep 2020 13:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6B7275745
+	for <lists+linux-can@lfdr.de>; Wed, 23 Sep 2020 13:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbgIWL32 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Sep 2020 07:29:28 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:45718 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgIWL32 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Sep 2020 07:29:28 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08NBPUt4068531;
-        Wed, 23 Sep 2020 11:29:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=1LyCS0TwPjWG693aSmZssqp+wWWmNSUUEOJiKI472j4=;
- b=MNxU++Q5zIw6qj6b3m4WJIs7dMzO7nxjMGLE8w+8CjcF9YH458vcx6oyt+5lK0sklZT5
- o3XMdvUoyLhMCUtEdH13ui/L/MOMMNhXQgLs1HZnIVX1L3nVRWofKvtNYy24vl1lpynp
- 9fHkSiQJWBvyh1HsZEwy6SUsRusOf27EIE8Zkf2Fs798Gm6daR3QJMuHkm8rVt3nW34x
- QfsQxe87jja1+t/Lh+2MkJYrp7RuVx20lIumXTeUv0T2GevpHovZZjFwRQOxC3BA3lkD
- KA1S3fy7B5IFWV0T7+lGNq5Zi7d66Xjfk7Ykx42NQynTR9lF5Iet/h01vCKj+zS35cgq JQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2130.oracle.com with ESMTP id 33qcptxt66-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Sep 2020 11:29:24 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08NBQPhh008670;
-        Wed, 23 Sep 2020 11:29:23 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 33nurugrwa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Sep 2020 11:29:23 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08NBTNEo019615;
-        Wed, 23 Sep 2020 11:29:23 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 23 Sep 2020 04:29:22 -0700
-Date:   Wed, 23 Sep 2020 14:29:17 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     mkl@pengutronix.de
+        id S1726419AbgIWLnm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 23 Sep 2020 07:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbgIWLnl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 23 Sep 2020 07:43:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C41FC0613CE
+        for <linux-can@vger.kernel.org>; Wed, 23 Sep 2020 04:43:41 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kL3BT-0004rn-Pl; Wed, 23 Sep 2020 13:43:39 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545] (unknown [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B783A567BC5;
+        Wed, 23 Sep 2020 11:43:38 +0000 (UTC)
+To:     Dan Carpenter <dan.carpenter@oracle.com>
 Cc:     linux-can@vger.kernel.org
-Subject: [bug report] can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI
- CAN
-Message-ID: <20200923112917.GB1473821@mwanda>
+References: <20200923112917.GB1473821@mwanda>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [bug report] can: mcp25xxfd: add driver for Microchip MCP25xxFD
+ SPI CAN
+Message-ID: <b01e0c60-6fe5-16cb-6134-e941468c2dc9@pengutronix.de>
+Date:   Wed, 23 Sep 2020 13:43:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- phishscore=0 mlxlogscore=818 bulkscore=0 mlxscore=0 suspectscore=3
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009230092
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 mlxlogscore=833
- adultscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 priorityscore=1501
- phishscore=0 spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009230092
+In-Reply-To: <20200923112917.GB1473821@mwanda>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="BFuoehk2IqTBT5XKX7QNBuF9DlNfEaZoA"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc Kleine-Budde,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--BFuoehk2IqTBT5XKX7QNBuF9DlNfEaZoA
+Content-Type: multipart/mixed; boundary="BJJTZmwG4efCcD9Kic5GMwtHnNnKwZNuu";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Dan Carpenter <dan.carpenter@oracle.com>
+Cc: linux-can@vger.kernel.org
+Message-ID: <b01e0c60-6fe5-16cb-6134-e941468c2dc9@pengutronix.de>
+Subject: Re: [bug report] can: mcp25xxfd: add driver for Microchip MCP25xxFD
+ SPI CAN
+References: <20200923112917.GB1473821@mwanda>
+In-Reply-To: <20200923112917.GB1473821@mwanda>
 
-The patch 55e5b97f003e: "can: mcp25xxfd: add driver for Microchip
-MCP25xxFD SPI CAN" from Sep 18, 2020, leads to the following static
-checker warning:
+--BJJTZmwG4efCcD9Kic5GMwtHnNnKwZNuu
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-	drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2155 mcp25xxfd_irq()
-	error: uninitialized symbol 'set_normal_mode'.
+On 9/23/20 1:29 PM, Dan Carpenter wrote:
+> Hello Marc Kleine-Budde,
+>=20
+> The patch 55e5b97f003e: "can: mcp25xxfd: add driver for Microchip
+> MCP25xxFD SPI CAN" from Sep 18, 2020, leads to the following static
+> checker warning:
+>=20
+> 	drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c:2155 mcp25xxfd_irq()
+> 	error: uninitialized symbol 'set_normal_mode'.
 
-drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-  2074          do {
-  2075                  u32 intf_pending, intf_pending_clearable;
-  2076                  bool set_normal_mode;
-                        ^^^^^^^^^^^^^^^^^^^^
-  2077  
-  2078                  err = regmap_bulk_read(priv->map_reg, MCP25XXFD_REG_INT,
-  2079                                         &priv->regs_status,
-  2080                                         sizeof(priv->regs_status) /
-  2081                                         sizeof(u32));
-  2082                  if (err)
-  2083                          goto out_fail;
-  2084  
-  2085                  intf_pending = FIELD_GET(MCP25XXFD_REG_INT_IF_MASK,
-  2086                                           priv->regs_status.intf) &
-  2087                          FIELD_GET(MCP25XXFD_REG_INT_IE_MASK,
-  2088                                    priv->regs_status.intf);
-  2089  
-  2090                  if (!(intf_pending))
-  2091                          return handled;
-  2092  
-  2093                  /* Some interrupts must be ACKed in the
-  2094                   * MCP25XXFD_REG_INT register.
-  2095                   * - First ACK then handle, to avoid lost-IRQ race
-  2096                   *   condition on fast re-occurring interrupts.
-  2097                   * - Write "0" to clear active IRQs, "1" to all other,
-  2098                   *   to avoid r/m/w race condition on the
-  2099                   *   MCP25XXFD_REG_INT register.
-  2100                   */
-  2101                  intf_pending_clearable = intf_pending &
-  2102                          MCP25XXFD_REG_INT_IF_CLEARABLE_MASK;
-  2103                  if (intf_pending_clearable) {
-  2104                          err = regmap_update_bits(priv->map_reg,
-  2105                                                   MCP25XXFD_REG_INT,
-  2106                                                   MCP25XXFD_REG_INT_IF_MASK,
-  2107                                                   ~intf_pending_clearable);
-  2108                          if (err)
-  2109                                  goto out_fail;
-  2110                  }
-  2111  
-  2112                  if (intf_pending & MCP25XXFD_REG_INT_MODIF) {
-                                           ^^^^^^^^^^^^^^^^^^^^^^^
-This is BIT(3)
-
-  2113                          err = mcp25xxfd_handle(priv, modif, &set_normal_mode);
-                                                                    ^^^^^^^^^^^^^^^^
-  2114                          if (err)
-  2115                                  goto out_fail;
-  2116                  }
-  2117  
-  2118                  if (intf_pending & MCP25XXFD_REG_INT_RXIF) {
-  2119                          err = mcp25xxfd_handle(priv, rxif);
-  2120                          if (err)
-  2121                                  goto out_fail;
-  2122                  }
-  2123  
-  2124                  if (intf_pending & MCP25XXFD_REG_INT_TEFIF) {
-  2125                          err = mcp25xxfd_handle(priv, tefif);
-  2126                          if (err)
-  2127                                  goto out_fail;
-  2128                  }
-  2129  
-  2130                  if (intf_pending & MCP25XXFD_REG_INT_RXOVIF) {
-  2131                          err = mcp25xxfd_handle(priv, rxovif);
-  2132                          if (err)
-  2133                                  goto out_fail;
-  2134                  }
-  2135  
-  2136                  if (intf_pending & MCP25XXFD_REG_INT_TXATIF) {
-  2137                          err = mcp25xxfd_handle(priv, txatif);
-  2138                          if (err)
-  2139                                  goto out_fail;
-  2140                  }
-  2141  
-  2142                  if (intf_pending & MCP25XXFD_REG_INT_IVMIF) {
-  2143                          err = mcp25xxfd_handle(priv, ivmif);
-  2144                          if (err)
-  2145                                  goto out_fail;
-  2146                  }
-  2147  
-  2148                  if (intf_pending & MCP25XXFD_REG_INT_SERRIF) {
-  2149                          err = mcp25xxfd_handle(priv, serrif);
-  2150                          if (err)
-  2151                                  goto out_fail;
-  2152                  }
-  2153  
-  2154                  if (intf_pending & MCP25XXFD_REG_INT_ECCIF) {
-                                           ^^^^^^^^^^^^^^^^^^^^^^^
-This is BIT(8)
-
-  2155                          err = mcp25xxfd_handle(priv, eccif, set_normal_mode);
-                                                                    ^^^^^^^^^^^^^^^^
-This might not be initialized if BIT(8) is set but BIT(3) is not.
-
-  2156                          if (err)
-  2157                                  goto out_fail;
+ACK
 
 regards,
-dan carpenter
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--BJJTZmwG4efCcD9Kic5GMwtHnNnKwZNuu--
+
+--BFuoehk2IqTBT5XKX7QNBuF9DlNfEaZoA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9rNOYACgkQqclaivrt
+76mG1wgAlKudZ1mb8NXfGINRgxGNAN2OLs4XnAEuTaOaQpIBIJ5naYN2vDeUM+Ze
++6N1fR5l2DZcsG8K5W8r1K7fu261RFjAt45IrBqaWp+DI9xEOfjC/ZYP44OKCZqU
+tpyIeaIG8wsDxqQILjWVG5T89zzyCTi3XQBJ3CJQBuBylrVUwDyBzOoDiWySIfob
+31Y+6ziZZA0TXUHkJGDoaUWA9b4ctRJ39dXDQFRw0fvJYSWUX4XEqUnv7982NgaC
+WUOTsjLAO/ylurQAYJ1jmyu5Y64/xp2ivMht+7eXsqhSKCbKJPfvybBqVdFUN7VG
+EyFgkeNz6O9CSuE187joiKJu1zDemQ==
+=bTV1
+-----END PGP SIGNATURE-----
+
+--BFuoehk2IqTBT5XKX7QNBuF9DlNfEaZoA--
