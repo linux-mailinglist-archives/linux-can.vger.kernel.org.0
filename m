@@ -2,156 +2,204 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356AB27652E
-	for <lists+linux-can@lfdr.de>; Thu, 24 Sep 2020 02:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0EA276947
+	for <lists+linux-can@lfdr.de>; Thu, 24 Sep 2020 08:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbgIXAfY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Sep 2020 20:35:24 -0400
-Received: from mail-eopbgr60047.outbound.protection.outlook.com ([40.107.6.47]:23734
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726466AbgIXAfX (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 23 Sep 2020 20:35:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mMuEuh2oOIYyGAuJEnKevKL1buMExz2OzAui8SmF2FZ1m5bCiENqZSUhyHk3PXBei/3lVVy/8t7by1ClJs6UKJrAa2YYow3NMGZEYbijUC3xL9aXTNtasyWdgGBD8I94tudi9pjkkrVdJ95YAkmYSgJojNDLwOW+fSLpJVK05SusAcYDsM4s0ZdwstyqlYFFgsR2LjtouPnBwbG4SSI8fwyDEw1XerMrDsiuNhE51/nkaHqESB+N7Oanuw9d/4epV5IEPavCx76AG6v8J4gP7oB6QmKA1nuax4scoVAgdUl1e08pLzY3il/T5tzUEt3At4L+x4oK7ENMxzh4SyA0JA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HfvxyWdMvaJMVLpWLBCUyBze8Wxr0zyBs8lviV49uxY=;
- b=hUw7cHkrGuyAzzNJzdhEmUCwmdZ/V/1CgYFk0EiY1JaA2gngRTQ0rKW2Wihq7y5dpPmvlm+pbHPEjchI2AQZbkc5pAKUOF+OYhhC/j8hYY3enXzejQ4pba5Ew/X0OtNt0m9TsspdRmSGFw8txkRxexFeGH2hOT6yDeRr/TF+nGid4mniZpWM7U81Fz896JTXPPgYthg+5KMuo9mfIeSVq6I20CmomIcpqF8iDFAnhY2VIqAzurvU3nszTvxL/4gVOjUtwuDphYpXv50hT5SHhU0duXdXH2gfyjxVIa72Yf1FNrsYT6cLXC/iCuZwq3X+of7/i3zmhyJqQo2zsVNnnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HfvxyWdMvaJMVLpWLBCUyBze8Wxr0zyBs8lviV49uxY=;
- b=fANMi02OYs4M5Th+WssSCOBYTJnDRv4V/iTY66zlW3Jno2Re0030GuizHNJlICXwCPnT2GsIZX3JNPJb5YZzpUB+gS0z+RBPaPMSJW+s3en2N0m3Od2TbKSIBUOo4Jw8ebF1a+shZxbeZKLaNopCk3PiE/ZveJkQJpFPJa7Ac5I=
-Received: from VE1PR04MB6687.eurprd04.prod.outlook.com (2603:10a6:803:121::30)
- by VI1PR04MB4061.eurprd04.prod.outlook.com (2603:10a6:803:4d::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20; Thu, 24 Sep
- 2020 00:35:18 +0000
-Received: from VE1PR04MB6687.eurprd04.prod.outlook.com
- ([fe80::8db9:c62f:dac5:ee3d]) by VE1PR04MB6687.eurprd04.prod.outlook.com
- ([fe80::8db9:c62f:dac5:ee3d%3]) with mapi id 15.20.3412.022; Thu, 24 Sep 2020
- 00:35:18 +0000
-From:   Leo Li <leoyang.li@nxp.com>
-To:     Michael Walle <michael@walle.cc>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-CC:     Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: RE: [PATCH 1/2] arm64: dts: ls1028a: add missing CAN nodes
-Thread-Topic: [PATCH 1/2] arm64: dts: ls1028a: add missing CAN nodes
-Thread-Index: AQHWkY/3EoU1wnrBSEO6n1vlKlAjpql28PzQ
-Date:   Thu, 24 Sep 2020 00:35:17 +0000
-Message-ID: <VE1PR04MB6687AC23E100D138FEDB012A8F390@VE1PR04MB6687.eurprd04.prod.outlook.com>
-References: <20200923095711.11355-1-michael@walle.cc>
- <20200923095711.11355-2-michael@walle.cc>
-In-Reply-To: <20200923095711.11355-2-michael@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: walle.cc; dkim=none (message not signed)
- header.d=none;walle.cc; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [136.49.234.194]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: f4e205d5-aef5-43bc-33d0-08d86021b6ac
-x-ms-traffictypediagnostic: VI1PR04MB4061:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4061B63486578638BA2ACAF58F390@VI1PR04MB4061.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Lr/gh4LUMhYAidPMjucNOWJop56PnnXy9Q9FV2s/+TFFlYNwyNGqF0LWEgdQy8cURpYFHjON3Xqp/hYw7yLQm8koNIIH9cClN+l0SUa2BDQBl/VeSGlKWTbp9F6mfEC2llMn+VOTxabI4J4/1VKdv/4mWJPmCV0If7daRBqMYRt/JjKvKPaY+yFB8XAFrGbUTDC8e1AmSGyz+7f7NGr+HMnzzV/FnfHOGA9mnN2t29/CsmBhUL4bD1fuMmcDUn38XCeeRki5OaQ7835Ma1G7jpbZuj1fn9RJVLZiBlky+7r/KSQJTu0P7xcnqMLjnbYr+0bZFcBA6JqcKpWLhE584MeXwa+YKpbfdmKpMAEnHxqRu7RpYdnIwd5R988rJg90
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6687.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(366004)(396003)(346002)(136003)(86362001)(110136005)(26005)(71200400001)(33656002)(316002)(8936002)(186003)(83380400001)(55016002)(53546011)(6506007)(9686003)(8676002)(54906003)(4326008)(2906002)(52536014)(76116006)(5660300002)(478600001)(66946007)(7696005)(64756008)(66556008)(66476007)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: pOSTb1bRTzp7oUjn9xLx1oydW6liMqUFutRuliBqcSCLSu05765ZzXZxNJuK7JWFFOl+UMq5JIzc56G+3A3EsvcKQlemij+buPeEEP/WtvGblM1OZ9YKecEsLvYU7Y7uPNWs5ScwfvtHvBBHfHQBOjIf4DX+O1jmAZVU6XoipmUOZwDExdW2LLVOagjxdKDf7DZ3BTOSWi7sMRyC5zdACZzDHqY/MGDm3AAPFsGmZsJsBZo/qTH0t26COfX2YHhRvHf6l/OiCFPDLcqym1K9++3dYjsmD+cDm1nu0jPfGnz5O2eFDdLEjmXGV/Hw5+w2zu+TFWH15YGGtHnrrihuqxFvTdF0KwPahSazA9CRI4eggGRKr1GFDImlbnlNGH2iEl63P08RMjXunf1gjExcf/cKlXoGMJR1jZq4rMYGjyy0rbJ6ZRALO8J+hvLJ2VYfY4K5L+ELQFAXcgK/nKm0s/V0Fy7gwvogC8DZnn34N0ONzblui4MK+GqkFpx35eaEkzwWSTrUCGDGRnSZdtUoAtSczy7SMdjomY/y+czbKwutBNiDZB1XSE5S0lrjmDxLUlD9VPlDKP0L0UaTgbsN5yYGM5aUrq7OKktW4L9tWi0a2Fxlwi5WlcuYuQl+bM4V595tEm9wXYBS+hnvquqmdw==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727113AbgIXGvB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 24 Sep 2020 02:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727095AbgIXGuv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 24 Sep 2020 02:50:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87630C0613CE
+        for <linux-can@vger.kernel.org>; Wed, 23 Sep 2020 23:50:51 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kLL5e-0002pO-3S; Thu, 24 Sep 2020 08:50:50 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545] (2a03-f580-87bc-d400-8d0c-cfd0-3f99-a545.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:8d0c:cfd0:3f99:a545])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 44C1F5685F3;
+        Thu, 24 Sep 2020 06:50:49 +0000 (UTC)
+To:     =?UTF-8?Q?Matthias_Wei=c3=9fer?= <m.weisser.m@gmail.com>,
+        linux-can@vger.kernel.org
+References: <CAO8h3eGqrxFMKrsrjECeog6cheLrRpn_y6Ty9BMUv_ncU1c67g@mail.gmail.com>
+ <20200923190551.GA14591@x1.vandijck-laurijssen.be>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: mcp25xxfd driver testing
+Message-ID: <9bbd4192-122b-8978-4bd2-ec13ef479b4e@pengutronix.de>
+Date:   Thu, 24 Sep 2020 08:50:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6687.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4e205d5-aef5-43bc-33d0-08d86021b6ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2020 00:35:18.0105
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XjMRSILYLvNVIAVm00phrl4aJZSdd7npI6cYfc7P1742ROlOKV0Eg0muUpB8aXmgELIvAyzDsgrI2k4JrSwbOg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4061
+In-Reply-To: <20200923190551.GA14591@x1.vandijck-laurijssen.be>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="u6K5IfXgPUZLxbV75iBiOrDMPrrpMwPJa"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--u6K5IfXgPUZLxbV75iBiOrDMPrrpMwPJa
+Content-Type: multipart/mixed; boundary="59y6vkjXCoIXzBkGZY6IRWGU8r3wOiico";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: =?UTF-8?Q?Matthias_Wei=c3=9fer?= <m.weisser.m@gmail.com>,
+ linux-can@vger.kernel.org
+Message-ID: <9bbd4192-122b-8978-4bd2-ec13ef479b4e@pengutronix.de>
+Subject: Re: mcp25xxfd driver testing
+References: <CAO8h3eGqrxFMKrsrjECeog6cheLrRpn_y6Ty9BMUv_ncU1c67g@mail.gmail.com>
+ <20200923190551.GA14591@x1.vandijck-laurijssen.be>
+In-Reply-To: <20200923190551.GA14591@x1.vandijck-laurijssen.be>
+
+--59y6vkjXCoIXzBkGZY6IRWGU8r3wOiico
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 9/23/20 9:05 PM, Kurt Van Dijck wrote:
+> On wo, 23 sep 2020 16:55:13 +0200, Matthias Wei=C3=9Fer wrote:
+>> Hi
+>>
+>> I currently try to get a MCP2518FD to work on our custom iMX6ULL based=
+
+>> hardware. I use the driver currently in linux-can-next backported to
+>> our v5.4 kernel
+>>
+>> DT:
+>>     can0: can@0 {
+>>         compatible =3D "microchip,mcp25xxfd";
+>>         reg =3D <0>;
+>>         clocks =3D <&can3_osc>;
+>>         spi-max-frequency =3D <85000000>;
+
+> I did not experience issues by using the real 20MHz upper limit here.
+
+Not quite...
+
+>>         interrupts-extended =3D <&gpio1 18 IRQ_TYPE_LEVEL_LOW>;
+>>         status =3D "okay";
+>>     };
+>>
+>>  # dmesg | grep mcp
+>> [    3.706085] mcp25xxfd spi1.0 can0: MCP2518FD rev0.0 (-RX_INT
+>> -MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:20.00MHz m:8.50MHz
+>> r:8.50MHz e:0.00MHz) successfully initialized.
+>=20
+> off-topic:
+> Variscite deploys a 20HHz oscillator, which brings the max spi frequenc=
+y
+> down to +/- 8.5MHz.
+> After discussion with Thomas Kopp, I learned that microchip uses a 40MH=
+z
+> oscillator, to arrive (close to) 20MHz spi freq.
+> Would you not use a 40MHz oscillator too?
+
+According to the debug output the can3_osc is 20 MHz. According to the da=
+tasheet
+this makes 10 MHz SPI clock, however it turns out, you can only use 85% o=
+f that
+to avoid stability problems. The driver takes care of the 85%, so you don=
+'t have
+to specify this in the DT.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-> -----Original Message-----
-> From: Michael Walle <michael@walle.cc>
-> Sent: Wednesday, September 23, 2020 4:57 AM
-> To: linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org; lin=
-ux-
-> kernel@vger.kernel.org; linux-can@vger.kernel.org
-> Cc: Shawn Guo <shawnguo@kernel.org>; Leo Li <leoyang.li@nxp.com>; Rob
-> Herring <robh+dt@kernel.org>; Marc Kleine-Budde <mkl@pengutronix.de>;
-> Joakim Zhang <qiangqing.zhang@nxp.com>; Michael Walle
-> <michael@walle.cc>
-> Subject: [PATCH 1/2] arm64: dts: ls1028a: add missing CAN nodes
->=20
-> The LS1028A has two FlexCAN controller. These are compatible with the one=
-s
-> from the LX2160A. Add the nodes.
->=20
-> The first controller was tested on the Kontron sl28 board.
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> index 0efeb8fa773e..807ee921ec12 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> @@ -386,6 +386,24 @@
->  			status =3D "disabled";
->  		};
->=20
-> +		can0: can@2180000 {
-> +			compatible =3D "fsl,ls1028ar1-flexcan", "fsl,lx2160ar1-
-> flexcan";
+--59y6vkjXCoIXzBkGZY6IRWGU8r3wOiico--
 
-The explicit compatible strings cannot be found in the binding, but matched=
- by the "fsl,<processor>-flexcan" pattern in the binding.  Is this consider=
-ed to be acceptable now?
+--u6K5IfXgPUZLxbV75iBiOrDMPrrpMwPJa
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-> +			reg =3D <0x0 0x2180000 0x0 0x10000>;
-> +			interrupts =3D <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks =3D <&sysclk>, <&clockgen 4 1>;
-> +			clock-names =3D "ipg", "per";
-> +			status =3D "disabled";
-> +		};
-> +
-> +		can1: can@2190000 {
-> +			compatible =3D "fsl,ls1028ar1-flexcan", "fsl,lx2160ar1-
-> flexcan";
-> +			reg =3D <0x0 0x2190000 0x0 0x10000>;
-> +			interrupts =3D <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks =3D <&sysclk>, <&clockgen 4 1>;
-> +			clock-names =3D "ipg", "per";
-> +			status =3D "disabled";
-> +		};
-> +
->  		duart0: serial@21c0500 {
->  			compatible =3D "fsl,ns16550", "ns16550a";
->  			reg =3D <0x00 0x21c0500 0x0 0x100>;
-> --
-> 2.20.1
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9sQcUACgkQqclaivrt
+76m8jwgAkxNDOgEcnjhJx3qNMDNen9LcNGfDszCNsN5QBcx19n8zHZ16DJyGLJjm
+vqa5n2vmvIGhajwa4kNXFW9y9yjQaqGg7WAJOWlT6pOcaNhgkZFpb90CMyxyBUJb
+ooHmI3uVyimsRra5mtO5DV7dJ8X8/r9bOsBlqRXqikZr6Haixmy5sbpbwBqlltnE
+LHTitZQANlEZZl/XR9hsRYzhXfJ0u9FxqiJZNtF4453D0ux8c0IifcLGXKZSmwPW
+LKMeOt9qsLXh9NLC/pgFGMb244gZhMm6vZtyXkx3EVmgDN+i7AcPC2539TPtZNm1
+HOdCdRkUhUV7fajsJ2Wwi5JfgO1AEw==
+=S2Xf
+-----END PGP SIGNATURE-----
+
+--u6K5IfXgPUZLxbV75iBiOrDMPrrpMwPJa--
