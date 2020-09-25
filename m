@@ -2,45 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 806DC27841B
-	for <lists+linux-can@lfdr.de>; Fri, 25 Sep 2020 11:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FE927841D
+	for <lists+linux-can@lfdr.de>; Fri, 25 Sep 2020 11:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727521AbgIYJek (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Sep 2020 05:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36502 "EHLO
+        id S1727749AbgIYJfp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Sep 2020 05:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727426AbgIYJej (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Sep 2020 05:34:39 -0400
+        with ESMTP id S1727723AbgIYJfp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Sep 2020 05:35:45 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7F7C0613CE
-        for <linux-can@vger.kernel.org>; Fri, 25 Sep 2020 02:34:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0BC0613CE
+        for <linux-can@vger.kernel.org>; Fri, 25 Sep 2020 02:35:44 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kLk7b-0000gX-Lg; Fri, 25 Sep 2020 11:34:31 +0200
+        id 1kLk8k-0000q4-8l; Fri, 25 Sep 2020 11:35:42 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:bb52:8761:ee49:c953] (unknown [IPv6:2a03:f580:87bc:d400:bb52:8761:ee49:c953])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 348C256A369;
-        Fri, 25 Sep 2020 09:34:30 +0000 (UTC)
-Subject: Re: [PATCH 1/2] arm64: dts: ls1028a: add missing CAN nodes
-To:     Michael Walle <michael@walle.cc>, Leo Li <leoyang.li@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20200923095711.11355-1-michael@walle.cc>
- <20200923095711.11355-2-michael@walle.cc>
- <VE1PR04MB6687AC23E100D138FEDB012A8F390@VE1PR04MB6687.eurprd04.prod.outlook.com>
- <e9347e4c2e070ee9e8aa7a8007d89f02@walle.cc>
- <VE1PR04MB6687CF32DBCC76B4DFBA070A8F390@VE1PR04MB6687.eurprd04.prod.outlook.com>
- <cd04c75c5d92371eca86d269cb17bcb3@walle.cc>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 35BB156A36F;
+        Fri, 25 Sep 2020 09:35:41 +0000 (UTC)
+Subject: Re: [PATCH linux-can-next/flexcan 2/4] can: flexcan: add flexcan
+ driver for i.MX8MP
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
+ <20200925151028.11004-3-qiangqing.zhang@nxp.com>
+ <bdb05b08-b60c-c3f9-2b01-3a8606d304f9@pengutronix.de>
+ <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -102,15 +98,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <790ce102-7542-b65e-0945-a04faf6e4b89@pengutronix.de>
-Date:   Fri, 25 Sep 2020 11:34:26 +0200
+Message-ID: <e1a7eebd-e36c-cd96-1b9f-7300faee40dd@pengutronix.de>
+Date:   Fri, 25 Sep 2020 11:35:37 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <cd04c75c5d92371eca86d269cb17bcb3@walle.cc>
+In-Reply-To: <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Vso2bsiwF03I2VMccksJJl8mHVNqsckVZ"
+ boundary="425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -120,37 +116,37 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Vso2bsiwF03I2VMccksJJl8mHVNqsckVZ
-Content-Type: multipart/mixed; boundary="h9EVbyu9eVCGkuNapgPNHY0q89dB8ZzoH";
+--425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY
+Content-Type: multipart/mixed; boundary="ZoB2iHweM0PXPMg7ANawgqTgkNi1lLaRe";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Michael Walle <michael@walle.cc>, Leo Li <leoyang.li@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
- Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Joakim Zhang <qiangqing.zhang@nxp.com>,
- Oleksij Rempel <o.rempel@pengutronix.de>
-Message-ID: <790ce102-7542-b65e-0945-a04faf6e4b89@pengutronix.de>
-Subject: Re: [PATCH 1/2] arm64: dts: ls1028a: add missing CAN nodes
-References: <20200923095711.11355-1-michael@walle.cc>
- <20200923095711.11355-2-michael@walle.cc>
- <VE1PR04MB6687AC23E100D138FEDB012A8F390@VE1PR04MB6687.eurprd04.prod.outlook.com>
- <e9347e4c2e070ee9e8aa7a8007d89f02@walle.cc>
- <VE1PR04MB6687CF32DBCC76B4DFBA070A8F390@VE1PR04MB6687.eurprd04.prod.outlook.com>
- <cd04c75c5d92371eca86d269cb17bcb3@walle.cc>
-In-Reply-To: <cd04c75c5d92371eca86d269cb17bcb3@walle.cc>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: dl-linux-imx <linux-imx@nxp.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Message-ID: <e1a7eebd-e36c-cd96-1b9f-7300faee40dd@pengutronix.de>
+Subject: Re: [PATCH linux-can-next/flexcan 2/4] can: flexcan: add flexcan
+ driver for i.MX8MP
+References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
+ <20200925151028.11004-3-qiangqing.zhang@nxp.com>
+ <bdb05b08-b60c-c3f9-2b01-3a8606d304f9@pengutronix.de>
+ <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
 
---h9EVbyu9eVCGkuNapgPNHY0q89dB8ZzoH
+--ZoB2iHweM0PXPMg7ANawgqTgkNi1lLaRe
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/25/20 11:31 AM, Michael Walle wrote:
-> Marc, I'd convert this to yaml format,
+On 9/25/20 11:11 AM, Joakim Zhang wrote:
+>> This doesn't apply to net-next/master. The MX8QM indented differently.=
 
-Oleksij (CC'ed) is working already on this.
-
-> may I put your name as the maintainer in the binding?
+>=20
+> Need I rebase on net-next/master in next version? This patch set is mad=
+e from
+> linux-can-next/flexcan branch.
+Yes, the flexcan patches are already in David's tree, so please base on
+net-next/master.
 
 Marc
 
@@ -161,23 +157,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---h9EVbyu9eVCGkuNapgPNHY0q89dB8ZzoH--
+--ZoB2iHweM0PXPMg7ANawgqTgkNi1lLaRe--
 
---Vso2bsiwF03I2VMccksJJl8mHVNqsckVZ
+--425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9tuaIACgkQqclaivrt
-76lexQf/YD2d/wkEXxvLSkrJtEnHGKg81c6SreDG7nQBhPSbhZlMJ+3hpvvGGxK3
-1fY7VmT9KGPmSHAR5gPbIvIXL86TB3DBu2OGKqIlHyLR0fss/IJRhviCEWy8Jwcu
-6Mhb/bCU8RcR1R13/TO3hCbKPXarQAkW9FwX/nEyMehuWYynXDLCM8UckwZa0Zik
-zbMzX0psOmrbjgXHBygMRFiTEKgFxgLmKdeloFPr3arf8Az3KO4Q9DBR+w+AnQ8E
-G/hkvpErfGHAa2h+m8FioeoEPoOKZLNNvwp0ZWJZ27rks53BEVlXGDosL+/fyN93
-Bk0e3jnyso1CTwpDbeju5UhmCVhCug==
-=lrs1
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9tuekACgkQqclaivrt
+76mLWgf/Z6QAMZ+BCTgCIdNO/cA92QTlR+5C3FjdBc7qz4Y1XslqYuA5kF9dheYD
+N8FW53kbQtqfFALf42bYDqVcgELh8Cq3KIeXeJ5Bxwp4BwjevmnHqkL5c31Iu4cS
+9G3eFZpXMIVxiNeMefSuN25tZDLa1Df7zSios5b8NTiUYUzOcXcw/C5Cy8R+N+0r
+/PL+Hki3isfw5horWhFAFcH8wu13eQt/qPoDeAkp8g8xb1cZMKHbuDxF0h3OL26n
+8hRYIxdxVLZiBP6vChIWCUua1nbmb3z865Us7Z4/EFKz+AxPY6qPzeTBSwAYbxwb
+5uiwAJBrEi1Oz6NnqQ7qAdkhOSBBIA==
+=+Jk9
 -----END PGP SIGNATURE-----
 
---Vso2bsiwF03I2VMccksJJl8mHVNqsckVZ--
+--425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY--
