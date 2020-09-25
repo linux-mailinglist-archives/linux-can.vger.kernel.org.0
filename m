@@ -2,41 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FE927841D
-	for <lists+linux-can@lfdr.de>; Fri, 25 Sep 2020 11:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6853278448
+	for <lists+linux-can@lfdr.de>; Fri, 25 Sep 2020 11:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727749AbgIYJfp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Sep 2020 05:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S1727935AbgIYJoi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Sep 2020 05:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727723AbgIYJfp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Sep 2020 05:35:45 -0400
+        with ESMTP id S1727402AbgIYJoh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Sep 2020 05:44:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0BC0613CE
-        for <linux-can@vger.kernel.org>; Fri, 25 Sep 2020 02:35:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA07C0613CE
+        for <linux-can@vger.kernel.org>; Fri, 25 Sep 2020 02:44:37 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kLk8k-0000q4-8l; Fri, 25 Sep 2020 11:35:42 +0200
+        id 1kLkHL-0001zc-C2; Fri, 25 Sep 2020 11:44:35 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:bb52:8761:ee49:c953] (unknown [IPv6:2a03:f580:87bc:d400:bb52:8761:ee49:c953])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 35BB156A36F;
-        Fri, 25 Sep 2020 09:35:41 +0000 (UTC)
-Subject: Re: [PATCH linux-can-next/flexcan 2/4] can: flexcan: add flexcan
- driver for i.MX8MP
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F3C9356A39B;
+        Fri, 25 Sep 2020 09:44:33 +0000 (UTC)
+Subject: Re: [PATCH linux-can-next/flexcan 3/4] can: flexcan: add CAN wakeup
+ function for i.MX8
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org
+Cc:     linux-imx@nxp.com, netdev@vger.kernel.org
 References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
- <20200925151028.11004-3-qiangqing.zhang@nxp.com>
- <bdb05b08-b60c-c3f9-2b01-3a8606d304f9@pengutronix.de>
- <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <20200925151028.11004-4-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -98,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <e1a7eebd-e36c-cd96-1b9f-7300faee40dd@pengutronix.de>
-Date:   Fri, 25 Sep 2020 11:35:37 +0200
+Message-ID: <f26c1dc3-f5f7-9a5a-ae2f-07cc2da6803e@pengutronix.de>
+Date:   Fri, 25 Sep 2020 11:44:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <20200925151028.11004-4-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY"
+ boundary="04TGKo4793Thaii56OP5l4U4ppA4bAY82"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,37 +112,46 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY
-Content-Type: multipart/mixed; boundary="ZoB2iHweM0PXPMg7ANawgqTgkNi1lLaRe";
+--04TGKo4793Thaii56OP5l4U4ppA4bAY82
+Content-Type: multipart/mixed; boundary="MVPCVJF8chAfehdbE3ysvabP7XiCiU9fy";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc: dl-linux-imx <linux-imx@nxp.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <e1a7eebd-e36c-cd96-1b9f-7300faee40dd@pengutronix.de>
-Subject: Re: [PATCH linux-can-next/flexcan 2/4] can: flexcan: add flexcan
- driver for i.MX8MP
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org
+Cc: linux-imx@nxp.com, netdev@vger.kernel.org
+Message-ID: <f26c1dc3-f5f7-9a5a-ae2f-07cc2da6803e@pengutronix.de>
+Subject: Re: [PATCH linux-can-next/flexcan 3/4] can: flexcan: add CAN wakeup
+ function for i.MX8
 References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
- <20200925151028.11004-3-qiangqing.zhang@nxp.com>
- <bdb05b08-b60c-c3f9-2b01-3a8606d304f9@pengutronix.de>
- <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
-In-Reply-To: <DB8PR04MB6795D438EB4D6C6F9CF4F096E6360@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <20200925151028.11004-4-qiangqing.zhang@nxp.com>
+In-Reply-To: <20200925151028.11004-4-qiangqing.zhang@nxp.com>
 
---ZoB2iHweM0PXPMg7ANawgqTgkNi1lLaRe
+--MVPCVJF8chAfehdbE3ysvabP7XiCiU9fy
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/25/20 11:11 AM, Joakim Zhang wrote:
->> This doesn't apply to net-next/master. The MX8QM indented differently.=
-
+On 9/25/20 5:10 PM, Joakim Zhang wrote:
+> The System Controller Firmware (SCFW) is a low-level system function
+> which runs on a dedicated Cortex-M core to provide power, clock, and
+> resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
+> (QM, QP), and i.MX8QX (QXP, DX).
 >=20
-> Need I rebase on net-next/master in next version? This patch set is mad=
-e from
-> linux-can-next/flexcan branch.
-Yes, the flexcan patches are already in David's tree, so please base on
-net-next/master.
+> SCU driver manages the IPC interface between host CPU and the
+> SCU firmware running on M4.
+>=20
+> For i.MX8, stop mode request is controlled by System Controller Unit(SC=
+U)
+> firmware.
+>=20
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> ---
+
+Just for reference, this fails to build with:
+
+ERROR: modpost: "imx_scu_get_handle" [drivers/net/can/flexcan.ko] undefin=
+ed!
+ERROR: modpost: "imx_sc_misc_set_control" [drivers/net/can/flexcan.ko] un=
+defined!
 
 Marc
 
@@ -157,23 +162,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---ZoB2iHweM0PXPMg7ANawgqTgkNi1lLaRe--
+--MVPCVJF8chAfehdbE3ysvabP7XiCiU9fy--
 
---425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY
+--04TGKo4793Thaii56OP5l4U4ppA4bAY82
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9tuekACgkQqclaivrt
-76mLWgf/Z6QAMZ+BCTgCIdNO/cA92QTlR+5C3FjdBc7qz4Y1XslqYuA5kF9dheYD
-N8FW53kbQtqfFALf42bYDqVcgELh8Cq3KIeXeJ5Bxwp4BwjevmnHqkL5c31Iu4cS
-9G3eFZpXMIVxiNeMefSuN25tZDLa1Df7zSios5b8NTiUYUzOcXcw/C5Cy8R+N+0r
-/PL+Hki3isfw5horWhFAFcH8wu13eQt/qPoDeAkp8g8xb1cZMKHbuDxF0h3OL26n
-8hRYIxdxVLZiBP6vChIWCUua1nbmb3z865Us7Z4/EFKz+AxPY6qPzeTBSwAYbxwb
-5uiwAJBrEi1Oz6NnqQ7qAdkhOSBBIA==
-=+Jk9
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9tu/0ACgkQqclaivrt
+76kYJgf9GpWmR0w/nSizZHAGKI11AsxaojbHrG9+sZHDokA+TnBOaQUoUKzAPkop
+kSoZxlj6iUDzmze83xj5FofORSmjcHHHj2XVwze8HDi41XsjbVBg6Nzou+Y44j5O
++UnvOEutTS+xItWYWf3oS/02vldTnlO04gAgUxSk7lT5tFPeeL6gVyKnr+d11asL
+iwPgEa2zPznEaaVzCbBXrDtsKHBEhMTmcWhlY/qpV0hnmD69nxZyols34pc9PYbG
+4NVamr+5j+dRBo2rEpJ6+Y3oQnrWgJC0464Db0H8FNAgkG/YRzpFcKGee0KRPXpg
+P2p//9iMjtV1GINp+XoZD8RgSVAYzQ==
+=aMYz
 -----END PGP SIGNATURE-----
 
---425Ne7nW8vkf0SFA3IH5RVlJMB8LgXFmY--
+--04TGKo4793Thaii56OP5l4U4ppA4bAY82--
