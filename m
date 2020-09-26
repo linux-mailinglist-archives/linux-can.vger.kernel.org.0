@@ -2,33 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F17279ABD
-	for <lists+linux-can@lfdr.de>; Sat, 26 Sep 2020 18:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84147279B60
+	for <lists+linux-can@lfdr.de>; Sat, 26 Sep 2020 19:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729634AbgIZQ1H (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 26 Sep 2020 12:27:07 -0400
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:31159 "EHLO
+        id S1726244AbgIZRaX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 26 Sep 2020 13:30:23 -0400
+Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:27346 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726210AbgIZQ1H (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Sep 2020 12:27:07 -0400
+        with ESMTP id S1726183AbgIZRaX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Sep 2020 13:30:23 -0400
 Received: from tomoyo.flets-east.jp ([153.230.197.127])
-        by mwinf5d10 with ME
-        id YgSs230022lQRaH03gT107; Sat, 26 Sep 2020 18:27:05 +0200
+        by mwinf5d89 with ME
+        id YhW22300R2lQRaH03hWJqJ; Sat, 26 Sep 2020 19:30:21 +0200
 X-ME-Helo: tomoyo.flets-east.jp
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 26 Sep 2020 18:27:05 +0200
+X-ME-Date: Sat, 26 Sep 2020 19:30:21 +0200
 X-ME-IP: 153.230.197.127
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
+To:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH] can: raw: add missing error queue support
-Date:   Sun, 27 Sep 2020 01:24:31 +0900
-Message-Id: <20200926162527.270030-1-mailhol.vincent@wanadoo.fr>
+        "David S . Miller" <davem@davemloft.net>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 0/6] can: add support for ETAS ES58X CAN USB
+Date:   Sun, 27 Sep 2020 02:29:40 +0900
+Message-Id: <20200926172953.277426-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -36,53 +33,61 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Error queue are not yet implemented in CAN-raw sockets.
+The purpose of this patch series is to introduce a new CAN USB
+driver to support ETAS USB interfaces (ES58X series).
 
-The problem: a userland call to recvmsg(soc, msg, MSG_ERRQUEUE) on a
-CAN-raw socket would unqueue messages from the normal queue without
-any kind of error or warning. As such, it prevented CAN drivers from
-using the functionalities that relies on the error queue such as
-skb_tx_timestamp().
+During development, issues in drivers/net/can/dev.c where discovered,
+the fix for those issues are included in this patch series.
 
-SCM_CAN_RAW_ERRQUEUE is defined as the type for the CAN raw error
-queue. SCM stands for "Socket control messages". The name is inspired
-from SCM_J1939_ERRQUEUE of include/uapi/linux/can/j1939.h.
+We also propose to add two helper functions in include/linux/can/dev.h
+which we think can benefit other drivers: get_can_len() and
+can_bit_time().
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/uapi/linux/can/raw.h | 3 +++
- net/can/raw.c                | 4 ++++
- 2 files changed, 7 insertions(+)
+The driver indirectly relies on https://lkml.org/lkml/2020/9/26/251
+([PATCH] can: raw: add missing error queue support) for the call to
+skb_tx_timestamp() to work but can still compile without it.
 
-diff --git a/include/uapi/linux/can/raw.h b/include/uapi/linux/can/raw.h
-index 6a11d308eb5c..3386aa81fdf2 100644
---- a/include/uapi/linux/can/raw.h
-+++ b/include/uapi/linux/can/raw.h
-@@ -49,6 +49,9 @@
- #include <linux/can.h>
- 
- #define SOL_CAN_RAW (SOL_CAN_BASE + CAN_RAW)
-+enum {
-+	SCM_CAN_RAW_ERRQUEUE = 1,
-+};
- 
- /* for socket options affecting the socket (not the global system) */
- 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 94a9405658dc..98abab119136 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -804,6 +804,10 @@ static int raw_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 	noblock =  flags & MSG_DONTWAIT;
- 	flags   &= ~MSG_DONTWAIT;
- 
-+	if (flags & MSG_ERRQUEUE)
-+		return sock_recv_errqueue(sk, msg, size,
-+					  SOL_CAN_RAW, SCM_CAN_RAW_ERRQUEUE);
-+
- 	skb = skb_recv_datagram(sk, flags, noblock, &err);
- 	if (!skb)
- 		return err;
+*Side notes*: scripts/checkpatch.pl returns 4 'checks' findings in
+[PATCH 5/6]. All those findings are of type: "Macro argument reuse 'x'
+possible side-effects?".  Those arguments reuse are actually made by
+calling either __stringify() or sizeof_field() which are both
+pre-processor constant. Furthermore, those macro are never called with
+arguments sensible to side-effects. So no actual side effect would
+occur.
+
+Thank you for your comments.
+
+Vincent Mailhol (6):
+  can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ
+    context
+  can: dev: add a helper function to get the correct length of Classical
+    frames
+  can: dev: __can_get_echo_skb(): fix the return length
+  can: dev: add a helper function to calculate the duration of one bit
+  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
+  USB: cdc-acm: blacklist ETAS ES58X device
+
+ drivers/net/can/dev.c                       |   26 +-
+ drivers/net/can/usb/Kconfig                 |    9 +
+ drivers/net/can/usb/Makefile                |    1 +
+ drivers/net/can/usb/etas_es58x/Makefile     |    4 +
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  560 ++++
+ drivers/net/can/usb/etas_es58x/es581_4.h    |  237 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2725 +++++++++++++++++++
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  700 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  650 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
+ drivers/usb/class/cdc-acm.c                 |   11 +
+ include/linux/can/dev.h                     |   38 +
+ 12 files changed, 5190 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
+
 -- 
 2.26.2
 
