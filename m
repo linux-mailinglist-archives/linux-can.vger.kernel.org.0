@@ -2,92 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5BF279B85
-	for <lists+linux-can@lfdr.de>; Sat, 26 Sep 2020 19:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA000279B86
+	for <lists+linux-can@lfdr.de>; Sat, 26 Sep 2020 19:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726183AbgIZRqA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 26 Sep 2020 13:46:00 -0400
-Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:38236 "EHLO
+        id S1729272AbgIZRqI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 26 Sep 2020 13:46:08 -0400
+Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:53174 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725208AbgIZRqA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Sep 2020 13:46:00 -0400
+        with ESMTP id S1725208AbgIZRqI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Sep 2020 13:46:08 -0400
 Received: from tomoyo.flets-east.jp ([153.230.197.127])
         by mwinf5d89 with ME
-        id Yhlm230082lQRaH03hlv3f; Sat, 26 Sep 2020 19:45:58 +0200
+        id Yhlm230082lQRaH03hm34K; Sat, 26 Sep 2020 19:46:06 +0200
 X-ME-Helo: tomoyo.flets-east.jp
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 26 Sep 2020 19:45:58 +0200
+X-ME-Date: Sat, 26 Sep 2020 19:46:06 +0200
 X-ME-IP: 153.230.197.127
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S . Miller" <davem@davemloft.net>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 0/6] can: add support for ETAS ES58X CAN USB
-Date:   Sun, 27 Sep 2020 02:45:30 +0900
-Message-Id: <20200926174542.278166-1-mailhol.vincent@wanadoo.fr>
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/6] can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ context
+Date:   Sun, 27 Sep 2020 02:45:31 +0900
+Message-Id: <20200926174542.278166-2-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200926174542.278166-1-mailhol.vincent@wanadoo.fr>
+References: <20200926174542.278166-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The purpose of this patch series is to introduce a new CAN USB
-driver to support ETAS USB interfaces (ES58X series).
+If a driver calls can_get_echo_skb() during a hardware IRQ (which is
+often, but not always, the case), the 'WARN_ON(in_irq)' in
+net/core/skbuff.c#skb_release_head_state() might be triggered, under
+network congestion circumstances, together with the potential risk of
+a NULL pointer dereference.
 
-During development, issues in drivers/net/can/dev.c where discovered,
-the fix for those issues are included in this patch series.
+The root cause of this issue is the call to kfree_skb() instead of
+dev_kfree_skb_irq() in net/core/dev.c#enqueue_to_backlog().
 
-We also propose to add two helper functions in include/linux/can/dev.h
-which we think can benefit other drivers: get_can_len() and
-can_bit_time().
+This patch prevents the skb to be freed within the call to netif_rx()
+by incrementing its reference count with skb_get(). The skb is finally
+freed by one of the in-irq-context safe functions:
+dev_consume_skb_any() or dev_kfree_skb_any().  The "any" version is
+used because some drivers might call can_get_echo_skb() in a normal
+context.
 
-The driver indirectly relies on https://lkml.org/lkml/2020/9/26/251
-([PATCH] can: raw: add missing error queue support) for the call to
-skb_tx_timestamp() to work but can still compile without it.
+The reason for this issue to occur is that initially, in the core
+network stack, loopback skb were not supposed to be received in
+hardware IRQ context. The CAN stack is an exeption.
 
-*Side notes*: scripts/checkpatch.pl returns 4 'checks' findings in
-[PATCH 5/6]. All those findings are of type: "Macro argument reuse 'x'
-possible side-effects?".  Those arguments reuse are actually made by
-calling either __stringify() or sizeof_field() which are both
-pre-processor constant. Furthermore, those macro are never called with
-arguments sensible to side-effects. So no actual side effect would
-occur.
+This bug is exactly what is described in
+https://patchwork.ozlabs.org/patch/835236/
 
-Thank you for your comments.
+While above link proposes a patch that directly modifies
+net/core/dev.c, we try to propose here a smoother modification local
+to CAN network stack (the assumption behind is that only CAN devices
+are affected by this issue).
 
-Vincent Mailhol (6):
-  can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ
-    context
-  can: dev: add a helper function to get the correct length of Classical
-    frames
-  can: dev: __can_get_echo_skb(): fix the return length
-  can: dev: add a helper function to calculate the duration of one bit
-  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
-  USB: cdc-acm: blacklist ETAS ES58X device
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+ drivers/net/can/dev.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- drivers/net/can/dev.c                       |   26 +-
- drivers/net/can/usb/Kconfig                 |    9 +
- drivers/net/can/usb/Makefile                |    1 +
- drivers/net/can/usb/etas_es58x/Makefile     |    4 +
- drivers/net/can/usb/etas_es58x/es581_4.c    |  560 ++++
- drivers/net/can/usb/etas_es58x/es581_4.h    |  237 ++
- drivers/net/can/usb/etas_es58x/es58x_core.c | 2725 +++++++++++++++++++
- drivers/net/can/usb/etas_es58x/es58x_core.h |  700 +++++
- drivers/net/can/usb/etas_es58x/es58x_fd.c   |  650 +++++
- drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
- drivers/usb/class/cdc-acm.c                 |   11 +
- include/linux/can/dev.h                     |   38 +
- 12 files changed, 5190 insertions(+), 14 deletions(-)
- create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
- create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
-
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index 68834a2853c9..e291fda395a0 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -512,7 +512,11 @@ unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx)
+ 	if (!skb)
+ 		return 0;
+ 
+-	netif_rx(skb);
++	skb_get(skb);
++	if (netif_rx(skb) == NET_RX_SUCCESS)
++		dev_consume_skb_any(skb);
++	else
++		dev_kfree_skb_any(skb);
+ 
+ 	return len;
+ }
 -- 
 2.26.2
 
