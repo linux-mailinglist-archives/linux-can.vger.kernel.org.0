@@ -2,48 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FAA27A9B3
-	for <lists+linux-can@lfdr.de>; Mon, 28 Sep 2020 10:38:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E551327ABA7
+	for <lists+linux-can@lfdr.de>; Mon, 28 Sep 2020 12:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbgI1Iiu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Sep 2020 04:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
+        id S1726559AbgI1KPl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Sep 2020 06:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726420AbgI1Iiu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Sep 2020 04:38:50 -0400
+        with ESMTP id S1726500AbgI1KPl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Sep 2020 06:15:41 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB8EC0613CE
-        for <linux-can@vger.kernel.org>; Mon, 28 Sep 2020 01:38:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02512C061755
+        for <linux-can@vger.kernel.org>; Mon, 28 Sep 2020 03:15:41 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kMogJ-0000lc-IT; Mon, 28 Sep 2020 10:38:47 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:e69a:da07:120c:40d8] (unknown [IPv6:2a03:f580:87bc:d400:e69a:da07:120c:40d8])
+        id 1kMqC3-00041r-2E; Mon, 28 Sep 2020 12:15:39 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:86f4:ae6c:f218:6298] (unknown [IPv6:2a03:f580:87bc:d400:86f4:ae6c:f218:6298])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6FE1656C58D;
-        Mon, 28 Sep 2020 08:38:46 +0000 (UTC)
-Subject: Re: [PATCH linux-can-next/flexcan 1/4] can: flexcan: initialize all
- flexcan memory for ECC function
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        Pankaj Bansal <pankaj.bansal@nxp.com>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
- <20200925151028.11004-2-qiangqing.zhang@nxp.com>
- <f98dcb18-19f9-9721-a191-481983158daa@pengutronix.de>
- <DB8PR04MB6795C88B839FE5083283E157E6340@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <4490a094-0b7d-4361-2c0a-906b2cff6020@pengutronix.de>
- <DB8PR04MB679574C44EC1B2D401C9B5D1E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <3910f513-1a47-5128-1a78-f412a0904911@pengutronix.de>
- <DB8PR04MB679575A5E8EE9C7534A446BAE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <e9542cdc-cce8-8ec5-8229-5a9992352539@pengutronix.de>
- <DB8PR04MB6795064F932CF60033514367E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E65FE56C6DC;
+        Mon, 28 Sep 2020 10:15:37 +0000 (UTC)
+To:     Thomas Kopp <thomas.kopp@microchip.com>, linux-can@vger.kernel.org
+Cc:     manivannan.sadhasivam@linaro.org
+References: <20200925065606.358-1-thomas.kopp@microchip.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -105,15 +91,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <91898e81-3fb6-e03f-a450-3f43ba2b7756@pengutronix.de>
-Date:   Mon, 28 Sep 2020 10:38:42 +0200
+Subject: Re: [PATCH] can: mcp25xxfd: Add explanation for SPI clk limit,
+ Reference to ECC errata
+Message-ID: <05c1b338-0d98-c2bd-9f44-5d35661ce773@pengutronix.de>
+Date:   Mon, 28 Sep 2020 12:15:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <DB8PR04MB6795064F932CF60033514367E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <20200925065606.358-1-thomas.kopp@microchip.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="9SEwBZLuY8Wg30vu5sgU4RAhE3EGALqVs"
+ boundary="Y6br4re2BgRcwggZVO6ZyX3RW3ukFoPZ2"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -123,43 +111,55 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---9SEwBZLuY8Wg30vu5sgU4RAhE3EGALqVs
-Content-Type: multipart/mixed; boundary="3hsv4SUzU7ukNMsUbjxBG16iqesN8y6ZK";
+--Y6br4re2BgRcwggZVO6ZyX3RW3ukFoPZ2
+Content-Type: multipart/mixed; boundary="rJ8j29cZ2yQFmhtmGMcbBoJYfNzRCELUY";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- Pankaj Bansal <pankaj.bansal@nxp.com>
-Cc: dl-linux-imx <linux-imx@nxp.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <91898e81-3fb6-e03f-a450-3f43ba2b7756@pengutronix.de>
-Subject: Re: [PATCH linux-can-next/flexcan 1/4] can: flexcan: initialize all
- flexcan memory for ECC function
-References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
- <20200925151028.11004-2-qiangqing.zhang@nxp.com>
- <f98dcb18-19f9-9721-a191-481983158daa@pengutronix.de>
- <DB8PR04MB6795C88B839FE5083283E157E6340@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <4490a094-0b7d-4361-2c0a-906b2cff6020@pengutronix.de>
- <DB8PR04MB679574C44EC1B2D401C9B5D1E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <3910f513-1a47-5128-1a78-f412a0904911@pengutronix.de>
- <DB8PR04MB679575A5E8EE9C7534A446BAE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <e9542cdc-cce8-8ec5-8229-5a9992352539@pengutronix.de>
- <DB8PR04MB6795064F932CF60033514367E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
-In-Reply-To: <DB8PR04MB6795064F932CF60033514367E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+To: Thomas Kopp <thomas.kopp@microchip.com>, linux-can@vger.kernel.org
+Cc: manivannan.sadhasivam@linaro.org
+Message-ID: <05c1b338-0d98-c2bd-9f44-5d35661ce773@pengutronix.de>
+Subject: Re: [PATCH] can: mcp25xxfd: Add explanation for SPI clk limit,
+ Reference to ECC errata
+References: <20200925065606.358-1-thomas.kopp@microchip.com>
+In-Reply-To: <20200925065606.358-1-thomas.kopp@microchip.com>
 
---3hsv4SUzU7ukNMsUbjxBG16iqesN8y6ZK
+--rJ8j29cZ2yQFmhtmGMcbBoJYfNzRCELUY
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/28/20 10:36 AM, Joakim Zhang wrote:
-> Could I send out a V3 to review firstly, then wait Pankaj have time to =
-do the
-> test?
+On 9/25/20 8:56 AM, Thomas Kopp wrote:
+> Reference the MCP2517FD and MCP2518FD erratasheets and paste the
+> explanation.
+> The single error correction does not always work, so just indicate that=
 
-sure, go ahead.
+> a single error occurred.
+>=20
+> Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
+> ---
+>  .../net/can/spi/mcp25xxfd/mcp25xxfd-core.c    | 28 ++++++++++++++++---=
+
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/n=
+et/can/spi/mcp25xxfd/mcp25xxfd-core.c
+> index 96901fb47bde..5557b2d1e774 100644
+> --- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+> +++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+> @@ -1943,6 +1943,17 @@ mcp25xxfd_handle_eccif_recover(struct mcp25xxfd_=
+priv *priv, u8 nr)
+>  	return mcp25xxfd_chip_set_normal_mode(priv);
+>  }
+> =20
+> +	/* Errata Reference:  DS80000789B, DS80000792C
+
+The "DS80000792C" is the new erratum for the mcp2517fd? Is it already onl=
+ine,
+the https://www.microchip.com/wwwproducts/en/MCP2517FD still lists the "B=
+" variant.
 
 Marc
+
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
@@ -167,23 +167,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---3hsv4SUzU7ukNMsUbjxBG16iqesN8y6ZK--
+--rJ8j29cZ2yQFmhtmGMcbBoJYfNzRCELUY--
 
---9SEwBZLuY8Wg30vu5sgU4RAhE3EGALqVs
+--Y6br4re2BgRcwggZVO6ZyX3RW3ukFoPZ2
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9xoRIACgkQqclaivrt
-76l9Pgf/e6rinM1v0XRuQNTB89bUrwo5wqDnYyUg+duY/0z75Eqr/GGnDdWFzALz
-RAziSoMLW3ZXG9ILBlcAgeFVs30qYGRznpOLGWQAlsMLR1kzp3A6k05b2yqjcdI4
-eQzcBD/N6XwhV9W63RiUUDfuj51iY/qksVTGgvdSPST9lmT5wp5dxxiaDibj5oI7
-5hM8QleK8xg0rMTjlzjbuig+7qNFmQYcNApQu9va/qsDVIjelJhJcY9qhbgguh/t
-4Xa7U3b9g9rOTZhHZXJgWvmT6Vt/xamAF6NZqurG7M7UsJvRjmB7IonjSSZUOVUZ
-tDyd5mrwoS9NfG1nJzLWM4OBjifwgA==
-=fRPT
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9xt8UACgkQqclaivrt
+76kx0gf/Q6yVcTg29UnfroG1IihU1afvJe/4qb5dLMDRTcmL+Xk43wLnt51G13/G
+78M0F589HB79lGQ20T9WSC2gMPhmtQpaz5Fh2VTUHmSgkm6WJ3E2apAcbWFjlSmP
+JioJkzu2OWZc2DRu95LfEF+GbxHqLGu6Na9AI2zBrTqwwxY+lYAkL9edvFldgqVG
+3RGeFtNS7lJOvMrcV0XhPgluJfs9+I/r+8tMckK4YaKRls0BdsDXj6fPDIWkQEnV
+FU/6V9m6NEVljFxX0NzxX4vh2uLdYk3elwUhK//opOfyn1isxW1OtR4vZqaWdzaJ
+rnK7t51zk6Fd7V7peYTnIbYuqksCOw==
+=vWGD
 -----END PGP SIGNATURE-----
 
---9SEwBZLuY8Wg30vu5sgU4RAhE3EGALqVs--
+--Y6br4re2BgRcwggZVO6ZyX3RW3ukFoPZ2--
