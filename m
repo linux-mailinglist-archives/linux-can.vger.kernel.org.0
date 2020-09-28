@@ -2,42 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDB327A75E
-	for <lists+linux-can@lfdr.de>; Mon, 28 Sep 2020 08:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D1627A808
+	for <lists+linux-can@lfdr.de>; Mon, 28 Sep 2020 09:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbgI1GVR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Sep 2020 02:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S1726440AbgI1HBk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Sep 2020 03:01:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726516AbgI1GVQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Sep 2020 02:21:16 -0400
+        with ESMTP id S1726412AbgI1HBk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Sep 2020 03:01:40 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D32C0613CE
-        for <linux-can@vger.kernel.org>; Sun, 27 Sep 2020 23:21:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BE0C0613CE
+        for <linux-can@vger.kernel.org>; Mon, 28 Sep 2020 00:01:39 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kMmXC-0000wb-9V; Mon, 28 Sep 2020 08:21:14 +0200
+        id 1kMnAG-0004xi-Dh; Mon, 28 Sep 2020 09:01:36 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:e69a:da07:120c:40d8] (unknown [IPv6:2a03:f580:87bc:d400:e69a:da07:120c:40d8])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 38F7356C1E1;
-        Mon, 28 Sep 2020 06:21:12 +0000 (UTC)
-Subject: Re: [PATCH V2 1/3] can: flexcan: initialize all flexcan memory for
- ECC function
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 90FA756C2C2;
+        Mon, 28 Sep 2020 07:01:34 +0000 (UTC)
 To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        Pankaj Bansal <pankaj.bansal@nxp.com>
 Cc:     dl-linux-imx <linux-imx@nxp.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20200927160801.28569-1-qiangqing.zhang@nxp.com>
- <20200927160801.28569-2-qiangqing.zhang@nxp.com>
- <34240503-1d9e-9b8c-cdd0-28482ea60fbf@pengutronix.de>
- <DB8PR04MB6795C350DB0CCFF56787561CE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <DB8PR04MB67953242A9B727F851B7466CE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
+ <20200925151028.11004-2-qiangqing.zhang@nxp.com>
+ <f98dcb18-19f9-9721-a191-481983158daa@pengutronix.de>
+ <DB8PR04MB6795C88B839FE5083283E157E6340@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <4490a094-0b7d-4361-2c0a-906b2cff6020@pengutronix.de>
+ <DB8PR04MB679574C44EC1B2D401C9B5D1E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -99,15 +99,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <c43b3311-8c15-71ec-5f39-1a3b22f928e5@pengutronix.de>
-Date:   Mon, 28 Sep 2020 08:20:59 +0200
+Subject: Re: [PATCH linux-can-next/flexcan 1/4] can: flexcan: initialize all
+ flexcan memory for ECC function
+Message-ID: <3910f513-1a47-5128-1a78-f412a0904911@pengutronix.de>
+Date:   Mon, 28 Sep 2020 09:01:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <DB8PR04MB67953242A9B727F851B7466CE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <DB8PR04MB679574C44EC1B2D401C9B5D1E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="oyfXLNkoCO3o0Tb8DlSNZbS6ijycA3o8T"
+ boundary="U2ZNnsfsjoGSlIXzeTcV1O7d3UhtmLKEA"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -117,50 +119,85 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---oyfXLNkoCO3o0Tb8DlSNZbS6ijycA3o8T
-Content-Type: multipart/mixed; boundary="s6btnVdXAE7THfRkywcXHaOYsyAX7Q1am";
+--U2ZNnsfsjoGSlIXzeTcV1O7d3UhtmLKEA
+Content-Type: multipart/mixed; boundary="t82KugHhbPYJ8DFaST9ZFIXYa7wa4K5eg";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Joakim Zhang <qiangqing.zhang@nxp.com>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+ Pankaj Bansal <pankaj.bansal@nxp.com>
 Cc: dl-linux-imx <linux-imx@nxp.com>,
  "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Message-ID: <c43b3311-8c15-71ec-5f39-1a3b22f928e5@pengutronix.de>
-Subject: Re: [PATCH V2 1/3] can: flexcan: initialize all flexcan memory for
- ECC function
-References: <20200927160801.28569-1-qiangqing.zhang@nxp.com>
- <20200927160801.28569-2-qiangqing.zhang@nxp.com>
- <34240503-1d9e-9b8c-cdd0-28482ea60fbf@pengutronix.de>
- <DB8PR04MB6795C350DB0CCFF56787561CE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
- <DB8PR04MB67953242A9B727F851B7466CE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
-In-Reply-To: <DB8PR04MB67953242A9B727F851B7466CE6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+Message-ID: <3910f513-1a47-5128-1a78-f412a0904911@pengutronix.de>
+Subject: Re: [PATCH linux-can-next/flexcan 1/4] can: flexcan: initialize all
+ flexcan memory for ECC function
+References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
+ <20200925151028.11004-2-qiangqing.zhang@nxp.com>
+ <f98dcb18-19f9-9721-a191-481983158daa@pengutronix.de>
+ <DB8PR04MB6795C88B839FE5083283E157E6340@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <4490a094-0b7d-4361-2c0a-906b2cff6020@pengutronix.de>
+ <DB8PR04MB679574C44EC1B2D401C9B5D1E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <DB8PR04MB679574C44EC1B2D401C9B5D1E6350@DB8PR04MB6795.eurprd04.prod.outlook.com>
 
---s6btnVdXAE7THfRkywcXHaOYsyAX7Q1am
+--t82KugHhbPYJ8DFaST9ZFIXYa7wa4K5eg
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/28/20 7:23 AM, Joakim Zhang wrote:
->>>> +	for (i =3D 0; i < ram_init[0].len; i++)
->>>> +		priv->write(0, (void __iomem *)regs + ram_init[0].offset +
->>>> +sizeof(u32) * i);
->>>
->>> As the write function only does endian conversion, and you're writing=
- 0 here.
->>> What about using iowrite32_rep() and get rid of the for loop?
->>
->> Thanks for this point, I will update in next version.
+On 9/28/20 4:27 AM, Joakim Zhang wrote:
+>> If it's OK on all SoCs to initialize the complete RAM area, just do it=
+=2E Then we can
+>> get rid of the proposed struct at all.
 >=20
-> Ahhh.. I check iowrite32_rep() writes a buf to single address, no shift=
- for address.
+> Should be OK according to IP guys feedbacks.
 
-Doh! Right.
+Good!
 
-> I prefer to use memset_io() here to initialize a block of io memory. Wh=
-at do
-> you think?
+> static const struct flexcan_devtype_data fsl_vf610_devtype_data =3D {
+> 	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RR=
+S |
+> 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_USE_OFF_TIMESTAMP |
+> 		FLEXCAN_QUIRK_BROKEN_PERR_STATE,
+> };
+>=20
+> static const struct flexcan_devtype_data fsl_ls1021a_r2_devtype_data =3D=
+ {
+> 	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RR=
+S |
+> 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+> 		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP,
+> };
+>=20
+> static const struct flexcan_devtype_data fsl_lx2160a_r1_devtype_data =3D=
+ {
+> 	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RR=
+S |
+> 		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+> 		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP | FLEXCAN_QUIRK_SUPPORT_FD,
+> };
 
-Of course, that's the correct function for this!
+> I am checking layerscape's CAN section:
+>=20
+> There is no ECC section in LS1021A=20
+> https://www.nxp.com/products/processors-and-microcontrollers/arm-proces=
+sors/layerscape-multicore-processors/layerscape-1021a-dual-core-communica=
+tions-processor-with-lcd-controller:LS1021A?tab=3DDocumentation_Tab
+
+Hmmm, why does the LS1021A have "FLEXCAN_QUIRK_DISABLE_MECR"? The bits in=
+ the
+ctrl2 and the mecr register itself used in the quirk are marked as reserv=
+ed in
+this datasheet....
+
+Can @Pankaj Bansal clarify this?
+
+> ECC section in LX2160A, also contains the same NOTE as i.MX8MP.
+> https://www.nxp.com/products/processors-and-microcontrollers/arm-proces=
+sors/layerscape-multicore-processors/layerscape-lx2160a-multicore-communi=
+cations-processor:LX2160A?tab=3DDocumentation_Tab
+
+> Hi @Pankaj Bansal, could you please also have a check?
+Can someone check the vf610, too?
 
 regards,
 Marc
@@ -172,23 +209,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---s6btnVdXAE7THfRkywcXHaOYsyAX7Q1am--
+--t82KugHhbPYJ8DFaST9ZFIXYa7wa4K5eg--
 
---oyfXLNkoCO3o0Tb8DlSNZbS6ijycA3o8T
+--U2ZNnsfsjoGSlIXzeTcV1O7d3UhtmLKEA
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9xgMsACgkQqclaivrt
-76mnZAf+PvdvfycP/f6zDP50Rc7IGWNUYNVqlZfjZ2DBpTLQsow9PEoUkjEWIMsu
-WOwwHXaFZnrCi7yTwayoZ/4ke+T9xNKS5aXnuJUx6zoZMS4DL4jZF/oh8iO/8Yyk
-RkbsXbpSISvPAm5zkaYVL7zfRSdic9bxctXFAmVqOVnFB+nYWR8xaIFmNrbJ6hbP
-VSr6d2Dwj+RqnhaokI8ZhTBlnTjrP4zIxHf0iPRMKr0MOm5Oj/MR3ja3Oe3voyyp
-uNP10DfP3x7YukCcRAui0mjQX0weK7cRkttCS07Y//V2syS6qtSaqDj5QwgYo624
-GL2AWBoUDLCwJrt74OdSrTqUFMV6qw==
-=tFnf
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9xikkACgkQqclaivrt
+76kwvgf+PfTyYlizxsS3m95R6vjkb8hz1aj6pk+k3w5XbQqA04UF5c8ksEL+RBq1
+be7DaY2CClkvW/tNnKcLJ+MbS3D6pJXIglW+CbktYfwYE3khu5tjIqzdZry+IUOa
+2nuLdIhldnW1OE2DWqaCvFLL0wPYxCXmqAZoDYixaCNqXcJ+ABDvUAXppdwACtQB
+bv38aRTG1WFuSqIUJ6A2uexuKHUX+y9OxtWgTmDV3imBhlTUlz4aFBstgcNCZGBw
+oi6BvIJylVaKP2O6dH+8boy5lXD4UA81Fmaf+WCgI6uhcrGuQ6h/fio35Zcd6RRG
+pBuFAvZGVLNumrSHmDyHvkmNTs+LvQ==
+=q/mY
 -----END PGP SIGNATURE-----
 
---oyfXLNkoCO3o0Tb8DlSNZbS6ijycA3o8T--
+--U2ZNnsfsjoGSlIXzeTcV1O7d3UhtmLKEA--
