@@ -2,44 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 747F927C1E0
-	for <lists+linux-can@lfdr.de>; Tue, 29 Sep 2020 12:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBD627C2B9
+	for <lists+linux-can@lfdr.de>; Tue, 29 Sep 2020 12:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727759AbgI2KGo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Sep 2020 06:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
+        id S1728283AbgI2KtF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Sep 2020 06:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725355AbgI2KGn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Sep 2020 06:06:43 -0400
+        with ESMTP id S1727761AbgI2KtF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Sep 2020 06:49:05 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EACFC061755
-        for <linux-can@vger.kernel.org>; Tue, 29 Sep 2020 03:06:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464EC061755
+        for <linux-can@vger.kernel.org>; Tue, 29 Sep 2020 03:49:04 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kNCWm-00087k-7o; Tue, 29 Sep 2020 12:06:32 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:feea:fa2e:c0c5:a14c] (2a03-f580-87bc-d400-feea-fa2e-c0c5-a14c.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:feea:fa2e:c0c5:a14c])
+        id 1kNDBu-0004fx-4h; Tue, 29 Sep 2020 12:49:02 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:feea:fa2e:c0c5:a14c] (unknown [IPv6:2a03:f580:87bc:d400:feea:fa2e:c0c5:a14c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1849456D474;
-        Tue, 29 Sep 2020 10:06:28 +0000 (UTC)
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dev.kurt@vandijck-laurijssen.be,
-        Thomas Kopp <Thomas.Kopp@microchip.com>
-References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
- <20200910133806.25077-3-manivannan.sadhasivam@linaro.org>
- <CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4A4FB56D528;
+        Tue, 29 Sep 2020 10:49:00 +0000 (UTC)
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org
+Cc:     linux-imx@nxp.com, netdev@vger.kernel.org
+References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
+ <20200925151028.11004-4-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -101,17 +92,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH 2/6] dt-bindings: can: mcp25xxfd: document device tree
- bindings
-Message-ID: <cbfa3fdb-bcfd-cca5-fcf5-95a78da0447d@pengutronix.de>
-Date:   Tue, 29 Sep 2020 12:06:24 +0200
+Subject: Re: [PATCH linux-can-next/flexcan 3/4] can: flexcan: add CAN wakeup
+ function for i.MX8
+Message-ID: <8ac4e125-96b6-af39-ac2d-0cd69beeaea8@pengutronix.de>
+Date:   Tue, 29 Sep 2020 12:48:55 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com>
+In-Reply-To: <20200925151028.11004-4-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="QB4FMdB6ZfwVUUqaNGlcb7SbCZIp5A0ZQ"
+ boundary="7y3EHm5r3UPziiBrV5gJHg2qW2XjvpPR0"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -121,111 +112,256 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---QB4FMdB6ZfwVUUqaNGlcb7SbCZIp5A0ZQ
-Content-Type: multipart/mixed; boundary="GS8VHcTEJMRGQpoEd2ZySgOden3czQM04";
+--7y3EHm5r3UPziiBrV5gJHg2qW2XjvpPR0
+Content-Type: multipart/mixed; boundary="i8QVTGK5XrO26A2pAcUeJa7bDULLFFAxr";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Wolfgang Grandegger <wg@grandegger.com>, Rob Herring
- <robh+dt@kernel.org>, linux-can@vger.kernel.org,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- dev.kurt@vandijck-laurijssen.be, Thomas Kopp <Thomas.Kopp@microchip.com>
-Message-ID: <cbfa3fdb-bcfd-cca5-fcf5-95a78da0447d@pengutronix.de>
-Subject: Re: [PATCH 2/6] dt-bindings: can: mcp25xxfd: document device tree
- bindings
-References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
- <20200910133806.25077-3-manivannan.sadhasivam@linaro.org>
- <CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org
+Cc: linux-imx@nxp.com, netdev@vger.kernel.org
+Message-ID: <8ac4e125-96b6-af39-ac2d-0cd69beeaea8@pengutronix.de>
+Subject: Re: [PATCH linux-can-next/flexcan 3/4] can: flexcan: add CAN wakeup
+ function for i.MX8
+References: <20200925151028.11004-1-qiangqing.zhang@nxp.com>
+ <20200925151028.11004-4-qiangqing.zhang@nxp.com>
+In-Reply-To: <20200925151028.11004-4-qiangqing.zhang@nxp.com>
 
---GS8VHcTEJMRGQpoEd2ZySgOden3czQM04
+--i8QVTGK5XrO26A2pAcUeJa7bDULLFFAxr
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/29/20 11:46 AM, Geert Uytterhoeven wrote:
-> Hi Manivannan, Oleksij,
+On 9/25/20 5:10 PM, Joakim Zhang wrote:
+> The System Controller Firmware (SCFW) is a low-level system function
+> which runs on a dedicated Cortex-M core to provide power, clock, and
+> resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
+> (QM, QP), and i.MX8QX (QXP, DX).
 >=20
-> On Thu, Sep 10, 2020 at 11:37 PM Manivannan Sadhasivam
-> <manivannan.sadhasivam@linaro.org> wrote:
->> From: Oleksij Rempel <o.rempel@pengutronix.de>
->>
->> This patch adds the device-tree binding documentation for the Microchi=
-p
->> MCP25xxFD SPI CAN controller family.
->>
->> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org=
->
+> SCU driver manages the IPC interface between host CPU and the
+> SCU firmware running on M4.
 >=20
-> Thanks for your patch, which is now commit 1b5a78e69c1fdae9
-> ("dt-binding: can: mcp25xxfd: document device tree bindings") in net-ne=
-xt.
+> For i.MX8, stop mode request is controlled by System Controller Unit(SC=
+U)
+> firmware.
+
+As you mentioned in the other mail, some functions are missing from the
 >=20
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/can/microchip,mcp25xxfd.ya=
-ml
->> @@ -0,0 +1,79 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/can/microchip,mcp25xxfd.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title:
->> +  Microchip MCP2517FD and MCP2518FD stand-alone CAN controller device=
- tree
->> +  bindings
->> +
->> +maintainers:
->> +  - Marc Kleine-Budde <mkl@pengutronix.de>
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - const: microchip,mcp2517fd
->> +        description: for MCP2517FD
->> +      - const: microchip,mcp2518fd
->> +        description: for MCP2518FD
->> +      - const: microchip,mcp25xxfd
->> +        description: to autodetect chip variant
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> ---
+>  drivers/net/can/flexcan.c | 81 ++++++++++++++++++++++++++++++++-------=
+
+>  1 file changed, 68 insertions(+), 13 deletions(-)
 >=20
-> The last one is a wildcard?
-> When would you want to use it (oh, in the example below)?
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 8c8753f77764..41b52cb56f93 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -9,6 +9,7 @@
+>  //
+>  // Based on code originally by Andrey Volkov <avolkov@varma-el.com>
+> =20
+> +#include <dt-bindings/firmware/imx/rsrc.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/can.h>
+>  #include <linux/can/dev.h>
+> @@ -17,6 +18,7 @@
+>  #include <linux/can/rx-offload.h>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/firmware/imx/sci.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -240,6 +242,8 @@
+>  #define FLEXCAN_QUIRK_SETUP_STOP_MODE BIT(8)
 
-Im using it in overlays for several raspi hats, e.g. a raspi to click boa=
-rd
-converter where I add mcp2517fd or mcp2518fd modules without the need to =
-change
-the overlay.
+rename this into "FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR"
 
-> Can you guarantee Microchip will not introduce other components that
-> match this wildcard, but are not compatible?
+>  /* Support CAN-FD mode */
+>  #define FLEXCAN_QUIRK_SUPPORT_FD BIT(9)
+> +/* Use System Controller Firmware */
+> +#define FLEXCAN_QUIRK_USE_SCFW BIT(10)
 
-Guarantee is quite a strong word :)
+=2E..and this into FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW
 
-So far in that name space there are the mcp2510, mcp2515 and mcp25625. Fr=
-om the
-SW point of view the 2515 and 25625 are identical while being compatible =
-to the
-mcp2510 but offer more features. There's a single drver (mcp251x) for the=
-se.
-These chips implement the CAN-2.0 standard.
+> =20
+>  /* Structure of the message buffer */
+>  struct flexcan_mb {
+> @@ -358,6 +362,9 @@ struct flexcan_priv {
+>  	struct regulator *reg_xceiver;
+>  	struct flexcan_stop_mode stm;
+> =20
+> +	/* IPC handle when enable stop mode by System Controller firmware(scf=
+w) */
+> +	struct imx_sc_ipc *sc_ipc_handle;
+> +
+>  	/* Read and Write APIs */
+>  	u32 (*read)(void __iomem *addr);
+>  	void (*write)(u32 val, void __iomem *addr);
+> @@ -387,7 +394,8 @@ static const struct flexcan_devtype_data fsl_imx6q_=
+devtype_data =3D {
+>  static const struct flexcan_devtype_data fsl_imx8qm_devtype_data =3D {=
 
-Regarding the mcp2517fd and mcp2518fd, the "fd" in the name references th=
-e
-CAN-FD standard (successor to CAN-2.0).
+>  	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_R=
+RS |
+>  		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+> -		FLEXCAN_QUIRK_SUPPORT_FD,
+> +		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SETUP_STOP_MODE |
+> +		FLEXCAN_QUIRK_USE_SCFW,
+>  };
+> =20
+>  static struct flexcan_devtype_data fsl_imx8mp_devtype_data =3D {
+> @@ -546,6 +554,25 @@ static void flexcan_enable_wakeup_irq(struct flexc=
+an_priv *priv, bool enable)
+>  	priv->write(reg_mcr, &regs->mcr);
+>  }
+> =20
+> +static void flexcan_stop_mode_enable_scfw(struct flexcan_priv *priv, b=
+ool enabled)
+> +{
+> +	struct device_node *np =3D priv->dev->of_node;
+> +	u32 rsrc_id, val;
+> +	int idx;
+> +
+> +	idx =3D of_alias_get_id(np, "can");
+> +	if (idx =3D=3D 0)
+> +		rsrc_id =3D IMX_SC_R_CAN_0;
+> +	else if (idx =3D=3D 1)
+> +		rsrc_id =3D IMX_SC_R_CAN_1;
+> +	else
+> +		rsrc_id =3D IMX_SC_R_CAN_2;
 
-Maybe Thomas Kopp (Cc'ed) from Microchip can say something to this.
+This looks too fragile to me. Better add a property to the DT which indic=
+ates
+the index.
 
-We can rename the compatible to mcp251xfd to make it more specific.
+> +
+> +	val =3D enabled ? 1 : 0;
 
-regards,
+Please use an if() here.
+
+> +	/* stop mode request */
+> +	imx_sc_misc_set_control(priv->sc_ipc_handle, rsrc_id, IMX_SC_C_IPG_ST=
+OP, val);
+> +}
+> +
+>  static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
+>  {
+>  	struct flexcan_regs __iomem *regs =3D priv->regs;
+> @@ -555,9 +582,12 @@ static inline int flexcan_enter_stop_mode(struct f=
+lexcan_priv *priv)
+>  	reg_mcr |=3D FLEXCAN_MCR_SLF_WAK;
+>  	priv->write(reg_mcr, &regs->mcr);
+> =20
+> -	/* enable stop request */
+> -	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+> -			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
+> +	 /* enable stop request */
+> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_SCFW)
+> +		flexcan_stop_mode_enable_scfw(priv, true);
+
+error handling?
+
+> +	else
+> +		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+> +				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
+> =20
+>  	return flexcan_low_power_enter_ack(priv);
+>  }
+> @@ -568,8 +598,11 @@ static inline int flexcan_exit_stop_mode(struct fl=
+excan_priv *priv)
+>  	u32 reg_mcr;
+> =20
+>  	/* remove stop request */
+> -	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+> -			   1 << priv->stm.req_bit, 0);
+> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_SCFW)
+> +		flexcan_stop_mode_enable_scfw(priv, false);
+
+error handling?
+
+> +	else
+> +		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+> +				   1 << priv->stm.req_bit, 0);
+> =20
+>  	reg_mcr =3D priv->read(&regs->mcr);
+>  	reg_mcr &=3D ~FLEXCAN_MCR_SLF_WAK;
+> @@ -1927,11 +1960,6 @@ static int flexcan_setup_stop_mode(struct platfo=
+rm_device *pdev)
+>  		gpr_np->full_name, priv->stm.req_gpr, priv->stm.req_bit,
+>  		priv->stm.ack_gpr, priv->stm.ack_bit);
+> =20
+> -	device_set_wakeup_capable(&pdev->dev, true);
+> -
+> -	if (of_property_read_bool(np, "wakeup-source"))
+> -		device_set_wakeup_enable(&pdev->dev, true);
+> -
+>  	return 0;
+> =20
+>  out_put_node:
+> @@ -1939,6 +1967,23 @@ static int flexcan_setup_stop_mode(struct platfo=
+rm_device *pdev)
+>  	return ret;
+>  }
+> =20
+> +static int flexcan_setup_stop_mode_scfw(struct platform_device *pdev)
+> +{
+> +	struct net_device *dev =3D platform_get_drvdata(pdev);
+> +	struct flexcan_priv *priv;
+> +	int ret;
+> +
+> +	priv =3D netdev_priv(dev);
+> +
+> +	ret =3D imx_scu_get_handle(&priv->sc_ipc_handle);
+
+this function can return -EPROBE_DEFER
+
+https://elixir.bootlin.com/linux/latest/source/drivers/firmware/imx/imx-s=
+cu.c#L97
+
+> +	if (ret < 0) {
+> +		dev_err(&pdev->dev, "get ipc handle used by SCU failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct of_device_id flexcan_of_match[] =3D {
+>  	{ .compatible =3D "fsl,imx8mp-flexcan", .data =3D &fsl_imx8mp_devtype=
+_data, },
+>  	{ .compatible =3D "fsl,imx8qm-flexcan", .data =3D &fsl_imx8qm_devtype=
+_data, },
+> @@ -2088,9 +2133,19 @@ static int flexcan_probe(struct platform_device =
+*pdev)
+>  	devm_can_led_init(dev);
+> =20
+>  	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE) {
+> -		err =3D flexcan_setup_stop_mode(pdev);
+
+what about renaming the flexcan_setup_stop_mode() to
+flexcan_setup_stop_mode_gpr() and moving this below into a function calle=
+d
+flexcan_setup_stop_mode().
+
+> -		if (err)
+> +		if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_SCFW)
+> +			err =3D flexcan_setup_stop_mode_scfw(pdev);
+> +		else
+> +			err =3D flexcan_setup_stop_mode(pdev);
+> +
+> +		if (err) {
+>  			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
+> +		} else {
+> +			device_set_wakeup_capable(&pdev->dev, true);
+> +
+> +			if (of_property_read_bool(pdev->dev.of_node, "wakeup-source"))
+> +				device_set_wakeup_enable(&pdev->dev, true);
+> +		}
+>  	}
+> =20
+>  	return 0;
+>=20
+
 Marc
 
 --=20
@@ -235,23 +371,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---GS8VHcTEJMRGQpoEd2ZySgOden3czQM04--
+--i8QVTGK5XrO26A2pAcUeJa7bDULLFFAxr--
 
---QB4FMdB6ZfwVUUqaNGlcb7SbCZIp5A0ZQ
+--7y3EHm5r3UPziiBrV5gJHg2qW2XjvpPR0
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9zByAACgkQqclaivrt
-76n2gQf9HkbizX3zocEZjxCncTVe9z2s4jgiAUNR2ygKzJ2nsKUrsadns1kgYY6x
-eblRtawzkUsfPxXaseaR/5zV1TxlA5W/t3O/Ynxlktk9lrark2YWiAPOfqBHdcUz
-dwOFC/D6rUCeXN+NtUZQpNsgtjRd08TfrZnyUWOM0xLOabGdjDzpYOuEiKULa9of
-La63Jn//6tYdTqArsWzXIOyjI2uQ9x2nlZStNv3rM6NIGpsLBzwlLp2hEzmrCzGC
-T1CwLLZ6vafbc97XrTEy/S0AIP8j1sT0Z/HJbJs0adDaUrZFScjYqfjZ27fpLUCs
-oLl+Oa9S69R4zMCcevOb+wn+O8mR0w==
-=ML/U
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9zERgACgkQqclaivrt
+76niJgf/TvIDPn4kXYwWpnReipILFFgnk1xCscLFiCfh+LJzoIpWTkAZEL5SJQr7
+UIjwkMNWtuOiLO6gc/q27gGAU3TCEfMF85snjDrGyNXuBhprMzn7G6vOarKyJGXG
+MYpDu9WLSV0SojYUYklED3JW7MmJQhpTR9IRz2Xtreq6dR4jYSMaozjacbrvazH3
+8FrJ0KBlmHaY0vf6nHyrBpFnqfD/Rc7Cy1eExtXOQwxG2wf41TBabdirGZKrefnC
+gl+Q3v4L5e4rZAnbX2LTUCR8m6JL8LsiEPmkSczfNVZQJQZrOYYrWXv+XrxpMYm9
+HUqaDckHlKdCA4sOWZTqiLsW9YpFcw==
+=iSWu
 -----END PGP SIGNATURE-----
 
---QB4FMdB6ZfwVUUqaNGlcb7SbCZIp5A0ZQ--
+--7y3EHm5r3UPziiBrV5gJHg2qW2XjvpPR0--
