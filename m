@@ -2,43 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F9127C892
-	for <lists+linux-can@lfdr.de>; Tue, 29 Sep 2020 14:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D74127CBA6
+	for <lists+linux-can@lfdr.de>; Tue, 29 Sep 2020 14:29:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731285AbgI2MCz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 29 Sep 2020 08:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
+        id S1732555AbgI2M3Z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 29 Sep 2020 08:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730395AbgI2Lim (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Sep 2020 07:38:42 -0400
+        with ESMTP id S1728427AbgI2Lap (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 29 Sep 2020 07:30:45 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1841C0613DE
-        for <linux-can@vger.kernel.org>; Tue, 29 Sep 2020 04:27:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D842DC0613E0
+        for <linux-can@vger.kernel.org>; Tue, 29 Sep 2020 04:30:44 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kNDnJ-0001md-L0; Tue, 29 Sep 2020 13:27:41 +0200
+        id 1kNDqE-0002GT-FF; Tue, 29 Sep 2020 13:30:42 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:feea:fa2e:c0c5:a14c] (unknown [IPv6:2a03:f580:87bc:d400:feea:fa2e:c0c5:a14c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E311D56D594;
-        Tue, 29 Sep 2020 11:27:38 +0000 (UTC)
-Subject: Re: [PATCH 2/6] dt-bindings: can: mcp25xxfd: document device tree
- bindings
-To:     Thomas.Kopp@microchip.com, geert@linux-m68k.org,
-        manivannan.sadhasivam@linaro.org, o.rempel@pengutronix.de
-Cc:     wg@grandegger.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dev.kurt@vandijck-laurijssen.be
-References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
- <20200910133806.25077-3-manivannan.sadhasivam@linaro.org>
- <CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com>
- <cbfa3fdb-bcfd-cca5-fcf5-95a78da0447d@pengutronix.de>
- <DM6PR11MB4283A6A532ED88F7D1058A8BFB320@DM6PR11MB4283.namprd11.prod.outlook.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 66B1456D5A0;
+        Tue, 29 Sep 2020 11:30:41 +0000 (UTC)
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+References: <20200928180253.1454-1-qiangqing.zhang@nxp.com>
+ <20200928180253.1454-2-qiangqing.zhang@nxp.com>
+ <32c4ab0a-2e16-5cf2-5c26-7917d91f3429@pengutronix.de>
+ <DB8PR04MB6795C370AFF065F239935F9FE6320@DB8PR04MB6795.eurprd04.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -100,15 +96,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <b26d4c51-7477-3e68-1c16-7b19558d6a57@pengutronix.de>
-Date:   Tue, 29 Sep 2020 13:27:33 +0200
+Subject: Re: [PATCH V3 1/3] can: flexcan: initialize all flexcan memory for
+ ECC function
+Message-ID: <95383b2d-698a-355f-2569-45e69bcbab0f@pengutronix.de>
+Date:   Tue, 29 Sep 2020 13:30:37 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB4283A6A532ED88F7D1058A8BFB320@DM6PR11MB4283.namprd11.prod.outlook.com>
+In-Reply-To: <DB8PR04MB6795C370AFF065F239935F9FE6320@DB8PR04MB6795.eurprd04.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="dRClpEa7NAmEL6aTZnORrLBEFd8RyZPUC"
+ boundary="iO6VpddatKVQ6j87ANMG1MjqWXG6pGOAM"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -118,61 +116,100 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---dRClpEa7NAmEL6aTZnORrLBEFd8RyZPUC
-Content-Type: multipart/mixed; boundary="4CWYNBaHbAeGqMBmQShgR52jFYKXkstMG";
+--iO6VpddatKVQ6j87ANMG1MjqWXG6pGOAM
+Content-Type: multipart/mixed; boundary="yj8znetbrbEDzOA38xDH0nWsnvM8Jr5hF";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Thomas.Kopp@microchip.com, geert@linux-m68k.org,
- manivannan.sadhasivam@linaro.org, o.rempel@pengutronix.de
-Cc: wg@grandegger.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- dev.kurt@vandijck-laurijssen.be
-Message-ID: <b26d4c51-7477-3e68-1c16-7b19558d6a57@pengutronix.de>
-Subject: Re: [PATCH 2/6] dt-bindings: can: mcp25xxfd: document device tree
- bindings
-References: <20200910133806.25077-1-manivannan.sadhasivam@linaro.org>
- <20200910133806.25077-3-manivannan.sadhasivam@linaro.org>
- <CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com>
- <cbfa3fdb-bcfd-cca5-fcf5-95a78da0447d@pengutronix.de>
- <DM6PR11MB4283A6A532ED88F7D1058A8BFB320@DM6PR11MB4283.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB4283A6A532ED88F7D1058A8BFB320@DM6PR11MB4283.namprd11.prod.outlook.com>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ dl-linux-imx <linux-imx@nxp.com>
+Message-ID: <95383b2d-698a-355f-2569-45e69bcbab0f@pengutronix.de>
+Subject: Re: [PATCH V3 1/3] can: flexcan: initialize all flexcan memory for
+ ECC function
+References: <20200928180253.1454-1-qiangqing.zhang@nxp.com>
+ <20200928180253.1454-2-qiangqing.zhang@nxp.com>
+ <32c4ab0a-2e16-5cf2-5c26-7917d91f3429@pengutronix.de>
+ <DB8PR04MB6795C370AFF065F239935F9FE6320@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <DB8PR04MB6795C370AFF065F239935F9FE6320@DB8PR04MB6795.eurprd04.prod.outlook.com>
 
---4CWYNBaHbAeGqMBmQShgR52jFYKXkstMG
+--yj8znetbrbEDzOA38xDH0nWsnvM8Jr5hF
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/29/20 1:25 PM, Thomas.Kopp@microchip.com wrote:
->> So far in that name space there are the mcp2510, mcp2515 and mcp25625.=
-
->> From the
->> SW point of view the 2515 and 25625 are identical while being compatib=
-le
->> to the
->> mcp2510 but offer more features. There's a single drver (mcp251x) for
->> these.
->> These chips implement the CAN-2.0 standard.
+On 9/29/20 1:27 PM, Joakim Zhang wrote:
+> [...]
+>>> +	reg_ctrl2 =3D priv->read(&regs->ctrl2);
+>>> +	reg_ctrl2 |=3D FLEXCAN_CTRL2_WRMFRZ;
+>>> +	priv->write(reg_ctrl2, &regs->ctrl2);
+>>> +
+>>> +	/* ranging from 0x0080 to 0x0ADF, ram details as below list:
+>>> +	 * 0x0080--0x087F:	128 MBs
+>>> +	 * 0x0880--0x0A7F:	128 RXIMRs
+>>> +	 * 0x0A80--0x0A97:	6 RXFIRs
+>>> +	 * 0x0A98--0x0A9F:	Reserved
+>>> +	 * 0x0AA0--0x0AA3:	RXMGMASK
+>>> +	 * 0x0AA4--0x0AA7:	RXFGMASK
+>>> +	 * 0x0AA8--0x0AAB:	RX14MASK
+>>> +	 * 0x0AAC--0x0AAF:	RX15MASK
+>>> +	 * 0x0AB0--0x0ABF:	TX_SMB
+>>> +	 * 0x0AC0--0x0ACF:	RX_SMB0
+>>> +	 * 0x0AD0--0x0ADF:	RX_SMB1
 >>
->> Regarding the mcp2517fd and mcp2518fd, the "fd" in the name references=
-
->> the
->> CAN-FD standard (successor to CAN-2.0).
->>
->> Maybe Thomas Kopp (Cc'ed) from Microchip can say something to this.
->>
->> We can rename the compatible to mcp251xfd to make it more specific.
-> I agree that mcp251xfd would be a good fit. We already have (theoretica=
-l)
-> conflicts for the xx in the namespace e.g. the MCP2542FD which is a=20
-> transceiver without any controller functionality.
+>> I don't like to have the register definition here *again), we have str=
+uct
+>> flexcan_regs for this.
 >=20
-> Although hard to guarantee I think it's fair to assume that no MCP251xF=
-D=20
-> will be released that is incompatible.
+> Do you mean still move these register definitions into flexcan_regs, ri=
+ght?
 
-Makes sense to me. Thomas, can you create a patch for this?
+ack
 
-regards,
+>>> +	 */
+>>> +	memset_io((void __iomem *)regs + 0x80, 0, 0xadf - 0x80 + 1);
+>>
+>> why the cast?
+>=20
+> Yes, no need, will remove it.
+>=20
+>> Can you use the "&regs->foo - &regs->bar + x" to get the length for th=
+e
+>> memset?
+>=20
+> After move above register definition into flexcan_regs, I can change to=
+ use
+> this way to get the length for the memset_io.
+
+ACK
+
+>>> +
+>>> +	/* ranging from 0x0F28 to 0x0FFF when CAN FD feature is enabled,
+>>> +	 * ram details as below list:
+>>> +	 * 0x0F28--0x0F6F:	TX_SMB_FD
+>>> +	 * 0x0F70--0x0FB7:	RX_SMB0_FD
+>>> +	 * 0x0FB8--0x0FFF:	RX_SMB0_FD
+>>> +	 */
+>>> +	memset_io((void __iomem *)regs + 0xf28, 0, 0xfff - 0xf28 + 1);
+>>
+>> same here
+>=20
+> Will change.
+
+tnx
+
+> Hi Marc, I'm going on holiday from tomorrow, so I would delay to send o=
+ut a
+> V4 to review until I come back, sorry for this. Thanks for your comment=
+s of
+> "can: flexcan: add CAN wakeup function for i.MX8", will rework the patc=
+h
+> later.
+
+Fine with me, I think we can push these changes via net to v5.10 after th=
+e v5.9
+release is out.
+
 Marc
 
 --=20
@@ -182,23 +219,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---4CWYNBaHbAeGqMBmQShgR52jFYKXkstMG--
+--yj8znetbrbEDzOA38xDH0nWsnvM8Jr5hF--
 
---dRClpEa7NAmEL6aTZnORrLBEFd8RyZPUC
+--iO6VpddatKVQ6j87ANMG1MjqWXG6pGOAM
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9zGiUACgkQqclaivrt
-76n2Twf+NSGTF8Zvf8YbYloU7pIkWGnUBsT4guyZVv6iZzKC2Hwgdoe2zPoS3fFB
-J7jamZoQCdSo1UnIxBkvPWd1gqJZrJi6/+k4QkjsxG9ccCNnnU+h/VXMo3Lukrj+
-pMQJgII9Z72dlUVsgzF/E1gvUnmfBidqGLkFsyXtki2r9MLrWk/tsiqAxx/wbq/5
-6rynPYEuoWY24C6E7Mj/P7kU710tU6YkLkiGwAAeMvZOzMilAq5l1Im/LVLB+SEi
-cJW/nJtqUQuLhHyY2X7P5vfW7ZQlj935ISC5FHXA2qhSoMvKh3nhQIEgsggEzt7y
-vNk2/HRbv9bdEJYwkGJli6XVwjQjHQ==
-=dCg3
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl9zGt0ACgkQqclaivrt
+76mXBggAi8B0u2NZkxBnC5Vc7qq4WSdXuf8obnOlNyiLXZwgM8Lg6T5LOTFSKnOW
+A/uQRF8Low1CHD0z/W0/9YPOYIvur7io3Y73SltVIohdLWH4iR4+z3FcG5t5HPCu
+0sSsIbRpsjE9lqAFcohFltHG/qa35x3NVaUGDFrMi1c4JvmXO7OnfNPT5Mg+Fn+v
+Iz8EJUUmVIFIxvPMOiFyw/e4LTc6LyuHT6+K5r7YV6asXWAWjydfOZ4hfPL7tcFb
+iTngAcmhbUIIsSp2d74z2sG6Xgu8WXbyAjeBtWtAhfXX+RErSFcA09ZPoy7PyDe2
+HCghhrpOGvzS3NqhKk8XXgtuMQuSjA==
+=MVop
 -----END PGP SIGNATURE-----
 
---dRClpEa7NAmEL6aTZnORrLBEFd8RyZPUC--
+--iO6VpddatKVQ6j87ANMG1MjqWXG6pGOAM--
