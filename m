@@ -2,29 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3515427E4D3
-	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 11:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABE927E4D2
+	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 11:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728938AbgI3JP1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1729024AbgI3JP1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Wed, 30 Sep 2020 05:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729021AbgI3JO1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 05:14:27 -0400
+        with ESMTP id S1728938AbgI3JO2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 05:14:28 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25681C061755
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE02C0613D0
         for <linux-can@vger.kernel.org>; Wed, 30 Sep 2020 02:14:27 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kNYBt-0007UQ-JF; Wed, 30 Sep 2020 11:14:25 +0200
+        id 1kNYBt-0007UQ-TD; Wed, 30 Sep 2020 11:14:25 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de
-Subject: [RFC]: can-next 2020-09-30 - mcp25xxfd/mcp251xfd and flexcan
-Date:   Wed, 30 Sep 2020 11:14:12 +0200
-Message-Id: <20200930091424.792165-1-mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de, Thomas Kopp <thomas.kopp@microchip.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 01/12] can: mcp25xxfd: mcp25xxfd_handle_eccif(): add ECC related errata and update log messages
+Date:   Wed, 30 Sep 2020 11:14:13 +0200
+Message-Id: <20200930091424.792165-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200930091424.792165-1-mkl@pengutronix.de>
+References: <20200930091424.792165-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
@@ -35,17 +38,64 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+From: Thomas Kopp <thomas.kopp@microchip.com>
 
-this series consists of mcp25xxfd/mcp251xfd and flexcan patches.
+This patch adds a reference to the recent released MCP2517FD and MCP2518FD
+errata sheets and paste the explanation.
 
-First some problems found during review were fixed. During this Geert pointed
-out that the autodetect compatible "mcp25xxfd" might be to generic. This was
-changed to "mcp251xfd" and the driver was renamed accordingly.
+The single error correction does not always work, so always indicate that a
+single error occurred. If the location of the ECC error is outside of the
+TX-RAM always use netdev_notice() to log the problem. For ECC errors in the
+TX-RAM, there is a recovery procedure.
 
-I'll send out a pull request today.
+Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
+Link: https://lore.kernel.org/r/20200925065606.358-1-thomas.kopp@microchip.com
+[mkl: split into two patches, adjust subject and commit message]
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ .../net/can/spi/mcp25xxfd/mcp25xxfd-core.c    | 21 ++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-regards,
-Marc
-
+diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+index bd2ba981ae36..106dda8e5310 100644
+--- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
++++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+@@ -1973,8 +1973,20 @@ mcp25xxfd_handle_eccif(struct mcp25xxfd_priv *priv, bool set_normal_mode)
+ 	else
+ 		return err;
+ 
++	/* Errata Reference:
++	 * mcp2517fd: DS80000789B, mcp2518fd: DS80000792C 2.
++	 *
++	 * ECC single error correction does not work in all cases:
++	 *
++	 * Fix/Work Around:
++	 * Enable single error correction and double error detection
++	 * interrupts by setting SECIE and DEDIE. Handle SECIF as a
++	 * detection interrupt and do not rely on the error
++	 * correction. Instead, handle both interrupts as a
++	 * notification that the RAM word at ERRADDR was corrupted.
++	 */
+ 	if (ecc_stat & MCP25XXFD_REG_ECCSTAT_SECIF)
+-		msg = "Single ECC Error corrected at address";
++		msg = "Single ECC Error detected at address";
+ 	else if (ecc_stat & MCP25XXFD_REG_ECCSTAT_DEDIF)
+ 		msg = "Double ECC Error detected at address";
+ 	else
+@@ -1983,12 +1995,7 @@ mcp25xxfd_handle_eccif(struct mcp25xxfd_priv *priv, bool set_normal_mode)
+ 	if (!in_tx_ram) {
+ 		ecc->ecc_stat = 0;
+ 
+-		if (ecc_stat & MCP25XXFD_REG_ECCSTAT_SECIF)
+-			netdev_info(priv->ndev, "%s 0x%04x.\n",
+-				    msg, addr);
+-		else
+-			netdev_notice(priv->ndev, "%s 0x%04x.\n",
+-				      msg, addr);
++		netdev_notice(priv->ndev, "%s 0x%04x.\n", msg, addr);
+ 	} else {
+ 		/* Re-occurring error? */
+ 		if (ecc->ecc_stat == ecc_stat) {
+-- 
+2.28.0
 
