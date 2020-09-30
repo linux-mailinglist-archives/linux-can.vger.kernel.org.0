@@ -2,157 +2,181 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3A527E4D5
-	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 11:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5B427E4B9
+	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 11:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729021AbgI3JP1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Sep 2020 05:15:27 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:11368 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729009AbgI3JO1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 05:14:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1601457266; x=1632993266;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xAGyLvOLu/HgPbzH7I7clpgTi3DG2Y2HxQhsIsY+0Pg=;
-  b=M31Kz77Y8e3ZT26CdQHwdrU8XiUi156FSWGVOKryd3MQgndkOsC89AnT
-   QaacHBIPYWrW612rRjZ0+U3V+6rWSByzILgTw6TmwxudukN0khviS/Ade
-   3cZEzMpOzDwAujt46OIUnSFI6kj6LUwCng+EF/6up1+MoenRPXngihCWU
-   HCnjbJWFQBONlOfd7zqjSP32l2azaX/qKyIz25uyjGYbDjOZIROYWmjV4
-   TWxsk+zdSy2lVWkbqftG3N00edfgeR8k7ffsCvL2izzrOmEEi2tv4QPV9
-   7LHaF7UrluzAGKvYXACxK2pkyN+5DNj1dV0Aw8zZYk4wR7iydIF6XEfFW
-   A==;
-IronPort-SDR: 1R9Cj3Ej2hKdo1tGbEL2iIvrSKwDfgiCW6aH7QS71kFXfWr9gpBKBC/pZBJk1pTG1347P8bOzY
- IlRV79gZCUzTPgwt4AWNm07tpjLXciws3NHfVg+Vvy39FdwumDcTgO/hJLz5vF753fGCzy9n+D
- e0lVWMjXJsNt6fT2PSpzXEiz6v8ynmON5Kb270qYbKTCi/flsH+jKwVgdcHvLHKTU4zzJUyEze
- tQZhzjL0bAOn2mWrOZhveDgDLNOxE0WpmQdnba/pYRZ6qxKA2BLInObEAeImdgQ0YiVH/6qU7D
- KcE=
-X-IronPort-AV: E=Sophos;i="5.77,322,1596524400"; 
-   d="scan'208";a="93714392"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2020 02:14:25 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 30 Sep 2020 02:14:25 -0700
-Received: from HNO-LT-M43677A.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Wed, 30 Sep 2020 02:14:23 -0700
-From:   Thomas Kopp <thomas.kopp@microchip.com>
-To:     <mkl@pengutronix.de>, <manivannan.sadhasivam@linaro.org>,
-        <o.rempel@pengutronix.de>, <geert@linux-m68k.org>
-CC:     <linux-can@vger.kernel.org>, <thomas.kopp@microchip.com>,
-        <dev.kurt@vandijck-laurijssen.be>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>, <wg@grandegger.com>
-Subject: [PATCH 1/2] can: mcp25xxfd: narrow down wildcards in device tree bindings
+        id S1729067AbgI3JOe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Sep 2020 05:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729065AbgI3JOd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 05:14:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175BFC0613D9
+        for <linux-can@vger.kernel.org>; Wed, 30 Sep 2020 02:14:32 -0700 (PDT)
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kNYBx-0007UQ-Rm; Wed, 30 Sep 2020 11:14:29 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 10/12] can: flexcan: initialize all flexcan memory for ECC function
 Date:   Wed, 30 Sep 2020 11:14:22 +0200
-Message-ID: <20200930091423.755-1-thomas.kopp@microchip.com>
-X-Mailer: git-send-email 2.25.1
+Message-Id: <20200930091424.792165-11-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200930091424.792165-1-mkl@pengutronix.de>
+References: <20200930091424.792165-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The wildcard should be narrowed down to prevent existing and
-future devices that are not compatible from matching.
-It is very unlikely that incompatible devices will be released
-that do not match the wildcard.
+From: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-Discussion Reference: https://lore.kernel.org/r/CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com/
+One issue was reported at a baremetal environment, which is used for
+FPGA verification. "The first transfer will fail for extended ID
+format(for both 2.0B and FD format), following frames can be transmitted
+and received successfully for extended format, and standard format don't
+have this issue. This issue occurred randomly with high possiblity, when
+it occurs, the transmitter will detect a BIT1 error, the receiver a CRC
+error. According to the spec, a non-correctable error may cause this
+transfer failure."
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+With FLEXCAN_QUIRK_DISABLE_MECR quirk, it supports correctable errors,
+disable non-correctable errors interrupt and freeze mode. Platform has
+ECC hardware support, but select this quirk, this issue may not come to
+light. Initialize all FlexCAN memory before accessing them, at least it
+can avoid non-correctable errors detected due to memory uninitialized.
+The internal region can't be initialized when the hardware doesn't support
+ECC.
 
-Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
+According to IMX8MPRM, Rev.C, 04/2020. There is a NOTE at the section
+11.8.3.13 Detection and correction of memory errors:
+"All FlexCAN memory must be initialized before starting its operation in
+order to have the parity bits in memory properly updated. CTRL2[WRMFRZ]
+grants write access to all memory positions that require initialization,
+ranging from 0x080 to 0xADF and from 0xF28 to 0xFFF when the CAN FD feature
+is enabled. The RXMGMASK, RX14MASK, RX15MASK, and RXFGMASK registers need to
+be initialized as well. MCR[RFEN] must not be set during memory initialization."
+
+Memory range from 0x080 to 0xADF, there are reserved memory (unimplemented
+by hardware, e.g. only configure 64 MBs), these memory can be initialized or not.
+In this patch, initialize all flexcan memory which includes reserved memory.
+
+In this patch, create FLEXCAN_QUIRK_SUPPORT_ECC for platforms which has ECC
+feature. If you have a ECC platform in your hand, please select this
+qurik to initialize all flexcan memory firstly, then you can select
+FLEXCAN_QUIRK_DISABLE_MECR to only enable correctable errors.
+
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Link: https://lore.kernel.org/r/20200929211557.14153-2-qiangqing.zhang@nxp.com
+[mkl: wrap long lines]
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c | 18 +++++++++---------
- drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h      |  4 ++--
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/net/can/flexcan.c | 53 +++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-index 5557b2d1e774..672d5f24e325 100644
---- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-+++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
-@@ -41,10 +41,10 @@ static const struct mcp25xxfd_devtype_data mcp25xxfd_devtype_data_mcp2518fd = {
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index e86925134009..19a29618f0c0 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -239,6 +239,8 @@
+ #define FLEXCAN_QUIRK_SETUP_STOP_MODE BIT(8)
+ /* Support CAN-FD mode */
+ #define FLEXCAN_QUIRK_SUPPORT_FD BIT(9)
++/* support memory detection and correction */
++#define FLEXCAN_QUIRK_SUPPORT_ECC BIT(10)
+ 
+ /* Structure of the message buffer */
+ struct flexcan_mb {
+@@ -292,7 +294,16 @@ struct flexcan_regs {
+ 	u32 rximr[64];		/* 0x880 - Not affected by Soft Reset */
+ 	u32 _reserved5[24];	/* 0x980 */
+ 	u32 gfwr_mx6;		/* 0x9e0 - MX6 */
+-	u32 _reserved6[63];	/* 0x9e4 */
++	u32 _reserved6[39];	/* 0x9e4 */
++	u32 _rxfir[6];		/* 0xa80 */
++	u32 _reserved8[2];	/* 0xa98 */
++	u32 _rxmgmask;		/* 0xaa0 */
++	u32 _rxfgmask;		/* 0xaa4 */
++	u32 _rx14mask;		/* 0xaa8 */
++	u32 _rx15mask;		/* 0xaac */
++	u32 tx_smb[4];		/* 0xab0 */
++	u32 rx_smb0[4];		/* 0xac0 */
++	u32 rx_smb1[4];		/* 0xad0 */
+ 	u32 mecr;		/* 0xae0 */
+ 	u32 erriar;		/* 0xae4 */
+ 	u32 erridpr;		/* 0xae8 */
+@@ -305,9 +316,13 @@ struct flexcan_regs {
+ 	u32 fdctrl;		/* 0xc00 - Not affected by Soft Reset */
+ 	u32 fdcbt;		/* 0xc04 - Not affected by Soft Reset */
+ 	u32 fdcrc;		/* 0xc08 */
++	u32 _reserved9[199];	/* 0xc0c */
++	u32 tx_smb_fd[18];	/* 0xf28 */
++	u32 rx_smb0_fd[18];	/* 0xf70 */
++	u32 rx_smb1_fd[18];	/* 0xfb8 */
  };
  
- /* Autodetect model, start with CRC enabled. */
--static const struct mcp25xxfd_devtype_data mcp25xxfd_devtype_data_mcp25xxfd = {
-+static const struct mcp25xxfd_devtype_data mcp25xxfd_devtype_data_mcp251xfd = {
- 	.quirks = MCP25XXFD_QUIRK_CRC_REG | MCP25XXFD_QUIRK_CRC_RX |
- 		MCP25XXFD_QUIRK_CRC_TX | MCP25XXFD_QUIRK_ECC,
--	.model = MCP25XXFD_MODEL_MCP25XXFD,
-+	.model = MCP25XXFD_MODEL_MCP251XFD,
- };
+-static_assert(sizeof(struct flexcan_regs) == 0x4 + 0xc08);
++static_assert(sizeof(struct flexcan_regs) ==  0x4 * 18 + 0xfb8);
  
- static const struct can_bittiming_const mcp25xxfd_bittiming_const = {
-@@ -78,8 +78,8 @@ static const char *__mcp25xxfd_get_model_str(enum mcp25xxfd_model model)
- 		return "MCP2517FD"; break;
- 	case MCP25XXFD_MODEL_MCP2518FD:
- 		return "MCP2518FD"; break;
--	case MCP25XXFD_MODEL_MCP25XXFD:
--		return "MCP25xxFD"; break;
-+	case MCP25XXFD_MODEL_MCP251XFD:
-+		return "MCP251xFD"; break;
- 	}
+ struct flexcan_devtype_data {
+ 	u32 quirks;		/* quirks needed for different IP cores */
+@@ -1292,6 +1307,37 @@ static void flexcan_set_bittiming(struct net_device *dev)
+ 		return flexcan_set_bittiming_ctrl(dev);
+ }
  
- 	return "<unknown>";
-@@ -2498,7 +2498,7 @@ static int mcp25xxfd_register_chip_detect(struct mcp25xxfd_priv *priv)
- 	else
- 		devtype_data = &mcp25xxfd_devtype_data_mcp2517fd;
++static void flexcan_ram_init(struct net_device *dev)
++{
++	struct flexcan_priv *priv = netdev_priv(dev);
++	struct flexcan_regs __iomem *regs = priv->regs;
++	u32 reg_ctrl2;
++
++	/* 11.8.3.13 Detection and correction of memory errors:
++	 * CTRL2[WRMFRZ] grants write access to all memory positions
++	 * that require initialization, ranging from 0x080 to 0xADF
++	 * and from 0xF28 to 0xFFF when the CAN FD feature is enabled.
++	 * The RXMGMASK, RX14MASK, RX15MASK, and RXFGMASK registers
++	 * need to be initialized as well. MCR[RFEN] must not be set
++	 * during memory initialization.
++	 */
++	reg_ctrl2 = priv->read(&regs->ctrl2);
++	reg_ctrl2 |= FLEXCAN_CTRL2_WRMFRZ;
++	priv->write(reg_ctrl2, &regs->ctrl2);
++
++	memset_io(&regs->mb[0][0], 0,
++		  offsetof(struct flexcan_regs, rx_smb1[3]) -
++		  offsetof(struct flexcan_regs, mb[0][0]) + 0x4);
++
++	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
++		memset_io(&regs->tx_smb_fd[0], 0,
++			  offsetof(struct flexcan_regs, rx_smb1_fd[17]) -
++			  offsetof(struct flexcan_regs, tx_smb_fd[0]) + 0x4);
++
++	reg_ctrl2 &= ~FLEXCAN_CTRL2_WRMFRZ;
++	priv->write(reg_ctrl2, &regs->ctrl2);
++}
++
+ /* flexcan_chip_start
+  *
+  * this functions is entered with clocks enabled
+@@ -1316,6 +1362,9 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	if (err)
+ 		goto out_chip_disable;
  
--	if (!mcp25xxfd_is_25XX(priv) &&
-+	if (!mcp25xxfd_is_251X(priv) &&
- 	    priv->devtype_data.model != devtype_data->model) {
- 		netdev_info(ndev,
- 			    "Detected %s, but firmware specifies a %s. Fixing up.",
-@@ -2707,8 +2707,8 @@ static const struct of_device_id mcp25xxfd_of_match[] = {
- 		.compatible = "microchip,mcp2518fd",
- 		.data = &mcp25xxfd_devtype_data_mcp2518fd,
- 	}, {
--		.compatible = "microchip,mcp25xxfd",
--		.data = &mcp25xxfd_devtype_data_mcp25xxfd,
-+		.compatible = "microchip,mcp251xfd",
-+		.data = &mcp25xxfd_devtype_data_mcp251xfd,
- 	}, {
- 		/* sentinel */
- 	},
-@@ -2723,8 +2723,8 @@ static const struct spi_device_id mcp25xxfd_id_table[] = {
- 		.name = "mcp2518fd",
- 		.driver_data = (kernel_ulong_t)&mcp25xxfd_devtype_data_mcp2518fd,
- 	}, {
--		.name = "mcp25xxfd",
--		.driver_data = (kernel_ulong_t)&mcp25xxfd_devtype_data_mcp25xxfd,
-+		.name = "mcp251xfd",
-+		.driver_data = (kernel_ulong_t)&mcp25xxfd_devtype_data_mcp251xfd,
- 	}, {
- 		/* sentinel */
- 	},
-diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
-index 3bc799204cb0..b1b5d7fd33ea 100644
---- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
-+++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
-@@ -553,7 +553,7 @@ struct mcp25xxfd_regs_status {
- enum mcp25xxfd_model {
- 	MCP25XXFD_MODEL_MCP2517FD = 0x2517,
- 	MCP25XXFD_MODEL_MCP2518FD = 0x2518,
--	MCP25XXFD_MODEL_MCP25XXFD = 0xffff,	/* autodetect model */
-+	MCP25XXFD_MODEL_MCP251XFD = 0xffff,	/* autodetect model */
- };
++	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SUPPORT_ECC)
++		flexcan_ram_init(dev);
++
+ 	flexcan_set_bittiming(dev);
  
- struct mcp25xxfd_devtype_data {
-@@ -607,7 +607,7 @@ mcp25xxfd_is_##_model(const struct mcp25xxfd_priv *priv) \
- 
- MCP25XXFD_IS(2517);
- MCP25XXFD_IS(2518);
--MCP25XXFD_IS(25XX);
-+MCP25XXFD_IS(251X);
- 
- static inline u8 mcp25xxfd_first_byte_set(u32 mask)
- {
+ 	/* MCR
 -- 
-2.25.1
+2.28.0
 
