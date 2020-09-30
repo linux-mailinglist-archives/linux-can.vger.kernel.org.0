@@ -2,68 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3DB27F324
-	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 22:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A77127F505
+	for <lists+linux-can@lfdr.de>; Thu,  1 Oct 2020 00:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730260AbgI3USf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Sep 2020 16:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S1731481AbgI3WWC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Sep 2020 18:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730310AbgI3USd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 16:18:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448E8C061755
-        for <linux-can@vger.kernel.org>; Wed, 30 Sep 2020 13:18:32 -0700 (PDT)
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kNiYW-0002Qt-Kb; Wed, 30 Sep 2020 22:18:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 13/13] can: flexcan: disable runtime PM if register flexcandev failed
-Date:   Wed, 30 Sep 2020 22:18:16 +0200
-Message-Id: <20200930201816.1032054-14-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
+        with ESMTP id S1727210AbgI3WWB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 18:22:01 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341CCC061755;
+        Wed, 30 Sep 2020 15:22:01 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 3C6B713C79213;
+        Wed, 30 Sep 2020 15:05:13 -0700 (PDT)
+Date:   Wed, 30 Sep 2020 15:21:59 -0700 (PDT)
+Message-Id: <20200930.152159.116377724536752338.davem@davemloft.net>
+To:     mkl@pengutronix.de
+Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: Re: pull-request: can-next 2020-09-30
+From:   David Miller <davem@davemloft.net>
 In-Reply-To: <20200930201816.1032054-1-mkl@pengutronix.de>
 References: <20200930201816.1032054-1-mkl@pengutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [2620:137:e000::1:9]); Wed, 30 Sep 2020 15:05:13 -0700 (PDT)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Joakim Zhang <qiangqing.zhang@nxp.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+Date: Wed, 30 Sep 2020 22:18:03 +0200
 
-Disable runtime PM if register flexcandev failed, and balance reference
-of usage_count.
+> this is a pull request of 13 patches for net-next.
 
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-Link: https://lore.kernel.org/r/20200929211557.14153-4-qiangqing.zhang@nxp.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/flexcan.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 9cf1de42f428..fbdd9a8c9374 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -2057,6 +2057,8 @@ static int flexcan_probe(struct platform_device *pdev)
- 	return 0;
- 
-  failed_register:
-+	pm_runtime_put_noidle(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
- 	free_candev(dev);
- 	return err;
- }
--- 
-2.28.0
-
+Pulled, thanks Marc.
