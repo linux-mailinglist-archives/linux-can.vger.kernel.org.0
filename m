@@ -2,117 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC4027E4CE
-	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 11:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3A527E4D5
+	for <lists+linux-can@lfdr.de>; Wed, 30 Sep 2020 11:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728965AbgI3JPV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 30 Sep 2020 05:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729060AbgI3JOd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 05:14:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEBCC0613D7
-        for <linux-can@vger.kernel.org>; Wed, 30 Sep 2020 02:14:30 -0700 (PDT)
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kNYBw-0007UQ-MU; Wed, 30 Sep 2020 11:14:28 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 08/12] can: mcp251xfd: rename all user facing strings to mcp251xfd
-Date:   Wed, 30 Sep 2020 11:14:20 +0200
-Message-Id: <20200930091424.792165-9-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200930091424.792165-1-mkl@pengutronix.de>
-References: <20200930091424.792165-1-mkl@pengutronix.de>
+        id S1729021AbgI3JP1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 30 Sep 2020 05:15:27 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:11368 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729009AbgI3JO1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 30 Sep 2020 05:14:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1601457266; x=1632993266;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xAGyLvOLu/HgPbzH7I7clpgTi3DG2Y2HxQhsIsY+0Pg=;
+  b=M31Kz77Y8e3ZT26CdQHwdrU8XiUi156FSWGVOKryd3MQgndkOsC89AnT
+   QaacHBIPYWrW612rRjZ0+U3V+6rWSByzILgTw6TmwxudukN0khviS/Ade
+   3cZEzMpOzDwAujt46OIUnSFI6kj6LUwCng+EF/6up1+MoenRPXngihCWU
+   HCnjbJWFQBONlOfd7zqjSP32l2azaX/qKyIz25uyjGYbDjOZIROYWmjV4
+   TWxsk+zdSy2lVWkbqftG3N00edfgeR8k7ffsCvL2izzrOmEEi2tv4QPV9
+   7LHaF7UrluzAGKvYXACxK2pkyN+5DNj1dV0Aw8zZYk4wR7iydIF6XEfFW
+   A==;
+IronPort-SDR: 1R9Cj3Ej2hKdo1tGbEL2iIvrSKwDfgiCW6aH7QS71kFXfWr9gpBKBC/pZBJk1pTG1347P8bOzY
+ IlRV79gZCUzTPgwt4AWNm07tpjLXciws3NHfVg+Vvy39FdwumDcTgO/hJLz5vF753fGCzy9n+D
+ e0lVWMjXJsNt6fT2PSpzXEiz6v8ynmON5Kb270qYbKTCi/flsH+jKwVgdcHvLHKTU4zzJUyEze
+ tQZhzjL0bAOn2mWrOZhveDgDLNOxE0WpmQdnba/pYRZ6qxKA2BLInObEAeImdgQ0YiVH/6qU7D
+ KcE=
+X-IronPort-AV: E=Sophos;i="5.77,322,1596524400"; 
+   d="scan'208";a="93714392"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2020 02:14:25 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 30 Sep 2020 02:14:25 -0700
+Received: from HNO-LT-M43677A.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Wed, 30 Sep 2020 02:14:23 -0700
+From:   Thomas Kopp <thomas.kopp@microchip.com>
+To:     <mkl@pengutronix.de>, <manivannan.sadhasivam@linaro.org>,
+        <o.rempel@pengutronix.de>, <geert@linux-m68k.org>
+CC:     <linux-can@vger.kernel.org>, <thomas.kopp@microchip.com>,
+        <dev.kurt@vandijck-laurijssen.be>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>, <wg@grandegger.com>
+Subject: [PATCH 1/2] can: mcp25xxfd: narrow down wildcards in device tree bindings
+Date:   Wed, 30 Sep 2020 11:14:22 +0200
+Message-ID: <20200930091423.755-1-thomas.kopp@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In [1] Geert noted that the autodetect compatible for the mcp25xxfd driver,
-which is "microchip,mcp25xxfd" might be too generic and overlap with upcoming,
-but incompatible chips.
+The wildcard should be narrowed down to prevent existing and
+future devices that are not compatible from matching.
+It is very unlikely that incompatible devices will be released
+that do not match the wildcard.
 
-In the previous patch the autodetect DT compatbile has been renamed to
-"microchip,mcp251xfd", this patch changes all user facing strings from
-"mcp25xxfd" to "mcp251xfd" and "MCP25XXFD" to "MCP251XFD", including:
-- kconfig symbols
-- name of kernel module
-- DT and SPI compatible
+Discussion Reference: https://lore.kernel.org/r/CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com/
 
-[1] http://lore.kernel.org/r/CAMuHMdVkwGjr6dJuMyhQNqFoJqbh6Ec5V2b5LenCshwpM2SDsQ@mail.gmail.com
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Thomas Kopp <thomas.kopp@microchip.com>
 ---
- drivers/net/can/spi/mcp251xfd/Kconfig         | 10 ++++-----
- drivers/net/can/spi/mcp251xfd/Makefile        | 10 ++++-----
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 22 +++++++++----------
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  4 ++--
- 4 files changed, 23 insertions(+), 23 deletions(-)
+ drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c | 18 +++++++++---------
+ drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h      |  4 ++--
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/mcp251xfd/Kconfig
-index 9eb596019a58..f5a147a92cb2 100644
---- a/drivers/net/can/spi/mcp251xfd/Kconfig
-+++ b/drivers/net/can/spi/mcp251xfd/Kconfig
-@@ -1,14 +1,14 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
--config CAN_MCP25XXFD
--	tristate "Microchip MCP25xxFD SPI CAN controllers"
-+config CAN_MCP251XFD
-+	tristate "Microchip MCP251xFD SPI CAN controllers"
- 	select REGMAP
- 	help
--	  Driver for the Microchip MCP25XXFD SPI FD-CAN controller
-+	  Driver for the Microchip MCP251XFD SPI FD-CAN controller
- 	  family.
- 
--config CAN_MCP25XXFD_SANITY
--	depends on CAN_MCP25XXFD
-+config CAN_MCP251XFD_SANITY
-+	depends on CAN_MCP251XFD
- 	bool "Additional Sanity Checks"
- 	help
- 	  This option enables additional sanity checks in the driver,
-diff --git a/drivers/net/can/spi/mcp251xfd/Makefile b/drivers/net/can/spi/mcp251xfd/Makefile
-index e943e6a2db0c..cb71244cbe89 100644
---- a/drivers/net/can/spi/mcp251xfd/Makefile
-+++ b/drivers/net/can/spi/mcp251xfd/Makefile
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
--obj-$(CONFIG_CAN_MCP25XXFD) += mcp25xxfd.o
-+obj-$(CONFIG_CAN_MCP251XFD) += mcp251xfd.o
- 
--mcp25xxfd-objs :=
--mcp25xxfd-objs += mcp251xfd-core.o
--mcp25xxfd-objs += mcp251xfd-crc16.o
--mcp25xxfd-objs += mcp251xfd-regmap.o
-+mcp251xfd-objs :=
-+mcp251xfd-objs += mcp251xfd-core.o
-+mcp251xfd-objs += mcp251xfd-crc16.o
-+mcp251xfd-objs += mcp251xfd-regmap.o
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 2988d93fbf82..37d3f07c9bf6 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -25,7 +25,7 @@
- 
- #include "mcp251xfd.h"
- 
--#define DEVICE_NAME "mcp25xxfd"
-+#define DEVICE_NAME "mcp251xfd"
- 
- static const struct mcp25xxfd_devtype_data mcp25xxfd_devtype_data_mcp2517fd = {
- 	.quirks = MCP25XXFD_QUIRK_MAB_NO_WARN | MCP25XXFD_QUIRK_CRC_REG |
+diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
+index 5557b2d1e774..672d5f24e325 100644
+--- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
++++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd-core.c
 @@ -41,10 +41,10 @@ static const struct mcp25xxfd_devtype_data mcp25xxfd_devtype_data_mcp2518fd = {
  };
  
@@ -137,7 +100,7 @@ index 2988d93fbf82..37d3f07c9bf6 100644
  	}
  
  	return "<unknown>";
-@@ -2494,7 +2494,7 @@ static int mcp25xxfd_register_chip_detect(struct mcp25xxfd_priv *priv)
+@@ -2498,7 +2498,7 @@ static int mcp25xxfd_register_chip_detect(struct mcp25xxfd_priv *priv)
  	else
  		devtype_data = &mcp25xxfd_devtype_data_mcp2517fd;
  
@@ -146,7 +109,7 @@ index 2988d93fbf82..37d3f07c9bf6 100644
  	    priv->devtype_data.model != devtype_data->model) {
  		netdev_info(ndev,
  			    "Detected %s, but firmware specifies a %s. Fixing up.",
-@@ -2703,8 +2703,8 @@ static const struct of_device_id mcp25xxfd_of_match[] = {
+@@ -2707,8 +2707,8 @@ static const struct of_device_id mcp25xxfd_of_match[] = {
  		.compatible = "microchip,mcp2518fd",
  		.data = &mcp25xxfd_devtype_data_mcp2518fd,
  	}, {
@@ -157,7 +120,7 @@ index 2988d93fbf82..37d3f07c9bf6 100644
  	}, {
  		/* sentinel */
  	},
-@@ -2719,8 +2719,8 @@ static const struct spi_device_id mcp25xxfd_id_table[] = {
+@@ -2723,8 +2723,8 @@ static const struct spi_device_id mcp25xxfd_id_table[] = {
  		.name = "mcp2518fd",
  		.driver_data = (kernel_ulong_t)&mcp25xxfd_devtype_data_mcp2518fd,
  	}, {
@@ -168,17 +131,10 @@ index 2988d93fbf82..37d3f07c9bf6 100644
  	}, {
  		/* sentinel */
  	},
-@@ -2923,5 +2923,5 @@ static struct spi_driver mcp25xxfd_driver = {
- module_spi_driver(mcp25xxfd_driver);
- 
- MODULE_AUTHOR("Marc Kleine-Budde <mkl@pengutronix.de>");
--MODULE_DESCRIPTION("Microchip MCP25xxFD Family CAN controller driver");
-+MODULE_DESCRIPTION("Microchip MCP251xFD Family CAN controller driver");
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+diff --git a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
 index 3bc799204cb0..b1b5d7fd33ea 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
+--- a/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
++++ b/drivers/net/can/spi/mcp25xxfd/mcp25xxfd.h
 @@ -553,7 +553,7 @@ struct mcp25xxfd_regs_status {
  enum mcp25xxfd_model {
  	MCP25XXFD_MODEL_MCP2517FD = 0x2517,
@@ -198,5 +154,5 @@ index 3bc799204cb0..b1b5d7fd33ea 100644
  static inline u8 mcp25xxfd_first_byte_set(u32 mask)
  {
 -- 
-2.28.0
+2.25.1
 
