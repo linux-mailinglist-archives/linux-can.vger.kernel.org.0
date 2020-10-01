@@ -2,87 +2,209 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30F0280318
-	for <lists+linux-can@lfdr.de>; Thu,  1 Oct 2020 17:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68C228033C
+	for <lists+linux-can@lfdr.de>; Thu,  1 Oct 2020 17:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732360AbgJAPqK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Oct 2020 11:46:10 -0400
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:27498 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731885AbgJAPqJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Oct 2020 11:46:09 -0400
-Received: from tomoyo.flets-east.jp ([153.230.197.127])
-        by mwinf5d31 with ME
-        id afls2300W2lQRaH03fm0uA; Thu, 01 Oct 2020 17:46:06 +0200
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 01 Oct 2020 17:46:06 +0200
-X-ME-IP: 153.230.197.127
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S1732360AbgJAPvo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Oct 2020 11:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732339AbgJAPvo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Oct 2020 11:51:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02606C0613D0
+        for <linux-can@vger.kernel.org>; Thu,  1 Oct 2020 08:51:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kO0ro-0001VS-UJ; Thu, 01 Oct 2020 17:51:37 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:f333:bae6:a31f:3e34] (unknown [IPv6:2a03:f580:87bc:d400:f333:bae6:a31f:3e34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 63C8E56F937;
+        Thu,  1 Oct 2020 15:51:27 +0000 (UTC)
+Subject: Re: [PATCH v2 2/6] can: dev: add a helper function
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         "David S . Miller" <davem@davemloft.net>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
+Cc:     Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Subject: Re: [PATCH v2 2/6] can: dev: add a helper function
-Date:   Fri,  2 Oct 2020 00:45:31 +0900
-Message-Id: <20201001154531.3217-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <1798400d-abc1-e6dd-2d19-41e82ca6e43e@pengutronix.de>
-References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr> <20200930144602.10290-3-mailhol.vincent@wanadoo.fr> <1798400d-abc1-e6dd-2d19-41e82ca6e43e@pengutronix.de>
+References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
+ <20200930144602.10290-3-mailhol.vincent@wanadoo.fr>
+ <1798400d-abc1-e6dd-2d19-41e82ca6e43e@pengutronix.de>
+ <20201001154531.3217-1-mailhol.vincent@wanadoo.fr>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <ad1d812b-692f-c7df-d5c5-f61436434d59@pengutronix.de>
+Date:   Thu, 1 Oct 2020 17:51:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201001154531.3217-1-mailhol.vincent@wanadoo.fr>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="F5SJwI8XvyNNhBrmEDJtIKkYaHyDQOy1L"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> > +static inline int get_can_len(struct sk_buff *skb)
-> 
-> make this return an u8
-> make the skb const
-> 
-> > +{
-> > +	struct canfd_frame *cf =3D (struct canfd_frame *)skb->data;
-> 
-> const
-> 
-> > +
-> > +	if (can_is_canfd_skb(skb))
-> > +		return min_t(__u8, cf->len, CANFD_MAX_DLEN);
-> 
-> u8
-> 
-> > +	else if (cf->can_id & CAN_RTR_FLAG)
-> > +		return 0;
-> > +	else
-> > +		return min_t(__u8, cf->len, CAN_MAX_DLEN);
-> 
-> u8
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--F5SJwI8XvyNNhBrmEDJtIKkYaHyDQOy1L
+Content-Type: multipart/mixed; boundary="ICHiQ9wftbi9A0xOxdyGBWXFOW7VDe7Yy";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+ "David S . Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Message-ID: <ad1d812b-692f-c7df-d5c5-f61436434d59@pengutronix.de>
+Subject: Re: [PATCH v2 2/6] can: dev: add a helper function
+References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
+ <20200930144602.10290-3-mailhol.vincent@wanadoo.fr>
+ <1798400d-abc1-e6dd-2d19-41e82ca6e43e@pengutronix.de>
+ <20201001154531.3217-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20201001154531.3217-1-mailhol.vincent@wanadoo.fr>
 
-Noted. All those changes will be addressed in v3 series.
-Thank you.
+--ICHiQ9wftbi9A0xOxdyGBWXFOW7VDe7Yy
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-As a side note, macros get_can_dlc() and get_canfd_dlc of the same
-file (include/linux/can/dev.h) also use __u8 instead of u8. Do you
-want me to add a patch to change these as below?
+On 10/1/20 5:45 PM, Vincent Mailhol wrote:
+>>> +static inline int get_can_len(struct sk_buff *skb)
+>>
+>> make this return an u8
+>> make the skb const
+>>
+>>> +{
+>>> +	struct canfd_frame *cf =3D3D (struct canfd_frame *)skb->data;
+>>
+>> const
+>>
+>>> +
+>>> +	if (can_is_canfd_skb(skb))
+>>> +		return min_t(__u8, cf->len, CANFD_MAX_DLEN);
+>>
+>> u8
+>>
+>>> +	else if (cf->can_id & CAN_RTR_FLAG)
+>>> +		return 0;
+>>> +	else
+>>> +		return min_t(__u8, cf->len, CAN_MAX_DLEN);
+>>
+>> u8
+>=20
+> Noted. All those changes will be addressed in v3 series.
+> Thank you.
+>=20
+> As a side note, macros get_can_dlc() and get_canfd_dlc of the same
+> file (include/linux/can/dev.h) also use __u8 instead of u8. Do you
+> want me to add a patch to change these as below?
 
- /*
-  * get_can_dlc(value) - helper macro to cast a given data length code (dlc)
-- * to __u8 and ensure the dlc value to be max. 8 bytes.
-+ * to u8 and ensure the dlc value to be max. 8 bytes.
-  *
-  * To be used in the CAN netdriver receive path to ensure conformance with
-  * ISO 11898-1 Chapter 8.4.2.3 (DLC field)
-  */
--#define get_can_dlc(i)         (min_t(__u8, (i), CAN_MAX_DLC))
--#define get_canfd_dlc(i)       (min_t(__u8, (i), CANFD_MAX_DLC))
-+#define get_can_dlc(i)         (min_t(u8, (i), CAN_MAX_DLC))
-+#define get_canfd_dlc(i)       (min_t(u8, (i), CANFD_MAX_DLC))
- 
- /* Check for outgoing skbs that have not been created by the CAN subsystem */
- static inline bool can_skb_headroom_valid(struct net_device *dev,
+yes. looks good
+
+
+tnx,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--ICHiQ9wftbi9A0xOxdyGBWXFOW7VDe7Yy--
+
+--F5SJwI8XvyNNhBrmEDJtIKkYaHyDQOy1L
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl91+vsACgkQqclaivrt
+76mq2ggAs4nYSlNLOizBO3j1bziccPD7Sl1T2XyKO4VAt6QstvxMI65tfXAojuaD
+qkIG2hWDoKxKPVwdO6j4D04GhHbSSrsZduH4v/Sr5Xo7qwf1U0D9ue9mGXe3z0ir
+NR3naRZXxrOGnLI3yMW2MfrElzWwIIrRPtGxigst1lm3m3Rw9pkKG9ikFMet4Vod
+8PPkM+H6vnHtKt4KktOTfJ3OjJth9Wv7Wq/T68j6S1y+/zMSEp93i3vqMq2OAqL+
+jzVBKKboBRvoWiYbsF8T+NCpIvta7+tfGGzm703dy/bBXGPATCm1e36IFW7onXIw
+tPrSZa9f8kKQh4p0yGIrsgyShwN1/g==
+=jwwg
+-----END PGP SIGNATURE-----
+
+--F5SJwI8XvyNNhBrmEDJtIKkYaHyDQOy1L--
