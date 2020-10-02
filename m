@@ -2,37 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FC3281726
-	for <lists+linux-can@lfdr.de>; Fri,  2 Oct 2020 17:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F36281736
+	for <lists+linux-can@lfdr.de>; Fri,  2 Oct 2020 17:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726017AbgJBPvz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Oct 2020 11:51:55 -0400
-Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:49576 "EHLO
+        id S2387688AbgJBP4A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Oct 2020 11:56:00 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:19140 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726569AbgJBPvu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Oct 2020 11:51:50 -0400
+        with ESMTP id S1726386AbgJBP4A (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Oct 2020 11:56:00 -0400
 Received: from tomoyo.flets-east.jp ([153.230.197.127])
         by mwinf5d76 with ME
-        id b3re230092lQRaH033rizY; Fri, 02 Oct 2020 17:51:47 +0200
+        id b3vk230042lQRaH033vrag; Fri, 02 Oct 2020 17:55:57 +0200
 X-ME-Helo: tomoyo.flets-east.jp
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 02 Oct 2020 17:51:47 +0200
+X-ME-Date: Fri, 02 Oct 2020 17:55:57 +0200
 X-ME-IP: 153.230.197.127
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Oliver Neukum <oneukum@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-usb@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Jakub Kicinski <kuba@kernel.org>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        linux-usb@vger.kernel.org (open list:USB ACM DRIVER)
-Subject: [PATCH v3 5/7] can: dev: add a helper function to calculate the duration of one bit
-Date:   Sat,  3 Oct 2020 00:41:49 +0900
-Message-Id: <20201002154219.4887-6-mailhol.vincent@wanadoo.fr>
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v3 7/7] usb: cdc-acm: add quirk to blacklist ETAS ES58X devices
+Date:   Sat,  3 Oct 2020 00:41:51 +0900
+Message-Id: <20201002154219.4887-8-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201002154219.4887-1-mailhol.vincent@wanadoo.fr>
 References: <20200926175810.278529-1-mailhol.vincent@wanadoo.fr>
@@ -43,108 +43,342 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Rename macro CAN_CALC_SYNC_SEG to CAN_SYNC_SEG and make it available
-through include/linux/can/dev.h
+The ES58X devices has a CDC ACM interface (used for debug
+purpose). During probing, the device is thus recognized as USB Modem
+(CDC ACM), preventing the etas-es58x module to load:
+  usbcore: registered new interface driver etas_es58x
+  usb 1-1.1: new full-speed USB device number 14 using xhci_hcd
+  usb 1-1.1: New USB device found, idVendor=108c, idProduct=0159, bcdDevice= 1.00
+  usb 1-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+  usb 1-1.1: Product: ES581.4
+  usb 1-1.1: Manufacturer: ETAS GmbH
+  usb 1-1.1: SerialNumber: 2204355
+  cdc_acm 1-1.1:1.0: No union descriptor, testing for castrated device
+  cdc_acm 1-1.1:1.0: ttyACM0: USB ACM device
 
-Add an helper function can_bit_time() which returns the duration (in
-time quanta) of one CAN bit.
+Thus, these have been added to the ignore list in
+drivers/usb/class/cdc-acm.c
 
-Rationale for this patch: the sync segment and the bit time are two
-concepts which are defined in the CAN ISO standard. Device drivers for
-CAN might need those.
+N.B. Future firmware release of the ES58X will remove the CDC-ACM
+interface.
 
-Please refer to ISO 11898-1:2015, section 11.3.1.1 "Bit time" for
-additional information.
+`lsusb -v` of the three devices variant (ES581.4, ES582.1 and
+ES584.1):
+
+  Bus 001 Device 011: ID 108c:0159 Robert Bosch GmbH ES581.4
+  Device Descriptor:
+    bLength                18
+    bDescriptorType         1
+    bcdUSB               1.10
+    bDeviceClass            2 Communications
+    bDeviceSubClass         0
+    bDeviceProtocol         0
+    bMaxPacketSize0        64
+    idVendor           0x108c Robert Bosch GmbH
+    idProduct          0x0159
+    bcdDevice            1.00
+    iManufacturer           1 ETAS GmbH
+    iProduct                2 ES581.4
+    iSerial                 3 2204355
+    bNumConfigurations      1
+    Configuration Descriptor:
+      bLength                 9
+      bDescriptorType         2
+      wTotalLength       0x0035
+      bNumInterfaces          1
+      bConfigurationValue     1
+      iConfiguration          5 Bus Powered Configuration
+      bmAttributes         0x80
+        (Bus Powered)
+      MaxPower              100mA
+      Interface Descriptor:
+        bLength                 9
+        bDescriptorType         4
+        bInterfaceNumber        0
+        bAlternateSetting       0
+        bNumEndpoints           3
+        bInterfaceClass         2 Communications
+        bInterfaceSubClass      2 Abstract (modem)
+        bInterfaceProtocol      0
+        iInterface              4 ACM Control Interface
+        CDC Header:
+          bcdCDC               1.10
+        CDC Call Management:
+          bmCapabilities       0x01
+            call management
+          bDataInterface          0
+        CDC ACM:
+          bmCapabilities       0x06
+            sends break
+            line coding and serial state
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x81  EP 1 IN
+          bmAttributes            3
+            Transfer Type            Interrupt
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0010  1x 16 bytes
+          bInterval              10
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x82  EP 2 IN
+          bmAttributes            2
+            Transfer Type            Bulk
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0040  1x 64 bytes
+          bInterval               0
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x03  EP 3 OUT
+          bmAttributes            2
+            Transfer Type            Bulk
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0040  1x 64 bytes
+          bInterval               0
+  Device Status:     0x0000
+    (Bus Powered)
+
+  Bus 001 Device 012: ID 108c:0168 Robert Bosch GmbH ES582
+  Device Descriptor:
+    bLength                18
+    bDescriptorType         1
+    bcdUSB               2.00
+    bDeviceClass            2 Communications
+    bDeviceSubClass         0
+    bDeviceProtocol         0
+    bMaxPacketSize0        64
+    idVendor           0x108c Robert Bosch GmbH
+    idProduct          0x0168
+    bcdDevice            1.00
+    iManufacturer           1 ETAS GmbH
+    iProduct                2 ES582
+    iSerial                 3 0108933
+    bNumConfigurations      1
+    Configuration Descriptor:
+      bLength                 9
+      bDescriptorType         2
+      wTotalLength       0x0043
+      bNumInterfaces          2
+      bConfigurationValue     1
+      iConfiguration          0
+      bmAttributes         0x80
+        (Bus Powered)
+      MaxPower              500mA
+      Interface Descriptor:
+        bLength                 9
+        bDescriptorType         4
+        bInterfaceNumber        0
+        bAlternateSetting       0
+        bNumEndpoints           1
+        bInterfaceClass         2 Communications
+        bInterfaceSubClass      2 Abstract (modem)
+        bInterfaceProtocol      1 AT-commands (v.25ter)
+        iInterface              0
+        CDC Header:
+          bcdCDC               1.10
+        CDC ACM:
+          bmCapabilities       0x02
+            line coding and serial state
+        CDC Union:
+          bMasterInterface        0
+          bSlaveInterface         1
+        CDC Call Management:
+          bmCapabilities       0x03
+            call management
+            use DataInterface
+          bDataInterface          1
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x83  EP 3 IN
+          bmAttributes            3
+            Transfer Type            Interrupt
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0040  1x 64 bytes
+          bInterval              16
+      Interface Descriptor:
+        bLength                 9
+        bDescriptorType         4
+        bInterfaceNumber        1
+        bAlternateSetting       0
+        bNumEndpoints           2
+        bInterfaceClass        10 CDC Data
+        bInterfaceSubClass      0
+        bInterfaceProtocol      0
+        iInterface              0
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x81  EP 1 IN
+          bmAttributes            2
+            Transfer Type            Bulk
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0200  1x 512 bytes
+          bInterval               0
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x02  EP 2 OUT
+          bmAttributes            2
+            Transfer Type            Bulk
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0200  1x 512 bytes
+          bInterval               0
+  Device Qualifier (for other device speed):
+    bLength                10
+    bDescriptorType         6
+    bcdUSB               2.00
+    bDeviceClass            2 Communications
+    bDeviceSubClass         0
+    bDeviceProtocol         0
+    bMaxPacketSize0        64
+    bNumConfigurations      1
+  Device Status:     0x0000
+    (Bus Powered)
+
+  Bus 001 Device 013: ID 108c:0169 Robert Bosch GmbH ES584.1
+  Device Descriptor:
+    bLength                18
+    bDescriptorType         1
+    bcdUSB               2.00
+    bDeviceClass            2 Communications
+    bDeviceSubClass         0
+    bDeviceProtocol         0
+    bMaxPacketSize0        64
+    idVendor           0x108c Robert Bosch GmbH
+    idProduct          0x0169
+    bcdDevice            1.00
+    iManufacturer           1 ETAS GmbH
+    iProduct                2 ES584.1
+    iSerial                 3 0100320
+    bNumConfigurations      1
+    Configuration Descriptor:
+      bLength                 9
+      bDescriptorType         2
+      wTotalLength       0x0043
+      bNumInterfaces          2
+      bConfigurationValue     1
+      iConfiguration          0
+      bmAttributes         0x80
+        (Bus Powered)
+      MaxPower              500mA
+      Interface Descriptor:
+        bLength                 9
+        bDescriptorType         4
+        bInterfaceNumber        0
+        bAlternateSetting       0
+        bNumEndpoints           1
+        bInterfaceClass         2 Communications
+        bInterfaceSubClass      2 Abstract (modem)
+        bInterfaceProtocol      1 AT-commands (v.25ter)
+        iInterface              0
+        CDC Header:
+          bcdCDC               1.10
+        CDC ACM:
+          bmCapabilities       0x02
+            line coding and serial state
+        CDC Union:
+          bMasterInterface        0
+          bSlaveInterface         1
+        CDC Call Management:
+          bmCapabilities       0x03
+            call management
+            use DataInterface
+          bDataInterface          1
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x83  EP 3 IN
+          bmAttributes            3
+            Transfer Type            Interrupt
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0040  1x 64 bytes
+          bInterval              16
+      Interface Descriptor:
+        bLength                 9
+        bDescriptorType         4
+        bInterfaceNumber        1
+        bAlternateSetting       0
+        bNumEndpoints           2
+        bInterfaceClass        10 CDC Data
+        bInterfaceSubClass      0
+        bInterfaceProtocol      0
+        iInterface              0
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x81  EP 1 IN
+          bmAttributes            2
+            Transfer Type            Bulk
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0200  1x 512 bytes
+          bInterval               0
+        Endpoint Descriptor:
+          bLength                 7
+          bDescriptorType         5
+          bEndpointAddress     0x02  EP 2 OUT
+          bmAttributes            2
+            Transfer Type            Bulk
+            Synch Type               None
+            Usage Type               Data
+          wMaxPacketSize     0x0200  1x 512 bytes
+          bInterval               0
+  Device Qualifier (for other device speed):
+    bLength                10
+    bDescriptorType         6
+    bcdUSB               2.00
+    bDeviceClass            2 Communications
+    bDeviceSubClass         0
+    bDeviceProtocol         0
+    bMaxPacketSize0        64
+    bNumConfigurations      1
+  Device Status:     0x0000
+    (Bus Powered)
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
 
 Changes in v3: None
 
-Changes in v2: None
+Changes in v2:
+  - Added dmesg and lsusb -v information and rephrased the comment.
 ---
- drivers/net/can/dev.c   | 13 ++++++-------
- include/linux/can/dev.h | 15 +++++++++++++++
- 2 files changed, 21 insertions(+), 7 deletions(-)
+ drivers/usb/class/cdc-acm.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index 8c3e11820e03..6070b4ab3bd8 100644
---- a/drivers/net/can/dev.c
-+++ b/drivers/net/can/dev.c
-@@ -60,7 +60,6 @@ EXPORT_SYMBOL_GPL(can_len2dlc);
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 7f6f3ab5b8a6..ed9355094e8c 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1906,6 +1906,17 @@ static const struct usb_device_id acm_ids[] = {
+ 	.driver_info = IGNORE_DEVICE,
+ 	},
  
- #ifdef CONFIG_CAN_CALC_BITTIMING
- #define CAN_CALC_MAX_ERROR 50 /* in one-tenth of a percent */
--#define CAN_CALC_SYNC_SEG 1
- 
- /* Bit-timing calculation derived from:
-  *
-@@ -86,8 +85,8 @@ can_update_sample_point(const struct can_bittiming_const *btc,
- 	int i;
- 
- 	for (i = 0; i <= 1; i++) {
--		tseg2 = tseg + CAN_CALC_SYNC_SEG -
--			(sample_point_nominal * (tseg + CAN_CALC_SYNC_SEG)) /
-+		tseg2 = tseg + CAN_SYNC_SEG -
-+			(sample_point_nominal * (tseg + CAN_SYNC_SEG)) /
- 			1000 - i;
- 		tseg2 = clamp(tseg2, btc->tseg2_min, btc->tseg2_max);
- 		tseg1 = tseg - tseg2;
-@@ -96,8 +95,8 @@ can_update_sample_point(const struct can_bittiming_const *btc,
- 			tseg2 = tseg - tseg1;
- 		}
- 
--		sample_point = 1000 * (tseg + CAN_CALC_SYNC_SEG - tseg2) /
--			(tseg + CAN_CALC_SYNC_SEG);
-+		sample_point = 1000 * (tseg + CAN_SYNC_SEG - tseg2) /
-+			(tseg + CAN_SYNC_SEG);
- 		sample_point_error = abs(sample_point_nominal - sample_point);
- 
- 		if (sample_point <= sample_point_nominal &&
-@@ -145,7 +144,7 @@ static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
- 	/* tseg even = round down, odd = round up */
- 	for (tseg = (btc->tseg1_max + btc->tseg2_max) * 2 + 1;
- 	     tseg >= (btc->tseg1_min + btc->tseg2_min) * 2; tseg--) {
--		tsegall = CAN_CALC_SYNC_SEG + tseg / 2;
-+		tsegall = CAN_SYNC_SEG + tseg / 2;
- 
- 		/* Compute all possible tseg choices (tseg=tseg1+tseg2) */
- 		brp = priv->clock.freq / (tsegall * bt->bitrate) + tseg % 2;
-@@ -223,7 +222,7 @@ static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
- 
- 	/* real bitrate */
- 	bt->bitrate = priv->clock.freq /
--		(bt->brp * (CAN_CALC_SYNC_SEG + tseg1 + tseg2));
-+		(bt->brp * (CAN_SYNC_SEG + tseg1 + tseg2));
- 
- 	return 0;
- }
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 791c452d98e1..77c3ea49b8fb 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -82,6 +82,21 @@ struct can_priv {
- #endif
- };
- 
-+#define CAN_SYNC_SEG 1
++	/* Exclude ETAS ES58x */
++	{ USB_DEVICE(0x108c, 0x0159), /* ES581.4 */
++	.driver_info = IGNORE_DEVICE,
++	},
++	{ USB_DEVICE(0x108c, 0x0168), /* ES582.1 */
++	.driver_info = IGNORE_DEVICE,
++	},
++	{ USB_DEVICE(0x108c, 0x0169), /* ES584.1 */
++	.driver_info = IGNORE_DEVICE,
++	},
 +
-+/*
-+ * can_bit_time() - Duration of one bit
-+ *
-+ * Please refer to ISO 11898-1:2015, section 11.3.1.1 "Bit time" for
-+ * additional information.
-+ *
-+ * Return: the number of time quanta in one bit.
-+ */
-+static inline int can_bit_time(struct can_bittiming *bt)
-+{
-+	return CAN_SYNC_SEG + bt->prop_seg + bt->phase_seg1 + bt->phase_seg2;
-+}
-+
- /*
-  * get_can_dlc(value) - helper macro to cast a given data length code (dlc)
-  * to u8 and ensure the dlc value to be max. 8 bytes.
+ 	{ USB_DEVICE(0x1bc7, 0x0021), /* Telit 3G ACM only composition */
+ 	.driver_info = SEND_ZERO_PACKET,
+ 	},
 -- 
 2.26.2
 
