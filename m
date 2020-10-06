@@ -2,42 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B49D28525B
-	for <lists+linux-can@lfdr.de>; Tue,  6 Oct 2020 21:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5685B285283
+	for <lists+linux-can@lfdr.de>; Tue,  6 Oct 2020 21:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbgJFTZ0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Oct 2020 15:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S1727125AbgJFTeZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Oct 2020 15:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726981AbgJFTZ0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Oct 2020 15:25:26 -0400
+        with ESMTP id S1727013AbgJFTeZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Oct 2020 15:34:25 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C57BC061755
-        for <linux-can@vger.kernel.org>; Tue,  6 Oct 2020 12:25:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFD2C061755
+        for <linux-can@vger.kernel.org>; Tue,  6 Oct 2020 12:34:24 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kPsaM-0002Wh-Nt; Tue, 06 Oct 2020 21:25:18 +0200
+        id 1kPsj5-0003ZN-Dy; Tue, 06 Oct 2020 21:34:19 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:5d91:2e2e:81e1:aa2d] (unknown [IPv6:2a03:f580:87bc:d400:5d91:2e2e:81e1:aa2d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3ADDC5736F1;
-        Tue,  6 Oct 2020 19:25:14 +0000 (UTC)
-Subject: Re: [PATCH v2 1/3] dt-bindings: can: flexcan: list supported
- processors
-To:     Michael Walle <michael@walle.cc>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20201001091131.30514-1-michael@walle.cc>
- <20201001091131.30514-2-michael@walle.cc>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B25C573700;
+        Tue,  6 Oct 2020 19:34:16 +0000 (UTC)
+Subject: Re: [PATCH 0/3] can: xilinx_can: Some minor changes
+To:     Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com
+Cc:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <cover.1600073396.git.michal.simek@xilinx.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -99,15 +99,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <afdcecef-10c6-738b-29fe-09353d1c7c92@pengutronix.de>
-Date:   Tue, 6 Oct 2020 21:25:09 +0200
+Message-ID: <c3b4ac47-6317-03db-f840-16acdfb25d76@pengutronix.de>
+Date:   Tue, 6 Oct 2020 21:34:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201001091131.30514-2-michael@walle.cc>
+In-Reply-To: <cover.1600073396.git.michal.simek@xilinx.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="mD7xUhpdvMSepXv5z06bm41gAExhQUo6p"
+ boundary="0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -117,64 +117,50 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---mD7xUhpdvMSepXv5z06bm41gAExhQUo6p
-Content-Type: multipart/mixed; boundary="mTuxtrWxO7h0LldUQFiophTOYZk8fDAl6";
+--0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs
+Content-Type: multipart/mixed; boundary="cBd2KVlXsRXBLXuKUZEeQgVrnMpKeRcX1";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Michael Walle <michael@walle.cc>, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-can@vger.kernel.org
-Cc: Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
- Rob Herring <robh+dt@kernel.org>, Joakim Zhang <qiangqing.zhang@nxp.com>,
- Oleksij Rempel <o.rempel@pengutronix.de>
-Message-ID: <afdcecef-10c6-738b-29fe-09353d1c7c92@pengutronix.de>
-Subject: Re: [PATCH v2 1/3] dt-bindings: can: flexcan: list supported
- processors
-References: <20201001091131.30514-1-michael@walle.cc>
- <20201001091131.30514-2-michael@walle.cc>
-In-Reply-To: <20201001091131.30514-2-michael@walle.cc>
+To: Michal Simek <michal.simek@xilinx.com>, linux-kernel@vger.kernel.org,
+ monstr@monstr.eu, git@xilinx.com
+Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org
+Message-ID: <c3b4ac47-6317-03db-f840-16acdfb25d76@pengutronix.de>
+Subject: Re: [PATCH 0/3] can: xilinx_can: Some minor changes
+References: <cover.1600073396.git.michal.simek@xilinx.com>
+In-Reply-To: <cover.1600073396.git.michal.simek@xilinx.com>
 
---mTuxtrWxO7h0LldUQFiophTOYZk8fDAl6
+--cBd2KVlXsRXBLXuKUZEeQgVrnMpKeRcX1
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/1/20 11:11 AM, Michael Walle wrote:
-> The compatible is a pattern match. Explicitly list all possible values.=
-
-> Also mention that the ls1028ar1 must be followed by lx2160ar1.
+On 9/14/20 10:49 AM, Michal Simek wrote:
+> Hi,
 >=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  Documentation/devicetree/bindings/net/can/fsl-flexcan.txt | 6 ++++++
->  1 file changed, 6 insertions(+)
+> recently some small patches come to our internal tree. We started to us=
+e
+> coverity which found 2 issues (last two patches) which is simply to fix=
+=2E
 >=20
-> diff --git a/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt =
-b/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
-> index 94c0f8bf4deb..c6152dc2d2d0 100644
-> --- a/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
-> +++ b/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
-> @@ -4,6 +4,12 @@ Required properties:
-> =20
->  - compatible : Should be "fsl,<processor>-flexcan"
-> =20
-> +  where <processor> is imx8qm, imx6q, imx28, imx53, imx35, imx25, p101=
-0,
-> +  vf610, ls1021ar2, lx2160ar1, ls1028ar1.
-> +
-> +  The ls1028ar1 must be followed by lx2160ar1, e.g.
-> +   - "fsl,ls1028ar1-flexcan", "fsl,lx2160ar1-flexcan"
-> +
->    An implementation should also claim any of the following compatibles=
-
->    that it is fully backwards compatible with:
-> =20
+> Thanks,
+> Michal
 >=20
+>=20
+> Srinivas Neeli (3):
+>   can: xilinx_can: Limit CANFD brp to 2
+>   can: xilinx_can: Check return value of set_reset_mode
+>   can: xilinx_can: Fix incorrect variable and initialize with a default=
 
-Added this patch to linux-can-next. The others should probably go via the=
- arm
-SoC tree.
+>     value
 
+Applied to linux-can-next.
+
+Tnx,
 Marc
 
 --=20
@@ -184,23 +170,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---mTuxtrWxO7h0LldUQFiophTOYZk8fDAl6--
+--cBd2KVlXsRXBLXuKUZEeQgVrnMpKeRcX1--
 
---mD7xUhpdvMSepXv5z06bm41gAExhQUo6p
+--0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl98xJYACgkQqclaivrt
-76m8MQf/SmgNiVETwrl9avWdkSe7ZIWRhmi5RLsY63w/fOlR97FomGlwm9aOvSc9
-GWmF4GofdT3ZdYeXvWHLL/G2Cnuidkwn3sjUEtS4uMZVhyXCNrIPXCAt4btnX0Yz
-4YQASwgFNd2IY9+2F4e2yO2R/2qqV67qKaKVJgQTgsbZbwCPjjBxihYCXIxyd35N
-f69pAb3S0qCoBBzzFjqAVBmhO1IOaud7LvwSlQyeR9Tfrmh8SU5aoj12ZPUIpujf
-hk8EqWWcLQaUibjGm7np0/BSUz2GwGxbPrBlecFkOZLa0Dm/hSrhR7JwszZUYwBy
-0Rx53C35lfZ74lsTaHmxqG8MGlsezw==
-=ilkD
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl98xrUACgkQqclaivrt
+76mPDAgAk9NuDb2PQ+COt4mqhBcCJiV9dXlF2Sg6AkL1tXC6QKTcKhN1i7TIj5+9
+xll5KNn3ZmEjiLgOtYlfSQu+rytAQ75uwyrGgIbxCuvdIE4EkDV8POKkQuGf1SaJ
+3N8csixcLac+WJvqK0YxmoFswULbydTt1isX09bG/CGREOLdORt+okejVxjh+ai/
+bQl+vR6EF06pXSqY7c8CbQsy/v6/YU3SxtI0tn/2PSiVCppKHyysMSX8TxrxAIG5
++dXU2dtniAFRzvJICDWjbEEfm/ACtTy/K4tI/XrCCfJljroJ/wlrr7vYCHJ9ETBr
+j/2uZUbo6IPeXWwEVoCNQyUbl0IsJg==
+=HawR
 -----END PGP SIGNATURE-----
 
---mD7xUhpdvMSepXv5z06bm41gAExhQUo6p--
+--0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs--
