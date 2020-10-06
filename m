@@ -2,52 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB597285247
-	for <lists+linux-can@lfdr.de>; Tue,  6 Oct 2020 21:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBDC285252
+	for <lists+linux-can@lfdr.de>; Tue,  6 Oct 2020 21:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbgJFTTg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Oct 2020 15:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S1727046AbgJFTVC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Oct 2020 15:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727020AbgJFTTf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Oct 2020 15:19:35 -0400
+        with ESMTP id S1727013AbgJFTVC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Oct 2020 15:21:02 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9732DC061755
-        for <linux-can@vger.kernel.org>; Tue,  6 Oct 2020 12:19:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C28FC061755
+        for <linux-can@vger.kernel.org>; Tue,  6 Oct 2020 12:21:02 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kPsUe-0001mt-I1; Tue, 06 Oct 2020 21:19:24 +0200
+        id 1kPsW6-0002A3-Ik; Tue, 06 Oct 2020 21:20:54 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:5d91:2e2e:81e1:aa2d] (unknown [IPv6:2a03:f580:87bc:d400:5d91:2e2e:81e1:aa2d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A44285736DF;
-        Tue,  6 Oct 2020 19:19:13 +0000 (UTC)
-Subject: Re: [PATCH 2/3] dt-bindings: can: rcar_can: Add r8a7742 support
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Rob Herring <robh@kernel.org>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0047F5736E9;
+        Tue,  6 Oct 2020 19:20:52 +0000 (UTC)
+Subject: Re: [RESEND PATCH v2 0/2] dt-bindings: can: document R8A774E1
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-References: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200816190732.6905-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200825022102.GA3808062@bogus>
- <CA+V-a8tFqsWE+vhF4R3-Ce0MjamPkWdwYSm8pAVN9AXSUq4d=g@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20201005081319.29322-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -109,15 +100,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <4ad66cd3-7c81-d83c-4c91-e9348a951028@pengutronix.de>
-Date:   Tue, 6 Oct 2020 21:19:09 +0200
+Message-ID: <648c76bc-f585-f069-de86-0ad9de17c52e@pengutronix.de>
+Date:   Tue, 6 Oct 2020 21:20:47 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CA+V-a8tFqsWE+vhF4R3-Ce0MjamPkWdwYSm8pAVN9AXSUq4d=g@mail.gmail.com>
+In-Reply-To: <20201005081319.29322-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="dxxBE5NOmk4pvu6T04oZaFIQ9X2ISSkJu"
+ boundary="kEey2E19m6qvqDZbFHFkLOzbqHnyhBEtb"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -127,61 +118,55 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---dxxBE5NOmk4pvu6T04oZaFIQ9X2ISSkJu
-Content-Type: multipart/mixed; boundary="nbOh468bs11BFXaW07qkgNPGXBteKDalK";
+--kEey2E19m6qvqDZbFHFkLOzbqHnyhBEtb
+Content-Type: multipart/mixed; boundary="VmZVycGsqpbGhKfrXMhjXIBSvCKv31dcI";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
- "David S. Miller" <davem@davemloft.net>
-Cc: Rob Herring <robh@kernel.org>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Magnus Damm <magnus.damm@gmail.com>, Linus Walleij
- <linus.walleij@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, Wolfgang Grandegger <wg@grandegger.com>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, netdev <netdev@vger.kernel.org>,
- linux-can@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Message-ID: <4ad66cd3-7c81-d83c-4c91-e9348a951028@pengutronix.de>
-Subject: Re: [PATCH 2/3] dt-bindings: can: rcar_can: Add r8a7742 support
-References: <20200816190732.6905-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200816190732.6905-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200825022102.GA3808062@bogus>
- <CA+V-a8tFqsWE+vhF4R3-Ce0MjamPkWdwYSm8pAVN9AXSUq4d=g@mail.gmail.com>
-In-Reply-To: <CA+V-a8tFqsWE+vhF4R3-Ce0MjamPkWdwYSm8pAVN9AXSUq4d=g@mail.gmail.com>
+To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
+ linux-kernel@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>
+Message-ID: <648c76bc-f585-f069-de86-0ad9de17c52e@pengutronix.de>
+Subject: Re: [RESEND PATCH v2 0/2] dt-bindings: can: document R8A774E1
+References: <20201005081319.29322-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20201005081319.29322-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 
---nbOh468bs11BFXaW07qkgNPGXBteKDalK
+--VmZVycGsqpbGhKfrXMhjXIBSvCKv31dcI
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/6/20 9:36 AM, Lad, Prabhakar wrote:
-> On Tue, Aug 25, 2020 at 3:21 AM Rob Herring <robh@kernel.org> wrote:
->>
->> On Sun, 16 Aug 2020 20:07:31 +0100, Lad Prabhakar wrote:
->>> Document RZ/G1H (r8a7742) SoC specific bindings. The R8A7742 CAN modu=
-le
->>> is identical to R-Car Gen2 family.
->>>
->>> No driver change is needed due to the fallback compatible value
->>> "renesas,rcar-gen2-can".
->>>
->>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com=
->
->>> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
->>> ---
->>>  Documentation/devicetree/bindings/net/can/rcar_can.txt | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>
->> Acked-by: Rob Herring <robh@kernel.org>
->>
-> Could you please pick up this patch. It has been acked by the
-> maintainers. Let me know if you want me to RESEND this patch.
+On 10/5/20 10:13 AM, Lad Prabhakar wrote:
+> Hi All,
+>=20
+> I am re-sending this patch set as this has been missed previously.
+> It is exactly same as [1].
+>=20
+> DT maintainers have already acked the patches.
+>=20
+> [1] https://www.spinics.net/lists/netdev/msg679244.html
+>=20
+> Cheers,
+> Prabhakar
+>=20
+> Changes for v2:
+> * Added R8A774E1 to the list of SoCs that can use CANFD through "clkp2"=
+=2E
+> * Added R8A774E1 to the list of SoCs that can use the CANFD clock
+>=20
+> Lad Prabhakar (2):
+>   dt-bindings: can: rcar_canfd: Document r8a774e1 support
+>   dt-bindings: can: rcar_can: Document r8a774e1 support
+>=20
+>  Documentation/devicetree/bindings/net/can/rcar_can.txt   | 5 +++--
+>  Documentation/devicetree/bindings/net/can/rcar_canfd.txt | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 
-Added this patch to linux-can-next.
+Added both to linux-can-next.
 
 Tnx,
 Marc
@@ -193,23 +178,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---nbOh468bs11BFXaW07qkgNPGXBteKDalK--
+--VmZVycGsqpbGhKfrXMhjXIBSvCKv31dcI--
 
---dxxBE5NOmk4pvu6T04oZaFIQ9X2ISSkJu
+--kEey2E19m6qvqDZbFHFkLOzbqHnyhBEtb
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl98wy0ACgkQqclaivrt
-76ln4Qf/WCSgqd3PqbxwMwYPx+VV54vnaroFMm1IrMupW194qR8bkGEyvA/FpjX2
-hPkagev4CzLTwd72FmXJyfGzbF2YZrr0nWIrvOt4h3oSiBqBt4BgU/WVLv9SjJhb
-8V0MdbuJL9nYajwCjiPsDOpR1urhWllL9WB6hQAI9MpZY5eY/AHiVNxbDSTbiDNT
-2Enq+FrgOGgI0U2+xFkFigE1/tO1GQ48vv7UtP1j8qc8VB67mDbqi+hJOcSO9Umg
-ic+atoJEZhg4w3jmxlDqrZ8aQXPuUUxMODXJFte/NRat/XoP9gZAziohVmd0Q2Tw
-8iNpXTGeeIgdXJT3SN+2RY0BPc60uQ==
-=uCEV
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl98w48ACgkQqclaivrt
+76krewf/Z5weWvxL2dFoZRpQD9XLl5FmpTYQ6KjxC+uYUokboyTrfVXd0gTopFT1
+nB+0QvRKS0PsqgyywzFVsxqYIY65PZxWyWslIeBfMFDliX1uK0wScKqlSykhrt+0
+s9osPw6vICZllm2HUTI6LUDGVvirlI+tuvOjU2uzKGqvSF3GPFWwvsO20X2MY3Zj
+vW6Lg8K9bvEfuaVjakSYUvFHR9DST9pUyu7jKjbAujS/Nf4y8Rm199j9YFIS5Yk6
+P7QSfD8vkBNYRdlnrKA8QOZ6i16hnN3ZmAyQgtQjJN3obU1sIeOmN18ZZqvFLA8y
+4B7fux6dF1BVp9HTAVjfpZqLKIQLQw==
+=UDpK
 -----END PGP SIGNATURE-----
 
---dxxBE5NOmk4pvu6T04oZaFIQ9X2ISSkJu--
+--kEey2E19m6qvqDZbFHFkLOzbqHnyhBEtb--
