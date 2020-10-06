@@ -2,42 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5685B285283
-	for <lists+linux-can@lfdr.de>; Tue,  6 Oct 2020 21:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2320A285316
+	for <lists+linux-can@lfdr.de>; Tue,  6 Oct 2020 22:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgJFTeZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Oct 2020 15:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S1727178AbgJFU1s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Oct 2020 16:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727013AbgJFTeZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Oct 2020 15:34:25 -0400
+        with ESMTP id S1727166AbgJFU1s (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Oct 2020 16:27:48 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFD2C061755
-        for <linux-can@vger.kernel.org>; Tue,  6 Oct 2020 12:34:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B734C061755
+        for <linux-can@vger.kernel.org>; Tue,  6 Oct 2020 13:27:48 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kPsj5-0003ZN-Dy; Tue, 06 Oct 2020 21:34:19 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:5d91:2e2e:81e1:aa2d] (unknown [IPv6:2a03:f580:87bc:d400:5d91:2e2e:81e1:aa2d])
+        id 1kPtYo-0001j6-PO; Tue, 06 Oct 2020 22:27:46 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:e811:4d13:5c6a:68dd] (unknown [IPv6:2a03:f580:87bc:d400:e811:4d13:5c6a:68dd])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B25C573700;
-        Tue,  6 Oct 2020 19:34:16 +0000 (UTC)
-Subject: Re: [PATCH 0/3] can: xilinx_can: Some minor changes
-To:     Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, monstr@monstr.eu, git@xilinx.com
-Cc:     Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <cover.1600073396.git.michal.simek@xilinx.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C43E657376C;
+        Tue,  6 Oct 2020 20:27:44 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org
+References: <20200928200404.82229-1-socketcan@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -99,15 +91,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <c3b4ac47-6317-03db-f840-16acdfb25d76@pengutronix.de>
-Date:   Tue, 6 Oct 2020 21:34:13 +0200
+Subject: Re: [PATCH can-next] can: add ISO 15765-2:2016 transport protocol
+Message-ID: <2cadd37a-bfca-097b-a957-864298b104f9@pengutronix.de>
+Date:   Tue, 6 Oct 2020 22:27:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <cover.1600073396.git.michal.simek@xilinx.com>
+In-Reply-To: <20200928200404.82229-1-socketcan@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs"
+ boundary="Km4dDW5bU1OenHpX6IgThQgVYSKLwMaJg"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -117,50 +110,53 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs
-Content-Type: multipart/mixed; boundary="cBd2KVlXsRXBLXuKUZEeQgVrnMpKeRcX1";
+--Km4dDW5bU1OenHpX6IgThQgVYSKLwMaJg
+Content-Type: multipart/mixed; boundary="5vaHoQk91swidk6gJnywVvvdRaeUsYSDI";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Michal Simek <michal.simek@xilinx.com>, linux-kernel@vger.kernel.org,
- monstr@monstr.eu, git@xilinx.com
-Cc: Appana Durga Kedareswara rao <appana.durga.rao@xilinx.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Naga Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org
-Message-ID: <c3b4ac47-6317-03db-f840-16acdfb25d76@pengutronix.de>
-Subject: Re: [PATCH 0/3] can: xilinx_can: Some minor changes
-References: <cover.1600073396.git.michal.simek@xilinx.com>
-In-Reply-To: <cover.1600073396.git.michal.simek@xilinx.com>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Message-ID: <2cadd37a-bfca-097b-a957-864298b104f9@pengutronix.de>
+Subject: Re: [PATCH can-next] can: add ISO 15765-2:2016 transport protocol
+References: <20200928200404.82229-1-socketcan@hartkopp.net>
+In-Reply-To: <20200928200404.82229-1-socketcan@hartkopp.net>
 
---cBd2KVlXsRXBLXuKUZEeQgVrnMpKeRcX1
+--5vaHoQk91swidk6gJnywVvvdRaeUsYSDI
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 9/14/20 10:49 AM, Michal Simek wrote:
-> Hi,
+On 9/28/20 10:04 PM, Oliver Hartkopp wrote:
+> CAN Transport Protocols offer support for segmented Point-to-Point
+> communication between CAN nodes via two defined CAN Identifiers.
+> As CAN frames can only transport a small amount of data bytes
+> (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+> segmentation is needed to transport longer PDUs as needed e.g. for
+> vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
+> This protocol driver implements data transfers according to
+> ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
 >=20
-> recently some small patches come to our internal tree. We started to us=
-e
-> coverity which found 2 issues (last two patches) which is simply to fix=
-=2E
->=20
-> Thanks,
-> Michal
->=20
->=20
-> Srinivas Neeli (3):
->   can: xilinx_can: Limit CANFD brp to 2
->   can: xilinx_can: Check return value of set_reset_mode
->   can: xilinx_can: Fix incorrect variable and initialize with a default=
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
->     value
+Applied to linux-can-next with some changes:
 
-Applied to linux-can-next.
+> diff --git a/net/can/isotp.c b/net/can/isotp.c
+> new file mode 100644
+> index 000000000000..efed3e47b6ee
+> --- /dev/null
+> +++ b/net/can/isotp.c
+> @@ -0,0 +1,1428 @@
+> +// SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-=
+3-Clause)
 
-Tnx,
+Removed the syscall note, as it's only ment for header files. See:
+
+    d77cd7fefc0d can: remove "WITH Linux-syscall-note" fro
+                      SPDX tag of C files
+
+Further I've fixes some indention, a checkpatch warning and some typos.
+
+regards,
 Marc
 
 --=20
@@ -170,23 +166,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---cBd2KVlXsRXBLXuKUZEeQgVrnMpKeRcX1--
+--5vaHoQk91swidk6gJnywVvvdRaeUsYSDI--
 
---0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs
+--Km4dDW5bU1OenHpX6IgThQgVYSKLwMaJg
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl98xrUACgkQqclaivrt
-76mPDAgAk9NuDb2PQ+COt4mqhBcCJiV9dXlF2Sg6AkL1tXC6QKTcKhN1i7TIj5+9
-xll5KNn3ZmEjiLgOtYlfSQu+rytAQ75uwyrGgIbxCuvdIE4EkDV8POKkQuGf1SaJ
-3N8csixcLac+WJvqK0YxmoFswULbydTt1isX09bG/CGREOLdORt+okejVxjh+ai/
-bQl+vR6EF06pXSqY7c8CbQsy/v6/YU3SxtI0tn/2PSiVCppKHyysMSX8TxrxAIG5
-+dXU2dtniAFRzvJICDWjbEEfm/ACtTy/K4tI/XrCCfJljroJ/wlrr7vYCHJ9ETBr
-j/2uZUbo6IPeXWwEVoCNQyUbl0IsJg==
-=HawR
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl980zwACgkQqclaivrt
+76mUHgf/TSWNEIBS0uuSqWxvp2Oki5fmXyFXByzRe210ZXgg71uxiGafMtPMQ8Jl
+Ez2NZ11Oh5In6GZG1D+1BuVOXIjzFaKFqO/3kOAJmT/3N6B1higq7GCXf7fcj31n
+nROkYfjHDepvGaZj11GVUguyxMzVXx7bah1iJt6CMZAXSDZCKoSU38RKcxdfDQ8n
+XWQnb0Yi1tRqGw72/g6hOd9DswNqQw2CMoTSE9EE9bVgdpB8KckcA9lUR4QFwIf6
+/bVw2YVYtVZZ7dsjiXOkFdeQklQRZra/vXws9r5trThcHnqU51uC+atoEYeTotdu
+D98Hk77t6chPKJ6mCCbs4Pf+Et1C4g==
+=zWrw
 -----END PGP SIGNATURE-----
 
---0z5WZTgETCLdli8CdlFkaSzMdLSpmjXGs--
+--Km4dDW5bU1OenHpX6IgThQgVYSKLwMaJg--
