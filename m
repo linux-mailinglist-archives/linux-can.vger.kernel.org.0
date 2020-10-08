@@ -2,53 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BC7287DD9
-	for <lists+linux-can@lfdr.de>; Thu,  8 Oct 2020 23:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60F6287E24
+	for <lists+linux-can@lfdr.de>; Thu,  8 Oct 2020 23:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729796AbgJHVS2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 8 Oct 2020 17:18:28 -0400
-Received: from [58.87.100.240] ([58.87.100.240]:45364 "EHLO
-        mail.hebei-kuixing.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1726766AbgJHVS1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Oct 2020 17:18:27 -0400
-X-Greylist: delayed 668 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Oct 2020 17:18:22 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mail.hebei-kuixing.com (Postfix) with ESMTP id AC1A460E64;
-        Thu,  8 Oct 2020 21:07:07 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at hebei-kuixing.com
-Received: from mail.hebei-kuixing.com ([127.0.0.1])
-        by localhost (mail.hebei-kuixing.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2baZvT9QzwCy; Fri,  9 Oct 2020 05:07:06 +0800 (CST)
-Received: from User (unknown [185.248.12.71])
-        by mail.hebei-kuixing.com (Postfix) with ESMTPA id 0E9CB60E6A;
-        Fri,  9 Oct 2020 05:06:50 +0800 (CST)
-Reply-To: <kim.leang2011@yahoo.com>
-From:   " Kim Leang" <sales@hebei-kuixing.com>
-Subject: Greeting!
-Date:   Fri, 9 Oct 2020 00:07:05 +0300
+        id S1729038AbgJHVkc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 8 Oct 2020 17:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726464AbgJHVkb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Oct 2020 17:40:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A00EC0613D3
+        for <linux-can@vger.kernel.org>; Thu,  8 Oct 2020 14:40:30 -0700 (PDT)
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kQdeE-0001aU-Ur; Thu, 08 Oct 2020 23:40:27 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2020-10-08
+Date:   Thu,  8 Oct 2020 23:40:19 +0200
+Message-Id: <20201008214022.2044402-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20201008210707.AC1A460E64@mail.hebei-kuixing.com>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Greeting!
+Subject: pull-request: can 2020-10-08
 
-I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
+Hello Jakub, hello David,
 
-I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+as Jakub pointed out, in case there is a last minute PR to Linux, please take
+this pull request into net/master for 5.9.
 
-The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
+The first patch is part of my pull request "linux-can-fixes-for-5.9-20201006",
+so consider that one obsolete and take this instead.
 
-Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
+The first patch is by Lucas Stach and fixes m_can driver by removing an
+erroneous call to m_can_class_suspend() in runtime suspend. Which causes the
+pinctrl state to get stuck on the "sleep" state, which breaks all CAN
+functionality on SoCs where this state is defined.
 
-Thanks and have a nice day,
-Mr. Kim Leang.
+The last two patches target the j1939 protocol: Cong Wang fixes a syzbot
+finding of an uninitialized variable in the j1939 transport protocol. I
+contribute a patch, that fixes the initialization of a same uninitialized
+variable in a different function.
+
+regards,
+Marc
+
+---
+
+The following changes since commit d91dc434f2baa592e9793597421231174d57bbbf:
+
+  Merge tag 'rxrpc-fixes-20201005' of git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs (2020-10-06 06:18:20 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.9-20201008
+
+for you to fetch changes up to 13ba4c434422837d7c8c163f9c8d854e67bf3c99:
+
+  net: j1939: j1939_session_fresh_new(): fix missing initialization of skbcnt (2020-10-08 23:28:09 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.9-20201008
+
+----------------------------------------------------------------
+Cong Wang (1):
+      can: j1935: j1939_tp_tx_dat_new(): fix missing initialization of skbcnt
+
+Lucas Stach (1):
+      can: m_can_platform: don't call m_can_class_suspend in runtime suspend
+
+Marc Kleine-Budde (1):
+      net: j1939: j1939_session_fresh_new(): fix missing initialization of skbcnt
+
+ drivers/net/can/m_can/m_can_platform.c | 2 --
+ net/can/j1939/transport.c              | 2 ++
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+
