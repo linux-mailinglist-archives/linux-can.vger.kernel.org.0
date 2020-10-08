@@ -2,34 +2,29 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F1C287E20
+	by mail.lfdr.de (Postfix) with ESMTP id F105D287E21
 	for <lists+linux-can@lfdr.de>; Thu,  8 Oct 2020 23:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730264AbgJHVkf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1730267AbgJHVkf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Thu, 8 Oct 2020 17:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727560AbgJHVke (ORCPT
+        with ESMTP id S1730264AbgJHVke (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Thu, 8 Oct 2020 17:40:34 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDD9C0613D2
-        for <linux-can@vger.kernel.org>; Thu,  8 Oct 2020 14:40:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E08FC0613D3
+        for <linux-can@vger.kernel.org>; Thu,  8 Oct 2020 14:40:34 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kQdeH-0001aU-7D; Thu, 08 Oct 2020 23:40:29 +0200
+        id 1kQdeH-0001aU-In; Thu, 08 Oct 2020 23:40:29 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot+3f3837e61a48d32b495f@syzkaller.appspotmail.com,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 2/3] can: j1935: j1939_tp_tx_dat_new(): fix missing initialization of skbcnt
-Date:   Thu,  8 Oct 2020 23:40:21 +0200
-Message-Id: <20201008214022.2044402-3-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 3/3] net: j1939: j1939_session_fresh_new(): fix missing initialization of skbcnt
+Date:   Thu,  8 Oct 2020 23:40:22 +0200
+Message-Id: <20201008214022.2044402-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201008214022.2044402-1-mkl@pengutronix.de>
 References: <20201008214022.2044402-1-mkl@pengutronix.de>
@@ -43,36 +38,30 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Cong Wang <xiyou.wangcong@gmail.com>
+This patch add the initialization of skbcnt, similar to:
 
-This fixes an uninit-value warning:
-BUG: KMSAN: uninit-value in can_receive+0x26b/0x630 net/can/af_can.c:650
+    e009f95b1543 can: j1935: j1939_tp_tx_dat_new(): fix missing initialization of skbcnt
 
-Reported-and-tested-by: syzbot+3f3837e61a48d32b495f@syzkaller.appspotmail.com
+Let's play save and initialize this skbcnt as well.
+
+Suggested-by: Jakub Kicinski <kuba@kernel.org>
 Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Cc: Robin van der Gracht <robin@protonic.nl>
-Cc: Oleksij Rempel <linux@rempel-privat.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Cong Wang <xiyou.wangcong@gmail.com>
-Link: https://lore.kernel.org/r/20201008061821.24663-1-xiyou.wangcong@gmail.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
  net/can/j1939/transport.c | 1 +
  1 file changed, 1 insertion(+)
 
 diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index 0cec4152f979..88cf1062e1e9 100644
+index 88cf1062e1e9..e09d087ba240 100644
 --- a/net/can/j1939/transport.c
 +++ b/net/can/j1939/transport.c
-@@ -580,6 +580,7 @@ sk_buff *j1939_tp_tx_dat_new(struct j1939_priv *priv,
+@@ -1488,6 +1488,7 @@ j1939_session *j1939_session_fresh_new(struct j1939_priv *priv,
  	skb->dev = priv->ndev;
  	can_skb_reserve(skb);
  	can_skb_prv(skb)->ifindex = priv->ndev->ifindex;
 +	can_skb_prv(skb)->skbcnt = 0;
- 	/* reserve CAN header */
- 	skb_reserve(skb, offsetof(struct can_frame, data));
+ 	skcb = j1939_skb_to_cb(skb);
+ 	memcpy(skcb, rel_skcb, sizeof(*skcb));
  
 -- 
 2.28.0
