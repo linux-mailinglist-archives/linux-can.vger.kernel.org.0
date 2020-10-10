@@ -2,42 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E2C28A24B
-	for <lists+linux-can@lfdr.de>; Sun, 11 Oct 2020 00:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B86A28A3B8
+	for <lists+linux-can@lfdr.de>; Sun, 11 Oct 2020 01:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730437AbgJJW4p (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 10 Oct 2020 18:56:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48686 "EHLO mail.kernel.org"
+        id S1731649AbgJJW4o (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 10 Oct 2020 18:56:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731118AbgJJTCW (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:02:22 -0400
+        id S1730437AbgJJS5V (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 10 Oct 2020 14:57:21 -0400
 Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5F215223EA;
-        Sat, 10 Oct 2020 16:34:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AED312227E;
+        Sat, 10 Oct 2020 17:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602347675;
-        bh=rN2RVNvkUAajl+OFUK7Q+q3UkemoM0e27/OZT/UWqRo=;
+        s=default; t=1602351161;
+        bh=6Nfiiu/X34lvAQOdoc6RiN2TjDrwhd7WB1u3kM3Ctyg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p2nOc3CrI/ySGmv5VclfiHMQUI59BfdVWFsAmzzM8H/fcJxNJU1p0feypnRy1Cv6/
-         /doT4eoKwwrLh2i17XiiVMviLhdTrtdEPrCUeqzP6LHPWWhMKe89QCJbJi8pRgtO0+
-         js3v4kxZpZQ+HrYvdZgmqhPvlxkPWODL8/CXQiGE=
-Date:   Sat, 10 Oct 2020 09:34:33 -0700
+        b=yLhcX5LPgaGcZgPC7sRf1EIKEzArXlEgDuWuL9h2+93h0sofOMBFprKRh8CYXgkqM
+         tDkPqV3L97z5MiG/uyxc3MSQRA02Tmee1YzRRkijpyxcnig/Am0O+0PrPFQ2S9nvST
+         /FuIOgH1lQxWvYMFK827gOYbMIoyNBKB+fpAQ+yU=
+Date:   Sat, 10 Oct 2020 10:32:40 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 08/17] can: add ISO 15765-2:2016 transport protocol
-Message-ID: <20201010093433.7c11ef46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <10c8b62c-e522-aaa4-2e75-d1c1bd630735@hartkopp.net>
-References: <20201007213159.1959308-1-mkl@pengutronix.de>
-        <20201007213159.1959308-9-mkl@pengutronix.de>
-        <20201009175751.5c54097f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <bcebf26e-3cfb-c7aa-e7fc-4faa744b9c2f@hartkopp.net>
-        <20201010084421.308645a2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <10c8b62c-e522-aaa4-2e75-d1c1bd630735@hartkopp.net>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: pull-request: can 2020-10-08
+Message-ID: <20201010103240.11c8e69d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201008214022.2044402-1-mkl@pengutronix.de>
+References: <20201008214022.2044402-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -45,13 +39,20 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, 10 Oct 2020 18:24:48 +0200 Oliver Hartkopp wrote:
-> Ok. Understood.
+On Thu,  8 Oct 2020 23:40:19 +0200 Marc Kleine-Budde wrote:
+> The first patch is part of my pull request "linux-can-fixes-for-5.9-20201006",
+> so consider that one obsolete and take this instead.
 > 
-> I'll remove the default=y then. Would it be ok to add some text like
+> The first patch is by Lucas Stach and fixes m_can driver by removing an
+> erroneous call to m_can_class_suspend() in runtime suspend. Which causes the
+> pinctrl state to get stuck on the "sleep" state, which breaks all CAN
+> functionality on SoCs where this state is defined.
 > 
-> If you want to perfrom automotive vehicle diagnostic services (UDS), say 
-> 'y'.
+> The last two patches target the j1939 protocol: Cong Wang fixes a syzbot
+> finding of an uninitialized variable in the j1939 transport protocol. I
+> contribute a patch, that fixes the initialization of a same uninitialized
+> variable in a different function.
 
-Most certainly, feel free to provide whatever description you reckon
-will help users who need this to identify the option.
+Pulled, thanks!
+
+Since we missed 5.9 would you like me to queue these up for stable?
