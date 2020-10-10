@@ -2,252 +2,271 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 480EA289F51
-	for <lists+linux-can@lfdr.de>; Sat, 10 Oct 2020 10:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4948928A3AD
+	for <lists+linux-can@lfdr.de>; Sun, 11 Oct 2020 01:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730132AbgJJITl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 10 Oct 2020 04:19:41 -0400
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:19808 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729913AbgJJINI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 10 Oct 2020 04:13:08 -0400
-Received: from tomoyo.flets-east.jp ([153.230.197.127])
-        by mwinf5d29 with ME
-        id e8Cm230022lQRaH038Cs69; Sat, 10 Oct 2020 10:13:00 +0200
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Oct 2020 10:13:00 +0200
-X-ME-IP: 153.230.197.127
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "open list:USB ACM DRIVER" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v3 6/7] can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
-Date:   Sat, 10 Oct 2020 17:12:11 +0900
-Message-Id: <20201010081211.392860-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <c501e9ea-5412-fa90-b403-d34ca4720c89@pengutronix.de>
-References: <20201002154219.4887-1-mailhol.vincent@wanadoo.fr> <20201002154219.4887-7-mailhol.vincent@wanadoo.fr> <c501e9ea-5412-fa90-b403-d34ca4720c89@pengutronix.de>
+        id S2388233AbgJJW4q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 10 Oct 2020 18:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732141AbgJJTkT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 10 Oct 2020 15:40:19 -0400
+X-Greylist: delayed 611 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 10 Oct 2020 07:49:49 PDT
+Received: from mo6-p00-ob.smtp.rzone.de (mo6-p00-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5300::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D24C05BD21;
+        Sat, 10 Oct 2020 07:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1602340784;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=Klr+mZsfIJkJvgRYeQuYBHf9OEE3IUqAY+xpDN72fV4=;
+        b=l/2Y2fEyqU8vJHN35tYPUoXyoWVrVYmvFWG+WK101KdaVq84S3TLlc64AHRgPBxFep
+        UM61IOZrejzdilsA7ROiNZyInxIK9WFky0ZCYtEJXTpejGUngiGU5IS+f8EYtZ3M7GPt
+        0B5dsqxmw1+78CJb9H5LbILXWltI9lUwXPGdJChZ2VccaqyftgQZR2hqT9noCHCzFjWR
+        CymS++d4kQy1s43+cNCP8xQvjBf00u/T342l8KSHWZ8MBxeaB6kO/mAYtALaSP+vFyCg
+        iK/lcLvMmCcRduKRv4g1+f0CyK9qbO2zxOB9O8CzaDAr0neOHYbhmryDAM8nvKdnbOPR
+        zAMw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWLW0JK2wEH"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.2.1 DYNA|AUTH)
+        with ESMTPSA id D0b41cw9AETBLvX
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sat, 10 Oct 2020 16:29:11 +0200 (CEST)
+Subject: Re: [PATCH 08/17] can: add ISO 15765-2:2016 transport protocol
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+References: <20201007213159.1959308-1-mkl@pengutronix.de>
+ <20201007213159.1959308-9-mkl@pengutronix.de>
+ <20201009175751.5c54097f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <bcebf26e-3cfb-c7aa-e7fc-4faa744b9c2f@hartkopp.net>
+Date:   Sat, 10 Oct 2020 16:29:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201009175751.5c54097f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> Just one header file for now :)
-
-Thanks for the review, very constructive comments :)
-
-I acknowledge all the trivial fixes (space, new line, // comments,
-naming...), those will be fixed in v4 (will also review other files
-for similar mistakes). In this reply, I will only focus on the points
-which need explanations.
-
-v4 will come a bit later.
 
 
-> > +/* Threshold on consecutive CAN_STATE_ERROR_PASSIVE. If we receive
-> > + * ES58X_CONSECUTIVE_ERR_PASSIVE_MAX times the event
-> > + * ES58X_ERR_CRTL_PASSIVE in a row without any successful Rx or Tx,
-> > + * we force the device to switch to CAN_STATE_BUS_OFF state.
-> > + */
-> > +#define ES58X_CONSECUTIVE_ERR_PASSIVE_MAX 254
+On 10.10.20 02:57, Jakub Kicinski wrote:
+> On Wed,  7 Oct 2020 23:31:50 +0200 Marc Kleine-Budde wrote:
+>> From: Oliver Hartkopp <socketcan@hartkopp.net>
+>>
+>> CAN Transport Protocols offer support for segmented Point-to-Point
+>> communication between CAN nodes via two defined CAN Identifiers.
+>> As CAN frames can only transport a small amount of data bytes
+>> (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+>> segmentation is needed to transport longer PDUs as needed e.g. for
+>> vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
+>> This protocol driver implements data transfers according to
+>> ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
 > 
-> Does the device recover from bus off automatically or why is this needed?
+> A few random things jump out here at a quick scan. Most of them are
+> not important enough to have to be addressed, but please follow up on
+> the 'default y' thing ASAP.
+> 
+>> +/*
+>> + * Remark on CAN_ISOTP_DEFAULT_RECV_* values:
+>> + *
+>> + * We can strongly assume, that the Linux Kernel implementation of
+>> + * CAN_ISOTP is capable to run with BS=0, STmin=0 and WFTmax=0.
+>> + * But as we like to be able to behave as a commonly available ECU,
+>> + * these default settings can be changed via sockopts.
+>> + * For that reason the STmin value is intentionally _not_ checked for
+>> + * consistency and copied directly into the flow control (FC) frame.
+>> + *
+> 
+> spurious empty comment line
 > 
 
-Will be answered below together with your other question on
-@err_passive_before_rtx_success of struct es58x_priv.
+Oh, yes - at the front and at the end. I will fix that.
 
-> > +
-> > +enum es58x_physical_media {
-> > +	ES58X_MEDIA_HIGH_SPEED = 1,
-> > +	ES58X_MEDIA_FAULT_TOLERANT = 2
+>> + */
+>> +
+>> +#endif /* !_UAPI_CAN_ISOTP_H */
+>> diff --git a/net/can/Kconfig b/net/can/Kconfig
+>> index 25436a715db3..021fe03a8ed6 100644
+>> --- a/net/can/Kconfig
+>> +++ b/net/can/Kconfig
+>> @@ -55,6 +55,19 @@ config CAN_GW
+>>   
+>>   source "net/can/j1939/Kconfig"
+>>   
+>> +config CAN_ISOTP
+>> +	tristate "ISO 15765-2:2016 CAN transport protocol"
+>> +	default y
 > 
-> You mean with FAULT_TOLERANT you mean ISO 11898-3? According to [1] they should
-> be named low speed.
-
-Two comments:
- 1/ Yes, this is "low speed". I did not know about the ISO 11898-3,
-    thanks for the hint.
- 2/ After double checking, this option is not supported by the devices
-    in scope of this driver (other devices of the ESxxx portfolio
-    might support it).
-This option will be removed in v4.
-
-> > +};
-> > +
-> > +enum es58x_samples_per_bit {
-> > +	ES58X_ONE_SAMPLE_PER_BIT = 1,
-> > +
-> > +	/* Some CAN controllers do not support three samples per
-> > +	 * bit. In this case the default value of one sample per bit
-> > +	 * is used, even if the configuration is set to
-> > +	 * ES58X_THREE_SAMPLES_PER_BIT.
-> > +	 */
+> default should not be y unless there is a very good reason.
+> I don't see such reason here. This is new functionality, users
+> can enable it if they need it.
 > 
-> Can you autodetect the controller and avoid announcing tripple sample mode to
-> the driver framework?
 
-Will be addressed in v4. Your remarks made me realized that some of
-the controller modes might not have been announced correctly. Will
-double check the other CAN_CTRLMODE_* as well.
+Yes. I agree. But there is a good reason for it.
+The ISO 15765-2 protocol is used for vehicle diagnosis and is a *very* 
+common CAN bus use case.
 
-> > +	ES58X_THREE_SAMPLES_PER_BIT = 2
-> > +};
-> > +
-> > +enum es58x_sync_edge {
-> > +	/* ISO CAN specification defines the use of a single edge
-> > +	 * synchronization. The synchronization should be done on
-> > +	 * recessive to dominant level change.
-> > +	 */
-> > +	ES58X_SINGLE_SYNC_EDGE = 1,
-> > +
-> > +	/* In addition to the ISO CAN specification, a double
-> > +	 * synchronization is also supported: recessive to dominant
-> > +	 * level change and dominant to recessive level change.
-> > +	 */
-> > +	ES58X_DUAL_SYNC_EDGE = 2
+The config item only shows up when CONFIG_CAN is selected and then ISO 
+15765-2 should be enabled too. I have implemented and maintained the 
+out-of-tree driver for ~12 years now and the people have real problems 
+using e.g. Ubuntu with signed kernel modules when they need this protocol.
+
+Therefore the option should default to 'y' to make sure the common 
+distros (that enable CONFIG_CAN) enable ISO-TP too.
+
+>> +	help
+>> +	  CAN Transport Protocols offer support for segmented Point-to-Point
+>> +	  communication between CAN nodes via two defined CAN Identifiers.
+>> +	  As CAN frames can only transport a small amount of data bytes
+>> +	  (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+>> +	  segmentation is needed to transport longer PDUs as needed e.g. for
+>> +	  vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
+>> +	  This protocol driver implements data transfers according to
+>> +	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
+>> +
+>>   source "drivers/net/can/Kconfig"
+>>   
+>>   endif
 > 
-> >We don't have a setting in the CAN framework for this....
-
-The idea here was just to let know people that the option exists so
-that if someone needs the feature one day, he or she can hack the
-driver for his or her own use.
-
-Is it OK to keep it (maybe with a comment such as "not implemented in
-this driver") or should it be simply removed?
-
-There are other similar references in other files. Will change these
-accordingly to your answer on above question.
-
-> > +/**
-> > + * struct es58x_abstracted_can_frame - Common structure to hold can
-> > + *	frame information.
+>> +#define CAN_ISOTP_VERSION "20200928"
 > 
-> why do you have an itermediate can frame format? We have the struct can_frame
-> and the skb for this.
+> We've been removing such version strings throughout the drivers.
+> Kernel version should be sufficient for in-tree modules.
 
-The goal of this structure was to factorize code when calculating the
-CAN flags. I will try to rethink this part in v4.
+Yes. Good point.
+I will send a separate patch which removes all the VERSION information 
+from the entire CAN bus subsystem (core, raw, bcm, gw).
 
-> > +union es58x_urb_cmd {
-> > +	u8 raw_cmd[0];
+>> +static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
+>> +{
+>> +	struct isotp_sock *so = container_of(hrtimer, struct isotp_sock,
+>> +					     txtimer);
+>> +	struct sock *sk = &so->sk;
+>> +	struct sk_buff *skb;
+>> +	struct net_device *dev;
+>> +	struct canfd_frame *cf;
+>> +	enum hrtimer_restart restart = HRTIMER_NORESTART;
+>> +	int can_send_ret;
+>> +	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
+>> +
+>> +	switch (so->tx.state) {
+>> +	case ISOTP_WAIT_FC:
+>> +	case ISOTP_WAIT_FIRST_FC:
+>> +
+>> +		/* we did not get any flow control frame in time */
+>> +
+>> +		/* report 'communication error on send' */
+>> +		sk->sk_err = ECOMM;
+>> +		if (!sock_flag(sk, SOCK_DEAD))
+>> +			sk->sk_error_report(sk);
+>> +
+>> +		/* reset tx state */
+>> +		so->tx.state = ISOTP_IDLE;
+>> +		wake_up_interruptible(&so->wait);
+>> +		break;
+>> +
+>> +	case ISOTP_SENDING:
+>> +
+>> +		/* push out the next segmented pdu */
+>> +		dev = dev_get_by_index(sock_net(sk), so->ifindex);
+>> +		if (!dev)
+>> +			break;
+>> +
+>> +isotp_tx_burst:
+>> +		skb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv),
+>> +				gfp_any());
 > 
-> I have to polish my C, what's an empty array in the beginning of a struct?
-
-This is not a struct but a union (it would indeed make no sense at the
-beginning of a struct).
-
-Because it is in a union, the order of the fields does not make a
-difference (if you prefer this to be at the end, I can fix it).
-
-This field is used to cast the union to an u8 array. Because the
-length is unknown it is declared as empty.
-
-For reference, I could at least find a few other references of union
-starting with an empty array in the kernel. One example here:
-https://elixir.bootlin.com/linux/latest/source/include/linux/bpf.h#L821
-
+> This is always in a timer context, so no need for gfp_any(), right?
 > 
-> > +/**
-> > + * struct es58x_priv - All information specific to a can channel.
-> > + * @can: struct can_priv must be the first member (Socket CAN relies
-> > + *	on the fact that function netdev_priv() returns a pointer to
-> > + *	a struct can_priv).
-> > + * @es58x_dev: pointer to the corresponding ES58X device.
-> > + * @echo_skb_spinlock: Spinlock to protect the access to the echo skb
-> > + *	FIFO.
-> > + * @current_packet_idx: Keeps track of the packet indexes.
-> > + * @echo_skb_tail_idx: beginning of the echo skb FIFO, i.e. index of
-> > + *	the first element.
-> > + * @echo_skb_head_idx: end of the echo skb FIFO plus one, i.e. first
-> > + *	free index.
-> > + * @num_echo_skb: actual number of elements in the FIFO. Thus, the end
-> > + *	of the FIFO is echo_skb_head = (echo_skb_tail_idx +
-> > + *	num_echo_skb) % can.echo_skb_max.
-> > + * @tx_urb: Used as a buffer to concatenate the TX messages and to do
-> > + *	a bulk send. Please refer to es58x_start_xmit() for more
-> > + *	details.
-> > + * @tx_can_msg_is_fd: false: all messages in @tx_urb are non-FD CAN,
-> > + *	true: all messages in @tx_urb are CAN-FD. Rationale: ES58X FD
-> > + *	devices do not allow to mix standard and FD CAN in one single
-> > + *	bulk transmission.
-> > + * @tx_can_msg_cnt: Number of messages in @tx_urb.
-> > + * @err_passive_before_rtx_success: The ES58X device might enter in a
-> > + *	state in which it keeps alternating between error passive
-> > + *	and active state. This counter keeps track of the number of
-> > + *	error passive and if it gets bigger than
-> > + *	ES58X_CONSECUTIVE_ERR_PASSIVE_MAX, es58x_rx_err_msg() will
-> > + *	force the status to bus-off.
+
+Some code from the time where hrtimer was only in hard-irq context. Will 
+fix that too.
+
+>> +		if (!skb) {
+>> +			dev_put(dev);
+>> +			break;
+>> +		}
+>> +
+>> +		can_skb_reserve(skb);
+>> +		can_skb_prv(skb)->ifindex = dev->ifindex;
+>> +		can_skb_prv(skb)->skbcnt = 0;
+>> +
+>> +		cf = (struct canfd_frame *)skb->data;
+>> +		skb_put(skb, so->ll.mtu);
+>> +
+>> +		/* create consecutive frame */
+>> +		isotp_fill_dataframe(cf, so, ae, 0);
+>> +
+>> +		/* place consecutive frame N_PCI in appropriate index */
+>> +		cf->data[ae] = N_PCI_CF | so->tx.sn++;
+>> +		so->tx.sn %= 16;
+>> +		so->tx.bs++;
+>> +
+>> +		if (so->ll.mtu == CANFD_MTU)
+>> +			cf->flags = so->ll.tx_flags;
+>> +
+>> +		skb->dev = dev;
+>> +		can_skb_set_owner(skb, sk);
+>> +
+>> +		can_send_ret = can_send(skb, 1);
+>> +		if (can_send_ret)
+>> +			printk_once(KERN_NOTICE "can-isotp: %s: can_send_ret %d\n",
+>> +				    __func__, can_send_ret);
 > 
-> Is this a bug or a feature?
+> pr_notice_once()
 
-This is a bug of the device.
+Ok. Will change that at the several occurrences.
 
-Rationale: According to ISO 11898-1, paragraph 12.1.4.2 "Error
-counting", the two only possible scenarios to decrements the error
-counter are "After the successful transmission of a frame" (paragraph
-g) and "After the successful reception of a frame" (paragraph h).
+>> +
+>> +		if (so->tx.idx >= so->tx.len) {
+>> +			/* we are done */
+>> +			so->tx.state = ISOTP_IDLE;
+>> +			dev_put(dev);
+>> +			wake_up_interruptible(&so->wait);
+>> +			break;
+>> +		}
+>> +
+>> +		if (so->txfc.bs && so->tx.bs >= so->txfc.bs) {
+>> +			/* stop and wait for FC */
+>> +			so->tx.state = ISOTP_WAIT_FC;
+>> +			dev_put(dev);
+>> +			hrtimer_set_expires(&so->txtimer,
+>> +					    ktime_add(ktime_get(),
+>> +						      ktime_set(1, 0)));
+>> +			restart = HRTIMER_RESTART;
+>> +			break;
+>> +		}
+>> +
+>> +		/* no gap between data frames needed => use burst mode */
+>> +		if (!so->tx_gap)
+>> +			goto isotp_tx_burst;
+>> +
+>> +		/* start timer to send next data frame with correct delay */
+>> +		dev_put(dev);
+>> +		hrtimer_set_expires(&so->txtimer,
+>> +				    ktime_add(ktime_get(), so->tx_gap));
+>> +		restart = HRTIMER_RESTART;
+>> +		break;
+>> +
+>> +	default:
+>> +		WARN_ON_ONCE(1);
+>> +	}
+>> +
+>> +	return restart;
+>> +}
 
-Here, the device switch from error passive state to error active state
-without any successful Tx or Rx of a frame. This means that the error
-counter does not behave as stipulated in the ISO.
+Thanks for the review!
 
-When the issue occurs, the only solution would be to set down the
-network. Forcing the bus off allows at least the user to recover (with
-restart or restart-ms).
+Will send the patches for the net-next tree later this day.
 
-For information, this issue was only witnessed when the device is
-trying to send frames on a bus which is already at 100% load.
-
-Example to reproduce: have can0 and can1 on the same bus and do:
-cangen -g0 can0
-cangen -g0 can1
-
-Note: development team of the device's firmware was informed of this
-issue and will consider how to fix it.
-
-> > +#define ES58X_SIZEOF_ES58X_DEVICE(es58x_dev_param)			\
-> > +	(offsetof(struct es58x_device, rx_cmd_buf) +			\
-> > +		(es58x_dev_param)->rx_urb_cmd_max_len)
-> 
-> can this be made a static inline?
-
-Yes. Will be fixed in v4.
-
-> > + * Must be a macro in order to retrieve the actual size using
-> > + * sizeof(). Can be use with any of the messages which have a fixed
-> > + * length. Check for an exact match of the size.
-> 
-> You can provide an outer macro that does the sizeof() and then calls the a
-> normal (static inline) function to do the actual work. Applied to the next 3 macros.
-
-OK. Will be fixed in v4.
-
-> > +#define ES58X_SIZEOF_URB_CMD(es58x_urb_cmd_type, msg_field)		\
-> > +	(offsetof(es58x_urb_cmd_type, raw_msg)				\
-> > +		+ sizeof_field(es58x_urb_cmd_type, msg_field)		\
-> > +		+ sizeof_field(es58x_urb_cmd_type,			\
-> > +			reserved_for_crc16_do_not_use))
-> 
-> static inline?
-
-Sorry but this one can not be converted into a static inline: the
-first argument is a type (that will become the first argument of
-offsetof() and sizeof_field()).
-
-
-One more time, thank you for your time and your review!
-
-Yours sincerely,
-Vincent Mailhol
+Best regards,
+Oliver
