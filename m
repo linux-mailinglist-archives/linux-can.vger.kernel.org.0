@@ -2,38 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FF8289CFD
-	for <lists+linux-can@lfdr.de>; Sat, 10 Oct 2020 03:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30F5289D29
+	for <lists+linux-can@lfdr.de>; Sat, 10 Oct 2020 03:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728807AbgJJBUR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Oct 2020 21:20:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50242 "EHLO mail.kernel.org"
+        id S1729330AbgJJBmx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Oct 2020 21:42:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729301AbgJJBBY (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 9 Oct 2020 21:01:24 -0400
+        id S1729487AbgJJBJd (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 9 Oct 2020 21:09:33 -0400
 Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AAEB72076E;
-        Sat, 10 Oct 2020 00:57:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DAF282076E;
+        Sat, 10 Oct 2020 01:09:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602291472;
-        bh=Xi+GuY+Ub0nJOsqlOxa+qb/oTjzimJdgMqtKwE2hq20=;
+        s=default; t=1602292168;
+        bh=zVXI7Xsxrr9zJ7BZ8/DTnYCiJVp2vlRnm6jMoWz51Mg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=xcieWmrBUjOBeKonPtzEwThjAodRQ9IVSJBcnG5ho7Wb3o6N5ac2gVnL4C0sGHj2U
-         NBXnKlyM4M3M2n/p6OKveV0GWyfamse066k6maXOIbIKJNMbU9ESSgi4B6PjdYOGKl
-         vHL8P/jNJhwVHqPPSdR/6V9dfOXhZo5ps86c+SrY=
-Date:   Fri, 9 Oct 2020 17:57:51 -0700
+        b=S2YcdyyCDQlRS810sfuniQpx/6QP/jTQZgLiWj7jDRG9jIFDql2pMPzi4IT1UN87s
+         N7azef/m4bC3Xnl4JQXAfKa48XVudExm/PDHlzvxToExVjqTSfi7N2sIJXXEfM6EEg
+         pwashQ+qmfrj6APBb0XoKdQxQbsSA2jdc4DHAxDY=
+Date:   Fri, 9 Oct 2020 18:09:26 -0700
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: Re: [PATCH 08/17] can: add ISO 15765-2:2016 transport protocol
-Message-ID: <20201009175751.5c54097f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201007213159.1959308-9-mkl@pengutronix.de>
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: pull-request: can-next 2020-10-07
+Message-ID: <20201009180926.2a85bc8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201007213159.1959308-1-mkl@pengutronix.de>
 References: <20201007213159.1959308-1-mkl@pengutronix.de>
-        <20201007213159.1959308-9-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -41,181 +39,40 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed,  7 Oct 2020 23:31:50 +0200 Marc Kleine-Budde wrote:
-> From: Oliver Hartkopp <socketcan@hartkopp.net>
+On Wed,  7 Oct 2020 23:31:42 +0200 Marc Kleine-Budde wrote:
+> The first 3 patches are by me and fix several warnings found when compiling the 
+> kernel with W=1.
 > 
-> CAN Transport Protocols offer support for segmented Point-to-Point
-> communication between CAN nodes via two defined CAN Identifiers.
-> As CAN frames can only transport a small amount of data bytes
-> (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
-> segmentation is needed to transport longer PDUs as needed e.g. for
-> vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
-> This protocol driver implements data transfers according to
-> ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
+> Lukas Bulwahn's patch adjusts the MAINTAINERS file, to accommodate the renaming 
+> of the mcp251xfd driver.
+> 
+> Vincent Mailhol contributes 3 patches for the CAN networking layer. First error
+> queue support is added the the CAN RAW protocol. The second patch converts the
+> get_can_dlc() and get_canfd_dlc() in-Kernel-only macros from using __u8 to u8.
+> The third patch adds a helper function to calculate the length of one bit in in
+> multiple of time quanta.
+> 
+> Oliver Hartkopp's patch add support for the ISO 15765-2:2016 transport protocol
+> to the CAN stack.
+> 
+> Three patches by Lad Prabhakar add documentation for various new rcar
+> controllers to the device tree bindings of the rcar_can and rcan_canfd driver.
+> 
+> Michael Walle's patch adds various processors to the flexcan driver binding
+> documentation.
+> 
+> The next two patches are by me and target the flexcan driver aswell. The remove
+> the ack_grp and ack_bit from the fsl,stop-mode DT property and the driver, as
+> they are not used anymore. As these are the last two arguments this change will
+> not break existing device trees.
+> 
+> The last three patches are by Srinivas Neeli and target the xilinx_can driver.
+> The first one increases the lower limit for the bit rate prescaler to 2, the
+> other two fix sparse and coverity findings.
 
-A few random things jump out here at a quick scan. Most of them are 
-not important enough to have to be addressed, but please follow up on
-the 'default y' thing ASAP.
+Pulled, thank you!
 
-> +/*
-> + * Remark on CAN_ISOTP_DEFAULT_RECV_* values:
-> + *
-> + * We can strongly assume, that the Linux Kernel implementation of
-> + * CAN_ISOTP is capable to run with BS=0, STmin=0 and WFTmax=0.
-> + * But as we like to be able to behave as a commonly available ECU,
-> + * these default settings can be changed via sockopts.
-> + * For that reason the STmin value is intentionally _not_ checked for
-> + * consistency and copied directly into the flow control (FC) frame.
-> + *
-
-spurious empty comment line
-
-> + */
-> +
-> +#endif /* !_UAPI_CAN_ISOTP_H */
-> diff --git a/net/can/Kconfig b/net/can/Kconfig
-> index 25436a715db3..021fe03a8ed6 100644
-> --- a/net/can/Kconfig
-> +++ b/net/can/Kconfig
-> @@ -55,6 +55,19 @@ config CAN_GW
->  
->  source "net/can/j1939/Kconfig"
->  
-> +config CAN_ISOTP
-> +	tristate "ISO 15765-2:2016 CAN transport protocol"
-> +	default y
-
-default should not be y unless there is a very good reason.
-I don't see such reason here. This is new functionality, users
-can enable it if they need it.
-
-> +	help
-> +	  CAN Transport Protocols offer support for segmented Point-to-Point
-> +	  communication between CAN nodes via two defined CAN Identifiers.
-> +	  As CAN frames can only transport a small amount of data bytes
-> +	  (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
-> +	  segmentation is needed to transport longer PDUs as needed e.g. for
-> +	  vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
-> +	  This protocol driver implements data transfers according to
-> +	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
-> +
->  source "drivers/net/can/Kconfig"
->  
->  endif
-
-> +#define CAN_ISOTP_VERSION "20200928"
-
-We've been removing such version strings throughout the drivers.
-Kernel version should be sufficient for in-tree modules.
-
-> +static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
-> +{
-> +	struct isotp_sock *so = container_of(hrtimer, struct isotp_sock,
-> +					     txtimer);
-> +	struct sock *sk = &so->sk;
-> +	struct sk_buff *skb;
-> +	struct net_device *dev;
-> +	struct canfd_frame *cf;
-> +	enum hrtimer_restart restart = HRTIMER_NORESTART;
-> +	int can_send_ret;
-> +	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
-> +
-> +	switch (so->tx.state) {
-> +	case ISOTP_WAIT_FC:
-> +	case ISOTP_WAIT_FIRST_FC:
-> +
-> +		/* we did not get any flow control frame in time */
-> +
-> +		/* report 'communication error on send' */
-> +		sk->sk_err = ECOMM;
-> +		if (!sock_flag(sk, SOCK_DEAD))
-> +			sk->sk_error_report(sk);
-> +
-> +		/* reset tx state */
-> +		so->tx.state = ISOTP_IDLE;
-> +		wake_up_interruptible(&so->wait);
-> +		break;
-> +
-> +	case ISOTP_SENDING:
-> +
-> +		/* push out the next segmented pdu */
-> +		dev = dev_get_by_index(sock_net(sk), so->ifindex);
-> +		if (!dev)
-> +			break;
-> +
-> +isotp_tx_burst:
-> +		skb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv),
-> +				gfp_any());
-
-This is always in a timer context, so no need for gfp_any(), right?
-
-> +		if (!skb) {
-> +			dev_put(dev);
-> +			break;
-> +		}
-> +
-> +		can_skb_reserve(skb);
-> +		can_skb_prv(skb)->ifindex = dev->ifindex;
-> +		can_skb_prv(skb)->skbcnt = 0;
-> +
-> +		cf = (struct canfd_frame *)skb->data;
-> +		skb_put(skb, so->ll.mtu);
-> +
-> +		/* create consecutive frame */
-> +		isotp_fill_dataframe(cf, so, ae, 0);
-> +
-> +		/* place consecutive frame N_PCI in appropriate index */
-> +		cf->data[ae] = N_PCI_CF | so->tx.sn++;
-> +		so->tx.sn %= 16;
-> +		so->tx.bs++;
-> +
-> +		if (so->ll.mtu == CANFD_MTU)
-> +			cf->flags = so->ll.tx_flags;
-> +
-> +		skb->dev = dev;
-> +		can_skb_set_owner(skb, sk);
-> +
-> +		can_send_ret = can_send(skb, 1);
-> +		if (can_send_ret)
-> +			printk_once(KERN_NOTICE "can-isotp: %s: can_send_ret %d\n",
-> +				    __func__, can_send_ret);
-
-pr_notice_once()
-
-> +
-> +		if (so->tx.idx >= so->tx.len) {
-> +			/* we are done */
-> +			so->tx.state = ISOTP_IDLE;
-> +			dev_put(dev);
-> +			wake_up_interruptible(&so->wait);
-> +			break;
-> +		}
-> +
-> +		if (so->txfc.bs && so->tx.bs >= so->txfc.bs) {
-> +			/* stop and wait for FC */
-> +			so->tx.state = ISOTP_WAIT_FC;
-> +			dev_put(dev);
-> +			hrtimer_set_expires(&so->txtimer,
-> +					    ktime_add(ktime_get(),
-> +						      ktime_set(1, 0)));
-> +			restart = HRTIMER_RESTART;
-> +			break;
-> +		}
-> +
-> +		/* no gap between data frames needed => use burst mode */
-> +		if (!so->tx_gap)
-> +			goto isotp_tx_burst;
-> +
-> +		/* start timer to send next data frame with correct delay */
-> +		dev_put(dev);
-> +		hrtimer_set_expires(&so->txtimer,
-> +				    ktime_add(ktime_get(), so->tx_gap));
-> +		restart = HRTIMER_RESTART;
-> +		break;
-> +
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +	}
-> +
-> +	return restart;
-> +}
+Would you mind in the future adding net-next to the patch subject like
+we do for normal patches directly applied to net-next? That way our
+build bot will test the patches. I should just teach it to recognize
+PRs but I haven't found the time, yet :(
