@@ -2,99 +2,220 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37B7289028
-	for <lists+linux-can@lfdr.de>; Fri,  9 Oct 2020 19:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FF8289CFD
+	for <lists+linux-can@lfdr.de>; Sat, 10 Oct 2020 03:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731960AbgJIRlG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Oct 2020 13:41:06 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:53881 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731889AbgJIRlE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Oct 2020 13:41:04 -0400
-X-ASG-Debug-ID: 1602265260-0a881813ef98a3a0001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (94.105.104.9.dyn.edpnet.net [94.105.104.9]) by relay-b03.edpnet.be with ESMTP id Br89Y4HgeGpfhNm1; Fri, 09 Oct 2020 19:41:00 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 94.105.104.9.dyn.edpnet.net[94.105.104.9]
-X-Barracuda-Apparent-Source-IP: 94.105.104.9
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id B80DA109BDC7;
-        Fri,  9 Oct 2020 19:41:00 +0200 (CEST)
-Date:   Fri, 9 Oct 2020 19:40:57 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+        id S1728807AbgJJBUR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Oct 2020 21:20:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50242 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729301AbgJJBBY (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 9 Oct 2020 21:01:24 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AAEB72076E;
+        Sat, 10 Oct 2020 00:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602291472;
+        bh=Xi+GuY+Ub0nJOsqlOxa+qb/oTjzimJdgMqtKwE2hq20=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=xcieWmrBUjOBeKonPtzEwThjAodRQ9IVSJBcnG5ho7Wb3o6N5ac2gVnL4C0sGHj2U
+         NBXnKlyM4M3M2n/p6OKveV0GWyfamse066k6maXOIbIKJNMbU9ESSgi4B6PjdYOGKl
+         vHL8P/jNJhwVHqPPSdR/6V9dfOXhZo5ps86c+SrY=
+Date:   Fri, 9 Oct 2020 17:57:51 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: mcp2517fd: transmit errors
-Message-ID: <20201009174057.GB16382@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: mcp2517fd: transmit errors
-Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-References: <20201009141643.GE7238@x1.vandijck-laurijssen.be>
- <4b7e3856-ea32-ad61-2608-19923d7e4b0d@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: Re: [PATCH 08/17] can: add ISO 15765-2:2016 transport protocol
+Message-ID: <20201009175751.5c54097f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201007213159.1959308-9-mkl@pengutronix.de>
+References: <20201007213159.1959308-1-mkl@pengutronix.de>
+        <20201007213159.1959308-9-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4b7e3856-ea32-ad61-2608-19923d7e4b0d@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 94.105.104.9.dyn.edpnet.net[94.105.104.9]
-X-Barracuda-Start-Time: 1602265260
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1735
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: SPAM GLOBAL 0.9029 1.0000 3.2573
-X-Barracuda-Spam-Score: 3.26
-X-Barracuda-Spam-Status: No, SCORE=3.26 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.85175
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 09 Oct 2020 18:24:02 +0200, Marc Kleine-Budde wrote:
-> On 10/9/20 4:16 PM, Kurt Van Dijck wrote:
-> > I'm using a v5.4 kernel now, with backported 'can: mcp25xxfd: initial commit'.
-> > I did focus up to now to CAN recv performance, but now I face another
-> > issue. I have errors transmitting to CAN.
+On Wed,  7 Oct 2020 23:31:50 +0200 Marc Kleine-Budde wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
 > 
-> What kind of errors?
-First observation is that no response is received for some requests.
-This is very high level, I need to investigate if the request is really
-sent. This is a needle in a haystack.
-Due to the transmit error counter in `ip -s link show can0`, I guess
-it's not sent.
-> 
-> > It's unstable.
-> 
-> What does that mean?
+> CAN Transport Protocols offer support for segmented Point-to-Point
+> communication between CAN nodes via two defined CAN Identifiers.
+> As CAN frames can only transport a small amount of data bytes
+> (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+> segmentation is needed to transport longer PDUs as needed e.g. for
+> vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
+> This protocol driver implements data transfers according to
+> ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
 
-Each burst of >x CAN frames produces the problem.
-I still figure x in this statement.
+A few random things jump out here at a quick scan. Most of them are 
+not important enough to have to be addressed, but please follow up on
+the 'default y' thing ASAP.
 
-I'm porting the problem to my desk to reproduce.
+> +/*
+> + * Remark on CAN_ISOTP_DEFAULT_RECV_* values:
+> + *
+> + * We can strongly assume, that the Linux Kernel implementation of
+> + * CAN_ISOTP is capable to run with BS=0, STmin=0 and WFTmax=0.
+> + * But as we like to be able to behave as a commonly available ECU,
+> + * these default settings can be changed via sockopts.
+> + * For that reason the STmin value is intentionally _not_ checked for
+> + * consistency and copied directly into the flow control (FC) frame.
+> + *
 
-> 
-> > I need to collect more details, and it is now about focus number 1.
-> > 
-> > I managed to decrease the urgency for my project by inserting a delay
-> > in the most busy transmitter.
-> > 
-> > Any ideas what to look for?
-> 
-> The mcp2517fd suffers from the MAB TX underflow errata: See 1. in
-> http://ww1.microchip.com/downloads/en/DeviceDoc/MCP2517FD-External-CAN-FD-Controller-with-SPI-Interface-20005688B.pdf
-> 
-> Compile the driver with "#define DEBUG" or remove the
-> "MCP251XFD_QUIRK_MAB_NO_WARN" from the mcp251xfd_devtype_data_mcp2517fd. Then
-> you should see an error message when the chip switches modes due to the MAB
-> underrun.
-I'll do this.
+spurious empty comment line
 
-> 
-> If it's that errors there's not so much you can do, maybe optimize the SPI host
-> driver (or use a mcp2518fd). Which SoC are you on?
-still the imx8mm, on a variscite board, with suboptimal 20MHz
-oscillator, 8.5Mhz SPI speed, 1Mbit CAN
+> + */
+> +
+> +#endif /* !_UAPI_CAN_ISOTP_H */
+> diff --git a/net/can/Kconfig b/net/can/Kconfig
+> index 25436a715db3..021fe03a8ed6 100644
+> --- a/net/can/Kconfig
+> +++ b/net/can/Kconfig
+> @@ -55,6 +55,19 @@ config CAN_GW
+>  
+>  source "net/can/j1939/Kconfig"
+>  
+> +config CAN_ISOTP
+> +	tristate "ISO 15765-2:2016 CAN transport protocol"
+> +	default y
 
-Kurt
+default should not be y unless there is a very good reason.
+I don't see such reason here. This is new functionality, users
+can enable it if they need it.
+
+> +	help
+> +	  CAN Transport Protocols offer support for segmented Point-to-Point
+> +	  communication between CAN nodes via two defined CAN Identifiers.
+> +	  As CAN frames can only transport a small amount of data bytes
+> +	  (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+> +	  segmentation is needed to transport longer PDUs as needed e.g. for
+> +	  vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
+> +	  This protocol driver implements data transfers according to
+> +	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
+> +
+>  source "drivers/net/can/Kconfig"
+>  
+>  endif
+
+> +#define CAN_ISOTP_VERSION "20200928"
+
+We've been removing such version strings throughout the drivers.
+Kernel version should be sufficient for in-tree modules.
+
+> +static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
+> +{
+> +	struct isotp_sock *so = container_of(hrtimer, struct isotp_sock,
+> +					     txtimer);
+> +	struct sock *sk = &so->sk;
+> +	struct sk_buff *skb;
+> +	struct net_device *dev;
+> +	struct canfd_frame *cf;
+> +	enum hrtimer_restart restart = HRTIMER_NORESTART;
+> +	int can_send_ret;
+> +	int ae = (so->opt.flags & CAN_ISOTP_EXTEND_ADDR) ? 1 : 0;
+> +
+> +	switch (so->tx.state) {
+> +	case ISOTP_WAIT_FC:
+> +	case ISOTP_WAIT_FIRST_FC:
+> +
+> +		/* we did not get any flow control frame in time */
+> +
+> +		/* report 'communication error on send' */
+> +		sk->sk_err = ECOMM;
+> +		if (!sock_flag(sk, SOCK_DEAD))
+> +			sk->sk_error_report(sk);
+> +
+> +		/* reset tx state */
+> +		so->tx.state = ISOTP_IDLE;
+> +		wake_up_interruptible(&so->wait);
+> +		break;
+> +
+> +	case ISOTP_SENDING:
+> +
+> +		/* push out the next segmented pdu */
+> +		dev = dev_get_by_index(sock_net(sk), so->ifindex);
+> +		if (!dev)
+> +			break;
+> +
+> +isotp_tx_burst:
+> +		skb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv),
+> +				gfp_any());
+
+This is always in a timer context, so no need for gfp_any(), right?
+
+> +		if (!skb) {
+> +			dev_put(dev);
+> +			break;
+> +		}
+> +
+> +		can_skb_reserve(skb);
+> +		can_skb_prv(skb)->ifindex = dev->ifindex;
+> +		can_skb_prv(skb)->skbcnt = 0;
+> +
+> +		cf = (struct canfd_frame *)skb->data;
+> +		skb_put(skb, so->ll.mtu);
+> +
+> +		/* create consecutive frame */
+> +		isotp_fill_dataframe(cf, so, ae, 0);
+> +
+> +		/* place consecutive frame N_PCI in appropriate index */
+> +		cf->data[ae] = N_PCI_CF | so->tx.sn++;
+> +		so->tx.sn %= 16;
+> +		so->tx.bs++;
+> +
+> +		if (so->ll.mtu == CANFD_MTU)
+> +			cf->flags = so->ll.tx_flags;
+> +
+> +		skb->dev = dev;
+> +		can_skb_set_owner(skb, sk);
+> +
+> +		can_send_ret = can_send(skb, 1);
+> +		if (can_send_ret)
+> +			printk_once(KERN_NOTICE "can-isotp: %s: can_send_ret %d\n",
+> +				    __func__, can_send_ret);
+
+pr_notice_once()
+
+> +
+> +		if (so->tx.idx >= so->tx.len) {
+> +			/* we are done */
+> +			so->tx.state = ISOTP_IDLE;
+> +			dev_put(dev);
+> +			wake_up_interruptible(&so->wait);
+> +			break;
+> +		}
+> +
+> +		if (so->txfc.bs && so->tx.bs >= so->txfc.bs) {
+> +			/* stop and wait for FC */
+> +			so->tx.state = ISOTP_WAIT_FC;
+> +			dev_put(dev);
+> +			hrtimer_set_expires(&so->txtimer,
+> +					    ktime_add(ktime_get(),
+> +						      ktime_set(1, 0)));
+> +			restart = HRTIMER_RESTART;
+> +			break;
+> +		}
+> +
+> +		/* no gap between data frames needed => use burst mode */
+> +		if (!so->tx_gap)
+> +			goto isotp_tx_burst;
+> +
+> +		/* start timer to send next data frame with correct delay */
+> +		dev_put(dev);
+> +		hrtimer_set_expires(&so->txtimer,
+> +				    ktime_add(ktime_get(), so->tx_gap));
+> +		restart = HRTIMER_RESTART;
+> +		break;
+> +
+> +	default:
+> +		WARN_ON_ONCE(1);
+> +	}
+> +
+> +	return restart;
+> +}
