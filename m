@@ -2,57 +2,144 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B86A28A3B8
-	for <lists+linux-can@lfdr.de>; Sun, 11 Oct 2020 01:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D090A28A3AC
+	for <lists+linux-can@lfdr.de>; Sun, 11 Oct 2020 01:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731649AbgJJW4o (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 10 Oct 2020 18:56:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48340 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730437AbgJJS5V (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 10 Oct 2020 14:57:21 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AED312227E;
-        Sat, 10 Oct 2020 17:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602351161;
-        bh=6Nfiiu/X34lvAQOdoc6RiN2TjDrwhd7WB1u3kM3Ctyg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=yLhcX5LPgaGcZgPC7sRf1EIKEzArXlEgDuWuL9h2+93h0sofOMBFprKRh8CYXgkqM
-         tDkPqV3L97z5MiG/uyxc3MSQRA02Tmee1YzRRkijpyxcnig/Am0O+0PrPFQ2S9nvST
-         /FuIOgH1lQxWvYMFK827gOYbMIoyNBKB+fpAQ+yU=
-Date:   Sat, 10 Oct 2020 10:32:40 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: pull-request: can 2020-10-08
-Message-ID: <20201010103240.11c8e69d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201008214022.2044402-1-mkl@pengutronix.de>
-References: <20201008214022.2044402-1-mkl@pengutronix.de>
+        id S2390181AbgJJW4r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 10 Oct 2020 18:56:47 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.163]:20598 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388184AbgJJUt7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 10 Oct 2020 16:49:59 -0400
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0lu8GW2/7Zq6MBXY="
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+        by smtp.strato.de (RZmta 47.2.1 DYNA|AUTH)
+        with ESMTPSA id D0b41cw9AKnbMGS
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sat, 10 Oct 2020 22:49:37 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     kuba@kernel.org, netdev@vger.kernel.org
+Cc:     mkl@pengutronix.de, davem@davemloft.net, linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH net-next 1/2] can-isotp: implement cleanups / improvements from review
+Date:   Sat, 10 Oct 2020 22:49:08 +0200
+Message-Id: <20201010204909.2059-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu,  8 Oct 2020 23:40:19 +0200 Marc Kleine-Budde wrote:
-> The first patch is part of my pull request "linux-can-fixes-for-5.9-20201006",
-> so consider that one obsolete and take this instead.
-> 
-> The first patch is by Lucas Stach and fixes m_can driver by removing an
-> erroneous call to m_can_class_suspend() in runtime suspend. Which causes the
-> pinctrl state to get stuck on the "sleep" state, which breaks all CAN
-> functionality on SoCs where this state is defined.
-> 
-> The last two patches target the j1939 protocol: Cong Wang fixes a syzbot
-> finding of an uninitialized variable in the j1939 transport protocol. I
-> contribute a patch, that fixes the initialization of a same uninitialized
-> variable in a different function.
+As pointed out by Jakub Kicinski here:
+https://marc.info/?l=linux-can&m=160229286216008
+this patch addresses the remarked issues:
 
-Pulled, thanks!
+- remove empty lines in comment
+- remove default=y for CAN_ISOTP in Kconfig
+- make use of pr_notice_once()
+- use GFP_KERNEL instead of gfp_any() in soft hrtimer context
 
-Since we missed 5.9 would you like me to queue these up for stable?
+The version strings in the CAN subsystem are removed by a separate patch.
+
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ include/uapi/linux/can/isotp.h |  4 +---
+ net/can/Kconfig                |  3 ++-
+ net/can/isotp.c                | 14 +++++++-------
+ 3 files changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
+index 553006509f4e..accf0efa46f4 100644
+--- a/include/uapi/linux/can/isotp.h
++++ b/include/uapi/linux/can/isotp.h
+@@ -151,8 +151,7 @@ struct can_isotp_ll_options {
+ #define CAN_ISOTP_DEFAULT_LL_TX_DL	CAN_MAX_DLEN
+ #define CAN_ISOTP_DEFAULT_LL_TX_FLAGS	0
+ 
+-/*
+- * Remark on CAN_ISOTP_DEFAULT_RECV_* values:
++/* Remark on CAN_ISOTP_DEFAULT_RECV_* values:
+  *
+  * We can strongly assume, that the Linux Kernel implementation of
+  * CAN_ISOTP is capable to run with BS=0, STmin=0 and WFTmax=0.
+@@ -160,7 +159,6 @@ struct can_isotp_ll_options {
+  * these default settings can be changed via sockopts.
+  * For that reason the STmin value is intentionally _not_ checked for
+  * consistency and copied directly into the flow control (FC) frame.
+- *
+  */
+ 
+ #endif /* !_UAPI_CAN_ISOTP_H */
+diff --git a/net/can/Kconfig b/net/can/Kconfig
+index 021fe03a8ed6..224e5e0283a9 100644
+--- a/net/can/Kconfig
++++ b/net/can/Kconfig
+@@ -57,7 +57,6 @@ source "net/can/j1939/Kconfig"
+ 
+ config CAN_ISOTP
+ 	tristate "ISO 15765-2:2016 CAN transport protocol"
+-	default y
+ 	help
+ 	  CAN Transport Protocols offer support for segmented Point-to-Point
+ 	  communication between CAN nodes via two defined CAN Identifiers.
+@@ -67,6 +66,8 @@ config CAN_ISOTP
+ 	  vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
+ 	  This protocol driver implements data transfers according to
+ 	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
++	  If you want to perform automotive vehicle diagnostic services (UDS),
++	  say 'y'.
+ 
+ source "drivers/net/can/Kconfig"
+ 
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index e6ff032b5426..bc3a722c200b 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -222,8 +222,8 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
+ 
+ 	can_send_ret = can_send(nskb, 1);
+ 	if (can_send_ret)
+-		printk_once(KERN_NOTICE "can-isotp: %s: can_send_ret %d\n",
+-			    __func__, can_send_ret);
++		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
++			       __func__, can_send_ret);
+ 
+ 	dev_put(dev);
+ 
+@@ -769,7 +769,7 @@ static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
+ 
+ isotp_tx_burst:
+ 		skb = alloc_skb(so->ll.mtu + sizeof(struct can_skb_priv),
+-				gfp_any());
++				GFP_KERNEL);
+ 		if (!skb) {
+ 			dev_put(dev);
+ 			break;
+@@ -798,8 +798,8 @@ static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
+ 
+ 		can_send_ret = can_send(skb, 1);
+ 		if (can_send_ret)
+-			printk_once(KERN_NOTICE "can-isotp: %s: can_send_ret %d\n",
+-				    __func__, can_send_ret);
++			pr_notice_once("can-isotp: %s: can_send_ret %d\n",
++				       __func__, can_send_ret);
+ 
+ 		if (so->tx.idx >= so->tx.len) {
+ 			/* we are done */
+@@ -942,8 +942,8 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	err = can_send(skb, 1);
+ 	dev_put(dev);
+ 	if (err) {
+-		printk_once(KERN_NOTICE "can-isotp: %s: can_send_ret %d\n",
+-			    __func__, err);
++		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
++			       __func__, err);
+ 		return err;
+ 	}
+ 
+-- 
+2.28.0
+
