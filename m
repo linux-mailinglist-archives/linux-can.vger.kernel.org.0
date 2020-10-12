@@ -2,37 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8930C28B492
-	for <lists+linux-can@lfdr.de>; Mon, 12 Oct 2020 14:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EB528B4BF
+	for <lists+linux-can@lfdr.de>; Mon, 12 Oct 2020 14:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388435AbgJLMZi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Oct 2020 08:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
+        id S1729643AbgJLMj0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Oct 2020 08:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388334AbgJLMZi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Oct 2020 08:25:38 -0400
+        with ESMTP id S1726348AbgJLMj0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Oct 2020 08:39:26 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197E4C0613D0
-        for <linux-can@vger.kernel.org>; Mon, 12 Oct 2020 05:25:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F8C0613D0
+        for <linux-can@vger.kernel.org>; Mon, 12 Oct 2020 05:39:26 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kRwtU-0000ax-MU; Mon, 12 Oct 2020 14:25:36 +0200
+        id 1kRx6q-000251-Nf; Mon, 12 Oct 2020 14:39:24 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:1287:4f51:d84:c644] (unknown [IPv6:2a03:f580:87bc:d400:1287:4f51:d84:c644])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 664F1577766;
-        Mon, 12 Oct 2020 12:25:35 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7FE1F577782;
+        Mon, 12 Oct 2020 12:39:23 +0000 (UTC)
 To:     linux-can@vger.kernel.org,
         Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 References: <20201009141643.GE7238@x1.vandijck-laurijssen.be>
  <4b7e3856-ea32-ad61-2608-19923d7e4b0d@pengutronix.de>
  <20201009174057.GB16382@x1.vandijck-laurijssen.be>
- <20201012122202.GB20394@x1.vandijck-laurijssen.be>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
 Subject: Re: mcp2517fd: transmit errors
-Message-ID: <01c8b502-f971-0006-077c-6d59f58b71b4@pengutronix.de>
-Date:   Mon, 12 Oct 2020 14:25:30 +0200
+Message-ID: <5b7d39c2-e1af-fe6c-0cb3-b2c0806efa96@pengutronix.de>
+Date:   Mon, 12 Oct 2020 14:39:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201012122202.GB20394@x1.vandijck-laurijssen.be>
+In-Reply-To: <20201009174057.GB16382@x1.vandijck-laurijssen.be>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="d2oQSlW2b230hRLuKAX2IcQ0EYW7RauYM"
+ boundary="Uqpote4DF5rgw9OccI2Wh4JwcQ16BcrRs"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,50 +112,71 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---d2oQSlW2b230hRLuKAX2IcQ0EYW7RauYM
-Content-Type: multipart/mixed; boundary="SrecB4bCKXIvrp8RIf75np3f7IEzGCLFC";
+--Uqpote4DF5rgw9OccI2Wh4JwcQ16BcrRs
+Content-Type: multipart/mixed; boundary="FSlOmt3CwfelCUYa0GE3TjgJ1kOnRqvP1";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: linux-can@vger.kernel.org,
  Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Message-ID: <01c8b502-f971-0006-077c-6d59f58b71b4@pengutronix.de>
+Message-ID: <5b7d39c2-e1af-fe6c-0cb3-b2c0806efa96@pengutronix.de>
 Subject: Re: mcp2517fd: transmit errors
 References: <20201009141643.GE7238@x1.vandijck-laurijssen.be>
  <4b7e3856-ea32-ad61-2608-19923d7e4b0d@pengutronix.de>
  <20201009174057.GB16382@x1.vandijck-laurijssen.be>
- <20201012122202.GB20394@x1.vandijck-laurijssen.be>
-In-Reply-To: <20201012122202.GB20394@x1.vandijck-laurijssen.be>
+In-Reply-To: <20201009174057.GB16382@x1.vandijck-laurijssen.be>
 
---SrecB4bCKXIvrp8RIf75np3f7IEzGCLFC
+--FSlOmt3CwfelCUYa0GE3TjgJ1kOnRqvP1
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 10/12/20 2:22 PM, Kurt Van Dijck wrote:
-> On Fri, 09 Oct 2020 19:40:57 +0200, Kurt Van Dijck wrote:
->> On Fri, 09 Oct 2020 18:24:02 +0200, Marc Kleine-Budde wrote:
->>> On 10/9/20 4:16 PM, Kurt Van Dijck wrote:
->>>> Any ideas what to look for?
->>>
->>> The mcp2517fd suffers from the MAB TX underflow errata: See 1. in
->>> http://ww1.microchip.com/downloads/en/DeviceDoc/MCP2517FD-External-CA=
-N-FD-Controller-with-SPI-Interface-20005688B.pdf
->>>
->>> Compile the driver with "#define DEBUG" or remove the
->>> "MCP251XFD_QUIRK_MAB_NO_WARN" from the mcp251xfd_devtype_data_mcp2517=
-fd. Then
->>> you should see an error message when the chip switches modes due to t=
-he MAB
->>> underrun.
->> I'll do this.
->=20
-> Yep, TX MAB underflow it is.
+On 10/9/20 7:40 PM, Kurt Van Dijck wrote:
+> On Fri, 09 Oct 2020 18:24:02 +0200, Marc Kleine-Budde wrote:
+>> On 10/9/20 4:16 PM, Kurt Van Dijck wrote:
+>>> I'm using a v5.4 kernel now, with backported 'can: mcp25xxfd: initial=
+ commit'.
+>>> I did focus up to now to CAN recv performance, but now I face another=
 
-There's not much you can do against it...use a mcp2518fd. Maybe implement=
-ing
-busy polling for spi transaction completion would bring a slight improvem=
-ent
-here....but that imx spi driver is a bit messy.
+>>> issue. I have errors transmitting to CAN.
+>>
+>> What kind of errors?
+> First observation is that no response is received for some requests.
+> This is very high level, I need to investigate if the request is really=
+
+> sent. This is a needle in a haystack.
+> Due to the transmit error counter in `ip -s link show can0`, I guess
+> it's not sent.
+
+If the HW TX process of a CAN frame runs into the MAB underflow there wil=
+l be an
+error on the CAN bus (stuffing, etc...)
+
+The driver switches the HW back into normal mode and the TX is retried. S=
+o there
+should be no packet loss, but some error frames.
+>>> It's unstable.
+>>
+>> What does that mean?
+>=20
+> Each burst of >x CAN frames produces the problem.
+> I still figure x in this statement.
+
+The TX routine of the driver doesn't do any aggregation of CAN frames. Al=
+though
+the network stack offers support for that and the hardware supports that.=
+
+
+The TX CAN frames are sent as individual SPI messages.
+
+On the other hand, what the driver does is aggregating the readout of the=
+ TEF (=3D
+TX-completion) messages.
+
+It's probably the overall system load that delays the SPI-complete-interr=
+upt to
+SPI-CS deselect, so that CS stays active for too long after the transfer,=
+ and
+the errata is triggered.
 
 Marc
 
@@ -167,23 +187,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---SrecB4bCKXIvrp8RIf75np3f7IEzGCLFC--
+--FSlOmt3CwfelCUYa0GE3TjgJ1kOnRqvP1--
 
---d2oQSlW2b230hRLuKAX2IcQ0EYW7RauYM
+--Uqpote4DF5rgw9OccI2Wh4JwcQ16BcrRs
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ESzoACgkQqclaivrt
-76kW+Qf/ZUx8KVniiJL93wdh0S43qCt3/yXvTnn/3jgjKg2UvJttFau0/oEsqzxy
-Y8HWo9+r4X4uLfU5Kd+Njj/egcEvVaZR8AbBExy5+TT3zICEftLtzOLLgtjbIx1h
-Ys58SSGRP3ie4z62pYgoc8ubyMpF4h4/LjS7rdgV6CS7rIA7E+1iQk2dZtj+L1lx
-6sYN1Dw90zFO3noZUsTgJMLFlvdM7bsJ8mI4ImbK6d0U50RIH5ptEWCqsOOO2d8E
-7e2h7rlpb4vUxKRxSvmECrly3IkVdXNgfGUNBtVhuA1WtYYGW7Ma6rMVzXAnzZZu
-oQlCHBWy9b2IUsc7AO2IukYVhSjQ9A==
-=lPhz
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ETncACgkQqclaivrt
+76lkSAf/dUVi/QL4mU2pNsKsQHW14iLKMMdcIXwTUF0A3q/gL7gqxpyEJH0LeAKc
+K++UN3x/zoUUAKKtK6fENl1PjLVaiDGKXyIacl+gYnTywQh3gOJ7g9bPdsvHXnsU
+Uh8GD3mryOMZRzEJO+39uCEKjHxNe8OPHcnRWE5Q5zUO3Zz6yRpA65drWO+0u+af
+2vntQPUYU+FoUs/PECM13J1Yspqq0Aa/9sumlpLnJ3+W1qBVANm2WYDBGJ0GdGqm
+ViRjSDhBPBRU1PbNWCoGYs+gS+iYNzswNdnCO9Jmcmh/0qHHVpqIycrB+FiliGjj
+u99ON5vUBHHikuwaTDz9W3leo78ltg==
+=GV6m
 -----END PGP SIGNATURE-----
 
---d2oQSlW2b230hRLuKAX2IcQ0EYW7RauYM--
+--Uqpote4DF5rgw9OccI2Wh4JwcQ16BcrRs--
