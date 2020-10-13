@@ -2,70 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DACC228CFF7
-	for <lists+linux-can@lfdr.de>; Tue, 13 Oct 2020 16:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B0928D165
+	for <lists+linux-can@lfdr.de>; Tue, 13 Oct 2020 17:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388492AbgJMONp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Oct 2020 10:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388308AbgJMONp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Oct 2020 10:13:45 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2B6C0613D0
-        for <linux-can@vger.kernel.org>; Tue, 13 Oct 2020 07:13:44 -0700 (PDT)
-Received: from ramsan ([84.195.186.194])
-        by albert.telenet-ops.be with bizsmtp
-        id fSDi2300E4C55Sk06SDiYz; Tue, 13 Oct 2020 16:13:43 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kSL3e-0006RP-HN; Tue, 13 Oct 2020 16:13:42 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1kSL3e-0007QD-FW; Tue, 13 Oct 2020 16:13:42 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] can: Explain PDU in CAN_ISOTP help text
-Date:   Tue, 13 Oct 2020 16:13:41 +0200
-Message-Id: <20201013141341.28487-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1728873AbgJMPlP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Oct 2020 11:41:15 -0400
+Received: from smtp5-g21.free.fr ([212.27.42.5]:17002 "EHLO smtp5-g21.free.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727830AbgJMPlO (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 13 Oct 2020 11:41:14 -0400
+Received: from debian.peak-system.com (unknown [89.158.155.184])
+        (Authenticated sender: stephane.grosjean)
+        by smtp5-g21.free.fr (Postfix) with ESMTPSA id 0AEC85FF23;
+        Tue, 13 Oct 2020 17:41:09 +0200 (CEST)
+From:   Stephane Grosjean <s.grosjean@peak-system.com>
+To:     linux-can Mailing List <linux-can@vger.kernel.org>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [PATCH] can/peak_canfd: fix echo management when loopback is on
+Date:   Tue, 13 Oct 2020 17:39:47 +0200
+Message-Id: <20201013153947.28012-1-s.grosjean@peak-system.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The help text for the CAN_ISOTP config symbol uses the acronym "PDU".
-However, this acronym is not explained here, nor in
-Documentation/networking/can.rst.
-Expand the acronym to make it easier for users to decide if they need to
-enable the CAN_ISOTP option or not.
+Echo management is driven by PUCAN_MSG_LOOPED_BACK bit, while loopback
+frames are identified with PUCAN_MSG_SELF_RECEIVE bit. Those bits are set
+for each outgoing frame written to the IP core so that a copy of each one
+will be placed into the rx path. Thus,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+- when PUCAN_MSG_LOOPED_BACK is set then the rx frame is an echo of a
+  previously sent frame,
+- when PUCAN_MSG_LOOPED_BACK+PUCAN_MSG_SELF_RECEIVE are set, then the rx
+  frame is an echo AND a loopback frame. Therefore, this frame must be
+  put into the socket rx path too.
+
+This patch fixes how CAN frames are handled when these are sent while the
+can interface is configured in "loopback on" mode.
+
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 ---
- net/can/Kconfig | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/can/peak_canfd/peak_canfd.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/net/can/Kconfig b/net/can/Kconfig
-index 224e5e0283a986d9..7c9958df91d353c8 100644
---- a/net/can/Kconfig
-+++ b/net/can/Kconfig
-@@ -62,8 +62,9 @@ config CAN_ISOTP
- 	  communication between CAN nodes via two defined CAN Identifiers.
- 	  As CAN frames can only transport a small amount of data bytes
- 	  (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
--	  segmentation is needed to transport longer PDUs as needed e.g. for
--	  vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
-+	  segmentation is needed to transport longer Protocol Data Units (PDU)
-+	  as needed e.g. for vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN
-+	  traffic.
- 	  This protocol driver implements data transfers according to
- 	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
- 	  If you want to perform automotive vehicle diagnostic services (UDS),
+diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
+index 10aa3e457c33..40c33b8a5fda 100644
+--- a/drivers/net/can/peak_canfd/peak_canfd.c
++++ b/drivers/net/can/peak_canfd/peak_canfd.c
+@@ -262,8 +262,7 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
+ 		cf_len = get_can_dlc(pucan_msg_get_dlc(msg));
+ 
+ 	/* if this frame is an echo, */
+-	if ((rx_msg_flags & PUCAN_MSG_LOOPED_BACK) &&
+-	    !(rx_msg_flags & PUCAN_MSG_SELF_RECEIVE)) {
++	if (rx_msg_flags & PUCAN_MSG_LOOPED_BACK) {
+ 		unsigned long flags;
+ 
+ 		spin_lock_irqsave(&priv->echo_lock, flags);
+@@ -277,7 +276,13 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
+ 		netif_wake_queue(priv->ndev);
+ 
+ 		spin_unlock_irqrestore(&priv->echo_lock, flags);
+-		return 0;
++
++		/* if this frame is only an echo, stop here. Otherwise,
++		 * continue to push this application self-received frame into
++		 * its own rx queue.
++		 */
++		if (!(rx_msg_flags & PUCAN_MSG_SELF_RECEIVE))
++			return 0;
+ 	}
+ 
+ 	/* otherwise, it should be pushed into rx fifo */
 -- 
-2.17.1
+2.20.1
 
