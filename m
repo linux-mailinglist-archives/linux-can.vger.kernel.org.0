@@ -2,34 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E54290A64
-	for <lists+linux-can@lfdr.de>; Fri, 16 Oct 2020 19:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B85B290A85
+	for <lists+linux-can@lfdr.de>; Fri, 16 Oct 2020 19:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390346AbgJPRQV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Oct 2020 13:16:21 -0400
-Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:55023 "EHLO
+        id S2390634AbgJPRV3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Oct 2020 13:21:29 -0400
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:24083 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390321AbgJPRQR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Oct 2020 13:16:17 -0400
+        with ESMTP id S2390353AbgJPRV3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Oct 2020 13:21:29 -0400
 Received: from tomoyo.flets-east.jp ([153.230.197.127])
-        by mwinf5d46 with ME
-        id ghG42300F2lQRaH03hGCKe; Fri, 16 Oct 2020 19:16:16 +0200
+        by mwinf5d44 with ME
+        id ghMB2300J2lQRaH03hML2a; Fri, 16 Oct 2020 19:21:26 +0200
 X-ME-Helo: tomoyo.flets-east.jp
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 16 Oct 2020 19:16:16 +0200
+X-ME-Date: Fri, 16 Oct 2020 19:21:26 +0200
 X-ME-IP: 153.230.197.127
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
+        Wolfgang Grandegger <wg@grandegger.com>
 Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v4 1/4] can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ context
-Date:   Sat, 17 Oct 2020 02:13:30 +0900
-Message-Id: <20201016171402.229001-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 2/4] can: dev: add a helper function to get the correct length of Classical frames
+Date:   Sat, 17 Oct 2020 02:20:23 +0900
+Message-Id: <20201016172053.229281-1-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201016171402.229001-1-mailhol.vincent@wanadoo.fr>
 References: <20201016171402.229001-1-mailhol.vincent@wanadoo.fr>
@@ -39,63 +39,71 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-If a driver calls can_get_echo_skb() during a hardware IRQ (which is
-often, but not always, the case), the 'WARN_ON(in_irq)' in
-net/core/skbuff.c#skb_release_head_state() might be triggered, under
-network congestion circumstances, together with the potential risk of
-a NULL pointer dereference.
+In classical CAN, the length of the data (i.e. CAN payload) is not
+always equal to the DLC! If the frame is a Remote Transmission Request
+(RTR), data length is always zero regardless of DLC value and else, if
+the DLC is greater than 8, the length is 8. Contrary to common belief,
+ISO 11898-1 Chapter 8.4.2.3 (DLC field) do allow DLCs greater than 8
+for Classical Frames and specifies that those DLCs shall indicate that
+the data field is 8 bytes long.
 
-The root cause of this issue is the call to kfree_skb() instead of
-dev_kfree_skb_irq() in net/core/dev.c#enqueue_to_backlog().
+Above facts are widely unknown and so many developpers uses the "len"
+field of "struct canfd_frame" to get the length of classical CAN
+frames: this is incorrect!
 
-This patch prevents the skb to be freed within the call to netif_rx()
-by incrementing its reference count with skb_get(). The skb is finally
-freed by one of the in-irq-context safe functions:
-dev_consume_skb_any() or dev_kfree_skb_any().  The "any" version is
-used because some drivers might call can_get_echo_skb() in a normal
-context.
-
-The reason for this issue to occur is that initially, in the core
-network stack, loopback skb were not supposed to be received in
-hardware IRQ context. The CAN stack is an exeption.
-
-This bug was previously reported back in 2017 in [1] but the proposed
-patch never got accepted.
-
-While [1] directly modifies net/core/dev.c, we try to propose here a
-smoother modification local to CAN network stack (the assumption
-behind is that only CAN devices are affected by this issue).
-
-[1] https://patchwork.ozlabs.org/patch/835236/
+This patch introduces function get_can_len() which can be used in
+remediation. The function takes the SKB as an input in order to be
+able to determine if the frame is classical or FD.
 
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
 
-Changes in v3 and v4: None
+Changes in v4: None
 
-Changes in v2:
- - Minor changes of link format in the changelog.
+Changes in v3:
+  - Make get_can_len() return u8.
+  - Make the skb const.
+Reference: https://lkml.org/lkml/2020/9/30/883
+
+Changes in v2: None
 ---
- drivers/net/can/dev.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/can/dev.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index b70ded3760f2..73cfcd7e9517 100644
---- a/drivers/net/can/dev.c
-+++ b/drivers/net/can/dev.c
-@@ -538,7 +538,11 @@ unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx)
- 	if (!skb)
- 		return 0;
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 41ff31795320..d90890172d2a 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -192,6 +192,29 @@ u8 can_dlc2len(u8 can_dlc);
+ /* map the sanitized data length to an appropriate data length code */
+ u8 can_len2dlc(u8 len);
  
--	netif_rx(skb);
-+	skb_get(skb);
-+	if (netif_rx(skb) == NET_RX_SUCCESS)
-+		dev_consume_skb_any(skb);
++/*
++ * get_can_len(skb) - get the length of the CAN payload.
++ *
++ * In classical CAN, the length of the data (i.e. CAN payload) is not
++ * always equal to the DLC! If the frame is a Remote Transmission
++ * Request (RTR), data length is always zero regardless of DLC value
++ * and else, if the DLC is greater than 8, the length is 8. Contrary
++ * to common belief, ISO 11898-1 Chapter 8.4.2.3 (DLC field) do allow
++ * DLCs greater than 8 for Classical Frames and specifies that those
++ * DLCs shall indicate that the data field is 8 bytes long.
++ */
++static inline u8 get_can_len(const struct sk_buff *skb)
++{
++	const struct canfd_frame *cf = (const struct canfd_frame *)skb->data;
++
++	if (can_is_canfd_skb(skb))
++		return min_t(u8, cf->len, CANFD_MAX_DLEN);
++	else if (cf->can_id & CAN_RTR_FLAG)
++		return 0;
 +	else
-+		dev_kfree_skb_any(skb);
- 
- 	return len;
- }
++		return min_t(u8, cf->len, CAN_MAX_DLEN);
++}
++
+ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ 				    unsigned int txqs, unsigned int rxqs);
+ #define alloc_candev(sizeof_priv, echo_skb_max) \
 -- 
 2.26.2
 
