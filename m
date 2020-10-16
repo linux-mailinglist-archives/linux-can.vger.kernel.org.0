@@ -2,97 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 447A1290974
-	for <lists+linux-can@lfdr.de>; Fri, 16 Oct 2020 18:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7AE290A5C
+	for <lists+linux-can@lfdr.de>; Fri, 16 Oct 2020 19:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409853AbgJPQNy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Oct 2020 12:13:54 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:44735 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395449AbgJPQNx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Oct 2020 12:13:53 -0400
-Received: by mail-ot1-f65.google.com with SMTP id e20so2859549otj.11;
-        Fri, 16 Oct 2020 09:13:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3S6o6pCsqlpQRPyq0YIBMbpipy60d1/GQBn4kE8sQ4E=;
-        b=bcwjTgkU7XyHDcXf5/rYd9ooU7udQIvLXJsgCJk5d2HRxbq1SphsJaouJ0EvXO4I0C
-         jAdbeDYzXtKM229Kku6nM2J4mOVIiB8YDk2I14A1w3KXsb69UMgvL3Y4jgiqJ0Oo0ACr
-         tEfxjceyy3E6Ixu0j9L69UsWZeiV56kr1BHukZFR21aj7ADKlPqJ7a1CszWW+vAdobEY
-         0uEYKyUt8gYuzul4WYqXc1k4BCYttHIVVzAX8smeULjfiI7gCKMKCAR/SmLmzsJrKvIS
-         RPGnUC94jlbVTtkQ2GSn3Z6Y3F0JgrD1bE5EeNr4lYfueidrb1QSKtUVFAP0aOqNoxyg
-         k+LQ==
-X-Gm-Message-State: AOAM531zbHliBblQGJVp6IbUF1HQdeQVvVKW7iS8Rjw8LqpvsrHohXWv
-        40DqRKeOqLvLCifHEjO73w==
-X-Google-Smtp-Source: ABdhPJy31GLp3Gq3wrThbltyY2aRjfcKdZPCwOmBriiR2Jq309ootzkq3phDe7FB4aNFH2VnXhA7VA==
-X-Received: by 2002:a9d:127:: with SMTP id 36mr2811371otu.73.1602864832590;
-        Fri, 16 Oct 2020 09:13:52 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h4sm1233579oot.45.2020.10.16.09.13.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 09:13:52 -0700 (PDT)
-Received: (nullmailer pid 1508478 invoked by uid 1000);
-        Fri, 16 Oct 2020 16:13:50 -0000
-Date:   Fri, 16 Oct 2020 11:13:50 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     mkl@pengutronix.de, Wolfgang Grandegger <wg@grandegger.com>,
+        id S1732539AbgJPRO7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Oct 2020 13:14:59 -0400
+Received: from smtp11.smtpout.orange.fr ([80.12.242.133]:54851 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732467AbgJPRO7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Oct 2020 13:14:59 -0400
+Received: from tomoyo.flets-east.jp ([153.230.197.127])
+        by mwinf5d46 with ME
+        id ghEh2300Y2lQRaH03hEsCJ; Fri, 16 Oct 2020 19:14:57 +0200
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 16 Oct 2020 19:14:57 +0200
+X-ME-IP: 153.230.197.127
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: can: add can-controller.yaml
-Message-ID: <20201016161350.GB1504381@bogus>
-References: <20201016073315.16232-1-o.rempel@pengutronix.de>
- <20201016073315.16232-2-o.rempel@pengutronix.de>
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v4 0/4] can: add support for ETAS ES58X CAN USB
+Date:   Sat, 17 Oct 2020 02:13:29 +0900
+Message-Id: <20201016171402.229001-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201016073315.16232-2-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 09:33:14AM +0200, Oleksij Rempel wrote:
-> For now we have only node name as common rule for all CAN controllers
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../bindings/net/can/can-controller.yaml         | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/can-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/can-controller.yaml b/Documentation/devicetree/bindings/net/can/can-controller.yaml
-> new file mode 100644
-> index 000000000000..185904454a69
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/can-controller.yaml
-> @@ -0,0 +1,16 @@
-> +# SPDX-License-Identifier: GPL-2.0
+The purpose of this patch series is to introduce a new CAN USB
+driver to support ETAS USB interfaces (ES58X series).
 
-Dual license new bindings please.
+During development, issues in drivers/net/can/dev.c were discovered,
+the fix for those issues are included in this patch series.
 
-(GPL-2.0-only OR BSD-2-Clause)
+We also propose to add one helper functions in include/linux/can/dev.h
+which we think can benefit other drivers: get_can_len().
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/can-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: CAN Controller Generic Binding
-> +
-> +maintainers:
-> +  - Marc Kleine-Budde <mkl@pengutronix.de>
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^can(@.*)?$"
+*Side notes*: scripts/checkpatch.pl returns 4 'checks' findings in
+[PATCH 4/4]. All those findings are of type: "Macro argument reuse 'x'
+possible side-effects?".  Those arguments reuse are actually made by
+calling either __stringify() or sizeof_field() which are both
+pre-processor constant. Furthermore, those macro are never called with
+arguments sensible to side-effects. So no actual side effect would
+occur.
 
-additionalProperties: true
+Changes in v4:
+  - Remove from the series the patches with have already been merged
+  into net-next.
+Reference: https://lkml.org/lkml/2020/10/4/78
+Reference: https://lkml.org/lkml/2020/10/5/355
+  - Modify [PATCH 4/4] according to comments from Marc.
+Reference: https://lkml.org/lkml/2020/10/4/80)
 
-(This is the default, but it's going to be required after rc1 so the 
-meta-schema can check for it and I can stop telling people to add it (in 
-the false case)).
+Changes in v3:
+  - Added one additional patch: [PATCH v3 2/7] can: dev: fix type of
+ get_can_dlc() and get_canfd_dlc() macros.
+  - Make get_can_len() return u8 and make the skb const in PATCH 3/7.
+  - Remove all the calls to likely() and unlikely() in PATCH 6/7.
+
+Changes in v2:
+  - Fixed -W1 warnings in PATCH 6/7 (v1 was tested with GCC -WExtra
+  but not with -W1).
+  - Added lsusb -v information in PATCH 7/7 and rephrased the comment.
+  - Take care to put everyone in CC of each of the patch of the series
+  (sorry for the mess in v1...)
+
+Vincent Mailhol (4):
+  can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ
+    context
+  can: dev: add a helper function to get the correct length of Classical
+    frames
+  can: dev: __can_get_echo_skb(): fix the return length
+  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
+
+ drivers/net/can/dev.c                       |   13 +-
+ drivers/net/can/usb/Kconfig                 |    9 +
+ drivers/net/can/usb/Makefile                |    1 +
+ drivers/net/can/usb/etas_es58x/Makefile     |    3 +
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  556 ++++
+ drivers/net/can/usb/etas_es58x/es581_4.h    |  209 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2639 +++++++++++++++++++
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  704 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  657 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.h   |  241 ++
+ include/linux/can/dev.h                     |   23 +
+ 11 files changed, 5048 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
+
+-- 
+2.26.2
+
