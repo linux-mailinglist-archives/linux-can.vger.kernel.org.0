@@ -2,26 +2,26 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E3E28FF20
-	for <lists+linux-can@lfdr.de>; Fri, 16 Oct 2020 09:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0662C28FF5A
+	for <lists+linux-can@lfdr.de>; Fri, 16 Oct 2020 09:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404539AbgJPHd1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Oct 2020 03:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S2404706AbgJPHom (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Oct 2020 03:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404514AbgJPHd1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Oct 2020 03:33:27 -0400
+        with ESMTP id S2404694AbgJPHom (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Oct 2020 03:44:42 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D42BC061755
-        for <linux-can@vger.kernel.org>; Fri, 16 Oct 2020 00:33:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C973EC061755
+        for <linux-can@vger.kernel.org>; Fri, 16 Oct 2020 00:44:41 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kTKEq-00064r-EO; Fri, 16 Oct 2020 09:33:20 +0200
+        id 1kTKPj-0007Q6-Gn; Fri, 16 Oct 2020 09:44:35 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1kTKEm-0004F3-G1; Fri, 16 Oct 2020 09:33:16 +0200
+        id 1kTKPi-0006rP-Ty; Fri, 16 Oct 2020 09:44:34 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     mkl@pengutronix.de, Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -31,12 +31,10 @@ Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: [PATCH v2 2/2] dt-bindings: can: flexcan: convert fsl,*flexcan bindings to yaml
-Date:   Fri, 16 Oct 2020 09:33:15 +0200
-Message-Id: <20201016073315.16232-3-o.rempel@pengutronix.de>
+Subject: [PATCH v1] ARM: dts: imx6/7: sync fsl,stop-mode with current flexcan driver
+Date:   Fri, 16 Oct 2020 09:44:32 +0200
+Message-Id: <20201016074432.26323-1-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201016073315.16232-1-o.rempel@pengutronix.de>
-References: <20201016073315.16232-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
@@ -47,223 +45,126 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In order to automate the verification of DT nodes convert
-fsl-flexcan.txt to fsl,flexcan.yaml
+After this patch we need 2 arguments less for the fsl,stop-mode
+property:
+
+| commit d9b081e3fc4bdc33e672dcb7bb256394909432fc
+| Author: Marc Kleine-Budde <mkl@pengutronix.de>
+| Date:   Sun Jun 14 21:09:20 2020 +0200
+|
+| can: flexcan: remove ack_grp and ack_bit handling from driver
+|
+| Since commit:
+|
+|  048e3a34a2e7 can: flexcan: poll MCR_LPM_ACK instead of GPR ACK for stop mode acknowledgment
+|
+| the driver polls the IP core's internal bit MCR[LPM_ACK] as stop mode
+| acknowledge and not the acknowledgment on chip level.
+|
+| This means the 4th and 5th value of the property "fsl,stop-mode" isn't used
+| anymore. This patch removes the used "ack_gpr" and "ack_bit" from the driver.
+
+This patch removes the two last arguments, as they are not needed
+anymore.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- .../bindings/net/can/fsl,flexcan.yaml         | 137 ++++++++++++++++++
- .../bindings/net/can/fsl-flexcan.txt          |  57 --------
- 2 files changed, 137 insertions(+), 57 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
- delete mode 100644 Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
 
-diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-new file mode 100644
-index 000000000000..c5c72bcd47c8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-@@ -0,0 +1,137 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/can/fsl,flexcan.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title:
-+  Flexcan CAN controller on Freescale's ARM and PowerPC system-on-a-chip (SOC).
-+
-+maintainers:
-+  - Marc Kleine-Budde <mkl@pengutronix.de>
-+
-+allOf:
-+  - $ref: can-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - fsl,imx8qm-flexcan
-+          - fsl,imx8mp-flexcan
-+          - fsl,imx6q-flexcan
-+          - fsl,imx53-flexcan
-+          - fsl,imx35-flexcan
-+          - fsl,imx28-flexcan
-+          - fsl,imx25-flexcan
-+          - fsl,p1010-flexcan
-+          - fsl,vf610-flexcan
-+          - fsl,ls1021ar2-flexcan
-+          - fsl,lx2160ar1-flexcan
-+      - items:
-+          - enum:
-+              - fsl,imx7d-flexcan
-+              - fsl,imx6ul-flexcan
-+              - fsl,imx6sx-flexcan
-+          - const: fsl,imx6q-flexcan
-+      - items:
-+          - enum:
-+              - fsl,ls1028ar1-flexcan
-+          - const: fsl,lx2160ar1-flexcan
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: ipg
-+      - const: per
-+
-+  clock-frequency:
-+    description: |
-+      The oscillator frequency driving the flexcan device, filled in by the
-+      boot loader. This property should only be used the used operating system
-+      doesn't support the clocks and clock-names property.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+
-+  xceiver-supply:
-+    description: Regulator that powers the CAN transceiver.
-+    maxItems: 1
-+
-+  big-endian:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      This means the registers of FlexCAN controller are big endian. This is
-+      optional property.i.e. if this property is not present in device tree
-+      node then controller is assumed to be little endian. If this property is
-+      present then controller is assumed to be big endian.
-+
-+  fsl,stop-mode:
-+    description: |
-+      Register bits of stop mode control.
-+
-+      The format should be as follows:
-+      <gpr req_gpr req_bit>
-+      gpr is the phandle to general purpose register node.
-+      req_gpr is the gpr register offset of CAN stop request.
-+      req_bit is the bit offset of CAN stop request.
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - description: The 'gpr' is the phandle to general purpose register node.
-+      - description: The 'req_gpr' is the gpr register offset of CAN stop request.
-+        maximum: 0xff
-+      - description: The 'req_bit' is the bit offset of CAN stop request.
-+        maximum: 0x1f
-+
-+  fsl,clk-source:
-+    description: |
-+      Select the clock source to the CAN Protocol Engine (PE). It's SoC
-+      implementation dependent. Refer to RM for detailed definition. If this
-+      property is not set in device tree node then driver selects clock source 1
-+      by default.
-+      0: clock source 0 (oscillator clock)
-+      1: clock source 1 (peripheral clock)
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 1
-+    minimum: 0
-+    maximum: 1
-+
-+  wakeup-source:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      Enable CAN remote wakeup.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    can@1c000 {
-+        compatible = "fsl,p1010-flexcan";
-+        reg = <0x1c000 0x1000>;
-+        interrupts = <48 0x2>;
-+        interrupt-parent = <&mpic>;
-+        clock-frequency = <200000000>;
-+        fsl,clk-source = <0>;
-+    };
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    can@2090000 {
-+        compatible = "fsl,imx6q-flexcan";
-+        reg = <0x02090000 0x4000>;
-+        interrupts = <0 110 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&clks 1>, <&clks 2>;
-+        clock-names = "ipg", "per";
-+        fsl,stop-mode = <&gpr 0x34 28>;
-+    };
-diff --git a/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt b/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
-deleted file mode 100644
-index e10b6eb955e1..000000000000
---- a/Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
-+++ /dev/null
-@@ -1,57 +0,0 @@
--Flexcan CAN controller on Freescale's ARM and PowerPC system-on-a-chip (SOC).
--
--Required properties:
--
--- compatible : Should be "fsl,<processor>-flexcan"
--
--  where <processor> is imx8qm, imx6q, imx28, imx53, imx35, imx25, p1010,
--  vf610, ls1021ar2, lx2160ar1, ls1028ar1.
--
--  The ls1028ar1 must be followed by lx2160ar1, e.g.
--   - "fsl,ls1028ar1-flexcan", "fsl,lx2160ar1-flexcan"
--
--  An implementation should also claim any of the following compatibles
--  that it is fully backwards compatible with:
--
--  - fsl,p1010-flexcan
--
--- reg : Offset and length of the register set for this device
--- interrupts : Interrupt tuple for this device
--
--Optional properties:
--
--- clock-frequency : The oscillator frequency driving the flexcan device
--
--- xceiver-supply: Regulator that powers the CAN transceiver
--
--- big-endian: This means the registers of FlexCAN controller are big endian.
--              This is optional property.i.e. if this property is not present in
--              device tree node then controller is assumed to be little endian.
--              if this property is present then controller is assumed to be big
--              endian.
--
--- fsl,stop-mode: register bits of stop mode control, the format is
--		 <&gpr req_gpr req_bit>.
--		 gpr is the phandle to general purpose register node.
--		 req_gpr is the gpr register offset of CAN stop request.
--		 req_bit is the bit offset of CAN stop request.
--
--- fsl,clk-source: Select the clock source to the CAN Protocol Engine (PE).
--		  It's SoC Implementation dependent. Refer to RM for detailed
--		  definition. If this property is not set in device tree node
--		  then driver selects clock source 1 by default.
--		  0: clock source 0 (oscillator clock)
--		  1: clock source 1 (peripheral clock)
--
--- wakeup-source: enable CAN remote wakeup
--
--Example:
--
--	can@1c000 {
--		compatible = "fsl,p1010-flexcan";
--		reg = <0x1c000 0x1000>;
--		interrupts = <48 0x2>;
--		interrupt-parent = <&mpic>;
--		clock-frequency = <200000000>; // filled in by bootloader
--		fsl,clk-source = <0>; // select clock source 0 for PE
--	};
+ # Please enter the commit message for your changes. Lines starting
+---
+ arch/arm/boot/dts/imx6qdl.dtsi | 4 ++--
+ arch/arm/boot/dts/imx6sx.dtsi  | 4 ++--
+ arch/arm/boot/dts/imx6ul.dtsi  | 4 ++--
+ arch/arm/boot/dts/imx7s.dtsi   | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+index 43edbf1156c7..5efb9b923bf9 100644
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -549,7 +549,7 @@ can1: flexcan@2090000 {
+ 				clocks = <&clks IMX6QDL_CLK_CAN1_IPG>,
+ 					 <&clks IMX6QDL_CLK_CAN1_SERIAL>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x34 28 0x10 17>;
++				fsl,stop-mode = <&gpr 0x34 28>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -560,7 +560,7 @@ can2: flexcan@2094000 {
+ 				clocks = <&clks IMX6QDL_CLK_CAN2_IPG>,
+ 					 <&clks IMX6QDL_CLK_CAN2_SERIAL>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x34 29 0x10 18>;
++				fsl,stop-mode = <&gpr 0x34 29>;
+ 				status = "disabled";
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/imx6sx.dtsi b/arch/arm/boot/dts/imx6sx.dtsi
+index b480dfa9e251..8770e522d21c 100644
+--- a/arch/arm/boot/dts/imx6sx.dtsi
++++ b/arch/arm/boot/dts/imx6sx.dtsi
+@@ -463,7 +463,7 @@ flexcan1: can@2090000 {
+ 				clocks = <&clks IMX6SX_CLK_CAN1_IPG>,
+ 					 <&clks IMX6SX_CLK_CAN1_SERIAL>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x10 1 0x10 17>;
++				fsl,stop-mode = <&gpr 0x10 1>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -474,7 +474,7 @@ flexcan2: can@2094000 {
+ 				clocks = <&clks IMX6SX_CLK_CAN2_IPG>,
+ 					 <&clks IMX6SX_CLK_CAN2_SERIAL>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x10 2 0x10 18>;
++				fsl,stop-mode = <&gpr 0x10 2>;
+ 				status = "disabled";
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
+index 2b088f210331..4a059708ff20 100644
+--- a/arch/arm/boot/dts/imx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul.dtsi
+@@ -430,7 +430,7 @@ can1: flexcan@2090000 {
+ 				clocks = <&clks IMX6UL_CLK_CAN1_IPG>,
+ 					 <&clks IMX6UL_CLK_CAN1_SERIAL>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x10 1 0x10 17>;
++				fsl,stop-mode = <&gpr 0x10 1>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -441,7 +441,7 @@ can2: flexcan@2094000 {
+ 				clocks = <&clks IMX6UL_CLK_CAN2_IPG>,
+ 					 <&clks IMX6UL_CLK_CAN2_SERIAL>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x10 2 0x10 18>;
++				fsl,stop-mode = <&gpr 0x10 2>;
+ 				status = "disabled";
+ 			};
+ 
+diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
+index 1cfaf410aa43..837f0da08686 100644
+--- a/arch/arm/boot/dts/imx7s.dtsi
++++ b/arch/arm/boot/dts/imx7s.dtsi
+@@ -971,7 +971,7 @@ flexcan1: can@30a00000 {
+ 				clocks = <&clks IMX7D_CLK_DUMMY>,
+ 					<&clks IMX7D_CAN1_ROOT_CLK>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x10 1 0x10 17>;
++				fsl,stop-mode = <&gpr 0x10 1>;
+ 				status = "disabled";
+ 			};
+ 
+@@ -982,7 +982,7 @@ flexcan2: can@30a10000 {
+ 				clocks = <&clks IMX7D_CLK_DUMMY>,
+ 					<&clks IMX7D_CAN2_ROOT_CLK>;
+ 				clock-names = "ipg", "per";
+-				fsl,stop-mode = <&gpr 0x10 2 0x10 18>;
++				fsl,stop-mode = <&gpr 0x10 2>;
+ 				status = "disabled";
+ 			};
+ 
 -- 
 2.28.0
 
