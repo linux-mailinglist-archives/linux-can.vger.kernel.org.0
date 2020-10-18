@@ -2,83 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5144F291612
-	for <lists+linux-can@lfdr.de>; Sun, 18 Oct 2020 07:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5238A291679
+	for <lists+linux-can@lfdr.de>; Sun, 18 Oct 2020 10:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbgJRFng (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 18 Oct 2020 01:43:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45394 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725275AbgJRFng (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 18 Oct 2020 01:43:36 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 781412080D;
-        Sun, 18 Oct 2020 05:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602999815;
-        bh=xQx4tam510oViG0aS6IAIECEgE6lGctfYht63oAFTjQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w5E1+nGVmBfju9sqafA7RNAyWyGXNV3glWIi0a1uVAyl5PpHYhnZwSlrCnlNiRfzs
-         cfV4uO4ZitYRPtno4rRqk/s62SY+Vkk0iEk8aerfp+YXmT6bAocVlLg03Vxy6aXm6p
-         C7/g4QRFCPJ09/zXowenG6SzN/MQpYZKW+T/2i1s=
-Date:   Sun, 18 Oct 2020 07:43:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     trix@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm@lists.01.org, linux-pci@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org, clang-built-linux@googlegroups.com
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-Message-ID: <20201018054332.GB593954@kroah.com>
-References: <20201017160928.12698-1-trix@redhat.com>
+        id S1726359AbgJRIqs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 18 Oct 2020 04:46:48 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.167]:32037 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726350AbgJRIqr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 18 Oct 2020 04:46:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1603010805;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:References:Cc:To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=Dw0n2hwrjKjkfZguVc3gnKkizKQo0iOm9G/eHwg89x4=;
+        b=aWv2lr3pWAXa0UHkoQm03i9yj0m07EZTccZ17l5FqkBtltKMWDcW/gs8nYhBxN7BZ+
+        f64cXZm0vZnZFzZfu6XacrWNzPNt+BovaEbTHrqH56JSkMm/uvkaeWNEbpQPkpN99jfw
+        wspJCptS7QaWy9iW68T/RrKIbwJdR9AMNnBOxcKcTGMdsMkueyKraznmrHx/JjisMFLC
+        nT7UY5vNit+VrO1PDcdTLMTb0nE0rr7Ixe8CdRiYaE8vnchkz8GIrDMP5X/wwLmp6rFZ
+        nLog4L7NLFAgV2w1AvoIl3YeOlohKlOYUpZDifZETwAFCYO4UKHk18OBkwY8pOeSdX86
+        YqbA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOMxqpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.177]
+        by smtp.strato.de (RZmta 47.2.1 DYNA|AUTH)
+        with ESMTPSA id D0b41cw9I8keg8w
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sun, 18 Oct 2020 10:46:40 +0200 (CEST)
+Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
+ use skb_clone()
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
+Cc:     netdev@vger.kernel.org, kernel@pengutronix.de,
+        linux-can@vger.kernel.org
+References: <20200124132656.22156-1-o.rempel@pengutronix.de>
+ <20200214120948.4sjnqn2jvndldphw@pengutronix.de>
+ <f2ae9b3a-0d10-64ae-1533-2308e9346ebc@pengutronix.de>
+ <f06cd4bc-6264-242f-fd74-ac8e3f2c10b2@hartkopp.net>
+Message-ID: <9ad203ae-9a50-3d96-1ac9-3e45ca9c1989@hartkopp.net>
+Date:   Sun, 18 Oct 2020 10:46:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201017160928.12698-1-trix@redhat.com>
+In-Reply-To: <f06cd4bc-6264-242f-fd74-ac8e3f2c10b2@hartkopp.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+Oh, answering myself ...
+
+On 17.10.20 21:13, Oliver Hartkopp wrote:
 > 
-> This is a upcoming change to clean up a new warning treewide.
-> I am wondering if the change could be one mega patch (see below) or
-> normal patch per file about 100 patches or somewhere half way by collecting
-> early acks.
+> 
+> On 16.10.20 21:36, Marc Kleine-Budde wrote:
+>> On 2/14/20 1:09 PM, Oleksij Rempel wrote:
+>>> Hi all,
+>>>
+>>> any comments on this patch?
+>>
+>> I'm going to take this patch now for 5.10....Comments?
+> 
+> Yes.
+> 
+> Removing the sk reference will lead to the effect, that you will receive 
+> the CAN frames you have sent on that socket - which is disabled by default:
+> 
+> https://elixir.bootlin.com/linux/latest/source/net/can/raw.c#L124
+> 
+> See concept here:
+> 
+> https://elixir.bootlin.com/linux/latest/source/Documentation/networking/can.rst#L560 
+> 
+> 
+> How can we maintain the CAN_RAW_RECV_OWN_MSGS to be disabled by default 
+> and fix the described problem?
 
-Please break it up into one-patch-per-subsystem, like normal, and get it
-merged that way.
+>>>> +    nskb = skb_clone(skb, GFP_ATOMIC);
+>>>> +    if (unlikely(!nskb)) {
+>>>> +        kfree_skb(skb);
+>>>> +        return NULL;
+>>>>       }
+>>>> -    /* we can assume to have an unshared skb with proper owner */
+>>>> -    return skb;
+>>>> +    can_skb_set_owner(nskb, skb->sk);
 
-Sending us a patch, without even a diffstat to review, isn't going to
-get you very far...
+skb-> sk is still set here - so everything should be fine.
 
-thanks,
+Sorry for the noise.
 
-greg k-h
+Regards,
+Oliver
+
