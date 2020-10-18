@@ -2,39 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE304291E11
-	for <lists+linux-can@lfdr.de>; Sun, 18 Oct 2020 21:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA07E291D41
+	for <lists+linux-can@lfdr.de>; Sun, 18 Oct 2020 21:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388077AbgJRTtv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 18 Oct 2020 15:49:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33702 "EHLO mail.kernel.org"
+        id S1733200AbgJRToB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 18 Oct 2020 15:44:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729480AbgJRTVe (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:21:34 -0400
+        id S1730309AbgJRTX2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 18 Oct 2020 15:23:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 88849222EC;
-        Sun, 18 Oct 2020 19:21:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 58460222EB;
+        Sun, 18 Oct 2020 19:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603048893;
-        bh=BDNwQRwoRfZPxJGVVrsS9A5kA4VPUPUBVwYYvkvLSsk=;
+        s=default; t=1603049007;
+        bh=NmE6hQ/3FioMCYKCOFbaQxX06Kh6L1zhoofrRgH5x+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qBKIwdF2jbcya63sg/kVpAS4W7owNm/ZE4gG+++9V2AjIPI2n0LFiSc02JH+rrp9j
-         LXvuVWmlhFFDOsDI+iabl1QakR/Y8AUoOho/atmoWrXF5ua+FBk5LTAbXrKnPU76Kf
-         j5Ke2qMoRnAiczuT6lg1kEGjsqtQf4AIGMR3vkbY=
+        b=VMTQfMv/MWuNHfszp5bIuY9AeL+UWWifgigw2In7cyilQ/hTGymJqI0dfNhnBchP+
+         IHyHOol5rE9lfmvL+Ln5JoeLo/ZKjQLYE/5umhcfZxlrH3NQeRlKUpGK9yBeVb+OWR
+         x1/aF69CkNBZTQfXZCKJXLsbsQpGR7sjxOy/F+Ug=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 055/101] can: flexcan: flexcan_chip_stop(): add error handling and propagate error value
-Date:   Sun, 18 Oct 2020 15:19:40 -0400
-Message-Id: <20201018192026.4053674-55-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 43/80] can: flexcan: flexcan_chip_stop(): add error handling and propagate error value
+Date:   Sun, 18 Oct 2020 15:21:54 -0400
+Message-Id: <20201018192231.4054535-43-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192026.4053674-1-sashal@kernel.org>
-References: <20201018192026.4053674-1-sashal@kernel.org>
+In-Reply-To: <20201018192231.4054535-1-sashal@kernel.org>
+References: <20201018192231.4054535-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 28 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 94d10ec954a05..2ac7a667bde35 100644
+index e5c207ad3c77d..aaa7ed1dc97ee 100644
 --- a/drivers/net/can/flexcan.c
 +++ b/drivers/net/can/flexcan.c
-@@ -1260,18 +1260,23 @@ static int flexcan_chip_start(struct net_device *dev)
+@@ -1232,18 +1232,23 @@ static int flexcan_chip_start(struct net_device *dev)
  	return err;
  }
  
@@ -96,7 +96,7 @@ index 94d10ec954a05..2ac7a667bde35 100644
  
  	/* Disable all interrupts */
  	priv->write(0, &regs->imask2);
-@@ -1281,6 +1286,23 @@ static void flexcan_chip_stop(struct net_device *dev)
+@@ -1253,6 +1258,23 @@ static void flexcan_chip_stop(struct net_device *dev)
  
  	flexcan_transceiver_disable(priv);
  	priv->can.state = CAN_STATE_STOPPED;
@@ -120,7 +120,7 @@ index 94d10ec954a05..2ac7a667bde35 100644
  }
  
  static int flexcan_open(struct net_device *dev)
-@@ -1362,7 +1384,7 @@ static int flexcan_close(struct net_device *dev)
+@@ -1341,7 +1363,7 @@ static int flexcan_close(struct net_device *dev)
  
  	netif_stop_queue(dev);
  	can_rx_offload_disable(&priv->offload);
