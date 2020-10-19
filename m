@@ -2,96 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 488372926E5
-	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 14:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E952926FE
+	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 14:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgJSMDA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Oct 2020 08:03:00 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:33016 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726259AbgJSMDA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 08:03:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1603108975;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=wwheiqu+Kv1v+1Fjle3mVlNRfqkrKNMbWPuB+egzk4c=;
-        b=n4Ge6okD3e8ereIMV1yxH5pEr5F5ZnHOd73HQgisg0KtRJslh40q9U/bwJfrJaDv++
-        ickcf5/c3P4A5AdOA35o0lwRug8NaMe0MzYxRK+BBI5WOyo6j8/x0IhnpcZ7WPCzMXXx
-        Yv1A45f5MOvD0Diq/zOv4FFunwsSANFZKIq5FeiLoQDzAV9R309eDOlnjPFvezmNOHQZ
-        m5K7YRsTz77vUc+FoUhE329QczRgXcFLa6b5CYZ9gSA3zKgNNh95O3Ff7lhuxtUyfCaE
-        crCTxC6WtGq3Dbf49g2DvOgQYVCS4fGqzw1GaaGQZfU7acCPXnD+w3jOu8tjaChcMqG7
-        0kzg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejuVITM/uUA="
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-        by smtp.strato.de (RZmta 47.2.1 DYNA|AUTH)
-        with ESMTPSA id D0b41cw9JC2sjSE
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Mon, 19 Oct 2020 14:02:54 +0200 (CEST)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Thomas Wagner <thwa1@web.de>
-Subject: [PATCH] can-isotp: enable RX timeout handling in listen-only mode
-Date:   Mon, 19 Oct 2020 14:02:29 +0200
-Message-Id: <20201019120229.89326-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.28.0
+        id S1726559AbgJSMIh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Oct 2020 08:08:37 -0400
+Received: from mga06.intel.com ([134.134.136.31]:2200 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725924AbgJSMIh (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 19 Oct 2020 08:08:37 -0400
+IronPort-SDR: rce4RRoRr5JO0OKCLe+n8CYvYZjJ3o3Zzs4e3heUT1pt6kublWXcQegWVCM7WkzeW3sTCgHwKb
+ 3/IaPZX52PqA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9778"; a="228650879"
+X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
+   d="scan'208";a="228650879"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2020 05:08:34 -0700
+IronPort-SDR: f7BJiUHIVHCyCeTSnusFZ5JMqws/qrkWu0CcCoRRnk41roUwoX9xep2s0kgMhHrKz+lEjwm1Qq
+ z7bJaayNfnJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,394,1596524400"; 
+   d="scan'208";a="301349564"
+Received: from lkp-server01.sh.intel.com (HELO 88424da292e0) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 19 Oct 2020 05:08:32 -0700
+Received: from kbuild by 88424da292e0 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kUTxo-000076-CI; Mon, 19 Oct 2020 12:08:32 +0000
+Date:   Mon, 19 Oct 2020 20:08:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH] can: mcp251xfd: fix semicolon.cocci warnings
+Message-ID: <20201019120805.GA63693@ae4257e0ab22>
+References: <202010192040.u25q5Ddd-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202010192040.u25q5Ddd-lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-As reported by Thomas Wagner here
-https://github.com/hartkopp/can-isotp/issues/34
-the timeout handling for data frames is not enabled when the isotp socket
-is used in listen-only mode (sockopt CAN_ISOTP_LISTEN_MODE).
-This mode is enabled by the isotpsniffer application which therefore
-became inconsistend with the strict rx timeout rules when running the
-isotp protocol in the operational mode.
+From: kernel test robot <lkp@intel.com>
 
-This patch fixes this inconsistency by moving the return condition for the
-listen-only mode behind the timeout handling code.
+drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c:176:2-3: Unneeded semicolon
 
-Reported-by: Thomas Wagner <thwa1@web.de>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+
+ Remove unneeded semicolon.
+
+Generated by: scripts/coccinelle/misc/semicolon.cocci
+
+Fixes: f4f77366f21d ("can: mcp251xfd: rename all user facing strings to mcp251xfd")
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- net/can/isotp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 4c2062875893..a79287ef86da 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -567,22 +567,22 @@ static int isotp_rcv_cf(struct sock *sk, struct canfd_frame *cf, int ae,
- 		nskb->dev = skb->dev;
- 		isotp_rcv_skb(nskb, sk);
- 		return 0;
- 	}
- 
--	/* no creation of flow control frames */
--	if (so->opt.flags & CAN_ISOTP_LISTEN_MODE)
--		return 0;
--
- 	/* perform blocksize handling, if enabled */
- 	if (!so->rxfc.bs || ++so->rx.bs < so->rxfc.bs) {
- 		/* start rx timeout watchdog */
- 		hrtimer_start(&so->rxtimer, ktime_set(1, 0),
- 			      HRTIMER_MODE_REL_SOFT);
- 		return 0;
- 	}
- 
-+	/* no creation of flow control frames */
-+	if (so->opt.flags & CAN_ISOTP_LISTEN_MODE)
-+		return 0;
-+
- 	/* we reached the specified blocksize so->rxfc.bs */
- 	isotp_send_fc(sk, ae, ISOTP_FC_CTS);
- 	return 0;
- }
- 
--- 
-2.28.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7cf726a59435301046250c42131554d9ccc566b8
+commit: f4f77366f21dfd6ac69a902313367d638b328ba1 can: mcp251xfd: rename all user facing strings to mcp251xfd
 
+ mcp251xfd-regmap.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+@@ -173,7 +173,7 @@ mcp251xfd_regmap_nocrc_read(void *contex
+ 		memcpy(&buf_tx->cmd, reg, sizeof(buf_tx->cmd));
+ 		if (MCP251XFD_SANITIZE_SPI)
+ 			memset(buf_tx->data, 0x0, val_len);
+-	};
++	}
+ 
+ 	err = spi_sync(spi, &msg);
+ 	if (err)
