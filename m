@@ -2,31 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 635BE292AA3
-	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 17:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3526E292AA4
+	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 17:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730226AbgJSPml (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1730342AbgJSPml (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 19 Oct 2020 11:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730342AbgJSPmk (ORCPT
+        with ESMTP id S1730349AbgJSPmk (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 11:42:40 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4050C0613CE
-        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 08:42:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71580C0613CE
+        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 08:42:40 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kUXIz-0000nY-Tc; Mon, 19 Oct 2020 17:42:37 +0200
+        id 1kUXJ0-0000nY-Hy; Mon, 19 Oct 2020 17:42:38 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Sriram Dash <sriram.dash@samsung.com>,
+        Wu Bo <wubo.oduw@gmail.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-rfc 01/12] can: m_can: remove double clearing of clock stop request bit
-Date:   Mon, 19 Oct 2020 17:42:22 +0200
-Message-Id: <20201019154233.1262589-2-mkl@pengutronix.de>
+Subject: [net-rfc 02/12] can: m_can: m_can_handle_state_change(): fix state change
+Date:   Mon, 19 Oct 2020 17:42:23 +0200
+Message-Id: <20201019154233.1262589-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201019154233.1262589-1-mkl@pengutronix.de>
 References: <20201019154233.1262589-1-mkl@pengutronix.de>
@@ -40,39 +39,46 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Sean Nyekjaer <sean@geanix.com>
+From: Wu Bo <wubo.oduw@gmail.com>
 
-The CSR bit is already cleared when arriving here so remove this section of
-duplicate code.
+m_can_handle_state_change() is called with the new_state as an argument.
 
-The registers set in m_can_config_endisable() is set to same exact values as
-before this patch.
+In the switch statements for CAN_STATE_ERROR_ACTIVE, the comment and the
+following code indicate that a CAN_STATE_ERROR_WARNING is handled.
 
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
-Acked-by: Sriram Dash <sriram.dash@samsung.com>
-Acked-by: Dan Murphy <dmurphy@ti.com>
-Link: https://lore.kernel.org/r/20191211063227.84259-1-sean@geanix.com
-Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
+This patch fixes this problem by changing the case to CAN_STATE_ERROR_WARNING.
+
+Signed-off-by: Wu Bo <wubo.oduw@gmail.com>
+Link: http://lore.kernel.org/r/20200129022330.21248-2-wubo.oduw@gmail.com
+Cc: Dan Murphy <dmurphy@ti.com>
+Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/net/can/m_can/m_can.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 02c5795b7393..4edc6f6e5165 100644
+index 4edc6f6e5165..1b72e6fffb31 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -380,10 +380,6 @@ void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
- 		cccr &= ~CCCR_CSR;
+@@ -661,7 +661,7 @@ static int m_can_handle_state_change(struct net_device *dev,
+ 	unsigned int ecr;
  
- 	if (enable) {
--		/* Clear the Clock stop request if it was set */
--		if (cccr & CCCR_CSR)
--			cccr &= ~CCCR_CSR;
--
- 		/* enable m_can configuration */
- 		m_can_write(cdev, M_CAN_CCCR, cccr | CCCR_INIT);
- 		udelay(5);
+ 	switch (new_state) {
+-	case CAN_STATE_ERROR_ACTIVE:
++	case CAN_STATE_ERROR_WARNING:
+ 		/* error warning state */
+ 		cdev->can.can_stats.error_warning++;
+ 		cdev->can.state = CAN_STATE_ERROR_WARNING;
+@@ -690,7 +690,7 @@ static int m_can_handle_state_change(struct net_device *dev,
+ 	__m_can_get_berr_counter(dev, &bec);
+ 
+ 	switch (new_state) {
+-	case CAN_STATE_ERROR_ACTIVE:
++	case CAN_STATE_ERROR_WARNING:
+ 		/* error warning state */
+ 		cf->can_id |= CAN_ERR_CRTL;
+ 		cf->data[1] = (bec.txerr > bec.rxerr) ?
 -- 
 2.28.0
 
