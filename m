@@ -2,39 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4795829350F
-	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 08:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C595129350D
+	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 08:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730785AbgJTGkT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Oct 2020 02:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S2403830AbgJTGkL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Oct 2020 02:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404327AbgJTGkT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 02:40:19 -0400
+        with ESMTP id S1730714AbgJTGkL (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 02:40:11 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC23BC061755
-        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 23:40:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7959C0613CE
+        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 23:40:10 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kUlJa-0007jj-P7; Tue, 20 Oct 2020 08:40:10 +0200
+        id 1kUlJZ-0007jg-0z; Tue, 20 Oct 2020 08:40:09 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:1dbb:4a83:65c6:6f4] (unknown [IPv6:2a03:f580:87bc:d400:1dbb:4a83:65c6:6f4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DBACA57CE61;
-        Mon, 19 Oct 2020 18:11:21 +0000 (UTC)
-Subject: Re: [PATCH] can: mcp251xfd: fix semicolon.cocci warnings
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <202010192040.u25q5Ddd-lkp@intel.com>
- <20201019120805.GA63693@ae4257e0ab22>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 14ABB57CE65;
+        Mon, 19 Oct 2020 18:13:27 +0000 (UTC)
+Subject: Re: [PATCH] can-isotp: enable RX timeout handling in listen-only mode
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc:     Thomas Wagner <thwa1@web.de>
+References: <20201019120229.89326-1-socketcan@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <87d0ad42-e32b-766c-ad73-0d75e7a241f8@pengutronix.de>
-Date:   Mon, 19 Oct 2020 20:11:16 +0200
+Message-ID: <0a65bae7-b6e2-52fc-8bbc-d5c3e7402287@pengutronix.de>
+Date:   Mon, 19 Oct 2020 20:13:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201019120805.GA63693@ae4257e0ab22>
+In-Reply-To: <20201019120229.89326-1-socketcan@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="4UdfvVcB1tslzKMudZImZrTWsH7lS8gNz"
+ boundary="vscZSdSUsjxbhH5bqDtXaKOEjtSsAsrME"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,46 +110,40 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---4UdfvVcB1tslzKMudZImZrTWsH7lS8gNz
-Content-Type: multipart/mixed; boundary="uc4AWUTjPallXlAXuWxOIL3AWr8Qypw8f";
+--vscZSdSUsjxbhH5bqDtXaKOEjtSsAsrME
+Content-Type: multipart/mixed; boundary="hHqzVIePPytoyS7JUetdlsNagk97FX2xP";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
- Wolfgang Grandegger <wg@grandegger.com>, Jakub Kicinski <kuba@kernel.org>,
- linux-can@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <87d0ad42-e32b-766c-ad73-0d75e7a241f8@pengutronix.de>
-Subject: Re: [PATCH] can: mcp251xfd: fix semicolon.cocci warnings
-References: <202010192040.u25q5Ddd-lkp@intel.com>
- <20201019120805.GA63693@ae4257e0ab22>
-In-Reply-To: <20201019120805.GA63693@ae4257e0ab22>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: Thomas Wagner <thwa1@web.de>
+Message-ID: <0a65bae7-b6e2-52fc-8bbc-d5c3e7402287@pengutronix.de>
+Subject: Re: [PATCH] can-isotp: enable RX timeout handling in listen-only mode
+References: <20201019120229.89326-1-socketcan@hartkopp.net>
+In-Reply-To: <20201019120229.89326-1-socketcan@hartkopp.net>
 
---uc4AWUTjPallXlAXuWxOIL3AWr8Qypw8f
+--hHqzVIePPytoyS7JUetdlsNagk97FX2xP
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/19/20 2:08 PM, kernel test robot wrote:
-> From: kernel test robot <lkp@intel.com>
+On 10/19/20 2:02 PM, Oliver Hartkopp wrote:
+> As reported by Thomas Wagner here
+> https://github.com/hartkopp/can-isotp/issues/34
+> the timeout handling for data frames is not enabled when the isotp sock=
+et
+> is used in listen-only mode (sockopt CAN_ISOTP_LISTEN_MODE).
+> This mode is enabled by the isotpsniffer application which therefore
+> became inconsistend with the strict rx timeout rules when running the
+> isotp protocol in the operational mode.
 >=20
-> drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c:176:2-3: Unneeded semi=
-colon
+> This patch fixes this inconsistency by moving the return condition for =
+the
+> listen-only mode behind the timeout handling code.
 >=20
->=20
->  Remove unneeded semicolon.
->=20
-> Generated by: scripts/coccinelle/misc/semicolon.cocci
->=20
-> Fixes: f4f77366f21d ("can: mcp251xfd: rename all user facing strings to=
- mcp251xfd")
+> Reported-by: Thomas Wagner <thwa1@web.de>
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-The correct fixes tag is:
-
-Fixes: 875347fe5756 ("can: mcp25xxfd: add regmap infrastructure")
-
-> Signed-off-by: kernel test robot <lkp@intel.com>
-
-Applied with that to linux-can.
+Applied to linux-can.
 
 tnx,
 Marc
@@ -165,23 +155,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---uc4AWUTjPallXlAXuWxOIL3AWr8Qypw8f--
+--hHqzVIePPytoyS7JUetdlsNagk97FX2xP--
 
---4UdfvVcB1tslzKMudZImZrTWsH7lS8gNz
+--vscZSdSUsjxbhH5bqDtXaKOEjtSsAsrME
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+N1sQACgkQqclaivrt
-76k8sAf/SRPNPfcKAGBC7kY/6wSCKTDPzPWMjXYOV7ejW8R8KhekhOM0jenNpqSA
-WWKmmspFj0wCF6lUjCAYlfuVRY5aGgYVhakvDdG3hW13mZc2YN8QE9zEQopNPiNN
-dZs/gK4OGi7CzcrlaqyFQj4V0KgtOXqn7Z0LW11c6EBy6Uj6R/vizIlOAD5xEu3e
-79kngSVvkrRBXze0NVKZmiewfM8qvbnnG5ncyazpD6HeLz+G6Cp5kNJJrdCNhA9s
-SwNWHde2Zt2B0POtXA2Lgl6FeqKyuFH917ESLSMSKmyNProWXFkPexKCdVwHVgPD
-wHoXeuEREc4AtBymq9JHmb9E78d/oA==
-=nOKQ
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+N10MACgkQqclaivrt
+76lijggAm20VvozCfYofgK0b+qZU3TQ6qWecjgiGrPdN9/bxM0KjpQ7L7MyO6Hzq
+QKvVRlA4xkGitiRvZRWNDmiOEv+pGWaruA7k1O3QGHfQ9e+WwwfCjSUuhmvwH/SI
+wkxnkvwHfGJQD+7qiapZrc8ijwH8ztxFf7lJ6hXsZcfbhwDlTs6gbUqW2YK+i/SB
+4WNu3Ruy/CLQv6JKzSm1FukHALt2I6F4aZ4fg6yRsbetKOE5wBpeAB1EHboVbyyo
+rycWimCM/GAvjSTu7zB4z37M4nBrElyObLpoui9ch7B0k8GUh3CR+h2ytCZQHIMc
+GUC/WSl8N1mupe+qI3GChXpWusHB5w==
+=D81c
 -----END PGP SIGNATURE-----
 
---4UdfvVcB1tslzKMudZImZrTWsH7lS8gNz--
+--vscZSdSUsjxbhH5bqDtXaKOEjtSsAsrME--
