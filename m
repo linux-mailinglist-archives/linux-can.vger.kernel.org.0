@@ -2,30 +2,29 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC652292E20
-	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 21:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450A7292E21
+	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 21:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731112AbgJSTFh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1731131AbgJSTFh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 19 Oct 2020 15:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731126AbgJSTFg (ORCPT
+        with ESMTP id S1731112AbgJSTFg (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 15:05:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE948C0613CE
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9E1C0613D0
         for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 12:05:36 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kUaTO-0005v5-MN; Mon, 19 Oct 2020 21:05:34 +0200
+        id 1kUaTO-0005v5-Uy; Mon, 19 Oct 2020 21:05:35 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
+Cc:     kernel@pengutronix.de, Navid Emamdoost <navid.emamdoost@gmail.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-rfc 10/16] can: ti_hecc: add missed clk_disable_unprepare() in error path
-Date:   Mon, 19 Oct 2020 21:05:18 +0200
-Message-Id: <20201019190524.1285319-11-mkl@pengutronix.de>
+Subject: [net-rfc 11/16] can: xilinx_can: handle failure cases of pm_runtime_get_sync
+Date:   Mon, 19 Oct 2020 21:05:19 +0200
+Message-Id: <20201019190524.1285319-12-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201019190524.1285319-1-mkl@pengutronix.de>
 References: <20201019190524.1285319-1-mkl@pengutronix.de>
@@ -39,53 +38,57 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Zhang Changzhong <zhangchangzhong@huawei.com>
+From: Navid Emamdoost <navid.emamdoost@gmail.com>
 
-The driver forgets to call clk_disable_unprepare() in error path after
-a success calling for clk_prepare_enable().
+Calling pm_runtime_get_sync increments the counter even in case of
+failure, causing incorrect ref count. Call pm_runtime_put if
+pm_runtime_get_sync fails.
 
-Fix it by adding a clk_disable_unprepare() in error path.
-
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-Link: https://lore.kernel.org/r/1594973079-27743-1-git-send-email-zhangchangzhong@huawei.com
-Fixes: befa60113ce7 ("can: ti_hecc: add missing prepare and unprepare of the clock")
+Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+Link: https://lore.kernel.org/r/20200605033239.60664-1-navid.emamdoost@gmail.com
+Fixes: 4716620d1b62 ("can: xilinx: Convert to runtime_pm")
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/ti_hecc.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/can/xilinx_can.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-index 1d63006c97bc..9913f5458279 100644
---- a/drivers/net/can/ti_hecc.c
-+++ b/drivers/net/can/ti_hecc.c
-@@ -933,7 +933,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
- 	err = clk_prepare_enable(priv->clk);
- 	if (err) {
- 		dev_err(&pdev->dev, "clk_prepare_enable() failed\n");
--		goto probe_exit_clk;
-+		goto probe_exit_release_clk;
+diff --git a/drivers/net/can/xilinx_can.c b/drivers/net/can/xilinx_can.c
+index 6c4d00d2dbdc..48d746e18f30 100644
+--- a/drivers/net/can/xilinx_can.c
++++ b/drivers/net/can/xilinx_can.c
+@@ -1395,7 +1395,7 @@ static int xcan_open(struct net_device *ndev)
+ 	if (ret < 0) {
+ 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
+ 			   __func__, ret);
+-		return ret;
++		goto err;
  	}
  
- 	priv->offload.mailbox_read = ti_hecc_mailbox_read;
-@@ -942,7 +942,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
- 	err = can_rx_offload_add_timestamp(ndev, &priv->offload);
- 	if (err) {
- 		dev_err(&pdev->dev, "can_rx_offload_add_timestamp() failed\n");
--		goto probe_exit_clk;
-+		goto probe_exit_disable_clk;
+ 	ret = request_irq(ndev->irq, xcan_interrupt, priv->irq_flags,
+@@ -1479,6 +1479,7 @@ static int xcan_get_berr_counter(const struct net_device *ndev,
+ 	if (ret < 0) {
+ 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
+ 			   __func__, ret);
++		pm_runtime_put(priv->dev);
+ 		return ret;
  	}
  
- 	err = register_candev(ndev);
-@@ -960,7 +960,9 @@ static int ti_hecc_probe(struct platform_device *pdev)
+@@ -1793,7 +1794,7 @@ static int xcan_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		netdev_err(ndev, "%s: pm_runtime_get failed(%d)\n",
+ 			   __func__, ret);
+-		goto err_pmdisable;
++		goto err_disableclks;
+ 	}
  
- probe_exit_offload:
- 	can_rx_offload_del(&priv->offload);
--probe_exit_clk:
-+probe_exit_disable_clk:
-+	clk_disable_unprepare(priv->clk);
-+probe_exit_release_clk:
- 	clk_put(priv->clk);
- probe_exit_candev:
+ 	if (priv->read_reg(priv, XCAN_SR_OFFSET) != XCAN_SR_CONFIG_MASK) {
+@@ -1828,7 +1829,6 @@ static int xcan_probe(struct platform_device *pdev)
+ 
+ err_disableclks:
+ 	pm_runtime_put(priv->dev);
+-err_pmdisable:
+ 	pm_runtime_disable(&pdev->dev);
+ err_free:
  	free_candev(ndev);
 -- 
 2.28.0
