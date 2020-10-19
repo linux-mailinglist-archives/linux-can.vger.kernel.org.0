@@ -2,246 +2,221 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F3C29221C
-	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 07:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA4329227F
+	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 08:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgJSFXM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Oct 2020 01:23:12 -0400
-Received: from mailrelay4-2.pub.mailoutpod1-cph3.one.com ([46.30.212.3]:57601
-        "EHLO mailrelay4-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726228AbgJSFXM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 01:23:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csselectronics.com; s=20191106;
-        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
-         message-id:from:cc:references:to:subject:from;
-        bh=VNJuIIukJPG/49UGwSbIZ/Wg/08FK0tOCaoz10NMwSg=;
-        b=iI7hLop3gqAg6QRnXM1lED8evcEcv3hKM0jBRxVifM4ElnP3iNd/WEwGcBxnOVavibYCv9sEHe/6+
-         v2fuUpZddv/azsj+FH97KJWjXYJvZh1uNsSO7oDwGC9I0g8n6VxNLaTlL2LIA9LetVw4/bgBf6m0yT
-         7ehIEkP0nQOlvLrRdSEH9KN7RMD3PmM5eULO6U/KNW2EGdWD51xeFIk5fkU4ECwY95+CGuVWV3BlbE
-         yQhKoM+NWniX0K0G1GTZzXatlrS2fY2A5sDt4JyLzwMWnLxwuecka6IFbAUMqYtzKaqPQaSREEs5iJ
-         RMETHvtnnVdcMEFcYwYCeHKqblhseUg==
-X-HalOne-Cookie: 5d7eadc935a9d094cfedef4ae2d2eb4ec1221f94
-X-HalOne-ID: 2ae02fe5-11cb-11eb-a2b4-d0431ea8bb10
-Received: from [192.168.0.157] (unknown [5.103.118.41])
-        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 2ae02fe5-11cb-11eb-a2b4-d0431ea8bb10;
-        Mon, 19 Oct 2020 05:23:06 +0000 (UTC)
-Subject: Re: [PATCH v2 3/3] can: mcp251xfd: add support for internal PLL
-To:     linux-can@vger.kernel.org
-References: <20201016205211.1141590-1-mkl@pengutronix.de>
- <20201016205211.1141590-4-mkl@pengutronix.de>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
-From:   =?UTF-8?Q?Magnus_Aagaard_S=c3=b8rensen?= <mas@csselectronics.com>
-Message-ID: <18c8ed1b-7b0b-a9f7-9583-13a4d65490fd@csselectronics.com>
-Date:   Mon, 19 Oct 2020 07:23:08 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S1726913AbgJSG23 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Oct 2020 02:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726626AbgJSG23 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 02:28:29 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED0AC061755
+        for <linux-can@vger.kernel.org>; Sun, 18 Oct 2020 23:28:29 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kUOee-0003gp-Fi; Mon, 19 Oct 2020 08:28:24 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:a99a:c1c5:5b7f:60] (unknown [IPv6:2a03:f580:87bc:d400:a99a:c1c5:5b7f:60])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 359E657BC30;
+        Mon, 19 Oct 2020 06:28:21 +0000 (UTC)
+Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
+ use skb_clone()
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        dev.kurt@vandijck-laurijssen.be, wg@grandegger.com
+Cc:     netdev@vger.kernel.org, kernel@pengutronix.de,
+        linux-can@vger.kernel.org
+References: <20200124132656.22156-1-o.rempel@pengutronix.de>
+ <20200214120948.4sjnqn2jvndldphw@pengutronix.de>
+ <f2ae9b3a-0d10-64ae-1533-2308e9346ebc@pengutronix.de>
+ <f06cd4bc-6264-242f-fd74-ac8e3f2c10b2@hartkopp.net>
+ <9ad203ae-9a50-3d96-1ac9-3e45ca9c1989@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <4e794974-8b87-9961-a144-fe9f5c236de6@pengutronix.de>
+Date:   Mon, 19 Oct 2020 08:28:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201016205211.1141590-4-mkl@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+In-Reply-To: <9ad203ae-9a50-3d96-1ac9-3e45ca9c1989@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="tmTWZElo08yWeQ31SenvOyzr931fUdJRw"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Signed-off-by: Magnus Aagaard Sørensen <mas@csselectronics.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--tmTWZElo08yWeQ31SenvOyzr931fUdJRw
+Content-Type: multipart/mixed; boundary="jatEB1sZkAVzPFLV1EmwwPFoVIm76xQ0l";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+ Oleksij Rempel <o.rempel@pengutronix.de>, dev.kurt@vandijck-laurijssen.be,
+ wg@grandegger.com
+Cc: netdev@vger.kernel.org, kernel@pengutronix.de, linux-can@vger.kernel.org
+Message-ID: <4e794974-8b87-9961-a144-fe9f5c236de6@pengutronix.de>
+Subject: Re: [RFC] can: can_create_echo_skb(): fix echo skb generation: always
+ use skb_clone()
+References: <20200124132656.22156-1-o.rempel@pengutronix.de>
+ <20200214120948.4sjnqn2jvndldphw@pengutronix.de>
+ <f2ae9b3a-0d10-64ae-1533-2308e9346ebc@pengutronix.de>
+ <f06cd4bc-6264-242f-fd74-ac8e3f2c10b2@hartkopp.net>
+ <9ad203ae-9a50-3d96-1ac9-3e45ca9c1989@hartkopp.net>
+In-Reply-To: <9ad203ae-9a50-3d96-1ac9-3e45ca9c1989@hartkopp.net>
 
-On 16-10-2020 22:52, Marc Kleine-Budde wrote:
-> The PLL is enabled if the configured clock is less than or equal to 10 times
-> the max clock frequency.
->
-> The device will operate with two different SPI speeds. A slow speed determined
-> by the clock without the PLL enabled, and a fast speed derived from the
-> frequency with the PLL enabled.
->
-> Link: https://lore.kernel.org/r/20201015124401.2766-3-mas@csselectronics.com
-> Co-developed-by: Magnus Aagaard Sørensen <mas@csselectronics.com>
-> Not-Singed-off-by: Magnus Aagaard Sørensen <mas@csselectronics.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->   .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 73 +++++++++++++++----
->   drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  3 +
->   2 files changed, 63 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> index b8304b7096d1..2be643c6e243 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> @@ -479,8 +479,12 @@ __mcp251xfd_chip_set_mode(const struct mcp251xfd_priv *priv,
->   	if (err)
->   		return err;
->   
-> -	if (mode_req == MCP251XFD_REG_CON_MODE_SLEEP || nowait)
-> +	if (mode_req == MCP251XFD_REG_CON_MODE_SLEEP || nowait) {
-> +		if (mode_req == MCP251XFD_REG_CON_MODE_SLEEP)
-> +			priv->spi->max_speed_hz = priv->spi_max_speed_hz_slow;
-> +
->   		return 0;
-> +	}
->   
->   	err = regmap_read_poll_timeout(priv->map_reg, MCP251XFD_REG_CON, con,
->   				       FIELD_GET(MCP251XFD_REG_CON_OPMOD_MASK,
-> @@ -655,7 +659,7 @@ static int mcp251xfd_chip_softreset(const struct mcp251xfd_priv *priv)
->   
->   static int mcp251xfd_chip_clock_init(const struct mcp251xfd_priv *priv)
->   {
-> -	u32 osc;
-> +	u32 osc, osc_reference, osc_mask;
->   	int err;
->   
->   	/* Activate Low Power Mode on Oscillator Disable. This only
-> @@ -665,7 +669,34 @@ static int mcp251xfd_chip_clock_init(const struct mcp251xfd_priv *priv)
->   	osc = MCP251XFD_REG_OSC_LPMEN |
->   		FIELD_PREP(MCP251XFD_REG_OSC_CLKODIV_MASK,
->   			   MCP251XFD_REG_OSC_CLKODIV_10);
-> -	return regmap_write(priv->map_reg, MCP251XFD_REG_OSC, osc);
-> +	osc_reference = MCP251XFD_REG_OSC_OSCRDY;
-> +	osc_mask = MCP251XFD_REG_OSC_OSCRDY | MCP251XFD_REG_OSC_PLLRDY;
-> +
-> +	if (priv->pll_enable) {
-> +		osc |= MCP251XFD_REG_OSC_PLLEN;
-> +		osc_reference |= MCP251XFD_REG_OSC_PLLRDY;
-> +	}
-> +
-> +	err = regmap_write(priv->map_reg, MCP251XFD_REG_OSC, osc);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Wait for "Oscillator + PLL Ready" bit */
-> +	err = regmap_read_poll_timeout(priv->map_reg, MCP251XFD_REG_OSC, osc,
-> +				       (osc & osc_mask) == osc_reference,
-> +				       MCP251XFD_OSC_STAB_SLEEP_US,
-> +				       MCP251XFD_OSC_STAB_TIMEOUT_US);
-> +
-> +	if (err == -ETIMEDOUT) {
-> +		netdev_err(priv->ndev,
-> +			   "Timeout waiting for Oscillator + PLL Ready (osc=0x%08x, osc_reference=0x%08x)\n",
-> +			   osc, osc_reference);
-> +		return -ETIMEDOUT;
-> +	}
-> +
-> +	priv->spi->max_speed_hz = priv->spi_max_speed_hz_fast;
-> +
-> +	return 0;
->   }
->   
->   static int mcp251xfd_chip_timestamp_init(const struct mcp251xfd_priv *priv)
-> @@ -2604,11 +2635,12 @@ mcp251xfd_register_done(const struct mcp251xfd_priv *priv)
->   		return err;
->   
->   	netdev_info(priv->ndev,
-> -		    "%s rev%lu.%lu (%cRX_INT %cMAB_NO_WARN %cCRC_REG %cCRC_RX %cCRC_TX %cECC %cHD c:%u.%02uMHz m:%u.%02uMHz r:%u.%02uMHz e:%u.%02uMHz) successfully initialized.\n",
-> +		    "%s rev%lu.%lu (%cRX_INT %cPLL %cMAB_NO_WARN %cCRC_REG %cCRC_RX %cCRC_TX %cECC %cHD c:%u.%02uMHz m:%u.%02uMHz rs:%u.%02uMHz rf:%u.%02uMHz ef:%u.%02uMHz) successfully initialized.\n",
->   		    mcp251xfd_get_model_str(priv),
->   		    FIELD_GET(MCP251XFD_REG_DEVID_ID_MASK, dev_id),
->   		    FIELD_GET(MCP251XFD_REG_DEVID_REV_MASK, dev_id),
->   		    priv->rx_int ? '+' : '-',
-> +		    priv->pll_enable ? '+' : '-',
->   		    MCP251XFD_QUIRK_ACTIVE(MAB_NO_WARN),
->   		    MCP251XFD_QUIRK_ACTIVE(CRC_REG),
->   		    MCP251XFD_QUIRK_ACTIVE(CRC_RX),
-> @@ -2619,8 +2651,10 @@ mcp251xfd_register_done(const struct mcp251xfd_priv *priv)
->   		    priv->can.clock.freq % 1000000 / 1000 / 10,
->   		    priv->spi_max_speed_hz_orig / 1000000,
->   		    priv->spi_max_speed_hz_orig % 1000000 / 1000 / 10,
-> -		    priv->spi->max_speed_hz / 1000000,
-> -		    priv->spi->max_speed_hz % 1000000 / 1000 / 10,
-> +		    priv->spi_max_speed_hz_slow / 1000000,
-> +		    priv->spi_max_speed_hz_slow % 1000000 / 1000 / 10,
-> +		    priv->spi_max_speed_hz_fast / 1000000,
-> +		    priv->spi_max_speed_hz_fast % 1000000 / 1000 / 10,
->   		    effective_speed_hz / 1000000,
->   		    effective_speed_hz % 1000000 / 1000 / 10);
->   
-> @@ -2650,6 +2684,10 @@ static int mcp251xfd_register(struct mcp251xfd_priv *priv)
->   	if (err)
->   		goto out_chip_set_mode_sleep;
->   
-> +	err = mcp251xfd_chip_clock_init(priv);
-> +	if (err)
-> +		goto out_chip_set_mode_sleep;
-> +
->   	err = mcp251xfd_register_chip_detect(priv);
->   	if (err)
->   		goto out_chip_set_mode_sleep;
-> @@ -2743,6 +2781,7 @@ static int mcp251xfd_probe(struct spi_device *spi)
->   	struct gpio_desc *rx_int;
->   	struct regulator *reg_vdd, *reg_xceiver;
->   	struct clk *clk;
-> +	bool pll_enable = false;
->   	u32 freq;
->   	int err;
->   
-> @@ -2785,12 +2824,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
->   		return -ERANGE;
->   	}
->   
-> -	if (freq <= MCP251XFD_SYSCLOCK_HZ_MAX / MCP251XFD_OSC_PLL_MULTIPLIER) {
-> -		dev_err(&spi->dev,
-> -			"Oscillator frequency (%u Hz) is too low and PLL is not supported.\n",
-> -			freq);
-> -		return -ERANGE;
-> -	}
-> +	if (freq <= MCP251XFD_SYSCLOCK_HZ_MAX / MCP251XFD_OSC_PLL_MULTIPLIER)
-> +		pll_enable = true;
->   
->   	ndev = alloc_candev(sizeof(struct mcp251xfd_priv),
->   			    MCP251XFD_TX_OBJ_NUM_MAX);
-> @@ -2806,6 +2841,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
->   	priv = netdev_priv(ndev);
->   	spi_set_drvdata(spi, priv);
->   	priv->can.clock.freq = freq;
-> +	if (pll_enable)
-> +		priv->can.clock.freq *= MCP251XFD_OSC_PLL_MULTIPLIER;
->   	priv->can.do_set_mode = mcp251xfd_set_mode;
->   	priv->can.do_get_berr_counter = mcp251xfd_get_berr_counter;
->   	priv->can.bittiming_const = &mcp251xfd_bittiming_const;
-> @@ -2817,6 +2854,7 @@ static int mcp251xfd_probe(struct spi_device *spi)
->   	priv->spi = spi;
->   	priv->rx_int = rx_int;
->   	priv->clk = clk;
-> +	priv->pll_enable = pll_enable;
->   	priv->reg_vdd = reg_vdd;
->   	priv->reg_xceiver = reg_xceiver;
->   
-> @@ -2856,7 +2894,16 @@ static int mcp251xfd_probe(struct spi_device *spi)
->   	 *
->   	 */
->   	priv->spi_max_speed_hz_orig = spi->max_speed_hz;
-> -	spi->max_speed_hz = min(spi->max_speed_hz, freq / 2 / 1000 * 850);
-> +	priv->spi_max_speed_hz_slow = min(spi->max_speed_hz,
-> +					  freq / 2 / 1000 * 850);
-> +	if (priv->pll_enable)
-> +		priv->spi_max_speed_hz_fast = min(spi->max_speed_hz,
-> +						  freq *
-> +						  MCP251XFD_OSC_PLL_MULTIPLIER /
-> +						  2 / 1000 * 850);
-> +	else
-> +		priv->spi_max_speed_hz_fast = priv->spi_max_speed_hz_slow;
-> +	spi->max_speed_hz = priv->spi_max_speed_hz_slow;
->   	spi->bits_per_word = 8;
->   	spi->rt = true;
->   	err = spi_setup(spi);
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> index fa1246e39980..813a791234de 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-> @@ -579,6 +579,8 @@ struct mcp251xfd_priv {
->   
->   	struct spi_device *spi;
->   	u32 spi_max_speed_hz_orig;
-> +	u32 spi_max_speed_hz_fast;
-> +	u32 spi_max_speed_hz_slow;
->   
->   	struct mcp251xfd_tef_ring tef;
->   	struct mcp251xfd_tx_ring tx[1];
-> @@ -591,6 +593,7 @@ struct mcp251xfd_priv {
->   
->   	struct gpio_desc *rx_int;
->   	struct clk *clk;
-> +	bool pll_enable;
->   	struct regulator *reg_vdd;
->   	struct regulator *reg_xceiver;
->   
+--jatEB1sZkAVzPFLV1EmwwPFoVIm76xQ0l
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 10/18/20 10:46 AM, Oliver Hartkopp wrote:
+> Oh, answering myself ...
+>=20
+> On 17.10.20 21:13, Oliver Hartkopp wrote:
+>>
+>>
+>> On 16.10.20 21:36, Marc Kleine-Budde wrote:
+>>> On 2/14/20 1:09 PM, Oleksij Rempel wrote:
+>>>> Hi all,
+>>>>
+>>>> any comments on this patch?
+>>>
+>>> I'm going to take this patch now for 5.10....Comments?
+>>
+>> Yes.
+>>
+>> Removing the sk reference will lead to the effect, that you will recei=
+ve=20
+>> the CAN frames you have sent on that socket - which is disabled by def=
+ault:
+>>
+>> https://elixir.bootlin.com/linux/latest/source/net/can/raw.c#L124
+>>
+>> See concept here:
+>>
+>> https://elixir.bootlin.com/linux/latest/source/Documentation/networkin=
+g/can.rst#L560=20
+>>
+>>
+>> How can we maintain the CAN_RAW_RECV_OWN_MSGS to be disabled by defaul=
+t=20
+>> and fix the described problem?
+>=20
+>>>>> +=C2=A0=C2=A0=C2=A0 nskb =3D skb_clone(skb, GFP_ATOMIC);
+>>>>> +=C2=A0=C2=A0=C2=A0 if (unlikely(!nskb)) {
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree_skb(skb);
+>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return NULL;
+>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>>>>> -=C2=A0=C2=A0=C2=A0 /* we can assume to have an unshared skb with p=
+roper owner */
+>>>>> -=C2=A0=C2=A0=C2=A0 return skb;
+>>>>> +=C2=A0=C2=A0=C2=A0 can_skb_set_owner(nskb, skb->sk);
+>=20
+> skb-> sk is still set here - so everything should be fine.
+>=20
+> Sorry for the noise.
+
+Is this a Acked-by/Reviewed-by?
+
+regrards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--jatEB1sZkAVzPFLV1EmwwPFoVIm76xQ0l--
+
+--tmTWZElo08yWeQ31SenvOyzr931fUdJRw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+NMgAACgkQqclaivrt
+76mepAgArN+OsCN+JuBLIW9cCJL1iMQEl2zKEtBTvwPL/RbHzeoRf9GX2NC0dYaD
+6gtjWGoD36TjqTg7OJpQ3eIBaqlFtqvY/etKLayythxelN4IOpIpYo6pLe3X5reL
+0MRAGbqZ2TIw6n5tVKAj4YQqx+yAx2VzYoyyVwI4Hid1en+IlHpY8uu7tdHLJQa4
+5dH5wslxnjsSdKsO9BTYnehp/5SiJtHjBtgWpeSEGRZdFtFISsnDg3it6Askll6p
+fo4kL6pGjDFtC9Cmt+DMT44Zubgr+NQmMqJeqyl8hUw3CcpBIQbcSXK/PXofKt5V
+GZ15qGy1qX8z9xUErWg9DB/wz2pzjQ==
+=f0nO
+-----END PGP SIGNATURE-----
+
+--tmTWZElo08yWeQ31SenvOyzr931fUdJRw--
