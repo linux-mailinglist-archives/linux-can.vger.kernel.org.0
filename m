@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E94D292E1D
+	by mail.lfdr.de (Postfix) with ESMTP id E5926292E1E
 	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 21:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731091AbgJSTFf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Oct 2020 15:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
+        id S1731122AbgJSTFg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Oct 2020 15:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
         with ESMTP id S1731105AbgJSTFf (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 15:05:35 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D6BC0613D0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C235FC0613CE
         for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 12:05:35 -0700 (PDT)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kUaTN-0005v5-3k; Mon, 19 Oct 2020 21:05:33 +0200
+        id 1kUaTN-0005v5-Pu; Mon, 19 Oct 2020 21:05:33 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de,
-        Zhang Changzhong <zhangchangzhong@huawei.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-rfc 07/16] can: j1939: j1939_sk_bind(): return failure if netdev is down
-Date:   Mon, 19 Oct 2020 21:05:15 +0200
-Message-Id: <20201019190524.1285319-8-mkl@pengutronix.de>
+Subject: [net-rfc 08/16] can: isotp: Explain PDU in CAN_ISOTP help text
+Date:   Mon, 19 Oct 2020 21:05:16 +0200
+Message-Id: <20201019190524.1285319-9-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201019190524.1285319-1-mkl@pengutronix.de>
 References: <20201019190524.1285319-1-mkl@pengutronix.de>
@@ -40,53 +40,38 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Zhang Changzhong <zhangchangzhong@huawei.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-When a netdev down event occurs after a successful call to
-j1939_sk_bind(), j1939_netdev_notify() can handle it correctly.
+The help text for the CAN_ISOTP config symbol uses the acronym "PDU".  However,
+this acronym is not explained here, nor in Documentation/networking/can.rst.
 
-But if the netdev already in down state before calling j1939_sk_bind(),
-j1939_sk_release() will stay in wait_event_interruptible() blocked
-forever. Because in this case, j1939_netdev_notify() won't be called and
-j1939_tp_txtimer() won't call j1939_session_cancel() or other function
-to clear session for ENETDOWN error, this lead to mismatch of
-j1939_session_get/put() and jsk->skb_pending will never decrease to
-zero.
+Expand the acronym to make it easier for users to decide if they need to enable
+the CAN_ISOTP option or not.
 
-To reproduce it use following commands:
-1. ip link add dev vcan0 type vcan
-2. j1939acd -r 100,80-120 1122334455667788 vcan0
-3. presses ctrl-c and thread will be blocked forever
-
-This patch adds check for ndev->flags in j1939_sk_bind() to avoid this
-kind of situation and return with -ENETDOWN.
-
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
-Link: https://lore.kernel.org/r/1599460308-18770-1-git-send-email-zhangchangzhong@huawei.com
-Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20201013141341.28487-1-geert+renesas@glider.be
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/j1939/socket.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ net/can/Kconfig | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-index 1be4c898b2fa..f23966526a88 100644
---- a/net/can/j1939/socket.c
-+++ b/net/can/j1939/socket.c
-@@ -475,6 +475,12 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 			goto out_release_sock;
- 		}
- 
-+		if (!(ndev->flags & IFF_UP)) {
-+			dev_put(ndev);
-+			ret = -ENETDOWN;
-+			goto out_release_sock;
-+		}
-+
- 		priv = j1939_netdev_start(ndev);
- 		dev_put(ndev);
- 		if (IS_ERR(priv)) {
+diff --git a/net/can/Kconfig b/net/can/Kconfig
+index 224e5e0283a9..7c9958df91d3 100644
+--- a/net/can/Kconfig
++++ b/net/can/Kconfig
+@@ -62,8 +62,9 @@ config CAN_ISOTP
+ 	  communication between CAN nodes via two defined CAN Identifiers.
+ 	  As CAN frames can only transport a small amount of data bytes
+ 	  (max. 8 bytes for 'classic' CAN and max. 64 bytes for CAN FD) this
+-	  segmentation is needed to transport longer PDUs as needed e.g. for
+-	  vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN traffic.
++	  segmentation is needed to transport longer Protocol Data Units (PDU)
++	  as needed e.g. for vehicle diagnosis (UDS, ISO 14229) or IP-over-CAN
++	  traffic.
+ 	  This protocol driver implements data transfers according to
+ 	  ISO 15765-2:2016 for 'classic' CAN and CAN FD frame types.
+ 	  If you want to perform automotive vehicle diagnostic services (UDS),
 -- 
 2.28.0
 
