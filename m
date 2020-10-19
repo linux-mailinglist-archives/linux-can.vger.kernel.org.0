@@ -2,133 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0E7291C33
-	for <lists+linux-can@lfdr.de>; Sun, 18 Oct 2020 21:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F50A29221D
+	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 07:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731575AbgJRT0K (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 18 Oct 2020 15:26:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41184 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731567AbgJRT0J (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 18 Oct 2020 15:26:09 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3372D22314;
-        Sun, 18 Oct 2020 19:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603049169;
-        bh=D520WNrr0uWEc7SIFgK6phE/cBpAaUU6XSAVxI02Nh4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PbEVDWXqSU4vpXwtdtm+A+tD5lz1jb5QCAUoq4RgbHpWSEyDA4Lnx6zqRV418b3RC
-         +sf43iU0nYgaWwC2vfGC2PASOpT9W2I6co90SxnL+FmSIw1ppO29RI9KWw+i2rrpNP
-         Mhm6F6IliKBJSzwtOnU6Y49CpZ41uDo7St3/Y9aY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 32/52] can: flexcan: flexcan_chip_stop(): add error handling and propagate error value
-Date:   Sun, 18 Oct 2020 15:25:09 -0400
-Message-Id: <20201018192530.4055730-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201018192530.4055730-1-sashal@kernel.org>
-References: <20201018192530.4055730-1-sashal@kernel.org>
+        id S1726239AbgJSFXI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Oct 2020 01:23:08 -0400
+Received: from mailrelay3-2.pub.mailoutpod1-cph3.one.com ([46.30.212.2]:52204
+        "EHLO mailrelay3-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726222AbgJSFXI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 01:23:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=csselectronics.com; s=20191106;
+        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
+         message-id:from:cc:references:to:subject:from;
+        bh=h6gtpMv9CoFJcjm6fpXiVUMwMQZcVYnbfwIH7C4v0HI=;
+        b=js9VoxQDGJYm1ibBMbzxYPwmhfqlFr5pRjqkWeeecms6+LUBNVSF2741nhTOIFhNHW8292y8t8tIE
+         jBMnys63Ix5BSsU1SRFzsqBqBgIxulvDfTgxQWrKtEfOqJ5r2YKpwJwaNBOMrWHIaedVdwp2C5R+gT
+         F5mkJWfor1EzYf1Dc8gkUDEUdj3/46emr5CjlFoLHWr/huyDwkjk5LHafWe4AAAQMwSyNjqb6gnTBU
+         PIdXCAj6sS9XFcaBfp7vLhQzTO9XPKHCL2qCRjCUs7ku7xTqebispxbkqIFiEJtCCS5RFXpTTXO9k1
+         iptcGXy2HcgbfLVH1oYYGuv7qw95HoA==
+X-HalOne-Cookie: a54260026d79af28958dd5948e2809fb97922bc7
+X-HalOne-ID: 29e77891-11cb-11eb-a804-d0431ea8bb03
+Received: from [192.168.0.157] (unknown [5.103.118.41])
+        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 29e77891-11cb-11eb-a804-d0431ea8bb03;
+        Mon, 19 Oct 2020 05:23:04 +0000 (UTC)
+Subject: Re: [PATCH v2 1/3] can: mcp251xfd: mcp251xfd_chip_wake(): renamed
+ from mcp251xfd_chip_clock_enable()
+To:     linux-can@vger.kernel.org
+References: <20201016205211.1141590-1-mkl@pengutronix.de>
+ <20201016205211.1141590-2-mkl@pengutronix.de>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+From:   =?UTF-8?Q?Magnus_Aagaard_S=c3=b8rensen?= <mas@csselectronics.com>
+Message-ID: <dd0f95b7-27ea-331b-7629-e652b6aa7b9b@csselectronics.com>
+Date:   Mon, 19 Oct 2020 07:23:07 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <20201016205211.1141590-2-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Joakim Zhang <qiangqing.zhang@nxp.com>
+Signed-off-by: Magnus Aagaard Sørensen <mas@csselectronics.com>
 
-[ Upstream commit 9ad02c7f4f279504bdd38ab706fdc97d5f2b2a9c ]
-
-This patch implements error handling and propagates the error value of
-flexcan_chip_stop(). This function will be called from flexcan_suspend()
-in an upcoming patch in some SoCs which support LPSR mode.
-
-Add a new function flexcan_chip_stop_disable_on_error() that tries to
-disable the chip even in case of errors.
-
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-[mkl: introduce flexcan_chip_stop_disable_on_error() and use it in flexcan_close()]
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Link: https://lore.kernel.org/r/20200922144429.2613631-11-mkl@pengutronix.de
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/can/flexcan.c | 34 ++++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 84dd79041285a..94468a883f369 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -1055,18 +1055,23 @@ static int flexcan_chip_start(struct net_device *dev)
- 	return err;
- }
- 
--/* flexcan_chip_stop
-+/* __flexcan_chip_stop
-  *
-- * this functions is entered with clocks enabled
-+ * this function is entered with clocks enabled
-  */
--static void flexcan_chip_stop(struct net_device *dev)
-+static int __flexcan_chip_stop(struct net_device *dev, bool disable_on_error)
- {
- 	struct flexcan_priv *priv = netdev_priv(dev);
- 	struct flexcan_regs __iomem *regs = priv->regs;
-+	int err;
- 
- 	/* freeze + disable module */
--	flexcan_chip_freeze(priv);
--	flexcan_chip_disable(priv);
-+	err = flexcan_chip_freeze(priv);
-+	if (err && !disable_on_error)
-+		return err;
-+	err = flexcan_chip_disable(priv);
-+	if (err && !disable_on_error)
-+		goto out_chip_unfreeze;
- 
- 	/* Disable all interrupts */
- 	flexcan_write(0, &regs->imask2);
-@@ -1076,6 +1081,23 @@ static void flexcan_chip_stop(struct net_device *dev)
- 
- 	flexcan_transceiver_disable(priv);
- 	priv->can.state = CAN_STATE_STOPPED;
-+
-+	return 0;
-+
-+ out_chip_unfreeze:
-+	flexcan_chip_unfreeze(priv);
-+
-+	return err;
-+}
-+
-+static inline int flexcan_chip_stop_disable_on_error(struct net_device *dev)
-+{
-+	return __flexcan_chip_stop(dev, true);
-+}
-+
-+static inline int flexcan_chip_stop(struct net_device *dev)
-+{
-+	return __flexcan_chip_stop(dev, false);
- }
- 
- static int flexcan_open(struct net_device *dev)
-@@ -1129,7 +1151,7 @@ static int flexcan_close(struct net_device *dev)
- 
- 	netif_stop_queue(dev);
- 	can_rx_offload_disable(&priv->offload);
--	flexcan_chip_stop(dev);
-+	flexcan_chip_stop_disable_on_error(dev);
- 
- 	free_irq(dev->irq, dev);
- 	clk_disable_unprepare(priv->clk_per);
--- 
-2.25.1
-
+On 16-10-2020 22:52, Marc Kleine-Budde wrote:
+> Co-developed-by: Magnus Aagaard Sørensen <mas@csselectronics.com>
+> Not-Singed-off-by: Magnus Aagaard Sørensen <mas@csselectronics.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>   drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 15 +++++++++------
+>   1 file changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> index c3f49543ff26..c36f5f14d50c 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> @@ -519,13 +519,16 @@ static inline bool mcp251xfd_osc_invalid(u32 reg)
+>   	return reg == 0x0 || reg == 0xffffffff;
+>   }
+>   
+> -static int mcp251xfd_chip_clock_enable(const struct mcp251xfd_priv *priv)
+> +static int mcp251xfd_chip_wake(const struct mcp251xfd_priv *priv)
+>   {
+>   	u32 osc, osc_reference, osc_mask;
+>   	int err;
+>   
+> -	/* Set Power On Defaults for "Clock Output Divisor" and remove
+> -	 * "Oscillator Disable" bit.
+> +	/* For normal sleep on MCP2517FD and MCP2518FD, clearing
+> +	 * "Oscillator Disable" will wake the chip. For low power mode
+> +	 * on MCP2518FD, asserting the chip select will wake the
+> +	 * chip. Writing to the Oscillator register will wake it in
+> +	 * both cases.
+>   	 */
+>   	osc = FIELD_PREP(MCP251XFD_REG_OSC_CLKODIV_MASK,
+>   			 MCP251XFD_REG_OSC_CLKODIV_10);
+> @@ -569,10 +572,10 @@ static int mcp251xfd_chip_softreset_do(const struct mcp251xfd_priv *priv)
+>   	const __be16 cmd = mcp251xfd_cmd_reset();
+>   	int err;
+>   
+> -	/* The Set Mode and SPI Reset command only seems to works if
+> -	 * the controller is not in Sleep Mode.
+> +	/* The Set Mode and SPI Reset command only works if the
+> +	 * controller is not in Sleep Mode.
+>   	 */
+> -	err = mcp251xfd_chip_clock_enable(priv);
+> +	err = mcp251xfd_chip_wake(priv);
+>   	if (err)
+>   		return err;
+>   
