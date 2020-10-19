@@ -2,102 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95AE9292E26
-	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 21:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BFC292EA7
+	for <lists+linux-can@lfdr.de>; Mon, 19 Oct 2020 21:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731171AbgJSTFm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 19 Oct 2020 15:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
+        id S1731257AbgJSTm3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 19 Oct 2020 15:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731137AbgJSTFl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 15:05:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9647CC0613CE
-        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 12:05:41 -0700 (PDT)
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kUaTT-0005v5-HK; Mon, 19 Oct 2020 21:05:39 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Tom Rix <trix@redhat.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-rfc 16/16] can: mcp251xfd: remove unneeded break
-Date:   Mon, 19 Oct 2020 21:05:24 +0200
-Message-Id: <20201019190524.1285319-17-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201019190524.1285319-1-mkl@pengutronix.de>
-References: <20201019190524.1285319-1-mkl@pengutronix.de>
+        with ESMTP id S1731126AbgJSTm2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 19 Oct 2020 15:42:28 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDB3C0613CE
+        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 12:42:27 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id gv6so367031pjb.4
+        for <linux-can@vger.kernel.org>; Mon, 19 Oct 2020 12:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=no6WOfZDuAXhTDfVia9Vunkz4L7BthY0F8m0jo4//vs=;
+        b=vqIoQqfPtCUD7ceHGEmbvFqqUZd/9dE0IpLQQ4p4nyONBXQMSFxBG5OzgCaJfT8eu8
+         Ez0DMwUntzcU9c2WJzs/WqMvxG3bzlj0mstlcz+E4fW0gt02sZNjrL1HdU6SHVwmCE5R
+         WFeHYzJRJuPZspqj8YJ2wlUmUN4Mc8MNrI6kLekCJ8yejCepkvkgEUeb7TbpDze1NnEh
+         TP2SjhqdakZDUedR00qYjd62k5W2m7FgfHIpcuS/rhjqMGxVL3Apppn+UDRO/ftdIfoh
+         duvoKavmXDacw9mysFV+xdp1Tg4QxCPiDxNSeCeZyO+34Y2S1kYSdX61NJzSKhmGsX5T
+         HLpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=no6WOfZDuAXhTDfVia9Vunkz4L7BthY0F8m0jo4//vs=;
+        b=KUdkU36u8A4L3sP8XvWHEQO5plYzA+H7qTzrreitjVfavj9ZlvqTVPpHKTs1HT2LsO
+         db2eh1HjqR/UKz5/UPEWgsPQ6xI52Kn9WoWNdOPfmXOvLcnvYst0wywsWHdnBWRuKmPV
+         hVav2eEC7nMoCRuEpFfAsbnSBsZ1YvLq0FuwISlLGUjnvL5V8lv5OAwbTvNZsBooJN2g
+         T5CGMDucmHAQgYj96hvvOQfSBK5hScQ2DI3oESSUqkUfsuBXP46OcJx4z+6Nl64Npo+G
+         pP7CazTAWx+yf2w2NjYH9fONJ7qtqpRpXV09BQnPx/gJdL2MBYJfLeAnHqxs6loUMRNY
+         FSbw==
+X-Gm-Message-State: AOAM5302OwBFq5YdLj+TYp+1y03p0zSYRLzLEDJnRBlwskqilTK2Qd9m
+        tagk1gIFkFM8J4QOyRN0WmhZpncvfzjH38+4FcUFYg==
+X-Google-Smtp-Source: ABdhPJxy4K+2uRaBuhFTeTSlHPetqrP1uAAP7dKvm6UBZz10SCa23PJUxb54E5JJmlle9J/y892Qp+TTrKvO4GeNXIk=
+X-Received: by 2002:a17:90a:ee87:: with SMTP id i7mr921476pjz.25.1603136546933;
+ Mon, 19 Oct 2020 12:42:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20201017160928.12698-1-trix@redhat.com> <20201018054332.GB593954@kroah.com>
+In-Reply-To: <20201018054332.GB593954@kroah.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 19 Oct 2020 12:42:15 -0700
+Message-ID: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Subject: Re: [RFC] treewide: cleanup unreachable breaks
+To:     Tom Rix <trix@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        storagedev@microchip.com, devel@driverdev.osuosl.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        George Burgess <gbiv@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+> > From: Tom Rix <trix@redhat.com>
+> >
+> > This is a upcoming change to clean up a new warning treewide.
+> > I am wondering if the change could be one mega patch (see below) or
+> > normal patch per file about 100 patches or somewhere half way by collecting
+> > early acks.
+>
+> Please break it up into one-patch-per-subsystem, like normal, and get it
+> merged that way.
+>
+> Sending us a patch, without even a diffstat to review, isn't going to
+> get you very far...
 
-A break is not needed if it is preceded by a return.
+Tom,
+If you're able to automate this cleanup, I suggest checking in a
+script that can be run on a directory.  Then for each subsystem you
+can say in your commit "I ran scripts/fix_whatever.py on this subdir."
+ Then others can help you drive the tree wide cleanup.  Then we can
+enable -Wunreachable-code-break either by default, or W=2 right now
+might be a good idea.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20201019172412.31143-1-trix@redhat.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 22 +++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Ah, George (gbiv@, cc'ed), did an analysis recently of
+`-Wunreachable-code-loop-increment`, `-Wunreachable-code-break`, and
+`-Wunreachable-code-return` for Android userspace.  From the review:
+```
+Spoilers: of these, it seems useful to turn on
+-Wunreachable-code-loop-increment and -Wunreachable-code-return by
+default for Android
+...
+While these conventions about always having break arguably became
+obsolete when we enabled -Wfallthrough, my sample turned up zero
+potential bugs caught by this warning, and we'd need to put a lot of
+effort into getting a clean tree. So this warning doesn't seem to be
+worth it.
+```
+Looks like there's an order of magnitude of `-Wunreachable-code-break`
+than the other two.
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index c3f49543ff26..9c215f7c5f81 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -75,11 +75,11 @@ static const char *__mcp251xfd_get_model_str(enum mcp251xfd_model model)
- {
- 	switch (model) {
- 	case MCP251XFD_MODEL_MCP2517FD:
--		return "MCP2517FD"; break;
-+		return "MCP2517FD";
- 	case MCP251XFD_MODEL_MCP2518FD:
--		return "MCP2518FD"; break;
-+		return "MCP2518FD";
- 	case MCP251XFD_MODEL_MCP251XFD:
--		return "MCP251xFD"; break;
-+		return "MCP251xFD";
- 	}
- 
- 	return "<unknown>";
-@@ -95,21 +95,21 @@ static const char *mcp251xfd_get_mode_str(const u8 mode)
- {
- 	switch (mode) {
- 	case MCP251XFD_REG_CON_MODE_MIXED:
--		return "Mixed (CAN FD/CAN 2.0)"; break;
-+		return "Mixed (CAN FD/CAN 2.0)";
- 	case MCP251XFD_REG_CON_MODE_SLEEP:
--		return "Sleep"; break;
-+		return "Sleep";
- 	case MCP251XFD_REG_CON_MODE_INT_LOOPBACK:
--		return "Internal Loopback"; break;
-+		return "Internal Loopback";
- 	case MCP251XFD_REG_CON_MODE_LISTENONLY:
--		return "Listen Only"; break;
-+		return "Listen Only";
- 	case MCP251XFD_REG_CON_MODE_CONFIG:
--		return "Configuration"; break;
-+		return "Configuration";
- 	case MCP251XFD_REG_CON_MODE_EXT_LOOPBACK:
--		return "External Loopback"; break;
-+		return "External Loopback";
- 	case MCP251XFD_REG_CON_MODE_CAN2_0:
--		return "CAN 2.0"; break;
-+		return "CAN 2.0";
- 	case MCP251XFD_REG_CON_MODE_RESTRICTED:
--		return "Restricted Operation"; break;
-+		return "Restricted Operation";
- 	}
- 
- 	return "<unknown>";
+We probably should add all 3 to W=2 builds (wrapped in cc-option).
+I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
+follow up on.
 -- 
-2.28.0
-
+Thanks,
+~Nick Desaulniers
