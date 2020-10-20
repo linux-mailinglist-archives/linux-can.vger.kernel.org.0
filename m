@@ -2,35 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1FD2937AA
-	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 11:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E3A293805
+	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 11:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730408AbgJTJJT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Oct 2020 05:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S2392859AbgJTJbg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Oct 2020 05:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729237AbgJTJJS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 05:09:18 -0400
+        with ESMTP id S2391608AbgJTJbf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 05:31:35 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9BAC061755
-        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 02:09:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593A8C061755
+        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 02:31:35 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kUndt-0007DQ-EK; Tue, 20 Oct 2020 11:09:17 +0200
+        id 1kUnzG-0001cS-RV; Tue, 20 Oct 2020 11:31:22 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207] (unknown [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3F43F57D5E6;
-        Tue, 20 Oct 2020 09:09:16 +0000 (UTC)
-Subject: Re: [PATCH] can: j1939: rename jacd tool
-To:     yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org
-References: <20201020081134.3597-1-yegorslists@googlemail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 21F5B57DD00;
+        Tue, 20 Oct 2020 09:31:21 +0000 (UTC)
+Subject: Re: [PATCH V3 06/10] can: flexcan: disable wakeup in flexcan_remove()
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
+        linux-can@vger.kernel.org, pankaj.bansal@nxp.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
+ <20201020155402.30318-7-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -92,15 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <4f9dd190-7032-6cc4-00e1-387ec1e34bfc@pengutronix.de>
-Date:   Tue, 20 Oct 2020 11:09:12 +0200
+Message-ID: <c5a5a84a-1ed0-5413-d909-074d8ad6b102@pengutronix.de>
+Date:   Tue, 20 Oct 2020 11:31:16 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201020081134.3597-1-yegorslists@googlemail.com>
+In-Reply-To: <20201020155402.30318-7-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="EGn62dCH91UY2ktpWBeLEH83OsjGHtYeN"
+ boundary="fpmcvrT9jKgjPv8v1lLH0pK21s5zKTdW4"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -110,33 +114,58 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---EGn62dCH91UY2ktpWBeLEH83OsjGHtYeN
-Content-Type: multipart/mixed; boundary="Zb5zrx2KwYJSpPoMC6g6IWIV0lxFezr7w";
+--fpmcvrT9jKgjPv8v1lLH0pK21s5zKTdW4
+Content-Type: multipart/mixed; boundary="aBs1oQwEY8mJWK1jjnehG7QfsR5xXmQte";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Message-ID: <4f9dd190-7032-6cc4-00e1-387ec1e34bfc@pengutronix.de>
-Subject: Re: [PATCH] can: j1939: rename jacd tool
-References: <20201020081134.3597-1-yegorslists@googlemail.com>
-In-Reply-To: <20201020081134.3597-1-yegorslists@googlemail.com>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, robh+dt@kernel.org,
+ shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc: kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
+ linux-can@vger.kernel.org, pankaj.bansal@nxp.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <c5a5a84a-1ed0-5413-d909-074d8ad6b102@pengutronix.de>
+Subject: Re: [PATCH V3 06/10] can: flexcan: disable wakeup in flexcan_remove()
+References: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
+ <20201020155402.30318-7-qiangqing.zhang@nxp.com>
+In-Reply-To: <20201020155402.30318-7-qiangqing.zhang@nxp.com>
 
---Zb5zrx2KwYJSpPoMC6g6IWIV0lxFezr7w
+--aBs1oQwEY8mJWK1jjnehG7QfsR5xXmQte
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/20/20 10:11 AM, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->=20
-> Due to naming conflicts, jacd was renamed to j1939acd.
->=20
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On 10/20/20 5:53 PM, Joakim Zhang wrote:
+> Disable wakeup in flexcan_remove().
 
-Applied to linux-can.
+The patch looks good, please explain why this is needed.
 
-Tnx,
 Marc
+
+>=20
+> Fixes: de3578c198c6 ("can: flexcan: add self wakeup support")
+> Fixes: 915f9666421c ("can: flexcan: add support for DT property 'wakeup=
+-source'")
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> ---
+>  drivers/net/can/flexcan.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 06f94b6f0ebe..881799bd9c5e 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -2062,6 +2062,8 @@ static int flexcan_remove(struct platform_device =
+*pdev)
+>  {
+>  	struct net_device *dev =3D platform_get_drvdata(pdev);
+> =20
+> +	device_set_wakeup_enable(&pdev->dev, false);
+> +	device_set_wakeup_capable(&pdev->dev, false);
+>  	unregister_flexcandev(dev);
+>  	pm_runtime_disable(&pdev->dev);
+>  	free_candev(dev);
+>=20
+
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -145,23 +174,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---Zb5zrx2KwYJSpPoMC6g6IWIV0lxFezr7w--
+--aBs1oQwEY8mJWK1jjnehG7QfsR5xXmQte--
 
---EGn62dCH91UY2ktpWBeLEH83OsjGHtYeN
+--fpmcvrT9jKgjPv8v1lLH0pK21s5zKTdW4
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+OqTgACgkQqclaivrt
-76ludwgAnhlLvVDP2asWvr91IjG9GDHq8My7KZkmOxm5+XyVYho64ayOpT28QYhK
-P5p1JisqUSRXkgGYiFswThRvu604Wf7nm/E0zHFPlMx9aJXhM+64W/UwV/2gHdu6
-nqxJUO2elnT4dJ+xjEJYfRcSYVBmJ/kF+PFDvCgkeNAS4v1ETD+OcwGOEAwfZS2C
-CPaKqVkFwljLdJMmHLLs3+tkNNchZ89Go7ZmzA+hN7p4XJNlJ9f5UfPg0spusc9A
-uX9ccMqBRna4Lk4CWSVlpG3pUWNqaE/xPdAQ2yP3W2LbXLZXLLX/LJsE5Y11tlVo
-2z3wHAfHADZnZo478vA3iRGa/kmQBQ==
-=h3MO
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+OrmQACgkQqclaivrt
+76nvaAf/RHGvBElUwEduDte/ZADA7kXFNv5xLVd6l4ltxgirFSpswl5oFPG+5du/
+VIMCS8E5oj2qn093h4CWZejQjlruMXbATh8Rc7uLh5vbH5191h3Rn8PIvSE7Mr8J
+TOPV9c1jU+p3+t+TNo6VhpcCyMTnmHHpCpnPRBW6zU8zkS5P4KPXW1SnHjPA97P2
+D9Qh4T3tf1qaEzYvMpTJCL8WWeF3vPDk+mwM3+SnYDDimmAL2QpJkIZa5M8rOpSu
+8Pq6U4LVF0LAUXcU9KjbNTZ+M19Heu/vhd6l+wq6ZkM32MLdZOWxVARIMLCUYl7w
+/xygeSTVKRC+NeRdjCqswk9bkW+40g==
+=WQaX
 -----END PGP SIGNATURE-----
 
---EGn62dCH91UY2ktpWBeLEH83OsjGHtYeN--
+--fpmcvrT9jKgjPv8v1lLH0pK21s5zKTdW4--
