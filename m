@@ -2,127 +2,188 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F13D293926
-	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 12:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0FDA29394C
+	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 12:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393145AbgJTK3j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Oct 2020 06:29:39 -0400
-Received: from mail-eopbgr60084.outbound.protection.outlook.com ([40.107.6.84]:61505
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388927AbgJTK3j (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Oct 2020 06:29:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lMwMdlvapABDBWR2DypLggv8hj6NhFYhVY57M2WsnyJxl4cEba5FpFonYfx4yN6v2E9qknvxYw8fpFL0MJ0rOPZGYXBNFLEXDGJDn1zqesg7brWIWv80Lx8tFGgS6L0HnOPppUZPcFbUVaqzwK3xkw0x5ANfkqBlVpudIGjpZgKv4mXMQbamAzsr4bZruCsf/Wc2j//f17mMkcPP6XZwgsvAbEZ/QLhEvdAvwToFzfxYKiYpzNbTR5sNyu0wynjdsAWn46tI9WrDbA0BfSUbv57mXW1Uf2CuJvEulkD0G4UjibzvZ5jeeefJqM1qWZLXZGw01BxE5Q1rAcMUV5z4Xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bsLRvOO1wBfVjmyGo/NdKwM2xLKfgp6XxBNCxYat+CA=;
- b=aq8Ufl0TOdY+xgJZe4V2TW81/Px2+6MUi8Tb6OvByhlJVZINnk3IoFM/keu0cyQd3PJytdf34M0t5Veue/1ugCB5tUhNE5Owv84qJZ5IxPklrOy60A4M8cuCpDcBa8H8T4Q0GjqFd/inSRQJIzabOT+QYXNvoUDqhNJDraE8VF0r9P2ss6lVvgXMGujkTfHZBVwIHfT0iD7fqecOv5EguzdGFJ9mDYbtW9HbN3VjsPmBFztUqfFNcgaUcaMlAeyajAZ98viGjhccvuHdLvAGNLtU/OqedUr7EGJxHcRIYe8JNALIZQBVzCXnfuav6J0iBQUqq93IF3bMb9W1fPM+Ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bsLRvOO1wBfVjmyGo/NdKwM2xLKfgp6XxBNCxYat+CA=;
- b=MObm/IfW8cJ2CcthGezQlCumGgWuZ+EttwzlkJd0P9AjrvqpRwNLthsOWaPwF1owBlnZZ35heGOuP5vRJIVC4I0YjMfxxn5+8JwLM3zqEfqGyufq2zSNesZc7Rfv5c5VIhxkC5FkhH/mc9t1PtSpGHF441BqZ3uWGLdtvhVFtkU=
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
- by DB6PR04MB3206.eurprd04.prod.outlook.com (2603:10a6:6:d::27) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3477.25; Tue, 20 Oct 2020 10:29:35 +0000
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::3c3a:58b9:a1cc:cbcc]) by DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::3c3a:58b9:a1cc:cbcc%9]) with mapi id 15.20.3477.028; Tue, 20 Oct 2020
- 10:29:35 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S2390049AbgJTKl3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Oct 2020 06:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389984AbgJTKl1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 06:41:27 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90427C061755
+        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 03:41:27 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kUp4w-0001NB-Po; Tue, 20 Oct 2020 12:41:18 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207] (unknown [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2654357E134;
+        Tue, 20 Oct 2020 10:41:17 +0000 (UTC)
+Subject: Re: [PATCH V3 06/10] can: flexcan: disable wakeup in flexcan_remove()
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "shawnguo@kernel.org" <shawnguo@kernel.org>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
         dl-linux-imx <linux-imx@nxp.com>, Ying Liu <victor.liu@nxp.com>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
         Pankaj Bansal <pankaj.bansal@nxp.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V3 06/10] can: flexcan: disable wakeup in flexcan_remove()
-Thread-Topic: [PATCH V3 06/10] can: flexcan: disable wakeup in
- flexcan_remove()
-Thread-Index: AQHWprY9cR7f3d0oi0qrc1aRv609RamgOhcAgAAPDeA=
-Date:   Tue, 20 Oct 2020 10:29:35 +0000
-Message-ID: <DB8PR04MB6795126625F3AE3B9BFBC9EBE61F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
 References: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
  <20201020155402.30318-7-qiangqing.zhang@nxp.com>
  <c5a5a84a-1ed0-5413-d909-074d8ad6b102@pengutronix.de>
-In-Reply-To: <c5a5a84a-1ed0-5413-d909-074d8ad6b102@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 2d4a4cba-5a61-4b02-4ddd-08d874e30a43
-x-ms-traffictypediagnostic: DB6PR04MB3206:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB6PR04MB32061264B7E6A3F4C3FFBC01E61F0@DB6PR04MB3206.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u31VOfavoqIeNJRYnJfWAfCZqhVXWVeJGUN1YfFkX0+qDMBHBoXXglb4BrYhQrulXZuea80HIoQTlB4sqHT/SQR4+NVKQkJYPyrPYqWogLfIUKMViuFTCfIUBFWM8GS+YTm2e6EnUe250XCiSrBe4zTkSVr1LeqmdUBv6zN1t9QWaO7U361xd1UuvV5V0jHQxuuVH28C+lNHzw5bEeuwi2+6zKwt5lhxzL8Eblr4DZx/IvWcZ6MPmZd+IDwx+KKq6JcbIXT4ZaAT3Q5JMRMhfLO26XnCkXLd7RhvD9ov/MJ18DkfPFR75UJVVeA4Ha7K1c3MZzf1S+55usSy/+pDDf8GH+lP378yP4rQY0m5rqEqu/e68XR/7b9cydqDdnUa1uGQ31moUbF/HWZ3Wr/+xQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(136003)(346002)(366004)(376002)(64756008)(66946007)(66446008)(5660300002)(33656002)(966005)(4326008)(26005)(186003)(6506007)(2906002)(478600001)(53546011)(8936002)(110136005)(76116006)(66556008)(66476007)(86362001)(9686003)(8676002)(83380400001)(54906003)(7696005)(52536014)(316002)(71200400001)(55016002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 9Htmgr4tosjm9MduUaxEiMFFmONA6qmNB2mwq+/eCaeZhjqeVN0Wyabw48IxMfmhUoQyPxDmpqCi5SvJMFEui/f07nIiETZ9Mf+8eCgCNPBILElyjXiaDInsS0llGnI17TL0e8za9TbrxrOa3dGvoS45G1CbQhMrZWhlRIypihUVxVpI2i5OSbZWlEtk+P13iStErRCButoNbaYtZMWBT5VRgL+rQnkCHVhkjw3Prsi4v+fclyqnzhDlm9dTQZAq5p93mA6wS3v7DL3+pgSn5+OS5ryVQu41KBQErbMAambBSMl9ZqNcj9lDVZuBkGyqXgqJQF5VESDqZHJDW3wWlUNzMlwI6v2hV3qiVtFU7rfv/vzXFAFUmdkMa6Sm1hF9sj7WCafR+fArGga4nULriHBR6MdtYR/oA8L45HOR4G75iU8/RwWkn36q2S8MvFIVrcXvT35zEwaYnjyvUn1xXrKxIULB0RZimYpuk6fqVfnNwNmTpG3iL177fYW3kb3wztVuGq7hZjRUu1a/BcsGnlGpb6CzvWz6UUmspOmENASg7UwmYcnTeqWBTONEWTOR1uIZW4XP83OHUczNt/dJgXN1QIXQu49SuCEzo2wYPxPztgGIWdh3RYkCZietTvq/KPwXYW/ugHaJWISdxSVqPg==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <DB8PR04MB6795126625F3AE3B9BFBC9EBE61F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <ae1dc697-03c4-3ed9-9b43-ab36607defc1@pengutronix.de>
+Date:   Tue, 20 Oct 2020 12:41:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d4a4cba-5a61-4b02-4ddd-08d874e30a43
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Oct 2020 10:29:35.0271
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ResRJMYNajAqP8p/HAYYu8GBk7Ic1WPHlPmLhRa/iCF4S/8F9h+H8ae08J/PI0xqYe62Be+7jeYe8KWH/T4ijg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB3206
+In-Reply-To: <DB8PR04MB6795126625F3AE3B9BFBC9EBE61F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="RMt43hyApA0rDFXrI74fGSCAHyVWKn6Gp"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQpIaSBNYXJjLA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE1hcmMg
-S2xlaW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IDIwMjDlubQxMOaciDIw
-5pelIDE3OjMxDQo+IFRvOiBKb2FraW0gWmhhbmcgPHFpYW5ncWluZy56aGFuZ0BueHAuY29tPjsg
-cm9iaCtkdEBrZXJuZWwub3JnOw0KPiBzaGF3bmd1b0BrZXJuZWwub3JnOyBzLmhhdWVyQHBlbmd1
-dHJvbml4LmRlDQo+IENjOiBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7IGRsLWxpbnV4LWlteCA8bGlu
-dXgtaW14QG54cC5jb20+OyBZaW5nIExpdQ0KPiA8dmljdG9yLmxpdUBueHAuY29tPjsgbGludXgt
-Y2FuQHZnZXIua2VybmVsLm9yZzsgUGFua2FqIEJhbnNhbA0KPiA8cGFua2FqLmJhbnNhbEBueHAu
-Y29tPjsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVs
-Lm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIFYzIDA2LzEwXSBjYW46IGZsZXhjYW46IGRpc2Fi
-bGUgd2FrZXVwIGluIGZsZXhjYW5fcmVtb3ZlKCkNCj4gDQo+IE9uIDEwLzIwLzIwIDU6NTMgUE0s
-IEpvYWtpbSBaaGFuZyB3cm90ZToNCj4gPiBEaXNhYmxlIHdha2V1cCBpbiBmbGV4Y2FuX3JlbW92
-ZSgpLg0KPiANCj4gVGhlIHBhdGNoIGxvb2tzIGdvb2QsIHBsZWFzZSBleHBsYWluIHdoeSB0aGlz
-IGlzIG5lZWRlZC4NCg0KT2theSwgQ2FuIEkgcmVzZW5kIHRoaXMgcGF0Y2ggaW5kaXZpZHVhbGx5
-Pw0KDQpKb2FraW0NCj4gTWFyYw0KPiANCj4gPg0KPiA+IEZpeGVzOiBkZTM1NzhjMTk4YzYgKCJj
-YW46IGZsZXhjYW46IGFkZCBzZWxmIHdha2V1cCBzdXBwb3J0IikNCj4gPiBGaXhlczogOTE1Zjk2
-NjY0MjFjICgiY2FuOiBmbGV4Y2FuOiBhZGQgc3VwcG9ydCBmb3IgRFQgcHJvcGVydHkNCj4gPiAn
-d2FrZXVwLXNvdXJjZSciKQ0KPiA+IFNpZ25lZC1vZmYtYnk6IEpvYWtpbSBaaGFuZyA8cWlhbmdx
-aW5nLnpoYW5nQG54cC5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvbmV0L2Nhbi9mbGV4Y2Fu
-LmMgfCAyICsrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gPg0KPiA+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9jYW4vZmxleGNhbi5jIGIvZHJpdmVycy9uZXQvY2Fu
-L2ZsZXhjYW4uYw0KPiA+IGluZGV4IDA2Zjk0YjZmMGViZS4uODgxNzk5YmQ5YzVlIDEwMDY0NA0K
-PiA+IC0tLSBhL2RyaXZlcnMvbmV0L2Nhbi9mbGV4Y2FuLmMNCj4gPiArKysgYi9kcml2ZXJzL25l
-dC9jYW4vZmxleGNhbi5jDQo+ID4gQEAgLTIwNjIsNiArMjA2Miw4IEBAIHN0YXRpYyBpbnQgZmxl
-eGNhbl9yZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZQ0KPiA+ICpwZGV2KSAgew0KPiA+ICAJ
-c3RydWN0IG5ldF9kZXZpY2UgKmRldiA9IHBsYXRmb3JtX2dldF9kcnZkYXRhKHBkZXYpOw0KPiA+
-DQo+ID4gKwlkZXZpY2Vfc2V0X3dha2V1cF9lbmFibGUoJnBkZXYtPmRldiwgZmFsc2UpOw0KPiA+
-ICsJZGV2aWNlX3NldF93YWtldXBfY2FwYWJsZSgmcGRldi0+ZGV2LCBmYWxzZSk7DQo+ID4gIAl1
-bnJlZ2lzdGVyX2ZsZXhjYW5kZXYoZGV2KTsNCj4gPiAgCXBtX3J1bnRpbWVfZGlzYWJsZSgmcGRl
-di0+ZGV2KTsNCj4gPiAgCWZyZWVfY2FuZGV2KGRldik7DQo+ID4NCj4gDQo+IA0KPiAtLQ0KPiBQ
-ZW5ndXRyb25peCBlLksuICAgICAgICAgICAgICAgICB8IE1hcmMgS2xlaW5lLUJ1ZGRlICAgICAg
-ICAgICB8DQo+IEVtYmVkZGVkIExpbnV4ICAgICAgICAgICAgICAgICAgIHwgaHR0cHM6Ly93d3cu
-cGVuZ3V0cm9uaXguZGUgIHwNCj4gVmVydHJldHVuZyBXZXN0L0RvcnRtdW5kICAgICAgICAgfCBQ
-aG9uZTogKzQ5LTIzMS0yODI2LTkyNCAgICAgfA0KPiBBbXRzZ2VyaWNodCBIaWxkZXNoZWltLCBI
-UkEgMjY4NiB8IEZheDogICArNDktNTEyMS0yMDY5MTctNTU1NSB8DQoNCg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--RMt43hyApA0rDFXrI74fGSCAHyVWKn6Gp
+Content-Type: multipart/mixed; boundary="aH9Vb2285YfjjDAEEbkDcMswyVgoOC1NR";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>,
+ "robh+dt@kernel.org" <robh+dt@kernel.org>,
+ "shawnguo@kernel.org" <shawnguo@kernel.org>,
+ "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc: "kernel@pengutronix.de" <kernel@pengutronix.de>,
+ dl-linux-imx <linux-imx@nxp.com>, Ying Liu <victor.liu@nxp.com>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+ Pankaj Bansal <pankaj.bansal@nxp.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Message-ID: <ae1dc697-03c4-3ed9-9b43-ab36607defc1@pengutronix.de>
+Subject: Re: [PATCH V3 06/10] can: flexcan: disable wakeup in flexcan_remove()
+References: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
+ <20201020155402.30318-7-qiangqing.zhang@nxp.com>
+ <c5a5a84a-1ed0-5413-d909-074d8ad6b102@pengutronix.de>
+ <DB8PR04MB6795126625F3AE3B9BFBC9EBE61F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <DB8PR04MB6795126625F3AE3B9BFBC9EBE61F0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+
+--aH9Vb2285YfjjDAEEbkDcMswyVgoOC1NR
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 10/20/20 12:29 PM, Joakim Zhang wrote:
+>> On 10/20/20 5:53 PM, Joakim Zhang wrote:
+>>> Disable wakeup in flexcan_remove().
+>>
+>> The patch looks good, please explain why this is needed.
+>=20
+> Okay, Can I resend this patch individually?
+
+sure.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--aH9Vb2285YfjjDAEEbkDcMswyVgoOC1NR--
+
+--RMt43hyApA0rDFXrI74fGSCAHyVWKn6Gp
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+OvsgACgkQqclaivrt
+76l5GQf/eanndg0QbJI5P9lEE/2NbSsxjWRMe4PjK2ANmFRxSIdfjs4Aqjw5gipF
+4y/xHCOPNE+UWuyjAzKLX1PPmZoaN2KCNNXvhcSgm1jYk5QXH5FRmp65JeW78kR3
+STT+kQHx/l8K+zMquTSdoJC0cuMpCp6yUfLFQwavwjtGLloj0sZczP7G4MAKR/k2
+12RLl7cOQKmLpi5173tBWgqWSPWXtyCWKHlV5Aq58YPS3Tblh0Iafo3Iwm2DlDc4
+wO9TrMPCP6My3W0nQb/NFC7Nq8X/JyAilVrF1A7vJUhObGCrwoZo4QQRbfTLs8w7
+HBo6zY0L5Fov7wRCDY42jUJeWV1sxQ==
+=hW8X
+-----END PGP SIGNATURE-----
+
+--RMt43hyApA0rDFXrI74fGSCAHyVWKn6Gp--
