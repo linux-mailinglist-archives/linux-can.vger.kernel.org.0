@@ -2,38 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF84293FE9
-	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 17:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91658293FF4
+	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 17:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436856AbgJTPvD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Oct 2020 11:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
+        id S2436922AbgJTPwq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Oct 2020 11:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730101AbgJTPvD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 11:51:03 -0400
+        with ESMTP id S2436916AbgJTPwq (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 11:52:46 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB360C061755
-        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 08:51:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D27FC061755
+        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 08:52:46 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kUtuW-0006hF-U5; Tue, 20 Oct 2020 17:50:53 +0200
+        id 1kUtwH-0006t0-Ii; Tue, 20 Oct 2020 17:52:41 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207] (unknown [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 41E6D57E557;
-        Tue, 20 Oct 2020 15:50:51 +0000 (UTC)
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
-        linux-can@vger.kernel.org, pankaj.bansal@nxp.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
- <20201020155402.30318-11-qiangqing.zhang@nxp.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AD39757E566;
+        Tue, 20 Oct 2020 15:52:37 +0000 (UTC)
+Subject: Re: [PATCH] can: isotp: make const array static, makes object smaller
+To:     Colin King <colin.king@canonical.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201020154203.54711-1-colin.king@canonical.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,17 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH V3 10/10] can: flexcan: add CAN wakeup function for
- i.MX8QM
-Message-ID: <b334edc4-cdaa-e7e6-5f1c-9bc046cbb255@pengutronix.de>
-Date:   Tue, 20 Oct 2020 17:50:47 +0200
+Message-ID: <84468e24-899c-6dac-5349-da6613c3eb98@pengutronix.de>
+Date:   Tue, 20 Oct 2020 17:52:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201020155402.30318-11-qiangqing.zhang@nxp.com>
+In-Reply-To: <20201020154203.54711-1-colin.king@canonical.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="gRoJHpvHipkIHg2UxeKi9VIujwNMEK2qJ"
+ boundary="tJG8cfsxoLOlGC1Y1hfR0tNaUE9sTYVnB"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,308 +114,46 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---gRoJHpvHipkIHg2UxeKi9VIujwNMEK2qJ
-Content-Type: multipart/mixed; boundary="NwKCTYajUq4t6f3dnUVQmrIBqaqtZoCHx";
+--tJG8cfsxoLOlGC1Y1hfR0tNaUE9sTYVnB
+Content-Type: multipart/mixed; boundary="tumPUlKtpQx75xVhhXq0eeC7YAM9A2EQ0";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>, robh+dt@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc: kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
- linux-can@vger.kernel.org, pankaj.bansal@nxp.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-ID: <b334edc4-cdaa-e7e6-5f1c-9bc046cbb255@pengutronix.de>
-Subject: Re: [PATCH V3 10/10] can: flexcan: add CAN wakeup function for
- i.MX8QM
-References: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
- <20201020155402.30318-11-qiangqing.zhang@nxp.com>
-In-Reply-To: <20201020155402.30318-11-qiangqing.zhang@nxp.com>
+To: Colin King <colin.king@canonical.com>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <84468e24-899c-6dac-5349-da6613c3eb98@pengutronix.de>
+Subject: Re: [PATCH] can: isotp: make const array static, makes object smaller
+References: <20201020154203.54711-1-colin.king@canonical.com>
+In-Reply-To: <20201020154203.54711-1-colin.king@canonical.com>
 
---NwKCTYajUq4t6f3dnUVQmrIBqaqtZoCHx
+--tumPUlKtpQx75xVhhXq0eeC7YAM9A2EQ0
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/20/20 5:54 PM, Joakim Zhang wrote:
-> The System Controller Firmware (SCFW) is a low-level system function
-> which runs on a dedicated Cortex-M core to provide power, clock, and
-> resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
-> (QM, QP), and i.MX8QX (QXP, DX). SCU driver manages the IPC interface
-> between host CPU and the SCU firmware running on M4.
+On 10/20/20 5:42 PM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 >=20
-> For i.MX8QM, stop mode request is controlled by System Controller Unit(=
-SCU)
-> firmware, this patch introduces FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW quir=
-k
-> for this function.
+> Don't populate the const array plen on the stack but instead it
+> static. Makes the object code smaller by 926 bytes.
 >=20
-> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-> ---
->  drivers/net/can/flexcan.c | 127 +++++++++++++++++++++++++++++++++-----=
-
->  1 file changed, 110 insertions(+), 17 deletions(-)
+> Before:
+>    text	   data	    bss	    dec	    hex	filename
+>   26531	   1943	     64	  28538	   6f7a	net/can/isotp.o
 >=20
-> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-> index 8f578c867493..97840b3e0a8a 100644
-> --- a/drivers/net/can/flexcan.c
-> +++ b/drivers/net/can/flexcan.c
-> @@ -9,6 +9,7 @@
->  //
->  // Based on code originally by Andrey Volkov <avolkov@varma-el.com>
-> =20
-> +#include <dt-bindings/firmware/imx/rsrc.h>
->  #include <linux/bitfield.h>
->  #include <linux/can.h>
->  #include <linux/can/dev.h>
-> @@ -17,6 +18,7 @@
->  #include <linux/can/rx-offload.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> +#include <linux/firmware/imx/sci.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
->  #include <linux/mfd/syscon.h>
-> @@ -242,6 +244,8 @@
->  #define FLEXCAN_QUIRK_SUPPORT_FD BIT(9)
->  /* support memory detection and correction */
->  #define FLEXCAN_QUIRK_SUPPORT_ECC BIT(10)
-> +/* Setup stop mode with SCU firmware to support wakeup */
-> +#define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW BIT(11)
-> =20
->  /* Structure of the message buffer */
->  struct flexcan_mb {
-> @@ -347,6 +351,7 @@ struct flexcan_priv {
->  	u8 mb_count;
->  	u8 mb_size;
->  	u8 clk_src;	/* clock source of CAN Protocol Engine */
-> +	u8 can_idx;
-
-please name it like the DT property, scu_index.
-
-> =20
->  	u64 rx_mask;
->  	u64 tx_mask;
-> @@ -358,6 +363,9 @@ struct flexcan_priv {
->  	struct regulator *reg_xceiver;
->  	struct flexcan_stop_mode stm;
-> =20
-> +	/* IPC handle when setup stop mode by System Controller firmware(scfw=
-) */
-> +	struct imx_sc_ipc *sc_ipc_handle;
-> +
->  	/* Read and Write APIs */
->  	u32 (*read)(void __iomem *addr);
->  	void (*write)(u32 val, void __iomem *addr);
-> @@ -387,7 +395,7 @@ static const struct flexcan_devtype_data fsl_imx6q_=
-devtype_data =3D {
->  static const struct flexcan_devtype_data fsl_imx8qm_devtype_data =3D {=
-
->  	.quirks =3D FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_R=
-RS |
->  		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
-> -		FLEXCAN_QUIRK_SUPPORT_FD,
-> +		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW,
->  };
-> =20
->  static struct flexcan_devtype_data fsl_imx8mp_devtype_data =3D {
-> @@ -546,18 +554,42 @@ static void flexcan_enable_wakeup_irq(struct flex=
-can_priv *priv, bool enable)
->  	priv->write(reg_mcr, &regs->mcr);
->  }
-> =20
-> +static int flexcan_stop_mode_enable_scfw(struct flexcan_priv *priv, bo=
-ol enabled)
-> +{
-> +	u8 idx =3D priv->can_idx;
-> +	u32 rsrc_id, val;
-> +
-> +	rsrc_id =3D IMX_SC_R_CAN(idx);
-> +
-> +	if (enabled)
-> +		val =3D 1;
-> +	else
-> +		val =3D 0;
-> +
-> +	/* stop mode request via scu firmware */
-> +	return imx_sc_misc_set_control(priv->sc_ipc_handle, rsrc_id,
-> +				       IMX_SC_C_IPG_STOP, val);
-> +}
-> +
->  static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
->  {
->  	struct flexcan_regs __iomem *regs =3D priv->regs;
->  	u32 reg_mcr;
-> +	int ret;
-> =20
->  	reg_mcr =3D priv->read(&regs->mcr);
->  	reg_mcr |=3D FLEXCAN_MCR_SLF_WAK;
->  	priv->write(reg_mcr, &regs->mcr);
-> =20
->  	/* enable stop request */
-> -	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-> -			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
-> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW) =
-{
-> +		ret =3D flexcan_stop_mode_enable_scfw(priv, true);
-> +		if (ret < 0)
-> +			return ret;
-> +	} else {
-> +		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-> +				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
-> +	}
-> =20
->  	return flexcan_low_power_enter_ack(priv);
->  }
-> @@ -566,10 +598,17 @@ static inline int flexcan_exit_stop_mode(struct f=
-lexcan_priv *priv)
->  {
->  	struct flexcan_regs __iomem *regs =3D priv->regs;
->  	u32 reg_mcr;
-> +	int ret;
-> =20
->  	/* remove stop request */
-> -	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-> -			   1 << priv->stm.req_bit, 0);
-> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW) =
-{
-> +		ret =3D flexcan_stop_mode_enable_scfw(priv, false);
-> +		if (ret < 0)
-> +			return ret;
-> +	} else {
-> +		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-> +				   1 << priv->stm.req_bit, 0);
-> +	}
-> =20
->  	reg_mcr =3D priv->read(&regs->mcr);
->  	reg_mcr &=3D ~FLEXCAN_MCR_SLF_WAK;
-> @@ -1838,7 +1877,7 @@ static void unregister_flexcandev(struct net_devi=
-ce *dev)
->  	unregister_candev(dev);
->  }
-> =20
-> -static int flexcan_setup_stop_mode(struct platform_device *pdev)
-> +static int flexcan_setup_stop_mode_gpr(struct platform_device *pdev)
->  {
->  	struct net_device *dev =3D platform_get_drvdata(pdev);
->  	struct device_node *np =3D pdev->dev.of_node;
-> @@ -1883,11 +1922,6 @@ static int flexcan_setup_stop_mode(struct platfo=
-rm_device *pdev)
->  		"gpr %s req_gpr=3D0x02%x req_bit=3D%u\n",
->  		gpr_np->full_name, priv->stm.req_gpr, priv->stm.req_bit);
-> =20
-> -	device_set_wakeup_capable(&pdev->dev, true);
-> -
-> -	if (of_property_read_bool(np, "wakeup-source"))
-> -		device_set_wakeup_enable(&pdev->dev, true);
-> -
->  	return 0;
-> =20
->  out_put_node:
-> @@ -1895,6 +1929,62 @@ static int flexcan_setup_stop_mode(struct platfo=
-rm_device *pdev)
->  	return ret;
->  }
-> =20
-> +static int flexcan_setup_stop_mode_scfw(struct platform_device *pdev)
-> +{
-> +	struct net_device *dev =3D platform_get_drvdata(pdev);
-> +	struct flexcan_priv *priv;
-> +	u8 can_idx;
-> +	int ret;
-> +
-> +	ret =3D of_property_read_u8(pdev->dev.of_node, "fsl,scu-index", &can_=
-idx);
-> +	if (ret < 0) {
-> +		dev_dbg(&pdev->dev, "failed to get scu index\n");
-> +		return ret;
-> +	}
-> +
-> +	priv =3D netdev_priv(dev);
-> +	priv->can_idx =3D can_idx;
-> +
-> +	/* this function could be defered probe, return -EPROBE_DEFER */
-> +	ret =3D imx_scu_get_handle(&priv->sc_ipc_handle);
-
-return imx_scu_get_handle(&priv->sc_ipc_handle);
-
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +/* flexcan_setup_stop_mode - Setup stop mode for wakeup
-> + *
-> + * Return: =3D 0 setup stop mode successfully or doesn't support this =
-feature
-> + *         < 0 fail to setup stop mode (could be defered probe)
-> + */
-> +static int flexcan_setup_stop_mode(struct platform_device *pdev)
-> +{
-> +	struct net_device *dev =3D platform_get_drvdata(pdev);
-> +	struct flexcan_priv *priv;
-> +	int ret;
-> +
-> +	priv =3D netdev_priv(dev);
-> +
-> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW)
-> +		ret =3D flexcan_setup_stop_mode_scfw(pdev);
-> +	else if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_G=
-PR)
-> +		ret =3D flexcan_setup_stop_mode_gpr(pdev);
-> +	else
-> +		/* return 0 directly if doesn't support stop mode feature */
-> +		return 0;
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	device_set_wakeup_capable(&pdev->dev, true);
-> +
-> +	if (of_property_read_bool(pdev->dev.of_node, "wakeup-source"))
-> +		device_set_wakeup_enable(&pdev->dev, true);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct of_device_id flexcan_of_match[] =3D {
->  	{ .compatible =3D "fsl,imx8qm-flexcan", .data =3D &fsl_imx8qm_devtype=
-_data, },
->  	{ .compatible =3D "fsl,imx8mp-flexcan", .data =3D &fsl_imx8mp_devtype=
-_data, },
-> @@ -2040,17 +2130,20 @@ static int flexcan_probe(struct platform_device=
- *pdev)
->  		goto failed_register;
->  	}
-> =20
-> +	err =3D flexcan_setup_stop_mode(pdev);
-> +	if (err < 0) {
-> +		if (err !=3D -EPROBE_DEFER)
-> +			dev_err(&pdev->dev, "setup stop mode failed\n");
-> +		goto failed_canregister;
-
-better name this failed_setup_stop_mode
-
-> +	}
-> +
->  	of_can_transceiver(dev);
->  	devm_can_led_init(dev);
-> =20
-> -	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR) {=
-
-> -		err =3D flexcan_setup_stop_mode(pdev);
-> -		if (err)
-> -			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
-> -	}
-> -
->  	return 0;
-> =20
-> + failed_canregister:
-> +	unregister_flexcandev(dev);
->   failed_register:
->  	pm_runtime_put_noidle(&pdev->dev);
->  	pm_runtime_disable(&pdev->dev);
+> After:
+>    text	   data	    bss	    dec	    hex	filename
+>   25509	   2039	     64	  27612	   6bdc	net/can/isotp.o
 >=20
+> (gcc version 10.2.0)
+>=20
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
+applied to linux-can/testing.
+
+Thanks,
 Marc
 
 --=20
@@ -426,23 +163,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---NwKCTYajUq4t6f3dnUVQmrIBqaqtZoCHx--
+--tumPUlKtpQx75xVhhXq0eeC7YAM9A2EQ0--
 
---gRoJHpvHipkIHg2UxeKi9VIujwNMEK2qJ
+--tJG8cfsxoLOlGC1Y1hfR0tNaUE9sTYVnB
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+PB1cACgkQqclaivrt
-76lcPQf/W3PbVrGVUGO7mylRjf62nGEETpX4iyGVH4PFTTOu4y8RhjrU6ybOd1t3
-tvQFLPSWhK0+/qKorsaup1X1NhPiC1On9JpLgLXBlbLBeiNwaIvQwOVwowcN+LUX
-Xy2kTxBglcwOigfQUFlMTMk3a8+WdB2sjGJXg5+6tlisJ6uz1gsd66gItREiCSj1
-meFzxC2QsrZckeYpS01MWBeNb7x7XHzxkDQZ47VDZdeD5I4P1cks4tjQbB7I+FMo
-w+UoqwXnAM2o+mwH/rBtQACOS4tXpfGF6n/sREQp3UjOCXDYSGHHTcf9zVggKBaE
-pnvhsYtqhyZhbnRlN4WXVOinBfC6lQ==
-=yHL8
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+PB8AACgkQqclaivrt
+76nH/Qf9H4/fOWvnpPiH+Zwsx6UlqqnrDA+fdj82eTRlv+qSnIcMZDuuYwanVCsF
+GWxkDJo+DgRGv0blQEGyQXhHAMZ6BY6ymLDMAMX/0U24Ehyc4MQJgFb8xOjBcXVm
+7Uy4y/QKCzXKzzRjWbGapSHNGg/WO/bhQZgjECc3BqSyeTZQ91kF7lBgYKyKFRNb
+7g9/ire+mwOY8sOPiptdlrm08wGsW12E7rqiqfJPA6j46U7+/9FMlRJJassLyYTt
+5XPJlsFY7CZas3/GSCXTWXhQISFXD7yRH0ahWRhJ4dv1cTFNll61BNH3Mlo8OIon
+OSi+2u1JSjpaZR4rTtxtJw4STHKK8g==
+=A1ER
 -----END PGP SIGNATURE-----
 
---gRoJHpvHipkIHg2UxeKi9VIujwNMEK2qJ--
+--tJG8cfsxoLOlGC1Y1hfR0tNaUE9sTYVnB--
