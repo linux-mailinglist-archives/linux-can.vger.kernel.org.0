@@ -2,200 +2,129 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F1D293F24
-	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 17:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9B3293622
+	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 09:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394425AbgJTPCJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Oct 2020 11:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394412AbgJTPCJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 11:02:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C39C061755
-        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 08:02:09 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kUt9L-0001Jd-Hj; Tue, 20 Oct 2020 17:02:07 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207] (unknown [IPv6:2a03:f580:87bc:d400:c351:f59d:74d9:d207])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0C89257E4E5;
-        Tue, 20 Oct 2020 15:02:05 +0000 (UTC)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de
-References: <20201019190524.1285319-1-mkl@pengutronix.de>
- <20201019190524.1285319-5-mkl@pengutronix.de>
- <fbbe1b80-c012-dc87-1eb0-4878cd08cce1@hartkopp.net>
- <ebf50f35-f093-b2c9-a27c-cef73d403efb@pengutronix.de>
- <20201020113023.102360-1-mailhol.vincent@wanadoo.fr>
- <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [net-rfc 04/16] can: dev: can_get_len(): add a helper function to
- get the correct length of Classical frames
-Message-ID: <24c434cf-95c2-8936-387b-cb651c029781@pengutronix.de>
-Date:   Tue, 20 Oct 2020 17:02:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1731477AbgJTHyH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Oct 2020 03:54:07 -0400
+Received: from mail-db8eur05on2069.outbound.protection.outlook.com ([40.107.20.69]:7233
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729301AbgJTHyH (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 20 Oct 2020 03:54:07 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OKbENijHS4UumarTSLcatSzQW+QWB0pynprBs0uOFFPZlTqRHXhFIxJ6ALCbvCNBGHLfQLe30KjcXbw0e0K0TTc+c7eYcxdG39gLpoUUio9xwwMPLFWgJHc4gU8b2BF5RKJ8eSLnh9AqLPTvZ7K/C+/1exWyKPw0EfIcTIjQdefu4IB0rbOo2zIZeD278NGMSJ0oAuR0LImVcAyCOgMDUlzTAHfi0z94uI6G36gVGVaiJILevCv2v/hD1B69i6cTt/K3dH3eS1QMV0jWDXXU/2AwzBna4AMdeCpUGPJzpsvsb2MJzJpwZFbGnSAVji4+iegJnHxdetpU4hVIwWsiLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eJBVAKBmdr1HldLN0jZ+y/OfX62yKO5ySL4HPSkJxEs=;
+ b=i2rbxsE03WUA4RI77bpDrj+kl69tMWgfokW/RLWy+pTTD/LlEhpWkgy4tZtsOCns3WWq2RYO3kfbiUnKNhBnOG7hGCKsVztfskKeTpAy9ISPGNzvwZZ4lGyXeGSs3gmrQ1Z0boCBmOare2hBrCpLRUTK75PZVx+6ozKURLmAFWMDS/RtQ4sHX59IQ+KyB8VtPYOJ6xTCbmhqM0V7dqflp9rZpROh+wMCIfFKEisalIwpARi94RBSUsuP8AmqefwJcWIw8w8cp7Y0uFsR5ge+U6z1HErhTiUbX6LtzmuQO9IPuvEbeFY9uAFHnezPhfEV7gzCdxkiSy0Y2Ri4J9icfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eJBVAKBmdr1HldLN0jZ+y/OfX62yKO5ySL4HPSkJxEs=;
+ b=Z7UkdSJ7QhrL8+9Iv+U3orLM93iZLswhD/719RvSKQSXCnevGk2LrO9zA07PxLEFzDzmqlEGc3Ap4ZxGTYig9UBVgsfPrLUI6LfUbHZL7/blUm0R00bREM6bk0hvbNFoApG3QY/Zos/N9E4gc+oaAvPaZnv4l+9QyzZFDQ3AKTU=
+Authentication-Results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
+ by DBAPR04MB7333.eurprd04.prod.outlook.com (2603:10a6:10:1b2::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21; Tue, 20 Oct
+ 2020 07:54:05 +0000
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::3c3a:58b9:a1cc:cbcc]) by DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::3c3a:58b9:a1cc:cbcc%9]) with mapi id 15.20.3477.028; Tue, 20 Oct 2020
+ 07:54:05 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     mkl@pengutronix.de, robh+dt@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
+        linux-can@vger.kernel.org, pankaj.bansal@nxp.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V3 00/10] can: flexcan: add stop mode support for i.MX8QM
+Date:   Tue, 20 Oct 2020 23:53:52 +0800
+Message-Id: <20201020155402.30318-1-qiangqing.zhang@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.71]
+X-ClientProxiedBy: SGBP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::27)
+ To DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
 MIME-Version: 1.0
-In-Reply-To: <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="6J4asT8MMVYpZxa9HQ6JSLbxtwJQV0cey"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.71) by SGBP274CA0015.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21 via Frontend Transport; Tue, 20 Oct 2020 07:54:02 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 3d561586-464a-41b5-2c52-08d874cd5142
+X-MS-TrafficTypeDiagnostic: DBAPR04MB7333:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DBAPR04MB7333308DBA99BF9950764550E61F0@DBAPR04MB7333.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2582;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YM+KJJ03uM/b01JUV7LI4OefJGt/jqWjOaCbZpUcI4S4EsARPotdtY/uHNUWryF6h0v8ITi+zLUoXpG98oTB34fF/r1gi6pe+3VAJozWVp+7MVn8YIjOLdMwqB/sudvMut7ZgHq2GCKs325apLKYuV0G/BZMub/L8xP57qnqRbx07zJ7g1ZGRUKRwbjNfoZoVZfZDdn19T0YaiFzdxiMUjMhaHz1NMUmeZjqBfrg8rWRR1A4aEpg36gsYdCk2nIsS2jivI7XbHw4DUnBBeyFiUc0Vx4hh2juE1Pqn51QIv59LZqHFs+eGZ0d7zYCbzsBrlokXY60SZeSV2JebWRso2Poi8pMl01R9FrIL+oO51SHDZmiavuOS94d5tNotape
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(366004)(39860400002)(346002)(396003)(6512007)(2906002)(66476007)(52116002)(66946007)(956004)(2616005)(36756003)(1076003)(6666004)(83380400001)(69590400008)(66556008)(26005)(316002)(4326008)(6506007)(8676002)(16526019)(5660300002)(186003)(8936002)(6486002)(478600001)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: jUDOtD0hODC0fyB3f91Rp1Vj62PfLafL7iqCitB3no8m6BU08xX6r7ZVktRZLe/30upsbz2eWkbdhRU8yajRcUBaXPGJJpgY4h4HU0ogLYNXOyRzMz/FwKGXCo8DysFkWBhqTQjeWFIrv/yxckyPVl1LffvbHPTKpUahkRcbuq6Z09Yi285fSB/mpt+NE/m13k7r1qIl+OX5/WAGFCsAYduVRuQxxjZi3UyVCCNIcpu+GSu4yLxekEwaNSLMwBafAdgEAIzyTmgaiwPxNu8ymQHlVO+dZUdfV4ozwbusOXKvis/wvmA2Dx6bwqM+PAo8DHDFrFwU0+T7ZrGG6ql0cRJwq7Ceeb5U3r3sBvW1xIkJApnU8iFZ4gqFodVdqt3PkMod23ipp5c+eW28c/CY5uVUxhba3OCg4hI+qIYqU8UnlE8ueA79UZM1z53Dny0AjY9y95FLvT/1XLMh/unGz/ygAu6ndRX1mkGYq3O5rpSBrnEMKDP3gTkBQMlJe8B8vLEQ8vMYR42uN7YiRzEQg1tbo1D5SpSrqeNHwbooJSbzf16StnZgW0Se2sX4sJP+rQRGApoDQiCbqn4y4b1ko0+UAQF/FR7s5C7UYfxt8aPx9WsYfjLn7ptttNiEGoCpVR3kjGIC/qqVCbFnu2/2lA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d561586-464a-41b5-2c52-08d874cd5142
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2020 07:54:05.5156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: S5a2KcK8lKO4ORHBtd7akzncyPu/UbKfRRkNaKT3eGb1Or0JTUa1n/VL/aXzPo/STYwfQdt3oKN75WDYoso+4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7333
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---6J4asT8MMVYpZxa9HQ6JSLbxtwJQV0cey
-Content-Type: multipart/mixed; boundary="dcpv7nOdHbfSFXAt9uBJnw4lNKvP67MV6";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
-Cc: kernel@pengutronix.de
-Message-ID: <24c434cf-95c2-8936-387b-cb651c029781@pengutronix.de>
-Subject: Re: [net-rfc 04/16] can: dev: can_get_len(): add a helper function to
- get the correct length of Classical frames
-References: <20201019190524.1285319-1-mkl@pengutronix.de>
- <20201019190524.1285319-5-mkl@pengutronix.de>
- <fbbe1b80-c012-dc87-1eb0-4878cd08cce1@hartkopp.net>
- <ebf50f35-f093-b2c9-a27c-cef73d403efb@pengutronix.de>
- <20201020113023.102360-1-mailhol.vincent@wanadoo.fr>
- <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
-In-Reply-To: <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
+The first patch from Liu Ying aims to export SCU symbols for SoCs w/wo SCU,
+so that no need to check CONFIG_IMX_SCU in the specific driver.
 
---dcpv7nOdHbfSFXAt9uBJnw4lNKvP67MV6
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+The following patches are flexcan fixes and add stop mode support for i.MX8QM.
 
-On 10/20/20 2:38 PM, Oliver Hartkopp wrote:
-[...]
+ChangeLogs:
+V2->V3:
+	* define IMX_SC_R_CAN(x) in rsrc.h
+	* remove error message on -EPROBE_DEFER.
+	* split disable wakeup patch into separate one.
 
-> You can create a DLC of 13 for Classical CAN. And your CAN controller=20
-> gets 8 bytes from it and says to the network layer: Here is a CAN frame=
-=20
-> with 8 bytes payload.
->=20
-> Have you ever read out a CAN controller register and found a value=20
-> greater than 8 on the register of the DLC value?
->=20
-> I believe you didn't. The CAN controller sees the DLC but provides 8=20
-> bytes as DLC=3D8.
+V1->V2:
+	* split ECC fix patches into separate patches.
+	* free can dev if failed to setup stop mode.
+	* disable wakeup on flexcan_remove.
+	* add FLEXCAN_IMX_SC_R_CAN macro helper.
+	* fsl,can-index->fsl,scu-index.
+	* move fsl,scu-index and priv->can_idx into
+	* flexcan_setup_stop_mode_scfw()
+	* prove failed if failed to setup stop mode.
 
-I just checked on the flexcan (mx6) and the mcp2518fd. I hardcoded a TX-d=
-lc of
-12 in both drivers and printed the raw dlc value in the RX-path:
+Joakim Zhang (9):
+  dt-bindings: can: flexcan: fix fsl,clk-source property
+  can: flexcan: remove FLEXCAN_QUIRK_DISABLE_MECR quirk for LS1021A
+  can: flexcan: add ECC initialization for LX2160A
+  can: flexcan: add ECC initialization for VF610
+  can: flexcan: disable wakeup in flexcan_remove()
+  dt-bindings: can: flexcan: add fsl,scu-index property to indicate a
+    resource
+  can: flexcan: rename macro FLEXCAN_QUIRK_SETUP_STOP_MODE ->
+    FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR
+  dt-bindings: firmware: add IMX_SC_R_CAN(x) macro for CAN
+  can: flexcan: add CAN wakeup function for i.MX8QM
 
-> Oct 20 16:46:08 riot kernel: flexcan_mailbox_read: dlc=3D12
-> Oct 20 16:46:10 riot kernel: mcp251xfd_hw_rx_obj_to_skb: dlc=3D12
+Liu Ying (1):
+  firmware: imx: always export SCU symbols
 
-The userspace shows a consistent len=3D8.
+ .../bindings/net/can/fsl-flexcan.txt          |   8 +-
+ drivers/net/can/flexcan.c                     | 147 ++++++++++++++----
+ include/dt-bindings/firmware/imx/rsrc.h       |   1 +
+ include/linux/firmware/imx/ipc.h              |  15 ++
+ include/linux/firmware/imx/svc/misc.h         |  23 +++
+ 5 files changed, 167 insertions(+), 27 deletions(-)
 
-If we want to support CAN-2.0 with DLC > 8, we have to audit the TX-path =
-every
-driver and remove the can_dropped_invalid_skb() check.
+-- 
+2.17.1
 
-I'm not sure what to do about the RX, with breaking user space ABI.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---dcpv7nOdHbfSFXAt9uBJnw4lNKvP67MV6--
-
---6J4asT8MMVYpZxa9HQ6JSLbxtwJQV0cey
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+O++gACgkQqclaivrt
-76n/ngf/RvVztR9suqht8qj3Vmx+SxuExh4kkkEPlDcL5e63G9UlHK9iil4tg6nT
-HF6HS+CUc4XFE+9/bcGeCjrD50kEMcPkAQtqMwmJjcdCy93pspU7KRwG4od4zdmJ
-gG4PO7lB0fMzWITFAMGFT34a5iJpcOhQoqHKaaaYR+7G02yl8PKOPU0YclSu6D+z
-ogqv8U+abcRJUWpBxuX+rROXhIobygSZyk0hisD+Bj1lnpn32vcqv2wwC/ZCjCiK
-axUx7/RBRCGBEcYW5lP8hIOUYh/cAlZ8C3mlz+LBTKXpYL6A2EshqAvCzAo+xujP
-1adOEak27B+jUg7olc03jT8l6HUP0Q==
-=jP1e
------END PGP SIGNATURE-----
-
---6J4asT8MMVYpZxa9HQ6JSLbxtwJQV0cey--
