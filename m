@@ -2,118 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C79C629410A
-	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 19:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E031B294255
+	for <lists+linux-can@lfdr.de>; Tue, 20 Oct 2020 20:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395098AbgJTREN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Oct 2020 13:04:13 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:17871 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395096AbgJTREN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 13:04:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1603213451;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=7vPgYzt7+497NE31Mut8+op76wscvx3QrmZea51uhVE=;
-        b=emb3Binfk4U3w1Kq1HKytHxIVNHmOSpKYwOmPnsFOapPEX+eUxh24rjeycz0nVC50M
-        ASVszUgDpVBgpfq1BdCg2jhBBFHKIoSE8cfAxIh0+fOTx3uVwKVCjnx7LBM71bCF4a0s
-        l/1O7tRaQvusOFyAdR+84IsQh6YO5FvJWcEH/cdckcaeKic3K6U7AUQ/s0lIAfu1at+1
-        kgFV/Hhii6+fkhpBsOE94s0SsGeATSQPwGJgpaZ8qrersz79AcqxuX9lmbCR6Ls1VxPp
-        WB9hQOF45jmZG6+/L4g1T96CeXjwTqazxqJuZfVX9GHy8PYfq9pjYDkbWStczMSRsB0U
-        p5jQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJU8h6kEyi"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 47.2.1 DYNA|AUTH)
-        with ESMTPSA id D0b41cw9KH4AoJZ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 20 Oct 2020 19:04:10 +0200 (CEST)
-Subject: Re: [net-rfc 04/16] can: dev: can_get_len(): add a helper function to
- get the correct length of Classical frames
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de,
-        =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
-References: <20201019190524.1285319-1-mkl@pengutronix.de>
- <20201019190524.1285319-5-mkl@pengutronix.de>
- <fbbe1b80-c012-dc87-1eb0-4878cd08cce1@hartkopp.net>
- <ebf50f35-f093-b2c9-a27c-cef73d403efb@pengutronix.de>
- <20201020113023.102360-1-mailhol.vincent@wanadoo.fr>
- <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
- <20201020160739.104686-1-mailhol.vincent@wanadoo.fr>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <a9605011-2674-dc73-111c-8ebf724a13ac@hartkopp.net>
-Date:   Tue, 20 Oct 2020 19:04:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S2437570AbgJTSmz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Oct 2020 14:42:55 -0400
+Received: from smtprelay0130.hostedemail.com ([216.40.44.130]:38858 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2437566AbgJTSmy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Oct 2020 14:42:54 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 43FA51260;
+        Tue, 20 Oct 2020 18:42:51 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:967:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1434:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2525:2553:2560:2563:2682:2685:2731:2828:2859:2911:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4425:5007:6742:6743:7576:7903:8957:9025:10004:10400:10450:10455:10848:11232:11658:11914:12043:12295:12297:12663:12740:12760:12895:13153:13228:13439:14181:14659:14721:19904:19999:21080:21451:21627:21939:21990:30012:30034:30054:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: humor84_3a06a8527241
+X-Filterd-Recvd-Size: 4943
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf17.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 20 Oct 2020 18:42:43 +0000 (UTC)
+Message-ID: <3bc5c2e3b3edc22a4d167ec807ecdaaf8dcda76d.camel@perches.com>
+Subject: Re: [RFC] treewide: cleanup unreachable breaks
+From:   Joe Perches <joe@perches.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        nouveau@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-can@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
+        storagedev@microchip.com, devel@driverdev.osuosl.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        George Burgess <gbiv@google.com>
+Date:   Tue, 20 Oct 2020 11:42:42 -0700
+In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+References: <20201017160928.12698-1-trix@redhat.com>
+         <20201018054332.GB593954@kroah.com>
+         <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <20201020160739.104686-1-mailhol.vincent@wanadoo.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 20.10.20 18:07, Vincent Mailhol wrote:
+On Mon, 2020-10-19 at 12:42 -0700, Nick Desaulniers wrote:
+> On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
+> > > From: Tom Rix <trix@redhat.com>
+> > > 
+> > > This is a upcoming change to clean up a new warning treewide.
+> > > I am wondering if the change could be one mega patch (see below) or
+> > > normal patch per file about 100 patches or somewhere half way by collecting
+> > > early acks.
+> > 
+> > Please break it up into one-patch-per-subsystem, like normal, and get it
+> > merged that way.
+> > 
+> > Sending us a patch, without even a diffstat to review, isn't going to
+> > get you very far...
+> 
+> Tom,
+> If you're able to automate this cleanup, I suggest checking in a
+> script that can be run on a directory.  Then for each subsystem you
+> can say in your commit "I ran scripts/fix_whatever.py on this subdir."
+>  Then others can help you drive the tree wide cleanup.  Then we can
+> enable -Wunreachable-code-break either by default, or W=2 right now
+> might be a good idea.
+> 
+> Ah, George (gbiv@, cc'ed), did an analysis recently of
+> `-Wunreachable-code-loop-increment`, `-Wunreachable-code-break`, and
+> `-Wunreachable-code-return` for Android userspace.  From the review:
+> ```
+> Spoilers: of these, it seems useful to turn on
+> -Wunreachable-code-loop-increment and -Wunreachable-code-return by
+> default for Android
+> ...
+> While these conventions about always having break arguably became
+> obsolete when we enabled -Wfallthrough, my sample turned up zero
+> potential bugs caught by this warning, and we'd need to put a lot of
+> effort into getting a clean tree. So this warning doesn't seem to be
+> worth it.
+> ```
+> Looks like there's an order of magnitude of `-Wunreachable-code-break`
+> than the other two.
+> 
+> We probably should add all 3 to W=2 builds (wrapped in cc-option).
+> I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
+> follow up on.
 
-> I also did the test. I can send a CAN with a DLC of 13 on one
-> controller and the other ones correctly received a frame of 8 bytes
-> with a DLC of 13.
+I suggest using W=1 as people that are doing cleanups
+generally use that and not W=123 or any other style.
 
-o_O
+Every other use of W= is still quite noisy and these
+code warnings are relatively trivially to fix up.
 
-You see me perplexed ...
 
-> After, I am not saying that absolutely all the controllers will allow
-> DLC greater than 8. I would not be surprised to see some controllers
-> attempting to do some sanitization (which would violate the ISO) and
-> maybe you did your testing on such controllers. Only thing I can tell
-> is that all the controllers I studied allowed it (I can give more
-> examples upon request).
-
-I believe you.
-
-> As for security testing, I worked as a security consultant in the
-> automotive industry for the last three years and with our colleagues,
-> we witnessed some ECUs that would completely stop responding after
-> receiving some DLCs greater than 8 due to some buffer overflow. This
-> is a real thing which can be found in production, I think it would be
-> great to be able to test that using socket CAN.
-
-Yes. That's a valid use-case. Many people are testing CAN setups based 
-on SocketCAN. So getting every aspect of CAN available is needed to be 
-able to provide a real OSS solution.
-
-> Some professional tools such as the CAN testing suite of Defensics by
-> Synopsys also include these kind of tests. Because Socket CAN does not
-> support this, Synopsys actually recommends to use the proprietary
-> drivers from the Peak controller which do allow this (unfortunately,
-> the Defensics documentation is not available publicly so I can not
-> give you a link to support my claim on that last example).
-
-Stephane from PEAK is working on the Linux driver (Mainline Linux & PEAK 
-chardev), so I put him on CC. Or are you referring to the Windows driver?
-
-> I hope that I could highlight in this answer that I am more than just
-> a hobbyist who got exited after ready the ISO and that I know this
-> subject. What I explain here is well known in the niche community of
-> automotive security researcher but outside of it I just think that
-> people are not aware of it.
-
-Well I have done a lot in automotive CAN security too - with message 
-authentication and with CAN IDS - but this DLC thing was still new to me ...
-
- From a first thought I would see a new flag CAN_CTRLMODE_RAW_DLC in the 
-netlink interface of IFLA_CAN_CTRLMODE for the CAN controller driver.
-
-This could switch the sanitizing AND the CAN controller can properly 
-expose its ability to support this mode.
-
-I think I have to pick a beer and look at some code ... :-)
-
-Best regards,
-Oliver
