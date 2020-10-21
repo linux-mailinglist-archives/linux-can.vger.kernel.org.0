@@ -2,181 +2,161 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE402294C04
-	for <lists+linux-can@lfdr.de>; Wed, 21 Oct 2020 13:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2CE294E3C
+	for <lists+linux-can@lfdr.de>; Wed, 21 Oct 2020 16:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406907AbgJULzm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Oct 2020 07:55:42 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:38491 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2410977AbgJULzg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Oct 2020 07:55:36 -0400
-Received: by mail-yb1-f196.google.com with SMTP id b138so1531974yba.5
-        for <linux-can@vger.kernel.org>; Wed, 21 Oct 2020 04:55:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/R2sfda93RiAhXjR4q6oMav9lNVgfEOrUpIOjkWDHwk=;
-        b=C/l3XqBRh9wM4tkITrp6jipydeTTcC5sSFXU8ibRKsH2KgNdjCbrVoF7+oIzh+CFuS
-         d89zPTE0xH4rMXsarqGOWxEJQ1pdqTq3G5YFtaS6kiMs/KVgzKlO89Ph8ZTI3NK7aRzG
-         FJWkicTDxKywZhwIELXQ4Ca9fHD9BXbUTp/VmKETaJUkF1iVklL4xnEO8oXhCp0HsFbS
-         4K9BzzKfLZZIU9o65ZaILeC925EqR9cePCoK2u88Q+7DXIDNc8RYqE+8V54a1ysa6FFc
-         YajzJAEmG9+ccBx6cUO0IynRvhPrIq3GcrgNubo6M5GVG9QSpyL/XkJpHO5t8V1Ord6O
-         3EDw==
-X-Gm-Message-State: AOAM532TSnqC5zYgIEkjsx90+3zsM3pMKkSwyB8dNfvVZ6cAM+m1szyd
-        H7BulZ2iHgSa0kXB7AaWJObxlV9ubPcvX0tbIO5438zspQsxnQ==
-X-Google-Smtp-Source: ABdhPJw8dqujmIE3LPZ+FecEi7OD2Fep6BxdymUm7JSYVc+kznVg526c0YbAjNy8pQMXgFow0fekq5+23VkTBT++Wf4=
-X-Received: by 2002:a25:d345:: with SMTP id e66mr4432592ybf.307.1603281333569;
- Wed, 21 Oct 2020 04:55:33 -0700 (PDT)
+        id S2443235AbgJUOH5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Oct 2020 10:07:57 -0400
+Received: from mail.iot.bzh ([51.75.236.24]:17838 "EHLO mail.iot.bzh"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2443234AbgJUOH5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 21 Oct 2020 10:07:57 -0400
+Received: from [10.18.0.158] (112.6.193.77.rev.sfr.net [77.193.6.112])
+        by mail.iot.bzh (Postfix) with ESMTPSA id 11D9140095;
+        Wed, 21 Oct 2020 16:07:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
+        t=1603289265; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b9oXZjcgiyLMU033KKZMSYJBBS9HhDmx4rYnBl6Kg+4=;
+        b=vqtNM9ep8o/aEha92TNLeuMESmqraYdU0MIL5gOMSvVeiHWFaDEZ+HDvy5riEFLbS/6fjX
+        DrrvGq5/8qdbcmUtrpEbvanbHQ0rVIHo20/wQWwAuEVi08GCo+Ab2nJ4oIwyG0lGplWZ8L
+        yEuDI+sVEXxiNccH4QBU9hazevD5Q33yS3wYiYCcCL7207VIjzQxtTpPjzynLxNKLHfPv6
+        CWtl+SKnK12nQmNgA9NprZgoYX2O24Mg0rNvtNsvWnci8cjli7PFF0156KoQQ2gmJgNfW2
+        svXD4ftjtQCfQ/KMpsqkX1lMnbwzEnH/VL8geWQsr58lXl1cJBqSanONcijVOA==
+Subject: Re: Questions around J1939 backport to old kernel
+From:   "Romain Forlot [IoT.bzh]" <romain.forlot@iot.bzh>
+To:     Arnej <arnejduranovic@protonmail.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <b2dd08f0-0390-21c8-83c5-c6c361e78d9c@iot.bzh>
+ <20191018145333.a27j7d7f4zf3bqjd@pengutronix.de>
+ <72a6f8b2-38e3-a54b-d719-10471d4d260b@iot.bzh>
+ <20191025093949.ijb5qt5beq4qavnk@pengutronix.de>
+ <aHcanZVhvgbO9XqQBg9c6QdeJZmy9g5O5w9yK83_VqiUuKYCBe2Uh_1S7oaPDQq85QTPEgQME2WTpi96iTO0yzSYRIxYQ-L8VcC8oyR591E=@protonmail.com>
+ <cb1b1825-e290-1bfd-6feb-bc997b21416f@iot.bzh>
+Organization: IOTBZH
+Message-ID: <8034ebaa-39f2-341c-ef72-10c85646adf6@iot.bzh>
+Date:   Wed, 21 Oct 2020 16:06:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <20201019190524.1285319-1-mkl@pengutronix.de> <20201019190524.1285319-5-mkl@pengutronix.de>
- <fbbe1b80-c012-dc87-1eb0-4878cd08cce1@hartkopp.net> <ebf50f35-f093-b2c9-a27c-cef73d403efb@pengutronix.de>
- <20201020113023.102360-1-mailhol.vincent@wanadoo.fr> <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
- <20201020160739.104686-1-mailhol.vincent@wanadoo.fr> <a9605011-2674-dc73-111c-8ebf724a13ac@hartkopp.net>
- <20201021005226.2727-1-mailhol.vincent@wanadoo.fr> <CAMZ6RqKFST4dcWZP_8NdDMB6GT09vhVWgN+nuMWkVovkh-EZdw@mail.gmail.com>
- <2711ea6f-e1ce-c3f9-dd98-83142bd33fc9@hartkopp.net>
-In-Reply-To: <2711ea6f-e1ce-c3f9-dd98-83142bd33fc9@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 21 Oct 2020 20:55:20 +0900
-Message-ID: <CAMZ6RqK2RCGLFmjiHTQAxZSGn-HQaAh_nHHGwKdODanZK5oJbg@mail.gmail.com>
-Subject: Re: [net-rfc 04/16] can: dev: can_get_len(): add a helper function to
- get the correct length of Classical frames
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
-        =?UTF-8?Q?St=C3=A9phane_Grosjean?= <s.grosjean@peak-system.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <cb1b1825-e290-1bfd-6feb-bc997b21416f@iot.bzh>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> On 21.10.20 18:48, Oliver Hartkopp wrote:
->> On 21.10.20 08:23, Vincent MAILHOL wrote:
->>>>>  From a first thought I would see a new flag CAN_CTRLMODE_RAW_DLC in the
->>>>> netlink interface of IFLA_CAN_CTRLMODE for the CAN controller driver.
->>>>>
->>>>> This could switch the sanitizing AND the CAN controller can properly
->>>>> expose its ability to support this mode.
+Hello,
+
+I've just remind that the mailing list do not accept attached document 
+and then my patches hasn't been published on it.
+
+What it is the correct way to do it ?
+
+Thanks.
+
+Regards.
+
+Romain Forlot.
+
+On 28/09/2020 13:17, Romain Forlot [IoT.bzh] wrote:
+> Hello,
+>
+> I almost forgot, here is the result of my work about the backport of 
+> j1939 protocol for the kernel v4.14. It isn't perfect, but we were 
+> able to use j1939 with some warning but it was functional.
+>
+> This work was mainly made for our Redpesk linux distribution for a CES 
+> demo. Hoping that it could be improved and be useful to you.
+>
+> Best regards.
+>
+> Romain Forlot.
+>
+> On 25/10/2019 21:49, Arnej wrote:
+>> Hello,
+>>
+>> I am also very interested in back-porting. My project is currently on 
+>> 4.9.9 and it is not possible to upgrade to the latest kernel at this 
+>> time. I was wondering if you had any thoughts on what is required to 
+>> achieve this? For example, it seems that the net stack in 5.4 is very 
+>> different from 4.9 (even more so compared to 4.14) and I am having 
+>> difficulties getting the kernel to compile after following your 
+>> cherry-pick suggestion. I'm wondering if you are familiar with the 
+>> net changes and would know if it is a good idea to continue to try 
+>> back-porting (is it even possible?) or if you know of any other option?
+>>
+>> Best Regards,
+>>
+>> Arnej Duranovic
+>>
+>> On Friday, October 25, 2019 4:39 AM, Oleksij Rempel 
+>> <o.rempel@pengutronix.de> wrote:
+>>
+>>> On Fri, Oct 25, 2019 at 09:38:39AM +0200, Romain Forlot [IoT.bzh] 
+>>> wrote:
+>>>
+>>>> I used it in the mainline kernel without troubles. This is a a very 
+>>>> good
+>>>> job, thanks.
+>>>> Ok, thanks for the answer. May be I  will work on it in the next 
+>>>> few months.
+>>>> Let's see. I'll keep you informed.
+>>> Thank you for testing. I hope to get more feed back :)
+>>>
+>>>> Regards.
+>>>> On 18/10/2019 16:53, Oleksij Rempel wrote:
 >>>>
->>>> Absolutely yes. In my first message, I mentioned the idea of managing
->>>> that through socket option, glad that we now share the same idea.
+>>>>> Hi,
+>>>>> On Fri, Oct 18, 2019 at 12:07:34PM +0200, Romain Forlot [IoT.bzh] 
+>>>>> wrote:
+>>>>>
+>>>>>> Hi,
+>>>>>> I am wondering what the cost is to backport the j1939 module to 
+>>>>>> an old
+>>>>>> version like a v4.14 LTSI version.
+>>>>>> The backport should be quite easy:
+>>>>> git cherry-pick -sx `git rev-list --reverse 
+>>>>> 2c1f9e26344483e2c74e80ef708d9c7fd2e543f4..9d71dd0c70099914fcd063135da3c580865e924c`
+>>>>> ...but it isn't :/ Some CAN patches are missing. We'll backport 
+>>>>> the stack to
+>>>>> v4.14.150 (or newer) and send a follow up mail.
+>>>>> However, the driver for the CAN adapter needs proper RX/TX frame 
+>>>>> ordering,
+>>>>> otherwise the stack will explode.
+>>>>> This is fixed in flexcan mainline. And involves a handful of 
+>>>>> patches. Other
+>>>>> drivers probably need more fixing. Some CAN hardware may even lack 
+>>>>> the hardware
+>>>>> support for proper ordering, that is time stamping registers.
+>>>>>
+>>>>>> And what the impact is of backporting the whole CAN stack on the 
+>>>>>> CAN drivers?
+>>>>>> The stack has no impact on the drivers, but requirements on 
+>>>>>> proper RX/TX
+>>>>>> ordering, see above.
+>>>>>> Are there any modifications to drivers once the CAN stack is 
+>>>>>> updated ?
+>>>>>> Yes, as long as they don't have proper RX/TX ordering.
+>>>>> So, which CAN driver are you planing to use?
+>>>>> Regards,
+>>>>> Oleksij & Marc
+>>>> -- 
+>>>> Romain Forlot - Embedded Engineer - IoT.bzh
+>>>> romain.forlot@iot.bzh - www.iot.bzh - +33675142438
+>>> -- 
 >>>
->>> Actually, I just realized that I replied to you too quickly. I was not
->>> exactly thinking of the same thing here so let me correct what I
->>> previously said.
->>>
->>> IFLA_CAN_CTRLMODE is at the netlink level. My idea is to have it, in
->>> addition, at the socket level. Example: add CAN_RAW_RAW_DLC in
->>> include/uapi/linux/can/raw.h.
+>>> Pengutronix e.K. | |
+>>> Industrial Linux Solutions | http://www.pengutronix.de/ |
+>>> Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0 |
+>>> Amtsgericht Hildesheim, HRA 2686 | Fax: +49-5121-206917-5555 |
 >>
->> Yes. We need at least some different handling inside the driver level
->> which could be switched with CAN_CTRLMODE_RAW_DLC.
->>
->>> The reason is that if we only manage it at the netlink level, some
->>> application not aware of the RAW_DLC issue might run into some buffer
->>> overflow issue. Unless an application directly requests it, the current
->>> behaviour should be maintained (rationale: do not break userland).
->>>
->>> So the full picture will be to have both the CAN_CTRLMODE_RAW_DLC at
->>> netlink level and CAN_RAW_RAW_DLC at the socket level (in the exact same
->>> way we have both CAN_CTRLMODE_FD and CAN_RAW_FD_FRAMES for
->>> CAN-FD).
->>
->> Yes. That hits the point.
->>
->> Btw. the impact on all protocols seems to be pretty heavy and to me it
->> turned out that it would be a bad idea to use can_frame.can_dlc as
->> transport vehicle for the raw dlc. Especially as this will contradict
->> the rule that the can_dlc element is a plain length information today as
->> canfd_frame.len and shares the same position in the struct.
->>
->> I currently tend to only have a switch on driver level with
->> CAN_CTRLMODE_RAW_DLC and make use of can_frame._res0 -> can_frame.raw_dlc
->>
->> With CAN_CTRLMODE_RAW_DLC enabled the CAN driver would ...
->>
->> - fill can_dlc and raw_dlc at reception time
->> - will use raw_dlc instead of can_dlc at tx time
->> - will use can_dlc if raw_dlc == 0 at tx time
->
-> To be more compatible to non raw dlc CAN frame sources the tx handling
-> could also be like this:
->
-> if ((can_dlc == CAN_MAX_DLEN) &&
->      (raw_dlc >= CAN_MAX_DLC && raw_dlc <= CAN_MAX_RAW_DLC))
-> => use raw_dlc
->
->>
->> This would have a minimal impact on the code and we only need to make
->> sure that the raw_dlc is not killed at some stage in the network layer.
->>
->> #define CAN_MAX_RAW_DLC 15
->>
->> IMO the raw dlc use-case is a really special case for testing purposes.
->> Touching the current can_frame.can_dlc handling could lead to more
->> complexity and the fear to run into overflows as already stated by Joakim.
->>
->> What do you think about the above approach?
+-- 
+Romain Forlot - Embedded Engineer - IoT.bzh
+romain.forlot@iot.bzh - www.iot.bzh - +33675142438
 
-If I understand well, the idea would be not to use a setsockopt() but
-instead rely on some logic on the can_dlc and raw_dlc to determine
-which one to use.
-
-Unfortunately, this approach has one issue in the TX path that could
-break existing applications.
-
-Consider below code (which I think is fairly realistic):
-
-void send_frame (int soc, canid_t can_id, char *data, size_t len)
-{
-    struct can_frame cf;
-    size_t dlc = len > sizeof(cf.data) ? sizeof(cf.data) : len;
-
-    cf.can_id = can_id;
-    cf.can_dlc = dlc;
-    memcpy(cf.data, data, dlc);
-
-    write(soc, &cf, sizeof(cf));
-}
-
-Here, the user did not initialize the can frame (cf) but assigned all
-the relevant fields manually. Because cf is not initialized, the newly
-introduced cf.dlc_raw field would have any of the values which was
-present on the stack at the moment (rationale: the C standard does not
-guarantee zero initialization). If 9 <= raw_dlc <= 15, the can frame
-will be transmitted with a bad DLC value. If raw_dlc > 15, the can
-frame will be discarded.
-
-I think that it is mandatory to have the application declare that it
-wants to use raw DLCs (this way, we know that the code is "DLC
-aware"). I can not think of any transparent approach.
-
-Next, we might think of using the netlink CAN_CTRLMODE_RAW_DLC and
-the CAN_RAW_RAW_DLC socket option and the raw_dlc field. But I think
-that this is overkill.
-
-If not introducing new dlc_raw field, the drawback, as you pointed
-out, will be that we would lose the backward compatibility of
-canfd_frame with can_frame and that can_dlc field can not be used
-directly as a length.
-
-For userland, I think that this is acceptable because the very instant
-the user calls setsockopt() with the CAN_RAW_RAW_DLC, he should be
-aware of the consequences and should resign to use can_dlc field as a
-plain length. That of course means that this should be clearly
-highlighted when updating the documentation. And users not interested
-by this feature can continue to use it as they did before.
-
-Inside the kernel, all drivers advertising CAN_CTRLMODE_RAW_DLC will
-also resign the right to use can_dlc as plain length. Drivers not
-using it are safe with their existing code. Finally, the TX and RX
-path would both need to be inspected in detail.
-
-TLDR; socket options seem mandatory in all cases. We then have to
-choose between breaking the can_dlc plain length property or
-introducing a new raw_dlc field. My choice goes to the first option of
-breaking the can_dlc plain length property.
-
-That said, I am curious about what other people think.
