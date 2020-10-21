@@ -2,108 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C48A2947E5
-	for <lists+linux-can@lfdr.de>; Wed, 21 Oct 2020 07:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED24294819
+	for <lists+linux-can@lfdr.de>; Wed, 21 Oct 2020 08:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408072AbgJUFde (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Oct 2020 01:33:34 -0400
-Received: from mail-eopbgr80054.outbound.protection.outlook.com ([40.107.8.54]:42820
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731295AbgJUFde (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 21 Oct 2020 01:33:34 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O/dRGVv/QaF6mLXAoxGTDq/WwJj0DEMFi6JK6N9eR5ahE809LZH8/rKfooFGbyBi1ZmHcqkqCgX/ETiS+JyDCotHbBw1nVZdJkgc0Ex+jxGvPrWDqWIINd8rohxOGtntKNqZYWI2PkgGS+PwaUO7t2QtRVVw1JAElV39Y8h8uWzxWHfC4wtKidrka49I77XI0+fs2y8on+lrJ/CvFmVbJ7xgmQ4Kbpksd8oGCEqd0YaHgLlPf1qTxZchOcAS0zTLKrw8vem21DMHZZN5JbB4/pn72rbgvmdlh4bigvIbApdQQh/swG07fxoaRuzCGq9PmogIF5WNix+as4QkPqsglQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O3Sr8JjE9FbXixLIg6T7siY8V8DhuGbwScB9quX2DOE=;
- b=Dc08S4LVXC9qDvpsgMJG6WJv7b16b+YsnwPp5lPy0fig57t/9fMWi2U6JCscxnubMdPuzkeWQfsZJAYTacJ7fkBXl13bXDdBshrlyUS31uO+c/Ijlmy0QtQvz2dCHe9pwfDe2Q3/CMwkRxbGTFGFirfYvYqkzh9tSrarRSCQ2kWoUBr1eEv6KyVixp91lUNw0slchAs17AZ5cNZ71e/SctfEijL+NJtuOWyZOXRAfrqFZUV9eNBB6r48PaV00Tag5F6F2zIvlGEl7BRTOk5aEoHmJN5PItS43o5s0OLg38OpZN3kmsK7s9Xq/KqwxDNP9D6z2IUYqgDJXsOrVUE3Rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O3Sr8JjE9FbXixLIg6T7siY8V8DhuGbwScB9quX2DOE=;
- b=FoI9iowjReDRO53gZVzdyPzEdKu70obJhBDge7YPQMnV6rBXJ8het4V7zgUbM63suemXdYXGHgjq2LO6DYHkF12gmt0UEZ5hSnV4AaAteAMzZYk7AYsqLW/jSURaO4jn/qL8D6VweTNRWRPu+IiivAdXpIspeQONyCq51I8MfS0=
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
- by DB7PR04MB3964.eurprd04.prod.outlook.com (2603:10a6:5:17::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Wed, 21 Oct
- 2020 05:33:29 +0000
-Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::3c3a:58b9:a1cc:cbcc]) by DB8PR04MB6795.eurprd04.prod.outlook.com
- ([fe80::3c3a:58b9:a1cc:cbcc%9]) with mapi id 15.20.3477.028; Wed, 21 Oct 2020
- 05:33:29 +0000
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>, Ying Liu <victor.liu@nxp.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V4 0/6] can: flexcan: add stop mode support for i.MX8QM
-Thread-Topic: [PATCH V4 0/6] can: flexcan: add stop mode support for i.MX8QM
-Thread-Index: AQHWp2pf20/YUdBzdkWpWOmwjarHMamhhkvQ
-Date:   Wed, 21 Oct 2020 05:33:29 +0000
-Message-ID: <DB8PR04MB6795A27E2E3D66186A8720DCE61C0@DB8PR04MB6795.eurprd04.prod.outlook.com>
-References: <20201021052437.3763-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20201021052437.3763-1-qiangqing.zhang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: cde945fc-14da-4b99-cd26-08d87582d772
-x-ms-traffictypediagnostic: DB7PR04MB3964:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB7PR04MB39649344E5F95C59994B2EDBE61C0@DB7PR04MB3964.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2sLP9ln/p7BNxhA4vwNI8oVp1fN1lIgMJ1PyKO8NW9iFbWLF4vhFQEhCg/n0SgLyLAj2QuN4ZO0MX+wxBueAC69s6qyU5sEi01nzxkj0VH49F3aGbzpI+6al/GlpNVIJQGKHW6uHDgzuVFGObz++zpLW+rAud2R/XP81ryilhlazZV9qzSEnRbtb+WcdCuQ+VgK5qBuMFdEd7r9HMKM6W0pYXzeMWlFyPb1KxPicNOazuYwp29ax2xrAykXDewtmu+gTzv7ZaVyNbzAEunZ3uLajrYu50HYzLXMJVVON1ro+ycE1V7+qIRz8UMICcp4e
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(5660300002)(9686003)(6506007)(8936002)(478600001)(64756008)(66476007)(66446008)(66556008)(66946007)(76116006)(4326008)(26005)(54906003)(110136005)(71200400001)(33656002)(316002)(52536014)(83380400001)(2906002)(186003)(86362001)(53546011)(8676002)(7696005)(4744005)(55016002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 9wvF9VAxk9b3Ifj1tI8thQQgzlef0N+54s7KtiMgzr2d7AoQ+jgiiIOO7W3V66jJHqiR6hPIEJLsFs1uhwiBzDF0QBVS60kgfcf+dx0LXrkN+phfzmhTLFlk0xuVxQaDMJKTSGPPJbIcjOGL72K9c0HaCAv1rgYGeYkabQkGXeFMJuVjQo6lP6l0kWWqXnYX9n7EJOzLXnS5x4XIKbHOATrJp+BGUPhlkPOH2c8/5sLTdo/XRhh5amS0yt1W5H+dqKLLb+rzWwLdCix332wlleKXwDrS6IA8hwo0ABh70WMUpTUIRozI2ttwGqWIYxnGNNUvoia8EDf6GdASvnoF8BhRYlRgp0ueNEBtKC9yTlmTchb/5X7D3h4Ff4gk8kLzium51nxvx/iuJgtf9S9ldHzQnT19a4PQBrtCFYKHRjY+PL8yEFqXElwXUoE8pVRtaxAWkg+CL7SLy6zmfuc78QaS29A0CmTX1fvhpYzigowS5izwKkEl7NR8XbBMbAJtq7Er3W5+YoALRM5tOOAbkQvJcqUl2mj9CP3qE/G6tgny6JEC/iUg6m/QNbdbNzXDDFq8V0LAPpe6S7BZSu7+5T9FCnFyqAeNUy/WNgL/v0sBGTsIUPgvli/l7l21vjpo1+1LRxZwhxFQFDqiL/uw+A==
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S2411619AbgJUGXw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Oct 2020 02:23:52 -0400
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:45608 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408726AbgJUGXw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Oct 2020 02:23:52 -0400
+Received: by mail-yb1-f178.google.com with SMTP id s89so793096ybi.12
+        for <linux-can@vger.kernel.org>; Tue, 20 Oct 2020 23:23:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JuQuqDCrL6Hu6gDM29TRnIBCq9vAzZ+4fyyt+FJInQA=;
+        b=c/YLMWTlfiBmsNAb9nyp2f8XCbWuoPJimVEGfxFTibHte3rIEmWrbx7e5o9IssPZ7W
+         2Las2Vs9MYEkaCHQLIyJc6AKX66uS++xs0/Uovth5YQ2HdhevgYoR+77jBrv5kW+zE/i
+         0jsab/w5p+MzyzEvfmziVl4RT+27/ZOUGdLJrboYnyq76wPZjcrlSjTBqPcY50n8HYl+
+         soa22UCV4dV4edsMvWglmVrJQgAC5DomRakYrqdmTbromDC4F82fsZ+5vA/f/NRZqEmY
+         gLlJD69g/MqO5C2pBmonavNdtT96skhseEjeJigev/i7t+EX59kSzReGLbuzM8TuvHHc
+         9vDQ==
+X-Gm-Message-State: AOAM533GLNQAIg/ThDZArHVrjtnGJrMSmzXt1UM9fKf2hJqYfLzL/M9O
+        gdMeoBQ42dXXXedLNIB3+PkwP5VufOoXOKeWJKo=
+X-Google-Smtp-Source: ABdhPJxLV1z3/HYyYoZb08c07wRs96L9+qj5nTnWgZOzvo/Jg90hyw1LfAFsZWU1HzZtXYGVjw3uEPZQ1kkugya8r2E=
+X-Received: by 2002:a25:15c9:: with SMTP id 192mr2692293ybv.145.1603261431494;
+ Tue, 20 Oct 2020 23:23:51 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cde945fc-14da-4b99-cd26-08d87582d772
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2020 05:33:29.1737
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y10GA+7IU6VFqhvm6hOzwf+dVDxc6HPIPl2M/4Pjt8FIrv5TTYFSy6ITACR+YPhw1FZSYl/tFyEbC3/hpzqrEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB3964
+References: <20201019190524.1285319-1-mkl@pengutronix.de> <20201019190524.1285319-5-mkl@pengutronix.de>
+ <fbbe1b80-c012-dc87-1eb0-4878cd08cce1@hartkopp.net> <ebf50f35-f093-b2c9-a27c-cef73d403efb@pengutronix.de>
+ <20201020113023.102360-1-mailhol.vincent@wanadoo.fr> <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
+ <20201020160739.104686-1-mailhol.vincent@wanadoo.fr> <a9605011-2674-dc73-111c-8ebf724a13ac@hartkopp.net>
+ <20201021005226.2727-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20201021005226.2727-1-mailhol.vincent@wanadoo.fr>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 21 Oct 2020 15:23:40 +0900
+Message-ID: <CAMZ6RqKFST4dcWZP_8NdDMB6GT09vhVWgN+nuMWkVovkh-EZdw@mail.gmail.com>
+Subject: Re: [net-rfc 04/16] can: dev: can_get_len(): add a helper function to
+ get the correct length of Classical frames
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?Q?St=C3=A9phane_Grosjean?= <s.grosjean@peak-system.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IEpvYWtpbSBaaGFuZyA8cWlh
-bmdxaW5nLnpoYW5nQG54cC5jb20+DQo+IFNlbnQ6IDIwMjDE6jEw1MIyMcjVIDEzOjI1DQo+IFRv
-OiBta2xAcGVuZ3V0cm9uaXguZGU7IHJvYmgrZHRAa2VybmVsLm9yZzsgc2hhd25ndW9Aa2VybmVs
-Lm9yZzsNCj4gcy5oYXVlckBwZW5ndXRyb25peC5kZQ0KPiBDYzoga2VybmVsQHBlbmd1dHJvbml4
-LmRlOyBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPjsgWWluZyBMaXUNCj4gPHZpY3Rv
-ci5saXVAbnhwLmNvbT47IGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtl
-cm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogW1BB
-VENIIFY0IDAvNl0gY2FuOiBmbGV4Y2FuOiBhZGQgc3RvcCBtb2RlIHN1cHBvcnQgZm9yIGkuTVg4
-UU0NCj4gDQo+IFRoZSBmaXJzdCBwYXRjaCBmcm9tIExpdSBZaW5nIGFpbXMgdG8gZXhwb3J0IFND
-VSBzeW1ib2xzIGZvciBTb0NzIHcvd28gU0NVLCBzbw0KPiB0aGF0IG5vIG5lZWQgdG8gY2hlY2sg
-Q09ORklHX0lNWF9TQ1UgaW4gdGhlIHNwZWNpZmljIGRyaXZlci4NCj4gDQo+IFRoZSBmb2xsb3dp
-bmcgcGF0Y2hlcyBhcmUgZmxleGNhbiBmaXhlcyBhbmQgYWRkIHN0b3AgbW9kZSBzdXBwb3J0IGZv
-cg0KPiBpLk1YOFFNLg0KDQpIaSBTaGF3bmd1bywNCg0KQ291bGQgeW91IHBsZWFzZSBoZWxwIHJl
-dmlldyBwYXRjaCAxLzYgYW5kIDUvNj8gU2luY2UgZmxleGNhbiBkcml2ZXIgZGVwZW5kcyBvbiB0
-aGVzZS4gVGhhbmtzLg0KDQpGb3IgcGF0Y2ggMS82LCBpdCB3aWxsIGJlbmVmaXQgb3RoZXIgZHJp
-dmVycyB3aGljaCBjb3ZlciBTb0NzIHcvd28gU0NVLCBzdWNoIGFzIGkuTVggRXRoZXJuZXQgQ29u
-dHJvbGxlciBkcml2ZXIgKGRyaXZlcnMvbmV0L2V0aGVybmV0L2ZyZWVzY2FsZS9mZWNfbWFpbi5j
-KS4NCg0KQmVzdCBSZWdhcmRzLA0KSm9ha2ltIFpoYW5nDQoNCg==
+> > From a first thought I would see a new flag CAN_CTRLMODE_RAW_DLC in the
+> > netlink interface of IFLA_CAN_CTRLMODE for the CAN controller driver.
+> >
+> > This could switch the sanitizing AND the CAN controller can properly
+> > expose its ability to support this mode.
+>
+> Absolutely yes. In my first message, I mentioned the idea of managing
+> that through socket option, glad that we now share the same idea.
+
+Actually, I just realized that I replied to you too quickly. I was not
+exactly thinking of the same thing here so let me correct what I
+previously said.
+
+IFLA_CAN_CTRLMODE is at the netlink level. My idea is to have it, in
+addition, at the socket level. Example: add CAN_RAW_RAW_DLC in
+include/uapi/linux/can/raw.h.
+
+The reason is that if we only manage it at the netlink level, some
+application not aware of the RAW_DLC issue might run into some buffer
+overflow issue. Unless an application directly requests it, the current
+behaviour should be maintained (rationale: do not break userland).
+
+So the full picture will be to have both the CAN_CTRLMODE_RAW_DLC at
+netlink level and CAN_RAW_RAW_DLC at the socket level (in the exact same
+way we have both CAN_CTRLMODE_FD and CAN_RAW_FD_FRAMES for
+CAN-FD).
+
+
+Yours sincerely,
+Vincent Mailhol
