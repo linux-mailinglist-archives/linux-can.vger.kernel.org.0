@@ -2,206 +2,517 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197FE295CB9
-	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 12:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F61295D1C
+	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 13:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2896540AbgJVKdw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Oct 2020 06:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2896454AbgJVKdw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 06:33:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DF3C0613CE
-        for <linux-can@vger.kernel.org>; Thu, 22 Oct 2020 03:33:51 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kVXuo-0004c2-BX; Thu, 22 Oct 2020 12:33:50 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:be0e:f7b2:6607:58d4] (2a03-f580-87bc-d400-be0e-f7b2-6607-58d4.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:be0e:f7b2:6607:58d4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3658657F9E1;
-        Thu, 22 Oct 2020 10:33:49 +0000 (UTC)
-Subject: Re: [PATCH] can: j1939: convert PGN structure to a table
-To:     yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org
-References: <20201022102946.18916-1-yegorslists@googlemail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <32bad1a4-4daf-8ebe-e469-175e0339b292@pengutronix.de>
-Date:   Thu, 22 Oct 2020 12:33:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S2503116AbgJVLCd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Oct 2020 07:02:33 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:41976 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502976AbgJVLCc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 07:02:32 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 5B1F41C0B78; Thu, 22 Oct 2020 13:02:29 +0200 (CEST)
+Date:   Thu, 22 Oct 2020 13:02:13 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>,
+        Drew Fustini <pdp7pdp7@gmail.com>
+Subject: Re: [PATCH v6 3/6] can: ctucanfd: add support for CTU CAN FD
+ open-source IP core - bus independent part.
+Message-ID: <20201022110213.GC26350@duo.ucw.cz>
+References: <cover.1603354744.git.pisa@cmp.felk.cvut.cz>
+ <886a8e0749e0521bf83a88313008a3f38031590b.1603354744.git.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-In-Reply-To: <20201022102946.18916-1-yegorslists@googlemail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="87vpIAMQtSFUdE8xGaQnT3JG5McWodty6"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="WplhKdTI2c8ulnbP"
+Content-Disposition: inline
+In-Reply-To: <886a8e0749e0521bf83a88313008a3f38031590b.1603354744.git.pisa@cmp.felk.cvut.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---87vpIAMQtSFUdE8xGaQnT3JG5McWodty6
-Content-Type: multipart/mixed; boundary="e0ePFKeS7uvBd4w9OqulEutkJuBOpnCsF";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Message-ID: <32bad1a4-4daf-8ebe-e469-175e0339b292@pengutronix.de>
-Subject: Re: [PATCH] can: j1939: convert PGN structure to a table
-References: <20201022102946.18916-1-yegorslists@googlemail.com>
-In-Reply-To: <20201022102946.18916-1-yegorslists@googlemail.com>
 
---e0ePFKeS7uvBd4w9OqulEutkJuBOpnCsF
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+--WplhKdTI2c8ulnbP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 10/22/20 12:29 PM, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Hi!
+
+> From: Martin Jerabek <martin.jerabek01@gmail.com>
 >=20
-> Use table markup to show the PGN structure.
->=20
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  Documentation/networking/j1939.rst | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/networking/j1939.rst b/Documentation/network=
-ing/j1939.rst
-> index faf2eb5c5052..f3fb9d880910 100644
-> --- a/Documentation/networking/j1939.rst
-> +++ b/Documentation/networking/j1939.rst
-> @@ -71,10 +71,14 @@ PGN
-> =20
->  The PGN (Parameter Group Number) is a number to identify a packet. The=
- PGN
->  is composed as follows:
-> -1 bit  : Reserved Bit
-> -1 bit  : Data Page
-> -8 bits : PF (PDU Format)
-> -8 bits : PS (PDU Specific)
+> This driver adds support for the CTU CAN FD open-source IP core.
+> More documentation and core sources at project page
+> (https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core).
+> The core integration to Xilinx Zynq system as platform driver
+> is available (https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top=
+).
+> Implementation on Intel FGA based PCI Express board is available
+> from project (https://gitlab.fel.cvut.cz/canbus/pcie-ctu_can_fd).
+
+Is "FGA" a typo? Yes, it is.
+
+Anyway, following link tells me:
+
+Project 'canbus/pcie-ctu_can_fd' was moved to
+'canbus/pcie-ctucanfd'. Please update any links and bookmarks that may
+still have the old path. Fixing it in Kconfig is more important.
+
+> +++ b/drivers/net/can/ctucanfd/Kconfig
+> @@ -0,0 +1,15 @@
+
+> +if CAN_CTUCANFD
 > +
-> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +  PGN
-> +  ----------------------------------------------------------------
-> +  25            24              23 ... 16        15 ... 8
+> +endif
 
-ICan you add a row description that indicated that these numbers are. The=
-y are
-probably bit positions within the CAN-ID?
+Empty -> drop?
 
-> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +  R (Reserved)  DP (Data Page)  PF (PDU Format)  PS (PDU Specific)
-> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
->  In J1939-21 distinction is made between PDU1 format (where PF < 240) a=
-nd PDU2
->  format (where PF >=3D 240). Furthermore, when using the PDU2 format, t=
-he PS-field
->=20
+> +++ b/drivers/net/can/ctucanfd/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
 
-Marc
+> +++ b/drivers/net/can/ctucanfd/ctu_can_fd.c
+> @@ -0,0 +1,1105 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
 
+Having Makefile and sources with different licenses is rather unusual.
+
+> +static const char * const ctucan_state_strings[] =3D {
+> +	"CAN_STATE_ERROR_ACTIVE",
+> +	"CAN_STATE_ERROR_WARNING",
+> +	"CAN_STATE_ERROR_PASSIVE",
+> +	"CAN_STATE_BUS_OFF",
+> +	"CAN_STATE_STOPPED",
+> +	"CAN_STATE_SLEEPING"
+> +};
+
+Put this near function that uses this?
+
+> +/**
+> + * ctucan_set_bittiming - CAN set bit timing routine
+> + * @ndev:	Pointer to net_device structure
+> + *
+> + * This is the driver set bittiming routine.
+> + * Return: 0 on success and failure value on error
+> + */
+
+> +/**
+> + * ctucan_chip_start - This routine starts the driver
+> + * @ndev:	Pointer to net_device structure
+> + *
+> + * This is the drivers start routine.
+> + *
+> + * Return: 0 on success and failure value on error
+> + */
+
+Good documentation is nice, but repeating "This routine starts the
+driver" in "This is the drivers start routine." is not too helpful.
+
+> +/**
+> + * ctucan_start_xmit - Starts the transmission
+> + * @skb:	sk_buff pointer that contains data to be Txed
+> + * @ndev:	Pointer to net_device structure
+> + *
+> + * This function is invoked from upper layers to initiate transmission. =
+This
+> + * function uses the next available free txbuf and populates their field=
+s to
+> + * start the transmission.
+> + *
+> + * Return: %NETDEV_TX_OK on success and failure value on error
+> + */
+
+Based on other documentation, I'd expect this to return -ESOMETHING on
+error, but it returns NETDEV_TX_BUSY.
+
+> +	/* Check if the TX buffer is full */
+> +	if (unlikely(!CTU_CAN_FD_TXTNF(ctu_can_get_status(&priv->p)))) {
+> +		netif_stop_queue(ndev);
+> +		netdev_err(ndev, "BUG!, no TXB free when queue awake!\n");
+> +		return NETDEV_TX_BUSY;
+> +	}
+
+You call stop_queue() without spinlock...
+
+> +	spin_lock_irqsave(&priv->tx_lock, flags);
+> +
+> +	ctucan_hw_txt_set_rdy(&priv->p, txb_id);
+> +
+> +	priv->txb_head++;
+> +
+> +	/* Check if all TX buffers are full */
+> +	if (!CTU_CAN_FD_TXTNF(ctu_can_get_status(&priv->p)))
+> +		netif_stop_queue(ndev);
+> +
+> +	spin_unlock_irqrestore(&priv->tx_lock, flags);
+
+=2E..and then with spinlock held. One of them is buggy.
+
+> +/**
+> + * xcan_rx -  Is called from CAN isr to complete the received
+> + *		frame processing
+> + * @ndev:	Pointer to net_device structure
+> + *
+> + * This function is invoked from the CAN isr(poll) to process the Rx fra=
+mes. It
+> + * does minimal processing and invokes "netif_receive_skb" to complete f=
+urther
+> + * processing.
+> + * Return: 1 on success and 0 on failure.
+> + */
+
+Adapt to usual 0 / -EFOO?
+
+> +	/* Check for Arbitration Lost interrupt */
+> +	if (isr.s.ali) {
+> +		if (dologerr)
+> +			netdev_info(ndev, "  arbitration lost");
+> +		priv->can.can_stats.arbitration_lost++;
+> +		if (skb) {
+> +			cf->can_id |=3D CAN_ERR_LOSTARB;
+> +			cf->data[0] =3D CAN_ERR_LOSTARB_UNSPEC;
+> +		}
+> +	}
+> +
+> +	/* Check for Bus Error interrupt */
+> +	if (isr.s.bei) {
+> +		netdev_info(ndev, "  bus error");
+
+Missing "if (dologerr)" here?
+
+> +static int ctucan_rx_poll(struct napi_struct *napi, int quota)
+> +{
+> +	struct net_device *ndev =3D napi->dev;
+> +	struct ctucan_priv *priv =3D netdev_priv(ndev);
+> +	int work_done =3D 0;
+> +	union ctu_can_fd_status status;
+> +	u32 framecnt;
+> +
+> +	framecnt =3D ctucan_hw_get_rx_frame_count(&priv->p);
+> +	netdev_dbg(ndev, "rx_poll: %d frames in RX FIFO", framecnt);
+
+This will be rather noisy, right?
+
+> +	/* Check for RX FIFO Overflow */
+> +	status =3D ctu_can_get_status(&priv->p);
+> +	if (status.s.dor) {
+> +		struct net_device_stats *stats =3D &ndev->stats;
+> +		struct can_frame *cf;
+> +		struct sk_buff *skb;
+> +
+> +		netdev_info(ndev, "  rx fifo overflow");
+
+And this goes at different loglevel, which will be confusing?
+
+> +/**
+> + * xcan_tx_interrupt - Tx Done Isr
+> + * @ndev:	net_device pointer
+> + */
+> +static void ctucan_tx_interrupt(struct net_device *ndev)
+
+Mismatch between code and docs.
+
+> +	netdev_dbg(ndev, "%s", __func__);
+
+This is inconsistent with other debugging.... and perhaps it is time
+to remove this kind of debugging for merge.
+
+> +/**
+> + * xcan_interrupt - CAN Isr
+> + */
+> +static irqreturn_t ctucan_interrupt(int irq, void *dev_id)
+
+Inconsistent.
+
+> +		/* Error interrupts */
+> +		if (isr.s.ewli || isr.s.fcsi || isr.s.ali) {
+> +			union ctu_can_fd_int_stat ierrmask =3D { .s =3D {
+> +				  .ewli =3D 1, .fcsi =3D 1, .ali =3D 1, .bei =3D 1 } };
+> +			icr.u32 =3D isr.u32 & ierrmask.u32;
+
+We normally do bit arithmetics instead of this.=20
+
+> +	{
+> +		union ctu_can_fd_int_stat imask;
+> +
+> +		imask.u32 =3D 0xffffffff;
+> +		ctucan_hw_int_ena_clr(&priv->p, imask);
+> +		ctucan_hw_int_mask_set(&priv->p, imask);
+> +	}
+
+More like this. Plus avoid block here...?
+
+> +/**
+> + * ctucan_close - Driver close routine
+> + * @ndev:	Pointer to net_device structure
+> + *
+> + * Return: 0 always
+> + */
+
+You see, this is better. No need to say "Driver close routine"
+twice. Now, make the rest consistent :-).
+
+
+> +EXPORT_SYMBOL(ctucan_suspend);
+> +EXPORT_SYMBOL(ctucan_resume);
+
+_GPL?
+
+And what kind of multi-module stuff are you doing that you need
+symbols exported?
+
+> +int ctucan_probe_common(struct device *dev, void __iomem *addr, int irq,=
+ unsigned int ntxbufs,
+> +			unsigned long can_clk_rate, int pm_enable_call,
+> +			void (*set_drvdata_fnc)(struct device *dev, struct net_device *ndev))
+> +{
+
+Splitting/simplifying this somehow would be good.
+
+> +/* Register descriptions: */
+> +union ctu_can_fd_frame_form_w {
+> +	uint32_t u32;
+
+u32, as you write elsewhere.
+
+> +	struct ctu_can_fd_frame_form_w_s {
+> +#ifdef __LITTLE_ENDIAN_BITFIELD
+> +  /* FRAME_FORM_W */
+> +		uint32_t dlc                     : 4;
+> +		uint32_t reserved_4              : 1;
+> +		uint32_t rtr                     : 1;
+> +		uint32_t ide                     : 1;
+> +		uint32_t fdf                     : 1;
+> +		uint32_t reserved_8              : 1;
+> +		uint32_t brs                     : 1;
+> +		uint32_t esi_rsv                 : 1;
+> +		uint32_t rwcnt                   : 5;
+> +		uint32_t reserved_31_16         : 16;
+> +#else
+
+I believe you should simply avoid using bitfields.
+
+> +union ctu_can_fd_timestamp_l_w {
+> +	uint32_t u32;
+> +	struct ctu_can_fd_timestamp_l_w_s {
+> +  /* TIMESTAMP_L_W */
+> +		uint32_t time_stamp_31_0        : 32;
+> +	} s;
+> +};
+
+This is crazy.
+
+> +union ctu_can_fd_data_5_8_w {
+> +	uint32_t u32;
+> +	struct ctu_can_fd_data_5_8_w_s {
+> +#ifdef __LITTLE_ENDIAN_BITFIELD
+> +  /* DATA_5_8_W */
+> +		uint32_t data_5                  : 8;
+> +		uint32_t data_6                  : 8;
+> +		uint32_t data_7                  : 8;
+> +		uint32_t data_8                  : 8;
+> +#else
+> +		uint32_t data_8                  : 8;
+> +		uint32_t data_7                  : 8;
+> +		uint32_t data_6                  : 8;
+> +		uint32_t data_5                  : 8;
+> +#endif
+> +	} s;
+> +};
+
+even more crazy.
+
+> +#ifdef __KERNEL__
+> +# include <linux/can/dev.h>
+> +#else
+> +/* The hardware registers mapping and low level layer should build
+> + * in userspace to allow development and verification of CTU CAN IP
+> + * core VHDL design when loaded into hardware. Debugging hardware
+> + * from kernel driver is really difficult, leads to system stucks
+> + * by error reporting etc. Testing of exactly the same code
+> + * in userspace together with headers generated automatically
+> + * generated from from IP-XACT/cactus helps to driver to hardware
+> + * and QEMU emulation model consistency keeping.
+> + */
+> +# include "ctu_can_fd_linux_defs.h"
+> +#endif
+
+Please remove non-kernel code for merge.
+
+> +void ctucan_hw_write32(struct ctucan_hw_priv *priv,
+> +		       enum ctu_can_fd_can_registers reg, u32 val)
+> +{
+> +	iowrite32(val, priv->mem_base + reg);
+> +}
+
+And get rid of this kind of abstraction layer.
+
+> +// TODO: rename or do not depend on previous value of id
+
+TODO: grep for TODO and C++ comments before attempting merge.
+
+> +static bool ctucan_hw_len_to_dlc(u8 len, u8 *dlc)
+> +{
+> +	*dlc =3D can_len2dlc(len);
+> +	return true;
+> +}
+
+Compared to how well other code is documented... This one is voodoo.
+
+> +bool ctucan_hw_set_ret_limit(struct ctucan_hw_priv *priv, bool enable, u=
+8 limit)
+> +{
+> +	union ctu_can_fd_mode_settings reg;
+> +
+> +	if (limit > CTU_CAN_FD_RETR_MAX)
+> +		return false;
+> +
+> +	reg.u32 =3D priv->read_reg(priv, CTU_CAN_FD_MODE);
+> +	reg.s.rtrle =3D enable ? RTRLE_ENABLED : RTRLE_DISABLED;
+> +	reg.s.rtrth =3D limit & 0xF;
+> +	priv->write_reg(priv, CTU_CAN_FD_MODE, reg.u32);
+> +	return true;
+> +}
+
+As elsewhere, I'd suggest 0/-ERRNO.
+
+> +void ctucan_hw_set_mode_reg(struct ctucan_hw_priv *priv,
+> +			    const struct can_ctrlmode *mode)
+> +{
+> +	u32 flags =3D mode->flags;
+> +	union ctu_can_fd_mode_settings reg;
+> +
+> +	reg.u32 =3D priv->read_reg(priv, CTU_CAN_FD_MODE);
+
+> +	if (mode->mask & CAN_CTRLMODE_LOOPBACK)
+> +		reg.s.ilbp =3D flags & CAN_CTRLMODE_LOOPBACK ?
+> +					INT_LOOP_ENABLED : INT_LOOP_DISABLED;
+
+Not sure what is going on here, but having mode->flags in same format
+as hardware register would help...?
+
+> +	switch (fnum) {
+> +	case CTU_CAN_FD_FILTER_A:
+> +		if (reg.s.sfa)
+> +			return true;
+> +	break;
+> +	case CTU_CAN_FD_FILTER_B:
+> +		if (reg.s.sfb)
+> +			return true;
+> +	break;
+> +	case CTU_CAN_FD_FILTER_C:
+> +		if (reg.s.sfc)
+> +			return true;
+> +	break;
+> +	}
+
+Check indentation of break statemnts, also elsewhere in this file
+
+> +bool ctucan_hw_get_range_filter_support(struct ctucan_hw_priv *priv)
+> +{
+> +	union ctu_can_fd_filter_control_filter_status reg;
+> +
+> +	reg.u32 =3D priv->read_reg(priv, CTU_CAN_FD_FILTER_CONTROL);
+> +
+> +	if (reg.s.sfr)
+> +		return true;
+
+return !!reg.s.sfr; ?
+
+> +enum ctu_can_fd_tx_status_tx1s ctucan_hw_get_tx_status(struct ctucan_hw_=
+priv
+> +							*priv, u8 buf)
+=2E..
+> +	default:
+> +		status =3D ~0;
+> +	}
+> +	return (enum ctu_can_fd_tx_status_tx1s)status;
+> +}
+
+Is ~0 in the enum?
+
+> +	// TODO: use named constants for the command
+
+TODO...
+
+> +// TODO: AL_CAPTURE and ERROR_CAPTURE
+
+=2E..
+
+> +#if defined(__LITTLE_ENDIAN_BITFIELD) =3D=3D defined(__BIG_ENDIAN_BITFIE=
+LD)
+> +# error __BIG_ENDIAN_BITFIELD or __LITTLE_ENDIAN_BITFIELD must be define=
+d.
+> +#endif
+
+:-).
+> +// True if Core is transceiver of current frame
+> +#define CTU_CAN_FD_IS_TRANSMITTER(stat) (!!(stat).ts)
+> +
+> +// True if Core is receiver of current frame
+> +#define CTU_CAN_FD_IS_RECEIVER(stat) (!!(stat).s.rxs)
+
+Why not, documentation is nice. But it is in big contrast to other
+parts of code where there's no docs at all.
+
+> +struct ctucan_hw_priv;
+> +#ifndef ctucan_hw_priv
+> +struct ctucan_hw_priv {
+> +	void __iomem *mem_base;
+> +	u32 (*read_reg)(struct ctucan_hw_priv *priv,
+> +			enum ctu_can_fd_can_registers reg);
+> +	void (*write_reg)(struct ctucan_hw_priv *priv,
+> +			  enum ctu_can_fd_can_registers reg, u32 val);
+> +};
+> +#endif
+
+Should not be needed in kernel.
+
+> +/**
+> + * ctucan_hw_read_rx_word - Reads one word of CAN Frame from RX FIFO Buf=
+fer.
+> + *
+> + * @priv: Private info
+> + *
+> + * Return: One wword of received frame
+
+Typo 'word'.
+
+> +++ b/drivers/net/can/ctucanfd/ctu_can_fd_regs.h
+> @@ -0,0 +1,971 @@
+> +
+> +/* This file is autogenerated, DO NOT EDIT! */
+> +
+
+Yay. How is that supposed to work after merge?
+
+Best regards,
+								Pavel
 --=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+http://www.livejournal.com/~pavelmachek
 
-
---e0ePFKeS7uvBd4w9OqulEutkJuBOpnCsF--
-
---87vpIAMQtSFUdE8xGaQnT3JG5McWodty6
+--WplhKdTI2c8ulnbP
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+RYAkACgkQqclaivrt
-76nKVwf/e0rIa9mRMoOUKpCAJ3laA07P9tBVSp4tAlp0H4Mdj4G7nAZi6MzdGKpu
-rXl49EqdTkF9FbXGu9dJLLWjqgJpcxFKHVlExJwp0ruQQrtJYRf7h3PAlbOhXlyT
-CHVM2QL+TsOckEtqlnJFJcJDR+VsxfAcsHW8mt0f0PsM5SnSwMEGc6fH4sE7nBB9
-fUcd3JEPmTwugzPSq1OHrMgwP2TZLH6z7kUMK0+QqTsAAgLL/Oe5kio8y7UQBkMx
-8CqDrsbW6lKZmblqN5XavGX5MW1nXzhcpKylbUSlaAp5b+jAEuhCAPnKT30RFcQw
-LWxcCCsOpqaXxQOValFB4GtDqIbNMA==
-=L5bj
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX5FmtQAKCRAw5/Bqldv6
+8vGvAJ9uJYXCbakJMeRM74nm7C5yS5WNjgCfedqWhCgGitgON8XcH8L7t1FjLYU=
+=malX
 -----END PGP SIGNATURE-----
 
---87vpIAMQtSFUdE8xGaQnT3JG5McWodty6--
+--WplhKdTI2c8ulnbP--
