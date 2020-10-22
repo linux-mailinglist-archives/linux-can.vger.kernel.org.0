@@ -2,35 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 999E029586E
-	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 08:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FE1295876
+	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 08:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439112AbgJVGdt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Oct 2020 02:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S2503963AbgJVGhZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Oct 2020 02:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438939AbgJVGdt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 02:33:49 -0400
+        with ESMTP id S2503423AbgJVGhZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 02:37:25 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E262DC0613CE
-        for <linux-can@vger.kernel.org>; Wed, 21 Oct 2020 23:33:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E701C0613CE
+        for <linux-can@vger.kernel.org>; Wed, 21 Oct 2020 23:37:25 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kVUAR-0007mz-MA; Thu, 22 Oct 2020 08:33:43 +0200
+        id 1kVUDz-0008Es-PP; Thu, 22 Oct 2020 08:37:23 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:be0e:f7b2:6607:58d4] (unknown [IPv6:2a03:f580:87bc:d400:be0e:f7b2:6607:58d4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2A2C957F65D;
-        Thu, 22 Oct 2020 06:33:41 +0000 (UTC)
-To:     Drew Fustini <drew@beagleboard.org>, linux-can@vger.kernel.org
-Cc:     Josh S <josh@macchina.cc>
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj5HwFUTqhbgZ2Y5Db-_PPHNN7Rc8dnp1s+TBBALf5EwSw@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 125B357F673;
+        Thu, 22 Oct 2020 06:37:22 +0000 (UTC)
+Subject: Re: Adding FD support to gs_usb
+To:     Eric Evenchick <eric@evenchick.com>, linux-can@vger.kernel.org
+References: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -92,16 +91,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <3ede1c31-9436-a8ec-b7cd-65cee5fa23fc@pengutronix.de>
-Date:   Thu, 22 Oct 2020 08:33:36 +0200
+Message-ID: <84075a2d-de68-da73-6db2-beb10122242d@pengutronix.de>
+Date:   Thu, 22 Oct 2020 08:37:17 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAPgEAj5HwFUTqhbgZ2Y5Db-_PPHNN7Rc8dnp1s+TBBALf5EwSw@mail.gmail.com>
+In-Reply-To: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="OhJ3mW9ekORG9ArYdWpTk2CIaqNHYDOnv"
+ boundary="pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,54 +109,41 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---OhJ3mW9ekORG9ArYdWpTk2CIaqNHYDOnv
-Content-Type: multipart/mixed; boundary="kh6TmyTXqgv03IpUAOrp2YTBGNhbg8nY7";
+--pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c
+Content-Type: multipart/mixed; boundary="2WTh28bmhiCAtX7tYZzoaJTfK05xJjHW9";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Drew Fustini <drew@beagleboard.org>, linux-can@vger.kernel.org
-Cc: Josh S <josh@macchina.cc>
-Message-ID: <3ede1c31-9436-a8ec-b7cd-65cee5fa23fc@pengutronix.de>
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj5HwFUTqhbgZ2Y5Db-_PPHNN7Rc8dnp1s+TBBALf5EwSw@mail.gmail.com>
-In-Reply-To: <CAPgEAj5HwFUTqhbgZ2Y5Db-_PPHNN7Rc8dnp1s+TBBALf5EwSw@mail.gmail.com>
+To: Eric Evenchick <eric@evenchick.com>, linux-can@vger.kernel.org
+Message-ID: <84075a2d-de68-da73-6db2-beb10122242d@pengutronix.de>
+Subject: Re: Adding FD support to gs_usb
+References: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
+In-Reply-To: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
 
---kh6TmyTXqgv03IpUAOrp2YTBGNhbg8nY7
+--2WTh28bmhiCAtX7tYZzoaJTfK05xJjHW9
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/22/20 8:00 AM, Drew Fustini wrote:
-> It appears it was simpler to get it to compile than I expected.
+On 10/21/20 9:02 PM, Eric Evenchick wrote:
+> With the new CANtact Pro shipping soon, I've added CAN FD support to a =
+fork
+> of gs_usb used by this device. It maintains compatibility with other gs=
+_usb
+> devices, but adds flags and options for CAN FD. I've put this fork up o=
+n
+> Github: https://github.com/linklayer/gs_usb_fd.
 
-\o/
+Can you send a patch against mainline here for review?
 
-> cs_change_delay.unit becomes cs_change_delay_unit,  and
-> cs_change_delay.value becomes cs_change_delay.
->=20
-> The other issue was 728fc9ff73d3 ("can: rx-offload:
-> can_rx_offload_add_manual(): add new initialization function") which
-> was simply solved by adding can_rx_offload_add_manual() to:
-> include/linux/can/rx-offload.h
-> drivers/net/can/rx-offload.c
->=20
-> The driver builds ok:
-
-With your help :) I backported current linus/master to the rpi-5.4:
-
-https://github.com/marckleinebudde/linux/tree/v5.4-rpi/mcp251xfd-20201022=
--54
-
-Can you test that?
-
-Do you know the process to get that into the rpi kernel? Send a pull requ=
-est on
-github?
+> I'm wondering if it makes sense to add this FD support to the gs_usb dr=
+iver.
+> Devices supporting FD will set the GS_CAN_FEATURE_FD feature flag to en=
+able
+> FD support. Non-FD devices will work as they did before.
+So far that sound good, please send a patch here.
 
 regards,
 Marc
-
-BTW: What's your current timezone?
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -167,23 +152,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---kh6TmyTXqgv03IpUAOrp2YTBGNhbg8nY7--
+--2WTh28bmhiCAtX7tYZzoaJTfK05xJjHW9--
 
---OhJ3mW9ekORG9ArYdWpTk2CIaqNHYDOnv
+--pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+RJ8AACgkQqclaivrt
-76n4Xgf8CKNNorchMH7H3mTIP8nQHgcqwOylgvsL1l8w3VtXdnBO0wcr5TACWcoL
-duNOUMX3jn/n3C0JfABPnWq3eCKQMqs/S47Krno3X7QDvhkqhwzfthWJ3qM4sJrz
-GwxBQ9xnFo4atSfdouxA5en/V6yFOf0AXzQqFia+wFVtm2o5UguhWm7okzduJwS7
-y7vLkbz5DL2W0rzmsMeCUOR4mD8f00uNXP6iSrppedO42elv7nsqX+/aXbrDI+NW
-7XAvZbr3blEGY6iI3HrRMQ57jQPiCnqjbUy+l1i1fb6equ0fNb/HAiLA/a/xo9qm
-DYBDss5aQtoKU2Wi+KPNFhLfpVpudA==
-=ImAV
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+RKJ0ACgkQqclaivrt
+76llJQf/e2OXDKHdegGYcf0z3PXf0w+m4wZuvydD5ovx3K5EXbTyiBA5BXeg93io
+An9Q5Ho5ZD9lsjreVXFEH6gQjjHIl75krqx0ifIPoh2ScumbH7j1na+gCbvgYi1d
+izFtvG9QeM8nghtGmBuIKltUyJxcdAl8AoOa9thLejBFNDve5rvl1aV+bWzETeY2
+G+suhnTrFYDJhNmL3vInLTqS+PuLebyOEw9vL6X+f0rlryChLQ09ULH9yhPv8eo9
+zELDnVgXOA68uxSCwV4GowBWYdhQpTMO5zlu+YhZ509c2fa52HY3aI8iA71ToiPy
+Rj4ymSAkJX6+Ev6SRCAEBnnLeE7ZZA==
+=9yxW
 -----END PGP SIGNATURE-----
 
---OhJ3mW9ekORG9ArYdWpTk2CIaqNHYDOnv--
+--pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c--
