@@ -2,173 +2,289 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FE1295876
-	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 08:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222522958DF
+	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 09:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503963AbgJVGhZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Oct 2020 02:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503423AbgJVGhZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 02:37:25 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E701C0613CE
-        for <linux-can@vger.kernel.org>; Wed, 21 Oct 2020 23:37:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kVUDz-0008Es-PP; Thu, 22 Oct 2020 08:37:23 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:be0e:f7b2:6607:58d4] (unknown [IPv6:2a03:f580:87bc:d400:be0e:f7b2:6607:58d4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 125B357F673;
-        Thu, 22 Oct 2020 06:37:22 +0000 (UTC)
-Subject: Re: Adding FD support to gs_usb
-To:     Eric Evenchick <eric@evenchick.com>, linux-can@vger.kernel.org
-References: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <84075a2d-de68-da73-6db2-beb10122242d@pengutronix.de>
-Date:   Thu, 22 Oct 2020 08:37:17 +0200
+        id S2505808AbgJVHPa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Oct 2020 03:15:30 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:30507 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2505807AbgJVHP3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 03:15:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1603350925;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=Wa93SaF+6dGiCSXa4su/yBJzVN95l5/BMy0djM/QxhA=;
+        b=ayvIFZztecMWSTTlkiKg7YexAOD8FHri1fRRae0oCbi4QxEuVGK8onYGSbqbJYJg5N
+        X5IGRygCxGpThc6Znq29Y9LGGMqEEMsNjSTj97sJVTy6NgIsoSVXNI3pK7qGdRjgJN0m
+        6G6iiFrgZtmsFTpwYJejHy2xaNhnVYeYjGZ5fmNubIkiKtaoWsYteKnUwL4vOxJ2rrsA
+        hv85ToeUzR2oUan7ieIT+/rsRboc06lyFPaipGqC0AmM/Gp75w+ElHf6CCyCTg7FK28K
+        8wtH1MFZCGvtEVruFiAOJGjc+et3U7hVHlFFldUTXccY9kkP3rlTo/8yR+DnPvlCji0G
+        cdVw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiO89upw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+        by smtp.strato.de (RZmta 47.2.1 DYNA|AUTH)
+        with ESMTPSA id D0b41cw9M7FOtc2
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 22 Oct 2020 09:15:24 +0200 (CEST)
+Subject: Re: [net-rfc 04/16] can: dev: can_get_len(): add a helper function to
+ get the correct length of Classical frames
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        kernel@pengutronix.de,
+        =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
+References: <20201019190524.1285319-1-mkl@pengutronix.de>
+ <20201019190524.1285319-5-mkl@pengutronix.de>
+ <fbbe1b80-c012-dc87-1eb0-4878cd08cce1@hartkopp.net>
+ <ebf50f35-f093-b2c9-a27c-cef73d403efb@pengutronix.de>
+ <20201020113023.102360-1-mailhol.vincent@wanadoo.fr>
+ <6f869e47-9a76-3398-0b64-2d573d412f4c@hartkopp.net>
+ <20201020160739.104686-1-mailhol.vincent@wanadoo.fr>
+ <a9605011-2674-dc73-111c-8ebf724a13ac@hartkopp.net>
+ <20201021005226.2727-1-mailhol.vincent@wanadoo.fr>
+ <CAMZ6RqKFST4dcWZP_8NdDMB6GT09vhVWgN+nuMWkVovkh-EZdw@mail.gmail.com>
+ <2711ea6f-e1ce-c3f9-dd98-83142bd33fc9@hartkopp.net>
+ <CAMZ6RqK2RCGLFmjiHTQAxZSGn-HQaAh_nHHGwKdODanZK5oJbg@mail.gmail.com>
+ <727e4845-63bd-659b-5344-97eb54121624@hartkopp.net>
+ <CAMZ6RqJ8=T8CAhYaa8PZs5-d2zhx1_15wMe7ohUZovvqTcgW0w@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <0087f8a4-c77c-cc13-b17d-bd9666837ee3@hartkopp.net>
+Date:   Thu, 22 Oct 2020 09:15:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <CAMZ6RqJ8=T8CAhYaa8PZs5-d2zhx1_15wMe7ohUZovvqTcgW0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c
-Content-Type: multipart/mixed; boundary="2WTh28bmhiCAtX7tYZzoaJTfK05xJjHW9";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Eric Evenchick <eric@evenchick.com>, linux-can@vger.kernel.org
-Message-ID: <84075a2d-de68-da73-6db2-beb10122242d@pengutronix.de>
-Subject: Re: Adding FD support to gs_usb
-References: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
-In-Reply-To: <ebff6876-57de-4938-8e9c-bf3994ec77f8@www.fastmail.com>
-
---2WTh28bmhiCAtX7tYZzoaJTfK05xJjHW9
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 10/21/20 9:02 PM, Eric Evenchick wrote:
-> With the new CANtact Pro shipping soon, I've added CAN FD support to a =
-fork
-> of gs_usb used by this device. It maintains compatibility with other gs=
-_usb
-> devices, but adds flags and options for CAN FD. I've put this fork up o=
-n
-> Github: https://github.com/linklayer/gs_usb_fd.
-
-Can you send a patch against mainline here for review?
-
-> I'm wondering if it makes sense to add this FD support to the gs_usb dr=
-iver.
-> Devices supporting FD will set the GS_CAN_FEATURE_FD feature flag to en=
-able
-> FD support. Non-FD devices will work as they did before.
-So far that sound good, please send a patch here.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---2WTh28bmhiCAtX7tYZzoaJTfK05xJjHW9--
+On 22.10.20 05:30, Vincent MAILHOL wrote:
+> On 21.10.21 02:52, Oliver Hartkopp wrote:
+>> On 21.10.20 13:55, Vincent MAILHOL wrote:
+>>>> On 21.10.20 18:48, Oliver Hartkopp wrote:
+>>
+>>>> To be more compatible to non raw dlc CAN frame sources the tx handling
+>>>> could also be like this:
+>>>>
+>>>> if ((can_dlc == CAN_MAX_DLEN) &&
+>>>>        (raw_dlc >= CAN_MAX_DLC && raw_dlc <= CAN_MAX_RAW_DLC))
+>>>> => use raw_dlc
+>>>>
+> 
+> In addition to that, we would have to decide what to do with malformed
+> frames. If can_dlc and can_raw are set to contradictory values, do we
+> drop the frame, do we just ignore the raw_dlc? For example, if can_dlc
+> is 8 but raw_dlc is 2, I think that we should drop.
 
---pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+The pseudo code is pretty clear on this: Use can_dlc.
 
------BEGIN PGP SIGNATURE-----
+The nice thing about testing raw_dlc to be 9..15 when can_dlc == 8 is, 
+that we always have a correct CAN frame on the wire with 8 bytes of content.
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+RKJ0ACgkQqclaivrt
-76llJQf/e2OXDKHdegGYcf0z3PXf0w+m4wZuvydD5ovx3K5EXbTyiBA5BXeg93io
-An9Q5Ho5ZD9lsjreVXFEH6gQjjHIl75krqx0ifIPoh2ScumbH7j1na+gCbvgYi1d
-izFtvG9QeM8nghtGmBuIKltUyJxcdAl8AoOa9thLejBFNDve5rvl1aV+bWzETeY2
-G+suhnTrFYDJhNmL3vInLTqS+PuLebyOEw9vL6X+f0rlryChLQ09ULH9yhPv8eo9
-zELDnVgXOA68uxSCwV4GowBWYdhQpTMO5zlu+YhZ509c2fa52HY3aI8iA71ToiPy
-Rj4ymSAkJX6+Ev6SRCAEBnnLeE7ZZA==
-=9yxW
------END PGP SIGNATURE-----
+Ok, the raw_dlc might be an uninitialized value - but still everything 
+remains fine for operation. So why dropping frames here?
 
---pS1UMaAzmPLlHP3uaI6EbQnG2RZ3fwD4c--
+The problem of uninitialized values could be solved with a 
+CAN_RAW_RAW_DLC sockopt BUT you will be always able to send a CAN frame 
+with an AF_PACKET socket which has no CAN_RAW_RAW_DLC sockopt.
+
+And then?
+
+The above pseudo code together with CAN_CTRLMODE_RAW_DLC seems to be a 
+pretty safe option to me. Even if 'legacy' applications with 
+uninitialized raw_dlc send CAN frames or AF_PACKET users enable 
+CAN_CTRLMODE_RAW_DLC we always end up with a proper can_dlc == 8  and a 
+fitting valid raw_dlc.
+
+> 
+> If we go this direction, I would propose below logic:
+> 
+>   1. if raw_dlc equals can_dlc: nominal case.
+
+Is not tested. We would start on testing can_dlc == 8
+
+> 
+>   2. if can_dlc equals 8 and raw_dlc is greater than 8: use raw_dlc
+>      case, already covered in your code.
+
+ACK
+
+>   3. if raw_dlc is 0, then consider it as unset: overwrite raw_dlc with
+>      can_dlc (so that it becomes case 1).
+
+Is not tested like this. We would start on can_dlc == 8 - and then check 
+for valid raw_dlc 9..15
+
+> 
+>   4. Other scenarios: the frame is malformed: drop it.
+
+No dropping.
+
+> Logic should apply for both Tx and Rx paths.
+
+So test for can_dlc == 8 - and then check for valid raw_dlc 9..15 in the 
+user space?! Fine.
+
+Btw. we can make sure that we do not have uninitialized raw_dlc value in 
+the rx path in the enabled drivers. In fact you could always use the 
+raw_dlc then.
+
+BUT it makes sense to use this test to detect cases, where someone 
+forgot to switch on CAN_CTRLMODE_RAW_DLC or the driver doesn't support 
+it and the programmer did not check the ctrlmode netlink return values.
+
+> Then, the drivers/users would only have to manage scenarios 1 and 2
+> (and 2 can be ignored if CAN_CTRLMODE_RAW_DLC is not advertised).
+> 
+>>>
+>>> If I understand well, the idea would be not to use a setsockopt() but
+>>> instead rely on some logic on the can_dlc and raw_dlc to determine
+>>> which one to use.
+>>>
+>>> Unfortunately, this approach has one issue in the TX path that could
+>>> break existing applications.
+>>>
+>>> Consider below code (which I think is fairly realistic):
+>>>
+>>> void send_frame (int soc, canid_t can_id, char *data, size_t len)
+>>> {
+>>>       struct can_frame cf;
+>>>       size_t dlc = len > sizeof(cf.data) ? sizeof(cf.data) : len;
+>>>
+>>>       cf.can_id = can_id;
+>>>       cf.can_dlc = dlc;
+>>>       memcpy(cf.data, data, dlc);
+>>>
+>>>       write(soc, &cf, sizeof(cf));
+>>> }
+>>>
+>>> Here, the user did not initialize the can frame (cf) but assigned all
+>>> the relevant fields manually. Because cf is not initialized, the newly
+>>> introduced cf.dlc_raw field would have any of the values which was
+>>> present on the stack at the moment (rationale: the C standard does not
+>>> guarantee zero initialization). If 9 <= raw_dlc <= 15, the can frame
+>>> will be transmitted with a bad DLC value. If raw_dlc > 15, the can
+>>> frame will be discarded.
+>>
+>> No, this is not what I wrote. With my suggestion you need to populate
+>> both dlc elements to use the new "raw dlc" feature.
+>>
+>> if (can_dlc == 8) && (9 <= raw_dlc <= 15)
+>> => put raw_dlc value into the controller register
+>> else
+>> => put can_dlc value into the controller register
+>>
+>> When you have a test system to make security tests and you enable
+>> CAN_CTRLMODE_RAW_DLC on a specific CAN interface - which applications
+>> would you run to send CAN frames on this interface?
+>>
+>> I assume only the test application which is really aware of setting
+>> can_dlc and raw_dlc correctly.
+> 
+> My point is that this assumption is dangerous.
+> 
+> I do not think I made myself clear. I am speaking about old "non-DLC
+> aware" code running in CAN_CTRLMODE_RAW_DLC context.
+> 
+> Consider two applications: the first application is a test application
+> which is "DLC aware", the second is a legacy application which
+> contains the code which I presented in my previous message.
+> 
+> A user who wants to run both in parallel sets CAN_CTRLMODE_RAW_DLC at
+> netlink level. First application works fine, second application which
+> contains the legacy code gets impacted as explained previously and
+> stops behaving as intended.
+> 
+> Newly introduced option should not break existing code regardless
+> why. In opposition, we can introduce new rules if these are strictly
+> tied to the new option.
+
+Yes but it doesn't help you with AF_PACKET.
+
+> In my mind, imposing a rule that old code should not be used in
+> CAN_CTRLMODE_RAW_DLC context would create a huge pitfall and would
+> violate the "don't break userland" principle.
+
+CAN_RAW_RAW_DLC could help in the case of legacy code only when they are 
+using CAN_RAW sockets. But nothing more.
+
+Therefore we need the robustness on driver level with the checking of 
+can_dlc == 8.
+
+(..)
+
+>>> For userland, I think that this is acceptable because the very instant
+>>> the user calls setsockopt() with the CAN_RAW_RAW_DLC, he should be
+>>> aware of the consequences and should resign to use can_dlc field as a
+>>> plain length.
+>>
+>> Not filling can_dlc would cause tons of changes for sanity checks and
+>> feature switches.
+> 
+> I never spoke about "not filling can_dlc". My point is to not use it
+> as a length but use it as a DLC according to ISO definition. In my
+> approach, can_dlc should always be filled with the raw DLC value.
+
+Ok, let me rephrase: Filling can_dlc with something else than a plain 
+length information 0..8 ;-)
+
+(..)
+
+>> The 14 year old documentation in can.h says:
+>> @can_dlc: frame payload length in byte (0 .. 8)
+>>
+>> I will not break this established rule for a testing feature. The
+>> question from Joakim clearly showed: Don't touch this!
+> 
+> My point is this is an expert feature: if you do not understand it, do
+> not use it and you are safe to go using the 14 years old definition.
+
+Full ACK - but you can't imagine what people do in the real world. Do 
+you know these 'more helps more' guys that switch everything to 'on'? :-D
+
+The approach with CAN_CTRLMODE_RAW_DLC and the described testing would 
+be even robust against unintended miss-use.
+
+>> At the end it would have made more sense to call it can_frame.len in the
+>> first place. But this first came into our mind when CAN FD showed up.
+>> The discussion about the can_dlc meaning can be closed IMO. It is a
+>> plain length from 0..8 which is unfortunately named can_dlc.
+> 
+> I agree that it should have been named len from the beginning, but as
+> a matter of fact it has been named "can_dlc". For me as a user, I
+> expect can_dlc to follow the DLC definition in ISO and so I *prefer*
+> to opt for the compromise of losing the plain length property rather
+> than losing the semantic meaning.
+
+I don't think you can claim to be a standard user. You are an expert for 
+security testing and digged into the ISO standard and intentionally 
+write DLC values >8 into controller registers. Users don't do things 
+like this ;-)
+
+Clean-up and renaming typically ends when it breaks APIs and commonly 
+followed rules. There are many examples in Linux where these clean-up 
+attempts have been canceled for these reasons.
+
+I would have liked to rename can_dlc to len too.
+But now that we have a compatible canfd_frame which can contain a 
+can_frame this is somehow settled: can_dlc == len.
+
+> I would like to conclude by saying that I do necessarily think that
+> your approach of raw_dlc field is bad (if used in combination with the
+> setsockopt()). It has its pros and cons. However, if you ask me for
+> feedback, *my answer* is that *I prefer* to use can_dlc as a DLC. But
+> at the end of the day, I would be happy if the feature gets
+> implemented, regardless how, so that I can do my testing :-)
+
+So let's see how we can get there best :-)
+
+Best regards,
+Oliver
