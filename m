@@ -2,116 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAA5295E53
-	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 14:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE031295FF7
+	for <lists+linux-can@lfdr.de>; Thu, 22 Oct 2020 15:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2898096AbgJVMZE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Oct 2020 08:25:04 -0400
-Received: from relay-b02.edpnet.be ([212.71.1.222]:48883 "EHLO
-        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2898104AbgJVMZD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 08:25:03 -0400
-X-ASG-Debug-ID: 1603369500-0a7b8d0d7c36c4c0001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (94.105.104.9.dyn.edpnet.net [94.105.104.9]) by relay-b02.edpnet.be with ESMTP id CkAr1VGAGZZ7h2KM; Thu, 22 Oct 2020 14:25:00 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 94.105.104.9.dyn.edpnet.net[94.105.104.9]
-X-Barracuda-Apparent-Source-IP: 94.105.104.9
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 7DB4D10E746F;
-        Thu, 22 Oct 2020 14:25:00 +0200 (CEST)
-Date:   Thu, 22 Oct 2020 14:24:53 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     yegorslists@googlemail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH] can: j1939: convert PGN structure to a table
-Message-ID: <20201022122453.GA31522@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH] can: j1939: convert PGN structure to a table
-Mail-Followup-To: Marc Kleine-Budde <mkl@pengutronix.de>,
-        yegorslists@googlemail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20201022102946.18916-1-yegorslists@googlemail.com>
- <32bad1a4-4daf-8ebe-e469-175e0339b292@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <32bad1a4-4daf-8ebe-e469-175e0339b292@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 94.105.104.9.dyn.edpnet.net[94.105.104.9]
-X-Barracuda-Start-Time: 1603369500
-X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 2435
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: SPAM GLOBAL 0.9974 1.0000 4.3124
-X-Barracuda-Spam-Score: 4.31
-X-Barracuda-Spam-Status: No, SCORE=4.31 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.85450
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+        id S2899499AbgJVNZo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Oct 2020 09:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2894957AbgJVNZn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Oct 2020 09:25:43 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF8BC0613CE;
+        Thu, 22 Oct 2020 06:25:43 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 33so1736655edq.13;
+        Thu, 22 Oct 2020 06:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=f4qzo7l2XRXPibYCmsETjjzPgdp095iWPj5AGr/pxpg=;
+        b=Iuzy4qwCkg0a6mh3LwbSx8O0wmwrtlwfso3MYI4eJO8ec3QjJnUv50v6zQ0fzBzF6d
+         EdsVHFA2Vydovh/4d9qiQW3C76VHtMcINjvjS6j888Z5U41WPsrlAZe+Fkyyx3pASaRn
+         wCwwj6FRUrhUurd82IqdepURLh93C+vDEibhB3jfzo7weHmL+aXIoHgCqlZRAHGvWD3o
+         ojMZvg96bFG8uJcWl0mm2eoQtqg7KAaE7IY74Vei3tjteYBbnXN1Rq5DJgVsSYmnCJlL
+         VGC2EIdbGENxqOA08mnuv71jclu8ve4VMzQzNBsZFFYSNVXJtQQdRuYc6GPiRFUy1k7o
+         cpIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=f4qzo7l2XRXPibYCmsETjjzPgdp095iWPj5AGr/pxpg=;
+        b=pUnuuN5wibGo+9MYC0DBVtrKFRv76EKI/Ax8zhsNVsiffCmmbOcrZbZQ1hET5Rl8UG
+         1wgRNdY/b9lU9n7fvlDGiKKydzAq/UUTlesUsEdRCmJSBncWrHx2c1MvmdR0Eep7lyK1
+         ay6RrFLg6KjvVve34PEnxYbyYYdYUKlW+IJD1rI9lXHmivK9t4dPThjMZztRvmDoG1cL
+         uXUrZvoRzn4HfRshlmUMu5CVUHvtuoC9R4Pt0VmZd1RcJbtAUl+v2BXOh96I6QKIlWJ2
+         vpRU6pgiiRA09IacfC4qdc+XhP3c8+DDgpuvjP5oBIc/8ZvOEyarq8LkiWiuB58Uo+5i
+         20Zg==
+X-Gm-Message-State: AOAM531BDqj0ACHuGECgulQ1qgTaVT8jD1bPG1YETVvqyZlmD7q7M9Dd
+        FFe3hZF3lUZlAPKIqLihoP6OlFqVrvM=
+X-Google-Smtp-Source: ABdhPJyPSBuzZFkxp36I5C3eTIv0SwlPqKbewFltadF8+AjiJVRDuvzsT8lHgfXNDQQV1nM1U8FhTw==
+X-Received: by 2002:aa7:d892:: with SMTP id u18mr2281589edq.305.1603373142043;
+        Thu, 22 Oct 2020 06:25:42 -0700 (PDT)
+Received: from development1.visionsystems.de (mail.visionsystems.de. [213.209.99.202])
+        by smtp.gmail.com with ESMTPSA id pj5sm843452ejb.118.2020.10.22.06.25.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 22 Oct 2020 06:25:41 -0700 (PDT)
+From:   yegorslists@googlemail.com
+To:     linux-can@vger.kernel.org
+Cc:     mkl@pengutronix.de, netdev@vger.kernel.org,
+        dev.kurt@vandijck-laurijssen.be,
+        Yegor Yefremov <yegorslists@googlemail.com>
+Subject: [PATCH v2] can: j1939: convert PGN structure to a table
+Date:   Thu, 22 Oct 2020 15:25:34 +0200
+Message-Id: <20201022132534.22888-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.17.0
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 22 Oct 2020 12:33:45 +0200, Marc Kleine-Budde wrote:
-> On 10/22/20 12:29 PM, yegorslists@googlemail.com wrote:
-> > From: Yegor Yefremov <yegorslists@googlemail.com>
-> > 
-> > Use table markup to show the PGN structure.
-> > 
-> > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > ---
-> >  Documentation/networking/j1939.rst | 12 ++++++++----
-> >  1 file changed, 8 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/Documentation/networking/j1939.rst b/Documentation/networking/j1939.rst
-> > index faf2eb5c5052..f3fb9d880910 100644
-> > --- a/Documentation/networking/j1939.rst
-> > +++ b/Documentation/networking/j1939.rst
-> > @@ -71,10 +71,14 @@ PGN
-> >  
-> >  The PGN (Parameter Group Number) is a number to identify a packet. The PGN
-> >  is composed as follows:
-> > -1 bit  : Reserved Bit
-> > -1 bit  : Data Page
-> > -8 bits : PF (PDU Format)
-> > -8 bits : PS (PDU Specific)
-> > +
-> > +  ============  ==============  ===============  =================
-> > +  PGN
-> > +  ----------------------------------------------------------------
-> > +  25            24              23 ... 16        15 ... 8
-> 
-> ICan you add a row description that indicated that these numbers are. They are
-> probably bit positions within the CAN-ID?
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-This is true for up to 99.9%, depending on who you ask.
-this maps indeed to the bit positions in the CAN-ID, as in J1939-21.
-The trouble is that PGN's are also communicated as such in the payload,
-e.g. in the TP and ETP (see J1939-81 if i remember correctly).
-Since only PGN is written there, without SA, the bit position relative
-to the CAN-ID are ... making things look fuzzy.
+Use table markup to show the PGN structure.
 
-So I the best I can propose is to add a 2nd row :-)
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v1 -> v2:
+  - add descrption for the bit position
 
-> 
-> > +  ============  ==============  ===============  =================
-> > +  R (Reserved)  DP (Data Page)  PF (PDU Format)  PS (PDU Specific)
-> > +  ============  ==============  ===============  =================
-> >  
-> >  In J1939-21 distinction is made between PDU1 format (where PF < 240) and PDU2
-> >  format (where PF >= 240). Furthermore, when using the PDU2 format, the PS-field
-> > 
-> 
-> Marc
-> 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-> 
+ Documentation/networking/j1939.rst | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-
+diff --git a/Documentation/networking/j1939.rst b/Documentation/networking/j1939.rst
+index faf2eb5c5052..bd1584ec90f9 100644
+--- a/Documentation/networking/j1939.rst
++++ b/Documentation/networking/j1939.rst
+@@ -71,10 +71,14 @@ PGN
+ 
+ The PGN (Parameter Group Number) is a number to identify a packet. The PGN
+ is composed as follows:
+-1 bit  : Reserved Bit
+-1 bit  : Data Page
+-8 bits : PF (PDU Format)
+-8 bits : PS (PDU Specific)
++
++  ============  ==============  ===============  =================
++  Bit position of PGN fields in the 29-bit CAN identifier
++  ----------------------------------------------------------------
++  25            24              23 ... 16        15 ... 8
++  ============  ==============  ===============  =================
++  R (Reserved)  DP (Data Page)  PF (PDU Format)  PS (PDU Specific)
++  ============  ==============  ===============  =================
+ 
+ In J1939-21 distinction is made between PDU1 format (where PF < 240) and PDU2
+ format (where PF >= 240). Furthermore, when using the PDU2 format, the PS-field
+-- 
+2.17.0
 
