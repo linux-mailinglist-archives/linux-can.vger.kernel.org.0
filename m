@@ -2,19 +2,19 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A5729783F
-	for <lists+linux-can@lfdr.de>; Fri, 23 Oct 2020 22:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E83C297879
+	for <lists+linux-can@lfdr.de>; Fri, 23 Oct 2020 22:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1756108AbgJWUa4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 23 Oct 2020 16:30:56 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:42352 "EHLO vps0.lunn.ch"
+        id S1756435AbgJWUxr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 23 Oct 2020 16:53:47 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:42390 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1756105AbgJWUa4 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 23 Oct 2020 16:30:56 -0400
+        id S1756428AbgJWUxr (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 23 Oct 2020 16:53:47 -0400
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94)
         (envelope-from <andrew@lunn.ch>)
-        id 1kW3i3-003Aol-Nn; Fri, 23 Oct 2020 22:30:47 +0200
-Date:   Fri, 23 Oct 2020 22:30:47 +0200
+        id 1kW448-003Awl-Nh; Fri, 23 Oct 2020 22:53:36 +0200
+Date:   Fri, 23 Oct 2020 22:53:36 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Oleksij Rempel <o.rempel@pengutronix.de>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -26,23 +26,55 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Russell King <linux@armlinux.org.uk>, mkl@pengutronix.de,
         Marek Vasut <marex@denx.de>, linux-can@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/6] add initial CAN PHY support
-Message-ID: <20201023203047.GE752111@lunn.ch>
+Subject: Re: [RFC PATCH v1 1/6] net: phy: add CAN PHY Virtual Bus
+Message-ID: <20201023205336.GF752111@lunn.ch>
 References: <20201023105626.6534-1-o.rempel@pengutronix.de>
+ <20201023105626.6534-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201023105626.6534-1-o.rempel@pengutronix.de>
+In-Reply-To: <20201023105626.6534-2-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Oct 23, 2020 at 12:56:20PM +0200, Oleksij Rempel wrote:
-> This patch set is introducing PHY support for CAN.
+On Fri, Oct 23, 2020 at 12:56:21PM +0200, Oleksij Rempel wrote:
+> Most of CAN PHYs (transceivers) are not attached to any data bus, so we
+> are not able to communicate with them. For this case, we introduce a CAN
+> specific virtual bus to make use of existing PHY framework.
 
-The device tree binding needs documenting.
+I don't think you are making the best use of the phylib framework.
 
-It might also help me get my head around the virtual MDIO bus and how
-PHYs are added to it.
+MDIO busses can be standalone devices, with their own DT nodes. And
+that device node can list the PHY devices on the bus.
 
-     Andrew
+can_mdio {
+	compatible = "virtual,mdio-virtual";
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+	canphy0: can-phy@0 {
+		compatible = "can,generic-transceiver",
+		reg = <0>;
+	}
+	canphy1: can-phy@1 
+		compatible = "nxp,tja1051",
+		reg = <1>
+	}
+}
+
+When you call of_mdiobus_register(fmb->mii_bus, np) it will parse this
+tree and should create PHY devices for them, and since your PHY driver
+has a match function, it should then bind the correct PHY driver.
+
+Your 'MAC' driver then uses phy-handle as normal to point to the PHY.
+
+There is also some interesting overlap here with what Intel posted
+recently:
+
+https://www.spinics.net/lists/kernel/msg3706164.html
+
+I'm not sure anything can be shared here, but it is worth looking at
+and thinking about.
+
+    Andrew
