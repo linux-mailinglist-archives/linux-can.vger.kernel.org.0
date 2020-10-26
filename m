@@ -2,173 +2,164 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCB2298A0F
-	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 11:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E16298A4E
+	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 11:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1769165AbgJZKJZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Oct 2020 06:09:25 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:54648 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729721AbgJZJuT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 05:50:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1603705819; x=1635241819;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=bj1H3g+sNBqGT++M5s0gyvOEXLMKJbkejJbJS45eMAQ=;
-  b=zG0xjTY2bIHuHvkcClonurkQ7vXbnr6FL3wbI8OZXvVy3laBnHPYR9VX
-   S7E0LqG64CHixG8mpcTaDWwdTHA3bypo619fnEfZfmmMbqpvntuNgpJHz
-   o29tVkbstXmkqR2/6vGFRx5RK/IPUS/i7KInDiMmj0CEryp2bU5+gmnqb
-   pazVAqsCRbaS/SiBEihupolBHyPh20JhPHnSG2Hm2asUouVZAh11WeUQD
-   i+KROtX2JHhbSIELpGVujTe+9K0sDqsfJIqzaAIJK8wVGFzg/UF5QJzn5
-   9X8Ka4wYO6mJlR9Vpqm6OWSEG1EfB9chuqck2EtUq1qVkI/OHedpb/RxW
-   A==;
-IronPort-SDR: pEnc9tZD9Agb3WS3fENEkYQNv9pSFGmAm2Y7cS2wLNneLrFaXrYQWsH24y1VhwIAl04hORV/+l
- /Dp9RobBaEgwTRq13vb6hSeKtum/QimFIILuvZRwexkb6i7eeVH6gDjd9l3cXvTGIm2x/aGNZN
- JiUO8ZARqv8L9IADB7QyWkIa7fwT3iDfaZoc2bo93i0TtNDO+XKkqB47q4qSQDTLlM4sQxCUsf
- IBFunm2R6ahof9GahZMRAq5pxMeHshvX+rY4HZWU1CYExSe3uDaV9GWBYYkvJTG4+hQBcmYDES
- kqI=
-X-IronPort-AV: E=Sophos;i="5.77,417,1596524400"; 
-   d="scan'208";a="95933888"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Oct 2020 02:50:19 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 26 Oct 2020 02:50:18 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3 via Frontend
- Transport; Mon, 26 Oct 2020 02:50:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cGpjpNjpq+klTingu3OqFBQF9H9jQe8HszHwZ2P9gAZunfaTR1psqIDbYihklwiVaNmjV9VU3IG7Qi33MHTyhQYO4A1gaalFtdKmHAIEPDAYpTVlzyAi6ADjAlO5scrXnD2U1kmsAzj0T/btL2mNW15vXVhM2wYPWt+CziHrmkHUTz4+1Ib+dClR9Yr2T/kVHVjCqGkMfL34Ze7nN2cdbgP3BFPQIgS1RgiwuxbFLBUqRgeAW6uKL/Nt+M+IotOE1BdbBKkG+7forRcv/+Lb84qiEeCQiSEobTvc2wnJHmbSJigHC3dvfhKtVhuhvEsPNPd11lPJUr05GZ0ARffEfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bj1H3g+sNBqGT++M5s0gyvOEXLMKJbkejJbJS45eMAQ=;
- b=hWS6rlCqhDVq5XrchMctVsLCdw6NpOuKhWU8J9fQ42SB1TIsjLUJNbsIuXht87m9HTOG/AGdiy4Ok+w9eCfjfSBk427N8vFKWv724S2uGN02zQXhfZPM4CRS412eOWCCHg5yXutfsgg25pAbMfgQ67h+S2FB/z1cp/kXa4X6Re9/Vqmm2FvYhBWoq7KxR1thNyLISl8LCry94eWiaIETOn7wCkWDLmz0m4wTK8bA3s2k+U0dEp6Q1B2PaxAqKRzlBN86SCjj5mTt78yHrxfOdMdsSK+xgMXnQUGXlO9Oigm072W56qSnDBugvAuNQas8eSSmjVg88JH2+CEvSzkzEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bj1H3g+sNBqGT++M5s0gyvOEXLMKJbkejJbJS45eMAQ=;
- b=pBe6GDRai8IpQNjFGhSuDk57lbwBLkGAmqws8eLpMwrxRkZ2Lls6GIO9BGtcageCQaBMKqkyj2lELTecw56H1YQ/n6TDPm1NVXW03q+Zmf+ca6T3l+F0cLnE5NKXYO5w8DX84l32VhEyfaO3JUrOiB6LjpssmClkLP8y99cfPSQ=
-Received: from DM6PR11MB4283.namprd11.prod.outlook.com (2603:10b6:5:206::32)
- by DM5PR11MB0025.namprd11.prod.outlook.com (2603:10b6:4:63::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Mon, 26 Oct
- 2020 09:50:17 +0000
-Received: from DM6PR11MB4283.namprd11.prod.outlook.com
- ([fe80::e97c:9647:f0c8:e603]) by DM6PR11MB4283.namprd11.prod.outlook.com
- ([fe80::e97c:9647:f0c8:e603%5]) with mapi id 15.20.3477.029; Mon, 26 Oct 2020
- 09:50:15 +0000
-From:   <Thomas.Kopp@microchip.com>
-To:     <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
-CC:     <mas@csselectronics.com>
-Subject: RE: [PATCH v2 1/3] can: mcp251xfd: mcp251xfd_chip_wake(): renamed
- from mcp251xfd_chip_clock_enable()
-Thread-Topic: [PATCH v2 1/3] can: mcp251xfd: mcp251xfd_chip_wake(): renamed
- from mcp251xfd_chip_clock_enable()
-Thread-Index: AQHWo/4/M2H6SR5xhUmdMFLxjP9hrKmh/5xg
-Date:   Mon, 26 Oct 2020 09:50:15 +0000
-Message-ID: <DM6PR11MB4283BE357EAC1D1D1FF08D60FB190@DM6PR11MB4283.namprd11.prod.outlook.com>
-References: <20201016205211.1141590-1-mkl@pengutronix.de>
- <20201016205211.1141590-2-mkl@pengutronix.de>
-In-Reply-To: <20201016205211.1141590-2-mkl@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none
- header.from=microchip.com;
-x-originating-ip: [93.241.63.210]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69052793-5f51-4189-c3c0-08d879948a6a
-x-ms-traffictypediagnostic: DM5PR11MB0025:
-x-microsoft-antispam-prvs: <DM5PR11MB0025CB38321E5C963146C67DFB190@DM5PR11MB0025.namprd11.prod.outlook.com>
-x-bypassexternaltag: True
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: svMMc9ohEIO68vaO/j1pLINXHm2XFqT0hlIsEkiIDTIQ7cn1Lstr+wOlmS1dmKj+deJAwXYqQ4yUkOKZbq8lrjhoX/Nfd5e1qYUjih1LdkU6G5lHb73YQVOkV2vldLC9yBXhvvJz8fDZXJCIop3DxtmrEFKyoGugGBT2rX8xmqnqhYUUVIzajnqin1FvguJbB9DqUHq/ZJOrNuM1Ay0hWV2ELg68suPr5dgzUbTiEuWSA3EgsnUQY4sqjvN8pPgJJGJ3reUwJpvWBddjAfvrkmU0cgC7SseYlDB7LB0fYO9rn3xjOrKekFRg6NTu8kp/x3rMswgInkqIvxMwp23WxQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4283.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(136003)(396003)(366004)(39860400002)(76116006)(8676002)(8936002)(316002)(478600001)(26005)(53546011)(186003)(2906002)(55016002)(6506007)(64756008)(9686003)(66446008)(66476007)(66946007)(66556008)(5660300002)(52536014)(110136005)(83380400001)(33656002)(86362001)(7696005)(4326008)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: RNnHi2n4dAxxENTxLEvUJlkO2aervTs1999GWCz1sVukjxCkxRIkRvpRcB6lAFE6uHmiakC3Gx26jTVzosfSFNGr+HN9jRl+e68v1041/CW+JpBN4QYH1WWRZ7uPT/MqHwP2wUuLkyqfD6YIgwud8cR3cjn6fYc/ZKiW3A5q/1ThUNn+CN1aLzeothz4xRt4paJ7i3bCg3HqqqYiP6rhatvO5QoXwyzSFnTS7rA1r885CB0jRHyRJpFlhOwnzr5Zf5SZIEnuVrXINqIicCXH9qj9Bisb4IJUYkcKYd3TtkvKCJgWb4D6lnwbizsU2VRgFzLKJfS3Vt+mZizrOaBb1zir5n0cBTV4ADkFYTZchxco4AZZp7YRW3hQ5QXqBWlNHwC5nDm8RUCZl2DtXpPkY6YHSlQZCxjWyhc93EyLRNLZNwL0nekIHPQr/Ujb1eWCg/k056TQPfbBPcJnuaulZtLw2SrS9n0T3uQrNERemAQ3cQ6xyWghdtd5pMJf3GblFVSrz/gQmyDePZKXkrrznjYJVVld32tU7Ng6t2AVNoTkT9B2ux+WwqYxAXXuBwDhfUIABdEGQYLImhjxA9jrJ6qAlXwNQgumiK8YtDh2AdgY984DGc8iyDGZT2Bl+g/jRxRydMvh/hXT6HUPherGNg==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1768912AbgJZKX1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Oct 2020 06:23:27 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:58719 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1768763AbgJZKX0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 06:23:26 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kWzet-0001jT-Nt; Mon, 26 Oct 2020 11:23:23 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953] (unknown [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 902CB582389;
+        Mon, 26 Oct 2020 10:23:21 +0000 (UTC)
+To:     yegorslists@googlemail.com, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
+References: <20201026094442.16587-1-yegorslists@googlemail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH] can: j1939: use backquotes for code samples
+Message-ID: <374efe56-58f2-22f2-f9e3-77d394719d51@pengutronix.de>
+Date:   Mon, 26 Oct 2020 11:23:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4283.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69052793-5f51-4189-c3c0-08d879948a6a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2020 09:50:15.6249
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gi9iyVqql9URie7smr7tdRVms6inlPB/U+FdDs2bnvGpvbUIwwX5mj2HkL37JMQLzexk+VY/XBpJOXtYkxuYsfRilnC/T601GwJuTZhxPHo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB0025
+In-Reply-To: <20201026094442.16587-1-yegorslists@googlemail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="IwGB14ACflZucYFZpwxefrjf1bGG2ETMl"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-PiBGcm9tOiBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPg0KPiBTZW50OiBG
-cmlkYXksIDE2IE9jdG9iZXIgMjAyMCAyMjo1Mg0KPiBUbzogbGludXgtY2FuQHZnZXIua2VybmVs
-Lm9yZw0KPiBDYzogTWFnbnVzIEFhZ2FhcmQgU8O4cmVuc2VuIDxtYXNAY3NzZWxlY3Ryb25pY3Mu
-Y29tPjsgTWFyYyBLbGVpbmUtDQo+IEJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IFN1Ympl
-Y3Q6IFtQQVRDSCB2MiAxLzNdIGNhbjogbWNwMjUxeGZkOiBtY3AyNTF4ZmRfY2hpcF93YWtlKCk6
-DQo+IHJlbmFtZWQgZnJvbSBtY3AyNTF4ZmRfY2hpcF9jbG9ja19lbmFibGUoKQ0KPiANCj4gQ28t
-ZGV2ZWxvcGVkLWJ5OiBNYWdudXMgQWFnYWFyZCBTw7hyZW5zZW4gPG1hc0Bjc3NlbGVjdHJvbmlj
-cy5jb20+DQo+IE5vdC1TaW5nZWQtb2ZmLWJ5OiBNYWdudXMgQWFnYWFyZCBTw7hyZW5zZW4gPG1h
-c0Bjc3NlbGVjdHJvbmljcy5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IE1hcmMgS2xlaW5lLUJ1ZGRl
-IDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IC0tLQ0KPiAgZHJpdmVycy9uZXQvY2FuL3NwaS9tY3Ay
-NTF4ZmQvbWNwMjUxeGZkLWNvcmUuYyB8IDE1ICsrKysrKysrKy0tLS0tLQ0KPiAgMSBmaWxlIGNo
-YW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL25ldC9jYW4vc3BpL21jcDI1MXhmZC9tY3AyNTF4ZmQtY29yZS5jDQo+IGIvZHJp
-dmVycy9uZXQvY2FuL3NwaS9tY3AyNTF4ZmQvbWNwMjUxeGZkLWNvcmUuYw0KPiBpbmRleCBjM2Y0
-OTU0M2ZmMjYuLmMzNmY1ZjE0ZDUwYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvY2FuL3Nw
-aS9tY3AyNTF4ZmQvbWNwMjUxeGZkLWNvcmUuYw0KPiArKysgYi9kcml2ZXJzL25ldC9jYW4vc3Bp
-L21jcDI1MXhmZC9tY3AyNTF4ZmQtY29yZS5jDQo+IEBAIC01MTksMTMgKzUxOSwxNiBAQCBzdGF0
-aWMgaW5saW5lIGJvb2wgbWNwMjUxeGZkX29zY19pbnZhbGlkKHUzMiByZWcpDQo+ICAgICAgICAg
-cmV0dXJuIHJlZyA9PSAweDAgfHwgcmVnID09IDB4ZmZmZmZmZmY7DQo+ICB9DQo+IA0KPiAtc3Rh
-dGljIGludCBtY3AyNTF4ZmRfY2hpcF9jbG9ja19lbmFibGUoY29uc3Qgc3RydWN0IG1jcDI1MXhm
-ZF9wcml2DQo+ICpwcml2KQ0KPiArc3RhdGljIGludCBtY3AyNTF4ZmRfY2hpcF93YWtlKGNvbnN0
-IHN0cnVjdCBtY3AyNTF4ZmRfcHJpdiAqcHJpdikNCj4gIHsNCj4gICAgICAgICB1MzIgb3NjLCBv
-c2NfcmVmZXJlbmNlLCBvc2NfbWFzazsNCj4gICAgICAgICBpbnQgZXJyOw0KPiANCj4gLSAgICAg
-ICAvKiBTZXQgUG93ZXIgT24gRGVmYXVsdHMgZm9yICJDbG9jayBPdXRwdXQgRGl2aXNvciIgYW5k
-IHJlbW92ZQ0KPiAtICAgICAgICAqICJPc2NpbGxhdG9yIERpc2FibGUiIGJpdC4NCj4gKyAgICAg
-ICAvKiBGb3Igbm9ybWFsIHNsZWVwIG9uIE1DUDI1MTdGRCBhbmQgTUNQMjUxOEZELCBjbGVhcmlu
-Zw0KPiArICAgICAgICAqICJPc2NpbGxhdG9yIERpc2FibGUiIHdpbGwgd2FrZSB0aGUgY2hpcC4g
-Rm9yIGxvdyBwb3dlciBtb2RlDQo+ICsgICAgICAgICogb24gTUNQMjUxOEZELCBhc3NlcnRpbmcg
-dGhlIGNoaXAgc2VsZWN0IHdpbGwgd2FrZSB0aGUNCj4gKyAgICAgICAgKiBjaGlwLiBXcml0aW5n
-IHRvIHRoZSBPc2NpbGxhdG9yIHJlZ2lzdGVyIHdpbGwgd2FrZSBpdCBpbg0KPiArICAgICAgICAq
-IGJvdGggY2FzZXMuDQo+ICAgICAgICAgICovDQo+ICAgICAgICAgb3NjID0gRklFTERfUFJFUChN
-Q1AyNTFYRkRfUkVHX09TQ19DTEtPRElWX01BU0ssDQo+ICAgICAgICAgICAgICAgICAgICAgICAg
-ICBNQ1AyNTFYRkRfUkVHX09TQ19DTEtPRElWXzEwKTsNCj4gQEAgLTU2OSwxMCArNTcyLDEwIEBA
-IHN0YXRpYyBpbnQgbWNwMjUxeGZkX2NoaXBfc29mdHJlc2V0X2RvKGNvbnN0DQo+IHN0cnVjdCBt
-Y3AyNTF4ZmRfcHJpdiAqcHJpdikNCj4gICAgICAgICBjb25zdCBfX2JlMTYgY21kID0gbWNwMjUx
-eGZkX2NtZF9yZXNldCgpOw0KPiAgICAgICAgIGludCBlcnI7DQo+IA0KPiAtICAgICAgIC8qIFRo
-ZSBTZXQgTW9kZSBhbmQgU1BJIFJlc2V0IGNvbW1hbmQgb25seSBzZWVtcyB0byB3b3JrcyBpZg0K
-PiAtICAgICAgICAqIHRoZSBjb250cm9sbGVyIGlzIG5vdCBpbiBTbGVlcCBNb2RlLg0KPiArICAg
-ICAgIC8qIFRoZSBTZXQgTW9kZSBhbmQgU1BJIFJlc2V0IGNvbW1hbmQgb25seSB3b3JrcyBpZiB0
-aGUNCj4gKyAgICAgICAgKiBjb250cm9sbGVyIGlzIG5vdCBpbiBTbGVlcCBNb2RlLg0KPiAgICAg
-ICAgICAqLw0KPiAtICAgICAgIGVyciA9IG1jcDI1MXhmZF9jaGlwX2Nsb2NrX2VuYWJsZShwcml2
-KTsNCj4gKyAgICAgICBlcnIgPSBtY3AyNTF4ZmRfY2hpcF93YWtlKHByaXYpOw0KPiAgICAgICAg
-IGlmIChlcnIpDQo+ICAgICAgICAgICAgICAgICByZXR1cm4gZXJyOw0KPiANCj4gLS0NCj4gMi4y
-OC4wDQoNClRoaXMgcGF0Y2ggc2VyaWVzIHdvcmtzIGZpbmUgb24gbXkgc2V0dXAgKFJQSTQsIE1D
-UDI1MThGRCwgZXh0ZXJuYWwgNCBNSHogY3J5c3RhbCkuIEdvaW5nIHRocm91Z2ggdGhlIGNvZGUg
-SSBub3RpY2VkIHRoYXQgdGhlIE1pbiBzcGVjaWZpZWQgT1NDIGZyZXF1ZW5jeSBpcyBzcGVjaWZp
-ZWQgZnJvbSAxIE1IeiB0byA0MCBNSHouIFRlY2huaWNhbGx5IHRoZSBEUyBvbmx5IHNwZWNpZmll
-cyA0LDIwIGFuZCA0ME1IeiBhcyBjcnlzdGFsL3Jlc29uYXRvciBvcHRpb25zIGFuZCAyTUh6IGlu
-cHV0IGFzIHRoZSBtaW5pbXVtIGV4dGVybmFsIGNsb2NrLiA0IHdpdGggUExMIGFuZCA0MCBkaXJl
-Y3QgYXJlIHRoZSBwcmVmZXJyZWQgb3B0aW9ucyBmb3IgQ0FOLUZELiBJIHRoaW5rIHRoZSBjb2Rl
-IGlzIGZpbmUsIGdpdmVuIHRoYXQgdGhlIGRlZmF1bHQgaXMgNDAgTUh6IGFuZCBpdCdzIHRoZSB1
-c2VyJ3MgcmVzcG9uc2liaWxpdHkgdG8gZGVzaWduIGluIHRoZSBwYXJ0IGFjY29yZGluZyB0byB0
-aGUgRFMuIFdlIGNvdWxkIG5hcnJvdyBkb3duIHRoZSBwbGwgY2xvY2tjaGVjayB0byBvbmx5IGFs
-bG93IDQgTUh6IHRob3VnaC4NCg0KQWxsIDMgcGF0Y2hlcyBpbiB0aGlzIHNlcmllczoNClRlc3Rl
-ZC1ieTogVGhvbWFzIEtvcHAgPHRob21hcy5rb3BwQG1pY3JvY2hpcC5jb20+DQoNCkJlc3QgUmVn
-YXJkcywNClRob21hcw0KDQo=
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--IwGB14ACflZucYFZpwxefrjf1bGG2ETMl
+Content-Type: multipart/mixed; boundary="6OQmhEiQWO5gFPf60L29m2hgIq6Y3GSbf";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: yegorslists@googlemail.com, linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
+Message-ID: <374efe56-58f2-22f2-f9e3-77d394719d51@pengutronix.de>
+Subject: Re: [PATCH] can: j1939: use backquotes for code samples
+References: <20201026094442.16587-1-yegorslists@googlemail.com>
+In-Reply-To: <20201026094442.16587-1-yegorslists@googlemail.com>
+
+--6OQmhEiQWO5gFPf60L29m2hgIq6Y3GSbf
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+On 10/26/20 10:44 AM, yegorslists@googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+>=20
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Please add a patch description for upcoming patches.
+Please don't re-wrap lines in the same patch as changing documentation.
+
+I've fixed both while applying the patches to linux-can/testing.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--6OQmhEiQWO5gFPf60L29m2hgIq6Y3GSbf--
+
+--IwGB14ACflZucYFZpwxefrjf1bGG2ETMl
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+Wo5QACgkQqclaivrt
+76m67gf+MGPgnkhVlYigDrG/OEWPDVLYGWODiBIdRTiY72QzWtIFh9Kax3w8LO68
+hHDyzuM5OtIVhmlnsmGSVz3uTR+a18DURczGJ3s2Hszg9lSPIE2H+ignGd3QHUqn
+gtk/U/OP6NK5biX8sM6JAO3jrg4m6XQaLHg2T+1MfnWhQvYVg2lpmD8ur/dXU/je
+DGW96F8hkysnV1MFzfIHRHOKdD46l2cDlAyyOOXYBTaXI7mKfpmBCY4EatanZq+2
+aU/zLcPx8bhrvfyIhgVjLyzzymAL6/GnHY1VYeDNYiXz6fTvDZoNIx87w7e78Bnj
+z8tSBH5jP3ZXBIQuL6zRVMA18dbrYA==
+=I4Te
+-----END PGP SIGNATURE-----
+
+--IwGB14ACflZucYFZpwxefrjf1bGG2ETMl--
