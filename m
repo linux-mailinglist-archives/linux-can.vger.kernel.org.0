@@ -2,317 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 483872992C8
-	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 17:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1492992F7
+	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 17:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1786334AbgJZQqg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Oct 2020 12:46:36 -0400
-Received: from relay.felk.cvut.cz ([147.32.80.7]:52627 "EHLO
-        relay.felk.cvut.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1780417AbgJZQok (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 12:44:40 -0400
-X-Greylist: delayed 1903 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 12:44:35 EDT
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 09QGBSGS098063;
-        Mon, 26 Oct 2020 17:11:28 +0100 (CET)
-        (envelope-from pisa@cmp.felk.cvut.cz)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 09QGBRNo004427;
-        Mon, 26 Oct 2020 17:11:27 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 09QGBRM9004426;
-        Mon, 26 Oct 2020 17:11:27 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Ondrej Ille <ondrej.ille@gmail.com>
-Subject: Re: [PATCH v6 3/6] can: ctucanfd: add support for CTU CAN FD open-source IP core - bus independent part.
-Date:   Mon, 26 Oct 2020 17:11:26 +0100
-User-Agent: KMail/1.9.10
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Petr Porazil <porazil@pikron.com>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1603354744.git.pisa@cmp.felk.cvut.cz> <202010222221.31952.pisa@cmp.felk.cvut.cz> <CAA7Zjpam0uFCXwXS4_X5Sq3wJcNUSxOxPiTm860OXDNs-xHgyg@mail.gmail.com>
-In-Reply-To: <CAA7Zjpam0uFCXwXS4_X5Sq3wJcNUSxOxPiTm860OXDNs-xHgyg@mail.gmail.com>
-X-KMail-QuotePrefix: > 
+        id S1786545AbgJZQwR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Oct 2020 12:52:17 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:58053 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1786534AbgJZQvP (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 26 Oct 2020 12:51:15 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 160962400FD
+        for <linux-can@vger.kernel.org>; Mon, 26 Oct 2020 17:51:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1603731072; bh=yRTBoIjhEVzPQbDjwgPpAsfqbu/8HF4vTK5BediuBIY=;
+        h=Subject:To:Cc:From:Autocrypt:Date:From;
+        b=Kst44kSBg3lI4atkCSZBuJzoeh0GFJuqbbS9XdpbZBDvYbW+AtCFjmj6zoMVyPWZE
+         4Xw49iPATkUBrMyQ13G6HSZDEzxWF4BiXNc2gdXjbvzhfpRSHeM8xQeWEQHp+swatB
+         6p8ndowK41CZhERbdXSP5fB2vCBqkWrSCm4lYXrG/vbCcH3dTtn9Djd30sglLjNtom
+         S+D6mXqHBaVs9QHYIxwb/EvajbFcs12lJJZOK00mzeRHvsWsEkpRrjn2D2FlHCrFrZ
+         9K+RC8lVj1y4DyVcflpAN5CPWWPBiHXAq2Sr6R0U06D8R1osuTUPv05WjQpaXhKrOG
+         lyi9MPoGK5/yQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4CKgp70y4Mz6tmN;
+        Mon, 26 Oct 2020 17:51:11 +0100 (CET)
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Drew Fustini <drew@beagleboard.org>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <CAPgEAj5HwFUTqhbgZ2Y5Db-_PPHNN7Rc8dnp1s+TBBALf5EwSw@mail.gmail.com>
+ <3ede1c31-9436-a8ec-b7cd-65cee5fa23fc@pengutronix.de>
+ <CAPgEAj7JLUjWiN8LdGV9OfQScsUkPVcs9bSE+w_9G0c9BNd-sg@mail.gmail.com>
+ <CAPgEAj6nQOAQ9NNB2QBbARuqWm5K62QW+NsqPROzcQOZqe-F+g@mail.gmail.com>
+ <975a3598-c229-0b9a-df95-c9647f138a3a@hartkopp.net>
+ <20201025105808.2pltif74at3xwtjd@hardanger.blackshift.org>
+ <68846197-98dc-b991-1ec8-a477ceb8d614@posteo.de>
+ <715b3c3b-dbbc-688c-9757-578455c3a607@pengutronix.de>
+ <0667516a-525e-9c4e-ec7a-e4d8a188c338@posteo.de>
+ <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
+ <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
+ <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
+ elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
+ TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
+ ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
+ ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
+ Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
+ R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
+ N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
+ NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
+ S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
+ aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
+ djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
+ TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
+ WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
+ UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
+ bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
+ VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
+ NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
+ TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
+ YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
+ c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
+ NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
+ NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
+ dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
+ aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
+ TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
+ MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
+ S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
+ K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
+ dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
+ a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
+ ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
+ QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
+ YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
+ TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
+ T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
+ MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
+ U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
+ CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
+ T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
+ NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
+ YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
+ dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
+ U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
+ TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
+ TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
+ RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
+ STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
+ NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
+ ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
+ aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
+ UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
+ MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
+ WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
+ V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
+ a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
+ dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
+ QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
+ IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Message-ID: <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
+Date:   Mon, 26 Oct 2020 17:51:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
+In-Reply-To: <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202010261711.26754.pisa@cmp.felk.cvut.cz>
-X-FELK-MailScanner-Information: 
-X-MailScanner-ID: 09QGBSGS098063
-X-FELK-MailScanner: Found to be clean
-X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached, score=-0.1,
-        required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.40,
-        NICE_REPLY_A -0.00, SPF_HELO_NONE 0.00, SPF_NONE 0.00)
-X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
-X-FELK-MailScanner-Watermark: 1604333494.02066@+0RJaPfulAdZwH/yVOP93g
-X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Ondrej and others,
+> On 10/26/20 3:50 AM, Drew Fustini wrote:
+>> I'm seeing this message which makes me think my issue is that I am not
+>> setting the oscillator as a dtoverlay param.
+>>
+>> [    6.873081] CAN device driver interface
+>> [    6.879904] DEBUG mcp251xfd mcp251xfd_probe(): ENTER
+>> [    6.880068] spi_master spi0: will run message pump with realtime priority
+>> [    6.921312] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+>> Failed to detect MCP251xFD (osc=0x00000000).
+>>
+>> From /boot/config.txt
+>>
+>> [pi4]
+>> dtoverlay=mcp251xfd-spi0-0
+> 
+> Are you using CS0 of spi0?
+> What's the frequency of your OSC?
+> 
+> Marc
+> 
 
-On Monday 26 of October 2020 14:38:59 Ondrej Ille wrote:
-> Hello Pavel and Pavel,
->
-> first of all, Pavel (Machek) thank you for review, we appreciate it.
-> We will try to fix as much mistakes as possible. Please, see my comments
-> below.
->
-> With Regards
-> Ondrej
->
-> On Thu, Oct 22, 2020 at 10:22 PM Pavel Pisa <pisa@cmp.felk.cvut.cz> wrote:
-...
-> > > > +/**
-> > > > + * ctucan_start_xmit - Starts the transmission
-> > > > + * @skb:   sk_buff pointer that contains data to be Txed
-> > > > + * @ndev:  Pointer to net_device structure
-> > > > + *
-> > > > + * This function is invoked from upper layers to initiate
-> >
-> > transmission.
-> >
-> > > > This + * function uses the next available free txbuf and populates
-> >
-> > their
-> >
-> > > > fields to + * start the transmission.
-> > > > + *
-> > > > + * Return: %NETDEV_TX_OK on success and failure value on error
-> > > > + */
-> > >
-> > > Based on other documentation, I'd expect this to return -ESOMETHING on
-> > > error, but it returns NETDEV_TX_BUSY.
-> >
-> > I add information about explicit error/need for postpone type.
->
-> Changing description, OK. Pavel Pisa, but why did you change handling of
-> insertion
-> failure to TXT Buffer to return NETDEV_TX_BUSY and increment tx_dropped?
-> Is there some preference on what should the driver return in case of HW
-> error?
-> Also, couldnt we afford not to check return value of ctucan_hw_insert_frame
-> ? Is purpose of
-> driver to be fail-safe against HW bug which says "There is TX buffer free
-> in Status register", but in reality,
-> no TXT Buffer is free?
->
-> If we look at when ctu_can_hw_insert_frame returns false, it is when:
->   1. We attempt to insert to non-existent TXT buffer -> Under drivers
-> control to do rotation correctly.
->   2. If cfg->len > CAN_FD_MAX_LEN. Couldnt this check be removed?
-> CAN_FD_MAX_LEN is
->       defined for Linux, so it is not OS agnostic... Also, is it possible
-> that driver will call insert with
->       cf->len > CAN_FD_MAX_LEN?
->   3. When there is HW bug (as mentioned earlier). There are assertions in
-> RTL checking this situation
->       will not happend!
-> So maybe we dont even need to check return value of this function at all?
+mcp251xfd_osc_invalid(osc) is true according to the string.
 
-I try to follow other drivers.
-So if everything is OK then return NETDEV_TX_OK.
-
-If there is no Tx buffer available then return
-NETDEV_TX_BUSY. Some retransmit or drop should be handled by
-NET core in such case. This situation should not appear
-in reality, because Tx queue should be stopped if there is no
-free Tx buffer and should not be reenable earlien than
-at least one is available. So this situation is bug in
-driver logic or NET core.
-
-If the check for CAN FD frame format fails then it is right
-to drop SKB and it is handled with NETDEV_TX_OK return
-in other drivers as well. Only statistic counter increments.
-If the Tx buffer selected by driver s in incorrect state
-then it is even more serious bug so alternative is to
-stop whole driver and report fatal error.
-
-> > > > +   /* Check for Bus Error interrupt */
-> > > > +   if (isr.s.bei) {
-> > > > +           netdev_info(ndev, "  bus error");
-> > >
-> > > Missing "if (dologerr)" here?
-> >
-> > Intention was to left this one to appear without rate limit, it is really
-> > indication of bigger problem. But on the other hand without dologerr
-> > would be quite short/unclear, but does not overflow the log buffers...
-> > We would discuss what to do with my colleagues, suggestions welcomed.
->
-> I agree with adding "dologerror" check here. It is true that arbitration
-> lost is not really an
-> error, and Bus error (error frame), therefore Bus error has higher
-> "severity". Could we
-> maybe do it that both have "dologerr" condition, but arbitration lost uses
-> "netdev_dbg"?
-
-Arbitration lost should not be reported nor generate interrupt
-for usual can application setup.
-
-> > > > +static int ctucan_rx_poll(struct napi_struct *napi, int quota)
-> > > > +{
-> > > > +   struct net_device *ndev = napi->dev;
-> > > > +   struct ctucan_priv *priv = netdev_priv(ndev);
-> > > > +   int work_done = 0;
-> > > > +   union ctu_can_fd_status status;
-> > > > +   u32 framecnt;
-> > > > +
-> > > > +   framecnt = ctucan_hw_get_rx_frame_count(&priv->p);
-> > > > +   netdev_dbg(ndev, "rx_poll: %d frames in RX FIFO", framecnt);
-> > >
-> > > This will be rather noisy, right?
-> >
-> > It has use to debug during development but may be it should be removed
-> > or controlled by other option.
->
-> Maybe again suppress by "net_ratelimit" ?
-
-I have removed this one and report only errors.
-
-...
-> > https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/blob/master/spec/CTU
-> >/ip/CAN_FD_IP_Core/2.1/CAN_FD_IP_Core.2.1.xml
-> >
-> > Which I consider as good option which should be preserved.
-> > I prefer to have only singe source of infomation
-> > which is kept with rest in automatic sync.
->
-> We are really trying only to use bitfields generated in ctu_can_fd_regs.
-> Whether it is bitfield or
-> mask, is up to debate, but we always use generated values. Linux driver is
-> only one part of it
-> all. The golden source (IP-XACT) is propagated to RTL, 2 different TB
-> packages, constant definitions,
-> generated documentation. This is the only way how to keep register map
-> consistent with limited
-> developer resources we have. If we corrupt this rule, we end up with 4
-> different representations
-> of register maps:
->    1. What Testebench thinks
->    2. What is in RTL
->    3. What is in documentation
->    4. What driver sees.
-> and then we will never put it back together again...
-
-I think that it is even important example for others. And there is not listed
-use of the generated header files for functional emulation in QEMU.
-I have even plan to use generator to prepare RO/RW mask for QEMU 
-and IP block emulation skeleton for QEMU automatically. This part
-has not been implemented during last bachelor thesis. That part
-was written manually but it is in QEMU mainline now.
-
-If there is strong preferences for macros than bitfields
-we add macros generation alternative.
-
-> > > > +   {
-> > > > +           union ctu_can_fd_int_stat imask;
-> > > > +
-> > > > +           imask.u32 = 0xffffffff;
-> > > > +           ctucan_hw_int_ena_clr(&priv->p, imask);
-> > > > +           ctucan_hw_int_mask_set(&priv->p, imask);
-> > > > +   }
-> > >
-> > > More like this. Plus avoid block here...?
-> >
-> > Blocks is to document that imask is really local for these
-> > two lines, no need to look for it elsewhere in the function.
-> > But I can move declaration to start of the function.
->
-> I would also remove blocks here.
-
-Flattened
-
-> > > > +/**
-> > > > + * ctucan_close - Driver close routine
-> > > > + * @ndev:  Pointer to net_device structure
-> > > > + *
-> > > > + * Return: 0 always
-> > > > + */
-> > >
-> > > You see, this is better. No need to say "Driver close routine"
-> > > twice. Now, make the rest consistent :-).
-> > >
-> > > > +EXPORT_SYMBOL(ctucan_suspend);
-> > > > +EXPORT_SYMBOL(ctucan_resume);
-> > >
-> > > _GPL?
-> >
-> > Should we be so strict??? Ondrej Ille can provide his opinion there.
->
-> Is it really necessary? If yes, then we can change it.
-
-I see no reason that it is necessary. Without GPL some vendor can come
-with CTU CAN FD integration on such platform, where integration
-code stays unavailable to users. But common driver part has to be made 
-available. We can prevent such use of the driver code, but I see
-no big wind there or financial income instrument.
-
-...
-
-> > Hmmm, we can add special rules to tools to skip some special cases
-> > but actual files exactly math what is in documentation and VHDL
-> > sources and registers implementation. See page 61 / PDF 67 of
-> >
-> >   http://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/Progdokum.pdf
-> >
-> > Yes there is still space for improvements but we need to have
-> > acceptable base for already running applications.
->
-> Point taken. These are indeed ridiculous. I was thinking about adding some
-> skip rule
-> to the register map generator, but I am out of IP-XACT fields to represent
-> this thing.
-> Maybe I can use vendor extensions do to hide it? Or custom switch? Anyway,
-> the
-> same thing needs to be resolved if HW design has dedicated test registers
-> which
-> are for debug. I will think about some solution.
-
-I personally prefer rules without exception. Defined 32-bit fields over
-whole register are harmless and if narrowed or reorganized later then
-in can help.
-
-....
-
-> > OK, I have invested lot of time after Marin Jerabek's submission of
-> > diploma theses to make code really documented etc.. I add there something
-> > even that it is really simple use of can_len2dlc. May it be, we can use
-> > that directly. It is Linux specific, but clean.
->
-> Using can_len2dlc seems as right option for me...
-
-Done
-
-> > > > +// TODO: AL_CAPTURE and ERROR_CAPTURE
-> >
-> > Again colleagues remark for future work. For me, it is important
-> > basic function under GNU/Linux.
->
-> Again, CAN be removed and moved to Issue tracker on Gitlab.
-
-Please add issue, I have removed this one already.
-
-> It is basically the same topic as above. We need to generate everything
-> from single
-> source, otherwise we are not able to keep all the targets (RTL, TB, driver,
-> docs)
-> consistent.
-
-Best wishes,
-
-Pavel
+https://github.com/marckleinebudde/linux/blob/v5.4-rpi/mcp251xfd-20201022-54/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c#L552
