@@ -2,906 +2,202 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 323EB298D8D
-	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 14:13:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 107A2298DD6
+	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 14:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731566AbgJZNNF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Mon, 26 Oct 2020 09:13:05 -0400
-Received: from smtp7.web4u.cz ([81.91.87.87]:43652 "EHLO mx-8.mail.web4u.cz"
+        id S1770756AbgJZN2Y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Oct 2020 09:28:24 -0400
+Received: from mail-eopbgr70072.outbound.protection.outlook.com ([40.107.7.72]:59699
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387722AbgJZNLg (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 26 Oct 2020 09:11:36 -0400
-X-Greylist: delayed 436 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 09:11:30 EDT
-Received: from mx-8.mail.web4u.cz (localhost [127.0.0.1])
-        by mx-8.mail.web4u.cz (Postfix) with ESMTP id 4D2D31FFF9A;
-        Mon, 26 Oct 2020 14:04:08 +0100 (CET)
-Received: from baree.pikron.com (unknown [94.112.11.73])
-        (Authenticated sender: ppisa@pikron.com)
-        by mx-8.mail.web4u.cz (Postfix) with ESMTPA id B048D1FFF68;
-        Mon, 26 Oct 2020 14:04:07 +0100 (CET)
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Pavel Machek <pavel@ucw.cz>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        Carsten Emde <c.emde@osadl.org>
-Subject: Re: [PATCH v6 3/6] can: ctucanfd: add support for CTU CAN FD open-source IP core - bus independent part.
-Date:   Mon, 26 Oct 2020 14:04:07 +0100
-User-Agent: KMail/1.9.10
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1770618AbgJZN2Y (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 26 Oct 2020 09:28:24 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mMlN058scgdAtzjoMzwwjWskqU73GlD3JTIIUhrcvjQxDDEE8C3kwPwOa+l9MXU7/8M2qhGvr9U7SXdYJBM69wEq0nu37u5tp5gvDzJ0EfZsJz9sG32r1Lb3VbHQuKWxjGxXbLW2D9rJ1Z7314DFa6kD8KxoaVk4lMZ81yV51fJH16cApbe3imPxgRb2IhmbX0R9YEOEylVmSKfdJ14MGQpp6A30q6BYAKKdoB9kU0O5lOMiBJmIQtegctdFv0eaQo9UsEGPcdkd4w06X3V0ZqRtDlcu5w5fi/PxZNMbbkzNfVC/9fI3t6BpCOujRIpowad6RUqTJqKQa7YMXIIiuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m/ZVpjdH2g5tX7oNqjnHYbEXoxqHpIZTMdoDKEEvAtQ=;
+ b=Q/d5dB/URilFdIATQ4mt5IuIH1l9fK/SVGA8PA35jEzhVP+7efAdsLPzQ6zHtORMJWJ3eFMYcKGHG5Z3PdB7X2E/UsJLsjC9W0IfVj6//9rqk+jmox7Mf0yy8G52Ttz6LA4kyf6Z/xNAsDq6rhIg3NUaBRr/6UkjZ8OOqB/lCzJZNPtVskMNzYjE2EYbi3zwP9LCkOOb3AUZNVrZ2atoSK4s3ueHJFBZCCHvwykxGJ94l0H2teruRzD31sgKnd35psFzdAAng68eJSHcttwd2d8O/3eU90yJG8tPGCHsY9YUq4IuXKrpEpvU1b5+UrZp801GPTeDWtfDgxzNSwbhwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m/ZVpjdH2g5tX7oNqjnHYbEXoxqHpIZTMdoDKEEvAtQ=;
+ b=1ai9JmHGmw0SO3X+/obKTgCk1VXApwKeEpEUbJNvdeaFGWmfaayLXclY/gOtGduWgJp+zpYH1Wb85cgk9q598KYc35eVeYv+AOrEgvaJgcyPpi931m1Tu8tiN7DvJV8askr7+o7rkoNUVc9WC1lZ9ewJageLJMFdaAVzDBuILOs=
+Received: from VI1PR03MB5053.eurprd03.prod.outlook.com (2603:10a6:803:bb::18)
+ by VI1PR03MB6622.eurprd03.prod.outlook.com (2603:10a6:800:17f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Mon, 26 Oct
+ 2020 13:28:17 +0000
+Received: from VI1PR03MB5053.eurprd03.prod.outlook.com
+ ([fe80::5c89:33b8:a5ea:8b6a]) by VI1PR03MB5053.eurprd03.prod.outlook.com
+ ([fe80::5c89:33b8:a5ea:8b6a%3]) with mapi id 15.20.3477.028; Mon, 26 Oct 2020
+ 13:28:17 +0000
+From:   =?utf-8?B?U3TDqXBoYW5lIEdyb3NqZWFu?= <s.grosjean@peak-system.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andri Yngvason <andri.yngvason@marel.com>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        armbru@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1603354744.git.pisa@cmp.felk.cvut.cz> <886a8e0749e0521bf83a88313008a3f38031590b.1603354744.git.pisa@cmp.felk.cvut.cz> <20201022110213.GC26350@duo.ucw.cz>
-In-Reply-To: <20201022110213.GC26350@duo.ucw.cz>
-X-KMail-QuotePrefix: > 
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: RE: [PATCH net] can: peak_usb: add range checking in decode
+ operations
+Thread-Topic: [PATCH net] can: peak_usb: add range checking in decode
+ operations
+Thread-Index: AQHWcXs9Qb/67FC9eEi/HZVs5d0UoamqU7Er
+Date:   Mon, 26 Oct 2020 13:28:16 +0000
+Message-ID: <VI1PR03MB5053AC24D22445459C5FAF0CD6190@VI1PR03MB5053.eurprd03.prod.outlook.com>
+References: <20200813140604.GA456946@mwanda>
+In-Reply-To: <20200813140604.GA456946@mwanda>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: oracle.com; dkim=none (message not signed)
+ header.d=none;oracle.com; dmarc=none action=none header.from=peak-system.com;
+x-originating-ip: [89.158.142.148]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3aad757b-8e3f-4769-cfbe-08d879b2ff89
+x-ms-traffictypediagnostic: VI1PR03MB6622:
+x-microsoft-antispam-prvs: <VI1PR03MB66226EE7C7FAABF2B68D06D2D6190@VI1PR03MB6622.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:983;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gSt7D2xkOO+FIdyVqLCSTvDyGPuAuxiwwAcs9dsqXYp5q9TjQqB4FNW1WrN2uHZS6HFmib0WOLZhF432vfcPUwBYufecI4a1fWTo2KILFPbwiTZxMOs2V5UUomC4rU7pMmJLIKxYnpbbmg6wbhlyh5sse9sbunRqiPagYWm/LOefIsMdFlWppsaGZLf9sFAQ3UkxSWK/N8rjHe5QOW8cVXP2mQ78EBvaErort5S+68BgaFDmaACGcvDv3zBA3I+2GMK5ZfCGAyeBXpYdtZk6+UqkCgNb75d8A3/ZDubAjl//TGiTi9iEQbgpTPFpH5HX
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB5053.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(366004)(136003)(39840400004)(346002)(85182001)(9686003)(66556008)(55016002)(86362001)(64756008)(66476007)(83380400001)(66446008)(26005)(15974865002)(6506007)(76116006)(66946007)(478600001)(54906003)(33656002)(91956017)(186003)(2906002)(7416002)(85202003)(8936002)(71200400001)(7696005)(8676002)(52536014)(5660300002)(4326008)(316002)(6916009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: EsUh9CJ6LLvx02cwT+wt4SwYYwqe9LyJhJZb03Z5RtW1CzwEB106bm4wzDDaWd5akKcDyX/CjgKj7fXPwTYn+0uVlA9LKtm1ZDE0Dd0hTYmEZkg53RcmgcO4a7e1n6knHwe/CQ20KornYE0U4w3/gvSpZpt58LhbV+KPz/nCjtHPJ9BEnDzJU3O1wHtNwpT2thHNi8sNdQ7IOJSX8t3iK/8RRTwG+NyTwrZDHIywSWRFJQfm6567VUQ+sgVEXnsAfyfdBnkVd87q3c38cUKU6mlxfVlMk+K5rWB2oKgQfOm/oJbFkUxJv59sEW2wet69HewiGw2zWE/ElNkXvoJ5Xdd95OKZrKmEot9khfGrhFSaLyfQcIXi+8UNtkLqToUFHrVS93Ye/MslC0OG7cc2XnQSlQpXNC1mQc6iX2aIquw8DQ2hGG/rcyUgYWt4cFlIHsD5LKj47l7oHAfwVwAb35z6Z+SqNIkyhERgAyoufOzY57EWIIA+OWzpvI8vH/sg/K7eQTJFsBVqDOlFa2rotZUcCRDd1hs47saHLwdQ6QhlY7UynNCcLP0Ob4GdL6i0MozYtz6/vOxE6RBQIV31iw5b3l1YQnDPAtLA62eXYo0BRhxKgz4+DZG630ya5H5qVvTBWPakBz287Pwor0Ceog==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-Content-Disposition: inline
-Message-Id: <202010261404.07417.pisa@cmp.felk.cvut.cz>
-X-W4U-Auth: 4e9955ddfc015ef9726aa4e09f38c48b34e8fad8
+X-OriginatorOrg: peak-system.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB5053.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3aad757b-8e3f-4769-cfbe-08d879b2ff89
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2020 13:28:16.9837
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vRYKz/U9EK8Ey9LQWtR3pfVv0re8266+KhoeBZ5LHqUfc6XAQasrUPEIRlAEYlFCwdImg1znLe+JUki8IyWAvtQyDp8Xm1ppSkcWIvySRfo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB6622
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Pavel and others,
-
-thanks for review and suggestions. I have spent weekend
-to attempt to resolve the most of the suggestions.
-
-The result is merge request to our projects
-
-  https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/merge_requests/372
-
-I am running test with two CTU CAN FD cores and two SJA1000 FD tollereant
-against two CTU CAN FD cores on PCIe board on my home machine
-from the morning. Zynq XCANs are not put into the mix because
-they are not FD tolerant.
-
-Actual statistics from Zynq system
-
-can2: flags=193<UP,RUNNING,NOARP>  mtu 16  Open Cores SJA1000 FD tollerant
-        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
-        RX packets 2431626  bytes 14089057 (13.4 MiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 329075  bytes 2383757 (2.2 MiB)
-        TX errors 65043  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 49
-
-can3: flags=193<UP,RUNNING,NOARP>  mtu 16  Open Cores SJA1000 FD tollerant
-        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
-        RX packets 2695281  bytes 15459822 (14.7 MiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 50
-
-can4: flags=193<UP,RUNNING,NOARP>  mtu 72  CTU CAN FD on Zynq
-        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
-        RX packets 84791228  bytes 1307744193 (1.2 GiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 1189540  bytes 17447286 (16.6 MiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 47
-
-can5: flags=193<UP,RUNNING,NOARP>  mtu 72  CTU CAN FD on Zynq
-        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
-        RX packets 81264790  bytes 1273404732 (1.1 GiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 4715979  bytes 51786821 (49.3 MiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 48
-
-Statistic from my the Intel Core 2 based system, only CTU CAN FD, EMS PCI board
-not used, it is not FD tollereant.
-
-can2: flags=193<UP,RUNNING,NOARP>  mtu 72  CTU CAN FD on DB4CGX15
-        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
-        RX packets 77731204  bytes 1222332122 (1.1 GiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 847131  bytes 13328222 (12.7 MiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 33
-
-can3: flags=193<UP,RUNNING,NOARP>  mtu 72  CTU CAN FD on DB4CGX15
-        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 10  (UNSPEC)
-        RX packets 1830253  bytes 28749064 (27.4 MiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 76340684  bytes 1200464054 (1.1 GiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-        device interrupt 33
-
-There is no indication of errors in the logs. On the other hand,
-massive renames and even some code functional changes to allow
-rewrite some parts to be better readable could introduce
-some errors.
-
-Automatic systemic tests and builds do passed in the final
-version
-
-  https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/-/pipelines/25070
-
-Same as automatic test at computes at the university
-
-  https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top/-/pipelines/25071
-
-So hopefully nothing is broken but testing for all corner cases
-after this update can take weeks.
-
-The response to review notes follows. I will wait for remarks form the community
-or at least check for typos from colleagues and then I send v7 series.
-
-Best wishes,
-
-Pavel
-
-On Thursday 22 of October 2020 13:02:13 Pavel Machek wrote:
-> Hi!
->
-> > From: Martin Jerabek <martin.jerabek01@gmail.com>
-> >
-> > This driver adds support for the CTU CAN FD open-source IP core.
-> > More documentation and core sources at project page
-> > (https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core).
-> > The core integration to Xilinx Zynq system as platform driver
-> > is available
-> > (https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top).
-> > Implementation on Intel FGA based PCI Express board is available from
-> > project (https://gitlab.fel.cvut.cz/canbus/pcie-ctu_can_fd).
->
-> Is "FGA" a typo? Yes, it is.
-
-Fixed
-
-> Anyway, following link tells me:
->
-> Project 'canbus/pcie-ctu_can_fd' was moved to
-> 'canbus/pcie-ctucanfd'. Please update any links and bookmarks that may
-> still have the old path. Fixing it in Kconfig is more important.
-
-Unification of ctu_can_fd -> ctucanfd done for file names, driver paths,
-device tree and documentation. Not enough resources to unify HDL sources,
-generated files etc. It would break history (blames etc.), testing etc.,
-there are more than 4k occurrences.
-
-> > +++ b/drivers/net/can/ctucanfd/Kconfig
-> > @@ -0,0 +1,15 @@
-> >
-> > +if CAN_CTUCANFD
-> > +
-> > +endif
->
-> Empty -> drop?
-
-TODO
-
-> > +++ b/drivers/net/can/ctucanfd/Makefile
-> > @@ -0,0 +1,7 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> >
-> > +++ b/drivers/net/can/ctucanfd/ctu_can_fd.c
-> > @@ -0,0 +1,1105 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
->
-> Having Makefile and sources with different licenses is rather unusual.
-
-UNified
-
-> > +static const char * const ctucan_state_strings[] = {
-> > +	"CAN_STATE_ERROR_ACTIVE",
-> > +	"CAN_STATE_ERROR_WARNING",
-> > +	"CAN_STATE_ERROR_PASSIVE",
-> > +	"CAN_STATE_BUS_OFF",
-> > +	"CAN_STATE_STOPPED",
-> > +	"CAN_STATE_SLEEPING"
-> > +};
->
-> Put this near function that uses this?
-
-ctucan_state_to_str() moved after array, array defined with strict
-correspondence of index to text.
-
-> > +/**
-> > + * ctucan_set_bittiming - CAN set bit timing routine
-> > + * @ndev:	Pointer to net_device structure
-> > + *
-> > + * This is the driver set bittiming routine.
-> > + * Return: 0 on success and failure value on error
-> > + */
-> >
-> > +/**
-> > + * ctucan_chip_start - This routine starts the driver
-> > + * @ndev:	Pointer to net_device structure
-> > + *
-> > + * This is the drivers start routine.
-> > + *
-> > + * Return: 0 on success and failure value on error
-> > + */
->
-> Good documentation is nice, but repeating "This routine starts the
-> driver" in "This is the drivers start routine." is not too helpful.
-
-Included relevant text as well as I have decided to move call
-to ctucan_reset() out of ctucan_chip_start() and slightly reorder/clarify
-some part of initialization and error handling.
-
-> > +/**
-> > + * ctucan_start_xmit - Starts the transmission
-> > + * @skb:	sk_buff pointer that contains data to be Txed
-> > + * @ndev:	Pointer to net_device structure
-> > + *
-> > + * This function is invoked from upper layers to initiate transmission.
-> > This + * function uses the next available free txbuf and populates their
-> > fields to + * start the transmission.
-> > + *
-> > + * Return: %NETDEV_TX_OK on success and failure value on error
-> > + */
->
-> Based on other documentation, I'd expect this to return -ESOMETHING on
-> error, but it returns NETDEV_TX_BUSY.
-
-Clarified NETDEV_TX_BUSY case and decided to drop frame if there is
-problem with format, length or other parameters during attempt
-to move frame into hardware.
-
-> > +	/* Check if the TX buffer is full */
-> > +	if (unlikely(!CTU_CAN_FD_TXTNF(ctu_can_get_status(&priv->p)))) {
-> > +		netif_stop_queue(ndev);
-> > +		netdev_err(ndev, "BUG!, no TXB free when queue awake!\n");
-> > +		return NETDEV_TX_BUSY;
-> > +	}
->
-> You call stop_queue() without spinlock...
-
-I hope that netif_stop_queue can be called from ctucan_start_xmit
-without locking and that during ctucan_start_xmit() call, would networking
-core postpone finish of netif_wake_queue(ndev) invoked from other CPU
-core or kernel thread. I have send longer request for clarification
-in previous reply and I would be happy, if somebody can check
-that my findings are right. If all that locking in network core work
-as I understand it then I would move the second call out of spinlock.
-But if there are differences how locking in networking core works
-between kernel versions (I have noticed some indication in the past)
-then I think that actual solution is correct and more robust.
-Even other drivers calls netif_stop_queue from irq lock protected
-regions...
-
-> > +	spin_lock_irqsave(&priv->tx_lock, flags);
-> > +
-> > +	ctucan_hw_txt_set_rdy(&priv->p, txb_id);
-> > +
-> > +	priv->txb_head++;
-> > +
-> > +	/* Check if all TX buffers are full */
-> > +	if (!CTU_CAN_FD_TXTNF(ctu_can_get_status(&priv->p)))
-> > +		netif_stop_queue(ndev);
-> > +
-> > +	spin_unlock_irqrestore(&priv->tx_lock, flags);
->
-> ...and then with spinlock held. One of them is buggy.
-
-See above.
-
-> > +/**
-> > + * xcan_rx -  Is called from CAN isr to complete the received
-> > + *		frame processing
-> > + * @ndev:	Pointer to net_device structure
-> > + *
-> > + * This function is invoked from the CAN isr(poll) to process the Rx
-> > frames. It + * does minimal processing and invokes "netif_receive_skb" to
-> > complete further + * processing.
-> > + * Return: 1 on success and 0 on failure.
-> > + */
->
-> Adapt to usual 0 / -EFOO?
-
-I have clarified that 1 is used to inform that frame has been fully received
-and sent to the network layer. 0 inform that there is frame first word read
-but SKB cannot be (hopefully temporarily) allocated. -EAGAIN indicate unlikelly
-condition that function is called when there is no frame in Rx FIFO, this indicates
-HW bug because this cannot happen when Rx FIFO frame count is not zero.
-
-> > +	/* Check for Arbitration Lost interrupt */
-> > +	if (isr.s.ali) {
-> > +		if (dologerr)
-> > +			netdev_info(ndev, "  arbitration lost");
-> > +		priv->can.can_stats.arbitration_lost++;
-> > +		if (skb) {
-> > +			cf->can_id |= CAN_ERR_LOSTARB;
-> > +			cf->data[0] = CAN_ERR_LOSTARB_UNSPEC;
-> > +		}
-> > +	}
-> > +
-> > +	/* Check for Bus Error interrupt */
-> > +	if (isr.s.bei) {
-> > +		netdev_info(ndev, "  bus error");
->
-> Missing "if (dologerr)" here?
-
-Bus error is result of series of troubles and should be logged. Bus restart
-after bus error is rate limited by driver nad hardware, so the missing 
-dologerr is intentional there. I have added \n to all messages and left them
-to be considered independent.
-
-> > +static int ctucan_rx_poll(struct napi_struct *napi, int quota)
-> > +{
-> > +	struct net_device *ndev = napi->dev;
-> > +	struct ctucan_priv *priv = netdev_priv(ndev);
-> > +	int work_done = 0;
-> > +	union ctu_can_fd_status status;
-> > +	u32 framecnt;
-> > +
-> > +	framecnt = ctucan_hw_get_rx_frame_count(&priv->p);
-> > +	netdev_dbg(ndev, "rx_poll: %d frames in RX FIFO", framecnt);
->
-> This will be rather noisy, right?
-
-OK, usesfull during development and only on debug level but removed now.
-
-> > +	/* Check for RX FIFO Overflow */
-> > +	status = ctu_can_get_status(&priv->p);
-> > +	if (status.s.dor) {
-> > +		struct net_device_stats *stats = &ndev->stats;
-> > +		struct can_frame *cf;
-> > +		struct sk_buff *skb;
-> > +
-> > +		netdev_info(ndev, "  rx fifo overflow");
->
-> And this goes at different loglevel, which will be confusing?
-
-Levels try to be reciprocal to severity and proportional to occurrence
-frequency. Can be tuned for sure. Some most flooding are ratelimited.
-
-> > +/**
-> > + * xcan_tx_interrupt - Tx Done Isr
-> > + * @ndev:	net_device pointer
-> > + */
-> > +static void ctucan_tx_interrupt(struct net_device *ndev)
->
-> Mismatch between code and docs.
-
-Corrected.
-
-> > +	netdev_dbg(ndev, "%s", __func__);
->
-> This is inconsistent with other debugging.... and perhaps it is time
-> to remove this kind of debugging for merge.
-
-I have removed some and will consider others.
-We are far from being production silicon version, so some debugging
-helps even "hardware"/HDL development.
-
-It seems that checkpatch pushes me in use of __func__.
-
-WARNING: Prefer using '"%s...", __func__' to using 'ctucan_set_bittiming', this function's name, in a string
-#127: FILE: /home/pi/fpga/can-fd/ctu-can-fd/CAN_FD_IP_Core/driver/linux/ctucanfd_base.c:127:
-+	netdev_dbg(ndev, "ctucan_set_bittiming\n");
-
-Generally, I am not sure if it is problem to have there many debugs
-at NET debug level. Today, when it is possible to control debug
-levels on per file basis it should not be so big problem and it can
-help to debug code and hardware interaction. It can be removed
-any time later.
-
-> > +/**
-> > + * xcan_interrupt - CAN Isr
-> > + */
-> > +static irqreturn_t ctucan_interrupt(int irq, void *dev_id)
->
-> Inconsistent.
-
-Corrected.
-
-> > +		/* Error interrupts */
-> > +		if (isr.s.ewli || isr.s.fcsi || isr.s.ali) {
-> > +			union ctu_can_fd_int_stat ierrmask = { .s = {
-> > +				  .ewli = 1, .fcsi = 1, .ali = 1, .bei = 1 } };
-> > +			icr.u32 = isr.u32 & ierrmask.u32;
->
-> We normally do bit arithmetics instead of this.
-
-As described, my intention is to use only fields and bits mapping
-which is directly generated from IPXACT specification
-and team decision was to to use structs for bitfields.
-So I do not want to add manually introduced defines.
-Even that core interface is stabilized at least for version 2.x now,
-I want all code to directly reflect HW design changes.
-
-> > +	{
-> > +		union ctu_can_fd_int_stat imask;
-> > +
-> > +		imask.u32 = 0xffffffff;
-> > +		ctucan_hw_int_ena_clr(&priv->p, imask);
-> > +		ctucan_hw_int_mask_set(&priv->p, imask);
-> > +	}
->
-> More like this. Plus avoid block here...?
-
-Block is to inform, that imask is really local and you do not
-need to look for it elsewhere in the function.
-But you prefer flat so I move define to start and remove
-block. In this case all F are OK, we know that there is nothing
-else than interrupts enable, mask bits, and if all should be
-stopped in response to error, then there cannot be problem even after
-some move of bitfileds in the register.
-
-> > +/**
-> > + * ctucan_close - Driver close routine
-> > + * @ndev:	Pointer to net_device structure
-> > + *
-> > + * Return: 0 always
-> > + */
->
-> You see, this is better. No need to say "Driver close routine"
-> twice. Now, make the rest consistent :-).
->
-> > +EXPORT_SYMBOL(ctucan_suspend);
-> > +EXPORT_SYMBOL(ctucan_resume);
->
-> _GPL?
-
-Not critical for me, may be Ondrej Ille has some opinion there.
-
-> And what kind of multi-module stuff are you doing that you need
-> symbols exported?
-
-Seems to be understood from followup patches.
-
-> > +int ctucan_probe_common(struct device *dev, void __iomem *addr, int irq,
-> > unsigned int ntxbufs, +			unsigned long can_clk_rate, int pm_enable_call,
-> > +			void (*set_drvdata_fnc)(struct device *dev, struct net_device *ndev))
-> > +{
->
-> Splitting/simplifying this somehow would be good.
-
-If you confirm my offer to move to structure with options then
-I look at it. On the other hand when functions prototype
-changes it enforces all users to get update which can bee
-better to catch problems than sillent structure fields addition.
-If zeroed the first then probably manageable too.
-
-> > +/* Register descriptions: */
-> > +union ctu_can_fd_frame_form_w {
-> > +	uint32_t u32;
->
-> u32, as you write elsewhere.
-
-As I already described these generated files should be used one
-to one in QEMU and other tools. There seems to be acceptable
-to use uint32_t in the kernel for these cases.
-Definition of u32 type in all other cases would lead often
-to unwanted pollute of namespace.
-
-> > +	struct ctu_can_fd_frame_form_w_s {
-> > +#ifdef __LITTLE_ENDIAN_BITFIELD
-> > +  /* FRAME_FORM_W */
-> > +		uint32_t dlc                     : 4;
-> > +		uint32_t reserved_4              : 1;
-> > +		uint32_t rtr                     : 1;
-> > +		uint32_t ide                     : 1;
-> > +		uint32_t fdf                     : 1;
-> > +		uint32_t reserved_8              : 1;
-> > +		uint32_t brs                     : 1;
-> > +		uint32_t esi_rsv                 : 1;
-> > +		uint32_t rwcnt                   : 5;
-> > +		uint32_t reserved_31_16         : 16;
-> > +#else
->
-> I believe you should simply avoid using bitfields.
-
-I have already described that my personal tendency
-is similar but in this case big and little part
-is kept consistent by generation and it was preferred
-solution by colleagues. There are more places where this
-style is used in the kernel and we do not use overlay structures
-for hardware directly. Value is read by iored/iowrite in all cases
-and union/struct works only for local variables to parse
-bitfields. It is correct from IO synchronization
-and single access rules and it optimizes to same code
-as use of defines on local variables.
-
-> > +union ctu_can_fd_timestamp_l_w {
-> > +	uint32_t u32;
-> > +	struct ctu_can_fd_timestamp_l_w_s {
-> > +  /* TIMESTAMP_L_W */
-> > +		uint32_t time_stamp_31_0        : 32;
-> > +	} s;
-> > +};
->
-> This is crazy.
-
-Yes, but generated from spec so it is kept consistent.
-Adding exception for case that size of field is 32-bits
-is possible but when field size changes it would cause
-incorrect access.
-
-> > +union ctu_can_fd_data_5_8_w {
-> > +	uint32_t u32;
-> > +	struct ctu_can_fd_data_5_8_w_s {
-> > +#ifdef __LITTLE_ENDIAN_BITFIELD
-> > +  /* DATA_5_8_W */
-> > +		uint32_t data_5                  : 8;
-> > +		uint32_t data_6                  : 8;
-> > +		uint32_t data_7                  : 8;
-> > +		uint32_t data_8                  : 8;
-> > +#else
-> > +		uint32_t data_8                  : 8;
-> > +		uint32_t data_7                  : 8;
-> > +		uint32_t data_6                  : 8;
-> > +		uint32_t data_5                  : 8;
-> > +#endif
-> > +	} s;
-> > +};
->
-> even more crazy.
-
-This is mainly for documentation where it has place and reason.
-It is used only in sense of data area start in the driver.
-
-> > +#ifdef __KERNEL__
-> > +# include <linux/can/dev.h>
-> > +#else
-> > +/* The hardware registers mapping and low level layer should build
-> > + * in userspace to allow development and verification of CTU CAN IP
-> > + * core VHDL design when loaded into hardware. Debugging hardware
-> > + * from kernel driver is really difficult, leads to system stucks
-> > + * by error reporting etc. Testing of exactly the same code
-> > + * in userspace together with headers generated automatically
-> > + * generated from from IP-XACT/cactus helps to driver to hardware
-> > + * and QEMU emulation model consistency keeping.
-> > + */
-> > +# include "ctu_can_fd_linux_defs.h"
-> > +#endif
->
-> Please remove non-kernel code for merge.
-
-As I tried to describe these mechanism allows to ensure that
-there is match between HW access generated registers description
-and manual algorithmic part of HW interface and actual implementation
-of registers file by different test from userpace run during each
-driver or HDL update. I am convinced personally that it worth
-to be run and tested. Alternative to #ifdef is file patching 
-during userspace build, but we use same files with symliks only
-during GitLab runner execution. It would complicate things
-on our side and can lead to not catching problem which would cost
-really much more than four additional lines. I have added description
-for others to understand value of this solution.
-If really requested to be removed, then I would follow
-requirement but with bad taste what more worthless problems
-I have to spent my time. 
-
-> > +void ctucan_hw_write32(struct ctucan_hw_priv *priv,
-> > +		       enum ctu_can_fd_can_registers reg, u32 val)
-> > +{
-> > +	iowrite32(val, priv->mem_base + reg);
-> > +}
->
-> And get rid of this kind of abstraction layer.
-
-We need to support big endian and little endian mapping
-in same driver. I.e. bigendian MIPS with little endian
-PCI mapping (that is standard) and big endian for SoC
-integration. I really think that linux/regmap.h is
-to big monster for this simple purpose. See my previous
-analysis and reference to similar conclusions of M_CAN
-authors.
-
-> > +// TODO: rename or do not depend on previous value of id
->
-> TODO: grep for TODO and C++ comments before attempting merge.
-
-There should not be any C++ comment except SPDX, which seems to be
-preffered even in other kernel C files and TODOs. They go after
-my colleagues providing basic HW abstraction. I have replaced C++
-comments in ctucanfd_hw.h.
-
-Code restructured to resolve this TODO.
-
-> > +static bool ctucan_hw_len_to_dlc(u8 len, u8 *dlc)
-> > +{
-> > +	*dlc = can_len2dlc(len);
-> > +	return true;
-> > +}
->
-> Compared to how well other code is documented... This one is voodoo.
-
-Wrapper removed, can_len2dlc used directly.
-
-Generally ctucanfd_hw.h/ctucanfd_hw.c provides documented API
-to the driver. Who wants to poke with ctucanfd_hw.h/ctucanfd_hw.c
-should read HW, registers docs, to which code directly corresponds.
-
-  http://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/Progdokum.pdf
-  http://canbus.pages.fel.cvut.cz/ctucanfd_ip_core/ctu_can_fd_architecture.pdf
-
-> > +bool ctucan_hw_set_ret_limit(struct ctucan_hw_priv *priv, bool enable,
-> > u8 limit) +{
-> > +	union ctu_can_fd_mode_settings reg;
-> > +
-> > +	if (limit > CTU_CAN_FD_RETR_MAX)
-> > +		return false;
-> > +
-> > +	reg.u32 = priv->read_reg(priv, CTU_CAN_FD_MODE);
-> > +	reg.s.rtrle = enable ? RTRLE_ENABLED : RTRLE_DISABLED;
-> > +	reg.s.rtrth = limit & 0xF;
-> > +	priv->write_reg(priv, CTU_CAN_FD_MODE, reg.u32);
-> > +	return true;
-> > +}
->
-> As elsewhere, I'd suggest 0/-ERRNO.
-
-I would prefer this HW documenting layer without dependency
-of concrete systems status reporting mechanisms.
-EXXX rule can be followed but at cost of testing, other
-systems integration etc.
-
-> > +void ctucan_hw_set_mode_reg(struct ctucan_hw_priv *priv,
-> > +			    const struct can_ctrlmode *mode)
-> > +{
-> > +	u32 flags = mode->flags;
-> > +	union ctu_can_fd_mode_settings reg;
-> > +
-> > +	reg.u32 = priv->read_reg(priv, CTU_CAN_FD_MODE);
-> >
-> > +	if (mode->mask & CAN_CTRLMODE_LOOPBACK)
-> > +		reg.s.ilbp = flags & CAN_CTRLMODE_LOOPBACK ?
-> > +					INT_LOOP_ENABLED : INT_LOOP_DISABLED;
->
-> Not sure what is going on here, but having mode->flags in same format
-> as hardware register would help...?
-
-Converts SocketCAN defined code to actual encoding in the HDL
-
-https://elixir.bootlin.com/linux/latest/source/include/uapi/linux/can/netlink.h#L95
-
-So this is to have external API of HW access functions as close to SocketCAN
-as possible.
-
-> > +	switch (fnum) {
-> > +	case CTU_CAN_FD_FILTER_A:
-> > +		if (reg.s.sfa)
-> > +			return true;
-> > +	break;
-> > +	case CTU_CAN_FD_FILTER_B:
-> > +		if (reg.s.sfb)
-> > +			return true;
-> > +	break;
-> > +	case CTU_CAN_FD_FILTER_C:
-> > +		if (reg.s.sfc)
-> > +			return true;
-> > +	break;
-> > +	}
->
-> Check indentation of break statemnts, also elsewhere in this file
-
-Strange that checkpatch accepts this, but changing.
-
-> > +bool ctucan_hw_get_range_filter_support(struct ctucan_hw_priv *priv)
-> > +{
-> > +	union ctu_can_fd_filter_control_filter_status reg;
-> > +
-> > +	reg.u32 = priv->read_reg(priv, CTU_CAN_FD_FILTER_CONTROL);
-> > +
-> > +	if (reg.s.sfr)
-> > +		return true;
->
-> return !!reg.s.sfr; ?
-
-Replaced
-
-> > +enum ctu_can_fd_tx_status_tx1s ctucan_hw_get_tx_status(struct
-> > ctucan_hw_priv +							*priv, u8 buf)
->
-> ...
->
-> > +	default:
-> > +		status = ~0;
-> > +	}
-> > +	return (enum ctu_can_fd_tx_status_tx1s)status;
-> > +}
->
-> Is ~0 in the enum?
-
-Hmm enum ctu_can_fd_tx_status_tx1s is generated from IPXACT CTU CAN FD specification.
-The ~0 is there to catch fatal problems, to put something, which does not match
-any enum value. Changing enum is problematic, it would require to change
-generator or specification... It is to catch real problem in the code
-implementation. So I am not sure what else I can do there.
-
-> > +	// TODO: use named constants for the command
->
-> TODO...
->
-> > +// TODO: AL_CAPTURE and ERROR_CAPTURE
-
-Removed, I am not sure what was on the mind of colleagues who has placed this TODO there.
-
-> > +#if defined(__LITTLE_ENDIAN_BITFIELD) == defined(__BIG_ENDIAN_BITFIELD)
-> > +# error __BIG_ENDIAN_BITFIELD or __LITTLE_ENDIAN_BITFIELD must be
-> > defined. +#endif
-> >
-> :-).
-> :
-> > +// True if Core is transceiver of current frame
-> > +#define CTU_CAN_FD_IS_TRANSMITTER(stat) (!!(stat).ts)
-> > +
-> > +// True if Core is receiver of current frame
-> > +#define CTU_CAN_FD_IS_RECEIVER(stat) (!!(stat).s.rxs)
->
-> Why not, documentation is nice. But it is in big contrast to other
-> parts of code where there's no docs at all.
-
-The ctucanfd_hw.h API should be documented for driver implementers.
-ctucanfd_hw.c require to read real HW docs.
-
-> > +struct ctucan_hw_priv;
-> > +#ifndef ctucan_hw_priv
-> > +struct ctucan_hw_priv {
-> > +	void __iomem *mem_base;
-> > +	u32 (*read_reg)(struct ctucan_hw_priv *priv,
-> > +			enum ctu_can_fd_can_registers reg);
-> > +	void (*write_reg)(struct ctucan_hw_priv *priv,
-> > +			  enum ctu_can_fd_can_registers reg, u32 val);
-> > +};
-> > +#endif
->
-> Should not be needed in kernel.
-
-Old mechanism, actual user space tests can live without it.
-
-> > +/**
-> > + * ctucan_hw_read_rx_word - Reads one word of CAN Frame from RX FIFO
-> > Buffer. + *
-> > + * @priv: Private info
-> > + *
-> > + * Return: One wword of received frame
->
-> Typo 'word'.
->
-> > +++ b/drivers/net/can/ctucanfd/ctu_can_fd_regs.h
-> > @@ -0,0 +1,971 @@
-> > +
-> > +/* This file is autogenerated, DO NOT EDIT! */
-> > +
->
-> Yay. How is that supposed to work after merge?
->
-> Best regards,
-> 								Pavel
-
-On Thursday 22 of October 2020 13:39:52 Pavel Machek wrote:
-> > @@ -12,4 +12,13 @@ config CAN_CTUCANFD
-> >
-> >  if CAN_CTUCANFD
-> >
-> > +config CAN_CTUCANFD_PCI
-> > +	tristate "CTU CAN-FD IP core PCI/PCIe driver"
-> > +	depends on PCI
-> > +	help
-> > +	  This driver adds PCI/PCIe support for CTU CAN-FD IP core.
-> > +	  The project providing FPGA design for Intel EP4CGX15 based DB4CGX15
-> > +	  PCIe board with PiKRON.com designed transceiver riser shield is
-> > available +	  at https://gitlab.fel.cvut.cz/canbus/pcie-ctu_can_fd .
-> > +
-> >  endif
->
-> Ok, now the if in the first patch makes sense. It can stay.
->
-> And it is separate module, so EXPORT_SYMBOLs make sense. Ok.
-
-I have changed dependency to not use if but
-  depends on CAN_CTUCANFD
-
-> > +#ifndef PCI_VENDOR_ID_TEDIA
-> > +#define PCI_VENDOR_ID_TEDIA 0x1760
-> > +#endif
-> >
-> > +#define PCI_DEVICE_ID_TEDIA_CTUCAN_VER21 0xff00
->
-> These should go elsewhere.
-
-Kept for now, I will adapt to suggestions but I would
-prefer to put it independent to allow easy backports
-for meanwhile. 
-
-> > +#define PCI_DEVICE_ID_ALTERA_CTUCAN_TEST  0xCAFD
-
-Test integration not in use removed.
-
->
-> > +static bool use_msi = 1;
-> > +static bool pci_use_second = 1;
->
-> true?
-
-Changed to true.
-
-On Thursday 22 of October 2020 13:43:06 Pavel Machek wrote:
-> Hi!
->
-> > +++ b/drivers/net/can/ctucanfd/Kconfig
-> > @@ -21,4 +21,15 @@ config CAN_CTUCANFD_PCI
-> >  	  PCIe board with PiKRON.com designed transceiver riser shield is
-> > available at https://gitlab.fel.cvut.cz/canbus/pcie-ctu_can_fd .
-> >
-> > +config CAN_CTUCANFD_PLATFORM
-> > +	tristate "CTU CAN-FD IP core platform (FPGA, SoC) driver"
-> > +	depends on OF || COMPILE_TEST
-> > +	help
->
-> This is likely wrong, as it can enable config of CAN_CTUCANFD=M,
-> CAN_CTUCANFD_PLATFORM=y, right?
-
-Chanegd to depends on
-
-> > @@ -8,3 +8,6 @@ ctucanfd-y := ctu_can_fd.o ctu_can_fd_hw.o
-> >
-> >  obj-$(CONFIG_CAN_CTUCANFD_PCI) += ctucanfd_pci.o
-> >  ctucanfd_pci-y := ctu_can_fd_pci.o
-> > +
-> > +obj-$(CONFIG_CAN_CTUCANFD_PLATFORM) += ctucanfd_platform.o
-> > +ctucanfd_platform-y += ctu_can_fd_platform.o
->
-> Can you simply add right object files directly?
-
-I have done rename in many places to fullfill this single line.
-Full rename in HDL would require to analyze 4k+ occurrences.
-
-On Thursday 22 of October 2020 13:25:40 Pavel Machek wrote:
-> On Thu 2020-10-22 10:36:21, Pavel Pisa wrote:
-> > CTU CAN FD IP core documentation based on Martin Jeřábek's diploma theses
-> > Open-source and Open-hardware CAN FD Protocol Support
-> > https://dspace.cvut.cz/handle/10467/80366
-> > .
-> >
-> > ---
-> >  .../ctu/FSM_TXT_Buffer_user.png               | Bin 0 -> 174807 bytes
->
-> Maybe picture should stay on website, somewhere. It is rather big for
-> kernel sources.
-
-I have invested time to redraw image in Inscape and do more
-optimization to reduce 172K to 16K SVG.
-
-> > +About SocketCAN
-> > +---------------
-> > +
-> > +SocketCAN is a standard common interface for CAN devices in the Linux
-> > +kernel. As the name suggests, the bus is accessed via sockets, similarly
-> > +to common network devices. The reasoning behind this is in depth
-> > +described in `Linux SocketCAN
-> > <https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/tree/Doc
-> >umentation/networking/can.rst>`_. +In short, it offers a
-> > +natural way to implement and work with higher layer protocols over CAN,
-> > +in the same way as, e.g., UDP/IP over Ethernet.
->
-> Drop? Or at least link directly to the file in kernel tree?
-
-What is the best way to cross-reference RST documentation in Linux kernel
-sources??
-
-> > +Device probe
-> > +~~~~~~~~~~~~
-...
->
-> Dunno. Is it suitable? This is supposed to be ctu-can documentation,
-> not "how hardware works" docs.
-
-I would be happy if it stays in our standalone build.
-If it is problem for mainline I try to reduce text.
-Help, suggestions etc. much appreciated.
-Mr. Ille, Mr. Jerabek and others, please help there.
-Same with checking for errors.
-
-Thanks for your time (when you reached the end of the discussion),
-
-Pavel
+4oCL4oCLSGVsbG8gRGFuLA0KDQpZb3UgaGF2ZSBteSBBY2suDQoNCkFja2VkLWJ5OiBTdGVwaGFu
+ZSBHcm9zamVhbiA8cy5ncm9zamVhbkBwZWFrLXN5c3RlbS5jb20+DQoNCi0tLQ0KU3TDqXBoYW5l
+IEdyb3NqZWFuDQpQRUFLLVN5c3RlbSBGcmFuY2UNCjEzMiwgcnVlIEFuZHLDqSBCaXNpYXV4DQpG
+LTU0MzIwIE1BWEVWSUxMRQ0KVMOpbCA6ICsoMzMpIDkuNzIuNTQuNTEuOTcNCg0KDQoNCkRlIDog
+RGFuIENhcnBlbnRlciA8ZGFuLmNhcnBlbnRlckBvcmFjbGUuY29tPg0KRW52b3nDqSA6IGpldWRp
+IDEzIGFvw7t0IDIwMjAgMTY6MDYNCsOAIDogV29sZmdhbmcgR3JhbmRlZ2dlciA8d2dAZ3JhbmRl
+Z2dlci5jb20+OyBTdMOpcGhhbmUgR3Jvc2plYW4gPHMuZ3Jvc2plYW5AcGVhay1zeXN0ZW0uY29t
+Pg0KQ2MgOiBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPjsgRGF2aWQgUy4g
+TWlsbGVyIDxkYXZlbUBkYXZlbWxvZnQubmV0PjsgSmFrdWIgS2ljaW5za2kgPGt1YmFAa2VybmVs
+Lm9yZz47IEFuZHJpIFluZ3Zhc29uIDxhbmRyaS55bmd2YXNvbkBtYXJlbC5jb20+OyBPbGl2ZXIg
+SGFydGtvcHAgPHNvY2tldGNhbkBoYXJ0a29wcC5uZXQ+OyBsaW51eC1jYW5Admdlci5rZXJuZWwu
+b3JnIDxsaW51eC1jYW5Admdlci5rZXJuZWwub3JnPjsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZyA8
+bmV0ZGV2QHZnZXIua2VybmVsLm9yZz47IGtlcm5lbC1qYW5pdG9yc0B2Z2VyLmtlcm5lbC5vcmcg
+PGtlcm5lbC1qYW5pdG9yc0B2Z2VyLmtlcm5lbC5vcmc+DQpPYmpldCA6IFtQQVRDSCBuZXRdIGNh
+bjogcGVha191c2I6IGFkZCByYW5nZSBjaGVja2luZyBpbiBkZWNvZGUgb3BlcmF0aW9ucw0KDQpU
+aGVzZSB2YWx1ZXMgY29tZSBmcm9tIHNrYi0+ZGF0YSBzbyBTbWF0Y2ggY29uc2lkZXJzIHRoZW0g
+dW50cnVzdGVkLiAgSQ0KYmVsaWV2ZSBTbWF0Y2ggaXMgY29ycmVjdCBidXQgSSBkb24ndCBoYXZl
+IGEgd2F5IHRvIHRlc3QgdGhpcy4NCg0KVGhlIHVzYl9pZi0+ZGV2W10gYXJyYXkgaGFzIDIgZWxl
+bWVudHMgYnV0IHRoZSBpbmRleCBpcyBpbiB0aGUgMC0xNQ0KcmFuZ2Ugd2l0aG91dCBjaGVja3Mu
+ICBUaGUgY2ZkLT5sZW4gY2FuIGJlIHVwIHRvIDI1NSBidXQgdGhlIG1heGltdW0NCnZhbGlkIHNp
+emUgaXMgQ0FORkRfTUFYX0RMRU4gKDY0KSBzbyB0aGF0IGNvdWxkIGxlYWQgdG8gbWVtb3J5DQpj
+b3JydXB0aW9uLg0KDQpGaXhlczogMGEyNWUxZjRmMTg1ICgiY2FuOiBwZWFrX3VzYjogYWRkIHN1
+cHBvcnQgZm9yIFBFQUsgbmV3IENBTkZEIFVTQiBhZGFwdGVycyIpDQpTaWduZWQtb2ZmLWJ5OiBE
+YW4gQ2FycGVudGVyIDxkYW4uY2FycGVudGVyQG9yYWNsZS5jb20+DQotLS0NCiBkcml2ZXJzL25l
+dC9jYW4vdXNiL3BlYWtfdXNiL3BjYW5fdXNiX2ZkLmMgfCA0OCArKysrKysrKysrKysrKysrKy0t
+LS0tDQogMSBmaWxlIGNoYW5nZWQsIDM3IGluc2VydGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQ0K
+DQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvY2FuL3VzYi9wZWFrX3VzYi9wY2FuX3VzYl9mZC5j
+IGIvZHJpdmVycy9uZXQvY2FuL3VzYi9wZWFrX3VzYi9wY2FuX3VzYl9mZC5jDQppbmRleCA0N2Nj
+MWZmNWI4OGUuLmRlZTNlNjg5YjU0ZCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbmV0L2Nhbi91c2Iv
+cGVha191c2IvcGNhbl91c2JfZmQuYw0KKysrIGIvZHJpdmVycy9uZXQvY2FuL3VzYi9wZWFrX3Vz
+Yi9wY2FuX3VzYl9mZC5jDQpAQCAtNDY4LDEyICs0NjgsMTggQEAgc3RhdGljIGludCBwY2FuX3Vz
+Yl9mZF9kZWNvZGVfY2FubXNnKHN0cnVjdCBwY2FuX3VzYl9mZF9pZiAqdXNiX2lmLA0KICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgcHVjYW5fbXNnICpyeF9tc2cp
+DQogew0KICAgICAgICAgc3RydWN0IHB1Y2FuX3J4X21zZyAqcm0gPSAoc3RydWN0IHB1Y2FuX3J4
+X21zZyAqKXJ4X21zZzsNCi0gICAgICAgc3RydWN0IHBlYWtfdXNiX2RldmljZSAqZGV2ID0gdXNi
+X2lmLT5kZXZbcHVjYW5fbXNnX2dldF9jaGFubmVsKHJtKV07DQotICAgICAgIHN0cnVjdCBuZXRf
+ZGV2aWNlICpuZXRkZXYgPSBkZXYtPm5ldGRldjsNCisgICAgICAgc3RydWN0IHBlYWtfdXNiX2Rl
+dmljZSAqZGV2Ow0KKyAgICAgICBzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2Ow0KICAgICAgICAg
+c3RydWN0IGNhbmZkX2ZyYW1lICpjZmQ7DQogICAgICAgICBzdHJ1Y3Qgc2tfYnVmZiAqc2tiOw0K
+ICAgICAgICAgY29uc3QgdTE2IHJ4X21zZ19mbGFncyA9IGxlMTZfdG9fY3B1KHJtLT5mbGFncyk7
+DQoNCisgICAgICAgaWYgKHB1Y2FuX21zZ19nZXRfY2hhbm5lbChybSkgPj0gQVJSQVlfU0laRSh1
+c2JfaWYtPmRldikpDQorICAgICAgICAgICAgICAgcmV0dXJuIC1FTk9NRU07DQorDQorICAgICAg
+IGRldiA9IHVzYl9pZi0+ZGV2W3B1Y2FuX21zZ19nZXRfY2hhbm5lbChybSldOw0KKyAgICAgICBu
+ZXRkZXYgPSBkZXYtPm5ldGRldjsNCisNCiAgICAgICAgIGlmIChyeF9tc2dfZmxhZ3MgJiBQVUNB
+Tl9NU0dfRVhUX0RBVEFfTEVOKSB7DQogICAgICAgICAgICAgICAgIC8qIENBTkZEIGZyYW1lIGNh
+c2UgKi8NCiAgICAgICAgICAgICAgICAgc2tiID0gYWxsb2NfY2FuZmRfc2tiKG5ldGRldiwgJmNm
+ZCk7DQpAQCAtNTE5LDE1ICs1MjUsMjEgQEAgc3RhdGljIGludCBwY2FuX3VzYl9mZF9kZWNvZGVf
+c3RhdHVzKHN0cnVjdCBwY2FuX3VzYl9mZF9pZiAqdXNiX2lmLA0KICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgcHVjYW5fbXNnICpyeF9tc2cpDQogew0KICAgICAg
+ICAgc3RydWN0IHB1Y2FuX3N0YXR1c19tc2cgKnNtID0gKHN0cnVjdCBwdWNhbl9zdGF0dXNfbXNn
+ICopcnhfbXNnOw0KLSAgICAgICBzdHJ1Y3QgcGVha191c2JfZGV2aWNlICpkZXYgPSB1c2JfaWYt
+PmRldltwdWNhbl9zdG1zZ19nZXRfY2hhbm5lbChzbSldOw0KLSAgICAgICBzdHJ1Y3QgcGNhbl91
+c2JfZmRfZGV2aWNlICpwZGV2ID0NCi0gICAgICAgICAgICAgICAgICAgICAgIGNvbnRhaW5lcl9v
+ZihkZXYsIHN0cnVjdCBwY2FuX3VzYl9mZF9kZXZpY2UsIGRldik7DQorICAgICAgIHN0cnVjdCBw
+Y2FuX3VzYl9mZF9kZXZpY2UgKnBkZXY7DQogICAgICAgICBlbnVtIGNhbl9zdGF0ZSBuZXdfc3Rh
+dGUgPSBDQU5fU1RBVEVfRVJST1JfQUNUSVZFOw0KICAgICAgICAgZW51bSBjYW5fc3RhdGUgcnhf
+c3RhdGUsIHR4X3N0YXRlOw0KLSAgICAgICBzdHJ1Y3QgbmV0X2RldmljZSAqbmV0ZGV2ID0gZGV2
+LT5uZXRkZXY7DQorICAgICAgIHN0cnVjdCBwZWFrX3VzYl9kZXZpY2UgKmRldjsNCisgICAgICAg
+c3RydWN0IG5ldF9kZXZpY2UgKm5ldGRldjsNCiAgICAgICAgIHN0cnVjdCBjYW5fZnJhbWUgKmNm
+Ow0KICAgICAgICAgc3RydWN0IHNrX2J1ZmYgKnNrYjsNCg0KKyAgICAgICBpZiAocHVjYW5fc3Rt
+c2dfZ2V0X2NoYW5uZWwoc20pID49IEFSUkFZX1NJWkUodXNiX2lmLT5kZXYpKQ0KKyAgICAgICAg
+ICAgICAgIHJldHVybiAtRU5PTUVNOw0KKw0KKyAgICAgICBkZXYgPSB1c2JfaWYtPmRldltwdWNh
+bl9zdG1zZ19nZXRfY2hhbm5lbChzbSldOw0KKyAgICAgICBwZGV2ID0gY29udGFpbmVyX29mKGRl
+diwgc3RydWN0IHBjYW5fdXNiX2ZkX2RldmljZSwgZGV2KTsNCisgICAgICAgbmV0ZGV2ID0gZGV2
+LT5uZXRkZXY7DQorDQogICAgICAgICAvKiBub3RoaW5nIHNob3VsZCBiZSBzZW50IHdoaWxlIGlu
+IEJVU19PRkYgc3RhdGUgKi8NCiAgICAgICAgIGlmIChkZXYtPmNhbi5zdGF0ZSA9PSBDQU5fU1RB
+VEVfQlVTX09GRikNCiAgICAgICAgICAgICAgICAgcmV0dXJuIDA7DQpAQCAtNTc5LDkgKzU5MSwx
+NCBAQCBzdGF0aWMgaW50IHBjYW5fdXNiX2ZkX2RlY29kZV9lcnJvcihzdHJ1Y3QgcGNhbl91c2Jf
+ZmRfaWYgKnVzYl9pZiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1
+Y3QgcHVjYW5fbXNnICpyeF9tc2cpDQogew0KICAgICAgICAgc3RydWN0IHB1Y2FuX2Vycm9yX21z
+ZyAqZXIgPSAoc3RydWN0IHB1Y2FuX2Vycm9yX21zZyAqKXJ4X21zZzsNCi0gICAgICAgc3RydWN0
+IHBlYWtfdXNiX2RldmljZSAqZGV2ID0gdXNiX2lmLT5kZXZbcHVjYW5fZXJtc2dfZ2V0X2NoYW5u
+ZWwoZXIpXTsNCi0gICAgICAgc3RydWN0IHBjYW5fdXNiX2ZkX2RldmljZSAqcGRldiA9DQotICAg
+ICAgICAgICAgICAgICAgICAgICBjb250YWluZXJfb2YoZGV2LCBzdHJ1Y3QgcGNhbl91c2JfZmRf
+ZGV2aWNlLCBkZXYpOw0KKyAgICAgICBzdHJ1Y3QgcGNhbl91c2JfZmRfZGV2aWNlICpwZGV2Ow0K
+KyAgICAgICBzdHJ1Y3QgcGVha191c2JfZGV2aWNlICpkZXY7DQorDQorICAgICAgIGlmIChwdWNh
+bl9lcm1zZ19nZXRfY2hhbm5lbChlcikgPj0gQVJSQVlfU0laRSh1c2JfaWYtPmRldikpDQorICAg
+ICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQorDQorICAgICAgIGRldiA9IHVzYl9pZi0+ZGV2
+W3B1Y2FuX2VybXNnX2dldF9jaGFubmVsKGVyKV07DQorICAgICAgIHBkZXYgPSBjb250YWluZXJf
+b2YoZGV2LCBzdHJ1Y3QgcGNhbl91c2JfZmRfZGV2aWNlLCBkZXYpOw0KDQogICAgICAgICAvKiBr
+ZWVwIGEgdHJhY2Ugb2YgdHggYW5kIHJ4IGVycm9yIGNvdW50ZXJzIGZvciBsYXRlciB1c2UgKi8N
+CiAgICAgICAgIHBkZXYtPmJlYy50eGVyciA9IGVyLT50eF9lcnJfY250Ow0KQEAgLTU5NSwxMSAr
+NjEyLDE3IEBAIHN0YXRpYyBpbnQgcGNhbl91c2JfZmRfZGVjb2RlX292ZXJydW4oc3RydWN0IHBj
+YW5fdXNiX2ZkX2lmICp1c2JfaWYsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBzdHJ1Y3QgcHVjYW5fbXNnICpyeF9tc2cpDQogew0KICAgICAgICAgc3RydWN0IHBjYW5f
+dWZkX292cl9tc2cgKm92ID0gKHN0cnVjdCBwY2FuX3VmZF9vdnJfbXNnICopcnhfbXNnOw0KLSAg
+ICAgICBzdHJ1Y3QgcGVha191c2JfZGV2aWNlICpkZXYgPSB1c2JfaWYtPmRldltwdWZkX29tc2df
+Z2V0X2NoYW5uZWwob3YpXTsNCi0gICAgICAgc3RydWN0IG5ldF9kZXZpY2UgKm5ldGRldiA9IGRl
+di0+bmV0ZGV2Ow0KKyAgICAgICBzdHJ1Y3QgcGVha191c2JfZGV2aWNlICpkZXY7DQorICAgICAg
+IHN0cnVjdCBuZXRfZGV2aWNlICpuZXRkZXY7DQogICAgICAgICBzdHJ1Y3QgY2FuX2ZyYW1lICpj
+ZjsNCiAgICAgICAgIHN0cnVjdCBza19idWZmICpza2I7DQoNCisgICAgICAgaWYgKHB1ZmRfb21z
+Z19nZXRfY2hhbm5lbChvdikgPj0gQVJSQVlfU0laRSh1c2JfaWYtPmRldikpDQorICAgICAgICAg
+ICAgICAgcmV0dXJuIC1FSU5WQUw7DQorDQorICAgICAgIGRldiA9IHVzYl9pZi0+ZGV2W3B1ZmRf
+b21zZ19nZXRfY2hhbm5lbChvdildOw0KKyAgICAgICBuZXRkZXYgPSBkZXYtPm5ldGRldjsNCisN
+CiAgICAgICAgIC8qIGFsbG9jYXRlIGFuIHNrYiB0byBzdG9yZSB0aGUgZXJyb3IgZnJhbWUgKi8N
+CiAgICAgICAgIHNrYiA9IGFsbG9jX2Nhbl9lcnJfc2tiKG5ldGRldiwgJmNmKTsNCiAgICAgICAg
+IGlmICghc2tiKQ0KQEAgLTcxNiw2ICs3MzksOSBAQCBzdGF0aWMgaW50IHBjYW5fdXNiX2ZkX2Vu
+Y29kZV9tc2coc3RydWN0IHBlYWtfdXNiX2RldmljZSAqZGV2LA0KICAgICAgICAgdTE2IHR4X21z
+Z19zaXplLCB0eF9tc2dfZmxhZ3M7DQogICAgICAgICB1OCBjYW5fZGxjOw0KDQorICAgICAgIGlm
+IChjZmQtPmxlbiA+IENBTkZEX01BWF9ETEVOKQ0KKyAgICAgICAgICAgICAgIHJldHVybiAtRUlO
+VkFMOw0KKw0KICAgICAgICAgdHhfbXNnX3NpemUgPSBBTElHTihzaXplb2Yoc3RydWN0IHB1Y2Fu
+X3R4X21zZykgKyBjZmQtPmxlbiwgNCk7DQogICAgICAgICB0eF9tc2ctPnNpemUgPSBjcHVfdG9f
+bGUxNih0eF9tc2dfc2l6ZSk7DQogICAgICAgICB0eF9tc2ctPnR5cGUgPSBjcHVfdG9fbGUxNihQ
+VUNBTl9NU0dfQ0FOX1RYKTsNCi0tDQoyLjI4LjANCg0KLS0NClBFQUstU3lzdGVtIFRlY2huaWsg
+R21iSA0KU2l0eiBkZXIgR2VzZWxsc2NoYWZ0IERhcm1zdGFkdCAtIEhSQiA5MTgzDQpHZXNjaGFl
+ZnRzZnVlaHJ1bmc6IEFsZXhhbmRlciBHYWNoIC8gVXdlIFdpbGhlbG0NClVuc2VyZSBEYXRlbnNj
+aHV0emVya2xhZXJ1bmcgbWl0IHdpY2h0aWdlbiBIaW53ZWlzZW4NCnp1ciBCZWhhbmRsdW5nIHBl
+cnNvbmVuYmV6b2dlbmVyIERhdGVuIGZpbmRlbiBTaWUgdW50ZXINCnd3dy5wZWFrLXN5c3RlbS5j
+b20vRGF0ZW5zY2h1dHouNDgzLjAuaHRtbA0K
