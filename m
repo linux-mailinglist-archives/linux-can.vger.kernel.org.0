@@ -2,31 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E16298A4E
-	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 11:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4420E298A80
+	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 11:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1768912AbgJZKX1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Oct 2020 06:23:27 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58719 "EHLO
+        id S1769871AbgJZKdO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Oct 2020 06:33:14 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46349 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1768763AbgJZKX0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 06:23:26 -0400
+        with ESMTP id S1769865AbgJZKb6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 06:31:58 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kWzet-0001jT-Nt; Mon, 26 Oct 2020 11:23:23 +0100
+        id 1kWzn8-0002gX-Py; Mon, 26 Oct 2020 11:31:54 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953] (unknown [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 902CB582389;
-        Mon, 26 Oct 2020 10:23:21 +0000 (UTC)
-To:     yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc:     netdev@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
-References: <20201026094442.16587-1-yegorslists@googlemail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 93FD658239C;
+        Mon, 26 Oct 2020 10:31:53 +0000 (UTC)
+To:     Thomas.Kopp@microchip.com, linux-can@vger.kernel.org
+Cc:     mas@csselectronics.com
+References: <20201016205211.1141590-1-mkl@pengutronix.de>
+ <20201016205211.1141590-2-mkl@pengutronix.de>
+ <DM6PR11MB4283BE357EAC1D1D1FF08D60FB190@DM6PR11MB4283.namprd11.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -88,16 +90,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH] can: j1939: use backquotes for code samples
-Message-ID: <374efe56-58f2-22f2-f9e3-77d394719d51@pengutronix.de>
-Date:   Mon, 26 Oct 2020 11:23:16 +0100
+Subject: Re: [PATCH v2 1/3] can: mcp251xfd: mcp251xfd_chip_wake(): renamed
+ from mcp251xfd_chip_clock_enable()
+Message-ID: <2f08de26-1284-5b63-096f-7a9ec23ef620@pengutronix.de>
+Date:   Mon, 26 Oct 2020 11:31:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201026094442.16587-1-yegorslists@googlemail.com>
+In-Reply-To: <DM6PR11MB4283BE357EAC1D1D1FF08D60FB190@DM6PR11MB4283.namprd11.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="IwGB14ACflZucYFZpwxefrjf1bGG2ETMl"
+ boundary="hi2PqfKvwEFk5Tgh1yJfrVAcilvODE5E6"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -107,31 +110,49 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---IwGB14ACflZucYFZpwxefrjf1bGG2ETMl
-Content-Type: multipart/mixed; boundary="6OQmhEiQWO5gFPf60L29m2hgIq6Y3GSbf";
+--hi2PqfKvwEFk5Tgh1yJfrVAcilvODE5E6
+Content-Type: multipart/mixed; boundary="V11EJImE4uyUXlJaQKOnXXqz655vc6sij";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: yegorslists@googlemail.com, linux-can@vger.kernel.org
-Cc: netdev@vger.kernel.org, dev.kurt@vandijck-laurijssen.be
-Message-ID: <374efe56-58f2-22f2-f9e3-77d394719d51@pengutronix.de>
-Subject: Re: [PATCH] can: j1939: use backquotes for code samples
-References: <20201026094442.16587-1-yegorslists@googlemail.com>
-In-Reply-To: <20201026094442.16587-1-yegorslists@googlemail.com>
+To: Thomas.Kopp@microchip.com, linux-can@vger.kernel.org
+Cc: mas@csselectronics.com
+Message-ID: <2f08de26-1284-5b63-096f-7a9ec23ef620@pengutronix.de>
+Subject: Re: [PATCH v2 1/3] can: mcp251xfd: mcp251xfd_chip_wake(): renamed
+ from mcp251xfd_chip_clock_enable()
+References: <20201016205211.1141590-1-mkl@pengutronix.de>
+ <20201016205211.1141590-2-mkl@pengutronix.de>
+ <DM6PR11MB4283BE357EAC1D1D1FF08D60FB190@DM6PR11MB4283.namprd11.prod.outlook.com>
+In-Reply-To: <DM6PR11MB4283BE357EAC1D1D1FF08D60FB190@DM6PR11MB4283.namprd11.prod.outlook.com>
 
---6OQmhEiQWO5gFPf60L29m2hgIq6Y3GSbf
+--V11EJImE4uyUXlJaQKOnXXqz655vc6sij
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/26/20 10:44 AM, yegorslists@googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->=20
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+On 10/26/20 10:50 AM, Thomas.Kopp@microchip.com wrote:
+> This patch series works fine on my setup (RPI4, MCP2518FD, external 4 M=
+Hz
+> crystal).
 
-Please add a patch description for upcoming patches.
-Please don't re-wrap lines in the same patch as changing documentation.
+\o/ Thanks \o/
 
-I've fixed both while applying the patches to linux-can/testing.
+> Going through the code I noticed that the Min specified OSC frequency i=
+s
+> specified from 1 MHz to 40 MHz. Technically the DS only specifies 4,20 =
+and
+> 40MHz as crystal/resonator options and 2MHz input as the minimum extern=
+al
+> clock. 4 with PLL and 40 direct are the preferred options for CAN-FD. I=
+ think
+> the code is fine, given that the default is 40 MHz and it's the user's
+> responsibility to design in the part according to the DS. We could narr=
+ow
+> down the pll clockcheck to only allow 4 MHz though.
+
+I'll address this in my next patch series.
+
+> All 3 patches in this series:
+> Tested-by: Thomas Kopp <thomas.kopp@microchip.com>
 
 regards,
 Marc
@@ -143,23 +164,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---6OQmhEiQWO5gFPf60L29m2hgIq6Y3GSbf--
+--V11EJImE4uyUXlJaQKOnXXqz655vc6sij--
 
---IwGB14ACflZucYFZpwxefrjf1bGG2ETMl
+--hi2PqfKvwEFk5Tgh1yJfrVAcilvODE5E6
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+Wo5QACgkQqclaivrt
-76m67gf+MGPgnkhVlYigDrG/OEWPDVLYGWODiBIdRTiY72QzWtIFh9Kax3w8LO68
-hHDyzuM5OtIVhmlnsmGSVz3uTR+a18DURczGJ3s2Hszg9lSPIE2H+ignGd3QHUqn
-gtk/U/OP6NK5biX8sM6JAO3jrg4m6XQaLHg2T+1MfnWhQvYVg2lpmD8ur/dXU/je
-DGW96F8hkysnV1MFzfIHRHOKdD46l2cDlAyyOOXYBTaXI7mKfpmBCY4EatanZq+2
-aU/zLcPx8bhrvfyIhgVjLyzzymAL6/GnHY1VYeDNYiXz6fTvDZoNIx87w7e78Bnj
-z8tSBH5jP3ZXBIQuL6zRVMA18dbrYA==
-=I4Te
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+WpZUACgkQqclaivrt
+76mFXgf/VWIz/+I0bZpnlx3dcoFyLEJbkPgdEY7pjhVmFzcaSs42AV7RB8y7erXF
+yG2LvHQlgqFbehEMCiRND9pP5lfCNxvjf81UpDENgpEcNs0iXP89nez81xZwZUaf
+UxE20d4K+N4sdTRaqR7tVfj/PooBgLkE4Ftzq3MAKV/w6fJWJ/tSMGVjs9vPPIjM
+Wi0/Kzbtm9kMOzhXOX470arhABAbcamGeJUjcMhB7AFa1hHCbuf7Bb7VFO9EuWYv
+YMWOolABm1K9wdMGJkNU61XWNiLiJ4Y+4B2UWOVRX6lOEvZ9Q3s90BSuHCRYZbHB
+rHGET0Loxgt/i7NZMFWOm72uTjnC0Q==
+=vgad
 -----END PGP SIGNATURE-----
 
---IwGB14ACflZucYFZpwxefrjf1bGG2ETMl--
+--hi2PqfKvwEFk5Tgh1yJfrVAcilvODE5E6--
