@@ -2,32 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E332987DF
-	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 09:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4456A29898A
+	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 10:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1771132AbgJZIJI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Oct 2020 04:09:08 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57295 "EHLO
+        id S1767732AbgJZJk0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Oct 2020 05:40:26 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60907 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391154AbgJZIJH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 04:09:07 -0400
-X-Greylist: delayed 1499 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Oct 2020 04:09:07 EDT
+        with ESMTP id S1767709AbgJZJk0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 05:40:26 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kWxC6-00088M-9a; Mon, 26 Oct 2020 08:45:30 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953] (unknown [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953])
+        id 1kWyzH-0005Bq-7F; Mon, 26 Oct 2020 10:40:23 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953] (2a03-f580-87bc-d400-24e0-1461-d6e8-7953.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 53B0C581707;
-        Mon, 26 Oct 2020 07:45:29 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C97BD581F9E;
+        Mon, 26 Oct 2020 09:40:21 +0000 (UTC)
 Subject: Re: mcp251xfd on RPi 5.4 downstream
-To:     Patrick Menschel <menschel.p@posteo.de>,
-        Drew Fustini <drew@beagleboard.org>
+To:     Drew Fustini <drew@beagleboard.org>,
+        Patrick Menschel <menschel.p@posteo.de>
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
@@ -42,7 +41,6 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <0667516a-525e-9c4e-ec7a-e4d8a188c338@posteo.de>
  <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
  <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
- <4b986830-a923-e96c-64d4-22e8620e6725@posteo.de>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -104,15 +102,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <09c9ca32-2f5a-0ade-5fe9-0d6330ba3582@pengutronix.de>
-Date:   Mon, 26 Oct 2020 08:45:25 +0100
+Message-ID: <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
+Date:   Mon, 26 Oct 2020 10:40:18 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <4b986830-a923-e96c-64d4-22e8620e6725@posteo.de>
+In-Reply-To: <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="g7eIvuyQesXxhdZaLZlrcsr2KwEqBEwPb"
+ boundary="FAIixXpoRmwG1R0hnmPQQM1Tm3EJei04z"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -122,15 +120,15 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---g7eIvuyQesXxhdZaLZlrcsr2KwEqBEwPb
-Content-Type: multipart/mixed; boundary="J6aKsF5WO3hsA0rZqnRwXL2vC5qo3L7VM";
+--FAIixXpoRmwG1R0hnmPQQM1Tm3EJei04z
+Content-Type: multipart/mixed; boundary="1l4MYzJzqu8rO0P5G3L3BeVMZWTWwNVpV";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Patrick Menschel <menschel.p@posteo.de>,
- Drew Fustini <drew@beagleboard.org>
+To: Drew Fustini <drew@beagleboard.org>,
+ Patrick Menschel <menschel.p@posteo.de>
 Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
  Josh S <josh@macchina.cc>
-Message-ID: <09c9ca32-2f5a-0ade-5fe9-0d6330ba3582@pengutronix.de>
+Message-ID: <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
 Subject: Re: mcp251xfd on RPi 5.4 downstream
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj5HwFUTqhbgZ2Y5Db-_PPHNN7Rc8dnp1s+TBBALf5EwSw@mail.gmail.com>
@@ -144,22 +142,31 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <0667516a-525e-9c4e-ec7a-e4d8a188c338@posteo.de>
  <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
  <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
- <4b986830-a923-e96c-64d4-22e8620e6725@posteo.de>
-In-Reply-To: <4b986830-a923-e96c-64d4-22e8620e6725@posteo.de>
+In-Reply-To: <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
 
---J6aKsF5WO3hsA0rZqnRwXL2vC5qo3L7VM
+--1l4MYzJzqu8rO0P5G3L3BeVMZWTWwNVpV
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/26/20 6:16 AM, Patrick Menschel wrote:
-> I'm lacking hw currently, so I haven't tested yet.
+On 10/26/20 3:50 AM, Drew Fustini wrote:
+> I'm seeing this message which makes me think my issue is that I am not
+> setting the oscillator as a dtoverlay param.
 >=20
-> I believe OSC has to be set, so for a 40Mhz crystal
-> dtoverlay=3Dmcp251xfd-spi0-0,osc=3D40000000
+> [    6.873081] CAN device driver interface
+> [    6.879904] DEBUG mcp251xfd mcp251xfd_probe(): ENTER
+> [    6.880068] spi_master spi0: will run message pump with realtime pri=
+ority
+> [    6.921312] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+> Failed to detect MCP251xFD (osc=3D0x00000000).
+>=20
+> From /boot/config.txt
+>=20
+> [pi4]
+> dtoverlay=3Dmcp251xfd-spi0-0
 
-An OSC of 40 MHz is default, but you can overwrite it using
-"oscillator=3D<FREQ_IN_HZ>"
+Are you using CS0 of spi0?
+What's the frequency of your OSC?
 
 Marc
 
@@ -170,23 +177,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---J6aKsF5WO3hsA0rZqnRwXL2vC5qo3L7VM--
+--1l4MYzJzqu8rO0P5G3L3BeVMZWTWwNVpV--
 
---g7eIvuyQesXxhdZaLZlrcsr2KwEqBEwPb
+--FAIixXpoRmwG1R0hnmPQQM1Tm3EJei04z
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+WfpUACgkQqclaivrt
-76kwWQf/f+uxoP3jGqc2rQME58Hh5SwnIcHqcrafaaZkERD1Obyzwb4xbLQlYVqn
-LRgWCIjcqw1sApLVhA3Tp4kJ85dz2yxPk5nIS47aEs9fa21cs88ujiUuTQ/QzSaT
-JTV1RHwmXd8CBy/FbicUAmF23IBNh75O05rXwgWHDhBZFvTLjpTF37D5q6bc2khG
-wqlVnSJJqE0RUhV8aSsn+x/84wND+KBwBNy+k7hI0ArbhtNY3gdtJ4zkd8CghOtq
-YVTnvZ7F6zLxp6E6F2cU2ncLGixbISFuX8o7AyWJUH7JWj6Fv0ng4fJQukudXhBv
-ODIEF3Cu+rohQ6Sr8vKa6av0CegqVg==
-=mVCD
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+WmYIACgkQqclaivrt
+76k7ugf/R3LdRRVABxixVPQ20xWU7Q2liRr6dh4+XAKN9t4kNAk3iHHNtwjNoGxa
+mXA/hbj0Uf7IiwkOiibVIYnJUjz+1x6f9IVQMetTGhHSmePYjjtCsdRsASdnyPKy
+cERHKpKQ0IUdxWA5MbG6s4ww9oUoZTtrRoG9+i4nEk/tZot6uTunvzujgpLmZ3EE
+rM6HSCbyTo64B5+hoMSjGk9S29hkwWgkL+QxuhlSw8Q1QiPPcIZ5ddsgahjKYBm1
+0nwRzHb7agWkv6JIJRY9DRmLKk6shRB/JNBkzYTF92Pirnx7HyNmHAxA6k1UODzF
+R/ym6GqauIJwpQCHxGlNjXgWoV0n2A==
+=xC3F
 -----END PGP SIGNATURE-----
 
---g7eIvuyQesXxhdZaLZlrcsr2KwEqBEwPb--
+--FAIixXpoRmwG1R0hnmPQQM1Tm3EJei04z--
