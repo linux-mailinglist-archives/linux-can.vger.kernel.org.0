@@ -2,182 +2,190 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E96D8298E47
-	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 14:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E5F298F9C
+	for <lists+linux-can@lfdr.de>; Mon, 26 Oct 2020 15:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1780405AbgJZNla (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Oct 2020 09:41:30 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37437 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1780396AbgJZNla (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 09:41:30 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kX2kR-0001pc-NQ; Mon, 26 Oct 2020 14:41:19 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953] (unknown [IPv6:2a03:f580:87bc:d400:24e0:1461:d6e8:7953])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A04DA5825DA;
-        Mon, 26 Oct 2020 13:41:14 +0000 (UTC)
-Subject: Re: [PATCH net] can: peak_usb: add range checking in decode
- operations
-To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andri Yngvason <andri.yngvason@marel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>
-References: <20200813140604.GA456946@mwanda>
- <VI1PR03MB5053AC24D22445459C5FAF0CD6190@VI1PR03MB5053.eurprd03.prod.outlook.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <22a213df-5033-70da-0797-1d0727520d9e@pengutronix.de>
-Date:   Mon, 26 Oct 2020 14:41:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1781807AbgJZOlY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Oct 2020 10:41:24 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:38426 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1781798AbgJZOlT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Oct 2020 10:41:19 -0400
+Received: by mail-io1-f70.google.com with SMTP id e21so6026909iod.5
+        for <linux-can@vger.kernel.org>; Mon, 26 Oct 2020 07:41:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=2HM/wCeXg7cLFuWJ8AHGUKtpGpttFNH8NsHAu4nzABU=;
+        b=V9QMyUW8MIk48lxB0FUJPbTpKtSp9uWOPqJr4lPu08yNzTfWxI0Zn1FEHDRh1XResP
+         XhdQ3ox12AUBFcoxDqo90gTJyQ/sCU11nDhtJlW739j0VsqoKGkR7ww6CNzyQperCB1L
+         C26JxkQdFfeZ4XAYViYehhjBAQkXGV6/qF2nPLEgwdCjuB/+6qSUlOlOQMmOU1gNYegY
+         MFsSuKSK3k3kSeC7wsekj8Pxsbc8dslb0vdeAHU8qmpTnLr+t/U6j/WcBi1LOWTCciUt
+         nKYGc3UgVgqr53LgXg1uc7v6Pu8nrDg3/Wo6yNWbXPMhXjLAqdqsUPI77icwuo7YIGek
+         6CLg==
+X-Gm-Message-State: AOAM531mIAXNhBJw21UFbJyJdnYdqq1LPuCN/rSFe22/3bDNRtAAGnbB
+        aHboHq9O+vGyemwS+b2CSFzMuf6EKYIQoV3qjxUL1ZDDPfi5
+X-Google-Smtp-Source: ABdhPJwNlQL+qJ6qgdwblfAgQPlcIcbRuu03KJz+bAqJRGV+u2B9AgR1dyf8aIlbX2nDWxC/Jb8+f0zjCMsj1NkcWY4IIq/NuEpa
 MIME-Version: 1.0
-In-Reply-To: <VI1PR03MB5053AC24D22445459C5FAF0CD6190@VI1PR03MB5053.eurprd03.prod.outlook.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="snynCzNzqxKniaos0OyWXShiO7DNDMXkF"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-Received: by 2002:a6b:5a17:: with SMTP id o23mr8648240iob.101.1603723276443;
+ Mon, 26 Oct 2020 07:41:16 -0700 (PDT)
+Date:   Mon, 26 Oct 2020 07:41:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000035e65c05b293ec0e@google.com>
+Subject: KASAN: use-after-free Read in j1939_xtp_rx_dat_one
+From:   syzbot <syzbot+220c1a29987a9a490903@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---snynCzNzqxKniaos0OyWXShiO7DNDMXkF
-Content-Type: multipart/mixed; boundary="6kn5cEE0GiTmDVO5IhFz1trl0OXKiBaal";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>,
- Dan Carpenter <dan.carpenter@oracle.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
- <kuba@kernel.org>, Andri Yngvason <andri.yngvason@marel.com>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
- Wolfgang Grandegger <wg@grandegger.com>
-Message-ID: <22a213df-5033-70da-0797-1d0727520d9e@pengutronix.de>
-Subject: Re: [PATCH net] can: peak_usb: add range checking in decode
- operations
-References: <20200813140604.GA456946@mwanda>
- <VI1PR03MB5053AC24D22445459C5FAF0CD6190@VI1PR03MB5053.eurprd03.prod.outlook.com>
-In-Reply-To: <VI1PR03MB5053AC24D22445459C5FAF0CD6190@VI1PR03MB5053.eurprd03.prod.outlook.com>
+Hello,
 
---6kn5cEE0GiTmDVO5IhFz1trl0OXKiBaal
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following issue on:
 
-On 10/26/20 2:28 PM, St=C3=A9phane Grosjean wrote:
-> =E2=80=8B=E2=80=8BHello Dan,
->=20
-> You have my Ack.
->=20
-> Acked-by: Stephane Grosjean <s.grosjean@peak-system.com>
+HEAD commit:    0adc313c Merge tag 'gfs2-for-5.10' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=134ebaef900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df5c8291513455a2
+dashboard link: https://syzkaller.appspot.com/bug?extid=220c1a29987a9a490903
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+userspace arch: i386
 
-Applied to linux-can/testing.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Tnx,
-Marc
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+220c1a29987a9a490903@syzkaller.appspotmail.com
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+vcan0: j1939_xtp_rx_dat_one: 0x000000009262b4a1: Data of RX-looped back packet (00 ff ff ff ff ff ff) doesn't match TX data (00 00 00 00 00 00 00)!
+==================================================================
+BUG: KASAN: use-after-free in j1939_xtp_rx_dat_one+0x108d/0x1130 net/can/j1939/transport.c:1825
+Read of size 1 at addr ffff8880219f308e by task ksoftirqd/0/10
+
+CPU: 0 PID: 10 Comm: ksoftirqd/0 Not tainted 5.9.0-syzkaller #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba5276e321-prebuilt.qemu.org 04/01/2014
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xae/0x4c8 mm/kasan/report.c:385
+ __kasan_report mm/kasan/report.c:545 [inline]
+ kasan_report.cold+0x1f/0x37 mm/kasan/report.c:562
+ j1939_xtp_rx_dat_one+0x108d/0x1130 net/can/j1939/transport.c:1825
+ j1939_xtp_rx_dat net/can/j1939/transport.c:1875 [inline]
+ j1939_tp_recv+0x544/0xb40 net/can/j1939/transport.c:2057
+ j1939_can_recv+0x5bc/0x7d0 net/can/j1939/main.c:101
+ deliver net/can/af_can.c:571 [inline]
+ can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:605
+ can_receive+0x2e3/0x520 net/can/af_can.c:662
+ can_rcv+0x12a/0x1a0 net/can/af_can.c:688
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5311
+ __netif_receive_skb+0x27/0x1c0 net/core/dev.c:5425
+ process_backlog+0x232/0x6c0 net/core/dev.c:6315
+ napi_poll net/core/dev.c:6759 [inline]
+ net_rx_action+0x4dc/0x1100 net/core/dev.c:6829
+ __do_softirq+0x2a0/0x9f6 kernel/softirq.c:298
+ run_ksoftirqd kernel/softirq.c:653 [inline]
+ run_ksoftirqd+0x2d/0x50 kernel/softirq.c:645
+ smpboot_thread_fn+0x655/0x9e0 kernel/smpboot.c:165
+ kthread+0x3af/0x4a0 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:296
+
+Allocated by task 15076:
+ kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+ kasan_set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:461
+ slab_post_alloc_hook mm/slab.h:526 [inline]
+ slab_alloc_node mm/slub.c:2891 [inline]
+ kmem_cache_alloc_node+0x132/0x480 mm/slub.c:2927
+ __alloc_skb+0x71/0x550 net/core/skbuff.c:198
+ alloc_skb include/linux/skbuff.h:1094 [inline]
+ alloc_skb_with_frags+0x92/0x570 net/core/skbuff.c:5832
+ sock_alloc_send_pskb+0x72a/0x880 net/core/sock.c:2329
+ j1939_sk_alloc_skb net/can/j1939/socket.c:857 [inline]
+ j1939_sk_send_loop net/can/j1939/socket.c:1039 [inline]
+ j1939_sk_sendmsg+0x6bb/0x1380 net/can/j1939/socket.c:1174
+ sock_sendmsg_nosec net/socket.c:651 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:671
+ sock_no_sendpage+0xee/0x130 net/core/sock.c:2833
+ kernel_sendpage.part.0+0x1ab/0x350 net/socket.c:3646
+ kernel_sendpage net/socket.c:3643 [inline]
+ sock_sendpage+0xe5/0x140 net/socket.c:944
+ pipe_to_sendpage+0x2ad/0x380 fs/splice.c:364
+ splice_from_pipe_feed fs/splice.c:418 [inline]
+ __splice_from_pipe+0x3dc/0x830 fs/splice.c:562
+ splice_from_pipe fs/splice.c:597 [inline]
+ generic_splice_sendpage+0xd4/0x140 fs/splice.c:743
+ do_splice_from fs/splice.c:764 [inline]
+ do_splice+0xbb8/0x1790 fs/splice.c:1061
+ __do_sys_splice fs/splice.c:1306 [inline]
+ __se_sys_splice fs/splice.c:1288 [inline]
+ __ia32_sys_splice+0x195/0x250 fs/splice.c:1288
+ do_syscall_32_irqs_on arch/x86/entry/common.c:78 [inline]
+ __do_fast_syscall_32+0x56/0x80 arch/x86/entry/common.c:137
+ do_fast_syscall_32+0x2f/0x70 arch/x86/entry/common.c:160
+ entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+
+Freed by task 22:
+ kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+ kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
+ kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
+ __kasan_slab_free+0x102/0x140 mm/kasan/common.c:422
+ slab_free_hook mm/slub.c:1544 [inline]
+ slab_free_freelist_hook+0x5d/0x150 mm/slub.c:1577
+ slab_free mm/slub.c:3142 [inline]
+ kmem_cache_free+0x82/0x350 mm/slub.c:3158
+ kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:622
+ __kfree_skb net/core/skbuff.c:679 [inline]
+ kfree_skb net/core/skbuff.c:696 [inline]
+ kfree_skb+0x140/0x3f0 net/core/skbuff.c:690
+ j1939_session_skb_drop_old net/can/j1939/transport.c:333 [inline]
+ j1939_xtp_rx_cts_one net/can/j1939/transport.c:1394 [inline]
+ j1939_xtp_rx_cts+0xb59/0xec0 net/can/j1939/transport.c:1433
+ j1939_tp_cmd_recv net/can/j1939/transport.c:2001 [inline]
+ j1939_tp_recv+0x8be/0xb40 net/can/j1939/transport.c:2067
+ j1939_can_recv+0x5bc/0x7d0 net/can/j1939/main.c:101
+ deliver net/can/af_can.c:571 [inline]
+ can_rcv_filter+0x5d4/0x8d0 net/can/af_can.c:605
+ can_receive+0x2e3/0x520 net/can/af_can.c:662
+ can_rcv+0x12a/0x1a0 net/can/af_can.c:688
+ __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5311
+ __netif_receive_skb+0x27/0x1c0 net/core/dev.c:5425
+ process_backlog+0x232/0x6c0 net/core/dev.c:6315
+ napi_poll net/core/dev.c:6759 [inline]
+ net_rx_action+0x4dc/0x1100 net/core/dev.c:6829
+ __do_softirq+0x2a0/0x9f6 kernel/softirq.c:298
+
+The buggy address belongs to the object at ffff8880219f3040
+ which belongs to the cache skbuff_head_cache of size 224
+The buggy address is located 78 bytes inside of
+ 224-byte region [ffff8880219f3040, ffff8880219f3120)
+The buggy address belongs to the page:
+page:000000007e0b9bbc refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x219f2
+head:000000007e0b9bbc order:1 compound_mapcount:0
+flags: 0xfff00000010200(slab|head)
+raw: 00fff00000010200 dead000000000100 dead000000000122 ffff88804030a500
+raw: 0000000000000000 0000000000190019 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8880219f2f80: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+ ffff8880219f3000: fc fc fc fc fc fc fc fc fa fb fb fb fb fb fb fb
+>ffff8880219f3080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                      ^
+ ffff8880219f3100: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880219f3180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
 
---6kn5cEE0GiTmDVO5IhFz1trl0OXKiBaal--
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---snynCzNzqxKniaos0OyWXShiO7DNDMXkF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+W0fUACgkQqclaivrt
-76nnhQgAl6+Fb5/ZrCTi01YRbiLyOBNunHKJQ26DhzVt5pSidGdvrj2aSVVfPj5N
-1bX0qYIekwYbAt4Mt2VrERaYD+K9cTalVCHTAgDwD0jY5PHzwNSF6V5NHnoGKrlh
-e0Bftf7aXi/N/wYxQlviOAwUZRBykH9duA6GceylGBO/6DUWwWkIZxWXAZttjA9Q
-Dfypihooj/pyLZZOItOvPFk0emKJYueZLRRAimXwxGPXu/dz5C/WvlYaErW+WzqC
-/rdTcac+82N0Zqs3fMp+VJYxvi0+yf+FifaR9bqT6mSn6oBWNy8LkoAKHoJJsdwK
-eTckJZ7qdtG3/OcTsnoHVTx03cXVjw==
-=zpgy
------END PGP SIGNATURE-----
-
---snynCzNzqxKniaos0OyWXShiO7DNDMXkF--
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
