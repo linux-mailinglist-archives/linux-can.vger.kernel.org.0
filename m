@@ -2,181 +2,189 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AC429E0CF
-	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 02:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76DAA29E307
+	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 03:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729471AbgJ1WDC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Oct 2020 18:03:02 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:11673 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728814AbgJ1WBE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Oct 2020 18:01:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1603922462;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=a1JKuin+rnjLC1y4tRaqPs+7iA9DtzmjM4NtI7IY9rM=;
-        b=qOVqCPD3/0wZMdLLKsUn1NQT6N/sP+UEv4e7D4FbAA2BTYEPFW3ZqspgR2vYN+S/Bp
-        qHGoddVTrztesuN98R8R8Gcr/byFaFQFRyTR6wK3ccDTUNMPzpqO90ilGk5jZsQxLZti
-        /ycY872u8q39ELBPfRBRvAE2VT2Jo/KjQ3Xl9Qd338DNRBuZg7LlokX7ULZ+KIzVr5y/
-        PlR3Kgvr5pnVqHyLxE+inT1Nxfa+WzWNWqJ4cFc/N8prh7g5jLlBSNPd5MkMIXR33TDU
-        oy+jKuZF2xuBBIcBzl05Rb63MXxFpckN+fzbb5Szto1hF4JZ5ms+hRSykk+z2NZH1hv9
-        1ngA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejudJy4jsSjttw=="
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-        by smtp.strato.de (RZmta 47.2.3 DYNA|AUTH)
-        with ESMTPSA id J01b14w9SB100RN
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 28 Oct 2020 12:01:00 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     mailhol.vincent@wanadoo.fr, mkl@pengutronix.de
-Cc:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH 3/4] can: remove obsolete get_canfd_dlc() macro
-Date:   Wed, 28 Oct 2020 12:00:32 +0100
-Message-Id: <20201028110033.113702-4-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201028110033.113702-1-socketcan@hartkopp.net>
+        id S1726546AbgJ2Coi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Oct 2020 22:44:38 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54481 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726556AbgJ1VeW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Oct 2020 17:34:22 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kXjEi-0006lF-P1; Wed, 28 Oct 2020 12:03:24 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:9a81:bf61:4515:808d] (unknown [IPv6:2a03:f580:87bc:d400:9a81:bf61:4515:808d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A237E583D28;
+        Wed, 28 Oct 2020 11:03:23 +0000 (UTC)
+Subject: Re: [PATCH 3/4] can: remove obsolete get_canfd_dlc() macro
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        mailhol.vincent@wanadoo.fr
+Cc:     linux-can@vger.kernel.org
 References: <20201028110033.113702-1-socketcan@hartkopp.net>
+ <20201028110033.113702-4-socketcan@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <57b153c5-d243-3a13-e643-1e64d60fc4df@pengutronix.de>
+Date:   Wed, 28 Oct 2020 12:03:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201028110033.113702-4-socketcan@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The macro was always used together with can_dlc2len() which sanitizes the
-given dlc value on its own.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs
+Content-Type: multipart/mixed; boundary="FWsADq8yyMlmjEHDklTn1896BrSkb6iDd";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, mailhol.vincent@wanadoo.fr
+Cc: linux-can@vger.kernel.org
+Message-ID: <57b153c5-d243-3a13-e643-1e64d60fc4df@pengutronix.de>
+Subject: Re: [PATCH 3/4] can: remove obsolete get_canfd_dlc() macro
+References: <20201028110033.113702-1-socketcan@hartkopp.net>
+ <20201028110033.113702-4-socketcan@hartkopp.net>
+In-Reply-To: <20201028110033.113702-4-socketcan@hartkopp.net>
 
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- drivers/net/can/flexcan.c                         | 2 +-
- drivers/net/can/peak_canfd/peak_canfd.c           | 2 +-
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    | 2 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c        | 2 +-
- include/linux/can/dev.h                           | 1 -
- include/linux/can/dev/peak_canfd.h                | 2 +-
- 7 files changed, 6 insertions(+), 7 deletions(-)
+--FWsADq8yyMlmjEHDklTn1896BrSkb6iDd
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index b30e3171cbd0..137f46705814 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -996,11 +996,11 @@ static struct sk_buff *flexcan_mailbox_read(struct can_rx_offload *offload,
- 		cfd->can_id = ((reg_id >> 0) & CAN_EFF_MASK) | CAN_EFF_FLAG;
- 	else
- 		cfd->can_id = (reg_id >> 18) & CAN_SFF_MASK;
- 
- 	if (reg_ctrl & FLEXCAN_MB_CNT_EDL) {
--		cfd->len = can_dlc2len(get_canfd_dlc((reg_ctrl >> 16) & 0xf));
-+		cfd->len = can_dlc2len((u8)((reg_ctrl >> 16) & 0xf));
- 
- 		if (reg_ctrl & FLEXCAN_MB_CNT_BRS)
- 			cfd->flags |= CANFD_BRS;
- 	} else {
- 		cfd->len = can_get_cc_len((reg_ctrl >> 16) & 0xf);
-diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
-index dc94ea6821c3..cc01db0c18b8 100644
---- a/drivers/net/can/peak_canfd/peak_canfd.c
-+++ b/drivers/net/can/peak_canfd/peak_canfd.c
-@@ -255,11 +255,11 @@ static int pucan_handle_can_rx(struct peak_canfd_priv *priv,
- 	struct sk_buff *skb;
- 	const u16 rx_msg_flags = le16_to_cpu(msg->flags);
- 	u8 cf_len;
- 
- 	if (rx_msg_flags & PUCAN_MSG_EXT_DATA_LEN)
--		cf_len = can_dlc2len(get_canfd_dlc(pucan_msg_get_dlc(msg)));
-+		cf_len = can_dlc2len(pucan_msg_get_dlc(msg));
- 	else
- 		cf_len = can_get_cc_len(pucan_msg_get_dlc(msg));
- 
- 	/* if this frame is an echo, */
- 	if (rx_msg_flags & PUCAN_MSG_LOOPED_BACK) {
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index ae9e9bafba23..fdc245774c3e 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1403,11 +1403,11 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
- 
- 		if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_BRS)
- 			cfd->flags |= CANFD_BRS;
- 
- 		dlc = FIELD_GET(MCP251XFD_OBJ_FLAGS_DLC, hw_rx_obj->flags);
--		cfd->len = can_dlc2len(get_canfd_dlc(dlc));
-+		cfd->len = can_dlc2len(dlc);
- 	} else {
- 		if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_RTR)
- 			cfd->can_id |= CAN_RTR_FLAG;
- 
- 		cfd->len = can_get_cc_len(FIELD_GET(MCP251XFD_OBJ_FLAGS_DLC,
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index 1626f73337ab..b2d56bb1950a 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -1249,11 +1249,11 @@ static void kvaser_usb_hydra_rx_msg_ext(const struct kvaser_usb *dev,
- 
- 	if (flags & KVASER_USB_HYDRA_CF_FLAG_OVERRUN)
- 		kvaser_usb_can_rx_over_error(priv->netdev);
- 
- 	if (flags & KVASER_USB_HYDRA_CF_FLAG_FDF) {
--		cf->len = can_dlc2len(get_canfd_dlc(dlc));
-+		cf->len = can_dlc2len(dlc);
- 		if (flags & KVASER_USB_HYDRA_CF_FLAG_BRS)
- 			cf->flags |= CANFD_BRS;
- 		if (flags & KVASER_USB_HYDRA_CF_FLAG_ESI)
- 			cf->flags |= CANFD_ESI;
- 	} else {
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index cf32bcfabba3..57dfa443c995 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -490,11 +490,11 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb_fd_if *usb_if,
- 			cfd->flags |= CANFD_BRS;
- 
- 		if (rx_msg_flags & PUCAN_MSG_ERROR_STATE_IND)
- 			cfd->flags |= CANFD_ESI;
- 
--		cfd->len = can_dlc2len(get_canfd_dlc(pucan_msg_get_dlc(rm)));
-+		cfd->len = can_dlc2len(pucan_msg_get_dlc(rm));
- 	} else {
- 		/* CAN 2.0 frame case */
- 		skb = alloc_can_skb(netdev, (struct can_frame **)&cfd);
- 		if (!skb)
- 			return -ENOMEM;
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 0a51f3c9cfec..41b897965376 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -103,11 +103,10 @@ static inline unsigned int can_bit_time(const struct can_bittiming *bt)
-  *
-  * To be used in the CAN netdriver receive path to ensure conformance with
-  * ISO 11898-1 Chapter 8.4.2.3 (DLC field)
-  */
- #define can_get_cc_len(i)	(min_t(u8, (i), CAN_MAX_DLEN))
--#define get_canfd_dlc(i)	(min_t(u8, (i), CANFD_MAX_DLC))
- 
- /* Check for outgoing skbs that have not been created by the CAN subsystem */
- static inline bool can_skb_headroom_valid(struct net_device *dev,
- 					  struct sk_buff *skb)
- {
-diff --git a/include/linux/can/dev/peak_canfd.h b/include/linux/can/dev/peak_canfd.h
-index 5fd627e9da19..f38772fd0c07 100644
---- a/include/linux/can/dev/peak_canfd.h
-+++ b/include/linux/can/dev/peak_canfd.h
-@@ -280,11 +280,11 @@ static inline int pucan_msg_get_channel(const struct pucan_rx_msg *msg)
- {
- 	return msg->channel_dlc & 0xf;
- }
- 
- /* return the dlc value from any received message channel_dlc field */
--static inline int pucan_msg_get_dlc(const struct pucan_rx_msg *msg)
-+static inline u8 pucan_msg_get_dlc(const struct pucan_rx_msg *msg)
- {
- 	return msg->channel_dlc >> 4;
- }
- 
- static inline int pucan_ermsg_get_channel(const struct pucan_error_msg *msg)
--- 
-2.28.0
+On 10/28/20 12:00 PM, Oliver Hartkopp wrote:
+> The macro was always used together with can_dlc2len() which sanitizes t=
+he
+> given dlc value on its own.
+>=20
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> ---
+>  drivers/net/can/flexcan.c                         | 2 +-
+>  drivers/net/can/peak_canfd/peak_canfd.c           | 2 +-
+>  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    | 2 +-
+>  drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
+>  drivers/net/can/usb/peak_usb/pcan_usb_fd.c        | 2 +-
+>  include/linux/can/dev.h                           | 1 -
+>  include/linux/can/dev/peak_canfd.h                | 2 +-
+>  7 files changed, 6 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index b30e3171cbd0..137f46705814 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -996,11 +996,11 @@ static struct sk_buff *flexcan_mailbox_read(struc=
+t can_rx_offload *offload,
+>  		cfd->can_id =3D ((reg_id >> 0) & CAN_EFF_MASK) | CAN_EFF_FLAG;
+>  	else
+>  		cfd->can_id =3D (reg_id >> 18) & CAN_SFF_MASK;
+> =20
+>  	if (reg_ctrl & FLEXCAN_MB_CNT_EDL) {
+> -		cfd->len =3D can_dlc2len(get_canfd_dlc((reg_ctrl >> 16) & 0xf));
+> +		cfd->len =3D can_dlc2len((u8)((reg_ctrl >> 16) & 0xf));
+                                       ^^^^
 
+where does this come from?
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--FWsADq8yyMlmjEHDklTn1896BrSkb6iDd--
+
+--Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ZT/cACgkQqclaivrt
+76kEJwf/dVm7M5dBaAWTUQczMgxcKg3oDd2DEUF8nxaTg40CduK8q3CBWaE5mPvN
+xtAMbCRRv8O2sEPXEX2UyFvb7sFm9Zm0O7KvOuxgqPMZewyZCxarRUxQFOlQ0tAY
+irq9A0swtPJlIyyJsF0UqlC8F3jtmW7kK23nQuIk5+9mFOA3xj5tRDEoXg5i+zer
+g9glP4dNr/uTVNSgYQGTir+euilffO0+cjuOQMTHCA3ceFYUPykw8dz1MIZ27uKx
+19cGLJVDOpHVF5BfVO591MXN1dPxtOYfFu6hG9qnYy5iPeOKNOAhtHDW1J8MLRUc
+8M+uDL/xc7nRqWbvwTRX14YpRp3rsA==
+=eTdZ
+-----END PGP SIGNATURE-----
+
+--Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs--
