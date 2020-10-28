@@ -2,34 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DAA29E307
-	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 03:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BAF29E310
+	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 03:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgJ2Coi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Oct 2020 22:44:38 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:54481 "EHLO
+        id S1729680AbgJ2Cox (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Oct 2020 22:44:53 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33747 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726556AbgJ1VeW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Oct 2020 17:34:22 -0400
+        with ESMTP id S1726069AbgJ1VeJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Oct 2020 17:34:09 -0400
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kXjEi-0006lF-P1; Wed, 28 Oct 2020 12:03:24 +0100
+        id 1kXkiV-0008Gu-GR; Wed, 28 Oct 2020 13:38:15 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:9a81:bf61:4515:808d] (unknown [IPv6:2a03:f580:87bc:d400:9a81:bf61:4515:808d])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A237E583D28;
-        Wed, 28 Oct 2020 11:03:23 +0000 (UTC)
-Subject: Re: [PATCH 3/4] can: remove obsolete get_canfd_dlc() macro
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 277C3583DF4;
+        Wed, 28 Oct 2020 12:38:14 +0000 (UTC)
+Subject: Re: [PATCH 4/4] can: rename can_dlc with len for all struct can_frame
+ users
 To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         mailhol.vincent@wanadoo.fr
 Cc:     linux-can@vger.kernel.org
 References: <20201028110033.113702-1-socketcan@hartkopp.net>
- <20201028110033.113702-4-socketcan@hartkopp.net>
+ <20201028110033.113702-5-socketcan@hartkopp.net>
+ <febc25d0-e715-1494-c972-0939ac46d481@pengutronix.de>
+ <63426205-95d1-6c2e-5551-746fd009fc86@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -91,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <57b153c5-d243-3a13-e643-1e64d60fc4df@pengutronix.de>
-Date:   Wed, 28 Oct 2020 12:03:18 +0100
+Message-ID: <4a2249b6-5fda-efb8-48af-c30709dc0bc2@pengutronix.de>
+Date:   Wed, 28 Oct 2020 13:38:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201028110033.113702-4-socketcan@hartkopp.net>
+In-Reply-To: <63426205-95d1-6c2e-5551-746fd009fc86@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs"
+ boundary="GuMVgSmMO3Kc7DRbgBP3A3tRrrg3Svd12"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,56 +112,185 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs
-Content-Type: multipart/mixed; boundary="FWsADq8yyMlmjEHDklTn1896BrSkb6iDd";
+--GuMVgSmMO3Kc7DRbgBP3A3tRrrg3Svd12
+Content-Type: multipart/mixed; boundary="kdXJLlxyiOEGhmXZGn07LVBaHfbx4L6K0";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>, mailhol.vincent@wanadoo.fr
 Cc: linux-can@vger.kernel.org
-Message-ID: <57b153c5-d243-3a13-e643-1e64d60fc4df@pengutronix.de>
-Subject: Re: [PATCH 3/4] can: remove obsolete get_canfd_dlc() macro
+Message-ID: <4a2249b6-5fda-efb8-48af-c30709dc0bc2@pengutronix.de>
+Subject: Re: [PATCH 4/4] can: rename can_dlc with len for all struct can_frame
+ users
 References: <20201028110033.113702-1-socketcan@hartkopp.net>
- <20201028110033.113702-4-socketcan@hartkopp.net>
-In-Reply-To: <20201028110033.113702-4-socketcan@hartkopp.net>
+ <20201028110033.113702-5-socketcan@hartkopp.net>
+ <febc25d0-e715-1494-c972-0939ac46d481@pengutronix.de>
+ <63426205-95d1-6c2e-5551-746fd009fc86@hartkopp.net>
+In-Reply-To: <63426205-95d1-6c2e-5551-746fd009fc86@hartkopp.net>
 
---FWsADq8yyMlmjEHDklTn1896BrSkb6iDd
+--kdXJLlxyiOEGhmXZGn07LVBaHfbx4L6K0
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/28/20 12:00 PM, Oliver Hartkopp wrote:
-> The macro was always used together with can_dlc2len() which sanitizes t=
-he
-> given dlc value on its own.
+On 10/28/20 12:54 PM, Oliver Hartkopp wrote:
 >=20
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->  drivers/net/can/flexcan.c                         | 2 +-
->  drivers/net/can/peak_canfd/peak_canfd.c           | 2 +-
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    | 2 +-
->  drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
->  drivers/net/can/usb/peak_usb/pcan_usb_fd.c        | 2 +-
->  include/linux/can/dev.h                           | 1 -
->  include/linux/can/dev/peak_canfd.h                | 2 +-
->  7 files changed, 6 insertions(+), 7 deletions(-)
 >=20
-> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-> index b30e3171cbd0..137f46705814 100644
-> --- a/drivers/net/can/flexcan.c
-> +++ b/drivers/net/can/flexcan.c
-> @@ -996,11 +996,11 @@ static struct sk_buff *flexcan_mailbox_read(struc=
-t can_rx_offload *offload,
->  		cfd->can_id =3D ((reg_id >> 0) & CAN_EFF_MASK) | CAN_EFF_FLAG;
->  	else
->  		cfd->can_id =3D (reg_id >> 18) & CAN_SFF_MASK;
-> =20
->  	if (reg_ctrl & FLEXCAN_MB_CNT_EDL) {
-> -		cfd->len =3D can_dlc2len(get_canfd_dlc((reg_ctrl >> 16) & 0xf));
-> +		cfd->len =3D can_dlc2len((u8)((reg_ctrl >> 16) & 0xf));
-                                       ^^^^
+> On 28.10.20 12:20, Marc Kleine-Budde wrote:
+>> On 10/28/20 12:00 PM, Oliver Hartkopp wrote:
+>>> Cleanup the can_dlc usage by renaming it with len from can_frame.len
+>>>
+>>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+>>
+>> [...]
+>>
+>>> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+>>> index 6dee4f8f2024..537dd4636c90 100644
+>>> --- a/drivers/net/can/dev.c
+>>> +++ b/drivers/net/can/dev.c
+>>> @@ -28,14 +28,14 @@ MODULE_AUTHOR("Wolfgang Grandegger <wg@grandegger=
+=2Ecom>");
+>>>   /* CAN DLC to real data length conversion helpers */
+>>>  =20
+>>>   static const u8 dlc2len[] =3D {0, 1, 2, 3, 4, 5, 6, 7,
+>>>   			     8, 12, 16, 20, 24, 32, 48, 64};
+>>>  =20
+>>> -/* get data length from can_dlc with sanitized can_dlc */
+>>> -u8 can_dlc2len(u8 can_dlc)
+>>> +/* get data length from dlc with sanitized len */
+>>> +u8 can_dlc2len(u8 dlc)
+>>>   {
+>>> -	return dlc2len[can_dlc & 0x0F];
+>>> +	return dlc2len[dlc & 0x0F];
+>>>   }
+>>>   EXPORT_SYMBOL_GPL(can_dlc2len);
+>>
+>> unrelated change.
+>=20
+> Probably the commit message has to be altered.
+> The plan is to remove can_dlc as it was misnamed/misused.
 
-where does this come from?
+Make it so!
+> In this specific case we provide a real (raw) dlc and not the can_dlc=20
+> which was a length value.
 
+ok
+
+>> [...]
+>>
+>>
+>>> diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/ca=
+n/peak_canfd/peak_canfd.c
+>>> index cc01db0c18b8..c25cb53eba4e 100644
+>>> --- a/drivers/net/can/peak_canfd/peak_canfd.c
+>>> +++ b/drivers/net/can/peak_canfd/peak_canfd.c
+>>
+>> [...]
+>>
+>>> @@ -650,11 +650,11 @@ static netdev_tx_t peak_canfd_start_xmit(struct=
+ sk_buff *skb,
+>>>   	struct pucan_tx_msg *msg;
+>>>   	u16 msg_size, msg_flags;
+>>>   	unsigned long flags;
+>>>   	bool should_stop_tx_queue;
+>>>   	int room_left;
+>>> -	u8 can_dlc;
+>>> +	u8 len;
+>>
+>> unrelated change
+>=20
+> Same here. can_dlc was just wrong in all cases.
+
+ok
+
+>>>  =20
+>>>   	if (can_dropped_invalid_skb(ndev, skb))
+>>>   		return NETDEV_TX_OK;
+>>>  =20
+>>>   	msg_size =3D ALIGN(sizeof(*msg) + cf->len, 4);
+>>> @@ -680,22 +680,22 @@ static netdev_tx_t peak_canfd_start_xmit(struct=
+ sk_buff *skb,
+>>>   		msg->can_id =3D cpu_to_le32(cf->can_id & CAN_SFF_MASK);
+>>>   	}
+>>>  =20
+>>>   	if (can_is_canfd_skb(skb)) {
+>>>   		/* CAN FD frame format */
+>>> -		can_dlc =3D can_len2dlc(cf->len);
+>>> +		len =3D can_len2dlc(cf->len);
+>>>  =20
+>>>   		msg_flags |=3D PUCAN_MSG_EXT_DATA_LEN;
+>>>  =20
+>>>   		if (cf->flags & CANFD_BRS)
+>>>   			msg_flags |=3D PUCAN_MSG_BITRATE_SWITCH;
+>>>  =20
+>>>   		if (cf->flags & CANFD_ESI)
+>>>   			msg_flags |=3D PUCAN_MSG_ERROR_STATE_IND;
+>>>   	} else {
+>>>   		/* CAN 2.0 frame format */
+>>> -		can_dlc =3D cf->len;
+>>> +		len =3D cf->len;
+>>>  =20
+>>>   		if (cf->can_id & CAN_RTR_FLAG)
+>>>   			msg_flags |=3D PUCAN_MSG_RTR;
+>>>   	}
+>>>  =20
+>>> @@ -705,11 +705,11 @@ static netdev_tx_t peak_canfd_start_xmit(struct=
+ sk_buff *skb,
+>>>   	/* set driver specific bit to differentiate with application loopb=
+ack */
+>>>   	if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+>>>   		msg_flags |=3D PUCAN_MSG_SELF_RECEIVE;
+>>>  =20
+>>>   	msg->flags =3D cpu_to_le16(msg_flags);
+>>> -	msg->channel_dlc =3D PUCAN_MSG_CHANNEL_DLC(priv->index, can_dlc);
+>>> +	msg->channel_dlc =3D PUCAN_MSG_CHANNEL_DLC(priv->index, len);
+>>>   	memcpy(msg->d, cf->data, cf->len);
+>>>  =20
+>>>   	/* struct msg client field is used as an index in the echo skbs ri=
+ng */
+>>>   	msg->client =3D priv->echo_idx;
+>>>  =20
+>>
+>> [...]
+>>
+>>> diff --git a/drivers/net/can/softing/softing_fw.c b/drivers/net/can/s=
+ofting/softing_fw.c
+>>> index ccd649a8e37b..7e1536877993 100644
+>>> --- a/drivers/net/can/softing/softing_fw.c
+>>> +++ b/drivers/net/can/softing/softing_fw.c
+>>> @@ -622,11 +622,11 @@ int softing_startstop(struct net_device *dev, i=
+nt up)
+>>>   	 * from here, no errors should occur, or the failed: part
+>>>   	 * must be reviewed
+>>>   	 */
+>>>   	memset(&msg, 0, sizeof(msg));
+>>>   	msg.can_id =3D CAN_ERR_FLAG | CAN_ERR_RESTARTED;
+>>> -	msg.can_dlc =3D CAN_ERR_DLC;
+>>> +	msg.len =3D CAN_ERR_DLC;
+>>
+>> unrelated?
+>=20
+> No, definitely not. msg is a struct can_frame. Therefore 'len' should b=
+e=20
+> used.
+
+I missed that. tnx.
+
+> When implementing the stuff for len8_dlc we are now very clear where we=
+=20
+> have a length value and where we have a data length code.
+>=20
+> (..) (skipping tons of 'same here?')
+>=20
+>>> -/* get data length from can_dlc with sanitized can_dlc */
+>>> -u8 can_dlc2len(u8 can_dlc);
+>>> +/* get data length from dlc with sanitized len */
+>>> +u8 can_dlc2len(u8 dlc);
+>>
+>> unrealted?
+>=20
+> Same as at its first occurance. Remove can_dlc from the radar.
+
+regards,
 Marc
 
 --=20
@@ -168,23 +300,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---FWsADq8yyMlmjEHDklTn1896BrSkb6iDd--
+--kdXJLlxyiOEGhmXZGn07LVBaHfbx4L6K0--
 
---Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs
+--GuMVgSmMO3Kc7DRbgBP3A3tRrrg3Svd12
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ZT/cACgkQqclaivrt
-76kEJwf/dVm7M5dBaAWTUQczMgxcKg3oDd2DEUF8nxaTg40CduK8q3CBWaE5mPvN
-xtAMbCRRv8O2sEPXEX2UyFvb7sFm9Zm0O7KvOuxgqPMZewyZCxarRUxQFOlQ0tAY
-irq9A0swtPJlIyyJsF0UqlC8F3jtmW7kK23nQuIk5+9mFOA3xj5tRDEoXg5i+zer
-g9glP4dNr/uTVNSgYQGTir+euilffO0+cjuOQMTHCA3ceFYUPykw8dz1MIZ27uKx
-19cGLJVDOpHVF5BfVO591MXN1dPxtOYfFu6hG9qnYy5iPeOKNOAhtHDW1J8MLRUc
-8M+uDL/xc7nRqWbvwTRX14YpRp3rsA==
-=eTdZ
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ZZjAACgkQqclaivrt
+76kYRwf/XXCJ7SP2iSAybGQv+89ItVqZahAxmhwWYffAzdFD+7v/HrVze/J6cvrb
+mhQIwE43789J8EU201mexoB9MOV1poUmR3SvP9ydjRF2WO3/D/nhsRzBBzU4/I4O
+iP9bWgCRvmPakT/F4ONVuf9HYeSi2QSCZzk3QJ25r54FtpNE16F/TO3r+KKr+2QK
+mttAI3jTz2sY4qVgEuA2iSLlkrf9JcCvY3k1FrCu7vDeaibx7UJCreMLxK0HPHBW
+rtzPicZT1HB/6FeYOzqaUhb0qSGjKRVkRq7FozhcjWBrHfSAAdhWFUcmo2CcMIjR
+LjC8RPkEgzHkOsqGlquFVqFFjvHCLQ==
+=CDgH
 -----END PGP SIGNATURE-----
 
---Oec8A5CIxpDAV5y9IOBr0iuG5H0x1FuTs--
+--GuMVgSmMO3Kc7DRbgBP3A3tRrrg3Svd12--
