@@ -2,327 +2,169 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F00CB29E7C8
-	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 10:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7398D29E7EE
+	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 10:56:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725980AbgJ2Juk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 29 Oct 2020 05:50:40 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:17437 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbgJ2Juk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Oct 2020 05:50:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1603965035;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=MGPGZzA2Jxemu5POOEqa+fVJy7QBNQ0VUv7Bygx6zO0=;
-        b=NG0VgdycgOEP6LGSiXabgbE1YLtQ0Mwp1t1VmHcJMwj9Ha4afogoh0Pj5QKUczigUf
-        wp4QKBjzaNbqJawjqGLgvPSnEfKYIC2x+TKWveGb+sUAY2bm7jpAfDtQcD6BY7Yu3Ier
-        fO5oVqzD5DaRUDcP+KSRkTJCxZvYWCYnEiQSVjMyArZLiaB+xPyJ3MqYwYwNWPKd7EPh
-        qzW18bMK5x6zcB2fF5jiIoK3UjmZntGW3pP2/CdyUvjJEBlXa1qb26YTfbkBl0pf6MQC
-        leplKFf88smePQ3mBm1VK6bHD+qc3/87RrsblSIdiUBAZyyyHculefEPzkAI6gsgvULe
-        eG8w==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOM1ppw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-        by smtp.strato.de (RZmta 47.3.0 DYNA|AUTH)
-        with ESMTPSA id L010bew9T9oW0vP
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Thu, 29 Oct 2020 10:50:32 +0100 (CET)
+        id S1726775AbgJ2J4u (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 29 Oct 2020 05:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51018 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725779AbgJ2J4u (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Oct 2020 05:56:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E559C0613D5
+        for <linux-can@vger.kernel.org>; Thu, 29 Oct 2020 02:56:50 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kY4fo-0006VD-S9; Thu, 29 Oct 2020 10:56:48 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:ff11:c9c6:9242:6723] (unknown [IPv6:2a03:f580:87bc:d400:ff11:c9c6:9242:6723])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B50C2584AAC;
+        Thu, 29 Oct 2020 09:56:47 +0000 (UTC)
 Subject: Re: [PATCH testing-only] can-dev: implement len8_dlc in some CAN USB
  adapters for testing
-To:     mkl@pengutronix.de, mailhol.vincent@wanadoo.fr
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        mailhol.vincent@wanadoo.fr
 Cc:     linux-can@vger.kernel.org
 References: <20201029083258.41569-1-socketcan@hartkopp.net>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <d58008e9-3e07-73b4-27bb-ac5eeebacc0f@hartkopp.net>
-Date:   Thu, 29 Oct 2020 10:50:28 +0100
+ <d58008e9-3e07-73b4-27bb-ac5eeebacc0f@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <8818b66d-a986-fb7a-b80b-985ec0d750f5@pengutronix.de>
+Date:   Thu, 29 Oct 2020 10:56:43 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201029083258.41569-1-socketcan@hartkopp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <d58008e9-3e07-73b4-27bb-ac5eeebacc0f@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="HtEBXYeBZfLiNLwqTTNCn3TXMEIbfLObA"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Info: usb8dev and gs_usb work as expected.
-The hack for the PCAN FD adapter crashes the system - I have to look 
-into it ...
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--HtEBXYeBZfLiNLwqTTNCn3TXMEIbfLObA
+Content-Type: multipart/mixed; boundary="6Rh9EQdtzHA1fLiGz3bo4i1qTz3EtP7h9";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, mailhol.vincent@wanadoo.fr
+Cc: linux-can@vger.kernel.org
+Message-ID: <8818b66d-a986-fb7a-b80b-985ec0d750f5@pengutronix.de>
+Subject: Re: [PATCH testing-only] can-dev: implement len8_dlc in some CAN USB
+ adapters for testing
+References: <20201029083258.41569-1-socketcan@hartkopp.net>
+ <d58008e9-3e07-73b4-27bb-ac5eeebacc0f@hartkopp.net>
+In-Reply-To: <d58008e9-3e07-73b4-27bb-ac5eeebacc0f@hartkopp.net>
 
-On 29.10.20 09:32, Oliver Hartkopp wrote:
-> Namely those that are in mainline and I currently have on my desk ...
-> 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> ---
->   drivers/net/can/usb/gs_usb.c               |  8 ++++++--
->   drivers/net/can/usb/peak_usb/pcan_usb.c    |  8 ++++++--
->   drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 16 +++++++++++-----
->   drivers/net/can/usb/usb_8dev.c             | 10 ++++++----
->   include/linux/can/dev.h                    | 15 +++++++++++++++
->   5 files changed, 44 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-> index 3a097c240e5a..fab6ed073e45 100644
-> --- a/drivers/net/can/usb/gs_usb.c
-> +++ b/drivers/net/can/usb/gs_usb.c
-> @@ -330,10 +330,13 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
->   			return;
->   
->   		cf->can_id = hf->can_id;
->   
->   		cf->len = can_get_cc_len(hf->len);
-> +		cf->len8_dlc = can_get_len8_dlc(dev->can.ctrlmode, cf->len,
-> +						hf->len);
-> +
->   		memcpy(cf->data, hf->data, 8);
->   
->   		/* ERROR frames tell us information about the controller */
->   		if (hf->can_id & CAN_ERR_FLAG)
->   			gs_update_state(dev, cf);
-> @@ -502,11 +505,12 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
->   	hf->channel = dev->channel;
->   
->   	cf = (struct can_frame *)skb->data;
->   
->   	hf->can_id = cf->can_id;
-> -	hf->len = cf->len;
-> +	hf->len = can_get_cc_dlc(dev->can.ctrlmode, cf->len, cf->len8_dlc);
-> +
->   	memcpy(hf->data, cf->data, cf->len);
->   
->   	usb_fill_bulk_urb(urb, dev->udev,
->   			  usb_sndbulkpipe(dev->udev, GSUSB_ENDPOINT_OUT),
->   			  hf,
-> @@ -856,11 +860,11 @@ static struct gs_can *gs_make_candev(unsigned int channel,
->   	dev->can.state = CAN_STATE_STOPPED;
->   	dev->can.clock.freq = bt_const->fclk_can;
->   	dev->can.bittiming_const = &dev->bt_const;
->   	dev->can.do_set_bittiming = gs_usb_set_bittiming;
->   
-> -	dev->can.ctrlmode_supported = 0;
-> +	dev->can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC;
->   
->   	if (bt_const->feature & GS_CAN_FEATURE_LISTEN_ONLY)
->   		dev->can.ctrlmode_supported |= CAN_CTRLMODE_LISTENONLY;
->   
->   	if (bt_const->feature & GS_CAN_FEATURE_LOOP_BACK)
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
-> index abecb77e34f2..105a17dc8075 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-> @@ -733,10 +733,12 @@ static int pcan_usb_decode_data(struct pcan_usb_msg_context *mc, u8 status_len)
->   
->   		cf->can_id = le16_to_cpu(tmp16) >> 5;
->   	}
->   
->   	cf->len = can_get_cc_len(rec_len);
-> +	cf->len8_dlc = can_get_len8_dlc(mc->pdev->dev.can.ctrlmode, cf->len,
-> +					rec_len);
->   
->   	/* Only first packet timestamp is a word */
->   	if (pcan_usb_decode_ts(mc, !mc->rec_ts_idx))
->   		goto decode_failed;
->   
-> @@ -836,11 +838,12 @@ static int pcan_usb_encode_msg(struct peak_usb_device *dev, struct sk_buff *skb,
->   	obuf[1] = 1;
->   
->   	pc = obuf + PCAN_USB_MSG_HEADER_LEN;
->   
->   	/* status/len byte */
-> -	*pc = cf->len;
-> +	*pc = can_get_cc_dlc(dev->can.ctrlmode, cf->len, cf->len8_dlc);
-> +
->   	if (cf->can_id & CAN_RTR_FLAG)
->   		*pc |= PCAN_USB_STATUSLEN_RTR;
->   
->   	/* can id */
->   	if (cf->can_id & CAN_EFF_FLAG) {
-> @@ -990,11 +993,12 @@ static const struct can_bittiming_const pcan_usb_const = {
->   const struct peak_usb_adapter pcan_usb = {
->   	.name = "PCAN-USB",
->   	.device_id = PCAN_USB_PRODUCT_ID,
->   	.ctrl_count = 1,
->   	.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY |
-> -			      CAN_CTRLMODE_BERR_REPORTING,
-> +			      CAN_CTRLMODE_BERR_REPORTING |
-> +			      CAN_CTRLMODE_CC_LEN8_DLC,
->   	.clock = {
->   		.freq = PCAN_USB_CRYSTAL_HZ / 2 ,
->   	},
->   	.bittiming_const = &pcan_usb_const,
->   
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> index 3e875cdbadac..3ed30ab79784 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-> @@ -492,16 +492,20 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb_fd_if *usb_if,
->   		if (rx_msg_flags & PUCAN_MSG_ERROR_STATE_IND)
->   			cfd->flags |= CANFD_ESI;
->   
->   		cfd->len = can_dlc2len(pucan_msg_get_dlc(rm));
->   	} else {
-> +		struct can_frame *cf = (struct can_frame *)cfd;
-> +
->   		/* CAN 2.0 frame case */
->   		skb = alloc_can_skb(netdev, (struct can_frame **)&cfd);
->   		if (!skb)
->   			return -ENOMEM;
->   
->   		cfd->len = can_get_cc_len(pucan_msg_get_dlc(rm));
-> +		cf->len8_dlc = can_get_len8_dlc(dev->can.ctrlmode, cf->len,
-> +						pucan_msg_get_dlc(rm));
->   	}
->   
->   	cfd->can_id = le32_to_cpu(rm->can_id);
->   
->   	if (rx_msg_flags & PUCAN_MSG_EXT_ID)
-> @@ -764,12 +768,14 @@ static int pcan_usb_fd_encode_msg(struct peak_usb_device *dev,
->   			tx_msg_flags |= PUCAN_MSG_BITRATE_SWITCH;
->   
->   		if (cfd->flags & CANFD_ESI)
->   			tx_msg_flags |= PUCAN_MSG_ERROR_STATE_IND;
->   	} else {
-> +		struct can_frame *cf = (struct can_frame *)cfd;
-> +
->   		/* CAND 2.0 frames */
-> -		len = cfd->len;
-> +		len = can_get_cc_dlc(dev->can.ctrlmode, cf->len, cf->len8_dlc);
->   
->   		if (cfd->can_id & CAN_RTR_FLAG)
->   			tx_msg_flags |= PUCAN_MSG_RTR;
->   	}
->   
-> @@ -1033,11 +1039,11 @@ static const struct can_bittiming_const pcan_usb_fd_data_const = {
->   
->   const struct peak_usb_adapter pcan_usb_fd = {
->   	.name = "PCAN-USB FD",
->   	.device_id = PCAN_USBFD_PRODUCT_ID,
->   	.ctrl_count = PCAN_USBFD_CHANNEL_COUNT,
-> -	.ctrlmode_supported = CAN_CTRLMODE_FD |
-> +	.ctrlmode_supported = CAN_CTRLMODE_FD | CAN_CTRLMODE_CC_LEN8_DLC |
->   			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
->   	.clock = {
->   		.freq = PCAN_UFD_CRYSTAL_HZ,
->   	},
->   	.bittiming_const = &pcan_usb_fd_const,
-> @@ -1105,11 +1111,11 @@ static const struct can_bittiming_const pcan_usb_chip_data_const = {
->   
->   const struct peak_usb_adapter pcan_usb_chip = {
->   	.name = "PCAN-Chip USB",
->   	.device_id = PCAN_USBCHIP_PRODUCT_ID,
->   	.ctrl_count = PCAN_USBFD_CHANNEL_COUNT,
-> -	.ctrlmode_supported = CAN_CTRLMODE_FD |
-> +	.ctrlmode_supported = CAN_CTRLMODE_FD | CAN_CTRLMODE_CC_LEN8_DLC |
->   		CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
->   	.clock = {
->   		.freq = PCAN_UFD_CRYSTAL_HZ,
->   	},
->   	.bittiming_const = &pcan_usb_chip_const,
-> @@ -1177,11 +1183,11 @@ static const struct can_bittiming_const pcan_usb_pro_fd_data_const = {
->   
->   const struct peak_usb_adapter pcan_usb_pro_fd = {
->   	.name = "PCAN-USB Pro FD",
->   	.device_id = PCAN_USBPROFD_PRODUCT_ID,
->   	.ctrl_count = PCAN_USBPROFD_CHANNEL_COUNT,
-> -	.ctrlmode_supported = CAN_CTRLMODE_FD |
-> +	.ctrlmode_supported = CAN_CTRLMODE_FD | CAN_CTRLMODE_CC_LEN8_DLC |
->   			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
->   	.clock = {
->   		.freq = PCAN_UFD_CRYSTAL_HZ,
->   	},
->   	.bittiming_const = &pcan_usb_pro_fd_const,
-> @@ -1249,11 +1255,11 @@ static const struct can_bittiming_const pcan_usb_x6_data_const = {
->   
->   const struct peak_usb_adapter pcan_usb_x6 = {
->   	.name = "PCAN-USB X6",
->   	.device_id = PCAN_USBX6_PRODUCT_ID,
->   	.ctrl_count = PCAN_USBPROFD_CHANNEL_COUNT,
-> -	.ctrlmode_supported = CAN_CTRLMODE_FD |
-> +	.ctrlmode_supported = CAN_CTRLMODE_FD | CAN_CTRLMODE_CC_LEN8_DLC |
->   			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
->   	.clock = {
->   		.freq = PCAN_UFD_CRYSTAL_HZ,
->   	},
->   	.bittiming_const = &pcan_usb_x6_const,
-> diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-> index 8aedb2ba37fb..940f1720297e 100644
-> --- a/drivers/net/can/usb/usb_8dev.c
-> +++ b/drivers/net/can/usb/usb_8dev.c
-> @@ -469,11 +469,12 @@ static void usb_8dev_rx_can_msg(struct usb_8dev_priv *priv,
->   		if (!skb)
->   			return;
->   
->   		cf->can_id = be32_to_cpu(msg->id);
->   		cf->len = can_get_cc_len(msg->dlc & 0xF);
-> -
-> +		cf->len8_dlc = can_get_len8_dlc(priv->can.ctrlmode, cf->len,
-> +						msg->dlc & 0xF);
->   		if (msg->flags & USB_8DEV_EXTID)
->   			cf->can_id |= CAN_EFF_FLAG;
->   
->   		if (msg->flags & USB_8DEV_RTR)
->   			cf->can_id |= CAN_RTR_FLAG;
-> @@ -635,11 +636,11 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
->   
->   	if (cf->can_id & CAN_EFF_FLAG)
->   		msg->flags |= USB_8DEV_EXTID;
->   
->   	msg->id = cpu_to_be32(cf->can_id & CAN_ERR_MASK);
-> -	msg->dlc = cf->len;
-> +	msg->dlc = can_get_cc_dlc(priv->can.ctrlmode, cf->len, cf->len8_dlc);
->   	memcpy(msg->data, cf->data, cf->len);
->   	msg->end = USB_8DEV_DATA_END;
->   
->   	for (i = 0; i < MAX_TX_URBS; i++) {
->   		if (priv->tx_contexts[i].echo_index == MAX_TX_URBS) {
-> @@ -925,12 +926,13 @@ static int usb_8dev_probe(struct usb_interface *intf,
->   	priv->can.clock.freq = USB_8DEV_ABP_CLOCK;
->   	priv->can.bittiming_const = &usb_8dev_bittiming_const;
->   	priv->can.do_set_mode = usb_8dev_set_mode;
->   	priv->can.do_get_berr_counter = usb_8dev_get_berr_counter;
->   	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-> -				      CAN_CTRLMODE_LISTENONLY |
-> -				      CAN_CTRLMODE_ONE_SHOT;
-> +				       CAN_CTRLMODE_LISTENONLY |
-> +				       CAN_CTRLMODE_ONE_SHOT |
-> +				       CAN_CTRLMODE_CC_LEN8_DLC;
->   
->   	netdev->netdev_ops = &usb_8dev_netdev_ops;
->   
->   	netdev->flags |= IFF_ECHO; /* we support local echo */
->   
-> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-> index 45018fbad35f..dd7cc705c81a 100644
-> --- a/include/linux/can/dev.h
-> +++ b/include/linux/can/dev.h
-> @@ -168,10 +168,25 @@ static inline bool can_is_canfd_skb(const struct sk_buff *skb)
->   {
->   	/* the CAN specific type of skb is identified by its data length */
->   	return skb->len == CANFD_MTU;
->   }
->   
-> +static inline u8 can_check_len8_dlc(u32 ctrlmode, u8 len, u8 dlc, u8 ret)
-> +{
-> +	/* return value for len8_dlc only if all conditions apply */
-> +	if ((ctrlmode & CAN_CTRLMODE_CC_LEN8_DLC) &&
-> +	    (len == CAN_MAX_DLEN) &&
-> +	    (dlc > CAN_MAX_DLEN && dlc <= CAN_MAX_RAW_DLC))
-> +		ret = dlc;
-> +
-> +	/* no valid len8_dlc value -> return provided default value */
-> +	return ret;
-> +}
-> +
-> +#define can_get_len8_dlc(cm, len, dlc) can_check_len8_dlc(cm, len, dlc, 0)
-> +#define can_get_cc_dlc(cm, len, dlc) can_check_len8_dlc(cm, len, dlc, len)
-> +
->   /* helper to define static CAN controller features at device creation time */
->   static inline void can_set_static_ctrlmode(struct net_device *dev,
->   					   u32 static_mode)
->   {
->   	struct can_priv *priv = netdev_priv(dev);
-> 
+--6Rh9EQdtzHA1fLiGz3bo4i1qTz3EtP7h9
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 10/29/20 10:50 AM, Oliver Hartkopp wrote:
+> Info: usb8dev and gs_usb work as expected.
+
+Which gs_usb are you using? The original one, or the candelight?
+
+> The hack for the PCAN FD adapter crashes the system - I have to look=20
+> into it ...
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--6Rh9EQdtzHA1fLiGz3bo4i1qTz3EtP7h9--
+
+--HtEBXYeBZfLiNLwqTTNCn3TXMEIbfLObA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+akdsACgkQqclaivrt
+76kbAQf/cQtxeY577gnI5uhC+05O6N1ORJ+NXfttqhnYOJByg065MkiSR2qiOSHB
+qOaDph/O0yVAqtE3/m2gTGFOL4x7gPwLRnY9c3lIVePJauBSkbud6zIN98uGb7ma
+Jz0mqcParDAoa2v+I7F42OIGHD2ji5csVv6n0rFP5WlYRLq5vv7YXi/1HjfRwQhP
+vb/NEZucPkdTGtjC7WiMDSA/0Wkgg9PwhG864cS+Zn0akywJ1YBhXo2wAs950TZC
+ZMFQEACcu3bhuyNuzoCJTQMOEgtKu9Hl3iLYDjLDRpgi1dFZLd1x37qqFRAmLLy7
+R/5iJhvhwToI3+jAzYE/lMIJXCeBMw==
+=FsTY
+-----END PGP SIGNATURE-----
+
+--HtEBXYeBZfLiNLwqTTNCn3TXMEIbfLObA--
