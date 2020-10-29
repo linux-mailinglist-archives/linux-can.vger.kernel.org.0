@@ -2,202 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB5029E309
-	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 03:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F2329E5A1
+	for <lists+linux-can@lfdr.de>; Thu, 29 Oct 2020 09:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbgJ2Coj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Oct 2020 22:44:39 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60685 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726553AbgJ1VeU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Oct 2020 17:34:20 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kXqgG-0005Mt-4Y; Wed, 28 Oct 2020 20:00:20 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:9a81:bf61:4515:808d] (unknown [IPv6:2a03:f580:87bc:d400:9a81:bf61:4515:808d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0710158408C;
-        Wed, 28 Oct 2020 19:00:18 +0000 (UTC)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        mailhol.vincent@wanadoo.fr
-Cc:     linux-can@vger.kernel.org
-References: <20201028180940.2071-1-socketcan@hartkopp.net>
- <20201028180940.2071-4-socketcan@hartkopp.net>
- <9eac8c67-694d-9fb7-5d44-272df37d0946@pengutronix.de>
- <674a183a-ab3c-a916-c5bd-9cc3d0a37de4@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH v2 3/4] can: remove obsolete get_canfd_dlc() macro
-Message-ID: <49fc0520-5786-c94a-2004-4703663b0a41@pengutronix.de>
-Date:   Wed, 28 Oct 2020 20:00:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1725999AbgJ2ICh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 29 Oct 2020 04:02:37 -0400
+Received: from mail-eopbgr70051.outbound.protection.outlook.com ([40.107.7.51]:47249
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725939AbgJ2IBX (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 29 Oct 2020 04:01:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RNt0I8IWM93591QirYm4epKIt+nn3eDOhCmIH1vlImLmblg/QuVvwDd5hqw+rdU0M15KoAVPnabOUSaVbHcfgLiAnUpCOYpG5NsP5DAZKJPJNRgWhS6c2NDoRmrPEWHiy9zocO0FrCJUIf8x6O7RdpSRjySdjdpxV+S7dSOvM67CpWLETZ4+855DeeL90xGKfMVHlY+Feh3tN0qZpWa2doEgAxI32qhchoqX+Hwbl4gUrnqHvGzFkDYIZx0VxDqEpzWnrlYc2++rTiYCZGlKa1eFBioqiEpDEhN4RK21Y4s3XkZXuhFR4R8UwE2+JoBj69NSwbPMpfyB1fstKahigg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fMjbAvf2/a0wePsQJiTDVWjZ7+XWwjwjJh9FrVQckTw=;
+ b=AQH02RXsLmHpoOjBhbReIYesiqI71mqBcFybAHYgz0twlqz0szB1f0vPXh5u0wGgu53lKYlKVvT9w9RjKl/X1zod2qZ5WApyl+gVZLjDm/4aibtQo8senqeXixRDa5AAH6hC6PWfJtVycmnRCpY6vp95SFqv21/xJccXx5cXtoo55eQ4hoJ5mQhbYQoikxSKxl93/sabeatt7u9DKPeUuQwXhoGXInr68/1vYeC8v8aKXcEo/Owo73FOUtRXQUnb+ymnp15ZbL/UjBR49p1GNL9HB22dZw/GU2iLktdoDBJiJFob0PA6vk92DINTx3BPTVSCKdU8pESWtz9ZHtZiGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fMjbAvf2/a0wePsQJiTDVWjZ7+XWwjwjJh9FrVQckTw=;
+ b=XV9ZCc2Y5SK3dQPALidOXZ7Z3dCDgOaLgsFLrTgrwFsJTDIYx+BgMbuppnhE9zWUrMT0JaDIkxTXe3MuntbkSShYr/nkJ9dWKL4/UFUkSzvUaO95L/bITe0o4MiM1AifRbsNibbYSlYeD4OKXwwUxOdHtSvKwWPctnBGAQcTKWA=
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
+ by DB8PR04MB6971.eurprd04.prod.outlook.com (2603:10a6:10:113::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Thu, 29 Oct
+ 2020 03:27:45 +0000
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::3c3a:58b9:a1cc:cbcc]) by DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::3c3a:58b9:a1cc:cbcc%8]) with mapi id 15.20.3499.027; Thu, 29 Oct 2020
+ 03:27:45 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>, Ying Liu <victor.liu@nxp.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V4 0/6] can: flexcan: add stop mode support for i.MX8QM
+Thread-Topic: [PATCH V4 0/6] can: flexcan: add stop mode support for i.MX8QM
+Thread-Index: AQHWp2pf20/YUdBzdkWpWOmwjarHMamhhkvQgAxxAyA=
+Date:   Thu, 29 Oct 2020 03:27:45 +0000
+Message-ID: <DB8PR04MB6795CA4DF4BD1D0F4A678AC9E6140@DB8PR04MB6795.eurprd04.prod.outlook.com>
+References: <20201021052437.3763-1-qiangqing.zhang@nxp.com>
+ <DB8PR04MB6795A27E2E3D66186A8720DCE61C0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+In-Reply-To: <DB8PR04MB6795A27E2E3D66186A8720DCE61C0@DB8PR04MB6795.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-Mentions: shawnguo@kernel.org
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 878cfabc-cdd2-4e8d-04cc-08d87bba9a73
+x-ms-traffictypediagnostic: DB8PR04MB6971:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR04MB697182A1F285703AF589BB74E6140@DB8PR04MB6971.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:972;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rZkLWd+BVPdVPPWUCIvTsodpdN211ac7PC6Q6Oi6HI2CqHTkdcNo/MNm5DOMJ16pMAwZj1W8mmGjFkRS0Np2/ocifYGnL7SUsgkFMxdFDZvNat62yhUuuHA0p8l9lLWmrAKB1o72Y5w9I3KwGJ/fE+QZQpDt/BbUDJszkqtlUYWXF/8wG27v1jdfsM7uQjJV3B0waT+pZqwqHu65y+0XBWu+IjOJxU7UmehhCpEQynyYmFPQtqruSFIIC2PaZkc4zRSBWaKBkUoPwfRyj9UMd+MiFgrnzw5Zz4uVuI6alIpbwUCY4O6lc/d1P2fOtxyu
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(39860400002)(376002)(136003)(346002)(83380400001)(2906002)(186003)(7696005)(33656002)(4326008)(53546011)(26005)(9686003)(6506007)(55016002)(478600001)(5660300002)(86362001)(64756008)(76116006)(66946007)(66476007)(66446008)(66556008)(71200400001)(8676002)(316002)(8936002)(52536014)(54906003)(110136005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: x9WuqQNwI65nTFVlGb0focmYtHoyAjiWdg3X1lsnaFH3a5lbia0jhMS6ezHl3cQB8r/qIo0CTHsjYI0/a3Az15QcddPa0Yq8/pKAcNyNb/HwJ6Xj503ztOVZIx9mPP7t+XRO7rGrELG6ouPJ/89UGk7K6PKh1ONvsI4NcLuyYbhyqhYcMCpWGyCeKhRemQJzFEN9ahRndJHgz/RYb//mbP/J4IjfyXfPINARcy+tFLHpHWkU01bWJuQ1Emh9RS7aomlqNJYFPTGyjzrhyTWeJT+gu1B+nyk5Zb0phXt6H/Qy1Zlc6Z6wwLTppesJjBBm1I3Cz01CFNqWEL2i0OKyHDeSOZzz0QfRYSjHClfqpg3F2R9sDIusb4x7ZnLc/TWimgMihAds05Xk4kwqK4DmQQavBAepFmAImK48Bb/zuk5+UsBQDxW0MsDfrRyY82CTpOAu12TRWVg9gaLQzVxuOvFtzcVzAgndi+jtscH2OOnvX9hCPk3XsiOGCAbMDx/DMP8YcyG0rfYqz71xv+vN1Ahn+G8nTK0MH/o/BioCRmkmu5/mrT3PwfcegLkcCNbAWR6Mi/rQcZNglvyL0aKbwwmSbHXg88wLcX3AQyOtomKVVRze6X2rvc+BKh6qdK9MVOsBwAfZR1segjddzP0Q/A==
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <674a183a-ab3c-a916-c5bd-9cc3d0a37de4@hartkopp.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="7S5pbahvk1PqbqNxVZEo2n1cvBYse7s64"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 878cfabc-cdd2-4e8d-04cc-08d87bba9a73
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2020 03:27:45.7381
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oR0+a+QUOHUe9FLDPhS/myud5AZKOHfHygVpJubBWFyyTxKKE282p9nuHPpCntWezW7Fab0NMEKokRQFeVhdNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6971
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---7S5pbahvk1PqbqNxVZEo2n1cvBYse7s64
-Content-Type: multipart/mixed; boundary="vrNDIP61KGuDbcnSL5LV1na9GA3QdLacy";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, mailhol.vincent@wanadoo.fr
-Cc: linux-can@vger.kernel.org
-Message-ID: <49fc0520-5786-c94a-2004-4703663b0a41@pengutronix.de>
-Subject: Re: [PATCH v2 3/4] can: remove obsolete get_canfd_dlc() macro
-References: <20201028180940.2071-1-socketcan@hartkopp.net>
- <20201028180940.2071-4-socketcan@hartkopp.net>
- <9eac8c67-694d-9fb7-5d44-272df37d0946@pengutronix.de>
- <674a183a-ab3c-a916-c5bd-9cc3d0a37de4@hartkopp.net>
-In-Reply-To: <674a183a-ab3c-a916-c5bd-9cc3d0a37de4@hartkopp.net>
-
---vrNDIP61KGuDbcnSL5LV1na9GA3QdLacy
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 10/28/20 7:55 PM, Oliver Hartkopp wrote:
->=20
->=20
-> On 28.10.20 19:34, Marc Kleine-Budde wrote:
->> On 10/28/20 7:09 PM, Oliver Hartkopp wrote:
->>> The macro was always used together with can_dlc2len() which sanitizes=
- the
->>> given dlc value on its own.
->>>
->>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
->>> ---
->>>   drivers/net/can/flexcan.c                         | 2 +-
->>>   drivers/net/can/peak_canfd/peak_canfd.c           | 2 +-
->>>   drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    | 2 +-
->>>   drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 2 +-
->>>   drivers/net/can/usb/peak_usb/pcan_usb_fd.c        | 2 +-
->>>   include/linux/can/dev.h                           | 1 -
->>>   include/linux/can/dev/peak_canfd.h                | 2 +-
->>>   7 files changed, 6 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
->>> index b30e3171cbd0..137f46705814 100644
->>> --- a/drivers/net/can/flexcan.c
->>> +++ b/drivers/net/can/flexcan.c
->>> @@ -996,11 +996,11 @@ static struct sk_buff *flexcan_mailbox_read(str=
-uct can_rx_offload *offload,
->>>   		cfd->can_id =3D ((reg_id >> 0) & CAN_EFF_MASK) | CAN_EFF_FLAG;
->>>   	else
->>>   		cfd->can_id =3D (reg_id >> 18) & CAN_SFF_MASK;
->>>  =20
->>>   	if (reg_ctrl & FLEXCAN_MB_CNT_EDL) {
->>> -		cfd->len =3D can_dlc2len(get_canfd_dlc((reg_ctrl >> 16) & 0xf));
->>> +		cfd->len =3D can_dlc2len((u8)((reg_ctrl >> 16) & 0xf));
->>
->> Where does the u8 come from? The can_dlc2len() only takes an u8, so th=
-e cast is
->> not needed.
->=20
-> But reg_ctrl is u32. No need for a cast here?
-
-No, not needed.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---vrNDIP61KGuDbcnSL5LV1na9GA3QdLacy--
-
---7S5pbahvk1PqbqNxVZEo2n1cvBYse7s64
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+Zv74ACgkQqclaivrt
-76l3mAf/RGtvzUtkJyw7bTynz8la+lHP+wkAjem7fHZWkIbzYRJ9JkXSTZBmYMPu
-ItA4MQFFvt6e9Tb++R39D7vZn8bms5uD6G8A/vP9llkdZyaPeigvObbrqQafdZsg
-BleqiRUx4T6jJPsET9o9JJPg6mJCPWjVTYfsbT1t7yymn6I5WjeqLfwDTOpUz8kf
-fhtKK+ndth7hbnNS8Dbis5OkPyzYILAkSG9iOYWbobhHGWEGJQJpWKoCJO9YG6zI
-4YFww/wIkbskHjuJtuIodPU4R0zNfdR1CCN6uwlkA6JtobkiitVRXTCRYZxQl/jE
-NMNTQzNIrezbnL2QXbCSTORh+FtN2A==
-=HbbA
------END PGP SIGNATURE-----
-
---7S5pbahvk1PqbqNxVZEo2n1cvBYse7s64--
+DQpHZW50bGUgUGluZy4uLg0KDQpAc2hhd25ndW9Aa2VybmVsLm9yZywgQ291bGQgeW91IHBsZWFz
+ZSBoZWxwIHJldmlldyBwYXRjaCAxLzYgYW5kIDUvNiBpbiB0aGlzIHBhdGNoIHNldD8NCg0KQmVz
+dCBSZWdhcmRzLA0KSm9ha2ltIFpoYW5nDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0N
+Cj4gRnJvbTogSm9ha2ltIFpoYW5nIDxxaWFuZ3FpbmcuemhhbmdAbnhwLmNvbT4NCj4gU2VudDog
+MjAyMMTqMTDUwjIxyNUgMTM6MzMNCj4gVG86IG1rbEBwZW5ndXRyb25peC5kZTsgcm9iaCtkdEBr
+ZXJuZWwub3JnOyBzaGF3bmd1b0BrZXJuZWwub3JnOw0KPiBzLmhhdWVyQHBlbmd1dHJvbml4LmRl
+DQo+IENjOiBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7IGRsLWxpbnV4LWlteCA8bGludXgtaW14QG54
+cC5jb20+OyBZaW5nIExpdQ0KPiA8dmljdG9yLmxpdUBueHAuY29tPjsgbGludXgtY2FuQHZnZXIu
+a2VybmVsLm9yZzsgbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIu
+a2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSRTogW1BBVENIIFY0IDAvNl0gY2FuOiBmbGV4Y2FuOiBh
+ZGQgc3RvcCBtb2RlIHN1cHBvcnQgZm9yIGkuTVg4UU0NCj4gDQo+IA0KPiA+IC0tLS0tT3JpZ2lu
+YWwgTWVzc2FnZS0tLS0tDQo+ID4gRnJvbTogSm9ha2ltIFpoYW5nIDxxaWFuZ3FpbmcuemhhbmdA
+bnhwLmNvbT4NCj4gPiBTZW50OiAyMDIwxOoxMNTCMjHI1SAxMzoyNQ0KPiA+IFRvOiBta2xAcGVu
+Z3V0cm9uaXguZGU7IHJvYmgrZHRAa2VybmVsLm9yZzsgc2hhd25ndW9Aa2VybmVsLm9yZzsNCj4g
+PiBzLmhhdWVyQHBlbmd1dHJvbml4LmRlDQo+ID4gQ2M6IGtlcm5lbEBwZW5ndXRyb25peC5kZTsg
+ZGwtbGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT47IFlpbmcgTGl1DQo+ID4gPHZpY3Rvci5s
+aXVAbnhwLmNvbT47IGxpbnV4LWNhbkB2Z2VyLmtlcm5lbC5vcmc7DQo+ID4gbmV0ZGV2QHZnZXIu
+a2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiA+IFN1YmplY3Q6IFtQ
+QVRDSCBWNCAwLzZdIGNhbjogZmxleGNhbjogYWRkIHN0b3AgbW9kZSBzdXBwb3J0IGZvcg0KPiA+
+IGkuTVg4UU0NCj4gPg0KPiA+IFRoZSBmaXJzdCBwYXRjaCBmcm9tIExpdSBZaW5nIGFpbXMgdG8g
+ZXhwb3J0IFNDVSBzeW1ib2xzIGZvciBTb0NzIHcvd28NCj4gPiBTQ1UsIHNvIHRoYXQgbm8gbmVl
+ZCB0byBjaGVjayBDT05GSUdfSU1YX1NDVSBpbiB0aGUgc3BlY2lmaWMgZHJpdmVyLg0KPiA+DQo+
+ID4gVGhlIGZvbGxvd2luZyBwYXRjaGVzIGFyZSBmbGV4Y2FuIGZpeGVzIGFuZCBhZGQgc3RvcCBt
+b2RlIHN1cHBvcnQgZm9yDQo+ID4gaS5NWDhRTS4NCj4gDQo+IEhpIFNoYXduZ3VvLA0KPiANCj4g
+Q291bGQgeW91IHBsZWFzZSBoZWxwIHJldmlldyBwYXRjaCAxLzYgYW5kIDUvNj8gU2luY2UgZmxl
+eGNhbiBkcml2ZXIgZGVwZW5kcw0KPiBvbiB0aGVzZS4gVGhhbmtzLg0KPiANCj4gRm9yIHBhdGNo
+IDEvNiwgaXQgd2lsbCBiZW5lZml0IG90aGVyIGRyaXZlcnMgd2hpY2ggY292ZXIgU29DcyB3L3dv
+IFNDVSwgc3VjaCBhcw0KPiBpLk1YIEV0aGVybmV0IENvbnRyb2xsZXIgZHJpdmVyIChkcml2ZXJz
+L25ldC9ldGhlcm5ldC9mcmVlc2NhbGUvZmVjX21haW4uYykuDQo+IA0KPiBCZXN0IFJlZ2FyZHMs
+DQo+IEpvYWtpbSBaaGFuZw0KDQo=
