@@ -2,38 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE1E2A0E5C
-	for <lists+linux-can@lfdr.de>; Fri, 30 Oct 2020 20:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D022A0E62
+	for <lists+linux-can@lfdr.de>; Fri, 30 Oct 2020 20:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgJ3TNn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Oct 2020 15:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
+        id S1726297AbgJ3TPC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Oct 2020 15:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725900AbgJ3TNm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Oct 2020 15:13:42 -0400
+        with ESMTP id S1725900AbgJ3TPB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Oct 2020 15:15:01 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7AAC0613CF
-        for <linux-can@vger.kernel.org>; Fri, 30 Oct 2020 12:13:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A5EC0613CF
+        for <linux-can@vger.kernel.org>; Fri, 30 Oct 2020 12:15:01 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kYZqE-0003d6-2i
-        for linux-can@vger.kernel.org; Fri, 30 Oct 2020 20:13:38 +0100
+        id 1kYZrQ-0003lR-KG; Fri, 30 Oct 2020 20:14:52 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:986b:b1c:42fa:9003] (unknown [IPv6:2a03:f580:87bc:d400:986b:b1c:42fa:9003])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 63B42585FE3
-        for <linux-can@vger.kernel.org>; Fri, 30 Oct 2020 19:13:37 +0000 (UTC)
-To:     kernel test robot <lkp@intel.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EE945585FE6;
+        Fri, 30 Oct 2020 19:14:48 +0000 (UTC)
+Subject: Re: net/can/isotp.c:1240:13: sparse: sparse: incorrect type in
+ initializer (different address spaces)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        kernel test robot <lkp@intel.com>
 Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-can <linux-can@vger.kernel.org>
 References: <202010290720.uQ3pTGrT-lkp@intel.com>
+ <146bb489-abaf-c763-44b2-ac1200560885@pengutronix.de>
+ <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,17 +99,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: net/can/isotp.c:1240:13: sparse: sparse: incorrect type in
- initializer (different address spaces)
-Message-ID: <146bb489-abaf-c763-44b2-ac1200560885@pengutronix.de>
-Date:   Thu, 29 Oct 2020 08:33:26 +0100
+Message-ID: <61008eb0-25f3-5986-b5f8-b9844a18dcef@pengutronix.de>
+Date:   Fri, 30 Oct 2020 20:14:45 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <202010290720.uQ3pTGrT-lkp@intel.com>
+In-Reply-To: <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="EnuOEDQ5JLfKqrBFyQdyqNZnnGzaJz5MN"
+ boundary="gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,139 +117,61 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---EnuOEDQ5JLfKqrBFyQdyqNZnnGzaJz5MN
-Content-Type: multipart/mixed; boundary="t7VfLF1HewxOWlyaMFGkwU0oDG4LQZKvD";
+--gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM
+Content-Type: multipart/mixed; boundary="Ey7HHqifZyWpIgaCF7F5bNFo37YKlEfKH";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: kernel test robot <lkp@intel.com>,
- Oliver Hartkopp <socketcan@hartkopp.net>
+To: Oliver Hartkopp <socketcan@hartkopp.net>,
+ kernel test robot <lkp@intel.com>
 Cc: kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
- Rich Felker <dalias@libc.org>, Yoshinori Sato <ysato@users.sourceforge.jp>
-Message-ID: <146bb489-abaf-c763-44b2-ac1200560885@pengutronix.de>
+ Rich Felker <dalias@libc.org>, Yoshinori Sato <ysato@users.sourceforge.jp>,
+ linux-can <linux-can@vger.kernel.org>
+Message-ID: <61008eb0-25f3-5986-b5f8-b9844a18dcef@pengutronix.de>
 Subject: Re: net/can/isotp.c:1240:13: sparse: sparse: incorrect type in
  initializer (different address spaces)
 References: <202010290720.uQ3pTGrT-lkp@intel.com>
-In-Reply-To: <202010290720.uQ3pTGrT-lkp@intel.com>
+ <146bb489-abaf-c763-44b2-ac1200560885@pengutronix.de>
+ <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
+In-Reply-To: <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
 
---t7VfLF1HewxOWlyaMFGkwU0oDG4LQZKvD
+--Ey7HHqifZyWpIgaCF7F5bNFo37YKlEfKH
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On 10/30/20 7:55 PM, Oliver Hartkopp wrote:
+>>>    1229=09
+>>>    1230	static int isotp_getsockopt(struct socket *sock, int level, i=
+nt optname,
+>>>    1231				    char __user *optval, int __user *optlen)
+>>>    1232	{
+>>>    1233		struct sock *sk =3D sock->sk;
+>>>    1234		struct isotp_sock *so =3D isotp_sk(sk);
+>>>    1235		int len;
+>>>    1236		void *val;
+>>>    1237=09
+>>>    1238		if (level !=3D SOL_CAN_ISOTP)
+>>>    1239			return -EINVAL;
+>>>> 1240		if (get_user(len, optlen))
+>>>    1241			return -EFAULT;
+>>>    1242		if (len < 0)
+>>>    1243			return -EINVAL;
+>>>    1244=09
+>=20
+> Sorry but there are tons of identical items in the networking subsystem=
+=20
+> in getsockopt functions.
+>=20
+> And I don't get the sparse warning with make C=3D1 for none of the=20
+> occurrences of
+
+Due to ARCH=3Dsh
 
 looks like sh is missing the some __user annotations so that sparse spwes=
  these
-warnings. Adding sh maintainers to Cc.
+warnings.
 
-regards,
 Marc
-
-On 10/29/20 12:01 AM, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git master
-> head:   23859ae44402f4d935b9ee548135dd1e65e2cbf4
-> commit: e057dd3fc20ffb3d7f150af46542a51b59b90127 can: add ISO 15765-2:2=
-016 transport protocol
-> date:   3 weeks ago
-> config: sh-randconfig-s031-20201028 (attached as .config)
-> compiler: sh4-linux-gcc (GCC) 9.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.3-56-gc09e8239-dirty
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linu=
-x.git/commit/?id=3De057dd3fc20ffb3d7f150af46542a51b59b90127
->         git remote add linus https://git.kernel.org/pub/scm/linux/kerne=
-l/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout e057dd3fc20ffb3d7f150af46542a51b59b90127
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cr=
-oss C=3D1 CF=3D'-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=3Dsh=20
->=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->=20
->=20
-> "sparse warnings: (new ones prefixed by >>)"
->>> net/can/isotp.c:1240:13: sparse: sparse: incorrect type in initialize=
-r (different address spaces) @@     expected int const *__gu_addr @@     =
-got int [noderef] __user *optlen @@
->>> net/can/isotp.c:1240:13: sparse:     expected int const *__gu_addr
->>> net/can/isotp.c:1240:13: sparse:     got int [noderef] __user *optlen=
-
->>> net/can/isotp.c:1240:13: sparse: sparse: incorrect type in argument 1=
- (different address spaces) @@     expected void const volatile [noderef]=
- __user *ptr @@     got int const *__gu_addr @@
->>> net/can/isotp.c:1240:13: sparse:     expected void const volatile [no=
-deref] __user *ptr
->>> net/can/isotp.c:1240:13: sparse:     got int const *__gu_addr
->=20
-> vim +1240 net/can/isotp.c
->=20
->   1229=09
->   1230	static int isotp_getsockopt(struct socket *sock, int level, int =
-optname,
->   1231				    char __user *optval, int __user *optlen)
->   1232	{
->   1233		struct sock *sk =3D sock->sk;
->   1234		struct isotp_sock *so =3D isotp_sk(sk);
->   1235		int len;
->   1236		void *val;
->   1237=09
->   1238		if (level !=3D SOL_CAN_ISOTP)
->   1239			return -EINVAL;
->> 1240		if (get_user(len, optlen))
->   1241			return -EFAULT;
->   1242		if (len < 0)
->   1243			return -EINVAL;
->   1244=09
->   1245		switch (optname) {
->   1246		case CAN_ISOTP_OPTS:
->   1247			len =3D min_t(int, len, sizeof(struct can_isotp_options));
->   1248			val =3D &so->opt;
->   1249			break;
->   1250=09
->   1251		case CAN_ISOTP_RECV_FC:
->   1252			len =3D min_t(int, len, sizeof(struct can_isotp_fc_options));
->   1253			val =3D &so->rxfc;
->   1254			break;
->   1255=09
->   1256		case CAN_ISOTP_TX_STMIN:
->   1257			len =3D min_t(int, len, sizeof(u32));
->   1258			val =3D &so->force_tx_stmin;
->   1259			break;
->   1260=09
->   1261		case CAN_ISOTP_RX_STMIN:
->   1262			len =3D min_t(int, len, sizeof(u32));
->   1263			val =3D &so->force_rx_stmin;
->   1264			break;
->   1265=09
->   1266		case CAN_ISOTP_LL_OPTS:
->   1267			len =3D min_t(int, len, sizeof(struct can_isotp_ll_options));
->   1268			val =3D &so->ll;
->   1269			break;
->   1270=09
->   1271		default:
->   1272			return -ENOPROTOOPT;
->   1273		}
->   1274=09
->   1275		if (put_user(len, optlen))
->   1276			return -EFAULT;
->   1277		if (copy_to_user(optval, val, len))
->   1278			return -EFAULT;
->   1279		return 0;
->   1280	}
->   1281=09
->=20
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->=20
-
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -256,23 +180,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---t7VfLF1HewxOWlyaMFGkwU0oDG4LQZKvD--
+--Ey7HHqifZyWpIgaCF7F5bNFo37YKlEfKH--
 
---EnuOEDQ5JLfKqrBFyQdyqNZnnGzaJz5MN
+--gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+acEYACgkQqclaivrt
-76mNpAf9FBBLM4EXuIGTgLEAhNg56ZM5FUm0KDYHPBKozKsSTFvZIgLaWSC3zKdd
-+6zcLBI9VBo6ik0vxqzFZt5tGfFQwkoq2ygRFdpA8WpzGJWPQoQf6/HYrIsIQz6f
-ak1gLMETbXjJek1jzNPavAm8DTRx0R9DvvLD8/5B5YB71/fqZbwpkpT5AaPT5KrR
-DauhOZndlQjtZpzGCvv66qNDR6GiiMX5HAT/NAV85TtgA3k6Uf2ayb9FsoMsDoav
-bZb+8EXnojz6KoNZ3/akkrH7Yptrc97G8/jlZnCPaPUUArUfMpyc8iUFQ3agmdwX
-bOObo9s2uqiak+8x2w3zRLRTNHlr8w==
-=M95h
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+cZiUACgkQqclaivrt
+76lmYQgArcoc2n2AL8i1gs+u1y4w5Zr1QPq9scACmPok1fQQACbHbgSWoKOd3tTU
+N9+oNmTOkiKH/EZiSYQmhgvVTUkWL4g3zLa3/ci6HxZUrrpgyoX/eyMe/AbYUvva
+qTUJi8dLUrSWFQYUdgPVEIMDNMZ4n2KnKs6xb9tnyXXH0p5pk1r3su8d4A1QwIvu
+WIs97qfs5+tRJy2JbB9Y+K4GMmfvcnyqPZFwSRSXopPSRj+O6O74wRywd2MSN4rg
+NIuckZBOqBMq/mo2LtFmfS7N1BZ9vb/xzt1V7XmQvSXqw7LzGLk3kWWVzi9SRuIG
+xehHiULctOM5LwcMNUsHXGZa7CrXHg==
+=0zcV
 -----END PGP SIGNATURE-----
 
---EnuOEDQ5JLfKqrBFyQdyqNZnnGzaJz5MN--
+--gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM--
