@@ -2,201 +2,244 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D022A0E62
-	for <lists+linux-can@lfdr.de>; Fri, 30 Oct 2020 20:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960DC2A10C1
+	for <lists+linux-can@lfdr.de>; Fri, 30 Oct 2020 23:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbgJ3TPC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Oct 2020 15:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S1725791AbgJ3WU7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Oct 2020 18:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725900AbgJ3TPB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Oct 2020 15:15:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A5EC0613CF
-        for <linux-can@vger.kernel.org>; Fri, 30 Oct 2020 12:15:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kYZrQ-0003lR-KG; Fri, 30 Oct 2020 20:14:52 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:986b:b1c:42fa:9003] (unknown [IPv6:2a03:f580:87bc:d400:986b:b1c:42fa:9003])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EE945585FE6;
-        Fri, 30 Oct 2020 19:14:48 +0000 (UTC)
-Subject: Re: net/can/isotp.c:1240:13: sparse: sparse: incorrect type in
- initializer (different address spaces)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-can <linux-can@vger.kernel.org>
-References: <202010290720.uQ3pTGrT-lkp@intel.com>
- <146bb489-abaf-c763-44b2-ac1200560885@pengutronix.de>
- <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <61008eb0-25f3-5986-b5f8-b9844a18dcef@pengutronix.de>
-Date:   Fri, 30 Oct 2020 20:14:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        with ESMTP id S1725780AbgJ3WU7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Oct 2020 18:20:59 -0400
+Received: from relay.felk.cvut.cz (relay.felk.cvut.cz [IPv6:2001:718:2:1611:0:1:0:70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAC41C0613D5;
+        Fri, 30 Oct 2020 15:20:58 -0700 (PDT)
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 09UMJbgL034239;
+        Fri, 30 Oct 2020 23:19:37 +0100 (CET)
+        (envelope-from pisa@cmp.felk.cvut.cz)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 09UMJaY6018402;
+        Fri, 30 Oct 2020 23:19:36 +0100
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 09UMJa47018401;
+        Fri, 30 Oct 2020 23:19:36 +0100
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        "Marc Kleine-Budde" <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Subject: [PATCH v7 0/6] CTU CAN FD open-source IP core SocketCAN driver, PCI, platform integration and documentation
+Date:   Fri, 30 Oct 2020 23:19:22 +0100
+Message-Id: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-FELK-MailScanner-Information: 
+X-MailScanner-ID: 09UMJbgL034239
+X-FELK-MailScanner: Found to be clean
+X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
+        score=-0.222, required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.28,
+        SPF_HELO_NONE 0.00, SPF_NONE 0.00)
+X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
+X-FELK-MailScanner-Watermark: 1604701179.57925@b26cNcq8EiBSu8Ihnt/U2w
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM
-Content-Type: multipart/mixed; boundary="Ey7HHqifZyWpIgaCF7F5bNFo37YKlEfKH";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
- Rich Felker <dalias@libc.org>, Yoshinori Sato <ysato@users.sourceforge.jp>,
- linux-can <linux-can@vger.kernel.org>
-Message-ID: <61008eb0-25f3-5986-b5f8-b9844a18dcef@pengutronix.de>
-Subject: Re: net/can/isotp.c:1240:13: sparse: sparse: incorrect type in
- initializer (different address spaces)
-References: <202010290720.uQ3pTGrT-lkp@intel.com>
- <146bb489-abaf-c763-44b2-ac1200560885@pengutronix.de>
- <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
-In-Reply-To: <4d092e3f-052d-7593-131c-a9629136f07f@hartkopp.net>
+This driver adds support for the CTU CAN FD open-source IP core.
+More documentation and core sources at project page
+(https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core).
+The core integration to Xilinx Zynq system as platform driver
+is available (https://gitlab.fel.cvut.cz/canbus/zynq/zynq-can-sja1000-top).
+Implementation on Intel FPGA based PCI Express board is available
+from project (https://gitlab.fel.cvut.cz/canbus/pcie-ctucanfd).
+The CTU CAN FD core emulation send for review for QEMU mainline.
+Development repository for QEMU emulation - ctu-canfd branch of
+  https://gitlab.fel.cvut.cz/canbus/qemu-canbus
 
---Ey7HHqifZyWpIgaCF7F5bNFo37YKlEfKH
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+More about CAN bus related projects used and developed at CTU FEE
+on the guidepost page http://canbus.pages.fel.cvut.cz/ .
 
-On 10/30/20 7:55 PM, Oliver Hartkopp wrote:
->>>    1229=09
->>>    1230	static int isotp_getsockopt(struct socket *sock, int level, i=
-nt optname,
->>>    1231				    char __user *optval, int __user *optlen)
->>>    1232	{
->>>    1233		struct sock *sk =3D sock->sk;
->>>    1234		struct isotp_sock *so =3D isotp_sk(sk);
->>>    1235		int len;
->>>    1236		void *val;
->>>    1237=09
->>>    1238		if (level !=3D SOL_CAN_ISOTP)
->>>    1239			return -EINVAL;
->>>> 1240		if (get_user(len, optlen))
->>>    1241			return -EFAULT;
->>>    1242		if (len < 0)
->>>    1243			return -EINVAL;
->>>    1244=09
->=20
-> Sorry but there are tons of identical items in the networking subsystem=
-=20
-> in getsockopt functions.
->=20
-> And I don't get the sparse warning with make C=3D1 for none of the=20
-> occurrences of
+Martin Jerabek (1):
+  can: ctucanfd: add support for CTU CAN FD open-source IP core - bus
+    independent part.
 
-Due to ARCH=3Dsh
+Pavel Pisa (5):
+  dt-bindings: vendor-prefix: add prefix for the Czech Technical
+    University in Prague.
+  dt-bindings: net: can: binding for CTU CAN FD open-source IP core.
+  can: ctucanfd: CTU CAN FD open-source IP core - PCI bus support.
+  can: ctucanfd: CTU CAN FD open-source IP core - platform/SoC support.
+  docs: ctucanfd: CTU CAN FD open-source IP core documentation.
 
-looks like sh is missing the some __user annotations so that sparse spwes=
- these
-warnings.
+The version 7 changes:
+  - sent at 2020-10-31
+  - In response of Pavel Machek review, renamed files to match
+    directly module names. The core specification updated
+    to provide better description and match of the fields.
+    Driver headers, routines adjusted etc..  To achieve this,
+    registers HDL was regenerated and  and its connection updated.
+  - CAN_STATE_* translation to text has been made robust to
+    Linux kernel define value changes/updates and the function
+    which uses table has moved after table for better readability.
+  - fsm_txt_buffer_user.svg redrawn from scratch to reduce
+    file to 16 kB.
+  - documentation updated, unified references to recently renamed
+    pcie-ctucanfd
+  - I have tried to fullfill request to cross-reference SocketCAN
+    document by :doc: or :ref: constructs in Sphinx way,
+    but without success. I reference geerated HTML on kernel.org
+    site for now.
 
-Marc
+The version 6 changes:
+  - sent at 2020-10-22
+  - the driver has been tested with 5.9 bigendian MIPS kernel
+    against QEMU CTU CAN FD model and correct behavior on PCIe
+    virtual board for big-endian system passed
+  - documentation updated to reflect inclusion of SocketCAN FD
+    and CTU CAN FD functional model support into QEMU mainline
+  - the integration for Cyclone V 5CSEMA4U23C6 based DE0-Nano-SoC
+    Terasic board used for SkodaAuto research projects at our
+    university has been clean up by its author (Jaroslav Beran)
+    and published
+    https://gitlab.fel.cvut.cz/canbus/intel-soc-ctucanfd
+  - Xilinx Zynq Microzed MZ_APO based target for automatic test
+    updated to Debian 10 base.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+The version 5 changes:
+  - sent at 2020-08-15
+  - correct Kconfig formatting according to Randy Dunlap
+  - silence warnings reported by make W=1 C=1 flags.
+    Changes suggested by Jakub Kicinski
+  - big thanks for core patch review by Pavel Machek
+    resulting in more readability and formating updates
+  - fix power management errors found by Pavel Machek
+  - removed comments from d-t bindings as suggested by Rob Herring
+  - selected ctu,ctucanfd-2 as alternative name to ctu,ctucanfd
+    which allows to bind to actual major HDL core sources version 2.x
+    if for some reason driver adaptation would not work on version
+    read from the core
+  - line length limit relaxed to 100 characters on some cases
+    where it helps to readability
 
+The version 4 changes:
+  - sent at 2020-08-04
+  - changes summary, 169 non-merge commits, 6 driver,
+    32 IP core sources enhancements and fixes, 58 tests
+    in master and about additional 30 iso-testbench
+    preparation branch.
+  - convert device-tree binding documentation to YAML
+  - QEMU model of CTU CAN FD IP core and generic extension
+    of QEMU CAN bus emulation developed by Jan Charvat.
+  - driver tested on QEMU emulated Malta big-endian MIPS
+    platform and big endian-support fixed.
+  - checkpatch from 5.4 kernel used to cleanup driver formatting
+  - header files generated from IP core IP-Xact description
+    updated to include protocol exception (pex) field.
+    Mechanism to set it from the driver is not provided yet.
 
---Ey7HHqifZyWpIgaCF7F5bNFo37YKlEfKH--
+The version 3 changes:
+  - sent at 2019-12-21
+  - adapts device tree bindings documentation according to
+    Rob Herring suggestions.
+  - the driver has been separated to individual modules for core support,
+    PCI bus integration and platform, SoC integration.
+  - the FPGA design has been cleaned up and CAN protocol FSM redesigned
+    by Ondrej Ille (the core redesign has been reason to pause attempts to driver
+    submission)
+  - the work from February 2019 on core, test framework and driver
+    1601 commits in total, 436 commits in the core sources, 144 commits
+    in the driver, 151 documentation, 502 in tests.
+  - not all continuous integration tests updated for latest design version yet
+    https://gitlab.fel.cvut.cz/canbus/ctucanfd_ip_core/pipelines
+  - Zynq hardware in the loop test show no issues for after driver PCI and platform
+    separation and latest VHDL sources updates.
+  - driver code has been periodically tested on 4.18.5-rt3 and 4.19 long term
+    stable kernels.
+  - test of the patches before submission is run on 5.4 kernel
+  - the core has been integrated by Jaroslav Beran <jara.beran@gmail.com>
+    into Intel FPGA based SoC used in the tester developed for Skoda auto
+    at Department of Measurement, Faculty of Electrical Engineering,
+    Czech Technical University https://meas.fel.cvut.cz/ . He has contributed
+    feedback and fixes to the project.
 
---gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+The version 2 sent at 2019-02-27
 
------BEGIN PGP SIGNATURE-----
+The version 1 sent at 2019-02-22
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+cZiUACgkQqclaivrt
-76lmYQgArcoc2n2AL8i1gs+u1y4w5Zr1QPq9scACmPok1fQQACbHbgSWoKOd3tTU
-N9+oNmTOkiKH/EZiSYQmhgvVTUkWL4g3zLa3/ci6HxZUrrpgyoX/eyMe/AbYUvva
-qTUJi8dLUrSWFQYUdgPVEIMDNMZ4n2KnKs6xb9tnyXXH0p5pk1r3su8d4A1QwIvu
-WIs97qfs5+tRJy2JbB9Y+K4GMmfvcnyqPZFwSRSXopPSRj+O6O74wRywd2MSN4rg
-NIuckZBOqBMq/mo2LtFmfS7N1BZ9vb/xzt1V7XmQvSXqw7LzGLk3kWWVzi9SRuIG
-xehHiULctOM5LwcMNUsHXGZa7CrXHg==
-=0zcV
------END PGP SIGNATURE-----
+Ondrej Ille has prepared the CTU CAN IP Core sources for new release.
+We are waiting with it for the driver review, our intention
+is to release IP when driver is reviewed and mainlined.
 
---gcQtAk3Y3wGD1qeRrIMFsP8CFUu44HdeM--
+DKMS CTU CAN FD driver build by OpenBuildService to ease integration
+into Debian systems when driver is not provided by the distribution
+
+https://build.opensuse.org/package/show/home:ppisa/ctu_can_fd
+
+Jan Charvat <charvj10@fel.cvut.cz> finished work to extend already
+mainlined QEMU SJA1000 and SocketCAN support to provide even CAN FD
+support and CTU CAN FD core support.
+
+  https://gitlab.fel.cvut.cz/canbus/qemu-canbus/-/tree/ctu-canfd
+
+The patches has been sent for review to QEMU mainlining list.
+
+Thanks in advance to all who help us to deliver the project into public.
+
+Thanks to all colleagues, reviewers and other providing feedback,
+infrastructure and enthusiasm and motivation for open-source work.
+
+Build infrastructure and hardware is provided by
+  Department of Control Engineering,
+  Faculty of Electrical Engineering,
+  Czech Technical University in Prague
+  https://dce.fel.cvut.cz/en
+
+ .../bindings/net/can/ctu,ctucanfd.yaml        |   63 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ .../device_drivers/ctu/ctucanfd-driver.rst    |  638 +++++++++
+ .../ctu/fsm_txt_buffer_user.svg               |  151 +++
+ drivers/net/can/Kconfig                       |    1 +
+ drivers/net/can/Makefile                      |    1 +
+ drivers/net/can/ctucanfd/Kconfig              |   34 +
+ drivers/net/can/ctucanfd/Makefile             |   10 +
+ drivers/net/can/ctucanfd/ctucanfd.h           |   87 ++
+ drivers/net/can/ctucanfd/ctucanfd_base.c      | 1142 +++++++++++++++++
+ drivers/net/can/ctucanfd/ctucanfd_frame.h     |  189 +++
+ drivers/net/can/ctucanfd/ctucanfd_hw.c        |  751 +++++++++++
+ drivers/net/can/ctucanfd/ctucanfd_hw.h        |  935 ++++++++++++++
+ drivers/net/can/ctucanfd/ctucanfd_pci.c       |  316 +++++
+ drivers/net/can/ctucanfd/ctucanfd_platform.c  |  142 ++
+ drivers/net/can/ctucanfd/ctucanfd_regs.h      |  971 ++++++++++++++
+ 16 files changed, 5433 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/can/ctu,ctucanfd.yaml
+ create mode 100644 Documentation/networking/device_drivers/ctu/ctucanfd-driver.rst
+ create mode 100644 Documentation/networking/device_drivers/ctu/fsm_txt_buffer_user.svg
+ create mode 100644 drivers/net/can/ctucanfd/Kconfig
+ create mode 100644 drivers/net/can/ctucanfd/Makefile
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd.h
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_base.c
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_frame.h
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_hw.c
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_hw.h
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_pci.c
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_platform.c
+ create mode 100644 drivers/net/can/ctucanfd/ctucanfd_regs.h
+
+-- 
+2.20.1
+
