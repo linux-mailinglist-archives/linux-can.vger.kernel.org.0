@@ -2,234 +2,129 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 121732A15F2
-	for <lists+linux-can@lfdr.de>; Sat, 31 Oct 2020 12:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B482A1758
+	for <lists+linux-can@lfdr.de>; Sat, 31 Oct 2020 13:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbgJaLkY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 31 Oct 2020 07:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        id S1727058AbgJaM1l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 31 Oct 2020 08:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727287AbgJaLkX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 31 Oct 2020 07:40:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79B2C0613D7
-        for <linux-can@vger.kernel.org>; Sat, 31 Oct 2020 04:40:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kYpEx-0007mN-Le; Sat, 31 Oct 2020 12:40:11 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:dcc0:5662:7742:3902] (unknown [IPv6:2a03:f580:87bc:d400:dcc0:5662:7742:3902])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6B8B9587083;
-        Sat, 31 Oct 2020 11:40:09 +0000 (UTC)
-Subject: Re: [PATCH v7 0/6] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <babcc2a2-8051-b542-3748-18324f2778df@pengutronix.de>
-Date:   Sat, 31 Oct 2020 12:40:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        with ESMTP id S1727041AbgJaM1k (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 31 Oct 2020 08:27:40 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AF3C0613D5
+        for <linux-can@vger.kernel.org>; Sat, 31 Oct 2020 05:27:39 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id a6so8111422otp.10
+        for <linux-can@vger.kernel.org>; Sat, 31 Oct 2020 05:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uUeEIMYVissc6Y+RJtqliJt9OuU+ukPzCN1Qs6fJkdM=;
+        b=v1XzATl76KNFkhMDiKhBMrDRdlTw+5n88oP+o/d1klStmDpDYAafkYs8eCSgn8PqX7
+         yzJeQjbyvjq4lWHHlJjfSg1x4HmnT4s90P7F0x6vMRXkHbhIBCf1iQvfus8kb1Fsrwqh
+         TIgvf2JUNQqD1NVp45sPdk7ZkJWhg0DOBwW0tOs7/1BayG9HLO8Sz/6BfLE/0L3wr2k8
+         rjO+fg1upUAEDaI6Y3JO8AXfOvq/nUBA3LKkxE0/A9Q4AezFE4kMwc3qvgiW/4jpf6N8
+         XjhhG7Ajcyp6X0Z834gPFyLeLPQtp+T5OzmPjNaTZnKBVec16QuDwJ0o3/cUyAsNsz17
+         wZiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uUeEIMYVissc6Y+RJtqliJt9OuU+ukPzCN1Qs6fJkdM=;
+        b=lhcd+NhHX9TYPKzfEBcfblA37PuGBtxKolXPlLiMo7Mo77q665EvqqmAbRxZUhXLiW
+         mWnuycwWT37AOBRqfOOHPt6kiHzeRknBiG8asgwZqhH9oKEQqaFJ/0v9UwpKA7ORK5Op
+         cJpvINbQxNWk3vpHwObBTRtRhhGw/U2LDba7qxHQM/IutxmGj1mPXVSU5bTV1i1UyM4v
+         vmUihPUbUS9DmaNpm/5Kjt9+DqrtNUSEiOeIgKe0KxgmWOhOrfHv/GJWKqTbq4pjg5q+
+         zUrUotQfN3MYYMVU2776+jYqS33HF8CyIHwozd+2fXGsSqtkF8BpIx2IT6aRuWkyhDmR
+         CzDg==
+X-Gm-Message-State: AOAM5315MSmWNS+dE3IbbeiF5s7ScbC15uoJbC+3Yh/E8pQw/U3IvWAJ
+        jHXhdXNcI3nR2HgeUIn8MLgEuaF903b+ycTpVPoMBw==
+X-Google-Smtp-Source: ABdhPJx9ie1G+lZErqZNyXsgXsyYoQ7YUhejKJ1wiC8InN6pU3PZEE74kuikX12iTGwD87Md5HuixAbHrSwV7PB49dk=
+X-Received: by 2002:a05:6830:22eb:: with SMTP id t11mr5137214otc.114.1604147258674;
+ Sat, 31 Oct 2020 05:27:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="pHGK3qOT5AE1di0F7vN1s8WmJCRRlr4tV"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <68846197-98dc-b991-1ec8-a477ceb8d614@posteo.de> <715b3c3b-dbbc-688c-9757-578455c3a607@pengutronix.de>
+ <0667516a-525e-9c4e-ec7a-e4d8a188c338@posteo.de> <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
+ <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
+ <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de> <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
+ <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de> <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
+ <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
+ <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de> <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
+ <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de> <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
+ <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com> <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+In-Reply-To: <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+From:   Drew Fustini <drew@beagleboard.org>
+Date:   Sat, 31 Oct 2020 13:27:46 +0100
+Message-ID: <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Patrick Menschel <menschel.p@posteo.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---pHGK3qOT5AE1di0F7vN1s8WmJCRRlr4tV
-Content-Type: multipart/mixed; boundary="W5s4VrYBHK1Vx9qcNDS91wyxP3zRIfMeR";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
- devicetree@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- David Miller <davem@davemloft.net>, Rob Herring <robh+dt@kernel.org>,
- mark.rutland@arm.com, Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- Marin Jerabek <martin.jerabek01@gmail.com>,
- Ondrej Ille <ondrej.ille@gmail.com>, Jiri Novak <jnovak@fel.cvut.cz>,
- Jaroslav Beran <jara.beran@gmail.com>, Petr Porazil <porazil@pikron.com>,
- Pavel Machek <pavel@ucw.cz>, Drew Fustini <pdp7pdp7@gmail.com>
-Message-ID: <babcc2a2-8051-b542-3748-18324f2778df@pengutronix.de>
-Subject: Re: [PATCH v7 0/6] CTU CAN FD open-source IP core SocketCAN driver,
- PCI, platform integration and documentation
-References: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
-In-Reply-To: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
-
---W5s4VrYBHK1Vx9qcNDS91wyxP3zRIfMeR
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-On 10/30/20 11:19 PM, Pavel Pisa wrote:
-> This driver adds support for the CTU CAN FD open-source IP core.
-
-Please fix the following spelling mistakes:
-
---- a/drivers/net/can/ctucanfd/ctucanfd_base.c
-+++ b/drivers/net/can/ctucanfd/ctucanfd_base.c
-@@ -752,7 +752,7 @@ static void ctucan_tx_interrupt(struct net_device *nd=
-ev)
- /**
-  * ctucan_interrupt - CAN Isr
-  * @irq:       irq number
-- * @dev_id:    device id poniter
-+ * @dev_id:    device id pointer
-  *
-  * This is the CTU CAN FD ISR. It checks for the type of interrupt
-  * and invokes the corresponding ISR.
-diff --git a/drivers/net/can/ctucanfd/ctucanfd_hw.h b/drivers/net/can/ctu=
-canfd/ctucanfd_hw.h
-index 7d562f41ca52..2fd2416de46d 100644
---- a/drivers/net/can/ctucanfd/ctucanfd_hw.h
-+++ b/drivers/net/can/ctucanfd/ctucanfd_hw.h
-@@ -211,7 +211,7 @@ bool ctucan_hw_set_ret_limit(struct ctucan_hw_priv *p=
-riv, bool enable,
-  *     CAN_CTRLMODE_LISTENONLY - No frame is transmitted, no dominant bi=
-t is
-  *                               sent on the bus.
-  *
-- *     CAN_CTRLMODE_3_SAMPLES  - Tripple sampling mode
-+ *     CAN_CTRLMODE_3_SAMPLES  - Triple sampling mode
-  *
-  *     CAN_CTRLMODE_FD         - Flexible data-rate support. When not se=
-t, Core
-  *                               does not accept CAN FD Frames and inter=
-prets,
-@@ -680,7 +680,7 @@ void ctucan_hw_set_rx_tsop(struct ctucan_hw_priv *pri=
-v,
-  *
-  * @priv: Private info
-  *
-- * Return: The firts word of received frame
-+ * Return: The first word of received frame
-  */
- static inline union ctu_can_fd_frame_format_w
-        ctu_can_fd_read_rx_ffw(struct ctucan_hw_priv *priv)
-@@ -908,7 +908,7 @@ static inline union ctu_can_fd_debug_register
-  * ctucan_hw_read_timestamp - Read timestamp value which is used interna=
-lly
-  *                             by CTU CAN FD Core.
-  *
-- * Reads timestamp twice and checks consistency betwen upper and
-+ * Reads timestamp twice and checks consistency between upper and
-  * lower timestamp word.
-  *
-  * @priv: Private info
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+On Wed, Oct 28, 2020 at 8:58 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 10/28/20 4:47 AM, Drew Fustini wrote:
+> >> I assumed the Waveshare instructions work but that is error on my part
+> >> for not actually reproducing.  That is what I will do first.
+> >> Ultimately, I want the freshly upstreamed driver working but I should
+> >> check if their driver tarball works.
+> >
+> > The Waveshare installer uses the 4.19 kernel with the mcp25xxfd
+> > driver.  However, it also fails, sio I think I need to dig deeper:
+> >
+> > pi@raspberrypi:~ $ dmesg | grep -Ei spi\|can
+> > [    4.263765] CAN device driver interface
+> > [    4.286258] mcp25xxfd_can: loading out-of-tree module taints kernel.
+> > [    5.477511] mcp25xxfd spi1.0: Cannot initialize MCP2517. Wrong
+> > wiring? (oscilator register reads as 00000000)
+>
+> It reads the osc as 0x0, too. This is the same error as you've seen with my driver.
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---W5s4VrYBHK1Vx9qcNDS91wyxP3zRIfMeR--
+Alright, it looks like I had faulty hardware!  I got a Waveshare CAN
+FD hat and both the old waveshare-provided driver and the new
+mcp251xfd driver work.
 
---pHGK3qOT5AE1di0F7vN1s8WmJCRRlr4tV
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+Well, at least for can0 with mcp251xfd-spi0-0:
 
------BEGIN PGP SIGNATURE-----
+[   14.530587] CAN device driver interface
+[   14.548941] mcp251xfd spi0.0: DEBUG mcp251xfd mcp251xfd_probe():
+devm_clk_get()
+[   14.548977] mcp251xfd spi0.0: DEBUG mcp251xfd mcp251xfd_probe(): feq=40000000
+[   14.549045] spi_master spi0: will run message pump with realtime priority
+[   14.562946] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
++MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
+r:17.00MHz e:0.00MHz) successfully initialized.
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+dTRUACgkQqclaivrt
-76n8EAf/TvrWWEtWu2fn+uGQPhIZWbXSNVwShThRvcx+pwMvUMtvTcHsmfbpUQND
-EH902MlE/MS35htwyCZBxn5XoqW2wDkFXViabNtliLEqlLz9RLGCSD2MQzGZ1sZX
-fAds1hZpADf7e12ucZRI82zJn+ynRxHX7ClVvgxX/ozNR+tjvBMBi8PHfXCYRPCR
-jX4oNBPNYE275/BUjouEFuqGmL2jlbnN8e7tMw9rNw410tcL8eXFdGg6KjiG+TVw
-FVfJrGfUTNj7K53Q0hgYrardmXRLrPN+fOBOIrhHZVHVRH6FogykJzWrp2l/5rHm
-/ONaoQeNyHCWfRy8aWf6g53WLYa5IQ==
-=W6Nr
------END PGP SIGNATURE-----
+However, I am still trying to figure out can1.  I tried
+mcp251xfd-spi0-1 and mcp251xfd-spi1-0 but neither was able to
+initialize the device.  I am using:
 
---pHGK3qOT5AE1di0F7vN1s8WmJCRRlr4tV--
+commit 9e02abd4fe591b2d7f369cdaaaf8f1269b7c8693 (HEAD ->
+v5.4-rpi/mcp251xfd-20201022-54, marc/v5.4-rpi/mcp251xfd-20201022-54)
+Author: Marc Kleine-Budde <mkl@pengutronix.de>
+Date:   Fri Nov 15 00:54:07 2019 +0100
+
+    mcp251xfd-spi0-0, mcp251xfd-spi0-1, mcp251xfd-spi1-0: add overlays
+
+    Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+
+I'll try tweaking it a bit and see if I get any further.
+
+Thanks,
+Drew
