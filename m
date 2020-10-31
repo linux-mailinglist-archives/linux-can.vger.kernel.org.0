@@ -2,86 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C58572A1311
-	for <lists+linux-can@lfdr.de>; Sat, 31 Oct 2020 03:39:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3522A1433
+	for <lists+linux-can@lfdr.de>; Sat, 31 Oct 2020 09:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbgJaCjK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Oct 2020 22:39:10 -0400
-Received: from server.msgroupspa.com ([185.149.113.111]:35286 "EHLO
-        server.msgroupspa.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725536AbgJaCjI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Oct 2020 22:39:08 -0400
-X-Greylist: delayed 66465 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Oct 2020 22:38:58 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=msgroupspa.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        Message-ID:Reply-To:Subject:To:From:Date:MIME-Version:Sender:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gOeEglh1DIJatPKqyvOsPs4e0Zw8Lzg9wwjnNfQdiM8=; b=nK3IDYT+DT+afspoRk1vnh030x
-        JBANriWCpwGFqkJTHXsxgXz4zPu7XOm+ROYW+1LhSp6Xws1Wm9Gxv0Soi++3fpbt9358vEM1Vilpv
-        5xlCNIs/Y8Yak5vs3SvhE9OTE/TC6Vf04ze0iphAaRgUliWRhAsWS8s68bwFyUv4tdChHxOH/JwR2
-        Vv+jWIv637j1UH3aZ6QLvXZrjdEmRucUTVxZtH4VnCDjrc4XZi9EwE5rzVsYDmyiNG+eYB+1QY+/8
-        bPWWeacOm9DyYRD9g3bLyiVv0uincEH4/sdJ6fuUSabQfGsi095GX6rsmNCONVo4/rhE4INecsjOZ
-        9QdrBN4A==;
-Received: from [::1] (port=55352 helo=server.msgroupspa.com)
-        by server.msgroupspa.com with esmtpa (Exim 4.93)
-        (envelope-from <no-reply@msgroupspa.com>)
-        id 1kYPRU-0006Ky-OT; Fri, 30 Oct 2020 16:07:24 +0800
+        id S1726441AbgJaIdh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 31 Oct 2020 04:33:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58940 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726435AbgJaIdT (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 31 Oct 2020 04:33:19 -0400
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 89C7E2074F;
+        Sat, 31 Oct 2020 08:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604133199;
+        bh=osrJmoKas3X+pScT/xkIaBdNgBNjTA4rl7LpNScNfCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bBaqg5tKSOK1U1z/HOF3Eni4YFUBUxlJloJxusm28kEyKzihXDTpTOA1C7yqkjqOi
+         4Gx3TgUGse2+JNbXJ1vxL7q4zRwHYyio6rf1plcWBOCziBoRjl5qbrSzv8zulYmY2u
+         5HJGzOZF4vvO9rZpR/+SC3TlyByNnItxdA2dB7iU=
+Date:   Sat, 31 Oct 2020 16:33:12 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     mkl@pengutronix.de, Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: Re: [PATCH v1] ARM: dts: imx6/7: sync fsl,stop-mode with current
+ flexcan driver
+Message-ID: <20201031083312.GV28755@dragon>
+References: <20201016075158.31574-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Date:   Fri, 30 Oct 2020 16:07:24 +0800
-From:   "Mr. John Galvan" <no-reply@msgroupspa.com>
-To:     undisclosed-recipients:;
-Subject: Hello/Hallo
-Reply-To: galvan.johnny@outlook.com
-User-Agent: Roundcube Webmail/1.4.8
-Message-ID: <8970d4ac30f8022b0ae628d9b69a2d43@msgroupspa.com>
-X-Sender: no-reply@msgroupspa.com
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - server.msgroupspa.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - msgroupspa.com
-X-Get-Message-Sender-Via: server.msgroupspa.com: authenticated_id: no-reply@msgroupspa.com
-X-Authenticated-Sender: server.msgroupspa.com: no-reply@msgroupspa.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201016075158.31574-1-o.rempel@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Fri, Oct 16, 2020 at 09:51:58AM +0200, Oleksij Rempel wrote:
+> After this patch we need 2 arguments less for the fsl,stop-mode
+> property:
+> 
+> | commit d9b081e3fc4bdc33e672dcb7bb256394909432fc
+> | Author: Marc Kleine-Budde <mkl@pengutronix.de>
+> | Date:   Sun Jun 14 21:09:20 2020 +0200
+> |
+> | can: flexcan: remove ack_grp and ack_bit handling from driver
+> |
+> | Since commit:
+> |
+> |  048e3a34a2e7 can: flexcan: poll MCR_LPM_ACK instead of GPR ACK for stop mode acknowledgment
+> |
+> | the driver polls the IP core's internal bit MCR[LPM_ACK] as stop mode
+> | acknowledge and not the acknowledgment on chip level.
+> |
+> | This means the 4th and 5th value of the property "fsl,stop-mode" isn't used
+> | anymore. This patch removes the used "ack_gpr" and "ack_bit" from the driver.
+> 
+> This patch removes the two last arguments, as they are not needed
+> anymore.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> 
+>  # Please enter the commit message for your changes. Lines starting
 
+It shouldn't be here.
 
--- 
-Sir/Madam,
+Fixed it up and applied the patch.
 
-I have access to very vital information that can be used to move a huge 
-amount of money. I have done my homework very well and I have the 
-machineries in place to get it done since I am still in active service. 
-If it was possible for me to do it alone I would not have bothered 
-contacting you. Ultimately I need an honest foreigner to play an 
-important role in the completion of this business transaction. Send 
-responds to this email: galvan.johnny@outlook.com
-
-Regards,
-John Galvan
-
----------------------------------------------------------------
-
-Sir / Madam,
-
-Ich habe Zugang zu sehr wichtigen Informationen, mit denen ich eine 
-große Menge Geld bewegen kann. Ich habe meine Hausaufgaben sehr gut 
-gemacht und ich habe die Maschinen, um sie zu erledigen, da ich immer 
-noch im aktiven Dienst bin. Wenn es mir möglich gewesen wäre, es alleine 
-zu tun, hätte ich mich nicht darum gekümmert, Sie zu kontaktieren. 
-Letztendlich brauche ich einen ehrlichen Ausländer, der eine wichtige 
-Rolle beim Abschluss dieses Geschäftsvorgangs spielt. Senden Sie 
-Antworten auf diese E-Mail: galvan.johnny@outlook.com
-
-Grüße,
-John Galvan
+Shawn
