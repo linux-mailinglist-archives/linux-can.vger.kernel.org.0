@@ -2,130 +2,137 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD4B2A1AE4
-	for <lists+linux-can@lfdr.de>; Sat, 31 Oct 2020 22:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 042A92A1CA1
+	for <lists+linux-can@lfdr.de>; Sun,  1 Nov 2020 08:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgJaV5P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 31 Oct 2020 17:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbgJaV5P (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 31 Oct 2020 17:57:15 -0400
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E8EC0617A6
-        for <linux-can@vger.kernel.org>; Sat, 31 Oct 2020 14:57:14 -0700 (PDT)
-Received: by mail-oo1-xc32.google.com with SMTP id p73so2451620oop.7
-        for <linux-can@vger.kernel.org>; Sat, 31 Oct 2020 14:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j2S+VzW8HpML0+dzbnPp4Z7MYvuzXLzw6SsWRN2dbyE=;
-        b=JmjW/bXTeLWpCCTQv0i789XUC9xSmokYrH7yuBBkO+Ojd7CLbmRRwO7WzlS0H9De5r
-         jHyloLHqfb9//1p58YkcYszm5Y/UJjE1wV/KLvDeB1HvNmf3JKcfHoRgGJHYp9f3ekuq
-         1QuIN+oMxIwDEt0DV+xgT1VhKkK/CdPfZqrivgMgBW4jTk/6P2qpkHWznzGjZuRO00Cj
-         ih1BAjknBPIK3VHMlSVOChPzwHyJv0YMMJIgwih7pSAI+hgU/P9fXU92bB5FbxuAUadZ
-         6Tzt5mrsM2PbFmbi29KNClCupDztAhhsS+guLY30yvY8MCnyZfG6EiMRRS7xF2QOeYRu
-         kUPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j2S+VzW8HpML0+dzbnPp4Z7MYvuzXLzw6SsWRN2dbyE=;
-        b=DVGF6fmpKASOEfvDKHB1Ved47ZnDIsKR3hpzysfRU4Mq2hl+Q/jANTAHxY13VUTHMX
-         7NTJe+TruEiVBuDXxR3tkY0N/hzWlbQWkjItaSjxeNCGTpIP1O+i0MKFc/xP7FMmlnl0
-         2MRQd2lgMgBbeqrxUBJBf+CM5baMi9lXsAoiD/o7hZWM7ZnrVKGwt190s5AmiEUYoWKC
-         nKneOXFfLm36eT6pF+DnXZELvpv57K8quD4MNganZ/AGSf5jsGpIDS1boRLzxnsQ+FPJ
-         3rAgkf9cVEWUtUgQHJG3dO0DApLo1YEGb3ZacUriqlqZGWAxFhnKt9gsWZsbcs4hwRL8
-         PgYw==
-X-Gm-Message-State: AOAM530dTOo3Hs5UpdCVs/K93yCMF8vop3aC5nayefVFTtjwrGeFL74U
-        SSj2AhhQMrYDDt0myAc2qzupWyYmwm4kYNAwPG8rAwgtorJxZtZE
-X-Google-Smtp-Source: ABdhPJzfwuIwaM8nV3xKhJTJv4X4YU97A9fRWPK+kR8emV0pg6lCGdx+kMZywSyAnFkModCKGt4MU3sGBaalaUwe4Rk=
-X-Received: by 2002:a4a:bc92:: with SMTP id m18mr6797975oop.39.1604181433994;
- Sat, 31 Oct 2020 14:57:13 -0700 (PDT)
+        id S1725890AbgKAHnI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 1 Nov 2020 02:43:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725773AbgKAHnH (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 1 Nov 2020 02:43:07 -0500
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8FFE208A9;
+        Sun,  1 Nov 2020 07:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604216586;
+        bh=qp7HDhOZNF9cCr2O01GugOZ4lkhXue/Od24USAgscpQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pTJKakq/BSuUPfzoaIBbvyMOlwYO06+ondNa5cVl2/Ln4vOSoNOggCommoc/aXEuy
+         XjTSia9iGweL3fM8G7qaLMgp39Y0l6qNDWjAYanp31Pd3K7DclfzkxnYgz4Y58WOuV
+         XnMDmVZvdNeeLJp8JIGooMQ0NCVqDMScHO+x7Zg0=
+Date:   Sun, 1 Nov 2020 15:43:01 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     mkl@pengutronix.de, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 1/6] firmware: imx: always export SCU symbols
+Message-ID: <20201101074300.GF31601@dragon>
+References: <20201021052437.3763-1-qiangqing.zhang@nxp.com>
+ <20201021052437.3763-2-qiangqing.zhang@nxp.com>
 MIME-Version: 1.0
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
- <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
- <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de> <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
- <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de> <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
- <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
- <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de> <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
- <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de> <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
- <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
- <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de> <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de> <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
-In-Reply-To: <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
-From:   Drew Fustini <drew@beagleboard.org>
-Date:   Sat, 31 Oct 2020 22:57:23 +0100
-Message-ID: <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-To:     Patrick Menschel <menschel.p@posteo.de>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201021052437.3763-2-qiangqing.zhang@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, Oct 31, 2020 at 4:35 PM Patrick Menschel <menschel.p@posteo.de> wrote:
->
-> > I believe Waveshare did choose other interrupt pins.
-> > Marc used 24 25 which I also chose for a pHat I'm currently making
-> > schematics for.
-> >
-> > Try these lines in /boot/config.txt
-> >
-> > dtoverlay=mcp251xfd-spi0-0,interrupt=25
-> > dtoverlay=mcp251xfd-spi1-0,interrupt=16
-> >
-> > The waveshare overlay is strange in one point. It uses Pin 26 (instead
-> > of 18) for Chip selection but that is no chip select pin. This can work
-> > if the pin is output and luckily pulls the CE line in the right direction.
-> >
-> > https://gist.github.com/pdp7/784d0ba8b9648d20ab055747ec945225#file-2xmcp2517fd-overlay-dts-L40
-> >
-> > https://pinout.xyz/pinout/pin37_gpio26#
-> >
-> > Maybe this has something to do with Nvidia Jetson Platform.
-> >
-> > --
-> > Patrick
-> >
->
-> Apparently Pin 26 is CE1 for SPI5, only available on Pi 4.
->
-> https://github.com/raspberrypi/firmware/blob/master/boot/overlays/README#L2674
->
-> --
-> Patrick
+On Wed, Oct 21, 2020 at 01:24:32PM +0800, Joakim Zhang wrote:
+> From: Liu Ying <victor.liu@nxp.com>
+> 
+> Always export SCU symbols for both SCU SoCs and non-SCU SoCs to avoid
+> build error.
+> 
+> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> ---
+>  include/linux/firmware/imx/ipc.h      | 15 +++++++++++++++
 
-Thank you!  That appears to have solved the problem:
+Could you rebase it to my imx/drivers branch?  There is one patch from
+Peng Fan that already changed ipc.h.
 
-#dtoverlay=2xMCP2517FD
-pi@raspberrypi:~$ dmesg | grep -Ei can\|spi
-[    5.916785] DEBUG spi.c spi_setup(): ENTER
-[    5.917056] DEBUG spi.c spi_setup(): ENTER
-[    5.960326] DEBUG spi.c spi_setup(): ENTER
-[    6.897919] CAN device driver interface
-[    6.904530] mcp251xfd spi0.0: DEBUG mcp251xfd mcp251xfd_probe():
-devm_clk_get()
-[    6.904574] mcp251xfd spi0.0: DEBUG mcp251xfd mcp251xfd_probe(): feq=40000000
-[    6.904641] DEBUG spi.c spi_setup(): ENTER
-[    6.904658] spi_master spi0: will run message pump with realtime priority
-[    6.912009] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
-+MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-r:17.00MHz e:0.00MHz) successfully initialized.
-[    6.912613] mcp251xfd spi1.0: DEBUG mcp251xfd mcp251xfd_probe():
-devm_clk_get()
-[    6.912646] mcp251xfd spi1.0: DEBUG mcp251xfd mcp251xfd_probe(): feq=40000000
-[    6.912701] DEBUG spi.c spi_setup(): ENTER
-[    6.912719] spi_master spi1: will run message pump with realtime priority
-[    6.920067] mcp251xfd spi1.0 can1: MCP2517FD rev0.0 (-RX_INT
-+MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-r:17.00MHz e:0.00MHz) successfully initialized.
+Shawn
 
-
-Thanks,
-Drew
+>  include/linux/firmware/imx/svc/misc.h | 23 +++++++++++++++++++++++
+>  2 files changed, 38 insertions(+)
+> 
+> diff --git a/include/linux/firmware/imx/ipc.h b/include/linux/firmware/imx/ipc.h
+> index 891057434858..300fa253fc30 100644
+> --- a/include/linux/firmware/imx/ipc.h
+> +++ b/include/linux/firmware/imx/ipc.h
+> @@ -34,6 +34,7 @@ struct imx_sc_rpc_msg {
+>  	uint8_t func;
+>  };
+>  
+> +#if IS_ENABLED(CONFIG_IMX_SCU)
+>  /*
+>   * This is an function to send an RPC message over an IPC channel.
+>   * It is called by client-side SCFW API function shims.
+> @@ -55,4 +56,18 @@ int imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg, bool have_resp);
+>   * @return Returns an error code (0 = success, failed if < 0)
+>   */
+>  int imx_scu_get_handle(struct imx_sc_ipc **ipc);
+> +
+> +#else
+> +static inline int
+> +imx_scu_call_rpc(struct imx_sc_ipc *ipc, void *msg, bool have_resp)
+> +{
+> +	return -EIO;
+> +}
+> +
+> +static inline int imx_scu_get_handle(struct imx_sc_ipc **ipc)
+> +{
+> +	return -EIO;
+> +}
+> +#endif
+> +
+>  #endif /* _SC_IPC_H */
+> diff --git a/include/linux/firmware/imx/svc/misc.h b/include/linux/firmware/imx/svc/misc.h
+> index 031dd4d3c766..d255048f17de 100644
+> --- a/include/linux/firmware/imx/svc/misc.h
+> +++ b/include/linux/firmware/imx/svc/misc.h
+> @@ -46,6 +46,7 @@ enum imx_misc_func {
+>   * Control Functions
+>   */
+>  
+> +#if IS_ENABLED(CONFIG_IMX_SCU)
+>  int imx_sc_misc_set_control(struct imx_sc_ipc *ipc, u32 resource,
+>  			    u8 ctrl, u32 val);
+>  
+> @@ -55,4 +56,26 @@ int imx_sc_misc_get_control(struct imx_sc_ipc *ipc, u32 resource,
+>  int imx_sc_pm_cpu_start(struct imx_sc_ipc *ipc, u32 resource,
+>  			bool enable, u64 phys_addr);
+>  
+> +#else
+> +static inline int
+> +imx_sc_misc_set_control(struct imx_sc_ipc *ipc, u32 resource,
+> +			u8 ctrl, u32 val)
+> +{
+> +	return -EIO;
+> +}
+> +
+> +static inline int
+> +imx_sc_misc_get_control(struct imx_sc_ipc *ipc, u32 resource,
+> +			u8 ctrl, u32 *val)
+> +{
+> +	return -EIO;
+> +}
+> +
+> +static inline int imx_sc_pm_cpu_start(struct imx_sc_ipc *ipc, u32 resource,
+> +				      bool enable, u64 phys_addr)
+> +{
+> +	return -EIO;
+> +}
+> +#endif
+> +
+>  #endif /* _SC_MISC_API_H */
+> -- 
+> 2.17.1
+> 
