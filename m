@@ -2,51 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D19D92A25F6
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 09:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DD62A2616
+	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 09:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728118AbgKBISt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 03:18:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S1727972AbgKBI2s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 03:28:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727802AbgKBISt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 03:18:49 -0500
+        with ESMTP id S1727806AbgKBI2s (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 03:28:48 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E105C0617A6
-        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 00:18:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711ACC0617A6
+        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 00:28:48 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kZV38-0000gP-GL; Mon, 02 Nov 2020 09:18:46 +0100
+        id 1kZVCk-0001xp-Ny; Mon, 02 Nov 2020 09:28:42 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4] (unknown [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E7B5F587D0F;
-        Mon,  2 Nov 2020 08:18:44 +0000 (UTC)
-To:     Drew Fustini <drew@beagleboard.org>,
-        Patrick Menschel <menschel.p@posteo.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
- <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
- <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
- <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
- <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
- <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
- <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
- <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de>
- <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
- <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
- <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
- <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 74EC7587D34;
+        Mon,  2 Nov 2020 08:28:38 +0000 (UTC)
+Subject: Re: [PATCH] net: can: prevent potential access of uninitialized value
+ in canfd_rcv()
+To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
+References: <20201102031326.430048-1-anant.thazhemadam@gmail.com>
+ <1817819d-3aeb-8034-a4ec-7c70040b0cf0@pengutronix.de>
+ <8c65ee4b-3cb8-907f-fa98-9bf4bd4293d3@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -108,16 +101,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
-Date:   Mon, 2 Nov 2020 09:18:40 +0100
+Message-ID: <28167915-ffeb-3555-7b7c-b735799b7831@pengutronix.de>
+Date:   Mon, 2 Nov 2020 09:28:34 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+In-Reply-To: <8c65ee4b-3cb8-907f-fa98-9bf4bd4293d3@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="6xZFHN1zIUGYa1LMaL0y3b8jdzfvFYlt5"
+ boundary="xEfywrfBEaJgE3gGWfpYYK8ofrTAiimEr"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -127,79 +119,72 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---6xZFHN1zIUGYa1LMaL0y3b8jdzfvFYlt5
-Content-Type: multipart/mixed; boundary="6ZLW4G4MK7X3fQa0E3w71kW2Rh0kI7dLV";
+--xEfywrfBEaJgE3gGWfpYYK8ofrTAiimEr
+Content-Type: multipart/mixed; boundary="WoMnR4Ie50mZr523xMIB1zOGAU5W8F17Q";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Drew Fustini <drew@beagleboard.org>,
- Patrick Menschel <menschel.p@posteo.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
- Josh S <josh@macchina.cc>
-Message-ID: <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
- <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
- <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
- <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
- <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
- <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
- <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
- <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
- <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
- <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de>
- <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
- <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
- <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
- <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
-In-Reply-To: <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+To: Anant Thazhemadam <anant.thazhemadam@gmail.com>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-kernel-mentees@lists.linuxfoundation.org,
+ syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
+Message-ID: <28167915-ffeb-3555-7b7c-b735799b7831@pengutronix.de>
+Subject: Re: [PATCH] net: can: prevent potential access of uninitialized value
+ in canfd_rcv()
+References: <20201102031326.430048-1-anant.thazhemadam@gmail.com>
+ <1817819d-3aeb-8034-a4ec-7c70040b0cf0@pengutronix.de>
+ <8c65ee4b-3cb8-907f-fa98-9bf4bd4293d3@gmail.com>
+In-Reply-To: <8c65ee4b-3cb8-907f-fa98-9bf4bd4293d3@gmail.com>
 
---6ZLW4G4MK7X3fQa0E3w71kW2Rh0kI7dLV
+--WoMnR4Ie50mZr523xMIB1zOGAU5W8F17Q
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 10/31/20 10:57 PM, Drew Fustini wrote:
-> #dtoverlay=3D2xMCP2517FD
-> pi@raspberrypi:~$ dmesg | grep -Ei can\|spi
-> [    5.916785] DEBUG spi.c spi_setup(): ENTER
-> [    5.917056] DEBUG spi.c spi_setup(): ENTER
-> [    5.960326] DEBUG spi.c spi_setup(): ENTER
-> [    6.897919] CAN device driver interface
-> [    6.904530] mcp251xfd spi0.0: DEBUG mcp251xfd mcp251xfd_probe():
-> devm_clk_get()
-> [    6.904574] mcp251xfd spi0.0: DEBUG mcp251xfd mcp251xfd_probe(): feq=
-=3D40000000
-> [    6.904641] DEBUG spi.c spi_setup(): ENTER
-> [    6.904658] spi_master spi0: will run message pump with realtime pri=
-ority
-> [    6.912009] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
-> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-> r:17.00MHz e:0.00MHz) successfully initialized.
+On 11/2/20 8:44 AM, Anant Thazhemadam wrote:
+>=20
+> On 02-11-2020 12:40, Marc Kleine-Budde wrote:
+>> On 11/2/20 4:13 AM, Anant Thazhemadam wrote:
+>>> In canfd_rcv(), cfd->len is uninitialized when skb->len =3D 0, and th=
+is
+>>> uninitialized cfd->len is accessed nonetheless by pr_warn_once().
+>>>
+>>> Fix this uninitialized variable access by checking cfd->len's validit=
+y
+>>> condition (cfd->len > CANFD_MAX_DLEN) separately after the skb->len's=
 
-> [    6.912613] mcp251xfd spi1.0: DEBUG mcp251xfd mcp251xfd_probe():
-> devm_clk_get()
-> [    6.912646] mcp251xfd spi1.0: DEBUG mcp251xfd mcp251xfd_probe(): feq=
-=3D40000000
-> [    6.912701] DEBUG spi.c spi_setup(): ENTER
-> [    6.912719] spi_master spi1: will run message pump with realtime pri=
-ority
-> [    6.920067] mcp251xfd spi1.0 can1: MCP2517FD rev0.0 (-RX_INT
-> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-> r:17.00MHz e:0.00MHz) successfully initialized.
+>>> condition is checked, and appropriately modify the log messages that
+>>> are generated as well.
+>>> In case either of the required conditions fail, the skb is freed and
+>>> NET_RX_DROP is returned, same as before.
+>>>
+>>> Reported-by: syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
+>>> Tested-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+>>> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+>>> ---
+>>> This patch was locally tested using the reproducer and .config file=20
+>>> generated by syzbot.
+>>>
+>>>  net/can/af_can.c | 19 ++++++++++++++-----
+>>>  1 file changed, 14 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/net/can/af_can.c b/net/can/af_can.c
+>>> index ea29a6d97ef5..1b9f2e50f065 100644
+>>> --- a/net/can/af_can.c
+>>> +++ b/net/can/af_can.c
+>>> @@ -694,16 +694,25 @@ static int canfd_rcv(struct sk_buff *skb, struc=
+t net_device *dev,
+>> Can you create a similar patch for "can_rcv()"?
+>=20
+> Yes, I can. Would it be alright if that was part of the v2 itself (sinc=
+e it's similar changes)?
+> Or would I have to split them up into 2 different patches and send it a=
+s a 2-patch series
+> (since the changes made are in different functions)?
 
-spi1.0?
-
-Have you changed any of the solder jumpers on JPAD3? See the 0 ohm resist=
-ors at A/B:
-
-    https://www.waveshare.com/w/upload/1/13/2-CH_CAN_FD_HAT_Manual-3.png
-
-I cannot see, how any of the chip selects of SPI1 is routed to the mcp251=
-7fd....
+Please make it two patches. Please add a "Fixes" line to both patches.
 
 Marc
 
@@ -210,23 +195,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---6ZLW4G4MK7X3fQa0E3w71kW2Rh0kI7dLV--
+--WoMnR4Ie50mZr523xMIB1zOGAU5W8F17Q--
 
---6xZFHN1zIUGYa1LMaL0y3b8jdzfvFYlt5
+--xEfywrfBEaJgE3gGWfpYYK8ofrTAiimEr
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+fwOAACgkQqclaivrt
-76muOQf/S/86zcUTbvzRkxRtQno1dVY74F5ob9/0HxFNFVLRUED5Xig2++sjFODz
-jo/fgLGDXaiogeG0UFxyWQ7xxscVQEnTPtc1nYEv9hfi/9JGl0PdmiZ9sa8hsdb9
-q1opmFgqxvHHGrEexBYeMtk7NW9kCVw4Y/HgJfOS3gL0gIc8CGfclmxSYBdmEv82
-Rzc8JLuNPFnPXDwdYggmUmqLvy5kuexk0AfqnpaLsbzhq3KTZF95GadCcjTvhPsl
-j9TPdZxLn2qpTEsHaOsilKkflX2avoS5jPSm3wMzdZvl3B8jkvgb8fJiLFbpdg04
-kKnIiDdfkaa0ncFmXMegDkKjVxL+WA==
-=UmPz
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+fwzIACgkQqclaivrt
+76nWLAf8CLzXzYX6Nv14/3mZxRm+h7Zy2pOIXyJX5p75AmmVWWryDi1Vg0ijOnDz
+5e65FfXl8q1c7wE4o0VI+HhNgY0REVN+vP70qnFF2oIPE2QBcirCAK3vDRzk6WDI
+suqhJb6bNpA+8Ekvqw5wFad1ZR8rxrI/+k0FOgHTEGYpdwFRkGvfjhj/6FSxaoI1
+Em88Ff4XnatAaNyNfo1FK2bVFMNf2zkcbW/lCQTweuj1J3bzSHydpkhCwzxK/jaF
+/mCBF7UucZEJczDuaFkvl34VT72pUzKkAdDFM56sNleHr28+K92Y/THh6Qf9phcB
+d8V/oAoXH3b8jZTvbKdwBd51/r1LlA==
+=E3pH
 -----END PGP SIGNATURE-----
 
---6xZFHN1zIUGYa1LMaL0y3b8jdzfvFYlt5--
+--xEfywrfBEaJgE3gGWfpYYK8ofrTAiimEr--
