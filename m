@@ -2,70 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16D02A36D9
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 23:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5019B2A372C
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 00:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbgKBW7R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 17:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725910AbgKBW7R (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 17:59:17 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1000DC0617A6
-        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 14:59:17 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id t143so4838063oif.10
-        for <linux-can@vger.kernel.org>; Mon, 02 Nov 2020 14:59:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=pIgbBf1uVZBJLBc5D8KblxG4A//HXosAxW7u85yDxVE=;
-        b=cscgf4UENNPWGUc6kLu3WbtTtJc1SYK2SS5ueXLVRncO2izfrzr0juH6o5i1d9SzoM
-         qC0+vemnKbfqtXi0gZZ07M5FF4ydHgf6pqu1cNMjGcb02WlqPm5HSw84jjhyszzPlJgf
-         Xka7GKtyDCiTzt+q9j4cR7gNSr+CbyOQDvGMQQO8X8wR5t461Ii+HyNg463NfodEXUhd
-         eUTV6+5yXod8oWkn7G2xoaLdDGaqJ66yE14aFbJSKAjXIMXDPO+Vw9+aRLxaL0WCVSQg
-         eqopv+4iYoDGfvjAK6I1o9Au2531wkxGS+EiSqJInWWV48ZzGnLG32KK03SNZT1gjaU1
-         eQVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=pIgbBf1uVZBJLBc5D8KblxG4A//HXosAxW7u85yDxVE=;
-        b=OWIcLTxs2QCs2V5W5o+GOwp4f6U4dqDHF9DSZ9pbZ0o8M+gp07NL/twXMbNU0/4E9n
-         OgvC6W7UAcwYEG54or+x24YPXMsfhj3Z33HkKANV/KHRDY0hUFyRIL7PkU+fIVuX1kZ6
-         8veytLD2XAsBgJnd16geqXwrjeyGEVCKN0nfm93AQrwJkxiHJD05tUZCkWuOQhgS1uxc
-         ih5Wcr3Yi0XkQ6+gfrWyKcLYXAV3qf9W/dZtnOzooCTnVasu/ll5Q5Mt6IzcCZwARXm2
-         3ppzK0mXsNU4zHrE5s+AbrO53vpusBmNhxAmMYwsPfgO6ftzCm9OIEdGPO8Iuk6+HaiV
-         M8IQ==
-X-Gm-Message-State: AOAM532pP+wlnZSzNxt0NSIVRiyp/d9SDUQ5/uDuXXPp+sAkejyA5GSG
-        ds+so1zjrjIaAP/CaKqZd/s4G5Dn28AHtdWM6JWRd/HAMEJB9UQD
-X-Google-Smtp-Source: ABdhPJwr5K2+xMulem0PmJfpBpU9H4LuoZDesbjjgez+doVpkxrRDSV5r/O1ipl9nHGIK3q5Imr7nvqh7qbbEMNpVBc=
-X-Received: by 2002:aca:b607:: with SMTP id g7mr270138oif.38.1604357956468;
- Mon, 02 Nov 2020 14:59:16 -0800 (PST)
+        id S1726432AbgKBX2r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 18:28:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725841AbgKBX2r (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 2 Nov 2020 18:28:47 -0500
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 28AAE22280;
+        Mon,  2 Nov 2020 23:28:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604359727;
+        bh=4MjQMzBRiuQQCBZ/m2YpKQucOcQZa7hQO0Ry0R/PWLY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GVqI/0xLl0PHdspUgvrvlEYBzXN3PNAvN+q70ACDQLBvKvTxOJ6TzR0ZoJ+NDPPQG
+         a0olQwsE8XKIkqrfR2VV8fXgY7AxgLy5j5kogO6ts8+ZW5w9AbkbiOKFC+TxslySjE
+         z6tb/dovnpfFNLkfRTfXHYx/9BfVysVqDmi+s13E=
+Date:   Tue, 3 Nov 2020 07:28:41 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc:     mkl@pengutronix.de, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-imx@nxp.com, victor.liu@nxp.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 5/6] dt-bindings: firmware: add IMX_SC_R_CAN(x) macro
+ for CAN
+Message-ID: <20201102232840.GT31601@dragon>
+References: <20201021052437.3763-1-qiangqing.zhang@nxp.com>
+ <20201021052437.3763-6-qiangqing.zhang@nxp.com>
 MIME-Version: 1.0
-From:   Drew Fustini <drew@beagleboard.org>
-Date:   Mon, 2 Nov 2020 23:59:25 +0100
-Message-ID: <CAPgEAj75pUnhOrvQ5basubGfpMoijpBonOsv-Wio=WP55dmFNw@mail.gmail.com>
-Subject: Re: mcp251xfd: rx-int setting
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201021052437.3763-6-qiangqing.zhang@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+On Wed, Oct 21, 2020 at 01:24:36PM +0800, Joakim Zhang wrote:
+> Add IMX_SC_R_CAN(x) macro for CAN.
+> 
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-I modified devm_gpiod_get_optional() in mcp251xfd_probe() to look for
-"rx-int" instead of "microchip,rx-int".  Is there a reason it was
-looking for "microchip,rx-int"?
+Acked-by: Shawn Guo <shawnguo@kernel.org>
 
-I am using branch v5.4-rpi/mcp251xfd-20201022-54 at commit 9e02abd4fe59.
-
-While it does now see the property, it does run into this issue:
-[    6.830900] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-RX_INT active after softreset, disabling RX_INT support.
-
-Any suggestions as to how to troubleshoot this?
-
-Thanks,
-Drew
+> ---
+>  include/dt-bindings/firmware/imx/rsrc.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/dt-bindings/firmware/imx/rsrc.h b/include/dt-bindings/firmware/imx/rsrc.h
+> index 54278d5c1856..43885056557c 100644
+> --- a/include/dt-bindings/firmware/imx/rsrc.h
+> +++ b/include/dt-bindings/firmware/imx/rsrc.h
+> @@ -111,6 +111,7 @@
+>  #define IMX_SC_R_CAN_0			105
+>  #define IMX_SC_R_CAN_1			106
+>  #define IMX_SC_R_CAN_2			107
+> +#define IMX_SC_R_CAN(x)			(IMX_SC_R_CAN_0 + (x))
+>  #define IMX_SC_R_DMA_1_CH0		108
+>  #define IMX_SC_R_DMA_1_CH1		109
+>  #define IMX_SC_R_DMA_1_CH2		110
+> -- 
+> 2.17.1
+> 
