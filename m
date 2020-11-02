@@ -2,35 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4441D2A3342
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 19:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70EEB2A336C
+	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 19:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725789AbgKBSrY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 13:47:24 -0500
-Received: from mout02.posteo.de ([185.67.36.66]:32899 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725846AbgKBSrY (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 2 Nov 2020 13:47:24 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id F19302400FE
-        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 19:47:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1604342841; bh=dRyr5J7bAoBi9KiAchpuXV2Zqv5mqcRk/HeSvFLjJ08=;
-        h=From:To:Cc:Autocrypt:Subject:Date:From;
-        b=kfuMQ0JtvDT5P/KNCXLcVz86SnybNXVuBDgT1O+UA4Kbx5BHX8OYRLh+UAbPVUZw1
-         uiaIzVu18YJ7oEv1c6t16CbA4p+ls1knedyD3zVuUawE7aa2zJJ9P92ScDZ1RXnDhB
-         1b7hCNlyn289B67OIzrEGPBTKxA5KRKJBmKnFnTrH0R/6HDPpfSC9dTEeToWXVjt9t
-         DoY6QuwqB8G5SUisrkWJ460eP53PjGvoCAFlL5uMHF8WEwO54I+Y9AP2G/LS5mV7M7
-         m1Sgp8FosTNaEDDJvyOmJtkYEr3eaMzQIrLKEVZMez7aBTpUNOnoUdEVXrooCRsMJo
-         V5BUbzLQDg/aA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4CQ22w2ZZ1z6tmJ;
-        Mon,  2 Nov 2020 19:47:20 +0100 (CET)
-From:   Patrick Menschel <menschel.p@posteo.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Drew Fustini <drew@beagleboard.org>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
+        id S1725801AbgKBS5E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 13:57:04 -0500
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:59609 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbgKBS5E (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 13:57:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1604343423; x=1635879423;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=XNfjrqM9aOWqxXCQwJeP0OGdRxaqaneNmt7crwb8VJE=;
+  b=An/OppHd1epkuePhXUkO2EUjwhAHpqnxWRMDSN2fZTrEZXYFgwMylsE8
+   mJz5OiI1dBk/MW6uZCqopkWksGPampPyTB/0HPVz+ZjT7mH8yDksUjB2m
+   KNKFp7nMvX5XgZb4T0204G8rbEeKECrw5xC7TS3rEz3t/JwUlRJWwlfzU
+   u4y/ozQq3tX/0F4wPD4nAFadkWBl/EBxw4u2rHhA3UkztVX0In9IMrg9o
+   kMxFWDHIP3VWoUIX3jp3l0hGCkZ6WyMA86kPtd03FWjbgLffO0XxHSrSI
+   l8cEcuAkXEncbxcQb4uG7cAcqo3TmuRF37nUadYlTbdtP7aYNrkbiC92c
+   g==;
+IronPort-SDR: n8XoEslLGGkF4WEiEAuGkAm+Ejt9oEgmiHY/hfkkwH8oObetYOv+lKi0x/sJh/0zTP9i40kxkc
+ 0xBlHRVpuJuV+35UwmpwhD0xQtz8aVB4i/KaHLLTwxHE6bHVeUnYfju+0nOamB3YoQd+i39MYM
+ i0kcovhzK0dfkhpEI34N6unnbrzr2xMWu81toh0QQMt7/h1zkGc/3BzP6YTZUVumtOMjOkIGUl
+ Tf/pXlQPvyCPSI4vjFojjUwQGe2s2AA7rXPWiBgA711unVqizmquXyLROp1yUbIJnaKy78jIHl
+ eHk=
+X-IronPort-AV: E=Sophos;i="5.77,445,1596524400"; 
+   d="scan'208";a="101850341"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2020 11:57:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 2 Nov 2020 11:57:03 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3 via Frontend
+ Transport; Mon, 2 Nov 2020 11:57:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=benQRetGDGro1+frISFW79m5uqTZ0Bw02zBmQr5ttDmALrBOseIzd2ilfJ/mM7OwytdSaQgfP8fiVrbw6JBsEP611FeOVuC0GdcvFtZWUIbJef2P5fyb5ymCmRyg8Vf1xk9AiUCWrk1eRQlXMnqzuryeC2VEAqduQoBi7785hwF4RZ+C2UI103KzoTZdr9sBrN62d3lc1u1sRJdSL877cxmeHl3Dukx7R+YRbsH34/b003ka1v2UldSzd5Ub0GzDdfADwsQWGHjg6QT4u47Q/eHwSZQAIQHacEBiICsTi+tIjoZDXXtodUsiixE/6V01WPE0eJKsf0/aUCZFMtMeAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XNfjrqM9aOWqxXCQwJeP0OGdRxaqaneNmt7crwb8VJE=;
+ b=laVYCkBSMVF/+ccxijdpvhAJcrlHDv2AsKG2os3DqRCuZZRZEnQIW86PB4pV3pZV3IpCXrfh+hpyvLPde4/8bc3gZT7+ACOwd+oe3eWuhg9kjOHVh/O2nwza8wAsHNqDbWZTHtMQh85Li9LxHATU8Mwzlm5GBQ8UVjQm5XuO2tsqejla6L2so610AJnTZfB9RgB8D4CChroEcVWmzMup83gp7eB5En+espYCvYGVF/jVeHJny/I34EpMWZCtwqSC3O+KYJNZI06nITGGow5AGDTWuQ/Mjbq9drCwT9zpEdD+VwVED5LG50WbyyxTzjgOJvqjk9HIzR/kcPYyZi4elw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XNfjrqM9aOWqxXCQwJeP0OGdRxaqaneNmt7crwb8VJE=;
+ b=sFpeSvHGdilJzM4tojYOb1yYygASd+g6y9SrrZ+yYpmFEbZ8uklKxNxMeIglKLLmeRj8kEhPdMHrviCZbgamLtv2/Gm8KmzvTEcspjLeYV6tXeT06CBhfwxAdi17N3HbpBdUdtIcnWH4kBFyl47p9vqLg3hGvhyRltlUhGgZMuI=
+Received: from DM6PR11MB4283.namprd11.prod.outlook.com (2603:10b6:5:206::32)
+ by DM6PR11MB2985.namprd11.prod.outlook.com (2603:10b6:5:66::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.24; Mon, 2 Nov
+ 2020 18:57:01 +0000
+Received: from DM6PR11MB4283.namprd11.prod.outlook.com
+ ([fe80::e97c:9647:f0c8:e603]) by DM6PR11MB4283.namprd11.prod.outlook.com
+ ([fe80::e97c:9647:f0c8:e603%5]) with mapi id 15.20.3499.030; Mon, 2 Nov 2020
+ 18:57:01 +0000
+From:   <Thomas.Kopp@microchip.com>
+To:     <menschel.p@posteo.de>, <mkl@pengutronix.de>,
+        <drew@beagleboard.org>
+CC:     <socketcan@hartkopp.net>, <linux-can@vger.kernel.org>,
+        <josh@macchina.cc>
+Subject: RE: mcp251xfd on RPi 5.4 downstream
+Thread-Topic: mcp251xfd on RPi 5.4 downstream
+Thread-Index: AQHWqCDoCFfsNWP42k6nfA0WlXA416mjIPwAgAAJTACAAMuIAIADyR+AgABIX4CAACPhAIAAcVKAgAAIj4CAAAfZAIAAejuAgAAOLgCAAHJzAIAAeGIAgAACjoCAAJ0rAIAARniAgAAI6YCAALuRAIAAAU+AgAHH5N2ABB4yAIAALqOAgAAF4YCAAGqigIACP+sAgAAtPl2AAG32AIAAFHIAgAABNJA=
+Date:   Mon, 2 Nov 2020 18:57:01 +0000
+Message-ID: <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
  <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
@@ -47,115 +92,55 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
  <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
  <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
-Date:   Mon, 2 Nov 2020 19:47:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+In-Reply-To: <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: posteo.de; dkim=none (message not signed)
+ header.d=none;posteo.de; dmarc=none action=none header.from=microchip.com;
+x-originating-ip: [37.49.108.103]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ebde68ab-8ecf-41d5-a323-08d87f611516
+x-ms-traffictypediagnostic: DM6PR11MB2985:
+x-microsoft-antispam-prvs: <DM6PR11MB2985D8959AE2C7ADBECD52D2FB100@DM6PR11MB2985.namprd11.prod.outlook.com>
+x-bypassexternaltag: True
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6IhMwXMi/D38klaGBX5GL6f0rWsUene/2uB9cPnLyiKy1GJjvEDdXbz62G3Uat0McHEL03UM/ndd54/tc4WiDpQpgS/Tnl1W1rbu9zqJj7GqDej+lV72EFwm0G5izHUkuvjWgCSNU5YWpaOamLkcTeU/OEj6NTKB/CBicXnPYnWbtWfQRRdkukTm6/W7Iv4XSXwLEDjtCcHOUry594Ihc6X7bjRi3XoQSy8IzeD7sMzHe63TcLOaNUPnkUK/jswJhj1tP8InyTzPIeGx7H4/8WIJfbrYNYUTPF4FebnYv3wdOZ7yYvECYjg4A/Fq4iQ3kdxa8K7sd5WMEYcdkRxs9MR7O+pHOT9cOUGyMj/AtrR6f5UJPeiU7Xoa6LHfrYTxqDVi6M3rM/W7dGdOvYqNOQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4283.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(136003)(366004)(396003)(39860400002)(55016002)(33656002)(86362001)(2906002)(76116006)(8936002)(8676002)(64756008)(66446008)(66556008)(71200400001)(66476007)(316002)(66946007)(54906003)(110136005)(7696005)(478600001)(26005)(966005)(52536014)(9686003)(5660300002)(4326008)(83380400001)(186003)(6506007)(4744005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: yMrNsyuFbPSxoYyJYRp2JzXWCJS66I6zO2PBpI/PpqrlMkVa6Bk0715H+Axzx7yd2YltPK5Tt8jFWS+Z4YCiAWLorIwy49dB8mRW4poHd2R4PetvA3MOVmsI8tV/Ayzm0Vwljf8K6xV15V+IPMJ6koicrGkq2gYe1ZFFLMRvhSTy60y5wx0bQUIH/ixUcPgdBdLYGnzZkb6iHQQSO/ReyrDeabrpa3Pdgm0QHSaDRXxdWlGvat4NAy8gQpvNRbjDhdmQzN8JP055wje4vYznSy6ff1hlOa3QEo33cwsIAJ+X/gY4YF8Em+5ulAuDrlHssGxccwqeI58DRf3o/tWAqde7CMNVgDOPP9QZAlsGacCgXw0ZmnhPGuqyILKIJDVUTe9o34482ASH+rEkwyK5NBjPMEidHPh0p9w+3VYQNKW6jBYdrcxrcUDoo5u2P2hYx7KkcbLJzjsGLraPczHfwmSzX215b0UjG/OzLENJwHb+KC5n2L1pC0VMvyJ9wcua6z8BrkYnDfrkzgV9dz1kIh4P2PDGf7LEAap+XqEddtcG9Hj05JolAFbLcsojs2w/4HYMGNFNfNwlwZZIlAwP4S97ASakEbVUsYq3vtBA9bBBuLa0LuAHMoRFp5e6zeRWSTHpBLDInb0zcZQDVx6dXw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4283.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebde68ab-8ecf-41d5-a323-08d87f611516
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2020 18:57:01.3656
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BSnTLKXlSsgI2+WvHMNZPr/ORYskPwgQf+oRiroAuwXRfTbcu4QwzBljQ5KXiAb7gNlkwrsHLHsVBgSRKjKEZPslLWFycqK2fc/QdeKHNI0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2985
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
->>     https://www.waveshare.com/w/upload/e/e2/2-CH-CAN-FD-HAT-Schematic.pdf
->>
->> Grmpf :/
->>
->>> This means that can1 cs is connected to pi header pin 26 
->>
->> Both of rpi's SPI host drivers prefer to use GPIO chip selects by default, as
->> native chip selects have some limitations. And all three mcp251xfd overlays use
->> GPIO chip selects, this means you can use any free GPIO in the system for the
->> SPI chip select.
->>
->> Marc
->>
-> 
-> It took me a while to realize but those pin numbers on the PCB are
-> WPI := WiringPi numbers, not header pin numbers and not BCM pin numbers.
-> 
-> The schematics also has the WPI column in the lower left section.
-> 
-> https://pinout.xyz/pinout/wiringpi#
-> 
-> --
-> Patrick
-> 
-
-It may be a blunt guess, but according to page 99
-
-https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2711/rpi_DATA_2711_1p0.pdf
-
-Pin 26 is pulldown. So it works if it remains unused because the pin is
-input with pulldown thus the chip is selected by default.
-
-I don't know if the CE pin can actually work if there is no matching alt
-function in pinselect register.
-
---
-Patrick
-
+PiBJdCBtYXkgYmUgYSBibHVudCBndWVzcywgYnV0IGFjY29yZGluZyB0byBwYWdlIDk5DQo+IA0K
+PiBodHRwczovL3d3dy5yYXNwYmVycnlwaS5vcmcvZG9jdW1lbnRhdGlvbi9oYXJkd2FyZS9yYXNw
+YmVycnlwaS9iY20yNw0KPiAxMS9ycGlfREFUQV8yNzExXzFwMC5wZGYNCj4gDQo+IFBpbiAyNiBp
+cyBwdWxsZG93bi4gU28gaXQgd29ya3MgaWYgaXQgcmVtYWlucyB1bnVzZWQgYmVjYXVzZSB0aGUg
+cGluIGlzDQo+IGlucHV0IHdpdGggcHVsbGRvd24gdGh1cyB0aGUgY2hpcCBpcyBzZWxlY3RlZCBi
+eSBkZWZhdWx0Lg0KPiANCj4gSSBkb24ndCBrbm93IGlmIHRoZSBDRSBwaW4gY2FuIGFjdHVhbGx5
+IHdvcmsgaWYgdGhlcmUgaXMgbm8gbWF0Y2hpbmcgYWx0DQo+IGZ1bmN0aW9uIGluIHBpbnNlbGVj
+dCByZWdpc3Rlci4NCj4gDQo+IC0tDQo+IFBhdHJpY2sNCkRvIHlvdSBzdWdnZXN0IHRoYXQgdGhl
+IGNvbW11bmljYXRpb24gd29ya3Mgd2l0aCBhIHBlcm1hbmVudCBsb3cgb24gQ1MvQ0U/DQpXaXRo
+b3V0IHRoZSBDUy9DRSBwaW4gaGF2aW5nIGVkZ2VzIHlvdSB3aWxsIG5vdCBiZSBhYmxlIHRvIHNl
+bmQgbXVsdGlwbGUgDQpjb21tYW5kcy4gVGhlIGRyaXZlciBpcyB3cml0aW5nL3JlYWRpbmcgbXVs
+dGlwbGUgdGltZXMgd2hlbiBicmluZ2luZyB1cCB0aGUNCmNoaXAuIElmIHlvdSBoYXZlIGEgcGVy
+bWFuZW50IGxvdyB0aGF0IHdpbGwgZmFpbC4gU28gc29tZWhvdyB0aGUgQ1MgZG9lcyANCmdlbmVy
+YXRlIHRoZSByaWdodCBlZGdlcy4NCg0KVGhvbWFzDQo=
