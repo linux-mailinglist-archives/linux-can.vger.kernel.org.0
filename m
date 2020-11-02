@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D7F2A31A4
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 18:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4441D2A3342
+	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 19:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727288AbgKBReP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 12:34:15 -0500
-Received: from mout02.posteo.de ([185.67.36.66]:59977 "EHLO mout02.posteo.de"
+        id S1725789AbgKBSrY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 13:47:24 -0500
+Received: from mout02.posteo.de ([185.67.36.66]:32899 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727227AbgKBReP (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 2 Nov 2020 12:34:15 -0500
+        id S1725846AbgKBSrY (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 2 Nov 2020 13:47:24 -0500
 Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 913A32400FD
-        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 18:34:12 +0100 (CET)
+        by mout02.posteo.de (Postfix) with ESMTPS id F19302400FE
+        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 19:47:20 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1604338452; bh=fNKJPXzWazXvQWMGyG4nKnlkLOLCXngerqAdWNSA5fI=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=R7W92SOvJjiPpY+57aEm7kQ9j6SpEW7L6vQ88e4sgJUKpJGk9DXPsZH0x1nzeD8q7
-         FdFJjrGHAyjdOSWCjH+eDnTr6DouPOighk5MEJJsWeY1uRgnCx3WARc0zUnvgAaNto
-         hZnSrkGEpeQtkDF5Ob/qJecZQFbtXm8gCQoMvSNU3TfPvVVTpZKaf3XzOJsYc6D+L0
-         thhytDH1dD5MAvWAykZinFG/PVueaVmVCghnPV9Jj6sTjhihhEZNBL4pxrbsrVat3H
-         K4M67t5IV3orvrGMvoWLpqSd2FW6fPaAPnymeEFG3Hc/+5fE9grfcXcCzGLFH8OHv2
-         PydHePci5yjBw==
+        t=1604342841; bh=dRyr5J7bAoBi9KiAchpuXV2Zqv5mqcRk/HeSvFLjJ08=;
+        h=From:To:Cc:Autocrypt:Subject:Date:From;
+        b=kfuMQ0JtvDT5P/KNCXLcVz86SnybNXVuBDgT1O+UA4Kbx5BHX8OYRLh+UAbPVUZw1
+         uiaIzVu18YJ7oEv1c6t16CbA4p+ls1knedyD3zVuUawE7aa2zJJ9P92ScDZ1RXnDhB
+         1b7hCNlyn289B67OIzrEGPBTKxA5KRKJBmKnFnTrH0R/6HDPpfSC9dTEeToWXVjt9t
+         DoY6QuwqB8G5SUisrkWJ460eP53PjGvoCAFlL5uMHF8WEwO54I+Y9AP2G/LS5mV7M7
+         m1Sgp8FosTNaEDDJvyOmJtkYEr3eaMzQIrLKEVZMez7aBTpUNOnoUdEVXrooCRsMJo
+         V5BUbzLQDg/aA==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4CQ0QW1dJ6z6tmP;
-        Mon,  2 Nov 2020 18:34:11 +0100 (CET)
+        by submission (posteo.de) with ESMTPSA id 4CQ22w2ZZ1z6tmJ;
+        Mon,  2 Nov 2020 19:47:20 +0100 (CET)
+From:   Patrick Menschel <menschel.p@posteo.de>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Drew Fustini <drew@beagleboard.org>
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
  <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
  <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
  <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
@@ -46,7 +46,7 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
  <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
  <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
-From:   Patrick Menschel <menschel.p@posteo.de>
+ <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
 Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
  elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
@@ -108,12 +108,12 @@ Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
  IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
 Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
-Date:   Mon, 2 Nov 2020 18:34:10 +0100
+Message-ID: <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+Date:   Mon, 2 Nov 2020 19:47:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+In-Reply-To: <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
@@ -121,26 +121,41 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
->     https://www.waveshare.com/w/upload/e/e2/2-CH-CAN-FD-HAT-Schematic.pdf
+>>     https://www.waveshare.com/w/upload/e/e2/2-CH-CAN-FD-HAT-Schematic.pdf
+>>
+>> Grmpf :/
+>>
+>>> This means that can1 cs is connected to pi header pin 26 
+>>
+>> Both of rpi's SPI host drivers prefer to use GPIO chip selects by default, as
+>> native chip selects have some limitations. And all three mcp251xfd overlays use
+>> GPIO chip selects, this means you can use any free GPIO in the system for the
+>> SPI chip select.
+>>
+>> Marc
+>>
 > 
-> Grmpf :/
+> It took me a while to realize but those pin numbers on the PCB are
+> WPI := WiringPi numbers, not header pin numbers and not BCM pin numbers.
 > 
->> This means that can1 cs is connected to pi header pin 26 
+> The schematics also has the WPI column in the lower left section.
 > 
-> Both of rpi's SPI host drivers prefer to use GPIO chip selects by default, as
-> native chip selects have some limitations. And all three mcp251xfd overlays use
-> GPIO chip selects, this means you can use any free GPIO in the system for the
-> SPI chip select.
+> https://pinout.xyz/pinout/wiringpi#
 > 
-> Marc
+> --
+> Patrick
 > 
 
-It took me a while to realize but those pin numbers on the PCB are
-WPI := WiringPi numbers, not header pin numbers and not BCM pin numbers.
+It may be a blunt guess, but according to page 99
 
-The schematics also has the WPI column in the lower left section.
+https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2711/rpi_DATA_2711_1p0.pdf
 
-https://pinout.xyz/pinout/wiringpi#
+Pin 26 is pulldown. So it works if it remains unused because the pin is
+input with pulldown thus the chip is selected by default.
+
+I don't know if the CE pin can actually work if there is no matching alt
+function in pinselect register.
 
 --
 Patrick
+
