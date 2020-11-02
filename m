@@ -2,36 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AC1A2A2525
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 08:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEDC2A2528
+	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 08:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgKBHZu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 02:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S1727802AbgKBH03 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 02:26:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727306AbgKBHZu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 02:25:50 -0500
+        with ESMTP id S1727306AbgKBH03 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 02:26:29 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2E3C0617A6
-        for <linux-can@vger.kernel.org>; Sun,  1 Nov 2020 23:25:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADE8C0617A6
+        for <linux-can@vger.kernel.org>; Sun,  1 Nov 2020 23:26:29 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kZUDk-000388-TR; Mon, 02 Nov 2020 08:25:41 +0100
+        id 1kZUEU-0003H1-T8; Mon, 02 Nov 2020 08:26:26 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4] (unknown [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F2697587C8B;
-        Mon,  2 Nov 2020 07:25:38 +0000 (UTC)
-To:     Drew Fustini <drew@beagleboard.org>,
-        Patrick Menschel <menschel.p@posteo.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EA54D587C8E;
+        Mon,  2 Nov 2020 07:26:25 +0000 (UTC)
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+To:     Drew Fustini <drew@beagleboard.org>
+Cc:     Patrick Menschel <menschel.p@posteo.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <0667516a-525e-9c4e-ec7a-e4d8a188c338@posteo.de>
+ <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
+ <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
+ <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
  <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
  <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
  <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
@@ -43,10 +48,6 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
  <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
  <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
- <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -108,16 +109,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <7b0920d7-50c5-ff40-033c-57aca5a992bd@pengutronix.de>
-Date:   Mon, 2 Nov 2020 08:25:34 +0100
+Message-ID: <79a8cbfa-fb56-b15b-08a1-e5c424451718@pengutronix.de>
+Date:   Mon, 2 Nov 2020 08:26:22 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
+In-Reply-To: <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj"
+ boundary="RfaX7Wx6nrOVA604ZI8qPxB3ZjGqXpbuv"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -127,17 +127,20 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj
-Content-Type: multipart/mixed; boundary="InuRJyQiDO7qKgo4iNy1PvwBkHvTExLwL";
+--RfaX7Wx6nrOVA604ZI8qPxB3ZjGqXpbuv
+Content-Type: multipart/mixed; boundary="n5PqgCf7zyaLxza7V8IXDpI5XHsmN3ED2";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Drew Fustini <drew@beagleboard.org>,
- Patrick Menschel <menschel.p@posteo.de>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
+To: Drew Fustini <drew@beagleboard.org>
+Cc: Patrick Menschel <menschel.p@posteo.de>,
+ Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
  Josh S <josh@macchina.cc>
-Message-ID: <7b0920d7-50c5-ff40-033c-57aca5a992bd@pengutronix.de>
+Message-ID: <79a8cbfa-fb56-b15b-08a1-e5c424451718@pengutronix.de>
 Subject: Re: mcp251xfd on RPi 5.4 downstream
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <68846197-98dc-b991-1ec8-a477ceb8d614@posteo.de>
+ <715b3c3b-dbbc-688c-9757-578455c3a607@pengutronix.de>
+ <0667516a-525e-9c4e-ec7a-e4d8a188c338@posteo.de>
  <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
  <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
  <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
@@ -152,54 +155,20 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
  <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
  <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
- <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
-In-Reply-To: <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
+In-Reply-To: <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
 
---InuRJyQiDO7qKgo4iNy1PvwBkHvTExLwL
+--n5PqgCf7zyaLxza7V8IXDpI5XHsmN3ED2
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/1/20 11:49 PM, Drew Fustini wrote:
->>>> Try these lines in /boot/config.txt
->>>>
->>>> dtoverlay=3Dmcp251xfd-spi0-0,interrupt=3D25
->>>> dtoverlay=3Dmcp251xfd-spi1-0,interrupt=3D16
+On 10/31/20 1:27 PM, Drew Fustini wrote:
+> Alright, it looks like I had faulty hardware!  I got a Waveshare CAN
+> FD hat and both the old waveshare-provided driver and the new
+> mcp251xfd driver work.
 
-If you use the above lines ^^, the patching of the overlay should not be =
-necessary:
+YEAY
 
-> I changed this in mcp251xfd-spi1-0-overlay.dts:
-> -                               interrupts =3D <24 IRQ_TYPE_LEVEL_LOW>;=
-
-> +                               interrupts =3D <16 IRQ_TYPE_LEVEL_LOW>;=
-
-
-[...]
-
-> pi@raspberrypi:~$ dmesg | grep -Ei can\|spi
-> [   14.663345] CAN device driver interface
-> [   14.669552] spi_master spi0: will run message pump with realtime pri=
-ority
-> [   14.677102] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
-> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-> r:17.00MHz e:0.00MHz) successfully initialized.
-> [   14.677833] spi_master spi1: will run message pump with realtime pri=
-ority
-> [   14.682667] mcp251xfd spi1.0 can1: MCP2517FD rev0.0 (-RX_INT
-> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-> r:17.00MHz e:0.00MHz) successfully initialized.
-
-Note: the waveshare module uses a mcp2517fd, which has some erratas. You =
-will
-experience error frames generated by sending mcp2517fd modules, during ce=
-rtain
-conditions. Sometimes CAN frames in the RX path are dropped.
-
-regards,
 Marc
 
 --=20
@@ -209,23 +178,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---InuRJyQiDO7qKgo4iNy1PvwBkHvTExLwL--
+--n5PqgCf7zyaLxza7V8IXDpI5XHsmN3ED2--
 
---xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj
+--RfaX7Wx6nrOVA604ZI8qPxB3ZjGqXpbuv
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ftG4ACgkQqclaivrt
-76lmeQf9Ea7RDX34fzqimEPN+NsAZgR+Mv4d+wl2yYw2z7jEzNZBGpoGv18z9/ho
-Ra84LkO/MR9Vm0zjPdNmwsubRva8pA4bW4RUbgTYufQwiAYl9xHjtYca0ylOiIiy
-557BxsdwEYK6mq4PAAIt9LTQf2EIPiuWHd17UmSqpiK3LUnST20/ORWDV/VNnL7C
-gevKOE9RnC/mF2am1km40OE/s/PmbXx47VpcExu7/8JIbM/pPUgr/avd65YLZ36j
-Rg+M0MEGOUo4iRBV6dGQ9notKUtxaDkFY4NxIb+8mJTQlJFgglFDiFNkO/W9YiJw
-JtcXfZLzMuorJ1pfKrHXm6yqgJcCXA==
-=hFk1
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ftJ4ACgkQqclaivrt
+76lwSQf+MTasOtlXFQ7rGVLEtebSkWVLl7N8wV5RSgQ3yA7oSLOM6pTjTgLzu3LA
+R7vmU9aos/gA7xU5YjKkjXgjRMbyHE4/Ljltwtcr4P2MPJpi4PoQf83S7Vg7NAc3
+tcmeg2bmVyxq7dzGBhZb6ut9IjLupuDvnXJL1Q2P8/XmFXPjKbB0ME+CJI3cHns4
+q6nqQBc2K6RTOvVsoGLpeLhVYUmDd6AzL+vG11I9s0sIvYbXu0OEFu7Bf9VwuRFb
+lClZCHkEwhmjLtXgdpbK7oycia11XJPQVNXfWBHDtnTopE55bD1dITB0/agcXS5G
+lc+QI/z2+/nvq7ylOMvsQ3N5qmrvkg==
+=hIR9
 -----END PGP SIGNATURE-----
 
---xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj--
+--RfaX7Wx6nrOVA604ZI8qPxB3ZjGqXpbuv--
