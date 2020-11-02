@@ -2,38 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 228042A289D
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 12:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AEC82A2CDB
+	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 15:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728483AbgKBLAV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 06:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S1725945AbgKBO0B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 09:26:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728253AbgKBLAU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 06:00:20 -0500
+        with ESMTP id S1726092AbgKBOWn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 09:22:43 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF63C0617A6
-        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 03:00:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E030C0617A6
+        for <linux-can@vger.kernel.org>; Mon,  2 Nov 2020 06:22:43 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kZXZR-00045N-Tv; Mon, 02 Nov 2020 12:00:18 +0100
+        id 1kZajI-0004US-Ak; Mon, 02 Nov 2020 15:22:40 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4] (unknown [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2515D587FEC;
-        Mon,  2 Nov 2020 11:00:16 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B8BB9588323;
+        Mon,  2 Nov 2020 14:22:38 +0000 (UTC)
+Subject: Re: mcp251xfd: loopback test on waveshare canfd hat
 To:     Drew Fustini <drew@beagleboard.org>
 Cc:     Patrick Menschel <menschel.p@posteo.de>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
- <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
  <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
  <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
  <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
@@ -47,6 +46,8 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
  <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
  <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <CAPgEAj7BTJyiBg4QkKuekYH0zyrA-10dby3Lgb5qj2uiD4ZOYQ@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -108,16 +109,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
-Date:   Mon, 2 Nov 2020 12:00:11 +0100
+Message-ID: <fbe2bf42-706e-d27f-5bfd-f63b3c9b9ef2@pengutronix.de>
+Date:   Mon, 2 Nov 2020 15:22:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+In-Reply-To: <CAPgEAj7BTJyiBg4QkKuekYH0zyrA-10dby3Lgb5qj2uiD4ZOYQ@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="0hjD1E4HiHbKnJ38nygzPtkzWv6xSHhfd"
+ boundary="mvNsAMn7s1PsN0fKtFFDyKcbabhgXyaO0"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -127,19 +127,17 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0hjD1E4HiHbKnJ38nygzPtkzWv6xSHhfd
-Content-Type: multipart/mixed; boundary="JZZmNmSn2UDM78J4JKCGh6Rv18klRJZX2";
+--mvNsAMn7s1PsN0fKtFFDyKcbabhgXyaO0
+Content-Type: multipart/mixed; boundary="z5vZr0DFugdbi3nqswu42kmLZYXyUW5cA";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Drew Fustini <drew@beagleboard.org>
 Cc: Patrick Menschel <menschel.p@posteo.de>,
  Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
  Josh S <josh@macchina.cc>
-Message-ID: <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
-Subject: Re: mcp251xfd on RPi 5.4 downstream
+Message-ID: <fbe2bf42-706e-d27f-5bfd-f63b3c9b9ef2@pengutronix.de>
+Subject: Re: mcp251xfd: loopback test on waveshare canfd hat
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
- <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
  <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
  <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
  <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
@@ -155,49 +153,27 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
  <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
  <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
-In-Reply-To: <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <CAPgEAj7BTJyiBg4QkKuekYH0zyrA-10dby3Lgb5qj2uiD4ZOYQ@mail.gmail.com>
+In-Reply-To: <CAPgEAj7BTJyiBg4QkKuekYH0zyrA-10dby3Lgb5qj2uiD4ZOYQ@mail.gmail.com>
 
---JZZmNmSn2UDM78J4JKCGh6Rv18klRJZX2
+--z5vZr0DFugdbi3nqswu42kmLZYXyUW5cA
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/2/20 11:40 AM, Drew Fustini wrote:
->     spi1.0?
+On 11/2/20 3:20 PM, Drew Fustini wrote:
+> I am able to have can0 (spi0.0) and can1 (spi1.0) initialize ok on the
+> waveshare canfd hat (solder jumper mode A) with the mcp251xfd driver
+> from Marc's rpi 5.4 branch.  However, I am not able to do a loopback
+> test successfully.
 >=20
->     Have you changed any of the solder jumpers on JPAD3? See the 0 ohm =
-resistors
->     at A/B:
->=20
->     =C2=A0 =C2=A0 https://www.waveshare.com/w/upload/1/13/2-CH_CAN_FD_H=
-AT_Manual-3.png
->=20
->     I cannot see, how any of the chip selects of SPI1 is routed to the =
-mcp2517fd....
->=20
+> No errors from setup:
+> sudo ip link set can0 type can bitrate 250000 listen-only on
+> sudo ip link set can1 type can bitrate 250000 listen-only on
+                                                ^^^^^^^^^^^^^^
 
-[...]
-
-> The jumpers are in the A position so can1 is set to use spi1.
-
-=2E..according to the PCB-print, but not according to the schematics (at =
-least how
-I read it):
-
-    https://www.waveshare.com/w/upload/e/e2/2-CH-CAN-FD-HAT-Schematic.pdf=
-
-
-Grmpf :/
-
-> This means that can1 cs is connected to pi header pin 26=C2=A0
-
-Both of rpi's SPI host drivers prefer to use GPIO chip selects by default=
-, as
-native chip selects have some limitations. And all three mcp251xfd overla=
-ys use
-GPIO chip selects, this means you can use any free GPIO in the system for=
- the
-SPI chip select.
+It really does listen-only on the bus, i.e. not send anything :)
 
 Marc
 
@@ -208,23 +184,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---JZZmNmSn2UDM78J4JKCGh6Rv18klRJZX2--
+--z5vZr0DFugdbi3nqswu42kmLZYXyUW5cA--
 
---0hjD1E4HiHbKnJ38nygzPtkzWv6xSHhfd
+--mvNsAMn7s1PsN0fKtFFDyKcbabhgXyaO0
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+f5rsACgkQqclaivrt
-76kg8Af/SfdU43JmLl6VySWT6lxwRROrt7uVYL8BOj+0rrUkj27tKW5YRi/uZg2F
-UQJVvZ+aA3EmmVKGWnNhgK+0iPgDPUyNvy1JpL2ustOEXRgBKCeOE3Zld70uVLzT
-SIjNl41XaGdvJldP3oSJZVXPEYS2DE2GIzt5iBTv6IZEgSCxm+vWYBZlLTLGZ3nV
-QkWmINwgxzZiC45glnEiCHmwQIGz+It2/0FjeiZ9jtl/E1/pxHq9VQ4Rhk1sVBNe
-tBSqTWxmr07j6bcE1NAWRmmtPf6w6eBl1aHniiWOxABWa9h6pN1D6fuUjLwUOsyl
-hcFzF/aHqjSWSy9/qhk9C6Pbedj65A==
-=B8Gb
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+gFikACgkQqclaivrt
+76kuhAf8C9ftrMvzwmyNGheJT0UdN4D2Age6Nq4KSYw9mhnQ/lPZdHoDfIlJTQbh
+2O5zFj3sXcsdztc4frcQSjyEKH/CruU+Ul6P+RjUe4MHVvgcUOkYcEE81ZwaDVmx
+aK3B76HUGJ+REtBj+0U+LUDm69ROUrEfQk8q/YQxiWGcVoAp6UHORE1F4hGiv7Yb
+BYQ+b4jtZnxAjrc5T9HL/0EtqCD7/3Ub/D2MtHWv8gBRZxw5Jx16mBd9bNckkVk2
+8Ec+AhncLmchQA5Z7oKD/dRULkwoiJqe/Tie390Af0YJrhAm5wXups5gyNb3aYgN
+SbfqTL+dirKW+60h/OpXTzU4J3Pfaw==
+=tkYn
 -----END PGP SIGNATURE-----
 
---0hjD1E4HiHbKnJ38nygzPtkzWv6xSHhfd--
+--mvNsAMn7s1PsN0fKtFFDyKcbabhgXyaO0--
