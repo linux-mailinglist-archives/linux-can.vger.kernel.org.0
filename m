@@ -2,40 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A55F2A2507
-	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 08:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC1A2A2525
+	for <lists+linux-can@lfdr.de>; Mon,  2 Nov 2020 08:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbgKBHLV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Nov 2020 02:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37132 "EHLO
+        id S1727965AbgKBHZu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Nov 2020 02:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727306AbgKBHLU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 02:11:20 -0500
+        with ESMTP id S1727306AbgKBHZu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Nov 2020 02:25:50 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D674C0617A6
-        for <linux-can@vger.kernel.org>; Sun,  1 Nov 2020 23:11:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2E3C0617A6
+        for <linux-can@vger.kernel.org>; Sun,  1 Nov 2020 23:25:49 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kZTzj-0001JA-27; Mon, 02 Nov 2020 08:11:11 +0100
+        id 1kZUDk-000388-TR; Mon, 02 Nov 2020 08:25:41 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4] (unknown [IPv6:2a03:f580:87bc:d400:1e4c:3972:f69f:4bf4])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D266A587C5A;
-        Mon,  2 Nov 2020 07:11:03 +0000 (UTC)
-To:     Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
-References: <20201102031326.430048-1-anant.thazhemadam@gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F2697587C8B;
+        Mon,  2 Nov 2020 07:25:38 +0000 (UTC)
+To:     Drew Fustini <drew@beagleboard.org>,
+        Patrick Menschel <menschel.p@posteo.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
+ <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
+ <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
+ <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
+ <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
+ <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
+ <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de>
+ <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
+ <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
+ <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,17 +108,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH] net: can: prevent potential access of uninitialized value
- in canfd_rcv()
-Message-ID: <1817819d-3aeb-8034-a4ec-7c70040b0cf0@pengutronix.de>
-Date:   Mon, 2 Nov 2020 08:10:59 +0100
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+Message-ID: <7b0920d7-50c5-ff40-033c-57aca5a992bd@pengutronix.de>
+Date:   Mon, 2 Nov 2020 08:25:34 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201102031326.430048-1-anant.thazhemadam@gmail.com>
+In-Reply-To: <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="ewozx9n6urGFNZ3BZbFyyP7RqJv8rAyn4"
+ boundary="xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -117,103 +127,77 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ewozx9n6urGFNZ3BZbFyyP7RqJv8rAyn4
-Content-Type: multipart/mixed; boundary="ja28KKD9T02vFCeiXOuCFFfjP9k3lxMKX";
+--xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj
+Content-Type: multipart/mixed; boundary="InuRJyQiDO7qKgo4iNy1PvwBkHvTExLwL";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Anant Thazhemadam <anant.thazhemadam@gmail.com>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org,
- syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
-Message-ID: <1817819d-3aeb-8034-a4ec-7c70040b0cf0@pengutronix.de>
-Subject: Re: [PATCH] net: can: prevent potential access of uninitialized value
- in canfd_rcv()
-References: <20201102031326.430048-1-anant.thazhemadam@gmail.com>
-In-Reply-To: <20201102031326.430048-1-anant.thazhemadam@gmail.com>
+To: Drew Fustini <drew@beagleboard.org>,
+ Patrick Menschel <menschel.p@posteo.de>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
+ Josh S <josh@macchina.cc>
+Message-ID: <7b0920d7-50c5-ff40-033c-57aca5a992bd@pengutronix.de>
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <CAPgEAj72jBPDGWnxOM73JLB=0Soo7uYh0FukNhpZQvDvqPewjg@mail.gmail.com>
+ <CAPgEAj4DceAkPySUekDZPAKwNToxNjz6Yr66_3mqkE-0iiKAYA@mail.gmail.com>
+ <92dd7044-8f0d-154b-eb04-8cec1b572dd2@pengutronix.de>
+ <fa70fffa-7702-7cd0-dcfb-15bd18c3bb15@posteo.de>
+ <2a1ddec7-ca28-ae44-dc06-f80f0017bf1f@pengutronix.de>
+ <CAPgEAj6z_DaycgVOqvqqTv2KVRcascT8_nd+FNnZJtg0ObGPaw@mail.gmail.com>
+ <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
+ <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
+ <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
+ <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de>
+ <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
+ <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
+ <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
+In-Reply-To: <CAPgEAj7LT48tVa47p-5+5=sb+J=Ff61pdhcOa=70ppPvCMeDzw@mail.gmail.com>
 
---ja28KKD9T02vFCeiXOuCFFfjP9k3lxMKX
+--InuRJyQiDO7qKgo4iNy1PvwBkHvTExLwL
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 11/2/20 4:13 AM, Anant Thazhemadam wrote:
-> In canfd_rcv(), cfd->len is uninitialized when skb->len =3D 0, and this=
+On 11/1/20 11:49 PM, Drew Fustini wrote:
+>>>> Try these lines in /boot/config.txt
+>>>>
+>>>> dtoverlay=3Dmcp251xfd-spi0-0,interrupt=3D25
+>>>> dtoverlay=3Dmcp251xfd-spi1-0,interrupt=3D16
 
-> uninitialized cfd->len is accessed nonetheless by pr_warn_once().
->=20
-> Fix this uninitialized variable access by checking cfd->len's validity
-> condition (cfd->len > CANFD_MAX_DLEN) separately after the skb->len's
-> condition is checked, and appropriately modify the log messages that
-> are generated as well.
-> In case either of the required conditions fail, the skb is freed and
-> NET_RX_DROP is returned, same as before.
->=20
-> Reported-by: syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
-> Tested-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-> ---
-> This patch was locally tested using the reproducer and .config file=20
-> generated by syzbot.
->=20
->  net/can/af_can.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
->=20
-> diff --git a/net/can/af_can.c b/net/can/af_can.c
-> index ea29a6d97ef5..1b9f2e50f065 100644
-> --- a/net/can/af_can.c
-> +++ b/net/can/af_can.c
-> @@ -694,16 +694,25 @@ static int canfd_rcv(struct sk_buff *skb, struct =
-net_device *dev,
+If you use the above lines ^^, the patching of the overlay should not be =
+necessary:
 
-Can you create a similar patch for "can_rcv()"?
+> I changed this in mcp251xfd-spi1-0-overlay.dts:
+> -                               interrupts =3D <24 IRQ_TYPE_LEVEL_LOW>;=
 
->  {
->  	struct canfd_frame *cfd =3D (struct canfd_frame *)skb->data;
-> =20
-> -	if (unlikely(dev->type !=3D ARPHRD_CAN || skb->len !=3D CANFD_MTU ||
-> -		     cfd->len > CANFD_MAX_DLEN)) {
-> -		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuf: dev type %d,=
- len %d, datalen %d\n",
-> +	if (unlikely(dev->type !=3D ARPHRD_CAN || skb->len !=3D CANFD_MTU)) {=
+> +                               interrupts =3D <16 IRQ_TYPE_LEVEL_LOW>;=
 
-> +		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuff: dev type %d=
-, len %d\n",
-> +			     dev->type, skb->len);
-> +		goto free_skb;
-> +	}
-> +
-> +	// This check is made separately since cfd->len would be uninitialize=
-d if skb->len =3D 0.
 
-Please don't use C++ comment style in the kernel.
+[...]
 
-> +	else if (unlikely(cfd->len > CANFD_MAX_DLEN)) {
+> pi@raspberrypi:~$ dmesg | grep -Ei can\|spi
+> [   14.663345] CAN device driver interface
+> [   14.669552] spi_master spi0: will run message pump with realtime pri=
+ority
+> [   14.677102] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
+> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
+> r:17.00MHz e:0.00MHz) successfully initialized.
+> [   14.677833] spi_master spi1: will run message pump with realtime pri=
+ority
+> [   14.682667] mcp251xfd spi1.0 can1: MCP2517FD rev0.0 (-RX_INT
+> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
+> r:17.00MHz e:0.00MHz) successfully initialized.
 
-Please move the "else" right after the closing curly bracket: "} else if =
-() {"
-or convert it into an "if () {"
-
-> +		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuff: dev type %d=
-, len %d, datalen %d\n",
->  			     dev->type, skb->len, cfd->len);
-> -		kfree_skb(skb);
-> -		return NET_RX_DROP;
-> +		goto free_skb;
->  	}
-> =20
->  	can_receive(skb, dev);
->  	return NET_RX_SUCCESS;
-> +
-> +free_skb:
-> +	kfree_skb(skb);
-> +	return NET_RX_DROP;
->  }
-> =20
->  /* af_can protocol functions */
->=20
+Note: the waveshare module uses a mcp2517fd, which has some erratas. You =
+will
+experience error frames generated by sending mcp2517fd modules, during ce=
+rtain
+conditions. Sometimes CAN frames in the RX path are dropped.
 
 regards,
 Marc
@@ -225,23 +209,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---ja28KKD9T02vFCeiXOuCFFfjP9k3lxMKX--
+--InuRJyQiDO7qKgo4iNy1PvwBkHvTExLwL--
 
---ewozx9n6urGFNZ3BZbFyyP7RqJv8rAyn4
+--xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+fsQMACgkQqclaivrt
-76nZfAgAgXV9z8x/ItX1gWyjHdlGO4q1Y3gl0dPIt3afO67g1MEx1j5e3ZAExxNL
-0r9jmkOELFrqI9lyNyOdLdm22Ic9DxYZYPMrbmv5cX1QzeJcCe5HdhOj2m+fTY1x
-qCDqVgAMHfXyOghXxwW6/AYQagJEp+OAHKdboEi7B6qsZvjiYjQFSg6g9/YyIShN
-Wagmu7UI9G4TZ/A/NxeqDr0zC3v7SLMatcDWbVMKqEUkhu9NCEY+7fFtf8SCpduG
-/zlqMgC7MoeqSI2HAurnpQW0DV9WKm9+uJ9TtJaTPcd1CC9iL7YLCN9xWkkoK2CR
-PlBx3qYoxTTlhWvaSt7CNa+xY8pRpQ==
-=pn6S
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ftG4ACgkQqclaivrt
+76lmeQf9Ea7RDX34fzqimEPN+NsAZgR+Mv4d+wl2yYw2z7jEzNZBGpoGv18z9/ho
+Ra84LkO/MR9Vm0zjPdNmwsubRva8pA4bW4RUbgTYufQwiAYl9xHjtYca0ylOiIiy
+557BxsdwEYK6mq4PAAIt9LTQf2EIPiuWHd17UmSqpiK3LUnST20/ORWDV/VNnL7C
+gevKOE9RnC/mF2am1km40OE/s/PmbXx47VpcExu7/8JIbM/pPUgr/avd65YLZ36j
+Rg+M0MEGOUo4iRBV6dGQ9notKUtxaDkFY4NxIb+8mJTQlJFgglFDiFNkO/W9YiJw
+JtcXfZLzMuorJ1pfKrHXm6yqgJcCXA==
+=hFk1
 -----END PGP SIGNATURE-----
 
---ewozx9n6urGFNZ3BZbFyyP7RqJv8rAyn4--
+--xCg5ZzDn5ynS94KNebWGvkm24cRTC8xoj--
