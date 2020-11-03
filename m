@@ -2,126 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D788C2A573C
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 22:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B33E2A5815
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 22:49:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732000AbgKCVkK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 16:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
+        id S1730624AbgKCVsT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 16:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731789AbgKCVkD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 16:40:03 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A430C0617A6;
-        Tue,  3 Nov 2020 13:40:03 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id e7so15434296pfn.12;
-        Tue, 03 Nov 2020 13:40:03 -0800 (PST)
+        with ESMTP id S1730835AbgKCVsS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 16:48:18 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8E5C0613D1
+        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 13:48:17 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id 9so19966089oir.5
+        for <linux-can@vger.kernel.org>; Tue, 03 Nov 2020 13:48:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Kay+/pGgafzcJkffZWNTFPkoHCNna9I8Qp0W22XX95A=;
-        b=flTf5cILyNWgpLfAwfPLQMJlF50oKrmpRGujjbXXW++BK/Y2Ll86m8QXoPl4nXbUXz
-         rh6js5Sb8DmseSVN7IUcJRxpYJMmC23VGJw3NGSjy5gAPbgr7fibi9aUZQNCJRr6NBpf
-         x8/rWxBRBgM6WqT+o1fa3XXXGT/3pvMVIacusX4YmZRMeVkV3OPdJvM0tc2OvulUeoO1
-         SjR001KOASG5Di/zKqyhQFCTyp1p3rKhBNum0ZlAI1vaMOJfKohSAflhcND2c43u4MtM
-         kDeEpeSjo9kDI6KgdD3ve4opROeIseGizZMHtzVwxllANcb/cp7ZJ4TMKTcYxBctzdi7
-         ld4g==
+        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/ODKRDsSMIPdBXu49kyOj33LiydR4dwOAg2L0ROOmCs=;
+        b=yOJO0XcMZnUKbvikWLzPw+nP+XnhxkT4e/tHdmqMpqkq5QK7D4fkpWgvQIyjQB81DU
+         QUtfezkwoPhzUGtGX8gur4DwNCkG7iK673E3NGQt5ONS90a9jVn0MJ/eT3ocludmxMF4
+         M/zegHMqyA7WrNniw1VjJdxog3Az1lRYqNAapiH9ShLkxs/2XCcGwIYjZSXJj0LgW9EG
+         KDGAmsw6/Ms/UNgJwB5HWhSYP+OaoSO3LgQI68LEkTOv+RMRNBkmFxZf6DLHbb3xzvts
+         JV7eb1T4nKRBiEDU6FO74gj4v/vy3lan4KgnMB9os597Uz0W5MsDV68p50GjyGxwFSQQ
+         gGoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Kay+/pGgafzcJkffZWNTFPkoHCNna9I8Qp0W22XX95A=;
-        b=e/ISnLfqSuzKf9cuSZFW+eYDgXC49AlFY3pmUX0gbCWx4yk1MOTRkjXUM8TRTX77lf
-         6X+FjQ3mSgc9xUjS/sdqzBytIMTWIQj6ID5OoKXARdxzxzWKnDRYu+h82xs/n2rdg/L9
-         apQt/oL7SZGXkvWgh3D0Tme0RKAqAj7Ntcc+vcVtTV+YpnK8wIdXC7yAwPGA43pECyuP
-         LMdUozVLFJ4FDpuu88gEhEnt/iVQqs54NM48HVdBe1XNoqYKl0BekmyCEsbV2V7H1wRe
-         WmpxlExr6F9LlYIIq9nsBMC3Y2fhslxIvoXVDuVhvfSuDjQqAg8b172GXrMCEXus1Ni7
-         7BNA==
-X-Gm-Message-State: AOAM53303sz8qcm0hsrsU4qyNVOiWd5hHPEhhuPu26dWvl41zlzN+BXP
-        ZevPdbVXGm5pQWmIKBu+ox0=
-X-Google-Smtp-Source: ABdhPJzD+WlAj76QkDXIfZDHla5nSlgn/pNJPRMS1mH17Ja57/QB1VgLI+Ljx2zXwtzf/p7EWc/vgQ==
-X-Received: by 2002:a65:6493:: with SMTP id e19mr18352684pgv.276.1604439602619;
-        Tue, 03 Nov 2020 13:40:02 -0800 (PST)
-Received: from localhost.localdomain ([49.207.221.93])
-        by smtp.gmail.com with ESMTPSA id 15sm16420108pgs.52.2020.11.03.13.39.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 13:40:01 -0800 (PST)
-From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
-To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Anant Thazhemadam <anant.thazhemadam@gmail.com>,
-        syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
-Subject: [PATCH 2/2] can: af_can: prevent potential access of uninitialized member in canfd_rcv()
-Date:   Wed,  4 Nov 2020 03:09:06 +0530
-Message-Id: <20201103213906.24219-3-anant.thazhemadam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201103213906.24219-1-anant.thazhemadam@gmail.com>
-References: <20201103213906.24219-1-anant.thazhemadam@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/ODKRDsSMIPdBXu49kyOj33LiydR4dwOAg2L0ROOmCs=;
+        b=YqLEIomSB5f1WBedhH4/O4LOZm5IlO/xQhqP8THt2NLLS3mXoc9xfz6e7gB7eAeM2d
+         3bllCTGbRXyv0ENEYNlcOyWaSnpbkVrKuPmuLCrhWsW38SoOALEiMcXg+3MibiMkMtNk
+         2pfFQU26/uq22wu3wN6h5roe1037ZLOHWDAZL2f0B+0P9DDXzjPlqqDbj2ba5KcmL2gn
+         wRC9KJt9UIIhvi3k8Tk289atb5pcnz115hgMhZUHRMAH7rvqMpdXAaOtUuCcoAQrwVqn
+         +C+GGRPFPsViKSSEBR7OZrGOsDRwxulFmtrhMlWm3Q1xDkWtdZQjURUvFd1Q9pvIBhpQ
+         vvag==
+X-Gm-Message-State: AOAM533DgpJR/dvDxM5A74mj/3wI8pCiGFtTHifvIZVRxGc3JomAQ+P3
+        4wnotKqEnBIZfqiIeikhtrxRJTkIk7Y/s3riVVPld3x50byvGMaO
+X-Google-Smtp-Source: ABdhPJxUmeoESaK338zl3pjWw/2IAc1XpfKrWWgQ1yaDnyTu6W9zRoVAqmt31ewGdEdTj37NZVskKEdwzSi7wRFuqmc=
+X-Received: by 2002:aca:b644:: with SMTP id g65mr747612oif.164.1604440096641;
+ Tue, 03 Nov 2020 13:48:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAPgEAj75pUnhOrvQ5basubGfpMoijpBonOsv-Wio=WP55dmFNw@mail.gmail.com>
+ <90e05b20-d863-49b8-670f-e74bca7537be@pengutronix.de>
+In-Reply-To: <90e05b20-d863-49b8-670f-e74bca7537be@pengutronix.de>
+From:   Drew Fustini <drew@beagleboard.org>
+Date:   Tue, 3 Nov 2020 22:48:25 +0100
+Message-ID: <CAPgEAj4DoWU7w7-NdCB=XQdn3zmtS3Wtr4uMr-zG_Xk0-PNg=g@mail.gmail.com>
+Subject: Re: mcp251xfd: rx-int setting
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In canfd_rcv(), cfd->len is uninitialized when skb->len = 0, and this
-uninitialized cfd->len is accessed nonetheless by pr_warn_once().
+On Tue, Nov 3, 2020 at 9:03 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 11/2/20 11:59 PM, Drew Fustini wrote:
+> > I modified devm_gpiod_get_optional() in mcp251xfd_probe() to look for
+> > "rx-int" instead of "microchip,rx-int".  Is there a reason it was
+> > looking for "microchip,rx-int"?
+>
+> The DT property was changed why upstreaming the driver. So the overlay has to be
+> patched, not the code.
+>
+> > I am using branch v5.4-rpi/mcp251xfd-20201022-54 at commit 9e02abd4fe59.
+>
+> I'll update the overlay.
+>
+> > While it does now see the property, it does run into this issue:
+> > [    6.830900] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+> > RX_INT active after softreset, disabling RX_INT support.
+> >
+> > Any suggestions as to how to troubleshoot this?
+>
+> The waveshare board doesn't have the INT1 connected. So chose a free GPIO on you
+> rpi, add this as the parameter to the overlay and connect the GPIO to 3v3.
+>
+> Or, if you want to solder, connect the INT1 pin of one of the mcp2517fd with a
+> GPIO on the waveshare module.
 
-Fix this uninitialized variable access by checking cfd->len's validity
-condition (cfd->len > CANFD_MAX_DLEN) separately after the skb->len's
-condition is checked, and appropriately modify the log messages that
-are generated as well.
-In case either of the required conditions fail, the skb is freed and
-NET_RX_DROP is returned, same as before.
+Thanks, I used rx-int of 27 for spi1 and connected to 3v3.  The driver
+successfully registered the rx-int setting:
 
-Fixes: d4689846881d ("can: af_can: canfd_rcv(): replace WARN_ONCE by pr_warn_once")
-Reported-by: syzbot+9bcb0c9409066696d3aa@syzkaller.appspotmail.com
-Tested-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
-Signed-off-by: Anant Thazhemadam <anant.thazhemadam@gmail.com>
----
-This patch was locally tested using the reproducer and .config file
-generated by syzbot.
+[    6.983684] mcp251xfd spi0.0 can1: MCP2517FD rev0.0 (+RX_INT
++MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
+r:17.00MHz e:0.00MHz) successfully initialized.
 
- net/can/af_can.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index 8ea01524f062..d759334f8843 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -703,16 +703,25 @@ static int canfd_rcv(struct sk_buff *skb, struct net_device *dev,
- {
- 	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
- 
--	if (unlikely(dev->type != ARPHRD_CAN || skb->len != CANFD_MTU ||
--		     cfd->len > CANFD_MAX_DLEN)) {
--		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuf: dev type %d, len %d, datalen %d\n",
-+	if (unlikely(dev->type != ARPHRD_CAN || skb->len != CANFD_MTU)) {
-+		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuff: dev type %d, len %d\n",
-+			     dev->type, skb->len);
-+		goto free_skb;
-+	}
-+
-+	/* This check is made separately since cfd->len would be uninitialized if skb->len = 0. */
-+	if (unlikely(cfd->len > CANFD_MAX_DLEN)) {
-+		pr_warn_once("PF_CAN: dropped non conform CAN FD skbuff: dev type %d, len %d, datalen %d\n",
- 			     dev->type, skb->len, cfd->len);
--		kfree_skb(skb);
--		return NET_RX_DROP;
-+		goto free_skb;
- 	}
- 
- 	can_receive(skb, dev);
- 	return NET_RX_SUCCESS;
-+
-+free_skb:
-+	kfree_skb(skb);
-+	return NET_RX_DROP;
- }
- 
- /* af_can protocol functions */
--- 
-2.25.1
-
+-Drew
