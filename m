@@ -2,93 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B33E2A5815
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 22:49:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6582A597D
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 23:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730624AbgKCVsT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 16:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S1731082AbgKCWGo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 17:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730835AbgKCVsS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 16:48:18 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8E5C0613D1
-        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 13:48:17 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id 9so19966089oir.5
-        for <linux-can@vger.kernel.org>; Tue, 03 Nov 2020 13:48:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/ODKRDsSMIPdBXu49kyOj33LiydR4dwOAg2L0ROOmCs=;
-        b=yOJO0XcMZnUKbvikWLzPw+nP+XnhxkT4e/tHdmqMpqkq5QK7D4fkpWgvQIyjQB81DU
-         QUtfezkwoPhzUGtGX8gur4DwNCkG7iK673E3NGQt5ONS90a9jVn0MJ/eT3ocludmxMF4
-         M/zegHMqyA7WrNniw1VjJdxog3Az1lRYqNAapiH9ShLkxs/2XCcGwIYjZSXJj0LgW9EG
-         KDGAmsw6/Ms/UNgJwB5HWhSYP+OaoSO3LgQI68LEkTOv+RMRNBkmFxZf6DLHbb3xzvts
-         JV7eb1T4nKRBiEDU6FO74gj4v/vy3lan4KgnMB9os597Uz0W5MsDV68p50GjyGxwFSQQ
-         gGoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/ODKRDsSMIPdBXu49kyOj33LiydR4dwOAg2L0ROOmCs=;
-        b=YqLEIomSB5f1WBedhH4/O4LOZm5IlO/xQhqP8THt2NLLS3mXoc9xfz6e7gB7eAeM2d
-         3bllCTGbRXyv0ENEYNlcOyWaSnpbkVrKuPmuLCrhWsW38SoOALEiMcXg+3MibiMkMtNk
-         2pfFQU26/uq22wu3wN6h5roe1037ZLOHWDAZL2f0B+0P9DDXzjPlqqDbj2ba5KcmL2gn
-         wRC9KJt9UIIhvi3k8Tk289atb5pcnz115hgMhZUHRMAH7rvqMpdXAaOtUuCcoAQrwVqn
-         +C+GGRPFPsViKSSEBR7OZrGOsDRwxulFmtrhMlWm3Q1xDkWtdZQjURUvFd1Q9pvIBhpQ
-         vvag==
-X-Gm-Message-State: AOAM533DgpJR/dvDxM5A74mj/3wI8pCiGFtTHifvIZVRxGc3JomAQ+P3
-        4wnotKqEnBIZfqiIeikhtrxRJTkIk7Y/s3riVVPld3x50byvGMaO
-X-Google-Smtp-Source: ABdhPJxUmeoESaK338zl3pjWw/2IAc1XpfKrWWgQ1yaDnyTu6W9zRoVAqmt31ewGdEdTj37NZVskKEdwzSi7wRFuqmc=
-X-Received: by 2002:aca:b644:: with SMTP id g65mr747612oif.164.1604440096641;
- Tue, 03 Nov 2020 13:48:16 -0800 (PST)
+        with ESMTP id S1731059AbgKCWGn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 17:06:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0129DC0613D1
+        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 14:06:43 -0800 (PST)
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ka4Rq-0006Ui-QA; Tue, 03 Nov 2020 23:06:38 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2020-11-03
+Date:   Tue,  3 Nov 2020 23:06:09 +0100
+Message-Id: <20201103220636.972106-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <CAPgEAj75pUnhOrvQ5basubGfpMoijpBonOsv-Wio=WP55dmFNw@mail.gmail.com>
- <90e05b20-d863-49b8-670f-e74bca7537be@pengutronix.de>
-In-Reply-To: <90e05b20-d863-49b8-670f-e74bca7537be@pengutronix.de>
-From:   Drew Fustini <drew@beagleboard.org>
-Date:   Tue, 3 Nov 2020 22:48:25 +0100
-Message-ID: <CAPgEAj4DoWU7w7-NdCB=XQdn3zmtS3Wtr4uMr-zG_Xk0-PNg=g@mail.gmail.com>
-Subject: Re: mcp251xfd: rx-int setting
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Nov 3, 2020 at 9:03 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 11/2/20 11:59 PM, Drew Fustini wrote:
-> > I modified devm_gpiod_get_optional() in mcp251xfd_probe() to look for
-> > "rx-int" instead of "microchip,rx-int".  Is there a reason it was
-> > looking for "microchip,rx-int"?
->
-> The DT property was changed why upstreaming the driver. So the overlay has to be
-> patched, not the code.
->
-> > I am using branch v5.4-rpi/mcp251xfd-20201022-54 at commit 9e02abd4fe59.
->
-> I'll update the overlay.
->
-> > While it does now see the property, it does run into this issue:
-> > [    6.830900] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-> > RX_INT active after softreset, disabling RX_INT support.
-> >
-> > Any suggestions as to how to troubleshoot this?
->
-> The waveshare board doesn't have the INT1 connected. So chose a free GPIO on you
-> rpi, add this as the parameter to the overlay and connect the GPIO to 3v3.
->
-> Or, if you want to solder, connect the INT1 pin of one of the mcp2517fd with a
-> GPIO on the waveshare module.
+Hello Jakub, hello David,
 
-Thanks, I used rx-int of 27 for spi1 and connected to 3v3.  The driver
-successfully registered the rx-int setting:
+here's a pull request for net/master consisting of 27 patches for net/master.
 
-[    6.983684] mcp251xfd spi0.0 can1: MCP2517FD rev0.0 (+RX_INT
-+MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-r:17.00MHz e:0.00MHz) successfully initialized.
+The first two patches are by Oleksij Rempel and they add a generic
+can-controller Device Tree yaml binding and convert the text based binding of
+the flexcan driver to a yaml based binding.
 
--Drew
+Zhang Changzhong's patch fixes a remove_proc_entry warning in the AF_CAN core.
+
+A patch by me fixes a kfree_skb() call from IRQ context in the rx-offload
+helper.
+
+Vincent Mailhol contributes a patch to prevent a call to kfree_skb() in hard
+IRQ context in can_get_echo_skb().
+
+Oliver Hartkopp's patch fixes the length calculation for RTR CAN frames in the
+__can_get_echo_skb() helper.
+
+Oleksij Rempel's patch fixes a use-after-free that shows up with j1939 in
+can_create_echo_skb().
+
+Yegor Yefremov contributes 4 patches to enhance the j1939 documentation.
+
+Zhang Changzhong's patch fixes a hanging task problem in j1939_sk_bind() if the
+netdev is down.
+
+Then there are three patches for the newly added CAN_ISOTP protocol. Geert
+Uytterhoeven enhances the kconfig help text. Oliver Hartkopp's patch adds
+missing RX timeout handling in listen-only mode and Colin Ian King's patch
+decreases the generated object code by 926 bytes.
+
+Zhang Changzhong contributes a patch for the ti_hecc driver that fixes the
+error path in the probe function.
+
+Navid Emamdoost's patch for the xilinx_can driver fixes the error handling in
+case of failing pm_runtime_get_sync().
+
+There are two patches for the peak_usb driver. Dan Carpenter adds range
+checking in decode operations and Stephane Grosjean's patch fixes a timestamp
+wrapping problem.
+
+Stephane Grosjean's patch for th peak_canfd driver fixes echo management if
+loopback is on.
+
+The next three patches all target the mcp251xfd driver. The first one is by me
+and it increased the severity of CRC read error messages. The kernel test robot
+removes an unneeded semicolon and Tom Rix removes unneeded break in several
+switch-cases.
+
+The last 4 patches are by Joakim Zhang and target the flexcan driver, the first
+three fix ECC related device specific quirks for the LS1021A, LX2160A and the
+VF610 SoC. The last patch disable wakeup completely upon driver remove.
+
+regards,
+Marc
+
+---
+
+The following changes since commit 9621618130bf7e83635367c13b9a6ee53935bb37:
+
+  sfp: Fix error handing in sfp_probe() (2020-11-02 17:19:59 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.10-20201103
+
+for you to fetch changes up to ab07ff1c92fa60f29438e655a1b4abab860ed0b6:
+
+  can: flexcan: flexcan_remove(): disable wakeup completely (2020-11-03 22:30:34 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.10-20201103
+
+----------------------------------------------------------------
+Colin Ian King (1):
+      can: isotp: padlen(): make const array static, makes object smaller
+
+Dan Carpenter (1):
+      can: peak_usb: add range checking in decode operations
+
+Geert Uytterhoeven (1):
+      can: isotp: Explain PDU in CAN_ISOTP help text
+
+Joakim Zhang (4):
+      can: flexcan: remove FLEXCAN_QUIRK_DISABLE_MECR quirk for LS1021A
+      can: flexcan: add ECC initialization for LX2160A
+      can: flexcan: add ECC initialization for VF610
+      can: flexcan: flexcan_remove(): disable wakeup completely
+
+Marc Kleine-Budde (2):
+      can: rx-offload: don't call kfree_skb() from IRQ context
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): increase severity of CRC read error messages
+
+Navid Emamdoost (1):
+      can: xilinx_can: handle failure cases of pm_runtime_get_sync
+
+Oleksij Rempel (3):
+      dt-bindings: can: add can-controller.yaml
+      dt-bindings: can: flexcan: convert fsl,*flexcan bindings to yaml
+      can: can_create_echo_skb(): fix echo skb generation: always use skb_clone()
+
+Oliver Hartkopp (2):
+      can: dev: __can_get_echo_skb(): fix real payload length return value for RTR frames
+      can: isotp: isotp_rcv_cf(): enable RX timeout handling in listen-only mode
+
+Stephane Grosjean (2):
+      can: peak_usb: peak_usb_get_ts_time(): fix timestamp wrapping
+      can: peak_canfd: pucan_handle_can_rx(): fix echo management when loopback is on
+
+Tom Rix (1):
+      can: mcp251xfd: remove unneeded break
+
+Vincent Mailhol (1):
+      can: dev: can_get_echo_skb(): prevent call to kfree_skb() in hard IRQ context
+
+Yegor Yefremov (4):
+      can: j1939: rename jacd tool
+      can: j1939: fix syntax and spelling
+      can: j1939: swap addr and pgn in the send example
+      can: j1939: use backquotes for code samples
+
+Zhang Changzhong (3):
+      can: proc: can_remove_proc(): silence remove_proc_entry warning
+      can: j1939: j1939_sk_bind(): return failure if netdev is down
+      can: ti_hecc: ti_hecc_probe(): add missed clk_disable_unprepare() in error path
+
+kernel test robot (1):
+      can: mcp251xfd: mcp251xfd_regmap_nocrc_read(): fix semicolon.cocci warnings
+
+ .../bindings/net/can/can-controller.yaml           |  18 +++
+ .../devicetree/bindings/net/can/fsl,flexcan.yaml   | 135 +++++++++++++++++++++
+ .../devicetree/bindings/net/can/fsl-flexcan.txt    |  57 ---------
+ Documentation/networking/j1939.rst                 | 120 +++++++++---------
+ drivers/net/can/dev.c                              |  14 ++-
+ drivers/net/can/flexcan.c                          |  12 +-
+ drivers/net/can/peak_canfd/peak_canfd.c            |  11 +-
+ drivers/net/can/rx-offload.c                       |   4 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |  22 ++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c   |  18 +--
+ drivers/net/can/ti_hecc.c                          |   8 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c       |  51 +++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c         |  48 ++++++--
+ drivers/net/can/xilinx_can.c                       |   6 +-
+ include/linux/can/skb.h                            |  20 ++-
+ net/can/Kconfig                                    |   5 +-
+ net/can/isotp.c                                    |  26 ++--
+ net/can/j1939/socket.c                             |   6 +
+ net/can/proc.c                                     |   6 +-
+ 19 files changed, 387 insertions(+), 200 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/can-controller.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/fsl-flexcan.txt
+
+
