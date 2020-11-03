@@ -2,101 +2,231 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1522A4BF9
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 17:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 334242A4C26
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 18:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728103AbgKCQvz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 11:51:55 -0500
-Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:49662 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgKCQvz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 11:51:55 -0500
-Received: from tomoyo.flets-east.jp ([153.230.197.127])
-        by mwinf5d58 with ME
-        id nsrh230062lQRaH03srqTB; Tue, 03 Nov 2020 17:51:52 +0100
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 03 Nov 2020 17:51:52 +0100
-X-ME-IP: 153.230.197.127
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH] cangen: allow DLC > 8 in increment generation mode if -8 option is given
-Date:   Wed,  4 Nov 2020 01:51:30 +0900
-Message-Id: <20201103165130.1907-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
+        id S1727901AbgKCRBS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 12:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbgKCRBS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 12:01:18 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EA7C0613D1
+        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 09:01:17 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kZzgK-0004lt-C2; Tue, 03 Nov 2020 18:01:16 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:fc98:3f6c:e55:4519] (unknown [IPv6:2a03:f580:87bc:d400:fc98:3f6c:e55:4519])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 44A74589797;
+        Tue,  3 Nov 2020 17:01:15 +0000 (UTC)
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
+References: <20201103165130.1907-1-mailhol.vincent@wanadoo.fr>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH] cangen: allow DLC > 8 in increment generation mode if -8
+ option is given
+Message-ID: <b339bb62-3835-81c3-ff91-fda124bbb549@pengutronix.de>
+Date:   Tue, 3 Nov 2020 18:01:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201103165130.1907-1-mailhol.vincent@wanadoo.fr>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="Q0qRO38QXjMDVa2MJbb4tiUL1x03ir9JM"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Currently, the -8 option allows DLCs greater than 8 in mix mode only.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Q0qRO38QXjMDVa2MJbb4tiUL1x03ir9JM
+Content-Type: multipart/mixed; boundary="G9OiMZ0vKOun32wm4CB4yvUj3hZXKIe7j";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <b339bb62-3835-81c3-ff91-fda124bbb549@pengutronix.de>
+Subject: Re: [PATCH] cangen: allow DLC > 8 in increment generation mode if -8
+ option is given
+References: <20201103165130.1907-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20201103165130.1907-1-mailhol.vincent@wanadoo.fr>
 
-Add the option to also generate such DLCs in increment
-mode. e.g.: 'cangen -8 -Li can0'
+--G9OiMZ0vKOun32wm4CB4yvUj3hZXKIe7j
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- cangen.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+On 11/3/20 5:51 PM, Vincent Mailhol wrote:
+> Currently, the -8 option allows DLCs greater than 8 in mix mode only.
+>=20
+> Add the option to also generate such DLCs in increment
+> mode. e.g.: 'cangen -8 -Li can0'
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  cangen.c | 20 ++++++++++++++------
+>  1 file changed, 14 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/cangen.c b/cangen.c
+> index 5c86f26..06a1931 100644
+> --- a/cangen.c
+> +++ b/cangen.c
+> @@ -171,7 +171,7 @@ int main(int argc, char **argv)
+>  	struct pollfd fds;
+> =20
+>  	struct sockaddr_can addr;
+> -	static struct canfd_frame frame;
+> +	static struct canfd_frame frame =3D { 0 };
+>  	struct can_frame *ccf =3D (struct can_frame *)&frame;
+>  	int nbytes;
+>  	int i;
+> @@ -386,7 +386,6 @@ int main(int argc, char **argv)
+> =20
+>  	while (running) {
+>  		frame.flags =3D 0;
+> -		ccf->len8_dlc =3D 0;
+> =20
+>  		if (count && (--count =3D=3D 0))
+>  			running =3D 0;
+> @@ -428,7 +427,8 @@ int main(int argc, char **argv)
+>  						ccf->len8_dlc =3D frame.len;
+> =20
+>  					frame.len =3D 8; /* for about 50% of the frames */
+> -				}
+> +				} else
+> +					ccf->len8_dlc =3D 0;
 
-diff --git a/cangen.c b/cangen.c
-index 5c86f26..06a1931 100644
---- a/cangen.c
-+++ b/cangen.c
-@@ -171,7 +171,7 @@ int main(int argc, char **argv)
- 	struct pollfd fds;
- 
- 	struct sockaddr_can addr;
--	static struct canfd_frame frame;
-+	static struct canfd_frame frame = { 0 };
- 	struct can_frame *ccf = (struct can_frame *)&frame;
- 	int nbytes;
- 	int i;
-@@ -386,7 +386,6 @@ int main(int argc, char **argv)
- 
- 	while (running) {
- 		frame.flags = 0;
--		ccf->len8_dlc = 0;
- 
- 		if (count && (--count == 0))
- 			running = 0;
-@@ -428,7 +427,8 @@ int main(int argc, char **argv)
- 						ccf->len8_dlc = frame.len;
- 
- 					frame.len = 8; /* for about 50% of the frames */
--				}
-+				} else
-+					ccf->len8_dlc = 0;
- 			}
- 		}
- 
-@@ -507,12 +507,20 @@ resend:
- 		if (dlc_mode == MODE_INCREMENT) {
- 
- 			incdlc++;
-+			incdlc %= CAN_MAX_RAW_DLC + 1;
- 
--			if (canfd && !mix) {
--				incdlc &= 0xF;
-+			if (canfd && !mix)
- 				frame.len = can_dlc2len(incdlc);
-+			else if (len8_dlc) {
-+				if (incdlc > CAN_MAX_DLEN) {
-+					frame.len = CAN_MAX_DLEN;
-+					ccf->len8_dlc = incdlc;
-+				} else {
-+					frame.len = incdlc;
-+					ccf->len8_dlc = 0;
-+				}
- 			} else {
--				incdlc %= 9;
-+				incdlc %= CAN_MAX_DLEN + 1;
- 				frame.len = incdlc;
- 			}
- 		}
--- 
-2.26.2
+nitpick:
 
+please use { } on the else side, too
+
+>  			}
+>  		}
+> =20
+> @@ -507,12 +507,20 @@ resend:
+>  		if (dlc_mode =3D=3D MODE_INCREMENT) {
+> =20
+>  			incdlc++;
+> +			incdlc %=3D CAN_MAX_RAW_DLC + 1;
+> =20
+> -			if (canfd && !mix) {
+> -				incdlc &=3D 0xF;
+> +			if (canfd && !mix)
+>  				frame.len =3D can_dlc2len(incdlc);
+> +			else if (len8_dlc) {
+> +				if (incdlc > CAN_MAX_DLEN) {
+> +					frame.len =3D CAN_MAX_DLEN;
+> +					ccf->len8_dlc =3D incdlc;
+> +				} else {
+> +					frame.len =3D incdlc;
+> +					ccf->len8_dlc =3D 0;
+> +				}
+>  			} else {
+> -				incdlc %=3D 9;
+> +				incdlc %=3D CAN_MAX_DLEN + 1;
+>  				frame.len =3D incdlc;
+>  			}
+>  		}
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--G9OiMZ0vKOun32wm4CB4yvUj3hZXKIe7j--
+
+--Q0qRO38QXjMDVa2MJbb4tiUL1x03ir9JM
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+hjNYACgkQqclaivrt
+76lPawf+OZ/LtZxKFM888VNICNl16bHlK9IzcDJtRjyhB6A0QAc/wt+1/9S2xNAN
+wGYGnO4Yn1gJNfeznMYSM+RZMQFroybNwGBUEcP2RpN1xFDhZpAsy9PaG9dAAptp
+wFRDjGAZvOoyXrhVmVfaUN0900I8EfBN3IW2hMLbswd5MgsTyAVRpcnPFTDDnYBE
+xz+JViN+HaXUbZ7IRA8WZgG5ILf2WNQ6S8/zV0F8wRlz7omfbEnD8FArcpu08Om6
+P9IwdUWCAfwvOJg2cqdcazAugqrlbkDDL6zFCH8SsKOPPIkY+QV+ey688pNrN9Y5
+JC9SnmDRBFhLUrmzJQu6pH2GKgGWog==
+=zMXQ
+-----END PGP SIGNATURE-----
+
+--Q0qRO38QXjMDVa2MJbb4tiUL1x03ir9JM--
