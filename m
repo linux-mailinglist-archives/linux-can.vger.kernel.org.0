@@ -2,30 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 749222A5962
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 23:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF002A595B
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 23:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731345AbgKCWHH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 17:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S1731541AbgKCWG7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 17:06:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731463AbgKCWG5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 17:06:57 -0500
+        with ESMTP id S1731451AbgKCWG6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 17:06:58 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E02C061A47
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4992C061A49
         for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 14:06:57 -0800 (PST)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ka4S3-0006Ui-E9; Tue, 03 Nov 2020 23:06:51 +0100
+        id 1ka4S3-0006Ui-V1; Tue, 03 Nov 2020 23:06:52 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Tom Rix <trix@redhat.com>,
+        kernel@pengutronix.de, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Pankaj Bansal <pankaj.bansal@nxp.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 23/27] can: mcp251xfd: remove unneeded break
-Date:   Tue,  3 Nov 2020 23:06:32 +0100
-Message-Id: <20201103220636.972106-24-mkl@pengutronix.de>
+Subject: [net 24/27] can: flexcan: remove FLEXCAN_QUIRK_DISABLE_MECR quirk for LS1021A
+Date:   Tue,  3 Nov 2020 23:06:33 +0100
+Message-Id: <20201103220636.972106-25-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201103220636.972106-1-mkl@pengutronix.de>
 References: <20201103220636.972106-1-mkl@pengutronix.de>
@@ -39,66 +40,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-A break is not needed if it is preceded by a return.
+After double check with Layerscape CAN owner (Pankaj Bansal), confirm that
+LS1021A doesn't support ECC feature, so remove FLEXCAN_QUIRK_DISABLE_MECR
+quirk.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20201019172412.31143-1-trix@redhat.com
+Fixes: 99b7668c04b27 ("can: flexcan: adding platform specific details for LS1021A")
+Cc: Pankaj Bansal <pankaj.bansal@nxp.com>
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Link: https://lore.kernel.org/r/20201020155402.30318-4-qiangqing.zhang@nxp.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 22 +++++++++----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/net/can/flexcan.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index c3f49543ff26..9c215f7c5f81 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -75,11 +75,11 @@ static const char *__mcp251xfd_get_model_str(enum mcp251xfd_model model)
- {
- 	switch (model) {
- 	case MCP251XFD_MODEL_MCP2517FD:
--		return "MCP2517FD"; break;
-+		return "MCP2517FD";
- 	case MCP251XFD_MODEL_MCP2518FD:
--		return "MCP2518FD"; break;
-+		return "MCP2518FD";
- 	case MCP251XFD_MODEL_MCP251XFD:
--		return "MCP251xFD"; break;
-+		return "MCP251xFD";
- 	}
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 4d594e977497..586e1417a697 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -405,8 +405,7 @@ static const struct flexcan_devtype_data fsl_vf610_devtype_data = {
  
- 	return "<unknown>";
-@@ -95,21 +95,21 @@ static const char *mcp251xfd_get_mode_str(const u8 mode)
- {
- 	switch (mode) {
- 	case MCP251XFD_REG_CON_MODE_MIXED:
--		return "Mixed (CAN FD/CAN 2.0)"; break;
-+		return "Mixed (CAN FD/CAN 2.0)";
- 	case MCP251XFD_REG_CON_MODE_SLEEP:
--		return "Sleep"; break;
-+		return "Sleep";
- 	case MCP251XFD_REG_CON_MODE_INT_LOOPBACK:
--		return "Internal Loopback"; break;
-+		return "Internal Loopback";
- 	case MCP251XFD_REG_CON_MODE_LISTENONLY:
--		return "Listen Only"; break;
-+		return "Listen Only";
- 	case MCP251XFD_REG_CON_MODE_CONFIG:
--		return "Configuration"; break;
-+		return "Configuration";
- 	case MCP251XFD_REG_CON_MODE_EXT_LOOPBACK:
--		return "External Loopback"; break;
-+		return "External Loopback";
- 	case MCP251XFD_REG_CON_MODE_CAN2_0:
--		return "CAN 2.0"; break;
-+		return "CAN 2.0";
- 	case MCP251XFD_REG_CON_MODE_RESTRICTED:
--		return "Restricted Operation"; break;
-+		return "Restricted Operation";
- 	}
+ static const struct flexcan_devtype_data fsl_ls1021a_r2_devtype_data = {
+ 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
+-		FLEXCAN_QUIRK_DISABLE_MECR | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+-		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP,
++		FLEXCAN_QUIRK_BROKEN_PERR_STATE | FLEXCAN_QUIRK_USE_OFF_TIMESTAMP,
+ };
  
- 	return "<unknown>";
+ static const struct flexcan_devtype_data fsl_lx2160a_r1_devtype_data = {
 -- 
 2.28.0
 
