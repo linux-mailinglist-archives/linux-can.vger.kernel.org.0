@@ -2,91 +2,214 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C782B2A4A82
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 16:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8A32A4ADA
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 17:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726388AbgKCP75 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 10:59:57 -0500
-Received: from mail-yb1-f195.google.com ([209.85.219.195]:39776 "EHLO
-        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbgKCP74 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 10:59:56 -0500
-Received: by mail-yb1-f195.google.com with SMTP id k138so8730882ybk.6
-        for <linux-can@vger.kernel.org>; Tue, 03 Nov 2020 07:59:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ICH7ixyuzDjbi0WWbJNnppCeZ69tF3EeEplOoA2mcP0=;
-        b=OSBF0/Lm2eeP7O7jdEEFTEqb7yyVSwszGy7gA85/1fkNlAhQmmZHTZpQgaaPrESbFJ
-         EWvF7jJlnu2hlqEhxa08N+sw+fUGEPlVhnKcMZnKtG+JRxqtBhbUp7BrVducKmjHhyKG
-         R4GqmZpx000dQoEcxVcUEElNfeuQMR+InxCTCqtenXVJMP5OLVw5XW7DtUcHtQOQ7K8c
-         cUmnSucVS2bDCZGb06z4wPEWf1a/OnEdUieROFxuiq/d/LxvO/kH3Q/l/iwbMITMJkBm
-         vQhCs/t8qL5dNzkQ5omsLAEL29f7GcPpyczczwxBKbiIQt2FbBnfHIQ+D9uouYkCwcNc
-         N/cA==
-X-Gm-Message-State: AOAM530/CCV1AwB6dYC6GYvNTX113uGEvkHc58qKFbb4Gr9r7GyRPuT7
-        o3azBJl6aUW8tqkOtBoCkezHtsHoQLO4AmtGIrDbBPB+oGY=
-X-Google-Smtp-Source: ABdhPJzN8HKK/A7xl0nNqoaXuBV5KOsSm+O0xzrq2yUMDgkNUZ+jEZ4JqAK2/pHsMzTCsK6C2CWcRQishSZber68398=
-X-Received: by 2002:a25:c782:: with SMTP id w124mr30808754ybe.125.1604419195603;
- Tue, 03 Nov 2020 07:59:55 -0800 (PST)
+        id S1727923AbgKCQK5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 11:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728202AbgKCQK5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 11:10:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B136C0613D1
+        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 08:10:57 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kZytP-0006KD-Ap; Tue, 03 Nov 2020 17:10:43 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:fc98:3f6c:e55:4519] (unknown [IPv6:2a03:f580:87bc:d400:fc98:3f6c:e55:4519])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A24F05896D5;
+        Tue,  3 Nov 2020 16:10:35 +0000 (UTC)
+Subject: Re: [PATCH v7 0/6] CTU CAN FD open-source IP core SocketCAN driver,
+ PCI, platform integration and documentation
+To:     Ondrej Ille <ondrej.ille@gmail.com>
+Cc:     Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Drew Fustini <pdp7pdp7@gmail.com>
+References: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
+ <2ccec201-1a84-1837-15a8-d2ad05f5753c@pengutronix.de>
+ <202011031100.35922.pisa@cmp.felk.cvut.cz>
+ <07227792-f75f-6998-bd09-ce6e612de79f@pengutronix.de>
+ <CAA7ZjpaYA0jLaybxq_2amtWOcs3sPE5w_fQK7jMdgaKpA-YoUg@mail.gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJfEWX4BQkQo2czAAoJECte4hHF
+ iupUvfMP/iNtiysSr5yU4tbMBzRkGov1/FjurfH1kPweLVHDwiQJOGBz9HgM5+n8boduRv36
+ 0lU32g3PehN0UHZdHWhygUd6J09YUi2mJo1l2Fz1fQ8elUGUOXpT/xoxNQjslZjJGItCjza8
+ +D1DO+0cNFgElcNPa7DFBnglatOCZRiMjo4Wx0i8njEVRU+4ySRU7rCI36KPts+uVmZAMD7V
+ 3qiR1buYklJaPCJsnXURXYsilBIE9mZRmQjTDVqjLWAit++flqUVmDjaD/pj2AQe2Jcmd2gm
+ sYW5P1moz7ACA1GzMjLDmeFtpJOIB7lnDX0F/vvsG3V713/701aOzrXqBcEZ0E4aWeZJzaXw
+ n1zVIrl/F3RKrWDhMKTkjYy7HA8hQ9SJApFXsgP334Vo0ea82H3dOU755P89+Eoj0y44MbQX
+ 7xUy4UTRAFydPl4pJskveHfg4dO6Yf0PGIvVWOY1K04T1C5dpnHAEMvVNBrfTA8qcahRN82V
+ /iIGB+KSC2xR79q1kv1oYn0GOnWkvZmMhqGLhxIqHYitwH4Jn5uRfanKYWBk12LicsjRiTyW
+ Z9cJf2RgAtQgvMPvmaOL8vB3U4ava48qsRdgxhXMagU618EszVdYRNxGLCqsKVYIDySTrVzu
+ ZGs2ibcRhN4TiSZjztWBAe1MaaGk05Ce4h5IdDLbOOxhuQENBF8SDLABCADohJLQ5yffd8Sq
+ 8Lo9ymzgaLcWboyZ46pY4CCCcAFDRh++QNOJ8l4mEJMNdEa/yrW4lDQDhBWV75VdBuapYoal
+ LFrSzDzrqlHGG4Rt4/XOqMo6eSeSLipYBu4Xhg59S9wZOWbHVT/6vZNmiTa3d40+gBg68dQ8
+ iqWSU5NhBJCJeLYdG6xxeUEtsq/25N1erxmhs/9TD0sIeX36rFgWldMwKmZPe8pgZEv39Sdd
+ B+ykOlRuHag+ySJxwovfdVoWT0o0LrGlHzAYo6/ZSi/Iraa9R/7A1isWOBhw087BMNkRYx36
+ B77E4KbyBPx9h3wVyD/R6T0Q3ZNPu6SQLnsWojMzABEBAAGJAjwEGAEKACYWIQTBQAugs5ie
+ b7x9W1wrXuIRxYrqVAUCXxIMsAIbDAUJAucGAAAKCRArXuIRxYrqVOu0D/48xSLyVZ5NN2Bb
+ yqo3zxdv/PMGJSzM3JqSv7hnMZPQGy9XJaTc5Iz/hyXaNRwpH5X0UNKqhQhlztChuAKZ7iu+
+ 2VKzq4JJe9qmydRUwylluc4HmGwlIrDNvE0N66pRvC3h8tOVIsippAQlt5ciH74bJYXr0PYw
+ Aksw1jugRxMbNRzgGECg4O6EBNaHwDzsVPX1tDj0d9t/7ClzJUy20gg8r9Wm/I/0rcNkQOpV
+ RJLDtSbGSusKxor2XYmVtHGauag4YO6Vdq+2RjArB3oNLgSOGlYVpeqlut+YYHjWpaX/cTf8
+ /BHtIQuSAEu/WnycpM3Z9aaLocYhbp5lQKL6/bcWQ3udd0RfFR/Gv7eR7rn3evfqNTtQdo4/
+ YNmd7P8TS7ALQV/5bNRe+ROLquoAZvhaaa6SOvArcmFccnPeyluX8+o9K3BCdXPwONhsrxGO
+ wrPI+7XKMlwWI3O076NqNshh6mm8NIC0mDUr7zBUITa67P3Q2VoPoiPkCL9RtsXdQx5BI9iI
+ h/6QlzDxcBdw2TVWyGkVTCdeCBpuRndOMVmfjSWdCXXJCLXO6sYeculJyPkuNvumxgwUiK/H
+ AqqdUfy1HqtzP2FVhG5Ce0TeMJepagR2CHPXNg88Xw3PDjzdo+zNpqPHOZVKpLUkCvRv1p1q
+ m1qwQVWtAwMML/cuPga78rkBDQRfEXGWAQgAt0Cq8SRiLhWyTqkf16Zv/GLkUgN95RO5ntYM
+ fnc2Tr3UlRq2Cqt+TAvB928lN3WHBZx6DkuxRM/Y/iSyMuhzL5FfhsICuyiBs5f3QG70eZx+
+ Bdj4I7LpnIAzmBdNWxMHpt0m7UnkNVofA0yH6rcpCsPrdPRJNOLFI6ZqXDQk9VF+AB4HVAJY
+ BDU3NAHoyVGdMlcxev0+gEXfBQswEcysAyvzcPVTAqmrDsupnIB2f0SDMROQCLO6F+/cLG4L
+ Stbz+S6YFjESyXblhLckTiPURvDLTywyTOxJ7Mafz6ZCene9uEOqyd/h81nZOvRd1HrXjiTE
+ 1CBw+Dbvbch1ZwGOTQARAQABiQNyBBgBCgAmFiEEwUALoLOYnm+8fVtcK17iEcWK6lQFAl8R
+ cZYCGwIFCQLnoRoBQAkQK17iEcWK6lTAdCAEGQEKAB0WIQQreQhYm33JNgw/d6GpyVqK+u3v
+ qQUCXxFxlgAKCRCpyVqK+u3vqatQCAC3QIk2Y0g/07xNLJwhWcD7JhIqfe7Qc5Vz9kf8ZpWr
+ +6w4xwRfjUSmrXz3s6e/vrQsfdxjVMDFOkyG8c6DWJo0TVm6Ucrf9G06fsjjE/6cbE/gpBkk
+ /hOVz/a7UIELT+HUf0zxhhu+C9hTSl8Nb0bwtm6JuoY5AW0LP2KoQ6LHXF9KNeiJZrSzG6WE
+ h7nf3KRFS8cPKe+trbujXZRb36iIYUfXKiUqv5xamhohy1hw+7Sy8nLmw8rZPa40bDxX0/Gi
+ 98eVyT4/vi+nUy1gF1jXgNBSkbTpbVwNuldBsGJsMEa8lXnYuLzn9frLdtufUjjCymdcV/iT
+ sFKziU9AX7TLZ5AP/i1QMP9OlShRqERH34ufA8zTukNSBPIBfmSGUe6G2KEWjzzNPPgcPSZx
+ Do4jfQ/m/CiiibM6YCa51Io72oq43vMeBwG9/vLdyev47bhSfMLTpxdlDJ7oXU9e8J61iAF7
+ vBwerBZL94I3QuPLAHptgG8zPGVzNKoAzxjlaxI1MfqAD9XUM80MYBVjunIQlkU/AubdvmMY
+ X7hY1oMkTkC5hZNHLgIsDvWUG0g3sACfqF6gtMHY2lhQ0RxgxAEx+ULrk/svF6XGDe6iveyc
+ z5Mg5SUggw3rMotqgjMHHRtB3nct6XqgPXVDGYR7nAkXitG+nyG5zWhbhRDglVZ0mLlW9hij
+ z3Emwa94FaDhN2+1VqLFNZXhLwrNC5mlA6LUjCwOL+zb9a07HyjekLyVAdA6bZJ5BkSXJ1CO
+ 5YeYolFjr4YU7GXcSVfUR6fpxrb8N+yH+kJhY3LmS9vb2IXxneE/ESkXM6a2YAZWfW8sgwTm
+ 0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
+ HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
+ xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
+Message-ID: <6dabf1e0-683f-d3be-469f-bf4becb11271@pengutronix.de>
+Date:   Tue, 3 Nov 2020 17:10:30 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-References: <20201023203017.3485-1-socketcan@hartkopp.net> <CAMZ6RqKQjD5vWeya1CEpNuaZb=vUYWtkgL1rDr1fcBvBRDdgxA@mail.gmail.com>
- <e23e5ebd-5bd9-dca2-5c1e-9adbd009cf99@hartkopp.net> <6bfdc3db-5aaf-b492-dc24-fb5d73cd3b23@hartkopp.net>
- <CAMZ6Rq+UY6SJxDJ15jx1vmSFUk9YHWx+Rf5dZiC9OY+6RO9QXg@mail.gmail.com>
- <e2e5e78e-5de8-9a36-ae6c-191518b3bba3@hartkopp.net> <729dcd89-d4b2-1139-4229-9d88f1fd3175@hartkopp.net>
-In-Reply-To: <729dcd89-d4b2-1139-4229-9d88f1fd3175@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 4 Nov 2020 00:59:44 +0900
-Message-ID: <CAMZ6RqKfu1TE62FS7vC-yUFKfpWOiVtg0Yq4kBd8_MRW3ZnU0Q@mail.gmail.com>
-Subject: Re: [PATCH RFC] can: add optional DLC element to Classical CAN frame structure
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAA7ZjpaYA0jLaybxq_2amtWOcs3sPE5w_fQK7jMdgaKpA-YoUg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="DEQeGb5aMYFzl9eN4yfnPHOvTp8529vAS"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 02.11.20 04:58, Oliver Hartkopp wrote:
-> On 01.11.20 17:12, Oliver Hartkopp wrote:
->
->> Yes. After you shared your thoughts I would indeed tend to provide an
->> option '-8' and then always print the raw DLC in parenthesis e.g. (0) or
->> (F).
->>
->> IMO this len8_dlc stuff is an expert feature that normal users do not
->> care about. Therefore it should be disabled by default.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--DEQeGb5aMYFzl9eN4yfnPHOvTp8529vAS
+Content-Type: multipart/mixed; boundary="ylA4F9LYT9n880wEfqxNkN9q8FPdAGpny";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ondrej Ille <ondrej.ille@gmail.com>
+Cc: Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
+ devicetree@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>,
+ Wolfgang Grandegger <wg@grandegger.com>, David Miller <davem@davemloft.net>,
+ Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+ Carsten Emde <c.emde@osadl.org>, armbru@redhat.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Marin Jerabek <martin.jerabek01@gmail.com>,
+ Jiri Novak <jnovak@fel.cvut.cz>, Jaroslav Beran <jara.beran@gmail.com>,
+ Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+ Drew Fustini <pdp7pdp7@gmail.com>
+Message-ID: <6dabf1e0-683f-d3be-469f-bf4becb11271@pengutronix.de>
+Subject: Re: [PATCH v7 0/6] CTU CAN FD open-source IP core SocketCAN driver,
+ PCI, platform integration and documentation
+References: <cover.1604095004.git.pisa@cmp.felk.cvut.cz>
+ <2ccec201-1a84-1837-15a8-d2ad05f5753c@pengutronix.de>
+ <202011031100.35922.pisa@cmp.felk.cvut.cz>
+ <07227792-f75f-6998-bd09-ce6e612de79f@pengutronix.de>
+ <CAA7ZjpaYA0jLaybxq_2amtWOcs3sPE5w_fQK7jMdgaKpA-YoUg@mail.gmail.com>
+In-Reply-To: <CAA7ZjpaYA0jLaybxq_2amtWOcs3sPE5w_fQK7jMdgaKpA-YoUg@mail.gmail.com>
 
-OK, it is a reasonable compromise.
+--ylA4F9LYT9n880wEfqxNkN9q8FPdAGpny
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-> I implemented '-8' for your testing with curly braces {} which just
-> looks 'more unusual' than ().
->
-> Please give it a try also from a visual standpoint if it fits for you.
+On 11/3/20 2:36 PM, Ondrej Ille wrote:
+> Hello Marc,
+>=20
+> thank you for review, I appreciate it. We will process all your notes, =
+and get
+> rid of uin32_t and bitfields then.
+>=20
+> As Pavel pointed out, there are user space tests using this stuff, so i=
+t is
+> not just search and replace work. We will extend our IP-XACT generation=
 
-I did the test. As usual, it works fine.
+> toolchain (what a strong word for bunch of python scripts...), to gener=
+ate=20
+> Linux specific headers with GEN_MASK and BIT then.
 
-Is the use of the hexadecimal notation a deliberate choice? I
-initially did that because it is the easiest hack. I was expecting to
-use a decimal representation in the finalized version but the
-hexadecimal notation stands out even more and seems like a good
-choice.
+Fine!
+> It will take some time, since we have to modify quite a lot of stuff an=
+d
+> re-test it then, but we will try to do it fast. Btw, do you agree with
+> separation of HW specific part of driver into "_hw" file, or would you
+> preffer to get rid of this abstraction layer? If we should get rid of i=
+t, we
+> will, but it would take even more time to do it.
 
-With both the curly braces and the hexadecimal representation, I do
-not see how we could do something more visual.
+I haven't looked at the HW abstraction yet, but will do next. Usually Lin=
+ux is
+considered the HW abstraction layer :)
 
-Concerning the () vs. {}, honestly, that's a coin flip for me. No
-preferences, both are fine.
+Marc
 
-Also, when receiving both Classical and FD frames, until now, the only
-visual clue was the presence of the zero prefix: [x] for Classical
-vs. [0x] for FD. I think that I might use the -8 option even when not
-using CAN_CTRLMODE_CC_LEN8_DLC. Like that, the Classical frames would
-show as {x} and the FD frames as [0x]: a way more visual clue than the
-current one.
-
-I will continue to think of other use cases for the other can-utils
-programs.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-Yours sincerely,
-Vincent Mailhol
+--ylA4F9LYT9n880wEfqxNkN9q8FPdAGpny--
+
+--DEQeGb5aMYFzl9eN4yfnPHOvTp8529vAS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+hgPYACgkQqclaivrt
+76lSrggAjr8U94Up39MhE0fLBeiufpYpaPFvhb9Pt87u4LHmSLVtR/5sMYlcsZuq
+YWzlO9sVSoR3ME4jZy0FN7ZtncBAbbEKXw92Je4tii+oBePQOHzCpnhFMZOZHaqv
+cbC7k0WvqE2kvUZHQsjOzsHwND8AZYzxS1JkTcZpsQ0r0aORyerZFxiMjAR9VXIt
+HeCNP/HCZnsAVhc/91JvXcmGMevKJraX4SurfHCu2v3UDWt8bCjuv1zxPwmj/9/w
+EMzRhT+FXQDwrCvNjnPkUqtiDHbsbJqJKL3fDnyy5EqXqbgDD8Q7Gtn4aw36OsiP
+OxA5jSWcThzYKJ4VY0bCMrmKTHBSTw==
+=q2fO
+-----END PGP SIGNATURE-----
+
+--DEQeGb5aMYFzl9eN4yfnPHOvTp8529vAS--
