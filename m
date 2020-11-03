@@ -2,37 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9A92A5A0E
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 23:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06CA2A5A0F
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 23:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729641AbgKCW0k (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 17:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S1729702AbgKCW1P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 17:27:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729342AbgKCW0k (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 17:26:40 -0500
+        with ESMTP id S1729342AbgKCW1P (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 17:27:15 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AC8C0613D1
-        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 14:26:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C35C0613D1
+        for <linux-can@vger.kernel.org>; Tue,  3 Nov 2020 14:27:14 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ka4lC-0001nM-9E; Tue, 03 Nov 2020 23:26:38 +0100
+        id 1ka4ll-0001o1-Et; Tue, 03 Nov 2020 23:27:13 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:a118:5f1:5158:c960] (unknown [IPv6:2a03:f580:87bc:d400:a118:5f1:5158:c960])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 27D6C589BE9;
-        Tue,  3 Nov 2020 22:26:37 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AF9BA589BEC;
+        Tue,  3 Nov 2020 22:27:12 +0000 (UTC)
+Subject: Re: [PATCH v3 0/4] Introduce optional DLC element for Classic CAN
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         mailhol.vincent@wanadoo.fr
 Cc:     linux-can@vger.kernel.org
 References: <20201029083218.41505-1-socketcan@hartkopp.net>
  <05f5257e-2ece-d9d4-2481-57b05b961d10@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <08cf2c95-df53-9ecb-d84a-9d95239b4b04@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -93,16 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH v3 0/4] Introduce optional DLC element for Classic CAN
-Message-ID: <08cf2c95-df53-9ecb-d84a-9d95239b4b04@pengutronix.de>
-Date:   Tue, 3 Nov 2020 23:26:32 +0100
+Message-ID: <e561625a-f6bb-bd10-332b-53cc2ae104b0@pengutronix.de>
+Date:   Tue, 3 Nov 2020 23:27:09 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <05f5257e-2ece-d9d4-2481-57b05b961d10@hartkopp.net>
+In-Reply-To: <08cf2c95-df53-9ecb-d84a-9d95239b4b04@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="0z9lDUEbyam2EgOArAEtdMRimRcUVO5aw"
+ boundary="g8dE6Q0jtoeOthk1B8U8JPWCTQ7TybH4t"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,53 +113,37 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0z9lDUEbyam2EgOArAEtdMRimRcUVO5aw
-Content-Type: multipart/mixed; boundary="CnhZ6bfK6kGiEGqYeLGVjN7qCZipqSHH0";
+--g8dE6Q0jtoeOthk1B8U8JPWCTQ7TybH4t
+Content-Type: multipart/mixed; boundary="Euj5vFILJwdptZU4DL4jFCfUEhYpe62zi";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Oliver Hartkopp <socketcan@hartkopp.net>, mailhol.vincent@wanadoo.fr
 Cc: linux-can@vger.kernel.org
-Message-ID: <08cf2c95-df53-9ecb-d84a-9d95239b4b04@pengutronix.de>
+Message-ID: <e561625a-f6bb-bd10-332b-53cc2ae104b0@pengutronix.de>
 Subject: Re: [PATCH v3 0/4] Introduce optional DLC element for Classic CAN
 References: <20201029083218.41505-1-socketcan@hartkopp.net>
  <05f5257e-2ece-d9d4-2481-57b05b961d10@hartkopp.net>
-In-Reply-To: <05f5257e-2ece-d9d4-2481-57b05b961d10@hartkopp.net>
+ <08cf2c95-df53-9ecb-d84a-9d95239b4b04@pengutronix.de>
+In-Reply-To: <08cf2c95-df53-9ecb-d84a-9d95239b4b04@pengutronix.de>
 
---CnhZ6bfK6kGiEGqYeLGVjN7qCZipqSHH0
+--Euj5vFILJwdptZU4DL4jFCfUEhYpe62zi
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/3/20 11:33 AM, Oliver Hartkopp wrote:
-> Hello Marc,
+On 11/3/20 11:26 PM, Marc Kleine-Budde wrote:
+> On 11/3/20 11:33 AM, Oliver Hartkopp wrote:
+>> Hello Marc,
+>>
+>> I did some more testing with different CAN-USB adapters and feel prett=
+y=20
+>> comfortable on the below patch set now.
+>>
+>> Would you think this is something for can-next?
 >=20
-> I did some more testing with different CAN-USB adapters and feel pretty=
-=20
-> comfortable on the below patch set now.
->=20
-> Would you think this is something for can-next?
+> Yes, this would go via
 
-Yes, this would go via
-
-> If so, I would also start to extend the can-gw.
-
-nice!
-
-> On 29.10.20 09:32, Oliver Hartkopp wrote:
->> Introduce improved DLC handling for Classic CAN with introduces a new
->> element 'len8_dlc' to the struct can_frame and additionally rename
->> the 'can_dlc' element to 'len' as it represents a plain payload length=
-=2E
->>
->> Before implementing the CAN_CTRLMODE_CC_LEN8_DLC handling on driver le=
-vel
->> this patch set cleans up and renames the relevant code.
->>
->> No functional changes.
->>
->> This patch set is based on mkl/linux-can.git (testing branch).
-
-Please based this on next-next/master.
+=2E..net-next/master
 
 Marc
 
@@ -169,23 +154,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---CnhZ6bfK6kGiEGqYeLGVjN7qCZipqSHH0--
+--Euj5vFILJwdptZU4DL4jFCfUEhYpe62zi--
 
---0z9lDUEbyam2EgOArAEtdMRimRcUVO5aw
+--g8dE6Q0jtoeOthk1B8U8JPWCTQ7TybH4t
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+h2RgACgkQqclaivrt
-76lwogf+PNH6jRfIloXnizlVu6S9bJIzH155/gwfUP29R0q+G+wDBLCPPd5OiDkk
-hiYZuElXQgqQB1LImVkHrz6H5kNpJbmrphCvGHD5R+B6sr3I0s93WLDE8VDA258U
-jfDRmhB8Cex3jtNojyMAqwAbv267m0tIOAnZPWEEmqEaqn3wi2Yy6vrQ0HiWMiuC
-m6Bhz2iE5pBVj/iyYF7gTGatBEoV/3nkqqiYRDA5s8QJzTZQv1p0tQ4pzJ8cSXir
-FXW34JS9l5mMWGL/XvEUfV8bH6DtyCr6ecDIftxR9spMQ9NzPjLl5RWsO4bj0ZvT
-QkgZkojaBxiwRqkllarkNfJcUjmWdQ==
-=lY+U
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+h2T0ACgkQqclaivrt
+76lNGAf7BJDyL4efXBQbvvcc+ivl9ZVAy0MfXDZyaq1sO3azeyrd4xgz0F0O8agx
+xKP+ezavfQIiYx7jCNveJwkalkWy2UoYvmfEw+Kx2UGsGyfIWSRAmIXt4/+6jIVp
+uEHlYI7cLwwInUBbX5AKzooPSL3TaCeOUCNrnEAG4CyVQdxjWlG1X8diOixwfz6m
+hlj5SSnvnwWRVk8Z3PJCwVPt0JI5D+YajORVUVN1lbZGZ/nTNTbXvvsRSGtac9ah
+du2ZxI+/8t+XwipqZ4nDf+POw3pYHPT4KyRVSTqzzY5W/+rNF/v6ipbtasftGxlF
+MXySMdjaKqRbdQBV6YYyLp+en6CT5w==
+=V7Sm
 -----END PGP SIGNATURE-----
 
---0z9lDUEbyam2EgOArAEtdMRimRcUVO5aw--
+--g8dE6Q0jtoeOthk1B8U8JPWCTQ7TybH4t--
