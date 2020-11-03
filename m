@@ -2,106 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256262A4F40
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 19:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3966E2A5734
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 22:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbgKCSpc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 13:45:32 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.221]:13779 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728621AbgKCSpb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 13:45:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604429130;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=h6P7B1Wx1MJzgXs8e+yMOibB+DNkzfBKg6E/3FuhAbo=;
-        b=c6IaTqo5PiBvSDMYIa61W3fG+pIJ0rxPE/Xd0wzqJig/Do+waoC/TQjpgM2dQ6cirJ
-        dyOLPyY82MP9ALdLe0F1rFtsiXENlfeBi2cUZBGufdhk6r6ouWXSBW7Qf8TdtXIQEE5m
-        lqC9Wuncn5NKv5SA0WxsT2nEMRLwipXy53bRs9TbYQVibMqjImdKChZ2w1Kq5d6pj0Na
-        tV6XLWfEOswR8Txf6udPoStwCsp5ixGGLiwMdSPuoDR8BLL4GBAynaqYu25XEjZIyfJ6
-        scGYVdMf0oLa4E6lBV2gtT0cvjFhThxk1dlUkTaiUyoUpK/8gxABhQde5Mmy1Z/qDdMk
-        +eHg==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1rnbMYliT57T0lTwqN2w="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 47.3.0 DYNA|AUTH)
-        with ESMTPSA id L010bewA3IjRGPb
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 3 Nov 2020 19:45:27 +0100 (CET)
-Subject: Re: [PATCH v3 2/4] can: rename get_can_dlc() macro with
- can_get_cc_len()
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20201029083218.41505-1-socketcan@hartkopp.net>
- <20201029083218.41505-3-socketcan@hartkopp.net>
- <CAMZ6RqL4LTtBJrEnRXzz7wTmGu+8B5D=ZM=PRPjfaR=raXGDhw@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <efc3e914-1048-33ad-4795-a705156d71d6@hartkopp.net>
-Date:   Tue, 3 Nov 2020 19:45:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1732115AbgKCVkK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 16:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732326AbgKCVj1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 16:39:27 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93224C0613D1;
+        Tue,  3 Nov 2020 13:39:27 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id b19so9226630pld.0;
+        Tue, 03 Nov 2020 13:39:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yuupg0c1D0Ih5Ju03L0WwdvLwQwoMb4nyLHRVSNf0Ks=;
+        b=M840EW4b6gw1qYhqVaIJU/OAPyKoAmUECTZSOnoc9GIWCxI2BHp1U2WCCIFiHDWxHB
+         Ony1okNLiSHpl/3VeyVHTotLk7RARJpZKeBH01ahW6fHLajTo0ilFvPiQzJz4b4mQ3/e
+         x1AGSS81jWeaUedhZc9hev5q66lNCk5bOrQK/3CLeXuLRaltDyM29SE+EpXXcoB7iZzS
+         IlI7w0p7HhM+MWC8Kzdlt+yILyr4DJYu7QLnEkOg/UBjTLtHOb3RhG8SayVrW966OQrv
+         8HGcDPld/5EAkO0UbXSo8w+RWOciUUL+/1SIyr8pBs9P67eAfM3TsdJ7eFcN5kPvjwW/
+         xqbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yuupg0c1D0Ih5Ju03L0WwdvLwQwoMb4nyLHRVSNf0Ks=;
+        b=D4uZKb0HvtmIKS30pQPQjJXQ7c2FgBzeMFRcZDuSuGLErrr3ABeojo4GnkfUnlipt3
+         zixxIVKwfFlDHkFqS38QsrSEKp9XUmBBovHFIvuV9djKFNAwBRy78ndsfBWK4UpU+RwC
+         et62iSkFpWLzg4yySYYYCF8hT4kj7q35JEqY6cUThkNs5tyC1LJQ7eDMEd49wBJRgXRt
+         9l/w2udBxOpjy3cPHlD6V7PBeFtFdyONGPdLeiflHixxBK08Vou+SLQIB/l+t/HANaJt
+         OmJuu990lc2VlVUpDil4vkSa4t7wTXuPmeZ3VMrhPP+IWzju3a+fgKrwztSse83GPiRk
+         XI8w==
+X-Gm-Message-State: AOAM531crg/ScBvdGuOrb9R+PPzpy8iY02Pz2AfZfCphB4f+SzOfnKLL
+        SAi8MRQucgXKdxgbzkKT+vc=
+X-Google-Smtp-Source: ABdhPJyM1UuoA2z+TC3CwU5JNeFaqyWsdrUPP63AH6Ql47E4JSyF2723/UlxJnfZ1n/5HjnR05DX3Q==
+X-Received: by 2002:a17:902:aa47:b029:d6:ac0f:fe76 with SMTP id c7-20020a170902aa47b02900d6ac0ffe76mr18878761plr.42.1604439566912;
+        Tue, 03 Nov 2020 13:39:26 -0800 (PST)
+Received: from localhost.localdomain ([49.207.221.93])
+        by smtp.gmail.com with ESMTPSA id 15sm16420108pgs.52.2020.11.03.13.39.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Nov 2020 13:39:25 -0800 (PST)
+From:   Anant Thazhemadam <anant.thazhemadam@gmail.com>
+To:     socketcan@hartkopp.net, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Anant Thazhemadam <anant.thazhemadam@gmail.com>
+Subject: [PATCH 0/2] prevent potential access of uninitialized members in can_rcv() and canfd_rcv()
+Date:   Wed,  4 Nov 2020 03:09:04 +0530
+Message-Id: <20201103213906.24219-1-anant.thazhemadam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqL4LTtBJrEnRXzz7wTmGu+8B5D=ZM=PRPjfaR=raXGDhw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+In both can_rcv(), and canfd_rcv(), when skb->len = 0, cfd->len 
+(which is uninitialized) is accessed by pr_warn_once().
 
+Performing the validation check for cfd->len separately, after the 
+validation check for skb->len is done, resolves this issue in both 
+instances, without compromising the degree of detail provided in the
+log messages.
 
-On 03.11.20 16:17, Vincent MAILHOL wrote:
-> On 29.10.20 17:32, Oliver Hartkopp wrote:
->> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
->> index 41ff31795320..0a51f3c9cfec 100644
->> --- a/include/linux/can/dev.h
->> +++ b/include/linux/can/dev.h
->> @@ -96,17 +96,17 @@ static inline unsigned int can_bit_time(const struct can_bittiming *bt)
->>   {
->>          return CAN_SYNC_SEG + bt->prop_seg + bt->phase_seg1 + bt->phase_seg2;
->>   }
->>
->>   /*
->> - * get_can_dlc(value) - helper macro to cast a given data length code (dlc)
->> + * can_get_cc_len(value) - helper macro to cast a given data length code (dlc)
->>    * to u8 and ensure the dlc value to be max. 8 bytes.
-> 
->   * can_get_cc_len(value) - convert a given data length code (dlc) of a
->   * Classical CAN frame into a valid data length of max. 8 bytes.
-> 
-> The comment is a leftover. It still mentioned DLC of max. 8 bytes. I
-> tried to rephrase it to better highlight the nuance.
-> 
->>    *
->>    * To be used in the CAN netdriver receive path to ensure conformance with
->>    * ISO 11898-1 Chapter 8.4.2.3 (DLC field)
->>    */
->> -#define get_can_dlc(i)         (min_t(u8, (i), CAN_MAX_DLC))
->> +#define can_get_cc_len(i)      (min_t(u8, (i), CAN_MAX_DLEN))
-> 
-> #define can_get_cc_len(dlc)      (min_t(u8, (dlc), CAN_MAX_DLEN))
-> 
-> It is easier to read and understand if the input is named "dlc", not "i".
-> 
+Anant Thazhemadam (2):
+  can: af_can: prevent potential access of uninitialized member in
+    can_rcv()
+  can: af_can: prevent potential access of uninitialized member in
+    canfd_rcv()
 
-I will take these suggestions and also the one from the other review 
-reply for the v4.
+ net/can/af_can.c | 38 ++++++++++++++++++++++++++++----------
+ 1 file changed, 28 insertions(+), 10 deletions(-)
 
-Thanks!
+-- 
+2.25.1
 
-Oliver
-
->>   #define get_canfd_dlc(i)       (min_t(u8, (i), CANFD_MAX_DLC))
->>
->>   /* Check for outgoing skbs that have not been created by the CAN subsystem */
->>   static inline bool can_skb_headroom_valid(struct net_device *dev,
->>                                            struct sk_buff *skb)
-> 
-> 
-> Yours sincerely,
-> Vincent Mailhol
-> 
