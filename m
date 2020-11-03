@@ -2,147 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0C42A4114
-	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 11:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC0F2A41FB
+	for <lists+linux-can@lfdr.de>; Tue,  3 Nov 2020 11:33:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbgKCKCC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Nov 2020 05:02:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbgKCKCC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 05:02:02 -0500
-Received: from relay.felk.cvut.cz (relay.felk.cvut.cz [IPv6:2001:718:2:1611:0:1:0:70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25B74C0613D1;
-        Tue,  3 Nov 2020 02:02:01 -0800 (PST)
-Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
-        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 0A3A0bo6012959;
-        Tue, 3 Nov 2020 11:00:37 +0100 (CET)
-        (envelope-from pisa@cmp.felk.cvut.cz)
-Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
-        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 0A3A0b9t028643;
-        Tue, 3 Nov 2020 11:00:37 +0100
-Received: (from pisa@localhost)
-        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 0A3A0a7u028642;
-        Tue, 3 Nov 2020 11:00:36 +0100
-X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
-Subject: Re: [PATCH v7 0/6] CTU CAN FD open-source IP core SocketCAN driver, PCI, platform integration and documentation
-Date:   Tue, 3 Nov 2020 11:00:35 +0100
-User-Agent: KMail/1.9.10
-Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
-        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marin Jerabek <martin.jerabek01@gmail.com>,
-        Ondrej Ille <ondrej.ille@gmail.com>,
-        Jiri Novak <jnovak@fel.cvut.cz>,
-        Jaroslav Beran <jara.beran@gmail.com>,
-        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
-        Drew Fustini <pdp7pdp7@gmail.com>
-References: <cover.1604095004.git.pisa@cmp.felk.cvut.cz> <2ccec201-1a84-1837-15a8-d2ad05f5753c@pengutronix.de>
-In-Reply-To: <2ccec201-1a84-1837-15a8-d2ad05f5753c@pengutronix.de>
-X-KMail-QuotePrefix: > 
+        id S1726109AbgKCKdQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Nov 2020 05:33:16 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.162]:33515 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726058AbgKCKdQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Nov 2020 05:33:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604399590;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=RfOniR0Ct/ucetmPh/xM/62EOLZP+mPbOTOCkJG0atM=;
+        b=ULXb6rNsajf11+TaMgzlddzAe+CKRsMcW5Z68P/aopiwK5ibf2/Oyam8g4hRn/lrbl
+        0pCzZAd+2CpPBnpVhqZ42FCclfrXkjkG/ySCKhPK32qsVmjclsao0k6wA7pzW2m4iN5c
+        v5qkz7A3VIQV664OvXuOpKTCa3fXjOdRVZ9kNKz7JUA6KZMLUY7nOPwSchivk9XgRi+O
+        9jtJmz2W8dihuTsQFIUOdc44rAI5cj+IJgqnt3LYWkDlfeQcfiYUv8x4Q0+QkCzdd08Y
+        ZVffxO3FZFbB/CyWMf+C20N2Gal9sgYPByHyoKHbY93l5zbvqM3z8yYFa3HH0OIdzEAJ
+        kkbA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8topw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+        by smtp.strato.de (RZmta 47.3.0 SBL|AUTH)
+        with ESMTPSA id L010bewA3AX7EeX
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 3 Nov 2020 11:33:07 +0100 (CET)
+Subject: Re: [PATCH v3 0/4] Introduce optional DLC element for Classic CAN
+To:     mkl@pengutronix.de, mailhol.vincent@wanadoo.fr
+Cc:     linux-can@vger.kernel.org
+References: <20201029083218.41505-1-socketcan@hartkopp.net>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <05f5257e-2ece-d9d4-2481-57b05b961d10@hartkopp.net>
+Date:   Tue, 3 Nov 2020 11:33:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
+In-Reply-To: <20201029083218.41505-1-socketcan@hartkopp.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202011031100.35922.pisa@cmp.felk.cvut.cz>
-X-FELK-MailScanner-Information: 
-X-MailScanner-ID: 0A3A0bo6012959
-X-FELK-MailScanner: Found to be clean
-X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
-        score=-0.098, required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.40,
-        NICE_REPLY_A -0.00, SPF_HELO_NONE 0.00, SPF_NONE 0.00,
-        URIBL_BLOCKED 0.00)
-X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
-X-FELK-MailScanner-Watermark: 1605002439.6287@ZlrwsaNtddJUcINn+dc1vg
-X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Hello Marc,
 
-thanks for response
+I did some more testing with different CAN-USB adapters and feel pretty 
+comfortable on the below patch set now.
 
-On Saturday 31 of October 2020 12:35:11 Marc Kleine-Budde wrote:
-> On 10/30/20 11:19 PM, Pavel Pisa wrote:
-> > This driver adds support for the CTU CAN FD open-source IP core.
->
-> Please fix the following checkpatch warnings/errors:
+Would you think this is something for can-next?
 
-Yes I recheck with actual checkpatch, I have used 5.4 one
-and may it be overlooked something during last upadates.
+If so, I would also start to extend the can-gw.
 
-> -----------------------------------------
-> drivers/net/can/ctucanfd/ctucanfd_frame.h
-> -----------------------------------------
-> CHECK: Please don't use multiple blank lines
-> #46: FILE: drivers/net/can/ctucanfd/ctucanfd_frame.h:46:
+On 29.10.20 09:32, Oliver Hartkopp wrote:
+> Introduce improved DLC handling for Classic CAN with introduces a new
+> element 'len8_dlc' to the struct can_frame and additionally rename
+> the 'can_dlc' element to 'len' as it represents a plain payload length.
+> 
+> Before implementing the CAN_CTRLMODE_CC_LEN8_DLC handling on driver level
+> this patch set cleans up and renames the relevant code.
+> 
+> No functional changes.
+> 
+> This patch set is based on mkl/linux-can.git (testing branch).
 
-OK, we find a reason for this blank line in header generator.
+Btw. here are still some patches that haven't been pushed upstream.
 
-> CHECK: Prefer kernel type 'u32' over 'uint32_t'
-> #49: FILE: drivers/net/can/ctucanfd/ctucanfd_frame.h:49:
-> +	uint32_t u32;
+Best,
+Oliver
 
-In this case, please confirm that even your personal opinion
-is against uint32_t in headers, you request the change.
-
-uint32_t is used in many kernel headers and in this case
-allows our tooling to use headers for mutual test of HDL
-design match with HW access in the C.
-
-If the reasons to remove uint32_t prevails, we need to
-separate Linux generator from the one used for other
-purposes. When we add Linux mode then we can revamp
-headers even more and in such case we can even invest
-time to switch from structure bitfields to plain bitmask
-defines. It is quite lot of work and takes some time,
-but if there is consensus I do it during next weeks,
-I would like to see what is preferred way to define
-registers bitfields. I personally like RTEMS approach
-for which we have prepared generator from parsed PDFs
-when we added BSP for TMS570 
-
-  https://git.rtems.org/rtems/tree/bsps/arm/tms570/include/bsp/ti_herc/reg_dcan.h#n152
-
-Other solution I like (biased, because I have even designed it)
-is
-
-  #define __val2mfld(mask,val) (((mask)&~((mask)<<1))*(val)&(mask))
-  #define __mfld2val(mask,val) (((val)&(mask))/((mask)&~((mask)<<1)))
-  https://gitlab.com/pikron/sw-base/sysless/-/blob/master/arch/arm/generic/defines/cpu_def.h#L314
-
-Which allows to use simple masks, i.e.
-  #define SSP_CR0_DSS_m  0x000f  /* Data Size Select (num bits - 1) */
-  #define SSP_CR0_FRF_m  0x0030  /* Frame Format: 0 SPI, 1 TI, 2 Microwire */
-  #define SSP_CR0_CPOL_m 0x0040  /* SPI Clock Polarity. 0 low between frames, 1 high */ #
-
-  https://gitlab.com/pikron/sw-base/sysless/-/blob/master/libs4c/spi/spi_lpcssp.c#L46
-
-in the sources
-
-  lpcssp_drv->ssp_regs->CR0 =
-                    __val2mfld(SSP_CR0_DSS_m, lpcssp_drv->data16_fl? 16 - 1 : 8 - 1) |
-                    __val2mfld(SSP_CR0_FRF_m, 0) |
-                    (msg->size_mode & SPI_MODE_CPOL? SSP_CR0_CPOL_m: 0) |
-                    (msg->size_mode & SPI_MODE_CPHA? SSP_CR0_CPHA_m: 0) |
-                    __val2mfld(SSP_CR0_SCR_m, rate);
-
-  https://gitlab.com/pikron/sw-base/sysless/-/blob/master/libs4c/spi/spi_lpcssp.c#L217
-
-If you have some preferred Linux style then please send us pointers.
-In the fact, Ondrej Ille has based his structure bitfileds style
-on the other driver included in the Linux kernel and it seems
-to be a problem now. So when I invest my time, I want to use style
-which pleases me and others.
-
-Thanks for the support and best wishes,
-
-Pavel Pisa
+> 
+> Changes in v2:
+>    - rephrase commit message of patch 4 about can_dlc replacement
+> 
+> Changes in v3:
+>    - remove unnecessarily introduced u8 cast in flexcan.c
+> 
+> Oliver Hartkopp (4):
+>    can: add optional DLC element to Classical CAN frame structure
+>    can: rename get_can_dlc() macro with can_get_cc_len()
+>    can: remove obsolete get_canfd_dlc() macro
+>    can: replace can_dlc as variable/element for payload length
+> 
+>   Documentation/networking/can.rst              |  6 ++--
+>   drivers/net/can/at91_can.c                    | 14 ++++----
+>   drivers/net/can/c_can/c_can.c                 | 20 +++++------
+>   drivers/net/can/cc770/cc770.c                 | 14 ++++----
+>   drivers/net/can/dev.c                         | 10 +++---
+>   drivers/net/can/flexcan.c                     |  4 +--
+>   drivers/net/can/grcan.c                       | 10 +++---
+>   drivers/net/can/ifi_canfd/ifi_canfd.c         |  6 ++--
+>   drivers/net/can/janz-ican3.c                  | 20 +++++------
+>   drivers/net/can/kvaser_pciefd.c               |  4 +--
+>   drivers/net/can/m_can/m_can.c                 |  6 ++--
+>   drivers/net/can/mscan/mscan.c                 | 20 +++++------
+>   drivers/net/can/pch_can.c                     | 14 ++++----
+>   drivers/net/can/peak_canfd/peak_canfd.c       | 16 ++++-----
+>   drivers/net/can/rcar/rcar_can.c               | 14 ++++----
+>   drivers/net/can/rcar/rcar_canfd.c             |  8 ++---
+>   drivers/net/can/rx-offload.c                  |  2 +-
+>   drivers/net/can/sja1000/sja1000.c             | 10 +++---
+>   drivers/net/can/slcan.c                       | 32 ++++++++---------
+>   drivers/net/can/softing/softing_fw.c          |  2 +-
+>   drivers/net/can/softing/softing_main.c        | 14 ++++----
+>   drivers/net/can/spi/hi311x.c                  | 20 +++++------
+>   drivers/net/can/spi/mcp251x.c                 | 20 +++++------
+>   .../net/can/spi/mcp251xfd/mcp251xfd-core.c    |  4 +--
+>   drivers/net/can/sun4i_can.c                   | 10 +++---
+>   drivers/net/can/ti_hecc.c                     |  8 ++---
+>   drivers/net/can/usb/ems_usb.c                 | 16 ++++-----
+>   drivers/net/can/usb/esd_usb2.c                | 16 ++++-----
+>   drivers/net/can/usb/gs_usb.c                  | 14 ++++----
+>   .../net/can/usb/kvaser_usb/kvaser_usb_core.c  |  2 +-
+>   .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 20 +++++------
+>   .../net/can/usb/kvaser_usb/kvaser_usb_leaf.c  | 22 ++++++------
+>   drivers/net/can/usb/mcba_usb.c                | 10 +++---
+>   drivers/net/can/usb/peak_usb/pcan_usb.c       | 14 ++++----
+>   drivers/net/can/usb/peak_usb/pcan_usb_fd.c    | 14 ++++----
+>   drivers/net/can/usb/peak_usb/pcan_usb_pro.c   | 14 ++++----
+>   drivers/net/can/usb/ucan.c                    | 20 +++++------
+>   drivers/net/can/usb/usb_8dev.c                | 14 ++++----
+>   drivers/net/can/xilinx_can.c                  | 12 +++----
+>   include/linux/can/dev.h                       |  9 +++--
+>   include/linux/can/dev/peak_canfd.h            |  2 +-
+>   include/uapi/linux/can.h                      | 36 ++++++++++++-------
+>   include/uapi/linux/can/netlink.h              |  1 +
+>   net/can/af_can.c                              |  2 +-
+>   net/can/gw.c                                  |  2 +-
+>   net/can/j1939/main.c                          |  4 +--
+>   46 files changed, 281 insertions(+), 271 deletions(-)
+> 
