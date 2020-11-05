@@ -2,50 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F042A77D2
-	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 08:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E249E2A782B
+	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 08:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgKEHPd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Nov 2020 02:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33116 "EHLO
+        id S1727691AbgKEHoo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Nov 2020 02:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726626AbgKEHPb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Nov 2020 02:15:31 -0500
+        with ESMTP id S1725320AbgKEHoo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Nov 2020 02:44:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F720C0613CF
-        for <linux-can@vger.kernel.org>; Wed,  4 Nov 2020 23:15:31 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7067BC0613CF
+        for <linux-can@vger.kernel.org>; Wed,  4 Nov 2020 23:44:44 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kaZUU-0005kw-4x; Thu, 05 Nov 2020 08:15:26 +0100
+        id 1kaZwl-0000Dr-UI; Thu, 05 Nov 2020 08:44:40 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:74d6:79:dc8d:9bc9] (unknown [IPv6:2a03:f580:87bc:d400:74d6:79:dc8d:9bc9])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7B63358AD8B;
-        Thu,  5 Nov 2020 07:15:24 +0000 (UTC)
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-To:     Patrick Menschel <menschel.p@posteo.de>, drew@beagleboard.org
-Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
- <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
- <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
- <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
- <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
- <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
- <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
- <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
- <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
- <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
- <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
- <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7370B58ADD3;
+        Thu,  5 Nov 2020 07:44:35 +0000 (UTC)
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+References: <20201103220636.972106-1-mkl@pengutronix.de>
+ <20201103220636.972106-6-mkl@pengutronix.de>
+ <20201103172102.3d75cb96@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CANn89iK5xqYmLT=DZk0S15pRObSJbo2-zrO7_A0Q46Ujg1RxYg@mail.gmail.com>
+ <988aea6a-c6b6-5d58-3a8e-604a52df0320@hartkopp.net>
+ <20201104080237.4d6605ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <550bf8d4-bf4c-b1ef-cd41-78c2b71514e3@hartkopp.net>
+ <CAMZ6RqK=oEn3pgHb2byMC_SOVdG3Bbsfzssu9Fd-jDpSzEbrwQ@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -107,15 +103,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
-Date:   Thu, 5 Nov 2020 08:15:17 +0100
+Subject: Re: [net 05/27] can: dev: can_get_echo_skb(): prevent call to
+ kfree_skb() in hard IRQ context
+Message-ID: <02c5f3c7-7b6a-a487-39fc-50b5fad0eebc@pengutronix.de>
+Date:   Thu, 5 Nov 2020 08:44:31 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+In-Reply-To: <CAMZ6RqK=oEn3pgHb2byMC_SOVdG3Bbsfzssu9Fd-jDpSzEbrwQ@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="4BQW3ThGatcIZm5tBulmPWPlLacvYtUIX"
+ boundary="k8eyacHwfbgWBAd63vkBdRW325jroGsr4"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -125,56 +123,89 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---4BQW3ThGatcIZm5tBulmPWPlLacvYtUIX
-Content-Type: multipart/mixed; boundary="GQT9BL9og1ZX66OeS1jpu884h6xUu2W8V";
+--k8eyacHwfbgWBAd63vkBdRW325jroGsr4
+Content-Type: multipart/mixed; boundary="9JGncgaiO20Vp0jxy0EKrDBBgDS5I0EOv";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Patrick Menschel <menschel.p@posteo.de>, drew@beagleboard.org
-Cc: socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
-Message-ID: <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de>
- <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
- <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
- <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
- <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
- <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
- <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
- <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
- <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
- <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
- <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
- <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
- <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
-In-Reply-To: <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>,
+ netdev <netdev@vger.kernel.org>, David Miller <davem@davemloft.net>,
+ linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+Message-ID: <02c5f3c7-7b6a-a487-39fc-50b5fad0eebc@pengutronix.de>
+Subject: Re: [net 05/27] can: dev: can_get_echo_skb(): prevent call to
+ kfree_skb() in hard IRQ context
+References: <20201103220636.972106-1-mkl@pengutronix.de>
+ <20201103220636.972106-6-mkl@pengutronix.de>
+ <20201103172102.3d75cb96@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CANn89iK5xqYmLT=DZk0S15pRObSJbo2-zrO7_A0Q46Ujg1RxYg@mail.gmail.com>
+ <988aea6a-c6b6-5d58-3a8e-604a52df0320@hartkopp.net>
+ <20201104080237.4d6605ef@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <550bf8d4-bf4c-b1ef-cd41-78c2b71514e3@hartkopp.net>
+ <CAMZ6RqK=oEn3pgHb2byMC_SOVdG3Bbsfzssu9Fd-jDpSzEbrwQ@mail.gmail.com>
+In-Reply-To: <CAMZ6RqK=oEn3pgHb2byMC_SOVdG3Bbsfzssu9Fd-jDpSzEbrwQ@mail.gmail.com>
 
---GQT9BL9og1ZX66OeS1jpu884h6xUu2W8V
+--9JGncgaiO20Vp0jxy0EKrDBBgDS5I0EOv
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 11/4/20 7:48 PM, Patrick Menschel wrote:
-> Hi,
+On 11/5/20 5:47 AM, Vincent MAILHOL wrote:
+>>> Okay, we can take this as a quick fix but to me it seems a little
+>>> strange to be dropping what is effectively locally generated frames.
 >=20
-> I can confirm it works on a Pi 0w too.
+> For those who are not familiar with SocketCAN and to make sure that we
+> are all aligned here, let me give a bit of context of how the echo on C=
+AN
+> skbs is usually implement in the drivers:
+>  * In the xmit() branch, the driver would queue the skb using
+>    can_put_echo_skb().
+>  * Whenever the driver gets notified of a successful TX, it will loopba=
+ck
+>    the skb using can_get_echo_skb().
 >=20
-> pi@rpi-0w-1:~ $ dmesg | grep -Ei can\|spi
-> [   29.478369] CAN device driver interface
-> [   29.615519] spi_master spi0: will run message pump with realtime pri=
-ority
-> [   29.660342] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
-> +MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:10.00MHz
-> r:10.00MHz e:0.00MHz) successfully initialized.
->=20
-> Its just a bread board install and I had to reduce the Spi-Max-Frequenc=
-y
-> due to 10cm long cables. It least I believe it's the cable length.
+> This is why the loopback is usually done in hardware IRQ context (but
+> drivers are also free to skip the second step and directly loopback the=
 
-What happens if you don't reduce the SPI frequency?
+> skb in the xmit() branch).
+>=20
+>> Thanks! So this patch doesn't hinder Marc's PR :-)
+>>
+>>> Can we use a NAPI poll model here and back pressure TX if the echo
+>>> is not keeping up?
+>>
+>> Some of the CAN network drivers already support NAPI.
+
+And some drivers (i.e. flexcan and mcp251xfd) already queue the ech_skb v=
+ia NAPI.
+
+> I had a quick look at NAPI in the past and my understanding is that it
+> requires the ability to turn off hardware interrupts meaning that it ca=
+n
+> be only used on some NIC, not but not, for example, on USB devices.
+>=20
+> It would be nice to extend the NAPI with skb loopback for drivers which=
+
+> already supports it but I am not sure how to include the other drivers.=
+
+>=20
+>> @Marc: Can we also use NAPI for echo'ing the skbs?
+
+The flexcan driver does:
+
+https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/net/can/flexcan=
+=2Ec#L1080
+
+In the interrupt handler, the driver pushes the echo_skb into the rx-offl=
+oad
+queue and triggers NAPI. The rx-offload pushed the skb into the networkin=
+g stack
+via NAPI.
+
+Here the code in the mcp251xfd driver:
+
+https://elixir.bootlin.com/linux/v5.10-rc2/source/drivers/net/can/spi/mcp=
+251xfd/mcp251xfd-core.c#L1237
 
 Marc
 
@@ -185,23 +216,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---GQT9BL9og1ZX66OeS1jpu884h6xUu2W8V--
+--9JGncgaiO20Vp0jxy0EKrDBBgDS5I0EOv--
 
---4BQW3ThGatcIZm5tBulmPWPlLacvYtUIX
+--k8eyacHwfbgWBAd63vkBdRW325jroGsr4
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+jpoUACgkQqclaivrt
-76mqfgf+PJwPDIhipUbeARsJimHFASMbHC3rPj7zGAVrdbZoL8GH5sCe2MMJWcS2
-iCEek5w3wGIAApUaxO+sU9xvE3un3j1YRgVnP/1lY3Auxx3VemIZQXxZ9jJCRMUz
-oqQlDM94prK/IFRtoRWZgCRlqOoABIQZWoCAx6gTAGMNAJ15GNT2uEDkJeBTc3qK
-w4724Kv+ik8CL0drHKpaVRlXeB13Ch1B/coalD5NCHVvpbS/WfwPggrRR/3sE5XW
-uidxgpBaaP+SrWfZ+ma3HT3RjntC4zNdjr+tAjXaieQXyJrE3fX1yS8FufCbqW1G
-CHFttogOkDNhOsJqEPeg+gWgjuUO8g==
-=1haF
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+jrV8ACgkQqclaivrt
+76mr/gf+JNei7BOuAL5HhkHMbRJoXQ1JNSORr4hiyDxvHwXLg8CmD3f5sAfH9x76
+3O73n1Qx8j+QzImujVXA9DM3DJsKSvWNWQZfurtxkDegFV08MicXU2j1yx5N6jZH
+Gs69PA6fbc1McJzwldiZyoiuCNxWllrpinBccRzwVWkY6rKhQo7LIXQR8sNbQfBj
+LFhaIn7ec26HZjZsgEGk8DuRmp4LpS0OY2LT6frq5Gh1JQKMfcrnZlt9D4SZkNGV
+8yiALe/FLTGfSK6hlJozsaamghLDO6RhnhN+3ERYcrDOM2mI/PluXP92B+RStYYn
+5W2d5BiC3BmONy0L4K3hBKgh75XICQ==
+=aPyB
 -----END PGP SIGNATURE-----
 
---4BQW3ThGatcIZm5tBulmPWPlLacvYtUIX--
+--k8eyacHwfbgWBAd63vkBdRW325jroGsr4--
