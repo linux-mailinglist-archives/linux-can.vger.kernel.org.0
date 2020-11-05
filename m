@@ -2,38 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840732A7891
-	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 09:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71BE32A7896
+	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 09:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725827AbgKEIHz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Nov 2020 03:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
+        id S1726849AbgKEIJJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Nov 2020 03:09:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725287AbgKEIHz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Nov 2020 03:07:55 -0500
+        with ESMTP id S1725287AbgKEIJI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Nov 2020 03:09:08 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15474C0613CF
-        for <linux-can@vger.kernel.org>; Thu,  5 Nov 2020 00:07:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F400C0613CF
+        for <linux-can@vger.kernel.org>; Thu,  5 Nov 2020 00:09:08 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kaaJE-0002cl-Fj; Thu, 05 Nov 2020 09:07:52 +0100
+        id 1kaaKO-0002m6-PQ; Thu, 05 Nov 2020 09:09:04 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:74d6:79:dc8d:9bc9] (unknown [IPv6:2a03:f580:87bc:d400:74d6:79:dc8d:9bc9])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8AA3858AE05;
-        Thu,  5 Nov 2020 08:07:50 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 64D3D58AE08;
+        Thu,  5 Nov 2020 08:09:03 +0000 (UTC)
 Subject: Re: mcp251xfd on RPi 5.4 downstream
-To:     Patrick Menschel <menschel.p@posteo.de>,
-        Drew Fustini <drew@beagleboard.org>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can@vger.kernel.org, Josh S <josh@macchina.cc>
+To:     Thomas.Kopp@microchip.com, menschel.p@posteo.de,
+        drew@beagleboard.org
+Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <41b606d5-5991-4d4f-bd6f-aaaf31cbc9b5@pengutronix.de>
  <6a7061a4-771d-6703-1e30-273050abfb9d@posteo.de>
  <2593d8e0-2d42-0461-e2e1-86a71b415476@pengutronix.de>
  <CAPgEAj5JheUirqr2kLrjJpwCaK3+HZyo8r8uKk25zMREVXWT3Q@mail.gmail.com>
@@ -48,6 +46,7 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
  <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
  <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -109,15 +108,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <ef3067c6-893b-4c9d-a7c5-771dfd26cc33@pengutronix.de>
-Date:   Thu, 5 Nov 2020 09:07:46 +0100
+Message-ID: <67b0781c-a0c9-ab04-8db7-5a5c6719e9c3@pengutronix.de>
+Date:   Thu, 5 Nov 2020 09:08:59 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+In-Reply-To: <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="QzS6uyRUGRgGCasRCZShvlXIL7SnekXIt"
+ boundary="Q7e1ZJVHCmx3wFr2keTxeZPI11OUiGVoV"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -127,15 +126,13 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---QzS6uyRUGRgGCasRCZShvlXIL7SnekXIt
-Content-Type: multipart/mixed; boundary="V5YPvYOIMSjjgv7SRkZQMn0SYPOw7ymPZ";
+--Q7e1ZJVHCmx3wFr2keTxeZPI11OUiGVoV
+Content-Type: multipart/mixed; boundary="sdDeyAwLDLSpjZfnZTN8xniZImI0i9bIb";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Patrick Menschel <menschel.p@posteo.de>,
- Drew Fustini <drew@beagleboard.org>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
- Josh S <josh@macchina.cc>
-Message-ID: <ef3067c6-893b-4c9d-a7c5-771dfd26cc33@pengutronix.de>
+To: Thomas.Kopp@microchip.com, menschel.p@posteo.de, drew@beagleboard.org
+Cc: socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
+Message-ID: <67b0781c-a0c9-ab04-8db7-5a5c6719e9c3@pengutronix.de>
 Subject: Re: mcp251xfd on RPi 5.4 downstream
 References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <CAPgEAj6nu475YeeWXc3wWO8sAmn8stz2Qr3nQ=HABd8CKR-c+w@mail.gmail.com>
@@ -154,62 +151,43 @@ References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
  <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
  <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
  <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
-In-Reply-To: <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
+In-Reply-To: <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
 
---V5YPvYOIMSjjgv7SRkZQMn0SYPOw7ymPZ
+--sdDeyAwLDLSpjZfnZTN8xniZImI0i9bIb
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/2/20 7:47 PM, Patrick Menschel wrote:
->>>     https://www.waveshare.com/w/upload/e/e2/2-CH-CAN-FD-HAT-Schematic=
-=2Epdf
->>>
->>> Grmpf :/
->>>
->>>> This means that can1 cs is connected to pi header pin 26=C2=A0
->>>
->>> Both of rpi's SPI host drivers prefer to use GPIO chip selects by def=
-ault, as
->>> native chip selects have some limitations. And all three mcp251xfd ov=
-erlays use
->>> GPIO chip selects, this means you can use any free GPIO in the system=
- for the
->>> SPI chip select.
->>>
->>> Marc
->>>
+On 11/2/20 7:57 PM, Thomas.Kopp@microchip.com wrote:
+>> It may be a blunt guess, but according to page 99
 >>
->> It took me a while to realize but those pin numbers on the PCB are
->> WPI :=3D WiringPi numbers, not header pin numbers and not BCM pin numb=
-ers.
+>> https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm27
+>> 11/rpi_DATA_2711_1p0.pdf
 >>
->> The schematics also has the WPI column in the lower left section.
+>> Pin 26 is pulldown. So it works if it remains unused because the pin i=
+s
+>> input with pulldown thus the chip is selected by default.
 >>
->> https://pinout.xyz/pinout/wiringpi#
->>
->> --
->> Patrick
->>
->=20
-> It may be a blunt guess, but according to page 99
->=20
-> https://www.raspberrypi.org/documentation/hardware/raspberrypi/bcm2711/=
-rpi_DATA_2711_1p0.pdf
->=20
-> Pin 26 is pulldown. So it works if it remains unused because the pin is=
+>> I don't know if the CE pin can actually work if there is no matching a=
+lt
+>> function in pinselect register.
 
-> input with pulldown thus the chip is selected by default.
->=20
-> I don't know if the CE pin can actually work if there is no matching al=
-t
-> function in pinselect register.
+> Do you suggest that the communication works with a permanent low on CS/=
+CE?
 
-Both rpi SPI drivers don't use native chip selects, they use GPIOs. This =
-means
-you can use any gpio as chip select.
+No.
 
-This is why this setup works.
+> Without the CS/CE pin having edges you will not be able to send multipl=
+e=20
+> commands. The driver is writing/reading multiple times when bringing up=
+ the
+> chip. If you have a permanent low that will fail. So somehow the CS doe=
+s=20
+> generate the right edges.
+
+The overlay configures the Pin for gpio and the SPI driver uses it in GPI=
+O mode.
 
 Marc
 
@@ -220,23 +198,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---V5YPvYOIMSjjgv7SRkZQMn0SYPOw7ymPZ--
+--sdDeyAwLDLSpjZfnZTN8xniZImI0i9bIb--
 
---QzS6uyRUGRgGCasRCZShvlXIL7SnekXIt
+--Q7e1ZJVHCmx3wFr2keTxeZPI11OUiGVoV
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+jstIACgkQqclaivrt
-76l8XQgAlquuDvlr3IQ7Om8N7n8aacq9HKppYwhDcEcaWAOSuQLXtyqei5VmnlKn
-Qj3clDhLCIhir2Rm1XG4o/gS46riR8BWjsnbnQD7sFUC9FRo4szdnAmI+Z2YNAxU
-X+dIevElC9Fl59dDlYRcwnfrKInryFuB99xfLDxXTQUm5uNJrcGVCtQV5h984ZeS
-jJxItpsXCtkaGN7S+ZmbM6fdytffBqjFQt6atyBUe5aYBSgqQAzmFAOrYUPG65yt
-A0NgAb253J9W3TOlpLWqxH5yTjZyRyyw1dT+13KsWEB/D2UjXxxwBD/45PVdwkY+
-tbzsVR+FR58dO4hBRC58fFZqqFBb+A==
-=hxiz
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+jsxsACgkQqclaivrt
+76k8jwgAqT8kflmXYJyT9TiAy/BwxOaXMW5Uz3iCknVhpY6JV0qdZ+V/xVFFGAKH
+IDWeHJlUZuoPs7POItlJz+/8crHY+ikpEscv0wzxwPKZ0aTlWSM4zImcrK7B8tUF
+CQqMw2OM7Fo5TbAeLhNWue26/MZd+3jhf4mBjhsX3L0bGzid6Y/gDB+Nlac/8iJC
+sOAZBeCjIQ6bbHuC4IryDXNHMqdYnX/r4MUFMAiv79MBKca5zcIig+8KuT/3NX2r
+IDTVbRJqaMmHT5NZ0bv4RQh3hgnxUJtlMv6GvsnySh1gzGY4cBVcHuDsexpHvNpZ
+RxMTIlSoKfOMkdvSaSVpMe/PZ9Z77g==
+=I2Qj
 -----END PGP SIGNATURE-----
 
---QzS6uyRUGRgGCasRCZShvlXIL7SnekXIt--
+--Q7e1ZJVHCmx3wFr2keTxeZPI11OUiGVoV--
