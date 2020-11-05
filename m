@@ -2,234 +2,161 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287AD2A83B2
-	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 17:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20C82A85C5
+	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 19:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730174AbgKEQjs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Nov 2020 11:39:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728999AbgKEQjr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Nov 2020 11:39:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A43C0613CF
-        for <linux-can@vger.kernel.org>; Thu,  5 Nov 2020 08:39:47 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kaiIY-0006mf-4C; Thu, 05 Nov 2020 17:39:42 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:74d6:79:dc8d:9bc9] (unknown [IPv6:2a03:f580:87bc:d400:74d6:79:dc8d:9bc9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 75C2558B7F8;
-        Thu,  5 Nov 2020 16:39:36 +0000 (UTC)
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Thomas Kopp <thomas.kopp@microchip.com>
-References: <20201103220636.972106-1-mkl@pengutronix.de>
- <20201103220636.972106-22-mkl@pengutronix.de> <20201105162417.GH7308@work>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [net 21/27] can: mcp251xfd: mcp251xfd_regmap_crc_read(): increase
- severity of CRC read error messages
-Message-ID: <cee3b960-6633-bffd-d1a6-05e4a5e20b2e@pengutronix.de>
-Date:   Thu, 5 Nov 2020 17:39:31 +0100
+        id S1731826AbgKESLd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Nov 2020 13:11:33 -0500
+Received: from mout01.posteo.de ([185.67.36.65]:34597 "EHLO mout01.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725862AbgKESLb (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 5 Nov 2020 13:11:31 -0500
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 0EB93160061
+        for <linux-can@vger.kernel.org>; Thu,  5 Nov 2020 19:11:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1604599889; bh=fdc1RGu9X5Jywm6UTBcRiKN56sHlxqWlZJxrrMbamg0=;
+        h=To:Cc:From:Autocrypt:Subject:Date:From;
+        b=VrvHbbQMT9Qjfad5BqpTBJV8FfB1jloVrwtF3cI+szWkaNQQJuwsMhPncbFEvCzYC
+         uGFdJwQca5mDpA9olvs3wRjyvvkN4U9i0aSIIMXiVYepcAVVzBjIaIq4eHwwIrnwd5
+         eeb3NOhvabiOcp08PNG4+DYY2EvK01Db1kAW5l1q4c0b229bPvbQedeDZ0/Vibzu4N
+         bJ7/xHHSHwkdRFQtIffm+dq9LF2vKFIfaeHagws7skLnf+11yMrs1X9cJGTzfxRoz7
+         8QIHV7PfWcmVs+tVrlXyXL/bhE17auDl22v1gKy2xK7EuPiZTKgkUJaOB5/xpqG6b2
+         uddDtfnLSxcIQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4CRs6814l5z9rxn;
+        Thu,  5 Nov 2020 19:11:28 +0100 (CET)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, drew@beagleboard.org
+Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
+ <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
+ <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
+ <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
+ <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
+ <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+ <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
+ elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
+ TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
+ ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
+ ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
+ Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
+ R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
+ N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
+ NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
+ S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
+ aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
+ djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
+ TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
+ WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
+ UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
+ bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
+ VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
+ NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
+ TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
+ YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
+ c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
+ NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
+ NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
+ dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
+ aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
+ TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
+ MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
+ S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
+ K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
+ dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
+ a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
+ ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
+ QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
+ YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
+ TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
+ T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
+ MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
+ U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
+ CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
+ T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
+ NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
+ YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
+ dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
+ U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
+ TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
+ TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
+ RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
+ STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
+ NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
+ ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
+ aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
+ UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
+ MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
+ WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
+ V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
+ a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
+ dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
+ QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
+ IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+Message-ID: <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
+Date:   Thu, 5 Nov 2020 19:11:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20201105162417.GH7308@work>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="RCPPXwNYgkddMRpm5c5z8YQ9Qg7QMsKVY"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---RCPPXwNYgkddMRpm5c5z8YQ9Qg7QMsKVY
-Content-Type: multipart/mixed; boundary="ROCwuYTbGV6HU6PvUWBbKXVgTs1Q4fn3E";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- linux-can@vger.kernel.org, kernel@pengutronix.de,
- Thomas Kopp <thomas.kopp@microchip.com>
-Message-ID: <cee3b960-6633-bffd-d1a6-05e4a5e20b2e@pengutronix.de>
-Subject: Re: [net 21/27] can: mcp251xfd: mcp251xfd_regmap_crc_read(): increase
- severity of CRC read error messages
-References: <20201103220636.972106-1-mkl@pengutronix.de>
- <20201103220636.972106-22-mkl@pengutronix.de> <20201105162417.GH7308@work>
-In-Reply-To: <20201105162417.GH7308@work>
+>> Its just a bread board install and I had to reduce the Spi-Max-Frequency
+>> due to 10cm long cables. It least I believe it's the cable length.
+> 
+> What happens if you don't reduce the SPI frequency?
 
---ROCwuYTbGV6HU6PvUWBbKXVgTs1Q4fn3E
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+CRC Errors above 16Mhz spi frequency.
 
-On 11/5/20 5:24 PM, Manivannan Sadhasivam wrote:
-> Hi Marc,
->=20
-> On Tue, Nov 03, 2020 at 11:06:30PM +0100, Marc Kleine-Budde wrote:
->> During debugging it turned out that some people have setups where the =
-SPI
->> communication is more prone to CRC errors.
->>
->> Increase the severity of both the transfer retry and transfer failure =
-message
->> to give users feedback without the need to recompile the driver with d=
-ebug
->> enabled.
->>
->> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->> Cc: Thomas Kopp <thomas.kopp@microchip.com>
->> Link: http://lore.kernel.org/r/20201019190524.1285319-15-mkl@pengutron=
-ix.de
->> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->> ---
->>  drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c | 16 ++++++++-------=
--
->>  1 file changed, 8 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/driver=
-s/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
->> index ba25902dd78c..c9ffc5ea2b25 100644
->> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
->> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
->> @@ -330,17 +330,17 @@ mcp251xfd_regmap_crc_read(void *context,
->>  			goto out;
->>  		}
->> =20
->> -		netdev_dbg(priv->ndev,
->> -			   "CRC read error at address 0x%04x (length=3D%zd, data=3D%*ph, C=
-RC=3D0x%04x) retrying.\n",
->> -			   reg, val_len, (int)val_len, buf_rx->data,
->> -			   get_unaligned_be16(buf_rx->data + val_len));
->> -	}
->> -
->> -	if (err) {
->>  		netdev_info(priv->ndev,
->> -			    "CRC read error at address 0x%04x (length=3D%zd, data=3D%*ph, =
-CRC=3D0x%04x).\n",
->> +			    "CRC read error at address 0x%04x (length=3D%zd, data=3D%*ph, =
-CRC=3D0x%04x) retrying.\n",
->>  			    reg, val_len, (int)val_len, buf_rx->data,
->>  			    get_unaligned_be16(buf_rx->data + val_len));
->=20
-> I'm not finding this inner debug log useful. Does the user really care
-> about the iterations it took to read a register? Just throwing the erro=
-r
-> after max try seems better to me.
+## No limit
+$ dmesg | grep -Ei can\|spi
+[   30.006596] CAN device driver interface
+[   30.276213] spi_master spi0: will run message pump with realtime priority
+[   30.436807] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+CRC read error at address 0x0000 (length=4, data=00 07 18 04, CRC=0xb29d).
+[   30.436835] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+Controller failed to enter mode Configuration Mode (4) and stays in
+Internal Loopback Mode (2).
+[   30.437036] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+CRC read error at address 0x0000 (length=4, data=00 07 18 04, CRC=0xb29d).
+[   30.437261] mcp251xfd: probe of spi0.0 failed with error -74
 
-Bitflips on the SPI should not happen, at least not regularly. Even with =
-my
-breadboard setup and max SPI frequency, I don't see any SPI CRC errors, u=
-nless
-there is bad cabling. Then a retry most of the times helps and the user d=
-oesn't
-notice. This drops performance...Yes logging drop performance, too, but a=
-t least
-someone will notice.
+## 18Mhz
+$ dmesg | grep -Ei can\|spi
+[   30.345967] CAN device driver interface
+[   30.503372] spi_master spi0: will run message pump with realtime priority
+[   30.542854] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+CRC read error at address 0x0000 (length=4, data=60 07 18 04, CRC=0xb28c).
+[   30.543057] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
+CRC read error at address 0x0000 (length=4, data=60 07 18 04, CRC=0xb28c).
+[   30.543286] mcp251xfd: probe of spi0.0 failed with error -74
 
-My rationale was to give the user feedback and not cover a potential prob=
-lem.
-The driver is new and probably not widely used and I have no idea how oft=
-en it
-runs into read-CRC problems in production use.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+## 16Mhz
+$ dmesg | grep -Ei can\|spi
+[   29.496863] CAN device driver interface
+[   30.028215] spi_master spi0: will run message pump with realtime priority
+[   30.171532] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
++MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:16.00MHz
+r:16.00MHz e:0.00MHz) successfully initialized.
 
 
---ROCwuYTbGV6HU6PvUWBbKXVgTs1Q4fn3E--
-
---RCPPXwNYgkddMRpm5c5z8YQ9Qg7QMsKVY
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+kKsMACgkQqclaivrt
-76kUPwgAiYKWvp90GEbocG1nNNP0GoH0FeWwKyNWJ96s3D+/KLvmyXGQukuzEgwg
-n4Xho/AyASnZXvcMhCHmWNfqYu/GHJFJSC3OLBwRF/FkaQ94DHhEVpt8bzsMcuyG
-tE+53OjAfh6OmgQthqMn9XM7Hj/Crcbft1x873FuoNXfFNUMjBjyRpfhvoCuocyH
-041kYX9IRfbGwa1PkbPzNZSD1GnH7t+IyABOFJCNPXcmYIN1qPlmsCFZ2wzFInAQ
-V2sgH978C9f/gkbSqKNL79s7EfCqOGvzzTqQtcNCrg6sfrWxLQAc6ZtsQDJQjr1L
-Ald8DeB6ZPxoAbSvMu3tk5IjNoMlEQ==
-=e0bF
------END PGP SIGNATURE-----
-
---RCPPXwNYgkddMRpm5c5z8YQ9Qg7QMsKVY--
+--
+Patrick
