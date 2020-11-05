@@ -2,161 +2,144 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A20C82A85C5
-	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 19:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E802A85E2
+	for <lists+linux-can@lfdr.de>; Thu,  5 Nov 2020 19:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731826AbgKESLd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 5 Nov 2020 13:11:33 -0500
-Received: from mout01.posteo.de ([185.67.36.65]:34597 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725862AbgKESLb (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 5 Nov 2020 13:11:31 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 0EB93160061
-        for <linux-can@vger.kernel.org>; Thu,  5 Nov 2020 19:11:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1604599889; bh=fdc1RGu9X5Jywm6UTBcRiKN56sHlxqWlZJxrrMbamg0=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=VrvHbbQMT9Qjfad5BqpTBJV8FfB1jloVrwtF3cI+szWkaNQQJuwsMhPncbFEvCzYC
-         uGFdJwQca5mDpA9olvs3wRjyvvkN4U9i0aSIIMXiVYepcAVVzBjIaIq4eHwwIrnwd5
-         eeb3NOhvabiOcp08PNG4+DYY2EvK01Db1kAW5l1q4c0b229bPvbQedeDZ0/Vibzu4N
-         bJ7/xHHSHwkdRFQtIffm+dq9LF2vKFIfaeHagws7skLnf+11yMrs1X9cJGTzfxRoz7
-         8QIHV7PfWcmVs+tVrlXyXL/bhE17auDl22v1gKy2xK7EuPiZTKgkUJaOB5/xpqG6b2
-         uddDtfnLSxcIQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4CRs6814l5z9rxn;
-        Thu,  5 Nov 2020 19:11:28 +0100 (CET)
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, drew@beagleboard.org
-Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
-References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
- <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
- <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
- <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
- <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
- <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
- <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
- <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
- <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
- <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
- <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
- <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
- <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
- <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
- <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
- <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: mcp251xfd on RPi 5.4 downstream
-Message-ID: <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
-Date:   Thu, 5 Nov 2020 19:11:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732024AbgKESPE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 5 Nov 2020 13:15:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731833AbgKESPA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 5 Nov 2020 13:15:00 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B05C0613D2
+        for <linux-can@vger.kernel.org>; Thu,  5 Nov 2020 10:15:00 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id k7so1174666plk.3
+        for <linux-can@vger.kernel.org>; Thu, 05 Nov 2020 10:15:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zr+O4641r70/m+Ora5m3lFETamMDRZrip5r52/NS1D4=;
+        b=ZfQNOrSey3faOuXuVNRJ1QpWcnr290Y7asLPe4IcU4mptJMgeiDAXeijfSxtf6qWFo
+         wzKmWOkJXfGDyEaH8RA8LWQZzXqZPU96i2GMamol5crR4O3URGAJuQvF+YAgQ8Pkn5jp
+         JY8wa/ZXRVeyjQsYHI8f7/9KGuanQJNUhEZPTFUCBoCPdUVm/qcxc9OyZKnxSSJ3X5OF
+         bGZWwiX6ZNst0UxZdvCiDiZRy8T7fxwBKDVMCeO3AlYixv6f85e4mSxDasqsKQHBGd04
+         GlJjk1LkmoYLONQKH+VS2kM7C9+PJzZkLpPwS9lsQPmDT16dbAsQcmUOWvD3ky32NKY/
+         hjrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zr+O4641r70/m+Ora5m3lFETamMDRZrip5r52/NS1D4=;
+        b=jUXuPU7owC81dj2ivVLe1ZBpk1CSYOtgS828xo8ulalQZf7ej4BOw4752ZKJbma2LK
+         DFZs0Yi6QNldq19DnHitolmRtXYbnt7ufLhR4Yu5f84jzDPzeakxvjOyx1wIilQurj24
+         AM3k04qq7yWcAnQThB1xyZ75OXfTkIPdcKgZmLUlu58mZ6pUlc4a7OxP5XZ/87/eRRCt
+         YhIyZNILr3oZuXBajOqlWbRkhx5hMm5yJKwf8hM+2WEnxATz/y+54mrpHZYyrXjCrjLS
+         gQRAmtlj5fZWwmjtVfyyg4Xz1zpMp7pmSARFkecffz69mx2o0MavVTJxLaI8hukKXHHO
+         3Wog==
+X-Gm-Message-State: AOAM530wmr1DnZ7O2VJdZOIvlHY8Thq/k9HbHkJ7QeXIFEo/vUHOHcaM
+        hw2RPQNxCvbxINEsXWa29Yxp
+X-Google-Smtp-Source: ABdhPJzMztYOVEejvswOIfXcY1eJ1oPwhghppVLlSWc+6G1lhscstTeu4ZQxxGj2CQWw5wuh+Ap3Ug==
+X-Received: by 2002:a17:902:8347:b029:d5:de7a:db11 with SMTP id z7-20020a1709028347b02900d5de7adb11mr3159891pln.2.1604600100107;
+        Thu, 05 Nov 2020 10:15:00 -0800 (PST)
+Received: from work ([103.59.133.81])
+        by smtp.gmail.com with ESMTPSA id t8sm3300941pfe.65.2020.11.05.10.14.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 05 Nov 2020 10:14:59 -0800 (PST)
+Date:   Thu, 5 Nov 2020 23:44:53 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Thomas Kopp <thomas.kopp@microchip.com>
+Subject: Re: [net 21/27] can: mcp251xfd: mcp251xfd_regmap_crc_read():
+ increase severity of CRC read error messages
+Message-ID: <20201105181453.GJ7308@work>
+References: <20201103220636.972106-1-mkl@pengutronix.de>
+ <20201103220636.972106-22-mkl@pengutronix.de>
+ <20201105162417.GH7308@work>
+ <cee3b960-6633-bffd-d1a6-05e4a5e20b2e@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cee3b960-6633-bffd-d1a6-05e4a5e20b2e@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
->> Its just a bread board install and I had to reduce the Spi-Max-Frequency
->> due to 10cm long cables. It least I believe it's the cable length.
+On Thu, Nov 05, 2020 at 05:39:31PM +0100, Marc Kleine-Budde wrote:
+> On 11/5/20 5:24 PM, Manivannan Sadhasivam wrote:
+> > Hi Marc,
+> > 
+> > On Tue, Nov 03, 2020 at 11:06:30PM +0100, Marc Kleine-Budde wrote:
+> >> During debugging it turned out that some people have setups where the SPI
+> >> communication is more prone to CRC errors.
+> >>
+> >> Increase the severity of both the transfer retry and transfer failure message
+> >> to give users feedback without the need to recompile the driver with debug
+> >> enabled.
+> >>
+> >> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> >> Cc: Thomas Kopp <thomas.kopp@microchip.com>
+> >> Link: http://lore.kernel.org/r/20201019190524.1285319-15-mkl@pengutronix.de
+> >> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> >> ---
+> >>  drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c | 16 ++++++++--------
+> >>  1 file changed, 8 insertions(+), 8 deletions(-)
+> >>
+> >> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> >> index ba25902dd78c..c9ffc5ea2b25 100644
+> >> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> >> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
+> >> @@ -330,17 +330,17 @@ mcp251xfd_regmap_crc_read(void *context,
+> >>  			goto out;
+> >>  		}
+> >>  
+> >> -		netdev_dbg(priv->ndev,
+> >> -			   "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x) retrying.\n",
+> >> -			   reg, val_len, (int)val_len, buf_rx->data,
+> >> -			   get_unaligned_be16(buf_rx->data + val_len));
+> >> -	}
+> >> -
+> >> -	if (err) {
+> >>  		netdev_info(priv->ndev,
+> >> -			    "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x).\n",
+> >> +			    "CRC read error at address 0x%04x (length=%zd, data=%*ph, CRC=0x%04x) retrying.\n",
+> >>  			    reg, val_len, (int)val_len, buf_rx->data,
+> >>  			    get_unaligned_be16(buf_rx->data + val_len));
+> > 
+> > I'm not finding this inner debug log useful. Does the user really care
+> > about the iterations it took to read a register? Just throwing the error
+> > after max try seems better to me.
 > 
-> What happens if you don't reduce the SPI frequency?
+> Bitflips on the SPI should not happen, at least not regularly. Even with my
+> breadboard setup and max SPI frequency, I don't see any SPI CRC errors, unless
+> there is bad cabling. Then a retry most of the times helps and the user doesn't
+> notice. This drops performance...Yes logging drop performance, too, but at least
+> someone will notice.
+> 
+> My rationale was to give the user feedback and not cover a potential problem.
+> The driver is new and probably not widely used and I have no idea how often it
+> runs into read-CRC problems in production use.
+> 
 
-CRC Errors above 16Mhz spi frequency.
+Okay. Let's see if anyone complain ;)
 
-## No limit
-$ dmesg | grep -Ei can\|spi
-[   30.006596] CAN device driver interface
-[   30.276213] spi_master spi0: will run message pump with realtime priority
-[   30.436807] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-CRC read error at address 0x0000 (length=4, data=00 07 18 04, CRC=0xb29d).
-[   30.436835] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-Controller failed to enter mode Configuration Mode (4) and stays in
-Internal Loopback Mode (2).
-[   30.437036] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-CRC read error at address 0x0000 (length=4, data=00 07 18 04, CRC=0xb29d).
-[   30.437261] mcp251xfd: probe of spi0.0 failed with error -74
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-## 18Mhz
-$ dmesg | grep -Ei can\|spi
-[   30.345967] CAN device driver interface
-[   30.503372] spi_master spi0: will run message pump with realtime priority
-[   30.542854] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-CRC read error at address 0x0000 (length=4, data=60 07 18 04, CRC=0xb28c).
-[   30.543057] mcp251xfd spi0.0 (unnamed net_device) (uninitialized):
-CRC read error at address 0x0000 (length=4, data=60 07 18 04, CRC=0xb28c).
-[   30.543286] mcp251xfd: probe of spi0.0 failed with error -74
+Thanks,
+Mani
 
-## 16Mhz
-$ dmesg | grep -Ei can\|spi
-[   29.496863] CAN device driver interface
-[   30.028215] spi_master spi0: will run message pump with realtime priority
-[   30.171532] mcp251xfd spi0.0 can0: MCP2517FD rev0.0 (-RX_INT
-+MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:16.00MHz
-r:16.00MHz e:0.00MHz) successfully initialized.
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> 
 
 
---
-Patrick
+
