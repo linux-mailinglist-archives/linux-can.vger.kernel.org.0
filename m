@@ -2,38 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 427282A9A5F
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:04:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D5D2A9A6B
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbgKFREU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:04:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S1726176AbgKFRHv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:07:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgKFREU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:04:20 -0500
+        with ESMTP id S1725868AbgKFRHu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:07:50 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4852C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:04:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC059C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:07:50 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb59s-0002aK-EU; Fri, 06 Nov 2020 18:04:16 +0100
+        id 1kb5DI-0002yA-Mk; Fri, 06 Nov 2020 18:07:48 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 606E358C60C;
-        Fri,  6 Nov 2020 17:04:15 +0000 (UTC)
-Subject: Re: [PATCH 01/17] can: ems_usb: Fixed warnings given by checkpatch.pl
- and fixed some outdated comments
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B41E458C628;
+        Fri,  6 Nov 2020 17:07:47 +0000 (UTC)
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-2-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-5-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +93,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <1275a75d-e7c7-2898-62dc-37abee968e8a@pengutronix.de>
-Date:   Fri, 6 Nov 2020 18:04:11 +0100
+Subject: Re: [PATCH 04/17] can: ems_usb: Added struct used for CAN FD
+ initialization
+Message-ID: <0e93a790-f4d1-4dd0-25ee-fd74525210c2@pengutronix.de>
+Date:   Fri, 6 Nov 2020 18:07:43 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-2-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-5-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="XvKtSVYhMYaQEKha3Qf2LjV5caR1PL8mF"
+ boundary="UH6ZYzwPxQLvqevjLks1dG0Z02rdlyvp5"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,32 +113,103 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---XvKtSVYhMYaQEKha3Qf2LjV5caR1PL8mF
-Content-Type: multipart/mixed; boundary="wcw1zAyABtS8JXyjzdVREe385omVld57x";
+--UH6ZYzwPxQLvqevjLks1dG0Z02rdlyvp5
+Content-Type: multipart/mixed; boundary="s2DeyeJrynadGuDj4PVlB3iACncR7VBt1";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <1275a75d-e7c7-2898-62dc-37abee968e8a@pengutronix.de>
-Subject: Re: [PATCH 01/17] can: ems_usb: Fixed warnings given by checkpatch.pl
- and fixed some outdated comments
+Message-ID: <0e93a790-f4d1-4dd0-25ee-fd74525210c2@pengutronix.de>
+Subject: Re: [PATCH 04/17] can: ems_usb: Added struct used for CAN FD
+ initialization
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-2-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-2-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-5-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-5-uttenthaler@ems-wuensche.com>
 
---wcw1zAyABtS8JXyjzdVREe385omVld57x
+--s2DeyeJrynadGuDj4PVlB3iACncR7VBt1
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
 On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
-
-please provide a patch description.
-
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+> ---
+>  drivers/net/can/usb/ems_usb.c | 33 +++++++++++++++++++++++++++++++--
+>  1 file changed, 31 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
+b.c
+> index fa96217c7d72..4ed0d681a68c 100644
+> --- a/drivers/net/can/usb/ems_usb.c
+> +++ b/drivers/net/can/usb/ems_usb.c
+> @@ -142,7 +142,7 @@ struct __packed cpc_canfd_msg {
+>  #define CPC_FDFLAG_XTD          0x80
+> =20
+>  /* Representation of the CAN parameters for the SJA1000 controller */
+> -struct cpc_sja1000_params {
+> +struct __packed cpc_sja1000_params {
 
-Marc
+please make that a separate patch
+
+>  	u8 mode;
+>  	u8 acc_code0;
+>  	u8 acc_code1;
+> @@ -157,12 +157,41 @@ struct cpc_sja1000_params {
+>  	u8 outp_contr;
+>  };
+> =20
+> +#define CPC_GENERICCONF_FD          0x00000001
+> +#define CPC_GENERICCONF_FD_BOSCH    0x00000002
+> +#define CPC_GENERICCONF_LISTEN_ONLY 0x00000004
+> +#define CPC_GENERICCONF_SINGLE_SHOT 0x00000008
+> +#define CPC_GENERICCONF_RESET_MODE  0x00000010
+
+use BIT()
+
+> +
+> +#define CPC_USB_RESET_MODE 0x00
+> +#define CPC_USB_RUN_MODE   0x01
+> +
+> +struct __packed cpc_generic_can_params {
+> +	/* config sets CAN initialization parameters like LOM */
+> +	__le32 config;
+> +	__le32 can_clk;
+> +	struct {
+> +		__le16 tseg1;  // Time segment 1 (before sample point)
+> +		__le16 tseg2;  // Time segment 2 (after sample point)
+> +		__le16 brp;    // Baud rate rate prescaler
+> +		__le16 sjw;    // (Re)synchronization jump width
+> +	} n;  // nominal baud rate
+no C++ comments
+
+why not call the variable nominal_bitrate?
+
+> +	struct {
+> +		__le16 tseg1;  // Time segment 1 (before sample point)
+> +		__le16 tseg2;  // Time segment 2 (after sample point)
+> +		__le16 brp;    // Baud rate prescaler
+> +		__le16 sjw;    // (Re)synchronization jump width
+> +	} d;  // data baud rate
+
+data_bitrate
+
+> +	__le32 reserved[5];    // Set to 0. Reserved for future use
+> +};
+> +
+>  /* CAN params message representation */
+> -struct cpc_can_params {
+> +struct __packed cpc_can_params {
+>  	u8 cc_type;
+> =20
+>  	union {
+>  		struct cpc_sja1000_params sja1000;
+> +		struct cpc_generic_can_params generic;
+>  	} cc_params;
+>  };
+> =20
+>=20
+
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -147,23 +218,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---wcw1zAyABtS8JXyjzdVREe385omVld57x--
+--s2DeyeJrynadGuDj4PVlB3iACncR7VBt1--
 
---XvKtSVYhMYaQEKha3Qf2LjV5caR1PL8mF
+--UH6ZYzwPxQLvqevjLks1dG0Z02rdlyvp5
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lggsACgkQqclaivrt
-76kzSgf/Z99P/0rG78ibYLCAgRL1Nuhg7B8wc8RlASMagCvTC9nVMTxL219vt8Pf
-+VeWn4TMw7G9NM5XfhBSfDjKrEh05DRtUu4h2WJDrmG2JVM+xuoplnrDvL+4PZDr
-yFc78tTq6mb6xceVcDDDoDs68goyAIaa5nnQ4/2K+TFucrp/Rk5b1+q2vlbYrl1E
-TzI+mAkqduo8IkFOJPUtA+El4vYfyvWrnpUGCqjQ5IHGXVHsxtzWgi/yY9eSVyZK
-B0r5FlmeOeWjPzNd73qsxmGrj4yUJhxa+cYrxm5fFy/XAqNk3K05zw/LfO5TWz8B
-z6a+7+65vgYULwAqHzd+Um9O3lwsHA==
-=oCrK
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lgt8ACgkQqclaivrt
+76lbWQgAoWAInf9oFgURdygyZ0buwHFusDE+qJ9rpOfztrAII2gLqU4+42yRe3YD
+boD6EaVW/GpLTUhy3O4bLNyZwHOxiSbfptYYwy5VqNmXsFHtVUW5BYESb78vwPXU
++oQhDP2aQI7zhpIdG+XUQFu8rp83h5Hr2HNjMlC4hdK0UeQoLpWswDodJrXAmy96
+tJiniw/pSMJlcRPXB3o0RIp5BK+Z3YTci8kK/IEjLGFfuT5oPSG3GJOOiHmi7Sgc
+HYSd8kqAKz4ENw0SmMlNE8fkSLi2jUhDo01Xo0OyesPZbOw/6T3FHhHlYENZhv3h
++x3NmuOPKKz1aEZ6MS8d0wp34T0Hwg==
+=ynPx
 -----END PGP SIGNATURE-----
 
---XvKtSVYhMYaQEKha3Qf2LjV5caR1PL8mF--
+--UH6ZYzwPxQLvqevjLks1dG0Z02rdlyvp5--
