@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D19762A9B55
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0D12A9B5C
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 19:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727270AbgKFR6T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        id S1727591AbgKFSBO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 13:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727159AbgKFR6T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:58:19 -0500
+        with ESMTP id S1726928AbgKFSBO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 13:01:14 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39823C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:58:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA80C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 10:01:14 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb609-0007wZ-Cf; Fri, 06 Nov 2020 18:58:17 +0100
+        id 1kb62y-0008GY-4m; Fri, 06 Nov 2020 19:01:12 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6DD2A58C6C0;
-        Fri,  6 Nov 2020 17:58:16 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2885558C6C5;
+        Fri,  6 Nov 2020 18:01:11 +0000 (UTC)
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-13-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-14-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -93,18 +93,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH 12/17] can: ems_usb: In ems_usb_start_xmit send only bytes
- with valid content to interface and not the complete buffer. Set first four
- bytes of buffer to 0. Wrapped long lines.
-Message-ID: <c48ea36f-db08-6e3f-1e8d-80fd2238a7bd@pengutronix.de>
-Date:   Fri, 6 Nov 2020 18:58:12 +0100
+Subject: Re: [PATCH 13/17] can: ems_usb: Rearrange code in ems_usb_start_xmit
+ to check with can_is_canfd_skb for CAN FD frames.
+Message-ID: <29cd1b51-395d-4768-e01d-989d20fb0f3c@pengutronix.de>
+Date:   Fri, 6 Nov 2020 19:01:06 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-13-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-14-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="IxTlY8EcGuC9447rdBLfTHlTWBJLtYaca"
+ boundary="PcJucMxfvz4yWHhNCBeCuPMH6DOMSZaWV"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,22 +113,21 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---IxTlY8EcGuC9447rdBLfTHlTWBJLtYaca
-Content-Type: multipart/mixed; boundary="ZUODlkSCJNXQhXep5G3bA6tS5ys54yzpw";
+--PcJucMxfvz4yWHhNCBeCuPMH6DOMSZaWV
+Content-Type: multipart/mixed; boundary="RsCQObcFn3NTlx2nR5tBaKbO6WS68AIvs";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <c48ea36f-db08-6e3f-1e8d-80fd2238a7bd@pengutronix.de>
-Subject: Re: [PATCH 12/17] can: ems_usb: In ems_usb_start_xmit send only bytes
- with valid content to interface and not the complete buffer. Set first four
- bytes of buffer to 0. Wrapped long lines.
+Message-ID: <29cd1b51-395d-4768-e01d-989d20fb0f3c@pengutronix.de>
+Subject: Re: [PATCH 13/17] can: ems_usb: Rearrange code in ems_usb_start_xmit
+ to check with can_is_canfd_skb for CAN FD frames.
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-13-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-13-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-14-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-14-uttenthaler@ems-wuensche.com>
 
---ZUODlkSCJNXQhXep5G3bA6tS5ys54yzpw
+--RsCQObcFn3NTlx2nR5tBaKbO6WS68AIvs
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
@@ -137,110 +135,144 @@ Content-Transfer-Encoding: quoted-printable
 On 11/6/20 6:02 PM, Gerhard Uttenthaler wrote:
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 31 +++++++++++++++++++++++--------
->  1 file changed, 23 insertions(+), 8 deletions(-)
+>  drivers/net/can/usb/ems_usb.c | 87 +++++++++++++++++++----------------=
+
+>  1 file changed, 47 insertions(+), 40 deletions(-)
 >=20
 > diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
 b.c
-> index b51a5eb65946..c464d644c833 100644
+> index c464d644c833..c3159ffaa4fa 100644
 > --- a/drivers/net/can/usb/ems_usb.c
 > +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -902,25 +902,37 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_b=
+> @@ -899,64 +899,71 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_b=
 uff *skb, struct net_device *ne
->  	struct can_frame *cf =3D (struct can_frame *)skb->data;
+>  	struct ems_usb *dev =3D netdev_priv(netdev);
+>  	struct ems_tx_urb_context *context =3D NULL;
+>  	struct net_device_stats *stats =3D &netdev->stats;
+> -	struct can_frame *cf =3D (struct can_frame *)skb->data;
 >  	struct ems_cpc_msg *msg;
 >  	struct urb *urb;
-> -	u8 *buf;
 >  	int i, err;
-> -	size_t size =3D CPC_HEADER_SIZE + CPC_MSG_HEADER_LEN
-> -			+ sizeof(struct cpc_can_msg);
-> +
-> +	u8 *buf;
-> +	size_t buf_size;
-> +	size_t buf_len =3D CPC_HEADER_SIZE + CPC_MSG_HEADER_LEN;
+> +	u8 dlc;
 > =20
->  	if (can_dropped_invalid_skb(netdev, skb))
+>  	u8 *buf;
+>  	size_t buf_size;
+>  	size_t buf_len =3D CPC_HEADER_SIZE + CPC_MSG_HEADER_LEN;
+> =20
+> -	if (can_dropped_invalid_skb(netdev, skb))
+
+why move this into the if? it's common code with fd and non fd
+
+> +	if (can_is_canfd_skb(skb)) {
+> +		// Placeholder for next patch
+
+no placeholders please
+
 >  		return NETDEV_TX_OK;
+> +	} else {
+> +		struct can_frame *cf =3D (struct can_frame *)skb->data;
 > =20
-> -	/* create a URB, and a buffer for it, and copy the data to the URB */=
-
-> +	buf_size =3D CPC_HEADER_SIZE +
-> +		   CPC_MSG_HEADER_LEN +
-> +		   sizeof(struct cpc_can_msg);
-
-does it make sense to only allocate the length of the buffer needed to ho=
-ld the
-data?
-
+> -	buf_size =3D CPC_HEADER_SIZE +
+> -		   CPC_MSG_HEADER_LEN +
+> -		   sizeof(struct cpc_can_msg);
+> +		if (can_dropped_invalid_skb(netdev, skb))
+> +			return NETDEV_TX_OK;
+> =20
+> -	/* Create an URB, and a buffer for it
+> -	 * and copy the data to the URB
+> -	 */
+> -	urb =3D usb_alloc_urb(0, GFP_ATOMIC);
+> -	if (!urb)
+> -		goto nomem;
+> -
+> -	buf =3D usb_alloc_coherent(dev->udev,
+> -				 buf_size,
+> -				 GFP_ATOMIC,
+> -				 &urb->transfer_dma);
+> -	if (!buf) {
+> -		netdev_err(netdev, "No memory left for USB buffer\n");
+> -		usb_free_urb(urb);
+> -		goto nomem;
+> -	}
+> -	// Clear first 4 bytes
+> -	*(u32 *)buf =3D 0;
+> +		buf_size =3D CPC_HEADER_SIZE +
+> +			   CPC_MSG_HEADER_LEN +
+> +			   sizeof(struct cpc_can_msg);
+> =20
+> -	msg =3D (struct ems_cpc_msg *)&buf[CPC_HEADER_SIZE];
+> +		/* Create an URB, and a buffer for it
+> +		 * and copy the data to the URB
+> +		 */
+> +		urb =3D usb_alloc_urb(0, GFP_ATOMIC);
+> +		if (!urb)
+> +			goto nomem;
 > +
-> +	/* Create an URB, and a buffer for it
-> +	 * and copy the data to the URB
-> +	 */
->  	urb =3D usb_alloc_urb(0, GFP_ATOMIC);
->  	if (!urb)
->  		goto nomem;
+> +		buf =3D usb_alloc_coherent(dev->udev,
+> +					 buf_size,
+> +					 GFP_ATOMIC,
+> +					 &urb->transfer_dma);
+> +		if (!buf) {
+> +			netdev_err(netdev, "No memory left for USB buffer\n");
+> +			usb_free_urb(urb);
+> +			goto nomem;
+> +		}
+> +		// Clear first 4 bytes
+> +		*(u32 *)buf =3D 0;
 > =20
-> -	buf =3D usb_alloc_coherent(dev->udev, size, GFP_ATOMIC, &urb->transfe=
-r_dma);
-> +	buf =3D usb_alloc_coherent(dev->udev,
-> +				 buf_size,
-> +				 GFP_ATOMIC,
-> +				 &urb->transfer_dma);
->  	if (!buf) {
->  		netdev_err(netdev, "No memory left for USB buffer\n");
->  		usb_free_urb(urb);
->  		goto nomem;
->  	}
-> +	// Clear first 4 bytes
-
-no C++ comments
-
-> +	*(u32 *)buf =3D 0;
+> -	msg->msg.can_msg.id =3D cpu_to_le32(cf->can_id & CAN_ERR_MASK);
+> -	msg->msg.can_msg.length =3D cf->can_dlc;
+> +		msg =3D (struct ems_cpc_msg *)&buf[CPC_HEADER_SIZE];
 > =20
->  	msg =3D (struct ems_cpc_msg *)&buf[CPC_HEADER_SIZE];
+> -	if (cf->can_id & CAN_RTR_FLAG) {
+> -		msg->type =3D cf->can_id & CAN_EFF_FLAG ?
+> -			CPC_CMD_TYPE_EXT_RTR_FRAME : CPC_CMD_TYPE_RTR_FRAME;
+> +		msg->msg.can_msg.id =3D cpu_to_le32(cf->can_id & CAN_ERR_MASK);
+> +		dlc =3D cf->can_dlc;
+> +		msg->msg.can_msg.length =3D dlc;
 > =20
-> @@ -942,6 +954,9 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buf=
-f *skb, struct net_device *ne
->  		msg->length =3D CPC_CAN_MSG_MIN_SIZE + cf->can_dlc;
->  	}
+> -		msg->length =3D CPC_CAN_MSG_MIN_SIZE;
+> -	} else {
+> -		msg->type =3D cf->can_id & CAN_EFF_FLAG ?
+> -			CPC_CMD_TYPE_EXT_CAN_FRAME : CPC_CMD_TYPE_CAN_FRAME;
+> +		if (cf->can_id & CAN_RTR_FLAG) {
+> +			msg->type =3D cf->can_id & CAN_EFF_FLAG ?
+> +				CPC_CMD_TYPE_EXT_RTR_FRAME : CPC_CMD_TYPE_RTR_FRAME;
 > =20
-> +	// Send only significant bytes of buffer
-> +	buf_len +=3D msg->length;
-> +
+> -		for (i =3D 0; i < cf->can_dlc; i++)
+> -			msg->msg.can_msg.msg[i] =3D cf->data[i];
+> +			msg->length =3D CPC_CAN_MSG_MIN_SIZE;
+> +		} else {
+> +			msg->type =3D cf->can_id & CAN_EFF_FLAG ?
+> +				CPC_CMD_TYPE_EXT_CAN_FRAME : CPC_CMD_TYPE_CAN_FRAME;
+> =20
+> -		msg->length =3D CPC_CAN_MSG_MIN_SIZE + cf->can_dlc;
+> -	}
+> +			for (i =3D 0; i < cf->can_dlc; i++)
+> +				msg->msg.can_msg.msg[i] =3D cf->data[i];
+> =20
+> -	// Send only significant bytes of buffer
+> -	buf_len +=3D msg->length;
+> +			msg->length =3D CPC_CAN_MSG_MIN_SIZE + cf->can_dlc;
+> +		}
+> =20
+> +		// Send only significant bytes of buffer
+> +		buf_len +=3D msg->length;
+> +	}
 >  	for (i =3D 0; i < MAX_TX_URBS; i++) {
 >  		if (dev->tx_contexts[i].echo_index =3D=3D MAX_TX_URBS) {
 >  			context =3D &dev->tx_contexts[i];
-> @@ -953,7 +968,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buf=
+> @@ -978,7 +985,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buf=
 f *skb, struct net_device *ne
->  	 * allowed (MAX_TX_URBS).
->  	 */
->  	if (!context) {
-> -		usb_free_coherent(dev->udev, size, buf, urb->transfer_dma);
-> +		usb_free_coherent(dev->udev, buf_size, buf, urb->transfer_dma);
->  		usb_free_urb(urb);
 > =20
->  		netdev_warn(netdev, "couldn't find free context\n");
-> @@ -966,7 +981,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buf=
-f *skb, struct net_device *ne
->  	context->dlc =3D cf->can_dlc;
+>  	context->dev =3D dev;
+>  	context->echo_index =3D i;
+> -	context->dlc =3D cf->can_dlc;
+> +	context->dlc =3D dlc;
 > =20
 >  	usb_fill_bulk_urb(urb, dev->udev, usb_sndbulkpipe(dev->udev, 2), buf,=
 
-> -			  size, ems_usb_write_bulk_callback, context);
-> +			  buf_len, ems_usb_write_bulk_callback, context);
->  	urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MAP;
->  	usb_anchor_urb(urb, &dev->tx_submitted);
-> =20
-> @@ -979,7 +994,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buf=
-f *skb, struct net_device *ne
->  		can_free_echo_skb(netdev, context->echo_index);
-> =20
->  		usb_unanchor_urb(urb);
-> -		usb_free_coherent(dev->udev, size, buf, urb->transfer_dma);
-> +		usb_free_coherent(dev->udev, buf_size, buf, urb->transfer_dma);
->  		dev_kfree_skb(skb);
-> =20
->  		atomic_dec(&dev->active_tx_urbs);
+>  			  buf_len, ems_usb_write_bulk_callback, context);
 >=20
 
 Marc
@@ -252,23 +284,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---ZUODlkSCJNXQhXep5G3bA6tS5ys54yzpw--
+--RsCQObcFn3NTlx2nR5tBaKbO6WS68AIvs--
 
---IxTlY8EcGuC9447rdBLfTHlTWBJLtYaca
+--PcJucMxfvz4yWHhNCBeCuPMH6DOMSZaWV
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ljrQACgkQqclaivrt
-76nw/wf/cYCP7OOMEjChH9hDtW4NI4MxnkLLt43l4Rp7OaJ5ifVUaeVa77nCc3sZ
-walIZiZiPkb9Ni6wEekeHdLgnk3h3WfreUdLBZKvxUpRUOkCAn9m430asimgzeEc
-LwL6H2/tYBTFnuAbJW1iQEDhYZFSNLnupEcBmsEXSwZTvfvTthe2d7kVIPvTUTMR
-V46jmZ8ynLpr6I3paJ19B5iSjKiAA9RUeSHnNG7uUYxIlFWW5shtvz9ZXKennCTQ
-Fa8pkgxr78m9XKJGC1QzPTu9k1URHvYIyk1LgZT55ElwcnmQUi59qZ5FG4PZayxK
-7Qtpvb1XFfYJxEGcGZKsmwyPXODSIw==
-=cLX6
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lj2IACgkQqclaivrt
+76lnfwgAoNrP4xUeIetTX2aCylYC5iwIrWI7udVpBMxoVWdH7cukjThpWD7LzeB5
+MxT72DpkmzoasoqjA2UbJvoJgNDR19VH5A6sFYyvpdfExcIFTJBJOv4EakJ/4ve7
+IhHp0NrZO0S/2Ya38GndKS/V/T8/8At/Xxfqs5VYWp1L7gi8yHcwVkB2Aizabl8o
+AVKuKm24nj+0CYrPi2auEb4p3p1QRPK3w9eyn+B0D3j3BN9lAj52rwTSF/bmOc2g
+oKlbqq01hgXXla7AfPvksmr3A043GjKJ5+O3ZKJT+tIcGDw5f7TbFHeiMxUqkxZ7
+TZjIms4+HEnOPfqGpqyVgZhoB3WxwQ==
+=t0FK
 -----END PGP SIGNATURE-----
 
---IxTlY8EcGuC9447rdBLfTHlTWBJLtYaca--
+--PcJucMxfvz4yWHhNCBeCuPMH6DOMSZaWV--
