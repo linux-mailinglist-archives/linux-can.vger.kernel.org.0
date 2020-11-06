@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE232A9B36
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2322A9B51
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726176AbgKFRvX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
+        id S1726867AbgKFR4d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:56:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbgKFRvX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:51:23 -0500
+        with ESMTP id S1727159AbgKFR4c (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:56:32 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F941C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:51:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BC9C0613D2
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:56:32 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb5tR-0007SH-8N; Fri, 06 Nov 2020 18:51:21 +0100
+        id 1kb5yQ-0007vJ-FG; Fri, 06 Nov 2020 18:56:30 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E006C58C6B6;
-        Fri,  6 Nov 2020 17:51:19 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6D56558C6BD;
+        Fri,  6 Nov 2020 17:56:29 +0000 (UTC)
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-10-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-15-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -93,18 +93,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH 09/17] can: ems_usb: For CPC-USB/FD added clock
- definitions, bittiming constants, set_bittiming functions, bittiming init
- function and add all that to probe function
-Message-ID: <e10bf6e4-559a-176b-904c-a7a5f5933f2b@pengutronix.de>
-Date:   Fri, 6 Nov 2020 18:51:15 +0100
+Subject: Re: [PATCH 14/17] can: ems_usb: Added code to handle CAN FD frames in
+ ems_usb_start_xmit
+Message-ID: <18396e36-2453-5f38-8852-d77bd864c298@pengutronix.de>
+Date:   Fri, 6 Nov 2020 18:56:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-10-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-15-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="VKEGHnWqbXEwIUjGBbc0lk66qUQptet5J"
+ boundary="vQRbiUMB04r4JigAwCHJs0AQTFoNEsIRW"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,264 +113,127 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---VKEGHnWqbXEwIUjGBbc0lk66qUQptet5J
-Content-Type: multipart/mixed; boundary="3CDjrjSagQxYyiPNMMIT4icfKrvxTDYxU";
+--vQRbiUMB04r4JigAwCHJs0AQTFoNEsIRW
+Content-Type: multipart/mixed; boundary="5OifAUsjyvZlxPyH7OR7JsYLzeYMbfwYo";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <e10bf6e4-559a-176b-904c-a7a5f5933f2b@pengutronix.de>
-Subject: Re: [PATCH 09/17] can: ems_usb: For CPC-USB/FD added clock
- definitions, bittiming constants, set_bittiming functions, bittiming init
- function and add all that to probe function
+Message-ID: <18396e36-2453-5f38-8852-d77bd864c298@pengutronix.de>
+Subject: Re: [PATCH 14/17] can: ems_usb: Added code to handle CAN FD frames in
+ ems_usb_start_xmit
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-10-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-10-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-15-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-15-uttenthaler@ems-wuensche.com>
 
---3CDjrjSagQxYyiPNMMIT4icfKrvxTDYxU
+--5OifAUsjyvZlxPyH7OR7JsYLzeYMbfwYo
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
+On 11/6/20 6:02 PM, Gerhard Uttenthaler wrote:
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 141 +++++++++++++++++++++++++++++++++-=
+>  drivers/net/can/usb/ems_usb.c | 61 ++++++++++++++++++++++++++++++++---=
 
->  1 file changed, 139 insertions(+), 2 deletions(-)
+>  1 file changed, 57 insertions(+), 4 deletions(-)
 >=20
 > diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
 b.c
-> index 6a9ea6a4e687..d6b52b265536 100644
+> index c3159ffaa4fa..c36f02eeec85 100644
 > --- a/drivers/net/can/usb/ems_usb.c
 > +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -108,6 +108,17 @@ MODULE_LICENSE("GPL v2");
->   */
->  #define EMS_USB_ARM7_CLOCK 8000000
+> @@ -73,8 +73,9 @@ MODULE_LICENSE("GPL v2");
+>  #define CPC_OVR_HW 0x80
 > =20
-> +/* CPC-USB/FD supports the following CAN clocks
-> + */
-> +#define EMS_USB_FD_8MHZ   8000000
-                          ^^^ one space only
-> +#define EMS_USB_FD_16MHZ 16000000
-> +#define EMS_USB_FD_20MHZ 20000000
-> +#define EMS_USB_FD_24MHZ 24000000
-> +#define EMS_USB_FD_32MHZ 32000000
-> +#define EMS_USB_FD_40MHZ 40000000
-> +#define EMS_USB_FD_80MHZ 80000000
+>  /* Size of the "struct ems_cpc_msg" without the union */
+> -#define CPC_MSG_HEADER_LEN   11
+> -#define CPC_CAN_MSG_MIN_SIZE 5
+> +#define CPC_MSG_HEADER_LEN     11
+> +#define CPC_CAN_MSG_MIN_SIZE    5
+> +#define CPC_CANFD_MSG_MIN_SIZE  6
 
-are these used?
+Don't do this, just use one space.
 
-> +#define EMS_USB_FD_CLOCK EMS_USB_FD_40MHZ
-> +
->  #define CPC_TX_QUEUE_TRIGGER_LOW	25
->  #define CPC_TX_QUEUE_TRIGGER_HIGH	35
 > =20
-> @@ -970,6 +981,30 @@ static const struct can_bittiming_const ems_usb_bi=
-ttiming_const_arm7 =3D {
->  	.brp_inc =3D 1,
->  };
+>  /* Define these values to match your devices */
+>  #define USB_CPCUSB_VENDOR_ID 0x12D6
+> @@ -909,8 +910,60 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_bu=
+ff *skb, struct net_device *ne
+>  	size_t buf_len =3D CPC_HEADER_SIZE + CPC_MSG_HEADER_LEN;
 > =20
-> +static const struct can_bittiming_const ems_usb_bittiming_const_generi=
-c =3D {
-> +	.name =3D "ems_usb_fd",
-> +	.tseg1_min =3D 1,
-> +	.tseg1_max =3D 256,
-> +	.tseg2_min =3D 1,
-> +	.tseg2_max =3D 128,
-> +	.sjw_max =3D 128,
-> +	.brp_min =3D 1,
-> +	.brp_max =3D 512,
-> +	.brp_inc =3D 1,
-> +};
+>  	if (can_is_canfd_skb(skb)) {
+> -		// Placeholder for next patch
+> -		return NETDEV_TX_OK;
+> +		struct canfd_frame *cfd =3D (struct canfd_frame *)skb->data;
+> +		struct cpc_canfd_msg *fd_msg;
 > +
-> +static const struct can_bittiming_const ems_usb_bittiming_const_generi=
-c_data =3D {
-> +	.name =3D "ems_usb_fd",
-> +	.tseg1_min =3D 1,
-> +	.tseg1_max =3D 16,
-> +	.tseg2_min =3D 1,
-> +	.tseg2_max =3D 16,
-> +	.sjw_max =3D 16,
-> +	.brp_min =3D 1,
-> +	.brp_max =3D 32,
-> +	.brp_inc =3D 1,
-> +};
+> +		if (can_dropped_invalid_skb(netdev, skb))
+> +			return NETDEV_TX_OK;
 > +
->  static int ems_usb_set_mode(struct net_device *netdev, enum can_mode m=
-ode)
->  {
->  	struct ems_usb *dev =3D netdev_priv(netdev);
-> @@ -1016,6 +1051,76 @@ static int ems_usb_set_bittiming_arm7(struct net=
-_device *netdev)
->  	return ems_usb_command_msg(dev, &dev->active_params);
->  }
+> +		buf_size =3D CPC_HEADER_SIZE +
+> +			   CPC_MSG_HEADER_LEN +
+> +			   sizeof(struct cpc_canfd_msg);
+> +
+> +		/* Create an URB and a buffer big enough for
+> +		 * all message lengths, copy the data to the URB
+> +		 */
+> +		urb =3D usb_alloc_urb(0, GFP_ATOMIC);
+> +		if (!urb)
+> +			goto nomem;
+> +
+> +		buf =3D usb_alloc_coherent(dev->udev,
+> +					 buf_size,
+> +					 GFP_ATOMIC,
+> +					 &urb->transfer_dma);
+> +		if (!buf) {
+> +			netdev_err(netdev, "No memory left for USB buffer\n");
+> +			usb_free_urb(urb);
+> +			goto nomem;
+> +		}
+> +		// Clear first 4 bytes
+
+not C++ momments
+
+> +		*(u32 *)buf =3D 0;
+> +
+> +		msg =3D (struct ems_cpc_msg *)&buf[CPC_HEADER_SIZE];
+
+What about creating/using a proper struct that holds the header and the c=
+ps_msg?
+Then you don't need this pointer arithmetics.
+
+> +		fd_msg =3D &msg->msg.canfd_msg;
+> +
+> +		msg->type =3D CPC_CMD_TYPE_CANFD_FRAME;
+> +
+> +		fd_msg->id =3D cpu_to_le32(cfd->can_id & CAN_ERR_MASK);
+> +		dlc =3D cfd->len;
+> +		fd_msg->length =3D dlc;
+> +		fd_msg->flags =3D 0;
+> +
+> +		if (cfd->can_id & CAN_EFF_FLAG)
+> +			fd_msg->flags |=3D CPC_FDFLAG_XTD;
+> +
+> +		if (cfd->flags & CANFD_BRS)
+> +			fd_msg->flags |=3D CPC_FDFLAG_BRS;
+> +
+> +		if (cfd->flags & CANFD_ESI)
+> +			fd_msg->flags |=3D CPC_FDFLAG_ESI;
+> +
+> +		for (i =3D 0; i < cfd->len; i++)
+> +			fd_msg->msg[i] =3D cfd->data[i];
+
+memcpy()
+
+> +
+> +		msg->length =3D CPC_CANFD_MSG_MIN_SIZE + cfd->len;
+> +		// Send only significant bytes of buffer
+> +		buf_len +=3D msg->length;
+>  	} else {
+>  		struct can_frame *cf =3D (struct can_frame *)skb->data;
 > =20
-> +static int ems_usb_set_bittiming_generic(struct net_device *netdev)
-> +{
-> +	struct ems_usb *dev =3D netdev_priv(netdev);
-> +	struct can_bittiming *bt =3D &dev->can.bittiming;
-> +	struct cpc_generic_can_params *gcp =3D
-> +		&dev->active_params.msg.can_params.cc_params.generic;
-> +	int err;
-> +
-> +	gcp->config =3D 0;
-> +	gcp->can_clk =3D dev->can.clock.freq;
-> +
-> +	gcp->n.tseg1 =3D bt->prop_seg + bt->phase_seg1;
-> +	gcp->n.tseg2 =3D bt->phase_seg2;
-> +	gcp->n.brp =3D bt->brp;
-> +	gcp->n.sjw =3D bt->sjw;
-> +
-> +	err =3D ems_usb_clear_cmd_queue(dev);
-> +	if (err)
-> +		return err;
-> +
-> +	netdev_info(netdev, "Set nominal bit timing for CPC-USB/FD with confi=
-g %X\n",
-> +		    gcp->config);
-> +	netdev_info(netdev, "CAN Clock: %uMHz, Tseg1: %u, Tseg2: %u, BRP: %u,=
- SJW: %u\n",
-> +		    gcp->can_clk / 1000000,
-> +		    gcp->n.tseg1,
-> +		    gcp->n.tseg2,
-> +		    gcp->n.brp,
-> +		    gcp->n.sjw);
-
-I suggest to have a more quit driver, make this _dbg() instead.
-
-> +
-> +	return ems_usb_command_msg(dev, &dev->active_params);
-> +}
-> +
-> +static int ems_usb_set_bittiming_generic_data(struct net_device *netde=
-v)
-> +{
-> +	struct ems_usb *dev =3D netdev_priv(netdev);
-> +	struct can_bittiming *bt =3D &dev->can.data_bittiming;
-> +	struct cpc_generic_can_params *gcp =3D
-> +		&dev->active_params.msg.can_params.cc_params.generic;
-> +	int err;
-> +
-> +	if (dev->can.ctrlmode & CAN_CTRLMODE_FD) {
-> +		gcp->config |=3D CPC_GENERICCONF_FD;
-> +		if (dev->can.ctrlmode & CAN_CTRLMODE_FD_NON_ISO)
-> +			gcp->config |=3D CPC_GENERICCONF_FD_BOSCH;
-> +	} else {
-> +		// If CAN FD is not requested we can return here
-
-no C++ comments
-
-Better make it:
-
-if (!(dev->can.ctrlmode & CAN_CTRLMODE_FD))
-	return 0;
-
-> +		return 0;
-> +	}
-> +
-> +	gcp->d.tseg1 =3D bt->prop_seg + bt->phase_seg1;
-> +	gcp->d.tseg2 =3D bt->phase_seg2;
-> +	gcp->d.brp =3D bt->brp;
-> +	gcp->d.sjw =3D bt->sjw;
-> +
-> +	err =3D ems_usb_clear_cmd_queue(dev);
-> +	if (err)
-> +		return err;
-> +
-> +	netdev_info(netdev, "Set data bit timing for CPC-USB/FD with config %=
-X\n",
-> +		    gcp->config);
-> +	netdev_info(netdev, "CAN Clock: %uMHz, Tseg1: %u, Tseg2: %u, BRP: %u,=
- SJW: %u\n",
-> +		    gcp->can_clk / 1000000,
-> +		    gcp->d.tseg1,
-> +		    gcp->d.tseg2,
-> +		    gcp->d.brp,
-> +		    gcp->d.sjw);
-
-I suggest to have a more quit driver, make this _dbg() instead.
-
-> +
-> +	return ems_usb_command_msg(dev, &dev->active_params);
-> +}
-> +
->  static void init_params_sja1000(struct ems_cpc_msg *msg)
->  {
->  	struct cpc_sja1000_params *sja1000 =3D
-> @@ -1024,6 +1129,8 @@ static void init_params_sja1000(struct ems_cpc_ms=
-g *msg)
->  	msg->type =3D CPC_CMD_TYPE_CAN_PARAMS;
->  	msg->length =3D sizeof(struct cpc_can_params);
->  	msg->msgid =3D 0;
-> +	msg->ts_sec =3D 0;
-> +	msg->ts_nsec =3D 0;
-> =20
->  	msg->msg.can_params.cc_type =3D CPC_CC_TYPE_SJA1000;
-> =20
-> @@ -1046,6 +1153,24 @@ static void init_params_sja1000(struct ems_cpc_m=
-sg *msg)
->  	sja1000->mode =3D SJA1000_MOD_RM;
->  }
-> =20
-> +static void init_params_generic(struct ems_cpc_msg *msg)
-> +{
-> +	struct cpc_generic_can_params *gcp =3D
-> +		&msg->msg.can_params.cc_params.generic;
-> +
-> +	msg->type =3D CPC_CMD_TYPE_CAN_PARAMS;
-> +	msg->length =3D sizeof(struct cpc_can_params);
-> +	msg->msgid =3D 0;
-> +	msg->ts_sec =3D 0;
-> +	msg->ts_nsec =3D 0;
-> +
-> +	memset((u8 *)gcp, 0, sizeof(struct cpc_generic_can_params));
-> +	msg->msg.can_params.cc_type =3D CPC_CC_TYPE_GENERIC;
-> +
-> +	gcp->config =3D CPC_GENERICCONF_RESET_MODE;
-> +	gcp->can_clk =3D EMS_USB_FD_CLOCK;
-> +}
-> +
->  /* probe function for new CPC-USB devices
->   */
->  static int ems_usb_probe(struct usb_interface *intf,
-> @@ -1076,14 +1201,26 @@ static int ems_usb_probe(struct usb_interface *=
-intf,
->  	dev->can.bittiming_const =3D &ems_usb_bittiming_const_arm7;
->  	dev->can.do_set_bittiming =3D ems_usb_set_bittiming_arm7;
->  	dev->can.do_set_mode =3D ems_usb_set_mode;
-> -	dev->can.ctrlmode_supported =3D CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE=
-_LISTENONLY;
-> +	dev->can.ctrlmode_supported =3D CAN_CTRLMODE_3_SAMPLES |
-> +				      CAN_CTRLMODE_LISTENONLY;
-
-unrelated
-
->  	init_params_sja1000(&dev->active_params);
->  	dev->ems_usb_write_mode =3D ems_usb_write_mode_arm7;
->  	dev->bulk_rd_buf_size =3D 64;
->  	break;
-> =20
->  	case USB_CPCUSB_FD_PRODUCT_ID:
-> -	// Placeholder for next patchess
-> +		dev->can.clock.freq =3D EMS_USB_FD_CLOCK;
-> +		dev->can.bittiming_const =3D &ems_usb_bittiming_const_generic;
-> +		dev->can.data_bittiming_const =3D &ems_usb_bittiming_const_generic_d=
-ata;
-> +		dev->can.do_set_bittiming =3D ems_usb_set_bittiming_generic;
-> +		dev->can.do_set_data_bittiming =3D ems_usb_set_bittiming_generic_dat=
-a;
-> +		dev->can.ctrlmode_supported =3D CAN_CTRLMODE_LISTENONLY |
-> +				CAN_CTRLMODE_ONE_SHOT |
-> +				CAN_CTRLMODE_BERR_REPORTING |
-> +				CAN_CTRLMODE_FD |
-> +				CAN_CTRLMODE_FD_NON_ISO;
-> +		init_params_generic(&dev->active_params);
-> +		dev->bulk_rd_buf_size =3D 512;
->  	break;
-> =20
->  	default:
 >=20
 
 Marc
@@ -383,23 +245,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---3CDjrjSagQxYyiPNMMIT4icfKrvxTDYxU--
+--5OifAUsjyvZlxPyH7OR7JsYLzeYMbfwYo--
 
---VKEGHnWqbXEwIUjGBbc0lk66qUQptet5J
+--vQRbiUMB04r4JigAwCHJs0AQTFoNEsIRW
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ljRMACgkQqclaivrt
-76l8vQf8Dpgj1jKYkVfNzapWlrYtOWEwDjjei8T5j2ynimkgu+JGUd3jRaWjFOtm
-vRuUZiviQFezcpJxwgrhIXhqHpe8/SHFyG+dz49QK0OWy89gaDQ4ZbROMctvkAyi
-+KGNrA4cC+RAzh0n0TSHWkOyaAsvBpALKPmZOy2io0ZGOiMEiaHvudGpyy6SVMeB
-S0Za+8brFFnMv2ls/7NuE2mX+ldmtuWHuF0g6Ai6ujZ1ygIyChRwcZkCynr0V87c
-mNQwqmTuNiRZXQq+7zc53AyNs9yduqlYgc8f34MT9BmQ3QQo1r5H3OZQG+r72iZa
-BJha984aIngXc7Fhgdt0vOJjAEfVLw==
-=d733
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+ljkkACgkQqclaivrt
+76mmyggAgaENORAGgiQukG8y8BoCjUB6fdJoEGksLFWGMLvyaAf+O2AixaxR8Cjn
+2M/bjli8o8XOnu6+G0efnP03ZQ4gEnHMrsv4zGY501/CN6JEaTMh2C0y1H0bcvLX
+5uaeRpO+R8a2M+EOvIXWprvPRPRsymEFUMtdm/1Li79xuKOuymEL+bcnZBioBGPq
+VziaAckwpfEmOif6SBtJC2iMnGD92gdV1oMmsBH+TUP0OdMi9Y21djLZEFaKUFn4
+PwuWKWOBzxx1cLDDZaDcgroZZp6smcqSZTOSZeBNZQ9U9f9zS2Gy39e/AjW5yT0n
+t8ZiliSvbgmdoLKdiTkUGMnYTTAyLg==
+=CnuR
 -----END PGP SIGNATURE-----
 
---VKEGHnWqbXEwIUjGBbc0lk66qUQptet5J--
+--vQRbiUMB04r4JigAwCHJs0AQTFoNEsIRW--
