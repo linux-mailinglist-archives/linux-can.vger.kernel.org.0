@@ -2,92 +2,242 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5153A2A9AF0
+	by mail.lfdr.de (Postfix) with ESMTP id BD70E2A9AF1
 	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727800AbgKFRdh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:33:37 -0500
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:34149 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727809AbgKFRdh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:33:37 -0500
-X-Greylist: delayed 67392 seconds by postgrey-1.27 at vger.kernel.org; Fri, 06 Nov 2020 12:33:36 EST
-Date:   Fri, 06 Nov 2020 17:33:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acoro.eu;
-        s=protonmail; t=1604684015;
-        bh=x43H6ny8a5VR+tPI34yA7YmXvyRVOsFaR6dhQIkw8Ro=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=txcGKDNsZQZYTvyNDNHZPwX/ZnnKalXNXWhu36O8HOl+ez4wq07gAgFpWb4hjGo7C
-         DZHpGDkQepG3B8Ebi8yC6Eq3EBxAwffR5JALLaw0WGxDV1zWxvzhq4JXHX+cnBYrY3
-         RrrrmnFIYkQpxa4MeUCBk0KNAkogEn4iDdbApAcHtvE3eZN+8Ca3XNh8UquwJvIFOf
-         0FOr6Xkct6dqfJOckyndtC/MrqKb/0OG/I/mJp2bhwGAkH59SX9q6CGxP43W6kwNBQ
-         1GLzJTScgUMysMMuEfsQXuRw7PISu9B6T4vhxFFZUdYvLXmKqaHPCtgFgCVgQlHqHO
-         yCVr8wtzuExPQ==
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-From:   Alejandro <alejandro@acoro.eu>
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org
-Reply-To: Alejandro <alejandro@acoro.eu>
-Subject: Re: [PATCH] can: dev: can_restart(): post buffer from the right context
-Message-ID: <2e152de6-a3b1-ad81-981d-423835eb184e@acoro.eu>
-In-Reply-To: <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de>
-References: <bd6d51f4-4a18-e557-46d1-00d3539d163e@acoro.eu> <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu> <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de>
+        id S1727809AbgKFReG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727499AbgKFReG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:34:06 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1025FC0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:34:06 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kb5ci-0005oR-4b; Fri, 06 Nov 2020 18:34:04 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3880958C697;
+        Fri,  6 Nov 2020 17:34:03 +0000 (UTC)
+Subject: Re: [PATCH 10/17] can: ems_usb: Added receive routine for CAN FD
+ messages and its call in ems_usb_read_bulk_callback
+To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+        linux-can@vger.kernel.org
+Cc:     wg@grandegger.com
+References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJfEWX4BQkQo2czAAoJECte4hHF
+ iupUvfMP/iNtiysSr5yU4tbMBzRkGov1/FjurfH1kPweLVHDwiQJOGBz9HgM5+n8boduRv36
+ 0lU32g3PehN0UHZdHWhygUd6J09YUi2mJo1l2Fz1fQ8elUGUOXpT/xoxNQjslZjJGItCjza8
+ +D1DO+0cNFgElcNPa7DFBnglatOCZRiMjo4Wx0i8njEVRU+4ySRU7rCI36KPts+uVmZAMD7V
+ 3qiR1buYklJaPCJsnXURXYsilBIE9mZRmQjTDVqjLWAit++flqUVmDjaD/pj2AQe2Jcmd2gm
+ sYW5P1moz7ACA1GzMjLDmeFtpJOIB7lnDX0F/vvsG3V713/701aOzrXqBcEZ0E4aWeZJzaXw
+ n1zVIrl/F3RKrWDhMKTkjYy7HA8hQ9SJApFXsgP334Vo0ea82H3dOU755P89+Eoj0y44MbQX
+ 7xUy4UTRAFydPl4pJskveHfg4dO6Yf0PGIvVWOY1K04T1C5dpnHAEMvVNBrfTA8qcahRN82V
+ /iIGB+KSC2xR79q1kv1oYn0GOnWkvZmMhqGLhxIqHYitwH4Jn5uRfanKYWBk12LicsjRiTyW
+ Z9cJf2RgAtQgvMPvmaOL8vB3U4ava48qsRdgxhXMagU618EszVdYRNxGLCqsKVYIDySTrVzu
+ ZGs2ibcRhN4TiSZjztWBAe1MaaGk05Ce4h5IdDLbOOxhuQENBF8SDLABCADohJLQ5yffd8Sq
+ 8Lo9ymzgaLcWboyZ46pY4CCCcAFDRh++QNOJ8l4mEJMNdEa/yrW4lDQDhBWV75VdBuapYoal
+ LFrSzDzrqlHGG4Rt4/XOqMo6eSeSLipYBu4Xhg59S9wZOWbHVT/6vZNmiTa3d40+gBg68dQ8
+ iqWSU5NhBJCJeLYdG6xxeUEtsq/25N1erxmhs/9TD0sIeX36rFgWldMwKmZPe8pgZEv39Sdd
+ B+ykOlRuHag+ySJxwovfdVoWT0o0LrGlHzAYo6/ZSi/Iraa9R/7A1isWOBhw087BMNkRYx36
+ B77E4KbyBPx9h3wVyD/R6T0Q3ZNPu6SQLnsWojMzABEBAAGJAjwEGAEKACYWIQTBQAugs5ie
+ b7x9W1wrXuIRxYrqVAUCXxIMsAIbDAUJAucGAAAKCRArXuIRxYrqVOu0D/48xSLyVZ5NN2Bb
+ yqo3zxdv/PMGJSzM3JqSv7hnMZPQGy9XJaTc5Iz/hyXaNRwpH5X0UNKqhQhlztChuAKZ7iu+
+ 2VKzq4JJe9qmydRUwylluc4HmGwlIrDNvE0N66pRvC3h8tOVIsippAQlt5ciH74bJYXr0PYw
+ Aksw1jugRxMbNRzgGECg4O6EBNaHwDzsVPX1tDj0d9t/7ClzJUy20gg8r9Wm/I/0rcNkQOpV
+ RJLDtSbGSusKxor2XYmVtHGauag4YO6Vdq+2RjArB3oNLgSOGlYVpeqlut+YYHjWpaX/cTf8
+ /BHtIQuSAEu/WnycpM3Z9aaLocYhbp5lQKL6/bcWQ3udd0RfFR/Gv7eR7rn3evfqNTtQdo4/
+ YNmd7P8TS7ALQV/5bNRe+ROLquoAZvhaaa6SOvArcmFccnPeyluX8+o9K3BCdXPwONhsrxGO
+ wrPI+7XKMlwWI3O076NqNshh6mm8NIC0mDUr7zBUITa67P3Q2VoPoiPkCL9RtsXdQx5BI9iI
+ h/6QlzDxcBdw2TVWyGkVTCdeCBpuRndOMVmfjSWdCXXJCLXO6sYeculJyPkuNvumxgwUiK/H
+ AqqdUfy1HqtzP2FVhG5Ce0TeMJepagR2CHPXNg88Xw3PDjzdo+zNpqPHOZVKpLUkCvRv1p1q
+ m1qwQVWtAwMML/cuPga78rkBDQRfEXGWAQgAt0Cq8SRiLhWyTqkf16Zv/GLkUgN95RO5ntYM
+ fnc2Tr3UlRq2Cqt+TAvB928lN3WHBZx6DkuxRM/Y/iSyMuhzL5FfhsICuyiBs5f3QG70eZx+
+ Bdj4I7LpnIAzmBdNWxMHpt0m7UnkNVofA0yH6rcpCsPrdPRJNOLFI6ZqXDQk9VF+AB4HVAJY
+ BDU3NAHoyVGdMlcxev0+gEXfBQswEcysAyvzcPVTAqmrDsupnIB2f0SDMROQCLO6F+/cLG4L
+ Stbz+S6YFjESyXblhLckTiPURvDLTywyTOxJ7Mafz6ZCene9uEOqyd/h81nZOvRd1HrXjiTE
+ 1CBw+Dbvbch1ZwGOTQARAQABiQNyBBgBCgAmFiEEwUALoLOYnm+8fVtcK17iEcWK6lQFAl8R
+ cZYCGwIFCQLnoRoBQAkQK17iEcWK6lTAdCAEGQEKAB0WIQQreQhYm33JNgw/d6GpyVqK+u3v
+ qQUCXxFxlgAKCRCpyVqK+u3vqatQCAC3QIk2Y0g/07xNLJwhWcD7JhIqfe7Qc5Vz9kf8ZpWr
+ +6w4xwRfjUSmrXz3s6e/vrQsfdxjVMDFOkyG8c6DWJo0TVm6Ucrf9G06fsjjE/6cbE/gpBkk
+ /hOVz/a7UIELT+HUf0zxhhu+C9hTSl8Nb0bwtm6JuoY5AW0LP2KoQ6LHXF9KNeiJZrSzG6WE
+ h7nf3KRFS8cPKe+trbujXZRb36iIYUfXKiUqv5xamhohy1hw+7Sy8nLmw8rZPa40bDxX0/Gi
+ 98eVyT4/vi+nUy1gF1jXgNBSkbTpbVwNuldBsGJsMEa8lXnYuLzn9frLdtufUjjCymdcV/iT
+ sFKziU9AX7TLZ5AP/i1QMP9OlShRqERH34ufA8zTukNSBPIBfmSGUe6G2KEWjzzNPPgcPSZx
+ Do4jfQ/m/CiiibM6YCa51Io72oq43vMeBwG9/vLdyev47bhSfMLTpxdlDJ7oXU9e8J61iAF7
+ vBwerBZL94I3QuPLAHptgG8zPGVzNKoAzxjlaxI1MfqAD9XUM80MYBVjunIQlkU/AubdvmMY
+ X7hY1oMkTkC5hZNHLgIsDvWUG0g3sACfqF6gtMHY2lhQ0RxgxAEx+ULrk/svF6XGDe6iveyc
+ z5Mg5SUggw3rMotqgjMHHRtB3nct6XqgPXVDGYR7nAkXitG+nyG5zWhbhRDglVZ0mLlW9hij
+ z3Emwa94FaDhN2+1VqLFNZXhLwrNC5mlA6LUjCwOL+zb9a07HyjekLyVAdA6bZJ5BkSXJ1CO
+ 5YeYolFjr4YU7GXcSVfUR6fpxrb8N+yH+kJhY3LmS9vb2IXxneE/ESkXM6a2YAZWfW8sgwTm
+ 0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
+ HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
+ xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
+Message-ID: <2d176b6c-7bb4-c473-1e59-803223d87122@pengutronix.de>
+Date:   Fri, 6 Nov 2020 18:33:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+In-Reply-To: <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="jo28JlaLCMbPbM9YZ2wCtJdhDizdAmEbw"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 6/11/20 11:25, Marc Kleine-Budde wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--jo28JlaLCMbPbM9YZ2wCtJdhDizdAmEbw
+Content-Type: multipart/mixed; boundary="xTIpVbkyXmeVwpzwQNl7SiymoPcq8VwDl";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
+ linux-can@vger.kernel.org
+Cc: wg@grandegger.com
+Message-ID: <2d176b6c-7bb4-c473-1e59-803223d87122@pengutronix.de>
+Subject: Re: [PATCH 10/17] can: ems_usb: Added receive routine for CAN FD
+ messages and its call in ems_usb_read_bulk_callback
+References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
 
-> On 11/5/20 10:51 PM, Alejandro wrote:
->> From: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
->>
->> netif_rx() is meant to be called from interrupt contexts. can_restart()
->> may be called by can_restart_work(), which is called from a worqueue, so
->> it may run in process context. Use netif_rx_any_context() which invokes
->> the correct code path depending on context.
->>
->> Co-developed-by: Loris Fauster<loris.fauster@ttcontrol.com>
->> Signed-off-by: Loris Fauster<loris.fauster@ttcontrol.com>
->> Signed-off-by: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
-> I think we either call can_restart() from a netlink callback via
-> can_restart_now() or via the can_restart_work(). So we should always use
-> netif_rx_ni(skb), right?
+--xTIpVbkyXmeVwpzwQNl7SiymoPcq8VwDl
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-Right, I think that currently it is as you say. However, it seems that
-can_restart_now() has public visibility (/linux/can/dev.h), and even though
-it doesn't seem to be used by other CAN drivers for now, I guess it could
-potentially be used in future. netif_rx_any_context() should avoid issues
-if can_restart_now() is called from an ISR later.
+On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
+> Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+> ---
+>  drivers/net/can/usb/ems_usb.c | 45 +++++++++++++++++++++++++++++++++++=
 
->
->> ---
->>    drivers/net/can/dev.c | 2 +-
->>    1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
->> index b70ded3760f2..83114f8e8c24 100644
->> --- a/drivers/net/can/dev.c
->> +++ b/drivers/net/can/dev.c
->> @@ -584,7 +584,7 @@ static void can_restart(struct net_device *dev)
->>   =20
->>    =09cf->can_id |=3D CAN_ERR_RESTARTED;
->>   =20
->> -=09netif_rx(skb);
->> +=09netif_rx_any_context(skb);
->>   =20
->>    =09stats->rx_packets++;
->>    =09stats->rx_bytes +=3D cf->can_dlc;
->>
-> Marc
->
-BR,
-Alejandro
+>  1 file changed, 45 insertions(+)
+>=20
+> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
+b.c
+> index d6b52b265536..a4d9a1b2d2f0 100644
+> --- a/drivers/net/can/usb/ems_usb.c
+> +++ b/drivers/net/can/usb/ems_usb.c
+> @@ -389,6 +389,47 @@ static void ems_usb_rx_can_msg(struct ems_usb *dev=
+, struct ems_cpc_msg *msg)
+>  	netif_rx(skb);
+>  }
+> =20
+> +static void ems_usb_rx_canfd_msg(struct ems_usb *dev, struct ems_cpc_m=
+sg *msg)
+> +{
+> +	struct cpc_canfd_msg *fd_msg =3D &msg->msg.canfd_msg;
+> +
+> +	/* Although the CPC_FDFLAG_NONCANFD_MSG flag
+> +	 * should not be set with a received message,
+> +	 * it seems better to have checked it anyway.
+> +	 */
+> +	if (!(fd_msg->flags & CPC_FDFLAG_NONCANFD_MSG)) {
+
+please exit early, to safe on indention level.
+
+> +		/* CAN FD frame */
+> +		struct canfd_frame *cfd;
+> +		struct sk_buff *skb;
+> +		int i;
+> +		struct net_device_stats *stats =3D &dev->netdev->stats;
+> +
+> +		skb =3D alloc_canfd_skb(dev->netdev, &cfd);
+> +		if (!skb)
+> +			return;
+> +
+> +		cfd->can_id =3D le32_to_cpu(fd_msg->id);
+> +		cfd->len =3D fd_msg->length;
+> +
+> +		for (i =3D 0; i < cfd->len; i++)
+> +			cfd->data[i] =3D fd_msg->msg[i];
+> +
+> +		cfd->flags =3D 0;
+> +		if (fd_msg->flags & CPC_FDFLAG_BRS)
+> +			cfd->flags |=3D CANFD_BRS;
+> +
+> +		if (fd_msg->flags & CPC_FDFLAG_ESI)
+> +			cfd->flags |=3D CANFD_ESI;
+> +
+> +		if (fd_msg->flags & CPC_FDFLAG_XTD)
+> +			cfd->can_id |=3D CAN_EFF_FLAG;
+> +
+> +		stats->rx_packets++;
+> +		stats->rx_bytes +=3D cfd->len;
+> +		netif_rx(skb);
+> +	}
+> +}
+> +
+>  static void ems_usb_rx_err(struct ems_usb *dev, struct ems_cpc_msg *ms=
+g)
+>  {
+>  	struct can_frame *cf;
+> @@ -513,6 +554,10 @@ static void ems_usb_read_bulk_callback(struct urb =
+*urb)
+>  			ems_usb_rx_can_msg(dev, msg);
+>  			break;
+> =20
+> +		case CPC_MSG_TYPE_CANFD_FRAME:
+> +			ems_usb_rx_canfd_msg(dev, msg);
+> +			break;
+> +
+>  		case CPC_MSG_TYPE_CAN_FRAME_ERROR:
+>  			/* Process errorframe */
+>  			ems_usb_rx_err(dev, msg);
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
+--xTIpVbkyXmeVwpzwQNl7SiymoPcq8VwDl--
+
+--jo28JlaLCMbPbM9YZ2wCtJdhDizdAmEbw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+liQcACgkQqclaivrt
+76nWhggAi//DpLKprdXQl9zGWIWshOlKS+4utcCFrbscfVGYFTH8Kj6cYSDQ3kGn
+cwN8ebUV9s+0STRhDa70bP3OI1AT/ddRvdHzT8L7aFgsAgsT/vlSCkOYX0Yq+HQa
+TL9VLh28jCLLy6WDLIDGrHphQp3kC2zkqeHYunU0Z0VBe3nw3jPSXkaM0bJWow23
+cthWPlMm4Y+qRUfhX8StX4WqWkOqm9lKKBkCiQg20fEp9LzqT5u1hTK3Ig4pAnpW
+qtWLJ6MpqJQv6vMXHlzcu/FB+Osv/6TvVkra5X52vVZLwGMpSebjuD0T/3UlL9yW
+quL9AGhUti22GZV8M5TnWZi9Hstsug==
+=senV
+-----END PGP SIGNATURE-----
+
+--jo28JlaLCMbPbM9YZ2wCtJdhDizdAmEbw--
