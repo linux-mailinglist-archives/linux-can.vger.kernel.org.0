@@ -2,198 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F07D72A943A
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 11:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B9E2A94D8
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 11:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbgKFK0Q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 05:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727173AbgKFK0Q (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 05:26:16 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE1C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 02:26:15 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kaywZ-00052G-Ik; Fri, 06 Nov 2020 11:26:07 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DA26958C167;
-        Fri,  6 Nov 2020 10:26:01 +0000 (UTC)
-To:     Alejandro <alejandro@acoro.eu>, linux-can@vger.kernel.org
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org
-References: <bd6d51f4-4a18-e557-46d1-00d3539d163e@acoro.eu>
- <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
- zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
- QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
- 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
- Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
- XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
- nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
- Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
- eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
- kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
- ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
- CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJfEWX4BQkQo2czAAoJECte4hHF
- iupUvfMP/iNtiysSr5yU4tbMBzRkGov1/FjurfH1kPweLVHDwiQJOGBz9HgM5+n8boduRv36
- 0lU32g3PehN0UHZdHWhygUd6J09YUi2mJo1l2Fz1fQ8elUGUOXpT/xoxNQjslZjJGItCjza8
- +D1DO+0cNFgElcNPa7DFBnglatOCZRiMjo4Wx0i8njEVRU+4ySRU7rCI36KPts+uVmZAMD7V
- 3qiR1buYklJaPCJsnXURXYsilBIE9mZRmQjTDVqjLWAit++flqUVmDjaD/pj2AQe2Jcmd2gm
- sYW5P1moz7ACA1GzMjLDmeFtpJOIB7lnDX0F/vvsG3V713/701aOzrXqBcEZ0E4aWeZJzaXw
- n1zVIrl/F3RKrWDhMKTkjYy7HA8hQ9SJApFXsgP334Vo0ea82H3dOU755P89+Eoj0y44MbQX
- 7xUy4UTRAFydPl4pJskveHfg4dO6Yf0PGIvVWOY1K04T1C5dpnHAEMvVNBrfTA8qcahRN82V
- /iIGB+KSC2xR79q1kv1oYn0GOnWkvZmMhqGLhxIqHYitwH4Jn5uRfanKYWBk12LicsjRiTyW
- Z9cJf2RgAtQgvMPvmaOL8vB3U4ava48qsRdgxhXMagU618EszVdYRNxGLCqsKVYIDySTrVzu
- ZGs2ibcRhN4TiSZjztWBAe1MaaGk05Ce4h5IdDLbOOxhuQENBF8SDLABCADohJLQ5yffd8Sq
- 8Lo9ymzgaLcWboyZ46pY4CCCcAFDRh++QNOJ8l4mEJMNdEa/yrW4lDQDhBWV75VdBuapYoal
- LFrSzDzrqlHGG4Rt4/XOqMo6eSeSLipYBu4Xhg59S9wZOWbHVT/6vZNmiTa3d40+gBg68dQ8
- iqWSU5NhBJCJeLYdG6xxeUEtsq/25N1erxmhs/9TD0sIeX36rFgWldMwKmZPe8pgZEv39Sdd
- B+ykOlRuHag+ySJxwovfdVoWT0o0LrGlHzAYo6/ZSi/Iraa9R/7A1isWOBhw087BMNkRYx36
- B77E4KbyBPx9h3wVyD/R6T0Q3ZNPu6SQLnsWojMzABEBAAGJAjwEGAEKACYWIQTBQAugs5ie
- b7x9W1wrXuIRxYrqVAUCXxIMsAIbDAUJAucGAAAKCRArXuIRxYrqVOu0D/48xSLyVZ5NN2Bb
- yqo3zxdv/PMGJSzM3JqSv7hnMZPQGy9XJaTc5Iz/hyXaNRwpH5X0UNKqhQhlztChuAKZ7iu+
- 2VKzq4JJe9qmydRUwylluc4HmGwlIrDNvE0N66pRvC3h8tOVIsippAQlt5ciH74bJYXr0PYw
- Aksw1jugRxMbNRzgGECg4O6EBNaHwDzsVPX1tDj0d9t/7ClzJUy20gg8r9Wm/I/0rcNkQOpV
- RJLDtSbGSusKxor2XYmVtHGauag4YO6Vdq+2RjArB3oNLgSOGlYVpeqlut+YYHjWpaX/cTf8
- /BHtIQuSAEu/WnycpM3Z9aaLocYhbp5lQKL6/bcWQ3udd0RfFR/Gv7eR7rn3evfqNTtQdo4/
- YNmd7P8TS7ALQV/5bNRe+ROLquoAZvhaaa6SOvArcmFccnPeyluX8+o9K3BCdXPwONhsrxGO
- wrPI+7XKMlwWI3O076NqNshh6mm8NIC0mDUr7zBUITa67P3Q2VoPoiPkCL9RtsXdQx5BI9iI
- h/6QlzDxcBdw2TVWyGkVTCdeCBpuRndOMVmfjSWdCXXJCLXO6sYeculJyPkuNvumxgwUiK/H
- AqqdUfy1HqtzP2FVhG5Ce0TeMJepagR2CHPXNg88Xw3PDjzdo+zNpqPHOZVKpLUkCvRv1p1q
- m1qwQVWtAwMML/cuPga78rkBDQRfEXGWAQgAt0Cq8SRiLhWyTqkf16Zv/GLkUgN95RO5ntYM
- fnc2Tr3UlRq2Cqt+TAvB928lN3WHBZx6DkuxRM/Y/iSyMuhzL5FfhsICuyiBs5f3QG70eZx+
- Bdj4I7LpnIAzmBdNWxMHpt0m7UnkNVofA0yH6rcpCsPrdPRJNOLFI6ZqXDQk9VF+AB4HVAJY
- BDU3NAHoyVGdMlcxev0+gEXfBQswEcysAyvzcPVTAqmrDsupnIB2f0SDMROQCLO6F+/cLG4L
- Stbz+S6YFjESyXblhLckTiPURvDLTywyTOxJ7Mafz6ZCene9uEOqyd/h81nZOvRd1HrXjiTE
- 1CBw+Dbvbch1ZwGOTQARAQABiQNyBBgBCgAmFiEEwUALoLOYnm+8fVtcK17iEcWK6lQFAl8R
- cZYCGwIFCQLnoRoBQAkQK17iEcWK6lTAdCAEGQEKAB0WIQQreQhYm33JNgw/d6GpyVqK+u3v
- qQUCXxFxlgAKCRCpyVqK+u3vqatQCAC3QIk2Y0g/07xNLJwhWcD7JhIqfe7Qc5Vz9kf8ZpWr
- +6w4xwRfjUSmrXz3s6e/vrQsfdxjVMDFOkyG8c6DWJo0TVm6Ucrf9G06fsjjE/6cbE/gpBkk
- /hOVz/a7UIELT+HUf0zxhhu+C9hTSl8Nb0bwtm6JuoY5AW0LP2KoQ6LHXF9KNeiJZrSzG6WE
- h7nf3KRFS8cPKe+trbujXZRb36iIYUfXKiUqv5xamhohy1hw+7Sy8nLmw8rZPa40bDxX0/Gi
- 98eVyT4/vi+nUy1gF1jXgNBSkbTpbVwNuldBsGJsMEa8lXnYuLzn9frLdtufUjjCymdcV/iT
- sFKziU9AX7TLZ5AP/i1QMP9OlShRqERH34ufA8zTukNSBPIBfmSGUe6G2KEWjzzNPPgcPSZx
- Do4jfQ/m/CiiibM6YCa51Io72oq43vMeBwG9/vLdyev47bhSfMLTpxdlDJ7oXU9e8J61iAF7
- vBwerBZL94I3QuPLAHptgG8zPGVzNKoAzxjlaxI1MfqAD9XUM80MYBVjunIQlkU/AubdvmMY
- X7hY1oMkTkC5hZNHLgIsDvWUG0g3sACfqF6gtMHY2lhQ0RxgxAEx+ULrk/svF6XGDe6iveyc
- z5Mg5SUggw3rMotqgjMHHRtB3nct6XqgPXVDGYR7nAkXitG+nyG5zWhbhRDglVZ0mLlW9hij
- z3Emwa94FaDhN2+1VqLFNZXhLwrNC5mlA6LUjCwOL+zb9a07HyjekLyVAdA6bZJ5BkSXJ1CO
- 5YeYolFjr4YU7GXcSVfUR6fpxrb8N+yH+kJhY3LmS9vb2IXxneE/ESkXM6a2YAZWfW8sgwTm
- 0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
- HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
- xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH] can: dev: can_restart(): post buffer from the right
- context
-Message-ID: <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de>
-Date:   Fri, 6 Nov 2020 11:25:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726408AbgKFK4J (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 05:56:09 -0500
+Received: from mail-eopbgr10065.outbound.protection.outlook.com ([40.107.1.65]:41045
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726201AbgKFK4J (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 6 Nov 2020 05:56:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lJcNGGabIro1drEownpvhBYlsePAwT1b436ct4X/TnmQTBPxZKNakCRwKGbs1Eq5isWxbEHFDN6Xujwhv6fzD/b8QcsG8Yaqm4MmgJ3iXp+ArilklXmKiC+uqOXt1toVUAXCj6d3sDwQL2TurHed0omM3M7JRfuzipOk4r47frBQEO5TELFMYvLpbadyt68+mUsPR4Mg0xj9lFwbIeye+uCH1mbfK8bq26PeWciEP1DOtnQl1teNVrxgNzTn56mgVSA2HYJUTNVWPdDX815arxV6hinltGOsQA7BSTRBSAJH2bTtajCN8eARdotOo+Ab9y6cW/DEkHfVnvM5Co8XIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GHjZkg9KbkH24snn0GaNZtSlHoocCgFJWZCPJRIb7xw=;
+ b=BuwNtxPA6irs9OSe2wl/bM+yZpUfbrEDVJhdlQUi+FNza28Kttq2upyWB42LZC6pfSo5OQhlxgn+fAeQVBJNnEGI0/R8UZ8Zz/+84b9PEa7y5s73PJKtqOuoZyxPWJ2+6obsYyp8MIkOK5KNGtiitdsvI5/bHOU9qRP+zgEm0iBJRFYlVhIhVkx2baQqOYS/llDH6Qy0rR4q8FqHfMnbM0ZImW30ieNIneAYT9VKBT9QPJEJyI/8QzOixC+l/Jw+0dRgweEuoIejajq3ZITuUtiAE4lCgC4Gcd9RVAjEedS+JIuhwL3xsHMX0itMdrsFjmO8+UWBxWrSelSTkPF73A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GHjZkg9KbkH24snn0GaNZtSlHoocCgFJWZCPJRIb7xw=;
+ b=dcOu91rmXr0cz7TqljI70XoMH5eBs8gTzWxxxMm+P/64G0ivloiFj85f1aBnVc7iDOzdrI6LC7ty/6e24mCOHKEzzcFvpewh/9nejTBStohuOog4MTfoy/payHfW6PLBXdm3CZ17kWwZUPJX643F6+Ca2d9iCYYn7GquvKXinrA=
+Authentication-Results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
+ by DB7PR04MB4282.eurprd04.prod.outlook.com (2603:10a6:5:19::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.27; Fri, 6 Nov
+ 2020 10:56:04 +0000
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::3c3a:58b9:a1cc:cbcc]) by DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::3c3a:58b9:a1cc:cbcc%9]) with mapi id 15.20.3541.021; Fri, 6 Nov 2020
+ 10:56:04 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     mkl@pengutronix.de, robh+dt@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V5 0/5] can: flexcan: add stop mode support for i.MX8QM
+Date:   Fri,  6 Nov 2020 18:56:22 +0800
+Message-Id: <20201106105627.31061-1-qiangqing.zhang@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.71]
+X-ClientProxiedBy: SG2PR02CA0055.apcprd02.prod.outlook.com
+ (2603:1096:4:54::19) To DB8PR04MB6795.eurprd04.prod.outlook.com
+ (2603:10a6:10:fa::15)
 MIME-Version: 1.0
-In-Reply-To: <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="EdfAYOiAsKPDVCsbJmxCJtYO1rgFTy5N4"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.71) by SG2PR02CA0055.apcprd02.prod.outlook.com (2603:1096:4:54::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Fri, 6 Nov 2020 10:56:01 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 1ca481b4-7a6c-4ffc-3f06-08d882428e2d
+X-MS-TrafficTypeDiagnostic: DB7PR04MB4282:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB7PR04MB428218DCE4A1654716B180B7E6ED0@DB7PR04MB4282.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:183;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /C9yHENVQ4ldsInjPOmg9k/SRhR3C7jN5JKF1m3l6VA+0JeU2XHEe7PigHtCwIqRfR/NM1IFewvbL6bHQ7qD68nfFd30LNGswVhL+EHzaCLngjGY5tnRK6w1lqiiicnEzIPSmC38du6yeQdxCbXQM5OcTdSOdai9WcSy7XqHAY6OuTGejEZmY63zMZJhTYbczWBLXrexC/lUXkUQIKrHZLJRT9GDYVNDJgTRzTi1QiZ1ekvSI22FF2Vk89NUkB2u1aa01A/S6AszMxorr4TxS6c0il5aTjZQgz25vkMIsB1bmniSDRxpAndWdMiE6lHWG4c1pCKREGdbUZjFe0UNhjVX8/9NzgnSt3iQt4JJKlLVzg+uGyXQHQbCuvfLWXa7
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(6486002)(5660300002)(478600001)(6666004)(26005)(4326008)(83380400001)(6506007)(956004)(36756003)(66476007)(66946007)(8676002)(69590400008)(52116002)(6512007)(86362001)(186003)(1076003)(2906002)(2616005)(8936002)(16526019)(316002)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 2SyIp+Qalh+ghT+Ty50lEoXRFGLgh/v43MGzQLdbbQzdVHlbk+cPjvzeYQds15t5w2Ho4EV0orlvhSJzgGu24mfcfO/XoKwDyGZ5CxJfwa5yCBMsV/QIMcNdK4fIS7Ytibymmu0G4zrsNi6nr1hoQTGiTGA0rB6zTgVnzUWSSvlOzcwZJm/sz5/uERhMIbk+fSZVjpkeZtgcexBlU4ErYT6netIxHKuUiENjYA8boLfIdSfP9btxBK+kEPfFxrDGK6vI44Tzbrmt/vcr4YKIKVDK9jD3NFRoozieRiBQtKZjBoByd+WHL1wQ73uJ27/D0bkSighoiXqKF8g8GGH3wIyNc8C4EN32Glgl/glTlsBY4/Csy8UxOfRkzZApd2GVA45TCqjKCfOKnXLym/kB5T6Tzll56oeqG8YqP8rO99BR2R3VGHv79G/K8gAa2Vr+GrE+I16LsonYB+Wgsei4iJ4YRBzdZKmKeiIMrnIxJzuSIKHE0LXUGbJIiMgky3COh1piH/bwRM472/KXg9qRuHCCw1GSFLiLlVNKL9P2gzZIHPwy+TBZMvbMTkQIzuxxFDSWacIHLE3wz58T79xC8DPoy7n4bjirNSC8VCGOGSDPaMA/vskdreWVkbzEZl9g0UGkb8U1d/FHF/Md2eeKwA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ca481b4-7a6c-4ffc-3f06-08d882428e2d
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2020 10:56:04.0684
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kYTLrEF3TlxKpW3EFYFHbjYu28BxC2xbrpBmkadFEwq57ZCi1D7tEkef0DkfqyXxd5/uUqnAAAxnrmv9Rp7/pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4282
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---EdfAYOiAsKPDVCsbJmxCJtYO1rgFTy5N4
-Content-Type: multipart/mixed; boundary="0NJjPIN8U8jk4k1ayA3Qls5dT4wjTQ5tH";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Alejandro <alejandro@acoro.eu>, linux-can@vger.kernel.org
-Cc: wg@grandegger.com, davem@davemloft.net, kuba@kernel.org
-Message-ID: <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de>
-Subject: Re: [PATCH] can: dev: can_restart(): post buffer from the right
- context
-References: <bd6d51f4-4a18-e557-46d1-00d3539d163e@acoro.eu>
- <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu>
-In-Reply-To: <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu>
+Add stop mode support for i.MX8QM.
 
---0NJjPIN8U8jk4k1ayA3Qls5dT4wjTQ5tH
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+ChangeLogs:
+V4->V5:
+	* remove patch:firmware: imx: always export SCU symbols, since
+	it done by commit: 95de5094f5ac firmware: imx: add dummy functions
+	* rebase to fsl,flexcan.yaml
 
-On 11/5/20 10:51 PM, Alejandro wrote:
-> From: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
->=20
-> netif_rx() is meant to be called from interrupt contexts. can_restart()=
+V3->V4:
+	* can_idx->scu_idx.
+	* return imx_scu_get_handle(&priv->sc_ipc_handle);
+	* failed_canregister->failed_setup_stop_mode.
 
-> may be called by can_restart_work(), which is called from a worqueue, s=
-o
-> it may run in process context. Use netif_rx_any_context() which invokes=
+V2->V3:
+	* define IMX_SC_R_CAN(x) in rsrc.h
+	* remove error message on -EPROBE_DEFER.
+	* split disable wakeup patch into separate one.
 
-> the correct code path depending on context.
->=20
-> Co-developed-by: Loris Fauster<loris.fauster@ttcontrol.com>
-> Signed-off-by: Loris Fauster<loris.fauster@ttcontrol.com>
-> Signed-off-by: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
+V1->V2:
+	* split ECC fix patches into separate patches.
+	* free can dev if failed to setup stop mode.
+	* disable wakeup on flexcan_remove.
+	* add FLEXCAN_IMX_SC_R_CAN macro helper.
+	* fsl,can-index->fsl,scu-index.
+	* move fsl,scu-index and priv->can_idx into
+	* flexcan_setup_stop_mode_scfw()
+	* prove failed if failed to setup stop mode.
 
-I think we either call can_restart() from a netlink callback via
-can_restart_now() or via the can_restart_work(). So we should always use
-netif_rx_ni(skb), right?
+Joakim Zhang (5):
+  dt-bindings: can: flexcan: fix fsl,clk-source property
+  dt-bindings: can: flexcan: add fsl,scu-index property to indicate a
+    resource
+  can: flexcan: rename macro FLEXCAN_QUIRK_SETUP_STOP_MODE ->
+    FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR
+  dt-bindings: firmware: add IMX_SC_R_CAN(x) macro for CAN
+  can: flexcan: add CAN wakeup function for i.MX8QM
 
-> ---
->   drivers/net/can/dev.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-> index b70ded3760f2..83114f8e8c24 100644
-> --- a/drivers/net/can/dev.c
-> +++ b/drivers/net/can/dev.c
-> @@ -584,7 +584,7 @@ static void can_restart(struct net_device *dev)
->  =20
->   	cf->can_id |=3D CAN_ERR_RESTARTED;
->  =20
-> -	netif_rx(skb);
-> +	netif_rx_any_context(skb);
->  =20
->   	stats->rx_packets++;
->   	stats->rx_bytes +=3D cf->can_dlc;
->=20
+ .../bindings/net/can/fsl,flexcan.yaml         |  15 +-
+ drivers/net/can/flexcan.c                     | 131 +++++++++++++++---
+ include/dt-bindings/firmware/imx/rsrc.h       |   1 +
+ 3 files changed, 124 insertions(+), 23 deletions(-)
 
-Marc
+-- 
+2.17.1
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---0NJjPIN8U8jk4k1ayA3Qls5dT4wjTQ5tH--
-
---EdfAYOiAsKPDVCsbJmxCJtYO1rgFTy5N4
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lJLUACgkQqclaivrt
-76k0QwgAs/9b5QKuEzqPs1apXZq9RTtIeddYt7Wtiynk+wYfQhw36qdlxCl0Zb5o
-ExD13XPtAjHAyf7jZJ5X6QqrxNkVMpCpLUhx2WWAFMaftz2jEiLTp8+GbYmIBoh+
-u3M3U4lYY/dySEq7y7B7LClGzF5tK6NFTlyEfStT3+qsJW6nJyEiY+O21pIisuE2
-ZYj8Rp6kRrxnK2qlqLfka0MYNLtw1OC9CiOznj65m1xQJdUyMKg3Ne1QETxFDf9E
-XbCS/lTpoDFsi1ipmUH80Bw/WtNuVNTit4ZdyTfYSQRnllylxjslkjq6CdZJ/Cj7
-9IFiKsfWVSMRgGEScn4Zrwx2yLcPGA==
-=hXym
------END PGP SIGNATURE-----
-
---EdfAYOiAsKPDVCsbJmxCJtYO1rgFTy5N4--
