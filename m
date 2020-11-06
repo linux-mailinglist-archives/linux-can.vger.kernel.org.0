@@ -2,38 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8FA2A9B92
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 19:06:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3C32A9B97
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 19:07:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727178AbgKFSGF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 13:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S1727859AbgKFSHI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 13:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726034AbgKFSGF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 13:06:05 -0500
+        with ESMTP id S1727676AbgKFSHI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 13:07:08 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2952C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 10:06:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4868CC0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 10:07:08 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb67e-0000VU-Ud; Fri, 06 Nov 2020 19:06:03 +0100
+        id 1kb68g-0000c1-Ea; Fri, 06 Nov 2020 19:07:06 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (2a03-f580-87bc-d400-33f0-799f-c05f-fe06.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 15CF358C6D5;
-        Fri,  6 Nov 2020 18:06:02 +0000 (UTC)
-Subject: Re: [PATCH 17/17] can: ems_usb: Made another struct packed. Enable
- CPC-USB/FD by adding it to the drivers device table
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8322558C6D8;
+        Fri,  6 Nov 2020 18:07:05 +0000 (UTC)
+Subject: Re: [PATCH 00/17] Add support for CPC-USB/FD CAN FD interface
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-18-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <77a19f48-4174-682d-b999-de7c28a7ed39@pengutronix.de>
-Date:   Fri, 6 Nov 2020 19:05:59 +0100
+Message-ID: <2a8eb771-6c94-8e3b-2b47-9dc4cf0ea28a@pengutronix.de>
+Date:   Fri, 6 Nov 2020 19:07:02 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-18-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="7EUT0b6dnzN2mmZof9I2TXdiHYF7TmC7X"
+ boundary="9LHe62IIdhoDs2KQQc9ZFTQzGsFC1Hyub"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,63 +111,87 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---7EUT0b6dnzN2mmZof9I2TXdiHYF7TmC7X
-Content-Type: multipart/mixed; boundary="yBJfWvjZmsh3V8f5n9fWjIi4kd00bB53V";
+--9LHe62IIdhoDs2KQQc9ZFTQzGsFC1Hyub
+Content-Type: multipart/mixed; boundary="xUZclinaBQpig1I8pXMoBdHa31RfbfoqO";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <77a19f48-4174-682d-b999-de7c28a7ed39@pengutronix.de>
-Subject: Re: [PATCH 17/17] can: ems_usb: Made another struct packed. Enable
- CPC-USB/FD by adding it to the drivers device table
+Message-ID: <2a8eb771-6c94-8e3b-2b47-9dc4cf0ea28a@pengutronix.de>
+Subject: Re: [PATCH 00/17] Add support for CPC-USB/FD CAN FD interface
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-18-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-18-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
 
---yBJfWvjZmsh3V8f5n9fWjIi4kd00bB53V
+--xUZclinaBQpig1I8pXMoBdHa31RfbfoqO
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/6/20 6:02 PM, Gerhard Uttenthaler wrote:
-> Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-> ---
->  drivers/net/can/usb/ems_usb.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
+> These patches extend the ems_usb.c driver to support both devices, the
+> classic CAN CPC-USB/ARM7 and the CAN FD CPC-USB/FD. Also support for
+> the listen only mode for CPC-USB/ARM7 was implemented. Most issues give=
+n
+> by checkpatch.pl were resolved.
 >=20
-> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
-b.c
-> index 7ede3ac08ed5..087069f999e5 100644
-> --- a/drivers/net/can/usb/ems_usb.c
-> +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -269,7 +269,7 @@ struct __packed cpc_can_error {
->  /* Structure containing RX/TX error counter. This structure is used to=
- request
->   * the values of the CAN controllers TX and RX error counter.
->   */
-> -struct cpc_can_err_counter {
-> +struct __packed cpc_can_err_counter {
+> Gerhard Uttenthaler (17):
+>   can: ems_usb: Fixed warnings given by checkpatch.pl and fixed some
+>     outdated comments
+>   can: ems_usb: Added defines and product id needed for CPC-USB/FD
+>   can: ems_usb: Added CAN FD message representation
+>   can: ems_usb: Added struct used for CAN FD initialization
+>   can: ems_usb: Replace constant define RX_BUFFER_SIZE by variable
+>     bulk_rd_buf_size, because this will have different values for
+>     CPC-USB/ARM7 and CPC-USB/FD. For the same reason added a function
+>     pointer ems_usb_write_mode. In device probe function added a switch=
 
-please make this a separate patch.
+>     statement to select between CPC-USB/ARM7 and CPC-USB/FD and
+>     rearranged initialization sequence accordingly.
+>   can: ems_usb: Added listen only mode for CPC-USB/ARM7 and moved
+>     evaluation of can.ctrlmode from set_bittiming routine to
+>     ems_usb_write_mode_arm7 routine. Wrapped a long line.
+>   can: ems_usb: Added CPC_ClearCmdQueue routine to get access to the
+>     interface even it is flooded with messages which cannot successfull=
+y
+>     be sent. Set timestamp to 0 in ems_usb_control_cmd.
+>   can: ems_usb: Modified ems_usb_read_bulk_callback to be able to handl=
+e
+>     also CPC-USB/FD
+>   can: ems_usb: For CPC-USB/FD added clock definitions, bittiming
+>     constants, set_bittiming functions, bittiming init function and add=
 
->  	u8 rx;
->  	u8 tx;
->  };
-> @@ -296,10 +296,11 @@ struct __packed ems_cpc_msg {
->  };
-> =20
->  /* Table of devices that work with this driver
-> - * NOTE: This driver supports only CPC-USB/ARM7 (LPC2119) yet.
-> + * This driver supports CPC-USB/ARM7 and CPC-USB/FD.
->   */
->  static struct usb_device_id ems_usb_table[] =3D {
->  	{USB_DEVICE(USB_CPCUSB_VENDOR_ID, USB_CPCUSB_ARM7_PRODUCT_ID)},
-> +	{USB_DEVICE(USB_CPCUSB_VENDOR_ID, USB_CPCUSB_FD_PRODUCT_ID)},
->  	{} /* Terminating entry */
->  };
-> =20
+>     all that to probe function
+>   can: ems_usb: Added receive routine for CAN FD messages and its call
+>     in ems_usb_read_bulk_callback
+>   can: ems_usb: Added ems_usb_write_mode_fd and its call in device prob=
+e
+>     routine. Fixed indentation.
+>   can: ems_usb: In ems_usb_start_xmit send only bytes with valid conten=
+t
+>     to interface and not the complete buffer. Set first four bytes of
+>     buffer to 0. Wrapped long lines.
+>   can: ems_usb: Rearrange code in ems_usb_start_xmit to check with
+>     can_is_canfd_skb for CAN FD frames.
+>   can: ems_usb: Added code to handle CAN FD frames in ems_usb_start_xmi=
+t
+>   can: ems_usb: In CAN error handling routine checking which CAN
+>     controller type is issuing the error
+>   can: ems_usb: Added error handling part for CPC-USB/FD. Get some
+>     structures packed
+>   can: ems_usb: Made another struct packed. Enable CPC-USB/FD by adding=
+
+>     it to the drivers device table
 >=20
+>  drivers/net/can/usb/ems_usb.c | 860 +++++++++++++++++++++++++++-------=
+
+>  1 file changed, 681 insertions(+), 179 deletions(-)
+>=20
+
+Looks good, some nitpicks inline.
+
+After the next iteration, we can squash all the FD related patches into o=
+ne.
 
 Marc
 
@@ -180,23 +202,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---yBJfWvjZmsh3V8f5n9fWjIi4kd00bB53V--
+--xUZclinaBQpig1I8pXMoBdHa31RfbfoqO--
 
---7EUT0b6dnzN2mmZof9I2TXdiHYF7TmC7X
+--9LHe62IIdhoDs2KQQc9ZFTQzGsFC1Hyub
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lkIcACgkQqclaivrt
-76mWhggAtnIuhEinpUCsCSt+SSOyOcltU8lc0MuJfbURgIJQ69HkupjgzsBK+3wL
-Cp6JrGp+/wgNRWs/X3oz35BND19X2mqKpgJ+d66WI9BuooEYNAaleNvb8MrJshOQ
-6w5t8pfhJ2yYoxXfT3nnhgZv+uDBWBmVAVirh7CtcafCRTdv6jV2uKsLRwKe00a8
-HtTOSAD3KHR0U+4TEj4EKTFmUtj2uTYwv4Q5nSrdgILTlmx7bPtce6aXWSvDzgJw
-ox1MdmX0+QVUY51JCXxWcq2ArEJISPu6kfcLlIEJuAEg9otU/NGzV8ySAGokArxV
-EpgJPKI56unILNOKYEblbH0cnGsyDA==
-=5O8i
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lkMYACgkQqclaivrt
+76muPwgAq+6h+NRwkmQOtuekC6jshEru4vKAD8UPFyC94rHSaXRc2HRjwRbUZOez
+rNBpXRQjYo0Qakp807Wb3+xyVnaxqUJXT9BALvnN8hMKU3WU9qMwp57VMvEUlrp2
+GQWzUbXi87Lm+5Lk44dGs59X6FOAd2g7A38znZLTU0tYqlmI5/+/IiMUAwIcamdb
+JpoCvrEgUZNILFaaJg4lmxM3QUUTCoAmFuPh8TugWZVHZwUFm053LzgSWOLmZ6l3
+hazT7mdP5hROu9y6YzEMLvs6oRG+OLVg1QOiXUx1obf2QCANy7VV0ypbrv7rE3vP
+e5dc+8tyyZlS3mg6knWcCL1bxUM1Hg==
+=l2Z3
 -----END PGP SIGNATURE-----
 
---7EUT0b6dnzN2mmZof9I2TXdiHYF7TmC7X--
+--9LHe62IIdhoDs2KQQc9ZFTQzGsFC1Hyub--
