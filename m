@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F972A9A82
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE2C2A9A7B
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:11:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726867AbgKFRLX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:11:23 -0500
-Received: from mail3.ems-wuensche.com ([81.169.186.156]:41794 "EHLO
+        id S1726320AbgKFRLV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:11:21 -0500
+Received: from mail3.ems-wuensche.com ([81.169.186.156]:53061 "EHLO
         mail3.ems-wuensche.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727380AbgKFRLW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:11:22 -0500
+        with ESMTP id S1726867AbgKFRLU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:11:20 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by h2257714.serverkompetenz.net (Postfix) with ESMTP id C3797FFA8C
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 17:04:40 +0000 (UTC)
+        by h2257714.serverkompetenz.net (Postfix) with ESMTP id 3717CFFA88
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 17:05:24 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
 X-Spam-Flag: NO
-X-Spam-Score: -1.901
+X-Spam-Score: -1.902
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.901 tagged_above=-9999.9 required=5
-        tests=[BAYES_00=-1.9, NO_RECEIVED=-0.001, NO_RELAYS=-0.001,
-        URIBL_BLOCKED=0.001] autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.902 tagged_above=-9999.9 required=5
+        tests=[BAYES_00=-1.9, NO_RECEIVED=-0.001, NO_RELAYS=-0.001]
+        autolearn=unavailable autolearn_force=no
 Received: from mail3.ems-wuensche.com ([81.169.186.156])
         by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id r1HQRErB_Xfd for <linux-can@vger.kernel.org>;
-        Fri,  6 Nov 2020 18:04:38 +0100 (CET)
+        with ESMTP id sTICFZToVOvr for <linux-can@vger.kernel.org>;
+        Fri,  6 Nov 2020 18:05:09 +0100 (CET)
 From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 To:     linux-can@vger.kernel.org
 Cc:     wg@grandegger.com, mkl@pengutronix.de,
         Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Subject: [PATCH 11/17] can: ems_usb: Added ems_usb_write_mode_fd and its call in device probe routine. Fixed indentation.
-Date:   Fri,  6 Nov 2020 18:02:00 +0100
-Message-Id: <20201106170206.32162-12-uttenthaler@ems-wuensche.com>
+Subject: [PATCH 12/17] can: ems_usb: In ems_usb_start_xmit send only bytes with valid content to interface and not the complete buffer. Set first four bytes of buffer to 0. Wrapped long lines.
+Date:   Fri,  6 Nov 2020 18:02:01 +0100
+Message-Id: <20201106170206.32162-13-uttenthaler@ems-wuensche.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
@@ -43,91 +43,93 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 ---
- drivers/net/can/usb/ems_usb.c | 49 +++++++++++++++++++++++++++--------
- 1 file changed, 38 insertions(+), 11 deletions(-)
+ drivers/net/can/usb/ems_usb.c | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
-index a4d9a1b2d2f0..b51a5eb65946 100644
+index b51a5eb65946..c464d644c833 100644
 --- a/drivers/net/can/usb/ems_usb.c
 +++ b/drivers/net/can/usb/ems_usb.c
-@@ -683,6 +683,32 @@ static int ems_usb_write_mode_arm7(struct ems_usb *dev, u32 mode)
- 	return ems_usb_command_msg(dev, &dev->active_params);
- }
+@@ -902,25 +902,37 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 	struct can_frame *cf = (struct can_frame *)skb->data;
+ 	struct ems_cpc_msg *msg;
+ 	struct urb *urb;
+-	u8 *buf;
+ 	int i, err;
+-	size_t size = CPC_HEADER_SIZE + CPC_MSG_HEADER_LEN
+-			+ sizeof(struct cpc_can_msg);
++
++	u8 *buf;
++	size_t buf_size;
++	size_t buf_len = CPC_HEADER_SIZE + CPC_MSG_HEADER_LEN;
  
-+static int ems_usb_write_mode_fd(struct ems_usb *dev, u32 mode)
-+{
-+	struct cpc_generic_can_params *gcp =
-+		&dev->active_params.msg.can_params.cc_params.generic;
-+
-+	if (mode == CPC_USB_RESET_MODE) {
-+		gcp->config |= CPC_GENERICCONF_RESET_MODE;
-+	} else if (mode == CPC_USB_RUN_MODE) {
-+		gcp->config &= ~CPC_GENERICCONF_RESET_MODE;
-+
-+		if (dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-+			gcp->config |= CPC_GENERICCONF_LISTEN_ONLY;
-+		else
-+			gcp->config &= ~CPC_GENERICCONF_LISTEN_ONLY;
-+
-+		if (dev->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-+			gcp->config |= CPC_GENERICCONF_SINGLE_SHOT;
-+		else
-+			gcp->config &= ~CPC_GENERICCONF_SINGLE_SHOT;
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	return ems_usb_command_msg(dev, &dev->active_params);
-+}
-+
- /* Send a CPC_Control command to change behaviour when interface receives a CAN
-  * message, bus error or CAN state changed notifications.
-  */
-@@ -1241,17 +1267,16 @@ static int ems_usb_probe(struct usb_interface *intf,
- 	/* Select CPC-USB/ARM7 or CPC-USB/FD */
- 	switch (dev->udev->descriptor.idProduct) {
- 	case USB_CPCUSB_ARM7_PRODUCT_ID:
--
--	dev->can.clock.freq = EMS_USB_ARM7_CLOCK;
--	dev->can.bittiming_const = &ems_usb_bittiming_const_arm7;
--	dev->can.do_set_bittiming = ems_usb_set_bittiming_arm7;
--	dev->can.do_set_mode = ems_usb_set_mode;
--	dev->can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
-+		dev->can.clock.freq = EMS_USB_ARM7_CLOCK;
-+		dev->can.bittiming_const = &ems_usb_bittiming_const_arm7;
-+		dev->can.do_set_bittiming = ems_usb_set_bittiming_arm7;
-+		dev->can.do_set_mode = ems_usb_set_mode;
-+		dev->can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
- 				      CAN_CTRLMODE_LISTENONLY;
--	init_params_sja1000(&dev->active_params);
--	dev->ems_usb_write_mode = ems_usb_write_mode_arm7;
--	dev->bulk_rd_buf_size = 64;
--	break;
-+		init_params_sja1000(&dev->active_params);
-+		dev->ems_usb_write_mode = ems_usb_write_mode_arm7;
-+		dev->bulk_rd_buf_size = 64;
-+		break;
+ 	if (can_dropped_invalid_skb(netdev, skb))
+ 		return NETDEV_TX_OK;
  
- 	case USB_CPCUSB_FD_PRODUCT_ID:
- 		dev->can.clock.freq = EMS_USB_FD_CLOCK;
-@@ -1259,14 +1284,16 @@ static int ems_usb_probe(struct usb_interface *intf,
- 		dev->can.data_bittiming_const = &ems_usb_bittiming_const_generic_data;
- 		dev->can.do_set_bittiming = ems_usb_set_bittiming_generic;
- 		dev->can.do_set_data_bittiming = ems_usb_set_bittiming_generic_data;
-+		dev->can.do_set_mode = ems_usb_set_mode;
- 		dev->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
- 				CAN_CTRLMODE_ONE_SHOT |
- 				CAN_CTRLMODE_BERR_REPORTING |
- 				CAN_CTRLMODE_FD |
- 				CAN_CTRLMODE_FD_NON_ISO;
- 		init_params_generic(&dev->active_params);
-+		dev->ems_usb_write_mode = ems_usb_write_mode_fd;
- 		dev->bulk_rd_buf_size = 512;
--	break;
-+		break;
+-	/* create a URB, and a buffer for it, and copy the data to the URB */
++	buf_size = CPC_HEADER_SIZE +
++		   CPC_MSG_HEADER_LEN +
++		   sizeof(struct cpc_can_msg);
++
++	/* Create an URB, and a buffer for it
++	 * and copy the data to the URB
++	 */
+ 	urb = usb_alloc_urb(0, GFP_ATOMIC);
+ 	if (!urb)
+ 		goto nomem;
  
- 	default:
- 		err = -ENODEV;
+-	buf = usb_alloc_coherent(dev->udev, size, GFP_ATOMIC, &urb->transfer_dma);
++	buf = usb_alloc_coherent(dev->udev,
++				 buf_size,
++				 GFP_ATOMIC,
++				 &urb->transfer_dma);
+ 	if (!buf) {
+ 		netdev_err(netdev, "No memory left for USB buffer\n");
+ 		usb_free_urb(urb);
+ 		goto nomem;
+ 	}
++	// Clear first 4 bytes
++	*(u32 *)buf = 0;
+ 
+ 	msg = (struct ems_cpc_msg *)&buf[CPC_HEADER_SIZE];
+ 
+@@ -942,6 +954,9 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 		msg->length = CPC_CAN_MSG_MIN_SIZE + cf->can_dlc;
+ 	}
+ 
++	// Send only significant bytes of buffer
++	buf_len += msg->length;
++
+ 	for (i = 0; i < MAX_TX_URBS; i++) {
+ 		if (dev->tx_contexts[i].echo_index == MAX_TX_URBS) {
+ 			context = &dev->tx_contexts[i];
+@@ -953,7 +968,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 	 * allowed (MAX_TX_URBS).
+ 	 */
+ 	if (!context) {
+-		usb_free_coherent(dev->udev, size, buf, urb->transfer_dma);
++		usb_free_coherent(dev->udev, buf_size, buf, urb->transfer_dma);
+ 		usb_free_urb(urb);
+ 
+ 		netdev_warn(netdev, "couldn't find free context\n");
+@@ -966,7 +981,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 	context->dlc = cf->can_dlc;
+ 
+ 	usb_fill_bulk_urb(urb, dev->udev, usb_sndbulkpipe(dev->udev, 2), buf,
+-			  size, ems_usb_write_bulk_callback, context);
++			  buf_len, ems_usb_write_bulk_callback, context);
+ 	urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+ 	usb_anchor_urb(urb, &dev->tx_submitted);
+ 
+@@ -979,7 +994,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 		can_free_echo_skb(netdev, context->echo_index);
+ 
+ 		usb_unanchor_urb(urb);
+-		usb_free_coherent(dev->udev, size, buf, urb->transfer_dma);
++		usb_free_coherent(dev->udev, buf_size, buf, urb->transfer_dma);
+ 		dev_kfree_skb(skb);
+ 
+ 		atomic_dec(&dev->active_tx_urbs);
 -- 
 2.26.2
 
