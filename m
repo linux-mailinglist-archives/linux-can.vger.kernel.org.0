@@ -2,37 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D18F2A9577
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 12:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1A82A9588
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 12:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727166AbgKFLcy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 06:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44236 "EHLO
+        id S1727150AbgKFLgh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 06:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726565AbgKFLcx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 06:32:53 -0500
+        with ESMTP id S1727050AbgKFLgg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 06:36:36 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EFFC0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 03:32:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A36C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 03:36:36 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kazz4-0005Zp-PD; Fri, 06 Nov 2020 12:32:46 +0100
+        id 1kb02k-00062a-27; Fri, 06 Nov 2020 12:36:34 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EF24358C264;
-        Fri,  6 Nov 2020 11:32:44 +0000 (UTC)
-To:     Joakim Zhang <qiangqing.zhang@nxp.com>, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201106105627.31061-1-qiangqing.zhang@nxp.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6D5E258C272;
+        Fri,  6 Nov 2020 11:36:32 +0000 (UTC)
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+To:     Patrick Menschel <menschel.p@posteo.de>, drew@beagleboard.org
+Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
+ <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
+ <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
+ <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
+ <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+ <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
+ <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
+ <40bf253b-fc66-0996-4ac9-08caaa249beb@pengutronix.de>
+ <a137fc74-ac6c-a4f6-811c-41edeb1a3326@posteo.de>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -94,16 +108,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH V5 0/5] can: flexcan: add stop mode support for i.MX8QM
-Message-ID: <688b3f70-07d2-fb6d-3722-f2fa3a6f3a85@pengutronix.de>
-Date:   Fri, 6 Nov 2020 12:32:40 +0100
+Message-ID: <324c7c7e-a6bb-2181-d0f6-7e1696eb08fe@pengutronix.de>
+Date:   Fri, 6 Nov 2020 12:36:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106105627.31061-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <a137fc74-ac6c-a4f6-811c-41edeb1a3326@posteo.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="QAoVwW4M6eWZW06VJ6CNVrCYFfZwepuub"
+ boundary="Ar72j7BD9Rkd0A4K9L8kssQwRQ2ziO7Wa"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,74 +126,57 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---QAoVwW4M6eWZW06VJ6CNVrCYFfZwepuub
-Content-Type: multipart/mixed; boundary="wrfpd44otWKUeflEeZKKl0SvqZTnP5aIH";
+--Ar72j7BD9Rkd0A4K9L8kssQwRQ2ziO7Wa
+Content-Type: multipart/mixed; boundary="3jWzLGVhrbcTshY2QGhFJIuZSAvgsFiob";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Joakim Zhang <qiangqing.zhang@nxp.com>, robh+dt@kernel.org,
- shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc: kernel@pengutronix.de, linux-imx@nxp.com, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <688b3f70-07d2-fb6d-3722-f2fa3a6f3a85@pengutronix.de>
-Subject: Re: [PATCH V5 0/5] can: flexcan: add stop mode support for i.MX8QM
-References: <20201106105627.31061-1-qiangqing.zhang@nxp.com>
-In-Reply-To: <20201106105627.31061-1-qiangqing.zhang@nxp.com>
+To: Patrick Menschel <menschel.p@posteo.de>, drew@beagleboard.org
+Cc: socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
+Message-ID: <324c7c7e-a6bb-2181-d0f6-7e1696eb08fe@pengutronix.de>
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
+ <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
+ <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
+ <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
+ <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+ <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
+ <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
+ <40bf253b-fc66-0996-4ac9-08caaa249beb@pengutronix.de>
+ <a137fc74-ac6c-a4f6-811c-41edeb1a3326@posteo.de>
+In-Reply-To: <a137fc74-ac6c-a4f6-811c-41edeb1a3326@posteo.de>
 
---wrfpd44otWKUeflEeZKKl0SvqZTnP5aIH
+--3jWzLGVhrbcTshY2QGhFJIuZSAvgsFiob
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/6/20 11:56 AM, Joakim Zhang wrote:
-> Add stop mode support for i.MX8QM.
+On 11/6/20 12:31 PM, Patrick Menschel wrote:
+>> On 11/5/20 7:11 PM, Patrick Menschel wrote:
+>>>>> Its just a bread board install and I had to reduce the Spi-Max-Freq=
+uency
+>>>>> due to 10cm long cables. It least I believe it's the cable length.
+>>>>
+>>>> What happens if you don't reduce the SPI frequency?
+>>>
+>>> CRC Errors above 16Mhz spi frequency.
+>>
+>> Ok - Which SoC are you using? rpi4?
+>>
+>> Marc
+>>
 >=20
-> ChangeLogs:
-> V4->V5:
-> 	* remove patch:firmware: imx: always export SCU symbols, since
-> 	it done by commit: 95de5094f5ac firmware: imx: add dummy functions
-> 	* rebase to fsl,flexcan.yaml
->=20
-> V3->V4:
-> 	* can_idx->scu_idx.
-> 	* return imx_scu_get_handle(&priv->sc_ipc_handle);
-> 	* failed_canregister->failed_setup_stop_mode.
->=20
-> V2->V3:
-> 	* define IMX_SC_R_CAN(x) in rsrc.h
-> 	* remove error message on -EPROBE_DEFER.
-> 	* split disable wakeup patch into separate one.
->=20
-> V1->V2:
-> 	* split ECC fix patches into separate patches.
-> 	* free can dev if failed to setup stop mode.
-> 	* disable wakeup on flexcan_remove.
-> 	* add FLEXCAN_IMX_SC_R_CAN macro helper.
-> 	* fsl,can-index->fsl,scu-index.
-> 	* move fsl,scu-index and priv->can_idx into
-> 	* flexcan_setup_stop_mode_scfw()
-> 	* prove failed if failed to setup stop mode.
->=20
-> Joakim Zhang (5):
->   dt-bindings: can: flexcan: fix fsl,clk-source property
+> https://www.raspberrypi.org/products/raspberry-pi-zero-w/
 
-added to linux-can/testing
-
->   dt-bindings: can: flexcan: add fsl,scu-index property to indicate a
->     resource
->   can: flexcan: rename macro FLEXCAN_QUIRK_SETUP_STOP_MODE ->
->     FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR
->   dt-bindings: firmware: add IMX_SC_R_CAN(x) macro for CAN
->   can: flexcan: add CAN wakeup function for i.MX8QM
-
-The others go via linux-can-next/testing, once net/master is merged back =
-to
-net-next/master to have the yaml bindings.
-
->  .../bindings/net/can/fsl,flexcan.yaml         |  15 +-
->  drivers/net/can/flexcan.c                     | 131 +++++++++++++++---=
-
->  include/dt-bindings/firmware/imx/rsrc.h       |   1 +
->  3 files changed, 124 insertions(+), 23 deletions(-)
+any config.txt options?
 
 Marc
 
@@ -191,23 +187,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---wrfpd44otWKUeflEeZKKl0SvqZTnP5aIH--
+--3jWzLGVhrbcTshY2QGhFJIuZSAvgsFiob--
 
---QAoVwW4M6eWZW06VJ6CNVrCYFfZwepuub
+--Ar72j7BD9Rkd0A4K9L8kssQwRQ2ziO7Wa
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lNFgACgkQqclaivrt
-76n8qgf/aMFC+7XaLIlrpGpmwiyI0qs+i48mAn/OakjqjIXHCf9+CFNo11ZyHDo7
-QiKL4IqWV1Fr1Ammzf4k+EgqSX47Qe9w4lrzHpquYIoRVyj6xRUNZZ+shMJZeu9l
-BcXhECeESv2QuixKbRJMXTQLsDyQfEz1tDEpaFTXrSx/GMFjeS5EnMX9/smfOuJ7
-1u+ZP6+dK81KRN3dTvkUwn5HnQFaHS+1yhdOA4fY7VmZRPsW7fRw78VbO1FJGNLY
-uMLLAv249Dr+O3o4DSmvHvuYhWDwnRXDtSZGE9tdMI1UjhL2dhQAPowq5R7KUUC3
-6bxDgDgF+e//owIvv3Pt1oSeMq4bwA==
-=oYOw
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lNTwACgkQqclaivrt
+76mc+wf7BeD8P6+8rL6o3VDTFlftqvIfyuv0DhqGbGpQU/uOzcv93fI171HVzAez
+Lw+Y7j3u9DDwqcyL2484mHeoekEtNfNkj8zDwpYCvrWUBsDLPlIWHM0iuMfcWyCX
+MEoob+7SDGK8b8zykpSVjqhLYf9kKKUmw/Pl4xigyi9aWGGxhdjS7/qnx5EcP9Bc
+3Kmi1Cil9rZZz22ShfmrQF/exZbhj9avYey3UAXBw2AUkz2aSQ20KizX4rgv5DkA
+UKANRk9JZhY2e6M7YONUUAz/pBdhhk7rrsP8iDifE6N4+8ZOA2FNQ/Lyh6Zus2a7
+kfRe1XyF80gJh7YsawnRSR/NRQkcQQ==
+=H8vZ
 -----END PGP SIGNATURE-----
 
---QAoVwW4M6eWZW06VJ6CNVrCYFfZwepuub--
+--Ar72j7BD9Rkd0A4K9L8kssQwRQ2ziO7Wa--
