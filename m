@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0D92A9AB9
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B3B2A9AD4
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:32:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbgKFRZe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:25:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
+        id S1727569AbgKFRcs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgKFRZe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:25:34 -0500
+        with ESMTP id S1726034AbgKFRcp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:32:45 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A7CC0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:25:33 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07123C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:32:44 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb5UR-0004yh-S1; Fri, 06 Nov 2020 18:25:31 +0100
+        id 1kb5bO-0005au-P1; Fri, 06 Nov 2020 18:32:42 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 00A4358C670;
-        Fri,  6 Nov 2020 17:25:30 +0000 (UTC)
-Subject: Re: [PATCH 07/17] can: ems_usb: Added CPC_ClearCmdQueue routine to
- get access to the interface even it is flooded with messages which cannot
- successfully be sent. Set timestamp to 0 in ems_usb_control_cmd.
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CAEF358C688;
+        Fri,  6 Nov 2020 17:32:41 +0000 (UTC)
+Subject: Re: [PATCH 08/17] can: ems_usb: Modified ems_usb_read_bulk_callback
+ to be able to handle also CPC-USB/FD
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-9-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <ea1958c7-9c9d-d20b-5e3c-edb4fe5c9efd@pengutronix.de>
-Date:   Fri, 6 Nov 2020 18:25:26 +0100
+Message-ID: <2ba9eb58-6275-39cd-73e7-07f4db485035@pengutronix.de>
+Date:   Fri, 6 Nov 2020 18:32:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-9-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79"
+ boundary="q4QaWkqvuCjYHhuFDoCu0P4DpjgJ3x99a"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,101 +113,143 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79
-Content-Type: multipart/mixed; boundary="InNYmeQGJ8QP0ukOb3l1PXI9rRg1KTe8K";
+--q4QaWkqvuCjYHhuFDoCu0P4DpjgJ3x99a
+Content-Type: multipart/mixed; boundary="MCp0PaRhb3ovyD3f77Ga9biUjnbW3UiHV";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <ea1958c7-9c9d-d20b-5e3c-edb4fe5c9efd@pengutronix.de>
-Subject: Re: [PATCH 07/17] can: ems_usb: Added CPC_ClearCmdQueue routine to
- get access to the interface even it is flooded with messages which cannot
- successfully be sent. Set timestamp to 0 in ems_usb_control_cmd.
+Message-ID: <2ba9eb58-6275-39cd-73e7-07f4db485035@pengutronix.de>
+Subject: Re: [PATCH 08/17] can: ems_usb: Modified ems_usb_read_bulk_callback
+ to be able to handle also CPC-USB/FD
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-9-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-9-uttenthaler@ems-wuensche.com>
 
---InNYmeQGJ8QP0ukOb3l1PXI9rRg1KTe8K
+--MCp0PaRhb3ovyD3f77Ga9biUjnbW3UiHV
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Is this a fix that is interesting for the stable tree?
-
 On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
+>  drivers/net/can/usb/ems_usb.c | 83 ++++++++++++++++++-----------------=
+
+>  1 file changed, 42 insertions(+), 41 deletions(-)
 >=20
 > diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
 b.c
-> index 66418e5af87d..c664af4499a1 100644
+> index c664af4499a1..6a9ea6a4e687 100644
 > --- a/drivers/net/can/usb/ems_usb.c
 > +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -637,12 +637,29 @@ static int ems_usb_control_cmd(struct ems_usb *de=
-v, u8 val)
->  	cmd.length =3D CPC_MSG_HEADER_LEN + 1;
+> @@ -460,6 +460,7 @@ static void ems_usb_read_bulk_callback(struct urb *=
+urb)
+>  	struct ems_usb *dev =3D urb->context;
+>  	struct net_device *netdev;
+>  	int retval;
+> +	u32 length, start;
 > =20
->  	cmd.msgid =3D 0;
-> +	cmd.ts_sec =3D 0;
-> +	cmd.ts_nsec =3D 0;
+>  	netdev =3D dev->netdev;
 > =20
->  	cmd.msg.generic[0] =3D val;
+> @@ -478,50 +479,50 @@ static void ems_usb_read_bulk_callback(struct urb=
+ *urb)
+>  		goto resubmit_urb;
+>  	}
 > =20
->  	return ems_usb_command_msg(dev, &cmd);
->  }
-> =20
-> +/* Send a CPC_ClearCmdQueue command
-> + */
-> +static int ems_usb_clear_cmd_queue(struct ems_usb *dev)
-> +{
-> +	struct ems_cpc_msg cmd;
+> -	if (urb->actual_length > CPC_HEADER_SIZE) {
+> +	length =3D urb->actual_length;
+> +	start =3D CPC_HEADER_SIZE;
+> +
+> +	while (length >=3D CPC_MSG_HEADER_LEN) {
+>  		struct ems_cpc_msg *msg;
+>  		u8 *ibuf =3D urb->transfer_buffer;
+> -		u8 msg_count, start;
+> -
+> -		msg_count =3D ibuf[0] & ~0x80;
+> -
+> -		start =3D CPC_HEADER_SIZE;
+> -
+> -		while (msg_count) {
+> -			msg =3D (struct ems_cpc_msg *)&ibuf[start];
+> -
+> -			switch (msg->type) {
+> -			case CPC_MSG_TYPE_CAN_STATE:
+> -				/* Process CAN state changes */
+> -				ems_usb_rx_err(dev, msg);
+> -				break;
+> -
+> -			case CPC_MSG_TYPE_CAN_FRAME:
+> -			case CPC_MSG_TYPE_EXT_CAN_FRAME:
+> -			case CPC_MSG_TYPE_RTR_FRAME:
+> -			case CPC_MSG_TYPE_EXT_RTR_FRAME:
+> -				ems_usb_rx_can_msg(dev, msg);
+> -				break;
+> -
+> -			case CPC_MSG_TYPE_CAN_FRAME_ERROR:
+> -				/* Process errorframe */
+> -				ems_usb_rx_err(dev, msg);
+> -				break;
+> -
+> -			case CPC_MSG_TYPE_OVERRUN:
+> -				/* Message lost while receiving */
+> -				ems_usb_rx_err(dev, msg);
+> -				break;
+> -			}
+> -
+> -			start +=3D CPC_MSG_HEADER_LEN + msg->length;
+> -			msg_count--;
+> -
+> -			if (start > urb->transfer_buffer_length) {
+> -				netdev_err(netdev, "format error\n");
+> -				break;
+> -			}
+> +		u32 read_count;
+> +
+> +		msg =3D (struct ems_cpc_msg *)&ibuf[start];
+> +
+> +		switch (msg->type) {
 
-please use C99 style initialization:
+Is there a check, that that you don't access the buffer after its actual_=
+length?
 
-struct ems_cpc_msg cmd =3D {
-	.type =3D CPC_CMD_TYPE_CLEAR_CMD_QUEUE,
-	.length =3D CPC_MSG_HEADER_LEN,
-};
-
+> +		case CPC_MSG_TYPE_CAN_STATE:
+> +			/* Process CAN state changes */
+> +			ems_usb_rx_err(dev, msg);
+> +			break;
 > +
-> +	cmd.type =3D CPC_CMD_TYPE_CLEAR_CMD_QUEUE;
-> +	cmd.length =3D CPC_MSG_HEADER_LEN;
-> +	cmd.msgid =3D 0;
-> +	cmd.ts_sec =3D 0;
-> +	cmd.ts_nsec =3D 0;
+> +		case CPC_MSG_TYPE_CAN_FRAME:
+> +		case CPC_MSG_TYPE_EXT_CAN_FRAME:
+> +		case CPC_MSG_TYPE_RTR_FRAME:
+> +		case CPC_MSG_TYPE_EXT_RTR_FRAME:
+> +			ems_usb_rx_can_msg(dev, msg);
+> +			break;
 > +
-> +	return ems_usb_command_msg(dev, &cmd);
-> +}
+> +		case CPC_MSG_TYPE_CAN_FRAME_ERROR:
+> +			/* Process errorframe */
+> +			ems_usb_rx_err(dev, msg);
+> +			break;
 > +
->  /* Start interface
->   */
->  static int ems_usb_start(struct ems_usb *dev)
-> @@ -978,11 +995,19 @@ static int ems_usb_set_bittiming_arm7(struct net_=
-device *netdev)
->  	struct can_bittiming *bt =3D &dev->can.bittiming;
->  	struct cpc_sja1000_params *sja1000 =3D
->  		&dev->active_params.msg.can_params.cc_params.sja1000;
-> +	int err;
+> +		case CPC_MSG_TYPE_OVERRUN:
+> +			/* Message lost while receiving */
+> +			ems_usb_rx_err(dev, msg);
+> +			break;
+>  		}
+> +
+> +		read_count =3D CPC_MSG_HEADER_LEN + msg->length;
+> +		start +=3D read_count;
+> +
+> +		if (start > urb->transfer_buffer_length) {
+> +			netdev_err(netdev, "format error\n");
+> +			break;
+> +		}
+> +
+> +		if (read_count <=3D length)
+> +			length -=3D read_count;
+>  	}
 > =20
->  	sja1000->btr0 =3D ((bt->brp - 1) & 0x3f) | (((bt->sjw - 1) & 0x3) << =
-6);
->  	sja1000->btr1 =3D ((bt->prop_seg + bt->phase_seg1 - 1) & 0xf) |
->  		(((bt->phase_seg2 - 1) & 0x7) << 4);
-> =20
-> +	/* If the command queue in the device is full of sending requests
-> +	 * a reinitialization would not be possible before the queue is clear=
-ed.
-> +	 */
-> +	err =3D ems_usb_clear_cmd_queue(dev);
-> +	if (err)
-> +		return err;
-> +
->  	netdev_info(netdev, "Set bit timing for CPC-USB/ARM7\n");
->  	netdev_info(netdev, "BTR0=3D0x%02x, BTR1=3D0x%02x\n",
->  		    sja1000->btr0, sja1000->btr1);
+>  resubmit_urb:
 >=20
 
 Marc
@@ -220,23 +261,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---InNYmeQGJ8QP0ukOb3l1PXI9rRg1KTe8K--
+--MCp0PaRhb3ovyD3f77Ga9biUjnbW3UiHV--
 
---E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79
+--q4QaWkqvuCjYHhuFDoCu0P4DpjgJ3x99a
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lhwcACgkQqclaivrt
-76l7Kgf/WUZeSwD1hW+dHlQRKHGzvW7A+SwPV9a8Z8J0YRGZrQ1WP1Bcwwj0BmOS
-IMJUn8+62aunC8efVPUsBenTelixJgWtK4aGGtJmmyoz2dDmjFj2r3Xbmp2RLa7F
-y1MKqVTJwRtMUp3nFcSAlpCjv7XEoY6jSLt7cQrJh4ZgWzUuIoBrU3zwfDVtHGrs
-Mtx9SaUwDI7q6kkXMhChSN46lAGC3JfAQ8G7qt1Jm43g4YbZcdB3KIRauyZHVaZz
-TknXmMfrvCYXbNhACATzOzdtO59hkn1lGMd9kPgFmvU4ANQehkyRJpVs7br8k8wp
-hLJUFoY2pV6VxgZGQ+i7nQwNAbqwwQ==
-=z150
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+liLUACgkQqclaivrt
+76nLowf+JSv4Q2BkmlRGgCdRyZAf3mGU8uvXm3ZkiB6h6/cyfeO0VFlwjKDJIR1p
+eUORn9IvP8i0G9n0iTtYHgbYqJzdMjE71ldSSmMOsTy+0cnWMzXGRR4iBFi/HMBf
+wC3YnXXVaCbDt3543xF9KLNoJnUFhuC0a78yub2G1JZMrDwJqK3HpKFmx4F/YMFw
+H50dGUjzoEkFnQPHJsiEdxbFju8MLBkx1zIFd4VREmdmsBmODQ9pJyTOBxMt5+uF
+siA/86TigjoYOjGvFTwkJbF/WVJRT1JBunLfisItvnDu6pXq/3F8HPzVaDURDlkW
+kkJy1BO9KTVu+X/fcxFgPjmKyCzEnw==
+=dYWr
 -----END PGP SIGNATURE-----
 
---E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79--
+--q4QaWkqvuCjYHhuFDoCu0P4DpjgJ3x99a--
