@@ -2,38 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AC12A9AF7
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1471B2A9B0F
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726320AbgKFRf4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:35:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S1727084AbgKFRns (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgKFRf4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:35:56 -0500
+        with ESMTP id S1726075AbgKFRnr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:43:47 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C09C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:35:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A250C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:43:47 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb5eT-00060n-Uq; Fri, 06 Nov 2020 18:35:54 +0100
+        id 1kb5m5-0006fL-OH; Fri, 06 Nov 2020 18:43:45 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E360D58C69D;
-        Fri,  6 Nov 2020 17:35:52 +0000 (UTC)
-Subject: Re: [PATCH 11/17] can: ems_usb: Added ems_usb_write_mode_fd and its
- call in device probe routine. Fixed indentation.
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9F85E58C6B1;
+        Fri,  6 Nov 2020 17:43:44 +0000 (UTC)
+Subject: Re: [PATCH 10/17] can: ems_usb: Added receive routine for CAN FD
+ messages and its call in ems_usb_read_bulk_callback
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-12-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <13fcdd2a-8532-6d8c-166c-148f84ab6a82@pengutronix.de>
-Date:   Fri, 6 Nov 2020 18:35:48 +0100
+Message-ID: <a8e3d56a-a727-0d7f-8ed8-f8d425e7927e@pengutronix.de>
+Date:   Fri, 6 Nov 2020 18:43:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-12-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="ueHU00nVlmIijLCjxrWrhYqmBYaeZihlT"
+ boundary="qXdZ9CYzpkdg4eeTA8qY4oqDVqsatsVKP"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,128 +113,105 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ueHU00nVlmIijLCjxrWrhYqmBYaeZihlT
-Content-Type: multipart/mixed; boundary="XTIXyfkxiz379PT8OQLVWoKI1doKUV8LQ";
+--qXdZ9CYzpkdg4eeTA8qY4oqDVqsatsVKP
+Content-Type: multipart/mixed; boundary="7kIHT7rxH6XQY65Hjt8WnI1GLP0PIr8jA";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <13fcdd2a-8532-6d8c-166c-148f84ab6a82@pengutronix.de>
-Subject: Re: [PATCH 11/17] can: ems_usb: Added ems_usb_write_mode_fd and its
- call in device probe routine. Fixed indentation.
+Message-ID: <a8e3d56a-a727-0d7f-8ed8-f8d425e7927e@pengutronix.de>
+Subject: Re: [PATCH 10/17] can: ems_usb: Added receive routine for CAN FD
+ messages and its call in ems_usb_read_bulk_callback
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-12-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-12-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-11-uttenthaler@ems-wuensche.com>
 
---XTIXyfkxiz379PT8OQLVWoKI1doKUV8LQ
+--7kIHT7rxH6XQY65Hjt8WnI1GLP0PIr8jA
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-As mentioned in the other patch, please fix the indention where you intro=
-duce
-the switch-case
-
-On 11/6/20 6:02 PM, Gerhard Uttenthaler wrote:
+On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 49 +++++++++++++++++++++++++++--------=
+>  drivers/net/can/usb/ems_usb.c | 45 +++++++++++++++++++++++++++++++++++=
 
->  1 file changed, 38 insertions(+), 11 deletions(-)
+>  1 file changed, 45 insertions(+)
 >=20
 > diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
 b.c
-> index a4d9a1b2d2f0..b51a5eb65946 100644
+> index d6b52b265536..a4d9a1b2d2f0 100644
 > --- a/drivers/net/can/usb/ems_usb.c
 > +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -683,6 +683,32 @@ static int ems_usb_write_mode_arm7(struct ems_usb =
-*dev, u32 mode)
->  	return ems_usb_command_msg(dev, &dev->active_params);
+> @@ -389,6 +389,47 @@ static void ems_usb_rx_can_msg(struct ems_usb *dev=
+, struct ems_cpc_msg *msg)
+>  	netif_rx(skb);
 >  }
 > =20
-> +static int ems_usb_write_mode_fd(struct ems_usb *dev, u32 mode)
+> +static void ems_usb_rx_canfd_msg(struct ems_usb *dev, struct ems_cpc_m=
+sg *msg)
 > +{
-> +	struct cpc_generic_can_params *gcp =3D
-> +		&dev->active_params.msg.can_params.cc_params.generic;
+> +	struct cpc_canfd_msg *fd_msg =3D &msg->msg.canfd_msg;
 > +
-> +	if (mode =3D=3D CPC_USB_RESET_MODE) {
-> +		gcp->config |=3D CPC_GENERICCONF_RESET_MODE;
-> +	} else if (mode =3D=3D CPC_USB_RUN_MODE) {
-> +		gcp->config &=3D ~CPC_GENERICCONF_RESET_MODE;
+> +	/* Although the CPC_FDFLAG_NONCANFD_MSG flag
+> +	 * should not be set with a received message,
+> +	 * it seems better to have checked it anyway.
+> +	 */
+> +	if (!(fd_msg->flags & CPC_FDFLAG_NONCANFD_MSG)) {
+> +		/* CAN FD frame */
+> +		struct canfd_frame *cfd;
+> +		struct sk_buff *skb;
+> +		int i;
+> +		struct net_device_stats *stats =3D &dev->netdev->stats;
 > +
-> +		if (dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +			gcp->config |=3D CPC_GENERICCONF_LISTEN_ONLY;
-> +		else
-> +			gcp->config &=3D ~CPC_GENERICCONF_LISTEN_ONLY;
+> +		skb =3D alloc_canfd_skb(dev->netdev, &cfd);
+> +		if (!skb)
+> +			return;
 > +
-> +		if (dev->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-> +			gcp->config |=3D CPC_GENERICCONF_SINGLE_SHOT;
-> +		else
-> +			gcp->config &=3D ~CPC_GENERICCONF_SINGLE_SHOT;
-> +	} else {
-> +		return -EINVAL;
+> +		cfd->can_id =3D le32_to_cpu(fd_msg->id);
+> +		cfd->len =3D fd_msg->length;
+> +
+> +		for (i =3D 0; i < cfd->len; i++)
+> +			cfd->data[i] =3D fd_msg->msg[i];
+
+memcpy()
+
+> +
+> +		cfd->flags =3D 0;
+> +		if (fd_msg->flags & CPC_FDFLAG_BRS)
+> +			cfd->flags |=3D CANFD_BRS;
+> +
+> +		if (fd_msg->flags & CPC_FDFLAG_ESI)
+> +			cfd->flags |=3D CANFD_ESI;
+> +
+> +		if (fd_msg->flags & CPC_FDFLAG_XTD)
+> +			cfd->can_id |=3D CAN_EFF_FLAG;
+> +
+> +		stats->rx_packets++;
+> +		stats->rx_bytes +=3D cfd->len;
+> +		netif_rx(skb);
 > +	}
-> +
-> +	return ems_usb_command_msg(dev, &dev->active_params);
 > +}
 > +
->  /* Send a CPC_Control command to change behaviour when interface recei=
-ves a CAN
->   * message, bus error or CAN state changed notifications.
->   */
-> @@ -1241,17 +1267,16 @@ static int ems_usb_probe(struct usb_interface *=
-intf,
->  	/* Select CPC-USB/ARM7 or CPC-USB/FD */
->  	switch (dev->udev->descriptor.idProduct) {
->  	case USB_CPCUSB_ARM7_PRODUCT_ID:
-> -
-> -	dev->can.clock.freq =3D EMS_USB_ARM7_CLOCK;
-> -	dev->can.bittiming_const =3D &ems_usb_bittiming_const_arm7;
-> -	dev->can.do_set_bittiming =3D ems_usb_set_bittiming_arm7;
-> -	dev->can.do_set_mode =3D ems_usb_set_mode;
-> -	dev->can.ctrlmode_supported =3D CAN_CTRLMODE_3_SAMPLES |
-> +		dev->can.clock.freq =3D EMS_USB_ARM7_CLOCK;
-> +		dev->can.bittiming_const =3D &ems_usb_bittiming_const_arm7;
-> +		dev->can.do_set_bittiming =3D ems_usb_set_bittiming_arm7;
-> +		dev->can.do_set_mode =3D ems_usb_set_mode;
-> +		dev->can.ctrlmode_supported =3D CAN_CTRLMODE_3_SAMPLES |
->  				      CAN_CTRLMODE_LISTENONLY;
-> -	init_params_sja1000(&dev->active_params);
-> -	dev->ems_usb_write_mode =3D ems_usb_write_mode_arm7;
-> -	dev->bulk_rd_buf_size =3D 64;
-> -	break;
-> +		init_params_sja1000(&dev->active_params);
-> +		dev->ems_usb_write_mode =3D ems_usb_write_mode_arm7;
-> +		dev->bulk_rd_buf_size =3D 64;
-> +		break;
+>  static void ems_usb_rx_err(struct ems_usb *dev, struct ems_cpc_msg *ms=
+g)
+>  {
+>  	struct can_frame *cf;
+> @@ -513,6 +554,10 @@ static void ems_usb_read_bulk_callback(struct urb =
+*urb)
+>  			ems_usb_rx_can_msg(dev, msg);
+>  			break;
 > =20
->  	case USB_CPCUSB_FD_PRODUCT_ID:
->  		dev->can.clock.freq =3D EMS_USB_FD_CLOCK;
-> @@ -1259,14 +1284,16 @@ static int ems_usb_probe(struct usb_interface *=
-intf,
->  		dev->can.data_bittiming_const =3D &ems_usb_bittiming_const_generic_d=
-ata;
->  		dev->can.do_set_bittiming =3D ems_usb_set_bittiming_generic;
->  		dev->can.do_set_data_bittiming =3D ems_usb_set_bittiming_generic_dat=
-a;
-> +		dev->can.do_set_mode =3D ems_usb_set_mode;
->  		dev->can.ctrlmode_supported =3D CAN_CTRLMODE_LISTENONLY |
->  				CAN_CTRLMODE_ONE_SHOT |
->  				CAN_CTRLMODE_BERR_REPORTING |
->  				CAN_CTRLMODE_FD |
->  				CAN_CTRLMODE_FD_NON_ISO;
->  		init_params_generic(&dev->active_params);
-> +		dev->ems_usb_write_mode =3D ems_usb_write_mode_fd;
->  		dev->bulk_rd_buf_size =3D 512;
-> -	break;
-> +		break;
-> =20
->  	default:
->  		err =3D -ENODEV;
+> +		case CPC_MSG_TYPE_CANFD_FRAME:
+> +			ems_usb_rx_canfd_msg(dev, msg);
+> +			break;
+> +
+>  		case CPC_MSG_TYPE_CAN_FRAME_ERROR:
+>  			/* Process errorframe */
+>  			ems_usb_rx_err(dev, msg);
 >=20
 
-Marc
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -243,23 +220,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---XTIXyfkxiz379PT8OQLVWoKI1doKUV8LQ--
+--7kIHT7rxH6XQY65Hjt8WnI1GLP0PIr8jA--
 
---ueHU00nVlmIijLCjxrWrhYqmBYaeZihlT
+--qXdZ9CYzpkdg4eeTA8qY4oqDVqsatsVKP
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+liXQACgkQqclaivrt
-76leCAf+IsMLh9A2fyTKR2L+Cxj/kkyHpuCZcZUrTg0UYIPfDsraPppprgqf5C0S
-w2zYEBi1Hv1NzPtNBLm3hWYyoVrde0YmPo50FlYhMs7TuqJQ9bJB+HDzUaVmWwYa
-+jlJH0rN0CGB8xLo1ezFKE6caVR1uO7yAa5gfHr79ChFYO1Ts8a+WZbi1+zuZX3Q
-up2oRDZBZF7GAtiPTjq8DQO+aeWJl4jhnAgC2BddZVp3F1EaUV+09Gb4OZRU/YrT
-MxZ7TX8dIOi+xKcEv9jtk2TbFORUn8VA77isatcYqix3empuIjKu6UiYrnOld9St
-mM84JRK7dW8paU40x4f04XGDCCPCzw==
-=J74Y
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+li0wACgkQqclaivrt
+76nqpgf/WmK9rr4IyMbkGQaXzMCFMLy2yuDM8dCh7eOmdAWolbt9AkGI/bDbyoJJ
+7+c2od0xOAgvTiEGVK3EMQa+YAMiBdXTrYZgo/Kx6hcVkUWhDerBZ0jIL/l3dhX6
+ywuwic7MvEDqXfK9LdpU8E2fyl+Di3L0NL4tAIlVrDXrxztqPNPBn8beyY56nwOH
+SNQ6WhIog1hRTEpsKzLqrHY4YuvUIdsEmifoA4vBKsaEFhcd2a4hVsuXPzgW2eKR
+wJ3uIc1NFo08UNnsXvxQ5n6CCIzxxVLcsaQl6J0kipg6TdYZwVNTNcvdyt/WgV0Q
+1jT7trZoSdQiaCCq/f41UjXTgLwRjA==
+=bSmj
 -----END PGP SIGNATURE-----
 
---ueHU00nVlmIijLCjxrWrhYqmBYaeZihlT--
+--qXdZ9CYzpkdg4eeTA8qY4oqDVqsatsVKP--
