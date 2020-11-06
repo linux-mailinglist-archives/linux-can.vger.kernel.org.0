@@ -2,36 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6C52A9AB7
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0D92A9AB9
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 18:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725868AbgKFRXi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 12:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S1726139AbgKFRZe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 12:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgKFRXi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:23:38 -0500
+        with ESMTP id S1726075AbgKFRZe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 12:25:34 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EE7C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:23:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A7CC0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 09:25:33 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb5SZ-0004kG-Om; Fri, 06 Nov 2020 18:23:35 +0100
+        id 1kb5UR-0004yh-S1; Fri, 06 Nov 2020 18:25:31 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (unknown [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D743F58C66C;
-        Fri,  6 Nov 2020 17:23:34 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 00A4358C670;
+        Fri,  6 Nov 2020 17:25:30 +0000 (UTC)
+Subject: Re: [PATCH 07/17] can: ems_usb: Added CPC_ClearCmdQueue routine to
+ get access to the interface even it is flooded with messages which cannot
+ successfully be sent. Set timestamp to 0 in ems_usb_control_cmd.
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-7-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -93,18 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH 06/17] can: ems_usb: Added listen only mode for
- CPC-USB/ARM7 and moved evaluation of can.ctrlmode from set_bittiming routine
- to ems_usb_write_mode_arm7 routine. Wrapped a long line.
-Message-ID: <40ebc584-0e48-2f77-dc8c-c57832fe83fa@pengutronix.de>
-Date:   Fri, 6 Nov 2020 18:23:30 +0100
+Message-ID: <ea1958c7-9c9d-d20b-5e3c-edb4fe5c9efd@pengutronix.de>
+Date:   Fri, 6 Nov 2020 18:25:26 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-7-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="4BlBLqvnZA4UyMYWtol8qfNBX4EWyaWf6"
+ boundary="E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,132 +114,101 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---4BlBLqvnZA4UyMYWtol8qfNBX4EWyaWf6
-Content-Type: multipart/mixed; boundary="VUe28fbb1g8ny9uxCQfePERDXxjq3efdF";
+--E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79
+Content-Type: multipart/mixed; boundary="InNYmeQGJ8QP0ukOb3l1PXI9rRg1KTe8K";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <40ebc584-0e48-2f77-dc8c-c57832fe83fa@pengutronix.de>
-Subject: Re: [PATCH 06/17] can: ems_usb: Added listen only mode for
- CPC-USB/ARM7 and moved evaluation of can.ctrlmode from set_bittiming routine
- to ems_usb_write_mode_arm7 routine. Wrapped a long line.
+Message-ID: <ea1958c7-9c9d-d20b-5e3c-edb4fe5c9efd@pengutronix.de>
+Subject: Re: [PATCH 07/17] can: ems_usb: Added CPC_ClearCmdQueue routine to
+ get access to the interface even it is flooded with messages which cannot
+ successfully be sent. Set timestamp to 0 in ems_usb_control_cmd.
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-7-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-7-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-8-uttenthaler@ems-wuensche.com>
 
---VUe28fbb1g8ny9uxCQfePERDXxjq3efdF
+--InNYmeQGJ8QP0ukOb3l1PXI9rRg1KTe8K
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
+
+Is this a fix that is interesting for the stable tree?
 
 On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 39 ++++++++++++++++++++++-------------=
-
->  1 file changed, 25 insertions(+), 14 deletions(-)
+>  drivers/net/can/usb/ems_usb.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
 >=20
 > diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
 b.c
-> index a3943042b8c8..66418e5af87d 100644
+> index 66418e5af87d..c664af4499a1 100644
 > --- a/drivers/net/can/usb/ems_usb.c
 > +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -85,6 +85,7 @@ MODULE_LICENSE("GPL v2");
->  /* Mode register NXP LPC2119/SJA1000 CAN Controller */
->  #define SJA1000_MOD_NORMAL 0x00
->  #define SJA1000_MOD_RM     0x01
-> +#define SJA1000_MOD_LOM    0x02
+> @@ -637,12 +637,29 @@ static int ems_usb_control_cmd(struct ems_usb *de=
+v, u8 val)
+>  	cmd.length =3D CPC_MSG_HEADER_LEN + 1;
 > =20
->  /* ECC register NXP LPC2119/SJA1000 CAN Controller */
->  #define SJA1000_ECC_SEG   0x1F
-> @@ -604,13 +605,23 @@ static int ems_usb_write_mode_arm7(struct ems_usb=
- *dev, u32 mode)
+>  	cmd.msgid =3D 0;
+> +	cmd.ts_sec =3D 0;
+> +	cmd.ts_nsec =3D 0;
+> =20
+>  	cmd.msg.generic[0] =3D val;
+> =20
+>  	return ems_usb_command_msg(dev, &cmd);
+>  }
+> =20
+> +/* Send a CPC_ClearCmdQueue command
+> + */
+> +static int ems_usb_clear_cmd_queue(struct ems_usb *dev)
+> +{
+> +	struct ems_cpc_msg cmd;
+
+please use C99 style initialization:
+
+struct ems_cpc_msg cmd =3D {
+	.type =3D CPC_CMD_TYPE_CLEAR_CMD_QUEUE,
+	.length =3D CPC_MSG_HEADER_LEN,
+};
+
+> +
+> +	cmd.type =3D CPC_CMD_TYPE_CLEAR_CMD_QUEUE;
+> +	cmd.length =3D CPC_MSG_HEADER_LEN;
+> +	cmd.msgid =3D 0;
+> +	cmd.ts_sec =3D 0;
+> +	cmd.ts_nsec =3D 0;
+> +
+> +	return ems_usb_command_msg(dev, &cmd);
+> +}
+> +
+>  /* Start interface
+>   */
+>  static int ems_usb_start(struct ems_usb *dev)
+> @@ -978,11 +995,19 @@ static int ems_usb_set_bittiming_arm7(struct net_=
+device *netdev)
+>  	struct can_bittiming *bt =3D &dev->can.bittiming;
 >  	struct cpc_sja1000_params *sja1000 =3D
 >  		&dev->active_params.msg.can_params.cc_params.sja1000;
+> +	int err;
 > =20
-> -	if (mode =3D=3D CPC_USB_RESET_MODE)
-> +	if (mode =3D=3D CPC_USB_RESET_MODE) {
->  		sja1000->mode |=3D SJA1000_MOD_RM;
-> -	else if (mode =3D=3D CPC_USB_RUN_MODE)
-> +	} else if (mode =3D=3D CPC_USB_RUN_MODE) {
->  		sja1000->mode &=3D ~SJA1000_MOD_RM;
-> =20
-> -	else
-> +		if (dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +			sja1000->mode |=3D SJA1000_MOD_LOM;
-> +		else
-> +			sja1000->mode &=3D ~SJA1000_MOD_LOM;
-> +
-> +		if (dev->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> +			sja1000->btr1 |=3D 0x80;
-> +		else
-> +			sja1000->btr1 &=3D ~0x80;
-> +	} else {
->  		return -EINVAL;
-> +	}
-> =20
->  	return ems_usb_command_msg(dev, &dev->active_params);
->  }
-> @@ -653,7 +664,9 @@ static int ems_usb_start(struct ems_usb *dev)
->  			break;
->  		}
-> =20
-> -		buf =3D usb_alloc_coherent(dev->udev, dev->bulk_rd_buf_size, GFP_KER=
-NEL,
-> +		buf =3D usb_alloc_coherent(dev->udev,
-> +					 dev->bulk_rd_buf_size,
-> +					 GFP_KERNEL,
->  					 &urb->transfer_dma);
-
-unrelated, please move the the previous patch
-
->  		if (!buf) {
->  			netdev_err(netdev, "No memory left for USB buffer\n");
-> @@ -963,18 +976,16 @@ static int ems_usb_set_bittiming_arm7(struct net_=
-device *netdev)
->  {
->  	struct ems_usb *dev =3D netdev_priv(netdev);
->  	struct can_bittiming *bt =3D &dev->can.bittiming;
-> -	u8 btr0, btr1;
-> +	struct cpc_sja1000_params *sja1000 =3D
-> +		&dev->active_params.msg.can_params.cc_params.sja1000;
-> =20
-> -	btr0 =3D ((bt->brp - 1) & 0x3f) | (((bt->sjw - 1) & 0x3) << 6);
-> -	btr1 =3D ((bt->prop_seg + bt->phase_seg1 - 1) & 0xf) |
-> +	sja1000->btr0 =3D ((bt->brp - 1) & 0x3f) | (((bt->sjw - 1) & 0x3) << =
+>  	sja1000->btr0 =3D ((bt->brp - 1) & 0x3f) | (((bt->sjw - 1) & 0x3) << =
 6);
-> +	sja1000->btr1 =3D ((bt->prop_seg + bt->phase_seg1 - 1) & 0xf) |
+>  	sja1000->btr1 =3D ((bt->prop_seg + bt->phase_seg1 - 1) & 0xf) |
 >  		(((bt->phase_seg2 - 1) & 0x7) << 4);
-> -	if (dev->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> -		btr1 |=3D 0x80;
-> -
-> -	netdev_info(netdev, "setting BTR0=3D0x%02x BTR1=3D0x%02x\n", btr0, bt=
-r1);
 > =20
-> -	dev->active_params.msg.can_params.cc_params.sja1000.btr0 =3D btr0;
-> -	dev->active_params.msg.can_params.cc_params.sja1000.btr1 =3D btr1;
-> +	netdev_info(netdev, "Set bit timing for CPC-USB/ARM7\n");
-> +	netdev_info(netdev, "BTR0=3D0x%02x, BTR1=3D0x%02x\n",
-> +		    sja1000->btr0, sja1000->btr1);
-
-One line of netdev_info should be enough...
-
-> =20
->  	return ems_usb_command_msg(dev, &dev->active_params);
->  }
-> @@ -1039,7 +1050,7 @@ static int ems_usb_probe(struct usb_interface *in=
-tf,
->  	dev->can.bittiming_const =3D &ems_usb_bittiming_const_arm7;
->  	dev->can.do_set_bittiming =3D ems_usb_set_bittiming_arm7;
->  	dev->can.do_set_mode =3D ems_usb_set_mode;
-> -	dev->can.ctrlmode_supported =3D CAN_CTRLMODE_3_SAMPLES;
-> +	dev->can.ctrlmode_supported =3D CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE=
-_LISTENONLY;
->  	init_params_sja1000(&dev->active_params);
->  	dev->ems_usb_write_mode =3D ems_usb_write_mode_arm7;
->  	dev->bulk_rd_buf_size =3D 64;
+> +	/* If the command queue in the device is full of sending requests
+> +	 * a reinitialization would not be possible before the queue is clear=
+ed.
+> +	 */
+> +	err =3D ems_usb_clear_cmd_queue(dev);
+> +	if (err)
+> +		return err;
+> +
+>  	netdev_info(netdev, "Set bit timing for CPC-USB/ARM7\n");
+>  	netdev_info(netdev, "BTR0=3D0x%02x, BTR1=3D0x%02x\n",
+>  		    sja1000->btr0, sja1000->btr1);
 >=20
 
 Marc
@@ -251,23 +220,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---VUe28fbb1g8ny9uxCQfePERDXxjq3efdF--
+--InNYmeQGJ8QP0ukOb3l1PXI9rRg1KTe8K--
 
---4BlBLqvnZA4UyMYWtol8qfNBX4EWyaWf6
+--E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lhpIACgkQqclaivrt
-76m44QgAi+zC0FzKLhPf/IRdJUq7vMNFFE6i74j9MI4cK4XewWFpxBs25W4h+s/t
-dFMCz4DrbIRgsOFjdUi38Aqip7AypCwy5LhP2W+W2DyvckEvG0LLwlqU9etke+ee
-WB7JCJWOOstpS9j/f/qeabhlkPOkhc3mSFKU4s2SiE77aiJz1nYGfBnK5blja+cQ
-y5NWijjdxXuVlLdXNsplE0rNEqt7W1/n3fwIF52Pukc81l6279GT8p1HD9zyQA6b
-fg/fb6DIjtZ5p/DLoCoU2dPIj/EQ0PjXXdiUUdsx/Hg9G3zQ5N8Z87rfvVIQSwuU
-quBEYDmgOkDT9dsGgkC/tjWRpBlSTg==
-=vyPK
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lhwcACgkQqclaivrt
+76l7Kgf/WUZeSwD1hW+dHlQRKHGzvW7A+SwPV9a8Z8J0YRGZrQ1WP1Bcwwj0BmOS
+IMJUn8+62aunC8efVPUsBenTelixJgWtK4aGGtJmmyoz2dDmjFj2r3Xbmp2RLa7F
+y1MKqVTJwRtMUp3nFcSAlpCjv7XEoY6jSLt7cQrJh4ZgWzUuIoBrU3zwfDVtHGrs
+Mtx9SaUwDI7q6kkXMhChSN46lAGC3JfAQ8G7qt1Jm43g4YbZcdB3KIRauyZHVaZz
+TknXmMfrvCYXbNhACATzOzdtO59hkn1lGMd9kPgFmvU4ANQehkyRJpVs7br8k8wp
+hLJUFoY2pV6VxgZGQ+i7nQwNAbqwwQ==
+=z150
 -----END PGP SIGNATURE-----
 
---4BlBLqvnZA4UyMYWtol8qfNBX4EWyaWf6--
+--E7s6ayAiVJKSezU7t5jDqRK8iap2TnO79--
