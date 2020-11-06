@@ -2,39 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4D82A9166
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 09:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030962A91EA
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 10:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726627AbgKFIfV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 03:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S1725848AbgKFJAW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 04:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbgKFIfV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 03:35:21 -0500
+        with ESMTP id S1725835AbgKFJAV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 04:00:21 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C9BC0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 00:35:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6B6C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 01:00:21 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kaxDH-0006Wf-6L; Fri, 06 Nov 2020 09:35:15 +0100
+        id 1kaxbW-00015w-RI; Fri, 06 Nov 2020 10:00:18 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:5c79:10d9:8dcb:593] (unknown [IPv6:2a03:f580:87bc:d400:5c79:10d9:8dcb:593])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 08B9C58BFDC;
-        Fri,  6 Nov 2020 08:35:09 +0000 (UTC)
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     kernel@pengutronix.de, netdev@vger.kernel.org,
-        linux-can@vger.kernel.org, Thomas Kopp <thomas.kopp@microchip.com>,
-        kuba@kernel.org, davem@davemloft.net
-References: <20201103220636.972106-1-mkl@pengutronix.de>
- <20201103220636.972106-22-mkl@pengutronix.de> <20201105162417.GH7308@work>
- <cee3b960-6633-bffd-d1a6-05e4a5e20b2e@pengutronix.de>
- <20201105181453.GJ7308@work>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F0D8458C02B;
+        Fri,  6 Nov 2020 09:00:16 +0000 (UTC)
+To:     Patrick Menschel <menschel.p@posteo.de>, drew@beagleboard.org
+Cc:     socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
+ <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
+ <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
+ <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
+ <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
+ <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+ <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
+ <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,17 +107,16 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [net 21/27] can: mcp251xfd: mcp251xfd_regmap_crc_read(): increase
- severity of CRC read error messages
-Message-ID: <91259ce4-173e-a4fa-b28a-ace99e7ca004@pengutronix.de>
-Date:   Fri, 6 Nov 2020 09:35:05 +0100
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+Message-ID: <40bf253b-fc66-0996-4ac9-08caaa249beb@pengutronix.de>
+Date:   Fri, 6 Nov 2020 10:00:11 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201105181453.GJ7308@work>
+In-Reply-To: <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="QkvYgK9gRd0X9ILCgrKkiORsaWDuxeeWt"
+ boundary="pcZYk4qvoNSNisElNlkUd58LsRdaQyG6f"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,108 +126,48 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---QkvYgK9gRd0X9ILCgrKkiORsaWDuxeeWt
-Content-Type: multipart/mixed; boundary="ty9bPnMBcRcKjO1rHi9nsLd2mfvd565jH";
+--pcZYk4qvoNSNisElNlkUd58LsRdaQyG6f
+Content-Type: multipart/mixed; boundary="Q6Tqd0INi7LBgBDl0lYWfDfOytMdhXHOk";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: kernel@pengutronix.de, netdev@vger.kernel.org, linux-can@vger.kernel.org,
- Thomas Kopp <thomas.kopp@microchip.com>, kuba@kernel.org, davem@davemloft.net
-Message-ID: <91259ce4-173e-a4fa-b28a-ace99e7ca004@pengutronix.de>
-Subject: Re: [net 21/27] can: mcp251xfd: mcp251xfd_regmap_crc_read(): increase
- severity of CRC read error messages
-References: <20201103220636.972106-1-mkl@pengutronix.de>
- <20201103220636.972106-22-mkl@pengutronix.de> <20201105162417.GH7308@work>
- <cee3b960-6633-bffd-d1a6-05e4a5e20b2e@pengutronix.de>
- <20201105181453.GJ7308@work>
-In-Reply-To: <20201105181453.GJ7308@work>
+To: Patrick Menschel <menschel.p@posteo.de>, drew@beagleboard.org
+Cc: socketcan@hartkopp.net, linux-can@vger.kernel.org, josh@macchina.cc
+Message-ID: <40bf253b-fc66-0996-4ac9-08caaa249beb@pengutronix.de>
+Subject: Re: mcp251xfd on RPi 5.4 downstream
+References: <CAPgEAj5eeN7Q9Hs7ZcrvaNCQJ7uW8kyNs3CPiVfQ=AEX9WeYoQ@mail.gmail.com>
+ <CAPgEAj4W61tCSkdrCP2J4dL7WwQ1NKzFCUGjY9o4_qj+NG5KEA@mail.gmail.com>
+ <3d19330b-860b-7d76-bc6d-768a7b00ed4b@pengutronix.de>
+ <CAPgEAj6qZxfsyuarVgvnXkHd3ZUAP-3fgD-nONCcn-C5xY44+Q@mail.gmail.com>
+ <e955f39f-2417-4dca-ee3c-70b328c1014d@posteo.de>
+ <3a5f81d6-13ba-71b8-67a7-fe6e8a13f84a@posteo.de>
+ <CAPgEAj7B5O5nwqr-nMBXNqgx9tD5=9XPG0W0=C21FMD6S+bR-A@mail.gmail.com>
+ <3b7b6353-0493-210a-7c14-e7ccc1067365@pengutronix.de>
+ <CAPgEAj7LcX3cb+syhtR1i3Uo1XkYYFQ_wDPV8GniaA-YwPk2Hg@mail.gmail.com>
+ <08a1fb36-5efb-27d8-f5b9-bd2a923479a2@pengutronix.de>
+ <9e9db79d-9357-19bd-0584-3f97ed49c731@posteo.de>
+ <cd778ddb-eb0e-bff9-5c14-06731ffb35a0@posteo.de>
+ <DM6PR11MB4283DF81AFCFEBB886559B5AFB100@DM6PR11MB4283.namprd11.prod.outlook.com>
+ <27b696e7-2c05-e8f3-ca3e-d30ceb11a818@posteo.de>
+ <1082be86-50d6-40f3-ec44-18d389fd9245@posteo.de>
+ <8bf56109-5e53-ca76-c022-99cf867322a6@pengutronix.de>
+ <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
+In-Reply-To: <a700cc0c-5e12-e7f6-7d9e-3bd7776c3e59@posteo.de>
 
---ty9bPnMBcRcKjO1rHi9nsLd2mfvd565jH
+--Q6Tqd0INi7LBgBDl0lYWfDfOytMdhXHOk
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/5/20 7:14 PM, Manivannan Sadhasivam wrote:
-> On Thu, Nov 05, 2020 at 05:39:31PM +0100, Marc Kleine-Budde wrote:
->> On 11/5/20 5:24 PM, Manivannan Sadhasivam wrote:
->>> Hi Marc,
->>>
->>> On Tue, Nov 03, 2020 at 11:06:30PM +0100, Marc Kleine-Budde wrote:
->>>> During debugging it turned out that some people have setups where th=
-e SPI
->>>> communication is more prone to CRC errors.
->>>>
->>>> Increase the severity of both the transfer retry and transfer failur=
-e message
->>>> to give users feedback without the need to recompile the driver with=
- debug
->>>> enabled.
->>>>
->>>> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>>> Cc: Thomas Kopp <thomas.kopp@microchip.com>
->>>> Link: http://lore.kernel.org/r/20201019190524.1285319-15-mkl@pengutr=
-onix.de
->>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->>>> ---
->>>>  drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c | 16 ++++++++-----=
----
->>>>  1 file changed, 8 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/driv=
-ers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
->>>> index ba25902dd78c..c9ffc5ea2b25 100644
->>>> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
->>>> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
->>>> @@ -330,17 +330,17 @@ mcp251xfd_regmap_crc_read(void *context,
->>>>  			goto out;
->>>>  		}
->>>> =20
->>>> -		netdev_dbg(priv->ndev,
->>>> -			   "CRC read error at address 0x%04x (length=3D%zd, data=3D%*ph,=
- CRC=3D0x%04x) retrying.\n",
->>>> -			   reg, val_len, (int)val_len, buf_rx->data,
->>>> -			   get_unaligned_be16(buf_rx->data + val_len));
->>>> -	}
->>>> -
->>>> -	if (err) {
->>>>  		netdev_info(priv->ndev,
->>>> -			    "CRC read error at address 0x%04x (length=3D%zd, data=3D%*ph=
-, CRC=3D0x%04x).\n",
->>>> +			    "CRC read error at address 0x%04x (length=3D%zd, data=3D%*ph=
-, CRC=3D0x%04x) retrying.\n",
->>>>  			    reg, val_len, (int)val_len, buf_rx->data,
->>>>  			    get_unaligned_be16(buf_rx->data + val_len));
->>>
->>> I'm not finding this inner debug log useful. Does the user really car=
-e
->>> about the iterations it took to read a register? Just throwing the er=
-ror
->>> after max try seems better to me.
+On 11/5/20 7:11 PM, Patrick Menschel wrote:
+>>> Its just a bread board install and I had to reduce the Spi-Max-Freque=
+ncy
+>>> due to 10cm long cables. It least I believe it's the cable length.
 >>
->> Bitflips on the SPI should not happen, at least not regularly. Even wi=
-th my
->> breadboard setup and max SPI frequency, I don't see any SPI CRC errors=
-, unless
->> there is bad cabling. Then a retry most of the times helps and the use=
-r doesn't
->> notice. This drops performance...Yes logging drop performance, too, bu=
-t at least
->> someone will notice.
->>
->> My rationale was to give the user feedback and not cover a potential p=
-roblem.
->> The driver is new and probably not widely used and I have no idea how =
-often it
->> runs into read-CRC problems in production use.
->>
+>> What happens if you don't reduce the SPI frequency?
 >=20
-> Okay. Let's see if anyone complain ;)
->=20
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> CRC Errors above 16Mhz spi frequency.
 
-The patch is part of my pull request and has already been merged by Jakub=
- to
-net/master.
+Ok - Which SoC are you using? rpi4?
 
 Marc
 
@@ -228,23 +178,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---ty9bPnMBcRcKjO1rHi9nsLd2mfvd565jH--
+--Q6Tqd0INi7LBgBDl0lYWfDfOytMdhXHOk--
 
---QkvYgK9gRd0X9ILCgrKkiORsaWDuxeeWt
+--pcZYk4qvoNSNisElNlkUd58LsRdaQyG6f
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lCrkACgkQqclaivrt
-76l+fAgArigckgI1GSRdefk/ZhqaVuC0kRQ4RlBdLFDVUxg6KdK2OG/XIMcdTR6c
-LwJuDviSnpjRwnSdC3p1lr9C5ogn5Tl02Xs7ZndNbnRMUMuDVkqku9+hVyT7dLk6
-+nXo5OHy8BVsmz20lhlDbQmJ1p9y7i46WC6ZHrG6FLFSfkyjtBTC+olQQAqRyLoU
-jU4ohWRxzVcyNRMnCZD5gvLxnJdnQErGkuMfu0tqId0+6GW813s+TbhNb5zgYxxc
-ld4m06LWeI7cMluAbCjZkhqN1bna9lNYEjcREO7BY9JydsPnw6P6MqduhJJqm731
-YB4axwHzT1srN6oteNgdL8zSJjLbDg==
-=z5F5
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lEJwACgkQqclaivrt
+76lj2wf/RiWiutAWTSRxilyQusiKRORaqc9ZelxOXxrcLD8+l4UEXl7HEeSSUt+b
+kz7W7/CO6kwq1BP9tUxM3tu0nIzbIrGmyIe/7jIGPB4DjR3Qts5efZbi4Rnfaiad
+tTvd0najcH489SOUJKJqoGDV3kSe2yOiFXsKLmff1LSdxQ+Hlhxf9HZTklS9GgjT
+06zZyeOb7/468c4mt5cnPrcBeFsg4MkTlBYb0a/1JXZ8tjvJNE0dUGvwsQrVxPfI
+Pfo3isFqAiqi39u4GGW/Urr0sBjLBMv+7wkeZDsAw57bXCrqHxAPEyxVq+K+UCKD
+DQoP62xp/XyLe+DR2V2L0dYHYH1sTw==
+=7IkY
 -----END PGP SIGNATURE-----
 
---QkvYgK9gRd0X9ILCgrKkiORsaWDuxeeWt--
+--pcZYk4qvoNSNisElNlkUd58LsRdaQyG6f--
