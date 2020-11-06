@@ -2,38 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9254C2A9B60
-	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 19:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E592A9B8D
+	for <lists+linux-can@lfdr.de>; Fri,  6 Nov 2020 19:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727626AbgKFSCE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 6 Nov 2020 13:02:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S1727073AbgKFSFg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 6 Nov 2020 13:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727069AbgKFSCE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 13:02:04 -0500
+        with ESMTP id S1726999AbgKFSFe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 6 Nov 2020 13:05:34 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279E4C0613CF
-        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 10:02:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D15C0613CF
+        for <linux-can@vger.kernel.org>; Fri,  6 Nov 2020 10:05:33 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kb63m-0008Lz-BD; Fri, 06 Nov 2020 19:02:02 +0100
+        id 1kb679-0000Og-QW; Fri, 06 Nov 2020 19:05:31 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06] (2a03-f580-87bc-d400-33f0-799f-c05f-fe06.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:33f0:799f:c05f:fe06])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7313C58C6C8;
-        Fri,  6 Nov 2020 18:02:01 +0000 (UTC)
-Subject: Re: [PATCH 15/17] can: ems_usb: In CAN error handling routine
- checking which CAN controller type is issuing the error
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A6CF958C6CE;
+        Fri,  6 Nov 2020 18:05:30 +0000 (UTC)
 To:     Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
         linux-can@vger.kernel.org
 Cc:     wg@grandegger.com
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-16-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-17-uttenthaler@ems-wuensche.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +93,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <d84c8bd0-1f27-6737-bffc-40413c29d3e9@pengutronix.de>
-Date:   Fri, 6 Nov 2020 19:01:58 +0100
+Subject: Re: [PATCH 16/17] can: ems_usb: Added error handling part for
+ CPC-USB/FD. Get some structures packed
+Message-ID: <0f911f89-2104-c563-abe5-58502ee2b53a@pengutronix.de>
+Date:   Fri, 6 Nov 2020 19:05:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201106170206.32162-16-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-17-uttenthaler@ems-wuensche.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="OzKOJnSNyhv28UnTKllfDfX4rVzcGdv7d"
+ boundary="x7TsRn4WoH7Mq3MhL5zwg4fYpW5uP7AEi"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,143 +113,202 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---OzKOJnSNyhv28UnTKllfDfX4rVzcGdv7d
-Content-Type: multipart/mixed; boundary="JDwY3MjNDWtSntbxRr89euofNixb4LqCp";
+--x7TsRn4WoH7Mq3MhL5zwg4fYpW5uP7AEi
+Content-Type: multipart/mixed; boundary="KyRos2sPwuXmClRQhU9jPqxlmfBiNMKQI";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>,
  linux-can@vger.kernel.org
 Cc: wg@grandegger.com
-Message-ID: <d84c8bd0-1f27-6737-bffc-40413c29d3e9@pengutronix.de>
-Subject: Re: [PATCH 15/17] can: ems_usb: In CAN error handling routine
- checking which CAN controller type is issuing the error
+Message-ID: <0f911f89-2104-c563-abe5-58502ee2b53a@pengutronix.de>
+Subject: Re: [PATCH 16/17] can: ems_usb: Added error handling part for
+ CPC-USB/FD. Get some structures packed
 References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <20201106170206.32162-16-uttenthaler@ems-wuensche.com>
-In-Reply-To: <20201106170206.32162-16-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-17-uttenthaler@ems-wuensche.com>
+In-Reply-To: <20201106170206.32162-17-uttenthaler@ems-wuensche.com>
 
---JDwY3MjNDWtSntbxRr89euofNixb4LqCp
+--KyRos2sPwuXmClRQhU9jPqxlmfBiNMKQI
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
+please make stuct packing a separate patch
+
 On 11/6/20 6:02 PM, Gerhard Uttenthaler wrote:
 > Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 > ---
->  drivers/net/can/usb/ems_usb.c | 77 +++++++++++++++++++----------------=
+>  drivers/net/can/usb/ems_usb.c | 108 +++++++++++++++++++++++++++++++++-=
 
->  1 file changed, 43 insertions(+), 34 deletions(-)
+>  1 file changed, 105 insertions(+), 3 deletions(-)
 >=20
 > diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_us=
 b.c
-> index c36f02eeec85..4a67c57c4760 100644
+> index 4a67c57c4760..7ede3ac08ed5 100644
 > --- a/drivers/net/can/usb/ems_usb.c
 > +++ b/drivers/net/can/usb/ems_usb.c
-> @@ -103,6 +103,9 @@ MODULE_LICENSE("GPL v2");
+> @@ -103,6 +103,23 @@ MODULE_LICENSE("GPL v2");
 > =20
 >  #define SJA1000_DEFAULT_OUTPUT_CONTROL 0xDA
 > =20
-> +#define SJA1000   2 // NXP basic CAN controller
-> +#define LPC546XX  5 // NXP CAN FD controller
+> +#define LPC546XX_ERROR_MASK  0x07
+> +#define LPC546XX_ERROR_STUFF 0x01
+> +#define LPC546XX_ERROR_FORM  0x02
+> +#define LPC546XX_ERROR_ACK   0x03
+> +#define LPC546XX_ERROR_BIT1  0x04
+> +#define LPC546XX_ERROR_BIT0  0x05
+> +#define LPC546XX_ERROR_CRC   0x06
+> +#define LPC546XX_ERROR_EP    0x20
+> +#define LPC546XX_ERROR_EW    0x40
+> +#define LPC546XX_ERROR_BO    0x80
 
-please add a proper prefix to these definees
+BIT()
+only one space
+and add a proper prefix
 
 > +
->  /* CPC-USB/ARM7 actually uses a 16MHz clock to generate the CAN clock
->   * but it expects SJA1000 bit settings based on 8MHz (is internally
->   * converted).
-> @@ -441,6 +444,9 @@ static void ems_usb_rx_err(struct ems_usb *dev, str=
-uct ems_cpc_msg *msg)
->  	if (!skb)
->  		return;
+> +#define LPC546XX_ACT_MASK 0x18
+> +#define LPC546XX_ACT_SYNC 0x00
+> +#define LPC546XX_ACT_IDLE 0x08
+> +#define LPC546XX_ACT_RX   0x10
+> +#define LPC546XX_ACT_TX   0x18
+
+only one space
+and add a proper prefix
+
+> +
+>  #define SJA1000   2 // NXP basic CAN controller
+>  #define LPC546XX  5 // NXP CAN FD controller
 > =20
-> +	/* The CPC_MSG_TYPE_CAN_STATE works for both
-> +	 * CPC-USB/ARM7 and CPC-USB/FD
-> +	 */
->  	if (msg->type =3D=3D CPC_MSG_TYPE_CAN_STATE) {
->  		u8 state =3D msg->msg.can_state;
+> @@ -217,20 +234,25 @@ struct cpc_confirm {
+>  };
 > =20
-> @@ -458,40 +464,43 @@ static void ems_usb_rx_err(struct ems_usb *dev, s=
-truct ems_cpc_msg *msg)
->  			dev->can.can_stats.error_passive++;
+>  /* Structure for overrun conditions */
+> -struct cpc_overrun {
+> +struct __packed cpc_overrun {
+>  	u8 event;
+>  	u8 count;
+>  };
+> =20
+>  /* SJA1000 CAN errors (compatible to NXP LPC2119) */
+> -struct cpc_sja1000_can_error {
+> +struct __packed cpc_sja1000_can_error {
+>  	u8 ecc;
+>  	u8 rxerr;
+>  	u8 txerr;
+>  };
+> =20
+> +struct __packed cpc_lpc546xx_can_error {
+> +	__le32 psr; /* protocol status register */
+> +	__le32 ecr; /* error counter register */
+> +};
+> +
+>  /* structure for CAN error conditions */
+> -struct cpc_can_error {
+> +struct __packed cpc_can_error {
+>  	u8 ecode;
+> =20
+>  	struct {
+> @@ -239,6 +261,7 @@ struct cpc_can_error {
+>  		/* Other controllers may also provide error code capture regs */
+>  		union {
+>  			struct cpc_sja1000_can_error sja1000;
+> +			struct cpc_lpc546xx_can_error lpc546xx;
+>  		} regs;
+>  	} cc;
+>  };
+> @@ -502,6 +525,85 @@ static void ems_usb_rx_err(struct ems_usb *dev, st=
+ruct ems_cpc_msg *msg)
+>  				    CAN_ERR_CRTL_TX_PASSIVE : CAN_ERR_CRTL_RX_PASSIVE;
+>  			}
 >  		}
->  	} else if (msg->type =3D=3D CPC_MSG_TYPE_CAN_FRAME_ERROR) {
-> -		u8 ecc =3D msg->msg.error.cc.regs.sja1000.ecc;
-> -		u8 txerr =3D msg->msg.error.cc.regs.sja1000.txerr;
-> -		u8 rxerr =3D msg->msg.error.cc.regs.sja1000.rxerr;
-> -
-> -		/* bus error interrupt */
-> -		dev->can.can_stats.bus_error++;
-> -		stats->rx_errors++;
-> -
-> -		cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
-> -
-> -		switch (ecc & SJA1000_ECC_MASK) {
-> -		case SJA1000_ECC_BIT:
-> -			cf->data[2] |=3D CAN_ERR_PROT_BIT;
-> -			break;
-> -		case SJA1000_ECC_FORM:
-> -			cf->data[2] |=3D CAN_ERR_PROT_FORM;
-> -			break;
-> -		case SJA1000_ECC_STUFF:
-> -			cf->data[2] |=3D CAN_ERR_PROT_STUFF;
-> -			break;
-> -		default:
-> -			cf->data[3] =3D ecc & SJA1000_ECC_SEG;
-> -			break;
-> -		}
-> -
-> -		/* Error occurred during transmission? */
-> -		if ((ecc & SJA1000_ECC_DIR) =3D=3D 0)
-> -			cf->data[2] |=3D CAN_ERR_PROT_TX;
-> -
-> -		if (dev->can.state =3D=3D CAN_STATE_ERROR_WARNING ||
-> -		    dev->can.state =3D=3D CAN_STATE_ERROR_PASSIVE) {
-> -			cf->can_id |=3D CAN_ERR_CRTL;
-> -			cf->data[1] =3D (txerr > rxerr) ?
-> -			    CAN_ERR_CRTL_TX_PASSIVE : CAN_ERR_CRTL_RX_PASSIVE;
-> +		// CPC-USB/ARM7
+> +
+> +		/* CPC-USB/FD */
+> +		else if (msg->msg.error.cc.cc_type =3D=3D LPC546XX) {
+> +			struct net_device *netdev =3D dev->netdev;
+> +			u32 psr =3D msg->msg.error.cc.regs.lpc546xx.psr;
+> +			u8 txerr =3D (u8)msg->msg.error.cc.regs.lpc546xx.ecr;
+> +			u8 rxerr =3D (u8)(msg->msg.error.cc.regs.lpc546xx.ecr >> 8);
 
-no c++ comments
+the case ist not needed
 
-> +		if (msg->msg.error.cc.cc_type =3D=3D SJA1000) {
-> +			u8 ecc =3D msg->msg.error.cc.regs.sja1000.ecc;
-> +			u8 txerr =3D msg->msg.error.cc.regs.sja1000.txerr;
-> +			u8 rxerr =3D msg->msg.error.cc.regs.sja1000.rxerr;
 > +
 > +			/* bus error interrupt */
 > +			dev->can.can_stats.bus_error++;
-> +			stats->rx_errors++;
 > +
 > +			cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
 > +
-> +			switch (ecc & SJA1000_ECC_MASK) {
-> +			case SJA1000_ECC_BIT:
-> +				cf->data[2] |=3D CAN_ERR_PROT_BIT;
-> +				break;
-> +			case SJA1000_ECC_FORM:
-> +				cf->data[2] |=3D CAN_ERR_PROT_FORM;
-> +				break;
-> +			case SJA1000_ECC_STUFF:
+> +			switch (psr & LPC546XX_ERROR_MASK) {
+> +			case LPC546XX_ERROR_STUFF:
+> +				netdev_dbg(netdev, "stuff error\n");
 > +				cf->data[2] |=3D CAN_ERR_PROT_STUFF;
 > +				break;
+> +			case LPC546XX_ERROR_FORM:
+> +				netdev_dbg(netdev, "form error\n");
+> +				cf->data[2] |=3D CAN_ERR_PROT_FORM;
+> +				break;
+> +			case LPC546XX_ERROR_ACK:
+> +				netdev_dbg(netdev, "ack error\n");
+> +				cf->data[3] =3D CAN_ERR_PROT_LOC_ACK;
+> +				break;
+> +			case LPC546XX_ERROR_BIT1:
+> +				netdev_dbg(netdev, "bit1 error\n");
+> +				cf->data[2] |=3D CAN_ERR_PROT_BIT1;
+> +				break;
+> +			case LPC546XX_ERROR_BIT0:
+> +				netdev_dbg(netdev, "bit0 error\n");
+> +				cf->data[2] |=3D CAN_ERR_PROT_BIT0;
+> +				break;
+> +			case LPC546XX_ERROR_CRC:
+> +				netdev_dbg(netdev, "CRC error\n");
+> +				cf->data[3] =3D CAN_ERR_PROT_LOC_CRC_SEQ;
+> +				break;
 > +			default:
-> +				cf->data[3] =3D ecc & SJA1000_ECC_SEG;
 > +				break;
 > +			}
 > +
-> +			/* Error occurred during transmission? */
-> +			if ((ecc & SJA1000_ECC_DIR) =3D=3D 0)
-> +				cf->data[2] |=3D CAN_ERR_PROT_TX;
-> +
-> +			if (dev->can.state =3D=3D CAN_STATE_ERROR_WARNING ||
-> +			    dev->can.state =3D=3D CAN_STATE_ERROR_PASSIVE) {
-> +				cf->can_id |=3D CAN_ERR_CRTL;
-> +				cf->data[1] =3D (txerr > rxerr) ?
-> +				    CAN_ERR_CRTL_TX_PASSIVE : CAN_ERR_CRTL_RX_PASSIVE;
+> +			/* Let activity flags decide direction */
+> +			switch (psr & LPC546XX_ACT_MASK) {
+> +			case LPC546XX_ACT_SYNC:
+> +				__attribute__((fallthrough));
+
+please use "fallthrough;"
+
+> +			case LPC546XX_ACT_IDLE:
+> +				__attribute__((fallthrough));
+> +			case LPC546XX_ACT_RX:
+> +				stats->rx_errors++;
+> +				break;
+> +			case LPC546XX_ACT_TX:
+> +				stats->tx_errors++;
+> +				break;
 > +			}
->  		}
+> +
+> +			/* Error warning status */
+> +			if (psr & LPC546XX_ERROR_EW) {
+> +				cf->data[1] =3D (txerr > rxerr) ?
+> +					CAN_ERR_CRTL_TX_WARNING :
+> +					CAN_ERR_CRTL_RX_WARNING;
+> +				cf->can_id |=3D CAN_ERR_CRTL;
+> +			}
+> +
+> +			/* Error passive status */
+> +			if (psr & LPC546XX_ERROR_EP) {
+> +				cf->data[1] |=3D (txerr > rxerr) ?
+> +					CAN_ERR_CRTL_TX_PASSIVE :
+> +					CAN_ERR_CRTL_RX_PASSIVE;
+> +				cf->can_id |=3D CAN_ERR_CRTL;
+> +			}
+> +
+> +			/* Error bus off status */
+> +			if (psr & LPC546XX_ERROR_BO)
+> +				cf->can_id |=3D CAN_ERR_BUSOFF;
+> +
+> +			cf->data[6] =3D txerr;
+> +			cf->data[7] =3D rxerr;
+> +		}
 >  	} else if (msg->type =3D=3D CPC_MSG_TYPE_OVERRUN) {
 >  		cf->can_id |=3D CAN_ERR_CRTL;
+>  		cf->data[1] =3D CAN_ERR_CRTL_RX_OVERFLOW;
 >=20
 
 Marc
@@ -261,23 +320,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---JDwY3MjNDWtSntbxRr89euofNixb4LqCp--
+--KyRos2sPwuXmClRQhU9jPqxlmfBiNMKQI--
 
---OzKOJnSNyhv28UnTKllfDfX4rVzcGdv7d
+--x7TsRn4WoH7Mq3MhL5zwg4fYpW5uP7AEi
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lj5YACgkQqclaivrt
-76lfoQgArX65KWC+RAOd/u/g703LNQ8vqM8syC2CdwfPKcvHwUKP1PQ/JgRZPaGE
-5ZEwpHi/iLjmLCPTFlWecegnKFU8YWOMZuI32r6TN39XfjrxMwWVOKchAUPnGeDH
-I3Ec+R57jhZm9uzVjvv3r8hdyIkpxRFf7F7GlMASLaDyuLRXyGj1MoMUlbwNL8yb
-URt17M0vZjVSfm0sRpa9KFDIV21Rs79CPJrKsvea8gavD6Ha9axM59asHafRhXgW
-qNzSRL0IVkpFlFzuIvXtTaHraa+FtGb83wxNZplbYn/GVCx0Im92Dn8d/U8y2ITD
-Fhqtb8E5NTNLnfMJrfvde3cYD5WYng==
-=Lbe7
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+lkGcACgkQqclaivrt
+76neNAgAk7HlxeVs9CwQ9Bf4eIeoPwp1njr4GNSy1iKBXN3Aa6acBPFQdJEfAcRH
+5z8yxV+J2HmYUNrl9/98hB6QwJB3loXHqvJraTKWGeH82eBP3IhbvNkEnClHBE1y
+7P1qGgs8yakIctiDRf6pfGVkgIJDM4EXYcSbCIL9NJyRchlDv9Se2WTXCgTSxgrm
+2fYq2H3EXjSzwn9mi1Gk4sbNMw5RNX113mBavXgH8zpKVnHn+M7ehbV3psI2hkLp
+/PPoJsldVkHSMqhp29rgYs09vjKmxaQtYS+G58FpqlLwGXUvmOTABp+fXKAZ7XmP
+Mq5OIbpTT/9OQycg4ZDnQXqLOJCGIA==
+=HhSh
 -----END PGP SIGNATURE-----
 
---OzKOJnSNyhv28UnTKllfDfX4rVzcGdv7d--
+--x7TsRn4WoH7Mq3MhL5zwg4fYpW5uP7AEi--
