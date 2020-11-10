@@ -2,292 +2,223 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E18192AD36D
-	for <lists+linux-can@lfdr.de>; Tue, 10 Nov 2020 11:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1583B2AD3D2
+	for <lists+linux-can@lfdr.de>; Tue, 10 Nov 2020 11:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731960AbgKJKTN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Nov 2020 05:19:13 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.171]:12399 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731729AbgKJKTM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Nov 2020 05:19:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1605003546;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=+hbqq5QMUb3pkjLtHBdNPzPERlh5RJ9buD6zG+C1rOw=;
-        b=mDOIDUSNOArNfpfdk10KepiAHqT/qqCscWv6wnJD8r/l9F7I+QVN3aNc/zfcocETaH
-        bWTAGbYacsoVUAYOtyrDP30JZ7D29rC5rkKseXsI3XygUJdf7k6wuw0QJOUc7fG6v46s
-        nEAr8WO7Wg0MrrxSMl5ztgtlRvVmDhIigm9EO1U18OLgsmQPMcTUHhZIvldjHIEf7il0
-        6BdxCT8fF6XzrKdzOsFiabn8TOE6dcPwCAPkhJhMpI70tfM9HTfA6nMTtqL5yuYgSqSt
-        f5Vs3r//v79lqP4uUYVaj+NL8OHSZCh9i3+6qQmWtUf84I3E9NTS8vRvZ2nmiWQq90FB
-        Hj+w==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejudJywjsi+/Fw=="
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-        by smtp.strato.de (RZmta 47.3.3 DYNA|AUTH)
-        with ESMTPSA id V0298cwAAAJ4AQm
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 10 Nov 2020 11:19:04 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org, mkl@pengutronix.de,
-        mailhol.vincent@wanadoo.fr
-Cc:     netdev@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Subject: [PATCH v6 8/8] can-dev: add len8_dlc support for various CAN USB adapters
-Date:   Tue, 10 Nov 2020 11:18:52 +0100
-Message-Id: <20201110101852.1973-9-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201110101852.1973-1-socketcan@hartkopp.net>
-References: <20201110101852.1973-1-socketcan@hartkopp.net>
+        id S1726706AbgKJKbK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Nov 2020 05:31:10 -0500
+Received: from mail3.ems-wuensche.com ([81.169.186.156]:32935 "EHLO
+        mail3.ems-wuensche.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726690AbgKJKbK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Nov 2020 05:31:10 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by h2257714.serverkompetenz.net (Postfix) with ESMTP id 10D9DFF19A
+        for <linux-can@vger.kernel.org>; Tue, 10 Nov 2020 10:31:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
+X-Spam-Flag: NO
+X-Spam-Score: -1.902
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.902 tagged_above=-9999.9 required=5
+        tests=[BAYES_00=-1.9, NICE_REPLY_A=-0.001, NO_RECEIVED=-0.001,
+        NO_RELAYS=-0.001, URIBL_BLOCKED=0.001]
+        autolearn=unavailable autolearn_force=no
+Received: from mail3.ems-wuensche.com ([81.169.186.156])
+        by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id F67dqW10U37z for <linux-can@vger.kernel.org>;
+        Tue, 10 Nov 2020 11:31:06 +0100 (CET)
+Subject: Re: [PATCH 05/17] can: ems_usb: Replace constant define
+ RX_BUFFER_SIZE by variable bulk_rd_buf_size, because this will have different
+ values for CPC-USB/ARM7 and CPC-USB/FD. For the same reason added a function
+ pointer ems_usb_write_mode. In device probe function added a switch statement
+ to select between CPC-USB/ARM7 and CPC-USB/FD and rearranged initialization
+ sequence accordingly.
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     wg@grandegger.com
+References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
+ <20201106170206.32162-6-uttenthaler@ems-wuensche.com>
+ <a5cabc30-4e7c-dd3d-9f4c-afc42864fe10@pengutronix.de>
+From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+Message-ID: <9474fc10-dc04-28fa-9459-54545ac8d293@ems-wuensche.com>
+Date:   Tue, 10 Nov 2020 11:31:02 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <a5cabc30-4e7c-dd3d-9f4c-afc42864fe10@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Support the Classical CAN raw DLC functionality to send and receive DLC
-values from 9 .. 15 on various Classical CAN capable USB network drivers:
+Am 06.11.20 um 18:15 schrieb Marc Kleine-Budde:
+> Please keep the patch subject within reasonable length.
+> It sould describe what you have done. The patch description should describe the why.
+OK
 
-- gs_usb
-- pcan_usb
-- pcan_usb_fd
-- usb_8dev
+> 
+> On 11/6/20 6:01 PM, Gerhard Uttenthaler wrote:
+>> Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
+>> ---
+>>  drivers/net/can/usb/ems_usb.c | 66 +++++++++++++++++++++++++----------
+>>  1 file changed, 47 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
+>> index 4ed0d681a68c..a3943042b8c8 100644
+>> --- a/drivers/net/can/usb/ems_usb.c
+>> +++ b/drivers/net/can/usb/ems_usb.c
+>> @@ -266,7 +266,6 @@ static struct usb_device_id ems_usb_table[] = {
+>>  
+>>  MODULE_DEVICE_TABLE(usb, ems_usb_table);
+>>  
+>> -#define RX_BUFFER_SIZE      64
+> 
+> Can you keep this define instead of using a "64" below? Give it a proper
+> prefix/postfix if needed.
+OK
 
-Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- drivers/net/can/usb/gs_usb.c               |  7 ++++---
- drivers/net/can/usb/peak_usb/pcan_usb.c    |  8 +++++---
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 19 +++++++++++++------
- drivers/net/can/usb/usb_8dev.c             | 10 ++++++----
- 4 files changed, 28 insertions(+), 16 deletions(-)
+> 
+>>  #define CPC_HEADER_SIZE     4
+>>  #define INTR_IN_BUFFER_SIZE 4
+>>  
+>> @@ -290,6 +289,8 @@ struct ems_usb {
+>>  	struct usb_device *udev;
+>>  	struct net_device *netdev;
+>>  
+>> +	u32 bulk_rd_buf_size;
+>> +
+>>  	atomic_t active_tx_urbs;
+>>  	struct usb_anchor tx_submitted;
+>>  	struct ems_tx_urb_context tx_contexts[MAX_TX_URBS];
+>> @@ -301,7 +302,9 @@ struct ems_usb {
+>>  	u8 *tx_msg_buffer;
+>>  
+>>  	u8 *intr_in_buffer;
+>> -	unsigned int free_slots; /* remember number of available slots */
+>> +	u32 free_slots; /* remember number of available slots */
+> 
+> nitpick
+> Why this change?
+It was the last "unsigned int". They all are u32 now.
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 940589667a7f..bd2c828030e9 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -329,11 +329,11 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
- 		if (!skb)
- 			return;
- 
- 		cf->can_id = hf->can_id;
- 
--		cf->len = can_cc_dlc2len(hf->len);
-+		cf->len = can_get_cc_len(dev->can.ctrlmode, cf,	hf->len);
- 		memcpy(cf->data, hf->data, 8);
- 
- 		/* ERROR frames tell us information about the controller */
- 		if (hf->can_id & CAN_ERR_FLAG)
- 			gs_update_state(dev, cf);
-@@ -502,11 +502,12 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
- 	hf->channel = dev->channel;
- 
- 	cf = (struct can_frame *)skb->data;
- 
- 	hf->can_id = cf->can_id;
--	hf->len = cf->len;
-+	hf->len = can_get_cc_dlc(dev->can.ctrlmode, cf);
-+
- 	memcpy(hf->data, cf->data, cf->len);
- 
- 	usb_fill_bulk_urb(urb, dev->udev,
- 			  usb_sndbulkpipe(dev->udev, GSUSB_ENDPOINT_OUT),
- 			  hf,
-@@ -856,11 +857,11 @@ static struct gs_can *gs_make_candev(unsigned int channel,
- 	dev->can.state = CAN_STATE_STOPPED;
- 	dev->can.clock.freq = bt_const->fclk_can;
- 	dev->can.bittiming_const = &dev->bt_const;
- 	dev->can.do_set_bittiming = gs_usb_set_bittiming;
- 
--	dev->can.ctrlmode_supported = 0;
-+	dev->can.ctrlmode_supported = CAN_CTRLMODE_CC_LEN8_DLC;
- 
- 	if (bt_const->feature & GS_CAN_FEATURE_LISTEN_ONLY)
- 		dev->can.ctrlmode_supported |= CAN_CTRLMODE_LISTENONLY;
- 
- 	if (bt_const->feature & GS_CAN_FEATURE_LOOP_BACK)
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
-index ec34f87cc02c..a418e43ef59d 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-@@ -732,11 +732,11 @@ static int pcan_usb_decode_data(struct pcan_usb_msg_context *mc, u8 status_len)
- 		mc->ptr += 2;
- 
- 		cf->can_id = le16_to_cpu(tmp16) >> 5;
- 	}
- 
--	cf->len = can_cc_dlc2len(rec_len);
-+	cf->len = can_get_cc_len(mc->pdev->dev.can.ctrlmode, cf, rec_len);
- 
- 	/* Only first packet timestamp is a word */
- 	if (pcan_usb_decode_ts(mc, !mc->rec_ts_idx))
- 		goto decode_failed;
- 
-@@ -836,11 +836,12 @@ static int pcan_usb_encode_msg(struct peak_usb_device *dev, struct sk_buff *skb,
- 	obuf[1] = 1;
- 
- 	pc = obuf + PCAN_USB_MSG_HEADER_LEN;
- 
- 	/* status/len byte */
--	*pc = cf->len;
-+	*pc = can_get_cc_dlc(dev->can.ctrlmode, cf);
-+
- 	if (cf->can_id & CAN_RTR_FLAG)
- 		*pc |= PCAN_USB_STATUSLEN_RTR;
- 
- 	/* can id */
- 	if (cf->can_id & CAN_EFF_FLAG) {
-@@ -990,11 +991,12 @@ static const struct can_bittiming_const pcan_usb_const = {
- const struct peak_usb_adapter pcan_usb = {
- 	.name = "PCAN-USB",
- 	.device_id = PCAN_USB_PRODUCT_ID,
- 	.ctrl_count = 1,
- 	.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY |
--			      CAN_CTRLMODE_BERR_REPORTING,
-+			      CAN_CTRLMODE_BERR_REPORTING |
-+			      CAN_CTRLMODE_CC_LEN8_DLC,
- 	.clock = {
- 		.freq = PCAN_USB_CRYSTAL_HZ / 2 ,
- 	},
- 	.bittiming_const = &pcan_usb_const,
- 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index 761e78d8e647..93468106c97b 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -497,11 +497,13 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb_fd_if *usb_if,
- 		/* CAN 2.0 frame case */
- 		skb = alloc_can_skb(netdev, (struct can_frame **)&cfd);
- 		if (!skb)
- 			return -ENOMEM;
- 
--		cfd->len = can_cc_dlc2len(pucan_msg_get_dlc(rm));
-+		cfd->len = can_get_cc_len(dev->can.ctrlmode,
-+					  (struct can_frame *)cfd,
-+					  pucan_msg_get_dlc(rm));
- 	}
- 
- 	cfd->can_id = le32_to_cpu(rm->can_id);
- 
- 	if (rx_msg_flags & PUCAN_MSG_EXT_ID)
-@@ -765,11 +767,12 @@ static int pcan_usb_fd_encode_msg(struct peak_usb_device *dev,
- 
- 		if (cfd->flags & CANFD_ESI)
- 			tx_msg_flags |= PUCAN_MSG_ERROR_STATE_IND;
- 	} else {
- 		/* CAND 2.0 frames */
--		len = cfd->len;
-+		len = can_get_cc_dlc(dev->can.ctrlmode,
-+				     (struct can_frame *)cfd);
- 
- 		if (cfd->can_id & CAN_RTR_FLAG)
- 			tx_msg_flags |= PUCAN_MSG_RTR;
- 	}
- 
-@@ -1034,11 +1037,12 @@ static const struct can_bittiming_const pcan_usb_fd_data_const = {
- const struct peak_usb_adapter pcan_usb_fd = {
- 	.name = "PCAN-USB FD",
- 	.device_id = PCAN_USBFD_PRODUCT_ID,
- 	.ctrl_count = PCAN_USBFD_CHANNEL_COUNT,
- 	.ctrlmode_supported = CAN_CTRLMODE_FD |
--			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
-+			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY |
-+			CAN_CTRLMODE_CC_LEN8_DLC,
- 	.clock = {
- 		.freq = PCAN_UFD_CRYSTAL_HZ,
- 	},
- 	.bittiming_const = &pcan_usb_fd_const,
- 	.data_bittiming_const = &pcan_usb_fd_data_const,
-@@ -1106,11 +1110,12 @@ static const struct can_bittiming_const pcan_usb_chip_data_const = {
- const struct peak_usb_adapter pcan_usb_chip = {
- 	.name = "PCAN-Chip USB",
- 	.device_id = PCAN_USBCHIP_PRODUCT_ID,
- 	.ctrl_count = PCAN_USBFD_CHANNEL_COUNT,
- 	.ctrlmode_supported = CAN_CTRLMODE_FD |
--		CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
-+		CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY |
-+		CAN_CTRLMODE_CC_LEN8_DLC,
- 	.clock = {
- 		.freq = PCAN_UFD_CRYSTAL_HZ,
- 	},
- 	.bittiming_const = &pcan_usb_chip_const,
- 	.data_bittiming_const = &pcan_usb_chip_data_const,
-@@ -1178,11 +1183,12 @@ static const struct can_bittiming_const pcan_usb_pro_fd_data_const = {
- const struct peak_usb_adapter pcan_usb_pro_fd = {
- 	.name = "PCAN-USB Pro FD",
- 	.device_id = PCAN_USBPROFD_PRODUCT_ID,
- 	.ctrl_count = PCAN_USBPROFD_CHANNEL_COUNT,
- 	.ctrlmode_supported = CAN_CTRLMODE_FD |
--			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
-+			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY |
-+			CAN_CTRLMODE_CC_LEN8_DLC,
- 	.clock = {
- 		.freq = PCAN_UFD_CRYSTAL_HZ,
- 	},
- 	.bittiming_const = &pcan_usb_pro_fd_const,
- 	.data_bittiming_const = &pcan_usb_pro_fd_data_const,
-@@ -1250,11 +1256,12 @@ static const struct can_bittiming_const pcan_usb_x6_data_const = {
- const struct peak_usb_adapter pcan_usb_x6 = {
- 	.name = "PCAN-USB X6",
- 	.device_id = PCAN_USBX6_PRODUCT_ID,
- 	.ctrl_count = PCAN_USBPROFD_CHANNEL_COUNT,
- 	.ctrlmode_supported = CAN_CTRLMODE_FD |
--			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
-+			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY |
-+			CAN_CTRLMODE_CC_LEN8_DLC,
- 	.clock = {
- 		.freq = PCAN_UFD_CRYSTAL_HZ,
- 	},
- 	.bittiming_const = &pcan_usb_x6_const,
- 	.data_bittiming_const = &pcan_usb_x6_data_const,
-diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-index 6517aaeb4bc0..8078ab44a768 100644
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -468,11 +468,12 @@ static void usb_8dev_rx_can_msg(struct usb_8dev_priv *priv,
- 		skb = alloc_can_skb(priv->netdev, &cf);
- 		if (!skb)
- 			return;
- 
- 		cf->can_id = be32_to_cpu(msg->id);
--		cf->len = can_cc_dlc2len(msg->dlc & 0xF);
-+		cf->len = can_get_cc_len(priv->can.ctrlmode, cf,
-+					 msg->dlc & 0xF);
- 
- 		if (msg->flags & USB_8DEV_EXTID)
- 			cf->can_id |= CAN_EFF_FLAG;
- 
- 		if (msg->flags & USB_8DEV_RTR)
-@@ -635,11 +636,11 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
- 
- 	if (cf->can_id & CAN_EFF_FLAG)
- 		msg->flags |= USB_8DEV_EXTID;
- 
- 	msg->id = cpu_to_be32(cf->can_id & CAN_ERR_MASK);
--	msg->dlc = cf->len;
-+	msg->dlc = can_get_cc_dlc(priv->can.ctrlmode, cf);
- 	memcpy(msg->data, cf->data, cf->len);
- 	msg->end = USB_8DEV_DATA_END;
- 
- 	for (i = 0; i < MAX_TX_URBS; i++) {
- 		if (priv->tx_contexts[i].echo_index == MAX_TX_URBS) {
-@@ -925,12 +926,13 @@ static int usb_8dev_probe(struct usb_interface *intf,
- 	priv->can.clock.freq = USB_8DEV_ABP_CLOCK;
- 	priv->can.bittiming_const = &usb_8dev_bittiming_const;
- 	priv->can.do_set_mode = usb_8dev_set_mode;
- 	priv->can.do_get_berr_counter = usb_8dev_get_berr_counter;
- 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
--				      CAN_CTRLMODE_LISTENONLY |
--				      CAN_CTRLMODE_ONE_SHOT;
-+				       CAN_CTRLMODE_LISTENONLY |
-+				       CAN_CTRLMODE_ONE_SHOT |
-+				       CAN_CTRLMODE_CC_LEN8_DLC;
- 
- 	netdev->netdev_ops = &usb_8dev_netdev_ops;
- 
- 	netdev->flags |= IFF_ECHO; /* we support local echo */
- 
+> 
+>> +
+>> +	int (*ems_usb_write_mode)(struct ems_usb *dev, u32 mode);
+>>  
+>>  	struct ems_cpc_msg active_params; /* active controller parameters */
+>>  };
+>> @@ -522,7 +525,7 @@ static void ems_usb_read_bulk_callback(struct urb *urb)
+>>  
+>>  resubmit_urb:
+>>  	usb_fill_bulk_urb(urb, dev->udev, usb_rcvbulkpipe(dev->udev, 2),
+>> -			  urb->transfer_buffer, RX_BUFFER_SIZE,
+>> +			  urb->transfer_buffer, dev->bulk_rd_buf_size,
+>>  			  ems_usb_read_bulk_callback, dev);
+>>  
+>>  	retval = usb_submit_urb(urb, GFP_ATOMIC);
+>> @@ -596,9 +599,18 @@ static int ems_usb_command_msg(struct ems_usb *dev, struct ems_cpc_msg *msg)
+>>  
+>>  /* Change CAN controllers' mode register
+>>   */
+>> -static int ems_usb_write_mode(struct ems_usb *dev, u8 mode)
+>> +static int ems_usb_write_mode_arm7(struct ems_usb *dev, u32 mode)
+>>  {
+>> -	dev->active_params.msg.can_params.cc_params.sja1000.mode = mode;
+>> +	struct cpc_sja1000_params *sja1000 =
+>> +		&dev->active_params.msg.can_params.cc_params.sja1000;
+>> +
+>> +	if (mode == CPC_USB_RESET_MODE)
+>> +		sja1000->mode |= SJA1000_MOD_RM;
+>> +	else if (mode == CPC_USB_RUN_MODE)
+>> +		sja1000->mode &= ~SJA1000_MOD_RM;
+>> +
+>> +	else
+>> +		return -EINVAL;
+>>  
+>>  	return ems_usb_command_msg(dev, &dev->active_params);
+>>  }
+>> @@ -641,7 +653,7 @@ static int ems_usb_start(struct ems_usb *dev)
+>>  			break;
+>>  		}
+>>  
+>> -		buf = usb_alloc_coherent(dev->udev, RX_BUFFER_SIZE, GFP_KERNEL,
+>> +		buf = usb_alloc_coherent(dev->udev, dev->bulk_rd_buf_size, GFP_KERNEL,
+>>  					 &urb->transfer_dma);
+>>  		if (!buf) {
+>>  			netdev_err(netdev, "No memory left for USB buffer\n");
+>> @@ -651,7 +663,7 @@ static int ems_usb_start(struct ems_usb *dev)
+>>  		}
+>>  
+>>  		usb_fill_bulk_urb(urb, dev->udev, usb_rcvbulkpipe(dev->udev, 2),
+>> -				  buf, RX_BUFFER_SIZE,
+>> +				  buf, dev->bulk_rd_buf_size,
+>>  				  ems_usb_read_bulk_callback, dev);
+>>  		urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+>>  		usb_anchor_urb(urb, &dev->rx_submitted);
+>> @@ -659,7 +671,7 @@ static int ems_usb_start(struct ems_usb *dev)
+>>  		err = usb_submit_urb(urb, GFP_KERNEL);
+>>  		if (err) {
+>>  			usb_unanchor_urb(urb);
+>> -			usb_free_coherent(dev->udev, RX_BUFFER_SIZE, buf,
+>> +			usb_free_coherent(dev->udev, dev->bulk_rd_buf_size, buf,
+>>  					  urb->transfer_dma);
+>>  			usb_free_urb(urb);
+>>  			break;
+>> @@ -708,7 +720,7 @@ static int ems_usb_start(struct ems_usb *dev)
+>>  	if (err)
+>>  		goto failed;
+>>  
+>> -	err = ems_usb_write_mode(dev, SJA1000_MOD_NORMAL);
+>> +	err = dev->can.do_set_mode(netdev, CAN_MODE_START);
+>>  	if (err)
+>>  		goto failed;
+>>  
+>> @@ -742,7 +754,7 @@ static int ems_usb_open(struct net_device *netdev)
+>>  	struct ems_usb *dev = netdev_priv(netdev);
+>>  	int err;
+>>  
+>> -	err = ems_usb_write_mode(dev, SJA1000_MOD_RM);
+>> +	err = dev->ems_usb_write_mode(dev, CPC_USB_RESET_MODE);
+>>  	if (err)
+>>  		return err;
+>>  
+>> @@ -900,7 +912,7 @@ static int ems_usb_close(struct net_device *netdev)
+>>  	netif_stop_queue(netdev);
+>>  
+>>  	/* Set CAN controller to reset mode */
+>> -	if (ems_usb_write_mode(dev, SJA1000_MOD_RM))
+>> +	if (dev->ems_usb_write_mode(dev, CPC_USB_RESET_MODE))
+>>  		netdev_warn(netdev, "couldn't stop device");
+>>  
+>>  	close_candev(netdev);
+>> @@ -915,8 +927,8 @@ static const struct net_device_ops ems_usb_netdev_ops = {
+>>  	.ndo_change_mtu = can_change_mtu,
+>>  };
+>>  
+>> -static const struct can_bittiming_const ems_usb_bittiming_const = {
+>> -	.name = "ems_usb",
+>> +static const struct can_bittiming_const ems_usb_bittiming_const_arm7 = {
+>> +	.name = "ems_usb_arm7",
+> 
+> You are changing the user space visible name of the CAN device. Is this needed?
+The driver will be able to handle both devices CPC-USB/ARM7 and
+CPC-USB/FD. If a user calls:
+
+ip -details -statistics link show can0
+
+then I noticed that "ems_usb" is inside the output. This seemed
+ambiguous for me as it could be a CPC-USB/ARM7 or a CPC-USB/FD. Sure
+this will need all patches applied to become visible.
+
 -- 
-2.28.0
+Gerhard
 
+-- 
+EMS Dr. Thomas Wuensche e.K.
+Sonnenhang 3
+85304 Ilmmuenster
+HR Ingolstadt, HRA 170106
+
+Phone: +49-8441-490260
+Fax  : +49-8441-81860
+http://www.ems-wuensche.com
