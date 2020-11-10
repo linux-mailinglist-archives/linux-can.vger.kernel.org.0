@@ -2,143 +2,232 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280362AD010
-	for <lists+linux-can@lfdr.de>; Tue, 10 Nov 2020 07:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEA72AD09F
+	for <lists+linux-can@lfdr.de>; Tue, 10 Nov 2020 08:46:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730713AbgKJGzb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 10 Nov 2020 01:55:31 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.161]:15720 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726006AbgKJGza (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Nov 2020 01:55:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1604991328;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=fODdxiI4WFWfv1hKxe+IgXill0r+Vu9XP6z2aFm3Yc0=;
-        b=XM9853NdgHWxbVP8rwXmSziFm80X+cqLu3ORmdjeLkGVFSHvZitT+dQNwSxi0NGlHs
-        jwiC51D5ebyfxqZWz70sGPqQgJobqqTyGsdvoHEFKXSScfDNdsAD3YgUNImR9ajRqF/g
-        FAvAS61avbM9b2k7wve3qJCp/4IcxN9TurLreGNAXtJtb+cVdMQOmbVQw+IqGXl+bx0A
-        UQpwE4aj9VCyNV8dC0ck05Of71XTIINOskcESeHI8EevzsXaab7vPiSNb5xEXMEbUamK
-        MAXcvPd3RLlqp8vVBiE1JCdCX5Y1SVWyXNxBkJdB/Aomk2iq8Sh1N2/5O9KwhluWVUhl
-        wxiQ==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGX8h6kE2n"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 47.3.3 DYNA|AUTH)
-        with ESMTPSA id V0298cwAA6tP9O1
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 10 Nov 2020 07:55:25 +0100 (CET)
-Subject: Re: [PATCH v5 8/8] can-dev: add len8_dlc support for various CAN USB
- adapters
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        mailhol.vincent@wanadoo.fr
+        id S1727019AbgKJHqn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 10 Nov 2020 02:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726827AbgKJHqm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 10 Nov 2020 02:46:42 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A176C0613D1
+        for <linux-can@vger.kernel.org>; Mon,  9 Nov 2020 23:46:42 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kcOMR-0006Dp-T9; Tue, 10 Nov 2020 08:46:40 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:6c8a:7fd4:ebb4:403c] (unknown [IPv6:2a03:f580:87bc:d400:6c8a:7fd4:ebb4:403c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1C0C358E87F;
+        Tue, 10 Nov 2020 07:46:38 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr
 Cc:     netdev@vger.kernel.org
 References: <20201109153657.17897-1-socketcan@hartkopp.net>
  <20201109153657.17897-9-socketcan@hartkopp.net>
  <c9b7ec89-0892-89fa-1f8d-af9c973e4544@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <68005955-4bf3-cdef-f85d-a841eb336921@hartkopp.net>
-Date:   Tue, 10 Nov 2020 07:55:17 +0100
+ <68005955-4bf3-cdef-f85d-a841eb336921@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH v5 8/8] can-dev: add len8_dlc support for various CAN USB
+ adapters
+Message-ID: <d563bbf7-da72-83ce-a3c1-ebec828e0d5b@pengutronix.de>
+Date:   Tue, 10 Nov 2020 08:46:32 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <c9b7ec89-0892-89fa-1f8d-af9c973e4544@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <68005955-4bf3-cdef-f85d-a841eb336921@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="UVHsEErOvDqwDEDxFjrDlSCAXVaA4wmRk"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--UVHsEErOvDqwDEDxFjrDlSCAXVaA4wmRk
+Content-Type: multipart/mixed; boundary="ldlUzzooeEMNcZMO3zUQH8jFwhXsYpKJ3";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org,
+ mailhol.vincent@wanadoo.fr
+Cc: netdev@vger.kernel.org
+Message-ID: <d563bbf7-da72-83ce-a3c1-ebec828e0d5b@pengutronix.de>
+Subject: Re: [PATCH v5 8/8] can-dev: add len8_dlc support for various CAN USB
+ adapters
+References: <20201109153657.17897-1-socketcan@hartkopp.net>
+ <20201109153657.17897-9-socketcan@hartkopp.net>
+ <c9b7ec89-0892-89fa-1f8d-af9c973e4544@pengutronix.de>
+ <68005955-4bf3-cdef-f85d-a841eb336921@hartkopp.net>
+In-Reply-To: <68005955-4bf3-cdef-f85d-a841eb336921@hartkopp.net>
 
+--ldlUzzooeEMNcZMO3zUQH8jFwhXsYpKJ3
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-On 09.11.20 21:12, Marc Kleine-Budde wrote:
-> On 11/9/20 4:36 PM, Oliver Hartkopp wrote:
->> Support the Classical CAN raw DLC functionality to send and receive DLC
->> values from 9 .. 15 on various Classical CAN capable USB network drivers:
+On 11/10/20 7:55 AM, Oliver Hartkopp wrote:
+>>> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_us=
+b.c
+>>> index 940589667a7f..cc0c30a33335 100644
+>>> --- a/drivers/net/can/usb/gs_usb.c
+>>> +++ b/drivers/net/can/usb/gs_usb.c
+>>> @@ -330,10 +330,13 @@ static void gs_usb_receive_bulk_callback(struct=
+ urb *urb)
+>>>   			return;
+>>>  =20
+>>>   		cf->can_id =3D hf->can_id;
+>>>  =20
+>>>   		cf->len =3D can_cc_dlc2len(hf->len);
+>>> +		cf->len8_dlc =3D can_get_len8_dlc(dev->can.ctrlmode, cf->len,
+>>> +						hf->len);
 >>
->> - gs_usb
->> - pcan_usb
->> - pcan_usb_fd
->> - usb_8dev
+>> What about introducing a function that sets len and len8_dlc at the sa=
+me time:
 >>
->> Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
->> ---
->>   drivers/net/can/usb/gs_usb.c               |  8 ++++++--
->>   drivers/net/can/usb/peak_usb/pcan_usb.c    |  8 ++++++--
->>   drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 17 ++++++++++++-----
->>   drivers/net/can/usb/usb_8dev.c             |  9 ++++++---
->>   4 files changed, 30 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
->> index 940589667a7f..cc0c30a33335 100644
->> --- a/drivers/net/can/usb/gs_usb.c
->> +++ b/drivers/net/can/usb/gs_usb.c
->> @@ -330,10 +330,13 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
->>   			return;
->>   
->>   		cf->can_id = hf->can_id;
->>   
->>   		cf->len = can_cc_dlc2len(hf->len);
->> +		cf->len8_dlc = can_get_len8_dlc(dev->can.ctrlmode, cf->len,
->> +						hf->len);
-> 
-> What about introducing a function that sets len and len8_dlc at the same time:
-> 
-> void can_frame_set_length(const struct can_priv *can, struct can_frame *cfd, u8
-> dlc);
+>> void can_frame_set_length(const struct can_priv *can, struct can_frame=
+ *cfd, u8
+>> dlc);
+>=20
+> Good idea.
+>=20
+> I would suggest something like
+>=20
+> u8 can_get_cc_len(const u32 ctrlmode, struct can_frame *cf, u8 dlc)
+>=20
+> that still returns the 'len' element, so that we can replace=20
+> can_cc_dlc2len() with can_get_cc_len() for CAN drivers that add support=
+=20
+> for len8_dlc.
 
-Good idea.
+The regex to replace can_cc_dlc2len() with can_get_cc_len() might be simp=
+ler,
+but passing the cf by reference _and_ assigning the return value to a mem=
+ber of
+cf looks strange.
 
-I would suggest something like
+> The assignment cf->len =3D can_get_cc_len() fits better into the code=20
+> which assigns cf->can_id too.
+>=20
+> And I would stay on 'u32 ctrlmode' as ctrlmode is the parameter which i=
+s=20
+> namely needed here. A pointer to can_priv can mean anything.
 
-u8 can_get_cc_len(const u32 ctrlmode, struct can_frame *cf, u8 dlc)
+OK
+>> And maybe a function that takes a canfd_frame, so that we don't need t=
+o cast....
+>=20
+> No. The len8_dlc element is from struct can_frame. When people use the =
 
-that still returns the 'len' element, so that we can replace 
-can_cc_dlc2len() with can_get_cc_len() for CAN drivers that add support 
-for len8_dlc.
+> struct canfd_frame in their driver this might have some benefits for th=
+em.
+> But when it comes to access the len8_dlc element this has to be casted =
+IMO.
+>=20
+> But with the suggested can_get_cc_len() function a needed cast could be=
+=20
+> put into the parameter list without adding extra code somewhere else in=
+=20
+> the driver.
 
-The assignment cf->len = can_get_cc_len() fits better into the code 
-which assigns cf->can_id too.
+OK
 
-And I would stay on 'u32 ctrlmode' as ctrlmode is the parameter which is 
-namely needed here. A pointer to can_priv can mean anything.
+Marc
 
-> 
-> And maybe a function that takes a canfd_frame, so that we don't need to cast....
-
-No. The len8_dlc element is from struct can_frame. When people use the 
-struct canfd_frame in their driver this might have some benefits for them.
-But when it comes to access the len8_dlc element this has to be casted IMO.
-
-But with the suggested can_get_cc_len() function a needed cast could be 
-put into the parameter list without adding extra code somewhere else in 
-the driver.
-
-(..)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
->> @@ -1033,11 +1040,11 @@ static const struct can_bittiming_const pcan_usb_fd_data_const = {
->>   
->>   const struct peak_usb_adapter pcan_usb_fd = {
->>   	.name = "PCAN-USB FD",
->>   	.device_id = PCAN_USBFD_PRODUCT_ID,
->>   	.ctrl_count = PCAN_USBFD_CHANNEL_COUNT,
->> -	.ctrlmode_supported = CAN_CTRLMODE_FD |
->> +	.ctrlmode_supported = CAN_CTRLMODE_FD | CAN_CTRLMODE_CC_LEN8_DLC |
->>   			CAN_CTRLMODE_3_SAMPLES | CAN_CTRLMODE_LISTENONLY,
-> 
-> Please add the new CTRLMODE at the end, so that the list ist sorted. I don't
-> mind if the diff is a bit larger.
-> 
+--ldlUzzooeEMNcZMO3zUQH8jFwhXsYpKJ3--
 
-I had to decide between "make the patch looking good" and "make the 
-result looking good" ;-)
+--UVHsEErOvDqwDEDxFjrDlSCAXVaA4wmRk
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-But I'm fine with "make the patch looking good" too. Will change that in v6.
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
-Oliver
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+qRVgACgkQqclaivrt
+76nWiwf/UvLKMREX1DIBWz87/FLrs8zYLml5N+YIxw7EiGv0G7DIuYbvBAyiWfsD
+WIBKOuccvh9Bx+hn5M0EgH05i4CQoOnxtefm3UBXIM0SfHNFEJAZhsxi02RHsMFx
+z0i/gTl3B3Jgz10dMfBdua+K/FWXcO+XQZSO3UzvwfYZAgEbjwxNJeo53hMwnlZW
+EkXgmC9h39gWX4z/DNNWVbAztYZLEGGrodupksqrwzZiDYWkZsviSA/onl8iycqt
+QpL+Ot2PyAlHp2s3Axl4L30oZFyARSkA/63yYtUj33V6V6riB3Qm10ICRTgjaBM0
+e3hDuBZFfTuXfdAhMiu/J8v22q+rIA==
+=1FUW
+-----END PGP SIGNATURE-----
+
+--UVHsEErOvDqwDEDxFjrDlSCAXVaA4wmRk--
