@@ -2,40 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B945A2AFA9D
-	for <lists+linux-can@lfdr.de>; Wed, 11 Nov 2020 22:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C352AFAB3
+	for <lists+linux-can@lfdr.de>; Wed, 11 Nov 2020 22:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725933AbgKKVj0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Nov 2020 16:39:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
+        id S1725949AbgKKVtA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Nov 2020 16:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725949AbgKKVjZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 16:39:25 -0500
+        with ESMTP id S1725933AbgKKVs7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 16:48:59 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8B2C0613D4
-        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 13:39:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E870C0613D1
+        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 13:48:59 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kcxpm-0007b5-LX; Wed, 11 Nov 2020 22:39:18 +0100
+        id 1kcxz2-0008Lz-1B; Wed, 11 Nov 2020 22:48:52 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a] (unknown [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6014F590317;
-        Wed, 11 Nov 2020 21:39:16 +0000 (UTC)
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        Sascha Hauer <kernel@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Shawn Guo <shawnguo@kernel.org>
-References: <20201111130507.1560881-1-mkl@pengutronix.de>
- <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 52557590328;
+        Wed, 11 Nov 2020 21:48:50 +0000 (UTC)
+To:     Alejandro <alejandro@acoro.eu>, linux-can@vger.kernel.org
+Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org
+References: <bd6d51f4-4a18-e557-46d1-00d3539d163e@acoro.eu>
+ <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu>
+ <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de>
+ <2e152de6-a3b1-ad81-981d-423835eb184e@acoro.eu>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,16 +94,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: pull-request: can 2020-11-11
-Message-ID: <e138af95-b924-9d93-1f31-49628179d25b@pengutronix.de>
-Date:   Wed, 11 Nov 2020 22:39:11 +0100
+Subject: Re: [PATCH] can: dev: can_restart(): post buffer from the right
+ context
+Message-ID: <fa4fe13b-b98b-ccb4-64c8-116d682b0162@pengutronix.de>
+Date:   Wed, 11 Nov 2020 22:48:46 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
+In-Reply-To: <2e152de6-a3b1-ad81-981d-423835eb184e@acoro.eu>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="XapceDl03msKBSSShGu3BzJRC8xzkSEzn"
+ boundary="phLltRTxP6QCjr7jyljqZmduBI0qQ45Us"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -116,76 +114,67 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---XapceDl03msKBSSShGu3BzJRC8xzkSEzn
-Content-Type: multipart/mixed; boundary="aYAkrOwdk19PYEJ6DV8GqfIPGlB0KZ2le";
+--phLltRTxP6QCjr7jyljqZmduBI0qQ45Us
+Content-Type: multipart/mixed; boundary="Zf5iEalzRP7mJg8F60zNqxMhTOjV6hkiD";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Rob Herring <robh+dt@kernel.org>
-Cc: netdev <netdev@vger.kernel.org>, David Miller <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
- Sascha Hauer <kernel@pengutronix.de>,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- Shawn Guo <shawnguo@kernel.org>
-Message-ID: <e138af95-b924-9d93-1f31-49628179d25b@pengutronix.de>
-Subject: Re: pull-request: can 2020-11-11
-References: <20201111130507.1560881-1-mkl@pengutronix.de>
- <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
-In-Reply-To: <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
+To: Alejandro <alejandro@acoro.eu>, linux-can@vger.kernel.org
+Cc: wg@grandegger.com, davem@davemloft.net, kuba@kernel.org
+Message-ID: <fa4fe13b-b98b-ccb4-64c8-116d682b0162@pengutronix.de>
+Subject: Re: [PATCH] can: dev: can_restart(): post buffer from the right
+ context
+References: <bd6d51f4-4a18-e557-46d1-00d3539d163e@acoro.eu>
+ <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu>
+ <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de>
+ <2e152de6-a3b1-ad81-981d-423835eb184e@acoro.eu>
+In-Reply-To: <2e152de6-a3b1-ad81-981d-423835eb184e@acoro.eu>
 
---aYAkrOwdk19PYEJ6DV8GqfIPGlB0KZ2le
+--Zf5iEalzRP7mJg8F60zNqxMhTOjV6hkiD
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 11/11/20 8:05 PM, Rob Herring wrote:
->> after v5.10-rc1 the flexcan bindings were converted to yaml. This caus=
+On 11/6/20 6:33 PM, Alejandro wrote:
+> On 6/11/20 11:25, Marc Kleine-Budde wrote:
+>=20
+>> On 11/5/20 10:51 PM, Alejandro wrote:
+>>> From: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
+>>>
+>>> netif_rx() is meant to be called from interrupt contexts. can_restart=
+()
+>>> may be called by can_restart_work(), which is called from a worqueue,=
+ so
+>>> it may run in process context. Use netif_rx_any_context() which invok=
 es
->> several unneeded regressions on i.MX53 based boards and/or SoC specify=
-ing the
->> fsl,stop-mode property in their flexcan node.
->>
->> This series fixes these problems by first updating the affected i.MX S=
-oC dtsi
->> files and then fixing the flexcan yaml binding.
->>
->> After I got the OK from the DT and fsl people, the plan is to upstream=
- this via
->> net/master. If this is not an option, I'll send individual patches.
+>>> the correct code path depending on context.
+>>>
+>>> Co-developed-by: Loris Fauster<loris.fauster@ttcontrol.com>
+>>> Signed-off-by: Loris Fauster<loris.fauster@ttcontrol.com>
+>>> Signed-off-by: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
+>> I think we either call can_restart() from a netlink callback via
+>> can_restart_now() or via the can_restart_work(). So we should always u=
+se
+>> netif_rx_ni(skb), right?
 >=20
-> There's no need for dts changes to go into 5.10. dtbs_check is nowhere
-> near warning free yet. They should go via the soc tree. The schema
-> fixes do need to go in and I can take them. However, all the issues
-> still aren't fixed:
+> Right, I think that currently it is as you say. However, it seems that
+> can_restart_now() has public visibility (/linux/can/dev.h),
 
-Right, this shows up with the dt_binding_check...
+Yes, but it doesn't export it's symbols. I've removed the function from t=
+he
+header file and everything still compiles.
 
-> Documentation/devicetree/bindings/clock/imx5-clock.example.dt.yaml:
-> can@53fc8000: compatible: 'oneOf' conditional failed, one must be
-> fixed:
->         ['fsl,imx53-flexcan', 'fsl,p1010-flexcan'] is too long
->         Additional items are not allowed ('fsl,p1010-flexcan' was unexp=
-ected)
->         'fsl,imx53-flexcan' is not one of ['fsl,imx7d-flexcan',
-> 'fsl,imx6ul-flexcan', 'fsl,imx6sx-flexcan']
->         'fsl,imx53-flexcan' is not one of ['fsl,ls1028ar1-flexcan']
->         'fsl,imx25-flexcan' was expected
->         'fsl,imx6q-flexcan' was expected
->         'fsl,lx2160ar1-flexcan' was expected
->         From schema:
-> /home/rob/proj/git/linux-dt/Documentation/devicetree/bindings/net/can/f=
-sl,flexcan.yaml
->=20
-> Either the imx5-clock.yaml example needs changing or the schema does.
-> I'm guessing it's the former.=20
+> and even though
+> it doesn't seem to be used by other CAN drivers for now, I guess it cou=
+ld
+> potentially be used in future. netif_rx_any_context() should avoid issu=
+es
+> if can_restart_now() is called from an ISR later.
 
-Ack. I've created a patch to fix this:
+I don't see a valid usecase where can_restart_now() is called from an ISR=
+=2E We
+can change this if an uscase pops up later.
 
-http://lore.kernel.org/r/20201111213548.1621094-1-mkl@pengutronix.de
-
-> I've applied the 2 schema patches here.
-
-Thanks
-
+regards,
 Marc
 
 --=20
@@ -195,23 +184,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---aYAkrOwdk19PYEJ6DV8GqfIPGlB0KZ2le--
+--Zf5iEalzRP7mJg8F60zNqxMhTOjV6hkiD--
 
---XapceDl03msKBSSShGu3BzJRC8xzkSEzn
+--phLltRTxP6QCjr7jyljqZmduBI0qQ45Us
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+sWf8ACgkQqclaivrt
-76kw2QgAjkLockxPe2IP9goY6XRnRffL8Ote+3Gxysmm0h0C7cJGUhvegZoQ7SKx
-/zF3j9UUgst3IMWVHM/PqUaoGI4Sl3nKpW8amlrfZl6BryeYVr239uqtUhKZTUhe
-B2zhYB8hNizlVO55OCLUVQjiffnCSrAcJrdiKuDCtUKQiTx4hXz4pO1660AYzbpV
-WhWd5DvgzpoJyOxpBHE2wCXUKCVx7t1RXUmZyI6CuI9H8oiw876ktQvfTC51tla9
-PfKTSiYWebO0MC08oFOMxoGZpgN2mYop9gAkH0MHN8SmGJP/705wZcjU1ygqqXx9
-0tvneY7mtH2maYM9VkvKeEEcBP46VA==
-=XdSO
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+sXD4ACgkQqclaivrt
+76lU7Af/afdgITv5XR8XGMn07vpucMFeQCG5BStl01l4RBajNEYxxBCMsn3m1QVf
+JjyqqlT3RBm/F88QE8z9o2fGQkUSwBiVkFutnb66O9Ams9pyM691Ir26xgRpp+CN
+aJ/p9oSdDaXu4RWUlyR6rOJlCRzrW4stteSb5S2yOuDhcEyGdPw9KlplQuBgRZxO
+N1rKPJBp+j0vY5I9lEBUk5xlTqqMF882qFrOgAi4fyZj6ZdWqMCmKx6xA+uQOInj
+GMyMTfuQfd9S+ug4HYS15rkUuoC36RrI2us4YfbzF4YLUHiN4gd5bX/FA2XilROn
+j5vIkhTIvnFIv/rCkJtlyptscDiREg==
+=DHnu
 -----END PGP SIGNATURE-----
 
---XapceDl03msKBSSShGu3BzJRC8xzkSEzn--
+--phLltRTxP6QCjr7jyljqZmduBI0qQ45Us--
