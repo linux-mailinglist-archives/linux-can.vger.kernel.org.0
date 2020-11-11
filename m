@@ -2,34 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E88072AFA90
-	for <lists+linux-can@lfdr.de>; Wed, 11 Nov 2020 22:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B945A2AFA9D
+	for <lists+linux-can@lfdr.de>; Wed, 11 Nov 2020 22:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgKKVfz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Nov 2020 16:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S1725933AbgKKVj0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Nov 2020 16:39:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgKKVfz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 16:35:55 -0500
+        with ESMTP id S1725949AbgKKVjZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 16:39:25 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592B2C0613D1
-        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 13:35:55 -0800 (PST)
-Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8B2C0613D4
+        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 13:39:25 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kcxmQ-0007CU-Id; Wed, 11 Nov 2020 22:35:50 +0100
+        id 1kcxpm-0007b5-LX; Wed, 11 Nov 2020 22:39:18 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a] (unknown [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6014F590317;
+        Wed, 11 Nov 2020 21:39:16 +0000 (UTC)
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        Sascha Hauer <kernel@pengutronix.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Shawn Guo <shawnguo@kernel.org>
+References: <20201111130507.1560881-1-mkl@pengutronix.de>
+ <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel@pengutronix.de
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>
-Subject: [PATCH] dt-bindings: clock: imx5: fix example
-Date:   Wed, 11 Nov 2020 22:35:48 +0100
-Message-Id: <20201111213548.1621094-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.28.0
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: pull-request: can 2020-11-11
+Message-ID: <e138af95-b924-9d93-1f31-49628179d25b@pengutronix.de>
+Date:   Wed, 11 Nov 2020 22:39:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+In-Reply-To: <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="XapceDl03msKBSSShGu3BzJRC8xzkSEzn"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
@@ -37,50 +115,103 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since commit:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--XapceDl03msKBSSShGu3BzJRC8xzkSEzn
+Content-Type: multipart/mixed; boundary="aYAkrOwdk19PYEJ6DV8GqfIPGlB0KZ2le";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Rob Herring <robh+dt@kernel.org>
+Cc: netdev <netdev@vger.kernel.org>, David Miller <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+ Sascha Hauer <kernel@pengutronix.de>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ Shawn Guo <shawnguo@kernel.org>
+Message-ID: <e138af95-b924-9d93-1f31-49628179d25b@pengutronix.de>
+Subject: Re: pull-request: can 2020-11-11
+References: <20201111130507.1560881-1-mkl@pengutronix.de>
+ <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
+In-Reply-To: <CAL_JsqLCRA4ee5OYzz2FNz+WTRiCa6YEGXDoXB29PC3D9uH6EQ@mail.gmail.com>
 
-    0e030a373df3 ("can: flexcan: fix endianess detection")
+--aYAkrOwdk19PYEJ6DV8GqfIPGlB0KZ2le
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-the fsl,imx53-flexcan isn't compatible with the fsl,p1010-flexcan any more. As
-the former accesses the IP core in Little Endian mode and the latter uses Big
-Endian mode.
+On 11/11/20 8:05 PM, Rob Herring wrote:
+>> after v5.10-rc1 the flexcan bindings were converted to yaml. This caus=
+es
+>> several unneeded regressions on i.MX53 based boards and/or SoC specify=
+ing the
+>> fsl,stop-mode property in their flexcan node.
+>>
+>> This series fixes these problems by first updating the affected i.MX S=
+oC dtsi
+>> files and then fixing the flexcan yaml binding.
+>>
+>> After I got the OK from the DT and fsl people, the plan is to upstream=
+ this via
+>> net/master. If this is not an option, I'll send individual patches.
+>=20
+> There's no need for dts changes to go into 5.10. dtbs_check is nowhere
+> near warning free yet. They should go via the soc tree. The schema
+> fixes do need to go in and I can take them. However, all the issues
+> still aren't fixed:
 
-With the conversion of the flexcan DT bindings to yaml, the dt_binding_check
-this throws the following error:
+Right, this shows up with the dt_binding_check...
 
-Documentation/devicetree/bindings/clock/imx5-clock.example.dt.yaml: can@53fc8000: compatible: 'oneOf' conditional failed, one must be fixed:
-        ['fsl,imx53-flexcan', 'fsl,imx25-flexcan'] is too long
-        Additional items are not allowed ('fsl,imx25-flexcan' was unexpected)
-        'fsl,imx53-flexcan' is not one of ['fsl,imx7d-flexcan', 'fsl,imx6ul-flexcan', 'fsl,imx6sx-flexcan']
-        'fsl,imx53-flexcan' is not one of ['fsl,ls1028ar1-flexcan']
-        'fsl,imx6q-flexcan' was expected
-        'fsl,lx2160ar1-flexcan' was expected
-        From schema: Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> Documentation/devicetree/bindings/clock/imx5-clock.example.dt.yaml:
+> can@53fc8000: compatible: 'oneOf' conditional failed, one must be
+> fixed:
+>         ['fsl,imx53-flexcan', 'fsl,p1010-flexcan'] is too long
+>         Additional items are not allowed ('fsl,p1010-flexcan' was unexp=
+ected)
+>         'fsl,imx53-flexcan' is not one of ['fsl,imx7d-flexcan',
+> 'fsl,imx6ul-flexcan', 'fsl,imx6sx-flexcan']
+>         'fsl,imx53-flexcan' is not one of ['fsl,ls1028ar1-flexcan']
+>         'fsl,imx25-flexcan' was expected
+>         'fsl,imx6q-flexcan' was expected
+>         'fsl,lx2160ar1-flexcan' was expected
+>         From schema:
+> /home/rob/proj/git/linux-dt/Documentation/devicetree/bindings/net/can/f=
+sl,flexcan.yaml
+>=20
+> Either the imx5-clock.yaml example needs changing or the schema does.
+> I'm guessing it's the former.=20
 
-The error is fixed by removing the "fsl,p1010-flexcan" compatible (which turned
-out the be incompatible) from the binding example.
+Ack. I've created a patch to fix this:
 
-Cc: Fabio Estevam <fabio.estevam@nxp.com>
-Cc: devicetree@vger.kernel.org
-Reported-by: Rob Herring <robh+dt@kernel.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- Documentation/devicetree/bindings/clock/imx5-clock.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+http://lore.kernel.org/r/20201111213548.1621094-1-mkl@pengutronix.de
 
-diff --git a/Documentation/devicetree/bindings/clock/imx5-clock.yaml b/Documentation/devicetree/bindings/clock/imx5-clock.yaml
-index 4d9e7c73dce9..155379c3c41e 100644
---- a/Documentation/devicetree/bindings/clock/imx5-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/imx5-clock.yaml
-@@ -57,7 +57,7 @@ examples:
-     };
- 
-     can@53fc8000 {
--        compatible = "fsl,imx53-flexcan", "fsl,p1010-flexcan";
-+        compatible = "fsl,imx53-flexcan";
-         reg = <0x53fc8000 0x4000>;
-         interrupts = <82>;
-         clocks = <&clks IMX5_CLK_CAN1_IPG_GATE>, <&clks IMX5_CLK_CAN1_SERIAL_GATE>;
--- 
-2.28.0
+> I've applied the 2 schema patches here.
 
+Thanks
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--aYAkrOwdk19PYEJ6DV8GqfIPGlB0KZ2le--
+
+--XapceDl03msKBSSShGu3BzJRC8xzkSEzn
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+sWf8ACgkQqclaivrt
+76kw2QgAjkLockxPe2IP9goY6XRnRffL8Ote+3Gxysmm0h0C7cJGUhvegZoQ7SKx
+/zF3j9UUgst3IMWVHM/PqUaoGI4Sl3nKpW8amlrfZl6BryeYVr239uqtUhKZTUhe
+B2zhYB8hNizlVO55OCLUVQjiffnCSrAcJrdiKuDCtUKQiTx4hXz4pO1660AYzbpV
+WhWd5DvgzpoJyOxpBHE2wCXUKCVx7t1RXUmZyI6CuI9H8oiw876ktQvfTC51tla9
+PfKTSiYWebO0MC08oFOMxoGZpgN2mYop9gAkH0MHN8SmGJP/705wZcjU1ygqqXx9
+0tvneY7mtH2maYM9VkvKeEEcBP46VA==
+=XdSO
+-----END PGP SIGNATURE-----
+
+--XapceDl03msKBSSShGu3BzJRC8xzkSEzn--
