@@ -2,38 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828A2AFD60
-	for <lists+linux-can@lfdr.de>; Thu, 12 Nov 2020 02:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 820682AFD5E
+	for <lists+linux-can@lfdr.de>; Thu, 12 Nov 2020 02:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgKLBbO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Nov 2020 20:31:14 -0500
+        id S1726188AbgKLBbQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Nov 2020 20:31:16 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbgKKWnF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 17:43:05 -0500
+        with ESMTP id S1727173AbgKKWpH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 17:45:07 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF28CC061A4A
-        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 14:33:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0F8C061A4A
+        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 14:45:07 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kcygW-0003qf-9g; Wed, 11 Nov 2020 23:33:48 +0100
+        id 1kcyrQ-0004wE-9P; Wed, 11 Nov 2020 23:45:04 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a] (unknown [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 85AA0590375;
-        Wed, 11 Nov 2020 22:33:45 +0000 (UTC)
-Subject: Re: [PATCH v2] can: m_can: Set device to software init mode before
- closing
-To:     Faiz Abbas <faiz_abbas@ti.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     kuba@kernel.org, davem@davemloft.net, wg@grandegger.com,
-        sriram.dash@samsung.com, dmurphy@ti.com
-References: <20200825055442.16994-1-faiz_abbas@ti.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 031FE590391;
+        Wed, 11 Nov 2020 22:45:01 +0000 (UTC)
+To:     dunaev@tecon.ru, linux-can <linux-can@vger.kernel.org>
+Cc:     "dunaich@mail.ru" <dunaich@mail.ru>
+References: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +91,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <4dfa600f-1167-e3c4-c9d5-d177f27cde92@pengutronix.de>
-Date:   Wed, 11 Nov 2020 23:33:38 +0100
+Subject: Re: [PATCH] fixup! can: mscan: mscan_rx_poll(): fix rx path lockup
+ when returning from polling to irq mode
+Message-ID: <deca9362-a911-5bd1-c8f3-1ed25a5d03ca@pengutronix.de>
+Date:   Wed, 11 Nov 2020 23:44:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200825055442.16994-1-faiz_abbas@ti.com>
+In-Reply-To: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="FLINfmH2tzMl5GH6qbhGBVFmGAmBjTrrJ"
+ boundary="Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,39 +111,72 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---FLINfmH2tzMl5GH6qbhGBVFmGAmBjTrrJ
-Content-Type: multipart/mixed; boundary="iuBwrBRpDu4oPsWzozGg6Dvhcf352MSWD";
+--Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW
+Content-Type: multipart/mixed; boundary="9DbtFCqHbbW3rp0w1vNcGv7M3gthIDDYG";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Faiz Abbas <faiz_abbas@ti.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc: kuba@kernel.org, davem@davemloft.net, wg@grandegger.com,
- sriram.dash@samsung.com, dmurphy@ti.com
-Message-ID: <4dfa600f-1167-e3c4-c9d5-d177f27cde92@pengutronix.de>
-Subject: Re: [PATCH v2] can: m_can: Set device to software init mode before
- closing
-References: <20200825055442.16994-1-faiz_abbas@ti.com>
-In-Reply-To: <20200825055442.16994-1-faiz_abbas@ti.com>
+To: dunaev@tecon.ru, linux-can <linux-can@vger.kernel.org>
+Cc: "dunaich@mail.ru" <dunaich@mail.ru>
+Message-ID: <deca9362-a911-5bd1-c8f3-1ed25a5d03ca@pengutronix.de>
+Subject: Re: [PATCH] fixup! can: mscan: mscan_rx_poll(): fix rx path lockup
+ when returning from polling to irq mode
+References: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
+In-Reply-To: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
 
---iuBwrBRpDu4oPsWzozGg6Dvhcf352MSWD
+--9DbtFCqHbbW3rp0w1vNcGv7M3gthIDDYG
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 8/25/20 7:54 AM, Faiz Abbas wrote:
-> There might be some requests pending in the buffer when the
-> interface close sequence occurs. In some devices, these
-> pending requests might lead to the module not shutting down
-> properly when m_can_clk_stop() is called.
+On 7/30/20 10:40 AM, Dmitry Dunaev wrote:
+> can: mscan: mscan_rx_poll(): fix void function return result check
 >=20
-> Therefore, move the device to init state before potentially
-> powering it down.
+> Last operation in mscan_rx_poll() check result of calling napi_complete=
+_done()
+> function which has void type. So some compilers (like riscv32-unknown-l=
+inux-gnu-gcc)
+> raises error on this line.
+
+Since commit:
+
+    364b6055738b net: busy-poll:
+                 return busypolling status to drivers
+
+the function napi_complete_done() is bool, that was in v4.10-rc1~202^2~25=
+5^2~2.
+
+> According to 'likely' compiler option and network api usage this check =
+is removed.
 >=20
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
+> Signed-off-by: Dmitry Dunaev <dunaev@tecon.ru>
+> ---
+> =C2=A0drivers/net/can/mscan/mscan.c | 9 ++++-----
+> =C2=A01 file changed, 4 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/msca=
+n.c
+> index 99101d7027a8..e06ae5888358 100644
+> --- a/drivers/net/can/mscan/mscan.c
+> +++ b/drivers/net/can/mscan/mscan.c
+> @@ -412,11 +412,10 @@ static int mscan_rx_poll(struct napi_struct *napi=
+, int quota)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (work_done < quota)=
+ {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 if (likely(napi_complete_done(&priv->napi, work_done))) {
 
-Added to linux-can/testing.
+This "likely(napi_complete_done())" was introduced in:
 
-Tnx,
+    2d77bd61a292 can: mscan: mscan_rx_poll():
+    fix rx path lockup when returning from polling to irq mode
+
+which is v5.5-rc6~23^2~35^2.
+
+Are you using a kernel older than v4.10?
+
+regards,
 Marc
 
 --=20
@@ -155,23 +186,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---iuBwrBRpDu4oPsWzozGg6Dvhcf352MSWD--
+--9DbtFCqHbbW3rp0w1vNcGv7M3gthIDDYG--
 
---FLINfmH2tzMl5GH6qbhGBVFmGAmBjTrrJ
+--Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+sZsIACgkQqclaivrt
-76neyQf7Bo/LNsQSo9M1tmaTNHiUilvKCob55/Zz+9X4yXdOuohr3/TkG4MEaYyI
-whCKppIDS8nhi1wz4jHgfe3SHm3mWH/wZNGjJdWB+H9hchbi1gR/CsBEe/TuZxry
-9wZQ1jejh+OD5zmOo4UCj7s740+jT1J4C9qSgkqxfBzvZVz44IRkSbZ4Msd2hr1X
-r9ACYjh+YgY5TaAt1xfu0lu9mumzB16PNJ4u+4rtdrKJN29h98Ip1JI8UGaGFxZw
-2PnrHQVxmihBIA4oaV6BF3l6Cp8dv6lDMUmes3+lZxGIGqC2raHQnyBL6R4FdP6r
-pPTEfkGXAcAAf+3UuAj2+zgekzKDBQ==
-=35uP
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+saWgACgkQqclaivrt
+76mjcQf9HybApqGcpXHaQkVMXTVwbU+6PbdAIByHVnupqpha1qhoG2TkpYQBSIpw
+arxS6RINxXFbmwceYaGKrooHMyIUSkkQXOlyIXGVgHUDkWy0A5XJmzvMwLBDwdx8
++SNWH8CvC1NmpMNJbHoxIfziakIkV/I2C4/cgJA+vqPPxsDz8tyl+whWMX8ezOPY
+rZtw+wXbRpBnUCtOxIXA866E1OoGzSiyIjKt5XPYANNr8jnARjO8QRnRI4rNT1Ow
+vpXXyIbgCtRA2b9uCVmsjAj4qpUZqgBcIPTWl7H73t+GTjnSgUP6Xsk/qFh2qSz8
+1B/VcYV3RpwIgcCPncB1bmHoDqgbjw==
+=8vpy
 -----END PGP SIGNATURE-----
 
---FLINfmH2tzMl5GH6qbhGBVFmGAmBjTrrJ--
+--Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW--
