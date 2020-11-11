@@ -2,93 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B1E12AFAFD
-	for <lists+linux-can@lfdr.de>; Wed, 11 Nov 2020 23:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5C62AFB23
+	for <lists+linux-can@lfdr.de>; Wed, 11 Nov 2020 23:12:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbgKKWFc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 11 Nov 2020 17:05:32 -0500
-Received: from mail-02.mail-europe.com ([51.89.119.103]:60066 "EHLO
-        mail-02.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbgKKWFc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 17:05:32 -0500
-Date:   Wed, 11 Nov 2020 22:05:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acoro.eu;
-        s=protonmail; t=1605132327;
-        bh=YwiOtjh3dkSm3ETj7PtSFmBV9QRYMwHkwGv/h8sSZ3w=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=XIzRr76U8o8ou9QD+vYiGP5OUZCyEyfhSW8RhLkkvy0yccz7kCldbJc6DKj0ipnvk
-         S/sUK1ggclxlCPgVJomAexE4E/RcKZicatgl9K+uZhXmqA8lG9zRA++0oRqH6ii5pc
-         tKKw91r7Ks2O/Fk8gs4wDUQyn0VB8zCYaqmewCj1ezazUIOreEhVwfJWmRjl+ch9nM
-         Wq5SjTCI0eB/1Wj3oJ2iLvLpNTYA9tO/dNTyewwS3CHkedbBdq3Y9mVt9awHo214XJ
-         Tm7mE0w0E6vy0pDzzMy9oQqHkqJ/2gjTjbHUS+PCjj5cxmsAzZ7De5WOC7oF0tWtNa
-         L3XjOsk5j2GAg==
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-From:   Alejandro <alejandro@acoro.eu>
-Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org
-Reply-To: Alejandro <alejandro@acoro.eu>
-Subject: Re: [PATCH] can: dev: can_restart(): post buffer from the right context
-Message-ID: <fec3e267-fe82-6967-89e1-70dd09924a35@acoro.eu>
-In-Reply-To: <fa4fe13b-b98b-ccb4-64c8-116d682b0162@pengutronix.de>
-References: <bd6d51f4-4a18-e557-46d1-00d3539d163e@acoro.eu> <4e84162b-fb31-3a73-fa9a-9438b4bd5234@acoro.eu> <e8dc38e5-5f4d-a1c9-8edb-d612b781467b@pengutronix.de> <2e152de6-a3b1-ad81-981d-423835eb184e@acoro.eu> <fa4fe13b-b98b-ccb4-64c8-116d682b0162@pengutronix.de>
+        id S1726466AbgKKWMJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 11 Nov 2020 17:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725933AbgKKWMJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 17:12:09 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76A8C0613D1
+        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 14:12:08 -0800 (PST)
+Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kcyLW-0001xv-US; Wed, 11 Nov 2020 23:12:07 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        =?UTF-8?q?Remigiusz=20Ko=C5=82=C5=82=C4=85taj?= 
+        <remigiusz.kollataj@mobica.com>
+Subject: [PATCH] can: mcba_usb: mcba_usb_start_xmit(): first fill skb, then pass to can_put_echo_skb()
+Date:   Wed, 11 Nov 2020 23:12:04 +0100
+Message-Id: <20201111221204.1639007-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:205:1d::14
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thanks for quick response. I'll send a second version of the patch if that'=
-s OK :).
+The driver has to first fill the skb with data and then handle it to
+can_put_echo_skb(). This patch moves the can_put_echo_skb() down, right before
+sending the skb out via USB.
 
-BR,
-Alejandro
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+Cc: Remigiusz Kołłątaj <remigiusz.kollataj@mobica.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/usb/mcba_usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On 11/11/20 22:48, Marc Kleine-Budde wrote:
-
-> On 11/6/20 6:33 PM, Alejandro wrote:
->> On 6/11/20 11:25, Marc Kleine-Budde wrote:
->>
->>> On 11/5/20 10:51 PM, Alejandro wrote:
->>>> From: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
->>>>
->>>> netif_rx() is meant to be called from interrupt contexts. can_restart(=
-)
->>>> may be called by can_restart_work(), which is called from a worqueue, =
-so
->>>> it may run in process context. Use netif_rx_any_context() which invoke=
-s
->>>> the correct code path depending on context.
->>>>
->>>> Co-developed-by: Loris Fauster<loris.fauster@ttcontrol.com>
->>>> Signed-off-by: Loris Fauster<loris.fauster@ttcontrol.com>
->>>> Signed-off-by: Alejandro Concepcion Rodriguez<alejandro@acoro.eu>
->>> I think we either call can_restart() from a netlink callback via
->>> can_restart_now() or via the can_restart_work(). So we should always us=
-e
->>> netif_rx_ni(skb), right?
->> Right, I think that currently it is as you say. However, it seems that
->> can_restart_now() has public visibility (/linux/can/dev.h),
-> Yes, but it doesn't export it's symbols. I've removed the function from t=
-he
-> header file and everything still compiles.
->
->> and even though
->> it doesn't seem to be used by other CAN drivers for now, I guess it coul=
-d
->> potentially be used in future. netif_rx_any_context() should avoid issue=
-s
->> if can_restart_now() is called from an ISR later.
-> I don't see a valid usecase where can_restart_now() is called from an ISR=
-. We
-> can change this if an uscase pops up later.
->
-> regards,
-> Marc
->
->
+diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+index 5857b37dcd96..e97f2e0da6b0 100644
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -326,8 +326,6 @@ static netdev_tx_t mcba_usb_start_xmit(struct sk_buff *skb,
+ 	if (!ctx)
+ 		return NETDEV_TX_BUSY;
+ 
+-	can_put_echo_skb(skb, priv->netdev, ctx->ndx);
+-
+ 	if (cf->can_id & CAN_EFF_FLAG) {
+ 		/* SIDH    | SIDL                 | EIDH   | EIDL
+ 		 * 28 - 21 | 20 19 18 x x x 17 16 | 15 - 8 | 7 - 0
+@@ -357,6 +355,8 @@ static netdev_tx_t mcba_usb_start_xmit(struct sk_buff *skb,
+ 	if (cf->can_id & CAN_RTR_FLAG)
+ 		usb_msg.dlc |= MCBA_DLC_RTR_MASK;
+ 
++	can_put_echo_skb(skb, priv->netdev, ctx->ndx);
++
+ 	err = mcba_usb_xmit(priv, (struct mcba_usb_msg *)&usb_msg, ctx);
+ 	if (err)
+ 		goto xmit_failed;
+-- 
+2.28.0
 
