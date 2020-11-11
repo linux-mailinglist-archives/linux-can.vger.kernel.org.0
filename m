@@ -2,207 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 820682AFD5E
-	for <lists+linux-can@lfdr.de>; Thu, 12 Nov 2020 02:56:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2528E2AFD5F
+	for <lists+linux-can@lfdr.de>; Thu, 12 Nov 2020 02:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgKLBbQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1726229AbgKLBbQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Wed, 11 Nov 2020 20:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727173AbgKKWpH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 17:45:07 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0F8C061A4A
-        for <linux-can@vger.kernel.org>; Wed, 11 Nov 2020 14:45:07 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kcyrQ-0004wE-9P; Wed, 11 Nov 2020 23:45:04 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a] (unknown [IPv6:2a03:f580:87bc:d400:f584:6a63:cc3a:f86a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 031FE590391;
-        Wed, 11 Nov 2020 22:45:01 +0000 (UTC)
-To:     dunaev@tecon.ru, linux-can <linux-can@vger.kernel.org>
-Cc:     "dunaich@mail.ru" <dunaich@mail.ru>
-References: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH] fixup! can: mscan: mscan_rx_poll(): fix rx path lockup
- when returning from polling to irq mode
-Message-ID: <deca9362-a911-5bd1-c8f3-1ed25a5d03ca@pengutronix.de>
-Date:   Wed, 11 Nov 2020 23:44:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:42326 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727819AbgKKXJ5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 11 Nov 2020 18:09:57 -0500
+Received: by mail-oi1-f196.google.com with SMTP id w145so4140380oie.9;
+        Wed, 11 Nov 2020 15:09:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=60RrVFqWWdxAN6Mge7nSOxyHfyjaJE+UbXHO2MJ0/Ew=;
+        b=MjcRO3DARFMPCMxbcv8Vn7zZGkeWnLIyCz+EZKi7ud9ZcAZuhuxNM5FUuGKeKkulmX
+         hv5d6tNeZRpY4LqmbaU9h4zJvh0sng+TthM5GPkKSnM8cCJK5ETKa/YNtuNUb0zU/91j
+         EEyGL+zSKgh1RQqLv6stbhD5Q8a7BmRSe3Vx8m+25doRh82bHhGNIABiisIKD7vB564Y
+         bgt1WxLGFhJ8EsHxC77GcyGYsUr0iwfDCb5jQNTmBdPA4eesuftwjhryP77OgO8O7+Ok
+         MploKB80vakBRg0a66pzK/EOOVY3b8aQ0styCTzLBwhSv53ABHO9eXVtQa2fysZs/l1D
+         5OBw==
+X-Gm-Message-State: AOAM531gjwKZVlKhUck8yDd8/Dfolw2ijpBobqH0I+jPleqkFilxSeLT
+        81LD/sSYv28ephFtNZkT3Q==
+X-Google-Smtp-Source: ABdhPJzc4X68X6/P1ZrKLVbEWkCMzB4pbLAPm5keK9jd9uq8aLjvGozwDxCJyDCSnvSxi6+A1pil5g==
+X-Received: by 2002:aca:4797:: with SMTP id u145mr2610482oia.0.1605136196720;
+        Wed, 11 Nov 2020 15:09:56 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x8sm872464ooc.44.2020.11.11.15.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Nov 2020 15:09:55 -0800 (PST)
+Received: (nullmailer pid 2220284 invoked by uid 1000);
+        Wed, 11 Nov 2020 23:09:55 -0000
+Date:   Wed, 11 Nov 2020 17:09:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de, devicetree@vger.kernel.org,
+        linux-can@vger.kernel.org, Fabio Estevam <fabio.estevam@nxp.com>
+Subject: Re: [PATCH] dt-bindings: clock: imx5: fix example
+Message-ID: <20201111230955.GA2214526@bogus>
+References: <20201111213548.1621094-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201111213548.1621094-1-mkl@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW
-Content-Type: multipart/mixed; boundary="9DbtFCqHbbW3rp0w1vNcGv7M3gthIDDYG";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: dunaev@tecon.ru, linux-can <linux-can@vger.kernel.org>
-Cc: "dunaich@mail.ru" <dunaich@mail.ru>
-Message-ID: <deca9362-a911-5bd1-c8f3-1ed25a5d03ca@pengutronix.de>
-Subject: Re: [PATCH] fixup! can: mscan: mscan_rx_poll(): fix rx path lockup
- when returning from polling to irq mode
-References: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
-In-Reply-To: <4365eab9aee7f907c5b62fc71a79ccc4c56312fa.camel@tecon.ru>
-
---9DbtFCqHbbW3rp0w1vNcGv7M3gthIDDYG
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-On 7/30/20 10:40 AM, Dmitry Dunaev wrote:
-> can: mscan: mscan_rx_poll(): fix void function return result check
->=20
-> Last operation in mscan_rx_poll() check result of calling napi_complete=
-_done()
-> function which has void type. So some compilers (like riscv32-unknown-l=
-inux-gnu-gcc)
-> raises error on this line.
-
-Since commit:
-
-    364b6055738b net: busy-poll:
-                 return busypolling status to drivers
-
-the function napi_complete_done() is bool, that was in v4.10-rc1~202^2~25=
-5^2~2.
-
-> According to 'likely' compiler option and network api usage this check =
-is removed.
->=20
-> Signed-off-by: Dmitry Dunaev <dunaev@tecon.ru>
+On Wed, Nov 11, 2020 at 10:35:48PM +0100, Marc Kleine-Budde wrote:
+> Since commit:
+> 
+>     0e030a373df3 ("can: flexcan: fix endianess detection")
+> 
+> the fsl,imx53-flexcan isn't compatible with the fsl,p1010-flexcan any more. As
+> the former accesses the IP core in Little Endian mode and the latter uses Big
+> Endian mode.
+> 
+> With the conversion of the flexcan DT bindings to yaml, the dt_binding_check
+> this throws the following error:
+> 
+> Documentation/devicetree/bindings/clock/imx5-clock.example.dt.yaml: can@53fc8000: compatible: 'oneOf' conditional failed, one must be fixed:
+>         ['fsl,imx53-flexcan', 'fsl,imx25-flexcan'] is too long
+>         Additional items are not allowed ('fsl,imx25-flexcan' was unexpected)
+>         'fsl,imx53-flexcan' is not one of ['fsl,imx7d-flexcan', 'fsl,imx6ul-flexcan', 'fsl,imx6sx-flexcan']
+>         'fsl,imx53-flexcan' is not one of ['fsl,ls1028ar1-flexcan']
+>         'fsl,imx6q-flexcan' was expected
+>         'fsl,lx2160ar1-flexcan' was expected
+>         From schema: Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+> 
+> The error is fixed by removing the "fsl,p1010-flexcan" compatible (which turned
+> out the be incompatible) from the binding example.
+> 
+> Cc: Fabio Estevam <fabio.estevam@nxp.com>
+> Cc: devicetree@vger.kernel.org
+> Reported-by: Rob Herring <robh+dt@kernel.org>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > ---
-> =C2=A0drivers/net/can/mscan/mscan.c | 9 ++++-----
-> =C2=A01 file changed, 4 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/msca=
-n.c
-> index 99101d7027a8..e06ae5888358 100644
-> --- a/drivers/net/can/mscan/mscan.c
-> +++ b/drivers/net/can/mscan/mscan.c
-> @@ -412,11 +412,10 @@ static int mscan_rx_poll(struct napi_struct *napi=
-, int quota)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (work_done < quota)=
- {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 if (likely(napi_complete_done(&priv->napi, work_done))) {
+>  Documentation/devicetree/bindings/clock/imx5-clock.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/imx5-clock.yaml b/Documentation/devicetree/bindings/clock/imx5-clock.yaml
+> index 4d9e7c73dce9..155379c3c41e 100644
+> --- a/Documentation/devicetree/bindings/clock/imx5-clock.yaml
+> +++ b/Documentation/devicetree/bindings/clock/imx5-clock.yaml
+> @@ -57,7 +57,7 @@ examples:
+>      };
+>  
+>      can@53fc8000 {
+> -        compatible = "fsl,imx53-flexcan", "fsl,p1010-flexcan";
+> +        compatible = "fsl,imx53-flexcan";
 
-This "likely(napi_complete_done())" was introduced in:
+But you just added that "fsl,imx53-flexcan" has a fallback of 
+'fsl,imx25-flexcan'. 
 
-    2d77bd61a292 can: mscan: mscan_rx_poll():
-    fix rx path lockup when returning from polling to irq mode
+Looks like "fsl,imx53-flexcan" alone needs to be dropped. Decide the one 
+way that is valid please. I've dropped the schema change until sorted 
+out.
 
-which is v5.5-rc6~23^2~35^2.
-
-Are you using a kernel older than v4.10?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---9DbtFCqHbbW3rp0w1vNcGv7M3gthIDDYG--
-
---Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+saWgACgkQqclaivrt
-76mjcQf9HybApqGcpXHaQkVMXTVwbU+6PbdAIByHVnupqpha1qhoG2TkpYQBSIpw
-arxS6RINxXFbmwceYaGKrooHMyIUSkkQXOlyIXGVgHUDkWy0A5XJmzvMwLBDwdx8
-+SNWH8CvC1NmpMNJbHoxIfziakIkV/I2C4/cgJA+vqPPxsDz8tyl+whWMX8ezOPY
-rZtw+wXbRpBnUCtOxIXA866E1OoGzSiyIjKt5XPYANNr8jnARjO8QRnRI4rNT1Ow
-vpXXyIbgCtRA2b9uCVmsjAj4qpUZqgBcIPTWl7H73t+GTjnSgUP6Xsk/qFh2qSz8
-1B/VcYV3RpwIgcCPncB1bmHoDqgbjw==
-=8vpy
------END PGP SIGNATURE-----
-
---Ea1PIOjB6D6s6e12JvC8WSxUHAx6ZMGCW--
+Rob
