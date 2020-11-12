@@ -2,18 +2,18 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9D12B0C44
-	for <lists+linux-can@lfdr.de>; Thu, 12 Nov 2020 19:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A812B0C3A
+	for <lists+linux-can@lfdr.de>; Thu, 12 Nov 2020 19:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbgKLSFy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 12 Nov 2020 13:05:54 -0500
-Received: from mail3.ems-wuensche.com ([81.169.186.156]:49526 "EHLO
+        id S1726426AbgKLSE4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 12 Nov 2020 13:04:56 -0500
+Received: from mail3.ems-wuensche.com ([81.169.186.156]:48779 "EHLO
         mail3.ems-wuensche.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726418AbgKLSEy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Nov 2020 13:04:54 -0500
+        with ESMTP id S1726592AbgKLSE4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 12 Nov 2020 13:04:56 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by h2257714.serverkompetenz.net (Postfix) with ESMTP id 3441AFFA8C
-        for <linux-can@vger.kernel.org>; Thu, 12 Nov 2020 18:04:53 +0000 (UTC)
+        by h2257714.serverkompetenz.net (Postfix) with ESMTP id D8B46FFA90
+        for <linux-can@vger.kernel.org>; Thu, 12 Nov 2020 18:04:54 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
 X-Spam-Flag: NO
 X-Spam-Score: -1.901
@@ -23,15 +23,15 @@ X-Spam-Status: No, score=-1.901 tagged_above=-9999.9 required=5
         URIBL_BLOCKED=0.001] autolearn=unavailable autolearn_force=no
 Received: from mail3.ems-wuensche.com ([81.169.186.156])
         by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hIrENVxgPSU2 for <linux-can@vger.kernel.org>;
-        Thu, 12 Nov 2020 19:04:52 +0100 (CET)
+        with ESMTP id y1RS_KVlK49W for <linux-can@vger.kernel.org>;
+        Thu, 12 Nov 2020 19:04:53 +0100 (CET)
 From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 To:     linux-can@vger.kernel.org
 Cc:     wg@grandegger.com, mkl@pengutronix.de,
         Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Subject: [PATCH v2 10/16] can: ems_usb: Added receive routine for CAN FD messages
-Date:   Thu, 12 Nov 2020 19:03:40 +0100
-Message-Id: <20201112180346.29070-11-uttenthaler@ems-wuensche.com>
+Subject: [PATCH v2 11/16] can: ems_usb: Added ems_usb_write_mode_fd
+Date:   Thu, 12 Nov 2020 19:03:41 +0100
+Message-Id: <20201112180346.29070-12-uttenthaler@ems-wuensche.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20201112180346.29070-1-uttenthaler@ems-wuensche.com>
 References: <20201112180346.29070-1-uttenthaler@ems-wuensche.com>
@@ -41,82 +41,65 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Added ems_usb_rx_canfd_msg routine for CAN FD frame reception
+This patch enables the supported CAN controller modes for CPC-USB/FD
 
 Signed-off-by: Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
 ---
- drivers/net/can/usb/ems_usb.c | 44 +++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ drivers/net/can/usb/ems_usb.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
-index 96012052a375..8ada663350fa 100644
+index 8ada663350fa..6d8f733c6c7f 100644
 --- a/drivers/net/can/usb/ems_usb.c
 +++ b/drivers/net/can/usb/ems_usb.c
-@@ -40,6 +40,7 @@ MODULE_LICENSE("GPL v2");
- #define CPC_MSG_TYPE_OVERRUN         21 /* overrun events */
- #define CPC_MSG_TYPE_CAN_FRAME_ERROR 23 /* detected bus errors */
- #define CPC_MSG_TYPE_ERR_COUNTER     25 /* RX/TX error counter */
-+#define CPC_MSG_TYPE_CANFD_FRAME     26 /* CAN FD frame */
- 
- /* Messages from the PC to the CPC interface  */
- #define CPC_CMD_TYPE_CAN_FRAME     1   /* CAN data frame */
-@@ -388,6 +389,45 @@ static void ems_usb_rx_can_msg(struct ems_usb *dev, struct ems_cpc_msg *msg)
- 	netif_rx(skb);
+@@ -689,6 +689,32 @@ static int ems_usb_write_mode_arm7(struct ems_usb *dev, u32 mode)
+ 	return ems_usb_command_msg(dev, &dev->active_params);
  }
  
-+static void ems_usb_rx_canfd_msg(struct ems_usb *dev, struct ems_cpc_msg *msg)
++static int ems_usb_write_mode_fd(struct ems_usb *dev, u32 mode)
 +{
-+	struct cpc_canfd_msg *fd_msg = &msg->msg.canfd_msg;
++	struct cpc_generic_can_params *gcp =
++		&dev->active_params.msg.can_params.cc_params.generic;
 +
-+	/* Although the CPC_FDFLAG_NONCANFD_MSG flag
-+	 * should not be set with a received message,
-+	 * it seems better to have checked it anyway.
-+	 */
-+	if (!(fd_msg->flags & CPC_FDFLAG_NONCANFD_MSG)) {
-+		/* CAN FD frame */
-+		struct canfd_frame *cfd;
-+		struct sk_buff *skb;
-+		struct net_device_stats *stats = &dev->netdev->stats;
++	if (mode == CPC_USB_RESET_MODE) {
++		gcp->config |= cpu_to_le32(CPC_GENERICCONF_RESET_MODE);
++	} else if (mode == CPC_USB_RUN_MODE) {
++		gcp->config &= cpu_to_le32(~CPC_GENERICCONF_RESET_MODE);
 +
-+		skb = alloc_canfd_skb(dev->netdev, &cfd);
-+		if (!skb)
-+			return;
++		if (dev->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
++			gcp->config |= cpu_to_le32(CPC_GENERICCONF_LISTEN_ONLY);
++		else
++			gcp->config &= cpu_to_le32(~CPC_GENERICCONF_LISTEN_ONLY);
 +
-+		cfd->can_id = le32_to_cpu(fd_msg->id);
-+		cfd->len = fd_msg->length;
-+
-+		memcpy(cfd->data, fd_msg->msg, cfd->len);
-+
-+		cfd->flags = 0;
-+		if (fd_msg->flags & CPC_FDFLAG_BRS)
-+			cfd->flags |= CANFD_BRS;
-+
-+		if (fd_msg->flags & CPC_FDFLAG_ESI)
-+			cfd->flags |= CANFD_ESI;
-+
-+		if (fd_msg->flags & CPC_FDFLAG_XTD)
-+			cfd->can_id |= CAN_EFF_FLAG;
-+
-+		stats->rx_packets++;
-+		stats->rx_bytes += cfd->len;
-+		netif_rx(skb);
++		if (dev->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT)
++			gcp->config |= cpu_to_le32(CPC_GENERICCONF_SINGLE_SHOT);
++		else
++			gcp->config &= cpu_to_le32(~CPC_GENERICCONF_SINGLE_SHOT);
++	} else {
++		return -EINVAL;
 +	}
++
++	return ems_usb_command_msg(dev, &dev->active_params);
 +}
 +
- static void ems_usb_rx_err(struct ems_usb *dev, struct ems_cpc_msg *msg)
- {
- 	struct can_frame *cf;
-@@ -520,6 +560,10 @@ static void ems_usb_read_bulk_callback(struct urb *urb)
- 			ems_usb_rx_can_msg(dev, msg);
- 			break;
+ /* Send a CPC_Control command to change behaviour when interface receives a CAN
+  * message, bus error or CAN state changed notifications.
+  */
+@@ -1256,12 +1282,14 @@ static int ems_usb_probe(struct usb_interface *intf,
+ 		dev->can.data_bittiming_const = &ems_usb_bittiming_const_generic_data;
+ 		dev->can.do_set_bittiming = ems_usb_set_bittiming_generic;
+ 		dev->can.do_set_data_bittiming = ems_usb_set_bittiming_generic_data;
++		dev->can.do_set_mode = ems_usb_set_mode;
+ 		dev->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+ 					      CAN_CTRLMODE_ONE_SHOT |
+ 					      CAN_CTRLMODE_BERR_REPORTING |
+ 					      CAN_CTRLMODE_FD |
+ 					      CAN_CTRLMODE_FD_NON_ISO;
+ 		init_params_generic(&dev->active_params);
++		dev->ems_usb_write_mode = ems_usb_write_mode_fd;
+ 		dev->bulk_rd_buf_size = CPC_USB_FD_RX_BUFFER_SIZE;
+ 	break;
  
-+		case CPC_MSG_TYPE_CANFD_FRAME:
-+			ems_usb_rx_canfd_msg(dev, msg);
-+			break;
-+
- 		case CPC_MSG_TYPE_CAN_FRAME_ERROR:
- 			/* Process errorframe */
- 			ems_usb_rx_err(dev, msg);
 -- 
 2.26.2
 
