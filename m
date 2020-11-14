@@ -2,90 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B53702B1DE9
-	for <lists+linux-can@lfdr.de>; Fri, 13 Nov 2020 16:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16DB2B2CDA
+	for <lists+linux-can@lfdr.de>; Sat, 14 Nov 2020 12:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgKMPA2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 13 Nov 2020 10:00:28 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42722 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726614AbgKMPAZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 13 Nov 2020 10:00:25 -0500
-Received: by mail-ot1-f65.google.com with SMTP id h16so5043546otq.9;
-        Fri, 13 Nov 2020 07:00:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VmahaNCCiWAzP+6zAolyYpB1M5noh0yEIKUtBdGplDQ=;
-        b=PN2mLXQZHDHz8Br6rtouFdxVeecFL1Ui14IKSZtkuOQxetGISyo1ACrepll6ZSv9Ga
-         /zW8l1AEv+i4zA6UlDqOKIgIDpnz1wPf3YeQYyUL5ZzD+O/TPrKvIW6DTEo/pKetvP5s
-         05d7B1qdtmPA6AeRnEyuibZis9IxrSN/uuqcWIZ9EepymTy3BSrHDwVR0sx6Op6TzhPS
-         Q0AB1RAjUf+6ZAVqfqQUyy6qGjzYHFus/qgNP3tphSf5P2I8cmDjz1+EOgFf2ZRQfoJZ
-         7C7Rbf5jwc9SBoGb5XI+IASIZTd8XsM/AxWcw9C+qGXzWavnM+cRHpZX3HUqJGfoOLgp
-         uCUg==
-X-Gm-Message-State: AOAM532Hr5MLWiA0pKbXejFLsKvhiXm3rVTAFcODReCjsoaQDVf16kSZ
-        48g73oAsFL2xJsV8MHjfGyEKyxvNyA==
-X-Google-Smtp-Source: ABdhPJxXF/baKvpipbsRty/VEzCGFQQNM8Lt8ZUoBmoHBr1lD+FWMq2Ne5a9+aSAjUgZ1TF+pfc0gw==
-X-Received: by 2002:a9d:62c1:: with SMTP id z1mr1748469otk.108.1605279624148;
-        Fri, 13 Nov 2020 07:00:24 -0800 (PST)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d3sm1990917otb.24.2020.11.13.07.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Nov 2020 07:00:23 -0800 (PST)
-Received: (nullmailer pid 1457523 invoked by uid 1000);
-        Fri, 13 Nov 2020 15:00:22 -0000
-Date:   Fri, 13 Nov 2020 09:00:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Fabio Estevam <fabio.estevam@nxp.com>
-Subject: Re: [PATCH] dt-bindings: clock: imx5: fix example
-Message-ID: <20201113150022.GA1455810@bogus>
-References: <20201111213548.1621094-1-mkl@pengutronix.de>
+        id S1726495AbgKNLNa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 14 Nov 2020 06:13:30 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7192 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726356AbgKNLNa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 14 Nov 2020 06:13:30 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4CYCPS22RPz15Vlr;
+        Sat, 14 Nov 2020 19:13:16 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.487.0; Sat, 14 Nov 2020
+ 19:13:25 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
+        <kuba@kernel.org>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH] can: ti_hecc: Fix memleak in ti_hecc_probe
+Date:   Sat, 14 Nov 2020 19:17:08 +0800
+Message-ID: <20201114111708.3465543-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201111213548.1621094-1-mkl@pengutronix.de>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 11 Nov 2020 22:35:48 +0100, Marc Kleine-Budde wrote:
-> Since commit:
-> 
->     0e030a373df3 ("can: flexcan: fix endianess detection")
-> 
-> the fsl,imx53-flexcan isn't compatible with the fsl,p1010-flexcan any more. As
-> the former accesses the IP core in Little Endian mode and the latter uses Big
-> Endian mode.
-> 
-> With the conversion of the flexcan DT bindings to yaml, the dt_binding_check
-> this throws the following error:
-> 
-> Documentation/devicetree/bindings/clock/imx5-clock.example.dt.yaml: can@53fc8000: compatible: 'oneOf' conditional failed, one must be fixed:
->         ['fsl,imx53-flexcan', 'fsl,imx25-flexcan'] is too long
->         Additional items are not allowed ('fsl,imx25-flexcan' was unexpected)
->         'fsl,imx53-flexcan' is not one of ['fsl,imx7d-flexcan', 'fsl,imx6ul-flexcan', 'fsl,imx6sx-flexcan']
->         'fsl,imx53-flexcan' is not one of ['fsl,ls1028ar1-flexcan']
->         'fsl,imx6q-flexcan' was expected
->         'fsl,lx2160ar1-flexcan' was expected
->         From schema: Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
-> 
-> The error is fixed by removing the "fsl,p1010-flexcan" compatible (which turned
-> out the be incompatible) from the binding example.
-> 
-> Cc: Fabio Estevam <fabio.estevam@nxp.com>
-> Cc: devicetree@vger.kernel.org
-> Reported-by: Rob Herring <robh+dt@kernel.org>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/clock/imx5-clock.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+In the error handling, we should goto the probe_exit_candev
+to free ndev to prevent memory leak.
 
-I've fixed things up with this and the compatible fixes and applied as 
-this needs to get into rc4.
+Fixes: dabf54dd1c63 ("can: ti_hecc: Convert TI HECC driver to DT only driver")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+---
+ drivers/net/can/ti_hecc.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-Rob
+diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+index 9913f5458279..2c22f40e12bd 100644
+--- a/drivers/net/can/ti_hecc.c
++++ b/drivers/net/can/ti_hecc.c
+@@ -881,7 +881,8 @@ static int ti_hecc_probe(struct platform_device *pdev)
+ 	priv->base = devm_platform_ioremap_resource_byname(pdev, "hecc");
+ 	if (IS_ERR(priv->base)) {
+ 		dev_err(&pdev->dev, "hecc ioremap failed\n");
+-		return PTR_ERR(priv->base);
++		err = PTR_ERR(priv->base);
++		goto probe_exit_candev;
+ 	}
+ 
+ 	/* handle hecc-ram memory */
+@@ -889,20 +890,22 @@ static int ti_hecc_probe(struct platform_device *pdev)
+ 							       "hecc-ram");
+ 	if (IS_ERR(priv->hecc_ram)) {
+ 		dev_err(&pdev->dev, "hecc-ram ioremap failed\n");
+-		return PTR_ERR(priv->hecc_ram);
++		err = PTR_ERR(priv->hecc_ram);
++		goto probe_exit_candev;
+ 	}
+ 
+ 	/* handle mbx memory */
+ 	priv->mbx = devm_platform_ioremap_resource_byname(pdev, "mbx");
+ 	if (IS_ERR(priv->mbx)) {
+ 		dev_err(&pdev->dev, "mbx ioremap failed\n");
+-		return PTR_ERR(priv->mbx);
++		err = PTR_ERR(priv->mbx);
++		goto probe_exit_candev;
+ 	}
+ 
+ 	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+ 	if (!irq) {
+ 		dev_err(&pdev->dev, "No irq resource\n");
+-		goto probe_exit;
++		goto probe_exit_candev;
+ 	}
+ 
+ 	priv->ndev = ndev;
+@@ -966,7 +969,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
+ 	clk_put(priv->clk);
+ probe_exit_candev:
+ 	free_candev(ndev);
+-probe_exit:
++
+ 	return err;
+ }
+ 
+-- 
+2.25.4
+
