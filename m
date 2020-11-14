@@ -2,31 +2,30 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 324632B2F12
+	by mail.lfdr.de (Postfix) with ESMTP id A98D92B2F13
 	for <lists+linux-can@lfdr.de>; Sat, 14 Nov 2020 18:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgKNReq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 14 Nov 2020 12:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S1726376AbgKNRer (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 14 Nov 2020 12:34:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726365AbgKNReq (ORCPT
+        with ESMTP id S1726387AbgKNReq (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Sat, 14 Nov 2020 12:34:46 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CF6C0613D1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B328C0613D1
         for <linux-can@vger.kernel.org>; Sat, 14 Nov 2020 09:34:46 -0800 (PST)
 Received: from heimdall.vpn.pengutronix.de ([2001:67c:670:205:1d::14] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kdzRg-0000mY-VO; Sat, 14 Nov 2020 18:34:41 +0100
+        id 1kdzRh-0000mY-Az; Sat, 14 Nov 2020 18:34:41 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Wu Bo <wubo.oduw@gmail.com>,
-        Dan Murphy <dmurphy@ti.com>,
+        kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 12/15] can: m_can: m_can_handle_state_change(): fix state change
-Date:   Sat, 14 Nov 2020 18:33:56 +0100
-Message-Id: <20201114173358.2058600-13-mkl@pengutronix.de>
+Subject: [net 13/15] can: m_can: m_can_class_free_dev(): introduce new function
+Date:   Sat, 14 Nov 2020 18:33:57 +0100
+Message-Id: <20201114173358.2058600-14-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201114173358.2058600-1-mkl@pengutronix.de>
 References: <20201114173358.2058600-1-mkl@pengutronix.de>
@@ -40,46 +39,50 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Wu Bo <wubo.oduw@gmail.com>
+From: Dan Murphy <dmurphy@ti.com>
 
-m_can_handle_state_change() is called with the new_state as an argument.
+This patch creates a common function that peripherials can call to free the
+netdev device when failures occur.
 
-In the switch statements for CAN_STATE_ERROR_ACTIVE, the comment and the
-following code indicate that a CAN_STATE_ERROR_WARNING is handled.
-
-This patch fixes this problem by changing the case to CAN_STATE_ERROR_WARNING.
-
-Signed-off-by: Wu Bo <wubo.oduw@gmail.com>
-Link: http://lore.kernel.org/r/20200129022330.21248-2-wubo.oduw@gmail.com
-Cc: Dan Murphy <dmurphy@ti.com>
-Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
+Fixes: d42f4e1d06d9 ("can: m_can: Create a m_can platform framework")
+Reported-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
+Link: http://lore.kernel.org/r/20200227183829.21854-2-dmurphy@ti.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/m_can/m_can.c | 6 ++++++
+ drivers/net/can/m_can/m_can.h | 1 +
+ 2 files changed, 7 insertions(+)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 02c5795b7393..63887e23d89c 100644
+index 63887e23d89c..f2c87b76e569 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -665,7 +665,7 @@ static int m_can_handle_state_change(struct net_device *dev,
- 	unsigned int ecr;
+@@ -1812,6 +1812,12 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(m_can_class_allocate_dev);
  
- 	switch (new_state) {
--	case CAN_STATE_ERROR_ACTIVE:
-+	case CAN_STATE_ERROR_WARNING:
- 		/* error warning state */
- 		cdev->can.can_stats.error_warning++;
- 		cdev->can.state = CAN_STATE_ERROR_WARNING;
-@@ -694,7 +694,7 @@ static int m_can_handle_state_change(struct net_device *dev,
- 	__m_can_get_berr_counter(dev, &bec);
++void m_can_class_free_dev(struct net_device *net)
++{
++	free_candev(net);
++}
++EXPORT_SYMBOL_GPL(m_can_class_free_dev);
++
+ int m_can_class_register(struct m_can_classdev *m_can_dev)
+ {
+ 	int ret;
+diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+index 49f42b50627a..b2699a7c9997 100644
+--- a/drivers/net/can/m_can/m_can.h
++++ b/drivers/net/can/m_can/m_can.h
+@@ -99,6 +99,7 @@ struct m_can_classdev {
+ };
  
- 	switch (new_state) {
--	case CAN_STATE_ERROR_ACTIVE:
-+	case CAN_STATE_ERROR_WARNING:
- 		/* error warning state */
- 		cf->can_id |= CAN_ERR_CRTL;
- 		cf->data[1] = (bec.txerr > bec.rxerr) ?
+ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev);
++void m_can_class_free_dev(struct net_device *net);
+ int m_can_class_register(struct m_can_classdev *cdev);
+ void m_can_class_unregister(struct m_can_classdev *cdev);
+ int m_can_class_get_clocks(struct m_can_classdev *cdev);
 -- 
 2.29.2
 
