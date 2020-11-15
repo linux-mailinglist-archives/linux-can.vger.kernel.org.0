@@ -2,58 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178E32B363B
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF2F2B363C
 	for <lists+linux-can@lfdr.de>; Sun, 15 Nov 2020 17:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727288AbgKOQb1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 15 Nov 2020 11:31:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S1727289AbgKOQbb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 15 Nov 2020 11:31:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727162AbgKOQb1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 15 Nov 2020 11:31:27 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBA0C0613D2
-        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 08:31:27 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id r17so16957242ljg.5
-        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 08:31:26 -0800 (PST)
+        with ESMTP id S1727162AbgKOQba (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 15 Nov 2020 11:31:30 -0500
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9EAC0613D1
+        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 08:31:30 -0800 (PST)
+Received: by mail-lf1-x142.google.com with SMTP id 74so21370167lfo.5
+        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 08:31:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/GSsVkPYCE2oXRSPzhmyR7xL2KuHN3qLvl41XmaAEn4=;
-        b=e7nirC8igAGWe39nGqu8nylaWZFiuKRLlykWmJU6B6m7A7h0MGsVleq/5Nnvxvqrs9
-         u0KjeTCU2PDH30KzEnoOJArYPW+U4m83r9xMck34rXPXgw39xKrr3XGcZz6p4If8tzib
-         gbn6WGfe80nGY3e4e7MoxCKkhBj8wSDfpW0OpOPBLsrgWSOxF3B+4roV5zl8v90LCHTq
-         WTTTVzvYfK3bSrGamJbWPBS+qxXmfwhRPWXybncLtckllqFw5LY5RGkV+oXzYrXYqEaj
-         Q1f881HW3b/PudzDLlj6+zJo+bxQ+fXxc6IGXFOjsdECN8RqjzY8dKSoApNIObpOJ0IR
-         eyLQ==
+        bh=aFfqs6hRo3I+FITlIMvep8whzD31ubHUBmS0a2ILvJs=;
+        b=QCkfx8zJLn75g2vjkaiDLWjcgO8Pkcnw5rGH8Al2yUp7FHlA0oJnO2Pgw9mua+A5r0
+         qPJ7m6WjIWuXqDRYZsA6Ly89l3V8M+7rP5V4T2zPAJtK2TEUncGWZ5KWhqPf+nRezvdv
+         TI2UqLaZ8hp7PohU9e75zKxfoTSCAsqmIefGI6OKTrKK3IUqUord8izA+p76gS6nvkDE
+         32RIfeXncC+J2bNFxdWG5I9VH4Un2x9ewDYuPQ9lszasYClx4SOwtyx4jf7Obve+PEX3
+         H+Ut6soC9gBJQv9o6ZSqIv6R2NMjyfEfJshJ382T2WnMe7CYbjbuhJqD//vBwi4q9erA
+         kzPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/GSsVkPYCE2oXRSPzhmyR7xL2KuHN3qLvl41XmaAEn4=;
-        b=q9e5USZd93rx8+Q0fsIXCyCXUcvaeosaG9KM0+KJkPvZJvUdpCXdWC904EhUyFscho
-         8vRx0xllTacv8tgUPTsryFKgFuVi9706aiXkUWqFLeJGkyUVes7JIcc74/aovoghdSM6
-         2LacLW+AYFX9RkD+hDrpPplYB4TS6v2zzi6SbBI0xkSR3JOBNsitC8onK5ZBk9mqI9nT
-         OOqI+30gwwo+owizRvkuizJ2zFgPZfY2ndCRHWy4gcO0SRbuJkyF4NWsjlu1hlViDCz1
-         5dfmPc7JV7G320Oc8PkIhjuLPoyNxw5EmM7BKchZ+kozgEFGk8Pz2FMRwPfYjAtacIik
-         DUIQ==
-X-Gm-Message-State: AOAM530RNlkQVZzjKDXkSv2N4/uGiOwZ4tLOggtoqLsXTznbukzYEeQB
-        M15SZhMz7poiRC9BR2oG0anf7Tod+oU=
-X-Google-Smtp-Source: ABdhPJwRljep8lLbDxeY4NeZpil36l6ExI0yvfCfi0EvaGqIAy6fa1D5UXxxPO37HrlHB6uKO6EH5Q==
-X-Received: by 2002:a2e:b8d4:: with SMTP id s20mr4894982ljp.226.1605457885330;
-        Sun, 15 Nov 2020 08:31:25 -0800 (PST)
+        bh=aFfqs6hRo3I+FITlIMvep8whzD31ubHUBmS0a2ILvJs=;
+        b=tXsUtXxe3GeylIfAGTry6AA2JE6poZzhHfhttvIfeKk9RAlhaeIMvPhO0tssyQkSVz
+         fIcIEy3/ULNcfn0FpAX2sMkczOin06uVFH/z6dzx4AaWndF6aRj2vTCWDvolW19gqOXb
+         Bd2WzRq9Ia4vs9bVPOxurHql7BHEwzokI+hyCqCAUR6gj3/yp8FquWGsYyVGKr7CTeSV
+         YGf3k85ojEehKjL7T6QPwdE34NLtkB6lD8TNSsDxKeJlWUO8b1k8WlxZwVwUAbcT0Ei1
+         GmS4ziPKcKULtDao2C1F6KHbkD+v58on8+f6mOWk+5IkcF/kFpbSu1ewWpaP/jOr/cs6
+         59ig==
+X-Gm-Message-State: AOAM531cuySeVOI1dnVLc0fHHJuIn+VZTMA9kQioKfzHLGb6CqjX8gkM
+        Fwi2xkm8AiK5i7bg+alPMQMD/3Ebhxg=
+X-Google-Smtp-Source: ABdhPJzF8lcqQkxv2CbUSx8CB3TP1jCUIWBIWdXYcYqJZhYdU1UcVh9rqlmm8aHBJM/RhrKxi6XhAQ==
+X-Received: by 2002:ac2:505b:: with SMTP id a27mr3804073lfm.172.1605457888861;
+        Sun, 15 Nov 2020 08:31:28 -0800 (PST)
 Received: from jimmy-desk-arch.kvaser.se (h-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id b12sm2419462ljj.133.2020.11.15.08.31.24
+        by smtp.gmail.com with ESMTPSA id b12sm2419462ljj.133.2020.11.15.08.31.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Nov 2020 08:31:24 -0800 (PST)
+        Sun, 15 Nov 2020 08:31:28 -0800 (PST)
 From:   Jimmy Assarsson <jimmyassarsson@gmail.com>
 To:     linux-can@vger.kernel.org
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH 5/6] can: kvaser_usb: kvaser_usb_hydra: Add support for new device variant
-Date:   Sun, 15 Nov 2020 17:30:26 +0100
-Message-Id: <20201115163027.16851-5-jimmyassarsson@gmail.com>
+Subject: [PATCH 6/6] can: kvaser_usb: Add new Kvaser hydra devices
+Date:   Sun, 15 Nov 2020 17:30:27 +0100
+Message-Id: <20201115163027.16851-6-jimmyassarsson@gmail.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201115163027.16851-1-jimmyassarsson@gmail.com>
 References: <20201115163027.16851-1-jimmyassarsson@gmail.com>
@@ -63,90 +63,57 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Christer Beskow <chbe@kvaser.com>
+From: Jimmy Assarsson <extja@kvaser.com>
 
-Add support for a new variant of devices using the hydra platform, based on
-NXP i.MX RT (flexcan).
+Add new Kvaser hydra devices.
 
-Signed-off-by: Christer Beskow <chbe@kvaser.com>
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- .../net/can/usb/kvaser_usb/kvaser_usb_hydra.c | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ drivers/net/can/usb/Kconfig                      | 3 +++
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 8 +++++++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-index 218fadc91155..980ff3acfefd 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
-@@ -34,6 +34,7 @@
- /* Forward declarations */
- static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_kcan;
- static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_flexc;
-+static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_rt;
+diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
+index 161f15e5218d..c1e5d5b570b6 100644
+--- a/drivers/net/can/usb/Kconfig
++++ b/drivers/net/can/usb/Kconfig
+@@ -74,6 +74,9 @@ config CAN_KVASER_USB
+ 	    - Kvaser USBcan Light 4xHS
+ 	    - Kvaser USBcan Pro 2xHS v2
+ 	    - Kvaser USBcan Pro 5xHS
++	    - Kvaser U100
++	    - Kvaser U100P
++	    - Kvaser U100S
+ 	    - ATI Memorator Pro 2xHS v2
+ 	    - ATI USBcan Pro 2xHS v2
  
- #define KVASER_USB_HYDRA_BULK_EP_IN_ADDR	0x82
- #define KVASER_USB_HYDRA_BULK_EP_OUT_ADDR	0x02
-@@ -135,6 +136,7 @@ struct kvaser_cmd_sw_detail_req {
- #define KVASER_USB_HYDRA_SW_FLAG_CANFD		BIT(10)
- #define KVASER_USB_HYDRA_SW_FLAG_NONISO		BIT(11)
- #define KVASER_USB_HYDRA_SW_FLAG_EXT_CAP	BIT(12)
-+#define KVASER_USB_HYDRA_SW_FLAG_CAN_FREQ_80M	BIT(13)
- struct kvaser_cmd_sw_detail_res {
- 	__le32 sw_flags;
- 	__le32 sw_version;
-@@ -383,6 +385,30 @@ static const struct can_bittiming_const kvaser_usb_hydra_flexc_bittiming_c = {
- 	.brp_inc = 1,
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index b7d20320961a..a9b3f12bc2ef 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -83,8 +83,11 @@
+ #define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	268
+ #define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	269
+ #define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	270
++#define USB_U100_PRODUCT_ID			273
++#define USB_U100P_PRODUCT_ID			274
++#define USB_U100S_PRODUCT_ID			275
+ #define USB_HYDRA_PRODUCT_ID_END \
+-	USB_HYBRID_PRO_CANLIN_PRODUCT_ID
++	USB_U100S_PRODUCT_ID
+ 
+ static inline bool kvaser_is_leaf(const struct usb_device_id *id)
+ {
+@@ -187,6 +190,9 @@ static const struct usb_device_id kvaser_usb_table[] = {
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_PRO_CANLIN_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100P_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100S_PRODUCT_ID) },
+ 	{ }
  };
- 
-+static const struct can_bittiming_const kvaser_usb_hydra_rt_bittiming_c = {
-+	.name = "kvaser_usb_rt",
-+	.tseg1_min = 2,
-+	.tseg1_max = 96,
-+	.tseg2_min = 2,
-+	.tseg2_max = 32,
-+	.sjw_max = 32,
-+	.brp_min = 1,
-+	.brp_max = 1024,
-+	.brp_inc = 1,
-+};
-+
-+static const struct can_bittiming_const kvaser_usb_hydra_rtd_bittiming_c = {
-+	.name = "kvaser_usb_rt",
-+	.tseg1_min = 2,
-+	.tseg1_max = 39,
-+	.tseg2_min = 2,
-+	.tseg2_max = 8,
-+	.sjw_max = 8,
-+	.brp_min = 1,
-+	.brp_max = 1024,
-+	.brp_inc = 1,
-+};
-+
- #define KVASER_USB_HYDRA_TRANSID_BITS		12
- #define KVASER_USB_HYDRA_TRANSID_MASK \
- 				GENMASK(KVASER_USB_HYDRA_TRANSID_BITS - 1, 0)
-@@ -1727,6 +1753,8 @@ static int kvaser_usb_hydra_get_software_details(struct kvaser_usb *dev)
- 
- 	if (flags &  KVASER_USB_HYDRA_SW_FLAG_FREQ_80M)
- 		dev->cfg = &kvaser_usb_hydra_dev_cfg_kcan;
-+	else if (flags & KVASER_USB_HYDRA_SW_FLAG_CAN_FREQ_80M)
-+		dev->cfg = &kvaser_usb_hydra_dev_cfg_rt;
- 	else
- 		dev->cfg = &kvaser_usb_hydra_dev_cfg_flexc;
- 
-@@ -2026,3 +2054,12 @@ static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_flexc = {
- 	.timestamp_freq = 1,
- 	.bittiming_const = &kvaser_usb_hydra_flexc_bittiming_c,
- };
-+
-+static const struct kvaser_usb_dev_cfg kvaser_usb_hydra_dev_cfg_rt = {
-+	.clock = {
-+		.freq = 80000000,
-+	},
-+	.timestamp_freq = 24,
-+	.bittiming_const = &kvaser_usb_hydra_rt_bittiming_c,
-+	.data_bittiming_const = &kvaser_usb_hydra_rtd_bittiming_c,
-+};
+ MODULE_DEVICE_TABLE(usb, kvaser_usb_table);
 -- 
 2.29.2
 
