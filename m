@@ -2,39 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF152B3788
-	for <lists+linux-can@lfdr.de>; Sun, 15 Nov 2020 19:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24ECE2B3824
+	for <lists+linux-can@lfdr.de>; Sun, 15 Nov 2020 19:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbgKOSAM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 15 Nov 2020 13:00:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
+        id S1727317AbgKOSzU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 15 Nov 2020 13:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727208AbgKOSAM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 15 Nov 2020 13:00:12 -0500
+        with ESMTP id S1727179AbgKOSzU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 15 Nov 2020 13:55:20 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C28C0613D1
-        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 10:00:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21465C0613D1
+        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 10:55:20 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1keMJs-000806-5J; Sun, 15 Nov 2020 19:00:08 +0100
+        id 1keNBA-0004Io-Ue; Sun, 15 Nov 2020 19:55:13 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1e3d:e0be:764c:4a56] (unknown [IPv6:2a03:f580:87bc:d400:1e3d:e0be:764c:4a56])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
          client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8D9C0592F05;
-        Sun, 15 Nov 2020 18:00:05 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kernel@pengutronix.de,
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2664F592F2D;
+        Sun, 15 Nov 2020 18:55:10 +0000 (UTC)
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         linux-can@vger.kernel.org
-References: <20201114173358.2058600-1-mkl@pengutronix.de>
- <20201114173501.023b5e49@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20201114173916.64217d86@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <f94cf530-eec7-c916-d9f1-0cbb964d8e00@pengutronix.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>
+References: <20201114152325.523630-1-mailhol.vincent@wanadoo.fr>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -95,16 +99,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: pull-request: can 2020-11-14
-Message-ID: <4086e494-b400-9881-9370-293286a7568e@pengutronix.de>
-Date:   Sun, 15 Nov 2020 19:00:01 +0100
+Subject: Re: [PATCH v6] can: usb: etas_es58X: add support for ETAS ES58X CAN
+ USB interfaces
+Message-ID: <11bada82-7406-d8e1-66e3-43db237ee265@pengutronix.de>
+Date:   Sun, 15 Nov 2020 19:55:05 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <f94cf530-eec7-c916-d9f1-0cbb964d8e00@pengutronix.de>
+In-Reply-To: <20201114152325.523630-1-mailhol.vincent@wanadoo.fr>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="t0dpIqY2ohTT6fcKeFujs6mNs8sUMHSnz"
+ boundary="7KjNyHPgHzuIuAFRP5MDixmwX0lOjynfG"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,39 +119,52 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---t0dpIqY2ohTT6fcKeFujs6mNs8sUMHSnz
-Content-Type: multipart/mixed; boundary="I2mrj6ANiLgB0womBVWEpMmDGawPavcS8";
+--7KjNyHPgHzuIuAFRP5MDixmwX0lOjynfG
+Content-Type: multipart/mixed; boundary="2TiozWkGeyZmt1hP37spvFYpTH3KfDAmH";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kernel@pengutronix.de,
- linux-can@vger.kernel.org
-Message-ID: <4086e494-b400-9881-9370-293286a7568e@pengutronix.de>
-Subject: Re: pull-request: can 2020-11-14
-References: <20201114173358.2058600-1-mkl@pengutronix.de>
- <20201114173501.023b5e49@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20201114173916.64217d86@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <f94cf530-eec7-c916-d9f1-0cbb964d8e00@pengutronix.de>
-In-Reply-To: <f94cf530-eec7-c916-d9f1-0cbb964d8e00@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
+ Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Masahiro Yamada <masahiroy@kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Message-ID: <11bada82-7406-d8e1-66e3-43db237ee265@pengutronix.de>
+Subject: Re: [PATCH v6] can: usb: etas_es58X: add support for ETAS ES58X CAN
+ USB interfaces
+References: <20201114152325.523630-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20201114152325.523630-1-mailhol.vincent@wanadoo.fr>
 
---I2mrj6ANiLgB0womBVWEpMmDGawPavcS8
+--2TiozWkGeyZmt1hP37spvFYpTH3KfDAmH
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/15/20 5:58 PM, Marc Kleine-Budde wrote:
-> On 11/15/20 2:39 AM, Jakub Kicinski wrote:
->> On Sat, 14 Nov 2020 17:35:01 -0800 Jakub Kicinski wrote:
->>> Two invalid fixes tags here, do you want to respin or should I pull?
+On 11/14/20 4:22 PM, Vincent Mailhol wrote:
+> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
+> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
 >=20
-> Let me respin this. It'll have the new date tag of today (15th).
+> Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.=
+com>
+> Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.co=
+m>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-It's linux-can-fixes-for-5.10-20201115, for the pull request see:
+The driver fails to compile with CONFIG_SYSFS switched off
 
-https://lore.kernel.org/r/20201115174131.2089251-1-mkl@pengutronix.de
+  CC [M]  drivers/net/can/usb/etas_es58x/es58x_core.o
+drivers/net/can/usb/etas_es58x/es58x_core.c: In function =E2=80=98es58x_i=
+nit_netdev=E2=80=99:
+drivers/net/can/usb/etas_es58x/es58x_core.c:2380:32: error: =E2=80=98stru=
+ct netdev_queue=E2=80=99 has no member named =E2=80=98dql=E2=80=99
+ 2380 |  netdev_get_tx_queue(netdev, 0)->dql.min_limit =3D
+      |                                ^~
 
 regards,
 Marc
+
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -155,23 +173,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---I2mrj6ANiLgB0womBVWEpMmDGawPavcS8--
+--2TiozWkGeyZmt1hP37spvFYpTH3KfDAmH--
 
---t0dpIqY2ohTT6fcKeFujs6mNs8sUMHSnz
+--7KjNyHPgHzuIuAFRP5MDixmwX0lOjynfG
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+xbKEACgkQqclaivrt
-76mGRAgAhjPDnw316CzeGJIia7GtahgAXcCB9uxZ06V3pFdHOm55Zj7f/nCGHnnY
-rIPgBnZxRZlIXKrfZlv9Zka+WG0M9MSA0//lR/q9o3zva/zeWl+DPNZ2HGhgNBHx
-yxTOYaFtRHxulnI5qGVKAtQ6xq2z4pAa85GNZLsSKkQPsXryU4WCFFDu2DXlqNRv
-vzOYAW1fZvABydw6CTZGIlZh3fPlfGX3vqSOKxlezxIiAj6gugCmNAwirkW3Lljw
-Py9m/hpjXa0GWQybaqSX2ZNr5jQTXqM6+eHRHFb5sq5cL1fELcdMOZjK+Uz8arIb
-6UY1z9ZBQbtmvqZaLaJ5HmH9ufjdRQ==
-=gpVL
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+xeYkACgkQqclaivrt
+76nyBQf+L4OxN9ufKCwxNaHJTYaAZVqlbnW1DUJZKlnNYK2zIC1fQ5bO648Liwls
+3su+QQotABXmLrYol0RbkzvcL4brVts+kJydbTEnDHtBVXHJhvgtirTjJy2CMxzo
+dWfap8eNvS6hPGxzf1GUwvquKv7uZ3bbfKZ7UQfGrNv7htPXTEONZ3xwGCcrZGBD
+l5m0d4EsOnMBM2DI30Ge6XLuZX+Jf9gKOs6MblFH3/TnY5JkxKDiKD0ziWZMmYnF
+QfmbbLIH4S6E2oaB6xySoR5Pt/oYw41YXDPr5IAshYqSy2KqCfXrdQHam5O1cJ6b
+MXHdIUZqfvM/hxGDKSY07qrkPCE63g==
+=lrm6
 -----END PGP SIGNATURE-----
 
---t0dpIqY2ohTT6fcKeFujs6mNs8sUMHSnz--
+--7KjNyHPgHzuIuAFRP5MDixmwX0lOjynfG--
