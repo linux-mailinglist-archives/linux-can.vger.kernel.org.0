@@ -2,104 +2,204 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCBE2B68AD
-	for <lists+linux-can@lfdr.de>; Tue, 17 Nov 2020 16:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8632B691B
+	for <lists+linux-can@lfdr.de>; Tue, 17 Nov 2020 16:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729507AbgKQP21 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Nov 2020 10:28:27 -0500
-Received: from de-out1.bosch-org.com ([139.15.230.186]:46536 "EHLO
-        de-out1.bosch-org.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728894AbgKQP21 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Nov 2020 10:28:27 -0500
-X-Greylist: delayed 2586 seconds by postgrey-1.27 at vger.kernel.org; Tue, 17 Nov 2020 10:28:25 EST
-Received: from si0vm1947.rbesz01.com (lb41g3-ha-dmz-psi-sl1-mailout.fe.ssn.bosch.com [139.15.230.188])
-        by fe0vms0187.rbdmz01.com (Postfix) with ESMTPS id 4Cb8wS4fvYz1XLDR9;
-        Tue, 17 Nov 2020 16:28:24 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=de.bosch.com;
-        s=key2-intmail; t=1605626904;
-        bh=OEO3R3OyQ/MyfwEOo1aKgZ7O31m4QfepUJyJQGtUuDU=; l=10;
-        h=From:Subject:From:Reply-To:Sender;
-        b=gWHgRA825oogKcEeJJTbex6HsfqRHbo4bWX6PERe3UQTkTaI9KndPYFAA0MNLGWVL
-         cB3rYaMUgrstgOaML7CL9FskrcadH34wYMmsxWZNp5azF7Sk3kuw7Zl7Zyc0nsP5+P
-         wJWEISc8Hzqh+zppmFX95E2hOeaKTDOe/agrXMj8=
-Received: from fe0vm1741.rbesz01.com (unknown [10.58.172.176])
-        by si0vm1947.rbesz01.com (Postfix) with ESMTPS id 4Cb8wS4L0sz6CjSs7;
-        Tue, 17 Nov 2020 16:28:24 +0100 (CET)
-X-AuditID: 0a3aad15-f9dff700000022e8-47-5fb3ec181b67
-Received: from fe0vm1652.rbesz01.com ( [10.58.173.29])
-        (using TLS with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by fe0vm1741.rbesz01.com (SMG Outbound) with SMTP id 2F.AC.08936.81CE3BF5; Tue, 17 Nov 2020 16:28:24 +0100 (CET)
-Received: from FE-MBX2035.de.bosch.com (fe-mbx2035.de.bosch.com [10.3.231.45])
-        by fe0vm1652.rbesz01.com (Postfix) with ESMTPS id 4Cb8wS2TpnzB1J;
-        Tue, 17 Nov 2020 16:28:24 +0100 (CET)
-Received: from SGPMBX2018.APAC.bosch.com (10.187.83.36) by
- FE-MBX2035.de.bosch.com (10.3.231.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2106.2; Tue, 17 Nov 2020 16:28:23 +0100
-Received: from FE-MBX2051.de.bosch.com (10.3.231.61) by
- SGPMBX2018.APAC.bosch.com (10.187.83.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2106.2; Tue, 17 Nov 2020 23:28:21 +0800
-Received: from FE-MBX2051.de.bosch.com ([fe80::9402:faf1:5852:4e2f]) by
- FE-MBX2051.de.bosch.com ([fe80::9402:faf1:5852:4e2f%6]) with mapi id
- 15.01.2106.004; Tue, 17 Nov 2020 16:28:19 +0100
-From:   "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        id S1726532AbgKQPxY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Nov 2020 10:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbgKQPxX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Nov 2020 10:53:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A44BC0613CF
+        for <linux-can@vger.kernel.org>; Tue, 17 Nov 2020 07:53:23 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kf3IG-0005c8-Si; Tue, 17 Nov 2020 16:53:20 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:4295:bc9e:e8ea:bff7] (unknown [IPv6:2a03:f580:87bc:d400:4295:bc9e:e8ea:bff7])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B48815948CD;
+        Tue, 17 Nov 2020 15:53:19 +0000 (UTC)
+To:     "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
         "WANG Xin (BT-FIR/ENG1-Zhu)" <Xin.Wang7@cn.bosch.com>
-Subject: AW: [PATCH] Fix attribute list size in do_get_nl_link()
-Thread-Topic: [PATCH] Fix attribute list size in do_get_nl_link()
-Thread-Index: AQHWvPBEZZmCtUZC6UWK+ezQ/N9DHanMWHsAgAATkxA=
-Date:   Tue, 17 Nov 2020 15:28:19 +0000
-Message-ID: <a2a1b05307604f1cb9ecb1245b4bc3a0@de.bosch.com>
 References: <20201117144222.7809-1-mark.jonas@de.bosch.com>
  <0285bc2b-dc7a-3fcb-3bc8-061e8e8e5bd5@pengutronix.de>
-In-Reply-To: <0285bc2b-dc7a-3fcb-3bc8-061e8e8e5bd5@pengutronix.de>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.143.165.147]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <a2a1b05307604f1cb9ecb1245b4bc3a0@de.bosch.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: AW: [PATCH] Fix attribute list size in do_get_nl_link()
+Message-ID: <42ed5703-4555-3853-9611-e23f5520a6fb@pengutronix.de>
+Date:   Tue, 17 Nov 2020 16:53:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsXCZbVWVlfizeZ4gyMrJS1WfZ/KbLF+0RQW
-        ByaP/r8GHp83yQUwRXHZpKTmZJalFunbJXBl/Nx5k7ngGE/Fxc9PmRsY5/B0MXJySAiYSMyf
-        9p21i5GLQ0hgOpPExH3NUM4uRolZt26xQzgfGCVWPf6H4Fw5uIYRwjnAKHHkSSs7yDA2ATuJ
-        /a/fMIHYIgJaErc/bmfrYuTgYBYokVi/pxIkLCzgIHFj4zpGiBJHidnbj0DZVhLt666CjWER
-        UJX4cPIRmM0rYC2x6/IzVpAxQgLFEl8e5IKYnAJOEq9+CoFUMArISmzYcJ4ZxGYWEJfY9Azk
-        G5DPBCSW7IGISwiISrx8/A8qriTx8M9mZojDNCXW79KHaFWUmNL9EGqpoMTJmU9YJgBDAMnU
-        WQgds5B0zELSsYCRZRWjaFqqQVmuobmJoV5RUmpxlYGhXnJ+7iZGSKSJ7mC80/1B7xAjEwfj
-        IUYJDmYlEV4Xk43xQrwpiZVVqUX58UWlOanFhxilOViUxHlVeDbGCQmkJ5akZqemFqQWwWSZ
-        ODilGpjOTTnBaxzWmy1X6HJQvujV7enWsbt3zpF2u/V3KY9+3Tm11JhJ1v91TbXySo73Cedf
-        Ut0228qBwbpEmtnY60hNRPvx6F6teo5V/j6rQ9SPKqVXX+G+zvajf3ZNC/cC5S3Fjrt/rb9y
-        7vauu4rtq7PnxEe/Fjj2myP6zuVNsSWVxxI/TIs1UVkz487Opd9Sr3vH/58c3NSnUMA+T15P
-        5YmLTZbEptSQfQJKHzc+EfnVrftRYGr9rVmpvW83qntVtHabHHg911pgwlPJl3IeeW2tsa2t
-        V4qS3dRPdmrunm/LtctIuXH6BSYLcV6RaSFnJS5xcsc0nE0pVw/Xy8p1+GBeHnP/rPyElteP
-        Uw8vV2Ipzkg01GIuKk4EANDU9tAjAwAA
+In-Reply-To: <a2a1b05307604f1cb9ecb1245b4bc3a0@de.bosch.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="p46JdgYkwLm3d9tLlNGVjPMRr7iY7RsgO"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGkgTWFyYywNCg0KPiBPbiAxMS8xNy8yMCAzOjQyIFBNLCBNYXJrIEpvbmFzIHdyb3RlOg0KPiA+
-IEZyb206IFdhbmcgWGluIDx4aW4ud2FuZzdAY24uYm9zY2guY29tPg0KPiA+DQo+ID4gVGhlIGZ1
-bmN0aW9uIGRvX2dldF9ubF9saW5rKCkgcmV0cmlldmVzIGF0dHJpYnV0ZXMgZnJvbSB0aGUgcmVz
-cG9uc2UNCj4gPiBSVE1fTkVXTElOSy4gQnV0IGl0IGNhbGN1bGF0ZXMgdGhlIGF0dHJpYnV0ZSBs
-aXN0IHNpemUgd2l0aCB0aGUgd3JvbmcNCj4gPiBzdHJ1Y3R1cmUgc3RydWN0IGlmYWRkcm1zZy4g
-QWNjb3JkaW5nIHRvIG1hbiA3IHJ0bmV0bGluaywgUlRNX05FV0xJTksNCj4gPiBtZXNzYWdlIHVz
-ZXMgc3RydWN0IGlmaW5mb21zZyBpbnN0ZWFkIG9mIHN0cnVjdCBpZmFkZHJtc2cuICBUaGlzDQo+
-ID4gY2F1c2VzIHRoYXQgYWRkaXRpb25hbCA4IGJ5dGVzIGFyZSBwYXJzZWQgYW5kIGdhcmJhZ2Ug
-YXR0cmlidXRlcyBtaWdodA0KPiA+IGJlIHJldHJpZXZlZC4gT25lIG9mIGNvbnNlcXVlbmNlcyBp
-cyB0aGF0IHRoZSBtZXNzYWdlIHdpbGwgYmUgZHJvcHBlZA0KPiA+IGlmIHRoZSBnYXJiYWdlIGF0
-dHJpYnV0ZSBpcyBJRkxBX0lGTkFNRSBhbmQgY29udGFpbnMgYW4gaW52YWxpZA0KPiA+IGludGVy
-ZmFjZSBuYW1lLg0KPiA+DQo+ID4gVG8gZml4IHRoaXMgaXNzdWUsIHVzZSBzdHJ1Y3QgaWZpbmZv
-bXNnIHRvIGNhbGN1bGF0ZSB0aGUgc2l6ZSBvZg0KPiA+IGF0dHJpYnV0ZSBsaXN0IGZvciBSVE1f
-TkVXTElOSy4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IFdhbmcgWGluIDx4aW4ud2FuZzdAY24u
-Ym9zY2guY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hcmsgSm9uYXMgPG1hcmsuam9uYXNAZGUu
-Ym9zY2guY29tPg0KPiANCj4gQXBwbGllZCB0byBtYXN0ZXIuDQoNCkkgcGxhbiB0byBlaXRoZXIg
-YWRkIHRoZSBwYXRjaCB0byB0aGUgbGlic29ja2V0Y2FuIHJlY2lwZSBpbiBtZXRhLW9wZW5lbWJl
-ZGRlZA0Kb3IgdG8gdXBncmFkZSB0aGUgcmVjaXBlIHRvIGEgbmV3IHZlcnNpb24gb2YgbGlic29j
-a2V0Y2FuLiBJIHdvdWxkIHByZWZlcg0KdXBncmFkaW5nIHRoZSByZWNpcGUgdG8gYSBuZXcgdmVy
-c2lvbi4NCg0KRG8geW91IHBsYW4gdG8gcmVsZWFzZSBhIG5ldyB2ZXJzaW9uIG9mIGxpYnNvY2tl
-dGNhbiBzb29uPw0KDQpHcmVldGluZ3MsDQpNYXJrDQo=
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--p46JdgYkwLm3d9tLlNGVjPMRr7iY7RsgO
+Content-Type: multipart/mixed; boundary="bLcAVY2LomJADAUITS5O6X8KQyrTx08H5";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: "Jonas Mark (BT-FIR/ENG1-Grb)" <Mark.Jonas@de.bosch.com>
+Cc: "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+ "WANG Xin (BT-FIR/ENG1-Zhu)" <Xin.Wang7@cn.bosch.com>
+Message-ID: <42ed5703-4555-3853-9611-e23f5520a6fb@pengutronix.de>
+Subject: Re: AW: [PATCH] Fix attribute list size in do_get_nl_link()
+References: <20201117144222.7809-1-mark.jonas@de.bosch.com>
+ <0285bc2b-dc7a-3fcb-3bc8-061e8e8e5bd5@pengutronix.de>
+ <a2a1b05307604f1cb9ecb1245b4bc3a0@de.bosch.com>
+In-Reply-To: <a2a1b05307604f1cb9ecb1245b4bc3a0@de.bosch.com>
+
+--bLcAVY2LomJADAUITS5O6X8KQyrTx08H5
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 11/17/20 4:28 PM, Jonas Mark (BT-FIR/ENG1-Grb) wrote:
+> Hi Marc,
+>=20
+>> On 11/17/20 3:42 PM, Mark Jonas wrote:
+>>> From: Wang Xin <xin.wang7@cn.bosch.com>
+>>>
+>>> The function do_get_nl_link() retrieves attributes from the response
+>>> RTM_NEWLINK. But it calculates the attribute list size with the wrong=
+
+>>> structure struct ifaddrmsg. According to man 7 rtnetlink, RTM_NEWLINK=
+
+>>> message uses struct ifinfomsg instead of struct ifaddrmsg.  This
+>>> causes that additional 8 bytes are parsed and garbage attributes migh=
+t
+>>> be retrieved. One of consequences is that the message will be dropped=
+
+>>> if the garbage attribute is IFLA_IFNAME and contains an invalid
+>>> interface name.
+>>>
+>>> To fix this issue, use struct ifinfomsg to calculate the size of
+>>> attribute list for RTM_NEWLINK.
+>>>
+>>> Signed-off-by: Wang Xin <xin.wang7@cn.bosch.com>
+>>> Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+>>
+>> Applied to master.
+>=20
+> I plan to either add the patch to the libsocketcan recipe in meta-opene=
+mbedded
+> or to upgrade the recipe to a new version of libsocketcan. I would pref=
+er
+> upgrading the recipe to a new version.
+>=20
+> Do you plan to release a new version of libsocketcan soon?
+
+here you are:
+
+https://git.pengutronix.de/cgit/tools/libsocketcan/tag/?h=3Dv0.0.12
+
+https://public.pengutronix.de/software/libsocketcan/libsocketcan-0.0.12.t=
+ar.bz2
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--bLcAVY2LomJADAUITS5O6X8KQyrTx08H5--
+
+--p46JdgYkwLm3d9tLlNGVjPMRr7iY7RsgO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+z8esACgkQqclaivrt
+76mnAgf/Y9WtnsLU6anuAfnvEkgijXhk6lrZy9FIKfOQql80VeQ9iXD4uk9VmBWq
+d0zEBLRqmtBPG09q9s7lIELQfAQbEBo3ZsoGDIff53JFqmtJ1AXdJ5etf9QxpGh6
+YmGROX6cRffGubkFxJgIafXq2L90HPxXdSc14/R3046kvNjA8lR4afjWt95GuQ1w
+WCIZ9g+fJsr+9Vxv85dZRrCmzAZHkMhPhg1DmnkmOEwAb7PNcQFVRLErj0ND1NmJ
+z0Y6Cejzx8Vpx/camPWPpNXSZdeFiiAR9cJAisJYZkSv3MOALv8O79ZYUuFXr8Py
+c3FmeMw4ZI3jtqzw19C2Qx45AlSojQ==
+=FuDx
+-----END PGP SIGNATURE-----
+
+--p46JdgYkwLm3d9tLlNGVjPMRr7iY7RsgO--
