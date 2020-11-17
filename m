@@ -2,113 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DAF12B5032
-	for <lists+linux-can@lfdr.de>; Mon, 16 Nov 2020 19:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AFC2B5A8E
+	for <lists+linux-can@lfdr.de>; Tue, 17 Nov 2020 08:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728125AbgKPSuE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 16 Nov 2020 13:50:04 -0500
-Received: from pd9568d8c.dip0.t-ipconnect.de ([217.86.141.140]:49651 "EHLO
-        remote.esd.eu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727701AbgKPSuD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 16 Nov 2020 13:50:03 -0500
-Received: from esd-s7 ([10.0.0.77]:56812 helo=esd-s7.esd)
-        by remote.esd.eu with esmtp (Exim 4.82_1-5b7a7c0-XX)
-        (envelope-from <stefan.maetje@esd.eu>)
-        id 1kejUM-00080c-2x; Mon, 16 Nov 2020 19:44:30 +0100
-Received: from esd-s9.esd.local (unknown [10.0.0.190])
-        by esd-s7.esd (Postfix) with ESMTP id D99877C1633;
-        Mon, 16 Nov 2020 19:44:30 +0100 (CET)
-Received: by esd-s9.esd.local (Postfix, from userid 2044)
-        id CC34BE00E3; Mon, 16 Nov 2020 19:44:30 +0100 (CET)
-From:   =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>
-To:     socketcan@hartkopp.net, linux-can@vger.kernel.org
-Cc:     mkl@pengutronix.de, mailhol.vincent@wanadoo.fr,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <Stefan.Maetje@esd.eu>
-Subject: [PATCH 1/1] can: drivers: add len8_dlc support for esd_usb2 CAN adapter
-Date:   Mon, 16 Nov 2020 19:44:30 +0100
-Message-Id: <20201116184430.25462-2-stefan.maetje@esd.eu>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20201116184430.25462-1-stefan.maetje@esd.eu>
+        id S1726278AbgKQHzD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 17 Nov 2020 02:55:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbgKQHzC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Nov 2020 02:55:02 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F1BC0613CF
+        for <linux-can@vger.kernel.org>; Mon, 16 Nov 2020 23:55:02 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kevpM-0001no-I2; Tue, 17 Nov 2020 08:55:00 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:4295:bc9e:e8ea:bff7] (unknown [IPv6:2a03:f580:87bc:d400:4295:bc9e:e8ea:bff7])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7D7F459425B;
+        Tue, 17 Nov 2020 07:54:58 +0000 (UTC)
+Subject: Re: [PATCH 1/1] can: drivers: add len8_dlc support for esd_usb2 CAN
+ adapter
+To:     =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        socketcan@hartkopp.net, linux-can@vger.kernel.org
+Cc:     mailhol.vincent@wanadoo.fr
 References: <20201116184430.25462-1-stefan.maetje@esd.eu>
+ <20201116184430.25462-2-stefan.maetje@esd.eu>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <4579b52c-6046-12cb-1d46-e4357c690f4f@pengutronix.de>
+Date:   Tue, 17 Nov 2020 08:54:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201116184430.25462-2-stefan.maetje@esd.eu>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="2zyjAsfDcCzW2rhT73w3rvsBbaIW84HH6"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Stefan Mätje <Stefan.Maetje@esd.eu>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--2zyjAsfDcCzW2rhT73w3rvsBbaIW84HH6
+Content-Type: multipart/mixed; boundary="a4AZ0X69Y78ozogfPBupAWE1KJuhY09nd";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+ socketcan@hartkopp.net, linux-can@vger.kernel.org
+Cc: mailhol.vincent@wanadoo.fr
+Message-ID: <4579b52c-6046-12cb-1d46-e4357c690f4f@pengutronix.de>
+Subject: Re: [PATCH 1/1] can: drivers: add len8_dlc support for esd_usb2 CAN
+ adapter
+References: <20201116184430.25462-1-stefan.maetje@esd.eu>
+ <20201116184430.25462-2-stefan.maetje@esd.eu>
+In-Reply-To: <20201116184430.25462-2-stefan.maetje@esd.eu>
 
-Support the Classical CAN raw DLC functionality to send and receive DLC values
-from 9 .. 15 for the Classical CAN capable CAN network driver esd_usb that
-supports the esd CAN-USB/2 and CAN-USB/Micro devices:
+--a4AZ0X69Y78ozogfPBupAWE1KJuhY09nd
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-- esd_usb2
+On 11/16/20 7:44 PM, Stefan M=C3=A4tje wrote:
+> From: Stefan M=C3=A4tje <Stefan.Maetje@esd.eu>
+>=20
+> Support the Classical CAN raw DLC functionality to send and receive DLC=
+ values
+> from 9 .. 15 for the Classical CAN capable CAN network driver esd_usb t=
+hat
+> supports the esd CAN-USB/2 and CAN-USB/Micro devices:
+>=20
+> - esd_usb2
+>=20
+> Signed-off-by: Stefan M=C3=A4tje <stefan.maetje@esd.eu>
+> Tested-by: Stefan M=C3=A4tje <stefan.maetje@esd.eu>
 
-Signed-off-by: Stefan Mätje <stefan.maetje@esd.eu>
-Tested-by: Stefan Mätje <stefan.maetje@esd.eu>
----
- drivers/net/can/usb/esd_usb2.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+I've re-wrapped some long lines and applied to linux-can-next/testing.
 
-diff --git a/drivers/net/can/usb/esd_usb2.c b/drivers/net/can/usb/esd_usb2.c
-index 3643a8ee03cf..cf89387de166 100644
---- a/drivers/net/can/usb/esd_usb2.c
-+++ b/drivers/net/can/usb/esd_usb2.c
-@@ -183,7 +183,7 @@ struct esd_usb2_net_priv;
- struct esd_tx_urb_context {
- 	struct esd_usb2_net_priv *priv;
- 	u32 echo_index;
--	int dlc;
-+	int len;	/* CAN payload length */
- };
- 
- struct esd_usb2 {
-@@ -321,7 +321,7 @@ static void esd_usb2_rx_can_msg(struct esd_usb2_net_priv *priv,
- 		}
- 
- 		cf->can_id = id & ESD_IDMASK;
--		cf->len = can_cc_dlc2len(msg->msg.rx.dlc & ~ESD_RTR);
-+		can_frame_set_cc_len(cf, msg->msg.rx.dlc & ~ESD_RTR, priv->can.ctrlmode);
- 
- 		if (id & ESD_EXTID)
- 			cf->can_id |= CAN_EFF_FLAG;
-@@ -355,7 +355,7 @@ static void esd_usb2_tx_done_msg(struct esd_usb2_net_priv *priv,
- 
- 	if (!msg->msg.txdone.status) {
- 		stats->tx_packets++;
--		stats->tx_bytes += context->dlc;
-+		stats->tx_bytes += context->len;
- 		can_get_echo_skb(netdev, context->echo_index);
- 	} else {
- 		stats->tx_errors++;
-@@ -737,7 +737,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff *skb,
- 	msg->msg.hdr.len = 3; /* minimal length */
- 	msg->msg.hdr.cmd = CMD_CAN_TX;
- 	msg->msg.tx.net = priv->index;
--	msg->msg.tx.dlc = cf->len;
-+	msg->msg.tx.dlc = can_get_cc_dlc(cf, priv->can.ctrlmode);
- 	msg->msg.tx.id = cpu_to_le32(cf->can_id & CAN_ERR_MASK);
- 
- 	if (cf->can_id & CAN_RTR_FLAG)
-@@ -769,7 +769,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff *skb,
- 
- 	context->priv = priv;
- 	context->echo_index = i;
--	context->dlc = cf->len;
-+	context->len = cf->len;
- 
- 	/* hnd must not be 0 - MSB is stripped in txdone handling */
- 	msg->msg.tx.hnd = 0x80000000 | i; /* returned in TX done message */
-@@ -988,7 +988,7 @@ static int esd_usb2_probe_one_net(struct usb_interface *intf, int index)
- 	priv->index = index;
- 
- 	priv->can.state = CAN_STATE_STOPPED;
--	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY;
-+	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_CC_LEN8_DLC;
- 
- 	if (le16_to_cpu(dev->udev->descriptor.idProduct) ==
- 	    USB_CANUSBM_PRODUCT_ID)
--- 
-2.25.1
+Thanks,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--a4AZ0X69Y78ozogfPBupAWE1KJuhY09nd--
+
+--2zyjAsfDcCzW2rhT73w3rvsBbaIW84HH6
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+zgcgACgkQqclaivrt
+76kPTwf+P2jrVCtAmXfBiAaQQq7I0GirqoZDLn+wRo7WfhqgfOcZ5Ms5fyRq1ceh
+fwUl6IvR6dGJIJVtRcgd8tNwE9yrOCmC0quaN0khBWhFqmw+uYfQTgzb8fZ2vu68
+OYKJ1Sdf8pAnfpuelyhrLvkfBJEZ2+dowgf+zTrnVxtN8CeluTJAONl/bhCYv6tt
+UzjmfiKRsrNqbPwl62luUW7Z1AMq74MvVfhH8qRnOX8SwDWJpqHJMOq/Bo5Xo5Kd
+6/s7iu8rW8cxN3omZSU3eodkc+QjtNTzM3Ry0wHAgKaoTcFcOUQUYn59pXihfQfL
+UcW94k3ORZDAfR5zSpw8pVY4GqA2qg==
+=IeWI
+-----END PGP SIGNATURE-----
+
+--2zyjAsfDcCzW2rhT73w3rvsBbaIW84HH6--
