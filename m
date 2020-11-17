@@ -2,95 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D61F62B5C9C
-	for <lists+linux-can@lfdr.de>; Tue, 17 Nov 2020 11:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C862B5E76
+	for <lists+linux-can@lfdr.de>; Tue, 17 Nov 2020 12:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727422AbgKQKGA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 17 Nov 2020 05:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727270AbgKQKGA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 17 Nov 2020 05:06:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3714AC0613CF
-        for <linux-can@vger.kernel.org>; Tue, 17 Nov 2020 02:06:00 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kexrq-0000e7-7Z; Tue, 17 Nov 2020 11:05:42 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:4295:bc9e:e8ea:bff7])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id ACE3159448F;
-        Tue, 17 Nov 2020 10:05:29 +0000 (UTC)
-Date:   Tue, 17 Nov 2020 11:05:28 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     xiakaixu1987@gmail.com
-Cc:     manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
-        wg@grandegger.com, kuba@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] can: mcp251xfd: remove useless code in
- mcp251xfd_chip_softreset
-Message-ID: <20201117100528.hfdgwe5fyckweurt@hardanger.blackshift.org>
-References: <1605605352-25298-1-git-send-email-kaixuxia@tencent.com>
+        id S1727940AbgKQLgg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 17 Nov 2020 06:36:36 -0500
+Received: from mga07.intel.com ([134.134.136.100]:13664 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727928AbgKQLgg (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 17 Nov 2020 06:36:36 -0500
+IronPort-SDR: YVawogSooEHZjG3gVDUOuUpBI/Q7EV/W2vuI4hoa+L6XaT1uRFMlWMNOjSTPbzdEqupYclvYZf
+ U1d1jvAXcL9w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9807"; a="235055376"
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="235055376"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 03:36:35 -0800
+IronPort-SDR: 5H8ibe/Eas8Hn9yBRDalvTQdNMH7/KA/GKfPbH0uDr/nrHOCiKGv6TAWwxED/IIwcdNOw/4zRV
+ QA38yupT70jw==
+X-IronPort-AV: E=Sophos;i="5.77,485,1596524400"; 
+   d="scan'208";a="325128604"
+Received: from amwebb-mobl2.ger.corp.intel.com (HELO pflykt-mobl1.ger.corp.intel.com) ([10.252.19.117])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2020 03:36:33 -0800
+Received: by pflykt-mobl1.ger.corp.intel.com (Postfix, from userid 1100)
+        id 9D56A3200D5; Tue, 17 Nov 2020 13:36:30 +0200 (EET)
+Message-ID: <3b81ac4f9f845627a1f2f9170c1a76b60366797b.camel@linux.intel.com>
+Subject: Re: [PATCH v2 1/1] NET: mcan: Move runtime PM enable/disable to
+ m_can_platform
+From:   Patrik Flykt <patrik.flykt@linux.intel.com>
+To:     linux-can@vger.kernel.org
+Cc:     wg@grandegger.com, mkl@pengutronix.de, dmurphy@ti.com,
+        sriram.dash@samsung.com, jarkko.nikula@intel.com
+Date:   Tue, 17 Nov 2020 13:36:30 +0200
+In-Reply-To: <20201023115800.46538-2-patrik.flykt@linux.intel.com>
+References: <20201023115800.46538-1-patrik.flykt@linux.intel.com>
+         <20201023115800.46538-2-patrik.flykt@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.36.4-2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vejvaibdl4v32vmq"
-Content-Disposition: inline
-In-Reply-To: <1605605352-25298-1-git-send-email-kaixuxia@tencent.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Fri, 2020-10-23 at 14:58 +0300, Patrik Flykt wrote:
+> This is a preparatory patch for upcoming PCI based M_CAN devices.
+> The current PM implementation would cause PCI based drivers to
+> enable PM twice, once when the PCI device is added and a second
+> time in m_can_class_register(). This will cause 'Unbalanced
+> pm_runtime_enable!' to be logged, and is a situation that should
+> be avoided.
+> 
+> Therefore, in anticipation of PCI devices, move PM enabling out
+> from M_CAN class registration to its only user, the
+> m_can_platform driver.
+> 
+> Signed-off-by: Patrik Flykt <patrik.flykt@linux.intel.com>
+> ---
+> v2: Rebased on mkl/linux-can.git 9146843b11b6
 
---vejvaibdl4v32vmq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ping ping?
 
-On Tue, Nov 17, 2020 at 05:29:12PM +0800, xiakaixu1987@gmail.com wrote:
-> From: Kaixu Xia <kaixuxia@tencent.com>
->=20
-> It would directly return if the variable err equals to 0 or other errors.
-> Only when the err equals to -ETIMEDOUT it can reach the 'if (err)'
-> statement, so the 'if (err)' and last 'return -ETIMEDOUT' statements are
-> useless. Romove them.
->=20
-> Reported-by: Tosk Robot <tencent_os_robot@tencent.com>
-> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+	Patrik
 
-Applied to linux-can-next/testing.
 
-Tnx,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---vejvaibdl4v32vmq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+zoGUACgkQqclaivrt
-76nLcwf+K7Ock9na2DUNadKgKZpILJKHxuuwomO5Jgx8BeeSy6v261b9g55FZNlg
-FeF6IIOWa3lD0AYCVfznChS4qdwHp0g7yaLzrs2vYbyXVRnXCZufOSeaMWTCBV18
-xXUtZaYrj644MAx3LnjGfXQcSuxMK2ARUC57bOAvoOql7m7Vc5Ln54JWmCIOhbN1
-LjD2TS8N3RjvZM847cB9V86N85ZEJHhtgN0NpqHUbm/DFF20n3SBlocE+7zHmsrd
-pCGbZOQ40g8hvy2LkzZNjALGDHfsRDmQoZRQ1eQK+YMsf9qMx2PCFVh+s3ZY6nM3
-eg3YsErI42Vs8hEFcV6bflqVx/4f7g==
-=vHS6
------END PGP SIGNATURE-----
-
---vejvaibdl4v32vmq--
