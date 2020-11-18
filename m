@@ -2,38 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6402B8053
-	for <lists+linux-can@lfdr.de>; Wed, 18 Nov 2020 16:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C3A2B8113
+	for <lists+linux-can@lfdr.de>; Wed, 18 Nov 2020 16:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726272AbgKRPXi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 18 Nov 2020 10:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S1726698AbgKRPqC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Nov 2020 10:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbgKRPXh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Nov 2020 10:23:37 -0500
+        with ESMTP id S1726357AbgKRPqC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Nov 2020 10:46:02 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C533C0613D4
-        for <linux-can@vger.kernel.org>; Wed, 18 Nov 2020 07:23:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF38C0613D4
+        for <linux-can@vger.kernel.org>; Wed, 18 Nov 2020 07:46:01 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kfPIv-0005mM-IX; Wed, 18 Nov 2020 16:23:29 +0100
+        id 1kfPeU-00088K-3h; Wed, 18 Nov 2020 16:45:46 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:cddb:adbd:f226:f7fe] (unknown [IPv6:2a03:f580:87bc:d400:cddb:adbd:f226:f7fe])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 131E559552C;
-        Wed, 18 Nov 2020 15:23:27 +0000 (UTC)
-Subject: Re: [PATCH] can: m_can: Process interrupt only when not runtime
- suspended
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E328E59556B;
+        Wed, 18 Nov 2020 15:45:41 +0000 (UTC)
+Subject: Re: [PATCH] can: m_can: Add PCI glue driver for Intel Elkhart Lake
 To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         linux-can@vger.kernel.org
-Cc:     Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
-        Patrik Flykt <patrik.flykt@linux.intel.com>
-References: <20200915134715.696303-1-jarkko.nikula@linux.intel.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Dan Murphy <dmurphy@ti.com>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        Patrik Flykt <patrik.flykt@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Raymond Tan <raymond.tan@intel.com>
+References: <20201117160827.3636264-1-jarkko.nikula@linux.intel.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +98,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <51aae4ee-5abf-8759-ca8d-627f661e9753@pengutronix.de>
-Date:   Wed, 18 Nov 2020 16:23:22 +0100
+Message-ID: <0730df74-60fb-8364-14ba-a4a6ce05b543@pengutronix.de>
+Date:   Wed, 18 Nov 2020 16:45:36 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200915134715.696303-1-jarkko.nikula@linux.intel.com>
+In-Reply-To: <20201117160827.3636264-1-jarkko.nikula@linux.intel.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="bx5o9DOD9DgSGSSWtvufcP7PmUwagE30V"
+ boundary="0ZY01FqYNBXCYeIV2eQPFkFs9ncwx10a2"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,38 +116,63 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---bx5o9DOD9DgSGSSWtvufcP7PmUwagE30V
-Content-Type: multipart/mixed; boundary="jJrGom4spdVvyxqmvI8xET6vlzr7AJwuw";
+--0ZY01FqYNBXCYeIV2eQPFkFs9ncwx10a2
+Content-Type: multipart/mixed; boundary="Qvn7aEch9nhCmIC0OjsZQy4pRGcGJvEzb";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Jarkko Nikula <jarkko.nikula@linux.intel.com>, linux-can@vger.kernel.org
-Cc: Dan Murphy <dmurphy@ti.com>, Sriram Dash <sriram.dash@samsung.com>,
- Patrik Flykt <patrik.flykt@linux.intel.com>
-Message-ID: <51aae4ee-5abf-8759-ca8d-627f661e9753@pengutronix.de>
-Subject: Re: [PATCH] can: m_can: Process interrupt only when not runtime
- suspended
-References: <20200915134715.696303-1-jarkko.nikula@linux.intel.com>
-In-Reply-To: <20200915134715.696303-1-jarkko.nikula@linux.intel.com>
+Cc: Wolfgang Grandegger <wg@grandegger.com>, Dan Murphy <dmurphy@ti.com>,
+ Sriram Dash <sriram.dash@samsung.com>,
+ Patrik Flykt <patrik.flykt@linux.intel.com>, Felipe Balbi
+ <balbi@kernel.org>, Raymond Tan <raymond.tan@intel.com>
+Message-ID: <0730df74-60fb-8364-14ba-a4a6ce05b543@pengutronix.de>
+Subject: Re: [PATCH] can: m_can: Add PCI glue driver for Intel Elkhart Lake
+References: <20201117160827.3636264-1-jarkko.nikula@linux.intel.com>
+In-Reply-To: <20201117160827.3636264-1-jarkko.nikula@linux.intel.com>
 
---jJrGom4spdVvyxqmvI8xET6vlzr7AJwuw
+--Qvn7aEch9nhCmIC0OjsZQy4pRGcGJvEzb
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 9/15/20 3:47 PM, Jarkko Nikula wrote:
-> Avoid processing bogus interrupt statuses when the HW is runtime
-> suspended and the M_CAN_IR register read may get all bits 1's. Handler
-> can be called if the interrupt request is shared with other peripherals=
-
-> or at the end of free_irq().
+On 11/17/20 5:08 PM, Jarkko Nikula wrote:
+> Add support for M_CAN controller on Intel Elkhart Lake attached to the
+> PCI bus. It integrates the Bosch M_CAN controller with Message RAM and
+> the wrapper IP block with additional registers which all of them are
+> within the same MMIO range.
 >=20
-> Therefore check the runtime suspended status before processing.
+> Currently only interrupt control register from wrapper IP is used and
+> the MRAM configuration is expected to come from the firmware via
+> "bosch,mram-cfg" device property and parsed by m_can.c core.
 >=20
+> Initial implementation is done by Felipe Balbi while he was working at
+> Intel with later changes from Raymond Tan and me.
+>=20
+> Co-developed-by: Felipe Balbi (Intel) <balbi@kernel.org>
+> Signed-off-by: Felipe Balbi (Intel) <balbi@kernel.org>
+> Co-developed-by: Raymond Tan <raymond.tan@intel.com>
+> Signed-off-by: Raymond Tan <raymond.tan@intel.com>
 > Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> ---
+> This has soft dependency to patches sent earlier by Patrik Flykt and me=
+:
+> https://www.spinics.net/lists/linux-can/msg04936.html
+> https://www.spinics.net/lists/linux-can/msg04182.html
+> Soft dependency since this can be applied without them but will see the=
 
-Applied to linux-can/testing
+> issues fixed by those patches.
 
-Tnx,
+I've applied the patches to linux-can-next/m_can, which is available here=
+
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/co=
+mmit/?h=3Dm_can
+
+Can you please test that branch. This will go into next, once the net/mas=
+ter is
+merged to net-next/master.
+
+regards,
 Marc
 
 --=20
@@ -154,23 +182,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---jJrGom4spdVvyxqmvI8xET6vlzr7AJwuw--
+--Qvn7aEch9nhCmIC0OjsZQy4pRGcGJvEzb--
 
---bx5o9DOD9DgSGSSWtvufcP7PmUwagE30V
+--0ZY01FqYNBXCYeIV2eQPFkFs9ncwx10a2
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+1PGoACgkQqclaivrt
-76mCyQf9E4E26iBpxPhBLklxSPaVND5i6y7m+8ruhfdYH7CWxPjkFSxWN5GrWHrI
-6A7BIm35SznGK9rLrqbjgvrviLs6gJFN5RkPTyQK9DumQlja/G3hrteXfZ1xQRHB
-7UPFiylyhhgwcYZpbq6JLzXpfDTHAzzzHWcPcPuyIJ579u0cpzR/FcvXv5gmpqgM
-LIlqivpnye6FaPm5dRPogIKh09Y1NsPTc6VUmk+viXk7FgfF9ou4U84haWTg1EeD
-neq+0cvbIFQjMkMu3HIjybT0K3kiQY349YMKkIfeSUomaCk+Z2pBT3NdbWbOMYey
-jdFonYi+1XoNAKt/z+PdZ8X7X3EMkA==
-=wiFH
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+1QaAACgkQqclaivrt
+76mAeQf/eYGHQjht/bD4+FDuOngAQNCEc2hJeRg3o34SxC7ye8IFxngrOdBSivFe
+7TwtEdQoxAWzgoAYZICDvVx/x/f+kM4QAIEerZxLT09xQYtSQdO1HQftRo7AowSb
+cg0cULhGc125ukLDfSOWqtq5K93bwHWSA3YkX1K27GcAU/64Ut6rTCZVFnUlZ0qX
+sS7m93bR1Ub2rBcoKiAksQ6likYGZQzLyg6ScU+BvFmmN6Yuus8+uZGqUHQy3sno
+qt2lZjP7c06j3u8l+VSeQkeV415wEPBatjRG/wJAzLEGigbRvtup7CbUI94X8AdO
+B04Ga3YBWsGXe+OllpvYr4TBnTh9wg==
+=COTY
 -----END PGP SIGNATURE-----
 
---bx5o9DOD9DgSGSSWtvufcP7PmUwagE30V--
+--0ZY01FqYNBXCYeIV2eQPFkFs9ncwx10a2--
