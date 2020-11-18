@@ -2,56 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D07532B7DE0
-	for <lists+linux-can@lfdr.de>; Wed, 18 Nov 2020 13:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99A42B8008
+	for <lists+linux-can@lfdr.de>; Wed, 18 Nov 2020 16:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725879AbgKRMwf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Wed, 18 Nov 2020 07:52:35 -0500
-Received: from tigeramira.ro ([88.158.78.30]:43706 "EHLO mail.tigeramira.ro"
-        rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S1725767AbgKRMwf (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 18 Nov 2020 07:52:35 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 95A6BA4AFB2
-        for <linux-can@vger.kernel.org>; Tue, 17 Nov 2020 15:47:21 +0200 (EET)
-Received: from mail.tigeramira.ro ([127.0.0.1])
-        by localhost (mail.tigeramira.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CTDAFurQbcpQ for <linux-can@vger.kernel.org>;
-        Tue, 17 Nov 2020 15:47:05 +0200 (EET)
-Received: from mail.tigeramira.ro (localhost [127.0.0.1])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 74F9EC368EE
-        for <linux-can@vger.kernel.org>; Sun, 15 Nov 2020 10:54:19 +0200 (EET)
-Received: from [156.96.44.214] (unknown [192.168.12.254])
-        by mail.tigeramira.ro (Postfix) with ESMTP id 16171998BFA
-        for <linux-can@vger.kernel.org>; Fri, 13 Nov 2020 19:07:51 +0200 (EET)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Corporate and Personal Loan::,
+        id S1726736AbgKRPBw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 18 Nov 2020 10:01:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726501AbgKRPBw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 18 Nov 2020 10:01:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF047C0613D4
+        for <linux-can@vger.kernel.org>; Wed, 18 Nov 2020 07:01:51 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kfOxx-0003NS-PQ; Wed, 18 Nov 2020 16:01:49 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-From:   "Investment  Corporate" <financialcapability6@gmail.com>
-Date:   Fri, 13 Nov 2020 08:08:04 -0800
-Reply-To: hmurrah39@gmail.com
-Message-Id: <20201113170752.16171998BFA@mail.tigeramira.ro>
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, kernel@pengutronix.de,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH] can: flexcan: flexcan_chip_start(): fix erroneous flexcan_transceiver_enable() during bus-off recovery
+Date:   Wed, 18 Nov 2020 16:01:48 +0100
+Message-Id: <20201118150148.2664024-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello linux-can@vger.kernel.org
+If the CAN controller goes into bus off, the do_set_mode() callback with
+CAN_MODE_START can be used to recover the controller, which then calls
+flexcan_chip_start(). If configured, this is done automatically by the
+framework or manually by the user.
 
+In flexcan_chip_start() there is an explicit call to
+flexcan_transceiver_enable(), which does a regulator_enable() on the
+transceiver regulator. This results in a net usage counter increase, as there
+is no corresponding flexcan_transceiver_disable() in the bus off code path.
+This further leads to the transceiver stuck enabled, even if the CAN interface
+is shut down.
 
-We are Base Investment Company offering Corporate and Personal Loan at 3% Interest Rate for a duration of 10Years.
+To fix this problem the
+flexcan_transceiver_enable()/flexcan_transceiver_disable() are moved out of
+flexcan_chip_start()/flexcan_chip_stop() into flexcan_open()/flexcan_close().
 
+Fixes: e955cead0311 ("CAN: Add Flexcan CAN controller driver")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/flexcan.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-We also pay 1% commission to brokers, who introduce project owners for finance or other opportunities.
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index d6a9cf0e9b60..99e5f272205d 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -1567,14 +1567,10 @@ static int flexcan_chip_start(struct net_device *dev)
+ 		priv->write(reg_ctrl2, &regs->ctrl2);
+ 	}
+ 
+-	err = flexcan_transceiver_enable(priv);
+-	if (err)
+-		goto out_chip_disable;
+-
+ 	/* synchronize with the can bus */
+ 	err = flexcan_chip_unfreeze(priv);
+ 	if (err)
+-		goto out_transceiver_disable;
++		goto out_chip_disable;
+ 
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+@@ -1592,8 +1588,6 @@ static int flexcan_chip_start(struct net_device *dev)
+ 
+ 	return 0;
+ 
+- out_transceiver_disable:
+-	flexcan_transceiver_disable(priv);
+  out_chip_disable:
+ 	flexcan_chip_disable(priv);
+ 	return err;
+@@ -1623,7 +1617,6 @@ static int __flexcan_chip_stop(struct net_device *dev, bool disable_on_error)
+ 	priv->write(priv->reg_ctrl_default & ~FLEXCAN_CTRL_ERR_ALL,
+ 		    &regs->ctrl);
+ 
+-	flexcan_transceiver_disable(priv);
+ 	priv->can.state = CAN_STATE_STOPPED;
+ 
+ 	return 0;
+@@ -1665,10 +1658,14 @@ static int flexcan_open(struct net_device *dev)
+ 	if (err)
+ 		goto out_runtime_put;
+ 
+-	err = request_irq(dev->irq, flexcan_irq, IRQF_SHARED, dev->name, dev);
++	err = flexcan_transceiver_enable(priv);
+ 	if (err)
+ 		goto out_close;
+ 
++	err = request_irq(dev->irq, flexcan_irq, IRQF_SHARED, dev->name, dev);
++	if (err)
++		goto out_transceiver_disable;
++
+ 	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+ 		priv->mb_size = sizeof(struct flexcan_mb) + CANFD_MAX_DLEN;
+ 	else
+@@ -1720,6 +1717,8 @@ static int flexcan_open(struct net_device *dev)
+ 	can_rx_offload_del(&priv->offload);
+  out_free_irq:
+ 	free_irq(dev->irq, dev);
++ out_transceiver_disable:
++	flexcan_transceiver_disable(priv);
+  out_close:
+ 	close_candev(dev);
+  out_runtime_put:
+@@ -1738,6 +1737,7 @@ static int flexcan_close(struct net_device *dev)
+ 
+ 	can_rx_offload_del(&priv->offload);
+ 	free_irq(dev->irq, dev);
++	flexcan_transceiver_disable(priv);
+ 
+ 	close_candev(dev);
+ 	pm_runtime_put(priv->dev);
+-- 
+2.29.2
 
-
-Please get back to me if you are interested for more
-
-details.
-
-
-Yours faithfully,
-
-Hashim Murrah
