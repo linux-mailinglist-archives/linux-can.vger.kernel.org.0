@@ -2,34 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B5F2B8DFD
-	for <lists+linux-can@lfdr.de>; Thu, 19 Nov 2020 09:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E7B2B8E76
+	for <lists+linux-can@lfdr.de>; Thu, 19 Nov 2020 10:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgKSIxA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Nov 2020 03:53:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S1726571AbgKSJMi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 Nov 2020 04:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726468AbgKSIxA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Nov 2020 03:53:00 -0500
+        with ESMTP id S1725873AbgKSJMi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Nov 2020 04:12:38 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D98C0613CF
-        for <linux-can@vger.kernel.org>; Thu, 19 Nov 2020 00:53:00 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F3BC0613CF
+        for <linux-can@vger.kernel.org>; Thu, 19 Nov 2020 01:12:38 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kffgX-0004Tk-Ij; Thu, 19 Nov 2020 09:52:57 +0100
+        id 1kffzY-00070r-MF; Thu, 19 Nov 2020 10:12:36 +0100
+Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:d2a0:42c2:7db3:b10])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A24CD595FBB;
+        Thu, 19 Nov 2020 09:12:35 +0000 (UTC)
+Date:   Thu, 19 Nov 2020 10:12:33 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, kernel@pengutronix.de,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5/5] can: flexcan: flexcan_close(): change order if commands to properly shut down the controller
-Date:   Thu, 19 Nov 2020 09:52:51 +0100
-Message-Id: <20201119085251.2949181-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201119085251.2949181-1-mkl@pengutronix.de>
-References: <20201119085251.2949181-1-mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org, mailhol.vincent@wanadoo.fr
+Subject: Re: [PATCH net-next v2] can: gw: support modification of Classical
+ CAN DLCs
+Message-ID: <20201119091233.p4rsay26gta6tb74@hardanger.blackshift.org>
+References: <20201119084921.2621-1-socketcan@hartkopp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5mq5oxy3q6kpcv3h"
+Content-Disposition: inline
+In-Reply-To: <20201119084921.2621-1-socketcan@hartkopp.net>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -38,62 +47,58 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-There haven been reports, that the flexcan_close() soradically hangs during
-simultanious ifdown, sending of CAN messages and probably open CAN bus:
 
-| (__schedule) from [<808bbd34>] (schedule+0x90/0xb8)
-| (schedule) from [<808bf274>] (schedule_timeout+0x1f8/0x24c)
-| (schedule_timeout) from [<8016be44>] (msleep+0x18/0x1c)
-| (msleep) from [<80746a64>] (napi_disable+0x60/0x70)
-| (napi_disable) from [<8052fdd0>] (flexcan_close+0x2c/0x140)
-| (flexcan_close) from [<80744930>] (__dev_close_many+0xb8/0xd8)
-| (__dev_close_many) from [<8074db9c>] (__dev_change_flags+0xd0/0x1a0)
-| (__dev_change_flags) from [<8074dc84>] (dev_change_flags+0x18/0x48)
-| (dev_change_flags) from [<80760c24>] (do_setlink+0x44c/0x7b4)
-| (do_setlink) from [<80761560>] (rtnl_newlink+0x374/0x68c)
+--5mq5oxy3q6kpcv3h
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I was unable to reproduce the issue, but a cleanup of the flexcan close
-sequence has probably fixed the problem at the reporting user.
+On Thu, Nov 19, 2020 at 09:49:21AM +0100, Oliver Hartkopp wrote:
+> Add support for data length code modifications for Classical CAN.
+>=20
+> The netlink configuration interface always allowed to pass any value
+> that fits into a byte, therefore only the modification process had to be
+> extended to handle the raw DLC represenation of Classical CAN frames.
+>=20
+> When a DLC value from 0 .. F is provided for Classical CAN frame
+> modifications the 'len' value is modified as-is with the exception that
+> potentially existing 9 .. F DLC values in the len8_dlc element are moved
+> to the 'len' element for the modification operation by mod_retrieve_ccdlc=
+().
+>=20
+> After the modification the Classical CAN frame DLC information is brought
+> back into the correct format by mod_store_ccdlc() which is filling 'len'
+> and 'len8_dlc' accordingly.
+>=20
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+>=20
+> ---
+> v2: remove unnecessary mod_retrieve_ccdlc() for 'set' modification
 
-This patch changes the sequence in flexcan_close() to:
-- stop the TX queue
-- disable the interrupts on the chip level and wait via free_irq()
-  synchronously for the interrupt handler to finish
-- disable RX offload, which disables synchronously NAPI
-- disable the flexcan on the chip level
-- free RX offload
-- disable the transceiver
-- close the CAN device
-- disable the clocks
+Added to linux-can-next/testing.
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/flexcan.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks,
+Marc
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 0fb768dee99f..002e93f2b249 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -1789,15 +1789,16 @@ static int flexcan_close(struct net_device *dev)
- 	struct flexcan_priv *priv = netdev_priv(dev);
- 
- 	netif_stop_queue(dev);
-+	flexcan_chip_interrupts_disable(dev);
-+	free_irq(dev->irq, dev);
- 	can_rx_offload_disable(&priv->offload);
- 	flexcan_chip_stop_disable_on_error(dev);
- 	flexcan_chip_interrupts_disable(dev);
- 
- 	can_rx_offload_del(&priv->offload);
--	free_irq(dev->irq, dev);
- 	flexcan_transceiver_disable(priv);
--
- 	close_candev(dev);
-+
- 	pm_runtime_put(priv->dev);
- 
- 	can_led_event(dev, CAN_LED_EVENT_STOP);
--- 
-2.29.2
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
+--5mq5oxy3q6kpcv3h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+2Nv8ACgkQqclaivrt
+76nZmAgAqQ+0SaJHZLh0bx0kNu0y4k4ZW5/lhmoyPNXAFBTKNZPrIsZZOcy0ehXI
+5k1RGwsmls5h76/RwyHvsDRwsP8y4uyxPo59MVwqaJuVRKJa/GGpXCQYdCYNInrG
+BfjgvPbY0EtyF6jQ0QIpexhTQQpkhg4dONhggGNGtWp0NTiErqM5g92Dkw99Xoid
+0oX49NkR1fRPhNDKnsElv+XgGsJ0Qa0RI5GIy1exXekGzDIaLdtvoow+oUoI0a7C
+oZBKmORFb3NDDIV2GUWtiw0d9ZUCVJVGWouIP/ixFzKMJNitSS81vtKE58NLmsZS
+bUq8Qysq4wzDP2x7giCqv/zJ/Jl4yA==
+=wC6b
+-----END PGP SIGNATURE-----
+
+--5mq5oxy3q6kpcv3h--
