@@ -2,29 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A37392B8FEB
+	by mail.lfdr.de (Postfix) with ESMTP id 367792B8FEA
 	for <lists+linux-can@lfdr.de>; Thu, 19 Nov 2020 11:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbgKSKJW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1726854AbgKSKJW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Thu, 19 Nov 2020 05:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726650AbgKSKJV (ORCPT
+        with ESMTP id S1726668AbgKSKJV (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Thu, 19 Nov 2020 05:09:21 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7922FC0613CF
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820DCC0613D4
         for <linux-can@vger.kernel.org>; Thu, 19 Nov 2020 02:09:21 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kfgsQ-00063P-9k; Thu, 19 Nov 2020 11:09:18 +0100
+        id 1kfgsQ-00063P-Hg; Thu, 19 Nov 2020 11:09:18 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, kernel@pengutronix.de
-Subject: [net-next v2 PATCH 0/5] flexcan: fix hanging flexcan_close()
-Date:   Thu, 19 Nov 2020 11:09:12 +0100
-Message-Id: <20201119100917.3013281-1-mkl@pengutronix.de>
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, kernel@pengutronix.de,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [net-next v2 1/5] can: flexcan: factor out enabling and disabling of interrupts into separate function
+Date:   Thu, 19 Nov 2020 11:09:13 +0100
+Message-Id: <20201119100917.3013281-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20201119100917.3013281-1-mkl@pengutronix.de>
+References: <20201119100917.3013281-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -35,34 +38,95 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+The upcoming patches are going to move the enabling and disabling of the
+interrupts. Introduce convenience functions to make these patches simpler.
 
-There haven been reports, that the flexcan_close() soradically hangs during
-simultanious ifdown, sending of CAN messages and probably open CAN bus:
+Link: https://lore.kernel.org/r/20201119085251.2949181-2-mkl@pengutronix.de
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/flexcan.c | 41 ++++++++++++++++++++++++++-------------
+ 1 file changed, 27 insertions(+), 14 deletions(-)
 
-| (__schedule) from [<808bbd34>] (schedule+0x90/0xb8)
-| (schedule) from [<808bf274>] (schedule_timeout+0x1f8/0x24c)
-| (schedule_timeout) from [<8016be44>] (msleep+0x18/0x1c)
-| (msleep) from [<80746a64>] (napi_disable+0x60/0x70)
-| (napi_disable) from [<8052fdd0>] (flexcan_close+0x2c/0x140)
-| (flexcan_close) from [<80744930>] (__dev_close_many+0xb8/0xd8)
-| (__dev_close_many) from [<8074db9c>] (__dev_change_flags+0xd0/0x1a0)
-| (__dev_change_flags) from [<8074dc84>] (dev_change_flags+0x18/0x48)
-| (dev_change_flags) from [<80760c24>] (do_setlink+0x44c/0x7b4)
-| (do_setlink) from [<80761560>] (rtnl_newlink+0x374/0x68c)
-
-I was unable to reproduce the issue, but a cleanup of the flexcan close
-sequence has probably fixed the problem at the reporting user.
-
-As this fix spans 5 patches and changes the flexcan_open() and flexcan_close()
-are rather big, I'm reluctant to push this via net/master now. So I think this
-series should go via net-next/master in my next pull request.
-
-changes since v1:
-- 5/5: remove redundant flexcan_chip_interrupts_disable(dev)
-       Thanks Joakim Zhang
-
-regards,
-Marc
-
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 06e03ab6f43a..56af58c4179b 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -1383,6 +1383,31 @@ static void flexcan_ram_init(struct net_device *dev)
+ 	priv->write(reg_ctrl2, &regs->ctrl2);
+ }
+ 
++static void flexcan_chip_interrupts_enable(const struct net_device *dev)
++{
++	const struct flexcan_priv *priv = netdev_priv(dev);
++	struct flexcan_regs __iomem *regs = priv->regs;
++	u64 reg_imask;
++
++	disable_irq(dev->irq);
++	priv->write(priv->reg_ctrl_default, &regs->ctrl);
++	reg_imask = priv->rx_mask | priv->tx_mask;
++	priv->write(upper_32_bits(reg_imask), &regs->imask2);
++	priv->write(lower_32_bits(reg_imask), &regs->imask1);
++	enable_irq(dev->irq);
++}
++
++static void flexcan_chip_interrupts_disable(const struct net_device *dev)
++{
++	const struct flexcan_priv *priv = netdev_priv(dev);
++	struct flexcan_regs __iomem *regs = priv->regs;
++
++	priv->write(0, &regs->imask2);
++	priv->write(0, &regs->imask1);
++	priv->write(priv->reg_ctrl_default & ~FLEXCAN_CTRL_ERR_ALL,
++		    &regs->ctrl);
++}
++
+ /* flexcan_chip_start
+  *
+  * this functions is entered with clocks enabled
+@@ -1393,7 +1418,6 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	struct flexcan_priv *priv = netdev_priv(dev);
+ 	struct flexcan_regs __iomem *regs = priv->regs;
+ 	u32 reg_mcr, reg_ctrl, reg_ctrl2, reg_mecr;
+-	u64 reg_imask;
+ 	int err, i;
+ 	struct flexcan_mb __iomem *mb;
+ 
+@@ -1611,13 +1635,7 @@ static int flexcan_chip_start(struct net_device *dev)
+ 
+ 	priv->can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+-	/* enable interrupts atomically */
+-	disable_irq(dev->irq);
+-	priv->write(priv->reg_ctrl_default, &regs->ctrl);
+-	reg_imask = priv->rx_mask | priv->tx_mask;
+-	priv->write(upper_32_bits(reg_imask), &regs->imask2);
+-	priv->write(lower_32_bits(reg_imask), &regs->imask1);
+-	enable_irq(dev->irq);
++	flexcan_chip_interrupts_enable(dev);
+ 
+ 	/* print chip status */
+ 	netdev_dbg(dev, "%s: reading mcr=0x%08x ctrl=0x%08x\n", __func__,
+@@ -1637,7 +1655,6 @@ static int flexcan_chip_start(struct net_device *dev)
+ static int __flexcan_chip_stop(struct net_device *dev, bool disable_on_error)
+ {
+ 	struct flexcan_priv *priv = netdev_priv(dev);
+-	struct flexcan_regs __iomem *regs = priv->regs;
+ 	int err;
+ 
+ 	/* freeze + disable module */
+@@ -1648,11 +1665,7 @@ static int __flexcan_chip_stop(struct net_device *dev, bool disable_on_error)
+ 	if (err && !disable_on_error)
+ 		goto out_chip_unfreeze;
+ 
+-	/* Disable all interrupts */
+-	priv->write(0, &regs->imask2);
+-	priv->write(0, &regs->imask1);
+-	priv->write(priv->reg_ctrl_default & ~FLEXCAN_CTRL_ERR_ALL,
+-		    &regs->ctrl);
++	flexcan_chip_interrupts_disable(dev);
+ 
+ 	priv->can.state = CAN_STATE_STOPPED;
+ 
+-- 
+2.29.2
 
