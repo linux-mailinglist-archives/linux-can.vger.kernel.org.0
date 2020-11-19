@@ -2,42 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9951B2B8D03
-	for <lists+linux-can@lfdr.de>; Thu, 19 Nov 2020 09:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982D52B8DD7
+	for <lists+linux-can@lfdr.de>; Thu, 19 Nov 2020 09:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgKSIXJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Nov 2020 03:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S1726287AbgKSIpH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 19 Nov 2020 03:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgKSIXI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Nov 2020 03:23:08 -0500
+        with ESMTP id S1726251AbgKSIpG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Nov 2020 03:45:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3BBC0613CF
-        for <linux-can@vger.kernel.org>; Thu, 19 Nov 2020 00:23:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59683C0613CF
+        for <linux-can@vger.kernel.org>; Thu, 19 Nov 2020 00:45:06 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kffDR-0000kB-4a; Thu, 19 Nov 2020 09:22:53 +0100
+        id 1kffYs-0003aW-Is; Thu, 19 Nov 2020 09:45:02 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:d2a0:42c2:7db3:b10] (unknown [IPv6:2a03:f580:87bc:d400:d2a0:42c2:7db3:b10])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 10DBD595F12;
-        Thu, 19 Nov 2020 08:22:48 +0000 (UTC)
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-can@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Dan Murphy <dmurphy@ti.com>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        Patrik Flykt <patrik.flykt@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Raymond Tan <raymond.tan@intel.com>
-References: <20201117160827.3636264-1-jarkko.nikula@linux.intel.com>
- <0730df74-60fb-8364-14ba-a4a6ce05b543@pengutronix.de>
- <b742048b-5407-2853-a635-c0fabb624881@linux.intel.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A0B88595F61;
+        Thu, 19 Nov 2020 08:45:00 +0000 (UTC)
+Subject: Re: [mkl-can-next:testing 20/27] drivers/net/can/flexcan.c:1389:6:
+ warning: variable 'err' set but not used
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-can@vger.kernel.org
+References: <202011190245.FnMHEVX9-lkp@intel.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -99,16 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH] can: m_can: Add PCI glue driver for Intel Elkhart Lake
-Message-ID: <dd837612-0b13-a3c0-a36c-338d022de1ed@pengutronix.de>
-Date:   Thu, 19 Nov 2020 09:22:44 +0100
+Message-ID: <20570626-28aa-79f8-e8b2-5caaec11961f@pengutronix.de>
+Date:   Thu, 19 Nov 2020 09:44:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <b742048b-5407-2853-a635-c0fabb624881@linux.intel.com>
+In-Reply-To: <202011190245.FnMHEVX9-lkp@intel.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="SifFmPpAtbcHtlfRhZI9z9qzl7hHMUNMo"
+ boundary="wAhTPwOkKgr6R1Y33JerdX8xzfJxSVd20"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -118,50 +111,60 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---SifFmPpAtbcHtlfRhZI9z9qzl7hHMUNMo
-Content-Type: multipart/mixed; boundary="HmuAJHn4ebcesVb0QMtE64t68GUnq2bKv";
+--wAhTPwOkKgr6R1Y33JerdX8xzfJxSVd20
+Content-Type: multipart/mixed; boundary="pGKNByS8xJqhph9KpBVLAttifQw7hnThm";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jarkko Nikula <jarkko.nikula@linux.intel.com>, linux-can@vger.kernel.org
-Cc: Wolfgang Grandegger <wg@grandegger.com>, Dan Murphy <dmurphy@ti.com>,
- Sriram Dash <sriram.dash@samsung.com>,
- Patrik Flykt <patrik.flykt@linux.intel.com>, Felipe Balbi
- <balbi@kernel.org>, Raymond Tan <raymond.tan@intel.com>
-Message-ID: <dd837612-0b13-a3c0-a36c-338d022de1ed@pengutronix.de>
-Subject: Re: [PATCH] can: m_can: Add PCI glue driver for Intel Elkhart Lake
-References: <20201117160827.3636264-1-jarkko.nikula@linux.intel.com>
- <0730df74-60fb-8364-14ba-a4a6ce05b543@pengutronix.de>
- <b742048b-5407-2853-a635-c0fabb624881@linux.intel.com>
-In-Reply-To: <b742048b-5407-2853-a635-c0fabb624881@linux.intel.com>
+To: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, linux-can@vger.kernel.org
+Message-ID: <20570626-28aa-79f8-e8b2-5caaec11961f@pengutronix.de>
+Subject: Re: [mkl-can-next:testing 20/27] drivers/net/can/flexcan.c:1389:6:
+ warning: variable 'err' set but not used
+References: <202011190245.FnMHEVX9-lkp@intel.com>
+In-Reply-To: <202011190245.FnMHEVX9-lkp@intel.com>
 
---HmuAJHn4ebcesVb0QMtE64t68GUnq2bKv
+--pGKNByS8xJqhph9KpBVLAttifQw7hnThm
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/19/20 9:16 AM, Jarkko Nikula wrote:
-> On 11/18/20 5:45 PM, Marc Kleine-Budde wrote:
->> I've applied the patches to linux-can-next/m_can, which is available h=
-ere
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git=
-/commit/?h=3Dm_can
->>
->> Can you please test that branch. This will go into next, once the net/=
-master is
->> merged to net-next/master.
->>
-> Thanks, works fine at quick test. I had the patch from top of linux-nex=
-t=20
-> tag next-20201117 so it wasn't very far away from you branch. Will send=
-=20
-> fixes if we'll notice and hopefully ours don't cause any :-)
+On 11/18/20 7:20 PM, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-n=
+ext.git testing
+> head:   5974dc5581b5ae0ef7bef0916ec99663d4b78c9d
+> commit: cad1b206dc43c9324409af29a0d3eb6dc8fa6a02 [20/27] can: flexcan: =
+flexcan_rx_offload_setup(): factor out mailbox and rx-offload setup into =
+separate function
+> config: xtensa-allyesconfig (attached as .config)
+> compiler: xtensa-linux-gcc (GCC) 9.3.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
+bin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can=
+-next.git/commit/?id=3Dcad1b206dc43c9324409af29a0d3eb6dc8fa6a02
+>         git remote add mkl-can-next https://git.kernel.org/pub/scm/linu=
+x/kernel/git/mkl/linux-can-next.git
+>         git fetch --no-tags mkl-can-next testing
+>         git checkout cad1b206dc43c9324409af29a0d3eb6dc8fa6a02
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cr=
+oss ARCH=3Dxtensa=20
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All warnings (new ones prefixed by >>):
+>=20
+>    drivers/net/can/flexcan.c: In function 'flexcan_rx_offload_setup':
+>>> drivers/net/can/flexcan.c:1389:6: warning: variable 'err' set but not=
+ used [-Wunused-but-set-variable]
+>     1389 |  int err;
+>          |      ^~~
 
-=2E..but that branch doesn't contain the other m_can patches that are on =
-my m_can
-branch.
+Fixed.
 
-Thanks for testing,
+Thanks,
 Marc
 
 --=20
@@ -171,23 +174,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---HmuAJHn4ebcesVb0QMtE64t68GUnq2bKv--
+--pGKNByS8xJqhph9KpBVLAttifQw7hnThm--
 
---SifFmPpAtbcHtlfRhZI9z9qzl7hHMUNMo
+--wAhTPwOkKgr6R1Y33JerdX8xzfJxSVd20
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+2K1QACgkQqclaivrt
-76mLkAf+N2HV8uXCLh8CH4BevmTGAAFyecwlZgSCDkp5wukzmztf9lB56W8yVJbt
-4IM4YvCVSXn9fUIgzASPAbWreZlcLCr4qBiyXrX2dufD1v3Flxb56BBQUhNfzwHR
-zPTdpc45adKNGKI61NLmaHdcZyPEWyAPkCmpFKIKK9QD/YjqlAi92Bi2K+z/RdJf
-uLX6b1+eZ/W+BznTSAats5bZ6IGrwoAX1ukOzF5TUTJzc7/L1aHF4XL88vDNhekh
-cqNpsl86jBB0l3aC0DA8NzuQ+pg4wrBtW9tZr3zz8lqf8vafO9Q4zilTZbpPrvw5
-4MZw80WruQkc8LE04wNoIDIU3wDrFA==
-=h+HW
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+2MIgACgkQqclaivrt
+76k9BAgAhWR2SLU9ccbO+6eP0/oAUv+8zwEE9YKh5pKeETJ0sNUA6wyV7RRHVg44
+l+u3Ew7bFIbA7W1ILOWpBQIJNUMQ03KIM03bmBP/yfzqx81YL0GvIfx/bdIZBZLn
+B/lurtnDnNRzxj+7OcwdyNcDztsMHnBVrxRkJaudLgqVBLXFhGjozSNs4k+WMEiU
+U94w6tglP3NhsXVMCvhLkljnvgSd4y5mePeGqSYQFmMJvU/TWX1qlqSz6DrWDcmI
+/m/utU4ia5lNdihXFg7q+3TuiJAN3g0PhO7H61SIpJEC93P0D4RxMtM+2u79TdjC
+jaACdj4By1Blv5q1XfBoZMac8vtZTA==
+=fyZ1
 -----END PGP SIGNATURE-----
 
---SifFmPpAtbcHtlfRhZI9z9qzl7hHMUNMo--
+--wAhTPwOkKgr6R1Y33JerdX8xzfJxSVd20--
