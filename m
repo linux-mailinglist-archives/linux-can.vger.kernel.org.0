@@ -2,104 +2,172 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 011B12BB30C
-	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 19:37:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 366692BB36F
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 19:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730432AbgKTS3J (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Nov 2020 13:29:09 -0500
-Received: from smtprelay0187.hostedemail.com ([216.40.44.187]:46450 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729771AbgKTS3I (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 13:29:08 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 2DC80180A7FF1;
-        Fri, 20 Nov 2020 18:29:00 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2198:2199:2393:2559:2562:2731:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3870:3871:3874:4321:4362:5007:6742:6743:10004:10400:10848:11232:11658:11914:12297:12740:12760:12895:13069:13311:13357:13439:14180:14659:14721:21060:21067:21080:21627:21990:30012:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: woman67_620d0012734d
-X-Filterd-Recvd-Size: 3843
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf05.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 20 Nov 2020 18:28:49 +0000 (UTC)
-Message-ID: <3e0bbb1644fe53d79322c2feb28ccaf3e20c0e94.camel@perches.com>
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-From:   Joe Perches <joe@perches.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
-        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
-        cluster-devel@redhat.com, coreteam@netfilter.org,
-        devel@driverdev.osuosl.org, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
-        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
-        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
-        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
-        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
-        selinux@vger.kernel.org, target-devel@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net,
-        usb-storage@lists.one-eyed-alien.net,
-        virtualization@lists.linux-foundation.org,
-        wcn36xx@lists.infradead.org, x86@kernel.org,
-        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Date:   Fri, 20 Nov 2020 10:28:48 -0800
-In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
-References: <cover.1605896059.git.gustavoars@kernel.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S1730847AbgKTSeT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Nov 2020 13:34:19 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:25561 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730656AbgKTSeS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 13:34:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1605897255;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=IsKartWkxcQ49qvgewBVUixxzcrCg2hPB3nmAgQOYHA=;
+        b=bPooZgCot2Jdkal5B6qrNeCrXX25xSH2BN5Uxe2oR6zaWYDmuGj6xIq5zEtzwBllBn
+        nwEkmiva85Q/nPY0hGZTQ12RAE0J8BnR/sNR03WBLuyVbflR4E9QqEpr47ZpTUJs0jYX
+        VuULn9C6V3ONwQoB49gPsaWTiX5luH52coFysWlyZNdVE+csFY2W4/xm5aafi8VnKysd
+        zYH+BKvUmUA6p+ncu/+j90AaEbz7criajpZ5re701agIlsWhO2HOvadoRA2wqS2Xc/6Y
+        ugWebrwhUMHiFjzjZhzHzhjdLCjCNqg8Mpl5oX9xajLzrnmBtMYPhjSWiaPc8cd/Zz/N
+        kN5Q==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKONebStI="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
+        with ESMTPSA id n07f3bwAKIYBYEr
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 20 Nov 2020 19:34:11 +0100 (CET)
+Subject: Re: Question on CAN FD Driver for mcp251xfd
+To:     Jin Park <jpark@enphaseenergy.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <DM6PR19MB3673FBAAA7A80E458659666EB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
+ <f168b9a4-79ae-7a8b-b074-632f86e8596b@pengutronix.de>
+ <DM6PR19MB36739C691B6C35B4AD7DF77AB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <032472ae-fb99-3c6f-ff3c-4e7b2d900980@hartkopp.net>
+Date:   Fri, 20 Nov 2020 19:34:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <DM6PR19MB36739C691B6C35B4AD7DF77AB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 2020-11-20 at 12:21 -0600, Gustavo A. R. Silva wrote:
-> Hi all,
+
+
+On 20.11.20 18:14, Jin Park wrote:
+> Hello Marc,
 > 
-> This series aims to fix almost all remaining fall-through warnings in
-> order to enable -Wimplicit-fallthrough for Clang.
+> Here are my answers.
+> VAR-SOM-MX8M-Nano board drives MCP2517FD/MCP2518FD (CAN FD controller) and TCAN332G (CAN FD Transceiver) for CAN FD communication.
 > 
-> In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
-> add multiple break/goto/return/fallthrough statements instead of just
-> letting the code fall through to the next case.
+> 1) Which commands have you tried?
+> 2) What are the error messages?
+> Please see below a), b), c), and d).
 > 
-> Notice that in order to enable -Wimplicit-fallthrough for Clang, this
-> change[1] is meant to be reverted at some point. So, this patch helps
-> to move in that direction.
+> 	a) Based on Bit Rate Switching feature in CAN FD, the bit rate at data phase and arbitration phase (or nominal phase) can be set in CAN FD protocol.
+> So, I tried below.
+> - command
+> ip link set can0 type can dbitrate 1000000
+> 
+> - error message
+> RTNETLINK answers: Operation not supported
+> 
+> 
 
-This was a bit hard to parse for a second or three.
+You need to apply both bitrates at the same time, e.g.
 
-Thanks Gustavo.
+$ ip link set can0 up type can bitrate 500000 sample-point 0.75 dbitrate 
+4000000 dsample-point 0.8 fd on
 
-How was this change done?
+See at:
 
+https://www.kernel.org/doc/Documentation/networking/can.txt
 
+Regards,
+Oliver
+	
+> 
+> 	b) To turn on FD mode, I tried below.
+> - command
+> ip link set can0 type can fd on
+> 
+> - error message
+> RTNETLINK answers: Operation not supported
+> 
+> 
+> 
+> 	c) To send CAN FD message, I tried below. Th
+> - command
+> cansend can0 123##1
+> 
+> - error message
+> CAN interface is not CAN FD capable - sorry.
+> 
+> - help text for cansend
+>      <can_id>#{R|data}          for CAN 2.0 frames
+>      <can_id>##<flags>{data}    for CAN FD frames
+> 
+> <can_id> can have 3 (SFF) or 8 (EFF) hex chars
+> {data} has 0..8 (0..64 CAN FD) ASCII hex-values (optionally separated by '.')
+> <flags> a single ASCII Hex value (0 .. F) which defines canfd_frame.flags
+> 
+> e.g. 5A1#11.2233.44556677.88 / 123#DEADBEEF / 5AA# / 123##1 / 213##311
+>       1F334455#1122334455667788 / 123#R for remote transmission request.
+> 
+> 
+> 
+> 
+> 
+> 	d) TCAN332G (CAN FD Transceiver) can support 5Mbps at data phase in CAN FD mode.
+> Current supported maximum bitrate in the driver is now 1Mbps at nominal rate.
+> (FYI, bit rate in data phase at CAN FD protocol is up to 8Mbps)
+>          Where: BITRATE  := { 1..1000000 }
+>                    SAMPLE-POINT  := { 0.000..0.999 }
+>                    TQ            := { NUMBER }
+>                    PROP-SEG      := { 1..8 }
+>                    PHASE-SEG1    := { 1..8 }
+>                    PHASE-SEG2    := { 1..8 }
+>                    SJW           := { 1..4 }
+>                    RESTART-MS    := { 0 | NUMBER }
+> 
+> 
+> 
+> 3) What doesn't work exactly?
+> 
+> I would like to send and receive messages in CAN FD with Bit Rate Switching (Arbitration phase: 1Mbps, Data phase: 5Mbps).
+> So far, CAN FD mode doesn't turn on with above commands.
+> 
+> Thanks,
+> Jin
+> 
+> 
+> -----Original Message-----
+> From: Marc Kleine-Budde <mkl@pengutronix.de>
+> Sent: Thursday, November 19, 2020 11:11 PM
+> To: Jin Park <jpark@enphaseenergy.com>; manivannan.sadhasivam@linaro.org
+> Subject: Re: Question on CAN FD Driver for mcp251xfd
+> 
+> Hello Jin Park,
+> 
+> please use the linux-can mailing list (linux-can@vger.kernel.org) for community question. There are other people interested in these question, please add list on Cc.
+> 
+> On 11/20/20 4:03 AM, Jin Park wrote:
+>> I am using MCP251XFD SPI-CAN Network Driver with VAR-SOM-MX8M-NANO
+>> board now and would like to ask whether it can support CAN FD features as well.
+> 
+> Yes it does support CAN-FD.
+> 
+>> I tried to command with CAN FD features in terminal and it didn’t work
+>> with CAN FD commands.
+> 
+> Which commands have you tried?
+> What are the error messages?
+> What doesn't work exactly?
+> 
+>> Is there any plan to release CAN FD Linux Driver in the future, if you
+>> have worked on CAN FD?
+> 
+> It should be working.
+> 
+> Marc
+> 
