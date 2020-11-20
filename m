@@ -2,372 +2,196 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B4A2BA8F3
-	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 12:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D638B2BA95A
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 12:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727918AbgKTLXt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Nov 2020 06:23:49 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.164]:33833 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727197AbgKTLXt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 06:23:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1605871422;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=jU0zOVoODlkAJjGqxa8+qtY/HTi0AhyqICrOXWxIzis=;
-        b=A2WQH/5KhTWeNrTZhQ80b68KgmjNg6ZRNY642P2cWUhyBhwq9aSItrB83yD5WAkTuC
-        A76je2z2vYuOg/58Jc1E9TkkYu+R3wUlDcpePXA6dAu/r2wS5cNjl5+1VjAXIDeE6BiD
-        BD6z+361Oo3hb/zT3VVdm3jOpjVh8Xd8JtEU0RiSctKtX8O2kOrSjG1EnNJm5IM1tOei
-        8aTNwV0gykEk+maPg95Do99GKOW6ccY2Ynvrszgv1ZbbFHzedwRWvhOjuLrcTvf82ncQ
-        oBG+NzkjnYTnMG/mI+avqno5nvGw5yXQ+spa7vdJARSAcmpM9qG5GB9cD33q0sJHm/84
-        p5Dw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iOMlqpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwAKBNYX5l
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 20 Nov 2020 12:23:34 +0100 (CET)
-Subject: Re: [net] can: gs_usb: fix endianess problem with candleLight
- firmware
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+        id S1727955AbgKTLj6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Nov 2020 06:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727865AbgKTLj5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 06:39:57 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8517CC0613CF
+        for <linux-can@vger.kernel.org>; Fri, 20 Nov 2020 03:39:57 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kg4ld-00033C-HI; Fri, 20 Nov 2020 12:39:53 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:9503:727f:64a0:8540] (2a03-f580-87bc-d400-9503-727f-64a0-8540.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:9503:727f:64a0:8540])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2AA0F5978D1;
+        Fri, 20 Nov 2020 11:39:51 +0000 (UTC)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de,
         Maximilian Schneider <max@schneidersoft.net>,
         Hubert Denkmair <hubert@denkmair.de>,
         Michael Rausch <mr@netadair.de>
 References: <20201120103818.3386964-1-mkl@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <9872e561-ddb5-4d0f-4d7c-fa74269f1208@hartkopp.net>
-Date:   Fri, 20 Nov 2020 12:23:34 +0100
+ <9872e561-ddb5-4d0f-4d7c-fa74269f1208@hartkopp.net>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
+ zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
+ QyUeXOxdj59DvLwAx8I6hOgeHx2X/ntKAMUxwawYfPZpP3gwTNKc27dJWSomOLgp+gbmOmgc
+ 6U5KwhAxPTEb3CsT5RicsC+uQQFumdl5I6XS+pbeXZndXwnj5t84M+HEj7RN6bUfV2WZO/AB
+ Xt5+qFkC/AVUcj/dcHvZwQJlGeZxoi4veCoOT2MYqfR0ax1MmN+LVRvKm29oSyD4Ts/97cbs
+ XsZDRxnEG3z/7Winiv0ZanclA7v7CQwrzsbpCv+oj+zokGuKasofzKdpywkjAfSE1zTyF+8K
+ nxBAmzwEqeQ3iKqBc3AcCseqSPX53mPqmwvNVS2GqBpnOfY7Mxr1AEmxdEcRYbhG6Xdn+ACq
+ Dq0Db3A++3PhMSaOu125uIAIwMXRJIzCXYSqXo8NIeo9tobk0C/9w3fUfMTrBDtSviLHqlp8
+ eQEP8+TDSmRP/CwmFHv36jd+XGmBHzW5I7qw0OORRwNFYBeEuiOIgxAfjjbLGHh9SRwEqXAL
+ kw+WVTwh0MN1k7I9/CDVlGvc3yIKS0sA+wudYiselXzgLuP5cQARAQABtCZNYXJjIEtsZWlu
+ ZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPokCVAQTAQoAPgIbAwIeAQIXgAULCQgHAwUV
+ CgkICwUWAgMBABYhBMFAC6CzmJ5vvH1bXCte4hHFiupUBQJfEWX4BQkQo2czAAoJECte4hHF
+ iupUvfMP/iNtiysSr5yU4tbMBzRkGov1/FjurfH1kPweLVHDwiQJOGBz9HgM5+n8boduRv36
+ 0lU32g3PehN0UHZdHWhygUd6J09YUi2mJo1l2Fz1fQ8elUGUOXpT/xoxNQjslZjJGItCjza8
+ +D1DO+0cNFgElcNPa7DFBnglatOCZRiMjo4Wx0i8njEVRU+4ySRU7rCI36KPts+uVmZAMD7V
+ 3qiR1buYklJaPCJsnXURXYsilBIE9mZRmQjTDVqjLWAit++flqUVmDjaD/pj2AQe2Jcmd2gm
+ sYW5P1moz7ACA1GzMjLDmeFtpJOIB7lnDX0F/vvsG3V713/701aOzrXqBcEZ0E4aWeZJzaXw
+ n1zVIrl/F3RKrWDhMKTkjYy7HA8hQ9SJApFXsgP334Vo0ea82H3dOU755P89+Eoj0y44MbQX
+ 7xUy4UTRAFydPl4pJskveHfg4dO6Yf0PGIvVWOY1K04T1C5dpnHAEMvVNBrfTA8qcahRN82V
+ /iIGB+KSC2xR79q1kv1oYn0GOnWkvZmMhqGLhxIqHYitwH4Jn5uRfanKYWBk12LicsjRiTyW
+ Z9cJf2RgAtQgvMPvmaOL8vB3U4ava48qsRdgxhXMagU618EszVdYRNxGLCqsKVYIDySTrVzu
+ ZGs2ibcRhN4TiSZjztWBAe1MaaGk05Ce4h5IdDLbOOxhuQENBF8SDLABCADohJLQ5yffd8Sq
+ 8Lo9ymzgaLcWboyZ46pY4CCCcAFDRh++QNOJ8l4mEJMNdEa/yrW4lDQDhBWV75VdBuapYoal
+ LFrSzDzrqlHGG4Rt4/XOqMo6eSeSLipYBu4Xhg59S9wZOWbHVT/6vZNmiTa3d40+gBg68dQ8
+ iqWSU5NhBJCJeLYdG6xxeUEtsq/25N1erxmhs/9TD0sIeX36rFgWldMwKmZPe8pgZEv39Sdd
+ B+ykOlRuHag+ySJxwovfdVoWT0o0LrGlHzAYo6/ZSi/Iraa9R/7A1isWOBhw087BMNkRYx36
+ B77E4KbyBPx9h3wVyD/R6T0Q3ZNPu6SQLnsWojMzABEBAAGJAjwEGAEKACYWIQTBQAugs5ie
+ b7x9W1wrXuIRxYrqVAUCXxIMsAIbDAUJAucGAAAKCRArXuIRxYrqVOu0D/48xSLyVZ5NN2Bb
+ yqo3zxdv/PMGJSzM3JqSv7hnMZPQGy9XJaTc5Iz/hyXaNRwpH5X0UNKqhQhlztChuAKZ7iu+
+ 2VKzq4JJe9qmydRUwylluc4HmGwlIrDNvE0N66pRvC3h8tOVIsippAQlt5ciH74bJYXr0PYw
+ Aksw1jugRxMbNRzgGECg4O6EBNaHwDzsVPX1tDj0d9t/7ClzJUy20gg8r9Wm/I/0rcNkQOpV
+ RJLDtSbGSusKxor2XYmVtHGauag4YO6Vdq+2RjArB3oNLgSOGlYVpeqlut+YYHjWpaX/cTf8
+ /BHtIQuSAEu/WnycpM3Z9aaLocYhbp5lQKL6/bcWQ3udd0RfFR/Gv7eR7rn3evfqNTtQdo4/
+ YNmd7P8TS7ALQV/5bNRe+ROLquoAZvhaaa6SOvArcmFccnPeyluX8+o9K3BCdXPwONhsrxGO
+ wrPI+7XKMlwWI3O076NqNshh6mm8NIC0mDUr7zBUITa67P3Q2VoPoiPkCL9RtsXdQx5BI9iI
+ h/6QlzDxcBdw2TVWyGkVTCdeCBpuRndOMVmfjSWdCXXJCLXO6sYeculJyPkuNvumxgwUiK/H
+ AqqdUfy1HqtzP2FVhG5Ce0TeMJepagR2CHPXNg88Xw3PDjzdo+zNpqPHOZVKpLUkCvRv1p1q
+ m1qwQVWtAwMML/cuPga78rkBDQRfEXGWAQgAt0Cq8SRiLhWyTqkf16Zv/GLkUgN95RO5ntYM
+ fnc2Tr3UlRq2Cqt+TAvB928lN3WHBZx6DkuxRM/Y/iSyMuhzL5FfhsICuyiBs5f3QG70eZx+
+ Bdj4I7LpnIAzmBdNWxMHpt0m7UnkNVofA0yH6rcpCsPrdPRJNOLFI6ZqXDQk9VF+AB4HVAJY
+ BDU3NAHoyVGdMlcxev0+gEXfBQswEcysAyvzcPVTAqmrDsupnIB2f0SDMROQCLO6F+/cLG4L
+ Stbz+S6YFjESyXblhLckTiPURvDLTywyTOxJ7Mafz6ZCene9uEOqyd/h81nZOvRd1HrXjiTE
+ 1CBw+Dbvbch1ZwGOTQARAQABiQNyBBgBCgAmFiEEwUALoLOYnm+8fVtcK17iEcWK6lQFAl8R
+ cZYCGwIFCQLnoRoBQAkQK17iEcWK6lTAdCAEGQEKAB0WIQQreQhYm33JNgw/d6GpyVqK+u3v
+ qQUCXxFxlgAKCRCpyVqK+u3vqatQCAC3QIk2Y0g/07xNLJwhWcD7JhIqfe7Qc5Vz9kf8ZpWr
+ +6w4xwRfjUSmrXz3s6e/vrQsfdxjVMDFOkyG8c6DWJo0TVm6Ucrf9G06fsjjE/6cbE/gpBkk
+ /hOVz/a7UIELT+HUf0zxhhu+C9hTSl8Nb0bwtm6JuoY5AW0LP2KoQ6LHXF9KNeiJZrSzG6WE
+ h7nf3KRFS8cPKe+trbujXZRb36iIYUfXKiUqv5xamhohy1hw+7Sy8nLmw8rZPa40bDxX0/Gi
+ 98eVyT4/vi+nUy1gF1jXgNBSkbTpbVwNuldBsGJsMEa8lXnYuLzn9frLdtufUjjCymdcV/iT
+ sFKziU9AX7TLZ5AP/i1QMP9OlShRqERH34ufA8zTukNSBPIBfmSGUe6G2KEWjzzNPPgcPSZx
+ Do4jfQ/m/CiiibM6YCa51Io72oq43vMeBwG9/vLdyev47bhSfMLTpxdlDJ7oXU9e8J61iAF7
+ vBwerBZL94I3QuPLAHptgG8zPGVzNKoAzxjlaxI1MfqAD9XUM80MYBVjunIQlkU/AubdvmMY
+ X7hY1oMkTkC5hZNHLgIsDvWUG0g3sACfqF6gtMHY2lhQ0RxgxAEx+ULrk/svF6XGDe6iveyc
+ z5Mg5SUggw3rMotqgjMHHRtB3nct6XqgPXVDGYR7nAkXitG+nyG5zWhbhRDglVZ0mLlW9hij
+ z3Emwa94FaDhN2+1VqLFNZXhLwrNC5mlA6LUjCwOL+zb9a07HyjekLyVAdA6bZJ5BkSXJ1CO
+ 5YeYolFjr4YU7GXcSVfUR6fpxrb8N+yH+kJhY3LmS9vb2IXxneE/ESkXM6a2YAZWfW8sgwTm
+ 0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
+ HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
+ xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
+Subject: Re: [net] can: gs_usb: fix endianess problem with candleLight
+ firmware
+Message-ID: <47f185ce-020c-fe43-e317-3fdd9fb2e11e@pengutronix.de>
+Date:   Fri, 20 Nov 2020 12:39:47 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201120103818.3386964-1-mkl@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <9872e561-ddb5-4d0f-4d7c-fa74269f1208@hartkopp.net>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="LlAP8ANgdCSGXhNlD3z9Mcv4hZItYZ5tS"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--LlAP8ANgdCSGXhNlD3z9Mcv4hZItYZ5tS
+Content-Type: multipart/mixed; boundary="NdaW5UzyYmfG39Q1J4DZtKFdgpQr5eM20";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: kernel@pengutronix.de, Maximilian Schneider <max@schneidersoft.net>,
+ Hubert Denkmair <hubert@denkmair.de>, Michael Rausch <mr@netadair.de>
+Message-ID: <47f185ce-020c-fe43-e317-3fdd9fb2e11e@pengutronix.de>
+Subject: Re: [net] can: gs_usb: fix endianess problem with candleLight
+ firmware
+References: <20201120103818.3386964-1-mkl@pengutronix.de>
+ <9872e561-ddb5-4d0f-4d7c-fa74269f1208@hartkopp.net>
+In-Reply-To: <9872e561-ddb5-4d0f-4d7c-fa74269f1208@hartkopp.net>
+
+--NdaW5UzyYmfG39Q1J4DZtKFdgpQr5eM20
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+
+On 11/20/20 12:23 PM, Oliver Hartkopp wrote:
+>=20
+>=20
+> On 20.11.20 11:38, Marc Kleine-Budde wrote:
+>> The firmware on the original USB2CAN by Geschwister Schneider Technolo=
+gie
+>> Entwicklungs- und Vertriebs UG exchanges all data between the host and=
+ the
+>> device in host byte order. This is done with the struct
+>> gs_host_config::byte_order member, which is sent first to indicate the=
+ desired
+>> byte order.
+>>
+>> The widely used open source firmware candleLight doesn't support this =
+feature
+>> and exchanges the data in little endian byte order. This breaks if a d=
+evice
+>> with candleLight firmware is used on big endianess systems.
+>=20
+> Looks like this problem showed up pretty late.
+
+There are not that many BE users out there...
+
+> Won't it be better to implement the feature in the candlelight firmware=
+=20
+> so that only the big endian users need to upgrade the candlelight=20
+> firmware instead of disabling this nice feature?
+
+It's easier to update the Linux driver, for LE Linux host systems this is=
+
+basically a no-op.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-On 20.11.20 11:38, Marc Kleine-Budde wrote:
-> The firmware on the original USB2CAN by Geschwister Schneider Technologie
-> Entwicklungs- und Vertriebs UG exchanges all data between the host and the
-> device in host byte order. This is done with the struct
-> gs_host_config::byte_order member, which is sent first to indicate the desired
-> byte order.
-> 
-> The widely used open source firmware candleLight doesn't support this feature
-> and exchanges the data in little endian byte order. This breaks if a device
-> with candleLight firmware is used on big endianess systems.
+--NdaW5UzyYmfG39Q1J4DZtKFdgpQr5eM20--
 
-Looks like this problem showed up pretty late.
+--LlAP8ANgdCSGXhNlD3z9Mcv4hZItYZ5tS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
-Won't it be better to implement the feature in the candlelight firmware 
-so that only the big endian users need to upgrade the candlelight 
-firmware instead of disabling this nice feature?
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
-Oliver
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+3qwMACgkQqclaivrt
+76nm7wf/TlUl4tbkFvwvt/yb/8KcCjcLC1Gz86JtdbgvqZs4iCCUt6OFt7tMNyh7
+Wl7iyg9BMZ3GnOwSSw3+T1xoNwuR8emtkM1SWfY5Paoshx7j00KBkqkAxQ91gepG
+acZN3tc3yBHr3BvD20ByePkw+v3S4+f3CE7bdFLqRtZqdqeRdnKmgV6YlRcL2icS
+ZEUbWdwKUFU5wO3RUdBGVQshVh7FV/tvbh50KzJZhPmS02a0EAA6zJYYmRjrmp/U
+Isrda0uYOKKav9mDkFcBmSTUvq9a9ysj6WC3OAgFaEcdTAn7mu6q5/gsuKwonXVF
+pzvWbUgX8Pp2gcfSR8i7MAYRED4fZA==
+=3nLN
+-----END PGP SIGNATURE-----
 
-> 
-> To fix this problem, all u32 (but not the struct gs_host_frame::echo_id, which
-> is a transparent cookie) are converted to __le32.
-> 
-> Cc: Maximilian Schneider <max@schneidersoft.net>
-> Cc: Hubert Denkmair <hubert@denkmair.de>
-> Reported-by: Michael Rausch <mr@netadair.de>
-> Link: https://lore.kernel.org/r/b58aace7-61f3-6df7-c6df-69fee2c66906@netadair.de
-> Fixes: d08e973a77d1 ("can: gs_usb: Added support for the GS_USB CAN devices")
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->   drivers/net/can/usb/gs_usb.c | 131 +++++++++++++++++++----------------
->   1 file changed, 70 insertions(+), 61 deletions(-)
-> 
-> diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-> index 3005157059ca..018ca3b057a3 100644
-> --- a/drivers/net/can/usb/gs_usb.c
-> +++ b/drivers/net/can/usb/gs_usb.c
-> @@ -63,21 +63,27 @@ enum gs_can_identify_mode {
->   };
->   
->   /* data types passed between host and device */
-> +
-> +/* The firmware on the original USB2CAN by Geschwister Schneider
-> + * Technologie Entwicklungs- und Vertriebs UG exchanges all data
-> + * between the host and the device in host byte order. This is done
-> + * with the struct gs_host_config::byte_order member, which is sent
-> + * first to indicate the desired byte order.
-> + *
-> + * The widely used open source firmware candleLight doesn't support
-> + * this feature and exchanges the data in little endian byte order.
-> + */
->   struct gs_host_config {
-> -	u32 byte_order;
-> +	__le32 byte_order;
->   } __packed;
-> -/* All data exchanged between host and device is exchanged in host byte order,
-> - * thanks to the struct gs_host_config byte_order member, which is sent first
-> - * to indicate the desired byte order.
-> - */
->   
->   struct gs_device_config {
->   	u8 reserved1;
->   	u8 reserved2;
->   	u8 reserved3;
->   	u8 icount;
-> -	u32 sw_version;
-> -	u32 hw_version;
-> +	__le32 sw_version;
-> +	__le32 hw_version;
->   } __packed;
->   
->   #define GS_CAN_MODE_NORMAL               0
-> @@ -87,26 +93,26 @@ struct gs_device_config {
->   #define GS_CAN_MODE_ONE_SHOT             BIT(3)
->   
->   struct gs_device_mode {
-> -	u32 mode;
-> -	u32 flags;
-> +	__le32 mode;
-> +	__le32 flags;
->   } __packed;
->   
->   struct gs_device_state {
-> -	u32 state;
-> -	u32 rxerr;
-> -	u32 txerr;
-> +	__le32 state;
-> +	__le32 rxerr;
-> +	__le32 txerr;
->   } __packed;
->   
->   struct gs_device_bittiming {
-> -	u32 prop_seg;
-> -	u32 phase_seg1;
-> -	u32 phase_seg2;
-> -	u32 sjw;
-> -	u32 brp;
-> +	__le32 prop_seg;
-> +	__le32 phase_seg1;
-> +	__le32 phase_seg2;
-> +	__le32 sjw;
-> +	__le32 brp;
->   } __packed;
->   
->   struct gs_identify_mode {
-> -	u32 mode;
-> +	__le32 mode;
->   } __packed;
->   
->   #define GS_CAN_FEATURE_LISTEN_ONLY      BIT(0)
-> @@ -117,23 +123,23 @@ struct gs_identify_mode {
->   #define GS_CAN_FEATURE_IDENTIFY         BIT(5)
->   
->   struct gs_device_bt_const {
-> -	u32 feature;
-> -	u32 fclk_can;
-> -	u32 tseg1_min;
-> -	u32 tseg1_max;
-> -	u32 tseg2_min;
-> -	u32 tseg2_max;
-> -	u32 sjw_max;
-> -	u32 brp_min;
-> -	u32 brp_max;
-> -	u32 brp_inc;
-> +	__le32 feature;
-> +	__le32 fclk_can;
-> +	__le32 tseg1_min;
-> +	__le32 tseg1_max;
-> +	__le32 tseg2_min;
-> +	__le32 tseg2_max;
-> +	__le32 sjw_max;
-> +	__le32 brp_min;
-> +	__le32 brp_max;
-> +	__le32 brp_inc;
->   } __packed;
->   
->   #define GS_CAN_FLAG_OVERFLOW 1
->   
->   struct gs_host_frame {
->   	u32 echo_id;
-> -	u32 can_id;
-> +	__le32 can_id;
->   
->   	u8 can_dlc;
->   	u8 channel;
-> @@ -329,13 +335,13 @@ static void gs_usb_receive_bulk_callback(struct urb *urb)
->   		if (!skb)
->   			return;
->   
-> -		cf->can_id = hf->can_id;
-> +		cf->can_id = le32_to_cpu(hf->can_id);
->   
->   		cf->can_dlc = get_can_dlc(hf->can_dlc);
->   		memcpy(cf->data, hf->data, 8);
->   
->   		/* ERROR frames tell us information about the controller */
-> -		if (hf->can_id & CAN_ERR_FLAG)
-> +		if (le32_to_cpu(hf->can_id) & CAN_ERR_FLAG)
->   			gs_update_state(dev, cf);
->   
->   		netdev->stats.rx_packets++;
-> @@ -418,11 +424,11 @@ static int gs_usb_set_bittiming(struct net_device *netdev)
->   	if (!dbt)
->   		return -ENOMEM;
->   
-> -	dbt->prop_seg = bt->prop_seg;
-> -	dbt->phase_seg1 = bt->phase_seg1;
-> -	dbt->phase_seg2 = bt->phase_seg2;
-> -	dbt->sjw = bt->sjw;
-> -	dbt->brp = bt->brp;
-> +	dbt->prop_seg = cpu_to_le32(bt->prop_seg);
-> +	dbt->phase_seg1 = cpu_to_le32(bt->phase_seg1);
-> +	dbt->phase_seg2 = cpu_to_le32(bt->phase_seg2);
-> +	dbt->sjw = cpu_to_le32(bt->sjw);
-> +	dbt->brp = cpu_to_le32(bt->brp);
->   
->   	/* request bit timings */
->   	rc = usb_control_msg(interface_to_usbdev(intf),
-> @@ -503,7 +509,7 @@ static netdev_tx_t gs_can_start_xmit(struct sk_buff *skb,
->   
->   	cf = (struct can_frame *)skb->data;
->   
-> -	hf->can_id = cf->can_id;
-> +	hf->can_id = cpu_to_le32(cf->can_id);
->   	hf->can_dlc = cf->can_dlc;
->   	memcpy(hf->data, cf->data, cf->can_dlc);
->   
-> @@ -573,6 +579,7 @@ static int gs_can_open(struct net_device *netdev)
->   	int rc, i;
->   	struct gs_device_mode *dm;
->   	u32 ctrlmode;
-> +	u32 flags = 0;
->   
->   	rc = open_candev(netdev);
->   	if (rc)
-> @@ -640,24 +647,24 @@ static int gs_can_open(struct net_device *netdev)
->   
->   	/* flags */
->   	ctrlmode = dev->can.ctrlmode;
-> -	dm->flags = 0;
->   
->   	if (ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> -		dm->flags |= GS_CAN_MODE_LOOP_BACK;
-> +		flags |= GS_CAN_MODE_LOOP_BACK;
->   	else if (ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> -		dm->flags |= GS_CAN_MODE_LISTEN_ONLY;
-> +		flags |= GS_CAN_MODE_LISTEN_ONLY;
->   
->   	/* Controller is not allowed to retry TX
->   	 * this mode is unavailable on atmels uc3c hardware
->   	 */
->   	if (ctrlmode & CAN_CTRLMODE_ONE_SHOT)
-> -		dm->flags |= GS_CAN_MODE_ONE_SHOT;
-> +		flags |= GS_CAN_MODE_ONE_SHOT;
->   
->   	if (ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> -		dm->flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
-> +		flags |= GS_CAN_MODE_TRIPLE_SAMPLE;
->   
->   	/* finally start device */
-> -	dm->mode = GS_CAN_MODE_START;
-> +	dm->mode = cpu_to_le32(GS_CAN_MODE_START);
-> +	dm->flags = cpu_to_le32(flags);
->   	rc = usb_control_msg(interface_to_usbdev(dev->iface),
->   			     usb_sndctrlpipe(interface_to_usbdev(dev->iface), 0),
->   			     GS_USB_BREQ_MODE,
-> @@ -737,9 +744,9 @@ static int gs_usb_set_identify(struct net_device *netdev, bool do_identify)
->   		return -ENOMEM;
->   
->   	if (do_identify)
-> -		imode->mode = GS_CAN_IDENTIFY_ON;
-> +		imode->mode = cpu_to_le32(GS_CAN_IDENTIFY_ON);
->   	else
-> -		imode->mode = GS_CAN_IDENTIFY_OFF;
-> +		imode->mode = cpu_to_le32(GS_CAN_IDENTIFY_OFF);
->   
->   	rc = usb_control_msg(interface_to_usbdev(dev->iface),
->   			     usb_sndctrlpipe(interface_to_usbdev(dev->iface),
-> @@ -790,6 +797,7 @@ static struct gs_can *gs_make_candev(unsigned int channel,
->   	struct net_device *netdev;
->   	int rc;
->   	struct gs_device_bt_const *bt_const;
-> +	u32 feature;
->   
->   	bt_const = kmalloc(sizeof(*bt_const), GFP_KERNEL);
->   	if (!bt_const)
-> @@ -830,14 +838,14 @@ static struct gs_can *gs_make_candev(unsigned int channel,
->   
->   	/* dev setup */
->   	strcpy(dev->bt_const.name, "gs_usb");
-> -	dev->bt_const.tseg1_min = bt_const->tseg1_min;
-> -	dev->bt_const.tseg1_max = bt_const->tseg1_max;
-> -	dev->bt_const.tseg2_min = bt_const->tseg2_min;
-> -	dev->bt_const.tseg2_max = bt_const->tseg2_max;
-> -	dev->bt_const.sjw_max = bt_const->sjw_max;
-> -	dev->bt_const.brp_min = bt_const->brp_min;
-> -	dev->bt_const.brp_max = bt_const->brp_max;
-> -	dev->bt_const.brp_inc = bt_const->brp_inc;
-> +	dev->bt_const.tseg1_min = le32_to_cpu(bt_const->tseg1_min);
-> +	dev->bt_const.tseg1_max = le32_to_cpu(bt_const->tseg1_max);
-> +	dev->bt_const.tseg2_min = le32_to_cpu(bt_const->tseg2_min);
-> +	dev->bt_const.tseg2_max = le32_to_cpu(bt_const->tseg2_max);
-> +	dev->bt_const.sjw_max = le32_to_cpu(bt_const->sjw_max);
-> +	dev->bt_const.brp_min = le32_to_cpu(bt_const->brp_min);
-> +	dev->bt_const.brp_max = le32_to_cpu(bt_const->brp_max);
-> +	dev->bt_const.brp_inc = le32_to_cpu(bt_const->brp_inc);
->   
->   	dev->udev = interface_to_usbdev(intf);
->   	dev->iface = intf;
-> @@ -854,28 +862,29 @@ static struct gs_can *gs_make_candev(unsigned int channel,
->   
->   	/* can setup */
->   	dev->can.state = CAN_STATE_STOPPED;
-> -	dev->can.clock.freq = bt_const->fclk_can;
-> +	dev->can.clock.freq = le32_to_cpu(bt_const->fclk_can);
->   	dev->can.bittiming_const = &dev->bt_const;
->   	dev->can.do_set_bittiming = gs_usb_set_bittiming;
->   
->   	dev->can.ctrlmode_supported = 0;
->   
-> -	if (bt_const->feature & GS_CAN_FEATURE_LISTEN_ONLY)
-> +	feature = le32_to_cpu(bt_const->feature);
-> +	if (feature & GS_CAN_FEATURE_LISTEN_ONLY)
->   		dev->can.ctrlmode_supported |= CAN_CTRLMODE_LISTENONLY;
->   
-> -	if (bt_const->feature & GS_CAN_FEATURE_LOOP_BACK)
-> +	if (feature & GS_CAN_FEATURE_LOOP_BACK)
->   		dev->can.ctrlmode_supported |= CAN_CTRLMODE_LOOPBACK;
->   
-> -	if (bt_const->feature & GS_CAN_FEATURE_TRIPLE_SAMPLE)
-> +	if (feature & GS_CAN_FEATURE_TRIPLE_SAMPLE)
->   		dev->can.ctrlmode_supported |= CAN_CTRLMODE_3_SAMPLES;
->   
-> -	if (bt_const->feature & GS_CAN_FEATURE_ONE_SHOT)
-> +	if (feature & GS_CAN_FEATURE_ONE_SHOT)
->   		dev->can.ctrlmode_supported |= CAN_CTRLMODE_ONE_SHOT;
->   
->   	SET_NETDEV_DEV(netdev, &intf->dev);
->   
-> -	if (dconf->sw_version > 1)
-> -		if (bt_const->feature & GS_CAN_FEATURE_IDENTIFY)
-> +	if (le32_to_cpu(dconf->sw_version) > 1)
-> +		if (feature & GS_CAN_FEATURE_IDENTIFY)
->   			netdev->ethtool_ops = &gs_usb_ethtool_ops;
->   
->   	kfree(bt_const);
-> @@ -910,7 +919,7 @@ static int gs_usb_probe(struct usb_interface *intf,
->   	if (!hconf)
->   		return -ENOMEM;
->   
-> -	hconf->byte_order = 0x0000beef;
-> +	hconf->byte_order = cpu_to_le32(0x0000beef);
->   
->   	/* send host config */
->   	rc = usb_control_msg(interface_to_usbdev(intf),
-> 
+--LlAP8ANgdCSGXhNlD3z9Mcv4hZItYZ5tS--
