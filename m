@@ -2,170 +2,191 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 062122BB4AD
-	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 20:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F28DE2BB531
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 20:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730154AbgKTS57 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Nov 2020 13:57:59 -0500
-Received: from mail-dm6nam12on2094.outbound.protection.outlook.com ([40.107.243.94]:22656
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730102AbgKTS57 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 20 Nov 2020 13:57:59 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZTzhmO6frLfbBDP4SpbTHjeHwWmVe+jyBWHSNWlEsWQkm52P2RkCa2d5WfrU6uAWDGHaPY9qMLCbhRObjfD7kEzbv3MM0TcYCGsY3090tje0waGhQYlGBEgu7vS9eiy4lCuuB65Jd17OzNEo8TKFvT7j3MzGZfB/0ZImKwbhff8qWfOYL+aj/vjjXd76zYh6U82V9cb/z+kNTWGpzs1U+Ts0Nsx6ZvVRT0OCtTJgZCAk1+Q36EBgw9JvWqsRPf4KYW+cOHQ41ebGapx7OwG5w3U41B8ZObwb+AAn0acZZW+k7uUGAT/+w/OMbTjxCMelhFCMMAQhck6Js6IyRvxPvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2B7A9uErG02vOPczM38rCMiVKrZenZQQcMaIuDWA17c=;
- b=BHmWFeRe5UXGPXghVIwOV5oSJzFZaqTmcPPqLxM3rui1U/0osxdWpp4FD+5eVIgU7NshK+eAC7W+QFz2hBAkTVBPevFuK7wOuEey1TcrWoynox4EDojRCTjcuQiy185PrL7vRBi5hrhw5u0UCWIttTkjErFJRTyzqOFkyA5tygk9OhYb8+RQoTJBFBMYLqdTdBSpHy3vTCcZSorhux/FO49jalb+3lq9LD/4i8cNSYQMy3k7IJV79h/jvcZPzYsida4MOR7T0kO2z2Cwbzj7D/pEep4GFnvNo9k5znKgBcz57kA8HDhGVDwzQnr6UEQC3kY54aeejf4Atfu2f7I6bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=enphaseenergy.com; dmarc=pass action=none
- header.from=enphaseenergy.com; dkim=pass header.d=enphaseenergy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=enphaseenergy.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2B7A9uErG02vOPczM38rCMiVKrZenZQQcMaIuDWA17c=;
- b=TBIRcdbrikb+ZkHAU1rNdG6XBh+qbQ38TYN4Lcz2siFlDXxlXMHw2gmzOapgPqpFh7dNiYKJ8A645z0hv4rjshUN5QB0AYuum4t3Nsinc8E6k09ZpqAe4lSxt4l8RuF2EFAdVL2yIaRgfgNyJRPGJfvlWzfqxU61qd+8Ak/bFEM=
-Received: from DM6PR19MB3673.namprd19.prod.outlook.com (2603:10b6:5:206::16)
- by DM6PR19MB4344.namprd19.prod.outlook.com (2603:10b6:5:2b7::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Fri, 20 Nov
- 2020 18:57:55 +0000
-Received: from DM6PR19MB3673.namprd19.prod.outlook.com
- ([fe80::7505:95f8:9549:fff1]) by DM6PR19MB3673.namprd19.prod.outlook.com
- ([fe80::7505:95f8:9549:fff1%7]) with mapi id 15.20.3564.028; Fri, 20 Nov 2020
- 18:57:55 +0000
-From:   Jin Park <jpark@enphaseenergy.com>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
-CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: RE: Question on CAN FD Driver for mcp251xfd
-Thread-Topic: Question on CAN FD Driver for mcp251xfd
-Thread-Index: Ada+6SXgGDp9dY+gRy+LbXKWK3qUSwAIyAyAABURNSAAAsvSAAAAuw7A
-Date:   Fri, 20 Nov 2020 18:57:55 +0000
-Message-ID: <DM6PR19MB36730DFFB7BC34494EFA0DA3B1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
-References: <DM6PR19MB3673FBAAA7A80E458659666EB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
- <f168b9a4-79ae-7a8b-b074-632f86e8596b@pengutronix.de>
- <DM6PR19MB36739C691B6C35B4AD7DF77AB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
- <032472ae-fb99-3c6f-ff3c-4e7b2d900980@hartkopp.net>
-In-Reply-To: <032472ae-fb99-3c6f-ff3c-4e7b2d900980@hartkopp.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: hartkopp.net; dkim=none (message not signed)
- header.d=none;hartkopp.net; dmarc=none action=none
- header.from=enphaseenergy.com;
-x-originating-ip: [209.37.103.210]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 08045ebf-2ac9-4488-aaba-08d88d8630a5
-x-ms-traffictypediagnostic: DM6PR19MB4344:
-x-microsoft-antispam-prvs: <DM6PR19MB4344383967D66C3FFD9C5A19B1FF0@DM6PR19MB4344.namprd19.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SJwaqXsStpquN1mrLbq0CTsDBWQ9zl3RtbnVOdalBIRaH009XRHf/h6mMRPmTzYqup9DsTStW3fEIiOsnjrDVZMAasb4imXTFs7U8pH1fIsJyDaAW26M5oxldLXJdYF1qceA+bwFzsHA4hgh8GrZr0qsDNXqaoDEK2hIvG3Zmua1sPZdi2MFfqI/TF0khBiIafNdV3TmS6uhRJ4vRg243cQqthAAarwJYuso2+jh3P/XlrH13304DLxUnQGhcfUyk9OefqMYOOU4e5Gb+KqoP+def4p8irCCZp96QpGvv+8s3+OXxAeiEbEU+Hix45ZBV4grphwyLDkwmJzxCgY2+uiuhcCpt0Q+eDTAXFGBQ5EzbMItoRLlE7Q3xtn1C1oBdCWoxdQqTF9ehnaMMjf2/A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR19MB3673.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(366004)(396003)(39860400002)(346002)(136003)(66556008)(55016002)(83380400001)(6506007)(186003)(2906002)(7696005)(9686003)(26005)(86362001)(53546011)(5660300002)(64756008)(76116006)(316002)(66476007)(4326008)(478600001)(8676002)(966005)(66446008)(33656002)(71200400001)(66946007)(8936002)(110136005)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: wi74rgG8C6gQjux7kla3EKV870YGNDbifz2uOzN0szIOEgv+FxEiPJiGV6jMmoflzdHQyKLIU+psoLT0M9EMvADWjRdmq97QlLl3pgsY5IEknW9jM7V0mA0vaOZ0QNSdLjB0Xi8Ywq06HgzFF5HIYQhieIiYZxHryfD7xxvdbNfX6Q2K3L6PqYIqnUfX6wMgSqLZ2a6pWQ9AvJQvcT2Fh6vCpDehTg0E/N+qJ9M09La6RWISi7vEWTzASDlKtLso/PL5CMruRddFSz6Fm9lMbWbPqQAov6RYvYKLDenHvWpsJ28RBfpTeda7Ox4JryRlRisuOdm9t8drcn4zv1g8oRvZJAWe6OUobKLm5Ys0Ra/D3VUHXbq9jyTyVwbcjsRjusrMUdS5rP2LbDe7b11S0Wx38e4MNkBN3061D8Nz3TaHLuKYXtxkE5+qJLW+5GhuOpBdpsQWFZLJ8ZiP0lf7/4ETXaHQKOFRqmX2hgEhO61VNp76MmgBiL8q9A84gVkFVGVpKlLWXw2JNKogkWGxT//wNkUhpILMc9UC0tIS3bXUtjbX5wGUSVDrmykXUumo7QnJMiKwqr1/mY4QhjqF0/PxwfVjM/Dqaev0qsVytbr69grej6Svhom9r9BkD2SpOy/sc9GGny6DeYgJ3e+8tN+ivXxAihgTwRK7rsWmb8TAq1FgY0OcgCFteaKHtBVgkOA/corlDqJLDWu0hN+dHYsgm5cYYhGItPcYLgIW83aLQvEnsFFfgL4sVjORe3HYhSvPTL/t23W2Ce3eKTLLvEKpeUbJ/e4QmcnrDYdSANAjyVMJj7njX+IHX/2xb/SCtOdqa9kweNVicUzqn8tcAISXrHEgTqOLZeSPwymmwGI8Xj7dOj516WFT3h1X4zJIQAf0cQQohOKumauVe1b/ZA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1732322AbgKTTZB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Nov 2020 14:25:01 -0500
+Received: from gateway34.websitewelcome.com ([192.185.148.194]:36390 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732311AbgKTTZB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 14:25:01 -0500
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 053704E9FD4
+        for <linux-can@vger.kernel.org>; Fri, 20 Nov 2020 13:02:32 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id gBfzkKZwlfgo0gBfzkDLza; Fri, 20 Nov 2020 13:02:32 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+4VxQ3E1SMf3fqpPxA59SXnFTIYnqNYQQfNHAF4XRGw=; b=n09KqYnyKHrO7dveIUWc55mzig
+        y4HUZZbrqh9oIGiAW16mTaR8pcvnAozTxI+rYVVIt9CxAErudOIqW44giqY0jAAxUq2Az5FkJRw8D
+        DdYM3ceCwzW72Iyh3zFwKX+btf9zXkIFnOla0anfthw4DZBTFFqyoxwOvEOl2OJ26TOTLqWU9obCG
+        intkFNaJRljaeNwR96RWCduzT1c1ht64s9kRw8R+vb7ftuKF/SC10c1DXlPqmQL512w8QCfyvTWtG
+        dzgy+MeNJCgbGq47RynDwYUz9POm4OiFKWoqxvHGtR/GFZ1BW9GSDXleqWC/tOZ433VaTMSGJy7Ut
+        yE2h40Yg==;
+Received: from 187-162-31-110.static.axtel.net ([187.162.31.110]:52198 helo=[192.168.15.4])
+        by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1kgBfw-0000VH-WA; Fri, 20 Nov 2020 13:02:29 -0600
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+To:     Joe Perches <joe@perches.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     alsa-devel@alsa-project.org, amd-gfx@lists.freedesktop.org,
+        bridge@lists.linux-foundation.org, ceph-devel@vger.kernel.org,
+        cluster-devel@redhat.com, coreteam@netfilter.org,
+        devel@driverdev.osuosl.org, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, dri-devel@lists.freedesktop.org,
+        GR-everest-linux-l2@marvell.com, GR-Linux-NIC-Dev@marvell.com,
+        intel-gfx@lists.freedesktop.org, intel-wired-lan@lists.osuosl.org,
+        keyrings@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        linux-acpi@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-atm-general@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-decnet-user@lists.sourceforge.net,
+        linux-ext4@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i3c@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        op-tee@lists.trustedfirmware.org, oss-drivers@netronome.com,
+        patches@opensource.cirrus.com, rds-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, samba-technical@lists.samba.org,
+        selinux@vger.kernel.org, target-devel@vger.kernel.org,
+        tipc-discussion@lists.sourceforge.net,
+        usb-storage@lists.one-eyed-alien.net,
+        virtualization@lists.linux-foundation.org,
+        wcn36xx@lists.infradead.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, linux-hardening@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <3e0bbb1644fe53d79322c2feb28ccaf3e20c0e94.camel@perches.com>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ AP7RWS474w==
+Message-ID: <9f986394-125a-81f7-7696-fe1a9f4eb4f5@embeddedor.com>
+Date:   Fri, 20 Nov 2020 13:02:34 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: enphaseenergy.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR19MB3673.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08045ebf-2ac9-4488-aaba-08d88d8630a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Nov 2020 18:57:55.2863
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 7df9352f-c5eb-4007-a723-44c078605c7a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EQ0UhvBUITNrZKDOefCyoHfO8bHCucNUpy5PCWCQCzhpRBnB4zoOFNwQRESJTPR1ilznjbgeyLzOyY/QURzoqw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR19MB4344
+In-Reply-To: <3e0bbb1644fe53d79322c2feb28ccaf3e20c0e94.camel@perches.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.31.110
+X-Source-L: No
+X-Exim-ID: 1kgBfw-0000VH-WA
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-31-110.static.axtel.net ([192.168.15.4]) [187.162.31.110]:52198
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 26
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-SGVsbG8gT2xpdmVyLA0KDQpJdCB3b3JrcyEgDQoxKSBJIHNldCBpdCAxTWJwcyBmb3IgYXJiaXRy
-YXRpb24gcGhhc2UgYW5kIDRNYnBzIGZvciBkYXRhIHBoYXNlIGFzIGJpdCByYXRlIHN3aXRjaGlu
-ZyBsaWtlIGJlbG93Lg0KaXAgbGluayBzZXQgY2FuMCB1cCB0eXBlIGNhbiBiaXRyYXRlIDEwMDAw
-MDAgc2FtcGxlLXBvaW50IDAuNzUgZGJpdHJhdGUgNDAwMDAwMCBkc2FtcGxlLXBvaW50IDAuOCBm
-ZCBvbg0KDQoyKSBTZW5kIENBTiBGRCBkYXRhDQpjYW5zZW5kIGNhbjAgMTIzIyMxMTIyMzM0NDU1
-NjY3Nzg4OTkxMDExMTIxMzE0MTUxNjE3MTgxOTIwDQoNCjMpIEkgZ290IHRoZSBkYXRhIHRocm91
-Z2ggQ0FOIGJ1cy4NCklEPTI5MSxUeXBlPUYsTGVuZ3RoPTMyLERhdGE9MTEyMjMzNDQ1NTY2Nzc4
-ODk5MTAxMTEyMTMxNDE1MTYxNzE4MTkyMDIxMjIyMzI0MjUNCg0KSXQgc29sdmVkIQ0KDQpNYW55
-IFRoYW5rcywNCkppbg0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogT2xpdmVy
-IEhhcnRrb3BwIDxzb2NrZXRjYW5AaGFydGtvcHAubmV0PiANClNlbnQ6IEZyaWRheSwgTm92ZW1i
-ZXIgMjAsIDIwMjAgMTA6MzQgQU0NClRvOiBKaW4gUGFyayA8anBhcmtAZW5waGFzZWVuZXJneS5j
-b20+OyBNYXJjIEtsZWluZS1CdWRkZSA8bWtsQHBlbmd1dHJvbml4LmRlPjsgbWFuaXZhbm5hbi5z
-YWRoYXNpdmFtQGxpbmFyby5vcmcNCkNjOiBsaW51eC1jYW5Admdlci5rZXJuZWwub3JnDQpTdWJq
-ZWN0OiBSZTogUXVlc3Rpb24gb24gQ0FOIEZEIERyaXZlciBmb3IgbWNwMjUxeGZkDQoNCkVYVEVS
-TkFMIEVNQUlMIC0gVXNlIGNhdXRpb24gd2hlbiByZXNwb25kaW5nLCBjbGlja2luZywgYW5kL29y
-IGRvd25sb2FkaW5nIGF0dGFjaG1lbnRzLg0KDQoNCg0KDQoNCk9uIDIwLjExLjIwIDE4OjE0LCBK
-aW4gUGFyayB3cm90ZToNCj4gSGVsbG8gTWFyYywNCj4NCj4gSGVyZSBhcmUgbXkgYW5zd2Vycy4N
-Cj4gVkFSLVNPTS1NWDhNLU5hbm8gYm9hcmQgZHJpdmVzIE1DUDI1MTdGRC9NQ1AyNTE4RkQgKENB
-TiBGRCBjb250cm9sbGVyKSBhbmQgVENBTjMzMkcgKENBTiBGRCBUcmFuc2NlaXZlcikgZm9yIENB
-TiBGRCBjb21tdW5pY2F0aW9uLg0KPg0KPiAxKSBXaGljaCBjb21tYW5kcyBoYXZlIHlvdSB0cmll
-ZD8NCj4gMikgV2hhdCBhcmUgdGhlIGVycm9yIG1lc3NhZ2VzPw0KPiBQbGVhc2Ugc2VlIGJlbG93
-IGEpLCBiKSwgYyksIGFuZCBkKS4NCj4NCj4gICAgICAgYSkgQmFzZWQgb24gQml0IFJhdGUgU3dp
-dGNoaW5nIGZlYXR1cmUgaW4gQ0FOIEZELCB0aGUgYml0IHJhdGUgYXQgZGF0YSBwaGFzZSBhbmQg
-YXJiaXRyYXRpb24gcGhhc2UgKG9yIG5vbWluYWwgcGhhc2UpIGNhbiBiZSBzZXQgaW4gQ0FOIEZE
-IHByb3RvY29sLg0KPiBTbywgSSB0cmllZCBiZWxvdy4NCj4gLSBjb21tYW5kDQo+IGlwIGxpbmsg
-c2V0IGNhbjAgdHlwZSBjYW4gZGJpdHJhdGUgMTAwMDAwMA0KPg0KPiAtIGVycm9yIG1lc3NhZ2UN
-Cj4gUlRORVRMSU5LIGFuc3dlcnM6IE9wZXJhdGlvbiBub3Qgc3VwcG9ydGVkDQo+DQo+DQoNCllv
-dSBuZWVkIHRvIGFwcGx5IGJvdGggYml0cmF0ZXMgYXQgdGhlIHNhbWUgdGltZSwgZS5nLg0KDQok
-IGlwIGxpbmsgc2V0IGNhbjAgdXAgdHlwZSBjYW4gYml0cmF0ZSA1MDAwMDAgc2FtcGxlLXBvaW50
-IDAuNzUgZGJpdHJhdGUNCjQwMDAwMDAgZHNhbXBsZS1wb2ludCAwLjggZmQgb24NCg0KU2VlIGF0
-Og0KDQpodHRwczovL3d3dy5rZXJuZWwub3JnL2RvYy9Eb2N1bWVudGF0aW9uL25ldHdvcmtpbmcv
-Y2FuLnR4dA0KDQpSZWdhcmRzLA0KT2xpdmVyDQoNCj4NCj4gICAgICAgYikgVG8gdHVybiBvbiBG
-RCBtb2RlLCBJIHRyaWVkIGJlbG93Lg0KPiAtIGNvbW1hbmQNCj4gaXAgbGluayBzZXQgY2FuMCB0
-eXBlIGNhbiBmZCBvbg0KPg0KPiAtIGVycm9yIG1lc3NhZ2UNCj4gUlRORVRMSU5LIGFuc3dlcnM6
-IE9wZXJhdGlvbiBub3Qgc3VwcG9ydGVkDQo+DQo+DQo+DQo+ICAgICAgIGMpIFRvIHNlbmQgQ0FO
-IEZEIG1lc3NhZ2UsIEkgdHJpZWQgYmVsb3cuIFRoDQo+IC0gY29tbWFuZA0KPiBjYW5zZW5kIGNh
-bjAgMTIzIyMxDQo+DQo+IC0gZXJyb3IgbWVzc2FnZQ0KPiBDQU4gaW50ZXJmYWNlIGlzIG5vdCBD
-QU4gRkQgY2FwYWJsZSAtIHNvcnJ5Lg0KPg0KPiAtIGhlbHAgdGV4dCBmb3IgY2Fuc2VuZA0KPiAg
-ICAgIDxjYW5faWQ+I3tSfGRhdGF9ICAgICAgICAgIGZvciBDQU4gMi4wIGZyYW1lcw0KPiAgICAg
-IDxjYW5faWQ+IyM8ZmxhZ3M+e2RhdGF9ICAgIGZvciBDQU4gRkQgZnJhbWVzDQo+DQo+IDxjYW5f
-aWQ+IGNhbiBoYXZlIDMgKFNGRikgb3IgOCAoRUZGKSBoZXggY2hhcnMge2RhdGF9IGhhcyAwLi44
-ICgwLi42NCANCj4gQ0FOIEZEKSBBU0NJSSBoZXgtdmFsdWVzIChvcHRpb25hbGx5IHNlcGFyYXRl
-ZCBieSAnLicpIDxmbGFncz4gYSANCj4gc2luZ2xlIEFTQ0lJIEhleCB2YWx1ZSAoMCAuLiBGKSB3
-aGljaCBkZWZpbmVzIGNhbmZkX2ZyYW1lLmZsYWdzDQo+DQo+IGUuZy4gNUExIzExLjIyMzMuNDQ1
-NTY2NzcuODggLyAxMjMjREVBREJFRUYgLyA1QUEjIC8gMTIzIyMxIC8gMjEzIyMzMTENCj4gICAg
-ICAgMUYzMzQ0NTUjMTEyMjMzNDQ1NTY2Nzc4OCAvIDEyMyNSIGZvciByZW1vdGUgdHJhbnNtaXNz
-aW9uIHJlcXVlc3QuDQo+DQo+DQo+DQo+DQo+DQo+ICAgICAgIGQpIFRDQU4zMzJHIChDQU4gRkQg
-VHJhbnNjZWl2ZXIpIGNhbiBzdXBwb3J0IDVNYnBzIGF0IGRhdGEgcGhhc2UgaW4gQ0FOIEZEIG1v
-ZGUuDQo+IEN1cnJlbnQgc3VwcG9ydGVkIG1heGltdW0gYml0cmF0ZSBpbiB0aGUgZHJpdmVyIGlz
-IG5vdyAxTWJwcyBhdCBub21pbmFsIHJhdGUuDQo+IChGWUksIGJpdCByYXRlIGluIGRhdGEgcGhh
-c2UgYXQgQ0FOIEZEIHByb3RvY29sIGlzIHVwIHRvIDhNYnBzKQ0KPiAgICAgICAgICBXaGVyZTog
-QklUUkFURSAgOj0geyAxLi4xMDAwMDAwIH0NCj4gICAgICAgICAgICAgICAgICAgIFNBTVBMRS1Q
-T0lOVCAgOj0geyAwLjAwMC4uMC45OTkgfQ0KPiAgICAgICAgICAgICAgICAgICAgVFEgICAgICAg
-ICAgICA6PSB7IE5VTUJFUiB9DQo+ICAgICAgICAgICAgICAgICAgICBQUk9QLVNFRyAgICAgIDo9
-IHsgMS4uOCB9DQo+ICAgICAgICAgICAgICAgICAgICBQSEFTRS1TRUcxICAgIDo9IHsgMS4uOCB9
-DQo+ICAgICAgICAgICAgICAgICAgICBQSEFTRS1TRUcyICAgIDo9IHsgMS4uOCB9DQo+ICAgICAg
-ICAgICAgICAgICAgICBTSlcgICAgICAgICAgIDo9IHsgMS4uNCB9DQo+ICAgICAgICAgICAgICAg
-ICAgICBSRVNUQVJULU1TICAgIDo9IHsgMCB8IE5VTUJFUiB9DQo+DQo+DQo+DQo+IDMpIFdoYXQg
-ZG9lc24ndCB3b3JrIGV4YWN0bHk/DQo+DQo+IEkgd291bGQgbGlrZSB0byBzZW5kIGFuZCByZWNl
-aXZlIG1lc3NhZ2VzIGluIENBTiBGRCB3aXRoIEJpdCBSYXRlIFN3aXRjaGluZyAoQXJiaXRyYXRp
-b24gcGhhc2U6IDFNYnBzLCBEYXRhIHBoYXNlOiA1TWJwcykuDQo+IFNvIGZhciwgQ0FOIEZEIG1v
-ZGUgZG9lc24ndCB0dXJuIG9uIHdpdGggYWJvdmUgY29tbWFuZHMuDQo+DQo+IFRoYW5rcywNCj4g
-SmluDQo+DQo+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IE1hcmMgS2xl
-aW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+DQo+IFNlbnQ6IFRodXJzZGF5LCBOb3ZlbWJl
-ciAxOSwgMjAyMCAxMToxMSBQTQ0KPiBUbzogSmluIFBhcmsgPGpwYXJrQGVucGhhc2VlbmVyZ3ku
-Y29tPjsgDQo+IG1hbml2YW5uYW4uc2FkaGFzaXZhbUBsaW5hcm8ub3JnDQo+IFN1YmplY3Q6IFJl
-OiBRdWVzdGlvbiBvbiBDQU4gRkQgRHJpdmVyIGZvciBtY3AyNTF4ZmQNCj4NCj4gSGVsbG8gSmlu
-IFBhcmssDQo+DQo+IHBsZWFzZSB1c2UgdGhlIGxpbnV4LWNhbiBtYWlsaW5nIGxpc3QgKGxpbnV4
-LWNhbkB2Z2VyLmtlcm5lbC5vcmcpIGZvciBjb21tdW5pdHkgcXVlc3Rpb24uIFRoZXJlIGFyZSBv
-dGhlciBwZW9wbGUgaW50ZXJlc3RlZCBpbiB0aGVzZSBxdWVzdGlvbiwgcGxlYXNlIGFkZCBsaXN0
-IG9uIENjLg0KPg0KPiBPbiAxMS8yMC8yMCA0OjAzIEFNLCBKaW4gUGFyayB3cm90ZToNCj4+IEkg
-YW0gdXNpbmcgTUNQMjUxWEZEIFNQSS1DQU4gTmV0d29yayBEcml2ZXIgd2l0aCBWQVItU09NLU1Y
-OE0tTkFOTyANCj4+IGJvYXJkIG5vdyBhbmQgd291bGQgbGlrZSB0byBhc2sgd2hldGhlciBpdCBj
-YW4gc3VwcG9ydCBDQU4gRkQgZmVhdHVyZXMgYXMgd2VsbC4NCj4NCj4gWWVzIGl0IGRvZXMgc3Vw
-cG9ydCBDQU4tRkQuDQo+DQo+PiBJIHRyaWVkIHRvIGNvbW1hbmQgd2l0aCBDQU4gRkQgZmVhdHVy
-ZXMgaW4gdGVybWluYWwgYW5kIGl0IGRpZG7igJl0IA0KPj4gd29yayB3aXRoIENBTiBGRCBjb21t
-YW5kcy4NCj4NCj4gV2hpY2ggY29tbWFuZHMgaGF2ZSB5b3UgdHJpZWQ/DQo+IFdoYXQgYXJlIHRo
-ZSBlcnJvciBtZXNzYWdlcz8NCj4gV2hhdCBkb2Vzbid0IHdvcmsgZXhhY3RseT8NCj4NCj4+IElz
-IHRoZXJlIGFueSBwbGFuIHRvIHJlbGVhc2UgQ0FOIEZEIExpbnV4IERyaXZlciBpbiB0aGUgZnV0
-dXJlLCBpZiANCj4+IHlvdSBoYXZlIHdvcmtlZCBvbiBDQU4gRkQ/DQo+DQo+IEl0IHNob3VsZCBi
-ZSB3b3JraW5nLg0KPg0KPiBNYXJjDQo+DQo=
+
+
+On 11/20/20 12:28, Joe Perches wrote:
+> On Fri, 2020-11-20 at 12:21 -0600, Gustavo A. R. Silva wrote:
+>> Hi all,
+>>
+>> This series aims to fix almost all remaining fall-through warnings in
+>> order to enable -Wimplicit-fallthrough for Clang.
+>>
+>> In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
+>> add multiple break/goto/return/fallthrough statements instead of just
+>> letting the code fall through to the next case.
+>>
+>> Notice that in order to enable -Wimplicit-fallthrough for Clang, this
+>> change[1] is meant to be reverted at some point. So, this patch helps
+>> to move in that direction.
+> 
+> This was a bit hard to parse for a second or three.
+> 
+> Thanks Gustavo.
+> 
+> How was this change done?
+
+I audited case by case in order to determine the best fit for each
+situation. Depending on the surrounding logic, sometimes it makes
+more sense a goto or a fallthrough rather than merely a break.
+
+Thanks
+--
+Gustavo
