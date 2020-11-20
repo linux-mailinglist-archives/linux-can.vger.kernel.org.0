@@ -2,99 +2,80 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC822B8FE9
-	for <lists+linux-can@lfdr.de>; Thu, 19 Nov 2020 11:12:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7EC2BA68B
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 10:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgKSKJW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 19 Nov 2020 05:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726854AbgKSKJV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 19 Nov 2020 05:09:21 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FE9C061A48
-        for <linux-can@vger.kernel.org>; Thu, 19 Nov 2020 02:09:21 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kfgsR-00063P-P7; Thu, 19 Nov 2020 11:09:19 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, kernel@pengutronix.de,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next v2 5/5] can: flexcan: flexcan_close(): change order if commands to properly shut down the controller
-Date:   Thu, 19 Nov 2020 11:09:17 +0100
-Message-Id: <20201119100917.3013281-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201119100917.3013281-1-mkl@pengutronix.de>
-References: <20201119100917.3013281-1-mkl@pengutronix.de>
+        id S1725797AbgKTJtW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Nov 2020 04:49:22 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.25]:30822 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726172AbgKTJtW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 04:49:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1605865757;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=buZxh9efwWpMUysXXlPGj7V3yQyvWgoZ5am0ea0FT9E=;
+        b=NYkxdnjKsmUaIJwVnOvjyZ5+rPCgkVtMfw5ImcD6OfDdd5zom0ej1F8FgUItZdRHnX
+        JBcFmjd/kIWuxCrDcGGjgbLLEHCnS74I/tk0BkVQM9TWUQ3YnVPuuHcMDVrqMNjxGme6
+        Y90UPbOzHuUBRt4V0Ia5YFNp3wVFQgJk4bKMfdIK6ZF15IGHNai4+F7bQpmY4PBMpG12
+        z3rbj/hTqEFq92otShKM4+ZehL05/aZ/tVp+hI1xAjA8lCHULc9TJM/0Wrx+bj6otLFN
+        t/tPbIBEvw8Z2T/wcllKEUun/H8Uf5oHXr5s8PrvkEhplsHOkOZKML7TVPqcX2lx2oNw
+        qbHQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iOMlqpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
+        with ESMTPSA id n07f3bwAK9nFWZa
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 20 Nov 2020 10:49:15 +0100 (CET)
+Subject: broken on next-next - [PATCH v6 4/8] can: replace can_dlc as
+ variable/element for payload length
+To:     mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org
+References: <20201110101852.1973-1-socketcan@hartkopp.net>
+ <20201110101852.1973-5-socketcan@hartkopp.net>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <ed313f33-7a01-261f-5dc6-ecbd6037a3c7@hartkopp.net>
+Date:   Fri, 20 Nov 2020 10:49:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20201110101852.1973-5-socketcan@hartkopp.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-There haven been reports, that the flexcan_close() soradically hangs during
-simultanious ifdown, sending of CAN messages and probably open CAN bus:
+Hi Marc,
 
-| (__schedule) from [<808bbd34>] (schedule+0x90/0xb8)
-| (schedule) from [<808bf274>] (schedule_timeout+0x1f8/0x24c)
-| (schedule_timeout) from [<8016be44>] (msleep+0x18/0x1c)
-| (msleep) from [<80746a64>] (napi_disable+0x60/0x70)
-| (napi_disable) from [<8052fdd0>] (flexcan_close+0x2c/0x140)
-| (flexcan_close) from [<80744930>] (__dev_close_many+0xb8/0xd8)
-| (__dev_close_many) from [<8074db9c>] (__dev_change_flags+0xd0/0x1a0)
-| (__dev_change_flags) from [<8074dc84>] (dev_change_flags+0x18/0x48)
-| (dev_change_flags) from [<80760c24>] (do_setlink+0x44c/0x7b4)
-| (do_setlink) from [<80761560>] (rtnl_newlink+0x374/0x68c)
+I just rebased the len8_dlc patches on the latest net-next for testing.
 
-I was unable to reproduce the issue, but a cleanup of the flexcan close
-sequence has probably fixed the problem at the reporting user.
+And the patch a1e654070a60d5d4f ("can: dev: can_restart(): post buffer 
+from the right context") renames netif_rx() to netif_rx_ni() which 
+hinders this [PATCH v6 4/8] to apply properly.
 
-This patch changes the sequence in flexcan_close() to:
-- stop the TX queue
-- disable the interrupts on the chip level and wait via free_irq()
-  synchronously for the interrupt handler to finish
-- disable RX offload, which disables synchronously NAPI
-- disable the flexcan on the chip level
-- free RX offload
-- disable the transceiver
-- close the CAN device
-- disable the clocks
+Just FYI before you create a pull request for net-next ;-)
 
-Link: https://lore.kernel.org/r/20201119085251.2949181-6-mkl@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/flexcan.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+> index 6dee4f8f2024..566501a02b91 100644
+> --- a/drivers/net/can/dev.c
+> +++ b/drivers/net/can/dev.c
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 0fb768dee99f..60808d048ef6 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -1789,15 +1789,15 @@ static int flexcan_close(struct net_device *dev)
- 	struct flexcan_priv *priv = netdev_priv(dev);
- 
- 	netif_stop_queue(dev);
-+	flexcan_chip_interrupts_disable(dev);
-+	free_irq(dev->irq, dev);
- 	can_rx_offload_disable(&priv->offload);
- 	flexcan_chip_stop_disable_on_error(dev);
--	flexcan_chip_interrupts_disable(dev);
- 
- 	can_rx_offload_del(&priv->offload);
--	free_irq(dev->irq, dev);
- 	flexcan_transceiver_disable(priv);
--
- 	close_candev(dev);
-+
- 	pm_runtime_put(priv->dev);
- 
- 	can_led_event(dev, CAN_LED_EVENT_STOP);
--- 
-2.29.2
+(..)
 
+> @@ -593,11 +593,11 @@ static void can_restart(struct net_device *dev)
+>   	cf->can_id |= CAN_ERR_RESTARTED;
+>   
+>   	netif_rx(skb);
+>   
+>   	stats->rx_packets++;
+> -	stats->rx_bytes += cf->can_dlc;
+> +	stats->rx_bytes += cf->len;
+>   
+
+Best,
+Oliver
