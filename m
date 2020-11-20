@@ -2,30 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE9A2BAB3A
-	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 14:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F77A2BAB7D
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 14:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbgKTNdj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Nov 2020 08:33:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S1726335AbgKTNpA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Nov 2020 08:45:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728284AbgKTNdi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 08:33:38 -0500
+        with ESMTP id S1727335AbgKTNo7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 08:44:59 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0839C0617A7
-        for <linux-can@vger.kernel.org>; Fri, 20 Nov 2020 05:33:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6B3C0613CF
+        for <linux-can@vger.kernel.org>; Fri, 20 Nov 2020 05:44:59 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kg6Xb-0006Fn-L2; Fri, 20 Nov 2020 14:33:31 +0100
+        id 1kg6iU-0000F3-GL; Fri, 20 Nov 2020 14:44:46 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Jimmy Assarsson <extja@kvaser.com>,
+Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de, kuba@kernel.org,
+        davem@davemloft.net, Kaixu Xia <kaixuxia@tencent.com>,
+        Tosk Robot <tencent_os_robot@tencent.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 24/25] can: kvaser_usb: Add new Kvaser hydra devices
-Date:   Fri, 20 Nov 2020 14:33:17 +0100
-Message-Id: <20201120133318.3428231-25-mkl@pengutronix.de>
+Subject: [PATCH 25/25] can: mcp251xfd: remove useless code in mcp251xfd_chip_softreset
+Date:   Fri, 20 Nov 2020 14:44:28 +0100
+Message-Id: <20201120134428.3430191-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201120133318.3428231-1-mkl@pengutronix.de>
 References: <20201120133318.3428231-1-mkl@pengutronix.de>
@@ -39,59 +40,44 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Jimmy Assarsson <extja@kvaser.com>
+From: Kaixu Xia <kaixuxia@tencent.com>
 
-Add new Kvaser hydra devices.
+It would directly return if the variable err equals to 0 or other errors.
+Only when the err equals to -ETIMEDOUT it can reach the 'if (err)'
+statement, so the 'if (err)' and last 'return -ETIMEDOUT' statements are
+useless. Romove them.
 
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
-Link: https://lore.kernel.org/r/20201115163027.16851-6-jimmyassarsson@gmail.com
+Reported-by: Tosk Robot <tencent_os_robot@tencent.com>
+Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+Link: https://lore.kernel.org/r/1605605352-25298-1-git-send-email-kaixuxia@tencent.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/Kconfig                      | 3 +++
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 8 +++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+Hello,
 
-diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-index 161f15e5218d..c1e5d5b570b6 100644
---- a/drivers/net/can/usb/Kconfig
-+++ b/drivers/net/can/usb/Kconfig
-@@ -74,6 +74,9 @@ config CAN_KVASER_USB
- 	    - Kvaser USBcan Light 4xHS
- 	    - Kvaser USBcan Pro 2xHS v2
- 	    - Kvaser USBcan Pro 5xHS
-+	    - Kvaser U100
-+	    - Kvaser U100P
-+	    - Kvaser U100S
- 	    - ATI Memorator Pro 2xHS v2
- 	    - ATI USBcan Pro 2xHS v2
+I had to manually resend the patch, as it was lost for unknown reasons.
+
+regards,
+Marc
+
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index afa8cfc729b5..3297eb7ecc9c 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -644,10 +644,7 @@ static int mcp251xfd_chip_softreset(const struct mcp251xfd_priv *priv)
+ 		return 0;
+ 	}
  
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index ad66a3b1a29d..e2d58846c40c 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -83,8 +83,11 @@
- #define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	268
- #define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	269
- #define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	270
-+#define USB_U100_PRODUCT_ID			273
-+#define USB_U100P_PRODUCT_ID			274
-+#define USB_U100S_PRODUCT_ID			275
- #define USB_HYDRA_PRODUCT_ID_END \
--	USB_HYBRID_PRO_CANLIN_PRODUCT_ID
-+	USB_U100S_PRODUCT_ID
+-	if (err)
+-		return err;
+-
+-	return -ETIMEDOUT;
++	return err;
+ }
  
- static inline bool kvaser_is_leaf(const struct usb_device_id *id)
- {
-@@ -187,6 +190,9 @@ static const struct usb_device_id kvaser_usb_table[] = {
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID) },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID) },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_PRO_CANLIN_PRODUCT_ID) },
-+	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100_PRODUCT_ID) },
-+	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100P_PRODUCT_ID) },
-+	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100S_PRODUCT_ID) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(usb, kvaser_usb_table);
+ static int mcp251xfd_chip_clock_init(const struct mcp251xfd_priv *priv)
 -- 
 2.29.2
 
