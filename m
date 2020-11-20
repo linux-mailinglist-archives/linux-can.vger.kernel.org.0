@@ -2,29 +2,29 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8B42BAB33
-	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 14:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCC82BAB35
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 14:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728239AbgKTNdh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1728273AbgKTNdh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Fri, 20 Nov 2020 08:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728256AbgKTNdf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 08:33:35 -0500
+        with ESMTP id S1728228AbgKTNdh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 08:33:37 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755FFC0613CF
-        for <linux-can@vger.kernel.org>; Fri, 20 Nov 2020 05:33:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09447C0613CF
+        for <linux-can@vger.kernel.org>; Fri, 20 Nov 2020 05:33:37 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kg6XZ-0006Fn-0r; Fri, 20 Nov 2020 14:33:29 +0100
+        id 1kg6XZ-0006Fn-Jf; Fri, 20 Nov 2020 14:33:29 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 18/25] can: flexcan: flexcan_rx_offload_setup(): factor out mailbox and rx-offload setup into separate function
-Date:   Fri, 20 Nov 2020 14:33:11 +0100
-Message-Id: <20201120133318.3428231-19-mkl@pengutronix.de>
+Subject: [net-next 19/25] can: flexcan: flexcan_open(): completely initialize controller before requesting IRQ
+Date:   Fri, 20 Nov 2020 14:33:12 +0100
+Message-Id: <20201120133318.3428231-20-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201120133318.3428231-1-mkl@pengutronix.de>
 References: <20201120133318.3428231-1-mkl@pengutronix.de>
@@ -38,107 +38,64 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In an upcoming patch the order of operations in flexcan_open() are changed.
-Introduce convenience function to make that patch simpler.
+This patch changes the order in which the flexcan controller is brought up
+during flexcan_open(). It makes sure that the chip is completely initialized
+before the IRQs are requested and finally enabled.
 
-Link: https://lore.kernel.org/r/20201119100917.3013281-4-mkl@pengutronix.de
+Link: https://lore.kernel.org/r/20201119100917.3013281-5-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/flexcan.c | 74 ++++++++++++++++++++++-----------------
- 1 file changed, 42 insertions(+), 32 deletions(-)
+ drivers/net/can/flexcan.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 64c174aa868b..0705b6384e49 100644
+index 0705b6384e49..e98368be1669 100644
 --- a/drivers/net/can/flexcan.c
 +++ b/drivers/net/can/flexcan.c
-@@ -1346,6 +1346,47 @@ static void flexcan_ram_init(struct net_device *dev)
- 	priv->write(reg_ctrl2, &regs->ctrl2);
- }
+@@ -1712,32 +1712,33 @@ static int flexcan_open(struct net_device *dev)
+ 	if (err)
+ 		goto out_close;
  
-+static int flexcan_rx_offload_setup(struct net_device *dev)
-+{
-+	struct flexcan_priv *priv = netdev_priv(dev);
-+	int err;
-+
-+	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
-+		priv->mb_size = sizeof(struct flexcan_mb) + CANFD_MAX_DLEN;
-+	else
-+		priv->mb_size = sizeof(struct flexcan_mb) + CAN_MAX_DLEN;
-+	priv->mb_count = (sizeof(priv->regs->mb[0]) / priv->mb_size) +
-+			 (sizeof(priv->regs->mb[1]) / priv->mb_size);
-+
-+	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP)
-+		priv->tx_mb_reserved =
-+			flexcan_get_mb(priv, FLEXCAN_TX_MB_RESERVED_OFF_TIMESTAMP);
-+	else
-+		priv->tx_mb_reserved =
-+			flexcan_get_mb(priv, FLEXCAN_TX_MB_RESERVED_OFF_FIFO);
-+	priv->tx_mb_idx = priv->mb_count - 1;
-+	priv->tx_mb = flexcan_get_mb(priv, priv->tx_mb_idx);
-+	priv->tx_mask = FLEXCAN_IFLAG_MB(priv->tx_mb_idx);
-+
-+	priv->offload.mailbox_read = flexcan_mailbox_read;
-+
-+	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP) {
-+		priv->offload.mb_first = FLEXCAN_RX_MB_OFF_TIMESTAMP_FIRST;
-+		priv->offload.mb_last = priv->mb_count - 2;
-+
-+		priv->rx_mask = GENMASK_ULL(priv->offload.mb_last,
-+					    priv->offload.mb_first);
-+		err = can_rx_offload_add_timestamp(dev, &priv->offload);
-+	} else {
-+		priv->rx_mask = FLEXCAN_IFLAG_RX_FIFO_OVERFLOW |
-+			FLEXCAN_IFLAG_RX_FIFO_AVAILABLE;
-+		err = can_rx_offload_add_fifo(dev, &priv->offload,
-+					      FLEXCAN_NAPI_WEIGHT);
-+	}
-+
-+	return err;
-+}
-+
- static void flexcan_chip_interrupts_enable(const struct net_device *dev)
- {
- 	const struct flexcan_priv *priv = netdev_priv(dev);
-@@ -1675,38 +1716,7 @@ static int flexcan_open(struct net_device *dev)
+-	err = request_irq(dev->irq, flexcan_irq, IRQF_SHARED, dev->name, dev);
++	err = flexcan_rx_offload_setup(dev);
  	if (err)
  		goto out_transceiver_disable;
  
--	if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
--		priv->mb_size = sizeof(struct flexcan_mb) + CANFD_MAX_DLEN;
--	else
--		priv->mb_size = sizeof(struct flexcan_mb) + CAN_MAX_DLEN;
--	priv->mb_count = (sizeof(priv->regs->mb[0]) / priv->mb_size) +
--			 (sizeof(priv->regs->mb[1]) / priv->mb_size);
--
--	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP)
--		priv->tx_mb_reserved =
--			flexcan_get_mb(priv, FLEXCAN_TX_MB_RESERVED_OFF_TIMESTAMP);
--	else
--		priv->tx_mb_reserved =
--			flexcan_get_mb(priv, FLEXCAN_TX_MB_RESERVED_OFF_FIFO);
--	priv->tx_mb_idx = priv->mb_count - 1;
--	priv->tx_mb = flexcan_get_mb(priv, priv->tx_mb_idx);
--	priv->tx_mask = FLEXCAN_IFLAG_MB(priv->tx_mb_idx);
--
--	priv->offload.mailbox_read = flexcan_mailbox_read;
--
--	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP) {
--		priv->offload.mb_first = FLEXCAN_RX_MB_OFF_TIMESTAMP_FIRST;
--		priv->offload.mb_last = priv->mb_count - 2;
--
--		priv->rx_mask = GENMASK_ULL(priv->offload.mb_last,
--					    priv->offload.mb_first);
--		err = can_rx_offload_add_timestamp(dev, &priv->offload);
--	} else {
--		priv->rx_mask = FLEXCAN_IFLAG_RX_FIFO_OVERFLOW |
--			FLEXCAN_IFLAG_RX_FIFO_AVAILABLE;
--		err = can_rx_offload_add_fifo(dev, &priv->offload,
--					      FLEXCAN_NAPI_WEIGHT);
--	}
-+	err = flexcan_rx_offload_setup(dev);
+-	err = flexcan_rx_offload_setup(dev);
++	err = flexcan_chip_start(dev);
  	if (err)
- 		goto out_free_irq;
+-		goto out_free_irq;
++		goto out_can_rx_offload_del;
  
+-	/* start chip and queuing */
+-	err = flexcan_chip_start(dev);
++	can_rx_offload_enable(&priv->offload);
++
++	err = request_irq(dev->irq, flexcan_irq, IRQF_SHARED, dev->name, dev);
+ 	if (err)
+-		goto out_offload_del;
++		goto out_can_rx_offload_disable;
+ 
+ 	flexcan_chip_interrupts_enable(dev);
+ 
+ 	can_led_event(dev, CAN_LED_EVENT_OPEN);
+ 
+-	can_rx_offload_enable(&priv->offload);
+ 	netif_start_queue(dev);
+ 
+ 	return 0;
+ 
+- out_offload_del:
++ out_can_rx_offload_disable:
++	can_rx_offload_disable(&priv->offload);
++	flexcan_chip_stop(dev);
++ out_can_rx_offload_del:
+ 	can_rx_offload_del(&priv->offload);
+- out_free_irq:
+-	free_irq(dev->irq, dev);
+  out_transceiver_disable:
+ 	flexcan_transceiver_disable(priv);
+  out_close:
 -- 
 2.29.2
 
