@@ -2,172 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 366692BB36F
-	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 19:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E632BB373
+	for <lists+linux-can@lfdr.de>; Fri, 20 Nov 2020 19:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730847AbgKTSeT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 20 Nov 2020 13:34:19 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:25561 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730656AbgKTSeS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 20 Nov 2020 13:34:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1605897255;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=IsKartWkxcQ49qvgewBVUixxzcrCg2hPB3nmAgQOYHA=;
-        b=bPooZgCot2Jdkal5B6qrNeCrXX25xSH2BN5Uxe2oR6zaWYDmuGj6xIq5zEtzwBllBn
-        nwEkmiva85Q/nPY0hGZTQ12RAE0J8BnR/sNR03WBLuyVbflR4E9QqEpr47ZpTUJs0jYX
-        VuULn9C6V3ONwQoB49gPsaWTiX5luH52coFysWlyZNdVE+csFY2W4/xm5aafi8VnKysd
-        zYH+BKvUmUA6p+ncu/+j90AaEbz7criajpZ5re701agIlsWhO2HOvadoRA2wqS2Xc/6Y
-        ugWebrwhUMHiFjzjZhzHzhjdLCjCNqg8Mpl5oX9xajLzrnmBtMYPhjSWiaPc8cd/Zz/N
-        kN5Q==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKONebStI="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwAKIYBYEr
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 20 Nov 2020 19:34:11 +0100 (CET)
-Subject: Re: Question on CAN FD Driver for mcp251xfd
-To:     Jin Park <jpark@enphaseenergy.com>,
+        id S1730691AbgKTSef (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 20 Nov 2020 13:34:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53108 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729952AbgKTSee (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 20 Nov 2020 13:34:34 -0500
+Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 87D0222470;
+        Fri, 20 Nov 2020 18:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605897274;
+        bh=pNUFEE16O9q1lV79zGxWuVcJGvY5m6bMjPJFWzou+m8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1qAYtGR0yoZVgzXkrY8ihvySutVvfR0l/auGAHC69QBHKGTs1eRqubAV3V4yh3uc5
+         XfKrnN90Y0I9sTLO+QaUEl3sEmV44k6cEJSMocI6ap6+2Ej3b0RRFyYeZ15PUFY5kM
+         WJFfzbTXZPyBjOSqqlVTDJtvxR0dJKLoRPqObw04=
+Date:   Fri, 20 Nov 2020 12:34:40 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <DM6PR19MB3673FBAAA7A80E458659666EB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
- <f168b9a4-79ae-7a8b-b074-632f86e8596b@pengutronix.de>
- <DM6PR19MB36739C691B6C35B4AD7DF77AB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <032472ae-fb99-3c6f-ff3c-4e7b2d900980@hartkopp.net>
-Date:   Fri, 20 Nov 2020 19:34:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH 072/141] can: peak_usb: Fix fall-through warnings for Clang
+Message-ID: <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
+References: <cover.1605896059.git.gustavoars@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <DM6PR19MB36739C691B6C35B4AD7DF77AB1FF0@DM6PR19MB3673.namprd19.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
+by explicitly adding a break statement instead of letting the code fall
+through to the next case.
 
+Link: https://github.com/KSPP/linux/issues/115
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On 20.11.20 18:14, Jin Park wrote:
-> Hello Marc,
-> 
-> Here are my answers.
-> VAR-SOM-MX8M-Nano board drives MCP2517FD/MCP2518FD (CAN FD controller) and TCAN332G (CAN FD Transceiver) for CAN FD communication.
-> 
-> 1) Which commands have you tried?
-> 2) What are the error messages?
-> Please see below a), b), c), and d).
-> 
-> 	a) Based on Bit Rate Switching feature in CAN FD, the bit rate at data phase and arbitration phase (or nominal phase) can be set in CAN FD protocol.
-> So, I tried below.
-> - command
-> ip link set can0 type can dbitrate 1000000
-> 
-> - error message
-> RTNETLINK answers: Operation not supported
-> 
-> 
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index c2764799f9ef..fd65a155be3b 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -299,6 +299,8 @@ static void peak_usb_write_bulk_callback(struct urb *urb)
+ 		if (net_ratelimit())
+ 			netdev_err(netdev, "Tx urb aborted (%d)\n",
+ 				   urb->status);
++		break;
++
+ 	case -EPROTO:
+ 	case -ENOENT:
+ 	case -ECONNRESET:
+-- 
+2.27.0
 
-You need to apply both bitrates at the same time, e.g.
-
-$ ip link set can0 up type can bitrate 500000 sample-point 0.75 dbitrate 
-4000000 dsample-point 0.8 fd on
-
-See at:
-
-https://www.kernel.org/doc/Documentation/networking/can.txt
-
-Regards,
-Oliver
-	
-> 
-> 	b) To turn on FD mode, I tried below.
-> - command
-> ip link set can0 type can fd on
-> 
-> - error message
-> RTNETLINK answers: Operation not supported
-> 
-> 
-> 
-> 	c) To send CAN FD message, I tried below. Th
-> - command
-> cansend can0 123##1
-> 
-> - error message
-> CAN interface is not CAN FD capable - sorry.
-> 
-> - help text for cansend
->      <can_id>#{R|data}          for CAN 2.0 frames
->      <can_id>##<flags>{data}    for CAN FD frames
-> 
-> <can_id> can have 3 (SFF) or 8 (EFF) hex chars
-> {data} has 0..8 (0..64 CAN FD) ASCII hex-values (optionally separated by '.')
-> <flags> a single ASCII Hex value (0 .. F) which defines canfd_frame.flags
-> 
-> e.g. 5A1#11.2233.44556677.88 / 123#DEADBEEF / 5AA# / 123##1 / 213##311
->       1F334455#1122334455667788 / 123#R for remote transmission request.
-> 
-> 
-> 
-> 
-> 
-> 	d) TCAN332G (CAN FD Transceiver) can support 5Mbps at data phase in CAN FD mode.
-> Current supported maximum bitrate in the driver is now 1Mbps at nominal rate.
-> (FYI, bit rate in data phase at CAN FD protocol is up to 8Mbps)
->          Where: BITRATE  := { 1..1000000 }
->                    SAMPLE-POINT  := { 0.000..0.999 }
->                    TQ            := { NUMBER }
->                    PROP-SEG      := { 1..8 }
->                    PHASE-SEG1    := { 1..8 }
->                    PHASE-SEG2    := { 1..8 }
->                    SJW           := { 1..4 }
->                    RESTART-MS    := { 0 | NUMBER }
-> 
-> 
-> 
-> 3) What doesn't work exactly?
-> 
-> I would like to send and receive messages in CAN FD with Bit Rate Switching (Arbitration phase: 1Mbps, Data phase: 5Mbps).
-> So far, CAN FD mode doesn't turn on with above commands.
-> 
-> Thanks,
-> Jin
-> 
-> 
-> -----Original Message-----
-> From: Marc Kleine-Budde <mkl@pengutronix.de>
-> Sent: Thursday, November 19, 2020 11:11 PM
-> To: Jin Park <jpark@enphaseenergy.com>; manivannan.sadhasivam@linaro.org
-> Subject: Re: Question on CAN FD Driver for mcp251xfd
-> 
-> Hello Jin Park,
-> 
-> please use the linux-can mailing list (linux-can@vger.kernel.org) for community question. There are other people interested in these question, please add list on Cc.
-> 
-> On 11/20/20 4:03 AM, Jin Park wrote:
->> I am using MCP251XFD SPI-CAN Network Driver with VAR-SOM-MX8M-NANO
->> board now and would like to ask whether it can support CAN FD features as well.
-> 
-> Yes it does support CAN-FD.
-> 
->> I tried to command with CAN FD features in terminal and it didn’t work
->> with CAN FD commands.
-> 
-> Which commands have you tried?
-> What are the error messages?
-> What doesn't work exactly?
-> 
->> Is there any plan to release CAN FD Linux Driver in the future, if you
->> have worked on CAN FD?
-> 
-> It should be working.
-> 
-> Marc
-> 
