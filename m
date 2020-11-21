@@ -2,102 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4962BC1D3
-	for <lists+linux-can@lfdr.de>; Sat, 21 Nov 2020 20:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F792BC215
+	for <lists+linux-can@lfdr.de>; Sat, 21 Nov 2020 21:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728403AbgKUTuX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 21 Nov 2020 14:50:23 -0500
-Received: from smtprelay0079.hostedemail.com ([216.40.44.79]:56188 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728402AbgKUTuW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Nov 2020 14:50:22 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 9CD14127B;
-        Sat, 21 Nov 2020 19:50:20 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:1801:2393:2525:2560:2563:2682:2685:2828:2859:2902:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3871:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4250:4321:4605:5007:7903:9025:10004:10400:10848:11026:11232:11233:11657:11658:11783:11914:12043:12048:12297:12438:12679:12740:12895:13069:13311:13357:13439:13894:14181:14659:14721:21080:21451:21627:21939:30012:30046:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:102,LUA_SUMMARY:none
-X-HE-Tag: knee97_180892727356
-X-Filterd-Recvd-Size: 2999
-Received: from XPS-9350.home (unknown [47.151.128.180])
-        (Authenticated sender: joe@perches.com)
-        by omf17.hostedemail.com (Postfix) with ESMTPA;
-        Sat, 21 Nov 2020 19:50:18 +0000 (UTC)
-Message-ID: <de5b16cf3fdac1f783e291acc325b78368653ec5.camel@perches.com>
-Subject: Re: [PATCH 072/141] can: peak_usb: Fix fall-through warnings for
- Clang
-From:   Joe Perches <joe@perches.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Date:   Sat, 21 Nov 2020 11:50:17 -0800
-In-Reply-To: <bf3dbc5c-c34e-b3ef-abb6-0c88d8a90332@pengutronix.de>
-References: <cover.1605896059.git.gustavoars@kernel.org>
-         <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
-         <bf3dbc5c-c34e-b3ef-abb6-0c88d8a90332@pengutronix.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
-MIME-Version: 1.0
+        id S1728403AbgKUUnH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 21 Nov 2020 15:43:07 -0500
+Received: from mail-eopbgr70121.outbound.protection.outlook.com ([40.107.7.121]:59214
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728402AbgKUUnH (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 21 Nov 2020 15:43:07 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G6KabwzvzH7Bq/eKuONXd86uWMpEICYd2vXt0Ss64/HbmLAlhEZKITCqWUbA7ubZdeCkP0FH9TW97eMjK23rOpaOJdqf5barHzhKbiDeUaTyfrkYKJL+Hptk5AbS8aDq8+ThbQzPx2w5iOQRVsFuM+xeWyEtL2hWrJUOW4rfmtpW+0qVfxVLcoC1W5nkR3moyI5FFyWQwEQqBS+X0GG+2bKaFBLAZlAjYo7G9ZSea1oDwjSJhyGY8SMTJHAnbnOOCVqcKc/ldsF2IdT+jB+oIXYqbdL2IhMnVTmzaNXxw0NoT2+BHh5aVLqudSDzqA5b2hzj6aAOBcg0MiUvFPJhTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HQ6AiitswaNKFrVRHud03uB3n4XUU0+f/+c48Up90z4=;
+ b=Q0aRlvJQOooiaAGkSe2R9taKDMewvjsU6F3G4QupWujUKppAh2NklyacyGrtPsDbwhFKkmoC0UeRV4iYDPr3MNzUVAfkusOartozwr9f0L5aXFt8zaYDjPpfseflKTOZp9TgcCXpqD92R5//veUFjC7UMXuXQks056RThhJg3C5Or3//XbK22jzHMGXwWAk92SqousVtZ49MBRwBhxe58QMfKGT+2xvFZUYZ3U5BwGGQMdgz6pn44Ge61Q/K5TDU1EaNrX+H91gluXfQLe+qhjXpuo43UTw6XYyeHBdLTTYzyDO3Hgcf166qpf00y3NU+ilab9ovRGGyDYGUdiZt/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=victronenergy.com; dmarc=pass action=none
+ header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HQ6AiitswaNKFrVRHud03uB3n4XUU0+f/+c48Up90z4=;
+ b=wKsetEL9t7JBWVGYg0xxFKde084Q6l8n+j25VzyryRbb/q1rbjOtP23XOheWPhmaDGeXOXtKsZuq6vUedzrYqKtgxmr/VQWGNMR3dBJlj4SyHbfwBpW5frkMHoJFKp33sN278TmtCcMHNJHVb1pdnFUC9EOnhWjkWfrcm2wn/yo=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=victronenergy.com;
+Received: from DBAPR07MB6967.eurprd07.prod.outlook.com (2603:10a6:10:192::11)
+ by DB9PR07MB7210.eurprd07.prod.outlook.com (2603:10a6:10:214::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.11; Sat, 21 Nov
+ 2020 20:43:02 +0000
+Received: from DBAPR07MB6967.eurprd07.prod.outlook.com
+ ([fe80::ad22:24cb:3fd:617c]) by DBAPR07MB6967.eurprd07.prod.outlook.com
+ ([fe80::ad22:24cb:3fd:617c%3]) with mapi id 15.20.3611.014; Sat, 21 Nov 2020
+ 20:43:02 +0000
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+From:   Jeroen Hofstee <jhofstee@victronenergy.com>
+Subject: vcan rate limit
+Message-ID: <46d8e940-0234-175f-2038-cc41f852358f@victronenergy.com>
+Date:   Sat, 21 Nov 2020 21:43:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [2001:1c01:3bc5:4e00:e791:efe6:bf00:7133]
+X-ClientProxiedBy: AM4PR0302CA0031.eurprd03.prod.outlook.com
+ (2603:10a6:205:2::44) To DBAPR07MB6967.eurprd07.prod.outlook.com
+ (2603:10a6:10:192::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2001:1c01:3bc5:4e00:e791:efe6:bf00:7133] (2001:1c01:3bc5:4e00:e791:efe6:bf00:7133) by AM4PR0302CA0031.eurprd03.prod.outlook.com (2603:10a6:205:2::44) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21 via Frontend Transport; Sat, 21 Nov 2020 20:43:02 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c6518743-9865-4c3a-7844-08d88e5e0a2f
+X-MS-TrafficTypeDiagnostic: DB9PR07MB7210:
+X-Microsoft-Antispam-PRVS: <DB9PR07MB7210F2E28867343C505809B5C0FE0@DB9PR07MB7210.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kHTdqrelvg5fSQxqnLDQa2n6z/Fdvz5KpcV3WgouqpeFihNTymxsddFySbtDI9K8qLtHd109jYOnzrB51fs9TLjxSI5Uhvzmu9OiEtQmkCG0Xk4ThGbImTdUSMwb+HwG9IhgCDwp4SIz9GUGTcSwV5kTZR5JYNl4xt180HFbEFZN1GqmVNbZH9rAJTOGv5QeKDqnYyvpr9uaAal/OZaQranqdJgOe6sIklxzScag3ynqRAytyrrMN7dEOX2BCgLB3r9LHc/Vc1tQdKz/832Z6YUlY2XRQYl1HS2DMZkCIvpvpADJ2C21owx3Xtq+9ONrbDDJO4P83p4e1zr7IDtE6u/BkX4xou2htuD9zOCBv588io0Z7dp+gUrRdbFV5aRXaccLpm94Q9AYLbHSZ/0a/OL7PFfGpEyyc5Uw05ioYS8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBAPR07MB6967.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(39830400003)(136003)(376002)(346002)(6486002)(7116003)(31686004)(83380400001)(2906002)(478600001)(16526019)(186003)(316002)(2616005)(8936002)(31696002)(3480700007)(5660300002)(8676002)(6916009)(52116002)(66556008)(66476007)(66946007)(86362001)(36756003)(133083001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: hn5d0+TYk1UFwSzs7YlXmFtRJnKq7SAZfGY3Y7hrXvwPPqozAr8Ple34Qpf94UM4yMyktwKAhf5gHi1WDSDGLzBTu8PVKHx9zwgzSxGnwZ2XO2nK5aGdLsbqIhfBprKUxSnJWsW87AIY93L5+Khzrj/8pSeNzdnj0zb6Mj1Fmv4XcbRXn9/EzOGqz0z7L6pX/9KQm9V2L7rKW2/zFL48RfusWA2QI/v9FndrDPtHjvLoTseqwAYHWHvMPEBDKjMZW1lkDth2vQzxKKZLq/J9ZYuv5itbI02Frqgzb+WGCkTk01S4eMNBhn7BHaWTFrK4CevNxAc3ge+B37ovsRqJ07JpY+Ife9CGwOq9hXQlfR4zdKWRN95vjH2duKkDtwOr2pqwDnn94/BcVYjwTov7ljJPCCTCbgw0oijo6RbPFUDNyZmmaTBS6iW/3DNe7F7HG6Ta5I4VButI0eWg6TGEn5Vg9678WO7GbfhfLoEhExqB+8NKrWQ+QDYlVFviWNSmdTwYpMmeK8V0Fx0fllrFVbncHwfrb9uUXaoABMoc0meHsjM2FtCUT5z5rfw0gsXJJ3Bdr2R7hJbYMHfoXTuFoY6R878fz2jD9cw2zAqsMsNwK3Op5tGL1dxpvGJvm5QUj4R8Box3FxleFLJnyWF4hbPcffDrIUERaQjHnK9FECXQD0ZH1e9RZm0SMWOzr8kB+4B6bqKkeX6nHvQHb55fuA==
+X-OriginatorOrg: victronenergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6518743-9865-4c3a-7844-08d88e5e0a2f
+X-MS-Exchange-CrossTenant-AuthSource: DBAPR07MB6967.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2020 20:43:02.3232
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 60b95f08-3558-4e94-b0f8-d690c498e225
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: T8aZ4FNUKw3bz9xny0k4yuW+ZWNt7YxqkqmJJ6Ofh53t8d7cT+KxIU0dwau80b2WatEloquJMhYWVWcsmLmH9svxmT9X6kkaS/+JwkH6wYM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB7210
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, 2020-11-21 at 14:17 +0100, Marc Kleine-Budde wrote:
-> On 11/20/20 7:34 PM, Gustavo A. R. Silva wrote:
-> > In preparation to enable -Wimplicit-fallthrough for Clang, fix a warning
-> > by explicitly adding a break statement instead of letting the code fall
-> > through to the next case.
-> > 
-> > Link: https://github.com/KSPP/linux/issues/115
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-[]
-> > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-[]
-> > @@ -299,6 +299,8 @@ static void peak_usb_write_bulk_callback(struct urb *urb)
-> >  		if (net_ratelimit())
-> >  			netdev_err(netdev, "Tx urb aborted (%d)\n",
-> >  				   urb->status);
-> > +		break;
-> > +
-> >  	case -EPROTO:
-> >  	case -ENOENT:
-> >  	case -ECONNRESET:
-> > 
-> 
-> What about moving the default to the end if the case, which is more common anyways:
-> 
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-[]
-> @@ -295,16 +295,16 @@ static void peak_usb_write_bulk_callback(struct urb *urb)
->                 netif_trans_update(netdev);
->                 break;
->  
-> 
-> -       default:
-> -               if (net_ratelimit())
-> -                       netdev_err(netdev, "Tx urb aborted (%d)\n",
-> -                                  urb->status);
->         case -EPROTO:
->         case -ENOENT:
->         case -ECONNRESET:
->         case -ESHUTDOWN:
-> -
->                 break;
-> +
-> +       default:
-> +               if (net_ratelimit())
-> +                       netdev_err(netdev, "Tx urb aborted (%d)\n",
-> +                                  urb->status);
+Hi,
 
-That's fine and is more generally used style but this
-default: case should IMO also end with a break;
+The virtual can (vcan driver) directly queues the tx messages on
+the rx path. As a consequence a sending program, canseq e.g. is only
+cpu limited and as a consequence the network stack can start dropping
+messages.
 
-+		break;
+For a realistic applications, it takes a bit more time to realize the
+network stack is actually dropping message, since the cpu doesn't
+necessarily go to 100%, it can just burst just enough to cause
+some messages to be dropped, causing unexpected behavior.
 
->         }
+The vcan driver behavior can be altered with e.g.:
+
+sudo tc qdisc add dev vcan0 root tbf rate 1mbit burst 24b limit 10000
+
+But I am in doubt many people are aware of that or occasionally, like me,
+have to find out the hard way they forgot to change it.
+
+So I was wondering if one of the following is acceptable / possible:
+ Â  - hint / assign the mentioned qdisc by default instead of none (no idea
+ Â Â Â  if that can be done from within a driver though)
+ Â  - take a transmission delay into account in the vcan driver itself.
+
+Looking forward to your opinions / ideas.
+
+With kind regards,
+
+Jeroen Hofstee
 
 
