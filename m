@@ -2,33 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E40072BBF1F
-	for <lists+linux-can@lfdr.de>; Sat, 21 Nov 2020 14:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D3A2BBF29
+	for <lists+linux-can@lfdr.de>; Sat, 21 Nov 2020 14:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727668AbgKUNCt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 21 Nov 2020 08:02:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S1727531AbgKUNSA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 21 Nov 2020 08:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727531AbgKUNCs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Nov 2020 08:02:48 -0500
+        with ESMTP id S1727418AbgKUNR7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Nov 2020 08:17:59 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD17C0613CF
-        for <linux-can@vger.kernel.org>; Sat, 21 Nov 2020 05:02:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF89C0613CF
+        for <linux-can@vger.kernel.org>; Sat, 21 Nov 2020 05:17:58 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kgSXL-0006lS-Ps; Sat, 21 Nov 2020 14:02:43 +0100
+        id 1kgSm0-00089W-LG; Sat, 21 Nov 2020 14:17:52 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:4c1f:9c86:2b81:b0ea] (unknown [IPv6:2a03:f580:87bc:d400:4c1f:9c86:2b81:b0ea])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BB7F35983C1;
-        Sat, 21 Nov 2020 13:02:42 +0000 (UTC)
-To:     Niels <niels@ka-long.de>, linux-can <linux-can@vger.kernel.org>
-References: <20201121094511.9C3AB27C0319@dd33904.kasserver.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5BCBD5983CB;
+        Sat, 21 Nov 2020 13:17:50 +0000 (UTC)
+Subject: Re: [PATCH 072/141] can: peak_usb: Fix fall-through warnings for
+ Clang
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -90,16 +98,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: MCP2518FD Treiber
-Message-ID: <25aa6faa-fc39-5d4c-844d-2283a232087e@pengutronix.de>
-Date:   Sat, 21 Nov 2020 14:02:37 +0100
+Message-ID: <bf3dbc5c-c34e-b3ef-abb6-0c88d8a90332@pengutronix.de>
+Date:   Sat, 21 Nov 2020 14:17:45 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201121094511.9C3AB27C0319@dd33904.kasserver.com>
+In-Reply-To: <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="Wddo4X70YT6Rd7mZ2rjdJ1jUMjUwXlrZX"
+ boundary="Um0PBROohAn87SHKH5Z0CxiUa3ZnYBeOM"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -109,180 +116,92 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Wddo4X70YT6Rd7mZ2rjdJ1jUMjUwXlrZX
-Content-Type: multipart/mixed; boundary="b0M5NQhicY1bt1MwnlGuJwRP50r0XOGtW";
+--Um0PBROohAn87SHKH5Z0CxiUa3ZnYBeOM
+Content-Type: multipart/mixed; boundary="uwJFcgT96ZkDsWpG9kNWehKVQzdOYN6eR";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Niels <niels@ka-long.de>, linux-can <linux-can@vger.kernel.org>
-Message-ID: <25aa6faa-fc39-5d4c-844d-2283a232087e@pengutronix.de>
-Subject: Re: MCP2518FD Treiber
-References: <20201121094511.9C3AB27C0319@dd33904.kasserver.com>
-In-Reply-To: <20201121094511.9C3AB27C0319@dd33904.kasserver.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
+Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Message-ID: <bf3dbc5c-c34e-b3ef-abb6-0c88d8a90332@pengutronix.de>
+Subject: Re: [PATCH 072/141] can: peak_usb: Fix fall-through warnings for
+ Clang
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
+In-Reply-To: <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
 
---b0M5NQhicY1bt1MwnlGuJwRP50r0XOGtW
+--uwJFcgT96ZkDsWpG9kNWehKVQzdOYN6eR
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-Hey Niels,
+On 11/20/20 7:34 PM, Gustavo A. R. Silva wrote:
+> In preparation to enable -Wimplicit-fallthrough for Clang, fix a warnin=
+g
+> by explicitly adding a break statement instead of letting the code fall=
 
-kennst Du schon die linux-can (linux-can <linux-can@vger.kernel.org>)
-Mailingliste? Bitte verwende diese f=C3=BCr Community Anfragen. Wenn Du n=
-och fragen
-hast, nimm bitte die ML auf Cc und steige auf Englisch um :D
-
-On 11/21/20 10:45 AM, Niels wrote:
-> Ich habe Deinen Treiber im offiziellen Kernel gefunden und versuche nun=
- ein
-> Projekt mit diesem Baustein umzusetzen. Der MCP (MIKROE 3060:
-> https://www.mikroe.com/mcp2518fd-click) ist verbunden mit einem IMX7D v=
-on
-> NXP.>
-> Leider unterst=C3=BCtzt NXP f=C3=BCr den IMX7D als neustes zur Zeit nur=
- den Kernel
-> 5.4.47. Auf dem IMX7D l=C3=A4uft ein Debian 10.6. F=C3=BCr den Backport=
- musste
-> allerdings nur in rx_offload.c die Funktion can_rx_offload_add_manual (=
-aus
-> dem master kopiert) hinzugef=C3=BCgt werden und zwei Namen in einer Str=
-uktur haben
-> sich ge=C3=A4ndert.
-
-Es gibt aus meiner Sicht beim imx7 den Gammelkernel von nxp einzusetzen.
-
-> Sieht eigentlich alles gut aus. Signale auf dem Scope sehen auch richti=
-g aus.
-> Nur das abschlie=C3=9Fende "ip link can2 up" bzw. "ifconfig can2 up" re=
-sultiert in
-> "invalid argument".
->
-> Ich hab es mit verschiedenen iproute2 Versionen / SPI Frequenzen
-> ausprobiert.
->
-> Bei der Initialisierung das e: 0.00MHz irritiert mich. Fehlt da beim DT=
- oder
-> beim ip link set noch was ?
-
-"e" steht f=C3=BCr effective. Wenn Du auf einen aktuellen Kernel wechsels=
-t oder noch
-den folgen Patch auf den nxp Kernel wirfst, dann zeigt der Treiber an, we=
-lche
-clock der SPI Bus tats=C3=A4chlich hat.
-
-"c" ist der externe Oszillator
-"m" ist die maximale Frequenz vom DT
-"r" ist die angefragte (requested) Frequenz des mcp251xfd
-    Treibers an das SPI Framework
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/drivers/spi/spi-imx.c?h=3Dv5.10-rc4&id=3Dbf253e6bf6b876a4ce74db7dcf8a13b=
-80d84aa5f
-
-> root@cl-debian:~# dmesg | grep mcp
-> [   15.716774] mcp251xfd spi1.0: can_rx_offload_init_queue: skb_queue_l=
-en_max=3D512
-> [   15.756445] mcp251xfd spi1.0 can2: MCP2518FD rev0.0 (+RX_INT -MAB_NO=
-_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:4.00MHz r:4.00MHz e:=
-0.00MHz) successfully initialized.
+> through to the next case.
 >=20
-> root@cl-debian:~# ip --details link show can2
-> 7: can2: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT group d=
-efault qlen 10
->     link/can  promiscuity 0 minmtu 0 maxmtu 0=20
->     can state STOPPED (berr-counter tx 0 rx 0) restart-ms 0=20
-> 	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-inc 1=
-
-> 	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp-inc=
- 1
-> 	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_ma=
-x_segs 65535=20
+> Link: https://github.com/KSPP/linux/issues/115
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> ---
+>  drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >=20
-> root@cl-debian:~# ip link set can2 type can bitrate 500000 dbitrate 100=
-0000 fd on
-> root@cl-debian:~# ip --details link show can2
-> 7: can2: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group d=
-efault qlen 10
->     link/can  promiscuity 0 minmtu 0 maxmtu 0=20
->     can <FD> state STOPPED (berr-counter tx 0 rx 0) restart-ms 0=20
-> 	  bitrate 500000 sample-point 0.875=20
-> 	  tq 25 prop-seg 34 phase-seg1 35 phase-seg2 10 sjw 1
-> 	  mcp251xfd: tseg1 2..256 tseg2 1..128 sjw 1..128 brp 1..256 brp-inc 1=
-
-> 	  dbitrate 1000000 dsample-point 0.750=20
-> 	  dtq 25 dprop-seg 14 dphase-seg1 15 dphase-seg2 10 dsjw 1
-> 	  mcp251xfd: dtseg1 1..32 dtseg2 1..16 dsjw 1..16 dbrp 1..256 dbrp-inc=
- 1
-> 	  clock 40000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_ma=
-x_segs 65535
+> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net=
+/can/usb/peak_usb/pcan_usb_core.c
+> index c2764799f9ef..fd65a155be3b 100644
+> --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> @@ -299,6 +299,8 @@ static void peak_usb_write_bulk_callback(struct urb=
+ *urb)
+>  		if (net_ratelimit())
+>  			netdev_err(netdev, "Tx urb aborted (%d)\n",
+>  				   urb->status);
+> +		break;
+> +
+>  	case -EPROTO:
+>  	case -ENOENT:
+>  	case -ECONNRESET:
 >=20
-> root@cl-debian:~# ip link set can2 up
-> RTNETLINK answers: Invalid argument
->=20
-> root@cl-debian:~# dmesg | grep mcp
-> [   15.716774] mcp251xfd spi1.0: can_rx_offload_init_queue: skb_queue_l=
-en_max=3D512
-> [   15.756445] mcp251xfd spi1.0 can2: MCP2518FD rev0.0 (+RX_INT -MAB_NO=
-_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:4.00MHz r:4.00MHz e:=
-0.00MHz) successfully initialized.
-> [  436.792327] mcp251xfd spi1.0 can2: FIFO setup: TEF: 4*12 bytes =3D 4=
-8 bytes, TX: 4*72 bytes =3D 288 bytes
-> [  436.792344] mcp251xfd spi1.0 can2: FIFO setup: RX-0: 16*76 bytes =3D=
- 1216 bytes
-> [  436.792353] mcp251xfd spi1.0 can2: FIFO setup: free: 496 bytes
->=20
-> root@cl-debian:~# strace ifconfig can2 up
-> ioctl(4, SIOCGIFFLAGS, {ifr_name=3D"can2", ifr_flags=3DIFF_NOARP}) =3D =
-0
-> ioctl(4, SIOCSIFFLAGS, {ifr_name=3D"can2", ifr_flags=3DIFF_UP|IFF_RUNNI=
-NG|IFF_NOARP}) =3D -1 EINVAL (Invalid argument)
-> dup(2)
->=20
-> Device Tree Schnipsel:
->=20
-> &ecspi2 {
->         pinctrl-names =3D "default";
->         pinctrl-0 =3D <&pinctrl_ecspi2>;
->         status =3D "okay";
->=20
->         fsl,spi-num-chipselects =3D <1>;
->         cs-gpios =3D <&gpio4 23 0>;
->=20
->         mcp2518fd@0 {
->                 compatible =3D "microchip,mcp2518fd";
->                 reg =3D <0x00>;
->                 microchip,rx-int-gpios =3D <&gpio3 0 GPIO_ACTIVE_LOW>;
 
-Das ist der nRX-INT Pin des MCP, nicht der Interrupt.
+What about moving the default to the end if the case, which is more commo=
+n anyways:
 
->                 spi-max-frequency =3D <4000000>;
->                 clocks =3D <&mcp2518fd_clk>;  // fixed, 40MHz
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/c=
+an/usb/peak_usb/pcan_usb_core.c
+index 204ccb27d6d9..e8977dd10902 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -295,16 +295,16 @@ static void peak_usb_write_bulk_callback(struct urb=
+ *urb)
+                netif_trans_update(netdev);
+                break;
+=20
+-       default:
+-               if (net_ratelimit())
+-                       netdev_err(netdev, "Tx urb aborted (%d)\n",
+-                                  urb->status);
+        case -EPROTO:
+        case -ENOENT:
+        case -ECONNRESET:
+        case -ESHUTDOWN:
+-
+                break;
++
++       default:
++               if (net_ratelimit())
++                       netdev_err(netdev, "Tx urb aborted (%d)\n",
++                                  urb->status);
+        }
+=20
+        /* should always release echo skb and corresponding context */
 
-Hier fehlt der Interrupt, siehe:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/D=
-ocumentation/devicetree/bindings/net/can/microchip,mcp251xfd.yaml?h=3Dv5.=
-10-rc4#n75
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-Unter der Annahme, dass der gpio3-0 der richtige IRQ ist, dann musst Du d=
-ie Zeile
-
-| interrupts-extended =3D <&gpio3 0 IRQ_TYPE_LEVEL_LOW>;
-
-anstatt der
-
-| microchip,rx-int-gpios
-
-verwenden.
-
-Ich schaue mal, ob ich beim laden des Treibers schon feststellen kann, ob=
- der
-IRQ fehlt um dann eine Fehlermeldung auszugeben.
-
-Deine Email Adresse w=C3=BCrde ich als "Reported-by: Niels <niels@ka-long=
-=2Ede>" unter
-den Patch schreiben. Ist das OK?
-
-Gr=C3=BC=C3=9Fe,
 Marc
 
 --=20
@@ -292,23 +211,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---b0M5NQhicY1bt1MwnlGuJwRP50r0XOGtW--
+--uwJFcgT96ZkDsWpG9kNWehKVQzdOYN6eR--
 
---Wddo4X70YT6Rd7mZ2rjdJ1jUMjUwXlrZX
+--Um0PBROohAn87SHKH5Z0CxiUa3ZnYBeOM
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+5D+0ACgkQqclaivrt
-76ko0wgAgXPsTJh0wucnTpnVbQw30bPin1vCcvNb0NbRyVIHltCHPqjIqNNnZ9v/
-Y2PpObD9fsoJZJTNXGugCmnxYyJldQP6T3hPKpjxwhR99tzjaSG2+0+dHUzt4L1Y
-K7mcOgKeGENAEMVRuAA7NUbU8oDBW//YfWpC4dAdR9tSe2KNXZXqU8DxmMUFZ5lH
-H+1Cs2TMUv9auckQCjk5qWPBCsmAks7m8OSN5g8kvzgKs/mCERqD4gpFhF+JMHeR
-5S/yBIGOMx4vn57RbZIGo9O9em0J59wCTliLYv7w0yrLiq3EFMzfPz9dhjXZtDd4
-50et0OHXCEaMRLmjMANvA07Voa1pDA==
-=yG4G
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+5E3kACgkQqclaivrt
+76kOuAf9FXn8cpXGeMIslKjsSJryU/nEjyGXwnMsE4DWltNdOsTzjaomGpAPxq7V
+lkXiduWwveC8VMEJwfYiK6XwOWctQ+tZvMCXzue25RDjk+wRHGSL93DBY8vnlj6w
+Xq3HueD2jPEbc/P4rXH0Gu/+MnCkT8dwSEDJHslTYxk2Pl7GPYvdS+L6rARGw9tA
+ZtI4J7DMZHOtxCVhCcJitIl5uIa+0gtz64UIyAqq5pR2ffAkLKi4dj9JXMTwbBXt
+mtTun+VyBOaThPCLw0SX70V1SGlT8q8yj34G1TALFuBU+kdh/wau1qf7HjenLEEU
+13++IkqjMhyCTpJXS7Zz8jIMNOs2ug==
+=YRBG
 -----END PGP SIGNATURE-----
 
---Wddo4X70YT6Rd7mZ2rjdJ1jUMjUwXlrZX--
+--Um0PBROohAn87SHKH5Z0CxiUa3ZnYBeOM--
