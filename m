@@ -2,92 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAC12BC29A
-	for <lists+linux-can@lfdr.de>; Sun, 22 Nov 2020 00:10:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8972BC333
+	for <lists+linux-can@lfdr.de>; Sun, 22 Nov 2020 03:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbgKUXJw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 21 Nov 2020 18:09:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726281AbgKUXJv (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 21 Nov 2020 18:09:51 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD2802080D;
-        Sat, 21 Nov 2020 23:09:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606000191;
-        bh=nqxz26mo8JnZraZoTA+dVPsiUYXHcIf5YCVE62ZYN94=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=wzbhNd0xc2Uclu+5q4WL9lrNTrmkmh9DvdBNKkNPdW2hvftozpOakrxZb7dtPTwxW
-         9nzsOlef/PAak10V93iMUtQZXGuXC5n8XE6zFkLX3n3O7T+0TvTaFnPFwouDmin6ht
-         gugkceaixx/xa5pdeJToYWbAD7asvBV6UBxaBIXU=
-Date:   Sat, 21 Nov 2020 15:09:50 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: pull-request: can-next 2020-11-20
-Message-ID: <20201121150950.203869ec@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201120133318.3428231-1-mkl@pengutronix.de>
-References: <20201120133318.3428231-1-mkl@pengutronix.de>
+        id S1726674AbgKVCqZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 21 Nov 2020 21:46:25 -0500
+Received: from smtprelay0147.hostedemail.com ([216.40.44.147]:57810 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726544AbgKVCqZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 21 Nov 2020 21:46:25 -0500
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 3F9DB100E7B40;
+        Sun, 22 Nov 2020 02:46:24 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:1801:2393:2559:2562:2828:2898:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3871:3874:4250:4321:4605:5007:6119:10004:10400:10848:11026:11232:11233:11657:11658:11783:11914:12043:12048:12297:12438:12740:12895:13069:13311:13357:13439:13894:14181:14659:14721:21080:21627:21990:30046:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: coil29_120f78c27359
+X-Filterd-Recvd-Size: 2917
+Received: from XPS-9350.home (unknown [47.151.128.180])
+        (Authenticated sender: joe@perches.com)
+        by omf10.hostedemail.com (Postfix) with ESMTPA;
+        Sun, 22 Nov 2020 02:46:22 +0000 (UTC)
+Message-ID: <13a35c0a0d446b72c2f83fda1651dea924707345.camel@perches.com>
+Subject: Re: [PATCH 072/141] can: peak_usb: Fix fall-through warnings for
+ Clang
+From:   Joe Perches <joe@perches.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Sat, 21 Nov 2020 18:46:21 -0800
+In-Reply-To: <d2fc3c0e-54de-3f2a-1434-76a80847965c@pengutronix.de>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+         <aab7cf16bf43cc7c3e9c9930d2dae850c1d07a3c.1605896059.git.gustavoars@kernel.org>
+         <bf3dbc5c-c34e-b3ef-abb6-0c88d8a90332@pengutronix.de>
+         <de5b16cf3fdac1f783e291acc325b78368653ec5.camel@perches.com>
+         <d2fc3c0e-54de-3f2a-1434-76a80847965c@pengutronix.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 20 Nov 2020 14:32:53 +0100 Marc Kleine-Budde wrote:
-> The first patch is by Yegor Yefremov and he improves the j1939 documentat=
-on by
-> adding tables for the CAN identifier and its fields.
->=20
-> Then there are 8 patches by Oliver Hartkopp targeting the CAN driver
-> infrastructure and drivers. These add support for optional DLC element to=
- the
-> Classical CAN frame structure. See patch ea7800565a12 ("can: add optional=
- DLC
-> element to Classical CAN frame structure") for details. Oliver's last pat=
-ch
-> adds len8_dlc support to several drivers. Stefan M=C3=A4tje provides a pa=
-tch to add=20
-> len8_dlc support to the esd_usb2 driver.
->=20
-> The next patch is by Oliver Hartkopp, too and adds support for modificati=
-on of
-> Classical CAN DLCs to CAN GW sockets.
->=20
-> The next 3 patches target the nxp,flexcan DT bindings. One patch by my ad=
-ds the
-> missing uint32 reference to the clock-frequency property. Joakim Zhang's
-> patches fix the fsl,clk-source property and add the IMX_SC_R_CAN() macro =
-to the
-> imx firmware header file, which will be used in the flexcan driver later.
->=20
-> Another patch by Joakim Zhang prepares the flexcan driver for SCU based
-> stop-mode, by giving the existing, GPR based stop-mode, a _GPR postfix.
->=20
-> The next 5 patches are by me, target the flexcan driver, and clean up the=
-=20
-> .ndo_open and .ndo_stop callbacks. These patches try to fix a sporadicall=
-y=20
-> hanging flexcan_close() during simultanious ifdown, sending of CAN messag=
-es and
-> probably open CAN bus. I was never aber to reproduce, but these seem to f=
-ix the=20
-> problem at the reporting user. As these changes are rather big, I'd like =
-to=20
-> mainline them via net-next/master.
->=20
-> The next patches are by Jimmy Assarsson and Christer Beskow, they add sup=
-port=20
-> for new USB devices to the existing kvaser_usb driver.
->=20
-> The last patch is by Kaixu Xia and simplifies the return in the
-> mcp251xfd_chip_softreset() function in the mcp251xfd driver.
+On Sun, 2020-11-22 at 00:04 +0100, Marc Kleine-Budde wrote:
+> On 11/21/20 8:50 PM, Joe Perches wrote:
+> > > What about moving the default to the end if the case, which is more common anyways:
+> > > 
+> > > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+> > []
+> > > @@ -295,16 +295,16 @@ static void peak_usb_write_bulk_callback(struct urb *urb)
+> > >                 netif_trans_update(netdev);
+> > >                 break;
+> > >  
+> > > 
+> > > -       default:
+> > > -               if (net_ratelimit())
+> > > -                       netdev_err(netdev, "Tx urb aborted (%d)\n",
+> > > -                                  urb->status);
+> > >         case -EPROTO:
+> > >         case -ENOENT:
+> > >         case -ECONNRESET:
+> > >         case -ESHUTDOWN:
+> > > -
+> > >                 break;
+> > > +
+> > > +       default:
+> > > +               if (net_ratelimit())
+> > > +                       netdev_err(netdev, "Tx urb aborted (%d)\n",
+> > > +                                  urb->status);
+> > 
+> > That's fine and is more generally used style but this
+> > default: case should IMO also end with a break;
+> > 
+> > +		break;
+> 
+> I don't mind.
+> 
+> process/coding-style.rst is not totally clear about the break after the default,
+> if this is the lase one the switch statement.
 
-Great, this one finally got into patchwork correctly!
+deprecated.rst has:
 
-Pulled, thank you!
+All switch/case blocks must end in one of:
+
+* break;
+* fallthrough;
+* continue;
+* goto <label>;
+* return [expression];
+
+I suppose that could be moved into coding-style along with
+maybe a change to "all switch/case/default blocks"
+
