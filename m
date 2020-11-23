@@ -2,123 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBED2C02B3
-	for <lists+linux-can@lfdr.de>; Mon, 23 Nov 2020 10:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F162C03F2
+	for <lists+linux-can@lfdr.de>; Mon, 23 Nov 2020 12:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728291AbgKWJzS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 23 Nov 2020 04:55:18 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:41910 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728252AbgKWJzR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Nov 2020 04:55:17 -0500
-Received: by mail-il1-f199.google.com with SMTP id f19so6391635ilk.8
-        for <linux-can@vger.kernel.org>; Mon, 23 Nov 2020 01:55:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=lMLTt/SuwLRf4ocvmFFvLONW25I25f5Nz49bfqZG5UE=;
-        b=hzq04kRoLJIPw80HNmv4wNKrKBQByjVwFAISAx7OmYAsbbEJjAK9uz+vwo1ahRfu9Y
-         FZiz8tlpw4lnjlCAeaAxpCyGGLDs7de58OUTmPVl35YDSpGc+QLsYx0sLEnQBgaKsvPl
-         Ow9FI6hg983y+oiXh0U5W8Av2R1BkbWCxGUWwgkcuGsmTEpL2xndMT8EODaqX5yCfIUN
-         p4aB4gyowGQy18IjzS2SkPv/LGi3QpIQXE0Nw/DW15BQpDLlIunfZcBjrpxsyJC+17yn
-         DpIMYP1h2cEERZYUBJZQQ5sSAn03JZU7/oPoYV1x2gxUd1AJcoVhvAkImwTWD8cDPcTG
-         hyhA==
-X-Gm-Message-State: AOAM531lE0q/zX9zEucpCXZZ0YClEkjOXLQ9ced04IToOGgoaisnAA25
-        5M97opjwJTJmI2hRokBeu/07rKqBOlENDOQzQ/MYmKn7Oj9m
-X-Google-Smtp-Source: ABdhPJwSytCrqYpdxaZQeFkbjDR+bnEkGRaDCDTj3gF/G42XrvV7MUqRE9i6xZBywlsAEDfC28y/9zLSpdLUXKdyTMNOSXPsTD5m
+        id S1728696AbgKWLQi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 23 Nov 2020 06:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728690AbgKWLQh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 23 Nov 2020 06:16:37 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825FCC061A4D
+        for <linux-can@vger.kernel.org>; Mon, 23 Nov 2020 03:16:37 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=blackshift.org)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kh9pi-0006oB-4C; Mon, 23 Nov 2020 12:16:34 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>
+Subject: [net-next 0/2] can: mcp251xfd: rx-path: reduce number of SPI core requests to set UINC bit
+Date:   Mon, 23 Nov 2020 12:16:29 +0100
+Message-Id: <20201123111631.3816024-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-Received: by 2002:a92:b512:: with SMTP id f18mr1892806ile.27.1606125316656;
- Mon, 23 Nov 2020 01:55:16 -0800 (PST)
-Date:   Mon, 23 Nov 2020 01:55:16 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f6d4dd05b4c330e0@google.com>
-Subject: BUG: receive list entry not found for dev vcan0, id 001, mask C00007FF
-From:   syzbot <syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Hello,
 
-syzbot found the following issue on:
+this is a short series to reduce the number SPI core requests to increment the
+UINC bit after RX handling. This is done by chaining the individual UINC bit
+changes into a single SPI message consisting of several transfers.
 
-HEAD commit:    b9ad3e9f bonding: wait for sysfs kobject destruction befor..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=1195c5cd500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=330f3436df12fd44
-dashboard link: https://syzkaller.appspot.com/bug?extid=d0ddd88c9a7432f041e6
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c409cd500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1349ced1500000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com
-
-RAX: ffffffffffffffda RBX: 00007fffc0827800 RCX: 0000000000443749
-RDX: 0000000000000018 RSI: 0000000020000300 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000001bbbbbb
-R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
-R13: 0000000000000005 R14: 0000000000000000 R15: 0000000000000000
-------------[ cut here ]------------
-BUG: receive list entry not found for dev vcan0, id 001, mask C00007FF
-WARNING: CPU: 0 PID: 8495 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
-Modules linked in:
-CPU: 0 PID: 8495 Comm: syz-executor608 Not tainted 5.10.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
-Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 a0 ae 56 8a e8 11 58 97 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 e0 ae 56 8a e8 76 ab d3 00 <0f> 0b 48 8b 7c 24 28 e8 90 22 0f 01 e9 54 fb ff ff e8 06 cf d8 f9
-RSP: 0018:ffffc9000182f9f0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88801ffe8000 RSI: ffffffff8158f3c5 RDI: fffff52000305f30
-RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9e30627
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff88801ab00000 R14: 1ffff92000305f45 R15: 00000000c00007ff
-FS:  0000000000000000(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000004c8928 CR3: 000000000b08e000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
- call_netdevice_notifier net/core/dev.c:1735 [inline]
- call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
- call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
- unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
- isotp_release+0x136/0x600 net/can/isotp.c:1011
- __sock_release+0xcd/0x280 net/socket.c:596
- sock_close+0x18/0x20 net/socket.c:1277
- __fput+0x285/0x920 fs/file_table.c:281
- task_work_run+0xdd/0x190 kernel/task_work.c:151
- exit_task_work include/linux/task_work.h:30 [inline]
- do_exit+0xb64/0x29b0 kernel/exit.c:809
- do_group_exit+0x125/0x310 kernel/exit.c:906
- __do_sys_exit_group kernel/exit.c:917 [inline]
- __se_sys_exit_group kernel/exit.c:915 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:915
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x442388
-Code: Unable to access opcode bytes at RIP 0x44235e.
-RSP: 002b:00007fffc0827768 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 0000000000442388
-RDX: 0000000000000001 RSI: 000000000000003c RDI: 0000000000000001
-RBP: 00000000004c88f0 R08: 00000000000000e7 R09: ffffffffffffffd0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00000000006dd240 R14: 0000000000000000 R15: 0000000000000000
+regards,
+Marc
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
