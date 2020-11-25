@@ -2,165 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C19782C4651
-	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 18:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BF02C4667
+	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 18:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732098AbgKYREb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Nov 2020 12:04:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731273AbgKYRE1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 12:04:27 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425FFC061A4F;
-        Wed, 25 Nov 2020 09:04:27 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id t33so377302ybd.0;
-        Wed, 25 Nov 2020 09:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U7yONu+GErpj3wVA3mUEvd1gZrZu1iMtuB4J5cc4iYs=;
-        b=bn+pL/HmrYW2tlvsO08UsmlB+e0sDsIo/gBe6lZBPy5Ml0r7IepVRmwL3Z1msCDTmB
-         4Fj8yYJnSSwKpycrMD6jc9mJYcLEOxyjBt+mj/swgeJwfcTqBWFSYbINT99XJh8MBLLG
-         BhdJX4URpdAlU1PS41QCV8cX0uycEbKi5uankHMmLYXfRheyb1dBSnJ2lYbkM9jPzYRg
-         +YL1Fiv4xli6A/G5oR00+c/fqffNKJdLOgNLmafCTxGe8sUqpvTjraMjrzXLQkd2Vyg7
-         6NJIAQ3gm8Ro9XvzXTxxo6aHXEqSB5bdv5UB5bHkEX37ZUG4NR8CwSl4aaovOFcf7q/J
-         MTKg==
+        id S1730875AbgKYRFR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Nov 2020 12:05:17 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:52861 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730647AbgKYRFR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 12:05:17 -0500
+Received: by mail-io1-f71.google.com with SMTP id i19so1938829ioa.19
+        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 09:05:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U7yONu+GErpj3wVA3mUEvd1gZrZu1iMtuB4J5cc4iYs=;
-        b=Qpmh2GhI2WFs2qzp7Yn0fsgZaW8qKZK7HSbi+NCT0Jsrn+O5TTnjfpO9+adg1ygVEg
-         He2LQK3eRrPr4xLBwGPGrkPHhKCZ6HNIFcBvOjEKxDQ993YxbqYTay1DZxWZjjkBSFtp
-         M0hx760u7VARoHEO5ak8GSqWZwst+zM/sXvn6sP7otDrBGFamZd7Uz7ks+exNWem11Bz
-         TJSh2xoh5NFtzMA6eC7gJcnDdrPFmcPP0fZxsrUGVnTidS1mOEmaHSUvIO3cuqBKc9Xy
-         7ZuVaVdr95Q26yooscZkYKo0LK7NYIKVwJvh5HlNeqPgtTp5RkDNNpfGJhliNkKNrQ8k
-         0r7Q==
-X-Gm-Message-State: AOAM533+U9pipnNe4G+sfWPHuOqXn+o+A4RGhehQmfihcqsqUhS5WoXN
-        z5/CDlpRDEKMyKWOtPsW01afemh/jiL5NVUaOAk=
-X-Google-Smtp-Source: ABdhPJwRDTWwRnnt/vVfXeVU3lUNCXdaAf9CCrzUJdkBRbFdtXrCpJBbeymEiGhAam+E5oqqQjDTbAdkVQMGwErIDPw=
-X-Received: by 2002:a25:aac5:: with SMTP id t63mr6307293ybi.22.1606323866493;
- Wed, 25 Nov 2020 09:04:26 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=4egMIs+9RjkoWxvqY8Ly2lD2Sy7rWatLrP2K7PTB5sQ=;
+        b=R4bWlDRbhojalupzIdVgKWTep7k1c6YtsfXV+HsGtI36aam/DlETrCc0Rys3uv4KUx
+         5lVeTi7el5d0gs+5rrVwRIs2+Br2l+1avEnxYL7HYfCuF0xG1rfQ0bgHoHxkh0Y2P7f6
+         OPrXUKa+hHH6csgVWhs9SeY9DDEBv+e7ufjeqdFqRNrOa1lB4Q09SPBgieleU0USdUQO
+         dEwIEm1wgK1c/TUNo6Hmmn9RXg1Bs0z0PRJ3HB72maMrzE779E7woeLfgoStmpb7r2iE
+         F0H/Z8/hdPVZAJHgsBTXtNJuWMTCCvJeadAb+YyZUyAGpdzDogypm6tEbzr1wUApCNCH
+         4Q+Q==
+X-Gm-Message-State: AOAM530PLeRtI9GNrgJEKYMwoAUwrRyRa0caQA3Fm+whfmkI8gpc91zf
+        sWiSLhiI2ogCOu2HQK/t6V9aar8lEufK9DAy+d4oR5dxh8Qq
+X-Google-Smtp-Source: ABdhPJxUYd54X4S7tbnyvh+HKXvkHdcZqFdPFnJhqsYXBV+gWMNWAihmr8SV8ek8cUTPctiTd3Vq5WYkgSjh0SX8P38B04dzF1i9
 MIME-Version: 1.0
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
- <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
- <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
- <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
- <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
- <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com> <20201125082405.1d8c23dc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201125082405.1d8c23dc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Wed, 25 Nov 2020 18:04:15 +0100
-Message-ID: <CANiq72=RuekXf1O6Fxrz2Eend0GtS6=E72P4T2=48SDqVcTChA@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org,
-        linux-input <linux-input@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-watchdog@vger.kernel.org, selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        =?UTF-8?Q?open_list=3AHARDWARE_RANDOM_NUMBER_GENERATOR_CORE_=3Clinux=2Dcrypt?=
-         =?UTF-8?Q?o=40vger=2Ekernel=2Eorg=3E=2C_patches=40opensource=2Ecirrus=2Ecom=2C_linux=2Dint?=
-         =?UTF-8?Q?egrity=40vger=2Ekernel=2Eorg=2C_target=2Ddevel=40vger=2Ekernel=2Eorg=2C_linux=2D?=
-         =?UTF-8?Q?hardening=40vger=2Ekernel=2Eorg=2C_Jonathan_Cameron_=3CJonathan=2ECamero?=
-         =?UTF-8?Q?n=40huawei=2Ecom=3E=2C_Greg_KH?= 
-        <gregkh@linuxfoundation.org>
+X-Received: by 2002:a5e:c10a:: with SMTP id v10mr3390892iol.54.1606323916136;
+ Wed, 25 Nov 2020 09:05:16 -0800 (PST)
+Date:   Wed, 25 Nov 2020 09:05:16 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006a69d505b4f16e83@google.com>
+Subject: BUG: receive list entry not found for dev vxcan1, id 003, mask C00007FF
+From:   syzbot <syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Nov 25, 2020 at 5:24 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> And just to spell it out,
->
-> case ENUM_VALUE1:
->         bla();
->         break;
-> case ENUM_VALUE2:
->         bla();
-> default:
->         break;
->
-> is a fairly idiomatic way of indicating that not all values of the enum
-> are expected to be handled by the switch statement.
+Hello,
 
-It looks like a benign typo to me -- `ENUM_VALUE2` does not follow the
-same pattern like `ENUM_VALUE1`. To me, the presence of the `default`
-is what indicates (explicitly) that not everything is handled.
+syzbot found the following issue on:
 
-> Applying a real patch set and then getting a few follow ups the next day
-> for trivial coding things like fallthrough missing or static missing,
-> just because I didn't have the full range of compilers to check with
-> before applying makes me feel pretty shitty, like I'm not doing a good
-> job. YMMV.
+HEAD commit:    470dfd80 lan743x: replace polling loop by wait_event_timeo..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f46c65500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df65150a33f23d8c
+dashboard link: https://syzkaller.appspot.com/bug?extid=76d62d3b8162883c7d11
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1164f8fd500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148ae72b500000
 
-The number of compilers, checkers, static analyzers, tests, etc. we
-use keeps going up. That, indeed, means maintainers will miss more
-things (unless maintainers do more work than before). But catching
-bugs before they happen is *not* a bad thing.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com
 
-Perhaps we could encourage more rebasing in -next (while still giving
-credit to bots and testers) to avoid having many fixing commits
-afterwards, but that is orthogonal.
+RAX: ffffffffffffffda RBX: 00007ffc766d7540 RCX: 0000000000443729
+RDX: 0000000000000018 RSI: 0000000020000040 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000001bbbbbb
+R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
+R13: 0000000000000004 R14: 0000000000000000 R15: 0000000000000000
+------------[ cut here ]------------
+BUG: receive list entry not found for dev vxcan1, id 003, mask C00007FF
+WARNING: CPU: 1 PID: 8479 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
+Modules linked in:
+CPU: 1 PID: 8479 Comm: syz-executor218 Not tainted 5.10.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
+Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 e0 de 56 8a e8 51 d3 95 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 20 df 56 8a e8 a6 76 d3 00 <0f> 0b 48 8b 7c 24 28 e8 40 e9 0e 01 e9 54 fb ff ff e8 66 db d7 f9
+RSP: 0018:ffffc900016ff9f0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888020251a40 RSI: ffffffff8158f3c5 RDI: fffff520002dff30
+RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9f30627
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000003
+R13: ffff88802c1c0000 R14: 1ffff920002dff45 R15: 00000000c00007ff
+FS:  0000000000000000(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000004c8908 CR3: 000000000b08e000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
+ call_netdevice_notifier net/core/dev.c:1735 [inline]
+ call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
+ call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
+ unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
+ isotp_release+0x136/0x600 net/can/isotp.c:1011
+ __sock_release+0xcd/0x280 net/socket.c:596
+ sock_close+0x18/0x20 net/socket.c:1255
+ __fput+0x285/0x920 fs/file_table.c:281
+ task_work_run+0xdd/0x190 kernel/task_work.c:151
+ exit_task_work include/linux/task_work.h:30 [inline]
+ do_exit+0xb64/0x29b0 kernel/exit.c:809
+ do_group_exit+0x125/0x310 kernel/exit.c:906
+ __do_sys_exit_group kernel/exit.c:917 [inline]
+ __se_sys_exit_group kernel/exit.c:915 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:915
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x442368
+Code: Unable to access opcode bytes at RIP 0x44233e.
+RSP: 002b:00007ffc766d74a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 0000000000442368
+RDX: 0000000000000001 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00000000004c88d0 R08: 00000000000000e7 R09: ffffffffffffffd0
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00000000006dd240 R14: 0000000000000000 R15: 0000000000000000
 
-I really don't think we should encourage the feeling that a maintainer
-is doing a bad job if they don't catch everything on their reviews.
-Any review is worth it. Maintainers, in the end, are just the
-"guaranteed" reviewers that decide when the code looks reasonable
-enough. They should definitely not feel pressured to be perfect.
 
-Cheers,
-Miguel
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
