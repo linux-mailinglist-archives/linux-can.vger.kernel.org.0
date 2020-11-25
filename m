@@ -2,163 +2,250 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750692C4962
-	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 21:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365B72C49B6
+	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 22:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731233AbgKYUyt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Nov 2020 15:54:49 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:11554 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730178AbgKYUyt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 15:54:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606337685;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ZdMw2N7bIn+sWgwKCW7dNdvwpqJ3CkbRwBrllFj08Bw=;
-        b=sEkJmNsU7OHeliA3KDKsmR8eujKL57S5zHkP8NTorojkVVUHDyYvnIv8PxyOqd1Hzk
-        NgzLi8lRT5v7zs7ydwFUjhThPXkXDAk6cj6nveLxzWbKRIeOFTuAUOcaD4z49/YReQ5S
-        NibIxX+6mLGVQYP+huI9OpWQZ5xkluRQ5q2M0e0Z6t31QSvpfhMSIA/V3j2b/RejsIRp
-        hVU7btdSfOBdTx8tAgtqhyzFKVshhZql8MtRLd/ShhF7J4FJMQkJFZWjRjAi4XCNEAiH
-        tZesw62oxEylfRcd53lxtkU7NBhP3LREKJnMbujXlu/qRB77syuyi6OTMAdXRwstvjuI
-        NojA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKOdeTT9I="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwAPKsZqb5
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 25 Nov 2020 21:54:35 +0100 (CET)
-Subject: Re: BUG: receive list entry not found for dev vxcan1, id 002, mask
- C00007FF
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-References: <00000000000041019205b4c4e9ad@google.com>
- <b134c098-2f34-15ee-cfec-2103a12da326@hartkopp.net>
- <CACT4Y+aAtWO5r+VCxqN0UFn-S1OEvDe5QS3r44kXSeA7mfhUMw@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <c206db48-6d8a-8ff3-79e3-7efab2fdce0f@hartkopp.net>
-Date:   Wed, 25 Nov 2020 21:54:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1731585AbgKYVKX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Nov 2020 16:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731577AbgKYVKX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 16:10:23 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB83C061A51
+        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 13:10:04 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id s21so3484285pfu.13
+        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 13:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5kDOOuMOjwqEdI4fOY8lF/zJwxoesF7EbkKd66qXZt4=;
+        b=AWR/7M4mhE4fi43nRvdimsQoF0WR0/yRvzcmpbbdNnukQZ4s3FUnDOA4HlPrcfy1KL
+         TnDV3Sp7ib0l66wO1u9Qkihqc0ymqk7uAD73hLx1Hbj+4zgGkd46Av0r6N17g4aWHL9f
+         T52peLS6H3gWn2HtVm1n8SJNqsSbmk3lehF9k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5kDOOuMOjwqEdI4fOY8lF/zJwxoesF7EbkKd66qXZt4=;
+        b=QMwgoMb9KnY9SU9qzjTWqptSKAdmiEuzuuGDEOk3TxVvepDfLpARdmHg+r+/1mc3GN
+         rWU4wPN+clJ4MZpFQD5gKMH/Prbw5T/ncZBpEWEPlSkZFrpBPlmQoI/m8lcWkIJEh+kG
+         bhiLtsZEi+Xr8avRQx0vz3KV03GHf/4IeO/n9MbE5rspUoPpVH4wjeWlJM4Mcz5MXfoE
+         VQMnmofZVlOHgdHIDcEJ7+ZWN4eRvndPJPiNxvHxyx3aqUV2ofY1oo6BMrRAwV75UzA3
+         0ay6JhuyH0xixUqu7xLoQD3Z4CFfJ6cPZq4J6h0P/3MLzGnn78x2WxeoF1JRi1IuRPL6
+         g2gA==
+X-Gm-Message-State: AOAM530d71Vkasxk/O6y2ub34RxXt/dPOasK0RZQtu1/QLeRHNy9Fqnb
+        YHiJup7k9WqEL80CBgvaSpUGJWhmtT1uKned
+X-Google-Smtp-Source: ABdhPJx/eEsXFJ4LN0K87oZeE7bvP2eO9KEt7vLrempCPcmRQAJuuV8YImLC928PO4R7i7Khu5FszQ==
+X-Received: by 2002:a65:6547:: with SMTP id a7mr4391475pgw.198.1606338602870;
+        Wed, 25 Nov 2020 13:10:02 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x30sm2796297pgc.86.2020.11.25.13.10.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Nov 2020 13:10:01 -0800 (PST)
+Date:   Wed, 25 Nov 2020 13:10:00 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Joe Perches <joe@perches.com>,
+        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        x86@kernel.org, linux-nfs@vger.kernel.org,
+        GR-Linux-NIC-Dev@marvell.com, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
+        linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-integrity@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
+ Clang
+Message-ID: <202011251240.1E67BE900@keescook>
+References: <202011220816.8B6591A@keescook>
+ <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
+ <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
+ <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
+ <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+ <20201123130348.GA3119@embeddedor>
+ <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
+ <202011241327.BB28F12F6@keescook>
+ <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
 MIME-Version: 1.0
-In-Reply-To: <CACT4Y+aAtWO5r+VCxqN0UFn-S1OEvDe5QS3r44kXSeA7mfhUMw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Dmitry,
+On Tue, Nov 24, 2020 at 11:05:35PM -0800, James Bottomley wrote:
+> Now, what we have seems to be about 6 cases (at least what's been shown
+> in this thread) where a missing break would cause potentially user
+> visible issues.  That means the value of this isn't zero, but it's not
+> a no-brainer massive win either.  That's why I think asking what we've
+> invested vs the return isn't a useless exercise.
 
-On 25.11.20 19:48, Dmitry Vyukov wrote:
-> On Wed, Nov 25, 2020 at 5:04 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+The number is much higher[1]. If it were 6 in the entire history of the
+kernel, I would agree with you. :) Some were fixed _before_ Gustavo's
+effort too, which I also count towards the idea of "this is a dangerous
+weakness in C, and now we have stopped it forever."
 
->> This seems to be very seldom but it does not break anything.
->>
->> Would removing the WARN(1) or replacing it with pr_warn() be ok to close
->> this issue?
-> 
+> But the broader point I'm making is just because the compiler people
+> come up with a shiny new warning doesn't necessarily mean the problem
+> it's detecting is one that causes us actual problems in the code base. 
+> I'd really be happier if we had a theory about what classes of CVE or
+> bug we could eliminate before we embrace the next new warning.
 
-> Yes, this is the intended way to deal with this:
-> https://elixir.bootlin.com/linux/v5.10-rc5/source/include/asm-generic/bug.h#L75
-> 
-> Maybe a good opportunity to add some explanatory comment as well
-> regarding how it should not happen but can.
-I already prepared a patch for it which has indeed 90% explanatory 
-comment ;-)
+But we did! It was long ago justified and documented[2], and even links to
+the CWE[3] for it. This wasn't random joy over discovering a new warning
+we could turn on, this was turning on a warning that the compiler folks
+finally gave us to handle an entire class of flaws. If we need to update
+the code-base to address it not a useful debate -- that was settled
+already, even if you're only discovering it now. :P. This last patch
+set is about finishing that work for Clang, which is correctly even
+more strict than GCC.
 
-Will send out a patch tomorrow after collecting all the three/four? 
-syskaller bug IDs that popped up with this issue :-D
+-Kees
 
-Many thanks!
-Oliver
+[1] https://outflux.net/slides/2019/lss/kspp.pdf calls out specific
+    numbers (about 6.5% of the patches fixed missing breaks):
+	v4.19:  3 of 129
+	v4.20:  2 of  59
+	v5.0:   3 of  56
+	v5.1:  10 of 100
+	v5.2:   6 of  71
+	v5.3:   7 of  69
+
+    And in the history of the kernel, it's been an ongoing source of
+    flaws:
+
+    $ l --no-merges | grep -i 'missing break' | wc -l
+    185
+
+    The frequency of such errors being "naturally" found was pretty
+    steady until the static checkers started warning, and then it was
+    on the rise, but the full effort flushed the rest out, and now it's
+    dropped to almost zero:
+
+      1 v2.6.12
+      3 v2.6.16.28
+      1 v2.6.17
+      1 v2.6.19
+      2 v2.6.21
+      1 v2.6.22
+      3 v2.6.24
+      3 v2.6.29
+      1 v2.6.32
+      1 v2.6.33
+      1 v2.6.35
+      4 v2.6.36
+      3 v2.6.38
+      2 v2.6.39
+      7 v3.0
+      2 v3.1
+      2 v3.2
+      2 v3.3
+      3 v3.4
+      1 v3.5
+      8 v3.6
+      7 v3.7
+      3 v3.8
+      6 v3.9
+      3 v3.10
+      2 v3.11
+      5 v3.12
+      5 v3.13
+      2 v3.14
+      4 v3.15
+      2 v3.16
+      3 v3.17
+      2 v3.18
+      2 v3.19
+      1 v4.0
+      2 v4.1
+      5 v4.2
+      4 v4.5
+      5 v4.7
+      6 v4.8
+      1 v4.9
+      3 v4.10
+      2 v4.11
+      6 v4.12
+      3 v4.13
+      2 v4.14
+      5 v4.15
+      2 v4.16
+      7 v4.18
+      2 v4.19
+      6 v4.20
+      3 v5.0
+     12 v5.1
+      3 v5.2
+      4 v5.3
+      2 v5.4
+      1 v5.8
 
 
-> 
-> 
-> 
-> 
->> On 23.11.20 12:58, syzbot wrote:
->>> Hello,
->>>
->>> syzbot found the following issue on:
->>>
->>> HEAD commit:    c2e7554e Merge tag 'gfs2-v5.10-rc4-fixes' of git://git.ker..
->>> git tree:       upstream
->>> console output: https://syzkaller.appspot.com/x/log.txt?x=117f03ba500000
->>> kernel config:  https://syzkaller.appspot.com/x/.config?x=75292221eb79ace2
->>> dashboard link: https://syzkaller.appspot.com/bug?extid=381d06e0c8eaacb8706f
->>> compiler:       gcc (GCC) 10.1.0-syz 20200507
->>>
->>> Unfortunately, I don't have any reproducer for this issue yet.
->>>
->>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>> Reported-by: syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com
->>>
->>> ------------[ cut here ]------------
->>> BUG: receive list entry not found for dev vxcan1, id 002, mask C00007FF
->>> WARNING: CPU: 1 PID: 12946 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
->>> Modules linked in:
->>> CPU: 1 PID: 12946 Comm: syz-executor.1 Not tainted 5.10.0-rc4-syzkaller #0
->>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
->>> RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
->>> Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 20 ac 56 8a e8 01 6c 97 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 60 ac 56 8a e8 66 af d3 00 <0f> 0b 48 8b 7c 24 28 e8 b0 25 0f 01 e9 54 fb ff ff e8 26 e0 d8 f9
->>> RSP: 0018:ffffc90017e2fb38 EFLAGS: 00010286
->>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
->>> RDX: ffff8880147a8000 RSI: ffffffff8158f3c5 RDI: fffff52002fc5f59
->>> RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9f2011b
->>> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
->>> R13: ffff8880254c0000 R14: 1ffff92002fc5f6e R15: 00000000c00007ff
->>> FS:  0000000001ddc940(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
->>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> CR2: 0000001b2f121000 CR3: 00000000152c0000 CR4: 00000000001506e0
->>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>> Call Trace:
->>>    isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
->>>    call_netdevice_notifier net/core/dev.c:1735 [inline]
->>>    call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
->>>    call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
->>>    unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
->>>    isotp_release+0x136/0x600 net/can/isotp.c:1011
->>>    __sock_release+0xcd/0x280 net/socket.c:596
->>>    sock_close+0x18/0x20 net/socket.c:1277
->>>    __fput+0x285/0x920 fs/file_table.c:281
->>>    task_work_run+0xdd/0x190 kernel/task_work.c:151
->>>    tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->>>    exit_to_user_mode_loop kernel/entry/common.c:164 [inline]
->>>    exit_to_user_mode_prepare+0x17e/0x1a0 kernel/entry/common.c:191
->>>    syscall_exit_to_user_mode+0x38/0x260 kernel/entry/common.c:266
->>>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>> RIP: 0033:0x417811
->>> Code: 75 14 b8 03 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 a4 1a 00 00 c3 48 83 ec 08 e8 0a fc ff ff 48 89 04 24 b8 03 00 00 00 0f 05 <48> 8b 3c 24 48 89 c2 e8 53 fc ff ff 48 89 d0 48 83 c4 08 48 3d 01
->>> RSP: 002b:000000000169fbf0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
->>> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000417811
->>> RDX: 0000000000000000 RSI: 00000000000013b7 RDI: 0000000000000003
->>> RBP: 0000000000000001 R08: 00000000acabb3b7 R09: 00000000acabb3bb
->>> R10: 000000000169fcd0 R11: 0000000000000293 R12: 000000000118c9a0
->>> R13: 000000000118c9a0 R14: 00000000000003e8 R15: 000000000118bf2c
->>>
->>>
->>> ---
->>> This report is generated by a bot. It may contain errors.
->>> See https://goo.gl/tpsmEJ for more information about syzbot.
->>> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>>
->>> syzbot will keep track of this issue. See:
->>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->>>
->>
->> --
->> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/b134c098-2f34-15ee-cfec-2103a12da326%40hartkopp.net.
+    And the reason it's fully zero, is because we still have the cases we're
+    cleaning up right now. Even this last one from v5.8 is specifically of
+    the same type this series addresses:
+
+        case 4:
+                color_index = TrueCModeIndex;
++               break;
+        default:
+                return;
+        }
+
+
+[2] https://www.kernel.org/doc/html/latest/process/deprecated.html#implicit-switch-case-fall-through
+
+	All switch/case blocks must end in one of:
+
+	break;
+	fallthrough;
+	continue;
+	goto <label>;
+	return [expression];
+
+[3] https://cwe.mitre.org/data/definitions/484.html
+
+-- 
+Kees Cook
