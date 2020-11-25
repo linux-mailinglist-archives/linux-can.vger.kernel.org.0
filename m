@@ -2,123 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BF02C4667
-	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 18:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07562C47E6
+	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 19:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730875AbgKYRFR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Nov 2020 12:05:17 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:52861 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730647AbgKYRFR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 12:05:17 -0500
-Received: by mail-io1-f71.google.com with SMTP id i19so1938829ioa.19
-        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 09:05:16 -0800 (PST)
+        id S1729688AbgKYSs2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Nov 2020 13:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729679AbgKYSs2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 13:48:28 -0500
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA05C061A4F
+        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 10:48:12 -0800 (PST)
+Received: by mail-qk1-x743.google.com with SMTP id n132so5717821qke.1
+        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 10:48:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ry8PSGCSfmuMoqDc/F+BQpmRt+JWuXMWpfH2F4VC6vI=;
+        b=Z2pVQJJvie3+Zppe6BMy7zZEWYSGPOkmWzQu4j7iWApXVYJemfZ9qEAn502TivEh0l
+         QDorChwhbgtJz6/quAdhiDL7QfN50PNHT/Y4kSP0Mv8kTfVqFLyTYfxQPtYQK1qfC+30
+         hCljrKvmdn3N1Eq+sphsiv6lnCWm1WAI1xVvAAw831rngQvjYSr9qcnuk2EbTFFWkK13
+         nhtcUqOter1nWXMjxt6fnXG0MjkvISIfLikN77bK3/05oCnWH9FIoSNlZS0h37aoh7Oj
+         akQkHFD58ynTLn2OGPl3qhk44iBu86YqVv4gw3p1m2k87+XDsu/jBEHh2n6+rxmKgWUA
+         34Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=4egMIs+9RjkoWxvqY8Ly2lD2Sy7rWatLrP2K7PTB5sQ=;
-        b=R4bWlDRbhojalupzIdVgKWTep7k1c6YtsfXV+HsGtI36aam/DlETrCc0Rys3uv4KUx
-         5lVeTi7el5d0gs+5rrVwRIs2+Br2l+1avEnxYL7HYfCuF0xG1rfQ0bgHoHxkh0Y2P7f6
-         OPrXUKa+hHH6csgVWhs9SeY9DDEBv+e7ufjeqdFqRNrOa1lB4Q09SPBgieleU0USdUQO
-         dEwIEm1wgK1c/TUNo6Hmmn9RXg1Bs0z0PRJ3HB72maMrzE779E7woeLfgoStmpb7r2iE
-         F0H/Z8/hdPVZAJHgsBTXtNJuWMTCCvJeadAb+YyZUyAGpdzDogypm6tEbzr1wUApCNCH
-         4Q+Q==
-X-Gm-Message-State: AOAM530PLeRtI9GNrgJEKYMwoAUwrRyRa0caQA3Fm+whfmkI8gpc91zf
-        sWiSLhiI2ogCOu2HQK/t6V9aar8lEufK9DAy+d4oR5dxh8Qq
-X-Google-Smtp-Source: ABdhPJxUYd54X4S7tbnyvh+HKXvkHdcZqFdPFnJhqsYXBV+gWMNWAihmr8SV8ek8cUTPctiTd3Vq5WYkgSjh0SX8P38B04dzF1i9
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ry8PSGCSfmuMoqDc/F+BQpmRt+JWuXMWpfH2F4VC6vI=;
+        b=e8ptB+BGR3W0NhE1tpuQPXxeFrJPXojViyRX51JcowK7f1NoBwDb77HEq4lNZN5Rzg
+         HpF9U9qexvrT4WXZibwXhXnW0eW1/WIx4jFR73QWPVyhGjaQfpunAGhWjACEWV+Nzr84
+         cPMJp2n1KB1mz0OV9q+0HnVyThTL3p1W7/Cuq9siDMO3E+pgVvK45F2Ud5BsQ78K1YSM
+         xt80QBTp+VB6UZU7QlpVQ7/kIislqPFM9ct3G4Zm+Hom2ekvuhCROZkPK6Y/eMPj60Kc
+         SvusVE8p8CuNDkvlacsA2g9xj+JyCCDOj5FlyNgVG8eCdnBapoYNksTw88x8Ywwyv8uO
+         sXMg==
+X-Gm-Message-State: AOAM531/os69ROqG3meIQPoqFmxEC4e2xYudscwpIVsScFiNqJI4Gfxt
+        ko0imaHpU5a0Fvg3Ut2Cql/BHgk0VXgMXjS6ZytKNg==
+X-Google-Smtp-Source: ABdhPJwYA+tsyCDUh48RpqbN0YTdmhHLCkvA1vhatub9+hran8ZOWDL0Hc0poQEstLRqpeQeDkWdK+v8evLCHiByMOw=
+X-Received: by 2002:a05:620a:15ce:: with SMTP id o14mr238776qkm.231.1606330091334;
+ Wed, 25 Nov 2020 10:48:11 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c10a:: with SMTP id v10mr3390892iol.54.1606323916136;
- Wed, 25 Nov 2020 09:05:16 -0800 (PST)
-Date:   Wed, 25 Nov 2020 09:05:16 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006a69d505b4f16e83@google.com>
-Subject: BUG: receive list entry not found for dev vxcan1, id 003, mask C00007FF
-From:   syzbot <syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
+References: <00000000000041019205b4c4e9ad@google.com> <b134c098-2f34-15ee-cfec-2103a12da326@hartkopp.net>
+In-Reply-To: <b134c098-2f34-15ee-cfec-2103a12da326@hartkopp.net>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 25 Nov 2020 19:48:00 +0100
+Message-ID: <CACT4Y+aAtWO5r+VCxqN0UFn-S1OEvDe5QS3r44kXSeA7mfhUMw@mail.gmail.com>
+Subject: Re: BUG: receive list entry not found for dev vxcan1, id 002, mask C00007FF
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     syzbot <syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+On Wed, Nov 25, 2020 at 5:04 PM Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>
+> Hello all,
+>
+> AFAICS the problems are caused by the WARN() statement here:
+>
+> https://elixir.bootlin.com/linux/v5.10-rc4/source/net/can/af_can.c#L546
+>
+> The idea was to check whether CAN protocol implementations work
+> correctly on their filter lists.
+>
+> With the fault injection it seem like we're getting a race between
+> closing the socket and removing the netdevice.
+>
+> This seems to be very seldom but it does not break anything.
+>
+> Would removing the WARN(1) or replacing it with pr_warn() be ok to close
+> this issue?
 
-syzbot found the following issue on:
+Hi Oliver,
 
-HEAD commit:    470dfd80 lan743x: replace polling loop by wait_event_timeo..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f46c65500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=df65150a33f23d8c
-dashboard link: https://syzkaller.appspot.com/bug?extid=76d62d3b8162883c7d11
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1164f8fd500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148ae72b500000
+Yes, this is the intended way to deal with this:
+https://elixir.bootlin.com/linux/v5.10-rc5/source/include/asm-generic/bug.h#L75
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com
+Maybe a good opportunity to add some explanatory comment as well
+regarding how it should not happen but can.
 
-RAX: ffffffffffffffda RBX: 00007ffc766d7540 RCX: 0000000000443729
-RDX: 0000000000000018 RSI: 0000000020000040 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000001bbbbbb
-R10: 0000000000000000 R11: 0000000000000246 R12: ffffffffffffffff
-R13: 0000000000000004 R14: 0000000000000000 R15: 0000000000000000
-------------[ cut here ]------------
-BUG: receive list entry not found for dev vxcan1, id 003, mask C00007FF
-WARNING: CPU: 1 PID: 8479 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
-Modules linked in:
-CPU: 1 PID: 8479 Comm: syz-executor218 Not tainted 5.10.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
-Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 e0 de 56 8a e8 51 d3 95 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 20 df 56 8a e8 a6 76 d3 00 <0f> 0b 48 8b 7c 24 28 e8 40 e9 0e 01 e9 54 fb ff ff e8 66 db d7 f9
-RSP: 0018:ffffc900016ff9f0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888020251a40 RSI: ffffffff8158f3c5 RDI: fffff520002dff30
-RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9f30627
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000003
-R13: ffff88802c1c0000 R14: 1ffff920002dff45 R15: 00000000c00007ff
-FS:  0000000000000000(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000004c8908 CR3: 000000000b08e000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
- call_netdevice_notifier net/core/dev.c:1735 [inline]
- call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
- call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
- unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
- isotp_release+0x136/0x600 net/can/isotp.c:1011
- __sock_release+0xcd/0x280 net/socket.c:596
- sock_close+0x18/0x20 net/socket.c:1255
- __fput+0x285/0x920 fs/file_table.c:281
- task_work_run+0xdd/0x190 kernel/task_work.c:151
- exit_task_work include/linux/task_work.h:30 [inline]
- do_exit+0xb64/0x29b0 kernel/exit.c:809
- do_group_exit+0x125/0x310 kernel/exit.c:906
- __do_sys_exit_group kernel/exit.c:917 [inline]
- __se_sys_exit_group kernel/exit.c:915 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:915
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x442368
-Code: Unable to access opcode bytes at RIP 0x44233e.
-RSP: 002b:00007ffc766d74a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 0000000000442368
-RDX: 0000000000000001 RSI: 000000000000003c RDI: 0000000000000001
-RBP: 00000000004c88d0 R08: 00000000000000e7 R09: ffffffffffffffd0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00000000006dd240 R14: 0000000000000000 R15: 0000000000000000
+Thanks for looking into this.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+
+> On 23.11.20 12:58, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    c2e7554e Merge tag 'gfs2-v5.10-rc4-fixes' of git://git.ker..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=117f03ba500000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=75292221eb79ace2
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=381d06e0c8eaacb8706f
+> > compiler:       gcc (GCC) 10.1.0-syz 20200507
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com
+> >
+> > ------------[ cut here ]------------
+> > BUG: receive list entry not found for dev vxcan1, id 002, mask C00007FF
+> > WARNING: CPU: 1 PID: 12946 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
+> > Modules linked in:
+> > CPU: 1 PID: 12946 Comm: syz-executor.1 Not tainted 5.10.0-rc4-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
+> > Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 20 ac 56 8a e8 01 6c 97 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 60 ac 56 8a e8 66 af d3 00 <0f> 0b 48 8b 7c 24 28 e8 b0 25 0f 01 e9 54 fb ff ff e8 26 e0 d8 f9
+> > RSP: 0018:ffffc90017e2fb38 EFLAGS: 00010286
+> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> > RDX: ffff8880147a8000 RSI: ffffffff8158f3c5 RDI: fffff52002fc5f59
+> > RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9f2011b
+> > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+> > R13: ffff8880254c0000 R14: 1ffff92002fc5f6e R15: 00000000c00007ff
+> > FS:  0000000001ddc940(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 0000001b2f121000 CR3: 00000000152c0000 CR4: 00000000001506e0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >   isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
+> >   call_netdevice_notifier net/core/dev.c:1735 [inline]
+> >   call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
+> >   call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
+> >   unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
+> >   isotp_release+0x136/0x600 net/can/isotp.c:1011
+> >   __sock_release+0xcd/0x280 net/socket.c:596
+> >   sock_close+0x18/0x20 net/socket.c:1277
+> >   __fput+0x285/0x920 fs/file_table.c:281
+> >   task_work_run+0xdd/0x190 kernel/task_work.c:151
+> >   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+> >   exit_to_user_mode_loop kernel/entry/common.c:164 [inline]
+> >   exit_to_user_mode_prepare+0x17e/0x1a0 kernel/entry/common.c:191
+> >   syscall_exit_to_user_mode+0x38/0x260 kernel/entry/common.c:266
+> >   entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > RIP: 0033:0x417811
+> > Code: 75 14 b8 03 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 a4 1a 00 00 c3 48 83 ec 08 e8 0a fc ff ff 48 89 04 24 b8 03 00 00 00 0f 05 <48> 8b 3c 24 48 89 c2 e8 53 fc ff ff 48 89 d0 48 83 c4 08 48 3d 01
+> > RSP: 002b:000000000169fbf0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+> > RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000417811
+> > RDX: 0000000000000000 RSI: 00000000000013b7 RDI: 0000000000000003
+> > RBP: 0000000000000001 R08: 00000000acabb3b7 R09: 00000000acabb3bb
+> > R10: 000000000169fcd0 R11: 0000000000000293 R12: 000000000118c9a0
+> > R13: 000000000118c9a0 R14: 00000000000003e8 R15: 000000000118bf2c
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> >
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/b134c098-2f34-15ee-cfec-2103a12da326%40hartkopp.net.
