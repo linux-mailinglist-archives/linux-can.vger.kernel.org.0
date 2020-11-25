@@ -2,142 +2,165 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F522C44A0
-	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 17:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19782C4651
+	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 18:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729755AbgKYQEG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Nov 2020 11:04:06 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:25784 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbgKYQEG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 11:04:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606320241;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=LjnFeCgpj60B5cvTEJDsWgPSYIro4/2CufStGHdmH4k=;
-        b=rUUv9s9Uw7YrdTEkBzgj2+wJHiV4w7IhVfbKFdUH2Gfpc99ZtmIlaiPkZdXAIvCBvl
-        7yDfeOhYIONtmH2whanjClU8+HLiOHdi276uNAahHsAg1UyXeKtivVyk8teNFVAAGRd4
-        J7q/8JjZxBiBECl2SKKSeyKp80JCbzkOO/btDPMJ7YTMEM7WOF1cR4Du006Ak5kkplk6
-        xmPtGUP0t6g7phtCev4mjRVP2K3KdO1SgDu3DpUg5rbuUtm3OmjRhYIIOgwwXz3saVrI
-        LtEnSdV3fXm10ph3yQYDpiMJGx7ic74I9mG/KYmDIUz/FeZTOXZNLVCJyAKWXOjVNF5B
-        gLAw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR+J8xrzF0="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-        by smtp.strato.de (RZmta 47.3.4 SBL|AUTH)
-        with ESMTPSA id n07f3bwAPG3mq4W
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 25 Nov 2020 17:03:48 +0100 (CET)
-Subject: Re: BUG: receive list entry not found for dev vxcan1, id 002, mask
- C00007FF
-To:     syzbot <syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com>,
-        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <00000000000041019205b4c4e9ad@google.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <b134c098-2f34-15ee-cfec-2103a12da326@hartkopp.net>
-Date:   Wed, 25 Nov 2020 17:03:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1732098AbgKYREb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Nov 2020 12:04:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731273AbgKYRE1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 12:04:27 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425FFC061A4F;
+        Wed, 25 Nov 2020 09:04:27 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id t33so377302ybd.0;
+        Wed, 25 Nov 2020 09:04:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U7yONu+GErpj3wVA3mUEvd1gZrZu1iMtuB4J5cc4iYs=;
+        b=bn+pL/HmrYW2tlvsO08UsmlB+e0sDsIo/gBe6lZBPy5Ml0r7IepVRmwL3Z1msCDTmB
+         4Fj8yYJnSSwKpycrMD6jc9mJYcLEOxyjBt+mj/swgeJwfcTqBWFSYbINT99XJh8MBLLG
+         BhdJX4URpdAlU1PS41QCV8cX0uycEbKi5uankHMmLYXfRheyb1dBSnJ2lYbkM9jPzYRg
+         +YL1Fiv4xli6A/G5oR00+c/fqffNKJdLOgNLmafCTxGe8sUqpvTjraMjrzXLQkd2Vyg7
+         6NJIAQ3gm8Ro9XvzXTxxo6aHXEqSB5bdv5UB5bHkEX37ZUG4NR8CwSl4aaovOFcf7q/J
+         MTKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U7yONu+GErpj3wVA3mUEvd1gZrZu1iMtuB4J5cc4iYs=;
+        b=Qpmh2GhI2WFs2qzp7Yn0fsgZaW8qKZK7HSbi+NCT0Jsrn+O5TTnjfpO9+adg1ygVEg
+         He2LQK3eRrPr4xLBwGPGrkPHhKCZ6HNIFcBvOjEKxDQ993YxbqYTay1DZxWZjjkBSFtp
+         M0hx760u7VARoHEO5ak8GSqWZwst+zM/sXvn6sP7otDrBGFamZd7Uz7ks+exNWem11Bz
+         TJSh2xoh5NFtzMA6eC7gJcnDdrPFmcPP0fZxsrUGVnTidS1mOEmaHSUvIO3cuqBKc9Xy
+         7ZuVaVdr95Q26yooscZkYKo0LK7NYIKVwJvh5HlNeqPgtTp5RkDNNpfGJhliNkKNrQ8k
+         0r7Q==
+X-Gm-Message-State: AOAM533+U9pipnNe4G+sfWPHuOqXn+o+A4RGhehQmfihcqsqUhS5WoXN
+        z5/CDlpRDEKMyKWOtPsW01afemh/jiL5NVUaOAk=
+X-Google-Smtp-Source: ABdhPJwRDTWwRnnt/vVfXeVU3lUNCXdaAf9CCrzUJdkBRbFdtXrCpJBbeymEiGhAam+E5oqqQjDTbAdkVQMGwErIDPw=
+X-Received: by 2002:a25:aac5:: with SMTP id t63mr6307293ybi.22.1606323866493;
+ Wed, 25 Nov 2020 09:04:26 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <00000000000041019205b4c4e9ad@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
+ <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
+ <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
+ <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
+ <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
+ <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
+ <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
+ <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com> <20201125082405.1d8c23dc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201125082405.1d8c23dc@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Wed, 25 Nov 2020 18:04:15 +0100
+Message-ID: <CANiq72=RuekXf1O6Fxrz2Eend0GtS6=E72P4T2=48SDqVcTChA@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Joe Perches <joe@perches.com>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
+        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
+        bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org,
+        linux-input <linux-input@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net,
+        Ext4 Developers List <linux-ext4@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org, selinux@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
+        netfilter-devel@vger.kernel.org,
+        =?UTF-8?Q?open_list=3AHARDWARE_RANDOM_NUMBER_GENERATOR_CORE_=3Clinux=2Dcrypt?=
+         =?UTF-8?Q?o=40vger=2Ekernel=2Eorg=3E=2C_patches=40opensource=2Ecirrus=2Ecom=2C_linux=2Dint?=
+         =?UTF-8?Q?egrity=40vger=2Ekernel=2Eorg=2C_target=2Ddevel=40vger=2Ekernel=2Eorg=2C_linux=2D?=
+         =?UTF-8?Q?hardening=40vger=2Ekernel=2Eorg=2C_Jonathan_Cameron_=3CJonathan=2ECamero?=
+         =?UTF-8?Q?n=40huawei=2Ecom=3E=2C_Greg_KH?= 
+        <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello all,
+On Wed, Nov 25, 2020 at 5:24 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> And just to spell it out,
+>
+> case ENUM_VALUE1:
+>         bla();
+>         break;
+> case ENUM_VALUE2:
+>         bla();
+> default:
+>         break;
+>
+> is a fairly idiomatic way of indicating that not all values of the enum
+> are expected to be handled by the switch statement.
 
-AFAICS the problems are caused by the WARN() statement here:
+It looks like a benign typo to me -- `ENUM_VALUE2` does not follow the
+same pattern like `ENUM_VALUE1`. To me, the presence of the `default`
+is what indicates (explicitly) that not everything is handled.
 
-https://elixir.bootlin.com/linux/v5.10-rc4/source/net/can/af_can.c#L546
+> Applying a real patch set and then getting a few follow ups the next day
+> for trivial coding things like fallthrough missing or static missing,
+> just because I didn't have the full range of compilers to check with
+> before applying makes me feel pretty shitty, like I'm not doing a good
+> job. YMMV.
 
-The idea was to check whether CAN protocol implementations work 
-correctly on their filter lists.
+The number of compilers, checkers, static analyzers, tests, etc. we
+use keeps going up. That, indeed, means maintainers will miss more
+things (unless maintainers do more work than before). But catching
+bugs before they happen is *not* a bad thing.
 
-With the fault injection it seem like we're getting a race between 
-closing the socket and removing the netdevice.
+Perhaps we could encourage more rebasing in -next (while still giving
+credit to bots and testers) to avoid having many fixing commits
+afterwards, but that is orthogonal.
 
-This seems to be very seldom but it does not break anything.
+I really don't think we should encourage the feeling that a maintainer
+is doing a bad job if they don't catch everything on their reviews.
+Any review is worth it. Maintainers, in the end, are just the
+"guaranteed" reviewers that decide when the code looks reasonable
+enough. They should definitely not feel pressured to be perfect.
 
-Would removing the WARN(1) or replacing it with pr_warn() be ok to close 
-this issue?
-
-Best regards,
-Oliver
-
-On 23.11.20 12:58, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    c2e7554e Merge tag 'gfs2-v5.10-rc4-fixes' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=117f03ba500000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=75292221eb79ace2
-> dashboard link: https://syzkaller.appspot.com/bug?extid=381d06e0c8eaacb8706f
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> BUG: receive list entry not found for dev vxcan1, id 002, mask C00007FF
-> WARNING: CPU: 1 PID: 12946 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
-> Modules linked in:
-> CPU: 1 PID: 12946 Comm: syz-executor.1 Not tainted 5.10.0-rc4-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
-> Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 20 ac 56 8a e8 01 6c 97 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 60 ac 56 8a e8 66 af d3 00 <0f> 0b 48 8b 7c 24 28 e8 b0 25 0f 01 e9 54 fb ff ff e8 26 e0 d8 f9
-> RSP: 0018:ffffc90017e2fb38 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff8880147a8000 RSI: ffffffff8158f3c5 RDI: fffff52002fc5f59
-> RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9f2011b
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
-> R13: ffff8880254c0000 R14: 1ffff92002fc5f6e R15: 00000000c00007ff
-> FS:  0000000001ddc940(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000001b2f121000 CR3: 00000000152c0000 CR4: 00000000001506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
->   call_netdevice_notifier net/core/dev.c:1735 [inline]
->   call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
->   call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
->   unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
->   isotp_release+0x136/0x600 net/can/isotp.c:1011
->   __sock_release+0xcd/0x280 net/socket.c:596
->   sock_close+0x18/0x20 net/socket.c:1277
->   __fput+0x285/0x920 fs/file_table.c:281
->   task_work_run+0xdd/0x190 kernel/task_work.c:151
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_user_mode_loop kernel/entry/common.c:164 [inline]
->   exit_to_user_mode_prepare+0x17e/0x1a0 kernel/entry/common.c:191
->   syscall_exit_to_user_mode+0x38/0x260 kernel/entry/common.c:266
->   entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> RIP: 0033:0x417811
-> Code: 75 14 b8 03 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 a4 1a 00 00 c3 48 83 ec 08 e8 0a fc ff ff 48 89 04 24 b8 03 00 00 00 0f 05 <48> 8b 3c 24 48 89 c2 e8 53 fc ff ff 48 89 d0 48 83 c4 08 48 3d 01
-> RSP: 002b:000000000169fbf0 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000417811
-> RDX: 0000000000000000 RSI: 00000000000013b7 RDI: 0000000000000003
-> RBP: 0000000000000001 R08: 00000000acabb3b7 R09: 00000000acabb3bb
-> R10: 000000000169fcd0 R11: 0000000000000293 R12: 000000000118c9a0
-> R13: 000000000118c9a0 R14: 00000000000003e8 R15: 000000000118bf2c
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
+Cheers,
+Miguel
