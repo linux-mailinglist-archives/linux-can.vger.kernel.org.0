@@ -2,236 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF2D2C3FFB
-	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 13:25:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A612C416B
+	for <lists+linux-can@lfdr.de>; Wed, 25 Nov 2020 14:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729209AbgKYMYm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Nov 2020 07:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728046AbgKYMYk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 07:24:40 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBE2C08E9AA
-        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 04:24:39 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id s21so2132178pfu.13
-        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 04:24:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9IH0l2L/ELs04A0W/6GC4nhC0e+RvRGWJ1bAzD1+dFc=;
-        b=GyrkIL7rJc/Wrkz9wtYqXZYvGBry6qXFkQono0nmrBFDlUCiGmbX9ByD1wUhih87ZW
-         XCd/8etF0h65aGuVNHVvGVnSoIRV2cIFxWeuMsMEKDZ+SIKsK6eM3KIHPaY2Au+pxfCB
-         jFmSmO0a8jtSnIjbAi/709gkMW9hnqxggrhUNIGI/2GrlejcLn7tyz9MFlSEpE31y19Z
-         9ARaZhNBbaKZzII6ioDoEFmbbi01XI+4/fF65wWR3SGfZuCMoV2cgGUJ8Osa8sFeqdbz
-         KLllcyBsC3gtRPDbq4Yc+z3inKaZT7D05cYTb7CBHNDdR/afLH0A7E5JHrBWilMAefn4
-         uS6g==
+        id S1729637AbgKYNvU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 25 Nov 2020 08:51:20 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:53938 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725838AbgKYNvU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 08:51:20 -0500
+Received: by mail-il1-f197.google.com with SMTP id t9so1813533ilp.20
+        for <linux-can@vger.kernel.org>; Wed, 25 Nov 2020 05:51:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9IH0l2L/ELs04A0W/6GC4nhC0e+RvRGWJ1bAzD1+dFc=;
-        b=O5zBe3kBzkny1kq87ZU1chPWbSQOKEkxpu9PHf2PwYDaS4LRU8WGK7clP7q0tpkX3q
-         R5y1vgMro3mX6TlHh8+cs2vy77bya4G0y73iPWUs5eYHhPYaU8jcTypQLGsTpmU6WB8v
-         iur05ifrdW6appr4GXim4aCEOkdgzJfKrlzqgr/JgpT2bMGXlsodNHh/0p2ThS4jcYwt
-         bdXTO+/VfxIRtc5Frv2h08x/ggx1kDW70JeBU3Nw3YtWOUD2LRHD9tpOs4e+SOe1cQcr
-         2IDN0IQK4+8FMhp6nie/N+3NuzHt2uZ4lob1wNzfb3WDz7m3lVqN6QowvcaH6nsCije+
-         F8og==
-X-Gm-Message-State: AOAM531lIsk0XJpn9LvHpQemPkKwryAaK3ofoj3FLmBgkDrivbt0M11h
-        b+iE/VvTY6jY54MufxzbQLxmSfmWmi11j0tA0ZYylw==
-X-Google-Smtp-Source: ABdhPJySo35UzNwHodlreVMfJuWPwHO1z+zkcbFfSYU3Avf+sN4n16LJPBb97SBockWyJEKx3Xs8q1wCvzejZmwrmAM=
-X-Received: by 2002:a62:7905:0:b029:197:f300:5a2a with SMTP id
- u5-20020a6279050000b0290197f3005a2amr2898775pfc.30.1606307078380; Wed, 25 Nov
- 2020 04:24:38 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=oz91lyUj1R68WEu1dVaiKojIcWkJEytay+zVxaWFIvc=;
+        b=roeiD+kWA58cnLStlMjjQmC/z/xfiYTF0stsQS/LreaN29QphjiQkAnYFq4NkRhqDQ
+         IWG8OSWGSuEauYG3n48/+2Wikxr1YFcXX75yRSIokpJaA96IO/THSXiVuw/GcPOHWTEz
+         k0fOBpYHujWNil0/Ntz94zItB6KhxefH8clymBmBTV3JCfwNOxFWJg7i9MFJA8ejf6/l
+         et7+NWPI2PgiRyI6oG77rn8LZbc5DmC5wvOlXVZ99Ifqf0t0L0joRxWmZ9lhuLJ31NxF
+         6KMBvueyIfRKN8oU3RimJazVDwuk0oDqRKYBtWNPygnT73MonfpOknikelJM2pShdKkn
+         MaOg==
+X-Gm-Message-State: AOAM533lkyEE0z9bD4RcEILo8Unje/YN0jHn4D7L5sop2pvKbAMSR21e
+        bKEUGSjpw8ozvxitKLZjygdJBA/vavv33HdOAJ2iN+5a/XjD
+X-Google-Smtp-Source: ABdhPJxTaZDFdE+wuyS+L4vT57rz7AKDgRPXgcLbABypoLQW9FA4vh0IYJPFYRmsuoG/Z9uqRtVzWfvvEpnBOta65UEdOkky4bJL
 MIME-Version: 1.0
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com>
- <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com>
- <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com>
- <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com>
- <20201123130348.GA3119@embeddedor> <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com>
- <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
-In-Reply-To: <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 25 Nov 2020 04:24:27 -0800
-Message-ID: <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for Clang
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
-        linux-integrity@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
+X-Received: by 2002:a05:6638:d4e:: with SMTP id d14mr3446791jak.26.1606312278807;
+ Wed, 25 Nov 2020 05:51:18 -0800 (PST)
+Date:   Wed, 25 Nov 2020 05:51:18 -0800
+In-Reply-To: <00000000000041019205b4c4e9ad@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c6d7a205b4eeb89b@google.com>
+Subject: Re: BUG: receive list entry not found for dev vxcan1, id 002, mask C00007FF
+From:   syzbot <syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 11:05 PM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> On Tue, 2020-11-24 at 13:32 -0800, Kees Cook wrote:
-> > We already enable -Wimplicit-fallthrough globally, so that's not the
-> > discussion. The issue is that Clang is (correctly) even more strict
-> > than GCC for this, so these are the remaining ones to fix for full
-> > Clang coverage too.
-> >
-> > People have spent more time debating this already than it would have
-> > taken to apply the patches. :)
->
-> You mean we've already spent 90% of the effort to come this far so we
-> might as well go the remaining 10% because then at least we get some
-> return? It's certainly a clinching argument in defence procurement ...
+syzbot has found a reproducer for the following issue on:
 
-So developers and distributions using Clang can't have
--Wimplicit-fallthrough enabled because GCC is less strict (which has
-been shown in this thread to lead to bugs)?  We'd like to have nice
-things too, you know.
+HEAD commit:    470dfd80 lan743x: replace polling loop by wait_event_timeo..
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=107c26a5500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=df65150a33f23d8c
+dashboard link: https://syzkaller.appspot.com/bug?extid=381d06e0c8eaacb8706f
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bcd669500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ecad3e500000
 
-I even agree that most of the churn comes from
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com
 
-case 0:
-  ++x;
-default:
-  break;
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004442a9
+RDX: 0000000000000018 RSI: 0000000020000000 RDI: 0000000000000004
+RBP: 00007ffc870fdef0 R08: 0000000000000001 R09: 0000000001bbbbbb
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc870fdf00
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+------------[ cut here ]------------
+BUG: receive list entry not found for dev vxcan1, id 002, mask C00007FF
+WARNING: CPU: 0 PID: 8713 at net/can/af_can.c:546 can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
+Modules linked in:
+CPU: 0 PID: 8713 Comm: syz-executor284 Not tainted 5.10.0-rc4-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:can_rx_unregister+0x5a4/0x700 net/can/af_can.c:546
+Code: 8b 7c 24 78 44 8b 64 24 68 49 c7 c5 e0 de 56 8a e8 51 d3 95 f9 44 89 f9 44 89 e2 4c 89 ee 48 c7 c7 20 df 56 8a e8 a6 76 d3 00 <0f> 0b 48 8b 7c 24 28 e8 40 e9 0e 01 e9 54 fb ff ff e8 66 db d7 f9
+RSP: 0018:ffffc90001b2fb38 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888014db8000 RSI: ffffffff8158f3c5 RDI: fffff52000365f59
+RBP: 0000000000000118 R08: 0000000000000001 R09: ffff8880b9e30627
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+R13: ffff8880261f0000 R14: 1ffff92000365f6e R15: 00000000c00007ff
+FS:  0000000000807880(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000004bdfc4 CR3: 0000000014c7c000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ isotp_notifier+0x2a7/0x540 net/can/isotp.c:1303
+ call_netdevice_notifier net/core/dev.c:1735 [inline]
+ call_netdevice_unregister_notifiers+0x156/0x1c0 net/core/dev.c:1763
+ call_netdevice_unregister_net_notifiers net/core/dev.c:1791 [inline]
+ unregister_netdevice_notifier+0xcd/0x170 net/core/dev.c:1870
+ isotp_release+0x136/0x600 net/can/isotp.c:1011
+ __sock_release+0xcd/0x280 net/socket.c:596
+ sock_close+0x18/0x20 net/socket.c:1255
+ __fput+0x285/0x920 fs/file_table.c:281
+ task_work_run+0xdd/0x190 kernel/task_work.c:151
+ tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:164 [inline]
+ exit_to_user_mode_prepare+0x17e/0x1a0 kernel/entry/common.c:191
+ syscall_exit_to_user_mode+0x38/0x260 kernel/entry/common.c:266
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x403b20
+Code: 01 f0 ff ff 0f 83 40 0d 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 83 3d 6d bc 2d 00 00 75 14 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff ff 0f 83 14 0d 00 00 c3 48 83 ec 08 e8 7a 02 00 00
+RSP: 002b:00007ffc870fdee8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000403b20
+RDX: 0000000000000018 RSI: 0000000020000000 RDI: 0000000000000004
+RBP: 00007ffc870fdef0 R08: 0000000000000001 R09: 0000000001bbbbbb
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffc870fdf00
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
 
-which I have a patch for: https://reviews.llvm.org/D91895.  I agree
-that can never lead to bugs.  But that's not the sole case of this
-series, just most of them.
-
-Though, note how the reviewer (C++ spec editor and clang front end
-owner) in https://reviews.llvm.org/D91895 even asks in that review how
-maybe a new flag would be more appropriate for a watered
-down/stylistic variant of the existing behavior.  And if the current
-wording of Documentation/process/deprecated.rst around "fallthrough"
-is a straightforward rule of thumb, I kind of agree with him.
-
->
-> > This is about robustness and language wrangling. It's a big code-
-> > base, and this is the price of our managing technical debt for
-> > permanent robustness improvements. (The numbers I ran from Gustavo's
-> > earlier patches were that about 10% of the places adjusted were
-> > identified as legitimate bugs being fixed. This final series may be
-> > lower, but there are still bugs being found from it -- we need to
-> > finish this and shut the door on it for good.)
->
-> I got my six patches by analyzing the lwn.net report of the fixes that
-> was cited which had 21 of which 50% didn't actually change the emitted
-> code, and 25% didn't have a user visible effect.
->
-> But the broader point I'm making is just because the compiler people
-> come up with a shiny new warning doesn't necessarily mean the problem
-
-That's not what this is though; you're attacking a strawman.  I'd
-encourage you to bring that up when that actually occurs, unlike this
-case since it's actively hindering getting -Wimplicit-fallthrough
-enabled for Clang.  This is not a shiny new warning; it's already on
-for GCC and has existed in both compilers for multiple releases.
-
-And I'll also note that warnings are warnings and not errors because
-they cannot be proven to be bugs in 100% of cases, but they have led
-to bugs in the past.  They require a human to review their intent and
-remove ambiguities.  If 97% of cases would end in a break ("Expert C
-Programming: Deep C Secrets" - Peter van der Linden), then it starts
-to look to me like a language defect; certainly an incorrectly chosen
-default.  But the compiler can't know those 3% were intentional,
-unless you're explicit for those exceptional cases.
-
-> it's detecting is one that causes us actual problems in the code base.
-> I'd really be happier if we had a theory about what classes of CVE or
-> bug we could eliminate before we embrace the next new warning.
-
-We don't generally file CVEs and waiting for them to occur might be
-too reactive, but I agree that pointing to some additional
-documentation in commit messages about how a warning could lead to a
-bug would make it clearer to reviewers why being able to enable it
-treewide, even if there's no bug in their particular subsystem, is in
-the general interest of the commons.
-
-On Mon, Nov 23, 2020 at 7:58 AM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> We're also complaining about the inability to recruit maintainers:
->
-> https://www.theregister.com/2020/06/30/hard_to_find_linux_maintainers_says_torvalds/
->
-> And burn out:
->
-> http://antirez.com/news/129
->
-> The whole crux of your argument seems to be maintainers' time isn't
-> important so we should accept all trivial patches ... I'm pushing back
-> on that assumption in two places, firstly the valulessness of the time
-> and secondly that all trivial patches are valuable.
-
-It's critical to the longevity of any open source project that there
-are not single points of failure.  If someone is not expendable or
-replaceable (or claims to be) then that's a risk to the project and a
-bottleneck.  Not having a replacement in training or some form of
-redundancy is short sighted.
-
-If trivial patches are adding too much to your workload, consider
-training a co-maintainer or asking for help from one of your reviewers
-whom you trust.  I don't doubt it's hard to find maintainers, but
-existing maintainers should go out of their way to entrust
-co-maintainers especially when they find their workload becomes too
-high.  And reviewing/picking up trivial patches is probably a great
-way to get started.  If we allow too much knowledge of any one
-subsystem to collect with one maintainer, what happens when that
-maintainer leaves the community (which, given a finite lifespan, is an
-inevitability)?
--- 
-Thanks,
-~Nick Desaulniers
