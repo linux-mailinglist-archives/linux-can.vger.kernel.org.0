@@ -2,136 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A6F2C4C30
-	for <lists+linux-can@lfdr.de>; Thu, 26 Nov 2020 01:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A2C2C5222
+	for <lists+linux-can@lfdr.de>; Thu, 26 Nov 2020 11:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728771AbgKZAap (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 25 Nov 2020 19:30:45 -0500
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:42610 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgKZAao (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 25 Nov 2020 19:30:44 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 742A42A495;
-        Wed, 25 Nov 2020 19:30:37 -0500 (EST)
-Date:   Thu, 26 Nov 2020 11:30:36 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@lists.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
-        linux-integrity@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [Intel-wired-lan] [PATCH 000/141] Fix fall-through warnings for
- Clang
-In-Reply-To: <CAKwvOdna5Zj_O=sB7Q0jHZX0BJSaakX=ZyftwQ_3=L3-ZB54XQ@mail.gmail.com>
-Message-ID: <alpine.LNX.2.23.453.2011261031290.6@nippy.intranet>
-References: <202011201129.B13FDB3C@keescook> <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com> <202011220816.8B6591A@keescook> <9b57fd4914b46f38d54087d75e072d6e947cb56d.camel@HansenPartnership.com> <ca071decb87cc7e905411423c05a48f9fd2f58d7.camel@perches.com>
- <0147972a72bc13f3629de8a32dee6f1f308994b5.camel@HansenPartnership.com> <d8d1e9add08cdd4158405e77762d4946037208f8.camel@perches.com> <dbd2cb703ed9eefa7dde9281ea26ab0f7acc8afe.camel@HansenPartnership.com> <20201123130348.GA3119@embeddedor>
- <8f5611bb015e044fa1c0a48147293923c2d904e4.camel@HansenPartnership.com> <202011241327.BB28F12F6@keescook> <a841536fe65bb33f1c72ce2455a6eb47a0107565.camel@HansenPartnership.com> <CAKwvOdkGBn7nuWTAqrORMeN1G+w3YwBfCqqaRD2nwvoAXKi=Aw@mail.gmail.com>
- <alpine.LNX.2.23.453.2011260750300.6@nippy.intranet> <CAKwvOdna5Zj_O=sB7Q0jHZX0BJSaakX=ZyftwQ_3=L3-ZB54XQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S2388106AbgKZKel (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Nov 2020 05:34:41 -0500
+Received: from mailout1.samsung.com ([203.254.224.24]:57251 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388041AbgKZKek (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Nov 2020 05:34:40 -0500
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201126103436epoutp01473a733d8caea5796390e19168e38f13~LCFp9Du2C0812508125epoutp01a
+        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 10:34:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201126103436epoutp01473a733d8caea5796390e19168e38f13~LCFp9Du2C0812508125epoutp01a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1606386876;
+        bh=SLA+YxSxwuaVy5M4r5sM0kRP4lwMguF/Prn+O9V/IEI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=qt2D70inCTC4LDmk5lr1eTgqho36/gz9LtKosz7MHBS63vH/CMBYhMNSHGRNM6oaI
+         uJy5x5Ud3dVv5OlIAHDy4LzZismHMzGR5ZLjHb8Ikqd6JdJu8sOKhqSgsxXw3g1/cr
+         6aPkj512U36Tet8UnvK+LvssHssOp2B8wWwYkXp4=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20201126103436epcas5p180b833cd843d91f42f7321724051be5d~LCFpNe70L2350023500epcas5p1T;
+        Thu, 26 Nov 2020 10:34:36 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        2F.25.33964.BB48FBF5; Thu, 26 Nov 2020 19:34:35 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20201126045221epcas5p46f00cd452b8023262f5556e6f4567352~K9a1ZhjFi0428904289epcas5p4b;
+        Thu, 26 Nov 2020 04:52:21 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20201126045221epsmtrp29075bc18fcb1d5b52cbde980e22b689d~K9a1Ysv8o2791927919epsmtrp2J;
+        Thu, 26 Nov 2020 04:52:21 +0000 (GMT)
+X-AuditID: b6c32a4b-eb7ff700000184ac-76-5fbf84bb50d7
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D5.A0.13470.5843FBF5; Thu, 26 Nov 2020 13:52:21 +0900 (KST)
+Received: from ubuntu.sa.corp.samsungelectronics.net (unknown
+        [107.108.83.125]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201126045220epsmtip1a5102e03d1a816fa0344453580167107~K9azy9Xka1656716567epsmtip1C;
+        Thu, 26 Nov 2020 04:52:20 +0000 (GMT)
+From:   Pankaj Sharma <pankj.sharma@samsung.com>
+To:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     sriram.dash@samsung.com, dmurphy@ti.com, wg@grandegger.com,
+        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        pankaj.dubey@samsung.com, Pankaj Sharma <pankj.sharma@samsung.com>
+Subject: [PATCH] can: m_can: add support for bosch mcan version 3.3.0
+Date:   Thu, 26 Nov 2020 10:21:42 +0530
+Message-Id: <1606366302-5520-1-git-send-email-pankj.sharma@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrEIsWRmVeSWpSXmKPExsWy7bCmhu7ulv3xBh9vmVvMOd/CYtF9egur
+        xYVtfawWq75PZba4vGsOm8X6RVNYLI4tELNYtPULu8XyrvvMFjfWs1ssvbeT1YHbY8vKm0we
+        Hy/dZvTYtKqTzaP/r4FH35ZVjB7Hb2xn8vi8SS6APYrLJiU1J7MstUjfLoErY+n8t2wFJ9kr
+        jv/bwdbAuJyti5GTQ0LAROLVp8vsXYxcHEICuxkl/myZzwLhfGKUOPd1KlTmG6NEy4r7rDAt
+        OzbPg6rayyhx6fEsVginhUni94zvYFVsAnoSl95PBlsiIhAqsax3AlicWeAAo8SvnzldjBwc
+        wgKuEo2nSkDCLAKqEucPPWIHsXkF3CVm/u2EWiYncfNcJzPIfAmBa+wS154cY4dIuEgcW3yd
+        EcIWlnh1fAtUXEri87u9UM9lSyzc3c8CsktCoEKibYYwRNhe4sCVOWBhZgFNifW79CHCshJT
+        T61jgriST6L39xMmiDivxI55MLaaxNSn76C2ykjcebQZapOHxJLDV8FsIYFYiW2Xl7JOYJSd
+        hbBhASPjKkbJ1ILi3PTUYtMC47zUcr3ixNzi0rx0veT83E2M4GSh5b2D8dGDD3qHGJk4GA8x
+        SnAwK4nwugvvjRfiTUmsrEotyo8vKs1JLT7EKM3BoiTOq/TjTJyQQHpiSWp2ampBahFMlomD
+        U6qByTZn0xVO3wmL2CatzRX49e5LYPypSXl/5nLEpv3+cmN6rTnThJd2zVIsxrrft25luxzz
+        hOXl9O03rPh+KpvUJciaZLKy3fvKLb7ksJug7p8288QDajr3Mz8/EH65o+F3VkyPgIKrit+O
+        TVJTVnpfbtefkZIVsce/+fF97cKO7KonfdNyVljduchsE2x7e8NOj2uCItEXVmxJN24Qnidb
+        6Cg9NWnn2vVV/6SuuU/5+86zwin4+A7m+OsSL1bNeMqe9c38zs0XTh+MMlM+M3Z1RTvM5As6
+        J2JaqLi9ya/plEzp1C9r1oXelW+/8nnH2de9aScF906PXeH4+2PXdz6LeTL8E6K2vNxzWbt5
+        wX+9g0osxRmJhlrMRcWJAC5/IWeFAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJLMWRmVeSWpSXmKPExsWy7bCSnG6ryf54g8OTTCzmnG9hseg+vYXV
+        4sK2PlaLVd+nMltc3jWHzWL9oiksFscWiFks2vqF3WJ5131mixvr2S2W3tvJ6sDtsWXlTSaP
+        j5duM3psWtXJ5tH/18Cjb8sqRo/jN7YzeXzeJBfAHsVlk5Kak1mWWqRvl8CVsXT+W7aCk+wV
+        x//tYGtgXM7WxcjJISFgIrFj8zyWLkYuDiGB3YwSi6a9AEpwACVkJBZ/roaoEZZY+e85O0RN
+        E5PEzpe7GEESbAJ6EpfeTwYbJCIQLrFzQhcTSBGzwClGiU93VzCBDBIWcJVoPFUCUsMioCpx
+        /tAjdhCbV8BdYubfTlaIBXISN891Mk9g5FnAyLCKUTK1oDg3PbfYsMAwL7Vcrzgxt7g0L10v
+        OT93EyM49LQ0dzBuX/VB7xAjEwfjIUYJDmYlEV534b3xQrwpiZVVqUX58UWlOanFhxilOViU
+        xHlvFC6MExJITyxJzU5NLUgtgskycXBKNTAt61wQasWxRKNZcTc3+xnrxx55+zdm39Dauyj/
+        +oXZ7swWqQeaHTkd/2xeJeDxVL/u2HLNhhfOxlw9mSwe+Wl37my6dbQzeX7qma+ONYcrk09X
+        +p17qR7qGntg755zn19YLlY50V/HuNSAyVXGKfmoB1+Y+Nq9V/Vrjwe/3cg4gVXe+zy3rOVE
+        g6hdDRtXFeSt5vvN5GXPdtkl8NOOgwb9wW4b99kp+jnHKpxkbNa9qnNr2ySzLzm/uJxEWipN
+        63/paf/z/bnwUV9Iwll1ibu8tQs7QtyU9u8/5t550umC5bo5es7ip1bHnX/GGajZ0+30ZK/Y
+        t7g6h113bi/T/PqmUcltw3qNhD+hkvOMipVYijMSDbWYi4oTAffoYf+sAgAA
+X-CMS-MailID: 20201126045221epcas5p46f00cd452b8023262f5556e6f4567352
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20201126045221epcas5p46f00cd452b8023262f5556e6f4567352
+References: <CGME20201126045221epcas5p46f00cd452b8023262f5556e6f4567352@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Add support for mcan bit timing and control mode according to bosch mcan IP
+version 3.3.0
+The mcan version read from the Core Release field of CREL register would be
+33. Accordingly the properties are to be set for mcan v3.3.0
 
+Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
+---
+Depends on:
+https://marc.info/?l=linux-can&m=160624495218700&w=2
 
-On Wed, 25 Nov 2020, Nick Desaulniers wrote:
+ drivers/net/can/m_can/m_can.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> On Wed, Nov 25, 2020 at 1:33 PM Finn Thain <fthain@telegraphics.com.au> wrote:
-> >
-> > Or do you think that a codebase can somehow satisfy multiple checkers 
-> > and their divergent interpretations of the language spec?
-> 
-> Have we found any cases yet that are divergent? I don't think so. 
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 86bbbfa..7652175 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1385,6 +1385,8 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
+ 						&m_can_data_bittiming_const_31X;
+ 		break;
+ 	case 32:
++	case 33:
++		/* Support both MCAN version v3.2.x and v3.3.0 */
+ 		m_can_dev->can.bittiming_const = m_can_dev->bit_timing ?
+ 			m_can_dev->bit_timing : &m_can_bittiming_const_31X;
+ 
+-- 
+2.7.4
 
-You mean, aside from -Wimplicit-fallthrough? I'm glad you asked. How about 
--Wincompatible-pointer-types and -Wframe-larger-than?
-
-All of the following files have been affected by divergent diagnostics 
-produced by clang and gcc.
-
-arch/arm64/include/asm/neon-intrinsics.h
-arch/powerpc/xmon/Makefile
-drivers/gpu/drm/i915/Makefile
-drivers/gpu/drm/i915/i915_utils.h
-drivers/staging/media/atomisp/pci/atomisp_subdev.c
-fs/ext4/super.c
-include/trace/events/qla.h
-net/mac80211/rate.c
-tools/lib/string.c
-tools/perf/util/setup.py
-tools/scripts/Makefile.include
-
-And if I searched for 'smatch' or 'coverity' instead of 'clang' I'd 
-probably find more divergence.
-
-Here are some of the relevant commits.
-
-0738c8b5915c7eaf1e6007b441008e8f3b460443
-9c87156cce5a63735d1218f0096a65c50a7a32aa
-babaab2f473817f173a2d08e410c25abf5ed0f6b
-065e5e559555e2f100bc95792a8ef1b609bbe130
-93f56de259376d7e4fff2b2d104082e1fa66e237
-6c4798d3f08b81c2c52936b10e0fa872590c96ae
-b7a313d84e853049062011d78cb04b6decd12f5c
-093b75ef5995ea35d7f6bdb6c7b32a42a1999813
-
-And before you object, "but -Wconstant-logical-operand is a clang-only 
-warning! it can't be divergent with gcc!", consider that the special cases 
-added to deal with clang-only warnings have to be removed when gcc catches 
-up, which is more churn. Now multiply that by the number of checkers you 
-care about.
