@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB0D2C525E
-	for <lists+linux-can@lfdr.de>; Thu, 26 Nov 2020 11:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D2C2C5273
+	for <lists+linux-can@lfdr.de>; Thu, 26 Nov 2020 11:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388207AbgKZKtD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Nov 2020 05:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
+        id S1726562AbgKZKv5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Nov 2020 05:51:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730695AbgKZKtC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Nov 2020 05:49:02 -0500
+        with ESMTP id S1726162AbgKZKv5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Nov 2020 05:51:57 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4600BC0613D4
-        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 02:49:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FFD8C0613D4
+        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 02:51:57 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kiEpW-0007XA-E6; Thu, 26 Nov 2020 11:48:50 +0100
+        id 1kiEsN-0007qz-7H; Thu, 26 Nov 2020 11:51:47 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:6c67:6373:f43a:c656] (unknown [IPv6:2a03:f580:87bc:d400:6c67:6373:f43a:c656])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 85A9059C23C;
-        Thu, 26 Nov 2020 10:48:46 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A932259C242;
+        Thu, 26 Nov 2020 10:51:45 +0000 (UTC)
 Subject: Re: [PATCH] can: m_can: add support for bosch mcan version 3.3.0
 To:     Pankaj Sharma <pankj.sharma@samsung.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
@@ -96,15 +96,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <e7a65c29-d0b0-358f-fc5f-c08944ada4df@pengutronix.de>
-Date:   Thu, 26 Nov 2020 11:48:42 +0100
+Message-ID: <d0b51daa-485c-1822-9f18-165e6dec9dbf@pengutronix.de>
+Date:   Thu, 26 Nov 2020 11:51:41 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
 In-Reply-To: <1606366302-5520-1-git-send-email-pankj.sharma@samsung.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="2ZUTq0CzZzvG0vMxQHcb2Ns1fkktbDqMb"
+ boundary="KIqOMsxO131FqX30iSVGCjXN6WAa0WWg9"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,21 +114,21 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---2ZUTq0CzZzvG0vMxQHcb2Ns1fkktbDqMb
-Content-Type: multipart/mixed; boundary="R636r5YsKKEI34x1lr4my7wfAeS3nNwLo";
+--KIqOMsxO131FqX30iSVGCjXN6WAa0WWg9
+Content-Type: multipart/mixed; boundary="oTRQPdU1r2q8RpCdZg9vvpM8GaQvbK2jp";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Pankaj Sharma <pankj.sharma@samsung.com>, linux-can@vger.kernel.org,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: sriram.dash@samsung.com, dmurphy@ti.com, wg@grandegger.com,
  davem@davemloft.net, kuba@kernel.org, pankaj.dubey@samsung.com
-Message-ID: <e7a65c29-d0b0-358f-fc5f-c08944ada4df@pengutronix.de>
+Message-ID: <d0b51daa-485c-1822-9f18-165e6dec9dbf@pengutronix.de>
 Subject: Re: [PATCH] can: m_can: add support for bosch mcan version 3.3.0
 References: <CGME20201126045221epcas5p46f00cd452b8023262f5556e6f4567352@epcas5p4.samsung.com>
  <1606366302-5520-1-git-send-email-pankj.sharma@samsung.com>
 In-Reply-To: <1606366302-5520-1-git-send-email-pankj.sharma@samsung.com>
 
---R636r5YsKKEI34x1lr4my7wfAeS3nNwLo
+--oTRQPdU1r2q8RpCdZg9vvpM8GaQvbK2jp
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
@@ -140,36 +140,13 @@ n IP
 > The mcan version read from the Core Release field of CREL register woul=
 d be
 > 33. Accordingly the properties are to be set for mcan v3.3.0
-
-BTW: do you have the v3.2 and v3.1 datasheets?
-
-Marc
-
+>=20
 > Signed-off-by: Pankaj Sharma <pankj.sharma@samsung.com>
-> ---
-> Depends on:
-> https://marc.info/?l=3Dlinux-can&m=3D160624495218700&w=3D2
->=20
->  drivers/net/can/m_can/m_can.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_ca=
-n.c
-> index 86bbbfa..7652175 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1385,6 +1385,8 @@ static int m_can_dev_setup(struct m_can_classdev =
-*m_can_dev)
->  						&m_can_data_bittiming_const_31X;
->  		break;
->  	case 32:
-> +	case 33:
-> +		/* Support both MCAN version v3.2.x and v3.3.0 */
->  		m_can_dev->can.bittiming_const =3D m_can_dev->bit_timing ?
->  			m_can_dev->bit_timing : &m_can_bittiming_const_31X;
-> =20
->=20
 
+Applied to linux-can/testing
+
+tnx,
+Marc
 
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
@@ -178,23 +155,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---R636r5YsKKEI34x1lr4my7wfAeS3nNwLo--
+--oTRQPdU1r2q8RpCdZg9vvpM8GaQvbK2jp--
 
---2ZUTq0CzZzvG0vMxQHcb2Ns1fkktbDqMb
+--KIqOMsxO131FqX30iSVGCjXN6WAa0WWg9
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+/iAoACgkQqclaivrt
-76nBzAf/XHyyzgupaej+rKmUh7ymEDEAn4zKSqJ4279miEe0kL03f1FIsPd6X8pX
-HpNyJDaTGaNAjqZAgUa9TzSN3Z2QEER81iHcFj4RK6G0wyYkvQC/CJ6GKmQLKJOO
-x7Y6mVxQ8PsIEWRCttNKMcdHvyKZhkm6uZQfiJK4SoiDwIjBLmvClyWQf+D3EUkK
-ezlxRdxPEFSE8judY5yXtqTASoqec4m/B8GXtSGIHg3FEWRkkbIVwiTUPnyNnJqQ
-N4u1VfczH5g0TzMzlnIIdMwrJ82vFBCvUxGccH+LahASr9rjnC/PjTZjF9qVKiSX
-wlru0OZhSquDJWISrRJ6vVi2jrChRQ==
-=nE49
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+/iL0ACgkQqclaivrt
+76lFvgf/TKvsry0HfV9b82IalpUS1vaRUSLDCGDzsE6rV6oI+URwo1TaUEH1csRq
+6hUZTjDi+qsBX3eOQL4LFi0iLQIjnIV99xKCdCID8sfb0IOxso9WEBWl8U8VFyXm
+ZStON3fA0fRXQHT6j/+G8I62vk8G0nlj32oMJzNK68c3HZRQjEub2C6CVAKQyJXy
+A5zpwn2KVKCwHQUC0Myj/REXMCyLdfTPD6kCPro89Cbw5ckl1c4PembvTB5+Cpaf
+h0VJamXn4xVeHhJU3KXJUA7z23Zwdlmot3oP8fZyk5YC+74QcNv4ZcVazzEEfudQ
+3vKVJxaSUKg4xoo28LCVj/smAzf0BQ==
+=zrV0
 -----END PGP SIGNATURE-----
 
---2ZUTq0CzZzvG0vMxQHcb2Ns1fkktbDqMb--
+--KIqOMsxO131FqX30iSVGCjXN6WAa0WWg9--
