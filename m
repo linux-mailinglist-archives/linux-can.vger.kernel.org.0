@@ -2,49 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1552C5526
-	for <lists+linux-can@lfdr.de>; Thu, 26 Nov 2020 14:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D11D52C5560
+	for <lists+linux-can@lfdr.de>; Thu, 26 Nov 2020 14:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389732AbgKZNVw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 26 Nov 2020 08:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S2389919AbgKZNbP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 26 Nov 2020 08:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389765AbgKZNVw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Nov 2020 08:21:52 -0500
+        with ESMTP id S2389865AbgKZNbP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 26 Nov 2020 08:31:15 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0F7C0613D4
-        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 05:21:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2F4C0613D4
+        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 05:31:14 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kiHDa-00017F-Mw
-        for linux-can@vger.kernel.org; Thu, 26 Nov 2020 14:21:50 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8B11059C40C
-        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 13:21:48 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1kiHMd-0002O7-O9; Thu, 26 Nov 2020 14:31:11 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:6c67:6373:f43a:c656] (unknown [IPv6:2a03:f580:87bc:d400:6c67:6373:f43a:c656])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0887559C3F7;
-        Thu, 26 Nov 2020 13:21:47 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7e71ef41;
-        Thu, 26 Nov 2020 13:21:46 +0000 (UTC)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B08B459C451;
+        Thu, 26 Nov 2020 13:31:10 +0000 (UTC)
+Subject: Re: [net-next v2 0/5] can: mcp251xfd: improve TEF and RX path
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next v2 5/5] can: mcp251xfd: tef-path: reduce number of SPI core requests to set UINC bit
-Date:   Thu, 26 Nov 2020 14:21:44 +0100
-Message-Id: <20201126132144.351154-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201126132144.351154-1-mkl@pengutronix.de>
+        Thomas Kopp <thomas.kopp@microchip.com>
 References: <20201126132144.351154-1-mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <1eaaa5b6-5f7e-263a-6423-c5459d729689@pengutronix.de>
+Date:   Thu, 26 Nov 2020 14:31:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201126132144.351154-1-mkl@pengutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="s7kpuSHYYWy8ACjvmk5tAZf600KfbDTrt"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -53,131 +110,66 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Reduce the number of separate SPI core requests when setting the UINC bit in
-the TEF FIFO, and instead batch them up into a single SPI core request.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--s7kpuSHYYWy8ACjvmk5tAZf600KfbDTrt
+Content-Type: multipart/mixed; boundary="Jzx1mgJrsKrN2G8nxBT0qB27fPUNUPwpP";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Thomas Kopp <thomas.kopp@microchip.com>
+Message-ID: <1eaaa5b6-5f7e-263a-6423-c5459d729689@pengutronix.de>
+Subject: Re: [net-next v2 0/5] can: mcp251xfd: improve TEF and RX path
+References: <20201126132144.351154-1-mkl@pengutronix.de>
+In-Reply-To: <20201126132144.351154-1-mkl@pengutronix.de>
 
-Tested-by: Thomas Kopp <thomas.kopp@microchip.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 64 +++++++++++++++----
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  3 +
- 2 files changed, 55 insertions(+), 12 deletions(-)
+--Jzx1mgJrsKrN2G8nxBT0qB27fPUNUPwpP
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 137c827e97e0..e2c2331cb2fa 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -340,6 +340,23 @@ static void mcp251xfd_ring_init(struct mcp251xfd_priv *priv)
- 	tef_ring->head = 0;
- 	tef_ring->tail = 0;
- 
-+	/* FIFO increment TEF tail pointer */
-+	addr = MCP251XFD_REG_TEFCON;
-+	val = MCP251XFD_REG_TEFCON_UINC;
-+	len = mcp251xfd_cmd_prepare_write_reg(priv, &tef_ring->uinc_buf,
-+					      addr, val, val);
-+
-+	for (j = 0; j < ARRAY_SIZE(tef_ring->uinc_xfer); j++) {
-+		struct spi_transfer *xfer;
-+
-+		xfer = &tef_ring->uinc_xfer[j];
-+		xfer->tx_buf = &tef_ring->uinc_buf;
-+		xfer->len = len;
-+		xfer->cs_change = 1;
-+		xfer->cs_change_delay.value = 0;
-+		xfer->cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
-+	}
-+
- 	/* TX */
- 	tx_ring = priv->tx;
- 	tx_ring->head = 0;
-@@ -1231,10 +1248,8 @@ static int
- mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 			   const struct mcp251xfd_hw_tef_obj *hw_tef_obj)
- {
--	struct mcp251xfd_tx_ring *tx_ring = priv->tx;
- 	struct net_device_stats *stats = &priv->ndev->stats;
- 	u32 seq, seq_masked, tef_tail_masked;
--	int err;
- 
- 	seq = FIELD_GET(MCP251XFD_OBJ_FLAGS_SEQ_MCP2518FD_MASK,
- 			hw_tef_obj->flags);
-@@ -1255,18 +1270,9 @@ mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 					    mcp251xfd_get_tef_tail(priv),
- 					    hw_tef_obj->ts);
- 	stats->tx_packets++;
--
--	/* finally increment the TEF pointer */
--	err = regmap_update_bits(priv->map_reg, MCP251XFD_REG_TEFCON,
--				 GENMASK(15, 8),
--				 MCP251XFD_REG_TEFCON_UINC);
--	if (err)
--		return err;
--
- 	priv->tef->tail++;
--	tx_ring->tail++;
- 
--	return mcp251xfd_check_tef_tail(priv);
-+	return 0;
- }
- 
- static int mcp251xfd_tef_ring_update(struct mcp251xfd_priv *priv)
-@@ -1353,6 +1359,40 @@ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
- 	}
- 
-  out_netif_wake_queue:
-+	len = i;	/* number of handled goods TEFs */
-+	if (len) {
-+		struct mcp251xfd_tef_ring *ring = priv->tef;
-+		struct mcp251xfd_tx_ring *tx_ring = priv->tx;
-+		struct spi_transfer *last_xfer;
-+
-+		tx_ring->tail += len;
-+
-+		/* Increment the TEF FIFO tail pointer 'len' times in
-+		 * a single SPI message.
-+		 */
-+
-+		/* Note:
-+		 *
-+		 * "cs_change == 1" on the last transfer results in an
-+		 * active chip select after the complete SPI
-+		 * message. This causes the controller to interpret
-+		 * the next register access as data. Temporary set
-+		 * "cs_change" of the last transfer to "0" to properly
-+		 * deactivate the chip select at the end of the
-+		 * message.
-+		 */
-+		last_xfer = &ring->uinc_xfer[len - 1];
-+		last_xfer->cs_change = 0;
-+		err = spi_sync_transfer(priv->spi, ring->uinc_xfer, len);
-+		last_xfer->cs_change = 1;
-+		if (err)
-+			return err;
-+
-+		err = mcp251xfd_check_tef_tail(priv);
-+		if (err)
-+			return err;
-+	}
-+
- 	mcp251xfd_ecc_tefif_successful(priv);
- 
- 	if (mcp251xfd_get_tx_free(priv->tx)) {
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 299dbf72e24b..cb6398c2a560 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -504,6 +504,9 @@ struct mcp251xfd_tef_ring {
- 
- 	/* u8 obj_num equals tx_ring->obj_num */
- 	/* u8 obj_size equals sizeof(struct mcp251xfd_hw_tef_obj) */
-+
-+	union mcp251xfd_write_reg_buf uinc_buf;
-+	struct spi_transfer uinc_xfer[MCP251XFD_TX_OBJ_NUM_MAX];
- };
- 
- struct mcp251xfd_tx_ring {
--- 
-2.29.2
+On 11/26/20 2:21 PM, Marc Kleine-Budde wrote:
+> This is a series to reduce the number SPI core requests to increment th=
+e UINC
+> bit after TEF and RX handling. This is done by chaining the individual =
+UINC bit
+> changes into a single SPI message consisting of several transfers.
+>=20
+> Changes since v1:
+> - combine RX and TEF into this series
+> - add patch description for TEF patches
+> - improve wording of comments
+
+Ohh, I forgot:
+
+- added Thomas Kopp's tested-by
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
+--Jzx1mgJrsKrN2G8nxBT0qB27fPUNUPwpP--
+
+--s7kpuSHYYWy8ACjvmk5tAZf600KfbDTrt
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl+/rhoACgkQqclaivrt
+76lRAAf9GquXmMmrm832POiJg/S6pPcBepVyukfwP7Iw+kmqP6Qh4Q1GgpT7NymQ
+i4b77MHq0ZvHux1VARnx3bVj315p8/qz9eEls8mKPGgy71MCa2OZIAAWV7JHiwmr
+ePUWcEvC9eB/wc0QI4dnIdzqFLbgT95Ky2SA0OG/1vJLazqcgsOybl2I3zlukL8F
+5tjKr0F6dXV3OtSYghYb+58qt0Z3MeNSnteUtaYb19/NEgPbVd9/Bj0j1Tnuy2L9
+YOJyrhccOI+aSBFyCk8ZPU9jcVCL0of7tO3YO6mm4oA83x11YdvC4XnGytEyscJB
+n35HGgkEo+JWjOicBboQSG2fvwxFWA==
+=NE80
+-----END PGP SIGNATURE-----
+
+--s7kpuSHYYWy8ACjvmk5tAZf600KfbDTrt--
