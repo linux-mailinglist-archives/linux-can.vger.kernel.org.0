@@ -2,70 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73F32C695B
-	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 17:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354D72C6A70
+	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 18:13:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731337AbgK0Q1C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 27 Nov 2020 11:27:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47026 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731300AbgK0Q1C (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 27 Nov 2020 11:27:02 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 509E521D7A;
-        Fri, 27 Nov 2020 16:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606494421;
-        bh=2RXBZ7l1i3OanimKbEWfF/F9FByKTdx4MivKfCLvYJ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p+69W7Ndi6d7uBkdXTFsN8h8sjZB/XaQdBbz75R3L6zqd76In1WaLvd0B4U4s0mQz
-         ty7cqgorPAveDSz5PqJmGLI+JSk/Id53KHnY1YCtRzmFfpSJnF2tkw54ZGpu6jfZIf
-         zmquQivOcWPsFg7MSu3HPaklzrqmJNiFWUe8/ApQ=
-Date:   Fri, 27 Nov 2020 08:27:00 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, Dan Murphy <dmurphy@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: Re: [RESEND PATCH v2] dt-bindings: net: correct interrupt flags in
- examples
-Message-ID: <20201127082700.4a218688@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <3fafb016-5d9e-5e0f-9e5a-2421fbde3eb1@pengutronix.de>
-References: <20201026153620.89268-1-krzk@kernel.org>
-        <3fafb016-5d9e-5e0f-9e5a-2421fbde3eb1@pengutronix.de>
+        id S1731631AbgK0RNJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Nov 2020 12:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731582AbgK0RNJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Nov 2020 12:13:09 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15491C0613D1
+        for <linux-can@vger.kernel.org>; Fri, 27 Nov 2020 09:13:09 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id k11so4817745pgq.2
+        for <linux-can@vger.kernel.org>; Fri, 27 Nov 2020 09:13:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yn11WTc6kb2VuxzT0TlUqdlna9y4XWGRb8BSebw/zIE=;
+        b=Y9E7KZwNYgu+UtKmQEKvej+l8R73YAobvzahlqlDDMMUXzwHDgAAXQ4tMmXT4Q6zFh
+         q1JLmt7vqegui8FFlMbE4LZcn1AxFgYOp5IymZ+lhA9zDozyfNTSUztJ7Vd4JP47JjjQ
+         neXr3w74M/QJtWHokUbLsOtbHkSeRyvY/4c4hn8OIZ3wEtXD8ICyjnHHS5IG48cm9z7k
+         D9N1mrao8gSHQKA+sH/i7ttMBMqcj9WroV3YvrLxTyeI9St6WjRA9YpDccTrFbqA7/VH
+         PZ5TE998wxZMH48YUm3mK0I/BkwMRwV55AqiNTelNzkSXkNargLQeghplLJ4rbC8UY0R
+         o1DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yn11WTc6kb2VuxzT0TlUqdlna9y4XWGRb8BSebw/zIE=;
+        b=CYHlJiTkmvkPfqFcYgT83oB4Il88oTH9w4NlqjhLQbNJQTkkAfKcLoHnQmVndOQ0TA
+         kw3cjxZAve79PJg/1hM3EZuBNPcgjSFW4mhC7fsa96w8vIqrazDnZ16QxLsIJxUZq+fs
+         r6KDAm12Kxz4Y/CWUdDt2kR9E4gTWX1asx6emjKtQ9eYFDeMJK+h5K/8x7G00iJNdkkM
+         WJZeWh4LYhKbNxCovNH+xy6tPKoLcy1uTG5PRLDXR4mnOhtIi5iq6xFPkpNwIy/jc5su
+         pWDrrK9Xm6GDTGS47luU7wK+vZTpcYvlpr+4Kb7MY621AU1zevpR/rk2GAdsIAEIxN2B
+         Mgnw==
+X-Gm-Message-State: AOAM5327uqXvwHgJoClPHJJqa7/KrNBgzJHdUtSFEwDpw6INsTGpa7Ip
+        MxNdCz0esbRoyJ+P8MUf+Vxk8OIKmZzj
+X-Google-Smtp-Source: ABdhPJzK+IBpTOBVyErsotds+JFXeXYfAKEwvbw7DB0fvJEBS4uvbMeXeuSZUI8UC8wl889eouB2eg==
+X-Received: by 2002:a17:90a:d58e:: with SMTP id v14mr11163782pju.191.1606497188446;
+        Fri, 27 Nov 2020 09:13:08 -0800 (PST)
+Received: from localhost.localdomain ([2409:4072:88d:6f0d:1941:b53e:6208:a8c9])
+        by smtp.gmail.com with ESMTPSA id 17sm8559823pfu.180.2020.11.27.09.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Nov 2020 09:13:07 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org, thomas.kopp@microchip.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] can: mcp251xfd: Add support for internal loopback mode
+Date:   Fri, 27 Nov 2020 22:42:57 +0530
+Message-Id: <20201127171257.46040-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 27 Nov 2020 10:13:01 +0100 Marc Kleine-Budde wrote:
-> On 10/26/20 4:36 PM, Krzysztof Kozlowski wrote:
-> > GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
-> > These are simple defines so they could be used in DTS but they will not
-> > have the same meaning:
-> > 1. GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE
-> > 2. GPIO_ACTIVE_LOW  = 1 = IRQ_TYPE_EDGE_RISING
-> > 
-> > Correct the interrupt flags, assuming the author of the code wanted same
-> > logical behavior behind the name "ACTIVE_xxx", this is:
-> >   ACTIVE_LOW  => IRQ_TYPE_LEVEL_LOW
-> >   ACTIVE_HIGH => IRQ_TYPE_LEVEL_HIGH
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for tcan4x5x.txt  
-> 
-> Jakub, can you queue this patch for net/master?
+MCP251xFD supports internal loopback mode which can be used to verify
+CAN functionality in the absence of a real CAN device.
 
-Sure! Are these correct?
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Fixes: a1a8b4594f8d ("NFC: pn544: i2c: Add DTS Documentation")
-Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI driver")
-Fixes: e3b329221567 ("dt-bindings: can: tcan4x5x: Update binding to use interrupt property")
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 3297eb7ecc9c..7715b8b14f29 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -932,6 +932,8 @@ static u8 mcp251xfd_get_normal_mode(const struct mcp251xfd_priv *priv)
+ 		mode = MCP251XFD_REG_CON_MODE_LISTENONLY;
+ 	else if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
+ 		mode = MCP251XFD_REG_CON_MODE_MIXED;
++	else if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
++		mode = MCP251XFD_REG_CON_MODE_INT_LOOPBACK;
+ 	else
+ 		mode = MCP251XFD_REG_CON_MODE_CAN2_0;
+ 
+@@ -2801,7 +2803,7 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	priv->can.data_bittiming_const = &mcp251xfd_data_bittiming_const;
+ 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+ 		CAN_CTRLMODE_BERR_REPORTING | CAN_CTRLMODE_FD |
+-		CAN_CTRLMODE_FD_NON_ISO;
++		CAN_CTRLMODE_FD_NON_ISO | CAN_CTRLMODE_LOOPBACK;
+ 	priv->ndev = ndev;
+ 	priv->spi = spi;
+ 	priv->rx_int = rx_int;
+-- 
+2.25.1
+
