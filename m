@@ -2,39 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F012C6C7B
-	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 21:18:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252F32C6C79
+	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 21:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729802AbgK0URk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 27 Nov 2020 15:17:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40678 "EHLO mail.kernel.org"
+        id S1732293AbgK0UQt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Nov 2020 15:16:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729717AbgK0UQX (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        id S1727952AbgK0UQX (ORCPT <rfc822;linux-can@vger.kernel.org>);
         Fri, 27 Nov 2020 15:16:23 -0500
 Received: from kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com (unknown [163.114.132.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E06EF2222C;
-        Fri, 27 Nov 2020 19:15:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5770C221F7;
+        Fri, 27 Nov 2020 19:16:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606504550;
-        bh=CN7WnqLywT0WkIXQYyF/EnLIQ7HnDbQqgSaTlXXK8Yk=;
+        s=default; t=1606504562;
+        bh=jP8SYl2r2cDuPz994OD0FaFWL+iaJ2Tnnt/wi39a5i8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=1Ula4UQlwAVruarEm+OwgFE+LUDU1WqSDrbYP8k8R5HJ0hqSGHVzCZNsYRmtI8RLU
-         cbxfWKCmQppu0rvdhGelD2xOJ1mT7lfA6MYwGPAeCkntIrsq0mmkrQkEIk745BVcVA
-         qdPCyhUQN2MRvs5O7BkR27vA1/mdmi/+/0HJWQ10=
-Date:   Fri, 27 Nov 2020 11:15:49 -0800
+        b=VY0Gqrh9HmNBWQxR273LxbWKC2O9p2kJfB016TDz6m6ElEWQUwQWfUWiXDZKp4C9s
+         4n1VRkdojlvep6m2FK2by1kcNOeI9TT87lyxdmzBASerpQ5YEPKTaeEfqQk0gXKUx3
+         uvAGXf9i2zKt4JTHQ67c5Jf4V1ldBeibyxSEa9jQ=
+Date:   Fri, 27 Nov 2020 11:16:01 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Niels Petter <petter@ka-long.de>
-Subject: Re: [net 2/6] can: mcp251xfd: mcp251xfd_probe(): bail out if no IRQ
- was given
-Message-ID: <20201127111549.7d5d50ed@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-In-Reply-To: <20201127100301.512603-3-mkl@pengutronix.de>
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: pull-request: can 2020-11-27
+Message-ID: <20201127111601.0904f768@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <20201127100301.512603-1-mkl@pengutronix.de>
 References: <20201127100301.512603-1-mkl@pengutronix.de>
-        <20201127100301.512603-3-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -42,30 +39,22 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 27 Nov 2020 11:02:57 +0100 Marc Kleine-Budde wrote:
-> This patch add a check to the mcp251xfd_probe() function to bail out and give
-> the user a proper error message if no IRQ is specified. Otherwise the driver
-> will probe just fine but ifup will fail with a meaningless "RTNETLINK answers:
-> Invalid argument" error message.
+On Fri, 27 Nov 2020 11:02:55 +0100 Marc Kleine-Budde wrote:
+> The first patch is by me and target the gs_usb driver and fixes the endianess
+> problem with candleLight firmware.
 > 
-> Link: https://lore.kernel.org/r/20201123113522.3820052-1-mkl@pengutronix.de
-> Reported-by: Niels Petter <petter@ka-long.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Another patch by me for the mcp251xfd driver add sanity checking to bail out if
+> no IRQ is configured.
 > 
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> index 9c215f7c5f81..8a39be076e14 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> @@ -2738,6 +2738,10 @@ static int mcp251xfd_probe(struct spi_device *spi)
->  	u32 freq;
->  	int err;
->  
-> +	if (!spi->irq)
-> +		return dev_err_probe(&spi->dev, -ENXIO,
-> +				     "No IRQ specified (maybe node \"interrupts-extended\" 
+> The next three patches target the m_can driver. A patch by me removes the
+> hardcoded IRQF_TRIGGER_FALLING from the request_threaded_irq() as this clashes
+> with the trigger level specified in the DT. Further a patch by me fixes the
+> nominal bitiming tseg2 min value for modern m_can cores. Pankaj Sharma's patch
+> add support for cores version 3.3.x.
+> 
+> The last patch by Oliver Hartkopp is for af_can and converts a WARN() into a
+> pr_warn(), which is triggered by the syzkaller. It was able to create a
+> situation where the closing of a socket runs simultaneously to the notifier
+> call chain for removing the CAN network device in use.
 
-FWIW this looks like an abuse of dev_err_probe() to me. What's the point
-of calling it with a constant err which is not EPROBE_DEFER?
+Pulled, thanks!
