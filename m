@@ -2,40 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A020B2C607D
-	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 08:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 391D32C6167
+	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 10:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392694AbgK0H27 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 27 Nov 2020 02:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S1726964AbgK0JNU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Nov 2020 04:13:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392692AbgK0H27 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Nov 2020 02:28:59 -0500
+        with ESMTP id S1726515AbgK0JNT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Nov 2020 04:13:19 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E986AC0613D1
-        for <linux-can@vger.kernel.org>; Thu, 26 Nov 2020 23:28:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B27C0613D1
+        for <linux-can@vger.kernel.org>; Fri, 27 Nov 2020 01:13:19 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kiYBX-0006Rv-Hf; Fri, 27 Nov 2020 08:28:51 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:2ba:5988:109d:d012] (unknown [IPv6:2a03:f580:87bc:d400:2ba:5988:109d:d012])
+        id 1kiZoS-0001Yq-C8; Fri, 27 Nov 2020 10:13:08 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:2ba:5988:109d:d012] (2a03-f580-87bc-d400-02ba-5988-109d-d012.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:2ba:5988:109d:d012])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 39B4C59CC01;
-        Fri, 27 Nov 2020 07:28:49 +0000 (UTC)
-Subject: Re: [PATCH] can: remove WARN() statement from list operation sanity
- check
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, dvyukov@google.com,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     syzkaller-bugs@googlegroups.com,
-        syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com,
-        syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com,
-        syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com
-References: <20201126192140.14350-1-socketcan@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2188859DDCD;
+        Fri, 27 Nov 2020 09:13:05 +0000 (UTC)
+Subject: Re: [RESEND PATCH v2] dt-bindings: net: correct interrupt flags in
+ examples
+To:     Krzysztof Kozlowski <krzk@kernel.org>, Dan Murphy <dmurphy@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>
+References: <20201026153620.89268-1-krzk@kernel.org>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,15 +99,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <0c10c604-ce38-3733-a442-37945ec36075@pengutronix.de>
-Date:   Fri, 27 Nov 2020 08:28:44 +0100
+Message-ID: <3fafb016-5d9e-5e0f-9e5a-2421fbde3eb1@pengutronix.de>
+Date:   Fri, 27 Nov 2020 10:13:01 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201126192140.14350-1-socketcan@hartkopp.net>
+In-Reply-To: <20201026153620.89268-1-krzk@kernel.org>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="9RPLeXyeMzhQAmbiQqkF6twrPks5SKh9s"
+ boundary="WPNAdXqLcbuC1HxxVIpO2K9FStqHhECO9"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,50 +117,48 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---9RPLeXyeMzhQAmbiQqkF6twrPks5SKh9s
-Content-Type: multipart/mixed; boundary="nOm11dg67Ba8LZysP9h4kxABEUDMN0dBH";
+--WPNAdXqLcbuC1HxxVIpO2K9FStqHhECO9
+Content-Type: multipart/mixed; boundary="nhIrz2JXk7IYKyJomWaiIUGCeZyqAnvWP";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, dvyukov@google.com,
- netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc: syzkaller-bugs@googlegroups.com,
- syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com,
- syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com,
- syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com
-Message-ID: <0c10c604-ce38-3733-a442-37945ec36075@pengutronix.de>
-Subject: Re: [PATCH] can: remove WARN() statement from list operation sanity
- check
-References: <20201126192140.14350-1-socketcan@hartkopp.net>
-In-Reply-To: <20201126192140.14350-1-socketcan@hartkopp.net>
+To: Krzysztof Kozlowski <krzk@kernel.org>, Dan Murphy <dmurphy@ti.com>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>
+Message-ID: <3fafb016-5d9e-5e0f-9e5a-2421fbde3eb1@pengutronix.de>
+Subject: Re: [RESEND PATCH v2] dt-bindings: net: correct interrupt flags in
+ examples
+References: <20201026153620.89268-1-krzk@kernel.org>
+In-Reply-To: <20201026153620.89268-1-krzk@kernel.org>
 
---nOm11dg67Ba8LZysP9h4kxABEUDMN0dBH
+--nhIrz2JXk7IYKyJomWaiIUGCeZyqAnvWP
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/26/20 8:21 PM, Oliver Hartkopp wrote:
-> To detect potential bugs in CAN protocol implementations (double remova=
-l
-> of receiver entries) a WARN() statement has been used if no matching li=
-st
-> item was found for removal.
->=20
-> The fault injection issued by syzkaller was able to create a situation
-> where the closing of a socket runs simultaneously to the notifier call
-> chain for removing the CAN network device in use.
->=20
-> This case is very unlikely in real life but it doesn't break anything.
-> Therefore we just replace the WARN() statement with pr_warn() to
-> preserve the notification for the CAN protocol development.
->=20
-> Reported-by: syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com
-> Reported-by: syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com
-> Reported-by: syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+On 10/26/20 4:36 PM, Krzysztof Kozlowski wrote:
+> GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
+> These are simple defines so they could be used in DTS but they will not=
 
-applied to can/testing.
+> have the same meaning:
+> 1. GPIO_ACTIVE_HIGH =3D 0 =3D IRQ_TYPE_NONE
+> 2. GPIO_ACTIVE_LOW  =3D 1 =3D IRQ_TYPE_EDGE_RISING
+>=20
+> Correct the interrupt flags, assuming the author of the code wanted sam=
+e
+> logical behavior behind the name "ACTIVE_xxx", this is:
+>   ACTIVE_LOW  =3D> IRQ_TYPE_LEVEL_LOW
+>   ACTIVE_HIGH =3D> IRQ_TYPE_LEVEL_HIGH
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for tcan4x5x.txt
 
-tnx,
+Jakub, can you queue this patch for net/master?
+
 Marc
 
 --=20
@@ -168,23 +168,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---nOm11dg67Ba8LZysP9h4kxABEUDMN0dBH--
+--nhIrz2JXk7IYKyJomWaiIUGCeZyqAnvWP--
 
---9RPLeXyeMzhQAmbiQqkF6twrPks5SKh9s
+--WPNAdXqLcbuC1HxxVIpO2K9FStqHhECO9
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/AqqwACgkQqclaivrt
-76n3tQf+J+Ugcr1yT8ol4I0oUD4/0UbP4d7KNiRbun1vE1HEP8ljogDtJBBXsD5m
-xv5B7phLLm/QcMw3G0MEZQLVW5JGXWjLMUf7K19GePUTeSbI7RedJSJemyOBfBR4
-FOl2CZop9CJcE2rgEDKfUYQ9RXpKEyr9eXPYQP2xnc+pW6fFCNpGP2+hUH0ygYcN
-afUaQtygCtMN3IeEhpe2P7INhBp+Q8AVyQwQzH6eBRTk5tjt1pYgkXF9kYIFRekJ
-X0wK/VqJQQLfEVeORpEQ6wGR+rH6ppzEMowEPRXPwvDTmkhdVuKj3v3GW1tEcB+S
-KmzTC6q3mKapSb33ZOnaCEre9XPPLQ==
-=Pfvp
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/Awx0ACgkQqclaivrt
+76kqeQf/c+UWn4j8Z/CpJL4/okK0YrYiMCB8p2PuVMu4YyjQzxLxhXUF61DlovKV
+LV5MbgX1ea/V+alNkFTjbPwV7WRmbUQ8YAMreT+c9LMGEyic+8VzqKSCN1/RNFfM
+9ZX1Ar21JHTXw4iD4QdqOYQ/3HijOoLWD/RQDoUbbFk+UvfSVZXDNCoRYUCeM6QH
+oTmh7Uw0XjtYCNjdsYOC6vDuvT/rzBshQw3t0tTpAsrKHYcpsZCH0K8Z056MRdJs
+HbH/OkzT6bkmmtDSSvtOcMdakIUuptNFV5SsF+GmEzsdpE2IGlCbQzzfzW5zVpgb
+tZ5z8NBpFrWdXhqoY7QWWrf6f3JNaA==
+=WvCQ
 -----END PGP SIGNATURE-----
 
---9RPLeXyeMzhQAmbiQqkF6twrPks5SKh9s--
+--WPNAdXqLcbuC1HxxVIpO2K9FStqHhECO9--
