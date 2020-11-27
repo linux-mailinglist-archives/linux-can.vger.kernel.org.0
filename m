@@ -2,59 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252F32C6C79
-	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 21:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33EAC2C7300
+	for <lists+linux-can@lfdr.de>; Sat, 28 Nov 2020 23:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732293AbgK0UQt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 27 Nov 2020 15:16:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40682 "EHLO mail.kernel.org"
+        id S2389353AbgK1Vt6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 28 Nov 2020 16:49:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34550 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727952AbgK0UQX (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 27 Nov 2020 15:16:23 -0500
-Received: from kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com (unknown [163.114.132.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5770C221F7;
-        Fri, 27 Nov 2020 19:16:02 +0000 (UTC)
+        id S1730698AbgK0Twe (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 27 Nov 2020 14:52:34 -0500
+Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606504562;
-        bh=jP8SYl2r2cDuPz994OD0FaFWL+iaJ2Tnnt/wi39a5i8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VY0Gqrh9HmNBWQxR273LxbWKC2O9p2kJfB016TDz6m6ElEWQUwQWfUWiXDZKp4C9s
-         4n1VRkdojlvep6m2FK2by1kcNOeI9TT87lyxdmzBASerpQ5YEPKTaeEfqQk0gXKUx3
-         uvAGXf9i2zKt4JTHQ67c5Jf4V1ldBeibyxSEa9jQ=
-Date:   Fri, 27 Nov 2020 11:16:01 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: pull-request: can 2020-11-27
-Message-ID: <20201127111601.0904f768@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-In-Reply-To: <20201127100301.512603-1-mkl@pengutronix.de>
-References: <20201127100301.512603-1-mkl@pengutronix.de>
+        s=default; t=1606504836;
+        bh=Okm4BivhdxTaLdf0zCzmKzoXvA8OXm1OHkZG3ATLRk4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=0cAdeBUOpesL+nObF59w9Pnp66Acu1p6sPPfUTM9wQG5Y5BIx6v3GSfIkJB4TyUvE
+         Y8N4i6/U2tyQbwMef8G+5SGzQKKXkjW+vwWDUVr7hh4aEv4w/96ajb49wm9gRY+A5X
+         Kzc7oPTVrYsqUsTEaDXvEMOD5+K1Fg9ud7qohN0s=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: pull-request: can 2020-11-27
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160650483669.8048.14288454793256894349.git-patchwork-notify@kernel.org>
+Date:   Fri, 27 Nov 2020 19:20:36 +0000
+References: <20201127100301.512603-1-mkl@pengutronix.de>
+In-Reply-To: <20201127100301.512603-1-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 27 Nov 2020 11:02:55 +0100 Marc Kleine-Budde wrote:
+Hello:
+
+This pull request was applied to netdev/net.git (refs/heads/master):
+
+On Fri, 27 Nov 2020 11:02:55 +0100 you wrote:
+> Hello Jakub, hello David,
+> 
+> here's a pull request of 6 patches for net/master.
+> 
 > The first patch is by me and target the gs_usb driver and fixes the endianess
 > problem with candleLight firmware.
 > 
-> Another patch by me for the mcp251xfd driver add sanity checking to bail out if
-> no IRQ is configured.
-> 
-> The next three patches target the m_can driver. A patch by me removes the
-> hardcoded IRQF_TRIGGER_FALLING from the request_threaded_irq() as this clashes
-> with the trigger level specified in the DT. Further a patch by me fixes the
-> nominal bitiming tseg2 min value for modern m_can cores. Pankaj Sharma's patch
-> add support for cores version 3.3.x.
-> 
-> The last patch by Oliver Hartkopp is for af_can and converts a WARN() into a
-> pr_warn(), which is triggered by the syzkaller. It was able to create a
-> situation where the closing of a socket runs simultaneously to the notifier
-> call chain for removing the CAN network device in use.
+> [...]
 
-Pulled, thanks!
+Here is the summary with links:
+  - pull-request: can 2020-11-27
+    https://git.kernel.org/netdev/net/c/d0742c49cab5
+  - [net,2/6] can: mcp251xfd: mcp251xfd_probe(): bail out if no IRQ was given
+    https://git.kernel.org/netdev/net/c/1a1c436bad34
+  - [net,3/6] can: m_can: m_can_open(): remove IRQF_TRIGGER_FALLING from request_threaded_irq()'s flags
+    https://git.kernel.org/netdev/net/c/865f5b671b48
+  - [net,4/6] can: m_can: fix nominal bitiming tseg2 min for version >= 3.1
+    https://git.kernel.org/netdev/net/c/e3409e419253
+  - [net,5/6] can: m_can: m_can_dev_setup(): add support for bosch mcan version 3.3.0
+    https://git.kernel.org/netdev/net/c/5c7d55bded77
+  - [net,6/6] can: af_can: can_rx_unregister(): remove WARN() statement from list operation sanity check
+    https://git.kernel.org/netdev/net/c/d73ff9b7c4ea
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
