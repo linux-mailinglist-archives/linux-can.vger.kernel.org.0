@@ -2,33 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B49872C631D
-	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 11:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFB42C639D
+	for <lists+linux-can@lfdr.de>; Fri, 27 Nov 2020 12:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgK0Ka3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 27 Nov 2020 05:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726171AbgK0Ka3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 27 Nov 2020 05:30:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4393DC0613D1
-        for <linux-can@vger.kernel.org>; Fri, 27 Nov 2020 02:30:29 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kib1D-0002cc-Hr; Fri, 27 Nov 2020 11:30:23 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:2ba:5988:109d:d012] (unknown [IPv6:2a03:f580:87bc:d400:2ba:5988:109d:d012])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7E63659DF1D;
-        Fri, 27 Nov 2020 10:30:20 +0000 (UTC)
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        linux-can@vger.kernel.org
+        id S1729127AbgK0LKA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 27 Nov 2020 06:10:00 -0500
+Received: from mail-eopbgr140093.outbound.protection.outlook.com ([40.107.14.93]:8933
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725616AbgK0LJ7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 27 Nov 2020 06:09:59 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j6YYngwbCSp4jYyri/xxUKyAJjmgHNDfE07AHPEQYF4s6liwbnIjcF7Xl12apMBZuwGqjrCg2KY8SAumf5dIRaUif+gM3bXLj9KF7p1w07w6jumPklA0z8SxLO+H8w5j4BjWJJyn/uskr+aduE7+2KWuVZ/ZDgQaQHDVphfsKNARhyTGWVt06OBZK2UhCaUVm8Lx3l5VloXVgYzvirapMouqL3P97Re00jVbZbc8n3FpuY6CZJzLDgF72Te87NM2HSRZrWTWvXOBeU06Ydwy1jHROFCXwyp6BVGnnRosAV5MVvzIu/fwNaKdarN928ed8XTRq+eKhST4YSrwYYT+yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pXGeRBcgw7GvXwmobby6IW97iuOSSZtIYDiOsulzLRM=;
+ b=BeBgue7RuzpMthpBs5EMk4DPpnERa7mKm/hmPBIYuVnJD3lvr6fr9NZNZIQEIauaGrLpQPshAOolIbD35wGEwX0GZUcGzGTGbTZZ68qdShrZNzFgQemIMDpA5cYYLmznjjsh8i3d6+QrxxlcZ9z+254FXlE4iFZTRxiPZ+Hm7C0trDklWgDPlh8nYlLFShsxjDvcCrHB9rU4anCQ0RM1Ej5R6rgnX4ZLQkvVFd+boMlFWUYCQAviu7eFaw9WSbdLr8A6mCjiAOOviBD/Jii4cIrgplVLYHVco9CAEYbPM+COG9FFTggSgBJWrRJ9kvkUXtk0brDTFPTj6Xtj030a7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=victronenergy.com; dmarc=pass action=none
+ header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pXGeRBcgw7GvXwmobby6IW97iuOSSZtIYDiOsulzLRM=;
+ b=ngX63rJDEPx1YA3TuENQ6bk57LuBYwsW+2f3lwW1LfDDOtsfaLq56n1jYUONRHS5EhYuTiHqWLaHgW2Z1ugPOF1XOxUai5FaEuAn2/h/fFPUOCnhsyDqcrqqoJKRN5+Ns1mUjsCOevVeJk2lS61vME/wAP6ApZCbxurrIqsY6Vg=
+Authentication-Results: lists.infradead.org; dkim=none (message not signed)
+ header.d=none;lists.infradead.org; dmarc=none action=none
+ header.from=victronenergy.com;
+Received: from DBAPR07MB6967.eurprd07.prod.outlook.com (2603:10a6:10:192::11)
+ by DBAPR07MB6583.eurprd07.prod.outlook.com (2603:10a6:10:184::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.9; Fri, 27 Nov
+ 2020 11:09:56 +0000
+Received: from DBAPR07MB6967.eurprd07.prod.outlook.com
+ ([fe80::ad22:24cb:3fd:617c]) by DBAPR07MB6967.eurprd07.prod.outlook.com
+ ([fe80::ad22:24cb:3fd:617c%3]) with mapi id 15.20.3632.009; Fri, 27 Nov 2020
+ 11:09:56 +0000
+Subject: Re: [PATCH] can: don't count arbitration lose as an error
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
@@ -36,159 +48,129 @@ Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         "moderated list:ARM/Allwinner sunXi SoC support" 
         <linux-arm-kernel@lists.infradead.org>
 References: <20201127095941.21609-1-jhofstee@victronenergy.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH] can: don't count arbitration lose as an error
-Message-ID: <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
-Date:   Fri, 27 Nov 2020 11:30:15 +0100
+ <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
+From:   Jeroen Hofstee <jhofstee@victronenergy.com>
+Message-ID: <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
+Date:   Fri, 27 Nov 2020 12:09:54 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
+In-Reply-To: <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [2001:1c01:3bc5:4e00:e791:efe6:bf00:7133]
+X-ClientProxiedBy: AM4PR0302CA0004.eurprd03.prod.outlook.com
+ (2603:10a6:205:2::17) To DBAPR07MB6967.eurprd07.prod.outlook.com
+ (2603:10a6:10:192::11)
 MIME-Version: 1.0
-In-Reply-To: <20201127095941.21609-1-jhofstee@victronenergy.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="j3bmmDYYKWRXmZ4hh06wVTlTGSFxeJqu1"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2001:1c01:3bc5:4e00:e791:efe6:bf00:7133] (2001:1c01:3bc5:4e00:e791:efe6:bf00:7133) by AM4PR0302CA0004.eurprd03.prod.outlook.com (2603:10a6:205:2::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Fri, 27 Nov 2020 11:09:55 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3aabbc4f-87a5-4bee-97ad-08d892c4f8c1
+X-MS-TrafficTypeDiagnostic: DBAPR07MB6583:
+X-Microsoft-Antispam-PRVS: <DBAPR07MB6583616352EFD4FC0E4ED103C0F80@DBAPR07MB6583.eurprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ytndjLFrqAXkud6qRT0DImvbk3UiihcjuwB1AdJe3dmaLakLfaWBAKsJNxjIsvFo0C6pInSVsUQfqhdVYoqUMW1fy2Na6qNQgV+yJxiS274BWGvOsJ/CDy4FpYMRE8lK/xEW+AMCRz3V9b7EXad9eqvRAbKGACRj1uI+wy4OTV3NorFHRP0niPS8L8DIfi2w5GpEJdh5SPsFUfZQx3LPioL/PepXTuAKAnC0LDSdtaS4vRazwi9lCg46bKxmzrDyqmJC7fsGn1o4b0auyt0DSrvFnaahEcaXFJ08JQtaF+kJxRgNQcnteXrtVqS4TYuxe04IsNAE2Mz3a2um1lBc7nGASe3bAQrSw7P8CN5KmqlWu/feXaeu9uagMWPEnOqJ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBAPR07MB6967.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(396003)(376002)(39850400004)(136003)(5660300002)(8936002)(53546011)(52116002)(4326008)(66556008)(478600001)(86362001)(8676002)(2616005)(316002)(66946007)(83380400001)(186003)(31686004)(66476007)(16526019)(31696002)(2906002)(36756003)(6486002)(54906003)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?Tjh2NFU2SXYrdHZoYU4vOHZLUE5FNWVvaWdFV1ZYdU5ZRFVWN3hTYjhRMXJU?=
+ =?utf-8?B?ZVJYWGRsOU1hUjQvdTRuQjNvY1l1UElLSHI0cHZEM051M1NTODdWRGkwNFBt?=
+ =?utf-8?B?aEhvRmxodFJVVm54M0hqeCt3STE4cDNVdnlVVkFTcVNaVjVmb3JTRVRkcnNZ?=
+ =?utf-8?B?UmoycHBuU2dHM1phNEd3ejRwQTBhWFMyZ3lsL0NGY2xndFJmdFU5eWt6WHhE?=
+ =?utf-8?B?dGJxZGFnWllOcjU5WWZEbmRWZWd0alU1TGl2RVYyOWplTk9FVjVjdVBUUzZM?=
+ =?utf-8?B?TE5NRUtuaFMxU0hEbEdDYW9NZHo2L24zaEVHcU9hVmQwVlIzT2pwZ1lJdTM2?=
+ =?utf-8?B?N1EvUkgza0tiRzFPK1V3V1ArcjFxbVlTcG1Md1EyQjVKdkVLZ2t6VzVLM25q?=
+ =?utf-8?B?dnQrUTVMVWlic0NJQ3NpaGdXaTh6YVp1ZXd2TXgwUDgvUnJtc3JUZFo1Z0ky?=
+ =?utf-8?B?a3gza0N2bGxrOU5DZFNlM2FwdlZyR2gvOXhTTWNZbVhBUi9YNWFNZUt6R2th?=
+ =?utf-8?B?NUtrWUpFeUtGQUlURGpSNkJyNTNpNGNQYW9EVnVlQTJoTmI1WWtDUHJOL2ZM?=
+ =?utf-8?B?b1cyN3NlTlhZSm1NYXdHLzVXdVNYV2UxMnpnM3I2NWw0ZUNpWDNyWUN1SHFY?=
+ =?utf-8?B?ankxc0dXVkRVK2FySFJ5ODg4Mzc5YlloK1dOSUhnWXVmQkhlTndONHJESmhP?=
+ =?utf-8?B?amY3RG9FRjNlWXRRRklHN0l4dmJhQ1N6M2tCWno0dkI1L050cWdsdDk4TGZi?=
+ =?utf-8?B?Myt5eUNSam9jM096amM1bHplK09OOElvOE5YVXJHNVVGZy9Ya3hBanE1RXdM?=
+ =?utf-8?B?bVFhR0FSUGQ1SDdIZGJsZXpHakhQQWJlN3BMaDhKNUc0Y05wQ29xUXZ4Y0w4?=
+ =?utf-8?B?b1hPRHZtbkppS05YT2FwWFZXWS8zVDd5ZGxGRUJWK0grcTVpWTVSQWhyYU1U?=
+ =?utf-8?B?K0JoK1VVS3Y4WGphTXJFbnhzSUpyNEhXZUdhejdnclNGei8rb2dXN1hIRmFX?=
+ =?utf-8?B?bXA1ZXdjQlNuaEJXSjZnQ25UNlVYNCtNNStQSFBzZC9aNGtPVFNqWGVDZjRL?=
+ =?utf-8?B?K3NMMndETkVFaDViQTRhNXliRWtBNlJLQUt5KzhFMXVLeTFrNFRCeFlpejhk?=
+ =?utf-8?B?Z1F0d0tWUGJSQVNveC8yVkJjd0VQNjBjK0NTdm05TU9ySGNmcjlOT2QwWGJB?=
+ =?utf-8?B?YXg5SmpHb1VCam5DYlNMMVFlVEdVY0l1VlEzaVVOM0FSTUpqSFN4SmZXSVhs?=
+ =?utf-8?B?ZzFubFRPSVRZVEF1KzExNUZOa3RGY1ZRbitTempaR29ibmFDWkNvSXN6SjZJ?=
+ =?utf-8?B?L2VXZ2lBcjdMMnZweVhUWXhlT3piZnI3SGlUQ0FlWGQ0UjZyME9OOGVwM1FL?=
+ =?utf-8?B?VEVwVi9XN3RtVkc0SW5Objk3QUNPLzFtTnlSeW0xYzF0Q0RncFFjSzZOODhF?=
+ =?utf-8?Q?5/oXNBja?=
+X-OriginatorOrg: victronenergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3aabbc4f-87a5-4bee-97ad-08d892c4f8c1
+X-MS-Exchange-CrossTenant-AuthSource: DBAPR07MB6967.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2020 11:09:55.9528
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 60b95f08-3558-4e94-b0f8-d690c498e225
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wotaMTJoSUBI88QEuJ4EJiIP4HoPVCuj7eei3V8fuxycnbaipwFzomsr9msHc45LMNzG3RtlSPPYxOrJvvALhRoMntDFLyJL4haNqK8ilK8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR07MB6583
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---j3bmmDYYKWRXmZ4hh06wVTlTGSFxeJqu1
-Content-Type: multipart/mixed; boundary="eZCix9IOUL6pzZiWr061RcpbjJRHz2QGQ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jeroen Hofstee <jhofstee@victronenergy.com>, linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@siol.net>,
- "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
- "moderated list:ARM/Allwinner sunXi SoC support"
- <linux-arm-kernel@lists.infradead.org>
-Message-ID: <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
-Subject: Re: [PATCH] can: don't count arbitration lose as an error
-References: <20201127095941.21609-1-jhofstee@victronenergy.com>
-In-Reply-To: <20201127095941.21609-1-jhofstee@victronenergy.com>
+Hi,
 
---eZCix9IOUL6pzZiWr061RcpbjJRHz2QGQ
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+On 11/27/20 11:30 AM, Marc Kleine-Budde wrote:
+> On 11/27/20 10:59 AM, Jeroen Hofstee wrote:
+>> Losing arbitration is normal in a CAN-bus network, it means that a
+>> higher priority frame is being send and the pending message will be
+>> retried later. Hence most driver only increment arbitration_lost, but
+>> the sja1000 and sun4i driver also incremeant tx_error, causing errors
+>> to be reported on a normal functioning CAN-bus. So stop counting them
+>> as errors.
+> Sounds plausible.
+>
+>> For completeness, the Kvaser USB hybra also increments the tx_error
+>> on arbitration lose, but it does so in single shot. Since in that
+>> case the message is not retried, that behaviour is kept.
+> You mean only in one shot mode?
 
-On 11/27/20 10:59 AM, Jeroen Hofstee wrote:
-> Losing arbitration is normal in a CAN-bus network, it means that a
-> higher priority frame is being send and the pending message will be
-> retried later. Hence most driver only increment arbitration_lost, but
-> the sja1000 and sun4i driver also incremeant tx_error, causing errors
-> to be reported on a normal functioning CAN-bus. So stop counting them
-> as errors.
-
-Sounds plausible.
-
-> For completeness, the Kvaser USB hybra also increments the tx_error
-> on arbitration lose, but it does so in single shot. Since in that
-> case the message is not retried, that behaviour is kept.
-
-You mean only in one shot mode? What about one shot mode on the sja1000 c=
-ores?
-
-> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
-
-I've split this into two patches, and added Fixes: lines, and pushed this=
- for
-now to linux-can/sja1000.
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git/log/?h=3D=
-sja1000
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Yes, well at least the function is called kvaser_usb_hydra_one_shot_fail.
 
 
---eZCix9IOUL6pzZiWr061RcpbjJRHz2QGQ--
+>   What about one shot mode on the sja1000 cores?
 
---j3bmmDYYKWRXmZ4hh06wVTlTGSFxeJqu1
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+That is a good question. I guess it will be counted as error by:
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/A1TcACgkQqclaivrt
-76mVrgf/ZtRKgSyLGtYXft2v7MhmeqFAzDZ1treLG8MQe+MPmgp07zEnge3oWvtI
-y69vexkYkICW4x6xVA8aot8xuTL3iLtD1BIMgJ00DNk2fL8WMB5I/bdCs3VnLtFG
-x5AUIiyT5qJ/bgaWnQlRaFYptQyMs2k8908ltGhGqI3RGoTw4TQqvY4/r6rFUDcY
-413XV4fwhMXwr+MK417+eN9rW3wIJmMQumrcaS8Tz2tJO6iZXZvCl245iHmhy/zd
-JlkwbTHy72IJ+oOD418M79eaKEv4f7GFi1qzTcxonf+1NkwLBlxGO7BagHT5id7O
-SCEMHlCKVb9kCI8Ui4kIQI3rfHCDhA==
-=QrJa
------END PGP SIGNATURE-----
+         if (isrc & IRQ_TI) {
+             /* transmission buffer released */
+             if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
+                 !(status & SR_TCS)) {
+                 stats->tx_errors++;
+                 can_free_echo_skb(dev, 0);
+             } else {
+                 /* transmission complete */
+                 stats->tx_bytes +=
+                     priv->read_reg(priv, SJA1000_FI) & 0xf;
+                 stats->tx_packets++;
+                 can_get_echo_skb(dev, 0);
+             }
+             netif_wake_queue(dev);
+             can_led_event(dev, CAN_LED_EVENT_TX);
+         }
 
---j3bmmDYYKWRXmZ4hh06wVTlTGSFxeJqu1--
+ From the datasheet, Transmit Interrupt:
+
+"set; this bit is set whenever the transmit bufferstatus
+changes from ‘0-to-1’ (released) and the TIE bit is set
+within the interrupt enable register".
+
+I cannot test it though, since I don't have a sja1000.
+
+>
+>> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+> I've split this into two patches, and added Fixes: lines, and pushed this for
+> now to linux-can/sja1000.
+>
+Thanks, regards,
+
+Jeroen
+
+
