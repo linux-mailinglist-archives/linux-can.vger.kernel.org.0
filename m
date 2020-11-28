@@ -2,135 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8BF2C730E
-	for <lists+linux-can@lfdr.de>; Sat, 28 Nov 2020 23:13:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A3B2C730F
+	for <lists+linux-can@lfdr.de>; Sat, 28 Nov 2020 23:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387698AbgK1Vt7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S2389359AbgK1Vt7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Sat, 28 Nov 2020 16:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730273AbgK1SDS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 28 Nov 2020 13:03:18 -0500
-X-Greylist: delayed 168 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 28 Nov 2020 09:26:26 PST
-Received: from mo6-p01-ob.smtp.rzone.de (mo6-p01-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5301::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8D5C025455;
-        Sat, 28 Nov 2020 09:26:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606584383;
+        with ESMTP id S1731627AbgK1SCx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 28 Nov 2020 13:02:53 -0500
+Received: from mo6-p01-ob.smtp.rzone.de (mo6-p01-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5301::5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F68C025396
+        for <linux-can@vger.kernel.org>; Sat, 28 Nov 2020 09:44:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606585485;
         s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=5iPrgIy7xTZ+IpTz98wlm8W+JTsMsmFczF194/0sF/s=;
-        b=cz0e0RC+dXR/M8FVs3Tr6AqKV5Wb8MXQvl+VKZ6N+GTF+6yNas5SJr/TEK60RGxu+6
-        J4sGsFLwtUiGeRq8UOiugbTi+9bR768s2AQfeMXvt+Bk5xaX+z8HL6NpF/yZmG7iB4No
-        6q1IkIVgQJuh7DlS0dx2+J4DsPQ2yDQJZ4PiJVB09uWUqnj8hnJrVp+7JeHm1+D0M5IK
-        1w4AEbab/Huj02Mli4K1kcJaRKi/IQJfkl6lR6msAIkDEjUXYWWi0RnM14PichHvufqc
-        cglRSxVnWSkqQvIAm/S1Fnrx9WEOAukwp75kCCWE5jePA7ojlEG83HZvIhoufudTLxSG
-        SkGw==
+        bh=ZFHOK2tOlauqaS49BG0Iljfi89bdnQDyUR1fCDYdP+4=;
+        b=F3LpZ79gfJ0G/NAJDhF+RkqwUKImlUSj2ZLPYRy8U7WOhOUa5uV7dwndkaRgFX8MVg
+        6qsmVVw38iehHfKxeQzmjhS/jK6Px8XnKcKCu8pVJfEnJmh5t7FnBR4NJjLUasOVn/2Q
+        BZ4hl9CZ5x4MOA3KXqAFHaPoeebGs/FNC62VOYfnnZC//3aJIFZrkppYIxwrtYG0Zvpb
+        R1wyUVsmPSy68xziwn3KDjaZE+Bd9dDyAmnBWJiIUq0Yrt5YVHdk8C/I5riMdoW1o6OV
+        2CqZrvka60F5r8yDolKILXZCR55mzmuetNuTSd2mco6ZNc3d0UyyYq/L4IQ+CK13OX64
+        l9Bw==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR+J8xuzl0="
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.10.177]
         by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwASHNKzj1
+        with ESMTPSA id n07f3bwASHiezk6
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Sat, 28 Nov 2020 18:23:20 +0100 (CET)
-Subject: Re: [PATCH] can: don't count arbitration lose as an error
+        Sat, 28 Nov 2020 18:44:40 +0100 (CET)
+Subject: Re: rx-dropped increases if the can module is not loaded (yet)
 To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "moderated list:ARM/Allwinner sunXi SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20201127095941.21609-1-jhofstee@victronenergy.com>
- <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
- <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <269cc265-272e-6b57-0f95-90a3bd66aea3@victronenergy.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <042ad21c-e238-511b-1282-2ea226e572ff@hartkopp.net>
-Date:   Sat, 28 Nov 2020 18:23:15 +0100
+Message-ID: <438db92e-692a-5fcf-db97-7ba3a51c97be@hartkopp.net>
+Date:   Sat, 28 Nov 2020 18:44:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
+In-Reply-To: <269cc265-272e-6b57-0f95-90a3bd66aea3@victronenergy.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 27.11.20 17:09, Jeroen Hofstee wrote:
 
+> Since it took me a while to figure it out, it might be worthwhile to share.
+> If a CAN-bus network interface is first set to up and only later used,
+> the messages received in the meantime are counted by [1] as dropped.
 
-On 27.11.20 12:09, Jeroen Hofstee wrote:
-> Hi,
-> 
-> On 11/27/20 11:30 AM, Marc Kleine-Budde wrote:
->> On 11/27/20 10:59 AM, Jeroen Hofstee wrote:
->>> Losing arbitration is normal in a CAN-bus network, it means that a
->>> higher priority frame is being send and the pending message will be
->>> retried later. Hence most driver only increment arbitration_lost, but
->>> the sja1000 and sun4i driver also incremeant tx_error, causing errors
->>> to be reported on a normal functioning CAN-bus. So stop counting them
->>> as errors.
->> Sounds plausible.
->>
->>> For completeness, the Kvaser USB hybra also increments the tx_error
->>> on arbitration lose, but it does so in single shot. Since in that
->>> case the message is not retried, that behaviour is kept.
->> You mean only in one shot mode?
-> 
-> Yes, well at least the function is called kvaser_usb_hydra_one_shot_fail.
-> 
-> 
->>   What about one shot mode on the sja1000 cores?
-> 
-> 
-> That is a good question. I guess it will be counted as error by:
-> 
->          if (isrc & IRQ_TI) {
->              /* transmission buffer released */
->              if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
->                  !(status & SR_TCS)) {
->                  stats->tx_errors++;
->                  can_free_echo_skb(dev, 0);
->              } else {
->                  /* transmission complete */
->                  stats->tx_bytes +=
->                      priv->read_reg(priv, SJA1000_FI) & 0xf;
->                  stats->tx_packets++;
->                  can_get_echo_skb(dev, 0);
->              }
->              netif_wake_queue(dev);
->              can_led_event(dev, CAN_LED_EVENT_TX);
->          }
-> 
->  From the datasheet, Transmit Interrupt:
-> 
-> "set; this bit is set whenever the transmit bufferstatus
-> changes from ‘0-to-1’ (released) and the TIE bit is set
-> within the interrupt enable register".
-> 
-> I cannot test it though, since I don't have a sja1000.
+Interesting! But makes sense and is consistent: When the CAN frame is 
+not processed by the network layer is is just dropped in the rx path.
 
-I have a PCAN-ExpressCard 34 here, which should make it in a test setup 
-as it acts as a PCI attached SJA1000.
+> If the the can module is modprobed before the interface is upped, this
+> is no longer the case.
+> 
+> Perhaps it saves someone some time.
 
-Will take a look at that arbitration lost behaviour on Monday. A really 
-interesting detail!
+So far we have not documented these details for the existing netdev 
+statistics. Do you think this is needed when the behaviour, which leads 
+to rx-dropped, is common for other netdevs also?
 
-Best,
+Regards,
 Oliver
 
 > 
->>
->>> Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
->> I've split this into two patches, and added Fixes: lines, and pushed 
->> this for
->> now to linux-can/sja1000.
->>
-> Thanks, regards,
-> 
-> Jeroen
-> 
+> [1] https://github.com/torvalds/linux/blob/v5.9/net/core/dev.c#L5257
 > 
