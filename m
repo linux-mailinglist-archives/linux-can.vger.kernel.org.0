@@ -2,76 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A3B2C730F
-	for <lists+linux-can@lfdr.de>; Sat, 28 Nov 2020 23:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CFFF2C7673
+	for <lists+linux-can@lfdr.de>; Sat, 28 Nov 2020 23:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389359AbgK1Vt7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 28 Nov 2020 16:49:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731627AbgK1SCx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 28 Nov 2020 13:02:53 -0500
-Received: from mo6-p01-ob.smtp.rzone.de (mo6-p01-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5301::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F68C025396
-        for <linux-can@vger.kernel.org>; Sat, 28 Nov 2020 09:44:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606585485;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ZFHOK2tOlauqaS49BG0Iljfi89bdnQDyUR1fCDYdP+4=;
-        b=F3LpZ79gfJ0G/NAJDhF+RkqwUKImlUSj2ZLPYRy8U7WOhOUa5uV7dwndkaRgFX8MVg
-        6qsmVVw38iehHfKxeQzmjhS/jK6Px8XnKcKCu8pVJfEnJmh5t7FnBR4NJjLUasOVn/2Q
-        BZ4hl9CZ5x4MOA3KXqAFHaPoeebGs/FNC62VOYfnnZC//3aJIFZrkppYIxwrtYG0Zvpb
-        R1wyUVsmPSy68xziwn3KDjaZE+Bd9dDyAmnBWJiIUq0Yrt5YVHdk8C/I5riMdoW1o6OV
-        2CqZrvka60F5r8yDolKILXZCR55mzmuetNuTSd2mco6ZNc3d0UyyYq/L4IQ+CK13OX64
-        l9Bw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR+J8xuzl0="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.177]
-        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwASHiezk6
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Sat, 28 Nov 2020 18:44:40 +0100 (CET)
-Subject: Re: rx-dropped increases if the can module is not loaded (yet)
-To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <269cc265-272e-6b57-0f95-90a3bd66aea3@victronenergy.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <438db92e-692a-5fcf-db97-7ba3a51c97be@hartkopp.net>
-Date:   Sat, 28 Nov 2020 18:44:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1731318AbgK1Wty (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 28 Nov 2020 17:49:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729763AbgK1Wty (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 28 Nov 2020 17:49:54 -0500
+Received: from kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com (unknown [163.114.132.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8DDA6207CD;
+        Sat, 28 Nov 2020 22:49:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606603754;
+        bh=nTcYVx1CXNipNWJj1PJLSt1g2sysd3r+3pEQrzOYWgg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iNZYP58ddvMEZPGU4oCTS8Kev4laQhA5Pl2zkv27rXKDPXiBcDUg8y0GIp08axExQ
+         /IOfOU/Qso78Wva603mnbHLMEkv1udfRjGHQoSgzjm3d58aO0U5vcR3ziHVrcl9WDz
+         s6H4LvC2bH8cmoti6oYa5Coa3X9KgS58sB+eK93k=
+Date:   Sat, 28 Nov 2020 14:49:12 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, Dan Murphy <dmurphy@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [RESEND PATCH v2] dt-bindings: net: correct interrupt flags in
+ examples
+Message-ID: <20201128144912.5d5a9430@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <4fe99bbc-4037-8542-449c-86a30fb1190a@pengutronix.de>
+References: <20201026153620.89268-1-krzk@kernel.org>
+        <3fafb016-5d9e-5e0f-9e5a-2421fbde3eb1@pengutronix.de>
+        <20201127082700.4a218688@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <4fe99bbc-4037-8542-449c-86a30fb1190a@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <269cc265-272e-6b57-0f95-90a3bd66aea3@victronenergy.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 27.11.20 17:09, Jeroen Hofstee wrote:
-
-> Since it took me a while to figure it out, it might be worthwhile to share.
-> If a CAN-bus network interface is first set to up and only later used,
-> the messages received in the meantime are counted by [1] as dropped.
-
-Interesting! But makes sense and is consistent: When the CAN frame is 
-not processed by the network layer is is just dropped in the rx path.
-
-> If the the can module is modprobed before the interface is upped, this
-> is no longer the case.
+On Fri, 27 Nov 2020 20:35:55 +0100 Marc Kleine-Budde wrote:
+> On 11/27/20 5:27 PM, Jakub Kicinski wrote:
+> > On Fri, 27 Nov 2020 10:13:01 +0100 Marc Kleine-Budde wrote:  
+> >> On 10/26/20 4:36 PM, Krzysztof Kozlowski wrote:  
+> >>> GPIO_ACTIVE_x flags are not correct in the context of interrupt flags.
+> >>> These are simple defines so they could be used in DTS but they will not
+> >>> have the same meaning:
+> >>> 1. GPIO_ACTIVE_HIGH = 0 = IRQ_TYPE_NONE
+> >>> 2. GPIO_ACTIVE_LOW  = 1 = IRQ_TYPE_EDGE_RISING
+> >>>
+> >>> Correct the interrupt flags, assuming the author of the code wanted same
+> >>> logical behavior behind the name "ACTIVE_xxx", this is:
+> >>>   ACTIVE_LOW  => IRQ_TYPE_LEVEL_LOW
+> >>>   ACTIVE_HIGH => IRQ_TYPE_LEVEL_HIGH
+> >>>
+> >>> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> >>> Acked-by: Rob Herring <robh@kernel.org>
+> >>> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for tcan4x5x.txt    
+> >>
+> >> Jakub, can you queue this patch for net/master?  
+> > 
+> > Sure! Are these correct?
+> > 
+> > Fixes: a1a8b4594f8d ("NFC: pn544: i2c: Add DTS Documentation")
+> > Fixes: 6be88670fc59 ("NFC: nxp-nci_i2c: Add I2C support to NXP NCI driver")  
 > 
-> Perhaps it saves someone some time.
+> ACK:
 
-So far we have not documented these details for the existing netdev 
-statistics. Do you think this is needed when the behaviour, which leads 
-to rx-dropped, is common for other netdevs also?
-
-Regards,
-Oliver
-
-> 
-> [1] https://github.com/torvalds/linux/blob/v5.9/net/core/dev.c#L5257
-> 
+Applied to net and queued for stable, thanks!
