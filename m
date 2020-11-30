@@ -2,43 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0B52C846B
-	for <lists+linux-can@lfdr.de>; Mon, 30 Nov 2020 13:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0852A2C846C
+	for <lists+linux-can@lfdr.de>; Mon, 30 Nov 2020 13:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726226AbgK3Mxz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 Nov 2020 07:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
+        id S1726258AbgK3Mx4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 30 Nov 2020 07:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726220AbgK3Mxz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Nov 2020 07:53:55 -0500
+        with ESMTP id S1726063AbgK3Mx4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Nov 2020 07:53:56 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8486BC0613D3
-        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 04:53:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D04BC0617A6
+        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 04:53:15 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kjig5-00040i-1Y
+        id 1kjig5-00041I-Sm
         for linux-can@vger.kernel.org; Mon, 30 Nov 2020 13:53:13 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 5661559F8F7
+        by bjornoya.blackshift.org (Postfix) with SMTP id C468E59F8FD
         for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 12:53:10 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 75F0E59F8E7;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9208A59F8E9;
         Mon, 30 Nov 2020 12:53:09 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 81ee56de;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 37dadc1d;
         Mon, 30 Nov 2020 12:53:08 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 1/5] can: m_can: tcan4x5x_can_probe(): fix error path: remove erroneous clk_disable_unprepare()
-Date:   Mon, 30 Nov 2020 13:53:03 +0100
-Message-Id: <20201130125307.218258-2-mkl@pengutronix.de>
+        kernel@pengutronix.de, Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [net 2/5] can: sja1000: sja1000_err(): don't count arbitration lose as an error
+Date:   Mon, 30 Nov 2020 13:53:04 +0100
+Message-Id: <20201130125307.218258-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201130125307.218258-1-mkl@pengutronix.de>
 References: <20201130125307.218258-1-mkl@pengutronix.de>
@@ -52,57 +53,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The clocks mcan_class->cclk and mcan_class->hclk are not prepared by any call
-during tcan4x5x_can_probe(), so remove erroneous clk_disable_unprepare() on
-them.
+From: Jeroen Hofstee <jhofstee@victronenergy.com>
 
-Fixes: 5443c226ba91 ("can: tcan4x5x: Add tcan4x5x driver to the kernel")
-Link: http://lore.kernel.org/r/20201130114252.215334-1-mkl@pengutronix.de
+Losing arbitration is normal in a CAN-bus network, it means that a higher
+priority frame is being send and the pending message will be retried later.
+Hence most driver only increment arbitration_lost, but the sja1000 driver also
+incremeants tx_error, causing errors to be reported on a normal functioning
+CAN-bus. So stop counting them as errors.
+
+Fixes: 8935f57e68c4 ("can: sja1000: fix network statistics update")
+Signed-off-by: Jeroen Hofstee <jhofstee@victronenergy.com>
+Link: https://lore.kernel.org/r/20201127095941.21609-1-jhofstee@victronenergy.com
+[mkl: split into two seperate patches]
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/tcan4x5x.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ drivers/net/can/sja1000/sja1000.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-index e5d7d85e0b6d..7347ab39c5b6 100644
---- a/drivers/net/can/m_can/tcan4x5x.c
-+++ b/drivers/net/can/m_can/tcan4x5x.c
-@@ -489,18 +489,18 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 	spi->bits_per_word = 32;
- 	ret = spi_setup(spi);
- 	if (ret)
--		goto out_clk;
-+		goto out_m_can_class_free_dev;
- 
- 	priv->regmap = devm_regmap_init(&spi->dev, &tcan4x5x_bus,
- 					&spi->dev, &tcan4x5x_regmap);
- 	if (IS_ERR(priv->regmap)) {
- 		ret = PTR_ERR(priv->regmap);
--		goto out_clk;
-+		goto out_m_can_class_free_dev;
+diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
+index 9f107798f904..25a4d7d0b349 100644
+--- a/drivers/net/can/sja1000/sja1000.c
++++ b/drivers/net/can/sja1000/sja1000.c
+@@ -474,7 +474,6 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 		netdev_dbg(dev, "arbitration lost interrupt\n");
+ 		alc = priv->read_reg(priv, SJA1000_ALC);
+ 		priv->can.can_stats.arbitration_lost++;
+-		stats->tx_errors++;
+ 		cf->can_id |= CAN_ERR_LOSTARB;
+ 		cf->data[0] = alc & 0x1f;
  	}
- 
- 	ret = tcan4x5x_power_enable(priv->power, 1);
- 	if (ret)
--		goto out_clk;
-+		goto out_m_can_class_free_dev;
- 
- 	ret = tcan4x5x_parse_config(mcan_class);
- 	if (ret)
-@@ -519,11 +519,6 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
- 
- out_power:
- 	tcan4x5x_power_enable(priv->power, 0);
--out_clk:
--	if (!IS_ERR(mcan_class->cclk)) {
--		clk_disable_unprepare(mcan_class->cclk);
--		clk_disable_unprepare(mcan_class->hclk);
--	}
-  out_m_can_class_free_dev:
- 	m_can_class_free_dev(mcan_class->net);
- 	dev_err(&spi->dev, "Probe failed, err=%d\n", ret);
-
-base-commit: 4d521943f76bd0d1e68ea5e02df7aadd30b2838a
 -- 
 2.29.2
 
