@@ -2,44 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEDD2C8654
+	by mail.lfdr.de (Postfix) with ESMTP id BA9CC2C8655
 	for <lists+linux-can@lfdr.de>; Mon, 30 Nov 2020 15:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbgK3OP0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 Nov 2020 09:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S1726589AbgK3OP7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 30 Nov 2020 09:15:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726342AbgK3OPX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Nov 2020 09:15:23 -0500
+        with ESMTP id S1726482AbgK3OP7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Nov 2020 09:15:59 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD68C0613D6
-        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 06:14:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF52C0617A7
+        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 06:14:44 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kjjww-0007bZ-3m
-        for linux-can@vger.kernel.org; Mon, 30 Nov 2020 15:14:42 +0100
+        id 1kjjwx-0007dF-4X
+        for linux-can@vger.kernel.org; Mon, 30 Nov 2020 15:14:43 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E227359FAEC
-        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 14:14:36 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 8C66F59FAF6
+        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 14:14:37 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 6565E59FAC2;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7922D59FAC4;
         Mon, 30 Nov 2020 14:14:34 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2bffa97c;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 850c4d2a;
         Mon, 30 Nov 2020 14:14:33 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Subject: [net-next 02/14] can: mcp251xfd: mcp25xxfd_ring_alloc(): add define instead open coding the maximum number of RX objects
-Date:   Mon, 30 Nov 2020 15:14:20 +0100
-Message-Id: <20201130141432.278219-3-mkl@pengutronix.de>
+        kernel@pengutronix.de,
+        Ursula Maplehurst <ursula@kangatronix.co.uk>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [net-next 03/14] can: mcp25xxfd: rx-path: reduce number of SPI core requests to set UINC bit
+Date:   Mon, 30 Nov 2020 15:14:21 +0100
+Message-Id: <20201130141432.278219-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201130141432.278219-1-mkl@pengutronix.de>
 References: <20201130141432.278219-1-mkl@pengutronix.de>
@@ -53,42 +55,123 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch add a define for the maximum number of RX objects instead of open
-coding it.
+From: Ursula Maplehurst <ursula@kangatronix.co.uk>
 
-Link: https://lore.kernel.org/r/20201126132144.351154-2-mkl@pengutronix.de
+Reduce the number of separate SPI core requests when setting the UINC bit in
+the RX FIFO, and instead batch them up into a single SPI core request.
+
+Link: https://github.com/marckleinebudde/linux/issues/4
+Link: https://lore.kernel.org/r/20201126132144.351154-3-mkl@pengutronix.de
 Tested-by: Thomas Kopp <thomas.kopp@microchip.com>
+Signed-off-by: Ursula Maplehurst <ursula@kangatronix.co.uk>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 3 ++-
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h      | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 51 ++++++++++++++++---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |  2 +
+ 2 files changed, 45 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index d0f2f5c73907..476a2e4a1de8 100644
+index 476a2e4a1de8..c770733ecbcc 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -416,7 +416,8 @@ static int mcp251xfd_ring_alloc(struct mcp251xfd_priv *priv)
- 		int rx_obj_num;
+@@ -332,7 +332,7 @@ static void mcp251xfd_ring_init(struct mcp251xfd_priv *priv)
+ 	u32 val;
+ 	u16 addr;
+ 	u8 len;
+-	int i;
++	int i, j;
  
- 		rx_obj_num = ram_free / rx_obj_size;
--		rx_obj_num = min(1 << (fls(rx_obj_num) - 1), 32);
-+		rx_obj_num = min(1 << (fls(rx_obj_num) - 1),
-+				 MCP251XFD_RX_OBJ_NUM_MAX);
+ 	/* TEF */
+ 	priv->tef.head = 0;
+@@ -370,6 +370,23 @@ static void mcp251xfd_ring_init(struct mcp251xfd_priv *priv)
+ 				prev_rx_ring->obj_num;
  
- 		rx_ring = kzalloc(sizeof(*rx_ring) + rx_obj_size * rx_obj_num,
- 				  GFP_KERNEL);
+ 		prev_rx_ring = rx_ring;
++
++		/* FIFO increment RX tail pointer */
++		addr = MCP251XFD_REG_FIFOCON(rx_ring->fifo_nr);
++		val = MCP251XFD_REG_FIFOCON_UINC;
++		len = mcp251xfd_cmd_prepare_write_reg(priv, &rx_ring->uinc_buf,
++						      addr, val, val);
++
++		for (j = 0; j < ARRAY_SIZE(rx_ring->uinc_xfer); j++) {
++			struct spi_transfer *xfer;
++
++			xfer = &rx_ring->uinc_xfer[j];
++			xfer->tx_buf = &rx_ring->uinc_buf;
++			xfer->len = len;
++			xfer->cs_change = 1;
++			xfer->cs_change_delay.value = 0;
++			xfer->cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
++		}
+ 	}
+ }
+ 
+@@ -1440,13 +1457,7 @@ mcp251xfd_handle_rxif_one(struct mcp251xfd_priv *priv,
+ 	if (err)
+ 		stats->rx_fifo_errors++;
+ 
+-	ring->tail++;
+-
+-	/* finally increment the RX pointer */
+-	return regmap_update_bits(priv->map_reg,
+-				  MCP251XFD_REG_FIFOCON(ring->fifo_nr),
+-				  GENMASK(15, 8),
+-				  MCP251XFD_REG_FIFOCON_UINC);
++	return 0;
+ }
+ 
+ static inline int
+@@ -1478,6 +1489,8 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
+ 		return err;
+ 
+ 	while ((len = mcp251xfd_get_rx_linear_len(ring))) {
++		struct spi_transfer *last_xfer;
++
+ 		rx_tail = mcp251xfd_get_rx_tail(ring);
+ 
+ 		err = mcp251xfd_rx_obj_read(priv, ring, hw_rx_obj,
+@@ -1492,6 +1505,28 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
+ 			if (err)
+ 				return err;
+ 		}
++
++		/* Increment the RX FIFO tail pointer 'len' times in a
++		 * single SPI message.
++		 */
++		ring->tail += len;
++
++		/* Note:
++		 *
++		 * "cs_change == 1" on the last transfer results in an
++		 * active chip select after the complete SPI
++		 * message. This causes the controller to interpret
++		 * the next register access as data. Temporary set
++		 * "cs_change" of the last transfer to "0" to properly
++		 * deactivate the chip select at the end of the
++		 * message.
++		 */
++		last_xfer = &ring->uinc_xfer[len - 1];
++		last_xfer->cs_change = 0;
++		err = spi_sync_transfer(priv->spi, ring->uinc_xfer, len);
++		last_xfer->cs_change = 1;
++		if (err)
++			return err;
+ 	}
+ 
+ 	return 0;
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index fa1246e39980..c20c97d01072 100644
+index c20c97d01072..97dc182e2b42 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -368,6 +368,7 @@
-  * FIFO setup: tef: 8*12 bytes = 96 bytes, tx: 8*16 bytes = 128 bytes
-  * FIFO setup: tef: 4*12 bytes = 48 bytes, tx: 4*72 bytes = 288 bytes
-  */
-+#define MCP251XFD_RX_OBJ_NUM_MAX 32
- #define MCP251XFD_TX_OBJ_NUM_CAN 8
- #define MCP251XFD_TX_OBJ_NUM_CANFD 4
+@@ -528,6 +528,8 @@ struct mcp251xfd_rx_ring {
+ 	u8 obj_num;
+ 	u8 obj_size;
+ 
++	union mcp251xfd_write_reg_buf uinc_buf;
++	struct spi_transfer uinc_xfer[MCP251XFD_RX_OBJ_NUM_MAX];
+ 	struct mcp251xfd_hw_rx_obj_canfd obj[];
+ };
  
 -- 
 2.29.2
