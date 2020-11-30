@@ -2,37 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 338292C837C
-	for <lists+linux-can@lfdr.de>; Mon, 30 Nov 2020 12:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD452C8384
+	for <lists+linux-can@lfdr.de>; Mon, 30 Nov 2020 12:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728293AbgK3Lty (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 30 Nov 2020 06:49:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S1729152AbgK3Luj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 30 Nov 2020 06:50:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgK3Lty (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Nov 2020 06:49:54 -0500
+        with ESMTP id S1728459AbgK3Luj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 30 Nov 2020 06:50:39 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AB1C0613D3
-        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 03:49:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD80C0613CF
+        for <linux-can@vger.kernel.org>; Mon, 30 Nov 2020 03:49:59 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kjhg3-00058w-5G; Mon, 30 Nov 2020 12:49:07 +0100
+        id 1kjhgr-0005By-E8; Mon, 30 Nov 2020 12:49:57 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:325a:f94c:7792:9202] (unknown [IPv6:2a03:f580:87bc:d400:325a:f94c:7792:9202])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AF06A59F83E;
-        Mon, 30 Nov 2020 11:49:04 +0000 (UTC)
-Subject: Re: [PATCH 0/2] can: Fix the error handling in c_can_power_up and
- kvaser_pciefd_open
-To:     Zhang Qilong <zhangqilong3@huawei.com>, wg@grandegger.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-References: <20201128133922.3276973-1-zhangqilong3@huawei.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4C1D759F843;
+        Mon, 30 Nov 2020 11:49:56 +0000 (UTC)
+Subject: Re: [PATCH] can: flexcan: Convert the driver to DT-only
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     wg@grandegger.com, linux-can@vger.kernel.org
+References: <20201128132855.7724-1-festevam@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -94,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <19bf4a7b-4d07-c9d5-5c63-3f804a1b4f4a@pengutronix.de>
-Date:   Mon, 30 Nov 2020 12:49:00 +0100
+Message-ID: <9a640482-51a3-6a35-5a11-d8b6db0e278b@pengutronix.de>
+Date:   Mon, 30 Nov 2020 12:49:52 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201128133922.3276973-1-zhangqilong3@huawei.com>
+In-Reply-To: <20201128132855.7724-1-festevam@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="hYMKzvTdh0rwMNkjVhhH9LfxqEehpNjrm"
+ boundary="QuUXfUcgYwEd5QGuWdfirzncZ1qSWRr9Z"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,37 +110,30 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---hYMKzvTdh0rwMNkjVhhH9LfxqEehpNjrm
-Content-Type: multipart/mixed; boundary="zS6XmMEY4aFvDWfd676C0ADnYDvXTJzlc";
+--QuUXfUcgYwEd5QGuWdfirzncZ1qSWRr9Z
+Content-Type: multipart/mixed; boundary="fFoZRPBlW1AqS8dSAMDa2hd7yzo5AQg1E";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Zhang Qilong <zhangqilong3@huawei.com>, wg@grandegger.com,
- davem@davemloft.net, kuba@kernel.org
-Cc: netdev@vger.kernel.org, linux-can@vger.kernel.org
-Message-ID: <19bf4a7b-4d07-c9d5-5c63-3f804a1b4f4a@pengutronix.de>
-Subject: Re: [PATCH 0/2] can: Fix the error handling in c_can_power_up and
- kvaser_pciefd_open
-References: <20201128133922.3276973-1-zhangqilong3@huawei.com>
-In-Reply-To: <20201128133922.3276973-1-zhangqilong3@huawei.com>
+To: Fabio Estevam <festevam@gmail.com>
+Cc: wg@grandegger.com, linux-can@vger.kernel.org
+Message-ID: <9a640482-51a3-6a35-5a11-d8b6db0e278b@pengutronix.de>
+Subject: Re: [PATCH] can: flexcan: Convert the driver to DT-only
+References: <20201128132855.7724-1-festevam@gmail.com>
+In-Reply-To: <20201128132855.7724-1-festevam@gmail.com>
 
---zS6XmMEY4aFvDWfd676C0ADnYDvXTJzlc
+--fFoZRPBlW1AqS8dSAMDa2hd7yzo5AQg1E
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 11/28/20 2:39 PM, Zhang Qilong wrote:
-> The patch series fix the error handling to avoid the reference
-> leak and wrong state for the net device.
+On 11/28/20 2:28 PM, Fabio Estevam wrote:
+> The flexcan driver runs only on DT platforms, so simplify the
+> code by using of_device_get_match_data() to retrieve the
+> driver data and also by removing the unused id_table.
 >=20
-> Zhang Qilong (2):
->   can: c_can: Fix error handling in c_can_power_up
->   can: kvaser_pciefd: Fix error handling in kvaser_pciefd_open
->=20
->  drivers/net/can/c_can/c_can.c   | 18 ++++++++++++++----
->  drivers/net/can/kvaser_pciefd.c |  4 +++-
->  2 files changed, 17 insertions(+), 5 deletions(-)
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Applied to linux-can/testing.
+Applied to can-next/testing
 
 Tnx,
 Marc
@@ -154,23 +145,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---zS6XmMEY4aFvDWfd676C0ADnYDvXTJzlc--
+--fFoZRPBlW1AqS8dSAMDa2hd7yzo5AQg1E--
 
---hYMKzvTdh0rwMNkjVhhH9LfxqEehpNjrm
+--QuUXfUcgYwEd5QGuWdfirzncZ1qSWRr9Z
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/E3CwACgkQqclaivrt
-76lT/ggAjWBWkC1zBR9FLy/j+y+f57tAy9ugKUl4bwv0D+AWJ6VdLFc6YSzzG2ss
-O0Ct8uJu1yUYZe5YhxlGfcAdXPlDo4kJ88qsLvE26SPehOUl523JAzBdjFda9EAL
-xgLVq7jlQzXsNXmJDygczNYFGuvl7lQnJ8T2De3+3Ff0zl8VMfqlTMuQ8JQhgSC9
-Tr6OIABJmXJMEpcVMwcAvZ5nsvzecK+zTajCyxz3JEmR0P0zp1dRMEzifbkbUHW6
-ezQ7LTRo9k/c4ezm+Zbm3sYk1ZL5olw+ksYpkJO8wNRgV0t6jlFrEwDVsYsf4BjX
-0ssb8zxe6+EFUTWi+nRRDV5QIVIOrQ==
-=37UW
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/E3GAACgkQqclaivrt
+76m3dgf9GXPDaPHaiJa1qnd1OoVtcnaR4fXL+3nPG6KauF5OvQsupXQE5YfZLkc4
+WADxJAHm4/MJEhEQpJlxQaHwBWqXodSBpgTRSQKqGS/psMAfcRUIMRocT9eNH4RW
+DVouXPe1tteMFL3//8Xp/TduIok9klQIkl1fOYKu6+zrTtS6TaD2hURV8bKYyX9z
+SsaogYWkOQcodmv1m2bKyu3Gx2k0ISV4LXx8nWTmauz0nArp+zIQ6tj1QtELxLor
+uOJl6tBqGz31fDvJbW4TMWMyZiv78ZPjdMn2dOLNIDrWa6O8Dvx+B1zbRsIoHqLD
+zjS3nDI6ZTFDXVV53d1Ql3R5Bs1rDA==
+=zfhJ
 -----END PGP SIGNATURE-----
 
---hYMKzvTdh0rwMNkjVhhH9LfxqEehpNjrm--
+--QuUXfUcgYwEd5QGuWdfirzncZ1qSWRr9Z--
