@@ -2,210 +2,169 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA06E2C998A
-	for <lists+linux-can@lfdr.de>; Tue,  1 Dec 2020 09:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0A52CA51F
+	for <lists+linux-can@lfdr.de>; Tue,  1 Dec 2020 15:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728665AbgLAIc3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Dec 2020 03:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbgLAIc3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Dec 2020 03:32:29 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E9EC0613CF
-        for <linux-can@vger.kernel.org>; Tue,  1 Dec 2020 00:31:49 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kk14d-0001yv-7U; Tue, 01 Dec 2020 09:31:47 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:7197:731a:c908:733b] (unknown [IPv6:2a03:f580:87bc:d400:7197:731a:c908:733b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B48BC5A0579;
-        Tue,  1 Dec 2020 08:31:45 +0000 (UTC)
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     linux-can@vger.kernel.org, thomas.kopp@microchip.com
-References: <20201201054019.11012-1-manivannan.sadhasivam@linaro.org>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH v2] can: mcp251xfd: Add support for internal loopback mode
-Message-ID: <3227afa3-6e00-15af-8af7-cb22030264ab@pengutronix.de>
-Date:   Tue, 1 Dec 2020 09:31:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S2388695AbgLAOJJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Dec 2020 09:09:09 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:38534 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728980AbgLAOJI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Dec 2020 09:09:08 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1DtHP4002730;
+        Tue, 1 Dec 2020 14:07:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=pTmh0fAx41hLIvYDyOekZfZD8/4rzzXxS/TqqdPExwg=;
+ b=vLWTsjjic+1p3i9uxybiHNVi42dcBKcTvA6AfpFTEr0sUNmVqp9yRxLgg7kIK5qGUN0J
+ oofgNIgToJJBxsPbFd+Am4pBxk6JPpjzRqo19VpEwymshbhsnRALOcfpiO21XOp3kmxr
+ lgOLJrUqyUshUH+0ojxyxXIg1LFHdnj2t2Bklh5y68LsxqqiRxoSPtOWNIoWynIJF754
+ 5bVkuWqCYCEFs8tq7LyeOV+zI3/vr+tI5ZKBss7pqjTfnpXNJRaPwJeD8R6AGcywA+BA
+ lerBH0PS/hUi55aURtflNdJ2juhGcYo6ht8r8gtlOn38U9XkoMGDxbASv62fD9VykISM Rg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 353dyqjnq9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 01 Dec 2020 14:07:42 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1Du5R6003844;
+        Tue, 1 Dec 2020 14:05:41 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 3540ey0hqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 01 Dec 2020 14:05:41 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B1E1twO021849;
+        Tue, 1 Dec 2020 14:05:41 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 3540ey0hp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Dec 2020 14:05:40 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B1E5MSD015816;
+        Tue, 1 Dec 2020 14:05:23 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 01 Dec 2020 06:05:21 -0800
+Date:   Tue, 1 Dec 2020 17:04:49 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, alsa-devel@alsa-project.org,
+        linux-atm-general@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-ide@vger.kernel.org, dm-devel@redhat.com,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
+        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net,
+        linux-afs@lists.infradead.org,
+        usb-storage@lists.one-eyed-alien.net, drbd-dev@tron.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        rds-devel@oss.oracle.com,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
+        oss-drivers@netronome.com, bridge@lists.linux-foundation.org,
+        linux-security-module@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
+        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
+        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        tipc-discussion@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        selinux@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
+        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
+        ceph-devel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+        x86@kernel.org, linux-nfs@vger.kernel.org,
+        GR-Linux-NIC-Dev@marvell.com, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-decnet-user@lists.sourceforge.net,
+        linux-mmc@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-usb@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, patches@opensource.cirrus.com,
+        Joe Perches <joe@perches.com>, linux-integrity@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
+Message-ID: <20201201140449.GG2767@kadam>
+References: <cover.1605896059.git.gustavoars@kernel.org>
+ <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011201129.B13FDB3C@keescook>
+ <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <202011220816.8B6591A@keescook>
 MIME-Version: 1.0
-In-Reply-To: <20201201054019.11012-1-manivannan.sadhasivam@linaro.org>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="OZzi7fNilkxrP4fAXvUPrXxi8dAnwv9za"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202011220816.8B6591A@keescook>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ clxscore=1011 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012010090
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---OZzi7fNilkxrP4fAXvUPrXxi8dAnwv9za
-Content-Type: multipart/mixed; boundary="D8wLAezaxE1JhIW3vynIjLJk6TKUWCFhY";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: linux-can@vger.kernel.org, thomas.kopp@microchip.com
-Message-ID: <3227afa3-6e00-15af-8af7-cb22030264ab@pengutronix.de>
-Subject: Re: [PATCH v2] can: mcp251xfd: Add support for internal loopback mode
-References: <20201201054019.11012-1-manivannan.sadhasivam@linaro.org>
-In-Reply-To: <20201201054019.11012-1-manivannan.sadhasivam@linaro.org>
+On Sun, Nov 22, 2020 at 08:17:03AM -0800, Kees Cook wrote:
+> On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
+> > On Fri, 20 Nov 2020 11:30:40 -0800 Kees Cook wrote:
+> > > On Fri, Nov 20, 2020 at 10:53:44AM -0800, Jakub Kicinski wrote:
+> > > > On Fri, 20 Nov 2020 12:21:39 -0600 Gustavo A. R. Silva wrote:  
+> > > > > This series aims to fix almost all remaining fall-through warnings in
+> > > > > order to enable -Wimplicit-fallthrough for Clang.
+> > > > > 
+> > > > > In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
+> > > > > add multiple break/goto/return/fallthrough statements instead of just
+> > > > > letting the code fall through to the next case.
+> > > > > 
+> > > > > Notice that in order to enable -Wimplicit-fallthrough for Clang, this
+> > > > > change[1] is meant to be reverted at some point. So, this patch helps
+> > > > > to move in that direction.
+> > > > > 
+> > > > > Something important to mention is that there is currently a discrepancy
+> > > > > between GCC and Clang when dealing with switch fall-through to empty case
+> > > > > statements or to cases that only contain a break/continue/return
+> > > > > statement[2][3][4].  
+> > > > 
+> > > > Are we sure we want to make this change? Was it discussed before?
+> > > > 
+> > > > Are there any bugs Clangs puritanical definition of fallthrough helped
+> > > > find?
+> > > > 
+> > > > IMVHO compiler warnings are supposed to warn about issues that could
+> > > > be bugs. Falling through to default: break; can hardly be a bug?!  
+> > > 
+> > > It's certainly a place where the intent is not always clear. I think
+> > > this makes all the cases unambiguous, and doesn't impact the machine
+> > > code, since the compiler will happily optimize away any behavioral
+> > > redundancy.
+> > 
+> > If none of the 140 patches here fix a real bug, and there is no change
+> > to machine code then it sounds to me like a W=2 kind of a warning.
+> 
+> FWIW, this series has found at least one bug so far:
+> https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
 
---D8wLAezaxE1JhIW3vynIjLJk6TKUWCFhY
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+This is a fallthrough to a return and not to a break.  That should
+trigger a warning.  The fallthrough to a break should not generate a
+warning.
 
-On 12/1/20 6:40 AM, Manivannan Sadhasivam wrote:
-> MCP251xFD supports internal loopback mode which can be used to verify
-> CAN functionality in the absence of a real CAN device.
->=20
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>=
-
-> ---
-
-Even CAN-FD + Listen Only works!
-
-Applied to can-next/testing
->=20
-> Changes in v2:
->=20
-> * Sorted ctrl modes as per the value
->=20
->  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/n=
-et/can/spi/mcp251xfd/mcp251xfd-core.c
-> index 3297eb7ecc9c..d9ef4cbcb8cd 100644
-> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> @@ -932,6 +932,8 @@ static u8 mcp251xfd_get_normal_mode(const struct mc=
-p251xfd_priv *priv)
->  		mode =3D MCP251XFD_REG_CON_MODE_LISTENONLY;
->  	else if (priv->can.ctrlmode & CAN_CTRLMODE_FD)
->  		mode =3D MCP251XFD_REG_CON_MODE_MIXED;
-> +	else if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> +		mode =3D MCP251XFD_REG_CON_MODE_INT_LOOPBACK;
-
-I've moved the CAN_CTRLMODE_LOOPBACK to the front of this.
-
->  	else
->  		mode =3D MCP251XFD_REG_CON_MODE_CAN2_0;
-> =20
-> @@ -2799,9 +2801,9 @@ static int mcp251xfd_probe(struct spi_device *spi=
-)
->  	priv->can.do_get_berr_counter =3D mcp251xfd_get_berr_counter;
->  	priv->can.bittiming_const =3D &mcp251xfd_bittiming_const;
->  	priv->can.data_bittiming_const =3D &mcp251xfd_data_bittiming_const;
-> -	priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LISTENONLY |
-> -		CAN_CTRLMODE_BERR_REPORTING | CAN_CTRLMODE_FD |
-> -		CAN_CTRLMODE_FD_NON_ISO;
-> +	priv->can.ctrlmode_supported =3D CAN_CTRLMODE_LOOPBACK |
-> +		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
-> +		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
->  	priv->ndev =3D ndev;
->  	priv->spi =3D spi;
->  	priv->rx_int =3D rx_int;
->=20
+The bug we're trying to fix is "missing break statement" but if the
+result of the bug is "we hit a break statement" then now we're just
+talking about style.  GCC should limit itself to warning about
+potentially buggy code.
 
 regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---D8wLAezaxE1JhIW3vynIjLJk6TKUWCFhY--
-
---OZzi7fNilkxrP4fAXvUPrXxi8dAnwv9za
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/F/20ACgkQqclaivrt
-76k1kwf/QzXomPWmg1StGB8CRmkppheop2TGR+Qby/RScOtPS7Bn6R6UYV+Yrjss
-XUX9SxeAOWo5yqi44buD61og3qBI73QTVZvuSCMOuLO+iG4JoVEUozLezNnSd1gw
-vbqOKvP/NssYd+eGtuiElGsOw9ZG6+p378FETmrTplNf5PZ4jx1deQs3ExANQgD7
-3E8G8oC8HO81dmbVMYkmWMNcKFL7V9+L0OfL7CUT+k8ZrR85nclaAfN7JNKsNRWr
-n+fkQSHWu9c51+kk8F69zYE493qiLqEIPQ4P/64rk499Va6rRJ3a/FsSSRwZSsHo
-LpQaYBa1+58+Cp/O6UOeJvC0Vp/YHQ==
-=5fBW
------END PGP SIGNATURE-----
-
---OZzi7fNilkxrP4fAXvUPrXxi8dAnwv9za--
+dan carpenter
