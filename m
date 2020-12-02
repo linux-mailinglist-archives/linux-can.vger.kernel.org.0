@@ -2,189 +2,144 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B74A2CA52C
-	for <lists+linux-can@lfdr.de>; Tue,  1 Dec 2020 15:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238642CBD02
+	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 13:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391481AbgLAOKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Dec 2020 09:10:51 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:36918 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388604AbgLAOKu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Dec 2020 09:10:50 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1Dt2KT119141;
-        Tue, 1 Dec 2020 14:09:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=CVxJrJvszPiYRoVvo8QMoaANjq0rT1w3VAIVepGqitY=;
- b=Q8Pq03hifJp4hxcZYQuiJvbKTKZMKP2mLNTS1aHW6hAxlDpObu2xNteC6Yj/L36I1kmY
- WSfMJZMdSk8bN2J9+UmYiF9MWo5KvhVT37I7ctRf5KKEocNW4v8PFVCDeiU3k6pn404k
- Igra+V15xZpvhIpriUlAo6fac2mI985JVt4CqtU5vfkzzkfANqieFePUQJBzO6eRndXt
- r4RGB+aUeJDKgHUaSwwmUD5k/B0oZ1T+RFudNU+Upzz4yF4kbfdExpcaXwIzXbiJCqdd
- NFMbLYQpnYBf2dU4wooUhfeXNwTuWm/ESbR6RxVNN2eeS+ZfeOwZNtuQUXq4Dn72Z2fB vg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 353egkjmec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Dec 2020 14:09:31 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B1Du5d4003800;
-        Tue, 1 Dec 2020 14:09:30 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 3540ey0nww-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 01 Dec 2020 14:09:30 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B1E8IaF039759;
-        Tue, 1 Dec 2020 14:09:29 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 3540ey0nvu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Dec 2020 14:09:29 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B1E9NOp018011;
-        Tue, 1 Dec 2020 14:09:24 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 01 Dec 2020 06:09:23 -0800
-Date:   Tue, 1 Dec 2020 17:08:49 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Kees Cook <keescook@chromium.org>, alsa-devel@alsa-project.org,
-        linux-atm-general@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        linux-ide@vger.kernel.org, dm-devel@redhat.com,
-        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
-        GR-everest-linux-l2@marvell.com, wcn36xx@lists.infradead.org,
-        samba-technical@lists.samba.org, linux-i3c@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        linux-afs@lists.infradead.org,
-        usb-storage@lists.one-eyed-alien.net, drbd-dev@tron.linbit.com,
-        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, oss-drivers@netronome.com,
-        bridge@lists.linux-foundation.org,
-        linux-security-module@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        linux-stm32@st-md-mailman.stormreply.com, cluster-devel@redhat.com,
-        linux-acpi@vger.kernel.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-input@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, linux-ext4@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        selinux@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, linux-geode@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-gpio@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        linux-mediatek@lists.infradead.org, xen-devel@lists.xenproject.org,
-        nouveau@lists.freedesktop.org, linux-hams@vger.kernel.org,
-        ceph-devel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-nfs@vger.kernel.org, GR-Linux-NIC-Dev@marvell.com,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-decnet-user@lists.sourceforge.net, linux-mmc@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-sctp@vger.kernel.org, linux-usb@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
-        Joe Perches <joe@perches.com>, linux-integrity@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 000/141] Fix fall-through warnings for Clang
-Message-ID: <20201201140849.GH2767@kadam>
-References: <cover.1605896059.git.gustavoars@kernel.org>
- <20201120105344.4345c14e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011201129.B13FDB3C@keescook>
- <20201120115142.292999b2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <202011220816.8B6591A@keescook>
- <CAKwvOdntVfXj2WRR5n6Kw7BfG7FdKpTeHeh5nPu5AzwVMhOHTg@mail.gmail.com>
+        id S1729543AbgLBM26 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Dec 2020 07:28:58 -0500
+Received: from mail-eopbgr50063.outbound.protection.outlook.com ([40.107.5.63]:14567
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727070AbgLBM25 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 2 Dec 2020 07:28:57 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ES5neDH5sZg6WM3aI1UPNs2nx9MROBiUITojwyHbYM/yMSJIE34PourinQu3GL69hzzng0DsSRmZ9XXPvJl+IGN2btmzHrHLkHDxLSgnkqrrlnbSJiMnBOMA2rQaABpp2UKrX2iL0Yk2ieDoGGcJ5ynUVscBScEvQED4DxpWiigwIIem2lZd33mhZifnC60d6pLbT+uxMFaDKJ20Ac43BN3p5Estfze+j3K6PRLTCPqu7dSsv4QdkswS0APjtd0YfRAD/evc1wIXInm9BMFAZTCY3jUUFqJO+eCaLWiLNII5ncCRPsOWpMLr2974v48ghm1R12IhhQBvR+AgEMD9OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VfCyCJmM/mrqrpuifxOD+G1FZRlVtnFvChglgWcIxHw=;
+ b=NPp4gQPH7Mz0bnnl8/0pRqchoQmtOt+fP1TKyFS52CPjevJKaBEwUFKQyRPxbKbEVdYHauxo6Q9jbwD9mVQqh9s9jITZrtHKd3q1QMHWTZPIE4PuJFmWYZTjIGtQmIQKP3I+Q5sTE27cBOK6Xy9WNv/e41N+D31BNE7BTdCULNMdABMQYZM98U2U4pbrV/WXADhFXpWM40ShKnZoDH0FNyMFizLzzWaLcfJyDS2qX77Wnc3zElr26rT0xRjMdVHxARMQCAFurBsH7ndmPnuJNghcARJWPh8/h8f4+OFmrKIv6OLH2sPqhRx8UxfHXkncW7XSggoJXXPuhdJJNG7hHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=pa-systems.de; dmarc=pass action=none
+ header.from=pa-systems.de; dkim=pass header.d=pa-systems.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mahapa.onmicrosoft.com; s=selector2-mahapa-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VfCyCJmM/mrqrpuifxOD+G1FZRlVtnFvChglgWcIxHw=;
+ b=C9eNxwDuUX6IFpTMa64pke7ztFwAQxnqEHb4PiasDzHnKnKLjtUmqM/347nGUICiPqqW25ZMlQ7kVe8Y3vfztuyKAt6ICqaSiEem9Idc8wNO6vWDWiWJR8DVYmyQ9WBgEgAXMiF1/cUgSp8b7dQ9OgfP3AykR2eWVLKihjBG5Bk=
+Received: from AM9PR06MB7283.eurprd06.prod.outlook.com (2603:10a6:20b:2d3::15)
+ by AM0PR0602MB3345.eurprd06.prod.outlook.com (2603:10a6:208:20::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.25; Wed, 2 Dec
+ 2020 12:28:08 +0000
+Received: from AM9PR06MB7283.eurprd06.prod.outlook.com
+ ([fe80::e14b:5647:7ace:196c]) by AM9PR06MB7283.eurprd06.prod.outlook.com
+ ([fe80::e14b:5647:7ace:196c%6]) with mapi id 15.20.3632.017; Wed, 2 Dec 2020
+ 12:28:08 +0000
+From:   Thomas Wagner <thomas.wagner@pa-systems.de>
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "thwa1@web.de" <thwa1@web.de>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>
+Subject: Suggestion to have a functional addressing/broadcast option for
+ ISO-TP sockets
+Thread-Topic: Suggestion to have a functional addressing/broadcast option for
+ ISO-TP sockets
+Thread-Index: AdbIokQ7wYkfmwdQQtioWWQAsiVkcg==
+Date:   Wed, 2 Dec 2020 12:28:08 +0000
+Message-ID: <AM9PR06MB72834DE8FE187784AE914AB2B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=pa-systems.de;
+x-originating-ip: [2003:ed:270f:fb00:5526:5c56:1d57:7797]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 392a1e5b-6b8f-4fad-2422-08d896bdb9e0
+x-ms-traffictypediagnostic: AM0PR0602MB3345:
+x-microsoft-antispam-prvs: <AM0PR0602MB334570A132602EF102B88DBAB5F30@AM0PR0602MB3345.eurprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Tm/DEwGnS6TjkNnom4YtLAhIf5qPoo7hQCI3XElhvZwYEFd/8iWqyuYHQAdNx/kyFkeP1mtMKMNPiJMpQdo17ENo+O8ySDV5X00htCRLwEWYTcWMwi2S3BNQiNWIqeC3VYtj1dpdd+IQDtDN1CkghuhCgoyYsjhogIsjEEXNpxLgy0PboW376WdvKQbnrbEsFsensLsVDrrCLw2WcNUydwHEI7SBzEyv5lNLG/AHpwSX9QuH0aDb77SBxuYaSQU7qUApyAl1own8ShCr2wMYo3UIWY++cmwrAWchZyJxmsi0epqWtGtH7ufuVWMoVv53m7ud92zLAWKKo42vcwuSbofjDgGXLiD9u1JsoR3hha3/0ZUtsS77KsK0E2lMa6cgkjVpSfhV3h/ay6CMLZ0NPA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR06MB7283.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(39830400003)(366004)(376002)(136003)(7696005)(8936002)(316002)(54906003)(33656002)(9686003)(55016002)(66476007)(5660300002)(52536014)(71200400001)(6506007)(2906002)(8676002)(86362001)(478600001)(76116006)(44832011)(6916009)(66946007)(83380400001)(4326008)(64756008)(66446008)(66556008)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?MGpBOHBuZE1PcnIzT1RXUmptamJNejNVTjFsOXJOWTZmMHlYVHpoL3F6R3pE?=
+ =?utf-8?B?eUtYT1JLaVE4UnVhMlB6N1NmWXBrUVM5Qjl2cjM0Z3dZM21oWGIwWDJmTzJw?=
+ =?utf-8?B?UU1FUFEyZDkrd2EvZzUrQlhHKzlzSkFWdnNVU2NtRC85dTVQOG9PR1cxK3E5?=
+ =?utf-8?B?SmMrd3Jlc3VGVUFiQjR1bFY2OUVNVkxLaW1TeGdpM3kvRHQzckJBOFp4dEt6?=
+ =?utf-8?B?WEJCaGVSaDJhMGx2VUsxQUFPWDI3U1A5dlVFdzdubnpnRktHSGZQZmJ0TGZZ?=
+ =?utf-8?B?aVFCSFY2NEtxNnREcGViUEhteENKWmdVT3FhNTFuTkRtUUNjZ0JrYUovT2Uy?=
+ =?utf-8?B?eEl4WWtxNmhCbVYvNzVQZE5GUUxRRkNTSTBjZzZ2L2h0ejNHVm5uZ2RmcVRZ?=
+ =?utf-8?B?MjRUSFNIdzArOHBQZ2sxTUFMOWxyTWs0Q2VLVlZRR3FNeTlvN0h3V2VQRjVl?=
+ =?utf-8?B?QzBxQ3RNZEJsRm93V1puWmJwQ0U4dnROMld4WW1veUVLSEJZZEl2bm5iWjRK?=
+ =?utf-8?B?VzBZODFjQzF0V25mZ3pMbVVtK3djRUFPQTRQVWNiSHRHZVFoWUw0S21qRkZQ?=
+ =?utf-8?B?eDNEMytDeXRkckJXR2dNaTF4SWZ5YldrZFlwL2FTMEl1S29NT3BMcmg1amps?=
+ =?utf-8?B?K0JsaDhucnBSVUVweWhYN213d2FhQ3gyVDIxZko2N1JjYjl3VmQvcWR1U3VM?=
+ =?utf-8?B?Tk5FRXVxd25uL3lzczY5WXlyRWtON05PK240SW1peHc5OWRjaGxyYTU1bTZv?=
+ =?utf-8?B?amZ4UGliUysxUmZveEYvN2xkVWZZaEQ5bTRtVzFjWkpXQkUrYkppZWVneEYx?=
+ =?utf-8?B?WnhCbWRwUk5hbFgwd3V2TytDUm9SNXI1aFNKNnYzMjcxQWR3UEhCZG1YNG96?=
+ =?utf-8?B?Sm5GMDJ3NTlsU0FWNjB5dm4yUkx0a3lmbXNKVHdRRVNUblFRNDBLb0RzcTNK?=
+ =?utf-8?B?RFJrVFFTb1h2eDNBN0dwbnBiT0FDWFlLZ1JYYW82VUlzSFJTYzZjMjVRQSth?=
+ =?utf-8?B?MjFQNjVWTXhlL0ZtUysvc0JtT0hpdDhaMjhpeTErZ1FhU1YxL3lHcXpVQjdo?=
+ =?utf-8?B?V2drVzUwZkFWTGZDZUEvdjBHMlVwYjR1Ym1zRE1lSEQxeXBDRkN2NlRpSXlQ?=
+ =?utf-8?B?KzUrNGRUOGZXOTJNaWJ4V3BWdDliOVFDbXg4ME5oNCtZNlVtc3lldGp5b0xI?=
+ =?utf-8?B?VEo2OU10NHF0MHhUUmxSSy9sUkhtcE5GUW5SRHozNC9OT2F5KzZSenVWa3BU?=
+ =?utf-8?B?SG16ZzkvWnduQW9xdUlOUmZ2cmhVdFpPN1ZYUTFmVlhHeEFXYXZ5bUhWNTVt?=
+ =?utf-8?B?TXFpZnpFNW16a3A3WWN1U0d2dkFWTkVBcHM2U3RDZ2lyOGsxcmVmbXhDZXF4?=
+ =?utf-8?Q?3WzyweQAfnu8EYhV+peUTWFFnOLFGzyk=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdntVfXj2WRR5n6Kw7BfG7FdKpTeHeh5nPu5AzwVMhOHTg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9821 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012010090
+X-OriginatorOrg: pa-systems.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR06MB7283.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 392a1e5b-6b8f-4fad-2422-08d896bdb9e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2020 12:28:08.3618
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d8c1b19d-12b7-4029-a8de-e069486288e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sQ9RfzGnp+6KUJ04qHKOKZOQk94Aw5r7e+jJE6hz/80gBMc0XrLtMHULpykrObzzwb+le8XpxJU3QU0Oe6edAiizQCujxoIJUcK4h8y/q0I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0602MB3345
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 05:32:51PM -0800, Nick Desaulniers wrote:
-> On Sun, Nov 22, 2020 at 8:17 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Fri, Nov 20, 2020 at 11:51:42AM -0800, Jakub Kicinski wrote:
-> > > If none of the 140 patches here fix a real bug, and there is no change
-> > > to machine code then it sounds to me like a W=2 kind of a warning.
-> >
-> > FWIW, this series has found at least one bug so far:
-> > https://lore.kernel.org/lkml/CAFCwf11izHF=g1mGry1fE5kvFFFrxzhPSM6qKAO8gxSp=Kr_CQ@mail.gmail.com/
-> 
-> So looks like the bulk of these are:
-> switch (x) {
->   case 0:
->     ++x;
->   default:
->     break;
-> }
-
-This should not generate a warning.
-
-> 
-> I have a patch that fixes those up for clang:
-> https://reviews.llvm.org/D91895
-> 
-> There's 3 other cases that don't quite match between GCC and Clang I
-> observe in the kernel:
-> switch (x) {
->   case 0:
->     ++x;
->   default:
->     goto y;
-> }
-> y:;
-
-This should generate a warning.
-
-> 
-> switch (x) {
->   case 0:
->     ++x;
->   default:
->     return;
-> }
-
-Warn for this.
-
-
-> 
-> switch (x) {
->   case 0:
->     ++x;
->   default:
->     ;
-> }
-
-Don't warn for this.
-
-If adding a break statement changes the flow of the code then warn about
-potentially missing break statements, but if it doesn't change anything
-then don't warn about it.
-
-regards,
-dan carpenter
+SGkgYWxsLA0KDQphcyBhbHJlYWR5IGRpc2N1c3NlZCB3aXRoIE9saXZlciBIYXJ0a29wcCB2aWEg
+R2l0aHViIChodHRwczovL2dpdGh1Yi5jb20vaGFydGtvcHAvY2FuLWlzb3RwL2lzc3Vlcy8zNiks
+IEkgc3VnZ2VzdCBhIG5ldyBvcHRpb24vZmxhZyB0byBlbmFibGUgSVNPLVRQIHNvY2tldHMgd2l0
+aCBqdXN0IGEgVFggYWRkcmVzcywgd2hpbGUgdGhlIFJYIGFkZHJlc3MgaXMgYmVpbmcgaWdub3Jl
+ZC9kaXNjYXJkZWQuIFRoaXMgY2FuIGJlIHVzZWZ1bCBmb3IgT0JEMi9VRFMgdXNhZ2UsIHdoZXJl
+IGZ1bmN0aW9uYWwgcmVxdWVzdHMgYXJlIHVzZWQgYW5kIHNlbnQgaW4gYSAxLXRvLU4gc2NlbmFy
+aW8sIHdoaWxlIHN0aWxsIGhhdmluZyBhbiBJU08tVFAgc3R5bGUgUENJLg0KDQpPbGl2ZXI6DQo+
+IEl0IHdvdWxkIGJlIHNvbWV0aGluZyBsaWtlIGEgbmV3IGZsYWcsIGUuZy4gQ0FOX0lTT1RQX0ZB
+RERSX1RYX09OTFkgd2hlcmUgb25seSB0aGUgdHAudHhfaWQgaXMgdXNlZCBhdCBiaW5kKCkgdGlt
+ZSAobm8gcmVnaXN0ZXJpbmcgb2YgYSB0cC5yeF9pZCkgYW5kIHdoZXJlIHlvdSBvbmx5IGNhbiBz
+ZW5kIFBEVXMgdGhhdCBhcmUgbWF4IDcgYnl0ZXMgPT4gU0YuDQoNCkluIGRlcHRoIFVzZS1DYXNl
+IGV4cGxhbmF0aW9uOg0KV2l0aCBPQkQyIGFuZCBVRFMgcmVxdWVzdHMgb24gQ0FOLCBJU08tVFAg
+aXMgdXNlZCBhcyBhIHRyYW5zcG9ydCBwcm90b2NvbC4gUmVxdWVzdHMgY2FuIGJlIHBoeXNpY2Fs
+bHkgYWRkcmVzc2VkIGJ5IGEgdGVzdGVyIHRvIGEgc3BlY2lmaWMgRUNVIHVzaW5nIHRoZSBDQU4t
+SURzIDB4N0UwIHRvIDB4N0U3ICgxMS1iaXQgSURzKS4NClRoZSBFQ1VzIHJlc3BvbmQgdG8gdGhl
+IHRlc3RlciB1c2luZyB0aGUgQ0FOLUlEcyAweDdFOCB0byAweDdFRi4gQSB0ZXN0ZXIgY2FuIG9w
+ZW4gOCBJU08tVFAgc29ja2V0cywgdXNpbmcgdGhlIHNwZWNpZmljIFJYIGFuZCBUWCBhZGRyZXNz
+ZXMsIHRvIGNvbW11bmljYXRlIHdpdGggZWFjaCBFQ1UuDQpJbiBzb21lIGNhc2VzIHJlcXVlc3Rz
+IGFyZW4ndCBzZW50IHBoeXNpY2FsbHkgYWRkcmVzc2VkIHRvIGEgc3BlY2lmaWMgRUNVLCBidXQg
+YnJvYWRjYXN0ZWQvZnVuY3Rpb25hbGx5IGFkZHJlc3NlZCB0byBhbGwgRUNVcyB3aG8gbWlnaHQg
+Y2FyZS9jYW4gcmVzcG9uZC4gVGhpcyBpcyBkb25lIHVzaW5nIHRoZSBzcGVjaWFsIENBTi1JRCAw
+eDdERi4NCkFueSBFQ1UgdGhhdCBtaWdodCByZXNwb25kIGRvZXMgc28sIHVzaW5nIGl0J3MgdG8t
+dGVzdGVyIGFkZHJlc3MgKDB4N0U4IHRvIDB4N0VGKS4gVGhpcyB3YXkgYSAxLXRvLU4gYnJvYWRj
+YXN0L3JlcXVlc3QgY2FuIGJlIGRvbmUsIGFmdGVyIHdoaWNoIG11bHRpcGxlIDEtdG8tMSBjb25u
+ZWN0aW9ucyBjYW4gYmUgZXN0YWJsaXNoZWQgdG8gdHJhbnNmZXIgbGFyZ2UgUERVcy4NCg0KSW4g
+dGhlIGN1cnJlbnQgSVNPLVRQL1NvY2tldENBTiBpbXBsZW1lbnRhdGlvbiwgYW4gYWRkaXRpb25h
+bCA5dGggc29ja2V0IG5lZWRzIHRvIGJlIHVzZWQgZm9yIHRob3NlIGZ1bmN0aW9uYWwgcmVxdWVz
+dHMuIFVzaW5nIGFuIElTTy1UUCBzb2NrZXQgYXMgOXRoIHNvY2tldCBmb3JjZXMgdGhlIHVzZXIg
+dG8gY2hvb3NlIGFuIFJYIGFkZHJlc3MgdGhhdCBpcyBuZXZlciBhY3R1YWxseSB1c2VkLiBVc2lu
+ZyBhIFJBVyBDQU4gc29ja2V0IGZvcmNlcyB0aGUgdXNlciB0byBjYWxjdWxhdGUvYnVpbGQgYSBQ
+Q0kgbWFudWFsbHkgYW5kIGhhdmUgdGhlIHNvY2tldCBkaXNjYXJkL2ZpbHRlciBhbGwgUlggdHJh
+ZmZpYy4gQUZBSUsgZnVuY3Rpb25hbCByZXF1ZXN0cyBhcmUgYWx3YXlzIDw3QiBkYXRhLCBzbyBJ
+U08tVFAgd291bGQgYmUgZmluZSB3aXRob3V0IGEgUlggYWRkcmVzcyBmb3IgZmxvdyBjb250cm9s
+IG9uIHRoZSA3REYgcmVxdWVzdCBzb2NrZXQuDQoNCg0KQW55IGZlZWRiYWNrL3Rob3VnaHRzIG9u
+IHRoYXQ/IDopIA0KDQpNaXQgZnJldW5kbGljaGVuIEdyw7zDn2VuDQpCZXN0IFJlZ2FyZHMNClRo
+b21hcyBXYWduZXINCg0K
