@@ -2,106 +2,87 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 640E62CC236
-	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 17:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688082CC23B
+	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 17:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387438AbgLBQZ6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Dec 2020 11:25:58 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:35067 "EHLO
+        id S1727432AbgLBQ1I (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Dec 2020 11:27:08 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:11994 "EHLO
         mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387405AbgLBQZ6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 11:25:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606926186;
+        with ESMTP id S1726670AbgLBQ1I (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 11:27:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606926256;
         s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=EBATEHZeZJeRrIC3X7gmTVqFxYZ3iIi6qc5SjPGFl30=;
-        b=QJ8RpRZDxQVY91hhgqP1gRXE8x8xyToZlsPzpUtrUHDgFcl+X9PTgyaIB8pbK3VxqL
-        FBw0GZnpmqmK2Of8KQ8dMM6TCugYEL3fMi4S91CBI6J1oSHzolj/TDDfcJPQ518oLrLZ
-        gF/pw9a7Fz91QXM496TVaIT4pLvc06h1U8uYOkoK+3ofWinllJ2FhbVC0OdEoEYrVI2G
-        j6UiFQyx2Rk4u4wU6vEkRMX3ZkKUOmqA/TACekMqRVOMTKZUjMSpZCsezj4ooJb+a2KQ
-        hVRMjYMtmcHFD3hRH8+G71QocOw+TziaY4Jx/bSlJrhd1UP45XiiLrTO798qMnUZ+OOQ
-        0sgQ==
+        bh=yJjgF8dOL6lwf0hmnUYZCr0Aq9lkYwrdRYbr2v6wxSU=;
+        b=DgyMDMm0b0tDJrGsXrA76QdxLI0DG3NJEw9ZEdzLjVwgvwOZNN1HskBq/ZWnwBX8+W
+        /TLe+O9vv/lQ5TqdyKVCs5iC2NUsKZXrD6odfCCxOi8MgrAzsvfm/7GwXE1okhFCJxs7
+        tcK2OGlz0f0opGYcuvzj2aGgEYmPwqkzseevCaOf5olDotJnONqrqFOl9Nde6mq/vBfT
+        vhPWEVv0znZMONJgBFvtUbnol7MNLdmo2VVwM8KrJNWXNHMdK/B79kCZjkUOUMjBNliJ
+        pc7BL/z3mmzbdkrd9tivTFOG1Pvaypz85sznW2rglk5JxwWIOHYMPCZM9u/SRlqI8kef
+        3WJQ==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iO89vpw=="
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.10.177]
         by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwB2GMvCYg
+        with ESMTPSA id n07f3bwB2GOECYq
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Wed, 2 Dec 2020 17:22:57 +0100 (CET)
-Subject: Re: [PATCH] can: don't count arbitration lose as an error
+        Wed, 2 Dec 2020 17:24:14 +0100 (CET)
+Subject: Re: rx-dropped increases if the can module is not loaded (yet)
 To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        "moderated list:ARM/Allwinner sunXi SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20201127095941.21609-1-jhofstee@victronenergy.com>
- <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
- <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
- <0988dd09-70d9-3ee8-9945-10c4dea49407@hartkopp.net>
- <405f9e1a-e653-e82d-6d45-a1e5298b5c82@victronenergy.com>
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <269cc265-272e-6b57-0f95-90a3bd66aea3@victronenergy.com>
+ <438db92e-692a-5fcf-db97-7ba3a51c97be@hartkopp.net>
+ <dea3d0e6-9e75-671c-b318-830b080ce5d5@victronenergy.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <b08226a0-bd96-637f-954d-fb8dedc0017b@hartkopp.net>
-Date:   Wed, 2 Dec 2020 17:22:56 +0100
+Message-ID: <8a05136d-5582-c8ef-012c-fc6a25ba744b@hartkopp.net>
+Date:   Wed, 2 Dec 2020 17:24:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <405f9e1a-e653-e82d-6d45-a1e5298b5c82@victronenergy.com>
+In-Reply-To: <dea3d0e6-9e75-671c-b318-830b080ce5d5@victronenergy.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Jeroen,
 
-On 02.12.20 16:37, Jeroen Hofstee wrote:
-> On 12/2/20 3:35 PM, Oliver Hartkopp wrote:
 
->> Do we agree that in one-shot mode both the tx_errors and the 
->> arbitration_lost counters are increased in the arbitration-lost case?
->>
->> At least this would fit to the Kvaser USB behaviour.
+On 02.12.20 16:47, Jeroen Hofstee wrote:
+> Hello Oliver,
 > 
-> 
-> I have no opinion about that. I just kept existing behavior.
-
-That's ok for me either.
-
->> And btw. I wondered if we should remove the check for 
->> CAN_CTRLMODE_ONE_SHOT here, as we ALWAYS should count a tx_error and 
->> drop the echo_skb when we have a TX-interrupt and TX-complete flag is 
->> zero.
+> On 11/28/20 6:44 PM, Oliver Hartkopp wrote:
+>> On 27.11.20 17:09, Jeroen Hofstee wrote:
 >>
->> So replace:
+>>> Since it took me a while to figure it out, it might be worthwhile to 
+>>> share.
+>>> If a CAN-bus network interface is first set to up and only later used,
+>>> the messages received in the meantime are counted by [1] as dropped.
 >>
->> if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
->>                   !(status & SR_TCS)) {
+>> Interesting! But makes sense and is consistent: When the CAN frame is 
+>> not processed by the network layer is is just dropped in the rx path.
 >>
->> with:
+>>> If the the can module is modprobed before the interface is upped, this
+>>> is no longer the case.
+>>>
+>>> Perhaps it saves someone some time.
 >>
->> if (!(status & SR_TCS)) {
+>> So far we have not documented these details for the existing netdev 
+>> statistics. Do you think this is needed when the behaviour, which 
+>> leads to rx-dropped, is common for other netdevs also?
 >>
->> Any suggestions?
 >>
 > 
-> In theory, yes. But I can't think of a reason you would end
-> up there without CAN_CTRLMODE_ONE_SHOT being set.
+> Don't know... Perhaps we should simply wait and see how many
+> people show up wondering where the rx-dropped frames are
+> coming from?
+> 
 
-Right. Me too. But for that reason I would remove that extra check to 
-catch this error even if CAN_CTRLMODE_ONE_SHOT is not enabled.
-
-> Aborting the current transmission in non single shot mode
-> will get you there and incorrectly report the message as
-> transmitted, but that is not implemented afaik.
-
-Ahem, no. If you get there the echo_skb is deleted and the tx_errors 
-counter is increased. Just as it should be.
+ACK ;-)
 
 Regards,
 Oliver
