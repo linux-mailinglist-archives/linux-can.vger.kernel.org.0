@@ -2,91 +2,71 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA282CC7E7
-	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 21:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E9C2CC7E5
+	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 21:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgLBUgO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Dec 2020 15:36:14 -0500
-Received: from relay-b03.edpnet.be ([212.71.1.220]:45993 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbgLBUgO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 15:36:14 -0500
-X-Greylist: delayed 838 seconds by postgrey-1.27 at vger.kernel.org; Wed, 02 Dec 2020 15:36:12 EST
-X-ASG-Debug-ID: 1606940492-0a88182e5848ad30001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (77.109.124.12.adsl.dyn.edpnet.net [77.109.124.12]) by relay-b03.edpnet.be with ESMTP id unXb3H9cSyJlNl9T; Wed, 02 Dec 2020 21:21:32 +0100 (CET)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.124.12.adsl.dyn.edpnet.net[77.109.124.12]
-X-Barracuda-Apparent-Source-IP: 77.109.124.12
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 1CC70117A76C;
-        Wed,  2 Dec 2020 21:21:32 +0100 (CET)
-Date:   Wed, 2 Dec 2020 21:21:27 +0100
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     Zhang Qilong <zhangqilong3@huawei.com>
-Cc:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
-        kuba@kernel.org, linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: Fix error handling in softing_netdev_open
-Message-ID: <20201202202127.GA17683@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [PATCH] can: Fix error handling in softing_netdev_open
-Mail-Followup-To: Zhang Qilong <zhangqilong3@huawei.com>, wg@grandegger.com,
-        mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org
-References: <20201202151632.1343786-1-zhangqilong3@huawei.com>
+        id S1726112AbgLBUff (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Dec 2020 15:35:35 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:15896 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726111AbgLBUff (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 15:35:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606941103;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:References:Cc:To:From:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=zVWqyUNXmY+BqsvQb4ckKO9IUPNmVxYeuAiBKwuZexQ=;
+        b=HC06I1p1D18VrV+N1dHbDSVcZ5RF/RgoUpy4Opz+CFpdwK+4lD2FTHDFDb88HyPKQP
+        TchGw+d7mMmpIDA3ARPcbqbSZ69yKBGbja98j8IvX2+Ii9oLCIgdwPXUiYS43o3yZVlG
+        oZ1bjdbDGDgCS/tja3GJqFfAigEfIfl+iOCZCZ5MSWde/TSp8FTrDQaZrCruE3I/MLLF
+        XMjhv8jjqJOE4St7bQmBXpg1sKXS1ba8236ADxR7tuUGsFxW1gTgowR1ZGwKR/Lv/s9S
+        RFhAd+bScKp8Oq/vxYlvqpY9PxtRTjp4ukLWx/wvTceFdPQ1SZklPQZgs9xBdKHGMd/W
+        hPbQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1rnbMYliT57T0lT8jNGw="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
+        with ESMTPSA id n07f3bwB2KVfCyp
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 2 Dec 2020 21:31:41 +0100 (CET)
+Subject: Re: Suggestion to have a functional addressing/broadcast option for
+ ISO-TP sockets
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     Thomas Wagner <thomas.wagner@pa-systems.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     "thwa1@web.de" <thwa1@web.de>
+References: <AM9PR06MB72834DE8FE187784AE914AB2B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+ <bf1b3dd2-1a43-0bc7-d1db-f4ad010944ed@hartkopp.net>
+ <AM9PR06MB7283F123B4B9B5A781597379B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+ <a01a36d2-725f-6de0-51bb-5a40be8d3e5b@hartkopp.net>
+Message-ID: <420f13ef-2993-7dd5-d537-085c1445be61@hartkopp.net>
+Date:   Wed, 2 Dec 2020 21:31:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201202151632.1343786-1-zhangqilong3@huawei.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 77.109.124.12.adsl.dyn.edpnet.net[77.109.124.12]
-X-Barracuda-Start-Time: 1606940492
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 1080
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: SPAM GLOBAL 0.9907 1.0000 4.2351
-X-Barracuda-Spam-Score: 4.24
-X-Barracuda-Spam-Status: No, SCORE=4.24 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.86265
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <a01a36d2-725f-6de0-51bb-5a40be8d3e5b@hartkopp.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Hi Thomas,
 
-On Wed, 02 Dec 2020 23:16:32 +0800, Zhang Qilong wrote:
+On 02.12.20 16:42, Oliver Hartkopp wrote:
+> On 02.12.20 15:58, Thomas Wagner wrote:
+>> I would much prefer to work of the GitHub repo if possible, as I don't 
+>> have a setup for newer kernels with CAN hardware.
 > 
-> If softing_netdev_open failed, we should call
-> close_candev to avoid reference leak.
-> 
-> Fixes: 03fd3cf5a179d ("can: add driver for Softing card")
-> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-> ---
->  drivers/net/can/softing/softing_main.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/can/softing/softing_main.c b/drivers/net/can/softing/softing_main.c
-> index 03a68bb486fd..40070c930202 100644
-> --- a/drivers/net/can/softing/softing_main.c
-> +++ b/drivers/net/can/softing/softing_main.c
-> @@ -382,8 +382,13 @@ static int softing_netdev_open(struct net_device *ndev)
->  
->  	/* check or determine and set bittime */
->  	ret = open_candev(ndev);
-> -	if (!ret)
-> -		ret = softing_startstop(ndev, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = softing_startstop(ndev, 1);
-> +	if (ret < 0)
-> +		close_candev(ndev);
-> +
->  	return ret;
->  }
->  
-> -- 
-> 2.25.4
-> 
+> Ok. Will send a notification here when the RFC code is ready to test.
+
+I added a branch sf_broadcast to the repo:
+https://github.com/hartkopp/can-isotp/commits/sf_broadcast
+
+I will do some tests tomorrow, but you can already check it out for 
+evaluation.
+
+Best,
+Oliver
