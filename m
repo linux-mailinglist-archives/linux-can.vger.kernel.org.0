@@ -2,107 +2,141 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B377A2CBE72
-	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 14:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F5F2CBFE3
+	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 15:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbgLBNgG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Dec 2020 08:36:06 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:29907 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgLBNgF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 08:36:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606915933;
+        id S1728942AbgLBOiX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Dec 2020 09:38:23 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:12148 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727975AbgLBOiX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 09:38:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606919731;
         s=strato-dkim-0002; d=hartkopp.net;
         h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=ZePi3w8rp8FS1iSkqEiLy78MnJ32klGkUQa6Uv32eQc=;
-        b=CTkLF2Eyub8AxdybikrEl6AfGmWBaDTgVbeRf2TyQTwtSaj84w3HgoevwAf37uPd0e
-        l3hy37laKxn/bi93nj2DrvD927qa7Hz/8Jity77CKj/htFVf43JyoXd2bIlmAs+LSpxt
-        gT96Ikq64LdfhzfmKFY76cu5jv8nlJm8YN2qTmpDBVmP6SpbQm5oft8gi46Sy3Vfdr+O
-        5REfK59mOT9u3K0Qv4satAZgiFIUyfk+SZ+uoFZkcoezlJmpbKUUMghJ8mx17cjbUqLk
-        3tzgyZH4fIBha44A77dOz+Cf4mZ5vwDfdz4do2RgckVz+VV9KoUTI78xvmnSVnlBk8Za
-        pcIw==
+        bh=AVuvWDbV/9+ouZdVUaYVWFIK1W5CysnFx9kN3a4DlG4=;
+        b=WVMfpVMDnHz3in9gx0erNCg9nGzRmfq3jbIKhthbVaDTwXmz353UGVD2vCXStPZTuG
+        VUrgWgOjnuIrkFDA2+PzPRefNiCkhXUb+JX0n8QimDnrOu9Tjx99L1OUgazZZ3I/ikCc
+        rJ5gkIHnJj2yKE1LKvywgUqMXWpmhJ33umAWiObyc8TuMpTGIZDQcGLzzAQM8pD+saxV
+        PyG50Zu6o1bGI6HGKanLLiXaBOI5ZmcjLDhR3EZuBgiojlKOaNxGxEOcVEuvCleEcjKg
+        Iw5eZoS5sUf1wr2Mafan/KiteAC5Yl383fFUOfRR2LG5Y6nNRT2DyRt7CBc9clJDYh5u
+        BC8g==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iO89vpw=="
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.10.177]
         by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwB2DWCBqq
+        with ESMTPSA id n07f3bwB2EZMC8u
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Wed, 2 Dec 2020 14:32:12 +0100 (CET)
-Subject: Re: Suggestion to have a functional addressing/broadcast option for
- ISO-TP sockets
-To:     Thomas Wagner <thomas.wagner@pa-systems.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Cc:     "thwa1@web.de" <thwa1@web.de>
-References: <AM9PR06MB72834DE8FE187784AE914AB2B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+        Wed, 2 Dec 2020 15:35:22 +0100 (CET)
+Subject: Re: [PATCH] can: don't count arbitration lose as an error
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20201127095941.21609-1-jhofstee@victronenergy.com>
+ <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
+ <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <bf1b3dd2-1a43-0bc7-d1db-f4ad010944ed@hartkopp.net>
-Date:   Wed, 2 Dec 2020 14:32:07 +0100
+Message-ID: <0988dd09-70d9-3ee8-9945-10c4dea49407@hartkopp.net>
+Date:   Wed, 2 Dec 2020 15:35:22 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <AM9PR06MB72834DE8FE187784AE914AB2B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+In-Reply-To: <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Thomas,
+Hi Jeroen,
 
-thanks for showing up here on the Linux-CAN mailing list!
-
-On 02.12.20 13:28, Thomas Wagner wrote:
-
-> as already discussed with Oliver Hartkopp via Github (https://github.com/hartkopp/can-isotp/issues/36), I suggest a new option/flag to enable ISO-TP sockets with just a TX address, while the RX address is being ignored/discarded. This can be useful for OBD2/UDS usage, where functional requests are used and sent in a 1-to-N scenario, while still having an ISO-TP style PCI.
+On 27.11.20 12:09, Jeroen Hofstee wrote:
+> On 11/27/20 11:30 AM, Marc Kleine-Budde wrote:
+>> On 11/27/20 10:59 AM, Jeroen Hofstee wrote:
+>>> Losing arbitration is normal in a CAN-bus network, it means that a
+>>> higher priority frame is being send and the pending message will be
+>>> retried later. Hence most driver only increment arbitration_lost, but
+>>> the sja1000 and sun4i driver also incremeant tx_error, causing errors
+>>> to be reported on a normal functioning CAN-bus. So stop counting them
+>>> as errors.
+>> Sounds plausible.
+>>
+>>> For completeness, the Kvaser USB hybra also increments the tx_error
+>>> on arbitration lose, but it does so in single shot. Since in that
+>>> case the message is not retried, that behaviour is kept.
+>> You mean only in one shot mode?
 > 
-> Oliver:
->> It would be something like a new flag, e.g. CAN_ISOTP_FADDR_TX_ONLY where only the tp.tx_id is used at bind() time (no registering of a tp.rx_id) and where you only can send PDUs that are max 7 bytes => SF.
+> Yes, well at least the function is called kvaser_usb_hydra_one_shot_fail.
+> 
+> 
+>>   What about one shot mode on the sja1000 cores?
+> 
+> 
+> That is a good question. I guess it will be counted as error by:
+> 
+>          if (isrc & IRQ_TI) {
+>              /* transmission buffer released */
+>              if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
+>                  !(status & SR_TCS)) {
+>                  stats->tx_errors++;
 
-Yes. I would be fine with it.
+I can confirm with CAN_CTRLMODE_ONE_SHOT active and the patch ("can: 
+sja1000: sja1000_err(): don't count arbitration lose as an error")
 
-Btw. I would like to ask about the naming of the flag.
+https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git/commit/?h=testing&id=bd0ccb92efb09c7da5b55162b283b42a93539ed7
 
-CAN_ISOTP_FADDR_TX_ONLY
-CAN_ISOTP_FUNCADDR_TX
-CAN_ISOTP_FUNC_ADDR
-CAN_ISOTP_FUNC_ADDR_TX
-(?? other ideas ??)
+I now get ONE(!) increment for tx_errors and ONE increment in the 
+arbitration-lost counter.
 
-> In depth Use-Case explanation:
-> With OBD2 and UDS requests on CAN, ISO-TP is used as a transport protocol. Requests can be physically addressed by a tester to a specific ECU using the CAN-IDs 0x7E0 to 0x7E7 (11-bit IDs).
-> The ECUs respond to the tester using the CAN-IDs 0x7E8 to 0x7EF. A tester can open 8 ISO-TP sockets, using the specific RX and TX addresses, to communicate with each ECU.
-> In some cases requests aren't sent physically addressed to a specific ECU, but broadcasted/functionally addressed to all ECUs who might care/can respond. This is done using the special CAN-ID 0x7DF.
-> Any ECU that might respond does so, using it's to-tester address (0x7E8 to 0x7EF). This way a 1-to-N broadcast/request can be done, after which multiple 1-to-1 connections can be established to transfer large PDUs.
+Before the above patch I had TWO tx_errors for each arbitration lost case.
 
-Btw. If you already have established the 8 1-to-1 sockets as described 
-above the ECU can also send PDUs with length >7 bytes as your socket 
-would do the protocol handshake.
+>                  can_free_echo_skb(dev, 0);
+>              } else {
+>                  /* transmission complete */
+>                  stats->tx_bytes +=
+>                      priv->read_reg(priv, SJA1000_FI) & 0xf;
+>                  stats->tx_packets++;
+>                  can_get_echo_skb(dev, 0);
+>              }
+>              netif_wake_queue(dev);
+>              can_led_event(dev, CAN_LED_EVENT_TX);
+>          }
+> 
+>  From the datasheet, Transmit Interrupt:
+> 
+> "set; this bit is set whenever the transmit bufferstatus
+> changes from ‘0-to-1’ (released) and the TIE bit is set
+> within the interrupt enable register".
+> 
+> I cannot test it though, since I don't have a sja1000.
 
-> In the current ISO-TP/SocketCAN implementation, an additional 9th socket needs to be used for those functional requests. Using an ISO-TP socket as 9th socket forces the user to choose an RX address that is never actually used. Using a RAW CAN socket forces the user to calculate/build a PCI manually and have the socket discard/filter all RX traffic. 
+Do we agree that in one-shot mode both the tx_errors and the 
+arbitration_lost counters are increased in the arbitration-lost case?
 
-You can simply remove the single default CAN_RAW filter which receives 
-all CAN-IDs:
+At least this would fit to the Kvaser USB behaviour.
 
-(see in cansend.c code)
+And btw. I wondered if we should remove the check for 
+CAN_CTRLMODE_ONE_SHOT here, as we ALWAYS should count a tx_error and 
+drop the echo_skb when we have a TX-interrupt and TX-complete flag is zero.
 
-setsockopt(s, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+So replace:
 
+if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
+                   !(status & SR_TCS)) {
 
-> AFAIK functional requests are always <7B data, so ISO-TP would be fine without a RX address for flow control on the 7DF request socket.
+with:
 
-Now I seed what you meant with "<7B" .. "<7 bytes"
-:-D
+if (!(status & SR_TCS)) {
 
-> Any feedback/thoughts on that? :)
-
-I'm currently working on the sja1000 arbitration lost topic but I can 
-send a RFC patch for this suggestion afterwards.
-
-Are you currently working on a Linux 5.10-rc kernel with ISO-TP included 
-in the tree - or would you like the testing based on my GitHub isotp repo?
+Any suggestions?
 
 Best regards,
 Oliver
