@@ -2,142 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D932CC141
-	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 16:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 640E62CC236
+	for <lists+linux-can@lfdr.de>; Wed,  2 Dec 2020 17:27:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727997AbgLBPsk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Dec 2020 10:48:40 -0500
-Received: from mail-eopbgr50116.outbound.protection.outlook.com ([40.107.5.116]:25245
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727677AbgLBPsk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 2 Dec 2020 10:48:40 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=efcf74TgoZgbSIwnU8b6ENwnXMgac+UKQQul2xLxc9vdRS9pFr4CS0cIhZMia9ZxjcA5tyaBGVHSa8sYDYCKzh3C/XZ5EekWhyyItSvBZhqU3kVlqLkL+heFSH1wYSJchFyuvtd/+3AgBDLHAHEAz8KHc47CDmfAoJtz7Cz1MiXHgk+rG4AeX8kj8c+geZtRckhOXSg+HOkCnwRiVHRd3eTpUBNlCRhi/Q9eUCpPgiIIT2+lQ1zvZdgixraOlcS3TKKcEeqEwKwsQvVTRZlUn7p3kjotwVo44QFgBbay78Ided03jFnTQ8yLJL4bYqHY2eXPs4iks00ZeCgOkbD8WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tYJk55MvKJlbRBsluiiCe4BLROvZ1yjrqLDvqHGnwAI=;
- b=P+LGzd7XzQQwq2jjSho2xHT0ohnyPF+mvhFlcmM0Tn1s70KEOjQ1qA2r/sLv0n5DaAgTvHm6PbeKJ3S8tsVqgY/HN9znYdvL7muuT83eb0bp3qbbe5w+ppvyaMe9UlwH+W7lx60mwJsAdkhuisV+Nw5t4uHfHOmnZG45JBtrbv9f0KA6mIIy1ZarlPiUnY6zPyoFnQwlrCgZFepS3vSDRVbmKI4IEmfGaD2N45KhfrMOIgbaCudmaEhVfRn0mqZNvkrsK6FPTS12OWjN7uZtS4FUtvJQQpuIOQ+a5vKSulD2Q5gmLw1aGeMsMcrnX2Eu5jqze81h0Edf/UUg7nGBng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=victronenergy.com; dmarc=pass action=none
- header.from=victronenergy.com; dkim=pass header.d=victronenergy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=victronenergy.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tYJk55MvKJlbRBsluiiCe4BLROvZ1yjrqLDvqHGnwAI=;
- b=j6AfHGT86INdjcy2+LtVL5nbcWFn+MXVESo/KNhXwnp9DcRNW5UwLgLDLJHh0a5C7rGdR5ee/tVwMpBc7OsnDzTwOaLYXRq8fGFcbMCw0UJSHOLVuoC9xZvp8u5ZAA46eeDOscKAEJ0SklGrfwDi06Kw+UsUvy2+IqahlCYHc+M=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=victronenergy.com;
-Received: from DBAPR07MB6967.eurprd07.prod.outlook.com (2603:10a6:10:192::11)
- by DBAPR07MB6854.eurprd07.prod.outlook.com (2603:10a6:10:17f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.6; Wed, 2 Dec
- 2020 15:47:51 +0000
-Received: from DBAPR07MB6967.eurprd07.prod.outlook.com
- ([fe80::ad22:24cb:3fd:617c]) by DBAPR07MB6967.eurprd07.prod.outlook.com
- ([fe80::ad22:24cb:3fd:617c%3]) with mapi id 15.20.3632.009; Wed, 2 Dec 2020
- 15:47:51 +0000
-Subject: Re: rx-dropped increases if the can module is not loaded (yet)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <269cc265-272e-6b57-0f95-90a3bd66aea3@victronenergy.com>
- <438db92e-692a-5fcf-db97-7ba3a51c97be@hartkopp.net>
-From:   Jeroen Hofstee <jhofstee@victronenergy.com>
-Message-ID: <dea3d0e6-9e75-671c-b318-830b080ce5d5@victronenergy.com>
-Date:   Wed, 2 Dec 2020 16:47:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <438db92e-692a-5fcf-db97-7ba3a51c97be@hartkopp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [2001:1c01:3bc5:4e00:e791:efe6:bf00:7133]
-X-ClientProxiedBy: AM4PR0701CA0013.eurprd07.prod.outlook.com
- (2603:10a6:200:42::23) To DBAPR07MB6967.eurprd07.prod.outlook.com
- (2603:10a6:10:192::11)
+        id S2387438AbgLBQZ6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Dec 2020 11:25:58 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:35067 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387405AbgLBQZ6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 2 Dec 2020 11:25:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1606926186;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=EBATEHZeZJeRrIC3X7gmTVqFxYZ3iIi6qc5SjPGFl30=;
+        b=QJ8RpRZDxQVY91hhgqP1gRXE8x8xyToZlsPzpUtrUHDgFcl+X9PTgyaIB8pbK3VxqL
+        FBw0GZnpmqmK2Of8KQ8dMM6TCugYEL3fMi4S91CBI6J1oSHzolj/TDDfcJPQ518oLrLZ
+        gF/pw9a7Fz91QXM496TVaIT4pLvc06h1U8uYOkoK+3ofWinllJ2FhbVC0OdEoEYrVI2G
+        j6UiFQyx2Rk4u4wU6vEkRMX3ZkKUOmqA/TACekMqRVOMTKZUjMSpZCsezj4ooJb+a2KQ
+        hVRMjYMtmcHFD3hRH8+G71QocOw+TziaY4Jx/bSlJrhd1UP45XiiLrTO798qMnUZ+OOQ
+        0sgQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iO89vpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.177]
+        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
+        with ESMTPSA id n07f3bwB2GMvCYg
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 2 Dec 2020 17:22:57 +0100 (CET)
+Subject: Re: [PATCH] can: don't count arbitration lose as an error
+To:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20201127095941.21609-1-jhofstee@victronenergy.com>
+ <434167b4-c2df-02bf-8a9c-2d4716c5435f@pengutronix.de>
+ <f5f93e72-c55f-cfd3-a686-3454e42c4371@victronenergy.com>
+ <0988dd09-70d9-3ee8-9945-10c4dea49407@hartkopp.net>
+ <405f9e1a-e653-e82d-6d45-a1e5298b5c82@victronenergy.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <b08226a0-bd96-637f-954d-fb8dedc0017b@hartkopp.net>
+Date:   Wed, 2 Dec 2020 17:22:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2001:1c01:3bc5:4e00:e791:efe6:bf00:7133] (2001:1c01:3bc5:4e00:e791:efe6:bf00:7133) by AM4PR0701CA0013.eurprd07.prod.outlook.com (2603:10a6:200:42::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.9 via Frontend Transport; Wed, 2 Dec 2020 15:47:51 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: debda649-7749-4df6-a567-08d896d9a067
-X-MS-TrafficTypeDiagnostic: DBAPR07MB6854:
-X-Microsoft-Antispam-PRVS: <DBAPR07MB685495CA9DBFC386C20AFC38C0F30@DBAPR07MB6854.eurprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aLDOaWSNO2HlapI9diOSFF7sTm9T/tuqMCFfAbuEoQjhdFUHsQkNJ4/Yww6yKQWD2FRlTYjd7Ep5BwC5a8ZAffd/zRHQuPwvEmaR7mqJP2+DxUGE/4OeQmByywgnAlobZPrycxBpKspxVcOvAU/3JAly+MkWw7hqVvYPbjUyLrrN3eZUCBXiscHKb8iXGwsk+Y/Z4dMgUOB7yjWH6gxHrOehik8WyE0vZem8V3Wibihmvtauk2woXLN73TQDx7YT+AgbbC88CYIrsb66lHT8hmIcQy8wd9okdrn0g8qUymptkvsTUGysUMd/4HKvGF4SmF2VpOTFYfLXsNICK33+y1tfVBQ1hK27MjGC54WIRHbIZo4w94zKDFQ41Ix1L4VvYLdsfGvEps5YjQCUOnhUOoqxY/ftU60cLz6d4G/u8o8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBAPR07MB6967.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(346002)(366004)(39850400004)(136003)(31686004)(4744005)(186003)(16526019)(36756003)(8936002)(53546011)(478600001)(8676002)(86362001)(31696002)(66476007)(2616005)(66556008)(66946007)(316002)(110136005)(83380400001)(2906002)(6486002)(52116002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?MGIxeXF1SjhRSEtjYkd6VWh6VWQzeG5tZ1p2dlBzclo4ejVnUFdXU0pSUElE?=
- =?utf-8?B?UlRDd3JvOG4yYVRPMDVhbU5nSE80cGRxcVp1cHZzaFY4RHVOUmNkTkJoVEtk?=
- =?utf-8?B?VmpWc29wQ2hMcFpkQ1JmLzNkczRYQ08xT2lGZkNCckdhRnNwYmdVN2tBVUVX?=
- =?utf-8?B?YVVPU3lwTlNxMUp4WWZDcHpBdGc3UGEvVThkZzF5c2RITDgxdDZsRjMxK1cr?=
- =?utf-8?B?U2dFNmd0NktwZWpmbzFFUjdDWE1TTnBCZWlIUFhnQjNBZ3pMSTQ1d0Z3WjJW?=
- =?utf-8?B?d1JINTc1SFNhaFpNQUVyL3lJRHJqYlVRV1cvRkt5WDJ3UzZGRDRRTVZ4NkNZ?=
- =?utf-8?B?SnBkVmx6VzJWbWdRbW5pUkRYZkUxZEpaTS9SbmtubGhTai9HdXZsVE9kZTdj?=
- =?utf-8?B?eDVaRnFtb2RLSzVOczM4a2dGY1pQZDU5SHg4RDJwNVBtZ3h6b0xkK1grYVMv?=
- =?utf-8?B?KzdFbEl2YmZ0ak8wcWtJM0tBRnNLOVVqSTFIOTFlTUhzMmVFaklYWGVrUml2?=
- =?utf-8?B?dHljYnJCNmtySzFwcGVDYVdYNHhvbTFOZUhFSnBLR1dCZlNSZDBuKzNQMXhx?=
- =?utf-8?B?dW5tU3Fwc1Q5OWZkUGl2d1c2UHd2Ry9GakpBTGVBaWxSMFczN3RCaFFTeENK?=
- =?utf-8?B?anlEeENYOHlRN1ZqeXNpakVYY1R4QlptMUFBRDRhRnBZTXl4bVJrZjQrQWFV?=
- =?utf-8?B?bkRFd2F5K1FBQzdjTkdqTTVrU3JFQ3Vzb1ZUd1BmZVo0dUVxYlF3ZUtudkVV?=
- =?utf-8?B?VEVZTlNNQ3RMdmlMSTV2bnY0ekE3YlRIWXVxT2pIcURwVlREZkR0SFBCQTE3?=
- =?utf-8?B?R2dRWkVqTEFhcGE0SnZQTE0xdy9XaFpWUTcvemR5R2dUdDlVWjNwLytEY3oz?=
- =?utf-8?B?L2lBZTRQem13cVZoTnBhbFBPV2hIbEJnbXU3K1NKUzc2YVIyNGxTN2ZqTWJr?=
- =?utf-8?B?WFU5V0MzKzR4ODFSMDFQV1FIb0d3QnB2d3JxRjFGUVV6Ynd2dkVCbURYRmk4?=
- =?utf-8?B?dXZaNWJlWDcxazh4aWhoOG5CN2hrQUltdWZhYUVjNFpBRnJkYXVlZEI4L2pZ?=
- =?utf-8?B?RVpiSWdXYkVvM0o3NjZZNEZJbjVwbWtmKzVaN0djK1VETmVKWStxWkw5SElo?=
- =?utf-8?B?TzJDb3B3dExMNEVEa1lwdmVyNnIzdnBzRTVaUC9OUCtIR3dWZnpxcmRwWmtw?=
- =?utf-8?B?MSttUUc4eHhlNUNMSjFPNk1Kc1htbXB1WkZEandGQStMRnFuK1Z1cXgyNXNu?=
- =?utf-8?B?V3J4QXNncW8vY0JrUFpNTGhOWnQ0YXVkbmxtRjh2bXFvdEd6akZVSU9EOU5q?=
- =?utf-8?B?N2pqZXVCNUJrUVA3cnltR2VmZXNRZGJKLzYzekJzNFdGRWJvYUFXaUN0bHJD?=
- =?utf-8?B?dVprTDRHaGRXdnloZmVXTlNWSkhrRC96OFcvaVNpbXVLU2VQTDdPcFdNMjJB?=
- =?utf-8?Q?XEEjCKjP?=
-X-OriginatorOrg: victronenergy.com
-X-MS-Exchange-CrossTenant-AuthSource: DBAPR07MB6967.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2020 15:47:51.5056
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 60b95f08-3558-4e94-b0f8-d690c498e225
-X-MS-Exchange-CrossTenant-Network-Message-Id: debda649-7749-4df6-a567-08d896d9a067
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: beQPaipLIcOnfGWI2Y4dapj+x8QDFvmSCKJ5ZVVRrpofund14lQnOTfuNKxZ1MTFQjOZDLGbq9t7w9MW0Z/7bJZ3t+lugF0zrxt7JBk/Jbw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR07MB6854
+In-Reply-To: <405f9e1a-e653-e82d-6d45-a1e5298b5c82@victronenergy.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Oliver,
+Hello Jeroen,
 
-On 11/28/20 6:44 PM, Oliver Hartkopp wrote:
-> On 27.11.20 17:09, Jeroen Hofstee wrote:
->
->> Since it took me a while to figure it out, it might be worthwhile to 
->> share.
->> If a CAN-bus network interface is first set to up and only later used,
->> the messages received in the meantime are counted by [1] as dropped.
->
-> Interesting! But makes sense and is consistent: When the CAN frame is 
-> not processed by the network layer is is just dropped in the rx path.
->
->> If the the can module is modprobed before the interface is upped, this
->> is no longer the case.
+On 02.12.20 16:37, Jeroen Hofstee wrote:
+> On 12/2/20 3:35 PM, Oliver Hartkopp wrote:
+
+>> Do we agree that in one-shot mode both the tx_errors and the 
+>> arbitration_lost counters are increased in the arbitration-lost case?
 >>
->> Perhaps it saves someone some time.
->
-> So far we have not documented these details for the existing netdev 
-> statistics. Do you think this is needed when the behaviour, which 
-> leads to rx-dropped, is common for other netdevs also?
->
->
+>> At least this would fit to the Kvaser USB behaviour.
+> 
+> 
+> I have no opinion about that. I just kept existing behavior.
 
-Don't know... Perhaps we should simply wait and see how many
-people show up wondering where the rx-dropped frames are
-coming from?
+That's ok for me either.
+
+>> And btw. I wondered if we should remove the check for 
+>> CAN_CTRLMODE_ONE_SHOT here, as we ALWAYS should count a tx_error and 
+>> drop the echo_skb when we have a TX-interrupt and TX-complete flag is 
+>> zero.
+>>
+>> So replace:
+>>
+>> if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT &&
+>>                   !(status & SR_TCS)) {
+>>
+>> with:
+>>
+>> if (!(status & SR_TCS)) {
+>>
+>> Any suggestions?
+>>
+> 
+> In theory, yes. But I can't think of a reason you would end
+> up there without CAN_CTRLMODE_ONE_SHOT being set.
+
+Right. Me too. But for that reason I would remove that extra check to 
+catch this error even if CAN_CTRLMODE_ONE_SHOT is not enabled.
+
+> Aborting the current transmission in non single shot mode
+> will get you there and incorrectly report the message as
+> transmitted, but that is not implemented afaik.
+
+Ahem, no. If you get there the echo_skb is deleted and the tx_errors 
+counter is increased. Just as it should be.
 
 Regards,
-
-Jeroen
-
+Oliver
