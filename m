@@ -2,86 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013822CD6FC
-	for <lists+linux-can@lfdr.de>; Thu,  3 Dec 2020 14:34:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 386FB2CD899
+	for <lists+linux-can@lfdr.de>; Thu,  3 Dec 2020 15:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436844AbgLCNbE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Dec 2020 08:31:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47842 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436833AbgLCNbD (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 3 Dec 2020 08:31:03 -0500
-From:   Sasha Levin <sashal@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com,
-        syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com,
-        syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 23/23] can: af_can: can_rx_unregister(): remove WARN() statement from list operation sanity check
-Date:   Thu,  3 Dec 2020 08:29:35 -0500
-Message-Id: <20201203132935.931362-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201203132935.931362-1-sashal@kernel.org>
-References: <20201203132935.931362-1-sashal@kernel.org>
+        id S1728727AbgLCOKH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Dec 2020 09:10:07 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:24684 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbgLCOKH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Dec 2020 09:10:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607004375;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=o2aVCg1kg+q3SZ6n9/rKxcpTwXIc2+cKzCUR2epdngU=;
+        b=iTB8gsrQT6G27vTJZMeMZbVZYFywbGddt7Sab+F+0YL0/w4MhUOKtaFd+Z44w5XxBC
+        7lAyD4C8T5lgsj3RJIsvAIw9WZqcGR3hQFiytZ+Y9c3DCMi0lUBD9uZa1VUE4EMwgoV/
+        xnkx4OdUCgKbnCkAPcvy5wJlI01RGClbduJ4tEqFFckWaXFODVekdbAsyGWhg6vuPBMD
+        Bw2aX7vQoMhYX6wikLilzFG2jK1Z385tyNLEmq9RkYeNxW7ZzFvmnu491jeDSYvBkBPe
+        RKlGUZXQ7txx0jAiR/Bhzen54X+rg3vz22LH84d4E7o4LqIWU9OClbRRzxGEfx8bAlkM
+        iELw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEBL7X5sbo3UIh9dyKNLCWJaRrQ0pDCeGtVbNHMQ98lI/DcPKMT"
+X-RZG-CLASS-ID: mo00
+Received: from localhost.localdomain
+        by smtp.strato.de (RZmta 47.3.4 AUTH)
+        with ESMTPSA id n07f3bwB3E6DFop
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 3 Dec 2020 15:06:13 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     mkl@pengutronix.de, kuba@kernel.org, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH 0/2] can-isotp fix and functional addressing
+Date:   Thu,  3 Dec 2020 15:06:02 +0100
+Message-Id: <20201203140604.25488-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+This patch set contains a fix that showed up while implementing the
+functional addressing switch suggested by Thomas Wagner.
 
-[ Upstream commit d73ff9b7c4eacaba0fd956d14882bcae970f8307 ]
+Unfortunately the functional addressing switch came in very late but
+it is really very simple and already tested.
 
-To detect potential bugs in CAN protocol implementations (double removal of
-receiver entries) a WARN() statement has been used if no matching list item was
-found for removal.
+I would like to leave it to the maintainers whether the second patch
+can still go into the 5.10-rc tree, which is intended for long-term.
 
-The fault injection issued by syzkaller was able to create a situation where
-the closing of a socket runs simultaneously to the notifier call chain for
-removing the CAN network device in use.
+Oliver Hartkopp (2):
+  can-isotp: block setsockopt on bound sockets
+  can-isotp: add SF_BROADCAST support for functional addressing
 
-This case is very unlikely in real life but it doesn't break anything.
-Therefore we just replace the WARN() statement with pr_warn() to preserve the
-notification for the CAN protocol development.
+ include/uapi/linux/can/isotp.h |  2 +-
+ net/can/isotp.c                | 32 +++++++++++++++++++++++---------
+ 2 files changed, 24 insertions(+), 10 deletions(-)
 
-Reported-by: syzbot+381d06e0c8eaacb8706f@syzkaller.appspotmail.com
-Reported-by: syzbot+d0ddd88c9a7432f041e6@syzkaller.appspotmail.com
-Reported-by: syzbot+76d62d3b8162883c7d11@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Link: https://lore.kernel.org/r/20201126192140.14350-1-socketcan@hartkopp.net
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- net/can/af_can.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/net/can/af_can.c b/net/can/af_can.c
-index fd6ef6d26846f..306d3584a4417 100644
---- a/net/can/af_can.c
-+++ b/net/can/af_can.c
-@@ -539,10 +539,13 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
- 
- 	/* Check for bugs in CAN protocol implementations using af_can.c:
- 	 * 'rcv' will be NULL if no matching list item was found for removal.
-+	 * As this case may potentially happen when closing a socket while
-+	 * the notifier for removing the CAN netdev is running we just print
-+	 * a warning here.
- 	 */
- 	if (!rcv) {
--		WARN(1, "BUG: receive list entry not found for dev %s, id %03X, mask %03X\n",
--		     DNAME(dev), can_id, mask);
-+		pr_warn("can: receive list entry not found for dev %s, id %03X, mask %03X\n",
-+			DNAME(dev), can_id, mask);
- 		goto out;
- 	}
- 
 -- 
-2.27.0
+2.29.2
 
