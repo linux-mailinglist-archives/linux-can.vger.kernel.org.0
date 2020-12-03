@@ -2,168 +2,129 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 655902CD274
-	for <lists+linux-can@lfdr.de>; Thu,  3 Dec 2020 10:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60AC2CD2C1
+	for <lists+linux-can@lfdr.de>; Thu,  3 Dec 2020 10:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728522AbgLCJX6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Dec 2020 04:23:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728033AbgLCJX6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Dec 2020 04:23:58 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93EDAC061A4D
-        for <linux-can@vger.kernel.org>; Thu,  3 Dec 2020 01:23:17 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kkkpT-0007J2-3L; Thu, 03 Dec 2020 10:23:11 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:9081:9b12:b54:e184] (unknown [IPv6:2a03:f580:87bc:d400:9081:9b12:b54:e184])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8CAED5A2733;
-        Thu,  3 Dec 2020 09:23:08 +0000 (UTC)
-Subject: Re: [PATCH] can: Fix error handling in softing_netdev_open
-To:     Zhang Qilong <zhangqilong3@huawei.com>, wg@grandegger.com,
-        davem@davemloft.net, kuba@kernel.org
-Cc:     linux-can@vger.kernel.org
-References: <20201202151632.1343786-1-zhangqilong3@huawei.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <4675262c-cbec-43b3-ceed-5651169f487e@pengutronix.de>
-Date:   Thu, 3 Dec 2020 10:23:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S2388635AbgLCJkm (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Dec 2020 04:40:42 -0500
+Received: from mail-eopbgr60064.outbound.protection.outlook.com ([40.107.6.64]:53934
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387667AbgLCJkl (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 3 Dec 2020 04:40:41 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=l9mwasETq/3QraX9Yn/zdnAQZOZ9AeWp+ZONIKbZ9tM+MuOEMP1lGQL421u5oD3rgHkz/58rCtlfqr/WGXbQEOkq5ZK9mmW8pBMB2TthDGiCEZmWFySh0UXtKOu5CxasqsJx+9GlvgHpziXt3Vklf/3qQpbOXnTS+P16K0JynS/GzdIbPYu96C5d+Zfc8Ws2D89OVSe23oerPGj0doTi16wXdzlnjoTY1jEB/uWJIdz6GNzuidqKQospRRdzCEZ2QOgw0RetO8aX4W3NTSSpprsVyVFbWXhlp6oaGzWINrDuRVvUjHTGd/X5Pu63NL1buU4KO53MNMAFXJTUejPeIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QM0vxyVtbtQICoj1Dc63acs4czKKogSiEKLBiH8nsrM=;
+ b=kwxEopaL1ypqitUabwZZnR09YtM8wqHdkqYz7704OhrshfRMs+KsS7wzILPcbPJoSQIVYkY7XPjdLFoQ1pfzjxiUxnOAOW5xIG78Uu7fwibv+Y2MHC2sECyGMXPFHlxcRHKCm4mNIN3QryALaM3PwW7C/y14HtE4+g6jxLajC8tcPCgDMj1else/zpfF3as7RzQc70oMaCW+yWJAUzQqEKldSLz2q3dsvQjyAh0j1TUSayx4hKgQ4LGmkfTEc+yDbh7YHzMOtqiBh2CIrCRjpC3/fcFpXjOsZsLHA4z5PBVve+tV2exFhxpDgUVS1jQKU5KMVsk+iCebsYPyCqwn4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=pa-systems.de; dmarc=pass action=none
+ header.from=pa-systems.de; dkim=pass header.d=pa-systems.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mahapa.onmicrosoft.com; s=selector2-mahapa-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QM0vxyVtbtQICoj1Dc63acs4czKKogSiEKLBiH8nsrM=;
+ b=h4GnZuH355+ZFuwuU/8vrOWc4SsYMYzbRy2XaS2c5oaRfWJcAhSv2RkQ4omPa5OpdQ8px6ScGEDyYlvPHHPso4tF5h5JRcgh1rhlomW7leBUuVooyrHJ9fr8ZSibgS2RU1fUwskjIpYqxmaUc6QHrSaq2s6ogMLVHe0/eWrZoJY=
+Received: from AM9PR06MB7283.eurprd06.prod.outlook.com (2603:10a6:20b:2d3::15)
+ by AM0PR06MB6451.eurprd06.prod.outlook.com (2603:10a6:208:1a1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.22; Thu, 3 Dec
+ 2020 09:39:53 +0000
+Received: from AM9PR06MB7283.eurprd06.prod.outlook.com
+ ([fe80::e14b:5647:7ace:196c]) by AM9PR06MB7283.eurprd06.prod.outlook.com
+ ([fe80::e14b:5647:7ace:196c%6]) with mapi id 15.20.3632.017; Thu, 3 Dec 2020
+ 09:39:53 +0000
+From:   Thomas Wagner <thomas.wagner@pa-systems.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     "thwa1@web.de" <thwa1@web.de>
+Subject: RE: Suggestion to have a functional addressing/broadcast option for
+ ISO-TP sockets
+Thread-Topic: Suggestion to have a functional addressing/broadcast option for
+ ISO-TP sockets
+Thread-Index: AdbIokQ7wYkfmwdQQtioWWQAsiVkcgADUMmAAAFyUvAAAx3IAAAKFjmAABqXJOA=
+Date:   Thu, 3 Dec 2020 09:39:53 +0000
+Message-ID: <AM9PR06MB7283E62151D53EF677B87517B5F20@AM9PR06MB7283.eurprd06.prod.outlook.com>
+References: <AM9PR06MB72834DE8FE187784AE914AB2B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+ <bf1b3dd2-1a43-0bc7-d1db-f4ad010944ed@hartkopp.net>
+ <AM9PR06MB7283F123B4B9B5A781597379B5F30@AM9PR06MB7283.eurprd06.prod.outlook.com>
+ <a01a36d2-725f-6de0-51bb-5a40be8d3e5b@hartkopp.net>
+ <420f13ef-2993-7dd5-d537-085c1445be61@hartkopp.net>
+In-Reply-To: <420f13ef-2993-7dd5-d537-085c1445be61@hartkopp.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: hartkopp.net; dkim=none (message not signed)
+ header.d=none;hartkopp.net; dmarc=none action=none header.from=pa-systems.de;
+x-originating-ip: [2003:ed:2713:f00:383f:de88:b80a:dcae]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 055b294e-5b11-43d8-2e7e-08d8976f632e
+x-ms-traffictypediagnostic: AM0PR06MB6451:
+x-microsoft-antispam-prvs: <AM0PR06MB64517A145DA039285DAD99BAB5F20@AM0PR06MB6451.eurprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: q8MTyrhvIbn1pjXtWKU4LIKxkUoNfeP8Q4Txe7QFV6HeYhINJXUi6UMjc69aPQRSO9SoFWmLNnKoPYmIkcLsFqJlQgF6wsDb06UecersFqhzm9WUa/mqEIvUgG9Mj9jaXW/Nlr6kkfi/SitABPbCKcAJyp0EjO9yKgQvMiiNo+X8/0I0CPezr5Z0e5C8nMKi/BrqMONBperDisLOBVyinrcFFFgbmi3ylqR0JqyX4oiHwdeVeKOx24Fdmj20bAGUGX9qVe+UXgup7nN0WaAfbLqQbzVN/XPAuP5SlO7cdpl+HWsrp8+PtaUJtV+XQckbI5kFpSrZK0LdzYzjsLvzFP1vKwBVZ5+S2w0e/uDXoI8a6ceyaDjuTC8SA8utumRivhdzIGwvdnUbAjQi9/lHdw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR06MB7283.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(39830400003)(396003)(366004)(136003)(4326008)(64756008)(55016002)(76116006)(966005)(86362001)(66446008)(110136005)(66946007)(66556008)(8676002)(52536014)(316002)(9686003)(5660300002)(478600001)(4744005)(66476007)(8936002)(2906002)(44832011)(6506007)(71200400001)(53546011)(186003)(7696005)(33656002)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?ZXUxQ0lkLzl4YXlIN0djVnJsNFRpZnpTbEVYZFROVHY5dUJsSmhmOWRPdmk3?=
+ =?utf-8?B?TXUxWEtabVk1VS9peUE1RVczOTRCU0lhck5HYjFqVVgxVUY1UlNOZVpjbHF1?=
+ =?utf-8?B?REo0OVB1TGFQdmRkT0NrZWpETHZhQWp4RG93YUk2clAzdmdFV3ZLdE42TThz?=
+ =?utf-8?B?eXh6MUtXMmFZUEVROVpCeDhYYmxDNTVZTVFGbG9uNXVmVGhabjBmOUZreXhi?=
+ =?utf-8?B?SVQwT1FyVDVKMGljS2JRalpyM1M3bWxUWGxqRlNuY2RRVjBxd0hPdHFqNUlv?=
+ =?utf-8?B?Y0xsVjlkMVc4VUU2REE4SS9uelNsaE51K1ZXNWJEYXEvV0ZsUXVxdFV0NnlD?=
+ =?utf-8?B?cXhnWjF1QWkxaG1DbzBlSldZdy9UT1pkWWxqYkZTMUgxSG8zQm12MTFlNG9t?=
+ =?utf-8?B?T0lyNytrb2k2VmVhSkVQV1pLVExLdXYxbjBRWEFFOGd5YzU4V21pRkFGY2N0?=
+ =?utf-8?B?bkJCQnQycTF2eUI1MkZMcnd5dktKQTZXSmpaYU1rY1NlcHZ6d29SeHNLSVQr?=
+ =?utf-8?B?VGhNTFluZXJ5dEZZeEJhZmtiWjlOeW5xeU8yZ29adkZITnNSTXo0TlRKbitP?=
+ =?utf-8?B?NWdTZ2xTelY5S2htK0UxTzQ2TVZpanJPTEY5NWNPbWU1MFNrdnZSTnMvNm5s?=
+ =?utf-8?B?dERTeE5MYThOQW8ydnJ4N2Qyai9YVWpuVVNKN2RHUjBhcld2KzF4d0VVLzEr?=
+ =?utf-8?B?b2xaUWFGNTFZZHo0TGVHRTBFbk1sYW5QZmhwdUhUNGhwdzdyTG8wTnBObUln?=
+ =?utf-8?B?b0RkbGdRL0VEWlo0aWdOenpzYjU0VUp5cEg5ZEkvamlZbm82YXVtUjNlWVhZ?=
+ =?utf-8?B?Z2VibHI1Z3NycDlqanZQYmk4TzdIY2RZWDhIdVdnSEJ5TnNwczh0K2p2L2Vr?=
+ =?utf-8?B?WllkVVJOQnVLNUloRHZKdVRMQkxUbm1YUWZVMm1tUkUySWl1ZWIxcTBhZDVl?=
+ =?utf-8?B?U1pGbDlqRnJ1b0lPZ3BmemlGV3dYS09GTm4zSVQvYlJ1MVI0Yk16MXN6Y1Bt?=
+ =?utf-8?B?eExQdFI0eFpKVWx6Tzc1VGpOblVXTnVMRjU2TjdwZGtJQTlxajBBbEZxY1Zz?=
+ =?utf-8?B?ZFhVTnJENEs5aVRMbnpESXZmOVRXUFdPZjdVOVpvQVQ1RWJIZVd0NUdkTDZZ?=
+ =?utf-8?B?VDI5MERxS2JwMjd3UjJQZC9neWFCR0J4SElZT2hNRmJlZkdCUGpySzJlWEYr?=
+ =?utf-8?B?ajJmSGVlUUphVEJESlYvUU8yOWpyY2lkUDdGZUFOTzQ5RmVVdTJjSXJ0RGh1?=
+ =?utf-8?B?UFVsOHVpa3NxQ05ZQi95RXBJbHlLdjhUZUdmdk1XZ2ZSQ29tQy81MmVMUHN3?=
+ =?utf-8?B?c2pyRGd3SjFFeDlMeTh5U1U5YXhOdCthT1FHTlA0MnFCUTFic0ZPdG9zOGF3?=
+ =?utf-8?Q?wKNlYldX1bOzpoDWmvYlJCBbocJIQNis=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20201202151632.1343786-1-zhangqilong3@huawei.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="hrVoA6mv8MyZttB9paf2fWzRkf5y0Slpa"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: pa-systems.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR06MB7283.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 055b294e-5b11-43d8-2e7e-08d8976f632e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2020 09:39:53.3582
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d8c1b19d-12b7-4029-a8de-e069486288e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: I3Lh0XMUVIBHuMXTJdv9UbH358R/UmSwSuLkNi9QUZlCJNM/adI2gfckfVqHKgEa7AT2p7RFy1Hnu4yj2/g3krnH14c5HIqG+Fe+tm5w4Bo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR06MB6451
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---hrVoA6mv8MyZttB9paf2fWzRkf5y0Slpa
-Content-Type: multipart/mixed; boundary="t81YQ6FIP0iFIefRVUrenrmfQFOZe2uIL";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Zhang Qilong <zhangqilong3@huawei.com>, wg@grandegger.com,
- davem@davemloft.net, kuba@kernel.org
-Cc: linux-can@vger.kernel.org
-Message-ID: <4675262c-cbec-43b3-ceed-5651169f487e@pengutronix.de>
-Subject: Re: [PATCH] can: Fix error handling in softing_netdev_open
-References: <20201202151632.1343786-1-zhangqilong3@huawei.com>
-In-Reply-To: <20201202151632.1343786-1-zhangqilong3@huawei.com>
-
---t81YQ6FIP0iFIefRVUrenrmfQFOZe2uIL
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 12/2/20 4:16 PM, Zhang Qilong wrote:
-> If softing_netdev_open failed, we should call
-> close_candev to avoid reference leak.
->=20
-> Fixes: 03fd3cf5a179d ("can: add driver for Softing card")
-> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-
-Added to linux-can/testing.
-
-Tnx,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---t81YQ6FIP0iFIefRVUrenrmfQFOZe2uIL--
-
---hrVoA6mv8MyZttB9paf2fWzRkf5y0Slpa
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/IrngACgkQqclaivrt
-76na/Qf/W8i6PAZWpXHfdv9slQVpDxWG6pGTa813CLSrPuPwLpLD70kSt2bG1fM7
-3WbuvGy8teMG/6Og3D1HKGzvKblhM/XD7xMmS3hM4Hanekw8Q2Dv9zga4NH9RHQZ
-M4CzzH6tq6ycEI6rSbudqILMKdkngzufVcYyZzZ7R443NE01TQSojvRvU7hgiQNn
-yDZr2BiMPN+uNcs737EPoRV71BNTXzMiLXhnXi4NAz9n+bA42zv2MPV1s+o9geYo
-8SBJoToKq8Ja5x0y6y0hs3cMsMTS2GYM4H8eOCahQCKn9nYTpP1dmeTBVPhQjp+q
-yIz581wwl3iwxt0vDTvxCjbvvXchFg==
-=7bVd
------END PGP SIGNATURE-----
-
---hrVoA6mv8MyZttB9paf2fWzRkf5y0Slpa--
+SGkgT2xpdmVyLA0KDQpPbiAwMy4xMi4yMCAyMTozMiwgT2xpdmVyIEhhcnRrb3BwIHdyb3RlOg0K
+PiBPbiAwMi4xMi4yMCAxNjo0MiwgT2xpdmVyIEhhcnRrb3BwIHdyb3RlOg0KPiA+IE9uIDAyLjEy
+LjIwIDE1OjU4LCBUaG9tYXMgV2FnbmVyIHdyb3RlOg0KPiA+PiBJIHdvdWxkIG11Y2ggcHJlZmVy
+IHRvIHdvcmsgb2YgdGhlIEdpdEh1YiByZXBvIGlmIHBvc3NpYmxlLCBhcyBJIGRvbid0DQo+ID4+
+IGhhdmUgYSBzZXR1cCBmb3IgbmV3ZXIga2VybmVscyB3aXRoIENBTiBoYXJkd2FyZS4NCj4gPg0K
+PiA+IE9rLiBXaWxsIHNlbmQgYSBub3RpZmljYXRpb24gaGVyZSB3aGVuIHRoZSBSRkMgY29kZSBp
+cyByZWFkeSB0byB0ZXN0Lg0KPiANCj4gSSBhZGRlZCBhIGJyYW5jaCBzZl9icm9hZGNhc3QgdG8g
+dGhlIHJlcG86DQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9oYXJ0a29wcC9jYW4taXNvdHAvY29tbWl0
+cy9zZl9icm9hZGNhc3QNCg0KSSBwdWxsZWQgdGhlIGJyYW5jaCBhbmQgdGVzdGVkIHRoZSBmbGFn
+IGJ5IHNpbXBseSByZXBsYWNpbmcgbXkgcHJldmlvdXMgaW1wbGVtZW50YXRpb24NCnRoYXQgdXNl
+ZCB0aGUgUkFXIHNvY2tldHMuIFdvcmtzIHdvbmRlcmZ1bGx5IGxvYWRlZCBpbnRvIHRoZSBVYnVu
+dHUgNS40LjAtNTYgYW5kDQphIDIuNi4zMSBjdXN0b20ga2VybmVsLiBJIGNhbiBkaXRjaCBhbGwg
+dGhlIFJYLXBhdGgtc2V0dGluZ3MgYW5kIGp1c3QgdXNlIHRoZSBmbGFnIHdpdGhvdXQNCmFueSBl
+cnJvcnMuIEVJTlZBTCBnZXRzIHRyaWdnZXJlZCBhcyBleHBlY3RlZCBmb3IgdG9vIGxvbmcgbWVz
+c2FnZXMuICBBbGwgZGVmYXVsdCBJU08tVFAgDQpzb2NrZXRzIHN0YXkgdW5oYXJtZWQuIFdvbmRl
+cmZ1bCwgdGhhbmtzIGZvciB0aGUgcXVpY2sgc29sdXRpb24hDQoNClJlZ2FyZHMNClRob21hcw0K
