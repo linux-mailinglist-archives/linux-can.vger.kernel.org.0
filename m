@@ -2,140 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C33B2CEA75
-	for <lists+linux-can@lfdr.de>; Fri,  4 Dec 2020 10:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA67C2CEED7
+	for <lists+linux-can@lfdr.de>; Fri,  4 Dec 2020 14:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726646AbgLDJFF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Dec 2020 04:05:05 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.161]:21331 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726471AbgLDJFF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Dec 2020 04:05:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607072472;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:References:Cc:To:From:Subject:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=WoerftFteiX6ACIuckmPLw/giNbgN3pDu/k+wbu1p1I=;
-        b=ixB2Q1lf+yFmPE3b+7DSxobbBDlf0UB5Z66RsOWj7wvJg27XwloGxoU8cfEK3fXmLY
-        Pzn3r7RxMwWL2D8V0ZGlTyBhY+Amkm8O5BwZRqeCmSjZlrTsdzgr4rxb/PZ4gZGqduS7
-        gvJCNHB6/fHAPFwnW3462M+CyoeW223ZqYOupjdigyEeehg7iTso7w5EbmbGB380sPYb
-        ZKoMTKr9sX1zqNnXjA26CELyY2BIBXjgMaChrkFqlg/9OEAZPbcebwL0W/I6yuBqWlff
-        LtGPmi0JYFWOJfAmRms9IYIdoqQIbiKnDcnnXAg3pS7juVr6dibAQVBWdV9pWWuKIPTy
-        8XmA==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xjyl0="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-        by smtp.strato.de (RZmta 47.3.4 DYNA|AUTH)
-        with ESMTPSA id n07f3bwB491BI3S
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 4 Dec 2020 10:01:11 +0100 (CET)
-Subject: Re: CAN ISO-TP Availability for Yocto
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     Jin Park <jpark@enphaseenergy.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-References: <DM6PR19MB36737423D8AC8E3C53912988B1F20@DM6PR19MB3673.namprd19.prod.outlook.com>
- <f17f5543-192b-b33d-df8b-1ea572b5c6c7@hartkopp.net>
-Message-ID: <4b93c231-a1de-05b4-54bb-1407168560f5@hartkopp.net>
-Date:   Fri, 4 Dec 2020 10:01:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1730165AbgLDNf5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Dec 2020 08:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726206AbgLDNf4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Dec 2020 08:35:56 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81530C0613D1
+        for <linux-can@vger.kernel.org>; Fri,  4 Dec 2020 05:35:16 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1klBEv-0004dM-QG
+        for linux-can@vger.kernel.org; Fri, 04 Dec 2020 14:35:13 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 3FCF85A43A3
+        for <linux-can@vger.kernel.org>; Fri,  4 Dec 2020 13:35:11 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 6CC265A4398;
+        Fri,  4 Dec 2020 13:35:10 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 03b56eae;
+        Fri, 4 Dec 2020 13:35:09 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2020-12-04
+Date:   Fri,  4 Dec 2020 14:35:05 +0100
+Message-Id: <20201204133508.742120-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <f17f5543-192b-b33d-df8b-1ea572b5c6c7@hartkopp.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Just an addition:
+Hello Jakub, hello David,
 
-I've looked into openembedded
+here's a pull request of 3 patches for net/master.
 
-https://github.com/openembedded/meta-openembedded/commits/master/meta-oe/recipes-extended/socketcan/can-isotp_git.bb
+Zhang Qilong contributes a patch for the softing driver, which fixes the error
+handling in the softing_netdev_open() function.
 
-and iso-tp was blacklisted here:
+Oliver Hartkopp has two patches for the ISOTP CAN protocol and says:
 
-https://github.com/openembedded/meta-openembedded/commit/649d491b213f19f4d7382cc20d824785d0965310#diff-a0aaa6de49c7f7360101571e2fe547248bb29c611c1bcf1f358667007c12f6b5
+| This patch set contains a fix that showed up while implementing the
+| functional addressing switch suggested by Thomas Wagner.
+|
+| Unfortunately the functional addressing switch came in very late but
+| it is really very simple and already tested.
+|
+| I would like to leave it to the maintainers whether the second patch
+| can still go into the 5.10-rc tree, which is intended for long-term.
 
-The recipe update is from 2019-08-29
-https://github.com/openembedded/meta-openembedded/commit/d6b4dee1b16b6b2bf5c502f23be7eb05ad2f675e#diff-a0aaa6de49c7f7360101571e2fe547248bb29c611c1bcf1f358667007c12f6b5
+regards,
+Marc
 
-So I wonder why isotp was blacklisted instead of upgrading the commit 
-hash to a more recent version of the can-isotp GitHub repo ...
+---
 
-¯\_(ツ)_/¯
+The following changes since commit bbe2ba04c5a92a49db8a42c850a5a2f6481e47eb:
 
-Btw. they use the out-of-tree implementation instead of creating a 
-patch. Hm.
+  Merge tag 'net-5.10-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2020-12-03 13:10:11 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.10-20201204
+
+for you to fetch changes up to 2e15980d931afa2e51a067ff6adebf5d5b3929b1:
+
+  can: isotp: add SF_BROADCAST support for functional addressing (2020-12-04 12:49:12 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.10-20201204
+
+----------------------------------------------------------------
+Oliver Hartkopp (2):
+      can: isotp: isotp_setsockopt(): block setsockopt on bound sockets
+      can: isotp: add SF_BROADCAST support for functional addressing
+
+Zhang Qilong (1):
+      can: softing: softing_netdev_open(): fix error handling
+
+ drivers/net/can/softing/softing_main.c |  9 +++++++--
+ include/uapi/linux/can/isotp.h         |  2 +-
+ net/can/isotp.c                        | 32 +++++++++++++++++++++++---------
+ 3 files changed, 31 insertions(+), 12 deletions(-)
 
 
-
-On 04.12.20 09:14, Oliver Hartkopp wrote:
-> Hello Jin,
-> 
-> On 03.12.20 23:50, Jin Park wrote:
-> 
->> I tried to build and load module and build image with Yocto frameworks 
->> and it showed the error like this.
->>
->> ‘can-isotp was skipped: Recipe is blacklisted: Kernel module Needs 
->> forward porting to kernel 5.2+’
->>
->> Do you know whether CAN ISO-TP supports Yocto project?
-> 
-> the CAN ISO-TP support will be in mainline Linux starting with Linux 
-> kernel 5.10.
-> 
-> For older kernels you may use the implementation for out-of-tree 
-> compilation which is located here:
-> https://github.com/hartkopp/can-isotp (master branch)
-> 
-> There is also a more up-to-date version in the 4.17+ branch which I used 
-> to prepare the mainline process.
-> 
-> But out-of-tree compilation is probably not to right way to integrate 
-> iso-tp into Yocto. I would suggest to backport the current mainline code 
-> to Kernel 5.4 and create a patch for it so that is applied to the kernel 
-> code before the kernel compilation process.
-> (Is this already the process in Yocto to have a patch like this which 
-> lead to the Yocto error message??)
-> 
-> Backporting the 5.10-rc mainline code to 5.4 is really easy as only one 
-> thing needs to be changed/reverted:
-> https://github.com/hartkopp/can-isotp/commit/98986fc2f07cb5c7fa73a86d9b4b3ae417d35d79 
-> 
-> 
->> I tried to bake module in below condition.
->>
->>   * Hardware: VAR-SOM-MX8M-NANO
->>   * Yocto version: Dunfell Kernel 5.4.74
->>
->> jin@jin-ThinkPad-P51:~/var-fslc-yocto$ bitbake can-isotp
->>
->> WARNING: You have included the meta-virtualization layer, but 
->> 'virtualization' has not been enabled in your DISTRO_FEATURES. Some 
->> bbappend files may not take effect. See the meta-virtualization README 
->> for details on enabling virtualization support.
->>
->> Loading cache: 100% 
->> |#########################################################################################################################################################################| 
->> Time: 0:00:00
->>
->> Loaded 3848 entries from dependency cache.
->>
->> ERROR: Nothing PROVIDES 'can-isotp'
->>
->> can-isotp was skipped: Recipe is blacklisted: Kernel module Needs 
->> forward porting to kernel 5.2+
-> 
-> I'm not familiar with Yocto. But when they created a kernel patch 
-> including code/include/Kconfig/Makefile (as suggested above) it should 
-> be easy to backport the mainline code as base for a 5.4 kernel patch.
-> 
-> Please let me know if you have problems creating such a 5.4 kernel patch.
-> 
-> Regards,
-> Oliver
-> 
