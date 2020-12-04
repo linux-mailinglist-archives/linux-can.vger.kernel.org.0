@@ -2,180 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7732CEEDB
-	for <lists+linux-can@lfdr.de>; Fri,  4 Dec 2020 14:38:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8E82CEFA1
+	for <lists+linux-can@lfdr.de>; Fri,  4 Dec 2020 15:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730179AbgLDNgf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Dec 2020 08:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbgLDNgf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Dec 2020 08:36:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEF5C061A56
-        for <linux-can@vger.kernel.org>; Fri,  4 Dec 2020 05:35:17 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1klBEx-0004f2-Vg
-        for linux-can@vger.kernel.org; Fri, 04 Dec 2020 14:35:16 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 27A635A43B6
-        for <linux-can@vger.kernel.org>; Fri,  4 Dec 2020 13:35:13 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id BD0A85A439D;
-        Fri,  4 Dec 2020 13:35:10 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 13ab1853;
-        Fri, 4 Dec 2020 13:35:10 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Thomas Wagner <thwa1@web.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 3/3] can: isotp: add SF_BROADCAST support for functional addressing
-Date:   Fri,  4 Dec 2020 14:35:08 +0100
-Message-Id: <20201204133508.742120-4-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201204133508.742120-1-mkl@pengutronix.de>
-References: <20201204133508.742120-1-mkl@pengutronix.de>
+        id S1727918AbgLDORe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Dec 2020 09:17:34 -0500
+Received: from mout.web.de ([212.227.17.12]:48031 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726395AbgLDORe (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 4 Dec 2020 09:17:34 -0500
+X-Greylist: delayed 1168 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 09:17:33 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1607091342;
+        bh=NE3Hh7UGu5j9Uf3U2IhfGfSQzsBZcglIXnyg/dtHqEI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=BFSLhiV6kGbDQyEWabRqSDZOTLwQnp7cj5PDdrWrw0cH8RHy92qyRinKxMnBulfrs
+         1G/R3bOh/aMaLs1btgo3mNOw7uM5u2C30z9SToFrMX4jqKBwIaqADp7V+KeLK529fw
+         vr/639OwpHiQBMHrCrLnTyq+JhDO5d8Dw3P8dupo=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from DEV-VM-UBUNTU.fritz.box ([79.246.214.49]) by smtp.web.de
+ (mrweb103 [213.165.67.124]) with ESMTPSA (Nemesis) id
+ 0MTPel-1kdEmw48l5-00SNjn; Fri, 04 Dec 2020 14:56:14 +0100
+From:   Thomseeen <thwa1@web.de>
+To:     socketcan@hartkopp.net, linux-can@vger.kernel.org
+Cc:     Thomseeen <thwa1@web.de>
+Subject: [PATCH] isotp: do not validate RX address when the broadcast flag is active
+Date:   Fri,  4 Dec 2020 14:55:57 +0100
+Message-Id: <20201204135557.55599-1-thwa1@web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:M0IPn/eJYNa+VT6lziWP4YbOXhZ920RW3W35EwTVlN9UX8rpwn1
+ /ELwp+NbMKYQfWXTM5ff04/yzCPR4o2Rate2w1P6V4AdVduIZ0tjy1OPOv2McMmXP9ZH+F1
+ /lLK9c2UYGNk25Inv6cPCp2md2g7F4ZUP1ngUwWNkEBQH651tJDUKqREq2t9SmGa2zG2mzP
+ ZV+ccX3FvHdU9mYG4YiIg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QHf4CV43c4M=:E+nMkf8Om3bAu5+PT1jbKY
+ DfKeBy+07ErTNCeeeoqEO77qO9p1mzbrnDmS3QGssHb0QlozbyiDWO3HBqv0ah1o1BFVrbhP2
+ Gn9l4FBp8Ilz5JzZ0qoitr+nJ4WCLUwi3QptoPJ1M3oX35q/Rym56eh9ucTof8R7FbjWMMAwP
+ LohIFM/v6DHxJIcruTARjL6mPErpuezgnHSV/SlJYe+jEawzxDMS7qzpEXo2qEoSfW+ENKIdr
+ fFBkPsEDDsDvDzj/ddjBG3S1br49xwBA9aATmxcff2bZD1+Lb2uYc32n+IG4KNK6OHme3sG6j
+ uHApptj2kMhrLnAYSq5FaMZ5brURhWeJGAxrvzRpvDwRVRcODuzE+3hACVkClumoE8h0MyQJ3
+ SF0sjxxnmyKqslSTfOrY/uefreZV8cUw9TPH4a5SHAcKI2R/D+S1r3UFf3+CELRa0HDNVFfXq
+ swPTsQZn1Dkh7Sj8npuoJIdDE/V9PvIxMMjZbTiiuz3hlKYmULRaG4exp28HA4omjG0OF6qy/
+ 78vVukvTPa1DOe9jzFnAKwlLCRsRq0nknV16jSwj8GOkxFa5xdn7Si/I5KjsTD/4wBzc4u61r
+ SPw1kRjody51lM9EDyuV3H/2LRn3LDUyF87nvJ6nUMosXRii72u5PvBl12wakkkSWiDxRSOzj
+ MH0k+8Fv5RwAnN6isKvjrQknJVF4E8fZNnp/y+dh3Gl2fL1c7YoRvb6xcwoqgE9/m5D2Wn1pT
+ h5f5OYRRVnMM0xRpycWUJejTBgIaKMYCxTlubOPWg/W0CisLEJ19aR5KozEob4VpezkgPog1/
+ DbxDiGtQAusmGD28DSp0q6BEHq743+LeI18Dt9wv5qemLfhdDKgKMOrDqMsX0ygeEmXT/Ql13
+ C435xw4Lf3u/omf5m6xg==
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+EADDRNOTAVAIL shouldn't be thrown when an invalid RX address (e.g. NO_CAN_=
+ID)
+is set while the socket is used with the CAN_ISOTP_SF_BROADCAST flag.
 
-When CAN_ISOTP_SF_BROADCAST is set in the CAN_ISOTP_OPTS flags the CAN_ISOTP
-socket is switched into functional addressing mode, where only single frame
-(SF) protocol data units can be send on the specified CAN interface and the
-given tp.tx_id after bind().
+Signed-off-by: Thomseeen <thwa1@web.de>
+=2D--
+ net/can/isotp.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-In opposite to normal and extended addressing this socket does not register a
-CAN-ID for reception which would be needed for a 1-to-1 ISOTP connection with a
-segmented bi-directional data transfer.
-
-Sending SFs on this socket is therefore a TX-only 'broadcast' operation.
-
-Suggested-by: Thomas Wagner <thwa1@web.de>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Tested-by: Thomas Wagner <thwa1@web.de>
-Link: https://lore.kernel.org/r/20201203140604.25488-3-socketcan@hartkopp.net
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- include/uapi/linux/can/isotp.h |  2 +-
- net/can/isotp.c                | 29 ++++++++++++++++++++---------
- 2 files changed, 21 insertions(+), 10 deletions(-)
-
-diff --git a/include/uapi/linux/can/isotp.h b/include/uapi/linux/can/isotp.h
-index 7793b26aa154..c55935b64ccc 100644
---- a/include/uapi/linux/can/isotp.h
-+++ b/include/uapi/linux/can/isotp.h
-@@ -135,7 +135,7 @@ struct can_isotp_ll_options {
- #define CAN_ISOTP_FORCE_RXSTMIN	0x100	/* ignore CFs depending on rx stmin */
- #define CAN_ISOTP_RX_EXT_ADDR	0x200	/* different rx extended addressing */
- #define CAN_ISOTP_WAIT_TX_DONE	0x400	/* wait for tx completion */
--
-+#define CAN_ISOTP_SF_BROADCAST	0x800	/* 1-to-N functional addressing */
- 
- /* default values */
- 
 diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 26bdc3c20b7e..5ce26e568f16 100644
---- a/net/can/isotp.c
+index fb6dba1..ae939bf 100644
+=2D-- a/net/can/isotp.c
 +++ b/net/can/isotp.c
-@@ -865,6 +865,14 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	if (!size || size > MAX_MSG_LENGTH)
+@@ -1106,20 +1106,25 @@ static int isotp_bind(struct socket *sock, struct =
+sockaddr *uaddr, int len)
+ #endif
  		return -EINVAL;
- 
-+	/* take care of a potential SF_DL ESC offset for TX_DL > 8 */
-+	off = (so->tx.ll_dl > CAN_MAX_DLEN) ? 1 : 0;
-+
-+	/* does the given data fit into a single frame for SF_BROADCAST? */
-+	if ((so->opt.flags & CAN_ISOTP_SF_BROADCAST) &&
-+	    (size > so->tx.ll_dl - SF_PCI_SZ4 - ae - off))
-+		return -EINVAL;
-+
- 	err = memcpy_from_msg(so->tx.buf, msg, size);
- 	if (err < 0)
- 		return err;
-@@ -891,9 +899,6 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	cf = (struct canfd_frame *)skb->data;
- 	skb_put(skb, so->ll.mtu);
- 
--	/* take care of a potential SF_DL ESC offset for TX_DL > 8 */
--	off = (so->tx.ll_dl > CAN_MAX_DLEN) ? 1 : 0;
--
- 	/* check for single frame transmission depending on TX_DL */
- 	if (size <= so->tx.ll_dl - SF_PCI_SZ4 - ae - off) {
- 		/* The message size generally fits into a SingleFrame - good.
-@@ -1016,7 +1021,7 @@ static int isotp_release(struct socket *sock)
- 	hrtimer_cancel(&so->rxtimer);
- 
- 	/* remove current filters & unregister */
--	if (so->bound) {
-+	if (so->bound && (!(so->opt.flags & CAN_ISOTP_SF_BROADCAST))) {
- 		if (so->ifindex) {
- 			struct net_device *dev;
- 
-@@ -1052,6 +1057,7 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	struct net_device *dev;
- 	int err = 0;
- 	int notify_enetdown = 0;
-+	int do_rx_reg = 1;
- 
- 	if (len < CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.tp))
- 		return -EINVAL;
-@@ -1066,6 +1072,10 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	if (!addr->can_ifindex)
- 		return -ENODEV;
- 
+
+-	if (addr->can_addr.tp.rx_id =3D=3D addr->can_addr.tp.tx_id)
+-		return -EADDRNOTAVAIL;
 +	/* do not register frame reception for functional addressing */
 +	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
-+		do_rx_reg = 0;
++		do_rx_reg =3D 0;
 +
- 	lock_sock(sk);
- 
- 	if (so->bound && addr->can_ifindex == so->ifindex &&
-@@ -1093,13 +1103,14 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 
- 	ifindex = dev->ifindex;
- 
--	can_rx_register(net, dev, addr->can_addr.tp.rx_id,
--			SINGLE_MASK(addr->can_addr.tp.rx_id), isotp_rcv, sk,
--			"isotp", sk);
-+	if (do_rx_reg)
-+		can_rx_register(net, dev, addr->can_addr.tp.rx_id,
-+				SINGLE_MASK(addr->can_addr.tp.rx_id),
-+				isotp_rcv, sk, "isotp", sk);
- 
- 	dev_put(dev);
- 
--	if (so->bound) {
-+	if (so->bound && do_rx_reg) {
- 		/* unregister old filter */
- 		if (so->ifindex) {
- 			dev = dev_get_by_index(net, so->ifindex);
-@@ -1302,7 +1313,7 @@ static int isotp_notifier(struct notifier_block *nb, unsigned long msg,
- 	case NETDEV_UNREGISTER:
- 		lock_sock(sk);
- 		/* remove current filters & unregister */
--		if (so->bound)
-+		if (so->bound && (!(so->opt.flags & CAN_ISOTP_SF_BROADCAST)))
- 			can_rx_unregister(dev_net(dev), dev, so->rxid,
- 					  SINGLE_MASK(so->rxid),
- 					  isotp_rcv, sk);
--- 
-2.29.2
++	/* do not validate rx address for functional addressing */
++	if (do_rx_reg) {
++		if (addr->can_addr.tp.rx_id =3D=3D addr->can_addr.tp.tx_id)
++			return -EADDRNOTAVAIL;
 
+-	if ((addr->can_addr.tp.rx_id | addr->can_addr.tp.tx_id) &
+-	    (CAN_ERR_FLAG | CAN_RTR_FLAG))
++		if (addr->can_addr.tp.rx_id & (CAN_ERR_FLAG | CAN_RTR_FLAG))
++			return -EADDRNOTAVAIL;
++	}
++
++	if (addr->can_addr.tp.tx_id & (CAN_ERR_FLAG | CAN_RTR_FLAG))
+ 		return -EADDRNOTAVAIL;
+
+ 	if (!addr->can_ifindex)
+ 		return -ENODEV;
+
+-	/* do not register frame reception for functional addressing */
+-	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
+-		do_rx_reg =3D 0;
+-
+ 	lock_sock(sk);
+
+ 	if (so->bound && addr->can_ifindex =3D=3D so->ifindex &&
+=2D-
+2.25.1
 
