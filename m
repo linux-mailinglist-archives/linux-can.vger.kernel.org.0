@@ -2,54 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFAAF2CF820
-	for <lists+linux-can@lfdr.de>; Sat,  5 Dec 2020 01:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8B52CF935
+	for <lists+linux-can@lfdr.de>; Sat,  5 Dec 2020 04:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730722AbgLEAq6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 4 Dec 2020 19:46:58 -0500
-Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:49526 "EHLO
-        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgLEAq5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 4 Dec 2020 19:46:57 -0500
-X-Greylist: delayed 14573 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 19:46:41 EST
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
-        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 274A31A5589;
-        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
-        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
-Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
-        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+        id S1726151AbgLEDpR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 4 Dec 2020 22:45:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40652 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725300AbgLEDpR (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 4 Dec 2020 22:45:17 -0500
+Date:   Fri, 4 Dec 2020 19:44:35 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607139877;
+        bh=DedLMCvUUNoNA8KM948vSidKtSEDZGqQQyINU7/n3WQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n1d/CegJidq7wdRVGjJRC2XNBkXnKdUlaOA/iDk1G03ARpQorizmjttSeKU74MPMj
+         DKnSaqnOo3tlDkMIVW3kCIGhIVaM0k1oOanCUEYPRemIYmRJR0D0fdnkZPGwm4996v
+         4Erz00v1IuJKt92PYNzU61FCui72ZdYEZtKbv99e0LI1dtSKkhkvwprbzDjCtXMaBm
+         mMu3WN+hAEKbLDyJxnWDg5CkigObHulBzFQTjhd//SLBeOEgjHp9oi0uGhkIal20mH
+         2ASy/8lEmnmH7fTzwJ3lD2wf01O6DdZTJWGemem78OQ8zrQRPFPifFiGbZkD0KX4+F
+         tgCxyq9c4HF9g==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Thomas Wagner <thwa1@web.de>
+Subject: Re: [net 3/3] can: isotp: add SF_BROADCAST support for functional
+ addressing
+Message-ID: <20201204194435.0d4ab3fd@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <20201204133508.742120-4-mkl@pengutronix.de>
+References: <20201204133508.742120-1-mkl@pengutronix.de>
+        <20201204133508.742120-4-mkl@pengutronix.de>
 MIME-Version: 1.0
-Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
-Date:   Sat, 05 Dec 2020 04:44:54 +0900
-From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
-To:     <infocarferr1@aim.com>
-Reply-To: <infocarfer@aim.com>
-Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
-         Kuo Fung I have Important Matter to Discuss with you concerning
-         my late client. Died without a NEXT OF KIN. Send me your private
-         email for full details information. 
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MAILER: Active! mail
-X-TM-AS-MML: disable
-X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
-X-TM-AS-Result: No--4.326-5.0-31-10
-X-imss-scan-details: No--4.326-5.0-31-10
-X-TM-AS-User-Approved-Sender: No
-X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
-        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
-        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
-        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
-        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-infocarfer@aim.com
+On Fri,  4 Dec 2020 14:35:08 +0100 Marc Kleine-Budde wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> When CAN_ISOTP_SF_BROADCAST is set in the CAN_ISOTP_OPTS flags the CAN_ISOTP
+> socket is switched into functional addressing mode, where only single frame
+> (SF) protocol data units can be send on the specified CAN interface and the
+> given tp.tx_id after bind().
+> 
+> In opposite to normal and extended addressing this socket does not register a
+> CAN-ID for reception which would be needed for a 1-to-1 ISOTP connection with a
+> segmented bi-directional data transfer.
+> 
+> Sending SFs on this socket is therefore a TX-only 'broadcast' operation.
 
-
-
+Unclear from this patch what is getting fixed. Looks a little bit like
+a feature which could be added in a backward compatible way, no?
+Is it only added for completeness of the ISOTP implementation?
