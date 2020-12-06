@@ -2,117 +2,134 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E08242D058E
-	for <lists+linux-can@lfdr.de>; Sun,  6 Dec 2020 15:57:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8299F2D05F3
+	for <lists+linux-can@lfdr.de>; Sun,  6 Dec 2020 17:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgLFO5I (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 6 Dec 2020 09:57:08 -0500
-Received: from mout01.posteo.de ([185.67.36.65]:55259 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726043AbgLFO5H (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 6 Dec 2020 09:57:07 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 2F3AB16005F
-        for <linux-can@vger.kernel.org>; Sun,  6 Dec 2020 15:56:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1607266569; bh=wBulcl0K+dypbINdNV/6e7GgIcnIO2lTiWRbQ+clK1U=;
-        h=To:From:Autocrypt:Subject:Date:From;
-        b=PCVhjVQFbSCrgSugnGewCmFQbQH+/iyWfbhv2QfkI8J33zfJQgUNHHFp44zCtTBMu
-         R7A95uwWB4ugyzJxaEIOs4CuNjwO6U1QSE3HwgV8HSGC6vmJV7TBc+LgSRd9jbO3yS
-         W0lS94FA2g0JaWIhzVLtbw1sHtXnGxehImq949LzKvPLlceP4wh088GHK+Jwtpd4HO
-         CLCsu9ojszljREt9CmknZhQyOsPH7jQbvoviu8AEUP1vey0PP8r1+F7UWvmmXu4jz6
-         hNdwca22MwM0FkebrCAbIyeQf01wulMdqp1QjN9/Vh9m3NrQmf+T48T1hKYeZwdKj8
-         u9Vup/CjG0PIA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4CpqJS4PZLz6tmD;
-        Sun,  6 Dec 2020 15:56:08 +0100 (CET)
-To:     Sven Schuchmann <schuchmann@schleissheimer.de>,
+        id S1726186AbgLFQ3b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 6 Dec 2020 11:29:31 -0500
+Received: from mail-am6eur05on2103.outbound.protection.outlook.com ([40.107.22.103]:7593
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726762AbgLFQ3a (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 6 Dec 2020 11:29:30 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fcVhGKOe8HXnGollsXusUA/KA2Wae9ouOdp96Z17yplHbZfby3VjTBcjW1CcCTkdW9QEWD1dMoWBdf3M/DOAgBWAaUyPSf2tbEs9zprgvelAHohZPhNc40o7puPervY/JdMgBgmrqsX/x3M1PmZ4Q4tJLHWV2KOVT/bcCbzzKHZJtmDaq3u5PRvOqc+ZRfAWLpOU2JhsnbWxZBmNuu0exM963x6CYpam1z0eGuye+w0HFjH/DdITNMw1wspTIDf1EIMd3wQ4r4X8N9YZ45XWhMvSVyKd3ywa7mozIEt7O/eTu5YU6Vx/vj1laFNj6MILvsyEnsewYnylhDFy5mjIDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WiVL6FqF+Jo75vPonh1Skrjt+IKl0HZ8TtIktjRHOgg=;
+ b=L2kjwugVYqMeFPUYIp4Qrl3KEUNwlsVXSPnj142K+A2jm5/PhA6OEfoB/m/Bs1f5dgZAtHGPrZhGOyuC4TZadwBAhypKSQHS6qh+WZxlsYUyccCp1AwHTr38evJfeOJ7FFzKFq4/KtS7hnTDpynxSTdnByuP7T0ZgzhVmCggFN3HCaqVyoqB8u1JIki8oE35WCa7ja+ysBwCPUXoFer8i5viEWTqcrdOQ7xxVaWPI+WePKLEreip06tMgab0YysH+CTog7hC27fVmB7PbtAmmWyQ3eA0wr2lhjc6vBd0VKDGpX6woCJfC5AgFANIlsDziHUvsGQZ/cd7vh9s393b5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=schleissheimer.de; dmarc=pass action=none
+ header.from=schleissheimer.de; dkim=pass header.d=schleissheimer.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=schleissheimer.onmicrosoft.com; s=selector1-schleissheimer-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WiVL6FqF+Jo75vPonh1Skrjt+IKl0HZ8TtIktjRHOgg=;
+ b=G+93y1wSp89JSHvPlJuoYTYkTe1QX13rzTgQdS/855Ia8ymun5RYFWWCah0+bwSBExP2QPZIhjhB1TTq1bjSASM8IPUlg3e8ZitKGXTCArVp25u5TCM61+euca3mjxRtAJ3QISxFM3ey0lM+V9rOSOxdBAZFNZa4jiuphqZnAv4=
+Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:12d::21)
+ by DBAP190MB0856.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:1aa::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.19; Sun, 6 Dec
+ 2020 16:28:40 +0000
+Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+ ([fe80::14dd:59d7:acaf:be4a]) by DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+ ([fe80::14dd:59d7:acaf:be4a%4]) with mapi id 15.20.3632.023; Sun, 6 Dec 2020
+ 16:28:40 +0000
+From:   Sven Schuchmann <schuchmann@schleissheimer.de>
+To:     Patrick Menschel <menschel.p@posteo.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: AW: mcp251xfd No Oscillator (clock) defined
+Thread-Topic: mcp251xfd No Oscillator (clock) defined
+Thread-Index: AdbLuKAjW6Ey/8Z7T1qzpJx8c3rFuwAAn6qAAAMOkYAABiTcAAADGfBg
+Date:   Sun, 6 Dec 2020 16:28:40 +0000
+Message-ID: <DB8P190MB06340912153C0DE9B67A684DD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
 References: <DB8P190MB0634231494D3D788E87DCE54D9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
  <611813e9-943a-33be-4e9b-5cb1397ac5d9@pengutronix.de>
  <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: mcp251xfd No Oscillator (clock) defined
-Message-ID: <fc13f0e7-d672-d62c-a51c-c7bccabc5f4e@posteo.de>
-Date:   Sun, 6 Dec 2020 15:56:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8
+ <fc13f0e7-d672-d62c-a51c-c7bccabc5f4e@posteo.de>
+In-Reply-To: <fc13f0e7-d672-d62c-a51c-c7bccabc5f4e@posteo.de>
+Accept-Language: de-DE, en-US
 Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: posteo.de; dkim=none (message not signed)
+ header.d=none;posteo.de; dmarc=none action=none
+ header.from=schleissheimer.de;
+x-originating-ip: [62.153.209.162]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c2e8e06e-5cd9-4c9d-de19-08d89a03fd92
+x-ms-traffictypediagnostic: DBAP190MB0856:
+x-microsoft-antispam-prvs: <DBAP190MB085647079F2100C1D5C0B991D9CF0@DBAP190MB0856.EURP190.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nEKt31FjLjruk/xinyPedXw31R3erxzztnEiHUoPpCLLSKw7mYe1aXmAFLylbUhMAYmqDsNzkhqrp+p8kF11xa3siXue7jSetxH+IYR9rDvYAPHyn/5EmK46ROkzCsOdJwgGqloKIwQhlJML+yq0zozAyFgw5C4XcDwF9ZFVDSSLRpRpvTebyOlkXm2h6jhpWv9gLSNw58P4U4Z+pfhJOXBzlAFXt4GhOf+6uWVbosfa2oKbeQ4uQ91XQKZaooQbuwVh5p4IpOzok1mSi9vWRADEYC3ZYlK2+s3uoOtavaXLdaY4u9d7ImMeVQdOu+WlkQ2PcVbU43vHnixARK3GMReoOl76mSqMWffiXchbr/cr1NYbmCdGUmOaaf58RO+YZueZ60Gv5ayL5oWFWia5TQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8P190MB0634.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(396003)(376002)(346002)(136003)(366004)(39830400003)(186003)(316002)(110136005)(71200400001)(55016002)(7696005)(83380400001)(9686003)(6506007)(66574015)(33656002)(26005)(2906002)(66446008)(66556008)(66946007)(64756008)(66476007)(478600001)(76116006)(8676002)(5660300002)(8936002)(86362001)(52536014)(966005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?QVdINE4vWi9BR0IvTmV4Z3ErUDlhVW9uUlhEK3BKbDFKcWxTaElPYnhLc0hL?=
+ =?utf-8?B?Qk9EMDZ2SHhMaWJPWFVaY2Fad1pwdFZuOEdnQ254MUZvQy9VZHdGWG5YVHZU?=
+ =?utf-8?B?SU01b0hFaVpFWFRjdThEVXp0bWxYeFZFWU5QWGt1MkNxL09sTHFCL1FseFBx?=
+ =?utf-8?B?eEY3TFJrcGxGeVBxVWxxZVBPWWp4bGI1R3BxL054dHpROFYvMGNDOC9BekNx?=
+ =?utf-8?B?VUt5ZHdwb3MxdDRXWjVrMzltekQydVVRa2RnUnJzd2huU1R0ZVZ6SjRQbWlq?=
+ =?utf-8?B?VTg2WFU3bWttSXA2SzNVeUkvVGRBT3pXWGlVLy9hVUg1OThkUG03NFNHcEtr?=
+ =?utf-8?B?RUFZQ1RiNkdOY2gwWDVIU0tMSkljbE9wclU2WFVBL09NVnZ3MExuS0JMR0hI?=
+ =?utf-8?B?Rk1KQ3dPdDhZOGZHd3hyV0lHUFBoWlBBTklLRkRRVTEyajM2YjdaL0x3VitO?=
+ =?utf-8?B?K2FDUUdCTUE4QWZndEdxYi9yTnpreWkwaHAwak10K1YvSGw5V28wQlJFYkFy?=
+ =?utf-8?B?RE9xSGZwMkkrTkhidWxVYnBPUGhvUmNqNE52Q202TmFzS2daYVdoT24zNFZO?=
+ =?utf-8?B?SDkzMXFNNnpyaXRiazBpaXlpalpGMmxIaFNTQVdJdHowQlh6QzNWNEdVK1ln?=
+ =?utf-8?B?S1FNTXU3OWRnQkIyQm16RmdWZGRQZUEvK09pcHZSMEViWm90cFhMKzV2UGRk?=
+ =?utf-8?B?a0lpU25OU3lZR0ZoMlFPTGJGZTQ4SXdtYm80Z0pEYlBTYjkxdWZkejZaNkZE?=
+ =?utf-8?B?ZHVuTDlNbUtJQWx2N09vK1ZsNm1VWTlPekFIRG13MENjZFIzSkJPYjFjQ0tH?=
+ =?utf-8?B?cnpGQjhxeDdSZTlMR2pwR2ZtTkdHZS9wSUtKSTkyQm9MNTAxRlNlVFhEcGxO?=
+ =?utf-8?B?RHU5RlhnODRpaEhYVFo5UHZFZTZXZDh0eUplZE92OUFiS3lWWThwamlGRW1z?=
+ =?utf-8?B?TWdaY2xIdng4ZldScWFTWWFJSTRPd1EySjhXclJKZ3RjQTJLaXVucmhLeFlq?=
+ =?utf-8?B?SGRiRWlzT0d4T1Z0d1B0d2tpU2t2V3BrbjN2RmN0b0E2RkJxZHl4MVAxaXpj?=
+ =?utf-8?B?MmZSMHl5dVM2SnorZ0dlZDJGL09xb1hjL0tsRU5iZlAxWHNlNHlVOUhWUGdw?=
+ =?utf-8?B?cENWc29iNUVJTmV0TmdZYWxIQ1Nwcitzb2RNVTRHOTVWUkF6V3ptdUFhL29n?=
+ =?utf-8?B?RkhHelhzalY4aGlVM0kvWFFPanBKZnpBSE5yN1ROY3QvWUEzY1dtNzQzVjdw?=
+ =?utf-8?B?VDNHa0t6MHFwWEF5c0VKdFErdmdRODROaEFidWJjSC95MFM4L0dMVTMrUXNu?=
+ =?utf-8?Q?KAytuiw4ii69M=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: schleissheimer.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2e8e06e-5cd9-4c9d-de19-08d89a03fd92
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2020 16:28:40.1261
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ba05321a-a007-44df-8805-c7e62d5887b5
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D7vazDE2GCyal8Fud0XFc5YTRaaRVLhqwOVHwYCri8lBzbW+Pbd3rzwlsNVjssg7W2R0t5IT8ESWgMl79oibJIflN81soFsI9jdaSz7J9tM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP190MB0856
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-> dtoverlay=spi1-1cs,cs0_pin=18
-However this line is not be necessary.
-It sets up spidev for spi1.
-https://github.com/raspberrypi/linux/blob/rpi-5.4.y/arch/arm/boot/dts/overlays/spi1-1cs-overlay.dts#L34
-
-The next overlay removes spidev again.
-https://github.com/raspberrypi/linux/blob/rpi-5.4.y/arch/arm/boot/dts/overlays/mcp251xfd-overlay.dts#L35
-
---
-Patrick
+PiBWb246IFBhdHJpY2sgTWVuc2NoZWwgPG1lbnNjaGVsLnBAcG9zdGVvLmRlPg0KPiBHZXNlbmRl
+dDogU29ubnRhZywgNi4gRGV6ZW1iZXIgMjAyMCAxNTo1Ng0KPiBBbjogU3ZlbiBTY2h1Y2htYW5u
+IDxzY2h1Y2htYW5uQHNjaGxlaXNzaGVpbWVyLmRlPjsgbGludXgtY2FuQHZnZXIua2VybmVsLm9y
+Zw0KPiBCZXRyZWZmOiBSZTogbWNwMjUxeGZkIE5vIE9zY2lsbGF0b3IgKGNsb2NrKSBkZWZpbmVk
+DQo+IA0KPiA+IGR0b3ZlcmxheT1zcGkxLTFjcyxjczBfcGluPTE4DQo+IEhvd2V2ZXIgdGhpcyBs
+aW5lIGlzIG5vdCBiZSBuZWNlc3NhcnkuDQo+IEl0IHNldHMgdXAgc3BpZGV2IGZvciBzcGkxLg0K
+PiBodHRwczovL2dpdGh1Yi5jb20vcmFzcGJlcnJ5cGkvbGludXgvYmxvYi9ycGktNS40LnkvYXJj
+aC9hcm0vYm9vdC9kdHMvb3ZlcmxheXMvc3BpMS0xY3Mtb3ZlcmxheS5kdHMjTDM0DQo+IA0KPiBU
+aGUgbmV4dCBvdmVybGF5IHJlbW92ZXMgc3BpZGV2IGFnYWluLg0KPiBodHRwczovL2dpdGh1Yi5j
+b20vcmFzcGJlcnJ5cGkvbGludXgvYmxvYi9ycGktNS40LnkvYXJjaC9hcm0vYm9vdC9kdHMvb3Zl
+cmxheXMvbWNwMjUxeGZkLW92ZXJsYXkuZHRzI0wzNQ0KPiANClRoYW5rcyBmb3IgcG9pbnRpbmcg
+b3V0LCBidXQgaWYgSSBkbyBub3QgaGF2ZSB0aGlzIGxpbmUgSSBnZXQ6DQpbICAgIDQuODk3NzAx
+XSBtY3AyNTF4ZmQgc3BpMS4wOiBOYXRpdmUgQ1MgaXMgbm90IHN1cHBvcnRlZCAtIHBsZWFzZSBj
+b25maWd1cmUgY3MtZ3BpbyBpbiBkZXZpY2UtdHJlZQ0KWyAgICA0Ljg5NzcyMF0gc3BpX21hc3Rl
+ciBzcGkxOiB3aWxsIHJ1biBtZXNzYWdlIHB1bXAgd2l0aCByZWFsdGltZSBwcmlvcml0eQ0KWyAg
+ICA0LjkzNjU5MF0gbWNwMjUxeGZkIHNwaTEuMCAodW5uYW1lZCBuZXRfZGV2aWNlKSAodW5pbml0
+aWFsaXplZCk6IEZhaWxlZCB0byBkZXRlY3QgTUNQMjUxeEZEIChvc2M9MHgwMDAwMDAwMCkuDQoN
+ClNvIEkgdGhvdWdodCBJIGhhdmUgdG8gY29uZmlndXJlIENTIHdpdGggdGhpcz8NCg0KU3Zlbg0K
+DQotLQ0KU3ZlbiBTY2h1Y2htYW5uDQpTY2hsZWnDn2hlaW1lciBTb2Z0LSB1bmQNCkhhcmR3YXJl
+ZW50d2lja2x1bmcgR21iSA0KQW0gS2Fsa29mZW4gMTANCjYxMjA2IE5pZWRlci1Xw7ZsbHN0YWR0
+DQpHRVJNQU5ZDQpQaG9uZTogKzQ5IDYwMzQgOTE0OCA3MTENCkZheDogKzQ5IDYwMzQgOTE0OCA5
+MQ0KRW1haWw6IHNjaHVjaG1hbm5Ac2NobGVpc3NoZWltZXIuZGUNCg0KQ291cnQgb2YgUmVnaXN0
+cmF0aW9uOiBBbXRzZ2VyaWNodCBGcmllZGJlcmcNClJlZ2lzdHJhdGlvbiBOdW1iZXI6IEhSQiAx
+NTgxDQpNYW5hZ2VtZW50IEJvYXJkOg0KSGFucy1Kb2FjaGltIFNjaGxlacOfaGVpbWVyDQpDaHJp
+c3RpbmUgU2NobGVpw59oZWltZXINCg==
