@@ -2,129 +2,172 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C2E2D04D8
-	for <lists+linux-can@lfdr.de>; Sun,  6 Dec 2020 13:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE49F2D0506
+	for <lists+linux-can@lfdr.de>; Sun,  6 Dec 2020 13:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbgLFMlR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 6 Dec 2020 07:41:17 -0500
-Received: from mail-am6eur05on2136.outbound.protection.outlook.com ([40.107.22.136]:46816
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725767AbgLFMlQ (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 6 Dec 2020 07:41:16 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cuLV/77Mw4qy1LGsAeTgHT50aCdb2m+J209S5lWdS3hFbQplSjgXuIJZOi9k0PYgChHqg9LFFxWqeBB5WPaVRgOeZjKlywg+rT4Zeqy4YPrsweR/s/ue0m2RzeB7WNpXvzFj9coOxygiDPwiD7X8TKEwFX0y0sfg/9kLZgH9lenZDnZZBVI238JSoI+x6/0oerUXfgViwDHF86ar7y1BT7zt91HmHGM0yL+kwkiTXZ/7MKrSFDkjzCA+iAfTlzsdpzaaoxDRwkxtji53T8IKoJ9hGeVtyDxkzLBThmFj1h/ojI405VVrjMB4YaG9KwqW+uRZ4PIlNIP7aiQ8zwaowQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=95PUGcwqhq5ZmpkqGgWY2MqZXN/yL4A8Z09e1hST/CA=;
- b=VknVn2l6j6Lp5iH0A+kLCvpc0P4ZioESTkOmBfVucN0JxrABf2bFl+MHXpWyGDUteEj5FItpGijw5isK92Ak+xCo45mMFn1UC4NHPHq/C1usi4nfIQZQB5dVlQpc8i8a2CB8AbvLhp5PMnwycd8FD/aNXvQqrgrWvwYXfqkM1SqeDkTg2BMN5+W7ZnFSFGPQA4SLqvejhHhKGPUXPZco91d+5wupN97O2fLLcqu3Jm08DGlw2S4gpGzW1ETqQBx54pEtFdWa0LctLFLo8NlR/ySuuwhIFAETuMN7WFWvUFIW5gTqOKDHDWi34qapR910/9aur70nrdAw71RjSUHsAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=schleissheimer.de; dmarc=pass action=none
- header.from=schleissheimer.de; dkim=pass header.d=schleissheimer.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=schleissheimer.onmicrosoft.com; s=selector1-schleissheimer-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=95PUGcwqhq5ZmpkqGgWY2MqZXN/yL4A8Z09e1hST/CA=;
- b=NE6A/tdbZn/NhlllchY0vY2TArm1yuxxANsFevIwS+mYgzIZjHuHbM2s8OIB4ufqFygAz5vhnWyeRzqI4Bk3gaS0zQHqTJh26By5PGKqK+gqmM+GTNBXnehdH1c0Ta7QSiexb892rjdMIMhDrvbDjQgZhQ1GaXdGFIgS2s6XkZo=
-Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:12d::21)
- by DBAP190MB0822.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:1b1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.19; Sun, 6 Dec
- 2020 12:40:27 +0000
-Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
- ([fe80::14dd:59d7:acaf:be4a]) by DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
- ([fe80::14dd:59d7:acaf:be4a%4]) with mapi id 15.20.3632.023; Sun, 6 Dec 2020
- 12:40:27 +0000
-From:   Sven Schuchmann <schuchmann@schleissheimer.de>
-To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: AW: mcp251xfd No Oscillator (clock) defined
-Thread-Topic: mcp251xfd No Oscillator (clock) defined
-Thread-Index: AdbLuKAjW6Ey/8Z7T1qzpJx8c3rFuwAAn6qAAAMOkYA=
-Date:   Sun, 6 Dec 2020 12:40:27 +0000
-Message-ID: <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
+        id S1728090AbgLFM6c (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 6 Dec 2020 07:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbgLFM6c (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Dec 2020 07:58:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4BFC0613D0
+        for <linux-can@vger.kernel.org>; Sun,  6 Dec 2020 04:57:51 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kltbq-0004UO-Bt; Sun, 06 Dec 2020 13:57:50 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:1986:af8f:99a1:542a] (unknown [IPv6:2a03:f580:87bc:d400:1986:af8f:99a1:542a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DE6FE5A534C;
+        Sun,  6 Dec 2020 12:57:48 +0000 (UTC)
+Subject: Re: AW: mcp251xfd No Oscillator (clock) defined
+To:     Sven Schuchmann <schuchmann@schleissheimer.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
 References: <DB8P190MB0634231494D3D788E87DCE54D9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
  <611813e9-943a-33be-4e9b-5cb1397ac5d9@pengutronix.de>
-In-Reply-To: <611813e9-943a-33be-4e9b-5cb1397ac5d9@pengutronix.de>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=schleissheimer.de;
-x-originating-ip: [62.153.209.162]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 19bae584-92cd-4965-15c3-08d899e41c1a
-x-ms-traffictypediagnostic: DBAP190MB0822:
-x-microsoft-antispam-prvs: <DBAP190MB08224F78D9121CCF87E6EB23D9CF0@DBAP190MB0822.EURP190.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /Ru0oABpfpd3Nut1hpp6+MuOlxKt6JC/jaEQSHozAgg2pXS57F8Y0ocFVZZcbzwsb8dsGIsurlHx1lB0w0btduaKZcXenjWbSWQ6sWTmqxsMJUnksT4CTuYMWrEuQJ7yYEZc3o2prmw1TK1YCtH50UbIRr69NodYYPNT4K+WtvmZ48fS8KAYiIBMA3CNK6E0esS+zSW/rdldJIUt7PxF1YHXLtDBWHCQlxWmqL/+2nN+lc/Tp4D4QWoOmawEEr0UOoA1zM9cFSxbWEY9sLszp87KXX0F7Hp0eEJddip7lLc/A+uKuoCmceiP7N/0DTR2CmwxEvgo+9CZN2Ez/x601A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8P190MB0634.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(346002)(396003)(136003)(376002)(39830400003)(366004)(478600001)(71200400001)(186003)(9686003)(66556008)(2906002)(8936002)(64756008)(66476007)(66946007)(33656002)(7696005)(6916009)(5660300002)(52536014)(66446008)(76116006)(26005)(83380400001)(8676002)(316002)(86362001)(55016002)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?ck1TMUZ2aEw2REEvWm9xUlZ5djBYaFRpdk9acGprUThIQVBkemdJdERpMnkw?=
- =?utf-8?B?S2JpLzR2Ujgrc2lKY1RxUCtQVDBBMkFnZnFKOHBuSE4rZkJqWmFRY2NFZUtv?=
- =?utf-8?B?WE5DNS9jU0JUdnhQUnljaTlxVmRVZXloTFFvanRTZlBUajBMMk9WZjkvT0F4?=
- =?utf-8?B?d2g3b0lPY0VycXdmUVBPUmQ5L3pYWDNsMzlHWG5iSzE5UWpOTloxbmRVeEVk?=
- =?utf-8?B?RVJWQ3QrVW9wVnpiSkN5b1JIQnVEL1R2K2FCSThFU0t0d09kYkQ3Y3pPRFlh?=
- =?utf-8?B?U1M3clhMNjR0MVRvYmV5N0lBcS9OL1Yzb1hGS211dzB3YWZtNG5yYmpFSjZa?=
- =?utf-8?B?ZCtnajQ1a2xHQXVBUkt1cm9kM1lpNE5ETDlMbnNsa1lISHQ3TkxVWE5LeDg2?=
- =?utf-8?B?NDNpNjYva3drRlRKQ2xiOEhBNS9EOHhiamRhNlFjYVdzbURIY3lSN09qMGVW?=
- =?utf-8?B?MkM3eDREMHlmQVVyU1hCN08yeXYydmViWjJWNjBqOFBGbDFJUXMxTzZDN1hw?=
- =?utf-8?B?L1RsQjVONTRGU1J2bjFzREZDR3dGeFNpM3RNb0lzbkZRYnBaaTdFS2dSVGxq?=
- =?utf-8?B?ZXJrWmMxOFVwSXlWc09DTGNoVGdaZldaOENONUZ6QTRVV29PM2N4Q21YbHhP?=
- =?utf-8?B?ZlJidFZhSG1yc0NUaXNoZHo5aUxNRmZPNGZTVTNoSGZ0SEV1N0crdFFEd2Nz?=
- =?utf-8?B?VXBYbm1nR2xzdVVKSGVMR0V2dUtERGhFc2gzNHJBZ0ExWDA2amtoemxwRTJz?=
- =?utf-8?B?eFduMEw5RkFFd3NwRVIzRHFSbkYrNzdwT3BBQjJ0ZFdPYzVHS2JKMmVpUjFa?=
- =?utf-8?B?dFZLVlFtSWwwOWpCNy90cGowZnhpUlNiZjdadEV6UHM4YU1vNUQrZ3RjSmcr?=
- =?utf-8?B?V3p6N0ZYL2RuNVhsWFd0REVraktibjU3SFM5MERCdXZXZG5URk16dm5PUmNC?=
- =?utf-8?B?eW9BYXBWL2NvVlZJQnFGMFVlNG9CRFFFRmlxeStkUlFNY0RnenQxcGhBRzJO?=
- =?utf-8?B?aGQ0SDBDWklqRWorVDljVUZPVEZrd0pBWDZNcFF0c20zSDRLQ2ZRcE1KNkht?=
- =?utf-8?B?T0Y3WFB1QUl4cUVEb2twUGlhK3JXRkgzUDJMdDNYU3VoSXBHc0U3UmlrTlVY?=
- =?utf-8?B?TEdpSkhIOXZoSWNvQnBJL0NFcDVzL3lIWmprQk5jTkZWQ0RYaDVwUllBL0Rr?=
- =?utf-8?B?L3JoRXFjY0ZoeEFvbVRtQW9ybVlOWGlhdnIwNEVMbTJqSGRRTXlvRHdXanJZ?=
- =?utf-8?B?dzZNTTRUVmY1RUYyVlBjeDQwZmF3L0lsbWxjQnJpZHJERTBTLzArMHUveENZ?=
- =?utf-8?Q?kqUzRB0tZUdYs=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <18b35d09-eff5-a539-675a-2b3bcab54293@pengutronix.de>
+Date:   Sun, 6 Dec 2020 13:57:44 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-OriginatorOrg: schleissheimer.de
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19bae584-92cd-4965-15c3-08d899e41c1a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2020 12:40:27.5472
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ba05321a-a007-44df-8805-c7e62d5887b5
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kG/K7wZNq8c4h/5yHPMiUJnwf4+5BzPSey2BM3RmZ7PdmL+IMljVwSS964JJHOr/2pIBzuhyrig/2Hz6CmQeBskpYRbCT7I0gMUOlmCDDUM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP190MB0822
+In-Reply-To: <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="dParzPDBqkpwhlZxNkvKnqkBtqsHJMP0I"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-PiAtLS0tLVVyc3Byw7xuZ2xpY2hlIE5hY2hyaWNodC0tLS0tDQo+IFZvbjogTWFyYyBLbGVpbmUt
-QnVkZGUgPG1rbEBwZW5ndXRyb25peC5kZT4NCj4gR2VzZW5kZXQ6IFNvbm50YWcsIDYuIERlemVt
-YmVyIDIwMjAgMTE6MzMNCj4gQmV0dGVyIGFkZCB0aGUgb3ZlcmxheXMgc3RhdGljYWxseSBpbiB0
-aGUgYm9vdGxvYWRlciB2aWEgY29uZmlnLnR4dDoNCj4gDQo+IHwgZHRvdmVybGF5PW1jcDI1MXhm
-ZCxzcGkwLTAsaW50ZXJydXB0PTE4DQoNClRoaXMgZGlkIHRoZSB0cmljaywgdGhhbmtzIGEgbG90
-Lg0KSSBtaXhlZCB1cCB0aGUgaW50ZXJydXB0cywgc28gaGVyZSBpcyB0aGUgY29tcGxldGUgc2V0
-dXAgZnJvbSBjb25maWcudHh0DQoNCmR0b3ZlcmxheT1tY3AyNTF4ZmQsc3BpMC0wLGludGVycnVw
-dD0yNQ0KZHRvdmVybGF5PXNwaTEtMWNzLGNzMF9waW49MTgNCmR0b3ZlcmxheT1tY3AyNTF4ZmQs
-c3BpMS0wLGludGVycnVwdD0yNA0KDQphbmQgZG1lc2cgc2hvd3M6DQpbICAgIDQuOTcwOTc0XSBD
-QU4gZGV2aWNlIGRyaXZlciBpbnRlcmZhY2UNClsgICAgNC45NzU5MzNdIHNwaV9tYXN0ZXIgc3Bp
-MDogd2lsbCBydW4gbWVzc2FnZSBwdW1wIHdpdGggcmVhbHRpbWUgcHJpb3JpdHkNClsgICAgNC45
-ODYxNzVdIG1jcDI1MXhmZCBzcGkwLjAgY2FuMDogTUNQMjUxOEZEIHJldjAuMCAoLVJYX0lOVCAt
-TUFCX05PX1dBUk4gK0NSQ19SRUcgK0NSQ19SWCArQ1JDX1RYICtFQ0MgLUhEIGM6NDAuMDBNSHog
-bToyMC4wME1IeiByOjE3LjAwTUh6IGU6MC4wME1Ieikgc3VjY2Vzc2Z1bGx5IGluaXRpYWxpemVk
-Lg0KWyAgICA0Ljk4Njk1MF0gc3BpX21hc3RlciBzcGkxOiB3aWxsIHJ1biBtZXNzYWdlIHB1bXAg
-d2l0aCByZWFsdGltZSBwcmlvcml0eQ0KWyAgICA0Ljk5NDk1OF0gbWNwMjUxeGZkIHNwaTEuMCBj
-YW4xOiBNQ1AyNTE4RkQgcmV2MC4wICgtUlhfSU5UIC1NQUJfTk9fV0FSTiArQ1JDX1JFRyArQ1JD
-X1JYICtDUkNfVFggK0VDQyAtSEQgYzo0MC4wME1IeiBtOjIwLjAwTUh6IHI6MTcuMDBNSHogZTow
-LjAwTUh6KSBzdWNjZXNzZnVsbHkgaW5pdGlhbGl6ZWQuDQoNCiAgU3Zlbg0KDQotLQ0KU3ZlbiBT
-Y2h1Y2htYW5uDQpTY2hsZWnDn2hlaW1lciBTb2Z0LSB1bmQNCkhhcmR3YXJlZW50d2lja2x1bmcg
-R21iSA0KQW0gS2Fsa29mZW4gMTANCjYxMjA2IE5pZWRlci1Xw7ZsbHN0YWR0DQpHRVJNQU5ZDQpQ
-aG9uZTogKzQ5IDYwMzQgOTE0OCA3MTENCkZheDogKzQ5IDYwMzQgOTE0OCA5MQ0KRW1haWw6IHNj
-aHVjaG1hbm5Ac2NobGVpc3NoZWltZXIuZGUNCg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--dParzPDBqkpwhlZxNkvKnqkBtqsHJMP0I
+Content-Type: multipart/mixed; boundary="1gxe3juJUHsxKQCynHxI174ayC7ObjxoX";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Sven Schuchmann <schuchmann@schleissheimer.de>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <18b35d09-eff5-a539-675a-2b3bcab54293@pengutronix.de>
+Subject: Re: AW: mcp251xfd No Oscillator (clock) defined
+References: <DB8P190MB0634231494D3D788E87DCE54D9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
+ <611813e9-943a-33be-4e9b-5cb1397ac5d9@pengutronix.de>
+ <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
+In-Reply-To: <DB8P190MB0634B2D31F9222E9053CC2DFD9CF0@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
+
+--1gxe3juJUHsxKQCynHxI174ayC7ObjxoX
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
+
+On 12/6/20 1:40 PM, Sven Schuchmann wrote:
+>> -----Urspr=C3=BCngliche Nachricht-----
+>> Von: Marc Kleine-Budde <mkl@pengutronix.de>
+>> Gesendet: Sonntag, 6. Dezember 2020 11:33
+>> Better add the overlays statically in the bootloader via config.txt:
+>>
+>> | dtoverlay=3Dmcp251xfd,spi0-0,interrupt=3D18
+>=20
+> This did the trick, thanks a lot.
+
+\o/
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--1gxe3juJUHsxKQCynHxI174ayC7ObjxoX--
+
+--dParzPDBqkpwhlZxNkvKnqkBtqsHJMP0I
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/M1UgACgkQqclaivrt
+76n8Jwf3WNIL+5XecCzFC+ORhWZaPLQt8lU1Sp47NjcVyBjzMovjeOs+fKaT9SYs
+PTHb47N+D/OMI6zjcxkEl22XsX5xrZ90Wm5RgITl+34xezKme353Gv7Czr3XH30W
+3IUPFFiqlTCLr2qviBrsnCzJjwUiz//Yaw82/q4EDJRQFy+BGYry5Imk3HoyW07I
+IeIk+MjcXW/9XKruTOg5qiwHFDMhy50WF8OSEGz5ZVbQlSki5fIYzXQa7pUSbgj0
+xMA4eJDfomObhH+CNlBGAawFjLHehaenCtms5YmyLBaq1uSPVA+l5gNPNJ1pt0Lp
+0hzkt5e5lUVslG7UesNfMicdzOUd
+=ph6B
+-----END PGP SIGNATURE-----
+
+--dParzPDBqkpwhlZxNkvKnqkBtqsHJMP0I--
