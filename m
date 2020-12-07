@@ -2,79 +2,53 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B72712D0942
-	for <lists+linux-can@lfdr.de>; Mon,  7 Dec 2020 04:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0152D0B3E
+	for <lists+linux-can@lfdr.de>; Mon,  7 Dec 2020 08:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgLGC66 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 6 Dec 2020 21:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgLGC65 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 6 Dec 2020 21:58:57 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B90C0613D0
-        for <linux-can@vger.kernel.org>; Sun,  6 Dec 2020 18:58:11 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id l11so15957265lfg.0
-        for <linux-can@vger.kernel.org>; Sun, 06 Dec 2020 18:58:11 -0800 (PST)
+        id S1725973AbgLGHlv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 7 Dec 2020 02:41:51 -0500
+Received: from mailrelay3-2.pub.mailoutpod1-cph3.one.com ([46.30.212.2]:11433
+        "EHLO mailrelay3-2.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725783AbgLGHlv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Dec 2020 02:41:51 -0500
+X-Greylist: delayed 1043 seconds by postgrey-1.27 at vger.kernel.org; Mon, 07 Dec 2020 02:41:50 EST
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=N2cz6JXIzuD7NLPiswYmGZhB8TbirxDF+xSoUNoc5ag=;
-        b=mZ2vuar5tL9Dz4eKuyVTwecMANET2918slcl0Oi5rJtH+n63Iq7OzUNDUj63tYOqN5
-         /xhFUq5WlWDpIavnKMkPnZDIsTaDKri+RD+RMG0X/fDykOE0D7O+stiEYpLPE4mQk8Zd
-         6JcGg7e7cz0nSPJdAxUdhJXnmRtW9cffIq8+TlELx+syzrOPl3dZIs8AmaFRRFDCC0lW
-         UHlpIJSPBQoCPRxfLlIIYndhsSw1SyDj5aIz3SCkGNlzwZ8h8Pm4lHEyV6LFB0JW6GTb
-         WFKPGTUbvd2pD0oEwhg7OgZ9BARUOeNXEzdK0ZTJHym9sU03xFS6sFU5Z1NKusOZWC7l
-         x4oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=N2cz6JXIzuD7NLPiswYmGZhB8TbirxDF+xSoUNoc5ag=;
-        b=WlZO1skK7E4Ixq2aPtFi9ByIHGFjYiMmb67Bq4VqKElyt6rMm5bZesjBU3Ux8FHDvi
-         j3h3DYwuoJ1hiqq0vj1nkdv2pYCcYpxz7iyyuX/tEqVZ5VDRt1b/STWl3IjemqZQF9ml
-         1ILk2QNEvVxV4C91Q3elKRn0DhmM0QavmwD1IZkvZUGg0M3qNKhWZvGpmFWUFZjHVaLK
-         8zX/UQ6EHjhWBU5OjWaOyRe7/UjNJMCq9eBAo/gBjDWPUrkiUhE0w65xZI6oozSMtZh4
-         DPlluqZBkC59FXM+aHCyDINe4CSlTamzEpQ9pBfS5I+aoG2vPNEKbs9Jl3WDGUoCbBlm
-         KdxQ==
-X-Gm-Message-State: AOAM532/Wh8xccOHDFrziUUcSQi2MCDyZfirNHI4sRDeRFlY0icyg/k9
-        G2e28nj8FUY53yILI4L6Cy85qudfliNnWAPN62HwmXJxvkAN+A==
-X-Google-Smtp-Source: ABdhPJxQlIl46tXZsUzF0BumlwNI54lqXpVTgFTXygbx0sWBE3Lr1wvtiQFobq5kobruH8d+Ra78Ct/qiXq+8Bsm4JM=
-X-Received: by 2002:ac2:41ca:: with SMTP id d10mr7423947lfi.419.1607309888853;
- Sun, 06 Dec 2020 18:58:08 -0800 (PST)
+        d=csselectronics.com; s=20191106;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id:to:
+         subject:from:from;
+        bh=axLHVmzvPZ5Ok/L5bQnc2+5q1f49EAca7wvWykWpufg=;
+        b=kf+B2+sGU5On+sDn+EG0ktRYTPyAe1inrziimyoDIOMW3hm5qAfNrDq40uwau8YCI/JI7MkclJQgs
+         uAmi4eIBs+fY0hwon5Q5oaLaPEk+qAWiXfEJntUMW8rxp1CAy6UNaEVBV5OUXZBbJIOXmddiLv+Yts
+         xWY8pT/bLEcVxahoW3+jgrL0hPQMHKM5c5KHWrVINE9JoSlj0vsYYINXs7EPDs2WPX0gEivTdA5y37
+         3TTxIWm5rEz3rFNBzHU98/6o/BCt6UaQVP1vQWeQAo3lj/VCjFNkY0YaCYGRq/9kYK3d21mHEpzEEF
+         nanmi1JE/0d+0jBHdVEBzN7OTw3mezw==
+X-HalOne-Cookie: 8dfafe2b9fd3a198dccd5db0e50deafd11f80ee1
+X-HalOne-ID: 24532c4b-385d-11eb-8cb5-d0431ea8bb03
+Received: from [192.168.0.157] (5.103.118.41.static.fibianet.dk [5.103.118.41])
+        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 24532c4b-385d-11eb-8cb5-d0431ea8bb03;
+        Mon, 07 Dec 2020 07:23:45 +0000 (UTC)
+From:   =?UTF-8?Q?Magnus_Aagaard_S=c3=b8rensen?= <mas@csselectronics.com>
+Subject: mcp251xfd PLL support
+To:     linux-can@vger.kernel.org
+Message-ID: <c3aae4cb-b5ce-8bba-727b-47231ec742a7@csselectronics.com>
+Date:   Mon, 7 Dec 2020 08:23:45 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-From:   Christian Gagneraud <chgans@gmail.com>
-Date:   Mon, 7 Dec 2020 15:57:57 +1300
-Message-ID: <CABxGUThzGkCerMBTuA95TCs49hjHg+O-u3Z_c8=RZGJ8bVQjRQ@mail.gmail.com>
-Subject: New USB driver, looking for advice
-To:     linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi all,
+Hello,
 
-I'm looking at creating a new CAN driver for a USB device [1].
-This device has a custom protocol over bulk endpoints.
-I was able to create a simple driver, based on usb-skeleton.c that
-allows to speak this protocol by opening a custom har device.
-I've been looking at the current implementation in [2], I think my
-device is a bit special, you cannot read CAN frames w/o sending a
-'read' command, so i need some sort of polling.
-AFAIK, the Linux USB stack provides that for me, except that the
-device won't read anything unless you send it a command.
-I have the feeling that current drivers are for devices that can
-return data by just scheduling read transfer.
-Anyone would have a clue on how these drivers work, and if my device
-is really that special?
+there was some initial patches posted mid October on enabling support 
+for the PLL on the mcp251xfd, such that 4 MHz external oscillators were 
+supported. Is there anything I can do to help facilitate the merge 
+process of these patches (e.g. did I miss a signed-off-by)?
 
-Any hint, point out or reading pointers are much appreciated.
+Regards, Magnus.
 
-Thanks,
-Chris
-
-PS: This is for marine applications, NMEA2000 which uses CAN HW and is
-wire-compatible with J1939
-
-[1] https://www.simrad-yachting.com/simrad/type/accessories/cables-connectors/navico-can-to-usb-converter-st10/
-[2] https://github.com/torvalds/linux/tree/master/drivers/net/can/usb
