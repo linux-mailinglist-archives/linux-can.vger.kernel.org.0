@@ -2,132 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F632D225F
-	for <lists+linux-can@lfdr.de>; Tue,  8 Dec 2020 05:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309372D2B86
+	for <lists+linux-can@lfdr.de>; Tue,  8 Dec 2020 13:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbgLHEyB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Dec 2020 23:54:01 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:58180 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727451AbgLHEyB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Dec 2020 23:54:01 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84nxYX064111;
-        Tue, 8 Dec 2020 04:52:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=1e3cV7XKyt5cBPHNeWYhYMHu3W87CKppja6U1Jvw5F4=;
- b=V+G180Fh0lHbcmydQJqS5i+cerb42SoRrRI9QCXlQMjyWKKfj0acXqExTQUiK+7OEtft
- OuMy/8L57grCegXY4FPi2mfpdUD9NETOrjU6XyLEGnB6yCKU9e30d2WSgQTsYBxq/cMN
- 5junVfgiRpfFB5rc1EfDtZHP43anCs3FIrUtz16u4yPsKG0NCInMT5yeMTaPCX1MMJeq
- qZ1GHIcbwNatFRQ/tELhwJDJybfqjlIskC/pDoCLpTPJ2KTrod7PX9rst5aaRTC3xIQA
- veh/+mbPHLjYXfePq5oiUCHv2+7Gowf8M2KKiHFzojpZKSSSQD2meZy2nTRpI8CVh6TQ Yg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 35825m0srp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 08 Dec 2020 04:52:35 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B84ocFe155422;
-        Tue, 8 Dec 2020 04:52:34 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3020.oracle.com with ESMTP id 358kys9m8t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 08 Dec 2020 04:52:34 +0000
-Received: from userp3020.oracle.com (userp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0B84qX4M159553;
-        Tue, 8 Dec 2020 04:52:33 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 358kys9m7s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Dec 2020 04:52:33 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B84qDZf015901;
-        Tue, 8 Dec 2020 04:52:15 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 07 Dec 2020 20:52:13 -0800
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        coreteam@netfilter.org, selinux@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>, Joe Perches <joe@perches.com>,
-        linux-hardening@vger.kernel.org, reiserfs-devel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, patches@opensource.cirrus.com,
-        linux-fbdev@vger.kernel.org, keyrings@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-geode@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-ext4@vger.kernel.org,
-        wcn36xx@lists.infradead.org, GR-everest-linux-l2@marvell.com,
-        x86@kernel.org, linux-watchdog@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-usb@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-wireless@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-decnet-user@lists.sourceforge.net,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        netfilter-devel@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        Kees Cook <keescook@chromium.org>,
-        samba-technical@lists.samba.org, ceph-devel@vger.kernel.org,
-        drbd-dev@tron.linbit.com, intel-gfx@lists.freedesktop.org,
-        dm-devel@redhat.com, linux-acpi@vger.kernel.org,
-        linux-ide@vger.kernel.org, xen-devel@lists.xenproject.org,
-        op-tee@lists.trustedfirmware.org, linux-hwmon@vger.kernel.org,
-        linux-sctp@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-mtd@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-can@vger.kernel.org, rds-devel@oss.oracle.com,
-        oss-drivers@netronome.com, tipc-discussion@lists.sourceforge.net,
-        cluster-devel@redhat.com, linux-rdma@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux1394-devel@lists.sourceforge.net, alsa-devel@alsa-project.org,
-        linux-i3c@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-afs@lists.infradead.org, nouveau@lists.freedesktop.org,
-        GR-Linux-NIC-Dev@marvell.com, netdev@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-mm@kvack.org,
-        intel-wired-lan@lists.osuosl.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: (subset) [PATCH 000/141] Fix fall-through warnings for Clang
-Date:   Mon,  7 Dec 2020 23:52:01 -0500
-Message-Id: <160740299787.710.4201881220590518200.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1605896059.git.gustavoars@kernel.org>
-References: <cover.1605896059.git.gustavoars@kernel.org>
+        id S1726104AbgLHM6f (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Dec 2020 07:58:35 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:33921 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726738AbgLHM5f (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Dec 2020 07:57:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1607432083;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
+        Subject:Sender;
+        bh=JPe60FiXFw4FjZQPyeBwYTkfdrTdRhNRFGDzKOOVX4o=;
+        b=Ow5YBRvNjKkovBTTW1/gdHF8RFFJnqTCzD04UN67fLznTzOFWyksGUFa+SRsUDIo/I
+        qZM9zZugvdTlhpH02DkDW/5SsfzjWJElXulwHnaTeqUUxMY1BFyu7VJqx3iz7pOdefOV
+        SUTfin1T7kpqAiN9jt9ZGZPONykkITGb2cEZdMgUTtLWM7Ph656ZSaeUM9eBLJNfY1yK
+        f6CxfjblYJ4nknjwDdwS+iF/Jsx84Mps/U9+u0PxS26oARcQuBGeNY6DgAH2ikGohyNl
+        mT9/HHtUf4Ulwj43+IWdn7riu8nRG63LDZxPgBual4RSRfxm4QfkW7VX0xIimgpPg0q2
+        oEdg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVJiOMtqpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+        by smtp.strato.de (RZmta 47.6.2 DYNA|AUTH)
+        with ESMTPSA id 302891wB8Csc1Ph
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 8 Dec 2020 13:54:38 +0100 (CET)
+Subject: Re: [net 3/3] can: isotp: add SF_BROADCAST support for functional
+ addressing
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Thomas Wagner <thwa1@web.de>, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org, davem@davemloft.net
+References: <20201204133508.742120-1-mkl@pengutronix.de>
+ <20201204133508.742120-4-mkl@pengutronix.de>
+ <20201204194435.0d4ab3fd@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+ <b4acc4eb-aff6-9d20-b8a9-d1c47213cefd@hartkopp.net>
+ <eefc4f80-da1c-fed5-7934-11615f1db0fc@pengutronix.de>
+ <20201205123300.34f99141@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+ <ce547683-925d-6971-6566-a0b54146090a@pengutronix.de>
+ <20201205130904.3d81b0dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
+Date:   Tue, 8 Dec 2020 13:54:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9828 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
- phishscore=0 mlxlogscore=740 clxscore=1015 priorityscore=1501 mlxscore=0
- spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012080029
+In-Reply-To: <20201205130904.3d81b0dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 20 Nov 2020 12:21:39 -0600, Gustavo A. R. Silva wrote:
 
-> This series aims to fix almost all remaining fall-through warnings in
-> order to enable -Wimplicit-fallthrough for Clang.
+
+On 05.12.20 22:09, Jakub Kicinski wrote:
+> On Sat, 5 Dec 2020 21:56:33 +0100 Marc Kleine-Budde wrote:
+>> On 12/5/20 9:33 PM, Jakub Kicinski wrote:
+>>>> What about the (incremental?) change that Thomas Wagner posted?
+>>>>
+>>>> https://lore.kernel.org/r/20201204135557.55599-1-thwa1@web.de
+>>>
+>>> That settles it :) This change needs to got into -next and 5.11.
+>>
+>> Ok. Can you take patch 1, which is a real fix:
+>>
+>> https://lore.kernel.org/linux-can/20201204133508.742120-2-mkl@pengutronix.de/
 > 
-> In preparation to enable -Wimplicit-fallthrough for Clang, explicitly
-> add multiple break/goto/return/fallthrough statements instead of just
-> letting the code fall through to the next case.
+> Sure! Applied that one from the ML (I assumed that's what you meant).
 > 
-> [...]
 
-Applied to 5.11/scsi-queue, thanks!
+I just double-checked this mail and in fact the second patch from Marc's 
+pull request was a real fix too:
 
-[054/141] target: Fix fall-through warnings for Clang
-          https://git.kernel.org/mkp/scsi/c/492096ecfa39
+https://lore.kernel.org/linux-can/20201204133508.742120-3-mkl@pengutronix.de/
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Btw. the missing feature which was added for completeness of the ISOTP 
+implementation has now also integrated the improvement suggested by 
+Thomas Wagner:
+
+https://lore.kernel.org/linux-can/20201206144731.4609-1-socketcan@hartkopp.net/T/#u
+
+Would be cool if it could go into the initial iso-tp contribution as 
+5.10 becomes a long-term kernel.
+
+But I don't want to be pushy - treat it as your like.
+
+Many thanks,
+Oliver
