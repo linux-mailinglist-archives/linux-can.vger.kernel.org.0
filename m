@@ -2,86 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B70C2D31BA
-	for <lists+linux-can@lfdr.de>; Tue,  8 Dec 2020 19:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 887152D3654
+	for <lists+linux-can@lfdr.de>; Tue,  8 Dec 2020 23:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730826AbgLHSIB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Dec 2020 13:08:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46404 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730478AbgLHSIB (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 8 Dec 2020 13:08:01 -0500
-Date:   Tue, 8 Dec 2020 10:07:18 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607450840;
-        bh=33QJdY1Oomg8uXozWiDDXYsMlphB2O4Pp6fHPwahJr8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lsVyRZPyBzKz4JWx9ob3BW6IbKoUA1yFyOJagCTxEYGsRZlrJI822nw05e380N7vY
-         zs6nND26tqzIw6SgnrjBwiuSZPQUBznquWAqaBFSpKv98BzQPRVRiLJCXemKz8Y7tA
-         Mp7VTzRHLoQgR0dWchLPmjgLZUOz4tt3XfRRHaIydjx2zmTPoLPpyn1jdPhZPLdgpu
-         h4z+Mrn4Q4ae+DTQoU1KsiECuzeG7f7Ul0wyWQ1epZgPxXBpNldzPKPRngJjmslysf
-         eAVY1bZGVLzL6PGpEPXRI4drDYot3ES091bSe8CgJ/4VI3nKCYrH3VtZJDl2e3DjBD
-         yUTYbC2miB5QA==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Thomas Wagner <thwa1@web.de>, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, netdev@vger.kernel.org, davem@davemloft.net
-Subject: Re: [net 3/3] can: isotp: add SF_BROADCAST support for functional
- addressing
-Message-ID: <20201208100718.5ed008dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-In-Reply-To: <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
-References: <20201204133508.742120-1-mkl@pengutronix.de>
-        <20201204133508.742120-4-mkl@pengutronix.de>
-        <20201204194435.0d4ab3fd@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-        <b4acc4eb-aff6-9d20-b8a9-d1c47213cefd@hartkopp.net>
-        <eefc4f80-da1c-fed5-7934-11615f1db0fc@pengutronix.de>
-        <20201205123300.34f99141@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-        <ce547683-925d-6971-6566-a0b54146090a@pengutronix.de>
-        <20201205130904.3d81b0dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
-        <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
+        id S1730490AbgLHWeA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Dec 2020 17:34:00 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:55918 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731136AbgLHWd5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Dec 2020 17:33:57 -0500
+Received: by mail-io1-f70.google.com with SMTP id j25so1943759iog.22
+        for <linux-can@vger.kernel.org>; Tue, 08 Dec 2020 14:33:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=5N8UKcVWDRDZehTYxR/1/iB/xs2w750hku+tRRbXm28=;
+        b=NSRek5TqDHhNXsEfIEj8aZ9QaVY6C5Nz5Baz6ZC9SaMJHEAkI+Y1irpqWsmwlt30qs
+         JNPAYUrZbMkoshfI9cKegqNoOLmNvgoMBRnoUmLFILKNcCnG2mJuKkpVoFMCVAnwKdpa
+         doCMB7/me0E6mBVPHlv1rURrNqQyiqd/YLGH7Z5e1GxCrK6mNwYyie6HZTK3N6tumyib
+         1Om9ZmUAi/YtGt044WuEIpHU5urppEEir4/cjilVCXduU0eqOmmX98i5CW0UZfNEmbi5
+         daE+tD2KNpJd+JoPMMBSPubvY1M909qYhOf/AXCecrFO7RFqyQpEBhcKckgCNqR8KWe0
+         /9yg==
+X-Gm-Message-State: AOAM532CwnFRejHPpZMe1xujpC3a4pKmTq21cg10k8vPg3cYWv5fVbid
+        CHTQg/eceYFfZMeBvffC4FqeP65L+ibl35JhV8RAxwepYbQ/
+X-Google-Smtp-Source: ABdhPJxTCiOFZJBvc0dE/asUctDs0YhPWft6cBWXWFDcz6/g7eOwGBnIHImZ9xCyWIig6yvXUTNsZfOm1ya+drU89FlAddQr4bEa
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a5d:91cf:: with SMTP id k15mr28658ior.161.1607466790502;
+ Tue, 08 Dec 2020 14:33:10 -0800 (PST)
+Date:   Tue, 08 Dec 2020 14:33:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000953b005b5fb870e@google.com>
+Subject: memory leak in pcan_usb_pro_init
+From:   syzbot <syzbot+215ecdbae76bb8c36b7e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, gustavoars@kernel.org, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liushixin2@huawei.com, mkl@pengutronix.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wg@grandegger.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 8 Dec 2020 13:54:28 +0100 Oliver Hartkopp wrote:
-> On 05.12.20 22:09, Jakub Kicinski wrote:
-> > On Sat, 5 Dec 2020 21:56:33 +0100 Marc Kleine-Budde wrote:  
-> >> On 12/5/20 9:33 PM, Jakub Kicinski wrote:  
-> >>>> What about the (incremental?) change that Thomas Wagner posted?
-> >>>>
-> >>>> https://lore.kernel.org/r/20201204135557.55599-1-thwa1@web.de  
-> >>>
-> >>> That settles it :) This change needs to got into -next and 5.11.  
-> >>
-> >> Ok. Can you take patch 1, which is a real fix:
-> >>
-> >> https://lore.kernel.org/linux-can/20201204133508.742120-2-mkl@pengutronix.de/  
-> > 
-> > Sure! Applied that one from the ML (I assumed that's what you meant).
-> 
-> I just double-checked this mail and in fact the second patch from Marc's 
-> pull request was a real fix too:
-> 
-> https://lore.kernel.org/linux-can/20201204133508.742120-3-mkl@pengutronix.de/
+Hello,
 
-Ack, I thought it was a fix to some existing code but it's a fix to
-ISO-TP so we should probably get it in before someone start depending
-on existing behavior - Marc should I apply that one directly, too?
+syzbot found the following issue on:
 
-> Btw. the missing feature which was added for completeness of the ISOTP 
-> implementation has now also integrated the improvement suggested by 
-> Thomas Wagner:
-> 
-> https://lore.kernel.org/linux-can/20201206144731.4609-1-socketcan@hartkopp.net/T/#u
-> 
-> Would be cool if it could go into the initial iso-tp contribution as 
-> 5.10 becomes a long-term kernel.
-> 
-> But I don't want to be pushy - treat it as your like.
+HEAD commit:    0477e928 Linux 5.10-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14ef3f45500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4305fa9ea70c7a9f
+dashboard link: https://syzkaller.appspot.com/bug?extid=215ecdbae76bb8c36b7e
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1207c05b500000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b7b613500000
 
-I think Linus wants to release 5.10 so that the merge window doesn't
-overlap with Christmas too much. Let's not push our luck.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+215ecdbae76bb8c36b7e@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff888110d22380 (size 96):
+  comm "kworker/0:3", pid 4912, jiffies 4294942219 (age 8.820s)
+  hex dump (first 32 bytes):
+    40 89 17 12 81 88 ff ff 00 00 00 00 00 00 00 00  @...............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<00000000706edd19>] kmalloc include/linux/slab.h:552 [inline]
+    [<00000000706edd19>] kzalloc include/linux/slab.h:664 [inline]
+    [<00000000706edd19>] pcan_usb_pro_init+0x120/0x280 drivers/net/can/usb/peak_usb/pcan_usb_pro.c:856
+    [<0000000025ad9e43>] peak_usb_create_dev drivers/net/can/usb/peak_usb/pcan_usb_core.c:850 [inline]
+    [<0000000025ad9e43>] peak_usb_probe+0x389/0x490 drivers/net/can/usb/peak_usb/pcan_usb_core.c:948
+    [<0000000064acbdae>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<0000000032f135d3>] really_probe+0x159/0x480 drivers/base/dd.c:554
+    [<00000000e1ce8490>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
+    [<00000000bfd26436>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
+    [<00000000cc4dd83e>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
+    [<00000000f1b1aa05>] __device_attach+0x122/0x250 drivers/base/dd.c:912
+    [<0000000034abf9f3>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
+    [<00000000ade05bb4>] device_add+0x5ac/0xc30 drivers/base/core.c:2936
+    [<00000000a596bcb5>] usb_set_configuration+0x9de/0xb90 drivers/usb/core/message.c:2159
+    [<0000000008726818>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<00000000c9e87a33>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<0000000032f135d3>] really_probe+0x159/0x480 drivers/base/dd.c:554
+    [<00000000e1ce8490>] driver_probe_device+0x84/0x100 drivers/base/dd.c:738
+    [<00000000bfd26436>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:844
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
