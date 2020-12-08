@@ -2,76 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE3D2D30BE
-	for <lists+linux-can@lfdr.de>; Tue,  8 Dec 2020 18:15:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B70C2D31BA
+	for <lists+linux-can@lfdr.de>; Tue,  8 Dec 2020 19:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730013AbgLHROZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Dec 2020 12:14:25 -0500
-Received: from mail3.ems-wuensche.com ([81.169.186.156]:41199 "EHLO
-        mail3.ems-wuensche.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbgLHROZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Dec 2020 12:14:25 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by h2257714.serverkompetenz.net (Postfix) with ESMTP id 01E27FF386
-        for <linux-can@vger.kernel.org>; Tue,  8 Dec 2020 17:13:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at h2257714.serverkompetenz.net
-X-Spam-Flag: NO
-X-Spam-Score: -1.903
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.903 tagged_above=-9999.9 required=5
-        tests=[BAYES_00=-1.9, NICE_REPLY_A=-0.001, NO_RECEIVED=-0.001,
-        NO_RELAYS=-0.001] autolearn=unavailable autolearn_force=no
-Received: from mail3.ems-wuensche.com ([81.169.186.156])
-        by localhost (h2257714.serverkompetenz.net [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nfkRw4WtKly1 for <linux-can@vger.kernel.org>;
-        Tue,  8 Dec 2020 18:13:41 +0100 (CET)
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     wg@grandegger.com
-References: <20201106170206.32162-1-uttenthaler@ems-wuensche.com>
- <2a8eb771-6c94-8e3b-2b47-9dc4cf0ea28a@pengutronix.de>
- <8837034e-3a8b-25fd-894c-ffa51d7fe039@ems-wuensche.com>
- <deefcd85-15a8-82e0-9471-b8911a43c676@pengutronix.de>
-From:   Gerhard Uttenthaler <uttenthaler@ems-wuensche.com>
-Subject: Re: [PATCH 00/17] Add support for CPC-USB/FD CAN FD interface
-Message-ID: <3b41cee4-104f-d319-7e25-ef0ad3187105@ems-wuensche.com>
-Date:   Tue, 8 Dec 2020 18:13:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S1730826AbgLHSIB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Dec 2020 13:08:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46404 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730478AbgLHSIB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 8 Dec 2020 13:08:01 -0500
+Date:   Tue, 8 Dec 2020 10:07:18 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607450840;
+        bh=33QJdY1Oomg8uXozWiDDXYsMlphB2O4Pp6fHPwahJr8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lsVyRZPyBzKz4JWx9ob3BW6IbKoUA1yFyOJagCTxEYGsRZlrJI822nw05e380N7vY
+         zs6nND26tqzIw6SgnrjBwiuSZPQUBznquWAqaBFSpKv98BzQPRVRiLJCXemKz8Y7tA
+         Mp7VTzRHLoQgR0dWchLPmjgLZUOz4tt3XfRRHaIydjx2zmTPoLPpyn1jdPhZPLdgpu
+         h4z+Mrn4Q4ae+DTQoU1KsiECuzeG7f7Ul0wyWQ1epZgPxXBpNldzPKPRngJjmslysf
+         eAVY1bZGVLzL6PGpEPXRI4drDYot3ES091bSe8CgJ/4VI3nKCYrH3VtZJDl2e3DjBD
+         yUTYbC2miB5QA==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Thomas Wagner <thwa1@web.de>, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org, davem@davemloft.net
+Subject: Re: [net 3/3] can: isotp: add SF_BROADCAST support for functional
+ addressing
+Message-ID: <20201208100718.5ed008dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+In-Reply-To: <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
+References: <20201204133508.742120-1-mkl@pengutronix.de>
+        <20201204133508.742120-4-mkl@pengutronix.de>
+        <20201204194435.0d4ab3fd@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+        <b4acc4eb-aff6-9d20-b8a9-d1c47213cefd@hartkopp.net>
+        <eefc4f80-da1c-fed5-7934-11615f1db0fc@pengutronix.de>
+        <20201205123300.34f99141@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+        <ce547683-925d-6971-6566-a0b54146090a@pengutronix.de>
+        <20201205130904.3d81b0dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
+        <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
 MIME-Version: 1.0
-In-Reply-To: <deefcd85-15a8-82e0-9471-b8911a43c676@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
-
-I resent the patch series a while ago. Did I miss something or did I do
-something wrong? You immediately commented on the first series, but now
-there is silence.
-
-Regards
-Gerhard
-
-Am 06.11.20 um 20:59 schrieb Marc Kleine-Budde:
-> On 11/6/20 8:04 PM, Gerhard Uttenthaler wrote:
->> Thank you for your instant answers! Would it be OK to resend after
->> rework all the patches again as [PATCH V2 xx/yy]?
+On Tue, 8 Dec 2020 13:54:28 +0100 Oliver Hartkopp wrote:
+> On 05.12.20 22:09, Jakub Kicinski wrote:
+> > On Sat, 5 Dec 2020 21:56:33 +0100 Marc Kleine-Budde wrote:  
+> >> On 12/5/20 9:33 PM, Jakub Kicinski wrote:  
+> >>>> What about the (incremental?) change that Thomas Wagner posted?
+> >>>>
+> >>>> https://lore.kernel.org/r/20201204135557.55599-1-thwa1@web.de  
+> >>>
+> >>> That settles it :) This change needs to got into -next and 5.11.  
+> >>
+> >> Ok. Can you take patch 1, which is a real fix:
+> >>
+> >> https://lore.kernel.org/linux-can/20201204133508.742120-2-mkl@pengutronix.de/  
+> > 
+> > Sure! Applied that one from the ML (I assumed that's what you meant).
 > 
-> sure
+> I just double-checked this mail and in fact the second patch from Marc's 
+> pull request was a real fix too:
 > 
-> Marc
+> https://lore.kernel.org/linux-can/20201204133508.742120-3-mkl@pengutronix.de/
+
+Ack, I thought it was a fix to some existing code but it's a fix to
+ISO-TP so we should probably get it in before someone start depending
+on existing behavior - Marc should I apply that one directly, too?
+
+> Btw. the missing feature which was added for completeness of the ISOTP 
+> implementation has now also integrated the improvement suggested by 
+> Thomas Wagner:
 > 
+> https://lore.kernel.org/linux-can/20201206144731.4609-1-socketcan@hartkopp.net/T/#u
+> 
+> Would be cool if it could go into the initial iso-tp contribution as 
+> 5.10 becomes a long-term kernel.
+> 
+> But I don't want to be pushy - treat it as your like.
 
-
--- 
-EMS Dr. Thomas Wuensche e.K.
-Sonnenhang 3
-85304 Ilmmuenster
-HR Ingolstadt, HRA 170106
-
-Phone: +49-8441-490260
-Fax  : +49-8441-81860
-http://www.ems-wuensche.com
+I think Linus wants to release 5.10 so that the merge window doesn't
+overlap with Christmas too much. Let's not push our luck.
