@@ -2,47 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9882D57B3
-	for <lists+linux-can@lfdr.de>; Thu, 10 Dec 2020 10:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D42822D57BD
+	for <lists+linux-can@lfdr.de>; Thu, 10 Dec 2020 10:58:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbgLJJ4x (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 10 Dec 2020 04:56:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S1730279AbgLJJ5e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Dec 2020 04:57:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729017AbgLJJ4p (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Dec 2020 04:56:45 -0500
+        with ESMTP id S1729847AbgLJJ5P (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Dec 2020 04:57:15 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBEAC0611CD
-        for <linux-can@vger.kernel.org>; Thu, 10 Dec 2020 01:55:38 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B49BC0617A6
+        for <linux-can@vger.kernel.org>; Thu, 10 Dec 2020 01:56:24 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1knIfh-0001Gu-13; Thu, 10 Dec 2020 10:55:37 +0100
+        id 1knIgQ-0001R0-EP; Thu, 10 Dec 2020 10:56:22 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:92bc:e5f0:39d9:bbfa] (unknown [IPv6:2a03:f580:87bc:d400:92bc:e5f0:39d9:bbfa])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 243A75AA1F9;
-        Thu, 10 Dec 2020 09:55:36 +0000 (UTC)
-Subject: Re: [net 3/3] can: isotp: add SF_BROADCAST support for functional
- addressing
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Thomas Wagner <thwa1@web.de>, linux-can@vger.kernel.org
-References: <20201204133508.742120-1-mkl@pengutronix.de>
- <20201204133508.742120-4-mkl@pengutronix.de>
- <20201204194435.0d4ab3fd@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <b4acc4eb-aff6-9d20-b8a9-d1c47213cefd@hartkopp.net>
- <eefc4f80-da1c-fed5-7934-11615f1db0fc@pengutronix.de>
- <20201205123300.34f99141@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <ce547683-925d-6971-6566-a0b54146090a@pengutronix.de>
- <20201205130904.3d81b0dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
- <20201208100718.5ed008dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <20e31c74-eb50-072c-1212-a58eb8da704b@pengutronix.de>
- <68a8f0b2-f3c6-23df-f41b-f52edd826cf9@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8448E5AA1FB;
+        Thu, 10 Dec 2020 09:56:21 +0000 (UTC)
+Subject: Re: [PATCH] can: mcp251xfd: Add support for internal loopback mode
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     linux-can@vger.kernel.org, thomas.kopp@microchip.com
+References: <20201127171257.46040-1-manivannan.sadhasivam@linaro.org>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -104,15 +92,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <34f1addf-c6b3-1555-8cce-bd4da061e138@pengutronix.de>
-Date:   Thu, 10 Dec 2020 10:55:32 +0100
+Message-ID: <da29d823-d4ee-bd05-e48b-fe176ee68ebd@pengutronix.de>
+Date:   Thu, 10 Dec 2020 10:56:18 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <68a8f0b2-f3c6-23df-f41b-f52edd826cf9@hartkopp.net>
+In-Reply-To: <20201127171257.46040-1-manivannan.sadhasivam@linaro.org>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="eclCLGWklX1ZsvOANJd3xBwPF4pROw9FF"
+ boundary="K4PwaoejHt5VxNdeFj1mRULgzpeYcou26"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -122,45 +110,32 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---eclCLGWklX1ZsvOANJd3xBwPF4pROw9FF
-Content-Type: multipart/mixed; boundary="lHpz17js6wTJdQkaxXBjOf03HdLMz6Fdy";
+--K4PwaoejHt5VxNdeFj1mRULgzpeYcou26
+Content-Type: multipart/mixed; boundary="cpvWOgfhNADJKpAYbDiqNInJ7oLHuJOgA";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>
-Cc: Thomas Wagner <thwa1@web.de>, linux-can@vger.kernel.org
-Message-ID: <34f1addf-c6b3-1555-8cce-bd4da061e138@pengutronix.de>
-Subject: Re: [net 3/3] can: isotp: add SF_BROADCAST support for functional
- addressing
-References: <20201204133508.742120-1-mkl@pengutronix.de>
- <20201204133508.742120-4-mkl@pengutronix.de>
- <20201204194435.0d4ab3fd@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <b4acc4eb-aff6-9d20-b8a9-d1c47213cefd@hartkopp.net>
- <eefc4f80-da1c-fed5-7934-11615f1db0fc@pengutronix.de>
- <20201205123300.34f99141@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <ce547683-925d-6971-6566-a0b54146090a@pengutronix.de>
- <20201205130904.3d81b0dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <752c8838-b478-43da-620b-e15bcc690518@hartkopp.net>
- <20201208100718.5ed008dc@kicinski-fedora-pc1c0hjn.DHCP.thefacebook.com>
- <20e31c74-eb50-072c-1212-a58eb8da704b@pengutronix.de>
- <68a8f0b2-f3c6-23df-f41b-f52edd826cf9@hartkopp.net>
-In-Reply-To: <68a8f0b2-f3c6-23df-f41b-f52edd826cf9@hartkopp.net>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: linux-can@vger.kernel.org, thomas.kopp@microchip.com
+Message-ID: <da29d823-d4ee-bd05-e48b-fe176ee68ebd@pengutronix.de>
+Subject: Re: [PATCH] can: mcp251xfd: Add support for internal loopback mode
+References: <20201127171257.46040-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20201127171257.46040-1-manivannan.sadhasivam@linaro.org>
 
---lHpz17js6wTJdQkaxXBjOf03HdLMz6Fdy
+--cpvWOgfhNADJKpAYbDiqNInJ7oLHuJOgA
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/10/20 9:18 AM, Oliver Hartkopp wrote:
-> Do you take this patch
+On 11/27/20 6:12 PM, Manivannan Sadhasivam wrote:
+> MCP251xFD supports internal loopback mode which can be used to verify
+> CAN functionality in the absence of a real CAN device.
 >=20
-> https://lore.kernel.org/linux-can/20201206144731.4609-1-socketcan@hartk=
-opp.net/T/#u
->=20
-> via linux-can-next then as it is neither in can-next and net-next now .=
-=2E. ?
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>=
 
-done
 
+Applied to linux-can-next.
+
+Tnx,
 Marc
 
 --=20
@@ -170,23 +145,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---lHpz17js6wTJdQkaxXBjOf03HdLMz6Fdy--
+--cpvWOgfhNADJKpAYbDiqNInJ7oLHuJOgA--
 
---eclCLGWklX1ZsvOANJd3xBwPF4pROw9FF
+--K4PwaoejHt5VxNdeFj1mRULgzpeYcou26
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/R8JUACgkQqclaivrt
-76kepQgAm2B/Ugf0dZ/GVt/ZZFMrUBtAdfz4N1SAmVYj5z1UOzz/iEB9SqTxw+dg
-zrGXB4Svbe2Dn3jRiV9NLqNfa376iuXpqzYgqsyRUYiaEXMioh5J5eM7YaYAUtcD
-mxTWF+LSPT0PE1DOdv5BIUwIJesGzD5HqnNNP/WCiXQRue+yaF+NKFkCNjDel3Tb
-nsGxKCHs2X0lDofRYRcguVxnhgnVyhU/irgiQz4VK2yFPRRqGULbynEYDtdFfoQu
-qJB0zyAouaVPz+JVo5+fDBkLtOnEA435JMhFGK/K/3Bcwe+kwzXDE/kw2LXlfEt8
-wmR4nIdo2QMVe7JqqQWqQsHeZ/2BMg==
-=L3aK
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/R8MIACgkQqclaivrt
+76lySAf6A/q3PBKiC10yBxtVDiYQghLcK7CkH7Exy85cz+DssdBMQj1mGvwq07y7
+zgG8XWP7r06b9VYuy3MonOprMPVT0hWPULXUhrjc6JbtSmiFqCVOcIASAC0OKsBY
+Gb+30w7TT+Va7tuE7qw+saD4Ok5TaVnSbMV7yoIYvj/bwoPMB+EULlqsn9h2nA3x
+hq9XYkNTweK65zp5e0TSe2jHDV9xXVUolePV88JYxfeK6moiwL5g2Qsc9MkncP3Q
+S9qGCmrV5WFcwh52gPLRCE7N/97DKiJrV/FF/slLctFeJUbyZDFc9tdrwaK8SJwq
+h5jZcmBXyjrYkYi1DqBTtWBPEDr5Xg==
+=dpJD
 -----END PGP SIGNATURE-----
 
---eclCLGWklX1ZsvOANJd3xBwPF4pROw9FF--
+--K4PwaoejHt5VxNdeFj1mRULgzpeYcou26--
