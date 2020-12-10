@@ -2,230 +2,199 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7290C2D4BB4
-	for <lists+linux-can@lfdr.de>; Wed,  9 Dec 2020 21:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E852D54C5
+	for <lists+linux-can@lfdr.de>; Thu, 10 Dec 2020 08:38:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733214AbgLIUZb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Dec 2020 15:25:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S1726826AbgLJHhY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Dec 2020 02:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387524AbgLIUZZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Dec 2020 15:25:25 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4C8C0613D6
-        for <linux-can@vger.kernel.org>; Wed,  9 Dec 2020 12:24:45 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id u19so3025295edx.2
-        for <linux-can@vger.kernel.org>; Wed, 09 Dec 2020 12:24:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NWzCxmt8ydVHM/+dxflBPJKVBUm+/DapTJJBwEsSxF8=;
-        b=TVkV+sdr2o0Zq8H4Yc3A4qc2hzYx0Yxaqstt2PJCYZyzdmwaYFHTFbublew327qYtf
-         SPY7JgeJDDl7Wwp+qOheQWvYOqVNhsO4KQv80q/n4Q0Ll3sN7KCc9tmIBl8IbEjJLcNv
-         IQxGnITLwqeSzP83xtPCgXNH0sGCI9w94Hckz8Pj5CMm4Mvqioqceh+oU8edPNEryit9
-         Ji5ZVuvsAY4GfgJe20Il7TeQhrIpO8V76exQ2QwR5IH7AXdJ8xZ5R9LfeBt33Fh3OrVH
-         00q+AVhibs44sVhqUclJn+nrtohvfZlmPynDFAIg6xYw4TwyCUZGv5dk18ylfOkS4iFA
-         uvxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NWzCxmt8ydVHM/+dxflBPJKVBUm+/DapTJJBwEsSxF8=;
-        b=SkUXL5WVa4OqXECo0YUVwQCJt2hNUuIxv9CVQsotNNdADFthK7TGM1awNyTI4CAs+i
-         9PczSDZayLRpzcxSdrQAcoq8eH61p61rQaCmZdsWUs1MNXo1Dq1+g4zynXTQ+hj5bqAE
-         dEoGWKFzPig/XHyBQ+kbOvuRgiQfvWkIlYKCgzl9Aj0/Kh3q36Pwr7VRF3Cv41MyZx8p
-         VyGPHFPfh9AudfkEGdysk4bl2X2x3Gc4z02ZjC2OCYIoGT6EqtuVJDfT4Vzhk5uj2Ina
-         i21AXpwd3nXjoghlv3TNWbv4CCLK/yqEPYbFcUO23y0/C5kX1c1h/RqjGneCobWxUBbT
-         DqRg==
-X-Gm-Message-State: AOAM532pSLUyVljJZDURukE5Khyt/xnbUAHqkIy1Fav0+UVbBxIqP9u+
-        Aq8N45Bx1THQgT6/vYSjTTPTgBqBYtHz2bnS3jY=
-X-Google-Smtp-Source: ABdhPJzrwKAJf/5jCBrPzslHTmdnPvZp+Ik74HRNc8WVYmNEt3mK/loKwjGU/DD8JOHtKFueAW0+6FzsK4RImUlx3EA=
-X-Received: by 2002:a05:6402:2074:: with SMTP id bd20mr3601664edb.326.1607545483526;
- Wed, 09 Dec 2020 12:24:43 -0800 (PST)
-MIME-Version: 1.0
+        with ESMTP id S1730829AbgLJHhY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Dec 2020 02:37:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A29C0613CF
+        for <linux-can@vger.kernel.org>; Wed,  9 Dec 2020 23:36:42 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1knGVC-00008f-Oz; Thu, 10 Dec 2020 08:36:38 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:92bc:e5f0:39d9:bbfa] (unknown [IPv6:2a03:f580:87bc:d400:92bc:e5f0:39d9:bbfa])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9B7955A9FC7;
+        Thu, 10 Dec 2020 07:36:37 +0000 (UTC)
+To:     Christian Gagneraud <chgans@gmail.com>
+Cc:     linux-can <linux-can@vger.kernel.org>
 References: <CABxGUThzGkCerMBTuA95TCs49hjHg+O-u3Z_c8=RZGJ8bVQjRQ@mail.gmail.com>
  <a13ab81e-ad20-0405-6935-ecd748233bc5@pengutronix.de>
-In-Reply-To: <a13ab81e-ad20-0405-6935-ecd748233bc5@pengutronix.de>
-From:   Christian Gagneraud <chgans@gmail.com>
-Date:   Thu, 10 Dec 2020 09:24:31 +1300
-Message-ID: <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
+ <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
 Subject: Re: New USB driver, looking for advice
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <60b5b0e3-bdb3-e1c5-b4ac-78f955b5374a@pengutronix.de>
+Date:   Thu, 10 Dec 2020 08:36:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="CCEEmjklwlKBwGNBLvoJdEJjurOblSCie"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, 9 Dec 2020 at 03:59, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 12/7/20 3:57 AM, Christian Gagneraud wrote:
-> > I'm looking at creating a new CAN driver for a USB device [1]. This device
-> > has a custom protocol over bulk endpoints. I was able to create a simple
-> > driver, based on usb-skeleton.c that allows to speak this protocol by opening
-> > a custom har device.
->
-> Do you already have code available somewhere?
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--CCEEmjklwlKBwGNBLvoJdEJjurOblSCie
+Content-Type: multipart/mixed; boundary="mXEhuPwb4XEh7al3RpswwLZyQw59TYfVD";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Christian Gagneraud <chgans@gmail.com>
+Cc: linux-can <linux-can@vger.kernel.org>
+Message-ID: <60b5b0e3-bdb3-e1c5-b4ac-78f955b5374a@pengutronix.de>
+Subject: Re: New USB driver, looking for advice
+References: <CABxGUThzGkCerMBTuA95TCs49hjHg+O-u3Z_c8=RZGJ8bVQjRQ@mail.gmail.com>
+ <a13ab81e-ad20-0405-6935-ecd748233bc5@pengutronix.de>
+ <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
+In-Reply-To: <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
 
-No, not yet. This driver is really a slightly modified usb-skeleton
-where you read/write bulk packets one by one on a char device.
-I have as well a python version that was used as a proof of concept
-(using pyusb).
+--mXEhuPwb4XEh7al3RpswwLZyQw59TYfVD
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
->
-> > I've been looking at the current implementation in [2], I think my device is
-> > a bit special, you cannot read CAN frames w/o sending a 'read' command, so i
-> > need some sort of polling. AFAIK, the Linux USB stack provides that for me,
-> > except that the device won't read anything unless you send it a command.
->
-> I don't know if you have to implement the polling yourself or if there is a
-> polling helper. I'll ask my co-workers.
->
-> Is that a Interrupt Transfer Endpoint or a normal Bulk Endpoint?
+On 12/9/20 9:24 PM, Christian Gagneraud wrote:
+>> I don't know if you have to implement the polling yourself or if there=
+ is a
+>> polling helper. I'll ask my co-workers.
+>>
+>> Is that a Interrupt Transfer Endpoint or a normal Bulk Endpoint?
+>=20
+> AFAIU the firmware, it's just a normal Bulk Endpoint, which i think is
+> the problem.
 
-AFAIU the firmware, it's just a normal Bulk Endpoint, which i think is
-the problem.
+Yes, with an Interrupt Endpoint things would be easier.
 
-> > I have the feeling that current drivers are for devices that can
-> > return data by just scheduling read transfer.
->
-> Yes. Current drivers get notified by the device, if there is a CAN frame waiting.
->
-> > Anyone would have a clue on how these drivers work, and if my device
-> > is really that special?
->
-> Yes, your device is quite special :)
+>>> I have the feeling that current drivers are for devices that can
+>>> return data by just scheduling read transfer.
+>>
+>> Yes. Current drivers get notified by the device, if there is a CAN fra=
+me waiting.
+>>
+>>> Anyone would have a clue on how these drivers work, and if my device
+>>> is really that special?
+>>
+>> Yes, your device is quite special :)
+>=20
+> Hum, no good news...
+>=20
+> The device has 3 interfaces:
+> - keyboard
+> - mouse
+> - device specific (CAN)
 
-Hum, no good news...
+I think you have to implement the polling yourself. Start a transfer on
+ndo_open(). In the completion handler handle the received data. In case y=
+ou have
+recieved a CAN frame, submit a new transfer in case you haven't received =
+data
+yet, schedule delayed work with a delay, e.g. 1ms. Once you have that run=
+ning
+you have fine tune the number of running transfers and delays.
 
-The device has 3 interfaces:
-- keyboard
-- mouse
-- device specific (CAN)
+Marc
 
-The reason for HID is that these sort of devices[1] communicate over N2K
-[1] https://www.simrad-yachting.com/en-nz/simrad/type/autopilots/autopilot-remote-controllers/simrad-op50-remote/
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Thanks,
-Chris
 
-$ lsusb -v
-Bus 001 Device 105: ID 1cda:03e8
-Device Descriptor:
- bLength                18
- bDescriptorType         1
- bcdUSB               2.00
- bDeviceClass            0 (Defined at Interface level)
- bDeviceSubClass         0
- bDeviceProtocol         0
- bMaxPacketSize0        64
- idVendor           0x1cda
- idProduct          0x03e8
- bcdDevice            0.13
- iManufacturer           1 Navico Asia Pacific Ltd
- iProduct                2 Navico USB IO Computer
- iSerial                 3 SN-03EC-FFFFFFFF
- bNumConfigurations      1
- Configuration Descriptor:
-   bLength                 9
-   bDescriptorType         2
-   wTotalLength           82
-   bNumInterfaces          3
-   bConfigurationValue     1
-   iConfiguration          0
-   bmAttributes         0x80
-     (Bus Powered)
-   MaxPower              100mA
-   Interface Descriptor:
-     bLength                 9
-     bDescriptorType         4
-     bInterfaceNumber        0
-     bAlternateSetting       0
-     bNumEndpoints           1
-     bInterfaceClass         3 Human Interface Device
-     bInterfaceSubClass      1 Boot Interface Subclass
-     bInterfaceProtocol      1 Keyboard
-     iInterface              4 Virtual Keyboard
-       HID Device Descriptor:
-         bLength                 9
-         bDescriptorType        33
-         bcdHID               1.01
-         bCountryCode            0 Not supported
-         bNumDescriptors         1
-         bDescriptorType        34 Report
-         wDescriptorLength      63
-        Report Descriptors:
-          ** UNAVAILABLE **
-     Endpoint Descriptor:
-       bLength                 7
-       bDescriptorType         5
-       bEndpointAddress     0x81  EP 1 IN
-       bmAttributes            3
-         Transfer Type            Interrupt
-         Synch Type               None
-         Usage Type               Data
-       wMaxPacketSize     0x0008  1x 8 bytes
-       bInterval              10
-   Interface Descriptor:
-     bLength                 9
-     bDescriptorType         4
-     bInterfaceNumber        1
-     bAlternateSetting       0
-     bNumEndpoints           1
-     bInterfaceClass         3 Human Interface Device
-     bInterfaceSubClass      1 Boot Interface Subclass
-     bInterfaceProtocol      2 Mouse
-     iInterface              5 Virtual Mouse
-       HID Device Descriptor:
-         bLength                 9
-         bDescriptorType        33
-         bcdHID               1.01
-         bCountryCode            0 Not supported
-         bNumDescriptors         1
-         bDescriptorType        34 Report
-         wDescriptorLength      50
-        Report Descriptors:
-          ** UNAVAILABLE **
-     Endpoint Descriptor:
-       bLength                 7
-       bDescriptorType         5
-       bEndpointAddress     0x84  EP 4 IN
-       bmAttributes            3
-         Transfer Type            Interrupt
-         Synch Type               None
-         Usage Type               Data
-       wMaxPacketSize     0x0008  1x 8 bytes
-       bInterval              10
-   Interface Descriptor:
-     bLength                 9
-     bDescriptorType         4
-     bInterfaceNumber        2
-     bAlternateSetting       0
-     bNumEndpoints           2
-     bInterfaceClass       255 Vendor Specific Class
-     bInterfaceSubClass    255 Vendor Specific Subclass
-     bInterfaceProtocol    255 Vendor Specific Protocol
-     iInterface              6 Client Application Interface
-     Endpoint Descriptor:
-       bLength                 7
-       bDescriptorType         5
-       bEndpointAddress     0x82  EP 2 IN
-       bmAttributes            2
-         Transfer Type            Bulk
-         Synch Type               None
-         Usage Type               Data
-       wMaxPacketSize     0x0040  1x 64 bytes
-       bInterval               0
-     Endpoint Descriptor:
-       bLength                 7
-       bDescriptorType         5
-       bEndpointAddress     0x02  EP 2 OUT
-       bmAttributes            2
-         Transfer Type            Bulk
-         Synch Type               None
-         Usage Type               Data
-       wMaxPacketSize     0x0040  1x 64 bytes
-       bInterval               0
-Device Status:     0x0000
- (Bus Powered)
+--mXEhuPwb4XEh7al3RpswwLZyQw59TYfVD--
+
+--CCEEmjklwlKBwGNBLvoJdEJjurOblSCie
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/R0AIACgkQqclaivrt
+76kIOwgAqLjyEnR2TplMg0MblfkEMtoXkvxYsqIdowS/yUQWyi1F17EchPUVa7w6
+xHgdlqwmX2xWrntc38vZbdU+9YIDFvcQwF9hWhehhAjb4pWRRt4eF/Fi7hvj7XPu
+bMJ98/7RMsPmdN/CBwi6Kmbfu65pJhgQISdQlGMtKLCjFjOGkdrSJiE+TzJXL+Fi
+whG8z9oO489dEeXXuUdRvwqVQY1CAFy1Fbbu+agPdSfLQfeTB9uaovjJtMT68A6a
+npHa8nD2LHIRnfUtKU4JU7OWoM9nOM4rD6zo0IHxSyxzAfzY4ZQ5JaOUL9NPFIU+
+BHqi4/jUM9XxaP1ngTfYvojSMJNaBg==
+=yGTH
+-----END PGP SIGNATURE-----
+
+--CCEEmjklwlKBwGNBLvoJdEJjurOblSCie--
