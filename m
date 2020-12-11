@@ -2,38 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2BF2D71FD
-	for <lists+linux-can@lfdr.de>; Fri, 11 Dec 2020 09:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C23C2D7241
+	for <lists+linux-can@lfdr.de>; Fri, 11 Dec 2020 09:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404060AbgLKIld (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 11 Dec 2020 03:41:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S2437074AbgLKIvJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 11 Dec 2020 03:51:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436949AbgLKIkf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Dec 2020 03:40:35 -0500
+        with ESMTP id S2404071AbgLKIul (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Dec 2020 03:50:41 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3474DC0613CF
-        for <linux-can@vger.kernel.org>; Fri, 11 Dec 2020 00:39:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9F0C0613D3
+        for <linux-can@vger.kernel.org>; Fri, 11 Dec 2020 00:50:01 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kndxw-0001RZ-PR; Fri, 11 Dec 2020 09:39:52 +0100
+        id 1kne7f-0002PU-M9; Fri, 11 Dec 2020 09:49:55 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:febd:5070:19dc:f640] (unknown [IPv6:2a03:f580:87bc:d400:febd:5070:19dc:f640])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B41E15AAE0C;
-        Fri, 11 Dec 2020 08:39:51 +0000 (UTC)
-To:     Christian Gagneraud <chgans@gmail.com>
-Cc:     linux-can <linux-can@vger.kernel.org>
-References: <CABxGUThzGkCerMBTuA95TCs49hjHg+O-u3Z_c8=RZGJ8bVQjRQ@mail.gmail.com>
- <a13ab81e-ad20-0405-6935-ecd748233bc5@pengutronix.de>
- <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
- <60b5b0e3-bdb3-e1c5-b4ac-78f955b5374a@pengutronix.de>
- <CABxGUTi+nCvGA+tAabb6XLhwBx9_ZqVM3KwS-74jS8swApPZPg@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1F2675AAE2D;
+        Fri, 11 Dec 2020 08:49:53 +0000 (UTC)
+Subject: Re: pull-request: can-next 2020-12-10
+To:     David Miller <davem@davemloft.net>
+Cc:     netdev@vger.kernel.org, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20201210095507.1551220-1-mkl@pengutronix.de>
+ <20201210.125026.34307921940137816.davem@davemloft.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,16 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: New USB driver, looking for advice
-Message-ID: <b74ebe15-51b6-848c-1fd8-d969d5822766@pengutronix.de>
-Date:   Fri, 11 Dec 2020 09:39:41 +0100
+Message-ID: <90160552-5285-3cbb-0290-24ebccff463e@pengutronix.de>
+Date:   Fri, 11 Dec 2020 09:49:49 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CABxGUTi+nCvGA+tAabb6XLhwBx9_ZqVM3KwS-74jS8swApPZPg@mail.gmail.com>
+In-Reply-To: <20201210.125026.34307921940137816.davem@davemloft.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="jd6BLlOapSIWyYSylk0h5GZdgdaCwJWxK"
+ boundary="USVyXEW4c1ixeS0kZuH7G8TSEFLJbA0MC"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,61 +112,58 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---jd6BLlOapSIWyYSylk0h5GZdgdaCwJWxK
-Content-Type: multipart/mixed; boundary="WTzUIRHv9lusmPXwi0TDE9uKB2LNnnun5";
+--USVyXEW4c1ixeS0kZuH7G8TSEFLJbA0MC
+Content-Type: multipart/mixed; boundary="d3DTzpRp6QFYnzDJNQk6ZE5Ro6pc2oIWC";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Christian Gagneraud <chgans@gmail.com>
-Cc: linux-can <linux-can@vger.kernel.org>
-Message-ID: <b74ebe15-51b6-848c-1fd8-d969d5822766@pengutronix.de>
-Subject: Re: New USB driver, looking for advice
-References: <CABxGUThzGkCerMBTuA95TCs49hjHg+O-u3Z_c8=RZGJ8bVQjRQ@mail.gmail.com>
- <a13ab81e-ad20-0405-6935-ecd748233bc5@pengutronix.de>
- <CABxGUTjcynztDDoB=OVAXa4SYig3Ju+Y8wHmg-oVxs-b5n2SqA@mail.gmail.com>
- <60b5b0e3-bdb3-e1c5-b4ac-78f955b5374a@pengutronix.de>
- <CABxGUTi+nCvGA+tAabb6XLhwBx9_ZqVM3KwS-74jS8swApPZPg@mail.gmail.com>
-In-Reply-To: <CABxGUTi+nCvGA+tAabb6XLhwBx9_ZqVM3KwS-74jS8swApPZPg@mail.gmail.com>
+To: David Miller <davem@davemloft.net>
+Cc: netdev@vger.kernel.org, kuba@kernel.org, linux-can@vger.kernel.org,
+ kernel@pengutronix.de
+Message-ID: <90160552-5285-3cbb-0290-24ebccff463e@pengutronix.de>
+Subject: Re: pull-request: can-next 2020-12-10
+References: <20201210095507.1551220-1-mkl@pengutronix.de>
+ <20201210.125026.34307921940137816.davem@davemloft.net>
+In-Reply-To: <20201210.125026.34307921940137816.davem@davemloft.net>
 
---WTzUIRHv9lusmPXwi0TDE9uKB2LNnnun5
+--d3DTzpRp6QFYnzDJNQk6ZE5Ro6pc2oIWC
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 12/10/20 11:26 PM, Christian Gagneraud wrote:
->>>> Yes, your device is quite special :)
-
-[...]
-
->> I think you have to implement the polling yourself. Start a transfer o=
-n
->> ndo_open(). In the completion handler handle the received data. In cas=
-e you have
->> recieved a CAN frame, submit a new transfer in case you haven't receiv=
-ed data
->> yet, schedule delayed work with a delay, e.g. 1ms. Once you have that =
-running
->> you have fine tune the number of running transfers and delays.
+On 12/10/20 9:50 PM, David Miller wrote:
+> From: Marc Kleine-Budde <mkl@pengutronix.de>
+> Date: Thu, 10 Dec 2020 10:55:00 +0100
 >=20
-> Thanks Marc for the hints.
-> I'll look into that, this will certainly take time, I'm not in a rush.
-> Full disclosure: I am actually an employee of Navico (the manufacturer
-> of the device),
+>> Hello Jakub, hello David,
+>>
+>> here's a pull request of 7 patches for net-next/master.
+>>
+>> The first patch is by Oliver Hartkopp for the CAN ISOTP, which adds su=
+pport for
+>> functional addressing.
+>>
+>> A patch by Antonio Quartulli removes an unneeded unlikely() annotation=
+ from the
+>> rx-offload helper.
+>>
+>> The next three patches target the m_can driver. Sean Nyekjaers's patch=
+ removes
+>> a double clearing of clock stop request bit, Patrik Flykt's patch move=
+s the
+>> runtime PM enable/disable to m_can_platform and Jarkko Nikula's patch =
+adds a
+>> PCI glue code driver.
+>>
+>> Fabio Estevam's patch converts the flexcan driver to DT only.
+>>
+>> And Manivannan Sadhasivam's patchd for the mcp251xfd driver adds inter=
+nal
+>> loopback mode support.
+>=20
+> Pulled, thanks Marc.
 
-Nice! There are several CAN devices which have mainline Linux spport by t=
-heir
-manufacturers. Is there any driver for other operating systems like Windo=
-ws,
-etc? You might talk to the developers to find out, how they solve the pro=
-blem of
-polling.
+Good to see you back, David!
 
-> I'm currently waiting for approval to publish code
-> related to that device. This shouldn't be an issue, I just need the
-> administrative work done.
-
-Fingers crossed!
-
-regard,
 Marc
 
 --=20
@@ -178,23 +173,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---WTzUIRHv9lusmPXwi0TDE9uKB2LNnnun5--
+--d3DTzpRp6QFYnzDJNQk6ZE5Ro6pc2oIWC--
 
---jd6BLlOapSIWyYSylk0h5GZdgdaCwJWxK
+--USVyXEW4c1ixeS0kZuH7G8TSEFLJbA0MC
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/TME8ACgkQqclaivrt
-76ktVggAoz091wncrqErJ99D8T5b+UhqD4apzYR/F8I0QTzPsrFCDrUWDIg0CMer
-7iqDL9oKyuAilqobRYhIJN3sWu3C7TfdatiHPJAGDY1sHhAMkrpBwo/KKbEytxv3
-v20BkJJ3HanJBKFbn4O3gvqKKp/zuA8qWKRHRd3wt4J2CGnC6pZNISEmPGRYFrye
-3aqyLWimQ6GqG8rtG3T/MYyD/9oYItm1YFyXLtn2gly+4sd6E3YgppUeGRav/niU
-ArwTLWHfGdCLgPPCAGmaeH0T7rQjSRJkCIBLe558lUU7uxbBQrkzzYPvqIPpWUL8
-aIUJ1BGIstq3Oqj/QiL83TGZZO0fBg==
-=zCP+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/TMq4ACgkQqclaivrt
+76ns+wf/cRPJEk1rAsdAizmcZdXHdXQsujXMVoYXXVm0Z5kLEw8P+wKb/R4OPGcL
+KH9wBePnVCO2csMotUGWc5kD+ava2MnJ6m/b8pKht0F0xfKVDmnOlQMN3poln1fR
+dRHT9qZxzEaglqjoqq9C8nsOeAnnmK4z/iFj/36Yof43Qw8iRfYHhOPnonw209pZ
+u++El9/wkUlVbEAqQDtwl2B8mPLgedVSSbmQeW6IFeJrR/HRZ5z0+wVXL4+6D1SY
+1SseZymiQsgyR/A0nYQJKxnrezE1o4kwCsmqDaiQ1lb7BhI/HWlgXtt17+b5xrLA
+5Nvy61EVNvS6dLCs3HIB0jhzb8OI1A==
+=A8KY
 -----END PGP SIGNATURE-----
 
---jd6BLlOapSIWyYSylk0h5GZdgdaCwJWxK--
+--USVyXEW4c1ixeS0kZuH7G8TSEFLJbA0MC--
