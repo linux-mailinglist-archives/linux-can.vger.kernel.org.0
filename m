@@ -2,41 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC482D93D4
-	for <lists+linux-can@lfdr.de>; Mon, 14 Dec 2020 09:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10F02D93D6
+	for <lists+linux-can@lfdr.de>; Mon, 14 Dec 2020 09:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439060AbgLNIM4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 14 Dec 2020 03:12:56 -0500
-Received: from first.geanix.com ([116.203.34.67]:57744 "EHLO first.geanix.com"
+        id S2439078AbgLNINH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 14 Dec 2020 03:13:07 -0500
+Received: from first.geanix.com ([116.203.34.67]:57758 "EHLO first.geanix.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439067AbgLNIMx (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 14 Dec 2020 03:12:53 -0500
+        id S2439074AbgLNINB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 14 Dec 2020 03:13:01 -0500
 Received: from [IPv6:2a06:4004:10df:1:da27:a6d2:5305:fd0a] (_gateway [172.21.0.1])
-        by first.geanix.com (Postfix) with ESMTPSA id 2EE67480B23;
-        Mon, 14 Dec 2020 08:12:04 +0000 (UTC)
+        by first.geanix.com (Postfix) with ESMTPSA id 5707C481A89;
+        Mon, 14 Dec 2020 08:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1607933524; bh=GYNUFOJ2Qwpw60GlZCPyGIe8jDqhWr1ABENHm/L7Dwc=;
+        t=1607933537; bh=RYM5oS08/h8SEh5FcFmIZjDoa2nmgwQULWW/QSarT0w=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=MlFVzZe2lMCRyZ7k3OXBHdR3N18xCRZR2E/7MOHxGAKlOD8yY74SH3gGzRIukfA5l
-         62BprkAQysVU6pwy9UCX4u3w9G181AAog+4xVG7o6ymYdJ/jj7wxVPIu7/99ChAUym
-         TogWSZ828XGZtdP0hYV26i/Si4Uc6I2AaLwziCURPBCiKvjAfqfVd/uCPD1XBQuHHi
-         lGZILvRFptSvxSKHhqMzwfMOgck73MjGVsRF40td1AHogDjVc/h0ZXctR9PdWOEROH
-         rR+S17HnNebxc8rv7gzaK49mBNmTpyYMJBWvgZ4lri5kZZKazmQZpLEtUPPPB1jolm
-         pWmNfyoCXxsMQ==
-Subject: Re: [can-next-rfc 2/7] can: m_can: convert indention to kernel coding
- style
+        b=W3AhMdbu4gkqNEdqPXET9XEsMM86pwgh4DiueFaKGiJ8PXBUACe2vocSfmyG0uFyn
+         ldWtan1L3O1tjhdY1MuRkih5eVq4brnzIXuJ2L8NUSfqlQoJTLDy/tqqkN8xoiasE1
+         DBBiiBQWbFHfaIO4fB8uHkr5NJTiujwVwVx3YzZfWxQ7fBnawMKLixQJToVQJJoY0Z
+         46xNxZ24sQw9ZCOCmnKdBWvVPXhPU6nUbNh4TQP3+MKpoL1IHMTfLGPj3M8RUMHNGh
+         fENXZ2aIZbYbMMDs5fpIwe6914YkFO/Lx8OXOZ8cktlsKe+0yEDoWlVMiIjaVVsmK9
+         EQpG0p74oUjaQ==
+Subject: Re: [can-next-rfc 3/7] can: m_can: use cdev as name for struct
+ m_can_classdev uniformly
 To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
         Sriram Dash <sriram.dash@samsung.com>
 References: <20201212175518.139651-1-mkl@pengutronix.de>
- <20201212175518.139651-3-mkl@pengutronix.de>
+ <20201212175518.139651-4-mkl@pengutronix.de>
 From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <f26f89cc-9309-becd-8c99-00a7a661f0f8@geanix.com>
-Date:   Mon, 14 Dec 2020 09:12:03 +0100
+Message-ID: <7454be99-d576-1912-a186-526396216bb7@geanix.com>
+Date:   Mon, 14 Dec 2020 09:12:17 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.4.3
 MIME-Version: 1.0
-In-Reply-To: <20201212175518.139651-3-mkl@pengutronix.de>
+In-Reply-To: <20201212175518.139651-4-mkl@pengutronix.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
@@ -51,261 +51,212 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 
 On 12/12/2020 18.55, Marc Kleine-Budde wrote:
-> This patch converts the  indention in the m_can driver to kernel coding style.
+> This patch coverts the m_can driver to use cdev as name for struct
+> m_can_classdev uniformly throughout the whole driver.
 >
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Reviewed-by: Sean Nyekjaer <sean@geanix.com>
 > ---
->   drivers/net/can/m_can/m_can.c | 88 +++++++++++++++++------------------
->   1 file changed, 43 insertions(+), 45 deletions(-)
+>   drivers/net/can/m_can/m_can.c | 98 +++++++++++++++++------------------
+>   1 file changed, 49 insertions(+), 49 deletions(-)
 >
 > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 8873f6f6f6da..27e736464580 100644
+> index 27e736464580..fb408ca85188 100644
 > --- a/drivers/net/can/m_can/m_can.c
 > +++ b/drivers/net/can/m_can/m_can.c
-> @@ -39,7 +39,7 @@ enum m_can_reg {
->   	M_CAN_TOCV	= 0x2c,
->   	M_CAN_ECR	= 0x40,
->   	M_CAN_PSR	= 0x44,
-> -/* TDCR Register only available for version >=3.1.x */
-> +	/* TDCR Register only available for version >=3.1.x */
->   	M_CAN_TDCR	= 0x48,
->   	M_CAN_IR	= 0x50,
->   	M_CAN_IE	= 0x54,
-> @@ -335,7 +335,7 @@ static u32 m_can_fifo_read(struct m_can_classdev *cdev,
->   			   u32 fgi, unsigned int offset)
->   {
->   	u32 addr_offset = cdev->mcfg[MRAM_RXF0].off + fgi * RXF0_ELEMENT_SIZE +
-> -			  offset;
-> +		offset;
->   
->   	return cdev->ops->read_fifo(cdev, addr_offset);
->   }
-> @@ -344,7 +344,7 @@ static void m_can_fifo_write(struct m_can_classdev *cdev,
->   			     u32 fpi, unsigned int offset, u32 val)
->   {
->   	u32 addr_offset = cdev->mcfg[MRAM_TXB].off + fpi * TXB_ELEMENT_SIZE +
-> -			  offset;
-> +		offset;
->   
->   	cdev->ops->write_fifo(cdev, addr_offset, val);
->   }
-> @@ -358,14 +358,14 @@ static inline void m_can_fifo_write_no_off(struct m_can_classdev *cdev,
->   static u32 m_can_txe_fifo_read(struct m_can_classdev *cdev, u32 fgi, u32 offset)
->   {
->   	u32 addr_offset = cdev->mcfg[MRAM_TXE].off + fgi * TXE_ELEMENT_SIZE +
-> -			  offset;
-> +		offset;
->   
->   	return cdev->ops->read_fifo(cdev, addr_offset);
+> @@ -1327,79 +1327,79 @@ static bool m_can_niso_supported(struct m_can_classdev *cdev)
+>   	return !niso_timeout;
 >   }
 >   
->   static inline bool m_can_tx_fifo_full(struct m_can_classdev *cdev)
+> -static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
+> +static int m_can_dev_setup(struct m_can_classdev *cdev)
 >   {
-> -		return !!(m_can_read(cdev, M_CAN_TXFQS) & TXFQS_TFQF);
-> +	return !!(m_can_read(cdev, M_CAN_TXFQS) & TXFQS_TFQF);
->   }
+> -	struct net_device *dev = m_can_dev->net;
+> +	struct net_device *dev = cdev->net;
+>   	int m_can_version;
 >   
->   void m_can_config_endisable(struct m_can_classdev *cdev, bool enable)
-> @@ -921,14 +921,13 @@ static void m_can_echo_tx_event(struct net_device *dev)
->   	m_can_txefs = m_can_read(cdev, M_CAN_TXEFS);
->   
->   	/* Get Tx Event fifo element count */
-> -	txe_count = (m_can_txefs & TXEFS_EFFL_MASK)
-> -			>> TXEFS_EFFL_SHIFT;
-> +	txe_count = (m_can_txefs & TXEFS_EFFL_MASK) >> TXEFS_EFFL_SHIFT;
->   
->   	/* Get and process all sent elements */
->   	for (i = 0; i < txe_count; i++) {
->   		/* retrieve get index */
-> -		fgi = (m_can_read(cdev, M_CAN_TXEFS) & TXEFS_EFGI_MASK)
-> -			>> TXEFS_EFGI_SHIFT;
-> +		fgi = (m_can_read(cdev, M_CAN_TXEFS) & TXEFS_EFGI_MASK) >>
-> +			TXEFS_EFGI_SHIFT;
->   
->   		/* get message marker */
->   		msg_mark = (m_can_txe_fifo_read(cdev, fgi, 4) &
-> @@ -1087,7 +1086,7 @@ static int m_can_set_bittiming(struct net_device *dev)
->   			 * Transmitter Delay Compensation Section
->   			 */
->   			tdco = (cdev->can.clock.freq / 1000) *
-> -			       ssp / dbt->bitrate;
-> +				ssp / dbt->bitrate;
->   
->   			/* Max valid TDCO value is 127 */
->   			if (tdco > 127) {
-> @@ -1102,9 +1101,9 @@ static int m_can_set_bittiming(struct net_device *dev)
->   		}
->   
->   		reg_btp |= (brp << DBTP_DBRP_SHIFT) |
-> -			   (sjw << DBTP_DSJW_SHIFT) |
-> -			   (tseg1 << DBTP_DTSEG1_SHIFT) |
-> -			   (tseg2 << DBTP_DTSEG2_SHIFT);
-> +			(sjw << DBTP_DSJW_SHIFT) |
-> +			(tseg1 << DBTP_DTSEG1_SHIFT) |
-> +			(tseg2 << DBTP_DTSEG2_SHIFT);
->   
->   		m_can_write(cdev, M_CAN_DBTP, reg_btp);
+> -	m_can_version = m_can_check_core_release(m_can_dev);
+> +	m_can_version = m_can_check_core_release(cdev);
+>   	/* return if unsupported version */
+>   	if (!m_can_version) {
+> -		dev_err(m_can_dev->dev, "Unsupported version number: %2d",
+> +		dev_err(cdev->dev, "Unsupported version number: %2d",
+>   			m_can_version);
+>   		return -EINVAL;
 >   	}
-> @@ -1137,7 +1136,7 @@ static void m_can_chip_config(struct net_device *dev)
->   	if (cdev->version == 30) {
->   		/* only support one Tx Buffer currently */
->   		m_can_write(cdev, M_CAN_TXBC, (1 << TXBC_NDTB_SHIFT) |
-> -				cdev->mcfg[MRAM_TXB].off);
-> +			    cdev->mcfg[MRAM_TXB].off);
->   	} else {
->   		/* TX FIFO is used for newer IP Core versions */
->   		m_can_write(cdev, M_CAN_TXBC,
-> @@ -1151,7 +1150,7 @@ static void m_can_chip_config(struct net_device *dev)
->   	/* TX Event FIFO */
->   	if (cdev->version == 30) {
->   		m_can_write(cdev, M_CAN_TXEFC, (1 << TXEFC_EFS_SHIFT) |
-> -				cdev->mcfg[MRAM_TXE].off);
-> +			    cdev->mcfg[MRAM_TXE].off);
->   	} else {
->   		/* Full TX Event FIFO is used */
->   		m_can_write(cdev, M_CAN_TXEFC,
-> @@ -1163,27 +1162,27 @@ static void m_can_chip_config(struct net_device *dev)
->   	/* rx fifo configuration, blocking mode, fifo size 1 */
->   	m_can_write(cdev, M_CAN_RXF0C,
->   		    (cdev->mcfg[MRAM_RXF0].num << RXFC_FS_SHIFT) |
-> -		     cdev->mcfg[MRAM_RXF0].off);
-> +		    cdev->mcfg[MRAM_RXF0].off);
 >   
->   	m_can_write(cdev, M_CAN_RXF1C,
->   		    (cdev->mcfg[MRAM_RXF1].num << RXFC_FS_SHIFT) |
-> -		     cdev->mcfg[MRAM_RXF1].off);
-> +		    cdev->mcfg[MRAM_RXF1].off);
+> -	if (!m_can_dev->is_peripheral)
+> -		netif_napi_add(dev, &m_can_dev->napi,
+> +	if (!cdev->is_peripheral)
+> +		netif_napi_add(dev, &cdev->napi,
+>   			       m_can_poll, M_CAN_NAPI_WEIGHT);
 >   
->   	cccr = m_can_read(cdev, M_CAN_CCCR);
->   	test = m_can_read(cdev, M_CAN_TEST);
->   	test &= ~TEST_LBCK;
->   	if (cdev->version == 30) {
-> -	/* Version 3.0.x */
-> +		/* Version 3.0.x */
->   
->   		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_DAR |
-> -			(CCCR_CMR_MASK << CCCR_CMR_SHIFT) |
-> -			(CCCR_CME_MASK << CCCR_CME_SHIFT));
-> +			  (CCCR_CMR_MASK << CCCR_CMR_SHIFT) |
-> +			  (CCCR_CME_MASK << CCCR_CME_SHIFT));
->   
->   		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD)
->   			cccr |= CCCR_CME_CANFD_BRS << CCCR_CME_SHIFT;
->   
->   	} else {
-> -	/* Version 3.1.x or 3.2.x */
-> +		/* Version 3.1.x or 3.2.x */
->   		cccr &= ~(CCCR_TEST | CCCR_MON | CCCR_BRSE | CCCR_FDOE |
->   			  CCCR_NISO | CCCR_DAR);
->   
-> @@ -1352,10 +1351,10 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
+>   	/* Shared properties of all M_CAN versions */
+> -	m_can_dev->version = m_can_version;
+> -	m_can_dev->can.do_set_mode = m_can_set_mode;
+> -	m_can_dev->can.do_get_berr_counter = m_can_get_berr_counter;
+> +	cdev->version = m_can_version;
+> +	cdev->can.do_set_mode = m_can_set_mode;
+> +	cdev->can.do_get_berr_counter = m_can_get_berr_counter;
 >   
 >   	/* Set M_CAN supported operations */
->   	m_can_dev->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
-> -					CAN_CTRLMODE_LISTENONLY |
-> -					CAN_CTRLMODE_BERR_REPORTING |
-> -					CAN_CTRLMODE_FD |
-> -					CAN_CTRLMODE_ONE_SHOT;
-> +		CAN_CTRLMODE_LISTENONLY |
-> +		CAN_CTRLMODE_BERR_REPORTING |
-> +		CAN_CTRLMODE_FD |
-> +		CAN_CTRLMODE_ONE_SHOT;
+> -	m_can_dev->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+> +	cdev->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+>   		CAN_CTRLMODE_LISTENONLY |
+>   		CAN_CTRLMODE_BERR_REPORTING |
+>   		CAN_CTRLMODE_FD |
+>   		CAN_CTRLMODE_ONE_SHOT;
 >   
 >   	/* Set properties depending on M_CAN version */
->   	switch (m_can_dev->version) {
-> @@ -1366,8 +1365,8 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
->   			m_can_dev->bit_timing : &m_can_bittiming_const_30X;
+> -	switch (m_can_dev->version) {
+> +	switch (cdev->version) {
+>   	case 30:
+>   		/* CAN_CTRLMODE_FD_NON_ISO is fixed with M_CAN IP v3.0.x */
+>   		can_set_static_ctrlmode(dev, CAN_CTRLMODE_FD_NON_ISO);
+> -		m_can_dev->can.bittiming_const = m_can_dev->bit_timing ?
+> -			m_can_dev->bit_timing : &m_can_bittiming_const_30X;
+> +		cdev->can.bittiming_const = cdev->bit_timing ?
+> +			cdev->bit_timing : &m_can_bittiming_const_30X;
 >   
->   		m_can_dev->can.data_bittiming_const = m_can_dev->data_timing ?
-> -						m_can_dev->data_timing :
-> -						&m_can_data_bittiming_const_30X;
-> +			m_can_dev->data_timing :
-> +			&m_can_data_bittiming_const_30X;
+> -		m_can_dev->can.data_bittiming_const = m_can_dev->data_timing ?
+> -			m_can_dev->data_timing :
+> +		cdev->can.data_bittiming_const = cdev->data_timing ?
+> +			cdev->data_timing :
+>   			&m_can_data_bittiming_const_30X;
 >   		break;
 >   	case 31:
 >   		/* CAN_CTRLMODE_FD_NON_ISO is fixed with M_CAN IP v3.1.x */
-> @@ -1376,8 +1375,8 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
->   			m_can_dev->bit_timing : &m_can_bittiming_const_31X;
+>   		can_set_static_ctrlmode(dev, CAN_CTRLMODE_FD_NON_ISO);
+> -		m_can_dev->can.bittiming_const = m_can_dev->bit_timing ?
+> -			m_can_dev->bit_timing : &m_can_bittiming_const_31X;
+> +		cdev->can.bittiming_const = cdev->bit_timing ?
+> +			cdev->bit_timing : &m_can_bittiming_const_31X;
 >   
->   		m_can_dev->can.data_bittiming_const = m_can_dev->data_timing ?
-> -						m_can_dev->data_timing :
-> -						&m_can_data_bittiming_const_31X;
-> +			m_can_dev->data_timing :
-> +			&m_can_data_bittiming_const_31X;
+> -		m_can_dev->can.data_bittiming_const = m_can_dev->data_timing ?
+> -			m_can_dev->data_timing :
+> +		cdev->can.data_bittiming_const = cdev->data_timing ?
+> +			cdev->data_timing :
+>   			&m_can_data_bittiming_const_31X;
 >   		break;
 >   	case 32:
 >   	case 33:
-> @@ -1386,13 +1385,12 @@ static int m_can_dev_setup(struct m_can_classdev *m_can_dev)
->   			m_can_dev->bit_timing : &m_can_bittiming_const_31X;
+>   		/* Support both MCAN version v3.2.x and v3.3.0 */
+> -		m_can_dev->can.bittiming_const = m_can_dev->bit_timing ?
+> -			m_can_dev->bit_timing : &m_can_bittiming_const_31X;
+> +		cdev->can.bittiming_const = cdev->bit_timing ?
+> +			cdev->bit_timing : &m_can_bittiming_const_31X;
 >   
->   		m_can_dev->can.data_bittiming_const = m_can_dev->data_timing ?
-> -						m_can_dev->data_timing :
-> -						&m_can_data_bittiming_const_31X;
-> +			m_can_dev->data_timing :
-> +			&m_can_data_bittiming_const_31X;
+> -		m_can_dev->can.data_bittiming_const = m_can_dev->data_timing ?
+> -			m_can_dev->data_timing :
+> +		cdev->can.data_bittiming_const = cdev->data_timing ?
+> +			cdev->data_timing :
+>   			&m_can_data_bittiming_const_31X;
 >   
->   		m_can_dev->can.ctrlmode_supported |=
-> -						(m_can_niso_supported(m_can_dev)
-> -						? CAN_CTRLMODE_FD_NON_ISO
-> -						: 0);
-> +			(m_can_niso_supported(m_can_dev) ?
-> +			 CAN_CTRLMODE_FD_NON_ISO : 0);
+> -		m_can_dev->can.ctrlmode_supported |=
+> -			(m_can_niso_supported(m_can_dev) ?
+> +		cdev->can.ctrlmode_supported |=
+> +			(m_can_niso_supported(cdev) ?
+>   			 CAN_CTRLMODE_FD_NON_ISO : 0);
 >   		break;
 >   	default:
->   		dev_err(m_can_dev->dev, "Unsupported version number: %2d",
-> @@ -1534,7 +1532,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+> -		dev_err(m_can_dev->dev, "Unsupported version number: %2d",
+> -			m_can_dev->version);
+> +		dev_err(cdev->dev, "Unsupported version number: %2d",
+> +			cdev->version);
+>   		return -EINVAL;
+>   	}
 >   
->   		/* get put index for frame */
->   		putidx = ((m_can_read(cdev, M_CAN_TXFQS) & TXFQS_TFQPI_MASK)
-> -				  >> TXFQS_TFQPI_SHIFT);
-> +			  >> TXFQS_TFQPI_SHIFT);
->   		/* Write ID Field to FIFO Element */
->   		m_can_fifo_write(cdev, putidx, M_CAN_FIFO_ID, id);
+> -	if (m_can_dev->ops->init)
+> -		m_can_dev->ops->init(m_can_dev);
+> +	if (cdev->ops->init)
+> +		cdev->ops->init(cdev);
 >   
-> @@ -1581,7 +1579,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
->   static void m_can_tx_work_queue(struct work_struct *ws)
+>   	return 0;
+>   }
+> @@ -1751,15 +1751,15 @@ void m_can_init_ram(struct m_can_classdev *cdev)
+>   }
+>   EXPORT_SYMBOL_GPL(m_can_init_ram);
+>   
+> -int m_can_class_get_clocks(struct m_can_classdev *m_can_dev)
+> +int m_can_class_get_clocks(struct m_can_classdev *cdev)
 >   {
->   	struct m_can_classdev *cdev = container_of(ws, struct m_can_classdev,
-> -						tx_work);
-> +						   tx_work);
+>   	int ret = 0;
 >   
->   	m_can_tx_handler(cdev);
->   	cdev->tx_skb = NULL;
-> @@ -1705,26 +1703,26 @@ static void m_can_of_parse_mram(struct m_can_classdev *cdev,
->   	cdev->mcfg[MRAM_SIDF].off = mram_config_vals[0];
->   	cdev->mcfg[MRAM_SIDF].num = mram_config_vals[1];
->   	cdev->mcfg[MRAM_XIDF].off = cdev->mcfg[MRAM_SIDF].off +
-> -			cdev->mcfg[MRAM_SIDF].num * SIDF_ELEMENT_SIZE;
-> +		cdev->mcfg[MRAM_SIDF].num * SIDF_ELEMENT_SIZE;
->   	cdev->mcfg[MRAM_XIDF].num = mram_config_vals[2];
->   	cdev->mcfg[MRAM_RXF0].off = cdev->mcfg[MRAM_XIDF].off +
-> -			cdev->mcfg[MRAM_XIDF].num * XIDF_ELEMENT_SIZE;
-> +		cdev->mcfg[MRAM_XIDF].num * XIDF_ELEMENT_SIZE;
->   	cdev->mcfg[MRAM_RXF0].num = mram_config_vals[3] &
-> -			(RXFC_FS_MASK >> RXFC_FS_SHIFT);
-> +		(RXFC_FS_MASK >> RXFC_FS_SHIFT);
->   	cdev->mcfg[MRAM_RXF1].off = cdev->mcfg[MRAM_RXF0].off +
-> -			cdev->mcfg[MRAM_RXF0].num * RXF0_ELEMENT_SIZE;
-> +		cdev->mcfg[MRAM_RXF0].num * RXF0_ELEMENT_SIZE;
->   	cdev->mcfg[MRAM_RXF1].num = mram_config_vals[4] &
-> -			(RXFC_FS_MASK >> RXFC_FS_SHIFT);
-> +		(RXFC_FS_MASK >> RXFC_FS_SHIFT);
->   	cdev->mcfg[MRAM_RXB].off = cdev->mcfg[MRAM_RXF1].off +
-> -			cdev->mcfg[MRAM_RXF1].num * RXF1_ELEMENT_SIZE;
-> +		cdev->mcfg[MRAM_RXF1].num * RXF1_ELEMENT_SIZE;
->   	cdev->mcfg[MRAM_RXB].num = mram_config_vals[5];
->   	cdev->mcfg[MRAM_TXE].off = cdev->mcfg[MRAM_RXB].off +
-> -			cdev->mcfg[MRAM_RXB].num * RXB_ELEMENT_SIZE;
-> +		cdev->mcfg[MRAM_RXB].num * RXB_ELEMENT_SIZE;
->   	cdev->mcfg[MRAM_TXE].num = mram_config_vals[6];
->   	cdev->mcfg[MRAM_TXB].off = cdev->mcfg[MRAM_TXE].off +
-> -			cdev->mcfg[MRAM_TXE].num * TXE_ELEMENT_SIZE;
-> +		cdev->mcfg[MRAM_TXE].num * TXE_ELEMENT_SIZE;
->   	cdev->mcfg[MRAM_TXB].num = mram_config_vals[7] &
-> -			(TXBC_NDTB_MASK >> TXBC_NDTB_SHIFT);
-> +		(TXBC_NDTB_MASK >> TXBC_NDTB_SHIFT);
+> -	m_can_dev->hclk = devm_clk_get(m_can_dev->dev, "hclk");
+> -	m_can_dev->cclk = devm_clk_get(m_can_dev->dev, "cclk");
+> +	cdev->hclk = devm_clk_get(cdev->dev, "hclk");
+> +	cdev->cclk = devm_clk_get(cdev->dev, "cclk");
 >   
->   	dev_dbg(cdev->dev,
->   		"sidf 0x%x %d xidf 0x%x %d rxf0 0x%x %d rxf1 0x%x %d rxb 0x%x %d txe 0x%x %d txb 0x%x %d\n",
+> -	if (IS_ERR(m_can_dev->cclk)) {
+> -		dev_err(m_can_dev->dev, "no clock found\n");
+> +	if (IS_ERR(cdev->cclk)) {
+> +		dev_err(cdev->dev, "no clock found\n");
+>   		ret = -ENODEV;
+>   	}
+>   
+> @@ -1818,49 +1818,49 @@ void m_can_class_free_dev(struct net_device *net)
+>   }
+>   EXPORT_SYMBOL_GPL(m_can_class_free_dev);
+>   
+> -int m_can_class_register(struct m_can_classdev *m_can_dev)
+> +int m_can_class_register(struct m_can_classdev *cdev)
+>   {
+>   	int ret;
+>   
+> -	if (m_can_dev->pm_clock_support) {
+> -		ret = m_can_clk_start(m_can_dev);
+> +	if (cdev->pm_clock_support) {
+> +		ret = m_can_clk_start(cdev);
+>   		if (ret)
+>   			return ret;
+>   	}
+>   
+> -	ret = m_can_dev_setup(m_can_dev);
+> +	ret = m_can_dev_setup(cdev);
+>   	if (ret)
+>   		goto clk_disable;
+>   
+> -	ret = register_m_can_dev(m_can_dev->net);
+> +	ret = register_m_can_dev(cdev->net);
+>   	if (ret) {
+> -		dev_err(m_can_dev->dev, "registering %s failed (err=%d)\n",
+> -			m_can_dev->net->name, ret);
+> +		dev_err(cdev->dev, "registering %s failed (err=%d)\n",
+> +			cdev->net->name, ret);
+>   		goto clk_disable;
+>   	}
+>   
+> -	devm_can_led_init(m_can_dev->net);
+> +	devm_can_led_init(cdev->net);
+>   
+> -	of_can_transceiver(m_can_dev->net);
+> +	of_can_transceiver(cdev->net);
+>   
+> -	dev_info(m_can_dev->dev, "%s device registered (irq=%d, version=%d)\n",
+> -		 KBUILD_MODNAME, m_can_dev->net->irq, m_can_dev->version);
+> +	dev_info(cdev->dev, "%s device registered (irq=%d, version=%d)\n",
+> +		 KBUILD_MODNAME, cdev->net->irq, cdev->version);
+>   
+>   	/* Probe finished
+>   	 * Stop clocks. They will be reactivated once the M_CAN device is opened
+>   	 */
+>   clk_disable:
+> -	m_can_clk_stop(m_can_dev);
+> +	m_can_clk_stop(cdev);
+>   
+>   	return ret;
+>   }
+>   EXPORT_SYMBOL_GPL(m_can_class_register);
+>   
+> -void m_can_class_unregister(struct m_can_classdev *m_can_dev)
+> +void m_can_class_unregister(struct m_can_classdev *cdev)
+>   {
+> -	unregister_candev(m_can_dev->net);
+> +	unregister_candev(cdev->net);
+>   
+> -	m_can_clk_stop(m_can_dev);
+> +	m_can_clk_stop(cdev);
+>   }
+>   EXPORT_SYMBOL_GPL(m_can_class_unregister);
+>   
 
