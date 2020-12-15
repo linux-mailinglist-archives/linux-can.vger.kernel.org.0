@@ -2,38 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D712DB59F
-	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 22:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CFB92DB5C2
+	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 22:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728646AbgLOVKb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 16:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S1726771AbgLOVSd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 16:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728520AbgLOVK3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 16:10:29 -0500
+        with ESMTP id S1728428AbgLOVST (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 16:18:19 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0520AC0617A7
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 13:09:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9FC06179C
+        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 13:17:39 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kpHZq-0007bc-Jc; Tue, 15 Dec 2020 22:09:46 +0100
+        id 1kpHhR-0000Id-4t; Tue, 15 Dec 2020 22:17:37 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f] (unknown [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E48745AE2FB;
-        Tue, 15 Dec 2020 21:09:44 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CDC2B5AE308;
+        Tue, 15 Dec 2020 21:17:35 +0000 (UTC)
 Subject: Re: pcan: usb_submit_urb() hangs in peak_usb_ndo_start_xmit()
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Stefan Tatschner <stefan@rumpelsepp.org>, linux-can@vger.kernel.org
 Cc:     ferdinand.jarisch@aisec.fraunhofer.de,
         Tobias Specht <tobias.specht@aisec.fraunhofer.de>
 References: <ad68c4ebcdadb31cbf9fd78c9ad38b57ee9ef562.camel@rumpelsepp.org>
  <bf1f223b500ca27636fd04d7d10a1401f5a6bf18.camel@rumpelsepp.org>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <53e2e96c-c10e-28b6-96c8-577f4f7999cd@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -94,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <53e2e96c-c10e-28b6-96c8-577f4f7999cd@pengutronix.de>
-Date:   Tue, 15 Dec 2020 22:09:41 +0100
+Message-ID: <52b86522-d3fd-f570-719f-cd761bdb4853@pengutronix.de>
+Date:   Tue, 15 Dec 2020 22:17:32 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <bf1f223b500ca27636fd04d7d10a1401f5a6bf18.camel@rumpelsepp.org>
+In-Reply-To: <53e2e96c-c10e-28b6-96c8-577f4f7999cd@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="5F71bsQ1RMfc8RSWwkHujHez78kcQAM08"
+ boundary="V6FIhfDnlpy13q5WBWhdk6AHYua6Oie9t"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,45 +113,53 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---5F71bsQ1RMfc8RSWwkHujHez78kcQAM08
-Content-Type: multipart/mixed; boundary="cHbft3OQhw6XoyK1G2fcdxNXNqSlUlZvw";
+--V6FIhfDnlpy13q5WBWhdk6AHYua6Oie9t
+Content-Type: multipart/mixed; boundary="l4cbbkTLyCXq2YzM9Zg8IqjFzrA00ChUI";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Stefan Tatschner <stefan@rumpelsepp.org>, linux-can@vger.kernel.org
 Cc: ferdinand.jarisch@aisec.fraunhofer.de,
  Tobias Specht <tobias.specht@aisec.fraunhofer.de>
-Message-ID: <53e2e96c-c10e-28b6-96c8-577f4f7999cd@pengutronix.de>
+Message-ID: <52b86522-d3fd-f570-719f-cd761bdb4853@pengutronix.de>
 Subject: Re: pcan: usb_submit_urb() hangs in peak_usb_ndo_start_xmit()
 References: <ad68c4ebcdadb31cbf9fd78c9ad38b57ee9ef562.camel@rumpelsepp.org>
  <bf1f223b500ca27636fd04d7d10a1401f5a6bf18.camel@rumpelsepp.org>
-In-Reply-To: <bf1f223b500ca27636fd04d7d10a1401f5a6bf18.camel@rumpelsepp.org>
+ <53e2e96c-c10e-28b6-96c8-577f4f7999cd@pengutronix.de>
+In-Reply-To: <53e2e96c-c10e-28b6-96c8-577f4f7999cd@pengutronix.de>
 
---cHbft3OQhw6XoyK1G2fcdxNXNqSlUlZvw
+--l4cbbkTLyCXq2YzM9Zg8IqjFzrA00ChUI
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-Hey Stefan,
-
-On 12/15/20 10:02 PM, Stefan Tatschner wrote:
-> On Tue, 2020-12-15 at 21:59 +0100, Stefan Tatschner wrote:
->> The very can frame which poc.py should send is:
->>
->>  25 ff
+On 12/15/20 10:09 PM, Marc Kleine-Budde wrote:
+> Hey Stefan,
 >=20
-> Sorry for the follow up e-mail, but this detail is important=E2=80=A6
-> "25 ff" should be the very **last** can frame. The word "last" somehow
-> disappeared from my e-mail.^^
+> On 12/15/20 10:02 PM, Stefan Tatschner wrote:
+>> On Tue, 2020-12-15 at 21:59 +0100, Stefan Tatschner wrote:
+>>> The very can frame which poc.py should send is:
+>>>
+>>>  25 ff
+>>
+>> Sorry for the follow up e-mail, but this detail is important=E2=80=A6
+>> "25 ff" should be the very **last** can frame. The word "last" somehow=
 
-I think the e-mail you're referring to, didn't make it to the mailing lis=
-t at all.
+>> disappeared from my e-mail.^^
+>=20
+> I think the e-mail you're referring to, didn't make it to the mailing l=
+ist at all.
+>=20
+> https://lore.kernel.org/linux-can/bf1f223b500ca27636fd04d7d10a1401f5a6b=
+f18.camel@rumpelsepp.org/
+>=20
+> Can you resend the mail?
 
-https://lore.kernel.org/linux-can/bf1f223b500ca27636fd04d7d10a1401f5a6bf1=
-8.camel@rumpelsepp.org/
+It got greylisted:
 
-Can you resend the mail?
+> X-Greylist: delayed 631 seconds by postgrey-1.27 at vger.kernel.org; Tu=
+e, 15 Dec 2020 16:10:47 EST
 
-regards,
+never mind,
 Marc
 
 --=20
@@ -160,23 +169,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---cHbft3OQhw6XoyK1G2fcdxNXNqSlUlZvw--
+--l4cbbkTLyCXq2YzM9Zg8IqjFzrA00ChUI--
 
---5F71bsQ1RMfc8RSWwkHujHez78kcQAM08
+--V6FIhfDnlpy13q5WBWhdk6AHYua6Oie9t
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/ZJhUACgkQqclaivrt
-76nmFggAtNldjwU68+GJVD9F6S5EBozdJPo5WJj1v54uq3zwdaI1+XzewOH5jAq6
-pCirVc/fCOxSDgFf4u6iVTA0QuroxusL70K75c3Wm7f4Jn/PXcDpvxOpjZSNbmdl
-1xzaaCqcTvpiklWQGeiQMtUOf4BUMJv6oa7/k0jJ+/5YDMZ+sMWULQljmEWmZ6V0
-512tq9yQsYDeEwgBeYKauOP5yGaEJpq5iTS9tmvxyBhBtrlB7i3bz1WcB80CvmSv
-IwpG2CYpc9aVzOBcBNzTSnv4EGTpZcKADh7/Z26Ry2DtfNd6OWOCwyDH0bj8SHDv
-Zi1mB8AXudnDm7Z2D/loyhooEzOqTA==
-=GIfW
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/ZJ+wACgkQqclaivrt
+76lXlQf/RdwUd66Jqa/m7rYrf7/i6rK0ssGeEsYp4oY71X/WDpul9SvaRAVWQo1m
+buvsHvKUNY1Ap/VSN7IFbwFqehXba5v8VZPZE/+j8f+13bKSFR3asmNeJNrQVTIE
+M8pXzIHponGTe1Oh4jO5n7qzpIrHqeBbd8/xPNjHdIFO7hjr/JJ9Sy9Ymj5ZbFUB
+j01UXmCgj0z5rTaeaYCGacppVm0lOu/hIf9SqQmn1Cm1edtABmTnpoLhRj4/cp9g
+2hhtBfGkU9AplrrTJGGkcdaNMajStAsMJudgVr5yqtY8LoP8HhtaB7a6HAC+c21V
+Hbdm4IsSanhYg4cQQwP4MUq81NuykA==
+=ADUj
 -----END PGP SIGNATURE-----
 
---5F71bsQ1RMfc8RSWwkHujHez78kcQAM08--
+--V6FIhfDnlpy13q5WBWhdk6AHYua6Oie9t--
