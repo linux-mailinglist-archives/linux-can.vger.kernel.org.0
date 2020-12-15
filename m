@@ -2,112 +2,170 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4F42DAB74
-	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 11:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A00E92DAB76
+	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 11:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727914AbgLOKwc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 05:52:32 -0500
-Received: from first.geanix.com ([116.203.34.67]:47788 "EHLO first.geanix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727282AbgLOKw2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 15 Dec 2020 05:52:28 -0500
-Received: from [IPv6:2a06:4004:10df:1:da27:a6d2:5305:fd0a] (_gateway [172.21.0.1])
-        by first.geanix.com (Postfix) with ESMTPSA id 0F6DC48614C;
-        Tue, 15 Dec 2020 10:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1608029506; bh=Akiao4UYRAPB3yg+p37X988qx2hxtXo9zMVQ4rV4NOg=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=S+o/gALOwLccY1kJJhpstYzWowslrUNF99ANdsHH5voErRgzkPWZB/zaxbr6dOXrk
-         xrpwRToOYCE0kRcWKwMDURtLd9LJAad9CV1HncL2EjNFhPZRP2k1ESBQdfrvsd+ds2
-         udpTX28eQ58LliYgmQLuAdKWuyNQYTdwMC5mLZvKEo/IM7MoLGKYFEK/pwNkLzINkB
-         PonFsswqiiXvwqwVw1t7y+xMc+Tvi1X6vMxhEVuGvpkl5SDdw0iDYaXMDfETz3Vicu
-         KhH6t+brK/6n8DIWAlIHC4/aZNcpONXNYtnoWLIDXkh/YJBNLx1wd9S8vZDtS/IXN4
-         w1QeHNukrJnbQ==
-Subject: Re: [net-rfc 2/2] can: tcan4x5x: fix bittiming const, use common
- bittiming from m_can driver
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+        id S1727448AbgLOKxY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 05:53:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727406AbgLOKxY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 05:53:24 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FC0C06179C
+        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 02:52:43 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kp7wd-0000Ym-5T; Tue, 15 Dec 2020 11:52:39 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f] (unknown [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C2C465ADD63;
+        Tue, 15 Dec 2020 10:52:36 +0000 (UTC)
+Subject: Re: [RFC]: m_can fixes
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
-        Sriram Dash <sriram.dash@samsung.com>
+        Sriram Dash <sriram.dash@samsung.com>,
+        Sean Nyekjaer <sean@geanix.com>
 References: <20201215103238.524029-1-mkl@pengutronix.de>
- <20201215103238.524029-3-mkl@pengutronix.de>
-From:   Sean Nyekjaer <sean@geanix.com>
-Message-ID: <611cf72a-23ce-160a-a5d3-bbab2204e371@geanix.com>
-Date:   Tue, 15 Dec 2020 11:51:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <f81fee4f-31f7-b500-79a1-4f54a0c66f16@pengutronix.de>
+Date:   Tue, 15 Dec 2020 11:52:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201215103238.524029-3-mkl@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.1 required=4.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        URIBL_BLOCKED autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on ff3d05386fc5
+In-Reply-To: <20201215103238.524029-1-mkl@pengutronix.de>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="tDuVNqOs69rCJs940VqO0TJCuGF5KMABV"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--tDuVNqOs69rCJs940VqO0TJCuGF5KMABV
+Content-Type: multipart/mixed; boundary="2SBfgDaEvOnuBpEnqezkaFaUbT28Z4HKf";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: linux-can@vger.kernel.org
+Cc: kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
+ Sriram Dash <sriram.dash@samsung.com>, Sean Nyekjaer <sean@geanix.com>
+Message-ID: <f81fee4f-31f7-b500-79a1-4f54a0c66f16@pengutronix.de>
+Subject: Re: [RFC]: m_can fixes
+References: <20201215103238.524029-1-mkl@pengutronix.de>
+In-Reply-To: <20201215103238.524029-1-mkl@pengutronix.de>
+
+--2SBfgDaEvOnuBpEnqezkaFaUbT28Z4HKf
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+On 12/15/20 11:32 AM, Marc Kleine-Budde wrote:
+> Hello,
+>=20
+> this is a series with 2 fixes the for m_can and the tcan4x5x driver. Ma=
+ybe we
+> can get this into v5.10, if not I'll ask the David and Jakub to queue t=
+his for
+> v5.11 and stable.
+
+Due to limited time traveling resources this will wait for v5.11.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-On 15/12/2020 11.32, Marc Kleine-Budde wrote:
-> According to the TCAN4550 datasheet "SLLSF91 - DECEMBER 2018" the tcan4x5x has
-> the same bittiming constants as a m_can revision 3.2.x/3.3.0.
->
-> The tcan4x5x chip I'm using identifies itself as m_can revision 3.2.1, so
-> remove the tcan4x5x specific bittiming values and rely on the values in the
-> m_can driver, which are selected according to core revision.
->
-> Fixes: 5443c226ba91 ("can: tcan4x5x: Add tcan4x5x driver to the kernel")
-> Cc: Dan Murphy <dmurphy@ti.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Reviewed-by: Sean Nyekjaer <sean@geanix.com>
-> ---
->   drivers/net/can/m_can/tcan4x5x.c | 26 --------------------------
->   1 file changed, 26 deletions(-)
->
-> diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
-> index 7347ab39c5b6..f726c5112294 100644
-> --- a/drivers/net/can/m_can/tcan4x5x.c
-> +++ b/drivers/net/can/m_can/tcan4x5x.c
-> @@ -129,30 +129,6 @@ struct tcan4x5x_priv {
->   	int reg_offset;
->   };
->   
-> -static struct can_bittiming_const tcan4x5x_bittiming_const = {
-> -	.name = DEVICE_NAME,
-> -	.tseg1_min = 2,
-> -	.tseg1_max = 31,
-> -	.tseg2_min = 2,
-> -	.tseg2_max = 16,
-> -	.sjw_max = 16,
-> -	.brp_min = 1,
-> -	.brp_max = 32,
-> -	.brp_inc = 1,
-> -};
-> -
-> -static struct can_bittiming_const tcan4x5x_data_bittiming_const = {
-> -	.name = DEVICE_NAME,
-> -	.tseg1_min = 1,
-> -	.tseg1_max = 32,
-> -	.tseg2_min = 1,
-> -	.tseg2_max = 16,
-> -	.sjw_max = 16,
-> -	.brp_min = 1,
-> -	.brp_max = 32,
-> -	.brp_inc = 1,
-> -};
-> -
->   static void tcan4x5x_check_wake(struct tcan4x5x_priv *priv)
->   {
->   	int wake_state = 0;
-> @@ -479,8 +455,6 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
->   	mcan_class->dev = &spi->dev;
->   	mcan_class->ops = &tcan4x5x_ops;
->   	mcan_class->is_peripheral = true;
-> -	mcan_class->bit_timing = &tcan4x5x_bittiming_const;
-> -	mcan_class->data_timing = &tcan4x5x_data_bittiming_const;
->   	mcan_class->net->irq = spi->irq;
->   
->   	spi_set_drvdata(spi, priv);
+--2SBfgDaEvOnuBpEnqezkaFaUbT28Z4HKf--
 
+--tDuVNqOs69rCJs940VqO0TJCuGF5KMABV
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/YlXEACgkQqclaivrt
+76lzUAf/fcMOXFh4HSSsICXzT/vmj5vSERxe3zxfBjy0KWlI69HNcIXjXEQRq0OE
+I+cxsP+0RUHfcxfmSPbgPy13CdUxW4O9AVVxcl/9q3Axx7WEvZuGGybdLMeK6+/B
+YGUR8DW7ORq9fuJtY/OKQtmBo6LX+N0MpOcy7X7qvZbdwHjhBEQN6k3CpIdAmXlG
+uOgkS3fUklTNFKvVy3QDhQZuGGv4WCjMMDasbKj452p3tJur7gxRjOIJLOsvYgR7
+oYCEN05izzVrjYKZBCJjotgIea6Zn6+giEZ5rahqAGvaw9u/uVPdiv+g4yGePLPo
+iXWz+nPgUOOIa5ZyKldRcf4MjTbihg==
+=cumU
+-----END PGP SIGNATURE-----
+
+--tDuVNqOs69rCJs940VqO0TJCuGF5KMABV--
