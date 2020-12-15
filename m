@@ -2,177 +2,123 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 230F62DAB7D
-	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 11:56:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32982DAC29
+	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 12:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727872AbgLOKye (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 05:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbgLOKyd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 05:54:33 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F48C0617A6
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 02:53:50 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kp7xh-0000gt-V3; Tue, 15 Dec 2020 11:53:46 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f] (unknown [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 36E015ADD7C;
-        Tue, 15 Dec 2020 10:53:45 +0000 (UTC)
-Subject: Re: [net-rfc 1/2] can: m_can: m_can_class_unregister(): remove
- erroneous m_can_clk_stop()
-To:     Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
-        Sriram Dash <sriram.dash@samsung.com>
-References: <20201215103238.524029-1-mkl@pengutronix.de>
- <20201215103238.524029-2-mkl@pengutronix.de>
- <75de2a54-f857-7079-8143-4129cdb0ff76@geanix.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <739ccc4d-f3f7-57e4-9383-ab60e0ef3cf0@pengutronix.de>
-Date:   Tue, 15 Dec 2020 11:53:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1728201AbgLOLiH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 06:38:07 -0500
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:40926 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728113AbgLOLiG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 06:38:06 -0500
+Received: by mail-yb1-f195.google.com with SMTP id t13so18529951ybq.7
+        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 03:37:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QzjA2IqmUbucrLDR+Ei4Xmnm0GH2Qy5lrzaYtVDu3RE=;
+        b=ALk/PEy6uGRmvaG4E7cd36GO5mlLdcpjdS29SHJG9IelHP1/izY2K5cROuJWwwIOoB
+         wCcyk5OmGuxlC3XhYOypTTyICyLFM3KtWYapeExNohCIbV7LedAPbZr1PDd7hIsyneOG
+         h/1FKzVDoMpqWS+p6JUBcIeTkEW2+xbhIsV7giRtydUb++HOdgnNF6hVc3spJ1o7/8yo
+         Ihr8zJsdvFQu2tEdmtRwkdXuoM6EU+SNOX47MZu0IVjSql1bvjCiCW4meqz91uY+ov1V
+         t2uLBZ6M6vpX6dnxK6I/wP2CunUUuO4vRN1SfIxvpBPsJZKhspr64HgH9noX4/SYrkJh
+         ZfRw==
+X-Gm-Message-State: AOAM530AZfhnlBOMrU0sfFD9qGgyaomTa6OdX0qXGb/T1QIinlrltmn+
+        F6UTTEBIGJjfvO/fV+t/BFutGC/LFWe/lSi2e+s=
+X-Google-Smtp-Source: ABdhPJzcgGHdoQQ0yIQ2/m4hitzef/9yuV9P/JqQnAFdLn2GuEFxb58zm9tHnt0DxBUuYSmabfgSbmIBJhAE1uqhdKk=
+X-Received: by 2002:a25:287:: with SMTP id 129mr32013720ybc.145.1608032245131;
+ Tue, 15 Dec 2020 03:37:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <75de2a54-f857-7079-8143-4129cdb0ff76@geanix.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="Nise03XetANDKPtI4pkkhvjrvWlUeKkmD"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20201214091426.417867-1-mkl@pengutronix.de> <fe7ac11a-410b-ee50-8494-da13055b544e@pengutronix.de>
+In-Reply-To: <fe7ac11a-410b-ee50-8494-da13055b544e@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 15 Dec 2020 20:37:14 +0900
+Message-ID: <CAMZ6RqKPOmZ9jx83g+dt2p+ZrHquuTWHPZM=BuZqyXiEmC8J5w@mail.gmail.com>
+Subject: Re: [PATCH RFC net-next] can: dev: can_skb_get_dll_len(): introduce
+ function to get data length of frame in data link layer
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Nise03XetANDKPtI4pkkhvjrvWlUeKkmD
-Content-Type: multipart/mixed; boundary="SqAO4Q3PzFXvYXDWVIqFdgQjBgURaftag";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sean Nyekjaer <sean@geanix.com>, linux-can@vger.kernel.org
-Cc: kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
- Sriram Dash <sriram.dash@samsung.com>
-Message-ID: <739ccc4d-f3f7-57e4-9383-ab60e0ef3cf0@pengutronix.de>
-Subject: Re: [net-rfc 1/2] can: m_can: m_can_class_unregister(): remove
- erroneous m_can_clk_stop()
-References: <20201215103238.524029-1-mkl@pengutronix.de>
- <20201215103238.524029-2-mkl@pengutronix.de>
- <75de2a54-f857-7079-8143-4129cdb0ff76@geanix.com>
-In-Reply-To: <75de2a54-f857-7079-8143-4129cdb0ff76@geanix.com>
+On Tue 15 Dec. 2020 at 17:08, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 12/14/20 10:14 AM, Marc Kleine-Budde wrote:
+> > From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> >
+> > This patch adds the function can_skb_get_dll_len() which returns the length of
+> > a CAN frame on the data link layer, including Start-of-frame, Identifier,
+> > various other bits, the CRC, the End-of-frame, the Inter frame spacing and the
+> > actual data.
+> >
+> > Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> > Not-Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> > Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Not-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> > Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > ---
+> > Hello,
+> >
+> > while reviewing the etas_es58X driver and hacking on BQL support for the
+> > mcp251xfd driver, it turned out the a function to calculate the length of the
+> > CAN frame that's send over the wire should go into the generic CAN dev code.
+> >
+> > Looking at the CAN and OSI layering I think the first layer where we have all
+> > the bits that we see on the wire is the data link layer (DLL).
+> >
+> > https://www.can-cia.org/can-knowledge/can/can-data-link-layers
+> >
+> > This is why I named the function can_skb_get_dll_len().
+> >
+> > I'm planing to add a (better) calculation of the CAN-FD dll_len, depending on
+> > the data and including different CRC lengths.
+> >
+> > As this code is copied from the etas_es58X driver, I've added the authors as
+> > Co-developed-by and I'd like to add their S-o-b to this patch.
+> >
+> > Please review and commnt on the naming on the functions.
+>
+> When implementing BQL we need the CAN frame's DLL len twice:
+> 1. When sending the package to the hardware
+> 2. After the TX-complete IRQ
+>
+> We can calculate this information twice, but I thought we might put it into the
+> struct can_skb_priv.
+>
+> https://elixir.bootlin.com/linux/latest/source/include/linux/can/skb.h#L34
+>
+> Thoughts?
 
---SqAO4Q3PzFXvYXDWVIqFdgQjBgURaftag
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+I am not knowledgeable enough on this part to guarantee if there will
+be no side effects but regardless, I like the idea.
 
-On 12/15/20 11:51 AM, Sean Nyekjaer wrote:
-> On 15/12/2020 11.32, Marc Kleine-Budde wrote:
->> In m_can_class_register() the clock is started, but stopped on exit. W=
-hen
->> calling m_can_class_unregister(), the clock is stopped a second time.
->>
->> This patch removes the erroneous m_can_clk_stop() in  m_can_class_unre=
-gister().
-> Looks good :) I have a little question...
-> Will ndo_stop() be called if the driver is removed?
+Also, an u8 is enough to hold the value. I wonder if it would be fine
+to change ifindex to, for example, u16, so that we do not lose any
+memory.
 
-Yes, you cannot remove a driver if the interface is still up.
+I would look like that:
 
-Marc
+struct can_skb_priv {
+    u16 ifindex;
+    u8 frame_len;
+    u8 res;
+    int skbcnt;
+    struct can_frame cf[];
+};
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+And the final result in the driver would look as below:
 
+/* Tx branch */
+can_skb_prv(skb)->frame_len = can_skb_get_frame_len(skb);
+netdev_sent_queue(can_skb_prv(skb)->frame_len);
 
---SqAO4Q3PzFXvYXDWVIqFdgQjBgURaftag--
+/* Rx branch */
+netdev_completed_queue(can_skb_prv(skb)->frame_len);
 
---Nise03XetANDKPtI4pkkhvjrvWlUeKkmD
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/YlbYACgkQqclaivrt
-76kL0ggAs8Zt+DO56MddA48V2cvUU5Xa10XNKjkltX8Vmw+voJSrrcMGC8p86EL8
-qeHSSlG07a7E1GZOop255nZ0W82CZ4X/ZptNbNo+KdaurVd38D5Qag+upAD1Kbqs
-dn+qBpjROfcL9JoOcvX+iVtOr43/JXaaQIhRX1DleJY2l0oCuLLenIvex9QIplbw
-GfqWjrk848R8jMmJJqQA4xk+ss1trly4bnht0QvF4HvM6+7Z+26WVLWMZZ+E6Lt9
-OHQd3IA8c1Be89JB1tEHPbPczXK8Wn5nZ5EHn8MMgUA1nqPyH2zRpkaMlGUPbRtk
-eO3B15Bv2jGZQ+LqHV5Q1eAAW+kzAQ==
-=LNvN
------END PGP SIGNATURE-----
-
---Nise03XetANDKPtI4pkkhvjrvWlUeKkmD--
+This is quite neat.
