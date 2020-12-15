@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF2A2DB76A
-	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 01:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0442DB770
+	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 01:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgLPABZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 19:01:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S1726939AbgLPABX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 19:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729587AbgLOXZe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 18:25:34 -0500
+        with ESMTP id S1726448AbgLOXZc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 18:25:32 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571A6C06138C
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 15:18:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D50C061285
+        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 15:18:04 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kpJZx-0002d2-RI
-        for linux-can@vger.kernel.org; Wed, 16 Dec 2020 00:18:01 +0100
+        id 1kpJZz-0002eG-73
+        for linux-can@vger.kernel.org; Wed, 16 Dec 2020 00:18:03 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 6F4485AE3E9
+        by bjornoya.blackshift.org (Postfix) with SMTP id 04A255AE3F4
         for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 23:17:54 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 43CFF5AE3A2;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 584C65AE3A3;
         Tue, 15 Dec 2020 23:17:50 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3cfc08f1;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5dd664d4;
         Tue, 15 Dec 2020 23:17:49 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
         Sriram Dash <sriram.dash@samsung.com>,
         Sean Nyekjaer <sean@geanix.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [can-next-rfc 05/16] can: tcan4x5x: mark struct regmap_bus tcan4x5x_bus as constant
-Date:   Wed, 16 Dec 2020 00:17:35 +0100
-Message-Id: <20201215231746.1132907-6-mkl@pengutronix.de>
+Subject: [can-next-rfc 06/16] can: tcan4x5x: tcan4x5x_bus: remove not needed read_flag_mask
+Date:   Wed, 16 Dec 2020 00:17:36 +0100
+Message-Id: <20201215231746.1132907-7-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201215231746.1132907-1-mkl@pengutronix.de>
 References: <20201215231746.1132907-1-mkl@pengutronix.de>
@@ -54,26 +54,26 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch marks the struct regmap_bus tcan4x5x_bus as constant.
+With C99 initializers, all non mentioned members are initialzied to 0, so
+remove not needed initialization of read_flag_mask.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/tcan4x5x-regmap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/m_can/tcan4x5x-regmap.c | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index f130c3586543..1d139554fc16 100644
+index 1d139554fc16..20bf9a57c9b1 100644
 --- a/drivers/net/can/m_can/tcan4x5x-regmap.c
 +++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -76,7 +76,7 @@ static const struct regmap_config tcan4x5x_regmap = {
- 	.max_register = TCAN4X5X_MAX_REGISTER,
- };
- 
--static struct regmap_bus tcan4x5x_bus = {
-+static const struct regmap_bus tcan4x5x_bus = {
- 	.write = tcan4x5x_regmap_write,
- 	.gather_write = regmap_spi_gather_write,
+@@ -82,7 +82,6 @@ static const struct regmap_bus tcan4x5x_bus = {
  	.async_write = regmap_spi_async_write,
+ 	.async_alloc = regmap_spi_async_alloc,
+ 	.read = tcan4x5x_regmap_read,
+-	.read_flag_mask = 0x00,
+ 	.reg_format_endian_default = REGMAP_ENDIAN_NATIVE,
+ 	.val_format_endian_default = REGMAP_ENDIAN_NATIVE,
+ };
 -- 
 2.29.2
 
