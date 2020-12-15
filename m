@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEA62DAAF6
+	by mail.lfdr.de (Postfix) with ESMTP id 70FAF2DAAF5
 	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 11:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbgLOKd0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1727836AbgLOKd0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 15 Dec 2020 05:33:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727836AbgLOKdZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 05:33:25 -0500
+        with ESMTP id S1727908AbgLOKd0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 05:33:26 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6F1C0617A7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A29C0617B0
         for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 02:32:44 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kp7dL-0006L4-0M
+        id 1kp7dL-0006LP-HL
         for linux-can@vger.kernel.org; Tue, 15 Dec 2020 11:32:43 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 441835ADD17
+        by bjornoya.blackshift.org (Postfix) with SMTP id AC7B55ADD1B
         for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 10:32:41 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 69C0A5ADD09;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 8630F5ADD0B;
         Tue, 15 Dec 2020 10:32:40 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 13baa16f;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 5e9472fb;
         Tue, 15 Dec 2020 10:32:39 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
         Sriram Dash <sriram.dash@samsung.com>,
         Sean Nyekjaer <sean@geanix.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-rfc 1/2] can: m_can: m_can_class_unregister(): remove erroneous m_can_clk_stop()
-Date:   Tue, 15 Dec 2020 11:32:37 +0100
-Message-Id: <20201215103238.524029-2-mkl@pengutronix.de>
+Subject: [net-rfc 2/2] can: tcan4x5x: fix bittiming const, use common bittiming from m_can driver
+Date:   Tue, 15 Dec 2020 11:32:38 +0100
+Message-Id: <20201215103238.524029-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201215103238.524029-1-mkl@pengutronix.de>
 References: <20201215103238.524029-1-mkl@pengutronix.de>
@@ -54,34 +54,64 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In m_can_class_register() the clock is started, but stopped on exit. When
-calling m_can_class_unregister(), the clock is stopped a second time.
+According to the TCAN4550 datasheet "SLLSF91 - DECEMBER 2018" the tcan4x5x has
+the same bittiming constants as a m_can revision 3.2.x/3.3.0.
 
-This patch removes the erroneous m_can_clk_stop() in  m_can_class_unregister().
+The tcan4x5x chip I'm using identifies itself as m_can revision 3.2.1, so
+remove the tcan4x5x specific bittiming values and rely on the values in the
+m_can driver, which are selected according to core revision.
 
-Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
+Fixes: 5443c226ba91 ("can: tcan4x5x: Add tcan4x5x driver to the kernel")
 Cc: Dan Murphy <dmurphy@ti.com>
-Cc: Sriram Dash <sriram.dash@samsung.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/net/can/m_can/tcan4x5x.c | 26 --------------------------
+ 1 file changed, 26 deletions(-)
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 61a93b192037..075ee760b5ba 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1918,8 +1918,6 @@ EXPORT_SYMBOL_GPL(m_can_class_resume);
- void m_can_class_unregister(struct m_can_classdev *m_can_dev)
- {
- 	unregister_candev(m_can_dev->net);
--
--	m_can_clk_stop(m_can_dev);
- }
- EXPORT_SYMBOL_GPL(m_can_class_unregister);
+diff --git a/drivers/net/can/m_can/tcan4x5x.c b/drivers/net/can/m_can/tcan4x5x.c
+index 7347ab39c5b6..f726c5112294 100644
+--- a/drivers/net/can/m_can/tcan4x5x.c
++++ b/drivers/net/can/m_can/tcan4x5x.c
+@@ -129,30 +129,6 @@ struct tcan4x5x_priv {
+ 	int reg_offset;
+ };
  
-
-base-commit: 7f376f1917d7461e05b648983e8d2aea9d0712b2
+-static struct can_bittiming_const tcan4x5x_bittiming_const = {
+-	.name = DEVICE_NAME,
+-	.tseg1_min = 2,
+-	.tseg1_max = 31,
+-	.tseg2_min = 2,
+-	.tseg2_max = 16,
+-	.sjw_max = 16,
+-	.brp_min = 1,
+-	.brp_max = 32,
+-	.brp_inc = 1,
+-};
+-
+-static struct can_bittiming_const tcan4x5x_data_bittiming_const = {
+-	.name = DEVICE_NAME,
+-	.tseg1_min = 1,
+-	.tseg1_max = 32,
+-	.tseg2_min = 1,
+-	.tseg2_max = 16,
+-	.sjw_max = 16,
+-	.brp_min = 1,
+-	.brp_max = 32,
+-	.brp_inc = 1,
+-};
+-
+ static void tcan4x5x_check_wake(struct tcan4x5x_priv *priv)
+ {
+ 	int wake_state = 0;
+@@ -479,8 +455,6 @@ static int tcan4x5x_can_probe(struct spi_device *spi)
+ 	mcan_class->dev = &spi->dev;
+ 	mcan_class->ops = &tcan4x5x_ops;
+ 	mcan_class->is_peripheral = true;
+-	mcan_class->bit_timing = &tcan4x5x_bittiming_const;
+-	mcan_class->data_timing = &tcan4x5x_data_bittiming_const;
+ 	mcan_class->net->irq = spi->irq;
+ 
+ 	spi_set_drvdata(spi, priv);
 -- 
 2.29.2
 
