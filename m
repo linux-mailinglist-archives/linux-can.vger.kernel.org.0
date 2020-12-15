@@ -2,39 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A09BC2DADE3
-	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 14:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DCA2DADFF
+	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 14:31:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725922AbgLONRt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 08:17:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S1726431AbgLONa4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 08:30:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726266AbgLONRr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 08:17:47 -0500
+        with ESMTP id S1727069AbgLONay (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 08:30:54 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC5CC06179C
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 05:17:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1B9C0617A7
+        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 05:30:14 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kpACO-0007LW-TM; Tue, 15 Dec 2020 14:17:04 +0100
+        id 1kpAP6-0008W4-IK; Tue, 15 Dec 2020 14:30:12 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f] (unknown [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 955505ADE7D;
-        Tue, 15 Dec 2020 13:17:03 +0000 (UTC)
-Subject: Re: [PATCH 2/2] can: dev: can_skb_get_dll_len(): introduce function
- to get data length of frame in data link layer
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3FFAB5ADE91;
+        Tue, 15 Dec 2020 13:30:11 +0000 (UTC)
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can <linux-can@vger.kernel.org>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-References: <20201215125549.540918-1-mkl@pengutronix.de>
- <20201215125549.540918-2-mkl@pengutronix.de>
- <f2961bfa-5217-b3d5-c5c5-7a6adb41f00d@hartkopp.net>
+References: <20201214091426.417867-1-mkl@pengutronix.de>
+ <CAMZ6Rq+t630Fv_vYDmxitY47ScKMbEp+YCeZ_PAqTngOHajQ2g@mail.gmail.com>
+ <2c3a332a-f3c5-7052-8276-44980efc3442@pengutronix.de>
+ <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,15 +95,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <784a7260-71ce-bee1-423d-238bd756f01d@pengutronix.de>
-Date:   Tue, 15 Dec 2020 14:17:00 +0100
+Subject: Re: [PATCH RFC net-next] can: dev: can_skb_get_dll_len(): introduce
+ function to get data length of frame in data link layer
+Message-ID: <d3326243-ab66-3e5c-8b6c-e9ce62da1d9d@pengutronix.de>
+Date:   Tue, 15 Dec 2020 14:30:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <f2961bfa-5217-b3d5-c5c5-7a6adb41f00d@hartkopp.net>
+In-Reply-To: <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="3I22ypo3v4gCcvb9NjkOeqkVWvI0H2RYS"
+ boundary="p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,47 +115,158 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---3I22ypo3v4gCcvb9NjkOeqkVWvI0H2RYS
-Content-Type: multipart/mixed; boundary="EajB5ycKt5b922YrfnCX60xZBwRc6JVyp";
+--p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU
+Content-Type: multipart/mixed; boundary="zl4JPe80A7a0N18qkXh8nYwlrpDEQH1D5";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Cc: Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: linux-can <linux-can@vger.kernel.org>,
  Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Message-ID: <784a7260-71ce-bee1-423d-238bd756f01d@pengutronix.de>
-Subject: Re: [PATCH 2/2] can: dev: can_skb_get_dll_len(): introduce function
- to get data length of frame in data link layer
-References: <20201215125549.540918-1-mkl@pengutronix.de>
- <20201215125549.540918-2-mkl@pengutronix.de>
- <f2961bfa-5217-b3d5-c5c5-7a6adb41f00d@hartkopp.net>
-In-Reply-To: <f2961bfa-5217-b3d5-c5c5-7a6adb41f00d@hartkopp.net>
+Message-ID: <d3326243-ab66-3e5c-8b6c-e9ce62da1d9d@pengutronix.de>
+Subject: Re: [PATCH RFC net-next] can: dev: can_skb_get_dll_len(): introduce
+ function to get data length of frame in data link layer
+References: <20201214091426.417867-1-mkl@pengutronix.de>
+ <CAMZ6Rq+t630Fv_vYDmxitY47ScKMbEp+YCeZ_PAqTngOHajQ2g@mail.gmail.com>
+ <2c3a332a-f3c5-7052-8276-44980efc3442@pengutronix.de>
+ <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
+In-Reply-To: <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
 
---EajB5ycKt5b922YrfnCX60xZBwRc6JVyp
+--zl4JPe80A7a0N18qkXh8nYwlrpDEQH1D5
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 12/15/20 2:09 PM, Oliver Hartkopp wrote:
->> + * rounded up and ignoring bitsuffing
+On 12/15/20 1:40 PM, Vincent MAILHOL wrote:
+[...]
+>>> This is just an overview, the data bitrate is also applied to some
+>>> other fields of the frame (e.g. the CRC). So when creating the macro
+>>> for the CANFD_FRAME_OVERHEAD, it should be split between the nominal
+>>> and data bitrates.
+>>
+>> I think we shouldn't mess with the number of bytes depending on BRS. W=
+hen it
+>> turns out that for CAN-FD this is not exact enough, we should look int=
+o the wifi
+>> drivers. As wifi doesn't even have a constant channel speed.
 >=20
-> bitsTuffing :-)
+> I have to admit that I was also not a fan of that idea, but it was the
+> only thing I could think of.
 >=20
-> and in all the other copy/paste locations too
+> I am curious to see how this issue could be handled in a smarter way.
 
-fixed - Tnx.
+Let's wait until we have a "problem" with that :)
 
 [...]
 
-> Would it make sense to move these definitions and/or the below code int=
-o=20
-> a separate can_dll.h file?
+>> Talking about CAN-FD and naming: For the CAN-FD frame/dll length we ne=
+ed the
+>> actual length of the data field.
+>>
+>> The code looks like this:
+>>
+>>> static const u8 len2XXX[] =3D {
+>>>       0, 1, 2, 3, 4, 5, 6, 7, 8,      /* 0 - 8 */
+>>>       12, 12, 12, 12,                 /* 9 - 12 */
+>>>       16, 16, 16, 16,                 /* 13 - 16 */
+>>>       20, 20, 20, 20,                 /* 17 - 20 */
+>>>       24, 24, 24, 24,                 /* 21 - 24 */
+>>>       32, 32, 32, 32, 32, 32, 32, 32, /* 25 - 32 */
+>>>       40, 40, 40, 40, 40, 40, 40, 40, /* 33 - 40 */
+>>>       48, 48, 48, 48, 48, 48, 48, 48  /* 41 - 48 */
+>>> };
+>>>
+>>> /* map the sanitized data length to an appropriate XXX length */
+>>> u8 can_len2XXX(u8 len)
+>>> {
+>>>       if (unlikely(len > ARRAY_SIZE(len2XXX)))
+>>>               return 64;
+>>>
+>>>       return len2XXX[len];
+>>> }
+>>
+>> Have you got a good name for this, too?
 
-ACK, after we've decided on proper naming I'll move this into a seperate =
-file.
-> we have separated the code to calculate these kind of things in=20
-> canframelen.[ch] in the can-utils too.
+I've send a v2...(hmmm, but missed the v2)
 
-good idea!
+> Before speaking of the naming, let me discuss the how to.
+>=20
+> For CAN-FD, the overhead length (i.e. all fields of the frame minus
+> the data) might vary depending on:
+>    * Whether the frame is SFF or EFF
+
+ACK, included in the v2
+
+>    * Size of the CRC: either 15, 17 or 21 depending only on the length
+>      of the data.
+
+I haven't looked into the actual standard, but from what I have found, th=
+e CRC
+for CAN-FD frames is 17 (for data length 0...16 bytes) or 21 (for data le=
+ngth >
+16 byes). Also there are 4 or 5 fixed stuff bits (corresponding to 17 or =
+21 bits
+of CRC) in the CRC.
+
+I got the impression that even 0...8 byte CAN-FD frames use a CRC of 17.
+
+> I did not fully check the ISO standard, but I hope I did not forget ano=
+ther
+> field of variable length in the above list.
+>=20
+> The CRC field will be handled in the len2XXX[] table, the SFF/EFF will
+> be handled in the can_len2XXX() function.
+
+For now I've selected the 21 bit CRC, for CAN-FD:
+
+> #define CANFD_DLL_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
+=3D=3D 8 bytes
+
+for CRC17 it would be 5 bits less =3D> 56 bit =3D> 7 bytes
+
+
+> #define CANFD_DLL_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
+=3D=3D 10 bytes
+
+for CRC17 it would be 5 bits less =3D> 75 bits =3D> 8 bytes
+
+I think that 1 bit is not worth the trouble.
+
+> The other fields (sof, dlc, eof, ...) are constant, and can be
+> squeezed in either the len2XXX[] table or the can_len2XXX() function.
+
+I want to use the can_fd_data_len2frame_data_len() in the mcp251xfd drive=
+r, so
+I'd like to keep that.
+
+> The choice of how to group things is fully arbitrary.
+>=20
+> Some candidates would be:
+>   * can_fd_data_len2crc_len[] which would just do return the length on
+>     the CRC and leave all other calculation to the can_len2XXX()
+>     function.
+>   * can_fd_data_len2ssf_len[] which will return the full frame length
+>     as if it was a SFF. The can_len2XXX() function would only do the
+>     very last step and add the length difference between the SFF and
+>     EFF if relevant.
+>=20
+> All in between mix are also possible but would result in more
+> convoluted naming (e.g. can_fd_data_len2data_crc_len[] that would
+> return the data length plus the CRC length).
+>=20
+> In all scenarios, the can_len2XXX() function would serve the same
+> purpose: calculate the full frame length. So I propose to name it
+> can_fd_data_len2frame_len().
+
+What about: can_fd_data_len2frame_data_len()
+
+As it only the frame's data length, not the complete frame len. (I don't =
+mind
+long function names :))
+
+> All that said, it is hard for me to pick a favorite. Out of all above
+> idea, I propose to keep the second candidate:
+>    * can_fd_data_len2ssf_len[]
+> But this is with no big conviction.
 
 Marc
 
@@ -165,23 +277,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---EajB5ycKt5b922YrfnCX60xZBwRc6JVyp--
+--zl4JPe80A7a0N18qkXh8nYwlrpDEQH1D5--
 
---3I22ypo3v4gCcvb9NjkOeqkVWvI0H2RYS
+--p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/Yt0wACgkQqclaivrt
-76kCOAgAnc+Om4jFPJxbSKbUKrvgt+N8vr5/vQLcUccgunEEQ+nTACRruF4HT8lM
-ifk8UjOm1b6hJdN6xAx+r73lrx4Jua0m773hnxOtUoyGdNQCcYnHZIbNChU57tjc
-MFHjaK03VjzLzOKyFif0l/64WworhUA1DbsmWRmPEEZGlBdyNH03KeeFI9izbnAD
-rM92d7Azi21t6CNuH6tbmqXFYOH3BAYwGe45eCs8ZJgD9yAD37kKO+aTDWhlACzi
-YEc48Gkj2KT73yEypblqzk+NNmuA0QjkJiMguSLfd9JMBD910kJ/qBIG5jZmjNMv
-2uZ9et7I5b3GoXH+kPu/j20oqRjZqg==
-=j1IC
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/YumAACgkQqclaivrt
+76kFtQf+JQSe6whi2wqsNii+Gd9tw1I9cMCIJuoLGW62FXz9CoNdXG73i0N6A7eZ
+ewaTX5dTcQTWcwr3OMeheporte/ELqzTY/+fLbN8lrEl6t+Zb8waV9vGo5HeU5JF
+oFocn7tzJh51zT6LhZe+LSBbJNZt28agnJGuQpxZpVlNJJEtzIssO0lsX5BORMNA
+xLFUiJLCEH2CKskA6tab/BH72jtaRmu0NrROEjqNRsC8uu6VV5pe0RtpF/bwy5ZH
+j0WiVORsLQE3dhxyPw8LHkSUbYQpeWFVBzKH8Trm+UGQzB0zgv4WSzhHOxHqpGWx
+hSjNOVoQUaZ++EkMUCMnGiZfJhGwsA==
+=H28f
 -----END PGP SIGNATURE-----
 
---3I22ypo3v4gCcvb9NjkOeqkVWvI0H2RYS--
+--p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU--
