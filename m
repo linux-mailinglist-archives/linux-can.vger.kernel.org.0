@@ -2,38 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DCA2DADFF
-	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 14:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B8D2DAE08
+	for <lists+linux-can@lfdr.de>; Tue, 15 Dec 2020 14:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbgLONa4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 08:30:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S1727749AbgLONb7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 08:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727069AbgLONay (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 08:30:54 -0500
+        with ESMTP id S1726475AbgLONbu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 08:31:50 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1B9C0617A7
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 05:30:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386C5C06179C
+        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 05:31:10 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kpAP6-0008W4-IK; Tue, 15 Dec 2020 14:30:12 +0100
+        id 1kpAQ0-0000Mz-5w; Tue, 15 Dec 2020 14:31:08 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f] (unknown [IPv6:2a03:f580:87bc:d400:d81b:8ab4:f042:fe4f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3FFAB5ADE91;
-        Tue, 15 Dec 2020 13:30:11 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1D1C55ADE92;
+        Tue, 15 Dec 2020 13:31:07 +0000 (UTC)
 To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
 References: <20201214091426.417867-1-mkl@pengutronix.de>
- <CAMZ6Rq+t630Fv_vYDmxitY47ScKMbEp+YCeZ_PAqTngOHajQ2g@mail.gmail.com>
- <2c3a332a-f3c5-7052-8276-44980efc3442@pengutronix.de>
- <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
+ <fe7ac11a-410b-ee50-8494-da13055b544e@pengutronix.de>
+ <CAMZ6RqKPOmZ9jx83g+dt2p+ZrHquuTWHPZM=BuZqyXiEmC8J5w@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,15 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
 Subject: Re: [PATCH RFC net-next] can: dev: can_skb_get_dll_len(): introduce
  function to get data length of frame in data link layer
-Message-ID: <d3326243-ab66-3e5c-8b6c-e9ce62da1d9d@pengutronix.de>
-Date:   Tue, 15 Dec 2020 14:30:08 +0100
+Message-ID: <5a8daa7b-88f9-48a6-6313-6a6b477d342e@pengutronix.de>
+Date:   Tue, 15 Dec 2020 14:31:04 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKPOmZ9jx83g+dt2p+ZrHquuTWHPZM=BuZqyXiEmC8J5w@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU"
+ boundary="KYvFz7jyqmsuU5YGp28yJeB2Nkf44oMTC"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,158 +115,90 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU
-Content-Type: multipart/mixed; boundary="zl4JPe80A7a0N18qkXh8nYwlrpDEQH1D5";
+--KYvFz7jyqmsuU5YGp28yJeB2Nkf44oMTC
+Content-Type: multipart/mixed; boundary="PqcpQsoXBHo8qn7lF3N1qOiTko4U7Oqtt";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc: linux-can <linux-can@vger.kernel.org>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
  Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Message-ID: <d3326243-ab66-3e5c-8b6c-e9ce62da1d9d@pengutronix.de>
+Message-ID: <5a8daa7b-88f9-48a6-6313-6a6b477d342e@pengutronix.de>
 Subject: Re: [PATCH RFC net-next] can: dev: can_skb_get_dll_len(): introduce
  function to get data length of frame in data link layer
 References: <20201214091426.417867-1-mkl@pengutronix.de>
- <CAMZ6Rq+t630Fv_vYDmxitY47ScKMbEp+YCeZ_PAqTngOHajQ2g@mail.gmail.com>
- <2c3a332a-f3c5-7052-8276-44980efc3442@pengutronix.de>
- <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJGrgMyWLRVBk9zUn0-pg-J+oRKhDtQ8kyVvBgF=Hi89A@mail.gmail.com>
+ <fe7ac11a-410b-ee50-8494-da13055b544e@pengutronix.de>
+ <CAMZ6RqKPOmZ9jx83g+dt2p+ZrHquuTWHPZM=BuZqyXiEmC8J5w@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKPOmZ9jx83g+dt2p+ZrHquuTWHPZM=BuZqyXiEmC8J5w@mail.gmail.com>
 
---zl4JPe80A7a0N18qkXh8nYwlrpDEQH1D5
+--PqcpQsoXBHo8qn7lF3N1qOiTko4U7Oqtt
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 12/15/20 1:40 PM, Vincent MAILHOL wrote:
-[...]
->>> This is just an overview, the data bitrate is also applied to some
->>> other fields of the frame (e.g. the CRC). So when creating the macro
->>> for the CANFD_FRAME_OVERHEAD, it should be split between the nominal
->>> and data bitrates.
+On 12/15/20 12:37 PM, Vincent MAILHOL wrote:
+>> When implementing BQL we need the CAN frame's DLL len twice:
+>> 1. When sending the package to the hardware
+>> 2. After the TX-complete IRQ
 >>
->> I think we shouldn't mess with the number of bytes depending on BRS. W=
-hen it
->> turns out that for CAN-FD this is not exact enough, we should look int=
-o the wifi
->> drivers. As wifi doesn't even have a constant channel speed.
->=20
-> I have to admit that I was also not a fan of that idea, but it was the
-> only thing I could think of.
->=20
-> I am curious to see how this issue could be handled in a smarter way.
-
-Let's wait until we have a "problem" with that :)
-
-[...]
-
->> Talking about CAN-FD and naming: For the CAN-FD frame/dll length we ne=
-ed the
->> actual length of the data field.
+>> We can calculate this information twice, but I thought we might put it=
+ into the
+>> struct can_skb_priv.
 >>
->> The code looks like this:
+>> https://elixir.bootlin.com/linux/latest/source/include/linux/can/skb.h=
+#L34
 >>
->>> static const u8 len2XXX[] =3D {
->>>       0, 1, 2, 3, 4, 5, 6, 7, 8,      /* 0 - 8 */
->>>       12, 12, 12, 12,                 /* 9 - 12 */
->>>       16, 16, 16, 16,                 /* 13 - 16 */
->>>       20, 20, 20, 20,                 /* 17 - 20 */
->>>       24, 24, 24, 24,                 /* 21 - 24 */
->>>       32, 32, 32, 32, 32, 32, 32, 32, /* 25 - 32 */
->>>       40, 40, 40, 40, 40, 40, 40, 40, /* 33 - 40 */
->>>       48, 48, 48, 48, 48, 48, 48, 48  /* 41 - 48 */
->>> };
->>>
->>> /* map the sanitized data length to an appropriate XXX length */
->>> u8 can_len2XXX(u8 len)
->>> {
->>>       if (unlikely(len > ARRAY_SIZE(len2XXX)))
->>>               return 64;
->>>
->>>       return len2XXX[len];
->>> }
->>
->> Have you got a good name for this, too?
-
-I've send a v2...(hmmm, but missed the v2)
-
-> Before speaking of the naming, let me discuss the how to.
+>> Thoughts?
 >=20
-> For CAN-FD, the overhead length (i.e. all fields of the frame minus
-> the data) might vary depending on:
->    * Whether the frame is SFF or EFF
-
-ACK, included in the v2
-
->    * Size of the CRC: either 15, 17 or 21 depending only on the length
->      of the data.
-
-I haven't looked into the actual standard, but from what I have found, th=
-e CRC
-for CAN-FD frames is 17 (for data length 0...16 bytes) or 21 (for data le=
-ngth >
-16 byes). Also there are 4 or 5 fixed stuff bits (corresponding to 17 or =
-21 bits
-of CRC) in the CRC.
-
-I got the impression that even 0...8 byte CAN-FD frames use a CRC of 17.
-
-> I did not fully check the ISO standard, but I hope I did not forget ano=
-ther
-> field of variable length in the above list.
+> I am not knowledgeable enough on this part to guarantee if there will
+> be no side effects but regardless, I like the idea.
 >=20
-> The CRC field will be handled in the len2XXX[] table, the SFF/EFF will
-> be handled in the can_len2XXX() function.
+> Also, an u8 is enough to hold the value.
 
-For now I've selected the 21 bit CRC, for CAN-FD:
+ACK
 
-> #define CANFD_DLL_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
-=3D=3D 8 bytes
+> I wonder if it would be fine
+> to change ifindex to, for example, u16, so that we do not lose any
+> memory.
 
-for CRC17 it would be 5 bits less =3D> 56 bit =3D> 7 bytes
+ifindex is an int:
 
+https://elixir.bootlin.com/linux/v5.10.1/source/include/linux/netdevice.h=
+#L1899
 
-> #define CANFD_DLL_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
-=3D=3D 10 bytes
-
-for CRC17 it would be 5 bits less =3D> 75 bits =3D> 8 bytes
-
-I think that 1 bit is not worth the trouble.
-
-> The other fields (sof, dlc, eof, ...) are constant, and can be
-> squeezed in either the len2XXX[] table or the can_len2XXX() function.
-
-I want to use the can_fd_data_len2frame_data_len() in the mcp251xfd drive=
-r, so
-I'd like to keep that.
-
-> The choice of how to group things is fully arbitrary.
+> I would look like that:
 >=20
-> Some candidates would be:
->   * can_fd_data_len2crc_len[] which would just do return the length on
->     the CRC and leave all other calculation to the can_len2XXX()
->     function.
->   * can_fd_data_len2ssf_len[] which will return the full frame length
->     as if it was a SFF. The can_len2XXX() function would only do the
->     very last step and add the length difference between the SFF and
->     EFF if relevant.
+> struct can_skb_priv {
+>     u16 ifindex;
+>     u8 frame_len;
+>     u8 res;
+
+No need for any reserved bytes, as this is not packed and not a stable AP=
+I. The
+compiler will take care of the packing. If you want to save space in stru=
+ctures
+take a look at pahole:
+
+https://lwn.net/Articles/206805/
+
+>     int skbcnt;
+>     struct can_frame cf[];
+> };
 >=20
-> All in between mix are also possible but would result in more
-> convoluted naming (e.g. can_fd_data_len2data_crc_len[] that would
-> return the data length plus the CRC length).
+> And the final result in the driver would look as below:
 >=20
-> In all scenarios, the can_len2XXX() function would serve the same
-> purpose: calculate the full frame length. So I propose to name it
-> can_fd_data_len2frame_len().
+> /* Tx branch */
+> can_skb_prv(skb)->frame_len =3D can_skb_get_frame_len(skb);
+> netdev_sent_queue(can_skb_prv(skb)->frame_len);
+>=20
+> /* Rx branch */
+> netdev_completed_queue(can_skb_prv(skb)->frame_len);
 
-What about: can_fd_data_len2frame_data_len()
+I think, I'll add another variety of the get_echo_skb() function, that re=
+turns
+the frame_len.
 
-As it only the frame's data length, not the complete frame len. (I don't =
-mind
-long function names :))
-
-> All that said, it is hard for me to pick a favorite. Out of all above
-> idea, I propose to keep the second candidate:
->    * can_fd_data_len2ssf_len[]
-> But this is with no big conviction.
+> This is quite neat.
 
 Marc
 
@@ -277,23 +209,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---zl4JPe80A7a0N18qkXh8nYwlrpDEQH1D5--
+--PqcpQsoXBHo8qn7lF3N1qOiTko4U7Oqtt--
 
---p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU
+--KYvFz7jyqmsuU5YGp28yJeB2Nkf44oMTC
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/YumAACgkQqclaivrt
-76kFtQf+JQSe6whi2wqsNii+Gd9tw1I9cMCIJuoLGW62FXz9CoNdXG73i0N6A7eZ
-ewaTX5dTcQTWcwr3OMeheporte/ELqzTY/+fLbN8lrEl6t+Zb8waV9vGo5HeU5JF
-oFocn7tzJh51zT6LhZe+LSBbJNZt28agnJGuQpxZpVlNJJEtzIssO0lsX5BORMNA
-xLFUiJLCEH2CKskA6tab/BH72jtaRmu0NrROEjqNRsC8uu6VV5pe0RtpF/bwy5ZH
-j0WiVORsLQE3dhxyPw8LHkSUbYQpeWFVBzKH8Trm+UGQzB0zgv4WSzhHOxHqpGWx
-hSjNOVoQUaZ++EkMUCMnGiZfJhGwsA==
-=H28f
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/YupgACgkQqclaivrt
+76mpFQf/YtUIPQtwzAXmO7r4yVM/20oiQDvmJPurlkCgfPv2vb0sCZ2/6y4sVv/i
+oXULbtuPF9CqkRWRO49ffYBXlXclaA95muArGEOXt95m0lICjceoniIwOurXzJzg
+I+YJ+FBYopyn+FFt7wUlFvzc4yt0SoxVIYLx7NkLBYmikNZwKcyfrio9c5q5bx/Q
+OX64/AySm9LRSHf35Esw35dpgcr3jJhrxVj62pfuuRC2LRCzco6hzhGq/cODBXKD
+uWS7JzpfbEzFeQVMpskng4bYcius58UUfULNaM8PFAMz196fyOWfNgbdhZtzCZxj
+GOxIoFNFFRJc7aufEeYvLBPCp6dcTg==
+=S4/E
 -----END PGP SIGNATURE-----
 
---p2Z7tGQnkAEj2Qb7VjpjIPYmpFWSlYPRU--
+--KYvFz7jyqmsuU5YGp28yJeB2Nkf44oMTC--
