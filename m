@@ -2,193 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FDB2DC7BF
-	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 21:29:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C332DC8D2
+	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 23:14:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbgLPU2M (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Dec 2020 15:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728879AbgLPU2M (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Dec 2020 15:28:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1063C061794
-        for <linux-can@vger.kernel.org>; Wed, 16 Dec 2020 12:27:31 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kpdOU-000461-AZ; Wed, 16 Dec 2020 21:27:30 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:ba98:8317:49d2:ebea] (unknown [IPv6:2a03:f580:87bc:d400:ba98:8317:49d2:ebea])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 938A55AEE7F;
-        Wed, 16 Dec 2020 20:27:28 +0000 (UTC)
-Subject: Re: AW: assignment of spi to can channels
-To:     Sven Schuchmann <schuchmann@schleissheimer.de>,
+        id S1727778AbgLPWMG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Dec 2020 17:12:06 -0500
+Received: from mail-eopbgr130134.outbound.protection.outlook.com ([40.107.13.134]:34341
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728756AbgLPWMG (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 16 Dec 2020 17:12:06 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LXGNx6R9YYS1qZogcBmgqMlFuGEp/gz1aGjVWiMdcpMhzEpaNtR2jHSlN0KbXq8yj44BrW7mraUANdBCyrl+MZ2t8ft0dphATWtmmGg+kBCRhjv4BvYVPd8aAe+HPTg33OEEJ0fySCNTWSrAvkGRbxoPbHbHD+juhV/hIgrDQVcCS/6QuEnRu2AXx6ucAbRFSSaslvPb7UqbDBhA28u+x8tJvHFmScJz4sq7ERtHkyrFYoeg5aImWcLJzTZ7p5pA22CeZijRkOe49/+NaLmd6dOvvvd3P3bOHE1PyHeb1ma0dLQXZuxsfc6VlfZMeC0mcMljqxK72+tVHQTrOD5fdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oSXlZLREQOnjUNEMosx0FIDUygqnMkXpcrkbZA404tg=;
+ b=LA4FZJNP8g8ihMXqmwK4GDhlu8YXBE8UHpk2hMwFBiKjEyXeFCtFW/zhp5Dqhn+daaLnEZO2DYCsjjXvOZh9EcX99iSGwYmGvUE9F8kH/Syr6ZJSYshbDPW+DXofaW5xaxBXR9bBBYvRdfMYBbkWLtxoZND30UYiZET28EqzbnFyeBIq3brhfhfrBnvA3+5rYtoL39YnnoZqdYS8st4F969Y65z5FuqFwqISNxgFRZzKrpQSsUqgj8S3DuB7A8SH7/htOly7/xCX57jbJTBY3o6OsUgbXm3E6wAxrs5+PlvdC2fGgRx632ho8fxDZdTC2QvDJ6WJqQHFxkSf3f9jTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=schleissheimer.de; dmarc=pass action=none
+ header.from=schleissheimer.de; dkim=pass header.d=schleissheimer.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=schleissheimer.onmicrosoft.com; s=selector1-schleissheimer-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oSXlZLREQOnjUNEMosx0FIDUygqnMkXpcrkbZA404tg=;
+ b=Rdzehk4BhzYpyqREpuFvG4kyTxbG/77yOtcQeWO1p1afi/4+abQ+ET59cE+qjQxvi1d2emqpVaDNm+JrpublCU+zztddpWx5m9wH+Xydbx0T54qYvTniG/Ma9lnNuvA1uMvD5qzRAF7v+93U9M2s8EK8ziqGjoZyHQV36HZUwas=
+Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:12d::21)
+ by DBAP190MB0998.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:1a6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.20; Wed, 16 Dec
+ 2020 22:11:16 +0000
+Received: from DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+ ([fe80::fc76:b821:1966:db40]) by DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+ ([fe80::fc76:b821:1966:db40%6]) with mapi id 15.20.3676.025; Wed, 16 Dec 2020
+ 22:11:16 +0000
+From:   Sven Schuchmann <schuchmann@schleissheimer.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: AW: AW: assignment of spi to can channels
+Thread-Topic: AW: assignment of spi to can channels
+Thread-Index: AdbTmBm1lZbEHNKQRxyl9xCamZQMEQAFv+GAAAj51EAABbc5gAADgGnQ
+Date:   Wed, 16 Dec 2020 22:11:16 +0000
+Message-ID: <DB8P190MB063448143C2C8F7FE8457CFAD9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
 References: <DB8P190MB06343276BF64CB3530DEB5D6D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
  <32e1f29b-b16e-bc8e-e57a-92c67d45a335@pengutronix.de>
  <DB8P190MB0634B8626AEF0F14A653DC67D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <f9538bbb-89a8-86b0-8e34-31150caee140@pengutronix.de>
-Date:   Wed, 16 Dec 2020 21:27:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ <f9538bbb-89a8-86b0-8e34-31150caee140@pengutronix.de>
+In-Reply-To: <f9538bbb-89a8-86b0-8e34-31150caee140@pengutronix.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none
+ header.from=schleissheimer.de;
+x-originating-ip: [62.153.209.162]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c30b71f9-fd3a-4957-dd7c-08d8a20f823e
+x-ms-traffictypediagnostic: DBAP190MB0998:
+x-microsoft-antispam-prvs: <DBAP190MB09982C1FE159F4BC26A035A8D9C50@DBAP190MB0998.EURP190.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vdkUwnlBE/pxboLKwNJE2+S9z74No7ZXesp7UZInejWiUNiJMmITv9fXoIQDitZT8a//l53u3T+T8AGLK62d2t42q6e+CZBURPiRoYSh1YM/yKKvMo1iixxCyG7+ee67Lj/uP45zAvHJOJe4OM0kFBYLsmiUrES6ztfsKjq15g3RdxDrbWk/gR5UnoWDfzLAqqclh2am+/55Rb1kbnE+WKZ/7WW15of8GSmW7Xxeri68xqGxmeqWk3ZvBhvV6yyUKeb6H3508Z6dEBjrfOAPgZbQ/Yk4s8Bq1OqpICWHzNdzwbAv0/VKopGY45YOgXacnouehwIaPZ6z8Ct1p7f2iQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8P190MB0634.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(376002)(396003)(366004)(136003)(346002)(39830400003)(316002)(8676002)(83380400001)(71200400001)(26005)(76116006)(66476007)(9686003)(186003)(7696005)(66556008)(66446008)(52536014)(55016002)(6506007)(66946007)(64756008)(5660300002)(33656002)(8936002)(110136005)(2906002)(478600001)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?cUNnRlZMMDRWb1VYdGRoUGdpVGZvbmM5MnlXNHhISDJoaDFOcWh3VE53N3Fz?=
+ =?utf-8?B?a2RhMS9RZ2ZRUnRaWHZVam81bGZnNTNSUHRiUkw3YzJ0cmE1UkwyRS9xQTlR?=
+ =?utf-8?B?aURFajZUclF0dzlpdkIxYjJwTDZFZysxakNvSWl2NTdYMGFUeEp3MDl6Q1hm?=
+ =?utf-8?B?ekhWenJnRlVkZ1FEZkE2OFZJbmM0VWlPMmRUK2dnMC9JVzlwdWdRWExtTU5J?=
+ =?utf-8?B?VnlhMDJuZ1h3cDN3YmlKcVFhSDdlY3dtVy9nSVRGOGgyUHpqV0twSkFRcFF5?=
+ =?utf-8?B?dXBkNzZGTWw1NzB0QUtDVlg1WVhndXBZbmNzVUpBamZQS0lidTBjWkNxZHdw?=
+ =?utf-8?B?aUJNTnQvWGNaVHJRS09TSzhmV0tTTjBuU0xKNWFVQlNBNkxudkFQTmVRUWxS?=
+ =?utf-8?B?WHpoNER3UVhZVjk0WDJRU3l0U0hhZ1MzVjRaZmJJL2k1UHdSQXFPYkp0U0xH?=
+ =?utf-8?B?MG1RUEltODJyZ1Vlb2hLZHI0bFNMSkFFWWdJWGVXWUMxUmc2WWtVdkEraEFL?=
+ =?utf-8?B?bThtaCtrSExWRWQvWTBVdU8yMTQ4TXJUSmNlaFJid2IrZ0w1bmdxK3hsT1FE?=
+ =?utf-8?B?cHFzcUxtakhRNThldjhZU1NXdmhvQWNKMjE3T3habVhWK3orekZiQ0YxSTNM?=
+ =?utf-8?B?aGdBTHlENkRIelpQT294UnAwck1hNmZ4VWx0TjF3N1pIVmdoeC9jMWZZRTB2?=
+ =?utf-8?B?YkV2ejJoWS82R1JwVXVvdjk2ZXpXR3FrZkZXWFJIamhBdUd2QWxtWEhPN3hF?=
+ =?utf-8?B?emRzWDE3TmlCbzZ5UlJNbzlHV1hlQXhtSGQrRU9FT2plYnBYQ3F5Z2pZRVd2?=
+ =?utf-8?B?WkdSN1IwZTZGY29YVXcyZS9VakZGWHl3Wm9hcjNGQlJzSzg1UDRpWTc0SUcx?=
+ =?utf-8?B?NHh6TjNwaWN6S2pZQmp3ME9QQ2ZSOHAwSUNoQ082YU9IMEpiUXJLclZmd1pq?=
+ =?utf-8?B?OFA2Ujh4QnRVeVNKeWw4aVZWZHMvRjJsVk5tS2JkZi8zWEJmOFEvNEhPL0hX?=
+ =?utf-8?B?a3krQnNjTHVvaU1xQUVBb20rZFdra3N3Tmx5RXdqMyszZU5mS1RpR0MwUm50?=
+ =?utf-8?B?VVdoRURoZkIycFkvTVJPUG9Jb0dYSVducGRsZVdLWEdRTXFoV0g5UGVoYmtF?=
+ =?utf-8?B?bFJzZVcyODdBdjRnamgyZ2Y2cTF5V1VXdWkzWGJqeExPc25CalRzQ2hSZkZm?=
+ =?utf-8?B?ZWNmbEdtbSs3ZUc3NitHanlXTFBmenZ3bVBlOHlnRXdUdkJVRzB3Y1JibFRW?=
+ =?utf-8?B?SzM0SjBuUTNvR2RsN0NPclJySncxSVk1UDNYeFp5NW1qc0dyRUJXcnRBa1dI?=
+ =?utf-8?Q?qEzLe/HBdCOwk=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <DB8P190MB0634B8626AEF0F14A653DC67D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="NuyRduBzc784pqE8hzU49HOjVLqvnbKgm"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: schleissheimer.de
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8P190MB0634.EURP190.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c30b71f9-fd3a-4957-dd7c-08d8a20f823e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2020 22:11:16.5097
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: ba05321a-a007-44df-8805-c7e62d5887b5
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aNly5atgAD5eKUzW2MBg+O2/OPeSCoTjhQw7xyGoeDIwmfhzuYdQgl48/DotRLIIzrmsioGad9b7BEXvcwkSr0RkJPjS2xsGmxoKj17BFu4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP190MB0998
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---NuyRduBzc784pqE8hzU49HOjVLqvnbKgm
-Content-Type: multipart/mixed; boundary="kRHu6MUDlZJLKT6EZrVOxHZM2O8KwRZJH";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Sven Schuchmann <schuchmann@schleissheimer.de>,
- "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Message-ID: <f9538bbb-89a8-86b0-8e34-31150caee140@pengutronix.de>
-Subject: Re: AW: assignment of spi to can channels
-References: <DB8P190MB06343276BF64CB3530DEB5D6D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
- <32e1f29b-b16e-bc8e-e57a-92c67d45a335@pengutronix.de>
- <DB8P190MB0634B8626AEF0F14A653DC67D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-In-Reply-To: <DB8P190MB0634B8626AEF0F14A653DC67D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
-
---kRHu6MUDlZJLKT6EZrVOxHZM2O8KwRZJH
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 12/16/20 6:49 PM, Sven Schuchmann wrote:
->> Note, with older versions of udev it was possible to rename interfaces=
- within
->> the same namespace, e.g. use "NAME=3Dcan0". I think this doesn't work =
-with newer
->> udevs anymore, so in this example "mcp?" is used.
->>
-> Since I am on systemd 241 on a RaspberryPi I decided to go for udev sty=
-le
->=20
-> created /etc/udev/rules.d/70-can.rules with
-> SUBSYSTEM=3D=3D"net", ACTION=3D=3D"add", DEVPATH=3D=3D"/devices/platfor=
-m/soc/*/*/*/spi0.0/net/can?", NAME=3D"can0"
-> SUBSYSTEM=3D=3D"net", ACTION=3D=3D"add", DEVPATH=3D=3D"/devices/platfor=
-m/soc/*/*/*/spi1.0/net/can?", NAME=3D"can1"
-
-Note: IFAIK this will not work with newer versions of udev....
-
-> and tadaaaaa:
-> [    6.917578] spi_master spi1: will run message pump with realtime pri=
-ority
-> [    6.936957] mcp251xfd spi1.0 can0: MCP2518FD rev0.0 (-RX_...
-> [    6.956523] spi_master spi0: will run message pump with realtime pri=
-ority
-> [    6.971942] mcp251xfd spi0.0 can1: MCP2518FD rev0.0 (-RX_...
-> [    7.006515] mcp251xfd spi1.0 rename3: renamed from can0
-> [    7.041681] mcp251xfd spi0.0 can0: renamed from can1
-> [    7.091563] mcp251xfd spi1.0 can1: renamed from rename3
-
-=2E..the "rename" trick doesn't work anymore. Better use a differnet name=
-, e.g.:
-mcp0 and mcp1.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---kRHu6MUDlZJLKT6EZrVOxHZM2O8KwRZJH--
-
---NuyRduBzc784pqE8hzU49HOjVLqvnbKgm
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/aba0ACgkQqclaivrt
-76nGjQf9EzX5XYAgTDncYlcci4tSUvkZw9YJEmpU91zcKuFLipFfEgBPTxX5dz3k
-MEFVSW+5QfBVLJG9XHsy30C/NmTuNwAJKLr2lXFR7WIn6t2Zl2cnEYSZngQw/7e4
-paqedJ0mHov9tvy0BwA+h49QCn8tLeuthJxdlj4a+/0Vfebri18rw6oEa00MorfM
-MiCCDWd0iWDh6zj/yG4L8K1Ky0HLtIcqOloWiosyb6m5p80GvbaEcJJ2CQN7y9Wv
-ALDQrnF721/tNl/0AYc0f0IHz2nKr+DIx6lgy7FhNR22O37HCimV8xQgdoivMC4L
-zopdkEziNzy1SKiKNC6P1TTCqel88w==
-=8ZyZ
------END PGP SIGNATURE-----
-
---NuyRduBzc784pqE8hzU49HOjVLqvnbKgm--
+PiAtLS0tLVVyc3Byw7xuZ2xpY2hlIE5hY2hyaWNodC0tLS0tDQo+IFZvbjogTWFyYyBLbGVpbmUt
+QnVkZGUgPG1rbEBwZW5ndXRyb25peC5kZT4NCj4gR2VzZW5kZXQ6IE1pdHR3b2NoLCAxNi4gRGV6
+ZW1iZXIgMjAyMCAyMToyNw0KPiA+IGNyZWF0ZWQgL2V0Yy91ZGV2L3J1bGVzLmQvNzAtY2FuLnJ1
+bGVzIHdpdGgNCj4gPiBTVUJTWVNURU09PSJuZXQiLCBBQ1RJT049PSJhZGQiLCBERVZQQVRIPT0i
+L2RldmljZXMvcGxhdGZvcm0vc29jLyovKi8qL3NwaTAuMC9uZXQvY2FuPyIsIE5BTUU9ImNhbjAi
+DQo+ID4gU1VCU1lTVEVNPT0ibmV0IiwgQUNUSU9OPT0iYWRkIiwgREVWUEFUSD09Ii9kZXZpY2Vz
+L3BsYXRmb3JtL3NvYy8qLyovKi9zcGkxLjAvbmV0L2Nhbj8iLCBOQU1FPSJjYW4xIg0KPiANCj4g
+Tm90ZTogSUZBSUsgdGhpcyB3aWxsIG5vdCB3b3JrIHdpdGggbmV3ZXIgdmVyc2lvbnMgb2YgdWRl
+di4uLi4NCj4gDQo+ID4gYW5kIHRhZGFhYWFhOg0KPiA+IFsgICAgNi45MTc1NzhdIHNwaV9tYXN0
+ZXIgc3BpMTogd2lsbCBydW4gbWVzc2FnZSBwdW1wIHdpdGggcmVhbHRpbWUgcHJpb3JpdHkNCj4g
+PiBbICAgIDYuOTM2OTU3XSBtY3AyNTF4ZmQgc3BpMS4wIGNhbjA6IE1DUDI1MThGRCByZXYwLjAg
+KC1SWF8uLi4NCj4gPiBbICAgIDYuOTU2NTIzXSBzcGlfbWFzdGVyIHNwaTA6IHdpbGwgcnVuIG1l
+c3NhZ2UgcHVtcCB3aXRoIHJlYWx0aW1lIHByaW9yaXR5DQo+ID4gWyAgICA2Ljk3MTk0Ml0gbWNw
+MjUxeGZkIHNwaTAuMCBjYW4xOiBNQ1AyNTE4RkQgcmV2MC4wICgtUlhfLi4uDQo+ID4gWyAgICA3
+LjAwNjUxNV0gbWNwMjUxeGZkIHNwaTEuMCByZW5hbWUzOiByZW5hbWVkIGZyb20gY2FuMA0KPiA+
+IFsgICAgNy4wNDE2ODFdIG1jcDI1MXhmZCBzcGkwLjAgY2FuMDogcmVuYW1lZCBmcm9tIGNhbjEN
+Cj4gPiBbICAgIDcuMDkxNTYzXSBtY3AyNTF4ZmQgc3BpMS4wIGNhbjE6IHJlbmFtZWQgZnJvbSBy
+ZW5hbWUzDQo+IA0KPiAuLi50aGUgInJlbmFtZSIgdHJpY2sgZG9lc24ndCB3b3JrIGFueW1vcmUu
+IEJldHRlciB1c2UgYSBkaWZmZXJuZXQgbmFtZSwgZS5nLjoNCj4gbWNwMCBhbmQgbWNwMS4NCg0K
+b2theSwgdW5kZXJzdG9vZCBhbmQgcmVuYW1lZDoNClsgICAgNi42NzM3MzJdIG1jcDI1MXhmZCBz
+cGkwLjAgbWNwMDogcmVuYW1lZCBmcm9tIGNhbjANClsgICAgNi43MTYwNTFdIG1jcDI1MXhmZCBz
+cGkxLjAgbWNwMTogcmVuYW1lZCBmcm9tIGNhbjENCg0KVGhhbmtzIQ0KDQogICBTdmVuDQo=
