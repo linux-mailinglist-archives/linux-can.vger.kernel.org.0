@@ -2,120 +2,213 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CED4D2DC2B6
-	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 16:07:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7372DC46B
+	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 17:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgLPPGp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Dec 2020 10:06:45 -0500
-Received: from mout01.posteo.de ([185.67.36.65]:49110 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726073AbgLPPGp (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 16 Dec 2020 10:06:45 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 00DB7160060
-        for <linux-can@vger.kernel.org>; Wed, 16 Dec 2020 16:05:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1608131147; bh=0UEzLfiaCMbtOpqsQXk19/pebhbYoO9MFhTjy2GSs2k=;
-        h=To:From:Autocrypt:Cc:Subject:Date:From;
-        b=VmX87uWnPI6ML4FGSARHM+Td74ebUlfYnAhdfBgaHkw31ubBD2cpGg4HhW0qlKOPI
-         v4zubtVE+SrDA2szpt3B9VcELIgIzVyqlxO0IDJpgA//q4v02OiPtDNsI7opMY2znR
-         czJx3ddX2I7dq1HOqUeC3N+gwna6csIOkHhZO6QOxhEH0esln3SWEMDkCxwQx0R+LG
-         O82hD+dXrxsEe9yZga6qQ986bzFFpj82XthuCQ9Ae8BHByO7QC1Vk29OiL97DA0sjf
-         TWJK/yyyIEBma+LB5DgzjnD0gYPDtSfvtue6HNE6oZ+Uq3eRF1lDAcMBI6pkeNMk3a
-         tWNxZa07tNDzg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Cwz2y2F0bz9rxS;
-        Wed, 16 Dec 2020 16:05:46 +0100 (CET)
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sven Schuchmann <schuchmann@schleissheimer.de>
-References: <DB8P190MB06343276BF64CB3530DEB5D6D9C50@DB8P190MB0634.EURP190.PROD.OUTLOOK.COM>
- <32e1f29b-b16e-bc8e-e57a-92c67d45a335@pengutronix.de>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: assignment of spi to can channels
-Message-ID: <90040329-7fdb-f306-94d4-fc4d9d00b6e3@posteo.de>
-Date:   Wed, 16 Dec 2020 16:05:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726689AbgLPQjX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Dec 2020 11:39:23 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:15454 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726523AbgLPQjX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Dec 2020 11:39:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1608136527;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:From:Subject:
+        Sender;
+        bh=P58Q1B6Y3i9m72D8duhwdNXBTuNFIG/Vp3XP3bU7cds=;
+        b=hQvAYsiep6P1mESQX7upwUo3k0VuYzpwj1QQ9hJAWWxzCOLhRvA31glhSNsxxDrGRR
+        6q0w/vzGlB9Ts7OfQuGrWTkSk6GR9WhrlqbbyqhqY3sYWUDJqDN5EFtTMD+qKQo5pbDA
+        UKYA3sc0QDxXC+ETB+HtqNZqite2DtL4APZ10uF/MyzlPtU+4S5MnHQ5mW+Zu2VefwYN
+        GIIzV+9zzAsk6H9YQp+D1xDVAb7UaiGialg/R8DtcoaIr4QaX1sJ+eAXUwywuyZF+804
+        t02sZyqN12mFYkah60GyEdlBUqVU8Nw5qRgmwx5Cph6iMmjxJs80ubGLva8MFEMq8gm5
+        2pvg==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKNNeTQbwO"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.8.6 DYNA|AUTH)
+        with ESMTPSA id h04d32wBGGZO0vA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 16 Dec 2020 17:35:24 +0100 (CET)
+Subject: Re: get entire CAN_RAW_FILTER value without knowing its size
+To:     Phillip Schichtel <phillip@schich.tel>, linux-can@vger.kernel.org
+References: <ac75d44f61007ece402aca50f49ee57138000d27.camel@schich.tel>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <d717b4d0-4678-c528-9581-dcc8f97b189e@hartkopp.net>
+Date:   Wed, 16 Dec 2020 17:35:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-In-Reply-To: <32e1f29b-b16e-bc8e-e57a-92c67d45a335@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ac75d44f61007ece402aca50f49ee57138000d27.camel@schich.tel>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+Hi Philip,
 
-we had this topic 2 years ago [1] [2].
-The udev solution was the winner but it was suggested to have unique
-identifiers provided in the devicetree.
-Sort of an equivalent to the predictable network device names.
+On 16.12.20 05:33, Phillip Schichtel wrote:
+> Hi everyone!
+> 
+> This is my first post to this mailing list (or any kernel mailing
+> list), so please tell me if this is the wrong place for this kind of
+> topic.
 
-[1]
-https://lore.kernel.org/linux-devicetree/CAL_JsqKudVXevW2YdEPvbOgK4CoszjqKNvCDrvKx-iOqRj0KWg@mail.gmail.com/
-[2] https://marc.info/?l=linux-can&m=153675634529327&w=2
---
-Patrick
+Welcome :-)
 
+You are perfectly right here.
+
+> I'm developing a Java binding library to SocketCAN using JNI [1], where
+> I try to provide a reasonably "Java-like" yet efficient and safe API.
+
+Great idea!
+
+> Part of this are setters and getters for the SOL_CAN_* socket options,
+> which is straight forward for all options except CAN_RAW_FILTER, since
+> it is the only option with a dynamically sized value (struct
+> can_filter*). Setting the value is simple, since all the information is
+> available in user space, but when using getsockopt I'm expected to
+> provide a buffer and a size, but I don't know how many filters there
+> are without keeping that state in the library or application, risking
+> it going out of sync with the kernel. Is this correct thus far or am I
+> missing something? Relevant source on the kernel side is at [2].
+> 
+> On the user space side using getsockopt() I see three ways around this
+> issue:
+> 
+> 1. Track the amount of filters in user space. I feel like this might be
+> problematic if e.g. sockets get shared between threads and processes.
+> Other bindings usually take this approach as far as I could tell, if
+> they support getting filters at all.
+
+IMO the filters are intended as write-only as it is very common to set 
+the filters once at process start and live with them until the process 
+terminates.
+
+The getsockopt for CAN_RAW_FILTER was only for completion sake - but in 
+fact I did not really think about the expected buffer length in 
+userspace when reading back a 'bigger' filter list :-/
+
+> 2. Allocate a buffer large enough that the filters will most likely all
+> fit, the optlen will be corrected to the actual size. This is the
+> approach I currently take (see [3]), but it feels very wrong.
+> 
+> 3. Search for the right size by trying increasingly larger buffers
+> until the buffer is big enough to fit all. This would be kind of an
+> improvement to 2. for the common case.
+> 
+> Neither of these feel good to me, but maybe that is just me?
+
+No. As we provide the getsockopt() for CAN_RAW_FILTER this way of 
+'testing out' the filter size is no fun for the programmer.
+
+And using SocketCAN should be fun :-)
+
+> On the
+> kernel side ([2]), I could imagine the option taking a void** for
+> optval and the kernel allocating a new buffer for the caller and
+> writing its address to the given pointer and the real length to optlen,
+> kind of like this (without knowing the appropriate functions):
+> 
+> 
+> case CAN_RAW_FILTER:
+> 	lock_sock(sk);
+> 	void* filters = NULL;
+> 	if (ro->count > 0) {
+> 		int fsize = ro->count * sizeof(struct can_filter);
+> 		filters = allocate_to_user(fsize);
+>                  if (!optval)
+> 			err = -EFAULT;
+> 		if (copy_to_user(optval, ro->filter, fsize))
+> 			err = -EFAULT;
+> 	} else {
+> 		len = 0;
+> 	}
+> 	release_sock(sk);
+> 
+> 
+> 	if (!err)
+> 		err = put_user(len, optlen);
+> 	if (!err)
+> 		err = put_user(filters, optval);
+> 	return err;
+> 
+> The setsockopt implementation of the option could also be adapted to
+> take the same void**.
+> 
+> Alternatively the implementation could always write back the full size
+> to optlen instead of the "written size" (put_user(fsize, optlen)
+> instead of put_user(len, optlen) in code). Since the caller knows how
+> big its buffer is, the size necessary would be the more valuable
+> information.
+> 
+> Did I completely misunderstand something or is this really a limitation
+> of the current implementation of this option? And if the latter is
+> true, are we in the position to change anything about this without
+> breaking user space?
+
+Yes, you hit the point. We have a limitation in the current 
+implementation; and no, we must not break user space.
+
+> I also haven't really looked into how other protocols handle
+> dynamically sized option values or if that is even a thing else where.
+
+Yes. I also had to google and read some kernel code.
+
+When we take a look into the can/raw.c code
+https://elixir.bootlin.com/linux/v5.10.1/source/net/can/raw.c#L663
+
+         case CAN_RAW_FILTER:
+                 lock_sock(sk);
+                 if (ro->count > 0) {
+                         int fsize = ro->count * sizeof(struct can_filter);
+
+                         if (len > fsize)
+                                 len = fsize;
+
+                         if (copy_to_user(optval, ro->filter, len))
+
+
+At this point we silently truncate the filters to the given length of 
+the userspace buffer. That's safe but not really good ...
+
+                                 err = -EFAULT;
+                 } else {
+                         len = 0;
+                 }
+                 release_sock(sk);
+
+                 if (!err)
+                         err = put_user(len, optlen);
+                 return err;
+
+The only interesting code that handles this kind of variable data vector 
+read was in net/core/sock.c in sock_getsockopt() for SO_PEERGROUPS:
+
+https://elixir.bootlin.com/linux/v5.10.1/source/net/core/sock.c#L1429
+
+It was introduced in commit 28b5ba2aa0f55:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=28b5ba2aa0f55
+
+"That is, if the provided buffer is too small, ERANGE is returned and 
+@optlen is updated. Otherwise, the  information is copied, @optlen is 
+set to the actual size, and 0 is returned."
+
+This sounds like an interesting approach.
+
+What do you think about integrating this kind of -ERANGE functionality 
+into can/raw.c ?
+
+In fact I never saw someone to use the getsockopt() for CAN_RAW_FILTER 
+until now. That's probably the reason why you hit this issue just now.
+
+IMO introducing the -ERANGE error number does not make the current 
+situation worse and when a programmer properly checks the return value 
+this -ERANGE would lead to some error handling as -EFAULT does today. So 
+I would not see that we are breaking user space here, right?
+
+Regards,
+Oliver
