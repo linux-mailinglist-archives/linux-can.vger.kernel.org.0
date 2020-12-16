@@ -2,112 +2,135 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 151A42DB7A2
-	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 01:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87C72DBA2B
+	for <lists+linux-can@lfdr.de>; Wed, 16 Dec 2020 05:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgLPABQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Dec 2020 19:01:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726660AbgLOXZC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 18:25:02 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0D6C0611CF
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 15:18:07 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kpJa1-0002gn-MH
-        for linux-can@vger.kernel.org; Wed, 16 Dec 2020 00:18:05 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D264D5AE412
-        for <linux-can@vger.kernel.org>; Tue, 15 Dec 2020 23:17:56 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id S1725385AbgLPElB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Dec 2020 23:41:01 -0500
+Received: from smtp.cubyte.cloud ([62.113.199.100]:32049 "EHLO
+        smtp.cubyte.cloud" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725287AbgLPEkz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Dec 2020 23:40:55 -0500
+X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Tue, 15 Dec 2020 23:40:54 EST
+Received: from [192.168.1.10] (204-167-142-46.pool.kielnet.net [46.142.167.204])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7EEB25AE3B8;
-        Tue, 15 Dec 2020 23:17:51 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 0436c5b1;
-        Tue, 15 Dec 2020 23:17:49 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp.cubyte.cloud (Postfix) with ESMTPSA id B71EB444BC
+        for <linux-can@vger.kernel.org>; Wed, 16 Dec 2020 04:33:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=schich.tel; s=mail;
+        t=1608093191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Tu/tIA9bplO9pprYk0dStEuFVl74zLjditAWRuzbojQ=;
+        b=I2ABg1qrFEYf5ILrG/piimq94ioie+PNQUxI13oOddmle8sbhTUPxePwkpk1aeJptIi6aT
+        OSw7Soh4bPwYRQmZrqhClTzhQBt7ZNjISf3+t3GVPMBeYHff0IIDLJndnraabLyiKyg5ay
+        KMSAsrY4AW0e4ebJVZ+loV8jd5k/ZLiXSIt0JLC3OQTMGpBc3jyN7HoL6avEQHP0Z/ae8N
+        Vhv5GwKP1hl66RhLMKDOrfyBvbJYM2pZvCBVYeUsCvVSAytwgyqZrOiGcVGAN9kri7Wsdl
+        i/T81UoDBdWbm6SHay2ipTErY30GmbxQwJn0yk+6tdjpp+5w5s1IrM704gKL0A==
+Message-ID: <ac75d44f61007ece402aca50f49ee57138000d27.camel@schich.tel>
+Subject: get entire CAN_RAW_FILTER value without knowing its size
+From:   Phillip Schichtel <phillip@schich.tel>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        Sean Nyekjaer <sean@geanix.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [can-next-rfc 16/16] can: tcan4x5x: add support for half-duplex controllers
-Date:   Wed, 16 Dec 2020 00:17:46 +0100
-Message-Id: <20201215231746.1132907-17-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201215231746.1132907-1-mkl@pengutronix.de>
-References: <20201215231746.1132907-1-mkl@pengutronix.de>
+Date:   Wed, 16 Dec 2020 05:33:10 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds back support for half-duplex controllers, which was removed in
-the last patch.
+Hi everyone!
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/tcan4x5x-regmap.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+This is my first post to this mailing list (or any kernel mailing
+list), so please tell me if this is the wrong place for this kind of
+topic.
 
-diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index 660e9d87dffb..ca80dbaf7a3f 100644
---- a/drivers/net/can/m_can/tcan4x5x-regmap.c
-+++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -51,7 +51,7 @@ static int tcan4x5x_regmap_read(void *context,
- 	struct tcan4x5x_priv *priv = spi_get_drvdata(spi);
- 	struct tcan4x5x_map_buf *buf_rx = &priv->map_buf_rx;
- 	struct tcan4x5x_map_buf *buf_tx = &priv->map_buf_tx;
--	struct spi_transfer xfer[] = {
-+	struct spi_transfer xfer[2] = {
- 		{
- 			.tx_buf = buf_tx,
- 		}
-@@ -66,17 +66,26 @@ static int tcan4x5x_regmap_read(void *context,
- 	       sizeof(buf_tx->cmd.addr));
- 	tcan4x5x_spi_cmd_set_len(&buf_tx->cmd, val_len);
- 
--	xfer[0].rx_buf = buf_rx;
--	xfer[0].len = sizeof(buf_tx->cmd) + val_len;
-+	if (spi->controller->flags & SPI_CONTROLLER_HALF_DUPLEX) {
-+		xfer[0].len = sizeof(buf_tx->cmd);
-+
-+		xfer[1].rx_buf = val_buf;
-+		xfer[1].len = val_len;
-+		spi_message_add_tail(&xfer[1], &msg);
-+	} else {
-+		xfer[0].rx_buf = buf_rx;
-+		xfer[0].len = sizeof(buf_tx->cmd) + val_len;
- 
--	if (TCAN4X5X_SANITIZE_SPI)
--		memset(buf_tx->data, 0x0, val_len);
-+		if (TCAN4X5X_SANITIZE_SPI)
-+			memset(buf_tx->data, 0x0, val_len);
-+	}
- 
- 	err = spi_sync(spi, &msg);
- 	if (err)
- 		return err;
- 
--	memcpy(val_buf, buf_rx->data, val_len);
-+	if (!(spi->controller->flags & SPI_CONTROLLER_HALF_DUPLEX))
-+		memcpy(val_buf, buf_rx->data, val_len);
- 
- 	return 0;
- }
--- 
-2.29.2
+I'm developing a Java binding library to SocketCAN using JNI [1], where
+I try to provide a reasonably "Java-like" yet efficient and safe API.
 
+Part of this are setters and getters for the SOL_CAN_* socket options,
+which is straight forward for all options except CAN_RAW_FILTER, since
+it is the only option with a dynamically sized value (struct
+can_filter*). Setting the value is simple, since all the information is
+available in user space, but when using getsockopt I'm expected to
+provide a buffer and a size, but I don't know how many filters there
+are without keeping that state in the library or application, risking
+it going out of sync with the kernel. Is this correct thus far or am I
+missing something? Relevant source on the kernel side is at [2].
+
+On the user space side using getsockopt() I see three ways around this
+issue:
+
+1. Track the amount of filters in user space. I feel like this might be
+problematic if e.g. sockets get shared between threads and processes.
+Other bindings usually take this approach as far as I could tell, if
+they support getting filters at all.
+
+2. Allocate a buffer large enough that the filters will most likely all
+fit, the optlen will be corrected to the actual size. This is the
+approach I currently take (see [3]), but it feels very wrong.
+
+3. Search for the right size by trying increasingly larger buffers
+until the buffer is big enough to fit all. This would be kind of an
+improvement to 2. for the common case.
+
+Neither of these feel good to me, but maybe that is just me? On the
+kernel side ([2]), I could imagine the option taking a void** for
+optval and the kernel allocating a new buffer for the caller and
+writing its address to the given pointer and the real length to optlen,
+kind of like this (without knowing the appropriate functions):
+
+
+case CAN_RAW_FILTER:
+	lock_sock(sk);
+	void* filters = NULL;
+	if (ro->count > 0) {
+		int fsize = ro->count * sizeof(struct can_filter);
+		filters = allocate_to_user(fsize);
+                if (!optval)
+			err = -EFAULT;
+		if (copy_to_user(optval, ro->filter, fsize))
+			err = -EFAULT;
+	} else {
+		len = 0;
+	}
+	release_sock(sk);
+
+
+	if (!err)
+		err = put_user(len, optlen);
+	if (!err)
+		err = put_user(filters, optval);
+	return err;
+
+The setsockopt implementation of the option could also be adapted to
+take the same void**.
+
+Alternatively the implementation could always write back the full size
+to optlen instead of the "written size" (put_user(fsize, optlen)
+instead of put_user(len, optlen) in code). Since the caller knows how
+big its buffer is, the size necessary would be the more valuable
+information.
+
+Did I completely misunderstand something or is this really a limitation
+of the current implementation of this option? And if the latter is
+true, are we in the position to change anything about this without
+breaking user space?
+
+I also haven't really looked into how other protocols handle
+dynamically sized option values or if that is even a thing else where.
+
+Either way, any feedback on this is very much appreciated!
+
+~ Phillip Schichtel
+
+[1]: https://github.com/pschichtel/JavaCAN
+[2]:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/net/can/raw.c?h=v5.10#n663
+
+[3]:
+https://github.com/pschichtel/JavaCAN/blob/ab64fb416996978fc154f84c204bf25273ab1776/core/src/main/c/javacan_socketcan.c#L176-L182
 
