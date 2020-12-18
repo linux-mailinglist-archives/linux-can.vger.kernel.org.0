@@ -2,36 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 111272DDF32
-	for <lists+linux-can@lfdr.de>; Fri, 18 Dec 2020 08:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6662DDF42
+	for <lists+linux-can@lfdr.de>; Fri, 18 Dec 2020 08:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbgLRHor (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Dec 2020 02:44:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S1732322AbgLRHv3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Dec 2020 02:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727098AbgLRHor (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Dec 2020 02:44:47 -0500
+        with ESMTP id S1727254AbgLRHv3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Dec 2020 02:51:29 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BFAC0617A7
-        for <linux-can@vger.kernel.org>; Thu, 17 Dec 2020 23:44:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DEAC0617A7
+        for <linux-can@vger.kernel.org>; Thu, 17 Dec 2020 23:50:49 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kqAQm-00074y-1w; Fri, 18 Dec 2020 08:44:04 +0100
+        id 1kqAXH-0007gF-B0; Fri, 18 Dec 2020 08:50:47 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:d63d:e85c:45c0:bef5] (unknown [IPv6:2a03:f580:87bc:d400:d63d:e85c:45c0:bef5])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0521B5AFC96;
-        Fri, 18 Dec 2020 07:44:01 +0000 (UTC)
-Subject: Re: [RFC PATCH can-next] can: raw: return -ERANGE when filterset does
- not fit into user space buffer
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Cc:     Phillip Schichtel <phillip@schich.tel>
-References: <20201216174928.21663-1-socketcan@hartkopp.net>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 276655AFCA9;
+        Fri, 18 Dec 2020 07:50:46 +0000 (UTC)
+Subject: Re: get entire CAN_RAW_FILTER value without knowing its size
+To:     Phillip Schichtel <phillip@schich.tel>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can@vger.kernel.org
+References: <ac75d44f61007ece402aca50f49ee57138000d27.camel@schich.tel>
+ <d717b4d0-4678-c528-9581-dcc8f97b189e@hartkopp.net>
+ <151eee51da7f618e2691ff1af32debc730168feb.camel@schich.tel>
+ <9feebe63-2dbd-bce3-c1aa-bec3b4d03a03@hartkopp.net>
+ <6fde14ea-12e0-aea7-a61c-b59303513637@hartkopp.net>
+ <3b2b260621a09d9abe14f92b32d54b38faf0b7c7.camel@schich.tel>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -93,15 +98,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <0c029db1-159f-dc02-75e6-af68c4306edb@pengutronix.de>
-Date:   Fri, 18 Dec 2020 08:43:58 +0100
+Message-ID: <19de0a70-0d2c-fa46-8c26-4f8f6e2e207c@pengutronix.de>
+Date:   Fri, 18 Dec 2020 08:50:42 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20201216174928.21663-1-socketcan@hartkopp.net>
+In-Reply-To: <3b2b260621a09d9abe14f92b32d54b38faf0b7c7.camel@schich.tel>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="uA88L0bVMjHyT6grdvvYNOlJcNniRXxXY"
+ boundary="D1qnek1QVl6avx164aZvk33GGTwchRuaY"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -111,51 +116,42 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---uA88L0bVMjHyT6grdvvYNOlJcNniRXxXY
-Content-Type: multipart/mixed; boundary="iI9P4WKB1bNVMTUJsa6IcdtFMJdRowB1F";
+--D1qnek1QVl6avx164aZvk33GGTwchRuaY
+Content-Type: multipart/mixed; boundary="FtwnT517Psi5fWrZycMDmNdoqSBHXh2LK";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
-Cc: Phillip Schichtel <phillip@schich.tel>
-Message-ID: <0c029db1-159f-dc02-75e6-af68c4306edb@pengutronix.de>
-Subject: Re: [RFC PATCH can-next] can: raw: return -ERANGE when filterset does
- not fit into user space buffer
-References: <20201216174928.21663-1-socketcan@hartkopp.net>
-In-Reply-To: <20201216174928.21663-1-socketcan@hartkopp.net>
+To: Phillip Schichtel <phillip@schich.tel>,
+ Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Message-ID: <19de0a70-0d2c-fa46-8c26-4f8f6e2e207c@pengutronix.de>
+Subject: Re: get entire CAN_RAW_FILTER value without knowing its size
+References: <ac75d44f61007ece402aca50f49ee57138000d27.camel@schich.tel>
+ <d717b4d0-4678-c528-9581-dcc8f97b189e@hartkopp.net>
+ <151eee51da7f618e2691ff1af32debc730168feb.camel@schich.tel>
+ <9feebe63-2dbd-bce3-c1aa-bec3b4d03a03@hartkopp.net>
+ <6fde14ea-12e0-aea7-a61c-b59303513637@hartkopp.net>
+ <3b2b260621a09d9abe14f92b32d54b38faf0b7c7.camel@schich.tel>
+In-Reply-To: <3b2b260621a09d9abe14f92b32d54b38faf0b7c7.camel@schich.tel>
 
---iI9P4WKB1bNVMTUJsa6IcdtFMJdRowB1F
+--FtwnT517Psi5fWrZycMDmNdoqSBHXh2LK
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 12/16/20 6:49 PM, Oliver Hartkopp wrote:
-> Multiple filters (struct can_filter) can be set with the setsockopt()
-> function, which was originally intended as a write-only operation.
->=20
-> As getsockopt() also provides a CAN_RAW_FILTER option to read back the
-> given filters, the caller has to provide an appropriate user space buff=
-er.
-> In the case this buffer is too small the getsockopt() silently truncate=
-s
-> the filter information and gives no information about the needed space.=
+On 12/17/20 5:33 PM, Phillip Schichtel wrote:
+> I also adjusted my java binding to handle the ERANGE error and
+> everything works as expected with your patch applied. I'm using a
+> buffer of 10 * sizeof(struct can_filter) now and realloc in case of
+> ERANGE using the optlen. So with an unpatched kernel the API is
+> currently restricted to the first 10 filters, but that's probably fine.=
 
-> This is safe but not convenient for the programmer.
->=20
-> In net/core/sock.c the SO_PEERGROUPS sockopt had a similar requirement
-> and solved it by returning -ERANGE in the case that the provided data
-> does not fit into the given user space buffer and fills the required si=
-ze
-> into optlen, so that the caller can retry with a matching buffer length=
-=2E
->=20
-> This patch adopts this approach for CAN_RAW_FILTER getsockopt().
->=20
-> Reported-by: Phillip Schichtel <phillip@schich.tel>
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-Added to linux-can-next/testing. Do we need an update to the in kernel
-Documentation?
+BTW: The current kernel has an arbitrary limit of 512 filters per socket:=
 
+
+#define CAN_RAW_FILTER_MAX 512
+/* maximum number of can_filter set via setsockopt() */
+
+regards,
 Marc
 
 --=20
@@ -165,23 +161,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---iI9P4WKB1bNVMTUJsa6IcdtFMJdRowB1F--
+--FtwnT517Psi5fWrZycMDmNdoqSBHXh2LK--
 
---uA88L0bVMjHyT6grdvvYNOlJcNniRXxXY
+--D1qnek1QVl6avx164aZvk33GGTwchRuaY
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/cXb4ACgkQqclaivrt
-76mtvAf/Qn/yMVeZbCeJ8Bc8KJ3AFQ87wrH+x4Di8bHvRDIpXCRAJTUXuVRBA9ta
-S2rxr8LgcGG3tt5YDYEfKAJAqhB89OiPS+iKivKNrLdLjvzNpxx4lQ92jzhc7DW8
-P2XJzSyi9jYjZxf+BDW+Gyz4+JBbInIGxjzurxsg7EfUWqtm3yLNez/rpUYaTO9V
-+/7kB6JlMtQEw+WIWoF0QjO5ACWPm2fEkgtGQr0HB1SQcx/b7YoQq95B2TcmY4K9
-8s5pYsOH2ReOG7Ycz4XwD0FD8gkUuGRdRMHIYOQTN9BtRoSU5X/EsmyXBiz2pSiw
-SXzF7zS0uGTaQQE1YGJqheaWLQ01FQ==
-=yc9D
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/cX1IACgkQqclaivrt
+76kiqgf/SQAiuk6MqdLMfmDjOj9os96XbcSzqe6hTIuRgl+vE5QrOzC+IFrz/5sp
+Cn4C72IPQocSopAE0Ep7cXCLdnBNmcVmTIpCr8Cz+/D7syRqQOv7zryB2VoouOHn
+a+ouY/WCDqxLzmoIEFpbCxG7IdeQLti4uSQQP7ndb0+6uggdFKb+OWxjc8WGnTIN
+V/Yrz+QU23Sb54N7/aoSJCeEWIybP3tpF9ggAnSdQ2oR+Gv6EbHvnET1o3gkhFsf
+5NxmR3Rz/MVlDFrCS4VijQd9zaf0AvscbWiWNu35s628kY8nHfaa7vV3Yn2qUdM9
+suPufzQBV5uZfjZFZWZ8CjaTQDVQZg==
+=Cxd/
 -----END PGP SIGNATURE-----
 
---uA88L0bVMjHyT6grdvvYNOlJcNniRXxXY--
+--D1qnek1QVl6avx164aZvk33GGTwchRuaY--
