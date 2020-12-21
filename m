@@ -2,53 +2,49 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3B62DFBD7
-	for <lists+linux-can@lfdr.de>; Mon, 21 Dec 2020 13:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBE02DFC13
+	for <lists+linux-can@lfdr.de>; Mon, 21 Dec 2020 13:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbgLUM26 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Dec 2020 07:28:58 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:19985 "EHLO
+        id S1726841AbgLUM6R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Dec 2020 07:58:17 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:23545 "EHLO
         mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725807AbgLUM25 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Dec 2020 07:28:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1608553562;
+        with ESMTP id S1725807AbgLUM6Q (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Dec 2020 07:58:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1608555322;
         s=strato-dkim-0002; d=hartkopp.net;
         h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
         Subject:Sender;
-        bh=SbD4hSbPipS+g1Ay3/o8KasZvvZKwV35sLmkWfN4Zxs=;
-        b=ZWw8pOhUhX+9GzT3Kp7QoIbTZUyou/EI8TQMyBgssbtVY1yLXqkDy16Q7AZUcaFC8q
-        +OdAZ4OcqOpPs72CNPW1yIlOSUfBAZnXC5iiX2ZGeF8qifLleoHYoq0wfgl+jx563gyW
-        tMFeon5lf2/4yemKwtzz7v9jpkZ2gUhIyHfirQTgIwsaCgsHddGajwUmMv3uy7rMqSPB
-        QAxsclfhKtyWO/7F5yIB2tVCkwX9utQaNfQQLoMlYkwQFHbijGA5fR5NiMfiu29hPNn7
-        ftUCD9s38+fX1ST6Q10n26n+KJ6bEqcdz8awsILmPgP3H9ziILFNL+qUJxXMxli/Ndrj
-        BTKg==
+        bh=H58C0j9gHK/cSRes9bGVTzbsbmeIVSPc3HRYF3jeGLA=;
+        b=PumkfYQQ6K7WabLJqfmHLXC5AwqPAqk64bA+TWBXikthGFGaJk97gLQLc7D77S2Orn
+        Wig8lN1QZ1mhwk5f5BAsufG6o2S8M4F0RqMC3nWFuXNoZLTmf+UNmkET/m5EBa3iR5By
+        KFA4dEZt1Ab4JZ/XY0PnUaG2tiQ8yNDREMUpbf4jdD+4VVAwLEM+9TFxz6NEEP/iq8Hc
+        aMWX1ZMQG0c1IaOSWm08fvS2yXMBs5poH4w8ZmsM4nObOpQR72APbupNMZDHLr/t/TZN
+        czNgpI6cOD3u9A010O26D88gop6sBNQRwQr11a72WqvzWnVsVuLMH2FrY//euWFPkwxt
+        K+2Q==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xty10="
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.10.177]
         by smtp.strato.de (RZmta 47.10.0 SBL|AUTH)
-        with ESMTPSA id Q06fc3wBLCPp0g4
+        with ESMTPSA id Q06fc3wBLCt40lo
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Mon, 21 Dec 2020 13:25:51 +0100 (CET)
-Subject: Re: general protection fault in j1939_netdev_notify (2)
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     linux@rempel-privat.de, mkl@pengutronix.de, robin@protonic.nl,
-        davem@davemloft.net,
-        syzbot <syzbot+5138c4dd15a0401bec7b@syzkaller.appspotmail.com>,
-        hkallweit1@gmail.com, kuba@kernel.org,
-        syzkaller-bugs@googlegroups.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de
-References: <000000000000e5b07c05b6deb081@google.com>
- <d9be63e3-a432-aa5c-d3a9-17138d1953d3@hartkopp.net>
- <20201220143734.dm2nz3eadhqfcx36@pengutronix.de>
+        Mon, 21 Dec 2020 13:55:04 +0100 (CET)
+Subject: Re: WARNING in isotp_tx_timer_handler
+To:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+78bab6958a614b0c80b9@syzkaller.appspotmail.com>
+Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mkl@pengutronix.de, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <0000000000005fe14605b6ea4958@google.com>
+ <20201221054031.1468-1-hdanton@sina.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <822244cd-3b4e-f3e8-c11e-2edb701ca30d@hartkopp.net>
-Date:   Mon, 21 Dec 2020 13:25:47 +0100
+Message-ID: <0f27c47f-b16e-b80e-2fbc-df7894266671@hartkopp.net>
+Date:   Mon, 21 Dec 2020 13:55:04 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.5.1
 MIME-Version: 1.0
-In-Reply-To: <20201220143734.dm2nz3eadhqfcx36@pengutronix.de>
+In-Reply-To: <20201221054031.1468-1-hdanton@sina.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -56,188 +52,114 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Hillf,
 
-
-On 20.12.20 15:37, Oleksij Rempel wrote:
-> Hello Oliver,
-> 
-> On Sun, Dec 20, 2020 at 02:18:27PM +0100, Oliver Hartkopp wrote:
->> Hello Oleksij,
+On 21.12.20 06:40, Hillf Danton wrote:
+> Sun, 20 Dec 2020 11:24:13 -0800
+>> syzbot found the following issue on:
 >>
->> I assume there is some ndev->ml_priv value set - but not from a CAN
->> netdevice.
-> 
-> it is kind of CAN device :)
-
-No, it is not.
-
-Team and bonding devices copy elements like dev->type but do not take 
-care about the CAN specific ml_priv.
-
-I don't know if this is the case here. I can take a look later.
-
->> What was the reason to fiddle with the 'priv' stuff in j1939_netdev_notify()
->> before checking if it was a CAN device?
+>> HEAD commit:    5e60366d Merge tag 'fallthrough-fixes-clang-5.11-rc1' of g..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=179a2287500000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=db720fe37a6a41d8
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=78bab6958a614b0c80b9
+>> compiler:       gcc (GCC) 10.1.0-syz 20200507
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10ea3e0f500000
 >>
->> Would this patch fix the issue then?
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+78bab6958a614b0c80b9@syzkaller.appspotmail.com
+>>
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 0 PID: 9908 at net/can/isotp.c:835 isotp_tx_timer_handler+0x65f/0xba0 net/can/isotp.c:835
+>> Modules linked in:
+>> CPU: 0 PID: 9908 Comm: systemd-udevd Not tainted 5.10.0-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+>> RIP: 0010:isotp_tx_timer_handler+0x65f/0xba0 net/can/isotp.c:835
+>> Code: c1 e8 03 83 e1 07 0f b6 04 28 38 c8 7f 08 84 c0 0f 85 b8 04 00 00 41 88 54 24 05 e9 07 fb ff ff 40 84 ed 75 21 e8 21 11 80 f9 <0f> 0b 45 31 e4 e8 17 11 80 f9 44 89 e0 48 83 c4 48 5b 5d 41 5c 41
+>> RSP: 0018:ffffc90000007dc8 EFLAGS: 00010246
+>> RAX: 0000000000000000 RBX: ffff88803e4e8518 RCX: 0000000000000100
+>> RDX: ffff8880117d5040 RSI: ffffffff87f2102f RDI: 0000000000000003
+>> RBP: 0000000000000000 R08: ffffffff8a7b6540 R09: ffffffff87f20a2e
+>> R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000000
+>> R13: ffff8880b9c26c80 R14: ffff8880b9c26a00 R15: ffff88803e4e8000
+>> FS:  00007fc247dbb8c0(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007ffcab7e7800 CR3: 000000001c8c6000 CR4: 00000000001506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <IRQ>
+>>   __run_hrtimer kernel/time/hrtimer.c:1519 [inline]
+>>   __hrtimer_run_queues+0x609/0xea0 kernel/time/hrtimer.c:1583
+>>   hrtimer_run_softirq+0x17b/0x360 kernel/time/hrtimer.c:1600
+>>   __do_softirq+0x2bc/0xa77 kernel/softirq.c:343
+>>   asm_call_irq_on_stack+0xf/0x20
+>>   </IRQ>
+>>   __run_on_irqstack arch/x86/include/asm/irq_stack.h:26 [inline]
+>>   run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:77 [inline]
+>>   do_softirq_own_stack+0xaa/0xd0 arch/x86/kernel/irq_64.c:77
+>>   invoke_softirq kernel/softirq.c:226 [inline]
+>>   __irq_exit_rcu+0x17f/0x200 kernel/softirq.c:420
+>>   irq_exit_rcu+0x5/0x20 kernel/softirq.c:432
+>>   sysvec_apic_timer_interrupt+0x4d/0x100 arch/x86/kernel/apic/apic.c:1096
+>>   asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:628
+>> RIP: 0010:call_rcu+0x2e7/0x710 kernel/rcu/tree.c:3039
+>> Code: 3c 02 00 0f 85 bb 03 00 00 48 8b 05 63 75 1a 0a 49 03 84 24 f0 00 00 00 49 39 c7 0f 8f 72 01 00 00 e8 5d e4 18 00 ff 34 24 9d <48> 83 c4 20 5b 5d 41 5c 41 5d 41 5e 41 5f c3 80 3c 02 00 0f 84 2f
+>> RSP: 0018:ffffc9000adafb88 EFLAGS: 00000246
+>> RAX: 00000000000010e9 RBX: ffff8880143c1780 RCX: ffffffff815740d7
+>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>> RBP: ffff8880b9c35b70 R08: 0000000000000001 R09: ffffffff8f4f983f
+>> R10: fffffbfff1e9f307 R11: 0000000000000000 R12: ffff8880b9c35a80
+>> R13: ffff8880b9c35b60 R14: ffff8880b9c35b18 R15: 000000000000002c
+>>   security_inode_free+0x9a/0xc0 security/security.c:1005
+>>   __destroy_inode+0x24d/0x740 fs/inode.c:259
+>>   destroy_inode+0x91/0x1b0 fs/inode.c:282
+>>   iput_final fs/inode.c:1654 [inline]
+>>   iput.part.0+0x41e/0x840 fs/inode.c:1680
+>>   iput+0x58/0x70 fs/inode.c:1670
+>>   dentry_unlink_inode+0x2b1/0x3d0 fs/dcache.c:374
+>>   __dentry_kill+0x3c0/0x640 fs/dcache.c:579
+>>   dentry_kill fs/dcache.c:717 [inline]
+>>   dput+0x696/0xc10 fs/dcache.c:878
+>>   do_renameat2+0xae7/0xbf0 fs/namei.c:4461
+>>   __do_sys_rename fs/namei.c:4503 [inline]
+>>   __se_sys_rename fs/namei.c:4501 [inline]
+>>   __x64_sys_rename+0x5d/0x80 fs/namei.c:4501
+>>   do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+>>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>> RIP: 0033:0x7fc246bb7d47
+>> Code: 75 12 48 89 df e8 19 84 07 00 85 c0 0f 95 c0 0f b6 c0 f7 d8 5b c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 b8 52 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 21 41 33 00 f7 d8 64 89 01 48
+>> RSP: 002b:00007ffcab6e3c68 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+>> RAX: ffffffffffffffda RBX: 00005556c8f7a380 RCX: 00007fc246bb7d47
+>> RDX: 0000000000000000 RSI: 00007ffcab6e3c70 RDI: 00005556c8f823b0
+>> RBP: 00007ffcab6e3d30 R08: 00005556c8f812c0 R09: 00005556c8f811e0
+>> R10: 00007fc247dbb8c0 R11: 0000000000000246 R12: 00007ffcab6e3c70
+>> R13: 0000000000000001 R14: 00005556c71306cb R15: 0000000000000000
 > 
-> No, j1939_priv_get_by_ndev() already has an internal test for
-> ARPHRD_CAN. One of this tests can be removed, to make the code clear.
-> So, we get netdev with ARPHRD_CAN and ml_priv == something.
+> Canceling a running timer that handles ISOTP_WAIT_FC/ISOTP_WAIT_FIRST_FC
+> ends up with the so->tx.state assigned to be ISOTP_IDLE.  That triggers
+> the warning. Fix it by correcting state before adding timer.
 > 
-> Right now I do not know how to fix it.
+> --- a/net/can/isotp.c
+> +++ b/net/can/isotp.c
+> @@ -378,6 +378,7 @@ static int isotp_rcv_fc(struct isotp_soc
+>   		break;
+>   
+>   	case ISOTP_FC_WT:
+> +		so->tx.state = ISOTP_WAIT_FC;
+>   		/* start timer to wait for next FC frame */
+>   		hrtimer_start(&so->txtimer, ktime_set(1, 0),
+>   			      HRTIMER_MODE_REL_SOFT);
 > 
-> Ideas?
 
-IMO the patch is still an improvement as it swaps the testing and 
-reduces complexity.
+Thanks for looking into this!
 
-Regards,
+But how did you get to this insight?
+
+When going through isotp_rcv_fc() there is no other way than 
+so->tx.state already contains ISOTP_WAIT_FC at that point.
+
+Or did I miss something?
+
+Best regards,
 Oliver
-
-> 
->> diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
->> index bb914d8b4216..6940f98b81fb 100644
->> --- a/net/can/j1939/main.c
->> +++ b/net/can/j1939/main.c
->> @@ -348,26 +348,25 @@ static int j1939_netdev_notify(struct notifier_block
->> *nb,
->>   			       unsigned long msg, void *data)
->>   {
->>   	struct net_device *ndev = netdev_notifier_info_to_dev(data);
->>   	struct j1939_priv *priv;
->>
->> +	if (ndev->type != ARPHRD_CAN)
->> +		goto notify_done;
->> +
->>   	priv = j1939_priv_get_by_ndev(ndev);
->>   	if (!priv)
->>   		goto notify_done;
->>
->> -	if (ndev->type != ARPHRD_CAN)
->> -		goto notify_put;
->> -
->>   	switch (msg) {
->>   	case NETDEV_DOWN:
->>   		j1939_cancel_active_session(priv, NULL);
->>   		j1939_sk_netdev_event_netdown(priv);
->>   		j1939_ecu_unmap_all(priv);
->>   		break;
->>   	}
->>
->> -notify_put:
->>   	j1939_priv_put(priv);
->>
->>   notify_done:
->>   	return NOTIFY_DONE;
->>   }
->>
->> If so, I can send a proper patch if you like.
->>
->> Best regards,
->> Oliver
->>
->>
->> On 20.12.20 06:34, syzbot wrote:
->>> Hello,
->>>
->>> syzbot found the following issue on:
->>>
->>> HEAD commit:    d635a69d Merge tag 'net-next-5.11' of git://git.kernel.org..
->>> git tree:       upstream
->>> console output: https://syzkaller.appspot.com/x/log.txt?x=1315f123500000
->>> kernel config:  https://syzkaller.appspot.com/x/.config?x=c3556e4856b17a95
->>> dashboard link: https://syzkaller.appspot.com/bug?extid=5138c4dd15a0401bec7b
->>> compiler:       clang version 11.0.0 (https://github.com/llvm/llvm-project.git ca2dcbd030eadbf0aa9b660efe864ff08af6e18b)
->>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12955123500000
->>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f2f30f500000
->>>
->>> The issue was bisected to:
->>>
->>> commit 497a5757ce4e8f37219a3989ac6a561eb9a8e6c7
->>> Author: Heiner Kallweit <hkallweit1@gmail.com>
->>> Date:   Sat Nov 7 20:50:56 2020 +0000
->>>
->>>       tun: switch to net core provided statistics counters
->>>
->>> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=143b845b500000
->>> final oops:     https://syzkaller.appspot.com/x/report.txt?x=163b845b500000
->>> console output: https://syzkaller.appspot.com/x/log.txt?x=123b845b500000
->>>
->>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>> Reported-by: syzbot+5138c4dd15a0401bec7b@syzkaller.appspotmail.com
->>> Fixes: 497a5757ce4e ("tun: switch to net core provided statistics counters")
->>>
->>> general protection fault, probably for non-canonical address 0xe000080fe8c072f1: 0000 [#1] PREEMPT SMP KASAN
->>> KASAN: probably user-memory-access in range [0x0000607f46039788-0x0000607f4603978f]
->>> CPU: 1 PID: 8472 Comm: syz-executor635 Not tainted 5.10.0-syzkaller #0
->>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
->>> RIP: 0010:j1939_ndev_to_priv net/can/j1939/main.c:219 [inline]
->>> RIP: 0010:j1939_priv_get_by_ndev_locked net/can/j1939/main.c:231 [inline]
->>> RIP: 0010:j1939_priv_get_by_ndev net/can/j1939/main.c:243 [inline]
->>> RIP: 0010:j1939_netdev_notify+0x115/0x320 net/can/j1939/main.c:353
->>> Code: 00 74 08 48 89 df e8 ba 1e 48 f9 48 8b 1b 48 85 db 0f 84 f0 00 00 00 4c 89 64 24 08 48 81 c3 28 60 00 00 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 8c 1e 48 f9 4c 8b 23 4d 85 e4 0f
->>> RSP: 0018:ffffc90000e9fd68 EFLAGS: 00010202
->>> RAX: 00000c0fe8c072f1 RBX: 0000607f46039788 RCX: ffff88801456d040
->>> RDX: ffff88801456d040 RSI: 0000000000000118 RDI: 0000000000000118
->>> RBP: 0000000000000118 R08: ffffffff8870585d R09: fffff520001d3fa5
->>> R10: fffff520001d3fa5 R11: 0000000000000000 R12: 0000000000000010
->>> R13: 1ffff1100293e848 R14: dffffc0000000000 R15: ffff8880149f4244
->>> FS:  0000000001d13880(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
->>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> CR2: 0000000020000080 CR3: 000000001402f000 CR4: 00000000001506e0
->>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>> Call Trace:
->>>    notifier_call_chain kernel/notifier.c:83 [inline]
->>>    raw_notifier_call_chain+0xe7/0x170 kernel/notifier.c:410
->>>    call_netdevice_notifiers_info net/core/dev.c:2022 [inline]
->>>    call_netdevice_notifiers_extack net/core/dev.c:2034 [inline]
->>>    call_netdevice_notifiers+0xeb/0x150 net/core/dev.c:2048
->>>    __tun_chr_ioctl+0x2337/0x4860 drivers/net/tun.c:3093
->>>    vfs_ioctl fs/ioctl.c:48 [inline]
->>>    __do_sys_ioctl fs/ioctl.c:753 [inline]
->>>    __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:739
->>>    do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
->>>    entry_SYSCALL_64_after_hwframe+0x44/0xa9
->>> RIP: 0033:0x440359
->>> Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
->>> RSP: 002b:00007fffd37b9c98 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
->>> RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440359
->>> RDX: 0000000000000118 RSI: 00000000400454cd RDI: 0000000000000003
->>> RBP: 00000000006ca018 R08: 00000000004002c8 R09: 00000000004002c8
->>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401b60
->>> R13: 0000000000401bf0 R14: 0000000000000000 R15: 0000000000000000
->>> Modules linked in:
->>> ---[ end trace 7688a2c3c10da2e1 ]---
->>> RIP: 0010:j1939_ndev_to_priv net/can/j1939/main.c:219 [inline]
->>> RIP: 0010:j1939_priv_get_by_ndev_locked net/can/j1939/main.c:231 [inline]
->>> RIP: 0010:j1939_priv_get_by_ndev net/can/j1939/main.c:243 [inline]
->>> RIP: 0010:j1939_netdev_notify+0x115/0x320 net/can/j1939/main.c:353
->>> Code: 00 74 08 48 89 df e8 ba 1e 48 f9 48 8b 1b 48 85 db 0f 84 f0 00 00 00 4c 89 64 24 08 48 81 c3 28 60 00 00 48 89 d8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 df e8 8c 1e 48 f9 4c 8b 23 4d 85 e4 0f
->>> RSP: 0018:ffffc90000e9fd68 EFLAGS: 00010202
->>> RAX: 00000c0fe8c072f1 RBX: 0000607f46039788 RCX: ffff88801456d040
->>> RDX: ffff88801456d040 RSI: 0000000000000118 RDI: 0000000000000118
->>> RBP: 0000000000000118 R08: ffffffff8870585d R09: fffff520001d3fa5
->>> R10: fffff520001d3fa5 R11: 0000000000000000 R12: 0000000000000010
->>> R13: 1ffff1100293e848 R14: dffffc0000000000 R15: ffff8880149f4244
->>> FS:  0000000001d13880(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
->>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> CR2: 0000000020000080 CR3: 000000001402f000 CR4: 00000000001506e0
->>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>
->>>
->>> ---
->>> This report is generated by a bot. It may contain errors.
->>> See https://goo.gl/tpsmEJ for more information about syzbot.
->>> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>>
->>> syzbot will keep track of this issue. See:
->>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->>> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->>> syzbot can test patches for this issue, for details see:
->>> https://goo.gl/tpsmEJ#testing-patches
->>>
->>
-> 
