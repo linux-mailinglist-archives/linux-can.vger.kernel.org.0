@@ -2,30 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F38E42E8E78
-	for <lists+linux-can@lfdr.de>; Sun,  3 Jan 2021 22:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C77D32E921A
+	for <lists+linux-can@lfdr.de>; Mon,  4 Jan 2021 09:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbhACViQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 3 Jan 2021 16:38:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36878 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726924AbhACViQ (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 3 Jan 2021 16:38:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D533520780;
-        Sun,  3 Jan 2021 21:37:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609709855;
-        bh=khXj97CoKJW2rMMdFS64ynxksQ+AMhuqjtWxv1oXc3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EWPRdrxpFUFamAglhnkHxT02k/bqev2QTgqt14Lv5m8Y8ISf7XdfasnTwX6c1Un4E
-         KKAODarwjdjm02KW3GWF6HHcPTkK3ILxvezsttaZ7fHbP6IPh8r2uIz7EdU9qBJFpD
-         a/uf4DrXjk0n5LuD6VL4+nvEzk/x8l+fJ2ONR6VcvrFOXF/281oPLSutaMki2E8r4c
-         aT4le59uph2seUFTOf2CcLnmodHGZ1eFTX8Io6qGvPtlEy3eibXT6M48X/5mFAYfMC
-         X7WjMJimHb1hEFHVhVV/vu6Mhb9HsYKuPzO2OkRXvIfC40uHX53GzhmCXQA/QUEYrF
-         Fvt3RIcEiangA==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S1726573AbhADIow (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jan 2021 03:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726520AbhADIow (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jan 2021 03:44:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB28C061574
+        for <linux-can@vger.kernel.org>; Mon,  4 Jan 2021 00:44:11 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kwLT9-0005ST-Sv; Mon, 04 Jan 2021 09:44:03 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:7c68:1abb:22de:a098] (unknown [IPv6:2a03:f580:87bc:d400:7c68:1abb:22de:a098])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C8FA05B8C98;
+        Mon,  4 Jan 2021 08:43:59 +0000 (UTC)
+Subject: Re: [PATCH 3/7] can: kvaser_pciefd: select CONFIG_CRC32
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
@@ -33,43 +37,151 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Christer Beskow <chbe@kvaser.com>,
         Jimmy Assarsson <extja@kvaser.com>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] can: kvaser_pciefd: select CONFIG_CRC32
-Date:   Sun,  3 Jan 2021 22:36:19 +0100
-Message-Id: <20210103213645.1994783-3-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210103213645.1994783-1-arnd@kernel.org>
 References: <20210103213645.1994783-1-arnd@kernel.org>
+ <20210103213645.1994783-3-arnd@kernel.org>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <d6cb1a96-b7ca-606b-e0e4-686c43ac39be@pengutronix.de>
+Date:   Mon, 4 Jan 2021 09:43:56 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210103213645.1994783-3-arnd@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="JLqjMHuhndnLmXg6YwAhSiLVBBhUNY9j6"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--JLqjMHuhndnLmXg6YwAhSiLVBBhUNY9j6
+Content-Type: multipart/mixed; boundary="riCgCKYsddot7VJGKlkZmf6YJDOTZvAK8";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Arnd Bergmann <arnd@kernel.org>, Wolfgang Grandegger <wg@grandegger.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Henning Colliander <henning.colliander@evidente.se>,
+ Christer Beskow <chbe@kvaser.com>, Jimmy Assarsson <extja@kvaser.com>,
+ linux-can@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <d6cb1a96-b7ca-606b-e0e4-686c43ac39be@pengutronix.de>
+Subject: Re: [PATCH 3/7] can: kvaser_pciefd: select CONFIG_CRC32
+References: <20210103213645.1994783-1-arnd@kernel.org>
+ <20210103213645.1994783-3-arnd@kernel.org>
+In-Reply-To: <20210103213645.1994783-3-arnd@kernel.org>
 
-Without crc32, this driver fails to link:
+--riCgCKYsddot7VJGKlkZmf6YJDOTZvAK8
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-arm-linux-gnueabi-ld: drivers/net/can/kvaser_pciefd.o: in function `kvaser_pciefd_probe':
-kvaser_pciefd.c:(.text+0x2b0): undefined reference to `crc32_be'
+On 1/3/21 10:36 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> Without crc32, this driver fails to link:
+>=20
+> arm-linux-gnueabi-ld: drivers/net/can/kvaser_pciefd.o: in function `kva=
+ser_pciefd_probe':
+> kvaser_pciefd.c:(.text+0x2b0): undefined reference to `crc32_be'
+>=20
+> Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan=
+ devices")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/net/can/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index 424970939fd4..1c28eade6bec 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -123,6 +123,7 @@ config CAN_JANZ_ICAN3
- config CAN_KVASER_PCIEFD
- 	depends on PCI
- 	tristate "Kvaser PCIe FD cards"
-+	select CRC32
- 	  help
- 	  This is a driver for the Kvaser PCI Express CAN FD family.
- 
--- 
-2.29.2
+regrards,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--riCgCKYsddot7VJGKlkZmf6YJDOTZvAK8--
+
+--JLqjMHuhndnLmXg6YwAhSiLVBBhUNY9j6
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/y1UwACgkQqclaivrt
+76mJLAf9Fd4jcCziotc78sS65BBYr2DwVSalThIf7nG/oYgrgGgKzGIRFLq1iKlP
+bgM03vgpc+bJjfcgcteyWVeGq4W7GMJpHPLaOwIGkXLs+je57aY0ANKWHCkD0ltq
+Jhq9RLRvJISguuTVSGIHgsap680vafqrMeftJDj1ADKQNO3TKV0RllvW3TNxXVSd
+75VEpb6lxPlkrA9q8C7XYliKmbZZa0dGLKQ79IO1Hqs5qwn1sG1Z7oVPNyKP0jym
+AkybOwbCe6eiIVoSmXI52TzjA2yVIlmlr7E1N0uj1L1nUaSnN6bYVrX51vuqApso
+SDvSmFu6zscJEuISkLpQ7kU7jfAQvw==
+=F9N+
+-----END PGP SIGNATURE-----
+
+--JLqjMHuhndnLmXg6YwAhSiLVBBhUNY9j6--
