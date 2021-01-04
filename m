@@ -2,40 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02FB2E93B9
-	for <lists+linux-can@lfdr.de>; Mon,  4 Jan 2021 11:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4989E2E93EC
+	for <lists+linux-can@lfdr.de>; Mon,  4 Jan 2021 12:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbhADKwX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 4 Jan 2021 05:52:23 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:34674 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726129AbhADKwX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jan 2021 05:52:23 -0500
-Received: by mail-oo1-f45.google.com with SMTP id x23so6181519oop.1;
-        Mon, 04 Jan 2021 02:52:07 -0800 (PST)
+        id S1726198AbhADLHV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 4 Jan 2021 06:07:21 -0500
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:42021 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726176AbhADLHV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 4 Jan 2021 06:07:21 -0500
+Received: by mail-ot1-f54.google.com with SMTP id 11so25600794oty.9;
+        Mon, 04 Jan 2021 03:07:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q0c1Y3LPa+ARd4G//BxkyHoz21dY5cJnRVsgk53Tbn0=;
-        b=W2qolnfRpSNOO2OPET4j501GZ6Fbc3ix9/s35u7f2ncBvczG8Kuep0IsneSeOvRgbM
-         LHJe1xNLSIF+3rPwk37OCQKnanEsCckhOJHRdFhCPgrOLruGpfZRBK9+GvxM/hkdmCfz
-         DkiIM1qGywXwkhOxgUzQgNZGJDHyoHsdlLjq4UYUNEcTmQCODczWIus72CpYNdOOO7vu
-         zFMEp0Juq80U/0fdPv7qtEN8yBLuRt0HlcDc6h8u5KiAtctNbqsQ9+3YEE6Ny/v/sSWt
-         uX8TC+ZW0nwJOVOrDkYKw5MT5mDYa7+aLW5O+JZX7cX7RrsisHeZhIzytloZvyaL8pj4
-         EPfw==
-X-Gm-Message-State: AOAM530a99uL6vF7UTuXVr4D0qYlWN2ocgbfSUT97D54nKcDX4MJ+C3k
-        aGzFRMG5vMAFmevVG2picUnPZR5K6MT+iXsLQkk=
-X-Google-Smtp-Source: ABdhPJzvxPnIglxjOoytlJMwE5oDPJlVBKkIU/bFGP9uDfDV7fCPuik4jToHwv9sqFHZKPyvpQob0nH+8q9/7XJ4cV4=
-X-Received: by 2002:a4a:ca14:: with SMTP id w20mr48712009ooq.11.1609757502401;
- Mon, 04 Jan 2021 02:51:42 -0800 (PST)
+        bh=ejBhJdxe+Ypz4pmFM6jtZykDsE8NXE7rALy/vOL6RA8=;
+        b=LlgyAPmzvjj92TKk7eaNa3gY+oYlfKzfUJV4jyDXnoeNXuNfR2FeAnCBk0osqov6Pq
+         SH/dsiIOfU8VgWTJD/lXsMtW7+klxnHbi4U8LWy3/kPKnJ6IF7/ABWgk7VcXzqekkGdW
+         59yqQm5VbGajh2sptpaPmkekQ3d0QRjAdvZn41glD9RJ4mKoGFzZWVv0zkBThC9fxDnN
+         Rl9fUY8kmo3USkpmoCLsqh367lNZxkwMvkuNZHVYsTcRir2cFgzufbuvjD41NCZEUOq4
+         Q2NkxX8rWGqYqHGDhISWkiRvACHtgLNF5ydAGrgKoRUfB3wb4PgG80PT7fwmDk4gICwd
+         YX8g==
+X-Gm-Message-State: AOAM532ZnxpDT5Flegw1nbFMUz25UMIYLMEdaqGWPFDCnQkQA8OgF7ag
+        nSnwO62A9QP9Ebfii4zeCC5ZSJc6L9PsVyyZ0Y8=
+X-Google-Smtp-Source: ABdhPJzw+PyrV+DkseEjjlzu9EgbZAc0gIpJeAxhpZElv1XC5IgqsQmeOJAOJHPj8fdx0f+V1VKbKYt5sGBHKGj1m5I=
+X-Received: by 2002:a9d:c01:: with SMTP id 1mr37173062otr.107.1609758400285;
+ Mon, 04 Jan 2021 03:06:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20201231155957.31165-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20201231155957.31165-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20210104090327.6547-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210104090327.6547-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Jan 2021 11:51:31 +0100
-Message-ID: <CAMuHMdX2ruikh4voRrHPmi=ti+eHVxXh6N05s1XH6+r5MeeqQw@mail.gmail.com>
-Subject: Re: [PATCH] can: rcar: Update help description for CAN_RCAR_CANFD config
+Date:   Mon, 4 Jan 2021 12:06:29 +0100
+Message-ID: <CAMuHMdWmy85b4Tu=RxKRDeXVVj_d4AXFjQxgm=OS-aFXjrTgwg@mail.gmail.com>
+Subject: Re: [PATCH v2] can: rcar: Update help description for CAN_RCAR config
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -45,57 +45,27 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Prabhakar,
-
-On Thu, Dec 31, 2020 at 5:00 PM Lad Prabhakar
+On Mon, Jan 4, 2021 at 10:03 AM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> The rcar_canfd driver supports R-Car Gen3 and RZ/G2 SoC's, update the
-> description to reflect this.
+> The rcar_can driver also supports RZ/G SoC's, update the description to
+> reflect this.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-> --- a/drivers/net/can/rcar/Kconfig
-> +++ b/drivers/net/can/rcar/Kconfig
-> @@ -10,13 +10,13 @@ config CAN_RCAR
->           be called rcar_can.
->
->  config CAN_RCAR_CANFD
-> -       tristate "Renesas R-Car CAN FD controller"
-> +       tristate "Renesas R-Car Gen3 and RZ/G2 CAN FD controller"
->         depends on ARCH_RENESAS || ARM
-
-Not introduced by this patch, but the "|| ARM" looks strange to me.
-Is this meant for compile-testing? Doesn't the driver compile on all
-platforms (it does on m68k), so "|| COMPILE_TEST" is not appropriate?
-Is the CAN FD controller present on some Renesas arm32 SoCs (but
-not yet supported by this driver)?
-
->         help
->           Say Y here if you want to use CAN FD controller found on
-> -         Renesas R-Car SoCs. The driver puts the controller in CAN FD only
-> -         mode, which can interoperate with CAN2.0 nodes but does not support
-> -         dedicated CAN 2.0 mode.
-> +         Renesas R-Car Gen3 and RZ/G2 SoCs. The driver puts the
-> +         controller in CAN FD only mode, which can interoperate with
-> +         CAN2.0 nodes but does not support dedicated CAN 2.0 mode.
->
->           To compile this driver as a module, choose M here: the module will
->           be called rcar_canfd.
-
 Gr{oetje,eeting}s,
 
                         Geert
 
-
---
+-- 
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
