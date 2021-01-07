@@ -2,47 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B292ECD34
-	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 10:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E67B82ECDEE
+	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 11:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727818AbhAGJv3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Jan 2021 04:51:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S1726754AbhAGKfh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Jan 2021 05:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727733AbhAGJv2 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 04:51:28 -0500
+        with ESMTP id S1726362AbhAGKfh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 05:35:37 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FA6C061244
-        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 01:50:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C0C0612F4
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 02:34:56 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kxRvg-0001P6-Mh
-        for linux-can@vger.kernel.org; Thu, 07 Jan 2021 10:50:04 +0100
+        id 1kxSd5-0008M5-J4
+        for linux-can@vger.kernel.org; Thu, 07 Jan 2021 11:34:55 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D64855BBAF1
-        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 09:49:09 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 846655BBC82
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 10:34:53 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id D5ECB5BBA49;
-        Thu,  7 Jan 2021 09:49:04 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 069185BBC7A;
+        Thu,  7 Jan 2021 10:34:53 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id da6dcf66;
-        Thu, 7 Jan 2021 09:49:01 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 446a9442;
+        Thu, 7 Jan 2021 10:34:52 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 19/19] can: flexcan: add CAN wakeup function for i.MX8QM
-Date:   Thu,  7 Jan 2021 10:49:00 +0100
-Message-Id: <20210107094900.173046-20-mkl@pengutronix.de>
+        kernel@pengutronix.de
+Subject: pull-request: can 2021-01-07
+Date:   Thu,  7 Jan 2021 11:34:45 +0100
+Message-Id: <20210107103451.183477-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210107094900.173046-1-mkl@pengutronix.de>
-References: <20210107094900.173046-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -53,254 +50,65 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Joakim Zhang <qiangqing.zhang@nxp.com>
+Hello Jakub, hello David,
 
-The System Controller Firmware (SCFW) is a low-level system function
-which runs on a dedicated Cortex-M core to provide power, clock, and
-resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
-(QM, QP), and i.MX8QX (QXP, DX). SCU driver manages the IPC interface
-between host CPU and the SCU firmware running on M4.
+this is a pull request of 6 patches for net/master.
 
-For i.MX8QM, stop mode request is controlled by System Controller Unit(SCU)
-firmware, this patch introduces FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW quirk
-for this function.
+The first patch is by me for the m_can driver and removes an erroneous
+m_can_clk_stop() from the driver's unregister function.
 
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
-Link: https://lore.kernel.org/r/20201106105627.31061-6-qiangqing.zhang@nxp.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+The second patch targets the tcan4x5x driver, is by me, and fixes the bit
+timing constant parameters.
+
+The next two patches are by me, target the mcp251xfd driver, and fix a race
+condition in the optimized TEF path (which was added in net-next for v5.11).
+The similar code in the RX path is changed to look the same, although it
+doesn't suffer from the race condition.
+
+A patch by Lad Prabhakar updates the description and help text for the rcar CAN
+driver to reflect all supported SoCs.
+
+In the last patch Sriram Dash transfers the maintainership of the m_can driver
+to Pankaj Sharma.
+
+regards,
+Marc
+
 ---
- drivers/net/can/flexcan.c | 123 ++++++++++++++++++++++++++++++++------
- 1 file changed, 106 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 038fe1036df2..7ab20a6b0d1d 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -9,6 +9,7 @@
- //
- // Based on code originally by Andrey Volkov <avolkov@varma-el.com>
- 
-+#include <dt-bindings/firmware/imx/rsrc.h>
- #include <linux/bitfield.h>
- #include <linux/can.h>
- #include <linux/can/dev.h>
-@@ -17,6 +18,7 @@
- #include <linux/can/rx-offload.h>
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/firmware/imx/sci.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/mfd/syscon.h>
-@@ -242,6 +244,8 @@
- #define FLEXCAN_QUIRK_SUPPORT_FD BIT(9)
- /* support memory detection and correction */
- #define FLEXCAN_QUIRK_SUPPORT_ECC BIT(10)
-+/* Setup stop mode with SCU firmware to support wakeup */
-+#define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW BIT(11)
- 
- /* Structure of the message buffer */
- struct flexcan_mb {
-@@ -347,6 +351,7 @@ struct flexcan_priv {
- 	u8 mb_count;
- 	u8 mb_size;
- 	u8 clk_src;	/* clock source of CAN Protocol Engine */
-+	u8 scu_idx;
- 
- 	u64 rx_mask;
- 	u64 tx_mask;
-@@ -358,6 +363,9 @@ struct flexcan_priv {
- 	struct regulator *reg_xceiver;
- 	struct flexcan_stop_mode stm;
- 
-+	/* IPC handle when setup stop mode by System Controller firmware(scfw) */
-+	struct imx_sc_ipc *sc_ipc_handle;
-+
- 	/* Read and Write APIs */
- 	u32 (*read)(void __iomem *addr);
- 	void (*write)(u32 val, void __iomem *addr);
-@@ -387,7 +395,7 @@ static const struct flexcan_devtype_data fsl_imx6q_devtype_data = {
- static const struct flexcan_devtype_data fsl_imx8qm_devtype_data = {
- 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
- 		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
--		FLEXCAN_QUIRK_SUPPORT_FD,
-+		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW,
- };
- 
- static struct flexcan_devtype_data fsl_imx8mp_devtype_data = {
-@@ -546,18 +554,42 @@ static void flexcan_enable_wakeup_irq(struct flexcan_priv *priv, bool enable)
- 	priv->write(reg_mcr, &regs->mcr);
- }
- 
-+static int flexcan_stop_mode_enable_scfw(struct flexcan_priv *priv, bool enabled)
-+{
-+	u8 idx = priv->scu_idx;
-+	u32 rsrc_id, val;
-+
-+	rsrc_id = IMX_SC_R_CAN(idx);
-+
-+	if (enabled)
-+		val = 1;
-+	else
-+		val = 0;
-+
-+	/* stop mode request via scu firmware */
-+	return imx_sc_misc_set_control(priv->sc_ipc_handle, rsrc_id,
-+				       IMX_SC_C_IPG_STOP, val);
-+}
-+
- static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
- {
- 	struct flexcan_regs __iomem *regs = priv->regs;
- 	u32 reg_mcr;
-+	int ret;
- 
- 	reg_mcr = priv->read(&regs->mcr);
- 	reg_mcr |= FLEXCAN_MCR_SLF_WAK;
- 	priv->write(reg_mcr, &regs->mcr);
- 
- 	/* enable stop request */
--	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
--			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
-+	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW) {
-+		ret = flexcan_stop_mode_enable_scfw(priv, true);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-+				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
-+	}
- 
- 	return flexcan_low_power_enter_ack(priv);
- }
-@@ -566,10 +598,17 @@ static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
- {
- 	struct flexcan_regs __iomem *regs = priv->regs;
- 	u32 reg_mcr;
-+	int ret;
- 
- 	/* remove stop request */
--	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
--			   1 << priv->stm.req_bit, 0);
-+	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW) {
-+		ret = flexcan_stop_mode_enable_scfw(priv, false);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
-+				   1 << priv->stm.req_bit, 0);
-+	}
- 
- 	reg_mcr = priv->read(&regs->mcr);
- 	reg_mcr &= ~FLEXCAN_MCR_SLF_WAK;
-@@ -1867,7 +1906,7 @@ static void unregister_flexcandev(struct net_device *dev)
- 	unregister_candev(dev);
- }
- 
--static int flexcan_setup_stop_mode(struct platform_device *pdev)
-+static int flexcan_setup_stop_mode_gpr(struct platform_device *pdev)
- {
- 	struct net_device *dev = platform_get_drvdata(pdev);
- 	struct device_node *np = pdev->dev.of_node;
-@@ -1912,11 +1951,6 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
- 		"gpr %s req_gpr=0x02%x req_bit=%u\n",
- 		gpr_np->full_name, priv->stm.req_gpr, priv->stm.req_bit);
- 
--	device_set_wakeup_capable(&pdev->dev, true);
--
--	if (of_property_read_bool(np, "wakeup-source"))
--		device_set_wakeup_enable(&pdev->dev, true);
--
- 	return 0;
- 
- out_put_node:
-@@ -1924,6 +1958,58 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int flexcan_setup_stop_mode_scfw(struct platform_device *pdev)
-+{
-+	struct net_device *dev = platform_get_drvdata(pdev);
-+	struct flexcan_priv *priv;
-+	u8 scu_idx;
-+	int ret;
-+
-+	ret = of_property_read_u8(pdev->dev.of_node, "fsl,scu-index", &scu_idx);
-+	if (ret < 0) {
-+		dev_dbg(&pdev->dev, "failed to get scu index\n");
-+		return ret;
-+	}
-+
-+	priv = netdev_priv(dev);
-+	priv->scu_idx = scu_idx;
-+
-+	/* this function could be defered probe, return -EPROBE_DEFER */
-+	return imx_scu_get_handle(&priv->sc_ipc_handle);
-+}
-+
-+/* flexcan_setup_stop_mode - Setup stop mode for wakeup
-+ *
-+ * Return: = 0 setup stop mode successfully or doesn't support this feature
-+ *         < 0 fail to setup stop mode (could be defered probe)
-+ */
-+static int flexcan_setup_stop_mode(struct platform_device *pdev)
-+{
-+	struct net_device *dev = platform_get_drvdata(pdev);
-+	struct flexcan_priv *priv;
-+	int ret;
-+
-+	priv = netdev_priv(dev);
-+
-+	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW)
-+		ret = flexcan_setup_stop_mode_scfw(pdev);
-+	else if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR)
-+		ret = flexcan_setup_stop_mode_gpr(pdev);
-+	else
-+		/* return 0 directly if doesn't support stop mode feature */
-+		return 0;
-+
-+	if (ret)
-+		return ret;
-+
-+	device_set_wakeup_capable(&pdev->dev, true);
-+
-+	if (of_property_read_bool(pdev->dev.of_node, "wakeup-source"))
-+		device_set_wakeup_enable(&pdev->dev, true);
-+
-+	return 0;
-+}
-+
- static const struct of_device_id flexcan_of_match[] = {
- 	{ .compatible = "fsl,imx8qm-flexcan", .data = &fsl_imx8qm_devtype_data, },
- 	{ .compatible = "fsl,imx8mp-flexcan", .data = &fsl_imx8mp_devtype_data, },
-@@ -2054,17 +2140,20 @@ static int flexcan_probe(struct platform_device *pdev)
- 		goto failed_register;
- 	}
- 
-+	err = flexcan_setup_stop_mode(pdev);
-+	if (err < 0) {
-+		if (err != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "setup stop mode failed\n");
-+		goto failed_setup_stop_mode;
-+	}
-+
- 	of_can_transceiver(dev);
- 	devm_can_led_init(dev);
- 
--	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR) {
--		err = flexcan_setup_stop_mode(pdev);
--		if (err)
--			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
--	}
--
- 	return 0;
- 
-+ failed_setup_stop_mode:
-+	unregister_flexcandev(dev);
-  failed_register:
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
--- 
-2.29.2
+The following changes since commit 1f685e6adbbe3c7b1bd9053be771b898d9efa655:
+
+  ptp: ptp_ines: prevent build when HAS_IOMEM is not set (2021-01-06 16:17:23 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.11-20210107
+
+for you to fetch changes up to 6ee49118f87cf02b36f68812bc49855b7b627a2b:
+
+  MAINTAINERS: Update MCAN MMIO device driver maintainer (2021-01-07 11:02:10 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.11-20210107
+
+----------------------------------------------------------------
+Lad Prabhakar (1):
+      can: rcar: Kconfig: update help description for CAN_RCAR config
+
+Marc Kleine-Budde (4):
+      can: m_can: m_can_class_unregister(): remove erroneous m_can_clk_stop()
+      can: tcan4x5x: fix bittiming const, use common bittiming from m_can driver
+      can: mcp251xfd: mcp251xfd_handle_tefif(): fix TEF vs. TX race condition
+      can: mcp251xfd: mcp251xfd_handle_rxif_ring(): first increment RX tail pointer in HW, then in driver
+
+Sriram Dash (1):
+      MAINTAINERS: Update MCAN MMIO device driver maintainer
+
+ MAINTAINERS                                    |  2 +-
+ drivers/net/can/m_can/m_can.c                  |  2 --
+ drivers/net/can/m_can/tcan4x5x.c               | 26 --------------------------
+ drivers/net/can/rcar/Kconfig                   |  4 ++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 17 ++++++++---------
+ 5 files changed, 11 insertions(+), 40 deletions(-)
 
 
