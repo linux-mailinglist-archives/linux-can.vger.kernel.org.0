@@ -2,46 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89292ECDF9
-	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 11:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514642ECDFA
+	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 11:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbhAGKgZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Jan 2021 05:36:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48188 "EHLO
+        id S1727765AbhAGKg0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Jan 2021 05:36:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727765AbhAGKgW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 05:36:22 -0500
+        with ESMTP id S1727739AbhAGKgV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 05:36:21 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CE3C061290
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4073AC061285
         for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 02:35:03 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kxSdB-0008T1-Qm
+        id 1kxSdB-0008TJ-Qm
         for linux-can@vger.kernel.org; Thu, 07 Jan 2021 11:35:01 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id DBBE05BBCAF
-        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 10:34:58 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 08FDB5BBCB0
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 10:34:59 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 96E695BBC83;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B1CB35BBC85;
         Thu,  7 Jan 2021 10:34:53 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id fea24183;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4f8d1a3e;
         Thu, 7 Jan 2021 10:34:52 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        kernel@pengutronix.de, Sriram Dash <sriram.dash@samsung.com>,
+        Pankaj Sharma <pankj.sharma@samsung.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 5/6] can: rcar: Kconfig: update help description for CAN_RCAR config
-Date:   Thu,  7 Jan 2021 11:34:50 +0100
-Message-Id: <20210107103451.183477-6-mkl@pengutronix.de>
+Subject: [net 6/6] MAINTAINERS: Update MCAN MMIO device driver maintainer
+Date:   Thu,  7 Jan 2021 11:34:51 +0100
+Message-Id: <20210107103451.183477-7-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210107103451.183477-1-mkl@pengutronix.de>
 References: <20210107103451.183477-1-mkl@pengutronix.de>
@@ -55,36 +54,32 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Sriram Dash <sriram.dash@samsung.com>
 
-The rcar_can driver also supports RZ/G SoC's, update the description to reflect
-this.
+Update Pankaj Sharma as maintainer for mcan mmio device driver as I
+will be moving to a different role.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20210104090327.6547-1-prabhakar.mahadev-lad.rj@bp.renesas.com
+Signed-off-by: Sriram Dash <sriram.dash@samsung.com>
+Acked-by: Pankaj Sharma <pankj.sharma@samsung.com>
+Link: https://lore.kernel.org/r/20210104123134.16930-1-sriram.dash@samsung.com
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/rcar/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/rcar/Kconfig b/drivers/net/can/rcar/Kconfig
-index 8d36101b78e3..29cabc20109e 100644
---- a/drivers/net/can/rcar/Kconfig
-+++ b/drivers/net/can/rcar/Kconfig
-@@ -1,10 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0
- config CAN_RCAR
--	tristate "Renesas R-Car CAN controller"
-+	tristate "Renesas R-Car and RZ/G CAN controller"
- 	depends on ARCH_RENESAS || ARM
- 	help
- 	  Say Y here if you want to use CAN controller found on Renesas R-Car
--	  SoCs.
-+	  or RZ/G SoCs.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7c1e45c416b1..b15514a770e3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10847,7 +10847,7 @@ F:	drivers/media/radio/radio-maxiradio*
  
- 	  To compile this driver as a module, choose M here: the module will
- 	  be called rcar_can.
+ MCAN MMIO DEVICE DRIVER
+ M:	Dan Murphy <dmurphy@ti.com>
+-M:	Sriram Dash <sriram.dash@samsung.com>
++M:	Pankaj Sharma <pankj.sharma@samsung.com>
+ L:	linux-can@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
 -- 
 2.29.2
 
