@@ -2,39 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AE92EE792
-	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 22:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 944E52EE798
+	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 22:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbhAGVUL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Jan 2021 16:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
+        id S1727106AbhAGVXG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Jan 2021 16:23:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726666AbhAGVUK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 16:20:10 -0500
+        with ESMTP id S1727009AbhAGVXG (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 16:23:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BACC0612F5
-        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 13:19:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A31C0612F4
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 13:22:25 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kxch7-000295-4S; Thu, 07 Jan 2021 22:19:45 +0100
+        id 1kxcjd-0002UL-V9; Thu, 07 Jan 2021 22:22:22 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:9ff9:96a6:9da4:146f] (unknown [IPv6:2a03:f580:87bc:d400:9ff9:96a6:9da4:146f])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 04D335BC291;
-        Thu,  7 Jan 2021 21:19:43 +0000 (UTC)
-Subject: Re: [net-next 15/19] can: tcan4x5x: rework SPI access
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>
-References: <20210107094900.173046-1-mkl@pengutronix.de>
- <20210107094900.173046-16-mkl@pengutronix.de>
- <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9422C5BC29B;
+        Thu,  7 Jan 2021 21:22:19 +0000 (UTC)
+Subject: Re: [net-next 19/19] can: flexcan: add CAN wakeup function for
+ i.MX8QM
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
+References: <20210107094900.173046-20-mkl@pengutronix.de>
+ <202101080428.hEujUZlS-lkp@intel.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <60cc440e-a292-0b59-16d7-79f4e25c13ee@pengutronix.de>
-Date:   Thu, 7 Jan 2021 22:19:40 +0100
+Message-ID: <13f12660-cb33-d610-a933-1e3459791159@pengutronix.de>
+Date:   Thu, 7 Jan 2021 22:22:16 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <202101080428.hEujUZlS-lkp@intel.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="oNh7FW29sl7tEnqBEikJa7aOseAl9KrIR"
+ boundary="wEkdPj6bunxMfQDSTvU4TOlf4XuPUCPte"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,43 +112,61 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---oNh7FW29sl7tEnqBEikJa7aOseAl9KrIR
-Content-Type: multipart/mixed; boundary="LEwlJu7TbTVIhG9BUVvXodhGxsTTnLNzH";
+--wEkdPj6bunxMfQDSTvU4TOlf4XuPUCPte
+Content-Type: multipart/mixed; boundary="hghEjJnkOUmlizFH1OwHCn3eUCiekQUkt";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
- kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
- Sean Nyekjaer <sean@geanix.com>
-Message-ID: <60cc440e-a292-0b59-16d7-79f4e25c13ee@pengutronix.de>
-Subject: Re: [net-next 15/19] can: tcan4x5x: rework SPI access
-References: <20210107094900.173046-1-mkl@pengutronix.de>
- <20210107094900.173046-16-mkl@pengutronix.de>
- <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+To: kernel test robot <lkp@intel.com>
+Cc: kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
+Message-ID: <13f12660-cb33-d610-a933-1e3459791159@pengutronix.de>
+Subject: Re: [net-next 19/19] can: flexcan: add CAN wakeup function for
+ i.MX8QM
+References: <20210107094900.173046-20-mkl@pengutronix.de>
+ <202101080428.hEujUZlS-lkp@intel.com>
+In-Reply-To: <202101080428.hEujUZlS-lkp@intel.com>
 
---LEwlJu7TbTVIhG9BUVvXodhGxsTTnLNzH
+--hghEjJnkOUmlizFH1OwHCn3eUCiekQUkt
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/7/21 8:00 PM, Jakub Kicinski wrote:
-> On Thu,  7 Jan 2021 10:48:56 +0100 Marc Kleine-Budde wrote:
->> +struct __packed tcan4x5x_map_buf {
->> +	struct tcan4x5x_buf_cmd cmd;
->> +	u8 data[256 * sizeof(u32)];
->> +} ____cacheline_aligned;
+On 1/7/21 9:07 PM, kernel test robot wrote:
+> Hi Marc,
 >=20
-> Interesting attribute combo, I must say.
+> Thank you for the patch! Yet something to improve:
+>=20
+> [auto build test ERROR on net-next/master]
+>=20
+> url:    https://github.com/0day-ci/linux/commits/Marc-Kleine-Budde/can-=
+tcan4x5x-replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.=
+git 3db1a3fa98808aa90f95ec3e0fa2fc7abf28f5c9
+> config: m68k-allmodconfig (attached as .config)
+> compiler: m68k-linux-gcc (GCC) 9.3.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
+bin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/0day-ci/linux/commit/90434a61388963ddee49d=
+0c805226dd4b56df274
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Marc-Kleine-Budde/can-tcan4x5x=
+-replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
+>         git checkout 90434a61388963ddee49d0c805226dd4b56df274
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cr=
+oss ARCH=3Dm68k=20
+>=20
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>=20
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>=20
+>>> ERROR: modpost: "imx_scu_get_handle" [drivers/net/can/flexcan.ko] und=
+efined!
 
-__packed as it's the byte stream send to the chip via SPI.
+Another false positive, due to the old net-next/master base.
 
-____cacheline_aligned, as it might be subject to DMA mapping in the SPI h=
-ost
-driver. An alternative would be to allocate these with separate kmalloc()=
-=2E
-
-regards,
 Marc
 
 --=20
@@ -160,23 +176,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---LEwlJu7TbTVIhG9BUVvXodhGxsTTnLNzH--
+--hghEjJnkOUmlizFH1OwHCn3eUCiekQUkt--
 
---oNh7FW29sl7tEnqBEikJa7aOseAl9KrIR
+--wEkdPj6bunxMfQDSTvU4TOlf4XuPUCPte
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/3euwACgkQqclaivrt
-76kMnwf/T0YOmD63Mz3xJV/KfRXZ9FckbuBBtG4xReS3fN3evdrSRyB45DsQBLTo
-XTQ41gkctdLUbv17UUv8eECWlKP/TTpsKxz328wdeoPZCo3wGi3WRRrFr/HAnziq
-dQDWUqQEPMat+1sMKsP8DAIZn5YYxpKODJ0hjdivPekk1mF4QebvcRV5D/GkzVCm
-KIs2YXkN99z0mz0AOHN3t0BxOtXFh9hx6B+1bf94WRy32kJFO46bxf3N1FjFs9Dh
-gcWjixKqkrbPx2ZAZztOYMnY/s8ine7TqIluXvfKkzwEDbC0ZDGs48IeQsg1jjOE
-1T9ZIThoHHs85VH3uCPv8Zeq8VZFpQ==
-=P33L
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/3e4gACgkQqclaivrt
+76leKwf+M8cUarszgraNK2bklPXMkDXclM33HEbNtTx2cKfs8DecgXXqal8274jj
+b84UEl5RqC5WJ+xVB/2u/uy2mh8CWGYKmtN2iqRoCo++pBupja0ToGr4qKGP3HOz
+ooOJlk6QukXd8rMp7PZsPO06I2CYVas9PD+cgnuJB79X18JyRq0D/bPZ7a2XfHhf
+F1MGwmIwT/ZYf85vOT9r+Z+erHoBlJ/Q1L/q+YeiBztHCE4i4BXib1/C1nLCpQ2N
+GkJCQuRhykgWbluv7qoUXrLLcaCXohsHIBOIKBF6nhdUUjuSIHY+W9S4c9JsBqxe
+dRe228GGfBbBZjp1OBE4VwurPZBmXw==
+=ZCTZ
 -----END PGP SIGNATURE-----
 
---oNh7FW29sl7tEnqBEikJa7aOseAl9KrIR--
+--wEkdPj6bunxMfQDSTvU4TOlf4XuPUCPte--
