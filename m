@@ -2,47 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 498C92EB4F7
-	for <lists+linux-can@lfdr.de>; Tue,  5 Jan 2021 22:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAA722ECD2C
+	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 10:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731524AbhAEVmZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 5 Jan 2021 16:42:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S1727717AbhAGJvN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Jan 2021 04:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbhAEVmY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 5 Jan 2021 16:42:24 -0500
+        with ESMTP id S1727711AbhAGJvN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 04:51:13 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C956CC061793
-        for <linux-can@vger.kernel.org>; Tue,  5 Jan 2021 13:41:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC65C0612A0
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 01:49:55 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kwu5G-0001dL-8n
-        for linux-can@vger.kernel.org; Tue, 05 Jan 2021 22:41:42 +0100
+        id 1kxRvW-00016K-1Q
+        for linux-can@vger.kernel.org; Thu, 07 Jan 2021 10:49:54 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8C0CF5BA555
-        for <linux-can@vger.kernel.org>; Tue,  5 Jan 2021 21:41:40 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 43A7E5BBA28
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 09:49:03 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id A73B85BA548;
-        Tue,  5 Jan 2021 21:41:39 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id BEE885BBA13;
+        Thu,  7 Jan 2021 09:49:01 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id da0288f2;
-        Tue, 5 Jan 2021 21:41:39 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 95ed9909;
+        Thu, 7 Jan 2021 09:49:01 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel@pengutronix.de, linux-can@vger.kernel.org
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 2/2] can: mcp251xfd: mcp251xfd_handle_rxif_ring(): first increment RX tail pointer in HW, then in driver
-Date:   Tue,  5 Jan 2021 22:41:38 +0100
-Message-Id: <20210105214138.3150886-3-mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-01-06
+Date:   Thu,  7 Jan 2021 10:48:41 +0100
+Message-Id: <20210107094900.173046-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210105214138.3150886-1-mkl@pengutronix.de>
-References: <20210105214138.3150886-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -53,47 +50,81 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The previous patch fixes a TEF vs. TX race condition, by first updating the TEF
-tail pointer in hardware, and then updating the driver internal pointer.
+Hello Jakub, hello David,
 
-The same pattern exists in the RX-path, too. This should be no problem, as the
-driver accesses the RX-FIFO from the interrupt handler only, thus the access is
-properly serialized. Fix the order here, too, so that the TEF- and RX-path look
-similar.
+this is a pull request of 19 patches for net-next/master.
 
-Fixes: 1f652bb6bae7 ("can: mcp25xxfd: rx-path: reduce number of SPI core requests to set UINC bit")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+The first 16 patches are by me and target the tcan4x5x SPI glue driver for the
+m_can CAN driver. First there are a several cleanup commits, then the SPI
+regmap part is converted to 8 bits per word, to make it possible to use that
+driver on SPI controllers that only support the 8 bit per word mode (such as
+the SPI cores on the raspberry pi).
+
+Oliver Hartkopp contributes a patch for the CAN_RAW protocol. The getsockopt()
+for CAN_RAW_FILTER is changed to return -ERANGE if the filterset does not fit
+into the provided user space buffer.
+
+The last two patches are by Joakim Zhang and add wakeup support to the flexcan
+driver for the i.MX8QM SoC. The dt-bindings docs are extended to describe the
+added property.
+
+regards,
+Marc
+
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 85a1a8b7c0e7..36235afb0bc6 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1552,10 +1552,8 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
- 
- 		/* Increment the RX FIFO tail pointer 'len' times in a
- 		 * single SPI message.
--		 */
--		ring->tail += len;
--
--		/* Note:
-+		 *
-+		 * Note:
- 		 *
- 		 * "cs_change == 1" on the last transfer results in an
- 		 * active chip select after the complete SPI
-@@ -1571,6 +1569,8 @@ mcp251xfd_handle_rxif_ring(struct mcp251xfd_priv *priv,
- 		last_xfer->cs_change = 1;
- 		if (err)
- 			return err;
-+
-+		ring->tail += len;
- 	}
- 
- 	return 0;
--- 
-2.29.2
+The following changes since commit ede71cae72855f8d6f6268510895210adc317666:
+
+  net-next: docs: Fix typos in snmp_counter.rst (2021-01-05 17:07:38 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.12-20210106
+
+for you to fetch changes up to 812f0116c66a3ebaf0b6062226aa85574dd79f67:
+
+  can: flexcan: add CAN wakeup function for i.MX8QM (2021-01-06 15:20:13 +0100)
+
+----------------------------------------------------------------
+linux-can-next-for-5.12-20210106
+
+----------------------------------------------------------------
+Joakim Zhang (2):
+      dt-bindings: can: fsl,flexcan: add fsl,scu-index property to indicate a resource
+      can: flexcan: add CAN wakeup function for i.MX8QM
+
+Marc Kleine-Budde (16):
+      can: tcan4x5x: replace DEVICE_NAME by KBUILD_MODNAME
+      can: tcan4x5x: beautify indention of tcan4x5x_of_match and tcan4x5x_id_table
+      can: tcan4x5x: rename tcan4x5x.c -> tcan4x5x-core.c
+      can: tcan4x5x: move regmap code into seperate file
+      can: tcan4x5x: mark struct regmap_bus tcan4x5x_bus as constant
+      can: tcan4x5x: tcan4x5x_bus: remove not needed read_flag_mask
+      can: tcan4x5x: remove regmap async support
+      can: tcan4x5x: rename regmap_spi_gather_write() -> tcan4x5x_regmap_gather_write()
+      can: tcan4x5x: tcan4x5x_regmap_write(): remove not needed casts and replace 4 by sizeof
+      can: tcan4x5x: tcan4x5x_regmap_init(): use spi as context pointer
+      can: tcan4x5x: fix max register value
+      can: tcan4x5x: tcan4x5x_regmap: set reg_stride to 4
+      can: tcan4x5x: add max_raw_{read,write} of 256
+      can: tcan4x5x: add {wr,rd}_table
+      can: tcan4x5x: rework SPI access
+      can: tcan4x5x: add support for half-duplex controllers
+
+Oliver Hartkopp (1):
+      can: raw: return -ERANGE when filterset does not fit into user space buffer
+
+ .../devicetree/bindings/net/can/fsl,flexcan.yaml   |  11 ++
+ drivers/net/can/flexcan.c                          | 123 ++++++++++++++++---
+ drivers/net/can/m_can/Makefile                     |   4 +
+ .../net/can/m_can/{tcan4x5x.c => tcan4x5x-core.c}  | 126 +++----------------
+ drivers/net/can/m_can/tcan4x5x-regmap.c            | 135 +++++++++++++++++++++
+ drivers/net/can/m_can/tcan4x5x.h                   |  57 +++++++++
+ net/can/raw.c                                      |  16 ++-
+ 7 files changed, 340 insertions(+), 132 deletions(-)
+ rename drivers/net/can/m_can/{tcan4x5x.c => tcan4x5x-core.c} (80%)
+ create mode 100644 drivers/net/can/m_can/tcan4x5x-regmap.c
+ create mode 100644 drivers/net/can/m_can/tcan4x5x.h
+
 
 
