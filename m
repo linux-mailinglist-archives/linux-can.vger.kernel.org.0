@@ -2,64 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 765722ED74B
-	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 20:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B422EE74C
+	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 22:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728131AbhAGTMa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Jan 2021 14:12:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42382 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725835AbhAGTMa (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 7 Jan 2021 14:12:30 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F3C6623432;
-        Thu,  7 Jan 2021 19:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610046710;
-        bh=uDzZTnqOoXkH2ikd0ySS6VgfbG7/Ib6y+i3yHuvIVxw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZLXJvMnHKdCiKM8XZZ2RFNwKZZftYn8hhG5BnfDm0kd8s9f1L4K0ytiOM1h7syc1B
-         OQTYjhmggO/W9nRD1uaHm4l2PMdt8/iS7t860XkW/iLz1Lb6j3Gx2gFwkbsTb9Zkfh
-         XJr3EjWHSt9G0n/mhQVXb0PUWumn3e/TxMY8IHDTTFiYVQthsqsDQDGjAYwFtwB12H
-         Q2JpdKOhQhZ6km6COdjFmPkOs9sda83EuO2pEDke6iqphObs16a24Zd/ygcSBrD9la
-         iDAuIes3MbWQSwDDisoWjUp9LLaM4vbKNgAxiP899X97qIpZTXFIQ0mprUEqFoToB9
-         NHhshrDoF55WQ==
-Date:   Thu, 7 Jan 2021 11:11:49 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: pull-request: can 2021-01-07
-Message-ID: <20210107111149.0c79570e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210107103451.183477-1-mkl@pengutronix.de>
-References: <20210107103451.183477-1-mkl@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726326AbhAGVAK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Jan 2021 16:00:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32868 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbhAGVAJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 16:00:09 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4C8C0612F4;
+        Thu,  7 Jan 2021 12:59:29 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id p14so6759882qke.6;
+        Thu, 07 Jan 2021 12:59:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=nEfwopL7NpPolFEYELpz+EkzQcRyvHWwBEWEGTr7pOY=;
+        b=SsImQMKdM74wq73O2vuQD2bnyE5eyy+b6w7qYMpaVt2YUmxHZAnBO6oYw0YIaoo2qR
+         tzYa/ZxTWf4yomGC7qUJ3sTABGIX2BwLEAODFPEey9ZswllUC9SbyMXCZrSAL3/AgtTy
+         yAeU1EORz24wBp00DfKFPb70uFXDgDm5hYM6tFCd5u8kYhEXnMdeF1kOpodUq1NHMse9
+         9Mm08FmOq2sYU0MUxpKDtE/C8DSGxO5Ow6cUiipd1gA2ejJppLDZxIHGiYIgZtQe4IVf
+         eAUEhd5JdoDHEc478tVSMVFVOLIWA/Z8IjqKk6dyhu2a0cnL3w0meB3+ObeAgZDdZY5n
+         sEog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nEfwopL7NpPolFEYELpz+EkzQcRyvHWwBEWEGTr7pOY=;
+        b=mHb8mRXoo3hQvD+ShvtQnomMA3hl34a4zGJs/fCG+BhwXLk/MI8sN8KKgKVELFE8GH
+         oJxqdoZva3sWHw8upheqy9sF9mkSJaxgYUOrKJ14VBinwcxVZMfaFXOChZ3xIM+H3cd/
+         3TeY8QeP86ZZc5tnrR1t4C9cYla/8ZsksZE5EolC6EUo5WLa9YUNQ7SGLbP6l1j71VjU
+         vtdEMPlRRDoC1NT/pmLNDHtQnQS5kV4gjkZ3XveYIeToSk1WyTH6X9VNpmrMjsYTeU/y
+         xzPhYO0bNz0ECrhGi6Pltnv0ViyTFLSz2tibXJVx8p7mtWx+fNR5okHtHFfAwBSbFKAD
+         5AcA==
+X-Gm-Message-State: AOAM531YAOCI1vIHPefuhEAEnImhePtdH3eCuk3rCwRtreE4ooNUwzQc
+        Jch5bSvEf3IgyCVa2xYfdC0=
+X-Google-Smtp-Source: ABdhPJxfJGbJEj8qaX10SHPU7zJw+t+4bROcJSDUNHWpec71ztBgtrwpcRotHKxF3sN73VmEridwqA==
+X-Received: by 2002:a05:620a:11ab:: with SMTP id c11mr864642qkk.282.1610053168329;
+        Thu, 07 Jan 2021 12:59:28 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:482:a80::1001])
+        by smtp.gmail.com with ESMTPSA id u5sm3939152qka.86.2021.01.07.12.59.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 12:59:27 -0800 (PST)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org, qiangqing.zhang@nxp.com,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH 1/2] dt-bindings: can: fsl,flexcan.yaml: introduce the stb-gpios property
+Date:   Thu,  7 Jan 2021 17:59:14 -0300
+Message-Id: <20210107205915.7602-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu,  7 Jan 2021 11:34:45 +0100 Marc Kleine-Budde wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 6 patches for net/master.
-> 
-> The first patch is by me for the m_can driver and removes an erroneous
-> m_can_clk_stop() from the driver's unregister function.
-> 
-> The second patch targets the tcan4x5x driver, is by me, and fixes the bit
-> timing constant parameters.
-> 
-> The next two patches are by me, target the mcp251xfd driver, and fix a race
-> condition in the optimized TEF path (which was added in net-next for v5.11).
-> The similar code in the RX path is changed to look the same, although it
-> doesn't suffer from the race condition.
-> 
-> A patch by Lad Prabhakar updates the description and help text for the rcar CAN
-> driver to reflect all supported SoCs.
-> 
-> In the last patch Sriram Dash transfers the maintainership of the m_can driver
-> to Pankaj Sharma.
+It is very common to have an STB pin in CAN transceivers, which allows
+putting the transceiver in standby or normal operation mode.
 
+Add a new optional 'stb-gpios' property to describe this.
 
-Pulled, thanks!
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+index 0d2df30f19db..64f904c4b3d5 100644
+--- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
++++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+@@ -66,6 +66,9 @@ properties:
+   xceiver-supply:
+     description: Regulator that powers the CAN transceiver.
+ 
++  stb-gpios:
++    description: GPIO that controls the STB CAN transceiver pin.
++
+   big-endian:
+     $ref: /schemas/types.yaml#/definitions/flag
+     description: |
+-- 
+2.17.1
+
