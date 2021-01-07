@@ -2,36 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AAD12ED219
-	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 15:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD602ED302
+	for <lists+linux-can@lfdr.de>; Thu,  7 Jan 2021 15:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbhAGO1t (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 7 Jan 2021 09:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S1728107AbhAGOsR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 7 Jan 2021 09:48:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbhAGO1t (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 09:27:49 -0500
+        with ESMTP id S1726514AbhAGOsR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 7 Jan 2021 09:48:17 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3120C0612F4
-        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 06:27:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB2EC0612F4
+        for <linux-can@vger.kernel.org>; Thu,  7 Jan 2021 06:47:37 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kxWFk-0003UA-Lb; Thu, 07 Jan 2021 15:27:04 +0100
+        id 1kxWZa-0005m4-1I; Thu, 07 Jan 2021 15:47:34 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:4007:ed9f:14bb:8cca] (unknown [IPv6:2a03:f580:87bc:d400:4007:ed9f:14bb:8cca])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 99EB65BBF40;
-        Thu,  7 Jan 2021 14:27:03 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 1D4965BBF73;
+        Thu,  7 Jan 2021 14:47:32 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     kernel test robot <lkp@intel.com>
 Cc:     kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
 References: <20210107094900.173046-20-mkl@pengutronix.de>
  <202101072123.StEAR5IC-lkp@intel.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <17682d27-a0bb-4a29-7c72-261ab7eeb8ee@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -94,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
 Subject: Re: [net-next 19/19] can: flexcan: add CAN wakeup function for
  i.MX8QM
-Message-ID: <17682d27-a0bb-4a29-7c72-261ab7eeb8ee@pengutronix.de>
-Date:   Thu, 7 Jan 2021 15:26:57 +0100
+Message-ID: <392df666-f86e-0d9c-7230-b6e2e387f800@pengutronix.de>
+Date:   Thu, 7 Jan 2021 15:47:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <202101072123.StEAR5IC-lkp@intel.com>
+In-Reply-To: <17682d27-a0bb-4a29-7c72-261ab7eeb8ee@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="4UhPtx8AmwFljAvjxzVhb4LzFir97s63U"
+ boundary="brz01fqD7PRvNqKUYhZKZfve8TrgFAW9i"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -112,83 +113,45 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---4UhPtx8AmwFljAvjxzVhb4LzFir97s63U
-Content-Type: multipart/mixed; boundary="vi9C0yQaLWb6BltHILKDnX9vbveJPcLvI";
+--brz01fqD7PRvNqKUYhZKZfve8TrgFAW9i
+Content-Type: multipart/mixed; boundary="dbo1aA9kaXGVYN1eZCPr2yup9msnlT7E2";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: kernel test robot <lkp@intel.com>
 Cc: kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
-Message-ID: <17682d27-a0bb-4a29-7c72-261ab7eeb8ee@pengutronix.de>
+Message-ID: <392df666-f86e-0d9c-7230-b6e2e387f800@pengutronix.de>
 Subject: Re: [net-next 19/19] can: flexcan: add CAN wakeup function for
  i.MX8QM
 References: <20210107094900.173046-20-mkl@pengutronix.de>
  <202101072123.StEAR5IC-lkp@intel.com>
-In-Reply-To: <202101072123.StEAR5IC-lkp@intel.com>
+ <17682d27-a0bb-4a29-7c72-261ab7eeb8ee@pengutronix.de>
+In-Reply-To: <17682d27-a0bb-4a29-7c72-261ab7eeb8ee@pengutronix.de>
 
---vi9C0yQaLWb6BltHILKDnX9vbveJPcLvI
+--dbo1aA9kaXGVYN1eZCPr2yup9msnlT7E2
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/7/21 2:56 PM, kernel test robot wrote:
-> [auto build test ERROR on net-next/master]
-
-This looks like a false positive to me.
-
-> url:    https://github.com/0day-ci/linux/commits/Marc-Kleine-Budde/can-=
-tcan4x5x-replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.=
-git 3db1a3fa98808aa90f95ec3e0fa2fc7abf28f5c9
-> config: riscv-randconfig-r013-20210107 (attached as .config)
-> compiler: riscv64-linux-gcc (GCC) 9.3.0
-> reproduce (this is a W=3D1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/0day-ci/linux/commit/90434a61388963ddee49d=
-0c805226dd4b56df274
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Marc-Kleine-Budde/can-tcan4x5x=
--replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
-
-This doesn't work for me:
-
-> =E2=9E=9C git remote add linux-review https://github.com/0day-ci/linux
-> =E2=9E=9C git fetch --no-tags linux-review Marc-Kleine-Budde/can-tcan4x=
-5x-replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
-> fatal: couldn't find remote ref Marc-Kleine-Budde/can-tcan4x5x-replace-=
-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
-
->         git checkout 90434a61388963ddee49d0c805226dd4b56df274
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-9.3.0 make.cr=
-oss ARCH=3Driscv=20
+On 1/7/21 3:26 PM, Marc Kleine-Budde wrote:
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next=
+=2Egit 3db1a3fa98808aa90f95ec3e0fa2fc7abf28f5c9
+>
+>> base-commit: ede71cae72855f8d6f6268510895210adc317666
 >=20
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> This tree contains:
 >=20
-> All errors (new ones prefixed by >>):
->=20
->    riscv64-linux-ld: drivers/net/can/flexcan.o: in function `.L359':
->>> flexcan.c:(.text+0x1844): undefined reference to `imx_scu_get_handle'=
+>> 95de5094f5ac firmware: imx: add dummy functions
 
+According to the kernel.org logs:
 
-Please have a look at the end of patch 1:
+> https://git.kernel.org/pub/scm/infra/transparency-logs/gitolite/git/1.g=
+it/tree/m?id=3De28cd5577ff410f23f047dfb9102648f5f053b2d
 
-> http://lore.kernel.org/r/20210107094900.173046-2-mkl@pengutronix.de
+"netdev/net-next" was updated to ede71cae72855f8d6f6268510895210adc317666=
+ on
 
-Where it says:
+> Date: Wed, 06 Jan 2021 01:07:57 -0000
 
-> base-commit: ede71cae72855f8d6f6268510895210adc317666
-
-This tree contains:
-
-> 95de5094f5ac firmware: imx: add dummy functions
-
-which provides no-op static inline for the function the linker complains =
-about.
-
-regards,
 Marc
 
 --=20
@@ -198,23 +161,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---vi9C0yQaLWb6BltHILKDnX9vbveJPcLvI--
+--dbo1aA9kaXGVYN1eZCPr2yup9msnlT7E2--
 
---4UhPtx8AmwFljAvjxzVhb4LzFir97s63U
+--brz01fqD7PRvNqKUYhZKZfve8TrgFAW9i
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/3GjEACgkQqclaivrt
-76kIIgf/cKhuQd01YKTyjNzpD0CzDO6OWZAC9lOQFpxBSC+rBNpd3V5TSJ2jFxuy
-pU6b7E+W2xBxt7r8i+G0j/amJ7vhKLSWqDaCk+F5uydgiGt2aj7iFUwCoxghsW3o
-jEEzOIScs5KJ98ORQpeFWOgvZLbUBxuL2AG4zeK8Bto6hm+i7LbsaQQi0bPhhLZt
-ni8rCbny5zZlSWN5+uMdHfsMU6QYFdElH+FkDQej6GOhMU25XxyOvQo0IG3uhRGx
-1bCX9Uw7cirB00KJIkKf9Zdi6H7BxFsVzI2fAL8B2ceK8QVvmTXdTDfgJ+9alEh7
-xP86Y7YX6JJCL3RybqzA+B4rsHpSUA==
-=DWmD
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/3Hv8ACgkQqclaivrt
+76kNiwf+MsV/VibX+UCBLagb8A0wjjxNYOQSTILT2rNfR86Bw7WOTaviyJw3HeSp
+4OiuJ8KjgEUAE7LmE/YoN5I36i7CX5SuzreKYh6OK2HISkfwVYdKxtTuRSLUOHwN
+f8AVXXvpDZwGC7Or2yTBA/VIlFU0wme5Df7tEkhNpOQdp80i2iy4T4Hk4dxaiece
+M9FlmePtF2nIyJU3NVciIyCuBQ7+ZM28zcE5wX46SRJCJnDTdzZ0aZlDKGjEpm4a
+Ms2j0yk/WmaBQHx6CxtSl7pV/NX1C0gs1VdZn+59jFiZMP8Z6gXryWPytMxsGQDs
+H5sV2v0l71qQgRRxOUZsZNMqNeHdiw==
+=oxxF
 -----END PGP SIGNATURE-----
 
---4UhPtx8AmwFljAvjxzVhb4LzFir97s63U--
+--brz01fqD7PRvNqKUYhZKZfve8TrgFAW9i--
