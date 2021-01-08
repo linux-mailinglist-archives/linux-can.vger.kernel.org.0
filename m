@@ -2,192 +2,282 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411372EEE58
-	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 09:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB4D2EEEB4
+	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 09:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727567AbhAHIHw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Jan 2021 03:07:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727365AbhAHIHw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Jan 2021 03:07:52 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50B8C0612F5
-        for <linux-can@vger.kernel.org>; Fri,  8 Jan 2021 00:07:11 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kxmnA-00075u-6m; Fri, 08 Jan 2021 09:06:40 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:87d0:8e7c:26a9:ef23] (unknown [IPv6:2a03:f580:87bc:d400:87d0:8e7c:26a9:ef23])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D9C615BC799;
-        Fri,  8 Jan 2021 08:06:36 +0000 (UTC)
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-can@vger.kernel.org
-Cc:     Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        Joe Perches <joe@perches.com>,
-        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
-        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH for can-next] MAINTAINERS: adjust entry to tcan4x5x file
- split
-Message-ID: <0ba9535f-2e1d-116d-1c47-01bdd0ff89b3@pengutronix.de>
-Date:   Fri, 8 Jan 2021 09:06:33 +0100
+        id S1727466AbhAHImB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 8 Jan 2021 03:42:01 -0500
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.1]:56505 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725816AbhAHImA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Jan 2021 03:42:00 -0500
+Received: from [100.113.1.5] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-a.eu-central-1.aws.symcld.net id CF/E1-07430-41A18FF5; Fri, 08 Jan 2021 08:38:44 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIJsWRWlGSWpSXmKPExsUS8J9toq6w1I9
+  4gyf/LSz+zPzAZHG2+xqjxarvU5ktLu+aw2bxqvkRm8X6RVNYLDZ1Xmaz2Dv1AaPF2U0rmSyW
+  3tvJ6sDlsXPWXXaPj5duM3os3vOSyaN79j8Wj/UbtjF69P818Dg4pZvN41TPamaPz5vkAjijW
+  DPzkvIrElgzuu+dYi5YalVx8cYJ1gbGv3pdjFwcQgINjBJX/t5g7WLk5JAQ8JPoeP6SDSKxiV
+  Hi4qK5zBDOG0aJXZ3bmECqhAT2MEoceB4BYgsLBEhM370dqIiDQ0QgWeLrhHqQemaB2UwS71Y
+  1sEM0z2eUuHdjIRtIA5uAmcT6F8+YQWxeAVuJE90vWUCaWQRUJLYuZQEJiwpESCzc38kKUSIo
+  cXLmE7A4p4CTxIV319lAypkFNCXW79IHCTMLiEvcejKfCcLWlli28DUzxJmaEmtOrWGGeExBY
+  tKsp0wgrRICcRJf7phChDkl3n/4ABW2lpi4OREirCYxf3EX4wRGiVlIbpiFsHcWkr2zkOxdwM
+  iyitEyqSgzPaMkNzEzR9fQwEDX0NBY11DXyMhML7FKN1EvtVQ3OTWvpCgRKKuXWF6sV1yZm5y
+  TopeXWrKJEZg6UgoZH+1gPP36g94hRkkOJiVR3lvvvscL8SXlp1RmJBZnxBeV5qQWH2KU4eBQ
+  kuA9LPEjXkiwKDU9tSItMweYxmDSEhw8SiK8bpJAad7igsTc4sx0iNQpRl2Om++XLGIWYsnLz
+  0uVEuflAikSACnKKM2DGwFLqZcYZaWEeRkZGBiEeApSi3IzS1DlXzGKczAqCfP6glzCk5lXAr
+  fpFdARTEBH5Hl9BzmiJBEhJdXAJCt3V+FwpYKEp1TLidt+K73jArfeKvM4V23HYtQYZOmyrV7
+  Uuu45Q7HV57SGzbV3BGMWzi66tP/3sY+pG90S90+Z+iDVSvx3zfHk13n7uvatUeo+fHqatozP
+  0t9/c00siwMfpbzz+ZJ/2ztmjSHn642Vvk/8jjp6avxunrW56MnalZJOwWsqa/cc2uhkLXM37
+  Y3yT+7tP+QNXv4R+b/54O5VPNXTY6PTRD0mVdTELNzEGNJziO0s9/k96/p+8FVIanP7C6r0XL
+  m3aupl9wes/Spl5UxXBM5saPhVsC/FrGXr0kpLMZGk90qVa84FPnymGrH4k+GUz9sm9zs/Exb
+  zunT93vYtgTJhOqJZhiVRSizFGYmGWsxFxYkAOqDHeSQEAAA=
+X-Env-Sender: Abhijeet.Badurkar@duagon.com
+X-Msg-Ref: server-7.tower-223.messagelabs.com!1610095123!1238391!1
+X-Originating-IP: [80.255.6.145]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 9652 invoked from network); 8 Jan 2021 08:38:43 -0000
+Received: from unknown (HELO keys.men.de) (80.255.6.145)
+  by server-7.tower-223.messagelabs.com with DHE-RSA-AES256-SHA encrypted SMTP; 8 Jan 2021 08:38:43 -0000
+Received: from MEN-EX01.intra.men.de ([192.168.1.1])
+  by keys.men.de (PGP Universal service);
+  Fri, 08 Jan 2021 09:38:43 +0100
+X-PGP-Universal: processed;
+        by keys.men.de on Fri, 08 Jan 2021 09:38:43 +0100
+Received: from WSRV-EXHybrid.intra.men.de (192.168.1.226) by
+ MEN-EX01.intra.men.de (192.168.1.1) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 8 Jan 2021 09:38:42 +0100
+Received: from MEN-EX01.intra.men.de (192.168.1.1) by
+ WSRV-EXHybrid.intra.men.de (192.168.1.226) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2106.2; Fri, 8 Jan 2021 09:38:42 +0100
+Received: from [10.64.14.204] (10.64.14.204) by MEN-EX01.intra.men.de
+ (192.168.1.1) with Microsoft SMTP Server (TLS) id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Jan 2021 09:38:42 +0100
+Subject: Re: [PATCH v5] net: can: Introduce MEN 16Z192-00 CAN controller
+ driver
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        kernel test robot <lkp@intel.com>, <wg@grandegger.com>
+CC:     <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <andreas.geissler@duagon.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        <openrisc@lists.librecores.org>
+References: <20201005112033.21438-1-abhijeet.badurkar@duagon.com>
+ <202010160751.lNyADAMs-lkp@intel.com>
+ <81bbd71a-ff79-9f15-753a-d47b36b91756@pengutronix.de>
+From:   Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
+Message-ID: <24882539-577e-9a04-d184-6b5818b63b8b@duagon.com>
+Date:   Fri, 8 Jan 2021 09:38:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="xUXzECopG6TaH5wOM76FytFesP1twLoUD"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <81bbd71a-ff79-9f15-753a-d47b36b91756@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.64.14.204]
+X-ClientProxiedBy: MEN-EX01.intra.men.de (192.168.1.1) To
+ MEN-EX01.intra.men.de (192.168.1.1)
+X-Loop: 2
+X-EXCLAIMER-MD-CONFIG: e4841e51-7998-49c0-ba41-8b8a0e2d8962
+X-EXCLAIMER-MD-BIFURCATION-INSTANCE: 0
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---xUXzECopG6TaH5wOM76FytFesP1twLoUD
-Content-Type: multipart/mixed; boundary="bfck0ZA6GpZnpvjvcExJt4b0J73jFy9tz";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-can@vger.kernel.org
-Cc: Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
- Sriram Dash <sriram.dash@samsung.com>, Joe Perches <joe@perches.com>,
- Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
- Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
- kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <0ba9535f-2e1d-116d-1c47-01bdd0ff89b3@pengutronix.de>
-Subject: Re: [PATCH for can-next] MAINTAINERS: adjust entry to tcan4x5x file
- split
-References: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
-
---bfck0ZA6GpZnpvjvcExJt4b0J73jFy9tz
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 1/8/21 8:39 AM, Lukas Bulwahn wrote:
-> Commit 7813887ea972 ("can: tcan4x5x: rename tcan4x5x.c -> tcan4x5x-core=
-=2Ec")
-> and commit 67def4ef8bb9 ("can: tcan4x5x: move regmap code into seperate=
-
-> file") split the file tcan4x5x.c into two files, but missed to adjust t=
-he
-> TI TCAN4X5X DEVICE DRIVER section in MAINTAINERS.
->=20
-> Hence, ./scripts/get_maintainer.pl --self-test=3Dpatterns complains:
->=20
->   warning: no file matches    F:    drivers/net/can/m_can/tcan4x5x.c
->=20
-> Adjust the file entry in MAINTAINERS to the tcan4x5x file splitting.
->=20
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> applies cleanly on next-20210107, not for current master
->=20
-> Marc, please pick this for your -next tree on top of the tcan4x5x clean=
-up.
-
-Makes perfect sense. Applied to linux-can-next.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+﻿
 
 
---bfck0ZA6GpZnpvjvcExJt4b0J73jFy9tz--
 
---xUXzECopG6TaH5wOM76FytFesP1twLoUD
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+M. Sc.
+Abhijeet Badurkar
+Software Engineering 
+Business Unit Computing Systems, duagon
 
------BEGIN PGP SIGNATURE-----
+duagon Germany GmbH
+Neuwieder Straße 1-7
+90411 Nürnberg
+Deutschland
+Phone		+49 911 99 33 5 - 219
+www.duagon.com
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/4EokACgkQqclaivrt
-76ldpAf/We4hotK7pNis8TKNSmVSOpiXwd3LXMjbV/D94OjNKLK+Qxdj6hCC1g5E
-wl/mR8rciF/qh8p2f/EeIcRexHrrDWhd17lkZizk8JfXNfwWWyZGDUqOkC7UOipv
-2qS36SOIcPrai4LIA4ZTwzONa7aNxsZrLCcjpkjryf4Mw2MU1c7ND/Ii+SCbLjcs
-EI4JYcaXuVM1Hw0OEn80M4RA6b3dr1+OhxE141Yk8+LG3MPZ56x1CzVnorSlo3LD
-3/lfaZTY0pnrKskcIwZUsTlRF1sQQHdOqPqqKb1kFScXxuTH49YQie3vq50sMY6N
-dmNXbuQ06BnZmy0eJiRHHXLyq61qYQ==
-=FGF/
------END PGP SIGNATURE-----
+duagon Germany GmbH - Geschäftsführer: Dr. Michael Goldbach - Mathias Kamolz - Kalina Scott - Handelsregister/Trade Register AG Nürnberg HRB 5540
 
---xUXzECopG6TaH5wOM76FytFesP1twLoUD--
+This message and/or attachments may be privileged or confidential. If you are not the intended recipient, you are hereby notified that you have received this transmittal in error; any review, dissemination, or copying is strictly prohibited. If you received this transmittal in error, please notify us immediately by reply and immediately delete this message and all its attachments. Thank you.
+On 16.10.20 09:55, Marc Kleine-Budde wrote:
+> * PGP Signed by an unknown key
+> 
+> On 10/16/20 1:49 AM, kernel test robot wrote:
+>> Hi Abhijeet,
+>>
+>> Thank you for the patch! Perhaps something to improve:
+>>
+>> [auto build test WARNING on 549738f15da0e5a00275977623be199fbbf7df50]
+>>
+>> url:    https://github.com/0day-ci/linux/commits/Abhijeet-Badurkar/net-can-Introduce-MEN-16Z192-00-CAN-controller-driver/20201005-192132
+>> base:    549738f15da0e5a00275977623be199fbbf7df50
+>> config: openrisc-randconfig-s031-20201015 (attached as .config)
+>> compiler: or1k-linux-gcc (GCC) 9.3.0
+>> reproduce:
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # apt-get install sparse
+>>         # sparse version: v0.6.3-rc1-dirty
+>>         # https://github.com/0day-ci/linux/commit/267876771a434b2be3278c2c87d36146c0fac77d
+>>         git remote add linux-review https://github.com/0day-ci/linux
+>>         git fetch --no-tags linux-review Abhijeet-Badurkar/net-can-Introduce-MEN-16Z192-00-CAN-controller-driver/20201005-192132
+>>         git checkout 267876771a434b2be3278c2c87d36146c0fac77d
+>>         # save the attached .config to linux build tree
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=openrisc 
+> 
+> I think it's the openrisc arch to blame^w ask here, since their iounmap doesn't
+> have __iomem annotation.
+Yes, only the iounmap of openrisc arch has the problem. Is there any specific reason why it does not have __iomem annotation? What's the possible way to fix this? Wait for iounmap funtion of openrisc to get fixed?
+> 
+>>
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>
+>>
+>> "sparse warnings: (new ones prefixed by >>)"
+>>>> drivers/net/can/men_z192_can.c:1057:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *addr @@     got void [noderef] __iomem *[assigned] dev_base @@
+>>>> drivers/net/can/men_z192_can.c:1057:17: sparse:     expected void *addr
+>>>> drivers/net/can/men_z192_can.c:1057:17: sparse:     got void [noderef] __iomem *[assigned] dev_base
+>>>> drivers/net/can/men_z192_can.c:1071:21: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *addr @@     got void [noderef] __iomem *dev_base @@
+>>    drivers/net/can/men_z192_can.c:1071:21: sparse:     expected void *addr
+>>>> drivers/net/can/men_z192_can.c:1071:21: sparse:     got void [noderef] __iomem *dev_base
+>>
+>> vim +1057 drivers/net/can/men_z192_can.c
+>>
+>>    962	
+>>    963	static int men_z192_probe(struct mcb_device *mdev,
+>>    964				  const struct mcb_device_id *id)
+>>    965	{
+>>    966		struct device *dev = &mdev->dev;
+>>    967		struct men_z192 *priv;
+>>    968		struct net_device *ndev;
+>>    969		void __iomem *dev_base;
+>>    970		struct resource *mem;
+>>    971		u32 timebase;
+>>    972		int ret = 0;
+>>    973		int irq;
+>>    974	
+>>    975		mem = mcb_request_mem(mdev, dev_name(dev));
+>>    976		if (IS_ERR(mem)) {
+>>    977			dev_err(dev, "failed to request device memory");
+>>    978			return PTR_ERR(mem);
+>>    979		}
+>>    980	
+>>    981		dev_base = ioremap(mem->start, resource_size(mem));
+>>    982		if (!dev_base) {
+>>    983			dev_err(dev, "failed to ioremap device memory");
+>>    984			ret = -ENXIO;
+>>    985			goto out_release;
+>>    986		}
+>>    987	
+>>    988		irq = mcb_get_irq(mdev);
+>>    989		if (irq <= 0) {
+>>    990			ret = -ENODEV;
+>>    991			goto out_unmap;
+>>    992		}
+>>    993	
+>>    994		ndev = alloc_candev(sizeof(struct men_z192), 0);
+>>    995		if (!ndev) {
+>>    996			dev_err(dev, "failed to allocat the can device");
+>>    997			ret = -ENOMEM;
+>>    998			goto out_unmap;
+>>    999		}
+>>   1000	
+>>   1001		ndev->netdev_ops = &men_z192_netdev_ops;
+>>   1002		ndev->irq = irq;
+>>   1003		ndev->flags |= IFF_ECHO;
+>>   1004	
+>>   1005		priv = netdev_priv(ndev);
+>>   1006		priv->ndev = ndev;
+>>   1007		priv->dev = dev;
+>>   1008	
+>>   1009		priv->mem = mem;
+>>   1010		priv->dev_base = dev_base;
+>>   1011		priv->regs = priv->dev_base + MEN_Z192_REGS_OFFS;
+>>   1012	
+>>   1013		timebase = readl(&priv->regs->timebase);
+>>   1014		if (!timebase) {
+>>   1015			dev_err(dev, "invalid timebase configured (timebase=%d)\n",
+>>   1016				timebase);
+>>   1017			ret = -EINVAL;
+>>   1018			goto out_free_candev;
+>>   1019		}
+>>   1020	
+>>   1021		priv->can.clock.freq = timebase;
+>>   1022		priv->can.bittiming_const = &men_z192_bittiming_const;
+>>   1023		priv->can.do_set_mode = men_z192_set_mode;
+>>   1024		priv->can.do_get_berr_counter = men_z192_get_berr_counter;
+>>   1025		priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+>>   1026					       CAN_CTRLMODE_3_SAMPLES |
+>>   1027					       CAN_CTRLMODE_LOOPBACK;
+>>   1028	
+>>   1029		spin_lock_init(&priv->lock);
+>>   1030	
+>>   1031		netif_napi_add(ndev, &priv->napi, men_z192_poll,
+>>   1032			       NAPI_POLL_WEIGHT);
+>>   1033	
+>>   1034		skb_queue_head_init(&priv->echoq);
+>>   1035	
+>>   1036		mcb_set_drvdata(mdev, ndev);
+>>   1037		SET_NETDEV_DEV(ndev, dev);
+>>   1038	
+>>   1039		ndev->ethtool_ops = &men_z192_ethtool_ops;
+>>   1040	
+>>   1041		ret = men_z192_register(ndev);
+>>   1042		if (ret) {
+>>   1043			dev_err(dev, "failed to register CAN device");
+>>   1044			goto out_free_candev;
+>>   1045		}
+>>   1046	
+>>   1047		devm_can_led_init(ndev);
+>>   1048	
+>>   1049		dev_info(dev, "MEN 16z192 CAN driver successfully registered\n");
+>>   1050	
+>>   1051		return 0;
+>>   1052	
+>>   1053	out_free_candev:
+>>   1054		netif_napi_del(&priv->napi);
+>>   1055		free_candev(ndev);
+>>   1056	out_unmap:
+>>> 1057		iounmap(dev_base);
+>>   1058	out_release:
+>>   1059		mcb_release_mem(mem);
+>>   1060		return ret;
+>>   1061	}
+>>   1062	
+>>   1063	static void men_z192_remove(struct mcb_device *mdev)
+>>   1064	{
+>>   1065		struct net_device *ndev = mcb_get_drvdata(mdev);
+>>   1066		struct men_z192 *priv = netdev_priv(ndev);
+>>   1067	
+>>   1068		unregister_candev(ndev);
+>>   1069		netif_napi_del(&priv->napi);
+>>   1070	
+>>> 1071		iounmap(priv->dev_base);
+>>   1072		mcb_release_mem(priv->mem);
+>>   1073	
+>>   1074		free_candev(ndev);
+>>   1075	}
+>>   1076	
+>>
+>> ---
+>> 0-DAY CI Kernel Test Service, Intel Corporation
+>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>>
+> 
+> Marc
+> 
+
+-- 
+Abhijeet Badurkar - Software Engineer
+
+ 
