@@ -2,88 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D87CF2EEDB6
-	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 08:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C7D2EEDF1
+	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 08:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725793AbhAHHJP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Jan 2021 02:09:15 -0500
-Received: from mga05.intel.com ([192.55.52.43]:50596 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725308AbhAHHJP (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 8 Jan 2021 02:09:15 -0500
-IronPort-SDR: qycPocURuxnfo8auNKp8TJHv+v/c4jy9NvcJ5XQHcuAgm9TdrhVk5qchYSw/Tp3tNC4V7F9+Dw
- Qh51B3aENAgQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9857"; a="262325099"
-X-IronPort-AV: E=Sophos;i="5.79,330,1602572400"; 
-   d="scan'208";a="262325099"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2021 23:08:34 -0800
-IronPort-SDR: V+v18GIAcnns8HSWKb4IcZLnMvyVgfLH1VA42fE8jts4LEnchua5TioeyRVWGT6gH1zRgiVbRs
- pMpaniKSEfyA==
-X-IronPort-AV: E=Sophos;i="5.79,330,1602572400"; 
-   d="scan'208";a="380025907"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.117]) ([10.239.13.117])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2021 23:08:33 -0800
-Subject: Re: [kbuild-all] Re: [net-next 19/19] can: flexcan: add CAN wakeup
- function for i.MX8QM
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
-References: <20210107094900.173046-20-mkl@pengutronix.de>
- <202101080428.hEujUZlS-lkp@intel.com>
- <13f12660-cb33-d610-a933-1e3459791159@pengutronix.de>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <42ec4ab0-b544-e7d7-d5e9-7609cb2273d3@intel.com>
-Date:   Fri, 8 Jan 2021 15:07:42 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <13f12660-cb33-d610-a933-1e3459791159@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        id S1725965AbhAHHkY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Jan 2021 02:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725308AbhAHHkY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Jan 2021 02:40:24 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01924C0612F4;
+        Thu,  7 Jan 2021 23:39:44 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id i9so8025755wrc.4;
+        Thu, 07 Jan 2021 23:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=c5P+vvdX7z4Mp5Q7UAxuVpXv4FhDjOB40VptQJQFkP8=;
+        b=ULcPG7pG3hfb4RaCCdNWz8cGe/83A/1O4EhCZZuR85Zw/37aUPVEbsyX2NP4o7pV7Y
+         YgaN7jW7IfTxRYJIi6gS1L/KZ2BHYUBVAxFMXXL2BScQ6d3Iinjpp6JlfYbMPZQHuTCR
+         dAhxYci+RBDU9jMf+d4pFm0FIzmrHwYoXdPBqaTs+PbSiEMUWGcssQ5woavK7Hgx76ia
+         6sn1VWGWM5yQuRw5aCL7yC6tsoitzHI5pJhALfIpf0ULe4zoC5HG1Q5GgybKrj5OMOXp
+         FsoIZYNwQ0P8xgazLZZZKRp9CgfFqvFSu2XtFRTNM7JzUIErBffGvCd8BSt4rPmyjAk6
+         lEVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=c5P+vvdX7z4Mp5Q7UAxuVpXv4FhDjOB40VptQJQFkP8=;
+        b=Bbmsn28yom6WZnFosoW95WpVFhsCK+HQXcl78QJ4l2LvjcXWrK1UsY59GXiZ8dspne
+         Pm8POAuW+910dA9bbwFf3fmfOQ7J9elrz8mzBEffj80Hz6Qe2eM6iR+IcZRoMQKTwiMD
+         pnXh0OrU6OL56PiJpVPf9aC//4sO0G0ZiTnCWZMoIof8C9lSEbHLjodSngDSNE6c3XLi
+         OqICcCQ8G91j02fRQD2vRXkKH0CY9fBUJTyVsb3H5gjA7sXcxAB1sxkvJrTLJMcgWod2
+         ZeE52F4pKLW+JI+MoRQsUAikyHhKj8ibh9vfo2qpPOP0nKooQEdluqWtnA+iCdkeVIws
+         EJgQ==
+X-Gm-Message-State: AOAM530cgDdTYjh2SNGfZJ8vOzRyMVif0FVAW4hKTxWhoMF9c/svU/Lg
+        1nqH9MBowY92JVPAH2lefis=
+X-Google-Smtp-Source: ABdhPJyPwtYCwKwbl9aqmXccDodCIGu87EsclY/46H4yL3ExGm0bY2bMvlfX5nOmTTnNZkwgkK0Mbg==
+X-Received: by 2002:adf:e511:: with SMTP id j17mr2258610wrm.416.1610091582663;
+        Thu, 07 Jan 2021 23:39:42 -0800 (PST)
+Received: from felia.fritz.box ([2001:16b8:2dc3:3e00:c96a:15b:2758:58ec])
+        by smtp.gmail.com with ESMTPSA id x18sm13895152wrg.55.2021.01.07.23.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Jan 2021 23:39:41 -0800 (PST)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        Joe Perches <joe@perches.com>,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH for can-next] MAINTAINERS: adjust entry to tcan4x5x file split
+Date:   Fri,  8 Jan 2021 08:39:32 +0100
+Message-Id: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Commit 7813887ea972 ("can: tcan4x5x: rename tcan4x5x.c -> tcan4x5x-core.c")
+and commit 67def4ef8bb9 ("can: tcan4x5x: move regmap code into seperate
+file") split the file tcan4x5x.c into two files, but missed to adjust the
+TI TCAN4X5X DEVICE DRIVER section in MAINTAINERS.
 
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
 
-On 1/8/21 5:22 AM, Marc Kleine-Budde wrote:
-> On 1/7/21 9:07 PM, kernel test robot wrote:
->> Hi Marc,
->>
->> Thank you for the patch! Yet something to improve:
->>
->> [auto build test ERROR on net-next/master]
->>
->> url:    https://github.com/0day-ci/linux/commits/Marc-Kleine-Budde/can-tcan4x5x-replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 3db1a3fa98808aa90f95ec3e0fa2fc7abf28f5c9
->> config: m68k-allmodconfig (attached as .config)
->> compiler: m68k-linux-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # https://github.com/0day-ci/linux/commit/90434a61388963ddee49d0c805226dd4b56df274
->>          git remote add linux-review https://github.com/0day-ci/linux
->>          git fetch --no-tags linux-review Marc-Kleine-Budde/can-tcan4x5x-replace-DEVICE_NAME-by-KBUILD_MODNAME/20210107-184956
->>          git checkout 90434a61388963ddee49d0c805226dd4b56df274
->>          # save the attached .config to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=m68k
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>, old ones prefixed by <<):
->>
->>>> ERROR: modpost: "imx_scu_get_handle" [drivers/net/can/flexcan.ko] undefined!
-> Another false positive, due to the old net-next/master base.
->
-> Marc
->
+  warning: no file matches    F:    drivers/net/can/m_can/tcan4x5x.c
 
-Hi Marc,
+Adjust the file entry in MAINTAINERS to the tcan4x5x file splitting.
 
-Sorry for the inconvenience, we'll take a look at this problem.
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on next-20210107, not for current master
 
-Best Regards,
-Rong Chen
+Marc, please pick this for your -next tree on top of the tcan4x5x cleanup.
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8170b40d6236..0d75f07fc951 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17887,7 +17887,7 @@ M:	Dan Murphy <dmurphy@ti.com>
+ L:	linux-can@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/net/can/tcan4x5x.txt
+-F:	drivers/net/can/m_can/tcan4x5x.c
++F:	drivers/net/can/m_can/tcan4x5x*
+ 
+ TI TRF7970A NFC DRIVER
+ M:	Mark Greer <mgreer@animalcreek.com>
+-- 
+2.17.1
+
