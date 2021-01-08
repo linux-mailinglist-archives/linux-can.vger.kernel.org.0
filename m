@@ -2,38 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5498F2EEE45
-	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 09:03:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411372EEE58
+	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 09:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726999AbhAHICK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Jan 2021 03:02:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S1727567AbhAHIHw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 8 Jan 2021 03:07:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726784AbhAHICK (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Jan 2021 03:02:10 -0500
+        with ESMTP id S1727365AbhAHIHw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Jan 2021 03:07:52 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D09C0612F4
-        for <linux-can@vger.kernel.org>; Fri,  8 Jan 2021 00:01:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50B8C0612F5
+        for <linux-can@vger.kernel.org>; Fri,  8 Jan 2021 00:07:11 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kxmi2-0006RH-20; Fri, 08 Jan 2021 09:01:22 +0100
+        id 1kxmnA-00075u-6m; Fri, 08 Jan 2021 09:06:40 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:87d0:8e7c:26a9:ef23] (unknown [IPv6:2a03:f580:87bc:d400:87d0:8e7c:26a9:ef23])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C7C4C5BC77A;
-        Fri,  8 Jan 2021 08:01:20 +0000 (UTC)
-To:     Rong Chen <rong.a.chen@intel.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
-References: <20210107094900.173046-20-mkl@pengutronix.de>
- <202101080428.hEujUZlS-lkp@intel.com>
- <13f12660-cb33-d610-a933-1e3459791159@pengutronix.de>
- <42ec4ab0-b544-e7d7-d5e9-7609cb2273d3@intel.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id D9C615BC799;
+        Fri,  8 Jan 2021 08:06:36 +0000 (UTC)
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-can@vger.kernel.org
+Cc:     Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        Joe Perches <joe@perches.com>,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,17 +96,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [kbuild-all] Re: [net-next 19/19] can: flexcan: add CAN wakeup
- function for i.MX8QM
-Message-ID: <ffddcd05-39d2-c739-86af-1e63bdb9f572@pengutronix.de>
-Date:   Fri, 8 Jan 2021 09:01:17 +0100
+Subject: Re: [PATCH for can-next] MAINTAINERS: adjust entry to tcan4x5x file
+ split
+Message-ID: <0ba9535f-2e1d-116d-1c47-01bdd0ff89b3@pengutronix.de>
+Date:   Fri, 8 Jan 2021 09:06:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <42ec4ab0-b544-e7d7-d5e9-7609cb2273d3@intel.com>
+In-Reply-To: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="gLTi7DY6y3LAP0FaOjKxPTZ58Rn3ctAsl"
+ boundary="xUXzECopG6TaH5wOM76FytFesP1twLoUD"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,35 +116,52 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---gLTi7DY6y3LAP0FaOjKxPTZ58Rn3ctAsl
-Content-Type: multipart/mixed; boundary="3E70UiGTy8DwiZnqzJqUmXTXT0TIxkdNe";
+--xUXzECopG6TaH5wOM76FytFesP1twLoUD
+Content-Type: multipart/mixed; boundary="bfck0ZA6GpZnpvjvcExJt4b0J73jFy9tz";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Rong Chen <rong.a.chen@intel.com>, kernel test robot <lkp@intel.com>
-Cc: kbuild-all@lists.01.org, linux-can <linux-can@vger.kernel.org>
-Message-ID: <ffddcd05-39d2-c739-86af-1e63bdb9f572@pengutronix.de>
-Subject: Re: [kbuild-all] Re: [net-next 19/19] can: flexcan: add CAN wakeup
- function for i.MX8QM
-References: <20210107094900.173046-20-mkl@pengutronix.de>
- <202101080428.hEujUZlS-lkp@intel.com>
- <13f12660-cb33-d610-a933-1e3459791159@pengutronix.de>
- <42ec4ab0-b544-e7d7-d5e9-7609cb2273d3@intel.com>
-In-Reply-To: <42ec4ab0-b544-e7d7-d5e9-7609cb2273d3@intel.com>
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>, linux-can@vger.kernel.org
+Cc: Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>,
+ Sriram Dash <sriram.dash@samsung.com>, Joe Perches <joe@perches.com>,
+ Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+ Pia Eichinger <pia.eichinger@st.oth-regensburg.de>,
+ kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <0ba9535f-2e1d-116d-1c47-01bdd0ff89b3@pengutronix.de>
+Subject: Re: [PATCH for can-next] MAINTAINERS: adjust entry to tcan4x5x file
+ split
+References: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210108073932.20804-1-lukas.bulwahn@gmail.com>
 
---3E70UiGTy8DwiZnqzJqUmXTXT0TIxkdNe
+--bfck0ZA6GpZnpvjvcExJt4b0J73jFy9tz
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/8/21 8:07 AM, Rong Chen wrote:
->>>>> ERROR: modpost: "imx_scu_get_handle" [drivers/net/can/flexcan.ko] u=
-ndefined!
->> Another false positive, due to the old net-next/master base.
+On 1/8/21 8:39 AM, Lukas Bulwahn wrote:
+> Commit 7813887ea972 ("can: tcan4x5x: rename tcan4x5x.c -> tcan4x5x-core=
+=2Ec")
+> and commit 67def4ef8bb9 ("can: tcan4x5x: move regmap code into seperate=
 
-> Sorry for the inconvenience, we'll take a look at this problem.
+> file") split the file tcan4x5x.c into two files, but missed to adjust t=
+he
+> TI TCAN4X5X DEVICE DRIVER section in MAINTAINERS.
+>=20
+> Hence, ./scripts/get_maintainer.pl --self-test=3Dpatterns complains:
+>=20
+>   warning: no file matches    F:    drivers/net/can/m_can/tcan4x5x.c
+>=20
+> Adjust the file entry in MAINTAINERS to the tcan4x5x file splitting.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> applies cleanly on next-20210107, not for current master
+>=20
+> Marc, please pick this for your -next tree on top of the tcan4x5x clean=
+up.
 
-No problem. The kernel test robot is a great service nonetheless!
+Makes perfect sense. Applied to linux-can-next.
 
+Thanks,
 Marc
 
 --=20
@@ -153,23 +171,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---3E70UiGTy8DwiZnqzJqUmXTXT0TIxkdNe--
+--bfck0ZA6GpZnpvjvcExJt4b0J73jFy9tz--
 
---gLTi7DY6y3LAP0FaOjKxPTZ58Rn3ctAsl
+--xUXzECopG6TaH5wOM76FytFesP1twLoUD
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/4EU0ACgkQqclaivrt
-76mf7gf+KaIJwak+EMjo1iGhN3Sm7BNrz9l28nUlPBc6gmbj/dJX1AjIBHqgCiOb
-1I95ukt0cu4JAON6vcTFcr6zudyZqyW0r1tgjF5BFJzX/BOd51MLlTGOC4TwwarY
-xpFwm3JKYJ2umrV9Ytl9/O/4RQdaiLD7wlhreFYoip/ZmYNUr4AOBUopANU6dyKf
-OGkZYBYzPRWDV9044G4lsu9j2Hogdn6+SlCHt6+DJbfKRFu5+2qLqKd7iMlOjqki
-8VvNvfcPGG0UFJQV73eARhRTZrdhrFUcjyvYjCQUXrXTCeA+Inhm1c3HCZjX9G4v
-RurB+nZycw6CbyM1W2DCKi1US0egYg==
-=n2xw
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/4EokACgkQqclaivrt
+76ldpAf/We4hotK7pNis8TKNSmVSOpiXwd3LXMjbV/D94OjNKLK+Qxdj6hCC1g5E
+wl/mR8rciF/qh8p2f/EeIcRexHrrDWhd17lkZizk8JfXNfwWWyZGDUqOkC7UOipv
+2qS36SOIcPrai4LIA4ZTwzONa7aNxsZrLCcjpkjryf4Mw2MU1c7ND/Ii+SCbLjcs
+EI4JYcaXuVM1Hw0OEn80M4RA6b3dr1+OhxE141Yk8+LG3MPZ56x1CzVnorSlo3LD
+3/lfaZTY0pnrKskcIwZUsTlRF1sQQHdOqPqqKb1kFScXxuTH49YQie3vq50sMY6N
+dmNXbuQ06BnZmy0eJiRHHXLyq61qYQ==
+=FGF/
 -----END PGP SIGNATURE-----
 
---gLTi7DY6y3LAP0FaOjKxPTZ58Rn3ctAsl--
+--xUXzECopG6TaH5wOM76FytFesP1twLoUD--
