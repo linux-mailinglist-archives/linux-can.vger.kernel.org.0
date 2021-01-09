@@ -2,82 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19662EFAC8
-	for <lists+linux-can@lfdr.de>; Fri,  8 Jan 2021 22:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470E32F0259
+	for <lists+linux-can@lfdr.de>; Sat,  9 Jan 2021 18:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbhAHVyo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 8 Jan 2021 16:54:44 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:46439 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725901AbhAHVyo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 8 Jan 2021 16:54:44 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-107-KCHJeWJCOGedzO2ULSD1-w-1; Fri, 08 Jan 2021 21:53:05 +0000
-X-MC-Unique: KCHJeWJCOGedzO2ULSD1-w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 8 Jan 2021 21:53:04 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 8 Jan 2021 21:53:04 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Marc Kleine-Budde' <mkl@pengutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>
-Subject: RE: [net-next 15/19] can: tcan4x5x: rework SPI access
-Thread-Topic: [net-next 15/19] can: tcan4x5x: rework SPI access
-Thread-Index: AQHW5TrYjuofN1D1dkq5+Uq0gmhgrKoeRRkg
-Date:   Fri, 8 Jan 2021 21:53:04 +0000
-Message-ID: <2aab5f57ffc2485e99cf04dee6441328@AcuMS.aculab.com>
-References: <20210107094900.173046-1-mkl@pengutronix.de>
- <20210107094900.173046-16-mkl@pengutronix.de>
- <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20210107110656.7e49772b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <c98003bf-e62a-ab6a-a526-1f3ed0bb1ab7@pengutronix.de>
-In-Reply-To: <c98003bf-e62a-ab6a-a526-1f3ed0bb1ab7@pengutronix.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726059AbhAIRlE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 9 Jan 2021 12:41:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726005AbhAIRlD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 9 Jan 2021 12:41:03 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFC9C061786
+        for <linux-can@vger.kernel.org>; Sat,  9 Jan 2021 09:40:23 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kyIDp-0004ji-Pi
+        for linux-can@vger.kernel.org; Sat, 09 Jan 2021 18:40:17 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 05A9C5BE8A0
+        for <linux-can@vger.kernel.org>; Sat,  9 Jan 2021 17:40:15 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1EF6E5BE896;
+        Sat,  9 Jan 2021 17:40:15 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8ae7607f;
+        Sat, 9 Jan 2021 17:40:14 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [net-next 00/13] can: dev: cleanup and add CAN frame length handling support
+Date:   Sat,  9 Jan 2021 18:40:00 +0100
+Message-Id: <20210109174013.534145-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-RnJvbTogTWFyYyBLbGVpbmUtQnVkZGUNCj4gU2VudDogMDcgSmFudWFyeSAyMDIxIDIxOjE3DQo+
-IA0KPiBPbiAxLzcvMjEgODowNiBQTSwgSmFrdWIgS2ljaW5za2kgd3JvdGU6DQo+ID4gT24gVGh1
-LCA3IEphbiAyMDIxIDExOjAwOjM1IC0wODAwIEpha3ViIEtpY2luc2tpIHdyb3RlOg0KPiA+PiBP
-biBUaHUsICA3IEphbiAyMDIxIDEwOjQ4OjU2ICswMTAwIE1hcmMgS2xlaW5lLUJ1ZGRlIHdyb3Rl
-Og0KPiA+Pj4gK3N0cnVjdCBfX3BhY2tlZCB0Y2FuNHg1eF9tYXBfYnVmIHsNCj4gPj4+ICsJc3Ry
-dWN0IHRjYW40eDV4X2J1Zl9jbWQgY21kOw0KPiA+Pj4gKwl1OCBkYXRhWzI1NiAqIHNpemVvZih1
-MzIpXTsNCj4gPj4+ICt9IF9fX19jYWNoZWxpbmVfYWxpZ25lZDsNCj4gPj4NCj4gPj4gSW50ZXJl
-c3RpbmcgYXR0cmlidXRlIGNvbWJvLCBJIG11c3Qgc2F5Lg0KPiA+DQo+ID4gTG9va2luZyBhdCB0
-aGUgcmVzdCBvZiB0aGUgcGF0Y2ggSSBkb24ndCByZWFsbHkgc2VlIGEgcmVhc29uIGZvcg0KPiA+
-IF9fcGFja2VkLiAgUGVyaGFwcyBpdCBjYW4gYmUgZHJvcHBlZD8NCj4gDQo+IEl0J3MgdGhlIHN0
-cmVhbSBvZiBieXRlcyBzZW5kIHZpYSBTUEkgdG8gdGhlIGNoaXAuIEhlcmUgYXJlIGJvdGggc3Ry
-dWN0cyBmb3INCj4gcmVmZXJlbmNlOg0KPiANCj4gPiArc3RydWN0IF9fcGFja2VkIHRjYW40eDV4
-X2J1Zl9jbWQgew0KPiA+ICsJdTggY21kOw0KPiA+ICsJX19iZTE2IGFkZHI7DQo+ID4gKwl1OCBs
-ZW47DQo+ID4gK307DQo+IA0KPiBUaGlzIGhhcyB0byBiZSBwYWNrZWQsIGFzIEkgYXNzdW1lIHRo
-ZSBjb21waWxlciB3b3VsZCBhZGQgc29tZSBzcGFjZSBhZnRlciB0aGUNCj4gInU4IGNtZCIgdG8g
-YWxpZ24gdGhlIF9fYmUxNiBuYXR1cmFsbHkuDQoNCldoeSBub3QgZ2VuZXJhdGUgYSBzZXJpZXMg
-b2YgMzJiaXQgd29yZHMgdG8gYmUgc2VudCBvdmVyIHRoZSBTUEkgYnVzLg0KU2xpZ2h0bHkgbGVz
-cyBmYWZmaW5nIGluIHRoZSBjb2RlLg0KVGhlbiBoYXZlIGEgI2RlZmluZSAob3IgaW5saW5lIGZ1
-bmN0aW9uKSB0byBtZXJnZSB0aGUgY21kK2FkZHIrbGVuDQppbnRvIGEgc2luZ2xlIDMyYml0IHdv
-cmQuDQoNCkFsc28gaWYgdGhlIGxlbmd0aCBpcyBpbiAzMmJpdCB1bml0cywgdGhlbiB0aGUgZGF0
-YVtdIGZpZWxkDQpvdWdodCB0byBiZSB1MzJbXS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQg
-QWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVz
-LCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+Hello,
+
+this series splits the CAN driver related infrastructure into several files
+(patches 1...6), followed by some cleanup patches (7, 8), and support for
+CAN frame length handling (9...13).
+
+I took the path and put the calculated frame length into the struct
+can_skb_priv and extended the can_get_echo_skb() and
+can_rx_offload_get_echo_skb() to optionally return the CAN frame length.
+
+This patch illustrated how the new code can be used. I'll send mcp251xfd BQL
+support in a separate series, once details about this code have settled.
+
+@@ -1352,7 +1357,9 @@ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
+        }
+ 
+        for (i = 0; i < len; i++) {
+-               err = mcp251xfd_handle_tefif_one(priv, &hw_tef_obj[i]);
++               unsigned int frame_len;
++
++               err = mcp251xfd_handle_tefif_one(priv, &hw_tef_obj[i], &frame_len);
+                /* -EAGAIN means the Sequence Number in the TEF
+                 * doesn't match our tef_tail. This can happen if we
+                 * read the TEF objects too early. Leave loop let the
+@@ -1362,6 +1369,8 @@ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
+                        goto out_netif_wake_queue;
+                if (err)
+                        return err;
++
++               total_frame_len += frame_len;
+        }
+ 
+  out_netif_wake_queue:
+@@ -1393,6 +1402,7 @@ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
+                        return err;
+ 
+                tx_ring->tail += len;
++               netdev_completed_queue(priv->ndev, len, total_frame_len);
+ 
+                err = mcp251xfd_check_tef_tail(priv);
+                if (err)
+@@ -2433,6 +2443,7 @@ static bool mcp251xfd_tx_busy(const struct mcp251xfd_priv *priv,
+ static netdev_tx_t mcp251xfd_start_xmit(struct sk_buff *skb,
+                                        struct net_device *ndev)
+ {
++       struct can_skb_priv *can_skb_priv = can_skb_prv(skb);
+        struct mcp251xfd_priv *priv = netdev_priv(ndev);
+        struct mcp251xfd_tx_ring *tx_ring = priv->tx;
+        struct mcp251xfd_tx_obj *tx_obj;
+@@ -2455,6 +2466,8 @@ static netdev_tx_t mcp251xfd_start_xmit(struct sk_buff *skb,
+                netif_stop_queue(ndev);
+ 
+        can_put_echo_skb(skb, ndev, tx_head);
++       can_skb_priv->frame_len = can_skb_get_frame_len(skb);
++       netdev_sent_queue(priv->ndev, can_skb_priv->frame_len);
+ 
+        err = mcp251xfd_tx_obj_write(priv, tx_obj);
+        if (err)
+
+regards,
+Marc
+
+
 
