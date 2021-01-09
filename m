@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E562F025F
-	for <lists+linux-can@lfdr.de>; Sat,  9 Jan 2021 18:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23272F0261
+	for <lists+linux-can@lfdr.de>; Sat,  9 Jan 2021 18:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726001AbhAIRlo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 9 Jan 2021 12:41:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S1725872AbhAIRlp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 9 Jan 2021 12:41:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbhAIRlo (ORCPT
+        with ESMTP id S1726068AbhAIRlo (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Sat, 9 Jan 2021 12:41:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F36DC0617A9
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61E2C0617AA
         for <linux-can@vger.kernel.org>; Sat,  9 Jan 2021 09:40:25 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kyIDw-0004na-4h
+        id 1kyIDw-0004nn-B3
         for linux-can@vger.kernel.org; Sat, 09 Jan 2021 18:40:24 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 9DCDE5BE8CA
+        by bjornoya.blackshift.org (Postfix) with SMTP id AA6755BE8CC
         for <linux-can@vger.kernel.org>; Sat,  9 Jan 2021 17:40:19 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0EFC95BE8A1;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2A3D85BE8A3;
         Sat,  9 Jan 2021 17:40:16 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b49d3d13;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7b50c61f;
         Sat, 9 Jan 2021 17:40:14 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 08/13] can: length: can_fd_len2dlc(): simplify length calculcation
-Date:   Sat,  9 Jan 2021 18:40:08 +0100
-Message-Id: <20210109174013.534145-9-mkl@pengutronix.de>
+Subject: [net-next 09/13] can: length: canfd_sanitize_len(): add function to sanitize CAN-FD data length
+Date:   Sat,  9 Jan 2021 18:40:09 +0100
+Message-Id: <20210109174013.534145-10-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210109174013.534145-1-mkl@pengutronix.de>
 References: <20210109174013.534145-1-mkl@pengutronix.de>
@@ -53,39 +53,30 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
-return 0xF. This is equal to the last 16 members of the array.
-
-This patch removes these members from the array, uses ARRAY_SIZE() for the
-length check, and returns CANFD_MAX_DLC (which is 0xf).
+The data field in CAN-FD frames have specifig frame length (0, 1, 2, 3, 4, 5,
+6, 7, 8, 12, 16, 20, 24, 32, 48, 64). This function "rounds" up a given length
+to the next valid CAN-FD frame length.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/length.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ include/linux/can/length.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-index 4bf3847ec508..b90d30858935 100644
---- a/drivers/net/can/dev/length.c
-+++ b/drivers/net/can/dev/length.c
-@@ -29,15 +29,13 @@ static const u8 len2dlc[] = {
- 	13, 13, 13, 13, 13, 13, 13, 13,	/* 25 - 32 */
- 	14, 14, 14, 14, 14, 14, 14, 14,	/* 33 - 40 */
- 	14, 14, 14, 14, 14, 14, 14, 14,	/* 41 - 48 */
--	15, 15, 15, 15, 15, 15, 15, 15,	/* 49 - 56 */
--	15, 15, 15, 15, 15, 15, 15, 15	/* 57 - 64 */
- };
- 
+diff --git a/include/linux/can/length.h b/include/linux/can/length.h
+index fabd93bcde3e..0d796f96266b 100644
+--- a/include/linux/can/length.h
++++ b/include/linux/can/length.h
+@@ -48,4 +48,10 @@ u8 can_fd_dlc2len(u8 dlc);
  /* map the sanitized data length to an appropriate data length code */
- u8 can_fd_len2dlc(u8 len)
- {
--	if (unlikely(len > 64))
--		return 0xF;
-+	if (len > ARRAY_SIZE(len2dlc))
-+		return CANFD_MAX_DLC;
+ u8 can_fd_len2dlc(u8 len);
  
- 	return len2dlc[len];
- }
++/* map the data length to an appropriate data link layer length */
++static inline u8 canfd_sanitize_len(u8 len)
++{
++	return can_fd_dlc2len(can_fd_len2dlc(len));
++}
++
+ #endif /* !_CAN_LENGTH_H */
 -- 
 2.29.2
 
