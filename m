@@ -2,277 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DFE2F1563
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 14:40:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE4A2F180F
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 15:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731671AbhAKNjR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Mon, 11 Jan 2021 08:39:17 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:38762 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730855AbhAKNMv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 08:12:51 -0500
-Received: by mail-yb1-f176.google.com with SMTP id r63so16799167ybf.5
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 05:12:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pzm8IzdLYeBEp007wnjH0WAfY1pSNTq4xmK0zesD/tw=;
-        b=gfDUC/zjERAWHG4RfoaYOXUNTrXAEBrYZddQNjz61KbaAZoB6Zw07IjzBvfAoZfnX/
-         ZK0kHtZqhG7cZcpsQ6daPGPbRgM0mM5E4NLaljfmFgL70tqcQrfeMEaFO7Fr5VTMuZfY
-         UNh5zNEuKy3thc3oOZfmzEp8ZBhraSlMl9JN21lYPgXGr49ADrq3Sg+8TjdmYR8ChAlJ
-         QlLJVREbvhmFj087rXNS65HdaT/HfmNKWb3NkjouFpO402QdrI6a5VpyH0lF3z6BMr/k
-         I7eP7jXiwlCtdvyo2vR8l/3NNNy+jWhs4ViwQ33O3bVIz879GPpSVAf7RFIv4pc8wsC4
-         zrOA==
-X-Gm-Message-State: AOAM533RSsl1gYmd5hh2xBUdGaba2CQVGgzLUx9q41Rz23gknXwTEDfK
-        e+ldEUx9dEIlF/kbGbqXwFixOHGGEhSkCCcZQhg=
-X-Google-Smtp-Source: ABdhPJx85/LL7fvdWtAvdMMOXHmqA2L8EnJyXSeZDzraL1yq/ZT0MxdlWMmXTHYshaFP1XSkUbiqs+jg4WWGANLh77A=
-X-Received: by 2002:a25:f30a:: with SMTP id c10mr22935370ybs.514.1610370729280;
- Mon, 11 Jan 2021 05:12:09 -0800 (PST)
+        id S1733153AbhAKOXb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 09:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733111AbhAKOXa (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 09:23:30 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67057C0617AB
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 06:22:12 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kyy5C-0007cE-RJ
+        for linux-can@vger.kernel.org; Mon, 11 Jan 2021 15:22:10 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 86CF55C0F3B
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 14:19:32 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 34E245C0F35;
+        Mon, 11 Jan 2021 14:19:32 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ba511fa4;
+        Mon, 11 Jan 2021 14:19:31 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [net-next v3 00/15] can: dev: cleanup and add CAN frame length handling support
+Date:   Mon, 11 Jan 2021 15:19:15 +0100
+Message-Id: <20210111141930.693847-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20210111104529.657057-1-mkl@pengutronix.de> <20210111104529.657057-11-mkl@pengutronix.de>
-In-Reply-To: <20210111104529.657057-11-mkl@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 11 Jan 2021 22:11:58 +0900
-Message-ID: <CAMZ6RqKtW0GxeRZ6fBroG4tWiJe8mOb=VDiFK9fxf4jxyfiC-A@mail.gmail.com>
-Subject: Re: [net-next v2 10/15] can: length: can_skb_get_frame_len():
- introduce function to get data length of frame in data link layer
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Le lun. 11 janv. 2021 à 19:45, Marc Kleine-Budde <mkl@pengutronix.de> a écrit :
->
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->
-> This patch adds the function can_skb_get_frame_len() which returns the length
-> of a CAN frame on the data link layer, including Start-of-frame, Identifier,
-> various other bits, the actual data, the CRC, the End-of-frame, the Inter frame
-> spacing.
->
-> Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-> Not-Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-> Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Not-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/dev/length.c |  50 +++++++++++++++
->  include/linux/can/length.h   | 120 +++++++++++++++++++++++++++++++++++
->  2 files changed, 170 insertions(+)
->
-> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-> index d695a3bee1ed..20cd153a45a5 100644
-> --- a/drivers/net/can/dev/length.c
-> +++ b/drivers/net/can/dev/length.c
-> @@ -38,3 +38,53 @@ u8 can_fd_len2dlc(u8 len)
->         return len2dlc[len];
->  }
->  EXPORT_SYMBOL_GPL(can_fd_len2dlc);
-> +
-> +/**
-> + * can_skb_get_frame_len() - Calculate the CAN Frame length in bytes
-> + *     of a given skb.
-> + * @skb: socket buffer of a CAN message.
-> + *
-> + * Do a rough calculation: bit stuffing is ignored and length in bits
-> + * is rounded up to a length in bytes.
-> + *
-> + * Rationale: this function is to be used for the BQL functions
-> + * (netdev_sent_queue() and netdev_completed_queue()) which expect a
-> + * value in bytes. Just using skb->len is insufficient because it will
-> + * return the constant value of CAN(FD)_MTU. Doing the bit stuffing
-> + * calculation would be too expensive in term of computing resources
-> + * for no noticeable gain.
-> + *
-> + * Remarks: The payload of CAN FD frames with BRS flag are sent at a
-> + * different bitrate. Currently, the can-utils canbusload tool does
-> + * not support CAN-FD yet and so we could not run any benchmark to
-> + * measure the impact. There might be possible improvement here.
-> + *
-> + * Return: length in bytes.
-> + */
-> +unsigned int can_skb_get_frame_len(const struct sk_buff *skb)
-> +{
-> +       const struct canfd_frame *cf = (const struct canfd_frame *)skb->data;
-> +       u8 len;
-> +
-> +       if (can_is_canfd_skb(skb))
-> +               len = canfd_sanitize_len(cf->len);
-> +       else if (cf->can_id & CAN_RTR_FLAG)
-> +               len = 0;
-> +       else
-> +               len = cf->len;
-> +
-> +       if (can_is_canfd_skb(skb)) {
-> +               if (cf->can_id & CAN_EFF_FLAG)
-> +                       len += CANFD_FRAME_OVERHEAD_EFF;
-> +               else
-> +                       len += CANFD_FRAME_OVERHEAD_SFF;
-> +       } else {
-> +               if (cf->can_id & CAN_EFF_FLAG)
-> +                       len += CAN_FRAME_OVERHEAD_EFF;
-> +               else
-> +                       len += CAN_FRAME_OVERHEAD_SFF;
-> +       }
-> +
-> +       return len;
-> +}
-> +EXPORT_SYMBOL_GPL(can_skb_get_frame_len);
-> diff --git a/include/linux/can/length.h b/include/linux/can/length.h
-> index b2313b2a0b02..6995092b774e 100644
-> --- a/include/linux/can/length.h
-> +++ b/include/linux/can/length.h
-> @@ -1,10 +1,127 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /* Copyright (C) 2020 Oliver Hartkopp <socketcan@hartkopp.net>
-> + * Copyright (C) 2020 Marc Kleine-Budde <kernel@pengutronix.de>
->   */
->
->  #ifndef _CAN_LENGTH_H
->  #define _CAN_LENGTH_H
->
-> +/*
-> + * Size of a Classical CAN Standard Frame
-> + *
-> + * Name of Field                       Bits
-> + * ---------------------------------------------------------
-> + * Start-of-frame                      1
-> + * Identifier                          11
-> + * Remote transmission request (RTR)   1
-> + * Identifier extension bit (IDE)      1
-> + * Reserved bit (r0)                   1
-> + * Data length code (DLC)              4
-> + * Data field                          0...64
-> + * CRC                                 15
-> + * CRC delimiter                       1
-> + * ACK slot                            1
-> + * ACK delimiter                       1
-> + * End-of-frame (EOF)                  7
-> + * Inter frame spacing                 3
-> + *
-> + * rounded up and ignoring bitstuffing
-> + */
-> +#define CAN_FRAME_OVERHEAD_SFF DIV_ROUND_UP(47, 8)
-> +
-> +/*
-> + * Size of a Classical CAN Extended Frame
-> + *
-> + * Name of Field                       Bits
-> + * ---------------------------------------------------------
-> + * Start-of-frame                      1
-> + * Identifier A                                11
-> + * Substitute remote request (SRR)     1
-> + * Identifier extension bit (IDE)      1
-> + * Identifier B                                18
-> + * Remote transmission request (RTR)   1
-> + * Reserved bits (r1, r0)              2
-> + * Data length code (DLC)              4
-> + * Data field                          0...64
-> + * CRC                                 15
-> + * CRC delimiter                       1
-> + * ACK slot                            1
-> + * ACK delimiter                       1
-> + * End-of-frame (EOF)                  7
-> + * Inter frame spacing                 3
-> + *
-> + * rounded up and ignoring bitstuffing
-> + */
-> +#define CAN_FRAME_OVERHEAD_EFF DIV_ROUND_UP(67, 8)
-> +
-> +/*
-> + * Size of a CAN-FD Standard Frame
-> + *
-> + * Name of Field                       Bits
-> + * ---------------------------------------------------------
-> + * Start-of-frame                      1
-> + * Identifier                          11
-> + * Reserved bit (r1)                   1
-> + * Identifier extension bit (IDE)      1
-> + * Flexible data rate format (FDF)     1
-> + * Reserved bit (r0)                   1
-> + * Bit Rate Switch (BRS)               1
-> + * Error Status Indicator (ESI)                1
-> + * Data length code (DLC)              4
-> + * Data field                          0...512
-> + * Stuff Bit Count (SBC)               0...16: 4 20...64:5
-> + * CRC                                 0...16: 17 20...64:21
-> + * CRC delimiter (CD)                  1
-> + * ACK slot (AS)                       1
-> + * ACK delimiter (AD)                  1
-> + * End-of-frame (EOF)                  7
-> + * Inter frame spacing                 3
-> + *
-> + * assuming CRC21, rounded up and ignoring bitstuffing
-> + */
-> +#define CANFD_FRAME_OVERHEAD_SFF DIV_ROUND_UP(61, 8)
-> +
-> +/*
-> + * Size of a CAN-FD Extended Frame
-> + *
-> + * Name of Field                       Bits
-> + * ---------------------------------------------------------
-> + * Start-of-frame                      1
-> + * Identifier A                                11
-> + * Substitute remote request (SRR)     1
-> + * Identifier extension bit (IDE)      1
-> + * Identifier B                                18
-> + * Reserved bit (r1)                   1
-> + * Flexible data rate format (FDF)     1
-> + * Reserved bit (r0)                   1
-> + * Bit Rate Switch (BRS)               1
-> + * Error Status Indicator (ESI)                1
-> + * Data length code (DLC)              4
-> + * Data field                          0...512
-> + * Stuff Bit Count (SBC)               0...16: 4 20...64:5
-> + * CRC                                 0...16: 17 20...64:21
-> + * CRC delimiter (CD)                  1
-> + * ACK slot (AS)                       1
-> + * ACK delimiter (AD)                  1
-> + * End-of-frame (EOF)                  7
-> + * Inter frame spacing                 3
-> + *
-> + * assuming CRC21, rounded up and ignoring bitstuffing
-> + */
-> +#define CANFD_FRAME_OVERHEAD_EFF DIV_ROUND_UP(80, 8)
-> +
-> +/*
-> + * Maximum size of a Classical CAN frame
-> + * (rounded up and ignoring bitstuffing)
-> + */
-> +#define CAN_FRAME_LEN_MAX (CAN_FRAME_OVERHEAD_EFF + CAN_MAX_DLEN)
-> +
-> +/*
-> + * Maximum size of a CAN-FD frame
-> + * (rounded up and ignoring bitstuffing)
-> + */
-> +#define CANFD_FRAME_LEN_MAX (CANFD_FRAME_OVERHEAD_EFF + CANFD_MAX_DLEN)
-> +
->  /*
->   * can_cc_dlc2len(value) - convert a given data length code (dlc) of a
->   * Classical CAN frame into a valid data length of max. 8 bytes.
-> @@ -45,6 +162,9 @@ u8 can_fd_dlc2len(u8 dlc);
->  /* map the sanitized data length to an appropriate data length code */
->  u8 can_fd_len2dlc(u8 len);
->
-> +/* calculate the CAN Frame length in bytes of a given skb */
-> +unsigned int can_skb_get_frame_len(const struct sk_buff *skb);
-> +
->  /* map the data length to an appropriate data link layer length */
->  static inline u8 canfd_sanitize_len(u8 len)
->  {
-> --
-> 2.29.2
->
+Hello,
 
-Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+this series splits the CAN driver related infrastructure into several files
+(patches 1...6), followed by some cleanup patches (7, 8), and support for CAN
+frame length handling (9...14). Totally unrelated is patch 15, which add
+software tx timestamping.
 
-Thanks Marc!
+I took the path and put the calculated frame length into the struct
+can_skb_priv and extended the can_get_echo_skb() and
+can_rx_offload_get_echo_skb() to optionally return the CAN frame length.
+
+Marc
+
+---
+
+changes since v2:
+- 05: add missing skb.o to Makefile (this time for real)
+- 10: added S-o-b and A-b
+- 15: moved skb_tx_timestamp()
+
+changes since v1:
+- 04: changed copyright
+- 05: add missing skb.o to Makefile
+- 06: add missing netlink.o to Makefile
+- 10: fix comment for CANFD_FRAME_LEN_MAX
+- 12: new
+- 15: new
+
+
+
