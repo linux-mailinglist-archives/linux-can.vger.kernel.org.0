@@ -2,83 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 270072F199F
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 16:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4AB2F19D6
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 16:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730046AbhAKP2E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 10:28:04 -0500
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:44380 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727917AbhAKP2B (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 10:28:01 -0500
-Received: by mail-yb1-f182.google.com with SMTP id f13so149747ybk.11
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 07:27:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nujb4BJJwAeqDo3UZR+d+saqlQdM8ej2eK7oc3dR2EQ=;
-        b=cqa8oK5V0yV0Jbgg2N3WGMeDWBCjxohQ/PCOlfL/YDSpxv9yzncNgdbF0UahRycUXO
-         x0lVJ4yo+UaEtP5UGQJst6BD09QJi5yopcKeiQMscHecDH8txA7mbtM+678bkTQyzLdp
-         qd3ymu19kA7hlHhpr6srTqIkmqqqAHnK7K5KSxl5VnAzBCgaOS8M74+5YCwJbHCuao9A
-         8JhpUqeXTjGUShalOZZ9EoAoLkGfT1rQ4uRh+aCBZPfBuQxqx8otYt7jcMIQRTEcMdcD
-         HJGOOWBSBsbQxstjH+JCBkL0HCFDOngO/5dHxigB8sh4fUmwxtxhb9r0kAxbTfjhIe2k
-         08Kw==
-X-Gm-Message-State: AOAM533l0X++gTGpn61rz0oNAN1/lCkPmBvpUZf4GsXHtQO2/FJ9xKDQ
-        tVtxK4G5ANHUqL/ZmjsmMZZTePpAd/FkVkPSEpGwFEEo+P8=
-X-Google-Smtp-Source: ABdhPJyV6E7yphe5bA+z/JZi4nE8mpW4mD47G7g30OGC4/0f7xNDdsiHOFZYe1udDVGmqPMxdmWp9LJnYysveWwsNr8=
-X-Received: by 2002:a25:4744:: with SMTP id u65mr358275yba.239.1610378840804;
- Mon, 11 Jan 2021 07:27:20 -0800 (PST)
+        id S1730426AbhAKPgT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 10:36:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727917AbhAKPgT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 10:36:19 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21528C061786
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 07:35:39 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1kyzED-0000NB-Uf; Mon, 11 Jan 2021 16:35:34 +0100
+Subject: Re: [net-next 15/19] can: tcan4x5x: rework SPI access
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
+        kernel@pengutronix.de, Sean Nyekjaer <sean@geanix.com>,
+        davem@davemloft.net
+References: <20210107094900.173046-1-mkl@pengutronix.de>
+ <20210107094900.173046-16-mkl@pengutronix.de>
+ <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20210107110656.7e49772b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <c98003bf-e62a-ab6a-a526-1f3ed0bb1ab7@pengutronix.de>
+ <20210107143851.51675f8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <8185f3e1-d0b1-0ea4-ac45-f2ea0b63ced9@pengutronix.de>
+ <20210108083229.6f42479b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <7a0e400a-7522-f3f0-55e1-887127636c09@pengutronix.de>
+Date:   Mon, 11 Jan 2021 16:35:30 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-References: <20210111104529.657057-1-mkl@pengutronix.de> <20210111104529.657057-6-mkl@pengutronix.de>
- <CAMZ6RqK=KKskgZ3cXEEzYFGmN8U0vGMt0rGM-5KMS2RH4cgEPQ@mail.gmail.com> <00904775-66c4-58d6-b560-76da0b5a22cc@pengutronix.de>
-In-Reply-To: <00904775-66c4-58d6-b560-76da0b5a22cc@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 12 Jan 2021 00:27:09 +0900
-Message-ID: <CAMZ6RqJFxhe49pTQt6ivK1jp651ZDn-GpMzx6NnfsYZR1Pxa6A@mail.gmail.com>
-Subject: Re: [net-next v2 05/15] can: dev: move skb related into seperate file
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210108083229.6f42479b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 11 Jan 2021 at 23:20, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 1/11/21 1:51 PM, Vincent MAILHOL wrote:
-> > On Mon. 11 Jan 2021 at 19:45, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> >>
-> >> This patch moves the skb related code of the CAN device infrastructure into a
-> >> separate file.
-> >>
-> >> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >> ---
-> >>  drivers/net/can/dev/dev.c | 213 ------------------------------------
-> >>  drivers/net/can/dev/skb.c | 220 ++++++++++++++++++++++++++++++++++++++
-> >>  include/linux/can/dev.h   |  76 -------------
-> >>  include/linux/can/skb.h   |  77 +++++++++++++
-> >>  4 files changed, 297 insertions(+), 289 deletions(-)
-> >>  create mode 100644 drivers/net/can/dev/skb.c
-> >>
-> >> [...]
-> >
-> > Sorry but the changes on drivers/net/can/dev/Makefile are still
-> > missing for the skb patch (however, it is now OK for the
-> > netlink).
->
-> Hopefully fixed this time. Seems I have to compile the whole kernel to notice
-> the missing symbols :/
+Hello Jakub,
 
-Yep, no more compilation issues!
+On 08.01.21 17:32, Jakub Kicinski wrote:
+> On Fri, 8 Jan 2021 11:07:26 +0100 Ahmad Fatoum wrote:
+>>>>> +struct __packed tcan4x5x_map_buf { 
+>>>>> +	struct tcan4x5x_buf_cmd cmd; 
+>>>>> +	u8 data[256 * sizeof(u32)]; 
+>>>>> +} ____cacheline_aligned;     
+>>>>
+>>>> Due to the packing of the struct tcan4x5x_buf_cmd it should have a length of 4
+>>>> bytes. Without __packed, will the "u8 data" come directly after the cmd?  
+>>>
+>>> Yup, u8 with no alignment attribute will follow the previous
+>>> field with no holes.  
+>>
+>> __packed has a documentation benefit though. It documents that the author
+>> considers the current layout to be the only correct one. (and thus extra
+>> care should be taken when modifying it).
+> 
+> ____cacheline_aligned adds a big architecture dependent padding at the
+> end of this struct, so the size of this structure is architecture
+> dependent. Besides using packed forced the compiler to use byte by byte
+> loads on architectures without unaligned access, so __packed is not
+> free.
 
-I will do a few more tests but your v3 seems to be the good
-one.
+https://godbolt.org/z/j68x8n
 
-Will also adapt the changes to the ES58x driver and send my v10,
-probably tomorrow (it's time to go to bed here).
+seems to indicate that explicit alignment "overrules" packed's implicit
+alignment of 1 as
+ there isn't any byte-by-byte access generated for a struct
+that is both packed and cacheline aligned. packed only structs are accessed
+byte-by-byte however.
 
+Did I get something wrong in my testcase?
 
-Yours sincerely,
-Vincent
+I compiled with ARM gcc 8.2  -mno-unaligned-access -fno-strict-aliasing -O2
+
+Cheers,
+Ahmad
+ 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
