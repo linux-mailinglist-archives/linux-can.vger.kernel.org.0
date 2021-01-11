@@ -2,88 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D422F1BFB
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 18:13:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161482F1D6A
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 19:04:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389364AbhAKRMh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 12:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730923AbhAKRMg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 12:12:36 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DDCC061795;
-        Mon, 11 Jan 2021 09:11:56 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id h10so295938pfo.9;
-        Mon, 11 Jan 2021 09:11:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mGQwOL0k8y1YfEAZ87QSjV7hnEWWuS5Kl92JzflD6+4=;
-        b=eY0ufYub3BzHiGX2iBcjEqmOzasXvZkYv/lxVuTXonjmv+jcXbS5ZUbcqDUyeH79gq
-         GWH1dEeqqVAp6sGjLewoKXGUDr5C1zViGl34J8ep4IsFxYaEQ2jcjcXGXnN57TlNez7V
-         MjEWggvOyr7RQjgH2GTftJDFYaAwzEm1ZvNJXFQz8sADPQYGSzpi77AZ5vWpthYlGrAv
-         xte561F0yisTKerHjdf/ujKjuCJGmCnZx7kHsON/pyv3uFNChJOdwpBbXWZNwv+GqdS2
-         bYwGEKhX7xIP/MaVmFV4kJh8pTK0NZt05kcoMPr0ux6JaS566v0+XZEY8Xs9kd2b5fA2
-         1Azg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mGQwOL0k8y1YfEAZ87QSjV7hnEWWuS5Kl92JzflD6+4=;
-        b=JSGZvvcKjJBNynckhnrLYYS7izU+xl/mvi/rXsybSFniHdSK8PBopuooa0VNS+b9Ps
-         81QPgrhsRwduuIdkDsRWTSErgWYqY1FcEsRr3PhGwbqGR8x5p/eLajdKoqCs4ey3EKFs
-         tWdsMr8rVMahOgId7UBe3JkX9i2NmP83rqt7OxqewZolyN9jAJzLhTFL9lMzOMAd4QX8
-         VRbtwL4fP8kkoPzsQZz3cuTvnG1YcFPwaHmh4rxlqs66XqaA0amH9KYjCMAiZ2I3riaO
-         kwXkzuXri3QzMj/NxWezOXjhOtWzlEffg/04SnvlRnPRwdr6KSVBlXdr60HBaxjomGRB
-         52dg==
-X-Gm-Message-State: AOAM533LGVpkUzHVW2Qsnzp2yM+AZt2mxJxJUCVpOekQ+uxawXplO9QO
-        sEJWLLjg/YvbrvEj14fkV4LbNi72Ih0=
-X-Google-Smtp-Source: ABdhPJz82+JSR1ETgjpvtF76kt/0wg/n4Os9o31PyMVTZ1dLpDhmOVi3IOQuelvLx65ef7rxYCDboA==
-X-Received: by 2002:a62:7f4c:0:b029:19e:23d1:cf0a with SMTP id a73-20020a627f4c0000b029019e23d1cf0amr315508pfd.67.1610385115633;
-        Mon, 11 Jan 2021 09:11:55 -0800 (PST)
-Received: from hoboy.vegasvil.org (c-73-241-114-122.hsd1.ca.comcast.net. [73.241.114.122])
-        by smtp.gmail.com with ESMTPSA id j12sm93373pjd.8.2021.01.11.09.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 09:11:54 -0800 (PST)
-Date:   Mon, 11 Jan 2021 09:11:52 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/1] can: dev: add software tx timestamps
-Message-ID: <20210111171152.GB11715@hoboy.vegasvil.org>
-References: <20210110124903.109773-1-mailhol.vincent@wanadoo.fr>
- <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
+        id S2388489AbhAKSED (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 13:04:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35528 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732662AbhAKSED (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 11 Jan 2021 13:04:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39A0B20738;
+        Mon, 11 Jan 2021 18:03:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610388202;
+        bh=epvKOWonVUFPSyX+WJP6xmKtL5tFzn6K/IuELuQ87mQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nMaTfvy+QxMaNVlN64KekkPukTr4a21sSoJ2bpcy4GIunSUHupTzb/Jm+T4Q9w/Wp
+         ytJQbPmcW+Y65jHfOkPJEruuewown0owS8al1eECk6VN9nvu17F3N98nP5jEYU9cy2
+         KZJ91ZAnLwCgqdDnyCTLJ8zFvvKB9SuxitdKzVGl1VoLwmFszI0xs7/KnOKPNRqHt3
+         uDR0RiVsdkU0kBLU13vUwdOeFN7AAGWLHqFs4VY/plpNMSlXM9XXWD10el9x4k+7/e
+         Lu8K4lxj8yZDNrNHjBKrrvdb06yPyMsIXLCE5tq+lIpbUconwcV/z9hqOL4nzuxW19
+         aOG7PqAOXTzjw==
+Date:   Mon, 11 Jan 2021 10:03:21 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
+        kernel@pengutronix.de, Sean Nyekjaer <sean@geanix.com>,
+        davem@davemloft.net
+Subject: Re: [net-next 15/19] can: tcan4x5x: rework SPI access
+Message-ID: <20210111100321.3f9a0b08@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <7a0e400a-7522-f3f0-55e1-887127636c09@pengutronix.de>
+References: <20210107094900.173046-1-mkl@pengutronix.de>
+        <20210107094900.173046-16-mkl@pengutronix.de>
+        <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20210107110656.7e49772b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <c98003bf-e62a-ab6a-a526-1f3ed0bb1ab7@pengutronix.de>
+        <20210107143851.51675f8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <8185f3e1-d0b1-0ea4-ac45-f2ea0b63ced9@pengutronix.de>
+        <20210108083229.6f42479b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <7a0e400a-7522-f3f0-55e1-887127636c09@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun, Jan 10, 2021 at 09:49:03PM +0900, Vincent Mailhol wrote:
->   * The hardware rx timestamp of a local loopback message is the
->     hardware tx timestamp. This means that there are no needs to
->     implement SOF_TIMESTAMPING_TX_HARDWARE for CAN sockets.
+On Mon, 11 Jan 2021 16:35:30 +0100 Ahmad Fatoum wrote:
+> Hello Jakub,
+> 
+> On 08.01.21 17:32, Jakub Kicinski wrote:
+> > On Fri, 8 Jan 2021 11:07:26 +0100 Ahmad Fatoum wrote:  
+> >>>>> +struct __packed tcan4x5x_map_buf { 
+> >>>>> +	struct tcan4x5x_buf_cmd cmd; 
+> >>>>> +	u8 data[256 * sizeof(u32)]; 
+> >>>>> +} ____cacheline_aligned;       
+> >>>>
+> >>>> Due to the packing of the struct tcan4x5x_buf_cmd it should have a length of 4
+> >>>> bytes. Without __packed, will the "u8 data" come directly after the cmd?    
+> >>>
+> >>> Yup, u8 with no alignment attribute will follow the previous
+> >>> field with no holes.    
+> >>
+> >> __packed has a documentation benefit though. It documents that the author
+> >> considers the current layout to be the only correct one. (and thus extra
+> >> care should be taken when modifying it).  
+> > 
+> > ____cacheline_aligned adds a big architecture dependent padding at the
+> > end of this struct, so the size of this structure is architecture
+> > dependent. Besides using packed forced the compiler to use byte by byte
+> > loads on architectures without unaligned access, so __packed is not
+> > free.  
+> 
+> https://godbolt.org/z/j68x8n
+> 
+> seems to indicate that explicit alignment "overrules" packed's implicit
+> alignment of 1 as
+>  there isn't any byte-by-byte access generated for a struct
+> that is both packed and cacheline aligned. packed only structs are accessed
+> byte-by-byte however.
+> 
+> Did I get something wrong in my testcase?
+> 
+> I compiled with ARM gcc 8.2  -mno-unaligned-access -fno-strict-aliasing -O2
 
-I can't agree with that statement.  The local loopback is a special
-"feature" of CAN sockets, and some programs turn it off.  Furthermore,
-requiring user space to handle CAN sockets differently WRT Tx time
-stamps is user-unfriendly.  So I would strongly support adding
-SOF_TIMESTAMPING_TX_HARDWARE to the CAN layer in the future.
-
-(This isn't a criticism of the current patch, though.)
-
-Thanks,
-Richard
-
-
+I see, that's why I said combining ____cacheline_aligned with __packed
+looks very confusing. Good to know which one takes precedence.
+That doesn't change my recommendation to remove __packed, though, let's
+not leave readers of this code scratching their heads.
