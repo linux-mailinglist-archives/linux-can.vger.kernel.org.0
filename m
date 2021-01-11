@@ -2,46 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 456022F127F
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 13:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7DF2F1295
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 13:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727482AbhAKMod (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 07:44:33 -0500
-Received: from mail-yb1-f176.google.com ([209.85.219.176]:45638 "EHLO
-        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727449AbhAKMod (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 07:44:33 -0500
-Received: by mail-yb1-f176.google.com with SMTP id k78so16685257ybf.12
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 04:44:17 -0800 (PST)
+        id S1726948AbhAKMwE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 07:52:04 -0500
+Received: from mail-yb1-f171.google.com ([209.85.219.171]:33172 "EHLO
+        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726686AbhAKMwE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 07:52:04 -0500
+Received: by mail-yb1-f171.google.com with SMTP id o144so16801679ybc.0
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 04:51:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=huhauAJpQg0ddEv+xxXgGiWjxm6fLcYh1TnDIj8hh30=;
-        b=DjPudTBO4LvW2nJN/5ZymK1i//23LoESWGlwqFrwV1qRAq3kfUMQnNGYlDbsGRgTls
-         mNGnP/V5i/2q1KRnDh8JuXlLsadiAfHrJTyzDBuRXtMbRvgXuQQqGqtp5V5/EcC1MtdE
-         +97pf9ciCBGciVuW3ZsQHKbdki8CrSYIklMnXQ96XTCRkZEsgF2C4hF1Gixh0qXts/w2
-         Pu65nQybE7+z90BjBZoIu4YoasmchftJITGleQMjgdy4/wIVELp7lWgumwLezjcO11ZX
-         8eOIV4As1odAUTnv9rQSkPQuDyHE2ER6ccOzkxUtpa2+DDk27fQMNXCiWnCOq9iuAA6a
-         XehA==
-X-Gm-Message-State: AOAM5327uyGclxP4y3aEy/C6Tz3k34k5M9bKLtzKCPox9Qnd+JBcGc5+
-        IbxodjHsAbi1Wg9b69FVO5SxE2boSZ2QvdFKDOFdPqxOKJKM1w==
-X-Google-Smtp-Source: ABdhPJxJYRPySemkLi1Vc41KawUSkHNWhuCbysrzrsn+4AEob6EJbbVta3cYcXrBPFv/O9wALgSEE6tdeDCiI4Waj+Y=
-X-Received: by 2002:a25:76c3:: with SMTP id r186mr25952679ybc.226.1610369032539;
- Mon, 11 Jan 2021 04:43:52 -0800 (PST)
+        bh=cAIqFUY4VpwOzBRI3NDCjGOL5OIp4RY9bxmtm/CGCq0=;
+        b=RhvWN8XwtpADsw4zGGvB6tEvt1/RAR1nl2OuAYLY6+kYuymlZfhrZq2+eHfe9ybHdI
+         c9fRgA4YW0ZExH0zfsk/mDo48FuzuUMniXtyhCjJSu31bqx0Hgjvpdngz3wj44vmmuV4
+         GTXLOzceg3XhMxYpQXh5asdMHkilonlJk2uyLo7fqmrAlu5vSX42R7HB14GQMqMtTFR0
+         n501d22VgkaUS96riMGACvRuhr/fwwOvd7VtlGtDspY+u7AlFU3wU3eBFXQknRpr3P5Y
+         ih66+zmHB/xe02LJsMey/9q+1Oe83LQv077tRYSgeVE3dByzI9s7jhWgdmk+Ut5L+TFM
+         Gi8Q==
+X-Gm-Message-State: AOAM532VWaTXR82xakoJN2L2/BmO369TCjfJkU3Ox52NqkU66TO/lYK/
+        WIr2bLimmrvhNV8HN3HBff1bkv09FLlbpLFNK0RHOZ78lnnzDQ==
+X-Google-Smtp-Source: ABdhPJxB2pug+89WVxnH6ltUSMfdGEeT0vjk50FMUb4Tdq8EiPcmkYQl1z9qw2rVYX+lhecQf0IPJbKrPl4L3hWXEa4=
+X-Received: by 2002:a25:5583:: with SMTP id j125mr20508104ybb.307.1610369482828;
+ Mon, 11 Jan 2021 04:51:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20210109174013.534145-1-mkl@pengutronix.de> <20210109174013.534145-12-mkl@pengutronix.de>
- <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
- <CAMZ6RqJ23-T8doazD+=0AO38VzetfudLWO3si+pO+mqE3vSgKw@mail.gmail.com>
- <20210111061335.39983-1-mailhol.vincent@wanadoo.fr> <28ab072d-a075-ce6b-6fed-a6d623a86a52@pengutronix.de>
- <CAMZ6Rq+irzbsiLP+bKL=h4JRh7pNXacwc9v4YO4NK=eNqOT3ew@mail.gmail.com>
- <20210111104139.47318-1-mailhol.vincent@wanadoo.fr> <a9d0a827-12c1-4469-1efa-973e5af30883@pengutronix.de>
-In-Reply-To: <a9d0a827-12c1-4469-1efa-973e5af30883@pengutronix.de>
+References: <20210111104529.657057-1-mkl@pengutronix.de> <20210111104529.657057-6-mkl@pengutronix.de>
+In-Reply-To: <20210111104529.657057-6-mkl@pengutronix.de>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 11 Jan 2021 21:43:41 +0900
-Message-ID: <CAMZ6RqJszEXP68OrGrQHiFfqiop8v01hVmViwKO9hsr-Ergihg@mail.gmail.com>
-Subject: Re: [PATCH v2] can: dev: can_put_echo_skb(): extend to store can
- frame length
+Date:   Mon, 11 Jan 2021 21:51:11 +0900
+Message-ID: <CAMZ6RqK=KKskgZ3cXEEzYFGmN8U0vGMt0rGM-5KMS2RH4cgEPQ@mail.gmail.com>
+Subject: Re: [net-next v2 05/15] can: dev: move skb related into seperate file
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can <linux-can@vger.kernel.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>
@@ -50,37 +44,37 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 11 Jan 2021 at 19:54, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Mon. 11 Jan 2021 at 19:45, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 >
-> On 1/11/21 11:41 AM, Vincent Mailhol wrote:
-> > Add a frame_len argument to can_put_echo_skb() which is used to save
-> > length of the CAN frame into field frame_len of struct can_skb_priv so
-> > that it can be later used after transmission completion. Convert all
-> > users of this function, too.
-> >
-> > Drivers which implement BQL call can_put_echo_skb() with the output of
-> > can_skb_get_frame_len(skb) and drivers which do not simply pass zero
-> > as an input (in the same way that NULL would be given to
-> > can_get_echo_skb()). This way, we have a nice symmetry between the two
-> > echo functions.
-> >
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > --
-> > v2: make the assignemend unconditional.
-> >
-> > Hi Marc,
-> >
-> > If you like the idea to modify can_put_echo_skb(), you can use this
-> > patch. Just put it between patches 12 and 13 of your series.
+> This patch moves the skb related code of the CAN device infrastructure into a
+> separate file.
 >
-> I think I've done the same changes, why applying. The series I just send is
-> based on your v1 with my changes.
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/dev/dev.c | 213 ------------------------------------
+>  drivers/net/can/dev/skb.c | 220 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/can/dev.h   |  76 -------------
+>  include/linux/can/skb.h   |  77 +++++++++++++
+>  4 files changed, 297 insertions(+), 289 deletions(-)
+>  create mode 100644 drivers/net/can/dev/skb.c
+>
+> [...]
 
-No problem, I just missed your message saying that you will do
-the changes.
+Sorry but the changes on drivers/net/can/dev/Makefile are still
+missing for the skb patch (however, it is now OK for the
+netlink).
 
-The only difference is the change in the patch subject but that's
-really a minor detail. The content is the same.
+diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+index 5c647951e06d..2c38bd532157 100644
+--- a/drivers/net/can/dev/Makefile
++++ b/drivers/net/can/dev/Makefile
+@@ -5,5 +5,6 @@ can-dev-y                       += bittiming.o
+ can-dev-y                      += dev.o
+ can-dev-y                      += length.o
+ can-dev-y                      += rx-offload.o
++can-dev-y                      += skb.o
+
+ can-dev-$(CONFIG_CAN_LEDS)     += led.o
 
 
 Yours sincerely,
