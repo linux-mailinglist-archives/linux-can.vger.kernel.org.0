@@ -2,37 +2,41 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE442F0E27
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B981B2F0E2E
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727786AbhAKI1d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 03:27:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S1727870AbhAKI3y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 03:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbhAKI1d (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:27:33 -0500
+        with ESMTP id S1726611AbhAKI3y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:29:54 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386F0C061786
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:26:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E59C061786
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:29:14 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kysXL-0004a5-Qs; Mon, 11 Jan 2021 09:26:51 +0100
+        id 1kysZc-0004gS-Js; Mon, 11 Jan 2021 09:29:12 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61] (unknown [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C1A2D5BF548;
-        Mon, 11 Jan 2021 08:26:50 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A47AC5BF54D;
+        Mon, 11 Jan 2021 08:29:11 +0000 (UTC)
+Subject: Re: [net-next 11/13] can: dev: extend struct can_skb_priv to hold CAN
+ frame length
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can <linux-can@vger.kernel.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>
 References: <20210109174013.534145-1-mkl@pengutronix.de>
- <CAMZ6RqJ-4rmFDzmzBeHvjw1-_pen4=yhnvnoRvybEtY5fqEQoQ@mail.gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
+ <20210109174013.534145-12-mkl@pengutronix.de>
+ <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
+ <9c166c82-3390-ba44-0cd2-721a3d82732a@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
  zu8T6kZP2wEIpM9RjEL3jdBjZNCsjSS6x1qzpc2+2ivjdiJsqeaagIgvy2JWy7vUa4/PyGfx
@@ -93,17 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [net-next 00/13] can: dev: cleanup and add CAN frame length
- handling support
-Message-ID: <a93cad08-6653-720e-fa1c-da43fec7462d@pengutronix.de>
-Date:   Mon, 11 Jan 2021 09:26:47 +0100
+Message-ID: <6781c656-ad8a-4724-fcec-7cb17dfd5b9a@pengutronix.de>
+Date:   Mon, 11 Jan 2021 09:29:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqJ-4rmFDzmzBeHvjw1-_pen4=yhnvnoRvybEtY5fqEQoQ@mail.gmail.com>
+In-Reply-To: <9c166c82-3390-ba44-0cd2-721a3d82732a@pengutronix.de>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="KFW0skldiuiT0KjcjyidmG7vJTMrMVYJ3"
+ boundary="BNv5acm0CyLbZ8xA2yPwAgausmI4D9A0b"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,52 +115,46 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---KFW0skldiuiT0KjcjyidmG7vJTMrMVYJ3
-Content-Type: multipart/mixed; boundary="kiCRlDCFOIQnLkD1XhtcwyYVqv2bbFZOi";
+--BNv5acm0CyLbZ8xA2yPwAgausmI4D9A0b
+Content-Type: multipart/mixed; boundary="qajVEOFYEXiPZqSuwORGQ9N4wGiC5Zjdv";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc: linux-can <linux-can@vger.kernel.org>,
  Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <a93cad08-6653-720e-fa1c-da43fec7462d@pengutronix.de>
-Subject: Re: [net-next 00/13] can: dev: cleanup and add CAN frame length
- handling support
+Message-ID: <6781c656-ad8a-4724-fcec-7cb17dfd5b9a@pengutronix.de>
+Subject: Re: [net-next 11/13] can: dev: extend struct can_skb_priv to hold CAN
+ frame length
 References: <20210109174013.534145-1-mkl@pengutronix.de>
- <CAMZ6RqJ-4rmFDzmzBeHvjw1-_pen4=yhnvnoRvybEtY5fqEQoQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJ-4rmFDzmzBeHvjw1-_pen4=yhnvnoRvybEtY5fqEQoQ@mail.gmail.com>
+ <20210109174013.534145-12-mkl@pengutronix.de>
+ <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
+ <9c166c82-3390-ba44-0cd2-721a3d82732a@pengutronix.de>
+In-Reply-To: <9c166c82-3390-ba44-0cd2-721a3d82732a@pengutronix.de>
 
---kiCRlDCFOIQnLkD1XhtcwyYVqv2bbFZOi
+--qajVEOFYEXiPZqSuwORGQ9N4wGiC5Zjdv
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 1/10/21 9:55 AM, Vincent MAILHOL wrote:
+On 1/11/21 9:22 AM, Marc Kleine-Budde wrote:
 [...]
 
-> Did you test it after the occurence of a can_bus_off() event?
+>> But the absence of symmetry in the final result bothers me a
+>> bit. Reading manually can_skb_prv(skb)->frame_len by hand would
+>> look as below, which I think is short enough not to be
+>> factorized within can_get_echo_skb():
+>>         struct sk_buff *skb =3D priv->echo_skb[skb_idx];
+>>         unsigned int frame_len =3D can_skb_prv(skb)->frame_len;
+>>         can_get_echo_skb(skb, netdev, skb_idx);
+>>
+>> So at the end, I would suggest not to modify can_get_echo_skb()
+>> so that it is a better "mirror" of can_put_echo_skb().
+>=20
+> That is the logical next step, which I didn't take :)
 
-Not yet...
-
-> When the device restarts, you normally have to call
-> netdev_reset_queue(netdev) in order to reset all the BQL
-> statistics.
-
-I only included the relevant parts to illustrate the use of the changed A=
-PI.
-There is a netdev_reset_queue() in mcp251xfd_ring_init(), which is called=
- via:
-mcp251xfd_chip_start(), mcp251xfd_set_mode()
-
-> @@ -335,6 +335,8 @@ static void mcp251xfd_ring_init(struct mcp251xfd_pr=
-iv *priv)
->         u8 len;
->         int i, j;
-> =20
-> +       netdev_reset_queue(priv->ndev);
-> +
->         /* TEF */
->         tef_ring =3D priv->tef;
->         tef_ring->head =3D 0;
+need more tee! I ment to say your "[PATCH] can: dev: extend can_put_echo_=
+skb()
+to handle frame_len" is the next logical step.
 
 Marc
 
@@ -169,23 +165,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---kiCRlDCFOIQnLkD1XhtcwyYVqv2bbFZOi--
+--qajVEOFYEXiPZqSuwORGQ9N4wGiC5Zjdv--
 
---KFW0skldiuiT0KjcjyidmG7vJTMrMVYJ3
+--BNv5acm0CyLbZ8xA2yPwAgausmI4D9A0b
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8C8cACgkQqclaivrt
-76nqmAf9Gqo8If940dTgrmG6cFcww1JWNEWwZ4VfrWqwHDhL9q4bxC5L5wcSIc0l
-slU6C+osHrj88bYUFW2soNAQC6yW4rZ8vNfthsbXy9kyodFn98CB2UyOLuTIAL44
-MbjMMsMjgx1H1fv83WfkNOaEnQ3srZyWrAruYZMreJJpTly1Ir9k86y/nkOm1Tcc
-npYcF67PMA2k7B0BTi0qI83xuzwhmjntO4VKbIUJR8lTUdskNaivDn07MOh8n8mB
-sXMbb4lCFVtfGCsyUtWfYsZNuhpsBlocIj7rY1EtUCUsM/2vyfxUsrMK8QYGygn8
-INVlHDQOA4cT08z+q5ppggbHEC3zkQ==
-=057Z
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8DFQACgkQqclaivrt
+76kM2Af+JgnIvTeAQv1jQiw9wTotgzL+LYG5BP+lqJ8TedsthRFlFvk3qYkcJape
+CW+HYFqjwgl1Aym8/if6lNmMH+9nw1mnAKNKjL1Ov/W/eLncTOSoJTCGehbiI2kK
+bYb/Cpc6BnWWSaHLa5+048F2VuRm9HgVwmwwBXQkAYVsmxfnuY4m+8zHc1GOl4fN
+y5hZ/ZvyVlYu4pt5UBSkZR47Z7OsNas7vA5gqDd0BFqf2LzcEju33aL/we9p6WmK
+xnn63bH2MXs6uyJYOQszlRzQUm5aVggrZEthC5hymdPBWgsFn1sPXuYpeX6PUtWh
+Zinp/SGl8AT4u+iXnpXi2a/2Cap8Tw==
+=Bfij
 -----END PGP SIGNATURE-----
 
---KFW0skldiuiT0KjcjyidmG7vJTMrMVYJ3--
+--BNv5acm0CyLbZ8xA2yPwAgausmI4D9A0b--
