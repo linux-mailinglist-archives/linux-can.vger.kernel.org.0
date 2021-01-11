@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 985202F1068
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 11:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 105392F1069
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 11:47:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729419AbhAKKrC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1729372AbhAKKrC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 11 Jan 2021 05:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729372AbhAKKrC (ORCPT
+        with ESMTP id S1729333AbhAKKrC (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 05:47:02 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A44C0617B1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4305C0617B9
         for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 02:45:49 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kyuho-000584-AA
+        id 1kyuho-00058B-CE
         for linux-can@vger.kernel.org; Mon, 11 Jan 2021 11:45:48 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id A3DC75BF7E2
+        by bjornoya.blackshift.org (Postfix) with SMTP id E41CF5BF7E5
         for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 10:45:45 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2BD3B5BF7C4;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 3D4B35BF7CB;
         Mon, 11 Jan 2021 10:45:41 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 905504a6;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 01102f00;
         Mon, 11 Jan 2021 10:45:35 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next v2 14/15] can: dev: can_rx_offload_get_echo_skb(): extend to return can frame length
-Date:   Mon, 11 Jan 2021 11:45:28 +0100
-Message-Id: <20210111104529.657057-15-mkl@pengutronix.de>
+Subject: [net-next v2 15/15] can: dev: add software tx timestamps
+Date:   Mon, 11 Jan 2021 11:45:29 +0100
+Message-Id: <20210111104529.657057-16-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210111104529.657057-1-mkl@pengutronix.de>
 References: <20210111104529.657057-1-mkl@pengutronix.de>
@@ -53,101 +53,63 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In order to implement byte queue limits (bql) in CAN drivers, the length of the
-CAN frame needs to be passed into the networking stack after queueing and after
-transmission completion.
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-To avoid to calculate this length twice, extend can_rx_offload_get_echo_skb()
-to return that value. Convert all users of this function, too.
+Call skb_tx_timestamp() within can_put_echo_skb() so that a software
+tx timestamp gets attached on the skb.
 
+There two main reasons to include this call in can_put_echo_skb():
+
+  * It easily allow to enable the tx timestamp on all devices with
+    just one small change.
+
+  * According to Documentation/networking/timestamping.rst, the tx
+    timestamps should be generated in the device driver as close as
+    possible, but always prior to passing the packet to the network
+    interface. During the call to can_put_echo_skb(), the skb gets
+    cloned meaning that the driver should not dereference the skb
+    variable anymore after can_put_echo_skb() returns. This makes
+    can_put_echo_skb() the very last place we can use the skb without
+    having to access the echo_skb[] array.
+
+Remarks:
+
+  * By default, skb_tx_timestamp() does nothing. It needs to be
+    activated by passing the SOF_TIMESTAMPING_TX_SOFTWARE flag either
+    through socket options or control messages.
+
+  * The hardware rx timestamp of a local loopback message is the
+    hardware tx timestamp. This means that there are no needs to
+    implement SOF_TIMESTAMPING_TX_HARDWARE for CAN sockets.
+
+References:
+
+Support for the error queue in CAN RAW sockets (which is needed for tx
+timestamps) was introduced in:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb88531bdbfaafb827192d1fc6c5a3fcc4fadd96
+
+Put the call to skb_tx_timestamp() just before adding it to the array:
+https://lkml.org/lkml/2021/1/10/54
+
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Link: https://lore.kernel.org/r/20210110124903.109773-2-mailhol.vincent@wanadoo.fr
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/rx-offload.c               | 5 +++--
- drivers/net/can/flexcan.c                      | 5 +++--
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
- drivers/net/can/ti_hecc.c                      | 2 +-
- include/linux/can/rx-offload.h                 | 3 ++-
- 5 files changed, 10 insertions(+), 7 deletions(-)
+ drivers/net/can/dev/skb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
-index 6a26b5282df1..ab2c1543786c 100644
---- a/drivers/net/can/dev/rx-offload.c
-+++ b/drivers/net/can/dev/rx-offload.c
-@@ -263,7 +263,8 @@ int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
- EXPORT_SYMBOL_GPL(can_rx_offload_queue_sorted);
+diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
+index 53683d4312f1..f858f994cd49 100644
+--- a/drivers/net/can/dev/skb.c
++++ b/drivers/net/can/dev/skb.c
+@@ -61,6 +61,7 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 		skb->pkt_type = PACKET_BROADCAST;
+ 		skb->ip_summed = CHECKSUM_UNNECESSARY;
+ 		skb->dev = dev;
++		skb_tx_timestamp(skb);
  
- unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
--					 unsigned int idx, u32 timestamp)
-+					 unsigned int idx, u32 timestamp,
-+					 unsigned int *frame_len_ptr)
- {
- 	struct net_device *dev = offload->dev;
- 	struct net_device_stats *stats = &dev->stats;
-@@ -271,7 +272,7 @@ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
- 	u8 len;
- 	int err;
- 
--	skb = __can_get_echo_skb(dev, idx, &len, NULL);
-+	skb = __can_get_echo_skb(dev, idx, &len, frame_len_ptr);
- 	if (!skb)
- 		return 0;
- 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 202d08f8e1a4..5d9157c655e9 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -1122,8 +1122,9 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
- 		u32 reg_ctrl = priv->read(&priv->tx_mb->can_ctrl);
- 
- 		handled = IRQ_HANDLED;
--		stats->tx_bytes += can_rx_offload_get_echo_skb(&priv->offload,
--							       0, reg_ctrl << 16);
-+		stats->tx_bytes +=
-+			can_rx_offload_get_echo_skb(&priv->offload, 0,
-+						    reg_ctrl << 16, NULL);
- 		stats->tx_packets++;
- 		can_led_event(dev, CAN_LED_EVENT_TX);
- 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 95bba456a4cd..63bbe0930e53 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1271,7 +1271,7 @@ mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 	stats->tx_bytes +=
- 		can_rx_offload_get_echo_skb(&priv->offload,
- 					    mcp251xfd_get_tef_tail(priv),
--					    hw_tef_obj->ts);
-+					    hw_tef_obj->ts, NULL);
- 	stats->tx_packets++;
- 	priv->tef->tail++;
- 
-diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
-index 485c19bc98c2..73245d8836a9 100644
---- a/drivers/net/can/ti_hecc.c
-+++ b/drivers/net/can/ti_hecc.c
-@@ -757,7 +757,7 @@ static irqreturn_t ti_hecc_interrupt(int irq, void *dev_id)
- 			stamp = hecc_read_stamp(priv, mbxno);
- 			stats->tx_bytes +=
- 				can_rx_offload_get_echo_skb(&priv->offload,
--							    mbxno, stamp);
-+							    mbxno, stamp, NULL);
- 			stats->tx_packets++;
- 			can_led_event(ndev, CAN_LED_EVENT_TX);
- 			--priv->tx_tail;
-diff --git a/include/linux/can/rx-offload.h b/include/linux/can/rx-offload.h
-index f1b38088b765..40882df7105e 100644
---- a/include/linux/can/rx-offload.h
-+++ b/include/linux/can/rx-offload.h
-@@ -44,7 +44,8 @@ int can_rx_offload_irq_offload_fifo(struct can_rx_offload *offload);
- int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
- 				struct sk_buff *skb, u32 timestamp);
- unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
--					 unsigned int idx, u32 timestamp);
-+					 unsigned int idx, u32 timestamp,
-+					 unsigned int *frame_len_ptr);
- int can_rx_offload_queue_tail(struct can_rx_offload *offload,
- 			      struct sk_buff *skb);
- void can_rx_offload_del(struct can_rx_offload *offload);
+ 		/* save frame_len to reuse it when transmission is completed */
+ 		can_skb_prv(skb)->frame_len = frame_len;
 -- 
 2.29.2
 
