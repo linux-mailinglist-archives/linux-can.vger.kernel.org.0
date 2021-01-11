@@ -2,44 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE4A2F180F
+	by mail.lfdr.de (Postfix) with ESMTP id 057712F180D
 	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 15:24:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733153AbhAKOXb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S1727903AbhAKOXb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 11 Jan 2021 09:23:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733111AbhAKOXa (ORCPT
+        with ESMTP id S1733087AbhAKOXa (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 09:23:30 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67057C0617AB
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B257C0617AA
         for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 06:22:12 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kyy5C-0007cE-RJ
+        id 1kyy5C-0007bc-M4
         for linux-can@vger.kernel.org; Mon, 11 Jan 2021 15:22:10 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 86CF55C0F3B
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 14:19:32 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 7D45D5C0F44
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 14:19:33 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 34E245C0F35;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4AAE55C0F36;
         Mon, 11 Jan 2021 14:19:32 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ba511fa4;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f4635547;
         Mon, 11 Jan 2021 14:19:31 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [net-next v3 00/15] can: dev: cleanup and add CAN frame length handling support
-Date:   Mon, 11 Jan 2021 15:19:15 +0100
-Message-Id: <20210111141930.693847-1-mkl@pengutronix.de>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [net-next v3 01/15] MAINTAINERS: CAN network layer: add missing header file can-ml.h
+Date:   Mon, 11 Jan 2021 15:19:16 +0100
+Message-Id: <20210111141930.693847-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210111141930.693847-1-mkl@pengutronix.de>
+References: <20210111141930.693847-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -50,33 +53,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+This patch add the can-ml.h to the list of maintained files of the CAN network
+layer.
 
-this series splits the CAN driver related infrastructure into several files
-(patches 1...6), followed by some cleanup patches (7, 8), and support for CAN
-frame length handling (9...14). Totally unrelated is patch 15, which add
-software tx timestamping.
-
-I took the path and put the calculated frame length into the struct
-can_skb_priv and extended the can_get_echo_skb() and
-can_rx_offload_get_echo_skb() to optionally return the CAN frame length.
-
-Marc
-
+Fixes: ffd956eef69b ("can: introduce CAN midlayer private and allocate it automatically")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-changes since v2:
-- 05: add missing skb.o to Makefile (this time for real)
-- 10: added S-o-b and A-b
-- 15: moved skb_tx_timestamp()
-
-changes since v1:
-- 04: changed copyright
-- 05: add missing skb.o to Makefile
-- 06: add missing netlink.o to Makefile
-- 10: fix comment for CANFD_FRAME_LEN_MAX
-- 12: new
-- 15: new
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 54fcd5fe572d..c3091a91ebbf 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3960,6 +3960,7 @@ W:	https://github.com/linux-can
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git
+ F:	Documentation/networking/can.rst
++F:	include/linux/can/can-ml.h
+ F:	include/linux/can/core.h
+ F:	include/linux/can/skb.h
+ F:	include/net/netns/can.h
+-- 
+2.29.2
 
 
