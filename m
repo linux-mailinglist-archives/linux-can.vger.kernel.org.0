@@ -2,42 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5492F0DA4
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBF62F0DAD
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726611AbhAKILl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 03:11:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        id S1727662AbhAKINQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 03:13:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725536AbhAKILk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:11:40 -0500
+        with ESMTP id S1727645AbhAKINO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:13:14 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DC0C061794
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:11:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A410C061786
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:12:34 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kysHs-0001nX-Bc; Mon, 11 Jan 2021 09:10:52 +0100
+        id 1kysJU-00020y-Fd; Mon, 11 Jan 2021 09:12:32 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61] (unknown [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A17055BF507;
-        Mon, 11 Jan 2021 08:10:48 +0000 (UTC)
-Subject: Re: [PATCH v3 1/1] can: dev: add software tx timestamps
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org,
-        Jeroen Hofstee <jhofstee@victronenergy.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20210110124903.109773-1-mailhol.vincent@wanadoo.fr>
- <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DF9AE5BF50E;
+        Mon, 11 Jan 2021 08:12:30 +0000 (UTC)
+Subject: Re: [net-next 10/13] can: length: can_skb_get_frame_len(): introduce
+ function to get data length of frame in data link layer
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+References: <20210109174013.534145-1-mkl@pengutronix.de>
+ <20210109174013.534145-11-mkl@pengutronix.de>
+ <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -99,15 +97,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <69d878d4-78cc-82da-e4eb-b494ebdcd2b1@pengutronix.de>
-Date:   Mon, 11 Jan 2021 09:10:43 +0100
+Message-ID: <6dc68463-8433-a42e-e0db-2f9687367058@pengutronix.de>
+Date:   Mon, 11 Jan 2021 09:12:27 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="W5m2bdeLuAChMxWINbkR6AJztCrKXb9B3"
+ boundary="5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -117,71 +115,44 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---W5m2bdeLuAChMxWINbkR6AJztCrKXb9B3
-Content-Type: multipart/mixed; boundary="ADcxpjxFh7FXRywHaHuMSkVPaHeGsfChk";
+--5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2
+Content-Type: multipart/mixed; boundary="BczRtz7MOKAgeAklEmGsDdViaFgcDPGbq";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org,
- Jeroen Hofstee <jhofstee@victronenergy.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-Message-ID: <69d878d4-78cc-82da-e4eb-b494ebdcd2b1@pengutronix.de>
-Subject: Re: [PATCH v3 1/1] can: dev: add software tx timestamps
-References: <20210110124903.109773-1-mailhol.vincent@wanadoo.fr>
- <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc: linux-can <linux-can@vger.kernel.org>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Message-ID: <6dc68463-8433-a42e-e0db-2f9687367058@pengutronix.de>
+Subject: Re: [net-next 10/13] can: length: can_skb_get_frame_len(): introduce
+ function to get data length of frame in data link layer
+References: <20210109174013.534145-1-mkl@pengutronix.de>
+ <20210109174013.534145-11-mkl@pengutronix.de>
+ <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
 
---ADcxpjxFh7FXRywHaHuMSkVPaHeGsfChk
+--BczRtz7MOKAgeAklEmGsDdViaFgcDPGbq
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/10/21 1:49 PM, Vincent Mailhol wrote:
-> Call skb_tx_timestamp() within can_put_echo_skb() so that a software
-> tx timestamp gets attached on the skb.
->=20
-> There two main reasons to include this call in can_put_echo_skb():
->=20
->   * It easily allow to enable the tx timestamp on all devices with
->     just one small change.
->=20
->   * According to Documentation/networking/timestamping.rst, the tx
->     timestamps should be generated in the device driver as close as
->     possible, but always prior to passing the packet to the network
->     interface. During the call to can_put_echo_skb(), the skb gets
->     cloned meaning that the driver should not dereference the skb
->     variable anymore after can_put_echo_skb() returns. This makes
->     can_put_echo_skb() the very last place we can use the skb without
->     having to access the echo_skb[] array.
->=20
-> Remarks:
->=20
->   * By default, skb_tx_timestamp() does nothing. It needs to be
->     activated by passing the SOF_TIMESTAMPING_TX_SOFTWARE flag either
->     through socket options or control messages.
->=20
->   * The hardware rx timestamp of a local loopback message is the
->     hardware tx timestamp. This means that there are no needs to
->     implement SOF_TIMESTAMPING_TX_HARDWARE for CAN sockets.
->=20
-> References:
->=20
-> Support for the error queue in CAN RAW sockets (which is needed for tx
-> timestamps) was introduced in:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
-it/?id=3Deb88531bdbfaafb827192d1fc6c5a3fcc4fadd96
->=20
-> Put the call to skb_tx_timestamp() just before adding it to the array:
-> https://lkml.org/lkml/2021/1/10/54
->=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On 1/10/21 4:32 AM, Vincent MAILHOL wrote:
+[...]
 
-Applied to linux-can-next/testing (ontop of my dev infrastructure cleanup=
-).
+>> +/*
+>> + * Maximum size of a CAN-FD frame (rough estimation because
+>> + * ES58X_SFF_BYTES() and ES58X_EFF_BYTES() macros are using the
+>> + * constant values for Classical CAN, not CAN-FD).
+>> + */
+> /*
+>  * Maximum size of a CAN-FD frame
+>  * (rounded up and ignoring bitstuffing)
+>  */
+> It is a leftover from my original comment. Does not apply anymore
+> thanks to your newly introduced CANFD_FRAME_OVERHEAD_EFF macro.
 
-regards,
+Fixed.
+
 Marc
 
 --=20
@@ -191,23 +162,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---ADcxpjxFh7FXRywHaHuMSkVPaHeGsfChk--
+--BczRtz7MOKAgeAklEmGsDdViaFgcDPGbq--
 
---W5m2bdeLuAChMxWINbkR6AJztCrKXb9B3
+--5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8CAMACgkQqclaivrt
-76kG3AgAnlowIFoWhJ9a2GQF+/oGo+RPpHSbq46GhmY9n/zF/SEroA7ZpyJTy7ke
-4qNH3K6Gct5Z6y97TUWiYqtUN2gwdiBijktLUBubfOhB4kMKbVaNE1EOWtUQb5U7
-JbIy5FRwpNTb+npbMD9jOR+5L4/4NAWNvH7XZmk/TebRrHJAqucTe088t/qMJBZH
-XheUOg7xQzcA0YaSVTu4Wvx7+2I/xcEIOQQ+KPVXbB9hR3tb7p/XAl+EivCOCTOE
-rAqpZep1ENos9rFsi2seNw+OlZdT2pYDX3miBKUs2DyKFLYyRLUh4MPzQeCJhA+P
-GNXC+BKgSVzGqH8Pp4vFTEJjZxpSqw==
-=4HXa
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8CGsACgkQqclaivrt
+76mp6gf/aDpO3S52jdoj39kh7XagAeVyVGNMTGFj2tEUDaCslD4boQTJ9T2yehJp
+0uW7sd+6AzhR1J+TbsyWhjrot2l7Msm3G6e7fur5i4m+jj2mD63UdchRXjhSzn4K
+kMbYGNg9Ku1pfUzz/oqJAsPQ5/XKSE2d77k5TapjBGccK4dvcCcjq2qT0TOU9RS0
+MW3MsOC2YrwXF8uKWHLzS1bC8r7M1HqpWK9Wmr6kVPyPF5sP6B2vi43gpuYyvKWg
+hJB+MQm+AnC+dTwX01wm2HFI2vvNsxvSUFnVDsggXAfj/xZDzKShMS2zydnwf64i
+3aOSW2XfW5eBfuxb6Vr9sG6WZz5MmA==
+=F39c
 -----END PGP SIGNATURE-----
 
---W5m2bdeLuAChMxWINbkR6AJztCrKXb9B3--
+--5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2--
