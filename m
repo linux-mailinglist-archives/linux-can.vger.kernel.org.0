@@ -2,40 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBF62F0DAD
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FAE2F0DB1
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727662AbhAKINQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 03:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S1727347AbhAKIPT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 03:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727645AbhAKINO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:13:14 -0500
+        with ESMTP id S1727304AbhAKIPT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:15:19 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A410C061786
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:12:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461DAC061786
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:14:39 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kysJU-00020y-Fd; Mon, 11 Jan 2021 09:12:32 +0100
+        id 1kysLV-0002Th-Sa; Mon, 11 Jan 2021 09:14:37 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61] (unknown [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DF9AE5BF50E;
-        Mon, 11 Jan 2021 08:12:30 +0000 (UTC)
-Subject: Re: [net-next 10/13] can: length: can_skb_get_frame_len(): introduce
- function to get data length of frame in data link layer
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EFF2F5BF513;
+        Mon, 11 Jan 2021 08:14:36 +0000 (UTC)
+Subject: Re: [net-next 05/13] can: dev: move skb related into seperate file
 To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+        Oliver Hartkopp <socketcan@hartkopp.net>
 References: <20210109174013.534145-1-mkl@pengutronix.de>
- <20210109174013.534145-11-mkl@pengutronix.de>
- <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
+ <20210109174013.534145-6-mkl@pengutronix.de>
+ <CAMZ6RqKwa7GLc2vTMkZjUqRknR5d7CtGgeA+JQ=dKX1-VZxz+w@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -97,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <6dc68463-8433-a42e-e0db-2f9687367058@pengutronix.de>
-Date:   Mon, 11 Jan 2021 09:12:27 +0100
+Message-ID: <fe402deb-7822-038a-ba38-3167b8b5bdbd@pengutronix.de>
+Date:   Mon, 11 Jan 2021 09:14:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKwa7GLc2vTMkZjUqRknR5d7CtGgeA+JQ=dKX1-VZxz+w@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2"
+ boundary="w2d4jYLdNBbxlaAvTFEqbuQ1emAk0JHHJ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,44 +113,45 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2
-Content-Type: multipart/mixed; boundary="BczRtz7MOKAgeAklEmGsDdViaFgcDPGbq";
+--w2d4jYLdNBbxlaAvTFEqbuQ1emAk0JHHJ
+Content-Type: multipart/mixed; boundary="ezR2iluoIRSIQGAXG8ciZQYaEbN31kyly";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc: linux-can <linux-can@vger.kernel.org>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Message-ID: <6dc68463-8433-a42e-e0db-2f9687367058@pengutronix.de>
-Subject: Re: [net-next 10/13] can: length: can_skb_get_frame_len(): introduce
- function to get data length of frame in data link layer
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <fe402deb-7822-038a-ba38-3167b8b5bdbd@pengutronix.de>
+Subject: Re: [net-next 05/13] can: dev: move skb related into seperate file
 References: <20210109174013.534145-1-mkl@pengutronix.de>
- <20210109174013.534145-11-mkl@pengutronix.de>
- <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
-In-Reply-To: <CAMZ6RqKBpAsEpwg+miG-ExEeNF3-u8_cGHZRvJ=uUgXtd20q+g@mail.gmail.com>
+ <20210109174013.534145-6-mkl@pengutronix.de>
+ <CAMZ6RqKwa7GLc2vTMkZjUqRknR5d7CtGgeA+JQ=dKX1-VZxz+w@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKwa7GLc2vTMkZjUqRknR5d7CtGgeA+JQ=dKX1-VZxz+w@mail.gmail.com>
 
---BczRtz7MOKAgeAklEmGsDdViaFgcDPGbq
+--ezR2iluoIRSIQGAXG8ciZQYaEbN31kyly
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/10/21 4:32 AM, Vincent MAILHOL wrote:
-[...]
+On 1/10/21 5:26 AM, Vincent MAILHOL wrote:
+> Fails to build. I think you just forgot to include the changes on
+> drivers/net/can/dev/Makefile (c.f. below).
+>=20
+> diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefil=
+e
+> index 5c647951e06d..2c38bd532157 100644
+> --- a/drivers/net/can/dev/Makefile
+> +++ b/drivers/net/can/dev/Makefile
+> @@ -5,5 +5,6 @@ can-dev-y            +=3D bittiming.o
+>  can-dev-y            +=3D dev.o
+>  can-dev-y            +=3D length.o
+>  can-dev-y            +=3D rx-offload.o
+> +can-dev-y            +=3D skb.o
+>=20
+>  can-dev-$(CONFIG_CAN_LEDS)    +=3D led.o
 
->> +/*
->> + * Maximum size of a CAN-FD frame (rough estimation because
->> + * ES58X_SFF_BYTES() and ES58X_EFF_BYTES() macros are using the
->> + * constant values for Classical CAN, not CAN-FD).
->> + */
-> /*
->  * Maximum size of a CAN-FD frame
->  * (rounded up and ignoring bitstuffing)
->  */
-> It is a leftover from my original comment. Does not apply anymore
-> thanks to your newly introduced CANFD_FRAME_OVERHEAD_EFF macro.
+squashed into 05/13
 
-Fixed.
-
+tnx,
 Marc
 
 --=20
@@ -162,23 +161,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---BczRtz7MOKAgeAklEmGsDdViaFgcDPGbq--
+--ezR2iluoIRSIQGAXG8ciZQYaEbN31kyly--
 
---5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2
+--w2d4jYLdNBbxlaAvTFEqbuQ1emAk0JHHJ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8CGsACgkQqclaivrt
-76mp6gf/aDpO3S52jdoj39kh7XagAeVyVGNMTGFj2tEUDaCslD4boQTJ9T2yehJp
-0uW7sd+6AzhR1J+TbsyWhjrot2l7Msm3G6e7fur5i4m+jj2mD63UdchRXjhSzn4K
-kMbYGNg9Ku1pfUzz/oqJAsPQ5/XKSE2d77k5TapjBGccK4dvcCcjq2qT0TOU9RS0
-MW3MsOC2YrwXF8uKWHLzS1bC8r7M1HqpWK9Wmr6kVPyPF5sP6B2vi43gpuYyvKWg
-hJB+MQm+AnC+dTwX01wm2HFI2vvNsxvSUFnVDsggXAfj/xZDzKShMS2zydnwf64i
-3aOSW2XfW5eBfuxb6Vr9sG6WZz5MmA==
-=F39c
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8COkACgkQqclaivrt
+76mVLQf+KWKGc+xXd7HcBxfCxi+rjIBL/ni71fAg9sdnRmFGcBAQWxciXKmB78pD
+PD/p3lvjdXEEIGugBdbJZ9zhNQQ1jqUM3AdoGbmobHORGiQasksKomHRWUz9OOQN
+PzRbBE7dXsM2HF/Sintan8IC/SFsuENVroCLH4OBQ+fESv1BgGX2I4qucwpkWFWX
+DyFdgs8MTUM43jhgyEMIBsliisLtBwWjt+1nldhd7tY81dnDZQRFjiV6H4Nd2UF5
+q4Ufwl9fwxSkqoojfRzEX5tPGTL9hRNroHyGhOV92vQAGo+ALxhnPMhmpnhwfGfA
+HCZ26gym3fkCmH+dnCzfffI8FPUkyg==
+=GsVv
 -----END PGP SIGNATURE-----
 
---5wigCwkMgAoJWKhBZAdHTocBXnIXgdHJ2--
+--w2d4jYLdNBbxlaAvTFEqbuQ1emAk0JHHJ--
