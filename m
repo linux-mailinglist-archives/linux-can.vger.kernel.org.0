@@ -2,39 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8517A2F0DBA
-	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693B42F0DEC
+	for <lists+linux-can@lfdr.de>; Mon, 11 Jan 2021 09:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727785AbhAKISG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 03:18:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S1727656AbhAKIXW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 03:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbhAKISF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:18:05 -0500
+        with ESMTP id S1727482AbhAKIXV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 03:23:21 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE7BC061786
-        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:17:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1BEC061794
+        for <linux-can@vger.kernel.org>; Mon, 11 Jan 2021 00:22:41 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kysOC-0002qQ-7j; Mon, 11 Jan 2021 09:17:24 +0100
+        id 1kysTH-0003gO-Tg; Mon, 11 Jan 2021 09:22:40 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61] (unknown [IPv6:2a03:f580:87bc:d400:1a37:80df:441f:8a61])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 64BF35BF522;
-        Mon, 11 Jan 2021 08:17:23 +0000 (UTC)
-Subject: Re: [net-next 06/13] can: dev: move netlink related code into
- seperate file
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E8E4E5BF52E;
+        Mon, 11 Jan 2021 08:22:38 +0000 (UTC)
 To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can <linux-can@vger.kernel.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>
 References: <20210109174013.534145-1-mkl@pengutronix.de>
- <20210109174013.534145-7-mkl@pengutronix.de>
- <CAMZ6RqJYXqG_v+g-iGBBsUJg7n_apHUJGCJpbteDnbFmbBk2XA@mail.gmail.com>
+ <20210109174013.534145-12-mkl@pengutronix.de>
+ <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,15 +94,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <496eed02-3fe7-08dd-d55e-94ebe60532c3@pengutronix.de>
-Date:   Mon, 11 Jan 2021 09:17:20 +0100
+Subject: Re: [net-next 11/13] can: dev: extend struct can_skb_priv to hold CAN
+ frame length
+Message-ID: <9c166c82-3390-ba44-0cd2-721a3d82732a@pengutronix.de>
+Date:   Mon, 11 Jan 2021 09:22:35 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqJYXqG_v+g-iGBBsUJg7n_apHUJGCJpbteDnbFmbBk2XA@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="PfqIAfxmjEytg09H8OweTYvJvkNrr9ebK"
+ boundary="q4eHSZfLYutiRaNTWxjOUz39RokVzfmBy"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -114,47 +114,82 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---PfqIAfxmjEytg09H8OweTYvJvkNrr9ebK
-Content-Type: multipart/mixed; boundary="tHv4L7hss9Wp9ixGUVzhOIakB23NfXaF6";
+--q4eHSZfLYutiRaNTWxjOUz39RokVzfmBy
+Content-Type: multipart/mixed; boundary="zDCDS6V2pTsQVvkmE5JDZYFinZ3rnrYZS";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc: linux-can <linux-can@vger.kernel.org>,
  Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <496eed02-3fe7-08dd-d55e-94ebe60532c3@pengutronix.de>
-Subject: Re: [net-next 06/13] can: dev: move netlink related code into
- seperate file
+Message-ID: <9c166c82-3390-ba44-0cd2-721a3d82732a@pengutronix.de>
+Subject: Re: [net-next 11/13] can: dev: extend struct can_skb_priv to hold CAN
+ frame length
 References: <20210109174013.534145-1-mkl@pengutronix.de>
- <20210109174013.534145-7-mkl@pengutronix.de>
- <CAMZ6RqJYXqG_v+g-iGBBsUJg7n_apHUJGCJpbteDnbFmbBk2XA@mail.gmail.com>
-In-Reply-To: <CAMZ6RqJYXqG_v+g-iGBBsUJg7n_apHUJGCJpbteDnbFmbBk2XA@mail.gmail.com>
+ <20210109174013.534145-12-mkl@pengutronix.de>
+ <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKfVZ-Z10EK611NZots0Q61bJ6b5TPxSgWAv3nWo0+ryg@mail.gmail.com>
 
---tHv4L7hss9Wp9ixGUVzhOIakB23NfXaF6
+--zDCDS6V2pTsQVvkmE5JDZYFinZ3rnrYZS
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 1/10/21 5:27 AM, Vincent MAILHOL wrote:
-> Same as previous message but for netlink: fails to build. I think
-> you just forgot to include the changes on
-> drivers/net/can/dev/Makefile (c.f. below).
->=20
-> diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefil=
-e
-> index 2c38bd532157..6624be65de6f 100644
-> --- a/drivers/net/can/dev/Makefile
-> +++ b/drivers/net/can/dev/Makefile
-> @@ -6,5 +6,6 @@ can-dev-y            +=3D dev.o
->  can-dev-y            +=3D length.o
->  can-dev-y            +=3D rx-offload.o
->  can-dev-y            +=3D skb.o
-> +can-dev-y            +=3D netlink.o
->=20
->  can-dev-$(CONFIG_CAN_LEDS)    +=3D led.o
+On 1/10/21 7:52 AM, Vincent MAILHOL wrote:
+[...]
 
-squashed - I somehow lost some changes, between iteration, when moving th=
-e files
-from net/can to net/can/dev....
+>> @@ -118,7 +123,7 @@ unsigned int can_get_echo_skb(struct net_device *d=
+ev, unsigned int idx)
+>>         struct sk_buff *skb;
+>>         u8 len;
+>>
+>> -       skb =3D __can_get_echo_skb(dev, idx, &len);
+>> +       skb =3D __can_get_echo_skb(dev, idx, &len, NULL);
+>>         if (!skb)
+>>                 return 0;
+>>
+>=20
+> The can_skb_priv->frame_len is smart. Nice change :)
+
+tnx :)
+
+> I have one knit pick concerning the symmetry between
+> can_put_echo_skb() and can_get_echo_skb().
+>=20
+> My current understanding is that:
+>   * In the tx branch, we need to manually set can_skb_priv->frame_len. =
+Example:
+>         can_skb_prv(skb)->frame_len =3D can_skb_get_frame_len(skb);
+>         can_put_echo_skb(skb, netdev, skb_idx);
+
+ack
+
+>   * In the rx branch, it is accessed through the function can_get_echo_=
+skb():
+>         unsigned int frame_len;
+>         can_get_echo_skb(skb, netdev, skb_idx, &frame_len);
+
+ack
+
+> Please correct me if my understanding is wrong.
+>=20
+> I think that you did not modify can_put_echo_skb() so that the
+> drivers which do not implement the BQL would not have to call
+> can_skb_get_frame_len(skb) and thus saving computing resources. I
+> also understand that the motivation to modify can_put_echo_skb()
+> is to factorise the code.
+>=20
+> But the absence of symmetry in the final result bothers me a
+> bit. Reading manually can_skb_prv(skb)->frame_len by hand would
+> look as below, which I think is short enough not to be
+> factorized within can_get_echo_skb():
+>         struct sk_buff *skb =3D priv->echo_skb[skb_idx];
+>         unsigned int frame_len =3D can_skb_prv(skb)->frame_len;
+>         can_get_echo_skb(skb, netdev, skb_idx);
+>=20
+> So at the end, I would suggest not to modify can_get_echo_skb()
+> so that it is a better "mirror" of can_put_echo_skb().
+
+That is the logical next step, which I didn't take :)
 
 regards,
 Marc
@@ -166,23 +201,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---tHv4L7hss9Wp9ixGUVzhOIakB23NfXaF6--
+--zDCDS6V2pTsQVvkmE5JDZYFinZ3rnrYZS--
 
---PfqIAfxmjEytg09H8OweTYvJvkNrr9ebK
+--q4eHSZfLYutiRaNTWxjOUz39RokVzfmBy
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8CZAACgkQqclaivrt
-76lSGgf/b34ZWYKZYdfAKz/gq914ORpwNabVVvf44CV6QtaK6nIFCh8heye4Opew
-0DGFfAb+TrLn1sMzaxYE1O6SEv0apfo/kC75z1eiMK2W1DjCT89xSOpafHAnBMko
-P31MLJ9VdIOoiPNrfq+708yqPSmPZsqOzFyLEN3rBA1ZzYqY0j2E3J6DhZux+Fid
-EAlgagFcuEIjJjprkKrM68wP96Bu0fx7RSKBj+TY8FwxR0BsiQbDhU1T2LxVBLop
-PBPDY67gAPKrkAYFaAazVP4F+gKar1q4Pap57prh9K9HdTcTpTDoMn6bV76/5HpQ
-vHoxBKAe3zUaBsHWJSbOzvYFNLA7VQ==
-=HPbT
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/8CssACgkQqclaivrt
+76mmOgf+P8WNHyX5k5NtLe0gCRjdnwapQZMp4CJS6fSxfkbiTgDlhwnIDRojI18r
+C64Fm9zjXzstGAW9NsAY0ZZHaOUcoIga7ZKLLm520NYkRV2pOUOg3T0jKLKhyuE/
+3QfJHbfwgpbBZVY+Z7VuoVaeuu0bMlqC0Qeh2rHMGRk5C54Q4mpGeF9HSfhpU1xM
+5K11avNTxt2lmXpaeIHNMW6zEmfM6iYbfN8ycLuASOHs5ScITTo+zy9fMQgmneN1
+hXQi5c8FLC8MxWB0NsLiFNNp/e10jHPnbtwY81Cc+a26LVrqLm0B0er7OVAcf2HF
+Pw3APvQSm0u2a32EeYiaKJcHWttFiA==
+=ZFk5
 -----END PGP SIGNATURE-----
 
---PfqIAfxmjEytg09H8OweTYvJvkNrr9ebK--
+--q4eHSZfLYutiRaNTWxjOUz39RokVzfmBy--
