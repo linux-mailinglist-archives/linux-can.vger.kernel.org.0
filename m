@@ -2,78 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 753192F23E2
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 01:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2C32F2625
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 03:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404151AbhALA0F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 19:26:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S1728203AbhALCPF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 11 Jan 2021 21:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404259AbhALARz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 19:17:55 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227D0C061575;
-        Mon, 11 Jan 2021 16:17:15 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id q20so285078pfu.8;
-        Mon, 11 Jan 2021 16:17:15 -0800 (PST)
+        with ESMTP id S1727426AbhALCPE (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 21:15:04 -0500
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDE7C061575;
+        Mon, 11 Jan 2021 18:14:24 -0800 (PST)
+Received: by mail-pg1-x52a.google.com with SMTP id v19so392862pgj.12;
+        Mon, 11 Jan 2021 18:14:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eMOGjx4X1G85YpVaLNWlXD4JxAjkbXS4+mOr5OYo8sI=;
-        b=Ie1Q5gDrHumtlGRP7Ula133n91VU8nJcDCw79dJgUxoeRc1a+Dh6C53LngnDM7NDlL
-         RqQv9nQ+BQU1a7X0h1f7F9f2IRBCZ2zpIwiYAuSYOZSQziDRuQR/8fDKW16zQOmFYdET
-         +Wuqt2VXw6fN7WfnYOc4QXN5um42TIb/K6xEAbHNJVsJFyGjTTS19wqf+dgvNQVkDMEU
-         beS7VJ7MTzF2cG3ISIiuR7gUPTFi12TqokwkboM7btsl/qTZxaiZcc0DVorX8yrauAwE
-         Vle1QlUvtAoSKYZHNWFicaFlLlumHY3Od+z2jAN2sFKB7pRpy6hL7+xlcIL6U02KDV1Y
-         H1FA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HKwXEUt2KV6yKFtidI9ws3+xlcJfaSAZDwRiqf3lrro=;
+        b=hYKPwKhE2oU3iWkqGCpi/yuf+O+T231tjBRvlO+6Xuu+HiZZQG9uWqHKQ9HHbqY1A2
+         eRVIfiz8M/v9v7O5bbkyxPZoXS2fgBWJ+TGb3j4CZwAaB/qDjDR/fPKl2Cb7GbMMF3Mg
+         UbW7/Wpy3gAOpMn3Th39IycQtbDbx3OkfVF0e9iS4B7oMhteQDfQfFPJLjMAklqxS/G8
+         2bTDftSWBMaKyPUGu4tSigE6dCpa4hch6hTYrjTPssQuYz4CgkBjEeetRkAoo1akqVfx
+         KTwg+kupB2acjFapYmLz0tXVDvKIR7HIJ30yRvuu+kKgijJ2iQGPYnWb3rPvQuAtuO1l
+         fb0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eMOGjx4X1G85YpVaLNWlXD4JxAjkbXS4+mOr5OYo8sI=;
-        b=PaROZQC/cWOYS8txtBNOvvJpB+L70zrN+MXtWZ5vxEzvn/JmGNzBOKFio2Hzdoper6
-         AmtTCJFUFLR8kCAXGayzFtHGE1rEjxnXmuBf2ksjCE1D8eVx9irjR24c82vuXzL78Oyt
-         C4ok5Wl9Nywk0P+uM7wB0oo4n66OMNdmZwVwtiesfQ5cZG1VgK5eNjLuYEVKVTUF48FJ
-         vHLc55IhnyoM0Z37C0onhulS2K7b5PDsdBJDqTDZDQQoE1HLVbIA/YWoYCKmcEVT3Llf
-         UDghlj+KXF9oAuVqqXYw08nwVLg/vLNKsDdnPYMhJIFEa3UR96Ba/SuXQnMxrwb/w7gC
-         Uk1g==
-X-Gm-Message-State: AOAM532QPvH7gQa7ZSkyfkDaXQV0TWJ4sj+TUPX8Y9Y79BeaWcPJlH/4
-        rjpKj+EBK9ln+1wxohTOAQM9pUOAtPHamrnXqVo=
-X-Google-Smtp-Source: ABdhPJzUpY3jMAx5iegF3WyYbaQBMHOy/tXVFcIxoYLTA1mDgn+AAvvsNB7b1iBngqOrnpfKH2KrRR1i7EuVDUA7f+o=
-X-Received: by 2002:a62:808d:0:b029:19e:b084:d5b0 with SMTP id
- j135-20020a62808d0000b029019eb084d5b0mr1862142pfd.80.1610410634548; Mon, 11
- Jan 2021 16:17:14 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HKwXEUt2KV6yKFtidI9ws3+xlcJfaSAZDwRiqf3lrro=;
+        b=UsPk3k6N5ZwnyZZ1r8YQ401zATF4lSHEmnrvXv77MH3D5aZdjnVpjB+sde8xFXcyyn
+         GobG6sngSX5GFWvaTvfCFGaDC03y1XPH5DzDucrZs+mvCXs9OYi/Y3p4QPymGSEXaYOZ
+         b4qsvXY87/dui5Xk35t7apEb4d3UNfMJLJLAoG1WIhYxlFvnyx2diHMurWCYx6y0lB5a
+         Prak/tCHApg7aBs86B8huJoCQRJckPR8PBQuZCX3L5Zw8jDcO2aCy7UsPurwBdkR5dEj
+         2cSK8csVFKEWocCZuR271RpzGyKozrHlKfIxJ7T9YZ+KuFETQY1HM+CnGoYq0TTcV23K
+         9FSA==
+X-Gm-Message-State: AOAM530oRW1cQyRnPxPgwChYPZz2MoOAAKM6uwEzAg9yZGazYuRpFGeq
+        VfKWAfWU3cs1sUUM0+fZmKY=
+X-Google-Smtp-Source: ABdhPJw9slzE8OzBbO4J+eiwaR63/+A8LmJOYK2IcTk2DUpF3XBWYgYkRWdbJ2m7CsHVB3685yLJQA==
+X-Received: by 2002:a62:1ad3:0:b029:19d:cc02:5d07 with SMTP id a202-20020a621ad30000b029019dcc025d07mr2302990pfa.70.1610417663981;
+        Mon, 11 Jan 2021 18:14:23 -0800 (PST)
+Received: from hoboy.vegasvil.org (c-73-241-114-122.hsd1.ca.comcast.net. [73.241.114.122])
+        by smtp.gmail.com with ESMTPSA id i25sm1092775pgb.33.2021.01.11.18.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Jan 2021 18:14:22 -0800 (PST)
+Date:   Mon, 11 Jan 2021 18:14:20 -0800
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/1] can: dev: add software tx timestamps
+Message-ID: <20210112021420.GA18703@hoboy.vegasvil.org>
+References: <20210110124903.109773-1-mailhol.vincent@wanadoo.fr>
+ <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
+ <20210111171152.GB11715@hoboy.vegasvil.org>
+ <CAMZ6RqJqWOGVb_oAhk+CSZAvsej_xSDR6jqktU_nwLgFpWTb9Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <00000000000019908405b8891f9d@google.com> <20210111113059.42de599d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210111113059.42de599d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Mon, 11 Jan 2021 16:17:03 -0800
-Message-ID: <CAM_iQpXbARpYRxFv4g2gC1+oPfdpKx8mMD_7d6BjWr5mPn3nrg@mail.gmail.com>
-Subject: Re: KMSAN: kernel-infoleak in move_addr_to_user (4)
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     syzbot <syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, David Miller <davem@davemloft.net>,
-        Alexander Potapenko <glider@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqJqWOGVb_oAhk+CSZAvsej_xSDR6jqktU_nwLgFpWTb9Q@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 11:33 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> Looks like a AF_CAN socket:
->
-> r0 = socket(0x1d, 0x2, 0x6)
-> getsockname$packet(r0, &(0x7f0000000100)={0x11, 0x0, 0x0, 0x1, 0x0, 0x6, @broadcast}, &(0x7f0000000000)=0x14)
->
+On Tue, Jan 12, 2021 at 09:00:33AM +0900, Vincent MAILHOL wrote:
+> Out of curiosity, which programs do you use? I guess wireshark
+> but please let me know if you use any other programs (I just use
+> to write a small C program to do the stuff).
 
-Right, it seems we need a memset(0) in isotp_getname().
+I was thinking of PTP over DeviceNET (which, in turn, is over CAN).
+This is specified in Annex G of IEEE 1588.
 
-Thanks.
+The linuxptp stack has modular design and could one day support
+DeviceNET.  It would be much easier for linuxptp if CAN interfaces
+support hardware time stamping in the same way as other network
+interfaces.
+
+Thanks,
+Richard
