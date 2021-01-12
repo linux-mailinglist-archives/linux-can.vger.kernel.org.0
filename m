@@ -2,172 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6072F2B34
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 10:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B13072F2C04
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 10:59:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392476AbhALJXh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jan 2021 04:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392630AbhALJXg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 04:23:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE66AC061786
-        for <linux-can@vger.kernel.org>; Tue, 12 Jan 2021 01:22:55 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kzFt7-0001Ph-Jl; Tue, 12 Jan 2021 10:22:53 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:6421:fa79:a26c:5f73] (unknown [IPv6:2a03:f580:87bc:d400:6421:fa79:a26c:5f73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0483F5C1988;
-        Tue, 12 Jan 2021 09:22:51 +0000 (UTC)
-Subject: Re: [PATCH v2] can: isotp: fix isotp_getname() leak
-To:     Oliver Hartkopp <socketcan@hartkopp.net>, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc:     Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com
-References: <20210112091643.11789-1-socketcan@hartkopp.net>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <ea706c1f-bbcf-8a95-e2ef-3ccda4356ab5@pengutronix.de>
-Date:   Tue, 12 Jan 2021 10:22:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S2389560AbhALJ5O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jan 2021 04:57:14 -0500
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:42376 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389230AbhALJ5O (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 04:57:14 -0500
+Received: from localhost.localdomain ([153.202.107.157])
+        by mwinf5d28 with ME
+        id Flv22400R3PnFJp03lvPlH; Tue, 12 Jan 2021 10:55:30 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 12 Jan 2021 10:55:30 +0100
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 0/1] Add software TX timestamps to the CAN devices
+Date:   Tue, 12 Jan 2021 18:54:36 +0900
+Message-Id: <20210112095437.6488-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <20210112091643.11789-1-socketcan@hartkopp.net>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="BFjukZb6GB5tVgX3Lv1JoKNdqmD6LW9Wh"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---BFjukZb6GB5tVgX3Lv1JoKNdqmD6LW9Wh
-Content-Type: multipart/mixed; boundary="RoElyrOgdrv9rfIs0eEgyj04y4xwGdMNF";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>, kuba@kernel.org,
- netdev@vger.kernel.org, linux-can@vger.kernel.org
-Cc: Cong Wang <xiyou.wangcong@gmail.com>,
- syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com
-Message-ID: <ea706c1f-bbcf-8a95-e2ef-3ccda4356ab5@pengutronix.de>
-Subject: Re: [PATCH v2] can: isotp: fix isotp_getname() leak
-References: <20210112091643.11789-1-socketcan@hartkopp.net>
-In-Reply-To: <20210112091643.11789-1-socketcan@hartkopp.net>
+With the ongoing work to add BQL to Socket CAN, I figured out that it
+would be nice to have an easy way to mesure the latency.
 
---RoElyrOgdrv9rfIs0eEgyj04y4xwGdMNF
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+And one easy way to do so it to check the round trip time of the
+packet by doing the difference between the software rx timestamp and
+the software tx timestamp.
 
-On 1/12/21 10:16 AM, Oliver Hartkopp wrote:
-> Initialize the sockaddr_can structure to prevent a data leak to user sp=
-ace.
->=20
-> Suggested-by: Cong Wang <xiyou.wangcong@gmail.com>
-> Reported-by: syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com
-> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+rx timestamps are already available. This patch gives the missing
+piece: add a tx software timestamp feature to the CAN devices.
 
-Applied to linux-can/testing
+Of course, the tx software timestamp might also be used for other
+purposes such as performance measurements of the different queuing
+disciplines (e.g. by checking the difference between the kernel tx
+software timestamp and the userland tx software timestamp).
 
-Tnx,
-Marc
+v2 was a mistake, please ignore it (fogot to do git add, changes were
+not reflected...)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+v3 reflects the comments that Jeroen made in
+https://lkml.org/lkml/2021/1/10/54
 
+v4 rebases the patch on linux-can-next/testing and suppress the
+comment related to SOF_TIMESTAMPING_TX_HARDWARE.
+Reference: https://lore.kernel.org/linux-can/20210111171152.GB11715@hoboy.vegasvil.org/
 
---RoElyrOgdrv9rfIs0eEgyj04y4xwGdMNF--
+Vincent Mailhol (1):
+  can: dev: add software tx timestamps
 
---BFjukZb6GB5tVgX3Lv1JoKNdqmD6LW9Wh
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+ drivers/net/can/dev/skb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.26.2
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/9amgACgkQqclaivrt
-76lgZAf/WgOA2j8A4lzxRMHwce0BSyU9idoe2hBZDATcsIhUzXqNWBLjLACHJ1Va
-cRmfZpUDN8zFvT5qde5rYfdu9T0HYmkBLn+Rhlf6rAMn1ybSwySiG1s+fYSZUAW4
-Fg7m7pK/UJuqg7tdTA5o5mUwpzAAHNE8tk++7K5CzNwTvjnl8ckcDWgG0iqgoABa
-gD3WrKZicEj2qtSzhcpcokJQiLNy70btYR2Rv113GMqQhfo5B5oPq8rpkvKz+26Z
-OPV2sR/Gg6eqHdgI1NfzGmvEr/7lY0Tnwd68/s4z7LG8icE5xkDZlicraqLbYgdh
-qHHZDdtDRzeLNKj+/fbnELoQGNBkIQ==
-=Rg1n
------END PGP SIGNATURE-----
-
---BFjukZb6GB5tVgX3Lv1JoKNdqmD6LW9Wh--
