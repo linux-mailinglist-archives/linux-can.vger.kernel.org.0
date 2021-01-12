@@ -2,54 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2C32F2625
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 03:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65E22F2867
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 07:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728203AbhALCPF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 11 Jan 2021 21:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727426AbhALCPE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 11 Jan 2021 21:15:04 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDE7C061575;
-        Mon, 11 Jan 2021 18:14:24 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id v19so392862pgj.12;
-        Mon, 11 Jan 2021 18:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HKwXEUt2KV6yKFtidI9ws3+xlcJfaSAZDwRiqf3lrro=;
-        b=hYKPwKhE2oU3iWkqGCpi/yuf+O+T231tjBRvlO+6Xuu+HiZZQG9uWqHKQ9HHbqY1A2
-         eRVIfiz8M/v9v7O5bbkyxPZoXS2fgBWJ+TGb3j4CZwAaB/qDjDR/fPKl2Cb7GbMMF3Mg
-         UbW7/Wpy3gAOpMn3Th39IycQtbDbx3OkfVF0e9iS4B7oMhteQDfQfFPJLjMAklqxS/G8
-         2bTDftSWBMaKyPUGu4tSigE6dCpa4hch6hTYrjTPssQuYz4CgkBjEeetRkAoo1akqVfx
-         KTwg+kupB2acjFapYmLz0tXVDvKIR7HIJ30yRvuu+kKgijJ2iQGPYnWb3rPvQuAtuO1l
-         fb0w==
+        id S1733124AbhALGj0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jan 2021 01:39:26 -0500
+Received: from mail-yb1-f176.google.com ([209.85.219.176]:36593 "EHLO
+        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729049AbhALGjZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 01:39:25 -0500
+Received: by mail-yb1-f176.google.com with SMTP id y4so1210447ybn.3;
+        Mon, 11 Jan 2021 22:39:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HKwXEUt2KV6yKFtidI9ws3+xlcJfaSAZDwRiqf3lrro=;
-        b=UsPk3k6N5ZwnyZZ1r8YQ401zATF4lSHEmnrvXv77MH3D5aZdjnVpjB+sde8xFXcyyn
-         GobG6sngSX5GFWvaTvfCFGaDC03y1XPH5DzDucrZs+mvCXs9OYi/Y3p4QPymGSEXaYOZ
-         b4qsvXY87/dui5Xk35t7apEb4d3UNfMJLJLAoG1WIhYxlFvnyx2diHMurWCYx6y0lB5a
-         Prak/tCHApg7aBs86B8huJoCQRJckPR8PBQuZCX3L5Zw8jDcO2aCy7UsPurwBdkR5dEj
-         2cSK8csVFKEWocCZuR271RpzGyKozrHlKfIxJ7T9YZ+KuFETQY1HM+CnGoYq0TTcV23K
-         9FSA==
-X-Gm-Message-State: AOAM530oRW1cQyRnPxPgwChYPZz2MoOAAKM6uwEzAg9yZGazYuRpFGeq
-        VfKWAfWU3cs1sUUM0+fZmKY=
-X-Google-Smtp-Source: ABdhPJw9slzE8OzBbO4J+eiwaR63/+A8LmJOYK2IcTk2DUpF3XBWYgYkRWdbJ2m7CsHVB3685yLJQA==
-X-Received: by 2002:a62:1ad3:0:b029:19d:cc02:5d07 with SMTP id a202-20020a621ad30000b029019dcc025d07mr2302990pfa.70.1610417663981;
-        Mon, 11 Jan 2021 18:14:23 -0800 (PST)
-Received: from hoboy.vegasvil.org (c-73-241-114-122.hsd1.ca.comcast.net. [73.241.114.122])
-        by smtp.gmail.com with ESMTPSA id i25sm1092775pgb.33.2021.01.11.18.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 18:14:22 -0800 (PST)
-Date:   Mon, 11 Jan 2021 18:14:20 -0800
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ElVoQG5KMy+Lp9Vbs8/Yd2MZ45smz4katwHziEUpjdc=;
+        b=MTWCkB/dKdua3g2SMD2mcDlCFbJCNQ0E7A8jJ8YbGDCfwWZOGMUO2niICPIiHVaCRT
+         oQOkYdPyUoTt9aYMzk3x0zTw5NOUYPzxvqOQwKFkxJMWPOHYILJs4oLakKC4DtDk66Z3
+         v9zqQYu8Xc8DT23oC/hWxpIZTG1RpzoQFFpoYc3I0nkakZtvbNHJQ6F+usvD00n2WvUt
+         o7JbXpDRNiGf0JDO2y+axgya3mrlQlGKeRWTzHbGVKnNj/hawcfGjhefsfDYB9WRxOV9
+         sCrjGH0Ecb1YqGDICQI17cicDrh5vvEYIO34cFRQzK7YBTET+jrVWaZ+YTFZ1BPvEqfM
+         4FsA==
+X-Gm-Message-State: AOAM531CwFsXZ1j+UhtlCVhsxKQMd6qODjuULa086h0acyaQv+V1Zap8
+        0NTHx8iVY4buKaUk1kS3+2vtC74QLLzFulj4z3s=
+X-Google-Smtp-Source: ABdhPJxI/u45bSw7nEeJkusYuKv92FOTuJQ2Ko8zb3F/13IsBWpHuzj8aUiXLyr4ym5std5l5ZvBKiiYzGIbOW6FxrM=
+X-Received: by 2002:a25:287:: with SMTP id 129mr4375547ybc.145.1610433524639;
+ Mon, 11 Jan 2021 22:38:44 -0800 (PST)
+MIME-Version: 1.0
+References: <20210110124903.109773-1-mailhol.vincent@wanadoo.fr>
+ <20210110124903.109773-2-mailhol.vincent@wanadoo.fr> <20210111171152.GB11715@hoboy.vegasvil.org>
+ <CAMZ6RqJqWOGVb_oAhk+CSZAvsej_xSDR6jqktU_nwLgFpWTb9Q@mail.gmail.com> <20210112021420.GA18703@hoboy.vegasvil.org>
+In-Reply-To: <20210112021420.GA18703@hoboy.vegasvil.org>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 12 Jan 2021 15:38:33 +0900
+Message-ID: <CAMZ6RqKY-QiNi_=H_J3QpwPfy7KUSNHRD5ok_MqnWgR-bou2hQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] can: dev: add software tx timestamps
+To:     Richard Cochran <richardcochran@gmail.com>
 Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         linux-can <linux-can@vger.kernel.org>,
         Jeroen Hofstee <jhofstee@victronenergy.com>,
@@ -58,33 +47,37 @@ Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Jakub Kicinski <kuba@kernel.org>,
         "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/1] can: dev: add software tx timestamps
-Message-ID: <20210112021420.GA18703@hoboy.vegasvil.org>
-References: <20210110124903.109773-1-mailhol.vincent@wanadoo.fr>
- <20210110124903.109773-2-mailhol.vincent@wanadoo.fr>
- <20210111171152.GB11715@hoboy.vegasvil.org>
- <CAMZ6RqJqWOGVb_oAhk+CSZAvsej_xSDR6jqktU_nwLgFpWTb9Q@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJqWOGVb_oAhk+CSZAvsej_xSDR6jqktU_nwLgFpWTb9Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 09:00:33AM +0900, Vincent MAILHOL wrote:
-> Out of curiosity, which programs do you use? I guess wireshark
-> but please let me know if you use any other programs (I just use
-> to write a small C program to do the stuff).
+On Tue. 12 Jan 2021 at 11:14, Richard Cochran <richardcochran@gmail.com> wrote:
+>
+> On Tue, Jan 12, 2021 at 09:00:33AM +0900, Vincent MAILHOL wrote:
+> > Out of curiosity, which programs do you use? I guess wireshark
+> > but please let me know if you use any other programs (I just use
+> > to write a small C program to do the stuff).
+>
+> I was thinking of PTP over DeviceNET (which, in turn, is over CAN).
+> This is specified in Annex G of IEEE 1588.
+>
+> The linuxptp stack has modular design and could one day support
+> DeviceNET.  It would be much easier for linuxptp if CAN interfaces
+> support hardware time stamping in the same way as other network
+> interfaces.
 
-I was thinking of PTP over DeviceNET (which, in turn, is over CAN).
-This is specified in Annex G of IEEE 1588.
+I actually also thought of implementing PTP but for a slightly
+different goal: synchronise the clock of the different CAN
+controllers connected to a same Linux host. But so far, it is
+just a rough idea and I never looked really deep into the
+technical details of linuxptp.
 
-The linuxptp stack has modular design and could one day support
-DeviceNET.  It would be much easier for linuxptp if CAN interfaces
-support hardware time stamping in the same way as other network
-interfaces.
+However, I did not know about DeviceNET. I am not really aware of
+the use cases for industrial automation applications.
 
-Thanks,
-Richard
+Glad to have asked, learnt something :)
+
+
+Yours sincerely,
+Vincent
