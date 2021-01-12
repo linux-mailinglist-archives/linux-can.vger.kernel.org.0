@@ -2,128 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8BA2F30A5
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 14:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224D92F3104
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 14:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbhALNJD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jan 2021 08:09:03 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:32730 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731025AbhALNJC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 08:09:02 -0500
-Received: from localhost.localdomain ([153.202.107.157])
-        by mwinf5d87 with ME
-        id Fp712400H3PnFJp03p786t; Tue, 12 Jan 2021 14:07:14 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 12 Jan 2021 14:07:14 +0100
-X-ME-IP: 153.202.107.157
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
-Subject: [PATCH v10 0/1] add support for ETAS ES58X CAN USB interfaces
-Date:   Tue, 12 Jan 2021 22:05:37 +0900
-Message-Id: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
+        id S1729821AbhALNOx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jan 2021 08:14:53 -0500
+Received: from mail-yb1-f174.google.com ([209.85.219.174]:46020 "EHLO
+        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbhALNOw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 08:14:52 -0500
+Received: by mail-yb1-f174.google.com with SMTP id k78so2090502ybf.12
+        for <linux-can@vger.kernel.org>; Tue, 12 Jan 2021 05:14:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xa1mvsUs+DyEkUdxPjbrYJGIfndXRgeIDaJT5zmaBEI=;
+        b=WIGU8amG35PNcVTjWag/3H2RUh/wwh7tYxfyYUjsbQ/OU4CEFN3j38k8prtsGUwDGe
+         Va9qFq8EGIZVLUs9f8ii6s97vJdUJ6U9RlaacLhMqEwSRkIlk2eiuvElJE7UcYuKeZhu
+         izq0EN1zO/gDIQ1fnJa1CP6F1/RP4B+gG2jm3bMDlwXo+087LscyZzRbHnDFwmaH0TyF
+         k4I5EdW17cmcPCKLPix10kVafD+9T6mUzZxYSzBcL+fkRCIDw2kxoLE4IEa5+gc6bpbt
+         tFxTrhNCEPiRyGMsVnIrwZ+Bljjy+2PVZFr5+z0B2KHux3FGUiKKjoLfSHFmAhPl65Bh
+         nExA==
+X-Gm-Message-State: AOAM532ZNUtBstjTXntLRGLghELZR705ulkB3YyIqK6SWDdqDgCmEkvJ
+        esOCXEJTEN57O1md9fjt0JEoRj8rlidRdOrRvJ8=
+X-Google-Smtp-Source: ABdhPJyxwN+3qPOipQDMRR5vu4RDjce+UVYWrJJacSTSNcl9EHX/pWUDLl+HSBrjlxLgulknlSbrlzgOHyDf3tL1XCU=
+X-Received: by 2002:a25:4744:: with SMTP id u65mr6912232yba.239.1610457251512;
+ Tue, 12 Jan 2021 05:14:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210111141930.693847-1-mkl@pengutronix.de>
+In-Reply-To: <20210111141930.693847-1-mkl@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 12 Jan 2021 22:14:00 +0900
+Message-ID: <CAMZ6RqJ=dr9SnP6YAF7WSKff7tYkqnoTZS7zjgSV1u3=TsQYTw@mail.gmail.com>
+Subject: Re: [net-next v3 00/15] can: dev: cleanup and add CAN frame length
+ handling support
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Here is the v10 of the patch.
+On Mon. 11 Jan 2021 at 23:19, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> Hello,
+>
+> this series splits the CAN driver related infrastructure into several files
+> (patches 1...6), followed by some cleanup patches (7, 8), and support for CAN
+> frame length handling (9...14). Totally unrelated is patch 15, which add
+> software tx timestamping.
+>
+> I took the path and put the calculated frame length into the struct
+> can_skb_priv and extended the can_get_echo_skb() and
+> can_rx_offload_get_echo_skb() to optionally return the CAN frame length.
+>
+> Marc
+>
+> ---
+>
+> changes since v2:
+> - 05: add missing skb.o to Makefile (this time for real)
+> - 10: added S-o-b and A-b
+> - 15: moved skb_tx_timestamp()
+>
+> changes since v1:
+> - 04: changed copyright
+> - 05: add missing skb.o to Makefile
+> - 06: add missing netlink.o to Makefile
+> - 10: fix comment for CANFD_FRAME_LEN_MAX
+> - 12: new
+> - 15: new
 
-Hope that we are now close to a release. Thanks for your comments!
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+
+Reviewed and tested the patch series, everything is OK for me.
+Thanks Marc!
 
 
 Yours sincerely,
 Vincent
-
----
-
-Changes in v10 (2021-01-12):
-  - Rebased on linux-can-next/testing and modified according to latest
-    BQL patches.
-Reference: https://lore.kernel.org/linux-can/20210111141930.693847-1-mkl@pengutronix.de/T/#m5f99d4da8e8934a75f9481ecc3137b59f3762413
-  - Replaced __netdev_sent_queue() by netdev_sent_queue().
-
-Changes in v9 (2021-01-09):
-  - es58x_start_xmit(): do not use skb anymore after the call of
-    can_put_echo_skb(). Rationale: can_put_echo_skb() calls
-    skb_clone() and thus the original skb gets consumed (i.e. use
-    after free issue).
-  - es58x_start_xmit(): Add a "drop_skb" label to free the skb when
-    errors occur.
-
-Changes in v8 (2021-01-04):
-  - The driver requires CRC16. Modified Kconfig accordingly.
-
-Changes in v7 (2020-11-17):
-  - Fix compilation issue if CONFIG_BQL is not set.
-Reference: https://lkml.org/lkml/2020/11/15/163
-
-Changes in v6 (2020-11-15):
-  - Rebase the patch on the testing branch of linux-can-next.
-  - Rename the helper functions according latest changes
-    (e.g. can_cc_get_len() -> can_cc_dlc2len())
-  - Fix comments of enum es58x_physical_layer and enum
-    es58x_sync_edge.
-
-Changes in v5 (2020-11-07):
-  - Add support for DLC greater than 8.
-  - All other patches from the previous series were either accepted or
-    dismissed. As such, this is not a series any more but a single
-    patch.
-
-Changes in v4 (2020-10-17):
-  - Remove struct es58x_abstracted_can_frame.
-  - Fix formatting (spaces, comment style).
-  - Transform macros into static inline functions when possible.
-  - Fix the ctrlmode_supported flags in es581_4.c and removed
-    misleading comments in enum es58x_samples_per_bit.
-  - Rename enums according to the type.
-  - Remove function es58x_can_put_echo_skb().
-Reference: https://lkml.org/lkml/2020/10/10/53
-
-Changes in v3 (2020-10-03):
-  - Remove all the calls to likely() and unlikely().
-Reference: https://lkml.org/lkml/2020/9/30/995
-
-Changes in v2 (2020-09-30):
-  - Fixed -W1 warnings (v1 was tested with GCC -WExtra but not with
-    -W1).
-
-v1 (2020-09-27):
- - First release
-
-Vincent Mailhol (1):
-  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
-
- drivers/net/can/usb/Kconfig                 |   10 +
- drivers/net/can/usb/Makefile                |    1 +
- drivers/net/can/usb/etas_es58x/Makefile     |    3 +
- drivers/net/can/usb/etas_es58x/es581_4.c    |  552 ++++
- drivers/net/can/usb/etas_es58x/es581_4.h    |  206 ++
- drivers/net/can/usb/etas_es58x/es58x_core.c | 2589 +++++++++++++++++++
- drivers/net/can/usb/etas_es58x/es58x_core.h |  707 +++++
- drivers/net/can/usb/etas_es58x/es58x_fd.c   |  662 +++++
- drivers/net/can/usb/etas_es58x/es58x_fd.h   |  242 ++
- 9 files changed, 4972 insertions(+)
- create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
- create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
-
--- 
-2.26.2
-
