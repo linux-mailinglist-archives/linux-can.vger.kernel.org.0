@@ -2,36 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D80D32F3417
-	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 16:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D853E2F3421
+	for <lists+linux-can@lfdr.de>; Tue, 12 Jan 2021 16:26:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389529AbhALPWz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 12 Jan 2021 10:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48318 "EHLO
+        id S2389430AbhALP0f (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 12 Jan 2021 10:26:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727707AbhALPWz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 10:22:55 -0500
+        with ESMTP id S1730024AbhALP0f (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 12 Jan 2021 10:26:35 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3ADC061575
-        for <linux-can@vger.kernel.org>; Tue, 12 Jan 2021 07:22:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C05C061786
+        for <linux-can@vger.kernel.org>; Tue, 12 Jan 2021 07:25:55 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kzLUr-0004uM-AK; Tue, 12 Jan 2021 16:22:13 +0100
+        id 1kzLYI-0005CC-Hl; Tue, 12 Jan 2021 16:25:46 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:6421:fa79:a26c:5f73] (unknown [IPv6:2a03:f580:87bc:d400:6421:fa79:a26c:5f73])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 60D855C1E6A;
-        Tue, 12 Jan 2021 15:22:12 +0000 (UTC)
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
- <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
- <CAMZ6Rq+vwBtUZtHTDQw_1KGFx_VSoep7ZtD3bu6cx5y8VyQFgw@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 858B45C1E70;
+        Tue, 12 Jan 2021 15:25:43 +0000 (UTC)
+Subject: Re: [net-next 15/19] can: tcan4x5x: rework SPI access
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        Dan Murphy <dmurphy@ti.com>, Sean Nyekjaer <sean@geanix.com>
+References: <20210107094900.173046-1-mkl@pengutronix.de>
+ <20210107094900.173046-16-mkl@pengutronix.de>
+ <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20210107110656.7e49772b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <c98003bf-e62a-ab6a-a526-1f3ed0bb1ab7@pengutronix.de>
+ <20210107143851.51675f8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -93,17 +99,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-Message-ID: <730bfea5-414a-da4b-8404-7dea8e5e9cd3@pengutronix.de>
-Date:   Tue, 12 Jan 2021 16:22:02 +0100
+Message-ID: <fc1f14e9-9c20-f137-d131-67b4133a3074@pengutronix.de>
+Date:   Tue, 12 Jan 2021 16:25:40 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6Rq+vwBtUZtHTDQw_1KGFx_VSoep7ZtD3bu6cx5y8VyQFgw@mail.gmail.com>
+In-Reply-To: <20210107143851.51675f8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="6u8n0AgXnXVTRdRAUR7eHktfiAewLdAjE"
+ boundary="xCawYD7yQNERv5tIZMwxHb2Y4qnORNr40"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,60 +117,58 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---6u8n0AgXnXVTRdRAUR7eHktfiAewLdAjE
-Content-Type: multipart/mixed; boundary="oBmr7yhAacODiQ9YDbMpj7DkWMC8QNW6o";
+--xCawYD7yQNERv5tIZMwxHb2Y4qnORNr40
+Content-Type: multipart/mixed; boundary="JETWWzvtngNHAlCpuq9QgQ4X4Vu1HP48w";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
- linux-can <linux-can@vger.kernel.org>
-Message-ID: <730bfea5-414a-da4b-8404-7dea8e5e9cd3@pengutronix.de>
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
- <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
- <CAMZ6Rq+vwBtUZtHTDQw_1KGFx_VSoep7ZtD3bu6cx5y8VyQFgw@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+vwBtUZtHTDQw_1KGFx_VSoep7ZtD3bu6cx5y8VyQFgw@mail.gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
+ kernel@pengutronix.de, Dan Murphy <dmurphy@ti.com>,
+ Sean Nyekjaer <sean@geanix.com>
+Message-ID: <fc1f14e9-9c20-f137-d131-67b4133a3074@pengutronix.de>
+Subject: Re: [net-next 15/19] can: tcan4x5x: rework SPI access
+References: <20210107094900.173046-1-mkl@pengutronix.de>
+ <20210107094900.173046-16-mkl@pengutronix.de>
+ <20210107110035.42a6bb46@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20210107110656.7e49772b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <c98003bf-e62a-ab6a-a526-1f3ed0bb1ab7@pengutronix.de>
+ <20210107143851.51675f8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210107143851.51675f8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 
---oBmr7yhAacODiQ9YDbMpj7DkWMC8QNW6o
+--JETWWzvtngNHAlCpuq9QgQ4X4Vu1HP48w
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/12/21 4:11 PM, Vincent MAILHOL wrote:
-> On Tue. 12 Jan 2021 at 22:05, Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
+On 1/7/21 11:38 PM, Jakub Kicinski wrote:
+> On Thu, 7 Jan 2021 22:17:15 +0100 Marc Kleine-Budde wrote:
+>>> +struct __packed tcan4x5x_buf_cmd {=20
+>>> +	u8 cmd;=20
+>>> +	__be16 addr;=20
+>>> +	u8 len;=20
+>>> +};  =20
 >>
->> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
->> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
+>> This has to be packed, as I assume the compiler would add some space a=
+fter the
+>> "u8 cmd" to align the __be16 naturally.
+>=20
+> Ack, packing this one makes sense.
+>=20
+>>> +struct __packed tcan4x5x_map_buf {=20
+>>> +	struct tcan4x5x_buf_cmd cmd;=20
+>>> +	u8 data[256 * sizeof(u32)];=20
+>>> +} ____cacheline_aligned;  =20
 >>
->> Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch=
-=2Ecom>
->> Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.c=
-om>
->> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->> ---
->>
+>> Due to the packing of the struct tcan4x5x_buf_cmd it should have a len=
+gth of 4
+>> bytes. Without __packed, will the "u8 data" come directly after the cm=
+d?
 >=20
-> Something strange is going on with the mailing list.  I can not
-> see the second patch (1/1) in the *linux-can* mailing
-> archive (only the cover letter is present):
-> https://lore.kernel.org/linux-can/20210112130538.14912-1-mailhol.vincen=
-t@wanadoo.fr/T/#
->=20
-> However, the full patch series is present on the *netdev* mailing
-> archives: https://lore.kernel.org/netdev/20210112130538.14912-2-mailhol=
-=2Evincent@wanadoo.fr/
->=20
-> Are there any restrictions in regard to the patch size on the
-> linux-can mailing list?
+> Yup, u8 with no alignment attribute will follow the previous
+> field with no holes.
 
-Not to my knowledge.
+Ack, without __packed, there's no diff in the objdump on arm.
 
-> Or did I did anything wrong which triggered some kind of spam filter?
-Both lists are hosted on vger.kernel.org. You might ask on helpdesk@kerne=
-l.org
-
-regards,
 Marc
 
 --=20
@@ -176,23 +178,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---oBmr7yhAacODiQ9YDbMpj7DkWMC8QNW6o--
+--JETWWzvtngNHAlCpuq9QgQ4X4Vu1HP48w--
 
---6u8n0AgXnXVTRdRAUR7eHktfiAewLdAjE
+--xCawYD7yQNERv5tIZMwxHb2Y4qnORNr40
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/9vp0ACgkQqclaivrt
-76mfYgf/aq6HXTCRawEWDzF1cNcODUamzNN/Qy1Kj7zUtjZBdKjQU+yGL4v10w71
-Hjvfxq7prrsLvdJCQhfC5MvAQiS503Syg/JGGNzoU3nQdVZu2MLECFy9d1ATHkBF
-x9hBoCLJ2mSnRFfoAa5BRtxfxfvthSfgszyHECHwSYYkKhtGCQLFaDJ4hRd0Weei
-XcYeIspyOGiw78rfOPKBwHvbjz4Aw+vhl65GtXjd1V2z+P1KCH3csdcjM6ylUgp4
-Ctzdi2C3uoVAWkzeiOFNr11cGG6LFLv1/MqvbufhldXaBicw20X4ueVuScBAv1Bb
-A9oAeAYDvHzVRgwuHWYzFitfelcZAg==
-=Y7JH
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/9v3QACgkQqclaivrt
+76lpQAf/ZBD7ahBEglmhp2j0JuLV0vLvt1S0IBWsJZcxbJk9FpvdZoxp0vqnVtVt
+SSBWOJMmalysgo+jc1mvfEJ3N/RsX1lx3nuDxOmTr5XJpA/oiOok5BPXPJyIzPGb
+U4AUiustcvJMMvZADba2QnA1La1ZfZMnX3aijXfjPYCF/wmoTdJlH3XK1Nx2oYUK
+85MKz2vZbQWLpJsHnzlmxPjvVxCG9tOZrdEBMJFStNydGi9jesOXmjOcsznZhhc1
+wMTKztieI0esil4gRZH4btVWPxNLmNUdNB3ud2wigkv1OjXYTdpXczDYxsfmzAVD
+EP2hmcK1B2DC64hBLtuWkkMJsiniGQ==
+=y7o0
 -----END PGP SIGNATURE-----
 
---6u8n0AgXnXVTRdRAUR7eHktfiAewLdAjE--
+--xCawYD7yQNERv5tIZMwxHb2Y4qnORNr40--
