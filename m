@@ -2,31 +2,33 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 595062F4F76
-	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 17:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44882F4F87
+	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 17:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbhAMQFe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 11:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
+        id S1725846AbhAMQGy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 11:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726828AbhAMQFd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 11:05:33 -0500
+        with ESMTP id S1727481AbhAMQGy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 11:06:54 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F637C061575
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 08:04:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2F1C061794
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 08:06:13 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kzida-0002er-53; Wed, 13 Jan 2021 17:04:46 +0100
+        id 1kziet-00033J-JH; Wed, 13 Jan 2021 17:06:07 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:fee8:1d97:dec2:c25] (unknown [IPv6:2a03:f580:87bc:d400:fee8:1d97:dec2:c25])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AF8515C2D7F;
-        Wed, 13 Jan 2021 16:04:41 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 190775C2D81;
+        Wed, 13 Jan 2021 16:06:06 +0000 (UTC)
+Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
 To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can <linux-can@vger.kernel.org>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
@@ -40,6 +42,7 @@ References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
  <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
  <7643bd48-6594-9ede-b791-de6e155c62c1@pengutronix.de>
  <CAMZ6Rq+HggK2HHkPn_QTKzz-niyiU8AkHc4rP5AXE+AqJmkbrg@mail.gmail.com>
+ <CAMZ6Rq+ZXG3LTgf9ZUohLGXKkSxqOf1W5WX0o5XGowQrwW+WRg@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -101,17 +104,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-Message-ID: <24603b31-fe7b-1f03-4939-fa074f471239@pengutronix.de>
-Date:   Wed, 13 Jan 2021 17:04:38 +0100
+Message-ID: <a0ea23cb-cf97-ca0b-be88-74c20bedc869@pengutronix.de>
+Date:   Wed, 13 Jan 2021 17:06:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6Rq+HggK2HHkPn_QTKzz-niyiU8AkHc4rP5AXE+AqJmkbrg@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+ZXG3LTgf9ZUohLGXKkSxqOf1W5WX0o5XGowQrwW+WRg@mail.gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="nBmtDLkusjkNMRqfqeMFPowSU7LenMjxr"
+ boundary="DZHLbIiEc9muuREis2EHsdRLtwfbzXTYJ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -121,8 +122,8 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---nBmtDLkusjkNMRqfqeMFPowSU7LenMjxr
-Content-Type: multipart/mixed; boundary="IkY9vCoecN0EmxtpMO6eRMzwTE6SYS4Gr";
+--DZHLbIiEc9muuREis2EHsdRLtwfbzXTYJ
+Content-Type: multipart/mixed; boundary="DDIikifoSUZHUYBAyHmNRECs0wFQZmYZY";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
@@ -132,128 +133,39 @@ Cc: linux-can <linux-can@vger.kernel.org>,
  "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
  Jimmy Assarsson <extja@kvaser.com>, Masahiro Yamada <masahiroy@kernel.org>,
  "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
-Message-ID: <24603b31-fe7b-1f03-4939-fa074f471239@pengutronix.de>
+Message-ID: <a0ea23cb-cf97-ca0b-be88-74c20bedc869@pengutronix.de>
 Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
  CAN USB interfaces
 References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
  <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
  <7643bd48-6594-9ede-b791-de6e155c62c1@pengutronix.de>
  <CAMZ6Rq+HggK2HHkPn_QTKzz-niyiU8AkHc4rP5AXE+AqJmkbrg@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+HggK2HHkPn_QTKzz-niyiU8AkHc4rP5AXE+AqJmkbrg@mail.gmail.com>
+ <CAMZ6Rq+ZXG3LTgf9ZUohLGXKkSxqOf1W5WX0o5XGowQrwW+WRg@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+ZXG3LTgf9ZUohLGXKkSxqOf1W5WX0o5XGowQrwW+WRg@mail.gmail.com>
 
---IkY9vCoecN0EmxtpMO6eRMzwTE6SYS4Gr
+--DDIikifoSUZHUYBAyHmNRECs0wFQZmYZY
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/13/21 1:15 PM, Vincent MAILHOL wrote:
->>> +/**
->>> + * es58x_calculate_crc() - Compute the crc16 of a given URB.
->>> + * @urb_cmd: The URB command for which we want to calculate the CRC.=
+On 1/13/21 3:35 PM, Vincent MAILHOL wrote:
+>> My understanding is that having a queue size being a power of two is
+>> required in order not to use spinlocks (else, modulo operations would
+>> break when the index wraparound back to zero). I tried to minimize the=
 
->>> + * @urb_len: Length of @urb_cmd. Must be at least bigger than 4
->>> + *   (ES58X_CRC_CALC_OFFSET + sizeof(crc))
->>> + *
->>> + * Return: crc16 value.
->>> + */
->>> +static u16 es58x_calculate_crc(const union es58x_urb_cmd *urb_cmd, u=
-16 urb_len)
->>> +{
->>> +     u16 crc;
->>> +     ssize_t len =3D urb_len - ES58X_CRC_CALC_OFFSET - sizeof(crc);
->>> +
->>> +     WARN_ON(len < 0);
->>
->> Is it possible to ensure earlier, that the urbs are of correct length?=
-
+>> number of spinlock: only one per bulk send or bulk receive.
 >=20
-> Easy answer: it is ensured.
-
-Okay, then get rid of those checks :)
-
-> On the Tx branch, I create the urbs so I
-> know for sure that the length is correct. On the Rx branch, I have a
-> dedicated function: es58x_check_rx_urb() for this purpose.  I
-> will remove that WARN_ON() and the one in es58x_get_crc().
+> Or do you mean to round up the skb_echo array length to the next power
+> of two in the driver despite the actual size of the device FIFO? Did
+> not think about that in the past but that should work.
 >=20
-> I will also check the other WARN_ON() in my code to see if they
-> can be removed (none on my test throughout the last ten months or
-> so could trigger any of these WARN_ON() so should be fine to
-> remove but I will double check).
+> I am going to think a bit more of how to improve that.
 
-[..]
-
->>> +struct es58x_priv {
->>> +     struct can_priv can;
->>> +     struct es58x_device *es58x_dev;
->>> +     struct urb *tx_urb;
->>> +
->>> +     spinlock_t echo_skb_spinlock;   /* Comments: c.f. supra */
->>> +     u32 current_packet_idx;
->>> +     u16 echo_skb_tail_idx;
->>> +     u16 echo_skb_head_idx;
->>> +     u16 num_echo_skb;
->>
->> Can you explain me how the tx-path works, especially why you need the
->> current_packet_idx.
->>
->> In the mcp251xfd driver, the number of TX buffers is a power of two, t=
-hat makes
->> things easier. tx_heads % len points to the next buffer to be filled, =
-tx_tail %
->> len points to the next buffer to be completed. tx_head - tx_tail is th=
-e fill
->> level of the FIFO. This works without spinlocks.
->=20
-> For what I understand of your explanations here are the equivalences
-> between the etas_es58x and the mcp251xfd drivers:
->=20
->  +--------------------+-------------------+
->  | etas_es58x         | mcp251xfd         |
->  +--------------------+-------------------+
->  | current_packet_idx | tx_head           |
->  | echo_skb_tail_idx  | tx_tail % len     |
->  | echo_skb_head_idx  | tx_head % len     |
->  | num_echo_skb       | tx_head - tx_tail |
->  +--------------------+-------------------+
->=20
-> Especially, the current_packet_idx is sent to the device and returned
-> to the driver upon completion.
-
-Is current_packet_idx used only for the TX-PATH?
-
-> I wish the TX buffers were a power of two which is unfortunately not
-> the case. The theoretical TX buffer sizes are 330 and 500 for the two
-> devices so I wrote the code to work with those values. The exact size
-> of the TX buffer is actually even more of a mystery because during
-> testing both devices were unstable when using the theoretical values
-> and I had to lower these. There is a comment at the bottom of
-> es581_4.c and es58x_fd.c to reflect those issues.
-
-What are the performance penalties for using 256 for the fd and 64 ofr th=
-e other?
-
-> Because I do not
-> have access to the source code of the firmware, I could not identify
-> the root cause.
-
-ok
-
-> My understanding is that having a queue size being a power of two is
-> required in order not to use spinlocks (else, modulo operations would
-> break when the index wraparound back to zero). I tried to minimize the
-> number of spinlock: only one per bulk send or bulk receive.
-
-With queue size being power of two the modulo can be written as a mask
-operation, so it's reasonable fast. So you only need to care about tx_hea=
-d and
-tx_tail, and there is only one writer for each variable. With a little da=
-nce and
-barriers when stopping and starting the queue it's race-free without spin=
-locks.
+For the echo_skb rounding up might work, but you should round down, so th=
+at your
+can directly use the masked value.
 
 Marc
-
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
@@ -261,23 +173,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---IkY9vCoecN0EmxtpMO6eRMzwTE6SYS4Gr--
+--DDIikifoSUZHUYBAyHmNRECs0wFQZmYZY--
 
---nBmtDLkusjkNMRqfqeMFPowSU7LenMjxr
+--DZHLbIiEc9muuREis2EHsdRLtwfbzXTYJ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl//GhYACgkQqclaivrt
-76kEkwf/cL97S82lhXjdDrVVze6C90BQdtYnv3xaqGEe95/pdU8Q4HFUSRye5vkY
-XGaJvzQPWD1tMR4iOwEsIF4vz10typr8EFzLHmWcM8+L1oKFo2juyiQUPcpe8Lzm
-iKfaw/idzFVWciAwn2Lnb8fOy2vBv+rGlF1vspEAy15M012/Y/bwPBMkvw9X1Hug
-NxhF8hJiEwEI/7C8mPu1T62LIkkYyWs4X0IBfliuRY3O6BbVCjL5qNxlmu4Qzys/
-MdNvHxrl2flqKG0AAayHMJTpFRp1Zed3JP4GalhdFDtXPcPiQRneyD2QbSDiK7yY
-iafM5kZrgVedHhUM6DEbHK2msJ61bQ==
-=gxgK
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl//GmsACgkQqclaivrt
+76krQAf/cOrvYybwj9Pl9uG9xNvWnZojKOo4fmZNt3RJbHVZm31XeTBhU01ll3xt
+5gtczymrjnrVZIv1/Ltv59LJv1wA/ppSo2lElUSU2XxXylRmGmZlVFKNl0lVqWXC
+JAvGoSRG4R2qes8GqvWmR2kRpF2o8cxaLFQZWy3jb+cb92fDYbcQMTmk48PWMi1g
+EcOb4zgq1PQW6VKBwlZnRuYWjTwlzvK3myCaZA/vsEesaXuGSP8OPlOq1okGkre8
+YnCVaBxvFxKbXY/losJzo3OYgvl4T8XXFmhFqWTj/b0Drj6nw9CKnywllelT8Fw+
+wwuiYZeo7a2qhCorAwKlUeREuB6amg==
+=eZo6
 -----END PGP SIGNATURE-----
 
---nBmtDLkusjkNMRqfqeMFPowSU7LenMjxr--
+--DZHLbIiEc9muuREis2EHsdRLtwfbzXTYJ--
