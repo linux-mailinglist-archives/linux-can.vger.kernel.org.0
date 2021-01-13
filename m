@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB212F5488
-	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 22:20:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C1D2F5480
+	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 22:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729031AbhAMVPd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 16:15:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40452 "EHLO
+        id S1728960AbhAMVPX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 16:15:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729013AbhAMVPG (ORCPT
+        with ESMTP id S1729011AbhAMVPG (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 16:15:06 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74057C0617A6
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 13:14:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995D3C0617A7
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 13:14:24 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kznTB-0001a0-PQ
-        for linux-can@vger.kernel.org; Wed, 13 Jan 2021 22:14:21 +0100
+        id 1kznTD-0001ba-3o
+        for linux-can@vger.kernel.org; Wed, 13 Jan 2021 22:14:23 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 20E295C3036
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 21:14:17 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 932865C303A
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 21:14:18 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 355F65C2FFD;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 84C275C3001;
         Wed, 13 Jan 2021 21:14:12 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9efb43c6;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3b08379b;
         Wed, 13 Jan 2021 21:14:11 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [net-next 04/17] can: dev: move bittiming related code into seperate file
-Date:   Wed, 13 Jan 2021 22:13:57 +0100
-Message-Id: <20210113211410.917108-5-mkl@pengutronix.de>
+Subject: [net-next 06/17] can: dev: move skb related into seperate file
+Date:   Wed, 13 Jan 2021 22:13:59 +0100
+Message-Id: <20210113211410.917108-7-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210113211410.917108-1-mkl@pengutronix.de>
 References: <20210113211410.917108-1-mkl@pengutronix.de>
@@ -53,53 +53,269 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch moves the bittiming related code of the CAN device infrastructure
-into a separate file.
+This patch moves the skb related code of the CAN device infrastructure into a
+separate file.
 
 Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Link: https://lore.kernel.org/r/20210111141930.693847-4-mkl@pengutronix.de
+Link: https://lore.kernel.org/r/20210111141930.693847-6-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- MAINTAINERS                     |   1 +
- drivers/net/can/dev/Makefile    |   1 +
- drivers/net/can/dev/bittiming.c | 261 ++++++++++++++++++++++++++++++++
- drivers/net/can/dev/dev.c       | 261 --------------------------------
- include/linux/can/bittiming.h   |  44 ++++++
- include/linux/can/dev.h         |  16 +-
- 6 files changed, 308 insertions(+), 276 deletions(-)
- create mode 100644 drivers/net/can/dev/bittiming.c
- create mode 100644 include/linux/can/bittiming.h
+ drivers/net/can/dev/Makefile |   1 +
+ drivers/net/can/dev/dev.c    | 213 ---------------------------------
+ drivers/net/can/dev/skb.c    | 220 +++++++++++++++++++++++++++++++++++
+ include/linux/can/dev.h      |  76 ------------
+ include/linux/can/skb.h      |  77 ++++++++++++
+ 5 files changed, 298 insertions(+), 289 deletions(-)
+ create mode 100644 drivers/net/can/dev/skb.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c3091a91ebbf..d17662df1cd7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3943,6 +3943,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git
- F:	Documentation/devicetree/bindings/net/can/
- F:	drivers/net/can/
-+F:	include/linux/can/bittiming.h
- F:	include/linux/can/dev.h
- F:	include/linux/can/led.h
- F:	include/linux/can/platform/
 diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
-index cba92e6bcf6f..b5c6bb848d9d 100644
+index 5c647951e06d..188bd53b113c 100644
 --- a/drivers/net/can/dev/Makefile
 +++ b/drivers/net/can/dev/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_CAN_DEV)		+= can-dev.o
-+can-dev-y			+= bittiming.o
+@@ -5,5 +5,6 @@ can-dev-y			+= bittiming.o
  can-dev-y			+= dev.o
+ can-dev-y			+= length.o
  can-dev-y			+= rx-offload.o
++can-dev-y                       += skb.o
  
-diff --git a/drivers/net/can/dev/bittiming.c b/drivers/net/can/dev/bittiming.c
+ can-dev-$(CONFIG_CAN_LEDS)	+= led.o
+diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
+index 3372e99d5db7..fe71ff9ef8c9 100644
+--- a/drivers/net/can/dev/dev.c
++++ b/drivers/net/can/dev/dev.c
+@@ -132,149 +132,6 @@ void can_change_state(struct net_device *dev, struct can_frame *cf,
+ }
+ EXPORT_SYMBOL_GPL(can_change_state);
+ 
+-/* Local echo of CAN messages
+- *
+- * CAN network devices *should* support a local echo functionality
+- * (see Documentation/networking/can.rst). To test the handling of CAN
+- * interfaces that do not support the local echo both driver types are
+- * implemented. In the case that the driver does not support the echo
+- * the IFF_ECHO remains clear in dev->flags. This causes the PF_CAN core
+- * to perform the echo as a fallback solution.
+- */
+-static void can_flush_echo_skb(struct net_device *dev)
+-{
+-	struct can_priv *priv = netdev_priv(dev);
+-	struct net_device_stats *stats = &dev->stats;
+-	int i;
+-
+-	for (i = 0; i < priv->echo_skb_max; i++) {
+-		if (priv->echo_skb[i]) {
+-			kfree_skb(priv->echo_skb[i]);
+-			priv->echo_skb[i] = NULL;
+-			stats->tx_dropped++;
+-			stats->tx_aborted_errors++;
+-		}
+-	}
+-}
+-
+-/* Put the skb on the stack to be looped backed locally lateron
+- *
+- * The function is typically called in the start_xmit function
+- * of the device driver. The driver must protect access to
+- * priv->echo_skb, if necessary.
+- */
+-int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+-		     unsigned int idx)
+-{
+-	struct can_priv *priv = netdev_priv(dev);
+-
+-	BUG_ON(idx >= priv->echo_skb_max);
+-
+-	/* check flag whether this packet has to be looped back */
+-	if (!(dev->flags & IFF_ECHO) || skb->pkt_type != PACKET_LOOPBACK ||
+-	    (skb->protocol != htons(ETH_P_CAN) &&
+-	     skb->protocol != htons(ETH_P_CANFD))) {
+-		kfree_skb(skb);
+-		return 0;
+-	}
+-
+-	if (!priv->echo_skb[idx]) {
+-		skb = can_create_echo_skb(skb);
+-		if (!skb)
+-			return -ENOMEM;
+-
+-		/* make settings for echo to reduce code in irq context */
+-		skb->pkt_type = PACKET_BROADCAST;
+-		skb->ip_summed = CHECKSUM_UNNECESSARY;
+-		skb->dev = dev;
+-
+-		/* save this skb for tx interrupt echo handling */
+-		priv->echo_skb[idx] = skb;
+-	} else {
+-		/* locking problem with netif_stop_queue() ?? */
+-		netdev_err(dev, "%s: BUG! echo_skb %d is occupied!\n", __func__, idx);
+-		kfree_skb(skb);
+-		return -EBUSY;
+-	}
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(can_put_echo_skb);
+-
+-struct sk_buff *
+-__can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr)
+-{
+-	struct can_priv *priv = netdev_priv(dev);
+-
+-	if (idx >= priv->echo_skb_max) {
+-		netdev_err(dev, "%s: BUG! Trying to access can_priv::echo_skb out of bounds (%u/max %u)\n",
+-			   __func__, idx, priv->echo_skb_max);
+-		return NULL;
+-	}
+-
+-	if (priv->echo_skb[idx]) {
+-		/* Using "struct canfd_frame::len" for the frame
+-		 * length is supported on both CAN and CANFD frames.
+-		 */
+-		struct sk_buff *skb = priv->echo_skb[idx];
+-		struct canfd_frame *cf = (struct canfd_frame *)skb->data;
+-
+-		/* get the real payload length for netdev statistics */
+-		if (cf->can_id & CAN_RTR_FLAG)
+-			*len_ptr = 0;
+-		else
+-			*len_ptr = cf->len;
+-
+-		priv->echo_skb[idx] = NULL;
+-
+-		return skb;
+-	}
+-
+-	return NULL;
+-}
+-
+-/* Get the skb from the stack and loop it back locally
+- *
+- * The function is typically called when the TX done interrupt
+- * is handled in the device driver. The driver must protect
+- * access to priv->echo_skb, if necessary.
+- */
+-unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx)
+-{
+-	struct sk_buff *skb;
+-	u8 len;
+-
+-	skb = __can_get_echo_skb(dev, idx, &len);
+-	if (!skb)
+-		return 0;
+-
+-	skb_get(skb);
+-	if (netif_rx(skb) == NET_RX_SUCCESS)
+-		dev_consume_skb_any(skb);
+-	else
+-		dev_kfree_skb_any(skb);
+-
+-	return len;
+-}
+-EXPORT_SYMBOL_GPL(can_get_echo_skb);
+-
+-/* Remove the skb from the stack and free it.
+- *
+- * The function is typically called when TX failed.
+- */
+-void can_free_echo_skb(struct net_device *dev, unsigned int idx)
+-{
+-	struct can_priv *priv = netdev_priv(dev);
+-
+-	BUG_ON(idx >= priv->echo_skb_max);
+-
+-	if (priv->echo_skb[idx]) {
+-		dev_kfree_skb_any(priv->echo_skb[idx]);
+-		priv->echo_skb[idx] = NULL;
+-	}
+-}
+-EXPORT_SYMBOL_GPL(can_free_echo_skb);
+-
+ /* CAN device restart for bus-off recovery */
+ static void can_restart(struct net_device *dev)
+ {
+@@ -379,76 +236,6 @@ static void can_setup(struct net_device *dev)
+ 	dev->features = NETIF_F_HW_CSUM;
+ }
+ 
+-struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
+-{
+-	struct sk_buff *skb;
+-
+-	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
+-			       sizeof(struct can_frame));
+-	if (unlikely(!skb))
+-		return NULL;
+-
+-	skb->protocol = htons(ETH_P_CAN);
+-	skb->pkt_type = PACKET_BROADCAST;
+-	skb->ip_summed = CHECKSUM_UNNECESSARY;
+-
+-	skb_reset_mac_header(skb);
+-	skb_reset_network_header(skb);
+-	skb_reset_transport_header(skb);
+-
+-	can_skb_reserve(skb);
+-	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+-
+-	*cf = skb_put_zero(skb, sizeof(struct can_frame));
+-
+-	return skb;
+-}
+-EXPORT_SYMBOL_GPL(alloc_can_skb);
+-
+-struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+-				struct canfd_frame **cfd)
+-{
+-	struct sk_buff *skb;
+-
+-	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
+-			       sizeof(struct canfd_frame));
+-	if (unlikely(!skb))
+-		return NULL;
+-
+-	skb->protocol = htons(ETH_P_CANFD);
+-	skb->pkt_type = PACKET_BROADCAST;
+-	skb->ip_summed = CHECKSUM_UNNECESSARY;
+-
+-	skb_reset_mac_header(skb);
+-	skb_reset_network_header(skb);
+-	skb_reset_transport_header(skb);
+-
+-	can_skb_reserve(skb);
+-	can_skb_prv(skb)->ifindex = dev->ifindex;
+-	can_skb_prv(skb)->skbcnt = 0;
+-
+-	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
+-
+-	return skb;
+-}
+-EXPORT_SYMBOL_GPL(alloc_canfd_skb);
+-
+-struct sk_buff *alloc_can_err_skb(struct net_device *dev, struct can_frame **cf)
+-{
+-	struct sk_buff *skb;
+-
+-	skb = alloc_can_skb(dev, cf);
+-	if (unlikely(!skb))
+-		return NULL;
+-
+-	(*cf)->can_id = CAN_ERR_FLAG;
+-	(*cf)->len = CAN_ERR_DLC;
+-
+-	return skb;
+-}
+-EXPORT_SYMBOL_GPL(alloc_can_err_skb);
+-
+ /* Allocate and setup space for the CAN network device */
+ struct net_device *alloc_candev_mqs(int sizeof_priv, unsigned int echo_skb_max,
+ 				    unsigned int txqs, unsigned int rxqs)
+diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
 new file mode 100644
-index 000000000000..f7fe226bb395
+index 000000000000..26cd597ff771
 --- /dev/null
-+++ b/drivers/net/can/dev/bittiming.c
-@@ -0,0 +1,261 @@
++++ b/drivers/net/can/dev/skb.c
+@@ -0,0 +1,220 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (C) 2005 Marc Kleine-Budde, Pengutronix
 + * Copyright (C) 2006 Andrey Volkov, Varma Electronics
@@ -108,615 +324,409 @@ index 000000000000..f7fe226bb395
 +
 +#include <linux/can/dev.h>
 +
-+#ifdef CONFIG_CAN_CALC_BITTIMING
-+#define CAN_CALC_MAX_ERROR 50 /* in one-tenth of a percent */
-+
-+/* Bit-timing calculation derived from:
++/* Local echo of CAN messages
 + *
-+ * Code based on LinCAN sources and H8S2638 project
-+ * Copyright 2004-2006 Pavel Pisa - DCE FELK CVUT cz
-+ * Copyright 2005      Stanislav Marek
-+ * email: pisa@cmp.felk.cvut.cz
-+ *
-+ * Calculates proper bit-timing parameters for a specified bit-rate
-+ * and sample-point, which can then be used to set the bit-timing
-+ * registers of the CAN controller. You can find more information
-+ * in the header file linux/can/netlink.h.
++ * CAN network devices *should* support a local echo functionality
++ * (see Documentation/networking/can.rst). To test the handling of CAN
++ * interfaces that do not support the local echo both driver types are
++ * implemented. In the case that the driver does not support the echo
++ * the IFF_ECHO remains clear in dev->flags. This causes the PF_CAN core
++ * to perform the echo as a fallback solution.
 + */
-+static int
-+can_update_sample_point(const struct can_bittiming_const *btc,
-+			unsigned int sample_point_nominal, unsigned int tseg,
-+			unsigned int *tseg1_ptr, unsigned int *tseg2_ptr,
-+			unsigned int *sample_point_error_ptr)
++void can_flush_echo_skb(struct net_device *dev)
 +{
-+	unsigned int sample_point_error, best_sample_point_error = UINT_MAX;
-+	unsigned int sample_point, best_sample_point = 0;
-+	unsigned int tseg1, tseg2;
++	struct can_priv *priv = netdev_priv(dev);
++	struct net_device_stats *stats = &dev->stats;
 +	int i;
 +
-+	for (i = 0; i <= 1; i++) {
-+		tseg2 = tseg + CAN_SYNC_SEG -
-+			(sample_point_nominal * (tseg + CAN_SYNC_SEG)) /
-+			1000 - i;
-+		tseg2 = clamp(tseg2, btc->tseg2_min, btc->tseg2_max);
-+		tseg1 = tseg - tseg2;
-+		if (tseg1 > btc->tseg1_max) {
-+			tseg1 = btc->tseg1_max;
-+			tseg2 = tseg - tseg1;
-+		}
-+
-+		sample_point = 1000 * (tseg + CAN_SYNC_SEG - tseg2) /
-+			(tseg + CAN_SYNC_SEG);
-+		sample_point_error = abs(sample_point_nominal - sample_point);
-+
-+		if (sample_point <= sample_point_nominal &&
-+		    sample_point_error < best_sample_point_error) {
-+			best_sample_point = sample_point;
-+			best_sample_point_error = sample_point_error;
-+			*tseg1_ptr = tseg1;
-+			*tseg2_ptr = tseg2;
++	for (i = 0; i < priv->echo_skb_max; i++) {
++		if (priv->echo_skb[i]) {
++			kfree_skb(priv->echo_skb[i]);
++			priv->echo_skb[i] = NULL;
++			stats->tx_dropped++;
++			stats->tx_aborted_errors++;
 +		}
 +	}
-+
-+	if (sample_point_error_ptr)
-+		*sample_point_error_ptr = best_sample_point_error;
-+
-+	return best_sample_point;
 +}
 +
-+int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
-+		       const struct can_bittiming_const *btc)
++/* Put the skb on the stack to be looped backed locally lateron
++ *
++ * The function is typically called in the start_xmit function
++ * of the device driver. The driver must protect access to
++ * priv->echo_skb, if necessary.
++ */
++int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
++		     unsigned int idx)
 +{
 +	struct can_priv *priv = netdev_priv(dev);
-+	unsigned int bitrate;			/* current bitrate */
-+	unsigned int bitrate_error;		/* difference between current and nominal value */
-+	unsigned int best_bitrate_error = UINT_MAX;
-+	unsigned int sample_point_error;	/* difference between current and nominal value */
-+	unsigned int best_sample_point_error = UINT_MAX;
-+	unsigned int sample_point_nominal;	/* nominal sample point */
-+	unsigned int best_tseg = 0;		/* current best value for tseg */
-+	unsigned int best_brp = 0;		/* current best value for brp */
-+	unsigned int brp, tsegall, tseg, tseg1 = 0, tseg2 = 0;
-+	u64 v64;
 +
-+	/* Use CiA recommended sample points */
-+	if (bt->sample_point) {
-+		sample_point_nominal = bt->sample_point;
++	BUG_ON(idx >= priv->echo_skb_max);
++
++	/* check flag whether this packet has to be looped back */
++	if (!(dev->flags & IFF_ECHO) || skb->pkt_type != PACKET_LOOPBACK ||
++	    (skb->protocol != htons(ETH_P_CAN) &&
++	     skb->protocol != htons(ETH_P_CANFD))) {
++		kfree_skb(skb);
++		return 0;
++	}
++
++	if (!priv->echo_skb[idx]) {
++		skb = can_create_echo_skb(skb);
++		if (!skb)
++			return -ENOMEM;
++
++		/* make settings for echo to reduce code in irq context */
++		skb->pkt_type = PACKET_BROADCAST;
++		skb->ip_summed = CHECKSUM_UNNECESSARY;
++		skb->dev = dev;
++
++		/* save this skb for tx interrupt echo handling */
++		priv->echo_skb[idx] = skb;
 +	} else {
-+		if (bt->bitrate > 800000)
-+			sample_point_nominal = 750;
-+		else if (bt->bitrate > 500000)
-+			sample_point_nominal = 800;
++		/* locking problem with netif_stop_queue() ?? */
++		netdev_err(dev, "%s: BUG! echo_skb %d is occupied!\n", __func__, idx);
++		kfree_skb(skb);
++		return -EBUSY;
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(can_put_echo_skb);
++
++struct sk_buff *
++__can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr)
++{
++	struct can_priv *priv = netdev_priv(dev);
++
++	if (idx >= priv->echo_skb_max) {
++		netdev_err(dev, "%s: BUG! Trying to access can_priv::echo_skb out of bounds (%u/max %u)\n",
++			   __func__, idx, priv->echo_skb_max);
++		return NULL;
++	}
++
++	if (priv->echo_skb[idx]) {
++		/* Using "struct canfd_frame::len" for the frame
++		 * length is supported on both CAN and CANFD frames.
++		 */
++		struct sk_buff *skb = priv->echo_skb[idx];
++		struct canfd_frame *cf = (struct canfd_frame *)skb->data;
++
++		/* get the real payload length for netdev statistics */
++		if (cf->can_id & CAN_RTR_FLAG)
++			*len_ptr = 0;
 +		else
-+			sample_point_nominal = 875;
++			*len_ptr = cf->len;
++
++		priv->echo_skb[idx] = NULL;
++
++		return skb;
 +	}
 +
-+	/* tseg even = round down, odd = round up */
-+	for (tseg = (btc->tseg1_max + btc->tseg2_max) * 2 + 1;
-+	     tseg >= (btc->tseg1_min + btc->tseg2_min) * 2; tseg--) {
-+		tsegall = CAN_SYNC_SEG + tseg / 2;
-+
-+		/* Compute all possible tseg choices (tseg=tseg1+tseg2) */
-+		brp = priv->clock.freq / (tsegall * bt->bitrate) + tseg % 2;
-+
-+		/* choose brp step which is possible in system */
-+		brp = (brp / btc->brp_inc) * btc->brp_inc;
-+		if (brp < btc->brp_min || brp > btc->brp_max)
-+			continue;
-+
-+		bitrate = priv->clock.freq / (brp * tsegall);
-+		bitrate_error = abs(bt->bitrate - bitrate);
-+
-+		/* tseg brp biterror */
-+		if (bitrate_error > best_bitrate_error)
-+			continue;
-+
-+		/* reset sample point error if we have a better bitrate */
-+		if (bitrate_error < best_bitrate_error)
-+			best_sample_point_error = UINT_MAX;
-+
-+		can_update_sample_point(btc, sample_point_nominal, tseg / 2,
-+					&tseg1, &tseg2, &sample_point_error);
-+		if (sample_point_error > best_sample_point_error)
-+			continue;
-+
-+		best_sample_point_error = sample_point_error;
-+		best_bitrate_error = bitrate_error;
-+		best_tseg = tseg / 2;
-+		best_brp = brp;
-+
-+		if (bitrate_error == 0 && sample_point_error == 0)
-+			break;
-+	}
-+
-+	if (best_bitrate_error) {
-+		/* Error in one-tenth of a percent */
-+		v64 = (u64)best_bitrate_error * 1000;
-+		do_div(v64, bt->bitrate);
-+		bitrate_error = (u32)v64;
-+		if (bitrate_error > CAN_CALC_MAX_ERROR) {
-+			netdev_err(dev,
-+				   "bitrate error %d.%d%% too high\n",
-+				   bitrate_error / 10, bitrate_error % 10);
-+			return -EDOM;
-+		}
-+		netdev_warn(dev, "bitrate error %d.%d%%\n",
-+			    bitrate_error / 10, bitrate_error % 10);
-+	}
-+
-+	/* real sample point */
-+	bt->sample_point = can_update_sample_point(btc, sample_point_nominal,
-+						   best_tseg, &tseg1, &tseg2,
-+						   NULL);
-+
-+	v64 = (u64)best_brp * 1000 * 1000 * 1000;
-+	do_div(v64, priv->clock.freq);
-+	bt->tq = (u32)v64;
-+	bt->prop_seg = tseg1 / 2;
-+	bt->phase_seg1 = tseg1 - bt->prop_seg;
-+	bt->phase_seg2 = tseg2;
-+
-+	/* check for sjw user settings */
-+	if (!bt->sjw || !btc->sjw_max) {
-+		bt->sjw = 1;
-+	} else {
-+		/* bt->sjw is at least 1 -> sanitize upper bound to sjw_max */
-+		if (bt->sjw > btc->sjw_max)
-+			bt->sjw = btc->sjw_max;
-+		/* bt->sjw must not be higher than tseg2 */
-+		if (tseg2 < bt->sjw)
-+			bt->sjw = tseg2;
-+	}
-+
-+	bt->brp = best_brp;
-+
-+	/* real bitrate */
-+	bt->bitrate = priv->clock.freq /
-+		(bt->brp * (CAN_SYNC_SEG + tseg1 + tseg2));
-+
-+	return 0;
++	return NULL;
 +}
-+#endif /* CONFIG_CAN_CALC_BITTIMING */
 +
-+/* Checks the validity of the specified bit-timing parameters prop_seg,
-+ * phase_seg1, phase_seg2 and sjw and tries to determine the bitrate
-+ * prescaler value brp. You can find more information in the header
-+ * file linux/can/netlink.h.
++/* Get the skb from the stack and loop it back locally
++ *
++ * The function is typically called when the TX done interrupt
++ * is handled in the device driver. The driver must protect
++ * access to priv->echo_skb, if necessary.
 + */
-+static int can_fixup_bittiming(struct net_device *dev, struct can_bittiming *bt,
-+			       const struct can_bittiming_const *btc)
++unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx)
 +{
-+	struct can_priv *priv = netdev_priv(dev);
-+	int tseg1, alltseg;
-+	u64 brp64;
++	struct sk_buff *skb;
++	u8 len;
 +
-+	tseg1 = bt->prop_seg + bt->phase_seg1;
-+	if (!bt->sjw)
-+		bt->sjw = 1;
-+	if (bt->sjw > btc->sjw_max ||
-+	    tseg1 < btc->tseg1_min || tseg1 > btc->tseg1_max ||
-+	    bt->phase_seg2 < btc->tseg2_min || bt->phase_seg2 > btc->tseg2_max)
-+		return -ERANGE;
++	skb = __can_get_echo_skb(dev, idx, &len);
++	if (!skb)
++		return 0;
 +
-+	brp64 = (u64)priv->clock.freq * (u64)bt->tq;
-+	if (btc->brp_inc > 1)
-+		do_div(brp64, btc->brp_inc);
-+	brp64 += 500000000UL - 1;
-+	do_div(brp64, 1000000000UL); /* the practicable BRP */
-+	if (btc->brp_inc > 1)
-+		brp64 *= btc->brp_inc;
-+	bt->brp = (u32)brp64;
-+
-+	if (bt->brp < btc->brp_min || bt->brp > btc->brp_max)
-+		return -EINVAL;
-+
-+	alltseg = bt->prop_seg + bt->phase_seg1 + bt->phase_seg2 + 1;
-+	bt->bitrate = priv->clock.freq / (bt->brp * alltseg);
-+	bt->sample_point = ((tseg1 + 1) * 1000) / alltseg;
-+
-+	return 0;
-+}
-+
-+/* Checks the validity of predefined bitrate settings */
-+static int
-+can_validate_bitrate(struct net_device *dev, struct can_bittiming *bt,
-+		     const u32 *bitrate_const,
-+		     const unsigned int bitrate_const_cnt)
-+{
-+	struct can_priv *priv = netdev_priv(dev);
-+	unsigned int i;
-+
-+	for (i = 0; i < bitrate_const_cnt; i++) {
-+		if (bt->bitrate == bitrate_const[i])
-+			break;
-+	}
-+
-+	if (i >= priv->bitrate_const_cnt)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+int can_get_bittiming(struct net_device *dev, struct can_bittiming *bt,
-+		      const struct can_bittiming_const *btc,
-+		      const u32 *bitrate_const,
-+		      const unsigned int bitrate_const_cnt)
-+{
-+	int err;
-+
-+	/* Depending on the given can_bittiming parameter structure the CAN
-+	 * timing parameters are calculated based on the provided bitrate OR
-+	 * alternatively the CAN timing parameters (tq, prop_seg, etc.) are
-+	 * provided directly which are then checked and fixed up.
-+	 */
-+	if (!bt->tq && bt->bitrate && btc)
-+		err = can_calc_bittiming(dev, bt, btc);
-+	else if (bt->tq && !bt->bitrate && btc)
-+		err = can_fixup_bittiming(dev, bt, btc);
-+	else if (!bt->tq && bt->bitrate && bitrate_const)
-+		err = can_validate_bitrate(dev, bt, bitrate_const,
-+					   bitrate_const_cnt);
++	skb_get(skb);
++	if (netif_rx(skb) == NET_RX_SUCCESS)
++		dev_consume_skb_any(skb);
 +	else
-+		err = -EINVAL;
++		dev_kfree_skb_any(skb);
 +
-+	return err;
++	return len;
 +}
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 3486704c8a95..1b3ab95b3fd1 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -58,267 +58,6 @@ u8 can_fd_len2dlc(u8 len)
- }
- EXPORT_SYMBOL_GPL(can_fd_len2dlc);
- 
--#ifdef CONFIG_CAN_CALC_BITTIMING
--#define CAN_CALC_MAX_ERROR 50 /* in one-tenth of a percent */
--
--/* Bit-timing calculation derived from:
-- *
-- * Code based on LinCAN sources and H8S2638 project
-- * Copyright 2004-2006 Pavel Pisa - DCE FELK CVUT cz
-- * Copyright 2005      Stanislav Marek
-- * email: pisa@cmp.felk.cvut.cz
-- *
-- * Calculates proper bit-timing parameters for a specified bit-rate
-- * and sample-point, which can then be used to set the bit-timing
-- * registers of the CAN controller. You can find more information
-- * in the header file linux/can/netlink.h.
-- */
--static int
--can_update_sample_point(const struct can_bittiming_const *btc,
--			unsigned int sample_point_nominal, unsigned int tseg,
--			unsigned int *tseg1_ptr, unsigned int *tseg2_ptr,
--			unsigned int *sample_point_error_ptr)
--{
--	unsigned int sample_point_error, best_sample_point_error = UINT_MAX;
--	unsigned int sample_point, best_sample_point = 0;
--	unsigned int tseg1, tseg2;
--	int i;
--
--	for (i = 0; i <= 1; i++) {
--		tseg2 = tseg + CAN_SYNC_SEG -
--			(sample_point_nominal * (tseg + CAN_SYNC_SEG)) /
--			1000 - i;
--		tseg2 = clamp(tseg2, btc->tseg2_min, btc->tseg2_max);
--		tseg1 = tseg - tseg2;
--		if (tseg1 > btc->tseg1_max) {
--			tseg1 = btc->tseg1_max;
--			tseg2 = tseg - tseg1;
--		}
--
--		sample_point = 1000 * (tseg + CAN_SYNC_SEG - tseg2) /
--			(tseg + CAN_SYNC_SEG);
--		sample_point_error = abs(sample_point_nominal - sample_point);
--
--		if (sample_point <= sample_point_nominal &&
--		    sample_point_error < best_sample_point_error) {
--			best_sample_point = sample_point;
--			best_sample_point_error = sample_point_error;
--			*tseg1_ptr = tseg1;
--			*tseg2_ptr = tseg2;
--		}
--	}
--
--	if (sample_point_error_ptr)
--		*sample_point_error_ptr = best_sample_point_error;
--
--	return best_sample_point;
--}
--
--static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
--			      const struct can_bittiming_const *btc)
--{
--	struct can_priv *priv = netdev_priv(dev);
--	unsigned int bitrate;			/* current bitrate */
--	unsigned int bitrate_error;		/* difference between current and nominal value */
--	unsigned int best_bitrate_error = UINT_MAX;
--	unsigned int sample_point_error;	/* difference between current and nominal value */
--	unsigned int best_sample_point_error = UINT_MAX;
--	unsigned int sample_point_nominal;	/* nominal sample point */
--	unsigned int best_tseg = 0;		/* current best value for tseg */
--	unsigned int best_brp = 0;		/* current best value for brp */
--	unsigned int brp, tsegall, tseg, tseg1 = 0, tseg2 = 0;
--	u64 v64;
--
--	/* Use CiA recommended sample points */
--	if (bt->sample_point) {
--		sample_point_nominal = bt->sample_point;
--	} else {
--		if (bt->bitrate > 800000)
--			sample_point_nominal = 750;
--		else if (bt->bitrate > 500000)
--			sample_point_nominal = 800;
--		else
--			sample_point_nominal = 875;
--	}
--
--	/* tseg even = round down, odd = round up */
--	for (tseg = (btc->tseg1_max + btc->tseg2_max) * 2 + 1;
--	     tseg >= (btc->tseg1_min + btc->tseg2_min) * 2; tseg--) {
--		tsegall = CAN_SYNC_SEG + tseg / 2;
--
--		/* Compute all possible tseg choices (tseg=tseg1+tseg2) */
--		brp = priv->clock.freq / (tsegall * bt->bitrate) + tseg % 2;
--
--		/* choose brp step which is possible in system */
--		brp = (brp / btc->brp_inc) * btc->brp_inc;
--		if (brp < btc->brp_min || brp > btc->brp_max)
--			continue;
--
--		bitrate = priv->clock.freq / (brp * tsegall);
--		bitrate_error = abs(bt->bitrate - bitrate);
--
--		/* tseg brp biterror */
--		if (bitrate_error > best_bitrate_error)
--			continue;
--
--		/* reset sample point error if we have a better bitrate */
--		if (bitrate_error < best_bitrate_error)
--			best_sample_point_error = UINT_MAX;
--
--		can_update_sample_point(btc, sample_point_nominal, tseg / 2,
--					&tseg1, &tseg2, &sample_point_error);
--		if (sample_point_error > best_sample_point_error)
--			continue;
--
--		best_sample_point_error = sample_point_error;
--		best_bitrate_error = bitrate_error;
--		best_tseg = tseg / 2;
--		best_brp = brp;
--
--		if (bitrate_error == 0 && sample_point_error == 0)
--			break;
--	}
--
--	if (best_bitrate_error) {
--		/* Error in one-tenth of a percent */
--		v64 = (u64)best_bitrate_error * 1000;
--		do_div(v64, bt->bitrate);
--		bitrate_error = (u32)v64;
--		if (bitrate_error > CAN_CALC_MAX_ERROR) {
--			netdev_err(dev,
--				   "bitrate error %d.%d%% too high\n",
--				   bitrate_error / 10, bitrate_error % 10);
--			return -EDOM;
--		}
--		netdev_warn(dev, "bitrate error %d.%d%%\n",
--			    bitrate_error / 10, bitrate_error % 10);
--	}
--
--	/* real sample point */
--	bt->sample_point = can_update_sample_point(btc, sample_point_nominal,
--						   best_tseg, &tseg1, &tseg2,
--						   NULL);
--
--	v64 = (u64)best_brp * 1000 * 1000 * 1000;
--	do_div(v64, priv->clock.freq);
--	bt->tq = (u32)v64;
--	bt->prop_seg = tseg1 / 2;
--	bt->phase_seg1 = tseg1 - bt->prop_seg;
--	bt->phase_seg2 = tseg2;
--
--	/* check for sjw user settings */
--	if (!bt->sjw || !btc->sjw_max) {
--		bt->sjw = 1;
--	} else {
--		/* bt->sjw is at least 1 -> sanitize upper bound to sjw_max */
--		if (bt->sjw > btc->sjw_max)
--			bt->sjw = btc->sjw_max;
--		/* bt->sjw must not be higher than tseg2 */
--		if (tseg2 < bt->sjw)
--			bt->sjw = tseg2;
--	}
--
--	bt->brp = best_brp;
--
--	/* real bitrate */
--	bt->bitrate = priv->clock.freq /
--		(bt->brp * (CAN_SYNC_SEG + tseg1 + tseg2));
--
--	return 0;
--}
--#else /* !CONFIG_CAN_CALC_BITTIMING */
--static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
--			      const struct can_bittiming_const *btc)
--{
--	netdev_err(dev, "bit-timing calculation not available\n");
--	return -EINVAL;
--}
--#endif /* CONFIG_CAN_CALC_BITTIMING */
--
--/* Checks the validity of the specified bit-timing parameters prop_seg,
-- * phase_seg1, phase_seg2 and sjw and tries to determine the bitrate
-- * prescaler value brp. You can find more information in the header
-- * file linux/can/netlink.h.
-- */
--static int can_fixup_bittiming(struct net_device *dev, struct can_bittiming *bt,
--			       const struct can_bittiming_const *btc)
--{
--	struct can_priv *priv = netdev_priv(dev);
--	int tseg1, alltseg;
--	u64 brp64;
--
--	tseg1 = bt->prop_seg + bt->phase_seg1;
--	if (!bt->sjw)
--		bt->sjw = 1;
--	if (bt->sjw > btc->sjw_max ||
--	    tseg1 < btc->tseg1_min || tseg1 > btc->tseg1_max ||
--	    bt->phase_seg2 < btc->tseg2_min || bt->phase_seg2 > btc->tseg2_max)
--		return -ERANGE;
--
--	brp64 = (u64)priv->clock.freq * (u64)bt->tq;
--	if (btc->brp_inc > 1)
--		do_div(brp64, btc->brp_inc);
--	brp64 += 500000000UL - 1;
--	do_div(brp64, 1000000000UL); /* the practicable BRP */
--	if (btc->brp_inc > 1)
--		brp64 *= btc->brp_inc;
--	bt->brp = (u32)brp64;
--
--	if (bt->brp < btc->brp_min || bt->brp > btc->brp_max)
--		return -EINVAL;
--
--	alltseg = bt->prop_seg + bt->phase_seg1 + bt->phase_seg2 + 1;
--	bt->bitrate = priv->clock.freq / (bt->brp * alltseg);
--	bt->sample_point = ((tseg1 + 1) * 1000) / alltseg;
--
--	return 0;
--}
--
--/* Checks the validity of predefined bitrate settings */
--static int
--can_validate_bitrate(struct net_device *dev, struct can_bittiming *bt,
--		     const u32 *bitrate_const,
--		     const unsigned int bitrate_const_cnt)
--{
--	struct can_priv *priv = netdev_priv(dev);
--	unsigned int i;
--
--	for (i = 0; i < bitrate_const_cnt; i++) {
--		if (bt->bitrate == bitrate_const[i])
--			break;
--	}
--
--	if (i >= priv->bitrate_const_cnt)
--		return -EINVAL;
--
--	return 0;
--}
--
--static int can_get_bittiming(struct net_device *dev, struct can_bittiming *bt,
--			     const struct can_bittiming_const *btc,
--			     const u32 *bitrate_const,
--			     const unsigned int bitrate_const_cnt)
--{
--	int err;
--
--	/* Depending on the given can_bittiming parameter structure the CAN
--	 * timing parameters are calculated based on the provided bitrate OR
--	 * alternatively the CAN timing parameters (tq, prop_seg, etc.) are
--	 * provided directly which are then checked and fixed up.
--	 */
--	if (!bt->tq && bt->bitrate && btc)
--		err = can_calc_bittiming(dev, bt, btc);
--	else if (bt->tq && !bt->bitrate && btc)
--		err = can_fixup_bittiming(dev, bt, btc);
--	else if (!bt->tq && bt->bitrate && bitrate_const)
--		err = can_validate_bitrate(dev, bt, bitrate_const,
--					   bitrate_const_cnt);
--	else
--		err = -EINVAL;
--
--	return err;
--}
--
- static void can_update_state_error_stats(struct net_device *dev,
- 					 enum can_state new_state)
- {
-diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
-new file mode 100644
-index 000000000000..707575c668f4
---- /dev/null
-+++ b/include/linux/can/bittiming.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/* Copyright (c) 2020 Pengutronix, Marc Kleine-Budde <kernel@pengutronix.de>
-+ */
++EXPORT_SYMBOL_GPL(can_get_echo_skb);
 +
-+#ifndef _CAN_BITTIMING_H
-+#define _CAN_BITTIMING_H
-+
-+#include <linux/netdevice.h>
-+#include <linux/can/netlink.h>
-+
-+#define CAN_SYNC_SEG 1
-+
-+#ifdef CONFIG_CAN_CALC_BITTIMING
-+int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
-+		       const struct can_bittiming_const *btc);
-+#else /* !CONFIG_CAN_CALC_BITTIMING */
-+static inline int
-+can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
-+		   const struct can_bittiming_const *btc)
-+{
-+	netdev_err(dev, "bit-timing calculation not available\n");
-+	return -EINVAL;
-+}
-+#endif /* CONFIG_CAN_CALC_BITTIMING */
-+
-+int can_get_bittiming(struct net_device *dev, struct can_bittiming *bt,
-+		      const struct can_bittiming_const *btc,
-+		      const u32 *bitrate_const,
-+		      const unsigned int bitrate_const_cnt);
-+
-+/*
-+ * can_bit_time() - Duration of one bit
++/* Remove the skb from the stack and free it.
 + *
-+ * Please refer to ISO 11898-1:2015, section 11.3.1.1 "Bit time" for
-+ * additional information.
-+ *
-+ * Return: the number of time quanta in one bit.
++ * The function is typically called when TX failed.
 + */
-+static inline unsigned int can_bit_time(const struct can_bittiming *bt)
++void can_free_echo_skb(struct net_device *dev, unsigned int idx)
 +{
-+	return CAN_SYNC_SEG + bt->prop_seg + bt->phase_seg1 + bt->phase_seg2;
-+}
++	struct can_priv *priv = netdev_priv(dev);
 +
-+#endif /* !_CAN_BITTIMING_H */
++	BUG_ON(idx >= priv->echo_skb_max);
++
++	if (priv->echo_skb[idx]) {
++		dev_kfree_skb_any(priv->echo_skb[idx]);
++		priv->echo_skb[idx] = NULL;
++	}
++}
++EXPORT_SYMBOL_GPL(can_free_echo_skb);
++
++struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
++{
++	struct sk_buff *skb;
++
++	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
++			       sizeof(struct can_frame));
++	if (unlikely(!skb))
++		return NULL;
++
++	skb->protocol = htons(ETH_P_CAN);
++	skb->pkt_type = PACKET_BROADCAST;
++	skb->ip_summed = CHECKSUM_UNNECESSARY;
++
++	skb_reset_mac_header(skb);
++	skb_reset_network_header(skb);
++	skb_reset_transport_header(skb);
++
++	can_skb_reserve(skb);
++	can_skb_prv(skb)->ifindex = dev->ifindex;
++	can_skb_prv(skb)->skbcnt = 0;
++
++	*cf = skb_put_zero(skb, sizeof(struct can_frame));
++
++	return skb;
++}
++EXPORT_SYMBOL_GPL(alloc_can_skb);
++
++struct sk_buff *alloc_canfd_skb(struct net_device *dev,
++				struct canfd_frame **cfd)
++{
++	struct sk_buff *skb;
++
++	skb = netdev_alloc_skb(dev, sizeof(struct can_skb_priv) +
++			       sizeof(struct canfd_frame));
++	if (unlikely(!skb))
++		return NULL;
++
++	skb->protocol = htons(ETH_P_CANFD);
++	skb->pkt_type = PACKET_BROADCAST;
++	skb->ip_summed = CHECKSUM_UNNECESSARY;
++
++	skb_reset_mac_header(skb);
++	skb_reset_network_header(skb);
++	skb_reset_transport_header(skb);
++
++	can_skb_reserve(skb);
++	can_skb_prv(skb)->ifindex = dev->ifindex;
++	can_skb_prv(skb)->skbcnt = 0;
++
++	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
++
++	return skb;
++}
++EXPORT_SYMBOL_GPL(alloc_canfd_skb);
++
++struct sk_buff *alloc_can_err_skb(struct net_device *dev, struct can_frame **cf)
++{
++	struct sk_buff *skb;
++
++	skb = alloc_can_skb(dev, cf);
++	if (unlikely(!skb))
++		return NULL;
++
++	(*cf)->can_id = CAN_ERR_FLAG;
++	(*cf)->len = CAN_ERR_DLC;
++
++	return skb;
++}
++EXPORT_SYMBOL_GPL(alloc_can_err_skb);
 diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 197a79535cc2..054c3bed190b 100644
+index d75fba1d030a..4a26e128af7f 100644
 --- a/include/linux/can/dev.h
 +++ b/include/linux/can/dev.h
-@@ -15,6 +15,7 @@
- #define _CAN_DEV_H
- 
- #include <linux/can.h>
-+#include <linux/can/bittiming.h>
- #include <linux/can/error.h>
- #include <linux/can/led.h>
- #include <linux/can/netlink.h>
-@@ -82,21 +83,6 @@ struct can_priv {
+@@ -84,69 +84,6 @@ struct can_priv {
  #endif
  };
  
--#define CAN_SYNC_SEG 1
--
--/*
-- * can_bit_time() - Duration of one bit
-- *
-- * Please refer to ISO 11898-1:2015, section 11.3.1.1 "Bit time" for
-- * additional information.
-- *
-- * Return: the number of time quanta in one bit.
-- */
--static inline unsigned int can_bit_time(const struct can_bittiming *bt)
+-/* Check for outgoing skbs that have not been created by the CAN subsystem */
+-static inline bool can_skb_headroom_valid(struct net_device *dev,
+-					  struct sk_buff *skb)
 -{
--	return CAN_SYNC_SEG + bt->prop_seg + bt->phase_seg1 + bt->phase_seg2;
+-	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
+-	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
+-		return false;
+-
+-	/* af_packet does not apply CAN skb specific settings */
+-	if (skb->ip_summed == CHECKSUM_NONE) {
+-		/* init headroom */
+-		can_skb_prv(skb)->ifindex = dev->ifindex;
+-		can_skb_prv(skb)->skbcnt = 0;
+-
+-		skb->ip_summed = CHECKSUM_UNNECESSARY;
+-
+-		/* perform proper loopback on capable devices */
+-		if (dev->flags & IFF_ECHO)
+-			skb->pkt_type = PACKET_LOOPBACK;
+-		else
+-			skb->pkt_type = PACKET_HOST;
+-
+-		skb_reset_mac_header(skb);
+-		skb_reset_network_header(skb);
+-		skb_reset_transport_header(skb);
+-	}
+-
+-	return true;
 -}
 -
+-/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
+-static inline bool can_dropped_invalid_skb(struct net_device *dev,
+-					  struct sk_buff *skb)
+-{
+-	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+-
+-	if (skb->protocol == htons(ETH_P_CAN)) {
+-		if (unlikely(skb->len != CAN_MTU ||
+-			     cfd->len > CAN_MAX_DLEN))
+-			goto inval_skb;
+-	} else if (skb->protocol == htons(ETH_P_CANFD)) {
+-		if (unlikely(skb->len != CANFD_MTU ||
+-			     cfd->len > CANFD_MAX_DLEN))
+-			goto inval_skb;
+-	} else
+-		goto inval_skb;
+-
+-	if (!can_skb_headroom_valid(dev, skb))
+-		goto inval_skb;
+-
+-	return false;
+-
+-inval_skb:
+-	kfree_skb(skb);
+-	dev->stats.tx_dropped++;
+-	return true;
+-}
+-
+-static inline bool can_is_canfd_skb(const struct sk_buff *skb)
+-{
+-	/* the CAN specific type of skb is identified by its data length */
+-	return skb->len == CANFD_MTU;
+-}
+ 
+ /* helper to define static CAN controller features at device creation time */
+ static inline void can_set_static_ctrlmode(struct net_device *dev,
+@@ -187,23 +124,10 @@ void can_bus_off(struct net_device *dev);
+ void can_change_state(struct net_device *dev, struct can_frame *cf,
+ 		      enum can_state tx_state, enum can_state rx_state);
+ 
+-int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+-		     unsigned int idx);
+-struct sk_buff *__can_get_echo_skb(struct net_device *dev, unsigned int idx,
+-				   u8 *len_ptr);
+-unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx);
+-void can_free_echo_skb(struct net_device *dev, unsigned int idx);
+-
+ #ifdef CONFIG_OF
+ void of_can_transceiver(struct net_device *dev);
+ #else
+ static inline void of_can_transceiver(struct net_device *dev) { }
+ #endif
+ 
+-struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf);
+-struct sk_buff *alloc_canfd_skb(struct net_device *dev,
+-				struct canfd_frame **cfd);
+-struct sk_buff *alloc_can_err_skb(struct net_device *dev,
+-				  struct can_frame **cf);
+-
+ #endif /* !_CAN_DEV_H */
+diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+index fc61cf4eff1c..c90ebbd3008c 100644
+--- a/include/linux/can/skb.h
++++ b/include/linux/can/skb.h
+@@ -16,6 +16,19 @@
+ #include <linux/can.h>
+ #include <net/sock.h>
+ 
++void can_flush_echo_skb(struct net_device *dev);
++int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
++		     unsigned int idx);
++struct sk_buff *__can_get_echo_skb(struct net_device *dev, unsigned int idx,
++				   u8 *len_ptr);
++unsigned int can_get_echo_skb(struct net_device *dev, unsigned int idx);
++void can_free_echo_skb(struct net_device *dev, unsigned int idx);
++struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf);
++struct sk_buff *alloc_canfd_skb(struct net_device *dev,
++				struct canfd_frame **cfd);
++struct sk_buff *alloc_can_err_skb(struct net_device *dev,
++				  struct can_frame **cf);
++
  /*
-  * can_cc_dlc2len(value) - convert a given data length code (dlc) of a
-  * Classical CAN frame into a valid data length of max. 8 bytes.
+  * The struct can_skb_priv is used to transport additional information along
+  * with the stored struct can(fd)_frame that can not be contained in existing
+@@ -74,4 +87,68 @@ static inline struct sk_buff *can_create_echo_skb(struct sk_buff *skb)
+ 	return nskb;
+ }
+ 
++/* Check for outgoing skbs that have not been created by the CAN subsystem */
++static inline bool can_skb_headroom_valid(struct net_device *dev,
++					  struct sk_buff *skb)
++{
++	/* af_packet creates a headroom of HH_DATA_MOD bytes which is fine */
++	if (WARN_ON_ONCE(skb_headroom(skb) < sizeof(struct can_skb_priv)))
++		return false;
++
++	/* af_packet does not apply CAN skb specific settings */
++	if (skb->ip_summed == CHECKSUM_NONE) {
++		/* init headroom */
++		can_skb_prv(skb)->ifindex = dev->ifindex;
++		can_skb_prv(skb)->skbcnt = 0;
++
++		skb->ip_summed = CHECKSUM_UNNECESSARY;
++
++		/* perform proper loopback on capable devices */
++		if (dev->flags & IFF_ECHO)
++			skb->pkt_type = PACKET_LOOPBACK;
++		else
++			skb->pkt_type = PACKET_HOST;
++
++		skb_reset_mac_header(skb);
++		skb_reset_network_header(skb);
++		skb_reset_transport_header(skb);
++	}
++
++	return true;
++}
++
++/* Drop a given socketbuffer if it does not contain a valid CAN frame. */
++static inline bool can_dropped_invalid_skb(struct net_device *dev,
++					  struct sk_buff *skb)
++{
++	const struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
++
++	if (skb->protocol == htons(ETH_P_CAN)) {
++		if (unlikely(skb->len != CAN_MTU ||
++			     cfd->len > CAN_MAX_DLEN))
++			goto inval_skb;
++	} else if (skb->protocol == htons(ETH_P_CANFD)) {
++		if (unlikely(skb->len != CANFD_MTU ||
++			     cfd->len > CANFD_MAX_DLEN))
++			goto inval_skb;
++	} else
++		goto inval_skb;
++
++	if (!can_skb_headroom_valid(dev, skb))
++		goto inval_skb;
++
++	return false;
++
++inval_skb:
++	kfree_skb(skb);
++	dev->stats.tx_dropped++;
++	return true;
++}
++
++static inline bool can_is_canfd_skb(const struct sk_buff *skb)
++{
++	/* the CAN specific type of skb is identified by its data length */
++	return skb->len == CANFD_MTU;
++}
++
+ #endif /* !_CAN_SKB_H */
 -- 
 2.29.2
 
