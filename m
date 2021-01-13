@@ -2,42 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 022522F4680
-	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 09:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D770F2F47AD
+	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 10:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbhAMI3v (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 03:29:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+        id S1727195AbhAMJel (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 04:34:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbhAMI3u (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 03:29:50 -0500
+        with ESMTP id S1725796AbhAMJek (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 04:34:40 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D02FC061575
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 00:29:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45229C061575
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 01:34:00 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kzbWe-0005aP-Vo; Wed, 13 Jan 2021 09:29:09 +0100
+        id 1kzcXI-0005MT-3n; Wed, 13 Jan 2021 10:33:52 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:fee8:1d97:dec2:c25] (unknown [IPv6:2a03:f580:87bc:d400:fee8:1d97:dec2:c25])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BF2175C2844;
-        Wed, 13 Jan 2021 08:29:07 +0000 (UTC)
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Jimmy Assarsson <extja@kvaser.com>
-Cc:     linux-can <linux-can@vger.kernel.org>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4C7785C2905;
+        Wed, 13 Jan 2021 09:33:48 +0000 (UTC)
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org
+Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
 References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
  <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
- <CAMZ6Rq+vwBtUZtHTDQw_1KGFx_VSoep7ZtD3bu6cx5y8VyQFgw@mail.gmail.com>
- <730bfea5-414a-da4b-8404-7dea8e5e9cd3@pengutronix.de>
- <6b010038-925b-9a52-e332-bcb08f9d9b77@kvaser.com>
- <CAMZ6Rq+G98qMv7TRqPiCEcPOF4GR5uv=2NX5UcA9WNEHYZJSeg@mail.gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -99,15 +99,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <2597b6ff-8bad-5922-9412-475286039bcb@pengutronix.de>
-Date:   Wed, 13 Jan 2021 09:29:04 +0100
+Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+Message-ID: <7643bd48-6594-9ede-b791-de6e155c62c1@pengutronix.de>
+Date:   Wed, 13 Jan 2021 10:33:39 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6Rq+G98qMv7TRqPiCEcPOF4GR5uv=2NX5UcA9WNEHYZJSeg@mail.gmail.com>
+In-Reply-To: <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="5sP3sQZfq8o2hvh1aVXDbQ9CH5DzlcOEB"
+ boundary="Ccz1nnbT3WQhOT9ZEzqelTfRHpUOwUMJF"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -117,83 +119,202 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---5sP3sQZfq8o2hvh1aVXDbQ9CH5DzlcOEB
-Content-Type: multipart/mixed; boundary="VK4I0E1AJc51CGnJeM5ITncndkxl25wVD";
+--Ccz1nnbT3WQhOT9ZEzqelTfRHpUOwUMJF
+Content-Type: multipart/mixed; boundary="gMlG8Be2GbcgrZh4SVCXpfBU7bd7B97OD";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
- Jimmy Assarsson <extja@kvaser.com>
-Cc: linux-can <linux-can@vger.kernel.org>
-Message-ID: <2597b6ff-8bad-5922-9412-475286039bcb@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
+Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jimmy Assarsson <extja@kvaser.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Message-ID: <7643bd48-6594-9ede-b791-de6e155c62c1@pengutronix.de>
 Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
  CAN USB interfaces
 References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
  <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
- <CAMZ6Rq+vwBtUZtHTDQw_1KGFx_VSoep7ZtD3bu6cx5y8VyQFgw@mail.gmail.com>
- <730bfea5-414a-da4b-8404-7dea8e5e9cd3@pengutronix.de>
- <6b010038-925b-9a52-e332-bcb08f9d9b77@kvaser.com>
- <CAMZ6Rq+G98qMv7TRqPiCEcPOF4GR5uv=2NX5UcA9WNEHYZJSeg@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+G98qMv7TRqPiCEcPOF4GR5uv=2NX5UcA9WNEHYZJSeg@mail.gmail.com>
+In-Reply-To: <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
 
---VK4I0E1AJc51CGnJeM5ITncndkxl25wVD
+--gMlG8Be2GbcgrZh4SVCXpfBU7bd7B97OD
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 1/13/21 4:03 AM, Vincent MAILHOL wrote:
-> On Wed. 13 Jan 2021 at 00:49, Jimmy Assarsson <extja@kvaser.com> wrote:=
-
->> On 2021-01-12 16:22, Marc Kleine-Budde wrote:
->>> On 1/12/21 4:11 PM, Vincent MAILHOL wrote:
->>>> On Tue. 12 Jan 2021 at 22:05, Vincent Mailhol
->>>> <mailhol.vincent@wanadoo.fr> wrote:
->>>>>
->>>>> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces fr=
-om
->>>>> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
->>>>>
->>>>> Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bo=
-sch.com>
->>>>> Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosc=
-h.com>
->>>>> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->>>>> ---
->>>>>
->>>>
->>>> Something strange is going on with the mailing list.  I can not
->>>> see the second patch (1/1) in the *linux-can* mailing
->>>> archive (only the cover letter is present):
->>>> https://lore.kernel.org/linux-can/20210112130538.14912-1-mailhol.vin=
-cent@wanadoo.fr/T/#
->>>>
->>>> However, the full patch series is present on the *netdev* mailing
->>>> archives: https://lore.kernel.org/netdev/20210112130538.14912-2-mail=
-hol.vincent@wanadoo.fr/
->>>>
->>>> Are there any restrictions in regard to the patch size on the
->>>> linux-can mailing list?
->>>
->>> Not to my knowledge.
->>
->> I remember having issues posting a large patch.
->>
->> You probably hit this limit:
->> "Message size exceeding 100 000 characters causes blocking."
->> http://vger.kernel.org/majordomo-info.html
+On 1/12/21 2:05 PM, Vincent Mailhol wrote:
+> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
+> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
 >=20
-> Thanks!
-> So, that's the issue. The patch has 161486 characters, way above
-> the limit...
->=20
-> Marc, is this an issue for the patch review? I have no idea how
-> to split it in a pretty way.
+> Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.=
+com>
+> Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.co=
+m>
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-Time, or rather the lack of, is the biggest problem when reviewing a patc=
-h.
-Larger patches take more time, but that's the way it is with complex driv=
-ers....
+[...]
 
-regards,
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/=
+can/usb/etas_es58x/es58x_core.c
+> new file mode 100644
+> index 000000000000..30692d78d8e6
+> --- /dev/null
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -0,0 +1,2589 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/* Driver for ETAS GmbH ES58X USB CAN(-FD) Bus Interfaces.
+> + *
+> + * File es58x_core.c: Core logic to manage the network devices and the=
+
+> + * USB interface.
+> + *
+> + * Copyright (C) 2019 Robert Bosch Engineering and Business
+> + * Solutions. All rights reserved.
+> + * Copyright (C) 2020 ETAS K.K.. All rights reserved.
+> + */
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/usb.h>
+> +#include <linux/crc16.h>
+> +#include <linux/spinlock.h>
+> +#include <asm/unaligned.h>
+> +
+> +#include "es58x_core.h"
+> +
+> +#define DRV_VERSION "1.00"
+> +MODULE_AUTHOR("Mailhol Vincent <mailhol.vincent@wanadoo.fr>");
+> +MODULE_AUTHOR("Arunachalam Santhanam <arunachalam.santhanam@in.bosch.c=
+om>");
+> +MODULE_DESCRIPTION("Socket CAN driver for ETAS ES58X USB adapters");
+> +MODULE_VERSION(DRV_VERSION);
+> +MODULE_LICENSE("GPL v2");
+> +
+> +/* Vendor and product id */
+> +#define ES58X_MODULE_NAME "etas_es58x"
+> +#define ES58X_VENDOR_ID 0x108C
+> +#define ES581_4_PRODUCT_ID 0x0159
+> +#define ES582_1_PRODUCT_ID 0x0168
+> +#define ES584_1_PRODUCT_ID 0x0169
+> +
+> +/* Table of devices which work with this driver */
+> +static const struct usb_device_id es58x_id_table[] =3D {
+> +	{USB_DEVICE(ES58X_VENDOR_ID, ES581_4_PRODUCT_ID)},
+> +	{USB_DEVICE(ES58X_VENDOR_ID, ES582_1_PRODUCT_ID)},
+> +	{USB_DEVICE(ES58X_VENDOR_ID, ES584_1_PRODUCT_ID)},
+> +	{}			/* Terminating entry */
+> +};
+> +
+> +MODULE_DEVICE_TABLE(usb, es58x_id_table);
+> +
+> +#define es58x_print_hex_dump(buf, len)					\
+> +	print_hex_dump(KERN_DEBUG,					\
+> +		       ES58X_MODULE_NAME " " __stringify(buf) ": ",	\
+> +		       DUMP_PREFIX_NONE, 16, 1, buf, len, false)
+> +
+> +#define es58x_print_hex_dump_debug(buf, len)				 \
+> +	print_hex_dump_debug(ES58X_MODULE_NAME " " __stringify(buf) ": ",\
+> +			     DUMP_PREFIX_NONE, 16, 1, buf, len, false)
+> +
+> +/* The last two bytes of an ES58X command is a CRC16. The first two
+> + * bytes (the start of frame) are skipped and the CRC calculation
+> + * starts on the third byte.
+> + */
+> +#define ES58X_CRC_CALC_OFFSET	2
+> +
+> +/**
+> + * es58x_calculate_crc() - Compute the crc16 of a given URB.
+> + * @urb_cmd: The URB command for which we want to calculate the CRC.
+> + * @urb_len: Length of @urb_cmd. Must be at least bigger than 4
+> + *	(ES58X_CRC_CALC_OFFSET + sizeof(crc))
+> + *
+> + * Return: crc16 value.
+> + */
+> +static u16 es58x_calculate_crc(const union es58x_urb_cmd *urb_cmd, u16=
+ urb_len)
+> +{
+> +	u16 crc;
+> +	ssize_t len =3D urb_len - ES58X_CRC_CALC_OFFSET - sizeof(crc);
+> +
+> +	WARN_ON(len < 0);
+
+Is it possible to ensure earlier, that the urbs are of correct length?
+
+> +	crc =3D crc16(0, &urb_cmd->raw_cmd[ES58X_CRC_CALC_OFFSET], len);
+> +	return crc;
+> +}
+
+[...]
+
+> +/**
+> + * struct es58x_priv - All information specific to a CAN channel.
+> + * @can: struct can_priv must be the first member (Socket CAN relies
+> + *	on the fact that function netdev_priv() returns a pointer to
+> + *	a struct can_priv).
+> + * @es58x_dev: pointer to the corresponding ES58X device.
+> + * @tx_urb: Used as a buffer to concatenate the TX messages and to do
+> + *	a bulk send. Please refer to es58x_start_xmit() for more
+> + *	details.
+> + * @echo_skb_spinlock: Spinlock to protect the access to the echo skb
+> + *	FIFO.
+> + * @current_packet_idx: Keeps track of the packet indexes.
+> + * @echo_skb_tail_idx: beginning of the echo skb FIFO, i.e. index of
+> + *	the first element.
+> + * @echo_skb_head_idx: end of the echo skb FIFO plus one, i.e. first
+> + *	free index.
+> + * @num_echo_skb: actual number of elements in the FIFO. Thus, the end=
+
+> + *	of the FIFO is echo_skb_head =3D (echo_skb_tail_idx +
+> + *	num_echo_skb) % can.echo_skb_max.
+> + * @tx_total_frame_len: sum, in bytes, of the length of each of the
+> + *	CAN messages contained in @tx_urb. To be used as an input of
+> + *	netdev_sent_queue() for BQL.
+> + * @tx_can_msg_cnt: Number of messages in @tx_urb.
+> + * @tx_can_msg_is_fd: false: all messages in @tx_urb are Classical
+> + *	CAN, true: all messages in @tx_urb are CAN FD. Rationale:
+> + *	ES58X FD devices do not allow to mix Classical CAN and FD CAN
+> + *	frames in one single bulk transmission.
+> + * @err_passive_before_rtx_success: The ES58X device might enter in a
+> + *	state in which it keeps alternating between error passive
+> + *	and active state. This counter keeps track of the number of
+> + *	error passive and if it gets bigger than
+> + *	ES58X_CONSECUTIVE_ERR_PASSIVE_MAX, es58x_rx_err_msg() will
+> + *	force the status to bus-off.
+> + * @channel_idx: Channel index, starts at zero.
+> + */
+> +struct es58x_priv {
+> +	struct can_priv can;
+> +	struct es58x_device *es58x_dev;
+> +	struct urb *tx_urb;
+> +
+> +	spinlock_t echo_skb_spinlock;	/* Comments: c.f. supra */
+> +	u32 current_packet_idx;
+> +	u16 echo_skb_tail_idx;
+> +	u16 echo_skb_head_idx;
+> +	u16 num_echo_skb;
+
+Can you explain me how the tx-path works, especially why you need the
+current_packet_idx.
+
+In the mcp251xfd driver, the number of TX buffers is a power of two, that=
+ makes
+things easier. tx_heads % len points to the next buffer to be filled, tx_=
+tail %
+len points to the next buffer to be completed. tx_head - tx_tail is the f=
+ill
+level of the FIFO. This works without spinlocks.
+
+> +
+> +	u16 tx_total_frame_len;
+> +	u8 tx_can_msg_cnt;
+> +	bool tx_can_msg_is_fd;
+> +
+> +	u8 err_passive_before_rtx_success;
+> +
+> +	u8 channel_idx;
+> +};
+
 Marc
 
 --=20
@@ -203,23 +324,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---VK4I0E1AJc51CGnJeM5ITncndkxl25wVD--
+--gMlG8Be2GbcgrZh4SVCXpfBU7bd7B97OD--
 
---5sP3sQZfq8o2hvh1aVXDbQ9CH5DzlcOEB
+--Ccz1nnbT3WQhOT9ZEzqelTfRHpUOwUMJF
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/+r1AACgkQqclaivrt
-76lVfAf9GgAh3+k987ZMoZVpaBLf+t2GziSj1wrHiHC+WjFZDBCQHvP9k5ynnc2O
-9n0ZvaAV2uMRuHB6ooKYuBSs6PqHeb7B4CthTTPI4FhRoYDKmy2d2ymcY3k2gz/N
-4vSUeJvsvGTgZHVgHAlPZNxhVan+gNhaIUe1k26VMbE4C9mznScKB/WVTMEW52oU
-inb+Z+VMIFDd3Q1r3GdD2qut8alahbaU/K2l5v30bC6m/K2BsANbqdnZWbUgIxvE
-Cd9ZizZbKgXDJWnpCCvbklBxRcmz7uLP99MiiqEQUuozjjXfqft1Ywi3EdEDJ7hg
-TF8U4H3j7ytLLONbmkhTcHdyY/K/kA==
-=ufva
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAl/+vnMACgkQqclaivrt
+76lJUQf/eK0/ukT+q2OpJO/s9tezTw8zmtyDP5rNFKyjb5KHz8Y1RGG3GaFFeMv3
+IN24SDwEdRbKAyGaYxGvFGS5liKnjA1iOsDryNPIyCCR19qKkl0plUJsVQIGlRlA
+4lmS7m1tn4Zo59QqvjByT2PIR78oJGyciVItzQd55DfqTHa1RNBtJaVcFa+mwx4A
+s/fmjqtGvIwzSyW8OpDRSHjt4qZorm9eWh36XDlP1F970FTnq+xqC3pi5tWeTdsy
+l6nFT2W5WjeC90mde+ruloDfNyYjyqz3yHXnnNy8DhERb8N2RDl8t5bB2wR+YsVi
+HXLXXbmfXfJOqvyf+sam2ROHu5ZwHw==
+=pZj6
 -----END PGP SIGNATURE-----
 
---5sP3sQZfq8o2hvh1aVXDbQ9CH5DzlcOEB--
+--Ccz1nnbT3WQhOT9ZEzqelTfRHpUOwUMJF--
