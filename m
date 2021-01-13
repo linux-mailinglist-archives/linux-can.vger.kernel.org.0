@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A422F5859
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 04:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BA622F5857
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 04:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbhANCR6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 21:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S1728177AbhANCRs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 21:17:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728856AbhAMVNl (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 16:13:41 -0500
+        with ESMTP id S1729005AbhAMVO6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 16:14:58 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5420C061794
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 13:14:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4937C0617A2
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 13:14:21 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1kznT7-0001QZ-EI
-        for linux-can@vger.kernel.org; Wed, 13 Jan 2021 22:14:17 +0100
+        id 1kznTA-0001XC-6x
+        for linux-can@vger.kernel.org; Wed, 13 Jan 2021 22:14:20 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 4B4CE5C3019
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 21:14:14 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id CB3045C3025
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 21:14:15 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id F40475C2FFB;
-        Wed, 13 Jan 2021 21:14:11 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1406D5C2FFC;
+        Wed, 13 Jan 2021 21:14:12 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f62de331;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id db042832;
         Wed, 13 Jan 2021 21:14:11 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [net-next 02/17] MAINTAINERS: CAN network layer: add missing header file can-ml.h
-Date:   Wed, 13 Jan 2021 22:13:55 +0100
-Message-Id: <20210113211410.917108-3-mkl@pengutronix.de>
+Subject: [net-next 03/17] can: dev: move driver related infrastructure into separate subdir
+Date:   Wed, 13 Jan 2021 22:13:56 +0100
+Message-Id: <20210113211410.917108-4-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210113211410.917108-1-mkl@pengutronix.de>
 References: <20210113211410.917108-1-mkl@pengutronix.de>
@@ -53,29 +53,61 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch add the can-ml.h to the list of maintained files of the CAN network
-layer.
+This patch moves the CAN driver related infrastructure into a separate subdir.
+It will be split into more files in the coming patches.
 
-Fixes: ffd956eef69b ("can: introduce CAN midlayer private and allocate it automatically")
 Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Link: https://lore.kernel.org/r/20210111141930.693847-2-mkl@pengutronix.de
+Link: https://lore.kernel.org/r/20210111141930.693847-3-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/can/Makefile               | 7 +------
+ drivers/net/can/dev/Makefile           | 7 +++++++
+ drivers/net/can/{ => dev}/dev.c        | 0
+ drivers/net/can/{ => dev}/rx-offload.c | 0
+ 4 files changed, 8 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/net/can/dev/Makefile
+ rename drivers/net/can/{ => dev}/dev.c (100%)
+ rename drivers/net/can/{ => dev}/rx-offload.c (100%)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 54fcd5fe572d..c3091a91ebbf 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3960,6 +3960,7 @@ W:	https://github.com/linux-can
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git
- F:	Documentation/networking/can.rst
-+F:	include/linux/can/can-ml.h
- F:	include/linux/can/core.h
- F:	include/linux/can/skb.h
- F:	include/net/netns/can.h
+diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+index 22164300122d..a2b4463d8480 100644
+--- a/drivers/net/can/Makefile
++++ b/drivers/net/can/Makefile
+@@ -7,12 +7,7 @@ obj-$(CONFIG_CAN_VCAN)		+= vcan.o
+ obj-$(CONFIG_CAN_VXCAN)		+= vxcan.o
+ obj-$(CONFIG_CAN_SLCAN)		+= slcan.o
+ 
+-obj-$(CONFIG_CAN_DEV)		+= can-dev.o
+-can-dev-y			+= dev.o
+-can-dev-y			+= rx-offload.o
+-
+-can-dev-$(CONFIG_CAN_LEDS)	+= led.o
+-
++obj-y				+= dev/
+ obj-y				+= rcar/
+ obj-y				+= spi/
+ obj-y				+= usb/
+diff --git a/drivers/net/can/dev/Makefile b/drivers/net/can/dev/Makefile
+new file mode 100644
+index 000000000000..cba92e6bcf6f
+--- /dev/null
++++ b/drivers/net/can/dev/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-$(CONFIG_CAN_DEV)		+= can-dev.o
++can-dev-y			+= dev.o
++can-dev-y			+= rx-offload.o
++
++can-dev-$(CONFIG_CAN_LEDS)	+= led.o
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev/dev.c
+similarity index 100%
+rename from drivers/net/can/dev.c
+rename to drivers/net/can/dev/dev.c
+diff --git a/drivers/net/can/rx-offload.c b/drivers/net/can/dev/rx-offload.c
+similarity index 100%
+rename from drivers/net/can/rx-offload.c
+rename to drivers/net/can/dev/rx-offload.c
 -- 
 2.29.2
 
