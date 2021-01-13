@@ -2,93 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 314452F4456
-	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 07:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC1F2F4530
+	for <lists+linux-can@lfdr.de>; Wed, 13 Jan 2021 08:27:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725801AbhAMGHc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 01:07:32 -0500
-Received: from mga01.intel.com ([192.55.52.88]:44840 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726475AbhAMGHb (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 13 Jan 2021 01:07:31 -0500
-IronPort-SDR: EVvHc23bn1xCsPXZgIxFbtuGH/OwrtbXy+tYPadhvVxz7SUZpZupXIvmVwSRvsDB3Vas1TFNCh
- 93aCHoq9/UlQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9862"; a="196790353"
-X-IronPort-AV: E=Sophos;i="5.79,343,1602572400"; 
-   d="scan'208";a="196790353"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 22:06:50 -0800
-IronPort-SDR: s7mv/kilUT1izL//LEJx2iNlUVtCR4x26PEZgILlkjvyW9Yp8ARiBjnTy3HSNv9ebHO3POZDUA
- JqChtI4pOMsw==
-X-IronPort-AV: E=Sophos;i="5.79,343,1602572400"; 
-   d="scan'208";a="381720516"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.117]) ([10.239.13.117])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2021 22:06:47 -0800
-Subject: Re: [kbuild-all] Re: [PATCH v10 1/1] can: usb: etas_es58X: add
- support for ETAS ES58X CAN USB interfaces
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        kernel test robot <lkp@intel.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>, kbuild-all@lists.01.org,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        id S1726202AbhAMH0P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 02:26:15 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:10719 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726235AbhAMH0O (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 02:26:14 -0500
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DFzTS32hbzl4FT;
+        Wed, 13 Jan 2021 15:24:12 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 13 Jan 2021 15:25:21 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
-References: <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
- <202101122332.Z7NglWp9-lkp@intel.com>
- <CAMZ6RqJNQ8MtLYu6i0Q3POBFYVrnFh3bUjiQC57vv-UqArCLfA@mail.gmail.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <bb840aed-5b48-432b-cc12-6ffb9d41ca03@intel.com>
-Date:   Wed, 13 Jan 2021 14:05:56 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>
+Subject: [PATCH] can: mcp251xfd: fix wrong check in mcp251xfd_handle_rxif_one
+Date:   Wed, 13 Jan 2021 15:31:00 +0800
+Message-ID: <20210113073100.79552-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqJNQ8MtLYu6i0Q3POBFYVrnFh3bUjiQC57vv-UqArCLfA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+If alloc_canfd_skb returns NULL, 'cfg' is an uninitialized
+variable, so we should check 'skb' rather than 'cfd' after
+calling alloc_canfd_skb(priv->ndev, &cfd).
 
+Fixes: 55e5b97f003e ("can: mcp25xxfd: add driver for Microchip MCP25xxFD SPI CAN")
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 1/13/21 11:13 AM, Vincent MAILHOL wrote:
-> On Tue 13 Jan 2021 at 00:29, kernel test robot <lkp@intel.com> wrote:
->> Hi Vincent,
->>
->> Thank you for the patch! Yet something to improve:
->>
->> [auto build test ERROR on linus/master]
->> [also build test ERROR on v5.11-rc3 next-20210111]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
-> The patch is applied on linux-can-next/testing. All the warnings
-> are related to the latest drivers/net/can/dev API changes.
-
-Hi Vincent,
-
-Thanks for the feedback, we'll try linux-can-next/testing next time.
-
-Best Regards,
-Rong Chen
-
->
-> I thought that the test robot only checked the
-> linux-kernel@vger.kernel.org open list and I didn't bother adding
-> the "--base". So this is my bad, sorry for that.
->
-> Because this is a false positive, I will not send a new
-> version (unless if requested).
->
->
-> Yours sincerely,
-> Vincent
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 77129d5f4..792d55ba4 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1492,7 +1492,7 @@ mcp251xfd_handle_rxif_one(struct mcp251xfd_priv *priv,
+ 	else
+ 		skb = alloc_can_skb(priv->ndev, (struct can_frame **)&cfd);
+ 
+-	if (!cfd) {
++	if (!skb) {
+ 		stats->rx_dropped++;
+ 		return 0;
+ 	}
+-- 
+2.23.0
 
