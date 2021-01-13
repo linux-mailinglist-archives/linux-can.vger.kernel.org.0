@@ -2,98 +2,174 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 721172F577B
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 04:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A172F585B
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 04:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbhANCAg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 21:00:36 -0500
-Received: from mail-qk1-f173.google.com ([209.85.222.173]:34825 "EHLO
-        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727880AbhANCAT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 21:00:19 -0500
-Received: by mail-qk1-f173.google.com with SMTP id n142so5215897qkn.2;
-        Wed, 13 Jan 2021 18:00:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1S4ht7EU4Q1EAaIDGPaE3cK58qdGEWTbB4lD0RChk5k=;
-        b=jpOzYRG53uyjQ7CLcR3VGfDaQKpFajfWq/eMpQ9R+Vlb5aF4nwRKLESuClV9am7XxR
-         j4VbFWVpFfh3+nv8xOBatwlyqvznRAoe9vbKxJo0Mf1N7tiomikI0Rtvh+PHRNjPeMz9
-         MHYQgxpUEp6cNX7vaqp3lOyI2vE24KWr0Xj5jV30YYOeAbS01sMP1uKlc9uA9mAdfUOD
-         Mn+GlmhQqSNOVVsICSoQgLdsyFxiKVX2xtV6D83OzqfOTAPQc63kixpvr5Z2HbHn/aMQ
-         Df323WNxTfzn2iv8xldjV7rmA+oRvd7IiSW0qAMU5tpAHFc4bpcXstfl6lPHYxNPgixx
-         /p8A==
-X-Gm-Message-State: AOAM533pVRglaVtIuNmfFFGn5QVSrpmN1JI82GPdvujUO4lq5/yrbYW0
-        n0OzAE5UFQZ6GiMpmeBYw5xldBzoh1jEn9ru50Zm5tqR793AJQ==
-X-Google-Smtp-Source: ABdhPJzsaUyplrpR1IuUXmDMQCoLG4sBSzKOfjrUTbiUacoqd0G/8hBduS3nKQvvC1Q0RTpBy801lf3JjtuZr8DQNzE=
-X-Received: by 2002:a05:6902:4f4:: with SMTP id w20mr7152691ybs.125.1610589578299;
- Wed, 13 Jan 2021 17:59:38 -0800 (PST)
+        id S1727192AbhANCR7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 21:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbhAMVNj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 16:13:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9DBC061575
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 13:14:17 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1kznT6-0001Pc-7g
+        for linux-can@vger.kernel.org; Wed, 13 Jan 2021 22:14:16 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 2944C5C300C
+        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 21:14:13 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id C955F5C2FF9;
+        Wed, 13 Jan 2021 21:14:11 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b3163a16;
+        Wed, 13 Jan 2021 21:14:11 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-01-13
+Date:   Wed, 13 Jan 2021 22:13:53 +0100
+Message-Id: <20210113211410.917108-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20210113211410.917108-1-mkl@pengutronix.de> <20210113211410.917108-10-mkl@pengutronix.de>
-In-Reply-To: <20210113211410.917108-10-mkl@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 14 Jan 2021 10:59:27 +0900
-Message-ID: <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
-Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length calculcation
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 14 Jan 2021 at 06:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
-> return 0xF. This is equal to the last 16 members of the array.
->
-> This patch removes these members from the array, uses ARRAY_SIZE() for the
-> length check, and returns CANFD_MAX_DLC (which is 0xf).
->
-> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> Link: https://lore.kernel.org/r/20210111141930.693847-9-mkl@pengutronix.de
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/dev/length.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-> index 5e7d481717ea..d695a3bee1ed 100644
-> --- a/drivers/net/can/dev/length.c
-> +++ b/drivers/net/can/dev/length.c
-> @@ -27,15 +27,13 @@ static const u8 len2dlc[] = {
->         13, 13, 13, 13, 13, 13, 13, 13, /* 25 - 32 */
->         14, 14, 14, 14, 14, 14, 14, 14, /* 33 - 40 */
->         14, 14, 14, 14, 14, 14, 14, 14, /* 41 - 48 */
-> -       15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
-> -       15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
->  };
->
->  /* map the sanitized data length to an appropriate data length code */
->  u8 can_fd_len2dlc(u8 len)
->  {
-> -       if (unlikely(len > 64))
-> -               return 0xF;
-> +       if (len > ARRAY_SIZE(len2dlc))
+Hello Jakub, hello David,
 
-Sorry but I missed an of-by-one issue when I did my first
-review. Don't know why but it popped to my eyes this morning when
-casually reading the emails.
+this is a pull request of 17 patches for net-next/master.
 
-ARRAY_SIZE(len2dlc) is 49. If len is between 0 and 48, use the
-array, if len is greater *or equal* return CANFD_MAX_DLC.
+The first two patches update the MAINTAINERS file, Lukas Bulwahn's patch fixes
+the files entry for the tcan4x5x driver, which was broken by me in net-next.
+A patch by me adds the a missing header file to the CAN Networking Layer.
 
-In short, replace > by >=:
-+       if (len >= ARRAY_SIZE(len2dlc))
+The next 5 patches are by me and split the the CAN driver related
+infrastructure code into more files in a separate subdir. The next two patches
+by me clean up the CAN length related code. This is followed by 6 patches by
+Vincent Mailhol and me, they add helper code for for CAN frame length
+calculation neede for BQL support.
 
-> +               return CANFD_MAX_DLC;
->
->         return len2dlc[len];
->  }
+A patch by Vincent Mailhol adds software TX timestamp support.
 
-Yours sincerely,
-Vincent
+The last patch is by me, targets the tcan4x5x driver, and removes the unneeded
+__packed attribute from the struct tcan4x5x_map_buf.
+
+regards,
+Marc
+
+---
+
+The following changes since commit f50e2f9f791647aa4e5b19d0064f5cabf630bf6e:
+
+  hci: llc_shdlc: style: Simplify bool comparison (2021-01-12 20:18:30 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.12-20210113
+
+for you to fetch changes up to b42e45a913f2ae76807e656a1c053808d7d34352:
+
+  can: tcan4x5x: remove __packed attribute from struct tcan4x5x_map_buf (2021-01-13 21:48:28 +0100)
+
+----------------------------------------------------------------
+linux-can-next-for-5.12-20210113
+
+----------------------------------------------------------------
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust entry to tcan4x5x file split
+
+Marc Kleine-Budde (13):
+      MAINTAINERS: CAN network layer: add missing header file can-ml.h
+      can: dev: move driver related infrastructure into separate subdir
+      can: dev: move bittiming related code into seperate file
+      can: dev: move length related code into seperate file
+      can: dev: move skb related into seperate file
+      can: dev: move netlink related code into seperate file
+      can: length: convert to kernel coding style
+      can: length: can_fd_len2dlc(): simplify length calculcation
+      can: length: canfd_sanitize_len(): add function to sanitize CAN-FD data length
+      can: dev: extend struct can_skb_priv to hold CAN frame length
+      can: dev: can_get_echo_skb(): extend to return can frame length
+      can: dev: can_rx_offload_get_echo_skb(): extend to return can frame length
+      can: tcan4x5x: remove __packed attribute from struct tcan4x5x_map_buf
+
+Vincent Mailhol (3):
+      can: length: can_skb_get_frame_len(): introduce function to get data length of frame in data link layer
+      can: dev: can_put_echo_skb(): extend to handle frame_len
+      can: dev: can_put_echo_skb(): add software tx timestamps
+
+ MAINTAINERS                                       |    5 +-
+ drivers/net/can/Makefile                          |    7 +-
+ drivers/net/can/at91_can.c                        |    4 +-
+ drivers/net/can/c_can/c_can.c                     |    4 +-
+ drivers/net/can/cc770/cc770.c                     |    4 +-
+ drivers/net/can/dev.c                             | 1338 ---------------------
+ drivers/net/can/dev/Makefile                      |   11 +
+ drivers/net/can/dev/bittiming.c                   |  261 ++++
+ drivers/net/can/dev/dev.c                         |  467 +++++++
+ drivers/net/can/dev/length.c                      |   90 ++
+ drivers/net/can/dev/netlink.c                     |  379 ++++++
+ drivers/net/can/{ => dev}/rx-offload.c            |    5 +-
+ drivers/net/can/dev/skb.c                         |  231 ++++
+ drivers/net/can/flexcan.c                         |    7 +-
+ drivers/net/can/grcan.c                           |    4 +-
+ drivers/net/can/ifi_canfd/ifi_canfd.c             |    4 +-
+ drivers/net/can/kvaser_pciefd.c                   |    6 +-
+ drivers/net/can/m_can/m_can.c                     |    8 +-
+ drivers/net/can/m_can/tcan4x5x.h                  |    2 +-
+ drivers/net/can/mscan/mscan.c                     |    4 +-
+ drivers/net/can/pch_can.c                         |    4 +-
+ drivers/net/can/peak_canfd/peak_canfd.c           |    4 +-
+ drivers/net/can/rcar/rcar_can.c                   |    4 +-
+ drivers/net/can/rcar/rcar_canfd.c                 |    4 +-
+ drivers/net/can/sja1000/sja1000.c                 |    4 +-
+ drivers/net/can/softing/softing_main.c            |    4 +-
+ drivers/net/can/spi/hi311x.c                      |    4 +-
+ drivers/net/can/spi/mcp251x.c                     |    4 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c    |    4 +-
+ drivers/net/can/sun4i_can.c                       |    4 +-
+ drivers/net/can/ti_hecc.c                         |    4 +-
+ drivers/net/can/usb/ems_usb.c                     |    4 +-
+ drivers/net/can/usb/esd_usb2.c                    |    4 +-
+ drivers/net/can/usb/gs_usb.c                      |    4 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |    2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |    2 +-
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c  |    2 +-
+ drivers/net/can/usb/mcba_usb.c                    |    4 +-
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c      |    4 +-
+ drivers/net/can/usb/ucan.c                        |    4 +-
+ drivers/net/can/usb/usb_8dev.c                    |    4 +-
+ drivers/net/can/xilinx_can.c                      |    6 +-
+ include/linux/can/bittiming.h                     |   44 +
+ include/linux/can/dev.h                           |  135 +--
+ include/linux/can/length.h                        |  174 +++
+ include/linux/can/rx-offload.h                    |    3 +-
+ include/linux/can/skb.h                           |   80 ++
+ 47 files changed, 1819 insertions(+), 1542 deletions(-)
+ delete mode 100644 drivers/net/can/dev.c
+ create mode 100644 drivers/net/can/dev/Makefile
+ create mode 100644 drivers/net/can/dev/bittiming.c
+ create mode 100644 drivers/net/can/dev/dev.c
+ create mode 100644 drivers/net/can/dev/length.c
+ create mode 100644 drivers/net/can/dev/netlink.c
+ rename drivers/net/can/{ => dev}/rx-offload.c (98%)
+ create mode 100644 drivers/net/can/dev/skb.c
+ create mode 100644 include/linux/can/bittiming.h
+ create mode 100644 include/linux/can/length.h
+
+
