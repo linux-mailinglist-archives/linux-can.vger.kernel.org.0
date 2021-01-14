@@ -2,88 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F36F2F5828
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 04:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704502F5906
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 04:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726695AbhANCPL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 13 Jan 2021 21:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729098AbhAMVXO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 13 Jan 2021 16:23:14 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFE3C0617A4
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 13:22:05 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kznad-0002wy-LA
-        for linux-can@vger.kernel.org; Wed, 13 Jan 2021 22:22:03 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 995415C30EE
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 21:22:01 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0A80D5C30D8;
-        Wed, 13 Jan 2021 21:22:00 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id eb468fed;
-        Wed, 13 Jan 2021 21:21:59 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Oliver Hartkopp <socketcan@hartkopp.net>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 1/2] can: isotp: isotp_getname(): fix kernel information leak
-Date:   Wed, 13 Jan 2021 22:21:57 +0100
-Message-Id: <20210113212158.925513-2-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210113212158.925513-1-mkl@pengutronix.de>
-References: <20210113212158.925513-1-mkl@pengutronix.de>
+        id S1727096AbhANDLx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 13 Jan 2021 22:11:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53062 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727805AbhANDLe (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 13 Jan 2021 22:11:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 650D523619;
+        Thu, 14 Jan 2021 03:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610593809;
+        bh=UrMb4pOgyUxRbspZeCZOuzk6ZhbroCYRglSDMIUBTVY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Mn5AFNMR/mfz4+VRnoPPBKsJ6S0M+Hj1sx4JqkUgw7NRC/imRz2gQe7eRHcL6RvQf
+         3JvJxayjLzsfKF9eXrehg71kmRWkkP1kjIWiIF3hCsaRduf9l5a5f8OhZRXWoJWeyt
+         eDQwYYtUnQsUxlnF9MZxtMgfajoRV4JBhyknYk0QuVQrc5GhAyztseV8zCb8OmQVG2
+         pmZq9JotkfjBXM3xd1Py3/vDdM0TJ4/Ag1XvqGNH/G7E/ZN8SUrU3GmrlZi7M2TM4s
+         P0Nozbu88UKkM3wmXRqgMcMKPuPFb+c9hzEQWhmZKRKfWHEvJIKVP09gCyEJBTTV2J
+         Du8OSJrngl1Uw==
+Received: from pdx-korg-docbuild-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-1.ci.codeaurora.org (Postfix) with ESMTP id 6023960593;
+        Thu, 14 Jan 2021 03:10:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Subject: Re: [net 1/2] can: isotp: isotp_getname(): fix kernel information leak
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161059380938.28478.8205076574768739115.git-patchwork-notify@kernel.org>
+Date:   Thu, 14 Jan 2021 03:10:09 +0000
+References: <20210113212158.925513-2-mkl@pengutronix.de>
+In-Reply-To: <20210113212158.925513-2-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de,
+        socketcan@hartkopp.net, xiyou.wangcong@gmail.com,
+        syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+Hello:
 
-Initialize the sockaddr_can structure to prevent a data leak to user space.
+This series was applied to netdev/net.git (refs/heads/master):
 
-Suggested-by: Cong Wang <xiyou.wangcong@gmail.com>
-Reported-by: syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Link: https://lore.kernel.org/r/20210112091643.11789-1-socketcan@hartkopp.net
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/isotp.c | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, 13 Jan 2021 22:21:57 +0100 you wrote:
+> From: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> Initialize the sockaddr_can structure to prevent a data leak to user space.
+> 
+> Suggested-by: Cong Wang <xiyou.wangcong@gmail.com>
+> Reported-by: syzbot+057884e2f453e8afebc8@syzkaller.appspotmail.com
+> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> Link: https://lore.kernel.org/r/20210112091643.11789-1-socketcan@hartkopp.net
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> 
+> [...]
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 7839c3b9e5be..3ef7f78e553b 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1155,6 +1155,7 @@ static int isotp_getname(struct socket *sock, struct sockaddr *uaddr, int peer)
- 	if (peer)
- 		return -EOPNOTSUPP;
- 
-+	memset(addr, 0, sizeof(*addr));
- 	addr->can_family = AF_CAN;
- 	addr->can_ifindex = so->ifindex;
- 	addr->can_addr.tp.rx_id = so->rxid;
+Here is the summary with links:
+  - [net,1/2] can: isotp: isotp_getname(): fix kernel information leak
+    https://git.kernel.org/netdev/net/c/b42b3a2744b3
+  - [net,2/2] can: mcp251xfd: mcp251xfd_handle_rxif_one(): fix wrong NULL pointer check
+    https://git.kernel.org/netdev/net/c/ca4c6ebeeb50
 
-base-commit: a95d25dd7b94a5ba18246da09b4218f132fed60e
--- 
-2.29.2
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
