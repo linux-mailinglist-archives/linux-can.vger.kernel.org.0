@@ -2,124 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6D82F5D1D
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 10:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E472F64BB
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 16:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728001AbhANJRI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Jan 2021 04:17:08 -0500
-Received: from mail-qk1-f173.google.com ([209.85.222.173]:33699 "EHLO
-        mail-qk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727512AbhANJRG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 04:17:06 -0500
-Received: by mail-qk1-f173.google.com with SMTP id f26so6573864qka.0;
-        Thu, 14 Jan 2021 01:16:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Py9tv1BOpYTNv98TYkoTeeYi5fcvbtH9uFZFAg3tHPA=;
-        b=JVFLQ9a4i65jcHmmTQsoGidozDFYUs3C3o6Y7wSSxK7E5RyoWcKvxbxbSSWDCD03H7
-         SlWmui3A+/X8mH1b7NFiT7Ew+Ocwb796314vtj5FGm+ZGIegR4QYKwvLVTu6FX0EhJYy
-         Rva3PZYqO4TRnEh0b/nXeYawXNbpc+hsytP9084f5e4UmU+1xoBFyap1KSEoh69pMXuP
-         ge+KVSdbUHvMTvN6UXycQYQYSZLPddf8f1ZyY7jxPDhAhsRUciemgPlbslD/p8GYXDno
-         EpPwrzW7gMOREMcXCVpGKw+QrkYU1y5zXm87rB4+Fldw2KSu26DBMNz6noCGE6GX5NcO
-         kVWQ==
-X-Gm-Message-State: AOAM531WrZXBoUdKRKonDVrYu/v/6VfPiB1Y6CA8Ql2UVHmKJTlcb8+Y
-        5SnjRuIRuJ1NHJnlE003Rg5xfy7XwA86VMB5nz4=
-X-Google-Smtp-Source: ABdhPJxSDzUfvPdnulzChrmcZy1CTadAtqqs9/JIrB+O94LLFUqJl9pZaZrwEu/zPXmwUwIhaMRFeL+2myUrX2Nzq5M=
-X-Received: by 2002:a25:5583:: with SMTP id j125mr8348157ybb.307.1610615785252;
- Thu, 14 Jan 2021 01:16:25 -0800 (PST)
+        id S1729153AbhANPfe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Jan 2021 10:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728346AbhANPfe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 10:35:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A072C061574
+        for <linux-can@vger.kernel.org>; Thu, 14 Jan 2021 07:34:54 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1l04eC-0004UF-S9
+        for linux-can@vger.kernel.org; Thu, 14 Jan 2021 16:34:52 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 966A75C3C62
+        for <linux-can@vger.kernel.org>; Thu, 14 Jan 2021 15:34:50 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B7C435C3C53;
+        Thu, 14 Jan 2021 15:34:49 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 97b5bdc8;
+        Thu, 14 Jan 2021 15:34:49 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     kernel@pengutronix.de, linux-can@vger.kernel.org
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>
+Subject: [PATCH 0/6] mcp251xfd: cleanups, optimize RTR, add len8_dlc and BQL support
+Date:   Thu, 14 Jan 2021 16:34:42 +0100
+Message-Id: <20210114153448.1506901-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20210113211410.917108-1-mkl@pengutronix.de> <20210113211410.917108-10-mkl@pengutronix.de>
- <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com> <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net>
-In-Reply-To: <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 14 Jan 2021 18:16:14 +0900
-Message-ID: <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
-Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length calculcation
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 14 Jan 2021 at 17:23, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> On 14.01.21 02:59, Vincent MAILHOL wrote:
-> > On Tue. 14 Jan 2021 at 06:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> >>
-> >> If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
-> >> return 0xF. This is equal to the last 16 members of the array.
-> >>
-> >> This patch removes these members from the array, uses ARRAY_SIZE() for the
-> >> length check, and returns CANFD_MAX_DLC (which is 0xf).
-> >>
-> >> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >> Link: https://lore.kernel.org/r/20210111141930.693847-9-mkl@pengutronix.de
-> >> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >> ---
-> >>   drivers/net/can/dev/length.c | 6 ++----
-> >>   1 file changed, 2 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-> >> index 5e7d481717ea..d695a3bee1ed 100644
-> >> --- a/drivers/net/can/dev/length.c
-> >> +++ b/drivers/net/can/dev/length.c
-> >> @@ -27,15 +27,13 @@ static const u8 len2dlc[] = {
-> >>          13, 13, 13, 13, 13, 13, 13, 13, /* 25 - 32 */
-> >>          14, 14, 14, 14, 14, 14, 14, 14, /* 33 - 40 */
-> >>          14, 14, 14, 14, 14, 14, 14, 14, /* 41 - 48 */
-> >> -       15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
-> >> -       15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
-> >>   };
-> >>
-> >>   /* map the sanitized data length to an appropriate data length code */
-> >>   u8 can_fd_len2dlc(u8 len)
-> >>   {
-> >> -       if (unlikely(len > 64))
-> >> -               return 0xF;
-> >> +       if (len > ARRAY_SIZE(len2dlc))
-> >
-> > Sorry but I missed an of-by-one issue when I did my first
-> > review. Don't know why but it popped to my eyes this morning when
-> > casually reading the emails.
->
-> Oh, yes.
->
-> The fist line is 0 .. 8 which has 9 bytes.
->
-> I also looked on it (from the back), and wondered if it was correct. But
-> didn't see it either at first sight.
->
-> >
-> > ARRAY_SIZE(len2dlc) is 49. If len is between 0 and 48, use the
-> > array, if len is greater *or equal* return CANFD_MAX_DLC.
->
-> All these changes and discussions make it very obviously more tricky to
-> understand that code.
->
-> I don't really like this kind of improvement ...
->
-> Before that it was pretty clear that we only catch an out of bounds
-> value and usually grab the value from the table.
+Hello,
 
-I understand your point: all three of us initially missed that
-bug. But now that it is fixed, I would still prefer to keep
-Marc's patch.
+this is a series of 6 patches for the mcp251xfd driver. It first replaces an
+open coded check for TX buffer space, optimizes RTR CAN frames, add len8_dlc
+support and finally BQL support. As netdev_xmit_more() is quite complicated it
+will be added in a later series.
+
+regards,
+Marc
 
 
-Yours sincerely,
-Vincent
 
-> >
-> > In short, replace > by >=:
-> > +       if (len >= ARRAY_SIZE(len2dlc))
-> >
-> >> +               return CANFD_MAX_DLC;
-> >>
-> >>          return len2dlc[len];
-> >>   }
