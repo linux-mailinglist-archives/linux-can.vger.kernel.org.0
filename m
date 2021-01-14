@@ -2,84 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF5C2F5BE1
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 08:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA2D2F5C5A
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 09:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbhANH6f (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Jan 2021 02:58:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727782AbhANH61 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 02:58:27 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D71FC06138C
-        for <linux-can@vger.kernel.org>; Wed, 13 Jan 2021 23:56:42 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1kzxUm-0007Xi-Jj
-        for linux-can@vger.kernel.org; Thu, 14 Jan 2021 08:56:40 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id A257B5C369E
-        for <linux-can@vger.kernel.org>; Thu, 14 Jan 2021 07:56:39 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 6FB455C3633;
-        Thu, 14 Jan 2021 07:56:23 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 38ddc252;
-        Thu, 14 Jan 2021 07:56:18 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 17/17] can: tcan4x5x: remove __packed attribute from struct tcan4x5x_map_buf
-Date:   Thu, 14 Jan 2021 08:56:17 +0100
-Message-Id: <20210114075617.1402597-18-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210114075617.1402597-1-mkl@pengutronix.de>
-References: <20210114075617.1402597-1-mkl@pengutronix.de>
+        id S1726055AbhANI0Q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Jan 2021 03:26:16 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:22186 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726897AbhANI0P (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 03:26:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610612603;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
+        Subject:Sender;
+        bh=hcdM4B0hWzGtfkUNSe9am22X7mDGlRBRswu1lZF1EII=;
+        b=Hh+neCW8Bhlqw4kDOy0CyhtqVu951NBKROWBJAVeI7J+BzfXYQg5J33WE16U97W4+0
+        oGf4kUCmX51J/tQJi7BRQIwwfhPL7lQvayoo2re9vjqNtNjavSYRc9kOxmenzcWJR4bL
+        nI2JJEUimqPD3GfMaGUzpNWEWR4iJNCRLhznedVuhRBvkGQaTlWW4nhipPJaIrU5QZy2
+        DngIFi6Hpvlzsg7tSkSHXmimdEnph3EYMsWgLyl/bIiQMsKmpL9E4lOF7fpJHrciGg3N
+        Y9EWhNwBl3xw+722ejtRMo+0NbpQvT072eF5IGEQ9k5nulHkdV5eVm6VlqRXmXO+x1IJ
+        uScA==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR+J8xty10="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+        by smtp.strato.de (RZmta 47.12.1 SBL|AUTH)
+        with ESMTPSA id k075acx0E8NGSDg
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 14 Jan 2021 09:23:16 +0100 (CET)
+Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length
+ calculcation
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+References: <20210113211410.917108-1-mkl@pengutronix.de>
+ <20210113211410.917108-10-mkl@pengutronix.de>
+ <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net>
+Date:   Thu, 14 Jan 2021 09:23:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The first member of struct tcan4x5x_map_buf is the struct tcan4x5x_buf_cmd,
-which has a size of 4 bytes. It's followed by an array of u8. The compiler
-places the array directly after the struct tcan4x5x_buf_cmd.
-
-This patch removes the not needed attribute __packed from the struct
-tcan4x5x_map_buf.
-
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Link: https://lore.kernel.org/r/20210113203955.912916-1-mkl@pengutronix.de
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/tcan4x5x.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/m_can/tcan4x5x.h b/drivers/net/can/m_can/tcan4x5x.h
-index 7bf264f8e81f..c66da829b795 100644
---- a/drivers/net/can/m_can/tcan4x5x.h
-+++ b/drivers/net/can/m_can/tcan4x5x.h
-@@ -25,7 +25,7 @@ struct __packed tcan4x5x_buf_cmd {
- 	u8 len;
- };
- 
--struct __packed tcan4x5x_map_buf {
-+struct tcan4x5x_map_buf {
- 	struct tcan4x5x_buf_cmd cmd;
- 	u8 data[256 * sizeof(u32)];
- } ____cacheline_aligned;
--- 
-2.29.2
 
 
+On 14.01.21 02:59, Vincent MAILHOL wrote:
+> On Tue. 14 Jan 2021 at 06:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>>
+>> If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
+>> return 0xF. This is equal to the last 16 members of the array.
+>>
+>> This patch removes these members from the array, uses ARRAY_SIZE() for the
+>> length check, and returns CANFD_MAX_DLC (which is 0xf).
+>>
+>> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>> Link: https://lore.kernel.org/r/20210111141930.693847-9-mkl@pengutronix.de
+>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>> ---
+>>   drivers/net/can/dev/length.c | 6 ++----
+>>   1 file changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
+>> index 5e7d481717ea..d695a3bee1ed 100644
+>> --- a/drivers/net/can/dev/length.c
+>> +++ b/drivers/net/can/dev/length.c
+>> @@ -27,15 +27,13 @@ static const u8 len2dlc[] = {
+>>          13, 13, 13, 13, 13, 13, 13, 13, /* 25 - 32 */
+>>          14, 14, 14, 14, 14, 14, 14, 14, /* 33 - 40 */
+>>          14, 14, 14, 14, 14, 14, 14, 14, /* 41 - 48 */
+>> -       15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
+>> -       15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
+>>   };
+>>
+>>   /* map the sanitized data length to an appropriate data length code */
+>>   u8 can_fd_len2dlc(u8 len)
+>>   {
+>> -       if (unlikely(len > 64))
+>> -               return 0xF;
+>> +       if (len > ARRAY_SIZE(len2dlc))
+> 
+> Sorry but I missed an of-by-one issue when I did my first
+> review. Don't know why but it popped to my eyes this morning when
+> casually reading the emails.
+
+Oh, yes.
+
+The fist line is 0 .. 8 which has 9 bytes.
+
+I also looked on it (from the back), and wondered if it was correct. But 
+didn't see it either at first sight.
+
+> 
+> ARRAY_SIZE(len2dlc) is 49. If len is between 0 and 48, use the
+> array, if len is greater *or equal* return CANFD_MAX_DLC.
+
+All these changes and discussions make it very obviously more tricky to 
+understand that code.
+
+I don't really like this kind of improvement ...
+
+Before that it was pretty clear that we only catch an out of bounds 
+value and usually grab the value from the table.
+
+Regards,
+Oliver
+
+> 
+> In short, replace > by >=:
+> +       if (len >= ARRAY_SIZE(len2dlc))
+> 
+>> +               return CANFD_MAX_DLC;
+>>
+>>          return len2dlc[len];
+>>   }
+> 
+> Yours sincerely,
+> Vincent
+> 
