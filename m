@@ -2,54 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AD62F66C7
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 18:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091A02F678F
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 18:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbhANRGX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Jan 2021 12:06:23 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:22767 "EHLO
+        id S1727322AbhANR0S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Jan 2021 12:26:18 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:8694 "EHLO
         mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727773AbhANRGX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 12:06:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610643809;
+        with ESMTP id S1726266AbhANR0R (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 12:26:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610645004;
         s=strato-dkim-0002; d=hartkopp.net;
         h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
         Subject:Sender;
-        bh=99qN2kXUT/2RMJYWOuie1CE2v87wytss3dTpa0fwnqU=;
-        b=FI0ij6QYk8H8UwIsX0twj00Iw9XZzhzzBDPm+gwZnMir/A4nr+auY8lZN9+3zUpHWp
-        DrQ3j6C9iH3dgKUcL2cneXdu7Ev7eKKWaX51RBJqITNik1LqVsuax823SOaLBe8OBuFa
-        +X/7QGpOpTjR3FWMGu4igiVYYTIWEIWprstoicS86pplLzvssLoLUXuT9X2oSq9igMP2
-        RCBjKl+3IO9s0rb1Ga30U581s2y5jiNnZS48JLhNh6ktqC7U4N6A7JpRyctycPTKpTso
-        PTOZzIJN8Il9OKUWg+o3cn86SNKVdLUoHne4jsQq6DMmjYUcitFeQDgYiRP62eoYGMoc
-        PiVQ==
+        bh=HDYBwIqHsqll23hMGGlTIt+vwOJcDHTYz6NC/MTevts=;
+        b=cmVxeG8r8irCu6qN8PZIQ23pvnL1M+54l9Ztn5bxSPJ3w2LaZNVaUHBLYPimpwblDZ
+        pTGfsP91NlaQ1gBmlIQExJs50i0rFLijiIhkOuzU3PahPY+B0GAS3srZBzokdleZAEJM
+        fNCfE2R6DoWARbSZtzWmBDiV0jBTD6DXWfnNQqfcwhMIf7VgYFKplqt9IH6YnHSRwpSU
+        nUuk+3evEI2CiAzFwh0cvoMRvYuEXN09aEUbR6uqfGTWKdJADMDRQLL+ChIUiurzadNu
+        8zK+VMPV8DjZImQBymsCMyBYXWlR9d0OJjsLIXHVHaETISHIcjZTEGJSpNEqxNgKlD3v
+        Jn4g==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVMh7kiA="
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.50.177]
         by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
-        with ESMTPSA id k075acx0EH3JUq9
+        with ESMTPSA id k075acx0EHNFUs3
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Thu, 14 Jan 2021 18:03:19 +0100 (CET)
-Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length
- calculcation
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
+        Thu, 14 Jan 2021 18:23:15 +0100 (CET)
+Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
-References: <20210113211410.917108-1-mkl@pengutronix.de>
- <20210113211410.917108-10-mkl@pengutronix.de>
- <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
- <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net>
- <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
+        Jimmy Assarsson <extja@kvaser.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
+References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
+ <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <75d3c8e9-acbd-09e9-e185-94833dbfb391@hartkopp.net>
-Date:   Thu, 14 Jan 2021 18:03:14 +0100
+Message-ID: <981eb251-1573-5852-4b16-2e207eb3c4da@hartkopp.net>
+Date:   Thu, 14 Jan 2021 18:23:15 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
+In-Reply-To: <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,137 +58,81 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Vincent,
 
+On 12.01.21 14:05, Vincent Mailhol wrote:
+> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
+> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
 
-On 14.01.21 10:16, Vincent MAILHOL wrote:
-> On Tue. 14 Jan 2021 at 17:23, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->> On 14.01.21 02:59, Vincent MAILHOL wrote:
->>> On Tue. 14 Jan 2021 at 06:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->>>>
->>>> If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
->>>> return 0xF. This is equal to the last 16 members of the array.
->>>>
->>>> This patch removes these members from the array, uses ARRAY_SIZE() for the
->>>> length check, and returns CANFD_MAX_DLC (which is 0xf).
->>>>
->>>> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
->>>> Link: https://lore.kernel.org/r/20210111141930.693847-9-mkl@pengutronix.de
->>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
->>>> ---
->>>>    drivers/net/can/dev/length.c | 6 ++----
->>>>    1 file changed, 2 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
->>>> index 5e7d481717ea..d695a3bee1ed 100644
->>>> --- a/drivers/net/can/dev/length.c
->>>> +++ b/drivers/net/can/dev/length.c
->>>> @@ -27,15 +27,13 @@ static const u8 len2dlc[] = {
->>>>           13, 13, 13, 13, 13, 13, 13, 13, /* 25 - 32 */
->>>>           14, 14, 14, 14, 14, 14, 14, 14, /* 33 - 40 */
->>>>           14, 14, 14, 14, 14, 14, 14, 14, /* 41 - 48 */
->>>> -       15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
->>>> -       15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
->>>>    };
->>>>
->>>>    /* map the sanitized data length to an appropriate data length code */
->>>>    u8 can_fd_len2dlc(u8 len)
->>>>    {
->>>> -       if (unlikely(len > 64))
->>>> -               return 0xF;
->>>> +       if (len > ARRAY_SIZE(len2dlc))
->>>
->>> Sorry but I missed an of-by-one issue when I did my first
->>> review. Don't know why but it popped to my eyes this morning when
->>> casually reading the emails.
->>
->> Oh, yes.
->>
->> The fist line is 0 .. 8 which has 9 bytes.
->>
->> I also looked on it (from the back), and wondered if it was correct. But
->> didn't see it either at first sight.
->>
->>>
->>> ARRAY_SIZE(len2dlc) is 49. If len is between 0 and 48, use the
->>> array, if len is greater *or equal* return CANFD_MAX_DLC.
->>
->> All these changes and discussions make it very obviously more tricky to
->> understand that code.
->>
->> I don't really like this kind of improvement ...
->>
->> Before that it was pretty clear that we only catch an out of bounds
->> value and usually grab the value from the table.
-> 
-> I understand your point: all three of us initially missed that
-> bug. But now that it is fixed, I would still prefer to keep
-> Marc's patch.
+(..)
 
-No, I'm still against it as it is now.
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+> new file mode 100644
+> index 000000000000..6b9534f23c96
+> --- /dev/null
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
 
-Even
+(..)
 
-	if (len >= ARRAY_SIZE(len2dlc))
+> +static void es58x_fd_print_bittiming(struct net_device *netdev,
+> +				     struct es58x_fd_bittiming
+> +				     *es58x_fd_bittiming, char *type)
+> +{
+> +	netdev_vdbg(netdev, "bitrate %s    = %d\n", type,
+> +		    le32_to_cpu(es58x_fd_bittiming->bitrate));
+> +	netdev_vdbg(netdev, "tseg1 %s      = %d\n", type,
+> +		    le16_to_cpu(es58x_fd_bittiming->tseg1));
+> +	netdev_vdbg(netdev, "tseg2 %s      = %d\n", type,
+> +		    le16_to_cpu(es58x_fd_bittiming->tseg2));
+> +	netdev_vdbg(netdev, "brp %s        = %d\n", type,
+> +		    le16_to_cpu(es58x_fd_bittiming->brp));
+> +	netdev_vdbg(netdev, "sjw %s        = %d\n", type,
+> +		    le16_to_cpu(es58x_fd_bittiming->sjw));
+> +}
 
-would need some comment that values > 48 lead to a DLC = 15.
+What is the reason for this code?
 
-This is not intuitively understandable from that value 
-"ARRAY_SIZE(len2dlc)" !
+These values can be retrieved with the 'ip' tool and are probably 
+interesting for development - but not in the final code.
 
-Using ARRAY_SIZE() is a bad choice IMO.
+> +
+> +static void es58x_fd_print_conf(struct net_device *netdev,
+> +				struct es58x_fd_tx_conf_msg *tx_conf_msg)
+> +{
+> +	es58x_fd_print_bittiming(netdev, &tx_conf_msg->nominal_bittiming,
+> +				 "nominal");
+> +	netdev_vdbg(netdev, "samples_per_bit    = %d\n",
+> +		    tx_conf_msg->samples_per_bit);
+> +	netdev_vdbg(netdev, "sync_edge          = %d\n",
+> +		    tx_conf_msg->sync_edge);
+> +	netdev_vdbg(netdev, "physical_layer     = %d\n",
+> +		    tx_conf_msg->physical_layer);
+> +	netdev_vdbg(netdev, "self_reception     = %d\n",
+> +		    tx_conf_msg->self_reception_mode);
+> +	netdev_vdbg(netdev, "ctrlmode           = %d\n", tx_conf_msg->ctrlmode);
+> +	netdev_vdbg(netdev, "canfd_enabled      = %d\n",
+> +		    tx_conf_msg->canfd_enabled);
+> +	if (tx_conf_msg->canfd_enabled) {
+> +		es58x_fd_print_bittiming(netdev,
+> +					 &tx_conf_msg->data_bittiming, "data");
+> +		netdev_vdbg(netdev,
+> +			    "Transmitter Delay Compensation        = %d\n",
+> +			    tx_conf_msg->tdc);
+> +		netdev_vdbg(netdev,
+> +			    "Transmitter Delay Compensation Offset = %d\n",
+> +			    le16_to_cpu(tx_conf_msg->tdco));
+> +		netdev_vdbg(netdev,
+> +			    "Transmitter Delay Compensation Filter = %d\n",
+> +			    le16_to_cpu(tx_conf_msg->tdcf));
+> +	}
+> +}
 
-If it's really worth to save 16 bytes I would suggest this:
+Same here.
 
-diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-index 3486704c8a95..0b0a5a16943a 100644
---- a/drivers/net/can/dev.c
-+++ b/drivers/net/can/dev.c
-@@ -42,18 +42,17 @@ static const u8 len2dlc[] = {0, 1, 2, 3, 4, 5, 6, 7, 
-8,             /* 0 - 8 */
-                              10, 10, 10, 10,                    /* 13 - 
-16 */
-                              11, 11, 11, 11,                    /* 17 - 
-20 */
-                              12, 12, 12, 12,                    /* 21 - 
-24 */
-                              13, 13, 13, 13, 13, 13, 13, 13,    /* 25 - 
-32 */
-                              14, 14, 14, 14, 14, 14, 14, 14,    /* 33 - 
-40 */
--                            14, 14, 14, 14, 14, 14, 14, 14,    /* 41 - 
-48 */
--                            15, 15, 15, 15, 15, 15, 15, 15,    /* 49 - 
-56 */
--                            15, 15, 15, 15, 15, 15, 15, 15};   /* 57 - 
-64 */
-+                            14, 14, 14, 14, 14, 14, 14, 14};   /* 41 - 
-48 */
-+                            /* 49 - 64 is checked in  can_fd_len2dlc() */
-
-  /* map the sanitized data length to an appropriate data length code */
-  u8 can_fd_len2dlc(u8 len)
-  {
--       if (unlikely(len > 64))
-+       if (len > 48)
-                 return 0xF;
-
-         return len2dlc[len];
-  }
-  EXPORT_SYMBOL_GPL(can_fd_len2dlc);
+Either the information can be retrieved with the 'ip' tool OR the are 
+not necessary as set to some reasonable default anyway OR we should 
+implement the functionality in the general CAN driver infrastructure.
 
 Regards,
 Oliver
 
-> 
-> 
-> Yours sincerely,
-> Vincent
-> 
->>>
->>> In short, replace > by >=:
->>> +       if (len >= ARRAY_SIZE(len2dlc))
->>>
->>>> +               return CANFD_MAX_DLC;
->>>>
->>>>           return len2dlc[len];
->>>>    }
