@@ -2,175 +2,192 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A812F6541
-	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 16:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AD62F66C7
+	for <lists+linux-can@lfdr.de>; Thu, 14 Jan 2021 18:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbhANPyb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 14 Jan 2021 10:54:31 -0500
-Received: from mail-qk1-f177.google.com ([209.85.222.177]:39135 "EHLO
-        mail-qk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbhANPyb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 10:54:31 -0500
-Received: by mail-qk1-f177.google.com with SMTP id p14so8606043qke.6;
-        Thu, 14 Jan 2021 07:54:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oER94ISeeQp8C2fada71qvbSp81ji9VD0JCVbzgzuL4=;
-        b=UwkfeYjnG+xELWW0nR1ZGqfKr4pk1KYx9rDg32/zQvV28e9E7qr+EWkvYrmBu/yvxd
-         rC6cB6hZPcNviBzQ1xBZJlXtPJ1WILT6tPsb8jzeSic7iIp1uAu4t8qJBh2k7n5KH7pe
-         XHPy7N3U8NNPA2IGo7yUcpD8xnwU3J1A1fX8Kc3bWi/vIfDRK5zWNSz0g36FEq1H0Hrn
-         Ddt6Jc22HQmzw9YkOFbIheNt7VWMa1YcsKBXCqaXZLpBsXDauAA1QXJ/Te7KYEW0cM5N
-         XLzSGe/VKmUGFdk2PO3tBK/H3AUpFweYlgjXWACkaqTeEOWTCvqkQ4ICYZHm4f2szHjf
-         yG6A==
-X-Gm-Message-State: AOAM532i4X0GDuAZylgdDyVp4dGeCEgpMMDwmtmn1FOPONsrOH0VAQtS
-        plDWDrG1i9vkk0Lc2mw4QXtdbk5obpBPIamHpko=
-X-Google-Smtp-Source: ABdhPJwu8omCz5uioYXNhdJ3CclkR43ziBbBIlt918T2EGG/rjJeqVk9QiPFKxeYRYlA2oOum9+PYLCgWDgdMeRjCoA=
-X-Received: by 2002:a25:d84:: with SMTP id 126mr4336174ybn.145.1610639629162;
- Thu, 14 Jan 2021 07:53:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
- <20210112130538.14912-2-mailhol.vincent@wanadoo.fr> <7643bd48-6594-9ede-b791-de6e155c62c1@pengutronix.de>
- <CAMZ6Rq+HggK2HHkPn_QTKzz-niyiU8AkHc4rP5AXE+AqJmkbrg@mail.gmail.com> <24603b31-fe7b-1f03-4939-fa074f471239@pengutronix.de>
-In-Reply-To: <24603b31-fe7b-1f03-4939-fa074f471239@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 15 Jan 2021 00:53:37 +0900
-Message-ID: <CAMZ6RqL4xW0WsJO=m-r8DTSDJai31GPtMM6zZYXZYHiwQ5hAPA@mail.gmail.com>
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        id S1726262AbhANRGX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 14 Jan 2021 12:06:23 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:22767 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727773AbhANRGX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 12:06:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610643809;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
+        Subject:Sender;
+        bh=99qN2kXUT/2RMJYWOuie1CE2v87wytss3dTpa0fwnqU=;
+        b=FI0ij6QYk8H8UwIsX0twj00Iw9XZzhzzBDPm+gwZnMir/A4nr+auY8lZN9+3zUpHWp
+        DrQ3j6C9iH3dgKUcL2cneXdu7Ev7eKKWaX51RBJqITNik1LqVsuax823SOaLBe8OBuFa
+        +X/7QGpOpTjR3FWMGu4igiVYYTIWEIWprstoicS86pplLzvssLoLUXuT9X2oSq9igMP2
+        RCBjKl+3IO9s0rb1Ga30U581s2y5jiNnZS48JLhNh6ktqC7U4N6A7JpRyctycPTKpTso
+        PTOZzIJN8Il9OKUWg+o3cn86SNKVdLUoHne4jsQq6DMmjYUcitFeQDgYiRP62eoYGMoc
+        PiVQ==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVMh7kiA="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
+        with ESMTPSA id k075acx0EH3JUq9
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 14 Jan 2021 18:03:19 +0100 (CET)
+Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length
+ calculcation
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+References: <20210113211410.917108-1-mkl@pengutronix.de>
+ <20210113211410.917108-10-mkl@pengutronix.de>
+ <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
+ <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net>
+ <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <75d3c8e9-acbd-09e9-e185-94833dbfb391@hartkopp.net>
+Date:   Thu, 14 Jan 2021 18:03:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue. 14 janv. 2021 at 01:04, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 1/13/21 1:15 PM, Vincent MAILHOL wrote:
-> >>> +/**
-> >>> + * es58x_calculate_crc() - Compute the crc16 of a given URB.
-> >>> + * @urb_cmd: The URB command for which we want to calculate the CRC.
-> >>> + * @urb_len: Length of @urb_cmd. Must be at least bigger than 4
-> >>> + *   (ES58X_CRC_CALC_OFFSET + sizeof(crc))
-> >>> + *
-> >>> + * Return: crc16 value.
-> >>> + */
-> >>> +static u16 es58x_calculate_crc(const union es58x_urb_cmd *urb_cmd, u16 urb_len)
-> >>> +{
-> >>> +     u16 crc;
-> >>> +     ssize_t len = urb_len - ES58X_CRC_CALC_OFFSET - sizeof(crc);
-> >>> +
-> >>> +     WARN_ON(len < 0);
-> >>
-> >> Is it possible to ensure earlier, that the urbs are of correct length?
-> >
-> > Easy answer: it is ensured.
->
-> Okay, then get rid of those checks :)
->
-> > On the Tx branch, I create the urbs so I
-> > know for sure that the length is correct. On the Rx branch, I have a
-> > dedicated function: es58x_check_rx_urb() for this purpose.  I
-> > will remove that WARN_ON() and the one in es58x_get_crc().
-> >
-> > I will also check the other WARN_ON() in my code to see if they
-> > can be removed (none on my test throughout the last ten months or
-> > so could trigger any of these WARN_ON() so should be fine to
-> > remove but I will double check).
-
-Checked, all WARN_ON() will be removed in v11.
-
-> >>> +struct es58x_priv {
-> >>> +     struct can_priv can;
-> >>> +     struct es58x_device *es58x_dev;
-> >>> +     struct urb *tx_urb;
-> >>> +
-> >>> +     spinlock_t echo_skb_spinlock;   /* Comments: c.f. supra */
-> >>> +     u32 current_packet_idx;
-> >>> +     u16 echo_skb_tail_idx;
-> >>> +     u16 echo_skb_head_idx;
-> >>> +     u16 num_echo_skb;
-> >>
-> >> Can you explain me how the tx-path works, especially why you need the
-> >> current_packet_idx.
-> >>
-> >> In the mcp251xfd driver, the number of TX buffers is a power of two, that makes
-> >> things easier. tx_heads % len points to the next buffer to be filled, tx_tail %
-> >> len points to the next buffer to be completed. tx_head - tx_tail is the fill
-> >> level of the FIFO. This works without spinlocks.
-> >
-> > For what I understand of your explanations here are the equivalences
-> > between the etas_es58x and the mcp251xfd drivers:
-> >
-> >  +--------------------+-------------------+
-> >  | etas_es58x         | mcp251xfd         |
-> >  +--------------------+-------------------+
-> >  | current_packet_idx | tx_head           |
-> >  | echo_skb_tail_idx  | tx_tail % len     |
-> >  | echo_skb_head_idx  | tx_head % len     |
-> >  | num_echo_skb       | tx_head - tx_tail |
-> >  +--------------------+-------------------+
-> >
-> > Especially, the current_packet_idx is sent to the device and returned
-> > to the driver upon completion.
->
-> Is current_packet_idx used only for the TX-PATH?
-
-It is used in the RX path of loopback packet. When a packet comes
-back, its index should be equal to current_packet_idx -
-num_echo_skb. I use this in es58x_can_get_echo_skb() to check
-that there are no packet drops.
-
-Of course, if the FIFO size is a power of two, the
-current_packet_idx would become useless.
-
-> > I wish the TX buffers were a power of two which is unfortunately not
-> > the case. The theoretical TX buffer sizes are 330 and 500 for the two
-> > devices so I wrote the code to work with those values. The exact size
-> > of the TX buffer is actually even more of a mystery because during
-> > testing both devices were unstable when using the theoretical values
-> > and I had to lower these. There is a comment at the bottom of
-> > es581_4.c and es58x_fd.c to reflect those issues.
->
-> What are the performance penalties for using 256 for the fd and 64 ofr the other?
-
-I checked my passed log, actually, I had good results with 256 on
-the FD. I lowered it to 255 with no strong reasons.
-
-For the classical CAN changing from 75 to 64 should still be
-enough to reach full busload.
-
-> > Because I do not
-> > have access to the source code of the firmware, I could not identify
-> > the root cause.
->
-> ok
->
-> > My understanding is that having a queue size being a power of two is
-> > required in order not to use spinlocks (else, modulo operations would
-> > break when the index wraparound back to zero). I tried to minimize the
-> > number of spinlock: only one per bulk send or bulk receive.
->
-> With queue size being power of two the modulo can be written as a mask
-> operation, so it's reasonable fast. So you only need to care about tx_head and
-> tx_tail, and there is only one writer for each variable. With a little dance and
-> barriers when stopping and starting the queue it's race-free without spinlocks.
-
-Yep, I checked linux/kfifo.h in the past. I think I understand
-the theory, now I need to practice.
-
-I will try to do the change. Will get back to you later when it is
-done and tested.
 
 
-Yours sincerely,
-Vincent
+On 14.01.21 10:16, Vincent MAILHOL wrote:
+> On Tue. 14 Jan 2021 at 17:23, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>> On 14.01.21 02:59, Vincent MAILHOL wrote:
+>>> On Tue. 14 Jan 2021 at 06:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>>>>
+>>>> If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
+>>>> return 0xF. This is equal to the last 16 members of the array.
+>>>>
+>>>> This patch removes these members from the array, uses ARRAY_SIZE() for the
+>>>> length check, and returns CANFD_MAX_DLC (which is 0xf).
+>>>>
+>>>> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>>>> Link: https://lore.kernel.org/r/20210111141930.693847-9-mkl@pengutronix.de
+>>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+>>>> ---
+>>>>    drivers/net/can/dev/length.c | 6 ++----
+>>>>    1 file changed, 2 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
+>>>> index 5e7d481717ea..d695a3bee1ed 100644
+>>>> --- a/drivers/net/can/dev/length.c
+>>>> +++ b/drivers/net/can/dev/length.c
+>>>> @@ -27,15 +27,13 @@ static const u8 len2dlc[] = {
+>>>>           13, 13, 13, 13, 13, 13, 13, 13, /* 25 - 32 */
+>>>>           14, 14, 14, 14, 14, 14, 14, 14, /* 33 - 40 */
+>>>>           14, 14, 14, 14, 14, 14, 14, 14, /* 41 - 48 */
+>>>> -       15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
+>>>> -       15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
+>>>>    };
+>>>>
+>>>>    /* map the sanitized data length to an appropriate data length code */
+>>>>    u8 can_fd_len2dlc(u8 len)
+>>>>    {
+>>>> -       if (unlikely(len > 64))
+>>>> -               return 0xF;
+>>>> +       if (len > ARRAY_SIZE(len2dlc))
+>>>
+>>> Sorry but I missed an of-by-one issue when I did my first
+>>> review. Don't know why but it popped to my eyes this morning when
+>>> casually reading the emails.
+>>
+>> Oh, yes.
+>>
+>> The fist line is 0 .. 8 which has 9 bytes.
+>>
+>> I also looked on it (from the back), and wondered if it was correct. But
+>> didn't see it either at first sight.
+>>
+>>>
+>>> ARRAY_SIZE(len2dlc) is 49. If len is between 0 and 48, use the
+>>> array, if len is greater *or equal* return CANFD_MAX_DLC.
+>>
+>> All these changes and discussions make it very obviously more tricky to
+>> understand that code.
+>>
+>> I don't really like this kind of improvement ...
+>>
+>> Before that it was pretty clear that we only catch an out of bounds
+>> value and usually grab the value from the table.
+> 
+> I understand your point: all three of us initially missed that
+> bug. But now that it is fixed, I would still prefer to keep
+> Marc's patch.
+
+No, I'm still against it as it is now.
+
+Even
+
+	if (len >= ARRAY_SIZE(len2dlc))
+
+would need some comment that values > 48 lead to a DLC = 15.
+
+This is not intuitively understandable from that value 
+"ARRAY_SIZE(len2dlc)" !
+
+Using ARRAY_SIZE() is a bad choice IMO.
+
+If it's really worth to save 16 bytes I would suggest this:
+
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index 3486704c8a95..0b0a5a16943a 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -42,18 +42,17 @@ static const u8 len2dlc[] = {0, 1, 2, 3, 4, 5, 6, 7, 
+8,             /* 0 - 8 */
+                              10, 10, 10, 10,                    /* 13 - 
+16 */
+                              11, 11, 11, 11,                    /* 17 - 
+20 */
+                              12, 12, 12, 12,                    /* 21 - 
+24 */
+                              13, 13, 13, 13, 13, 13, 13, 13,    /* 25 - 
+32 */
+                              14, 14, 14, 14, 14, 14, 14, 14,    /* 33 - 
+40 */
+-                            14, 14, 14, 14, 14, 14, 14, 14,    /* 41 - 
+48 */
+-                            15, 15, 15, 15, 15, 15, 15, 15,    /* 49 - 
+56 */
+-                            15, 15, 15, 15, 15, 15, 15, 15};   /* 57 - 
+64 */
++                            14, 14, 14, 14, 14, 14, 14, 14};   /* 41 - 
+48 */
++                            /* 49 - 64 is checked in  can_fd_len2dlc() */
+
+  /* map the sanitized data length to an appropriate data length code */
+  u8 can_fd_len2dlc(u8 len)
+  {
+-       if (unlikely(len > 64))
++       if (len > 48)
+                 return 0xF;
+
+         return len2dlc[len];
+  }
+  EXPORT_SYMBOL_GPL(can_fd_len2dlc);
+
+Regards,
+Oliver
+
+> 
+> 
+> Yours sincerely,
+> Vincent
+> 
+>>>
+>>> In short, replace > by >=:
+>>> +       if (len >= ARRAY_SIZE(len2dlc))
+>>>
+>>>> +               return CANFD_MAX_DLC;
+>>>>
+>>>>           return len2dlc[len];
+>>>>    }
