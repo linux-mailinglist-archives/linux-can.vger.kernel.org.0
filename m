@@ -2,201 +2,166 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4F82F7BA0
-	for <lists+linux-can@lfdr.de>; Fri, 15 Jan 2021 14:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF8D2F7C66
+	for <lists+linux-can@lfdr.de>; Fri, 15 Jan 2021 14:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732743AbhAONEN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 15 Jan 2021 08:04:13 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:17047 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387523AbhAONEM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jan 2021 08:04:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1610715677;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
-        Subject:Sender;
-        bh=sayPzAdvpstKzH8RYSbIqms91+XSsNmNVidATQ0aIys=;
-        b=gd9q3Ebl5P1vdNAgO91BeKnpMsuWPg+B/E6Ucy61XLTJXOkXDRcSt4O1i9mfhb17Ty
-        qVcOCFbq1a84Dj1KJV/J4E7b8a/lzAXE+ryiqzmHJXNhDlRiq1ZdMTU7T9HPUKMQxkbT
-        z1WUyOu7+71ylracN76JgvNDZx+JKzq5bo4CQe/qnAlzQEXgQq7DSBp5dFz01dpwiu0T
-        AmglZc7aNmpz+hYCdYEdwtNt9fX6CgRAjy0NNAmr3WHYQ/Z8Xv+SG3KDKYS8CcbUJ49z
-        llhydY4A0/d6IOjRHgaaREPSYEfSWte3WLSWPviz9zmdo24BCe+V31h1r5hLORRC3bCk
-        jPsw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVJiOMtqpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
-        with ESMTPSA id k075acx0FD1EX2z
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 15 Jan 2021 14:01:14 +0100 (CET)
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
- <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
- <981eb251-1573-5852-4b16-2e207eb3c4da@hartkopp.net>
- <CAMZ6RqKeGVsF+CcqoAWC7JXEo2oLTS5E5B3Jk4oeiF9XWEC3Sw@mail.gmail.com>
- <3daf39cb-2835-379d-86df-91b17282594a@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <47a39992-2368-1403-e55c-3bee4793b91c@hartkopp.net>
-Date:   Fri, 15 Jan 2021 14:01:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1731332AbhAONVI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 15 Jan 2021 08:21:08 -0500
+Received: from mail-yb1-f176.google.com ([209.85.219.176]:40346 "EHLO
+        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbhAONVH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jan 2021 08:21:07 -0500
+Received: by mail-yb1-f176.google.com with SMTP id w24so2732618ybi.7
+        for <linux-can@vger.kernel.org>; Fri, 15 Jan 2021 05:21:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4lsJTt0uqRKngPWOp5F3hpCgNbnlyinFhXWrh7Ri3vE=;
+        b=fSl2VCA/CQQj31/FJhjqz9VW45011a4dTBLDmpLBg+KUuj5RBF5BV95HZ8qHJsjfGt
+         KLX8+oVHm2edHFFzbhDEP1jeli3v4mKEV+mcHUU2A2XL8F03+G2B7YIqSZxoW4wQJnoV
+         9umlev7LAnvtvZCjaBHG3lbKY3JoGo5xZL2CCfJoE6jzmvR5Kpk057sl3hcJ6jQtyLHK
+         Aqp1JRFvfABGH06saaTNDWUEAd6w5V5LqZbKw7r6oNRxHz3EFVWxgtb07lsb3M4WEZHf
+         5G8DDXnYRT1u2yVtxb699Mphcm6UOuRzmAj598h3ZpsTBH89miuhCNTPDGYIvNZRbvis
+         zRuA==
+X-Gm-Message-State: AOAM532s1FN6hZIjG2fsWEjnqnASCPaangbg76OGrsaTRON/+UiSSA9/
+        t0iF1TBNPzRDoa4tFRc+sMJc722swgbz1jMzXtAnDZjeVNadUw==
+X-Google-Smtp-Source: ABdhPJzTItUJ1W7anddUp5QCP1vhBB9Zl9OG7dZtg/yDUiw+pk+Ir64GG6DufXJE7ergg+4WuyLykWSzneMfk5DOcOI=
+X-Received: by 2002:a25:5583:: with SMTP id j125mr16225998ybb.307.1610716843405;
+ Fri, 15 Jan 2021 05:20:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <3daf39cb-2835-379d-86df-91b17282594a@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210113211410.917108-1-mkl@pengutronix.de> <20210113211410.917108-10-mkl@pengutronix.de>
+ <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
+ <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net> <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
+ <75d3c8e9-acbd-09e9-e185-94833dbfb391@hartkopp.net> <CAMZ6RqKZcuJH2DPeZjgqvL2MG+LoLScHTdd4s+K9OFYDUFT2ZQ@mail.gmail.com>
+ <a79041a9-a211-bd3f-42b3-35919bd12470@hartkopp.net>
+In-Reply-To: <a79041a9-a211-bd3f-42b3-35919bd12470@hartkopp.net>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 15 Jan 2021 22:20:32 +0900
+Message-ID: <CAMZ6RqLYnLYySQ0ZY3tvR7zk0x6BRoBmw2gh-8pf7kt-nMbQfQ@mail.gmail.com>
+Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length calculcation
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
--DaveM
--JacubK
--netdev
+On Fri. 15 Jan 2021 at 21:38, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+>
+> -DaveM
+> -Jakub
+> -netdev
+>
+> On 15.01.21 02:57, Vincent MAILHOL wrote:
+>
+> >> 48 */
+> >> +                            /* 49 - 64 is checked in  can_fd_len2dlc() */
+> >
+> > Ack
+> >
+> >>
+> >>    /* map the sanitized data length to an appropriate data length code */
+> >>    u8 can_fd_len2dlc(u8 len)
+> >>    {
+> >> -       if (unlikely(len > 64))
+> >> +       if (len > 48)
+> >
+> > I personally prefer the use of macros instead of hardcoded values. 48 is the
+> > last index of the table, i.e. it is ARRAY_SIZE(len2dlc) - 1.
+>
+> In general I'm with you here.
+>
+> > For me, it is like doing this:
+> > for (i = 0; i <= harcoded_value_representing_last_index_of_array; i++)
+> > instead of this:
+> > for (i = 0; i < ARRAY_SIZE(array); i++)
+> >
+> > Definitely prefer the later and (len >= ARRAY_SIZE(len2dlc)) is nothing less
+> > than the negation of the i < ARRAY_SIZE(array) that we usually see in a for
+> > loop.
+> >
+> > I recognize below patterns to be correct:
+> >     i < ARRAY_SIZE(array): check that variable is inbound.
+> >     i >= ARRAY_SIZE(array): check that variable is outbound.
+> >
+> > Anything which deviates from those patterns is fishy and it is actually how
+> > I spotted the bug.
+> >
+> > If we don’t use ARRAY_SIZE() we lose that recognizable pattern and we need
+> > to be aware of the actual content of len2dlc[] to understand the code.
+> > (And I know that the table is just above the function and that this makes my
+> > argument weaker).
+> >
+> > So IMO, checks done against the array size should use the ARRAY_SIZE() macro
+> > in order 1/ to make it a recognizable pattern and 2/ to make it work regardless
+> > of the actual size of the table (i.e. no hardcoded value).
+>
+> The problem is NOT that we make sure to access this array correctly.
+>
+> This particular array is no set of arbitrary values that may be extended
+> later on BUT it is a 'translation map' for defined length values which
+> will never change.
+>
+> Therefore ARRAY_SIZE(array) hides the fact that every length value
+> "greater than 48" results to a DLC of 15.
+>
+> For that reason my former code was very clear:
+>
+> 1. It had a table that mapped 0 .. 64 to a DLC
+> 2. It had a test for '> 64' as sanity test.
+>
+> Now the sanity test is gone and mixed up with the mapping of length
+> values - and finally with ARRAY_SIZE(whatever) which doesn't give a hint
+> why this is checked.
+>
+> We are writing code to be understandable for the reader and the
+> suggested 'improvement' which saves 16 bytes does exactly the opposite.
 
-@Vincent: No need for cross posting and putting the networking 
-maintainers in CC for these really deep CAN driver specific topics IHMO
+You did not convince me but I will not argue more on the use of
+ARRAY_SIZE(). I do not want to trigger an endless discussion :)
 
-On 15.01.21 08:26, Marc Kleine-Budde wrote:
-> On 1/15/21 1:41 AM, Vincent MAILHOL wrote:
->> On Fri. 15 Jan 2021 at 02:23, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
->>>
->>> Hi Vincent,
->>>
->>> On 12.01.21 14:05, Vincent Mailhol wrote:
->>>> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
->>>> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
->>>
->>> (..)
->>>
->>>> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
->>>> new file mode 100644
->>>> index 000000000000..6b9534f23c96
->>>> --- /dev/null
->>>> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
->>>
->>> (..)
->>>
->>>> +static void es58x_fd_print_bittiming(struct net_device *netdev,
->>>> +                                  struct es58x_fd_bittiming
->>>> +                                  *es58x_fd_bittiming, char *type)
->>>> +{
->>>> +     netdev_vdbg(netdev, "bitrate %s    = %d\n", type,
->>>> +                 le32_to_cpu(es58x_fd_bittiming->bitrate));
->>>> +     netdev_vdbg(netdev, "tseg1 %s      = %d\n", type,
->>>> +                 le16_to_cpu(es58x_fd_bittiming->tseg1));
->>>> +     netdev_vdbg(netdev, "tseg2 %s      = %d\n", type,
->>>> +                 le16_to_cpu(es58x_fd_bittiming->tseg2));
->>>> +     netdev_vdbg(netdev, "brp %s        = %d\n", type,
->>>> +                 le16_to_cpu(es58x_fd_bittiming->brp));
->>>> +     netdev_vdbg(netdev, "sjw %s        = %d\n", type,
->>>> +                 le16_to_cpu(es58x_fd_bittiming->sjw));
->>>> +}
->>>
->>> What is the reason for this code?
->>>
->>> These values can be retrieved with the 'ip' tool and are probably
->>> interesting for development - but not in the final code.
->>
->> First thing, I used netdev_vdbg() (verbose debug). That macro
->> will only produce code if VERBOSE_DEBUG is defined. Normal users
->> will not see those. So yes, this is mostly for development.
->>
->> Also, just realised that netdev_vdbg() is barely used
->> anywhere (only three files use it:
->> https://elixir.bootlin.com/linux/v5.11-rc3/C/ident/netdev_vdbg).
->>
->> I guess that I will remove it :)
->>
+If we take the code as being understandable as top priority, then
+I would suggest to remove the len2dlc[] array and use the GNU
+case range extension (which is supported in the kernel):
 
-Thanks! That will remove some more code in the background too.
+/* map the data length to an appropriate data length code */
+u8 can_fd_len2dlc(u8 len)
+{
+    switch(len) {
+    case 0 ... 8:
+        return len;
+    case 9 ... 12:
+        return 9;
+    case 13 ... 16:
+        return 10;
+    case 17 ... 20:
+        return 11;
+    case 21 ... 24:
+        return 12;
+    case 25 ... 32:
+        return 13;
+    case 33 ... 48:
+        return 14;
+    case 49 ... 64:
+    default:
+        return CANFD_MAX_DLC;
+    }
+}
 
->>>> +
->>>> +static void es58x_fd_print_conf(struct net_device *netdev,
->>>> +                             struct es58x_fd_tx_conf_msg *tx_conf_msg)
->>>> +{
->>>> +     es58x_fd_print_bittiming(netdev, &tx_conf_msg->nominal_bittiming,
->>>> +                              "nominal");
->>>> +     netdev_vdbg(netdev, "samples_per_bit    = %d\n",
->>>> +                 tx_conf_msg->samples_per_bit);
->>>> +     netdev_vdbg(netdev, "sync_edge          = %d\n",
->>>> +                 tx_conf_msg->sync_edge);
->>>> +     netdev_vdbg(netdev, "physical_layer     = %d\n",
->>>> +                 tx_conf_msg->physical_layer);
->>>> +     netdev_vdbg(netdev, "self_reception     = %d\n",
->>>> +                 tx_conf_msg->self_reception_mode);
->>>> +     netdev_vdbg(netdev, "ctrlmode           = %d\n", tx_conf_msg->ctrlmode);
->>>> +     netdev_vdbg(netdev, "canfd_enabled      = %d\n",
->>>> +                 tx_conf_msg->canfd_enabled);
->>>> +     if (tx_conf_msg->canfd_enabled) {
->>>> +             es58x_fd_print_bittiming(netdev,
->>>> +                                      &tx_conf_msg->data_bittiming, "data");
->>>> +             netdev_vdbg(netdev,
->>>> +                         "Transmitter Delay Compensation        = %d\n",
->>>> +                         tx_conf_msg->tdc);
->>>> +             netdev_vdbg(netdev,
->>>> +                         "Transmitter Delay Compensation Offset = %d\n",
->>>> +                         le16_to_cpu(tx_conf_msg->tdco));
->>>> +             netdev_vdbg(netdev,
->>>> +                         "Transmitter Delay Compensation Filter = %d\n",
->>>> +                         le16_to_cpu(tx_conf_msg->tdcf));
->>>> +     }
->>>> +}
->>>
->>> Same here.
->>>
->>> Either the information can be retrieved with the 'ip' tool OR the are
->>> not necessary as set to some reasonable default anyway
->>
->> Ack, will remove.
->>
->>> OR we should
->>> implement the functionality in the general CAN driver infrastructure.
->>
->> Would make sense to me to add the tdco (Transmitter Delay
->> Compensation Offset). Ref: ISO 11898-1 section
->> 11.3.3 "Transmitter delay compensation"
->>
->> I would just like your opinion on one topic: the tdco is specific
->> to CAN FD. If we add it, we have two choices:
->>    1. put it in struct can_bittiming: that will mean that we will
->>       have an unused field for classical CAN (field bittiming of
->>       struct can_priv).
->>    2. put it in struct can_priv (but outside of struct
->>       can_bittiming): no unused field but less pretty.
-> 
-> 3. Deprecate struct can_bittiming as the user space interface
->     and transfer each member individually via netlink. Extend
->     the kernel-only can_bittiming by the tdc related
->     parameters, and add these to the new netlink interface.
+And we will just leave the optimizations in the hand of the compiler.
 
-I also saw the current netlink interface as the problem here.
+> >
+> >>                   return 0xF;
+> >
+> > I would also prefer to use the CANFD_MAX_DLC macro here.
+>
+> Ack. Me too. Just seen that after pressing the 'send' button :-/
 
-But even when 'deprecating' the old interface we still need to provide 
-the API, right?
+No problem :)
+This also happens to me too often.
 
-Would therefore the new parameters overwrite the content which is 
-transferred by can_bittiming or how would you like to make sure the 
-mixed content remains consistent?
-
-> I prefer this, as I want to extend the bittiming_const in this way, too. There
-> are CAN controllers, where the bit timing calculation:
-> 
->> 	bt->prop_seg = tseg1 / 2;
->> 	bt->phase_seg1 = tseg1 - bt->prop_seg;
-> 
-> doesn't work anymore, as they have asymmetric prog_seg and phase_seg1, so that
-> splitting tseg1 in half doesn't work anymore.
-
-Interesting.
-
-Regards,
-Oliver
+Yours sincerely,
+Vincent
