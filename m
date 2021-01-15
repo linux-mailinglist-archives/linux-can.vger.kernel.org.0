@@ -2,206 +2,308 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEE22F704A
-	for <lists+linux-can@lfdr.de>; Fri, 15 Jan 2021 02:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4CD2F73B0
+	for <lists+linux-can@lfdr.de>; Fri, 15 Jan 2021 08:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731774AbhAOB6B convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Thu, 14 Jan 2021 20:58:01 -0500
-Received: from mail-yb1-f181.google.com ([209.85.219.181]:34434 "EHLO
-        mail-yb1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729511AbhAOB6B (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 14 Jan 2021 20:58:01 -0500
-Received: by mail-yb1-f181.google.com with SMTP id x6so3686353ybr.1;
-        Thu, 14 Jan 2021 17:57:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VqkrrEe6H1YIkS5n/J/G7K0xHbD/rvMI2NvBBpdBVcI=;
-        b=K8R9hYJmLZTNDF31WV8nRqlztl3RPvmQpEHIfCRVIw4DGgmZFPUtbcNx07TrAsLLtN
-         eyFEZpmDJApEEArERyMXYY8Qbe0AXyScsNSx9KWAtUqseiTDB2a3aKjN9OtRHDwjwN/E
-         hTMu73tqN0i8tdHoXH/jUy0HMYZQeiqSw6QCwXsMgrijshh+xFfyERZeN1Sf8pQDPemK
-         YfRjpOHd27D8ByBAHJUY8rEtzEUwIoIsbLi2HdUkONnvTor6ztvZteCQPVfNqgHMLGPn
-         uSOMjUnrRawLmyfTVegcVgsgZvGiM/yBGV0KwcPQrZOAWNGZzRJJT8FFMIdSxOGEXFOC
-         ZwGg==
-X-Gm-Message-State: AOAM530yD1rysckdfVvG+VPT6ql+vA60PJLDc4XHLyBOapgpOte9h4FD
-        BvYaT9wiPyP6aJq7JVfA7Oe9OckM0dp8DlOqulg=
-X-Google-Smtp-Source: ABdhPJwIi50eOw+YCb8LgH/iHZV9hn9c6qApdoFztiCL/OpFY5v5ouXTMqX8rxudzSCkUf0WTu4cEGTBjE5YZL1Wq78=
-X-Received: by 2002:a25:5583:: with SMTP id j125mr13357564ybb.307.1610675839556;
- Thu, 14 Jan 2021 17:57:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20210113211410.917108-1-mkl@pengutronix.de> <20210113211410.917108-10-mkl@pengutronix.de>
- <CAMZ6Rq+Wxn_kG7rSkUrMYMqNw790SMe-UKmpUVdEA_eGcjoT+g@mail.gmail.com>
- <2f3fff1a-9a50-030b-6a29-2009c8b65b68@hartkopp.net> <CAMZ6RqLKYnGDePueN1ftL9a47Qf-ZR7bc4eLGwzCkncsD6ok2Q@mail.gmail.com>
- <75d3c8e9-acbd-09e9-e185-94833dbfb391@hartkopp.net>
-In-Reply-To: <75d3c8e9-acbd-09e9-e185-94833dbfb391@hartkopp.net>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 15 Jan 2021 10:57:08 +0900
-Message-ID: <CAMZ6RqKZcuJH2DPeZjgqvL2MG+LoLScHTdd4s+K9OFYDUFT2ZQ@mail.gmail.com>
-Subject: Re: [net-next 09/17] can: length: can_fd_len2dlc(): simplify length calculcation
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        netdev <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
+        id S1729925AbhAOH07 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 15 Jan 2021 02:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728140AbhAOH06 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jan 2021 02:26:58 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68755C061575
+        for <linux-can@vger.kernel.org>; Thu, 14 Jan 2021 23:26:17 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1l0JUn-00067h-79; Fri, 15 Jan 2021 08:26:09 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:1f14:2ed2:f7ac:c4d] (unknown [IPv6:2a03:f580:87bc:d400:1f14:2ed2:f7ac:c4d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9A6245C44F1;
+        Fri, 15 Jan 2021 07:26:05 +0000 (UTC)
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Jimmy Assarsson <extja@kvaser.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
+References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
+ <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
+ <981eb251-1573-5852-4b16-2e207eb3c4da@hartkopp.net>
+ <CAMZ6RqKeGVsF+CcqoAWC7JXEo2oLTS5E5B3Jk4oeiF9XWEC3Sw@mail.gmail.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+Message-ID: <3daf39cb-2835-379d-86df-91b17282594a@pengutronix.de>
+Date:   Fri, 15 Jan 2021 08:26:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+MIME-Version: 1.0
+In-Reply-To: <CAMZ6RqKeGVsF+CcqoAWC7JXEo2oLTS5E5B3Jk4oeiF9XWEC3Sw@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="epfT1Br9KFKBmVpkyuj6BGl3P8PJ3tpKG"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri. 15 Jan 2021 at 02:03, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> On 14.01.21 10:16, Vincent MAILHOL wrote:
-> > On Tue. 14 Jan 2021 at 17:23, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
-> >> On 14.01.21 02:59, Vincent MAILHOL wrote:
-> >>> On Tue. 14 Jan 2021 at 06:14, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> >>>>
-> >>>> If the length paramter in len2dlc() exceeds the size of the len2dlc array, we
-> >>>> return 0xF. This is equal to the last 16 members of the array.
-> >>>>
-> >>>> This patch removes these members from the array, uses ARRAY_SIZE() for the
-> >>>> length check, and returns CANFD_MAX_DLC (which is 0xf).
-> >>>>
-> >>>> Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> >>>> Link: https://lore.kernel.org/r/20210111141930.693847-9-mkl@pengutronix.de
-> >>>> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> >>>> ---
-> >>>>    drivers/net/can/dev/length.c | 6 ++----
-> >>>>    1 file changed, 2 insertions(+), 4 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
-> >>>> index 5e7d481717ea..d695a3bee1ed 100644
-> >>>> --- a/drivers/net/can/dev/length.c
-> >>>> +++ b/drivers/net/can/dev/length.c
-> >>>> @@ -27,15 +27,13 @@ static const u8 len2dlc[] = {
-> >>>>           13, 13, 13, 13, 13, 13, 13, 13, /* 25 - 32 */
-> >>>>           14, 14, 14, 14, 14, 14, 14, 14, /* 33 - 40 */
-> >>>>           14, 14, 14, 14, 14, 14, 14, 14, /* 41 - 48 */
-> >>>> -       15, 15, 15, 15, 15, 15, 15, 15, /* 49 - 56 */
-> >>>> -       15, 15, 15, 15, 15, 15, 15, 15  /* 57 - 64 */
-> >>>>    };
-> >>>>
-> >>>>    /* map the sanitized data length to an appropriate data length code */
-> >>>>    u8 can_fd_len2dlc(u8 len)
-> >>>>    {
-> >>>> -       if (unlikely(len > 64))
-> >>>> -               return 0xF;
-> >>>> +       if (len > ARRAY_SIZE(len2dlc))
-> >>>
-> >>> Sorry but I missed an of-by-one issue when I did my first
-> >>> review. Don't know why but it popped to my eyes this morning when
-> >>> casually reading the emails.
-> >>
-> >> Oh, yes.
-> >>
-> >> The fist line is 0 .. 8 which has 9 bytes.
-> >>
-> >> I also looked on it (from the back), and wondered if it was correct. But
-> >> didn't see it either at first sight.
-> >>
-> >>>
-> >>> ARRAY_SIZE(len2dlc) is 49. If len is between 0 and 48, use the
-> >>> array, if len is greater *or equal* return CANFD_MAX_DLC.
-> >>
-> >> All these changes and discussions make it very obviously more tricky to
-> >> understand that code.
-> >>
-> >> I don't really like this kind of improvement ...
-> >>
-> >> Before that it was pretty clear that we only catch an out of bounds
-> >> value and usually grab the value from the table.
-> >
-> > I understand your point: all three of us initially missed that
-> > bug. But now that it is fixed, I would still prefer to keep
-> > Marc's patch.
->
-> No, I'm still against it as it is now.
->
-> Even
->
->         if (len >= ARRAY_SIZE(len2dlc))
->
-> would need some comment that values > 48 lead to a DLC = 15.
->
-> This is not intuitively understandable from that value
-> "ARRAY_SIZE(len2dlc)" !
->
-> Using ARRAY_SIZE() is a bad choice IMO.
->
-> If it's really worth to save 16 bytes I would suggest this:
->
-> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
-> index 3486704c8a95..0b0a5a16943a 100644
-> --- a/drivers/net/can/dev.c
-> +++ b/drivers/net/can/dev.c
-> @@ -42,18 +42,17 @@ static const u8 len2dlc[] = {0, 1, 2, 3, 4, 5, 6, 7,
-> 8,             /* 0 - 8 */
->                               10, 10, 10, 10,                    /* 13 -
-> 16 */
->                               11, 11, 11, 11,                    /* 17 -
-> 20 */
->                               12, 12, 12, 12,                    /* 21 -
-> 24 */
->                               13, 13, 13, 13, 13, 13, 13, 13,    /* 25 -
-> 32 */
->                               14, 14, 14, 14, 14, 14, 14, 14,    /* 33 -
-> 40 */
-> -                            14, 14, 14, 14, 14, 14, 14, 14,    /* 41 -
-> 48 */
-> -                            15, 15, 15, 15, 15, 15, 15, 15,    /* 49 -
-> 56 */
-> -                            15, 15, 15, 15, 15, 15, 15, 15};   /* 57 -
-> 64 */
-> +                            14, 14, 14, 14, 14, 14, 14, 14};   /* 41 -
-> 48 */
-> +                            /* 49 - 64 is checked in  can_fd_len2dlc() */
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--epfT1Br9KFKBmVpkyuj6BGl3P8PJ3tpKG
+Content-Type: multipart/mixed; boundary="o9inDsSlrN66A04ochUbDSaLVkSou9ERX";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+ Oliver Hartkopp <socketcan@hartkopp.net>
+Cc: linux-can <linux-can@vger.kernel.org>,
+ Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+ Wolfgang Grandegger <wg@grandegger.com>,
+ "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jimmy Assarsson <extja@kvaser.com>, Masahiro Yamada <masahiroy@kernel.org>,
+ "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Message-ID: <3daf39cb-2835-379d-86df-91b17282594a@pengutronix.de>
+Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
+ <20210112130538.14912-2-mailhol.vincent@wanadoo.fr>
+ <981eb251-1573-5852-4b16-2e207eb3c4da@hartkopp.net>
+ <CAMZ6RqKeGVsF+CcqoAWC7JXEo2oLTS5E5B3Jk4oeiF9XWEC3Sw@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKeGVsF+CcqoAWC7JXEo2oLTS5E5B3Jk4oeiF9XWEC3Sw@mail.gmail.com>
 
-Ack
+--o9inDsSlrN66A04ochUbDSaLVkSou9ERX
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
->
->   /* map the sanitized data length to an appropriate data length code */
->   u8 can_fd_len2dlc(u8 len)
->   {
-> -       if (unlikely(len > 64))
-> +       if (len > 48)
+On 1/15/21 1:41 AM, Vincent MAILHOL wrote:
+> On Fri. 15 Jan 2021 at 02:23, Oliver Hartkopp <socketcan@hartkopp.net> =
+wrote:
+>>
+>> Hi Vincent,
+>>
+>> On 12.01.21 14:05, Vincent Mailhol wrote:
+>>> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from=
 
-I personally prefer the use of macros instead of hardcoded values. 48 is the
-last index of the table, i.e. it is ARRAY_SIZE(len2dlc) - 1.
+>>> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
+>>
+>> (..)
+>>
+>>> diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/=
+can/usb/etas_es58x/es58x_fd.c
+>>> new file mode 100644
+>>> index 000000000000..6b9534f23c96
+>>> --- /dev/null
+>>> +++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
+>>
+>> (..)
+>>
+>>> +static void es58x_fd_print_bittiming(struct net_device *netdev,
+>>> +                                  struct es58x_fd_bittiming
+>>> +                                  *es58x_fd_bittiming, char *type)
+>>> +{
+>>> +     netdev_vdbg(netdev, "bitrate %s    =3D %d\n", type,
+>>> +                 le32_to_cpu(es58x_fd_bittiming->bitrate));
+>>> +     netdev_vdbg(netdev, "tseg1 %s      =3D %d\n", type,
+>>> +                 le16_to_cpu(es58x_fd_bittiming->tseg1));
+>>> +     netdev_vdbg(netdev, "tseg2 %s      =3D %d\n", type,
+>>> +                 le16_to_cpu(es58x_fd_bittiming->tseg2));
+>>> +     netdev_vdbg(netdev, "brp %s        =3D %d\n", type,
+>>> +                 le16_to_cpu(es58x_fd_bittiming->brp));
+>>> +     netdev_vdbg(netdev, "sjw %s        =3D %d\n", type,
+>>> +                 le16_to_cpu(es58x_fd_bittiming->sjw));
+>>> +}
+>>
+>> What is the reason for this code?
+>>
+>> These values can be retrieved with the 'ip' tool and are probably
+>> interesting for development - but not in the final code.
+>=20
+> First thing, I used netdev_vdbg() (verbose debug). That macro
+> will only produce code if VERBOSE_DEBUG is defined. Normal users
+> will not see those. So yes, this is mostly for development.
+>=20
+> Also, just realised that netdev_vdbg() is barely used
+> anywhere (only three files use it:
+> https://elixir.bootlin.com/linux/v5.11-rc3/C/ident/netdev_vdbg).
+>=20
+> I guess that I will remove it :)
+>=20
+>>> +
+>>> +static void es58x_fd_print_conf(struct net_device *netdev,
+>>> +                             struct es58x_fd_tx_conf_msg *tx_conf_ms=
+g)
+>>> +{
+>>> +     es58x_fd_print_bittiming(netdev, &tx_conf_msg->nominal_bittimin=
+g,
+>>> +                              "nominal");
+>>> +     netdev_vdbg(netdev, "samples_per_bit    =3D %d\n",
+>>> +                 tx_conf_msg->samples_per_bit);
+>>> +     netdev_vdbg(netdev, "sync_edge          =3D %d\n",
+>>> +                 tx_conf_msg->sync_edge);
+>>> +     netdev_vdbg(netdev, "physical_layer     =3D %d\n",
+>>> +                 tx_conf_msg->physical_layer);
+>>> +     netdev_vdbg(netdev, "self_reception     =3D %d\n",
+>>> +                 tx_conf_msg->self_reception_mode);
+>>> +     netdev_vdbg(netdev, "ctrlmode           =3D %d\n", tx_conf_msg-=
+>ctrlmode);
+>>> +     netdev_vdbg(netdev, "canfd_enabled      =3D %d\n",
+>>> +                 tx_conf_msg->canfd_enabled);
+>>> +     if (tx_conf_msg->canfd_enabled) {
+>>> +             es58x_fd_print_bittiming(netdev,
+>>> +                                      &tx_conf_msg->data_bittiming, =
+"data");
+>>> +             netdev_vdbg(netdev,
+>>> +                         "Transmitter Delay Compensation        =3D =
+%d\n",
+>>> +                         tx_conf_msg->tdc);
+>>> +             netdev_vdbg(netdev,
+>>> +                         "Transmitter Delay Compensation Offset =3D =
+%d\n",
+>>> +                         le16_to_cpu(tx_conf_msg->tdco));
+>>> +             netdev_vdbg(netdev,
+>>> +                         "Transmitter Delay Compensation Filter =3D =
+%d\n",
+>>> +                         le16_to_cpu(tx_conf_msg->tdcf));
+>>> +     }
+>>> +}
+>>
+>> Same here.
+>>
+>> Either the information can be retrieved with the 'ip' tool OR the are
+>> not necessary as set to some reasonable default anyway
+>=20
+> Ack, will remove.
+>=20
+>> OR we should
+>> implement the functionality in the general CAN driver infrastructure.
+>=20
+> Would make sense to me to add the tdco (Transmitter Delay
+> Compensation Offset). Ref: ISO 11898-1 section
+> 11.3.3 "Transmitter delay compensation"
+>=20
+> I would just like your opinion on one topic: the tdco is specific
+> to CAN FD. If we add it, we have two choices:
+>   1. put it in struct can_bittiming: that will mean that we will
+>      have an unused field for classical CAN (field bittiming of
+>      struct can_priv).
+>   2. put it in struct can_priv (but outside of struct
+>      can_bittiming): no unused field but less pretty.
 
-For me, it is like doing this:
-for (i = 0; i <= harcoded_value_representing_last_index_of_array; i++)
-instead of this:
-for (i = 0; i < ARRAY_SIZE(array); i++)
+3. Deprecate struct can_bittiming as the user space interface
+   and transfer each member individually via netlink. Extend
+   the kernel-only can_bittiming by the tdc related
+   parameters, and add these to the new netlink interface.
 
-Definitely prefer the later and (len >= ARRAY_SIZE(len2dlc)) is nothing less
-than the negation of the i < ARRAY_SIZE(array) that we usually see in a for
-loop.
+I prefer this, as I want to extend the bittiming_const in this way, too. =
+There
+are CAN controllers, where the bit timing calculation:
 
-I recognize below patterns to be correct:
-   i < ARRAY_SIZE(array): check that variable is inbound.
-   i >= ARRAY_SIZE(array): check that variable is outbound.
+> 	bt->prop_seg =3D tseg1 / 2;
+> 	bt->phase_seg1 =3D tseg1 - bt->prop_seg;
 
-Anything which deviates from those patterns is fishy and it is actually how
-I spotted the bug.
+doesn't work anymore, as they have asymmetric prog_seg and phase_seg1, so=
+ that
+splitting tseg1 in half doesn't work anymore.
 
-If we don’t use ARRAY_SIZE() we lose that recognizable pattern and we need
-to be aware of the actual content of len2dlc[] to understand the code.
-(And I know that the table is just above the function and that this makes my
-argument weaker).
+Marc
 
-So IMO, checks done against the array size should use the ARRAY_SIZE() macro
-in order 1/ to make it a recognizable pattern and 2/ to make it work regardless
-of the actual size of the table (i.e. no hardcoded value).
-
->                  return 0xF;
-
-I would also prefer to use the CANFD_MAX_DLC macro here.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
-Yours sincerely,
-Vincent
+--o9inDsSlrN66A04ochUbDSaLVkSou9ERX--
 
+--epfT1Br9KFKBmVpkyuj6BGl3P8PJ3tpKG
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
->          return len2dlc[len];
->   }
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmABQ4kACgkQqclaivrt
+76lNyAf+K7h9VMYE4qP3RXoskgWJSzAQPjLgza08h1165bLdica2gGDyPFSMaa0H
+JRHXKGBh1aMDVHzAgWpNxxgckf1gEnqZzGirMwn9aFIyGRehNWRMC6fJYim497kW
+c9eYqACAXrqhOnXbG3OHK97pKzBRXSvfN1AgIKaqYi5XwLR5OwHRTp8Yw/BB83nj
+p4z7nFHlnXCiIwwPHFoEWj2X0PRuoi/qgyRFT0AbEjA7+ZvRcj9rBcGEkclt3dvd
+5pQA3F73I8l0F6Je30IH8caV/61/oPQFQZ28E9bQFJ9dobRuEb0ZbHWMm+nuynoV
+heJhIVqIRvjLUsBsxl24hy5d1lkdaQ==
+=2QcJ
+-----END PGP SIGNATURE-----
+
+--epfT1Br9KFKBmVpkyuj6BGl3P8PJ3tpKG--
