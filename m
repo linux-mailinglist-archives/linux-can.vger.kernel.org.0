@@ -2,50 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFE52F8ABB
-	for <lists+linux-can@lfdr.de>; Sat, 16 Jan 2021 03:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E50FE2F8BF4
+	for <lists+linux-can@lfdr.de>; Sat, 16 Jan 2021 08:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725815AbhAPCcD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 15 Jan 2021 21:32:03 -0500
-Received: from mail-yb1-f177.google.com ([209.85.219.177]:36918 "EHLO
-        mail-yb1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbhAPCcC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 15 Jan 2021 21:32:02 -0500
-Received: by mail-yb1-f177.google.com with SMTP id z1so6895566ybr.4
-        for <linux-can@vger.kernel.org>; Fri, 15 Jan 2021 18:31:46 -0800 (PST)
+        id S1726201AbhAPHDg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 16 Jan 2021 02:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbhAPHDg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 16 Jan 2021 02:03:36 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99984C061757
+        for <linux-can@vger.kernel.org>; Fri, 15 Jan 2021 23:02:55 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id d199so1161746ybc.0
+        for <linux-can@vger.kernel.org>; Fri, 15 Jan 2021 23:02:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=OU0u4KBcvD4HmDvfGmZIBG00OaS5XJeVHT+KUR1/BqQ=;
+        b=skcinvSilSu2j3fcNvdCDTFEaLFSMxQEqUzs4fyP5mSV4VAinquz710BXsGXarzGVb
+         vLhfdn8OhflV3iZLjLcq1JqhrvpL8CNVej4L4b8ru9/zN5WQOa118wZpsaijvc4Jp1MT
+         cCkjhSLgILblnTFcSvBZ3svv32yT4rgYF8Phrr5eq6FQrnBgRUQ+GUqGzhFVON0VdxDn
+         9dnooRHhIM3133Pe1lgY5/k2gej3MQSAvdf/9LtqeolYOevr1GsOReQXVu0qYOo/8PNS
+         UQrsuViumituI2SVX910+Lo3GEpK9uMiVg44+DB3NTx8f2NTXXfoZCKEaU8YHhtX4quj
+         sqgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AJc9XfaqyZ7M+ROsydcQmdbEqxWY4jRZ/yXGG8a8CYY=;
-        b=I94wiTBDg8VwemmDoThE/13+mjVjHDAgmDORotvXsZFkbIJpLLvA/cNSVS1F/P5ZWk
-         /sU2nT9n9YnZ4aPKkZ4k+fM54ocYvR2W1fnGbp8dTJ8YXNWjoXnLoZsMyr4r9D6fqMwF
-         JIndzxGhWeRdh1e1Yx8GWR2zkPpyy1zHbZwuLsXniZyj6VHnkeqYE1KjlNkeaJyjvntq
-         YkON2+PZOQh87lwJzfJ/cIk+gRXd2rSkksm7OEsPpS2gYbcoFwhL5Ks9qVOxwqDM7pSO
-         +okbCGwJgL3pLEQtWPqNP9qu/YnlN32YsvwOqLp9KCuVOvokj5ZfTosq9tB/888AfyKY
-         iRCw==
-X-Gm-Message-State: AOAM532aow8tChQhyvzJsMwK8NpWM3S2hjv+ssLgi1pmFUiTftSVsS9D
-        8VHM6dDaReNkkzr4kGHNeho7PKpqDvshuPNrP28YAu9NGw6gbA==
-X-Google-Smtp-Source: ABdhPJw04CmIO0zeHpTWBb7mNcqWKnLABr1lZ5JjavVkNoPIVorjSbgrqHoklNSnNki9cxKUw+IlIA4xLG5bKumD14Q=
-X-Received: by 2002:a25:5583:: with SMTP id j125mr20129545ybb.307.1610764281051;
- Fri, 15 Jan 2021 18:31:21 -0800 (PST)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=OU0u4KBcvD4HmDvfGmZIBG00OaS5XJeVHT+KUR1/BqQ=;
+        b=qadvkFHP83M6L+uwKlXMZ6U3iXxlL/U9iMYlO/6mF9E0Tu+MlxJfsCP6BYgvgCsgcP
+         wNUaXz6PruA7mhQz8GW4Tm30lHfVDKsxbMbQknyHhbrNDm77k5Jj5TMKXHuVAihANKjp
+         ADHDmyvW3SW+dD5iJtZIIlc27R1Z9gXyEGDzdmXHyOnh4t91rd6nN/ZiHuJfQI8plqBt
+         PJwb3CG4uciNLpK83ZbIEfZxaE1Um65g3WOvhDuAShGQ9FFYY7sdnxZlRBmKOxW7kjlr
+         hmHX3Or24Fx3lSnnxlZwUGZ3M2AjViycwgsldpO3TdqUGyTJUWKrgTfcpmkW+GyNQcZM
+         pdwA==
+X-Gm-Message-State: AOAM533OhkJcUKUn6YE37QPZfiAo+CVWhVbsSwkzkpdxyA1MFJG7++bX
+        Hdl43sq0UZs/qvflqzGHF9Om+4pcglviE5pbeOg=
+X-Google-Smtp-Source: ABdhPJz1NdanHKPoHNG3vm2H0KhafXrb6WeDu0kVdf7UYhbIBdF9aBWf8OY1apiBM4e7Q4hZaaQpk/t70qRIhbxpC/U=
+X-Received: by 2002:a25:5583:: with SMTP id j125mr21096543ybb.307.1610780574755;
+ Fri, 15 Jan 2021 23:02:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20210112130538.14912-1-mailhol.vincent@wanadoo.fr>
- <20210112130538.14912-2-mailhol.vincent@wanadoo.fr> <981eb251-1573-5852-4b16-2e207eb3c4da@hartkopp.net>
- <CAMZ6RqKeGVsF+CcqoAWC7JXEo2oLTS5E5B3Jk4oeiF9XWEC3Sw@mail.gmail.com>
- <3daf39cb-2835-379d-86df-91b17282594a@pengutronix.de> <47a39992-2368-1403-e55c-3bee4793b91c@hartkopp.net>
- <7b41612e-6c99-a713-5285-a044402066bd@pengutronix.de> <CAMZ6RqLFLtcGQsnRLPF8VD4=OhSArM3HVT_2MNG-9HVBuPMV=Q@mail.gmail.com>
- <580003bc-af06-9d97-dfd1-aa56e306943a@pengutronix.de> <CAMZ6RqJ4dpbQdh96xSJyyVg_Ztzt0dw2z8Bn+e32vzq2=y1Gyg@mail.gmail.com>
- <b3088f7e-b5f1-a5bf-4e6c-a14cd1dec25b@pengutronix.de> <a175e052-b721-54df-812b-9880f78cde9b@pengutronix.de>
-In-Reply-To: <a175e052-b721-54df-812b-9880f78cde9b@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 16 Jan 2021 11:31:10 +0900
-Message-ID: <CAMZ6RqKTwK8-ztqJ576MG0VcBLmf+HCKmv-xzetcb+_d4PQ+7Q@mail.gmail.com>
-Subject: Re: [PATCH v10 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+From:   Vincent Mailhol <vincent.mailhol@gmail.com>
+Date:   Sat, 16 Jan 2021 16:02:44 +0900
+Message-ID: <CAMZ6RqLtg1ynVeePLLriUw0+KLbTpPJHapTEanv1_EZYJSrK=g@mail.gmail.com>
+Subject: [RFC] Add new CAN FD bittiming parameters: Transmission Delay
+ Compensation (TDC)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Jimmy Assarsson <extja@kvaser.com>,
@@ -55,117 +59,146 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sun. 16 Jan 2021 at 04:00, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 1/15/21 7:27 PM, Marc Kleine-Budde wrote:
-> >>> Option 4:
-> >>> We can introduce a struct can_bitiming_fd with the first member being the struct
-> >>> can_bitiming and add tdc related variables after that. This way we can use the
-> >>> same function to calculate the bit timing on both CAN and CAN-FD.
-> >>
-> >> While option 3 is slightly easier, my preference will go to option 4.
-> >
-> > We still need the netlink enhancement from option 3.
->
-> Just tried option 4.
->
-> > diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-> > index 7faf6a37d5b2..bf2326fe22a1 100644
-> > --- a/include/linux/can/dev.h
-> > +++ b/include/linux/can/dev.h
-> > @@ -32,6 +32,10 @@ enum can_mode {
-> >         CAN_MODE_SLEEP
-> >  };
-> >
-> > +struct canfd_bittiming {
-> > +       struct can_bittiming dbt;
->
-> tdc to be added here....
->
-> > +};
-> > +
-> >  /*
-> >   * CAN common private data
-> >   */
-> > @@ -39,7 +43,8 @@ struct can_priv {
-> >         struct net_device *dev;
-> >         struct can_device_stats can_stats;
-> >
-> > -       struct can_bittiming bittiming, data_bittiming;
-> > +       struct can_bittiming bittiming;
-> > +       struct canfd_bittiming data_bittiming;
-> >         const struct can_bittiming_const *bittiming_const,
-> >                 *data_bittiming_const;
-> >         const u16 *termination_const;
->
-> But I had to add that ".dbt" everywhere....
->
-> > --- a/drivers/net/can/dev/dev.c
-> > +++ b/drivers/net/can/dev/dev.c
-> > @@ -345,8 +345,8 @@ int open_candev(struct net_device *dev)
-> >
-> >         /* For CAN FD the data bitrate has to be >= the arbitration bitrate */
-> >         if ((priv->ctrlmode & CAN_CTRLMODE_FD) &&
-> > -           (!priv->data_bittiming.bitrate ||
-> > -            priv->data_bittiming.bitrate < priv->bittiming.bitrate)) {
-> > +           (!priv->data_bittiming.dbt.bitrate ||
-> > +            priv->data_bittiming.dbt.bitrate < priv->bittiming.bitrate)) {
-> >                 netdev_err(dev, "incorrect/missing data bit-timing\n");
-> >                 return -EINVAL;
-> >         }
-> > diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-> > index 3ae884cdf677..c8341cbd8a66 100644
-> > --- a/drivers/net/can/dev/netlink.c
-> > +++ b/drivers/net/can/dev/netlink.c
-> > @@ -239,7 +239,7 @@ static size_t can_get_size(const struct net_device *dev)
-> >         size += nla_total_size(sizeof(u32));                    /* IFLA_CAN_RESTART_MS */
-> >         if (priv->do_get_berr_counter)                          /* IFLA_CAN_BERR_COUNTER */
-> >                 size += nla_total_size(sizeof(struct can_berr_counter));
-> > -       if (priv->data_bittiming.bitrate)                       /* IFLA_CAN_DATA_BITTIMING */
-> > +       if (priv->data_bittiming.dbt.bitrate)                   /* IFLA_CAN_DATA_BITTIMING */
-> >                 size += nla_total_size(sizeof(struct can_bittiming));
-> >         if (priv->data_bittiming_const)                         /* IFLA_CAN_DATA_BITTIMING_CONST */
-> >                 size += nla_total_size(sizeof(struct can_bittiming_const));
-> > @@ -286,7 +286,7 @@ static int can_fill_info(struct sk_buff *skb, const struct net_device *dev)
-> >              !priv->do_get_berr_counter(dev, &bec) &&
-> >              nla_put(skb, IFLA_CAN_BERR_COUNTER, sizeof(bec), &bec)) ||
-> >
-> > -           (priv->data_bittiming.bitrate &&
-> > +           (priv->data_bittiming.dbt.bitrate &&
-> >              nla_put(skb, IFLA_CAN_DATA_BITTIMING,
-> >                      sizeof(priv->data_bittiming), &priv->data_bittiming)) ||
-> >
->
-> And that's not even everything.
+This RFC is a follow-up on the discussion started in:
+https://lore.kernel.org/linux-can/20210112130538.14912-1-mailhol.vincent@wanadoo.fr/T/#t
 
-I also expected that many lines would have to be changed:
-  $ grep -R data_bittiming drivers/net/can/dev | wc -l
-  15
-And (full kernel tree):
-  $ grep -R data_bittiming | wc -l
-  126
+* Scope of this RFC *
 
-But those changes are all trivial, that's why I liked the idea.
+I want to discuss 1/ which TDC values we should provide to the
+user and 2/ how to calculate those. In this RFC, I will not
+directly discuss how to actually modify the netlink ABI.
 
-> I think best it to add a "struct can_tdc" directly to the struct can_priv. Then
-> add a netlink interface that returns the existing can_bittiming and the can_tdc,
-> not as a struct, but each member with a separate tag (or whatever it's called).
 
-Not a bad idea, still need to think about the pros and cons.
+* The code *
 
-For now, I will use the "struct can_tdc" in my RFC. Right now, I
-will not be working on the netlink interface immediately. I will
-first focus on modifying the ES58X driver's FIFO and go back to
-the netlink interface later.
+/**
+ * struct can_tdc - CAN FD Transmission Delay Compensation parameters
+ *
+ * At high bit rates, the propagation delay from the TX pin to the RX
+ * pin of the transceiver causes measurement errors and needs to be
+ * corrected.
+ *
+ * To solve this issue, ISO 11898-1 introduces in section 11.3.3
+ * "Transmitter delay compensation" a SSP (Secondary Sample Point)
+ * equal to the distance, in time quanta, from the start of the bit
+ * time to the measurement on the RX pin.
+ *
+ * This structure contains the parameters to calculate that SSP.
+ *
+ * @tdcv: Transmitter Delay Compensation Value. Distance, in time
+ *    quanta, from when the bit is sent on the TX pin to when it is
+ *    received on the RX pin of the transmitter.
+ *
+ *    0: Automatic mode (default). Use the value dynamically
+ *    measured by the controller.
+ *
+ *    Other values: manual mode. Use the fixed provided value.
+ *
+ *    N.B. when using the automatic mode, the dynamically measured
+ *    value might not be visible to the kernel.
+ *
+ * @tdco: Transmitter Delay Compensation Offset. Offset value, in time
+ *    quanta, defining the delay between the start of the bit
+ *    reception on the CANRX pin of the transceiver and the SSP such
+ *    as SSP = @tdcv + @tdco.
+ *
+ * @tdcf: Transmitter Delay Compensation Filter window. Defines the
+ *    minimum value for the SSP position, in time quanta. If SSP is
+ *    less than @tdcf, then no compensation delay occurs and the
+ *    normal sampling point is used instead. The feature is enabled
+ *    if and only if @tdcf is configured to a value greater than @tdco.
+ */
+struct can_tdc {
+    u16 tdc;
+    u16 tdco;
+    u16 tdcf;
+};
+
+
+/**
+ * struct can_tdc_const - CAN hardware-dependent bit-timing constant
+ *    for TDC
+ *
+ * @tdcv_max: Transmitter Delay Compensation Value maximum value,
+ *    should be set to zero if the controller does not support
+ *    manual mode for tdcv.
+ * @tdco_max: Transmitter Delay Compensation Offset maximum value.
+ *    Should be set to zero if the controller does not support TDC.
+ * @tdcf_max: Transmitter Delay Compensation Filter window maximum
+ *    value. Should be set to zero if the controller does not
+ *    support this feature.
+ */
+struct can_tdc_const {
+    u16 tdcv_max;
+    u16 tdco_max;
+    u16 tdcf_max;
+};
+
+/* Do the bittiming calculation of the tdc parameters */
+static void can_set_tdc(const struct can_bittiming *dbt, struct can_tdc *tdc,
+            const struct can_tdc_const *tdc_const)
+{
+    /* As specified in ISO 11898-1 section 11.3.3 "Transmitter
+     * delay compensation" (TDC) is only applicable if data BRP is
+     * one or two.
+     */
+    if ((dbt->brp == 1) || (dbt->brp == 2)) {
+        memset(tdc, 0, sizeof(*tdc));
+        return;
+    }
+
+    tdc->tdcv = 0;
+    /* Convert the sample point from tenth of a percent to time quanta */
+    tdc->tdco = min(can_bit_time(dbt) * dbt->sample_point / 100,
+            tdc_const->tdco_max);
+    tdc->tdcf = 0;
+}
+
+
+* Explanation on the code *
+
+The only way to calculate tdcv is through measurement which is
+done by the controller. This parameter is only here to receive a
+fixed value that would be given by the user through the netlink
+interface.
+
+The calculation of tdco is of my conception. I could not find any
+reference formula. My logic is to just reuse the normal sample
+point so that at the end ssp = tdcv + sp.  Another method might
+set ssp to the middle of the bit:
+  tdc->tdco = can_bit_time(dbt) / 2
+
+My current proposal is not to use tdcf by default (leave it to
+zero) if doing bittiming calculation. Meaning that this value
+will only be used if configured by the user through the netlink
+interface. The reason for this choice are:
+  * the lack of test environment: on my hardware (the ETAS
+    ES582.1), everything works up fine to 8 Mbps just by using
+    the tdco.
+  * I could not find a good reference to calculate that value.
+Any ideas of how to calculate tdcf is welcome!
+
+
+* References *
+
+This is a collection of specifications and references which I
+used while writing this RFC. I believe that all TDC use cases are
+covered in this RFC.
+
+  - Bosch C_CAN FD8:
+https://www.bosch-semiconductors.com/media/ip_modules/pdf_2/c_can_fd8/users_manual_c_can_fd8_r210_1.pdf
+
+  - Microchip CAN FD Controller Module:
+http://ww1.microchip.com/downloads/en/DeviceDoc/MCP251XXFD-CAN-FD-Controller-Module-Family-Reference-Manual-20005678B.pdf
+
+  - SAM E701/S70/V70/V71 Family:
+https://www.mouser.com/datasheet/2/268/60001527A-1284321.pdf
+
+  - ISO 11898-1
+
+
+Thank you for your comments,
 
 
 Yours sincerely,
 Vincent
-
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
->
