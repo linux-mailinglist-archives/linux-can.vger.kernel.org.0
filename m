@@ -2,21 +2,21 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C782FBC64
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 17:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD3E2FBC66
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 17:28:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730097AbhASQ2B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jan 2021 11:28:01 -0500
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:21111 "EHLO
+        id S1728349AbhASQ2N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jan 2021 11:28:13 -0500
+Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:22180 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732922AbhASQ1o (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jan 2021 11:27:44 -0500
+        with ESMTP id S1729498AbhASQ2A (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jan 2021 11:28:00 -0500
 Received: from tomoyo.flets-east.jp ([153.202.107.157])
         by mwinf5d12 with ME
-        id JgRt240073PnFJp03gRxrJ; Tue, 19 Jan 2021 17:26:00 +0100
+        id JgS9240013PnFJp03gSCtF; Tue, 19 Jan 2021 17:26:15 +0100
 X-ME-Helo: tomoyo.flets-east.jp
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 19 Jan 2021 17:26:00 +0100
+X-ME-Date: Tue, 19 Jan 2021 17:26:15 +0100
 X-ME-IP: 153.202.107.157
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -28,9 +28,9 @@ Cc:     Wolfgang Grandegger <wg@grandegger.com>,
         Alejandro Concepcion Rodriguez <alejandro@acoro.eu>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 1/3] can: dev: can_restart: fix use after free bug
-Date:   Wed, 20 Jan 2021 01:25:10 +0900
-Message-Id: <20210119162512.5236-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 2/3] can: vxcan: vxcan_xmit: fix use after free bug
+Date:   Wed, 20 Jan 2021 01:25:11 +0900
+Message-Id: <20210119162512.5236-3-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20210119162512.5236-1-mailhol.vincent@wanadoo.fr>
 References: <20210119162512.5236-1-mailhol.vincent@wanadoo.fr>
@@ -41,36 +41,43 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 After calling netif_rx_ni(skb), dereferencing skb is unsafe.
-Especially, the can_frame cf which aliases skb memory is accessed
-after the netif_rx_ni() in:
-      stats->rx_bytes += cf->len;
+Especially, the canfd_frame cfd which aliases skb memory is accessed
+after the netif_rx_ni().
 
-Reordering the lines solves the issue.
-
-fixes: 39549eef3587 ("can: CAN Network device driver and Netlink interface")
+fixes: a8f820a380a2 ("can: add Virtual CAN Tunnel driver (vxcan)")
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- drivers/net/can/dev/dev.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/can/vxcan.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index f580f0ac6497..01e4a194f187 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -153,11 +153,11 @@ static void can_restart(struct net_device *dev)
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index fa47bab510bb..a525ef8d19b0 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -39,6 +39,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	struct net_device *peer;
+ 	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+ 	struct net_device_stats *peerstats, *srcstats = &dev->stats;
++	u8 len;
  
- 	cf->can_id |= CAN_ERR_RESTARTED;
+ 	if (can_dropped_invalid_skb(dev, skb))
+ 		return NETDEV_TX_OK;
+@@ -61,12 +62,13 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	skb->dev        = peer;
+ 	skb->ip_summed  = CHECKSUM_UNNECESSARY;
  
--	netif_rx_ni(skb);
--
- 	stats->rx_packets++;
- 	stats->rx_bytes += cf->len;
++	u8 len = cfd->len;
+ 	if (netif_rx_ni(skb) == NET_RX_SUCCESS) {
+ 		srcstats->tx_packets++;
+-		srcstats->tx_bytes += cfd->len;
++		srcstats->tx_bytes += len;
+ 		peerstats = &peer->stats;
+ 		peerstats->rx_packets++;
+-		peerstats->rx_bytes += cfd->len;
++		peerstats->rx_bytes += len;
+ 	}
  
-+	netif_rx_ni(skb);
-+
- restart:
- 	netdev_dbg(dev, "restarted\n");
- 	priv->can_stats.restarts++;
+ out_unlock:
 -- 
 2.26.2
 
