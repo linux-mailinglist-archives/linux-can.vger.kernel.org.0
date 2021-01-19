@@ -2,88 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CF42FBC67
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 17:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34132FBC94
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 17:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729360AbhASQ2R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jan 2021 11:28:17 -0500
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:43967 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727967AbhASQ2M (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jan 2021 11:28:12 -0500
-Received: from tomoyo.flets-east.jp ([153.202.107.157])
-        by mwinf5d12 with ME
-        id JgSN2400V3PnFJp03gSSvz; Tue, 19 Jan 2021 17:26:29 +0100
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 19 Jan 2021 17:26:29 +0100
-X-ME-IP: 153.202.107.157
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S1730577AbhASQfC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jan 2021 11:35:02 -0500
+Received: from mx2.suse.de ([195.135.220.15]:52060 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731808AbhASQe5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 19 Jan 2021 11:34:57 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id D0D53AE55;
+        Tue, 19 Jan 2021 16:34:15 +0000 (UTC)
+References: <20210119093143.17222-1-rpalethorpe@suse.com>
+ <20210119093143.17222-5-rpalethorpe@suse.com>
+ <322f1056-0a73-65e6-531a-3275029df256@pengutronix.de>
+ <YAb1Wncn2/x6LBYj@yuki.lan>
+ <3277a88e-0301-7f3d-b024-c728e1041092@pengutronix.de>
+User-agent: mu4e 1.4.14; emacs 27.1
+From:   Richard Palethorpe <rpalethorpe@suse.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Cyril Hrubis <chrubis@suse.cz>, ltp@lists.linux.it,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         linux-can@vger.kernel.org
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Loris Fauster <loris.fauster@ttcontrol.com>,
-        Alejandro Concepcion Rodriguez <alejandro@acoro.eu>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH 3/3] can: peak_usb: fix use after free bugs
-Date:   Wed, 20 Jan 2021 01:25:12 +0900
-Message-Id: <20210119162512.5236-4-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210119162512.5236-1-mailhol.vincent@wanadoo.fr>
-References: <20210119162512.5236-1-mailhol.vincent@wanadoo.fr>
+Subject: Re: [LTP] [PATCH v2 4/6] can_recv_own_msgs: Convert to new library
+Reply-To: rpalethorpe@suse.de
+In-reply-to: <3277a88e-0301-7f3d-b024-c728e1041092@pengutronix.de>
+Date:   Tue, 19 Jan 2021 16:34:14 +0000
+Message-ID: <87bldkq41l.fsf@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-After calling peak_usb_netif_rx_ni(skb), dereferencing skb is unsafe.
-Especially, the can_frame cf which aliases skb memory is accessed
-after the peak_usb_netif_rx_ni().
+Hello All,
 
-Reordering the lines solves the issue.
+Marc Kleine-Budde <mkl@pengutronix.de> writes:
 
-fixes: 0a25e1f4f185 ("can: peak_usb: add support for PEAK new CANFD USB adapters")
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On 1/19/21 4:06 PM, Cyril Hrubis wrote:
+>> Hi!
+>>>>  /*
+>>>> - * tst-rcv-own-msgs.c
+>>>> - *
+>>>> - * Copyright (c) 2010 Volkswagen Group Electronic Research
+>>>> - * All rights reserved.
+>>>> - *
+>>>> - * Redistribution and use in source and binary forms, with or without
+>>>> - * modification, are permitted provided that the following conditions
+>>>> - * are met:
+>>>> - * 1. Redistributions of source code must retain the above copyright
+>>>> - *    notice, this list of conditions and the following disclaimer.
+>>>> - * 2. Redistributions in binary form must reproduce the above copyright
+>>>> - *    notice, this list of conditions and the following disclaimer in the
+>>>> - *    documentation and/or other materials provided with the distribution.
+>>>> - * 3. Neither the name of Volkswagen nor the names of its contributors
+>>>> - *    may be used to endorse or promote products derived from this software
+>>>> - *    without specific prior written permission.
+>>>
+>>> IANAL, I think you're missing this license. Is looks like some sort
+>>> of BSD to me.
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index 61631f4fd92a..f347ecc79aef 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -514,11 +514,11 @@ static int pcan_usb_fd_decode_canmsg(struct pcan_usb_fd_if *usb_if,
- 	else
- 		memcpy(cfd->data, rm->d, cfd->len);
- 
--	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(rm->ts_low));
--
- 	netdev->stats.rx_packets++;
- 	netdev->stats.rx_bytes += cfd->len;
- 
-+	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(rm->ts_low));
-+
- 	return 0;
- }
- 
-@@ -580,11 +580,11 @@ static int pcan_usb_fd_decode_status(struct pcan_usb_fd_if *usb_if,
- 	if (!skb)
- 		return -ENOMEM;
- 
--	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(sm->ts_low));
--
- 	netdev->stats.rx_packets++;
- 	netdev->stats.rx_bytes += cf->len;
- 
-+	peak_usb_netif_rx(skb, &usb_if->time_ref, le32_to_cpu(sm->ts_low));
-+
- 	return 0;
- }
- 
+Ufff, thanks, I should pay more attention when it is a test imported
+from elsewhere.
+
+>>>
+>>>> - *
+>>>> - * Alternatively, provided that this notice is retained in full, this
+>>>> - * software may be distributed under the terms of the GNU General
+>>>> - * Public License ("GPL") version 2, in which case the provisions of the
+>>>> - * GPL apply INSTEAD OF those given above.
+>>>
+>>> It doesn't say "or later".
+>> 
+>> Looks like we cannot just remove this license. So what about moving this
+>> text into a separate COPYING file and changing the SPDX to GPL-v2.0?
+>
+> This file is dual licensed, better keep it dual licensed.
+>
+> regards,
+> Marc
+
+HHmm, this appears to be the BSD-3-Clause license with the following
+text inserted in the middle:
+
+ * Alternatively, provided that this notice is retained in full, this
+ * software may be distributed under the terms of the GNU General
+ * Public License ("GPL") version 2, in which case the provisions of the
+ * GPL apply INSTEAD OF those given above.
+ *
+ * The provided data structures and external interfaces from this code
+ * are not restricted to be used by modules with a GPL compatible license.
+
+I don't see any corresponding SPDX identifier or exception for this. It
+is probably easiest and safest just to keep it as-is.
+
 -- 
-2.26.2
-
+Thank you,
+Richard.
