@@ -2,181 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E243A2FB399
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 08:58:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B35C2FB9DD
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 15:54:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728608AbhASH4K (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jan 2021 02:56:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730573AbhASHzo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jan 2021 02:55:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289F2C061573
-        for <linux-can@vger.kernel.org>; Mon, 18 Jan 2021 23:55:04 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l1lql-0002gq-KV; Tue, 19 Jan 2021 08:54:51 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:8975:b8c4:b326:621a] (unknown [IPv6:2a03:f580:87bc:d400:8975:b8c4:b326:621a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 463EC5C7A0E;
-        Tue, 19 Jan 2021 07:54:36 +0000 (UTC)
-To:     angkery <angkery@163.com>, manivannan.sadhasivam@linaro.org,
-        thomas.kopp@microchip.com, wg@grandegger.com, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Junlin Yang <yangjunlin@yulong.com>
-References: <20210119020221.3713-1-angkery@163.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH] can: mcp251xfd: mcp251xfd_handle_ivmif(): fix wrong NULL
- pointer check
-Message-ID: <cc10d919-4087-e61d-28c4-ccffabe7d95a@pengutronix.de>
-Date:   Tue, 19 Jan 2021 08:54:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1727854AbhASOiD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jan 2021 09:38:03 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48668 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387548AbhASJeA (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 19 Jan 2021 04:34:00 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611048789; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=Gs8OrqNIg23F6h+Tgi8l2QM19tsafIuNjPaR1oJmc9E=;
+        b=tLfuGN4pJWULG0N6Tdu1wof5tkI0AtEjl0C4W2b3SlKQj++mni8Gf5/+CZs5rRoWkZ9FfP
+        UNFKv/wTG8GZ15TJLKu4ho+dl/Yc12zMdP3bTjmpmQPA9RtkJXLs3lu7jz/AFrwDWQpQ8w
+        UG7yEEG3kNgY0QgqhErqFrJ5EpaHfV4=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2D8C8AB9F;
+        Tue, 19 Jan 2021 09:33:09 +0000 (UTC)
+From:   Richard Palethorpe <rpalethorpe@suse.com>
+To:     ltp@lists.linux.it
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: [PATCH v2 0/6] Convert CAN tests to new LTP API
+Date:   Tue, 19 Jan 2021 09:31:37 +0000
+Message-Id: <20210119093143.17222-1-rpalethorpe@suse.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20210119020221.3713-1-angkery@163.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="MFBmdvepDAa83HI4jNqP40G2U9JYAOPNn"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---MFBmdvepDAa83HI4jNqP40G2U9JYAOPNn
-Content-Type: multipart/mixed; boundary="MJd7BafsDwCg03TvaXIhqZgisVeE3DiRZ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: angkery <angkery@163.com>, manivannan.sadhasivam@linaro.org,
- thomas.kopp@microchip.com, wg@grandegger.com, davem@davemloft.net,
- kuba@kernel.org
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, Junlin Yang <yangjunlin@yulong.com>
-Message-ID: <cc10d919-4087-e61d-28c4-ccffabe7d95a@pengutronix.de>
-Subject: Re: [PATCH] can: mcp251xfd: mcp251xfd_handle_ivmif(): fix wrong NULL
- pointer check
-References: <20210119020221.3713-1-angkery@163.com>
-In-Reply-To: <20210119020221.3713-1-angkery@163.com>
+Hello,
 
---MJd7BafsDwCg03TvaXIhqZgisVeE3DiRZ
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+This is an attempt to convert the CAN tests to the (modern) Linux Test
+Project API and removes the wrapper script. To be clear, this is a
+patch-set for the LTP *not* the kernel tree or can-utils.
 
-On 1/19/21 3:02 AM, angkery wrote:
-> From: Junlin Yang <yangjunlin@yulong.com>
->=20
-> if alloc_can_err_skb() returns NULL, we should check skb instead of cf.=
+I have tried to keep the core test behaviour the same, but (for
+example) moving to the SAFE_ functions will naturally introduce some
+changes in error checking. Deliberate behavioral changes have been
+noted in the commit messages.
 
+FYI, we appear to have 4 CAN tests in LTP including two tests for
+SLCAN (pty03, pty04).
 
-Have a look at the function, there is a check for cf several times before=
- this.
-But as cf is initialized as NULL this is should be no problem.
+V2: Update e-mail addresses and resend
 
-While in:
+Richard Palethorpe (6):
+  API: Add FILE_SCANF to new lib
+  can: Add can_common.h for vcan device setup
+  can_filter: Convert to new library
+  can_recv_own_msgs: Convert to new library
+  can: Remove obsolete test wrapper script
+  can: Update contact details
 
-| ca4c6ebeeb50 can: mcp251xfd: mcp251xfd_handle_rxif_one():
-|             fix wrong NULL pointer check
+ include/tst_safe_file_ops.h                   |   3 +
+ testcases/network/can/Makefile                |   2 -
+ .../can/filter-tests/00_Descriptions.txt      |   6 +-
+ testcases/network/can/filter-tests/INSTALL    |   3 +-
+ testcases/network/can/filter-tests/Makefile   |   4 -
+ .../network/can/filter-tests/can_common.h     |  70 ++++
+ .../network/can/filter-tests/can_filter.c     | 317 +++++++-----------
+ .../can/filter-tests/can_rcv_own_msgs.c       | 273 +++++----------
+ .../network/can/filter-tests/can_run_tests.sh | 106 ------
+ 9 files changed, 291 insertions(+), 493 deletions(-)
+ create mode 100644 testcases/network/can/filter-tests/can_common.h
+ delete mode 100755 testcases/network/can/filter-tests/can_run_tests.sh
 
-a real problem has been fixed.
+-- 
+2.29.2
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---MJd7BafsDwCg03TvaXIhqZgisVeE3DiRZ--
-
---MFBmdvepDAa83HI4jNqP40G2U9JYAOPNn
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAGkDgACgkQqclaivrt
-76k3wwf/T3pirYlaWQKTcWKcDcJuvzEbAg109+zHl0Ltc0vlqd0foNtBv9064t8m
-41Ld7wModYPl2kzrs2H6VMWYafX676EbaUiuxdtr78xeM8g+ivFo9TLQH8gT8L9g
-RoKq3MCx6K09GSRTMzoJqgB7IL9wsgachdGS/MykgH7qZZfQ+mlW77J+KG/eV84Y
-kJT8QkWYyZhe/1emTdxiUZzTL0tE2zlNZFQzKE4qAXMvTHf1u5ge/T3IfpqYINVw
-yceHZ/NRq/5P1EkWetHhCX5/INDTpG0Uz4KkAtg7evS0TWnXZOnWxUNpcF3ajQ/X
-QayRHvX1Zvjg0SvnE9YbEUDJyAZv9g==
-=0LFJ
------END PGP SIGNATURE-----
-
---MFBmdvepDAa83HI4jNqP40G2U9JYAOPNn--
