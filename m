@@ -2,98 +2,132 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 910D02FBDA4
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 18:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0392FBDE8
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 18:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727140AbhASRa0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jan 2021 12:30:26 -0500
-Received: from mail-yb1-f173.google.com ([209.85.219.173]:34011 "EHLO
-        mail-yb1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390732AbhASRIt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jan 2021 12:08:49 -0500
-Received: by mail-yb1-f173.google.com with SMTP id x6so16678730ybr.1
-        for <linux-can@vger.kernel.org>; Tue, 19 Jan 2021 09:08:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N/amjSCxiEdzeoXIElkPEVr9qS0tkOIHBvyzNNOuPGk=;
-        b=S8ZYm22fKZrt/yU1061f2cENslHZ4LnLlBBJub8oUCG0Ysj5hXmNEyxPydoAztvnvI
-         i17CNupunBcU065q2fX4htc+wyTFFMuB2iX799T+OX3ZBJ01hrkNaInibR8v15hD5heZ
-         EYjsdQC5z5ySNgNpDw7/P55HQqIQyB01/HoS5jCzmKdrKY0giBlPTrth4G3xWxfWzFwq
-         he+CMaQD3QQmUeUWkmuVQs85iP8N0huIRal0yU16hJNJWNzRrjZYUnGXuk75Z8ITqvQ1
-         Ub6JPxmnU/SnDx7c4i1XHZ1fbxj2xf4PV6yNMI3Actnoq+NI1Fiy5GSmZjWhQ6esvOax
-         BPxw==
-X-Gm-Message-State: AOAM530bkwDRtWE3EXGlGVF01SR7R1UkUMKibOCZ8oWxHm05rHL9b32o
-        +u4ubTi3tehisf1E8kEzC/h8RpzTafHR9mnMvVc=
-X-Google-Smtp-Source: ABdhPJzLx+zZNIvh4wCFnAs7nDqUtT18BqSutvcx8HCsYUlUwHsZRd7lfBmu46RiWllWlASc/thDR7hy5GKAaQtPipI=
-X-Received: by 2002:a25:3858:: with SMTP id f85mr1780177yba.125.1611076082904;
- Tue, 19 Jan 2021 09:08:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20210119162512.5236-1-mailhol.vincent@wanadoo.fr> <20210119162512.5236-3-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20210119162512.5236-3-mailhol.vincent@wanadoo.fr>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 20 Jan 2021 02:07:52 +0900
-Message-ID: <CAMZ6RqJb=y9E3tmT+kPwAB1cYyDE2v4e5iMaoB_J17U-W+WB3w@mail.gmail.com>
-Subject: Re: [PATCH 2/3] can: vxcan: vxcan_xmit: fix use after free bug
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S1732603AbhASOiX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jan 2021 09:38:23 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48700 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387557AbhASJeA (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 19 Jan 2021 04:34:00 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611048790; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=F0O1yfxvj2cf6vUfDqzCU1sr5/oQEGYafzItc2hZ3k4=;
+        b=uz6gEMwLD1/Up+TZUzZiuH022niA4/BwnkZ5B9tisM8NUpyxEKk21DlqTQ8zuf7bc7fOY2
+        rH1O69jL+mtYU2e1rZVWem3S/9MRNSrpcO5r2AGjdE9tfJ6tHUM5VXaGgUbv+ygZ1JVuCM
+        QjHfP3rbcooJRmL+5JVMKcw6KLZ8luk=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 38ED4ACF5;
+        Tue, 19 Jan 2021 09:33:10 +0000 (UTC)
+From:   Richard Palethorpe <rpalethorpe@suse.com>
+To:     ltp@lists.linux.it
+Cc:     linux-can@vger.kernel.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Loris Fauster <loris.fauster@ttcontrol.com>,
-        Alejandro Concepcion Rodriguez <alejandro@acoro.eu>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: [PATCH v2 2/6] can: Add can_common.h for vcan device setup
+Date:   Tue, 19 Jan 2021 09:31:39 +0000
+Message-Id: <20210119093143.17222-3-rpalethorpe@suse.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210119093143.17222-1-rpalethorpe@suse.com>
+References: <20210119093143.17222-1-rpalethorpe@suse.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 20 Jan 2021 at 01:25, Vincent Mailhol
-<mailhol.vincent@wanadoo.fr> wrote:
->
-> After calling netif_rx_ni(skb), dereferencing skb is unsafe.
-> Especially, the canfd_frame cfd which aliases skb memory is accessed
-> after the netif_rx_ni().
->
-> fixes: a8f820a380a2 ("can: add Virtual CAN Tunnel driver (vxcan)")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
->  drivers/net/can/vxcan.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
-> index fa47bab510bb..a525ef8d19b0 100644
-> --- a/drivers/net/can/vxcan.c
-> +++ b/drivers/net/can/vxcan.c
-> @@ -39,6 +39,7 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
->         struct net_device *peer;
->         struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
->         struct net_device_stats *peerstats, *srcstats = &dev->stats;
-> +       u8 len;
->
->         if (can_dropped_invalid_skb(dev, skb))
->                 return NETDEV_TX_OK;
-> @@ -61,12 +62,13 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
->         skb->dev        = peer;
->         skb->ip_summed  = CHECKSUM_UNNECESSARY;
->
-> +       u8 len = cfd->len;
+Note that we call modprobe to set echo=1. However this does seem to be
+necessary for the current tests on 5.10. It has been kept to avoid
+changing the test behavior unnecessarily, but can most likely be
+safely removed if it causes problems.
 
-len = cfd->len;
-Silly mistake: u8 not needed twice of course...
+Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
+---
+ .../network/can/filter-tests/can_common.h     | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 testcases/network/can/filter-tests/can_common.h
 
->         if (netif_rx_ni(skb) == NET_RX_SUCCESS) {
->                 srcstats->tx_packets++;
-> -               srcstats->tx_bytes += cfd->len;
-> +               srcstats->tx_bytes += len;
->                 peerstats = &peer->stats;
->                 peerstats->rx_packets++;
-> -               peerstats->rx_bytes += cfd->len;
-> +               peerstats->rx_bytes += len;
->         }
->
->  out_unlock:
-> --
-> 2.26.2
->
+diff --git a/testcases/network/can/filter-tests/can_common.h b/testcases/network/can/filter-tests/can_common.h
+new file mode 100644
+index 000000000..d01694b80
+--- /dev/null
++++ b/testcases/network/can/filter-tests/can_common.h
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (c) 2021 SUSE LLC
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <sys/ioctl.h>
++#include <sys/time.h>
++#include <net/if.h>
++
++#include "tst_cmd.h"
++#include "tst_safe_stdio.h"
++#include "tst_safe_file_ops.h"
++
++#include <linux/if.h>
++#include <linux/can.h>
++#include <linux/can/raw.h>
++
++static char *can_dev_name;
++static int can_created_dev;
++
++static void can_cmd(const char *const argv[])
++{
++	tst_cmd(argv, NULL, NULL, TST_CMD_TCONF_ON_MISSING);
++}
++
++#define CAN_CMD(...) can_cmd((const char *const[]){ __VA_ARGS__, NULL })
++
++static void can_setup_vcan(void)
++{
++	unsigned int flags;
++	char *path;
++
++	if (can_dev_name)
++		goto check_echo;
++
++	can_dev_name = "vcan0";
++
++	tst_res(TINFO, "Creating vcan0 device; use -D option to avoid this");
++
++	CAN_CMD("modprobe", "-r", "vcan");
++	CAN_CMD("modprobe", "vcan", "echo=1");
++
++	can_created_dev = 1;
++
++	CAN_CMD("ip", "link", "add", "dev", "vcan0", "type", "vcan");
++	CAN_CMD("ip", "link", "set", "dev", "vcan0", "up");
++
++check_echo:
++	/* Precondition for the frame flow test? */
++	SAFE_ASPRINTF(&path, "/sys/class/net/%s/flags", can_dev_name);
++	if (FILE_SCANF(path, "%x", &flags) || !(flags & IFF_ECHO))
++		tst_res(TWARN, "Could not determine if ECHO is set on vcan0");
++}
++
++static void can_cleanup_vcan(void)
++{
++	if (!can_created_dev)
++		return;
++
++	CAN_CMD("ip", "link", "set", "dev", "vcan0", "down");
++	CAN_CMD("ip", "link", "del", "dev", "vcan0");
++	CAN_CMD("modprobe", "-r", "vcan");
++}
+-- 
+2.29.2
+
