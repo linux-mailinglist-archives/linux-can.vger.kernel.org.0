@@ -2,117 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFB42FBE8F
-	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 19:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED28C2FC2C0
+	for <lists+linux-can@lfdr.de>; Tue, 19 Jan 2021 22:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404647AbhASSGy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 19 Jan 2021 13:06:54 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51138 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404633AbhASSGp (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 19 Jan 2021 13:06:45 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 08848AE36;
-        Tue, 19 Jan 2021 18:05:59 +0000 (UTC)
-Date:   Tue, 19 Jan 2021 19:05:57 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Richard Palethorpe <rpalethorpe@suse.com>
-Cc:     ltp@lists.linux.it, Oliver Hartkopp <socketcan@hartkopp.net>,
+        id S1729313AbhASVjy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 19 Jan 2021 16:39:54 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:24819 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728001AbhASVie (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 19 Jan 2021 16:38:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1611092078;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:From:
+        Subject:Sender;
+        bh=szSf/fv/ZmtKjy6LNU3aUDR+VYBcZ5uxizTWwHfjSVE=;
+        b=adl8iqHiY/t1Kh7R6Qb0L+JZkhhLD24wonn3Wr87LaGqzwfeA7AvRnYqwlNyQ2Hn/D
+        3x9rxk0dw8hqXHb5wab0FW/65hTzyAaWqS4kzLE7mV5PQJiedBmVaxUhVeUCX+iIR/0j
+        /9phIdB/Y7b2NAtbou3GZ/wFB0X3k+bvWumcsa73MSuGg2cc3XnYLypBoQUthO1Ye7gE
+        HBra6jX8IxcuurGjvwVEDPo4CDRFSN4YtkqKEsYNKuIcxs3RdsFs5VOOKHji1VwlMx/f
+        1EXgqiq6w5d/gSCnt09gGhl1AUGprCbZuBffNfdG9l/09PNkCf7pLIyQLlByhFhM39PU
+        Oyjw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOMtqpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.177]
+        by smtp.strato.de (RZmta 47.12.1 DYNA|AUTH)
+        with ESMTPSA id k075acx0JLYVhaY
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 19 Jan 2021 22:34:31 +0100 (CET)
+Subject: Re: [LTP] [PATCH v2 4/6] can_recv_own_msgs: Convert to new library
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, rpalethorpe@suse.de
+Cc:     Cyril Hrubis <chrubis@suse.cz>, ltp@lists.linux.it,
         linux-can@vger.kernel.org
-Subject: Re: [LTP] [PATCH v2 2/6] can: Add can_common.h for vcan device setup
-Message-ID: <YAcfhf2qg5q4VZrg@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
 References: <20210119093143.17222-1-rpalethorpe@suse.com>
- <20210119093143.17222-3-rpalethorpe@suse.com>
+ <20210119093143.17222-5-rpalethorpe@suse.com>
+ <322f1056-0a73-65e6-531a-3275029df256@pengutronix.de>
+ <YAb1Wncn2/x6LBYj@yuki.lan>
+ <3277a88e-0301-7f3d-b024-c728e1041092@pengutronix.de>
+ <87bldkq41l.fsf@suse.de>
+ <85d808dd-c8c3-1216-ee6e-94d63ddf0f2b@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <29fef223-bb59-bc88-8e3c-6e63de0af210@hartkopp.net>
+Date:   Tue, 19 Jan 2021 22:34:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210119093143.17222-3-rpalethorpe@suse.com>
+In-Reply-To: <85d808dd-c8c3-1216-ee6e-94d63ddf0f2b@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Richie,
 
-...
-> +#include <linux/if.h>
-...
-> +static void can_setup_vcan(void)
-> +{
-...
-> +check_echo:
-> +	/* Precondition for the frame flow test? */
-> +	SAFE_ASPRINTF(&path, "/sys/class/net/%s/flags", can_dev_name);
-> +	if (FILE_SCANF(path, "%x", &flags) || !(flags & IFF_ECHO))
-FYI IFF_ECHO is not defined on some older toolchains (aarch64).
-It'd be good to add lapi/if.h, where it'd be defined.
-But it can be added later.
 
-In file included from can_common.h:21,
-                 from can_filter.c:12:
-can_common.h: In function ‘can_setup_vcan’:
-can_common.h:58:50: error: ‘IFF_ECHO’ undeclared (first use in this function); did you mean ‘IFF_DEBUG’?
-  if (FILE_SCANF(path, "%x", &flags) || !(flags & IFF_ECHO))
-                                                  ^~~~~~~~
-can_common.h:58:50: note: each undeclared identifier is reported only once for each function it appears in
-In file included from can_common.h:21,
-                 from can_rcv_own_msgs.c:12:
-can_common.h: In function ‘can_setup_vcan’:
-can_common.h:58:50: error: ‘IFF_ECHO’ undeclared (first use in this function); did you mean ‘IFF_DEBUG’?
-  if (FILE_SCANF(path, "%x", &flags) || !(flags & IFF_ECHO))
-                                                  ^~~~~~~~
+On 19.01.21 17:39, Marc Kleine-Budde wrote:
+> On 1/19/21 5:34 PM, Richard Palethorpe wrote:
+>> Hello All,
+>>
+>> Marc Kleine-Budde <mkl@pengutronix.de> writes:
+>>
+>>> On 1/19/21 4:06 PM, Cyril Hrubis wrote:
+>>>> Hi!
+>>>>>>   /*
+>>>>>> - * tst-rcv-own-msgs.c
+>>>>>> - *
+>>>>>> - * Copyright (c) 2010 Volkswagen Group Electronic Research
+>>>>>> - * All rights reserved.
+>>>>>> - *
+>>>>>> - * Redistribution and use in source and binary forms, with or without
+>>>>>> - * modification, are permitted provided that the following conditions
+>>>>>> - * are met:
+>>>>>> - * 1. Redistributions of source code must retain the above copyright
+>>>>>> - *    notice, this list of conditions and the following disclaimer.
+>>>>>> - * 2. Redistributions in binary form must reproduce the above copyright
+>>>>>> - *    notice, this list of conditions and the following disclaimer in the
+>>>>>> - *    documentation and/or other materials provided with the distribution.
+>>>>>> - * 3. Neither the name of Volkswagen nor the names of its contributors
+>>>>>> - *    may be used to endorse or promote products derived from this software
+>>>>>> - *    without specific prior written permission.
+>>>>>
+>>>>> IANAL, I think you're missing this license. Is looks like some sort
+>>>>> of BSD to me.
+>>
+>> Ufff, thanks, I should pay more attention when it is a test imported
+>> from elsewhere.
+>>
+>>>>>
+>>>>>> - *
+>>>>>> - * Alternatively, provided that this notice is retained in full, this
+>>>>>> - * software may be distributed under the terms of the GNU General
+>>>>>> - * Public License ("GPL") version 2, in which case the provisions of the
+>>>>>> - * GPL apply INSTEAD OF those given above.
+>>>>>
+>>>>> It doesn't say "or later".
+>>>>
+>>>> Looks like we cannot just remove this license. So what about moving this
+>>>> text into a separate COPYING file and changing the SPDX to GPL-v2.0?
+>>>
+>>> This file is dual licensed, better keep it dual licensed.
+>>>
+>>> regards,
+>>> Marc
+>>
+>> HHmm, this appears to be the BSD-3-Clause license with the following
+>> text inserted in the middle:
+>>
+>>   * Alternatively, provided that this notice is retained in full, this
+>>   * software may be distributed under the terms of the GNU General
+>>   * Public License ("GPL") version 2, in which case the provisions of the
+>>   * GPL apply INSTEAD OF those given above.
+>>   *
+>>   * The provided data structures and external interfaces from this code
+>>   * are not restricted to be used by modules with a GPL compatible license.
+>>
+>> I don't see any corresponding SPDX identifier or exception for this. It
+>> is probably easiest and safest just to keep it as-is.
+> 
+> I think the Linux kernel uses:
+> 
+> /* SPDX-License-Identifier: ((GPL-2.0-only WITH Linux-syscall-note) OR
+> BSD-3-Clause) */
+> 
+> e.g.:
+> 
+> https://elixir.bootlin.com/linux/v5.10/source/include/uapi/linux/can/gw.h
+> 
 
-Also there are other problems on toolchains with older linux headers
-- bug in using <net/if.h> with <linux/if.h>. Can't we just use <linux/if.h>?
-https://travis-ci.org/github/pevik/ltp/jobs/755163076
+Thanks Marc!
 
-In file included from /usr/src/ltp/testcases/network/can/filter-tests/can_common.h:15:0,
-                 from /usr/src/ltp/testcases/network/can/filter-tests/can_filter.c:12:
-/usr/include/linux/if.h:71:2: error: redeclaration of enumerator 'IFF_UP'
-  IFF_UP    = 1<<0,  /* sysfs */
-  ^
-/usr/include/net/if.h:44:5: note: previous definition of 'IFF_UP' was here
-     IFF_UP = 0x1,  /* Interface is up.  */
-     ^
-/usr/include/linux/if.h:72:2: error: redeclaration of enumerator 'IFF_BROADCAST'
-  IFF_BROADCAST   = 1<<1,  /* __volatile__ */
-  ^
-/usr/include/net/if.h:46:5: note: previous definition of 'IFF_BROADCAST' was here
-     IFF_BROADCAST = 0x2, /* Broadcast address valid.  */
-     ^
-/usr/include/linux/if.h:73:2: error: redeclaration of enumerator 'IFF_DEBUG'
-  IFF_DEBUG   = 1<<2,  /* sysfs */
-  ^
-/usr/include/net/if.h:48:5: note: previous definition of 'IFF_DEBUG' was here
-     IFF_DEBUG = 0x4,  /* Turn on debugging.  */
-     ^
-/usr/include/linux/if.h:74:2: error: redeclaration of enumerator 'IFF_LOOPBACK'
-  IFF_LOOPBACK   = 1<<3,  /* __volatile__ */
-  ^
-/usr/include/net/if.h:50:5: note: previous definition of 'IFF_LOOPBACK' was here
-     IFF_LOOPBACK = 0x8,  /* Is a loopback net.  */
-     ^
-/usr/include/linux/if.h:75:2: error: redeclaration of enumerator 'IFF_POINTOPOINT'
-  IFF_POINTOPOINT   = 1<<4,  /* __volatile__ */
-  ^
-/usr/include/net/if.h:52:5: note: previous definition of 'IFF_POINTOPOINT' was here
-     IFF_POINTOPOINT = 0x10, /* Interface is point-to-point link.  */
-     ^
-/usr/include/linux/if.h:76:2: error: redeclaration of enumerator 'IFF_NOTRAILERS'
-  IFF_NOTRAILERS   = 1<<5,  /* sysfs */
-  ^
-/usr/include/net/if.h:54:5: note: previous definition of 'IFF_NOTRAILERS' was here
-     IFF_NOTRAILERS = 0x20, /* Avoid use of trailers.  */
-     ^
-/usr/include/linux/if.h:77:2: error: redeclaration of enumerator 'IFF_RUNNING'
-  IFF_RUNNING   = 1<<6,  /* __volatile__ */
+Yes, indeed it is a GPLv2 / BSD3 dual license to use it in both 
+environments.
 
-Also it fails to run docparse:
-invalid character encountered while parsing JSON string, at character offset 133249 (before "\tCAN device name"\n...") at /usr/src/ltp/docparse/testinfo.pl line 398.
-make[1]: *** [/usr/src/ltp/docparse/Makefile:60: txt] Error 255
-I'll have look into this one.
-
-Kind regards,
-Petr
+Regards,
+Oliver
