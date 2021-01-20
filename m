@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C3F2FD2EA
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1742FD322
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:53:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390673AbhATOj6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 09:39:58 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33194 "EHLO mx2.suse.de"
+        id S1732496AbhATOud (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 09:50:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33196 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390513AbhATOjN (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 20 Jan 2021 09:39:13 -0500
+        id S2389903AbhATOjM (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 20 Jan 2021 09:39:12 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1611153459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zM704vkttjmVp/mzJS1wza80yMe++CPILRdKR18++gU=;
-        b=Ig1oZ6RA+JiU1G0yHgCkMlhIh2Push2C3Vs533AsmCZLyPFT/letv1eKiIpI22XWNyqVDs
-        50wVxO/26NMM2bv8lYGV9KXJlZ9kfLGCPApercIM0iWIOYbWVsfjvfcNYfsN2Bz+3vvaB+
-        FIUHPH4XvNGqzmkPQcwqBsZBmtxMQcE=
+        bh=VrEiCKkMfjbW/Ymz+VaVQpAzkPgExNsvxYEOMFDKDMU=;
+        b=HHJ6F2uYcINQfF+SGVnp2Bj8aeYzHUeEbhonCV1PzGrZWZgVyMS/6ti5CMBU+/8NuKK24+
+        f8Nygf/ioKwOU8WXPprUGGcavZH5BLNlrx9Tgx1p4729yOIo8ONvHGvwg18mwOZKKoGJI8
+        PCKFNmSU+VygdoWbTAtkzwNJkCN9XmA=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 4C4D9AD78;
+        by mx2.suse.de (Postfix) with ESMTP id AD006AD87;
         Wed, 20 Jan 2021 14:37:39 +0000 (UTC)
 From:   Richard Palethorpe <rpalethorpe@suse.com>
 To:     ltp@lists.linux.it
@@ -30,9 +30,9 @@ Cc:     linux-can@vger.kernel.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Richard Palethorpe <rpalethorpe@suse.com>
-Subject: [PATCH v3 5/7] can_recv_own_msgs: Convert to new library
-Date:   Wed, 20 Jan 2021 14:37:21 +0000
-Message-Id: <20210120143723.26483-6-rpalethorpe@suse.com>
+Subject: [PATCH v3 6/7] can: Remove obsolete test wrapper script
+Date:   Wed, 20 Jan 2021 14:37:22 +0000
+Message-Id: <20210120143723.26483-7-rpalethorpe@suse.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210120143723.26483-1-rpalethorpe@suse.com>
 References: <20210120143723.26483-1-rpalethorpe@suse.com>
@@ -42,364 +42,177 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Behavior is approximately the same except for the following:
-
-* Test will continue after non-fatal errors.
-* We now check the return value of `setsocketopt` and that I/O
-  completed the specified number of bytes.
-* The command line arg, device name, must be prepended with `-D`
+Functionality moved into can_common.h and the test executables.
 
 Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
 ---
- .../can/filter-tests/can_rcv_own_msgs.c       | 273 ++++++------------
- 1 file changed, 88 insertions(+), 185 deletions(-)
+ testcases/network/can/Makefile                |   2 -
+ .../can/filter-tests/00_Descriptions.txt      |   1 +
+ testcases/network/can/filter-tests/INSTALL    |   3 +-
+ testcases/network/can/filter-tests/Makefile   |   2 -
+ .../network/can/filter-tests/can_run_tests.sh | 106 ------------------
+ 5 files changed, 3 insertions(+), 111 deletions(-)
+ delete mode 100755 testcases/network/can/filter-tests/can_run_tests.sh
 
-diff --git a/testcases/network/can/filter-tests/can_rcv_own_msgs.c b/testcases/network/can/filter-tests/can_rcv_own_msgs.c
-index 8ad51d298..517daae51 100644
---- a/testcases/network/can/filter-tests/can_rcv_own_msgs.c
-+++ b/testcases/network/can/filter-tests/can_rcv_own_msgs.c
-@@ -1,88 +1,31 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
- /*
-- * tst-rcv-own-msgs.c
-- *
-- * Copyright (c) 2010 Volkswagen Group Electronic Research
-- * All rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- * 1. Redistributions of source code must retain the above copyright
-- *    notice, this list of conditions and the following disclaimer.
-- * 2. Redistributions in binary form must reproduce the above copyright
-- *    notice, this list of conditions and the following disclaimer in the
-- *    documentation and/or other materials provided with the distribution.
-- * 3. Neither the name of Volkswagen nor the names of its contributors
-- *    may be used to endorse or promote products derived from this software
-- *    without specific prior written permission.
-- *
-- * Alternatively, provided that this notice is retained in full, this
-- * software may be distributed under the terms of the GNU General
-- * Public License ("GPL") version 2, in which case the provisions of the
-- * GPL apply INSTEAD OF those given above.
-- *
-- * The provided data structures and external interfaces from this code
-- * are not restricted to be used by modules with a GPL compatible license.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
-- * DAMAGE.
-- *
-- * Send feedback to <socketcan-users@lists.berlios.de>
-- *
-+ * Copyright (c) 2011 Volkswagen Group Electronic Research
-+ * Copyright (c) 2021 SUSE LLC
-  */
+diff --git a/testcases/network/can/Makefile b/testcases/network/can/Makefile
+index 31744534a..a69f6be87 100644
+--- a/testcases/network/can/Makefile
++++ b/testcases/network/can/Makefile
+@@ -22,6 +22,4 @@ top_srcdir		?= ../../..
  
--#include <stdio.h>
--#include <stdlib.h>
--#include <unistd.h>
--#include <string.h>
+ include $(top_srcdir)/include/mk/env_pre.mk
+ 
+-INSTALL_TARGETS		:= *.sh
 -
--#include <sys/types.h>
--#include <sys/socket.h>
--#include <sys/ioctl.h>
--#include <sys/time.h>
--#include <net/if.h>
- #include "config.h"
--#include "tst_res_flags.h"
--#include "tst_minmax.h"
-+#include "tst_test.h"
+ include $(top_srcdir)/include/mk/generic_trunk_target.mk
+diff --git a/testcases/network/can/filter-tests/00_Descriptions.txt b/testcases/network/can/filter-tests/00_Descriptions.txt
+index 89610982c..55d213456 100644
+--- a/testcases/network/can/filter-tests/00_Descriptions.txt
++++ b/testcases/network/can/filter-tests/00_Descriptions.txt
+@@ -5,5 +5,6 @@ information on the CAN network protocol family PF_CAN is contained in
+ <Kernel/Documentation/networking/can.txt>.
  
- #ifdef HAVE_LINUX_CAN_H
+ For any issue(s) with CAN tests please write to:
++<ltp@lists.linux.it>
+ <socketcan-users@lists.berlios.de>,
+ Oliver Hartkopp <oliver.hartkopp@volkswagen.de>,
+diff --git a/testcases/network/can/filter-tests/INSTALL b/testcases/network/can/filter-tests/INSTALL
+index e549aed0f..7d62d65fe 100644
+--- a/testcases/network/can/filter-tests/INSTALL
++++ b/testcases/network/can/filter-tests/INSTALL
+@@ -12,7 +12,8 @@ enable CAN protocol, please see ltp/README file.
+ $ make
  
--#include <linux/can.h>
--#include <linux/can/raw.h>
-+#include "can_common.h"
-+#include "tst_minmax.h"
+ 2) To Run the tests from this directory, do:
+-$ ./run_ltp-can_tests.sh
++$ ./can_filter
++$ ./can_rcv_own_msgs
  
--struct rxs {
--	int s;
--	int t;
--};
-+static int s, t;
+ 3) To let LTP run the tests from $LTPROOT, execute:
+ $ ./runltp -f can
+diff --git a/testcases/network/can/filter-tests/Makefile b/testcases/network/can/filter-tests/Makefile
+index 6a9474164..29aaa3240 100644
+--- a/testcases/network/can/filter-tests/Makefile
++++ b/testcases/network/can/filter-tests/Makefile
+@@ -23,6 +23,4 @@ include $(top_srcdir)/include/mk/testcases.mk
  
--struct rxs test_sockets(int s, int t, canid_t can_id)
-+void test_sockets(canid_t can_id, int expect_rxs, int expect_rxt)
- {
- 	fd_set rdfs;
- 	struct timeval tv;
- 	int m = MAX(s, t) + 1;
- 	int have_rx = 1;
- 	struct can_frame frame;
--	struct rxs rx;
--	int ret;
-+	int rxs = 0, rxt = 0;
+ CPPFLAGS		+= -DETH_P_CAN=0x000C -DPF_CAN=29 -DAF_CAN=PF_CAN
  
- 	frame.can_id = can_id;
- 	frame.can_dlc = 0;
--	if (write(s, &frame, sizeof(frame)) < 0) {
--		perror("write");
--		exit(1);
--	}
+-INSTALL_TARGETS		:= *.sh
 -
--	rx.s = rx.t = 0;
-+	SAFE_WRITE(1, s, &frame, sizeof(frame));
- 
- 	while (have_rx) {
- 
-@@ -93,164 +36,124 @@ struct rxs test_sockets(int s, int t, canid_t can_id)
- 		tv.tv_usec = 50000;	/* 50ms timeout */
- 		have_rx = 0;
- 
--		ret = select(m, &rdfs, NULL, NULL, &tv);
--		if (ret < 0) {
--			perror("select");
--			exit(1);
--		}
-+		if (select(m, &rdfs, NULL, NULL, &tv) < 0)
-+			tst_brk(TBROK | TERRNO, "select");
- 
- 		if (FD_ISSET(s, &rdfs)) {
- 
- 			have_rx = 1;
--			ret = read(s, &frame, sizeof(struct can_frame));
--			if (ret < 0) {
--				perror("read");
--				exit(1);
--			}
--			if (frame.can_id != can_id) {
--				fprintf(stderr, "received wrong can_id!\n");
--				exit(1);
--			}
--			rx.s++;
-+			SAFE_READ(1, s, &frame, sizeof(struct can_frame));
-+
-+			if (frame.can_id != can_id)
-+				tst_res(TFAIL, "received wrong can_id!");
-+
-+			rxs++;
- 		}
- 
- 		if (FD_ISSET(t, &rdfs)) {
- 
- 			have_rx = 1;
--			ret = read(t, &frame, sizeof(struct can_frame));
--			if (ret < 0) {
--				perror("read");
--				exit(1);
--			}
--			if (frame.can_id != can_id) {
--				fprintf(stderr, "received wrong can_id!\n");
--				exit(1);
--			}
--			rx.t++;
-+			SAFE_READ(1, t, &frame, sizeof(struct can_frame));
-+
-+			if (frame.can_id != can_id)
-+				tst_res(TFAIL, "received wrong can_id!");
-+
-+			rxt++;
- 		}
- 	}
- 
- 	/* timeout */
- 
--	return rx;
-+	tst_res(rxs == expect_rxs && rxt == expect_rxt ? TPASS : TFAIL,
-+		"s received %d of %d, t received %d of %d",
-+		rxs, expect_rxs, rxt, expect_rxt);
- }
- 
--void setopts(int s, int loopback, int recv_own_msgs)
-+static void setopts(int loopback, int recv_own_msgs)
- {
--	setsockopt(s, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback,
--		   sizeof(loopback));
--	setsockopt(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS, &recv_own_msgs,
--		   sizeof(recv_own_msgs));
-+	SAFE_SETSOCKOPT(s, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback,
-+			sizeof(loopback));
-+	SAFE_SETSOCKOPT(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS, &recv_own_msgs,
-+			sizeof(recv_own_msgs));
- 
--	printf("check loopback %d recv_own_msgs %d ... ", loopback,
--	       recv_own_msgs);
-+	tst_res(TINFO, "set loopback = %d, recv_own_msgs = %d",
-+		loopback, recv_own_msgs);
- }
- 
--int main(int argc, char **argv)
-+static void setup(void)
- {
--	int s, t;
- 	struct sockaddr_can addr;
- 	struct ifreq ifr;
--	struct rxs rx;
- 
--	/* check command line options */
--	if (argc != 2) {
--		fprintf(stderr, "Usage: %s <device>\n", argv[0]);
--		return TFAIL;
--	}
-+	can_setup_vcan();
- 
--	s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
--	if (s < 0) {
--		perror("socket");
--		return TFAIL;
--	}
--	t = socket(PF_CAN, SOCK_RAW, CAN_RAW);
--	if (t < 0) {
--		perror("socket");
--		return TFAIL;
--	}
-+	s = SAFE_SOCKET(PF_CAN, SOCK_RAW, CAN_RAW);
-+	t = SAFE_SOCKET(PF_CAN, SOCK_RAW, CAN_RAW);
-+
-+	strcpy(ifr.ifr_name, can_dev_name);
-+	SAFE_IOCTL(s, SIOCGIFINDEX, &ifr);
- 
--	strcpy(ifr.ifr_name, argv[1]);
--	if (ioctl(s, SIOCGIFINDEX, &ifr) < 0) {
--		perror("SIOCGIFINDEX");
--		return TFAIL;
--	}
- 	addr.can_ifindex = ifr.ifr_ifindex;
- 	addr.can_family = AF_CAN;
- 
--	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
--		perror("bind");
--		return TFAIL;
--	}
--	if (bind(t, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
--		perror("bind");
--		return TFAIL;
--	}
-+	SAFE_BIND(s, (struct sockaddr *)&addr, sizeof(addr));
-+	SAFE_BIND(t, (struct sockaddr *)&addr, sizeof(addr));
-+}
- 
--	printf("Starting PF_CAN frame flow test.\n");
--	printf("checking socket default settings ... ");
--	rx = test_sockets(s, t, 0x340);
--	if (rx.s == 0 && rx.t == 1)
--		printf("ok.\n");
--	else {
--		printf("failure!\n");
--		return TFAIL;
--	}
-+static void cleanup(void)
-+{
-+	if (s)
-+		SAFE_CLOSE(s);
-+	if (t)
-+		SAFE_CLOSE(t);
- 
--	/* check loopback 0 recv_own_msgs 0 */
--	setopts(s, 0, 0);
--	rx = test_sockets(s, t, 0x341);
--	if (rx.s == 0 && rx.t == 0)
--		printf("ok.\n");
--	else {
--		printf("failure!\n");
--		return TFAIL;
--	}
-+	can_cleanup_vcan();
-+}
- 
--	/* check loopback 0 recv_own_msgs 1 */
--	setopts(s, 0, 1);
--	rx = test_sockets(s, t, 0x342);
--	if (rx.s == 0 && rx.t == 0)
--		printf("ok.\n");
--	else {
--		printf("failure!\n");
--		return TFAIL;
--	}
-+static void run(void)
-+{
-+	tst_res(TINFO, "Starting PF_CAN frame flow test.");
-+	tst_res(TINFO, "checking socket default settings");
-+	test_sockets(0x340, 0, 1);
- 
--	/* check loopback 1 recv_own_msgs 0 */
--	setopts(s, 1, 0);
--	rx = test_sockets(s, t, 0x343);
--	if (rx.s == 0 && rx.t == 1)
--		printf("ok.\n");
--	else {
--		printf("failure!\n");
--		return TFAIL;
--	}
-+	setopts(0, 0);
-+	test_sockets(0x341, 0, 0);
- 
--	/* check loopback 1 recv_own_msgs 1 */
--	setopts(s, 1, 1);
--	rx = test_sockets(s, t, 0x344);
--	if (rx.s == 1 && rx.t == 1)
--		printf("ok.\n");
--	else {
--		printf("failure!\n");
--		return TFAIL;
--	}
-+	setopts(0, 1);
-+	test_sockets(0x342, 0, 0);
- 
--	printf("PF_CAN frame flow test was successful.\n");
-+	setopts(1, 0);
-+	test_sockets(0x343, 0, 1);
- 
--	close(s);
--	close(t);
-+	setopts(1, 1);
-+	test_sockets(0x344, 1, 1);
- 
--	return TPASS;
-+	/* Return to defaults for when -i is used */
-+	setopts(1, 0);
- }
- 
-+static struct tst_test test = {
-+	.options = (struct tst_option[]) {
-+		{"D:", &can_dev_name, "-D <device>	CAN device name"},
-+		{}
-+	},
-+	.setup = setup,
-+	.cleanup = cleanup,
-+	.test_all = run,
-+	.caps = (struct tst_cap []) {
-+		TST_CAP(TST_CAP_REQ, CAP_NET_RAW),
-+		TST_CAP(TST_CAP_DROP, CAP_SYS_ADMIN),
-+		{}
-+	},
-+	.needs_drivers = (const char *const[]) {
-+		"vcan",
-+		"can-raw",
-+		NULL
-+	}
-+};
-+
- #else
- 
--int main(void)
+ include $(top_srcdir)/include/mk/generic_leaf_target.mk
+diff --git a/testcases/network/can/filter-tests/can_run_tests.sh b/testcases/network/can/filter-tests/can_run_tests.sh
+deleted file mode 100755
+index 762d90eca..000000000
+--- a/testcases/network/can/filter-tests/can_run_tests.sh
++++ /dev/null
+@@ -1,106 +0,0 @@
+-#!/bin/sh
+-################################################################################
+-## Copyright (c) Oliver Hartkopp <oliver.hartkopp@volkswagen.de>, 2011        ##
+-## Copyright (c) International Business Machines  Corp., 2009                 ##
+-##                                                                            ##
+-## This program is free software;  you can redistribute it and#or modify      ##
+-## it under the terms of the GNU General Public License as published by       ##
+-## the Free Software Foundation; either version 2 of the License, or          ##
+-## (at your option) any later version.                                        ##
+-##                                                                            ##
+-## This program is distributed in the hope that it will be useful, but        ##
+-## WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY ##
+-## or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License   ##
+-## for more details.                                                          ##
+-##                                                                            ##
+-## You should have received a copy of the GNU General Public License          ##
+-## along with this program;  if not, write to the Free Software Foundation,   ##
+-## Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA           ##
+-##                                                                            ##
+-################################################################################
+-
+-TCID="$1"
+-TST_TOTAL=1
+-export TST_COUNT
+-
+-. test.sh
+-
+-setup()
 -{
--	printf("The linux/can.h was missing upon compilation.\n");
--	return TCONF;
+-	tst_require_root
+-
+-	# load needed CAN networklayer modules
+-	modprobe can
+-	ret=$?
+-	if [ $ret -ne 0 ]; then
+-		tst_brkm TCONF "modprobe can failed: ret - $ret"
+-	fi
+-
+-	modprobe can_raw
+-	ret=$?
+-	if [ $ret -ne 0 ]; then
+-		tst_brkm TCONF "modprobe can_raw failed: ret - $ret"
+-	fi
+-
+-	# ensure the vcan driver to perform the ECHO on driver level
+-	modprobe -r vcan
+-	ret=$?
+-	if [ $ret -ne 0 ]; then
+-		tst_brkm TCONF "modprobe -r vcan failed: ret - $ret"
+-	fi
+-
+-	modprobe vcan echo=1
+-	ret=$?
+-	if [ $ret -ne 0 ]; then
+-		tst_brkm TCONF "modprobe vcan echo=1 failed: ret - $ret"
+-	fi
+-
+-	VCAN=vcan0
+-
+-	# create virtual CAN device
+-	ip link add dev $VCAN type vcan
+-	ret=$?
+-	if [ $ret -ne 0 ]; then
+-		tst_brkm TBROK \
+-			 "ip link add dev $VCAN type vcan failed: ret - $ret"
+-	fi
+-
+-	ip link set dev $VCAN up
+-	ret=$?
+-	if [ $ret -ne 0 ]; then
+-		tst_brkm TBROK "ip link set dev $VCAN up failed: ret - $ret"
+-	fi
+-
+-	# check precondition for CAN frame flow test
+-	HAS_ECHO=`ip link show $VCAN | grep -c ECHO`
+-	if [ $HAS_ECHO -ne 1 ]; then
+-		tst_brkm TBROK "ECHO is not 1"
+-	fi
 -}
-+TST_TEST_TCONF("The linux/can.h was missing upon compilation");
- 
- #endif /* HAVE_LINUX_CAN_H */
+-
+-cleanup()
+-{
+-	ip link set dev $VCAN down
+-	ip link del dev $VCAN
+-	modprobe -r vcan
+-	modprobe -r can_raw
+-	modprobe -r can
+-}
+-
+-if [ $# -ne 1 ]; then
+-	tst_brkm TBROK "Usage: $0 [can_filter | can_rcv_own_msgs]"
+-fi
+-
+-setup
+-TST_CLEANUP=cleanup
+-
+-"$1" "$VCAN"
+-ret=$?
+-case "$ret" in
+-0)	tst_resm TPASS "Test $1 PASS";;
+-1)	tst_resm TFAIL "Test $1 FAIL";;
+-32)	tst_resm TCONF "$1 is not appropriate for configuration flag";;
+-*)	tst_resm TBROK "Invalid resm type $ret";;
+-esac
+-
+-tst_exit
 -- 
 2.30.0
 
