@@ -2,85 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF042FD2E1
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8D32FD2E3
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390494AbhATOih (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 09:38:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60420 "EHLO mx2.suse.de"
+        id S1728897AbhATOij (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 09:38:39 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60454 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389175AbhATOiY (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        id S2390380AbhATOiY (ORCPT <rfc822;linux-can@vger.kernel.org>);
         Wed, 20 Jan 2021 09:38:24 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611153456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=IjY/D1iXjKz54pM82wpuiKbmLEMaLpoadCsoWoh5Jog=;
-        b=pVOso3GEue7YH2GAuPKkrbOTS3CfmWwpiTy8dfAgeu/OebjoVkWVRPLBizO0kUKvCzxU6h
-        NBXx/IdPHyqyyBjkA6bKz8qkR9qQSFj6kdT7cWEB6zZprn7bfMgjsv2BKIuTH2qEOCHTJt
-        QFDuK5vPTdvoMAfSAdg2h2+cGHXTx6g=
+        t=1611153457; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0xgX7YPXzNS9rb1w3IpK/3aOUFtKLDljIQ672WlmTLU=;
+        b=BJ89Vl2NW1T1s6jYod39xoXuxBMUgMGzQdBM1TzoYHskV3GBxiOQ22UKFOloaxnJjwG8L5
+        UxkHzeAsiTDDmAPp9b+JtqSWRE98Eq02J5OWvzorK8iP1oSZq4r0OWfOgv/ULqbvmuuG0R
+        gxSp/JbohbIGLlUCV7+Vr/HcImgak48=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A9971AB9F;
-        Wed, 20 Jan 2021 14:37:36 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id ADC81ACAC;
+        Wed, 20 Jan 2021 14:37:37 +0000 (UTC)
 From:   Richard Palethorpe <rpalethorpe@suse.com>
 To:     ltp@lists.linux.it
 Cc:     linux-can@vger.kernel.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Richard Palethorpe <rpalethorpe@suse.com>
-Subject: [PATCH v3 0/7] Convert CAN tests to new LTP API
-Date:   Wed, 20 Jan 2021 14:37:16 +0000
-Message-Id: <20210120143723.26483-1-rpalethorpe@suse.com>
+Subject: [PATCH v3 1/7] API: Add FILE_SCANF to new lib
+Date:   Wed, 20 Jan 2021 14:37:17 +0000
+Message-Id: <20210120143723.26483-2-rpalethorpe@suse.com>
 X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210120143723.26483-1-rpalethorpe@suse.com>
+References: <20210120143723.26483-1-rpalethorpe@suse.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
+---
+ include/tst_safe_file_ops.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-This is an attempt to convert the CAN tests to the (modern) Linux Test
-Project API and removes the wrapper script. To be clear, this is a
-patch-set for the LTP *not* the kernel tree or can-utils.
-
-I have tried to keep the core test behaviour the same, but (for
-example) moving to the SAFE_ functions will naturally introduce some
-changes in error checking. Deliberate behavioral changes have been
-noted in the commit messages.
-
-FYI, we appear to have 4 CAN tests in LTP including two tests for
-SLCAN (pty03, pty04).
-
-V2: Update e-mail addresses and resend
-V3:
-* Add COPYING and use dual license SPDX identifier
-* Fix compilation issues with can_common.h
-
-Richard Palethorpe (7):
-  API: Add FILE_SCANF to new lib
-  can: Add can_common.h for vcan device setup
-  can: Add COPYING with dual license text
-  can_filter: Convert to new library
-  can_recv_own_msgs: Convert to new library
-  can: Remove obsolete test wrapper script
-  can: Update contact details
-
- include/tst_safe_file_ops.h                   |   3 +
- testcases/network/can/Makefile                |   2 -
- .../can/filter-tests/00_Descriptions.txt      |   6 +-
- testcases/network/can/filter-tests/COPYING    |  35 ++
- testcases/network/can/filter-tests/INSTALL    |   3 +-
- testcases/network/can/filter-tests/Makefile   |   4 -
- .../network/can/filter-tests/can_common.h     |  75 +++++
- .../network/can/filter-tests/can_filter.c     | 317 +++++++-----------
- .../can/filter-tests/can_rcv_own_msgs.c       | 273 +++++----------
- .../network/can/filter-tests/can_run_tests.sh | 106 ------
- 10 files changed, 331 insertions(+), 493 deletions(-)
- create mode 100644 testcases/network/can/filter-tests/COPYING
- create mode 100644 testcases/network/can/filter-tests/can_common.h
- delete mode 100755 testcases/network/can/filter-tests/can_run_tests.sh
-
+diff --git a/include/tst_safe_file_ops.h b/include/tst_safe_file_ops.h
+index 894c16123..ea8f89263 100644
+--- a/include/tst_safe_file_ops.h
++++ b/include/tst_safe_file_ops.h
+@@ -7,6 +7,9 @@
+ 
+ #include "safe_file_ops_fn.h"
+ 
++#define FILE_SCANF(path, fmt, ...) \
++	file_scanf(__FILE__, __LINE__, (path), (fmt), ## __VA_ARGS__)
++
+ #define SAFE_FILE_SCANF(path, fmt, ...) \
+ 	safe_file_scanf(__FILE__, __LINE__, NULL, \
+ 	                (path), (fmt), ## __VA_ARGS__)
 -- 
 2.30.0
 
