@@ -2,38 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4A52FCCB9
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 09:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8DB2FCCD8
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 09:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730883AbhATI3d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 03:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        id S1729684AbhATIhN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 03:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730530AbhATI3I (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jan 2021 03:29:08 -0500
+        with ESMTP id S1730521AbhATIfi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jan 2021 03:35:38 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85D9C061575
-        for <linux-can@vger.kernel.org>; Wed, 20 Jan 2021 00:28:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA90C0613D3
+        for <linux-can@vger.kernel.org>; Wed, 20 Jan 2021 00:34:58 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l28qd-0001o5-1r; Wed, 20 Jan 2021 09:28:15 +0100
+        id 1l28x6-0002Sl-Kc; Wed, 20 Jan 2021 09:34:56 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:26cf:9004:ca44:570] (unknown [IPv6:2a03:f580:87bc:d400:26cf:9004:ca44:570])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3034B5C8845;
-        Wed, 20 Jan 2021 08:28:12 +0000 (UTC)
-Subject: Re: [PATCH] can: dev: export can_get_state_str() function
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Alejandro Concepcion Rodriguez <alejandro@acoro.eu>
-References: <20210119170355.12040-1-mailhol.vincent@wanadoo.fr>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CAB455C8851;
+        Wed, 20 Jan 2021 08:34:55 +0000 (UTC)
+Subject: Re: [PATCH v3] can: length: can_fd_len2dlc(): make length calculation
+ readable again
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+References: <20210118201346.79422-1-socketcan@hartkopp.net>
+ <6ef62f6d-c53d-1fe6-7983-3cafc201c516@pengutronix.de>
+ <34875dce-5159-1fc5-3ada-25b9b864dd57@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,15 +95,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <d899df22-cbb0-e7ee-80af-84bbe9eb1c5e@pengutronix.de>
-Date:   Wed, 20 Jan 2021 09:28:08 +0100
+Message-ID: <4f5be763-504a-f6eb-5ed7-2f5ce3144a8b@pengutronix.de>
+Date:   Wed, 20 Jan 2021 09:34:52 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210119170355.12040-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <34875dce-5159-1fc5-3ada-25b9b864dd57@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="ySNqsHA82jUiXJZBj5Vo4r8eitTD9RRfc"
+ boundary="YBtxyGenkau5jMqPtO1ifRjEW3FTi8wxJ"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,32 +113,61 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ySNqsHA82jUiXJZBj5Vo4r8eitTD9RRfc
-Content-Type: multipart/mixed; boundary="9kfTYkaKaZkRJAXuPIzZXzd2N3wfGq9Br";
+--YBtxyGenkau5jMqPtO1ifRjEW3FTi8wxJ
+Content-Type: multipart/mixed; boundary="4osy6R5BovFys5CyMWiVzQen15XSsRBeX";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>,
- Wolfgang Grandegger <wg@grandegger.com>,
- Alejandro Concepcion Rodriguez <alejandro@acoro.eu>
-Message-ID: <d899df22-cbb0-e7ee-80af-84bbe9eb1c5e@pengutronix.de>
-Subject: Re: [PATCH] can: dev: export can_get_state_str() function
-References: <20210119170355.12040-1-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20210119170355.12040-1-mailhol.vincent@wanadoo.fr>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Message-ID: <4f5be763-504a-f6eb-5ed7-2f5ce3144a8b@pengutronix.de>
+Subject: Re: [PATCH v3] can: length: can_fd_len2dlc(): make length calculation
+ readable again
+References: <20210118201346.79422-1-socketcan@hartkopp.net>
+ <6ef62f6d-c53d-1fe6-7983-3cafc201c516@pengutronix.de>
+ <34875dce-5159-1fc5-3ada-25b9b864dd57@hartkopp.net>
+In-Reply-To: <34875dce-5159-1fc5-3ada-25b9b864dd57@hartkopp.net>
 
---9kfTYkaKaZkRJAXuPIzZXzd2N3wfGq9Br
+--4osy6R5BovFys5CyMWiVzQen15XSsRBeX
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 1/19/21 6:03 PM, Vincent Mailhol wrote:
-> The can_get_state_str() function is also relevant to the
-> drivers. Export the symbol and make it visible in the can/dev.h
-> header.
+On 1/18/21 9:58 PM, Oliver Hartkopp wrote:
+>>> diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/lengt=
+h.c
+>>> index d35c4e82314d..d085cb26d00d 100644
+>>> --- a/drivers/net/can/dev/length.c
+>>> +++ b/drivers/net/can/dev/length.c
+>>> @@ -25,16 +25,21 @@ static const u8 len2dlc[] =3D {
+>>>   	11, 11, 11, 11,			/* 17 - 20 */
+>>>   	12, 12, 12, 12,			/* 21 - 24 */
+>>>   	13, 13, 13, 13, 13, 13, 13, 13,	/* 25 - 32 */
+>>>   	14, 14, 14, 14, 14, 14, 14, 14,	/* 33 - 40 */
+>>>   	14, 14, 14, 14, 14, 14, 14, 14,	/* 41 - 48 */
+>>> +	15, 15, 15, 15, 15, 15, 15, 15,	/* 49 - 56 */
+>>> +	15, 15, 15, 15, 15, 15, 15, 15	/* 57 - 64 */
+>>>   };
+>>>  =20
+>>>   /* map the sanitized data length to an appropriate data length code=
+ */
+>>>   u8 can_fd_len2dlc(u8 len)
+>>>   {
+>>> -	if (len >=3D ARRAY_SIZE(len2dlc))
+>>> +	/* check for length mapping table size at build time */
+>>> +	BUILD_BUG_ON(ARRAY_SIZE(len2dlc) < CANFD_MAX_DLEN + 1);
+>>                                          ^^^
+>> What about "!=3D"?
 >=20
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> "<" makes sure that the table is long enough
+> "!=3D" makes sure it has a specific length
 
-Applied to linux-can-next/testing
+=46rom my point of view we want it to have a specific length...
+
+> So "<" looks easier to understand to me.
+>=20
+> =C2=AF\_(=E3=83=84)_/=C2=AF
+
+=2E..so changed to !=3D why applying to linux-can-next/testing
 
 regards,
 Marc
@@ -150,23 +179,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---9kfTYkaKaZkRJAXuPIzZXzd2N3wfGq9Br--
+--4osy6R5BovFys5CyMWiVzQen15XSsRBeX--
 
---ySNqsHA82jUiXJZBj5Vo4r8eitTD9RRfc
+--YBtxyGenkau5jMqPtO1ifRjEW3FTi8wxJ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAH6ZgACgkQqclaivrt
-76nbCggAtp2Gpf09NnO70pVYX1SuAe6Ju9aAYIutUQHlptEUTugneMewdvwjK1zA
-Us2YVb0rKojCqG0enog/dTB1NUSLaS4CdKYB+BDwsCP5y2B+8x/IPtJXZnzqmTOM
-IzcAEAbPC7H9j0JLHyu+pH9wZABRpdBzmpm0bThleOBT+M/vKpO4391hdPgvgXbF
-WSrRnqPzpjxvTglCZjTput1o7AE/AhhsBSJZwJRQahIs1r03GfZyJ1tA2pz6HOgt
-vByDsaI6OKQvfkxV37/DoGq7Q7ZE5kbp9W7vtRj0EF90SIXNwWhuug2i7JFYKyPx
-hs6zR703OW1Ds/nOyFH0biN+GtOUow==
-=uGvD
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAH6ywACgkQqclaivrt
+76nI3Af/XFcJbX8g1Y/rnuQoVE2qHob3LLgdS/6loFBr8Lgp02QE9DVyuVFqtHBv
+KpqSB3MJCBEZO7h7seKs65QvfGnmMtjL6CvmBZA+LjUvvWs5C10+2r7h7W17/2lZ
+OIxO9lg0Eeg7gqLoqju0zxjysFFCAitADAHKhWmEGNn5sQSfVwmPU85NC2zwCJsj
+M11OU5ujX1FK38jg+XGv7T/30d9x5/MIF84VAGktp6Im9zqA9p2YJmfP8v0LevF8
+kfO7qwu93mEM77UUl9DCenVMh++Of4WiMrie+S8+c9AUYPGZpHJmeKqu3NqVo4y0
+1h9fl7duDFmfirzSJDua8T+2Z4X1Dw==
+=6y0a
 -----END PGP SIGNATURE-----
 
---ySNqsHA82jUiXJZBj5Vo4r8eitTD9RRfc--
+--YBtxyGenkau5jMqPtO1ifRjEW3FTi8wxJ--
