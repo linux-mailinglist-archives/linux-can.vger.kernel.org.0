@@ -2,85 +2,85 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB5D2FD21C
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 14:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF042FD2E1
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387652AbhATN4r (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 08:56:47 -0500
-Received: from mail-yb1-f179.google.com ([209.85.219.179]:35529 "EHLO
-        mail-yb1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388004AbhATNbQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 20 Jan 2021 08:31:16 -0500
-Received: by mail-yb1-f179.google.com with SMTP id k132so12320553ybf.2;
-        Wed, 20 Jan 2021 05:31:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TDkQlUwx2SnbfI3bo/dvPQ9TYvp5Pg19eP3Xh9x9QQA=;
-        b=akR9tPgogBqDO1N0u69Dvan6xv8axu2t+ZJDkrnxmr5MppVTxF69kV1bTdEFl45tZN
-         lgsmSMMFrIlPxGXcLHn4PeanH0Gf+OR+MmVytcax6kQLzyy7bzbxNwB4CRTNT1c3si6k
-         9+zdQfVMn8zBjnCW/2fzmMz/YbxPMJAyBnZgVGkyybyiOOqMFk78aMd9pvRbLbBrpgsX
-         l2IwLknmetULmhrxNchL8zbGEP6KLmH6qbcRe9b1zFyXWqXjdR7u4XbZRmRQtwjUg31v
-         vQcACGexPMbvJr7dz9kr4NJ5Kc9Tk5ftyPnzbLiIM/Yr/GhRNIEYMkeJy8x1VurjIlWc
-         KMKw==
-X-Gm-Message-State: AOAM532ixOsN0M9ZZhp9AXIQhoVXfUCM2vnGHbLrEkyDObqlD1RxQ0Je
-        78Lft7fAFN3V6kOlHd0ryGOoXSXm82njPboTUsY=
-X-Google-Smtp-Source: ABdhPJyXniBHr/mjEIYxXgrcej64wZm2Dv4s6R/ANXLhIvvrZaLeby7h0bBliGh4tZh4wy6V/MqgDH3HRBfMB5BfZYI=
-X-Received: by 2002:a25:5583:: with SMTP id j125mr12566111ybb.307.1611149434990;
- Wed, 20 Jan 2021 05:30:34 -0800 (PST)
+        id S2390494AbhATOih (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 09:38:37 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60420 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389175AbhATOiY (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 20 Jan 2021 09:38:24 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1611153456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=IjY/D1iXjKz54pM82wpuiKbmLEMaLpoadCsoWoh5Jog=;
+        b=pVOso3GEue7YH2GAuPKkrbOTS3CfmWwpiTy8dfAgeu/OebjoVkWVRPLBizO0kUKvCzxU6h
+        NBXx/IdPHyqyyBjkA6bKz8qkR9qQSFj6kdT7cWEB6zZprn7bfMgjsv2BKIuTH2qEOCHTJt
+        QFDuK5vPTdvoMAfSAdg2h2+cGHXTx6g=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id A9971AB9F;
+        Wed, 20 Jan 2021 14:37:36 +0000 (UTC)
+From:   Richard Palethorpe <rpalethorpe@suse.com>
+To:     ltp@lists.linux.it
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Richard Palethorpe <rpalethorpe@suse.com>
+Subject: [PATCH v3 0/7] Convert CAN tests to new LTP API
+Date:   Wed, 20 Jan 2021 14:37:16 +0000
+Message-Id: <20210120143723.26483-1-rpalethorpe@suse.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20210120114137.200019-1-mailhol.vincent@wanadoo.fr>
- <20210120114137.200019-2-mailhol.vincent@wanadoo.fr> <994ac0a3-afd9-eca7-9640-e001f5a43d65@pengutronix.de>
-In-Reply-To: <994ac0a3-afd9-eca7-9640-e001f5a43d65@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 20 Jan 2021 22:30:24 +0900
-Message-ID: <CAMZ6RqL46r5FnD7WQqFa5Z715id7r3qrdh2nR=gVFesLDdrCQA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] can: dev: can_restart: fix use after free bug
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Loris Fauster <loris.fauster@ttcontrol.com>,
-        Alejandro Concepcion Rodriguez <alejandro@acoro.eu>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 20 janv. 2021 at 21:53, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 1/20/21 12:41 PM, Vincent Mailhol wrote:
-> > After calling netif_rx_ni(skb), dereferencing skb is unsafe.
-> > Especially, the can_frame cf which aliases skb memory is accessed
-> > after the netif_rx_ni() in:
-> >       stats->rx_bytes += cf->len;
-> >
-> > Reordering the lines solves the issue.
-> >
-> > Fixes: 39549eef3587 ("can: CAN Network device driver and Netlink interface")
-> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> > ---
-> > *Remark for upstream*
-> > drivers/net/can/dev.c has been moved to drivers/net/can/dev/dev.c in
-> > below commit, please carry the patch forward.
-> > Reference: 3e77f70e7345 ("can: dev: move driver related infrastructure
-> > into separate subdir")
->
-> I've send a pull request to Jakub and David. Let's see what happens :)
+Hello,
 
-Thanks!
+This is an attempt to convert the CAN tests to the (modern) Linux Test
+Project API and removes the wrapper script. To be clear, this is a
+patch-set for the LTP *not* the kernel tree or can-utils.
 
-Yours sincerely,
-Vincent
+I have tried to keep the core test behaviour the same, but (for
+example) moving to the SAFE_ functions will naturally introduce some
+changes in error checking. Deliberate behavioral changes have been
+noted in the commit messages.
 
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
->
+FYI, we appear to have 4 CAN tests in LTP including two tests for
+SLCAN (pty03, pty04).
+
+V2: Update e-mail addresses and resend
+V3:
+* Add COPYING and use dual license SPDX identifier
+* Fix compilation issues with can_common.h
+
+Richard Palethorpe (7):
+  API: Add FILE_SCANF to new lib
+  can: Add can_common.h for vcan device setup
+  can: Add COPYING with dual license text
+  can_filter: Convert to new library
+  can_recv_own_msgs: Convert to new library
+  can: Remove obsolete test wrapper script
+  can: Update contact details
+
+ include/tst_safe_file_ops.h                   |   3 +
+ testcases/network/can/Makefile                |   2 -
+ .../can/filter-tests/00_Descriptions.txt      |   6 +-
+ testcases/network/can/filter-tests/COPYING    |  35 ++
+ testcases/network/can/filter-tests/INSTALL    |   3 +-
+ testcases/network/can/filter-tests/Makefile   |   4 -
+ .../network/can/filter-tests/can_common.h     |  75 +++++
+ .../network/can/filter-tests/can_filter.c     | 317 +++++++-----------
+ .../can/filter-tests/can_rcv_own_msgs.c       | 273 +++++----------
+ .../network/can/filter-tests/can_run_tests.sh | 106 ------
+ 10 files changed, 331 insertions(+), 493 deletions(-)
+ create mode 100644 testcases/network/can/filter-tests/COPYING
+ create mode 100644 testcases/network/can/filter-tests/can_common.h
+ delete mode 100755 testcases/network/can/filter-tests/can_run_tests.sh
+
+-- 
+2.30.0
+
