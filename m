@@ -2,80 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE612FD43C
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 16:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7992FD6D1
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 18:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732871AbhATOvH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 09:51:07 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33198 "EHLO mx2.suse.de"
+        id S1728250AbhATRVI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 12:21:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33762 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390516AbhATOjM (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 20 Jan 2021 09:39:12 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611153460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2j0XbK/1WjIdhU456gkB7ScjrGdsote0niueTWY6heM=;
-        b=aajR17uSNHPtQmCvNzhtnlfi6AGrnOJo8Be8WOecBeh+KAeAMdT7QV1RKePB80iQo72Qd7
-        ez6dme0WUqL45uwDo3p5qkpJggSsLwP9MWWu7hpv8d37pNBHWYdz4KnK+glLJbflERvZRJ
-        mvTOfDrOW7E9JD3dk/1z+oSvmDR5Tlc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1CC0FAD8C;
-        Wed, 20 Jan 2021 14:37:40 +0000 (UTC)
-From:   Richard Palethorpe <rpalethorpe@suse.com>
-To:     ltp@lists.linux.it
-Cc:     linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Richard Palethorpe <rpalethorpe@suse.com>
-Subject: [PATCH v3 7/7] can: Update contact details
-Date:   Wed, 20 Jan 2021 14:37:23 +0000
-Message-Id: <20210120143723.26483-8-rpalethorpe@suse.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210120143723.26483-1-rpalethorpe@suse.com>
-References: <20210120143723.26483-1-rpalethorpe@suse.com>
+        id S2390947AbhATRUi (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 20 Jan 2021 12:20:38 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0D05822CE3;
+        Wed, 20 Jan 2021 17:19:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611163196;
+        bh=f9NjFTR2vJgUfpqeCtF+sXxDu7N4LTV5PQEfjR1od4Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Xkl/AwNYXYuEEaNYRJHeeZ9Ssl60aEZCMol7iRmgu2XKxN40uXHGVSgyqnEMRWzrI
+         TslyLawgLPhLKxKpXTbX+xUQ97y266JEtdRtcAv/uwTAEwlgqHKTmIkcCmxK4FSjce
+         lRJMGefeo/8wqkj2hs2ITJ68k3sTaH2qkBEufDh4oKHejkFO3Hn772mjsY+DYfR69/
+         bpTJlG/PDJVai72tqGeblqO0rg/GY/B2S9vAje4JTz5dnvKLEw/c1AbGhnl7bOVBnY
+         yYjshtFMhdyi/AmlooQXfRsc9yQXuKHmSGtSsdSe22yhlTRptGwDdLpzG0FBiPYSkH
+         lzoyZkZtm+RJw==
+Date:   Wed, 20 Jan 2021 09:19:55 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: pull-request: can 2021-01-20
+Message-ID: <20210120091955.54a52e09@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210120125202.2187358-1-mkl@pengutronix.de>
+References: <20210120125202.2187358-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-socketcan-users appears to be no more.
+On Wed, 20 Jan 2021 13:51:59 +0100 Marc Kleine-Budde wrote:
+> Hello Jakub, hello David,
+> 
+> this is a pull request of 3 patches for net/master.
+> 
+> All three patches are by Vincent Mailhol and fix a potential use after free bug
+> in the CAN device infrastructure, the vxcan driver, and the peak_usk driver. In
+> the TX-path the skb is used to read from after it was passed to the networking
+> stack with netif_rx_ni().
 
-Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
----
- testcases/network/can/filter-tests/00_Descriptions.txt | 5 +++--
- testcases/network/can/filter-tests/Makefile            | 2 --
- 2 files changed, 3 insertions(+), 4 deletions(-)
+Pulled, thanks.
 
-diff --git a/testcases/network/can/filter-tests/00_Descriptions.txt b/testcases/network/can/filter-tests/00_Descriptions.txt
-index 55d213456..9623d29a0 100644
---- a/testcases/network/can/filter-tests/00_Descriptions.txt
-+++ b/testcases/network/can/filter-tests/00_Descriptions.txt
-@@ -6,5 +6,6 @@ information on the CAN network protocol family PF_CAN is contained in
- 
- For any issue(s) with CAN tests please write to:
- <ltp@lists.linux.it>
--<socketcan-users@lists.berlios.de>,
--Oliver Hartkopp <oliver.hartkopp@volkswagen.de>,
-+Oliver Hartkopp <socketcan@hartkopp.net>
-+Linux-CAN ML <linux-can@vger.kernel.org>
-+
-diff --git a/testcases/network/can/filter-tests/Makefile b/testcases/network/can/filter-tests/Makefile
-index 29aaa3240..bd57c7fff 100644
---- a/testcases/network/can/filter-tests/Makefile
-+++ b/testcases/network/can/filter-tests/Makefile
-@@ -14,8 +14,6 @@
- #    You should have received a copy of the GNU General Public License along
- #    with this program; if not, write to the Free Software Foundation, Inc.,
- #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--#
--#  Send feedback to <socketcan-users@lists.berlios.de>
- 
- top_srcdir		?= ../../../..
- 
--- 
-2.30.0
+Seems like the PR didn't show up in patchwork at all :S Hopefully I can
+still pull reight manually without the scripts :)
 
+> Note: Patch 1/3 touches "drivers/net/can/dev.c". In net-next/master this file
+> has been moved to drivers/net/can/dev/dev.c [1] and parts of it have been
+> transfered into separate files. This may result in a merge conflict. Please
+> carry this patch forward, the change is rather simple. Drop us a note if
+> needed. Are any actions needed with regards to linux-next?
+
+Thanks for the note, I'm sending the PR to Linus now, so I think
+linux-next may never see the the conflict.
