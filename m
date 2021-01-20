@@ -2,14 +2,14 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4132FD2DE
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C482FD2E0
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390601AbhATOi3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 09:38:29 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60476 "EHLO mx2.suse.de"
+        id S2390416AbhATOie (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 09:38:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60498 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390416AbhATOiZ (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        id S2390494AbhATOiZ (ORCPT <rfc822;linux-can@vger.kernel.org>);
         Wed, 20 Jan 2021 09:38:25 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
@@ -17,12 +17,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a6hdMxU6bfIY9nuDlBnPbWgIEEGZnE8NhXKn9sSPVlQ=;
-        b=cTM2ED8VOEeu4a0EtFT7NRrUIuwvxQSK3b5jmw8koWkCC3j5npjoaLQkPf1ycNC9jG08Ly
-        yKrUdpOO2OSObRUuG6zzevi/Yik3JY5flwjMGXn1dG/g16mrRr/2YyoSWzOrhGARl8JNtI
-        /PXXX7339IpzSA8s1oifkx7CrF/ct+U=
+        bh=O8bxkecA30vKpvKXV5/2+zt45Y6vrE4AWViiGp85qzs=;
+        b=XthkpOnZxxtc//TIr/0+IE/0iE77xtWE/aVa3MZIHQjYwbEhjNNXGOCLaRWDqt3cnJjGFf
+        AjYaR8sU1jwYvCtB+PWHrR43eG9ejq7euylHE0vQdHgP6wjowLKDNllTzeYfD2FJTlnQny
+        N7jSaKnGLazS+AR/i+8sXsms/eLqOR0=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 1820AACAD;
+        by mx2.suse.de (Postfix) with ESMTP id 790A5ACE1;
         Wed, 20 Jan 2021 14:37:38 +0000 (UTC)
 From:   Richard Palethorpe <rpalethorpe@suse.com>
 To:     ltp@lists.linux.it
@@ -30,9 +30,9 @@ Cc:     linux-can@vger.kernel.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Richard Palethorpe <rpalethorpe@suse.com>
-Subject: [PATCH v3 2/7] can: Add can_common.h for vcan device setup
-Date:   Wed, 20 Jan 2021 14:37:18 +0000
-Message-Id: <20210120143723.26483-3-rpalethorpe@suse.com>
+Subject: [PATCH v3 3/7] can: Add COPYING with dual license text
+Date:   Wed, 20 Jan 2021 14:37:19 +0000
+Message-Id: <20210120143723.26483-4-rpalethorpe@suse.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210120143723.26483-1-rpalethorpe@suse.com>
 References: <20210120143723.26483-1-rpalethorpe@suse.com>
@@ -42,98 +42,60 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Note that we call modprobe to set echo=1. However this does seem to be
-necessary for the current tests on 5.10. It has been kept to avoid
-changing the test behavior unnecessarily, but can most likely be
-safely removed if it causes problems.
+This may be referred to with
+
+SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+
+The kernel version includes the syscall note, but the contents of the
+syscall note have never been included within the LTP CAN tests.
 
 Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
 ---
- .../network/can/filter-tests/can_common.h     | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 testcases/network/can/filter-tests/can_common.h
+ testcases/network/can/filter-tests/COPYING | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 testcases/network/can/filter-tests/COPYING
 
-diff --git a/testcases/network/can/filter-tests/can_common.h b/testcases/network/can/filter-tests/can_common.h
+diff --git a/testcases/network/can/filter-tests/COPYING b/testcases/network/can/filter-tests/COPYING
 new file mode 100644
-index 000000000..f15145f30
+index 000000000..2fa5eb911
 --- /dev/null
-+++ b/testcases/network/can/filter-tests/can_common.h
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2021 SUSE LLC
-+ */
++++ b/testcases/network/can/filter-tests/COPYING
+@@ -0,0 +1,35 @@
++Copyright (c) 2010-2011 Volkswagen Group Electronic Research
++All rights reserved.
 +
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions
++are met:
++1. Redistributions of source code must retain the above copyright
++   notice, this list of conditions and the following disclaimer.
++2. Redistributions in binary form must reproduce the above copyright
++   notice, this list of conditions and the following disclaimer in the
++   documentation and/or other materials provided with the distribution.
++3. Neither the name of Volkswagen nor the names of its contributors
++   may be used to endorse or promote products derived from this software
++   without specific prior written permission.
 +
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <sys/ioctl.h>
-+#include <sys/time.h>
++Alternatively, provided that this notice is retained in full, this
++software may be distributed under the terms of the GNU General
++Public License ("GPL") version 2, in which case the provisions of the
++GPL apply INSTEAD OF those given above.
 +
-+#include "tst_cmd.h"
-+#include "tst_safe_stdio.h"
-+#include "tst_safe_file_ops.h"
++The provided data structures and external interfaces from this code
++are not restricted to be used by modules with a GPL compatible license.
 +
-+#include <linux/if.h>
-+#include <linux/can.h>
-+#include <linux/can/raw.h>
-+
-+#ifndef IFF_ECHO
-+# define IFF_ECHO (1<<18)
-+#endif
-+
-+static char *can_dev_name;
-+static int can_created_dev;
-+
-+static void can_cmd(const char *const argv[])
-+{
-+	tst_cmd(argv, NULL, NULL, TST_CMD_TCONF_ON_MISSING);
-+}
-+
-+#define CAN_CMD(...) can_cmd((const char *const[]){ __VA_ARGS__, NULL })
-+
-+static void can_setup_vcan(void)
-+{
-+	unsigned int flags;
-+	char *path;
-+
-+	if (can_dev_name)
-+		goto check_echo;
-+
-+	can_dev_name = "vcan0";
-+
-+	tst_res(TINFO, "Creating vcan0 device; use -D option to avoid this");
-+
-+	CAN_CMD("modprobe", "-r", "vcan");
-+	CAN_CMD("modprobe", "vcan", "echo=1");
-+
-+	can_created_dev = 1;
-+
-+	CAN_CMD("ip", "link", "add", "dev", "vcan0", "type", "vcan");
-+	CAN_CMD("ip", "link", "set", "dev", "vcan0", "up");
-+
-+check_echo:
-+	/* Precondition for the frame flow test? */
-+	SAFE_ASPRINTF(&path, "/sys/class/net/%s/flags", can_dev_name);
-+	if (FILE_SCANF(path, "%x", &flags) || !(flags & IFF_ECHO)) {
-+		tst_res(TWARN, "Could not determine if ECHO is set on %s",
-+			can_dev_name);
-+	}
-+}
-+
-+static void can_cleanup_vcan(void)
-+{
-+	if (!can_created_dev)
-+		return;
-+
-+	CAN_CMD("ip", "link", "set", "dev", "vcan0", "down");
-+	CAN_CMD("ip", "link", "del", "dev", "vcan0");
-+	CAN_CMD("modprobe", "-r", "vcan");
-+}
++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
++DAMAGE.
 -- 
 2.30.0
 
