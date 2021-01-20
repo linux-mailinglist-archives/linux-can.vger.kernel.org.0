@@ -2,37 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2462FD2E5
-	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C3F2FD2EA
+	for <lists+linux-can@lfdr.de>; Wed, 20 Jan 2021 15:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732374AbhATOjJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 20 Jan 2021 09:39:09 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60520 "EHLO mx2.suse.de"
+        id S2390673AbhATOj6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 20 Jan 2021 09:39:58 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33194 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390516AbhATOi0 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 20 Jan 2021 09:38:26 -0500
+        id S2390513AbhATOjN (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 20 Jan 2021 09:39:13 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
         t=1611153459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Zc2VLeDPlgnNVz0Wq7v1E6qs0Z0oKAFaTotGbVP/wN4=;
-        b=AIF4idcHJd4pQ6YmUHvTRPUQKWap/Qyv+VOuAvUBSxBNhaEdEAlwFl9I5Cvv9SB+m+nvql
-        tNDfCcxK1oUO4dVlg8CfNhTPtOsTYbxaXumhvDSHHL/qKIOBILyvCwkO1ixZ29bgYutqgU
-        qYgOZiyq6jYi6mqqqHQRYGHf2BcN/5E=
+        bh=zM704vkttjmVp/mzJS1wza80yMe++CPILRdKR18++gU=;
+        b=Ig1oZ6RA+JiU1G0yHgCkMlhIh2Push2C3Vs533AsmCZLyPFT/letv1eKiIpI22XWNyqVDs
+        50wVxO/26NMM2bv8lYGV9KXJlZ9kfLGCPApercIM0iWIOYbWVsfjvfcNYfsN2Bz+3vvaB+
+        FIUHPH4XvNGqzmkPQcwqBsZBmtxMQcE=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DEAC8AD18;
-        Wed, 20 Jan 2021 14:37:38 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 4C4D9AD78;
+        Wed, 20 Jan 2021 14:37:39 +0000 (UTC)
 From:   Richard Palethorpe <rpalethorpe@suse.com>
 To:     ltp@lists.linux.it
 Cc:     linux-can@vger.kernel.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Richard Palethorpe <rpalethorpe@suse.com>
-Subject: [PATCH v3 4/7] can_filter: Convert to new library
-Date:   Wed, 20 Jan 2021 14:37:20 +0000
-Message-Id: <20210120143723.26483-5-rpalethorpe@suse.com>
+Subject: [PATCH v3 5/7] can_recv_own_msgs: Convert to new library
+Date:   Wed, 20 Jan 2021 14:37:21 +0000
+Message-Id: <20210120143723.26483-6-rpalethorpe@suse.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210120143723.26483-1-rpalethorpe@suse.com>
 References: <20210120143723.26483-1-rpalethorpe@suse.com>
@@ -42,25 +42,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Behavior is mostly the same, but on some errors we print fail and
-continue instead of exiting immediately. It appears this would result
-in more information being printed if there is a failure.
+Behavior is approximately the same except for the following:
+
+* Test will continue after non-fatal errors.
+* We now check the return value of `setsocketopt` and that I/O
+  completed the specified number of bytes.
+* The command line arg, device name, must be prepended with `-D`
 
 Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
 ---
- .../network/can/filter-tests/can_filter.c     | 317 +++++++-----------
- 1 file changed, 124 insertions(+), 193 deletions(-)
+ .../can/filter-tests/can_rcv_own_msgs.c       | 273 ++++++------------
+ 1 file changed, 88 insertions(+), 185 deletions(-)
 
-diff --git a/testcases/network/can/filter-tests/can_filter.c b/testcases/network/can/filter-tests/can_filter.c
-index db017451a..7377556cb 100644
---- a/testcases/network/can/filter-tests/can_filter.c
-+++ b/testcases/network/can/filter-tests/can_filter.c
-@@ -1,63 +1,15 @@
+diff --git a/testcases/network/can/filter-tests/can_rcv_own_msgs.c b/testcases/network/can/filter-tests/can_rcv_own_msgs.c
+index 8ad51d298..517daae51 100644
+--- a/testcases/network/can/filter-tests/can_rcv_own_msgs.c
++++ b/testcases/network/can/filter-tests/can_rcv_own_msgs.c
+@@ -1,88 +1,31 @@
 +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
  /*
-- * tst-filter.c
+- * tst-rcv-own-msgs.c
 - *
-  * Copyright (c) 2011 Volkswagen Group Electronic Research
+- * Copyright (c) 2010 Volkswagen Group Electronic Research
 - * All rights reserved.
 - *
 - * Redistribution and use in source and binary forms, with or without
@@ -98,6 +101,7 @@ index db017451a..7377556cb 100644
 - *
 - * Send feedback to <socketcan-users@lists.berlios.de>
 - *
++ * Copyright (c) 2011 Volkswagen Group Electronic Research
 + * Copyright (c) 2021 SUSE LLC
   */
  
@@ -113,6 +117,7 @@ index db017451a..7377556cb 100644
 -#include <net/if.h>
  #include "config.h"
 -#include "tst_res_flags.h"
+-#include "tst_minmax.h"
 +#include "tst_test.h"
  
  #ifdef HAVE_LINUX_CAN_H
@@ -120,50 +125,126 @@ index db017451a..7377556cb 100644
 -#include <linux/can.h>
 -#include <linux/can/raw.h>
 +#include "can_common.h"
++#include "tst_minmax.h"
  
- #define ID 0x123
- #define TC 18			/* # of testcases */
-@@ -66,7 +18,9 @@ const int rx_res[TC] = { 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1 };
- const int rxbits_res[TC] = { 4369, 4369, 4369, 4369, 17, 4352, 17, 4352, 257,
- 			     257, 4112, 4112, 1, 256, 16, 4096, 1, 256 };
+-struct rxs {
+-	int s;
+-	int t;
+-};
++static int s, t;
  
--canid_t calc_id(int testcase)
-+static int s;
-+
-+static canid_t calc_id(int testcase)
+-struct rxs test_sockets(int s, int t, canid_t can_id)
++void test_sockets(canid_t can_id, int expect_rxs, int expect_rxt)
  {
- 	canid_t id = ID;
+ 	fd_set rdfs;
+ 	struct timeval tv;
+ 	int m = MAX(s, t) + 1;
+ 	int have_rx = 1;
+ 	struct can_frame frame;
+-	struct rxs rx;
+-	int ret;
++	int rxs = 0, rxt = 0;
  
-@@ -78,7 +32,7 @@ canid_t calc_id(int testcase)
- 	return id;
+ 	frame.can_id = can_id;
+ 	frame.can_dlc = 0;
+-	if (write(s, &frame, sizeof(frame)) < 0) {
+-		perror("write");
+-		exit(1);
+-	}
+-
+-	rx.s = rx.t = 0;
++	SAFE_WRITE(1, s, &frame, sizeof(frame));
+ 
+ 	while (have_rx) {
+ 
+@@ -93,164 +36,124 @@ struct rxs test_sockets(int s, int t, canid_t can_id)
+ 		tv.tv_usec = 50000;	/* 50ms timeout */
+ 		have_rx = 0;
+ 
+-		ret = select(m, &rdfs, NULL, NULL, &tv);
+-		if (ret < 0) {
+-			perror("select");
+-			exit(1);
+-		}
++		if (select(m, &rdfs, NULL, NULL, &tv) < 0)
++			tst_brk(TBROK | TERRNO, "select");
+ 
+ 		if (FD_ISSET(s, &rdfs)) {
+ 
+ 			have_rx = 1;
+-			ret = read(s, &frame, sizeof(struct can_frame));
+-			if (ret < 0) {
+-				perror("read");
+-				exit(1);
+-			}
+-			if (frame.can_id != can_id) {
+-				fprintf(stderr, "received wrong can_id!\n");
+-				exit(1);
+-			}
+-			rx.s++;
++			SAFE_READ(1, s, &frame, sizeof(struct can_frame));
++
++			if (frame.can_id != can_id)
++				tst_res(TFAIL, "received wrong can_id!");
++
++			rxs++;
+ 		}
+ 
+ 		if (FD_ISSET(t, &rdfs)) {
+ 
+ 			have_rx = 1;
+-			ret = read(t, &frame, sizeof(struct can_frame));
+-			if (ret < 0) {
+-				perror("read");
+-				exit(1);
+-			}
+-			if (frame.can_id != can_id) {
+-				fprintf(stderr, "received wrong can_id!\n");
+-				exit(1);
+-			}
+-			rx.t++;
++			SAFE_READ(1, t, &frame, sizeof(struct can_frame));
++
++			if (frame.can_id != can_id)
++				tst_res(TFAIL, "received wrong can_id!");
++
++			rxt++;
+ 		}
+ 	}
+ 
+ 	/* timeout */
+ 
+-	return rx;
++	tst_res(rxs == expect_rxs && rxt == expect_rxt ? TPASS : TFAIL,
++		"s received %d of %d, t received %d of %d",
++		rxs, expect_rxs, rxt, expect_rxt);
  }
  
--canid_t calc_mask(int testcase)
-+static canid_t calc_mask(int testcase)
+-void setopts(int s, int loopback, int recv_own_msgs)
++static void setopts(int loopback, int recv_own_msgs)
  {
- 	canid_t mask = CAN_SFF_MASK;
+-	setsockopt(s, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback,
+-		   sizeof(loopback));
+-	setsockopt(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS, &recv_own_msgs,
+-		   sizeof(recv_own_msgs));
++	SAFE_SETSOCKOPT(s, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &loopback,
++			sizeof(loopback));
++	SAFE_SETSOCKOPT(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS, &recv_own_msgs,
++			sizeof(recv_own_msgs));
  
-@@ -93,174 +47,151 @@ canid_t calc_mask(int testcase)
- 	return mask;
+-	printf("check loopback %d recv_own_msgs %d ... ", loopback,
+-	       recv_own_msgs);
++	tst_res(TINFO, "set loopback = %d, recv_own_msgs = %d",
++		loopback, recv_own_msgs);
  }
  
 -int main(int argc, char **argv)
 +static void setup(void)
  {
--	fd_set rdfs;
--	struct timeval tv;
--	int s;
+-	int s, t;
  	struct sockaddr_can addr;
--	struct can_filter rfilter;
--	struct can_frame frame;
--	int testcase;
--	int have_rx;
--	int rx;
--	int rxbits, rxbitval;
--	int ret;
--	int recv_own_msgs = 1;
  	struct ifreq ifr;
-+	int recv_own_msgs = 1;
+-	struct rxs rx;
  
 -	/* check command line options */
 -	if (argc != 2) {
@@ -177,7 +258,13 @@ index db017451a..7377556cb 100644
 -		perror("socket");
 -		return TFAIL;
 -	}
+-	t = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+-	if (t < 0) {
+-		perror("socket");
+-		return TFAIL;
+-	}
 +	s = SAFE_SOCKET(PF_CAN, SOCK_RAW, CAN_RAW);
++	t = SAFE_SOCKET(PF_CAN, SOCK_RAW, CAN_RAW);
 +
 +	strcpy(ifr.ifr_name, can_dev_name);
 +	SAFE_IOCTL(s, SIOCGIFINDEX, &ifr);
@@ -187,231 +274,110 @@ index db017451a..7377556cb 100644
 -		perror("SIOCGIFINDEX");
 -		return TFAIL;
 -	}
- 	addr.can_family = AF_CAN;
  	addr.can_ifindex = ifr.ifr_ifindex;
- 
--	setsockopt(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS,
--		   &recv_own_msgs, sizeof(recv_own_msgs));
-+	SAFE_SETSOCKOPT(s, SOL_CAN_RAW, CAN_RAW_RECV_OWN_MSGS,
-+			&recv_own_msgs, sizeof(recv_own_msgs));
+ 	addr.can_family = AF_CAN;
  
 -	if (bind(s, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
 -		perror("bind");
 -		return TFAIL;
 -	}
+-	if (bind(t, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+-		perror("bind");
+-		return TFAIL;
+-	}
 +	SAFE_BIND(s, (struct sockaddr *)&addr, sizeof(addr));
++	SAFE_BIND(t, (struct sockaddr *)&addr, sizeof(addr));
 +}
  
--	printf("---\n");
+-	printf("Starting PF_CAN frame flow test.\n");
+-	printf("checking socket default settings ... ");
+-	rx = test_sockets(s, t, 0x340);
+-	if (rx.s == 0 && rx.t == 1)
+-		printf("ok.\n");
+-	else {
+-		printf("failure!\n");
+-		return TFAIL;
+-	}
 +static void cleanup(void)
 +{
 +	if (s)
 +		SAFE_CLOSE(s);
++	if (t)
++		SAFE_CLOSE(t);
  
--	for (testcase = 0; testcase < TC; testcase++) {
+-	/* check loopback 0 recv_own_msgs 0 */
+-	setopts(s, 0, 0);
+-	rx = test_sockets(s, t, 0x341);
+-	if (rx.s == 0 && rx.t == 0)
+-		printf("ok.\n");
+-	else {
+-		printf("failure!\n");
+-		return TFAIL;
+-	}
 +	can_cleanup_vcan();
 +}
  
--		rfilter.can_id = calc_id(testcase);
--		rfilter.can_mask = calc_mask(testcase);
--		setsockopt(s, SOL_CAN_RAW, CAN_RAW_FILTER,
--			   &rfilter, sizeof(rfilter));
-+static void run(unsigned int n)
+-	/* check loopback 0 recv_own_msgs 1 */
+-	setopts(s, 0, 1);
+-	rx = test_sockets(s, t, 0x342);
+-	if (rx.s == 0 && rx.t == 0)
+-		printf("ok.\n");
+-	else {
+-		printf("failure!\n");
+-		return TFAIL;
+-	}
++static void run(void)
 +{
-+	fd_set rdfs;
-+	struct timeval tv;
-+	struct can_frame frame;
-+	static struct can_filter rfilter;
-+	int testcase = n;
-+	int have_rx = 1;
-+	int rx = 0;
-+	int rxbits = 0, rxbitval;
++	tst_res(TINFO, "Starting PF_CAN frame flow test.");
++	tst_res(TINFO, "checking socket default settings");
++	test_sockets(0x340, 0, 1);
  
--		printf("testcase %2d filters : can_id = 0x%08X can_mask = "
--		       "0x%08X\n", testcase, rfilter.can_id, rfilter.can_mask);
-+	rfilter.can_id = calc_id(testcase);
-+	rfilter.can_mask = calc_mask(testcase);
-+	SAFE_SETSOCKOPT(s, SOL_CAN_RAW, CAN_RAW_FILTER,
-+			&rfilter, sizeof(rfilter));
+-	/* check loopback 1 recv_own_msgs 0 */
+-	setopts(s, 1, 0);
+-	rx = test_sockets(s, t, 0x343);
+-	if (rx.s == 0 && rx.t == 1)
+-		printf("ok.\n");
+-	else {
+-		printf("failure!\n");
+-		return TFAIL;
+-	}
++	setopts(0, 0);
++	test_sockets(0x341, 0, 0);
  
--		printf("testcase %2d sending patterns ... ", testcase);
-+	tst_res(TINFO, "testcase %2d filters : can_id = 0x%08X can_mask = "
-+	       "0x%08X", testcase, rfilter.can_id, rfilter.can_mask);
+-	/* check loopback 1 recv_own_msgs 1 */
+-	setopts(s, 1, 1);
+-	rx = test_sockets(s, t, 0x344);
+-	if (rx.s == 1 && rx.t == 1)
+-		printf("ok.\n");
+-	else {
+-		printf("failure!\n");
+-		return TFAIL;
+-	}
++	setopts(0, 1);
++	test_sockets(0x342, 0, 0);
  
--		frame.can_dlc = 1;
--		frame.data[0] = testcase;
-+	tst_res(TINFO, "testcase %2d sending patterns ... ", testcase);
+-	printf("PF_CAN frame flow test was successful.\n");
++	setopts(1, 0);
++	test_sockets(0x343, 0, 1);
  
--		frame.can_id = ID;
--		if (write(s, &frame, sizeof(frame)) < 0) {
--			perror("write");
--			exit(1);
--		}
--		frame.can_id = (ID | CAN_RTR_FLAG);
--		if (write(s, &frame, sizeof(frame)) < 0) {
--			perror("write");
--			exit(1);
--		}
--		frame.can_id = (ID | CAN_EFF_FLAG);
--		if (write(s, &frame, sizeof(frame)) < 0) {
--			perror("write");
--			exit(1);
--		}
--		frame.can_id = (ID | CAN_EFF_FLAG | CAN_RTR_FLAG);
--		if (write(s, &frame, sizeof(frame)) < 0) {
--			perror("write");
--			exit(1);
--		}
-+	frame.can_dlc = 1;
-+	frame.data[0] = testcase;
- 
--		printf("ok\n");
-+	frame.can_id = ID;
-+	SAFE_WRITE(1, s, &frame, sizeof(frame));
- 
--		have_rx = 1;
--		rx = 0;
--		rxbits = 0;
-+	frame.can_id = (ID | CAN_RTR_FLAG);
-+	SAFE_WRITE(1, s, &frame, sizeof(frame));
- 
--		while (have_rx) {
-+	frame.can_id = (ID | CAN_EFF_FLAG);
-+	SAFE_WRITE(1, s, &frame, sizeof(frame));
- 
--			have_rx = 0;
--			FD_ZERO(&rdfs);
--			FD_SET(s, &rdfs);
--			tv.tv_sec = 0;
--			tv.tv_usec = 50000;	/* 50ms timeout */
-+	frame.can_id = (ID | CAN_EFF_FLAG | CAN_RTR_FLAG);
-+	SAFE_WRITE(1, s, &frame, sizeof(frame));
- 
--			ret = select(s + 1, &rdfs, NULL, NULL, &tv);
--			if (ret < 0) {
--				perror("select");
--				exit(1);
--			}
-+	tst_res(TPASS, "testcase %2d Sent patterns", testcase);
-+
-+	while (have_rx) {
-+
-+		have_rx = 0;
-+		FD_ZERO(&rdfs);
-+		FD_SET(s, &rdfs);
-+		tv.tv_sec = 0;
-+		tv.tv_usec = 50000;	/* 50ms timeout */
-+
-+		if (select(s + 1, &rdfs, NULL, NULL, &tv) < 0)
-+			tst_brk(TBROK | TERRNO, "select");
- 
--			if (FD_ISSET(s, &rdfs)) {
--				have_rx = 1;
--				ret = read(s, &frame, sizeof(struct can_frame));
--				if (ret < 0) {
--					perror("read");
--					exit(1);
--				}
--				if ((frame.can_id & CAN_SFF_MASK) != ID) {
--					fprintf(stderr,
--						"received wrong can_id!\n");
--					exit(1);
--				}
--				if (frame.data[0] != testcase) {
--					fprintf(stderr,
--						"received wrong testcase!\n");
--					exit(1);
--				}
--
--				/* test & calc rxbits */
--				rxbitval = 1 << ((frame.can_id &
--						 (CAN_EFF_FLAG | CAN_RTR_FLAG |
--						  CAN_ERR_FLAG)) >> 28);
--
--				/* only receive a rxbitval once */
--				if ((rxbits & rxbitval) == rxbitval) {
--					fprintf(stderr,
--						"received rxbitval %d twice!\n",
--						rxbitval);
--					exit(1);
--				}
--				rxbits |= rxbitval;
--				rx++;
--
--				printf("testcase %2d rx : can_id = 0x%08X rx = "
--				       "%d rxbits = %d\n", testcase,
--				       frame.can_id, rx, rxbits);
-+		if (FD_ISSET(s, &rdfs)) {
-+			have_rx = 1;
-+			SAFE_READ(1, s, &frame, sizeof(struct can_frame));
-+
-+			if ((frame.can_id & CAN_SFF_MASK) != ID)
-+				tst_res(TFAIL, "received wrong can_id!");
-+
-+			if (frame.data[0] != testcase)
-+				tst_res(TFAIL, "received wrong testcase!");
-+
-+			/* test & calc rxbits */
-+			rxbitval = 1 << ((frame.can_id &
-+					  (CAN_EFF_FLAG | CAN_RTR_FLAG |
-+					   CAN_ERR_FLAG)) >> 28);
-+
-+			/* only receive a rxbitval once */
-+			if ((rxbits & rxbitval) == rxbitval) {
-+				tst_res(TFAIL, "received rxbitval %d twice!",
-+					rxbitval);
- 			}
-+			rxbits |= rxbitval;
-+			rx++;
-+
-+			tst_res(TINFO, "testcase %2d rx : can_id = 0x%08X rx = "
-+			       "%d rxbits = %d", testcase,
-+			       frame.can_id, rx, rxbits);
- 		}
--		/* rx timed out -> check the received results */
--		if (rx_res[testcase] != rx) {
--			fprintf(stderr,
--				"wrong rx value in testcase %d : %d (expected "
--				"%d)\n", testcase, rx, rx_res[testcase]);
--			exit(1);
--		}
--		if (rxbits_res[testcase] != rxbits) {
--			fprintf(stderr,
--				"wrong rxbits value in testcase %d : %d "
--				"(expected %d)\n", testcase, rxbits,
--				rxbits_res[testcase]);
--			exit(1);
--		}
--		printf("testcase %2d ok\n---\n", testcase);
- 	}
--
 -	close(s);
--
+-	close(t);
++	setopts(1, 1);
++	test_sockets(0x344, 1, 1);
+ 
 -	return TPASS;
-+	/* rx timed out -> check the received results */
-+	if (rx_res[testcase] != rx) {
-+		tst_brk(TBROK,
-+			"wrong rx value in testcase %d : %d (expected "
-+			"%d)", testcase, rx, rx_res[testcase]);
-+	}
-+	if (rxbits_res[testcase] != rxbits) {
-+		tst_brk(TBROK,
-+			"wrong rxbits value in testcase %d : %d "
-+			"(expected %d)", testcase, rxbits,
-+			rxbits_res[testcase]);
-+	}
-+	tst_res(TPASS, "testcase %2d ok", testcase);
++	/* Return to defaults for when -i is used */
++	setopts(1, 0);
  }
  
 +static struct tst_test test = {
-+	.tcnt = TC,
 +	.options = (struct tst_option[]) {
 +		{"D:", &can_dev_name, "-D <device>	CAN device name"},
 +		{}
 +	},
 +	.setup = setup,
 +	.cleanup = cleanup,
-+	.test = run,
++	.test_all = run,
 +	.caps = (struct tst_cap []) {
 +		TST_CAP(TST_CAP_REQ, CAP_NET_RAW),
 +		TST_CAP(TST_CAP_DROP, CAP_SYS_ADMIN),
