@@ -2,101 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090792FE562
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jan 2021 09:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0112FE61D
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jan 2021 10:19:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbhAUIwN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jan 2021 03:52:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
+        id S1727306AbhAUJOL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jan 2021 04:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728150AbhAUIwB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jan 2021 03:52:01 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE38CC061575
-        for <linux-can@vger.kernel.org>; Thu, 21 Jan 2021 00:51:16 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l2VgK-0000y7-3Z; Thu, 21 Jan 2021 09:51:08 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:37fb:eadb:47a3:78d5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3AA0D5C9852;
-        Thu, 21 Jan 2021 08:51:05 +0000 (UTC)
-Date:   Thu, 21 Jan 2021 09:51:04 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Su Yanjun <suyanjun218@gmail.com>
-Cc:     manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
-        wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] can: mcp251xfd: replace sizeof(u32) with val_bytes in
- regmap
-Message-ID: <20210121085104.kp5qkllzyfu6ybtj@hardanger.blackshift.org>
-References: <20210121083313.71296-1-suyanjun218@gmail.com>
+        with ESMTP id S1727249AbhAUJLI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jan 2021 04:11:08 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063A3C0613ED;
+        Thu, 21 Jan 2021 01:10:28 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id l14so584653qvh.2;
+        Thu, 21 Jan 2021 01:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+h3XO1KHkOJ1WE2lVC/8D0t/DmItYejrYEfvh5uWFfA=;
+        b=CefFG/UZeDEyOZR6R1hkPmmASHVpA8OFOj2xdj3iY7d4oQ5ctaUKOQLkEisCJrPe/+
+         RK8rKKh0qkgfztY9mZ9gj82lD2fPGlkmWJPhilA2HvvYnxCBwF8o0VI5fWuE/GX2sYnw
+         M9ja4/mLLTugc5nmForFBjElcVeFsQQdC+mLclAN6Rmukt9wUtRMp+VAQW2zZK5E5iFM
+         wraCd8m4gBTEmDYMjzUn1fm/4ukVUEm8zZB8srJtU6ZYFoOXeAjw8UE6HzZiZNFRj4oT
+         0z8AMM2uSB/bA48XUdFEGtLjWXw8IadTltZ36zdh7fj2Xa5XeR0UvUGT66aGrPet04B5
+         YUJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+h3XO1KHkOJ1WE2lVC/8D0t/DmItYejrYEfvh5uWFfA=;
+        b=OUne90d4yzOGoIBc6ya9683FC3PcchXV5+cRpFyIP3/zr+LRm55Cu2smnu2ago/PZ8
+         PgYRTsDr7G9Y85lpdUbSQnGJ0hGbD92KG26By2kcnzbPSDoBf8X1C9U0mw8HGORT2rn5
+         +5oTBDKyJOTHSnGjoJ4yZCMq/Gh2i+HqCf9uuvBnqQQ+u0l0pVWoZxCZQJRBHBGsIv8f
+         qMK6kb8EkEPHAPe2+G+sxlQvr1NSA0Q2YdvAMmv4xVkhGDEUfAX+k+63oPc0xQUMtPED
+         GMp0QDkF47AjFnq6PapcV5BoMHB1J7zNTHfxLB3syc+M2+BpsUNG7Tqr70j+KSPHJlTH
+         Uz5w==
+X-Gm-Message-State: AOAM5310C+cbXHswyS+Ih/YlJlYDlc16tmZ7WgTJoKZW9X35MGMdEpe3
+        10GuZibc0g7pBhuSvxWcStk=
+X-Google-Smtp-Source: ABdhPJyUlF4d0UezjmzlvVLRM4fC3skEghQEEetNaz4NlKgT6QmXaTfR9rbccpFGIbqyQEvgvUMdMg==
+X-Received: by 2002:ad4:5187:: with SMTP id b7mr13655408qvp.2.1611220227359;
+        Thu, 21 Jan 2021 01:10:27 -0800 (PST)
+Received: from localhost.localdomain ([45.32.7.59])
+        by smtp.gmail.com with ESMTPSA id b16sm2903733qtx.85.2021.01.21.01.10.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jan 2021 01:10:26 -0800 (PST)
+From:   Su Yanjun <suyanjun218@gmail.com>
+To:     mkl@pengutronix.de, manivannan.sadhasivam@linaro.org,
+        thomas.kopp@microchip.com, wg@grandegger.com, davem@davemloft.net,
+        kuba@kernel.org, lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Su Yanjun <suyanjun218@gmail.com>
+Subject: [PATCH v2] can: mcp251xfd: replace sizeof(u32) with val_bytes in regmap
+Date:   Thu, 21 Jan 2021 17:10:05 +0800
+Message-Id: <20210121091005.74417-1-suyanjun218@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uvdzd62yprqygzpz"
-Content-Disposition: inline
-In-Reply-To: <20210121083313.71296-1-suyanjun218@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+No functional effect.
 
---uvdzd62yprqygzpz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-On Thu, Jan 21, 2021 at 04:33:13PM +0800, Su Yanjun wrote:
-> No functional effect.
->=20
-> Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index f07e8b737d31..b15bfd50b863 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -181,6 +181,12 @@ static int mcp251xfd_clks_and_vdd_disable(const struct mcp251xfd_priv *priv)
+ 	return 0;
+ }
+ 
++static inline int
++mcp251xfd_get_val_bytes(const struct mcp251xfd_priv *priv)
++{
++	return regmap_get_val_bytes(priv->map_reg);
++}
++
+ static inline u8
+ mcp251xfd_cmd_prepare_write_reg(const struct mcp251xfd_priv *priv,
+ 				union mcp251xfd_write_reg_buf *write_reg_buf,
+@@ -1308,6 +1314,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
+ 		       const u8 offset, const u8 len)
+ {
+ 	const struct mcp251xfd_tx_ring *tx_ring = priv->tx;
++	int val_bytes = mcp251xfd_get_val_bytes(priv);
+ 
+ 	if (IS_ENABLED(CONFIG_CAN_MCP251XFD_SANITY) &&
+ 	    (offset > tx_ring->obj_num ||
+@@ -1322,7 +1329,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
+ 	return regmap_bulk_read(priv->map_rx,
+ 				mcp251xfd_get_tef_obj_addr(offset),
+ 				hw_tef_obj,
+-				sizeof(*hw_tef_obj) / sizeof(u32) * len);
++				sizeof(*hw_tef_obj) / val_bytes * len);
+ }
+ 
+ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
+@@ -1511,11 +1518,12 @@ mcp251xfd_rx_obj_read(const struct mcp251xfd_priv *priv,
+ 		      const u8 offset, const u8 len)
+ {
+ 	int err;
++	int val_bytes = mcp251xfd_get_val_bytes(priv);
+ 
+ 	err = regmap_bulk_read(priv->map_rx,
+ 			       mcp251xfd_get_rx_obj_addr(ring, offset),
+ 			       hw_rx_obj,
+-			       len * ring->obj_size / sizeof(u32));
++			       len * ring->obj_size / val_bytes);
+ 
+ 	return err;
+ }
+@@ -2139,6 +2147,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 	struct mcp251xfd_priv *priv = dev_id;
+ 	irqreturn_t handled = IRQ_NONE;
+ 	int err;
++	int val_bytes = mcp251xfd_get_val_bytes(priv);
+ 
+ 	if (priv->rx_int)
+ 		do {
+@@ -2162,7 +2171,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 		err = regmap_bulk_read(priv->map_reg, MCP251XFD_REG_INT,
+ 				       &priv->regs_status,
+ 				       sizeof(priv->regs_status) /
+-				       sizeof(u32));
++				       val_bytes);
+ 		if (err)
+ 			goto out_fail;
+ 
+-- 
+2.25.1
 
-Fails to build from source:
-
-  CC [M]  drivers/net/can/spi/mcp251xfd/mcp251xfd-core.o
-drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c: In function =E2=80=98mcp251=
-xfd_get_val_bytes=E2=80=99:
-drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c:187:22: error: invalid use o=
-f undefined type =E2=80=98struct regmap=E2=80=99
-  187 |  return priv->map_reg->format.val_bytes;
-      |                      ^~
-rivers/net/can/spi/mcp251xfd/mcp251xfd-core.c:188:1: error: control reaches=
- end of non-void function [-Werror=3Dreturn-type]
-  188 | }
-      | ^
-cc1: some warnings being treated as errors
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---uvdzd62yprqygzpz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAJQHUACgkQqclaivrt
-76kgAwgAoJfEY57+qt577cXwMuAWcpN2BrXymJSzb3emTslNlwY0SQNVl/Y0aEmy
-5ffMoyK3TyA28ztLxOCdvvSssNS2DqnjvLgOIL1xmVBAatwBnzdAPFICvKpumvsZ
-OdyDrh4ZZUT55W6X7I+370f8KFSBN7XPReOHkUykZvZj1qg4S1g1DPjFVEDDTgyW
-hGcTFTg2Is5V4Lwt2LXmlfCnF/l+khF6ZakDZ1A99w0KSMTD9Vua5Gx4sqEEGYRp
-ap917/egq2nQkEMNqRVN0uDkS398m1mobCYvP7wf20M4fI8NyLPAM0hPgS357TBz
-GPiDvWHoTR4Y2iWZUcnOnjE2slMq5g==
-=VcRg
------END PGP SIGNATURE-----
-
---uvdzd62yprqygzpz--
