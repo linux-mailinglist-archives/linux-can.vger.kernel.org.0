@@ -2,97 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AE62FE41D
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jan 2021 08:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F8D2FE518
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jan 2021 09:36:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727294AbhAUHiV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jan 2021 02:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S1726381AbhAUIfV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jan 2021 03:35:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727256AbhAUHiI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jan 2021 02:38:08 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A82C0613C1
-        for <linux-can@vger.kernel.org>; Wed, 20 Jan 2021 23:37:28 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l2UWw-0001dr-SA; Thu, 21 Jan 2021 08:37:22 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:37fb:eadb:47a3:78d5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6A7FE5C97A8;
-        Thu, 21 Jan 2021 07:37:21 +0000 (UTC)
-Date:   Thu, 21 Jan 2021 08:37:20 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH can tree] can: dev: prevent potential information leak in
- can_fill_info()
-Message-ID: <20210121073720.zlskqgitnod3w6hf@hardanger.blackshift.org>
-References: <YAkaRdRJncsJO8Ve@mwanda>
+        with ESMTP id S1727653AbhAUIfD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jan 2021 03:35:03 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2BAC061575;
+        Thu, 21 Jan 2021 00:34:17 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id o18so976612qtp.10;
+        Thu, 21 Jan 2021 00:34:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hMOAJyfPO68mVIjv580xYZQF8xaJ8E997+OoMF8/OQI=;
+        b=m6v+CB1tAJROh1IfPBd3d0qoHGG9tXhZJgICBYrpTkiUHcqor0trYUvUjERJX3duTX
+         b5ah/EJjECkOvsZpG82MOxLYWCjDT4ILuovxZWCwqC8RIc9XZBC/SQQSqO7MuPpsxFqb
+         i1t3aQlyLYA+vu5GqiWvwFVVGdSf2Wa8v4x4ymosLFDl+mRPx9Eq/cCQJlovfG1lSLzh
+         UtJB2FPExquH5rhjeXsRtlT73xw7UUWArgap6isYreLCrQvYDtuwWJrZ9fCtnNRLpr5+
+         eQcqbLE3XCMl680j/PdcFymDPLU7veM86EGO1R2jjJAzIrRLTBdQt8OBl47TB+TkGhr8
+         Siwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hMOAJyfPO68mVIjv580xYZQF8xaJ8E997+OoMF8/OQI=;
+        b=CtzSMYsj+tCIUps06/kc7aNDr22VQnEvfLj3ZQU86GBsdeggPAEamusZ9BHFEwWkl5
+         +XAVT+jqCA2MdT5VUs1+UkS58ScBM6ehODCLXKBTKmGaF6TU6LTI/smpxJtg/BqbaLGe
+         WmDwjzrP4y0lxNiLFVciQasN6n/VOpotBZkYd4RZPGoGNAc/Bl8+H+9bRE6DrbhQXGxp
+         IGWBLlB/wTXZnKQs8MfSB7Sqt6tWuxbaKFsk+zG8BmIfqL6CqQBhLq0kzdOVjDkwF69o
+         atd81R6Q6iqXSlJl8v5eBHYfEo8dbqOLnE9oneCbvzIL70fooM6hEQVT1rkG78/hahQ9
+         RQBg==
+X-Gm-Message-State: AOAM532gVa8uW06ACaxQLExWabcsEsol3vLvvUJbP6FHFPFbx2vvec3H
+        pnnvvqv4KvdT2GyZgyk4guo=
+X-Google-Smtp-Source: ABdhPJwNQQUh5RWU6qcVZEFDjxxzztzm7rOUWZ9CI1Oz0N+6tyLmkA2oEWaBnkJ8c93skU7BAFnlmA==
+X-Received: by 2002:ac8:4f43:: with SMTP id i3mr9092551qtw.140.1611218056570;
+        Thu, 21 Jan 2021 00:34:16 -0800 (PST)
+Received: from localhost.localdomain ([45.32.7.59])
+        by smtp.gmail.com with ESMTPSA id e185sm2343003qkb.127.2021.01.21.00.34.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jan 2021 00:34:15 -0800 (PST)
+From:   Su Yanjun <suyanjun218@gmail.com>
+To:     mkl@pengutronix.de, manivannan.sadhasivam@linaro.org,
+        thomas.kopp@microchip.com, wg@grandegger.com, davem@davemloft.net,
+        kuba@kernel.org, lgirdwood@gmail.com, broonie@kernel.org
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Su Yanjun <suyanjun218@gmail.com>
+Subject: [PATCH v1] can: mcp251xfd: replace sizeof(u32) with val_bytes in regmap
+Date:   Thu, 21 Jan 2021 16:33:13 +0800
+Message-Id: <20210121083313.71296-1-suyanjun218@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sif3h2wey4pwemlu"
-Content-Disposition: inline
-In-Reply-To: <YAkaRdRJncsJO8Ve@mwanda>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+No functional effect.
 
---sif3h2wey4pwemlu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-Hey Dan,
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index f07e8b737d31..cc48ccee4694 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -181,6 +181,12 @@ static int mcp251xfd_clks_and_vdd_disable(const struct mcp251xfd_priv *priv)
+ 	return 0;
+ }
+ 
++static inline int
++mcp251xfd_get_val_bytes(const struct mcp251xfd_priv *priv)
++{
++	return priv->map_reg->format.val_bytes;
++}
++
+ static inline u8
+ mcp251xfd_cmd_prepare_write_reg(const struct mcp251xfd_priv *priv,
+ 				union mcp251xfd_write_reg_buf *write_reg_buf,
+@@ -1308,6 +1314,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
+ 		       const u8 offset, const u8 len)
+ {
+ 	const struct mcp251xfd_tx_ring *tx_ring = priv->tx;
++	int val_bytes = mcp251xfd_get_val_bytes(priv);
+ 
+ 	if (IS_ENABLED(CONFIG_CAN_MCP251XFD_SANITY) &&
+ 	    (offset > tx_ring->obj_num ||
+@@ -1322,7 +1329,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
+ 	return regmap_bulk_read(priv->map_rx,
+ 				mcp251xfd_get_tef_obj_addr(offset),
+ 				hw_tef_obj,
+-				sizeof(*hw_tef_obj) / sizeof(u32) * len);
++				sizeof(*hw_tef_obj) / val_bytes * len);
+ }
+ 
+ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
+@@ -1511,11 +1518,12 @@ mcp251xfd_rx_obj_read(const struct mcp251xfd_priv *priv,
+ 		      const u8 offset, const u8 len)
+ {
+ 	int err;
++	int val_bytes = mcp251xfd_get_val_bytes(priv);
+ 
+ 	err = regmap_bulk_read(priv->map_rx,
+ 			       mcp251xfd_get_rx_obj_addr(ring, offset),
+ 			       hw_rx_obj,
+-			       len * ring->obj_size / sizeof(u32));
++			       len * ring->obj_size / val_bytes);
+ 
+ 	return err;
+ }
+@@ -2139,6 +2147,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 	struct mcp251xfd_priv *priv = dev_id;
+ 	irqreturn_t handled = IRQ_NONE;
+ 	int err;
++	int val_bytes = mcp251xfd_get_val_bytes(priv);
+ 
+ 	if (priv->rx_int)
+ 		do {
+@@ -2162,7 +2171,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 		err = regmap_bulk_read(priv->map_reg, MCP251XFD_REG_INT,
+ 				       &priv->regs_status,
+ 				       sizeof(priv->regs_status) /
+-				       sizeof(u32));
++				       val_bytes);
+ 		if (err)
+ 			goto out_fail;
+ 
+-- 
+2.25.1
 
-On Thu, Jan 21, 2021 at 09:08:05AM +0300, Dan Carpenter wrote:
-> The "bec" struct isn't necessarily always initialized.  For example,
-> the mcp251xfd_get_berr_counter() function doesn't initialize anything
-> if the interface is down.
->=20
-> Fixes: 52c793f24054 ("can: netlink support for bus-error reporting and co=
-unters")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-
-Thanks for the patch. As this is a fix, I've backported it to net/master, w=
-hich
-is before the split of the dev.c into separate files. Applied to
-linux-can/testing.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---sif3h2wey4pwemlu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAJLykACgkQqclaivrt
-76kByAf/dri0xzZQz/DzfMzagXjus6P5AAV6R3awzjWURGIXH1NwljIAeHn/Swt6
-+zHwRZInKI8d0c9puZ1KPOUjebA9tQXB9ghni2PfPSQL6RMrpBpG+MnXdF1nH+kc
-T5rIZ75ehwTkkmXx7iFMTEh41+jeTgqBFtwmMK64GKSmxv/0ex6crCsFBT7YXdW7
-DbXFoTVIGJI9qfw5aTb+j4U/fepo+iR3dmurG9Cvc9PmqYgEAFYrufqYitNR4bPb
-LGNsCxjJWJWnFrkE02Sq/ZIl8vATYDmAGKyJrcHStUDChmvF4v8CREROnXrl1zKD
-tJXn1a5Yb5bxoxsRoX0PBY3tbTxNKw==
-=e/IK
------END PGP SIGNATURE-----
-
---sif3h2wey4pwemlu--
