@@ -2,107 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6282D2FE6A3
-	for <lists+linux-can@lfdr.de>; Thu, 21 Jan 2021 10:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8432FF6EA
+	for <lists+linux-can@lfdr.de>; Thu, 21 Jan 2021 22:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728755AbhAUJpg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 21 Jan 2021 04:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
+        id S1726564AbhAUVIl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 21 Jan 2021 16:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728438AbhAUJpM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jan 2021 04:45:12 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B94C061575
-        for <linux-can@vger.kernel.org>; Thu, 21 Jan 2021 01:44:31 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l2WVt-0007QS-Bo; Thu, 21 Jan 2021 10:44:25 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:37fb:eadb:47a3:78d5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 634405C98FE;
-        Thu, 21 Jan 2021 09:44:23 +0000 (UTC)
-Date:   Thu, 21 Jan 2021 10:44:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Su <suyanjun218@gmail.com>
-Cc:     manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
-        wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] can: mcp251xfd: replace sizeof(u32) with val_bytes in
- regmap
-Message-ID: <20210121094422.h5tjjyhsn7gvhlrm@hardanger.blackshift.org>
-References: <20210121091005.74417-1-suyanjun218@gmail.com>
- <20210121092115.dasphwfzfkthcy64@hardanger.blackshift.org>
- <5ed3d488-3ea6-cc07-a04d-73a6678d772a@gmail.com>
+        with ESMTP id S1727453AbhAUU6P (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 21 Jan 2021 15:58:15 -0500
+X-Greylist: delayed 485 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jan 2021 12:57:22 PST
+Received: from antares.kleine-koenig.org (antares.kleine-koenig.org [IPv6:2a01:4f8:c0c:3a97::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD63EC06174A;
+        Thu, 21 Jan 2021 12:57:22 -0800 (PST)
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id 4F281AD8EB0; Thu, 21 Jan 2021 21:48:22 +0100 (CET)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pau Oliva Fora <pof@eslack.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH v1 0/2] isa: Make the remove callback for isa drivers return void
+Date:   Thu, 21 Jan 2021 21:48:10 +0100
+Message-Id: <20210121204812.402589-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zrug2yvgvouevx6t"
-Content-Disposition: inline
-In-Reply-To: <5ed3d488-3ea6-cc07-a04d-73a6678d772a@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
---zrug2yvgvouevx6t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+as described in the commit log of the 2nd patch returning an error code
+from a bus' remove callback doesn't make any difference as the driver
+core ignores it and still considers the device removed.
 
-On Thu, Jan 21, 2021 at 05:33:40PM +0800, Su wrote:
-> The sizeof(u32) is hardcoded. IMO it's better to use the config value in
-> regmap.
+So change the remove callback to return void to not give driver authors
+an incentive to believe they could return an error.
 
-I got why you want to change this. Please update the patch description, com=
-ment
-on the increase of the object size and address the other issues I pointed o=
-ut.
-I think it makes no sense to have the function mcp251xfd_get_val_bytes() as=
- you
-have to use several regmaps anyways.
+There is only a single isa driver in the tree (assuming I didn't miss
+any) that has a remove callback that can return a non zero return code.
+This is "fixed" in the first patch, to make the second patch more
+obviously correct.
 
-> > > No functional effect.
-> > Not quite:
-> >=20
-> > scripts/bloat-o-meter shows:
-> >=20
-> > add/remove: 0/0 grow/shrink: 3/0 up/down: 104/0 (104)
-> > Function                                     old     new   delta
-> > mcp251xfd_handle_tefif                       980    1028     +48
-> > mcp251xfd_irq                               3716    3756     +40
-> > mcp251xfd_handle_rxif_ring                   964     980     +16
-> > Total: Before=3D20832, After=3D20936, chg +0.50%
+Best regards
+Uwe
 
-Marc
+Uwe Kleine-König (2):
+  watchdog: pcwd: drop always-false if from remove callback
+  isa: Make the remove callback for isa drivers return void
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+ drivers/base/isa.c                   | 2 +-
+ drivers/i2c/busses/i2c-elektor.c     | 4 +---
+ drivers/i2c/busses/i2c-pca-isa.c     | 4 +---
+ drivers/input/touchscreen/htcpen.c   | 4 +---
+ drivers/media/radio/radio-sf16fmr2.c | 4 +---
+ drivers/net/can/sja1000/tscan1.c     | 4 +---
+ drivers/net/ethernet/3com/3c509.c    | 3 +--
+ drivers/scsi/advansys.c              | 3 +--
+ drivers/scsi/aha1542.c               | 3 +--
+ drivers/scsi/fdomain_isa.c           | 3 +--
+ drivers/scsi/g_NCR5380.c             | 3 +--
+ drivers/watchdog/pcwd.c              | 7 +------
+ include/linux/isa.h                  | 2 +-
+ sound/isa/ad1848/ad1848.c            | 3 +--
+ sound/isa/adlib.c                    | 3 +--
+ sound/isa/cmi8328.c                  | 3 +--
+ sound/isa/cmi8330.c                  | 3 +--
+ sound/isa/cs423x/cs4231.c            | 3 +--
+ sound/isa/cs423x/cs4236.c            | 3 +--
+ sound/isa/es1688/es1688.c            | 3 +--
+ sound/isa/es18xx.c                   | 3 +--
+ sound/isa/galaxy/galaxy.c            | 3 +--
+ sound/isa/gus/gusclassic.c           | 3 +--
+ sound/isa/gus/gusextreme.c           | 3 +--
+ sound/isa/gus/gusmax.c               | 3 +--
+ sound/isa/gus/interwave.c            | 3 +--
+ sound/isa/msnd/msnd_pinnacle.c       | 3 +--
+ sound/isa/opl3sa2.c                  | 3 +--
+ sound/isa/opti9xx/miro.c             | 3 +--
+ sound/isa/opti9xx/opti92x-ad1848.c   | 3 +--
+ sound/isa/sb/jazz16.c                | 3 +--
+ sound/isa/sb/sb16.c                  | 3 +--
+ sound/isa/sb/sb8.c                   | 3 +--
+ sound/isa/sc6000.c                   | 3 +--
+ sound/isa/sscape.c                   | 3 +--
+ sound/isa/wavefront/wavefront.c      | 3 +--
+ 36 files changed, 36 insertions(+), 79 deletions(-)
 
---zrug2yvgvouevx6t
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAJTPQACgkQqclaivrt
-76kmLAf/Yexh9D+O2IOdOK2R9xP9k0PGIxsk6HhUz2wMqvIP8HBRd/Tuqj+5hFQU
-NO17xotVj9XVvvYHSI4mp8zfMyLVz7rylzimdLuxrGDaKmeMA+txcEU6BASpkXpy
-OadMbHTaor2CZt4blUVeeQcTGKhwH35cSIaRfXLcDr5dZADwwQcz5l1TkNe4dxEw
-9qFaWENDjwoqnkwFVjQGVCM04kthvcQA8kRtwq0ne3VpoiyY1phSbzYO784CO3+F
-+uj0zJUNqUwpa5zA2HG6zby4h4af2hca8mdZQNlAmgyJzTCmQ9rjpPGHKiBuSZ+A
-PPN08M3HNARYwFYda7Qwhs9XW2t36Q==
-=stZm
------END PGP SIGNATURE-----
-
---zrug2yvgvouevx6t--
+base-commit: 5a158981aafa7f29709034b17bd007b15cb29983
+-- 
+2.29.2
