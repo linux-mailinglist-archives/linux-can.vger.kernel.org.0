@@ -2,94 +2,242 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 596E02FFE49
-	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 09:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C707D2FFEB7
+	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 09:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbhAVIgL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 22 Jan 2021 03:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726495AbhAVIcJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 03:32:09 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D20C0613D6
-        for <linux-can@vger.kernel.org>; Fri, 22 Jan 2021 00:31:18 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l2rqa-0004fJ-MY; Fri, 22 Jan 2021 09:31:12 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:aed1:e241:8b32:9cc0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 043E05CA589;
-        Fri, 22 Jan 2021 08:31:09 +0000 (UTC)
-Date:   Fri, 22 Jan 2021 09:31:09 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Su Yanjun <suyanjun218@gmail.com>
-Cc:     manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
-        wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] can: mcp251xfd: replace sizeof(u32) with val_bytes in
- regmap
-Message-ID: <20210122083109.7gyxdwi2dlo3ptjj@hardanger.blackshift.org>
-References: <20210122081334.213957-1-suyanjun218@gmail.com>
+        id S1726308AbhAVIwx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Fri, 22 Jan 2021 03:52:53 -0500
+Received: from mail-yb1-f179.google.com ([209.85.219.179]:34755 "EHLO
+        mail-yb1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbhAVIwU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 03:52:20 -0500
+Received: by mail-yb1-f179.google.com with SMTP id x6so4803968ybr.1;
+        Fri, 22 Jan 2021 00:52:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CcshxsSxb3HxoDICysCU4sJjdMWHDPfpU/9Zl/cZow4=;
+        b=RrVWOnbrFeiKMbEg1LJl9lfRFAjR4wcCAMmVCzHvN/w6PHe0X2SehAx7j7lIjeoOai
+         7BT8eNF1RHUk5x4+s8wxXWcJjjraajBNOotM8ubbgUsKnXOa3Vkcz+FR7MvcU7v+8pU0
+         fjMXoCp9E/wa5OauQgm4vPk5e+yKDfNYBKyVEicS3eQWfNhWYXzSejF3sAiTIHuKappU
+         S9QgYgaj6k7AI8PBOG+ZUvu80zh7EJR4kkaN1kRdB7kqyKFdP+dCd6ptOjTYPNGyMm6o
+         rsfEFOr6LtojtrgVHgszM5PfhuNA3kkRR5EkhbAexfdsLPJ/gsZ52jrJUtd1IJAS72oG
+         wytg==
+X-Gm-Message-State: AOAM533b0xD5Isvfjzem0sgEiOVI1PMTcCqikKJbM6dcp/XWPM0T+uK9
+        TG816UtDP3SpYyKRavp3PLNvXwQAs617Yw1tXoc=
+X-Google-Smtp-Source: ABdhPJzSnfaDU7TrVAvA0CeBo4eAD7jqIgMgAz430yjuvhBQC7rkrf+Rdyuw2vSedemLG8e49Uo9uB/BLy5deDTWIvg=
+X-Received: by 2002:a25:5583:: with SMTP id j125mr4543262ybb.307.1611305497077;
+ Fri, 22 Jan 2021 00:51:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5h6qemvvzzz5qhue"
-Content-Disposition: inline
-In-Reply-To: <20210122081334.213957-1-suyanjun218@gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210122062255.202620-1-suyanjun218@gmail.com>
+In-Reply-To: <20210122062255.202620-1-suyanjun218@gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 22 Jan 2021 17:51:26 +0900
+Message-ID: <CAMZ6RqL87RpZrH39H9c6wi5wg4=1r104oKf542oAZ2vHRke2WQ@mail.gmail.com>
+Subject: Re: [PATCH v1] can: mcp251xfd: Add some sysfs debug interfaces for
+ registers r/w
+To:     Su Yanjun <suyanjun218@gmail.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, lgirdwood@gmail.com,
+        broonie@kernel.org, linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi,
 
---5h6qemvvzzz5qhue
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In addition to Marc’s comment, I also have security concerns.
 
-On Fri, Jan 22, 2021 at 04:13:34PM +0800, Su Yanjun wrote:
-> The sizeof(u32) is hardcoded. It's better to use the config value in
-> regmap.
->=20
-> It increases the size of target object, but it's flexible when new mcp ch=
-ip
-> need other val_bytes.
->=20
+On Fri. 22 Jan 2021 at 15:22, Su Yanjun <suyanjun218@gmail.com> wrote:
+> When i debug mcp2518fd, some method to track registers is
+> needed. This easy debug interface will be ok.
+>
+> For example,
+> read a register at 0xe00:
+> echo 0xe00 > can_get_reg
+> cat can_get_reg
+>
+> write a register at 0xe00:
+> echo 0xe00,0x60 > can_set_reg
+
+What about:
+printf "A%0.s" {1..1000} > can_set_reg
+
+Doesn’t it crash the kernel?
+
+I see no checks of the buf len in your code and I suspect it to be
+vulnerable to stack buffer overflow exploits.
+
 > Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
-
-Applied to linux-can-next/testing.
-
-Thanks,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---5h6qemvvzzz5qhue
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAKjUoACgkQqclaivrt
-76m+Cwf/QmCkqwzxOCPGlj7JWUKqIeOMCNJWBFJzqnV6mMaihyIwiPHsollFQpyE
-tmmZl2bcJ+N1zq2BfDQiK/3WksXbIgqhFg5gGhhgfA/Co4i9wq/EsgJcocKb0+Zq
-fl5R2JZKDQf8h2GN/qOP96+vUnXie8vr6cKpExlPH2Nm4cmC0ekjW0kYb33XNkvo
-E5XzfdewZBOoyxb50nFn/yvkM3GxirMlR3NhvVp4sQxugzpWCkekBcOseMiWY2Sp
-xt3sLwZfLoOblu791qIB+2uAWwJgG5V2UJWwTZMRI2eT/mDeKuIePFn9LH+w2Wgv
-6jrwq/1o8+CjBNw5CEbSdLttBQ/d+w==
-=YbTG
------END PGP SIGNATURE-----
-
---5h6qemvvzzz5qhue--
+> ---
+>  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 132 ++++++++++++++++++
+>  1 file changed, 132 insertions(+)
+>
+> diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> index ab8aad0a7594..d65abe5505d5 100644
+> --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+> @@ -27,6 +27,131 @@
+>
+>  #define DEVICE_NAME "mcp251xfd"
+>
+> +/* Add sysfs debug interface for easy to debug
+> + *
+> + * For example,
+> + *
+> + * - read a register
+> + * echo 0xe00 > can_get_reg
+> + * cat can_get_reg
+> + *
+> + * - write a register
+> + * echo 0xe00,0x1 > can_set_reg
+> + *
+> + */
+> +static int reg_offset;
+> +
+> +static int __get_param(const char *buf, char *off, char *val)
+> +{
+> +       int len;
+> +
+> +       if (!buf || !off || !val)
+> +               return -EINVAL;
+> +
+> +       len = 0;
+> +       while (*buf != ',') {
+> +               *off++ = *buf++;
+> +               len++;
+> +
+> +               if (len >= 16)
+> +                       return -EINVAL;
+> +       }
+> +
+> +       buf++;
+> +
+> +       *off = '\0';
+> +
+> +       len = 0;
+> +       while (*buf) {
+> +               *val++ = *buf++;
+> +               len++;
+> +
+> +               if (len >= 16)
+> +                       return -EINVAL;
+> +       }
+> +
+> +       *val = '\0';
+> +
+> +       return 0;
+> +}
+> +
+> +static ssize_t can_get_reg_show(struct device *dev,
+> +                               struct device_attribute *attr, char *buf)
+> +{
+> +       int err;
+> +       u32 val;
+> +       struct mcp251xfd_priv *priv;
+> +
+> +       priv = dev_get_drvdata(dev);
+> +
+> +       err = regmap_read(priv->map_reg, reg_offset, &val);
+> +       if (err)
+> +               return 0;
+> +
+> +       return sprintf(buf, "reg = 0x%08x, val = 0x%08x\n", reg_offset, val);
+> +}
+> +
+> +static ssize_t can_get_reg_store(struct device *dev,
+> +                                struct device_attribute *attr, const char *buf, size_t len)
+> +{
+> +       u32 off;
+> +
+> +       reg_offset = 0;
+> +
+> +       if (kstrtouint(buf, 0, &off) || (off % 4))
+> +               return -EINVAL;
+> +
+> +       reg_offset = off;
+> +
+> +       return len;
+> +}
+> +
+> +static ssize_t can_set_reg_show(struct device *dev,
+> +                               struct device_attribute *attr, char *buf)
+> +{
+> +       return 0;
+> +}
+> +
+> +static ssize_t can_set_reg_store(struct device *dev,
+> +                                struct device_attribute *attr, const char *buf, size_t len)
+> +{
+> +       struct mcp251xfd_priv *priv;
+> +       u32 off, val;
+> +       int err;
+> +
+> +       char s1[16];
+> +       char s2[16];
+> +
+> +       if (__get_param(buf, s1, s2))
+> +               return -EINVAL;
+> +
+> +       if (kstrtouint(s1, 0, &off) || (off % 4))
+> +               return -EINVAL;
+> +
+> +       if (kstrtouint(s2, 0, &val))
+> +               return -EINVAL;
+> +
+> +       err = regmap_write(priv->map_reg, off, val);
+> +       if (err)
+> +               return -EINVAL;
+> +
+> +       return len;
+> +}
+> +
+> +static DEVICE_ATTR_RW(can_get_reg);
+> +static DEVICE_ATTR_RW(can_set_reg);
+> +
+> +static struct attribute *can_attributes[] = {
+> +       &dev_attr_can_get_reg.attr,
+> +       &dev_attr_can_set_reg.attr,
+> +       NULL
+> +};
+> +
+> +static const struct attribute_group can_group = {
+> +       .attrs = can_attributes,
+> +       NULL
+> +};
+> +
+>  static const struct mcp251xfd_devtype_data mcp251xfd_devtype_data_mcp2517fd = {
+>         .quirks = MCP251XFD_QUIRK_MAB_NO_WARN | MCP251XFD_QUIRK_CRC_REG |
+>                 MCP251XFD_QUIRK_CRC_RX | MCP251XFD_QUIRK_CRC_TX |
+> @@ -2944,6 +3069,12 @@ static int mcp251xfd_probe(struct spi_device *spi)
+>         if (err)
+>                 goto out_free_candev;
+>
+> +       err = sysfs_create_group(&spi->dev.kobj, &can_group);
+> +       if (err) {
+> +               netdev_err(priv->ndev, "Create can group fail.\n");
+> +               goto out_free_candev;
+> +       }
+> +
+>         err = can_rx_offload_add_manual(ndev, &priv->offload,
+>                                         MCP251XFD_NAPI_WEIGHT);
+>         if (err)
+> @@ -2972,6 +3103,7 @@ static int mcp251xfd_remove(struct spi_device *spi)
+>         mcp251xfd_unregister(priv);
+>         spi->max_speed_hz = priv->spi_max_speed_hz_orig;
+>         free_candev(ndev);
+> +       sysfs_remove_group(&spi->dev.kobj, &can_group);
+>
+>         return 0;
+>  }
+> --
+> 2.25.1
+>
