@@ -2,100 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899FD2FFDDE
-	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 09:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F35C2FFDFC
+	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 09:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726974AbhAVIF3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 22 Jan 2021 03:05:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53854 "EHLO
+        id S1726648AbhAVIPD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 22 Jan 2021 03:15:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726751AbhAVIFZ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 03:05:25 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F302C06174A;
-        Fri, 22 Jan 2021 00:04:44 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id o18so3505842qtp.10;
-        Fri, 22 Jan 2021 00:04:44 -0800 (PST)
+        with ESMTP id S1726586AbhAVIO7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 03:14:59 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE203C061786;
+        Fri, 22 Jan 2021 00:14:15 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id v126so4342878qkd.11;
+        Fri, 22 Jan 2021 00:14:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=Kx3sH6YHlpgK218Xqk1ihUZMM+LeKPCk6agxOk0gJmM=;
-        b=D3e7DVZXhlIvnI8Jabvi3Ua7OjQqy3K9WCZPCDupl3J5qtqmO8a8VE7zup0z14bvWX
-         jn+I9U4TbM7y3xkbY4ZlEwR7K7vE5D3KCkDeVKEzidU/sW4FIZFf/I8Lt4sQkeABNG9O
-         rbNT9kke1JSvUe6eVkD+6CstOjPhswyElvy9JMuUDKjqnq26Ayue0Wsa/A+UQ4VLgXcO
-         7tcIB7thrFFe200npdTBk6YsOjkZHXPZ74n6Tq7BeOwbAAQS8BZe5gG+3XZkUfymCDeL
-         RA0vmPfbp6jcpWmqxt58XEa9TXr5fMtABVORBoIQREpybdUTvFPQc8pdJkp696y/VElP
-         WalQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j9WFwnkI02ep3Zjvdj1Uqy/+MDbNFHZwwnPFmhXv7IQ=;
+        b=DKU52w2ZIfEETZOzXJtm56X6DbLG+6QwWX/dvJfo9NmvEb4stLQ6yoavYmnGjsd32X
+         ETvu2q5JkphB/v5duewNkzzCljIYTjZeaQa6rQA2OuyD5ISzTng/4futdSrfwqNbm96V
+         htXB3w2xu4LuedJMUMWKDo1OsrWKhelihDWYSmUlZUMyaGdxLDFdLkOV0k5ba3XC9IDr
+         h10GAzMbaumbSBeVHlhyhS48ACmo5Thn6ouI5E2B0IvdQnaRn3qwdUCOdqgCH/quXBql
+         BBu7TpOZPGCjqsITiwqrCcFn7Do3PitR4N27TcvMf6qlzcDuz4b/3YKn+7DK6QBAwuuk
+         mNaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=Kx3sH6YHlpgK218Xqk1ihUZMM+LeKPCk6agxOk0gJmM=;
-        b=a21Q4EIV0QtM30OJAj86RdM32gD2iMfEJouqaAmdLUZBJl3gTa23fYHtZHEqDhEvS/
-         pzGN9ps0LTV0fgiohtlU4BOJGPkK8uu4nxfopOivjXBn17EXASRotRM5u3Gid01gRXr+
-         G32xMSdnXS6Z++yNuoLPumnfrl5sYA+OEzmYGYS5avH1GuAHTcqRIyItjYnK67efbKTX
-         S1XOAPLpdC4n8GAyJQ1hirpSHIv4v25E2GrSTujH3YmudxWJypLRBgBPIvbo3rcs57El
-         k/OU4AcClpgsgufr7VC7JO2RpbIWeFbQtnc41X1HGdPk0NtFBpg1nu4x9q9I0nfcxi7F
-         +zww==
-X-Gm-Message-State: AOAM532OFGmuO5kQ42quu5cOdZA7lVvxHrmWnV4SGmWGg39lz23HFdI8
-        A6o7lQPy9K7YfoakHZji4VnsBiYBgEadfOXtyIY=
-X-Google-Smtp-Source: ABdhPJxJHbeeR43zsgpwVrgT6+nsbNZ6WrgxKtmBY3w5+CnKtZ90SVA4xW0zshG3KJ3afUHPLQdcXw==
-X-Received: by 2002:ac8:3987:: with SMTP id v7mr3243472qte.144.1611302683458;
-        Fri, 22 Jan 2021 00:04:43 -0800 (PST)
-Received: from [0.0.0.0] ([2001:19f0:5:2661:5400:2ff:fe99:4621])
-        by smtp.gmail.com with ESMTPSA id e38sm5385674qtb.30.2021.01.22.00.04.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jan 2021 00:04:42 -0800 (PST)
-Subject: Re: [PATCH v1] can: mcp251xfd: Add some sysfs debug interfaces for
- registers r/w
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
-        wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j9WFwnkI02ep3Zjvdj1Uqy/+MDbNFHZwwnPFmhXv7IQ=;
+        b=njEFtrfWYy/khxp5olI+qhEB/H7R7s/XKgE2OLlMCTitf4O2AcLIDOgEqN8CSB3zfv
+         tQyVmNEpo8WntHt7OmEi6/DtxO6OlO9gVaoltgUj0CytHailXvSn8KcopXq0exSphDgc
+         TXUaRhBDGHQPLKAa1DuMYNlajlatC7mbIPxxgijbB4y9Aur2gCC9JRGLfxaEx0QxNyeD
+         roZlmq9mzZSSxj0baDoV3ksLbEvhh6eJ95QTQjD+f558jmCKMnDudNR2dCRUEuSFXwtP
+         R7nEzdJTAivISJ3aKPYTXkrbts6KoRAWtpKBw63+xSybPh+U/vN26GWKaPt/fgQ5V9Tb
+         8uuw==
+X-Gm-Message-State: AOAM531drjrSVIr5HG6DPMWhI+UHwxlhaKt4+00p2sN8K9gmwiPw8Jfw
+        cfvMpLR/Un+olfvC71M5K+U=
+X-Google-Smtp-Source: ABdhPJwrz4ohm9c7mWJB6FvpHRMBPQ0ca5ylqR8DG8B3GsDLaNh/RDdVFjvZ512SJvpF8dkHLJrMYA==
+X-Received: by 2002:a05:620a:f92:: with SMTP id b18mr3765133qkn.146.1611303255275;
+        Fri, 22 Jan 2021 00:14:15 -0800 (PST)
+Received: from localhost.localdomain ([45.32.7.59])
+        by smtp.gmail.com with ESMTPSA id y25sm5751624qky.14.2021.01.22.00.14.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jan 2021 00:14:14 -0800 (PST)
+From:   Su Yanjun <suyanjun218@gmail.com>
+To:     mkl@pengutronix.de, manivannan.sadhasivam@linaro.org,
+        thomas.kopp@microchip.com, wg@grandegger.com, davem@davemloft.net,
+        kuba@kernel.org, lgirdwood@gmail.com, broonie@kernel.org
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210122062255.202620-1-suyanjun218@gmail.com>
- <7181a6a3-62c6-9021-ea63-827f55eacd98@pengutronix.de>
-From:   Su <suyanjun218@gmail.com>
-Message-ID: <f311f01e-5203-821b-e44f-f0088a4622e7@gmail.com>
-Date:   Fri, 22 Jan 2021 16:04:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        linux-kernel@vger.kernel.org, Su Yanjun <suyanjun218@gmail.com>
+Subject: [PATCH v4] can: mcp251xfd: replace sizeof(u32) with val_bytes in regmap
+Date:   Fri, 22 Jan 2021 16:13:34 +0800
+Message-Id: <20210122081334.213957-1-suyanjun218@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <7181a6a3-62c6-9021-ea63-827f55eacd98@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The sizeof(u32) is hardcoded. It's better to use the config value in
+regmap.
 
-在 2021/1/22 下午3:22, Marc Kleine-Budde 写道:
-> On 1/22/21 7:22 AM, Su Yanjun wrote:
->> When i debug mcp2518fd, some method to track registers is
->> needed. This easy debug interface will be ok.
-> NACK
->
-> As the driver uses regmap, everything should be there already.
->
-> To read use:
->
-> | cat /sys/kernel/debug/regmap/spi0.0-crc/registers
->
-> Register write support for devices that are handles by proper kernel drivers is
-> a pure debugging tool, thus not enabled by default, not even with a Kconfig
-> switch. You have to enable it manually, have a look at commit:
->
-> 09c6ecd39410 regmap: Add support for writing to regmap registers via debugfs
+It increases the size of target object, but it's flexible when new mcp chip
+need other val_bytes.
 
-You're right.
+Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
+---
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Thank you
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index f07e8b737d31..3dde52669343 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -1308,6 +1308,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
+ 		       const u8 offset, const u8 len)
+ {
+ 	const struct mcp251xfd_tx_ring *tx_ring = priv->tx;
++	int val_bytes = regmap_get_val_bytes(priv->map_rx);
+ 
+ 	if (IS_ENABLED(CONFIG_CAN_MCP251XFD_SANITY) &&
+ 	    (offset > tx_ring->obj_num ||
+@@ -1322,7 +1323,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
+ 	return regmap_bulk_read(priv->map_rx,
+ 				mcp251xfd_get_tef_obj_addr(offset),
+ 				hw_tef_obj,
+-				sizeof(*hw_tef_obj) / sizeof(u32) * len);
++				sizeof(*hw_tef_obj) / val_bytes * len);
+ }
+ 
+ static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
+@@ -1511,11 +1512,12 @@ mcp251xfd_rx_obj_read(const struct mcp251xfd_priv *priv,
+ 		      const u8 offset, const u8 len)
+ {
+ 	int err;
++	int val_bytes = regmap_get_val_bytes(priv->map_rx);
+ 
+ 	err = regmap_bulk_read(priv->map_rx,
+ 			       mcp251xfd_get_rx_obj_addr(ring, offset),
+ 			       hw_rx_obj,
+-			       len * ring->obj_size / sizeof(u32));
++			       len * ring->obj_size / val_bytes);
+ 
+ 	return err;
+ }
+@@ -2139,6 +2141,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 	struct mcp251xfd_priv *priv = dev_id;
+ 	irqreturn_t handled = IRQ_NONE;
+ 	int err;
++	int val_bytes = regmap_get_val_bytes(priv->map_reg);
+ 
+ 	if (priv->rx_int)
+ 		do {
+@@ -2162,7 +2165,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 		err = regmap_bulk_read(priv->map_reg, MCP251XFD_REG_INT,
+ 				       &priv->regs_status,
+ 				       sizeof(priv->regs_status) /
+-				       sizeof(u32));
++				       val_bytes);
+ 		if (err)
+ 			goto out_fail;
+ 
+-- 
+2.25.1
 
->
-> regards,
-> Marc
->
