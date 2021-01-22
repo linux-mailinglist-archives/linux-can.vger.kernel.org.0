@@ -2,38 +2,38 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A722FFD4D
-	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 08:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1322FFD59
+	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 08:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726881AbhAVHXy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 22 Jan 2021 02:23:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44832 "EHLO
+        id S1726986AbhAVH1Y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 22 Jan 2021 02:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726094AbhAVHXn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 02:23:43 -0500
+        with ESMTP id S1727062AbhAVH1W (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 02:27:22 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7BBC06174A
-        for <linux-can@vger.kernel.org>; Thu, 21 Jan 2021 23:23:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B45C0613ED
+        for <linux-can@vger.kernel.org>; Thu, 21 Jan 2021 23:26:42 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l2qmR-0006Du-Cy; Fri, 22 Jan 2021 08:22:51 +0100
+        id 1l2qq4-0006bj-4g; Fri, 22 Jan 2021 08:26:36 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:aed1:e241:8b32:9cc0] (unknown [IPv6:2a03:f580:87bc:d400:aed1:e241:8b32:9cc0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 934425CA4EA;
-        Fri, 22 Jan 2021 07:22:47 +0000 (UTC)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 3AEE05CA4F1;
+        Fri, 22 Jan 2021 07:26:34 +0000 (UTC)
 To:     Su Yanjun <suyanjun218@gmail.com>,
         manivannan.sadhasivam@linaro.org, thomas.kopp@microchip.com,
         wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
         lgirdwood@gmail.com, broonie@kernel.org
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20210122062255.202620-1-suyanjun218@gmail.com>
+References: <20210122030214.166334-1-suyanjun218@gmail.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -95,17 +95,17 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH v1] can: mcp251xfd: Add some sysfs debug interfaces for
- registers r/w
-Message-ID: <7181a6a3-62c6-9021-ea63-827f55eacd98@pengutronix.de>
-Date:   Fri, 22 Jan 2021 08:22:43 +0100
+Subject: Re: [PATCH v1] can: mcp251xfd: use regmap_bulk_write for
+ compatibility
+Message-ID: <7007275e-a271-8160-729b-67e4d579dfe2@pengutronix.de>
+Date:   Fri, 22 Jan 2021 08:26:30 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210122062255.202620-1-suyanjun218@gmail.com>
+In-Reply-To: <20210122030214.166334-1-suyanjun218@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="byx8IapFzFTq197OxxdaaUfUZZSZetpZA"
+ boundary="JqAFCNcLepDxQuiQEg2w1MyCLwdxcSq6B"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,8 +115,8 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---byx8IapFzFTq197OxxdaaUfUZZSZetpZA
-Content-Type: multipart/mixed; boundary="KEhEh49rfMhHsKuTYM517rKrOeh8U3Yqe";
+--JqAFCNcLepDxQuiQEg2w1MyCLwdxcSq6B
+Content-Type: multipart/mixed; boundary="xOnKsZEu3EoQCXgzv2UK6pcoBQzUNpUgy";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
 To: Su Yanjun <suyanjun218@gmail.com>, manivannan.sadhasivam@linaro.org,
@@ -124,37 +124,30 @@ To: Su Yanjun <suyanjun218@gmail.com>, manivannan.sadhasivam@linaro.org,
  kuba@kernel.org, lgirdwood@gmail.com, broonie@kernel.org
 Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Message-ID: <7181a6a3-62c6-9021-ea63-827f55eacd98@pengutronix.de>
-Subject: Re: [PATCH v1] can: mcp251xfd: Add some sysfs debug interfaces for
- registers r/w
-References: <20210122062255.202620-1-suyanjun218@gmail.com>
-In-Reply-To: <20210122062255.202620-1-suyanjun218@gmail.com>
+Message-ID: <7007275e-a271-8160-729b-67e4d579dfe2@pengutronix.de>
+Subject: Re: [PATCH v1] can: mcp251xfd: use regmap_bulk_write for
+ compatibility
+References: <20210122030214.166334-1-suyanjun218@gmail.com>
+In-Reply-To: <20210122030214.166334-1-suyanjun218@gmail.com>
 
---KEhEh49rfMhHsKuTYM517rKrOeh8U3Yqe
+--xOnKsZEu3EoQCXgzv2UK6pcoBQzUNpUgy
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
 
-On 1/22/21 7:22 AM, Su Yanjun wrote:
-> When i debug mcp2518fd, some method to track registers is
-> needed. This easy debug interface will be ok.
+On 1/22/21 4:02 AM, Su Yanjun wrote:
+> Recently i use mcp2518fd on 4.x kernel which multiple write is not
+> backported, regmap_raw_write will cause old kernel crash because the
+> tx buffer in driver is smaller then 2K. Use regmap_bulk_write instead
+> for compatibility.
 
-NACK
-
-As the driver uses regmap, everything should be there already.
-
-To read use:
-
-| cat /sys/kernel/debug/regmap/spi0.0-crc/registers
-
-Register write support for devices that are handles by proper kernel driv=
-ers is
-a pure debugging tool, thus not enabled by default, not even with a Kconf=
-ig
-switch. You have to enable it manually, have a look at commit:
-
-09c6ecd39410 regmap: Add support for writing to regmap registers via debu=
-gfs
+Hmmm, this patch will never be backported to any 4.x kernel, as the drive=
+r is
+not available on these kernels. You have to carry patches for these kerne=
+ls
+anyway, so I think I'll not take that patch. Sorry. Drop me a note if you=
+ are
+interested in updating your kernel to a recent v5.11 kernel.
 
 regards,
 Marc
@@ -166,23 +159,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---KEhEh49rfMhHsKuTYM517rKrOeh8U3Yqe--
+--xOnKsZEu3EoQCXgzv2UK6pcoBQzUNpUgy--
 
---byx8IapFzFTq197OxxdaaUfUZZSZetpZA
+--JqAFCNcLepDxQuiQEg2w1MyCLwdxcSq6B
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAKfUMACgkQqclaivrt
-76ncugf+MUBVB+aTRouQmk/9/GF5nxzgNZftctWAXsLodpiT3ATRXq/BFgWl+QHh
-wFMTAM+aryuEhqlC9aWOKUgqGZCAHGPcHSF3l7UBeOh3hDGnVit1gB9brkF8byHR
-Vsln/dBJyjcpVdcF1IaGF5rLrVuLOutTr1sWgBl8frf97+z6fL75g/A01mJ/zd+r
-KGzi90eZnHM9FKm6Cr6jpvgcAIZbmOV/LYk9gN+PvuCsfmbsMVv32qPcqezxwc3l
-VpzLw9DfmIQO+JXyaTxZmQ+HCyN8tE4WqPun8IUC+Q4kfvcNcD4G4sA+xwq5PcA1
-HEIQm4YaQ0HOHmikPUx5lapExjDquA==
-=aEbX
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAKfiYACgkQqclaivrt
+76lNsAf/RID0x67zSmVj2QoEMW3Dy8ksMpCzboa/GbeB9Vq1Mpg4YXeeA6//88J5
+GmtGBxxbrJMDMpUs5c4fer7JPJKetEM0FCDxAuR2KCVetVaGvyFtthaOKuB3zWfu
+D2d3nwf4F+vmhzjs9S8LVXKXK+kcjfKgtVYnW56EQEYrSOImQuF4c3PJZYh6JHZq
+apSle4AtsfjawLTV6nJGVPQZre0nPYftIKbcTBeIHe+Q6ljfzGacBnho9+jM0Za8
+CQUoUkmBqS4tZ8gOpr8CxB0CVKM54Y8K+Y0kVzmpKVA5FP/QQIngk25ClaHdlvf2
+A8C8HzhwDBVurFW99zkMYymuPoNEEA==
+=vFGj
 -----END PGP SIGNATURE-----
 
---byx8IapFzFTq197OxxdaaUfUZZSZetpZA--
+--JqAFCNcLepDxQuiQEg2w1MyCLwdxcSq6B--
