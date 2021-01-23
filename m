@@ -2,1347 +2,243 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9C430079B
-	for <lists+linux-can@lfdr.de>; Fri, 22 Jan 2021 16:43:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4C33013C9
+	for <lists+linux-can@lfdr.de>; Sat, 23 Jan 2021 08:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbhAVPmj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 22 Jan 2021 10:42:39 -0500
-Received: from mail-yb1-f174.google.com ([209.85.219.174]:39296 "EHLO
-        mail-yb1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728686AbhAVPl4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 22 Jan 2021 10:41:56 -0500
-Received: by mail-yb1-f174.google.com with SMTP id k4so5838226ybp.6
-        for <linux-can@vger.kernel.org>; Fri, 22 Jan 2021 07:41:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8BGttgCtfI8Z2eXKVsNxr2pA1W6cph/9Xn1foPofNQc=;
-        b=tZaIk2TWh/zlXHoNqdUjV8foZahBNXTtiIsEwHo/DqaxVE20x9CWo72RDycdS5N+oV
-         jkb1GMA0VqRB2Zzfn1KcCM6opl/1CwovWbo9XrUIi2ditj8etqHoVIlhihYbdlT7piUz
-         oF3YZIBb78cy/Uo+tE2/PbbM24YTnCOnlIp2R2kcmwJINR3xXz9EOZGx5nT7dbQgisCo
-         zD1bh6K84vSGn75ULPWtfxlC+h7oX9rdioJQ4RUJ775cGAg1xKvdbb7eAYYwXqmeYbNn
-         KgarvJ3+9o0PgGBjygshm+sV4qcLKKBMiYv8oMeA+UkI7PgzXqd6Rgz0pWXHQKpv+hNx
-         Kqqw==
-X-Gm-Message-State: AOAM533TJZHCpy57VYHfTsZ8Ggae++b7lO6GhKIxB4dInqikxmvTlE3i
-        0o75Tf90ZisE/BDi0TjDW7rC8lQpoIbLP0pvrLWWtCJP5IHGiA==
-X-Google-Smtp-Source: ABdhPJzLE6FQj/ER2P9niPiELXj25BzRgrOVI+BYqrzE5hPDX4MVtyUpXea/GNgzgMP+BaTvuUfptApqDC8sWM4UjrM=
-X-Received: by 2002:a25:ba05:: with SMTP id t5mr6940883ybg.360.1611330071783;
- Fri, 22 Jan 2021 07:41:11 -0800 (PST)
+        id S1726698AbhAWHlk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 23 Jan 2021 02:41:40 -0500
+Received: from mail-vi1eur05on2089.outbound.protection.outlook.com ([40.107.21.89]:51808
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726617AbhAWHli (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 23 Jan 2021 02:41:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jCDQutsRidHsjiePlPFhxhPYe4LQSesGMjsuAv9FNHHsXcs+g4aT5+KQaagd497a+VoJPeLSdKiNU7+6BL96aeBUSSOizMxtGLMu0tEJE4m0vhzl+Wx1KWJfoE5zOxm2vh3lgp/40RxrFUs6wB2l02phBHEF0s3wsHO092kjaMvbHbRsaWpjvYVb6wC0vRADhQedHfbaO/gr5pdDKU++qEl39Gi74ygHBgzFEY/NH5GeyQoqGjk8olV3FjahRTTRHe7Qvhh1zqQUz/yoiQ74WjHl6Ptc1E5ousG4kqdft2bgh3YmXc+NVm9uqrzQSon5Gq4bkPZyi6UhMjdn7RprhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kLVXSEDp66V62tSIGx6KUZyshXLYmOSxJhDl96aORHk=;
+ b=fsmHARAEiCcHon0lzZ5yQcFURYYQn50NKe7tYemwzDGJi0meWPrNGCt/LLGmlu23qMsWQHkcPCWugaN7q2Lsf+yPTRaZXkfmRmq2d/mBTpMJZ50/Cc80WOL7aFTD3FcBphvu0sK5bjCYEHKwzcXtyjkXKN6jW/xlDQtBVnBmaGwTTzaGlqlJ/d+H6mgD3ll+zVtjZT+oy2AdJQdmQjY4/d49euCytgwdDmzu5fceGY12TehnQK4H719X8lWk1tLIhONTjJLMDbMB1oTv7OZTNktSNDyl+6NGUxCsLFArf8cd3Rl/zbSOTJzVZpCW2kH5j+oWlOV69BqKJwve0LafFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kLVXSEDp66V62tSIGx6KUZyshXLYmOSxJhDl96aORHk=;
+ b=bDwv2NqWczS30gjIxZ1CC08baLq8vguLBpXDPdFfapY3cOH7nVzZFol+OGM8r96XWyAaM6yrCOLoyQ3Q9erVkeqdUYRPAxu2h8i6M+3fPMzA+YZnhg0fUlJtC16zlpkYp19bQq6oonXUgOQ08xyuwGB4r6efgqrBoeeXKh2nAPg=
+Received: from VI1PR04MB6800.eurprd04.prod.outlook.com (2603:10a6:803:133::16)
+ by VI1PR04MB4736.eurprd04.prod.outlook.com (2603:10a6:803:5d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11; Sat, 23 Jan
+ 2021 07:40:47 +0000
+Received: from VI1PR04MB6800.eurprd04.prod.outlook.com
+ ([fe80::6958:79d5:16bf:5f14]) by VI1PR04MB6800.eurprd04.prod.outlook.com
+ ([fe80::6958:79d5:16bf:5f14%8]) with mapi id 15.20.3784.014; Sat, 23 Jan 2021
+ 07:40:47 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: RE: [5.10 CAN BUG report] kernel dump about echo skb
+Thread-Topic: [5.10 CAN BUG report] kernel dump about echo skb
+Thread-Index: Adbv0JcY0ZF9qkIgQu6uosJiCy92lAAwrSDwAAK1AQAAAIcBAAAAmOMAAABlCAAALLACYA==
+Date:   Sat, 23 Jan 2021 07:40:47 +0000
+Message-ID: <VI1PR04MB680067A3BD86FFFC1E381FEBE6BF0@VI1PR04MB6800.eurprd04.prod.outlook.com>
+References: <DB8PR04MB6795E0155F4523CA9D4AAC1CE6A10@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <DB8PR04MB679559428DCCA341EE53A6E4E6A00@DB8PR04MB6795.eurprd04.prod.outlook.com>
+ <CAMZ6RqLuL_BzQisQ0kGEnj7zPTe3iKnsd6n2ivZQ+bPnZW_VhA@mail.gmail.com>
+ <20210122092324.fchsd253qnrjxwvr@hardanger.blackshift.org>
+ <20210122094030.dvyzutfy4bw2si6f@pengutronix.de>
+ <CAMZ6RqKd-P32QPyzeeJ7J-L1agHg7HmJtZrzO8WcXCRjDw5Rpw@mail.gmail.com>
+In-Reply-To: <CAMZ6RqKd-P32QPyzeeJ7J-L1agHg7HmJtZrzO8WcXCRjDw5Rpw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: wanadoo.fr; dkim=none (message not signed)
+ header.d=none;wanadoo.fr; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 32d75c0c-be37-432b-eb44-08d8bf7232e6
+x-ms-traffictypediagnostic: VI1PR04MB4736:
+x-microsoft-antispam-prvs: <VI1PR04MB4736E49F0805F04EAD1B64E9E6BF0@VI1PR04MB4736.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: esotL7SJeI/Ro/det+t1TqYlqY4CleAKiReBOCDs+P/a/P1HY+G4WqZVNculaZLKNUBiqMhR6vTKxLE8Vi9Ob+14hpEP2R5D9D/cce+3wtGLm9GuFz5/3miIvU15G+BkB4bCZD+KAiQA89h0Dsa8/Kq6I6mDimBT9BRNwc5cNCkq+P+X6thuSpm7bqR1uZrxKK8WfMuhTgkAyR5awdPJMI9NhN5bNKKNJPVdBjYXp2zfOdAEx+f3XWxPPqkDt+k1V78UZ3Z3ckpvVrgLB6J0DneuSoCuRokLhVgH2aZBauUtU14gjEFPoDquWnTYtVe9dAMwiEzPzxYVlvP9RzDOKT2W7UvsqBhw4pnlYAFylMY0WLvkR27iMmyify4j3yZzp0jgdgdehOf2BWvEXDJtMFAL86HgdEMXyDVh+TedLFvwMvnKnWEMsCarclreCpqvlS0yvNKdXVUr83visK3rDWG3jNnn7xIG+3psKxR1SNcMVz8uNKh/U0frnlj/bEIzsvLzVOsGds61jAVAfWKWOQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB6800.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(366004)(39840400004)(396003)(33656002)(54906003)(76116006)(52536014)(66476007)(7696005)(4326008)(64756008)(55016002)(66556008)(8676002)(2906002)(86362001)(71200400001)(110136005)(316002)(966005)(83380400001)(53546011)(83080400002)(9686003)(66446008)(26005)(5660300002)(186003)(478600001)(66946007)(45080400002)(6506007)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?gb2312?B?dFJWMTVRNjZZR20zSER1MDVrbVdWT3lqMG1WdHdJRHJQekkzSWU0RmZCR1hN?=
+ =?gb2312?B?aTcyVUhLTVo0VkxZR2VsaWdyWGRzd1g5bFRTbkFwZ2o0K0h3YlQ2RlBlYVc2?=
+ =?gb2312?B?RDh5QzNoS3J3WEdlMEMyd28xODMwTFQwaUkvaGhyL29JSUdRTkZuZmxQTi9P?=
+ =?gb2312?B?Tlp2ZEZacDFHOE0wYitlNktRN2U1VUFHMy9xVGo3czFjby92YzlDWFVmSUdy?=
+ =?gb2312?B?eWJCTms2Mm9ERXY5dzE1MlIyeXJEcHlVeDNhZGIybFZxRDAyVVM0cEVERE9N?=
+ =?gb2312?B?a2czYXoxTUlzNHFYM2QyQXk1MGFCZkVCanVtQzJUNllzL1NCbEJtUG5sRlIw?=
+ =?gb2312?B?Wm40ZFdsaVhDMzR0Qk5DOEhJM2FsSmhuVFZnQTNESHdiamFTNkpwNVUzb3R1?=
+ =?gb2312?B?MGkyVy9yR3k0cGZMZkpvOUIvZUprRDJCa21RUzIwMHB4czFKSjZZbkhVRDVD?=
+ =?gb2312?B?cVhWSnF0WFhDanVHMTFpNkZNYzlBTUlPd1EzRm5PR1AzWVZlSHZ5ODZJcEkz?=
+ =?gb2312?B?UHJpai9pSlBGUGxVaUtFUWJ4ckJiTUQrWjVIM2JLTVZFUDFwVHBlS1owTnZD?=
+ =?gb2312?B?QXdKWmdHQWNWd2llS3Npb05XNDBBVTl6b2ZTMjVjUTgwM2xZRWFCWGNyRUMz?=
+ =?gb2312?B?K2FJSmFsd09YN3NyLzJ1RzVVN0JXK1VEd3d2d2pKTG0weXVsNHdTY043RnVl?=
+ =?gb2312?B?M3V2Uk1OK1JmRm1oTVRHNENJbVZVeWVZazhWalBMVS9IKy9oVHltbXRtTi84?=
+ =?gb2312?B?OU1lZDdneUVObWk0NXlCUlBjNGx1SjJiYUtzQlJaKzY5ZDRFVXBFbEQ5M0kx?=
+ =?gb2312?B?TkdwS2NKWnVsZXVxZGk5eWNnTG9PWTJhS2ZYSFlGdzk0Ymg1TFplMjRJSDNr?=
+ =?gb2312?B?azZvVlJ1UGVTemwvcW5BR0RpdkpqSVYvT0xGZXF6VTl3cm1QVXhIRlBjSTdB?=
+ =?gb2312?B?RUd0a0tiWTVmcWorYnEwa2tiTnNUSHVvS0hvV1p4eS9QNlZDNUpmUUFoSDdT?=
+ =?gb2312?B?RzNYeE5UcG9KSGt5TWt1Mmg5THJqS0xrcnFYZHBDU2lBbUc0T2ZTV1M4V2xu?=
+ =?gb2312?B?UGdZTVovM2x1ck1xcnJ6VzlaMWtwWGZkM2RZVHBXWnIxVWxQNmpBSnhKRG5K?=
+ =?gb2312?B?a1dWeFRmY3FkcUlTRjQyb0wveTlSWkhYNkVtWEdrRjlHdi9vVExQWnlma2hP?=
+ =?gb2312?B?NnN6VG9SYTFsa1FreWRjM25NWmdMK3E2SER1Qk9sZFJaR25oZ200R2ZRM0Ji?=
+ =?gb2312?B?bWpMNEVwU2R5dFRkdnlDdnA1SW5WcUliUjhBZlg2TFFQUFpiWFRSdlJsdzc2?=
+ =?gb2312?Q?jaDjioeq6BYyQ=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20210122110533.2728-1-abhijeet.badurkar@duagon.com>
-In-Reply-To: <20210122110533.2728-1-abhijeet.badurkar@duagon.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sat, 23 Jan 2021 00:41:00 +0900
-Message-ID: <CAMZ6Rq+MPpknpxwKv0-eV8J3FbKw7AigWrzbMC1HJgEUv8f56A@mail.gmail.com>
-Subject: Re: [PATCH v6] net: can: Introduce MEN 16Z192-00 CAN controller driver
-To:     Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>,
-        andreas.geissler@duagon.com, stefan.schlosser@duagon.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB6800.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 32d75c0c-be37-432b-eb44-08d8bf7232e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2021 07:40:47.2294
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CtMBojnQ4eocdfC1hXRtM5IjQ2Fgt5TB4fEQLdP0wHkFaXpYLot85t2TWUe6O4JOW6TKzyv2V/GZZmrty+V5aQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4736
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Abhijeet,
-
-I did a quick review.
-
-On Fri. 22 Jan 2021 at 20:05, Abhijeet Badurkar
-<abhijeet.badurkar@duagon.com> wrote:
->         This CAN Controller is found on MEN Chameleon FPGAs.
->
->         The driver/device supports the CAN2.0 specification.
->         There are 255 RX and 255 Tx buffer within the IP. The
->         pointer for the buffer are handled by HW to make the
->         access from within the driver as simple as possible.
->
->         The driver also supports parameters to configure the
->         buffer level interrupt for RX/TX as well as a RX timeout
->         interrupt using ethtool.
->
->         With this configuration options, the driver/device
->         provides flexibility for different types of usecases.
->
->         Changes in version 2:
->         Since the hardware does not have TX-done notification,
->         the local loopback mechanism is implemented using ECHO skbs.
->         The skb is added to echo stack, upon packet reception,
->         received and echo skb are matched.
->
->         LED trigger support is added.
->
->         Changes in version 3:
->         Fixed compiler warning.
->
->         Changes in version 4:
->         Implemented the module parameters using ethtool coalesce.
->         Removed LED trigger implementation. Used FIELD_GET and
->         FIELD_PREP for setting and getting register values. Replaced
->         some hard-coded values with macros.
->
->         Changes in version 5:
->         Fixed compiler warning.
->
->         Changes in version 6:
->         Implemented polling mode and added parameter for polling interval.
->         Note: Previous version of this path had sparse warning regarding
->         iounmap function of openrisc architecture. Since this function is now
->         fixed in mainline, sparse warning is removed.
->
-> Signed-off-by: Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
-> ---
->  drivers/net/can/Kconfig        |   10 +
->  drivers/net/can/Makefile       |    1 +
->  drivers/net/can/men_z192_can.c | 1150 ++++++++++++++++++++++++++++++++
->  3 files changed, 1161 insertions(+)
->  create mode 100644 drivers/net/can/men_z192_can.c
->
-> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-> index 1c28eade6bec..bbf6e19e4797 100644
-> --- a/drivers/net/can/Kconfig
-> +++ b/drivers/net/can/Kconfig
-> @@ -134,6 +134,16 @@ config CAN_KVASER_PCIEFD
->             Kvaser Mini PCI Express HS v2
->             Kvaser Mini PCI Express 2xHS v2
->
-> +config CAN_MEN_Z192
-> +       depends on MCB
-> +       tristate "MEN 16Z192-00 CAN Controller"
-> +         help
-> +         Driver for MEN 16Z192-00 CAN Controller IP-Core, which
-> +         is connected to the MEN Chameleon Bus.
-> +
-> +         This driver can also be built as a module. If so, the module will be
-> +         called men_z192_can.ko.
-> +
->  config CAN_SUN4I
->         tristate "Allwinner A10 CAN controller"
->         depends on MACH_SUN4I || MACH_SUN7I || COMPILE_TEST
-> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
-> index 22164300122d..d874ab1b9f08 100644
-> --- a/drivers/net/can/Makefile
-> +++ b/drivers/net/can/Makefile
-> @@ -26,6 +26,7 @@ obj-$(CONFIG_CAN_GRCAN)               += grcan.o
->  obj-$(CONFIG_CAN_IFI_CANFD)    += ifi_canfd/
->  obj-$(CONFIG_CAN_JANZ_ICAN3)   += janz-ican3.o
->  obj-$(CONFIG_CAN_KVASER_PCIEFD)        += kvaser_pciefd.o
-> +obj-$(CONFIG_CAN_MEN_Z192)     += men_z192_can.o
->  obj-$(CONFIG_CAN_MSCAN)                += mscan/
->  obj-$(CONFIG_CAN_M_CAN)                += m_can/
->  obj-$(CONFIG_CAN_PEAK_PCIEFD)  += peak_canfd/
-> diff --git a/drivers/net/can/men_z192_can.c b/drivers/net/can/men_z192_can.c
-> new file mode 100644
-> index 000000000000..8a72ffc39508
-> --- /dev/null
-> +++ b/drivers/net/can/men_z192_can.c
-> @@ -0,0 +1,1150 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* MEN 16Z192 CAN Controller driver
-> + *
-> + * Copyright (C) 2016 MEN Mikroelektronik GmbH (www.men.de)
-> + *
-> + * Local loopback implementation in this driver is adapted from Janz MODULbus
-> + * VMOD-ICAN3 CAN Interface Driver
-> + * Copyright (c) 2010 Ira W. Snyder <iws@ovro.caltech.edu>
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/err.h>
-> +#include <linux/bitops.h>
-> +#include <linux/ethtool.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/can.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/can/error.h>
-> +#include <linux/can/led.h>
-> +#include <linux/mcb.h>
-> +#include <linux/bitfield.h>
-> +
-> +#define DRV_NAME    "z192_can"
-> +
-> +#define MEN_Z192_MODE_TOUT_US          40
-> +#define MEN_Z192_READ_POLL_TIMEOUT     10
-> +
-> +/* CTL/BTR Register Bits */
-> +#define MEN_Z192_CTL0_INITRQ           BIT(0)
-> +#define MEN_Z192_CTL0_SLPRQ            BIT(1)
-> +#define MEN_Z192_CTL1_INITAK           BIT(8)
-> +#define MEN_Z192_CTL1_SLPAK            BIT(9)
-> +#define MEN_Z192_CTL1_LISTEN           BIT(12)
-> +#define MEN_Z192_CTL1_LOOPB            BIT(13)
-> +#define MEN_Z192_CTL1_CANE             BIT(15)
-> +#define MEN_Z192_BTR0_BRP              GENMASK(21, 16)
-> +#define MEN_Z192_BTR0_SJW              GENMASK(23, 22)
-> +#define MEN_Z192_BTR1_TSEG1            GENMASK(27, 24)
-> +#define MEN_Z192_BTR1_TSEG2            GENMASK(30, 28)
-> +#define MEN_Z192_BTR1_SAMP             BIT(31)
-
-Please use only one space between the #define and the value.
-
-> +/* IER Interrupt Enable Register bits */
-> +#define MEN_Z192_RXIE                  BIT(0)
-> +#define MEN_Z192_OVRIE                 BIT(1)
-> +#define MEN_Z192_CSCIE                 BIT(6)
-> +#define MEN_Z192_TOUTE                 BIT(7)
-> +#define MEN_Z192_TXIE                  BIT(16)
-> +#define MEN_Z192_ERRIE                 BIT(17)
-> +
-> +#define MEN_Z192_INTE_ALL              (MEN_Z192_RXIE |        \
-> +                                        MEN_Z192_OVRIE |       \
-> +                                        MEN_Z192_CSCIE |       \
-> +                                        MEN_Z192_TOUTE |       \
-> +                                        MEN_Z192_TXIE)
-> +
-> +#define MEN_Z192_INTE_NAPI             (MEN_Z192_RXIE | MEN_Z192_TOUTE)
-> +
-> +/* RX_TX_STAT RX/TX status register bits */
-> +#define MEN_Z192_RX_BUF_CNT            GENMASK(7, 0)
-> +#define MEN_Z192_TX_BUF_CNT            GENMASK(15, 8)
-> +#define        MEN_Z192_RFLG_RXIF              BIT(16)
-> +#define        MEN_Z192_RFLG_OVRF              BIT(17)
-> +#define        MEN_Z192_RFLG_TSTATE            GENMASK(19, 18)
-> +#define        MEN_Z192_RFLG_RSTATE            GENMASK(21, 20)
-> +#define        MEN_Z192_RFLG_CSCIF             BIT(22)
-> +#define        MEN_Z192_RFLG_TOUTF             BIT(23)
-> +#define MEN_Z192_TFLG_TXIF             BIT(24)
-> +
-> +#define MEN_Z192_GET_TSTATE(x)         FIELD_GET(MEN_Z192_RFLG_TSTATE, x)
-> +#define MEN_Z192_GET_RSTATE(x)         FIELD_GET(MEN_Z192_RFLG_RSTATE, x)
-> +
-> +#define MEN_Z192_RFLG_ALL              (MEN_Z192_RFLG_RXIF |   \
-> +                                       MEN_Z192_RFLG_OVRF |    \
-> +                                       MEN_Z192_RFLG_TSTATE |  \
-> +                                       MEN_Z192_RFLG_RSTATE |  \
-> +                                       MEN_Z192_RFLG_CSCIF |   \
-> +                                       MEN_Z192_RFLG_TOUTF |   \
-> +                                       MEN_Z192_TFLG_TXIF)
-> +
-> +/* RX/TX Error counter bits */
-> +#define MEN_Z192_GET_RX_ERR_CNT                GENMASK(7, 0)
-> +#define MEN_Z192_GET_TX_ERR_CNT                GENMASK(23, 16)
-> +
-> +/* Buffer level register bits */
-> +#define MEN_Z192_RX_BUF_LVL            GENMASK(15, 0)
-> +#define MEN_Z192_TX_BUF_LVL            GENMASK(31, 16)
-> +
-> +/* RX/TX Buffer register bits */
-> +#define MEN_Z192_CFBUF_LEN             GENMASK(3, 0)
-> +#define MEN_Z192_CFBUF_ID_11_BITS      GENMASK(31, 21)
-> +#define MEN_Z192_CFBUF_ID_18_BITS      GENMASK(18, 1)
-> +#define MEN_Z192_CFBUF_TS              GENMASK(31, 8)
-> +#define MEN_Z192_CFBUF_E_RTR           BIT(0)
-> +#define MEN_Z192_CFBUF_IDE             BIT(19)
-> +#define MEN_Z192_CFBUF_SRR             BIT(20)
-> +#define MEN_Z192_CFBUF_S_RTR           BIT(20)
-> +
-> +/* Global register offsets */
-> +#define MEN_Z192_RX_BUF_START          0x0000
-> +#define MEN_Z192_TX_BUF_START          0x1000
-> +#define MEN_Z192_REGS_OFFS             0x2000
-> +
-> +/* Buffer level control values */
-> +#define MEN_Z192_MIN_BUF_LVL           0
-> +#define MEN_Z192_MAX_BUF_LVL           254
-> +#define MEN_Z192_RX_BUF_LVL_DEF                5
-> +#define MEN_Z192_TX_BUF_LVL_DEF                5
-> +#define MEN_Z192_RX_TOUT_MIN           0
-> +#define MEN_Z192_RX_TOUT_MAX           65535
-> +#define MEN_Z192_RX_TOUT_DEF           1000
-> +
-> +#define MEN_Z192_CAN_ID_11_BITS                GENMASK(28, 18)
-> +#define MEN_Z192_CAN_ID_18_BITS                GENMASK(17, 0)
-> +
-> +/* Polling interval */
-> +#define MEN_Z192_POLL_INTERVAL_DEF     0
-> +
-> +static int poll_interval = MEN_Z192_POLL_INTERVAL_DEF;
-> +module_param(poll_interval, int, 0444);
-> +MODULE_PARM_DESC(poll_interval, "Poll interval (msec), default="
-> +                __MODULE_STRING(MEN_Z192_POLL_INTERVAL_DEF) ")");
-> +
-> +struct men_z192_regs {
-> +       u32 ctl_btr;            /* Control and bus timing register */
-> +       u32 ier;                /* Interrupt enable register */
-> +       u32 buf_lvl;            /* Buffer level register */
-> +       u32 rxa;                /* RX Data acknowledge register */
-> +       u32 txa;                /* TX data acknowledge register */
-> +       u32 rx_tx_sts;          /* RX/TX flags and buffer level */
-> +       u32 ovr_ecc_sts;        /* Overrun/ECC status register */
-> +       u32 idac_ver;           /* ID acceptance control / version */
-> +       u32 rx_tx_err;          /* RX/TX error counter register */
-> +       u32 idar_0_to_3;        /* ID acceptance register 0...3 */
-> +       u32 idar_4_to_7;        /* ID acceptance register 4...7 */
-> +       u32 idmr_0_to_3;        /* ID mask register 0...3 */
-> +       u32 idmr_4_to_7;        /* ID mask register 4...7 */
-> +       u32 rx_timeout;         /* receive timeout */
-> +       u32 timebase;           /* Base frequency for baudrate calculation */
-> +};
-> +
-> +struct men_z192 {
-> +       struct can_priv can;
-> +       struct napi_struct napi;
-> +       struct net_device *ndev;
-> +       struct device *dev;
-> +
-> +       /* Lock for CTL_BTR register access. This register combines bittiming
-> +        * bits and the operation mode bits. It is also used for bit r/m/w
-> +        * access to all registers.
-> +        */
-> +       spinlock_t lock;
-> +       struct resource *mem;
-> +       struct men_z192_regs __iomem *regs;
-> +       void __iomem *dev_base;
-> +
-> +       int txlvl;
-> +
-> +       /* Following parameters related to RX interrupt have impact on latency
-> +        * and provide the users full control over them.
-> +        *
-> +        * rxlvl: Receive buffer level or in other words, the number of frames
-> +        * to trigger RX interrupt
-> +        * When number of received valid CAN frames exceeds rxlvl and RX
-> +        * interrupt is enabled, an interrupt will be generated. For example,
-> +        * if rxlvl is 0 and one frame is received, an interrupt will be
-> +        * generated or if rxlvl is 254 and 255 frames are received, an
-> +        * interrupt will be generated.
-> +        *
-> +        * rx_timeout: Read timeout for receive buffer
-> +        * When receive buffer is not empty and it has not been accessed since
-> +        * rx_timeout then TOUTF flag is set. If RX interrupt was already
-> +        * enabled and TOUTF flag is set, a RX interrupt will be generated.
-> +        * By defining this parameter, time of the interrupt generation can be
-> +        * controlled, if the RX buffer level is not reached within rx_timeout.
-> +        *
-> +        * When an interrupt is generated for either of these parameters, NAPI
-> +        * poll is scheduled to read the recived CAN frames.
-
-recived -> received
-
-> +        */
-> +       int rxlvl;
-> +       int rx_timeout;
-> +
-> +       /* queue for echo packets */
-> +       struct sk_buff_head echoq;
-> +
-> +       struct hrtimer poll_timer;
-> +};
-> +
-> +struct men_z192_cf_buf {
-> +       u32 can_id;
-> +       u32 data[2];
-
-Is it possible to make it u8 data[CAN_MAX_DLEN]?
-
-> +       u32 length;
-> +};
-> +
-> +enum men_z192_int_state {
-> +       MEN_Z192_CAN_DIS = 0,
-> +       MEN_Z192_CAN_EN,
-> +       MEN_Z192_CAN_NAPI_DIS,
-> +       MEN_Z192_CAN_NAPI_EN,
-> +};
-> +
-> +static const enum can_state bus_state_map[] = {
-> +       CAN_STATE_ERROR_ACTIVE,
-> +       CAN_STATE_ERROR_WARNING,
-> +       CAN_STATE_ERROR_PASSIVE,
-> +       CAN_STATE_BUS_OFF
-> +};
-> +
-> +static const struct can_bittiming_const men_z192_bittiming_const = {
-> +       .name = DRV_NAME,
-> +       .tseg1_min = 4,
-> +       .tseg1_max = 16,
-> +       .tseg2_min = 2,
-> +       .tseg2_max = 8,
-> +       .sjw_max = 4,
-> +       .brp_min = 2,
-> +       .brp_max = 64,
-> +       .brp_inc = 1,
-> +};
-> +
-> +static inline void men_z192_bit_clr(struct men_z192 *priv, void __iomem *addr,
-> +                                   u32 mask)
-> +{
-> +       unsigned long flags;
-> +       u32 val;
-> +
-> +       spin_lock_irqsave(&priv->lock, flags);
-> +
-> +       val = readl(addr);
-> +       val &= ~mask;
-> +       writel(val, addr);
-> +
-> +       spin_unlock_irqrestore(&priv->lock, flags);
-> +}
-> +
-> +static inline void men_z192_bit_set(struct men_z192 *priv, void __iomem *addr,
-> +                                   u32 mask)
-> +{
-> +       unsigned long flags;
-> +       u32 val;
-> +
-> +       spin_lock_irqsave(&priv->lock, flags);
-> +
-> +       val = readl(addr);
-> +       val |= mask;
-> +       writel(val, addr);
-> +
-> +       spin_unlock_irqrestore(&priv->lock, flags);
-> +}
-> +
-> +static inline void men_z192_ack_rx_pkg(struct men_z192 *priv,
-> +                                      unsigned int count)
-> +{
-> +       writel(count, &priv->regs->rxa);
-> +}
-> +
-> +static inline void men_z192_ack_tx_pkg(struct men_z192 *priv,
-> +                                      unsigned int count)
-> +{
-> +       writel(count, &priv->regs->txa);
-> +}
-> +
-> +static void men_z192_set_int(struct men_z192 *priv,
-> +                            enum men_z192_int_state state)
-> +{
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +
-> +       if (priv->ndev->irq == 0) {
-> +               /* don't enable any interrupts at all */
-> +               state = MEN_Z192_CAN_DIS;
-> +       }
-> +
-> +       switch (state) {
-> +       case MEN_Z192_CAN_DIS:
-> +               men_z192_bit_clr(priv, &regs->ier, MEN_Z192_INTE_ALL);
-> +               break;
-> +
-> +       case MEN_Z192_CAN_EN:
-> +               men_z192_bit_set(priv, &regs->ier, MEN_Z192_INTE_ALL);
-> +               break;
-> +
-> +       case MEN_Z192_CAN_NAPI_DIS:
-> +               men_z192_bit_clr(priv, &regs->ier, MEN_Z192_INTE_NAPI);
-> +               break;
-> +
-> +       case MEN_Z192_CAN_NAPI_EN:
-> +               men_z192_bit_set(priv, &regs->ier, MEN_Z192_INTE_NAPI);
-> +               break;
-> +
-> +       default:
-> +               netdev_err(priv->ndev, "invalid interrupt state\n");
-> +               break;
-> +       }
-> +}
-> +
-> +static int men_z192_get_berr_counter(const struct net_device *ndev,
-> +                                    struct can_berr_counter *bec)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       u32 err_cnt;
-> +
-> +       err_cnt = readl(&regs->rx_tx_err);
-> +
-> +       bec->txerr = FIELD_GET(MEN_Z192_GET_TX_ERR_CNT, err_cnt);
-> +       bec->rxerr = FIELD_GET(MEN_Z192_GET_RX_ERR_CNT, err_cnt);
-> +
-> +       return 0;
-> +}
-> +
-> +static int men_z192_req_run_mode(struct men_z192 *priv)
-> +{
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       u32 val;
-> +
-> +       men_z192_bit_clr(priv, &regs->ctl_btr, MEN_Z192_CTL0_INITRQ);
-> +
-> +       return read_poll_timeout(readl, val, !(val & MEN_Z192_CTL1_INITAK),
-> +                                MEN_Z192_READ_POLL_TIMEOUT,
-> +                                MEN_Z192_MODE_TOUT_US, 0, &regs->ctl_btr);
-> +}
-> +
-> +static int men_z192_req_init_mode(struct men_z192 *priv)
-> +{
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       u32 val;
-> +
-> +       men_z192_bit_set(priv, &regs->ctl_btr, MEN_Z192_CTL0_INITRQ);
-> +
-> +       return read_poll_timeout(readl, val, val & MEN_Z192_CTL1_INITAK,
-> +                                MEN_Z192_READ_POLL_TIMEOUT,
-> +                                MEN_Z192_MODE_TOUT_US, 0, &regs->ctl_btr);
-> +}
-> +
-> +static void z192_put_echo_skb(struct men_z192 *priv, struct sk_buff *skb)
-> +{
-> +       skb = can_create_echo_skb(skb);
-> +       if (!skb)
-> +               return;
-> +
-> +       /* save this skb for tx interrupt echo handling */
-> +       skb_queue_tail(&priv->echoq, skb);
-> +}
-
-What is the rationale for not using can_put_echo_skb()?
-
-> +
-> +static unsigned int z192_get_echo_skb(struct men_z192 *priv)
-> +{
-> +       struct sk_buff *skb = skb_dequeue(&priv->echoq);
-> +       struct can_frame *cf;
-> +       u8 dlc;
-> +
-> +       /* this should never trigger unless there is a driver bug */
-> +       if (!skb) {
-> +               netdev_err(priv->ndev, "BUG: echo skb not occupied\n");
-> +               return 0;
-> +       }
-> +
-> +       cf = (struct can_frame *)skb->data;
-> +       dlc = cf->can_dlc;
-> +
-> +       /* check flag whether this packet has to be looped back */
-> +       if (skb->pkt_type != PACKET_LOOPBACK) {
-> +               kfree_skb(skb);
-> +               return dlc;
-> +       }
-> +
-> +       skb->protocol = htons(ETH_P_CAN);
-> +       skb->pkt_type = PACKET_BROADCAST;
-> +       skb->ip_summed = CHECKSUM_UNNECESSARY;
-> +       skb->dev = priv->ndev;
-> +       netif_receive_skb(skb);
-> +       return dlc;
-> +}
-> +
-> +static bool z192_echo_skb_matches(struct men_z192 *priv, struct sk_buff *skb)
-> +{
-> +       struct can_frame *cf = (struct can_frame *)skb->data;
-> +       struct sk_buff *echo_skb = skb_peek(&priv->echoq);
-> +       struct can_frame *echo_cf;
-> +
-> +       if (!echo_skb)
-> +               return false;
-> +
-> +       echo_cf = (struct can_frame *)echo_skb->data;
-> +       if (cf->can_id != echo_cf->can_id)
-> +               return false;
-> +
-> +       if (cf->can_dlc != echo_cf->can_dlc)
-> +               return false;
-> +
-> +       return memcmp(cf->data, echo_cf->data, cf->can_dlc) == 0;
-> +}
-> +
-> +static int men_z192_read_frame(struct net_device *ndev, unsigned int frame_nr)
-> +{
-> +       struct net_device_stats *stats = &ndev->stats;
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_cf_buf __iomem *cf_buf;
-> +       struct can_frame *cf;
-> +       struct sk_buff *skb;
-> +       u32 cf_offset;
-> +       u32 length;
-> +       u32 id;
-> +       u16 id_11_bits;
-> +       u32 id_18_bits;
-> +
-> +       skb = alloc_can_skb(ndev, &cf);
-> +       if (unlikely(!skb)) {
-> +               stats->rx_dropped++;
-> +               return 0;
-> +       }
-> +
-> +       cf_offset = sizeof(struct men_z192_cf_buf) * frame_nr;
-
-cf_offset = sizeof(*cf_buf) * frame_nr;
-
-> +
-> +       cf_buf = priv->dev_base + MEN_Z192_RX_BUF_START + cf_offset;
-> +       length = readl(&cf_buf->length) & MEN_Z192_CFBUF_LEN;
-> +       id = readl(&cf_buf->can_id);
-> +
-> +       if (id & MEN_Z192_CFBUF_IDE) {
-> +               /* Extended frame */
-> +               id_11_bits = FIELD_GET(MEN_Z192_CFBUF_ID_11_BITS, id);
-> +               id_18_bits = FIELD_GET(MEN_Z192_CFBUF_ID_18_BITS, id);
-> +
-> +               cf->can_id = FIELD_PREP(MEN_Z192_CAN_ID_11_BITS, id_11_bits) |
-> +                            FIELD_PREP(MEN_Z192_CAN_ID_18_BITS, id_18_bits) |
-> +                            CAN_EFF_FLAG;
-> +
-> +               if (id & MEN_Z192_CFBUF_E_RTR)
-> +                       cf->can_id |= CAN_RTR_FLAG;
-> +       } else {
-> +               /* Standard frame */
-> +               cf->can_id = FIELD_GET(MEN_Z192_CFBUF_ID_11_BITS, id);
-> +
-> +               if (id & MEN_Z192_CFBUF_S_RTR)
-> +                       cf->can_id |= CAN_RTR_FLAG;
-> +       }
-> +
-> +       cf->can_dlc = can_cc_dlc2len(length);
-
-The field cf->can_dlc has been deprecated. Please replace it with cf->len.
-(This remark applies to other functions as well).
-
-> +
-> +       /* remote transmission request frame contains no data field even if the
-> +        * data length is set to a value > 0
-> +        */
-> +       if (!(cf->can_id & CAN_RTR_FLAG) && cf->can_dlc) {
-> +               *(__be32 *)cf->data = cpu_to_be32(readl(&cf_buf->data[0]));
-> +               if (cf->can_dlc > 4)
-> +                       *(__be32 *)(cf->data + 4) =
-> +                       cpu_to_be32(readl(&cf_buf->data[1]));
-> +       }
-> +
-> +       if (z192_echo_skb_matches(priv, skb)) {
-> +               stats->tx_packets++;
-> +               stats->tx_bytes += z192_get_echo_skb(priv);
-> +               kfree_skb(skb);
-> +               return 1;
-> +       }
-> +
-> +       stats->rx_bytes += cf->can_dlc;
-> +       stats->rx_packets++;
-> +       netif_receive_skb(skb);
-> +
-
-If I understand correctly, you compare the received frame with
-the oldest frame in your echo_cf queue. If the matches succeed
-you deduce that it is a loopback frame, if not, you deduce that
-it is a was received from another node. Correct?
-
-Doesn't the device provide this information?
-
-> +       return 1;
-
-Is it possible to make the return value more conventional?
-Example:
-    Success: return 0;
-    Error: return -ERRORCODE (e.g. -ENOMEM)
-
-Else, please document the return value.
-
-> +}
-> +
-> +static int men_z192_poll(struct napi_struct *napi, int quota)
-> +{
-> +       struct net_device *ndev = napi->dev;
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       int work_done = 0;
-> +       u32 frame_cnt;
-> +       u32 status;
-> +
-> +       status = readl(&regs->rx_tx_sts);
-> +
-> +       frame_cnt = FIELD_GET(MEN_Z192_RX_BUF_CNT, status);
-> +
-> +       while (frame_cnt-- && (work_done < quota)) {
-> +               work_done += men_z192_read_frame(ndev, 0);
-> +               men_z192_ack_rx_pkg(priv, 1);
-> +       }
-> +
-> +       if (work_done < quota) {
-> +               napi_complete(napi);
-> +               men_z192_set_int(priv, MEN_Z192_CAN_NAPI_EN);
-> +       }
-> +
-> +       return work_done;
-> +}
-> +
-> +static int men_z192_xmit(struct sk_buff *skb, struct net_device *ndev)
-> +{
-> +       struct can_frame *cf = (struct can_frame *)skb->data;
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       struct men_z192_cf_buf __iomem *cf_buf;
-> +       int status;
-> +       u32 id;
-> +       u16 id_11_bits;
-> +       u32 id_18_bits;
-> +
-> +       if (can_dropped_invalid_skb(ndev, skb))
-> +               return NETDEV_TX_OK;
-> +
-> +       status = readl(&regs->rx_tx_sts);
-> +
-> +       if (FIELD_GET(MEN_Z192_TX_BUF_CNT, status) == MEN_Z192_MAX_BUF_LVL) {
-> +               netif_stop_queue(ndev);
-> +               netdev_err(ndev, "not enough space in TX buffer\n");
-> +
-> +               return NETDEV_TX_BUSY;
-> +       }
-
-Could you stop the queue in advance to prevent returning NETDEV_TX_BUSY?
-
-> +
-> +       cf_buf = priv->dev_base + MEN_Z192_TX_BUF_START;
-> +
-> +       if (cf->can_id & CAN_EFF_FLAG) {
-> +               /* Extended frame */
-> +               id = cf->can_id & CAN_EFF_MASK;
-> +               id_11_bits = FIELD_GET(MEN_Z192_CAN_ID_11_BITS, id);
-> +               id_18_bits = FIELD_GET(MEN_Z192_CAN_ID_18_BITS, id);
-> +
-> +               id = FIELD_PREP(MEN_Z192_CFBUF_ID_11_BITS, id_11_bits) |
-> +                    MEN_Z192_CFBUF_SRR |
-> +                    MEN_Z192_CFBUF_IDE |
-> +                    FIELD_PREP(MEN_Z192_CFBUF_ID_18_BITS, id_18_bits);
-> +
-> +               if (cf->can_id & CAN_RTR_FLAG)
-> +                       id |= MEN_Z192_CFBUF_E_RTR;
-> +       } else {
-> +               /* Standard frame */
-> +               id = FIELD_PREP(MEN_Z192_CFBUF_ID_11_BITS, cf->can_id);
-> +
-> +               if (cf->can_id & CAN_RTR_FLAG)
-> +                       id |= MEN_Z192_CFBUF_S_RTR;
-> +       }
-> +
-> +       writel(id, &cf_buf->can_id);
-> +       writel(cf->can_dlc, &cf_buf->length);
-> +
-> +       if (!(cf->can_id & CAN_RTR_FLAG) && cf->can_dlc) {
-> +               writel(be32_to_cpup((__be32 *)(cf->data)), &cf_buf->data[0]);
-> +               if (cf->can_dlc > 4)
-> +                       writel(be32_to_cpup((__be32 *)(cf->data + 4)),
-> +                              &cf_buf->data[1]);
-
-Why do you cast cf->data to __be32? Shouldn't the cf_buf->data
-which should be of type __be32 instead (or as commented above,
-make cf_buf->data an array of bytes).
-
-> +       }
-> +
-> +       /* The 16z192 CAN IP doesn't have TX-done interrupts, so local
-> +        * loopback is emulated using ECHO skbs. Add the skb to the ECHO
-> +        * stack. Upon packet reception, check if the ECHO skb and received
-> +        * skb match, and use that to wake the queue.
-> +        */
-> +       z192_put_echo_skb(priv, skb);
-> +
-> +       /* be sure everything is written to the
-> +        * device before acknowledge the data.
-> +        */
-> +       wmb();
-> +
-> +       /* Acknowldege the written data in TXBUF by writing to TXA
-
-Acknowldege -> Acknowledge
-
-> +        * i.e. transmit data acknowledge register.
-> +        */
-> +       men_z192_ack_tx_pkg(priv, 1);
-> +
-> +       return NETDEV_TX_OK;
-> +}
-> +
-> +static void men_z192_handle_err(struct net_device *ndev, u32 status)
-> +{
-> +       struct net_device_stats *stats = &ndev->stats;
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct can_berr_counter bec;
-> +       struct can_frame *cf;
-> +       struct sk_buff *skb;
-> +       enum can_state rx_state = 0, tx_state = 0;
-> +
-> +       skb = alloc_can_err_skb(ndev, &cf);
-> +       if (unlikely(!skb)) {
-> +               stats->rx_dropped++;
-> +               return;
-> +       }
-> +
-> +       /* put the rx/tx error counter to
-> +        * the additional controller specific
-> +        * section of the error frame.
-> +        */
-> +       men_z192_get_berr_counter(ndev, &bec);
-> +       cf->data[6] = bec.txerr;
-> +       cf->data[7] = bec.rxerr;
-> +
-> +       /* overrun interrupt */
-> +       if (status & MEN_Z192_RFLG_OVRF) {
-> +               cf->can_id |= CAN_ERR_CRTL;
-> +               cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
-> +               stats->rx_over_errors++;
-> +               stats->rx_errors++;
-> +       }
-> +
-> +       /* bus change interrupt */
-> +       if (status & MEN_Z192_RFLG_CSCIF) {
-> +               rx_state = bus_state_map[MEN_Z192_GET_RSTATE(status)];
-> +               tx_state = bus_state_map[MEN_Z192_GET_TSTATE(status)];
-> +
-> +               can_change_state(ndev, cf, tx_state, rx_state);
-> +
-> +               if (priv->can.state == CAN_STATE_BUS_OFF)
-> +                       can_bus_off(ndev);
-> +       }
-> +
-> +       stats->rx_packets++;
-> +       stats->rx_bytes += cf->can_dlc;
-> +       netif_receive_skb(skb);
-> +}
-> +
-> +static bool men_z192_handle(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       bool handled = false;
-> +       u32 flags;
-> +       u32 status;
-> +
-> +       status = readl(&regs->rx_tx_sts);
-> +       flags = status & MEN_Z192_RFLG_ALL;
-> +       if (!flags)
-> +               goto out;
-> +
-> +       /* It is safe to write to RX_TS_STS[15:0] */
-> +       writel(flags, &regs->rx_tx_sts);
-> +
-> +       if (flags & MEN_Z192_TFLG_TXIF) {
-> +               netif_wake_queue(ndev);
-> +               handled = true;
-> +       }
-> +
-> +       /* handle errors */
-> +       if ((flags & MEN_Z192_RFLG_OVRF) ||
-> +           (flags & MEN_Z192_RFLG_CSCIF)) {
-> +               men_z192_handle_err(ndev, status);
-> +               handled = true;
-> +       }
-> +
-> +       /* schedule NAPI if:
-> +        * - rx IRQ
-> +        * - rx timeout IRQ
-> +        */
-> +       if ((flags & MEN_Z192_RFLG_RXIF) ||
-> +           (flags & MEN_Z192_RFLG_TOUTF)) {
-> +               men_z192_set_int(priv, MEN_Z192_CAN_NAPI_DIS);
-> +               napi_schedule(&priv->napi);
-> +               handled = true;
-> +       }
-> +
-> +out:
-> +       return handled;
-> +}
-> +
-> +static irqreturn_t men_z192_isr(int irq, void *dev_id)
-> +{
-> +       struct net_device *ndev = dev_id;
-> +       bool handled;
-> +
-> +       handled = men_z192_handle(ndev);
-> +
-> +       return IRQ_RETVAL(handled);
-> +}
-> +
-> +static int men_z192_set_bittiming(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       const struct can_bittiming *bt = &priv->can.bittiming;
-> +       unsigned long flags;
-> +       u32 ctlbtr;
-> +       int ret = 0;
-> +
-> +       spin_lock_irqsave(&priv->lock, flags);
-> +
-> +       ctlbtr = readl(&priv->regs->ctl_btr);
-> +
-> +       if (!(ctlbtr & MEN_Z192_CTL1_INITAK)) {
-> +               netdev_alert(ndev,
-> +                            "cannot set bittiminig while in running mode\n");
-> +               ret = -EPERM;
-> +               goto out_restore;
-> +       }
-> +
-> +       ctlbtr &= ~(MEN_Z192_BTR0_BRP |
-> +                   MEN_Z192_BTR0_SJW |
-> +                   MEN_Z192_BTR1_TSEG1 |
-> +                   MEN_Z192_BTR1_TSEG2 |
-> +                   MEN_Z192_CTL1_LISTEN |
-> +                   MEN_Z192_CTL1_LOOPB |
-> +                   MEN_Z192_BTR1_SAMP);
-> +
-> +       ctlbtr |= FIELD_PREP(MEN_Z192_BTR0_BRP, bt->brp - 1) |
-> +                 FIELD_PREP(MEN_Z192_BTR0_SJW, bt->sjw - 1) |
-> +                 FIELD_PREP(MEN_Z192_BTR1_TSEG1,
-> +                            bt->phase_seg1 + bt->prop_seg - 1) |
-> +                 FIELD_PREP(MEN_Z192_BTR1_TSEG2, bt->phase_seg2 - 1);
-> +
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
-> +               ctlbtr |= MEN_Z192_BTR1_SAMP;
-> +
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
-> +               ctlbtr |= MEN_Z192_CTL1_LISTEN;
-> +
-> +       if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
-> +               ctlbtr |= MEN_Z192_CTL1_LOOPB;
-> +
-> +       writel(ctlbtr, &priv->regs->ctl_btr);
-> +
-> +out_restore:
-> +       spin_unlock_irqrestore(&priv->lock, flags);
-> +
-> +       return ret;
-> +}
-> +
-> +static void men_z192_init_idac(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +
-> +       /* hardware filtering (accept everything) */
-> +       writel(0x00000000, &regs->idar_0_to_3);
-> +       writel(0x00000000, &regs->idar_4_to_7);
-> +       writel(0xffffffff, &regs->idmr_0_to_3);
-> +       writel(0xffffffff, &regs->idmr_4_to_7);
-> +}
-> +
-> +static void men_z192_set_can_state(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       enum can_state rx_state, tx_state;
-> +       u32 status;
-> +
-> +       status = readl(&regs->rx_tx_sts);
-> +
-> +       rx_state = bus_state_map[MEN_Z192_GET_RSTATE(status)];
-> +       tx_state = bus_state_map[MEN_Z192_GET_TSTATE(status)];
-> +
-> +       can_change_state(ndev, NULL, tx_state, rx_state);
-> +}
-> +
-> +static enum hrtimer_restart men_z192_timer_poll(struct hrtimer *timer)
-> +{
-> +       struct men_z192 *priv = container_of(timer, struct men_z192,
-> +                                            poll_timer);
-> +
-> +       men_z192_handle(priv->ndev);
-> +
-> +       hrtimer_forward_now(timer, poll_interval * 1000);
-> +       return HRTIMER_RESTART;
-> +}
-> +
-> +static int men_z192_start(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       int ret;
-> +
-> +       ret = men_z192_req_init_mode(priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = men_z192_set_bittiming(ndev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       ret = men_z192_req_run_mode(priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       men_z192_init_idac(ndev);
-> +
-> +       /* The 16z192 CAN IP does not reset the can bus state if we enter the
-> +        * init mode. There is also no software reset to reset the state
-> +        * machine. We need to read the current state, and inform the upper
-> +        * layer about the current state.
-> +        */
-> +       men_z192_set_can_state(ndev);
-> +
-> +       men_z192_set_int(priv, MEN_Z192_CAN_EN);
-> +
-> +       hrtimer_init(&priv->poll_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> +       priv->poll_timer.function = men_z192_timer_poll;
-> +
-> +       if (ndev->irq == 0)
-> +               hrtimer_start(&priv->poll_timer, poll_interval * 1000,
-> +                             HRTIMER_MODE_REL);
-> +
-> +       return 0;
-> +}
-> +
-> +static int men_z192_open(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       bool got_irq = false;
-> +       int ret;
-> +
-> +       ret = open_candev(ndev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (ndev->irq > 0) {
-> +               ret = request_irq(ndev->irq, men_z192_isr, IRQF_SHARED,
-> +                                 ndev->name, ndev);
-> +               if (ret)
-> +                       goto out;
-> +               got_irq = true;
-> +       }
-> +
-> +       ret = men_z192_start(ndev);
-> +       if (ret)
-> +               goto out;
-> +
-> +       napi_enable(&priv->napi);
-> +       netif_start_queue(ndev);
-> +
-> +       return 0;
-> +out:
-> +       if (got_irq)
-> +               free_irq(ndev->irq, ndev);
-> +
-> +       close_candev(ndev);
-> +       return ret;
-> +}
-> +
-> +static int men_z192_stop(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       int ret;
-> +
-> +       hrtimer_cancel(&priv->poll_timer);
-> +
-> +       men_z192_set_int(priv, MEN_Z192_CAN_DIS);
-> +
-> +       ret = men_z192_req_init_mode(priv);
-> +       if (ret)
-> +               return ret;
-> +
-> +       priv->can.state = CAN_STATE_STOPPED;
-> +
-> +       return 0;
-> +}
-> +
-> +static int men_z192_close(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       int ret;
-> +
-> +       netif_stop_queue(ndev);
-> +
-> +       napi_disable(&priv->napi);
-> +
-> +       ret = men_z192_stop(ndev);
-> +
-> +       if (ndev->irq > 0)
-> +               free_irq(ndev->irq, ndev);
-> +
-> +       /* drop all outstanding echo skbs */
-> +       skb_queue_purge(&priv->echoq);
-> +
-> +       close_candev(ndev);
-> +
-> +       return ret;
-> +}
-> +
-> +static int men_z192_set_mode(struct net_device *ndev, enum can_mode mode)
-> +{
-> +       int ret;
-> +
-> +       switch (mode) {
-> +       case CAN_MODE_START:
-> +               ret = men_z192_start(ndev);
-> +               if (ret)
-> +                       return ret;
-> +
-> +               netif_wake_queue(ndev);
-> +               break;
-> +       default:
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct net_device_ops men_z192_netdev_ops = {
-> +       .ndo_open       = men_z192_open,
-> +       .ndo_stop       = men_z192_close,
-> +       .ndo_start_xmit = men_z192_xmit,
-> +       .ndo_change_mtu = can_change_mtu,
-> +};
-> +
-> +static int men_z192_verify_buf_lvl(int buffer_lvl)
-> +{
-> +       if (buffer_lvl < MEN_Z192_MIN_BUF_LVL ||
-> +           buffer_lvl > MEN_Z192_MAX_BUF_LVL)
-> +               return -EINVAL;
-> +
-> +       return 0;
-> +}
-> +
-> +static void men_z192_set_buf_lvl_irq(struct net_device *ndev, int rxlvl,
-> +                                    int txlvl)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       int reg_val;
-> +
-> +       if (men_z192_verify_buf_lvl(rxlvl))
-> +               reg_val = MEN_Z192_RX_BUF_LVL_DEF & MEN_Z192_RX_BUF_LVL;
-> +       else
-> +               reg_val = rxlvl & MEN_Z192_RX_BUF_LVL;
-> +
-> +       if (men_z192_verify_buf_lvl(txlvl))
-> +               reg_val |= (MEN_Z192_TX_BUF_LVL_DEF << 16) &
-> +                           MEN_Z192_TX_BUF_LVL;
-> +       else
-> +               reg_val |= (txlvl << 16) & MEN_Z192_TX_BUF_LVL;
-> +
-> +       dev_info(priv->dev, "RX IRQ Level: %d TX IRQ Level: %d\n",
-> +                rxlvl, txlvl);
-> +
-> +       writel(reg_val, &regs->buf_lvl);
-> +
-> +       priv->txlvl = txlvl;
-> +       priv->rxlvl = rxlvl;
-> +}
-> +
-> +static void men_z192_set_rx_tout(struct net_device *ndev, int tout)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       int reg_val;
-> +
-> +       if (tout < MEN_Z192_RX_TOUT_MIN || tout > MEN_Z192_RX_TOUT_MAX)
-> +               reg_val = MEN_Z192_RX_TOUT_MAX;
-> +       else
-> +               reg_val = tout;
-> +
-> +       dev_info(priv->dev, "RX IRQ timeout set to: %d\n", reg_val);
-> +
-> +       writel(reg_val, &regs->rx_timeout);
-> +
-> +       priv->rx_timeout = reg_val;
-> +}
-> +
-> +static int men_z192_get_coalesce(struct net_device *ndev,
-> +                                struct ethtool_coalesce *ec)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +
-> +       memset(ec, 0, sizeof(struct ethtool_coalesce));
-
-memset(ec, 0, sizeof(*ec));
-
-> +
-> +       ec->tx_max_coalesced_frames = priv->txlvl;
-> +       ec->rx_max_coalesced_frames = priv->rxlvl;
-> +       ec->rx_coalesce_usecs = priv->rx_timeout;
-> +
-> +       return 0;
-> +}
-> +
-> +static int men_z192_set_coalesce(struct net_device *ndev,
-> +                                struct ethtool_coalesce *ec)
-> +{
-> +       men_z192_set_buf_lvl_irq(ndev, ec->rx_max_coalesced_frames,
-> +                                ec->tx_max_coalesced_frames);
-> +
-> +       men_z192_set_rx_tout(ndev, ec->rx_coalesce_usecs);
-> +
-> +       return 0;
-> +}
-> +
-> +static void men_z192_init_coalesce(struct net_device *ndev)
-> +{
-> +       men_z192_set_buf_lvl_irq(ndev, MEN_Z192_MIN_BUF_LVL,
-> +                                MEN_Z192_MIN_BUF_LVL);
-> +       men_z192_set_rx_tout(ndev, MEN_Z192_RX_TOUT_DEF);
-> +}
-> +
-> +static int men_z192_register(struct net_device *ndev)
-> +{
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +       struct men_z192_regs __iomem *regs = priv->regs;
-> +       u32 ctl_btr;
-> +       int ret;
-> +
-> +       /* The CAN controller should be always enabled.
-> +        * There is no way to enable it if disabled.
-> +        */
-> +       ctl_btr = readl(&regs->ctl_btr);
-> +       if (!(ctl_btr & MEN_Z192_CTL1_CANE))
-> +               return -ENODEV;
-> +
-> +       men_z192_init_coalesce(ndev);
-> +
-> +       ret = men_z192_req_init_mode(priv);
-> +       if (ret) {
-> +               dev_err(priv->dev, "failed to request init mode\n");
-> +               return ret;
-> +       }
-> +
-> +       return register_candev(ndev);
-> +}
-> +
-> +static const struct ethtool_ops men_z192_ethtool_ops = {
-> +       .supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS |
-> +                                    ETHTOOL_COALESCE_MAX_FRAMES,
-> +       .get_coalesce = men_z192_get_coalesce,
-> +       .set_coalesce = men_z192_set_coalesce,
-> +};
-> +
-> +static int men_z192_probe(struct mcb_device *mdev,
-> +                         const struct mcb_device_id *id)
-> +{
-> +       struct device *dev = &mdev->dev;
-> +       struct men_z192 *priv;
-> +       struct net_device *ndev;
-> +       void __iomem *dev_base;
-> +       struct resource *mem;
-> +       u32 timebase;
-> +       int ret = 0;
-> +
-> +       mem = mcb_request_mem(mdev, dev_name(dev));
-> +       if (IS_ERR(mem)) {
-> +               dev_err(dev, "failed to request device memory\n");
-> +               return PTR_ERR(mem);
-> +       }
-> +
-> +       dev_base = ioremap(mem->start, resource_size(mem));
-> +       if (!dev_base) {
-> +               dev_err(dev, "failed to ioremap device memory\n");
-> +               ret = -ENXIO;
-> +               goto out_release;
-> +       }
-> +
-> +       ndev = alloc_candev(sizeof(struct men_z192), 0);
-
-ndev = alloc_candev(sizeof(*priv), 0);
-
-> +       if (!ndev) {
-> +               dev_err(dev, "failed to allocate can device\n");
-> +               ret = -ENOMEM;
-> +               goto out_unmap;
-> +       }
-> +
-> +       if (poll_interval > 0) {
-> +               ndev->irq = 0;
-> +       } else {
-> +               ndev->irq = mcb_get_irq(mdev);
-> +               if (ndev->irq <= 0) {
-> +                       ret = -ENODEV;
-> +                       goto out_free_candev;
-> +               }
-> +       }
-> +
-> +       ndev->netdev_ops = &men_z192_netdev_ops;
-> +       ndev->flags |= IFF_ECHO;
-> +
-> +       priv = netdev_priv(ndev);
-> +       priv->ndev = ndev;
-> +       priv->dev = dev;
-> +
-> +       priv->mem = mem;
-> +       priv->dev_base = dev_base;
-> +       priv->regs = priv->dev_base + MEN_Z192_REGS_OFFS;
-> +
-> +       timebase = readl(&priv->regs->timebase);
-> +       if (!timebase) {
-> +               dev_err(dev, "invalid timebase configured (timebase=%d)\n",
-> +                       timebase);
-> +               ret = -EINVAL;
-> +               goto out_free_candev;
-> +       }
-> +
-> +       priv->can.clock.freq = timebase;
-> +       priv->can.bittiming_const = &men_z192_bittiming_const;
-> +       priv->can.do_set_mode = men_z192_set_mode;
-> +       priv->can.do_get_berr_counter = men_z192_get_berr_counter;
-> +       priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
-> +                                      CAN_CTRLMODE_3_SAMPLES |
-> +                                      CAN_CTRLMODE_LOOPBACK;
-> +
-> +       spin_lock_init(&priv->lock);
-> +
-> +       netif_napi_add(ndev, &priv->napi, men_z192_poll,
-> +                      NAPI_POLL_WEIGHT);
-> +
-> +       skb_queue_head_init(&priv->echoq);
-> +
-> +       mcb_set_drvdata(mdev, ndev);
-> +       SET_NETDEV_DEV(ndev, dev);
-> +
-> +       ndev->ethtool_ops = &men_z192_ethtool_ops;
-> +
-> +       ret = men_z192_register(ndev);
-> +       if (ret) {
-> +               dev_err(dev, "failed to register CAN device\n");
-> +               goto out_napi_del;
-> +       }
-> +
-> +       devm_can_led_init(ndev);
-> +
-> +       dev_info(dev, "MEN 16z192 CAN driver registered (%s mode)\n",
-> +                ndev->irq ? "interrupt" : "polling");
-> +
-> +       return 0;
-> +
-> +out_napi_del:
-> +       netif_napi_del(&priv->napi);
-> +out_free_candev:
-> +       free_candev(ndev);
-> +out_unmap:
-> +       iounmap(dev_base);
-> +out_release:
-> +       mcb_release_mem(mem);
-> +       return ret;
-> +}
-> +
-> +static void men_z192_remove(struct mcb_device *mdev)
-> +{
-> +       struct net_device *ndev = mcb_get_drvdata(mdev);
-> +       struct men_z192 *priv = netdev_priv(ndev);
-> +
-> +       unregister_candev(ndev);
-> +       netif_napi_del(&priv->napi);
-> +
-> +       iounmap(priv->dev_base);
-> +       mcb_release_mem(priv->mem);
-> +
-> +       free_candev(ndev);
-> +}
-> +
-> +static const struct mcb_device_id men_z192_ids[] = {
-> +       { .device = 0xc0 },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(mcb, men_z192_ids);
-> +
-> +static struct mcb_driver men_z192_driver = {
-> +       .driver = {
-> +               .name = DRV_NAME,
-> +               .owner = THIS_MODULE,
-> +       },
-> +       .probe = men_z192_probe,
-> +       .remove = men_z192_remove,
-> +       .id_table = men_z192_ids,
-> +};
-> +module_mcb_driver(men_z192_driver);
-> +
-> +MODULE_AUTHOR("Andreas Werner <andreas.werner@men.de>");
-> +MODULE_DESCRIPTION("MEN 16z192 CAN Controller");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("mcb:16z192");
-> +MODULE_IMPORT_NS(MCB);
->
-> base-commit: 83d09ad4b950651a95d37697f1493c00d888d0db
-> --
-
-Yours sincerely,
-Vincent
+DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFZpbmNlbnQgTUFJTEhPTCA8
+bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+DQo+IFNlbnQ6IDIwMjHE6jHUwjIyyNUgMTc6NTIN
+Cj4gVG86IE9sZWtzaWogUmVtcGVsIDxvLnJlbXBlbEBwZW5ndXRyb25peC5kZT4NCj4gQ2M6IE1h
+cmMgS2xlaW5lLUJ1ZGRlIDxta2xAcGVuZ3V0cm9uaXguZGU+OyBsaW51eC1jYW5Admdlci5rZXJu
+ZWwub3JnOw0KPiBKb2FraW0gWmhhbmcgPHFpYW5ncWluZy56aGFuZ0BueHAuY29tPjsga2VybmVs
+QHBlbmd1dHJvbml4LmRlOyBPbGl2ZXINCj4gSGFydGtvcHAgPHNvY2tldGNhbkBoYXJ0a29wcC5u
+ZXQ+DQo+IFN1YmplY3Q6IFJlOiBbNS4xMCBDQU4gQlVHIHJlcG9ydF0ga2VybmVsIGR1bXAgYWJv
+dXQgZWNobyBza2INCj4gDQo+IE9uIEZyaSAyMiBKYW4gMjAyMSBhdCAxODo0MCwgT2xla3NpaiBS
+ZW1wZWwgPG8ucmVtcGVsQHBlbmd1dHJvbml4LmRlPg0KPiB3cm90ZToNCj4gPiBPbiBGcmksIEph
+biAyMiwgMjAyMSBhdCAxMDoyMzoyNEFNICswMTAwLCBNYXJjIEtsZWluZS1CdWRkZSB3cm90ZToN
+Cj4gPiA+IE9uIEZyaSwgSmFuIDIyLCAyMDIxIGF0IDA2OjA4OjE4UE0gKzA5MDAsIFZpbmNlbnQg
+TUFJTEhPTCB3cm90ZToNCj4gPiA+ID4gPiA+IDEuIEtlcm5lbCBkdW1wIGxvZzoNCj4gPiA+ID4g
+PiA+IFsgIDEwMS42ODgzMjddIC0tLS0tLS0tLS0tLVsgY3V0IGhlcmUgXS0tLS0tLS0tLS0tLSBb
+ICAxMDEuNjkyOTY4XQ0KPiByZWZjb3VudF90Og0KPiA+ID4gPiA+ID4gYWRkaXRpb24gb24gMDsg
+dXNlLWFmdGVyLWZyZWUuDQo+ID4gPiA+DQo+ID4gPiA+IFRoZSBza2IgYWxyZWFkeSBoYWQgaXRz
+IHJlZmNvdW50IGF0IHplcm8gd2hlbiByZWFjaGluZw0KPiA+ID4gPiBjYW5fcHV0X2VjaG9fc2ti
+KCkuIEl0IGlzIGFzIGlmIGl0IHdhcyBhbHJlYWR5IGZyZWVkL2NvbnN1bWVkIQ0KPiA+ID4NCj4g
+PiA+IEFDSw0KPiA+ID4NCj4gPiA+ID4gSWYgeW91IHJlbW92ZSBPbGVrc2lqoa9zIHBhdGNoLCBj
+YW5fcHV0X2VjaG9fc2tiKCkgd2lsbCBwcm9iYWJseQ0KPiA+ID4gPiBub3QgY2xvbmUgdGhlIHNr
+YiBhbmQgdGh1cyBub3QgY2hlY2sgdGhlIHJlZmNvdW50OiB0aGlzIG1lYW5zIHRoYXQNCj4gPiA+
+ID4geW91IHdpbGwgbm90IHNlZSB0aGUgd2FybmluZywgaG93ZXZlciwgaXQgZG9lcyBub3QgbmVj
+ZXNzYXJpbHkNCj4gPiA+ID4gbWVhbiB0aGF0IHRoZSBidWcgZGlkIG5vdCBvY2N1ci4NCj4gPiA+
+DQo+ID4gPiBBQ0sNCj4gPiA+DQo+ID4gPiA+IFNvIGZhciwgaXQgc2VlbXMgdG8gbWUgdG8gYmUg
+YW5vdGhlciBidWcgd2hpY2ggd2FzIGludmlzaWJsZSB1bnRpbA0KPiA+ID4gPiBub3cgYW5kIHdo
+aWNoIE9sZWtzaWqhr3MgcGF0Y2gganVzdCB1bmNvdmVyZWQuIEJ1dCBJIGRvIG5vdCB5ZXQNCj4g
+PiA+ID4gZnVsbHkgdW5kZXJzdGFuZCB3aGF0IHRoZSByb290IGNhdXNlIGNvdWxkIGJlLg0KPiA+
+ID4NCj4gPiA+IE9yIGl0J3MgdGhlIHNhbWUgYnVnLCBoaXR0aW5nIGVhcmxpZXIuIE9sZWtzaWon
+cyBiYWNrdHJhY2Ugd2FzIGluDQo+ID4gPiB0aGUgVFgtY29tcGxldGUgcGF0aCBhbmQgdGhlIHBy
+b2JsZW0gd2FzIGZpeGVzIGJ5IGNsb25pbmcgdGhlIHNrYiBpbiBiZWZvcmUNCj4gVFguDQo+ID4g
+PiBUaGlzIG1lYW5zIHRoZSByZWZjb3VudCBvZiB0aGUgb3JpZ2luYWwgc2tiIHdhcyBkZWNyZW1l
+bnRlZCBiZXR3ZWVuDQo+ID4gPiBUWCBhbmQgVFgtY29tcGxldGUuIEhlcmUgdGhlIHJlZmNvdW50
+IGlzIGRlY3JlbWVudGVkIGV2ZW4gYmVmb3JlIFRYLg0KPiA+ID4NCj4gPiA+IERvZXMgdGhpcyBt
+YWtlIHNlbnNlPw0KPiANCj4gTWFrZXMgYWJzb2x1dGUgc2Vuc2UuDQo+IA0KPiBUaGF0IHdvdWxk
+IG1lYW4gdGhhdCBPbGVzaWqhr3MgcGF0Y2ggYWRkcmVzc2VkIHRoZSBpc3N1ZSBidXQgdG9vIGxh
+dGUgYW5kIHRoYXQNCj4gc29tZXdoZXJlIGVhcmxpZXIgaW4gdGhlIFRYIHBhdGgsIHRoZSByZWZj
+b3VudCBpcyBlaXRoZXI6DQo+ICAgLSBkZWNyZW1lbnRlZCB3aGVyZSBpdCBzaG91bGRuoa90IGJl
+DQo+ICAgLSBub3QgaW5jcmVtZW50ZWQgd2hlcmUgaXQgc2hvdWxkIGJlDQo+IA0KPiBBc3N1bWlu
+ZyB0aGF0IHRoZSBza2IgcmVhY2hlcyB0aGUgeG1pdCgpIGZ1bmNpb24sIHdoYXQgc2hvdWxkIGJl
+IGl0cyByZWZjb3VudD8NCj4gMiBpZiB0aGUgc29ja2V0IGlzIHN0aWxsIG9wZW5lZCBhbmQgMSBp
+ZiB0aGUgc29ja2V0IGlzIGNsb3NlZD8NCj4gU29tZXRoaW5nIGVsc2U/DQo+IA0KPiA+IElzIHNv
+Y2tldCB3YXMgY2xvc2VkIGp1c3QgYmVmb3JlIFRYPw0KPiANCj4gR29vZCBxdWVzdGlvbiENCj4g
+SW4gYWRkaXRpb24sIEkgd291bGQgbGlrZSB0byBrbm93IHdoaWNoIHByb3RvY29sIGlzIHVzZWQg
+KHJhd19jYW4sIGoxOTM5LA0KPiBvdGhlcj8pDQoNCg0KDQpIaSBNYXJjLCBPbGVrc2lqLCBWaW5j
+ZW50LCANCg0KVGhhbmtzIGEgbG90IGZvciB5b3UgbG9va2luZyBpbnRvIHRoaXMgaXNzdWUuIEkg
+c3RpbGwgY2FuJ3QgcmVwcm9kdWNlIGl0IG1hbnVhbGx5LCBvbmx5IGNhbiBiZSByZXByb2R1Y2Vk
+IHdoZW4gcnVuIGF1dG8gc2NyaXB0cy4NCg0KQmVsb3cgaXMgdGVzdCBzY3JpcHRzIGZvciB0aGlz
+Og0KDQoxKSBTZXJ2ZXIgc2lkZToNCiMgRnVuY3Rpb246ICAgICB0ZXN0X2Nhbl8wMg0KIyBEZXNj
+cmlwdGlvbiAgIENBTiBiaXRyYXRlIHN1cHBvcnQgdGVzdA0KIyBhdXRvLW1hbnVhbCAgIFBhcnRp
+YWxseSBhdXRvDQojIFJ1biB0aW1lICAgICAgNSBtaW4NCnRlc3RfY2FuXzAyKCkNCnsNCglSQz0y
+DQoJVENJRD0idGVzdF9jYW5fMDIiDQogICAgVFNUX0NPVU5UPTINCiAgICB0Y2lkX25vdz0kVENJ
+RA0KCXRjaWRfbmV4dD0idGVzdF9jYW5fMDMiDQoNCiAgICBlY2hvICI9PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT0iDQogICAgZWNobyAiPSAgICAgc3RhcnQgJFRDSUQgICAgICA9Ig0KCXNl
+cnZlcl9pbml0IHx8IGV4aXQgJFJDDQoJZWNobyAkVENJRCA+PiAkTG9nX2ZpbGUNCiAgICAjU1RB
+TkRfQklUX1JBVEVTPSI1MDAwMCAyMDAwMCAxMDAwMCINCiAgICAjQklUUkFURV9EQVRBPSgiMDAg
+MDUgMDAgMDAiICIwMCAwMiAwMCAwMCIgIjAwIDAxIDAwIDAwIikNCiAgICBTVEFORF9CSVRfUkFU
+RVM9IjEwMDAwMDAgNTAwMDAwIDI1MDAwMCAxMjUwMDAgNTAwMDAgMjAwMDAgMTAwMDAiDQogICAg
+QklUUkFURV9EQVRBPSgiMDEgMDAgMDAgMDAiICIwMCA1MCAwMCAwMCIgIjAwIDI1IDAwIDAwIiAi
+MDAgMTIgNTAgMDAiICIwMCAwNSAwMCAwMCIgIjAwIDAyIDAwIDAwIiAiMDAgMDEgMDAgMDAiKQ0K
+CWxvY2FsIGk9MA0KICAgIGJpdHJhdGVfaW5kZXg9MA0KICAgIGZvciBpIGluICRTVEFORF9CSVRf
+UkFURVMNCiAgICBkbw0KICAgICAgICBlY2hvICJOb3cgdGVzdCBiaXRyYXRlICRpIg0KICAgICAg
+ICBpZmNvbmZpZyAkQ0FOSUQgZG93bg0KICAgICAgICBpcCBsaW5rIHNldCAkQ0FOSUQgIHR5cGUg
+Y2FuIGJpdHJhdGUgJGkgfHwgZXhpdCAkUkMNCiAgICAgICAgaWZjb25maWcgJENBTklEIHVwIHx8
+IGV4aXQgJFJDDQogICAgICAgIGNhbmR1bXAgJENBTklEID4gJExvZ19maWxlICYNCiAgICAgICAg
+YmdwaWQ9JCENCiAgICAgICAgbHRpbWU9MA0KICAgICAgICB3aGlsZSBbICRsdGltZSAtbHQgMTAg
+XTsgZG8NCiAgICAgICAgICAgIG92ZXJfc3RhdHVzPSQoY2F0ICRMb2dfZmlsZSB8IGdyZXAgIiR7
+QklUUkFURV9EQVRBWyRiaXRyYXRlX2luZGV4XX0iIHwgY3V0IC1kICddJyAtZiAnMicpDQogICAg
+ICAgICAgICBpZiBbIC1uICIkb3Zlcl9zdGF0dXMiIF07IHRoZW4NCiAgICAgICAgICAgICAgICBl
+Y2hvICJzdXBwb3J0IGJpdHJhdGUgJGkiDQogICAgICAgICAgICAgICAgYml0cmF0ZV9pbmRleD1g
+ZXhwciAkYml0cmF0ZV9pbmRleCArIDFgDQogICAgICAgICAgICAgICAgY2Fuc2VuZCAkQ0FOSUQg
+Nzc3IzExMjIzMzQ0NTU2Njc3ODgNCiAgICAgICAgICAgICAgICBraWxsIC05ICRiZ3BpZCA+IC9k
+ZXYvbnVsbCAyPiYxDQogICAgICAgICAgICAgICAgYnJlYWsNCiAgICAgICAgICAgIGZpDQogICAg
+ICAgICAgICBsZXQgbHRpbWU9bHRpbWUrMQ0KICAgICAgICAgICAgc2xlZXAgNQ0KICAgICAgICBk
+b25lDQogICAgICAgIGlmIFsgJGx0aW1lIC1lcSAxMCBdOyB0aGVuDQogICAgICAgICAgICB0c3Rf
+cmVzbSBURkFJTCAiRG9uJ3Qgc3VwcG9ydCAkaSBiaXRyYXRlICEiDQogICAgICAgICAgICBraWxs
+IC05ICRiZ3BpZCA+IC9kZXYvbnVsbCAyPiYxDQogICAgICAgICAgICBjYXQgJExvZ19maWxlDQog
+ICAgICAgICAgICBleGl0IDENCiAgICAgICAgZmkNCiAgICBkb25lDQogICAgZWNobyAkdGNpZF9u
+ZXh0ID4+ICRMb2dfZmlsZQ0KDQogICAgdHN0X3Jlc20gVFBBU1MgInRlc3QgUEFTUyINCg0KICAg
+IFJDPTANCiAgICByZXR1cm4gJFJDDQp9DQoNCjIpIENsaWVudCBzaWRlOg0KIyBGdW5jdGlvbjog
+ICAgIHRlc3RfY2FuXzAyDQojIERlc2NyaXB0aW9uICAgQ0FOIGJpdHJhdGUgc3VwcG9ydCB0ZXN0
+DQojIGF1dG8tbWFudWFsICAgUGFydGlhbGx5IGF1dG8NCiMgUnVuIHRpbWUgICAgICA1IG1pbg0K
+dGVzdF9jYW5fMDIoKQ0Kew0KCVJDPTINCglUQ0lEPSJ0ZXN0X2Nhbl8wMiINCiAgICBUU1RfQ09V
+TlQ9Mg0KDQogICAgZWNobyAiPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09Ig0KICAgIGVj
+aG8gIj0gICAgIHN0YXJ0ICRUQ0lEICAgICAgPSINCgljbGllbnRfaW5pdCB8fCBleGl0ICRSQw0K
+ICAgIGtpbGwgLTkgJGJncGlkID4gL2Rldi9udWxsIDI+JjENCiAgICAjU1RBTkRfQklUX1JBVEVT
+PSI1MDAwMCAyMDAwMCAxMDAwMCINCiAgICAjQklUUkFURV9EQVRBPSgwMDA1MDAwMCAwMDAyMDAw
+MCAwMDAxMDAwMCkNCiAgICBTVEFORF9CSVRfUkFURVM9IjEwMDAwMDAgNTAwMDAwIDI1MDAwMCAx
+MjUwMDAgNTAwMDAgMjAwMDAgMTAwMDAiDQogICAgQklUUkFURV9EQVRBPSgwMTAwMDAwMCAwMDUw
+MDAwMCAwMDI1MDAwMCAwMDEyNTAwMCAwMDA1MDAwMCAwMDAyMDAwMCAwMDAxMDAwMCkNCglsb2Nh
+bCBpPTANCiAgICBiaXRyYXRlX2luZGV4PTANCiAgICBmb3IgaSBpbiAkU1RBTkRfQklUX1JBVEVT
+DQogICAgZG8NCiAgICAgICAgZWNobyAiTm93IHRlc3QgYml0cmF0ZSAkaSINCiAgICAgICAgaWZj
+b25maWcgJENBTklEIGRvd24NCiAgICAgICAgaXAgbGluayBzZXQgJENBTklEIHR5cGUgY2FuIGJp
+dHJhdGUgJGkgfHwgZXhpdCAkUkMNCiAgICAgICAgaWZjb25maWcgJENBTklEIHVwDQogICAgICAg
+IGNhbmR1bXAgJENBTklELDc3NzpDMDAwMDdGRiA+ICRMb2dfZmlsZSAmDQogICAgICAgIGNwaWQ9
+JCENCg0KICAgICAgICBjYW5kYXRhPSIxMjMjJHtCSVRSQVRFX0RBVEFbJGJpdHJhdGVfaW5kZXhd
+fSINCiAgICAgICAgI2FkZCBtb3JlIHNsZWVwIHRpbWUgdG8gbWFrZSBzdXJlIHNlcnZlciBzaWRl
+IGlzIHJlYWR5IGJlZm9yZSBzZW5kaW5nDQogICAgICAgIGNhbnNlbmQgJENBTklEICRjYW5kYXRh
+IHx8IGV4aXQgJFJDDQogICAgICAgIGNhbnNlbmQgJENBTklEICRjYW5kYXRhIHx8IGV4aXQgJFJD
+DQogICAgICAgIGNhbnNlbmQgJENBTklEICRjYW5kYXRhIHx8IGV4aXQgJFJDDQogICAgICAgIGJp
+dHJhdGVfaW5kZXg9YGV4cHIgJGJpdHJhdGVfaW5kZXggKyAxYA0KDQoJICAgIGxvY2FsIHRpbWVv
+dXQ9MTANCgkgICAgb3Zlcl9zdGF0dXM9JChjYXQgJExvZ19maWxlIHwgZ3JlcCA3NzcpDQoJICAg
+IHdoaWxlIFsgLXogIiRvdmVyX3N0YXR1cyIgXQ0KCSAgICBkbw0KICAgICAgICAgICAgaWYgWyAk
+dGltZW91dCAtbGUgMCBdOyB0aGVuDQogICAgICAgICAgICAgICAgcm0gLXJmICRMb2dfZmlsZQ0K
+ICAgICAgICAgICAgICAgIGtpbGwgLTkgJGNwaWQgPiAvZGV2L251bGwgMj4mMQ0KICAgICAgICAg
+ICAgICAgIHRzdF9yZXNtIFRGQUlMICJ0ZXN0IEZBSUwiDQogICAgICAgICAgICAgICAgcmV0dXJu
+ICRSQw0KICAgICAgICAgICAgZWxzZQ0KICAgICAgICAgICAgICAgIGVjaG8gIndhaXQgc2VydmVy
+IHNpZGUgdG8gZmluaXNoIHRoZSBjYWxjdWxhdGUiDQogICAgICAgICAgICAgICAgc2xlZXAgNQ0K
+ICAgICAgICAgICAgICAgIHRpbWVvdXQ9JCgoJHRpbWVvdXQgLSAxKSkNCiAgICAgICAgICAgIGZp
+DQoJICAgICAgICBvdmVyX3N0YXR1cz0kKGNhdCAkTG9nX2ZpbGUgfCBncmVwIDc3NykNCgkgICAg
+ZG9uZQ0KICAgICAgICBlY2hvICJ0ZXN0IGJpdHJhdGUgJGkgZmluaXNoIg0KICAgICAgICBraWxs
+IC05ICRjcGlkID4gL2Rldi9udWxsIDI+JjENCiAgICAgICAgcm0gLXJmICRMb2dfZmlsZQ0KICAg
+IGRvbmUNCg0KICAgIHRzdF9yZXNtIFRQQVNTICJ0ZXN0IFBBU1MiDQoNCiAgICBSQz0wDQogICAg
+cmV0dXJuICRSQw0KfQ0KDQpJIGFsc28gc3VzcGVjdCBpdCBpcyB0aGUgc2FtZSBpc3N1ZSBhcyBP
+bGVrc2lqIHJlcG9ydGVkLiBEdXJpbmcgdGhpcyB0ZXN0IGNhc2UsIENBTiBkZXZpY2UgdXAvZG93
+biBtdWNoIGZyZXF1ZW50bHksIHdoaWNoIGNvdWxkIHRyaWdnZXIgdGhpcyBwcm9ibGVtLg0KV2hh
+dCBjb3VsZCBJIGRvIHRvIHByb3ZpZGUgbW9yZSBpbmZvPw0KDQpCZXN0IFJlZ2FyZHMsDQpKb2Fr
+aW0gWmhhbmcNCj4gDQo+IFlvdXJzIHNpbmNlcmVseSwNCj4gVmluY2VudA0KPiANCj4gPiBSZWdh
+cmRzLA0KPiA+IE9sZWtzaWoNCj4gPiAtLQ0KPiA+IFBlbmd1dHJvbml4IGUuSy4gICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8DQo+IHwNCj4gPiBTdGV1ZXJ3YWxkZXIgU3RyLiAyMSAgICAgICAg
+ICAgICAgICAgICAgICAgfA0KPiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91
+dGxvb2suY29tLz91cmw9aHR0cCUzQSUyRiUyRnd3dy5wZQ0KPiBuZ3V0cm9uaXguZGUlMkYmYW1w
+O2RhdGE9MDQlN0MwMSU3Q3FpYW5ncWluZy56aGFuZyU0MG54cC5jb20lN0M2ZA0KPiA5M2FlYzI1
+ZDIyNDEyMGEwNzkwOGQ4YmViYjVjZjUlN0M2ODZlYTFkM2JjMmI0YzZmYTkyY2Q5OWM1YzMwMTYz
+NQ0KPiAlN0MwJTdDMCU3QzYzNzQ2OTA1OTIxMDkyNzQ5OCU3Q1Vua25vd24lN0NUV0ZwYkdac2Iz
+ZDhleUpXSWoNCj4gb2lNQzR3TGpBd01EQWlMQ0pRSWpvaVYybHVNeklpTENKQlRpSTZJazFoYVd3
+aUxDSlhWQ0k2TW4wJTNEJTdDMzANCj4gMDAmYW1wO3NkYXRhPTZKUWJUWVFZUHN3Tm5EUWxZSWEl
+MkZwUmxoOXRmZVprdHJxRkluT1RDVllYMCUzRCZhDQo+IG1wO3Jlc2VydmVkPTAgIHwNCj4gPiAz
+MTEzNyBIaWxkZXNoZWltLCBHZXJtYW55ICAgICAgICAgICAgICAgICAgfCBQaG9uZToNCj4gKzQ5
+LTUxMjEtMjA2OTE3LTAgICAgfA0KPiA+IEFtdHNnZXJpY2h0IEhpbGRlc2hlaW0sIEhSQSAyNjg2
+ICAgICAgICAgICB8IEZheDoNCj4gKzQ5LTUxMjEtMjA2OTE3LTU1NTUgfA0K
