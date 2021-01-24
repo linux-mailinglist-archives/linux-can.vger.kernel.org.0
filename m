@@ -2,272 +2,147 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F773016DF
-	for <lists+linux-can@lfdr.de>; Sat, 23 Jan 2021 17:37:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F98301BCE
+	for <lists+linux-can@lfdr.de>; Sun, 24 Jan 2021 13:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726184AbhAWQgx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 23 Jan 2021 11:36:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726111AbhAWQgv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 23 Jan 2021 11:36:51 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BC7C061786;
-        Sat, 23 Jan 2021 08:36:09 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id v67so11900987lfa.0;
-        Sat, 23 Jan 2021 08:36:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PrviOZAF/Z/WvaXzLoflp5bWDkueLuaEZaeOy5rWH64=;
-        b=u8XHL62s5WBuNxLEznm9AeJT7EGgZhMVe72DdWlai5zpRJqQPEM4D+ZepGRYOYysP8
-         7PgSHXW2/NFvEqmIMyyXd2PP6JeBta4jWvRif7vDwsurvmaeqyYxW1j8m6h3pvde7L5e
-         0X75rIYCKVIdQKEb8UDnqkNMxZLjbuA4dagfhVnz0td1oEms3W8CpU8/hSEDDz2wFELq
-         wdHszRhT05T+du1lvzbdRG8OHKI/ZaPRB8vYXn6NMZ7zq57XJibo4dz9Xw4qlCslpfE5
-         IxePvAWMX8Z54zHtXsc0Zv46zZULYakHQZ+S82fUM9lThCGxCRbnDXKVZ/vfW9jtXH7u
-         YhEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PrviOZAF/Z/WvaXzLoflp5bWDkueLuaEZaeOy5rWH64=;
-        b=dwbqcIbZdG97M0c7WkG8BJf5PllOTdrt2ZT8zMGAvelxE53eynWvLeuzhpY1xa7veI
-         qRuGOyECQCT1/SqId/8qMoQnJAA6B01KMsxiPVhBy53i5C5+2B6tqdNoEKL6NDg+jPPU
-         bqP++IS3g7uVXK/jlz7MJ7UTk5MgCB/oWFZHCgqBX48icjczBlbyuqchTHrgujNpeWDY
-         62AgTSj/5Nkvzjy4FusXoaDKRrNNbxJnRQQraunz8KIIg2r33jJwWN2b9iCnhcOkEMV6
-         S30V1HcPl8EoE4zBQtFKG9fnWlHXDN90AxQf3eSenYs6lpk6U2GWswdZxN7jiU2nXRLt
-         0byQ==
-X-Gm-Message-State: AOAM533bzqguzWiM0drh3chQb5RNzaySjSTQqNKGg3z5IuCvA1jjoYLL
-        OTalrWDv7r6UseSz3fv/2hEMzvG6Qggh/nQyZy8=
-X-Google-Smtp-Source: ABdhPJzW1DdDlMhGZT4R7RVbO7LVnxmblngLCX9rBXYU/bOweQzYzNtc/jpb3l0EzUL43rVb10yeI8hiEDbdfx1/F6A=
-X-Received: by 2002:a19:6a0a:: with SMTP id u10mr94681lfu.308.1611419767973;
- Sat, 23 Jan 2021 08:36:07 -0800 (PST)
+        id S1726456AbhAXMZX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 24 Jan 2021 07:25:23 -0500
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:59239 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726497AbhAXMZW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 24 Jan 2021 07:25:22 -0500
+Received: from tomoyo.flets-east.jp ([153.202.107.157])
+        by mwinf5d65 with ME
+        id LcPW240073PnFJp03cPbGJ; Sun, 24 Jan 2021 13:23:39 +0100
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 24 Jan 2021 13:23:39 +0100
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Subject: [PATCH v11 0/1] add support for ETAS ES58X CAN USB interfaces
+Date:   Sun, 24 Jan 2021 21:23:05 +0900
+Message-Id: <20210124122306.265430-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210122062255.202620-1-suyanjun218@gmail.com> <CAMZ6RqL87RpZrH39H9c6wi5wg4=1r104oKf542oAZ2vHRke2WQ@mail.gmail.com>
-In-Reply-To: <CAMZ6RqL87RpZrH39H9c6wi5wg4=1r104oKf542oAZ2vHRke2WQ@mail.gmail.com>
-From:   knigh dark <suyanjun218@gmail.com>
-Date:   Sun, 24 Jan 2021 00:36:06 +0800
-Message-ID: <CAMdsLGyWyXzWgzuCEovqVafOUv0_HG1S58ZyMsbiBaOYc5gxhQ@mail.gmail.com>
-Subject: Re: [PATCH v1] can: mcp251xfd: Add some sysfs debug interfaces for
- registers r/w
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        thomas.kopp@microchip.com, Wolfgang Grandegger <wg@grandegger.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, lgirdwood@gmail.com,
-        broonie@kernel.org, linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Vincent MAILHOL <mailhol.vincent@wanadoo.fr> =E4=BA=8E2021=E5=B9=B41=E6=9C=
-=8822=E6=97=A5=E5=91=A8=E4=BA=94 =E4=B8=8B=E5=8D=884:51=E5=86=99=E9=81=93=
-=EF=BC=9A
->
-> Hi,
->
-> In addition to Marc=E2=80=99s comment, I also have security concerns.
->
-> On Fri. 22 Jan 2021 at 15:22, Su Yanjun <suyanjun218@gmail.com> wrote:
-> > When i debug mcp2518fd, some method to track registers is
-> > needed. This easy debug interface will be ok.
-> >
-> > For example,
-> > read a register at 0xe00:
-> > echo 0xe00 > can_get_reg
-> > cat can_get_reg
-> >
-> > write a register at 0xe00:
-> > echo 0xe00,0x60 > can_set_reg
->
-> What about:
-> printf "A%0.s" {1..1000} > can_set_reg
->
-> Doesn=E2=80=99t it crash the kernel?
-I check the input buffer in __get_param with 16 bytes limit.
-Thanks for your review.
->
-> I see no checks of the buf len in your code and I suspect it to be
-> vulnerable to stack buffer overflow exploits.
->
-> > Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
-> > ---
-> >  .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 132 ++++++++++++++++++
-> >  1 file changed, 132 insertions(+)
-> >
-> > diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/n=
-et/can/spi/mcp251xfd/mcp251xfd-core.c
-> > index ab8aad0a7594..d65abe5505d5 100644
-> > --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-> > @@ -27,6 +27,131 @@
-> >
-> >  #define DEVICE_NAME "mcp251xfd"
-> >
-> > +/* Add sysfs debug interface for easy to debug
-> > + *
-> > + * For example,
-> > + *
-> > + * - read a register
-> > + * echo 0xe00 > can_get_reg
-> > + * cat can_get_reg
-> > + *
-> > + * - write a register
-> > + * echo 0xe00,0x1 > can_set_reg
-> > + *
-> > + */
-> > +static int reg_offset;
-> > +
-> > +static int __get_param(const char *buf, char *off, char *val)
-> > +{
-> > +       int len;
-> > +
-> > +       if (!buf || !off || !val)
-> > +               return -EINVAL;
-> > +
-> > +       len =3D 0;
-> > +       while (*buf !=3D ',') {
-> > +               *off++ =3D *buf++;
-> > +               len++;
-> > +
-> > +               if (len >=3D 16)
-> > +                       return -EINVAL;
-> > +       }
-> > +
-> > +       buf++;
-> > +
-> > +       *off =3D '\0';
-> > +
-> > +       len =3D 0;
-> > +       while (*buf) {
-> > +               *val++ =3D *buf++;
-> > +               len++;
-> > +
-> > +               if (len >=3D 16)
-> > +                       return -EINVAL;
-> > +       }
-> > +
-> > +       *val =3D '\0';
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static ssize_t can_get_reg_show(struct device *dev,
-> > +                               struct device_attribute *attr, char *bu=
-f)
-> > +{
-> > +       int err;
-> > +       u32 val;
-> > +       struct mcp251xfd_priv *priv;
-> > +
-> > +       priv =3D dev_get_drvdata(dev);
-> > +
-> > +       err =3D regmap_read(priv->map_reg, reg_offset, &val);
-> > +       if (err)
-> > +               return 0;
-> > +
-> > +       return sprintf(buf, "reg =3D 0x%08x, val =3D 0x%08x\n", reg_off=
-set, val);
-> > +}
-> > +
-> > +static ssize_t can_get_reg_store(struct device *dev,
-> > +                                struct device_attribute *attr, const c=
-har *buf, size_t len)
-> > +{
-> > +       u32 off;
-> > +
-> > +       reg_offset =3D 0;
-> > +
-> > +       if (kstrtouint(buf, 0, &off) || (off % 4))
-> > +               return -EINVAL;
-> > +
-> > +       reg_offset =3D off;
-> > +
-> > +       return len;
-> > +}
-> > +
-> > +static ssize_t can_set_reg_show(struct device *dev,
-> > +                               struct device_attribute *attr, char *bu=
-f)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static ssize_t can_set_reg_store(struct device *dev,
-> > +                                struct device_attribute *attr, const c=
-har *buf, size_t len)
-> > +{
-> > +       struct mcp251xfd_priv *priv;
-> > +       u32 off, val;
-> > +       int err;
-> > +
-> > +       char s1[16];
-> > +       char s2[16];
-> > +
-> > +       if (__get_param(buf, s1, s2))
-> > +               return -EINVAL;
-> > +
-> > +       if (kstrtouint(s1, 0, &off) || (off % 4))
-> > +               return -EINVAL;
-> > +
-> > +       if (kstrtouint(s2, 0, &val))
-> > +               return -EINVAL;
-> > +
-> > +       err =3D regmap_write(priv->map_reg, off, val);
-> > +       if (err)
-> > +               return -EINVAL;
-> > +
-> > +       return len;
-> > +}
-> > +
-> > +static DEVICE_ATTR_RW(can_get_reg);
-> > +static DEVICE_ATTR_RW(can_set_reg);
-> > +
-> > +static struct attribute *can_attributes[] =3D {
-> > +       &dev_attr_can_get_reg.attr,
-> > +       &dev_attr_can_set_reg.attr,
-> > +       NULL
-> > +};
-> > +
-> > +static const struct attribute_group can_group =3D {
-> > +       .attrs =3D can_attributes,
-> > +       NULL
-> > +};
-> > +
-> >  static const struct mcp251xfd_devtype_data mcp251xfd_devtype_data_mcp2=
-517fd =3D {
-> >         .quirks =3D MCP251XFD_QUIRK_MAB_NO_WARN | MCP251XFD_QUIRK_CRC_R=
-EG |
-> >                 MCP251XFD_QUIRK_CRC_RX | MCP251XFD_QUIRK_CRC_TX |
-> > @@ -2944,6 +3069,12 @@ static int mcp251xfd_probe(struct spi_device *sp=
-i)
-> >         if (err)
-> >                 goto out_free_candev;
-> >
-> > +       err =3D sysfs_create_group(&spi->dev.kobj, &can_group);
-> > +       if (err) {
-> > +               netdev_err(priv->ndev, "Create can group fail.\n");
-> > +               goto out_free_candev;
-> > +       }
-> > +
-> >         err =3D can_rx_offload_add_manual(ndev, &priv->offload,
-> >                                         MCP251XFD_NAPI_WEIGHT);
-> >         if (err)
-> > @@ -2972,6 +3103,7 @@ static int mcp251xfd_remove(struct spi_device *sp=
-i)
-> >         mcp251xfd_unregister(priv);
-> >         spi->max_speed_hz =3D priv->spi_max_speed_hz_orig;
-> >         free_candev(ndev);
-> > +       sysfs_remove_group(&spi->dev.kobj, &can_group);
-> >
-> >         return 0;
-> >  }
-> > --
-> > 2.25.1
-> >
+Here is the v11 of the patch which reflect the latest comments I
+received on the mailing list (thanks for that!). The biggest change is
+the modification on the FIFO. Making the FIFO length a power of two
+allow to remove the spinlocks and drastically reduce the complexity.
+
+In parallel, I am working on the Transmitter Delay Compensation
+parameters to the driver API. I will send a patch later.
+
+Thanks for your comments!
+
+
+Changes in v11 (2021-01-23):
+  - Remove all WARN_ON() calls: these were use during development,
+    relevant tests are done not to trigger these.
+  - es58x_start_xmit(): added net_ratelimit() condition to prevent
+    spamming dmesg.
+  - add a new es58x_xmit_more() function and simplify the code of
+    es58x_start_xmit()
+  - Removed functions {es581_4,es58x_fd}_print_conf() which were only
+    there for debug.
+  - Additional comment for es58x_fd_param.bitrate_max.
+  - Make the device FIFO size a power of two and modify the echo_skb
+    indexes logic to prevent the use of spinlocks
+
+Changes in v10 (2021-01-12):
+  - Rebased on linux-can-next/testing and modified according to latest
+    BQL patches.
+Reference: https://lore.kernel.org/linux-can/20210111141930.693847-1-mkl@pengutronix.de/T/#m5f99d4da8e8934a75f9481ecc3137b59f3762413
+  - Replaced __netdev_sent_queue() by netdev_sent_queue().
+
+Changes in v9 (2021-01-09):
+  - es58x_start_xmit(): do not use skb anymore after the call of
+    can_put_echo_skb(). Rationale: can_put_echo_skb() calls
+    skb_clone() and thus the original skb gets consumed (i.e. use
+    after free issue).
+  - es58x_start_xmit(): Add a "drop_skb" label to free the skb when
+    errors occur.
+
+Changes in v8 (2021-01-04):
+  - The driver requires CRC16. Modified Kconfig accordingly.
+
+Changes in v7 (2020-11-17):
+  - Fix compilation issue if CONFIG_BQL is not set.
+Reference: https://lkml.org/lkml/2020/11/15/163
+
+Changes in v6 (2020-11-15):
+  - Rebase the patch on the testing branch of linux-can-next.
+  - Rename the helper functions according latest changes
+    (e.g. can_cc_get_len() -> can_cc_dlc2len())
+  - Fix comments of enum es58x_physical_layer and enum
+    es58x_sync_edge.
+
+Changes in v5 (2020-11-07):
+  - Add support for DLC greater than 8.
+  - All other patches from the previous series were either accepted or
+    dismissed. As such, this is not a series any more but a single
+    patch.
+
+Changes in v4 (2020-10-17):
+  - Remove struct es58x_abstracted_can_frame.
+  - Fix formatting (spaces, comment style).
+  - Transform macros into static inline functions when possible.
+  - Fix the ctrlmode_supported flags in es581_4.c and removed
+    misleading comments in enum es58x_samples_per_bit.
+  - Rename enums according to the type.
+  - Remove function es58x_can_put_echo_skb().
+Reference: https://lkml.org/lkml/2020/10/10/53
+
+Changes in v3 (2020-10-03):
+  - Remove all the calls to likely() and unlikely().
+Reference: https://lkml.org/lkml/2020/9/30/995
+
+Changes in v2 (2020-09-30):
+  - Fixed -W1 warnings (v1 was tested with GCC -WExtra but not with -W1).
+
+v1 (2020-09-27):
+ - First release
+
+
+Yours sincerely,
+Vincent
+
+*** BLURB HERE ***
+
+Vincent Mailhol (1):
+  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
+
+ drivers/net/can/usb/Kconfig                 |   10 +
+ drivers/net/can/usb/Makefile                |    1 +
+ drivers/net/can/usb/etas_es58x/Makefile     |    3 +
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  529 ++++
+ drivers/net/can/usb/etas_es58x/es581_4.h    |  207 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2519 +++++++++++++++++++
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  698 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  600 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
+ 9 files changed, 4810 insertions(+)
+ create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
+
+
+base-commit: 107a1f6fe7786124bd89fab74bdc478b630f1bfa
+-- 
+2.26.2
+
