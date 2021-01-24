@@ -2,147 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F98301BCE
-	for <lists+linux-can@lfdr.de>; Sun, 24 Jan 2021 13:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62890301D06
+	for <lists+linux-can@lfdr.de>; Sun, 24 Jan 2021 16:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbhAXMZX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 24 Jan 2021 07:25:23 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:59239 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbhAXMZW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 24 Jan 2021 07:25:22 -0500
-Received: from tomoyo.flets-east.jp ([153.202.107.157])
-        by mwinf5d65 with ME
-        id LcPW240073PnFJp03cPbGJ; Sun, 24 Jan 2021 13:23:39 +0100
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 24 Jan 2021 13:23:39 +0100
-X-ME-IP: 153.202.107.157
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "open list : NETWORKING DRIVERS" <netdev@vger.kernel.org>
-Subject: [PATCH v11 0/1] add support for ETAS ES58X CAN USB interfaces
-Date:   Sun, 24 Jan 2021 21:23:05 +0900
-Message-Id: <20210124122306.265430-1-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
+        id S1726556AbhAXPLw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 24 Jan 2021 10:11:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59180 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726374AbhAXPLC (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 24 Jan 2021 10:11:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611500972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AkBGm8p0fa4rt1PI1coAbw65Fn4m5HoJaXKXxd+BTEc=;
+        b=b9fAFLXMSOkPd9Xjijt04qDItG38VWRCGZoz7rFR/j3YEOHaQJOUWIh6T3E1vb2oOjKWBt
+        Fl6SJOfZ3RPaH8f5R8avTPkXahCbFqKQDRzlJz14TDQnK/4nNC2hLePsVTWYp10wyN3Vdb
+        Vx1yZjZ+7PghLsSDq47GneHKFE18Y70=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-393-az_3CplrM5W1FBGp-e-77A-1; Sun, 24 Jan 2021 10:09:31 -0500
+X-MC-Unique: az_3CplrM5W1FBGp-e-77A-1
+Received: by mail-qk1-f198.google.com with SMTP id w204so8191547qka.18
+        for <linux-can@vger.kernel.org>; Sun, 24 Jan 2021 07:09:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AkBGm8p0fa4rt1PI1coAbw65Fn4m5HoJaXKXxd+BTEc=;
+        b=IrZ8PCOlfcPDUXpPKMhpSP4cxNRvjKecNllCZnCZvkjvyRLXq/9lFAp44tlzTpFjMe
+         rHlohXmXSJBEfu/JVsLzWh2UXm8MI7BuMh9/rMLvm7m8d+hHKmlU28/A9QAwms/KCSnn
+         Czc+QCwsnwhCrPZN8OcKZMKH+epRq0oHn3P6sFI22Nf7NTlgpteMhBdMnIH7L3qUl3FR
+         RDjwCCzKkoRHeHSyGXMYeHolYvNuPzIvRSVQ3WvpGBXDywfIBhEEgNbeooe6Q9IBdgR2
+         1jPdrJCTAuKz+HSfvt9cSZy/lJBIA+tzXyJsRvhFb/Mq3ruEHj+yedhXJftXKwMr9foJ
+         /aBg==
+X-Gm-Message-State: AOAM533yJtG/99SxLOANXTaBorV8JDJpiJNgGU60RQgfwVPJLp4obSra
+        U6QAlwMpSi/cLdzbU6ZTwe54xHJQu15KvmvTu+xd4AU25KSMRFhzVAVJkfLDbNtuH62nmqz2i0O
+        9bsA698LOMdkYHAv6ihC1
+X-Received: by 2002:ac8:1184:: with SMTP id d4mr83460qtj.103.1611500970478;
+        Sun, 24 Jan 2021 07:09:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzYBBg29MiCtXTRNQOAOd6nYAfAuayesoZV2Aq69NRiMptaO6XUCaf/fW9Xmoeh1PweXRp35Q==
+X-Received: by 2002:ac8:1184:: with SMTP id d4mr83442qtj.103.1611500970318;
+        Sun, 24 Jan 2021 07:09:30 -0800 (PST)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id v12sm2556362qkg.63.2021.01.24.07.09.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Jan 2021 07:09:29 -0800 (PST)
+From:   trix@redhat.com
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        kuba@kernel.org, socketcan@hartkopp.net, colin.king@canonical.com
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] can: mcba_usb: remove h from printk format specifier
+Date:   Sun, 24 Jan 2021 07:09:16 -0800
+Message-Id: <20210124150916.1920434-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Here is the v11 of the patch which reflect the latest comments I
-received on the mailing list (thanks for that!). The biggest change is
-the modification on the FIFO. Making the FIFO length a power of two
-allow to remove the spinlocks and drastically reduce the complexity.
+From: Tom Rix <trix@redhat.com>
 
-In parallel, I am working on the Transmitter Delay Compensation
-parameters to the driver API. I will send a patch later.
+This change fixes the checkpatch warning described in this commit
+commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
+  unnecessary %h[xudi] and %hh[xudi]")
 
-Thanks for your comments!
+Standard integer promotion is already done and %hx and %hhx is useless
+so do not encourage the use of %hh[xudi] or %h[xudi].
 
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/net/can/usb/mcba_usb.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Changes in v11 (2021-01-23):
-  - Remove all WARN_ON() calls: these were use during development,
-    relevant tests are done not to trigger these.
-  - es58x_start_xmit(): added net_ratelimit() condition to prevent
-    spamming dmesg.
-  - add a new es58x_xmit_more() function and simplify the code of
-    es58x_start_xmit()
-  - Removed functions {es581_4,es58x_fd}_print_conf() which were only
-    there for debug.
-  - Additional comment for es58x_fd_param.bitrate_max.
-  - Make the device FIFO size a power of two and modify the echo_skb
-    indexes logic to prevent the use of spinlocks
-
-Changes in v10 (2021-01-12):
-  - Rebased on linux-can-next/testing and modified according to latest
-    BQL patches.
-Reference: https://lore.kernel.org/linux-can/20210111141930.693847-1-mkl@pengutronix.de/T/#m5f99d4da8e8934a75f9481ecc3137b59f3762413
-  - Replaced __netdev_sent_queue() by netdev_sent_queue().
-
-Changes in v9 (2021-01-09):
-  - es58x_start_xmit(): do not use skb anymore after the call of
-    can_put_echo_skb(). Rationale: can_put_echo_skb() calls
-    skb_clone() and thus the original skb gets consumed (i.e. use
-    after free issue).
-  - es58x_start_xmit(): Add a "drop_skb" label to free the skb when
-    errors occur.
-
-Changes in v8 (2021-01-04):
-  - The driver requires CRC16. Modified Kconfig accordingly.
-
-Changes in v7 (2020-11-17):
-  - Fix compilation issue if CONFIG_BQL is not set.
-Reference: https://lkml.org/lkml/2020/11/15/163
-
-Changes in v6 (2020-11-15):
-  - Rebase the patch on the testing branch of linux-can-next.
-  - Rename the helper functions according latest changes
-    (e.g. can_cc_get_len() -> can_cc_dlc2len())
-  - Fix comments of enum es58x_physical_layer and enum
-    es58x_sync_edge.
-
-Changes in v5 (2020-11-07):
-  - Add support for DLC greater than 8.
-  - All other patches from the previous series were either accepted or
-    dismissed. As such, this is not a series any more but a single
-    patch.
-
-Changes in v4 (2020-10-17):
-  - Remove struct es58x_abstracted_can_frame.
-  - Fix formatting (spaces, comment style).
-  - Transform macros into static inline functions when possible.
-  - Fix the ctrlmode_supported flags in es581_4.c and removed
-    misleading comments in enum es58x_samples_per_bit.
-  - Rename enums according to the type.
-  - Remove function es58x_can_put_echo_skb().
-Reference: https://lkml.org/lkml/2020/10/10/53
-
-Changes in v3 (2020-10-03):
-  - Remove all the calls to likely() and unlikely().
-Reference: https://lkml.org/lkml/2020/9/30/995
-
-Changes in v2 (2020-09-30):
-  - Fixed -W1 warnings (v1 was tested with GCC -WExtra but not with -W1).
-
-v1 (2020-09-27):
- - First release
-
-
-Yours sincerely,
-Vincent
-
-*** BLURB HERE ***
-
-Vincent Mailhol (1):
-  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
-
- drivers/net/can/usb/Kconfig                 |   10 +
- drivers/net/can/usb/Makefile                |    1 +
- drivers/net/can/usb/etas_es58x/Makefile     |    3 +
- drivers/net/can/usb/etas_es58x/es581_4.c    |  529 ++++
- drivers/net/can/usb/etas_es58x/es581_4.h    |  207 ++
- drivers/net/can/usb/etas_es58x/es58x_core.c | 2519 +++++++++++++++++++
- drivers/net/can/usb/etas_es58x/es58x_core.h |  698 +++++
- drivers/net/can/usb/etas_es58x/es58x_fd.c   |  600 +++++
- drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
- 9 files changed, 4810 insertions(+)
- create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
- create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
- create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
-
-
-base-commit: 107a1f6fe7786124bd89fab74bdc478b630f1bfa
+diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
+index df54eb7d4b36..dc79c050f5f7 100644
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -466,7 +466,7 @@ static void mcba_usb_process_ka_usb(struct mcba_priv *priv,
+ 				    struct mcba_usb_msg_ka_usb *msg)
+ {
+ 	if (unlikely(priv->usb_ka_first_pass)) {
+-		netdev_info(priv->netdev, "PIC USB version %hhu.%hhu\n",
++		netdev_info(priv->netdev, "PIC USB version %u.%u\n",
+ 			    msg->soft_ver_major, msg->soft_ver_minor);
+ 
+ 		priv->usb_ka_first_pass = false;
+@@ -492,7 +492,7 @@ static void mcba_usb_process_ka_can(struct mcba_priv *priv,
+ 				    struct mcba_usb_msg_ka_can *msg)
+ {
+ 	if (unlikely(priv->can_ka_first_pass)) {
+-		netdev_info(priv->netdev, "PIC CAN version %hhu.%hhu\n",
++		netdev_info(priv->netdev, "PIC CAN version %u.%u\n",
+ 			    msg->soft_ver_major, msg->soft_ver_minor);
+ 
+ 		priv->can_ka_first_pass = false;
+@@ -554,7 +554,7 @@ static void mcba_usb_process_rx(struct mcba_priv *priv,
+ 		break;
+ 
+ 	default:
+-		netdev_warn(priv->netdev, "Unsupported msg (0x%hhX)",
++		netdev_warn(priv->netdev, "Unsupported msg (0x%X)",
+ 			    msg->cmd_id);
+ 		break;
+ 	}
 -- 
-2.26.2
+2.27.0
 
