@@ -2,145 +2,233 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FCD3024DA
-	for <lists+linux-can@lfdr.de>; Mon, 25 Jan 2021 13:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C326302B2D
+	for <lists+linux-can@lfdr.de>; Mon, 25 Jan 2021 20:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbhAYMVG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 25 Jan 2021 07:21:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45056 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727952AbhAYMUm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jan 2021 07:20:42 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC28C061A2A
-        for <linux-can@vger.kernel.org>; Mon, 25 Jan 2021 03:52:50 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l40QI-0005lf-Ht; Mon, 25 Jan 2021 12:52:46 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:41dd:30c9:182f:703e] (unknown [IPv6:2a03:f580:87bc:d400:41dd:30c9:182f:703e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AA57E5CD37F;
-        Mon, 25 Jan 2021 11:43:39 +0000 (UTC)
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        id S1731605AbhAYTJW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 25 Jan 2021 14:09:22 -0500
+Received: from mail1.bemta25.messagelabs.com ([195.245.230.65]:43552 "EHLO
+        mail1.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731602AbhAYTJP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 25 Jan 2021 14:09:15 -0500
+Received: from [100.112.198.228] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-b.eu-west-1.aws.symcld.net id 3F/48-57556-E361F006; Mon, 25 Jan 2021 19:04:30 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFKsWRWlGSWpSXmKPExsUS8J9toq6tGH+
+  CwZNuA4tV36cyW7zd3cJksX7RFBaLpfd2sjqweHy8dJvRo/+vgcfnTXIen++uZw1giWLNzEvK
+  r0hgzbh4YAN7wfOpzBV/Pt9kbGDcsJipi5GTQ0iggVHi1TqvLkYODgkBP4krc+W6GLmAwmsYJ
+  b51fGCDcPYySky/+5oNpEFYIECi5cwddhBbRMBA4tbikywgRcwCuxglHv58xg7R8Z9R4v/HBc
+  wgVWwCZhLrXzwDs3kFbCU+3l0LtppFQFVizYIfYLaoQITEwv2drBA1ghInZz5hATmJUyBQomG
+  fOIjJLKApsX6XPkgFs4C4xK0n85kgbHmJ5q2zmSGe0ZRYc2oNmC0hoCAxadZTJojH4iS+3DGF
+  MK0lJm5OhKhQk5i/uIsRwuaUeP/hA9MERvFZSE6YhbB3FpK9s5DsXcDIsorRIqkoMz2jJDcxM
+  0fX0MBA19DQSNfQ0lLXyMhcL7FKN0kvtVS3PLW4RNdQL7G8WK+4Mjc5J0UvL7VkEyMwalMKjj
+  /ewbjizQe9Q4ySHExKorwBj/gShPiS8lMqMxKLM+KLSnNSiw8xynBwKEnwzhfiTxASLEpNT61
+  Iy8wBJhCYtAQHj5II7wQRoDRvcUFibnFmOkTqFKMlx+0NSxYxc9x8DyI3z126iFmIJS8/L1VK
+  nLcTpEEApCGjNA9uHCzJXWKUlRLmZWRgYBDiKUgtys0sQZV/xSjOwagkzJsFMoUnM68Ebusro
+  IOYgA56coYP5KCSRISUVAMT9/KwrRmaiuc+1Za8uLA2Rb/DIeL1hx8BMc3a2w8vtBLj5z3dED
+  mzpaPjwllteZed0ezl69cyvWB+cGGpZWuw28FbEreDs+8v4xd4UPfkav83I8OJt4WDWCw4Psz
+  X+phVwPeu4nTDgilTX/VGWhmHnVuiu1Tq2c8L3Dscji20MAj5ezfgUuL0RY7vjeKrN78P4Tu1
+  fPJs4e5pS9v4m05+kpOM8PjtPL1/UqC+y6WJFzc9UJg34XDuqr670xeL7Pb9uqPr/bN35z4ZT
+  SnN1MrzYlFZmyYt89+rffmqe3zsZWL2gauefZmQldcTteDdhaLn9gGMfz977ltV+6b68xKBNQ
+  Uv9CP3yJy8pCEumXX3hxJLcUaioRZzUXEiAAUEY+HtAwAA
+X-Env-Sender: Abhijeet.Badurkar@duagon.com
+X-Msg-Ref: server-3.tower-282.messagelabs.com!1611601468!2466117!1
+X-Originating-IP: [80.255.6.145]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 2497 invoked from network); 25 Jan 2021 19:04:29 -0000
+Received: from unknown (HELO keys.men.de) (80.255.6.145)
+  by server-3.tower-282.messagelabs.com with DHE-RSA-AES256-SHA encrypted SMTP; 25 Jan 2021 19:04:29 -0000
+Received: from MEN-EX01.intra.men.de ([192.168.1.1])
+  by keys.men.de (PGP Universal service);
+  Mon, 25 Jan 2021 20:04:29 +0100
+X-PGP-Universal: processed;
+        by keys.men.de on Mon, 25 Jan 2021 20:04:29 +0100
+Received: from MEN-EX01.intra.men.de (192.168.1.1) by MEN-EX01.intra.men.de
+ (192.168.1.1) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 25 Jan
+ 2021 20:04:28 +0100
+Received: from [10.64.14.204] (10.64.14.204) by MEN-EX01.intra.men.de
+ (192.168.1.1) with Microsoft SMTP Server (TLS) id 15.0.1497.2 via Frontend
+ Transport; Mon, 25 Jan 2021 20:04:27 +0100
+Subject: Re: [PATCH v6] net: can: Introduce MEN 16Z192-00 CAN controller
+ driver
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         linux-can <linux-can@vger.kernel.org>,
-        andreas.geissler@duagon.com, stefan.schlosser@duagon.com
+        <andreas.geissler@duagon.com>, <stefan.schlosser@duagon.com>
 References: <20210122110533.2728-1-abhijeet.badurkar@duagon.com>
  <CAMZ6Rq+MPpknpxwKv0-eV8J3FbKw7AigWrzbMC1HJgEUv8f56A@mail.gmail.com>
  <0673cb4c-f6ce-027c-8028-62161ca47f9c@duagon.com>
  <CAMZ6RqLLU2BC1m_F8Dfi9_n_AoQ6CgfOgtY3xwTscdLvJN4+Ag@mail.gmail.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH v6] net: can: Introduce MEN 16Z192-00 CAN controller
- driver
-Message-ID: <b50ee651-880a-9093-9c79-d6f398fe4280@pengutronix.de>
-Date:   Mon, 25 Jan 2021 12:43:27 +0100
+From:   Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
+Message-ID: <329e79ca-e6bd-be37-f763-77d1eea0ad32@duagon.com>
+Date:   Mon, 25 Jan 2021 20:04:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <CAMZ6RqLLU2BC1m_F8Dfi9_n_AoQ6CgfOgtY3xwTscdLvJN4+Ag@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="aX8XWbS3EO0ToEimKj1n317VMsn0r6HKQ"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.64.14.204]
+X-ClientProxiedBy: MEN-EX01.intra.men.de (192.168.1.1) To
+ MEN-EX01.intra.men.de (192.168.1.1)
+X-EXCLAIMER-MD-CONFIG: e4841e51-7998-49c0-ba41-8b8a0e2d8962
+X-EXCLAIMER-MD-BIFURCATION-INSTANCE: 0
+X-Loop: 2
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---aX8XWbS3EO0ToEimKj1n317VMsn0r6HKQ
-Content-Type: multipart/mixed; boundary="K4Or60kXnr5symxGOCwXtoLdMPSN1jPHZ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
- Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
-Cc: Wolfgang Grandegger <wg@grandegger.com>,
- linux-can <linux-can@vger.kernel.org>, andreas.geissler@duagon.com,
- stefan.schlosser@duagon.com
-Message-ID: <b50ee651-880a-9093-9c79-d6f398fe4280@pengutronix.de>
-Subject: Re: [PATCH v6] net: can: Introduce MEN 16Z192-00 CAN controller
- driver
-References: <20210122110533.2728-1-abhijeet.badurkar@duagon.com>
- <CAMZ6Rq+MPpknpxwKv0-eV8J3FbKw7AigWrzbMC1HJgEUv8f56A@mail.gmail.com>
- <0673cb4c-f6ce-027c-8028-62161ca47f9c@duagon.com>
- <CAMZ6RqLLU2BC1m_F8Dfi9_n_AoQ6CgfOgtY3xwTscdLvJN4+Ag@mail.gmail.com>
-In-Reply-To: <CAMZ6RqLLU2BC1m_F8Dfi9_n_AoQ6CgfOgtY3xwTscdLvJN4+Ag@mail.gmail.com>
-
---K4Or60kXnr5symxGOCwXtoLdMPSN1jPHZ
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
-
-On 1/25/21 12:01 PM, Vincent MAILHOL wrote:
+On 25.01.21 12:01, Vincent MAILHOL wrote:
+> On Mon 25 Jan 2021 at 17:47, Abhijeet Badurkar
+> <abhijeet.badurkar@duagon.com> wrote:
+>> Hi Vincent,
+>>
+>> thx for quick review. Please find my comments below.
+>>
+>>
+>> M. Sc.
+>> Abhijeet Badurkar
+>> Software Engineering
+>> Business Unit Computing Systems, duagon
+>>
+>> duagon Germany GmbH
+>> Neuwieder Straße 1-7
+>> 90411 Nürnberg
+>> Deutschland
+>> Phone           +49 911 99 33 5 - 219
+>> www.duagon.com
+>>
+>> duagon Germany GmbH - Geschäftsführer: Dr. Michael Goldbach - Mathias Kamolz - Kalina Scott - Handelsregister/Trade Register AG Nürnberg HRB 5540
+>>
+>> This message and/or attachments may be privileged or confidential. If you are not the intended recipient, you are hereby notified that you have received this transmittal in error; any review, dissemination, or copying is strictly prohibited. If you received this transmittal in error, please notify us immediately by reply and immediately delete this message and all its attachments. Thank you.
+>> On 22.01.21 16:41, Vincent MAILHOL wrote:
+>>> Hi Abhijeet,
+>>>
+>>> I did a quick review.
+>>>
+>>> On Fri. 22 Jan 2021 at 20:05, Abhijeet Badurkar
+>>> <abhijeet.badurkar@duagon.com> wrote:
+>>>>         This CAN Controller is found on MEN Chameleon FPGAs.
+>>>>
+>>>>         The driver/device supports the CAN2.0 specification.
+>>>>         There are 255 RX and 255 Tx buffer within the IP. The
+>>>>         pointer for the buffer are handled by HW to make the
+>>>>         access from within the driver as simple as possible.
+>>>>
+>>>>         The driver also supports parameters to configure the
+>>>>         buffer level interrupt for RX/TX as well as a RX timeout
+>>>>         interrupt using ethtool.
+>>>>
+>>>>         With this configuration options, the driver/device
+>>>>         provides flexibility for different types of usecases.
+>>>>
+>>>>         Changes in version 2:
+>>>>         Since the hardware does not have TX-done notification,
+>>>>         the local loopback mechanism is implemented using ECHO skbs.
+>>>>         The skb is added to echo stack, upon packet reception,
+>>>>         received and echo skb are matched.
+>>>>
+>>>>         LED trigger support is added.
+>>>>
+>>>>         Changes in version 3:
+>>>>         Fixed compiler warning.
+>>>>
+>>>>         Changes in version 4:
+>>>>         Implemented the module parameters using ethtool coalesce.
+>>>>         Removed LED trigger implementation. Used FIELD_GET and
+>>>>         FIELD_PREP for setting and getting register values. Replaced
+>>>>         some hard-coded values with macros.
+>>>>
+>>>>         Changes in version 5:
+>>>>         Fixed compiler warning.
+>>>>
+>>>>         Changes in version 6:
+>>>>         Implemented polling mode and added parameter for polling interval.
+>>>>         Note: Previous version of this path had sparse warning regarding
+>>>>         iounmap function of openrisc architecture. Since this function is now
+>>>>         fixed in mainline, sparse warning is removed.
+>>>>
+>>>> Signed-off-by: Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
+>>>> ---
+>>>>  drivers/net/can/Kconfig        |   10 +
+>>>>  drivers/net/can/Makefile       |    1 +
+>>>>  drivers/net/can/men_z192_can.c | 1150 ++++++++++++++++++++++++++++++++
+>>>>  3 files changed, 1161 insertions(+)
+>>>>  create mode 100644 drivers/net/can/men_z192_can.c
+>>>>
+>>>> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+>>>> index 1c28eade6bec..bbf6e19e4797 100644
+>>>> --- a/drivers/net/can/Kconfig
+>>>> +++ b/drivers/net/can/Kconfig
+>>>> @@ -134,6 +134,16 @@ config CAN_KVASER_PCIEFD
+>>>>             Kvaser Mini PCI Express HS v2
+>>>>             Kvaser Mini PCI Express 2xHS v2
+>>>>
+>>>> +config CAN_MEN_Z192
+>>>> +       depends on MCB
+>>>> +       tristate "MEN 16Z192-00 CAN Controller"
+>>>> +         help
+>>>> +         Driver for MEN 16Z192-00 CAN Controller IP-Core, which
+>>>> +         is connected to the MEN Chameleon Bus.
+>>>> +
+>>>> +         This driver can also be built as a module. If so, the module will be
+>>>> +         called men_z192_can.ko.
+>>>> +
+>>>>  config CAN_SUN4I
+>>>>         tristate "Allwinner A10 CAN controller"
+>>>>         depends on MACH_SUN4I || MACH_SUN7I || COMPILE_TEST
+>>>> diff --git a/drivers/net/can/Makefile b/drivers/net/can/Makefile
+>>>> index 22164300122d..d874ab1b9f08 100644
+>>>> --- a/drivers/net/can/Makefile
+>>>> +++ b/drivers/net/can/Makefile
+>>>> @@ -26,6 +26,7 @@ obj-$(CONFIG_CAN_GRCAN)               += grcan.o
+>>>>  obj-$(CONFIG_CAN_IFI_CANFD)    += ifi_canfd/
+>>>>  obj-$(CONFIG_CAN_JANZ_ICAN3)   += janz-ican3.o
+>>>>  obj-$(CONFIG_CAN_KVASER_PCIEFD)        += kvaser_pciefd.o
+>>>> +obj-$(CONFIG_CAN_MEN_Z192)     += men_z192_can.o
+>>>>  obj-$(CONFIG_CAN_MSCAN)                += mscan/
+>>>>  obj-$(CONFIG_CAN_M_CAN)                += m_can/
+>>>>  obj-$(CONFIG_CAN_PEAK_PCIEFD)  += peak_canfd/
+>>>> diff --git a/drivers/net/can/men_z192_can.c b/drivers/net/can/men_z192_can.c
+>>>> new file mode 100644
+>>>> index 000000000000..8a72ffc39508
+>>>> --- /dev/null
+>>>> +++ b/drivers/net/can/men_z192_can.c
+>>>> @@ -0,0 +1,1150 @@
+>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>> +/* MEN 16Z192 CAN Controller driver
+>>>> + *
+>>>> + * Copyright (C) 2016 MEN Mikroelektronik GmbH (www.men.de)
+>>>> + *
+>>>> + * Local loopback implementation in this driver is adapted from Janz MODULbus
+>>>> + * VMOD-ICAN3 CAN Interface Driver
+>>>> + * Copyright (c) 2010 Ira W. Snyder <iws@ovro.caltech.edu>
+>>>> + */
+>>>> +
+>>>> +#include <linux/kernel.h>
+>>>> +#include <linux/module.h>
+>>>> +#include <linux/io.h>
+>>>> +#include <linux/iopoll.h>
+>>>> +#include <linux/err.h>
+>>>> +#include <linux/bitops.h>
+>>>> +#include <linux/ethtool.h>
+>>>> +#include <linux/netdevice.h>
+>>>> +#include <linux/can.h>
+>>>> +#include <linux/can/dev.h>
+>>>> +#include <linux/can/error.h>
+>>>> +#include <linux/can/led.h>
+>>>> +#include <linux/mcb.h>
+>>>> +#include <linux/bitfield.h>
+>>>> +
+>>>> +#define DRV_NAME    "z192_can"
+>>>> +
+>>>> +#define MEN_Z192_MODE_TOUT_US          40
+>>>> +#define MEN_Z192_READ_POLL_TIMEOUT     10
+>>>> +
 >>>> +/* CTL/BTR Register Bits */
 >>>> +#define MEN_Z192_CTL0_INITRQ           BIT(0)
 >>>> +#define MEN_Z192_CTL0_SLPRQ            BIT(1)
@@ -156,68 +244,538 @@ On 1/25/21 12:01 PM, Vincent MAILHOL wrote:
 >>>> +#define MEN_Z192_BTR1_SAMP             BIT(31)
 >>>
 >>> Please use only one space between the #define and the value.
->> I had tried that before, but that makes the code difficult to read. Th=
-e other drivers in mainline have also used more than one space.
->=20
+>> I had tried that before, but that makes the code difficult to read. The other drivers in mainline have also used more than one space.
+> 
 > When I sent my first patch, I received the same comment asking me
 > to remove extra spaces. I am not here to argue which one is the
 > most readable. I just recommend you to do as such because it is
 > the prefered style here.
-
-IMHO one space only pays out, once you add something to the driver, which=
-
-doesn't fit into the current indention level.
-
-[...]
-
+>
+Ok.
+ 
+>>>
+>>>> +/* IER Interrupt Enable Register bits */
+>>>> +#define MEN_Z192_RXIE                  BIT(0)
+>>>> +#define MEN_Z192_OVRIE                 BIT(1)
+>>>> +#define MEN_Z192_CSCIE                 BIT(6)
+>>>> +#define MEN_Z192_TOUTE                 BIT(7)
+>>>> +#define MEN_Z192_TXIE                  BIT(16)
+>>>> +#define MEN_Z192_ERRIE                 BIT(17)
+>>>> +
+>>>> +#define MEN_Z192_INTE_ALL              (MEN_Z192_RXIE |        \
+>>>> +                                        MEN_Z192_OVRIE |       \
+>>>> +                                        MEN_Z192_CSCIE |       \
+>>>> +                                        MEN_Z192_TOUTE |       \
+>>>> +                                        MEN_Z192_TXIE)
+>>>> +
+>>>> +#define MEN_Z192_INTE_NAPI             (MEN_Z192_RXIE | MEN_Z192_TOUTE)
+>>>> +
+>>>> +/* RX_TX_STAT RX/TX status register bits */
+>>>> +#define MEN_Z192_RX_BUF_CNT            GENMASK(7, 0)
+>>>> +#define MEN_Z192_TX_BUF_CNT            GENMASK(15, 8)
+>>>> +#define        MEN_Z192_RFLG_RXIF              BIT(16)
+>>>> +#define        MEN_Z192_RFLG_OVRF              BIT(17)
+>>>> +#define        MEN_Z192_RFLG_TSTATE            GENMASK(19, 18)
+>>>> +#define        MEN_Z192_RFLG_RSTATE            GENMASK(21, 20)
+>>>> +#define        MEN_Z192_RFLG_CSCIF             BIT(22)
+>>>> +#define        MEN_Z192_RFLG_TOUTF             BIT(23)
+>>>> +#define MEN_Z192_TFLG_TXIF             BIT(24)
+>>>> +
+>>>> +#define MEN_Z192_GET_TSTATE(x)         FIELD_GET(MEN_Z192_RFLG_TSTATE, x)
+>>>> +#define MEN_Z192_GET_RSTATE(x)         FIELD_GET(MEN_Z192_RFLG_RSTATE, x)
+>>>> +
+>>>> +#define MEN_Z192_RFLG_ALL              (MEN_Z192_RFLG_RXIF |   \
+>>>> +                                       MEN_Z192_RFLG_OVRF |    \
+>>>> +                                       MEN_Z192_RFLG_TSTATE |  \
+>>>> +                                       MEN_Z192_RFLG_RSTATE |  \
+>>>> +                                       MEN_Z192_RFLG_CSCIF |   \
+>>>> +                                       MEN_Z192_RFLG_TOUTF |   \
+>>>> +                                       MEN_Z192_TFLG_TXIF)
+>>>> +
+>>>> +/* RX/TX Error counter bits */
+>>>> +#define MEN_Z192_GET_RX_ERR_CNT                GENMASK(7, 0)
+>>>> +#define MEN_Z192_GET_TX_ERR_CNT                GENMASK(23, 16)
+>>>> +
+>>>> +/* Buffer level register bits */
+>>>> +#define MEN_Z192_RX_BUF_LVL            GENMASK(15, 0)
+>>>> +#define MEN_Z192_TX_BUF_LVL            GENMASK(31, 16)
+>>>> +
+>>>> +/* RX/TX Buffer register bits */
+>>>> +#define MEN_Z192_CFBUF_LEN             GENMASK(3, 0)
+>>>> +#define MEN_Z192_CFBUF_ID_11_BITS      GENMASK(31, 21)
+>>>> +#define MEN_Z192_CFBUF_ID_18_BITS      GENMASK(18, 1)
+>>>> +#define MEN_Z192_CFBUF_TS              GENMASK(31, 8)
+>>>> +#define MEN_Z192_CFBUF_E_RTR           BIT(0)
+>>>> +#define MEN_Z192_CFBUF_IDE             BIT(19)
+>>>> +#define MEN_Z192_CFBUF_SRR             BIT(20)
+>>>> +#define MEN_Z192_CFBUF_S_RTR           BIT(20)
+>>>> +
+>>>> +/* Global register offsets */
+>>>> +#define MEN_Z192_RX_BUF_START          0x0000
+>>>> +#define MEN_Z192_TX_BUF_START          0x1000
+>>>> +#define MEN_Z192_REGS_OFFS             0x2000
+>>>> +
+>>>> +/* Buffer level control values */
+>>>> +#define MEN_Z192_MIN_BUF_LVL           0
+>>>> +#define MEN_Z192_MAX_BUF_LVL           254
+>>>> +#define MEN_Z192_RX_BUF_LVL_DEF                5
+>>>> +#define MEN_Z192_TX_BUF_LVL_DEF                5
+>>>> +#define MEN_Z192_RX_TOUT_MIN           0
+>>>> +#define MEN_Z192_RX_TOUT_MAX           65535
+>>>> +#define MEN_Z192_RX_TOUT_DEF           1000
+>>>> +
+>>>> +#define MEN_Z192_CAN_ID_11_BITS                GENMASK(28, 18)
+>>>> +#define MEN_Z192_CAN_ID_18_BITS                GENMASK(17, 0)
+>>>> +
+>>>> +/* Polling interval */
+>>>> +#define MEN_Z192_POLL_INTERVAL_DEF     0
+>>>> +
+>>>> +static int poll_interval = MEN_Z192_POLL_INTERVAL_DEF;
+>>>> +module_param(poll_interval, int, 0444);
+>>>> +MODULE_PARM_DESC(poll_interval, "Poll interval (msec), default="
+>>>> +                __MODULE_STRING(MEN_Z192_POLL_INTERVAL_DEF) ")");
+>>>> +
+>>>> +struct men_z192_regs {
+>>>> +       u32 ctl_btr;            /* Control and bus timing register */
+>>>> +       u32 ier;                /* Interrupt enable register */
+>>>> +       u32 buf_lvl;            /* Buffer level register */
+>>>> +       u32 rxa;                /* RX Data acknowledge register */
+>>>> +       u32 txa;                /* TX data acknowledge register */
+>>>> +       u32 rx_tx_sts;          /* RX/TX flags and buffer level */
+>>>> +       u32 ovr_ecc_sts;        /* Overrun/ECC status register */
+>>>> +       u32 idac_ver;           /* ID acceptance control / version */
+>>>> +       u32 rx_tx_err;          /* RX/TX error counter register */
+>>>> +       u32 idar_0_to_3;        /* ID acceptance register 0...3 */
+>>>> +       u32 idar_4_to_7;        /* ID acceptance register 4...7 */
+>>>> +       u32 idmr_0_to_3;        /* ID mask register 0...3 */
+>>>> +       u32 idmr_4_to_7;        /* ID mask register 4...7 */
+>>>> +       u32 rx_timeout;         /* receive timeout */
+>>>> +       u32 timebase;           /* Base frequency for baudrate calculation */
+>>>> +};
+>>>> +
+>>>> +struct men_z192 {
+>>>> +       struct can_priv can;
+>>>> +       struct napi_struct napi;
+>>>> +       struct net_device *ndev;
+>>>> +       struct device *dev;
+>>>> +
+>>>> +       /* Lock for CTL_BTR register access. This register combines bittiming
+>>>> +        * bits and the operation mode bits. It is also used for bit r/m/w
+>>>> +        * access to all registers.
+>>>> +        */
+>>>> +       spinlock_t lock;
+>>>> +       struct resource *mem;
+>>>> +       struct men_z192_regs __iomem *regs;
+>>>> +       void __iomem *dev_base;
+>>>> +
+>>>> +       int txlvl;
+>>>> +
+>>>> +       /* Following parameters related to RX interrupt have impact on latency
+>>>> +        * and provide the users full control over them.
+>>>> +        *
+>>>> +        * rxlvl: Receive buffer level or in other words, the number of frames
+>>>> +        * to trigger RX interrupt
+>>>> +        * When number of received valid CAN frames exceeds rxlvl and RX
+>>>> +        * interrupt is enabled, an interrupt will be generated. For example,
+>>>> +        * if rxlvl is 0 and one frame is received, an interrupt will be
+>>>> +        * generated or if rxlvl is 254 and 255 frames are received, an
+>>>> +        * interrupt will be generated.
+>>>> +        *
+>>>> +        * rx_timeout: Read timeout for receive buffer
+>>>> +        * When receive buffer is not empty and it has not been accessed since
+>>>> +        * rx_timeout then TOUTF flag is set. If RX interrupt was already
+>>>> +        * enabled and TOUTF flag is set, a RX interrupt will be generated.
+>>>> +        * By defining this parameter, time of the interrupt generation can be
+>>>> +        * controlled, if the RX buffer level is not reached within rx_timeout.
+>>>> +        *
+>>>> +        * When an interrupt is generated for either of these parameters, NAPI
+>>>> +        * poll is scheduled to read the recived CAN frames.
+>>>
+>>> recived -> received
+>> will fix this.
+>>>
+>>>> +        */
+>>>> +       int rxlvl;
+>>>> +       int rx_timeout;
+>>>> +
+>>>> +       /* queue for echo packets */
+>>>> +       struct sk_buff_head echoq;
+>>>> +
+>>>> +       struct hrtimer poll_timer;
+>>>> +};
+>>>> +
 >>>> +struct men_z192_cf_buf {
 >>>> +       u32 can_id;
 >>>> +       u32 data[2];
 >>>
 >>> Is it possible to make it u8 data[CAN_MAX_DLEN]?
->> The core has two 32-bit registers for data, therefore array of two 32-=
-bit
->> elements has been used.
->=20
+>> The core has two 32-bit registers for data, therefore array of two 32-bit elements has been used.
+> 
 > First thing, u32 is wrong, it should be either __le32 or __be32
 > to make your code portable.
-
-You should describe the memory/packet/etc... layout of the hardware here,=
- so if
-it's organized in 32 bit values, use them here.
-
-If you have to use __le32, __be32 or u32 depends on how the HW is connect=
-ed to
-your linux box. If it's USB you have to use the le or be variants.
-
-For memory mapped IO with readl/writel and friend, according to:
-
-> https://elixir.bootlin.com/linux/latest/source/include/asm-generic/io.h=
-#L141
-
-{read,write}{b,w,l,q}() access little endian memory and return result in =
-native
-endianness.
-
+> 
 > The data field of struct can_frame is an array of bytes. You have
 > to make a choice which is either casting cf->data to
 > __be32[] (what you did) or make your data field a u8[].
->=20
+> 
 > If I am correct, u8[] and __be32[] has the same memory
 > layout. Thus I think it is more readable to declare it your data
 > field as a u8[] despite how it is declared on the
 > controller (and you can add a comment to reflect that).
-
-See above, that should describe your controller.
-
-[...]
-
->>>> +static int men_z192_xmit(struct sk_buff *skb, struct net_device *nd=
-ev)
+> 
+>>>
+>>>> +       u32 length;
+>>>> +};
+>>>> +
+>>>> +enum men_z192_int_state {
+>>>> +       MEN_Z192_CAN_DIS = 0,
+>>>> +       MEN_Z192_CAN_EN,
+>>>> +       MEN_Z192_CAN_NAPI_DIS,
+>>>> +       MEN_Z192_CAN_NAPI_EN,
+>>>> +};
+>>>> +
+>>>> +static const enum can_state bus_state_map[] = {
+>>>> +       CAN_STATE_ERROR_ACTIVE,
+>>>> +       CAN_STATE_ERROR_WARNING,
+>>>> +       CAN_STATE_ERROR_PASSIVE,
+>>>> +       CAN_STATE_BUS_OFF
+>>>> +};
+>>>> +
+>>>> +static const struct can_bittiming_const men_z192_bittiming_const = {
+>>>> +       .name = DRV_NAME,
+>>>> +       .tseg1_min = 4,
+>>>> +       .tseg1_max = 16,
+>>>> +       .tseg2_min = 2,
+>>>> +       .tseg2_max = 8,
+>>>> +       .sjw_max = 4,
+>>>> +       .brp_min = 2,
+>>>> +       .brp_max = 64,
+>>>> +       .brp_inc = 1,
+>>>> +};
+>>>> +
+>>>> +static inline void men_z192_bit_clr(struct men_z192 *priv, void __iomem *addr,
+>>>> +                                   u32 mask)
 >>>> +{
->>>> +       struct can_frame *cf =3D (struct can_frame *)skb->data;
->>>> +       struct men_z192 *priv =3D netdev_priv(ndev);
->>>> +       struct men_z192_regs __iomem *regs =3D priv->regs;
+>>>> +       unsigned long flags;
+>>>> +       u32 val;
+>>>> +
+>>>> +       spin_lock_irqsave(&priv->lock, flags);
+>>>> +
+>>>> +       val = readl(addr);
+>>>> +       val &= ~mask;
+>>>> +       writel(val, addr);
+>>>> +
+>>>> +       spin_unlock_irqrestore(&priv->lock, flags);
+>>>> +}
+>>>> +
+>>>> +static inline void men_z192_bit_set(struct men_z192 *priv, void __iomem *addr,
+>>>> +                                   u32 mask)
+>>>> +{
+>>>> +       unsigned long flags;
+>>>> +       u32 val;
+>>>> +
+>>>> +       spin_lock_irqsave(&priv->lock, flags);
+>>>> +
+>>>> +       val = readl(addr);
+>>>> +       val |= mask;
+>>>> +       writel(val, addr);
+>>>> +
+>>>> +       spin_unlock_irqrestore(&priv->lock, flags);
+>>>> +}
+>>>> +
+>>>> +static inline void men_z192_ack_rx_pkg(struct men_z192 *priv,
+>>>> +                                      unsigned int count)
+>>>> +{
+>>>> +       writel(count, &priv->regs->rxa);
+>>>> +}
+>>>> +
+>>>> +static inline void men_z192_ack_tx_pkg(struct men_z192 *priv,
+>>>> +                                      unsigned int count)
+>>>> +{
+>>>> +       writel(count, &priv->regs->txa);
+>>>> +}
+>>>> +
+>>>> +static void men_z192_set_int(struct men_z192 *priv,
+>>>> +                            enum men_z192_int_state state)
+>>>> +{
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +
+>>>> +       if (priv->ndev->irq == 0) {
+>>>> +               /* don't enable any interrupts at all */
+>>>> +               state = MEN_Z192_CAN_DIS;
+>>>> +       }
+>>>> +
+>>>> +       switch (state) {
+>>>> +       case MEN_Z192_CAN_DIS:
+>>>> +               men_z192_bit_clr(priv, &regs->ier, MEN_Z192_INTE_ALL);
+>>>> +               break;
+>>>> +
+>>>> +       case MEN_Z192_CAN_EN:
+>>>> +               men_z192_bit_set(priv, &regs->ier, MEN_Z192_INTE_ALL);
+>>>> +               break;
+>>>> +
+>>>> +       case MEN_Z192_CAN_NAPI_DIS:
+>>>> +               men_z192_bit_clr(priv, &regs->ier, MEN_Z192_INTE_NAPI);
+>>>> +               break;
+>>>> +
+>>>> +       case MEN_Z192_CAN_NAPI_EN:
+>>>> +               men_z192_bit_set(priv, &regs->ier, MEN_Z192_INTE_NAPI);
+>>>> +               break;
+>>>> +
+>>>> +       default:
+>>>> +               netdev_err(priv->ndev, "invalid interrupt state\n");
+>>>> +               break;
+>>>> +       }
+>>>> +}
+>>>> +
+>>>> +static int men_z192_get_berr_counter(const struct net_device *ndev,
+>>>> +                                    struct can_berr_counter *bec)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       u32 err_cnt;
+>>>> +
+>>>> +       err_cnt = readl(&regs->rx_tx_err);
+>>>> +
+>>>> +       bec->txerr = FIELD_GET(MEN_Z192_GET_TX_ERR_CNT, err_cnt);
+>>>> +       bec->rxerr = FIELD_GET(MEN_Z192_GET_RX_ERR_CNT, err_cnt);
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_req_run_mode(struct men_z192 *priv)
+>>>> +{
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       u32 val;
+>>>> +
+>>>> +       men_z192_bit_clr(priv, &regs->ctl_btr, MEN_Z192_CTL0_INITRQ);
+>>>> +
+>>>> +       return read_poll_timeout(readl, val, !(val & MEN_Z192_CTL1_INITAK),
+>>>> +                                MEN_Z192_READ_POLL_TIMEOUT,
+>>>> +                                MEN_Z192_MODE_TOUT_US, 0, &regs->ctl_btr);
+>>>> +}
+>>>> +
+>>>> +static int men_z192_req_init_mode(struct men_z192 *priv)
+>>>> +{
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       u32 val;
+>>>> +
+>>>> +       men_z192_bit_set(priv, &regs->ctl_btr, MEN_Z192_CTL0_INITRQ);
+>>>> +
+>>>> +       return read_poll_timeout(readl, val, val & MEN_Z192_CTL1_INITAK,
+>>>> +                                MEN_Z192_READ_POLL_TIMEOUT,
+>>>> +                                MEN_Z192_MODE_TOUT_US, 0, &regs->ctl_btr);
+>>>> +}
+>>>> +
+>>>> +static void z192_put_echo_skb(struct men_z192 *priv, struct sk_buff *skb)
+>>>> +{
+>>>> +       skb = can_create_echo_skb(skb);
+>>>> +       if (!skb)
+>>>> +               return;
+>>>> +
+>>>> +       /* save this skb for tx interrupt echo handling */
+>>>> +       skb_queue_tail(&priv->echoq, skb);
+>>>> +}
+>>>
+>>> What is the rationale for not using can_put_echo_skb()?
+>> The z192 CAN IP core doesn't have TX done irq, therefore the loopback mechanism has been implemented like this, which is similar to janz-ican3 driver.
+> 
+> can_put_echo_skb() is not limited to TX done IRQ (for example,
+> some drivers with no loopback features just call
+> can_put_echo_skb() within the xmit() function). The fact that
+agree.
+> another driver used this approach is not a convincing
+> argument (if I am correct janz-ican3 is the only one to use this
+> approach, maybe it just passed through code review).
+The driver has its private queue and put, get echo functions to handle the echo frames, that is why the can_put_echo_skb was not used. Using this function would
+have not written in private queue of the driver.
+> 
+>>>> +
+>>>> +static unsigned int z192_get_echo_skb(struct men_z192 *priv)
+>>>> +{
+>>>> +       struct sk_buff *skb = skb_dequeue(&priv->echoq);
+>>>> +       struct can_frame *cf;
+>>>> +       u8 dlc;
+>>>> +
+>>>> +       /* this should never trigger unless there is a driver bug */
+>>>> +       if (!skb) {
+>>>> +               netdev_err(priv->ndev, "BUG: echo skb not occupied\n");
+>>>> +               return 0;
+>>>> +       }
+>>>> +
+>>>> +       cf = (struct can_frame *)skb->data;
+>>>> +       dlc = cf->can_dlc;
+>>>> +
+>>>> +       /* check flag whether this packet has to be looped back */
+>>>> +       if (skb->pkt_type != PACKET_LOOPBACK) {
+>>>> +               kfree_skb(skb);
+>>>> +               return dlc;
+>>>> +       }
+>>>> +
+>>>> +       skb->protocol = htons(ETH_P_CAN);
+>>>> +       skb->pkt_type = PACKET_BROADCAST;
+>>>> +       skb->ip_summed = CHECKSUM_UNNECESSARY;
+>>>> +       skb->dev = priv->ndev;
+>>>> +       netif_receive_skb(skb);
+>>>> +       return dlc;
+>>>> +}
+>>>> +
+>>>> +static bool z192_echo_skb_matches(struct men_z192 *priv, struct sk_buff *skb)
+>>>> +{
+>>>> +       struct can_frame *cf = (struct can_frame *)skb->data;
+>>>> +       struct sk_buff *echo_skb = skb_peek(&priv->echoq);
+>>>> +       struct can_frame *echo_cf;
+>>>> +
+>>>> +       if (!echo_skb)
+>>>> +               return false;
+>>>> +
+>>>> +       echo_cf = (struct can_frame *)echo_skb->data;
+>>>> +       if (cf->can_id != echo_cf->can_id)
+>>>> +               return false;
+>>>> +
+>>>> +       if (cf->can_dlc != echo_cf->can_dlc)
+>>>> +               return false;
+>>>> +
+>>>> +       return memcmp(cf->data, echo_cf->data, cf->can_dlc) == 0;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_read_frame(struct net_device *ndev, unsigned int frame_nr)
+>>>> +{
+>>>> +       struct net_device_stats *stats = &ndev->stats;
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_cf_buf __iomem *cf_buf;
+>>>> +       struct can_frame *cf;
+>>>> +       struct sk_buff *skb;
+>>>> +       u32 cf_offset;
+>>>> +       u32 length;
+>>>> +       u32 id;
+>>>> +       u16 id_11_bits;
+>>>> +       u32 id_18_bits;
+>>>> +
+>>>> +       skb = alloc_can_skb(ndev, &cf);
+>>>> +       if (unlikely(!skb)) {
+>>>> +               stats->rx_dropped++;
+>>>> +               return 0;
+>>>> +       }
+>>>> +
+>>>> +       cf_offset = sizeof(struct men_z192_cf_buf) * frame_nr;
+>>>
+>>> cf_offset = sizeof(*cf_buf) * frame_nr;
+>> ok
+>>>
+>>>> +
+>>>> +       cf_buf = priv->dev_base + MEN_Z192_RX_BUF_START + cf_offset;
+>>>> +       length = readl(&cf_buf->length) & MEN_Z192_CFBUF_LEN;
+>>>> +       id = readl(&cf_buf->can_id);
+>>>> +
+>>>> +       if (id & MEN_Z192_CFBUF_IDE) {
+>>>> +               /* Extended frame */
+>>>> +               id_11_bits = FIELD_GET(MEN_Z192_CFBUF_ID_11_BITS, id);
+>>>> +               id_18_bits = FIELD_GET(MEN_Z192_CFBUF_ID_18_BITS, id);
+>>>> +
+>>>> +               cf->can_id = FIELD_PREP(MEN_Z192_CAN_ID_11_BITS, id_11_bits) |
+>>>> +                            FIELD_PREP(MEN_Z192_CAN_ID_18_BITS, id_18_bits) |
+>>>> +                            CAN_EFF_FLAG;
+>>>> +
+>>>> +               if (id & MEN_Z192_CFBUF_E_RTR)
+>>>> +                       cf->can_id |= CAN_RTR_FLAG;
+>>>> +       } else {
+>>>> +               /* Standard frame */
+>>>> +               cf->can_id = FIELD_GET(MEN_Z192_CFBUF_ID_11_BITS, id);
+>>>> +
+>>>> +               if (id & MEN_Z192_CFBUF_S_RTR)
+>>>> +                       cf->can_id |= CAN_RTR_FLAG;
+>>>> +       }
+>>>> +
+>>>> +       cf->can_dlc = can_cc_dlc2len(length);
+>>>
+>>> The field cf->can_dlc has been deprecated. Please replace it with cf->len.
+>>> (This remark applies to other functions as well).
+>> Ok, will fix this.
+>>>
+>>>> +
+>>>> +       /* remote transmission request frame contains no data field even if the
+>>>> +        * data length is set to a value > 0
+>>>> +        */
+>>>> +       if (!(cf->can_id & CAN_RTR_FLAG) && cf->can_dlc) {
+>>>> +               *(__be32 *)cf->data = cpu_to_be32(readl(&cf_buf->data[0]));
+>>>> +               if (cf->can_dlc > 4)
+>>>> +                       *(__be32 *)(cf->data + 4) =
+>>>> +                       cpu_to_be32(readl(&cf_buf->data[1]));
+>>>> +       }
+>>>> +
+>>>> +       if (z192_echo_skb_matches(priv, skb)) {
+>>>> +               stats->tx_packets++;
+>>>> +               stats->tx_bytes += z192_get_echo_skb(priv);
+>>>> +               kfree_skb(skb);
+>>>> +               return 1;
+>>>> +       }
+>>>> +
+>>>> +       stats->rx_bytes += cf->can_dlc;
+>>>> +       stats->rx_packets++;
+>>>> +       netif_receive_skb(skb);
+>>>> +
+>>>
+>>> If I understand correctly, you compare the received frame with
+>>> the oldest frame in your echo_cf queue. If the matches succeed
+>>> you deduce that it is a loopback frame, if not, you deduce that
+>>> it is a was received from another node. Correct?
+>> yes
+>>>
+>>> Doesn't the device provide this information?
+>> If I understoord it correctly, TX done irq is necessary for the implementation of loopback mechanism.
+>> Since this irq is unavailable in this device, the loopback was implemented this way.
+> 
+> Not necessarily. This depends on your microcontroller. It might
+> just have a flag to differentiate between loopback and normal
+> frames. That's why I am asking for confirmation that no such
+> mechanism exists in the specification.
+There is no mechanism in the hardware to differentiate between loopback and normal frames.
+> 
+>>>
+>>>> +       return 1;
+>>>
+>>> Is it possible to make the return value more conventional?
+>>> Example:
+>>>     Success: return 0;
+>>>     Error: return -ERRORCODE (e.g. -ENOMEM)
+>> sure, will fix this.
+>>>
+>>> Else, please document the return value.
+>>>
+>>>> +}
+>>>> +
+>>>> +static int men_z192_poll(struct napi_struct *napi, int quota)
+>>>> +{
+>>>> +       struct net_device *ndev = napi->dev;
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       int work_done = 0;
+>>>> +       u32 frame_cnt;
+>>>> +       u32 status;
+>>>> +
+>>>> +       status = readl(&regs->rx_tx_sts);
+>>>> +
+>>>> +       frame_cnt = FIELD_GET(MEN_Z192_RX_BUF_CNT, status);
+>>>> +
+>>>> +       while (frame_cnt-- && (work_done < quota)) {
+>>>> +               work_done += men_z192_read_frame(ndev, 0);
+>>>> +               men_z192_ack_rx_pkg(priv, 1);
+>>>> +       }
+>>>> +
+>>>> +       if (work_done < quota) {
+>>>> +               napi_complete(napi);
+>>>> +               men_z192_set_int(priv, MEN_Z192_CAN_NAPI_EN);
+>>>> +       }
+>>>> +
+>>>> +       return work_done;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_xmit(struct sk_buff *skb, struct net_device *ndev)
+>>>> +{
+>>>> +       struct can_frame *cf = (struct can_frame *)skb->data;
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
 >>>> +       struct men_z192_cf_buf __iomem *cf_buf;
 >>>> +       int status;
 >>>> +       u32 id;
@@ -227,132 +785,700 @@ ev)
 >>>> +       if (can_dropped_invalid_skb(ndev, skb))
 >>>> +               return NETDEV_TX_OK;
 >>>> +
->>>> +       status =3D readl(&regs->rx_tx_sts);
+>>>> +       status = readl(&regs->rx_tx_sts);
 >>>> +
->>>> +       if (FIELD_GET(MEN_Z192_TX_BUF_CNT, status) =3D=3D MEN_Z192_M=
-AX_BUF_LVL) {
+>>>> +       if (FIELD_GET(MEN_Z192_TX_BUF_CNT, status) == MEN_Z192_MAX_BUF_LVL) {
 >>>> +               netif_stop_queue(ndev);
->>>> +               netdev_err(ndev, "not enough space in TX buffer\n");=
-
+>>>> +               netdev_err(ndev, "not enough space in TX buffer\n");
 >>>> +
 >>>> +               return NETDEV_TX_BUSY;
 >>>> +       }
 >>>
->>> Could you stop the queue in advance to prevent returning NETDEV_TX_BU=
-SY?
->> sorry, didn'get you. You mean before checking buffer count for max lev=
-el? The queue is to be stopped when there are no transmission buffers lef=
-t in the hardawre, right?
+>>> Could you stop the queue in advance to prevent returning NETDEV_TX_BUSY?
+>> sorry, didn'get you. You mean before checking buffer count for max level? The queue is to be stopped when there are no transmission buffers left in the hardawre, right?
 >> And since now buffer is full, means NETDEV_TX_BUSY?
->=20
-> Please refer to: https://www.kernel.org/doc/html/latest//networking/dri=
-ver.html
-
-In short:
-Once your TX-buffer is full, call netif_stop_queue(). This stops the stac=
-k to
-call your xmit function. Onc you've successfully send a CAN frame, call
-netif_start_queue().
-
-Have a look at the mcp251xfd driver, how to implement that race-free. You=
- can
-check if xmit is called with full buffer as a safety net and reutrn TX_BU=
-SY, but
-if that happens your driver is racy.
-
+> 
+> Please refer to: https://www.kernel.org/doc/html/latest//networking/driver.html
+ok
+> 
+>>>
 >>>> +
->>>> +       cf_buf =3D priv->dev_base + MEN_Z192_TX_BUF_START;
+>>>> +       cf_buf = priv->dev_base + MEN_Z192_TX_BUF_START;
 >>>> +
 >>>> +       if (cf->can_id & CAN_EFF_FLAG) {
 >>>> +               /* Extended frame */
->>>> +               id =3D cf->can_id & CAN_EFF_MASK;
->>>> +               id_11_bits =3D FIELD_GET(MEN_Z192_CAN_ID_11_BITS, id=
-);
->>>> +               id_18_bits =3D FIELD_GET(MEN_Z192_CAN_ID_18_BITS, id=
-);
+>>>> +               id = cf->can_id & CAN_EFF_MASK;
+>>>> +               id_11_bits = FIELD_GET(MEN_Z192_CAN_ID_11_BITS, id);
+>>>> +               id_18_bits = FIELD_GET(MEN_Z192_CAN_ID_18_BITS, id);
 >>>> +
->>>> +               id =3D FIELD_PREP(MEN_Z192_CFBUF_ID_11_BITS, id_11_b=
-its) |
+>>>> +               id = FIELD_PREP(MEN_Z192_CFBUF_ID_11_BITS, id_11_bits) |
 >>>> +                    MEN_Z192_CFBUF_SRR |
 >>>> +                    MEN_Z192_CFBUF_IDE |
->>>> +                    FIELD_PREP(MEN_Z192_CFBUF_ID_18_BITS, id_18_bit=
-s);
+>>>> +                    FIELD_PREP(MEN_Z192_CFBUF_ID_18_BITS, id_18_bits);
 >>>> +
 >>>> +               if (cf->can_id & CAN_RTR_FLAG)
->>>> +                       id |=3D MEN_Z192_CFBUF_E_RTR;
+>>>> +                       id |= MEN_Z192_CFBUF_E_RTR;
 >>>> +       } else {
 >>>> +               /* Standard frame */
->>>> +               id =3D FIELD_PREP(MEN_Z192_CFBUF_ID_11_BITS, cf->can=
-_id);
+>>>> +               id = FIELD_PREP(MEN_Z192_CFBUF_ID_11_BITS, cf->can_id);
 >>>> +
 >>>> +               if (cf->can_id & CAN_RTR_FLAG)
->>>> +                       id |=3D MEN_Z192_CFBUF_S_RTR;
+>>>> +                       id |= MEN_Z192_CFBUF_S_RTR;
 >>>> +       }
 >>>> +
 >>>> +       writel(id, &cf_buf->can_id);
 >>>> +       writel(cf->can_dlc, &cf_buf->length);
 >>>> +
 >>>> +       if (!(cf->can_id & CAN_RTR_FLAG) && cf->can_dlc) {
->>>> +               writel(be32_to_cpup((__be32 *)(cf->data)), &cf_buf->=
-data[0]);
+>>>> +               writel(be32_to_cpup((__be32 *)(cf->data)), &cf_buf->data[0]);
 >>>> +               if (cf->can_dlc > 4)
->>>> +                       writel(be32_to_cpup((__be32 *)(cf->data + 4)=
-),
+>>>> +                       writel(be32_to_cpup((__be32 *)(cf->data + 4)),
 >>>> +                              &cf_buf->data[1]);
 >>>
 >>> Why do you cast cf->data to __be32? Shouldn't the cf_buf->data
 >>> which should be of type __be32 instead (or as commented above,
 >>> make cf_buf->data an array of bytes).
-
-cf->data is in __be32 format. (As Vincent said above, an an u8 array for =
-4
-members has the same mem layout as a __be32).
-
->> wanted to write 4 bytes with correct byte ordering. When function
->> be32_to_cpup is used for that purpose, it's parameter has to be of typ=
-e
->> __be32, which is why casting is done. As already said, there are two 3=
-2-bit
->> registers for storing entire 8-byte CAN data, so it is realized with a=
-n
->> array of 32-bit type with length of 2.
-
+>> wanted to write 4 bytes with correct byte ordering. When function be32_to_cpup is used for that purpose, it's parameter has to be of type __be32, which
+>> is why casting is done. As already said, there are two 32-bit registers for storing entire 8-byte CAN data, so it is realized with an array of 32-bit type with length of 2.
+> 
 > be32_to_cpup is to convert endianness from the device to the cpu.
->=20
+> 
 > As commented above, the type of your data[] is wrong.
-
-I don't think so, as writel assumes a __le32 HW-register converted to nat=
-ive
-endianess.
-
+> 
 > Also, did you test your code on a big endian architecture?
+not yet, but will test on ppc.
+> 
+>>>
+>>>> +       }
+>>>> +
+>>>> +       /* The 16z192 CAN IP doesn't have TX-done interrupts, so local
+>>>> +        * loopback is emulated using ECHO skbs. Add the skb to the ECHO
+>>>> +        * stack. Upon packet reception, check if the ECHO skb and received
+>>>> +        * skb match, and use that to wake the queue.
+>>>> +        */
+>>>> +       z192_put_echo_skb(priv, skb);
+>>>> +
+>>>> +       /* be sure everything is written to the
+>>>> +        * device before acknowledge the data.
+>>>> +        */
+>>>> +       wmb();
+>>>> +
+>>>> +       /* Acknowldege the written data in TXBUF by writing to TXA
+>>>
+>>> Acknowldege -> Acknowledge
+>> will fix this
+>>>
+>>>> +        * i.e. transmit data acknowledge register.
+>>>> +        */
+>>>> +       men_z192_ack_tx_pkg(priv, 1);
+>>>> +
+>>>> +       return NETDEV_TX_OK;
+>>>> +}
+>>>> +
+>>>> +static void men_z192_handle_err(struct net_device *ndev, u32 status)
+>>>> +{
+>>>> +       struct net_device_stats *stats = &ndev->stats;
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct can_berr_counter bec;
+>>>> +       struct can_frame *cf;
+>>>> +       struct sk_buff *skb;
+>>>> +       enum can_state rx_state = 0, tx_state = 0;
+>>>> +
+>>>> +       skb = alloc_can_err_skb(ndev, &cf);
+>>>> +       if (unlikely(!skb)) {
+>>>> +               stats->rx_dropped++;
+>>>> +               return;
+>>>> +       }
+>>>> +
+>>>> +       /* put the rx/tx error counter to
+>>>> +        * the additional controller specific
+>>>> +        * section of the error frame.
+>>>> +        */
+>>>> +       men_z192_get_berr_counter(ndev, &bec);
+>>>> +       cf->data[6] = bec.txerr;
+>>>> +       cf->data[7] = bec.rxerr;
+>>>> +
+>>>> +       /* overrun interrupt */
+>>>> +       if (status & MEN_Z192_RFLG_OVRF) {
+>>>> +               cf->can_id |= CAN_ERR_CRTL;
+>>>> +               cf->data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+>>>> +               stats->rx_over_errors++;
+>>>> +               stats->rx_errors++;
+>>>> +       }
+>>>> +
+>>>> +       /* bus change interrupt */
+>>>> +       if (status & MEN_Z192_RFLG_CSCIF) {
+>>>> +               rx_state = bus_state_map[MEN_Z192_GET_RSTATE(status)];
+>>>> +               tx_state = bus_state_map[MEN_Z192_GET_TSTATE(status)];
+>>>> +
+>>>> +               can_change_state(ndev, cf, tx_state, rx_state);
+>>>> +
+>>>> +               if (priv->can.state == CAN_STATE_BUS_OFF)
+>>>> +                       can_bus_off(ndev);
+>>>> +       }
+>>>> +
+>>>> +       stats->rx_packets++;
+>>>> +       stats->rx_bytes += cf->can_dlc;
+>>>> +       netif_receive_skb(skb);
+>>>> +}
+>>>> +
+>>>> +static bool men_z192_handle(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       bool handled = false;
+>>>> +       u32 flags;
+>>>> +       u32 status;
+>>>> +
+>>>> +       status = readl(&regs->rx_tx_sts);
+>>>> +       flags = status & MEN_Z192_RFLG_ALL;
+>>>> +       if (!flags)
+>>>> +               goto out;
+>>>> +
+>>>> +       /* It is safe to write to RX_TS_STS[15:0] */
+>>>> +       writel(flags, &regs->rx_tx_sts);
+>>>> +
+>>>> +       if (flags & MEN_Z192_TFLG_TXIF) {
+>>>> +               netif_wake_queue(ndev);
+>>>> +               handled = true;
+>>>> +       }
+>>>> +
+>>>> +       /* handle errors */
+>>>> +       if ((flags & MEN_Z192_RFLG_OVRF) ||
+>>>> +           (flags & MEN_Z192_RFLG_CSCIF)) {
+>>>> +               men_z192_handle_err(ndev, status);
+>>>> +               handled = true;
+>>>> +       }
+>>>> +
+>>>> +       /* schedule NAPI if:
+>>>> +        * - rx IRQ
+>>>> +        * - rx timeout IRQ
+>>>> +        */
+>>>> +       if ((flags & MEN_Z192_RFLG_RXIF) ||
+>>>> +           (flags & MEN_Z192_RFLG_TOUTF)) {
+>>>> +               men_z192_set_int(priv, MEN_Z192_CAN_NAPI_DIS);
+>>>> +               napi_schedule(&priv->napi);
+>>>> +               handled = true;
+>>>> +       }
+>>>> +
+>>>> +out:
+>>>> +       return handled;
+>>>> +}
+>>>> +
+>>>> +static irqreturn_t men_z192_isr(int irq, void *dev_id)
+>>>> +{
+>>>> +       struct net_device *ndev = dev_id;
+>>>> +       bool handled;
+>>>> +
+>>>> +       handled = men_z192_handle(ndev);
+>>>> +
+>>>> +       return IRQ_RETVAL(handled);
+>>>> +}
+>>>> +
+>>>> +static int men_z192_set_bittiming(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       const struct can_bittiming *bt = &priv->can.bittiming;
+>>>> +       unsigned long flags;
+>>>> +       u32 ctlbtr;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       spin_lock_irqsave(&priv->lock, flags);
+>>>> +
+>>>> +       ctlbtr = readl(&priv->regs->ctl_btr);
+>>>> +
+>>>> +       if (!(ctlbtr & MEN_Z192_CTL1_INITAK)) {
+>>>> +               netdev_alert(ndev,
+>>>> +                            "cannot set bittiminig while in running mode\n");
+>>>> +               ret = -EPERM;
+>>>> +               goto out_restore;
+>>>> +       }
+>>>> +
+>>>> +       ctlbtr &= ~(MEN_Z192_BTR0_BRP |
+>>>> +                   MEN_Z192_BTR0_SJW |
+>>>> +                   MEN_Z192_BTR1_TSEG1 |
+>>>> +                   MEN_Z192_BTR1_TSEG2 |
+>>>> +                   MEN_Z192_CTL1_LISTEN |
+>>>> +                   MEN_Z192_CTL1_LOOPB |
+>>>> +                   MEN_Z192_BTR1_SAMP);
+>>>> +
+>>>> +       ctlbtr |= FIELD_PREP(MEN_Z192_BTR0_BRP, bt->brp - 1) |
+>>>> +                 FIELD_PREP(MEN_Z192_BTR0_SJW, bt->sjw - 1) |
+>>>> +                 FIELD_PREP(MEN_Z192_BTR1_TSEG1,
+>>>> +                            bt->phase_seg1 + bt->prop_seg - 1) |
+>>>> +                 FIELD_PREP(MEN_Z192_BTR1_TSEG2, bt->phase_seg2 - 1);
+>>>> +
+>>>> +       if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
+>>>> +               ctlbtr |= MEN_Z192_BTR1_SAMP;
+>>>> +
+>>>> +       if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+>>>> +               ctlbtr |= MEN_Z192_CTL1_LISTEN;
+>>>> +
+>>>> +       if (priv->can.ctrlmode & CAN_CTRLMODE_LOOPBACK)
+>>>> +               ctlbtr |= MEN_Z192_CTL1_LOOPB;
+>>>> +
+>>>> +       writel(ctlbtr, &priv->regs->ctl_btr);
+>>>> +
+>>>> +out_restore:
+>>>> +       spin_unlock_irqrestore(&priv->lock, flags);
+>>>> +
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static void men_z192_init_idac(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +
+>>>> +       /* hardware filtering (accept everything) */
+>>>> +       writel(0x00000000, &regs->idar_0_to_3);
+>>>> +       writel(0x00000000, &regs->idar_4_to_7);
+>>>> +       writel(0xffffffff, &regs->idmr_0_to_3);
+>>>> +       writel(0xffffffff, &regs->idmr_4_to_7);
+>>>> +}
+>>>> +
+>>>> +static void men_z192_set_can_state(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       enum can_state rx_state, tx_state;
+>>>> +       u32 status;
+>>>> +
+>>>> +       status = readl(&regs->rx_tx_sts);
+>>>> +
+>>>> +       rx_state = bus_state_map[MEN_Z192_GET_RSTATE(status)];
+>>>> +       tx_state = bus_state_map[MEN_Z192_GET_TSTATE(status)];
+>>>> +
+>>>> +       can_change_state(ndev, NULL, tx_state, rx_state);
+>>>> +}
+>>>> +
+>>>> +static enum hrtimer_restart men_z192_timer_poll(struct hrtimer *timer)
+>>>> +{
+>>>> +       struct men_z192 *priv = container_of(timer, struct men_z192,
+>>>> +                                            poll_timer);
+>>>> +
+>>>> +       men_z192_handle(priv->ndev);
+>>>> +
+>>>> +       hrtimer_forward_now(timer, poll_interval * 1000);
+>>>> +       return HRTIMER_RESTART;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_start(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       int ret;
+>>>> +
+>>>> +       ret = men_z192_req_init_mode(priv);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       ret = men_z192_set_bittiming(ndev);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       ret = men_z192_req_run_mode(priv);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       men_z192_init_idac(ndev);
+>>>> +
+>>>> +       /* The 16z192 CAN IP does not reset the can bus state if we enter the
+>>>> +        * init mode. There is also no software reset to reset the state
+>>>> +        * machine. We need to read the current state, and inform the upper
+>>>> +        * layer about the current state.
+>>>> +        */
+>>>> +       men_z192_set_can_state(ndev);
+>>>> +
+>>>> +       men_z192_set_int(priv, MEN_Z192_CAN_EN);
+>>>> +
+>>>> +       hrtimer_init(&priv->poll_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+>>>> +       priv->poll_timer.function = men_z192_timer_poll;
+>>>> +
+>>>> +       if (ndev->irq == 0)
+>>>> +               hrtimer_start(&priv->poll_timer, poll_interval * 1000,
+>>>> +                             HRTIMER_MODE_REL);
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_open(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       bool got_irq = false;
+>>>> +       int ret;
+>>>> +
+>>>> +       ret = open_candev(ndev);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       if (ndev->irq > 0) {
+>>>> +               ret = request_irq(ndev->irq, men_z192_isr, IRQF_SHARED,
+>>>> +                                 ndev->name, ndev);
+>>>> +               if (ret)
+>>>> +                       goto out;
+>>>> +               got_irq = true;
+>>>> +       }
+>>>> +
+>>>> +       ret = men_z192_start(ndev);
+>>>> +       if (ret)
+>>>> +               goto out;
+>>>> +
+>>>> +       napi_enable(&priv->napi);
+>>>> +       netif_start_queue(ndev);
+>>>> +
+>>>> +       return 0;
+>>>> +out:
+>>>> +       if (got_irq)
+>>>> +               free_irq(ndev->irq, ndev);
+>>>> +
+>>>> +       close_candev(ndev);
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_stop(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       int ret;
+>>>> +
+>>>> +       hrtimer_cancel(&priv->poll_timer);
+>>>> +
+>>>> +       men_z192_set_int(priv, MEN_Z192_CAN_DIS);
+>>>> +
+>>>> +       ret = men_z192_req_init_mode(priv);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       priv->can.state = CAN_STATE_STOPPED;
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_close(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       int ret;
+>>>> +
+>>>> +       netif_stop_queue(ndev);
+>>>> +
+>>>> +       napi_disable(&priv->napi);
+>>>> +
+>>>> +       ret = men_z192_stop(ndev);
+>>>> +
+>>>> +       if (ndev->irq > 0)
+>>>> +               free_irq(ndev->irq, ndev);
+>>>> +
+>>>> +       /* drop all outstanding echo skbs */
+>>>> +       skb_queue_purge(&priv->echoq);
+>>>> +
+>>>> +       close_candev(ndev);
+>>>> +
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_set_mode(struct net_device *ndev, enum can_mode mode)
+>>>> +{
+>>>> +       int ret;
+>>>> +
+>>>> +       switch (mode) {
+>>>> +       case CAN_MODE_START:
+>>>> +               ret = men_z192_start(ndev);
+>>>> +               if (ret)
+>>>> +                       return ret;
+>>>> +
+>>>> +               netif_wake_queue(ndev);
+>>>> +               break;
+>>>> +       default:
+>>>> +               return -EOPNOTSUPP;
+>>>> +       }
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static const struct net_device_ops men_z192_netdev_ops = {
+>>>> +       .ndo_open       = men_z192_open,
+>>>> +       .ndo_stop       = men_z192_close,
+>>>> +       .ndo_start_xmit = men_z192_xmit,
+>>>> +       .ndo_change_mtu = can_change_mtu,
+>>>> +};
+>>>> +
+>>>> +static int men_z192_verify_buf_lvl(int buffer_lvl)
+>>>> +{
+>>>> +       if (buffer_lvl < MEN_Z192_MIN_BUF_LVL ||
+>>>> +           buffer_lvl > MEN_Z192_MAX_BUF_LVL)
+>>>> +               return -EINVAL;
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static void men_z192_set_buf_lvl_irq(struct net_device *ndev, int rxlvl,
+>>>> +                                    int txlvl)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       int reg_val;
+>>>> +
+>>>> +       if (men_z192_verify_buf_lvl(rxlvl))
+>>>> +               reg_val = MEN_Z192_RX_BUF_LVL_DEF & MEN_Z192_RX_BUF_LVL;
+>>>> +       else
+>>>> +               reg_val = rxlvl & MEN_Z192_RX_BUF_LVL;
+>>>> +
+>>>> +       if (men_z192_verify_buf_lvl(txlvl))
+>>>> +               reg_val |= (MEN_Z192_TX_BUF_LVL_DEF << 16) &
+>>>> +                           MEN_Z192_TX_BUF_LVL;
+>>>> +       else
+>>>> +               reg_val |= (txlvl << 16) & MEN_Z192_TX_BUF_LVL;
+>>>> +
+>>>> +       dev_info(priv->dev, "RX IRQ Level: %d TX IRQ Level: %d\n",
+>>>> +                rxlvl, txlvl);
+>>>> +
+>>>> +       writel(reg_val, &regs->buf_lvl);
+>>>> +
+>>>> +       priv->txlvl = txlvl;
+>>>> +       priv->rxlvl = rxlvl;
+>>>> +}
+>>>> +
+>>>> +static void men_z192_set_rx_tout(struct net_device *ndev, int tout)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       int reg_val;
+>>>> +
+>>>> +       if (tout < MEN_Z192_RX_TOUT_MIN || tout > MEN_Z192_RX_TOUT_MAX)
+>>>> +               reg_val = MEN_Z192_RX_TOUT_MAX;
+>>>> +       else
+>>>> +               reg_val = tout;
+>>>> +
+>>>> +       dev_info(priv->dev, "RX IRQ timeout set to: %d\n", reg_val);
+>>>> +
+>>>> +       writel(reg_val, &regs->rx_timeout);
+>>>> +
+>>>> +       priv->rx_timeout = reg_val;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_get_coalesce(struct net_device *ndev,
+>>>> +                                struct ethtool_coalesce *ec)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +
+>>>> +       memset(ec, 0, sizeof(struct ethtool_coalesce));
+>>>
+>>> memset(ec, 0, sizeof(*ec));
+>> ok
+>>>
+>>>> +
+>>>> +       ec->tx_max_coalesced_frames = priv->txlvl;
+>>>> +       ec->rx_max_coalesced_frames = priv->rxlvl;
+>>>> +       ec->rx_coalesce_usecs = priv->rx_timeout;
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static int men_z192_set_coalesce(struct net_device *ndev,
+>>>> +                                struct ethtool_coalesce *ec)
+>>>> +{
+>>>> +       men_z192_set_buf_lvl_irq(ndev, ec->rx_max_coalesced_frames,
+>>>> +                                ec->tx_max_coalesced_frames);
+>>>> +
+>>>> +       men_z192_set_rx_tout(ndev, ec->rx_coalesce_usecs);
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static void men_z192_init_coalesce(struct net_device *ndev)
+>>>> +{
+>>>> +       men_z192_set_buf_lvl_irq(ndev, MEN_Z192_MIN_BUF_LVL,
+>>>> +                                MEN_Z192_MIN_BUF_LVL);
+>>>> +       men_z192_set_rx_tout(ndev, MEN_Z192_RX_TOUT_DEF);
+>>>> +}
+>>>> +
+>>>> +static int men_z192_register(struct net_device *ndev)
+>>>> +{
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +       struct men_z192_regs __iomem *regs = priv->regs;
+>>>> +       u32 ctl_btr;
+>>>> +       int ret;
+>>>> +
+>>>> +       /* The CAN controller should be always enabled.
+>>>> +        * There is no way to enable it if disabled.
+>>>> +        */
+>>>> +       ctl_btr = readl(&regs->ctl_btr);
+>>>> +       if (!(ctl_btr & MEN_Z192_CTL1_CANE))
+>>>> +               return -ENODEV;
+>>>> +
+>>>> +       men_z192_init_coalesce(ndev);
+>>>> +
+>>>> +       ret = men_z192_req_init_mode(priv);
+>>>> +       if (ret) {
+>>>> +               dev_err(priv->dev, "failed to request init mode\n");
+>>>> +               return ret;
+>>>> +       }
+>>>> +
+>>>> +       return register_candev(ndev);
+>>>> +}
+>>>> +
+>>>> +static const struct ethtool_ops men_z192_ethtool_ops = {
+>>>> +       .supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS |
+>>>> +                                    ETHTOOL_COALESCE_MAX_FRAMES,
+>>>> +       .get_coalesce = men_z192_get_coalesce,
+>>>> +       .set_coalesce = men_z192_set_coalesce,
+>>>> +};
+>>>> +
+>>>> +static int men_z192_probe(struct mcb_device *mdev,
+>>>> +                         const struct mcb_device_id *id)
+>>>> +{
+>>>> +       struct device *dev = &mdev->dev;
+>>>> +       struct men_z192 *priv;
+>>>> +       struct net_device *ndev;
+>>>> +       void __iomem *dev_base;
+>>>> +       struct resource *mem;
+>>>> +       u32 timebase;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       mem = mcb_request_mem(mdev, dev_name(dev));
+>>>> +       if (IS_ERR(mem)) {
+>>>> +               dev_err(dev, "failed to request device memory\n");
+>>>> +               return PTR_ERR(mem);
+>>>> +       }
+>>>> +
+>>>> +       dev_base = ioremap(mem->start, resource_size(mem));
+>>>> +       if (!dev_base) {
+>>>> +               dev_err(dev, "failed to ioremap device memory\n");
+>>>> +               ret = -ENXIO;
+>>>> +               goto out_release;
+>>>> +       }
+>>>> +
+>>>> +       ndev = alloc_candev(sizeof(struct men_z192), 0);
+>>>
+>>> ndev = alloc_candev(sizeof(*priv), 0);
+>> ok
+>>>
+>>>> +       if (!ndev) {
+>>>> +               dev_err(dev, "failed to allocate can device\n");
+>>>> +               ret = -ENOMEM;
+>>>> +               goto out_unmap;
+>>>> +       }
+>>>> +
+>>>> +       if (poll_interval > 0) {
+>>>> +               ndev->irq = 0;
+>>>> +       } else {
+>>>> +               ndev->irq = mcb_get_irq(mdev);
+>>>> +               if (ndev->irq <= 0) {
+>>>> +                       ret = -ENODEV;
+>>>> +                       goto out_free_candev;
+>>>> +               }
+>>>> +       }
+>>>> +
+>>>> +       ndev->netdev_ops = &men_z192_netdev_ops;
+>>>> +       ndev->flags |= IFF_ECHO;
+>>>> +
+>>>> +       priv = netdev_priv(ndev);
+>>>> +       priv->ndev = ndev;
+>>>> +       priv->dev = dev;
+>>>> +
+>>>> +       priv->mem = mem;
+>>>> +       priv->dev_base = dev_base;
+>>>> +       priv->regs = priv->dev_base + MEN_Z192_REGS_OFFS;
+>>>> +
+>>>> +       timebase = readl(&priv->regs->timebase);
+>>>> +       if (!timebase) {
+>>>> +               dev_err(dev, "invalid timebase configured (timebase=%d)\n",
+>>>> +                       timebase);
+>>>> +               ret = -EINVAL;
+>>>> +               goto out_free_candev;
+>>>> +       }
+>>>> +
+>>>> +       priv->can.clock.freq = timebase;
+>>>> +       priv->can.bittiming_const = &men_z192_bittiming_const;
+>>>> +       priv->can.do_set_mode = men_z192_set_mode;
+>>>> +       priv->can.do_get_berr_counter = men_z192_get_berr_counter;
+>>>> +       priv->can.ctrlmode_supported = CAN_CTRLMODE_LISTENONLY |
+>>>> +                                      CAN_CTRLMODE_3_SAMPLES |
+>>>> +                                      CAN_CTRLMODE_LOOPBACK;
+>>>> +
+>>>> +       spin_lock_init(&priv->lock);
+>>>> +
+>>>> +       netif_napi_add(ndev, &priv->napi, men_z192_poll,
+>>>> +                      NAPI_POLL_WEIGHT);
+>>>> +
+>>>> +       skb_queue_head_init(&priv->echoq);
+>>>> +
+>>>> +       mcb_set_drvdata(mdev, ndev);
+>>>> +       SET_NETDEV_DEV(ndev, dev);
+>>>> +
+>>>> +       ndev->ethtool_ops = &men_z192_ethtool_ops;
+>>>> +
+>>>> +       ret = men_z192_register(ndev);
+>>>> +       if (ret) {
+>>>> +               dev_err(dev, "failed to register CAN device\n");
+>>>> +               goto out_napi_del;
+>>>> +       }
+>>>> +
+>>>> +       devm_can_led_init(ndev);
+>>>> +
+>>>> +       dev_info(dev, "MEN 16z192 CAN driver registered (%s mode)\n",
+>>>> +                ndev->irq ? "interrupt" : "polling");
+>>>> +
+>>>> +       return 0;
+>>>> +
+>>>> +out_napi_del:
+>>>> +       netif_napi_del(&priv->napi);
+>>>> +out_free_candev:
+>>>> +       free_candev(ndev);
+>>>> +out_unmap:
+>>>> +       iounmap(dev_base);
+>>>> +out_release:
+>>>> +       mcb_release_mem(mem);
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +static void men_z192_remove(struct mcb_device *mdev)
+>>>> +{
+>>>> +       struct net_device *ndev = mcb_get_drvdata(mdev);
+>>>> +       struct men_z192 *priv = netdev_priv(ndev);
+>>>> +
+>>>> +       unregister_candev(ndev);
+>>>> +       netif_napi_del(&priv->napi);
+>>>> +
+>>>> +       iounmap(priv->dev_base);
+>>>> +       mcb_release_mem(priv->mem);
+>>>> +
+>>>> +       free_candev(ndev);
+>>>> +}
+>>>> +
+>>>> +static const struct mcb_device_id men_z192_ids[] = {
+>>>> +       { .device = 0xc0 },
+>>>> +       { }
+>>>> +};
+>>>> +MODULE_DEVICE_TABLE(mcb, men_z192_ids);
+>>>> +
+>>>> +static struct mcb_driver men_z192_driver = {
+>>>> +       .driver = {
+>>>> +               .name = DRV_NAME,
+>>>> +               .owner = THIS_MODULE,
+>>>> +       },
+>>>> +       .probe = men_z192_probe,
+>>>> +       .remove = men_z192_remove,
+>>>> +       .id_table = men_z192_ids,
+>>>> +};
+>>>> +module_mcb_driver(men_z192_driver);
+>>>> +
+>>>> +MODULE_AUTHOR("Andreas Werner <andreas.werner@men.de>");
+>>>> +MODULE_DESCRIPTION("MEN 16z192 CAN Controller");
+>>>> +MODULE_LICENSE("GPL v2");
+>>>> +MODULE_ALIAS("mcb:16z192");
+>>>> +MODULE_IMPORT_NS(MCB);
+>>>>
+>>>> base-commit: 83d09ad4b950651a95d37697f1493c00d888d0db
+>>>> --
+>>>
+>>> Yours sincerely,
+>>> Vincent
+>>>
+>>
+>> --
+>> Abhijeet Badurkar - Software Engineer
+>>
+>>
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---K4Or60kXnr5symxGOCwXtoLdMPSN1jPHZ--
-
---aX8XWbS3EO0ToEimKj1n317VMsn0r6HKQ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAOruMACgkQqclaivrt
-76kDLgf/QiwHlc3FjvF8YYdLiZF2koM2rGS39txv+LoW7bW7gKbC50mnxA/+Wqgu
-TKAteAVfL/b+A4ws3AHKJEke911hQY0jSyu1kSeHuofbDFLDOrtjqXBcckCxpFET
-NjYG5kSVDtkcnSogA8o24fKP+SFoYwUL3z12VnhJucX/UEhw4DxWdSsHSKaEYtkf
-1hUdPO/tKkdk8BWEOWesEy/QtwptAi06Chl5hHGkQ+bX70vCafAjYi+xx2gJSFzl
-swwBVXxEYeSg+zoGb/omo8ZJM6YaHM56U8boZ0SobLXlrDbGxaS9996/K5RUUaI9
-maH11NYXko45/nj2h3dnIEpUo4ybsQ==
-=oOsw
------END PGP SIGNATURE-----
-
---aX8XWbS3EO0ToEimKj1n317VMsn0r6HKQ--
+-- 
+Abhijeet Badurkar - Software Engineer
