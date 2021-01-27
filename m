@@ -2,40 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B66E93056F2
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79D93056DC
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:27:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbhA0J3M (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jan 2021 04:29:12 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:51837 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235244AbhA0JZp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:25:45 -0500
+        id S232269AbhA0J0S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jan 2021 04:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235217AbhA0JXR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:23:17 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C52C06174A
+        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 01:22:36 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l4h22-00083Y-Ob
-        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:34 +0100
+        id 1l4h22-000847-VL
+        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:35 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 09B5F5CF0E5
+        by bjornoya.blackshift.org (Postfix) with SMTP id 4C69D5CF0E8
         for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:32 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9B01A5CF0CD;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B86775CF0CF;
         Wed, 27 Jan 2021 09:22:28 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c32620fe;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 47fd5774;
         Wed, 27 Jan 2021 09:22:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 01/12] can: gw: fix typo
-Date:   Wed, 27 Jan 2021 10:22:16 +0100
-Message-Id: <20210127092227.2775573-2-mkl@pengutronix.de>
+Subject: [net-next 02/12] can: flexcan: fix typos
+Date:   Wed, 27 Jan 2021 10:22:17 +0100
+Message-Id: <20210127092227.2775573-3-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210127092227.2775573-1-mkl@pengutronix.de>
 References: <20210127092227.2775573-1-mkl@pengutronix.de>
@@ -49,30 +52,36 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch fixes a typo found by codespell.
+This patch fixes two typos found by codespell.
 
-Fixes: 94c23097f991 ("can: gw: support modification of Classical CAN DLCs")
-Link: https://lore.kernel.org/r/20210127085529.2768537-3-mkl@pengutronix.de
+Fixes: 812f0116c66a ("can: flexcan: add CAN wakeup function for i.MX8QM")
+Link: https://lore.kernel.org/r/20210127085529.2768537-2-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- net/can/gw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/flexcan.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/can/gw.c b/net/can/gw.c
-index 8598d9da0e5f..ba4124805602 100644
---- a/net/can/gw.c
-+++ b/net/can/gw.c
-@@ -225,7 +225,7 @@ static void mod_store_ccdlc(struct canfd_frame *cf)
- 	if (ccf->len <= CAN_MAX_DLEN)
- 		return;
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 5d9157c655e9..971ada36e37f 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -1975,14 +1975,14 @@ static int flexcan_setup_stop_mode_scfw(struct platform_device *pdev)
+ 	priv = netdev_priv(dev);
+ 	priv->scu_idx = scu_idx;
  
--	/* potentially broken values are catched in can_can_gw_rcv() */
-+	/* potentially broken values are caught in can_can_gw_rcv() */
- 	if (ccf->len > CAN_MAX_RAW_DLC)
- 		return;
+-	/* this function could be defered probe, return -EPROBE_DEFER */
++	/* this function could be deferred probe, return -EPROBE_DEFER */
+ 	return imx_scu_get_handle(&priv->sc_ipc_handle);
+ }
  
-
-base-commit: 6626a0266566c5aea16178c5e6cd7fc4db3f2f56
+ /* flexcan_setup_stop_mode - Setup stop mode for wakeup
+  *
+  * Return: = 0 setup stop mode successfully or doesn't support this feature
+- *         < 0 fail to setup stop mode (could be defered probe)
++ *         < 0 fail to setup stop mode (could be deferred probe)
+  */
+ static int flexcan_setup_stop_mode(struct platform_device *pdev)
+ {
 -- 
 2.29.2
 
