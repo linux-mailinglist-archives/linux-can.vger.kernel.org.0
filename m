@@ -2,44 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1F893056F4
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:30:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016A03056DF
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbhA0J3P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jan 2021 04:29:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S235262AbhA0J07 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jan 2021 04:26:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235224AbhA0JZX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:25:23 -0500
+        with ESMTP id S235289AbhA0JYx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:24:53 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CCAC06178A
-        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 01:22:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D628DC061786
+        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 01:22:42 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l4h2A-0008DI-6O
-        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:42 +0100
+        id 1l4h29-0008DB-9C
+        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:41 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 8CF5E5CF11D
-        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:38 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 563525CF116
+        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:37 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id B25E15CF0DC;
-        Wed, 27 Jan 2021 09:22:30 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id AF0E95CF0E1;
+        Wed, 27 Jan 2021 09:22:31 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a7d4a738;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1f441bea;
         Wed, 27 Jan 2021 09:22:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Su Yanjun <suyanjun218@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 06/12] can: mcp251xfd: replace sizeof(u32) with val_bytes in regmap
-Date:   Wed, 27 Jan 2021 10:22:21 +0100
-Message-Id: <20210127092227.2775573-7-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [net-next 07/12] can: mcp251xfd: mcp251xfd_start_xmit(): use mcp251xfd_get_tx_free() to check TX is is full
+Date:   Wed, 27 Jan 2021 10:22:22 +0100
+Message-Id: <20210127092227.2775573-8-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210127092227.2775573-1-mkl@pengutronix.de>
 References: <20210127092227.2775573-1-mkl@pengutronix.de>
@@ -53,74 +52,28 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Su Yanjun <suyanjun218@gmail.com>
+This patch replaces an open coded check if the TX ring is full by a check if
+mcp251xfd_get_tx_free() returns 0.
 
-The sizeof(u32) is hardcoded. It's better to use the config value from the
-regmap.
-
-It increases the size of target object, but it's flexible when new mcp chip
-need other val_bytes.
-
-Link: https://lore.kernel.org/r/20210122081334.213957-1-suyanjun218@gmail.com
-Signed-off-by: Su Yanjun <suyanjun218@gmail.com>
+Link: https://lore.kernel.org/r/20210114153448.1506901-2-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 00e9855c23d1..897c9310266a 100644
+index 897c9310266a..1dbb87c28049 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1308,6 +1308,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
- 		       const u8 offset, const u8 len)
- {
- 	const struct mcp251xfd_tx_ring *tx_ring = priv->tx;
-+	const int val_bytes = regmap_get_val_bytes(priv->map_rx);
+@@ -2436,7 +2436,7 @@ static netdev_tx_t mcp251xfd_start_xmit(struct sk_buff *skb,
+ 	/* Stop queue if we occupy the complete TX FIFO */
+ 	tx_head = mcp251xfd_get_tx_head(tx_ring);
+ 	tx_ring->head++;
+-	if (tx_ring->head - tx_ring->tail >= tx_ring->obj_num)
++	if (mcp251xfd_get_tx_free(tx_ring) == 0)
+ 		netif_stop_queue(ndev);
  
- 	if (IS_ENABLED(CONFIG_CAN_MCP251XFD_SANITY) &&
- 	    (offset > tx_ring->obj_num ||
-@@ -1322,7 +1323,7 @@ mcp251xfd_tef_obj_read(const struct mcp251xfd_priv *priv,
- 	return regmap_bulk_read(priv->map_rx,
- 				mcp251xfd_get_tef_obj_addr(offset),
- 				hw_tef_obj,
--				sizeof(*hw_tef_obj) / sizeof(u32) * len);
-+				sizeof(*hw_tef_obj) / val_bytes * len);
- }
- 
- static int mcp251xfd_handle_tefif(struct mcp251xfd_priv *priv)
-@@ -1510,12 +1511,13 @@ mcp251xfd_rx_obj_read(const struct mcp251xfd_priv *priv,
- 		      struct mcp251xfd_hw_rx_obj_canfd *hw_rx_obj,
- 		      const u8 offset, const u8 len)
- {
-+	const int val_bytes = regmap_get_val_bytes(priv->map_rx);
- 	int err;
- 
- 	err = regmap_bulk_read(priv->map_rx,
- 			       mcp251xfd_get_rx_obj_addr(ring, offset),
- 			       hw_rx_obj,
--			       len * ring->obj_size / sizeof(u32));
-+			       len * ring->obj_size / val_bytes);
- 
- 	return err;
- }
-@@ -2137,6 +2139,7 @@ static int mcp251xfd_handle_spicrcif(struct mcp251xfd_priv *priv)
- static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
- {
- 	struct mcp251xfd_priv *priv = dev_id;
-+	const int val_bytes = regmap_get_val_bytes(priv->map_reg);
- 	irqreturn_t handled = IRQ_NONE;
- 	int err;
- 
-@@ -2162,7 +2165,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
- 		err = regmap_bulk_read(priv->map_reg, MCP251XFD_REG_INT,
- 				       &priv->regs_status,
- 				       sizeof(priv->regs_status) /
--				       sizeof(u32));
-+				       val_bytes);
- 		if (err)
- 			goto out_fail;
- 
+ 	can_put_echo_skb(skb, ndev, tx_head, 0);
 -- 
 2.29.2
 
