@@ -2,43 +2,40 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF30F3056E6
-	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 809CD3056ED
+	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:29:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235323AbhA0J1U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jan 2021 04:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbhA0JZW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:25:22 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB9BC061794
-        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 01:22:45 -0800 (PST)
+        id S235362AbhA0J2O (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jan 2021 04:28:14 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60225 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235260AbhA0J0T (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:26:19 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l4h2C-0008Gt-8o
-        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:44 +0100
+        id 1l4h2B-0008FR-OP
+        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:43 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 09A7A5CF12A
-        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:40 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id AC1F25CF121
+        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:38 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id E4F2B5CF0EB;
-        Wed, 27 Jan 2021 09:22:32 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 52E5B5CF0F6;
+        Wed, 27 Jan 2021 09:22:34 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 74183b7c;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4e40676a;
         Wed, 27 Jan 2021 09:22:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 09/12] can: mcp251xfd: mcp251xfd_hw_rx_obj_to_skb(): don't copy data for RTR CAN frames in RX-path
-Date:   Wed, 27 Jan 2021 10:22:24 +0100
-Message-Id: <20210127092227.2775573-10-mkl@pengutronix.de>
+Subject: [net-next 11/12] can: mcp251xfd: add len8_dlc support
+Date:   Wed, 27 Jan 2021 10:22:26 +0100
+Message-Id: <20210127092227.2775573-12-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210127092227.2775573-1-mkl@pengutronix.de>
 References: <20210127092227.2775573-1-mkl@pengutronix.de>
@@ -52,32 +49,93 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In Classical CAN there are RTR frames. RTR frames have the RTR bit set, may
-have a dlc != 0, but contain no data.
+This patch adds support for the Classical CAN raw DLC functionality to send and
+receive DLC values from 9 ... 15 to the mcp251xfd driver.
 
-This patch changes the RX-path to no copy any data for RTR frames, so that the
-data field in the CAN frame stays 0x0.
-
-Link: https://lore.kernel.org/r/20210114153448.1506901-4-mkl@pengutronix.de
+Link: https://lore.kernel.org/r/20210114153448.1506901-6-mkl@pengutronix.de
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 23 ++++++++++++-------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index aa992e71d787..92816be4f3d4 100644
+index e6d98e172a47..8f78a29db39b 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1474,7 +1474,8 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
- 						 hw_rx_obj->flags));
+@@ -1439,6 +1439,7 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
+ 			   struct sk_buff *skb)
+ {
+ 	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
++	u8 dlc;
+ 
+ 	if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_IDE) {
+ 		u32 sid, eid;
+@@ -1454,9 +1455,10 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
+ 					hw_rx_obj->id);
  	}
  
--	memcpy(cfd->data, hw_rx_obj->data, cfd->len);
-+	if (!(hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_RTR))
-+		memcpy(cfd->data, hw_rx_obj->data, cfd->len);
- }
++	dlc = FIELD_GET(MCP251XFD_OBJ_FLAGS_DLC, hw_rx_obj->flags);
++
+ 	/* CANFD */
+ 	if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_FDF) {
+-		u8 dlc;
  
- static int
+ 		if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_ESI)
+ 			cfd->flags |= CANFD_ESI;
+@@ -1464,14 +1466,13 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
+ 		if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_BRS)
+ 			cfd->flags |= CANFD_BRS;
+ 
+-		dlc = FIELD_GET(MCP251XFD_OBJ_FLAGS_DLC, hw_rx_obj->flags);
+ 		cfd->len = can_fd_dlc2len(dlc);
+ 	} else {
+ 		if (hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_RTR)
+ 			cfd->can_id |= CAN_RTR_FLAG;
+ 
+-		cfd->len = can_cc_dlc2len(FIELD_GET(MCP251XFD_OBJ_FLAGS_DLC,
+-						 hw_rx_obj->flags));
++		can_frame_set_cc_len((struct can_frame *)cfd, dlc,
++				     priv->can.ctrlmode);
+ 	}
+ 
+ 	if (!(hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_RTR))
+@@ -2325,9 +2326,7 @@ mcp251xfd_tx_obj_from_skb(const struct mcp251xfd_priv *priv,
+ 	 * harm, only the lower 7 bits will be transferred into the
+ 	 * TEF object.
+ 	 */
+-	dlc = can_fd_len2dlc(cfd->len);
+-	flags |= FIELD_PREP(MCP251XFD_OBJ_FLAGS_SEQ_MCP2518FD_MASK, seq) |
+-		FIELD_PREP(MCP251XFD_OBJ_FLAGS_DLC, dlc);
++	flags |= FIELD_PREP(MCP251XFD_OBJ_FLAGS_SEQ_MCP2518FD_MASK, seq);
+ 
+ 	if (cfd->can_id & CAN_RTR_FLAG)
+ 		flags |= MCP251XFD_OBJ_FLAGS_RTR;
+@@ -2343,8 +2342,15 @@ mcp251xfd_tx_obj_from_skb(const struct mcp251xfd_priv *priv,
+ 
+ 		if (cfd->flags & CANFD_BRS)
+ 			flags |= MCP251XFD_OBJ_FLAGS_BRS;
++
++		dlc = can_fd_len2dlc(cfd->len);
++	} else {
++		dlc = can_get_cc_dlc((struct can_frame *)cfd,
++				     priv->can.ctrlmode);
+ 	}
+ 
++	flags |= FIELD_PREP(MCP251XFD_OBJ_FLAGS_DLC, dlc);
++
+ 	load_buf = &tx_obj->buf;
+ 	if (priv->devtype_data.quirks & MCP251XFD_QUIRK_CRC_TX)
+ 		hw_tx_obj = &load_buf->crc.hw_tx_obj;
+@@ -2896,7 +2902,8 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 	priv->can.data_bittiming_const = &mcp251xfd_data_bittiming_const;
+ 	priv->can.ctrlmode_supported = CAN_CTRLMODE_LOOPBACK |
+ 		CAN_CTRLMODE_LISTENONLY | CAN_CTRLMODE_BERR_REPORTING |
+-		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO;
++		CAN_CTRLMODE_FD | CAN_CTRLMODE_FD_NON_ISO |
++		CAN_CTRLMODE_CC_LEN8_DLC;
+ 	priv->ndev = ndev;
+ 	priv->spi = spi;
+ 	priv->rx_int = rx_int;
 -- 
 2.29.2
 
