@@ -2,43 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3654F3056E9
+	by mail.lfdr.de (Postfix) with ESMTP id A5E403056EA
 	for <lists+linux-can@lfdr.de>; Wed, 27 Jan 2021 10:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235340AbhA0J1q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 27 Jan 2021 04:27:46 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:38103 "EHLO
+        id S235347AbhA0J2A (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 27 Jan 2021 04:28:00 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48023 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbhA0JZi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:25:38 -0500
-X-Greylist: delayed 1631 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 Jan 2021 04:25:37 EST
+        with ESMTP id S235195AbhA0JZw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 27 Jan 2021 04:25:52 -0500
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l4h23-00085d-CD
-        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:35 +0100
+        id 1l4h26-0008BV-Vw
+        for linux-can@vger.kernel.org; Wed, 27 Jan 2021 10:22:39 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 482385CF0EE
-        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:33 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id A6F1B5CF106
+        for <linux-can@vger.kernel.org>; Wed, 27 Jan 2021 09:22:36 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id C9F5B5CF0D1;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id E13745CF0D3;
         Wed, 27 Jan 2021 09:22:28 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ec185e80;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 752c95bc;
         Wed, 27 Jan 2021 09:22:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 03/12] can: dev: export can_get_state_str() function
-Date:   Wed, 27 Jan 2021 10:22:18 +0100
-Message-Id: <20210127092227.2775573-4-mkl@pengutronix.de>
+        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [net-next 04/12] can: length: can_fd_len2dlc(): make legnth calculation readable again
+Date:   Wed, 27 Jan 2021 10:22:19 +0100
+Message-Id: <20210127092227.2775573-5-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210127092227.2775573-1-mkl@pengutronix.de>
 References: <20210127092227.2775573-1-mkl@pengutronix.de>
@@ -52,52 +51,43 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+In commit 652562e5ff06 ("can: length: can_fd_len2dlc(): simplify length
+calculcation") the readability of the code degraded and became more error
+prone. To counteract this, partially convert that patch and replace open coded
+values (of the original code) with proper defines.
 
-The can_get_state_str() function is also relevant to the drivers. Export the
-symbol and make it visible in the can/dev.h header.
-
-Link: https://lore.kernel.org/r/20210119170355.12040-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Fixes: 652562e5ff06 ("can: length: can_fd_len2dlc(): simplify length calculcation")
+Cc: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Link: https://lore.kernel.org/r/20210118201346.79422-1-socketcan@hartkopp.net
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/dev/dev.c | 3 ++-
- include/linux/can/dev.h   | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/can/dev/length.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/dev/dev.c b/drivers/net/can/dev/dev.c
-index 01e4a194f187..d9281ae853f8 100644
---- a/drivers/net/can/dev/dev.c
-+++ b/drivers/net/can/dev/dev.c
-@@ -74,7 +74,7 @@ static int can_rx_state_to_frame(struct net_device *dev, enum can_state state)
- 	}
- }
+diff --git a/drivers/net/can/dev/length.c b/drivers/net/can/dev/length.c
+index d35c4e82314d..b48140b1102e 100644
+--- a/drivers/net/can/dev/length.c
++++ b/drivers/net/can/dev/length.c
+@@ -27,12 +27,17 @@ static const u8 len2dlc[] = {
+ 	13, 13, 13, 13, 13, 13, 13, 13,	/* 25 - 32 */
+ 	14, 14, 14, 14, 14, 14, 14, 14,	/* 33 - 40 */
+ 	14, 14, 14, 14, 14, 14, 14, 14,	/* 41 - 48 */
++	15, 15, 15, 15, 15, 15, 15, 15,	/* 49 - 56 */
++	15, 15, 15, 15, 15, 15, 15, 15	/* 57 - 64 */
+ };
  
--static const char *can_get_state_str(const enum can_state state)
-+const char *can_get_state_str(const enum can_state state)
+ /* map the sanitized data length to an appropriate data length code */
+ u8 can_fd_len2dlc(u8 len)
  {
- 	switch (state) {
- 	case CAN_STATE_ERROR_ACTIVE:
-@@ -95,6 +95,7 @@ static const char *can_get_state_str(const enum can_state state)
+-	if (len >= ARRAY_SIZE(len2dlc))
++	/* check for length mapping table size at build time */
++	BUILD_BUG_ON(ARRAY_SIZE(len2dlc) != CANFD_MAX_DLEN + 1);
++
++	if (unlikely(len > CANFD_MAX_DLEN))
+ 		return CANFD_MAX_DLC;
  
- 	return "<unknown>";
- }
-+EXPORT_SYMBOL_GPL(can_get_state_str);
- 
- void can_change_state(struct net_device *dev, struct can_frame *cf,
- 		      enum can_state tx_state, enum can_state rx_state)
-diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
-index 7faf6a37d5b2..ac4d83a1ab81 100644
---- a/include/linux/can/dev.h
-+++ b/include/linux/can/dev.h
-@@ -123,6 +123,7 @@ void unregister_candev(struct net_device *dev);
- int can_restart_now(struct net_device *dev);
- void can_bus_off(struct net_device *dev);
- 
-+const char *can_get_state_str(const enum can_state state);
- void can_change_state(struct net_device *dev, struct can_frame *cf,
- 		      enum can_state tx_state, enum can_state rx_state);
- 
+ 	return len2dlc[len];
 -- 
 2.29.2
 
