@@ -2,83 +2,52 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B9F308AEF
-	for <lists+linux-can@lfdr.de>; Fri, 29 Jan 2021 18:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C93309321
+	for <lists+linux-can@lfdr.de>; Sat, 30 Jan 2021 10:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbhA2RFs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 29 Jan 2021 12:05:48 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50644 "EHLO mx2.suse.de"
+        id S230365AbhA3JSD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 30 Jan 2021 04:18:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231924AbhA2RFa (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 29 Jan 2021 12:05:30 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1611939836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fvozQKXIjqAjDtAx1eQ9Q/1Mrq8dGwmVnOjUzOX8L5E=;
-        b=PQTBrkNEM+/Lt/1ExJLv3kSQ3fDd6tSanokdTEO3oCtAhtSINFTTvwZeIalcQ0GN6PfO6s
-        8SmpszgKZrvaol1xOOItKRXABFalGKsjzDkk+3B8vfa8qY2fotSXuF1ZAzrxLEgGhlh7KV
-        +/7ZcAQHuz8X+6iKDvVq7ejPEjH/Zzg=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 36EDEAE66;
-        Fri, 29 Jan 2021 17:03:56 +0000 (UTC)
-From:   Richard Palethorpe <rpalethorpe@suse.com>
-To:     ltp@lists.linux.it
-Cc:     linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        Cyril Hrubis <chrubis@suse.cz>, Petr Vorel <pvorel@suse.cz>
-Subject: [PATCH v4 7/7] can: Update contact details
-Date:   Fri, 29 Jan 2021 17:03:05 +0000
-Message-Id: <20210129170305.27383-8-rpalethorpe@suse.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210129170305.27383-1-rpalethorpe@suse.com>
-References: <20210129170305.27383-1-rpalethorpe@suse.com>
+        id S233602AbhA3EOd (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 29 Jan 2021 23:14:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C576864E10;
+        Sat, 30 Jan 2021 03:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611978610;
+        bh=gyBYZCIQ6GpWAMI5dfXJpRmMlyhJfGJ/U9LQuJPledU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LUoFtNYNkj0wuXz1YBnHl0llu6UxthCzqqiYEH99Fhl0AUG3nRtkY9SJuEzZyY25c
+         inshsnxXHQZFiZHWHeHPHpwrTAeOvzCserJU/ty/OaTvlFtEQxz7KIbKDWLhCqTU0j
+         MO4lCummdILrxS3WHETlC0m/j0tYvPsfjPF0vIEhStXJajvzDaMLIxXBrjMlsNigpi
+         VSDO7DiKIJTfd96xSIybpdMZhXNu1gVfxuj5XAU75Pl7bycOpx2z+vFBUPYKNak0rY
+         0XFek2aktgWu5iEms+MuxZ30x8FIDK3jSY4F817QwNgOxcSeUdGhH49DzjBVSSIJ7s
+         UyHfSdhUpOdKA==
+Date:   Fri, 29 Jan 2021 19:50:08 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: pull-request: can-next 2021-01-29
+Message-ID: <20210129195008.66f980f7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210129084302.3040284-1-mkl@pengutronix.de>
+References: <20210129084302.3040284-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-socketcan-users appears to be no more.
+On Fri, 29 Jan 2021 09:42:54 +0100 Marc Kleine-Budde wrote:
+> Hello Jakub, hello David,
+> 
+> this is a pull request of 8 patches for net-next/master.
+> 
+> All patches are by me and target the mcp251xfd driver. The first 4
+> patches update the information regarding the "85% of (FSYSCLK/2)"
+> errata. The other 4 are misc cleanups, unitfy error messages, add
+> missing postfix to a macro, simplify the return of a function, and
+> make use of dev_err_probe() in the mcp251xfd_probe() function.
 
-Signed-off-by: Richard Palethorpe <rpalethorpe@suse.com>
-Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- testcases/network/can/filter-tests/00_Descriptions.txt | 5 +++--
- testcases/network/can/filter-tests/Makefile            | 2 --
- 2 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/testcases/network/can/filter-tests/00_Descriptions.txt b/testcases/network/can/filter-tests/00_Descriptions.txt
-index 55d213456..9623d29a0 100644
---- a/testcases/network/can/filter-tests/00_Descriptions.txt
-+++ b/testcases/network/can/filter-tests/00_Descriptions.txt
-@@ -6,5 +6,6 @@ information on the CAN network protocol family PF_CAN is contained in
- 
- For any issue(s) with CAN tests please write to:
- <ltp@lists.linux.it>
--<socketcan-users@lists.berlios.de>,
--Oliver Hartkopp <oliver.hartkopp@volkswagen.de>,
-+Oliver Hartkopp <socketcan@hartkopp.net>
-+Linux-CAN ML <linux-can@vger.kernel.org>
-+
-diff --git a/testcases/network/can/filter-tests/Makefile b/testcases/network/can/filter-tests/Makefile
-index 29aaa3240..bd57c7fff 100644
---- a/testcases/network/can/filter-tests/Makefile
-+++ b/testcases/network/can/filter-tests/Makefile
-@@ -14,8 +14,6 @@
- #    You should have received a copy of the GNU General Public License along
- #    with this program; if not, write to the Free Software Foundation, Inc.,
- #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
--#
--#  Send feedback to <socketcan-users@lists.berlios.de>
- 
- top_srcdir		?= ../../../..
- 
--- 
-2.30.0
-
+Pulled, thanks!
