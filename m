@@ -2,88 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42546309AD5
-	for <lists+linux-can@lfdr.de>; Sun, 31 Jan 2021 07:23:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34565309CCD
+	for <lists+linux-can@lfdr.de>; Sun, 31 Jan 2021 15:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbhAaGXS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 31 Jan 2021 01:23:18 -0500
-Received: from mail-yb1-f170.google.com ([209.85.219.170]:38893 "EHLO
-        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbhAaGXN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 31 Jan 2021 01:23:13 -0500
-Received: by mail-yb1-f170.google.com with SMTP id i6so7093824ybq.5
-        for <linux-can@vger.kernel.org>; Sat, 30 Jan 2021 22:22:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=n7EIXkLZv/X5oQxwJG8viHYhY7qWY6jWtsVHF69ah0U=;
-        b=a26MoMAJXo3pRK25P1uCnCvdnFItiPZRz+Zna3W+rsJbL8+WpyW42NNgpg7RURNhmd
-         wFkZGyBWL8fydGLuRa0FQCp0cYo5IksybSyzgfFNaT1yW9dhjlkrujia2yLupLV3HPCT
-         smLTIAb1t8sAY+BVLSW+k/VCnWtNeMNV0UzbSBlEXRq9b111KsYlEBd30SYM4L8bE2Zc
-         Zu/NX8lrDe04Ch1TaMZqcebhX2XdX6x2V/YFltyBdgLMmg+iAMUfm2Y8z9QkvZf6YZyj
-         nFdhYvnfgYYSUSTaHuXbIwInsOF6JDBQfKNskDm6s9I5KsQiyYlFFqXO39wfXxeDtN9q
-         T3Jw==
-X-Gm-Message-State: AOAM533W1VJfszYgtDu9Vr5YNpYnNCxM7tSRLskCftHyc+Y/TLzYeqj1
-        H6sN97LM+p2lnFyP4k7T1DtL4sG/XIHg63mshTYYWE+ct8kiHg==
-X-Google-Smtp-Source: ABdhPJw+2yw6aEEeTbprC+DGzAJ/vWt/GFfHscwmar+yYcYxEJX7RV27LELYe+O7tiS9lYLJxmbkw/yXBuV8gx1KlUw=
-X-Received: by 2002:a25:84cc:: with SMTP id x12mr176749ybm.487.1612074152044;
- Sat, 30 Jan 2021 22:22:32 -0800 (PST)
-MIME-Version: 1.0
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 31 Jan 2021 15:22:21 +0900
-Message-ID: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
-Subject: [Question] Sending CAN error frames
-To:     linux-can <linux-can@vger.kernel.org>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
+        id S229915AbhAaOUU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 31 Jan 2021 09:20:20 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.162]:34969 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232317AbhAaNDc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 31 Jan 2021 08:03:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612097972;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+        From:Subject:Sender;
+        bh=4svtcZ7PtoTwqORkNzZoJJcMOmxrfTNQBl77Z1eQYB8=;
+        b=FRidVytCA+1Pp0COO2ahjfZtNK2DJujDf8LaGScbIz4HK/t5ZwmeDJ1KXX8lKmgYdK
+        J8OWDFZFAca6/XvwklEezCaNUeGLOAtVRz8HhmzrvxZwYqt3bNHxhU8aUWNcHug+RnkS
+        VVC2xQoD74b5Kyq7I/RtDUloMUhJaBuGaWm/HNGtPAVxt8dAGChmHuThofFmZ7qaR0Ac
+        vhIqbFIwf32OA1OEuPnk0ts2pf+I+ooVOqPtrnRWDjPZBNAK+DlrmF/dL6VDIPpcW7y8
+        1oqcagX0TV7Hmlx/zv8EZhLWh1hYNWSHeKZA71z4ahPeAC0lxLBD+3uyFUMC3KwM7NLJ
+        Xmng==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1rnbMYliT57TylTcjXQ=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.16.0 DYNA|AUTH)
+        with ESMTPSA id w076a1x0VCxW90X
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Sun, 31 Jan 2021 13:59:32 +0100 (CET)
+Subject: Re: [Question] Sending CAN error frames
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can <linux-can@vger.kernel.org>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Jimmy Assarsson <extja@kvaser.com>,
         Christer Beskow <chbe@kvaser.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <87e3dd54-50ab-1190-efdb-18ddb3b21a02@hartkopp.net>
+Date:   Sun, 31 Jan 2021 13:59:26 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Hi Vincent,
 
-The socket CAN API handles the CAN errors (as reported by the
-microcontroller) by emitting some RX CAN frames with the
-CAN_ERR_FLAG set.
+On 31.01.21 07:22, Vincent MAILHOL wrote:
+> Hello,
+> 
+> The socket CAN API handles the CAN errors (as reported by the
+> microcontroller) by emitting some RX CAN frames with the
+> CAN_ERR_FLAG set.
 
-My question concerns the transmission path: I would like to
-understand how drivers should handle *TX* CAN frames which have
-the CAN_ERR_FLAG set.
+Yes. This is the only intention.
 
-The socket API allows sending such frames. For example doing:
-    cansend can0 20000123#0011223344556677
-will generate such frames and it will reach the xmit() function of
-the driver.
+> My question concerns the transmission path: I would like to
+> understand how drivers should handle *TX* CAN frames which have
+> the CAN_ERR_FLAG set.
+> 
+> The socket API allows sending such frames. For example doing:
+>      cansend can0 20000123#0011223344556677
+> will generate such frames and it will reach the xmit() function of
+> the driver.
 
-However, contrary to the other flags (EFF, RTR, FDF, BRS), the
-ERR flag is not present on the data link layer. Instead, the data
-link layer is responsible for detecting errors and signaling those
-as soon as they occur (thus interrupting the transmission).
+The reason to pass the frame as-is to the driver layer (including 
+CAN_ERR_FLAG) is the possibility to test the correct behavior on the RX 
+path, e.g. when you use the vcan driver.
 
-While the ISO standard does not explicitly forbid having upper
-layers generating such frames, it is not documented. Also, I am
-not aware of CAN controllers allowing to generate error frames on
-demand.
+On the sending path the CAN_ERR_FLAG has no functionality so far - at 
+least it was not defined by the community.
 
-My initial expectation is that those error frames only make
-sense in the RX path and that we should drop such TX frames in,
-for example, can_dropped_invalid_skb().
+> However, contrary to the other flags (EFF, RTR, FDF, BRS), the
+> ERR flag is not present on the data link layer. Instead, the data
+> link layer is responsible for detecting errors and signaling those
+> as soon as they occur (thus interrupting the transmission).
+> 
+> While the ISO standard does not explicitly forbid having upper
+> layers generating such frames, it is not documented. Also, I am
+> not aware of CAN controllers allowing to generate error frames on
+> demand.
 
-However, after looking at the code of other drivers, it appears
-that one (and only one) of them: the Kvaser hydra, does actually
-check this CAN_ERR_FLAG flag in the TX path:
-https://elixir.bootlin.com/linux/v5.11-rc5/source/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c#L1421
+There are specialized CAN testers, e.g. IIRC Vector CANstress that can 
+generate error frames on specific conditions (e.g. when detecting a 
+specific CAN ID).
 
-I would be thankful if anyone knowledgeable about the Kvaser hydra
-could explain to me how the device handles those error frames.
+But I heave not seen CAN controllers that provide such functionality.
 
-Also, please comment if you are aware of any use cases for TX
-error frames.
+> My initial expectation is that those error frames only make
+> sense in the RX path and that we should drop such TX frames in,
+> for example, can_dropped_invalid_skb().
 
+No. As written above the bit is defined to be valid in the RX path only 
+and it makes sense for testing.
 
-Yours sincerely,
-Vincent
+> However, after looking at the code of other drivers, it appears
+> that one (and only one) of them: the Kvaser hydra, does actually
+> check this CAN_ERR_FLAG flag in the TX path:
+> https://elixir.bootlin.com/linux/v5.11-rc5/source/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c#L1421
+> 
+> I would be thankful if anyone knowledgeable about the Kvaser hydra
+> could explain to me how the device handles those error frames.
+
+o_O - Yes, would be interested too!!
+
+> Also, please comment if you are aware of any use cases for TX
+> error frames.
+
+Done.
+
+Best regards,
+Oliver
