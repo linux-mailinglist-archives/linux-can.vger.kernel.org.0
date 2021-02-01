@@ -2,147 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F29B30A983
-	for <lists+linux-can@lfdr.de>; Mon,  1 Feb 2021 15:21:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F03830AB17
+	for <lists+linux-can@lfdr.de>; Mon,  1 Feb 2021 16:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbhBAOU3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Feb 2021 09:20:29 -0500
-Received: from mail-yb1-f178.google.com ([209.85.219.178]:43103 "EHLO
-        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbhBAOU1 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 09:20:27 -0500
-Received: by mail-yb1-f178.google.com with SMTP id y128so16977913ybf.10
-        for <linux-can@vger.kernel.org>; Mon, 01 Feb 2021 06:20:11 -0800 (PST)
+        id S231337AbhBAPXE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Feb 2021 10:23:04 -0500
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:38983 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230256AbhBAPWP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 10:22:15 -0500
+Received: by mail-yb1-f169.google.com with SMTP id k4so17206522ybp.6;
+        Mon, 01 Feb 2021 07:22:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6x1EaUuwLV2Hd5QoGV7Xy8qzZIYLEM9GxBGasKu9kUA=;
-        b=k5/CDXWpSa+4mn4pCgOaidpI+TJHh6vYpXkQAA/52kax/ZidLI71N6uEePk1xuPIem
-         ChsoSDNMWVhpNRmzZbPQF9pFHZdgXR9cyORtuWz4pibsqNXtOUryDjHe4n9CIuB5ZIwy
-         31BYuBm1BgFx43/1NOU6O4JqFx3arO6QDro1GsnPFc+bF8Ks57QGJOcWOkdIgeXn4W3t
-         uZyXBexFdWBRAEkURLfc5aoY5I81yh2Qa2WJXeTbGqJMd4qlF6/l+KJnFwF71gPJ4nLz
-         4Fwjl4ZcwlH1NBjRCDW7nWWw4aLcoea1QN5xFy8L5cOkeZvRAU36ReoBP7vaqQN0c4l9
-         dwZg==
-X-Gm-Message-State: AOAM531iXgp47fW/3z/i0bO0v9dZXvXU2NKBFvWIfnGt9Ve39JRq9UxI
-        QsDWv78JIbdi3opun2d4NmT1gI/9hBwvDawIm74=
-X-Google-Smtp-Source: ABdhPJyQ6ASZK/zm6Wd4TsQxT+eMDhq7CEIHtLjZf7Ce42Q3TaKHpu1d3QrxroH1egKzR0pK9wlDF2X1eJEIB/eyXlA=
-X-Received: by 2002:a25:cd01:: with SMTP id d1mr8555938ybf.125.1612189185841;
- Mon, 01 Feb 2021 06:19:45 -0800 (PST)
+        bh=dsxwO7hWzLBNBcxb5oAX/WrRy6edgK73m5vgz2nVH7Q=;
+        b=jua+dTqmXbEX85xGAg+cPYPLbnY+yfw7xhyJavOO42LaavNpH5zixaSfHZTeAsJ8BN
+         Lzi4qIrdwusUb0W1xAsQbEffQ726BRItX7AU00lNK0ZB/gBedzp8OkrrkAZMF34kQWzk
+         GGmoh4LMH4rH0p7qQv8Myaioc3dDjiqHDxiIVqGBfaw3WFfuQ8Fh66EAGgELgmAPfZ4M
+         +I4dqpANQvnT7kRX3MjWmXVgAzy+Ie3SeQH4+wecPTPIBhDjrczS8Uvhz/jttlp3f5fG
+         WjsfbqFTqm8lFqjPwKxGp4Dg7ORm15Msetl+ZbrR0w8/cmiPnGaImtFqnby0iIdiZ/+B
+         VEZA==
+X-Gm-Message-State: AOAM531zVP5lRqm2HVps3UIfFl5VTT0kJSyB5ldfAZbT3r6M+iJEoa44
+        gqLGTmPa2hoNeXHv0muA7oBiYIw4U2fcs+lc/N6iYE18ycTjM5+b
+X-Google-Smtp-Source: ABdhPJwnE27Wk0UI8BZqnbJwsTwAI0TzEdeQheHNeNLfkQnPyHM9Ix5xSG/me6TxuPLoo+O9WHeKxVml6/8tmbokDPs=
+X-Received: by 2002:a25:84cc:: with SMTP id x12mr8729588ybm.487.1612192894792;
+ Mon, 01 Feb 2021 07:21:34 -0800 (PST)
 MIME-Version: 1.0
-References: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
- <87e3dd54-50ab-1190-efdb-18ddb3b21a02@hartkopp.net> <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
-In-Reply-To: <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
+References: <20210125104055.79882-1-socketcan@hartkopp.net>
+In-Reply-To: <20210125104055.79882-1-socketcan@hartkopp.net>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 1 Feb 2021 23:19:34 +0900
-Message-ID: <CAMZ6RqJWrObGZRwyA1kD5cEZRUd_-4zt8rsMR+zZPLpxD6AWAQ@mail.gmail.com>
-Subject: Re: [Question] Sending CAN error frames
-To:     Jimmy Assarsson <jimmyassarsson@gmail.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Christer Beskow <chbe@kvaser.com>
+Date:   Tue, 2 Feb 2021 00:21:23 +0900
+Message-ID: <CAMZ6Rq+WvuGMrR2sQykt727ZZPvb2v-6hb0nvVpsUwWCco7bFg@mail.gmail.com>
+Subject: Re: [PATCH RESEND iproute2 5.11] iplink_can: add Classical CAN frame
+ LEN8_DLC support
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-can <linux-can@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Jimmy,
-
-On Mon. 1 Feb 2021 at 05:42, Jimmy Assarsson <jimmyassarsson@gmail.com> wrote:
+On Mon. 25 Jan 2021 at 19:40, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> The len8_dlc element is filled by the CAN interface driver and used for CAN
+> frame creation by the CAN driver when the CAN_CTRLMODE_CC_LEN8_DLC flag is
+> supported by the driver and enabled via netlink configuration interface.
 >
-> On 2021-01-31 13:59, Oliver Hartkopp wrote:
-> > Hi Vincent,
-> >
-> > On 31.01.21 07:22, Vincent MAILHOL wrote:
-> >> Hello,
-> >>
-> >> The socket CAN API handles the CAN errors (as reported by the
-> >> microcontroller) by emitting some RX CAN frames with the
-> >> CAN_ERR_FLAG set.
-> >
-> > Yes. This is the only intention.
-> >
-> >> My question concerns the transmission path: I would like to
-> >> understand how drivers should handle *TX* CAN frames which have
-> >> the CAN_ERR_FLAG set.
-> >>
-> >> The socket API allows sending such frames. For example doing:
-> >>      cansend can0 20000123#0011223344556677
-> >> will generate such frames and it will reach the xmit() function of
-> >> the driver.
-> >
-> > The reason to pass the frame as-is to the driver layer (including CAN_ERR_FLAG) is the possibility to test the correct behavior on the RX path, e.g. when you use the vcan driver.
-> >
-> > On the sending path the CAN_ERR_FLAG has no functionality so far - at least it was not defined by the community.
-> >
-> >> However, contrary to the other flags (EFF, RTR, FDF, BRS), the
-> >> ERR flag is not present on the data link layer. Instead, the data
-> >> link layer is responsible for detecting errors and signaling those
-> >> as soon as they occur (thus interrupting the transmission).
-> >>
-> >> While the ISO standard does not explicitly forbid having upper
-> >> layers generating such frames, it is not documented. Also, I am
-> >> not aware of CAN controllers allowing to generate error frames on
-> >> demand.
-> >
-> > There are specialized CAN testers, e.g. IIRC Vector CANstress that can generate error frames on specific conditions (e.g. when detecting a specific CAN ID).
-> >
-> > But I heave not seen CAN controllers that provide such functionality.
-> >
-> >> My initial expectation is that those error frames only make
-> >> sense in the RX path and that we should drop such TX frames in,
-> >> for example, can_dropped_invalid_skb().
-> >
-> > No. As written above the bit is defined to be valid in the RX path only and it makes sense for testing.
-> >
-> >> However, after looking at the code of other drivers, it appears
-> >> that one (and only one) of them: the Kvaser hydra, does actually
-> >> check this CAN_ERR_FLAG flag in the TX path:
-> >> https://elixir.bootlin.com/linux/v5.11-rc5/source/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c#L1421
-> >>
-> >> I would be thankful if anyone knowledgeable about the Kvaser hydra
-> >> could explain to me how the device handles those error frames.
-> >
-> > o_O - Yes, would be interested too!!
+> Add the command line support for cc-len8-dlc for Linux 5.11+
 >
-> Hi Vincent and Oliver,
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> ---
+>  ip/iplink_can.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> When the user passes a frame with CAN_ERR_FLAG set, the CAN controller will generate an error frame.
-> We got customers that use this for testing system robustness and fault reporting/handling.
+> diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+> index 735ab941..6a26f3ff 100644
+> --- a/ip/iplink_can.c
+> +++ b/ip/iplink_can.c
+> @@ -35,10 +35,11 @@ static void print_usage(FILE *f)
+>                 "\t[ one-shot { on | off } ]\n"
+>                 "\t[ berr-reporting { on | off } ]\n"
+>                 "\t[ fd { on | off } ]\n"
+>                 "\t[ fd-non-iso { on | off } ]\n"
+>                 "\t[ presume-ack { on | off } ]\n"
+> +               "\t[ cc-len8-dlc { on | off } ]\n"
+>                 "\n"
+>                 "\t[ restart-ms TIME-MS ]\n"
+>                 "\t[ restart ]\n"
+>                 "\n"
+>                 "\t[ termination { 0..65535 } ]\n"
+> @@ -101,10 +102,11 @@ static void print_ctrlmode(FILE *f, __u32 cm)
+>         _PF(CAN_CTRLMODE_ONE_SHOT, "ONE-SHOT");
+>         _PF(CAN_CTRLMODE_BERR_REPORTING, "BERR-REPORTING");
+>         _PF(CAN_CTRLMODE_FD, "FD");
+>         _PF(CAN_CTRLMODE_FD_NON_ISO, "FD-NON-ISO");
+>         _PF(CAN_CTRLMODE_PRESUME_ACK, "PRESUME-ACK");
+> +       _PF(CAN_CTRLMODE_CC_LEN8_DLC, "CC-LEN8-DLC");
+>  #undef _PF
+>         if (cm)
+>                 print_hex(PRINT_ANY, NULL, "%x", cm);
+>         close_json_array(PRINT_ANY, "> ");
+>  }
+> @@ -209,10 +211,14 @@ static int can_parse_opt(struct link_util *lu, int argc, char **argv,
+>                                      CAN_CTRLMODE_FD_NON_ISO);
+>                 } else if (matches(*argv, "presume-ack") == 0) {
+>                         NEXT_ARG();
+>                         set_ctrlmode("presume-ack", *argv, &cm,
+>                                      CAN_CTRLMODE_PRESUME_ACK);
+> +               } else if (matches(*argv, "cc-len8-dlc") == 0) {
+> +                       NEXT_ARG();
+> +                       set_ctrlmode("cc-len8-dlc", *argv, &cm,
+> +                                    CAN_CTRLMODE_CC_LEN8_DLC);
+>                 } else if (matches(*argv, "restart") == 0) {
+>                         __u32 val = 1;
+>
+>                         addattr32(n, 1024, IFLA_CAN_RESTART, val);
+>                 } else if (matches(*argv, "restart-ms") == 0) {
+> --
+> 2.29.2
 
-Interesting.
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 
-There are two forms of error flags:
-  - The active error flag: 6 consecutive dominant bits
-  - The passive error flag: 6 consecutive recessive bits
-Can it generate both or only one of these? Is it generated as
-soon as the device receives the command or is it generated at a
-predefined timing (e.g. beginning of the frame)?
-
-Which CAN microcontroller is used inside the device?
-
-Also, could you point me to the Kvaser hydra product page? I
-couldn't find it with a quick search so I figured out that maybe
-the commercial name is different?
-
-> We also got this implemented in the early version of kvaser_pciefd driver, but dropped it:
-> https://marc.info/?l=linux-can&m=154324867704480&w=2
-> Is this something that we should remove from kvasr_usb aswell?
-
-No. My intent is not to ask you to remove it. It is rather the
-opposite: I want to understand more how you are able to achieve
-what I thought not to be possible. For what you told me, the
-Kvaser hydra is the kind of device which I would like to have in
-my testing environment :)
-
-However, it would make sense to normalize this use case in the
-Socket CAN interface. For the discussion with Oliver, it is clear
-that this use case is currently not expected and undefined, the
-reason being that such a CAN controller was not thought to
-exist. Now that you have proved us wrong, things are different.
-
-
-Yours sincerely,
-Vincent
+Reviewed and tested the patch, everything is OK for me.
+Thanks Oliver!
