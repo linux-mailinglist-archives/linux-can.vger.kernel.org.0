@@ -2,67 +2,67 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0F730AEBE
-	for <lists+linux-can@lfdr.de>; Mon,  1 Feb 2021 19:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFA430B1A6
+	for <lists+linux-can@lfdr.de>; Mon,  1 Feb 2021 21:40:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbhBASKl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Mon, 1 Feb 2021 13:10:41 -0500
-Received: from mail1.bemta25.messagelabs.com ([195.245.230.2]:18248 "EHLO
-        mail1.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229963AbhBASKk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 13:10:40 -0500
-Received: from [100.112.195.241] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-a.eu-west-1.aws.symcld.net id 16/9E-12176-90348106; Mon, 01 Feb 2021 18:06:01 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRWlGSWpSXmKPExsUS8J9toi6Hs0S
-  CwYs9iharvk9ltli/aAqLxdJ7O1kdmD0+XrrN6NH/18Dj8ya5AOYo1sy8pPyKBNaMaa07mAq6
-  pzNVzNjk3cC4+xVjFyMXh5BAA6PE5R0HgRxODgkBP4lH/WdZQGwhgU2MEjcaXSDsN4wSs3bHQ
-  zTcZZRYfKSDFSTBJmAmsf7FM2YQW0RAV+LHpnlgU5kFJjJKdDf+BksIC9hJvNj4FmwDi4CKxN
-  dp98BsXgFHiR/vHkJtlpdYveEAM8Q2TYk1p9YwQ8QVJCbNesrUxcgBZMdJfLljCtEqKHFy5hM
-  WkDAzUPn6XfoQ1ZwS7z98YAKxmQW0JZYtfM0M0WktMXFzIkSJmsT8xV2MExhFZyEZNAth0Cwk
-  zQsYmVcxWiQVZaZnlOQmZuboGhoY6BoaGukaWgKxkZleYpVuol5qqW55anGJrqFeYnmxXnFlb
-  nJOil5easkmRmBkpRQcqNvB+OD1B71DjJIcTEqivB/eiSYI8SXlp1RmJBZnxBeV5qQWH2KU4e
-  BQkuBlcpJIEBIsSk1PrUjLzAFGOUxagoNHSYRXEiTNW1yQmFucmQ6ROsWYyfFm7ZJFzBxvweT
-  tDSDy5nsQuXnuUiDZdu8ukGwHkzMXHFzNzDELTN5vPwQkH4BIIZa8/LxUKXHeIpAFAiALMkrz
-  4NbDEt0lRlkpYV5GBgYGIZ6C1KLczBJU+VeM4hyMSsK8OxyBpvBk5pXAXfkK6AEmoAc+bhUDe
-  aAkESEl1cDUdXbSmUCOnomzgvIbBE3qV//QPpO+OZN7Y8KnoCX8RZJ6EUcE1wf0yWlfnyrY3X
-  FJ9WTqVh1ziR/zTr4237JmfsIdhgeHKwrv1W17cnzlReMDOTGXz3asklFh/79miZrFqrXyX/6
-  YKhae4GactXSjwntl1Q9XuebVv1X8XXI9ufKJkmn2ytwnH4S/hDR+e7xSK69ubsStX5u0yxW/
-  WMou9+86InZ/1k8TvdRuZ6dobiPGU0+OHOflWFyudvv8HHGbKcn/u+ZbVstPVjwTv918ke0K0
-  6kbHopOfn7t14F366uP664v0XY+om/Uvjq16cVzDafF+d9m1DhNuT9j3/aPl2o8u+cbmPjt+L
-  zpZyqjohJLcUaioRZzUXEiAAli4MTvAwAA
+        id S229646AbhBAUkO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 1 Feb 2021 15:40:14 -0500
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.112]:50841 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229525AbhBAUkO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 15:40:14 -0500
+Received: from [100.113.7.208] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-1.bemta.az-b.eu-central-1.aws.symcld.net id D7/CC-38008-06668106; Mon, 01 Feb 2021 20:36:48 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPKsWRWlGSWpSXmKPExsUS8J9tom58mkS
+  Cwc/rcharvk9ltli/aAqLxdJ7O1kdmD0+XrrN6NH/18Dj8ya5AOYo1sy8pPyKBNaMdxPOsRa0
+  TmeqOPD8MnsD49ZXjF2MXBxCAg2MEgs2H2fqYuTkkBDwk9h75CcTRGITo8TZN5NYQRJCAm8YJ
+  RqXJkIk7jJKXDneCpZgEzCTWP/iGTOILSKgK/Fj0zywscwCExkluht/gyWEBbwlDj05BbaCRU
+  BF4u/pNywgNq+Ao8TuZ8eYIVbLS6zecIAZYpumxJpTa6DiChKTZj0F6uUAsuMkvtwxhWgVlDg
+  58wkLSJgZqHz9Ln2Iak6J9x8+gG1iFtCWWLbwNTNEp7XExM2JECVqEvMXdzFOYBSdhWTQLIRB
+  s5A0L2BkXsVomVSUmZ5RkpuYmaNraGCga2horGsOZJnqJVbpJumlluomp+aVFCUCZfUSy4v1i
+  itzk3NS9PJSSzYxAuMrpZA9cwfj5Dcf9A4xSnIwKYnyfngnmiDEl5SfUpmRWJwRX1Sak1p8iF
+  GGg0NJgpc7VSJBSLAoNT21Ii0zBxjrMGkJDh4lEd5vIGne4oLE3OLMdIjUKcZMjjdrlyxi5ng
+  LJm9vAJE334PIzXOXAsm2e3eBZDuYnLng4Gpmjllg8n77ISD5AEQKseTl56VKifPyABOWkADI
+  gozSPLj1sHR3iVFWSpiXkYGBQYinILUoN7MEVf4VozgHo5Iw7y6QM3ky80rgrnwF9AAT0AMft
+  4qBPFCSiJCSamASFhJdfSX0c0v59V2JK1/NZXDPFLnUWfi5SWbB0+7TflmlM7affz/pX+rcDW
+  +tp54yL/8ZaK7PVv9UVSldv5QtM1VHbeL1Npv6R18vsxzabvZW/ZjpJttNps8tg/5LmdrP0ap
+  bXB4ixrDTadG0GRsV9qy5xfr4hw9jw1vzFao2zb8OWjZxqrGatIpwO0o2rjvoL3tkYsO3jxyZ
+  a23+n/f0+5bmGXBolvQewSWnHmzkf7zypZnb0i/btyqEn/y5XvVNxSxgLO2S4bhyxeSDVNqvh
+  QlzE/mq5Ete/GVZaHtY7NW2632funbuvbvKs+LqK3H2y0dO/I4JOWS6Iq3t/myBp9z6s9b0Hx
+  Vxn3vx7P3TSizFGYmGWsxFxYkA0YY+wPIDAAA=
 X-Env-Sender: Abhijeet.Badurkar@duagon.com
-X-Msg-Ref: server-14.tower-268.messagelabs.com!1612202759!1233590!1
+X-Msg-Ref: server-16.tower-246.messagelabs.com!1612211806!2046942!1
 X-Originating-IP: [80.255.6.145]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.60.3; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 1461 invoked from network); 1 Feb 2021 18:06:00 -0000
+Received: (qmail 30691 invoked from network); 1 Feb 2021 20:36:47 -0000
 Received: from unknown (HELO keys.men.de) (80.255.6.145)
-  by server-14.tower-268.messagelabs.com with DHE-RSA-AES256-SHA encrypted SMTP; 1 Feb 2021 18:06:00 -0000
+  by server-16.tower-246.messagelabs.com with DHE-RSA-AES256-SHA encrypted SMTP; 1 Feb 2021 20:36:47 -0000
 Received: from MEN-EX01.intra.men.de ([192.168.1.1])
   by keys.men.de (PGP Universal service);
-  Mon, 01 Feb 2021 19:06:00 +0100
+  Mon, 01 Feb 2021 21:36:47 +0100
 X-PGP-Universal: processed;
-        by keys.men.de on Mon, 01 Feb 2021 19:06:00 +0100
+        by keys.men.de on Mon, 01 Feb 2021 21:36:47 +0100
 Received: from WSRV-EXHybrid.intra.men.de (192.168.1.226) by
  MEN-EX01.intra.men.de (192.168.1.1) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 1 Feb 2021 19:05:59 +0100
+ 15.0.1497.2; Mon, 1 Feb 2021 21:36:46 +0100
 Received: from MEN-EX01.intra.men.de (192.168.1.1) by
  WSRV-EXHybrid.intra.men.de (192.168.1.226) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2106.2; Mon, 1 Feb 2021 19:05:59 +0100
+ 15.1.2106.2; Mon, 1 Feb 2021 21:36:45 +0100
 Received: from abadurkar-HP-Z2-Tower-G4-Workstation.dev.men.de (10.64.14.204)
  by MEN-EX01.intra.men.de (192.168.1.1) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Mon, 1 Feb 2021 19:05:58 +0100
+ 15.0.1497.2 via Frontend Transport; Mon, 1 Feb 2021 21:36:45 +0100
 From:   Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
 To:     <wg@grandegger.com>, <mkl@pengutronix.de>
 CC:     <linux-can@vger.kernel.org>, <andreas.geissler@duagon.com>,
         <stefan.schlosser@duagon.com>,
         Abhijeet Badurkar <abhijeet.badurkar@duagon.com>
-Subject: [PATCH] Introduce-MEN-16Z192-00-CAN-controller-driver
-Date:   Mon, 1 Feb 2021 19:05:51 +0100
-Message-ID: <20210201180551.25627-1-abhijeet.badurkar@duagon.com>
+Subject: [PATCH v7] net: can: Introduce-MEN-16Z192-00-CAN-controller-driver
+Date:   Mon, 1 Feb 2021 21:36:31 +0100
+Message-ID: <20210201203631.25966-1-abhijeet.badurkar@duagon.com>
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [10.64.14.204]
 X-ClientProxiedBy: MEN-EX01.intra.men.de (192.168.1.1) To
@@ -138,7 +138,7 @@ index 1c28eade6bec..bbf6e19e4797 100644
 @@ -134,6 +134,16 @@ config CAN_KVASER_PCIEFD
  	    Kvaser Mini PCI Express HS v2
  	    Kvaser Mini PCI Express 2xHS v2
- 
+
 +config CAN_MEN_Z192
 +	depends on MCB
 +	tristate "MEN 16Z192-00 CAN Controller"
@@ -1368,7 +1368,7 @@ index 000000000000..a447af513d0b
 +MODULE_IMPORT_NS(MCB);
 
 base-commit: 1048ba83fb1c00cd24172e23e8263972f6b5d9ac
--- 
+--
 2.17.1
 
 
