@@ -2,456 +2,147 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FBC30A8C4
-	for <lists+linux-can@lfdr.de>; Mon,  1 Feb 2021 14:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F29B30A983
+	for <lists+linux-can@lfdr.de>; Mon,  1 Feb 2021 15:21:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbhBANbM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Feb 2021 08:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbhBANaz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 08:30:55 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23107C06174A
-        for <linux-can@vger.kernel.org>; Mon,  1 Feb 2021 05:30:14 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l6ZHQ-0000KE-Nm
-        for linux-can@vger.kernel.org; Mon, 01 Feb 2021 14:30:12 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id C33645D3CA3
-        for <linux-can@vger.kernel.org>; Mon,  1 Feb 2021 13:30:11 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 30B895D3C9E;
-        Mon,  1 Feb 2021 13:30:11 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 86214b3b;
-        Mon, 1 Feb 2021 13:30:10 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel@pengutronix.de, linux-can@vger.kernel.org
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH] can: mcp251xfd: add coredump support
-Date:   Mon,  1 Feb 2021 14:30:07 +0100
-Message-Id: <20210201133007.3260567-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.0
+        id S231778AbhBAOU3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Feb 2021 09:20:29 -0500
+Received: from mail-yb1-f178.google.com ([209.85.219.178]:43103 "EHLO
+        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231201AbhBAOU1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 09:20:27 -0500
+Received: by mail-yb1-f178.google.com with SMTP id y128so16977913ybf.10
+        for <linux-can@vger.kernel.org>; Mon, 01 Feb 2021 06:20:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6x1EaUuwLV2Hd5QoGV7Xy8qzZIYLEM9GxBGasKu9kUA=;
+        b=k5/CDXWpSa+4mn4pCgOaidpI+TJHh6vYpXkQAA/52kax/ZidLI71N6uEePk1xuPIem
+         ChsoSDNMWVhpNRmzZbPQF9pFHZdgXR9cyORtuWz4pibsqNXtOUryDjHe4n9CIuB5ZIwy
+         31BYuBm1BgFx43/1NOU6O4JqFx3arO6QDro1GsnPFc+bF8Ks57QGJOcWOkdIgeXn4W3t
+         uZyXBexFdWBRAEkURLfc5aoY5I81yh2Qa2WJXeTbGqJMd4qlF6/l+KJnFwF71gPJ4nLz
+         4Fwjl4ZcwlH1NBjRCDW7nWWw4aLcoea1QN5xFy8L5cOkeZvRAU36ReoBP7vaqQN0c4l9
+         dwZg==
+X-Gm-Message-State: AOAM531iXgp47fW/3z/i0bO0v9dZXvXU2NKBFvWIfnGt9Ve39JRq9UxI
+        QsDWv78JIbdi3opun2d4NmT1gI/9hBwvDawIm74=
+X-Google-Smtp-Source: ABdhPJyQ6ASZK/zm6Wd4TsQxT+eMDhq7CEIHtLjZf7Ce42Q3TaKHpu1d3QrxroH1egKzR0pK9wlDF2X1eJEIB/eyXlA=
+X-Received: by 2002:a25:cd01:: with SMTP id d1mr8555938ybf.125.1612189185841;
+ Mon, 01 Feb 2021 06:19:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
+ <87e3dd54-50ab-1190-efdb-18ddb3b21a02@hartkopp.net> <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
+In-Reply-To: <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 1 Feb 2021 23:19:34 +0900
+Message-ID: <CAMZ6RqJWrObGZRwyA1kD5cEZRUd_-4zt8rsMR+zZPLpxD6AWAQ@mail.gmail.com>
+Subject: Re: [Question] Sending CAN error frames
+To:     Jimmy Assarsson <jimmyassarsson@gmail.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can <linux-can@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Christer Beskow <chbe@kvaser.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For easier debugging this patch adds dev coredump support to the
-driver. A dev coredump is generated in case the chip fails to start or
-an error in the interrupt handler is detected.
+Hi Jimmy,
 
-The dev coredump consists of all chip registers and chip memory, as
-well as the driver's internal state of the TEF-, TX- and RX-FIFOs.
+On Mon. 1 Feb 2021 at 05:42, Jimmy Assarsson <jimmyassarsson@gmail.com> wrote:
+>
+> On 2021-01-31 13:59, Oliver Hartkopp wrote:
+> > Hi Vincent,
+> >
+> > On 31.01.21 07:22, Vincent MAILHOL wrote:
+> >> Hello,
+> >>
+> >> The socket CAN API handles the CAN errors (as reported by the
+> >> microcontroller) by emitting some RX CAN frames with the
+> >> CAN_ERR_FLAG set.
+> >
+> > Yes. This is the only intention.
+> >
+> >> My question concerns the transmission path: I would like to
+> >> understand how drivers should handle *TX* CAN frames which have
+> >> the CAN_ERR_FLAG set.
+> >>
+> >> The socket API allows sending such frames. For example doing:
+> >>      cansend can0 20000123#0011223344556677
+> >> will generate such frames and it will reach the xmit() function of
+> >> the driver.
+> >
+> > The reason to pass the frame as-is to the driver layer (including CAN_ERR_FLAG) is the possibility to test the correct behavior on the RX path, e.g. when you use the vcan driver.
+> >
+> > On the sending path the CAN_ERR_FLAG has no functionality so far - at least it was not defined by the community.
+> >
+> >> However, contrary to the other flags (EFF, RTR, FDF, BRS), the
+> >> ERR flag is not present on the data link layer. Instead, the data
+> >> link layer is responsible for detecting errors and signaling those
+> >> as soon as they occur (thus interrupting the transmission).
+> >>
+> >> While the ISO standard does not explicitly forbid having upper
+> >> layers generating such frames, it is not documented. Also, I am
+> >> not aware of CAN controllers allowing to generate error frames on
+> >> demand.
+> >
+> > There are specialized CAN testers, e.g. IIRC Vector CANstress that can generate error frames on specific conditions (e.g. when detecting a specific CAN ID).
+> >
+> > But I heave not seen CAN controllers that provide such functionality.
+> >
+> >> My initial expectation is that those error frames only make
+> >> sense in the RX path and that we should drop such TX frames in,
+> >> for example, can_dropped_invalid_skb().
+> >
+> > No. As written above the bit is defined to be valid in the RX path only and it makes sense for testing.
+> >
+> >> However, after looking at the code of other drivers, it appears
+> >> that one (and only one) of them: the Kvaser hydra, does actually
+> >> check this CAN_ERR_FLAG flag in the TX path:
+> >> https://elixir.bootlin.com/linux/v5.11-rc5/source/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c#L1421
+> >>
+> >> I would be thankful if anyone knowledgeable about the Kvaser hydra
+> >> could explain to me how the device handles those error frames.
+> >
+> > o_O - Yes, would be interested too!!
+>
+> Hi Vincent and Oliver,
+>
+> When the user passes a frame with CAN_ERR_FLAG set, the CAN controller will generate an error frame.
+> We got customers that use this for testing system robustness and fault reporting/handling.
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/spi/mcp251xfd/Kconfig         |   1 +
- drivers/net/can/spi/mcp251xfd/Makefile        |   2 +
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    |   2 +
- .../net/can/spi/mcp251xfd/mcp251xfd-dump.c    | 265 ++++++++++++++++++
- .../net/can/spi/mcp251xfd/mcp251xfd-dump.h    |  45 +++
- drivers/net/can/spi/mcp251xfd/mcp251xfd.h     |   8 +
- 6 files changed, 323 insertions(+)
- create mode 100644 drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c
- create mode 100644 drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.h
+Interesting.
 
-diff --git a/drivers/net/can/spi/mcp251xfd/Kconfig b/drivers/net/can/spi/mcp251xfd/Kconfig
-index f5a147a92cb2..dd0fc0a54be1 100644
---- a/drivers/net/can/spi/mcp251xfd/Kconfig
-+++ b/drivers/net/can/spi/mcp251xfd/Kconfig
-@@ -3,6 +3,7 @@
- config CAN_MCP251XFD
- 	tristate "Microchip MCP251xFD SPI CAN controllers"
- 	select REGMAP
-+	select WANT_DEV_COREDUMP
- 	help
- 	  Driver for the Microchip MCP251XFD SPI FD-CAN controller
- 	  family.
-diff --git a/drivers/net/can/spi/mcp251xfd/Makefile b/drivers/net/can/spi/mcp251xfd/Makefile
-index cb71244cbe89..e87e668a08a0 100644
---- a/drivers/net/can/spi/mcp251xfd/Makefile
-+++ b/drivers/net/can/spi/mcp251xfd/Makefile
-@@ -6,3 +6,5 @@ mcp251xfd-objs :=
- mcp251xfd-objs += mcp251xfd-core.o
- mcp251xfd-objs += mcp251xfd-crc16.o
- mcp251xfd-objs += mcp251xfd-regmap.o
-+
-+mcp251xfd-$(CONFIG_DEV_COREDUMP) += mcp251xfd-dump.o
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 3c5b92911d46..cf776578ad57 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1099,6 +1099,7 @@ static int mcp251xfd_chip_start(struct mcp251xfd_priv *priv)
- 	return 0;
- 
-  out_chip_stop:
-+	mcp251xfd_dump(priv);
- 	mcp251xfd_chip_stop(priv, CAN_STATE_STOPPED);
- 
- 	return err;
-@@ -2287,6 +2288,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
-  out_fail:
- 	netdev_err(priv->ndev, "IRQ handler returned %d (intf=0x%08x).\n",
- 		   err, priv->regs_status.intf);
-+	mcp251xfd_dump(priv);
- 	mcp251xfd_chip_interrupts_disable(priv);
- 
- 	return handled;
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c
-new file mode 100644
-index 000000000000..2989df783535
---- /dev/null
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.c
-@@ -0,0 +1,265 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// mcp251xfd - Microchip MCP251xFD Family CAN controller driver
-+//
-+// Copyright (c) 2020, 2021 Pengutronix,
-+//               Marc Kleine-Budde <kernel@pengutronix.de>
-+// Copyright (C) 2015-2018 Etnaviv Project
-+//
-+
-+#include <linux/devcoredump.h>
-+
-+#include "mcp251xfd.h"
-+#include "mcp251xfd-dump.h"
-+
-+struct mcp251xfd_dump_iter {
-+	void *start;
-+	struct mcp251xfd_dump_object_header *hdr;
-+	void *data;
-+};
-+
-+struct mcp251xfd_dump_reg_space {
-+	u16 base;
-+	u16 size;
-+};
-+
-+struct mcp251xfd_dump_ring {
-+	enum mcp251xfd_dump_object_ring_key key;
-+	u32 val;
-+};
-+
-+static const struct mcp251xfd_dump_reg_space
-+mcp251xfd_dump_reg_space[] = {
-+	{
-+		.base = MCP251XFD_REG_CON,
-+		.size = MCP251XFD_REG_FLTOBJ(32) - MCP251XFD_REG_CON,
-+	}, {
-+		.base = MCP251XFD_RAM_START,
-+		.size = MCP251XFD_RAM_SIZE,
-+	}, {
-+		.base = MCP251XFD_REG_OSC,
-+		.size = MCP251XFD_REG_DEVID - MCP251XFD_REG_OSC,
-+	},
-+};
-+
-+static void
-+mcp251xfd_dump_header(struct mcp251xfd_dump_iter *iter,
-+		      enum mcp251xfd_dump_object object, void *data_end)
-+{
-+	struct mcp251xfd_dump_object_header *hdr = iter->hdr;
-+
-+	hdr->magic = cpu_to_le32(MCP251XFD_DUMP_MAGIC);
-+	hdr->object = cpu_to_le32(object);
-+	hdr->file_offset = cpu_to_le32(iter->data - iter->start);
-+	hdr->file_size = cpu_to_le32(data_end - iter->data);
-+
-+	iter->hdr++;
-+	iter->data += le32_to_cpu(hdr->file_size);
-+}
-+
-+static void mcp251xfd_dump_registers(const struct mcp251xfd_priv *priv,
-+				     struct mcp251xfd_dump_iter *iter)
-+{
-+	struct mcp251xfd_dump_object_reg *reg = iter->data;
-+	unsigned int i, j;
-+	int err;
-+
-+	for (i = 0; i < ARRAY_SIZE(mcp251xfd_dump_reg_space); i++) {
-+		const struct mcp251xfd_dump_reg_space *reg_space;
-+		void *buf;
-+
-+		reg_space = &mcp251xfd_dump_reg_space[i];
-+
-+		buf = kmalloc(reg_space->size, GFP_KERNEL);
-+		if (!buf)
-+			return;
-+
-+		err = regmap_bulk_read(priv->map_reg, reg_space->base,
-+				       buf, reg_space->size / sizeof(u32));
-+		if (err) {
-+			kfree(buf);
-+			return;
-+		}
-+
-+		for (j = 0; j < reg_space->size; j += sizeof(u32), reg++) {
-+			reg->reg = cpu_to_le32(reg_space->base + j);
-+			reg->val = cpu_to_le32p(buf + j);
-+		}
-+
-+		kfree(buf);
-+	}
-+
-+	mcp251xfd_dump_header(iter, MCP251XFD_DUMP_OBJECT_REG, reg);
-+}
-+
-+static void mcp251xfd_dump_ring(struct mcp251xfd_dump_iter *iter,
-+				enum mcp251xfd_dump_object object,
-+				const struct mcp251xfd_dump_ring *dump_ring,
-+				unsigned int len)
-+{
-+	struct mcp251xfd_dump_object_reg *reg = iter->data;
-+	unsigned int i;
-+
-+	for (i = 0; i < len; i++, reg++) {
-+		reg->reg = cpu_to_le32(dump_ring[i].key);
-+		reg->val = cpu_to_le32(dump_ring[i].val);
-+	}
-+
-+	mcp251xfd_dump_header(iter, object, reg);
-+}
-+
-+static void mcp251xfd_dump_tef_ring(const struct mcp251xfd_priv *priv,
-+				    struct mcp251xfd_dump_iter *iter)
-+{
-+	const struct mcp251xfd_tef_ring *tef = priv->tef;
-+	const struct mcp251xfd_tx_ring *tx = priv->tx;
-+	const struct mcp251xfd_dump_ring dump_ring[] = {
-+		{
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_HEAD,
-+			.val = tef->head,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_TAIL,
-+			.val = tef->tail,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_BASE,
-+			.val = 0,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_NR,
-+			.val = 0,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_FIFO_NR,
-+			.val = 0,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_NUM,
-+			.val = tx->obj_num,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_SIZE,
-+			.val = sizeof(struct mcp251xfd_hw_tef_obj),
-+		},
-+	};
-+
-+	mcp251xfd_dump_ring(iter, MCP251XFD_DUMP_OBJECT_TEF,
-+			    dump_ring, ARRAY_SIZE(dump_ring));
-+}
-+
-+static void mcp251xfd_dump_tx_ring(const struct mcp251xfd_priv *priv,
-+				   struct mcp251xfd_dump_iter *iter)
-+{
-+	const struct mcp251xfd_tx_ring *tx = priv->tx;
-+	const struct mcp251xfd_dump_ring dump_ring[] = {
-+		{
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_HEAD,
-+			.val = tx->head,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_TAIL,
-+			.val = tx->tail,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_BASE,
-+			.val = tx->base,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_NR,
-+			.val = 0,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_FIFO_NR,
-+			.val = MCP251XFD_TX_FIFO,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_NUM,
-+			.val = tx->obj_num,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_SIZE,
-+			.val = tx->obj_size,
-+		},
-+	};
-+
-+	mcp251xfd_dump_ring(iter, MCP251XFD_DUMP_OBJECT_TX,
-+			    dump_ring, ARRAY_SIZE(dump_ring));
-+}
-+
-+static void mcp251xfd_dump_rx_ring_one(const struct mcp251xfd_priv *priv,
-+				       struct mcp251xfd_dump_iter *iter,
-+				       const struct mcp251xfd_rx_ring *rx)
-+{
-+	const struct mcp251xfd_dump_ring dump_ring[] = {
-+		{
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_HEAD,
-+			.val = rx->head,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_TAIL,
-+			.val = rx->tail,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_BASE,
-+			.val = rx->base,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_NR,
-+			.val = rx->nr,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_FIFO_NR,
-+			.val = rx->fifo_nr,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_NUM,
-+			.val = rx->obj_num,
-+		}, {
-+			.key = MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_SIZE,
-+			.val = rx->obj_size,
-+		},
-+	};
-+
-+	mcp251xfd_dump_ring(iter, MCP251XFD_DUMP_OBJECT_RX,
-+			    dump_ring, ARRAY_SIZE(dump_ring));
-+}
-+
-+static void mcp251xfd_dump_rx_ring(const struct mcp251xfd_priv *priv,
-+				   struct mcp251xfd_dump_iter *iter)
-+{
-+	struct mcp251xfd_rx_ring *rx_ring;
-+	unsigned int i;
-+
-+	mcp251xfd_for_each_rx_ring(priv, rx_ring, i)
-+		mcp251xfd_dump_rx_ring_one(priv, iter, rx_ring);
-+}
-+
-+void mcp251xfd_dump(const struct mcp251xfd_priv *priv)
-+{
-+	struct mcp251xfd_dump_iter iter;
-+	unsigned int rings_num, obj_num;
-+	unsigned int file_size = 0;
-+	unsigned int i;
-+
-+	/* register space + end marker */
-+	obj_num = 2;
-+
-+	/* register space */
-+	for (i = 0; i < ARRAY_SIZE(mcp251xfd_dump_reg_space); i++)
-+		file_size += mcp251xfd_dump_reg_space[i].size / sizeof(u32) *
-+			sizeof(struct mcp251xfd_dump_object_reg);
-+
-+	/* TEF ring, TX ring, RX rings */
-+	rings_num = 2 + priv->rx_ring_num;
-+	obj_num += rings_num;
-+	file_size += rings_num * __MCP251XFD_DUMP_OBJECT_RING_KEY_MAX  *
-+		sizeof(struct mcp251xfd_dump_object_reg);
-+
-+	/* size of the headers */
-+	file_size += sizeof(*iter.hdr) * obj_num;
-+
-+	/* allocate the file in vmalloc memory, it's likely to be big */
-+	iter.start = __vmalloc(file_size, GFP_KERNEL | __GFP_NOWARN |
-+			       __GFP_ZERO | __GFP_NORETRY);
-+	if (!iter.start) {
-+		netdev_warn(priv->ndev, "Failed to allocate devcoredump file.\n");
-+		return;
-+	}
-+
-+	/* point the data member after the headers */
-+	iter.hdr = iter.start;
-+	iter.data = &iter.hdr[obj_num];
-+
-+	mcp251xfd_dump_registers(priv, &iter);
-+	mcp251xfd_dump_tef_ring(priv, &iter);
-+	mcp251xfd_dump_tx_ring(priv, &iter);
-+	mcp251xfd_dump_rx_ring(priv, &iter);
-+	mcp251xfd_dump_header(&iter, MCP251XFD_DUMP_OBJECT_END, iter.data);
-+
-+	dev_coredumpv(&priv->spi->dev, iter.start,
-+		      iter.data - iter.start, GFP_KERNEL);
-+}
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.h
-new file mode 100644
-index 000000000000..34628acac78e
---- /dev/null
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-dump.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0
-+ *
-+ * mcp251xfd - Microchip MCP251xFD Family CAN controller driver
-+ *
-+ * Copyright (c) 2019, 2020, 2021 Pengutronix,
-+ *               Marc Kleine-Budde <kernel@pengutronix.de>
-+ */
-+
-+#ifndef _MCP251XFD_DUMP_H
-+#define _MCP251XFD_DUMP_H
-+
-+#define MCP251XFD_DUMP_MAGIC 0x1825434d
-+
-+enum mcp251xfd_dump_object {
-+	MCP251XFD_DUMP_OBJECT_REG,
-+	MCP251XFD_DUMP_OBJECT_TEF,
-+	MCP251XFD_DUMP_OBJECT_TX,
-+	MCP251XFD_DUMP_OBJECT_RX,
-+	MCP251XFD_DUMP_OBJECT_END = -1,
-+};
-+
-+enum mcp251xfd_dump_object_ring_key {
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_HEAD,
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_TAIL,
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_BASE,
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_NR,
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_FIFO_NR,
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_NUM,
-+	MCP251XFD_DUMP_OBJECT_RING_KEY_OBJ_SIZE,
-+	__MCP251XFD_DUMP_OBJECT_RING_KEY_MAX,
-+};
-+
-+struct mcp251xfd_dump_object_header {
-+	__le32 magic;
-+	__le32 object;
-+	__le32 file_offset;
-+	__le32 file_size;
-+};
-+
-+struct mcp251xfd_dump_object_reg {
-+	__le32 reg;
-+	__le32 val;
-+};
-+
-+#endif
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-index 480bd4480bdf..fe8be4a80798 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd.h
-@@ -838,4 +838,12 @@ u16 mcp251xfd_crc16_compute2(const void *cmd, size_t cmd_size,
- 			     const void *data, size_t data_size);
- u16 mcp251xfd_crc16_compute(const void *data, size_t data_size);
- 
-+#if IS_ENABLED(CONFIG_DEV_COREDUMP)
-+void mcp251xfd_dump(const struct mcp251xfd_priv *priv);
-+#else
-+static inline void mcp251xfd_dump(const struct mcp251xfd_priv *priv)
-+{
-+}
-+#endif
-+
- #endif
--- 
-2.30.0
+There are two forms of error flags:
+  - The active error flag: 6 consecutive dominant bits
+  - The passive error flag: 6 consecutive recessive bits
+Can it generate both or only one of these? Is it generated as
+soon as the device receives the command or is it generated at a
+predefined timing (e.g. beginning of the frame)?
+
+Which CAN microcontroller is used inside the device?
+
+Also, could you point me to the Kvaser hydra product page? I
+couldn't find it with a quick search so I figured out that maybe
+the commercial name is different?
+
+> We also got this implemented in the early version of kvaser_pciefd driver, but dropped it:
+> https://marc.info/?l=linux-can&m=154324867704480&w=2
+> Is this something that we should remove from kvasr_usb aswell?
+
+No. My intent is not to ask you to remove it. It is rather the
+opposite: I want to understand more how you are able to achieve
+what I thought not to be possible. For what you told me, the
+Kvaser hydra is the kind of device which I would like to have in
+my testing environment :)
+
+However, it would make sense to normalize this use case in the
+Socket CAN interface. For the discussion with Oliver, it is clear
+that this use case is currently not expected and undefined, the
+reason being that such a CAN controller was not thought to
+exist. Now that you have proved us wrong, things are different.
 
 
+Yours sincerely,
+Vincent
