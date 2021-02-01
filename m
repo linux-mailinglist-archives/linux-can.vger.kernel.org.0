@@ -2,100 +2,64 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 981C9310759
-	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 10:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B943311256
+	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 21:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbhBEJJf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 Feb 2021 04:09:35 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.160]:32714 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbhBEJHQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 5 Feb 2021 04:07:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612515735;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
-        Subject:Sender;
-        bh=+2O5Spxqd/9qgoTVNeF7y6the3JZSkF5BJhY46QGDY4=;
-        b=UdgXd439oXveSk7IaUqLkAQTfylOHXpJ36dpDPTpqq/s6RZlVKbLoN6d4trt2FXVBd
-        YtZ8JXDOCaqiXZHtIseIKvxxy7vhLbI6qc7zMK49SAtoJWvTYtYktKuSGmmEejHhtwp2
-        RNTbJGDaPs4jIBMUZA1wCfXsKBcGyBSPlxSRKKPjjat+eBfJLrbsLtSDML776D5CW3PL
-        HkjTyuQec+SRDoWdcJw0Cusn1nj8cxWqr1Yi0MXYRWGJKaN+grwP/2vjmjFbmZXo7it3
-        DclmvK2L8F02w2wHrIuetZ14SmXwLFXnLHaxGOfbzV3JJzuG9ZuIqqOvYQ4+cFq3n8tX
-        vXEw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOMtqpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-        by smtp.strato.de (RZmta 47.17.0 DYNA|AUTH)
-        with ESMTPSA id y063a2x1591x0RB
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Fri, 5 Feb 2021 10:01:59 +0100 (CET)
-Subject: Re: correct length of bcm message
-To:     Patrick Menschel <menschel.p@posteo.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <ff7c731b-6b98-79d7-b652-6ba2fe0afc3c@posteo.de>
- <c859e653-af2b-332c-f3d0-cf2525d1382a@posteo.de>
- <d73f45d8-da19-2d09-78ea-318faa98e7aa@hartkopp.net>
- <b987ec8d-d1a8-34e3-7c8b-4ce0bbd4b30f@posteo.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <7f9ffbe7-8926-3874-9261-03e26f711b8d@hartkopp.net>
-Date:   Fri, 5 Feb 2021 10:01:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S233549AbhBESha (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 5 Feb 2021 13:37:30 -0500
+Received: from [20.39.40.203] ([20.39.40.203]:54986 "EHLO optinix.in"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S233003AbhBEPJb (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:09:31 -0500
+dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
+        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
+        b=UQEHlnVg5XQbvsB12U1Ol3bhaQI9w8E6XPoWFxWLZmrTEAjZvoQaEbrphRRSyBGIIWdRriBN1NgjJnIHHuwrDk7Jiepk7hcecgKlubZ8Cbf+eyLm3How+vKdkYfuxbESucRjBUGhM3uNAIEl+djc5YuHgus55Al0uLGG/w84VCgbq4C5haAYakmS1vYlSgFchzN2F++luNM29v8DFhI75uaDxJSrLZjsc+U9sEzNpAaOCR9pw2OgdpmsaX
+        RpEWSooLH5k7s+lJH9RwsRzupCIBYaSMrEgafQL+30fpkHM9MFjkLmthx4Z1XqGeg54bjdS4mLhUgJrpa/zvXopT6v+g==
+Received: from User (Unknown [52.231.31.5])
+        by optinix.in with ESMTP
+        ; Mon, 1 Feb 2021 08:49:51 +0000
+Message-ID: <7494048F-E4B5-4167-8C98-9021CA321467@optinix.in>
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <support@digitalsol.in>
+Subject: Re:read
+Date:   Mon, 1 Feb 2021 08:49:50 -0000
 MIME-Version: 1.0
-In-Reply-To: <b987ec8d-d1a8-34e3-7c8b-4ce0bbd4b30f@posteo.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-On 05.02.21 09:27, Patrick Menschel wrote:
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-> Am 04.02.21 um 21:14 schrieb Oliver Hartkopp:
->> struct can_frames[0] is used in this struct definition to point out,
->> that this struct is followed by a number (0..257) struct can_frame's.
->>
->> This creates a padding at the end of struct bcm_head, so that the struct
->> can_frame (which is always 64 bit aligned) can be directly concatenated.
-> 
-> so this behavior is caused by this alignment
-> 
-> struct can_frame {
->      ...
->      __u8    data[8] __attribute__((aligned(8)));
-> }
-> 
-> and walks back upwards to
-> 
-> nframes (end at 36 bytes)
-> ...
-> < 4 bytes gap >
-> ...
-> frames (start at 40 bytes)
-> 
-> Should the alignment not be defined on structure instead?
-> 
-> struct can_frame __attribute__((aligned(8))) {
-> ...
-> }
-
-Hm, the original idea was to be able to access the data[] with a 64 bit 
-aligned access, e.g. to initialize the content by a single assignment.
-
-The can_id and the other stuff (len, flags, padding, whatever) before 
-the data[] section is intentionally also 64 bit long.
-
-So it should be no difference in functionality.
-
-> Interesting to know, apparently native alignment is 8 on X86_64 linux
-> and 4 on armhf linux. That's why it worked on X86_64.
-> 
-> Regarding python ctypes module, setting _pack_=8 has no remedy effect on
-> armhf platform, so I'll move to struct module.
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
 Regards,
-Oliver
+Ms. Reem.
+
