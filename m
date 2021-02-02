@@ -2,242 +2,158 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA6D30B40C
-	for <lists+linux-can@lfdr.de>; Tue,  2 Feb 2021 01:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C379E30B7C8
+	for <lists+linux-can@lfdr.de>; Tue,  2 Feb 2021 07:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbhBBAXf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Feb 2021 19:23:35 -0500
-Received: from mail-yb1-f178.google.com ([209.85.219.178]:42772 "EHLO
-        mail-yb1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbhBBAXc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Feb 2021 19:23:32 -0500
-Received: by mail-yb1-f178.google.com with SMTP id b187so4636029ybg.9
-        for <linux-can@vger.kernel.org>; Mon, 01 Feb 2021 16:23:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FS/3um4f2ddxiAaANdQK7JD0VNqW5iKsuVxhG1QH8Yg=;
-        b=XTaQXls0avE8qzmTpk6vHTF0UPy2DH2nYAt4VhLeD+Y7+q67KXqSeTjo8WuMGrXSO+
-         +rKlaAXJ+qi/yyoe52OGNZKYrYay6vFODyUY9QylrXwjQzks5PTK60BBzA3KUyBz4wpL
-         HuS9B2/VuOjRZ3rsmFfGpGWgCb6/cgWNd+HMfb1axJ07Qk2/XZ1eU1fLK1JAtEiMTdPd
-         gvdOKxCxHP54OWHmRoASc/fzicny6Y+NcGZYAY0phEnu9LHYJUQZyo/679rvrc38ADV7
-         lSsZj7+OkJfFtGR6bxiTxCIykvGnfyXj1bXrvFmeQqde50zuogVXhE0U6ArtZ4FprJFy
-         9LZQ==
-X-Gm-Message-State: AOAM532PUyufTc4iAJzyNN82s5Jq3HTBS8EkpegK35u1cnOZ7fgilISj
-        voEhRt2jtshEO7GilFM3+QBB3z0Rur5Do7AnNpE=
-X-Google-Smtp-Source: ABdhPJwAnV3C4IF9ubS0znAUQ5d2TbJZTWf/JcoFlKNZ3E2DGFwuBqeobFwglY8RPPg7ENzydogkLqq60+dYYOr44XM=
-X-Received: by 2002:a25:cd01:: with SMTP id d1mr11949476ybf.125.1612225370593;
- Mon, 01 Feb 2021 16:22:50 -0800 (PST)
+        id S231621AbhBBGZe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Feb 2021 01:25:34 -0500
+Received: from mail-eopbgr130072.outbound.protection.outlook.com ([40.107.13.72]:25344
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231605AbhBBGZd (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 2 Feb 2021 01:25:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KnGSR+UF3rOEw1Lnal8Air6724ed5whpybXcW1xD6tCB+F+w0ju4fZXHbEEpgniJn9WSdzfJsYmkZdWifOlGl5tcUtWs+ajj5UW2qm88wk0Ki1mutMZ/NsN9AY68+mKE3x4KX5+IYwQb75RHFxBDg3xgigkAp/H9HGcX5Be3zPooXo4GiZTpvS7EBmi48tfroko5u12hB1U4Ql+lO0YhQDnNOuQPnlO1xGKKJ7CTe8tNVRhapP4V9LEOTfWDe/l6CAz+h74zHUPhCoCukG2wHYxWxt+XF4NGpvWO0KTSsFrkAQtdXWHD8SBQLPuwI5RqdXW1hDiZ4+jiStgrmY9dHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aVmsgc4cuhK3MV3tcIx8i39LgFgrCfmFXMzTafyf5OA=;
+ b=Z0ff6Sr6GaqHHu75oeHu8+FLJGLkkG91Ri1xbh576sGuF4Hzy8/6lTX7ROc80tcgybscVliC7/cGJPdcooy9eQ5MmQ+8jtcHTndjq6qRk9co0a74MsysgyMmwGgeXUhku5jtOGYCgn1uS0EpNOcRcWe23LNwFIxAwURK92yONklbzxmMxhXMD3E/sYw1zBIfZIS0isxEId8S+BGnRZ+dVZbsABqCFvbLdTCP7ay4YiIklzMf5ts/OuTi1f83oHltvGXqXQzxA2sC8LVD3ggOGUrtiDDHAuo3AY7Gl5AZqOlLaA3ujeoHGyUiqTXw04MhZZk2sRPM2F8YP669HCKHKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aVmsgc4cuhK3MV3tcIx8i39LgFgrCfmFXMzTafyf5OA=;
+ b=CWc6EjR765WgcDDCme1mxXkM+XeWfXu1NP+/xUivT5iYj57wHlnPR/DvTXUBhoRCQCTYkDOfVItpHIl8DyXZR8j7/AFX+iuF2roZRRxQOC2uHQqptjy7C6VTX1hWDV6wdApWatKKFIlkOSd2F41Eb7z1dRXZglrwxUb2FjLyaKY=
+Authentication-Results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
+ by DB7PR04MB5307.eurprd04.prod.outlook.com (2603:10a6:10:1e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.22; Tue, 2 Feb
+ 2021 06:24:43 +0000
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::9d2b:182e:ba3b:5920]) by DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::9d2b:182e:ba3b:5920%3]) with mapi id 15.20.3805.027; Tue, 2 Feb 2021
+ 06:24:43 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     mkl@pengutronix.de, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-imx@nxp.com
+Subject: [PATCH linux-can] can: flexcan: enable RX FIFO after FRZ/HALT valid
+Date:   Tue,  2 Feb 2021 14:23:50 +0800
+Message-Id: <20210202062350.7258-1-qiangqing.zhang@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.71]
+X-ClientProxiedBy: SG2PR03CA0108.apcprd03.prod.outlook.com
+ (2603:1096:4:7c::36) To DB8PR04MB6795.eurprd04.prod.outlook.com
+ (2603:10a6:10:fa::15)
 MIME-Version: 1.0
-References: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
- <87e3dd54-50ab-1190-efdb-18ddb3b21a02@hartkopp.net> <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
- <CAMZ6RqJWrObGZRwyA1kD5cEZRUd_-4zt8rsMR+zZPLpxD6AWAQ@mail.gmail.com> <1debcaeb-71c7-6b78-88b3-7f121a33c1c1@kvaser.com>
-In-Reply-To: <1debcaeb-71c7-6b78-88b3-7f121a33c1c1@kvaser.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Tue, 2 Feb 2021 09:22:39 +0900
-Message-ID: <CAMZ6Rq+ObkS2RDFbgbPP7HZH26WbN-eoLeQyiY6+CpDGYjE10w@mail.gmail.com>
-Subject: Re: [Question] Sending CAN error frames
-To:     Jimmy Assarsson <extja@kvaser.com>
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.71) by SG2PR03CA0108.apcprd03.prod.outlook.com (2603:1096:4:7c::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.12 via Frontend Transport; Tue, 2 Feb 2021 06:24:41 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 08d49ced-8ee9-4b69-076e-08d8c7433aa3
+X-MS-TrafficTypeDiagnostic: DB7PR04MB5307:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB7PR04MB530766C4BF13E298A24F74AAE6B59@DB7PR04MB5307.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uyCXqlnF/hBj4Sm8GN64/b6FUdBiEmfBzoA3LDmpP5ukeqmEmTdwqTzRX8dXY/PBepQtf83N0guij2GjkiOWTYfpH8dNza1mNHqUA+YXr6WpUunfIP6e2Dl2OSA0asKDa3WGEuAdZUOXdKHvhIsEBNR7l4F5abiKLVfpjgBHzdkXPj+RCxnrRvQGq69OM990e0W2armvAOgy1+aYNLnngP+lAaMjkEtHtElIQ4Zx2Hv49ZIQTrdwwV7YwOuMKA7S1SkU5zvw+nO+OnT7dTQf2Zi/g/k6CJU05hpP+JiG0FdU7uFQusq+5MyB4nPeOsU7QxFC2uDvnIOX4Uw8NvNcv+wslBUZPEFqBhhg4UP2wtmjkzTecMmPKAbCMqijw8xxVtuEFTbMp8Ab6nfr2wdNIgAbCnmbNJtWPrysq/UPAGDkO9kRJ0Ua9kEU1XoA7VQOU5Vm6Bh1JwUMX0z+snsuJr13oNFjuzH9crOVe6daIGC4RUA7lkYY5+rgkUqg2AxQkv61Kbd/05CU3o8Fn5xmVEoRpYF8JUBV6WJkGAmYp5RX+AAIjiXHOiXYeLpO6BkOzHGsm9LTsJ7qe+EIcklVAg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(6666004)(26005)(1076003)(186003)(69590400011)(6506007)(6512007)(86362001)(16526019)(6486002)(316002)(52116002)(2906002)(4326008)(478600001)(2616005)(83380400001)(5660300002)(36756003)(66946007)(8676002)(956004)(66556008)(8936002)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?oPT+03Dl4FhbsIURWaNDZstBHUNDmT2diDvkzko7k8yJHHKvcAUpKIHC2ddi?=
+ =?us-ascii?Q?uTgGOB21nGrHKfy07ICBEgQFDIQd5RIToPK9TxwLQniN21bxPwjrG18K/bZ3?=
+ =?us-ascii?Q?9wsC9K11YRjyfqy5VtAIbt2jKkKQc4ZwBnhj8GzVApgO8D9/asRc/XYGCVt3?=
+ =?us-ascii?Q?hXOjhq0HSVIf1PsoqlXUkzG9e5+6KwNFt3XO9B/iszkVqojOxWRpgqfnXqrQ?=
+ =?us-ascii?Q?bqdQSoKl66t9YLh83C3PlPZPTzePEP/RGzBlXD78AziUucgQEVzIUH5XNEQA?=
+ =?us-ascii?Q?X1qH36aFwzbK5090MDUO0UutPr5hC44CWXUumA1gbKO+Gudm3G+wmVmYAHkI?=
+ =?us-ascii?Q?j7wA6yAgGnbiVbBq8s6jijz5/pPETpTIc7UzVfmuTzaziRqvoH8ahiPoEj2Q?=
+ =?us-ascii?Q?DxNzLq4Zw8FvifzLyCjKDwh25N/M48H+id8OkYk+7PFOLKh3STeeT1XB3595?=
+ =?us-ascii?Q?BBdnP+1akt+VxBEeLfjKVBrR/ImKGp0E9/96FS/ksWtcke8U+wug3MYuLfC7?=
+ =?us-ascii?Q?QfE774cjqUSJlw3/cRuDbgSbrwEW4kjWn/atrAnamSny853ZVmdPomKS9kub?=
+ =?us-ascii?Q?pVKR1MNHGzgrbNx10B39mSPNWxmZC3cmEGJvNDad1m9oBFNu4VM0i204TjH9?=
+ =?us-ascii?Q?uhCsIprWRVceGo6KAd3uV8bWjzLFlhfs8TY2XbG/4ALx3NRG8YXjFz0olojn?=
+ =?us-ascii?Q?eMSggT5jW1GCfSDcfgs/lT3YyynjSUVEHJIplEN656tH6n9otWWbq0VZq+Ov?=
+ =?us-ascii?Q?W0QeHsY4iod9tGGaXtQAtcTPm4KeJy2OjuK4A/5hnkMe5BDdnelNWztOixYM?=
+ =?us-ascii?Q?0/kOav1OdSmGlFMN6suHHA56U019om0YaAbd1bDtacsD+c+zXCN72avXoRpJ?=
+ =?us-ascii?Q?p7Gf58fEmd3YnVKHqn661g0JMD+X3UlThTB6VZwPgj0uoGEzVAbK0YG09ys5?=
+ =?us-ascii?Q?Y1odBNcJ6pKINjUp//J5g0R8CWq/YDHvphE9rR1KH0IlZ9JJ6fSZ4FLcWHkK?=
+ =?us-ascii?Q?eXO6llqo4J0krrQEwrlVg8OnwoDfhNTGuh12Yp5ZpR2i2ec6FGzbVk9q1L0N?=
+ =?us-ascii?Q?W6TRmdU1?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 08d49ced-8ee9-4b69-076e-08d8c7433aa3
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2021 06:24:43.6391
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6l/VMBll3o5d2PRCi8kHvO2SBYQ81//z9RSt7x2ZIJ16z9Y9s2BF36GoldMddwcF8xIHdb20D9P1/EcPcULBcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5307
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Jimmy,
+RX FIFO enable failed could happen when do system reboot stress test,
+one customer reports failure rate is about 50%.
 
-On Tue. 2 Feb 2021 at 00:41, Jimmy Assarsson <extja@kvaser.com> wrote:
-> On 2021-02-01 15:19, Vincent MAILHOL wrote:
-> > Hi Jimmy,
-> > On Mon. 1 Feb 2021 at 05:42, Jimmy Assarsson <jimmyassarsson@gmail.com> wrote:
-> >> On 2021-01-31 13:59, Oliver Hartkopp wrote:
-> >>> Hi Vincent,
-> >>> On 31.01.21 07:22, Vincent MAILHOL wrote:
-> >>>> Hello,
-> >>>>
-> >>>> The socket CAN API handles the CAN errors (as reported by the
-> >>>> microcontroller) by emitting some RX CAN frames with the
-> >>>> CAN_ERR_FLAG set.
-> >>>
-> >>> Yes. This is the only intention.
-> >>>
-> >>>> My question concerns the transmission path: I would like to
-> >>>> understand how drivers should handle *TX* CAN frames which have
-> >>>> the CAN_ERR_FLAG set.
-> >>>>
-> >>>> The socket API allows sending such frames. For example doing:
-> >>>>       cansend can0 20000123#0011223344556677
-> >>>> will generate such frames and it will reach the xmit() function of
-> >>>> the driver.
-> >>>
-> >>> The reason to pass the frame as-is to the driver layer (including CAN_ERR_FLAG) is the possibility to test the correct behavior on the RX path, e.g. when you use the vcan driver.
-> >>>
-> >>> On the sending path the CAN_ERR_FLAG has no functionality so far - at least it was not defined by the community.
-> >>>
-> >>>> However, contrary to the other flags (EFF, RTR, FDF, BRS), the
-> >>>> ERR flag is not present on the data link layer. Instead, the data
-> >>>> link layer is responsible for detecting errors and signaling those
-> >>>> as soon as they occur (thus interrupting the transmission).
-> >>>>
-> >>>> While the ISO standard does not explicitly forbid having upper
-> >>>> layers generating such frames, it is not documented. Also, I am
-> >>>> not aware of CAN controllers allowing to generate error frames on
-> >>>> demand.
-> >>>
-> >>> There are specialized CAN testers, e.g. IIRC Vector CANstress that can generate error frames on specific conditions (e.g. when detecting a specific CAN ID).
-> >>>
-> >>> But I heave not seen CAN controllers that provide such functionality.
-> >>>
-> >>>> My initial expectation is that those error frames only make
-> >>>> sense in the RX path and that we should drop such TX frames in,
-> >>>> for example, can_dropped_invalid_skb().
-> >>>
-> >>> No. As written above the bit is defined to be valid in the RX path only and it makes sense for testing.
-> >>>
-> >>>> However, after looking at the code of other drivers, it appears
-> >>>> that one (and only one) of them: the Kvaser hydra, does actually
-> >>>> check this CAN_ERR_FLAG flag in the TX path:
-> >>>> https://elixir.bootlin.com/linux/v5.11-rc5/source/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c#L1421
-> >>>>
-> >>>> I would be thankful if anyone knowledgeable about the Kvaser hydra
-> >>>> could explain to me how the device handles those error frames.
-> >>>
-> >>> o_O - Yes, would be interested too!!
-> >>
-> >> Hi Vincent and Oliver,
-> >>
-> >> When the user passes a frame with CAN_ERR_FLAG set, the CAN controller will generate an error frame.
-> >> We got customers that use this for testing system robustness and fault reporting/handling.
-> >
-> > Interesting.
-> >
-> > There are two forms of error flags:
-> >    - The active error flag: 6 consecutive dominant bits
-> >    - The passive error flag: 6 consecutive recessive bits
-> > Can it generate both or only one of these? Is it generated as
-> > soon as the device receives the command or is it generated at a
-> > predefined timing (e.g. beginning of the frame)?
->
-> It can only generate the active error flag.
-> It will generate an error frame on the bus as soon as the bus is idle.
->
-> $ sudo ip link set can4 type can bitrate 100000
-> $ sudo ip link set can5 type can bitrate 100000
-> $ sudo ip link set can4 up
-> $ sudo ip link set can5 up
-> $ ./candump -c -ta -H -d -e -x can4,#FFFFFFFF &
-> [1] 177884
-> $ ./cansend can5 20000000#
->   (0000000084.786201)  can4  RX - -  20000080   [8]  00 00 00 00 00 00
-> 00 01   ERRORFRAME
->         bus-error
->         error-counter-tx-rx{{0}{1}}
-> $ ./cansend can5 20000123#0011223344556677
->   (0000000086.798898)  can4  RX - -  20000080   [8]  00 00 00 00 00 00
-> 00 02   ERRORFRAME
->         bus-error
->         error-counter-tx-rx{{0}{2}}
-> $ ./cansend can5 20000000#
->   (0000000087.385292)  can4  RX - -  20000080   [8]  00 00 00 00 00 00
-> 00 03   ERRORFRAME
->         bus-error
->         error-counter-tx-rx{{0}{3}}
-> $ ./cansend can5 20000000#
->   (0000000087.911860)  can4  RX - -  20000080   [8]  00 00 00 00 00 00
-> 00 04   ERRORFRAME
->         bus-error
->         error-counter-tx-rx{{0}{4}}
-> $ ./cansend can5 20000000#
->   (0000000088.404890)  can4  RX - -  20000080   [8]  00 00 00 00 00 00
-> 00 05   ERRORFRAME
->         bus-error
->         error-counter-tx-rx{{0}{5}}
-> $ ./cansend can5 005#FF.12.20
->   (0000000093.061655)  can4  RX - -  005   [3]  FF 12 20
-> $ ./cansend can5 005#FF.12.21
->   (0000000094.667557)  can4  RX - -  005   [3]  FF 12 21
-> $ ./cansend can5 005#FF.12.22
->   (0000000095.617019)  can4  RX - -  005   [3]  FF 12 22
-> $ ./cansend can5 20000000#
->   (0000000097.883071)  can4  RX - -  20000080   [8]  00 00 00 00 00 00
-> 00 03   ERRORFRAME
->         bus-error
->         error-counter-tx-rx{{0}{3}}
+[    0.303958] flexcan 5a8d0000.can: 5a8d0000.can supply xceiver not found, using dummy regulator
+[    0.304281] flexcan 5a8d0000.can (unnamed net_device) (uninitialized): Could not enable RX FIFO, unsupported core
+[    0.314640] flexcan 5a8d0000.can: registering netdev failed
+[    0.320728] flexcan 5a8e0000.can: 5a8e0000.can supply xceiver not found, using dummy regulator
+[    0.320991] flexcan 5a8e0000.can (unnamed net_device) (uninitialized): Could not enable RX FIFO, unsupported core
+[    0.331360] flexcan 5a8e0000.can: registering netdev failed
+[    0.337444] flexcan 5a8f0000.can: 5a8f0000.can supply xceiver not found, using dummy regulator
+[    0.337716] flexcan 5a8f0000.can (unnamed net_device) (uninitialized): Could not enable RX FIFO, unsupported core
+[    0.348117] flexcan 5a8f0000.can: registering netdev failed
 
-Thanks for the example, things are now clear.
+RX FIFO should be enabled after the FRZ/HALT are valid. But the current
+code set RX FIFO enable and FRZ/HALT at the same time.
 
-So the error flag always increments the RX counter even if you
-are the transmitter.
+Fixes: e955cead03117 ("CAN: Add Flexcan CAN controller driver")
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+---
+ drivers/net/can/flexcan.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
->
-> > Which CAN microcontroller is used inside the device?
->
-> It is an IP developed by Kvaser called KCAN. I'm not sure, but I think
-> it has only been used in FPGAs.
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 038fe1036df2..8ee9fa2f4161 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -1803,6 +1803,7 @@ static int register_flexcandev(struct net_device *dev)
+ {
+ 	struct flexcan_priv *priv = netdev_priv(dev);
+ 	struct flexcan_regs __iomem *regs = priv->regs;
++	unsigned int timeout = FLEXCAN_TIMEOUT_US / 10;
+ 	u32 reg, err;
+ 
+ 	err = flexcan_clks_enable(priv);
+@@ -1825,10 +1826,19 @@ static int register_flexcandev(struct net_device *dev)
+ 	if (err)
+ 		goto out_chip_disable;
+ 
+-	/* set freeze, halt and activate FIFO, restrict register access */
++	/* set freeze, halt and polling the freeze ack */
+ 	reg = priv->read(&regs->mcr);
+-	reg |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT |
+-		FLEXCAN_MCR_FEN | FLEXCAN_MCR_SUPV;
++	reg |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT;
++	priv->write(reg, &regs->mcr);
++
++	while (timeout-- && !(priv->read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
++		udelay(100);
++
++	if (!(priv->read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
++		return -ETIMEDOUT;
++
++	/* Activate FIFO, restrict register access */
++	reg |=  FLEXCAN_MCR_FEN | FLEXCAN_MCR_SUPV;
+ 	priv->write(reg, &regs->mcr);
+ 
+ 	/* Currently we only support newer versions of this core
+-- 
+2.17.1
 
-This makes more sense. As I wrote before, I did not know of any
-microcontroller allowing you to generate error flags on
-demand. So you build your device on an FPGA to be able to control
-the bit level. Nice!
-
-I also once wanted to use an FPGA to play with error flags but it
-only remained an idea.
-
-> > Also, could you point me to the Kvaser hydra product page? I
-> > couldn't find it with a quick search so I figured out that maybe
-> > the commercial name is different?
->
-> Hydra is the name of the platform for the USB based products.
-> You find all devices with this capability here:
-> https://www.kvaser.com/products-services/our-products/#/?descriptors=can_fd,err_frame_gen&pc_int=mini-pci-express,pci-express,usb
-> As mentioned before, the SocketCAN driver for the PCIe based devices
-> does not support this.
-
-Thanks!
-
-> >> We also got this implemented in the early version of kvaser_pciefd driver, but dropped it:
-> >> https://marc.info/?l=linux-can&m=154324867704480&w=2
-> >> Is this something that we should remove from kvasr_usb aswell?
-> >
-> > No. My intent is not to ask you to remove it. It is rather the
-> > opposite: I want to understand more how you are able to achieve
-> > what I thought not to be possible. For what you told me, the
-> > Kvaser hydra is the kind of device which I would like to have in
-> > my testing environment :)
-> >
-> > However, it would make sense to normalize this use case in the
-> > Socket CAN interface. For the discussion with Oliver, it is clear
-> > that this use case is currently not expected and undefined, the
-> > reason being that such a CAN controller was not thought to
-> > exist. Now that you have proved us wrong, things are different.
->
-> Right, it would be nice to sort this out. I prefer to keep the
-> functionality, since we got customers using it.
-
-Basically, I would see this as an expert function: add a
-CAN_CTRLMODE_TX_ERR and have the user explicitly enable the
-feature through netlink when configuring the interface. The
-rationale is to prevent by default an unprivileged application
-from messing with the bus.
-
-If CAN_CTRLMODE_TX_ERR is on the device generates an error
-flag. Else, the CAN_ERR_FLAG is simply ignored (masked out).
-The CAN ID, DLC and payload of the TX error frames are
-ignored (i.e. reserved for future).
-
-I do not see the need for more complex logic at the moment
-because your device is only capable of generating one type of
-error flags: the active error. If one day a device has the
-ability to generate both the active and passive error flags, we
-should then define how to send those (maybe by putting a flag in
-the payload, similar to what is done on the RX path).
-
-What do you think of the above?
-
-
-Yours sincerely,
-Vincent
