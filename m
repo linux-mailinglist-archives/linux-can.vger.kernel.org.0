@@ -2,39 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4683C30B8C3
-	for <lists+linux-can@lfdr.de>; Tue,  2 Feb 2021 08:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A402F30B8C2
+	for <lists+linux-can@lfdr.de>; Tue,  2 Feb 2021 08:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbhBBHiY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Feb 2021 02:38:24 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37079 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbhBBHiQ (ORCPT
+        id S229632AbhBBHiV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Feb 2021 02:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232120AbhBBHiQ (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Tue, 2 Feb 2021 02:38:16 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F31C06174A
+        for <linux-can@vger.kernel.org>; Mon,  1 Feb 2021 23:37:34 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1l6qDY-0005Y7-O3; Tue, 02 Feb 2021 08:35:20 +0100
+        id 1l6qFd-0005p7-Gu; Tue, 02 Feb 2021 08:37:29 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:162d:e977:d9c4:7fc2] (unknown [IPv6:2a03:f580:87bc:d400:162d:e977:d9c4:7fc2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B0BD45D45B4;
-        Tue,  2 Feb 2021 07:35:17 +0000 (UTC)
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Jimmy Assarsson <extja@kvaser.com>
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
-References: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
- <87e3dd54-50ab-1190-efdb-18ddb3b21a02@hartkopp.net>
- <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
- <CAMZ6RqJWrObGZRwyA1kD5cEZRUd_-4zt8rsMR+zZPLpxD6AWAQ@mail.gmail.com>
- <1debcaeb-71c7-6b78-88b3-7f121a33c1c1@kvaser.com>
- <CAMZ6Rq+ObkS2RDFbgbPP7HZH26WbN-eoLeQyiY6+CpDGYjE10w@mail.gmail.com>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 78B9A5D45BB;
+        Tue,  2 Feb 2021 07:37:28 +0000 (UTC)
+Subject: Re: [PATCH linux-can] can: flexcan: enable RX FIFO after FRZ/HALT
+ valid
+To:     Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-imx@nxp.com
+References: <20210202062350.7258-1-qiangqing.zhang@nxp.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -96,16 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [Question] Sending CAN error frames
-Message-ID: <17b14b11-87bf-9508-0da5-1031c5d5e132@pengutronix.de>
-Date:   Tue, 2 Feb 2021 08:35:14 +0100
+Message-ID: <c6bc1c1b-b86e-63c2-2dba-eb9fe108516e@pengutronix.de>
+Date:   Tue, 2 Feb 2021 08:37:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6Rq+ObkS2RDFbgbPP7HZH26WbN-eoLeQyiY6+CpDGYjE10w@mail.gmail.com>
+In-Reply-To: <20210202062350.7258-1-qiangqing.zhang@nxp.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="kAOiXBqTseF323Uv34S94X4fL4xl0AXLH"
+ boundary="47JrNILbIXQhceVvVrqzX1VEv4bVYDfE3"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -115,64 +111,85 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---kAOiXBqTseF323Uv34S94X4fL4xl0AXLH
-Content-Type: multipart/mixed; boundary="G5fAmR5yb43EYgTpSMr4D6zerLBmLK2XP";
+--47JrNILbIXQhceVvVrqzX1VEv4bVYDfE3
+Content-Type: multipart/mixed; boundary="JVEK9iahjexr1sPMUEBqE2gbES7F2KSXL";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
- Jimmy Assarsson <extja@kvaser.com>
-Cc: Jimmy Assarsson <jimmyassarsson@gmail.com>,
- Oliver Hartkopp <socketcan@hartkopp.net>,
- linux-can <linux-can@vger.kernel.org>
-Message-ID: <17b14b11-87bf-9508-0da5-1031c5d5e132@pengutronix.de>
-Subject: Re: [Question] Sending CAN error frames
-References: <CAMZ6RqK0rTNg3u3mBpZOoY51jLZ-et-J01tY6-+mWsM4meVw-A@mail.gmail.com>
- <87e3dd54-50ab-1190-efdb-18ddb3b21a02@hartkopp.net>
- <42080d05-7ab3-99be-92e2-73ed262350ba@gmail.com>
- <CAMZ6RqJWrObGZRwyA1kD5cEZRUd_-4zt8rsMR+zZPLpxD6AWAQ@mail.gmail.com>
- <1debcaeb-71c7-6b78-88b3-7f121a33c1c1@kvaser.com>
- <CAMZ6Rq+ObkS2RDFbgbPP7HZH26WbN-eoLeQyiY6+CpDGYjE10w@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+ObkS2RDFbgbPP7HZH26WbN-eoLeQyiY6+CpDGYjE10w@mail.gmail.com>
+To: Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org, linux-imx@nxp.com
+Message-ID: <c6bc1c1b-b86e-63c2-2dba-eb9fe108516e@pengutronix.de>
+Subject: Re: [PATCH linux-can] can: flexcan: enable RX FIFO after FRZ/HALT
+ valid
+References: <20210202062350.7258-1-qiangqing.zhang@nxp.com>
+In-Reply-To: <20210202062350.7258-1-qiangqing.zhang@nxp.com>
 
---G5fAmR5yb43EYgTpSMr4D6zerLBmLK2XP
+--JVEK9iahjexr1sPMUEBqE2gbES7F2KSXL
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 2/2/21 1:22 AM, Vincent MAILHOL wrote:
-[...]
-
->> Right, it would be nice to sort this out. I prefer to keep the
->> functionality, since we got customers using it.
+On 2/2/21 7:23 AM, Joakim Zhang wrote:
+> RX FIFO enable failed could happen when do system reboot stress test,
+> one customer reports failure rate is about 50%.
 >=20
-> Basically, I would see this as an expert function: add a
-> CAN_CTRLMODE_TX_ERR and have the user explicitly enable the
-> feature through netlink when configuring the interface. The
-> rationale is to prevent by default an unprivileged application
-> from messing with the bus.
-
-The CAN_CTRLMODE_TX_ERR would be a per device option. Another option migh=
-t be a
-sockopt, where you have to enable the TX_ERR explicitly. I'm not sure, wh=
-ich
-option is the best here.
-
-> If CAN_CTRLMODE_TX_ERR is on the device generates an error
-> flag. Else, the CAN_ERR_FLAG is simply ignored (masked out).
-> The CAN ID, DLC and payload of the TX error frames are
-> ignored (i.e. reserved for future).
+> [    0.303958] flexcan 5a8d0000.can: 5a8d0000.can supply xceiver not fo=
+und, using dummy regulator
+> [    0.304281] flexcan 5a8d0000.can (unnamed net_device) (uninitialized=
+): Could not enable RX FIFO, unsupported core
+> [    0.314640] flexcan 5a8d0000.can: registering netdev failed
+> [    0.320728] flexcan 5a8e0000.can: 5a8e0000.can supply xceiver not fo=
+und, using dummy regulator
+> [    0.320991] flexcan 5a8e0000.can (unnamed net_device) (uninitialized=
+): Could not enable RX FIFO, unsupported core
+> [    0.331360] flexcan 5a8e0000.can: registering netdev failed
+> [    0.337444] flexcan 5a8f0000.can: 5a8f0000.can supply xceiver not fo=
+und, using dummy regulator
+> [    0.337716] flexcan 5a8f0000.can (unnamed net_device) (uninitialized=
+): Could not enable RX FIFO, unsupported core
+> [    0.348117] flexcan 5a8f0000.can: registering netdev failed
 >=20
-> I do not see the need for more complex logic at the moment
-> because your device is only capable of generating one type of
-> error flags: the active error. If one day a device has the
-> ability to generate both the active and passive error flags, we
-> should then define how to send those (maybe by putting a flag in
-> the payload, similar to what is done on the RX path).
+> RX FIFO should be enabled after the FRZ/HALT are valid. But the current=
+
+> code set RX FIFO enable and FRZ/HALT at the same time.
 >=20
-> What do you think of the above?
+> Fixes: e955cead03117 ("CAN: Add Flexcan CAN controller driver")
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> ---
+>  drivers/net/can/flexcan.c | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 038fe1036df2..8ee9fa2f4161 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -1803,6 +1803,7 @@ static int register_flexcandev(struct net_device =
+*dev)
+>  {
+>  	struct flexcan_priv *priv =3D netdev_priv(dev);
+>  	struct flexcan_regs __iomem *regs =3D priv->regs;
+> +	unsigned int timeout =3D FLEXCAN_TIMEOUT_US / 10;
+>  	u32 reg, err;
+> =20
+>  	err =3D flexcan_clks_enable(priv);
+> @@ -1825,10 +1826,19 @@ static int register_flexcandev(struct net_devic=
+e *dev)
+>  	if (err)
+>  		goto out_chip_disable;
+> =20
+> -	/* set freeze, halt and activate FIFO, restrict register access */
+> +	/* set freeze, halt and polling the freeze ack */
+>  	reg =3D priv->read(&regs->mcr);
+> -	reg |=3D FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT |
+> -		FLEXCAN_MCR_FEN | FLEXCAN_MCR_SUPV;
+> +	reg |=3D FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT;
+> +	priv->write(reg, &regs->mcr);
+> +
+> +	while (timeout-- && !(priv->read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
+> +		udelay(100);
 
-Sounds good.
+Please make use of existing functions like flexcan_chip_freeze().
 
+regards,
 Marc
 
 --=20
@@ -182,23 +199,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---G5fAmR5yb43EYgTpSMr4D6zerLBmLK2XP--
+--JVEK9iahjexr1sPMUEBqE2gbES7F2KSXL--
 
---kAOiXBqTseF323Uv34S94X4fL4xl0AXLH
+--47JrNILbIXQhceVvVrqzX1VEv4bVYDfE3
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAZALIACgkQqclaivrt
-76ks0wf/aS7LSHrQZ2K19M3Y7GVRcO4mjZF8L1lNaUkvC7iXdTNCqDtb+jwD1Boo
-/FhO/+UwLTQ+70Ch+mRZ/2KWi+zTEqeBb0bjlFEKM2m2GFnI1dpeFRsc4+xzsKew
-3w404oJ3j8yexBbzSWqz1EQIkLN7cbQLyaucEXQyuj7zFeLJxDg9G2q5c0jwsYMK
-H4jRFnNcALR26fXWKAmNkNfVYYai+vwbdKTN7gxI811Q9EesfvRTACxbPOTOlV4H
-btDy8WB/jWlvJKbGqZlDlW/Xpde/nzSsbYq+IEhosnw29GyrNwOsUGhTmHI/moOe
-u2OIZtcoO/QwubJhVr0JsUmyXNMBtA==
-=1mzK
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAZATUACgkQqclaivrt
+76kpywf/RwPp56lRcS6vE8LrYr0yUHzvYyf1CNlKXucTey2W9L4Z+SOAwvTKWGIS
+zjAEv1WeozSq58FtYvOPB6svsWhx6bvhIMh4Rfs6cGhgUmTZq4vhM7x1nf+isHn6
+qrDKpcD2ZKp5w4FL4BlJkX4/M9wxz0Ys6z+Hdy/hTctpDLWoSQzOdOVnw9+Kmh6T
+8aq3GJXBKU8x5nSA3bupGcHT3mkz93tkJOu+AcDE0xUnUfdHF30PCF6b3yEZUDp1
+RVFE8hIVLmXSevhTVHFZ2wb0d4KUGYROGhyniyisBOip34I2i5iWbbOUNYqXganY
+JgvV12ipd0Vlw8fnAOrvvcJkZgmPOQ==
+=yIov
 -----END PGP SIGNATURE-----
 
---kAOiXBqTseF323Uv34S94X4fL4xl0AXLH--
+--47JrNILbIXQhceVvVrqzX1VEv4bVYDfE3--
