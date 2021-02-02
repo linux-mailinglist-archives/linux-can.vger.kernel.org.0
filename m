@@ -2,84 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A4630C406
-	for <lists+linux-can@lfdr.de>; Tue,  2 Feb 2021 16:39:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 015C330C802
+	for <lists+linux-can@lfdr.de>; Tue,  2 Feb 2021 18:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234971AbhBBPix (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Feb 2021 10:38:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235406AbhBBPgk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Feb 2021 10:36:40 -0500
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79992C06178A;
-        Tue,  2 Feb 2021 07:35:58 -0800 (PST)
-Received: by mail-ot1-x331.google.com with SMTP id 63so20224205oty.0;
-        Tue, 02 Feb 2021 07:35:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tdFhB73A7dTTwfblIiXQMJ3iM2WbUmdSjuebDAtwxg8=;
-        b=ULkz5rx865PO4hyqXiU0CvoD8nLy3Fmoa2CW0hS/qL+mhsAtbm87nKMtLQ8go3FOzR
-         1jase5lCYJL6I5AUhMiboSh26Wr+FrLhEIZ+UkP4+OzTuny6xy1N66GLnfGO9vQpf9Q/
-         O/8pEw2fi9OizE2Fn6lexn64BMRAE4bkCK9Txsog6+OdF22jhN2AX0w4ZxXff8+HoQst
-         5Q3yXzFwoINH4yswVtulRTP8Tprg/Tatvk74UfRdUQ36zIeviPVOR9X//QRi+VoeI4T3
-         zrYpmflVhNjWaY8WLlYZYmmznQYXSYxLy0O/c6BJHmXQ0iYIWzy5hbPSID/UGMmAJtUq
-         ntxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tdFhB73A7dTTwfblIiXQMJ3iM2WbUmdSjuebDAtwxg8=;
-        b=PoV4lqmweflc5d0CGB6wRyJJG+l8muna6tQb1n3QIkR2Ej41aPEMw9Vz8p9wX5MlTZ
-         WJCxA41DDRkhY3AryoBdMs5X7EugRNccK64XkdgfojzXYJ+OfJ8jEO6BJeyhmEMGAsOc
-         jz4hsjc3dVbxlignSCm5EbPEUdIxqpNwVFzaLPKq+yXn93uy68LIotEZ5Kjzf3RFz4t1
-         ZFyF+gwJR3g5yGEe+h7ze7K89Xydrw+00P7YF/csQenGay3Bb2c7E+DXa294/y8Yf32/
-         qbAFVxUIhVW+Uxs7qk5+phrt5Z6Bp1rmgRPCjHrMQXWPQOR/w8bl4ewqNpza+a1t2B7X
-         SSGQ==
-X-Gm-Message-State: AOAM532tX6HkVE1B2xjDKahiHJekIT6uSvUliucyQKDl7RVuV4jkj5yM
-        wyM/m0SDuXnc0OKR+EwR5Gr3BPfyfEg=
-X-Google-Smtp-Source: ABdhPJxl2ocQ9oxqTL9Ow+Bspd3uWxH3q5cJyCKAq3Fu3HpSxWpYV1R0dVCrJIHTNRAi0igD0tuZYQ==
-X-Received: by 2002:a05:6830:543:: with SMTP id l3mr16140902otb.241.1612280157872;
-        Tue, 02 Feb 2021 07:35:57 -0800 (PST)
-Received: from Davids-MacBook-Pro.local ([8.48.134.50])
-        by smtp.googlemail.com with ESMTPSA id v207sm5341685oif.0.2021.02.02.07.35.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Feb 2021 07:35:57 -0800 (PST)
+        id S237560AbhBBRiJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Feb 2021 12:38:09 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:31365 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237182AbhBBRey (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Feb 2021 12:34:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612287059;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+        From:Subject:Sender;
+        bh=d6c9JvZ+ULTnF0wVQPp9B2N8i/b5AB3i6LLcChZtVrg=;
+        b=ikN5N6c1pbjCxVBx0jlO26IOvUsfie7lCbYukAoGojCuRdLbAQKyj8aQHh6FbGJZeC
+        4Z8eTz2RwOF6XLd7gHfjEIy1kheTRkokj9mVTSgA8FO07zQe2yZTB7W2WXmVFw1hS/Hr
+        MZBvbJEPBOqG6Q83uBoMDr2oRTuTE2DXtMc1e63yWLCnRT5gDzsJLA+drBToZrkgE/64
+        DDutcNK8EyggjJU+AQX4OKRJJA5l6UNUPicqg+RjsvNIPln+m2CDwKDcgy/yrVTjJOa8
+        IuOZ6/w9BplVHO1Ug0lrR20U2yR17bSsS+WPYByZrG7fhrBhvj19lrDQxdq4GDH2ZAsl
+        Mnrw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJV8h6kk/I"
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+        by smtp.strato.de (RZmta 47.16.0 DYNA|AUTH)
+        with ESMTPSA id w076a1x12HUvI3B
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 2 Feb 2021 18:30:57 +0100 (CET)
 Subject: Re: [PATCH RESEND iproute2 5.11] iplink_can: add Classical CAN frame
  LEN8_DLC support
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+To:     David Ahern <dsahern@gmail.com>,
         Stephen Hemminger <stephen@networkplumber.org>
 Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
 References: <20210125104055.79882-1-socketcan@hartkopp.net>
  <b835a46c-f950-6c58-f50f-9b2f4fd66b46@gmail.com>
  <d8ba08c4-a1c2-78b8-1b09-36c522b07a8c@hartkopp.net>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <586c2310-17ee-328e-189c-f03aae1735e9@gmail.com>
-Date:   Tue, 2 Feb 2021 08:35:56 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:78.0)
- Gecko/20100101 Thunderbird/78.7.0
+ <586c2310-17ee-328e-189c-f03aae1735e9@gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <fe697032-88f2-c1f1-8afc-f4469a5f3bd5@hartkopp.net>
+Date:   Tue, 2 Feb 2021 18:30:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <d8ba08c4-a1c2-78b8-1b09-36c522b07a8c@hartkopp.net>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <586c2310-17ee-328e-189c-f03aae1735e9@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2/2/21 3:48 AM, Oliver Hartkopp wrote:
+
+
+On 02.02.21 16:35, David Ahern wrote:
+> On 2/2/21 3:48 AM, Oliver Hartkopp wrote:
+>>
+>> Are you sure this patch is correctly assigned to iproute2-next?
+>>
+>> IMO it has to be applied to iproute2 as the functionality is already in
+>> v5.11 which is in rc6 right now.
+>>
 > 
-> Are you sure this patch is correctly assigned to iproute2-next?
+> new features land in iproute2-next just as they do for the kernel with
+> net-next.
 > 
-> IMO it has to be applied to iproute2 as the functionality is already in
-> v5.11 which is in rc6 right now.
+> Patches adding support for kernel features should be sent in the same
+> development window if you want the iproute2 support to match kernel version.
 > 
 
-new features land in iproute2-next just as they do for the kernel with
-net-next.
+Oh, I followed the commits from iproute2 until the new include files 
+from (in this case) 5.11 pre rc1 had been updated (on 2020-12-24):
 
-Patches adding support for kernel features should be sent in the same
-development window if you want the iproute2 support to match kernel version.
+https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=2953235e61eb672bbdd2de84eb5b91c388f9a9b5
+
+I thought the uapi updates in iproute2 are *always* pulled from the 
+kernel and not from iprout2-next which was new to me.
+
+Do you expect patches for iproute2-next when the relevant changes become 
+available in linux-next then?
+
+Even though I did not know about iproute2-next the patch is needed for 
+the 5.11 kernel (as written in the subject).
+
+Regards,
+Oliver
+
