@@ -2,46 +2,54 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24AF430FDF4
-	for <lists+linux-can@lfdr.de>; Thu,  4 Feb 2021 21:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC1630FE70
+	for <lists+linux-can@lfdr.de>; Thu,  4 Feb 2021 21:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbhBDUTB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 4 Feb 2021 15:19:01 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.22]:30170 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239962AbhBDUTA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Feb 2021 15:19:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612469702;
+        id S238507AbhBDUdI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 4 Feb 2021 15:33:08 -0500
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:25954 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240222AbhBDUcr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Feb 2021 15:32:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612470590;
         s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
-        Subject:Sender;
-        bh=WruN6FW+unoQ+s5sIWUbCA39Xu0NlNViYDemMrOhlx4=;
-        b=nXElvc4x+nRaFiwtQyVqypt5qrqusyls1LdlUb3ZKLYSFPv6BiOEHpul7BjO6DRPPP
-        5f/SNhGdQeunxvBXT7mdhKgI3uP4TX/y8h72ihvL4F3umb8OzOAVlAQqKjFGPAkwvyXc
-        DwZdlAJpPalf4HdXT+/9lyCg1RD3EULtmY5y4JWVZbdKLfxm8vFVyu6am+evr1Fa+mTt
-        WDLOBaQD2M6p6s5o4/sQwsqrFJzPO9skvI/G3rUPPuMcETuulKUCClabKrwg1mLCIFHN
-        T/K0D8gIYr+SC5hjCIsh2/xvc0QtE21orP+ln4/IO+ooOAQ6Oww03dqU7yZ0cZ+UZUDf
-        OY9w==
+        h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+        From:Subject:Sender;
+        bh=t1aAvkRCETTrfGuIzFK7zRTpWkJziC4roy/wMf7REBc=;
+        b=F8P4diFRSwqhumz4wAYnUm6+G6VI9fHN2OckjxOmSyqbXGb1Xiby/ddtvlS+09kFlj
+        UQdirJ8etJRuH7eFDcayA5CQockuyEx8u8sIY1crnUIeuF+Dwu2hWkeqZM9T+gK77GiC
+        pa0IPTFVIZ1lZwaVtzbhF9CLwgzBeblSDkrtCfuthnoah7cNpH966N4SCvJQwqF1R8Dh
+        Iqyat7kaNpjf/jPkMGuD56+rNcEtxpILpcZWK7/VEfE6euIjKYVuLTOzWLGvWChezVCz
+        URwwL4nmOUi2PLIdnKRtL8ytaFM+scP830Y0NaZ7F+vu5fht3pvzXGQ55EomgGYr0hYx
+        Lbcg==
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJVch5kkU2"
 X-RZG-CLASS-ID: mo00
 Received: from [192.168.50.177]
         by smtp.strato.de (RZmta 47.17.0 DYNA|AUTH)
-        with ESMTPSA id U025c8x14KF109A
+        with ESMTPSA id U025c8x14KTm0AL
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Thu, 4 Feb 2021 21:15:01 +0100 (CET)
-Subject: Re: correct length of bcm message
-To:     Patrick Menschel <menschel.p@posteo.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <ff7c731b-6b98-79d7-b652-6ba2fe0afc3c@posteo.de>
- <c859e653-af2b-332c-f3d0-cf2525d1382a@posteo.de>
+        Thu, 4 Feb 2021 21:29:48 +0100 (CET)
+Subject: Re: [PATCH RESEND iproute2 5.11] iplink_can: add Classical CAN frame
+ LEN8_DLC support
+To:     David Ahern <dsahern@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>
+Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
+References: <20210125104055.79882-1-socketcan@hartkopp.net>
+ <b835a46c-f950-6c58-f50f-9b2f4fd66b46@gmail.com>
+ <d8ba08c4-a1c2-78b8-1b09-36c522b07a8c@hartkopp.net>
+ <586c2310-17ee-328e-189c-f03aae1735e9@gmail.com>
+ <fe697032-88f2-c1f1-8afc-f4469a5f3bd5@hartkopp.net>
+ <1bf605b4-70e5-e5f2-f076-45c9b52a5758@gmail.com>
+ <dccf261d-6cc3-f79a-8044-f0800c88108d@hartkopp.net>
+ <aeb9d16e-e101-e2e5-d136-b48333f03997@gmail.com>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <d73f45d8-da19-2d09-78ea-318faa98e7aa@hartkopp.net>
-Date:   Thu, 4 Feb 2021 21:14:56 +0100
+Message-ID: <2e59f04e-ca7e-1a23-3554-3760c665d635@hartkopp.net>
+Date:   Thu, 4 Feb 2021 21:29:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <c859e653-af2b-332c-f3d0-cf2525d1382a@posteo.de>
+In-Reply-To: <aeb9d16e-e101-e2e5-d136-b48333f03997@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -49,65 +57,21 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Patrick,
 
-On 04.02.21 18:47, Patrick Menschel wrote:
-> Am 04.02.21 um 16:38 schrieb Patrick Menschel:
->> Hi,
->>
->> is anyone writing to BCMSocket on the Raspberry Pi from Python3 ?
->>
->> I'm digging through an endianess / alignment issue on armhf platform.
->>
->> My testcode [1] that I wrote years ago on works on X86_64 platform but
->> fails on armhf platform with OSERROR 22 "invalid argument".
-> 
-> Some more details.
-> 
-> The length on X86_64 results in 72 bytes which are consumed by bcm.
-> 
-> On armhf it results in 52 bytes which cause OSError: [Errno 22] Invalid
-> argument.
-> 
->>
->> Then I started concatenating bytes by hand instead of using ctypes.
->>
->> What I came around is that frames[0] is somehow expected to be 8 bytes
->> length although it should be 16 bytes.
 
-struct can_frames[0] is used in this struct definition to point out, 
-that this struct is followed by a number (0..257) struct can_frame's.
+On 04.02.21 04:15, David Ahern wrote:
+> On 2/3/21 12:04 PM, Oliver Hartkopp wrote:
+>> My only fault was, that I did not send the patch for iproute2-next at
+>> the time when the len8_dlc patches were in net-next, right?
+> 
+> yes
+> 
 
-This creates a padding at the end of struct bcm_head, so that the struct 
-can_frame (which is always 64 bit aligned) can be directly concatenated.
+Now that I know about iproute2-next, I will do better next time.
 
-Regards,
+Can you please apply this simple patch intended for Linux 5.11 to the 
+iproute2 tree this time?
+
+Thanks,
 Oliver
 
->>
->> struct bcm_msg_head {
->> ...
->>          struct can_frame frames[0];
->> };
->>
->> I ended up inserting padding 8 bytes instead of frames[0] value and that
->> actually works.
-> 
-> I have to amend that, it's 4 padding bytes.
-> 
-> struct.pack("=IIIllllII4xIB3x8s",opcode,flags,count,ival1_sec,ival1_usec,ival2_sec,ival2_usec,can_id,nframes,can_id,can_dlc,data)
->                         ^^ padding bytes
-> 
-> Sending the resulting 56bytes to bcmsocket gets me a cyclic message on
-> armhf.
-> 
->>
->> That makes my overall BCMHead 40 bytes and the complete bcm message
->> including the can frame 56bytes.
->>
->> [1] https://github.com/menschel/pysocketcan
->>
-> 
-> Thanks,
-> Patrick
-> 
