@@ -2,119 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4220310719
-	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 09:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981C9310759
+	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 10:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbhBEIxH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 Feb 2021 03:53:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbhBEIxG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 5 Feb 2021 03:53:06 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3428AC06178A
-        for <linux-can@vger.kernel.org>; Fri,  5 Feb 2021 00:52:26 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l7wqh-0006EF-6p; Fri, 05 Feb 2021 09:52:19 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:8f9f:ac65:660b:ab5f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F246C5D72D6;
-        Fri,  5 Feb 2021 08:52:15 +0000 (UTC)
-Date:   Fri, 5 Feb 2021 09:52:15 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Xulin Sun <xulin.sun@windriver.com>
-Cc:     wg@grandegger.com, dmurphy@ti.com, sriram.dash@samsung.com,
-        kuba@kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xulinsun@gmail.com
-Subject: Re: [PATCH 2/2] can: m_can: m_can_class_allocate_dev(): remove
- impossible error return judgment
-Message-ID: <20210205085215.sgsvtys5z4gm3ict@hardanger.blackshift.org>
-References: <20210205072559.13241-1-xulin.sun@windriver.com>
- <20210205072559.13241-2-xulin.sun@windriver.com>
- <20210205081911.4xvabbzdtkvkpplq@hardanger.blackshift.org>
- <9cae961a-881d-8678-6ec3-0fd00c74c8ad@windriver.com>
+        id S229727AbhBEJJf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 5 Feb 2021 04:09:35 -0500
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.160]:32714 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229669AbhBEJHQ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 5 Feb 2021 04:07:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612515735;
+        s=strato-dkim-0002; d=hartkopp.net;
+        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
+        Subject:Sender;
+        bh=+2O5Spxqd/9qgoTVNeF7y6the3JZSkF5BJhY46QGDY4=;
+        b=UdgXd439oXveSk7IaUqLkAQTfylOHXpJ36dpDPTpqq/s6RZlVKbLoN6d4trt2FXVBd
+        YtZ8JXDOCaqiXZHtIseIKvxxy7vhLbI6qc7zMK49SAtoJWvTYtYktKuSGmmEejHhtwp2
+        RNTbJGDaPs4jIBMUZA1wCfXsKBcGyBSPlxSRKKPjjat+eBfJLrbsLtSDML776D5CW3PL
+        HkjTyuQec+SRDoWdcJw0Cusn1nj8cxWqr1Yi0MXYRWGJKaN+grwP/2vjmjFbmZXo7it3
+        DclmvK2L8F02w2wHrIuetZ14SmXwLFXnLHaxGOfbzV3JJzuG9ZuIqqOvYQ4+cFq3n8tX
+        vXEw==
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOMtqpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+        by smtp.strato.de (RZmta 47.17.0 DYNA|AUTH)
+        with ESMTPSA id y063a2x1591x0RB
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 5 Feb 2021 10:01:59 +0100 (CET)
+Subject: Re: correct length of bcm message
+To:     Patrick Menschel <menschel.p@posteo.de>,
+        linux-can <linux-can@vger.kernel.org>
+References: <ff7c731b-6b98-79d7-b652-6ba2fe0afc3c@posteo.de>
+ <c859e653-af2b-332c-f3d0-cf2525d1382a@posteo.de>
+ <d73f45d8-da19-2d09-78ea-318faa98e7aa@hartkopp.net>
+ <b987ec8d-d1a8-34e3-7c8b-4ce0bbd4b30f@posteo.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <7f9ffbe7-8926-3874-9261-03e26f711b8d@hartkopp.net>
+Date:   Fri, 5 Feb 2021 10:01:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5ixmah6qra6ivpgj"
-Content-Disposition: inline
-In-Reply-To: <9cae961a-881d-8678-6ec3-0fd00c74c8ad@windriver.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <b987ec8d-d1a8-34e3-7c8b-4ce0bbd4b30f@posteo.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---5ixmah6qra6ivpgj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 05.02.2021 16:46:16, Xulin Sun wrote:
-> On 2021/2/5 =E4=B8=8B=E5=8D=884:19, Marc Kleine-Budde wrote:
-> > On 05.02.2021 15:25:59, Xulin Sun wrote:
-> > > If the previous can_net device has been successfully allocated, its
-> > > private data structure is impossible to be empty, remove this redunda=
-nt
-> > > error return judgment. Otherwise, memory leaks for alloc_candev() will
-> > > be triggered.
-> > Your analysis is correct, the netdev_priv() will never fail. But how
-> > will this trigger a mem leak on alloc_candev()? I've removed that
->=20
-> The previous code judges the netdev_priv is empty, and then goto out. The
-> correct approach should add free_candev(net_dev) before goto.
->=20
-> The code Like:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 class_dev =3D netdev_priv(net_=
-dev);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!class_dev) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 dev_err(dev, "Failed to init netdev cdevate");
-> +=C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 free_candev(net_dev);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 goto out;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->=20
-> Otherwise, memory leaks for alloc_candev() will be triggered.
+On 05.02.21 09:27, Patrick Menschel wrote:
 
-No - as you said in the original patch description. The return value
-of netdev_priv() cannot be NULL, as net_dev is not NULL.
+> Am 04.02.21 um 21:14 schrieb Oliver Hartkopp:
+>> struct can_frames[0] is used in this struct definition to point out,
+>> that this struct is followed by a number (0..257) struct can_frame's.
+>>
+>> This creates a padding at the end of struct bcm_head, so that the struct
+>> can_frame (which is always 64 bit aligned) can be directly concatenated.
+> 
+> so this behavior is caused by this alignment
+> 
+> struct can_frame {
+>      ...
+>      __u8    data[8] __attribute__((aligned(8)));
+> }
+> 
+> and walks back upwards to
+> 
+> nframes (end at 36 bytes)
+> ...
+> < 4 bytes gap >
+> ...
+> frames (start at 40 bytes)
+> 
+> Should the alignment not be defined on structure instead?
+> 
+> struct can_frame __attribute__((aligned(8))) {
+> ...
+> }
 
-> Now directly remove the impossible error return judgment to resolve
-> the above possible issue.
+Hm, the original idea was to be able to access the data[] with a 64 bit 
+aligned access, e.g. to initialize the content by a single assignment.
 
-Marc
+The can_id and the other stuff (len, flags, padding, whatever) before 
+the data[] section is intentionally also 64 bit long.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+So it should be no difference in functionality.
 
---5ixmah6qra6ivpgj
-Content-Type: application/pgp-signature; name="signature.asc"
+> Interesting to know, apparently native alignment is 8 on X86_64 linux
+> and 4 on armhf linux. That's why it worked on X86_64.
+> 
+> Regarding python ctypes module, setting _pack_=8 has no remedy effect on
+> armhf platform, so I'll move to struct module.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAdBzwACgkQqclaivrt
-76m8Wwf/XrNhbJ9LzHFhjVk8mBwZETNanYtNEHxJ7lZWEjMqjblzlefUvetmmfUA
-ft2uXaKHgJK5iWQiE8e8RFUzgKO/8Ff/whcfw7/YRtdQsGYQCIDhZ5L8xrIN1fr+
-1MocCKg08DuPBTa2hdRLn2zz3M1hOILVd6EcBolFHjWZ2obXuT6gT34AZ4tOXRwD
-07w31mfqQ6tYwBCv8SmhiZ8TSTDyGajv+Kqb2lhatTEMT5QfZC40OO5meCJhSyDi
-LcRmnitxcpbxlZuxP1ymadM6Nb7/urHYW/YCIhmYAJE1Jca4EtJYjb2TQ84RGxnJ
-r/9unNZqAMepkLnGB+N7aXSGx9kAyg==
-=LRzj
------END PGP SIGNATURE-----
-
---5ixmah6qra6ivpgj--
+Regards,
+Oliver
