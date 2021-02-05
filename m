@@ -2,148 +2,159 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 145453106A8
-	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 09:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89003106FB
+	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 09:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbhBEI3C (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 Feb 2021 03:29:02 -0500
-Received: from mout01.posteo.de ([185.67.36.65]:42788 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229466AbhBEI3A (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 5 Feb 2021 03:29:00 -0500
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id A6A6E160062
-        for <linux-can@vger.kernel.org>; Fri,  5 Feb 2021 09:28:00 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1612513680; bh=bDkZwvEzE17SY8h+/Zt57zumj6mn+P5XLBJv9lN8A+k=;
-        h=To:From:Autocrypt:Subject:Date:From;
-        b=Gx9iLbZaCtYtxnI/UOMZHfmBKC8ZUahfM4eyiXfqm6ylNvXjzri/28w7XxqwrGaVJ
-         G1EyLCNwHj2CYT/2Vz3rXah30a5BgYMROySWIAov/CN5QVz1GX5mRM/qnITj1/lyYy
-         LnRn03hOqLzGVBTryfZKFCSUWO/TkEmDW9/CsUx0zEemYreHP4katZ5pk6ZCjfwDbp
-         VWGru/kdsnAMDjnI47sdjg8Q6acyycWkgbmkTqo8U8rZ/2EBVCTPP1nte8/aUdpanQ
-         wiJ3nD+PXCyvB26aNzVyVI88vjyueqLV74/lp6/cVotO2dxsrcewu73iZPuqXjBv/y
-         RBlikXWXgPTCg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4DX7pR686Dz6tmF;
-        Fri,  5 Feb 2021 09:27:59 +0100 (CET)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
-References: <ff7c731b-6b98-79d7-b652-6ba2fe0afc3c@posteo.de>
- <c859e653-af2b-332c-f3d0-cf2525d1382a@posteo.de>
- <d73f45d8-da19-2d09-78ea-318faa98e7aa@hartkopp.net>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: correct length of bcm message
-Message-ID: <b987ec8d-d1a8-34e3-7c8b-4ce0bbd4b30f@posteo.de>
-Date:   Fri, 5 Feb 2021 09:27:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <d73f45d8-da19-2d09-78ea-318faa98e7aa@hartkopp.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S229539AbhBEIrN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 5 Feb 2021 03:47:13 -0500
+Received: from mail-co1nam11on2051.outbound.protection.outlook.com ([40.107.220.51]:6752
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229500AbhBEIrM (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 5 Feb 2021 03:47:12 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=czWrJET4FGyOE++y621eTdbkVeezUulCgcsOaBliFJztKEmW2IIqqXaDQSk1mPUN2pA+wdcUMqoVD9glB0x9qk4AbgCIV1TckjGEosoldaLDfhGARqN86wure0YZY9QXuIyWKJEF1D1y+K3aLgEvEG3mkbR/iJ8zd9UmKg2Efdk9r+Xr7FB4X0wGLUUfTT+x3wd/57bQt7eEAyHtDxQ/bxDMlBZpamOu1hEStTveqOavBfah22Zc0iVU7GuK3ZCIaVav9WzYvPz955WY0q7pQII3u23tq1R2Qu5h3TZ4xu6Drlysf3usTlzL3+SmrPZCF17m9vMYRaOlCV2HW6lZqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EP6pq4CItDZtzXTFWszUmDr0o3zIPFdiXlIyEMlHxlM=;
+ b=JB5UeUYgfa2tdQO1nlTSdr2TKtOe4+2aDN3Y1AplWXuADBn6v529B2ohJumzU/VKcqtQv3xyC7EMEyPHET4PEcxWJ2jCQl2+pfTIkoogzpIfNZt0v9/fTsrQni+2RueIc55QlNRza/FkA7opob9lTicVVMU8dCn+oCh745pwANcNOsZQumdVjdmEf/Z7ALx5EmLBgBH8Q/WCYmvTfj4N6wTSPdwk+N2fK5dE1JrBDrulZsAS2MCr4NO9hziSGwIsFHQOYrVEIxmxyv+iIvlg9pffqDGisJGoPPmcBQDc/o3IZMNRhFShXEA/Xc8N3pxXOhtccaxyhAwwCUB+iNqUEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EP6pq4CItDZtzXTFWszUmDr0o3zIPFdiXlIyEMlHxlM=;
+ b=OA99V7VnWPrc0e9GPqLV0s+aZxVZafO6WktoHggwHgZVAJ6D09Xb6cHdXq+d1dmp4DtStzW3xpvGElFOvvR+657PG9hiy4uLxkU+v7GGMIcr5xpU2KZDYv0ph6jLAmz/TJ8JRFDNX0gW/3lw1yRI/TBsh5qdyEfKLmAhHxiEY/0=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=windriver.com;
+Received: from DM5PR11MB1898.namprd11.prod.outlook.com (2603:10b6:3:114::10)
+ by DM6PR11MB3689.namprd11.prod.outlook.com (2603:10b6:5:143::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17; Fri, 5 Feb
+ 2021 08:46:24 +0000
+Received: from DM5PR11MB1898.namprd11.prod.outlook.com
+ ([fe80::d4c5:af6f:ddff:a34d]) by DM5PR11MB1898.namprd11.prod.outlook.com
+ ([fe80::d4c5:af6f:ddff:a34d%8]) with mapi id 15.20.3825.024; Fri, 5 Feb 2021
+ 08:46:24 +0000
+Subject: Re: [PATCH 2/2] can: m_can: m_can_class_allocate_dev(): remove
+ impossible error return judgment
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     wg@grandegger.com, dmurphy@ti.com, sriram.dash@samsung.com,
+        kuba@kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xulinsun@gmail.com
+References: <20210205072559.13241-1-xulin.sun@windriver.com>
+ <20210205072559.13241-2-xulin.sun@windriver.com>
+ <20210205081911.4xvabbzdtkvkpplq@hardanger.blackshift.org>
+From:   Xulin Sun <xulin.sun@windriver.com>
+Message-ID: <9cae961a-881d-8678-6ec3-0fd00c74c8ad@windriver.com>
+Date:   Fri, 5 Feb 2021 16:46:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+In-Reply-To: <20210205081911.4xvabbzdtkvkpplq@hardanger.blackshift.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [60.247.85.82]
+X-ClientProxiedBy: HK2PR06CA0003.apcprd06.prod.outlook.com
+ (2603:1096:202:2e::15) To DM5PR11MB1898.namprd11.prod.outlook.com
+ (2603:10b6:3:114::10)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [128.224.162.221] (60.247.85.82) by HK2PR06CA0003.apcprd06.prod.outlook.com (2603:1096:202:2e::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.19 via Frontend Transport; Fri, 5 Feb 2021 08:46:21 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: cd1eb4a9-679f-4226-286f-08d8c9b284f5
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3689:
+X-Microsoft-Antispam-PRVS: <DM6PR11MB36891CB4D8C2855777FB369DFBB29@DM6PR11MB3689.namprd11.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Zc7B/kzDKHMWzC4/lugK16v7Rl58iWNG72Sqls6NwnRokhDW4MuVC2+qKzlx2tcZzfoOyD8LVE8/9HRatLnGb/jrGFAmmO5chDzNRaaDDl+zvpxFhcJW9+cExx804ETibuBk85kQWJ+lznIhSGPv6zcYDap5wxBOjU8n+yqoDZoZMCqvuba93tHrLyUhPVz+hJr5CCaMO3Tv+o5yCgr0j1rFCiQH1vJeuf5rzsL2NifieNxtjBi3sHFxXHDvrfIVNSvMzhuvL7iGXBMkL258zzgYSzjJ2Sy1zGsUTOO+0HSxiiUXuH9jpQCcNKof6Mj9coDhFX4LQY/InGvzR4pOjVCERUKUShcr36dk/3/deixiLZwNFfCdzLqLhFv4YT+SN+OMBOXoA5ulO+IKK9g2RuJLI1PYwBh2B/03oO26DXbbA/NQmapW30WgeBTSXWAI8jDKQOEUCiwcWvK+zfGb2RgK3Ggk5mcmhAwEubG7KQ0JEPMb8/Q5+Acj/86zJNSk9bV14FPbhY1jxxAijwPPLoxUWuZiCV0cn4whem7kFT9Eeq7+5duxn+jXxexGiODs4DM62tNC4IRgwsmbKWHE2+ITw9Rkr0/KcM2CdSNeVQUiMHjMeMX0wRwW4cb+D1dP
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1898.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(396003)(366004)(39850400004)(136003)(16576012)(66476007)(8676002)(66556008)(2906002)(6916009)(8936002)(6666004)(316002)(5660300002)(86362001)(26005)(186003)(52116002)(66946007)(6486002)(16526019)(956004)(2616005)(4326008)(44832011)(36756003)(478600001)(31696002)(7416002)(53546011)(6706004)(31686004)(78286007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?cGJGQlIrUUFualZyY0wyZmpkNHpkeHhFa2dtMVpQNDFkNkczemcwSTltTkxn?=
+ =?utf-8?B?ZUVVZlBpK0s3RVBQU1dUa3owaFkxcXlQVE05M3I5eDNwbXlCUnR2aTU3OWZ5?=
+ =?utf-8?B?UHVIMTFNUzcwUHBzbVhyVHp5T0JmU2daS3Q0MHpSNXJ5ekJMNFRzWkJMWnUx?=
+ =?utf-8?B?Qk03RWN3WUxmZDVRU1luQytleGhxU2paVVgrbzRvdDQxM2NCUWNsek1zV1Jw?=
+ =?utf-8?B?V3lvYmYyekJFRXFpS3hpMWI1TDhacWVCRmR1d1VDMjByZU1ETnEwMzF0WEFW?=
+ =?utf-8?B?QThjVVlNMWxNVU8ySFNLc1RxWUlRWUsvTEVCQU1pZWZaRFcwdkJ1OGZrMUk2?=
+ =?utf-8?B?VG9qM0p2VDBEaHBsTy9BY0p1ZzA1bmc3ZWNydEo4TFRzNUdtek5BNWpDVXBa?=
+ =?utf-8?B?Tk9CbHZheE1tWWpVNjAxSHFKZ0licDJwSUc1eEljV0VvQUVicndJMUNKWUIw?=
+ =?utf-8?B?SWNsRkd3cEJYWFNiVXRnMEtPeCt3RFY3dVVWTmpuKzIxS3UzVWpCbXBST0Vk?=
+ =?utf-8?B?cG5lZmR5ME9udkpaMFZ0cEt1SXorWlc1SmJRS05EMlYrTW9lQWNvclBlSGZ5?=
+ =?utf-8?B?ZlYva3JHLzYycjFRQy84bEtlZjB4c1Y3ajEza2Rnbk45NmJieEpuZDhTczR0?=
+ =?utf-8?B?T1liTVBpV0pRN3RBbldNWjdEdjNCQlJSMXFVZXQvSW9QOHpBVnZyWHhkVUxY?=
+ =?utf-8?B?REwrdTJmUjlGU1dMYXlWd3ZYQmRYSElrM1B1MUs4WmM3OGptdFNOaURLNEE3?=
+ =?utf-8?B?M0Y2WWNCOW0vT2V2ODRvQkV5K0Q3UmJuUWJqRkhhekdXNWdmMVhOeE0rU1ZL?=
+ =?utf-8?B?clZBZDlBWTlSODJ3Vm1hbktnajZZb0VLQi9aelZhVVg2VkdBbjIwejNzbnRa?=
+ =?utf-8?B?Q1Nodkk5ZDBEamd6OWNpMURvaFhLOUpTNFRsM2NUYlBOUWhOWFBZK2ZPU2RP?=
+ =?utf-8?B?b2RKeVlpQlZnc2hHS015UFptdGc5T0VVQ3pYMGNaS1l2SXpqYVRhQS8wNlhk?=
+ =?utf-8?B?d3N0NlFsODhsaWxNVnNYZXlrYlM3MHU5cCtKWWhDclppeU85VlBrQzdMeStB?=
+ =?utf-8?B?eHU4ZzFMRGZOTUdjaHVWSWs4K216OGh6b2pLTnRmQnBGQmQ4Q3VpVTNjamh0?=
+ =?utf-8?B?c3JPdG0weUFYdkJGZys4YksxdkJqRzc3Z21jZHp2Y0MzaHc1RDdyMjVnWDE4?=
+ =?utf-8?B?UzkxQ05DR0dwc29jUFBFRjNVZkNiN3ZDRUcrbjJYa2pIc1l3OVIvU1hyVktk?=
+ =?utf-8?B?TmE1MHhHclBWK3V3ZHVIekVHWkZRZDV2NXY5TXVoUDdwZFRpTEtzZ3o5bHJi?=
+ =?utf-8?B?WkRpbTI2Rktxa0FEWlRtSVo4SktqdnlyWko1RnNZaFJyNUZNTjJucHFZNUJW?=
+ =?utf-8?B?ZGVYY0RaOU5ydFpTVHc2Um5nWm1jTjgrWkpFRC84QzQ2TVJTQVFpdVgzODJ6?=
+ =?utf-8?B?bGdwanYrd0loNHdoSithek9leE91emZ0MTYxa0FnV1d6SG9kSTJsT1ZlZUth?=
+ =?utf-8?B?SmIwdEZwdTlVY3FUSytuUWVtTlFCYjV2RDhOdTRuR1hjQlZUZjB6aFM1STVU?=
+ =?utf-8?B?K1RPakpDUDhiZlFnM09MeTBpK1pkQnl4ZmZ4R0hLc2Z5Sjd1c1k0Zno3UjRs?=
+ =?utf-8?B?ejRZTXpaTzYvVzRkRTJFTHoyRWpKaW9RajRRL1VmYmlXQmtWZFdxRnhEWkYv?=
+ =?utf-8?B?eldRZ3o3QjN3V1FJclRacGs0N1o3cW1lYVFrbXB4YlJpemdWOXRaTnBYamhw?=
+ =?utf-8?Q?eDy6OD2DWwjF5Hp7rHRqH9SyWtVSHkciPsa16M7?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd1eb4a9-679f-4226-286f-08d8c9b284f5
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1898.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2021 08:46:24.7185
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Hc+9YkPUKsP38+Cz6U6v/hfGbtY6BI0hgho2oR0T+cV4WYP2FUnyk+5rhFkZYYA7vGX4t6dR4+vBxrKJu6ptVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3689
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thanks Oliver,
+On 2021/2/5 下午4:19, Marc Kleine-Budde wrote:
+> On 05.02.2021 15:25:59, Xulin Sun wrote:
+>> If the previous can_net device has been successfully allocated, its
+>> private data structure is impossible to be empty, remove this redundant
+>> error return judgment. Otherwise, memory leaks for alloc_candev() will
+>> be triggered.
+> Your analysis is correct, the netdev_priv() will never fail. But how
+> will this trigger a mem leak on alloc_candev()? I've removed that
 
-Am 04.02.21 um 21:14 schrieb Oliver Hartkopp:
-> struct can_frames[0] is used in this struct definition to point out,
-> that this struct is followed by a number (0..257) struct can_frame's.
-> 
-> This creates a padding at the end of struct bcm_head, so that the struct
-> can_frame (which is always 64 bit aligned) can be directly concatenated.
+Hi Marc,
 
-so this behavior is caused by this alignment
+The previous code judges the netdev_priv is empty, and then goto out. 
+The correct approach should add free_candev(net_dev) before goto.
 
-struct can_frame {
-    ...
-    __u8    data[8] __attribute__((aligned(8)));
-}
+The code Like:
 
-and walks back upwards to
+         class_dev = netdev_priv(net_dev);
+         if (!class_dev) {
+                 dev_err(dev, "Failed to init netdev cdevate");
++               free_candev(net_dev);
+                 goto out;
+         }
 
-nframes (end at 36 bytes)
-...
-< 4 bytes gap >
-...
-frames (start at 40 bytes)
+Otherwise, memory leaks for alloc_candev() will be triggered.
 
-Should the alignment not be defined on structure instead?
+Now directly remove the impossible error return judgment to resolve the above possible issue.
 
-struct can_frame __attribute__((aligned(8))) {
-...
-}
+Thanks
 
+Xulin
 
-Interesting to know, apparently native alignment is 8 on X86_64 linux
-and 4 on armhf linux. That's why it worked on X86_64.
-
-Regarding python ctypes module, setting _pack_=8 has no remedy effect on
-armhf platform, so I'll move to struct module.
-
-Thanks again.
-
-Regards,
-Patrick
+> statement. I'll add it back, if I've missed something.
+>
+>> Signed-off-by: Xulin Sun <xulin.sun@windriver.com>
+> Applied to linux-can-next/testing.
+>
+> Thanks,
+> Marc
+>
