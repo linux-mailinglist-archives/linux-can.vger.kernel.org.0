@@ -2,138 +2,124 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E053105D4
-	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 08:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEE331063D
+	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 09:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbhBEH1y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 Feb 2021 02:27:54 -0500
-Received: from mail-mw2nam12on2085.outbound.protection.outlook.com ([40.107.244.85]:50849
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231509AbhBEH1s (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 5 Feb 2021 02:27:48 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l8ttYU/OVqQJVvjtbl3WWnKFry3DWxTmKILaXIH92Bz6lO8VLT5qljBzL4RMUDB2DrcA6ZYienXPR7YbzKl082xAvmAVNuX5uPTNqpR6RaGR6ijTMHr9Ys25s4Srb+NRQvLHXucDoSaAA+wVAj2uelyWFjaLOaGMcFHdzmyvagSI8x4N4/Zacuqd/sefZfooXU6JLIVUVz5ahFubkZniawmEa4aM6B+3ahKOK72moDkrZjTcT1Nf1SRxXf/DKBqRC+FiOWbj/o/N7WOtOYC8rwcxX2/tZQ9hqumPV9aqQ1yKQ1SMsEXZVsput/Nw3NKy6/tP3Eefsr/yWCrFI1EyCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sHId1mWeBQb6P0X8xTLdnyY7yxEgLjNp/8E6auNgBfU=;
- b=ZZRXvf787JGqLUkU5GRGfYfiY5IrFijRFvkqRt6j4iOkRwAVPlo2H9TItug58dgb9JnCG+I/7neV4QXo8SfFkgwtI/UURKBWjE9+W5A9YedYvE7yuf268tcsNgfsCgofM1n1tQyfVj7SzSlyN/o2zV0ZmEaltUVLcWnYQVTpRUuP2wtEREQ+XqjA1oFCjlV/C/q+ChxibjrUmKHT5I2gozG4rYaBB40ul6M58CACDMXFlzBD31R7plZID0TkHxzr6XSO0lFPBll3YfbBMr0WRUSkYevzu2pi2cXV+srXfS7dW0a5za4VqINtg1klklx34Md/zID5eS/ikh16/5HA9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sHId1mWeBQb6P0X8xTLdnyY7yxEgLjNp/8E6auNgBfU=;
- b=VV/az/h5fHofZsO6gS4cWcHnvViUiVlX4aJY6Vfivvqb/ejwgS4PA89e6RcEqAbUovm7+tSWe3Olz5pKRRpwXUK2UkTK5ECSbMC/7803EI4G1t4GlWHrziSDJn3vXHW9F6WZd7R8cPUfKkwdmwWl10Mh/2m8+H4JZl6ZqoH8tuo=
-Authentication-Results: grandegger.com; dkim=none (message not signed)
- header.d=none;grandegger.com; dmarc=none action=none
- header.from=windriver.com;
-Received: from DM5PR11MB1898.namprd11.prod.outlook.com (2603:10b6:3:114::10)
- by DM6PR11MB3627.namprd11.prod.outlook.com (2603:10b6:5:13b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.20; Fri, 5 Feb
- 2021 07:26:29 +0000
-Received: from DM5PR11MB1898.namprd11.prod.outlook.com
- ([fe80::d4c5:af6f:ddff:a34d]) by DM5PR11MB1898.namprd11.prod.outlook.com
- ([fe80::d4c5:af6f:ddff:a34d%8]) with mapi id 15.20.3825.024; Fri, 5 Feb 2021
- 07:26:29 +0000
-From:   Xulin Sun <xulin.sun@windriver.com>
-To:     wg@grandegger.com, mkl@pengutronix.de
-Cc:     dmurphy@ti.com, sriram.dash@samsung.com, kuba@kernel.org,
-        davem@davemloft.net, linux-can@vger.kernel.org,
+        id S231300AbhBEIGD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 5 Feb 2021 03:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231233AbhBEIGA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 5 Feb 2021 03:06:00 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16A1C06178C
+        for <linux-can@vger.kernel.org>; Fri,  5 Feb 2021 00:05:19 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1l7w72-0006id-K0; Fri, 05 Feb 2021 09:05:08 +0100
+Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:8f9f:ac65:660b:ab5f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 33B765D725F;
+        Fri,  5 Feb 2021 08:05:04 +0000 (UTC)
+Date:   Fri, 5 Feb 2021 09:05:02 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Xulin Sun <xulin.sun@windriver.com>
+Cc:     wg@grandegger.com, dmurphy@ti.com, sriram.dash@samsung.com,
+        kuba@kernel.org, davem@davemloft.net, linux-can@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xulin.sun@windriver.com, xulinsun@gmail.com
-Subject: [PATCH 2/2] can: m_can: m_can_class_allocate_dev(): remove impossible error return judgment
-Date:   Fri,  5 Feb 2021 15:25:59 +0800
-Message-Id: <20210205072559.13241-2-xulin.sun@windriver.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210205072559.13241-1-xulin.sun@windriver.com>
+        xulinsun@gmail.com
+Subject: Re: [PATCH 1/2] can: m_can: m_can_plat_probe(): free can_net device
+ in case probe fails
+Message-ID: <20210205080502.4chauzh3rey6bpvu@hardanger.blackshift.org>
 References: <20210205072559.13241-1-xulin.sun@windriver.com>
-Content-Type: text/plain
-X-Originating-IP: [60.247.85.82]
-X-ClientProxiedBy: HK0PR03CA0116.apcprd03.prod.outlook.com
- (2603:1096:203:b0::32) To DM5PR11MB1898.namprd11.prod.outlook.com
- (2603:10b6:3:114::10)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from pek-lpggp4.wrs.com (60.247.85.82) by HK0PR03CA0116.apcprd03.prod.outlook.com (2603:1096:203:b0::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3825.23 via Frontend Transport; Fri, 5 Feb 2021 07:26:25 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f0d9db16-ca03-4a23-a16f-08d8c9a75ad7
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3627:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM6PR11MB3627505DAE95E4EA4D8121D5FBB29@DM6PR11MB3627.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dYJ6GxOPh0+SrjZUR7x6d6xrA86QVHRzAU5XAZ72VbE83NMRuiqQKgRiCRVTg7mqp5Q9KWfCN524ckJzcUDJ6w2Md/juC4imYb50eC2IDPPl3Br/w8LXCM3JIvKnpXxCvqZN/9qF/BIUslURHiicbDlWDUeM4t6+Abb2cRLLPoL1OjXOSkUhQKY6EgZ5CHBSbW7w4G6JT8gHL8uBVYzRfp1Yc0Jfzofug2yOpw9kya8ipLhP7m7MgYxoy5dT9Cx4CvXpGtml0WnukwhMIqsL25LFgZ/ckVnhn7wLpRvmA4wVRuWn7UG6cN7iNdxCUcl5q5XipW8VNEdXSvlAJsgDwQXwjBvNlpD9pw8/+O877sAFUTVG2IH9vKKYyyfrfZ4gwJwtuX73XCsowqj+eu+/nCcjSZRmskQAJ/IR47rCM0Hets2C6u3YkG3UgAZcOEizwuUnyFyG2VSTIgIsBZPCIHPK0kHF5bPZzSm6sraO/CZVA5q1ba4ZrlLoF4SN8YjalwLA2cQnOvVKweNKCCK4LQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1898.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(366004)(376002)(39850400004)(396003)(316002)(956004)(2616005)(16526019)(186003)(8676002)(5660300002)(66946007)(66556008)(66476007)(6666004)(52116002)(44832011)(7416002)(36756003)(83380400001)(6486002)(2906002)(4326008)(8936002)(6512007)(4744005)(86362001)(6506007)(478600001)(1076003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?EExT9NnISx8a+iAbVWYI6b/F8Vm5+SXAstc50VD1EEJFg3Pp/cCIzh/UzEMy?=
- =?us-ascii?Q?R1C3IvD+/PNEXz0Kd31PjUz43DFim/U/fL9Ijz6LRkZZrWe4Ryc5kHALOJNc?=
- =?us-ascii?Q?nR6aCWt1oZzybWh3ZNuw6lX0MkgqDWvT8UwqE84Qx/sxHk0mDXjTvrXrnssj?=
- =?us-ascii?Q?BZEjZvW6luKjs59FH+DpTyEo9/zGNFdHkQMnhE2wi+Gtg8B2be2Jsiq3E60E?=
- =?us-ascii?Q?dMmMUhTlFnRYTlmOq4cJIanGE0Q0U8REqgvtLs0wGRurGHuJQr4cJTS/1MDI?=
- =?us-ascii?Q?N714SRhe9+6Q6KCcpYpILtGsQcdIdqlLQcadJ6DnQgfc99NUs4Si3vG//nUk?=
- =?us-ascii?Q?ua1xZiSqMVdOj2GWER2BlkyzullDdgyXX8dPRilpxnWLIH/PPTDPQ3m7uyfJ?=
- =?us-ascii?Q?slwc2Tw166Anw5U5gDmE+5NCoZuoigt7v8irHOBCw4DUsC6VhwlW7cu79cJ9?=
- =?us-ascii?Q?wZuzVUuLRtIhvdV38ZEjK4c+S+yqSE3KqjFJmki9C8UD+Dhmx2Lp7OxeO5BH?=
- =?us-ascii?Q?JGWFkehzsewc0mxXG0ql2sJnoJ3dZ0HvkAkkyvqAD1gfZ4tpkqywHCMz7uVX?=
- =?us-ascii?Q?7rJ4Z3uIXKOT7/C4ft4WmIAK4bQJcr8Kf6ecXy7z56jgttA2sXnPMonyDuV5?=
- =?us-ascii?Q?eggXtrBsPertskOM2cB06nWzXTr94Zjk2tqQOMtyiVtFnSYAdPQgspmChiMs?=
- =?us-ascii?Q?SZyEKBPcwKabZSrmzL23cqp/4+FFeLPLw7GnR4E+oD41LKiu/0dOk1D7t+wY?=
- =?us-ascii?Q?uHRvMAwygzYG8uMGmHwxm6eH7FdBu56oGZLr6k5476gH2OdyGmy+iGrKXzBr?=
- =?us-ascii?Q?F4Z6imFfVs0B4a705XBCpkY+FQ9X98gr993pkRIuMvAXBkCc/aScgZKsvMe0?=
- =?us-ascii?Q?Hks+IGf+2/r0HRpB6sLJ7eGQFV6tXKxhzTBjysv0RxU+5YKD6B9aW6KA2GSQ?=
- =?us-ascii?Q?slqufn0x1EkeNgOiqna/MSH91EYnyPLfJR4BLaUOGVeaeCgIZleK3GMpxhRo?=
- =?us-ascii?Q?QLJcVU6Sr52JmekHfBoThB5G0PE/Fgke/A41rExGnhkYj19V/5yB/vfS8w5L?=
- =?us-ascii?Q?TKWIxQshc/Lwti3BcRMqwqf+BiTLuYNFZcj1cfq/mvnZClzaBtROQCTMlO1C?=
- =?us-ascii?Q?LHTUMQltLZLiR90t+1m4DnbjAtRawRkWYnhLFWCms+bOI/LsBUWi+lWlFbyr?=
- =?us-ascii?Q?uRqwJgrQckOSPvmI3GC1r9V3YrdUzM5i8hrixSk/3i0FX+C0cRtd6aSy4qo3?=
- =?us-ascii?Q?yagnEmlYL08Ium5leyw+0cytGIZMSzXgxDcDxDVcG3UJih2FXhwObTSlG7TK?=
- =?us-ascii?Q?nP5IWdIYuLA6WAsh0BmeU1Ns?=
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0d9db16-ca03-4a23-a16f-08d8c9a75ad7
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1898.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2021 07:26:29.7306
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qUKatR2/vSg2h5MQIiRGCU8b82zILfpWaciE+zo0ttwMYw1WvM6CigMl2kxyNmiePFrhNetZx09Mt6GXcNy9yQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3627
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zbu6fhcwy5glorai"
+Content-Disposition: inline
+In-Reply-To: <20210205072559.13241-1-xulin.sun@windriver.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-If the previous can_net device has been successfully allocated, its
-private data structure is impossible to be empty, remove this redundant
-error return judgment. Otherwise, memory leaks for alloc_candev() will
-be triggered.
 
-Signed-off-by: Xulin Sun <xulin.sun@windriver.com>
----
- drivers/net/can/m_can/m_can.c | 5 -----
- 1 file changed, 5 deletions(-)
+--zbu6fhcwy5glorai
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 02c5795b7393..042940088d41 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1797,11 +1797,6 @@ struct m_can_classdev *m_can_class_allocate_dev(struct device *dev)
- 	}
- 
- 	class_dev = netdev_priv(net_dev);
--	if (!class_dev) {
--		dev_err(dev, "Failed to init netdev cdevate");
--		goto out;
--	}
--
- 	class_dev->net = net_dev;
- 	class_dev->dev = dev;
- 	SET_NETDEV_DEV(net_dev, dev);
--- 
-2.17.1
+On 05.02.2021 15:25:58, Xulin Sun wrote:
+> The can_net device is allocated through kvzalloc(), if the subsequent pro=
+be
+> cases fail to initialize, it should free the can_net device that has been
+> successfully allocated before.
+>=20
+> To fix below memory leaks call trace:
+>=20
+> unreferenced object 0xfffffc08418b0000 (size 32768):
+> comm "kworker/0:1", pid 22, jiffies 4294893966 (age 931.976s)
+> hex dump (first 32 bytes):
+> 63 61 6e 25 64 00 00 00 00 00 00 00 00 00 00 00 can%d...........
+> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+> backtrace:
+> [<000000003faec9cc>] __kmalloc+0x1a4/0x3e0
+> [<00000000560b1cad>] kvmalloc_node+0xa0/0xb0
+> [<0000000093bada32>] alloc_netdev_mqs+0x60/0x380
+> [<0000000041ddbb53>] alloc_candev_mqs+0x6c/0x14c
+> [<00000000d08c7529>] m_can_class_allocate_dev+0x64/0x18c
+> [<000000009fef1617>] m_can_plat_probe+0x2c/0x1f4
+> [<000000006fdcc497>] platform_drv_probe+0x5c/0xb0
+> [<00000000fd0f0726>] really_probe+0xec/0x41c
+> [<000000003ffa5158>] driver_probe_device+0x60/0xf0
+> [<000000005986c77e>] __device_attach_driver+0xb0/0x100
+> [<00000000757823bc>] bus_for_each_drv+0x8c/0xe0
+> [<0000000059253919>] __device_attach+0xdc/0x180
+> [<0000000035c2b9f1>] device_initial_probe+0x28/0x34
+> [<0000000082e2c85c>] bus_probe_device+0xa4/0xb0
+> [<00000000cc6181c3>] deferred_probe_work_func+0x7c/0xb0
+> [<0000000001b85f22>] process_one_work+0x1ec/0x480
+>=20
+> Signed-off-by: Xulin Sun <xulin.sun@windriver.com>
 
+This patch doesn't apply to net/master, since v5.10 there is a
+similar fix:
+
+    85816aba460c can: m_can: Fix freeing of can device from peripherials
+
+Please update to latest v5.10.x. If you're on a kernel that's still
+supported, and you're using the latest stable of that kernel, and it
+doesn't have that patch applied, ask on linux-stable to pick up that
+patch.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--zbu6fhcwy5glorai
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAc/CsACgkQqclaivrt
+76k4GAgAoCzMCXRD1nv4RBLQvl3ihvz9ra5Z2cMrl+RdHhEue7jym67pAAdMb0Vp
+2HRMfryBK1po6t4pMk5FSe1bL2tWcTJ4hZ8yrLCClZYL5dQEM7h37e0Ewqe23+KN
+KVwalbpqalVlRxfpTYRtPelEMW/4i6mfeosw4ALnfisp9hklroKjrEKBZRhUDAUA
+uwbCtKNGmXUVCxQFI+z+oNB79wr+SMiV3kyI6e4ANIdNop/8V9JsPgZ1nQ9xixgg
+sNoc69LUGhzY3k+2TTURJwiKVDWbun23MeaOWuZT+Lztw9XzFpilupzs+LbLc5TY
+2dpmcgFZkIXCAL5r2g7Ts0trc4W5ag==
+=1ObZ
+-----END PGP SIGNATURE-----
+
+--zbu6fhcwy5glorai--
