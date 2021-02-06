@@ -2,64 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B943311256
-	for <lists+linux-can@lfdr.de>; Fri,  5 Feb 2021 21:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA35311E20
+	for <lists+linux-can@lfdr.de>; Sat,  6 Feb 2021 15:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233549AbhBESha (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 5 Feb 2021 13:37:30 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:54986 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S233003AbhBEPJb (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:09:31 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=UQEHlnVg5XQbvsB12U1Ol3bhaQI9w8E6XPoWFxWLZmrTEAjZvoQaEbrphRRSyBGIIWdRriBN1NgjJnIHHuwrDk7Jiepk7hcecgKlubZ8Cbf+eyLm3How+vKdkYfuxbESucRjBUGhM3uNAIEl+djc5YuHgus55Al0uLGG/w84VCgbq4C5haAYakmS1vYlSgFchzN2F++luNM29v8DFhI75uaDxJSrLZjsc+U9sEzNpAaOCR9pw2OgdpmsaX
-        RpEWSooLH5k7s+lJH9RwsRzupCIBYaSMrEgafQL+30fpkHM9MFjkLmthx4Z1XqGeg54bjdS4mLhUgJrpa/zvXopT6v+g==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Mon, 1 Feb 2021 08:49:51 +0000
-Message-ID: <7494048F-E4B5-4167-8C98-9021CA321467@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Mon, 1 Feb 2021 08:49:50 -0000
+        id S229506AbhBFO4j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 6 Feb 2021 09:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229646AbhBFO4f (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 6 Feb 2021 09:56:35 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ACFC06178B
+        for <linux-can@vger.kernel.org>; Sat,  6 Feb 2021 06:56:03 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id y18so12857604edw.13
+        for <linux-can@vger.kernel.org>; Sat, 06 Feb 2021 06:56:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=LKTydslwkBHjRBD/0U/iTEH4rnbV3bQM+PEGCYVnKRWqCpBuxiyyJWlH+XxoDVh2b/
+         HFZWTfmHMpqHsMdZMtB/2gIQb6SrU7HNNg4Pbg6aDUnwTTYa4ErmhrI4rReQ/aAXsVVq
+         wwdcwN/6PaD+QIBMSCrJ3tjlNWUWWctCNR4ZtJFT9jJA61Cvt48scMGk7sXyE5r6ccDR
+         P3Y4T1+1qudMtHcSBxbPHr6TwKJ2cZ6qwDAUiEhK7eJUvy9B8fetIBZUma+T+Fz/B+MD
+         X/a9+Uu3zKZgMCYnPeP2cVIikCY3zOffZKfAVZgicLkOAYPws+uBFNEJqRYUVgffaWvv
+         FXrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=KN4qxe5/Mf9BUpiU0VTvbXU1SVs00MbQAzJ0i3WDjvywO8ekxTBoXHb6dISjaWg9k3
+         e44dEIYms61usFDrf7wKxqFUZqv0FdXwYN//9RP+/VfGr73SIKc01zrN/kD0ofDMkbxh
+         /gHGvpL9Yr8BAWTye5h+atHKmlw8XCSR9d3ZqFnhkQh1vUNws9P9XJVeQD11A9bnC7tg
+         UvG773hrrwk0INBVl5PlOSlzPq7hSQF3OpMswvpXNyuq8r7g5y8mEZ0y9OpbBzNk/AgO
+         iTR73tdVotZ84u2siaKhlHfExuiNFl/ePCf5EBn6wyioI6Gatnjrl/CBE5uxNpwRaN7y
+         d75Q==
+X-Gm-Message-State: AOAM531bPsdVxoS7UdnfDKqavh1xD0qiBDkmBEqIt3B1GT6SywwXlDzt
+        hdYr257hQCK3aACbPs58f0JxcBok8YU9O+ePMqE=
+X-Google-Smtp-Source: ABdhPJzHuK3LvHqbpz7y7FkmfdCO+mLpCyAcQI6UI8feOQjxzQakBQkfzu17R8y2ODfxQ2tLrHWIUKNuNGqsXo7YnO0=
+X-Received: by 2002:a05:6402:3508:: with SMTP id b8mr8823036edd.341.1612623362722;
+ Sat, 06 Feb 2021 06:56:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:56:02
+ -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada9@gmail.com>
+Date:   Sat, 6 Feb 2021 15:56:02 +0100
+Message-ID: <CAGSHw-BTtjFX0_eZQxh6ESq0ccY53ZvhP0ukJTUOzzjPJEQARQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
-
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
-
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
-
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
