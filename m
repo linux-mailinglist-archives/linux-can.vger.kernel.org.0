@@ -2,85 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6173B3126A6
-	for <lists+linux-can@lfdr.de>; Sun,  7 Feb 2021 19:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7DF312BB6
+	for <lists+linux-can@lfdr.de>; Mon,  8 Feb 2021 09:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbhBGS1S (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 7 Feb 2021 13:27:18 -0500
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.162]:19906 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbhBGS1R (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 7 Feb 2021 13:27:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1612722203;
-        s=strato-dkim-0002; d=hartkopp.net;
-        h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
-        Subject:Sender;
-        bh=hnbcsvjB0aAzoi2XylNmKq2AMKPQaxSezQL2SYddjEU=;
-        b=aPiJC8l6DPrPb2UZiBMI8pc+em+efCbF7B7U7xtMGSC1FWw7kc+Zayf5MVe7x/ZRTR
-        OZuPHwPEaeb6IhjlIsjNes8xUB5VQ4yjrILMNdB1AiW90wC92ff9Wb0/hNyqLh2hViRB
-        m4//mf2LBntdKdKg8JJbQzuHYJZD5mnErjc3Ced1ToojscMCE5571fm1WhTjDsh3YpaI
-        QjoUXihs4Qw/tkMQRqPgMR18xJrAoNJAwdD+jrVKS5ZORXPfv5kEAU8WvT9fcjZlbQfC
-        dHAqMrSQK76pAyMZRCpDJT4dIIYACIBrTN0xhOSxKu+Kmf4+YK6DgVMZJF3fdelJiGwv
-        TJcw==
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGUch5mUj/"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-        by smtp.strato.de (RZmta 47.17.1 DYNA|AUTH)
-        with ESMTPSA id R0883bx17INM0G4
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Sun, 7 Feb 2021 19:23:22 +0100 (CET)
-Subject: Re: correct length of bcm message
-To:     Patrick Menschel <menschel.p@posteo.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <ff7c731b-6b98-79d7-b652-6ba2fe0afc3c@posteo.de>
- <c859e653-af2b-332c-f3d0-cf2525d1382a@posteo.de>
- <d73f45d8-da19-2d09-78ea-318faa98e7aa@hartkopp.net>
- <b987ec8d-d1a8-34e3-7c8b-4ce0bbd4b30f@posteo.de>
- <7f9ffbe7-8926-3874-9261-03e26f711b8d@hartkopp.net>
- <f0b2d6de-9254-be02-abd6-0373834b574b@posteo.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <ea71b986-7826-0566-44e6-703cbd76e49a@hartkopp.net>
-Date:   Sun, 7 Feb 2021 19:23:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S229806AbhBHIaM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Feb 2021 03:30:12 -0500
+Received: from smtp-18d.idc2.mandic.com.br ([177.70.124.135]:39111 "EHLO
+        smtp-18.idc2.mandic.com.br" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229894AbhBHIaI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Feb 2021 03:30:08 -0500
+Received: by smtp-18.smtp.mandic.prv (Postfix, from userid 491)
+        id 5BC52607E9FB; Mon,  8 Feb 2021 05:29:22 -0300 (-03)
+Received: from smtp-18.idc2.mandic.com.br (ifsmtp2 [192.168.1.38])
+        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPS id C1044607AAA4;
+        Mon,  8 Feb 2021 05:29:16 -0300 (-03)
+Received: from User (unknown [52.235.38.23])
+        by smtp-18.smtp.mandic.prv (Postfix) with ESMTPA id 78375465E268;
+        Mon,  8 Feb 2021 05:26:42 -0300 (-03)
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <stefy@macrometrica.com.br>
+Subject: Re:reply
+Date:   Mon, 8 Feb 2021 08:29:15 -0000
 MIME-Version: 1.0
-In-Reply-To: <f0b2d6de-9254-be02-abd6-0373834b574b@posteo.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Mandic-Auth: DYB6x5JcyVot9snxiAasWC73cfc93V+pC3vUrorm87+eXbqAUeEHL0ZNPgpM50IYQeUbiYx0PkMIK2oavHcOOA==
+X-Mandic-Sender: stefy@macrometrica.com.br
+Message-Id: <20210208082916.C1044607AAA4@smtp-18.smtp.mandic.prv>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-On 07.02.21 07:33, Patrick Menschel wrote:
->>> Interesting to know, apparently native alignment is 8 on X86_64 linux
->>> and 4 on armhf linux. That's why it worked on X86_64.
->>>
->>> Regarding python ctypes module, setting _pack_=8 has no remedy effect on
->>> armhf platform, so I'll move to struct module.
-> 
-> Hi,
-> 
-> tying some loose ends here.
-> My final solution to force alignment after bcm_msg_head to the next 8
-> byte boundary in python3 is to use an alignment hack of struct module.
-> https://docs.python.org/3/library/struct.html#struct-examples
-> 
-> struct.pack("IIIllllII0q",opcode,flags,count,ival1_sec,ival1_usec,ival2_sec,ival2_usec,can_id,nframes)
-> 
-> The "0q" is a zero length long long which causes padding up to the next
-> 8 byte boundary.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-Excellent! Exactly what is needed here.
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-Thanks,
-Oliver
-
-> This works for ARMHF (40 bytes) and X86_64 (72 bytes).
-> 
-> Regards,
-> Patrick
-> 
+Regards,
+Ms. Reem.
