@@ -2,34 +2,28 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C7E314E66
-	for <lists+linux-can@lfdr.de>; Tue,  9 Feb 2021 12:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8407315103
+	for <lists+linux-can@lfdr.de>; Tue,  9 Feb 2021 14:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbhBILpS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Feb 2021 06:45:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbhBILe7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Feb 2021 06:34:59 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB8AC061793
-        for <linux-can@vger.kernel.org>; Tue,  9 Feb 2021 03:31:57 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1l9RF9-0004S2-Pu; Tue, 09 Feb 2021 12:31:43 +0100
-Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:655a:4660:2120:638])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 264185DB349;
-        Tue,  9 Feb 2021 11:28:16 +0000 (UTC)
-Date:   Tue, 9 Feb 2021 12:28:15 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
+        id S231700AbhBIN4z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Feb 2021 08:56:55 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:50538 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232105AbhBINz3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Feb 2021 08:55:29 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-5-mCfALkJXP3Sgnq38bQfAag-1;
+ Tue, 09 Feb 2021 13:53:43 +0000
+X-MC-Unique: mCfALkJXP3Sgnq38bQfAag-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Tue, 9 Feb 2021 13:53:43 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Tue, 9 Feb 2021 13:53:43 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Marc Kleine-Budde' <mkl@pengutronix.de>
+CC:     Arnd Bergmann <arnd@kernel.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -39,163 +33,87 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] can: ucan: fix alignment constraints
-Message-ID: <20210209112815.hqndd7qonsygvv4n@hardanger.blackshift.org>
+Subject: RE: [PATCH] can: ucan: fix alignment constraints
+Thread-Topic: [PATCH] can: ucan: fix alignment constraints
+Thread-Index: AQHW/h0DjBhn7+16ykCQOOnmCF4WhKpPn1uQgAARu4CAACZvoA==
+Date:   Tue, 9 Feb 2021 13:53:43 +0000
+Message-ID: <e0a5cbe1e41f4326aa4c9800f4a351b2@AcuMS.aculab.com>
 References: <20210204162625.3099392-1-arnd@kernel.org>
  <20210208131624.y5ro74e4fibpg6rk@hardanger.blackshift.org>
  <bd7e6497b3f64fb5bb839dc9a9d51d6a@AcuMS.aculab.com>
+ <20210209112815.hqndd7qonsygvv4n@hardanger.blackshift.org>
+In-Reply-To: <20210209112815.hqndd7qonsygvv4n@hardanger.blackshift.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="djjdhxlhmqm3zy7h"
-Content-Disposition: inline
-In-Reply-To: <bd7e6497b3f64fb5bb839dc9a9d51d6a@AcuMS.aculab.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+RnJvbTogTWFyYyBLbGVpbmUtQnVkZGUNCj4gU2VudDogMDkgRmVicnVhcnkgMjAyMSAxMToyOA0K
+PiANCj4gT24gMDkuMDIuMjAyMSAxMDozNDo0MiwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KLi4uDQo+
+ID4gQUZBSUNUIHRoZXJlIGlzIG9uZSBzdHJ1Y3R1cmUgdGhhdCB3b3VsZCBoYXZlIGVuZC1wYWRk
+aW5nLg0KPiA+IEJ1dCBJIGRpZG4ndCBhY3R1YWxseSBzcG90IGFueXRoaW5nIHZhbGlkYXRpbmcg
+aXQncyBsZW5ndGguDQo+ID4gV2hpY2ggbWF5IHdlbGwgbWVhbiB0aGF0IGl0IGlzIHBvc3NpYmxl
+IHRvIHJlYWQgb2ZmIHRoZSBlbmQNCj4gPiBvZiB0aGUgVVNCIHJlY2VpdmUgYnVmZmVyIC0gcGxh
+dXNpYmx5IGludG8gdW5tYXBwZWQgYWRkcmVzc2VzLg0KPiANCj4gSW4gdWNhbl9yZWFkX2J1bGtf
+Y2FsbGJhY2soKSB0aGVyZSBpcyBhIGNoZWNrIG9mIHRoZSB1cmIncyBsZW5ndGgsDQo+IGFzIHdl
+bGwgYXMgdGhlIGxlbmd0aCBpbmZvcm1hdGlvbiBpbnNpZGUgdGhlIHJ4J2VkIGRhdGE6DQo+IA0K
+PiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92NS4xMC4xNC9zb3VyY2UvZHJpdmVy
+cy9uZXQvY2FuL3VzYi91Y2FuLmMjTDczNA0KPiANCj4gfCBzdGF0aWMgdm9pZCB1Y2FuX3JlYWRf
+YnVsa19jYWxsYmFjayhzdHJ1Y3QgdXJiICp1cmIpDQo+IHwgWy4uLl0NCj4gfCAJCS8qIGNoZWNr
+IHNhbml0eSAobGVuZ3RoIG9mIGhlYWRlcikgKi8NCj4gfCAJCWlmICgodXJiLT5hY3R1YWxfbGVu
+Z3RoIC0gcG9zKSA8IFVDQU5fSU5fSERSX1NJWkUpIHsNCj4gfCAJCQluZXRkZXZfd2Fybih1cC0+
+bmV0ZGV2LA0KPiB8IAkJCQkgICAgImludmFsaWQgbWVzc2FnZSAoc2hvcnQ7IG5vIGhkcjsgbDol
+ZClcbiIsDQo+IHwgCQkJCSAgICB1cmItPmFjdHVhbF9sZW5ndGgpOw0KPiB8IAkJCWdvdG8gcmVz
+dWJtaXQ7DQo+IHwgCQl9DQo+IHwNCj4gfCAJCS8qIHNldHVwIHRoZSBtZXNzYWdlIGFkZHJlc3Mg
+Ki8NCj4gfCAJCW0gPSAoc3RydWN0IHVjYW5fbWVzc2FnZV9pbiAqKQ0KPiB8IAkJCSgodTggKil1
+cmItPnRyYW5zZmVyX2J1ZmZlciArIHBvcyk7DQo+IHwgCQlsZW4gPSBsZTE2X3RvX2NwdShtLT5s
+ZW4pOw0KPiB8DQo+IHwgCQkvKiBjaGVjayBzYW5pdHkgKGxlbmd0aCBvZiBjb250ZW50KSAqLw0K
+PiB8IAkJaWYgKHVyYi0+YWN0dWFsX2xlbmd0aCAtIHBvcyA8IGxlbikgew0KPiB8IAkJCW5ldGRl
+dl93YXJuKHVwLT5uZXRkZXYsDQo+IHwgCQkJCSAgICAiaW52YWxpZCBtZXNzYWdlIChzaG9ydDsg
+bm8gZGF0YTsgbDolZClcbiIsDQo+IHwgCQkJCSAgICB1cmItPmFjdHVhbF9sZW5ndGgpOw0KPiB8
+IAkJCXByaW50X2hleF9kdW1wKEtFUk5fV0FSTklORywNCj4gfCAJCQkJICAgICAgICJyYXcgZGF0
+YTogIiwNCj4gfCAJCQkJICAgICAgIERVTVBfUFJFRklYX0FERFJFU1MsDQo+IHwgCQkJCSAgICAg
+ICAxNiwNCj4gfCAJCQkJICAgICAgIDEsDQo+IHwgCQkJCSAgICAgICB1cmItPnRyYW5zZmVyX2J1
+ZmZlciwNCj4gfCAJCQkJICAgICAgIHVyYi0+YWN0dWFsX2xlbmd0aCwNCj4gfCAJCQkJICAgICAg
+IHRydWUpOw0KPiB8DQo+IHwgCQkJZ290byByZXN1Ym1pdDsNCj4gfCAJCX0NCg0KVGhhdCBsb29r
+cyBhcyB0aG91Z2ggaXQgY2hlY2tzIHRoYXQgdGhlIGJ1ZmZlciBsZW5ndGggcHJvdmlkZWQNCmJ5
+IHRoZSBkZXZpY2UgaXMgYWxsIGNvbnRhaW5lZCB3aXRoaW4gdGhlIGJ1ZmZlci4NCg0KSSB3YXMg
+bG9va2luZyBmb3IgdGhlIGNoZWNrIHRoYXQgdGhlIHN0cnVjdHVyZSB0eXBlIHRoZSBkYXRhDQpi
+dWZmZXIgaXMgY2FzdCB0byBmaXRzIGlzIHRoZSBzdXBwbGllZCBkYXRhLg0KSSBkaWRuJ3Qgc2Vl
+IGEgJ3NpemVvZiAoYnVmZmVyX3R5cGUpJyBmb3IgdGhlIG9uZSBJIGxvb2tlZCBmb3INCih0aGUg
+c3RydWN0dXJlIHdpdGggYWxsIHRoZSB2ZXJzaW9uIGluZm8gaW4gaXQpLg0KDQo+IA0KPiANCj4g
+PiBJIGxvb2tlZCBiZWNhdXNlIGFsbCB0aGUgcGF0Y2hlcyB0byAnZml4JyB0aGUgY29tcGlsZXIg
+d2FybmluZw0KPiA+IGFyZSBkdWJpb3VzLg0KPiA+IE9uY2UgeW91J3ZlIGNoYW5nZWQgdGhlIG91
+dGVyIGFsaWdubWVudCAoZWcgb2YgYSB1bmlvbikgdGhlbg0KPiA+IHRoZSBjb21waWxlciB3aWxs
+IGFzc3VtZSB0aGF0IGFueSBwb2ludGVyIHRvIHRoYXQgdW5pb24gaXMgYWxpZ25lZC4NCj4gPiBT
+byBhbnkgX3BhY2tlZCgpIGF0dHJpYnV0ZXMgdGhhdCBhcmUgcmVxdWlyZWQgZm9yIG1pcy1hbGln
+bmVkDQo+ID4gYWNjZXNzZXMgZ2V0IGlnbm9yZWQgLSBiZWNhdXNlIHRoZSBjb21waWxlciBrbm93
+cyB0aGUgcG9pbnRlcg0KPiA+IG11c3QgYmUgYWxpZ25lZC4NCj4gDQo+IEhlcmUgdGhlIHBhY2tl
+ZCBhdHRyaWJ1dGUgaXMgbm90IHRvIHRlbGwgdGhlIGNvbXBpbGVyLCB0aGF0IGEgcG9pbnRlcg0K
+PiB0byB0aGUgc3RydWN0IHVjYW5fbWVzc2FnZV9pbiBtYXkgYmUgdW5hbGlnbmVkLiBSYXRoZXIg
+aXMgdGVsbHMgdGhlDQo+IGNvbXBpbGVyIHRvIG5vdCBhZGQgYW55IGhvbGVzIGludG8gdGhlIHN0
+cnVjdC4NCg0KQnV0IHRoYXQgaXNuJ3Qgd2hhdCBpdCBtZWFucy4NClVzaW5nIGl0IHRoYXQgd2F5
+IGlzIGJhc2ljYWxseSB3cm9uZy4NCkl0IHRlbGxzIHRoZSBjb21waWxlciB0aGF0IHRoZSBzdHJ1
+Y3R1cmUgbWlnaHQgYmUgbWlzYWxpZ25lZA0KYW5kLCBpZiBuZWNlc3NhcnksIGRvIGJ5dGUgYWNj
+ZXNzZXMgYW5kIHNoaWZ0cy4NCg0KSSBzdWdnZXN0IHlvdSBsb29rIGF0IHRoZSBnZW5lcmF0ZWQg
+Y29kZSBmb3IgYW4gYXJjaGl0ZWN0dXJlDQp0aGF0IGRvZXNuJ3QgaGF2ZSBlZmZpY2llbnQgdW5h
+bGlnbmVkIGFjY2Vzc2VzIC0gZWcgc3BhcmMgb3IgcHBjDQooYW5kIHByb2JhYmx5IGFybTMyIGFu
+ZCBtYW55IG90aGVycykuDQoNClRoZSBjb21waWxlciB3b24ndCBhZGQgJ3JhbmRvbScgaG9sZXMu
+DQpJZiB5b3Ugd2FudCB0byB2ZXJpZnkgdGhhdCB0aGVyZSBhcmVuJ3QgYWN0dWFsbHkgYW55IGhv
+bGVzDQp0aGVuIHVzZSBhIGNvbXBpbGUtdGltZSBhc3NlcnQgb24gdGhlIHNpemUuDQoNCglEYXZp
+ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
+RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
+NiAoV2FsZXMpDQo=
 
---djjdhxlhmqm3zy7h
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 09.02.2021 10:34:42, David Laight wrote:
-> From: Marc Kleine-Budde
-> > Sent: 08 February 2021 13:16
-> >=20
-> > On 04.02.2021 17:26:13, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > struct ucan_message_in contains member with 4-byte alignment
-> > > but is itself marked as unaligned, which triggers a warning:
-> > >
-> > > drivers/net/can/usb/ucan.c:249:1: warning: alignment 1 of 'struct uca=
-n_message_in' is less than 4 [-
-> > Wpacked-not-aligned]
-> > >
-> > > Mark the outer structure to have the same alignment as the inner
-> > > one.
-> > >
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >=20
-> > Applied to linux-can-next/testing.
->=20
-> I've just had a look at that file.
->=20
-> Are any of the __packed or __aligned actually required at all.
->=20
-> AFAICT there is one structure that would have end-padding.
-> But I didn't actually spot anything validating it's length.
-> Which may well mean that it is possible to read off the end
-> of the USB receive buffer - plausibly into unmapped addresses.
-
-In ucan_read_bulk_callback() there is a check of the urb's length,
-as well as the length information inside the rx'ed data:
-
-https://elixir.bootlin.com/linux/v5.10.14/source/drivers/net/can/usb/ucan.c=
-#L734
-
-| static void ucan_read_bulk_callback(struct urb *urb)
-| [...]
-| 		/* check sanity (length of header) */
-| 		if ((urb->actual_length - pos) < UCAN_IN_HDR_SIZE) {
-| 			netdev_warn(up->netdev,
-| 				    "invalid message (short; no hdr; l:%d)\n",
-| 				    urb->actual_length);
-| 			goto resubmit;
-| 		}
-|=20
-| 		/* setup the message address */
-| 		m =3D (struct ucan_message_in *)
-| 			((u8 *)urb->transfer_buffer + pos);
-| 		len =3D le16_to_cpu(m->len);
-|=20
-| 		/* check sanity (length of content) */
-| 		if (urb->actual_length - pos < len) {
-| 			netdev_warn(up->netdev,
-| 				    "invalid message (short; no data; l:%d)\n",
-| 				    urb->actual_length);
-| 			print_hex_dump(KERN_WARNING,
-| 				       "raw data: ",
-| 				       DUMP_PREFIX_ADDRESS,
-| 				       16,
-| 				       1,
-| 				       urb->transfer_buffer,
-| 				       urb->actual_length,
-| 				       true);
-|=20
-| 			goto resubmit;
-| 		}
-
-
-> I looked because all the patches to 'fix' the compiler warning
-> are dubious.
-> Once you've changed the outer alignment (eg of a union) then
-> the compiler will assume that any pointer to that union is aligned.
-> So any _packed() attributes that are required for mis-aligned
-> accesses get ignored - because the compiler knows the pointer
-> must be aligned.
-
-Here the packed attribute is not to tell the compiler, that a pointer
-to the struct ucan_message_in may be unaligned. Rather is tells the
-compiler to not add any holes into the struct.
-
-| struct ucan_message_in {
-| 	__le16 len; /* Length of the content include header */
-| 	u8 type;    /* UCAN_IN_RX and friends */
-| 	u8 subtype; /* command sub type */
-|=20
-| 	union {
-| 		/* CAN Frame received
-| 		 * (type =3D=3D UCAN_IN_RX)
-| 		 * && ((msg.can_msg.id & CAN_RTR_FLAG) =3D=3D 0)
-| 		 */
-| 		struct ucan_can_msg can_msg;
-|=20
-| 		/* CAN transmission complete
-| 		 * (type =3D=3D UCAN_IN_TX_COMPLETE)
-| 		 */
-| 		struct ucan_tx_complete_entry_t can_tx_complete_msg[0];
-| 	} __aligned(0x4) msg;
-| } __packed;
-
-> So while the changes remove the warning, they may be removing
-> support for misaligned addresses.
-
-There won't be any misaligned access on the struct, the USB device
-will send it aligned and the driver will enforce the alignment:
-
-| 		/* proceed to next message */
-| 		pos +=3D len;
-| 		/* align to 4 byte boundary */
-| 		pos =3D round_up(pos, 4);
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---djjdhxlhmqm3zy7h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAiccwACgkQqclaivrt
-76kTRQf/VhGlpKxtfkAF8AWG10yA3INg9/1yq2i1yWV3QzCKTiWm0uaVgUSv77Lm
-Jg4zGGkjEnEDcxHUoVaFB2JmJ4uhRgm83c21ZpYyvkuGjVFixTwsnILELh2hCS6w
-Ltn3CSxJFXBCLQ/CNDL/xcyNhLKJcICOfs8BRHF7OAjbERrjIRBY9d+ZluZ+LGFo
-J1SkCiaRl3MjwJJKfsX6rdSEl5ohYu+BQtg9zRITbLyeEX/kx7XkVSV3wJmA50aM
-bjfc3rWhrLonsGRok0PJOkHuj7qxpwMruJCM160ywliiB+Lh4REgoV4NVfAsNKMd
-7GCF/fw9PSW/7b5o/3qDxoB/31HoqA==
-=MGWN
------END PGP SIGNATURE-----
-
---djjdhxlhmqm3zy7h--
