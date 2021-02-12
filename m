@@ -2,78 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E923167C6
-	for <lists+linux-can@lfdr.de>; Wed, 10 Feb 2021 14:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52398319B1F
+	for <lists+linux-can@lfdr.de>; Fri, 12 Feb 2021 09:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbhBJNR5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Wed, 10 Feb 2021 08:17:57 -0500
-Received: from spam.auroraoh.com ([24.56.89.101]:55868 "EHLO
-        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231695AbhBJNRa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 10 Feb 2021 08:17:30 -0500
-X-ASG-Debug-ID: 1612962980-112c0d6a799d670001-ZXuqFv
-Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id o85MXCAl0V5REjY1; Wed, 10 Feb 2021 08:16:20 -0500 (EST)
-X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
-Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
- (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
- 02:44:01 -0500
-Content-Type: text/plain; charset="iso-8859-1"
-X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
+        id S229992AbhBLIVj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 12 Feb 2021 03:21:39 -0500
+Received: from ozlabs.org ([203.11.71.1]:38277 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229965AbhBLIVW (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 12 Feb 2021 03:21:22 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4DcRJl6cDgz9sB4;
+        Fri, 12 Feb 2021 19:20:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
+        t=1613118040; bh=5MaJGvBp35LQnuv/WVy3idsdObN11F6uoStWZVNU/UI=;
+        h=Subject:From:To:Cc:Date:From;
+        b=XaDGk5uIbxaWhSzEJt36kiLPkmiWMSWiVkeF+4aukmx1DY5TiNdhV6fvx5GgtmtZA
+         8Ud9mo9FC5ZT9LFHj024lLLsth5rO5RzVdkxxdKy4O4RR9/bMPYGQkH0xcgANUBCY7
+         vyfj35OGztexp/f13vsbHcYXJzcNVq8YQuGIQJyDMM7B/2x7sJho7SIRmeNidgdtpU
+         OVOZNk7EpJ8kKfF+RGqlbqB9m1ceTPPkEsbhfQffhGQujPVs9kHRR76owtBcc9yhaG
+         tISKemoQv4IRQZifiGgJ78U2lWlq86avkj1iwf9UjFfBoBLcgOwQPW8ASjItOdsmao
+         pH01HNJAO6pxw==
+Message-ID: <98cea51e699d405ebe9a6d475e51608f318a4209.camel@ozlabs.org>
+Subject: Proposal for a new protocol family - AF_MCTP
+From:   Jeremy Kerr <jk@ozlabs.org>
+To:     netdev@vger.kernel.org
+Cc:     linux-can@vger.kernel.org
+Date:   Fri, 12 Feb 2021 16:20:39 +0800
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-To:     Recipients <januskad@auroraoh.com>
-X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
- we also registered with the Turkish British Chamber of Commerce and Industry
- (TBCCI) we have operations in Europe and Asia.
-From:   <januskad@auroraoh.com>
-Date:   Tue, 9 Feb 2021 15:43:15 +0800
-Reply-To: <cfolimiited@gmail.com>
-X-Priority: 1 (High)
-X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <67115bd0-7ba7-4a38-8269-fd8c74a9c433@COASRV-MAIL2.auroraoh.loc>
-X-Originating-IP: [197.210.29.8]
-X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
- COASRV-MAIL2.auroraoh.loc (10.3.1.15)
-X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
-X-Barracuda-Start-Time: 1612962980
-X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at auroraoh.com
-X-Barracuda-Scan-Msg-Size: 755
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 1.61
-X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87885
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-        0.00 NO_REAL_NAME           From: does not include a real name
-        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
-        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
-                                   Address
-        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
+Hi all,
 
-We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
+I'm currently working on implementing support for the Management
+Controller Transport Protocol (MCTP). Briefly, MCTP is a protocol for
+intra-system communication between a management controller (typically a
+BMC), and the devices it manages. If you're after the full details, the
+DMTF have a specification (DSP0236) up at:
 
-Please contact us for more details;
+  https://www.dmtf.org/standards/pmci
+
+In short, this involves adding a new protocol / address family
+("AF_MCTP"), the supporting types for a sockets API, and netlink
+protocol definitions.
+
+At the moment, I'm currently at the design & prototyping stage - so no
+patches to send just yet! However, if you're super keen, you can have a
+review of the design outline for the OpenBMC project, up at:
+
+  https://github.com/jk-ozlabs/openbmc-docs/blob/mctp/designs/mctp/mctp-kernel.md
+
+If you'd like to send feedback on any aspects of that, I'm keen to hear
+them. You can either respond to me via email, or participate in the
+gerrit review of that document, which is at:
+
+  https://gerrit.openbmc-project.xyz/c/openbmc/docs/+/40514
+
+Otherwise, if you prefer to review as code instead, I'll be sending
+patches to netdev once we've done a few passes of the design doc with
+the OpenBMC community.
+
+linux-can folks: the structure of MCTP is a little similar to CAN, and
+I've been referring to net/can/ a little for the mctp implementation,
+hence including the list here. If you have any particular hindsight you
+have from your work, I'd be keen to hear about it too.
+
+Cheers,
 
 
-Kind regards,
+Jeremy
+ 
 
-Paul McCann
-
--- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
 
