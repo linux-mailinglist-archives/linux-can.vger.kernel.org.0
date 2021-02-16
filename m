@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B4231C8CB
-	for <lists+linux-can@lfdr.de>; Tue, 16 Feb 2021 11:29:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1378931C992
+	for <lists+linux-can@lfdr.de>; Tue, 16 Feb 2021 12:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbhBPK3U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 Feb 2021 05:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S229790AbhBPLUc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Feb 2021 06:20:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbhBPK3T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Feb 2021 05:29:19 -0500
+        with ESMTP id S229889AbhBPLUO (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Feb 2021 06:20:14 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D3CC061574
-        for <linux-can@vger.kernel.org>; Tue, 16 Feb 2021 02:28:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958BFC06174A
+        for <linux-can@vger.kernel.org>; Tue, 16 Feb 2021 03:19:33 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lBxav-0008OL-GG; Tue, 16 Feb 2021 11:28:37 +0100
+        id 1lByOC-0005Dw-77; Tue, 16 Feb 2021 12:19:32 +0100
 Received: from hardanger.blackshift.org (unknown [IPv6:2a03:f580:87bc:d400:c976:249:a7:a1bb])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5A67A5E2286;
-        Tue, 16 Feb 2021 10:28:36 +0000 (UTC)
-Date:   Tue, 16 Feb 2021 11:28:35 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 5AD4F5E2311;
+        Tue, 16 Feb 2021 11:19:31 +0000 (UTC)
+Date:   Tue, 16 Feb 2021 12:19:30 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Cc:     linux-rpi-kernel@lists.infradead.org, linux-can@vger.kernel.org
+Cc:     linux-can <linux-can@vger.kernel.org>
 Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
-Message-ID: <20210216102835.v5goqyksqsu6h6xr@hardanger.blackshift.org>
+Message-ID: <20210216111930.pcg4e7cildzuri6d@hardanger.blackshift.org>
 References: <602651f9.1c69fb81.302a5.647d@mx.google.com>
  <20210215144509.rhds7oybzat6u27w@hardanger.blackshift.org>
  <CAALJrqgrmzGHZX+iiMYwMkVMpxtf_3fWYkVA-iMdPOxpGzrCRQ@mail.gmail.com>
@@ -39,11 +39,13 @@ References: <602651f9.1c69fb81.302a5.647d@mx.google.com>
  <CAALJrqj=QC1to9ja0CeL76JxVF1iwjsW7YJHs18VbXea=PvBGg@mail.gmail.com>
  <c47647cd-01c1-a924-263d-72c84b36b2e0@pengutronix.de>
  <CAALJrqiAFR7bacR3eB40OU0fbM1QOc-xnvDtts5tDh5cE+3rrw@mail.gmail.com>
+ <20210216102835.v5goqyksqsu6h6xr@hardanger.blackshift.org>
+ <CAALJrqiVdmLQr7q2ijbWq70RD6PTD8PtVX_zmLW9=uNdc57WqA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6raoxtiysidwj5ze"
+        protocol="application/pgp-signature"; boundary="sw4ibksoaz3ccdrq"
 Content-Disposition: inline
-In-Reply-To: <CAALJrqiAFR7bacR3eB40OU0fbM1QOc-xnvDtts5tDh5cE+3rrw@mail.gmail.com>
+In-Reply-To: <CAALJrqiVdmLQr7q2ijbWq70RD6PTD8PtVX_zmLW9=uNdc57WqA@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -53,46 +55,59 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---6raoxtiysidwj5ze
+--sw4ibksoaz3ccdrq
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 16.02.2021 09:44:54, Torin Cooper-Bennun wrote:
-> > Your mram-cfg looks broken, You don't have any TX Event FIFO entries. P=
-lease use
-> > this one:
+Please keep the mailing list on Cc.
+
+On 16.02.2021 11:11:34, Torin Cooper-Bennun wrote:
+> On Tue, 16 Feb 2021 at 10:28, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
+e:
+> > You might not, but the driver does :)
+>=20
+> Indeed, on closer inspection I can see that!
+>=20
+> > If the process repeats infinitely then the CAN controller doesn't go
+> > into bus-off, which means the CAN bus is terminated correctly.
 > >
-> > bosch,mram-cfg =3D <0x0 0 0 16 0 0 1 1>;
+> > With your setup of only one node on the bus and correct termination, I
+> > too think the frame should be send until the ACK field. I suggest to
+> > first create a working CAN bus setup and then add the tcan to it.
 >=20
-> Okay, thanks for the tip, I usually don't make use of the TX event
-> feature!
+> I have to thank you for mentioning termination, because it turned out
+> I had not used correct termination at all. How embarrassing! With that
+> fixed, the transceiver is happy and I have working TX and RX.
 
-You might not, but the driver does :)
+\o/
 
-> This hasn't fixed the TX behaviour, though. I've verified
-> that the frame is loaded into MRAM and requested for TX correctly, but
-> the transceiver does this...
+> Mostly working RX, anyway. When putting the interface down and then
+> back up (but allowing a second node to continue attempting TX in the
+> meantime) I see some blank frames...
 >=20
-> 1. sends start-of-frame, then 5 bits of ID correctly, at the correct bitr=
-ate
-> 2. bus then seems to be stuck dominant for 6 bits instead of
-> transmitting further ID bits
-> 3. bus lines drift back recessive (not a clean edge) over the duration
-> of 12 bits
-> 4. process repeats
+> can0  001   [8]  00 01 02 03 04 05 06 07
+> can0  001   [8]  00 01 02 03 04 05 06 07
+> can0  001   [8]  00 01 02 03 04 05 06 07
+> can0  000   [0]
+> can0  000   [0]
+> can0  001   [8]  00 01 02 03 04 05 06 07
+> can0  001   [8]  00 01 02 03 04 05 06 07
+> etc.
 >=20
-> Steps 2-3 constitute an error frame, if my understanding is correct.
-> Presently the TCAN4550 is not connected to any other CAN nodes; I
-> would therefore expect the transmit to at least continue to the ACK
-> field.
+> (where the 8-byte frame is what the bus is actually seeing.)
 
-If the process repeats infinitely then the CAN controller doesn't go
-into bus-off, which means the CAN bus is terminated correctly.
+Where do you see these blank frames? On the sending rpi with candump? An
+on the bus (with a second system) you only see the full 8 byte long
+frames?
 
-With your setup of only one node on the bus and correct termination, I
-too think the frame should be send until the ACK field. I suggest to
-first create a working CAN bus setup and then add the tcan to it.
+Use "candump any,0~0,#FFFFFFFF -extA" to get RX/TX annotation.
+Use "cangen -Ii -L8 -D000102030405060708 -g100 can0" to get increasing
+CAN-IDs, so you can figure out if a CAN frame got lost.
+
+Seems I have to add the TX path to the list of broken things...
+
+The mcp251xfd driver can be used as a template for the tcan4x5x driver.
 
 regards,
 Marc
@@ -103,19 +118,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---6raoxtiysidwj5ze
+--sw4ibksoaz3ccdrq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmArnlAACgkQqclaivrt
-76le1wf/SfMlKR4ATZ3+e9lLCniB2hyMAXVSVSOCnsQToiOZX9ZDmIP2fE0Z370R
-DpElUCw6JA1yACbKYGbuoEwJdE19Tz+Ymrkcqa/Vej7JsjFrhwx5Ck7IVOR53rEO
-zMWf2DfmbNI+7rCa6I6OdewiVQa3NSHt7ndfhL3pY+v6x+nMngbTojLhy411Z/n5
-y6/cOPn/xT/RNNzLpWjS7bTnsaIgREJwDKMA1ZkmADcpf4YXEWdF81Oz5Puy+t8H
-dgv8A7AbHPm6qMSecNYVyCrd5anhJ3cCMLnw0TaVVMgWKNs6hkIP0zuj4w79to+o
-AQ2QJJs8cDcXkVEk1N3s0YfzACaP4g==
-=7lf7
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmArqj8ACgkQqclaivrt
+76nBbAf/eqPnwn84XC6I6/gaGRhlz+sKUOxKNIVvztV60LAPkLGDLZFUXSEJ4MIy
+FJeCeoPxFSPVEy+VNqKiy0f150rLhOcu26TPszEJZ90Slg+ldFDmu56UsmJdG3q8
+sC+80c4EcsEACb+9Sif8Yaqv2rh1quICZgOBv0xgmCzJnO8qTomWJm1JM4O2aWQM
+qtzte/d4hPWZKI29lbnj0iRv6JNiCFVrBkMbyvC1XA66P/ZB5IIj2eHK2IJIrflH
+FzJJo3j6jIOdwfIJHH5MKan4xiqUQ+Db2zII1zpD+ERpGHTrmbd556w5q/cCd2v6
+vZtmFIKhIxi/Mk+xSTsJfvzOvN5R8g==
+=He2Z
 -----END PGP SIGNATURE-----
 
---6raoxtiysidwj5ze--
+--sw4ibksoaz3ccdrq--
