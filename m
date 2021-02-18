@@ -2,47 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF7131E92D
-	for <lists+linux-can@lfdr.de>; Thu, 18 Feb 2021 12:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E62531EC1F
+	for <lists+linux-can@lfdr.de>; Thu, 18 Feb 2021 17:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbhBRLdA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Feb 2021 06:33:00 -0500
-Received: from mail-eopbgr60059.outbound.protection.outlook.com ([40.107.6.59]:25830
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S230520AbhBRQQL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Feb 2021 11:16:11 -0500
+Received: from mail-eopbgr30057.outbound.protection.outlook.com ([40.107.3.57]:31975
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231338AbhBRLDV (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 18 Feb 2021 06:03:21 -0500
+        id S233150AbhBRMkI (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 18 Feb 2021 07:40:08 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IfBEgba66V2dRrXTQGY4PhrMhrOhMqMmSGZpwTSZztYck6y5fKyO9J/humZg495ev2sC8FG5V93aRvQcb+ExEUJDCyAntReE+oi7SZj9o2j4skQLXFS81Iw0n+7o8OwvxrtIw+up/LzodZZsZe4a7yvByjk6CPCr1eenm5vsg30sKssCMgfJAmscgks1ZKQFHYRvpFpt3kQIiJMknRP1m52ih3Zr8rmA7K17bn6x6d/4nKKgaXS5jGxED+T85D1jNxuqBcHD7Vc9MRSNRM9lh1qr0CA8/vVwDvioE5iyRWh04MR9cszNIx9ZdQ7Og3l0DlVoCueiaBf3Tu2BQOy/9g==
+ b=TH9MyXan2XQcljbaJhh35AVUrVRwo0P9YWPrGPFX/pKTS83QEyS60TFozCb1Rx+qYeJFKlfOFrwBknorVOTkgBGu6IA7ZuQVmsgAvdSrKWPnU0073X5yW7/7CFfh7QCv3lOU9pe7h2g554sW8QcD7b8WVQ/aX3INDKPgtFpyYOJqwSaxMDTW6ThbTMpWdyjAmyLzhWNKTCJL2G/Qo5JVpcLrGDZxXFepP2l5S+7/UESDhqFlGctkBeVbM4fRNWK61N2HJ1CosD5BPJAkgKZeoMllwwclkG39WZ2a9CrFR5y/ubFK9EBt3t/7LY1zrZy2LZUcczOnMVl3CRV6VRh94g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IPazkHLyFs2Z6gWxvc0cdc+gg8Ixgn8LAPLDmwAHThk=;
- b=cvpz2uREhx1hebzfvd+ifPI/NiVtAJD0wHK16GgTvpS/QrHAZy17ZfcT+JAMkkj+B+sAU7ReNSJLBjl+P/oiLJhwx6WCeB3OkbE51Dn3Br/2X4SJJjPnMsDsIsEiB4RmgrLxeqDhAtU8uBJREV5ZrMcDLviIufNY1hhR34CZj8p2OdZ8201eKi6WpfMQKqVzh/oWC7JyD4TPA8TjALq9KgdLvdKD9tUUmK13kyXRYSFyp1l3es6CwvxzEQ7ma3yrWMweUa7ZIgHcnOQH/JVXnWmBCQf5Ktc8nqAJ7qGl20nWcRCmNfxA7FYU8lV5pwbJBOZ0NSfxMtCMeQm4l9fRJA==
+ bh=FRXVyqGU5xYXxARufVupvQL/xnyaBdea3kmDQlh9SGA=;
+ b=WIfdSeDE8onyoU01RfBOkP9mv6vuRlWS/2QbUovKdS60AOZ0mpZ72XeN+872kc5GDYb1rsnwmHkLWMLBGe3UQZEPKLGXd8dEWrCYYy2gXB70jRj31hh+7mcJ/YKS15y//osBsk7b6FNrleLei/zl7SUp2pxt+Uw1SG9rqM384zSENXC56qSzZncAdIQb/HaYvf79bK/3N5aSyCkPMF5dZmO1zUrPaTqd7isWYkLbLH+N1bWhLbtalgHuBhGXSo1LYE9xAUcBIwLsB1zGvb2wa3qQWRH2KrySuVgWF/8Z9HbyvMTdm/sDMRFlExstS9BL9+30r3c/jmgKCGMbaADb7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IPazkHLyFs2Z6gWxvc0cdc+gg8Ixgn8LAPLDmwAHThk=;
- b=o1H8LBNWZuoiMcYBr3Gpp8tUUqPbiakqaGpok9s+Zn1Jpqzw+c754meGIsrBrzqX6hSs+Tq6mq64jwWECGWptvVC2CQtg0wYkdPnGU8nLAP8NN2ngprHgW8f/dQHhJlIbfasPhN8Ef/MKXbsF5D/RZDKB4C+sfoitCW6Upn8FWg=
+ bh=FRXVyqGU5xYXxARufVupvQL/xnyaBdea3kmDQlh9SGA=;
+ b=Z4c9RMXHK04iZ8DF0y+zUSouX2vkOsAY2VGxqAYrOhbONnbOaJvQWxuMiruQUaGmDTNf+BdKj5IoW2gsAyx47oM/G/J1ylqcD0Hty7M/VlS81qKNEn20IR2605QBW4hkM5vogwOnJ74X3wTk5bTCFKjr+7moZOyUd7k/7lIL25c=
 Authentication-Results: pengutronix.de; dkim=none (message not signed)
  header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
 Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
  by DB6PR0401MB2327.eurprd04.prod.outlook.com (2603:10a6:4:48::25) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3846.26; Thu, 18 Feb
- 2021 11:00:22 +0000
+ 2021 11:00:17 +0000
 Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
  ([fe80::7d13:2d65:d6f7:b978]) by DB8PR04MB6795.eurprd04.prod.outlook.com
  ([fe80::7d13:2d65:d6f7:b978%4]) with mapi id 15.20.3846.042; Thu, 18 Feb 2021
- 11:00:22 +0000
+ 11:00:17 +0000
 From:   Joakim Zhang <qiangqing.zhang@nxp.com>
 To:     mkl@pengutronix.de
 Cc:     linux-can@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH V3 3/3] can: flexcan: invoke flexcan_chip_freeze() to enter freeze mode
-Date:   Thu, 18 Feb 2021 19:00:37 +0800
-Message-Id: <20210218110037.16591-4-qiangqing.zhang@nxp.com>
+Subject: [PATCH V3 1/3] can: flexcan: assert FRZ bit in flexcan_chip_freeze()
+Date:   Thu, 18 Feb 2021 19:00:35 +0800
+Message-Id: <20210218110037.16591-2-qiangqing.zhang@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210218110037.16591-1-qiangqing.zhang@nxp.com>
 References: <20210218110037.16591-1-qiangqing.zhang@nxp.com>
@@ -53,97 +53,81 @@ X-ClientProxiedBy: SG2PR02CA0037.apcprd02.prod.outlook.com
  (2603:10a6:10:fa::15)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.71) by SG2PR02CA0037.apcprd02.prod.outlook.com (2603:1096:3:18::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend Transport; Thu, 18 Feb 2021 11:00:20 +0000
+Received: from localhost.localdomain (119.31.174.71) by SG2PR02CA0037.apcprd02.prod.outlook.com (2603:1096:3:18::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3868.27 via Frontend Transport; Thu, 18 Feb 2021 11:00:15 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f3dd91b5-0c12-45ae-2b31-08d8d3fc629e
+X-MS-Office365-Filtering-Correlation-Id: 9071c84f-10bd-4a2f-dde0-08d8d3fc5fd1
 X-MS-TrafficTypeDiagnostic: DB6PR0401MB2327:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB6PR0401MB23273B7341C9DD712103F943E6859@DB6PR0401MB2327.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:489;
+X-Microsoft-Antispam-PRVS: <DB6PR0401MB232711790F61F2FE957FC369E6859@DB6PR0401MB2327.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: P43tSqbGD03nkse93ZO6FfcF6hoC7t262kHvjDNgq7e/MTvP7mZYADMNY3ZzIrB4mhnAXCY5niP2kDhKQvTgE61Y9wO3UkOanXnglM4bMSUFGRy81kMpXf96/rpY7lWhIPZY5g2ttCWuA8uU8uPBYDX2qOZUNB+VDMpm1QwUlWQZDTy4bb/BVquSAL4dOGZ6KGmMELpi2Wv3SjhO4RuvQIJ564QWvH65filtY8BkNXy0paIDc+OABXTzZGjqegv2HOBPUohsCzPGjY30/aH8Sduq6d9F125Uk9P9bdvoGUFIk0KT2nudwbQDIuvi9KwxYCD0Jy3uAYzIwfwFXs/6Qdu73HO4CTTJZEHtcnFMvCMnQd3+tfqtqFG9wukSbY9O1VQLVYC2add2P1g7eny60J4T5T//VMrvUqxI9MFEqLsWXeiq95AbjdFkoBrMq706x2s9SfJlJK7OvQ1a6aUExyH5/l75enqrJhn6rowUELb9YGDCWfg9hdtJ9PecQM7PZI2XkaH1eNVuDUAY8Y6nWCpGrekwF/AFT0ENty8pCN61Si3imzEznzIxtqg7cMBc3JZexLICC+DIxtlt0VZrzQ==
+X-Microsoft-Antispam-Message-Info: 0J2lDJVoCCeVqJs6TlnQeJlUIaGZvZbnj7BMK+MAbcG3iFJ7wK/rc3lhYPC7AtaXPIsMhwbh4CQsweOtuHroSOdgOr5DZg2mfdYtZNZx8SjvHHvFb/rnM8xWwjkgFzdsnDlQudYtbz4A6c08T/4l8gkBfUzH3irJmkUh6oDh47YQ9CaRbjDKvdNTFIBE4CUf9Af1Zk711YfwA3KK0jMZI6bDzld2q2fjAmnqpvnJH5H8sKwye/IjjfLzFaufG2P1gfJRuDQtyLz2Ml/IXmGjcagHmx/vCMkbeX2UuImCoZDuD3ZqH3nsEG12b6xQRpMVwjdKTyka8Gmi9hYusTrI5VKNDthp+UF1kic6GnLlw/PZNPABSnH+vhG8RsJ0DGwc9OT5bV3ewWTDIRdQEuyFUX4UUl/1dNx1dbiRAShVMAPftdDeSRs77sGrkBz2jHZ20oB6vUtVEJ75GU9q2PBpoE6QOzMbnpezxlaxnt8VZq2g5IrXTVlCfBISCgt7yqOJaeW96W+sXqLIv5iJF9Fi/v4vgmVafzenPVci6fZwFzIB3EVjHr/HdnqeOBPiMkea36bkaBc/0pvPOfuVK+raZA==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(39860400002)(366004)(136003)(346002)(66476007)(8676002)(66556008)(66946007)(52116002)(8936002)(5660300002)(6666004)(186003)(1076003)(6486002)(86362001)(69590400012)(4326008)(478600001)(2616005)(316002)(956004)(83380400001)(6916009)(36756003)(26005)(16526019)(6512007)(2906002)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?w3pyVtZ7IA/uyxcrTwAZtEDareeffmXjHng2jByPNQ6lR0gOP9z385e+zKJM?=
- =?us-ascii?Q?udLwUyyZ65+rTFWaD09LbdEikB/BCb2s/TXKFXgoGaXHA99+gdFlyjyjRbA9?=
- =?us-ascii?Q?8V/yJ0KqtXLFy8xI8jmnD6CldBSWa9luv73f/l/jMwlu6TpuMTDibykK5c1+?=
- =?us-ascii?Q?5trnmWVsYHWiub9LAK2xfhkCgyuXOnSZtFAGJbGZvohOJ0/6QzKRH3NrW5wZ?=
- =?us-ascii?Q?s+6nByzdGvUjwnnwmaeHlOwCGIiaGsqooZXe1JPtQafH5abU5FusfMAroZ0c?=
- =?us-ascii?Q?Awr+RmCZsI9Op8J300UXXbUC6Ju8AVH2kj4vddQiHicwKy7wJWn6qgVaBXPT?=
- =?us-ascii?Q?qsOrdpms0KYSoDcCS9D8I5ZcnqpRHGgVUniKodrMWV2YkgYzUQh/su779x03?=
- =?us-ascii?Q?J8dMwI4oAhmR4hKAb8VBURmzuZmGZDapTWXvSzu+WScXcEtmdXp2gpmi1eSk?=
- =?us-ascii?Q?F4f3GZTViXb1SGLluhxHq/Fmyv38g3sljkIAOP65JUAuOyav9DwtoJnHp0hM?=
- =?us-ascii?Q?qE87eszHYmdpc6B8eo1fmaV5vl0VbM7we/3ypzMcrIWA38ahsTRmWHqspo6a?=
- =?us-ascii?Q?wCqF902hJApHD3MLRHsrG5+yJBrwKL6AZqBY5UQUp6Qr1fqbwD8Ornnr8VWZ?=
- =?us-ascii?Q?Bff8gwnwoYmZNf4Rn/KGs63sM4GKp9zItAoGXM8zhTsIrz9797Y1lq1nCHz4?=
- =?us-ascii?Q?ifGXUFCK3CfaVFkID/oc1ep6kkLb9XKaOm1zPv1QMUD6TyDqRUsnEqEDVYUW?=
- =?us-ascii?Q?lFocBRBNQ/ZXue75ue2np9FM17lV3qhlHd3OOMjTeoKWTL+hML7QVmbd1Fzn?=
- =?us-ascii?Q?kIq0IroVB+e/i+yT/+lHNLQVLpKnDKtVJf252B0QI6KEZ9wtZk4ygTBz7Tck?=
- =?us-ascii?Q?0a6ii+VCl0vS1lhGFKg3D1yDmeZGjEbuBed7O3uvfIoVhr5WmdllWua75u/D?=
- =?us-ascii?Q?dZrKOgT9jxbHgG843hYOYdRu0qKMo9bxe8gNNOYTL9QoBz7bJ8Qsp7tpt38R?=
- =?us-ascii?Q?LZy0V3CUrKm0t4pj5nR6TOIoay4+5m5AGwtlx7tlD8+De59MeM93zSRSmYYt?=
- =?us-ascii?Q?WIJRSmDGgokCNljuEoTicpiwiSljYBQavz+jzxQTgk1DIwptqF32Dfe+p2oe?=
- =?us-ascii?Q?LclWo09INZpcg9BGRf+/ywW31Hzg94y0NwM8kK44G36b+Jya41AwhUIGl206?=
- =?us-ascii?Q?xk6kfKStEWjodkRwrEswYL8lmJ4csrV199axTNQoGzDeqUEnYYqA0fOsydZ1?=
- =?us-ascii?Q?FDxZ1Rc0ODHXlPaNnHRewG5G9Ja5W3tdt5AIQN1rrAuE5h+Gg89DrXMEzlfF?=
- =?us-ascii?Q?DI4jjPTkmxFv5e5ZSTnzBx8f?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?9/Fd2zDrnsBgo1MA98klx4c+zCsNjQAPjbTf1ZCd23yF307UCA7oYuQ+SA1j?=
+ =?us-ascii?Q?2lI+VWuwuAJ0uwmi6RGJFtWxHbs5PAPKKd1fflGsYko7OAh72QkuoquxkLC1?=
+ =?us-ascii?Q?qYrKpZvJJYG0E8/AbVWCigD/e1Z1Wg6ZzhmC5HiTc7HpqdzllMNHJ4AwbEZG?=
+ =?us-ascii?Q?n4Fm63a5j5OzVfMlF3phCZB34EYqM/zecO39i3Zu7vX5s0S4OwnktskDpyz5?=
+ =?us-ascii?Q?Mu4UiNyVImMadCX4bclocd/6zOOjo2FqB5SHw5lxxo0wC9DlpEFtB0rr3+md?=
+ =?us-ascii?Q?5F7KWeAy/AKjv/EavMvX0KZ4Xe21+LH/suW+Gj73W+SLcYUyWFdaGCnYZ/4K?=
+ =?us-ascii?Q?5kDOH0kkEERS2/qvEN/ERScpOKUCW6yG7w75X3H+u/hgLA+NDxT+BxurwRhx?=
+ =?us-ascii?Q?XtOd969e8rvQkAwWKu/9KaMit0Ye+xO1FZzrpiX2FGWK5Rb79FIQ7BF+gOry?=
+ =?us-ascii?Q?twkZYb4RygTo5P9xpULxJTylNtE3XIFaRAg8CG6Gr9yjVQzuqHEtR64eE7t5?=
+ =?us-ascii?Q?Wae0Mv3+fQc3fhtvmdqWlQhTO1wpY1FBiv/fbtVM2e43wja/xSbQv6VkDq0x?=
+ =?us-ascii?Q?E7ueqJCV4wtcpGOavfcpDwib2qbFa8AX/EshEHnCQWn/kqXm0RL40S/+Vr7l?=
+ =?us-ascii?Q?Hydavnt7BK298MV+eGvdomFclOWjcuWmc6nNkI3Hxvk1gKAueVGo4u6xSBCH?=
+ =?us-ascii?Q?OgC9mGRKUjpezZhw78HFpjwADeEMPQ+8miE5BsGyTqhanp0HwNlYtFAWXnIb?=
+ =?us-ascii?Q?tPXDRHpIYwjg/eMo4nurKU5vDVw95GzIi3ElRHEh0rdNogEr2BdtkGCXuYN8?=
+ =?us-ascii?Q?P+8z7YGoOrl+WekngOUtb9vXywq1/JF10yJpevtHO9OsX1HjiY58OETBTnUh?=
+ =?us-ascii?Q?b5bfbTlgMylpHFEQ8Qvf711oVW0T5lGQXZiahxO1bLCGrCcKaG+wTg57JqTZ?=
+ =?us-ascii?Q?fIYPGd7cG1xi1wQmlzgkywiaENypffBLc7Syeh2VQlqpz+YVMaSjP9bXW/Kt?=
+ =?us-ascii?Q?T4PvLWEYq3gD/2tfUxDQ3hH2rOQSGa8yV6JLyPfxC4tK+4Jx3EyQ8+ZBcMT+?=
+ =?us-ascii?Q?p4O+kB9o+wV4f7vM8mAf14b9zwJMukA+QFmMpXVxrEBJ2RZZ5ElzCUWZTDT7?=
+ =?us-ascii?Q?Ztu/Ley/5+lW+oSTikri+c2Nz+PZ25ghvehpgHiFmDSkiR0fld6TNY7y0/t9?=
+ =?us-ascii?Q?8ZxXVNMrX+Mqj+5rq2sCFSlPcauknh/qfp1UnIt5307SQDh5tzzTF9gHW1E/?=
+ =?us-ascii?Q?eH02Vlm3X0cunchofiAZKwkX5qiDhPrbO3VSuNEwWIFNA76JP71W4xzSh1KT?=
+ =?us-ascii?Q?vj1cDfkGACEuaMUNPvSugeeW?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3dd91b5-0c12-45ae-2b31-08d8d3fc629e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9071c84f-10bd-4a2f-dde0-08d8d3fc5fd1
 X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 11:00:22.0453
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Feb 2021 11:00:17.1130
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2+miZ1E2bfTbHSP7SAYHpqGh8p7TKU/UZNtL2AJQuOxjDOzSB/r+1xzKCYEueq3z97ugadrV2FN2jgiVoyDEVw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1Kuyt22MF6jJgOPkUe8WOf54r1cbPyGaFZtwFG2Fwxt2hSCjgmMFDppJ/Ekgg7MejSp9Z5VqCdGsj3PQYql9Zw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2327
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Invoke flexcan_chip_freeze() to enter freeze mode, since need poll
-freeze mode acknowledge.
+Assert HALT bit to enter freeze mode, there is a premise that FRZ bit is
+asserted. This patch asserts FRZ bit in flexcan_chip_freeze, although
+the reset value is 1b'1. This is a prepare patch, later patch will
+invoke flexcan_chip_freeze() to enter freeze mode, which polling freeze
+mode acknowledge.
 
-Fixes: e955cead03117 ("CAN: Add Flexcan CAN controller driver")
+Fixes: b1aa1c7a2165b ("can: flexcan: fix transition from and to freeze mode in chip_{,un}freeze")
 Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
 ---
- drivers/net/can/flexcan.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/net/can/flexcan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index d6a84b7e06da..bdfb36496d96 100644
+index 038fe1036df2..737e594cb12c 100644
 --- a/drivers/net/can/flexcan.c
 +++ b/drivers/net/can/flexcan.c
-@@ -1440,10 +1440,13 @@ static int flexcan_chip_start(struct net_device *dev)
+@@ -662,7 +662,7 @@ static int flexcan_chip_freeze(struct flexcan_priv *priv)
+ 	u32 reg;
  
- 	flexcan_set_bittiming(dev);
+ 	reg = priv->read(&regs->mcr);
+-	reg |= FLEXCAN_MCR_HALT;
++	reg |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT;
+ 	priv->write(reg, &regs->mcr);
  
-+	/* set freeze, halt */
-+	err = flexcan_chip_freeze(priv);
-+	if (err)
-+		goto out_chip_disable;
-+
- 	/* MCR
- 	 *
--	 * enable freeze
--	 * halt now
- 	 * only supervisor access
- 	 * enable warning int
- 	 * enable individual RX masking
-@@ -1452,9 +1455,8 @@ static int flexcan_chip_start(struct net_device *dev)
- 	 */
- 	reg_mcr = priv->read(&regs->mcr);
- 	reg_mcr &= ~FLEXCAN_MCR_MAXMB(0xff);
--	reg_mcr |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT | FLEXCAN_MCR_SUPV |
--		FLEXCAN_MCR_WRN_EN | FLEXCAN_MCR_IRMQ | FLEXCAN_MCR_IDAM_C |
--		FLEXCAN_MCR_MAXMB(priv->tx_mb_idx);
-+	reg_mcr |= FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN | FLEXCAN_MCR_IRMQ |
-+		FLEXCAN_MCR_IDAM_C | FLEXCAN_MCR_MAXMB(priv->tx_mb_idx);
- 
- 	/* MCR
- 	 *
+ 	while (timeout-- && !(priv->read(&regs->mcr) & FLEXCAN_MCR_FRZ_ACK))
 -- 
 2.17.1
 
