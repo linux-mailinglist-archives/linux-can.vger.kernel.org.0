@@ -2,66 +2,60 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BB3322808
-	for <lists+linux-can@lfdr.de>; Tue, 23 Feb 2021 10:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E48FA3229C5
+	for <lists+linux-can@lfdr.de>; Tue, 23 Feb 2021 12:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbhBWJsw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Feb 2021 04:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbhBWJsW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Feb 2021 04:48:22 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDAFC06174A;
-        Tue, 23 Feb 2021 01:47:42 -0800 (PST)
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1lEUHz-007Iqu-8F; Tue, 23 Feb 2021 10:47:31 +0100
-Message-ID: <7909a51a9b234932e1761484a1c2ab5d8fa16317.camel@sipsolutions.net>
-Subject: Re: [PATCH net v1 3/3] [RFC] mac80211: ieee80211_store_ack_skb():
- make use of skb_clone_sk_optional()
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Robin van der Gracht <robin@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-wireless@vger.kernel.org
-Date:   Tue, 23 Feb 2021 10:47:22 +0100
-In-Reply-To: <20210222185141.oma64d4uq64pys45@pengutronix.de>
-References: <20210222151247.24534-1-o.rempel@pengutronix.de>
-         <20210222151247.24534-4-o.rempel@pengutronix.de>
-         <3823be537c3c138de90154835573113c6577188e.camel@sipsolutions.net>
-         <20210222185141.oma64d4uq64pys45@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S232521AbhBWLxw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Feb 2021 06:53:52 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:49930 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232495AbhBWLxB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 23 Feb 2021 06:53:01 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 23 Feb 2021 03:52:13 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Tue, 23 Feb 2021
+ 03:51:59 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Tue, 23 Feb 2021 11:52:12 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-X-malware-bazaar: not-scanned
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <a979b4e3f4df4cf8baf7c5db5d0603cc@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 2021-02-22 at 19:51 +0100, Marc Kleine-Budde wrote:
-> On 22.02.2021 17:30:59, Johannes Berg wrote:
-> > On Mon, 2021-02-22 at 16:12 +0100, Oleksij Rempel wrote:
-> > > This code is trying to clone the skb with optional skb->sk. But this
-> > > will fail to clone the skb if socket was closed just after the skb was
-> > > pushed into the networking stack.
-> > 
-> > Which IMHO is completely fine. If we then still clone the SKB we can't
-> > do anything with it, since the point would be to ... send it back to the
-> > socket, but it's gone.
-> 
-> Ok, but why is the skb cloned if there is no socket linked in skb->sk?
+Hello,
 
-Hm? There are two different ways to get here, one with and one without a
-socket.
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-johannes
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
+
+Regards,
+Ms. Reem.
