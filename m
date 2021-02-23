@@ -2,133 +2,169 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0047321F6E
-	for <lists+linux-can@lfdr.de>; Mon, 22 Feb 2021 19:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11C3223B7
+	for <lists+linux-can@lfdr.de>; Tue, 23 Feb 2021 02:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbhBVSxv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Feb 2021 13:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbhBVSwf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Feb 2021 13:52:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B831C061574
-        for <linux-can@vger.kernel.org>; Mon, 22 Feb 2021 10:51:55 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lEGJ6-0008Gn-TH; Mon, 22 Feb 2021 19:51:44 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:52ba:71b5:63be:d0d8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2A7515E71DB;
-        Mon, 22 Feb 2021 18:51:42 +0000 (UTC)
-Date:   Mon, 22 Feb 2021 19:51:41 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S230060AbhBWBa5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Feb 2021 20:30:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230042AbhBWBa5 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 22 Feb 2021 20:30:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7DFFF64E57;
+        Tue, 23 Feb 2021 01:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614043816;
+        bh=ncie3eGoP1Lo7pENaLRqCW2fkUMl2yR3qc5u8v9f/Cs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MyaOfdQ9yb+Jt1rs6BqyaFO5YLrlUhDHHOh2P6qeIQvBeKoXJV6f/o5WInaM0gWds
+         567BIW+sx8ibyf8SpHpSMFPxwhfG9tUAFIwAJC0omA/3h+qtASKo4guFtMrr5QOG2O
+         wTqnSPJ5TiwOfiTRz2a9quZsIasxGTyXiNfjzMyTpeGemqWvZAH26YoHbgp7wnnG81
+         FPqUI5oZUQKmcRF/2NqkbGNjb1WybkM8DtHTk7d6fReE0HIiGIpHULqejofiDpqn6f
+         BJU1QTcKUCM5RKK5csIN8uc0xTYwrYy6zeS+lgNRFioqoePS5mLm143FDaZ/2FRMUs
+         WyDxYAHySz5YA==
+Date:   Mon, 22 Feb 2021 17:30:12 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     mkl@pengutronix.de, "David S. Miller" <davem@davemloft.net>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Robin van der Gracht <robin@protonic.nl>,
+        syzbot+5138c4dd15a0401bec7b@syzkaller.appspotmail.com,
         kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        linux-wireless@vger.kernel.org
-Subject: Re: [PATCH net v1 3/3] [RFC] mac80211: ieee80211_store_ack_skb():
- make use of skb_clone_sk_optional()
-Message-ID: <20210222185141.oma64d4uq64pys45@pengutronix.de>
-References: <20210222151247.24534-1-o.rempel@pengutronix.de>
- <20210222151247.24534-4-o.rempel@pengutronix.de>
- <3823be537c3c138de90154835573113c6577188e.camel@sipsolutions.net>
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v3] net: introduce CAN specific pointer in the
+ struct net_device
+Message-ID: <20210222173012.39e82e8d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210222150251.12911-1-o.rempel@pengutronix.de>
+References: <20210222150251.12911-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qcmaz5my6wsby6p5"
-Content-Disposition: inline
-In-Reply-To: <3823be537c3c138de90154835573113c6577188e.camel@sipsolutions.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Mon, 22 Feb 2021 16:02:51 +0100 Oleksij Rempel wrote:
+> Since 20dd3850bcf8 ("can: Speed up CAN frame receiption by using
+> ml_priv") the CAN framework uses per device specific data in the AF_CAN
+> protocol. For this purpose the struct net_device->ml_priv is used. Later
+> the ml_priv usage in CAN was extended for other users, one of them being
+> CAN_J1939.
+> 
+> Later in the kernel ml_priv was converted to an union, used by other
+> drivers. E.g. the tun driver started storing it's stats pointer.
+> 
+> Since tun devices can claim to be a CAN device, CAN specific protocols
+> will wrongly interpret this pointer, which will cause system crashes.
+> Mostly this issue is visible in the CAN_J1939 stack.
+> 
+> To fix this issue, we request a dedicated CAN pointer within the
+> net_device struct.
+> 
+> Reported-by: syzbot+5138c4dd15a0401bec7b@syzkaller.appspotmail.com
+> Fixes: 20dd3850bcf8 ("can: Speed up CAN frame receiption by using ml_priv")
+> Fixes: ffd956eef69b ("can: introduce CAN midlayer private and allocate it automatically")
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Fixes: 497a5757ce4e ("tun: switch to net core provided statistics counters")
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
---qcmaz5my6wsby6p5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index ddf4cfc12615..6e25c6f0f190 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1584,6 +1584,16 @@ enum netdev_priv_flags {
+>  #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
+>  #define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
+>  
+> +/**
+> + * enum netdev_ml_priv_type - &struct net_device ml_priv_type
+> + *
+> + * This enum specifies the type of the struct net_device::ml_priv pointer.
+> + */
 
-On 22.02.2021 17:30:59, Johannes Berg wrote:
-> On Mon, 2021-02-22 at 16:12 +0100, Oleksij Rempel wrote:
-> > This code is trying to clone the skb with optional skb->sk. But this
-> > will fail to clone the skb if socket was closed just after the skb was
-> > pushed into the networking stack.
->=20
-> Which IMHO is completely fine. If we then still clone the SKB we can't
-> do anything with it, since the point would be to ... send it back to the
-> socket, but it's gone.
+kdoc (scripts/kernel-doc -none include/linux/netdevice.h) is not happy
+about the fact enum values are not defined. Perhaps they will be
+sufficiently self-explanatory to not bother documenting?
 
-Ok, but why is the skb cloned if there is no socket linked in skb->sk?
+Maybe just:
 
-| static u16 ieee80211_store_ack_skb(struct ieee80211_local *local,
-| 				   struct sk_buff *skb,
-| 				   u32 *info_flags,
-| 				   u64 *cookie)
-| {
-| 	struct sk_buff *ack_skb;
-| 	u16 info_id =3D 0;
-|=20
-| 	if (skb->sk)
-| 		ack_skb =3D skb_clone_sk(skb);
-| 	else
-| 		ack_skb =3D skb_clone(skb, GFP_ATOMIC);
+/* Specifies the type of the struct net_device::ml_priv pointer */
 
-Looks like this is dead code, since both callers of
-ieee80211_store_ack_skb() first check if there is a skb->sk
+?
 
-| 	if (unlikely(!multicast && ((skb->sk &&
-| 		     skb_shinfo(skb)->tx_flags & SKBTX_WIFI_STATUS) ||
-| 		     ctrl_flags & IEEE80211_TX_CTL_REQ_TX_STATUS)))
-| 		info_id =3D ieee80211_store_ack_skb(local, skb, &info_flags,
-| 						  cookie);
+> +enum netdev_ml_priv_type {
+> +	ML_PRIV_NONE,
+> +	ML_PRIV_CAN,
+> +};
+> +
+>  /**
+>   *	struct net_device - The DEVICE structure.
+>   *
+> @@ -1779,6 +1789,7 @@ enum netdev_priv_flags {
+>   * 	@nd_net:		Network namespace this network device is inside
+>   *
+>   * 	@ml_priv:	Mid-layer private
+> +	@ml_priv_type:  Mid-layer private type
 
-> Nothing to fix here, I'd think. If you wanted to get a copy back that
-> gives you the status of the SKB, it should not come as a huge surprise
-> that you have to keep the socket open for that :)
->=20
-> Having the ACK skb will just make us do more work by handing it back
-> to skb_complete_wifi_ack() at TX status time, which is supposed to put
-> it into the socket's error queue, but if the socket is closed ... no
-> point in that.
+missing '*' at the start of the line
 
-We haven't looked at the callers of ieee80211_store_ack_skb().
+>   * 	@lstats:	Loopback statistics
+>   * 	@tstats:	Tunnel statistics
+>   * 	@dstats:	Dummy statistics
+> @@ -2094,8 +2105,10 @@ struct net_device {
+>  	possible_net_t			nd_net;
+>  
+>  	/* mid-layer private */
+> +	void				*ml_priv;
+> +	enum netdev_ml_priv_type	ml_priv_type;
+> +
+>  	union {
+> -		void					*ml_priv;
+>  		struct pcpu_lstats __percpu		*lstats;
+>  		struct pcpu_sw_netstats __percpu	*tstats;
+>  		struct pcpu_dstats __percpu		*dstats;
+> @@ -2286,6 +2299,29 @@ static inline void netdev_reset_rx_headroom(struct net_device *dev)
+>  	netdev_set_rx_headroom(dev, -1);
+>  }
+>  
+> +static inline void *netdev_get_ml_priv(struct net_device *dev,
+> +				       enum netdev_ml_priv_type type)
+> +{
+> +	if (dev->ml_priv_type != type)
+> +		return NULL;
+> +
+> +	return dev->ml_priv;
+> +}
+> +
+> +static inline void netdev_set_ml_priv(struct net_device *dev,
+> +				      void *ml_priv,
+> +				      enum netdev_ml_priv_type type)
+> +{
+> +	WARN_ONCE(dev->ml_priv_type && dev->ml_priv_type != type,
+> +		  "Overwriting already set ml_priv_type (%u) with different ml_priv_type (%u)!\n",
+> +		  dev->ml_priv_type, type);
+> +	WARN_ONCE(!dev->ml_priv_type && dev->ml_priv,
+> +		  "Overwriting already set ml_priv and ml_priv_type is ML_PRIV_NONE!\n");
 
-Marc
+nit: do we need the _ONCE() this helper should be used on control path
+     and relatively rarely, no?
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> +	dev->ml_priv = ml_priv;
+> +	dev->ml_priv_type = type;
+> +}
+> +
+>  /*
+>   * Net namespace inlines
+>   */
 
---qcmaz5my6wsby6p5
-Content-Type: application/pgp-signature; name="signature.asc"
+> @@ -454,6 +455,7 @@ static int j1939_sk_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+>  		j1939_local_ecu_put(priv, jsk->addr.src_name, jsk->addr.sa);
+>  	} else {
+>  		struct net_device *ndev;
+> +		struct can_ml_priv *can_ml;
 
------BEGIN PGP SIGNATURE-----
+nit: rev xmas tree
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmAz/ToACgkQqclaivrt
-76m93wf/eWUzTatxExdw00AuLvib66LXKeD9tLGTQx/Lc7sJ66kOcJ91wO7VKTIY
-2HRsx2m23gP1jkxX1fHFg2BsreVXHdZqE5TycY7FM2vW5dqhsKdZD7Ts43uc9pxI
-XHYDmBlF7oUeoibHpKp5bp3hTruvAGQ/nw4UJ/vymQ8RLEZia8u1W3neQwBcQaTa
-MS+fg4FzktN4VcDzMr5lLCuUsxFV7hUZF+PqPYeeHvF1ymdJHviuaqpIX/ZimpIR
-X+/Ka56E9bgodvkLIFupXin4CTe01fCqRiHxyPLqVL0zHLIMbYqAKIp5d4aIpNMA
-9ojbC9JrGBO0ku47jjTzB3ESXC6wRg==
-=j/gi
------END PGP SIGNATURE-----
-
---qcmaz5my6wsby6p5--
+>  
+>  		ndev = dev_get_by_index(net, addr->can_ifindex);
+>  		if (!ndev) {
