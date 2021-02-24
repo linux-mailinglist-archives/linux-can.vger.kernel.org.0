@@ -2,99 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14BA53234E4
-	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 02:20:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 793683234E7
+	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 02:20:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbhBXBGu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Feb 2021 20:06:50 -0500
-Received: from mail-yb1-f169.google.com ([209.85.219.169]:33474 "EHLO
-        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbhBXALE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Feb 2021 19:11:04 -0500
-Received: by mail-yb1-f169.google.com with SMTP id x19so93485ybe.0
-        for <linux-can@vger.kernel.org>; Tue, 23 Feb 2021 16:10:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cml7mREV7L5A/aqvNQAAB5IflVJixN22fq1jq0gbRRA=;
-        b=cvqN2OKf7in8ByhFpbjnQFzXjgmdOQ9YUSKLztB7AhzxrGEPETF3US0rs3Hvq0O3hB
-         x8dMEcVxmsuq5d2ixkr/4+49uWuUMAAJKqOEBKRqwLbex5sXGnc6+Qho13vwtPvOaPJT
-         z9HIW/xe2N2e7rqcUMNTlVJGcnWQYp4PmKvHgxtjYv1HrLL57VK0VqHN9rLlSns7GwC+
-         4rUN5Xv6x+njvmIzQvxWXzubR3oYIUXfRXJkat44BC3EQxYWdmk8IDbxMG5diEPW807t
-         /Hxg0Q+SwHYoIP5mz5wV7RSVjUakxwKepov4aOZqGpXizOAeIArH87ZKiCahxF/SR5xv
-         Cx4w==
-X-Gm-Message-State: AOAM531zs1gHjNynJbxhCDkgSlbfiDiYnpgWXdIRP6K4y3A4iujyp+6K
-        d3jFjBazlzBW0owmAhVl1uDJ5H2JZwKVEWjh8ZhWaJQUYP5AnA==
-X-Google-Smtp-Source: ABdhPJwylANlyaj45F25bMY6+YAhXGplUkJW7eRogMnd7ar/U4TowIO0bPUHa4nA3Z2rHi809Wh20dr5odsoQqmU5Qw=
-X-Received: by 2002:a05:6902:4b2:: with SMTP id r18mr45085435ybs.226.1614125420922;
- Tue, 23 Feb 2021 16:10:20 -0800 (PST)
+        id S233328AbhBXBHS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Feb 2021 20:07:18 -0500
+Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:58409 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234870AbhBXAWz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Feb 2021 19:22:55 -0500
+Received: from localhost.localdomain ([153.202.107.157])
+        by mwinf5d12 with ME
+        id YoLV2400J3PnFJp03oLaNP; Wed, 24 Feb 2021 01:20:37 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 24 Feb 2021 01:20:37 +0100
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 0/5] Introducing new CAN FD bittiming parameters: Transmission Delay Compensation (TDC)
+Date:   Wed, 24 Feb 2021 09:20:03 +0900
+Message-Id: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20210223162852.218041-1-mailhol.vincent@wanadoo.fr>
- <20210223162852.218041-4-mailhol.vincent@wanadoo.fr> <87im6id0o3.fsf@hardanger.blackshift.org>
-In-Reply-To: <87im6id0o3.fsf@hardanger.blackshift.org>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 24 Feb 2021 09:10:10 +0900
-Message-ID: <CAMZ6RqJ71DW7=AaABijtLnvi1nX-z3eDTnwx=UZQhX-6AGu0Cw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/5] can: netlink: move '=' operators back to previous
- line (checkpatch fix)
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+At high bit rates, the propagation delay from the TX pin to the RX pin
+of the transceiver causes measurement errors and needs to be
+corrected.
 
-On Wed. 24 Feb 2021 at 04:49, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 24.02.2021 01:28:50, Vincent Mailhol wrote:
-> [...]
-> > --- a/drivers/net/can/dev/netlink.c
-> > +++ b/drivers/net/can/dev/netlink.c
-> > @@ -8,20 +8,18 @@
-> >  #include <net/rtnetlink.h>
-> >
-> >  static const struct nla_policy can_policy[IFLA_CAN_MAX + 1] = {
-> > -     [IFLA_CAN_STATE]        = { .type = NLA_U32 },
-> > -     [IFLA_CAN_CTRLMODE]     = { .len = sizeof(struct can_ctrlmode) },
-> > -     [IFLA_CAN_RESTART_MS]   = { .type = NLA_U32 },
-> > -     [IFLA_CAN_RESTART]      = { .type = NLA_U32 },
-> > -     [IFLA_CAN_BITTIMING]    = { .len = sizeof(struct can_bittiming) },
-> > -     [IFLA_CAN_BITTIMING_CONST]
-> > -                             = { .len = sizeof(struct can_bittiming_const) },
-> > -     [IFLA_CAN_CLOCK]        = { .len = sizeof(struct can_clock) },
-> > -     [IFLA_CAN_BERR_COUNTER] = { .len = sizeof(struct can_berr_counter) },
-> > -     [IFLA_CAN_DATA_BITTIMING]
-> > -                             = { .len = sizeof(struct can_bittiming) },
-> > -     [IFLA_CAN_DATA_BITTIMING_CONST]
-> > -                             = { .len = sizeof(struct can_bittiming_const) },
-> > -     [IFLA_CAN_TERMINATION]  = { .type = NLA_U16 },
-> > +     [IFLA_CAN_STATE]                = { .type = NLA_U32 },
-> > +     [IFLA_CAN_CTRLMODE]             = { .len = sizeof(struct can_ctrlmode) },
-> > +     [IFLA_CAN_RESTART_MS]           = { .type = NLA_U32 },
-> > +     [IFLA_CAN_RESTART]              = { .type = NLA_U32 },
-> > +     [IFLA_CAN_BITTIMING]            = { .len = sizeof(struct can_bittiming) },
-> > +     [IFLA_CAN_BITTIMING_CONST]      = { .len = sizeof(struct can_bittiming_const) },
-> > +     [IFLA_CAN_CLOCK]                = { .len = sizeof(struct can_clock) },
-> > +     [IFLA_CAN_BERR_COUNTER]         = { .len = sizeof(struct can_berr_counter) },
-> > +     [IFLA_CAN_DATA_BITTIMING]       = { .len = sizeof(struct can_bittiming) },
-> > +     [IFLA_CAN_DATA_BITTIMING_CONST] = { .len = sizeof(struct can_bittiming_const) },
-> > +     [IFLA_CAN_TERMINATION]          = { .type = NLA_U16 },
-> > +     [IFLA_CAN_TERMINATION]          = { .type = NLA_U16 },
->
-> You doubled the last entry by mistake.
+To solve this issue, ISO 11898-1 introduces in section 11.3.3
+"Transmitter delay compensation" (here after TDC) a SSP (Secondary
+Sample Point) equal to the distance, in time quanta, from the start of
+the bit time on the TX pin to the actual measurement on the RX pin.
 
-Arf...
-As you noticed, the double entry is then removed in the next
-patch. That is because I saw the issue but miserably modified the
-wrong patch.
+This patch series implements the TDC parameters which allow the
+controller to calculate that SSP.
 
-I will correct this in v2.
+The first patch introduces the new structures, the second one saves
+eight bytes on struct can_priv, the third fixes some existing
+checkpatch warnings in preparation on the next one, the fourth one
+implements the netlink interface and, finally, the fifth one adds the
+calculation.
+
+This is a follow-up on the RFC is sent already more than one month
+ago.
+
+Ref: https://lore.kernel.org/linux-can/CAMZ6RqLtg1ynVeePLLriUw0+KLbTpPJHapTEanv1_EZYJSrK=g@mail.gmail.com/T/#u
+
+You might also be interested in below patch which implement those
+changes in iproute command line:
+https://lore.kernel.org/linux-can/20210223181714.219655-1-mailhol.vincent@wanadoo.fr/T/#t
+Because this v2 introduced no changes on the netlink interface, the
+iproute patch will *not* be resend.
+
+Changes from v1:
+  - Changed the commit message of the first patch of the serie to
+    clarify the condition of when TDC is active.
+  - Changed the alignment style from tabulations to single space in
+    drivers/net/can/dev/netlink.c
+  - Remove duplicated [IFLA_CAN_TERMINATION] entry in
+    drivers/net/can/dev/netlink.c
+
+Changes from the RFC:
+  - The RFC was a single e-mail with all comments in bulk, made this a
+    proper patch series.
+  - Added the netlink interface.
+  - Rename the function can_set_tdc to can_calc_tdco (the formula is
+    the same, everything around it was reworked).
+  - Other small miscellaneous changes.
+
+TODO: the documentation will be updated after the netlink interface
+gets approved.
 
 
 Yours sincerely,
 Vincent
+
+Vincent Mailhol (5):
+  can: add new CAN FD bittiming parameters: Transmitter Delay
+    Compensation (TDC)
+  can: dev: reorder struct can_priv members for better packing
+  can: netlink: move '=' operators back to previous line (checkpatch
+    fix)
+  can: add netlink interface for CAN-FD Transmitter Delay Compensation
+    (TDC)
+  can: bittiming: add calculation for CAN FD Transmitter Delay
+    Compensation (TDC)
+
+ drivers/net/can/dev/bittiming.c  |  23 +++++++
+ drivers/net/can/dev/netlink.c    | 100 ++++++++++++++++++++++++++-----
+ include/linux/can/bittiming.h    |  71 ++++++++++++++++++++++
+ include/linux/can/dev.h          |  14 +++--
+ include/uapi/linux/can/netlink.h |   6 ++
+ 5 files changed, 194 insertions(+), 20 deletions(-)
+
+
+base-commit: 1b34628ac60360ef7455c00f01dc62f82ed08d8c
+-- 
+2.26.2
+
