@@ -2,139 +2,297 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBDD3241FE
-	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 17:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E11323C90
+	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 14:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232578AbhBXQVQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 Feb 2021 11:21:16 -0500
-Received: from mxcwn13.webd.pl ([194.181.228.69]:37062 "EHLO mxcwn13.webd.pl"
+        id S233826AbhBXMv1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 Feb 2021 07:51:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232949AbhBXQU2 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 24 Feb 2021 11:20:28 -0500
-X-Greylist: delayed 17685 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Feb 2021 11:20:26 EST
-Received: from wn13.int.webd ([192.168.101.113] helo=wn13.webd.pl)
-        by mta01.webd.pl with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <m.madej@xtrack.com>)
-        id 1lEsHr-0005vz-9l
-        for linux-can@vger.kernel.org; Wed, 24 Feb 2021 12:24:59 +0100
-Received: from [192.168.101.231] (port=45408 helo=mta01.int.webd)
-        by wn13.webd.pl with esmtp (Exim 4.93)
-        (envelope-from <m.madej@xtrack.com>)
-        id 1lEsHr-0005DL-76
-        for linux-can@vger.kernel.org; Wed, 24 Feb 2021 12:24:59 +0100
-X-Quarantine-ID: <7yOqngGKG_Gm>
-X-Virus-Scanned: amavisd-new at mxwn13.webd.pl
-Received: from wn13.webd.pl ([192.168.101.113])
-        by mta01.int.webd (mxwn13.webd.pl [192.168.101.200]) (amavisd-new, port 10134)
-        with ESMTP id 7yOqngGKG_Gm for <linux-can@vger.kernel.org>;
-        Wed, 24 Feb 2021 12:24:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xtrack.com;
-         s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=UvujGglEUtXAHcPQWfT7nTB6HDaNso/Ri9rzb4oMUvE=; b=nGHo4sKex60knr2hiPRAgqlNf+
-        j9oioqLl1zbk7Z+hqt5SieIEAKwUasGcTLUT/2fxeONQzlLCoRuKGtuztwExA5UlIbW3YWd2bDj08
-        YBbZ4QOBMfJiO05L1tWCwoNojZNIbSuS4lkb2/FH5NSk28s4TOVORPW9Zj9efXh7W+GM4tCBxM2YE
-        G+fPSGCTpLqHGccpSUMgHgnmZaz8RPzLEfjDfpAuWsPnvhSGGI4X44c9J/XQCDtgiXvESAJdHPxac
-        iKsAnljz2Kpq3HjvkzW3ras5uo2p4SEHQ3yrUcy269gtSs8dII12No9XytaJRWz5YmQiHQ+kWxq+4
-        epu3QBAw==;
-Received: from [185.241.198.130] (port=56500 helo=[192.168.32.4])
-        by wn13.webd.pl with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <m.madej@xtrack.com>)
-        id 1lEsHq-0005D2-Ui
-        for linux-can@vger.kernel.org; Wed, 24 Feb 2021 12:24:58 +0100
-To:     linux-can@vger.kernel.org
-From:   Mariusz Madej <m.madej@xtrack.com>
-Subject: m_can: a lot of 'Rx FIFO 0 Message Lost' in dmesg
-Message-ID: <b4179765-d57b-991d-0baa-0270bdf6fd0b@xtrack.com>
-Date:   Wed, 24 Feb 2021 12:24:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S232408AbhBXMvO (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 24 Feb 2021 07:51:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C2ADE64EEA;
+        Wed, 24 Feb 2021 12:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614171033;
+        bh=wWRzA55ZZ0wfuWAkDVKRy/jzGb5TYicPsND7SZ8CG04=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SMkL+CgAVwlbeoPk4s6gppMEzDkB6F1w2l55l50dnZ9FS8AmMZBsz0jX9vunb0zuT
+         0VOlGu0/vFhfSr6UsN0h5Edxz9qNx6KfcYFi6+tFK/DvdBq6suJCKnyBqy438MHIid
+         XJ3gHkWZe8Q3plPE09lbUKv0Y8ytoxOpWTBzl7CBP/r7zu20B0S4ARCG/U2Y/bQmBD
+         70kCXJqV+6qHqBADU2mjchdFhCtZYzxLEshT9MpoNwZF7ba1ckd2P1mHsfQyp9SgoK
+         /qXgaGV8Yh64xIriR9UpwBoMzbfF2vAXYobPE29uaT9LRtDR0xWuahFxToyAwUMCbK
+         4hzq5njIFHl5A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 05/67] can: flexcan: add CAN wakeup function for i.MX8QM
+Date:   Wed, 24 Feb 2021 07:49:23 -0500
+Message-Id: <20210224125026.481804-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210224125026.481804-1-sashal@kernel.org>
+References: <20210224125026.481804-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+From: Joakim Zhang <qiangqing.zhang@nxp.com>
 
-I have a problem with m_can controller in my sama5d2 processor.
-Under heavy can traffic it happens that my device starts to report (dmesg):
+[ Upstream commit 812f0116c66a3ebaf0b6062226aa85574dd79f67 ]
 
-[   77.610000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.620000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.630000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.630000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.640000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.640000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.650000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.660000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
-[   77.660000] m_can_platform f8054000.can can0: Rx FIFO 0 Message Lost
+The System Controller Firmware (SCFW) is a low-level system function
+which runs on a dedicated Cortex-M core to provide power, clock, and
+resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
+(QM, QP), and i.MX8QX (QXP, DX). SCU driver manages the IPC interface
+between host CPU and the SCU firmware running on M4.
 
-what causes large load problem in my system.
+For i.MX8QM, stop mode request is controlled by System Controller Unit(SCU)
+firmware, this patch introduces FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW quirk
+for this function.
 
-I think I have a clue what is going on but my kernel knowledge is low so 
-i want
-You to tell me if I am right or not. So:
+Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+Link: https://lore.kernel.org/r/20201106105627.31061-6-qiangqing.zhang@nxp.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/can/flexcan.c | 123 ++++++++++++++++++++++++++++++++------
+ 1 file changed, 106 insertions(+), 17 deletions(-)
 
-The only place in m_can.c file, where interrupt register is cleared is 
-function
-called when interrupt arrives
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 038fe1036df23..7ab20a6b0d1db 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -9,6 +9,7 @@
+ //
+ // Based on code originally by Andrey Volkov <avolkov@varma-el.com>
+ 
++#include <dt-bindings/firmware/imx/rsrc.h>
+ #include <linux/bitfield.h>
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+@@ -17,6 +18,7 @@
+ #include <linux/can/rx-offload.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
++#include <linux/firmware/imx/sci.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/mfd/syscon.h>
+@@ -242,6 +244,8 @@
+ #define FLEXCAN_QUIRK_SUPPORT_FD BIT(9)
+ /* support memory detection and correction */
+ #define FLEXCAN_QUIRK_SUPPORT_ECC BIT(10)
++/* Setup stop mode with SCU firmware to support wakeup */
++#define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW BIT(11)
+ 
+ /* Structure of the message buffer */
+ struct flexcan_mb {
+@@ -347,6 +351,7 @@ struct flexcan_priv {
+ 	u8 mb_count;
+ 	u8 mb_size;
+ 	u8 clk_src;	/* clock source of CAN Protocol Engine */
++	u8 scu_idx;
+ 
+ 	u64 rx_mask;
+ 	u64 tx_mask;
+@@ -358,6 +363,9 @@ struct flexcan_priv {
+ 	struct regulator *reg_xceiver;
+ 	struct flexcan_stop_mode stm;
+ 
++	/* IPC handle when setup stop mode by System Controller firmware(scfw) */
++	struct imx_sc_ipc *sc_ipc_handle;
++
+ 	/* Read and Write APIs */
+ 	u32 (*read)(void __iomem *addr);
+ 	void (*write)(u32 val, void __iomem *addr);
+@@ -387,7 +395,7 @@ static const struct flexcan_devtype_data fsl_imx6q_devtype_data = {
+ static const struct flexcan_devtype_data fsl_imx8qm_devtype_data = {
+ 	.quirks = FLEXCAN_QUIRK_DISABLE_RXFG | FLEXCAN_QUIRK_ENABLE_EACEN_RRS |
+ 		FLEXCAN_QUIRK_USE_OFF_TIMESTAMP | FLEXCAN_QUIRK_BROKEN_PERR_STATE |
+-		FLEXCAN_QUIRK_SUPPORT_FD,
++		FLEXCAN_QUIRK_SUPPORT_FD | FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW,
+ };
+ 
+ static struct flexcan_devtype_data fsl_imx8mp_devtype_data = {
+@@ -546,18 +554,42 @@ static void flexcan_enable_wakeup_irq(struct flexcan_priv *priv, bool enable)
+ 	priv->write(reg_mcr, &regs->mcr);
+ }
+ 
++static int flexcan_stop_mode_enable_scfw(struct flexcan_priv *priv, bool enabled)
++{
++	u8 idx = priv->scu_idx;
++	u32 rsrc_id, val;
++
++	rsrc_id = IMX_SC_R_CAN(idx);
++
++	if (enabled)
++		val = 1;
++	else
++		val = 0;
++
++	/* stop mode request via scu firmware */
++	return imx_sc_misc_set_control(priv->sc_ipc_handle, rsrc_id,
++				       IMX_SC_C_IPG_STOP, val);
++}
++
+ static inline int flexcan_enter_stop_mode(struct flexcan_priv *priv)
+ {
+ 	struct flexcan_regs __iomem *regs = priv->regs;
+ 	u32 reg_mcr;
++	int ret;
+ 
+ 	reg_mcr = priv->read(&regs->mcr);
+ 	reg_mcr |= FLEXCAN_MCR_SLF_WAK;
+ 	priv->write(reg_mcr, &regs->mcr);
+ 
+ 	/* enable stop request */
+-	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+-			   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
++	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW) {
++		ret = flexcan_stop_mode_enable_scfw(priv, true);
++		if (ret < 0)
++			return ret;
++	} else {
++		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
++				   1 << priv->stm.req_bit, 1 << priv->stm.req_bit);
++	}
+ 
+ 	return flexcan_low_power_enter_ack(priv);
+ }
+@@ -566,10 +598,17 @@ static inline int flexcan_exit_stop_mode(struct flexcan_priv *priv)
+ {
+ 	struct flexcan_regs __iomem *regs = priv->regs;
+ 	u32 reg_mcr;
++	int ret;
+ 
+ 	/* remove stop request */
+-	regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
+-			   1 << priv->stm.req_bit, 0);
++	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW) {
++		ret = flexcan_stop_mode_enable_scfw(priv, false);
++		if (ret < 0)
++			return ret;
++	} else {
++		regmap_update_bits(priv->stm.gpr, priv->stm.req_gpr,
++				   1 << priv->stm.req_bit, 0);
++	}
+ 
+ 	reg_mcr = priv->read(&regs->mcr);
+ 	reg_mcr &= ~FLEXCAN_MCR_SLF_WAK;
+@@ -1867,7 +1906,7 @@ static void unregister_flexcandev(struct net_device *dev)
+ 	unregister_candev(dev);
+ }
+ 
+-static int flexcan_setup_stop_mode(struct platform_device *pdev)
++static int flexcan_setup_stop_mode_gpr(struct platform_device *pdev)
+ {
+ 	struct net_device *dev = platform_get_drvdata(pdev);
+ 	struct device_node *np = pdev->dev.of_node;
+@@ -1912,11 +1951,6 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
+ 		"gpr %s req_gpr=0x02%x req_bit=%u\n",
+ 		gpr_np->full_name, priv->stm.req_gpr, priv->stm.req_bit);
+ 
+-	device_set_wakeup_capable(&pdev->dev, true);
+-
+-	if (of_property_read_bool(np, "wakeup-source"))
+-		device_set_wakeup_enable(&pdev->dev, true);
+-
+ 	return 0;
+ 
+ out_put_node:
+@@ -1924,6 +1958,58 @@ static int flexcan_setup_stop_mode(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static int flexcan_setup_stop_mode_scfw(struct platform_device *pdev)
++{
++	struct net_device *dev = platform_get_drvdata(pdev);
++	struct flexcan_priv *priv;
++	u8 scu_idx;
++	int ret;
++
++	ret = of_property_read_u8(pdev->dev.of_node, "fsl,scu-index", &scu_idx);
++	if (ret < 0) {
++		dev_dbg(&pdev->dev, "failed to get scu index\n");
++		return ret;
++	}
++
++	priv = netdev_priv(dev);
++	priv->scu_idx = scu_idx;
++
++	/* this function could be defered probe, return -EPROBE_DEFER */
++	return imx_scu_get_handle(&priv->sc_ipc_handle);
++}
++
++/* flexcan_setup_stop_mode - Setup stop mode for wakeup
++ *
++ * Return: = 0 setup stop mode successfully or doesn't support this feature
++ *         < 0 fail to setup stop mode (could be defered probe)
++ */
++static int flexcan_setup_stop_mode(struct platform_device *pdev)
++{
++	struct net_device *dev = platform_get_drvdata(pdev);
++	struct flexcan_priv *priv;
++	int ret;
++
++	priv = netdev_priv(dev);
++
++	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW)
++		ret = flexcan_setup_stop_mode_scfw(pdev);
++	else if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR)
++		ret = flexcan_setup_stop_mode_gpr(pdev);
++	else
++		/* return 0 directly if doesn't support stop mode feature */
++		return 0;
++
++	if (ret)
++		return ret;
++
++	device_set_wakeup_capable(&pdev->dev, true);
++
++	if (of_property_read_bool(pdev->dev.of_node, "wakeup-source"))
++		device_set_wakeup_enable(&pdev->dev, true);
++
++	return 0;
++}
++
+ static const struct of_device_id flexcan_of_match[] = {
+ 	{ .compatible = "fsl,imx8qm-flexcan", .data = &fsl_imx8qm_devtype_data, },
+ 	{ .compatible = "fsl,imx8mp-flexcan", .data = &fsl_imx8mp_devtype_data, },
+@@ -2054,17 +2140,20 @@ static int flexcan_probe(struct platform_device *pdev)
+ 		goto failed_register;
+ 	}
+ 
++	err = flexcan_setup_stop_mode(pdev);
++	if (err < 0) {
++		if (err != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "setup stop mode failed\n");
++		goto failed_setup_stop_mode;
++	}
++
+ 	of_can_transceiver(dev);
+ 	devm_can_led_init(dev);
+ 
+-	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_STOP_MODE_GPR) {
+-		err = flexcan_setup_stop_mode(pdev);
+-		if (err)
+-			dev_dbg(&pdev->dev, "failed to setup stop-mode\n");
+-	}
+-
+ 	return 0;
+ 
++ failed_setup_stop_mode:
++	unregister_flexcandev(dev);
+  failed_register:
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+-- 
+2.27.0
 
-static irqreturn_t m_can_isr(int irq, void *dev_id)
-{
-.
-.
-         /* ACK all irqs */
-         if (ir & IR_ALL_INT)
-                 m_can_write(cdev, M_CAN_IR, ir);
-.
-.
-}
-
-But when we enter 'NAPI mode' in heavy load we are never get to this 
-function
-until load gets lower and interrupts are enabled again. In this situation,
-this code:
-
-static int m_can_do_rx_poll(struct net_device *dev, int quota)
-{
-         struct m_can_classdev *cdev = netdev_priv(dev);
-         u32 pkts = 0;
-         u32 rxfs;
-
-         rxfs = m_can_read(cdev, M_CAN_RXF0S);
-         if (!(rxfs & RXFS_FFL_MASK)) {
-                 netdev_dbg(dev, "no messages in fifo0\n");
-                 return 0;
-         }
-
-         while ((rxfs & RXFS_FFL_MASK) && (quota > 0)) {
-                 if (rxfs & RXFS_RFL)
-                         netdev_warn(dev, "Rx FIFO 0 Message Lost\n");
-
-                 m_can_read_fifo(dev, rxfs);
-
-                 quota--;
-                 pkts++;
-                 rxfs = m_can_read(cdev, M_CAN_RXF0S);
-         }
-
-         if (pkts)
-                 can_led_event(dev, CAN_LED_EVENT_RX);
-
-         return pkts;
-}
-
-will always have (rxfs & RXFS_RFL) == true until interrupt are enabled 
-again.
-That is why we got so many messages in a row for so long time. So clearing
-RXFS_RFL bit after warning is issued could be a solution.
-
-Can You tell me if I am right?
