@@ -2,158 +2,133 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFB232454B
-	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 21:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA4A3245A1
+	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 22:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbhBXUfo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 Feb 2021 15:35:44 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.53]:19003 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbhBXUfn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Feb 2021 15:35:43 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1614198755; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=odsDwFjEYdfA5fcy5cR9tiEdNvmFHn+pKzHvMW98ODONhFDpUotNR6Le55l0gSR1Sk
-    Gl+5W98tasj8PKmzjnFSnn/QvwBqlO6RafDrglVp4ph2MdUafo7N5aKOcYAuIwWIvF7l
-    jBFzD2i3pFgvGCjLCuvcnp8tibzejBEicEkQMgGJUwp/ayvcKN20vmMvLiyWhz8YsuDA
-    oXBx/BOg5/4eZNtotxS26EL2ns9su3Hfoowigk/PVw53dl+Vt9RSXFhchxxM/rQc9f1k
-    XputsSH4ZIHrdxzlXLndgmuy3Eqk5ZcRoVph6t7i1LVc3t2Wb3Q3Sn/tLp7Zvhb7TIMG
-    FbOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1614198755;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=aC1Oqi0gTCBRh71ZBeFShz0zjWZcHdK+/jHi3+gDnLs=;
-    b=M/VC1z8GJSlqaSH5c0eWBfyFGVAnGx1h58r3RgNWxlII9QC4uFnlMnH/cYTN2epdFj
-    vGjpML7OxbT1S2Fch68z7CltfsvINHWaxUWKRbLyBD9mo5+/gxANf2PpZy0AVqb/BzrA
-    2mtwE/PXCzx7rI9j7yVF06jqmXtUweBDAaTJXftx8ZgUZZvbyAh36WWdlaCmP98lv3Fo
-    wkXXp5Xb/fzPIJ7OKiIEvhmF1E+IEx5lSOgHRqGi9DEBy5g9bazXioRglyIjlHUJBMau
-    RM4k9dk1+2f/wagua7UMZoORYXTAYPH5ZNu4b4olbYTZ+KUXp+1rGTlNLW6vBR8Ogw8w
-    nHRA==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1614198755;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=aC1Oqi0gTCBRh71ZBeFShz0zjWZcHdK+/jHi3+gDnLs=;
-    b=TKTl2BmArHFa/WMPOGV1JrDkfmRL6iTYUuliFEffB1vkfxhULsa2R52PM5LS2B2X41
-    fvxMiwGTVatwTWYSDSDbW/XYO4lYjkutw8iJw/sGgB2Gib8XEWq1H6JCuBJnoLtxlZHX
-    N7prqFjJ+JA3mw6NEkgORVTmwyqO6EjhV4xr1rU16ekrGxecrJcMjFLmH7IKTfaKNTHY
-    AoxK2akC3T8mr2PcxLtI6Ca1o5hKdwj3t8Xavukjq/qt9+HNvXTom/lUiH10DAUH/Dc0
-    NWBqtD5N1p+8aS6/sbc1sLosPLuu5MLiakzC8TiZID+soHHHQaKNJGXgVhJ/I+PuigWl
-    e1qA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMJV8h5kkV6"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-    by smtp.strato.de (RZmta 47.19.0 DYNA|AUTH)
-    with ESMTPSA id V003bex1OKWYD2m
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 24 Feb 2021 21:32:34 +0100 (CET)
-Subject: Re: [PATCH net v3 1/1] can: can_skb_set_owner(): fix ref counting if
- socket was closed before setting skb ownership
-To:     Eric Dumazet <edumazet@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S233251AbhBXVPO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 Feb 2021 16:15:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232623AbhBXVPN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Feb 2021 16:15:13 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F41C06174A
+        for <linux-can@vger.kernel.org>; Wed, 24 Feb 2021 13:14:33 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lF1UE-00078Y-RH; Wed, 24 Feb 2021 22:14:22 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:55fd:a17b:b4ca:d5fb])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C3D555E8908;
+        Wed, 24 Feb 2021 21:14:19 +0000 (UTC)
+Date:   Wed, 24 Feb 2021 22:14:18 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Robin van der Gracht <robin@protonic.nl>,
         Andre Naujoks <nautsch2@gmail.com>, kernel@pengutronix.de,
         linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v3 1/1] can: can_skb_set_owner(): fix ref counting if
+ socket was closed before setting skb ownership
+Message-ID: <20210224211418.74dltgabq2rpfuf2@pengutronix.de>
 References: <20210224075932.20234-1-o.rempel@pengutronix.de>
  <CANn89iLEHpCphH8vKd=0BS7pgdP1YZDGqQfQPeGBkD09RoHtzg@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <76ec5c10-c051-7a52-9ae7-04af79a0e9e5@hartkopp.net>
-Date:   Wed, 24 Feb 2021 21:32:29 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+ <76ec5c10-c051-7a52-9ae7-04af79a0e9e5@hartkopp.net>
 MIME-Version: 1.0
-In-Reply-To: <CANn89iLEHpCphH8vKd=0BS7pgdP1YZDGqQfQPeGBkD09RoHtzg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dnjabxnrhdo3b7pb"
+Content-Disposition: inline
+In-Reply-To: <76ec5c10-c051-7a52-9ae7-04af79a0e9e5@hartkopp.net>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--dnjabxnrhdo3b7pb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 24.02.21 09:53, Eric Dumazet wrote:
-> On Wed, Feb 24, 2021 at 8:59 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
->>
->> There are two ref count variables controlling the free()ing of a socket:
->> - struct sock::sk_refcnt - which is changed by sock_hold()/sock_put()
->> - struct sock::sk_wmem_alloc - which accounts the memory allocated by
->>    the skbs in the send path.
->>
->> In case there are still TX skbs on the fly and the socket() is closed,
->> the struct sock::sk_refcnt reaches 0. In the TX-path the CAN stack
->> clones an "echo" skb, calls sock_hold() on the original socket and
->> references it. This produces the following back trace:
->>
->> | WARNING: CPU: 0 PID: 280 at lib/refcount.c:25 refcount_warn_saturate+0x114/0x134
->> | refcount_t: addition on 0; use-after-free.
->> | Modules linked in: coda_vpu(E) v4l2_jpeg(E) videobuf2_vmalloc(E) imx_vdoa(E)
->> | CPU: 0 PID: 280 Comm: test_can.sh Tainted: G            E     5.11.0-04577-gf8ff6603c617 #203
->> | Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
->> | Backtrace:
->> | [<80bafea4>] (dump_backtrace) from [<80bb0280>] (show_stack+0x20/0x24) r7:00000000 r6:600f0113 r5:00000000 r4:81441220
->> | [<80bb0260>] (show_stack) from [<80bb593c>] (dump_stack+0xa0/0xc8)
->> | [<80bb589c>] (dump_stack) from [<8012b268>] (__warn+0xd4/0x114) r9:00000019 r8:80f4a8c2 r7:83e4150c r6:00000000 r5:00000009 r4:80528f90
->> | [<8012b194>] (__warn) from [<80bb09c4>] (warn_slowpath_fmt+0x88/0xc8) r9:83f26400 r8:80f4a8d1 r7:00000009 r6:80528f90 r5:00000019 r4:80f4a8c2
->> | [<80bb0940>] (warn_slowpath_fmt) from [<80528f90>] (refcount_warn_saturate+0x114/0x134) r8:00000000 r7:00000000 r6:82b44000 r5:834e5600 r4:83f4d540
->> | [<80528e7c>] (refcount_warn_saturate) from [<8079a4c8>] (__refcount_add.constprop.0+0x4c/0x50)
->> | [<8079a47c>] (__refcount_add.constprop.0) from [<8079a57c>] (can_put_echo_skb+0xb0/0x13c)
->> | [<8079a4cc>] (can_put_echo_skb) from [<8079ba98>] (flexcan_start_xmit+0x1c4/0x230) r9:00000010 r8:83f48610 r7:0fdc0000 r6:0c080000 r5:82b44000 r4:834e5600
->> | [<8079b8d4>] (flexcan_start_xmit) from [<80969078>] (netdev_start_xmit+0x44/0x70) r9:814c0ba0 r8:80c8790c r7:00000000 r6:834e5600 r5:82b44000 r4:82ab1f00
->> | [<80969034>] (netdev_start_xmit) from [<809725a4>] (dev_hard_start_xmit+0x19c/0x318) r9:814c0ba0 r8:00000000 r7:82ab1f00 r6:82b44000 r5:00000000 r4:834e5600
->> | [<80972408>] (dev_hard_start_xmit) from [<809c6584>] (sch_direct_xmit+0xcc/0x264) r10:834e5600 r9:00000000 r8:00000000 r7:82b44000 r6:82ab1f00 r5:834e5600 r4:83f27400
->> | [<809c64b8>] (sch_direct_xmit) from [<809c6c0c>] (__qdisc_run+0x4f0/0x534)
->>
->> To fix this problem, only set skb ownership to sockets which have still
->> a ref count > 0.
->>
->> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
->> Cc: Andre Naujoks <nautsch2@gmail.com>
->> Suggested-by: Eric Dumazet <edumazet@google.com>
->> Fixes: 0ae89beb283a ("can: add destructor for self generated skbs")
->> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> 
-> SGTM
-> 
-> Reviewed-by: Eric Dumazet <edumazet@google.com>
-> 
->> ---
->>   include/linux/can/skb.h | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
->> index 685f34cfba20..655f33aa99e3 100644
->> --- a/include/linux/can/skb.h
->> +++ b/include/linux/can/skb.h
->> @@ -65,8 +65,7 @@ static inline void can_skb_reserve(struct sk_buff *skb)
->>
->>   static inline void can_skb_set_owner(struct sk_buff *skb, struct sock *sk)
->>   {
->> -       if (sk) {
->> -               sock_hold(sk);
+On 24.02.2021 21:32:29, Oliver Hartkopp wrote:
+> > > To fix this problem, only set skb ownership to sockets which have sti=
+ll
+> > > a ref count > 0.
+> > >=20
+> > > Cc: Oliver Hartkopp <socketcan@hartkopp.net>
+> > > Cc: Andre Naujoks <nautsch2@gmail.com>
+> > > Suggested-by: Eric Dumazet <edumazet@google.com>
+> > > Fixes: 0ae89beb283a ("can: add destructor for self generated skbs")
+> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> >=20
+> > SGTM
+> >=20
+> > Reviewed-by: Eric Dumazet <edumazet@google.com>
+> >=20
+> > > ---
+> > >   include/linux/can/skb.h | 3 +--
+> > >   1 file changed, 1 insertion(+), 2 deletions(-)
+> > >=20
+> > > diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
+> > > index 685f34cfba20..655f33aa99e3 100644
+> > > --- a/include/linux/can/skb.h
+> > > +++ b/include/linux/can/skb.h
+> > > @@ -65,8 +65,7 @@ static inline void can_skb_reserve(struct sk_buff *=
+skb)
+> > >=20
+> > >   static inline void can_skb_set_owner(struct sk_buff *skb, struct so=
+ck *sk)
+> > >   {
+> > > -       if (sk) {
+> > > -               sock_hold(sk);
+>=20
+> Although the commit message gives a comprehensive reason for this patch: =
+Can
+> you please add some comment here as I do not think the use of
+> refcount_inc_not_zero() makes clear what is checked here.
 
-Although the commit message gives a comprehensive reason for this patch: 
-Can you please add some comment here as I do not think the use of 
-refcount_inc_not_zero() makes clear what is checked here.
+Good point. What about:
 
-Many thanks,
-Oliver
+If the socket has already been closed by user space, the refcount may
+already be 0 (and the socket will be freed after the last TX skb has
+been freed). So only increase socket refcount if the refcount is > 0.
 
+regards
+Marc
 
->> +       if (sk && refcount_inc_not_zero(&sk->sk_refcnt)) {
->>                  skb->destructor = sock_efree;
->>                  skb->sk = sk;
->>          }
->> --
->> 2.29.2
->>
+P.S.: Have you had time to look at my ISOTOP RFC patch?
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--dnjabxnrhdo3b7pb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA2waYACgkQqclaivrt
+76nYUAf/RrC5ym0WGkJahDL9D9tdBge7At8Sl8OywoWTczF1RKFmTf+rYh+QZryN
+4/8Oyu+FNUIsKueWAukyE9cEzuja9K7RjGHD8j8JlUKxDZtfei9PrXEZh2QqRrAk
+A9rt1Uy9KaHPDAmn9O79gpgbd7/Zaopyz4X8u4lzusibVJD0PoQcAOgC3E7MERZK
+7/FvUYNzePRSGydOFEKCrcwIcxl7zWHIyQGLeioTCWwzqdLGyBn3wTY44fuhuBYE
+uMYY59ePaZk8OIG7YXhgJMtwstiXCEhSUnFINivQcg9va3FnsvBKSxYnInje5S2W
+O0EO83ZMmDTs8XIJZQL55MScMZKtHg==
+=qiPV
+-----END PGP SIGNATURE-----
+
+--dnjabxnrhdo3b7pb--
