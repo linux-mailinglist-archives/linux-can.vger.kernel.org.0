@@ -2,133 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA4A3245A1
-	for <lists+linux-can@lfdr.de>; Wed, 24 Feb 2021 22:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6494F324755
+	for <lists+linux-can@lfdr.de>; Thu, 25 Feb 2021 00:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbhBXVPO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 Feb 2021 16:15:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbhBXVPN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Feb 2021 16:15:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F41C06174A
-        for <linux-can@vger.kernel.org>; Wed, 24 Feb 2021 13:14:33 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lF1UE-00078Y-RH; Wed, 24 Feb 2021 22:14:22 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:55fd:a17b:b4ca:d5fb])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C3D555E8908;
-        Wed, 24 Feb 2021 21:14:19 +0000 (UTC)
-Date:   Wed, 24 Feb 2021 22:14:18 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
+        id S236283AbhBXXEA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 Feb 2021 18:04:00 -0500
+Received: from smtp-17-i2.italiaonline.it ([213.209.12.17]:36194 "EHLO
+        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S236281AbhBXXD6 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 24 Feb 2021 18:03:58 -0500
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([87.20.116.197])
+        by smtp-17.iol.local with ESMTPA
+        id F32VlxCf1lChfF32Ylf7W1; Wed, 24 Feb 2021 23:53:56 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1614207236; bh=6o6jDBvR5XQjgJ8BGNlWOmm64d1YNEr7t6lmSQ620tU=;
+        h=From;
+        b=eMZ0ljuDRUWKxtg+LRiec7AwT//WdWV8DapMtlEaTrbn3xmFeSnqYmc/m2KojXnLE
+         7o3pac8rWyodynOZ4n6q6MymMlO83caXAORJF2C0jm8C8V7CYRYNFImIpLfITzZXOI
+         nio6wM29gj9urJiiAvMQdErK5bNi0Mbj3p/5Wj/QHHshe+Wz6Dv5zua1vXUhgKMnZx
+         8R45rkF2jlJGujmU1qhNQFGSi4jAby2QavNwvUgWmK/h7X3PYhrZk75L6rT9JRdqMo
+         6EjyVRWBdezFc7isgpa78NNHgxmMfhfH7RevBaAZGVQjUVPdjKC00xyopIqdzsPoUP
+         PC0aEJ/+ClVIQ==
+X-CNFS-Analysis: v=2.4 cv=S6McfKgP c=1 sm=1 tr=0 ts=6036d904 cx=a_exe
+ a=AVqmXbCQpuNSdJmApS5GbQ==:117 a=AVqmXbCQpuNSdJmApS5GbQ==:17 a=gu6fZOg2AAAA:8
+ a=FCneKAZuOMEC46B4a7wA:9 a=-FEs8UIgK8oA:10 a=NWVoK91CQyQA:10
+ a=2RSlZUUhi9gRBrsHwhhZ:22 a=pHzHmUro8NiASowvMSCR:22 a=Ew2E2A-JSTLzCXPT_086:22
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dariobin@libero.it>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Andre Naujoks <nautsch2@gmail.com>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net v3 1/1] can: can_skb_set_owner(): fix ref counting if
- socket was closed before setting skb ownership
-Message-ID: <20210224211418.74dltgabq2rpfuf2@pengutronix.de>
-References: <20210224075932.20234-1-o.rempel@pengutronix.de>
- <CANn89iLEHpCphH8vKd=0BS7pgdP1YZDGqQfQPeGBkD09RoHtzg@mail.gmail.com>
- <76ec5c10-c051-7a52-9ae7-04af79a0e9e5@hartkopp.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dnjabxnrhdo3b7pb"
-Content-Disposition: inline
-In-Reply-To: <76ec5c10-c051-7a52-9ae7-04af79a0e9e5@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 0/6] can: c_can: add support to 64 messages objects
+Date:   Wed, 24 Feb 2021 23:52:40 +0100
+Message-Id: <20210224225246.11346-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfMOLlCecWLvUGrZ7U5u1wIQsmh8zYjADupowNCTunlqn3AYJ7cx8lPJ5yDyX/ogisOrWL37tzz2APPsamdAFFz7RVfq6ILVDTaGTkwAYAyYMKMmju+Xq
+ ePNcq/wACcZ5kKxR5dJ/AUMgfJ+odwsBZqSD9gsmUVWbH4CAHg5j+lllLg14qWp1UytCf11ESQZ9TGbEvW+asfU2+au/UIyKp0/jI6vrbaM14GyH9hmXLChT
+ hbjtTFRt8arwVuXsjGfMkIaxiROIHm0WWNye3GNqan2EKzOpJYsNlqs5qxrUekH3XvGqbyJ24Nh6wvDi5OOEV+aiMqVZCnI0yqo6HEUBPgfXEgQMqmM/+mNw
+ +dfF8VhFQabo+sb2C3hUcatQCudUvCfQfP8FHZNWtYYNeHB28eap5vmwElBfxDp6K5ognpcMr4+bH3+cLstLS4RLve3UpUIFsQ3407/G77JTxlJdGFBkB956
+ tds9OXOuvwXkUZVkO+Hh0mnH+o0ZhN6aL2/r9uHb/m9QFn8+yGLg1u7aOvAa4NEBjIg/Id48aGuWTa11wQpx9/0mNjF4nOZM7PrjoLZdbJo3Uifc/lJzkJ/c
+ aLniYsX/CbTlG5xsV7fqGUKQ
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---dnjabxnrhdo3b7pb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The D_CAN controller supports up to 128 messages. Until now the driver
+only managed 32 messages although Sitara processors and DRA7 SOC can
+handle 64.
 
-On 24.02.2021 21:32:29, Oliver Hartkopp wrote:
-> > > To fix this problem, only set skb ownership to sockets which have sti=
-ll
-> > > a ref count > 0.
-> > >=20
-> > > Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-> > > Cc: Andre Naujoks <nautsch2@gmail.com>
-> > > Suggested-by: Eric Dumazet <edumazet@google.com>
-> > > Fixes: 0ae89beb283a ("can: add destructor for self generated skbs")
-> > > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> >=20
-> > SGTM
-> >=20
-> > Reviewed-by: Eric Dumazet <edumazet@google.com>
-> >=20
-> > > ---
-> > >   include/linux/can/skb.h | 3 +--
-> > >   1 file changed, 1 insertion(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-> > > index 685f34cfba20..655f33aa99e3 100644
-> > > --- a/include/linux/can/skb.h
-> > > +++ b/include/linux/can/skb.h
-> > > @@ -65,8 +65,7 @@ static inline void can_skb_reserve(struct sk_buff *=
-skb)
-> > >=20
-> > >   static inline void can_skb_set_owner(struct sk_buff *skb, struct so=
-ck *sk)
-> > >   {
-> > > -       if (sk) {
-> > > -               sock_hold(sk);
->=20
-> Although the commit message gives a comprehensive reason for this patch: =
-Can
-> you please add some comment here as I do not think the use of
-> refcount_inc_not_zero() makes clear what is checked here.
+The series was tested on a beaglebone board.
 
-Good point. What about:
+Note:
+I have not changed the type of tx_field (belonging to the c_can_priv
+structure) to atomic64_t because I think the atomic_t type has size
+of at least 32 bits on x86 and arm, which is enough to handle 64
+messages.
+http://marc.info/?l=linux-can&m=139746476821294&w=2 reports the results
+of tests performed just on x86 and arm architectures.
 
-If the socket has already been closed by user space, the refcount may
-already be 0 (and the socket will be freed after the last TX skb has
-been freed). So only increase socket refcount if the refcount is > 0.
 
-regards
-Marc
+Dario Binacchi (6):
+  can: c_can: remove unused code
+  can: c_can: fix indentation
+  can: c_can: fix control interface used by c_can_do_tx
+  can: c_can: use 32-bit write to set arbitration register
+  can: c_can: prepare to up the message objects number
+  can: c_can: add support to 64 messages objects
 
-P.S.: Have you had time to look at my ISOTOP RFC patch?
+ drivers/net/can/c_can/c_can.c          | 83 ++++++++++++++++----------
+ drivers/net/can/c_can/c_can.h          | 32 ++++------
+ drivers/net/can/c_can/c_can_platform.c |  6 +-
+ 3 files changed, 69 insertions(+), 52 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
+2.17.1
 
---dnjabxnrhdo3b7pb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA2waYACgkQqclaivrt
-76nYUAf/RrC5ym0WGkJahDL9D9tdBge7At8Sl8OywoWTczF1RKFmTf+rYh+QZryN
-4/8Oyu+FNUIsKueWAukyE9cEzuja9K7RjGHD8j8JlUKxDZtfei9PrXEZh2QqRrAk
-A9rt1Uy9KaHPDAmn9O79gpgbd7/Zaopyz4X8u4lzusibVJD0PoQcAOgC3E7MERZK
-7/FvUYNzePRSGydOFEKCrcwIcxl7zWHIyQGLeioTCWwzqdLGyBn3wTY44fuhuBYE
-uMYY59ePaZk8OIG7YXhgJMtwstiXCEhSUnFINivQcg9va3FnsvBKSxYnInje5S2W
-O0EO83ZMmDTs8XIJZQL55MScMZKtHg==
-=qiPV
------END PGP SIGNATURE-----
-
---dnjabxnrhdo3b7pb--
