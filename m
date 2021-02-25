@@ -2,73 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BF53247C8
-	for <lists+linux-can@lfdr.de>; Thu, 25 Feb 2021 01:11:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4F83248FA
+	for <lists+linux-can@lfdr.de>; Thu, 25 Feb 2021 03:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234711AbhBYAKw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 24 Feb 2021 19:10:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234547AbhBYAKw (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 24 Feb 2021 19:10:52 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id BE4CF64F11;
-        Thu, 25 Feb 2021 00:10:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614211811;
-        bh=13ZrnrWbJURGI9V3ZmlgrooZjGdus8OLxqZvp6eCfg8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FGp8EVAf64yhpIejxvRwefw37McgJ84q6PJckOemOWgsoJ1CtOhpzxM1CbwqPF/IP
-         8bZdU8ZYlCJMJly7/1YLIR0BWXYD+xAIO9MGPZbIF2o1trHaJ1y8v9ALF/YFRJ2Xrf
-         7zuh6lKorzhxAlS9M8CYN6s0VhmhK9PYAqyXvQr4iK4LPjnh+uLGLT+fVId7v2m3Xg
-         /imwv3L6RkiZ+uq+obVZNp/BMzu6uzlWDyakKubfqDO+SyKkDgcLfPR7wI30E+POD9
-         P/8nWFHAFcCh4nFOf1CB41ccPcfvHvNmmwKqGKjDr9f87UwVErsfJa7O38jyCqy6fz
-         Bn/hYsAZl1HQw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B157660A0E;
-        Thu, 25 Feb 2021 00:10:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235268AbhBYCtY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 24 Feb 2021 21:49:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234143AbhBYCtY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 24 Feb 2021 21:49:24 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F0CC061574;
+        Wed, 24 Feb 2021 18:48:43 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id r23so4830744ljh.1;
+        Wed, 24 Feb 2021 18:48:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q4pNbsL3f3M5e+tpQcGLyhHs/pFg5rDTg3Nd6Jf64es=;
+        b=evrw97IH7xRofQ7LtVoGUGx3oc9qKGDAZvh0OnfKtgeV4fXhbOzeUwhudAuYd6Wn9e
+         jvnaV7YjqLR2C5d5EkJP1lo9Ybq0pFyUgBBB2a/hGIWAeboRxiagkKMxgmKyA2rhlOR2
+         KPqHDrPuca2toqP3fhe7ImdtjWbThbFzoNoO90efjrrX51nkd5erbMdDD09vFYtB4fpH
+         3Mmp4dYEC+DoOJGuqRwFaaOLcTr+2YVKBO+cIDtqf8cAuK37PdvV+TtzEl3s2Dz3l84G
+         Q4+f6+e7OI3L9Ng/z4aAyOh0BxEo/7qp7Up6DiD5+rdDV5IaHb/usp+v2gu/BIlwFfHH
+         Tkvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q4pNbsL3f3M5e+tpQcGLyhHs/pFg5rDTg3Nd6Jf64es=;
+        b=GueTeGXMsofpW4FqoiDT15hyBBi3kaa8x3wbisECKWxfNQDbTtMyVrNYSghswxE76V
+         01ADYYdLaBYs+uanYrhZXref+h1HdqQZJy5FXdwAAe/q9aXuPhXD4SXBYwA25BwE6YHK
+         1RcZf4IM3zn++bl/QcfjjoIiMn8gfK4TgJlOQEnP1zXF7HEfXLBhftKEZ0plJLLr0/V9
+         wShbeE4LTg23+m3eG124pBBhU8x3U/dMKuSGtoydiJqocPSxLNww2Ddal1wIzUXDRXOW
+         4NvwLUNwuIesHRjPi/SgkUneomLYhyDkxkcFtK1uiq6WQSjXkHkdH3Q6YP4sbraFcuYP
+         Aa2w==
+X-Gm-Message-State: AOAM533vUKBHoGVAA+Qq+meqpDEAHtI4Q+c7X/nryK4chFJlwT9CW1A7
+        qJ8pcsmLF0a8LyYmODGG0cjgNlPxGRAD2FPWzfxn3wLX5Qs=
+X-Google-Smtp-Source: ABdhPJxCVO5mB5/Rdjt53vaxTsyeSUgYidJU1yjvzMkTvS932v+Va9dSnxSWzTxiL8xH7IDvSOBVN7zzCSPScFuEj6A=
+X-Received: by 2002:a2e:8357:: with SMTP id l23mr428915ljh.116.1614221322316;
+ Wed, 24 Feb 2021 18:48:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v4 1/1] net: introduce CAN specific pointer in the struct
- net_device
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161421181172.15909.1583905121942567968.git-patchwork-notify@kernel.org>
-Date:   Thu, 25 Feb 2021 00:10:11 +0000
-References: <20210223070127.4538-1-o.rempel@pengutronix.de>
-In-Reply-To: <20210223070127.4538-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        socketcan@hartkopp.net, robin@protonic.nl,
-        syzbot+5138c4dd15a0401bec7b@syzkaller.appspotmail.com,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210224125026.481804-1-sashal@kernel.org> <20210224125026.481804-5-sashal@kernel.org>
+In-Reply-To: <20210224125026.481804-5-sashal@kernel.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 24 Feb 2021 23:48:31 -0300
+Message-ID: <CAOMZO5Axfa0yLtfk-KAaxr40XkuMxMS8Qzf2-JyP9R5PN8PMvQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.11 05/67] can: flexcan: add CAN wakeup function
+ for i.MX8QM
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi Sasha,
 
-This patch was applied to netdev/net.git (refs/heads/master):
+On Wed, Feb 24, 2021 at 10:35 PM Sasha Levin <sashal@kernel.org> wrote:
+>
+> From: Joakim Zhang <qiangqing.zhang@nxp.com>
+>
+> [ Upstream commit 812f0116c66a3ebaf0b6062226aa85574dd79f67 ]
+>
+> The System Controller Firmware (SCFW) is a low-level system function
+> which runs on a dedicated Cortex-M core to provide power, clock, and
+> resource management. It exists on some i.MX8 processors. e.g. i.MX8QM
+> (QM, QP), and i.MX8QX (QXP, DX). SCU driver manages the IPC interface
+> between host CPU and the SCU firmware running on M4.
+>
+> For i.MX8QM, stop mode request is controlled by System Controller Unit(SCU)
+> firmware, this patch introduces FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW quirk
+> for this function.
+>
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> Link: https://lore.kernel.org/r/20201106105627.31061-6-qiangqing.zhang@nxp.com
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-On Tue, 23 Feb 2021 08:01:26 +0100 you wrote:
-> Since 20dd3850bcf8 ("can: Speed up CAN frame receiption by using
-> ml_priv") the CAN framework uses per device specific data in the AF_CAN
-> protocol. For this purpose the struct net_device->ml_priv is used. Later
-> the ml_priv usage in CAN was extended for other users, one of them being
-> CAN_J1939.
-> 
-> Later in the kernel ml_priv was converted to an union, used by other
-> drivers. E.g. the tun driver started storing it's stats pointer.
-> 
-> [...]
+This is adding a new feature and not fixing a bug.
 
-Here is the summary with links:
-  - [net,v4,1/1] net: introduce CAN specific pointer in the struct net_device
-    https://git.kernel.org/netdev/net/c/4e096a18867a
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Why does it qualify for stable inclusion?
