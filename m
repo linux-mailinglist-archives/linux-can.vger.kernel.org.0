@@ -2,98 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039B1326558
-	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 17:15:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B043265A3
+	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 17:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbhBZQPg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 26 Feb 2021 11:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S230060AbhBZQgg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Feb 2021 11:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbhBZQPd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 11:15:33 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7736CC06174A
-        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 08:14:37 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id b3so9102912wrj.5
-        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 08:14:37 -0800 (PST)
+        with ESMTP id S229849AbhBZQgf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 11:36:35 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED9C06178B
+        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 08:35:27 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id u14so9176531wri.3
+        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 08:35:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PgumST9E2sDt6UmaQJ3JZE/OHkq062TpQ7qtimhu4qs=;
-        b=XKF19MhZV3mwsEafvIo2xQf9IApNtlJMbBOO/UnC4frv69esRGzpKppv0zuhdz2TvZ
-         hGIHuozzC9OX8rQzdpgJlDwYhsiAxyV/z/dzOaMmJ+R4S8xOr7JqI3lhmv9sLwliyJ/1
-         X4bUQSIbtGwn7DDB9GSqN3QRif5kGTE33YiHXzGt+mKX4dYox/zuqZpPQ+AC5AsjWodY
-         WvtVUq/1x2mQRa/8eoexxvwR2MDtUyftSBsIHZkoJoo2Ons4M2iFYoXvqUFNBfX3Nu4e
-         bI16+StTbzSOBn617I0VNeqx8EXpKqWCpw+fC5fHrosFJEyVhU8h8VV0aYNW4fANk8En
-         +jQQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F8HTWVAdaFckdNJ1tQ3gEcvYLom0n0d+SUvtlHF9Plc=;
+        b=QSHTmmGpuBPoau7pXnAsvSdeXiQbU7eqRPdypBaUGnkMK0yS1ivvBTK+Cw0o+SP51n
+         OGjO/jl1PM91udMiTiQRB3xtpESFrZb41iDA2K+OzHA8H+YjTHA7OS9ScHrreyEhkXx0
+         OFQNM3Kh/ehVydCgnTtYDhNbsjb7hsbp3dN4t8F7rLre68C4pw6bYGeBeF2915/PYSTR
+         FKo+JCunj7/0yb9/QpCQPudplDcEypUOIyRf/2FPpdOEo3c7sep/EjMw5ywA1OimoCe1
+         wmIojKQKLQtAG9CnI5jbxqd7EL5H8Kwhc9zlfYdWWG6RsZ5eLanh8EA/6n3qW06IU1EO
+         zojg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PgumST9E2sDt6UmaQJ3JZE/OHkq062TpQ7qtimhu4qs=;
-        b=O9J2eOfKixD1vkrVe4Si0kmVn37Fs1koPVHXmDL9Ra+7ARQ8HJFMMVHDDpY/g44Vot
-         m7rlFSra7s+RJrtmbm8fVN4gXu/affZ6m1xXSegVbPK7QRPSZvCucOBTkrmFw56Ih2dc
-         p3CRCAdS/0I8tLTHfLHmUtLI3hv2dagmSDyphCCMidqg8uKJplhblOLbkA7vhfdtAd7R
-         5X1iPTTysGhRQmGfZ+ikt1ozqF0IgH0pg4SPyU+Hn0qRvqRdjy7DBthbLPo+TkvcO7cB
-         zBlsgc2oM6MOHGo1ese6MFAK7STgfKIxvXudfzE/FrxkYXkq6Bvg/7hDxn/Kp6+TGaKG
-         BGyg==
-X-Gm-Message-State: AOAM532tvVtcXXNXc3+d4SKp3jNIj9zbLSUC7Ss8nldAXPB6UOklwuWS
-        7pmbyb8DzTCwcJ1y3Qn9lX2NJA==
-X-Google-Smtp-Source: ABdhPJw1fIDJECyrbn15CB0HlmYEWaOfWEzK2MYlJZb+lCxulUN0d4VfDZ+yqvbuK0GnOOZXzRK2Ow==
-X-Received: by 2002:a5d:5651:: with SMTP id j17mr4044749wrw.343.1614356076218;
-        Fri, 26 Feb 2021 08:14:36 -0800 (PST)
-Received: from bigthink (94.197.200.66.threembb.co.uk. [94.197.200.66])
-        by smtp.gmail.com with ESMTPSA id b131sm3216418wmb.34.2021.02.26.08.14.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=F8HTWVAdaFckdNJ1tQ3gEcvYLom0n0d+SUvtlHF9Plc=;
+        b=fL0Gp6BOeqI/WtXSWQFdE0rnC0rAzqsLddrwaGti5BjfLNtW70A7Fu7l73+I3U9IA2
+         PzvDR6j2K1CqA9q4uR/5wl8Y9pxkOhn/AEI+NFiDd60CpTOAniQlq5kQ1mVXLZ9JmwPR
+         TfU9e3mniImidebvOvJDIGoBLxMQ95duRVppcafxQqYYpQu/6b2PLiycqvVJ0H5bCJMI
+         7W3ZD8+mqlIj76L1mOafgmzi/0ZSKAVT+7BnzzgRkN7v+u5EOxYeR2DpuDOWs5pnvWiu
+         xgxoXLOdXj5Z174DDpPBestUsgta5FCZItvKyff/2O/d34/0i1ji6P0hKC2PwNdy+YzP
+         q7eA==
+X-Gm-Message-State: AOAM532ceqbGfEd319Y9Q+bHxc1bCZAEHgzkYSbMrIlziA5/AIlcDzNz
+        iDVuNcQucsDceArMfv26OLHy8aU1YQF14A==
+X-Google-Smtp-Source: ABdhPJx7TnFdPOqexptVhTjThJEnSZkv8oLlSUJgeAcC2PwJd7AtZsd97647k29+j5Dqi+8dXWciIA==
+X-Received: by 2002:a5d:58c9:: with SMTP id o9mr4150625wrf.181.1614357325719;
+        Fri, 26 Feb 2021 08:35:25 -0800 (PST)
+Received: from localhost.localdomain (94.197.200.66.threembb.co.uk. [94.197.200.66])
+        by smtp.gmail.com with ESMTPSA id g11sm1242487wrw.89.2021.02.26.08.35.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Feb 2021 08:14:35 -0800 (PST)
-Date:   Fri, 26 Feb 2021 16:14:34 +0000
+        Fri, 26 Feb 2021 08:35:25 -0800 (PST)
 From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
-Message-ID: <20210226161434.ymdrmclic6nrccj5@bigthink>
-References: <20210226121854.4gb5yufb23hyar73@bigthink>
- <7254df67-202f-ac23-c45c-fcb5172a70a3@pengutronix.de>
- <20210226123144.cwhjberqeyjctc6w@bigthink>
- <2aebafa3-6a18-7d14-b32d-e17909d3d6a8@pengutronix.de>
- <20210226132620.wfuvywkzmhwfmhpc@bigthink>
- <20210226133936.q3o7hrshyurhj3ke@pengutronix.de>
- <20210226134522.kd3oxtx3u4ltjxos@bigthink>
- <20210226140054.725kihkdgkmtl3xf@pengutronix.de>
- <20210226152633.dkro7ffhye4c72hb@bigthink>
- <20210226160135.w43onb3z25xhv4re@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     dmurphy@ti.com, mkl@pengutronix.de,
+        Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Subject: [PATCH] tcan4x5x: clear MRAM before entering Normal mode
+Date:   Fri, 26 Feb 2021 16:34:41 +0000
+Message-Id: <20210226163440.313628-1-torin@maxiluxsystems.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210226160135.w43onb3z25xhv4re@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 05:01:35PM +0100, Marc Kleine-Budde wrote:
-> > Is timestamp-wrapping a concern for rx-offloading?
-> 
-> No, as long as you provide a proper u32 timestamp, which means wrap
-> around at 0xffffffff to 0x0. As the tcan4x5x has only a 16 bit
-> timestamp, shift it to full 32 bit, like this:
-> 
-> https://elixir.bootlin.com/linux/v5.11/source/drivers/net/can/flexcan.c#L805
-> 
-> On the mcp with true 32 bit timestamp there's a wraparound every 107
-> seconds at 40 MHz external clock (0xffffffff / 40000000).
-> 
-> The tcan has the TSS.TCP as a prescaler and increments in bit time,
-> which is 5MHz max. This results in a wrap around every 13ms (0xffff /
-> 5000000) with a prescaler of 1. With a prescaler of 16, you can increase
-> this to 209ms (0xffff / 5000000 * 16), which gives an accuracy of 2
-> bytes.
+This prevents a potentially destructive race condition. The device is
+fully operational on the bus after entering Normal mode, so zeroing the
+MRAM after entering this mode may lead to loss of information, e.g. new
+received messages.
 
-Nice, thank you, that all sounds good. I'll get to work. :)
+Signed-off-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
+---
+ drivers/net/can/m_can/tcan4x5x-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---
-Regards,
-
-Torin Cooper-Bennun
-Software Engineer | maxiluxsystems.com
+diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+index b7caec769ddb..4147cecfbbd6 100644
+--- a/drivers/net/can/m_can/tcan4x5x-core.c
++++ b/drivers/net/can/m_can/tcan4x5x-core.c
+@@ -237,14 +237,14 @@ static int tcan4x5x_init(struct m_can_classdev *cdev)
+ 	if (ret)
+ 		return ret;
+ 
++	/* Zero out the MCAN buffers */
++	m_can_init_ram(cdev);
++
+ 	ret = regmap_update_bits(tcan4x5x->regmap, TCAN4X5X_CONFIG,
+ 				 TCAN4X5X_MODE_SEL_MASK, TCAN4X5X_MODE_NORMAL);
+ 	if (ret)
+ 		return ret;
+ 
+-	/* Zero out the MCAN buffers */
+-	m_can_init_ram(cdev);
+-
+ 	return ret;
+ }
+ 
+-- 
+2.30.0
 
