@@ -2,76 +2,179 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E12B3262A4
-	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 13:22:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB04C3262AB
+	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 13:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbhBZMUl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 26 Feb 2021 07:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S230124AbhBZMXq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Feb 2021 07:23:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbhBZMTs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 07:19:48 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA32C061226
-        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 04:18:57 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id p3so7284828wmc.2
-        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 04:18:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tRakzkW9bryBlLcFYcmoInfM1jiRcffwSGQorT21Dhk=;
-        b=AlloOZ9Lo5wIV4bOcEylIC+K/5u5GqBm4jWMacbqs2tIBztWv/2TfDc1P42tJQEvdi
-         bumcz05S5jIq0kGoJ1MYIiA9wl64k9FywQiflZHNc+1Kv43EGzYaH8GGDj8zW9g/QItp
-         dNV6z2yh4UQROeLlwLZcikqXq0IEy9P8l84zNuhTnC6wEAPh7Mnm1iBx5vZmhf9N84dz
-         29urg6Wvk7EyEXq2+ktb8NsUK9Lv95o9rh2rGEqMco3imXSmem271vOoD9YerWPz4ydc
-         9rhRad7CcRKyigGpqTArawoLRR+kS99qzMg740pXKFP0Jmyi7AQFkqQ1ygaDhOA6SwJb
-         zpfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tRakzkW9bryBlLcFYcmoInfM1jiRcffwSGQorT21Dhk=;
-        b=SZ2AavMX75LCPeDUeU5pwqC76IPPRDXiYXh5vY2YLML65SGJjW5HCPnClgBfSCYOKY
-         3Fb82rrd6RIHyVoVfxIok1dbeDu8Zir/GafaZyosFszk7W85i3jMXO7V+fZFmEwiHkMa
-         eEk0stUFmCt66yhixTf5NcdutBoQF+2LE4BQ/pnaK5YfglLpb1f5li0UDb0DkwzrwBze
-         L2vpCd9Vuzfx4fh4MPmK6knTEYU2AmgeO5K2pOQE5Y1vvOj8p4ksyquuj2fsoGez++Xc
-         hmU6lIku11f8ITfqbUHNx7tWwl1bL3+gtcKvGw/yXXWW6ZrVKBpgKMKIUwRH2h6LP02w
-         76AQ==
-X-Gm-Message-State: AOAM530biRSFak5QivBi4uMXENH+Xxqe1YA9V7feM2Fl0nyCOPoSRBGp
-        ZtkW6DxOolcV6ZLXVx2yUOr4CIwb0ksjTQ==
-X-Google-Smtp-Source: ABdhPJy9GTchLsu3GzcXnf+J0PkEgNfVxaVwbiVFy9dUI+AGXxsaQBHD1tZzWMCcIYE0GYMknJch8Q==
-X-Received: by 2002:a1c:df8a:: with SMTP id w132mr2611489wmg.53.1614341936601;
-        Fri, 26 Feb 2021 04:18:56 -0800 (PST)
-Received: from bigthink (94.197.200.66.threembb.co.uk. [94.197.200.66])
-        by smtp.gmail.com with ESMTPSA id g63sm12161618wma.40.2021.02.26.04.18.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Feb 2021 04:18:56 -0800 (PST)
-Date:   Fri, 26 Feb 2021 12:18:54 +0000
-From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S230095AbhBZMXp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 07:23:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061FDC061574
+        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 04:23:05 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lFc99-0008So-LM; Fri, 26 Feb 2021 13:23:03 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:adc1:3ee1:6274:c5d0] (unknown [IPv6:2a03:f580:87bc:d400:adc1:3ee1:6274:c5d0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A59B65E9B4E;
+        Fri, 26 Feb 2021 12:23:02 +0000 (UTC)
+To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
 Cc:     linux-can@vger.kernel.org
-Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
-Message-ID: <20210226121854.4gb5yufb23hyar73@bigthink>
 References: <602651f9.1c69fb81.302a5.647d@mx.google.com>
  <20210215144509.rhds7oybzat6u27w@hardanger.blackshift.org>
+ <20210226121854.4gb5yufb23hyar73@bigthink>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
+Message-ID: <7254df67-202f-ac23-c45c-fcb5172a70a3@pengutronix.de>
+Date:   Fri, 26 Feb 2021 13:22:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210215144509.rhds7oybzat6u27w@hardanger.blackshift.org>
+In-Reply-To: <20210226121854.4gb5yufb23hyar73@bigthink>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="IYKJbEQ5ZXPmfXnRVjAaVspyOgO0tbUnT"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi again. Going back to the start of our conversation:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--IYKJbEQ5ZXPmfXnRVjAaVspyOgO0tbUnT
+Content-Type: multipart/mixed; boundary="YXTn6cH1dFKLUUPWFPm4B1pw9QbhhzDsc";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Cc: linux-can@vger.kernel.org
+Message-ID: <7254df67-202f-ac23-c45c-fcb5172a70a3@pengutronix.de>
+Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
+References: <602651f9.1c69fb81.302a5.647d@mx.google.com>
+ <20210215144509.rhds7oybzat6u27w@hardanger.blackshift.org>
+ <20210226121854.4gb5yufb23hyar73@bigthink>
+In-Reply-To: <20210226121854.4gb5yufb23hyar73@bigthink>
 
-On Mon, Feb 15, 2021 at 03:45:09PM +0100, Marc Kleine-Budde wrote:
-> Sadly, the driver is still not in good shape...I think it will explode
-> as soon as you receive a CAN frame on the rpi, as the frames are passed
-> into the networking stack from the wrong context...
-> 
-> Maybe I'll find some time to get receive properly working.
+--YXTn6cH1dFKLUUPWFPm4B1pw9QbhhzDsc
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-Could you clarify what your concern is? netif_receive_skb seems to be
-used in the same way in m_can.c as in rx-offload.c.
+On 2/26/21 1:18 PM, Torin Cooper-Bennun wrote:
+> Hi again. Going back to the start of our conversation:
+>=20
+> On Mon, Feb 15, 2021 at 03:45:09PM +0100, Marc Kleine-Budde wrote:
+>> Sadly, the driver is still not in good shape...I think it will explode=
 
+>> as soon as you receive a CAN frame on the rpi, as the frames are passe=
+d
+>> into the networking stack from the wrong context...
+>>
+>> Maybe I'll find some time to get receive properly working.
+>=20
+> Could you clarify what your concern is? netif_receive_skb seems to be
+> used in the same way in m_can.c as in rx-offload.c.
+
+The problem is that netif_receive_skb(skb) is called from a threaded inte=
+rrupt
+handler, but you should call it from NAPI.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--YXTn6cH1dFKLUUPWFPm4B1pw9QbhhzDsc--
+
+--IYKJbEQ5ZXPmfXnRVjAaVspyOgO0tbUnT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA46CMACgkQqclaivrt
+76kXdAgAoHCiF2rX7xq2/hbEBgDroIE7w3GQXIzNdh+OScFUpNut+/da18W/Zo4f
+nqZTwPua6wihRDYEud0XXrNOVhPnDSTO+Opfj1L1zWLlrZdFaGA/Ful1UvA1B3rC
++2qiAm1PP7RUrEoqP6k3tqlmjRNglzhVrthTAPcqOR0/N/yt0v4cfYW7S7iH2YHV
+ujVS4OCOeuIn8OTlE3e/GPIVp440WCL/ZFm7pNx2hewUePt1olEYacgd6RSz4Ola
+sBdS/m+I5m5uV1e1lrLNxMfbz2DLgzetbTQ1IpEnyYgWpw2aejCzH68ap0N+6kZW
+IhrZTOIvLuY1U29dey4Nxj/+QhvzDg==
+=wWI1
+-----END PGP SIGNATURE-----
+
+--IYKJbEQ5ZXPmfXnRVjAaVspyOgO0tbUnT--
