@@ -2,199 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 144D73262B5
-	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 13:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B83703262BE
+	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 13:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbhBZM24 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 26 Feb 2021 07:28:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S230014AbhBZMc3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Feb 2021 07:32:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbhBZM2y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 07:28:54 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A78C061574
-        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 04:28:14 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lFcE8-0000Tb-QL; Fri, 26 Feb 2021 13:28:12 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:adc1:3ee1:6274:c5d0] (unknown [IPv6:2a03:f580:87bc:d400:adc1:3ee1:6274:c5d0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B95C5E9B59;
-        Fri, 26 Feb 2021 12:28:12 +0000 (UTC)
+        with ESMTP id S229999AbhBZMc2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 07:32:28 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BE5C061574
+        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 04:31:47 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id o16so7654576wmh.0
+        for <linux-can@vger.kernel.org>; Fri, 26 Feb 2021 04:31:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2+wKd98czlu7JQ4LvrmBdXSvupsv5g7JN3pks17x6sc=;
+        b=vPAaP5ZliHHvWxja7AUsVWWywVWAFOeUDLS1xAuGLubUiGMkLTOzhefmS2J2mIrn2T
+         i5YcPSoQG7Dtb9GQEhJXtAkmM3W/wyaOLOf88gAX4+F5Et0tErtCoYOI1zQZ+BD/4nW4
+         Iw+k2e0W7Kc9im2zj+d/3MvzRaPcDAPxSXTjvSxbUVb4RVF7aD2pz6QsnyU3onJrCkXB
+         AaMUktM1D90vFrMLyuGBNkf8sCwqGW18J5eyLop09CDNjFJ0jpUmyw2jE9fSgbhdds9N
+         fM8SJgiAb4DVidLzy/0TvMvylXBODuaCBs/PUJFm7FpTQu4zKdhwpKfDsDy2NxUDdAqE
+         3LhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2+wKd98czlu7JQ4LvrmBdXSvupsv5g7JN3pks17x6sc=;
+        b=h1hwm3ooDreTczxgLuAoD+HaNivz94Oi8hsJGDbwBFIxlTobIO4uRP8+6kIRBieYwl
+         mZqApYeO6jSCFbrI+S8wSqFMTtZ58S6TTCtCQE2wPGU6iPJ1tkLEjc0cOT1BWGx51+Kh
+         22uzWgBwK1EIOI5p9mkDKLy6uUBw7yrxCZ3UNRzK92anO8ThgkvsAuC95Ff1IS0q7aUz
+         6LA3hEAdxH8mmrnQ3ImGaz8kbcbQYjTaL/ia/BiC25gg7qya7dshHNxJsgr2j+BU3hOI
+         Po+zKnQdqcOmNIarCpcL3ZIhxHmaWivVz9PEKEvkZeyJcwDl4Lbh4R0mgiqVEgqmU98f
+         Orrg==
+X-Gm-Message-State: AOAM5338rBIr8s43gIMRxcDiDwWBFxyKNA/Tk14nI6MIFMRsPq3Pu0wy
+        nPhUe+U7O3HRt5mfV0G5yJnp2A==
+X-Google-Smtp-Source: ABdhPJyiiZGX2mdqvp+675ZqtZZOsU0RUHeAeWyhKkLyF2HFqZXO7u3jm6O1o2rz3sLzgRS7QFjPZQ==
+X-Received: by 2002:a1c:3b02:: with SMTP id i2mr2691073wma.18.1614342706623;
+        Fri, 26 Feb 2021 04:31:46 -0800 (PST)
+Received: from bigthink (94.197.200.66.threembb.co.uk. [94.197.200.66])
+        by smtp.gmail.com with ESMTPSA id q20sm11255896wmc.14.2021.02.26.04.31.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Feb 2021 04:31:46 -0800 (PST)
+Date:   Fri, 26 Feb 2021 12:31:44 +0000
+From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
 Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
-To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Cc:     linux-can <linux-can@vger.kernel.org>
-References: <CAALJrqgrmzGHZX+iiMYwMkVMpxtf_3fWYkVA-iMdPOxpGzrCRQ@mail.gmail.com>
- <20210215174408.eea3okssfzjsqrly@hardanger.blackshift.org>
- <CAALJrqj=QC1to9ja0CeL76JxVF1iwjsW7YJHs18VbXea=PvBGg@mail.gmail.com>
- <c47647cd-01c1-a924-263d-72c84b36b2e0@pengutronix.de>
- <CAALJrqiAFR7bacR3eB40OU0fbM1QOc-xnvDtts5tDh5cE+3rrw@mail.gmail.com>
- <20210216102835.v5goqyksqsu6h6xr@hardanger.blackshift.org>
- <CAALJrqiVdmLQr7q2ijbWq70RD6PTD8PtVX_zmLW9=uNdc57WqA@mail.gmail.com>
- <20210216111930.pcg4e7cildzuri6d@hardanger.blackshift.org>
- <CAALJrqjGKPo+5B_qBX1b0hAheiaZk4so85OrjQT=1d51Vj8a=w@mail.gmail.com>
- <20210216123235.i63toczore5vfftp@hardanger.blackshift.org>
- <20210226122714.os5sbvyujavrubym@bigthink>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <c5995cc0-283d-45cd-4181-b50c4273ecb7@pengutronix.de>
-Date:   Fri, 26 Feb 2021 13:28:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+Message-ID: <20210226123144.cwhjberqeyjctc6w@bigthink>
+References: <602651f9.1c69fb81.302a5.647d@mx.google.com>
+ <20210215144509.rhds7oybzat6u27w@hardanger.blackshift.org>
+ <20210226121854.4gb5yufb23hyar73@bigthink>
+ <7254df67-202f-ac23-c45c-fcb5172a70a3@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20210226122714.os5sbvyujavrubym@bigthink>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="lYw7KevsSKWg5IOuXMeVAMddEG0l3R3cM"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7254df67-202f-ac23-c45c-fcb5172a70a3@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---lYw7KevsSKWg5IOuXMeVAMddEG0l3R3cM
-Content-Type: multipart/mixed; boundary="NQWOPzYzDHEjOXnYfvdNygjA7GxAxE2y9";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Cc: linux-can <linux-can@vger.kernel.org>
-Message-ID: <c5995cc0-283d-45cd-4181-b50c4273ecb7@pengutronix.de>
-Subject: Re: can, tcan4x5x: look to merge rpi support into rpi kernel tree
-References: <CAALJrqgrmzGHZX+iiMYwMkVMpxtf_3fWYkVA-iMdPOxpGzrCRQ@mail.gmail.com>
- <20210215174408.eea3okssfzjsqrly@hardanger.blackshift.org>
- <CAALJrqj=QC1to9ja0CeL76JxVF1iwjsW7YJHs18VbXea=PvBGg@mail.gmail.com>
- <c47647cd-01c1-a924-263d-72c84b36b2e0@pengutronix.de>
- <CAALJrqiAFR7bacR3eB40OU0fbM1QOc-xnvDtts5tDh5cE+3rrw@mail.gmail.com>
- <20210216102835.v5goqyksqsu6h6xr@hardanger.blackshift.org>
- <CAALJrqiVdmLQr7q2ijbWq70RD6PTD8PtVX_zmLW9=uNdc57WqA@mail.gmail.com>
- <20210216111930.pcg4e7cildzuri6d@hardanger.blackshift.org>
- <CAALJrqjGKPo+5B_qBX1b0hAheiaZk4so85OrjQT=1d51Vj8a=w@mail.gmail.com>
- <20210216123235.i63toczore5vfftp@hardanger.blackshift.org>
- <20210226122714.os5sbvyujavrubym@bigthink>
-In-Reply-To: <20210226122714.os5sbvyujavrubym@bigthink>
+On Fri, Feb 26, 2021 at 01:22:59PM +0100, Marc Kleine-Budde wrote:
+> The problem is that netif_receive_skb(skb) is called from a threaded interrupt
+> handler, but you should call it from NAPI.
 
---NQWOPzYzDHEjOXnYfvdNygjA7GxAxE2y9
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Ah, I was sure it was in fact called from NAPI, but that's only if
+is_peripheral is false. It should be as simple as getting rid of this
+switch, then, no?
 
-On 2/26/21 1:27 PM, Torin Cooper-Bennun wrote:
-> On Tue, Feb 16, 2021 at 01:32:35PM +0100, Marc Kleine-Budde wrote:
->> If the number of blank frames equals the number of missing frames, the=
-n
->> have a look where the message RAM is initialized:
->=20
-> This is the case, but it occurred over a matter of seconds (the frames
-> were only being sent about twice a second). I've finally got some time
-> to investigate, so I'll try to find out what's going on.
->=20
->>     https://elixir.bootlin.com/linux/latest/source/drivers/net/can/m_c=
-an/tcan4x5x.c#L335
->>
->> Oh! This doesn't look right :(
->>
->> I think it's a bad idea to first bring the chip into normal mode and
->> then initialize the RAM.
->=20
-> I'm unsure whether this caused it, but needless to say, this is bad in
-> any case!
+https://elixir.bootlin.com/linux/latest/source/drivers/net/can/m_can/m_can.c#L966
 
-Feel free to send patches. :D
+--
+Regards,
 
-Marc
+Torin Cooper-Bennun
+Software Engineer  | maxiluxsystems.com
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
-
---NQWOPzYzDHEjOXnYfvdNygjA7GxAxE2y9--
-
---lYw7KevsSKWg5IOuXMeVAMddEG0l3R3cM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA46VkACgkQqclaivrt
-76kzmggAr+c65VtnWF7dP0iORoCJAJHstDlZmHed+sCqabxIyQyE6WH2678CcCdl
-jJF+cpmgJ2NDJ5jPrxIPGnj6aMp3zuYHoOqLKgp63PwLsRqxwiSiYiNJH/PQz2RM
-ibj6iwMBkhfAjB4UFAZfXt6P4pgak9JGkWl2JgF/mJ0J7AGK1Y7TqBiRdW5QfCQv
-8ZEUiOKt4zexogELIpMgzmlWrkeTTTsdkeVTvIHnxGUSF/Rt9Ky9Z/ESkKh8W3qM
-kV0Li1BtIyg8SBxnfg4qYD9VkejE6xHgOMpa1E0qxAUnzVDQfdm78zSiqlplO29B
-U6LBmyQLs07+cd0vYa0oG8Ru6V2dkg==
-=tMdw
------END PGP SIGNATURE-----
-
---lYw7KevsSKWg5IOuXMeVAMddEG0l3R3cM--
