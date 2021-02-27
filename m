@@ -2,151 +2,221 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DCF8326635
-	for <lists+linux-can@lfdr.de>; Fri, 26 Feb 2021 18:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D1B326B96
+	for <lists+linux-can@lfdr.de>; Sat, 27 Feb 2021 05:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbhBZRSU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 26 Feb 2021 12:18:20 -0500
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:17974 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbhBZRSS (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 26 Feb 2021 12:18:18 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1614359710; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=JIG40WouO/XHbdneV+wOQlmyiqQDHIYualaVqafJxXOsuiFIMdO9pt1k97NRK1ux7f
-    ija1AN+beO0llFx0k5S7mecwM4P0SC3kVuV2ocXF5Tt+wnaSP9ABmR6zf7EImGBmv4yE
-    GPS1WQigsrZy7zMFTAbHazUHgGaB0k2S9/wvvITMq8iHBNHF7z0zuZPriq9iQSxSEHNi
-    LQD+iviWHf5meztcU5H7Bm1Yq4JRZrsTb85PS8R+S9ph//N7j4arERksgD+D8Z1pVXby
-    ezm4Ds2K+G0bw2NJZ0fmBZOOv/oEWYA/twNwnfJCg2/Yihl/DFoaGqNY1W2gmp63TMFd
-    S5vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1614359710;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=FCCWz2y199L4CnM1fW+BV96WabUqKD8PmzCV5AMWD/Q=;
-    b=ZHKRrbYrZ8CeW+LpE8ICv4iKgy/SuPpNC9qN5DISXfoxM40E/4Sanmd6UxHhpr1QNl
-    zwLeBdWEh4yNTbCKqeuD5nX0ZXSgYs1koa4lUc5DtCFBJlh4e+Hymy+m/iTsiOMIO2x+
-    /REM+E4OE3LiOJvhKlR7hakF5cd80rUdikMzt55KL27QsNHalrQN34GQ4c7Gy5grmlwN
-    g6GJ/XgXvwmL9yLFlnUpO9kxPYrV6xsTaRzcLPeJjTu/PdNBLgdqLy7n1TE4Lh4CbCgr
-    hyv0t/z+7lpMa3hwuFZ0Zq+qNfjqU03Z3+CdCuGc7EtYj8K7UKlzIHKW9RklPzqy3R1j
-    gG4w==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1614359710;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=FCCWz2y199L4CnM1fW+BV96WabUqKD8PmzCV5AMWD/Q=;
-    b=L1+erj4mu8ygrsacdv/F94ArTomtKTb5aABtl0U+KlizOf+c6Sx5nBwXUotz6KuO2y
-    yO/kPlXeioBUnfPgPkmKaeFLkLF+8POcRMqwVBoQFBdf6HVS827iTkfQk32hUXwm14E0
-    /L02iG8/cThMG9QOvYBUQySQDkjTX91BezgP3nHjbsRlebccShDdfr44IGx+kTJ8a5vP
-    Hlai9qNZbCt6Lqk1cCaCN9nGQj4fDzmjkOUzEf/XM/VgazqLP55iwrg+VSuemogQxGQj
-    d+JvWsX7l9UyJiyocqkT5D6ZTDqOYZstMn6Pt0iCvEaHsPFqmRsY6+U5GvAtDYmXqOcI
-    pUYQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3PMaViOoLMGUMh6mCA="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-    by smtp.strato.de (RZmta 47.19.0 DYNA|AUTH)
-    with ESMTPSA id V003bex1QHF9JpZ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 26 Feb 2021 18:15:09 +0100 (CET)
-Subject: Re: [PATCH net v4 1/1] can: can_skb_set_owner(): fix ref counting if
- socket was closed before setting skb ownership
-To:     Oleksij Rempel <o.rempel@pengutronix.de>, mkl@pengutronix.de,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Robin van der Gracht <robin@protonic.nl>
-Cc:     Andre Naujoks <nautsch2@gmail.com>,
-        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210226092456.27126-1-o.rempel@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <2e9e82d1-7e52-0f5b-c1bf-848c2f162019@hartkopp.net>
-Date:   Fri, 26 Feb 2021 18:15:04 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S229912AbhB0Eqs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 26 Feb 2021 23:46:48 -0500
+Received: from mxwn13.webd.pl ([194.181.228.67]:52295 "EHLO mxwn13.webd.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229795AbhB0Eqr (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 26 Feb 2021 23:46:47 -0500
+X-Greylist: delayed 2550 seconds by postgrey-1.27 at vger.kernel.org; Fri, 26 Feb 2021 23:46:43 EST
+Received: from wn13.int.webd ([192.168.101.113] helo=wn13.webd.pl)
+        by mta01.webd.pl with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <mariusz.madej@xtrack.com>)
+        id 1lFqpA-0002fg-3U; Sat, 27 Feb 2021 05:03:24 +0100
+Received: from [192.168.101.231] (port=38386 helo=mta01.int.webd)
+        by wn13.webd.pl with esmtp (Exim 4.93)
+        (envelope-from <mariusz.madej@xtrack.com>)
+        id 1lFqp9-0008OD-VT; Sat, 27 Feb 2021 05:03:23 +0100
+X-Quarantine-ID: <xGQNV92m42CQ>
+X-Virus-Scanned: amavisd-new at mxwn13.webd.pl
+Received: from wn13.webd.pl ([192.168.101.113])
+        by mta01.int.webd (mxwn13.webd.pl [192.168.101.200]) (amavisd-new, port 10134)
+        with ESMTP id xGQNV92m42CQ; Sat, 27 Feb 2021 05:03:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xtrack.com;
+         s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=Mfps4u+b9Jhg8JCS6rdyt4ryBICe3YrINKfFonXomgY=; b=krtKdS39LXlKkIheVHm6gohIHu
+        K0ArzN0+5V6FqRZhsTRgSDGDwre1hv+i3P5ylAft/DvTzOmXTvFbseKglurWa10BPJBDZyiy8VToM
+        +CVD8KdgdEiPR9P037yszeH3aauqs9EWyXFzzy5Nmqo0B/oTXlby4WgK6jmfbTH6yWNED8TswFFji
+        xH+r8Vk9s4l75XwX1Pk14aZ3d0/TCdVJGG36Wir1xCP+PqcX9huYs+6NY1J0CvD/cXmHM2EsVfPhg
+        nbQAip+KRsRQ/33fVqkUfgdMEBttbmEQY8WMvqRMpU5L1cGpI1EBXplth/7FuZa08YmqUOBWXc/3i
+        x0cFUQgA==;
+Received: from [185.241.198.130] (port=57272 helo=[192.168.32.4])
+        by wn13.webd.pl with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mariusz.madej@xtrack.com>)
+        id 1lFqp1-0008N9-HS; Sat, 27 Feb 2021 05:03:15 +0100
+Subject: Re: m_can: a lot of 'Rx FIFO 0 Message Lost' in dmesg
+To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+References: <PR3PR05MB7212376CDA795770B7E625E6809F9@PR3PR05MB7212.eurprd05.prod.outlook.com>
+ <20210226133702.echxlob5z4pj5ptc@bigthink>
+From:   Mariusz Madej <mariusz.madej@xtrack.com>
+Message-ID: <d0ebed81-3f7a-1e82-e16b-85e242d1ddca@xtrack.com>
+Date:   Sat, 27 Feb 2021 05:03:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <20210226092456.27126-1-o.rempel@pengutronix.de>
+In-Reply-To: <20210226133702.echxlob5z4pj5ptc@bigthink>
 Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 2/26/21 2:37 PM, Torin Cooper-Bennun wrote
 
+>> The only place in m_can.c file, where interrupt register is cleared is function
+>> called when interrupt arrives
+>>
+>> static irqreturn_t m_can_isr(int irq, void *dev_id)
+>> {
+>> .
+>> .
+>>          /* ACK all irqs */
+>>          if (ir & IR_ALL_INT)
+>>                  m_can_write(cdev, M_CAN_IR, ir);
+>> .
+>> .
+>> }
+>>
+>> But when we enter 'NAPI mode' in heavy load we are never get to this function
+>> until load gets lower and interrupts are enabled again. In this situation,
+>> this code:
+> The m_can driver handles the IRQ by offloading the RX to a NAPI queue,
+> so the RX procedure is deferred, and is scheduled to happen at a
+> (slightly) later time. As far as I understand it, interrupts are not
+> disabled at any point.
 
-On 26.02.21 10:24, Oleksij Rempel wrote:
-> There are two ref count variables controlling the free()ing of a socket:
-> - struct sock::sk_refcnt - which is changed by sock_hold()/sock_put()
-> - struct sock::sk_wmem_alloc - which accounts the memory allocated by
->    the skbs in the send path.
-> 
-> In case there are still TX skbs on the fly and the socket() is closed,
-> the struct sock::sk_refcnt reaches 0. In the TX-path the CAN stack
-> clones an "echo" skb, calls sock_hold() on the original socket and
-> references it. This produces the following back trace:
-> 
-> | WARNING: CPU: 0 PID: 280 at lib/refcount.c:25 refcount_warn_saturate+0x114/0x134
-> | refcount_t: addition on 0; use-after-free.
-> | Modules linked in: coda_vpu(E) v4l2_jpeg(E) videobuf2_vmalloc(E) imx_vdoa(E)
-> | CPU: 0 PID: 280 Comm: test_can.sh Tainted: G            E     5.11.0-04577-gf8ff6603c617 #203
-> | Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
-> | Backtrace:
-> | [<80bafea4>] (dump_backtrace) from [<80bb0280>] (show_stack+0x20/0x24) r7:00000000 r6:600f0113 r5:00000000 r4:81441220
-> | [<80bb0260>] (show_stack) from [<80bb593c>] (dump_stack+0xa0/0xc8)
-> | [<80bb589c>] (dump_stack) from [<8012b268>] (__warn+0xd4/0x114) r9:00000019 r8:80f4a8c2 r7:83e4150c r6:00000000 r5:00000009 r4:80528f90
-> | [<8012b194>] (__warn) from [<80bb09c4>] (warn_slowpath_fmt+0x88/0xc8) r9:83f26400 r8:80f4a8d1 r7:00000009 r6:80528f90 r5:00000019 r4:80f4a8c2
-> | [<80bb0940>] (warn_slowpath_fmt) from [<80528f90>] (refcount_warn_saturate+0x114/0x134) r8:00000000 r7:00000000 r6:82b44000 r5:834e5600 r4:83f4d540
-> | [<80528e7c>] (refcount_warn_saturate) from [<8079a4c8>] (__refcount_add.constprop.0+0x4c/0x50)
-> | [<8079a47c>] (__refcount_add.constprop.0) from [<8079a57c>] (can_put_echo_skb+0xb0/0x13c)
-> | [<8079a4cc>] (can_put_echo_skb) from [<8079ba98>] (flexcan_start_xmit+0x1c4/0x230) r9:00000010 r8:83f48610 r7:0fdc0000 r6:0c080000 r5:82b44000 r4:834e5600
-> | [<8079b8d4>] (flexcan_start_xmit) from [<80969078>] (netdev_start_xmit+0x44/0x70) r9:814c0ba0 r8:80c8790c r7:00000000 r6:834e5600 r5:82b44000 r4:82ab1f00
-> | [<80969034>] (netdev_start_xmit) from [<809725a4>] (dev_hard_start_xmit+0x19c/0x318) r9:814c0ba0 r8:00000000 r7:82ab1f00 r6:82b44000 r5:00000000 r4:834e5600
-> | [<80972408>] (dev_hard_start_xmit) from [<809c6584>] (sch_direct_xmit+0xcc/0x264) r10:834e5600 r9:00000000 r8:00000000 r7:82b44000 r6:82ab1f00 r5:834e5600 r4:83f27400
-> | [<809c64b8>] (sch_direct_xmit) from [<809c6c0c>] (__qdisc_run+0x4f0/0x534)
-> 
-> To fix this problem, only set skb ownership to sockets which have still
-> a ref count > 0.
-> 
-> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
-> Cc: Andre Naujoks <nautsch2@gmail.com>
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Fixes: 0ae89beb283a ("can: add destructor for self generated skbs")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->   include/linux/can/skb.h | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-> index 685f34cfba20..d82018cc0d0b 100644
-> --- a/include/linux/can/skb.h
-> +++ b/include/linux/can/skb.h
-> @@ -65,8 +65,12 @@ static inline void can_skb_reserve(struct sk_buff *skb)
->   
->   static inline void can_skb_set_owner(struct sk_buff *skb, struct sock *sk)
->   {
-> -	if (sk) {
-> -		sock_hold(sk);
-> +	/*
-> +	 * If the socket has already been closed by user space, the refcount may
-> +	 * already be 0 (and the socket will be freed after the last TX skb has
-> +	 * been freed). So only increase socket refcount if the refcount is > 0.
-> +	 */
-> +	if (sk && refcount_inc_not_zero(&sk->sk_refcnt)) {
->   		skb->destructor = sock_efree;
->   		skb->sk = sk;
->   	}
+Interupts are disabled in m_can_isr function:
 
-Ah, now I got the problem. You are replacing sock_hold(). Maybe I was a 
-bit slow-witted here - but with the comment it is ok.
+if ((ir & IR_RF0N) || (ir & IR_ERR_ALL_30X)) {
+         cdev->irqstatus = ir;
+         m_can_disable_all_interrupts(cdev);    <--------HERE
+         if (!cdev->is_peripheral)
+                 napi_schedule(&cdev->napi);
+         else
+                 m_can_rx_peripheral(dev);
 
-Reviewed-by: Oliver Hartkopp <socketcan@hartkopp.net>
+}
 
-Many thanks!
+and they are enabled conditionaly in function:
 
-Oliver
+static int m_can_poll(struct napi_struct *napi, int quota)
+{
+         struct net_device *dev = napi->dev;
+         struct m_can_classdev *cdev = netdev_priv(dev);
+         int work_done;
+
+         work_done = m_can_rx_handler(dev, quota);
+         if (work_done < quota) {
+                 napi_complete_done(napi, work_done);
+                 m_can_enable_all_interrupts(cdev); <---- HERE
+         }
+
+         return work_done;
+}
+
+so if work_done==quota(64) napi will schedule next receiving instead
+of enabling interrupts. That is why i wrote that in my condition i dont get
+to m_can_isr function and message lost interrupt is not cleared. As a result
+my device enters to this function:
+
+static int m_can_do_rx_poll(struct net_device *dev, int quota)
+{
+         struct m_can_classdev *cdev = netdev_priv(dev);
+         u32 pkts = 0;
+         u32 rxfs;
+
+         rxfs = m_can_read(cdev, M_CAN_RXF0S);
+         if (!(rxfs & RXFS_FFL_MASK)) {
+                 netdev_dbg(dev, "no messages in fifo0\n");
+                 return 0;
+         }
+
+         while ((rxfs & RXFS_FFL_MASK) && (quota > 0)) {
+                 if (rxfs & RXFS_RFL)
+                         netdev_warn(dev, "Rx FIFO 0 Message Lost\n");
+
+                 m_can_read_fifo(dev, rxfs);
+
+                 quota--;
+                 pkts++;
+                 rxfs = m_can_read(cdev, M_CAN_RXF0S);
+         }
+
+         if (pkts)
+                 can_led_event(dev, CAN_LED_EVENT_RX);
+
+         return pkts;
+}
+
+With RXFS_RFL==true and 64 messages to be read, that is why i have 64 warnings
+in a row.
+Those warnings take cpu time, and in this time fifo is full again so
+function m_can_poll does not enable interrupts again, and so on...
+
+>> That is why we got so many messages in a row for so long time. So clearing
+>> RXFS_RFL bit after warning is issued could be a solution.
+> RXFS_RFL is a flag in a status register, not an interrupt flag. There is
+> a corresponding interrupt flag, but that is cleared along with the rest,
+> at the top of m_can_isr.
+
+I agree, sorry for not being specific, the problem is cpu can not get into
+m_can_isr for a long time in my case.
+
+>
+> I think you are losing messages because the traffic is too heavy for
+> your system to read out the messages fast enough. That is the usual
+> reason for seeing "Rx FIFO 0 Message Lost".
+
+Seeing "Rx FIFO 0 Message Lost" is not my biggest problem. The problem is
+my system is not responsive along this messages.
+
+I changed m_can_do_rx_poll:
+
+static int m_can_do_rx_poll(struct net_device *dev, int quota)
+{
+         struct m_can_classdev *cdev = netdev_priv(dev);
+         u32 pkts = 0;
+         u32 rxfs;
+
+         rxfs = m_can_read(cdev, M_CAN_RXF0S);
+         if (!(rxfs & RXFS_FFL_MASK)) {
+                 netdev_dbg(dev, "no messages in fifo0\n");
+                 return 0;
+         }
+
+         while ((rxfs & RXFS_FFL_MASK) && (quota > 0)) {
+                 if (rxfs & RXFS_RFL) {
+                         netdev_warn(dev, "Rx FIFO 0 Message Lost\n");
+                         m_can_write(cdev, M_CAN_IR, IR_RF0L);
+                 }
+
+                 m_can_read_fifo(dev, rxfs);
+
+                 quota--;
+                 pkts++;
+                 rxfs = m_can_read(cdev, M_CAN_RXF0S);
+         }
+
+         if (pkts)
+                 can_led_event(dev, CAN_LED_EVENT_RX);
+
+         return pkts;
+}
+
+And now my system is responsive - i sometimes get "Rx FIFO 0 Message Lost"
+but one at a time - not 100k and this is not a big problem for me.
+CAN works OK
+So IMO it is a bug.
+
+>
+> --
+> Regards,
+>
+> Torin Cooper-Bennun
+> Software Engineer  | maxiluxsystems.com
+>
+Regards,
+
+Mariusz
+
