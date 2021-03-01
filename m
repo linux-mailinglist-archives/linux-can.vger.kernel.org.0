@@ -2,56 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB07D327D97
-	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 12:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E317327F0F
+	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 14:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234361AbhCALvk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Mar 2021 06:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S235440AbhCANK2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Mar 2021 08:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234184AbhCALve (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Mar 2021 06:51:34 -0500
+        with ESMTP id S235285AbhCANJl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Mar 2021 08:09:41 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AC2C061788
-        for <linux-can@vger.kernel.org>; Mon,  1 Mar 2021 03:51:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E12C061756
+        for <linux-can@vger.kernel.org>; Mon,  1 Mar 2021 05:08:59 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lGh4t-0006Kn-7h; Mon, 01 Mar 2021 12:51:07 +0100
+        id 1lGiI4-00064x-GU; Mon, 01 Mar 2021 14:08:48 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6e66:a1a4:a449:44cd])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id EEF755EB1B2;
-        Mon,  1 Mar 2021 11:51:02 +0000 (UTC)
-Date:   Mon, 1 Mar 2021 12:51:02 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 655305EB278;
+        Mon,  1 Mar 2021 13:08:46 +0000 (UTC)
+Date:   Mon, 1 Mar 2021 14:08:45 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Dario Binacchi <dariobin@libero.it>
 Cc:     linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@systec-electronic.com>,
         Federico Vaga <federico.vaga@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
         YueHaibing <yuehaibing@huawei.com>,
         Zhang Qilong <zhangqilong3@huawei.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] can: c_can: prepare to up the message objects
+Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
  number
-Message-ID: <20210301115102.j5qwmiy2on3ezd4d@pengutronix.de>
-References: <20210225215155.30509-1-dariobin@libero.it>
- <20210225215155.30509-6-dariobin@libero.it>
- <20210226083315.cutpxc4iety4qedp@pengutronix.de>
- <1564374858.544328.1614507493409@mail1.libero.it>
+Message-ID: <20210301130845.3s45ujmhkazscm6x@pengutronix.de>
+References: <20210228103856.4089-1-dariobin@libero.it>
+ <20210228103856.4089-6-dariobin@libero.it>
+ <20210301113805.jylhc373sip7zmed@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2dhc5sepxjp7dlct"
+        protocol="application/pgp-signature"; boundary="6padqo4tgffcbgov"
 Content-Disposition: inline
-In-Reply-To: <1564374858.544328.1614507493409@mail1.libero.it>
+In-Reply-To: <20210301113805.jylhc373sip7zmed@pengutronix.de>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -61,36 +56,36 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---2dhc5sepxjp7dlct
+--6padqo4tgffcbgov
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 28.02.2021 11:18:13, Dario Binacchi wrote:
-> > > +	u32 msg_obj_rx_mask;
-> >=20
-> > Is this variable big enough after you've extended the driver to use 64
-> > mailboxes?
+On 01.03.2021 12:38:05, Marc Kleine-Budde wrote:
+> On 28.02.2021 11:38:54, Dario Binacchi wrote:
+> [...]
 >=20
-> Yes. I have kept the message assignment policy unchanged, they are equall=
-y=20
-> divided between reception and transmission. Therefore, in the case of 64=
-=20
-> messages, 32 are used for reception and 32 for transmission. So a 32-bit=
-=20
-> variable is enough.
+> > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
+> >  	while ((idx =3D ffs(pend))) {
+> >  		idx--;
+> >  		pend &=3D ~(1 << idx);
+> > -		obj =3D idx + C_CAN_MSG_OBJ_TX_FIRST;
+> > +		obj =3D idx + priv->msg_obj_tx_first;
+> >  		c_can_inval_tx_object(dev, IF_TX, obj);
+> >  		can_get_echo_skb(dev, idx, NULL);
+> >  		bytes +=3D priv->dlc[idx];
+> > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
+> >  	/* Clear the bits in the tx_active mask */
+> >  	atomic_sub(clr, &priv->tx_active);
+> > =20
+> > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
+> > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
 >=20
-> >=20
-> > If you want to support 128 message objects converting the driver to the
-> > linux bitmap API is another option.
-> >=20
->=20
-> Do you know if any of the hardware managed by Linux use a D_CAN controlle=
-r=20
-> with 128 message objects?
+> Do we need 1UL here, too?
 
-Even the am437x only uses 64 message objects. Ok let's stay with 64 as
-max for now.
+There are several more "1 <<" in the driver. As the right side of the
+sift operation can be up to 32, I think you should replace all "1 <<"
+with "1UL <<".
 
 regards,
 Marc
@@ -101,19 +96,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---2dhc5sepxjp7dlct
+--6padqo4tgffcbgov
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA81SMACgkQqclaivrt
-76nyPQf/aaa/oKtyI9yNhbSa5NQXHNe7o/CjFKpk5OCavnNpKh0eTRSxmdip+sDT
-PReCAnYwfvQAa4o2zMuW8xR4igotXas/6o2JXY/RLWmihXp3zTHVAuku0aRJlNiE
-ePSAVAof3SdenghvekzLu+y7gk1qgFULQkHyp6AZxY8ABJUowTOrarK5rhD9U8xy
-g8ERGLxVOObBqbDh9yEarTv0mY1PC224uZToSK4v94Bfyh4gUD97iYLknbtHdKhK
-gugf8iOvLfIVB1H2EUvxWL4SzPASF/IGJCKVzyuY3HPMmt31RIGiD14yYoKqBHJB
-/0yOSFgRkH6E24iHYGeP9co18gY0Bw==
-=4J6b
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA851oACgkQqclaivrt
+76lVCAf/fD2kv4AaTlo/WCGvVcdQgNunuCNtU6gKv9NxYJdx8goRxw25LEPpbvgf
+/LyYcc3PZdt43WSluC5YAgh9sU9u1kYONCv07w9S/hClZtlVP+7rI0C9Qhdi4rl/
+Cq9nDgk560o1USfI6t2X8yzp50Jgr+6rJZaIcVhU+k3gB8IMFqQDvZmdVBabXv/z
+Y95/KSaqBVK3NmD44Djd8CK2MWmoozhdQPf3HAhkCw4qusrGLDsMPMcNaQzkQ5HV
+hXspd+N6IeDt+zKF96QRM+wreplpRz+1L/PA2GWW/p7E8yU5VFISlKQ/jmFoP/VT
+Vca/u1cz1ChXM92jY4D8UYyrlfjSmw==
+=cBHB
 -----END PGP SIGNATURE-----
 
---2dhc5sepxjp7dlct--
+--6padqo4tgffcbgov--
