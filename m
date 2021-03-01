@@ -2,126 +2,89 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A72F328FF2
-	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 21:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB86329396
+	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 22:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241383AbhCAUAA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Mar 2021 15:00:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242149AbhCATwp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Mar 2021 14:52:45 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2CAC061797
-        for <linux-can@vger.kernel.org>; Mon,  1 Mar 2021 11:49:27 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lGoXg-0000JO-D9; Mon, 01 Mar 2021 20:49:20 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:bdf1:58e9:8113:f2a1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2555D5EBC2D;
-        Mon,  1 Mar 2021 19:46:54 +0000 (UTC)
-Date:   Mon, 1 Mar 2021 20:46:53 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dariobin@libero.it>
-Cc:     linux-kernel@vger.kernel.org,
-        Federico Vaga <federico.vaga@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
- number
-Message-ID: <20210301194653.egjnrysvfmqusd45@pengutronix.de>
-References: <20210228103856.4089-1-dariobin@libero.it>
- <20210228103856.4089-6-dariobin@libero.it>
- <20210301113805.jylhc373sip7zmed@pengutronix.de>
- <20210301130845.3s45ujmhkazscm6x@pengutronix.de>
- <198393892.577352.1614619471062@mail1.libero.it>
+        id S236303AbhCAV2s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Mar 2021 16:28:48 -0500
+Received: from mxcwn13.webd.pl ([194.181.228.69]:40747 "EHLO mxcwn13.webd.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237988AbhCAVWU (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 1 Mar 2021 16:22:20 -0500
+Received: from wn13.int.webd ([192.168.101.113] helo=wn13.webd.pl)
+        by mta01.webd.pl with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <mariusz.madej@xtrack.com>)
+        id 1lGpyq-0004ge-Pz; Mon, 01 Mar 2021 22:21:28 +0100
+Received: from [192.168.101.231] (port=48996 helo=mta01.int.webd)
+        by wn13.webd.pl with esmtp (Exim 4.93)
+        (envelope-from <mariusz.madej@xtrack.com>)
+        id 1lGpyq-0005Oc-ND; Mon, 01 Mar 2021 22:21:28 +0100
+X-Quarantine-ID: <KaS4Ai1MsV3c>
+X-Virus-Scanned: amavisd-new at mxwn13.webd.pl
+Received: from wn13.webd.pl ([192.168.101.113])
+        by mta01.int.webd (mxwn13.webd.pl [192.168.101.200]) (amavisd-new, port 10134)
+        with ESMTP id KaS4Ai1MsV3c; Mon,  1 Mar 2021 22:21:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xtrack.com;
+         s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=kNwkNwrTdW8LBBMrLUj7w33sDYzP3G1CVSqOQcpn/d0=; b=W6OaWbGlRNg7frJcvnd5x9ppR+
+        ZlqTdDVJipqAh61hTrjdGamK8g2jalgu99ygsrLcMaazwu2iYW6vq/MywOw5q8I62zNYI/Qwlgoz6
+        J1kEOEVcZYWuUZbYdGqm4Aa/EJ0Ylbj+6HtbB484t0OY1q1nZrOyP8Lw+O3vSMH4+5t85qtsHlXIj
+        mvE2vZzOX0pItBLC6aSrXnwj2lJTPl/uFtAsXWnpGaq8Je3PJ9yXAsoVCTdX7yRTGOKLGuqjb1/GQ
+        K/7fFgXhYYYmNVT0jXxT0mp10QfopsriKiLbOdgnRE/LvkVynqks4BQ/FxuAZNziPai+s/PzRHRmx
+        sxUKiQjQ==;
+Received: from [185.241.198.130] (port=51794 helo=[192.168.32.4])
+        by wn13.webd.pl with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <mariusz.madej@xtrack.com>)
+        id 1lGpyq-0005OR-3X; Mon, 01 Mar 2021 22:21:28 +0100
+To:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+From:   Mariusz Madej <mariusz.madej@xtrack.com>
+Subject: [PATCH] can: m_can: reset IR_RF0L in message reception loop
+Message-ID: <0710fbd2-4b88-21bf-88f7-0b97d7e7dc0b@xtrack.com>
+Date:   Mon, 1 Mar 2021 22:21:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="df4yjeailgg3kxvn"
-Content-Disposition: inline
-In-Reply-To: <198393892.577352.1614619471062@mail1.libero.it>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Message lost warning is reported in loop without interrupt reset. Besides
+redundant log messages it may lead to serious performance problem, where
+fifo gets full faster than next reception is scheduled by NAPI. This
+patch fixes it.
 
---df4yjeailgg3kxvn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Mariusz Madej <mariusz.madej@xtrack.com>
+---
+  drivers/net/can/m_can/m_can.c | 4 +++-
+  1 file changed, 3 insertions(+), 1 deletion(-)
 
-On 01.03.2021 18:24:31, Dario Binacchi wrote:
-> Hi Marc,
->=20
-> > Il 01/03/2021 14:08 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
-> >=20
-> > =20
-> > On 01.03.2021 12:38:05, Marc Kleine-Budde wrote:
-> > > On 28.02.2021 11:38:54, Dario Binacchi wrote:
-> > > [...]
-> > >=20
-> > > > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
-> > > >  	while ((idx =3D ffs(pend))) {
-> > > >  		idx--;
-> > > >  		pend &=3D ~(1 << idx);
-> > > > -		obj =3D idx + C_CAN_MSG_OBJ_TX_FIRST;
-> > > > +		obj =3D idx + priv->msg_obj_tx_first;
-> > > >  		c_can_inval_tx_object(dev, IF_TX, obj);
-> > > >  		can_get_echo_skb(dev, idx, NULL);
-> > > >  		bytes +=3D priv->dlc[idx];
-> > > > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
-> > > >  	/* Clear the bits in the tx_active mask */
-> > > >  	atomic_sub(clr, &priv->tx_active);
-> > > > =20
-> > > > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
-> > > > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
-> > >=20
-> > > Do we need 1UL here, too?
-> >=20
-> > There are several more "1 <<" in the driver. As the right side of the
-> > sift operation can be up to 32, I think you should replace all "1 <<"
-> > with "1UL <<".
->=20
-> Do you agree if I use the BIT macro for all these shift operations?
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 3752520a7..bd5539435 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -501,8 +501,10 @@ static int m_can_do_rx_poll(struct net_device *dev, int quota)
+  	}
+  
+  	while ((rxfs & RXFS_FFL_MASK) && (quota > 0)) {
+-		if (rxfs & RXFS_RFL)
++		if (rxfs & RXFS_RFL) {
+  			netdev_warn(dev, "Rx FIFO 0 Message Lost\n");
++			m_can_write(cdev, M_CAN_IR, IR_RF0L);	
++		}
+  
+  		m_can_read_fifo(dev, rxfs);
+  
+-- 
+2.20.1
 
-No, only use BIT(), where you want to set a single bit, use GENMASK()
-for masks.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---df4yjeailgg3kxvn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA9RKsACgkQqclaivrt
-76k8bwgAseV6n0GjZF7s/1Dg64W063rxRs/X0o6rdNGyZyEgx6gl5hLuF/Z3bCMf
-7mw4mPC0Ub4TEH14CdDb23LW2xXDPyyDgUcE00T2Qmp4GQZACqYJQinvUS7mF6Uv
-T1fHr6ynyjfu1XSkLWespNXbG3rDbbd/78FiT9P3frbCkA4AJR2bUvODbX6fiHNW
-u3KvKUtRx5aJEmHHBRhT95JIRRP4DRPOfs9C8c+S9HtwYPX4+OT8lWde2roUWUPw
-Il8VkTofjEWe6W+bUkAcTa44/fxAoilok3EPtrEuaaDIFrt2o/uERqM3hgZR/xM6
-jY8jIasV+bRLv5XbJbKQCCfzzxoQRQ==
-=M5u4
------END PGP SIGNATURE-----
-
---df4yjeailgg3kxvn--
