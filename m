@@ -2,256 +2,149 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9833271F7
-	for <lists+linux-can@lfdr.de>; Sun, 28 Feb 2021 11:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 760D4327622
+	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 03:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbhB1Kxh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 28 Feb 2021 05:53:37 -0500
-Received: from smtp-17-i2.italiaonline.it ([213.209.12.17]:53640 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231152AbhB1KxS (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 28 Feb 2021 05:53:18 -0500
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([87.20.116.197])
-        by smtp-17.iol.local with ESMTPA
-        id GJTalhz13lChfGJTllvZV4; Sun, 28 Feb 2021 11:39:13 +0100
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1614508753; bh=DAcsIcI1qqpEQyjajSihDV+gP9Q8Oe+cpX5SqQxGkZI=;
-        h=From;
-        b=Qe00kSCrmEyC7cQBaoubWCHyqqCEKq5KVHyx/HpoMyfs4gQKKnS/Nph72fE1P21yu
-         +X513RVVQlTQbtVSuWn2xOWZpdJ3gCVnqjPfCC2E539q2CCbotZg2XMHm5xmmZlH4Q
-         KCvDpbu1XC28TYDbhQ05kHPfnvIzTQq4U/e0mhmaD3hRmMr6OoqWxYHPgN1f4KxqRr
-         aUo3nkIvUixy5NdPxHZ7XfWt4xYzy7kx22FwQqjhnQnM7OmSXY9TACbHcXhkzXJoQd
-         CeLRy08YZr4FsfbJ1EkyJBDrNyKBX69/FfYqwlWQ2IykwXaD4vsrtIuQadj/ezgXRa
-         bgtwnkZDK7Z8A==
-X-CNFS-Analysis: v=2.4 cv=S6McfKgP c=1 sm=1 tr=0 ts=603b72d1 cx=a_exe
- a=AVqmXbCQpuNSdJmApS5GbQ==:117 a=AVqmXbCQpuNSdJmApS5GbQ==:17
- a=FEz_7PL0ERQs5GQP_jQA:9 a=oxaoH9BcOFauOGrG:21 a=Asb3xwQKlx4a7rY6:21
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     Federico Vaga <federico.vaga@gmail.com>,
-        Alexander Stein <alexander.stein@systec-electronic.com>,
-        Dario Binacchi <dariobin@libero.it>,
+        id S231836AbhCACqA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 28 Feb 2021 21:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231833AbhCACp7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 28 Feb 2021 21:45:59 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B77C06174A;
+        Sun, 28 Feb 2021 18:45:18 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id cw15so6734677qvb.11;
+        Sun, 28 Feb 2021 18:45:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i3RUk30ykIg813PhDPfClgxpavudFjgIE8k7yntSSP0=;
+        b=DjmA8VDvFrsn8iXdNqiZCrwvJrxZ89+xuCzSyzsKcHf04Jl/MrLfHWwb/DgBH00rO5
+         L3WJuXYqIl3ZKbPJgYjlYKOxlmorczUeUFKlZaH2YhRyV4ZPWv2cHbj8Duzu+ubBAl9n
+         cu+lpHARuvwQiwCsphZ5qjP3JV4OSQFlCnmtLEkYlK1MWLPxda4TPU1XDp+zlXw5vT/g
+         1blibaILqFgywxpJnKfeNklUNdY8MT2hkAGPSWaE3qB+aRco/ee4HqJnMtg6WdKpuVhG
+         /QMR/bWfhVCZOkNprS+WCjfUpCvh/X7ktPMHx1hUDPgDIs4/nyDb8wbW0Ih6kpj2V6sZ
+         hz+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=i3RUk30ykIg813PhDPfClgxpavudFjgIE8k7yntSSP0=;
+        b=Gy2dpwXBxNG/9hHwSugaEgzR9iYLfs+1lE/fSZO3Pz7yDtm1Q+50LTYle1c3/dOYXu
+         1A7sZ2XzUl0DOkpNJKXigY2ly0vqNlIcfoeRicRJ7uHkGJ7KKfEE5Nf8mnE+OUqP6YZ4
+         BhiXimMV8Oemvs71h22zsO7KL5tLHrjJOAOUhKmsHrelOWbsFUVmztecQbanCGYszmyw
+         v4aatoep0jPewHWS4ErwU1UD69cSu0jyfP6DCQNv2Kh6p++9Xc87djCvMBF6vMgfVSAT
+         fSf0vXDfN4RAi6Q8/kLKhKEctBbq80aTzFe/O8YmyLpbZms3J6UXjMjfxfXes/ZN+VM/
+         Vn1g==
+X-Gm-Message-State: AOAM533JeOzks97TG/7kSaOgd8E+TTlpsLXrjaF2yAa05eiMr1BTofF9
+        UzOqP7FiIPjDVAOfB6swvpHQ6LexCWsDew==
+X-Google-Smtp-Source: ABdhPJwRwDQyJUDK4PbtI4Ec3MPStxzu5SaPsooJ9Xc0DKW8MtvvX3+JomDK3l2NY3SrgpAuhnh9uQ==
+X-Received: by 2002:a0c:8c87:: with SMTP id p7mr12959756qvb.46.1614566718155;
+        Sun, 28 Feb 2021 18:45:18 -0800 (PST)
+Received: from tong-desktop.local ([2601:5c0:c200:27c6:1d59:a36:514:a21])
+        by smtp.googlemail.com with ESMTPSA id e1sm11949958qkf.99.2021.02.28.18.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Feb 2021 18:45:17 -0800 (PST)
+From:   Tong Zhang <ztong0001@gmail.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v3 6/6] can: c_can: add support to 64 message objects
-Date:   Sun, 28 Feb 2021 11:38:55 +0100
-Message-Id: <20210228103856.4089-7-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210228103856.4089-1-dariobin@libero.it>
-References: <20210228103856.4089-1-dariobin@libero.it>
-X-CMAE-Envelope: MS4xfMtgfoD11GRmxmTwHk6CA4xJ2FIHUYbkitTuHRUiwJbQyZapeubBQKOEzBse9y8YAOvKlzS1nBNfmFJBK/VWJ7r/vNFegrFoARRvSos6N85xiRieDZIK
- wiPhUoqpGnlPATmGP6SI5dIhidQM0g5BMvgqJiGU6nJbzEMywIyzVlAywQ5DeL/7BrLJHgZeJQ8wajk6P4nIw89anL3Gn3coiB1O47kzlKShbVpKdN7j6niU
- AkZdxqSEAcL/U6itSQuB9QvO+2i62hNsXwKS0QtrTcOAni4yt5atoZrz0+Ut3DLmO0eHcXGiabDHbyC2w+Wfhd0aOwz7xmKEbpCQUY1qf5UcFZqNY5dwQbdt
- Zzn7c2gxv7H+MTXIzC9tZZBg0jrPKJZ6rqpXfwWCjrwXTRqwIBGhWtfMYpeUs0FLdcZbPXSvALtbPWvdbPIrutugMjuAPJ4LIIsLEglL+7Yma5loM3TaKeOY
- 8ZQY5v8rUJZJQeOUEEHfeD6qePCgperhHWgZWOpRp0o5tiLMknQ2OtTBEllaOsITXQ50fGNrMaWsx926pJXUKkgcj/TDuDxZNDvP6VTKSvrXI9vDK5a31EuN
- Nwudre3C/Tjgi5dHSaVtZ5zz0YqX6JTFTaDMmDgDg4NFptBkgXMOCEbE1DZAId+CixAPyMbva+WliSMg0ISdg+06iCmx/tFDtSuLbuvhlcur6Q==
+        Tong Zhang <ztong0001@gmail.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] can: c_can_pci: fix use-after-free
+Date:   Sun, 28 Feb 2021 21:45:11 -0500
+Message-Id: <20210301024512.539039-1-ztong0001@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-D_CAN controller supports 16, 32, 64 or 128 message objects, comparing
-to 32 on C_CAN.
-AM335x/AM437x Sitara processors and DRA7 SOC all instantiate a D_CAN
-controller with 64 message objects, as described in the "DCAN features"
-subsection of the CAN chapter of their technical reference manuals.
+There is a UAF in c_can_pci_remove().
+dev is released by free_c_can_dev() and is used by
+pci_iounmap(pdev, priv->base) later.
+To fix this issue, save the mmio address before releasing dev.
 
-The driver policy has been kept unchanged, and as in the previous
-version, the first half of the message objects is used for reception and
-the second for transmission.
+[ 1795.746699] ==================================================================
+[ 1795.747093] BUG: KASAN: use-after-free in c_can_pci_remove+0x34/0x70 [c_can_pci]
+[ 1795.747503] Read of size 8 at addr ffff888103db0be8 by task modprobe/98
+[ 1795.747867]
+[ 1795.747957] CPU: 0 PID: 98 Comm: modprobe Not tainted 5.11.0-11746-g06d5d309a3f1-dirty #56
+[ 1795.748410] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.13.0-48-gd9c812dda519-4
+[ 1795.749025] Call Trace:
+[ 1795.749176]  dump_stack+0x8a/0xb5
+[ 1795.749385]  print_address_description.constprop.0+0x1a/0x140
+[ 1795.749713]  ? c_can_pci_remove+0x34/0x70 [c_can_pci]
+[ 1795.750001]  ? c_can_pci_remove+0x34/0x70 [c_can_pci]
+[ 1795.750285]  kasan_report.cold+0x7f/0x111
+[ 1795.750513]  ? c_can_pci_remove+0x34/0x70 [c_can_pci]
+[ 1795.750797]  c_can_pci_remove+0x34/0x70 [c_can_pci]
+[ 1795.751071]  pci_device_remove+0x62/0xe0
+[ 1795.751308]  device_release_driver_internal+0x148/0x270
+[ 1795.751609]  driver_detach+0x76/0xe0
+[ 1795.751812]  bus_remove_driver+0x7e/0x100
+[ 1795.752051]  pci_unregister_driver+0x28/0xf0
+[ 1795.752286]  __x64_sys_delete_module+0x268/0x300
+[ 1795.752547]  ? __ia32_sys_delete_module+0x300/0x300
+[ 1795.752815]  ? call_rcu+0x3e4/0x580
+[ 1795.753014]  ? fpregs_assert_state_consistent+0x4d/0x60
+[ 1795.753305]  ? exit_to_user_mode_prepare+0x2f/0x130
+[ 1795.753574]  do_syscall_64+0x33/0x40
+[ 1795.753782]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 1795.754060] RIP: 0033:0x7f033332dcf7
+[ 1795.754257] Code: 48 89 57 30 48 8b 04 24 48 89 47 38 e9 1d a0 02 00 48 89 f8 48 89 f7 48 89 d6 41
+[ 1795.755248] RSP: 002b:00007ffd06037208 EFLAGS: 00000202 ORIG_RAX: 00000000000000b0
+[ 1795.755655] RAX: ffffffffffffffda RBX: 00007f03333ab690 RCX: 00007f033332dcf7
+[ 1795.756038] RDX: 00000000ffffffff RSI: 0000000000000080 RDI: 0000000000d20b10
+[ 1795.756420] RBP: 0000000000d20ac0 R08: 2f2f2f2f2f2f2f2f R09: 0000000000d20ac0
+[ 1795.756801] R10: fefefefefefefeff R11: 0000000000000202 R12: 0000000000d20ac0
+[ 1795.757183] R13: 0000000000d2abf0 R14: 0000000000000000 R15: 0000000000000001
+[ 1795.757565]
+[ 1795.757651] The buggy address belongs to the page:
+[ 1795.757912] page:(____ptrval____) refcount:0 mapcount:-128 mapping:0000000000000000 index:0x0 pfn0
+[ 1795.758427] flags: 0x200000000000000()
+[ 1795.758633] raw: 0200000000000000 ffffea00040f7608 ffff88817fffab18 0000000000000000
+[ 1795.759047] raw: 0000000000000000 0000000000000003 00000000ffffff7f 0000000000000000
+[ 1795.759460] page dumped because: kasan: bad access detected
+[ 1795.759759]
+[ 1795.759845] Memory state around the buggy address:
+[ 1795.760104]  ffff888103db0a80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+[ 1795.760490]  ffff888103db0b00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+[ 1795.760878] >ffff888103db0b80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+[ 1795.761264]                                                           ^
+[ 1795.761618]  ffff888103db0c00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+[ 1795.762007]  ffff888103db0c80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+[ 1795.762392] ==================================================================
 
-The I/O load is increased only in the case of 64 message objects,
-keeping it unchanged in the case of 32. Two 32-bit read accesses are in
-fact required, which however remained at 16-bit for configurations with
-32 message objects.
-
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
-
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
 ---
+ drivers/net/can/c_can/c_can_pci.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Changes in v3:
-- Use unsigned int instead of int as type of the msg_obj_num field
-  in c_can_driver_data and c_can_pci_data structures.
-
-Changes in v2:
-- Add message objects number to PCI driver data.
-
- drivers/net/can/c_can/c_can.c          | 19 +++++++++++--------
- drivers/net/can/c_can/c_can.h          |  5 +++--
- drivers/net/can/c_can/c_can_pci.c      |  6 +++++-
- drivers/net/can/c_can/c_can_platform.c |  6 +++++-
- 4 files changed, 24 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_can.c
-index ede6f4d62095..bb766904636b 100644
---- a/drivers/net/can/c_can/c_can.c
-+++ b/drivers/net/can/c_can/c_can.c
-@@ -723,8 +723,12 @@ static void c_can_do_tx(struct net_device *dev)
- 	struct net_device_stats *stats = &dev->stats;
- 	u32 idx, obj, pkts = 0, bytes = 0, pend, clr;
- 
--	clr = pend = priv->read_reg(priv, C_CAN_INTPND2_REG);
-+	if (priv->msg_obj_tx_last > 32)
-+		pend = priv->read_reg32(priv, C_CAN_INTPND3_REG);
-+	else
-+		pend = priv->read_reg(priv, C_CAN_INTPND2_REG);
- 
-+	clr = pend;
- 	while ((idx = ffs(pend))) {
- 		idx--;
- 		pend &= ~(1 << idx);
-@@ -834,7 +838,12 @@ static int c_can_read_objects(struct net_device *dev, struct c_can_priv *priv,
- 
- static inline u32 c_can_get_pending(struct c_can_priv *priv)
- {
--	u32 pend = priv->read_reg(priv, C_CAN_NEWDAT1_REG);
-+	u32 pend;
-+
-+	if (priv->msg_obj_rx_last > 16)
-+		pend = priv->read_reg32(priv, C_CAN_NEWDAT1_REG);
-+	else
-+		pend = priv->read_reg(priv, C_CAN_NEWDAT1_REG);
- 
- 	return pend;
- }
-@@ -856,12 +865,6 @@ static int c_can_do_rx_poll(struct net_device *dev, int quota)
- 	struct c_can_priv *priv = netdev_priv(dev);
- 	u32 pkts = 0, pend = 0, toread, n;
- 
--	/*
--	 * It is faster to read only one 16bit register. This is only possible
--	 * for a maximum number of 16 objects.
--	 */
--	WARN_ON(priv->msg_obj_rx_last > 16);
--
- 	while (quota > 0) {
- 		if (!pend) {
- 			pend = c_can_get_pending(priv);
-diff --git a/drivers/net/can/c_can/c_can.h b/drivers/net/can/c_can/c_can.h
-index 68295fab83d9..bd291e998a51 100644
---- a/drivers/net/can/c_can/c_can.h
-+++ b/drivers/net/can/c_can/c_can.h
-@@ -22,8 +22,6 @@
- #ifndef C_CAN_H
- #define C_CAN_H
- 
--#define C_CAN_NO_OF_OBJECTS	32
--
- enum reg {
- 	C_CAN_CTRL_REG = 0,
- 	C_CAN_CTRL_EX_REG,
-@@ -61,6 +59,7 @@ enum reg {
- 	C_CAN_NEWDAT2_REG,
- 	C_CAN_INTPND1_REG,
- 	C_CAN_INTPND2_REG,
-+	C_CAN_INTPND3_REG,
- 	C_CAN_MSGVAL1_REG,
- 	C_CAN_MSGVAL2_REG,
- 	C_CAN_FUNCTION_REG,
-@@ -122,6 +121,7 @@ static const u16 __maybe_unused reg_map_d_can[] = {
- 	[C_CAN_NEWDAT2_REG]	= 0x9E,
- 	[C_CAN_INTPND1_REG]	= 0xB0,
- 	[C_CAN_INTPND2_REG]	= 0xB2,
-+	[C_CAN_INTPND3_REG]	= 0xB4,
- 	[C_CAN_MSGVAL1_REG]	= 0xC4,
- 	[C_CAN_MSGVAL2_REG]	= 0xC6,
- 	[C_CAN_IF1_COMREQ_REG]	= 0x100,
-@@ -161,6 +161,7 @@ struct raminit_bits {
- 
- struct c_can_driver_data {
- 	enum c_can_dev_id id;
-+	unsigned int msg_obj_num;
- 
- 	/* RAMINIT register description. Optional. */
- 	const struct raminit_bits *raminit_bits; /* Array of START/DONE bit positions */
 diff --git a/drivers/net/can/c_can/c_can_pci.c b/drivers/net/can/c_can/c_can_pci.c
-index 3752f68d095e..9415b12d26c8 100644
+index 406b4847e5dc..a378383a99fb 100644
 --- a/drivers/net/can/c_can/c_can_pci.c
 +++ b/drivers/net/can/c_can/c_can_pci.c
-@@ -31,6 +31,8 @@ enum c_can_pci_reg_align {
- struct c_can_pci_data {
- 	/* Specify if is C_CAN or D_CAN */
- 	enum c_can_dev_id type;
-+	/* Number of message objects */
-+	unsigned int msg_obj_num;
- 	/* Set the register alignment in the memory */
- 	enum c_can_pci_reg_align reg_align;
- 	/* Set the frequency */
-@@ -149,7 +151,7 @@ static int c_can_pci_probe(struct pci_dev *pdev,
- 	}
+@@ -239,12 +239,13 @@ static void c_can_pci_remove(struct pci_dev *pdev)
+ {
+ 	struct net_device *dev = pci_get_drvdata(pdev);
+ 	struct c_can_priv *priv = netdev_priv(dev);
+-
++	void __iomem *addr = priv->base;
++  
+ 	unregister_c_can_dev(dev);
  
- 	/* allocate the c_can device */
--	dev = alloc_c_can_dev(C_CAN_NO_OF_OBJECTS);
-+	dev = alloc_c_can_dev(c_can_pci_data->msg_obj_num);
- 	if (!dev) {
- 		ret = -ENOMEM;
- 		goto out_iounmap;
-@@ -253,6 +255,7 @@ static void c_can_pci_remove(struct pci_dev *pdev)
+ 	free_c_can_dev(dev);
  
- static const struct c_can_pci_data c_can_sta2x11= {
- 	.type = BOSCH_C_CAN,
-+	.msg_obj_num = 32,
- 	.reg_align = C_CAN_REG_ALIGN_32,
- 	.freq = 52000000, /* 52 Mhz */
- 	.bar = 0,
-@@ -260,6 +263,7 @@ static const struct c_can_pci_data c_can_sta2x11= {
- 
- static const struct c_can_pci_data c_can_pch = {
- 	.type = BOSCH_C_CAN,
-+	.msg_obj_num = 32,
- 	.reg_align = C_CAN_REG_32,
- 	.freq = 50000000, /* 50 MHz */
- 	.init = c_can_pci_reset_pch,
-diff --git a/drivers/net/can/c_can/c_can_platform.c b/drivers/net/can/c_can/c_can_platform.c
-index a5b9b1a93702..87a145b67a2f 100644
---- a/drivers/net/can/c_can/c_can_platform.c
-+++ b/drivers/net/can/c_can/c_can_platform.c
-@@ -192,10 +192,12 @@ static void c_can_hw_raminit(const struct c_can_priv *priv, bool enable)
- 
- static const struct c_can_driver_data c_can_drvdata = {
- 	.id = BOSCH_C_CAN,
-+	.msg_obj_num = 32,
- };
- 
- static const struct c_can_driver_data d_can_drvdata = {
- 	.id = BOSCH_D_CAN,
-+	.msg_obj_num = 32,
- };
- 
- static const struct raminit_bits dra7_raminit_bits[] = {
-@@ -205,6 +207,7 @@ static const struct raminit_bits dra7_raminit_bits[] = {
- 
- static const struct c_can_driver_data dra7_dcan_drvdata = {
- 	.id = BOSCH_D_CAN,
-+	.msg_obj_num = 64,
- 	.raminit_num = ARRAY_SIZE(dra7_raminit_bits),
- 	.raminit_bits = dra7_raminit_bits,
- 	.raminit_pulse = true,
-@@ -217,6 +220,7 @@ static const struct raminit_bits am3352_raminit_bits[] = {
- 
- static const struct c_can_driver_data am3352_dcan_drvdata = {
- 	.id = BOSCH_D_CAN,
-+	.msg_obj_num = 64,
- 	.raminit_num = ARRAY_SIZE(am3352_raminit_bits),
- 	.raminit_bits = am3352_raminit_bits,
- };
-@@ -293,7 +297,7 @@ static int c_can_plat_probe(struct platform_device *pdev)
- 	}
- 
- 	/* allocate the c_can device */
--	dev = alloc_c_can_dev(C_CAN_NO_OF_OBJECTS);
-+	dev = alloc_c_can_dev(drvdata->msg_obj_num);
- 	if (!dev) {
- 		ret = -ENOMEM;
- 		goto exit;
+-	pci_iounmap(pdev, priv->base);
++	pci_iounmap(pdev, addr);
+ 	pci_disable_msi(pdev);
+ 	pci_clear_master(pdev);
+ 	pci_release_regions(pdev);
 -- 
-2.17.1
+2.25.1
 
