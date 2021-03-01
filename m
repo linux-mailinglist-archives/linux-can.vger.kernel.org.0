@@ -2,112 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6079C328078
-	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 15:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 351B83287F5
+	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 18:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236101AbhCAOOz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Mar 2021 09:14:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236289AbhCAOOt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Mar 2021 09:14:49 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4BFC06178C
-        for <linux-can@vger.kernel.org>; Mon,  1 Mar 2021 06:14:09 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id l22so4035253wme.1
-        for <linux-can@vger.kernel.org>; Mon, 01 Mar 2021 06:14:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T/Bv6TUwFAxbQNlFxlmz30xGEXRhFQq2TXCX65gXhRg=;
-        b=LeJJodEDPZBSv8CYyWHnBR18KTdXzdNaF637Wwk7Xw6nK5rOGnhYvfXyjAp1xvTQfa
-         kZWTqmj2spHXbPRvJ3U2LhUlCKoimah2EcG/XATEu4Ac1Q6G/UzSpCF6glfXcrhJ0Z4M
-         nNSK+Y494e8uJ8/DWnjtITCDMl5Jr+KdRv1yDVDd1qc/pieAywgzPpn3p4F6/6ySJqic
-         Kv95DU33SNq5+TpIIGtepcHag1ggkMbEscJpdybAsn+RDlPScG1pA8iKLs6upPUDMeBD
-         RTA0e7wVLKb7WwxdRPcyQAYVr6f/AO3yOAVPnSechwPJ9Jja0tNr5CGnXwC3khM5x8uz
-         CyVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T/Bv6TUwFAxbQNlFxlmz30xGEXRhFQq2TXCX65gXhRg=;
-        b=oGzD2hTYxzezGB/0y9FZt5wpZgHBuhWQPE9TfxrvGxIfLV/+GHx6FWjTmlO1ZsgUch
-         F0myCDIoEY6TRhJYZ38bIsi/qx3C7/aZDAAr/AlTo7MWIz0rApNrdT3Q3przvc/NPbvg
-         OOVYHCGkcBBTEiksxr/BwHn3jtcXZXD+2i3xp47tJ3wTY0pZKo/k78LAifqM5NMCzwv/
-         7xW6ylgrhHOibNZyOB8L+VZDar5KBGtZ0dZtc/LMw/fs9Mn5aUEBmq5G6PHWJlO/AcGp
-         GU5v2U2JFCnsLw7h5uSHIb8vU1Bf8foWqV2OPVeWwf6WcKzPpgoFUgG8r3zcSJeGeBJo
-         PuYw==
-X-Gm-Message-State: AOAM533ok7GllqrTVeJGOCMzPQb9izgtLoWAsFQzmrrAbTjEEoLjihUb
-        2LUUdRKpb/kVU/A+7WSqvvJ4nAAiikrssA==
-X-Google-Smtp-Source: ABdhPJxGDmO4y05i7VTsmv9o8WFCiVkbi1XZKRcps56fX2sIrNddvOe7DaTEJviOOpao4m9rxYIvIg==
-X-Received: by 2002:a05:600c:d1:: with SMTP id u17mr8447827wmm.64.1614608047827;
-        Mon, 01 Mar 2021 06:14:07 -0800 (PST)
-Received: from bigthink (94.197.200.66.threembb.co.uk. [94.197.200.66])
-        by smtp.gmail.com with ESMTPSA id g11sm22760888wmk.32.2021.03.01.06.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 06:14:07 -0800 (PST)
-Date:   Mon, 1 Mar 2021 14:14:06 +0000
-From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Mariusz Madej <mariusz.madej@xtrack.com>
-Cc:     "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: m_can: a lot of 'Rx FIFO 0 Message Lost' in dmesg
-Message-ID: <20210301141406.bnrqqkbfnq523ofb@bigthink>
-References: <PR3PR05MB7212376CDA795770B7E625E6809F9@PR3PR05MB7212.eurprd05.prod.outlook.com>
- <20210226133702.echxlob5z4pj5ptc@bigthink>
- <d0ebed81-3f7a-1e82-e16b-85e242d1ddca@xtrack.com>
+        id S238157AbhCARbC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Mar 2021 12:31:02 -0500
+Received: from smtp-31-i2.italiaonline.it ([213.209.12.31]:35217 "EHLO
+        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237877AbhCARWi (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 1 Mar 2021 12:22:38 -0500
+Received: from oxapps-30-132.iol.local ([10.101.8.178])
+        by smtp-31.iol.local with ESMTPA
+        id GmEolCaigVpAbGmEolVksZ; Mon, 01 Mar 2021 18:21:43 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1614619304; bh=ELHHirX/rHrzCr8RdE/L9KdYRZbNnQKFFnNxXi1w8EU=;
+        h=From;
+        b=KwaFNDQUVgU9gM6pxpH76TBUQp8noyQ/Eh7w092d/TTi+bc3SmvKkSjaGfWQOwLjb
+         KptPGEZv7hpzpLPHeo6po+7xervW5W/uvk2vswCft6vzs5tCzji40IrNZDYWiW+mZi
+         2IYCvK9122UJqXAELPcWNI0wbW09GBTv7et1QrbqMjogvj1PF8jYnYFriQqRN+puil
+         ha8doJmsEfsTeaIBcJK2ZCt7mAHdeV5884hzuM+A55F6hEFpILbMe4zHSvCmNkU6FB
+         IRtsX4B0NB/SO7Yh5f13QYgTbsWbbAk05gVHbRTEg4TB8gM5LP/PPAWV/pCJhh0jh3
+         8GgDRGGQQu2Iw==
+X-CNFS-Analysis: v=2.4 cv=WMS64lgR c=1 sm=1 tr=0 ts=603d22a8 cx=a_exe
+ a=iUxb6lXnTT1s429i9ALYXg==:117 a=UPWQtH3J-JgA:10 a=IkcTkHD0fZMA:10
+ a=_gZzKa99_6AA:10 a=bGNZPXyTAAAA:8 a=bAF_0_vCazFOC95qmekA:9 a=QEXdDO2ut3YA:10
+ a=yL4RfsBhuEsimFDS2qtJ:22
+Date:   Mon, 1 Mar 2021 18:21:42 +0100 (CET)
+From:   Dario Binacchi <dariobin@libero.it>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Federico Vaga <federico.vaga@gmail.com>,
+        Alexander Stein <alexander.stein@systec-electronic.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Message-ID: <1037673059.602534.1614619302914@mail1.libero.it>
+In-Reply-To: <20210301113805.jylhc373sip7zmed@pengutronix.de>
+References: <20210228103856.4089-1-dariobin@libero.it>
+ <20210228103856.4089-6-dariobin@libero.it>
+ <20210301113805.jylhc373sip7zmed@pengutronix.de>
+Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
+ number
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0ebed81-3f7a-1e82-e16b-85e242d1ddca@xtrack.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.3-Rev27
+X-Originating-IP: 87.20.116.197
+X-Originating-Client: open-xchange-appsuite
+x-libjamsun: BbLCwLDUl8yEj6k34kETrEsxm0xv+7N3
+x-libjamv: SzWzyhp462U=
+X-CMAE-Envelope: MS4xfBJxX6+FRTbJIR+f3u0MrRX5DYxea0av406W91FF3BXLet5O/Db3PK5csHSd4CDbiUyirNi3JI9H4yA2V24KsJSB82i8fgeEN8T0nbJEU11oCrHoMvNI
+ 9GtzGH8wsnJnbgAV8O0ffyXV6/3sd9I3QnugSr+62lJ7SPSTJOlz6FNeAB50odDwBZ5wwQzS+JkWdz+LM+Se25wo3U/h66oQ9R+9xHt8LExJ8EqhmW2LeOAt
+ c9Bk3PDthzG6uzRrygPJwWMRG2VPkUC8HjP9ET+wdcVfDDWbN2bEdWwk1Dx9ZDVWa3XfoqUDRkwWXfHd00xeeRn/TMNxPon6o6U7pf4E5D+dfUQlgtijP6L/
+ ifXdF7kL0Gjv7qsZ2ZmjmsLSqosNxsQLvTD2mRHa+d65QZLfVpNQC6w35ItpxshHj8rxV1bga0hBJ08yieDaZ69FnjyjYuttf7Ykjxa/cHc1Kf/NEWlzep97
+ L7YR2lHtC1Ix1LGGbJpF0VI5QjrdtKgiw0cGHW+Ju56Pugxk6sEVzllDEfDFXRkEIGHJFtIC7iIDw2UrtCWVWj17ZSrbuO/eLFSTQX8oYQt2pExvLzC6cXMt
+ eT/ROli/IUzoZ/GzVqH5Lmw9Pm1Qofxw9mUHQY4k3TsioQ==
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thank you Mariusz, you've helped me understand this driver better - I
-had missed some of the logic. I agree that this is a bug.
+Hi Marc,
 
-On Sat, Feb 27, 2021 at 05:03:14AM +0100, Mariusz Madej wrote:
-> I changed m_can_do_rx_poll:
+> Il 01/03/2021 12:38 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
 > 
-> static int m_can_do_rx_poll(struct net_device *dev, int quota)
-> {
->         struct m_can_classdev *cdev = netdev_priv(dev);
->         u32 pkts = 0;
->         u32 rxfs;
+>  
+> On 28.02.2021 11:38:54, Dario Binacchi wrote:
+> [...]
 > 
->         rxfs = m_can_read(cdev, M_CAN_RXF0S);
->         if (!(rxfs & RXFS_FFL_MASK)) {
->                 netdev_dbg(dev, "no messages in fifo0\n");
->                 return 0;
->         }
+> > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
+> >  	while ((idx = ffs(pend))) {
+> >  		idx--;
+> >  		pend &= ~(1 << idx);
+> > -		obj = idx + C_CAN_MSG_OBJ_TX_FIRST;
+> > +		obj = idx + priv->msg_obj_tx_first;
+> >  		c_can_inval_tx_object(dev, IF_TX, obj);
+> >  		can_get_echo_skb(dev, idx, NULL);
+> >  		bytes += priv->dlc[idx];
+> > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
+> >  	/* Clear the bits in the tx_active mask */
+> >  	atomic_sub(clr, &priv->tx_active);
+> >  
+> > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
+> > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
 > 
->         while ((rxfs & RXFS_FFL_MASK) && (quota > 0)) {
->                 if (rxfs & RXFS_RFL) {
->                         netdev_warn(dev, "Rx FIFO 0 Message Lost\n");
->                         m_can_write(cdev, M_CAN_IR, IR_RF0L);
->                 }
-> 
->                 m_can_read_fifo(dev, rxfs);
-> 
->                 quota--;
->                 pkts++;
->                 rxfs = m_can_read(cdev, M_CAN_RXF0S);
->         }
-> 
->         if (pkts)
->                 can_led_event(dev, CAN_LED_EVENT_RX);
-> 
->         return pkts;
-> }
+> Do we need 1UL here, too?
 
-Your fix makes sense to me. If you submit a patch to the linux-can list,
-it will probably be reviewed quickly. (Don't bother to CC Dan Murphy
-though, as his address listed in MAINTAINERS bounces mail.)
+Do you agree if I use the BIT macro ?
 
---
-Regards,
+Thanks and regards
+Dario
 
-Torin Cooper-Bennun
-Software Engineer | maxiluxsystems.com
-
+> 
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
