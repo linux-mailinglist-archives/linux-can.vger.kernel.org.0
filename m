@@ -2,51 +2,48 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 351B83287F5
-	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 18:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 306453287F7
+	for <lists+linux-can@lfdr.de>; Mon,  1 Mar 2021 18:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238157AbhCARbC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 1 Mar 2021 12:31:02 -0500
-Received: from smtp-31-i2.italiaonline.it ([213.209.12.31]:35217 "EHLO
+        id S237877AbhCARbM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 1 Mar 2021 12:31:12 -0500
+Received: from smtp-17-i2.italiaonline.it ([213.209.12.17]:32771 "EHLO
         libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S237877AbhCARWi (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 1 Mar 2021 12:22:38 -0500
-Received: from oxapps-30-132.iol.local ([10.101.8.178])
-        by smtp-31.iol.local with ESMTPA
-        id GmEolCaigVpAbGmEolVksZ; Mon, 01 Mar 2021 18:21:43 +0100
+        id S238362AbhCARZi (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 1 Mar 2021 12:25:38 -0500
+Received: from oxapps-35-162.iol.local ([10.101.8.208])
+        by smtp-17.iol.local with ESMTPA
+        id GmHXls9QElChfGmHXl1BAu; Mon, 01 Mar 2021 18:24:31 +0100
 x-libjamoibt: 1601
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1614619304; bh=ELHHirX/rHrzCr8RdE/L9KdYRZbNnQKFFnNxXi1w8EU=;
+        t=1614619471; bh=bG1rlOxsdCDfq+llbqJGLJDe2PcVuPpWg8L2GLXFwMM=;
         h=From;
-        b=KwaFNDQUVgU9gM6pxpH76TBUQp8noyQ/Eh7w092d/TTi+bc3SmvKkSjaGfWQOwLjb
-         KptPGEZv7hpzpLPHeo6po+7xervW5W/uvk2vswCft6vzs5tCzji40IrNZDYWiW+mZi
-         2IYCvK9122UJqXAELPcWNI0wbW09GBTv7et1QrbqMjogvj1PF8jYnYFriQqRN+puil
-         ha8doJmsEfsTeaIBcJK2ZCt7mAHdeV5884hzuM+A55F6hEFpILbMe4zHSvCmNkU6FB
-         IRtsX4B0NB/SO7Yh5f13QYgTbsWbbAk05gVHbRTEg4TB8gM5LP/PPAWV/pCJhh0jh3
-         8GgDRGGQQu2Iw==
-X-CNFS-Analysis: v=2.4 cv=WMS64lgR c=1 sm=1 tr=0 ts=603d22a8 cx=a_exe
- a=iUxb6lXnTT1s429i9ALYXg==:117 a=UPWQtH3J-JgA:10 a=IkcTkHD0fZMA:10
+        b=fRnCcuNuO7jQmQ7SVQafADhz1tAnZ1wEPxE6BItB/6g9l80VhZWCNPrMjS3eSUNts
+         hOb7kajuUnd20XCC6zgetNIL4QPwcfStEjb6DfnXJ+cm/fxzPUV+YrxwenMdYa6Nxn
+         aLDM4/SPC4BPpWlL23wQ+Lof69ckqEGXpxzf0iIxCG3bBcpUhPGbSBNXgYpAVVTezg
+         M+neEHnrCW0pP59u2+43O6qY4C5312oC8oQeuY7WOM7GsJVGdARJJDa4/TxM7fWlRf
+         e1TGSzyBP5SUqk/qAKs3Ji0Uliwnfcftpp5fR9cywq4oTQ1/oR4yuFGyL/ozL9Be9R
+         eHtt+2+/SHt7Q==
+X-CNFS-Analysis: v=2.4 cv=S6McfKgP c=1 sm=1 tr=0 ts=603d234f cx=a_exe
+ a=OCAZjQWm+uh9gf1btJle/A==:117 a=UPWQtH3J-JgA:10 a=IkcTkHD0fZMA:10
  a=_gZzKa99_6AA:10 a=bGNZPXyTAAAA:8 a=bAF_0_vCazFOC95qmekA:9 a=QEXdDO2ut3YA:10
  a=yL4RfsBhuEsimFDS2qtJ:22
-Date:   Mon, 1 Mar 2021 18:21:42 +0100 (CET)
+Date:   Mon, 1 Mar 2021 18:24:31 +0100 (CET)
 From:   Dario Binacchi <dariobin@libero.it>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-kernel@vger.kernel.org,
         Federico Vaga <federico.vaga@gmail.com>,
-        Alexander Stein <alexander.stein@systec-electronic.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
         YueHaibing <yuehaibing@huawei.com>,
         Zhang Qilong <zhangqilong3@huawei.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <1037673059.602534.1614619302914@mail1.libero.it>
-In-Reply-To: <20210301113805.jylhc373sip7zmed@pengutronix.de>
+Message-ID: <198393892.577352.1614619471062@mail1.libero.it>
+In-Reply-To: <20210301130845.3s45ujmhkazscm6x@pengutronix.de>
 References: <20210228103856.4089-1-dariobin@libero.it>
  <20210228103856.4089-6-dariobin@libero.it>
  <20210301113805.jylhc373sip7zmed@pengutronix.de>
+ <20210301130845.3s45ujmhkazscm6x@pengutronix.de>
 Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
  number
 MIME-Version: 1.0
@@ -57,50 +54,55 @@ Importance: Normal
 X-Mailer: Open-Xchange Mailer v7.10.3-Rev27
 X-Originating-IP: 87.20.116.197
 X-Originating-Client: open-xchange-appsuite
-x-libjamsun: BbLCwLDUl8yEj6k34kETrEsxm0xv+7N3
-x-libjamv: SzWzyhp462U=
-X-CMAE-Envelope: MS4xfBJxX6+FRTbJIR+f3u0MrRX5DYxea0av406W91FF3BXLet5O/Db3PK5csHSd4CDbiUyirNi3JI9H4yA2V24KsJSB82i8fgeEN8T0nbJEU11oCrHoMvNI
- 9GtzGH8wsnJnbgAV8O0ffyXV6/3sd9I3QnugSr+62lJ7SPSTJOlz6FNeAB50odDwBZ5wwQzS+JkWdz+LM+Se25wo3U/h66oQ9R+9xHt8LExJ8EqhmW2LeOAt
- c9Bk3PDthzG6uzRrygPJwWMRG2VPkUC8HjP9ET+wdcVfDDWbN2bEdWwk1Dx9ZDVWa3XfoqUDRkwWXfHd00xeeRn/TMNxPon6o6U7pf4E5D+dfUQlgtijP6L/
- ifXdF7kL0Gjv7qsZ2ZmjmsLSqosNxsQLvTD2mRHa+d65QZLfVpNQC6w35ItpxshHj8rxV1bga0hBJ08yieDaZ69FnjyjYuttf7Ykjxa/cHc1Kf/NEWlzep97
- L7YR2lHtC1Ix1LGGbJpF0VI5QjrdtKgiw0cGHW+Ju56Pugxk6sEVzllDEfDFXRkEIGHJFtIC7iIDw2UrtCWVWj17ZSrbuO/eLFSTQX8oYQt2pExvLzC6cXMt
- eT/ROli/IUzoZ/GzVqH5Lmw9Pm1Qofxw9mUHQY4k3TsioQ==
+x-libjamsun: Su6GbuglkQm7DL0+yrReHMwEkhjVUa8k
+x-libjamv: oGyG3dN93IQ=
+X-CMAE-Envelope: MS4xfLxOOFKC4Y9fSYBSqzo4qq615MhwxnKZ8YvoMT7gDPE9jDW7BwHzkmfF3fAoNILXn4Ek2mx3x1NRuflten3u32PeeDNiw+l8rH23rsP4HwKnSDtENmRi
+ o0CNHRTKh9/BUpF8hmIL8OoHywRRyoyI6KFyAuPywyK/09gJNQngT41eRVepN3p+Ezmc6CJShycfU8gKJGIVuw0QJIdSZiU4xld9NKtVCnSm876AaXa5Os4v
+ sY8NDwIktH8V//EpkOEUFvbvmwtQIkzSt2i320Y9B2c3wVcxVZPCXmBKvdbfAFsmELVB5ocGp5xeJI4JjNEoWv33vUMxoFVU4W1hLIFjp5Hs1Z6Oh9UjbI86
+ tom1/NqXYUbLk6KirbcP2Hx5IhBgFpeXI0JioDRR2IEpyK+YfNF/SMUdLep9Rtw7zOfVe1jTeMmokXMQBhvhBKB96hwT6F2lAIc4GiftW9LkppRPowLzAekr
+ rjy7qpVSirGFTVsk
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Marc,
 
-> Il 01/03/2021 12:38 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
+> Il 01/03/2021 14:08 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
 > 
 >  
-> On 28.02.2021 11:38:54, Dario Binacchi wrote:
-> [...]
+> On 01.03.2021 12:38:05, Marc Kleine-Budde wrote:
+> > On 28.02.2021 11:38:54, Dario Binacchi wrote:
+> > [...]
+> > 
+> > > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
+> > >  	while ((idx = ffs(pend))) {
+> > >  		idx--;
+> > >  		pend &= ~(1 << idx);
+> > > -		obj = idx + C_CAN_MSG_OBJ_TX_FIRST;
+> > > +		obj = idx + priv->msg_obj_tx_first;
+> > >  		c_can_inval_tx_object(dev, IF_TX, obj);
+> > >  		can_get_echo_skb(dev, idx, NULL);
+> > >  		bytes += priv->dlc[idx];
+> > > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
+> > >  	/* Clear the bits in the tx_active mask */
+> > >  	atomic_sub(clr, &priv->tx_active);
+> > >  
+> > > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
+> > > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
+> > 
+> > Do we need 1UL here, too?
 > 
-> > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
-> >  	while ((idx = ffs(pend))) {
-> >  		idx--;
-> >  		pend &= ~(1 << idx);
-> > -		obj = idx + C_CAN_MSG_OBJ_TX_FIRST;
-> > +		obj = idx + priv->msg_obj_tx_first;
-> >  		c_can_inval_tx_object(dev, IF_TX, obj);
-> >  		can_get_echo_skb(dev, idx, NULL);
-> >  		bytes += priv->dlc[idx];
-> > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
-> >  	/* Clear the bits in the tx_active mask */
-> >  	atomic_sub(clr, &priv->tx_active);
-> >  
-> > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
-> > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
-> 
-> Do we need 1UL here, too?
+> There are several more "1 <<" in the driver. As the right side of the
+> sift operation can be up to 32, I think you should replace all "1 <<"
+> with "1UL <<".
 
-Do you agree if I use the BIT macro ?
+Do you agree if I use the BIT macro for all these shift operations?
 
 Thanks and regards
 Dario
 
 > 
+> regards,
 > Marc
 > 
 > -- 
