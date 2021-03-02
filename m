@@ -2,72 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ACA32AEAA
-	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 03:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF8432AEAC
+	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 04:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbhCCAAQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Mar 2021 19:00:16 -0500
-Received: from mx.krause.de ([88.79.216.98]:55227 "EHLO mx.krause.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1381809AbhCBIqm (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 2 Mar 2021 03:46:42 -0500
-Received: from [172.20.10.125] (port=33925 helo=mail.horstmanngroup.de)
-        by mx.krause.de with esmtps (TLSv1:AES256-SHA:256)
-        (Exim 4.82_1-5b7a7c0-XX)
-        (envelope-from <t.schluessler@krause.de>)
-        id 1lH0O7-0007QR-0i; Tue, 02 Mar 2021 09:28:15 +0100
-Received: from HG-SRV-053.HG.local (172.20.10.125) by HG-SRV-053.HG.local
- (172.20.10.125) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 2 Mar
- 2021 09:28:14 +0100
-Received: from HG-SRV-053.HG.local ([::1]) by HG-SRV-053.HG.local ([::1]) with
- mapi id 15.00.1367.000; Tue, 2 Mar 2021 09:28:14 +0100
-X-CTCH-RefID: str=0001.0A782F29.603DF71F.0044,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-From:   =?utf-8?B?U2NobMO8w59sZXIsIFRpbW8=?= <t.schluessler@krause.de>
-To:     'Marc Kleine-Budde' <mkl@pengutronix.de>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-CC:     "ukrfoil@gmail.com" <ukrfoil@gmail.com>,
-        linux-can <linux-can@vger.kernel.org>
-Subject: RE: mcp251x hangs during ifup
-Thread-Topic: mcp251x hangs during ifup
-Thread-Index: AQHXDwULsseziUMWSEmfL1A+/cbmIKpwOdWAgAAg2xA=
-Date:   Tue, 2 Mar 2021 08:28:13 +0000
-Message-ID: <638520bccd0c44d091d5715fe7d303ec@HG-SRV-053.HG.local>
-References: <20210301165856.37gvqkomvjkjvbj2@pengutronix.de>
- <CAMZ6RqKfXR9cHxjvnPwxjWHWEuxYNV9V4qLSd0ZQGP0JOMKX0w@mail.gmail.com>
- <20210302071901.ptwvejkedascbdsv@pengutronix.de>
-In-Reply-To: <20210302071901.ptwvejkedascbdsv@pengutronix.de>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [172.20.35.35]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S232532AbhCCAA3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Mar 2021 19:00:29 -0500
+Received: from smtp-34-i2.italiaonline.it ([213.209.12.34]:40000 "EHLO
+        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1383211AbhCBKvl (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 2 Mar 2021 05:51:41 -0500
+Received: from oxapps-10-055.iol.local ([10.101.8.65])
+        by smtp-34.iol.local with ESMTPA
+        id H2c8l94sm5WrZH2c8l4zHI; Tue, 02 Mar 2021 11:50:53 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1614682253; bh=C0Y4sFONm5SoSXiJY4aW33P4LBjyO5IeaOw3cbk+ueA=;
+        h=From;
+        b=TEOGE+yOsT2CVAVfBpT55ktP1Xt651fAY6ar2GbaDm7U/NUrpOsXk7aCYUIPjqRcp
+         akYr+SmiXwSksRBJDhFC2hi1uxvziAA8XoniQtmhHzbqMIHQ/qOwArUjSfeS1zFu3o
+         Nx2RwlYtv/19BWc8aEmntRDSyAu+MHSYhdLJOi92j7F7BIYiXkyOI3bCSn87qOwLRS
+         M5RMklT6+BlO3c4mj2oLpkXMgw7wz7HW6yg//blJSA0GqZHNfiPYuxLpumcbPeR0ti
+         xAxIsIHn0bD/ZQksrrx9+X01qO+9oi3fzctkrUxUum5gO8+qjPU8HKjsUP5wmKziEx
+         U/hBlH/Kyr9gQ==
+X-CNFS-Analysis: v=2.4 cv=W4/96Tak c=1 sm=1 tr=0 ts=603e188d cx=a_exe
+ a=Xcto81xy1FNFSyA6Xjc/hA==:117 a=C-c6dMTymFoA:10 a=IkcTkHD0fZMA:10
+ a=vesc6bHxzc4A:10 a=bGNZPXyTAAAA:8 a=bAF_0_vCazFOC95qmekA:9
+ a=XoIhxgry9z_zYQRl:21 a=C3h1kYaqPfvzLjQo:21 a=QEXdDO2ut3YA:10
+ a=yL4RfsBhuEsimFDS2qtJ:22
+Date:   Tue, 2 Mar 2021 11:50:52 +0100 (CET)
+From:   Dario Binacchi <dariobin@libero.it>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Federico Vaga <federico.vaga@gmail.com>,
+        Alexander Stein <alexander.stein@systec-electronic.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Message-ID: <1154674280.137227.1614682252245@mail1.libero.it>
+In-Reply-To: <20210301194550.6zqmxzcwvzlgjzcj@pengutronix.de>
+References: <20210228103856.4089-1-dariobin@libero.it>
+ <20210228103856.4089-6-dariobin@libero.it>
+ <20210301113805.jylhc373sip7zmed@pengutronix.de>
+ <1037673059.602534.1614619302914@mail1.libero.it>
+ <20210301194550.6zqmxzcwvzlgjzcj@pengutronix.de>
+Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
+ number
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+Importance: Normal
+X-Mailer: Open-Xchange Mailer v7.10.3-Rev27
+X-Originating-IP: 185.33.57.41
+X-Originating-Client: open-xchange-appsuite
+x-libjamsun: DN0WFxwHZZBmmj1Vh68r9MQebC1YSHja
+x-libjamv: IMPIRE54ZRQ=
+X-CMAE-Envelope: MS4xfKQeFdU7BSumWpmVQBKsGr4VpPRiCP/7k7PB9FLsRuqIaDY7Ona0hmUU6N/B5DIVWQvMQD8StjtZFr4F9LfVtSx2JHIkXb4XhnQE1/ixDLmB9cPB2aNH
+ AjFs+/CkfS9ycR41Jq47Hao3dAG4VGpMfmC0SjmnozacTl23KKcZErms0ztaK/6ddui3KIoDOXy+K+SjyqVLMiCgPPtpITMqepbuOw599+VQ9pJFnU6GBel7
+ MgFOf7pbgHUfiuTL4z/QpKYlJ/Zzrf1nDFfzBCRMEhvRVs1sXsjQHpevXITwSWtkwZAiVGON/1HIHa16rDRB7C0i575W86ivbCiI5x/A7e6xbKGBE8Lb2HLJ
+ pFQxNe6/7QpT9aJJZJKISLy7tQQAx29RHjgZe+gFVo+59YRc4OstqEQHGVrRzPi966awYxNu29OQjQLeobMbQLsLyuohOqK81peK2219k4NS9mQ4YUit0ePN
+ 2DD/i+JPOCJAab6MUDkXMmdAHCy0jt+CfUm5jkiSYMqWy7sNJmMdHwKs795cyLaIZAUQhDc+gDpbiwSlRTl345kkgcYWXcycUxNSNQkb8VgdY8m84WsH7m/u
+ 9ePeV1wr0m0DY8XacuidtJynv7Ptiz2p2hGEUDf1mfVnJw==
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-T24gMDIuMDMuMjAyMSAwODoxOTowMCwgTWFyYyB3cm90ZToNCj4gT24gMDIuMDMuMjAyMSAxMDo0
-MDoyMSwgVmluY2VudCBNQUlMSE9MIHdyb3RlOg0KPiA+IFRoaXMgbWNwMjUxeF9od193YWtlKCkg
-ZnVuY3Rpb24gd2FzIGludHJvZHVjZWQgaW4gYmVsb3cgY29tbWl0Og0KPiA+IDhjZThjMGFiY2Jh
-MyAoImNhbjogbWNwMjUxeDogb25seSByZXNldCBoYXJkd2FyZSBhcyByZXF1aXJlZCIpIA0KPiA+
-IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRz
-L2xpbnV4LmdpdC9jb20NCj4gPiBtaXQvP2lkPThjZThjMGFiY2JhMzE0ZTFmZTk1NGExODQwZjY1
-NjhiZjVhZWYyZWYNCg0KPiA+IEkgYW0gYWRkaW5nIFRpbW8gdG8gdGhlIGxvb3AuIEhlIGlzIHRo
-ZSBhdXRob3Igb2YgdGhlIHR3byBjb21taXRzIGFib3ZlLg0KPiA+IEkgdGhpbmsgaGUgd2lsbCBi
-ZSBvZiBiZXR0ZXIgc3VwcG9ydCB0aGFuIG1lIGhlcmUgOikNCg0KPiBPZiBjb3Vyc2UgSSB3YW50
-ZWQgdG8gYWRkIFRpbW8sIHRoYW5rcy4gSSB0aGluayBJJ3ZlIHBpY2tlZCB5b3VyIGUtbWFpbCwg
-YXMgeW91J3ZlIGRvbmUgdGhlIG5ld2VzdCBjaGFuZ2Ugb24gdGhlIGRyaXZlciBhZnRlciBtZSA6
-KQ0KDQpUaGlzIENBTiBjb250cm9sbGVyIGRlbWFuZHMgYSBzb2Z0d2FyZSByZXNldCBhZnRlciBw
-b3dlciBvbiB3aGljaCBpcyBkb25lIGluIG1jcDI1MXhfY2FuX3Byb2JlIC0+IG1jcDI1MXhfaHdf
-cHJvYmUuDQpTaW5jZSB0aGVuIHJlc2V0cyBhcmUgb25seSBwZXJmb3JtZWQgd2hlbiB0aGUgcG93
-ZXIgdG8gdGhlIGNvbnRyb2xsZXIgaGFzIGJlZW4gZGlzYWJsZWQuIEUuZy4gd2hlbiBtY3AyNTF4
-X2Nhbl9zdXNwZW5kIGlzIGNhbGxlZCwNCnBvd2VyIGlzIHR1cm5lZCBvZmYgYW5kIGJ5IHNldHRp
-bmcgQUZURVJfU1VTUEVORF9QT1dFUiBpbiBwcml2LT5hZnRlcl9zdXNwZW5kIGl0IHdpbGwgYmUg
-cmVlbmFibGVkIGFuZCByZXNldCBpbiBtY3AyNTF4X2Nhbl9yZXN1bWUNCmFuZCBtY3AyNTF4X3Jl
-c3RhcnRfd29ya19oYW5kbGVyLg0KQ291bGQgaXQgYmUgdGhhdCBtY3AyNTF4X2Nhbl9wcm9iZSBk
-b2VzIG5vdCBnZXQgY2FsbGVkIGluIGFueSBjb25maWd1cmF0aW9uPyBPciBjb3VsZCBpdCBiZSB0
-aGF0IHRoZSBjb250cm9sbGVyIGdldHMgcG93ZXIgY3ljbGVkIGR1cmluZw0Kb3BlcmF0aW9uIHdp
-dGggdGhlc2UgT3JhbmdlIFBpIGJvYXJkcz8NCg0KUmVnYXJkcw0KVGltbw0K
+Hi Marc,
+
+> Il 01/03/2021 20:45 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
+> 
+>  
+> On 01.03.2021 18:21:42, Dario Binacchi wrote:
+> > > > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
+> > > >  	while ((idx = ffs(pend))) {
+> > > >  		idx--;
+> > > >  		pend &= ~(1 << idx);
+> > > > -		obj = idx + C_CAN_MSG_OBJ_TX_FIRST;
+> > > > +		obj = idx + priv->msg_obj_tx_first;
+> > > >  		c_can_inval_tx_object(dev, IF_TX, obj);
+> > > >  		can_get_echo_skb(dev, idx, NULL);
+> > > >  		bytes += priv->dlc[idx];
+> > > > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
+> > > >  	/* Clear the bits in the tx_active mask */
+> > > >  	atomic_sub(clr, &priv->tx_active);
+> > > >  
+> > > > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
+> > > > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
+> > > 
+> > > Do we need 1UL here, too?
+> > 
+> > Do you agree if I use the BIT macro ?
+> 
+> No, please use GENMASK(priv->msg_obj_tx_num, 0) here.
+> 
+
+In case of 64 message objects, msg_obj_tx_num = 32, and 1 << (priv->msg_obj_tx_num - 1) = 0x80000000. 
+GENMASK(priv->msg_obj_tx_num, 0) = 0. 
+BIT(priv->msg_obj_tx_num - 1) = 0x80000000.
+
+Thanks and regards,
+Dario
+
+> regrads,
+> Marc
+> 
+> -- 
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
