@@ -2,124 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A9E32AEB0
-	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 04:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97CB632AEB9
+	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 04:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234965AbhCCAB7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Mar 2021 19:01:59 -0500
-Received: from sitav-80046.hsr.ch ([152.96.80.46]:56262 "EHLO
-        mail.strongswan.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbhCBNBb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Mar 2021 08:01:31 -0500
-Received: from localhost.localdomain (unknown [185.12.128.224])
-        by mail.strongswan.org (Postfix) with ESMTPSA id 7CD5E409FE;
-        Tue,  2 Mar 2021 13:24:36 +0100 (CET)
-From:   Martin Willi <martin@strongswan.org>
-To:     "David S . Miller" <davem@davemloft.net>,
+        id S235298AbhCCAD1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Mar 2021 19:03:27 -0500
+Received: from relay-b03.edpnet.be ([212.71.1.220]:46096 "EHLO
+        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1835428AbhCBTGy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Mar 2021 14:06:54 -0500
+X-ASG-Debug-ID: 1614710693-15c4356e4c23060001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (94.105.105.240.dyn.edpnet.net [94.105.105.240]) by relay-b03.edpnet.be with ESMTP id b4Gey686mZx8ui2U; Tue, 02 Mar 2021 19:44:53 +0100 (CET)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 94.105.105.240.dyn.edpnet.net[94.105.105.240]
+X-Barracuda-Apparent-Source-IP: 94.105.105.240
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 3D62612A739F;
+        Tue,  2 Mar 2021 19:44:53 +0100 (CET)
+Date:   Tue, 2 Mar 2021 19:44:51 +0100
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     linux-kernel@vger.kernel.org,
+        Federico Vaga <federico.vaga@gmail.com>,
+        Alexander Stein <alexander.stein@systec-electronic.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-Subject: [PATCH net] can: dev: Move device back to init netns on owning netns delete
-Date:   Tue,  2 Mar 2021 13:24:23 +0100
-Message-Id: <20210302122423.872326-1-martin@strongswan.org>
-X-Mailer: git-send-email 2.25.1
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] can: c_can: fix control interface used by
+ c_can_do_tx
+Message-ID: <20210302184451.GC26930@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [PATCH v3 3/6] can: c_can: fix control interface used by
+ c_can_do_tx
+Mail-Followup-To: Dario Binacchi <dariobin@libero.it>,
+        linux-kernel@vger.kernel.org,
+        Federico Vaga <federico.vaga@gmail.com>,
+        Alexander Stein <alexander.stein@systec-electronic.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20210228103856.4089-1-dariobin@libero.it>
+ <20210228103856.4089-4-dariobin@libero.it>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210228103856.4089-4-dariobin@libero.it>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 94.105.105.240.dyn.edpnet.net[94.105.105.240]
+X-Barracuda-Start-Time: 1614710693
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1116
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.88269
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-When a non-initial netns is destroyed, the usual policy is to delete
-all virtual network interfaces contained, but move physical interfaces
-back to the initial netns. This keeps the physical interface visible
-on the system.
+On Sun, 28 Feb 2021 11:38:52 +0100, Dario Binacchi wrote:
+> According to commit 640916db2bf7 ("can: c_can: Make it SMP safe") let RX use
+> IF1 (i.e. IF_RX) and TX use IF2 (i.e. IF_TX).
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> ---
+> 
+> (no changes since v1)
+> 
+>  drivers/net/can/c_can/c_can.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_can.c
+> index dbcc1c1c92d6..69526c3a671c 100644
+> --- a/drivers/net/can/c_can/c_can.c
+> +++ b/drivers/net/can/c_can/c_can.c
+> @@ -732,7 +732,7 @@ static void c_can_do_tx(struct net_device *dev)
+>  		idx--;
+>  		pend &= ~(1 << idx);
+>  		obj = idx + C_CAN_MSG_OBJ_TX_FIRST;
+> -		c_can_inval_tx_object(dev, IF_RX, obj);
+> +		c_can_inval_tx_object(dev, IF_TX, obj);
 
-CAN devices are somewhat special, as they define rtnl_link_ops even
-if they are physical devices. If a CAN interface is moved into a
-non-initial netns, destroying that netns lets the interface vanish
-instead of moving it back to the initial netns. default_device_exit()
-skips CAN interfaces due to having rtnl_link_ops set. Reproducer:
+Right. I had a similar effort last year to increase the reception
+throughput, but I ended with some sporadic strange tx echo problems.
+This fix may have fixed my problem as wel.
 
-  ip netns add foo
-  ip link set can0 netns foo
-  ip netns delete foo
-
-WARNING: CPU: 1 PID: 84 at net/core/dev.c:11030 ops_exit_list+0x38/0x60
-CPU: 1 PID: 84 Comm: kworker/u4:2 Not tainted 5.10.19 #1
-Workqueue: netns cleanup_net
-[<c010e700>] (unwind_backtrace) from [<c010a1d8>] (show_stack+0x10/0x14)
-[<c010a1d8>] (show_stack) from [<c086dc10>] (dump_stack+0x94/0xa8)
-[<c086dc10>] (dump_stack) from [<c086b938>] (__warn+0xb8/0x114)
-[<c086b938>] (__warn) from [<c086ba10>] (warn_slowpath_fmt+0x7c/0xac)
-[<c086ba10>] (warn_slowpath_fmt) from [<c0629f20>] (ops_exit_list+0x38/0x60)
-[<c0629f20>] (ops_exit_list) from [<c062a5c4>] (cleanup_net+0x230/0x380)
-[<c062a5c4>] (cleanup_net) from [<c0142c20>] (process_one_work+0x1d8/0x438)
-[<c0142c20>] (process_one_work) from [<c0142ee4>] (worker_thread+0x64/0x5a8)
-[<c0142ee4>] (worker_thread) from [<c0148a98>] (kthread+0x148/0x14c)
-[<c0148a98>] (kthread) from [<c0100148>] (ret_from_fork+0x14/0x2c)
-
-To properly restore physical CAN devices to the initial netns on owning
-netns exit, introduce a flag on rtnl_link_ops that can be set by drivers.
-For CAN devices setting this flag, default_device_exit() considers them
-non-virtual, applying the usual namespace move.
-
-The issue was introduced in the commit mentioned below, as at that time
-CAN devices did not have a dellink() operation.
-
-Fixes: e008b5fc8dc7 ("net: Simplfy default_device_exit and improve batching.")
-Signed-off-by: Martin Willi <martin@strongswan.org>
----
- drivers/net/can/dev/netlink.c | 1 +
- include/net/rtnetlink.h       | 2 ++
- net/core/dev.c                | 2 +-
- 3 files changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-index 867f6be31230..f5d79e6e5483 100644
---- a/drivers/net/can/dev/netlink.c
-+++ b/drivers/net/can/dev/netlink.c
-@@ -355,6 +355,7 @@ static void can_dellink(struct net_device *dev, struct list_head *head)
- 
- struct rtnl_link_ops can_link_ops __read_mostly = {
- 	.kind		= "can",
-+	.netns_refund	= true,
- 	.maxtype	= IFLA_CAN_MAX,
- 	.policy		= can_policy,
- 	.setup		= can_setup,
-diff --git a/include/net/rtnetlink.h b/include/net/rtnetlink.h
-index e2091bb2b3a8..4da61c950e93 100644
---- a/include/net/rtnetlink.h
-+++ b/include/net/rtnetlink.h
-@@ -33,6 +33,7 @@ static inline int rtnl_msg_family(const struct nlmsghdr *nlh)
-  *
-  *	@list: Used internally
-  *	@kind: Identifier
-+ *	@netns_refund: Physical device, move to init_net on netns exit
-  *	@maxtype: Highest device specific netlink attribute number
-  *	@policy: Netlink policy for device specific attribute validation
-  *	@validate: Optional validation function for netlink/changelink parameters
-@@ -64,6 +65,7 @@ struct rtnl_link_ops {
- 	size_t			priv_size;
- 	void			(*setup)(struct net_device *dev);
- 
-+	bool			netns_refund;
- 	unsigned int		maxtype;
- 	const struct nla_policy	*policy;
- 	int			(*validate)(struct nlattr *tb[],
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 6c5967e80132..a142a207fc1d 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -11346,7 +11346,7 @@ static void __net_exit default_device_exit(struct net *net)
- 			continue;
- 
- 		/* Leave virtual devices for the generic cleanup */
--		if (dev->rtnl_link_ops)
-+		if (dev->rtnl_link_ops && !dev->rtnl_link_ops->netns_refund)
- 			continue;
- 
- 		/* Push remaining network devices to init_net */
--- 
-2.25.1
-
+>  		can_get_echo_skb(dev, idx, NULL);
+>  		bytes += priv->dlc[idx];
+>  		pkts++;
+> -- 
+> 2.17.1
+> 
