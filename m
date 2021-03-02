@@ -2,36 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF8432AEAC
-	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 04:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF7B32AEAE
+	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 04:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbhCCAA3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Mar 2021 19:00:29 -0500
-Received: from smtp-34-i2.italiaonline.it ([213.209.12.34]:40000 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1383211AbhCBKvl (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 2 Mar 2021 05:51:41 -0500
-Received: from oxapps-10-055.iol.local ([10.101.8.65])
-        by smtp-34.iol.local with ESMTPA
-        id H2c8l94sm5WrZH2c8l4zHI; Tue, 02 Mar 2021 11:50:53 +0100
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1614682253; bh=C0Y4sFONm5SoSXiJY4aW33P4LBjyO5IeaOw3cbk+ueA=;
-        h=From;
-        b=TEOGE+yOsT2CVAVfBpT55ktP1Xt651fAY6ar2GbaDm7U/NUrpOsXk7aCYUIPjqRcp
-         akYr+SmiXwSksRBJDhFC2hi1uxvziAA8XoniQtmhHzbqMIHQ/qOwArUjSfeS1zFu3o
-         Nx2RwlYtv/19BWc8aEmntRDSyAu+MHSYhdLJOi92j7F7BIYiXkyOI3bCSn87qOwLRS
-         M5RMklT6+BlO3c4mj2oLpkXMgw7wz7HW6yg//blJSA0GqZHNfiPYuxLpumcbPeR0ti
-         xAxIsIHn0bD/ZQksrrx9+X01qO+9oi3fzctkrUxUum5gO8+qjPU8HKjsUP5wmKziEx
-         U/hBlH/Kyr9gQ==
-X-CNFS-Analysis: v=2.4 cv=W4/96Tak c=1 sm=1 tr=0 ts=603e188d cx=a_exe
- a=Xcto81xy1FNFSyA6Xjc/hA==:117 a=C-c6dMTymFoA:10 a=IkcTkHD0fZMA:10
- a=vesc6bHxzc4A:10 a=bGNZPXyTAAAA:8 a=bAF_0_vCazFOC95qmekA:9
- a=XoIhxgry9z_zYQRl:21 a=C3h1kYaqPfvzLjQo:21 a=QEXdDO2ut3YA:10
- a=yL4RfsBhuEsimFDS2qtJ:22
-Date:   Tue, 2 Mar 2021 11:50:52 +0100 (CET)
-From:   Dario Binacchi <dariobin@libero.it>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S234568AbhCCABW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Mar 2021 19:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1838648AbhCBK5i (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Mar 2021 05:57:38 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9308AC06178A
+        for <linux-can@vger.kernel.org>; Tue,  2 Mar 2021 02:56:57 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lH2hk-0001ZR-JF; Tue, 02 Mar 2021 11:56:40 +0100
+Received: from [IPv6:2a03:f580:87bc:d400:170b:eff8:30a0:9455] (unknown [IPv6:2a03:f580:87bc:d400:170b:eff8:30a0:9455])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 4E1855EC2A0;
+        Tue,  2 Mar 2021 10:56:35 +0000 (UTC)
+Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
+ number
+To:     Dario Binacchi <dariobin@libero.it>
 Cc:     linux-kernel@vger.kernel.org,
         Federico Vaga <federico.vaga@gmail.com>,
         Alexander Stein <alexander.stein@systec-electronic.com>,
@@ -43,76 +41,185 @@ Cc:     linux-kernel@vger.kernel.org,
         YueHaibing <yuehaibing@huawei.com>,
         Zhang Qilong <zhangqilong3@huawei.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <1154674280.137227.1614682252245@mail1.libero.it>
-In-Reply-To: <20210301194550.6zqmxzcwvzlgjzcj@pengutronix.de>
 References: <20210228103856.4089-1-dariobin@libero.it>
  <20210228103856.4089-6-dariobin@libero.it>
  <20210301113805.jylhc373sip7zmed@pengutronix.de>
  <1037673059.602534.1614619302914@mail1.libero.it>
  <20210301194550.6zqmxzcwvzlgjzcj@pengutronix.de>
-Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
- number
+ <1154674280.137227.1614682252245@mail1.libero.it>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <3e02f656-573d-8615-60c7-7c62af615a10@pengutronix.de>
+Date:   Tue, 2 Mar 2021 11:56:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.3-Rev27
-X-Originating-IP: 185.33.57.41
-X-Originating-Client: open-xchange-appsuite
-x-libjamsun: DN0WFxwHZZBmmj1Vh68r9MQebC1YSHja
-x-libjamv: IMPIRE54ZRQ=
-X-CMAE-Envelope: MS4xfKQeFdU7BSumWpmVQBKsGr4VpPRiCP/7k7PB9FLsRuqIaDY7Ona0hmUU6N/B5DIVWQvMQD8StjtZFr4F9LfVtSx2JHIkXb4XhnQE1/ixDLmB9cPB2aNH
- AjFs+/CkfS9ycR41Jq47Hao3dAG4VGpMfmC0SjmnozacTl23KKcZErms0ztaK/6ddui3KIoDOXy+K+SjyqVLMiCgPPtpITMqepbuOw599+VQ9pJFnU6GBel7
- MgFOf7pbgHUfiuTL4z/QpKYlJ/Zzrf1nDFfzBCRMEhvRVs1sXsjQHpevXITwSWtkwZAiVGON/1HIHa16rDRB7C0i575W86ivbCiI5x/A7e6xbKGBE8Lb2HLJ
- pFQxNe6/7QpT9aJJZJKISLy7tQQAx29RHjgZe+gFVo+59YRc4OstqEQHGVrRzPi966awYxNu29OQjQLeobMbQLsLyuohOqK81peK2219k4NS9mQ4YUit0ePN
- 2DD/i+JPOCJAab6MUDkXMmdAHCy0jt+CfUm5jkiSYMqWy7sNJmMdHwKs795cyLaIZAUQhDc+gDpbiwSlRTl345kkgcYWXcycUxNSNQkb8VgdY8m84WsH7m/u
- 9ePeV1wr0m0DY8XacuidtJynv7Ptiz2p2hGEUDf1mfVnJw==
+In-Reply-To: <1154674280.137227.1614682252245@mail1.libero.it>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="HVzkvO2wFvndWwHoH5zV90NUDan4VQl8A"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--HVzkvO2wFvndWwHoH5zV90NUDan4VQl8A
+Content-Type: multipart/mixed; boundary="NqCD5WZtdBXi0l0B7Gy05QjU2aqXJBIe2";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Dario Binacchi <dariobin@libero.it>
+Cc: linux-kernel@vger.kernel.org, Federico Vaga <federico.vaga@gmail.com>,
+ Alexander Stein <alexander.stein@systec-electronic.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+ Wolfgang Grandegger <wg@grandegger.com>, YueHaibing <yuehaibing@huawei.com>,
+ Zhang Qilong <zhangqilong3@huawei.com>, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org
+Message-ID: <3e02f656-573d-8615-60c7-7c62af615a10@pengutronix.de>
+Subject: Re: [PATCH v3 5/6] can: c_can: prepare to up the message objects
+ number
+References: <20210228103856.4089-1-dariobin@libero.it>
+ <20210228103856.4089-6-dariobin@libero.it>
+ <20210301113805.jylhc373sip7zmed@pengutronix.de>
+ <1037673059.602534.1614619302914@mail1.libero.it>
+ <20210301194550.6zqmxzcwvzlgjzcj@pengutronix.de>
+ <1154674280.137227.1614682252245@mail1.libero.it>
+In-Reply-To: <1154674280.137227.1614682252245@mail1.libero.it>
 
-> Il 01/03/2021 20:45 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
-> 
->  
-> On 01.03.2021 18:21:42, Dario Binacchi wrote:
-> > > > @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)
-> > > >  	while ((idx = ffs(pend))) {
-> > > >  		idx--;
-> > > >  		pend &= ~(1 << idx);
-> > > > -		obj = idx + C_CAN_MSG_OBJ_TX_FIRST;
-> > > > +		obj = idx + priv->msg_obj_tx_first;
-> > > >  		c_can_inval_tx_object(dev, IF_TX, obj);
-> > > >  		can_get_echo_skb(dev, idx, NULL);
-> > > >  		bytes += priv->dlc[idx];
-> > > > @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)
-> > > >  	/* Clear the bits in the tx_active mask */
-> > > >  	atomic_sub(clr, &priv->tx_active);
-> > > >  
-> > > > -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
-> > > > +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
-> > > 
-> > > Do we need 1UL here, too?
-> > 
-> > Do you agree if I use the BIT macro ?
-> 
-> No, please use GENMASK(priv->msg_obj_tx_num, 0) here.
-> 
+--NqCD5WZtdBXi0l0B7Gy05QjU2aqXJBIe2
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-In case of 64 message objects, msg_obj_tx_num = 32, and 1 << (priv->msg_obj_tx_num - 1) = 0x80000000. 
-GENMASK(priv->msg_obj_tx_num, 0) = 0. 
-BIT(priv->msg_obj_tx_num - 1) = 0x80000000.
+On 3/2/21 11:50 AM, Dario Binacchi wrote:
+> Hi Marc,
+>=20
+>> Il 01/03/2021 20:45 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:=
 
-Thanks and regards,
-Dario
+>>
+>> =20
+>> On 01.03.2021 18:21:42, Dario Binacchi wrote:
+>>>>> @@ -730,7 +728,7 @@ static void c_can_do_tx(struct net_device *dev)=
 
-> regrads,
-> Marc
-> 
-> -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+>>>>>  	while ((idx =3D ffs(pend))) {
+>>>>>  		idx--;
+>>>>>  		pend &=3D ~(1 << idx);
+>>>>> -		obj =3D idx + C_CAN_MSG_OBJ_TX_FIRST;
+>>>>> +		obj =3D idx + priv->msg_obj_tx_first;
+>>>>>  		c_can_inval_tx_object(dev, IF_TX, obj);
+>>>>>  		can_get_echo_skb(dev, idx, NULL);
+>>>>>  		bytes +=3D priv->dlc[idx];
+>>>>> @@ -740,7 +738,7 @@ static void c_can_do_tx(struct net_device *dev)=
+
+>>>>>  	/* Clear the bits in the tx_active mask */
+>>>>>  	atomic_sub(clr, &priv->tx_active);
+>>>>> =20
+>>>>> -	if (clr & (1 << (C_CAN_MSG_OBJ_TX_NUM - 1)))
+>>>>> +	if (clr & (1 << (priv->msg_obj_tx_num - 1)))
+>>>>
+>>>> Do we need 1UL here, too?
+>>>
+>>> Do you agree if I use the BIT macro ?
+>>
+>> No, please use GENMASK(priv->msg_obj_tx_num, 0) here.
+>=20
+> In case of 64 message objects, msg_obj_tx_num =3D 32, and 1 << (priv->m=
+sg_obj_tx_num - 1) =3D 0x80000000.=20
+> GENMASK(priv->msg_obj_tx_num, 0) =3D 0.=20
+> BIT(priv->msg_obj_tx_num - 1) =3D 0x80000000.
+
+Doh! I've misread where the -1 is places.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+
+--NqCD5WZtdBXi0l0B7Gy05QjU2aqXJBIe2--
+
+--HVzkvO2wFvndWwHoH5zV90NUDan4VQl8A
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA+GeAACgkQqclaivrt
+76kWtQf/QKPLMn0MnWkf4a0CdFhyE/5rEjO6AsqAQDSPn0Noz3FARXuZICAMq6ks
+weKLtxVy4vzaXinyf+9fpY12p0/bX4IQleQY5HMTvBLrgPjm0yO1bLg/0pcqb+0m
+s0yzznF9X7mqR+UVKLatuQoklbbzdieYLpg1A7NhVIfcBiSUJXLkvHJtWGVaF+TO
+yrLaXTnzGiiDAVmxayN3uzGXRTZ3enl9Z3dl97jfTgQQ7yuDW6EB4X1n03+xqmEs
+2kCbjf2udpwmFx31bEwyj8Zum9Fpo6oTGATc2/lHqlDuCYNHT3dtbn9gJytsi8l8
+x7WHvpc1GNY0VT3ZCIPRTT3RZiivzg==
+=YzP6
+-----END PGP SIGNATURE-----
+
+--HVzkvO2wFvndWwHoH5zV90NUDan4VQl8A--
