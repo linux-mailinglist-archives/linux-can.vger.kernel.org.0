@@ -2,94 +2,127 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF08232AEA3
-	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 03:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FB832AEA5
+	for <lists+linux-can@lfdr.de>; Wed,  3 Mar 2021 03:59:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbhCBX6a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 2 Mar 2021 18:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58666 "EHLO
+        id S231682AbhCBX6x (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 2 Mar 2021 18:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445144AbhCBC4n (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 1 Mar 2021 21:56:43 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00ACBC061788;
-        Mon,  1 Mar 2021 18:56:02 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id f20so20171149ioo.10;
-        Mon, 01 Mar 2021 18:56:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b/iU+4MCfDOZKJqdyJrM0gfu7fMW1rxZzEA8By+aoPI=;
-        b=fofpuf54tNID7ojunPZi8cAg3fKWUhTBIostlMtbptISKhMsU03ycwudk1iBBcpujG
-         QSfkI01LfoQxF6j72v7OlxjldYcW+WIGpCdcnxpoejOREsIUVAMUj6J1OFdiqJ+u4ZHr
-         f9rA8bCKMbxefXkI5jyP72R/PJ7NQuFx/w8FOWTd7bqIH0yT9fVmCTt0FbeqOon/mPxA
-         rchD8Wqhpq4SUgXc9U6TtVBpCxz4zt/E1iD6o9tCsY8ms4KRAlmqC3KaJLqUmENN+eIR
-         mrx2D3Skem9VwIACf1CDyCBUQpsTBUSojxLX7cJsbUhEvWV/pXz8pbI+pz9dsDOcf7Zt
-         5NEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b/iU+4MCfDOZKJqdyJrM0gfu7fMW1rxZzEA8By+aoPI=;
-        b=mbmvGBKjq6B35F6ro1K8adN0pFa/SDAIp85ac7ho5MUnDkUz0ZJUWzlCADcUPxH4qX
-         g3+L/hmXV43HPRJqBuy9eCP+dcr/vi0M6r+3/DLx6D9NwPDBRcUyc0xEJ2AP7MA/Rrb5
-         6lrImtwx09j9+GFbe+OlZ/qPCbt6oJjCuA3oM7X81A8eaHE70me7/yY78vCHujahuls/
-         keX+foJZdQARj1eFwTyy7kZL0UHJRz4MquMYAU7c3sLNiFuuCfZQH3oM17o61jgVu1pk
-         lWi5pIvpCGMuH/1nWGOOpd5hK+CXZVfLGF+OWcWm/D7yZAJ/KA/hfcd93ZKJsp9dJyDC
-         ns4Q==
-X-Gm-Message-State: AOAM531VwpF/EywwAdXKifWhpqi2zz9bmA+OewLtREG38hm9YLO8g/nk
-        Pk0PQxP/IEaAouFjW3/GBlIsi1UA3oJ2S+C3XsQ=
-X-Google-Smtp-Source: ABdhPJwqpFM+0OqWvmoSVEZdsnnteDFQItJgeJAHaSAVioKlWRvNw1lvx/tqf6Q9Lc/rPUNX/1uc8IvTajMPMohMW10=
-X-Received: by 2002:a02:b893:: with SMTP id p19mr19211711jam.68.1614653762507;
- Mon, 01 Mar 2021 18:56:02 -0800 (PST)
+        with ESMTP id S1836675AbhCBHTr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 2 Mar 2021 02:19:47 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BF2C061797
+        for <linux-can@vger.kernel.org>; Mon,  1 Mar 2021 23:19:06 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lGzJA-0000Ef-LV; Tue, 02 Mar 2021 08:19:04 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:170b:eff8:30a0:9455])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AF9355EC01E;
+        Tue,  2 Mar 2021 07:19:02 +0000 (UTC)
+Date:   Tue, 2 Mar 2021 08:19:01 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Timo =?utf-8?B?U2NobMO8w59sZXI=?= <schluessler@krause.de>,
+        ukrfoil@gmail.com, linux-can <linux-can@vger.kernel.org>
+Subject: Re: mcp251x hangs during ifup
+Message-ID: <20210302071901.ptwvejkedascbdsv@pengutronix.de>
+References: <20210301165856.37gvqkomvjkjvbj2@pengutronix.de>
+ <CAMZ6RqKfXR9cHxjvnPwxjWHWEuxYNV9V4qLSd0ZQGP0JOMKX0w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210301041550.795500-1-ztong0001@gmail.com> <20210301150840.mqngl7og46o3nxjb@pengutronix.de>
-In-Reply-To: <20210301150840.mqngl7og46o3nxjb@pengutronix.de>
-From:   Tong Zhang <ztong0001@gmail.com>
-Date:   Mon, 1 Mar 2021 21:55:51 -0500
-Message-ID: <CAA5qM4Di1J7oPK3JrP8o++JUoBqkQ-wDzmwrBaT+9mmpCgK+=w@mail.gmail.com>
-Subject: Re: [PATCH] can: c_can: move runtime PM enable/disable to c_can_platform
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="civbd7xmcgx54scm"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKfXR9cHxjvnPwxjWHWEuxYNV9V4qLSd0ZQGP0JOMKX0w@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Mar 1, 2021 at 2:49 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 28.02.2021 23:15:48, Tong Zhang wrote:
-> > Currently doing modprobe c_can_pci will make kernel complain
-> > "Unbalanced pm_runtime_enable!", this is caused by pm_runtime_enable()
-> > called before pm is initialized in register_candev() and doing so will
->
-> I don't see where register_candev() is doing any pm related
-> initialization.
->
-> > also cause it to enable twice.
->
-> > This fix is similar to 227619c3ff7c, move those pm_enable/disable code to
-> > c_can_platform.
->
-> As I understand 227619c3ff7c ("can: m_can: move runtime PM
-> enable/disable to m_can_platform"), PCI devices automatically enable PM,
-> when the "PCI device is added".
 
-Hi Marc,
-Thanks for the comments. I thinks you are right -- I was mislead by the trace --
-I have corrected the commit log along with the indent fix in v2 patch.
-Thanks again for your help,
-- Tong
+--civbd7xmcgx54scm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> Please clarify the above point, otherwise the code looks OK, small
-> nitpick inline:
+On 02.03.2021 10:40:21, Vincent MAILHOL wrote:
+> On Tue. 2 Mar 2021 at 01:58, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >
+> > Hello,
+> >
+> > in the armbian forum a problem with the mcp215x was reported:
+> >
+> > https://forum.armbian.com/topic/14909-orange-pi-mcp2515-ip-up-freezes/
+> >
+> > In the last comment (Posted Saturday at 10:05 PM) Aleksey posted a
+> > mcp251x.c with a workaround. After cleanup the diff looks like this:
+> >
+> > diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251=
+x.c
+> > index f69fb4238a65..6d5fcf5a19a2 100644
+> > --- a/drivers/net/can/spi/mcp251x.c
+> > +++ b/drivers/net/can/spi/mcp251x.c
+> > @@ -1221,7 +1221,7 @@ static int mcp251x_open(struct net_device *net)
+> >         INIT_WORK(&priv->tx_work, mcp251x_tx_work_handler);
+> >         INIT_WORK(&priv->restart_work, mcp251x_restart_work_handler);
+> > -       ret =3D mcp251x_hw_wake(spi);
+> > +       ret =3D mcp251x_hw_reset(spi);
+> >         if (ret)
+> >                 goto out_free_wq;
+> >         ret =3D mcp251x_setup(net, spi);
+> >
+> > Vincent, it seems the gpio support has broken the driver on some
+> > platforms. Do you have an idea?
+>=20
+> This mcp251x_hw_wake() function was introduced in below commit:
+> 8ce8c0abcba3 ("can: mcp251x: only reset hardware as required")
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3D8ce8c0abcba314e1fe954a1840f6568bf5aef2ef
+>=20
+> The GPIO support was then introduced later on in below commit:
+> 2d52dabbef60 ("can: mcp251x: add GPIO support")
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
+/?id=3D2d52dabbef60da91b72617519495fe77b621e6b8
+>=20
+> I am adding Timo to the loop. He is the author of the two commits above.
+> I think he will be of better support than me here :)
+
+Of course I wanted to add Timo, thanks. I think I've picked your e-mail,
+as you've done the newest change on the driver after me :)
+
+Sorry for the noise.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--civbd7xmcgx54scm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA95uMACgkQqclaivrt
+76k0fgf+LlAHre/jdoXdbM0/Fwaslw0ohhN5tX3dSmDMrDFov95bVubk/vO8fWm9
+LSSSL1/RqGNOP4INBCb+ZXxSs0NVvUOVVMIwcLO3Xb5eHKTnqLnk7cDQKEnaXFgP
+BPfVo8bkH30wVWtKXUlmnG2M3UnaoCVoWmfacpmr/Kn3U83kVWtx0XwrnzzEWKIJ
+gCzDDW4cTNg/Oj2YCO1ieYZQM2BY0g7Y9jTy3QmFci7QuvJxCE2NxxkVA/dTmyf9
+EviKrI7wIOx0tyVeS6RUjC843H83S2BHuzKAtJbrQy1Ueef1jSTnuCBLC18LN6H2
+9uNUGxLfsYtD19ukHiXYs/TRU5YBKw==
+=UhLa
+-----END PGP SIGNATURE-----
+
+--civbd7xmcgx54scm--
