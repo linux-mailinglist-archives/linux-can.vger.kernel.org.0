@@ -2,78 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9608832C5A8
-	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 02:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB07632C5AA
+	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 02:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377829AbhCDAYA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Mar 2021 19:24:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
+        id S1380742AbhCDAYB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 Mar 2021 19:24:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383522AbhCCOjP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Mar 2021 09:39:15 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673B9C061A32
-        for <linux-can@vger.kernel.org>; Wed,  3 Mar 2021 06:36:10 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id h98so23910662wrh.11
-        for <linux-can@vger.kernel.org>; Wed, 03 Mar 2021 06:36:10 -0800 (PST)
+        with ESMTP id S1447752AbhCCPQV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Mar 2021 10:16:21 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D0AC0611A3
+        for <linux-can@vger.kernel.org>; Wed,  3 Mar 2021 06:44:32 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id 7so23980676wrz.0
+        for <linux-can@vger.kernel.org>; Wed, 03 Mar 2021 06:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kznca3zEmMinTq28ma7OpIR5yo6A50Qa42241Bk+eug=;
-        b=VkD9zoZ7Em96cDUoODqEjHGsmtGjCX2p3Y1lh8tu7jMB6qjkXsTl1Rfr4aNxcjMX54
-         ezrsyFX4y4V1FYXpm6NnxFyHCPTo1Yz6CVJ813eRulg6CFe1F78lhKZOb3vF9YQ9GuiV
-         CdlaGO1OuXVufDGua8aat0wxbBglaLWB89tIV+uEPiOzR2QukdWvVt+CSaVcRV+kC5nl
-         cxBsdjPtSEPGpeIlvIxg554oRHX3kbhfZfO+4xmvg+a1BhpYpnvUtTnFRBkz4UNKuNg4
-         D8tKIOT6IGMZDkzGS0884/VHFcJBOQEtX4WuBvJH85NBsBDgTITfBQcAFw4h/upCRdPe
-         MFEA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sTCwzn3oKxMCf1Fn/+EFMRYBOCtivaEMQs5qlcJpOJw=;
+        b=Am2myAUUVowOyKE7h8Ucqpa5z1rtl4V8Vz8ZCF7zai8asJOtWuhXkYmfHgqN8YLEHA
+         q7RA80olYy3BEwXz+Xr/BNnJDBFYKDmMfj8FwtkevHQpqiaWhJ4ksdSxpSFOdaiJdEiQ
+         0BA6mgZz384Kdf0fWAlfhctBX4UiAuTnunHjAWqv1dwakBsM7S/ZRzQfqWWnvAYzrb3R
+         G4FZiK7mHSYUSVubbllXFYeaj1My/Asoit8XYzVdXKygyWqtgndOL8eFe3SeU6E4DKyZ
+         eOvImfpeRj8HQzckhqk0lqESpLAYzqmyGfEy6KulTaNSmQzSyVVrH4IFtIjWdPT2fmv7
+         r8UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kznca3zEmMinTq28ma7OpIR5yo6A50Qa42241Bk+eug=;
-        b=JSDQSs+KGY7J6TWs8OB8UuZ4NxcJwAh5fI4A7B7kg724A4PYhYHtE1v/GDj2yjj14N
-         augkTlNLeIKzTqA3T5hT/Uwd0ZxKOVVv1EC4FvrHnrj2rP1xmogY8P8X4bbZ3btC3qPv
-         IEhFWPjPdv8NDXN01NaAH6szOkOEEriCkahzvQm2A8qLVXnLCCMKqsEtAPj7PwfyJjhE
-         s7Igqg4ajVh+S2iWNcXIK/MsrTENe532rhzxFbcydBmIBugU/xC4YHTVx6ITMQ6YwUam
-         tPZ/IyVRDpumTUaxjqxu6rvh+rJ6vnv1t66mmndnu3O1qwaXxclD9p98UYSYp0IEejNT
-         lDow==
-X-Gm-Message-State: AOAM532HM76BiQoWeoxPm5/bUGZ0FK+Nx3f3bF5dy3WernmIdBs/gnpH
-        4vrR8kk7D6TvotYWYqYYcGR5Jw==
-X-Google-Smtp-Source: ABdhPJw1DZSuuU9pBiiTlo+1uJdghGIJg1sPsxVkh0DIQYmQBDomiPUZ4lyZ/tx+Ljsx9Kx9EkF6ew==
-X-Received: by 2002:a5d:698e:: with SMTP id g14mr9659980wru.127.1614782169166;
-        Wed, 03 Mar 2021 06:36:09 -0800 (PST)
-Received: from bigthink (94.197.200.66.threembb.co.uk. [94.197.200.66])
-        by smtp.gmail.com with ESMTPSA id l22sm33393481wrb.4.2021.03.03.06.36.07
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sTCwzn3oKxMCf1Fn/+EFMRYBOCtivaEMQs5qlcJpOJw=;
+        b=fV/K2mlPhb0nwtQg0iAUiAiWkDklHUGbPLK+cg4e/mPfkPmuYmmPKK/tbwx+ME5a4g
+         yc7B0Yql4YEurMqXbeaOawHM4WhHbV4pyx0NgM02d7gXjFLVmGXpy+UB+NBiZfbllfmZ
+         qcKIqZp1J/ylVKOrI2MniBZ3piGiiZ35nyOBERsc6g49XUnyBOU0VmlyDfYMYD8S9Fc2
+         k8H10Of/aESattUp62KuHmD45R3DXHfh+R5w6JH5bIXvGBkBtP9lcyS2/uGOs8aMkl/g
+         kgJ7a8h6V00CSPcvRGR2tJjhrzYde+SBAcbxn1qGiIU/ayqeCDeVw179jOOPPmxNhLQE
+         lWag==
+X-Gm-Message-State: AOAM530t/NwqQ4AitCUlJ7cNJYi18b8vRKqXthgI5Ibtvs/cX4SKKhhK
+        aUrKxdPi2Wby2aoCNO/WHrOOPOXiX2VUmw==
+X-Google-Smtp-Source: ABdhPJzOFw4oEsrLPp157vd2hR5M3qLawnbmyZRQxR/dUVGiJc95RVpNf+kjAb5SDkO0b6y/GDjQtg==
+X-Received: by 2002:a5d:5047:: with SMTP id h7mr17048718wrt.111.1614782671305;
+        Wed, 03 Mar 2021 06:44:31 -0800 (PST)
+Received: from localhost.localdomain (94.197.200.66.threembb.co.uk. [94.197.200.66])
+        by smtp.gmail.com with ESMTPSA id h20sm5877480wmp.38.2021.03.03.06.44.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 06:36:08 -0800 (PST)
-Date:   Wed, 3 Mar 2021 14:36:06 +0000
+        Wed, 03 Mar 2021 06:44:31 -0800 (PST)
 From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: m_can: m_can_rx_handler(): fix RX in periphs being
- blocked by error handling
-Message-ID: <20210303143606.hlvqoqwljuzxcuc6@bigthink>
-References: <20210303124950.3917746-1-torin@maxiluxsystems.com>
- <20210303125523.4tfd6ifwyugoygzh@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     mkl@pengutronix.de, Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Subject: [PATCH] can: m_can: m_can_rx_peripheral: fix RX being blocked by errors
+Date:   Wed,  3 Mar 2021 14:43:51 +0000
+Message-Id: <20210303144350.4093750-1-torin@maxiluxsystems.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210303125523.4tfd6ifwyugoygzh@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 01:55:23PM +0100, Marc Kleine-Budde wrote:
-> To be precise, it's a threaded Interrupt. Why not call the rx_handler
-> with a reasonable quota instead?
+For M_CAN peripherals, m_can_rx_handler was called with quota = 1, which
+caused any error handling to block RX from taking place until the next
+time the IRQ handler is called. This had been observed to cause RX to be
+blocked indefinitely in some cases.
 
-After some testing, I've found that this solution works best. I'll send
-another patch.
+This is fixed by calling m_can_rx_handler with a sensibly high quota.
 
---
-Regards,
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
+---
+ drivers/net/can/m_can/m_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Torin Cooper-Bennun
-Software Engineer | maxiluxsystems.com
+diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+index 3752520a7d4b..1f265895bf87 100644
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -876,7 +876,7 @@ static int m_can_rx_peripheral(struct net_device *dev)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 
+-	m_can_rx_handler(dev, 1);
++	m_can_rx_handler(dev, M_CAN_NAPI_WEIGHT);
+ 
+ 	m_can_enable_all_interrupts(cdev);
+ 
+-- 
+2.30.1
 
