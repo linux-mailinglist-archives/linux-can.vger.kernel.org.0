@@ -2,46 +2,55 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D3832C5B3
-	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 02:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DF232C5B6
+	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 02:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353482AbhCDAYD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Mar 2021 19:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S1382072AbhCDAYE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 Mar 2021 19:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243510AbhCCVRn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Mar 2021 16:17:43 -0500
+        with ESMTP id S232489AbhCCVUV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Mar 2021 16:20:21 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E290FC061756
-        for <linux-can@vger.kernel.org>; Wed,  3 Mar 2021 13:17:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1ABC061756
+        for <linux-can@vger.kernel.org>; Wed,  3 Mar 2021 13:19:33 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lHYrb-0004UO-Dx; Wed, 03 Mar 2021 22:16:59 +0100
+        id 1lHYu3-0004et-Lt; Wed, 03 Mar 2021 22:19:31 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:a20d:2fb6:f2cb:982e])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5843B5ED14D;
-        Wed,  3 Mar 2021 21:16:58 +0000 (UTC)
-Date:   Wed, 3 Mar 2021 22:16:57 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0000B5ED151;
+        Wed,  3 Mar 2021 21:19:29 +0000 (UTC)
+Date:   Wed, 3 Mar 2021 22:19:29 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Martin Willi <martin@strongswan.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: [PATCH net] can: dev: Move device back to init netns on owning
- netns delete
-Message-ID: <20210303211657.gyampnzyhqjaim5i@pengutronix.de>
-References: <20210302122423.872326-1-martin@strongswan.org>
+To:     =?utf-8?B?dWtyZm9pbC5jb20sIEPRgtGD0LTQuNC+0L/QsNC6INCj0LrRgNCw0LjQvdCw?=
+         =?utf-8?B?LCDQktC+0YHRgtC+0YfQvdGL0Lkg0YDQtdCz0LjQvtC9?= 
+        <ukrfoil@gmail.com>
+Cc:     =?utf-8?B?U2NobMO8w59sZXIs?= Timo <t.schluessler@krause.de>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: mcp251x hangs during ifup
+Message-ID: <20210303211929.gvgbk2aimwbsj6x7@pengutronix.de>
+References: <CACGOs=TG4jyXKHBfPGDEJp1gSA+PyNVqCM7grPGMpe9+wYDBLA@mail.gmail.com>
+ <20210303072653.zb66tkdlsxtval5n@pengutronix.de>
+ <CACGOs=TJhoV99D=V-7xa8LG6Ftx8SWUO_XCHGAP3L1_UGLVm3w@mail.gmail.com>
+ <20210303074841.me5egjpecebrpxc4@pengutronix.de>
+ <CACGOs=SOxiN1PKhZvhTizH92vneKUOfjxL+9fg4-=JmHHgYtNw@mail.gmail.com>
+ <20210303080825.lcpphr2ihvuugfl7@pengutronix.de>
+ <CACGOs=SSEvb=5AG9a7dSpOuiaq-wX+FLe3NAMEtKcMFdwJx8Pw@mail.gmail.com>
+ <20210303083336.4rn47cnzcexk7czq@pengutronix.de>
+ <ce8e93fce5e44fa9a4c097d06e3e2be1@HG-SRV-053.HG.local>
+ <CACGOs=Ry7DtLooobKzuK7PWLOaWVnawMNTkErKC8e4OJKjNJPQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6acdq5udxfxzzwp3"
+        protocol="application/pgp-signature"; boundary="kvtpvjrj7pkogzjb"
 Content-Disposition: inline
-In-Reply-To: <20210302122423.872326-1-martin@strongswan.org>
+In-Reply-To: <CACGOs=Ry7DtLooobKzuK7PWLOaWVnawMNTkErKC8e4OJKjNJPQ@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -51,59 +60,38 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---6acdq5udxfxzzwp3
+--kvtpvjrj7pkogzjb
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 02.03.2021 13:24:23, Martin Willi wrote:
-> When a non-initial netns is destroyed, the usual policy is to delete
-> all virtual network interfaces contained, but move physical interfaces
-> back to the initial netns. This keeps the physical interface visible
-> on the system.
+On 03.03.2021 20:46:25, ukrfoil.com, C=D1=82=D1=83=D0=B4=D0=B8=D0=BE=D0=BF=
+=D0=B0=D0=BA =D0=A3=D0=BA=D1=80=D0=B0=D0=B8=D0=BD=D0=B0, =D0=92=D0=BE=D1=81=
+=D1=82=D0=BE=D1=87=D0=BD=D1=8B=D0=B9 =D1=80=D0=B5=D0=B3=D0=B8=D0=BE=D0=BD w=
+rote:
+> You have set IRQ_TYPE_LEVEL_LOW correctly
 >=20
-> CAN devices are somewhat special, as they define rtnl_link_ops even
-> if they are physical devices. If a CAN interface is moved into a
-> non-initial netns, destroying that netns lets the interface vanish
-> instead of moving it back to the initial netns. default_device_exit()
-> skips CAN interfaces due to having rtnl_link_ops set. Reproducer:
->=20
->   ip netns add foo
->   ip link set can0 netns foo
->   ip netns delete foo
->=20
-> WARNING: CPU: 1 PID: 84 at net/core/dev.c:11030 ops_exit_list+0x38/0x60
-> CPU: 1 PID: 84 Comm: kworker/u4:2 Not tainted 5.10.19 #1
-> Workqueue: netns cleanup_net
-> [<c010e700>] (unwind_backtrace) from [<c010a1d8>] (show_stack+0x10/0x14)
-> [<c010a1d8>] (show_stack) from [<c086dc10>] (dump_stack+0x94/0xa8)
-> [<c086dc10>] (dump_stack) from [<c086b938>] (__warn+0xb8/0x114)
-> [<c086b938>] (__warn) from [<c086ba10>] (warn_slowpath_fmt+0x7c/0xac)
-> [<c086ba10>] (warn_slowpath_fmt) from [<c0629f20>] (ops_exit_list+0x38/0x=
-60)
-> [<c0629f20>] (ops_exit_list) from [<c062a5c4>] (cleanup_net+0x230/0x380)
-> [<c062a5c4>] (cleanup_net) from [<c0142c20>] (process_one_work+0x1d8/0x43=
-8)
-> [<c0142c20>] (process_one_work) from [<c0142ee4>] (worker_thread+0x64/0x5=
-a8)
-> [<c0142ee4>] (worker_thread) from [<c0148a98>] (kthread+0x148/0x14c)
-> [<c0148a98>] (kthread) from [<c0100148>] (ret_from_fork+0x14/0x2c)
->=20
-> To properly restore physical CAN devices to the initial netns on owning
-> netns exit, introduce a flag on rtnl_link_ops that can be set by drivers.
-> For CAN devices setting this flag, default_device_exit() considers them
-> non-virtual, applying the usual namespace move.
->=20
-> The issue was introduced in the commit mentioned below, as at that time
-> CAN devices did not have a dellink() operation.
->=20
-> Fixes: e008b5fc8dc7 ("net: Simplfy default_device_exit and improve batchi=
-ng.")
-> Signed-off-by: Martin Willi <martin@strongswan.org>
+> After installation and with the default driver, everything works,
+> there is no hang.
 
-applied to linux-can/testing
+\o/
 
-Thanks,
+> It looks like I was wrong in my experiments, I was led astray, there
+> is a lot of information on the Internet about setting
+> IRQ_TYPE_EDGE_FALLING as correct. Therefore, I apologize for the time
+> spent solving this problem. Thanks for the help.
+
+No problem!
+
+> data after changing to IRQ_TYPE_LEVEL_LOW
+>=20
+> root@nanopi-neo:~#cat /proc/interrupts
+> >            CPU0       CPU1       CPU2       CPU3
+> > 107:          0          0          0          0  sunxi_pio_level  40 L=
+evel     spi0.0
+
+This looks consistent.
+
 Marc
 
 --=20
@@ -112,19 +100,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---6acdq5udxfxzzwp3
+--kvtpvjrj7pkogzjb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA//MYACgkQqclaivrt
-76lIYAf8DP4XvSvvYRwlxr544JULhXG1eiAqe9qWOVa2jHInXr4ApQIJIMjavAO9
-d6mWqROiFWYTL8JzagyYAdVk6+6iqM/Y9rs+IvaQdd+qw9MkTw8faelMwNVC0+My
-gpuVO0Hkq45efpDa4X/Dua9tfMeKgQ/fJ1hD7CKOgCEDyYX847Og9nG9Skv423x1
-2uGKvLPB7KlGeuX/7BZZbi54/yj4xGDfSjKc5ws9dY4/Xsq8DTAjQ4eoa5nWw4eZ
-HxFco+kMu/L+3cU7ZTmCRPlb2aIqnhkhKhfWtesLDNFpdWk2sDwuGT76SsfuRAjw
-bkR4UR/BHpGv8p8ilX/+VrNAouPTYw==
-=i8Hc
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA//V0ACgkQqclaivrt
+76kfxQf/bQVMYrGQS9qqCnwCiPBu/K4BLeE0XApZ8ZD57z96pBPMxsOiwTLI4Tlt
+n8Ghs7rL2DAgVAUd+vONWd6k2cYZqDtjwTCtyGE3fLbIxOuqkd5YvRWvQHbys4ei
+P5RmmIVsCjHIB/b/3maLIMSg/VBDrAxJ2R9zq+zbwmeHSnrvz4TAyEPcK8WQdhVM
+IBFpC/vHHTUD80uWTBRlzURlPUb2QYULxMl35sXLs5wPmyyTjL0qk+6swa6uF/+N
+xvJ4HS7Pa08s9T46bkavFDZiPprG57dgolrNaIFCdyojbmZrNfGWqj14tC0PB8P1
+tjPVVgv3Gjou3fqotKOM+TP4uucFOA==
+=4209
 -----END PGP SIGNATURE-----
 
---6acdq5udxfxzzwp3--
+--kvtpvjrj7pkogzjb--
