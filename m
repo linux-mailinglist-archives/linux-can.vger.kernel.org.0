@@ -2,82 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0889A32C5A3
-	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 02:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2403C32C5A5
+	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 02:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240731AbhCDAX5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 3 Mar 2021 19:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S240990AbhCDAX6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 3 Mar 2021 19:23:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240990AbhCCNIo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Mar 2021 08:08:44 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0203C06178B
-        for <linux-can@vger.kernel.org>; Wed,  3 Mar 2021 05:07:53 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id e10so23368741wro.12
-        for <linux-can@vger.kernel.org>; Wed, 03 Mar 2021 05:07:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gT3e+ll57UiNKMckiUfYzGEhCLqAbjuKvFeG+pjUby8=;
-        b=eK4xGGiyKLCiFI//fmkOKaxdnFBPvyJBm3lfFnoZd3gHCBZhsjnzimTwoZYbyX7mTz
-         jICc04c/Lr4adtDYDHroV+0bkPEmcsmmjjIb0l0HTtP3pqwus0u/QPulgKxJopclWRq9
-         573AiszUAH0QXC940jn4KFHEdFQ5o4Q9KBiPTWis7S8Y6uEoMC65CtZ53PwTB3e0d8Ci
-         JivRQooLpGJ9XkQfe5o8ehUqAuNkQNFgoUADuBoEOfcD4bnWigNtmIyQF5exBkKpMAbN
-         IZLZ9V85YTrI/7WJak0hWpTHKZmSHXjvP1eyGuGq1ra7PM+xXhXSAPHWsOASd8TFBi4q
-         InAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gT3e+ll57UiNKMckiUfYzGEhCLqAbjuKvFeG+pjUby8=;
-        b=Ct8ps/ul25C5lizfESHTr9nF4s6s7Q0cCNVMneLq88HfeDyWWsL+gSQN4077OoEz95
-         07DFN+IamGE5E2HAGXn0r8Nn6+KPI099LN99GQHYoc5RawxUPIVMJmlat/I+7WofS0dM
-         gPrdtxlaBB4sCOuS70UJxEHvs15t/kZ+5vMMCXgCWoHYi4eN5tCmyIJx1GfWZwUVkIjp
-         COpOf8n7SpcpCpHZP6jBTimwSIOKgPTt2i3LXaEhazFtgKtl2lb84YAbUlCQoALT0vHR
-         kPJsz0Tz53gmgBOlWzPmMAfogyTtcIan1wd/U6r3/uK74xT3EQlXzC3KiHwoTwvdj2S9
-         Ncng==
-X-Gm-Message-State: AOAM533RZOVbqjBa6SIMjgch2TpR8ygt9VMfGKGFHZxkQ6bmPFq1gZ/I
-        IUUBd5ZMlD4xHTbUknUw/83Kiw==
-X-Google-Smtp-Source: ABdhPJwy4AoNuTElpza13/9UgNsdQSNzz7q3CFFZI+6tkmJRqe4DxJkG/GE4DO5uYniD4Zse9L/G7w==
-X-Received: by 2002:a5d:4445:: with SMTP id x5mr25927885wrr.30.1614776872479;
-        Wed, 03 Mar 2021 05:07:52 -0800 (PST)
-Received: from bigthink (94.197.200.66.threembb.co.uk. [94.197.200.66])
-        by smtp.gmail.com with ESMTPSA id w16sm18973710wrk.41.2021.03.03.05.07.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 05:07:52 -0800 (PST)
-Date:   Wed, 3 Mar 2021 13:07:50 +0000
-From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S241434AbhCCNMX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 3 Mar 2021 08:12:23 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5294C061788
+        for <linux-can@vger.kernel.org>; Wed,  3 Mar 2021 05:11:25 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lHRHg-0008PM-Gk; Wed, 03 Mar 2021 14:11:24 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:a20d:2fb6:f2cb:982e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BAE7D5ECC1C;
+        Wed,  3 Mar 2021 13:11:23 +0000 (UTC)
+Date:   Wed, 3 Mar 2021 14:11:22 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
 Cc:     linux-can@vger.kernel.org
 Subject: Re: [PATCH] can: m_can: m_can_rx_handler(): fix RX in periphs being
  blocked by error handling
-Message-ID: <20210303130750.y2leqimmthzn2liy@bigthink>
+Message-ID: <20210303131122.nem3z2iq4ts3iirj@pengutronix.de>
 References: <20210303124950.3917746-1-torin@maxiluxsystems.com>
  <20210303125523.4tfd6ifwyugoygzh@pengutronix.de>
+ <20210303130750.y2leqimmthzn2liy@bigthink>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ppb3kpalxj6x5kto"
 Content-Disposition: inline
-In-Reply-To: <20210303125523.4tfd6ifwyugoygzh@pengutronix.de>
+In-Reply-To: <20210303130750.y2leqimmthzn2liy@bigthink>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Mar 03, 2021 at 01:55:23PM +0100, Marc Kleine-Budde wrote:
-> > In peripherals, m_can_rx_handler is called with quota = 1 from an ISR
-> > context.
-> 
-> To be precise, it's a threaded Interrupt. Why not call the rx_handler
-> with a reasonable quota instead?
 
-I see, thanks. Forgive my ignorance, but how long should a threaded ISR
-reasonably block for? Was there ever a good reason for the quota to be 1
-here?
+--ppb3kpalxj6x5kto
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
---
-Regards,
+On 03.03.2021 13:07:50, Torin Cooper-Bennun wrote:
+> On Wed, Mar 03, 2021 at 01:55:23PM +0100, Marc Kleine-Budde wrote:
+> > > In peripherals, m_can_rx_handler is called with quota =3D 1 from an I=
+SR
+> > > context.
+> >=20
+> > To be precise, it's a threaded Interrupt. Why not call the rx_handler
+> > with a reasonable quota instead?
+>=20
+> I see, thanks. Forgive my ignorance, but how long should a threaded ISR
+> reasonably block for?
 
-Torin Cooper-Bennun
-Software Engineer | maxiluxsystems.com
+It's a IRQ thread, so it's subject to scheduling and priorities can be
+configured. The IRQ thread of the mcp251xfd driver runs until all IRQs
+are handled.
 
+> Was there ever a good reason for the quota to be 1 here?
+
+Don't know.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--ppb3kpalxj6x5kto
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmA/ivgACgkQqclaivrt
+76m28Af/R7awfbIhphTghJQtqavF9x0MZ30vo0Da0bIqAskTPFwxLuG4zHkDyfuZ
+pu2x+Lpp5Ywv7TsTOcglx7VN6WXjob0gfI1wyaENTT9rWNaZSIQ/4wCNFLOOuolA
+mM9koYLKkc6+hHMa38N3f9k83IWvI4G0X+AuELIbCnYwtsq0h1c3kxhAqAYzQHFR
+6fWcBcBeFpzNoJXhyTmAkb/lQX+4dbktFNoPOFVft8NUMTz8Pr+y9mN77zcjkRg3
+OTT6Uu4UJ2BFjk0V4FQ0R67A+z1EAgvfzCj7a+D2j64ifcLPlS8CbtGrwyWEaP6l
+tx7DC2aM3doph5D5Zd1AnZu61EbHpg==
+=W+d3
+-----END PGP SIGNATURE-----
+
+--ppb3kpalxj6x5kto--
