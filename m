@@ -2,47 +2,42 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2FE32D779
-	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 17:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167F732D783
+	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 17:18:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbhCDQNI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 4 Mar 2021 11:13:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S232744AbhCDQR5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 4 Mar 2021 11:17:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbhCDQMy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Mar 2021 11:12:54 -0500
+        with ESMTP id S232441AbhCDQRo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Mar 2021 11:17:44 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F67C061574
-        for <linux-can@vger.kernel.org>; Thu,  4 Mar 2021 08:12:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23811C061574
+        for <linux-can@vger.kernel.org>; Thu,  4 Mar 2021 08:17:04 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lHqaD-00085Z-Ah
-        for linux-can@vger.kernel.org; Thu, 04 Mar 2021 17:12:13 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 667205EDE2C
-        for <linux-can@vger.kernel.org>; Thu,  4 Mar 2021 16:12:12 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1lHqes-0000z7-LY; Thu, 04 Mar 2021 17:17:02 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:3b3:61f5:ff65:ce3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id F3D8A5EDE27;
-        Thu,  4 Mar 2021 16:12:11 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 05dd163e;
-        Thu, 4 Mar 2021 16:12:11 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id BB4E95EDE37;
+        Thu,  4 Mar 2021 16:17:01 +0000 (UTC)
+Date:   Thu, 4 Mar 2021 17:17:00 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel@pengutronix.de, linux-can@vger.kernel.org
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [can-next v2] can: mcp251xfd: add HW timestamp to RX, TX and error CAN frames
-Date:   Thu,  4 Mar 2021 17:12:09 +0100
-Message-Id: <20210304161209.2754463-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.1
+To:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     kernel@pengutronix.de
+Subject: Re: [RFC] can: isotp TX-path cleanups
+Message-ID: <20210304161700.csap6diwotihtsuy@pengutronix.de>
+References: <20210218215434.1708249-1-mkl@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4s4botiawf64y7sv"
+Content-Disposition: inline
+In-Reply-To: <20210218215434.1708249-1-mkl@pengutronix.de>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -51,102 +46,50 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch uses the previously added mcp251xfd_skb_set_timestamp()
-function to convert the timestamp done by the CAN controller into a
-proper skb hw timestamp.
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Hello,
+--4s4botiawf64y7sv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-here's the corrected version with the NULL pointer check.
+On 18.02.2021 22:54:32, Marc Kleine-Budde wrote:
+> Hello
+>=20
+> we've noticed that "candump -x" on normal CAN ISO-TP traffic shows:
+>=20
+> | (2021-02-18 14:52:51.643904)  ca0  TX B E  713   [8]  20 0D 0E 0F AA AA=
+ AA AA
+>=20
+> Note here the "B" and "E" flags are set. Another possibility is to use
+> skb_put_zero() instead of skb_put(), but with a bigger overhead. A 3.
+> option is to only memset() the non-data part of the struct canfd_frame.
+
+Oliver, any opinion this?
+
+I think I'll include this in my next pull request to net/master.
 
 regards,
 Marc
 
- .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 23 +++++++++++++++----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 965f8d82b8a1..6e886bc6e3e0 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -1268,7 +1268,8 @@ mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 			   unsigned int *frame_len_ptr)
- {
- 	struct net_device_stats *stats = &priv->ndev->stats;
--	u32 seq, seq_masked, tef_tail_masked;
-+	struct sk_buff *skb;
-+	u32 seq, seq_masked, tef_tail_masked, tef_tail;
- 
- 	seq = FIELD_GET(MCP251XFD_OBJ_FLAGS_SEQ_MCP2518FD_MASK,
- 			hw_tef_obj->flags);
-@@ -1284,9 +1285,13 @@ mcp251xfd_handle_tefif_one(struct mcp251xfd_priv *priv,
- 	if (seq_masked != tef_tail_masked)
- 		return mcp251xfd_handle_tefif_recover(priv, seq);
- 
-+	tef_tail = mcp251xfd_get_tef_tail(priv);
-+	skb = priv->can.echo_skb[tef_tail];
-+	if (skb)
-+		mcp251xfd_skb_set_timestamp(priv, skb, hw_tef_obj->ts);
- 	stats->tx_bytes +=
- 		can_rx_offload_get_echo_skb(&priv->offload,
--					    mcp251xfd_get_tef_tail(priv),
-+					    tef_tail,
- 					    hw_tef_obj->ts,
- 					    frame_len_ptr);
- 	stats->tx_packets++;
-@@ -1452,7 +1457,7 @@ mcp251xfd_rx_ring_update(const struct mcp251xfd_priv *priv,
- }
- 
- static void
--mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
-+mcp251xfd_hw_rx_obj_to_skb(struct mcp251xfd_priv *priv,
- 			   const struct mcp251xfd_hw_rx_obj_canfd *hw_rx_obj,
- 			   struct sk_buff *skb)
- {
-@@ -1495,6 +1500,8 @@ mcp251xfd_hw_rx_obj_to_skb(const struct mcp251xfd_priv *priv,
- 
- 	if (!(hw_rx_obj->flags & MCP251XFD_OBJ_FLAGS_RTR))
- 		memcpy(cfd->data, hw_rx_obj->data, cfd->len);
-+
-+	mcp251xfd_skb_set_timestamp(priv, skb, hw_rx_obj->ts);
- }
- 
- static int
-@@ -1608,16 +1615,21 @@ static int mcp251xfd_handle_rxif(struct mcp251xfd_priv *priv)
- }
- 
- static struct sk_buff *
--mcp251xfd_alloc_can_err_skb(const struct mcp251xfd_priv *priv,
-+mcp251xfd_alloc_can_err_skb(struct mcp251xfd_priv *priv,
- 			    struct can_frame **cf, u32 *timestamp)
- {
-+	struct sk_buff *skb;
- 	int err;
- 
- 	err = mcp251xfd_get_timestamp(priv, timestamp);
- 	if (err)
- 		return NULL;
- 
--	return alloc_can_err_skb(priv->ndev, cf);
-+	skb = alloc_can_err_skb(priv->ndev, cf);
-+	if (skb)
-+		mcp251xfd_skb_set_timestamp(priv, skb, *timestamp);
-+
-+	return skb;
- }
- 
- static int mcp251xfd_handle_rxovif(struct mcp251xfd_priv *priv)
-@@ -1769,6 +1781,7 @@ static int mcp251xfd_handle_ivmif(struct mcp251xfd_priv *priv)
- 	if (!cf)
- 		return 0;
- 
-+	mcp251xfd_skb_set_timestamp(priv, skb, timestamp);
- 	err = can_rx_offload_queue_sorted(&priv->offload, skb, timestamp);
- 	if (err)
- 		stats->rx_fifo_errors++;
--- 
-2.30.1
+--4s4botiawf64y7sv
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBBB/oACgkQqclaivrt
+76lItwgAjJDYLsl+IOWvC76b1J53IIA2aaiigjD8UCZ3qOSY0mVF602UvZKHq5zE
+JxtAb3bmEqXCG9Yg6+PwZqR+pp1CQBPn8PIhB/FioJAuenBhYd3FmGlaSCcbkswd
+BHmt6z9s+yQ+R2Kcd1tLffDBH5fGYHGxBddQwK/M/AmrMhwI1EZ++moK08gSf1B4
+nk1BDVT7pd+KEzOHj68F72hhK5wINEdCKH8Kf5jMJ5Epmq3XfjU5BMqKyXvha0RC
+RLePbnIze5MwYRkURP0RAa9xWoTjvNHhPuDNYOkD2KUhc312mXM0RznmMqaauvym
+AyGInOwXXaJYFF+696qHLmF5xh3O8Q==
+=/9wP
+-----END PGP SIGNATURE-----
+
+--4s4botiawf64y7sv--
