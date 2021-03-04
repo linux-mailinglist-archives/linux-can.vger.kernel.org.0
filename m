@@ -2,43 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E63732D6EE
-	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 16:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D9032D6F5
+	for <lists+linux-can@lfdr.de>; Thu,  4 Mar 2021 16:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235436AbhCDPnu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 4 Mar 2021 10:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50352 "EHLO
+        id S235483AbhCDPoV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 4 Mar 2021 10:44:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235332AbhCDPnf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Mar 2021 10:43:35 -0500
+        with ESMTP id S235348AbhCDPoF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 4 Mar 2021 10:44:05 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0755FC061765
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F8FC0613D8
         for <linux-can@vger.kernel.org>; Thu,  4 Mar 2021 07:42:50 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lHq7k-0003bV-Db
-        for linux-can@vger.kernel.org; Thu, 04 Mar 2021 16:42:48 +0100
+        id 1lHq7l-0003cs-IN
+        for linux-can@vger.kernel.org; Thu, 04 Mar 2021 16:42:49 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id DB7DE5EDD31
-        for <linux-can@vger.kernel.org>; Thu,  4 Mar 2021 15:42:44 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 104DB5EDD37
+        for <linux-can@vger.kernel.org>; Thu,  4 Mar 2021 15:42:45 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 0DF2D5EDD14;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 29A085EDD16;
         Thu,  4 Mar 2021 15:42:43 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 97f20049;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9cb95617;
         Thu, 4 Mar 2021 15:42:42 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     kernel@pengutronix.de, Dario Binacchi <dariobin@libero.it>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v5 07/11] can: c_can: remove unused code
-Date:   Thu,  4 Mar 2021 16:42:36 +0100
-Message-Id: <20210304154240.2747987-8-mkl@pengutronix.de>
+Subject: [PATCH v5 08/11] can: c_can: c_can_rx_object_get(): fix indentation
+Date:   Thu,  4 Mar 2021 16:42:37 +0100
+Message-Id: <20210304154240.2747987-9-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210304154240.2747987-1-mkl@pengutronix.de>
 References: <20210304154240.2747987-1-mkl@pengutronix.de>
@@ -54,53 +54,29 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Dario Binacchi <dariobin@libero.it>
 
-Commit 9d23a9818cb1 ("can: c_can: Remove unused inline function") left
-behind C_CAN_MSG_OBJ_TX_LAST constant.
+Commit 524369e2391f ("can: c_can: remove obsolete STRICT_FRAME_ORDERING Kconfig option")
+left behind wrong indentation, fix it.
 
-Commit fa39b54ccf28 ("can: c_can: Get rid of pointless interrupts")
-left behind C_CAN_MSG_RX_LOW_LAST and C_CAN_MSG_OBJ_RX_SPLIT
-constants.
-
-The removed code also made a comment useless and misleading.
-
-Link: https://lore.kernel.org/r/20210302215435.18286-2-dariobin@libero.it
+Link: https://lore.kernel.org/r/20210302215435.18286-3-dariobin@libero.it
 Signed-off-by: Dario Binacchi <dariobin@libero.it>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/c_can/c_can.c | 3 +--
- drivers/net/can/c_can/c_can.h | 4 ----
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ drivers/net/can/c_can/c_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/c_can/c_can.c b/drivers/net/can/c_can/c_can.c
-index b820002fb81e..e0c57cab7ab2 100644
+index e0c57cab7ab2..ce4efc88a841 100644
 --- a/drivers/net/can/c_can/c_can.c
 +++ b/drivers/net/can/c_can/c_can.c
-@@ -834,8 +834,7 @@ static inline u32 c_can_get_pending(struct c_can_priv *priv)
-  * c_can core saves a received CAN message into the first free message
-  * object it finds free (starting with the lowest). Bits NEWDAT and
-  * INTPND are set for this message object indicating that a new message
-- * has arrived. To work-around this issue, we keep two groups of message
-- * objects whose partitioning is defined by C_CAN_MSG_OBJ_RX_SPLIT.
-+ * has arrived.
-  *
-  * We clear the newdat bit right away.
-  *
-diff --git a/drivers/net/can/c_can/c_can.h b/drivers/net/can/c_can/c_can.h
-index 3d07285e46c1..7a7d3fb4b1c3 100644
---- a/drivers/net/can/c_can/c_can.h
-+++ b/drivers/net/can/c_can/c_can.h
-@@ -32,11 +32,7 @@
- 				C_CAN_MSG_OBJ_RX_NUM - 1)
+@@ -774,7 +774,7 @@ static u32 c_can_adjust_pending(u32 pend)
+ static inline void c_can_rx_object_get(struct net_device *dev,
+ 				       struct c_can_priv *priv, u32 obj)
+ {
+-		c_can_object_get(dev, IF_RX, obj, priv->comm_rcv_high);
++	c_can_object_get(dev, IF_RX, obj, priv->comm_rcv_high);
+ }
  
- #define C_CAN_MSG_OBJ_TX_FIRST	(C_CAN_MSG_OBJ_RX_LAST + 1)
--#define C_CAN_MSG_OBJ_TX_LAST	(C_CAN_MSG_OBJ_TX_FIRST + \
--				C_CAN_MSG_OBJ_TX_NUM - 1)
- 
--#define C_CAN_MSG_OBJ_RX_SPLIT	9
--#define C_CAN_MSG_RX_LOW_LAST	(C_CAN_MSG_OBJ_RX_SPLIT - 1)
- #define RECEIVE_OBJECT_BITS	0x0000ffff
- 
- enum reg {
+ static inline void c_can_rx_finalize(struct net_device *dev,
 -- 
 2.30.1
 
