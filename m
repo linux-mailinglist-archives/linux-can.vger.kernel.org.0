@@ -2,88 +2,151 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 293CF330CCD
-	for <lists+linux-can@lfdr.de>; Mon,  8 Mar 2021 12:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1CE331387
+	for <lists+linux-can@lfdr.de>; Mon,  8 Mar 2021 17:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbhCHLzH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 8 Mar 2021 06:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbhCHLzD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Mar 2021 06:55:03 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B05C2C06174A
-        for <linux-can@vger.kernel.org>; Mon,  8 Mar 2021 03:55:02 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id d139-20020a1c1d910000b029010b895cb6f2so3623984wmd.5
-        for <linux-can@vger.kernel.org>; Mon, 08 Mar 2021 03:55:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o8Ta+vdorvkLD8idQ6hGBWD1lQOhbd2DV+DhaFS9Ks4=;
-        b=R2gGbVVcH2gjl8fB6DHArqz7fU3GX8O1bo6xnhJRU/rZVQA4i97KTYL953apkkydT7
-         Gb2VAZUSA6cBTvM0P0wG7VakOirorkFkTmbG6Y9RoCQovP6/2drzwS7NHqXRD02sTvIA
-         zQ7ATAbCtP6ykPu2hSzwpLKxKnLg4bVpUXxAAnMLutCtU9isnULBg/nTHWBFMHZjME5V
-         UM3dNniGoDWCEnUqvWvXO1OapdSO8iOzUUs/WaDV2t4idA8v07Z20A2cXrvfL3PSIN/y
-         W59F8yMY3YoHzOSx3jQsf57v/AvQ0kYcYNNVSxadDyn/0Ht9c7Diu6Gkz4YaAvr/ZI4W
-         MYoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o8Ta+vdorvkLD8idQ6hGBWD1lQOhbd2DV+DhaFS9Ks4=;
-        b=t1BcObfWU6WciSdVLr+Pvo/G+0ZeIzNCWKB5IfQL5zB4j6NpLKP1zFEkvYzdtfLZfg
-         zj4leyz8rFuRIHQXtYbBFlC9dHHtfDjxvXthlYoULTDijfrkoIFX6/FpIzkwtSWBnnFp
-         nagiFV8vj119IHK8OwCAddQnm/7yA6yE2PN1qSIpFMe0kxhMJKr4rw0kVaQtmgDegHDq
-         EB1pF4KDC/u7LQFuAgBgBnSXY/U4J8pM8kRq0ycuZSBNxjl6OwpKCRnhyNEkNQBoETYi
-         M2q8B8MgkH9Yb95X29FLA3dGWLaZh4yGDRV1OpTOmMjSqK4gXhl/dvr0JJbrL03Fv1Rg
-         Bz9g==
-X-Gm-Message-State: AOAM533jc2W0Af2kiiLUBAIOvyjD60MJpcVWlQJB3dEaDTu9xSdwHtW8
-        zHv5Qio89BS+ztl8YuAtS6Rbnw==
-X-Google-Smtp-Source: ABdhPJxL/DK+zSVjvDfVhojfeScpJPZjjs9Z+EW9WCYuuSNT33BrvUtrBR1M8fd8ZpB2RExp8E1Wsg==
-X-Received: by 2002:a1c:4e12:: with SMTP id g18mr21151833wmh.56.1615204501493;
-        Mon, 08 Mar 2021 03:55:01 -0800 (PST)
-Received: from bigthink (92.41.6.207.threembb.co.uk. [92.41.6.207])
-        by smtp.gmail.com with ESMTPSA id a8sm14183785wmm.46.2021.03.08.03.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 03:55:01 -0800 (PST)
-Date:   Mon, 8 Mar 2021 11:54:59 +0000
-From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v3] can: m_can: fix periph RX path: use rx-offload to
- ensure skbs are sent from softirq context
-Message-ID: <20210308115459.pekta5yarm22wsm6@bigthink>
-References: <20210308113144.3058817-1-mkl@pengutronix.de>
+        id S230135AbhCHQgC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 8 Mar 2021 11:36:02 -0500
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:42085 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229730AbhCHQfs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 8 Mar 2021 11:35:48 -0500
+Received: from localhost.localdomain ([153.202.107.157])
+        by mwinf5d09 with ME
+        id dsbe2400Y3PnFJp03sbicU; Mon, 08 Mar 2021 17:35:45 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 08 Mar 2021 17:35:45 +0100
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v12 0/1] Introducing ETAS ES58X CAN USB interfaces
+Date:   Tue,  9 Mar 2021 01:34:44 +0900
+Message-Id: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210308113144.3058817-1-mkl@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Mar 08, 2021 at 12:31:44PM +0100, Marc Kleine-Budde wrote:
-> Hello,
-> 
-> for completeness here the v3 of Torin's patch.
-> 
-> changes since v2:
-> - fixed commenting style
-> - add some missing variable initialization
-> - m_can_class_register(): update error handling
-> 
-> regards,
-> Marc
+Here comes the twelfth iteration of the ETAS es58x usb driver. The
+major difference from previous version is the total removal of
+spinlocks. Aside of that, I also implemented the TDC accordingly to
+the patch series which I submitted here two weeks ago.
 
-Thanks for the review and for applying the corrections Marc, much
-appreciated! :)
+This patch series is based on linux-can-next/testing. It requires the
+latest patches in that branch to compile.
 
-Just tested the updated patch on my setup; no (more) problems.
+Crossing fingers, hoping that we are now close to a release.
 
---
-Regards,
+Thank you in advance for your review and for your time!
 
-Torin Cooper-Bennun
-Software Engineer | maxiluxsystems.com
+
+Yours sincerely,
+Vincent
+
+** Change log **
+
+Changes in v12 (2021-03-09):
+  - Rework the queue stop/wake management so that spinlocks are not
+    needed anymore.
+  - es58x_start_xmit(): check for valid SKB using
+    can_dropped_invalid_skb().
+  - Implemented TDC according to latest patches in linux-can-next.
+Reference: https://lore.kernel.org/linux-can/20210224002008.4158-1-mailhol.vincent@wanadoo.fr/T/#t
+
+Changes in v11 (2021-01-23):
+  - Remove all WARN_ON() calls: these were use during development,
+    relevant tests are done not to trigger these.
+  - es58x_start_xmit(): added net_ratelimit() condition to prevent
+    spamming dmesg.
+  - add a new es58x_xmit_more() function and simplify the code of
+    es58x_start_xmit().
+  - Removed functions {es581_4,es58x_fd}_print_conf() which were only
+    there for debug.
+  - Additional comment for es58x_fd_param.bitrate_max.
+  - Make the device FIFO size a power of two and modify the echo_skb
+    indexes logic to prevent the use of spinlocks.
+
+Changes in v10 (2021-01-12):
+  - Rebased on linux-can-next/testing and modified according to latest
+    BQL patches.
+Reference: https://lore.kernel.org/linux-can/20210111141930.693847-1-mkl@pengutronix.de/T/#m5f99d4da8e8934a75f9481ecc3137b59f3762413
+  - Replaced __netdev_sent_queue() by netdev_sent_queue().
+
+Changes in v9 (2021-01-09):
+  - es58x_start_xmit(): do not use skb anymore after the call of
+    can_put_echo_skb(). Rationale: can_put_echo_skb() calls
+    skb_clone() and thus the original skb gets consumed (i.e. use
+    after free issue).
+  - es58x_start_xmit(): Add a "drop_skb" label to free the skb when
+    errors occur.
+
+Changes in v8 (2021-01-04):
+  - The driver requires CRC16. Modified Kconfig accordingly.
+
+Changes in v7 (2020-11-17):
+  - Fix compilation issue if CONFIG_BQL is not set.
+Reference: https://lkml.org/lkml/2020/11/15/163
+
+Changes in v6 (2020-11-15):
+  - Rebase the patch on the testing branch of linux-can-next.
+  - Rename the helper functions according latest changes
+    (e.g. can_cc_get_len() -> can_cc_dlc2len())
+  - Fix comments of enum es58x_physical_layer and enum
+    es58x_sync_edge.
+
+Changes in v5 (2020-11-07):
+  - Add support for DLC greater than 8.
+  - All other patches from the previous series were either accepted or
+    dismissed. As such, this is not a series any more but a single
+    patch.
+
+Changes in v4 (2020-10-17):
+  - Remove struct es58x_abstracted_can_frame.
+  - Fix formatting (spaces, comment style).
+  - Transform macros into static inline functions when possible.
+  - Fix the ctrlmode_supported flags in es581_4.c and removed
+    misleading comments in enum es58x_samples_per_bit.
+  - Rename enums according to the type.
+  - Remove function es58x_can_put_echo_skb().
+Reference: https://lkml.org/lkml/2020/10/10/53
+
+Changes in v3 (2020-10-03):
+  - Remove all the calls to likely() and unlikely().
+Reference: https://lkml.org/lkml/2020/9/30/995
+
+Changes in v2 (2020-09-30):
+  - Fixed -W1 warnings (v1 was tested with GCC -WExtra but not with -W1).
+
+v1 (2020-09-27):
+  - First release
+
+
+Vincent Mailhol (1):
+  can: usb: etas_es58X: add support for ETAS ES58X CAN USB interfaces
+
+ drivers/net/can/usb/Kconfig                 |   10 +
+ drivers/net/can/usb/Makefile                |    1 +
+ drivers/net/can/usb/etas_es58x/Makefile     |    3 +
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  525 ++++
+ drivers/net/can/usb/etas_es58x/es581_4.h    |  208 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2404 +++++++++++++++++++
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  690 ++++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  600 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
+ 9 files changed, 4684 insertions(+)
+ create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
+
+-- 
+2.26.2
 
