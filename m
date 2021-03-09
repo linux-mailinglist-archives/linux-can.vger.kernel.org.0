@@ -2,109 +2,366 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D3233255E
+	by mail.lfdr.de (Postfix) with ESMTP id 669D1332560
 	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 13:22:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbhCIMWD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S229546AbhCIMWD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 9 Mar 2021 07:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbhCIMVb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 07:21:31 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432C8C06174A
-        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 04:21:31 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id u14so15093814wri.3
-        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 04:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=T7wBAvLpBXpPfZk0ZSyFEaLT8X/+CsWVzUA8OjJ+mW4=;
-        b=ei3oP1EP4qLj45xlo8OWwhq4qwB7bR2PpKV1vjcTupN7TI/277iqUG4rLIQcxdDVDE
-         +YPLiBQyqMehHW7Kehx6+yYTCSMZkENliLQZJrTI1BANgWP9C4zlu+rweKC611c9DrH4
-         AUOW7hXE8qpNCeRfvplQyrBaQ188+kWX9P/UxDP43lXGmpBTqLICxuwt9qoSS47mDxoi
-         3Cvk0x/PQmMjgf5QVN/TFhCjsc8SySxtSaKGJv3iuO026wKVoplfjM46fyiXSWO1kMuX
-         yNwZfWDL2mk2yBx6L7TXhxmdkmVFl8NSBdWWjt78XPbINQACPm0gbsn521VY3t1MJtHk
-         LGag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=T7wBAvLpBXpPfZk0ZSyFEaLT8X/+CsWVzUA8OjJ+mW4=;
-        b=X3+eZ3boKYDAjiLssAhB5XHC/0RlAOtlj62aiHo0BPDo4VY1yaPjVd8XDt4TvnNc+y
-         e5Md9lLSe9E6dyGdYpTnDqmCFuSKY7ng0haktXZehX9zGzh0h0OiD+u2qH/HU9n9fnXk
-         VVRu/xFB6d7ep/N1lRDENEnAwyAInMAbMHkyE0QmK7mBQxQmT/tGRGvN2a5rG/eBOD+l
-         IT7iSfYxPTQ2mtL6srM+8V10bEa5nQ5UKtrnQLZCnJT3kgJukJZx0dB2ywUQXGnCeVSQ
-         kLaU8UD1Jh6+lLuhZBzikz3DcK0j96Q4YgI3tX/MHS+yVIegkS965WVjEpDPuHmI6ZOi
-         Ih4g==
-X-Gm-Message-State: AOAM532mVqlT0MgFayNUXaFfCe5P/YMO7Yb6GXmXqSjO3WWHvGMU2BGn
-        qXuhpUYRldfFZAR+J8e9lCJ/LE8HZQbGaA==
-X-Google-Smtp-Source: ABdhPJzFCJHIqhpncXvl/EF7BWuywQqSoM8BZrzD56sN/uNqMj/kNUGWJetsP8tKp6M/EbhcLf7Ylw==
-X-Received: by 2002:adf:f852:: with SMTP id d18mr28601860wrq.210.1615292488210;
-        Tue, 09 Mar 2021 04:21:28 -0800 (PST)
-Received: from [192.168.16.194] (h-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.googlemail.com with ESMTPSA id u20sm27420989wru.6.2021.03.09.04.21.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Mar 2021 04:21:27 -0800 (PST)
-Subject: Re: [PATCH v12 0/1] Introducing ETAS ES58X CAN USB interfaces
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
- <2f2db145-0d70-0795-2dda-54f5ade68681@gmail.com>
- <CAMZ6RqKExqbVkJ+efo=ROU3v1biRNFPzs3P3=p+yF7bTAUFY-g@mail.gmail.com>
-From:   Jimmy Assarsson <jimmyassarsson@gmail.com>
-Message-ID: <d2a4de17-25ca-3331-206d-181909a4400d@gmail.com>
-Date:   Tue, 9 Mar 2021 13:21:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        with ESMTP id S230435AbhCIMVp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 07:21:45 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A27C06174A
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 04:21:45 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lJbMu-00067C-2F
+        for linux-can@vger.kernel.org; Tue, 09 Mar 2021 13:21:44 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 2E31F5F17B0
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 12:21:43 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id BE2595F17AC;
+        Tue,  9 Mar 2021 12:21:42 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 537f781f;
+        Tue, 9 Mar 2021 12:21:42 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v2] can/peak_usb: add support of ethtool set_phys_id()
+Date:   Tue,  9 Mar 2021 13:21:41 +0100
+Message-Id: <20210309122141.3276927-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqKExqbVkJ+efo=ROU3v1biRNFPzs3P3=p+yF7bTAUFY-g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021-03-09 13:18, Vincent MAILHOL wrote:
-> Hi Jimmy,
-> 
-> On Tue. 9 Mar 2021 at 17:30, Jimmy Assarsson <jimmyassarsson@gmail.com> wrote:
->>
->> On 2021-03-08 17:34, Vincent Mailhol wrote:
->>> Here comes the twelfth iteration of the ETAS es58x usb driver. The
->>> major difference from previous version is the total removal of
->>> spinlocks. Aside of that, I also implemented the TDC accordingly to
->>> the patch series which I submitted here two weeks ago.
->>>
->>> This patch series is based on linux-can-next/testing. It requires the
->>> latest patches in that branch to compile.
->>>
->>> Crossing fingers, hoping that we are now close to a release.
->>>
->>> Thank you in advance for your review and for your time!
->>>
->>>
->>> Yours sincerely,
->>> Vincent
->>
->> Hi Vincent,
->>
->> Can you please send me the patch, since it does not reach the mailing list (+100 000 characters).
-> 
-> I resent it. It is now available at: https://lkml.org/lkml/2021/3/9/456
+From: Stephane Grosjean <s.grosjean@peak-system.com>
 
-Great :)
+This patch makes it possible to specifically flash the LED of a CAN port
+of the CAN-USB interfaces of PEAK-System.
 
-> Also, I guess that your main interest is the TDC. If so, please
-> check function es58x_fd_enable_channel() and structure
-> es58x_tdc_const both in es58x_fd.h
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+Hello,
 
-Correct, thanks!
+for completeness here the patch with PCAN_ prefix for all defines.
 
-Regards,
-jimmy
+regards,
+Marc
+
+Changes since v1:
+- use PCAN_ prefix for defines instead of FW_
+
+ drivers/net/can/usb/peak_usb/pcan_usb.c      | 47 ++++++++++++++++++++
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c |  4 ++
+ drivers/net/can/usb/peak_usb/pcan_usb_core.h |  2 +
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c   | 34 ++++++++++++++
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c  | 34 +++++++++++++-
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.h  |  6 +++
+ 6 files changed, 126 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
+index e6c1e5d33924..aa89c1119e27 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
+@@ -11,6 +11,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/usb.h>
+ #include <linux/module.h>
++#include <linux/ethtool.h>
+ 
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+@@ -42,6 +43,7 @@ MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB adapter");
+ #define PCAN_USB_CMD_REGISTER	9
+ #define PCAN_USB_CMD_EXT_VCC	10
+ #define PCAN_USB_CMD_ERR_FR	11
++#define PCAN_USB_CMD_LED	12
+ 
+ /* PCAN_USB_CMD_SET_BUS number arg */
+ #define PCAN_USB_BUS_XCVER		2
+@@ -250,6 +252,15 @@ static int pcan_usb_set_ext_vcc(struct peak_usb_device *dev, u8 onoff)
+ 	return pcan_usb_send_cmd(dev, PCAN_USB_CMD_EXT_VCC, PCAN_USB_SET, args);
+ }
+ 
++static int pcan_usb_set_led(struct peak_usb_device *dev, u8 onoff)
++{
++	u8 args[PCAN_USB_CMD_ARGS_LEN] = {
++		[0] = !!onoff,
++	};
++
++	return pcan_usb_send_cmd(dev, PCAN_USB_CMD_LED, PCAN_USB_SET, args);
++}
++
+ /*
+  * set bittiming value to can
+  */
+@@ -973,6 +984,40 @@ static int pcan_usb_probe(struct usb_interface *intf)
+ 	return 0;
+ }
+ 
++static int pcan_usb_set_phys_id(struct net_device *netdev,
++				enum ethtool_phys_id_state state)
++{
++	struct peak_usb_device *dev = netdev_priv(netdev);
++	int err = 0;
++
++	switch (state) {
++	case ETHTOOL_ID_ACTIVE:
++		/* call ON/OFF twice a second */
++		return 2;
++
++	case ETHTOOL_ID_OFF:
++		err = pcan_usb_set_led(dev, 0);
++		break;
++
++	case ETHTOOL_ID_ON:
++		fallthrough;
++
++	case ETHTOOL_ID_INACTIVE:
++		/* restore LED default */
++		err = pcan_usb_set_led(dev, 1);
++		break;
++
++	default:
++		break;
++	}
++
++	return err;
++}
++
++static const struct ethtool_ops pcan_usb_ethtool_ops = {
++	.set_phys_id = pcan_usb_set_phys_id,
++};
++
+ /*
+  * describe the PCAN-USB adapter
+  */
+@@ -1003,6 +1048,8 @@ const struct peak_usb_adapter pcan_usb = {
+ 	/* size of device private data */
+ 	.sizeof_dev_private = sizeof(struct pcan_usb),
+ 
++	.ethtool_ops = &pcan_usb_ethtool_ops,
++
+ 	/* timestamps usage */
+ 	.ts_used_bits = 16,
+ 	.ts_period = 24575, /* calibration period in ts. */
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 573b11559d73..685c59e2cfd3 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -14,6 +14,7 @@
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+ #include <linux/usb.h>
++#include <linux/ethtool.h>
+ 
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+@@ -820,6 +821,9 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+ 
+ 	netdev->flags |= IFF_ECHO; /* we support local echo */
+ 
++	/* add ethtool support */
++	netdev->ethtool_ops = peak_usb_adapter->ethtool_ops;
++
+ 	init_usb_anchor(&dev->rx_submitted);
+ 
+ 	init_usb_anchor(&dev->tx_submitted);
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.h b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+index 4b1528a42a7b..e15b4c78f309 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.h
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.h
+@@ -46,6 +46,8 @@ struct peak_usb_adapter {
+ 	const struct can_bittiming_const * const data_bittiming_const;
+ 	unsigned int ctrl_count;
+ 
++	const struct ethtool_ops *ethtool_ops;
++
+ 	int (*intf_probe)(struct usb_interface *intf);
+ 
+ 	int (*dev_init)(struct peak_usb_device *dev);
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+index f347ecc79aef..43519de3f767 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+@@ -7,6 +7,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/usb.h>
+ #include <linux/module.h>
++#include <linux/ethtool.h>
+ 
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+@@ -1009,6 +1010,31 @@ static void pcan_usb_fd_free(struct peak_usb_device *dev)
+ 	}
+ }
+ 
++/* blink LED's */
++static int pcan_usb_fd_set_phys_id(struct net_device *netdev,
++				   enum ethtool_phys_id_state state)
++{
++	struct peak_usb_device *dev = netdev_priv(netdev);
++	int err = 0;
++
++	switch (state) {
++	case ETHTOOL_ID_ACTIVE:
++		err = pcan_usb_fd_set_can_led(dev, PCAN_UFD_LED_FAST);
++		break;
++	case ETHTOOL_ID_INACTIVE:
++		err = pcan_usb_fd_set_can_led(dev, PCAN_UFD_LED_DEF);
++		break;
++	default:
++		break;
++	}
++
++	return err;
++}
++
++static const struct ethtool_ops pcan_usb_fd_ethtool_ops = {
++	.set_phys_id = pcan_usb_fd_set_phys_id,
++};
++
+ /* describes the PCAN-USB FD adapter */
+ static const struct can_bittiming_const pcan_usb_fd_const = {
+ 	.name = "pcan_usb_fd",
+@@ -1050,6 +1076,8 @@ const struct peak_usb_adapter pcan_usb_fd = {
+ 	/* size of device private data */
+ 	.sizeof_dev_private = sizeof(struct pcan_usb_fd_device),
+ 
++	.ethtool_ops = &pcan_usb_fd_ethtool_ops,
++
+ 	/* timestamps usage */
+ 	.ts_used_bits = 32,
+ 	.ts_period = 1000000, /* calibration period in ts. */
+@@ -1123,6 +1151,8 @@ const struct peak_usb_adapter pcan_usb_chip = {
+ 	/* size of device private data */
+ 	.sizeof_dev_private = sizeof(struct pcan_usb_fd_device),
+ 
++	.ethtool_ops = &pcan_usb_fd_ethtool_ops,
++
+ 	/* timestamps usage */
+ 	.ts_used_bits = 32,
+ 	.ts_period = 1000000, /* calibration period in ts. */
+@@ -1196,6 +1226,8 @@ const struct peak_usb_adapter pcan_usb_pro_fd = {
+ 	/* size of device private data */
+ 	.sizeof_dev_private = sizeof(struct pcan_usb_fd_device),
+ 
++	.ethtool_ops = &pcan_usb_fd_ethtool_ops,
++
+ 	/* timestamps usage */
+ 	.ts_used_bits = 32,
+ 	.ts_period = 1000000, /* calibration period in ts. */
+@@ -1269,6 +1301,8 @@ const struct peak_usb_adapter pcan_usb_x6 = {
+ 	/* size of device private data */
+ 	.sizeof_dev_private = sizeof(struct pcan_usb_fd_device),
+ 
++	.ethtool_ops = &pcan_usb_fd_ethtool_ops,
++
+ 	/* timestamps usage */
+ 	.ts_used_bits = 32,
+ 	.ts_period = 1000000, /* calibration period in ts. */
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+index 275087c39602..b3aedb3f87ce 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+@@ -9,6 +9,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/usb.h>
+ #include <linux/module.h>
++#include <linux/ethtool.h>
+ 
+ #include <linux/can.h>
+ #include <linux/can/dev.h>
+@@ -908,7 +909,7 @@ static int pcan_usb_pro_init(struct peak_usb_device *dev)
+ 	usb_if->dev[dev->ctrl_idx] = dev;
+ 
+ 	/* set LED in default state (end of init phase) */
+-	pcan_usb_pro_set_led(dev, 0, 1);
++	pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
+ 
+ 	kfree(bi);
+ 	kfree(fi);
+@@ -992,6 +993,35 @@ int pcan_usb_pro_probe(struct usb_interface *intf)
+ 	return 0;
+ }
+ 
++static int pcan_usb_pro_set_phys_id(struct net_device *netdev,
++				    enum ethtool_phys_id_state state)
++{
++	struct peak_usb_device *dev = netdev_priv(netdev);
++	int err = 0;
++
++	switch (state) {
++	case ETHTOOL_ID_ACTIVE:
++		/* fast blinking forever */
++		err = pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_BLINK_FAST,
++					   0xffffffff);
++		break;
++
++	case ETHTOOL_ID_INACTIVE:
++		/* restore LED default */
++		err = pcan_usb_pro_set_led(dev, PCAN_USBPRO_LED_DEVICE, 1);
++		break;
++
++	default:
++		break;
++	}
++
++	return err;
++}
++
++static const struct ethtool_ops pcan_usb_pro_ethtool_ops = {
++	.set_phys_id = pcan_usb_pro_set_phys_id,
++};
++
+ /*
+  * describe the PCAN-USB Pro adapter
+  */
+@@ -1020,6 +1050,8 @@ const struct peak_usb_adapter pcan_usb_pro = {
+ 	/* size of device private data */
+ 	.sizeof_dev_private = sizeof(struct pcan_usb_pro_device),
+ 
++	.ethtool_ops = &pcan_usb_pro_ethtool_ops,
++
+ 	/* timestamps usage */
+ 	.ts_used_bits = 32,
+ 	.ts_period = 1000000, /* calibration period in ts. */
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.h b/drivers/net/can/usb/peak_usb/pcan_usb_pro.h
+index 6bb12357d078..6f4504300e23 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.h
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.h
+@@ -115,6 +115,12 @@ struct __packed pcan_usb_pro_devid {
+ 	__le32 serial_num;
+ };
+ 
++#define PCAN_USBPRO_LED_DEVICE		0x00
++#define PCAN_USBPRO_LED_BLINK_FAST	0x01
++#define PCAN_USBPRO_LED_BLINK_SLOW	0x02
++#define PCAN_USBPRO_LED_ON		0x03
++#define PCAN_USBPRO_LED_OFF		0x04
++
+ struct __packed pcan_usb_pro_setled {
+ 	u8  data_type;
+ 	u8  channel;
+-- 
+2.30.1
+
+
