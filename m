@@ -2,69 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0681D3327F3
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 14:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F8533280B
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 15:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbhCIN6c (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 08:58:32 -0500
-Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:59994 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbhCIN6P (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 08:58:15 -0500
-Received: from localhost.localdomain ([153.202.107.157])
-        by mwinf5d12 with ME
-        id eDxt240033PnFJp03DyCQx; Tue, 09 Mar 2021 14:58:14 +0100
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 09 Mar 2021 14:58:14 +0100
-X-ME-IP: 153.202.107.157
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 2/2] can: bittiming: add temporary variable to increase readability
-Date:   Tue,  9 Mar 2021 22:57:48 +0900
-Message-Id: <20210309135748.29258-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210309135748.29258-1-mailhol.vincent@wanadoo.fr>
-References: <20210309135748.29258-1-mailhol.vincent@wanadoo.fr>
+        id S230403AbhCIOEh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 09:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230030AbhCIOEb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 09:04:31 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFBAC06174A
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 06:04:31 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lJcyM-0005jH-Cp
+        for linux-can@vger.kernel.org; Tue, 09 Mar 2021 15:04:30 +0100
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 7A2DA5F19E4
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 14:04:29 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 310CD5F19E0;
+        Tue,  9 Mar 2021 14:04:29 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 752b7830;
+        Tue, 9 Mar 2021 14:04:28 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] can: grcan: add missing Kconfig dependency to HAS_IOMEM
+Date:   Tue,  9 Mar 2021 15:04:24 +0100
+Message-Id: <20210309140424.3331010-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Introduce a temporary variable sample_point_in_tq which will hold the
-sample point value expressed in time quanta instead of tenth of
-percent.
+On ARCHs without IOMEM support the grcan driver fails to link due to
+missing iomem functionality. This patch adds the missing Kconfig
+dependency to HAS_IOMEM.
 
-This change is only to increase readability.
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
-Hi Marc,
+ drivers/net/can/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please squash this patch into:
-c2cd2b376005 ("can: bittiming: add calculation for CAN FD Transmitter Delay Compensation (TDC)")
----
- drivers/net/can/dev/bittiming.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/dev/bittiming.c b/drivers/net/can/dev/bittiming.c
-index 853b0ffb443c..f49170eadd54 100644
---- a/drivers/net/can/dev/bittiming.c
-+++ b/drivers/net/can/dev/bittiming.c
-@@ -191,8 +191,9 @@ void can_calc_tdco(struct net_device *dev)
- 	 */
- 	if (dbt->brp == 1 || dbt->brp == 2) {
- 		/* Reuse "normal" sample point and convert it to time quanta */
--		tdc->tdco = min(can_bit_time(dbt) * dbt->sample_point / 1000,
--				tdc_const->tdco_max);
-+		u32 sample_point_in_tq = can_bit_time(dbt) * dbt->sample_point / 1000;
-+
-+		tdc->tdco = min(sample_point_in_tq, tdc_const->tdco_max);
- 	} else {
- 		tdc->tdco = 0;
- 	}
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index 1c28eade6bec..e355d3974977 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -103,7 +103,7 @@ config CAN_FLEXCAN
+ 
+ config CAN_GRCAN
+ 	tristate "Aeroflex Gaisler GRCAN and GRHCAN CAN devices"
+-	depends on OF && HAS_DMA
++	depends on OF && HAS_DMA && HAS_IOMEM
+ 	help
+ 	  Say Y here if you want to use Aeroflex Gaisler GRCAN or GRHCAN.
+ 	  Note that the driver supports little endian, even though little
 -- 
-2.26.2
+2.30.1
+
 
