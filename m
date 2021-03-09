@@ -2,139 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C627332674
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 14:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D543327EF
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 14:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230425AbhCINTu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 08:19:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbhCINT0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 08:19:26 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E8C06174A
-        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 05:19:26 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lJcGi-0005bv-64; Tue, 09 Mar 2021 14:19:24 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4699:faa8:8510:ac25])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B6B585F18AD;
-        Tue,  9 Mar 2021 13:19:22 +0000 (UTC)
-Date:   Tue, 9 Mar 2021 14:19:21 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Subject: Re: [PATCH v2 4/5] can: add netlink interface for CAN-FD Transmitter
- Delay Compensation (TDC)
-Message-ID: <20210309131921.7b5jhq3bak2yiv5w@pengutronix.de>
-References: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
- <20210224002008.4158-5-mailhol.vincent@wanadoo.fr>
- <CAMZ6RqLZ+LidnRka1-pX8dkHCaqNs3=bRujsMEs8LXnq0Y_E9Q@mail.gmail.com>
+        id S230299AbhCIN6b (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 08:58:31 -0500
+Received: from smtp06.smtpout.orange.fr ([80.12.242.128]:28288 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231384AbhCIN6I (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 08:58:08 -0500
+Received: from localhost.localdomain ([153.202.107.157])
+        by mwinf5d12 with ME
+        id eDxt240033PnFJp03Dy0P4; Tue, 09 Mar 2021 14:58:02 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 09 Mar 2021 14:58:02 +0100
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v3 0/2] Introducing new CAN FD bittiming parameters: Transmission Delay Compensation (TDC)
+Date:   Tue,  9 Mar 2021 22:57:46 +0900
+Message-Id: <20210309135748.29258-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kza7ln2wosqaajl4"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqLZ+LidnRka1-pX8dkHCaqNs3=bRujsMEs8LXnq0Y_E9Q@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+A set of two incremental patches to be applied to the v2.
+Both patches are fully cosmetics.
 
---kza7ln2wosqaajl4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Those two patches are to be squashed in linux-can-next/testing. Each
+patch contains detailed instruction after the "---" scissors.
 
-On 09.03.2021 22:16:45, Vincent MAILHOL wrote:
-> On Wed. 24 Feb 2021 at 09:20, Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
-> >
-> > diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlin=
-k.c
-> > index c19eef775ec8..c3f75c09d6c8 100644
-> > --- a/drivers/net/can/dev/netlink.c
-> > +++ b/drivers/net/can/dev/netlink.c
-> > @@ -19,6 +19,12 @@ static const struct nla_policy can_policy[IFLA_CAN_M=
-AX + 1] =3D {
-> >         [IFLA_CAN_DATA_BITTIMING] =3D { .len =3D sizeof(struct can_bitt=
-iming) },
-> >         [IFLA_CAN_DATA_BITTIMING_CONST] =3D { .len =3D sizeof(struct ca=
-n_bittiming_const) },
-> >         [IFLA_CAN_TERMINATION] =3D { .type =3D NLA_U16 },
-> > +       [IFLA_CAN_TDCV] =3D { .type =3D NLA_U32 },
-> > +       [IFLA_CAN_TDCV_MAX_CONST] =3D { .type =3D NLA_U32 },
-> > +       [IFLA_CAN_TDCO] =3D { .type =3D NLA_U32 },
-> > +       [IFLA_CAN_TDCO_MAX_CONST] =3D { .type =3D NLA_U32 },
-> > +       [IFLA_CAN_TDCF] =3D { .type =3D NLA_U32 },
-> > +       [IFLA_CAN_TDCF_MAX_CONST] =3D { .type =3D NLA_U32 },
-> >  };
->=20
-> Looking back at my patch, I just realized that the values are not
-> ordered in a consistent way. Here, I alternate between the TDCx
-> and the TDCx_CONST...
->=20
-> > (...)
->=20
-> > diff --git a/include/uapi/linux/can/netlink.h b/include/uapi/linux/can/=
-netlink.h
-> > index f730d443b918..e69c4b330ae6 100644
-> > --- a/include/uapi/linux/can/netlink.h
-> > +++ b/include/uapi/linux/can/netlink.h
-> > @@ -134,6 +134,12 @@ enum {
-> >         IFLA_CAN_BITRATE_CONST,
-> >         IFLA_CAN_DATA_BITRATE_CONST,
-> >         IFLA_CAN_BITRATE_MAX,
-> > +       IFLA_CAN_TDCV,
-> > +       IFLA_CAN_TDCO,
-> > +       IFLA_CAN_TDCF,
-> > +       IFLA_CAN_TDCV_MAX_CONST,
-> > +       IFLA_CAN_TDCO_MAX_CONST,
-> > +       IFLA_CAN_TDCF_MAX_CONST,
-> >         __IFLA_CAN_MAX
-> >  };
->=20
-> ... and there, all the TDCx and the TDCx_CONST are grouped together.
->=20
-> Marc, because the patches are already in the
-> linux-can-next/testing, how should I proceed to fix this? Should
-> I resend the full patch series with the changes or can I just
-> prepare one patch and ask you to squash it?
+Changes from v2:
+  - Reorder the IFLA_CAN_TDC* entries in can_policy structure
+  - Increase readability of the TDCO formula by introducing a
+    temporary variable.
 
-Please send an incremental patch and I'll squash it.
+Changes from v1:
+  - Changed the commit message of the first patch of the serie to
+    clarify the condition of when TDC is active.
+  - Changed the alignment style from tabulations to single space in
+    drivers/net/can/dev/netlink.c
+  - Remove duplicated [IFLA_CAN_TERMINATION] entry in
+    drivers/net/can/dev/netlink.c
 
-Marc
+Changes from the RFC:
+  - The RFC was a single e-mail with all comments in bulk, made this a
+    proper patch series.
+  - Added the netlink interface.
+  - Rename the function can_set_tdc to can_calc_tdco (the formula is
+    the same, everything around it was reworked).
+  - Other small miscellaneous changes.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Vincent Mailhol (2):
+  can: netlink: reorder IFLA_CAN_TDC* entries in can_policy structure
+  can: bittiming: add temporary variable to increase readability
 
---kza7ln2wosqaajl4
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/net/can/dev/bittiming.c | 5 +++--
+ drivers/net/can/dev/netlink.c   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBHddcACgkQqclaivrt
-76knrQf8Cuz4Chy7/nuDrKjOGFTAWpiO+aww9QCM4DdiJUK1/owvizH5DCzzyrb8
-cBW/Rdw3ko6NBzsd0AOO9vlIfsyfeuu2rYOuOYk7mqMRi29i2GUa286qomkyhyGu
-NxWDB36HTyHOnz4fP3DbOVXrVrMshxJnId3IYRXLfjL1qmQMSZY6Hty+xs1+0A/M
-e0HIHoAs+nd1RmkGwMdDjLZ+9ySc8SO5BU8blK+vh4zVqnhna7ZAwWZsutWBW91M
-kKsARp8DyFzgfhOCjVjaVRW+YhG52Ff1fnDKEmjVf+aqMX5FOTBirQyIBTH7pX+7
-QjDzvGn4IfOxwiUL6rfSoL7rPhNdWw==
-=IJJ6
------END PGP SIGNATURE-----
+base-commit: c2cd2b376005b82a251af20900fa2c67cb001d7f
+prerequisite-patch-id: c628b2ba1459ffd73489ff50639ba5a051a99263
+prerequisite-patch-id: 0ce44c0600bff103810eb09cdcd42285c85d365c
+prerequisite-patch-id: d5ae23ff6cf14d07ea646d33f9f0ecf3a6f9e7e1
+prerequisite-patch-id: 38fd449c0a0bc7c8346f25567e974edbd5243606
+prerequisite-patch-id: f40a6871ffc879f75586ba04b3056ec0b5d8590a
+prerequisite-patch-id: f3244bc526a5131c9b6b689dfc1b758126a0a99f
+prerequisite-patch-id: 9a1a7334fd4c337d7fc9af5c89db128a54ec9c8d
+prerequisite-patch-id: a2a2a06a29ac02e4796bf8bb8bebe04aa968113e
+prerequisite-patch-id: 3381611eb10fd16725435b7dcce288c16d2fcb28
+prerequisite-patch-id: f01462cc6867bb197ea80f3c6a14f0c28828550d
+prerequisite-patch-id: fbcf50987c0bf12599657af5ea4b8f1b72cd4dae
+prerequisite-patch-id: 27f813c54fcb64781e729f30beba394cb6324101
+prerequisite-patch-id: f9996d1fb2545c8b0ee39afd2db6dca0b659e811
+prerequisite-patch-id: 03759de4308f541a3cd3c9eb89c4ac1bcd6c36a0
+prerequisite-patch-id: 91dfc83cc1eab008eef5658a638a970be13a6d4d
+prerequisite-patch-id: 6f8fc8b8d9f794bc3e039a15d5d0f752c7044f65
+prerequisite-patch-id: 607cb1c602ec6ce3f36ed573e6a4c23471da934d
+prerequisite-patch-id: a5060baf10c13d07812b04a059dcd0108c144dd2
+prerequisite-patch-id: 946baf14dd974293570f1f2e2c8aa81780b0b22e
+prerequisite-patch-id: d2db79eff80fb8aa8728a1df5adf292bdc988953
+prerequisite-patch-id: cd7663a0f2c16b829eb5116d4353a20867b32c4e
+prerequisite-patch-id: 99606eec325782fb50338ca09a8c08ad79832e36
+prerequisite-patch-id: 09e03c5f5daf820f5337bb9340071c41f60ea6fb
+prerequisite-patch-id: 5f004d320a3121d2b999b6b3088671f670370d59
+prerequisite-patch-id: ceb46ad3d3d00b333ebae335762ff4f01601adb5
+prerequisite-patch-id: 94e90c8ddb8696e3cc469388e27a3c142fe07b23
+-- 
+2.26.2
 
---kza7ln2wosqaajl4--
