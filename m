@@ -2,110 +2,157 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5077D332F3D
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 20:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F73332FDD
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 21:27:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhCITot (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 14:44:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S231607AbhCIU1R (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 15:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbhCIToR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 14:44:17 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA04C06174A;
-        Tue,  9 Mar 2021 11:44:17 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id o11so15303775iob.1;
-        Tue, 09 Mar 2021 11:44:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h0LdCjjwzecnp1EYokdW4ebJBaUE+V7zj86mopJQUfk=;
-        b=kGKbT37spDgGsq64b2yUwd05ipI+8eRT+NKbHxXN/JRiGVRW/3lpfcSGRLEh0PgUxm
-         S+fzmf0yeP8Z2TqhFZtTHZzF+Ce7QrXg2RFRXFCEN/z847MuyOFOtPpI+llRKWc4Xa+7
-         zZHTxAxs5zjqeqBFu5rFXVNuA+Dtps1Msvwd8KLv+FTFZVSvlKUUedwXBl5IOP/ilJSt
-         8emDedCKrXwSrUjgPIyrRXnXQG71WdL3rnOIKvtEVJq5pnj5lR9cV44CN4fEFb9Es0Fe
-         qHu/mOJoiM9ieSNimMDWVhpOftTUFSGH9SbMMjzjWTeTL5XWKVctMVMvU1lmjiaGrjdR
-         08Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h0LdCjjwzecnp1EYokdW4ebJBaUE+V7zj86mopJQUfk=;
-        b=NUmqnbG5WIYw3m+bh29WQvNJqmcqlGHQHkrvuVD+6BLo6BiAhsruS7yyug8FK7GhpF
-         I9rNazlMmP5dgD3mqaMxxakizawUjqyL21KdDHUMlUj9N/u6+42zbfNh43n/TrGvAJhq
-         w20U+sfcI3MZoaDfYvWDI+13H79XuAb8gZ3ZjzA2jER0uE4k9B7xeOEvG4pCGHpYOVxs
-         AkTCmDKOchj1e8AaeLSyQHvsz9GttkMj+1VHDq8bi0AW5upRAilf2HqL5N7JZptlxAQ3
-         juQXkwPIoCtqiIjNhxTMjKRBEpe3DP+YnoFk58IZA7hDNn2dbqjrJsjA8Sd0TYlvEqYG
-         L1MA==
-X-Gm-Message-State: AOAM530tcRW7qVvH/i8hXy0CI2oImWWiyfEfEI/smjhAe5AaVFlp4sNr
-        Pek98leLoXOgy2777z3/OBcVygGr1PXomftfZUg=
-X-Google-Smtp-Source: ABdhPJyDizL1CBOqwFRy8H1vQEuwTFNUXxlaJPi2bSerzyJM/ggHe+xUxloch1cnoAX1BKQ4gBb5dmjCzMrHhMSb/PM=
-X-Received: by 2002:a5e:990a:: with SMTP id t10mr24345727ioj.161.1615319056963;
- Tue, 09 Mar 2021 11:44:16 -0800 (PST)
+        with ESMTP id S230320AbhCIU0m (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 15:26:42 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB58C06174A
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 12:26:42 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lJiwC-0004RL-IE; Tue, 09 Mar 2021 21:26:40 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:b198:25bf:9f04:24e4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0F0175F209C;
+        Tue,  9 Mar 2021 20:26:38 +0000 (UTC)
+Date:   Tue, 9 Mar 2021 21:26:37 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+Message-ID: <20210309202637.mmenugxlsscvhdtx@pengutronix.de>
+References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
+ <20210308163445.103636-2-mailhol.vincent@wanadoo.fr>
+ <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
+ <CAMZ6RqJADCFL_=uv-=hNjiNj+CZkUDNWjLTP3eV010KGj+H49A@mail.gmail.com>
+ <20210309125708.ei75tr5vp2sanfh6@pengutronix.de>
+ <CAMZ6Rq+_QTDM5R++kQAtHjUHiydaV3njcH-up+uY7Jd8dggwQA@mail.gmail.com>
+ <20210309153547.q7zspf46k6terxqv@pengutronix.de>
+ <CAMZ6Rq+bKzRqAg9egg6NL_mJHTwY02em2dR+O33OGe6xqt-nqg@mail.gmail.com>
+ <CAMZ6RqKR3HYrJvc+=rXK40Yq=L3pgvTWwgC=reYWSN9XdQ4ksg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210309152354.95309-1-mailhol.vincent@wanadoo.fr> <20210309152354.95309-2-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20210309152354.95309-2-mailhol.vincent@wanadoo.fr>
-From:   Dave Taht <dave.taht@gmail.com>
-Date:   Tue, 9 Mar 2021 11:44:05 -0800
-Message-ID: <CAA93jw5+wB=va5tqUpCiPu20N+pn8VcMxUdySSWoQE_zqH8Qtg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] dql: add dql_set_min_limit()
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        Tom Herbert <therbert@google.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bkieglku3e3q2jb2"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqKR3HYrJvc+=rXK40Yq=L3pgvTWwgC=reYWSN9XdQ4ksg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I note that "proof" is very much in the developer's opinion and
-limited testing base.
 
-Actual operational experience, as in a real deployment, with other applications,
-heavy context switching, or virtualization, might yield better results.
+--bkieglku3e3q2jb2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There's lots of defaults in the linux kernel that are just swags, the
-default NAPI and rx/tx ring buffer sizes being two where devs just
-copy/paste stuff, which either doesn't scale up, or doesn't scale
-down.
+On 10.03.2021 03:26:12, Vincent MAILHOL wrote:
+> > > > @@ -136,3 +136,11 @@ void dql_init(struct dql *dql, unsigned int ho=
+ld_time)
+> > > >       dql_reset(dql);
+> > > >  }
+> > > >  EXPORT_SYMBOL(dql_init);
+> > > > +
+> > > > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
+> > > > +{
+> > > > +#ifdef CONFIG_BQL
+> > >
+> > > remove this ifdef
+> > >
+> > > > +     dql->min_limit =3D min_limit;
+> > > > +#endif
+> > > > +}
+> > > > +EXPORT_SYMBOL(dql_set_min_limit);
 
-This does not mean I oppose your patch! However I have two points I'd
-like to make
-regarding bql and dql in general that I have long longed be explored.
+Just for completeness. If it would be a real function, the kernel way
+would be:
 
-0) Me being an advocate of low latency in general, does mean that I
-have no problem
-and even prefer, starving the device rather than always keeping it busy.
+#ifdef CONFIG_BQL
+void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
+{
+     dql->min_limit =3D min_limit;
+}
 
-/me hides
+EXPORT_SYMBOL(dql_set_min_limit);
+#endif
 
-1) BQL is MIAD - multiplicative increase, additive decrease. While in
-practice so far this does not seem to matter much (and also measuring
-things down to "us" really hard), a stabler algorithm is AIMD. BQL
-often absorbs a large TSO burst - usually a minimum of 128k is
-observed on gbit, where a stabler state (without GSO) seemed to be
-around 40k on many of the chipsets I worked with, back when I was
-working in this area.
+=2E..and have a static inline no-op in the header file.
 
-(cake's gso-splitting also gets lower bql values in general, if you
-have enough cpu to run cake)
+> >
+> > Actually, after doing a few more tests, this is a bit more complicated
+> > than anticipated.
+> > The dql member of struct netdev_queue is also guarded by a #ifdef CONFI=
+G_BQL:
+> > https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.=
+h#L629
+> >
+> > This means that under the current idea, we would also need to guard
+> > the call to dql_set_min_limit():
+> > #ifdef CONFIG_BQL
+> >     dql_set_min_limit(&netdev_get_tx_queue(netdev, 0)->dql,
+> >               es58x_dev->param->dql_limit_min);
+> > #ifdef CONFIG_BQL
+> >
+> > This kills the initial intent of not using the #ifdef CONFIG_BQL to
+> > set the value.
+> >
+> > This leads to the need to do:
+> > void netdev_queue_set_dql_min_limit(struct netdev_queue *q, unsigned in=
+t min_limit)
+>=20
+> Of course, I meant:
+> static inline void netdev_queue_set_dql_min_limit(struct netdev_queue
+> *q, unsigned int min_limit)
+>=20
+> > {
+> > #ifdef CONFIG_BQL
+> >     q->dql.min_limit =3D min_limit;
+> > #endif
+> > }
+> > which would probably be inside /include/linux/netdevice.h.
+> >
+> > Does it make sense?
 
-2) BQL + hardware mq is increasingly an issue in my mind in that, say,
-you are hitting
-64 hw queues, each with 128k stored in there, is additive, where in
-order to service interrupts properly and keep the media busy might
-only require 128k total, spread across the active queues and flows. I
-have often thought that making BQL scale better to multiple hw queues
-by globally sharing the buffering state(s), would lead to lower
-latency, but
-also that probably sharing that state would be too high overhead.
+Yes, or the other way in illustrated above, if someone doesn't like
+static inlines with ifdefs inside the function.
 
-Having not worked out a solution to 2), and preferring to start with
-1), and not having a whole lot of support for item 0) in the world, I
-just thought I'd mention it, in the hope
-someone might give it a go.
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--bkieglku3e3q2jb2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBH2fsACgkQqclaivrt
+76lA5Qf/VF2Ko+rCULAEnENpJ3vF2HEz/FXHspeMctqLDmYHfW7q1w4dh3iFHmC8
+mt0/OGi+kDGinjrtT2PSmKHbzyJ/6BpFMCGnxpDulzHA12XVOwvD+FfQiCbycVS5
+9iJlIRhg8iREYnyKlOgais7JsY2bEND6yziI7aK7Mp85NtgL9Vpm7pnYrUPHyLkY
+daj5OW5xJfdqt8T7G2R9WH9rc4U2FnbY08ZfhB+MT03AiMZZQNjfEOZKCq3JFzFc
+VOJI7F3u8jPt1ZnFIh1lQLd0Kl8CYIiC+IXmdJDyo7Ugas9RjZhn50mDIiJL6esY
+bxvR9w1/z5ujKhNNYBdZg85CKYyvYQ==
+=y5DY
+-----END PGP SIGNATURE-----
+
+--bkieglku3e3q2jb2--
