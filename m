@@ -2,139 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55630332D9A
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 18:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC06332DBC
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 19:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbhCIRyu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 12:54:50 -0500
-Received: from mail-yb1-f173.google.com ([209.85.219.173]:35751 "EHLO
-        mail-yb1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhCIRy0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 12:54:26 -0500
-Received: by mail-yb1-f173.google.com with SMTP id p186so14899735ybg.2
-        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 09:54:26 -0800 (PST)
+        id S231522AbhCISBY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 13:01:24 -0500
+Received: from mail-yb1-f170.google.com ([209.85.219.170]:35722 "EHLO
+        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231386AbhCISAy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 13:00:54 -0500
+Received: by mail-yb1-f170.google.com with SMTP id p186so14921977ybg.2;
+        Tue, 09 Mar 2021 10:00:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LbusjPHkIFuKE/DlSmfAKSWYjOXQOkFjuU8KPwjErWw=;
-        b=Minn5waGrNUQ11c4vUC7NDlvZPSAWxJOHObQcNv2KjZrqn8oRbYJFD+RA/rsgQwEay
-         4eAqI+vRtA2V+z64UB2I67BmE3vbLIDYx89FBatEc6sqJRgMgKdb1Mzc/oYcO7GalnKX
-         x+Ejb9KWNrNndcSOCHutMSrUF6KQlRzQFhYOcmI0qVVMKeqcX8+lrNdVgg+t1NjJ7XSg
-         FKAKJZWaqQseD6Dq5guZkQNtYsM5zcjy8tUFNuGD1EYq7b8YwpRMX4Wjy4BuMPFS/JHQ
-         9fUd4T4fDz/BqfKigSEKexUnm0+UfabwcFXSSzxnJ3HpeSFlrh/uXN/9x7ccuzKghyON
-         QSRA==
-X-Gm-Message-State: AOAM533DWjY49RdVki2V2ePXg7W5GprWg7utQ1x3FmwgtaudW41zBPDE
-        /VRaEkl1EM/RGU1NNV6GDBv/4bKruTfMyQwtc1c=
-X-Google-Smtp-Source: ABdhPJwqNfLjLnTCVKCFIoiQT2p1RykyvKoZl1g8nf9Vz/nk5ukKVD0aLrbM65ngTuvMWz1zK/6OX4+v52hReXtfqao=
-X-Received: by 2002:a25:2c96:: with SMTP id s144mr25338603ybs.487.1615312465774;
- Tue, 09 Mar 2021 09:54:25 -0800 (PST)
+        bh=d09tCXoDPz/gPvVq2LzHz5z3xcmuD/lr6SC5zub3HT8=;
+        b=rygDn7jEP/jVCCdNu/wZ8/oQvZB9aip92Ajz55aoRRyNGnMB2RcJWDLorpFOHNFJn3
+         dGh+a8A18TyyWtUQNkPTb9D3pqJiKEuGYaDLuIct10u/4cZdTtFOVoq+wL4xyvWpRmxl
+         M9gWbmq4S1g9ZwNvZNPguBF86lazVLSTGeGLp25S2cLaX3p5R9EqEDQOe3hQ7Tsn9oQ9
+         0p1HLnuQSo7bq3Yfbhvf0uvWSLLNWASi3c+gR53YtvhsSCgkFOG+yy/DkWNNCwXC3jTA
+         0y/bwA53xiVQ8msCM8iiZaCR6uz9rbs7/oiNSOABje3D6CChw2ihH3DlEEIHjn7CWAEE
+         wNOg==
+X-Gm-Message-State: AOAM531NxcQpUAFfgpf/X4CnggYxjq/ImQPVp0VVAYDhu31IzKEZBQkx
+        4Wt82DqcEjbvj72jIws+Mp9EVXrznfB2gL0OIYo=
+X-Google-Smtp-Source: ABdhPJxnh4XwyORoIaJFyZrpzJ3MnNuNx8SJSawU6P0DnrxP2BS6a2mjJjwPIDMt5lVtM+jf44yiDTHpTy1kCwpD0co=
+X-Received: by 2002:a25:3853:: with SMTP id f80mr41403299yba.514.1615312853886;
+ Tue, 09 Mar 2021 10:00:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
- <20210308163445.103636-2-mailhol.vincent@wanadoo.fr> <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
- <CAMZ6RqJADCFL_=uv-=hNjiNj+CZkUDNWjLTP3eV010KGj+H49A@mail.gmail.com>
- <20210309125708.ei75tr5vp2sanfh6@pengutronix.de> <CAMZ6Rq+_QTDM5R++kQAtHjUHiydaV3njcH-up+uY7Jd8dggwQA@mail.gmail.com>
- <20210309153547.q7zspf46k6terxqv@pengutronix.de>
-In-Reply-To: <20210309153547.q7zspf46k6terxqv@pengutronix.de>
+References: <20210309152354.95309-1-mailhol.vincent@wanadoo.fr> <20210309152354.95309-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20210309152354.95309-2-mailhol.vincent@wanadoo.fr>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 10 Mar 2021 02:54:14 +0900
-Message-ID: <CAMZ6Rq+bKzRqAg9egg6NL_mJHTwY02em2dR+O33OGe6xqt-nqg@mail.gmail.com>
-Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Date:   Wed, 10 Mar 2021 03:00:43 +0900
+Message-ID: <CAMZ6RqJ8e0sQPvaT_6dVOwisnHj6m+STgdnmLmmQxzV0+uHbvw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] dql: add dql_set_min_limit()
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Tom Herbert <therbert@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 10 Mar 2021 at 00:35, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+On Wed. 10 Mar 2021 at 00:23, Vincent Mailhol
+<mailhol.vincent@wanadoo.fr> wrote:
 >
-> On 09.03.2021 22:10:08, Vincent MAILHOL wrote:
-> > Sounds good to me. I will prepare a patch to explain the issue
-> > and try to introduce the dql_set_min_limit() function.
-> >
-> > Meanwhile, I would be thankful if you could continue the review :)
+> Add a function to set the dynamic queue limit minimum value.
 >
-> Thanks for the mail, looks good.
+> This function is to be used by network drivers which are able to
+> prove, at least through empirical tests, that they reach better
+> performances with a specific predefined dql.min_limit value.
 >
-> One note for the patch, though:
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+>  include/linux/dynamic_queue_limits.h | 3 +++
+>  lib/dynamic_queue_limits.c           | 8 ++++++++
+>  2 files changed, 11 insertions(+)
 >
-> > diff --git a/include/linux/dynamic_queue_limits.h b/include/linux/dynamic_queue_limits.h
-> > index 407c2f281b64..32437f168a35 100644
-> > --- a/include/linux/dynamic_queue_limits.h
-> > +++ b/include/linux/dynamic_queue_limits.h
-> > @@ -103,6 +103,9 @@ void dql_reset(struct dql *dql);
-> >  /* Initialize dql state */
-> >  void dql_init(struct dql *dql, unsigned int hold_time);
-> >
-> > +/* Set the dql minimum limit */
-> #ifdef CONFIG_DQL
-> > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit);
-> #else
-> static inline void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
-> {
-> }
-> #endif
-> > +
-> >  #endif /* _KERNEL_ */
-> >
-> >  #endif /* _LINUX_DQL_H */
-> > diff --git a/lib/dynamic_queue_limits.c b/lib/dynamic_queue_limits.c
-> > index fde0aa244148..8b6ad1e0a2e3 100644
-> > --- a/lib/dynamic_queue_limits.c
-> > +++ b/lib/dynamic_queue_limits.c
+> diff --git a/include/linux/dynamic_queue_limits.h b/include/linux/dynamic_queue_limits.h
+> index 407c2f281b64..32437f168a35 100644
+> --- a/include/linux/dynamic_queue_limits.h
+> +++ b/include/linux/dynamic_queue_limits.h
+> @@ -103,6 +103,9 @@ void dql_reset(struct dql *dql);
+>  /* Initialize dql state */
+>  void dql_init(struct dql *dql, unsigned int hold_time);
 >
-> This file is only compiled if CONFIG_DQL is set, see lib/Makefile:
+> +/* Set the dql minimum limit */
+> +void dql_set_min_limit(struct dql *dql, unsigned int min_limit);
+> +
+>  #endif /* _KERNEL_ */
 >
-> | obj-$(CONFIG_DQL) += dynamic_queue_limits.o
+>  #endif /* _LINUX_DQL_H */
+> diff --git a/lib/dynamic_queue_limits.c b/lib/dynamic_queue_limits.c
+> index fde0aa244148..8b6ad1e0a2e3 100644
+> --- a/lib/dynamic_queue_limits.c
+> +++ b/lib/dynamic_queue_limits.c
+> @@ -136,3 +136,11 @@ void dql_init(struct dql *dql, unsigned int hold_time)
+>         dql_reset(dql);
+>  }
+>  EXPORT_SYMBOL(dql_init);
+> +
+> +void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
+> +{
+> +#ifdef CONFIG_BQL
+> +       dql->min_limit = min_limit;
+> +#endif
 
-Got it.
+Marc pointed some issue on the #ifdef in a separate thread:
+https://lore.kernel.org/linux-can/20210309153547.q7zspf46k6terxqv@pengutronix.de/
 
-> > @@ -136,3 +136,11 @@ void dql_init(struct dql *dql, unsigned int hold_time)
-> >       dql_reset(dql);
-> >  }
-> >  EXPORT_SYMBOL(dql_init);
-> > +
-> > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
-> > +{
-> > +#ifdef CONFIG_BQL
->
-> remove this ifdef
->
-> > +     dql->min_limit = min_limit;
-> > +#endif
-> > +}
-> > +EXPORT_SYMBOL(dql_set_min_limit);
+I will come back with a v2 tomorrow.
 
-Actually, after doing a few more tests, this is a bit more complicated
-than anticipated.
-The dql member of struct netdev_queue is also guarded by a #ifdef CONFIG_BQL:
-https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L629
-
-This means that under the current idea, we would also need to guard
-the call to dql_set_min_limit():
-#ifdef CONFIG_BQL
-    dql_set_min_limit(&netdev_get_tx_queue(netdev, 0)->dql,
-              es58x_dev->param->dql_limit_min);
-#ifdef CONFIG_BQL
-
-This kills the initial intent of not using the #ifdef CONFIG_BQL to
-set the value.
-
-This leads to the need to do:
-void netdev_queue_set_dql_min_limit(struct netdev_queue *q, unsigned
-int min_limit)
-{
-#ifdef CONFIG_BQL
-    q->dql.min_limit = min_limit;
-#endif
-}
-which would probably be inside /include/linux/netdevice.h.
-
-Does it make sense?
-
-
-Yours sincerely,
-Vincent
+> +}
+> +EXPORT_SYMBOL(dql_set_min_limit);
