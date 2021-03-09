@@ -2,168 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C003332E2C
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 19:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB09332E40
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 19:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhCISWz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 13:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbhCISWv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 13:22:51 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064A8C06174A;
-        Tue,  9 Mar 2021 10:22:50 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id x4so22005459lfu.7;
-        Tue, 09 Mar 2021 10:22:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nPcKXNtUEVOXwaBBJEtR6Bl/12Ymo4LlBYKDQmcyiIs=;
-        b=k4KMZ2viAP4DmQIxJDKBBn1WXTr02JDJzyuq7hUYNtUbK01fkDwM3qInYlRPiZfrWk
-         tR5LzER8rbt+kjaT2A192hn33oJJhSQIxZHul9RJ1egI9BXuc7vLcQEYcAKLIFDhtO0v
-         EbxHcPi7EH5SdlVto3wmuFIgjhUnGUIVU6ehZ3cAX3uq99IA4L1IUc9x89xD+ceN98gw
-         N2OtOOAferpXGw4DCSuOV5FsMH0r3dykkFStktVAdxeMtTyL2GdffjrGxom/AfK6hAf2
-         asVwSP7tTbUEby14RgSFs+ZrH3SVHBmIHK42fXTYYevaotnBRcnbqqYbC4xug2U3NT6i
-         v3qw==
+        id S229805AbhCIS0k convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 9 Mar 2021 13:26:40 -0500
+Received: from mail-yb1-f177.google.com ([209.85.219.177]:42338 "EHLO
+        mail-yb1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229691AbhCIS0Y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 13:26:24 -0500
+Received: by mail-yb1-f177.google.com with SMTP id n195so14953115ybg.9
+        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 10:26:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nPcKXNtUEVOXwaBBJEtR6Bl/12Ymo4LlBYKDQmcyiIs=;
-        b=R+3Q4cCsI0iQQKCudYxfB2xTZ4sfYZBJqFEdbKZkkjvgZFeKVIXxGe4JPKgnw05jsD
-         AtBKMGHl7yHXqdduoSd1E7vLN9vp23riO8X1OLTv3X/JXCwtRoRR0JPX4KaQb4/D5Fxp
-         TpIYU373yUaQPlUCgSMFAJW3fWc2TS7S2L35dUH29oktWhZG9pPLkj1msq6aAyfXeK8/
-         bYlbjKlsQIzRMNU7Mkl4wNTccFBRb7dnnlf6zWwvdu5p+dpRmRQTE5QzmzTPAqhLECRc
-         2zWC2EESdbqHg9LzHMq2HQ7eJeqonMuTmXvZ3+B9IAVATrMa+dgm1ARSkqPc+wHNVssC
-         QlBw==
-X-Gm-Message-State: AOAM53223YmKp79f/YlT8eIHRrDwRWqbkiu0+B/gVIvyb0cqTGI93sbi
-        Lc+XXUoH5kX7XGJI3LFW00cRiCPN4bmhFw==
-X-Google-Smtp-Source: ABdhPJwWJf5k7Z6vwmOswpO5RhCPnxK/mGkhuY3focuVVIxpamv75nNJY1n/XMLism6s7eWUUWjD1g==
-X-Received: by 2002:a05:6512:3185:: with SMTP id i5mr17724391lfe.653.1615314168934;
-        Tue, 09 Mar 2021 10:22:48 -0800 (PST)
-Received: from [192.168.16.194] (h-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.googlemail.com with ESMTPSA id a28sm2280191ljn.45.2021.03.09.10.22.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Mar 2021 10:22:48 -0800 (PST)
-Subject: Re: [RESEND v12] can: usb: etas_es58X: add support for ETAS ES58X CAN
- USB interfaces
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20210309120946.1640-1-mailhol.vincent@wanadoo.fr>
- <20210309120946.1640-2-mailhol.vincent@wanadoo.fr>
- <45c0b0cc-bfd6-5180-7ad9-51eebc9de3c9@gmail.com>
- <CAMZ6RqJ8j0yqw1Sa1dbLpakBSuKie5xpYMpg6oQFG_MuE3sWkw@mail.gmail.com>
- <CAMZ6Rq+xJv+NVHAUYjT+-MLeO+Owoo03T2hzaA9tOKLstxU0uA@mail.gmail.com>
-From:   Jimmy Assarsson <jimmyassarsson@gmail.com>
-Message-ID: <d5b7f0c5-68d4-364f-b2ff-6cd003c70cb4@gmail.com>
-Date:   Tue, 9 Mar 2021 19:22:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.3
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aS99F6wsyZ+OH8LrhLwfK0hXrDzy8Tatm3jXreStxmw=;
+        b=nbPfINEpCY2e55BzpqKfUtdNyHgYQLvtwxi1H7kDE969+oWlCwwKlTIkUA5sdXALP+
+         yK7PLB2CpOvLYH3w1s+oxWYNh8sIduEjb6drxpqokfyJSPjTStyCMZ7pKkvuAiC66En/
+         q/PDhZMqBps/eZ7+WGS5V7VhrYBo8DPONLljydsrS2VFmjCGUJq0/2pYa4GVHeUt5eAm
+         LUq2WiMn7UohqoxZBclM9WTgzU2/NlfQMVGoBY/Q2CJ0Rj7SMTAhMUaAcBagEAsUh/J8
+         JbZ1SN3DBl7g9zVITzSXU6xJpuut1rsZdgEp6Ug7i3DTzhQDxRJXaK8G68G0KHmFGJAA
+         vzSQ==
+X-Gm-Message-State: AOAM5306VfhMrizdxMT13qg78xn2u/6wvR9CFJWRAdYRtg3y8heIkvDK
+        SBogjNKgj8p0D2ZGIaV4AdSvU0Dt9a2deiPBAqU=
+X-Google-Smtp-Source: ABdhPJzVt3/Wz6ZSl5r0b8C4WYxF0vf5cgEn4jzrSbwW/9U70GP5yMwVXjRB847VF8ChZ6yDPck12brK9OdgnoEv7nc=
+X-Received: by 2002:a25:2d1f:: with SMTP id t31mr44516561ybt.239.1615314383358;
+ Tue, 09 Mar 2021 10:26:23 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6Rq+xJv+NVHAUYjT+-MLeO+Owoo03T2hzaA9tOKLstxU0uA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
+ <20210308163445.103636-2-mailhol.vincent@wanadoo.fr> <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
+ <CAMZ6RqJADCFL_=uv-=hNjiNj+CZkUDNWjLTP3eV010KGj+H49A@mail.gmail.com>
+ <20210309125708.ei75tr5vp2sanfh6@pengutronix.de> <CAMZ6Rq+_QTDM5R++kQAtHjUHiydaV3njcH-up+uY7Jd8dggwQA@mail.gmail.com>
+ <20210309153547.q7zspf46k6terxqv@pengutronix.de> <CAMZ6Rq+bKzRqAg9egg6NL_mJHTwY02em2dR+O33OGe6xqt-nqg@mail.gmail.com>
+In-Reply-To: <CAMZ6Rq+bKzRqAg9egg6NL_mJHTwY02em2dR+O33OGe6xqt-nqg@mail.gmail.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 10 Mar 2021 03:26:12 +0900
+Message-ID: <CAMZ6RqKR3HYrJvc+=rXK40Yq=L3pgvTWwgC=reYWSN9XdQ4ksg@mail.gmail.com>
+Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021-03-09 19:18, Vincent MAILHOL wrote:
-> On Wed. 10 Mar 2021 at 03:11, Vincent MAILHOL
-> <mailhol.vincent@wanadoo.fr> wrote:
->>
->> On Wed. 10 Mar 2021 at 02:27, Jimmy Assarsson <jimmyassarsson@gmail.com> wrote:
->>>
->>> Hi Vincent,
->>>
->>> On 2021-03-09 13:09, Vincent Mailhol wrote:
->>>> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
->>>> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
->>> ...
->>>> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
->>>> new file mode 100644
->>>> index 000000000000..31f907a7b75f
->>>> --- /dev/null
->>>> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
->>> ...
->>>> +/**
->>>> + * es58x_add_skb_idx() - Increment an index of the loopback FIFO.
->>>> + * @priv: ES58X private parameters related to the network device.
->>>> + * @idx: address of the index to be incremented.
->>>> + * @a: the increment. Must be positive and less or equal to
->>>> + *   @priv->can.echo_skb_max.
->>>> + *
->>>> + * Do a modulus addition: set *@idx to (*@idx + @a) %
->>>> + * @priv->can.echo_skb_max.
->>>> + *
->>>> + * Rationale: the modulus operator % takes a decent amount of CPU
->>>> + * cycles (c.f. other division functions such as
->>>> + * include/linux/math64.h:iter_div_u64_rem()).
->>>> + */
->>>> +static __always_inline void es58x_add_skb_idx(struct es58x_priv *priv,
->>>> +                                           u16 *idx, u16 a)
->>>
->>> Never used?
->>
->> Indeed, this is a leftover. Should have been removed in v11 when I
->> made the device FIFO size a power of two.
->> I was not warned by the compiler, probably because this is an inline function.
->>
->>> ...
->>>> +/**
->>>> + * es58x_get_product_info() - Get the product information and print them.
->>>> + * @es58x_dev: ES58X device.
->>>> + *
->>>> + * Do a synchronous call to get the product information.
->>>> + *
->>>> + * Return: zero on success, errno when any error occurs.
->>>> + */
->>>> +static int es58x_get_product_info(struct es58x_device *es58x_dev)
->>>> +{
->>>> +     struct usb_device *udev = es58x_dev->udev;
->>>> +     const int es58x_prod_info_idx = 6;
->>>> +     /* Empirical tests show a prod_info length of maximum 83,
->>>> +      * below should be more than enough.
->>>> +      */
->>>> +     const size_t prod_info_len = 127;
->>>> +     char *prod_info;
->>>> +     int ret;
->>>> +
->>>> +     prod_info = kmalloc(prod_info_len, GFP_KERNEL);
->>>> +     if (!prod_info)
->>>> +             return -ENOMEM;
->>>> +
->>>> +     ret = usb_string(udev, es58x_prod_info_idx, prod_info, prod_info_len);
->>>> +     if (ret < 0) {
->>>> +             dev_err(es58x_dev->dev,
->>>> +                     "%s: Could not read the product info: %pe\n",
->>>> +                     __func__, ERR_PTR(ret));
->>>
->>> Missing free
->>
->> Absolutely!
->>
->>>> +             return ret;
->>>> +     } else if (ret >= prod_info_len - 1) {
->>>> +             dev_warn(es58x_dev->dev,
->>>> +                      "%s: Buffer is too small, result might be truncated\n",
->>>> +                      __func__);
->>>> +     }
->>>> +     dev_info(es58x_dev->dev, "Product info: %s\n", prod_info);
->>>> +     kfree(prod_info);
->>>> +
->>>> +     return 0;
->>>> +}
->>
->> Thanks for the two findings, both will be fixed in v13.
-> 
-> Out of curiosity, did you find the two issues throughout a code
-> review or did you use any kind of static analysis tool?
+Le mer. 10 mars 2021 à 02:54, Vincent MAILHOL
+<mailhol.vincent@wanadoo.fr> a écrit :
+>
+> On Wed. 10 Mar 2021 at 00:35, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> >
+> > On 09.03.2021 22:10:08, Vincent MAILHOL wrote:
+> > > Sounds good to me. I will prepare a patch to explain the issue
+> > > and try to introduce the dql_set_min_limit() function.
+> > >
+> > > Meanwhile, I would be thankful if you could continue the review :)
+> >
+> > Thanks for the mail, looks good.
+> >
+> > One note for the patch, though:
+> >
+> > > diff --git a/include/linux/dynamic_queue_limits.h b/include/linux/dynamic_queue_limits.h
+> > > index 407c2f281b64..32437f168a35 100644
+> > > --- a/include/linux/dynamic_queue_limits.h
+> > > +++ b/include/linux/dynamic_queue_limits.h
+> > > @@ -103,6 +103,9 @@ void dql_reset(struct dql *dql);
+> > >  /* Initialize dql state */
+> > >  void dql_init(struct dql *dql, unsigned int hold_time);
+> > >
+> > > +/* Set the dql minimum limit */
+> > #ifdef CONFIG_DQL
+> > > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit);
+> > #else
+> > static inline void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
+> > {
+> > }
+> > #endif
+> > > +
+> > >  #endif /* _KERNEL_ */
+> > >
+> > >  #endif /* _LINUX_DQL_H */
+> > > diff --git a/lib/dynamic_queue_limits.c b/lib/dynamic_queue_limits.c
+> > > index fde0aa244148..8b6ad1e0a2e3 100644
+> > > --- a/lib/dynamic_queue_limits.c
+> > > +++ b/lib/dynamic_queue_limits.c
+> >
+> > This file is only compiled if CONFIG_DQL is set, see lib/Makefile:
+> >
+> > | obj-$(CONFIG_DQL) += dynamic_queue_limits.o
+>
+> Got it.
+>
+> > > @@ -136,3 +136,11 @@ void dql_init(struct dql *dql, unsigned int hold_time)
+> > >       dql_reset(dql);
+> > >  }
+> > >  EXPORT_SYMBOL(dql_init);
+> > > +
+> > > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
+> > > +{
+> > > +#ifdef CONFIG_BQL
+> >
+> > remove this ifdef
+> >
+> > > +     dql->min_limit = min_limit;
+> > > +#endif
+> > > +}
+> > > +EXPORT_SYMBOL(dql_set_min_limit);
+>
+> Actually, after doing a few more tests, this is a bit more complicated
+> than anticipated.
+> The dql member of struct netdev_queue is also guarded by a #ifdef CONFIG_BQL:
+> https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L629
+>
+> This means that under the current idea, we would also need to guard
+> the call to dql_set_min_limit():
+> #ifdef CONFIG_BQL
+>     dql_set_min_limit(&netdev_get_tx_queue(netdev, 0)->dql,
+>               es58x_dev->param->dql_limit_min);
+> #ifdef CONFIG_BQL
+>
+> This kills the initial intent of not using the #ifdef CONFIG_BQL to
+> set the value.
+>
+> This leads to the need to do:
+> void netdev_queue_set_dql_min_limit(struct netdev_queue *q, unsigned int min_limit)
 
-Code review.
+Of course, I meant:
+static inline void netdev_queue_set_dql_min_limit(struct netdev_queue
+*q, unsigned int min_limit)
+
+> {
+> #ifdef CONFIG_BQL
+>     q->dql.min_limit = min_limit;
+> #endif
+> }
+> which would probably be inside /include/linux/netdevice.h.
+>
+> Does it make sense?
