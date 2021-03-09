@@ -2,143 +2,110 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB09332E40
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 19:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5077D332F3D
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 20:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbhCIS0k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Tue, 9 Mar 2021 13:26:40 -0500
-Received: from mail-yb1-f177.google.com ([209.85.219.177]:42338 "EHLO
-        mail-yb1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhCIS0Y (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 13:26:24 -0500
-Received: by mail-yb1-f177.google.com with SMTP id n195so14953115ybg.9
-        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 10:26:23 -0800 (PST)
+        id S230173AbhCITot (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 14:44:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231467AbhCIToR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 14:44:17 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA04C06174A;
+        Tue,  9 Mar 2021 11:44:17 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id o11so15303775iob.1;
+        Tue, 09 Mar 2021 11:44:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h0LdCjjwzecnp1EYokdW4ebJBaUE+V7zj86mopJQUfk=;
+        b=kGKbT37spDgGsq64b2yUwd05ipI+8eRT+NKbHxXN/JRiGVRW/3lpfcSGRLEh0PgUxm
+         S+fzmf0yeP8Z2TqhFZtTHZzF+Ce7QrXg2RFRXFCEN/z847MuyOFOtPpI+llRKWc4Xa+7
+         zZHTxAxs5zjqeqBFu5rFXVNuA+Dtps1Msvwd8KLv+FTFZVSvlKUUedwXBl5IOP/ilJSt
+         8emDedCKrXwSrUjgPIyrRXnXQG71WdL3rnOIKvtEVJq5pnj5lR9cV44CN4fEFb9Es0Fe
+         qHu/mOJoiM9ieSNimMDWVhpOftTUFSGH9SbMMjzjWTeTL5XWKVctMVMvU1lmjiaGrjdR
+         08Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=aS99F6wsyZ+OH8LrhLwfK0hXrDzy8Tatm3jXreStxmw=;
-        b=nbPfINEpCY2e55BzpqKfUtdNyHgYQLvtwxi1H7kDE969+oWlCwwKlTIkUA5sdXALP+
-         yK7PLB2CpOvLYH3w1s+oxWYNh8sIduEjb6drxpqokfyJSPjTStyCMZ7pKkvuAiC66En/
-         q/PDhZMqBps/eZ7+WGS5V7VhrYBo8DPONLljydsrS2VFmjCGUJq0/2pYa4GVHeUt5eAm
-         LUq2WiMn7UohqoxZBclM9WTgzU2/NlfQMVGoBY/Q2CJ0Rj7SMTAhMUaAcBagEAsUh/J8
-         JbZ1SN3DBl7g9zVITzSXU6xJpuut1rsZdgEp6Ug7i3DTzhQDxRJXaK8G68G0KHmFGJAA
-         vzSQ==
-X-Gm-Message-State: AOAM5306VfhMrizdxMT13qg78xn2u/6wvR9CFJWRAdYRtg3y8heIkvDK
-        SBogjNKgj8p0D2ZGIaV4AdSvU0Dt9a2deiPBAqU=
-X-Google-Smtp-Source: ABdhPJzVt3/Wz6ZSl5r0b8C4WYxF0vf5cgEn4jzrSbwW/9U70GP5yMwVXjRB847VF8ChZ6yDPck12brK9OdgnoEv7nc=
-X-Received: by 2002:a25:2d1f:: with SMTP id t31mr44516561ybt.239.1615314383358;
- Tue, 09 Mar 2021 10:26:23 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=h0LdCjjwzecnp1EYokdW4ebJBaUE+V7zj86mopJQUfk=;
+        b=NUmqnbG5WIYw3m+bh29WQvNJqmcqlGHQHkrvuVD+6BLo6BiAhsruS7yyug8FK7GhpF
+         I9rNazlMmP5dgD3mqaMxxakizawUjqyL21KdDHUMlUj9N/u6+42zbfNh43n/TrGvAJhq
+         w20U+sfcI3MZoaDfYvWDI+13H79XuAb8gZ3ZjzA2jER0uE4k9B7xeOEvG4pCGHpYOVxs
+         AkTCmDKOchj1e8AaeLSyQHvsz9GttkMj+1VHDq8bi0AW5upRAilf2HqL5N7JZptlxAQ3
+         juQXkwPIoCtqiIjNhxTMjKRBEpe3DP+YnoFk58IZA7hDNn2dbqjrJsjA8Sd0TYlvEqYG
+         L1MA==
+X-Gm-Message-State: AOAM530tcRW7qVvH/i8hXy0CI2oImWWiyfEfEI/smjhAe5AaVFlp4sNr
+        Pek98leLoXOgy2777z3/OBcVygGr1PXomftfZUg=
+X-Google-Smtp-Source: ABdhPJyDizL1CBOqwFRy8H1vQEuwTFNUXxlaJPi2bSerzyJM/ggHe+xUxloch1cnoAX1BKQ4gBb5dmjCzMrHhMSb/PM=
+X-Received: by 2002:a5e:990a:: with SMTP id t10mr24345727ioj.161.1615319056963;
+ Tue, 09 Mar 2021 11:44:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
- <20210308163445.103636-2-mailhol.vincent@wanadoo.fr> <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
- <CAMZ6RqJADCFL_=uv-=hNjiNj+CZkUDNWjLTP3eV010KGj+H49A@mail.gmail.com>
- <20210309125708.ei75tr5vp2sanfh6@pengutronix.de> <CAMZ6Rq+_QTDM5R++kQAtHjUHiydaV3njcH-up+uY7Jd8dggwQA@mail.gmail.com>
- <20210309153547.q7zspf46k6terxqv@pengutronix.de> <CAMZ6Rq+bKzRqAg9egg6NL_mJHTwY02em2dR+O33OGe6xqt-nqg@mail.gmail.com>
-In-Reply-To: <CAMZ6Rq+bKzRqAg9egg6NL_mJHTwY02em2dR+O33OGe6xqt-nqg@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 10 Mar 2021 03:26:12 +0900
-Message-ID: <CAMZ6RqKR3HYrJvc+=rXK40Yq=L3pgvTWwgC=reYWSN9XdQ4ksg@mail.gmail.com>
-Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+References: <20210309152354.95309-1-mailhol.vincent@wanadoo.fr> <20210309152354.95309-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20210309152354.95309-2-mailhol.vincent@wanadoo.fr>
+From:   Dave Taht <dave.taht@gmail.com>
+Date:   Tue, 9 Mar 2021 11:44:05 -0800
+Message-ID: <CAA93jw5+wB=va5tqUpCiPu20N+pn8VcMxUdySSWoQE_zqH8Qtg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] dql: add dql_set_min_limit()
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Tom Herbert <therbert@google.com>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Le mer. 10 mars 2021 à 02:54, Vincent MAILHOL
-<mailhol.vincent@wanadoo.fr> a écrit :
->
-> On Wed. 10 Mar 2021 at 00:35, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> >
-> > On 09.03.2021 22:10:08, Vincent MAILHOL wrote:
-> > > Sounds good to me. I will prepare a patch to explain the issue
-> > > and try to introduce the dql_set_min_limit() function.
-> > >
-> > > Meanwhile, I would be thankful if you could continue the review :)
-> >
-> > Thanks for the mail, looks good.
-> >
-> > One note for the patch, though:
-> >
-> > > diff --git a/include/linux/dynamic_queue_limits.h b/include/linux/dynamic_queue_limits.h
-> > > index 407c2f281b64..32437f168a35 100644
-> > > --- a/include/linux/dynamic_queue_limits.h
-> > > +++ b/include/linux/dynamic_queue_limits.h
-> > > @@ -103,6 +103,9 @@ void dql_reset(struct dql *dql);
-> > >  /* Initialize dql state */
-> > >  void dql_init(struct dql *dql, unsigned int hold_time);
-> > >
-> > > +/* Set the dql minimum limit */
-> > #ifdef CONFIG_DQL
-> > > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit);
-> > #else
-> > static inline void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
-> > {
-> > }
-> > #endif
-> > > +
-> > >  #endif /* _KERNEL_ */
-> > >
-> > >  #endif /* _LINUX_DQL_H */
-> > > diff --git a/lib/dynamic_queue_limits.c b/lib/dynamic_queue_limits.c
-> > > index fde0aa244148..8b6ad1e0a2e3 100644
-> > > --- a/lib/dynamic_queue_limits.c
-> > > +++ b/lib/dynamic_queue_limits.c
-> >
-> > This file is only compiled if CONFIG_DQL is set, see lib/Makefile:
-> >
-> > | obj-$(CONFIG_DQL) += dynamic_queue_limits.o
->
-> Got it.
->
-> > > @@ -136,3 +136,11 @@ void dql_init(struct dql *dql, unsigned int hold_time)
-> > >       dql_reset(dql);
-> > >  }
-> > >  EXPORT_SYMBOL(dql_init);
-> > > +
-> > > +void dql_set_min_limit(struct dql *dql, unsigned int min_limit)
-> > > +{
-> > > +#ifdef CONFIG_BQL
-> >
-> > remove this ifdef
-> >
-> > > +     dql->min_limit = min_limit;
-> > > +#endif
-> > > +}
-> > > +EXPORT_SYMBOL(dql_set_min_limit);
->
-> Actually, after doing a few more tests, this is a bit more complicated
-> than anticipated.
-> The dql member of struct netdev_queue is also guarded by a #ifdef CONFIG_BQL:
-> https://elixir.bootlin.com/linux/latest/source/include/linux/netdevice.h#L629
->
-> This means that under the current idea, we would also need to guard
-> the call to dql_set_min_limit():
-> #ifdef CONFIG_BQL
->     dql_set_min_limit(&netdev_get_tx_queue(netdev, 0)->dql,
->               es58x_dev->param->dql_limit_min);
-> #ifdef CONFIG_BQL
->
-> This kills the initial intent of not using the #ifdef CONFIG_BQL to
-> set the value.
->
-> This leads to the need to do:
-> void netdev_queue_set_dql_min_limit(struct netdev_queue *q, unsigned int min_limit)
+I note that "proof" is very much in the developer's opinion and
+limited testing base.
 
-Of course, I meant:
-static inline void netdev_queue_set_dql_min_limit(struct netdev_queue
-*q, unsigned int min_limit)
+Actual operational experience, as in a real deployment, with other applications,
+heavy context switching, or virtualization, might yield better results.
 
-> {
-> #ifdef CONFIG_BQL
->     q->dql.min_limit = min_limit;
-> #endif
-> }
-> which would probably be inside /include/linux/netdevice.h.
->
-> Does it make sense?
+There's lots of defaults in the linux kernel that are just swags, the
+default NAPI and rx/tx ring buffer sizes being two where devs just
+copy/paste stuff, which either doesn't scale up, or doesn't scale
+down.
+
+This does not mean I oppose your patch! However I have two points I'd
+like to make
+regarding bql and dql in general that I have long longed be explored.
+
+0) Me being an advocate of low latency in general, does mean that I
+have no problem
+and even prefer, starving the device rather than always keeping it busy.
+
+/me hides
+
+1) BQL is MIAD - multiplicative increase, additive decrease. While in
+practice so far this does not seem to matter much (and also measuring
+things down to "us" really hard), a stabler algorithm is AIMD. BQL
+often absorbs a large TSO burst - usually a minimum of 128k is
+observed on gbit, where a stabler state (without GSO) seemed to be
+around 40k on many of the chipsets I worked with, back when I was
+working in this area.
+
+(cake's gso-splitting also gets lower bql values in general, if you
+have enough cpu to run cake)
+
+2) BQL + hardware mq is increasingly an issue in my mind in that, say,
+you are hitting
+64 hw queues, each with 128k stored in there, is additive, where in
+order to service interrupts properly and keep the media busy might
+only require 128k total, spread across the active queues and flows. I
+have often thought that making BQL scale better to multiple hw queues
+by globally sharing the buffering state(s), would lead to lower
+latency, but
+also that probably sharing that state would be too high overhead.
+
+Having not worked out a solution to 2), and preferring to start with
+1), and not having a whole lot of support for item 0) in the world, I
+just thought I'd mention it, in the hope
+someone might give it a go.
