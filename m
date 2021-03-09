@@ -2,109 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137C2332379
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 11:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A669A3323A4
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 12:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbhCIK6q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 05:58:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S229546AbhCILIA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 06:08:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbhCIK6p (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 05:58:45 -0500
+        with ESMTP id S229544AbhCILHn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 06:07:43 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE82C06174A
-        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 02:58:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F032C06174A
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 03:07:43 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lJa4Y-0003ZS-Je; Tue, 09 Mar 2021 11:58:42 +0100
-Received: from [IPv6:2a03:f580:87bc:d400:4699:faa8:8510:ac25] (unknown [IPv6:2a03:f580:87bc:d400:4699:faa8:8510:ac25])
+        id 1lJaDF-0004Zw-Os; Tue, 09 Mar 2021 12:07:41 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4699:faa8:8510:ac25])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 849D35F167A;
-        Tue,  9 Mar 2021 10:58:41 +0000 (UTC)
-Subject: Re: [PATCH 3/3] can/peak_usb: add support of ONE_SHOT mode
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        linux-can Mailing List <linux-can@vger.kernel.org>
-References: <20210309082128.23125-1-s.grosjean@peak-system.com>
- <20210309082128.23125-4-s.grosjean@peak-system.com>
- <ae20aac4-28b3-ec5d-66e2-71ef2b507839@pengutronix.de>
- <7272e91d-3e27-3b3d-fdbd-818cd073e761@hartkopp.net>
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C03145F1693;
+        Tue,  9 Mar 2021 11:07:40 +0000 (UTC)
+Date:   Tue, 9 Mar 2021 12:07:39 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <6aeb7ae5-e2da-df07-dd43-9777c5352a16@pengutronix.de>
-Date:   Tue, 9 Mar 2021 11:58:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+To:     Stephane Grosjean <s.grosjean@peak-system.com>
+Cc:     linux-can Mailing List <linux-can@vger.kernel.org>
+Subject: Re: [PATCH 2/3] can/peak_usb: add forgotten supported devices
+Message-ID: <20210309110739.x2njhvrau5v5vtaz@pengutronix.de>
+References: <20210309082128.23125-1-s.grosjean@peak-system.com>
+ <20210309082128.23125-3-s.grosjean@peak-system.com>
 MIME-Version: 1.0
-In-Reply-To: <7272e91d-3e27-3b3d-fdbd-818cd073e761@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="46u15OwUKw9c30FkxHJpKh4xiciOZNLCS"
+        protocol="application/pgp-signature"; boundary="huz3ah2xobmge22y"
+Content-Disposition: inline
+In-Reply-To: <20210309082128.23125-3-s.grosjean@peak-system.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,63 +47,19 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---46u15OwUKw9c30FkxHJpKh4xiciOZNLCS
-Content-Type: multipart/mixed; boundary="M3b7BMFuPrnYJ7ZV80rWMqyei3gjI21KZ";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Oliver Hartkopp <socketcan@hartkopp.net>,
- Stephane Grosjean <s.grosjean@peak-system.com>,
- linux-can Mailing List <linux-can@vger.kernel.org>
-Message-ID: <6aeb7ae5-e2da-df07-dd43-9777c5352a16@pengutronix.de>
-Subject: Re: [PATCH 3/3] can/peak_usb: add support of ONE_SHOT mode
-References: <20210309082128.23125-1-s.grosjean@peak-system.com>
- <20210309082128.23125-4-s.grosjean@peak-system.com>
- <ae20aac4-28b3-ec5d-66e2-71ef2b507839@pengutronix.de>
- <7272e91d-3e27-3b3d-fdbd-818cd073e761@hartkopp.net>
-In-Reply-To: <7272e91d-3e27-3b3d-fdbd-818cd073e761@hartkopp.net>
 
---M3b7BMFuPrnYJ7ZV80rWMqyei3gjI21KZ
+--huz3ah2xobmge22y
 Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 3/9/21 11:53 AM, Oliver Hartkopp wrote:
->> What happens if in one shot mode and the frame is not send? Who takes =
-care of
->> the echo skb?
->=20
-> ONE-SHOT only means that the CAN controller would not retry the=20
-> transmission when e.g. loosing the arbitration or getting an error flag=
-=2E
->=20
-> The sja1000 does it this way, when the TX interrupt flag is set in the =
+On 09.03.2021 09:21:27, Stephane Grosjean wrote:
+> Since the peak_usb driver also supports the CAN-USB interfaces
+> "PCAN-USB X6" and "PCAN-Chip USB" from PEAK-System GmbH, this patch adds
+> their names to the list of explicitly supported devices.
 
-> interrupt register:
->=20
->                  if (isrc & IRQ_TI) {
->                          /* transmission buffer released */
->                          if (priv->can.ctrlmode & CAN_CTRLMODE_ONE_SHOT=
- &&
->                              !(status & SR_TCS)) {
->                                  stats->tx_errors++;
->                                  can_free_echo_skb(dev, 0);
->                          } else {
->                                  /* transmission complete */
->                                  stats->tx_bytes +=3D
->                                          priv->read_reg(priv,=20
-> SJA1000_FI) & 0xf;
->                                  stats->tx_packets++;
->                                  can_get_echo_skb(dev, 0, NULL);
->                          }
->                          netif_wake_queue(dev);
->                          can_led_event(dev, CAN_LED_EVENT_TX);
->                  }
->=20
->=20
-> Do we need to check this for the other drivers?
-
-Yes.
+Can you look up which patch added support for these interfaces? Then we
+can add a Fixes tag.
 
 Marc
 
@@ -179,24 +69,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-
---M3b7BMFuPrnYJ7ZV80rWMqyei3gjI21KZ--
-
---46u15OwUKw9c30FkxHJpKh4xiciOZNLCS
+--huz3ah2xobmge22y
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBHVN4ACgkQqclaivrt
-76lm9wf+K3O3EPW5QGZIE4kYGDcadE9Bua+queu29s3NgsVaOZB+H6jjUx8PZ5x3
-osuNffB87hg1iyB35yzmq/W+21KH4dZQ/uKbgX6tj8bAczRrouaS2ZFZ9Ocqfhhf
-BLLsfsaHtiu1CiDP/gcsAJQRs2C1TIlwXEZJzOoGsdQfHMyxnT6yp56aFD5NJIzr
-8gWGs0DXIvhiZXVJnlYM7IlwFNPUEuwvKczLrUaAMjHPHU1wE+XfD3Nx/M4KY9OC
-XUCNc73Yir+Cgt0AUunRfjYKgoC/+tqOGylyr4cEJst+JJn26pfXa1k/vwH6pxIt
-jyeKhRsXvlrC1ywMn50Oowe8O1mhyA==
-=jIq9
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBHVvkACgkQqclaivrt
+76ni7Qf/UmmKrhyAJmn5gnslI3AItRVJDCnw+gWLFVAe3PGZ18dwDcju2SvX9Z63
+X0dNhSbXFwqna7Dy25+JA7I3EhGbK60qeNoPenp+g1lYB/Y1Vu33R+UeO0YHq2DJ
+DEx+jKG8WA5HdUSfMT440sH5RI/EX6tgIVZ1t9/Cnd/yJSKuKvhOYWGlDgEVHL0z
+9dKrDvaYfZ7Q82mjskBgtOBj+QuMS4YQOQCMOgskvvzb3Bm0KZlwGQj9Hznqr4Af
++ZFky7Br+gdAaVEig0Zwc9s/Xo6lxFrKYpY1uB15zIuzgPi8A4ZBBM48rFZzZuJd
+KrhKsmxC6E+YVrtaukxlrdJgyS8Mww==
+=Ls+i
 -----END PGP SIGNATURE-----
 
---46u15OwUKw9c30FkxHJpKh4xiciOZNLCS--
+--huz3ah2xobmge22y--
