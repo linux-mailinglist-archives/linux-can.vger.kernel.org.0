@@ -2,36 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FAD3322FE
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 11:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505EA33232D
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 11:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhCIK11 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 05:27:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
+        id S230391AbhCIKgh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 05:36:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhCIK1R (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 05:27:17 -0500
+        with ESMTP id S230446AbhCIKgX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 05:36:23 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F481C06174A
-        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 02:27:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E7BC06174A
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 02:36:23 -0800 (PST)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lJZa7-0000eL-1T; Tue, 09 Mar 2021 11:27:15 +0100
+        id 1lJZiv-0001Wc-RA; Tue, 09 Mar 2021 11:36:21 +0100
 Received: from [IPv6:2a03:f580:87bc:d400:4699:faa8:8510:ac25] (unknown [IPv6:2a03:f580:87bc:d400:4699:faa8:8510:ac25])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BA2375F163D;
-        Tue,  9 Mar 2021 10:27:13 +0000 (UTC)
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org
-Cc:     Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
- <20210308163445.103636-2-mailhol.vincent@wanadoo.fr>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 934405F164C;
+        Tue,  9 Mar 2021 10:36:20 +0000 (UTC)
+Subject: Re: [PATCH 3/3] can/peak_usb: add support of ONE_SHOT mode
+To:     Stephane Grosjean <s.grosjean@peak-system.com>,
+        linux-can Mailing List <linux-can@vger.kernel.org>
+References: <20210309082128.23125-1-s.grosjean@peak-system.com>
+ <20210309082128.23125-4-s.grosjean@peak-system.com>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -93,17 +93,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-Message-ID: <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
-Date:   Tue, 9 Mar 2021 11:27:10 +0100
+Message-ID: <ae20aac4-28b3-ec5d-66e2-71ef2b507839@pengutronix.de>
+Date:   Tue, 9 Mar 2021 11:36:17 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20210308163445.103636-2-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20210309082128.23125-4-s.grosjean@peak-system.com>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="U5FaleFl1uhvqo9SqNtRWc4rxGnyQosC7"
+ boundary="eGfuNh44xFJTpxZGqoaPYgCBVJQw7c2HF"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -113,36 +111,39 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---U5FaleFl1uhvqo9SqNtRWc4rxGnyQosC7
-Content-Type: multipart/mixed; boundary="yfrySo6ddNJV8IZhfha64UCTxUY9PXSCb";
+--eGfuNh44xFJTpxZGqoaPYgCBVJQw7c2HF
+Content-Type: multipart/mixed; boundary="kJ59Wxd3gEdX9V0b2muGXYPygu6Iazmao";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-can@vger.kernel.org
-Cc: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Message-ID: <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
-Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
- CAN USB interfaces
-References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
- <20210308163445.103636-2-mailhol.vincent@wanadoo.fr>
-In-Reply-To: <20210308163445.103636-2-mailhol.vincent@wanadoo.fr>
+To: Stephane Grosjean <s.grosjean@peak-system.com>,
+ linux-can Mailing List <linux-can@vger.kernel.org>
+Message-ID: <ae20aac4-28b3-ec5d-66e2-71ef2b507839@pengutronix.de>
+Subject: Re: [PATCH 3/3] can/peak_usb: add support of ONE_SHOT mode
+References: <20210309082128.23125-1-s.grosjean@peak-system.com>
+ <20210309082128.23125-4-s.grosjean@peak-system.com>
+In-Reply-To: <20210309082128.23125-4-s.grosjean@peak-system.com>
 
---yfrySo6ddNJV8IZhfha64UCTxUY9PXSCb
+--kJ59Wxd3gEdX9V0b2muGXYPygu6Iazmao
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 3/8/21 5:34 PM, Vincent Mailhol wrote:
-> This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
-> ETAS GmbH (https://www.etas.com/en/products/es58x.php).
+On 3/9/21 9:21 AM, Stephane Grosjean wrote:
+> This patch adds "ONE-SHOT" mode support to the following CAN-USB
+> PEAK-System GmbH interfaces:
+> - PCAN-USB X6
+> - PCAN-USB FD
+> - PCAN-USB Pro FD
+> - PCAN-Chip USB
+> - PCAN-USB Pro
 >=20
-> Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.=
-com>
-> Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.co=
-m>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 
-I'm not sure if you're supposed to change dql.min_limit from the driver.
+What happens if in one shot mode and the frame is not send? Who takes car=
+e of
+the echo skb?
 
+regards,
 Marc
 
 --=20
@@ -152,23 +153,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---yfrySo6ddNJV8IZhfha64UCTxUY9PXSCb--
+--kJ59Wxd3gEdX9V0b2muGXYPygu6Iazmao--
 
---U5FaleFl1uhvqo9SqNtRWc4rxGnyQosC7
+--eGfuNh44xFJTpxZGqoaPYgCBVJQw7c2HF
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBHTX4ACgkQqclaivrt
-76kcfggAtCcsBPAa61NHdikB80+1flR5wRSvjKEh4pV/cj0YjZeZ4ZDK9HR5SNOd
-bhC453eBqiXXN6Qy+OeMi2f7Pie5X1w768Z52Mg+qZUS6S7+soD5ZAnTquTjhwfO
-N36kTFDT3W+UeMvNMSlXinzlO8cfLYdwkBdHZP9oCR6q7WeMriENSJvdlpd9fgob
-6uqW9F6VJEIQeMGxbH/Q0itCI4oD6ar6anurzDbTYqSihk/dSrHhyfpErZlSqM+k
-9NASFQveti7OzbvbWg4Lh9OvmIX2ygmIlRbd+cB/x6uuveawj/y8tChde2VHNsyd
-Tm4B2JXNQTVfdESBeFpBeu0S/KMrLg==
-=kHsT
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBHT6EACgkQqclaivrt
+76kNtQgAgZEWbQGCsn4rwTCmv6ia2C6cU/beSMtA/dwZpxzw4qs3AyFA8xSanOcE
+Bdlgeu5OWThag53C1rvYBOC+ysuhaDkpAuq9RldKckqxqSfgj5utYpV+UlAejtnJ
+qrrWCKyBPdpj20DAYWKvmV2/YVLaSG+Rdr9VH3DueYrPAiyuzZjx+xYfkLKvqAC5
+RuwIfgnoWTusxP5cP2uZg84+LX/7XeKnAPe+MVUSuQfQT2tx+73h5BK4iFCllBTE
+NAhJtg4MCh1LeRQ+0H3k/YYHnRInBZtsRCYQt9PAHPjQX71iDEFy+N88f9nIkiGZ
+R0mXNuZMlNETnRFwLswZPP3kU8zRzg==
+=Q4/x
 -----END PGP SIGNATURE-----
 
---U5FaleFl1uhvqo9SqNtRWc4rxGnyQosC7--
+--eGfuNh44xFJTpxZGqoaPYgCBVJQw7c2HF--
