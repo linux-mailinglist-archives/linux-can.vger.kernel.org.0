@@ -2,59 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE7E3321CB
+	by mail.lfdr.de (Postfix) with ESMTP id 841AE3321CD
 	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 10:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbhCIJT2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S229656AbhCIJT2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Tue, 9 Mar 2021 04:19:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbhCIJTG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 04:19:06 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F172FC06174A
-        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 01:19:05 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id w11so14380461wrr.10
-        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 01:19:05 -0800 (PST)
+        with ESMTP id S229544AbhCIJTU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 04:19:20 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11303C06174A
+        for <linux-can@vger.kernel.org>; Tue,  9 Mar 2021 01:19:20 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id e10so14349383wro.12
+        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 01:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOPpVPEfwsPCm/IrqTIA8c1KcuoQPElvZGV6eeikJJE=;
-        b=Gq5+Al88Fv52oanhDcS+Z1iyduSVfYA2xBUdF3at9ClGMbq0Qy9t/j3Gfhrzw1HSad
-         pBoW1hkvyuTjpryIgMvQTPQKLRH7JPxRo+FSwouW39IsV3USbu2FAxeScHitcRVkhYqZ
-         KPLqB79UqyksLfUaE2JFp7ZOfUpp3+cXGy+VMi4mBp++XWgR68OrYvu5Y2Ou3VlK+DS7
-         9hC71us9mz9GaJmHGaZvWAooCgb+XdZY2uyreO2el6iMjA6XQ6IPzZ2gMRxMTXlawdCM
-         fb99Krp72SjRl67p+T1e5N7oID5BGGgOyyf9We+K27E9UJFgl3iXcP7OG0xNY4MM9PAJ
-         GMjA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qX3zq7pg+l1Hty2u81A/ziSs9V0j8N9GHTZv3aWvmNs=;
+        b=A38oD0kNArCMLWjwrlIJ6qGkHfsPIjYfeualpi5SB4g3c4AwGgzu9GyUK7SDuG3AbT
+         OKitOCGDB56pb9SaL+gyPuCM/XU1SebpzmpOqXrMFZThrSfmG5lifBx5k7yeKEoP0i47
+         VDeP44RIRa8HYixUVmNygZjN8H8tFQR3+aVis58mgdCGpBcN0yrm3xjvDgJiqUz8Kl62
+         W9BaVI/sYIQSBoLEHiPAEHcTvZC97TYnax05TS2nG/CHayBSaxiTqyJS8XK5zrNn+WjH
+         GZWSAA7OwsrzUKFHsAbqqtLYT6MCGTJRHNlJkXzh68wu6EAT7DZ1vKMtMl9JA2hQnzcE
+         Lg3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NOPpVPEfwsPCm/IrqTIA8c1KcuoQPElvZGV6eeikJJE=;
-        b=Vos5gOpf91VZljbr8Wrsit3Feh0+AJpWpRZmeMIbM8UcwHgfLokcVS4SpegyXG+19I
-         AI94cTFJH+98o7U/Tc9K75GFa96dYVOgrTBNjBMt7B07p5hqNqxYVK4RxBQO0NMgSFyM
-         vlc2bThY0kTsWL0byW7mMpmalaBNcuGTKrxYrfiGF836eoeVGDcHEwW5CD2KgO+mXoah
-         Myf7xsYDrscrlcdy5bJmDT9HSSzpgjc4Rb5qxRNBbpJcE/djShPmyQ78VUo4RZA6wk+A
-         QZZpyU57J6gWyfAlfvRZkDY8MN5Kr6RcfnHXaVdhljc9o/4wVxrwy32ognuzkjB1nWyN
-         mSmQ==
-X-Gm-Message-State: AOAM531ql1eLfHPIJmjeqqiJDaLq5YreqNGac57Zi3HzkshQUIywF735
-        spe0K1iiXmvSDkNqIOj6oKQH8fRjsPE=
-X-Google-Smtp-Source: ABdhPJwBVveJ14pgBhwWfiCTiJtJRkw8blU5Wu4HO7EML28bcCoFqrlJvinXgmnNVIeSrE/wYgR80w==
-X-Received: by 2002:adf:ed87:: with SMTP id c7mr27326086wro.9.1615281544818;
-        Tue, 09 Mar 2021 01:19:04 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qX3zq7pg+l1Hty2u81A/ziSs9V0j8N9GHTZv3aWvmNs=;
+        b=Rtbobzz4miNh9BmFDGheklROZto0te7t6WtIZ6u46CsHjuUtjHsww7dg9EoIA5b/Qm
+         cNWoM4lxJQhjZMLtyUjtsqKTViqETlx4p/2cAFxGxMFVDwf1WqYmfj4lrL0GiGJFkXc7
+         NCN7FVMrUHMWRo+wW9MM8TPVbNepepS8kk+yiiZagZ7j/EStYqOCLeqBTf0rFKwur3gx
+         JI2EBjiVA1Eg5kNHPan8UAFzWV0k/aPSHu5w5wo38XDCkqZJT5cUrM2ZcCOBBSjnxHcC
+         1HDdjghXSjCG8o8ION4tcmvQkUGEByP6+HA+WBEzNK5Sej5/d9DQO/9Ax1vgygT6A/o9
+         JE4g==
+X-Gm-Message-State: AOAM5337OJGMQ15MyO2Ch/nGsCpQFpNgSuLYDNeoPzYx4Eiv+D4Paf0W
+        KXqe8LVbA3MJ4SHeU2PzlgBON7TM/ck=
+X-Google-Smtp-Source: ABdhPJyfJfxGaETMdqezvOGMPCVzQ4mcFbFbqAJyKPvsiUH5IBoEg4IdxYBQ0gQlxkdFy3UpvUdAcw==
+X-Received: by 2002:adf:83c2:: with SMTP id 60mr26815926wre.386.1615281558908;
+        Tue, 09 Mar 2021 01:19:18 -0800 (PST)
 Received: from localhost.localdomain (h-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id r26sm3098022wmn.28.2021.03.09.01.19.04
+        by smtp.gmail.com with ESMTPSA id r26sm3098022wmn.28.2021.03.09.01.19.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Mar 2021 01:19:04 -0800 (PST)
+        Tue, 09 Mar 2021 01:19:18 -0800 (PST)
 From:   Jimmy Assarsson <jimmyassarsson@gmail.com>
 To:     linux-can@vger.kernel.org
 Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
         Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH] can: kvaser_pciefd: Always disable bus load reporting
-Date:   Tue,  9 Mar 2021 10:17:23 +0100
-Message-Id: <20210309091724.31262-1-jimmyassarsson@gmail.com>
+Subject: [PATCH] can: kvaser_usb: Add support for USBcan Pro 4xHS
+Date:   Tue,  9 Mar 2021 10:17:24 +0100
+Message-Id: <20210309091724.31262-2-jimmyassarsson@gmail.com>
 X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210309091724.31262-1-jimmyassarsson@gmail.com>
+References: <20210309091724.31262-1-jimmyassarsson@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -63,47 +65,49 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Jimmy Assarsson <extja@kvaser.com>
 
-Under certain circumstances, when switching from Kvaser's linuxcan driver
-(kvpciefd) to the SocketCAN driver (kvaser_pciefd), the bus load reporting
-is not disabled.
-This is flooding the kernel log with prints like:
-[3485.574677] kvaser_pciefd 0000:02:00.0: Received unexpected packet type 0x00000009
+Add support for Kvaser USBcan Pro 4xHS.
 
-Always put the controller in the expected state, instead of assuming that
-bus load reporting is inactive.
-
-Note: If bus load reporting is enabled when the driver is loaded, you will
-      still get a number of bus load packages (and printouts), before it is
-      disabled.
-
-Fixes: 26ad340e582d ("can: kvaser_pciefd: Add driver for Kvaser PCIEcan devices")
 Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
 ---
- drivers/net/can/kvaser_pciefd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/can/usb/Kconfig                      | 1 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/kvaser_pciefd.c b/drivers/net/can/kvaser_pciefd.c
-index 37e05010ca91..74d9899fc904 100644
---- a/drivers/net/can/kvaser_pciefd.c
-+++ b/drivers/net/can/kvaser_pciefd.c
-@@ -57,6 +57,7 @@ MODULE_DESCRIPTION("CAN driver for Kvaser CAN/PCIe devices");
- #define KVASER_PCIEFD_KCAN_STAT_REG 0x418
- #define KVASER_PCIEFD_KCAN_MODE_REG 0x41c
- #define KVASER_PCIEFD_KCAN_BTRN_REG 0x420
-+#define KVASER_PCIEFD_KCAN_BUS_LOAD_REG 0x424
- #define KVASER_PCIEFD_KCAN_BTRD_REG 0x428
- #define KVASER_PCIEFD_KCAN_PWM_REG 0x430
- /* Loopback control register */
-@@ -949,6 +950,9 @@ static int kvaser_pciefd_setup_can_ctrls(struct kvaser_pciefd *pcie)
- 		timer_setup(&can->bec_poll_timer, kvaser_pciefd_bec_poll_timer,
- 			    0);
+diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
+index c1e5d5b570b6..538f4d9adb91 100644
+--- a/drivers/net/can/usb/Kconfig
++++ b/drivers/net/can/usb/Kconfig
+@@ -73,6 +73,7 @@ config CAN_KVASER_USB
+ 	    - Kvaser Memorator Pro 5xHS
+ 	    - Kvaser USBcan Light 4xHS
+ 	    - Kvaser USBcan Pro 2xHS v2
++	    - Kvaser USBcan Pro 4xHS
+ 	    - Kvaser USBcan Pro 5xHS
+ 	    - Kvaser U100
+ 	    - Kvaser U100P
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 2b7efd296758..4e97da8434ab 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -86,8 +86,9 @@
+ #define USB_U100_PRODUCT_ID			273
+ #define USB_U100P_PRODUCT_ID			274
+ #define USB_U100S_PRODUCT_ID			275
++#define USB_USBCAN_PRO_4HS_PRODUCT_ID		276
+ #define USB_HYDRA_PRODUCT_ID_END \
+-	USB_U100S_PRODUCT_ID
++	USB_USBCAN_PRO_4HS_PRODUCT_ID
  
-+		/* Disable Bus load reporting */
-+		iowrite32(0, can->reg_base + KVASER_PCIEFD_KCAN_BUS_LOAD_REG);
-+
- 		tx_npackets = ioread32(can->reg_base +
- 				       KVASER_PCIEFD_KCAN_TX_NPACKETS_REG);
- 		if (((tx_npackets >> KVASER_PCIEFD_KCAN_TX_NPACKETS_MAX_SHIFT) &
+ static inline bool kvaser_is_leaf(const struct usb_device_id *id)
+ {
+@@ -193,6 +194,7 @@ static const struct usb_device_id kvaser_usb_table[] = {
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100P_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100S_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_PRO_4HS_PRODUCT_ID) },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(usb, kvaser_usb_table);
 -- 
 2.30.0
 
