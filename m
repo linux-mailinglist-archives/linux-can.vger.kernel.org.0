@@ -2,152 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC82133259E
-	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 13:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A25833325AC
+	for <lists+linux-can@lfdr.de>; Tue,  9 Mar 2021 13:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbhCIMlv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 9 Mar 2021 07:41:51 -0500
-Received: from smtp-31-i2.italiaonline.it ([213.209.12.31]:40596 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229544AbhCIMlc (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 9 Mar 2021 07:41:32 -0500
-Received: from oxapps-11-062.iol.local ([10.101.8.72])
-        by smtp-31.iol.local with ESMTPA
-        id Jbg3l9rW9VpAbJbg3l7SXg; Tue, 09 Mar 2021 13:41:31 +0100
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1615293691; bh=3o5+VsHZgtA11EBUsy294JHGkkQreeR6kHFtHPSgnu8=;
-        h=From;
-        b=GRxGkpFyvJdIhgt7gquWoIzpXws6pBgJlp4hBUI113AlBtIdDGKRH9nUhtO1vKgUp
-         r9wHYzUPJKXmw9rwIt8dWS9uibUOToWe2Ey3sc8ozQY8uMVofepIntrYZs9cUThQ9O
-         wpnIlnCPqP8/xAoZ+YpvXTgWrmFNS75WlhAnUX6Rn06/XlAyHkHCvo6qRGKUSQZdWv
-         hgqL+fjt45unjDRpfgI3F5aKGvvta7wJMw0TK23JojLrwt9JVvDvGRn5txu4R+wO9O
-         Pxu438/jo03bT/kI3NFUIeQtvYzrwuz1D+APb3ToLrHUTvUO3HwwMr7EuqhvSQHAVT
-         DbTOiXkk59fzg==
-X-CNFS-Analysis: v=2.4 cv=WMS64lgR c=1 sm=1 tr=0 ts=60476cfb cx=a_exe
- a=ArCppHiS2LX9rvfu7+HyXQ==:117 a=C-c6dMTymFoA:10 a=IkcTkHD0fZMA:10
- a=vesc6bHxzc4A:10 a=gu6fZOg2AAAA:8 a=qkFHNxRNrKAakAEVf68A:9 a=QEXdDO2ut3YA:10
- a=-FEs8UIgK8oA:10 a=NWVoK91CQyQA:10 a=2RSlZUUhi9gRBrsHwhhZ:22
- a=BPzZvq435JnGatEyYwdK:22
-Date:   Tue, 9 Mar 2021 13:41:31 +0100 (CET)
-From:   Dario Binacchi <dariobin@libero.it>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de
-Message-ID: <1739785095.246292.1615293691102@mail1.libero.it>
-In-Reply-To: <20210305130211.2860914-1-mkl@pengutronix.de>
-References: <20210305130211.2860914-1-mkl@pengutronix.de>
-Subject: Re: [PATCH v6 0/12] can: c_can: add support to 64 message objects
+        id S229799AbhCIMqK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 9 Mar 2021 07:46:10 -0500
+Received: from mail-yb1-f170.google.com ([209.85.219.170]:40655 "EHLO
+        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229544AbhCIMqK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 9 Mar 2021 07:46:10 -0500
+Received: by mail-yb1-f170.google.com with SMTP id c131so13789665ybf.7
+        for <linux-can@vger.kernel.org>; Tue, 09 Mar 2021 04:46:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iZVX4P6GO6TuP6ukYs5oXp8i0aZ0okK0rj5UnJMGUJk=;
+        b=DhDBdejYugNkM5J8bGDTt2ZjPeOAijOF90zV9iuxmoLHp35rJG0Qyz19CUA7qV/zNt
+         jk/JWG4V2hYRypiDovpawjmyBg+OKokfMXE+4JSQUQ8fMkCso6kySGm5VVr9KMhzKJgX
+         NRkLSIedrCNolNNV6SBp9YbtsBQzGmCSruyBxakb5qnvm/w4X5WoFNPHkk0Lv5T5aoP7
+         FqW40b8OvWR+16uqzRrZgtatw0zs8IXViPxJ+PXKpYX+yLQVCM3v6Pz2WT2NFkrZ40TI
+         IBEBJykOy6jAGiZOF9qYFC27g2TPWZs/96L+Z1J7PW77Yld8QTAaZM5xbZiMLCtFCZwf
+         eXkw==
+X-Gm-Message-State: AOAM5305xFa+iC0Rbqzqum6Tctm20cqxmDzs47OQNJhSggwdRdcapxva
+        oR9uHh184q4VzrfoDum/TtlmdbjdTFsRLI9CWAQ=
+X-Google-Smtp-Source: ABdhPJy8/qDhYu3gU+JR48ivgMQjBbZQrZ/gFyoNMXCJkth+72SVb6mOd0rtM8ir54uclHdDEH8W+7asJmM5dzzH0no=
+X-Received: by 2002:a25:254a:: with SMTP id l71mr39837035ybl.125.1615293969483;
+ Tue, 09 Mar 2021 04:46:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-Importance: Normal
-X-Mailer: Open-Xchange Mailer v7.10.3-Rev27
-X-Originating-IP: 185.33.57.41
-X-Originating-Client: open-xchange-appsuite
-x-libjamsun: ZOUYbfK43OiFtnK2FIaUMltXpItcoY2/
-x-libjamv: F9fNopjYPV0=
-X-CMAE-Envelope: MS4xfL0hrdgSstfTzqtnFxQLVyQa+HpMDqpD8P8X6GsbMXZypG7vU9VvWIybgX54YHiirIlPWxe/RQUAWur/O+EL7L0KLd4mBf+gj6YrnQ2kU1bxV9HYegju
- qHyftOYZM47nuyU/hM5gAF3P4pFz8gqzPpx6JY/pwlT3pfMOzQLZsypDqNiVSZU1tUg4hnown4qanVJ0xy/VfseRbg1y40z1rTNClOeQxNDqJLzQzThdiOLq
- cNdB9zPHG4WoHGaLlGREIWdBEJol6jMZZq65FJhOPJc=
+References: <20210308163445.103636-1-mailhol.vincent@wanadoo.fr>
+ <20210308163445.103636-2-mailhol.vincent@wanadoo.fr> <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
+In-Reply-To: <2b43e72b-c561-d144-c01e-c4ea361cc932@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 9 Mar 2021 21:45:58 +0900
+Message-ID: <CAMZ6RqJADCFL_=uv-=hNjiNj+CZkUDNWjLTP3eV010KGj+H49A@mail.gmail.com>
+Subject: Re: [PATCH v12 1/1] can: usb: etas_es58X: add support for ETAS ES58X
+ CAN USB interfaces
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Marc,
 
-> Il 05/03/2021 14:01 Marc Kleine-Budde <mkl@pengutronix.de> ha scritto:
-> 
->  
-> Hello,
-> 
-> this series picks up Dario Binacchi's patches and adds some cleanup
-> patches in front.
-> 
-> The D_CAN controller supports up to 128 messages. Until now the driver
-> only managed 32 messages although Sitara processors and DRA7 SOC can
-> handle 64.
-> 
-> The series was tested on a beaglebone board.
-> 
-> Note:
-> I have not changed the type of tx_field (belonging to the c_can_priv
-> structure) to atomic64_t because I think the atomic_t type has size
-> of at least 32 bits on x86 and arm, which is enough to handle 64
-> messages.
-> http://marc.info/?l=linux-can&m=139746476821294&w=2 reports the results
-> of tests performed just on x86 and arm architectures.
-> 
-> Changes in v6:
-> - make patches
->   [PATCH v5 0/11] can: c_can: add support to 64 message objects
->   [PATCH v5 0/11] can: c_can: add support to 64 message objects
->   separate again, they have been squashed accidentally 
-> 
-> Changes in v5:
-> - Add cleanup patches
-> - alloc_c_can_dev(): make use of struct_size()
-> 
-> Changes in v4:
-> - Restore IF_RX interface.
-> - Add a comment to clarify why IF_RX interface is used instead of IF_TX.
-> - Use GENMASK() for setting msg_obj_rx_mask.
-> - Use BIT() for setting single bits and GENMASK() for setting masks.
-> 
-> Changes in v3:
-> - Use unsigned int instead of int as type of the msg_obj_* fields
->   in the c_can_priv structure.
-> - Replace (u64)1 with 1UL in msg_obj_rx_mask setting.
-> - Use unsigned int instead of int as type of the msg_obj_num field
->   in c_can_driver_data and c_can_pci_data structures.
-> 
-> Changes in v2:
-> - Fix compiling error reported by kernel test robot.
-> - Add Reported-by tag.
-> - Pass larger size to alloc_candev() routine to avoid an additional
->   memory allocation/deallocation.
-> - Add message objects number to PCI driver data.
+On Tue. 9 Mar 2021 at 19:27, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 3/8/21 5:34 PM, Vincent Mailhol wrote:
+> > This driver supports the ES581.4, ES582.1 and ES584.1 interfaces from
+> > ETAS GmbH (https://www.etas.com/en/products/es58x.php).
+> >
+> > Co-developed-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> > Signed-off-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
+> > Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+>
+> I'm not sure if you're supposed to change dql.min_limit from the driver.
 
-I tested the patch series on a custom board having two CAN ports.
-I connected the CAN1 port to the CAN2 port with a cable. Then I
-opened two terminals. On one I issued a dump command and on the
-other the transmit command used in the tests described in
-https://marc.info/?l=linux-can&m=139746476821294&w=2.
+One thing for sure, I am the only one to do it.
 
-Terminal-1:
-$ ip link set can1 type can bitrate <bitrate>
-$ ip link set up can1
-$ candump -t can1 >/tmp/can-test-<bitrate>/out
+The reason to do so is because benchmarks show me that values
+below this threshold are not good for this device (and I try to
+be very permissive on the values).
 
-Terminal-2
-$ ip link set can0 type can bitrate <bitrate>
-$ ip link set up can0
-$ time cangen can0 -g0 -p1 -I5A5 -L0 -x -n 1000000
+USB introduces a lot of latency and the small PDU of CAN does not
+help. The BQL is here to remediate, however, the algorithms can
+take time to adjust, especially if there are small bursts.
+Modifying the dql.min_limit was the only solution I found to make
+sure that packets can be sent in bulk even during small burst
+events.
 
-Then I applied the following commands to the file generated by the dump
-command:
-$ wc -l </tmp/can-test-<bitrate>                                 # ca
-$ egrep -v '  can1  5A5   \[0\]' /tmp/can-test-<bitrate> | wc -l # cb
+The BQL was not designed for USB nor was it designed for CAN
+which probably explains why I am the first one to ever have
+thought of using dql.min_limit like this. Using dql.min_limit is
+a hack and I pledge guilty for it. However, because this hack
+brings performance improvement, I would like to keep it if you do
+not mind.
 
-I repeated the tests for 1000000, 500000, 250000 and 125000 bitrates,
-before and after applying the series.
-Here are the results.
 
-Before applying the series:
-
- bitrate       time         ca         cb
-  125000    6m 45.22s    1000000        0
-  250000    3m 25.94s    1000000        0
-  500000    1m 45.62s    1000000        0
- 1000000    1m  9.28s    1000000        0
-
-After applying the series:
-
- bitrate       time         ca         cb
-  125000    6m 42.71s    1000000        0
-  250000    3m 23.28s    1000000        0
-  500000    1m 44.04s    1000000        0
- 1000000    1m  8.44s    1000000        0
-
-Thanks and regards,
-Dario
+Yours sincerely,
+Vincent
