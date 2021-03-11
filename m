@@ -2,108 +2,170 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77116334A30
-	for <lists+linux-can@lfdr.de>; Wed, 10 Mar 2021 22:57:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D813371DC
+	for <lists+linux-can@lfdr.de>; Thu, 11 Mar 2021 12:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbhCJV4t (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 10 Mar 2021 16:56:49 -0500
-Received: from mx1.emlix.com ([136.243.223.33]:44336 "EHLO mx1.emlix.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231719AbhCJV4X (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 10 Mar 2021 16:56:23 -0500
-Received: from mailer.emlix.com (unknown [81.20.119.6])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 31F795FCA4;
-        Wed, 10 Mar 2021 22:56:22 +0100 (CET)
-Date:   Wed, 10 Mar 2021 22:56:21 +0100
-From:   Daniel =?iso-8859-1?Q?Gl=F6ckner?= <dg@emlix.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S232881AbhCKLzU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 11 Mar 2021 06:55:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232860AbhCKLzF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Mar 2021 06:55:05 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A2DAC061574
+        for <linux-can@vger.kernel.org>; Thu, 11 Mar 2021 03:55:05 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lKJuB-000610-Bb; Thu, 11 Mar 2021 12:55:03 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:cd1a:e083:465e:4edf])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6271C5F35AF;
+        Thu, 11 Mar 2021 11:55:02 +0000 (UTC)
+Date:   Thu, 11 Mar 2021 12:55:01 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Daniel =?utf-8?B?R2zDtmNrbmVy?= <dg@emlix.com>
 Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
 Subject: Re: Softirq error with mcp251xfd driver
-Message-ID: <20210310215621.GA5538@homes.emlix.com>
+Message-ID: <20210311115501.uhke2wpsf6kpgexu@pengutronix.de>
 References: <20210310064626.GA11893@homes.emlix.com>
  <20210310071351.rimo5qvp5t3hwjli@pengutronix.de>
  <20210310212254.GA2050@homes.emlix.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yjmigm222rxv7cps"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20210310212254.GA2050@homes.emlix.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Mar 10, 2021 at 10:22:54PM +0100, Daniel Glöckner wrote:
+
+--yjmigm222rxv7cps
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 10.03.2021 22:22:54, Daniel Gl=C3=B6ckner wrote:
 > On Wed, Mar 10, 2021 at 08:13:51AM +0100, Marc Kleine-Budde wrote:
-> > On 10.03.2021 07:46:26, Daniel Glöckner wrote:
-> > > the mcp251xfd driver uses a threaded irq handler to queue skbs with the
-> > > can_rx_offload_* helpers. I get the following error on every packet until
+> > On 10.03.2021 07:46:26, Daniel Gl=C3=B6ckner wrote:
+> > > the mcp251xfd driver uses a threaded irq handler to queue skbs with t=
+he
+> > > can_rx_offload_* helpers. I get the following error on every packet u=
+ntil
 > > > the rate limit kicks in:
-> > > 
+> > >=20
 > > > NOHZ tick-stop error: Non-RCU local softirq work is pending, handler
 > > > #08!!!
-> > 
+> >=20
 > > That's a known problem. But I had no time to investigate it.
-> > 
-> > > Adding local_bh_disable/local_bh_enable around the can_rx_offload_* calls
+> >=20
+> > > Adding local_bh_disable/local_bh_enable around the can_rx_offload_* c=
+alls
 > > > gets rid of the error, but is that the correct way to fix this?
 > > > Internally the can_rx_offload code uses spin_lock_irqsave to safely
 > > > manipulate its queue.
-> > 
+> >=20
 > > The problem is not the queue handling inside of rx_offload, but the call
 > > to napi_schedule(). This boils down to raising a soft IRQ (the NAPI)
 > > from the threaded IRQ handler of the mcp251xfd driver.
-> > 
+> >=20
 > > The local_bh_enable() "fixes" the problem running the softirq if needed.
-> > 
+> >=20
 > > https://elixir.bootlin.com/linux/v5.11/source/kernel/softirq.c#L1913
-> > 
+> >=20
 > > I'm not sure how to properly fix the problem, yet.
-> 
+>=20
 > If I understand correctly, the point of using can_rx_offload_* in the
 > mcp251xfd driver is that it sorts the rx, tx, and error frames according
-> to their timestamp. In that case calling local_bh_enable after each packet
-> is not correct because there will never be more than one packet in the
-> queue. We want to call local_bh_disable + can_rx_offload_schedule +
+> to their timestamp.
+
+ACK - Also using netif_rx*() doesn't guarantee packet order, but
+netif_receive_skb() does.
+
+> In that case calling local_bh_enable after each packet is not correct
+> because there will never be more than one packet in the queue.
+
+Have I understood the code correctly, will the NAPI will run
+synchronously in local_bh_enable()? Will the NAPI then process other
+skbs (i.e. Ethernet) in our context? That would defeat the whole purpose
+of reading the CAN frames independent of the NAPI...
+
+> We want to call local_bh_disable + can_rx_offload_schedule +
 > local_bh_enable only at the end of mcp251xfd_irq after intf_pending
-> indicated that there are no more packets inside the chip. How about adding
-> a flag to struct can_rx_offload that suppresses the automatic calls to
-> can_rx_offload_schedule?
-> 
+> indicated that there are no more packets inside the chip. How about
+> adding a flag to struct can_rx_offload that suppresses the automatic
+> calls to can_rx_offload_schedule?
+
+Oleksij has a work-in-progress patch series where the
+can_rx_offload_schedule() is moved out of the
+can_rx_offload_queue_sorted(). This fixes a RX-before-TX problem, which
+arises if the NAPI runs between RX and before the TX frames have been
+added to the queue.
+
 > If there is the risk that under high load we will never exit the loop in
 > mcp251xfd_irq or if can_rx_offload_napi_poll might run again while we add
-> more packets to the queue, a more complex scheme is needed. We could
-> extend can_rx_offload_napi_poll to process only packets with a timestamp
-> below a certain value. That value has to be read from the TBC register
-> before we read the INT register. Then the three functions can be run after
-> each iteration to empty the queue. We need to update that timestamp limit
-> one more time when we finally exit the loop to process those packets that
-> have arrived after the reading of the TBC register when the INT register
-> still had bits set. Using the timestamp of the tail of the queue is
-> probably the easiest way to set the final limit.
+> more packets to the queue, a more complex scheme is needed.
 
-Or we leave can_rx_offload unchanged and keep two additional lists of skbs
-inside the mcp251xfd driver: One for the packets that arrived before the
-timestamp read from TBC and one for the packets that arrived later. At the
-end of an iteration we call local_bh_disable, enqueue all packets from the
-first list with can_rx_offload_queue_sorted, and the ask the softirq to
-process them by calling local_bh_enable. Afterwards we move everything
-from the second list to the first list and do the next iteration.
+ACK - Due to this complexity the patch series is still WIP. Maybe we can
+post the series later today, so that you can pick it up.
 
-The drawback is that we can't use can_rx_offload_get_echo_skb.
+> We could extend can_rx_offload_napi_poll to process only packets with
+> a timestamp below a certain value. That value has to be read from the
+> TBC register before we read the INT register.
 
-Best regards,
+I don't think this is a good idea, reading a register over SPI is too
+expensive.
 
-  Daniel
+> Then the three functions can be run after each iteration to empty the
+> queue. We need to update that timestamp limit one more time when we
+> finally exit the loop to process those packets that have arrived after
+> the reading of the TBC register when the INT register still had bits
+> set. Using the timestamp of the tail of the queue is probably the
+> easiest way to set the final limit.
 
--- 
-Dipl.-Math. Daniel Glöckner, emlix GmbH, http://www.emlix.com
-Fon +49 551 30664-0, Fax +49 551 30664-11,
-Gothaer Platz 3, 37083 Göttingen, Germany
-Sitz der Gesellschaft: Göttingen, Amtsgericht Göttingen HR B 3160
-Geschäftsführung: Heike Jordan, Dr. Uwe Kracke
-Ust-IdNr.: DE 205 198 055
+We had the following ideas:
 
-emlix - your embedded linux partner
+If no TX packages are on the fly, call napi_schedule at end of IRQ
+handler loop.
+ =20
+If TX packages are on the fly and we have TX-completed at least one, we
+can flush until and including the latest TX-completed CAN frame. If
+there are no completed TX frames yet, we have to take care that the
+queue doesn't grow too large. TX frames can be delayed almost
+indefinitely, if they have a low priority. Always keep in mind that
+reading from the controller is really expensive and we want to avoid
+this at all costs.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--yjmigm222rxv7cps
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBKBRIACgkQqclaivrt
+76kkfQf8Cf26eiZ4AzHCAT7vyhMuaa6KOuhMMbEtN6klFZDHASF7BUcHyIyhkXFT
+bJPmwOuMcjAAkx8HluaItc0iwvrI0crG6w96R4RKaMGaG9HMJwBsI6dSwxg2qd6h
+O7a7hx/Mf9KNNiNtfNWL0TwtCDE+IQm1rgrw8C+4LPfxu2gSUTHqOfo5hEPLVpJW
+5FjU6LsiPq5zjhmThImbup7bxiDtO3igKmtqo/x0fZrWF/BCUn2xLwqwAs2wO/tU
+99tDShZtPzOEBkdvxwA3xVpdqv1tHH98dgVetjN+BZiJ/XO7AFYzYiezd7of+F9q
+Jah+vWm4epJZjSO7aNyZX0Z8z1gClQ==
+=AzOo
+-----END PGP SIGNATURE-----
+
+--yjmigm222rxv7cps--
