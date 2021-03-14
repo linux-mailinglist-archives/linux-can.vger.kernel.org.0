@@ -2,101 +2,114 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3917337252
-	for <lists+linux-can@lfdr.de>; Thu, 11 Mar 2021 13:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FBA339FE4
+	for <lists+linux-can@lfdr.de>; Sat, 13 Mar 2021 19:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbhCKMU7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 11 Mar 2021 07:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbhCKMU4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 11 Mar 2021 07:20:56 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0F8C061574
-        for <linux-can@vger.kernel.org>; Thu, 11 Mar 2021 04:20:56 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lKKJC-000182-TI; Thu, 11 Mar 2021 13:20:54 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:cd1a:e083:465e:4edf])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 064CE5F3608;
-        Thu, 11 Mar 2021 12:20:53 +0000 (UTC)
-Date:   Thu, 11 Mar 2021 13:20:53 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Daniel =?utf-8?B?R2zDtmNrbmVy?= <dg@emlix.com>
-Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org
-Subject: Re: Softirq error with mcp251xfd driver
-Message-ID: <20210311122053.4ymta6byqjeocmsv@pengutronix.de>
-References: <20210310064626.GA11893@homes.emlix.com>
- <20210310071351.rimo5qvp5t3hwjli@pengutronix.de>
- <20210310212254.GA2050@homes.emlix.com>
- <20210310215621.GA5538@homes.emlix.com>
+        id S234269AbhCMSfE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Sat, 13 Mar 2021 13:35:04 -0500
+Received: from smtp.econet.co.zw ([77.246.51.158]:62181 "EHLO
+        ironportDMZ.econet.co.zw" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233635AbhCMSfD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 13 Mar 2021 13:35:03 -0500
+X-Greylist: delayed 433 seconds by postgrey-1.27 at vger.kernel.org; Sat, 13 Mar 2021 13:34:59 EST
+IronPort-SDR: mDSsjbKcaVdFG5GqQFMTeVc4aoZLRWVLGK1vUixCIY/uKtiD+m/7fNEhsBwBepPPMn5tEcgkXN
+ 0kf+g54xDaGQWLxdgNKWkT/NUYMdqLmEqGlbInNSaPrs7yIG9pllVbsvofgOvAiBfF2rtkOKdd
+ 7jDcRkn+QnPB1cMXsh3WrHO408qEXiGC2s0ldR4usP1gFSqmQD3lDKIoO1zSIRS7akrX1fM7+K
+ c3Wh8mzoculYKqvYE5rOQJx27JaaDEmpetBPJ1QOhwlDUj3Q04CLzUjG78czQ4P1gDppi3dbk+
+ HVc=
+IronPort-HdrOrdr: A9a23:hlvA3aN5TRyAvsBcTmGjsMiAIKoaSvp033AA0UdtRRtJNvGCn8
+ e1k/gBkTPygjAdWHYv8OrwWpWoa3Xa6JJz/M0tLa6vNTOW21eAAYl+4eLZogHINDb58odmup
+ tIV4hbJJnOAUNhjcD8iTPZL/8FzMOc+K6lwcfypk0dND1CUK1r4wdnBgvzKCQfL2MqObMDGI
+ OY9o57oVObFUg/VcinGmIDG9HKutyjruOcXTc9GxUl5AOS5AnH1JfGFXGjr28jegIK5Y0H+W
+ jB1zXj5qO5s+yqoyWss1P73tBzkNvlxsArPr3qtuElbhHtjgqPQagJYczlgBkF5Ni16FAwkM
+ Tdyi1QWvhO1w==
+X-IronPort-AV: E=Sophos;i="5.81,245,1610402400"; 
+   d="scan'208";a="3444427"
+Received: from unknown (HELO wvale-jmb-svr-1.econetzw.local) ([192.168.101.35])
+  by ironportLAN.econet.co.zw with ESMTP; 13 Mar 2021 20:27:44 +0200
+Received: from PKTS-MB-SVR-03.econetzw.local (192.168.81.9) by
+ wvale-jmb-svr-1.econetzw.local (192.168.101.35) with Microsoft SMTP Server
+ (TLS) id 15.0.1473.3; Sat, 13 Mar 2021 20:27:43 +0200
+Received: from WVALE-CAS-SVR-9.econetzw.local (192.168.101.60) by
+ pkts-mb-svr-03.econetzw.local (192.168.81.9) with Microsoft SMTP Server (TLS)
+ id 15.0.1473.3; Sat, 13 Mar 2021 20:27:41 +0200
+Received: from User (165.231.148.189) by WVALE-CAS-SVR-9.econetzw.local
+ (10.10.11.230) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
+ Transport; Sat, 13 Mar 2021 20:27:55 +0200
+Reply-To: <r19772744@daum.net>
+From:   "Reem E. A" <chawora@econet.co.zw>
+Subject: Re:
+Date:   Sat, 13 Mar 2021 18:27:40 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6aabzysww5xjeyax"
-Content-Disposition: inline
-In-Reply-To: <20210310215621.GA5538@homes.emlix.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <a0187928693a4e759d4094abaf71afbe@WVALE-CAS-SVR-9.econetzw.local>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
---6aabzysww5xjeyax
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (2) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home on their behalf and
+for our "Mutual Benefits".
 
-On 10.03.2021 22:56:21, Daniel Gl=C3=B6ckner wrote:
-[...]
-> Or we leave can_rx_offload unchanged and keep two additional lists of skbs
-> inside the mcp251xfd driver: One for the packets that arrived before the
-> timestamp read from TBC and one for the packets that arrived later. At the
-> end of an iteration we call local_bh_disable, enqueue all packets from the
-> first list with can_rx_offload_queue_sorted, and the ask the softirq to
-> process them by calling local_bh_enable. Afterwards we move everything
-> from the second list to the first list and do the next iteration.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Turkish Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-In the patch series (which was started by Kurt Van Dijck) there is a
-second queue in rx-offload, this one is filled inside the IRQ handler
-and than added at the end of the IRQ handler to the queue that NAPI
-works on. He started this to get rid of the spin_lock operation on every
-skb added to the queue.
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+reem.alhashimi@yandex.com
 
-> The drawback is that we can't use can_rx_offload_get_echo_skb.
+Regards,
+Ms. Reem.
+This mail was sent through Econet Wireless, a Global telecoms leader.
 
-I'd like to keep it, as this optimizes other use cases, too.
+DISCLAIMER
 
-regards,
-Marc
+The information in this message is confidential and is legally privileged. It is intended solely for the addressee. Access to this message by anyone else is unauthorized. If received in error please accept our apologies and notify the sender immediately. You must also delete the original message from your machine. If you are not the intended recipient, any use, disclosure, copying, distribution or action taken in reliance of it, is prohibited and may be unlawful. The information, attachments, opinions or advice contained in this email are not the views or opinions of Econet Wireless, its subsidiaries or affiliates. Econet Wireless therefore accepts no liability for claims, losses, or damages arising from the inaccuracy, incorrectness, or lack of integrity of such information.
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/AgileBanner.png]
+WORK ISN'T A PLACE
+IT'S WHAT WE DO
+________________________________
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---6aabzysww5xjeyax
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBKCyIACgkQqclaivrt
-76nUyQf/eri29ha+3N/5YdQ6kq6PPo7xTdHMUTU6MLA5SZL7dxBgB+yKU0j//1xw
-Ryn7ovUTWa7K0AScFXtGQVXg7p4nJjGDEdcexUh7A27YOBTcli2/b3t7g3onBXmH
-UOEtsEKNpqv/2EzOg9Dgo2wSPTMNzftSeBvagNIGCOU/k1U1jCSzgMyEL6mqrY72
-aIimXO6kDSgX5GLFWusR5a7vYSotNIKhDHmjkaoiYT2Hlo8EXtsLDJ2/EEgtZ8nF
-Ahai9hRjrrNitRiOiecqjMcOT0QlYbcgGvwtH/QtnAre6AP7lMEYDAf0D5L+DpVI
-dxs+/rxFsxcYWvE8tMVuqfPT5Lwpmw==
-=a5V8
------END PGP SIGNATURE-----
 
---6aabzysww5xjeyax--
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/telephone.png]
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/email.png]
+
+<mailto:>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/location.png]
+
+
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/website.png]
+
+www.econet.co.zw<https://www.econet.co.zw>
+
+
+[https://mail.econet.co.zw/OWA/auth/current/themes/resources/Agile/inspired.jpg]
