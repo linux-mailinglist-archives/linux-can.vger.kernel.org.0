@@ -2,121 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D602A33C0AD
-	for <lists+linux-can@lfdr.de>; Mon, 15 Mar 2021 17:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3302F33C39B
+	for <lists+linux-can@lfdr.de>; Mon, 15 Mar 2021 18:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbhCOP7a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Mar 2021 11:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S230452AbhCORJ6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 15 Mar 2021 13:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbhCOP7F (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Mar 2021 11:59:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B08C06174A
-        for <linux-can@vger.kernel.org>; Mon, 15 Mar 2021 08:59:04 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lLpcU-0002zv-G0; Mon, 15 Mar 2021 16:59:02 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:91fd:fdb9:356d:9a2d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D00C45F5D28;
-        Mon, 15 Mar 2021 15:59:00 +0000 (UTC)
-Date:   Mon, 15 Mar 2021 16:59:00 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Subject: Re: [PATCH v2 4/5] can: add netlink interface for CAN-FD Transmitter
- Delay Compensation (TDC)
-Message-ID: <20210315155900.a6l5l5aeuvsgn55x@pengutronix.de>
-References: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
- <20210224002008.4158-5-mailhol.vincent@wanadoo.fr>
+        with ESMTP id S233615AbhCORJw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Mar 2021 13:09:52 -0400
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C59CC06175F
+        for <linux-can@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
+Received: by mail-ua1-x943.google.com with SMTP id h34so4423174uah.5
+        for <linux-can@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=aXgMsfvJxS8rnPrkFXfXe2FXnX4z8Cqcu/QhnL5Qn1DjMCuOtoNVfGi4EBSS9Iknwn
+         vlNLqDk2YbQyiCk670OLjQr7loetNG1u4FZO8UCDQ2J04lVrlvZVYZ8kX/m2f/vpT8RG
+         ZS2Q72l+5VWjpF0FapEgmyk86Q2RyIYtBwW0g+Kv5gwmZmeSODXVZRu5TrncT2JBKVWl
+         0T4REScA9GLg4vUJnQBLz/6DT44uKbQMn8TCECFL0QnRbFsF40mm5TjkcPcIZSc0whXV
+         T2AgYFv8Od1V+OxvkOJjvUw7wQyrmJeMqbP2Cwhn97vz8cjryp78SHO5Uey9b3DA2nH3
+         +UTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
+        b=n5WeCcXupivYArwqkGtByjKmqphOCPu47FtzJ2ahCXojr5Mbcw134JGzKDbKvgFL9N
+         t/16Ej8wzFU/ceOw38nmaFZRVm6lfi3yE6UpKVB86DwvdwfTG3qTTwiONn7cwERUnX+2
+         lZafpXfwclg42jqZW2LfejVQwLTifhda/80OooEC0IH6ti9pmJtLwcTWtgPkXRRMmN3x
+         W3XR/Z5fl1RH6lReT2kn+xGAcnkpeT8DXwFiHdXhWl+vgyX0X1i/ErP1LezE5V7qXERn
+         MzP59/tsYcM7Oq7WpygZ1LVKfXilNuZ/B6RwPxfBzrV6QdJ2vJD6nK7ig5+mm7RRfTaW
+         zfQA==
+X-Gm-Message-State: AOAM532X242JXkgJ6D6frxd30y/z21s5xuN0SypgUMfD5sZmqOzh+vpf
+        hA9JJU46O3Rc9o6/l/VGfvk+rCp+5dBVfIq0YT0=
+X-Google-Smtp-Source: ABdhPJz279ChG9se2R56+CgC4LM1QaXLH3vfcRaBnVrWnTQpeUm6AYsXRAqStDe2E32gf/IZJ47H7xYnUK1rrffxr7c=
+X-Received: by 2002:ab0:4129:: with SMTP id j38mr5247512uad.39.1615828191432;
+ Mon, 15 Mar 2021 10:09:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="claa2ydl5f2a7cxu"
-Content-Disposition: inline
-In-Reply-To: <20210224002008.4158-5-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:09:50
+ -0700 (PDT)
+Reply-To: ezbtg22@gmail.com
+From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
+Date:   Mon, 15 Mar 2021 10:09:50 -0700
+Message-ID: <CAH16wSNYh7NNhzrypnhaAQBv8EfF3vGrQ=w1tsAkdJyEQZxf=A@mail.gmail.com>
+Subject: From Mrs.Glenn
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+-- 
+Dear Beloved,
 
---claa2ydl5f2a7cxu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
+in a hospital bed in Israel. I am 59 years and childless; my husband
+is dead. I was diagnosed with terminal cancer. And my doctor just
+predicted that I have but very limited time to live due to damages in
+my system and as a result of that I decided to dispose my 10.5 million
+US dollars to a God-fearing one for the continuation of charitable
+work. This is why I located you.
 
-On 24.02.2021 09:20:07, Vincent Mailhol wrote:
-> Add the netlink interface for TDC parameters of struct can_tdc and
-> can_tdc_const.
->=20
-> Contrary to the can_bittiming(_const) structures for which there is
-> just a single IFLA_CAN(_DATA)_BITTMING(_CONST) entry per structure,
-> here, an IFLA_CAN_TDC* entry is added for each of the TDC parameters
-> of the newly introduced struct can_tdc and struct can_tdc_const.
->=20
-> For struct can_tdc, these are:
-> 	IFLA_CAN_TDCV
-> 	IFLA_CAN_TDCO
-> 	IFLA_CAN_TDCF
->=20
-> For struct can_tdc_const, these are:
-> 	IFLA_CAN_TDCV_MAX_CONST
-> 	IFLA_CAN_TDCO_MAX_CONST
-> 	IFLA_CAN_TDCF_MAX_CONST
->=20
-> This is done so that changes can be applied in the future to the
-> structures without breaking the netlink interface.
->=20
-> All the new parameters are defined as u32. This arbitrary choice is
-> done to mimic the other bittiming values with are also all of type
-> u32. An u16 would have been sufficient to hold the TDC values.
+My guess about you may not be accurate because I came across your
+contact at the humanitarian calendar event of the year but I believe
+in God who divinely directed me to you for this solemn proposal of
+charitable work.
 
-I just had a look at the ethtool-netlink interface:
+Therefore I wholeheartedly wish to bequeath my fortune to you as a
+God-fearing person for the continuation of charitable work anywhere
+around the world.
 
-| Documentation/networking/ethtool-netlink.rst
+I shall be going in for a surgery operations soonest and desire this
+money to be transferred to you as I do not wish to leave this money in
+the bank because bankers might misuse it for their own interest after
+my death.
 
-this is much better designed than the CAN netlink interface. It was done
-by the pros and much later than CAN. :D So I'd like to have a similar
-structure for new CAN netlink stuff.
+As soon as I receive your quick reply assuring me that you will
+utilize the money as I instructed you for the benefit of the less
+privilege, I shall give you more details and also instruct my bank to
+release the money to you for the charity project. I hope you receive
+this mail in good health.
 
-So I think I'll remove this patch for now from can-next-testing. The
-kernel internal interface to tdc is still OK, we can leave it as is and
-change it if needed. But netlink is user space and I'd like to have it
-properly designed.
+Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
+know what will be my situation in next minute,
 
-regards,
-Marc
+I am waiting for your reply.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---claa2ydl5f2a7cxu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBPhEEACgkQqclaivrt
-76kl8Qf+J4tDslM4VNAhhcjOdBGXweZMng5DnLon7LRR/DxfX5Eh21c9agyRqrH3
-LiOnGZevytsa63Trb7LPomFB0b2+yqnYrcLfy4n11j3DAO6tQXiDoTuzrE+HIBtt
-7Gp+rdeqoZyTmlFjfzQhd9ln9g5k6iRmCYK5cfguqtranL8IgDBrzT9re1k/Uvjr
-6iEPXKYtW0XrZX8Ju9X3o4aPTVBOQjgfr7YSuF+yD9kqUh4Vt1ha2r7BRhMQMP9n
-y6+uxx9EC0ge+HXf54LRAF4YxnSfQLIQ5RQQbrE4FaH6KJTiB5Q+of9EMWJz4Hbm
-XyhYvMv1ZDjtHPDtzcicy2lbRJ4BOw==
-=5C+6
------END PGP SIGNATURE-----
-
---claa2ydl5f2a7cxu--
+Yours sincerely,
+Mrs Elizabet Glenn.
