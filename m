@@ -2,95 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3302F33C39B
-	for <lists+linux-can@lfdr.de>; Mon, 15 Mar 2021 18:10:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BB333C62B
+	for <lists+linux-can@lfdr.de>; Mon, 15 Mar 2021 19:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbhCORJ6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Mar 2021 13:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233615AbhCORJw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Mar 2021 13:09:52 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C59CC06175F
-        for <linux-can@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id h34so4423174uah.5
-        for <linux-can@vger.kernel.org>; Mon, 15 Mar 2021 10:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=aXgMsfvJxS8rnPrkFXfXe2FXnX4z8Cqcu/QhnL5Qn1DjMCuOtoNVfGi4EBSS9Iknwn
-         vlNLqDk2YbQyiCk670OLjQr7loetNG1u4FZO8UCDQ2J04lVrlvZVYZ8kX/m2f/vpT8RG
-         ZS2Q72l+5VWjpF0FapEgmyk86Q2RyIYtBwW0g+Kv5gwmZmeSODXVZRu5TrncT2JBKVWl
-         0T4REScA9GLg4vUJnQBLz/6DT44uKbQMn8TCECFL0QnRbFsF40mm5TjkcPcIZSc0whXV
-         T2AgYFv8Od1V+OxvkOJjvUw7wQyrmJeMqbP2Cwhn97vz8cjryp78SHO5Uey9b3DA2nH3
-         +UTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7Vrbe4gpVhb7cfcmpNanXi5E+OCzidx3VGMrGNR2bC4=;
-        b=n5WeCcXupivYArwqkGtByjKmqphOCPu47FtzJ2ahCXojr5Mbcw134JGzKDbKvgFL9N
-         t/16Ej8wzFU/ceOw38nmaFZRVm6lfi3yE6UpKVB86DwvdwfTG3qTTwiONn7cwERUnX+2
-         lZafpXfwclg42jqZW2LfejVQwLTifhda/80OooEC0IH6ti9pmJtLwcTWtgPkXRRMmN3x
-         W3XR/Z5fl1RH6lReT2kn+xGAcnkpeT8DXwFiHdXhWl+vgyX0X1i/ErP1LezE5V7qXERn
-         MzP59/tsYcM7Oq7WpygZ1LVKfXilNuZ/B6RwPxfBzrV6QdJ2vJD6nK7ig5+mm7RRfTaW
-         zfQA==
-X-Gm-Message-State: AOAM532X242JXkgJ6D6frxd30y/z21s5xuN0SypgUMfD5sZmqOzh+vpf
-        hA9JJU46O3Rc9o6/l/VGfvk+rCp+5dBVfIq0YT0=
-X-Google-Smtp-Source: ABdhPJz279ChG9se2R56+CgC4LM1QaXLH3vfcRaBnVrWnTQpeUm6AYsXRAqStDe2E32gf/IZJ47H7xYnUK1rrffxr7c=
-X-Received: by 2002:ab0:4129:: with SMTP id j38mr5247512uad.39.1615828191432;
- Mon, 15 Mar 2021 10:09:51 -0700 (PDT)
+        id S231574AbhCOSxp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 15 Mar 2021 14:53:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232701AbhCOSxe (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 15 Mar 2021 14:53:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BC9D64E61;
+        Mon, 15 Mar 2021 18:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1615834414;
+        bh=I/C5JsE0km0+j4siEIBkM6jWf4KUJ3smXtoWYnUceEk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K/yoqIYs8ult9ZaBc1vO0zCXU6+iWRWYWcqDLZihMz/21Hj4Wy/htWvM6CfAf4Qc6
+         m8NwZBzJAwD/n8rB2rb2Rhl8jClNYKCYlgX4My0C4bELzXVSwo5YnCIysNN12Z4D2K
+         jnVwYLtsSOLgoJ2n6F1TCLqPVm49t1aSE4NeeFE0lbUV3c6GcRRlN+XYIVNocCgucB
+         hSKRFDMq7EoCMVHeUEvY31qVNEwfY/jYMTBmBomfjV4lPj8Yv4QND4d1xXOTGs3UBO
+         9F45bp24HVlh1Gvqjz9VGEO5otHVsQl3gd9t+3blsPt4zTjk/pVcyMOWDJPdJLL3bw
+         0UKi27M10rixw==
+Date:   Mon, 15 Mar 2021 11:53:32 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
+        <weiwan@google.com>, <cong.wang@bytedance.com>,
+        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
+Subject: Re: [RFC v2] net: sched: implement TCQ_F_CAN_BYPASS for lockless
+ qdisc
+Message-ID: <20210315115332.1647e92b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1615777818-13969-1-git-send-email-linyunsheng@huawei.com>
+References: <1615603667-22568-1-git-send-email-linyunsheng@huawei.com>
+        <1615777818-13969-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:2e8f:0:0:0:0:0 with HTTP; Mon, 15 Mar 2021 10:09:50
- -0700 (PDT)
-Reply-To: ezbtg22@gmail.com
-From:   "Mrs.E.Glenn" <mrganuserge654@gmail.com>
-Date:   Mon, 15 Mar 2021 10:09:50 -0700
-Message-ID: <CAH16wSNYh7NNhzrypnhaAQBv8EfF3vGrQ=w1tsAkdJyEQZxf=A@mail.gmail.com>
-Subject: From Mrs.Glenn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
--- 
-Dear Beloved,
+On Mon, 15 Mar 2021 11:10:18 +0800 Yunsheng Lin wrote:
+> @@ -606,6 +623,11 @@ static const u8 prio2band[TC_PRIO_MAX + 1] = {
+>   */
+>  struct pfifo_fast_priv {
+>  	struct skb_array q[PFIFO_FAST_BANDS];
+> +
+> +	/* protect against data race between enqueue/dequeue and
+> +	 * qdisc->empty setting
+> +	 */
+> +	spinlock_t lock;
+>  };
+>  
+>  static inline struct skb_array *band2list(struct pfifo_fast_priv *priv,
+> @@ -623,7 +645,10 @@ static int pfifo_fast_enqueue(struct sk_buff *skb, struct Qdisc *qdisc,
+>  	unsigned int pkt_len = qdisc_pkt_len(skb);
+>  	int err;
+>  
+> -	err = skb_array_produce(q, skb);
+> +	spin_lock(&priv->lock);
+> +	err = __ptr_ring_produce(&q->ring, skb);
+> +	WRITE_ONCE(qdisc->empty, false);
+> +	spin_unlock(&priv->lock);
+>  
+>  	if (unlikely(err)) {
+>  		if (qdisc_is_percpu_stats(qdisc))
+> @@ -642,6 +667,7 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+>  	struct sk_buff *skb = NULL;
+>  	int band;
+>  
+> +	spin_lock(&priv->lock);
+>  	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
+>  		struct skb_array *q = band2list(priv, band);
+>  
+> @@ -655,6 +681,7 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+>  	} else {
+>  		WRITE_ONCE(qdisc->empty, true);
+>  	}
+> +	spin_unlock(&priv->lock);
+>  
+>  	return skb;
+>  }
 
-I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
-in a hospital bed in Israel. I am 59 years and childless; my husband
-is dead. I was diagnosed with terminal cancer. And my doctor just
-predicted that I have but very limited time to live due to damages in
-my system and as a result of that I decided to dispose my 10.5 million
-US dollars to a God-fearing one for the continuation of charitable
-work. This is why I located you.
-
-My guess about you may not be accurate because I came across your
-contact at the humanitarian calendar event of the year but I believe
-in God who divinely directed me to you for this solemn proposal of
-charitable work.
-
-Therefore I wholeheartedly wish to bequeath my fortune to you as a
-God-fearing person for the continuation of charitable work anywhere
-around the world.
-
-I shall be going in for a surgery operations soonest and desire this
-money to be transferred to you as I do not wish to leave this money in
-the bank because bankers might misuse it for their own interest after
-my death.
-
-As soon as I receive your quick reply assuring me that you will
-utilize the money as I instructed you for the benefit of the less
-privilege, I shall give you more details and also instruct my bank to
-release the money to you for the charity project. I hope you receive
-this mail in good health.
-
-Please contact me on this E-mail (ezbtg22@gmail.com) because I don t
-know what will be my situation in next minute,
-
-I am waiting for your reply.
-
-Yours sincerely,
-Mrs Elizabet Glenn.
+I thought pfifo was supposed to be "lockless" and this change
+re-introduces a lock between producer and consumer, no?
