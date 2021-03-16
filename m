@@ -2,189 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4579333D3FB
-	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 13:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2945233D715
+	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 16:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbhCPMhZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 Mar 2021 08:37:25 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3486 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232010AbhCPMgx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 08:36:53 -0400
-Received: from DGGEMM402-HUB.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F0CRb01qVzRQWX;
-        Tue, 16 Mar 2021 20:35:07 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- DGGEMM402-HUB.china.huawei.com (10.3.20.210) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Tue, 16 Mar 2021 20:36:50 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Tue, 16 Mar
- 2021 20:36:50 +0800
-Subject: Re: [RFC v2] net: sched: implement TCQ_F_CAN_BYPASS for lockless
- qdisc
-To:     Eric Dumazet <edumazet@google.com>
-CC:     Jakub Kicinski <kuba@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "Wei Wang" <weiwan@google.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>
-References: <1615603667-22568-1-git-send-email-linyunsheng@huawei.com>
- <1615777818-13969-1-git-send-email-linyunsheng@huawei.com>
- <20210315115332.1647e92b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <3838b7c2-c32f-aeda-702a-5cb8f712ec0c@huawei.com>
- <CANn89iKQOxvGkr3g37xT1qkcc55gbRGNkFGcGLQmR1PVaq8RjA@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <4eb6bb79-0122-3472-d4a6-ed41475f6a96@huawei.com>
-Date:   Tue, 16 Mar 2021 20:36:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S236112AbhCPPRp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Mar 2021 11:17:45 -0400
+Received: from mail-yb1-f169.google.com ([209.85.219.169]:44253 "EHLO
+        mail-yb1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233350AbhCPPQN (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 11:16:13 -0400
+Received: by mail-yb1-f169.google.com with SMTP id f145so20790288ybg.11
+        for <linux-can@vger.kernel.org>; Tue, 16 Mar 2021 08:16:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Oi5aDw+4Qx2u0nrB9217FJupS4B/RU6Jze73MgpkaQ8=;
+        b=dsPC0wqffiSfV2XYCU9ch6M+pGV/uzqv3/03/ko4ci2tCAwFw7f0X6u43QHPQU9AvT
+         olfAZvVO44nqD4OwSeOlhhjZk7f4dlFEBo4R9JTfu+vdItV8NAluiWUsrL7WcSEmVXzo
+         xzn/hAzWYvOftNWA1Cvv+Cep6SnmcXoUkzaJklTaUJkulbcPlA8eeoACXOP92WHYPHRF
+         FviTOcSEduNE+/EDDHn3bD69scpZbTNPDUEuDlGkrH14DLkX6uKp8g9hrphrYnlnOPlq
+         +/hJgDgGLwHGCTlYBVGLt0M5gn77H9056rzm0b9TU5rhRSjxqQvwo/1t+dhAowaAD05E
+         8MJg==
+X-Gm-Message-State: AOAM532tCSscBry62CEKzlDcHOge9k6dR1ntNlZNMFvcdDBPVcWaeKc4
+        hVY5TYrZvvFFtS0PMYLaLHHyvZeqN1ffB81kqA7ZBQhbf3chdQ==
+X-Google-Smtp-Source: ABdhPJwAK40nqtrOkC7XFpLq1UTAq/+0L8xIAV9FGwdjy//GVtKgI8GeOehzMDZXe3GBTFdLQ8gK17yEyxj2OJLEzc0=
+X-Received: by 2002:a25:254a:: with SMTP id l71mr7650222ybl.125.1615907772620;
+ Tue, 16 Mar 2021 08:16:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CANn89iKQOxvGkr3g37xT1qkcc55gbRGNkFGcGLQmR1PVaq8RjA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme713-chm.china.huawei.com (10.1.199.109) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+References: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
+ <20210224002008.4158-5-mailhol.vincent@wanadoo.fr> <20210315155900.a6l5l5aeuvsgn55x@pengutronix.de>
+In-Reply-To: <20210315155900.a6l5l5aeuvsgn55x@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 17 Mar 2021 00:16:01 +0900
+Message-ID: <CAMZ6RqJyMXzog1mu3S62yMAxJorTg0D5VL5OYKALYRoMxN_DdQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] can: add netlink interface for CAN-FD Transmitter
+ Delay Compensation (TDC)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/3/16 16:15, Eric Dumazet wrote:
-> On Tue, Mar 16, 2021 at 1:35 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>
->> On 2021/3/16 2:53, Jakub Kicinski wrote:
->>> On Mon, 15 Mar 2021 11:10:18 +0800 Yunsheng Lin wrote:
->>>> @@ -606,6 +623,11 @@ static const u8 prio2band[TC_PRIO_MAX + 1] = {
->>>>   */
->>>>  struct pfifo_fast_priv {
->>>>      struct skb_array q[PFIFO_FAST_BANDS];
->>>> +
->>>> +    /* protect against data race between enqueue/dequeue and
->>>> +     * qdisc->empty setting
->>>> +     */
->>>> +    spinlock_t lock;
->>>>  };
->>>>
->>>>  static inline struct skb_array *band2list(struct pfifo_fast_priv *priv,
->>>> @@ -623,7 +645,10 @@ static int pfifo_fast_enqueue(struct sk_buff *skb, struct Qdisc *qdisc,
->>>>      unsigned int pkt_len = qdisc_pkt_len(skb);
->>>>      int err;
->>>>
->>>> -    err = skb_array_produce(q, skb);
->>>> +    spin_lock(&priv->lock);
->>>> +    err = __ptr_ring_produce(&q->ring, skb);
->>>> +    WRITE_ONCE(qdisc->empty, false);
->>>> +    spin_unlock(&priv->lock);
->>>>
->>>>      if (unlikely(err)) {
->>>>              if (qdisc_is_percpu_stats(qdisc))
->>>> @@ -642,6 +667,7 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
->>>>      struct sk_buff *skb = NULL;
->>>>      int band;
->>>>
->>>> +    spin_lock(&priv->lock);
->>>>      for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
->>>>              struct skb_array *q = band2list(priv, band);
->>>>
->>>> @@ -655,6 +681,7 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
->>>>      } else {
->>>>              WRITE_ONCE(qdisc->empty, true);
->>>>      }
->>>> +    spin_unlock(&priv->lock);
->>>>
->>>>      return skb;
->>>>  }
->>>
->>> I thought pfifo was supposed to be "lockless" and this change
->>> re-introduces a lock between producer and consumer, no?
->>
->> Yes, the lock breaks the "lockless" of the lockless qdisc for now
->> I do not how to solve the below data race locklessly:
->>
->>         CPU1:                                   CPU2:
->>       dequeue skb                                .
->>           .                                      .
->>           .                                 enqueue skb
->>           .                                      .
->>           .                      WRITE_ONCE(qdisc->empty, false);
->>           .                                      .
->>           .                                      .
->> WRITE_ONCE(qdisc->empty, true);
-> 
-> 
-> Maybe it is time to fully document/explain how this can possibly work.
+On Tue. 16 Mar 2021 at 00:59, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 24.02.2021 09:20:07, Vincent Mailhol wrote:
+> > Add the netlink interface for TDC parameters of struct can_tdc and
+> > can_tdc_const.
+> >
+> > Contrary to the can_bittiming(_const) structures for which there is
+> > just a single IFLA_CAN(_DATA)_BITTMING(_CONST) entry per structure,
+> > here, an IFLA_CAN_TDC* entry is added for each of the TDC parameters
+> > of the newly introduced struct can_tdc and struct can_tdc_const.
+> >
+> > For struct can_tdc, these are:
+> >       IFLA_CAN_TDCV
+> >       IFLA_CAN_TDCO
+> >       IFLA_CAN_TDCF
+> >
+> > For struct can_tdc_const, these are:
+> >       IFLA_CAN_TDCV_MAX_CONST
+> >       IFLA_CAN_TDCO_MAX_CONST
+> >       IFLA_CAN_TDCF_MAX_CONST
+> >
+> > This is done so that changes can be applied in the future to the
+> > structures without breaking the netlink interface.
+> >
+> > All the new parameters are defined as u32. This arbitrary choice is
+> > done to mimic the other bittiming values with are also all of type
+> > u32. An u16 would have been sufficient to hold the TDC values.
+>
+> I just had a look at the ethtool-netlink interface:
+>
+> | Documentation/networking/ethtool-netlink.rst
+>
+> this is much better designed than the CAN netlink interface. It was done
+> by the pros and much later than CAN. :D So I'd like to have a similar
+> structure for new CAN netlink stuff.
+>
+> So I think I'll remove this patch for now from can-next-testing. The
+> kernel internal interface to tdc is still OK, we can leave it as is and
+> change it if needed. But netlink is user space and I'd like to have it
+> properly designed.
 
-I might be able to provide some document/explain on how the lockless
-qdisc work for I was looking through the code the past few days.
+Understood. However, I will need more time to read and understand
+the ethtool-netlink interface. The new patch will come later, I
+do not know when.
 
-By "lockless", I suppose it means there is no lock between enqueuing and
-dequeuing, whoever grasps the qdisc->seqlock can dequeue the skb and send
-it out after enqueuing the skb it tries to send, other CPU which does not
-grasp the qdisc->seqlock just enqueue the skb and return, hoping other cpu
-holding the qdisc->seqlock can dequeue it's skb and send it out.
 
-For the locked qdisck(the one without TCQ_F_NOLOCK flags set), it holds
-the qdisc_lock() when doing the enqueuing/dequeuing and sch_direct_xmit(),
-and in sch_direct_xmit() it releases the qdisc_lock() when doing skb validation
-and calling dev_hard_start_xmit() to send skb to the driver, and hold the
-qdisc_lock() again after calling dev_hard_start_xmit(), so other cpu may
-grasps the qdisc_lock() and repeat the above process during that qdisc_lock()
-release period.
-
-So the main difference between lockess qdisc and locked qdisc is if
-there is a lock to protect both enqueuing and dequeuing. For example, pfifo_fast
-uses ptr_ring to become lockless for enqueuing or dequeuing, but it still needs
-producer_lock to protect the concurrent enqueue, and consumer_lock to protect
-the concurrent dequeue. for Other qdisc that can not provide the lockless between
-enqueuing or dequeuing, maybe we implement the locking in the specific qdisc
-implementation, so that it still can claim to be "lockless", like the locking
-added for pfifo_fast in this patch.
-
-Idealy we can claim all qdisc to be lockess qdisc as long as we make sure
-all qdisc either use lockless implementation, or use internal lock to protect
-between enqueuing and dequeuing, so that we can remove the locked dqisc and
-will have less contention between enqueuing and dequeuing.
-
-Below patch is the first try to remove the difference between lockess qdisc
-and locked qdisc, so that we can see if we can remove the locked qdisc in the
-future:
-
-https://patchwork.kernel.org/project/netdevbpf/patch/1615800610-34700-1-git-send-email-linyunsheng@huawei.com/
-
-I may be wrong about the above analysis, if there is any error, please
-point it out.
-
-> 
-> lockless qdisc used concurrently by multiple cpus, using
-> WRITE_ONCE() and READ_ONCE() ?
-> 
-> Just say no to this.
-
-what do you mean "no" here? Do you mean it is impossible to implement lockless
-qdisc correctly?  Or TCQ_F_CAN_BYPASS for lockless qdisc is a wrong direction?
-And is there any reason?
-
-> 
->>
->> If the above happens, the qdisc->empty is true even if the qdisc has some
->> skb, which may cuase out of order or packet stuck problem.
->>
->> It seems we may need to update ptr_ring' status(empty or not) while
->> enqueuing/dequeuing atomically in the ptr_ring implementation.
->>
->> Any better idea?
-> 
-> .
-> 
-
+Yours sincerely,
+Vincent
