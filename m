@@ -2,133 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BD833CC46
-	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 04:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC2533CECC
+	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 08:47:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbhCPDri (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 15 Mar 2021 23:47:38 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:3302 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbhCPDr3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 15 Mar 2021 23:47:29 -0400
-Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4DzzgF5hL1z145Nb;
-        Tue, 16 Mar 2021 11:44:25 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Tue, 16 Mar 2021 11:47:25 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Tue, 16 Mar
- 2021 11:47:25 +0800
-Subject: Re: [Linuxarm] Re: [RFC v2] net: sched: implement TCQ_F_CAN_BYPASS
- for lockless qdisc
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
-        <weiwan@google.com>, <cong.wang@bytedance.com>,
-        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>
-References: <1615603667-22568-1-git-send-email-linyunsheng@huawei.com>
- <1615777818-13969-1-git-send-email-linyunsheng@huawei.com>
- <20210315115332.1647e92b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <3838b7c2-c32f-aeda-702a-5cb8f712ec0c@huawei.com>
-Message-ID: <3ddec762-19c8-6743-43dd-3e44f91fd113@huawei.com>
-Date:   Tue, 16 Mar 2021 11:47:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S232498AbhCPHqt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Mar 2021 03:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231809AbhCPHqb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 03:46:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBDBC06174A
+        for <linux-can@vger.kernel.org>; Tue, 16 Mar 2021 00:46:31 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lM4PM-00063l-9t; Tue, 16 Mar 2021 08:46:28 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6392:1248:cd55:3bde])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0DDB05F639F;
+        Tue, 16 Mar 2021 07:46:26 +0000 (UTC)
+Date:   Tue, 16 Mar 2021 08:46:26 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Angelo Dureghello <angelo@kernel-space.org>
+Cc:     wg@grandegger.com, qiangqing.zhang@nxp.com,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: flexcan: fix chip freeze for missing bitrate
+Message-ID: <20210316074626.7iz2vmjo42mxqjua@pengutronix.de>
+References: <20210315231510.650593-1-angelo@kernel-space.org>
 MIME-Version: 1.0
-In-Reply-To: <3838b7c2-c32f-aeda-702a-5cb8f712ec0c@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme717-chm.china.huawei.com (10.1.199.113) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="e6amiogjwqv2jc3x"
+Content-Disposition: inline
+In-Reply-To: <20210315231510.650593-1-angelo@kernel-space.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/3/16 8:35, Yunsheng Lin wrote:
-> On 2021/3/16 2:53, Jakub Kicinski wrote:
->> On Mon, 15 Mar 2021 11:10:18 +0800 Yunsheng Lin wrote:
->>> @@ -606,6 +623,11 @@ static const u8 prio2band[TC_PRIO_MAX + 1] = {
->>>   */
->>>  struct pfifo_fast_priv {
->>>  	struct skb_array q[PFIFO_FAST_BANDS];
->>> +
->>> +	/* protect against data race between enqueue/dequeue and
->>> +	 * qdisc->empty setting
->>> +	 */
->>> +	spinlock_t lock;
->>>  };
->>>  
->>>  static inline struct skb_array *band2list(struct pfifo_fast_priv *priv,
->>> @@ -623,7 +645,10 @@ static int pfifo_fast_enqueue(struct sk_buff *skb, struct Qdisc *qdisc,
->>>  	unsigned int pkt_len = qdisc_pkt_len(skb);
->>>  	int err;
->>>  
->>> -	err = skb_array_produce(q, skb);
->>> +	spin_lock(&priv->lock);
->>> +	err = __ptr_ring_produce(&q->ring, skb);
->>> +	WRITE_ONCE(qdisc->empty, false);
->>> +	spin_unlock(&priv->lock);
->>>  
->>>  	if (unlikely(err)) {
->>>  		if (qdisc_is_percpu_stats(qdisc))
->>> @@ -642,6 +667,7 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
->>>  	struct sk_buff *skb = NULL;
->>>  	int band;
->>>  
->>> +	spin_lock(&priv->lock);
->>>  	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
->>>  		struct skb_array *q = band2list(priv, band);
->>>  
->>> @@ -655,6 +681,7 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
->>>  	} else {
->>>  		WRITE_ONCE(qdisc->empty, true);
->>>  	}
->>> +	spin_unlock(&priv->lock);
->>>  
->>>  	return skb;
->>>  }
->>
->> I thought pfifo was supposed to be "lockless" and this change
->> re-introduces a lock between producer and consumer, no?
-> 
-> Yes, the lock breaks the "lockless" of the lockless qdisc for now
-> I do not how to solve the below data race locklessly:
-> 
-> 	CPU1:					CPU2:
->       dequeue skb				 .
-> 	  .				    	 .	
-> 	  .				    enqueue skb
-> 	  .					 .
-> 	  .			 WRITE_ONCE(qdisc->empty, false);
-> 	  .					 .
-> 	  .					 .
-> WRITE_ONCE(qdisc->empty, true);
-> 
-> If the above happens, the qdisc->empty is true even if the qdisc has some
-> skb, which may cuase out of order or packet stuck problem.
-> 
-> It seems we may need to update ptr_ring' status(empty or not) while
-> enqueuing/dequeuing atomically in the ptr_ring implementation.
-> 
-> Any better idea?
 
-It seems we can use __ptr_ring_empty() within the qdisc->seqlock protection,
-because qdisc->seqlock is clearly served as r->consumer_lock.
+--e6amiogjwqv2jc3x
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
->>
->> .
->>
-> _______________________________________________
-> Linuxarm mailing list -- linuxarm@openeuler.org
-> To unsubscribe send an email to linuxarm-leave@openeuler.org
-> 
+On 16.03.2021 00:15:10, Angelo Dureghello wrote:
+> For cases when flexcan is built-in, bitrate is still not set
+> at registering. So flexcan_chip_freeze() generates:
+>=20
+> [    1.860000] *** ZERO DIVIDE ***   FORMAT=3D4
+> [    1.860000] Current process id is 1
+> [    1.860000] BAD KERNEL TRAP: 00000000
+> [    1.860000] PC: [<402e70c8>] flexcan_chip_freeze+0x1a/0xa8
+>=20
+> To allow chip freeze, using an hardcoded timeout when bitrate is still
+> not set.
+>=20
+> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
 
+Applied to linux-can/testing
+
+Thanks,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--e6amiogjwqv2jc3x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBQYk8ACgkQqclaivrt
+76mZlwf7BLTAqzFsY+6y1wa+7fsh6a47CwI4rmeG8URI5w3W7E8PYESM+UNAxO+D
+ZHjEpq20yN8YGMDEPPSa23JNc1DflzlhKFnwiwNpEeWiT42T71To7WPo+Jdt6Z1L
+8S4uaIBStHulPETXRHN6hGlgQSnHVpET3aHwmxC0GRXy8HGyTUoXH5qJtxXdUQAm
+0EgIUvuzRSRPEkUxdd5oziszC0sIU2RAnV7dbxqYnNkTQv/ElBiOSQEWGFFzMmsS
+qA/Db7e4oLeiakiUy1T+dmfkLxnCd133SFSyOBZB2Mlw1B1qbKLG19qEAp/loIMJ
+zVorxBEDrZHcFMDpyeaMHDVXrTvU9A==
+=5Q9E
+-----END PGP SIGNATURE-----
+
+--e6amiogjwqv2jc3x--
