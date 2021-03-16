@@ -2,103 +2,105 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D0F33D76D
-	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 16:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B1B33D887
+	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 17:03:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbhCPPaI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 Mar 2021 11:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S238329AbhCPQCa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Mar 2021 12:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236835AbhCPP3x (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 11:29:53 -0400
+        with ESMTP id S238335AbhCPQAs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 12:00:48 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D476C06174A
-        for <linux-can@vger.kernel.org>; Tue, 16 Mar 2021 08:29:52 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lMBdm-0005rO-5L; Tue, 16 Mar 2021 16:29:50 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6392:1248:cd55:3bde])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 052B65F6913;
-        Tue, 16 Mar 2021 15:29:48 +0000 (UTC)
-Date:   Tue, 16 Mar 2021 16:29:48 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Subject: Re: [PATCH v2 4/5] can: add netlink interface for CAN-FD Transmitter
- Delay Compensation (TDC)
-Message-ID: <20210316152948.eqak6slrs2xf5lc4@pengutronix.de>
-References: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
- <20210224002008.4158-5-mailhol.vincent@wanadoo.fr>
- <20210315155900.a6l5l5aeuvsgn55x@pengutronix.de>
- <CAMZ6RqJyMXzog1mu3S62yMAxJorTg0D5VL5OYKALYRoMxN_DdQ@mail.gmail.com>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A70C061765
+        for <linux-can@vger.kernel.org>; Tue, 16 Mar 2021 09:00:32 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1lMC7P-0001cf-67; Tue, 16 Mar 2021 17:00:27 +0100
+Subject: [BUG] Re: [net 3/6] can: flexcan: invoke flexcan_chip_freeze() to
+ enter freeze mode
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>, linux-can@vger.kernel.org,
+        kernel@pengutronix.de, kuba@kernel.org, davem@davemloft.net
+References: <20210301112100.197939-1-mkl@pengutronix.de>
+ <20210301112100.197939-4-mkl@pengutronix.de>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <65137c60-4fbe-6772-6d48-ac360930f62b@pengutronix.de>
+Date:   Tue, 16 Mar 2021 17:00:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2krjvrsoqljuz2hh"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqJyMXzog1mu3S62yMAxJorTg0D5VL5OYKALYRoMxN_DdQ@mail.gmail.com>
+In-Reply-To: <20210301112100.197939-4-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Joakim, Marc,
 
---2krjvrsoqljuz2hh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 01.03.21 12:20, Marc Kleine-Budde wrote:
+> From: Joakim Zhang <qiangqing.zhang@nxp.com>
+> 
+> Invoke flexcan_chip_freeze() to enter freeze mode, since need poll
+> freeze mode acknowledge.
+> 
+> Fixes: e955cead03117 ("CAN: Add Flexcan CAN controller driver")
+> Link: https://lore.kernel.org/r/20210218110037.16591-4-qiangqing.zhang@nxp.com
+> Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/flexcan.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index e66a51dbea0a..134c05757a3b 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -1480,10 +1480,13 @@ static int flexcan_chip_start(struct net_device *dev)
+>  
+>  	flexcan_set_bittiming(dev);
+>  
+> +	/* set freeze, halt */
+> +	err = flexcan_chip_freeze(priv);
+> +	if (err)
+> +		goto out_chip_disable;
 
-On 17.03.2021 00:16:01, Vincent MAILHOL wrote:
-> > I just had a look at the ethtool-netlink interface:
-> >
-> > | Documentation/networking/ethtool-netlink.rst
-> >
-> > this is much better designed than the CAN netlink interface. It was done
-> > by the pros and much later than CAN. :D So I'd like to have a similar
-> > structure for new CAN netlink stuff.
-> >
-> > So I think I'll remove this patch for now from can-next-testing. The
-> > kernel internal interface to tdc is still OK, we can leave it as is and
-> > change it if needed. But netlink is user space and I'd like to have it
-> > properly designed.
->=20
-> Understood. However, I will need more time to read and understand
-> the ethtool-netlink interface. The new patch will come later, I
-> do not know when.
+With v5.12-rc3, both my FlexCAN controllers on an i.MX6Q now divide by zero
+on probe because priv->can.bittiming.bitrate == 0 inside of flexcan_chip_freeze.
 
-No Problem
+Reverting this patch fixes it.
 
-Marc
+> +
+>  	/* MCR
+>  	 *
+> -	 * enable freeze
+> -	 * halt now
+>  	 * only supervisor access
+>  	 * enable warning int
+>  	 * enable individual RX masking
+> @@ -1492,9 +1495,8 @@ static int flexcan_chip_start(struct net_device *dev)
+>  	 */
+>  	reg_mcr = priv->read(&regs->mcr);
+>  	reg_mcr &= ~FLEXCAN_MCR_MAXMB(0xff);
+> -	reg_mcr |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT | FLEXCAN_MCR_SUPV |
+> -		FLEXCAN_MCR_WRN_EN | FLEXCAN_MCR_IRMQ | FLEXCAN_MCR_IDAM_C |
+> -		FLEXCAN_MCR_MAXMB(priv->tx_mb_idx);
+> +	reg_mcr |= FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN | FLEXCAN_MCR_IRMQ |
+> +		FLEXCAN_MCR_IDAM_C | FLEXCAN_MCR_MAXMB(priv->tx_mb_idx);
+>  
+>  	/* MCR
+>  	 *
+> 
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---2krjvrsoqljuz2hh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBQzukACgkQqclaivrt
-76m+ywf+IqLQ5uuANF+LAoKFiDi3MTAkwwvcQkElwMPWOxiHtTOglew7CvltZc9F
-DqqtGHNbLG/oOQluKXtjNtcXyM69siCV3WmMuzMuZDdPoXn7HsqMHhcVCkXZ0mtR
-by1SwFCOCLo41BiyyCaux6kbqU4inJTwluqBSTp/WpV4PCpi6ZdEOdyFKZ7S1gx1
-x/ycJ4OdLhy5Tq4IQF3dDDHK/RcUaBgg/lnCL5nsy33pKRCHNd+mPQLIg58IqaLi
-b3NdQJJMr2EqDzgLHYOml+lpCTRIJ9+gr8mxArpN30XUT5+0HWcB+a/Jbn/tNn43
-v76Sa4NmPrlsJ0LNd8AA6bO5xOSsKQ==
-=AMv4
------END PGP SIGNATURE-----
-
---2krjvrsoqljuz2hh--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
