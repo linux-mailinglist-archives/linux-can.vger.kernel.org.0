@@ -2,90 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABF233CFA8
-	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 09:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1CA33D047
+	for <lists+linux-can@lfdr.de>; Tue, 16 Mar 2021 10:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234396AbhCPIVj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 Mar 2021 04:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234421AbhCPIVW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 04:21:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC71C06174A
-        for <linux-can@vger.kernel.org>; Tue, 16 Mar 2021 01:21:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lM4x6-0003Dh-VW
-        for linux-can@vger.kernel.org; Tue, 16 Mar 2021 09:21:21 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 79F2B5F646C
-        for <linux-can@vger.kernel.org>; Tue, 16 Mar 2021 08:21:17 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 030605F643A;
-        Tue, 16 Mar 2021 08:21:10 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 89c33ec4;
-        Tue, 16 Mar 2021 08:21:06 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net 11/11] can: m_can: m_can_rx_peripheral(): fix RX being blocked by errors
-Date:   Tue, 16 Mar 2021 09:21:04 +0100
-Message-Id: <20210316082104.4027260-12-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210316082104.4027260-1-mkl@pengutronix.de>
-References: <20210316082104.4027260-1-mkl@pengutronix.de>
+        id S233906AbhCPJDQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 16 Mar 2021 05:03:16 -0400
+Received: from mail.kernel-space.org ([195.201.34.187]:42978 "EHLO
+        mail.kernel-space.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231888AbhCPJC7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 05:02:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
+        s=20190913; t=1615885376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qmo5ofGZf52G4GqOGhG5vIZRek1UX+429nBUjjkbEuY=;
+        b=wbqZrgtbQ0iyvlgblWUaZLbkkKDJRhmvbJR6C7n0SXq8wIVwoMDu+cxpInfeREdmxalqkh
+        pdPYYA/9cZVUmOT+Mg9xSWpknwIVZ6arUymHGIkUlAtNyP38ZZcx6ZEQm6kgGk9G53IyRw
+        0h3VMI7Pr9XgBWZF1bFwKiqKJo9zXrE=
+Received: from [192.168.0.2] (host-79-45-237-250.retail.telecomitalia.it [79.45.237.250])
+        by sysam.it (OpenSMTPD) with ESMTPSA id c66aedff (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 16 Mar 2021 09:02:55 +0000 (UTC)
+Message-ID: <fc58e507-e04e-50bc-8817-2570365d96ca@kernel-space.org>
+Date:   Tue, 16 Mar 2021 10:02:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:87.0) Gecko/20100101
+ Thunderbird/87.0
+Subject: Re: [net 05/11] can: flexcan: flexcan_chip_freeze(): fix chip freeze
+ for missing bitrate
+Content-Language: en-US
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20210316082104.4027260-1-mkl@pengutronix.de>
+ <20210316082104.4027260-6-mkl@pengutronix.de>
+From:   Angelo Dureghello <angelo@kernel-space.org>
+In-Reply-To: <20210316082104.4027260-6-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Hi all,
 
-For M_CAN peripherals, m_can_rx_handler() was called with quota = 1,
-which caused any error handling to block RX from taking place until
-the next time the IRQ handler is called. This had been observed to
-cause RX to be blocked indefinitely in some cases.
+On 16/03/21 9:20 AM, Marc Kleine-Budde wrote:
+> From: Angelo Dureghello <angelo@kernel-space.org>
+>
+> For cases when flexcan is built-in, bitrate is still not set at
+> registering. So flexcan_chip_freeze() generates:
+>
+> [    1.860000] *** ZERO DIVIDE ***   FORMAT=4
+> [    1.860000] Current process id is 1
+> [    1.860000] BAD KERNEL TRAP: 00000000
+> [    1.860000] PC: [<402e70c8>] flexcan_chip_freeze+0x1a/0xa8
+>
+> To allow chip freeze, using an hardcoded timeout when bitrate is still
+> not set.
+>
+> Fixes: ec15e27cc890 ("can: flexcan: enable RX FIFO after FRZ/HALT valid")
+> Link: https://lore.kernel.org/r/20210315231510.650593-1-angelo@kernel-space.org
+> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+> [mkl: use if instead of ? operator]
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  drivers/net/can/flexcan.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+> index 134c05757a3b..57f3635ad8d7 100644
+> --- a/drivers/net/can/flexcan.c
+> +++ b/drivers/net/can/flexcan.c
+> @@ -697,9 +697,15 @@ static int flexcan_chip_disable(struct flexcan_priv *priv)
+>  static int flexcan_chip_freeze(struct flexcan_priv *priv)
+>  {
+>  	struct flexcan_regs __iomem *regs = priv->regs;
+> -	unsigned int timeout = 1000 * 1000 * 10 / priv->can.bittiming.bitrate;
+> +	unsigned int timeout;
+> +	u32 bitrate = priv->can.bittiming.bitrate;
+>  	u32 reg;
+>  
+> +	if (bitrate)
+> +		timeout = 1000 * 1000 * 10 / bitrate;
+> +	else
+> +		timeout = FLEXCAN_TIMEOUT_US / 10;
+> +
+>  	reg = priv->read(&regs->mcr);
+>  	reg |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT;
+>  	priv->write(reg, &regs->mcr);
 
-This is fixed by calling m_can_rx_handler with a sensibly high quota.
+?
 
-Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
-Link: https://lore.kernel.org/r/20210303144350.4093750-1-torin@maxiluxsystems.com
-Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/m_can.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index d783c46cac16..0c8d36bc668c 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -873,7 +873,7 @@ static int m_can_rx_peripheral(struct net_device *dev)
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 
--	m_can_rx_handler(dev, 1);
-+	m_can_rx_handler(dev, M_CAN_NAPI_WEIGHT);
- 
- 	m_can_enable_all_interrupts(cdev);
- 
--- 
-2.30.1
+Just curious, what's the issue with my "?" ?
 
 
+Regards,
+--
+Angelo Dureghello
