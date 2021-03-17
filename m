@@ -2,89 +2,121 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8386A33E5C5
-	for <lists+linux-can@lfdr.de>; Wed, 17 Mar 2021 02:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FE133E94C
+	for <lists+linux-can@lfdr.de>; Wed, 17 Mar 2021 06:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbhCQBO6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 16 Mar 2021 21:14:58 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:5093 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhCQBOm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 16 Mar 2021 21:14:42 -0400
-Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4F0XFv57DFzYKq0;
-        Wed, 17 Mar 2021 09:12:51 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Wed, 17 Mar 2021 09:14:35 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Wed, 17 Mar
- 2021 09:14:35 +0800
-Subject: Re: [RFC v2] net: sched: implement TCQ_F_CAN_BYPASS for lockless
- qdisc
-To:     Cong Wang <xiyou.wangcong@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     David Miller <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "Wei Wang" <weiwan@google.com>,
-        "Cong Wang ." <cong.wang@bytedance.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        id S229994AbhCQFxD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 Mar 2021 01:53:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45950 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229862AbhCQFwr (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 17 Mar 2021 01:52:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A9BAE64F8C;
+        Wed, 17 Mar 2021 05:52:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1615960367;
+        bh=tOgFJ4o5PgryrZSo/91PbTtI3nbI+1J8paf/6XTa9WM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HJ9lKY4hGhS1co2uTb9cICsaNrZmtCRDTA55GJgvzxAPdZEb1OjpPKZIOfBwYDu7+
+         xn+uL5wP9w8GPZvQZijePGNwKkZHL+c8obT2jisoZudWe1R+gYYnEZfI1GJ87WqKsw
+         VWZICVxNTlWraAgPFUH1RTY+mog6FAfryPhI102k=
+Date:   Wed, 17 Mar 2021 06:52:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>
-References: <1615603667-22568-1-git-send-email-linyunsheng@huawei.com>
- <1615777818-13969-1-git-send-email-linyunsheng@huawei.com>
- <20210315115332.1647e92b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAM_iQpXvVZxBRHF6PBDOYSOSCj08nPyfcY0adKuuTg=cqffV+w@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <c91af612-24d3-798e-3df3-8bab35e01a38@huawei.com>
-Date:   Wed, 17 Mar 2021 09:14:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Brown <broonie@kernel.org>,
+        Cheng-Yi Chiang <cychiang@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
+Message-ID: <YFGZLM7MbypuE15L@kroah.com>
+References: <20210316194858.3527845-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAM_iQpXvVZxBRHF6PBDOYSOSCj08nPyfcY0adKuuTg=cqffV+w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/3/17 6:48, Cong Wang wrote:
-> On Mon, Mar 15, 2021 at 2:07 PM Jakub Kicinski <kuba@kernel.org> wrote:
->>
->> I thought pfifo was supposed to be "lockless" and this change
->> re-introduces a lock between producer and consumer, no?
+On Tue, Mar 16, 2021 at 01:48:58PM -0600, Rob Herring wrote:
+> Users of common properties shouldn't have a type definition as the
+> common schemas already have one. Drop all the unnecessary type
+> references in the tree.
 > 
-> It has never been truly lockless, it uses two spinlocks in the ring buffer
-> implementation, and it introduced a q->seqlock recently, with this patch
-> now we have priv->lock, 4 locks in total. So our "lockless" qdisc ends
-> up having more locks than others. ;) I don't think we are going to a
-> right direction...
-
-Yes, we have 4 locks in total, but lockless qdisc only use two locks
-in this patch, which are priv->lock and q->seqlock.
-
-The qdisc at least uses two locks, which is qdisc_lock(q) and q->busylock,
-which seems to have bigger contention when concurrent accessing to the
-same qdisc.
-
-If we want to reduce the total number of lock, we can use qdisc_lock(q)
-for lockless qdisc and remove q->seqlock:)
-
+> A meta-schema update to catch these is pending.
 > 
-> Thanks.
-> 
-> .
-> 
+> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> Cc: Maxime Ripard <mripard@kernel.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+> Cc: Odelu Kukatla <okukatla@codeaurora.org>
+> Cc: Alex Elder <elder@kernel.org>
+> Cc: Suman Anna <s-anna@ti.com>
+> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-can@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
+>  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
+>  .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
+>  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
+>  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
+>  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
+>  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
+>  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
+>  Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
+>  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
+>  Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
+>  .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
+>  Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
+>  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
+>  Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
+>  16 files changed, 5 insertions(+), 23 deletions(-)
 
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
