@@ -2,121 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FE133E94C
-	for <lists+linux-can@lfdr.de>; Wed, 17 Mar 2021 06:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F97E33EB43
+	for <lists+linux-can@lfdr.de>; Wed, 17 Mar 2021 09:19:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbhCQFxD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 17 Mar 2021 01:53:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45950 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229862AbhCQFwr (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 17 Mar 2021 01:52:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A9BAE64F8C;
-        Wed, 17 Mar 2021 05:52:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1615960367;
-        bh=tOgFJ4o5PgryrZSo/91PbTtI3nbI+1J8paf/6XTa9WM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HJ9lKY4hGhS1co2uTb9cICsaNrZmtCRDTA55GJgvzxAPdZEb1OjpPKZIOfBwYDu7+
-         xn+uL5wP9w8GPZvQZijePGNwKkZHL+c8obT2jisoZudWe1R+gYYnEZfI1GJ87WqKsw
-         VWZICVxNTlWraAgPFUH1RTY+mog6FAfryPhI102k=
-Date:   Wed, 17 Mar 2021 06:52:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Brown <broonie@kernel.org>,
-        Cheng-Yi Chiang <cychiang@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        Alex Elder <elder@kernel.org>, Suman Anna <s-anna@ti.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop type references on common properties
-Message-ID: <YFGZLM7MbypuE15L@kroah.com>
-References: <20210316194858.3527845-1-robh@kernel.org>
+        id S229640AbhCQISw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 17 Mar 2021 04:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229540AbhCQISl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 17 Mar 2021 04:18:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5B2C06174A
+        for <linux-can@vger.kernel.org>; Wed, 17 Mar 2021 01:18:41 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lMRNy-00086C-7B; Wed, 17 Mar 2021 09:18:34 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:31e3:6e40:b1cd:40a8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 244F65F736C;
+        Wed, 17 Mar 2021 08:18:32 +0000 (UTC)
+Date:   Wed, 17 Mar 2021 09:18:31 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     netdev@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-can@vger.kernel.org, kernel@pengutronix.de, kuba@kernel.org,
+        davem@davemloft.net
+Subject: Re: [BUG] Re: [net 3/6] can: flexcan: invoke flexcan_chip_freeze()
+ to enter freeze mode
+Message-ID: <20210317081831.osalrszbje4oofoh@pengutronix.de>
+References: <20210301112100.197939-1-mkl@pengutronix.de>
+ <20210301112100.197939-4-mkl@pengutronix.de>
+ <65137c60-4fbe-6772-6d48-ac360930f62b@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="of2tyaqxqtda5bhf"
 Content-Disposition: inline
-In-Reply-To: <20210316194858.3527845-1-robh@kernel.org>
+In-Reply-To: <65137c60-4fbe-6772-6d48-ac360930f62b@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Mar 16, 2021 at 01:48:58PM -0600, Rob Herring wrote:
-> Users of common properties shouldn't have a type definition as the
-> common schemas already have one. Drop all the unnecessary type
-> references in the tree.
-> 
-> A meta-schema update to catch these is pending.
-> 
-> Cc: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Cheng-Yi Chiang <cychiang@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Stefan Wahren <wahrenst@gmx.net>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Odelu Kukatla <okukatla@codeaurora.org>
-> Cc: Alex Elder <elder@kernel.org>
-> Cc: Suman Anna <s-anna@ti.com>
-> Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml       | 5 +----
->  Documentation/devicetree/bindings/arm/cpus.yaml              | 2 --
->  .../bindings/display/allwinner,sun4i-a10-tcon.yaml           | 1 -
->  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml    | 3 +--
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml      | 1 -
->  .../devicetree/bindings/interconnect/qcom,rpmh.yaml          | 1 -
->  .../bindings/memory-controllers/nvidia,tegra210-emc.yaml     | 2 +-
->  Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml   | 1 -
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml          | 1 -
->  Documentation/devicetree/bindings/nvmem/nvmem-consumer.yaml  | 2 --
->  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml   | 2 +-
->  Documentation/devicetree/bindings/sound/ak4642.yaml          | 2 --
->  .../devicetree/bindings/sound/google,cros-ec-codec.yaml      | 2 +-
->  Documentation/devicetree/bindings/sound/renesas,rsnd.yaml    | 1 -
->  .../devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml       | 1 -
->  Documentation/devicetree/bindings/usb/usb.yaml               | 1 -
->  16 files changed, 5 insertions(+), 23 deletions(-)
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+--of2tyaqxqtda5bhf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 16.03.2021 17:00:25, Ahmad Fatoum wrote:
+> > --- a/drivers/net/can/flexcan.c
+> > +++ b/drivers/net/can/flexcan.c
+> > @@ -1480,10 +1480,13 @@ static int flexcan_chip_start(struct net_device=
+ *dev)
+> > =20
+> >  	flexcan_set_bittiming(dev);
+> > =20
+> > +	/* set freeze, halt */
+> > +	err =3D flexcan_chip_freeze(priv);
+> > +	if (err)
+> > +		goto out_chip_disable;
+>=20
+> With v5.12-rc3, both my FlexCAN controllers on an i.MX6Q now divide by ze=
+ro
+> on probe because priv->can.bittiming.bitrate =3D=3D 0 inside of flexcan_c=
+hip_freeze.
+>=20
+> Reverting this patch fixes it.
+
+A fix for this in on its way to net/master:
+
+https://lore.kernel.org/linux-can/20210316082104.4027260-6-mkl@pengutronix.=
+de/
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--of2tyaqxqtda5bhf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBRu1QACgkQqclaivrt
+76nzJQgAlqMdzIBp25Sj4mIOKbe6LSUNo3yG/72y7Syx+amxcN4pSvok6ROfVA1k
+fXaqw873lEPWa4jYHKNtGG7ClCEx3ZBxN+XoJ6fDH98IeUnYK0Mhl/0/yLaiLo59
+FzWS9Tx2HuT+G6R4Lc58oeQtoWTQXutCJRqdmQmBG3IpTkgCXr8HQH+OttTl+kq7
+PWTqF87dGqasNWDJjzOCDxltSPqSaQVx4UtjkP3rgJCY8dZPIIM+Fo3UUOtB6LoR
+wcoEQ4pW1dzWBhKv/uWhY/XIB+MWTfnj7VPbSEQMxZHFon6mxZqh70ds8owXHbIW
+ZjOyozFQWFviyQCyXHm1klFk6tHQBA==
+=SR11
+-----END PGP SIGNATURE-----
+
+--of2tyaqxqtda5bhf--
