@@ -2,154 +2,155 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D16733402A9
-	for <lists+linux-can@lfdr.de>; Thu, 18 Mar 2021 11:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9A03402F4
+	for <lists+linux-can@lfdr.de>; Thu, 18 Mar 2021 11:12:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbhCRKDQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 18 Mar 2021 06:03:16 -0400
-Received: from mail-yb1-f170.google.com ([209.85.219.170]:43068 "EHLO
-        mail-yb1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbhCRKDM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Mar 2021 06:03:12 -0400
-Received: by mail-yb1-f170.google.com with SMTP id u75so1924753ybi.10
-        for <linux-can@vger.kernel.org>; Thu, 18 Mar 2021 03:03:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ysxm+f3DcM/Jk5RY2cdHDBr6MjC8CH1FDRB72v4sZWE=;
-        b=WERPDWu4A/dBMQhd46FGoZv3X7ZaUsz/Qk6Bzop27Qbpnsm0Y+piWxeCQAUbgoQkBg
-         FfFQ4iF86rKfWOZjjPq23Vf6lvWHQo7PAZ1PtsGvTeelkNDi8itCYMGp4sqY0kOVrbDz
-         RGllVpArPp+2Tq+alTCtkHtOgPS4OVB2Fv0U9GggM2Rla58DFZ0QmGocToaJKggB7x+r
-         +uENqWk30KLdBrxFtsCPIz9GxV2HJ9k6WYcYYkTM2rh7ydp8W5fIsUFaSgeK55JlCKax
-         APttbvQ4veRmUcO9vNz4FNktWcjcH0pLOtqz4MeBRWOLuE3ETAEFCFe8wPsPGdIL0CiE
-         b2LA==
-X-Gm-Message-State: AOAM530lQgGAfn2oIgy9ugtPU1Tl5zmflMcfQyyYfopepVM946NhzEyw
-        MT+YSlhhFRlJZ5pKes6l9d4DLQV9shbBw1pKFITs4k4ezGRGJg==
-X-Google-Smtp-Source: ABdhPJzzMNhqraQECaVzzTu70tHIWfPgXG68E2O/U0tSMC9QD7OPgzmEHuNdSO+T/ZpHBSnU0knZLWET3+umF5MdvsI=
-X-Received: by 2002:a05:6902:4b2:: with SMTP id r18mr10694938ybs.226.1616061791301;
- Thu, 18 Mar 2021 03:03:11 -0700 (PDT)
+        id S229649AbhCRKMY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 18 Mar 2021 06:12:24 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:25164 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229618AbhCRKL7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 18 Mar 2021 06:11:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1616062308; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=kwcYCTFYvBcXj5tH8IQ75LJz4gWAzkJxUwqGZ7M6Z3e0iVmeuv4lNwDl3eV0pzS4MD
+    8lYXrZLxXXf6Va5uC69pR4haEgNRlJ3CZKK4m4WtiZno88LzE4xnmP76SkURVx6udLU9
+    LXpUDWGGuW4IFm0girOLLeZ1Gj/XKDbBjUXqGxidOEoSrZ7Pp0Sosk+n9HJCpeIdEN7N
+    oxuRYHrmFiHSidWSBHT9upZpU0zdEQXDOkdYQZoNYrapm6MLuIORsEuQLXafLyXmBrvK
+    +EEdSAYAXdHq9Kd8BWBLT8Vjkpx55P7K2wkaDQXdlOsN2LG0hx52ROwcoucSfYuB5nB+
+    710A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616062308;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=+4w0vi7G/vmvpMV+8OYWuvA+rqzn6qG4BCKZ9rtRS1Y=;
+    b=bTOs+P3EVkbCdkaOGVRny8EXxg6RbTOJkAHTfkHgPlWw2gZZQJESaiPaqp+PPW9HpK
+    J7kJVivXYe+ZTx5d0mDlTMMQkcV+m1NqdPgoY5AWzCmb2APyFlcP6JF1X8Rj3AFLDAwq
+    PCpd5V+4L4U3niUTw88YGx/lYohVN3wMYOKe8Y0BrHtnJqXaozGo5aplYlDhLeXTV3vz
+    oBkY+qgYY6DKRibe5QykkEvVMZerxZln6FsGgM6/fCrUfpnYJ1QOcDIVs980XoRnDddv
+    uPhwm7/RPM8B5tte9tBchMTnd1ACLSzvKJwsEw/Cx1Qv6vdcxIpd1ra3sYr+mV9o+1By
+    GBuA==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616062308;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=+4w0vi7G/vmvpMV+8OYWuvA+rqzn6qG4BCKZ9rtRS1Y=;
+    b=YGZzskUI3GwrDrRsLW3hk803TChqp7iciKOjtw5/+UIonlfEmC41CausPzdS5tjAj5
+    9aEUuI8lPHypBljbBHJOtK471rlIyuc4zP6HwqwjsXOnUWVLg2kR0nh4pxLnReIkiNrh
+    5fXYZpPTGIgKQLwAWReiM8FCVZu7ga6MO5SHcAnUfCLFRZesU3G2Lr0zwaeUJgNSI94a
+    Uu0/9VkMqQnShgjvR8rfjFrOS+BgoxI8grRBsijNd+kaznaNLVUWUoYURNUXNDIayLut
+    /wkrtnSqIRRKbQZqfhq7ekLbxFJZiTndc5UHPKJjMlRCe9qoKUCXKzFC09aPuih2JLPh
+    TygA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVxiOMpjpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+    by smtp.strato.de (RZmta 47.21.0 DYNA|AUTH)
+    with ESMTPSA id R01debx2IABl1qi
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 18 Mar 2021 11:11:47 +0100 (CET)
+Subject: Re: [net 03/11] can: isotp: TX-path: ensure that CAN frame flags are
+ initialized
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20210316082104.4027260-1-mkl@pengutronix.de>
+ <20210316082104.4027260-4-mkl@pengutronix.de>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <bd9fc82e-d67b-34c8-fb74-8977b8825078@hartkopp.net>
+Date:   Thu, 18 Mar 2021 11:11:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-References: <20210309211904.3348700-1-mkl@pengutronix.de>
-In-Reply-To: <20210309211904.3348700-1-mkl@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 18 Mar 2021 19:03:00 +0900
-Message-ID: <CAMZ6Rq+QNj6ajmTyqtZt0HnJjg95Y_Ud-eokhZj9AvN1dPpRYg@mail.gmail.com>
-Subject: Re: [PATCH can-next] can: dev: always create TX echo skb
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de,
-        Oliver Hartkopp <socketcan@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210316082104.4027260-4-mkl@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hello Marc,
 
-On Wed. 10 Mar 2021 at 06:19, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> So far the creation of the TX echo skb was optional and can be
-> controlled by the local sender of a CAN frame.
->
-> It turns out that the TX echo CAN skb can be piggybacked to carry
-> information in the driver from the TX- to the TX-complete handler.
->
-> Several drivers already use the return value of
-> can_get_echo_skb() (which is the length of the data field in the CAN
-> frame) for their number of transferred bytes statistics. The
-> statistics are not working if CAN echo skbs are disabled.
->
-> Another use case is to calculate and set the CAN frame length on the
-> wire, which is needed for BQL support in both the TX and TX-completion
-> handler.
->
-> For now in can_put_echo_skb(), which is called from the TX handler,
-> the skb carrying the CAN frame is discarded if no TX echo is
-> requested, leading to the above illustrated problems.
->
-> This patch changes the can_put_echo_skb() function, so that the echo
-> skb is always generated. If the sender requests no echo, the echo skb
-> is consumed in __can_get_echo_skb() without being passed into the RX
-> handler of the networking stack, but the CAN data length and CAN frame
-> length information is properly returned.
->
+I obviously missed these patches - but they are fine. Thanks!
+
+After checking your patch I was going after this missing initialization 
+and detected that the outgoing CAN frame skbs from isotp.c were not 
+properly zero initialized - so I sent a patch for it some minutes ago:
+
+https://lore.kernel.org/linux-can/20210318100233.1693-1-socketcan@hartkopp.net/T/#u
+
+In fact I had
+
+ > CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
+ > CONFIG_INIT_ON_FREE_DEFAULT_ON=y
+
+in my local kernel config therefore I was not able to see it on my own :-/
+
+Best,
+Oliver
+
+On 16.03.21 09:20, Marc Kleine-Budde wrote:
+> The previous patch ensures that the TX flags (struct
+> can_isotp_ll_options::tx_flags) are 0 for classic CAN frames or a user
+> configured value for CAN-FD frames.
+> 
+> This patch sets the CAN frames flags unconditionally to the ISO-TP TX
+> flags, so that they are initialized to a proper value. Otherwise when
+> running "candump -x" on a classical CAN ISO-TP stream shows wrongly
+> set "B" and "E" flags.
+> 
+> | $ candump any,0:0,#FFFFFFFF -extA
+> | [...]
+> | can0  TX B E  713   [8]  2B 0A 0B 0C 0D 0E 0F 00
+> | can0  TX B E  713   [8]  2C 01 02 03 04 05 06 07
+> | can0  TX B E  713   [8]  2D 08 09 0A 0B 0C 0D 0E
+> | can0  TX B E  713   [8]  2E 0F 00 01 02 03 04 05
+> 
+> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+> Link: https://lore.kernel.org/r/20210218215434.1708249-2-mkl@pengutronix.de
+> Cc: Oliver Hartkopp <socketcan@hartkopp.net>
 > Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 > ---
->  drivers/net/can/dev/skb.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-> index 6a64fe410987..22b0472a5fad 100644
-> --- a/drivers/net/can/dev/skb.c
-> +++ b/drivers/net/can/dev/skb.c
-> @@ -45,7 +45,7 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
->         BUG_ON(idx >= priv->echo_skb_max);
->
->         /* check flag whether this packet has to be looped back */
-> -       if (!(dev->flags & IFF_ECHO) || skb->pkt_type != PACKET_LOOPBACK ||
-> +       if (!(dev->flags & IFF_ECHO) ||
->             (skb->protocol != htons(ETH_P_CAN) &&
->              skb->protocol != htons(ETH_P_CANFD))) {
->                 kfree_skb(skb);
-> @@ -58,7 +58,6 @@ int can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
->                         return -ENOMEM;
->
->                 /* make settings for echo to reduce code in irq context */
-> -               skb->pkt_type = PACKET_BROADCAST;
->                 skb->ip_summed = CHECKSUM_UNNECESSARY;
->                 skb->dev = dev;
->
-> @@ -111,6 +110,13 @@ __can_get_echo_skb(struct net_device *dev, unsigned int idx, u8 *len_ptr,
->
->                 priv->echo_skb[idx] = NULL;
->
-> +               if (skb->pkt_type == PACKET_LOOPBACK) {
-> +                       skb->pkt_type = PACKET_BROADCAST;
-> +               } else {
-> +                       dev_consume_skb_any(skb);
-> +                       return NULL;
-> +               }
-> +
->                 return skb;
->         }
-
-I do see any particular issues on this patch at the moment,
-however, while looking at the TX echo functionality, it reminded
-me of a point which has always been a bit unclear to me: the
-CAN_CTRLMODE_LOOPBACK. So let me go a bit off topic.
-
-Like all other controller's mode, I would expect the
-CAN_CTRLMODE_LOOPBACK flag to do two things:
-  - Announce that the device is capable of doing loopback
-  - Control this feature (enable/disable it)
-
-But, by default, this flag is set to 0 unless the user
-explicitly passes the "loopback on" argument when configuring
-the device.
-
-So isn't this supposed to be an issue for all the drivers which
-expect to get a TX loopback in order to trigger the TX completion
-handler?
-
-Personally, for my driver, I would like to use the
-can_set_static_ctrlmode() to force CAN_CTRLMODE_LOOPBACK so that
-I do not need a different TX completion logic when
-CAN_CTRLMODE_LOOPBACK is off.
-
-The issue is that because CAN_CTRLMODE_LOOPBACK is per default
-off, doing:
-  can_set_static_ctrlmode(netdev, CAN_CTRLMODE_LOOPBACK);
-would lead to a
-  RTNETLINK answers: Operation not supported
-when configuring the device unless "loopback on" is explicitly
-passed on the command line.
-
-At the moment, I have the feeling that many drivers just ignore
-the value of this flag and activate the loopback regardless.
-
-Do you think that it would make sense to set
-CAN_CTRLMODE_LOOPBACK by default to on?
-
-
-Yours sincerely,
-Vincent
+>   net/can/isotp.c | 9 +++------
+>   1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/net/can/isotp.c b/net/can/isotp.c
+> index e32d446c121e..430976485d95 100644
+> --- a/net/can/isotp.c
+> +++ b/net/can/isotp.c
+> @@ -215,8 +215,7 @@ static int isotp_send_fc(struct sock *sk, int ae, u8 flowstatus)
+>   	if (ae)
+>   		ncf->data[0] = so->opt.ext_address;
+>   
+> -	if (so->ll.mtu == CANFD_MTU)
+> -		ncf->flags = so->ll.tx_flags;
+> +	ncf->flags = so->ll.tx_flags;
+>   
+>   	can_send_ret = can_send(nskb, 1);
+>   	if (can_send_ret)
+> @@ -790,8 +789,7 @@ static enum hrtimer_restart isotp_tx_timer_handler(struct hrtimer *hrtimer)
+>   		so->tx.sn %= 16;
+>   		so->tx.bs++;
+>   
+> -		if (so->ll.mtu == CANFD_MTU)
+> -			cf->flags = so->ll.tx_flags;
+> +		cf->flags = so->ll.tx_flags;
+>   
+>   		skb->dev = dev;
+>   		can_skb_set_owner(skb, sk);
+> @@ -939,8 +937,7 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+>   	}
+>   
+>   	/* send the first or only CAN frame */
+> -	if (so->ll.mtu == CANFD_MTU)
+> -		cf->flags = so->ll.tx_flags;
+> +	cf->flags = so->ll.tx_flags;
+>   
+>   	skb->dev = dev;
+>   	skb->sk = sk;
+> 
