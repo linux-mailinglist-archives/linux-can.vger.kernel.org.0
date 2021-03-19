@@ -2,131 +2,131 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E46023418E4
-	for <lists+linux-can@lfdr.de>; Fri, 19 Mar 2021 10:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 132053418EC
+	for <lists+linux-can@lfdr.de>; Fri, 19 Mar 2021 10:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbhCSJzh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Mar 2021 05:55:37 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:15017 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbhCSJzP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Mar 2021 05:55:15 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1616147712; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=ICuPCd/H6U7MxsjzqUiWPdWsXmpkPbNW2Na4UjgYqCFcrIQ+BfqX//8ZMJlZDKZm1Q
-    jMpZWe7EupQEulmYElo32+MGuYIF9jy7J6X+T7bF5JV1e6VYAw++RFrc+Cn/AhEp9JgC
-    b2dCUmfzG0+IQLzw9pmjD26/oCDQyFcF+WR2lAzTnHRVYZbID1r85g51rDAwwsCqwjCX
-    bf01uInwVUi14K+YbrDL8QwZljxXzSKWm1V+V5cgLwAsu99yoGhcYxFVGFGsSbHZQzMx
-    CLga2L6hNTqRZ2ba7yGZZGHydAYzx8fUfkM+6pFLOuX6lNZavd6G76BeaHVAzJaWb5/Q
-    8s9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616147712;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=NrsXwoxNZc6p598sG/uGu3ku4kAJb/CtVjZj4X29WAw=;
-    b=l6URlexECHB72oYEukXAWB0+EuNutXZHDryRlr6o7xpBPbwgK/eP5/wXPiTRFQ0Z3l
-    bRq7BJI0RPIdjw08NiCiAcDjfof+gUsYUACbobDMRGzpBmgimY1aniRwBNdhQpBfTo4G
-    +M/mdC/PFq/FcTJFSVudAua+HVJD6N8nfTTYZLGW2/R88/NJWjK1SBCIBCGxwuWVPkeb
-    yFgcFlXC6x+tg55tzLXP4MhMSCq2Fqw/uWFdkgVzZ4ufWtChoho7scrpZaWojXp2HxkM
-    LeoGaGbMZrDPp7UK89SumFPxLRzqG7iRmCWndkRNrpqpXMtu0TDb4GLWowJKCwCdlzQy
-    +DuA==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616147712;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=NrsXwoxNZc6p598sG/uGu3ku4kAJb/CtVjZj4X29WAw=;
-    b=TDbvQWxTifiuoNAV958LBGA5ifgL8eUxevWw6jfmam+KcZatte4SUaAnbuV4bw+xgU
-    CKpZQapN6/P8/EEytCJRRa97/geA5vcOpS/JM5UzcCrJ7Z6oEWVL0OwQkLrqh0b4pPVJ
-    0Rue7gUDEgwH8CnK5wRUvwuAZ64EmWZHz5kw6sxU2l/xXYJs+yW4T37+h0+CiQX1p97p
-    EOEYZpdA0AUMPA936k91/wh9CJJwG9+IShrwEsO89KXDKhqxMUw1P7cFYYaChMI69v83
-    SHrdpIGTegUhBvCQd1JwwvfxVnztja19DrjpyYZtUGIbNUCtW/m9/mu91YXalv9QR5yh
-    64pg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iOMpjpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-    by smtp.strato.de (RZmta 47.21.0 DYNA|AUTH)
-    with ESMTPSA id R01debx2J9tB55g
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 19 Mar 2021 10:55:11 +0100 (CET)
-Subject: Re: [PATCH] can: isotp: tx-path: zero initialize outgoing CAN frames
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-References: <20210318100233.1693-1-socketcan@hartkopp.net>
- <20210319082619.hssq4yhkjcxmtkqt@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <06ac59af-faaa-e9a6-0b65-0f70ab2648c2@hartkopp.net>
-Date:   Fri, 19 Mar 2021 10:55:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229745AbhCSJ4l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 19 Mar 2021 05:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229687AbhCSJ4d (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Mar 2021 05:56:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B3EC06174A
+        for <linux-can@vger.kernel.org>; Fri, 19 Mar 2021 02:56:33 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lNBrr-0006e4-Vy; Fri, 19 Mar 2021 10:56:32 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7ffa:65dd:d990:c71d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DE3E25FA753;
+        Fri, 19 Mar 2021 09:56:30 +0000 (UTC)
+Date:   Fri, 19 Mar 2021 10:56:30 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Stephane Grosjean <s.grosjean@peak-system.com>,
+        linux-can Mailing List <linux-can@vger.kernel.org>
+Subject: Re: [PATCH 2/3] can/peak_usb: add forgotten supported devices
+Message-ID: <20210319095630.pheblaalfg6r6zvo@pengutronix.de>
+References: <20210309082128.23125-1-s.grosjean@peak-system.com>
+ <20210309082128.23125-3-s.grosjean@peak-system.com>
+ <20210309152837.3vpzfgcxsexr7l7u@pengutronix.de>
+ <20210319083925.rvkbikpmkfxhjmr2@pengutronix.de>
+ <CAMZ6RqL_ua4NzJ5VMC8Nw0iSXfBDDuOpabVJv+EEK82c4AsnEQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210319082619.hssq4yhkjcxmtkqt@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hsydvovqctkae2ey"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqL_ua4NzJ5VMC8Nw0iSXfBDDuOpabVJv+EEK82c4AsnEQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-On 19.03.21 09:26, Marc Kleine-Budde wrote:
-> On 18.03.2021 11:02:33, Oliver Hartkopp wrote:
->> Commit d4eb538e1f48 ("can: isotp: TX-path: ensure that CAN frame flags are
->> initialized") ensured the TX flags to be properly set for outgoing CAN frames.
->>
->> In fact the root cause of the issue results from a missing initialization of
->> outgoing CAN frames created by isotp. This is no problem on the CAN bus as the
->> CAN driver only picks the correctly defined content from the struct
->> can(fd)_frame. But when the outgoing frames are monitored (e.g. with candump)
->> we potentially leak some bytes in the unused content of struct can(fd)_frame.
->>
->> Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
->> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
->> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> 
-> What about skb_put_zero(), which I mentioned in my initial cover letter:
+--hsydvovqctkae2ey
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, that would indeed be more elegant. Will send a v2 patch.
+On 19.03.2021 18:47:06, Vincent MAILHOL wrote:
+> On Fri. 19 Mar 2021 at 17:39, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
+e:
+> > On 09.03.2021 16:28:37, Marc Kleine-Budde wrote:
+> > > On 09.03.2021 09:21:27, Stephane Grosjean wrote:
+> > > > Since the peak_usb driver also supports the CAN-USB interfaces
+> > > > "PCAN-USB X6" and "PCAN-Chip USB" from PEAK-System GmbH, this patch=
+ adds
+> > > > their names to the list of explicitly supported devices.
+> > > >
+> > > > Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+> > > > ---
+> > > >  drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/n=
+et/can/usb/peak_usb/pcan_usb_fd.c
+> > > > index 6183a42f6491..8e6250c4c417 100644
+> > > > --- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> > > > +++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
+> > > > @@ -19,6 +19,8 @@
+> > > >
+> > > >  MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB FD adapter");
+> > > >  MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB Pro FD adapter");
+> > > > +MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB X6 adapter");
+> > > > +MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-Chip USB");
+> > >
+> > > I've exchanged these, to correspond the order of the device ids.
+> >
+> > Funny side note:
+> > MODULE_SUPPORTED_DEVICE was a noop define. All uses have been globally
+> > removed from Linus' tree after this patch hit linux-net/master, but
+> > before it landed in Linus' tree.
+>=20
+> Silly question but does it mean that we should not use
+> MODULE_SUPPORTED_DEVICE in newly submitted patches?
 
->>> Note here the "B" and "E" flags are set. Another possibility is to use
->>> skb_put_zero() instead of skb_put(), but with a bigger overhead. A 3.
->>> option is to only memset() the non-data part of the struct canfd_frame.
-> 
-> http://lore.kernel.org/r/20210218215434.1708249-1-mkl@pengutronix.de
+ACK - It's been removed from Linus' tree, see:
 
-I modified candump in a way that it always prints the entire frame 
-independent from can(fd)_frame::len
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D6417f03132a6952cd17ddd8eaddbac92b61b17e0
 
-diff --git a/candump.c b/candump.c
-index 7bb854a..9683fc9 100644
---- a/candump.c
-+++ b/candump.c
-@@ -719,13 +719,13 @@ int main(int argc, char **argv)
-                                 perror("read");
-                                 return 1;
-                         }
+> After seeing St=C3=A9phane's patch, I added it to my driver. Even if it is
+> a noop define, it adds meta information in the source code so I was
+> inclined to keep it.
 
-                         if ((size_t)nbytes == CAN_MTU)
--                               maxdlen = CAN_MAX_DLEN;
-+                               frame.len = maxdlen = CAN_MAX_DLEN;
-                         else if ((size_t)nbytes == CANFD_MTU)
--                               maxdlen = CANFD_MAX_DLEN;
-+                               frame.len = maxdlen = CANFD_MAX_DLEN;
-                         else {
-                                 fprintf(stderr, "read: incomplete CAN 
-frame\n");
-                                 return 1;
-                         }
+As the noop define has been removed, the driver will no longer compile.
 
-And there you can see that in flow-control (FC) frames and consecutive 
-frames (CF) especially at the end of the PDU you see uninitialized content.
+regards,
+Marc
 
-So it does not help to only clear the non-data part of the struct 
-canfd_frame.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Best,
-Oliver
+--hsydvovqctkae2ey
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBUdUsACgkQqclaivrt
+76k4DQf/SN7DIlfk7h7/5l+C8eSRBUazXHkZMAxqarnwVFVJ6+TwyjCmci9P/cw2
+YeLDc9u9dbk/U5+CvkENIf3+J1PXpmi33iYe3tayyj5E3X8orXG+3mRmZT7t6t7F
+LptspTVwBa3Gb/158WwY2DGLnZU6VsuV092DKV96+um7LYtV2QWjgenyxZUvOIR3
+BM6ZaI9iW43oZ90S0oUugUU2hlcpmPFaNapqe+MQ+tD1fms1E5LtslfDNNW5X+ah
+weXGM2ldiB9L3p5ON6gd6/vmCijaA6K3TAWmLXo0SYUt5JGwZUORHXxbo5jREXvl
+DFhSVG7e8/+UXPlqAGXglHKKqxvn3w==
+=5uGs
+-----END PGP SIGNATURE-----
+
+--hsydvovqctkae2ey--
