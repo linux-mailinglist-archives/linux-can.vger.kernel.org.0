@@ -2,77 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7B3341D1F
-	for <lists+linux-can@lfdr.de>; Fri, 19 Mar 2021 13:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED0C341E65
+	for <lists+linux-can@lfdr.de>; Fri, 19 Mar 2021 14:33:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbhCSMmS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Mar 2021 08:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbhCSMl4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Mar 2021 08:41:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310F0C06175F
-        for <linux-can@vger.kernel.org>; Fri, 19 Mar 2021 05:41:56 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lNERu-0003EJ-QP
-        for linux-can@vger.kernel.org; Fri, 19 Mar 2021 13:41:54 +0100
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 048555FA99D
-        for <linux-can@vger.kernel.org>; Fri, 19 Mar 2021 12:41:51 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7754B5FA97F;
-        Fri, 19 Mar 2021 12:41:47 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3a8a0ca8;
-        Fri, 19 Mar 2021 12:41:43 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, mailhol.vincent@wanadoo.fr,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v13 11/11] can: etas_es58x: es58x_fd: remove setting of dql.min_limit for now
-Date:   Fri, 19 Mar 2021 13:41:41 +0100
-Message-Id: <20210319124141.247844-12-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210319124141.247844-1-mkl@pengutronix.de>
-References: <20210319124141.247844-1-mkl@pengutronix.de>
+        id S229903AbhCSNdV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 19 Mar 2021 09:33:21 -0400
+Received: from mail-yb1-f177.google.com ([209.85.219.177]:35863 "EHLO
+        mail-yb1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229784AbhCSNc5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Mar 2021 09:32:57 -0400
+Received: by mail-yb1-f177.google.com with SMTP id b10so6280992ybn.3
+        for <linux-can@vger.kernel.org>; Fri, 19 Mar 2021 06:32:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SCA00+ALAlQP/L9nJvyfPiP9C1I4BhZaOP0cUzQL53E=;
+        b=Exopfo4mbjRfNwlryMTD7F0GtZE268pjc5sXlbP1NEpZu5ufjmswtpJOkXiJrQO/t6
+         DahylI6RWsnOcyLGRZgId/TS51DSucDROXwuZmSoE2+xKzhV6OIqBuTbceAnXV2P+kaF
+         f9HZ2OpeDAHDawFLC+aaZsrmnRI8nfAizHwfxg2ZtxwYqQsIA2FkrvZpNfE1UZuQdihF
+         /ZszktfEJCrfX770+0QBzMOCMNql7s6BzrxylGZtjJjYsD6cxCNtVr1bNEsQOcV9M8oN
+         jqX+YzACk0X4ncRF7Nv5zaY8bFuZHWIscsxRcbzPdfq254c4jFbBTFEuXotBrVuza5I/
+         MT7g==
+X-Gm-Message-State: AOAM530RhY2jUACk0A9sxVgJd7ZSAoiij5PHP70+AWn8OIx7CokdW7Jx
+        WrnHNAUw9OtlsnpDlQB0V8tsVf/sBtnZvsaV5QOEd0xiTiKcnw==
+X-Google-Smtp-Source: ABdhPJxYt82VLRWSDevPRUGodWfsRlNl6/nEo82vSO8TGULHUe69NFEs7dOGx3JOlbaWKsdXrrD4Uib+kd+Mtq8vEIw=
+X-Received: by 2002:a25:73d1:: with SMTP id o200mr6768887ybc.239.1616160777103;
+ Fri, 19 Mar 2021 06:32:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210319124141.247844-1-mkl@pengutronix.de>
+In-Reply-To: <20210319124141.247844-1-mkl@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 19 Mar 2021 22:32:46 +0900
+Message-ID: <CAMZ6RqJB_2c1MX8EaO+ZH+qgSjQDbq6PrsNJCJM=kw=hqxFMSw@mail.gmail.com>
+Subject: Re: [PATCH v13 00/11] Introducing ETAS ES58X CAN USB interfaces
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/usb/etas_es58x/es58x_fd.c | 4 ----
- 1 file changed, 4 deletions(-)
+On Fri 19 mars 2021 at 21:41, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> Hello,
+>
+> this my attempt to split the driver into 3 patches, so that it can be
+> send via mailing lists:
+> - core support
+> - es581_4
+> - es58x_fd
+>
+> For now I've removed the setting of dql.min_limit, that can be added
+> back in a later patch, once discussed with upstream netdev. While
+> working on the code, I've added some typo and kernel doc fixes.
+>
+> I plan to squash the patches, I've kept them separate for better
+> illustration.
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index 5260c14c6378..e0c4f9f5f94e 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -576,10 +576,6 @@ const struct es58x_parameters es58x_fd_param = {
- 	 * maximum, so no impact on performance was measured.
- 	 */
- 	.fifo_mask = 255, /* echo_skb_max = 256 */
--#ifdef CONFIG_BQL
--	/* Empirical value. */
--	.dql_limit_min = CAN_FRAME_LEN_MAX * 15,
--#endif
- 	.tx_bulk_max = ES58X_FD_TX_BULK_MAX,
- 	.urb_cmd_header_len = ES58X_FD_URB_CMD_HEADER_LEN,
- 	.rx_urb_max = ES58X_RX_URBS_MAX,
--- 
-2.30.2
+Thanks a lot for your support! You could have asked me to split the patches :)
+
+I was also myself working on a new version:
+  - addressing the comments from Jimmy
+  - following my exchange with Oliver yesterday, I realised that
+    I totally misunderstood the meaning of CAN_CTRLMODE_LOOPBACK,
+    I will remove it.
+
+If fine with you, I can directly squash your suggestions while
+preparing my v14 and just keep the 3 patches split as suggested.
 
 
+Yours sincerely,
+Vincent
