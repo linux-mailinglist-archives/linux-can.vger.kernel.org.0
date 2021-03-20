@@ -2,104 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 037BC34266B
-	for <lists+linux-can@lfdr.de>; Fri, 19 Mar 2021 20:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAB4342BD5
+	for <lists+linux-can@lfdr.de>; Sat, 20 Mar 2021 12:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbhCSTpn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 19 Mar 2021 15:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbhCSTpm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 19 Mar 2021 15:45:42 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71423C06175F;
-        Fri, 19 Mar 2021 12:45:42 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id e14so3436013plj.2;
-        Fri, 19 Mar 2021 12:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0iG9i0hkyLebN0rrxlD9RQ2LdGYygnU0VLbpS3c4IRk=;
-        b=NmnEUZh/mG38WsmKqMoGP/bFCNSRtEm07atlNjDURO9qH2FksvyTqya9HEULPbBSDP
-         5tiU1iM8Offa/AAxF0dmmVdo62PdAHmqDlnRZhMokJ1HFgo50q926GyFET6E8yPtXkBo
-         VRdvPxvbfUI/mFAQzV7MDnvVSSPWH2ZonsltFA9vElxbaeLABCp4hPFQfuvgzkrtYR/S
-         cXFC8hX/c7eC1MyMz7egoNpKuWHvQzKMVePunhUIvrZJYI0+UEltRceXeJndlvchewO8
-         C/syoOiiRP2rlgrhajw2Hix/n/EywylXWtSE1keAxGXYKTIekc/x87gIuPUMUMC/8Y+t
-         g6ug==
+        id S230133AbhCTLND (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 20 Mar 2021 07:13:03 -0400
+Received: from mail-yb1-f171.google.com ([209.85.219.171]:37580 "EHLO
+        mail-yb1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229979AbhCTLMy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 20 Mar 2021 07:12:54 -0400
+Received: by mail-yb1-f171.google.com with SMTP id i9so1059971ybp.4
+        for <linux-can@vger.kernel.org>; Sat, 20 Mar 2021 04:12:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0iG9i0hkyLebN0rrxlD9RQ2LdGYygnU0VLbpS3c4IRk=;
-        b=tELqgTtnOjm18GKF9wgB5V+fjyzTwFeVmIijVhWPFC9GD9cV0Lf7cyuxPl8+INFiT7
-         vyuOBDCcGQ4jvhcCRcv8ZWr2vwlxmxEbM1eqBC/XR8VrEKsGBD9aiaANkft/xCgBpZZi
-         AF7sRzHznhPFle2vA99lD/ijFsjXyOYJYVaVV/AXIadoVfzV94wXW7ru9pRieGNHvZ5x
-         EZo3j1qT55dTNkaKFQ53Zc6rnbJURorKz8kp7dpd92vasE/lErpAk13ciMwEAvXvumln
-         /i947P+DLHJKY1SBClSxkQair+5zZBK+EY5oI59gfz2J/fKZgxfQTBJSppVQ9UBUEALl
-         fCEA==
-X-Gm-Message-State: AOAM532ID/qDV5tve17yLxWwWR0J2h7LBya7CYHUAdLkaKt59URJzcYd
-        dw6FW2LaxUVwmdgtMwTeqQv+yauU6jPAnpHz/LM=
-X-Google-Smtp-Source: ABdhPJzBi2AY/dZ5Ts/M/JMMkgDtkUN7DQZiemjvgYyWLdVgAFMe5e1q9MkFQG0JmHIxsOdBSEVfcTswXF/I6ASnR9c=
-X-Received: by 2002:a17:902:be02:b029:e6:bb0d:6c1e with SMTP id
- r2-20020a170902be02b02900e6bb0d6c1emr15754118pls.77.1616183142004; Fri, 19
- Mar 2021 12:45:42 -0700 (PDT)
+        bh=ySW40ow135HzzFmg2xHWT+Yy4IT2Z5S8VIKvmAzImSs=;
+        b=qv+UE5ZWGclF7iTVEIFcJsClirwJWi/2Y8chs/IAciIL1+ksrZGoXr9t5HIWt/H5fn
+         qzIUBdlYNqC9y/uq4NEpG8PwejJOPTa1OAt14iowacmgd2sD4VdWM3A/5ZekoDy9cd2j
+         6vwkFAiN9XCsc10abaW0Jz12zOic/94z0GU65oIOgcx45BS4UmYXZoulzzyzREpdEkQa
+         DrImX6UihwIIDRxrHYGtV855cmMcfGfiD4DrHfPFHuPN4pAT2oFG1QNiwlkLI2Sn66+s
+         VBbEr2/mNrHNJBfxu+NWHw2fanf7tPW0nIPEY8k20wwzJGqkL4kdR3jvlX6p6O4M17P4
+         852w==
+X-Gm-Message-State: AOAM531KATzgSjp09meZhJMpASqhr94XADMO4jXnWw9/A7c+Oq+JJe0j
+        7IIIJ3+4kI/+rSLAykE/HJos8mZLvwPMs3XBioRU2p8FC+baUQ==
+X-Google-Smtp-Source: ABdhPJy7GtQZDCOlGpJClGRGOQJIiATGx64dsr59XKxXaoemLLfrLzPQGcN9JWITi9bBafYqxpMHg6OiUxGwwirx7mg=
+X-Received: by 2002:a25:bc41:: with SMTP id d1mr11736129ybk.125.1616227393357;
+ Sat, 20 Mar 2021 01:03:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <1616050402-37023-1-git-send-email-linyunsheng@huawei.com> <e5c2d82c-0158-3997-80b6-4aab56c61367@huawei.com>
-In-Reply-To: <e5c2d82c-0158-3997-80b6-4aab56c61367@huawei.com>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Fri, 19 Mar 2021 12:45:30 -0700
-Message-ID: <CAM_iQpV4HX5L1b8ofUig-bi3r_MDdsjThqaxfoRCd=02XZBprQ@mail.gmail.com>
-Subject: Re: [Linuxarm] [PATCH net] net: sched: fix packet stuck problem for
- lockless qdisc
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Wei Wang <weiwan@google.com>,
-        "Cong Wang ." <cong.wang@bytedance.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linuxarm@openeuler.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
-        bpf <bpf@vger.kernel.org>, Jonas Bonn <jonas.bonn@netrounds.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Zhivich <mzhivich@akamai.com>,
-        Josh Hunt <johunt@akamai.com>, Jike Song <albcamus@gmail.com>,
-        Kehuan Feng <kehuan.feng@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
+References: <20210319142700.305648-1-mkl@pengutronix.de> <20210319142700.305648-3-mkl@pengutronix.de>
+In-Reply-To: <20210319142700.305648-3-mkl@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sat, 20 Mar 2021 17:03:02 +0900
+Message-ID: <CAMZ6RqJWBB_YRuTxeM8m_=iOz5ABs1Fq1++tdeEZ7vb=jOG9iQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] can: dev: can_free_echo_skb(): extend to return can
+ frame length
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>, kernel@pengutronix.de
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Mar 19, 2021 at 2:25 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
-> I had done some performance test to see if there is value to
-> fix the packet stuck problem and support lockless qdisc bypass,
-> here is some result using pktgen in 'queue_xmit' mode on a dummy
-> device as Paolo Abeni had done in [1], and using pfifo_fast qdisc:
+On Fri. 19 mars 2021 at 23:27, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> In order to implement byte queue limits (bql) in CAN drivers, the
+> length of the CAN frame needs to be passed into the networking stack
+> even if the transmission failed for some reason.
 >
-> threads  vanilla    locked-qdisc    vanilla+this_patch
->    1     2.6Mpps      2.9Mpps            2.5Mpps
->    2     3.9Mpps      4.8Mpps            3.6Mpps
->    4     5.6Mpps      3.0Mpps            4.7Mpps
->    8     2.7Mpps      1.6Mpps            2.8Mpps
->    16    2.2Mpps      1.3Mpps            2.3Mpps
+> To avoid to calculate this length twice, extend can_free_echo_skb() to
+> return that value. Convert all users of this function, too.
 >
-> locked-qdisc: test by removing the "TCQ_F_NOLOCK | TCQ_F_CPUSTATS".
+> This patch is the natural extension of commit:
+>
+> | 9420e1d495e2 ("can: dev: can_get_echo_skb(): extend to return can
+> |                frame length")
+>
+> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+[...]
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> index 95d0a02e408b..724ba72237dc 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -314,7 +314,7 @@ static void es58x_can_free_echo_skb_tail(struct net_device *netdev)
+>         struct sk_buff *skb = priv->can.echo_skb[priv->tx_tail & fifo_mask];
+>
+>         netdev_completed_queue(netdev, 1, can_skb_prv(skb)->frame_len);
+> -       can_free_echo_skb(netdev, priv->tx_tail & fifo_mask);
+> +       can_free_echo_skb(netdev, priv->tx_tail & fifo_mask, NULL);
 
-I read this as this patch introduces somehow a performance
-regression for -net, as the lockless bypass patch you submitted is
-for -net-next.
+Do you already have the etas_es58x driver in can-next/testing?
+Or were you working on the wrong branch?
+Could you push the last version of can-next/testing? It would be easier for me.
 
-Thanks.
+
+Yours sincerely,
+Vincent
