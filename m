@@ -2,44 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E433342F3B
-	for <lists+linux-can@lfdr.de>; Sat, 20 Mar 2021 20:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C44342F4C
+	for <lists+linux-can@lfdr.de>; Sat, 20 Mar 2021 20:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbhCTT1X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 20 Mar 2021 15:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S229872AbhCTThf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 20 Mar 2021 15:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbhCTT04 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 20 Mar 2021 15:26:56 -0400
+        with ESMTP id S229791AbhCTThP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 20 Mar 2021 15:37:15 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A3DC061574
-        for <linux-can@vger.kernel.org>; Sat, 20 Mar 2021 12:26:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17615C061574
+        for <linux-can@vger.kernel.org>; Sat, 20 Mar 2021 12:37:15 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lNhFN-0007zm-OS
-        for linux-can@vger.kernel.org; Sat, 20 Mar 2021 20:26:53 +0100
+        id 1lNhPN-0000Qu-Me
+        for linux-can@vger.kernel.org; Sat, 20 Mar 2021 20:37:13 +0100
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id BB76D5FB3C5
-        for <linux-can@vger.kernel.org>; Sat, 20 Mar 2021 19:26:52 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 1CF695FB3E0
+        for <linux-can@vger.kernel.org>; Sat, 20 Mar 2021 19:37:12 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 332CF5FB3C0;
-        Sat, 20 Mar 2021 19:26:52 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 43C315FB3D5;
+        Sat, 20 Mar 2021 19:37:11 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b93f8837;
-        Sat, 20 Mar 2021 19:26:51 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7c602c88;
+        Sat, 20 Mar 2021 19:37:10 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Leon Romanovsky <leon@kernel.org>,
-        Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH] can: peak_usb: Revert "can: peak_usb: add forgotten supported devices"
-Date:   Sat, 20 Mar 2021 20:26:49 +0100
-Message-Id: <20210320192649.341832-1-mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2021-03-20
+Date:   Sat, 20 Mar 2021 20:37:06 +0100
+Message-Id: <20210320193708.348503-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,35 +50,51 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In commit 6417f03132a6 ("module: remove never implemented
-MODULE_SUPPORTED_DEVICE") the MODULE_SUPPORTED_DEVICE macro was
-removed from the kerne entirely. Shortly before this patch was applied
-mainline the commit 59ec7b89ed3e ("can: peak_usb: add forgotten
-supported devices") was added to net/master. As this would result in a
-merge conflict, let's revert this patch.
+Hello Jakub, hello David,
 
-Fixes: 59ec7b89ed3e ("can: peak_usb: add forgotten supported devices")
-Suggested-by: Leon Romanovsky <leon@kernel.org>
-Cc: Stephane Grosjean <s.grosjean@peak-system.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+this is a pull request of 2 patches for net/master.
+
+The first patch is by Oliver Hartkopp. He fixes the TX-path in the
+ISO-TP protocol by properly initializing the outgoing CAN frames.
+
+The second patch is by me and reverts a patch from my previous pull
+request which added MODULE_SUPPORTED_DEVICE to the peak_usb driver. In
+the mean time in Linus's tree the entirely MODULE_SUPPORTED_DEVICE was
+removed. So this reverts the adding of the new MODULE_SUPPORTED_DEVICE
+to avoid the merge conflict.
+
+If you prefer to resolve the merge conflict by hand, I'll send a new
+pull request without that patch.
+
+regards,
+Marc
+
 ---
- drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-index f1d018218c93..f347ecc79aef 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb_fd.c
-@@ -18,8 +18,6 @@
- 
- MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB FD adapter");
- MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB Pro FD adapter");
--MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-Chip USB");
--MODULE_SUPPORTED_DEVICE("PEAK-System PCAN-USB X6 adapter");
- 
- #define PCAN_USBPROFD_CHANNEL_COUNT	2
- #define PCAN_USBFD_CHANNEL_COUNT	1
--- 
-2.30.2
+The following changes since commit 5aa3c334a449bab24519c4967f5ac2b3304c8dcf:
+
+  selftests: forwarding: vxlan_bridge_1d: Fix vxlan ecn decapsulate value (2021-03-19 13:54:28 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.12-20210320
+
+for you to fetch changes up to 5d7047ed6b7214fbabc16d8712a822e256b1aa44:
+
+  can: peak_usb: Revert "can: peak_usb: add forgotten supported devices" (2021-03-20 20:28:45 +0100)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.12-20210320
+
+----------------------------------------------------------------
+Marc Kleine-Budde (1):
+      can: peak_usb: Revert "can: peak_usb: add forgotten supported devices"
+
+Oliver Hartkopp (1):
+      can: isotp: tx-path: zero initialize outgoing CAN frames
+
+ drivers/net/can/usb/peak_usb/pcan_usb_fd.c | 2 --
+ net/can/isotp.c                            | 6 +++---
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
 
