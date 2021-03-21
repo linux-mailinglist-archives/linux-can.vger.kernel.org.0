@@ -2,69 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3391034309A
-	for <lists+linux-can@lfdr.de>; Sun, 21 Mar 2021 03:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF433431A1
+	for <lists+linux-can@lfdr.de>; Sun, 21 Mar 2021 08:36:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbhCUCLk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 20 Mar 2021 22:11:40 -0400
-Received: from [198.145.29.99] ([198.145.29.99]:50912 "EHLO mail.kernel.org"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S230014AbhCUCLH (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 20 Mar 2021 22:11:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id D58DE6194C;
-        Sun, 21 Mar 2021 02:10:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1616292608;
-        bh=ii0hhmDiWoJrsDyEsa5R+c4c2PK3zuX8YCpsV7ZteZ8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FZFY/HRuX/57ji52zIfPJq39nWagaID0MoMeoKbHP+B3WZHaC+VXdNqkGHdjYfFB/
-         SpE98h8Ct6dH3O61ObTNWhktyeDjOz1e6qyrYZPW/vKwAIVXqkfw7vqbfqAdhuhSUB
-         fWsMBR18PjlosPSNpujuMni+dgXp+7Sx8/lNSE6polJpPV/mTM8gM6QawYY6ZyVTG+
-         obzVjAOofC7NYIXMuWdvK1z1w+cRW1qBA6Y9cXlQICHD0auzbaBw75HwCCwUO6KR3U
-         tit/olS6gajGnaB/RavilDA/JnTQ7iYhv0s4j7DJweXGaqjF9NrVXVm4v0e6++aQDo
-         XHUuu9ofjJd6w==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C5925626EC;
-        Sun, 21 Mar 2021 02:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229863AbhCUHd6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 21 Mar 2021 03:33:58 -0400
+Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:20198 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229817AbhCUHdw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 21 Mar 2021 03:33:52 -0400
+Received: from tomoyo.flets-east.jp ([153.202.107.157])
+        by mwinf5d13 with ME
+        id ivZc240053PnFJp03vZlav; Sun, 21 Mar 2021 08:33:46 +0100
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 21 Mar 2021 08:33:46 +0100
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v4 0/1]  Introducing new CAN FD bittiming parameters: Transmission Delay Compensation (TDC)
+Date:   Sun, 21 Mar 2021 16:33:28 +0900
+Message-Id: <20210321073329.1454-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can 2021-03-20
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161629260880.5230.14283916005008635768.git-patchwork-notify@kernel.org>
-Date:   Sun, 21 Mar 2021 02:10:08 +0000
-References: <20210320193708.348503-1-mkl@pengutronix.de>
-In-Reply-To: <20210320193708.348503-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+I made a silly mistake which cause the automatic tdco calculation not
+to work and failed to catch it during my testing (I probably was to
+focussed to test the netlink interface, and forget to test the most
+obvious use case...)
 
-This pull request was applied to netdev/net.git (refs/heads/master):
+One incremental patch to be applied on the v3.  The patch contains
+detailed instruction after the "---" scissors.
 
-On Sat, 20 Mar 2021 20:37:06 +0100 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 2 patches for net/master.
-> 
-> The first patch is by Oliver Hartkopp. He fixes the TX-path in the
-> ISO-TP protocol by properly initializing the outgoing CAN frames.
-> 
-> [...]
+Changes from v3:
+  - do tdco calculation after data bittiming is copied to can_priv.
 
-Here is the summary with links:
-  - pull-request: can 2021-03-20
-    https://git.kernel.org/netdev/net/c/49371a8a66ac
-  - [net,2/2] can: peak_usb: Revert "can: peak_usb: add forgotten supported devices"
-    https://git.kernel.org/netdev/net/c/5d7047ed6b72
+Changes from v2:
+  - Reorder the IFLA_CAN_TDC* entries in can_policy structure
+  - Increase readability of the TDCO formula by introducing a
+    temporary variable.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Changes from v1:
+  - Changed the commit message of the first patch of the serie to
+    clarify the condition of when TDC is active.
+  - Changed the alignment style from tabulations to single space in
+    drivers/net/can/dev/netlink.c
+  - Remove duplicated [IFLA_CAN_TERMINATION] entry in
+    drivers/net/can/dev/netlink.c
 
+Changes from the RFC:
+  - The RFC was a single e-mail with all comments in bulk, made this a
+    proper patch series.
+  - Added the netlink interface.
+  - Rename the function can_set_tdc to can_calc_tdco (the formula is
+    the same, everything around it was reworked).
+  - Other small miscellaneous changes.
+
+Vincent Mailhol (1):
+  can: netlink: do tdco calculation after data bittiming is copied to
+    can_priv
+
+ drivers/net/can/dev/netlink.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+-- 
+2.26.2
 
