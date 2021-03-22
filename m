@@ -2,200 +2,143 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6496343C4B
-	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 10:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2696C343D33
+	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 10:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbhCVJJO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Mar 2021 05:09:14 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:14053 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhCVJIr (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Mar 2021 05:08:47 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4F3pWp2nqgzNnNp;
-        Mon, 22 Mar 2021 17:06:14 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 22 Mar 2021 17:08:39 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>
-Subject: [RFC v3] net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
-Date:   Mon, 22 Mar 2021 17:09:16 +0800
-Message-ID: <1616404156-11772-1-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1616050402-37023-1-git-send-email-linyunsheng@huawei.com>
-References: <1616050402-37023-1-git-send-email-linyunsheng@huawei.com>
+        id S229879AbhCVJrU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Mar 2021 05:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229591AbhCVJqt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Mar 2021 05:46:49 -0400
+Received: from relay.felk.cvut.cz (relay.felk.cvut.cz [IPv6:2001:718:2:1611:0:1:0:70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F382C061574
+        for <linux-can@vger.kernel.org>; Mon, 22 Mar 2021 02:46:48 -0700 (PDT)
+Received: from cmp.felk.cvut.cz (haar.felk.cvut.cz [147.32.84.19])
+        by relay.felk.cvut.cz (8.15.2/8.15.2) with ESMTP id 12M9jjsY006457;
+        Mon, 22 Mar 2021 10:45:45 +0100 (CET)
+        (envelope-from pisa@cmp.felk.cvut.cz)
+Received: from haar.felk.cvut.cz (localhost [127.0.0.1])
+        by cmp.felk.cvut.cz (8.14.0/8.12.3/SuSE Linux 0.6) with ESMTP id 12M9jjWi002167;
+        Mon, 22 Mar 2021 10:45:45 +0100
+Received: (from pisa@localhost)
+        by haar.felk.cvut.cz (8.14.0/8.13.7/Submit) id 12M9jer7002157;
+        Mon, 22 Mar 2021 10:45:40 +0100
+X-Authentication-Warning: haar.felk.cvut.cz: pisa set sender to pisa@cmp.felk.cvut.cz using -f
+From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
+To:     "Marc Kleine-Budde" <mkl@pengutronix.de>
+Subject: Re: CAN FD controllers (M-CAN tcan4x5x as well as Microchip mcp251xfd) fails on iMX6 eCSPI interface
+Date:   Mon, 22 Mar 2021 10:45:40 +0100
+User-Agent: KMail/1.9.10
+Cc:     linux-can@vger.kernel.org, Petr Porazil <porazil@volny.cz>,
+        Han Xu <han.xu@nxp.com>, Mingkai Hu <mingkai.hu@nxp.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>,
+        Pavel Machek <pavel@ucw.cz>
+References: <202103220906.52896.pisa@cmp.felk.cvut.cz> <20210322083128.ehblmvyxo5rggeno@pengutronix.de>
+In-Reply-To: <20210322083128.ehblmvyxo5rggeno@pengutronix.de>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202103221045.40634.pisa@cmp.felk.cvut.cz>
+X-FELK-MailScanner-Information: 
+X-MailScanner-ID: 12M9jjsY006457
+X-FELK-MailScanner: Found to be clean
+X-FELK-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
+        score=-0.099, required 6, BAYES_00 -0.50, KHOP_HELO_FCRDNS 0.40,
+        NICE_REPLY_A -0.00, SPF_HELO_NONE 0.00, SPF_NONE 0.00,
+        URIBL_BLOCKED 0.00)
+X-FELK-MailScanner-From: pisa@cmp.felk.cvut.cz
+X-FELK-MailScanner-Watermark: 1617011155.27573@dBDCBLue3wcgdmy/hKukdg
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Currently pfifo_fast has both TCQ_F_CAN_BYPASS and TCQ_F_NOLOCK
-flag set, but queue discipline by-pass does not work for lockless
-qdisc because skb is always enqueued to qdisc even when the qdisc
-is empty, see __dev_xmit_skb().
+Hello Marc,
 
-This patch calls sch_direct_xmit() to transmit the skb directly
-to the driver for empty lockless qdisc too, which aviod enqueuing
-and dequeuing operation. qdisc->empty is set to false whenever a
-skb is enqueued, see pfifo_fast_enqueue(), and is set to true when
-skb dequeuing return NULL, see pfifo_fast_dequeue().
+thanks much for the fast reply.
 
-There is a data race between enqueue/dequeue and qdisc->empty
-setting, qdisc->empty is only used as a hint, so we need to call
-sch_may_need_requeuing() to see if the queue is really empty and if
-there is requeued skb, which has higher priority than the current
-skb.
+On Monday 22 of March 2021 09:31:28 Marc Kleine-Budde wrote:
+> On 22.03.2021 09:06:52, Pavel Pisa wrote:
+> > my colleague at Elektroline.cz works on design of iMX6
+> > based system with CAN FD support realized by tcan4x5x
+> > chip connected to eCSPI. It seems that there are problems
+> > with eCSPI DMA stucks and other troubles. When the same
+> > chip (or even Microchip's mcp251xfd) is connected to
+> > other (less industry sound platforms) as Allwinner etc...
+> > drivers seems to work reliably, but tests on iMX6 results
+> > in failures. They consider fast redesign to slCAN connected
+> > second Microchip MCU to resolve critical problem for the
+> > project now....
+>
+> Don't use slcan, just don't.
 
-The performance for ip_forward test increases about 10% with this
-patch.
+Yes, I agree with it and argued it to my colleagues but they are
+so frustrated by more problems in iMX6 and imxRT erratas that they
+believe that serial port has highest probability to not been broken.
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
-Hi, Vladimir and Ahmad
-	Please give it a test to see if there is any out of order
-packet for this patch, which has removed the priv->lock added in
-RFC v2.
+> - If you want to stick to the SPI, use a mcp2518fd.
+> - If you don't need CAN-FD, attach a stm32f042 or f072 via USB. There is
+>   a open source firmware and Linux drivers.
 
-There is a data race as below:
+They have Microchip PIC32 for power management in the design and quite
+good experience with it, so they can use little more advanced one
+with CAN FD and use it at CAN interface. The idea to use SPI connected
+MCU (in my case NXP LPC) come to my mind at LinCAN era when everybody
+used MCP2515 with horrible single register operation overhead.
+Can you suggest SPI protocol for CAN, CAN FD MCU connection as the
+SocketCAN interface? Is there plan for CAN FD version?
+Anyway if the problems are caused by NXP SPI, then they can creep
+in still.
 
-      CPU1                                   CPU2
-qdisc_run_begin(q)                            .
-        .                                q->enqueue()
-sch_may_need_requeuing()                      .
-    return true                               .
-        .                                     .
-        .                                     .
-    q->enqueue()                              .
+> - If you need CAN-FD, use a more modern stm32. I think some of the "G"
+>   series have CAN-FD. But the firmware and Linux drivers are not
+>   adopted, yet.
 
-When above happen, the skb enqueued by CPU1 is dequeued after the
-skb enqueued by CPU2 because sch_may_need_requeuing() return true.
-If there is not qdisc bypass, the CPU1 has better chance to queue
-the skb quicker than CPU2.
+We have solved and mainlined CAN FD on imxRT on NuttX and Microchip
+SAME70 (mainlining to NuttX expected soon) so we can reuse these.
 
-This patch does not take care of the above data race, because I
-view this as similar as below:
+> Expect quite some CPU load for the SPI based CAN controllers, due to the
+> high Linux SPI overhead and the not that optimized imx SPI host driver.
 
-Even at the same time CPU1 and CPU2 write the skb to two socket
-which both heading to the same qdisc, there is no guarantee that
-which skb will hit the qdisc first, becuase there is a lot of
-factor like interrupt/softirq/cache miss/scheduling afffecting
-that.
+Yes, I am not fan of these solution (you know our CTU CAN FD effort,
+hopefully headers generator rewrite comes to the table next month),
+but Elektroline company needs industrial range system and could not
+wait for iMX8X with CAN FD controllers at the project start time.
 
-So I hope the above data race will not cause problem for Vladimir
-and Ahmad.
----
- include/net/pkt_sched.h   |  1 +
- include/net/sch_generic.h |  1 -
- net/core/dev.c            | 22 ++++++++++++++++++++++
- net/sched/sch_generic.c   | 11 +++++++++++
- 4 files changed, 34 insertions(+), 1 deletion(-)
+> > The setup on 5.7 kernel partially works
+>
+> For the tcan4x5x better use latest v5.12 plus this series:
+> https://lore.kernel.org/linux-can/20210308102427.63916-1-torin@maxiluxsyste
+>ms.com/
 
-diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
-index f5c1bee..5715ddf 100644
---- a/include/net/pkt_sched.h
-+++ b/include/net/pkt_sched.h
-@@ -122,6 +122,7 @@ void qdisc_warn_nonwc(const char *txt, struct Qdisc *qdisc);
- bool sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
- 		     struct net_device *dev, struct netdev_queue *txq,
- 		     spinlock_t *root_lock, bool validate);
-+bool sch_may_need_requeuing(struct Qdisc *q);
- 
- void __qdisc_run(struct Qdisc *q);
- 
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index f7a6e14..e08cc77 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -161,7 +161,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		if (!spin_trylock(&qdisc->seqlock))
- 			return false;
--		WRITE_ONCE(qdisc->empty, false);
- 	} else if (qdisc_is_running(qdisc)) {
- 		return false;
- 	}
-diff --git a/net/core/dev.c b/net/core/dev.c
-index be941ed..317180a 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3796,9 +3796,31 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 	qdisc_calculate_pkt_len(skb, q);
- 
- 	if (q->flags & TCQ_F_NOLOCK) {
-+		if (q->flags & TCQ_F_CAN_BYPASS && READ_ONCE(q->empty) &&
-+		    qdisc_run_begin(q)) {
-+			if (sch_may_need_requeuing(q)) {
-+				rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
-+				__qdisc_run(q);
-+				qdisc_run_end(q);
-+
-+				goto no_lock_out;
-+			}
-+
-+			qdisc_bstats_cpu_update(q, skb);
-+
-+			if (sch_direct_xmit(skb, q, dev, txq, NULL, true) &&
-+			    !READ_ONCE(q->empty))
-+				__qdisc_run(q);
-+
-+			qdisc_run_end(q);
-+			return NET_XMIT_SUCCESS;
-+		}
-+
- 		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
-+		WRITE_ONCE(q->empty, false);
- 		qdisc_run(q);
- 
-+no_lock_out:
- 		if (unlikely(to_free))
- 			kfree_skb_list(to_free);
- 		return rc;
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 44991ea..2145fdad 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -146,6 +146,8 @@ static inline void dev_requeue_skb(struct sk_buff *skb, struct Qdisc *q)
- 	}
- 	if (lock)
- 		spin_unlock(lock);
-+
-+	WRITE_ONCE(q->empty, false);
- 	__netif_schedule(q);
- }
- 
-@@ -273,6 +275,15 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 	return skb;
- }
- 
-+bool sch_may_need_requeuing(struct Qdisc *q)
-+{
-+	if (likely(skb_queue_empty(&q->gso_skb) &&
-+		   !q->ops->peek(q)))
-+		return false;
-+
-+	return true;
-+}
-+
- /*
-  * Transmit possibly several skbs, and handle the return status as
-  * required. Owning running seqcount bit guarantees that
--- 
-2.7.4
+Thanks, we will test that for sure but for production we probably
+need to backport to 5.10 because it has chance for serious LTS
+support from Civil Infrastructure Platform (adding Pavel to CC)
+for standard and even better preempt-RT kernels.
+
+> If the SPI DMA makes troubles, deactivate it. I think the tcan4x5x driver
+> uses single tcan4x5x register reads, which results in small SPI
+> transfers, so DMA brings no benefits.
+
+Yes, we try that. I have some reminiscence form old time that we have
+done some similar tricks on imx53 to make it work in infussion system demo.
+
+Again thanks much for fast response,
+
+                Pavel
+--
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://dce.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
 
