@@ -2,195 +2,325 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D853343E80
-	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 11:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CCE344B2D
+	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 17:25:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbhCVKyu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Mar 2021 06:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhCVKyU (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Mar 2021 06:54:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A91C061574
-        for <linux-can@vger.kernel.org>; Mon, 22 Mar 2021 03:54:19 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lOICI-00013a-Sc; Mon, 22 Mar 2021 11:54:10 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:2d14:11e9:80f:5de6])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 4D1AD5FCFD6;
-        Mon, 22 Mar 2021 10:53:56 +0000 (UTC)
-Date:   Mon, 22 Mar 2021 11:53:55 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
-Cc:     linux-can@vger.kernel.org, Petr Porazil <porazil@volny.cz>,
-        Han Xu <han.xu@nxp.com>, Mingkai Hu <mingkai.hu@nxp.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: Re: CAN FD controllers (M-CAN tcan4x5x as well as Microchip
- mcp251xfd) fails on iMX6 eCSPI interface
-Message-ID: <20210322105355.k33jpdfhxzk45evu@pengutronix.de>
-References: <202103220906.52896.pisa@cmp.felk.cvut.cz>
- <20210322083128.ehblmvyxo5rggeno@pengutronix.de>
- <202103221045.40634.pisa@cmp.felk.cvut.cz>
+        id S231142AbhCVQZL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Mar 2021 12:25:11 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.25]:22522 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230377AbhCVQY5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Mar 2021 12:24:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1616430283; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=JsgLVy7hX7SvJZBACqksoXLXZwZKTjzOE80jODI7f4lQMXLy+KZEJFeZvdLgYWwZnE
+    i2Lpct3FVeSc+qQZE8DIpN0x3g7BmMazNzTa11+Lf2Lm+7RgR9GzBMfAYZSaqmF+O5Tq
+    YFzCEq8TPTZDntMOsFFGdLkGDR0jVNRS7Amhi9P+PSakxuWqJtwxCRCzRxCsqhyFhHKP
+    oQmCNv+HldymXTS5Al2L0zAY+PDl3Q/Za2L24/jzq0Udwgpp1E0ovETiv5uNxNSg/zGM
+    7XHISZalMASQfVoB9BlQmsGskttyIdwrInHwamV0zRhe4L286eZ/vbk3PJZRphtUytcj
+    lnng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616430283;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=fNSPOvAcXJaGwOFbee0eesJYwvcfj3mVkyRH4eS4iOg=;
+    b=lLGpcH0r1zxv6DvLjuiAZhPci+8ZWlhn4vg/mnVGfazYU+j/Y1hdJFI5B/ikyxWu3K
+    ZIBSS0G+xTeSyqHV3r+b9eQEtW4FOrAXCL6xUB2gSfHst53L+O05nYtKVCgYKxnc/7xE
+    z1tDXFkv9rubxV5bsDKFD2O1MJQnZ0yex7UHnNBPTzEFu8F/VCsjRSVa6aF3cRnS+1UZ
+    9gIablcKFsp2bsQWOB3Ban/Uw3DAqEnO0bF1zSqEQZJm7LNEXHk/mPJPxBPMnRKBY73q
+    +BxvdH0GiZcq2JStOd0D9uLbk9e8mI6p0UX/9iRcaQ6vPBxzmxOlI5e/CNJeEFa4P1XQ
+    NO0Q==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616430283;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=fNSPOvAcXJaGwOFbee0eesJYwvcfj3mVkyRH4eS4iOg=;
+    b=dZTSxhUCRXaurYltWQj9o4RvqePC+AoYkOn0ifZqCQqb+39aLNpEWXRWcq4o4o6LMf
+    /8Xc0ckBldZhaxhCQBp9BKaUShrlIpihaJM0067kcVS0V2C/B/eTVJWgsAtopBe5noAo
+    l9gQ3B1yKvZbLe/4qhwvrwpLla6U3F3qoL/QTrAbw6nRin3qEs3LGMZ04R/A1uOlfSXp
+    x1+YxFyqBG+cK6aayodhJnYA4cvyr7c3zcffYEtIu177nrId643CKLdwNs9n8BbMy0Qb
+    bfOzcQZnBi63tjaT4cvK+GjCaML9Rugk5PZCWvBLRze3n2D7Qk4YC5B9STyd1OUR29rA
+    +UlQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOMpjpw=="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.10.137]
+    by smtp.strato.de (RZmta 47.21.0 DYNA|AUTH)
+    with ESMTPSA id R01debx2MGOgCwc
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 22 Mar 2021 17:24:42 +0100 (CET)
+Subject: Re: [kbuild-all] Re: include/linux/compiler_types.h:315:38: error:
+ call to '__compiletime_assert_536' declared with attribute error:
+ BUILD_BUG_ON failed: offsetof(struct can_frame, len) != offsetof(struct
+ canfd_frame, len) || offsetof(struct can_frame, data) != offsetof(struc...
+To:     Rong Chen <rong.a.chen@intel.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can <linux-can@vger.kernel.org>
+References: <202103210435.I0fiBGAC-lkp@intel.com>
+ <dad98ebd-77a4-3305-e681-278cabe38793@hartkopp.net>
+ <7f4f7e1c-194b-a903-d474-e3b742556a55@intel.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <f8075a19-10e1-abf9-6d59-1a46454b74b1@hartkopp.net>
+Date:   Mon, 22 Mar 2021 17:24:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5s5xiniupwssevae"
-Content-Disposition: inline
-In-Reply-To: <202103221045.40634.pisa@cmp.felk.cvut.cz>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <7f4f7e1c-194b-a903-d474-e3b742556a55@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Rong,
 
---5s5xiniupwssevae
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 22.03.21 09:52, Rong Chen wrote:
 
-On 22.03.2021 10:45:40, Pavel Pisa wrote:
-> Hello Marc,
->=20
-> thanks much for the fast reply.
->=20
-> On Monday 22 of March 2021 09:31:28 Marc Kleine-Budde wrote:
-> > On 22.03.2021 09:06:52, Pavel Pisa wrote:
-> > > my colleague at Elektroline.cz works on design of iMX6
-> > > based system with CAN FD support realized by tcan4x5x
-> > > chip connected to eCSPI. It seems that there are problems
-> > > with eCSPI DMA stucks and other troubles. When the same
-> > > chip (or even Microchip's mcp251xfd) is connected to
-> > > other (less industry sound platforms) as Allwinner etc...
-> > > drivers seems to work reliably, but tests on iMX6 results
-> > > in failures. They consider fast redesign to slCAN connected
-> > > second Microchip MCU to resolve critical problem for the
-> > > project now....
-> >
-> > Don't use slcan, just don't.
->=20
-> Yes, I agree with it and argued it to my colleagues but they are
-> so frustrated by more problems in iMX6 and imxRT erratas that they
+> On 3/21/21 10:19 PM, Oliver Hartkopp wrote:
+>> Two reminders in two days? ;-)
+>>
+>> Did you check my answer here?
+>> https://lore.kernel.org/lkml/afffeb73-ba4c-ca2c-75d0-9e7899e5cbe1@hartkopp.net/ 
+>>
+>>
+>> And did you try the partly revert?
+> 
+> Hi Oliver,
+> 
+> Sorry for the delay, we tried the revert patch and the problem still 
+> exists,
+> we also found that commit c7b74967 changed the error message which 
+> triggered
+> the report.
+> 
+> The problem is that offsetof(struct can_frame, data) != offsetof(struct 
+> canfd_frame, data)
+> the following struct layout shows that the offset has been changed by 
+> union:
+> 
+> struct can_frame {
+>          canid_t                    can_id;               /* 0     4 */
+>          union {
+>                  __u8               len;                  /* 4     1 */
+>                  __u8               can_dlc;              /* 4     1 */
+>          };                                               /* 4     4 */
 
-imxrt, as in the mmu-less =C2=B5C?
+Ugh! Why did the compiler extend the space for the union to 4 bytes?!?
 
-> believe that serial port has highest probability to not been broken.
+>          __u8                       __pad;                /* 8     1 */
+>          __u8                       __res0;               /* 9     1 */
+>          __u8                       len8_dlc;             /* 10     1 */
+> 
+>          /* XXX 5 bytes hole, try to pack */
+> 
+>          __u8                       data[8] 
+> __attribute__((__aligned__(8))); /*    16     8 */
+> 
+>          /* size: 24, cachelines: 1, members: 6 */
+>          /* sum members: 19, holes: 1, sum holes: 5 */
+>          /* forced alignments: 1, forced holes: 1, sum forced holes: 5 */
+>          /* last cacheline: 24 bytes */
+> } __attribute__((__aligned__(8)));
+> 
+> struct canfd_frame {
+>          canid_t                    can_id;               /* 0     4 */
+>          __u8                       len;                  /* 4     1 */
+>          __u8                       flags;                /* 5     1 */
+>          __u8                       __res0;               /* 6     1 */
+>          __u8                       __res1;               /* 7     1 */
+>          __u8                       data[64] 
+> __attribute__((__aligned__(8))); /*     8    64 */
+> 
+>          /* size: 72, cachelines: 2, members: 6 */
+>          /* forced alignments: 1 */
+>          /* last cacheline: 8 bytes */
+> } __attribute__((__aligned__(8)))
+> 
+> 
+> and I tried to add "__attribute__((packed))" to the union, the issue is 
+> gone:
+> 
+> diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
+> index f75238ac6dce..9842bb55ffd9 100644
+> --- a/include/uapi/linux/can.h
+> +++ b/include/uapi/linux/can.h
+> @@ -113,7 +113,7 @@ struct can_frame {
+>                   */
+>                  __u8 len;
+>                  __u8 can_dlc; /* deprecated */
+> -       };
+> +       } __attribute__((packed));
+>          __u8 __pad; /* padding */
+>          __u8 __res0; /* reserved / padding */
+>          __u8 len8_dlc; /* optional DLC for 8 byte payload length (9 .. 
+> 15) */
 
-I can ask my coworker Uwe to tell horror stories about the imx serial
-port driver if you want :D
-I haven't thought that far, I even don't recommend slcan from the CAN
-point of view.
+This is pretty strange!
 
-> > - If you want to stick to the SPI, use a mcp2518fd.
-> > - If you don't need CAN-FD, attach a stm32f042 or f072 via USB. There is
-> >   a open source firmware and Linux drivers.
->=20
-> They have Microchip PIC32 for power management in the design and quite
-> good experience with it, so they can use little more advanced one
-> with CAN FD and use it at CAN interface.
+pahole on my x86_64 machine shows the correct data structure layout:
 
-I suggest to use a PIC32 with USB and CAN, to get rid of the SPI. The
-existing STM32F0x2 firmware can probably be ported to the PIC32 so that
-you can re-use the gs-usb driver unter Linux.
+struct can_frame {
+         canid_t                    can_id;               /*     0     4 */
+         union {
+                 __u8               len;                  /*     4     1 */
+                 __u8               can_dlc;              /*     4     1 */
+         };                                               /*     4     1 */
+         __u8                       __pad;                /*     5     1 */
+         __u8                       __res0;               /*     6     1 */
+         __u8                       len8_dlc;             /*     7     1 */
+         __u8                       data[8] 
+__attribute__((__aligned__(8))); /*     8     8 */
 
-> The idea to use SPI connected MCU (in my case NXP LPC) come to my mind
-> at LinCAN era when everybody used MCP2515 with horrible single
-> register operation overhead. Can you suggest SPI protocol for CAN, CAN
-> FD MCU connection as the SocketCAN interface?
+         /* size: 16, cachelines: 1, members: 6 */
+         /* forced alignments: 1 */
+         /* last cacheline: 16 bytes */
+} __attribute__((__aligned__(8)));
 
-Don't do SPI in the first place, use USB.
+Target: x86_64-linux-gnu
+gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+Linux 5.12.0-rc3-00070-g8b12a62a4e3e x86_64 GNU/Linux
 
-Back to the SPI:
-If you have a full blown =CC=A7=CC=A7=C2=B5C you don't want to access the =
-=C2=B5C's CAN
-controller on the register level, but send/receive complete CAN
-messages. We don't have a SPI driver for that, but you can model the SPI
-messages like the gs-usb USB messages.
+So it looks like your compiler does not behave correctly - and I wonder 
+if it would be the correct approach to add the __packed() attribute or 
+better fix/change the (ARM) compiler.
 
-> Is there plan for CAN FD version? Anyway if the problems are caused by
-> NXP SPI, then they can creep in still.
+At least I'm very happy that the BUILD_BUG_ON() triggered correctly - so 
+it was worth to have it ;-)
 
-The only advantage on sending/receiving full CAN messages over SPI is
-that you have less overhead compared to register level access. But the
-imx SPI host driver will probably still use a lot of CPU.
+Best regards,
+Oliver
 
-> > - If you need CAN-FD, use a more modern stm32. I think some of the "G"
-> >   series have CAN-FD. But the firmware and Linux drivers are not
-> >   adopted, yet.
->=20
-> We have solved and mainlined CAN FD on imxRT on NuttX and Microchip
-> SAME70 (mainlining to NuttX expected soon) so we can reuse these.
 
-Sounds good. Next step would be to add a gs-usb compatible USB device
-driver. There already is a not mainlined gs-usb-fd
-(https://github.com/linklayer/gs_usb_fd), but linklayer lost interest in
-mainlining it.
-
-> > Expect quite some CPU load for the SPI based CAN controllers, due to the
-> > high Linux SPI overhead and the not that optimized imx SPI host driver.
->=20
-> Yes, I am not fan of these solution (you know our CTU CAN FD effort,
-> hopefully headers generator rewrite comes to the table next month),
-> but Elektroline company needs industrial range system and could not
-> wait for iMX8X with CAN FD controllers at the project start time.
-
-don't use imx8x, use the imx8mp instead.
-
-> > > The setup on 5.7 kernel partially works
-> >
-> > For the tcan4x5x better use latest v5.12 plus this series:
-> > https://lore.kernel.org/linux-can/20210308102427.63916-1-torin@maxiluxs=
-yste
-> >ms.com/
->=20
-> Thanks, we will test that for sure but for production we probably
-> need to backport to 5.10 because it has chance for serious LTS
-> support from Civil Infrastructure Platform (adding Pavel to CC)
-> for standard and even better preempt-RT kernels.
-
-Ok
-
-> > If the SPI DMA makes troubles, deactivate it. I think the tcan4x5x driv=
-er
-> > uses single tcan4x5x register reads, which results in small SPI
-> > transfers, so DMA brings no benefits.
->=20
-> Yes, we try that. I have some reminiscence form old time that we have
-> done some similar tricks on imx53 to make it work in infussion system dem=
-o.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---5s5xiniupwssevae
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBYd0AACgkQqclaivrt
-76lAiwgAnlAN3CfylRpgn62OEQBPKj4TRU4y4Mj4nHCoNKdmXF4iLNRYebnJnVtC
-6xCYTThaHIgylW44WtbAGzOe0aPws/RLolkUrrG+Vd3RZMJ8MEKz9uAY2Od/JvIP
-uwiNomkhgVaxuM6OowSyiSs2j0XGun9Vm683lu5s/T77sz8UYCtbydmLieh2/br/
-Ln1+8iV6+1RNTOrOtzSnzIYilhetE06OPV71nzk9PVKblwdDC5Y8VTN6tR7pUH/e
-lmux6/FflNMT0MWHpECUyUiEv68WFRSyqCxXARhfxSnWoKMetD5lLFrFPHXTDPrL
-aE5ow+C+KbyAt3vp/ay+DZDQWpvtZw==
-=NDsg
------END PGP SIGNATURE-----
-
---5s5xiniupwssevae--
+>>
+>> Maybe there's a mismatch in include files - or BUILD_BUG_ON() 
+>> generally does not work with unions on ARM as assumed here:
+>>
+>> https://lore.kernel.org/lkml/6e57d5d2-9b88-aee6-fb7a-82e24144d179@hartkopp.net/ 
+>>
+>>
+>> In both cases I can not really fix the issue.
+>> When the partly revert (suggested above) works, this would be a hack too.
+>>
+>> Best,
+>> Oliver
+>>
+>> On 20.03.21 21:43, kernel test robot wrote:
+>>> Hi Oliver,
+>>>
+>>> FYI, the error/warning still remains.
+>>>
+>>> tree: 
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
+>>> master
+>>> head:   812da4d39463a060738008a46cfc9f775e4bfcf6
+>>> commit: c7b74967799b1af52b3045d69d4c26836b2d41de can: replace can_dlc 
+>>> as variable/element for payload length
+>>> date:   4 months ago
+>>> config: arm-randconfig-r016-20210321 (attached as .config)
+>>> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
+>>> reproduce (this is a W=1 build):
+>>>          wget 
+>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+>>> -O ~/bin/make.cross
+>>>          chmod +x ~/bin/make.cross
+>>>          # 
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7b74967799b1af52b3045d69d4c26836b2d41de 
+>>>
+>>>          git remote add linus 
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>          git fetch --no-tags linus master
+>>>          git checkout c7b74967799b1af52b3045d69d4c26836b2d41de
+>>>          # save the attached .config to linux build tree
+>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 
+>>> make.cross ARCH=arm
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>>     In file included from <command-line>:
+>>>     net/can/af_can.c: In function 'can_init':
+>>>>> include/linux/compiler_types.h:315:38: error: call to 
+>>>>> '__compiletime_assert_536' declared with attribute error: 
+>>>>> BUILD_BUG_ON failed: offsetof(struct can_frame, len) != 
+>>>>> offsetof(struct canfd_frame, len) || offsetof(struct can_frame, 
+>>>>> data) != offsetof(struct canfd_frame, data)
+>>>       315 |  _compiletime_assert(condition, msg, 
+>>> __compiletime_assert_, __COUNTER__)
+>>>           |                                      ^
+>>>     include/linux/compiler_types.h:296:4: note: in definition of 
+>>> macro '__compiletime_assert'
+>>>       296 |    prefix ## suffix();    \
+>>>           |    ^~~~~~
+>>>     include/linux/compiler_types.h:315:2: note: in expansion of macro 
+>>> '_compiletime_assert'
+>>>       315 |  _compiletime_assert(condition, msg, 
+>>> __compiletime_assert_, __COUNTER__)
+>>>           |  ^~~~~~~~~~~~~~~~~~~
+>>>     include/linux/build_bug.h:39:37: note: in expansion of macro 
+>>> 'compiletime_assert'
+>>>        39 | #define BUILD_BUG_ON_MSG(cond, msg) 
+>>> compiletime_assert(!(cond), msg)
+>>>           | ^~~~~~~~~~~~~~~~~~
+>>>     include/linux/build_bug.h:50:2: note: in expansion of macro 
+>>> 'BUILD_BUG_ON_MSG'
+>>>        50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " 
+>>> #condition)
+>>>           |  ^~~~~~~~~~~~~~~~
+>>>     net/can/af_can.c:891:2: note: in expansion of macro 'BUILD_BUG_ON'
+>>>       891 |  BUILD_BUG_ON(offsetof(struct can_frame, len) !=
+>>>           |  ^~~~~~~~~~~~
+>>>
+>>>
+>>> vim +/__compiletime_assert_536 +315 include/linux/compiler_types.h
+>>>
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  301
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  302  #define 
+>>> _compiletime_assert(condition, msg, prefix, suffix) \
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  303 
+>>> __compiletime_assert(condition, msg, prefix, suffix)
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  304
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  /**
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  306   * compiletime_assert - 
+>>> break build and emit msg if condition is false
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  307   * @condition: a 
+>>> compile-time constant condition to check
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  308   * @msg:       a message 
+>>> to emit if condition is false
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  309   *
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * In tradition of POSIX 
+>>> assert, this macro will break the build if the
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * supplied condition is 
+>>> *false*, emitting the supplied error message if the
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * compiler has support 
+>>> to do so.
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   */
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  314  #define 
+>>> compiletime_assert(condition, msg) \
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21 @315 
+>>> _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  316
+>>>
+>>> :::::: The code at line 315 was first introduced by commit
+>>> :::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move 
+>>> compiletime_assert() macros into compiler_types.h
+>>>
+>>> :::::: TO: Will Deacon <will@kernel.org>
+>>> :::::: CC: Will Deacon <will@kernel.org>
+>>>
+>>> ---
+>>> 0-DAY CI Kernel Test Service, Intel Corporation
+>>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>>>
+>> _______________________________________________
+>> kbuild-all mailing list -- kbuild-all@lists.01.org
+>> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 
