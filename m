@@ -2,106 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B67343654
-	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 02:38:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDB9343BF5
+	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 09:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbhCVBhu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 21 Mar 2021 21:37:50 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3493 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbhCVBhc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 21 Mar 2021 21:37:32 -0400
-Received: from DGGEML402-HUB.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4F3cWx3nwFzRSjD;
-        Mon, 22 Mar 2021 09:35:41 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- DGGEML402-HUB.china.huawei.com (10.3.17.38) with Microsoft SMTP Server (TLS)
- id 14.3.498.0; Mon, 22 Mar 2021 09:37:25 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Mon, 22 Mar
- 2021 09:37:25 +0800
-Subject: Re: [Linuxarm] [PATCH net] net: sched: fix packet stuck problem for
- lockless qdisc
-To:     Cong Wang <xiyou.wangcong@gmail.com>
-CC:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Wei Wang <weiwan@google.com>,
-        "Cong Wang ." <cong.wang@bytedance.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        "Linux Kernel Network Developers" <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jonas Bonn <jonas.bonn@netrounds.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Zhivich <mzhivich@akamai.com>,
-        Josh Hunt <johunt@akamai.com>,
-        "Jike Song" <albcamus@gmail.com>,
-        Kehuan Feng <kehuan.feng@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <1616050402-37023-1-git-send-email-linyunsheng@huawei.com>
- <e5c2d82c-0158-3997-80b6-4aab56c61367@huawei.com>
- <CAM_iQpV4HX5L1b8ofUig-bi3r_MDdsjThqaxfoRCd=02XZBprQ@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <383f1c9b-016f-0aaa-def3-9d8786d40b01@huawei.com>
-Date:   Mon, 22 Mar 2021 09:37:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S229482AbhCVIlR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 22 Mar 2021 04:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229760AbhCVIlA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 22 Mar 2021 04:41:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12646C061574
+        for <linux-can@vger.kernel.org>; Mon, 22 Mar 2021 01:41:00 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lOG7O-0001kL-My; Mon, 22 Mar 2021 09:40:58 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:2d14:11e9:80f:5de6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 40FD75FCA3C;
+        Mon, 22 Mar 2021 07:53:17 +0000 (UTC)
+Date:   Mon, 22 Mar 2021 08:53:16 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] can: netlink: do tdco calculation after data
+ bittiming is copied to can_priv
+Message-ID: <20210322075316.343tc2yh62zewf4c@pengutronix.de>
+References: <20210321073329.1454-1-mailhol.vincent@wanadoo.fr>
+ <20210321073329.1454-2-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-In-Reply-To: <CAM_iQpV4HX5L1b8ofUig-bi3r_MDdsjThqaxfoRCd=02XZBprQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme711-chm.china.huawei.com (10.1.199.107) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="is3k5laf7uxq2jmv"
+Content-Disposition: inline
+In-Reply-To: <20210321073329.1454-2-mailhol.vincent@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/3/20 3:45, Cong Wang wrote:
-> On Fri, Mar 19, 2021 at 2:25 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->> I had done some performance test to see if there is value to
->> fix the packet stuck problem and support lockless qdisc bypass,
->> here is some result using pktgen in 'queue_xmit' mode on a dummy
->> device as Paolo Abeni had done in [1], and using pfifo_fast qdisc:
->>
->> threads  vanilla    locked-qdisc    vanilla+this_patch
->>    1     2.6Mpps      2.9Mpps            2.5Mpps
->>    2     3.9Mpps      4.8Mpps            3.6Mpps
->>    4     5.6Mpps      3.0Mpps            4.7Mpps
->>    8     2.7Mpps      1.6Mpps            2.8Mpps
->>    16    2.2Mpps      1.3Mpps            2.3Mpps
->>
->> locked-qdisc: test by removing the "TCQ_F_NOLOCK | TCQ_F_CPUSTATS".
-> 
-> I read this as this patch introduces somehow a performance
-> regression for -net, as the lockless bypass patch you submitted is
-> for -net-next.
 
-Yes, right now there is performance regression for fixing this bug,
-but the problem is that if we can not fix the above data race without
-any performance regression, do you prefer to send this patch to
--net, or to -net-next with the lockless bypass patch?
+--is3k5laf7uxq2jmv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Any idea to fix this with less performance regression?
+On 21.03.2021 16:33:29, Vincent Mailhol wrote:
+> The call to can_calc_tdco() is done too early. The data_bittiming
+> field of can_priv is not yet updated.
+>=20
+> Moving the call after tdco is memcopied solves the issue.
+>=20
+> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+> ---
+> Hi Marc,
+>=20
+> Please squash this into below commit:
+> 2b3d40020eca ("can: bittiming: add calculation for CAN FD Transmitter Del=
+ay Compensation (TDC)")
 
-> 
-> Thanks.
-> 
-> .
-> 
+done
 
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--is3k5laf7uxq2jmv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBYTOkACgkQqclaivrt
+76lzcQf6A0lbSFzpdXFgM+RGhdRYAK6vv4iYL+nUr9oOoHzPhnrStk+Wsv3tHzPx
+s00I6qxqlQMnZqZKT+Ey+uax4mkk795l7r6JhPkCqKZKEQr4LMSuLDP/kCY9eKX1
+NkhaXBpTRNAssy73veh2NajO9QyDtM2YDsya6DaPCxZXBPpGGpuTrAYixwC0eUgg
+ls/y3NP+1epPHaVkPMdkd83ZFXzXLwKJwcFYq7Rr7k+OMqP7hR4N/h6CYHgXlkjC
+yRPYVjzVoAHFps0j9T29fV1pgM/TtogoUtjTe7N/PeiIJ3JJ/6HviIBg30OSmd0z
+w6AtXUanvt7ZChj/TABGxogSBaMFuQ==
+=8uu2
+-----END PGP SIGNATURE-----
+
+--is3k5laf7uxq2jmv--
