@@ -2,103 +2,139 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEA83432D3
-	for <lists+linux-can@lfdr.de>; Sun, 21 Mar 2021 14:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84141343611
+	for <lists+linux-can@lfdr.de>; Mon, 22 Mar 2021 01:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbhCUNt4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 21 Mar 2021 09:49:56 -0400
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:27980 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbhCUNtc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 21 Mar 2021 09:49:32 -0400
-Received: from tomoyo.flets-east.jp ([153.202.107.157])
-        by mwinf5d13 with ME
-        id j1oz240023PnFJp031pT0a; Sun, 21 Mar 2021 14:49:30 +0100
-X-ME-Helo: tomoyo.flets-east.jp
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 21 Mar 2021 14:49:30 +0100
-X-ME-IP: 153.202.107.157
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        Dave Taht <dave.taht@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v3 1/1] netdev: add netdev_queue_set_dql_min_limit()
-Date:   Sun, 21 Mar 2021 22:48:49 +0900
-Message-Id: <20210321134849.463560-2-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210321134849.463560-1-mailhol.vincent@wanadoo.fr>
-References: <20210321134849.463560-1-mailhol.vincent@wanadoo.fr>
+        id S229829AbhCVAzg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 21 Mar 2021 20:55:36 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5099 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229979AbhCVAzM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 21 Mar 2021 20:55:12 -0400
+Received: from dggeml406-hub.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4F3bb62HRPzYMlt;
+        Mon, 22 Mar 2021 08:53:22 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggeml406-hub.china.huawei.com (10.3.17.50) with Microsoft SMTP Server (TLS)
+ id 14.3.498.0; Mon, 22 Mar 2021 08:55:09 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Mon, 22 Mar
+ 2021 08:55:09 +0800
+Subject: Re: [Linuxarm] Re: [RFC v2] net: sched: implement TCQ_F_CAN_BYPASS
+ for lockless qdisc
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+CC:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        "Vladimir Oltean" <olteanv@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "Eric Dumazet" <edumazet@google.com>, Wei Wang <weiwan@google.com>,
+        "Cong Wang ." <cong.wang@bytedance.com>,
+        Taehee Yoo <ap420073@gmail.com>,
+        "Linux Kernel Network Developers" <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>
+References: <1615603667-22568-1-git-send-email-linyunsheng@huawei.com>
+ <1615777818-13969-1-git-send-email-linyunsheng@huawei.com>
+ <20210315115332.1647e92b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <CAM_iQpXvVZxBRHF6PBDOYSOSCj08nPyfcY0adKuuTg=cqffV+w@mail.gmail.com>
+ <87eegddhsj.fsf@toke.dk>
+ <CAHmME9qDU7VRmBV+v0tzLiUpMJykjswSDwqc9P43ZwG1UD7mzw@mail.gmail.com>
+ <3bae7b26-9d7f-15b8-d466-ff5c26d08b35@huawei.com>
+ <CAM_iQpVvR1eUQxgihWrZ==X=xQjaaeH_qkehvU0Y2R6i9eM-Qw@mail.gmail.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <9d045462-051e-0cde-24d0-349dd397e2b7@huawei.com>
+Date:   Mon, 22 Mar 2021 08:55:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
+In-Reply-To: <CAM_iQpVvR1eUQxgihWrZ==X=xQjaaeH_qkehvU0Y2R6i9eM-Qw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add a function to set the dynamic queue limit minimum value.
+On 2021/3/20 2:15, Cong Wang wrote:
+> On Thu, Mar 18, 2021 at 12:33 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> On 2021/3/17 21:45, Jason A. Donenfeld wrote:
+>>> On 3/17/21, Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+>>>> Cong Wang <xiyou.wangcong@gmail.com> writes:
+>>>>
+>>>>> On Mon, Mar 15, 2021 at 2:07 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>>>>>>
+>>>>>> I thought pfifo was supposed to be "lockless" and this change
+>>>>>> re-introduces a lock between producer and consumer, no?
+>>>>>
+>>>>> It has never been truly lockless, it uses two spinlocks in the ring
+>>>>> buffer
+>>>>> implementation, and it introduced a q->seqlock recently, with this patch
+>>>>> now we have priv->lock, 4 locks in total. So our "lockless" qdisc ends
+>>>>> up having more locks than others. ;) I don't think we are going to a
+>>>>> right direction...
+>>>>
+>>>> Just a thought, have you guys considered adopting the lockless MSPC ring
+>>>> buffer recently introduced into Wireguard in commit:
+>>>>
+>>>> 8b5553ace83c ("wireguard: queueing: get rid of per-peer ring buffers")
+>>>>
+>>>> Jason indicated he was willing to work on generalising it into a
+>>>> reusable library if there was a use case for it. I haven't quite though
+>>>> through the details of whether this would be such a use case, but
+>>>> figured I'd at least mention it :)
+>>>
+>>> That offer definitely still stands. Generalization sounds like a lot of fun.
+>>>
+>>> Keep in mind though that it's an eventually consistent queue, not an
+>>> immediately consistent one, so that might not match all use cases. It
+>>> works with wg because we always trigger the reader thread anew when it
+>>> finishes, but that doesn't apply to everyone's queueing setup.
+>>
+>> Thanks for mentioning this.
+>>
+>> "multi-producer, single-consumer" seems to match the lockless qdisc's
+>> paradigm too, for now concurrent enqueuing/dequeuing to the pfifo_fast's
+>> queues() is not allowed, it is protected by producer_lock or consumer_lock.
+>>
+>> So it would be good to has lockless concurrent enqueuing, while dequeuing
+>> can be protected by qdisc_lock() or q->seqlock, which meets the "multi-producer,
+>> single-consumer" paradigm.
+> 
+> I don't think so. Usually we have one queue for each CPU so we can expect
+> each CPU has a lockless qdisc assigned, but we can not assume this in
+> the code, so we still have to deal with multiple CPU's sharing a lockless qdisc,
+> and we usually enqueue and dequeue in process context, so it means we could
+> have multiple producers and multiple consumers.
 
-Some specific drivers might have legitimate reasons to configure
-dql.min_limit to a given value. Typically, this is the case when the
-PDU of the protocol is smaller than the packet size to used to
-carry those frames to the device.
+For lockless qdisc, dequeuing is always within the qdisc_run_begin() and
+qdisc_run_end(), so multiple consumers is protected with each other by
+q->seqlock .
 
-Concrete example: a CAN (Control Area Network) device with an USB 2.0
-interface.  The PDU of classical CAN protocol are roughly 16 bytes but
-the USB packet size (which is used to carry the CAN frames to the
-device) might be up to 512 bytes.  Wen small traffic burst occurs, BQL
-algorithm is not able to immediately adjust and this would result in
-having to send many small USB packets (i.e packet of 16 bytes for each
-CAN frame). Filling up the USB packet with CAN frames is relatively
-fast (small latency issue) but the gain of not having to send several
-small USB packets is huge (big throughput increase). In this case,
-forcing dql.min_limit to a given value that would allow to stuff the
-USB packet is always a win.
+For enqueuing, multiple consumers is protected by producer_lock, see
+pfifo_fast_enqueue() -> skb_array_produce() -> ptr_ring_produce().
+I am not sure if lockless MSPC can work with the process context, but
+even if not, the enqueuing is also protected by rcu_read_lock_bh(),
+which provides some kind of atomicity, so that producer_lock can be
+reomved when lockless MSPC is used.
 
-This function is to be used by network drivers which are able to prove
-through a rationale and through empirical tests on several environment
-(with other applications, heavy context switching, virtualization...),
-that they constantly reach better performances with a specific
-predefined dql.min_limit value with no noticeable latency impact.
-
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- include/linux/netdevice.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index ddf4cfc12615..c3511263b15a 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3389,6 +3389,24 @@ netif_xmit_frozen_or_drv_stopped(const struct netdev_queue *dev_queue)
- 	return dev_queue->state & QUEUE_STATE_DRV_XOFF_OR_FROZEN;
- }
- 
-+/**
-+ *	netdev_queue_set_dql_min_limit - set dql minimum limit
-+ *	@dev_queue: pointer to transmit queue
-+ *	@min_limit: dql minimum limit
-+ *
-+ * Forces xmit_more() to return true until the minimum threshold
-+ * defined by @min_limit is reached (or until the tx queue is
-+ * empty). Warning: to be use with care, misuse will impact the
-+ * latency.
-+ */
-+static inline void netdev_queue_set_dql_min_limit(struct netdev_queue *dev_queue,
-+						  unsigned int min_limit)
-+{
-+#ifdef CONFIG_BQL
-+	dev_queue->dql.min_limit = min_limit;
-+#endif
-+}
-+
- /**
-  *	netdev_txq_bql_enqueue_prefetchw - prefetch bql data for write
-  *	@dev_queue: pointer to transmit queue
--- 
-2.26.2
+> 
+> On the other hand, I don't think the problems we have been fixing are the ring
+> buffer implementation itself, they are about the high-level qdisc
+> state transitions.
+> 
+> Thanks.
+> 
+> .
+> 
 
