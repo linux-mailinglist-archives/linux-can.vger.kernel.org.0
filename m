@@ -2,313 +2,113 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C855B3455C8
-	for <lists+linux-can@lfdr.de>; Tue, 23 Mar 2021 03:56:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2053456CA
+	for <lists+linux-can@lfdr.de>; Tue, 23 Mar 2021 05:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbhCWC4B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 22 Mar 2021 22:56:01 -0400
-Received: from mga04.intel.com ([192.55.52.120]:6492 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229537AbhCWCza (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 22 Mar 2021 22:55:30 -0400
-IronPort-SDR: oSN8t+TeqpTE1LxwpZbawNHDZz+SiQ6GgZo6LFojvUSbo2LPWJlxSMhbTAPDLrZ9IMnhlgck1C
- fgQy9+mumgIQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="188074951"
-X-IronPort-AV: E=Sophos;i="5.81,270,1610438400"; 
-   d="scan'208";a="188074951"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 19:55:29 -0700
-IronPort-SDR: Qt51m2NdIFWPebJ2Kfbt4AdsLwESOfvS4IR/C3Hdsy11SR8DurC60Lf2S2v7k2OXfN8y01S42V
- ArpnH0y19gmQ==
-X-IronPort-AV: E=Sophos;i="5.81,270,1610438400"; 
-   d="scan'208";a="408092779"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.11]) ([10.239.13.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 19:55:27 -0700
-Subject: Re: [kbuild-all] Re: include/linux/compiler_types.h:315:38: error:
- call to '__compiletime_assert_536' declared with attribute error:
- BUILD_BUG_ON failed: offsetof(struct can_frame, len) != offsetof(struct
- canfd_frame, len) || offsetof(struct can_frame, data) != offsetof(struc...
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <202103210435.I0fiBGAC-lkp@intel.com>
- <dad98ebd-77a4-3305-e681-278cabe38793@hartkopp.net>
- <7f4f7e1c-194b-a903-d474-e3b742556a55@intel.com>
- <f8075a19-10e1-abf9-6d59-1a46454b74b1@hartkopp.net>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <b10903ca-c424-b305-d981-fe0004500190@intel.com>
-Date:   Tue, 23 Mar 2021 10:54:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <f8075a19-10e1-abf9-6d59-1a46454b74b1@hartkopp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S229482AbhCWEcT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Mar 2021 00:32:19 -0400
+Received: from mail-eopbgr30089.outbound.protection.outlook.com ([40.107.3.89]:1605
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229451AbhCWEbu (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 23 Mar 2021 00:31:50 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CF6FD34fRf3LriZSVlz03mxjOcNQebeNJg+aJhF8MvPaBtssEapHilkeetycwFAgngbflSfKOGYZnJ/mN3PkoaFPLUFxMNl3HueChhAOGkxXQds6wNSzYjizLM50czRLsAMhMrAWsPnvIB5ph/E+OtcwTq39lo2QLmkRsBTk6yRqSATsuwypwLk1c3qnVYvIjlNB0yX05PKaS7DfVl94zOXwDeZJ+lmLWAZlWa1fEBdaAMwAW0B0TbDbwxveBnDSIpvDIw93EKbB1Nx1O7wItrVmGvErPxGjzY7KI4HpgIm8aoO/Xn5qy0w6XRShF/LfRarFantlcwe4XlMSzGeS3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lbp5qY1CsHWHJg5CYlSsEiEdkGawYCu3cZgSSiCJ/7g=;
+ b=hfmeDzCDSiYlEPsHnPsNnXrD2NHJQGVlXAIjuCdm8pGV/S8VJfAsRw1oOZIHcPsnilpuG8KC/rZ7CDNpTG6cNI6sdawoj/IUae5cCsKoaTNRgi5KIjXTW3PJqCYJHSlX+LO9eQx/WTLEhgOiP28RJP0hSaqnNbjPlz7TYHwHiPM9rlc7fJWkl9qefexkN24WqKbmNpsK4+9Zmfjgi1S1NloWVpoGFuLc69FAUIJ76AJokSI2AvnNtvRlizawuGO6BrGwbEp8hv5XrZS8ztCI6Z8W7hedABrTa7Cll5HCMAF0+EzvEcdTBhk4tNkPYxNMEjrP5g8k1ZX9rLZ8RfQjMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lbp5qY1CsHWHJg5CYlSsEiEdkGawYCu3cZgSSiCJ/7g=;
+ b=ad9pstX0M36HJBzipffDbBY4Ty4E8h8Ro8l+Vum0DeWzgMqMPi3iQ82tewJIfspOJ3/FPxntPNVRcq2BNQB+JpFzCJ3o8NX0NapiGHliSQFGSjcyLvvmS3q/Ar9wSPhm42tvhoSlK194xkVXpkVUfue29YUE1GpAV3O0Ed6UR/I=
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com (2603:10a6:10:fa::15)
+ by DBBPR04MB7628.eurprd04.prod.outlook.com (2603:10a6:10:204::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.18; Tue, 23 Mar
+ 2021 04:31:48 +0000
+Received: from DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::9598:ace0:4417:d1d5]) by DB8PR04MB6795.eurprd04.prod.outlook.com
+ ([fe80::9598:ace0:4417:d1d5%7]) with mapi id 15.20.3955.027; Tue, 23 Mar 2021
+ 04:31:41 +0000
+From:   Joakim Zhang <qiangqing.zhang@nxp.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     Han Xu <han.xu@nxp.com>
+Subject: CAN performance test
+Thread-Topic: CAN performance test
+Thread-Index: AdcfnJoGB+57WM0vSGmlPUSs8pFyIg==
+Date:   Tue, 23 Mar 2021 04:31:41 +0000
+Message-ID: <DB8PR04MB6795C0366E4B43B3D12461EDE6649@DB8PR04MB6795.eurprd04.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7e4308d7-6881-40dd-e515-08d8edb48ed9
+x-ms-traffictypediagnostic: DBBPR04MB7628:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DBBPR04MB7628F78F07E08FE183D7F737E6649@DBBPR04MB7628.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tmQeTmFrdwsNJfctCvj07b6MR2jQ1+1Dk+jtMcF2nBheiv7JKBimgt2VNtElygBaSw+2oaxWmBOTRzb/FXTReZ2jANSjfgXIfyxA+DnTcqrZzaFsJMdY+UA1kYyESqarjRYV1nMCoKzO2ALujPZWQ4xQRlfTf2N4KDra4SLjWTAr7dQTUWzEoV1o4b5Flp72XEY0jF9ekq5etTf4p/+c+fVxBqPkduR//1RIlpZ+eJHBmzDEeq9yTg64eJbqXQPtStpxHiv7ilaSqx8pluZeBKj29TsH3l1mDgNrC6EkPlkdXa9TwaEnIaLW74+ZR2lixPCzqw3X4Yk5nIf+icuboWMLb6MarN7K6xU5+ghQp3YmlQNWceyQ2Oa3xCPEZm8vkdFQ8yVHWkNIa2Q+LQQrbyzNaQF/iyFxKfyzeyuqTbULNxI4uKN1xgGp6ypsLQQF0Tc5p5rKT9HbMj8Bv/rVPS5aAK6ASOToQOpiXvRusbGcaWdABvRKiIUMsjvo5Qlj2Ssmru4WQzPYcc1s/kPZC+hJlhoM60enQR+obsDSAu8C0EelIjXJwX0Z86dGjPs3hpViE1x9/TJUHi4hgniaE3lW8Gp8pB4jkrXBr6q6yulnz9br9Y5h+Mqt8iZDdiO2pjer5fjGktHDzLTNUsXqVwrTlvaDjV9D4X8dZZTng1g=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6795.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(366004)(376002)(39860400002)(136003)(64756008)(316002)(66556008)(478600001)(76116006)(86362001)(6506007)(66946007)(55016002)(66476007)(7696005)(9686003)(4326008)(8676002)(52536014)(110136005)(33656002)(7116003)(66446008)(38100700001)(8936002)(186003)(5660300002)(558084003)(71200400001)(2906002)(26005)(3480700007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?ZnxqKrpf9oFZWcxBDhNiqy6CyHUJAwoxl1HPKl/0bnsdB2KkFQUCQGYDEdd0?=
+ =?us-ascii?Q?SZEFKVU06O0m9XhqtxOjApxIVb1ArVoN1z4f7UVov5hmdQ7cg+WSq6rXV+vo?=
+ =?us-ascii?Q?jaORI3+CYU9IsufmNbayuaEGJ2ULV2kne8qXgl8Bnjjz8d1my89RCOdbLUB+?=
+ =?us-ascii?Q?zgUSFjpwI9U8y225cYEGsJB2+uu+muK2NXZ0SdNs9w2BSTNjQfrUcpwGuYCQ?=
+ =?us-ascii?Q?QYqi/7ulvd8tegGmiRl79+uA51LXwID0nZ4uemn0jAnjoi6SzTwXz9hy1GZt?=
+ =?us-ascii?Q?x/YUoq5fWx7hu2qrp6ORB8Rj7wRyu6/t0cqObYPWw+cPWdg0mu2JaqsOAnQy?=
+ =?us-ascii?Q?G7DhMAf/0SdOQl3M/XdFKCQdnbOrT4pFQwakTpSqwz1Oy41T4jYwx3CbZVrR?=
+ =?us-ascii?Q?nK2ZfrtImpqbrAMdZsjG8SmoGatWsB6pXC7uzo0CYwOLzjC/sEE9iSh8GrkH?=
+ =?us-ascii?Q?ZXA07KmE+RqZnbGKkpdcWXzxg31oRf3v6hBPQUt5DJaeCPupMHUvONlJHrrx?=
+ =?us-ascii?Q?aDDrKdFnkz/9a/4N1by1IP/UYaCT3h3ImQyeMc1pQ3KfXPUvc3yN9d58klvX?=
+ =?us-ascii?Q?n5BaHOmi54+NzZlnFoHivmMoEjNjmR4wLkjFklQAER/+HUux44/v8AT5J2XM?=
+ =?us-ascii?Q?RxnEz6uhPlt2zgHtX+0rCPA8ccxqicjDV3aF6LOxmN2GhM08wJvwO165iNMj?=
+ =?us-ascii?Q?MVzYEko+Pv04SOUJYxgG52LcUBCEo87+wVSA/xWI99DqnLYgB/aKHJJSta0/?=
+ =?us-ascii?Q?NA20lcVdY2fvQA9Zd9to7Gb8cs+JwnSCNYzH8n+VVhzamIcxzE9ATqBsyez+?=
+ =?us-ascii?Q?tkk/xroMkFse0xn4Fokbv/nTchNJZqhRp9MWv7qBg5T6S89s1zargLy3HYK6?=
+ =?us-ascii?Q?DfdFHd6IaHJ+/IQW7L3DSlTsNPHS3iAHGbFMHKH0M1TK00QtJ5n5xBSWI7e7?=
+ =?us-ascii?Q?EI2dxytU/6Mmieylk4Glw7QtSLW+rxwpSttOdUoDU1XiBJ9vyIgYriljMsHH?=
+ =?us-ascii?Q?bnlwF6g16oHdybdl7u1W+dka+E4uLfetnoxpjQ/T3/VFF5NV1pBdNMhvsDSF?=
+ =?us-ascii?Q?fQpqdgps61v7FPkp7qvQyZX12GUk26x7ufVFRefXtkVrkjZ8Ax6B5lsb2CzL?=
+ =?us-ascii?Q?w7zQQuab9xoD5ZjtRvFnfFUkc7ccuPSS8OMf77KIac4GdrSY9qpc73NCztCC?=
+ =?us-ascii?Q?vBQsfuEs6AxorQmVgCU2cY1SL8X4k5PUTbCS4F+p306wdkRbPSAygo3Y7So+?=
+ =?us-ascii?Q?eZvKYGI5VrgmQRBQyn2hwgdhQziRjLcTyg3IB5aPTRlHfgPLSAVttv69Mh44?=
+ =?us-ascii?Q?/LmVtaqzMAYrswTMmXud41a4?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6795.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e4308d7-6881-40dd-e515-08d8edb48ed9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2021 04:31:41.8958
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ilnm3pXjmX9erUIC3Ufq3gJacRgzbQr0FTScsxRVSKxMCmc0LjsnWq4WxdE9x6sYm+yVTVlIUzAGYIDvHd6LIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7628
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+Hi Marc,
 
-On 3/23/21 12:24 AM, Oliver Hartkopp wrote:
-> Hi Rong,
->
-> On 22.03.21 09:52, Rong Chen wrote:
->
->> On 3/21/21 10:19 PM, Oliver Hartkopp wrote:
->>> Two reminders in two days? ;-)
->>>
->>> Did you check my answer here?
->>> https://lore.kernel.org/lkml/afffeb73-ba4c-ca2c-75d0-9e7899e5cbe1@hartkopp.net/ 
->>>
->>>
->>> And did you try the partly revert?
->>
->> Hi Oliver,
->>
->> Sorry for the delay, we tried the revert patch and the problem still 
->> exists,
->> we also found that commit c7b74967 changed the error message which 
->> triggered
->> the report.
->>
->> The problem is that offsetof(struct can_frame, data) != 
->> offsetof(struct canfd_frame, data)
->> the following struct layout shows that the offset has been changed by 
->> union:
->>
->> struct can_frame {
->>          canid_t                    can_id;               /* 0     4 */
->>          union {
->>                  __u8               len;                  /* 4     1 */
->>                  __u8               can_dlc;              /* 4     1 */
->>          };                                               /* 4     4 */
->
-> Ugh! Why did the compiler extend the space for the union to 4 bytes?!?
->
->>          __u8 __pad;                /* 8     1 */
->>          __u8                       __res0;               /* 9     1 */
->>          __u8                       len8_dlc;             /* 10     1 */
->>
->>          /* XXX 5 bytes hole, try to pack */
->>
->>          __u8                       data[8] 
->> __attribute__((__aligned__(8))); /*    16     8 */
->>
->>          /* size: 24, cachelines: 1, members: 6 */
->>          /* sum members: 19, holes: 1, sum holes: 5 */
->>          /* forced alignments: 1, forced holes: 1, sum forced holes: 
->> 5 */
->>          /* last cacheline: 24 bytes */
->> } __attribute__((__aligned__(8)));
->>
->> struct canfd_frame {
->>          canid_t                    can_id;               /* 0     4 */
->>          __u8                       len;                  /* 4     1 */
->>          __u8                       flags;                /* 5     1 */
->>          __u8                       __res0;               /* 6     1 */
->>          __u8                       __res1;               /* 7     1 */
->>          __u8                       data[64] 
->> __attribute__((__aligned__(8))); /*     8    64 */
->>
->>          /* size: 72, cachelines: 2, members: 6 */
->>          /* forced alignments: 1 */
->>          /* last cacheline: 8 bytes */
->> } __attribute__((__aligned__(8)))
->>
->>
->> and I tried to add "__attribute__((packed))" to the union, the issue 
->> is gone:
->>
->> diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
->> index f75238ac6dce..9842bb55ffd9 100644
->> --- a/include/uapi/linux/can.h
->> +++ b/include/uapi/linux/can.h
->> @@ -113,7 +113,7 @@ struct can_frame {
->>                   */
->>                  __u8 len;
->>                  __u8 can_dlc; /* deprecated */
->> -       };
->> +       } __attribute__((packed));
->>          __u8 __pad; /* padding */
->>          __u8 __res0; /* reserved / padding */
->>          __u8 len8_dlc; /* optional DLC for 8 byte payload length (9 
->> .. 15) */
->
-> This is pretty strange!
->
-> pahole on my x86_64 machine shows the correct data structure layout:
->
-> struct can_frame {
->         canid_t                    can_id;               /* 0     4 */
->         union {
->                 __u8               len;                  /* 4     1 */
->                 __u8               can_dlc;              /* 4     1 */
->         };                                               /* 4     1 */
->         __u8                       __pad;                /* 5     1 */
->         __u8                       __res0;               /* 6     1 */
->         __u8                       len8_dlc;             /* 7     1 */
->         __u8                       data[8] 
-> __attribute__((__aligned__(8))); /*     8     8 */
->
->         /* size: 16, cachelines: 1, members: 6 */
->         /* forced alignments: 1 */
->         /* last cacheline: 16 bytes */
-> } __attribute__((__aligned__(8)));
->
-> Target: x86_64-linux-gnu
-> gcc version 10.2.1 20210110 (Debian 10.2.1-6)
-> Linux 5.12.0-rc3-00070-g8b12a62a4e3e x86_64 GNU/Linux
->
-> So it looks like your compiler does not behave correctly - and I 
-> wonder if it would be the correct approach to add the __packed() 
-> attribute or better fix/change the (ARM) compiler.
-
-Hi Oliver,
-
-I tried arm-linux-gnueabi (gcc version 10.2.0) and the problem still exists,
-btw we prefer to not use the latest gcc compiler to avoid false positives.
+Do you know there is some easy ways for us to test CAN performance? I teste=
+d it before by hardcode the driver, it's not a good way. Thanks a lot!
 
 Best Regards,
-Rong Chen
-
->
-> At least I'm very happy that the BUILD_BUG_ON() triggered correctly - 
-> so it was worth to have it ;-)
->
-> Best regards,
-> Oliver
->
->
->>>
->>> Maybe there's a mismatch in include files - or BUILD_BUG_ON() 
->>> generally does not work with unions on ARM as assumed here:
->>>
->>> https://lore.kernel.org/lkml/6e57d5d2-9b88-aee6-fb7a-82e24144d179@hartkopp.net/ 
->>>
->>>
->>> In both cases I can not really fix the issue.
->>> When the partly revert (suggested above) works, this would be a hack 
->>> too.
->>>
->>> Best,
->>> Oliver
->>>
->>> On 20.03.21 21:43, kernel test robot wrote:
->>>> Hi Oliver,
->>>>
->>>> FYI, the error/warning still remains.
->>>>
->>>> tree: 
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 
->>>> master
->>>> head:   812da4d39463a060738008a46cfc9f775e4bfcf6
->>>> commit: c7b74967799b1af52b3045d69d4c26836b2d41de can: replace 
->>>> can_dlc as variable/element for payload length
->>>> date:   4 months ago
->>>> config: arm-randconfig-r016-20210321 (attached as .config)
->>>> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
->>>> reproduce (this is a W=1 build):
->>>>          wget 
->>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->>>> -O ~/bin/make.cross
->>>>          chmod +x ~/bin/make.cross
->>>>          # 
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7b74967799b1af52b3045d69d4c26836b2d41de 
->>>>
->>>>          git remote add linus 
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>          git fetch --no-tags linus master
->>>>          git checkout c7b74967799b1af52b3045d69d4c26836b2d41de
->>>>          # save the attached .config to linux build tree
->>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 
->>>> make.cross ARCH=arm
->>>>
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All errors (new ones prefixed by >>):
->>>>
->>>>     In file included from <command-line>:
->>>>     net/can/af_can.c: In function 'can_init':
->>>>>> include/linux/compiler_types.h:315:38: error: call to 
->>>>>> '__compiletime_assert_536' declared with attribute error: 
->>>>>> BUILD_BUG_ON failed: offsetof(struct can_frame, len) != 
->>>>>> offsetof(struct canfd_frame, len) || offsetof(struct can_frame, 
->>>>>> data) != offsetof(struct canfd_frame, data)
->>>>       315 |  _compiletime_assert(condition, msg, 
->>>> __compiletime_assert_, __COUNTER__)
->>>>           |                                      ^
->>>>     include/linux/compiler_types.h:296:4: note: in definition of 
->>>> macro '__compiletime_assert'
->>>>       296 |    prefix ## suffix();    \
->>>>           |    ^~~~~~
->>>>     include/linux/compiler_types.h:315:2: note: in expansion of 
->>>> macro '_compiletime_assert'
->>>>       315 |  _compiletime_assert(condition, msg, 
->>>> __compiletime_assert_, __COUNTER__)
->>>>           |  ^~~~~~~~~~~~~~~~~~~
->>>>     include/linux/build_bug.h:39:37: note: in expansion of macro 
->>>> 'compiletime_assert'
->>>>        39 | #define BUILD_BUG_ON_MSG(cond, msg) 
->>>> compiletime_assert(!(cond), msg)
->>>>           | ^~~~~~~~~~~~~~~~~~
->>>>     include/linux/build_bug.h:50:2: note: in expansion of macro 
->>>> 'BUILD_BUG_ON_MSG'
->>>>        50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " 
->>>> #condition)
->>>>           |  ^~~~~~~~~~~~~~~~
->>>>     net/can/af_can.c:891:2: note: in expansion of macro 'BUILD_BUG_ON'
->>>>       891 |  BUILD_BUG_ON(offsetof(struct can_frame, len) !=
->>>>           |  ^~~~~~~~~~~~
->>>>
->>>>
->>>> vim +/__compiletime_assert_536 +315 include/linux/compiler_types.h
->>>>
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  301
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  302  #define 
->>>> _compiletime_assert(condition, msg, prefix, suffix) \
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  303 
->>>> __compiletime_assert(condition, msg, prefix, suffix)
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  304
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  /**
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  306   * compiletime_assert - 
->>>> break build and emit msg if condition is false
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  307   * @condition: a 
->>>> compile-time constant condition to check
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  308   * @msg:       a 
->>>> message to emit if condition is false
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  309   *
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * In tradition of 
->>>> POSIX assert, this macro will break the build if the
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * supplied condition 
->>>> is *false*, emitting the supplied error message if the
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * compiler has support 
->>>> to do so.
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   */
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  314  #define 
->>>> compiletime_assert(condition, msg) \
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21 @315 
->>>> _compiletime_assert(condition, msg, __compiletime_assert_, 
->>>> __COUNTER__)
->>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  316
->>>>
->>>> :::::: The code at line 315 was first introduced by commit
->>>> :::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move 
->>>> compiletime_assert() macros into compiler_types.h
->>>>
->>>> :::::: TO: Will Deacon <will@kernel.org>
->>>> :::::: CC: Will Deacon <will@kernel.org>
->>>>
->>>> ---
->>>> 0-DAY CI Kernel Test Service, Intel Corporation
->>>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->>>>
->>> _______________________________________________
->>> kbuild-all mailing list -- kbuild-all@lists.01.org
->>> To unsubscribe send an email to kbuild-all-leave@lists.01.org
->>
+Joakim Zhang
 
