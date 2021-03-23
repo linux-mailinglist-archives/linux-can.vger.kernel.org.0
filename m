@@ -2,367 +2,222 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFA034579E
-	for <lists+linux-can@lfdr.de>; Tue, 23 Mar 2021 07:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104753457E3
+	for <lists+linux-can@lfdr.de>; Tue, 23 Mar 2021 07:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbhCWGHN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Mar 2021 02:07:13 -0400
-Received: from mga02.intel.com ([134.134.136.20]:52789 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229494AbhCWGHM (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 23 Mar 2021 02:07:12 -0400
-IronPort-SDR: ZWr9QwuoRq7JqPvkwbkN/m1LeSCg7EUlcZ/0GvtDUwZKVXgWoPOUpQje2Gi+dMThOLCsLfTS1M
- EyBcBBiVEQaQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9931"; a="177541918"
-X-IronPort-AV: E=Sophos;i="5.81,271,1610438400"; 
-   d="scan'208";a="177541918"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 23:07:11 -0700
-IronPort-SDR: gyEh8gsVpYZo/0t4eMvUoUFxtkHhBL6VDnLY9Kp7KIRam4yFxzOSNlTcIYKWJFeZuvqARXHqJx
- oq4E4TV7asMA==
-X-IronPort-AV: E=Sophos;i="5.81,271,1610438400"; 
-   d="scan'208";a="408158450"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.11]) ([10.239.13.11])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2021 23:07:09 -0700
-Subject: Re: [kbuild-all] Re: include/linux/compiler_types.h:315:38: error:
- call to '__compiletime_assert_536' declared with attribute error:
- BUILD_BUG_ON failed: offsetof(struct can_frame, len) != offsetof(struct
- canfd_frame, len) || offsetof(struct can_frame, data) != offsetof(struc...
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <202103210435.I0fiBGAC-lkp@intel.com>
- <dad98ebd-77a4-3305-e681-278cabe38793@hartkopp.net>
- <7f4f7e1c-194b-a903-d474-e3b742556a55@intel.com>
- <f8075a19-10e1-abf9-6d59-1a46454b74b1@hartkopp.net>
- <b10903ca-c424-b305-d981-fe0004500190@intel.com>
- <CAMZ6RqK0-7DaoscTgKD+APDxtPw1q0Dz0Kef_doa0PZOnBav=w@mail.gmail.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <52e57719-7b55-b21a-5e30-4be2fb4e776c@intel.com>
-Date:   Tue, 23 Mar 2021 14:06:21 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S229804AbhCWGjA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Mar 2021 02:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229961AbhCWGi2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Mar 2021 02:38:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9B1C061574
+        for <linux-can@vger.kernel.org>; Mon, 22 Mar 2021 23:38:28 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1lOag2-0007ur-BO; Tue, 23 Mar 2021 07:38:06 +0100
+Subject: Re: [RFC v3] net: sched: implement TCQ_F_CAN_BYPASS for lockless
+ qdisc
+To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     olteanv@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        andriin@fb.com, edumazet@google.com, weiwan@google.com,
+        cong.wang@bytedance.com, ap420073@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@openeuler.org, mkl@pengutronix.de,
+        linux-can@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
+        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com
+References: <1616050402-37023-1-git-send-email-linyunsheng@huawei.com>
+ <1616404156-11772-1-git-send-email-linyunsheng@huawei.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <5bef912e-aa7d-8a27-4d18-ac8cf4f7afdf@pengutronix.de>
+Date:   Tue, 23 Mar 2021 07:37:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-In-Reply-To: <CAMZ6RqK0-7DaoscTgKD+APDxtPw1q0Dz0Kef_doa0PZOnBav=w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1616404156-11772-1-git-send-email-linyunsheng@huawei.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Vincent,
+Hi,
 
-On 3/23/21 1:46 PM, Vincent MAILHOL wrote:
-> Hi Oliver and Rong,
->
-> This is an interesting and quite surprising issue!
->
-> On Tue. 23 mars 2021 at 11:54, Rong Chen <rong.a.chen@intel.com> wrote:
->> On 3/23/21 12:24 AM, Oliver Hartkopp wrote:
->>> Hi Rong,
->>>
->>> On 22.03.21 09:52, Rong Chen wrote:
->>>
->>>> On 3/21/21 10:19 PM, Oliver Hartkopp wrote:
->>>>> Two reminders in two days? ;-)
->>>>>
->>>>> Did you check my answer here?
->>>>> https://lore.kernel.org/lkml/afffeb73-ba4c-ca2c-75d0-9e7899e5cbe1@hartkopp.net/
->>>>>
->>>>>
->>>>> And did you try the partly revert?
->>>> Hi Oliver,
->>>>
->>>> Sorry for the delay, we tried the revert patch and the problem still
->>>> exists,
->>>> we also found that commit c7b74967 changed the error message which
->>>> triggered
->>>> the report.
->>>>
->>>> The problem is that offsetof(struct can_frame, data) !=
->>>> offsetof(struct canfd_frame, data)
->>>> the following struct layout shows that the offset has been changed by
->>>> union:
->>>>
->>>> struct can_frame {
->>>>           canid_t                    can_id;               /* 0     4 */
->>>>           union {
->>>>                   __u8               len;                  /* 4     1 */
->>>>                   __u8               can_dlc;              /* 4     1 */
->>>>           };                                               /* 4     4 */
->>> Ugh! Why did the compiler extend the space for the union to 4 bytes?!?
-> Just a random idea but maybe the added padding is due to some
-> kind of odd intrication with the __attribute__((__aligned__(8)))
-> just below? Does this reproduce if we remove the
-> __attribute__((__aligned__(8)))?
+On 22.03.21 10:09, Yunsheng Lin wrote:
+> Currently pfifo_fast has both TCQ_F_CAN_BYPASS and TCQ_F_NOLOCK
+> flag set, but queue discipline by-pass does not work for lockless
+> qdisc because skb is always enqueued to qdisc even when the qdisc
+> is empty, see __dev_xmit_skb().
+> 
+> This patch calls sch_direct_xmit() to transmit the skb directly
+> to the driver for empty lockless qdisc too, which aviod enqueuing
+> and dequeuing operation. qdisc->empty is set to false whenever a
+> skb is enqueued, see pfifo_fast_enqueue(), and is set to true when
+> skb dequeuing return NULL, see pfifo_fast_dequeue().
+> 
+> There is a data race between enqueue/dequeue and qdisc->empty
+> setting, qdisc->empty is only used as a hint, so we need to call
+> sch_may_need_requeuing() to see if the queue is really empty and if
+> there is requeued skb, which has higher priority than the current
+> skb.
+> 
+> The performance for ip_forward test increases about 10% with this
+> patch.
+> 
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> ---
+> Hi, Vladimir and Ahmad
+> 	Please give it a test to see if there is any out of order
+> packet for this patch, which has removed the priv->lock added in
+> RFC v2.
 
-Here is the layout without __attribute__((__aligned__(8))),
-the union is still extended to 4 bytes:
+Overnight test (10h, 64 mil frames) didn't see any out-of-order frames
+between 2 FlexCANs on a dual core machine:
 
-struct can_frame {
-         canid_t                    can_id;               /* 0     4 */
-         union {
-                 __u8               len;                  /* 4     1 */
-                 __u8               can_dlc;              /* 4     1 */
-         };                                               /* 4     4 */
-         __u8                       __pad;                /* 8     1 */
-         __u8                       __res0;               /* 9     1 */
-         __u8                       len8_dlc;             /* 10     1 */
-         __u8                       data[8];              /* 11     8 */
+Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-         /* size: 20, cachelines: 1, members: 6 */
-         /* padding: 1 */
-         /* last cacheline: 20 bytes */
-};
+No performance measurements taken.
 
-Best Regards,
-Rong Chen
+> 
+> There is a data race as below:
+> 
+>       CPU1                                   CPU2
+> qdisc_run_begin(q)                            .
+>         .                                q->enqueue()
+> sch_may_need_requeuing()                      .
+>     return true                               .
+>         .                                     .
+>         .                                     .
+>     q->enqueue()                              .
+> 
+> When above happen, the skb enqueued by CPU1 is dequeued after the
+> skb enqueued by CPU2 because sch_may_need_requeuing() return true.
+> If there is not qdisc bypass, the CPU1 has better chance to queue
+> the skb quicker than CPU2.
+> 
+> This patch does not take care of the above data race, because I
+> view this as similar as below:
+> 
+> Even at the same time CPU1 and CPU2 write the skb to two socket
+> which both heading to the same qdisc, there is no guarantee that
+> which skb will hit the qdisc first, becuase there is a lot of
+> factor like interrupt/softirq/cache miss/scheduling afffecting
+> that.
+> 
+> So I hope the above data race will not cause problem for Vladimir
+> and Ahmad.
+> ---
+>  include/net/pkt_sched.h   |  1 +
+>  include/net/sch_generic.h |  1 -
+>  net/core/dev.c            | 22 ++++++++++++++++++++++
+>  net/sched/sch_generic.c   | 11 +++++++++++
+>  4 files changed, 34 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
+> index f5c1bee..5715ddf 100644
+> --- a/include/net/pkt_sched.h
+> +++ b/include/net/pkt_sched.h
+> @@ -122,6 +122,7 @@ void qdisc_warn_nonwc(const char *txt, struct Qdisc *qdisc);
+>  bool sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
+>  		     struct net_device *dev, struct netdev_queue *txq,
+>  		     spinlock_t *root_lock, bool validate);
+> +bool sch_may_need_requeuing(struct Qdisc *q);
+>  
+>  void __qdisc_run(struct Qdisc *q);
+>  
+> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+> index f7a6e14..e08cc77 100644
+> --- a/include/net/sch_generic.h
+> +++ b/include/net/sch_generic.h
+> @@ -161,7 +161,6 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+>  	if (qdisc->flags & TCQ_F_NOLOCK) {
+>  		if (!spin_trylock(&qdisc->seqlock))
+>  			return false;
+> -		WRITE_ONCE(qdisc->empty, false);
+>  	} else if (qdisc_is_running(qdisc)) {
+>  		return false;
+>  	}
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index be941ed..317180a 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -3796,9 +3796,31 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
+>  	qdisc_calculate_pkt_len(skb, q);
+>  
+>  	if (q->flags & TCQ_F_NOLOCK) {
+> +		if (q->flags & TCQ_F_CAN_BYPASS && READ_ONCE(q->empty) &&
+> +		    qdisc_run_begin(q)) {
+> +			if (sch_may_need_requeuing(q)) {
+> +				rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
+> +				__qdisc_run(q);
+> +				qdisc_run_end(q);
+> +
+> +				goto no_lock_out;
+> +			}
+> +
+> +			qdisc_bstats_cpu_update(q, skb);
+> +
+> +			if (sch_direct_xmit(skb, q, dev, txq, NULL, true) &&
+> +			    !READ_ONCE(q->empty))
+> +				__qdisc_run(q);
+> +
+> +			qdisc_run_end(q);
+> +			return NET_XMIT_SUCCESS;
+> +		}
+> +
+>  		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
+> +		WRITE_ONCE(q->empty, false);
+>  		qdisc_run(q);
+>  
+> +no_lock_out:
+>  		if (unlikely(to_free))
+>  			kfree_skb_list(to_free);
+>  		return rc;
+> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+> index 44991ea..2145fdad 100644
+> --- a/net/sched/sch_generic.c
+> +++ b/net/sched/sch_generic.c
+> @@ -146,6 +146,8 @@ static inline void dev_requeue_skb(struct sk_buff *skb, struct Qdisc *q)
+>  	}
+>  	if (lock)
+>  		spin_unlock(lock);
+> +
+> +	WRITE_ONCE(q->empty, false);
+>  	__netif_schedule(q);
+>  }
+>  
+> @@ -273,6 +275,15 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
+>  	return skb;
+>  }
+>  
+> +bool sch_may_need_requeuing(struct Qdisc *q)
+> +{
+> +	if (likely(skb_queue_empty(&q->gso_skb) &&
+> +		   !q->ops->peek(q)))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+>  /*
+>   * Transmit possibly several skbs, and handle the return status as
+>   * required. Owning running seqcount bit guarantees that
+> 
 
->
-> (I am not saying that we should permanently remove it, this is
-> only a suggestion for troubleshooting).
->
->>>>           __u8 __pad;                /* 8     1 */
->>>>           __u8                       __res0;               /* 9     1 */
->>>>           __u8                       len8_dlc;             /* 10     1 */
->>>>
->>>>           /* XXX 5 bytes hole, try to pack */
->>>>
->>>>           __u8                       data[8]
->>>> __attribute__((__aligned__(8))); /*    16     8 */
->>>>
->>>>           /* size: 24, cachelines: 1, members: 6 */
->>>>           /* sum members: 19, holes: 1, sum holes: 5 */
->>>>           /* forced alignments: 1, forced holes: 1, sum forced holes:
->>>> 5 */
->>>>           /* last cacheline: 24 bytes */
->>>> } __attribute__((__aligned__(8)));
->>>>
->>>> struct canfd_frame {
->>>>           canid_t                    can_id;               /* 0     4 */
->>>>           __u8                       len;                  /* 4     1 */
->>>>           __u8                       flags;                /* 5     1 */
->>>>           __u8                       __res0;               /* 6     1 */
->>>>           __u8                       __res1;               /* 7     1 */
->>>>           __u8                       data[64]
->>>> __attribute__((__aligned__(8))); /*     8    64 */
->>>>
->>>>           /* size: 72, cachelines: 2, members: 6 */
->>>>           /* forced alignments: 1 */
->>>>           /* last cacheline: 8 bytes */
->>>> } __attribute__((__aligned__(8)))
->>>>
->>>>
->>>> and I tried to add "__attribute__((packed))" to the union, the issue
->>>> is gone:
->>>>
->>>> diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
->>>> index f75238ac6dce..9842bb55ffd9 100644
->>>> --- a/include/uapi/linux/can.h
->>>> +++ b/include/uapi/linux/can.h
->>>> @@ -113,7 +113,7 @@ struct can_frame {
->>>>                    */
->>>>                   __u8 len;
->>>>                   __u8 can_dlc; /* deprecated */
->>>> -       };
->>>> +       } __attribute__((packed));
->>>>           __u8 __pad; /* padding */
->>>>           __u8 __res0; /* reserved / padding */
->>>>           __u8 len8_dlc; /* optional DLC for 8 byte payload length (9
->>>> .. 15) */
->>> This is pretty strange!
->>>
->>> pahole on my x86_64 machine shows the correct data structure layout:
->>>
->>> struct can_frame {
->>>          canid_t                    can_id;               /* 0     4 */
->>>          union {
->>>                  __u8               len;                  /* 4     1 */
->>>                  __u8               can_dlc;              /* 4     1 */
->>>          };                                               /* 4     1 */
->>>          __u8                       __pad;                /* 5     1 */
->>>          __u8                       __res0;               /* 6     1 */
->>>          __u8                       len8_dlc;             /* 7     1 */
->>>          __u8                       data[8]
->>> __attribute__((__aligned__(8))); /*     8     8 */
->>>
->>>          /* size: 16, cachelines: 1, members: 6 */
->>>          /* forced alignments: 1 */
->>>          /* last cacheline: 16 bytes */
->>> } __attribute__((__aligned__(8)));
->>>
->>> Target: x86_64-linux-gnu
->>> gcc version 10.2.1 20210110 (Debian 10.2.1-6)
->>> Linux 5.12.0-rc3-00070-g8b12a62a4e3e x86_64 GNU/Linux
->>>
->>> So it looks like your compiler does not behave correctly - and I
->>> wonder if it would be the correct approach to add the __packed()
->>> attribute or better fix/change the (ARM) compiler.
-> I had a look at the ISO/IEC 9899-1999 (aka C99 standard). In
-> section 6.7.2.1 "Structure and union specifiers", there are no
-> clauses to forbid this behavior...
-> Here are the relevant clauses of that section:
->    * 12 Each non-bit-field member of a structure or union object
->      is aligned in an implementation-defined appropriate to its
->      type.
->    * 13 [...] There may be unnamed padding within a structure
->      object, but not at its beginning.
->    * 14 The size of a union is sufficient to contain the largest
->      of its members. [...]
->    * 15 There may be unnamed padding at the end of a structure or
->      union.
->
-> So while I am really curious to understand why the compiler
-> behaves like that, technically speaking, it does not violate the
-> standard. As such, I think that Mark's patch (which negates
-> clause 15) makes sense.
->
->> Hi Oliver,
->>
->> I tried arm-linux-gnueabi (gcc version 10.2.0) and the problem still exists,
->> btw we prefer to not use the latest gcc compiler to avoid false positives.
->>
->> Best Regards,
->> Rong Chen
->>
->>> At least I'm very happy that the BUILD_BUG_ON() triggered correctly -
->>> so it was worth to have it ;-)
->>>
->>> Best regards,
->>> Oliver
->>>
->>>
->>>>> Maybe there's a mismatch in include files - or BUILD_BUG_ON()
->>>>> generally does not work with unions on ARM as assumed here:
->>>>>
->>>>> https://lore.kernel.org/lkml/6e57d5d2-9b88-aee6-fb7a-82e24144d179@hartkopp.net/
->>>>>
->>>>>
->>>>> In both cases I can not really fix the issue.
->>>>> When the partly revert (suggested above) works, this would be a hack
->>>>> too.
->>>>>
->>>>> Best,
->>>>> Oliver
->>>>>
->>>>> On 20.03.21 21:43, kernel test robot wrote:
->>>>>> Hi Oliver,
->>>>>>
->>>>>> FYI, the error/warning still remains.
->>>>>>
->>>>>> tree:
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>>> master
->>>>>> head:   812da4d39463a060738008a46cfc9f775e4bfcf6
->>>>>> commit: c7b74967799b1af52b3045d69d4c26836b2d41de can: replace
->>>>>> can_dlc as variable/element for payload length
->>>>>> date:   4 months ago
->>>>>> config: arm-randconfig-r016-20210321 (attached as .config)
->>>>>> compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
->>>>>> reproduce (this is a W=1 build):
->>>>>>           wget
->>>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
->>>>>> -O ~/bin/make.cross
->>>>>>           chmod +x ~/bin/make.cross
->>>>>>           #
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c7b74967799b1af52b3045d69d4c26836b2d41de
->>>>>>
->>>>>>           git remote add linus
->>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>>>           git fetch --no-tags linus master
->>>>>>           git checkout c7b74967799b1af52b3045d69d4c26836b2d41de
->>>>>>           # save the attached .config to linux build tree
->>>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0
->>>>>> make.cross ARCH=arm
->>>>>>
->>>>>> If you fix the issue, kindly add following tag as appropriate
->>>>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>>>
->>>>>> All errors (new ones prefixed by >>):
->>>>>>
->>>>>>      In file included from <command-line>:
->>>>>>      net/can/af_can.c: In function 'can_init':
->>>>>>>> include/linux/compiler_types.h:315:38: error: call to
->>>>>>>> '__compiletime_assert_536' declared with attribute error:
->>>>>>>> BUILD_BUG_ON failed: offsetof(struct can_frame, len) !=
->>>>>>>> offsetof(struct canfd_frame, len) || offsetof(struct can_frame,
->>>>>>>> data) != offsetof(struct canfd_frame, data)
->>>>>>        315 |  _compiletime_assert(condition, msg,
->>>>>> __compiletime_assert_, __COUNTER__)
->>>>>>            |                                      ^
->>>>>>      include/linux/compiler_types.h:296:4: note: in definition of
->>>>>> macro '__compiletime_assert'
->>>>>>        296 |    prefix ## suffix();    \
->>>>>>            |    ^~~~~~
->>>>>>      include/linux/compiler_types.h:315:2: note: in expansion of
->>>>>> macro '_compiletime_assert'
->>>>>>        315 |  _compiletime_assert(condition, msg,
->>>>>> __compiletime_assert_, __COUNTER__)
->>>>>>            |  ^~~~~~~~~~~~~~~~~~~
->>>>>>      include/linux/build_bug.h:39:37: note: in expansion of macro
->>>>>> 'compiletime_assert'
->>>>>>         39 | #define BUILD_BUG_ON_MSG(cond, msg)
->>>>>> compiletime_assert(!(cond), msg)
->>>>>>            | ^~~~~~~~~~~~~~~~~~
->>>>>>      include/linux/build_bug.h:50:2: note: in expansion of macro
->>>>>> 'BUILD_BUG_ON_MSG'
->>>>>>         50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: "
->>>>>> #condition)
->>>>>>            |  ^~~~~~~~~~~~~~~~
->>>>>>      net/can/af_can.c:891:2: note: in expansion of macro 'BUILD_BUG_ON'
->>>>>>        891 |  BUILD_BUG_ON(offsetof(struct can_frame, len) !=
->>>>>>            |  ^~~~~~~~~~~~
->>>>>>
->>>>>>
->>>>>> vim +/__compiletime_assert_536 +315 include/linux/compiler_types.h
->>>>>>
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  301
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  302  #define
->>>>>> _compiletime_assert(condition, msg, prefix, suffix) \
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  303
->>>>>> __compiletime_assert(condition, msg, prefix, suffix)
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  304
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  305  /**
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  306   * compiletime_assert -
->>>>>> break build and emit msg if condition is false
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  307   * @condition: a
->>>>>> compile-time constant condition to check
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  308   * @msg:       a
->>>>>> message to emit if condition is false
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  309   *
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  310   * In tradition of
->>>>>> POSIX assert, this macro will break the build if the
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  311   * supplied condition
->>>>>> is *false*, emitting the supplied error message if the
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  312   * compiler has support
->>>>>> to do so.
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  313   */
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  314  #define
->>>>>> compiletime_assert(condition, msg) \
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21 @315
->>>>>> _compiletime_assert(condition, msg, __compiletime_assert_,
->>>>>> __COUNTER__)
->>>>>> eb5c2d4b45e3d2 Will Deacon 2020-07-21  316
->>>>>>
->>>>>> :::::: The code at line 315 was first introduced by commit
->>>>>> :::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move
->>>>>> compiletime_assert() macros into compiler_types.h
->>>>>>
->>>>>> :::::: TO: Will Deacon <will@kernel.org>
->>>>>> :::::: CC: Will Deacon <will@kernel.org>
->>>>>>
->>>>>> ---
->>>>>> 0-DAY CI Kernel Test Service, Intel Corporation
->>>>>> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
->>>>>>
->>>>> _______________________________________________
->>>>> kbuild-all mailing list -- kbuild-all@lists.01.org
->>>>> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
