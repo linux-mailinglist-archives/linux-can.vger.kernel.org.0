@@ -2,47 +2,51 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6633458BB
-	for <lists+linux-can@lfdr.de>; Tue, 23 Mar 2021 08:32:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29E03458D3
+	for <lists+linux-can@lfdr.de>; Tue, 23 Mar 2021 08:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbhCWHcQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 23 Mar 2021 03:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        id S229764AbhCWHe7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 23 Mar 2021 03:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbhCWHbw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Mar 2021 03:31:52 -0400
+        with ESMTP id S229675AbhCWHet (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 23 Mar 2021 03:34:49 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F945C061574
-        for <linux-can@vger.kernel.org>; Tue, 23 Mar 2021 00:31:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90B3C061574
+        for <linux-can@vger.kernel.org>; Tue, 23 Mar 2021 00:34:48 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lObVz-0005mg-FY; Tue, 23 Mar 2021 08:31:47 +0100
+        id 1lObYl-0006G3-OR; Tue, 23 Mar 2021 08:34:39 +0100
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:c81e:25b5:b851:4b31])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E8F295FDBF1;
-        Tue, 23 Mar 2021 07:30:49 +0000 (UTC)
-Date:   Tue, 23 Mar 2021 08:30:49 +0100
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9CB5B5FDC07;
+        Tue, 23 Mar 2021 07:34:37 +0000 (UTC)
+Date:   Tue, 23 Mar 2021 08:34:37 +0100
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Dan Murphy <dmurphy@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kael_w@yeah.net
-Subject: Re: [PATCH] net: can: Remove duplicate include of regmap.h
-Message-ID: <20210323073049.xtsa4qfquezickon@pengutronix.de>
-References: <20210323021026.140460-1-wanjiabing@vivo.com>
+To:     Rong Chen <rong.a.chen@intel.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, linux-can <linux-can@vger.kernel.org>
+Subject: Re: [kbuild-all] Re: include/linux/compiler_types.h:315:38: error:
+ call to '__compiletime_assert_536' declared with attribute error:
+ BUILD_BUG_ON failed: offsetof(struct can_frame, len) != offsetof(struct
+ canfd_frame, len) || offsetof(struct can_frame, data) != offsetof(struc...
+Message-ID: <20210323073437.yo63wreqnubbeqby@pengutronix.de>
+References: <202103210435.I0fiBGAC-lkp@intel.com>
+ <dad98ebd-77a4-3305-e681-278cabe38793@hartkopp.net>
+ <7f4f7e1c-194b-a903-d474-e3b742556a55@intel.com>
+ <f8075a19-10e1-abf9-6d59-1a46454b74b1@hartkopp.net>
+ <b10903ca-c424-b305-d981-fe0004500190@intel.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2x7tt3dycidjeo77"
+        protocol="application/pgp-signature"; boundary="jucf3zuhpwlugk7g"
 Content-Disposition: inline
-In-Reply-To: <20210323021026.140460-1-wanjiabing@vivo.com>
+In-Reply-To: <b10903ca-c424-b305-d981-fe0004500190@intel.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -52,18 +56,22 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---2x7tt3dycidjeo77
+--jucf3zuhpwlugk7g
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 23.03.2021 10:10:25, Wan Jiabing wrote:
-> linux/regmap.h has been included at line 13, so remove the=20
-> duplicate one at line 14.
+On 23.03.2021 10:54:40, Rong Chen wrote:
+> I tried arm-linux-gnueabi (gcc version 10.2.0) and the problem still
+> exists, btw we prefer to not use the latest gcc compiler to avoid
+> false positives.
 
-applied to linux-can-next/testing.
+FWIW:
 
-Thanks,
+I'm using latest debian arm compiler and the BUILD_BUG never triggered.
+gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+
+regards,
 Marc
 
 --=20
@@ -72,19 +80,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---2x7tt3dycidjeo77
+--jucf3zuhpwlugk7g
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBZmSYACgkQqclaivrt
-76k9hgf9E1gyqjyXoEpiqFqSf7ZDUNLduopZyW4BCvi6dF4SoZnaFmgPLbRuZTup
-n4/0ylnbQ7Y4T/5Yyzv7nXaZlr9SLP86uAS+pqUzlQiKl0+Woz3c9SSvjaJDdrvu
-BZEbBx2Bhc0olUgFvuJsHMbgC7VSpQHqLOTpszYJGu14fd2u4CNawknJtNAUP8Bs
-emBNEA0Yq6nic70t16UhrPzjlUgZfhDDj0BBFyu1CBrBb5Vq3GG/3A74sVneVhvW
-BsSfZTpl1i1+IyFi+FXDi2tJ4SML7d4tAKV2G8COP8sEnrlBp5mubw3NUH7JRz3l
-mU9iAbLp5LCCKhdJubnUCP7e+FNQpQ==
-=05VG
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBZmgoACgkQqclaivrt
+76mwaAgApUoTTkXx1qY9IZ6zUEu3JH4lUypUxxju76Zhf60CX36mqvNnIjhxDUxd
+7vycnZt5Num4MHOF4e9tWEXgCw/bpkYfCSQ+6Ygov0EN7smROs8ACqYeWOmEt1Ew
+atTH+OdgHKf2nW7yrYZVlOnb93kKgqwEaxbSONFwRh7SPSjKId3lqACYzHNL7g4P
+QJ7Y9UQHAOAUL9gsYcVzsAba8izsQ2F1Fwu3YTnyU2Evd13NmuZ4pBY5UCb6EI6C
+3zFgtmtaKrz4p629gZVEsT+KXU/HHygdyNc7cnRZfJ2G30rcezKQub4dGcxeeics
+LKxxexIVwnCelLjh+zqqO/uFM5KJMA==
+=atgV
 -----END PGP SIGNATURE-----
 
---2x7tt3dycidjeo77--
+--jucf3zuhpwlugk7g--
