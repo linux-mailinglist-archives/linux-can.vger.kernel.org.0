@@ -2,107 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF58348A35
-	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 08:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF33B348AFF
+	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 09:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhCYHbz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Mar 2021 03:31:55 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.217]:21245 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhCYHbX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 03:31:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1616657475; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=ffgPBMeAkWNv4uvVgLqfQr1hRDgg5V1zOGLnWtDQKbRkC/LY4jsyvs0QkT6ZbFBn74
-    psPLJyxT5Hi3mmJGmPZcA7JIGjsSiSLi4ZRrVrh2AP2vUvyStA4P0WPGJ9kaq3INfWRV
-    rCIVLqKXLZ9bcvEMHUoQ80+bc1kQifNRykeWdm4mF/fqbqnYK+SIbBw6xzhG85PxGyd6
-    4maMpvSeRhwyRTWpxPw/AMQprJTfbH8pFCnN7Y1PnuRWUbBHD2C/rAuhkdKArjX9hKJj
-    jMnDrPWADjQ7IFtYaJJrnnzmIkpHs3oimlH7tANiat1+8YD4xZTT766wDsCb/UX54Kvg
-    LfMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616657475;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=tVc8yqxqCVGVQclGzYutZcYaj2Ok12d2Ye+a2Y4YSE8=;
-    b=rsIIE0BDA6bh+qAWt0FJ5WplAzoy+9C547irHMXBCIjMznFhSiHWQ3O97NTyL1duZB
-    SvvXr9nHpuvrTbgVp8ucDJ0D+H7eI40dkeCx7vlYzGmJMUKboDFQeLr1dYMwWB4sU/4v
-    plG/IwMQfsL16JOKDNX7o7I5SpEU05RgN8nqBw71mYUT1hehY7QWXlunPrGwSdPKHacS
-    HM7TSHBdQDnZNx54MK6XQ/vJRb58LtDP58gp3Vtz6vZ4xLpQNI1HL5XGVA/xDfNDl9mV
-    C+Q6+lM0dm36QE9zG4Y/WIRNUHUKP89M0iXZkk3ONxzse0LxzMRnGOj90/NTK++dAqey
-    n0QQ==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616657475;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=tVc8yqxqCVGVQclGzYutZcYaj2Ok12d2Ye+a2Y4YSE8=;
-    b=lQHx/7sX0AIoJwuhUvTaQ/X6NnLyXeqFOkoFXqkN8/gwZoCk6kqzVs5Nhpte63PhY2
-    ApPMCmNW22asLtweW/1bevnKwOZFWLgEITLq6CnQs1QibeZh2pFeqmAtzvq7FFzka/KI
-    o1k4nya7UbCf7OME7XxEHnoUNCIVUNMdGml/1tTCw/FW+NO9QFUQ0L5UfNasg5nouFUU
-    /XA+HOAy4rRnRAspybMex/ZdPWx2HctzAZYQiglColdWdyDV77RtijqjjZPG7b1bVFwq
-    B3iH4/BGvsvY+Samh7b1jpDDGcCtMA7HGlJEcAl4KfC9z+fp43ZGJ/ba7gCdmI6yrpG4
-    K8LQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGV1iOMpjpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-    by smtp.strato.de (RZmta 47.22.0 DYNA|AUTH)
-    with ESMTPSA id z00fabx2P7VE2g2
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 25 Mar 2021 08:31:14 +0100 (CET)
-Subject: Re: [PATCH] [RFC] can: fix msg_namelen values depending on
- CAN_REQUIRED_SIZE
-To:     Richard Weinberger <richard@nod.at>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-References: <20210324215442.44537-1-socketcan@hartkopp.net>
- <224900630.112641.1616624386963.JavaMail.zimbra@nod.at>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <f830f92e-fc89-7e5f-29ce-e245527a1e39@hartkopp.net>
-Date:   Thu, 25 Mar 2021 08:31:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S229669AbhCYIBk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Thu, 25 Mar 2021 04:01:40 -0400
+Received: from relay-b02.edpnet.be ([212.71.1.222]:55918 "EHLO
+        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229923AbhCYIBW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 04:01:22 -0400
+X-ASG-Debug-ID: 1616659274-15c4336f02514a50001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.77.176.adsl.dyn.edpnet.net [77.109.77.176]) by relay-b02.edpnet.be with ESMTP id qCQuV0koh95K9Lpw; Thu, 25 Mar 2021 09:01:14 +0100 (CET)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.77.176.adsl.dyn.edpnet.net[77.109.77.176]
+X-Barracuda-Apparent-Source-IP: 77.109.77.176
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 6030812F8956;
+        Thu, 25 Mar 2021 09:01:14 +0100 (CET)
+Date:   Thu, 25 Mar 2021 09:01:13 +0100
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     Richard Weinberger <richard@nod.at>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: PATCH: Breaking UAPI change?
+Message-ID: <20210325080113.GA8446@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: PATCH: Breaking UAPI change?
+Mail-Followup-To: Oliver Hartkopp <socketcan@hartkopp.net>,
+        Richard Weinberger <richard@nod.at>,
+        linux-can <linux-can@vger.kernel.org>
+References: <1883346738.111675.1616599858539.JavaMail.zimbra@nod.at>
+ <20210324190104.GB3342@x1.vandijck-laurijssen.be>
+ <1135648123.112255.1616613706554.JavaMail.zimbra@nod.at>
+ <20210324192746.GA7408@x1.vandijck-laurijssen.be>
+ <26bf9711-9fe4-f7fe-22fe-750cf93bd760@hartkopp.net>
 MIME-Version: 1.0
-In-Reply-To: <224900630.112641.1616624386963.JavaMail.zimbra@nod.at>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <26bf9711-9fe4-f7fe-22fe-750cf93bd760@hartkopp.net>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 77.109.77.176.adsl.dyn.edpnet.net[77.109.77.176]
+X-Barracuda-Start-Time: 1616659274
+X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 2472
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.50
+X-Barracuda-Spam-Status: No, SCORE=0.50 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=BSF_RULE7568M
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.88768
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.50 BSF_RULE7568M          Custom Rule 7568M
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 24.03.21 23:19, Richard Weinberger wrote:
-> Oliver,
+On Wed, 24 Mar 2021 21:26:19 +0100, Oliver Hartkopp wrote:
+> On 24.03.21 20:27, Kurt Van Dijck wrote:
+> >>----- Ursprüngliche Mail -----
+> >>>>commit f5223e9eee65 ("can: extend sockaddr_can to include j1939 members")
+> >commit 124900109ca88d29382ef2e2b848d3a2f9d67b98
+> >Author: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> >Date:   Wed Mar 24 20:08:50 2021
+> >
+> >     can raw: don't increase provided name length
+> >     The length of the buffer is known by the application,
+> >     not the kernel. Kernel is supposed to return only the
+> >     size of used bytes.
+> >     There is a minimum required size for the struct sockaddr_can
+> >     to be usefull for can_raw, so errors are returned when
+> >     the provided size is lower
+> >     Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> >
+> >diff --git a/net/can/raw.c b/net/can/raw.c
+> >index 6ec8aa1d0da4..00d352ae221e 100644
+> >--- a/net/can/raw.c
+> >+++ b/net/can/raw.c
+> >@@ -475,7 +475,7 @@ static int raw_getname(struct socket *sock, struct sockaddr *uaddr,
+> >  	if (peer)
+> >  		return -EOPNOTSUPP;
+> >-	memset(addr, 0, sizeof(*addr));
+> >+	memset(addr, 0, CAN_REQUIRED_SIZE(*addr, ifindex));
+> >  	addr->can_family  = AF_CAN;
+> >  	addr->can_ifindex = ro->ifindex;
 > 
-> ----- Ursprüngliche Mail -----
->> @@ -808,10 +810,13 @@ static int raw_recvmsg(struct socket *sock, struct msghdr
->> *msg, size_t size,
->> 	int noblock;
->>
->> 	noblock = flags & MSG_DONTWAIT;
->> 	flags &= ~MSG_DONTWAIT;
->>
->> +	if (msg->msg_name && msg->msg_namelen < RAW_MIN_NAMELEN)
->> +		return -EINVAL;
->> +
+> Is there no need to adapt the return value then?
 > 
-> Like with Kurt's patch, my test fails here too because msg->msg_namelen is 0.
-> ->msg_namelen is always 0 in the recvfrom() case.
+> - return sizeof(*addr);
+> + return CAN_REQUIRED_SIZE(*addr, ifindex);
 
-Agreed!
+indeed. I have missed that one.
+I was looking for a function parameter, and then forgot somehow ...
 
-I just adopted that part and did no more testing yesterday (needed some 
-sleep).
-
-E.g. 'candump any' also fails at CAN frame reception time due to this 
-wrong check ;-)
-
-Will send an update soon.
-
-Regards,
-Oliver
+> 
+> Regards,
+> Oliver
+> 
+> ps. If so, I need to go through isotp_getname() too ...
+> 
+> 
+> >@@ -806,6 +806,10 @@ static int raw_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+> >  		return sock_recv_errqueue(sk, msg, size,
+> >  					  SOL_CAN_RAW, SCM_CAN_RAW_ERRQUEUE);
+> >+	if (msg->name && msg->msg_namelen <
+> >+			CAN_REQUIRED_SIZE(struct sockaddr_can, ifindex))
+> >+		return -EINVAL;
+> >+
+> >  	skb = skb_recv_datagram(sk, flags, noblock, &err);
+> >  	if (!skb)
+> >  		return err;
+> >@@ -825,7 +829,8 @@ static int raw_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+> >  	if (msg->msg_name) {
+> >  		__sockaddr_check_size(sizeof(struct sockaddr_can));
+> >-		msg->msg_namelen = sizeof(struct sockaddr_can);
+> >+		if (msg->msg_namelen > sizeof(struct sockaddr_can))
+> >+			msg->msg_namelen = sizeof(struct sockaddr_can);
+> >  		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
+> >  	}
+> >
