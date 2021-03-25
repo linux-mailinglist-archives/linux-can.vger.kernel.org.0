@@ -2,90 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA3D348BA8
-	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 09:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A071348BD8
+	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 09:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbhCYIiT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Mar 2021 04:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbhCYIiA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 04:38:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF25C06174A
-        for <linux-can@vger.kernel.org>; Thu, 25 Mar 2021 01:38:00 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lPLV8-0002BN-MI; Thu, 25 Mar 2021 09:37:58 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:f5fd:792d:c506:d37f])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id C93BA5FF8AC;
-        Thu, 25 Mar 2021 08:37:57 +0000 (UTC)
-Date:   Thu, 25 Mar 2021 09:37:56 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Patrick Menschel <menschel.p@posteo.de>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Subject: Re: CAN Testing with Docker Image?
-Message-ID: <20210325083756.lc367z5fscppmvmh@pengutronix.de>
-References: <2a2f2f06-00ed-7418-b5b6-ea7eb729d4f5@posteo.de>
+        id S229662AbhCYIqy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Thu, 25 Mar 2021 04:46:54 -0400
+Received: from relay-b03.edpnet.be ([212.71.1.220]:50032 "EHLO
+        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229906AbhCYIqd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 04:46:33 -0400
+X-ASG-Debug-ID: 1616661989-15c4354a946d1870001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (77.109.77.176.adsl.dyn.edpnet.net [77.109.77.176]) by relay-b03.edpnet.be with ESMTP id NKwBTC7C3rBL6ATN; Thu, 25 Mar 2021 09:46:29 +0100 (CET)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.77.176.adsl.dyn.edpnet.net[77.109.77.176]
+X-Barracuda-Apparent-Source-IP: 77.109.77.176
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 128FB12F8A26;
+        Thu, 25 Mar 2021 09:46:29 +0100 (CET)
+Date:   Thu, 25 Mar 2021 09:46:28 +0100
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Richard Weinberger <richard@nod.at>,
+        linux-can <linux-can@vger.kernel.org>
+Subject: Re: [PATCH] [RFC] can: fix msg_namelen values depending on
+ CAN_REQUIRED_SIZE
+Message-ID: <20210325084627.GD8446@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [PATCH] [RFC] can: fix msg_namelen values depending on
+ CAN_REQUIRED_SIZE
+Mail-Followup-To: Oliver Hartkopp <socketcan@hartkopp.net>,
+        Richard Weinberger <richard@nod.at>,
+        linux-can <linux-can@vger.kernel.org>
+References: <20210324215442.44537-1-socketcan@hartkopp.net>
+ <224900630.112641.1616624386963.JavaMail.zimbra@nod.at>
+ <f830f92e-fc89-7e5f-29ce-e245527a1e39@hartkopp.net>
+ <20210325080723.GB8446@x1.vandijck-laurijssen.be>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uoxtu5h6r7unlq7r"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2a2f2f06-00ed-7418-b5b6-ea7eb729d4f5@posteo.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20210325080723.GB8446@x1.vandijck-laurijssen.be>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 77.109.77.176.adsl.dyn.edpnet.net[77.109.77.176]
+X-Barracuda-Start-Time: 1616661989
+X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1391
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.88769
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Thu, 25 Mar 2021 09:07:23 +0100, Kurt Van Dijck wrote:
+> On Thu, 25 Mar 2021 08:31:09 +0100, Oliver Hartkopp wrote:
+> > On 24.03.21 23:19, Richard Weinberger wrote:
+> > >Oliver,
+> > >
+> > >----- Ursprüngliche Mail -----
+> > >>@@ -808,10 +810,13 @@ static int raw_recvmsg(struct socket *sock, struct msghdr
+> > >>*msg, size_t size,
+> > >>	int noblock;
+> > >>
+> > >>	noblock = flags & MSG_DONTWAIT;
+> > >>	flags &= ~MSG_DONTWAIT;
+> > >>
+> > >>+	if (msg->msg_name && msg->msg_namelen < RAW_MIN_NAMELEN)
+> > >>+		return -EINVAL;
+> > >>+
 
---uoxtu5h6r7unlq7r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This indeed fails. There exists a thin layer between the syscall and
+socket's recvmsg that puts a seperate sockaddr and length 0 :-(
 
-On 25.03.2021 07:52:58, Patrick Menschel wrote:
-> Hi all,
->=20
-> I'd like to ask if anybody is using a Docker Image for testing CAN Bus
-> and what Image is recommended?
->=20
-> I'm currently setting up a gitlab CI pipeline for my python3 unit tests
-> and did not find any docker image with built-in CAN support.
-
-There was a talk in German at Chemnitzer Linux-Tage:
-
-https://chemnitzer.linux-tage.de/2021/en/programm/beitrag/210
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---uoxtu5h6r7unlq7r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBcS+IACgkQqclaivrt
-76nvfwf/eZ/Q6Szp06My87hU+3YxfVKSmSgNCN1SRt2ZRTNcwIZDiKMEueRMDEFQ
-lVWPbXgZWAMWW3QAASTv04KfYC9IZwiDzzxw5aPA+pkmxXYk8wLgp1QmmClbAxcg
-Ym2LbopPbS8UUXlbSxXd/6glZBuIx7d77+nFYvLWFR0DBqNjSE/MmixhMYg+Qzbf
-q9RiAJbkKBt/zBz2Pq4emcmKRosQeaesCkXj734J2vQEdchMcssPQmmXLF2sRSI/
-HKDspqpE4rlxkLFkBU74CMQmsT2Gp82uPsqeIuqJ+tVe9JdlzX/brmDCYbFBkOud
-F19m470/K2h7AGTWzlM/hLA4FyXbMw==
-=dbTA
------END PGP SIGNATURE-----
-
---uoxtu5h6r7unlq7r--
+> > >
+> > >Like with Kurt's patch, my test fails here too because msg->msg_namelen is 0.
+> > >->msg_namelen is always 0 in the recvfrom() case.
+> > 
+> > Agreed!
+> > 
+> > I just adopted that part and did no more testing yesterday (needed some
+> > sleep).
+> > 
+> > E.g. 'candump any' also fails at CAN frame reception time due to this wrong
+> > check ;-)
+> 
+> I'd like to understand how this check is wrong.
+> msg->msg_namelen should contain the size of msg->msg_name, isn't it.
+> if that is less than RAW_MIN_NAMELEN, you can't store the address.
+> 
+> candump sets msg->msg_namelen to sizeof(), so it is not 0.
+> 
+> > 
+> > Will send an update soon.
+> 
+> looking forward
+> Kurt
