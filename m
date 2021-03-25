@@ -2,132 +2,225 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F60348D67
-	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 10:53:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54163349285
+	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 14:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbhCYJxO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Mar 2021 05:53:14 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:34257 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229730AbhCYJxI (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 25 Mar 2021 05:53:08 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 85F4B16005F
-        for <linux-can@vger.kernel.org>; Thu, 25 Mar 2021 10:53:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1616665986; bh=Wubmjh3V3o0Wfr9RLJcSrABwrgP2Mvx1F7MNgz21IO8=;
-        h=Subject:To:Cc:From:Autocrypt:Date:From;
-        b=iHCa0qNg3yst/9buCuKkuMOK2bLqadi8DQKYDfd/R7BGdtLXyH0A1wDPuE6cg/QNC
-         JWm1M3z8Zo5TnL5JKFLTmUbhwOoN45mlvVytvPMTU8sfbFbyWcH7fJoxbf13whbu1C
-         0CWDYAZY7WNRLecB8nIfI8lgYQN08I2PLm7HPHF/Cyp/LFtBsq8eiYRqmYnj85DB13
-         hO7UhpSxx+uJs6V9N0qBd9IvaHbPJN1spzQzDNNQ08/39U1IozhGwlU/8yqmbIJpln
-         Epa3fSxYRQZHwv1hGV0t1/ojf3kUODAO8eZd0DGFSC9aguFM0JgqwCx4oWDSnkt0ov
-         Wu9TMzD4HLuRw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4F5gQV0GFtz9rxW;
-        Thu, 25 Mar 2021 10:53:05 +0100 (CET)
-Subject: Re: CAN Testing with Docker Image?
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>
-References: <2a2f2f06-00ed-7418-b5b6-ea7eb729d4f5@posteo.de>
- <20210325083756.lc367z5fscppmvmh@pengutronix.de>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Message-ID: <cc7d39e8-18a5-963e-bdef-067553e526b1@posteo.de>
-Date:   Thu, 25 Mar 2021 10:53:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229963AbhCYM7a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Mar 2021 08:59:30 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.216]:23331 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230016AbhCYM7Y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 08:59:24 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1616677155; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=ln/2VCb5g/oA+7ZeuVzvLKdrZ5RJNpEX0IBfZLIpUO9yAnIC2ZTguWVTdjiPHdmJF7
+    UB+phCVq7DUwh70DemhfIM7Q4Hbm3qCEkIZvNuewrUJHbB9ecZMW+uNVxJ8b9u2/Tc1Y
+    0NiGsTEPBmLMrLakrbj5K79oZhJg9EFkQyB7pAq6pUqiwu3w9oCBSmunqlT1o39zwojj
+    Q5CYYTnxQk+YItkpT4n0fJmOGk5EpNFA3GVNxh8oMCIFEbDVHrVFYIXRAQpI5dnbWJVk
+    eGYIXSYfO5gWfLkwT3eEFxXhJj91LBxnNFH0+vsz58aa7jmhdrjTb8ZsXo8+xdnKeHgY
+    kc0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677155;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=9p53nm6HlAOy3B84ljTprAtSH3tTGr/W8Btxf3nVmkY=;
+    b=sF1w/lHlJ4v6HoaOgpG4w7spoLQZkbq7CbkVnpxTIjPC/i05NvXsvAzuIG1lDB5FgR
+    5e+Q+UTt0Bye0rU4sIIcX3gorQUrX+9qn2TRD/i9VMq5jgrY1AGn2j7A6TZBY8e0Onu0
+    9lxd+3g+gzYA+LoO+851ZeTvadAduv+0Xx+0bX7DtqK3Q0dAseFOACbQ1QHjolmAB510
+    LQylHzeWKfk1yA3m/t6DmrrlgPLbkGwqAqTPoHBHTjNaL6h9gFD0VFj/tW6kkRRd05FP
+    5R0UToGYo5b0u5fNiKQDq4C1flyudCnHCRSERSpS01iIX+rXzNyQlcPj6IycStOiqYmq
+    IG1g==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677155;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=9p53nm6HlAOy3B84ljTprAtSH3tTGr/W8Btxf3nVmkY=;
+    b=b7i5TMY9orVyc055AmBv4xPKqGc+ucyoB80oN3hoIr9zkV4S5csLgYLj6BHahM0sjM
+    3YkiOLkyiqGm/2kYBrT8mRQIi0UndhHh3GlPYYTknjVk/qPgBtbb4n+BrB3IcaLLk2Vw
+    UXhp4uyGT+eRJJxLPyAbidyAzwUvgROvT9uzuPiTIOmPt6FG3ONCSzgGv/15jctFc7KK
+    p2l9N8/RkIF4hy6KI3SSJwtNZTCZKuiVGc9daE1vAkGfo6sQBTsdLcETf+GJ5MTV04nU
+    A5fBqY5MQHi21dSYfQq6RnqSRAtRA4noAAvfnCPhbS+/3rJdHS/mppZlXkp1xJkTZWRC
+    v25g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejuVLjM8tyWa"
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.22.0 DYNA|AUTH)
+    with ESMTPSA id z00fabx2PCxF4Ch
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 25 Mar 2021 13:59:15 +0100 (CET)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Richard Weinberger <richard@nod.at>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Subject: [PATCH 1/3] can: bcm/raw: fix msg_namelen values depending on CAN_REQUIRED_SIZE
+Date:   Thu, 25 Mar 2021 13:58:48 +0100
+Message-Id: <20210325125850.1620-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20210325083756.lc367z5fscppmvmh@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Thanks,
+Since commit f5223e9eee65 ("can: extend sockaddr_can to include j1939
+members") the sockaddr_can has been extended in size and a new
+CAN_REQUIRED_SIZE macro has been introduced to calculate the protocol
+specific needed size.
 
-I'm just struggling to get vcan0 up in the gitlab ci pipeline.
-Apparently I need some privileged settings that are not available on
-shared-runners.
+The ABI for the msg_name and msg_namelen has not been adapted to the
+new CAN_REQUIRED_SIZE macro for the other CAN protocols which leads
+to a problem when an existing binary reads the (increased)
+struct sockaddr_can in msg_name.
 
---
-Patrick
+Fixes: f5223e9eee65 ("can: extend sockaddr_can to include j1939 members")
+Link: https://lore.kernel.org/linux-can/1135648123.112255.1616613706554.JavaMail.zimbra@nod.at/T/#t
+Reported-by: Richard Weinberger <richard@nod.at>
+Tested-by: Richard Weinberger <richard@nod.at>
+Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ net/can/bcm.c | 10 ++++++----
+ net/can/raw.c | 14 ++++++++------
+ 2 files changed, 14 insertions(+), 10 deletions(-)
 
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index 0e5c37be4a2b..909b9e684e04 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -84,10 +84,12 @@
+ MODULE_DESCRIPTION("PF_CAN broadcast manager protocol");
+ MODULE_LICENSE("Dual BSD/GPL");
+ MODULE_AUTHOR("Oliver Hartkopp <oliver.hartkopp@volkswagen.de>");
+ MODULE_ALIAS("can-proto-2");
+ 
++#define BCM_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_ifindex)
++
+ /*
+  * easy access to the first 64 bit of can(fd)_frame payload. cp->data is
+  * 64 bit aligned so the offset has to be multiples of 8 which is ensured
+  * by the only callers in bcm_rx_cmp_to_index() bcm_rx_handler().
+  */
+@@ -1290,11 +1292,11 @@ static int bcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 
+ 	if (!ifindex && msg->msg_name) {
+ 		/* no bound device as default => check msg_name */
+ 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
+ 
+-		if (msg->msg_namelen < CAN_REQUIRED_SIZE(*addr, can_ifindex))
++		if (msg->msg_namelen < BCM_MIN_NAMELEN)
+ 			return -EINVAL;
+ 
+ 		if (addr->can_family != AF_CAN)
+ 			return -EINVAL;
+ 
+@@ -1532,11 +1534,11 @@ static int bcm_connect(struct socket *sock, struct sockaddr *uaddr, int len,
+ 	struct sock *sk = sock->sk;
+ 	struct bcm_sock *bo = bcm_sk(sk);
+ 	struct net *net = sock_net(sk);
+ 	int ret = 0;
+ 
+-	if (len < CAN_REQUIRED_SIZE(*addr, can_ifindex))
++	if (len < BCM_MIN_NAMELEN)
+ 		return -EINVAL;
+ 
+ 	lock_sock(sk);
+ 
+ 	if (bo->bound) {
+@@ -1614,12 +1616,12 @@ static int bcm_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	}
+ 
+ 	sock_recv_ts_and_drops(msg, sk, skb);
+ 
+ 	if (msg->msg_name) {
+-		__sockaddr_check_size(sizeof(struct sockaddr_can));
+-		msg->msg_namelen = sizeof(struct sockaddr_can);
++		__sockaddr_check_size(BCM_MIN_NAMELEN);
++		msg->msg_namelen = BCM_MIN_NAMELEN;
+ 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
+ 	}
+ 
+ 	skb_free_datagram(sk, skb);
+ 
+diff --git a/net/can/raw.c b/net/can/raw.c
+index 37b47a39a3ed..139d9471ddcf 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -58,10 +58,12 @@
+ MODULE_DESCRIPTION("PF_CAN raw protocol");
+ MODULE_LICENSE("Dual BSD/GPL");
+ MODULE_AUTHOR("Urs Thuermann <urs.thuermann@volkswagen.de>");
+ MODULE_ALIAS("can-proto-1");
+ 
++#define RAW_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_ifindex)
++
+ #define MASK_ALL 0
+ 
+ /* A raw socket has a list of can_filters attached to it, each receiving
+  * the CAN frames matching that filter.  If the filter list is empty,
+  * no CAN frames will be received by the socket.  The default after
+@@ -392,11 +394,11 @@ static int raw_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+ 	struct raw_sock *ro = raw_sk(sk);
+ 	int ifindex;
+ 	int err = 0;
+ 	int notify_enetdown = 0;
+ 
+-	if (len < CAN_REQUIRED_SIZE(*addr, can_ifindex))
++	if (len < RAW_MIN_NAMELEN)
+ 		return -EINVAL;
+ 	if (addr->can_family != AF_CAN)
+ 		return -EINVAL;
+ 
+ 	lock_sock(sk);
+@@ -473,15 +475,15 @@ static int raw_getname(struct socket *sock, struct sockaddr *uaddr,
+ 	struct raw_sock *ro = raw_sk(sk);
+ 
+ 	if (peer)
+ 		return -EOPNOTSUPP;
+ 
+-	memset(addr, 0, sizeof(*addr));
++	memset(addr, 0, RAW_MIN_NAMELEN);
+ 	addr->can_family  = AF_CAN;
+ 	addr->can_ifindex = ro->ifindex;
+ 
+-	return sizeof(*addr);
++	return RAW_MIN_NAMELEN;
+ }
+ 
+ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 			  sockptr_t optval, unsigned int optlen)
+ {
+@@ -737,11 +739,11 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+ 	int err;
+ 
+ 	if (msg->msg_name) {
+ 		DECLARE_SOCKADDR(struct sockaddr_can *, addr, msg->msg_name);
+ 
+-		if (msg->msg_namelen < CAN_REQUIRED_SIZE(*addr, can_ifindex))
++		if (msg->msg_namelen < RAW_MIN_NAMELEN)
+ 			return -EINVAL;
+ 
+ 		if (addr->can_family != AF_CAN)
+ 			return -EINVAL;
+ 
+@@ -830,12 +832,12 @@ static int raw_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ 	}
+ 
+ 	sock_recv_ts_and_drops(msg, sk, skb);
+ 
+ 	if (msg->msg_name) {
+-		__sockaddr_check_size(sizeof(struct sockaddr_can));
+-		msg->msg_namelen = sizeof(struct sockaddr_can);
++		__sockaddr_check_size(RAW_MIN_NAMELEN);
++		msg->msg_namelen = RAW_MIN_NAMELEN;
+ 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
+ 	}
+ 
+ 	/* assign the flags that have been recorded in raw_rcv() */
+ 	msg->msg_flags |= *(raw_flags(skb));
+-- 
+2.30.2
 
-Am 25.03.21 um 09:37 schrieb Marc Kleine-Budde:
-> On 25.03.2021 07:52:58, Patrick Menschel wrote:
->> Hi all,
->>
->> I'd like to ask if anybody is using a Docker Image for testing CAN Bus
->> and what Image is recommended?
->>
->> I'm currently setting up a gitlab CI pipeline for my python3 unit tests
->> and did not find any docker image with built-in CAN support.
-> 
-> There was a talk in German at Chemnitzer Linux-Tage:
-> 
-> https://chemnitzer.linux-tage.de/2021/en/programm/beitrag/210
-> 
-> Marc
-> 
