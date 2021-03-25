@@ -2,65 +2,65 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0AC349286
+	by mail.lfdr.de (Postfix) with ESMTP id A1021349287
 	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 14:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhCYM71 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Mar 2021 08:59:27 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:15116 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbhCYM7S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 08:59:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1616677155; cv=none;
+        id S229533AbhCYM73 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 25 Mar 2021 08:59:29 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:29127 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229963AbhCYM7W (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 08:59:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1616677156; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=Z2hzzoyKhRliphnz3UxpJR0UdwV/n0qvqMGB7g1+drKO5rgUfzFLQL7GIRTg6svU3E
-    FUYOURbneB5Wps1qsB147Nby4P3Ujw8vlAD3dlc6+wYOEfGD8z9vYILhfCb5C0jSynAV
-    lhLa/OiRFAxrc2RViwlI8dPTNHtbVdEDJp8cvHVQm7PABFacc0DWzb47gyO4DNXlFkDC
-    SBF/Dnymo8KkxZqY8heX7S3gBnnjOY32TiYjaCYtGZ+v9KeGHskExy3DoXZOYjRQGFjz
-    iUs7lp5cZCkrieCJO39n4o0mOF2f4YkAEMgEqlpreGYmYbbn9BrrRFP+v0vA4lMMI9yT
-    8wOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677155;
+    b=VqkvthETLW4kzMxOgojRKCUOZEjdybvilX+6dbtYnCqlmrWhApHcxWIusAB3L1xI1Q
+    kWq1z/PMcvasQAPDrAKrFhLBLJNHd1DPNsxApId9uqIfYp6PiALggivxJLwfsS8dGV65
+    WnBCsBwsVZA9ITBrmwIh79rPdqIQ28OEqxeODnx4D2bgRlUEX3B8Qq1Ca/W23QvuyxPB
+    Mbl507BHZCxsJFdJ9laBl0gO/ZGo37wPNz0PEKJMemnRjLNaCmyTTuZi+L+LCJoc/N6r
+    4gxuxuDd+QwjcJBarJC645kJXyDaZjk4IBCK3txkoV5Zdn8wzBth3hN03c9dFnCZWisE
+    JoJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677156;
     s=strato-dkim-0002; d=strato.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=BtQvu86BsDEqco/hwzQUxNhpogg7mivKfJlDqcBXnfQ=;
-    b=pm0O9JZvmNcVqWZB/3kwVJBSL7ZW0tHR2Ndz5cyQ8JPvPhgkVuCNM3fgTpkHAAmYGy
-    LOSD/63KuYkE37z9sAjzdvJNsiQ6mi72dKlL5j74BQg0Bcm7wmuoaEbxoIVMSp8Jkd4L
-    CZqcelfi/PHXVhGbbo5F/SGUgBNAMgVY46CxISt/dQVRnepUnN/CzUPmw7oj1p1oFwFD
-    gNWrBdk/+qRG3KNeoRmRp+1IiCK5kBXAVu1Q2oBn451lWolZOD4GDTx29J8cjLjA4xp2
-    sUkum0r+S766U7vTnsDo8kX2p7DlmTHJWDw46rVqWi5IRLbwhrTxLfanrDrc2ch930iK
-    Xfzw==
+    bh=5da/XseoIf1FLJUIMaN4zg257fUOiUlJl/iL7aMvTYc=;
+    b=aNUOI21WkHm8Ytg5X33V4FiHBdOFh9cnSgx8a7FMsQApImwbWM/HybtKj99ZInfsYp
+    gL/wEJtBoNcjD6Lih6f3pvAMR21v7w9wEPnaquA+nYNzjklDkNWcH6wZ/hAMJfJakF25
+    CGRuGtxLuNzDrRPWXmZMePOsX0UXbjmY1OdqcRylfQ3KuAPuz4e3Lbeat72Hp1UKrL+o
+    GyMItkmdcoY+MrYIEDFpY6bgz0jfSHuNsscgCcmDOpBXZv633ok7VuimVNCR6Lz/NfCk
+    lTMigafX800sS8FhXK4jkCqgyT/9QB+VAq4G/IAmumwk5DVvORTMJ3qF7DnY4LUJ0TtS
+    y9lA==
 ARC-Authentication-Results: i=1; strato.com;
     dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677155;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677156;
     s=strato-dkim-0002; d=hartkopp.net;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=BtQvu86BsDEqco/hwzQUxNhpogg7mivKfJlDqcBXnfQ=;
-    b=Grtdh96J3RmKeIHHDz7bQPgcNUXyRgrEQNfDkQ1bRu88vrAs0jOpS8HYGyMalIMCSS
-    juMATljpQngHH3mo3jxXDyYIAD8E91sUk8pklUqGjT0TbU9Vmui3OZNzOBTkkA9uvWdk
-    4KA0RiwMIFKa4q1VH+CzPnVoJcczW5H78IQmmG3enpiE7D4TBk0fIPL0RQjADJ9kH9Xb
-    wgAA+Ch2dbf+lhScBMFvlx5N8p+Sxt8jBzMFlIxFytgIf3manYufal7v4YZq0YWAZvuw
-    mrIJtmuLWvqkeEH5vtM/Sha3sR8ID/9G7Nj7TX6f+qQfi2hxhLv9fywjpRpQLyRvWduw
-    t/hQ==
+    bh=5da/XseoIf1FLJUIMaN4zg257fUOiUlJl/iL7aMvTYc=;
+    b=jJ7Olchk4ibYrCK1fK3jmwCKV/5iWtrj+JNlGSoAhfX933fIE+yzM6HjIpOkhgoUF8
+    Waux5SQniEfBj/i6DMqSAc7GM6D/xIJHDBeuFFlF5bxU/kygvqgeBoXdIEmCdLTygqcF
+    828bKNnt/Dcul+rVfPBRrI0sxmuHHbgGiKoFuHUDr89HX+fjgUIG9wRiqaUUiRUpV5TA
+    7EOemS+mo/wHwxy+Q4ZxtCtbXBeQG4EO2CkKF5jL7hCIcO5ZPFozI1AGffoICJcXptlq
+    HutcfU/Ta0ukdXLyBObW3XPlgh3S9oj/ypImOzXWT1na+JqPs8aPbZImRGLcBEqCYYRz
+    JpWQ==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejuVLjM8tyWa"
 X-RZG-CLASS-ID: mo00
 Received: from silver.lan
     by smtp.strato.de (RZmta 47.22.0 DYNA|AUTH)
-    with ESMTPSA id z00fabx2PCxF4Ci
+    with ESMTPSA id z00fabx2PCxG4Ck
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Thu, 25 Mar 2021 13:59:15 +0100 (CET)
+    Thu, 25 Mar 2021 13:59:16 +0100 (CET)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
 To:     linux-can@vger.kernel.org
 Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Richard Weinberger <richard@nod.at>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Subject: [PATCH 2/3] can: isotp: fix msg_namelen values depending on CAN_REQUIRED_SIZE
-Date:   Thu, 25 Mar 2021 13:58:49 +0100
-Message-Id: <20210325125850.1620-2-socketcan@hartkopp.net>
+        Rong Chen <rong.a.chen@intel.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 3/3] can: uapi: can.h: suppress padding of union inside struct can_frame
+Date:   Thu, 25 Mar 2021 13:58:50 +0100
+Message-Id: <20210325125850.1620-3-socketcan@hartkopp.net>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325125850.1620-1-socketcan@hartkopp.net>
 References: <20210325125850.1620-1-socketcan@hartkopp.net>
@@ -70,89 +70,71 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Since commit f5223e9eee65 ("can: extend sockaddr_can to include j1939
-members") the sockaddr_can has been extended in size and a new
-CAN_REQUIRED_SIZE macro has been introduced to calculate the protocol
-specific needed size.
+In commit ea7800565a12 ("can: add optional DLC element to Classical
+CAN frame structure") the struct can_frame::can_dlc was put into an
+anonymous union with another u8 variable.
 
-The ABI for the msg_name and msg_namelen has not been adapted to the
-new CAN_REQUIRED_SIZE macro for the other CAN protocols which leads
-to a problem when an existing binary reads the (increased)
-struct sockaddr_can in msg_name.
+For various reasons some members in struct can_frame and canfd_frame
+including the first 8 byes of data are expected to have the same
+memory layout. This is enforced by a BUILD_BUG_ON check in af_can.c.
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://lore.kernel.org/linux-can/1135648123.112255.1616613706554.JavaMail.zimbra@nod.at/T/#t
-Reported-by: Richard Weinberger <richard@nod.at>
-Acked-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Since the above mentioned commit this check fails on some compilers
+(e.g. arm-linux-gnueabi-gcc (GCC) 9.3.0) that apply an alignment on
+an (anonymous) union (see Link). Rong Chen analyzed the problem and
+found that the union in struct can_frame takes 4 bytes instead of
+the expected 1:
+
+| struct can_frame {
+|          canid_t                    can_id;               /* 0     4 */
+|          union {
+|                  __u8               len;                  /* 4     1 */
+|                  __u8               can_dlc;              /* 4     1 */
+|          };                                               /* 4     4 */
+|          __u8                       __pad;                /* 8     1 */
+|          __u8                       __res0;               /* 9     1 */
+|          __u8                       len8_dlc;             /* 10     1 */
+|
+|          /* XXX 5 bytes hole, try to pack */
+|
+|          __u8                       data[8]
+| __attribute__((__aligned__(8))); /*    16     8 */
+|
+|          /* size: 24, cachelines: 1, members: 6 */
+|          /* sum members: 19, holes: 1, sum holes: 5 */
+|          /* forced alignments: 1, forced holes: 1, sum forced holes: 5 */
+|          /* last cacheline: 24 bytes */
+| } __attribute__((__aligned__(8)));
+
+Marking the anonymous union as __attribute__((packed)) fixes the
+BUILD_BUG_ON problem on these compilers.
+
+Fixes: ea7800565a12 ("can: add optional DLC element to Classical CAN frame structure")
+Link: https://lore.kernel.org/linux-can/2c82ec23-3551-61b5-1bd8-178c3407ee83@hartkopp.net/
+Suggested-by: Rong Chen <rong.a.chen@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Author: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
 ---
- net/can/isotp.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ include/uapi/linux/can.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 15ea1234d457..9f94ad3caee9 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -75,10 +75,12 @@
- MODULE_DESCRIPTION("PF_CAN isotp 15765-2:2016 protocol");
- MODULE_LICENSE("Dual BSD/GPL");
- MODULE_AUTHOR("Oliver Hartkopp <socketcan@hartkopp.net>");
- MODULE_ALIAS("can-proto-6");
- 
-+#define ISOTP_MIN_NAMELEN CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.tp)
-+
- #define SINGLE_MASK(id) (((id) & CAN_EFF_FLAG) ? \
- 			 (CAN_EFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG) : \
- 			 (CAN_SFF_MASK | CAN_EFF_FLAG | CAN_RTR_FLAG))
- 
- /* ISO 15765-2:2016 supports more than 4095 byte per ISO PDU as the FF_DL can
-@@ -984,11 +986,12 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 	}
- 
- 	sock_recv_timestamp(msg, sk, skb);
- 
- 	if (msg->msg_name) {
--		msg->msg_namelen = sizeof(struct sockaddr_can);
-+		__sockaddr_check_size(ISOTP_MIN_NAMELEN);
-+		msg->msg_namelen = ISOTP_MIN_NAMELEN;
- 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
- 	}
- 
- 	skb_free_datagram(sk, skb);
- 
-@@ -1054,11 +1057,11 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
- 	struct net_device *dev;
- 	int err = 0;
- 	int notify_enetdown = 0;
- 	int do_rx_reg = 1;
- 
--	if (len < CAN_REQUIRED_SIZE(struct sockaddr_can, can_addr.tp))
-+	if (len < ISOTP_MIN_NAMELEN)
- 		return -EINVAL;
- 
- 	/* do not register frame reception for functional addressing */
- 	if (so->opt.flags & CAN_ISOTP_SF_BROADCAST)
- 		do_rx_reg = 0;
-@@ -1150,17 +1153,17 @@ static int isotp_getname(struct socket *sock, struct sockaddr *uaddr, int peer)
- 	struct isotp_sock *so = isotp_sk(sk);
- 
- 	if (peer)
- 		return -EOPNOTSUPP;
- 
--	memset(addr, 0, sizeof(*addr));
-+	memset(addr, 0, ISOTP_MIN_NAMELEN);
- 	addr->can_family = AF_CAN;
- 	addr->can_ifindex = so->ifindex;
- 	addr->can_addr.tp.rx_id = so->rxid;
- 	addr->can_addr.tp.tx_id = so->txid;
- 
--	return sizeof(*addr);
-+	return ISOTP_MIN_NAMELEN;
- }
- 
- static int isotp_setsockopt(struct socket *sock, int level, int optname,
- 			    sockptr_t optval, unsigned int optlen)
- {
+diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
+index f75238ac6dce..56abe9b50561 100644
+--- a/include/uapi/linux/can.h
++++ b/include/uapi/linux/can.h
+@@ -111,11 +111,11 @@ struct can_frame {
+ 		 * was previously named can_dlc so we need to carry that
+ 		 * name for legacy support
+ 		 */
+ 		__u8 len;
+ 		__u8 can_dlc; /* deprecated */
+-	};
++	} __attribute__((packed)); /* disable padding by some compilers */
+ 	__u8 __pad; /* padding */
+ 	__u8 __res0; /* reserved / padding */
+ 	__u8 len8_dlc; /* optional DLC for 8 byte payload length (9 .. 15) */
+ 	__u8 data[CAN_MAX_DLEN] __attribute__((aligned(8)));
+ };
 -- 
 2.30.2
 
