@@ -2,139 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1021349287
-	for <lists+linux-can@lfdr.de>; Thu, 25 Mar 2021 14:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AE634BB5A
+	for <lists+linux-can@lfdr.de>; Sun, 28 Mar 2021 08:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbhCYM73 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 25 Mar 2021 08:59:29 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:29127 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbhCYM7W (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 25 Mar 2021 08:59:22 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1616677156; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=VqkvthETLW4kzMxOgojRKCUOZEjdybvilX+6dbtYnCqlmrWhApHcxWIusAB3L1xI1Q
-    kWq1z/PMcvasQAPDrAKrFhLBLJNHd1DPNsxApId9uqIfYp6PiALggivxJLwfsS8dGV65
-    WnBCsBwsVZA9ITBrmwIh79rPdqIQ28OEqxeODnx4D2bgRlUEX3B8Qq1Ca/W23QvuyxPB
-    Mbl507BHZCxsJFdJ9laBl0gO/ZGo37wPNz0PEKJMemnRjLNaCmyTTuZi+L+LCJoc/N6r
-    4gxuxuDd+QwjcJBarJC645kJXyDaZjk4IBCK3txkoV5Zdn8wzBth3hN03c9dFnCZWisE
-    JoJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677156;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=5da/XseoIf1FLJUIMaN4zg257fUOiUlJl/iL7aMvTYc=;
-    b=aNUOI21WkHm8Ytg5X33V4FiHBdOFh9cnSgx8a7FMsQApImwbWM/HybtKj99ZInfsYp
-    gL/wEJtBoNcjD6Lih6f3pvAMR21v7w9wEPnaquA+nYNzjklDkNWcH6wZ/hAMJfJakF25
-    CGRuGtxLuNzDrRPWXmZMePOsX0UXbjmY1OdqcRylfQ3KuAPuz4e3Lbeat72Hp1UKrL+o
-    GyMItkmdcoY+MrYIEDFpY6bgz0jfSHuNsscgCcmDOpBXZv633ok7VuimVNCR6Lz/NfCk
-    lTMigafX800sS8FhXK4jkCqgyT/9QB+VAq4G/IAmumwk5DVvORTMJ3qF7DnY4LUJ0TtS
-    y9lA==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1616677156;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=5da/XseoIf1FLJUIMaN4zg257fUOiUlJl/iL7aMvTYc=;
-    b=jJ7Olchk4ibYrCK1fK3jmwCKV/5iWtrj+JNlGSoAhfX933fIE+yzM6HjIpOkhgoUF8
-    Waux5SQniEfBj/i6DMqSAc7GM6D/xIJHDBeuFFlF5bxU/kygvqgeBoXdIEmCdLTygqcF
-    828bKNnt/Dcul+rVfPBRrI0sxmuHHbgGiKoFuHUDr89HX+fjgUIG9wRiqaUUiRUpV5TA
-    7EOemS+mo/wHwxy+Q4ZxtCtbXBeQG4EO2CkKF5jL7hCIcO5ZPFozI1AGffoICJcXptlq
-    HutcfU/Ta0ukdXLyBObW3XPlgh3S9oj/ypImOzXWT1na+JqPs8aPbZImRGLcBEqCYYRz
-    JpWQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejuVLjM8tyWa"
-X-RZG-CLASS-ID: mo00
-Received: from silver.lan
-    by smtp.strato.de (RZmta 47.22.0 DYNA|AUTH)
-    with ESMTPSA id z00fabx2PCxG4Ck
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Thu, 25 Mar 2021 13:59:16 +0100 (CET)
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     linux-can@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Rong Chen <rong.a.chen@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 3/3] can: uapi: can.h: suppress padding of union inside struct can_frame
-Date:   Thu, 25 Mar 2021 13:58:50 +0100
-Message-Id: <20210325125850.1620-3-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210325125850.1620-1-socketcan@hartkopp.net>
-References: <20210325125850.1620-1-socketcan@hartkopp.net>
+        id S231199AbhC1Gbz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 28 Mar 2021 02:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229997AbhC1Gb0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 28 Mar 2021 02:31:26 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB84CC061762
+        for <linux-can@vger.kernel.org>; Sat, 27 Mar 2021 23:31:25 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id o66so10300457ybg.10
+        for <linux-can@vger.kernel.org>; Sat, 27 Mar 2021 23:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=+qWYn1hSdRIVBHQHbWXIxh/qjNFpXHdieofhcKfb/ys=;
+        b=un5ugo9bupqrzZuaBDEbB786JWEzOQTNdwphXi4TOqH9iSP+44sC/hABKBkrd5PRtf
+         7jZx0pPsKeCWa97uNLMVrxcUbXHvpyoBn5oZYNAQFZsmvyS2liGWbAih8Qo/juVJGCzw
+         Y16g0hPbvSZtfV7CLm9ZaDSsZyOkcdd3roHlRv6xJ+OmFx8tEUguEZyn8zBrxBjk/HtR
+         dyf9+rh7TFsjL0A7AdpBP6TqBjy5+u/bfausEvolq7MwJ6du/43NJnkt8pCLIlzELbih
+         GgycRMRIUYRaoHxZdjTU6NIUvq0hWr2tRmOwwsRt0IOmTuJTvn2J9bkg0EKDwCYhtPNW
+         SqKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=+qWYn1hSdRIVBHQHbWXIxh/qjNFpXHdieofhcKfb/ys=;
+        b=eED9lnZoqx+CcZK7brYHwomgOntFioVDOFWfLW1hQK3ZuSZbRvMEkzIjV05TJ+s7Gt
+         fl//WnBM5hAR65qc/KC/WLnNndnBz5c0NaTi4RDHvjNcGAnMsc8ZXI1aBiymA2SCGUOn
+         5ywFrNGsNhwH00nVLCimHzaKStaKO+/QsKzNoqhYh59pw2foytqZs8Ckw5H0M6wnBgvv
+         mhff5HAfKfQbhq99D2p6HHH/fHtL0XEeLtVrxUGvt+3ogp+sg0zStjngwVBGQT/9OuXV
+         1Qd5kcKuoh++LGk3bBCeDNb35mROb3HF6J3nxtjkouzfHSzhwO48StSuTpjCwfAoYIh0
+         mI7A==
+X-Gm-Message-State: AOAM530b27uFJplnJMo2K47mA9/eqpbd6VqfdX2j6E8MCV693Njw4MOU
+        Ty3ldZ/AERFILB+U3r9ELOm5PgpeqzQWrZZu3I08cZUO2HkE+zAl
+X-Google-Smtp-Source: ABdhPJyH177l3kLMciSz+F2h7fE/2KJD26NzaPVAQcXeg491DZUuRqEA5sRQSzEZw5XltCBNgmf5XVS5jqjuvTMUPXU=
+X-Received: by 2002:a25:ae8c:: with SMTP id b12mr30625767ybj.173.1616913084786;
+ Sat, 27 Mar 2021 23:31:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Belisko Marek <marek.belisko@gmail.com>
+Date:   Sun, 28 Mar 2021 08:31:14 +0200
+Message-ID: <CAAfyv37vMxhN2B1uR5xUzZwVzAqrQOyPA6stWYj_5346xO0s3A@mail.gmail.com>
+Subject: m_can error/overrun frames on high speed
+To:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In commit ea7800565a12 ("can: add optional DLC element to Classical
-CAN frame structure") the struct can_frame::can_dlc was put into an
-anonymous union with another u8 variable.
+Hi,
 
-For various reasons some members in struct can_frame and canfd_frame
-including the first 8 byes of data are expected to have the same
-memory layout. This is enforced by a BUILD_BUG_ON check in af_can.c.
+I have a beaglebone based board and I'm performing some tests. I
+discovered that when set bitrate to 500k during replaying can file
+from PC to board ip detect 4-5 error/overrun frames. When comparing
+the original file with received one few lines in candump are missing.
+When decreased can speed to 125KB replaying the same file no
+error/overruns are detected and files are the same. I'm not can expert
+thus I'm asking for some advice on how to debug such phenomena. I'm
+using mainline 4.12 kernel which shows this symptom. I compared
+changes with the latest mainline kernel and there are few patches only
+which seems can influence can behavior (others are only cosmetical). I
+took :
 
-Since the above mentioned commit this check fails on some compilers
-(e.g. arm-linux-gnueabi-gcc (GCC) 9.3.0) that apply an alignment on
-an (anonymous) union (see Link). Rong Chen analyzed the problem and
-found that the union in struct can_frame takes 4 bytes instead of
-the expected 1:
+3cb3eaac52c0f145d895f4b6c22834d5f02b8569 - can: c_can: c_can_poll():
+only read status register after status IRQ
+23c5a9488f076bab336177cd1d1a366bd8ddf087 - can: c_can: D_CAN:
+c_can_chip_config(): perform a sofware reset on open
+6f12001ad5e79d0a0b08c599731d45c34cafd376 - can: c_can: C_CAN: add bus
+recovery events
 
-| struct can_frame {
-|          canid_t                    can_id;               /* 0     4 */
-|          union {
-|                  __u8               len;                  /* 4     1 */
-|                  __u8               can_dlc;              /* 4     1 */
-|          };                                               /* 4     4 */
-|          __u8                       __pad;                /* 8     1 */
-|          __u8                       __res0;               /* 9     1 */
-|          __u8                       len8_dlc;             /* 10     1 */
-|
-|          /* XXX 5 bytes hole, try to pack */
-|
-|          __u8                       data[8]
-| __attribute__((__aligned__(8))); /*    16     8 */
-|
-|          /* size: 24, cachelines: 1, members: 6 */
-|          /* sum members: 19, holes: 1, sum holes: 5 */
-|          /* forced alignments: 1, forced holes: 1, sum forced holes: 5 */
-|          /* last cacheline: 24 bytes */
-| } __attribute__((__aligned__(8)));
+I know most of the answers for such issues is to try latest kernel
+(i'm in process trying 5.10).
 
-Marking the anonymous union as __attribute__((packed)) fixes the
-BUILD_BUG_ON problem on these compilers.
+Thanks and BR,
 
-Fixes: ea7800565a12 ("can: add optional DLC element to Classical CAN frame structure")
-Link: https://lore.kernel.org/linux-can/2c82ec23-3551-61b5-1bd8-178c3407ee83@hartkopp.net/
-Suggested-by: Rong Chen <rong.a.chen@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Author: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
----
- include/uapi/linux/can.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+marek
 
-diff --git a/include/uapi/linux/can.h b/include/uapi/linux/can.h
-index f75238ac6dce..56abe9b50561 100644
---- a/include/uapi/linux/can.h
-+++ b/include/uapi/linux/can.h
-@@ -111,11 +111,11 @@ struct can_frame {
- 		 * was previously named can_dlc so we need to carry that
- 		 * name for legacy support
- 		 */
- 		__u8 len;
- 		__u8 can_dlc; /* deprecated */
--	};
-+	} __attribute__((packed)); /* disable padding by some compilers */
- 	__u8 __pad; /* padding */
- 	__u8 __res0; /* reserved / padding */
- 	__u8 len8_dlc; /* optional DLC for 8 byte payload length (9 .. 15) */
- 	__u8 data[CAN_MAX_DLEN] __attribute__((aligned(8)));
- };
 -- 
-2.30.2
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
 
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
