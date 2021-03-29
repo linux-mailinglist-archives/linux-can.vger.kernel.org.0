@@ -2,72 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C01EF34D920
-	for <lists+linux-can@lfdr.de>; Mon, 29 Mar 2021 22:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C5E34DA4B
+	for <lists+linux-can@lfdr.de>; Tue, 30 Mar 2021 00:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbhC2Uke (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 29 Mar 2021 16:40:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48264 "EHLO mail.kernel.org"
+        id S232058AbhC2WWV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 29 Mar 2021 18:22:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229468AbhC2UkJ (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 29 Mar 2021 16:40:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 2D59A6196C;
-        Mon, 29 Mar 2021 20:40:09 +0000 (UTC)
+        id S231928AbhC2WVw (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 29 Mar 2021 18:21:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FC876196E;
+        Mon, 29 Mar 2021 22:21:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617050409;
-        bh=xJ75zZfeeHGiAuPkUV8xBNfuHwhl/VPN2DU8RIAwFuA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gqG9EgVBq+ifysEXw1bjw1dsIvGeZ3t0YaQvQBbDT8nShSEIEd1w1GFhFY4eMLILr
-         2pPQZSAEDTrrYGWp7anGwEyQVx/tMJg3J53668+wXXFn8NZxUQWwM42eLMKPvF5txD
-         pgBBk1DkvKaEcC4rnnbSmghapJReL/zftcO8D2rRjSwFjoIMVZF4gu86j3p4UdIMED
-         d2Cl4T5o09rNY1prf3DuwYDmAsr7LQK9mLQaZalXJnhCdOXSqw1tMmdP9Mnq4OcwyI
-         EUEKopEzM1wuA/4FeGnBJnh6V3mSdz8gjgHl6CuxhLfnJxsS/SfhfxRP5Rc2upczjt
-         POVg2GjPSfeWg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 21BA160A3B;
-        Mon, 29 Mar 2021 20:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1617056509;
+        bh=Z9wWLHsGHt21P8puljHuk63i5M/sIAFknRTpJamjAP0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=shQRLkIXwUdA5pQONhWlQY8O1GGSvCXx1o6zU8RA97tl2ikfzj0xhy1htHNfpUHgi
+         fgkcmYiAqKlC6pTT+F1N5rSreWHx4fGFc9c1n6+F0b3vEW3vu6QdBDDkEthqIcTHQt
+         ftNKst4KuwSxp3Zm5ReRK48ZBv+on/WmxhvRY7672M1SOH9yT+CzW/Jqh+a9hKiomP
+         7T+1hI/kEML1DLW1VvYLWIiuJ/ImzcZ8nlqhhwS1geQ3MMeJ4vkwN44GZd8WKCmC72
+         ceJu+CLpGVvXLIRLj2OQZaHuczXlo0ws4ekP9m/QbaBwti0v8Bc3R8W9qN/yOzq3GF
+         40RszT/knqDyg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jimmy Assarsson <extja@kvaser.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 12/38] can: kvaser_usb: Add support for USBcan Pro 4xHS
+Date:   Mon, 29 Mar 2021 18:21:07 -0400
+Message-Id: <20210329222133.2382393-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210329222133.2382393-1-sashal@kernel.org>
+References: <20210329222133.2382393-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can 2021-03-29
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161705040913.15223.11767373062136414770.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Mar 2021 20:40:09 +0000
-References: <20210329085355.921447-1-mkl@pengutronix.de>
-In-Reply-To: <20210329085355.921447-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+From: Jimmy Assarsson <extja@kvaser.com>
 
-This pull request was applied to netdev/net.git (refs/heads/master):
+[ Upstream commit 7507479c46b120c37ef83e59be7683a526e98e1a ]
 
-On Mon, 29 Mar 2021 10:53:52 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 3 patches for net/master.
-> 
-> The two patch are by Oliver Hartkopp. He fixes length check in the
-> proto_ops::getname callback for the CAN RAW, BCM and ISOTP protocols,
-> which were broken by the introduction of the J1939 protocol.
-> 
-> [...]
+Add support for Kvaser USBcan Pro 4xHS.
 
-Here is the summary with links:
-  - pull-request: can 2021-03-29
-    https://git.kernel.org/netdev/net/c/f4c848db16be
-  - [net,2/3] can: isotp: fix msg_namelen values depending on CAN_REQUIRED_SIZE
-    https://git.kernel.org/netdev/net/c/f522d9559b07
-  - [net,3/3] can: uapi: can.h: mark union inside struct can_frame packed
-    https://git.kernel.org/netdev/net/c/f5076c6ba02e
+Link: https://lore.kernel.org/r/20210309091724.31262-2-jimmyassarsson@gmail.com
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/can/usb/Kconfig                      | 1 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
+index c1e5d5b570b6..538f4d9adb91 100644
+--- a/drivers/net/can/usb/Kconfig
++++ b/drivers/net/can/usb/Kconfig
+@@ -73,6 +73,7 @@ config CAN_KVASER_USB
+ 	    - Kvaser Memorator Pro 5xHS
+ 	    - Kvaser USBcan Light 4xHS
+ 	    - Kvaser USBcan Pro 2xHS v2
++	    - Kvaser USBcan Pro 4xHS
+ 	    - Kvaser USBcan Pro 5xHS
+ 	    - Kvaser U100
+ 	    - Kvaser U100P
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index e2d58846c40c..073c4a39e718 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -86,8 +86,9 @@
+ #define USB_U100_PRODUCT_ID			273
+ #define USB_U100P_PRODUCT_ID			274
+ #define USB_U100S_PRODUCT_ID			275
++#define USB_USBCAN_PRO_4HS_PRODUCT_ID		276
+ #define USB_HYDRA_PRODUCT_ID_END \
+-	USB_U100S_PRODUCT_ID
++	USB_USBCAN_PRO_4HS_PRODUCT_ID
+ 
+ static inline bool kvaser_is_leaf(const struct usb_device_id *id)
+ {
+@@ -193,6 +194,7 @@ static const struct usb_device_id kvaser_usb_table[] = {
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100P_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100S_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_PRO_4HS_PRODUCT_ID) },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(usb, kvaser_usb_table);
+-- 
+2.30.1
 
