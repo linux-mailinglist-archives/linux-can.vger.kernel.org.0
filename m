@@ -2,44 +2,45 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9594934E696
-	for <lists+linux-can@lfdr.de>; Tue, 30 Mar 2021 13:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD2A34E694
+	for <lists+linux-can@lfdr.de>; Tue, 30 Mar 2021 13:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbhC3LrA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 30 Mar 2021 07:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
+        id S231986AbhC3Lq7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 30 Mar 2021 07:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbhC3Lqa (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 30 Mar 2021 07:46:30 -0400
+        with ESMTP id S231960AbhC3Lq3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 30 Mar 2021 07:46:29 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB11C061574
-        for <linux-can@vger.kernel.org>; Tue, 30 Mar 2021 04:46:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D051C061574
+        for <linux-can@vger.kernel.org>; Tue, 30 Mar 2021 04:46:29 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lRCpI-00068H-RG
+        id 1lRCpI-00068a-53
         for linux-can@vger.kernel.org; Tue, 30 Mar 2021 13:46:28 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id B30B9603E54
+        by bjornoya.blackshift.org (Postfix) with SMTP id C6606603E58
         for <linux-can@vger.kernel.org>; Tue, 30 Mar 2021 11:46:15 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id E34B0603DF7;
-        Tue, 30 Mar 2021 11:46:06 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2CAA7603DFA;
+        Tue, 30 Mar 2021 11:46:07 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 647a84b1;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 93240ece;
         Tue, 30 Mar 2021 11:46:00 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
 Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Arnd Bergmann <arnd@arndb.de>,
+        kernel@pengutronix.de,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 13/39] can: ucan: fix alignment constraints
-Date:   Tue, 30 Mar 2021 13:45:33 +0200
-Message-Id: <20210330114559.1114855-14-mkl@pengutronix.de>
+Subject: [net-next 14/39] can: peak_usb: pcan_usb_pro_encode_msg(): use macros for flags instead of plain integers
+Date:   Tue, 30 Mar 2021 13:45:34 +0200
+Message-Id: <20210330114559.1114855-15-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210330114559.1114855-1-mkl@pengutronix.de>
 References: <20210330114559.1114855-1-mkl@pengutronix.de>
@@ -53,36 +54,35 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Stephane Grosjean <s.grosjean@peak-system.com>
 
-struct ucan_message_in contains member with 4-byte alignment
-but is itself marked as unaligned, which triggers a warning:
+This patch replaces the plain integers used for flags in
+pcan_usb_pro_encode_msg() by macros which are already defined.
 
-drivers/net/can/usb/ucan.c:249:1: warning: alignment 1 of 'struct ucan_message_in' is less than 4 [-Wpacked-not-aligned]
-
-Mark the outer structure to have the same alignment as the inner
-one.
-
-Link: https://lore.kernel.org/r/20210204162625.3099392-1-arnd@kernel.org
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20210309082128.23125-4-s.grosjean@peak-system.com
+Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
+[mkl: split into two patches]
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/ucan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/usb/peak_usb/pcan_usb_pro.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/can/usb/ucan.c b/drivers/net/can/usb/ucan.c
-index 11fddedc36d4..1679cbe45ded 100644
---- a/drivers/net/can/usb/ucan.c
-+++ b/drivers/net/can/usb/ucan.c
-@@ -246,7 +246,7 @@ struct ucan_message_in {
- 		 */
- 		struct ucan_tx_complete_entry_t can_tx_complete_msg[0];
- 	} __aligned(0x4) msg;
--} __packed;
-+} __packed __aligned(0x4);
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+index 18fa180ecc81..902900d4f7c1 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_pro.c
+@@ -776,9 +776,9 @@ static int pcan_usb_pro_encode_msg(struct peak_usb_device *dev,
  
- /* Macros to calculate message lengths */
- #define UCAN_OUT_HDR_SIZE offsetof(struct ucan_message_out, msg)
+ 	flags = 0;
+ 	if (cf->can_id & CAN_EFF_FLAG)
+-		flags |= 0x02;
++		flags |= PCAN_USBPRO_EXT;
+ 	if (cf->can_id & CAN_RTR_FLAG)
+-		flags |= 0x01;
++		flags |= PCAN_USBPRO_RTR;
+ 
+ 	pcan_msg_add_rec(&usb_msg, data_type, 0, flags, len, cf->can_id,
+ 			 cf->data);
 -- 
 2.30.2
 
