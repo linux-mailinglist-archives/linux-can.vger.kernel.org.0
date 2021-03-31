@@ -2,111 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D1834FBC5
-	for <lists+linux-can@lfdr.de>; Wed, 31 Mar 2021 10:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D1A3501A5
+	for <lists+linux-can@lfdr.de>; Wed, 31 Mar 2021 15:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbhCaIiM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 31 Mar 2021 04:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbhCaIhs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Mar 2021 04:37:48 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB17C061574
-        for <linux-can@vger.kernel.org>; Wed, 31 Mar 2021 01:37:47 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lRWME-00047G-8O; Wed, 31 Mar 2021 10:37:46 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:a06:b6ed:4055:757b])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 88B1A604C6C;
-        Wed, 31 Mar 2021 08:37:45 +0000 (UTC)
-Date:   Wed, 31 Mar 2021 10:37:44 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Belisko Marek <marek.belisko@gmail.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: m_can error/overrun frames on high speed
-Message-ID: <20210331083744.pui7rtjexvejjvf6@pengutronix.de>
-References: <CAAfyv37vMxhN2B1uR5xUzZwVzAqrQOyPA6stWYj_5346xO0s3A@mail.gmail.com>
+        id S235763AbhCaNpu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 31 Mar 2021 09:45:50 -0400
+Received: from mail.rdts.de ([195.243.153.28]:58884 "EHLO mail.rdts.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235755AbhCaNpT (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 31 Mar 2021 09:45:19 -0400
+Received: from webmail.rdts.de (php1.rdts.de [82.223.13.20])
+        by mail.rdts.de (Postfix) with ESMTPSA id 3BDAAA8631;
+        Wed, 31 Mar 2021 15:45:18 +0200 (CEST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5qs7hrtiq474kisj"
-Content-Disposition: inline
-In-Reply-To: <CAAfyv37vMxhN2B1uR5xUzZwVzAqrQOyPA6stWYj_5346xO0s3A@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 31 Mar 2021 15:45:17 +0200
+From:   Gerhard Bertelsmann <info@gerhard-bertelsmann.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Tim Harvey <tharvey@gateworks.com>, linux-can@vger.kernel.org
+Subject: Re: [PATCH] can: mcp251x: fix support for half duplex SPI host
+ controllers
+In-Reply-To: <20210331071427.w4bplxt2hoiduho2@pengutronix.de>
+References: <20210330100246.1074375-1-mkl@pengutronix.de>
+ <CAJ+vNU0w2faqmW0MOA9FQD8=vxpJH1Lc8c0BMcAVKGNq1vNjjg@mail.gmail.com>
+ <20210331071427.w4bplxt2hoiduho2@pengutronix.de>
+Message-ID: <4366ddabaf5e0696f537ad3bcd8fa854@gerhard-bertelsmann.de>
+X-Sender: info@gerhard-bertelsmann.de
+User-Agent: Roundcube Webmail/1.2.3
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Am 2021-03-31 09:14, schrieb Marc Kleine-Budde:
+> On 30.03.2021 14:06:03, Tim Harvey wrote:
+>> On Tue, Mar 30, 2021 at 3:02 AM Marc Kleine-Budde <mkl@pengutronix.de> 
+>> wrote:
+>> >
+>> > Some SPI host controllers do not support full-duplex SPI transfers.
+>> >
+>> > The function mcp251x_spi_trans() does a full duplex transfer. It is
+>> > used in several places in the driver, where a TX half duplex transfer
+>> > is sufficient.
+>> >
+>> > To fix support for half duplex SPI host controllers, this patch
+>> > introduces a new function mcp251x_spi_write() and changes all callers
+>> > that do a TX half duplex transfer to use mcp251x_spi_write().
+> 
+>> So was the issue being resolved here that there was another SPI host
+>> controller that wasn't advertising that it was half duplex only
+> 
+> I don't know which SPI host controller Gerhard uses, but I assume it 
+> has
+> half duplex set, as the driver probe fails with:
+> 
+> | [  112.226164] mcp251x spi0.1: spi transfer failed: ret = -22
+> 
+> The -22 is returned by the SPI framework if you have a half duplex
+> controller and a transfer with both TX and RX buffer set. This is the
+> case in the mcp251x_spi_trans() function.
 
---5qs7hrtiq474kisj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm using an Onion Omega2 board with MT7688 CPU. It uses MediaTek MT7621
+SPI controller driver - spi-mt7621.c (5.10.26) with sets the flag to:
 
-On 28.03.2021 08:31:14, Belisko Marek wrote:
-> I have a beaglebone based board and I'm performing some tests.
+         master->flags = SPI_CONTROLLER_HALF_DUPLEX;
 
-As far as I know the beagle bone boards all have d_can controllers, not
-m_can.
+All Mediatek/Ralink SPI controller are only half duplex AFAIK.
 
-> I discovered that when set bitrate to 500k during replaying can file
-> from PC to board ip detect 4-5 error/overrun frames. When comparing
-> the original file with received one few lines in candump are missing.
-> When decreased can speed to 125KB replaying the same file no
-> error/overruns are detected and files are the same. I'm not can expert
-> thus I'm asking for some advice on how to debug such phenomena. I'm
-> using mainline 4.12 kernel which shows this symptom. I compared
-> changes with the latest mainline kernel and there are few patches only
-> which seems can influence can behavior (others are only cosmetical). I
-> took :
->=20
-> 3cb3eaac52c0f145d895f4b6c22834d5f02b8569 - can: c_can: c_can_poll():
-> only read status register after status IRQ
-> 23c5a9488f076bab336177cd1d1a366bd8ddf087 - can: c_can: D_CAN:
-> c_can_chip_config(): perform a sofware reset on open
-> 6f12001ad5e79d0a0b08c599731d45c34cafd376 - can: c_can: C_CAN: add bus
-> recovery events
->=20
-> I know most of the answers for such issues is to try latest kernel
-> (i'm in process trying 5.10).
+> 
+>> or was something else wrong with e0e25001d088 ("can: mcp251x: add
+>> support for half duplex controllers")?
+> 
+> Your patch only converted the SPI read path to use half duplex
+> transfers. My patch also converts the SPI write path.
 
-That's going into the right direction. Please try the lastest
-net-next/master, which includes this merge:
+Without Marcs latest patch the MCP2515 didn't initialized correctly and
+showed the error mentioned above (spi transfer failed).
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/=
-?id=3D9c0ee085c49c11381dcbd609ea85e902eab88a92
+Regards
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---5qs7hrtiq474kisj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBkNNYACgkQqclaivrt
-76n7GAf7BXz8hg6g15h22PKhBMdiXCHhEDkLr0hJEiJUf0yF/mIy6qc69gE+q852
-nJaxOYsgAbnbTcktFLQSNQrcjfz2Ibiu2/2nGZOrRWpTZgDgaPh1fzjv7nCGD5dO
-7xQ54cpOQdDOCahFX2bXzuJMbrZREfwU5u33O6s0GUgH9fA4pWs8W/xpr7gTK0cF
-Qp4oY1y8WAiukLYbqQNQchajkqiFfoKZ33UZEa64F4zuyx2hhUg3+V4ah4KwOFTH
-KybxFFVGXTOrEgwj1nxEFsn6XtJcvuaO63vKCGqKjq8bFH7+bGFUcAldbXFaNfXL
-fDutuH3+j4WusHPo80UP5Z9CHLvvOA==
-=y6KT
------END PGP SIGNATURE-----
-
---5qs7hrtiq474kisj--
+Gerd
