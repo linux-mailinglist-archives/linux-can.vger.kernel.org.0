@@ -2,129 +2,130 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B60D3502D0
-	for <lists+linux-can@lfdr.de>; Wed, 31 Mar 2021 16:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272FB3502ED
+	for <lists+linux-can@lfdr.de>; Wed, 31 Mar 2021 17:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236171AbhCaOyh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 31 Mar 2021 10:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S235595AbhCaPG3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 31 Mar 2021 11:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236169AbhCaOye (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Mar 2021 10:54:34 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251DDC061574
-        for <linux-can@vger.kernel.org>; Wed, 31 Mar 2021 07:54:34 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id e7so22632972edu.10
-        for <linux-can@vger.kernel.org>; Wed, 31 Mar 2021 07:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zMU6/LnEcj+bd+gJDWHuE7jKvgGDD3VtI1BTIQgBO2U=;
-        b=TvhuHFvDJvQfER8YS/M1YDS5XEu+7XcF5ePVX062DNXtkL6C+yKo00i+S9R/kBIgS7
-         4WjE/2HiUW/M7Sz1xpuv53lRbqPDMkq4VvsNsyQ+koe4eiyrP1Lg7pW9sZKcmEKiU9XE
-         LVrSLp5q5rusr2yNDrxT5APsYYIwXgGinJlLHIta8DK7iQHc8dv6QS8v5e73j+btLCFB
-         D5w7vqHexT3e/yrQaTNniAzBv4j826EquFBcS9AcIuhSp4W2IlWvo/myazG7mAcBdaLv
-         HJAk6hE7v/07GEujSbWEJmGNDiD7sU68tRXIJdApQ8HPmD+1dxDwNQHIPcvMPJBcvFDq
-         vQQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zMU6/LnEcj+bd+gJDWHuE7jKvgGDD3VtI1BTIQgBO2U=;
-        b=a3ftlEtRGgSs3MeuaUQx64MpKAwQ+iHdbkRFeNps0p+OiXtNfE1rt71jSRIx3J0UOL
-         uD7U/AsLMmsbEUTvwBuQa5v170/0vRe+2iOcu0abKIBYdIp4II73B47SQw+wL9qCjQX/
-         esLIsDZBJAux22IOw4BEXgM+6m9YEB7dBGr+LCxpxPDa9EOcYEl73OcSUXx70uvXBEbF
-         xOxJW53sTIijkA0UVkwgG8G/m62y3o+YTmA4odosy3OJIieqHscqO7RngQWpgupxH/5f
-         yk6Xt/tXnyxGnetvZjLShPu+MdvNQYnzEObolrw9zGKGSIhK/I2INtbpHleCHdv4oSf2
-         5TzA==
-X-Gm-Message-State: AOAM531xoMITEeETlia+WtoeEzaLU6I4DHGEs9mmFsNQn00ALG2QN+Kc
-        vpefCigfNIlgUWkQ+MovSCqT7vKDHwMCa4eDgW8ognTHq1F1uTbd/fc=
-X-Google-Smtp-Source: ABdhPJx3h3IpBS4vM4iEN1J1l8UtchKO4JPprClCQPp0DQaVNY5dBH0zuyTd8AtiavHIBHobNSlFoX8Ag2NNHBQ5KsE=
-X-Received: by 2002:a05:6402:3486:: with SMTP id v6mr4103004edc.109.1617202472852;
- Wed, 31 Mar 2021 07:54:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210330100246.1074375-1-mkl@pengutronix.de> <CAJ+vNU0w2faqmW0MOA9FQD8=vxpJH1Lc8c0BMcAVKGNq1vNjjg@mail.gmail.com>
- <20210331071427.w4bplxt2hoiduho2@pengutronix.de>
-In-Reply-To: <20210331071427.w4bplxt2hoiduho2@pengutronix.de>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 31 Mar 2021 07:54:19 -0700
-Message-ID: <CAJ+vNU10c5NtLaG64VhcYO8E9sA3di6v5_MnNHVTaFrfkrpxyQ@mail.gmail.com>
-Subject: Re: [PATCH] can: mcp251x: fix support for half duplex SPI host controllers
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        with ESMTP id S236023AbhCaPGD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 31 Mar 2021 11:06:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A897DC061574
+        for <linux-can@vger.kernel.org>; Wed, 31 Mar 2021 08:06:03 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lRcPx-0006RT-Ft; Wed, 31 Mar 2021 17:06:01 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:a06:b6ed:4055:757b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8BFB9605033;
+        Wed, 31 Mar 2021 15:06:00 +0000 (UTC)
+Date:   Wed, 31 Mar 2021 17:05:59 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Tim Harvey <tharvey@gateworks.com>
 Cc:     Gerhard Bertelsmann <info@gerhard-bertelsmann.de>,
         linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] can: mcp251x: fix support for half duplex SPI host
+ controllers
+Message-ID: <20210331150559.5fbus7itrotjwvxs@pengutronix.de>
+References: <20210330100246.1074375-1-mkl@pengutronix.de>
+ <CAJ+vNU0w2faqmW0MOA9FQD8=vxpJH1Lc8c0BMcAVKGNq1vNjjg@mail.gmail.com>
+ <20210331071427.w4bplxt2hoiduho2@pengutronix.de>
+ <CAJ+vNU10c5NtLaG64VhcYO8E9sA3di6v5_MnNHVTaFrfkrpxyQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zatwqarglwkofgwg"
+Content-Disposition: inline
+In-Reply-To: <CAJ+vNU10c5NtLaG64VhcYO8E9sA3di6v5_MnNHVTaFrfkrpxyQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Mar 31, 2021 at 12:14 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 30.03.2021 14:06:03, Tim Harvey wrote:
-> > On Tue, Mar 30, 2021 at 3:02 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > >
-> > > Some SPI host controllers do not support full-duplex SPI transfers.
-> > >
-> > > The function mcp251x_spi_trans() does a full duplex transfer. It is
-> > > used in several places in the driver, where a TX half duplex transfer
-> > > is sufficient.
-> > >
-> > > To fix support for half duplex SPI host controllers, this patch
-> > > introduces a new function mcp251x_spi_write() and changes all callers
-> > > that do a TX half duplex transfer to use mcp251x_spi_write().
->
-> > So was the issue being resolved here that there was another SPI host
-> > controller that wasn't advertising that it was half duplex only
->
-> I don't know which SPI host controller Gerhard uses, but I assume it has
-> half duplex set, as the driver probe fails with:
->
-> | [  112.226164] mcp251x spi0.1: spi transfer failed: ret = -22
->
-> The -22 is returned by the SPI framework if you have a half duplex
-> controller and a transfer with both TX and RX buffer set. This is the
-> case in the mcp251x_spi_trans() function.
->
-> > or was something else wrong with e0e25001d088 ("can: mcp251x: add
-> > support for half duplex controllers")?
->
-> Your patch only converted the SPI read path to use half duplex
-> transfers. My patch also converts the SPI write path.
->
-> If your half duplex controller works without that patch, the controller
-> driver doesn't advertise correctly that it is half duplex only. If the
-> hardware is indeed half duplex only, better send a patch that sets the
-> half duplex flag. If the hardware support full duplex, but the driver
-> somehow doesn't implement it correctly, so that it implements half
-> duplex only you should at least drop a note on the SPI mailing list.
 
-Marc,
+--zatwqarglwkofgwg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the explanation!
+On 31.03.2021 07:54:19, Tim Harvey wrote:
+> > Your patch only converted the SPI read path to use half duplex
+> > transfers. My patch also converts the SPI write path.
+> >
+> > If your half duplex controller works without that patch, the controller
+> > driver doesn't advertise correctly that it is half duplex only. If the
+> > hardware is indeed half duplex only, better send a patch that sets the
+> > half duplex flag. If the hardware support full duplex, but the driver
+> > somehow doesn't implement it correctly, so that it implements half
+> > duplex only you should at least drop a note on the SPI mailing list.
 
-I was surprised as the 5.4 kernel I use with the CN803x OcteonTX using
-drivers/spi/spi-cavium-thunderx.c works fine but as you say it is
-because the host controller does not advertise half duplex only in
-that kernel. I did mainlin in e8510d43f219 ("spi: spi-cavium-thunderx:
-flag controller as half duplex") which appears in 5.9.
+[...]
 
->
-> Can you test this patch and give me a Tested-by?
->
+> Thanks for the explanation!
+>=20
+> I was surprised as the 5.4 kernel I use with the CN803x OcteonTX using
+> drivers/spi/spi-cavium-thunderx.c works fine but as you say it is
+> because the host controller does not advertise half duplex only in
+> that kernel. I did mainlin in e8510d43f219 ("spi: spi-cavium-thunderx:
+> flag controller as half duplex") which appears in 5.9.
 
-I did verify that with this patch 5.12-rc5 initializes the mcp251x on
-the CN803x OcteonTx and without it we fail.
+Thanks for mainlining the half duplex flag and clarifying the issue
+here, I was to lazy to look up which controller you're using and if the
+patch was mainlined.
 
-Tested on a GW6404 board with an OcteonTX SoC and MCP25625
+> > Can you test this patch and give me a Tested-by?
+> >
+>=20
+> I did verify that with this patch 5.12-rc5 initializes the mcp251x on
+> the CN803x OcteonTx and without it we fail.
+>=20
+> Tested on a GW6404 board with an OcteonTX SoC and MCP25625
+>=20
+> Tested-By: Tim Harvey <tharvey@gateworks.com>
 
-Tested-By: Tim Harvey <tharvey@gateworks.com>
+Thanks a lot!
 
-By the way, I believe you were discussing at one point the possibility
-of adding something in the spi core that would be able to implement
-half duplex transactions for drivers written for full duplex
-communication. Is that something on your list or even possible?
+> By the way, I believe you were discussing at one point the possibility
+> of adding something in the spi core that would be able to implement
+> half duplex transactions for drivers written for full duplex
+> communication. Is that something on your list or even possible?
+
+Yes I had this discussion, but the only thing the SPI core can do is to
+aggregate several half duplex transfers into one full duplex one. This
+requires a lot of memory handling/copying and I decided to not work on
+this.
 
 regards,
+Marc
 
-Tim
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--zatwqarglwkofgwg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBkj80ACgkQqclaivrt
+76ljawf9EHwaju91gEqdYyvu2QjzZGQW5lvXa2siuWG9+VLOILR2WPocd2jmAPcO
+g9qNVaifKgiTcERFzn5DaS0ZiIzOe1nX1xREc2Ke9K8vL0LNPENDc2hJTgAYW852
+UlU7O/SFlTtB5vBwWhrqIGIWDGVNCXi7ZNsEdYBp7VJlnnAc9eTVwm54T3fiSE3S
+4UidEs7eOcMNeQXNvPzZspuSoMzOvo/hzBnFzacoRhFd6df7jHvFJeR1kvtgx2wG
+qd6WsV7ZbhLXjJm6Qx5rITZNc+5LvRvtdHeOxfjPX5GMozIztcYI8usyVaPF+USu
+dYhbrW34rjUgIXwyDbSVYA8Fu7MWTg==
+=VMAd
+-----END PGP SIGNATURE-----
+
+--zatwqarglwkofgwg--
