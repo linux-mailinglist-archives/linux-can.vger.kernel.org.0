@@ -2,148 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F6B352AE6
-	for <lists+linux-can@lfdr.de>; Fri,  2 Apr 2021 15:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580C6352FBE
+	for <lists+linux-can@lfdr.de>; Fri,  2 Apr 2021 21:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbhDBNCY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Apr 2021 09:02:24 -0400
-Received: from mail-yb1-f179.google.com ([209.85.219.179]:46841 "EHLO
-        mail-yb1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235204AbhDBNCY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Apr 2021 09:02:24 -0400
-Received: by mail-yb1-f179.google.com with SMTP id 8so5017057ybc.13
-        for <linux-can@vger.kernel.org>; Fri, 02 Apr 2021 06:02:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FIg0i6CmYh4n4awmgUOl25efgfB/lH0FnDU+1uIse9A=;
-        b=XgNXSj7V4qgdYDBmvOdorKa48vkxhGeqCe4Jh4Ip360ndL/ghLluo+w2FQrkUNGy9M
-         r7ve1fVyxw6+qdyL/C5K2L83D8epUUfU70GQ1TLTvN2nvPeT8aXQGLqlJnkSWD0i9Qvo
-         HtH3Q1uhJgvwsDBI+ZQuu7NEvLArnOc3qL9H6QWZkaso6AQbsLaB3QRVAuCqGYmvFaQz
-         E20U8IKolXrRolqsTg2wplZ8gtffnXlITO1w0p7fZscNQ9dxvqmRXMR6eqx6ySzl8brJ
-         OONSdpx2XwAzelhaWVlFok3101cJ70NTuXSckn7OC5IsSMyNVLKyynitlp5B0/Wq4YsS
-         5mwg==
-X-Gm-Message-State: AOAM532DMgr18wqoX2fXy7q+wlFF4u5xK/D7sqfnf08L0T2i7ehO6ZuY
-        t1nFgcEsM6HAZAvr4ok395akp7VSfeHkVYFr3hg=
-X-Google-Smtp-Source: ABdhPJxFlNOVjUvC+qwxWxtDTQtZlBs5UwHbNsQUZpOSCwnv7F0OlItO7iTh35G/PacVl25wKqDcVU+5AF6Zff+Mo20=
-X-Received: by 2002:a25:7a02:: with SMTP id v2mr17763881ybc.514.1617368541407;
- Fri, 02 Apr 2021 06:02:21 -0700 (PDT)
+        id S236431AbhDBT2E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Apr 2021 15:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235946AbhDBT2D (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Apr 2021 15:28:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA5FC0613E6
+        for <linux-can@vger.kernel.org>; Fri,  2 Apr 2021 12:28:02 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lSPSa-0008Kx-TG; Fri, 02 Apr 2021 21:28:00 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:59d7:5e21:b5c4:e370])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 281A7606C32;
+        Fri,  2 Apr 2021 19:28:00 +0000 (UTC)
+Date:   Fri, 2 Apr 2021 21:27:59 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Belisko Marek <marek.belisko@gmail.com>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: m_can error/overrun frames on high speed
+Message-ID: <20210402192759.up2tperefmwyt3r2@pengutronix.de>
+References: <CAAfyv37vMxhN2B1uR5xUzZwVzAqrQOyPA6stWYj_5346xO0s3A@mail.gmail.com>
+ <20210331083744.pui7rtjexvejjvf6@pengutronix.de>
+ <CAAfyv35tCPxf0KSOk3=mcq6j2yB0DLUrN3AJ6sJtreZmTYZdGQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210321104103.213308-1-mailhol.vincent@wanadoo.fr>
- <20210321104103.213308-2-mailhol.vincent@wanadoo.fr> <20210329123636.5xrgzdxyt54y7coe@pengutronix.de>
- <CAMZ6RqKeEoNGN0iZUfEG8x=FMHu4d2ZE=0QPiOxSXTrXFjg9rg@mail.gmail.com> <20210402104735.ucv6it3pk4ze4umy@pengutronix.de>
-In-Reply-To: <20210402104735.ucv6it3pk4ze4umy@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Fri, 2 Apr 2021 22:02:10 +0900
-Message-ID: <CAMZ6RqKM8FBwNMxnO-D6zTCs32Fc-KB=8+7O2wtDH=hcoTVX6g@mail.gmail.com>
-Subject: Re: [PATCH v14 1/4] can: etas_es58x: add core support for ETAS ES58X
- CAN USB interfaces
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can <linux-can@vger.kernel.org>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iuen6oo4ixbxclad"
+Content-Disposition: inline
+In-Reply-To: <CAAfyv35tCPxf0KSOk3=mcq6j2yB0DLUrN3AJ6sJtreZmTYZdGQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri. 2 Apr 2021 at 19:47, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 02.04.2021 18:56:33, Vincent MAILHOL wrote:
-> > > > +int es58x_rx_err_msg(struct net_device *netdev, enum es58x_err error,
-> > > > +                  enum es58x_event event, u64 timestamp)
-> > > > +{
-> > > > +     struct es58x_priv *priv = es58x_priv(netdev);
-> > > > +     struct can_priv *can = netdev_priv(netdev);
-> > > > +     struct can_device_stats *can_stats = &can->can_stats;
-> > > > +     struct can_frame *cf;
-> > >
-> > > = NULL;
-> > >
-> > > So that the if (cf) properly works...
-> >
-> > I actually expected cfto be set to NULL when an error
-> > occurred (same as skb).
-> >
-> > But indeed, cf is not initialised if the allocation fails. I was
-> > wondering if it would not be better to make both alloc_can_skb()
-> > and and alloc_canfd_skb() set cf to NULL. That would remove a
-> > pitfall.
->
-> Makes sense.
->
-> > If you like the idea, I can submit a patch.
->
-> Sorry creating this drive by patch. The patch description took longer
-> than the actual patch :)
 
-This is often the case for any patches where the diff is one or two lines!
+--iuen6oo4ixbxclad
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
->
-> > > > +/**
-> > > > + * es58x_open() - Open and start network device.
-> > > > + * @netdev: CAN network device.
-> > > > + *
-> > > > + * Called when the network transitions to the up state.
-> > > > + *
-> > > > + * Return: zero on success, errno when any error occurs.
-> > > > + */
-> > > > +static int es58x_open(struct net_device *netdev)
-> > > > +{
-> > > > +     int ret;
-> > > > +
-> > > > +     ret = open_candev(netdev);
-> > > > +     if (ret)
-> > > > +             return ret;
-> > > > +
-> > > > +     ret = es58x_enable_channel(netdev);
-> > > > +     if (ret)
-> > > > +             return ret;
-> > >
-> > > Please do an as complete as possible reset and configuration during
-> > > open(). If there is any error a ifdown/ifup should fix it. Here on a USB
-> > > device with multiple interfaces it's not as easy as on devices with only
-> > > one CAN interface.
-> >
-> > ACK.
-> >
-> > I will use a function as below to check if all interfaces are
-> > down.
-> >
-> > static bool es58x_are_all_channels_closed(struct es58x_device *es58x_dev)
-> > {
-> >     int i;
-> >
-> >     for (i = 0; i < es58x_dev->num_can_ch; i++) {
-> >         struct can_priv *can_priv = netdev_priv(es58x_dev->netdev[i]);
-> >         if (can_priv->state != CAN_STATE_STOPPED)
-> >             return false;
-> >     }
-> >     return true;
-> > }
-> >
-> > I will modify both es58x_open() and es58x_close().
->
-> Have a look at
-> https://elixir.bootlin.com/linux/v5.11/source/include/linux/kref.h
->
-> I'm not sure if kref is overkill here :)
+On 01.04.2021 11:04:25, Belisko Marek wrote:
+> Is there anything I can tune to have it read faster? Thanks.
 
-There is indeed a race condition in which the above function
-might return true when it is not supposed to.
+Indeed, with current net-next/master, you put the NAPI on a per
+networking device from softirq to threaded mode.
 
-I checked the struct kref and the refcount_t, but here, I think
-that a simple atomic_t is enough because there is no risk of
-saturation.
+| echo 1 | sudo tee /sys/class/net/can0/threaded
 
-Something like:
-|     if (atomic_inc_return(opened_channel_cnt) == 1)
-|         /* configure */
-and
-|     if (atomic_dec_and_test(opened_channel_cnt))
-|         /* release */
+Then you a separate NAPI thread per networking device that can be tuned
+with chrt, etc...
 
-[...]
+regards,
+Marc
 
-Yours sincerely,
-Vincent
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--iuen6oo4ixbxclad
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBncDwACgkQqclaivrt
+76mangf/Qgj9Kqkc3sFj0Jd6eMLz3V5Qd29rC3y0euzY+Ahj12nIu2d192DsAC6H
+Eeh8Lg/25kzrecGn55U3zYqyhDGZbxutIHEjYxTAZzkCrkKz2o4jsX/97q6dCaCi
+11tz8y9Jf1sTCfNHIehsuiwHvfendXzQ9Q0CxpwqpoceR3llR2Fb9f4tTRQeZr+4
+rMtW9qCV7kUF2l2qp+xXj/TPBVmoau/lJe1LEBAGho6xdWy61lote5kszus91AjJ
+V/t4qwijaM4gzwwu6XB/JxblFZ9iqbWto4P+uJqdFXb4M80bIl+Pe+XmnbQbbR06
+ELJ/z+DhkSVdjxiuLvKWutBPNoli2w==
+=vouo
+-----END PGP SIGNATURE-----
+
+--iuen6oo4ixbxclad--
