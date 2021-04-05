@@ -2,91 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580C6352FBE
-	for <lists+linux-can@lfdr.de>; Fri,  2 Apr 2021 21:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CA8353AF9
+	for <lists+linux-can@lfdr.de>; Mon,  5 Apr 2021 04:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236431AbhDBT2E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Apr 2021 15:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235946AbhDBT2D (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Apr 2021 15:28:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA5FC0613E6
-        for <linux-can@vger.kernel.org>; Fri,  2 Apr 2021 12:28:02 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lSPSa-0008Kx-TG; Fri, 02 Apr 2021 21:28:00 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:59d7:5e21:b5c4:e370])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 281A7606C32;
-        Fri,  2 Apr 2021 19:28:00 +0000 (UTC)
-Date:   Fri, 2 Apr 2021 21:27:59 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Belisko Marek <marek.belisko@gmail.com>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: m_can error/overrun frames on high speed
-Message-ID: <20210402192759.up2tperefmwyt3r2@pengutronix.de>
-References: <CAAfyv37vMxhN2B1uR5xUzZwVzAqrQOyPA6stWYj_5346xO0s3A@mail.gmail.com>
- <20210331083744.pui7rtjexvejjvf6@pengutronix.de>
- <CAAfyv35tCPxf0KSOk3=mcq6j2yB0DLUrN3AJ6sJtreZmTYZdGQ@mail.gmail.com>
+        id S231728AbhDEC3s convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Sun, 4 Apr 2021 22:29:48 -0400
+Received: from mail-yb1-f182.google.com ([209.85.219.182]:33520 "EHLO
+        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231656AbhDEC3r (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 4 Apr 2021 22:29:47 -0400
+Received: by mail-yb1-f182.google.com with SMTP id l15so11174569ybm.0
+        for <linux-can@vger.kernel.org>; Sun, 04 Apr 2021 19:29:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cdeQUgQSltUmWo32+kTyKX/kOTGYD/wTgNyRtXWD9JA=;
+        b=fwG3qGYVD5Wzj0atmwVs5dELLMRfrBcug0zj9RR3sOH2Ba6Xpg0CwmL8hLu6c/3oPp
+         qU7HLFhoKOgo1EVnOyEdB3S2XaJX1aaczAhDp3PS2n+sLXko2msozDh8zXvBbCtmHKpV
+         xqYAo/1ezewLlEUwc2bUJdw0HTQy4YLBDlVkB/JZo7qq7DNGs0c6Wzer7yKwpp0WtLll
+         QpC/IS1/0b5CZ4lm+mSgRFjnZ69jzrxtHW/6cLfS6YvHQTI19xGPVE8fFbiOeEnIHpMo
+         brnc7p9Rf8x48TAYnpSYMPFe8hgmshmfBUbrzP63vMek2ag4yHQf8d1h+8XX1y6i1WFC
+         fvaQ==
+X-Gm-Message-State: AOAM533egD5gBTAA64agCVN9JYRu4YxuXxhViiPDnoPVQdCwi/9Eo77S
+        UDNXcn8/vxE012uNHciszyyD6nt5cOl5pqA+wMuq6jrNngc=
+X-Google-Smtp-Source: ABdhPJzarhPPm3sFiymuAc7ImD2ta+iQTCnUs+MEWos71s3sokrddeuR6spWlxvSXtfhoNtYzTymYLoqbUl0Yt9CRA0=
+X-Received: by 2002:a25:bed1:: with SMTP id k17mr12778818ybm.125.1617589782244;
+ Sun, 04 Apr 2021 19:29:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iuen6oo4ixbxclad"
-Content-Disposition: inline
-In-Reply-To: <CAAfyv35tCPxf0KSOk3=mcq6j2yB0DLUrN3AJ6sJtreZmTYZdGQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
+ <20210224002008.4158-5-mailhol.vincent@wanadoo.fr> <20210315155900.a6l5l5aeuvsgn55x@pengutronix.de>
+ <CAMZ6RqJyMXzog1mu3S62yMAxJorTg0D5VL5OYKALYRoMxN_DdQ@mail.gmail.com> <20210316152948.eqak6slrs2xf5lc4@pengutronix.de>
+In-Reply-To: <20210316152948.eqak6slrs2xf5lc4@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 5 Apr 2021 11:29:31 +0900
+Message-ID: <CAMZ6Rq+ET3V3EQDVe9xYF8=Sv7N1WHZCLy2XTvqVXuNEyKg6VQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] can: add netlink interface for CAN-FD Transmitter
+ Delay Compensation (TDC)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---iuen6oo4ixbxclad
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed. 17 Mar 2021 at 00:29, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 17.03.2021 00:16:01, Vincent MAILHOL wrote:
+> > > I just had a look at the ethtool-netlink interface:
+> > >
+> > > | Documentation/networking/ethtool-netlink.rst
+> > >
+> > > this is much better designed than the CAN netlink interface. It was done
+> > > by the pros and much later than CAN. :D So I'd like to have a similar
+> > > structure for new CAN netlink stuff.
+> > >
+> > > So I think I'll remove this patch for now from can-next-testing. The
+> > > kernel internal interface to tdc is still OK, we can leave it as is and
+> > > change it if needed. But netlink is user space and I'd like to have it
+> > > properly designed.
+> >
+> > Understood. However, I will need more time to read and understand
+> > the ethtool-netlink interface. The new patch will come later, I
+> > do not know when.
+>
+> No Problem
 
-On 01.04.2021 11:04:25, Belisko Marek wrote:
-> Is there anything I can tune to have it read faster? Thanks.
+I started to look at Ethtool netlink, but as far as my understanding
+goes, this seems purely restricted to the ethtool application (i.e.
+not to iproute2). I double checked the latest versions of iproute2
+but there isn’t a single #include <linux/ethtool_netlink.h> nor
+anything else related to that new API.
 
-Indeed, with current net-next/master, you put the NAPI on a per
-networking device from softirq to threaded mode.
+Please let me know if I missed the point.
 
-| echo 1 | sudo tee /sys/class/net/can0/threaded
 
-Then you a separate NAPI thread per networking device that can be tuned
-with chrt, etc...
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---iuen6oo4ixbxclad
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBncDwACgkQqclaivrt
-76mangf/Qgj9Kqkc3sFj0Jd6eMLz3V5Qd29rC3y0euzY+Ahj12nIu2d192DsAC6H
-Eeh8Lg/25kzrecGn55U3zYqyhDGZbxutIHEjYxTAZzkCrkKz2o4jsX/97q6dCaCi
-11tz8y9Jf1sTCfNHIehsuiwHvfendXzQ9Q0CxpwqpoceR3llR2Fb9f4tTRQeZr+4
-rMtW9qCV7kUF2l2qp+xXj/TPBVmoau/lJe1LEBAGho6xdWy61lote5kszus91AjJ
-V/t4qwijaM4gzwwu6XB/JxblFZ9iqbWto4P+uJqdFXb4M80bIl+Pe+XmnbQbbR06
-ELJ/z+DhkSVdjxiuLvKWutBPNoli2w==
-=vouo
------END PGP SIGNATURE-----
-
---iuen6oo4ixbxclad--
+Yours sincerely,
+Vincent
