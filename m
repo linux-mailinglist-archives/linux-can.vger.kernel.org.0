@@ -2,47 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E5B355186
-	for <lists+linux-can@lfdr.de>; Tue,  6 Apr 2021 13:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3B83551B7
+	for <lists+linux-can@lfdr.de>; Tue,  6 Apr 2021 13:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241287AbhDFLGd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Apr 2021 07:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S236359AbhDFLQi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Apr 2021 07:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245347AbhDFLGc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Apr 2021 07:06:32 -0400
+        with ESMTP id S236307AbhDFLQg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Apr 2021 07:16:36 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06B6C06174A
-        for <linux-can@vger.kernel.org>; Tue,  6 Apr 2021 04:06:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56909C06174A
+        for <linux-can@vger.kernel.org>; Tue,  6 Apr 2021 04:16:28 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lTjXL-0007q1-Az
-        for linux-can@vger.kernel.org; Tue, 06 Apr 2021 13:06:23 +0200
+        id 1lTjh4-0000rw-WA
+        for linux-can@vger.kernel.org; Tue, 06 Apr 2021 13:16:27 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id A2BD16086CF
-        for <linux-can@vger.kernel.org>; Tue,  6 Apr 2021 11:06:21 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 41FE0608708
+        for <linux-can@vger.kernel.org>; Tue,  6 Apr 2021 11:16:24 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 513DC6086BF;
-        Tue,  6 Apr 2021 11:06:19 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 847AA6086FB;
+        Tue,  6 Apr 2021 11:16:23 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 6a07bb0b;
-        Tue, 6 Apr 2021 11:06:18 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3896d4b4;
+        Tue, 6 Apr 2021 11:16:23 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Subject: [can-next-rfc 4/4] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work around broken CRC on TBC register
-Date:   Tue,  6 Apr 2021 13:06:17 +0200
-Message-Id: <20210406110617.1865592-5-mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de,
+        Stephane Grosjean <s.grosjean@peak-system.com>
+Subject: [RFC]: can-next 2021-04-06: peak_usb cleanups
+Date:   Tue,  6 Apr 2021 13:16:12 +0200
+Message-Id: <20210406111622.1874957-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210406110617.1865592-1-mkl@pengutronix.de>
-References: <20210406110617.1865592-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -53,97 +50,16 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-MCP251XFD_REG_TBC is the time base counter register. It increments
-once per SYS clock tick, which is 20 or 40 MHz. Observation shows that
-if the lowest byte (which is transferred first on the SPI bus) of that
-register is 0x00 or 0x80 the calculated CRC doesn't always match the
-transferred one.
+Hello,
 
-To reproduce this problem let the driver read the TBC register in a
-high frequency. This can be done by attaching only the mcp251xfd CAN
-controller to a valid terminated CAN bus and send a single CAN frame.
-As there are no other CAN controller on the bus, the sent CAN frame is
-not ACKed and the mcp251xfd repeats it. If user space enables the bus
-error reporting, each of the NACK errors is reported with a time
-stamp (which is read from the TBC register) to user space.
+this series consist of several cleanups for the peak_usb driver. It
+was tested on the peak_usb_fd, but it also does some changes on the
+peak_usb, which I don't have access to.
 
-$ ip link set can0 down
-$ ip link set can0 up type can bitrate 500000 berr-reporting on
-$ cansend can0 4FF#ff.01.00.00.00.00.00.00
+Please test.
 
-This leads to several error messages per second:
+regards,
+Marc
 
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=00 3a 86 da, CRC=0x7753) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=80 01 b4 da, CRC=0x5830) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=00 e9 23 db, CRC=0xa723) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=00 8a 30 db, CRC=0x4a9c) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=80 f3 43 db, CRC=0x66d2) retrying.
-
-If the highest bit in the lowest byte is flipped the transferred CRC
-matches the calculated one. We assume for now the CRC calculation in
-the chip works on wrong data and the transferred data is correct.
-
-This patch implements the following workaround:
-
-- If a CRC read error on the TBC register is detected and the lowest
-  byte is 0x00 or 0x80, the highest bit of the lowest byte is flipped
-  and the CRC is calculated again.
-- If the CRC now matches, the _original_ data is passed to the reader.
-  For now we assume transferred data was OK.
-
-Cc: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Thomas Kopp <thomas.kopp@microchip.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
-
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-index 35557ac43c03..297491516a26 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-@@ -321,6 +321,40 @@ mcp251xfd_regmap_crc_read(void *context,
- 		if (err != -EBADMSG)
- 			return err;
- 
-+		/* MCP251XFD_REG_TBC is the time base counter
-+		 * register. It increments once per SYS clock tick,
-+		 * which is 20 or 40 MHz.
-+		 *
-+		 * Observation shows that if the lowest byte (which is
-+		 * transferred first on the SPI bus) of that register
-+		 * is 0x00 or 0x80 the calculated CRC doesn't always
-+		 * match the transferred one.
-+		 *
-+		 * If the highest bit in the lowest byte is flipped
-+		 * the transferred CRC matches the calculated one. We
-+		 * assume for now the CRC calculation in the chip
-+		 * works on wrong data and the transferred data is
-+		 * correct.
-+		 */
-+		if (reg == MCP251XFD_REG_TBC &&
-+		    (buf_rx->data[0] == 0x0 || buf_rx->data[0] == 0x80)) {
-+			/* Flip highest bit in lowest byte of le32 */
-+			buf_rx->data[0] ^= 0x80;
-+
-+			/* re-check CRC */
-+			err = mcp251xfd_regmap_crc_read_check_crc(buf_rx,
-+								  buf_tx,
-+								  val_len);
-+			if (!err) {
-+				/* If CRC is now correct, assume
-+				 * transferred data was OK, flip bit
-+				 * back to original value.
-+				 */
-+				buf_rx->data[0] ^= 0x80;
-+				goto out;
-+			}
-+		}
-+
- 		/* MCP251XFD_REG_OSC is the first ever reg we read from.
- 		 *
- 		 * The chip may be in deep sleep and this SPI transfer
--- 
-2.30.2
 
 
