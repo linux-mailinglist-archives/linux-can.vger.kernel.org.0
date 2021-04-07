@@ -2,50 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC36F3565EF
-	for <lists+linux-can@lfdr.de>; Wed,  7 Apr 2021 10:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E8135663D
+	for <lists+linux-can@lfdr.de>; Wed,  7 Apr 2021 10:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244436AbhDGIBr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Apr 2021 04:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
+        id S240221AbhDGIQL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Apr 2021 04:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238043AbhDGIBo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Apr 2021 04:01:44 -0400
+        with ESMTP id S239694AbhDGIQK (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Apr 2021 04:16:10 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652D4C061762
-        for <linux-can@vger.kernel.org>; Wed,  7 Apr 2021 01:01:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A662C06174A
+        for <linux-can@vger.kernel.org>; Wed,  7 Apr 2021 01:16:01 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lU37x-0001zt-RL
-        for linux-can@vger.kernel.org; Wed, 07 Apr 2021 10:01:29 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id B37DC609800
-        for <linux-can@vger.kernel.org>; Wed,  7 Apr 2021 08:01:24 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1lU3Lz-0003t3-GL; Wed, 07 Apr 2021 10:15:59 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:a41a:93b3:8535:9a37])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 20D936097D8;
-        Wed,  7 Apr 2021 08:01:21 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ea9b0bef;
-        Wed, 7 Apr 2021 08:01:19 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 0E37560985A;
+        Wed,  7 Apr 2021 08:15:58 +0000 (UTC)
+Date:   Wed, 7 Apr 2021 10:15:57 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>
-Subject: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work around broken CRC on TBC register
-Date:   Wed,  7 Apr 2021 10:01:18 +0200
-Message-Id: <20210407080118.1916040-7-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210407080118.1916040-1-mkl@pengutronix.de>
-References: <20210407080118.1916040-1-mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Subject: Re: [PATCH v2 4/5] can: add netlink interface for CAN-FD Transmitter
+ Delay Compensation (TDC)
+Message-ID: <20210407081557.m3sotnepbgasarri@pengutronix.de>
+References: <20210224002008.4158-1-mailhol.vincent@wanadoo.fr>
+ <20210224002008.4158-5-mailhol.vincent@wanadoo.fr>
+ <20210315155900.a6l5l5aeuvsgn55x@pengutronix.de>
+ <CAMZ6RqJyMXzog1mu3S62yMAxJorTg0D5VL5OYKALYRoMxN_DdQ@mail.gmail.com>
+ <20210316152948.eqak6slrs2xf5lc4@pengutronix.de>
+ <CAMZ6Rq+ET3V3EQDVe9xYF8=Sv7N1WHZCLy2XTvqVXuNEyKg6VQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hxmxc2sdywojaloz"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+ET3V3EQDVe9xYF8=Sv7N1WHZCLy2XTvqVXuNEyKg6VQ@mail.gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -54,98 +54,133 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-MCP251XFD_REG_TBC is the time base counter register. It increments
-once per SYS clock tick, which is 20 or 40 MHz. Observation shows that
-if the lowest byte (which is transferred first on the SPI bus) of that
-register is 0x00 or 0x80 the calculated CRC doesn't always match the
-transferred one.
 
-To reproduce this problem let the driver read the TBC register in a
-high frequency. This can be done by attaching only the mcp251xfd CAN
-controller to a valid terminated CAN bus and send a single CAN frame.
-As there are no other CAN controller on the bus, the sent CAN frame is
-not ACKed and the mcp251xfd repeats it. If user space enables the bus
-error reporting, each of the NACK errors is reported with a time
-stamp (which is read from the TBC register) to user space.
+--hxmxc2sdywojaloz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-$ ip link set can0 down
-$ ip link set can0 up type can bitrate 500000 berr-reporting on
-$ cansend can0 4FF#ff.01.00.00.00.00.00.00
+On 05.04.2021 11:29:31, Vincent MAILHOL wrote:
+> Hi Marc,
+>=20
+> On Wed. 17 Mar 2021 at 00:29, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
+e:
+> > On 17.03.2021 00:16:01, Vincent MAILHOL wrote:
+> > > > I just had a look at the ethtool-netlink interface:
+> > > >
+> > > > | Documentation/networking/ethtool-netlink.rst
+> > > >
+> > > > this is much better designed than the CAN netlink interface. It was=
+ done
+> > > > by the pros and much later than CAN. :D So I'd like to have a simil=
+ar
+> > > > structure for new CAN netlink stuff.
+> > > >
+> > > > So I think I'll remove this patch for now from can-next-testing. The
+> > > > kernel internal interface to tdc is still OK, we can leave it as is=
+ and
+> > > > change it if needed. But netlink is user space and I'd like to have=
+ it
+> > > > properly designed.
+> > >
+> > > Understood. However, I will need more time to read and understand
+> > > the ethtool-netlink interface. The new patch will come later, I
+> > > do not know when.
+> >
+> > No Problem
+>=20
+> I started to look at Ethtool netlink, but as far as my understanding
+> goes, this seems purely restricted to the ethtool application (i.e.
+> not to iproute2). I double checked the latest versions of iproute2
+> but there isn=E2=80=99t a single #include <linux/ethtool_netlink.h> nor
+> anything else related to that new API.
+>=20
+> Please let me know if I missed the point.
 
-This leads to several error messages per second:
+For example have a look at the RINGS_GET of ethtool-netlink.rst:
 
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=00 3a 86 da, CRC=0x7753) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=80 01 b4 da, CRC=0x5830) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=00 e9 23 db, CRC=0xa723) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=00 8a 30 db, CRC=0x4a9c) retrying.
-| mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4, data=80 f3 43 db, CRC=0x66d2) retrying.
+| RINGS_GET
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D
+|=20
+| Gets ring sizes like ``ETHTOOL_GRINGPARAM`` ioctl request.
+|=20
+| Request contents:
+|=20
+|   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+|   ``ETHTOOL_A_RINGS_HEADER``            nested  request header
+|   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+|=20
+| Kernel response contents:
+|=20
+|   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+|   ``ETHTOOL_A_RINGS_HEADER``            nested  reply header
+|   ``ETHTOOL_A_RINGS_RX_MAX``            u32     max size of RX ring
+|   ``ETHTOOL_A_RINGS_RX_MINI_MAX``       u32     max size of RX mini ring
+|   ``ETHTOOL_A_RINGS_RX_JUMBO_MAX``      u32     max size of RX jumbo ring
+|   ``ETHTOOL_A_RINGS_TX_MAX``            u32     max size of TX ring
+|   ``ETHTOOL_A_RINGS_RX``                u32     size of RX ring
+|   ``ETHTOOL_A_RINGS_RX_MINI``           u32     size of RX mini ring
+|   ``ETHTOOL_A_RINGS_RX_JUMBO``          u32     size of RX jumbo ring
+|   ``ETHTOOL_A_RINGS_TX``                u32     size of TX ring
+|   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-If the highest bit in the lowest byte is flipped the transferred CRC
-matches the calculated one. We assume for now the CRC calculation in
-the chip works on wrong data and the transferred data is correct.
+The response consists of a header and several nested values. This looks
+to me to be the netlink way to serialize a C-struct. If I understand
+your code correctly it was just the values without the nested header.
 
-This patch implements the following workaround:
+| RINGS_SET
+| =3D=3D=3D=3D=3D=3D=3D=3D=3D
+|=20
+| Sets ring sizes like ``ETHTOOL_SRINGPARAM`` ioctl request.
+|=20
+| Request contents:
+|=20
+|   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+|   ``ETHTOOL_A_RINGS_HEADER``            nested  reply header
+|   ``ETHTOOL_A_RINGS_RX``                u32     size of RX ring
+|   ``ETHTOOL_A_RINGS_RX_MINI``           u32     size of RX mini ring
+|   ``ETHTOOL_A_RINGS_RX_JUMBO``          u32     size of RX jumbo ring
+|   ``ETHTOOL_A_RINGS_TX``                u32     size of TX ring
+|   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+|=20
+| Kernel checks that requested ring sizes do not exceed limits reported by
+| driver. Driver may impose additional constraints and may not suspport all
+| attributes.
 
-- If a CRC read error on the TBC register is detected and the lowest
-  byte is 0x00 or 0x80, the highest bit of the lowest byte is flipped
-  and the CRC is calculated again.
-- If the CRC now matches, the _original_ data is passed to the reader.
-  For now we assume transferred data was OK.
+regards,
+Marc
 
-Link: https://lore.kernel.org/r/20210406110617.1865592-5-mkl@pengutronix.de
-Cc: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Thomas Kopp <thomas.kopp@microchip.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- .../net/can/spi/mcp251xfd/mcp251xfd-regmap.c  | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-index 35557ac43c03..297491516a26 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c
-@@ -321,6 +321,40 @@ mcp251xfd_regmap_crc_read(void *context,
- 		if (err != -EBADMSG)
- 			return err;
- 
-+		/* MCP251XFD_REG_TBC is the time base counter
-+		 * register. It increments once per SYS clock tick,
-+		 * which is 20 or 40 MHz.
-+		 *
-+		 * Observation shows that if the lowest byte (which is
-+		 * transferred first on the SPI bus) of that register
-+		 * is 0x00 or 0x80 the calculated CRC doesn't always
-+		 * match the transferred one.
-+		 *
-+		 * If the highest bit in the lowest byte is flipped
-+		 * the transferred CRC matches the calculated one. We
-+		 * assume for now the CRC calculation in the chip
-+		 * works on wrong data and the transferred data is
-+		 * correct.
-+		 */
-+		if (reg == MCP251XFD_REG_TBC &&
-+		    (buf_rx->data[0] == 0x0 || buf_rx->data[0] == 0x80)) {
-+			/* Flip highest bit in lowest byte of le32 */
-+			buf_rx->data[0] ^= 0x80;
-+
-+			/* re-check CRC */
-+			err = mcp251xfd_regmap_crc_read_check_crc(buf_rx,
-+								  buf_tx,
-+								  val_len);
-+			if (!err) {
-+				/* If CRC is now correct, assume
-+				 * transferred data was OK, flip bit
-+				 * back to original value.
-+				 */
-+				buf_rx->data[0] ^= 0x80;
-+				goto out;
-+			}
-+		}
-+
- 		/* MCP251XFD_REG_OSC is the first ever reg we read from.
- 		 *
- 		 * The chip may be in deep sleep and this SPI transfer
--- 
-2.30.2
+--hxmxc2sdywojaloz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBtajoACgkQqclaivrt
+76lENQgAmuKCWhic3EgOzvmL6MOscJQ17Cl8Ss3YW8SfiruAj50mbFyRyTWOtZ3l
+BJNNrU+U5IJz5rBdgDLWVysm7I1oP8o2Wnk0NWTfGPN6kluRcnoEvNI8uduprY4I
+afixKPJ1LSGAShSgv1LEpa5a5dYQn4ACdnhg0YA0oIJakdL6DdZ9fViC0xyyVezy
+pEvxFXvekk2ABHiMbhGSOI2cI9PduqwHNck5SMWTlB0K8IQd3PlCeZ7QVDOHJhM7
+0Ta3KbFoeG36T4emxWT3fi91ArqQxqSGXsQPU9H3v0xAunXltgNuwgn5TER759oc
+ggHhDcEbrKZGB8RbXZyYLCvyUjWPiQ==
+=Zw6I
+-----END PGP SIGNATURE-----
+
+--hxmxc2sdywojaloz--
