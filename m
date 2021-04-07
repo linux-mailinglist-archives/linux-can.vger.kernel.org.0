@@ -2,71 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24D4355F94
-	for <lists+linux-can@lfdr.de>; Wed,  7 Apr 2021 01:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7953565E4
+	for <lists+linux-can@lfdr.de>; Wed,  7 Apr 2021 10:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344357AbhDFXkT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Apr 2021 19:40:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37964 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245171AbhDFXkS (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 6 Apr 2021 19:40:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C2875613CB;
-        Tue,  6 Apr 2021 23:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617752409;
-        bh=BBDcA9mMD1hh/MHKONANE/he4s+s4XtD+s5/7mD1Ao8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iWis537+iQu3XimXPxGNo8lKq6ejoGPTLI8wL+sDYPAqnINurQGGfdiyQBRNhWUUC
-         f9rkXXM9n37vKqR1y+Ta46xVfkMNlu1cK+3weLYQ8nvkfHZV3vDXX5KREnjeFuIKLE
-         fFptdbR/sacJQuqzc9UjZvhV+E/gNS/LXls1mdNQeoZXI5+RbE2/1y/URGUb8F2pRp
-         1gmjGUyJrk06Ae1oiF8THFk58N3Q32HdYpDDhYXKlj63sfVUZAnawO4fW0u80HRywR
-         PN6PG/605SelmoJX3t05wJXaXtnidJL3+cq4s7QcWn8bCyc23i70gwxoRb8STqFGnP
-         9QyUofR2z6SOA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id B879760A50;
-        Tue,  6 Apr 2021 23:40:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235703AbhDGIBd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 7 Apr 2021 04:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229529AbhDGIBd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Apr 2021 04:01:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4135CC06174A
+        for <linux-can@vger.kernel.org>; Wed,  7 Apr 2021 01:01:24 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lU37q-0001rg-TL
+        for linux-can@vger.kernel.org; Wed, 07 Apr 2021 10:01:22 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id D52706097D4
+        for <linux-can@vger.kernel.org>; Wed,  7 Apr 2021 08:01:20 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2BCB96097CA;
+        Wed,  7 Apr 2021 08:01:20 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id f454e5fb;
+        Wed, 7 Apr 2021 08:01:19 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-04-07
+Date:   Wed,  7 Apr 2021 10:01:12 +0200
+Message-Id: <20210407080118.1916040-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net] can: mcp251x: fix support for half duplex SPI host controllers
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161775240975.19905.5284211796735654997.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Apr 2021 23:40:09 +0000
-References: <20210406103606.1847506-2-mkl@pengutronix.de>
-In-Reply-To: <20210406103606.1847506-2-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        tharvey@gateworks.com, info@gerhard-bertelsmann.de
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hello Jakub, hello David,
 
-This patch was applied to netdev/net.git (refs/heads/master):
+this is a pull request of 6 patches for net-next/master.
 
-On Tue,  6 Apr 2021 12:36:06 +0200 you wrote:
-> Some SPI host controllers do not support full-duplex SPI transfers.
-> 
-> The function mcp251x_spi_trans() does a full duplex transfer. It is
-> used in several places in the driver, where a TX half duplex transfer
-> is sufficient.
-> 
-> To fix support for half duplex SPI host controllers, this patch
-> introduces a new function mcp251x_spi_write() and changes all callers
-> that do a TX half duplex transfer to use mcp251x_spi_write().
-> 
-> [...]
+The first patch targets the CAN driver infrastructure, it improves the
+alloc_can{,fd}_skb() function to set the pointer to the CAN frame to
+NULL if skb allocation fails.
 
-Here is the summary with links:
-  - [net] can: mcp251x: fix support for half duplex SPI host controllers
-    https://git.kernel.org/netdev/net/c/617085fca637
+The next patch adds missing error handling to the m_can driver's RX
+path (the code was introduced in -next, no need to backport).
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+In the next patch an unused constant is removed from an enum in the
+c_can driver.
+
+The last 3 patches target the mcp251xfd driver. They add BQL support
+and try to work around a sometimes broken CRC when reading the TBC
+register.
+
+regards,
+Marc
+
+---
+
+The following changes since commit 0b35e0deb5bee7d4882356d6663522c1562a8321:
+
+  docs: ethtool: correct quotes (2021-04-06 16:56:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.13-20210407
+
+for you to fetch changes up to c7eb923c3caf4c6a183465cc012dc368b199a4b2:
+
+  can: mcp251xfd: mcp251xfd_regmap_crc_read(): work around broken CRC on TBC register (2021-04-07 09:31:28 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.13-20210407
+
+----------------------------------------------------------------
+Marc Kleine-Budde (6):
+      can: skb: alloc_can{,fd}_skb(): set "cf" to NULL if skb allocation fails
+      can: m_can: m_can_receive_skb(): add missing error handling to can_rx_offload_queue_sorted() call
+      can: c_can: remove unused enum BOSCH_C_CAN_PLATFORM
+      can: mcp251xfd: add BQL support
+      can: mcp251xfd: mcp251xfd_regmap_crc_read_one(): Factor out crc check into separate function
+      can: mcp251xfd: mcp251xfd_regmap_crc_read(): work around broken CRC on TBC register
+
+ drivers/net/can/c_can/c_can.h                    |  1 -
+ drivers/net/can/dev/skb.c                        | 10 +++-
+ drivers/net/can/m_can/m_can.c                    | 13 +++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c   | 23 +++++++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-regmap.c | 64 ++++++++++++++++++++----
+ 5 files changed, 90 insertions(+), 21 deletions(-)
 
 
