@@ -2,79 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6435B359FC5
-	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 15:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972E135A019
+	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 15:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233019AbhDIN1X (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Apr 2021 09:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60658 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232286AbhDIN1W (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 9 Apr 2021 09:27:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 16A8461105;
-        Fri,  9 Apr 2021 13:27:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1617974829;
-        bh=nKeHRuV5ymkEE4MF/NvZwM3D4+Kpkmi60AA4GEp/lxc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KZKMEUfRgF+cTTCGQSVZvtyf7Mk+1WDaNgzOGt4vZlr+tvIH/S7FlxdZMN2BRO4vu
-         iaykpC0N/jH72qcco8nqGaBmXYOqLMGUrORGfKnCRyf3cMv0HNSvxoexVMWmpmq0PZ
-         F9JyM8CsNjogKdYEwaCZ6aqoLvM8v5ej6S7DJHOo=
-Date:   Fri, 9 Apr 2021 15:27:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Koen Vandeputte <koen.vandeputte@citymesh.com>,
-        linux-can@vger.kernel.org, wg@grandegger.com,
-        netdev@vger.kernel.org, qiangqing.zhang@nxp.com
-Subject: Re: flexcan introduced a DIV/0 in kernel
-Message-ID: <YHBWKzZyuUhMr0fj@kroah.com>
-References: <5bdfcccb-0b02-e46b-eefe-7df215cc9d02@citymesh.com>
- <27f66de1-42bc-38d9-8a1c-7062eb359958@pengutronix.de>
- <f7ba143a-58c8-811a-876e-d494c4681537@citymesh.com>
- <20210409131001.7r36v2vd3zmceloj@pengutronix.de>
+        id S232876AbhDINll (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Apr 2021 09:41:41 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:58096 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231402AbhDINlk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Apr 2021 09:41:40 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 139Df4ZH113099;
+        Fri, 9 Apr 2021 08:41:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1617975664;
+        bh=+hrfoKJ5dxbZo5OQLdyaXN4aZTv5QQgu1FvsD/VAlxs=;
+        h=From:To:CC:Subject:Date;
+        b=XU0/teXZMOTlXq58jED0E/yqtBw6uSrLZCuHTs85bfy2EmkecWtlzjziD4ScbPgx6
+         RedcJSsXSH+LzdGuXfxDoHcfEg8+wnZ1SxoD7qm0Dch13kmRCyI+9bWVG/WYI8exK5
+         LEFynr5PFjBoFcG5dhfxxrY9fEuzemgKrEt3862E=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 139Df4Qw074014
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 9 Apr 2021 08:41:04 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 9 Apr
+ 2021 08:41:04 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 9 Apr 2021 08:41:04 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 139DewmZ029277;
+        Fri, 9 Apr 2021 08:40:59 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Subject: [PATCH 0/4] CAN TRANSCEIVER: Add support for CAN transceivers
+Date:   Fri, 9 Apr 2021 19:10:50 +0530
+Message-ID: <20210409134056.18740-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210409131001.7r36v2vd3zmceloj@pengutronix.de>
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Apr 09, 2021 at 03:10:01PM +0200, Marc Kleine-Budde wrote:
-> On 09.04.2021 14:55:59, Koen Vandeputte wrote:
-> > 
-> > On 09.04.21 13:21, Marc Kleine-Budde wrote:
-> > > On 4/9/21 12:18 PM, Koen Vandeputte wrote:
-> > > > Hi All,
-> > > > 
-> > > > I just updated kernel 4.14 within OpenWRT from 4.14.224 to 4.14.229
-> > > > Booting it shows the splat below on each run. [1]
-> > > > 
-> > > > 
-> > > > It seems there are 2 patches regarding flexcan which were introduced in
-> > > > 4.14.226
-> > > > 
-> > > > --> ce59ffca5c49 ("can: flexcan: enable RX FIFO after FRZ/HALT valid")
-> > > > --> bb7c9039a396 ("can: flexcan: assert FRZ bit in flexcan_chip_freeze()")
-> > > > 
-> > > > Reverting these fixes the splat.
-> > > This patch should fix the problem:
-> > > 
-> > > 47c5e474bc1e can: flexcan: flexcan_chip_freeze(): fix chip freeze for missing
-> > > bitrate
-> > > 
-> > > Greg, can you pick this up for v4.14?
-> > > 
-> > > regards,
-> > > Marc
-> > > 
-> > Checking kernels 4.4 & 4.9 shows that this fix is also missing over there.
-> > 
-> > Marc,
-> > Can you confirm that it's also required for these?
-> 
-> ACK, the fix is needed for v4.4.265 and v4.9.265.
+The following series of patches add support for CAN transceivers.
 
-Now queued up there too, thanks!
+TCAN1042 has a standby signal that needs to be pulled high for
+sending/receiving messages[1]. TCAN1043 has a enable signal along with
+standby signal that needs to be pulled up for sending/receiving
+messages[2], and other combinations of the two lines can be used to put the
+transceiver in different states to reduce power consumption. On boards
+like the AM654-idk and J721e-evm these signals are controlled using gpios.
 
-greg k-h
+Patch 1 models the transceiver as a phy device tree node with properties
+for max bit rate supported, gpio properties for indicating gpio pin numbers
+to which standby and enable signals are connected.
+
+Patch 2 adds a generic driver to support CAN transceivers.
+
+Patches 3 & 4 add support for implementing the transceiver as a phy of
+m_can_platform driver.
+
+Aswath Govindraju (2):
+  dt-bindings: phy: Add binding for TI TCAN104x CAN transceivers
+  phy: phy-can-transceiver: Add support for generic CAN transceiver
+    driver
+
+Faiz Abbas (2):
+  dt-bindings: net: can: Document transceiver implementation as phy
+  can: m_can_platform: Add support for transceiver as phy
+
+ .../bindings/net/can/bosch,m_can.yaml         |   6 +
+ .../bindings/phy/ti,tcan104x-can.yaml         |  56 +++++++
+ drivers/net/can/m_can/m_can_platform.c        |  25 ++++
+ drivers/phy/Kconfig                           |   9 ++
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-can-transceiver.c             | 140 ++++++++++++++++++
+ 6 files changed, 237 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+ create mode 100644 drivers/phy/phy-can-transceiver.c
+
+-- 
+2.17.1
+
