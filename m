@@ -2,107 +2,119 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2616359F66
-	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 14:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628F5359F90
+	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 15:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233839AbhDIM4P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Apr 2021 08:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S231127AbhDINKT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Apr 2021 09:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233759AbhDIM4P (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Apr 2021 08:56:15 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FB5C061760
-        for <linux-can@vger.kernel.org>; Fri,  9 Apr 2021 05:56:02 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z1so6440363edb.8
-        for <linux-can@vger.kernel.org>; Fri, 09 Apr 2021 05:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=citymesh-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=kvoch3I7dH1Borope1QoU/3kV19MJ6NYyNXR2koLaZQ=;
-        b=Ofh9yB9b3ptIysHXeCvSt4gLfRa231Qv/0DfeDuqTTxOBFD9MXOXA9G8ZA2pCvXW0B
-         WeH58xd9IO7WHPic7gQlGm/WVzBEq/6jqDfVmiGUuRpK4ff6VGB8l8yMTt3LzOB/K2Gv
-         I9HsdkWrkdz3pxf/KaHzFL2md8B/Xsn8eua0KxJA7YRBy9/7dyzBEkkl/4hisspieaVH
-         V6Kxo2ss2p/zUoQigfBaXOm2SfDtm/zVjhMtcwiNpc1EgBtIMBJmgKAQjdYBM64bzKW+
-         +MPS0fbBjETb6fiVb9XXbLU0XYZycarw/5HRkFeqN+tGTkN1tD4hFzbOP+/nP7LELZ86
-         KIMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=kvoch3I7dH1Borope1QoU/3kV19MJ6NYyNXR2koLaZQ=;
-        b=TKTTkwj5imNLdBwWlT1wXX9xN8DFnsG6pk7Iezo/KBfT37T55YYdCZ56nSwpgSw4V7
-         gBrfuTGMCvM4zTvcyVSMsxoTrNatnrz6WpCqm1ao8MLcuUVVuVEUMsOjF4lzVadfs47E
-         9PwQjkj1kOeh+kznibjZgrTk/tYODBq5ajoibDq8mtfCEj7xNS0sghGx1NQIP7DGRZtg
-         tPz86grnFPXWffNscas3ohOhZmBqyXxDmnGG73jB1OXoNRmzxjvVEQzeXfK64/3ETckc
-         EeUlI9vP+uRBEVOjW68Thpzjl+c7qoPaInki43msxsUZftz1A+ANQJBX/fab53rNizCk
-         x5AA==
-X-Gm-Message-State: AOAM532Yad5QGDO52aGWmmU1Bvq4/ANBKPWi5nFaR+rQ3zzxOiPZOXg6
-        UntiokSmGeAWLugKhyza0RBXRQ==
-X-Google-Smtp-Source: ABdhPJxXuyERTLCe84nRJRD0IMXBvhEwcKd1tM/u03fdGXcXchboST8Um+NAuTRcZkFjI3/gpwAaAA==
-X-Received: by 2002:aa7:c683:: with SMTP id n3mr6269330edq.214.1617972960926;
-        Fri, 09 Apr 2021 05:56:00 -0700 (PDT)
-Received: from [10.202.0.7] ([31.31.140.89])
-        by smtp.gmail.com with ESMTPSA id h24sm1217935ejl.9.2021.04.09.05.55.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Apr 2021 05:56:00 -0700 (PDT)
-Subject: Re: flexcan introduced a DIV/0 in kernel
-To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
-Cc:     wg@grandegger.com, netdev@vger.kernel.org, qiangqing.zhang@nxp.com,
+        with ESMTP id S233573AbhDINKT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Apr 2021 09:10:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6C7C061760
+        for <linux-can@vger.kernel.org>; Fri,  9 Apr 2021 06:10:06 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lUqtf-0007oz-Oa; Fri, 09 Apr 2021 15:10:03 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:e35b:267f:b46f:b43f])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 94C7F60B442;
+        Fri,  9 Apr 2021 13:10:02 +0000 (UTC)
+Date:   Fri, 9 Apr 2021 15:10:01 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Koen Vandeputte <koen.vandeputte@citymesh.com>
+Cc:     linux-can@vger.kernel.org, wg@grandegger.com,
+        netdev@vger.kernel.org, qiangqing.zhang@nxp.com,
         gregkh@linuxfoundation.org
+Subject: Re: flexcan introduced a DIV/0 in kernel
+Message-ID: <20210409131001.7r36v2vd3zmceloj@pengutronix.de>
 References: <5bdfcccb-0b02-e46b-eefe-7df215cc9d02@citymesh.com>
  <27f66de1-42bc-38d9-8a1c-7062eb359958@pengutronix.de>
-From:   Koen Vandeputte <koen.vandeputte@citymesh.com>
-Message-ID: <f7ba143a-58c8-811a-876e-d494c4681537@citymesh.com>
-Date:   Fri, 9 Apr 2021 14:55:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <f7ba143a-58c8-811a-876e-d494c4681537@citymesh.com>
 MIME-Version: 1.0
-In-Reply-To: <27f66de1-42bc-38d9-8a1c-7062eb359958@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pir2bzxakkou25dt"
+Content-Disposition: inline
+In-Reply-To: <f7ba143a-58c8-811a-876e-d494c4681537@citymesh.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-On 09.04.21 13:21, Marc Kleine-Budde wrote:
-> On 4/9/21 12:18 PM, Koen Vandeputte wrote:
->> Hi All,
->>
->> I just updated kernel 4.14 within OpenWRT from 4.14.224 to 4.14.229
->> Booting it shows the splat below on each run. [1]
->>
->>
->> It seems there are 2 patches regarding flexcan which were introduced in
->> 4.14.226
->>
->> --> ce59ffca5c49 ("can: flexcan: enable RX FIFO after FRZ/HALT valid")
->> --> bb7c9039a396 ("can: flexcan: assert FRZ bit in flexcan_chip_freeze()")
->>
->> Reverting these fixes the splat.
-> This patch should fix the problem:
->
-> 47c5e474bc1e can: flexcan: flexcan_chip_freeze(): fix chip freeze for missing
-> bitrate
->
-> Greg, can you pick this up for v4.14?
->
-> regards,
-> Marc
->
-Checking kernels 4.4 & 4.9 shows that this fix is also missing over there.
+--pir2bzxakkou25dt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 09.04.2021 14:55:59, Koen Vandeputte wrote:
+>=20
+> On 09.04.21 13:21, Marc Kleine-Budde wrote:
+> > On 4/9/21 12:18 PM, Koen Vandeputte wrote:
+> > > Hi All,
+> > >=20
+> > > I just updated kernel 4.14 within OpenWRT from 4.14.224 to 4.14.229
+> > > Booting it shows the splat below on each run. [1]
+> > >=20
+> > >=20
+> > > It seems there are 2 patches regarding flexcan which were introduced =
+in
+> > > 4.14.226
+> > >=20
+> > > --> ce59ffca5c49 ("can: flexcan: enable RX FIFO after FRZ/HALT valid")
+> > > --> bb7c9039a396 ("can: flexcan: assert FRZ bit in flexcan_chip_freez=
+e()")
+> > >=20
+> > > Reverting these fixes the splat.
+> > This patch should fix the problem:
+> >=20
+> > 47c5e474bc1e can: flexcan: flexcan_chip_freeze(): fix chip freeze for m=
+issing
+> > bitrate
+> >=20
+> > Greg, can you pick this up for v4.14?
+> >=20
+> > regards,
+> > Marc
+> >=20
+> Checking kernels 4.4 & 4.9 shows that this fix is also missing over there.
+>=20
+> Marc,
+> Can you confirm that it's also required for these?
 
-Marc,
+ACK, the fix is needed for v4.4.265 and v4.9.265.
 
-Can you confirm that it's also required for these?
+Thanks for checking this,
+Marc
 
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Thanks,
+--pir2bzxakkou25dt
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Koen
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmBwUicACgkQqclaivrt
+76ntwgf/ZszwewI5LFOBytekzBJRkx1XzpPw7/eqSfQjC/Hg2qjHyVlZYgVwx53n
+cVAUQh6x1pWBfut0/wsMO9K2ce3YB0cy64M9+uB2EBhe80lzYiwDFyCKisYoJWso
+gStj3vor1qgLJo7z0YtX3c4bs4jgSwxxC5slfYlat3S/DYiArBKF9rc1Aw/3jb9q
+F5dckmL8LYhkldEmoSpMgq2LxBPw7aONKRWYKUUw15MArHQcDtGjqMan7F0UImbq
+Z+t3UA2O8cA3xoLK6Ln1qc6nstlkByo1uwA6RNH9+NDO2uOLf64iXZTgexAFoZ/+
+K5Fg4Ok1PcEyZP6G+kfJHpNRzPURog==
+=kRSP
+-----END PGP SIGNATURE-----
+
+--pir2bzxakkou25dt--
