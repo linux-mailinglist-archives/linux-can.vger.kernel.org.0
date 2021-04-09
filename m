@@ -2,294 +2,156 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5780B359489
-	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 07:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CEC359BD4
+	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 12:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbhDIFbV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Apr 2021 01:31:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44124 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229715AbhDIFbU (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 9 Apr 2021 01:31:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1617946267; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dUyZP7P4xA+xPzX2ba0l8kT9zCH9NJ6E9eFzEIksaXQ=;
-        b=QlH7AvwABeg+r4h+GIi/sUzv+gfX5X1Ye35qtMKCLXqeNhnf4kMPyCap2FTjWVdnVX50Nz
-        SxpRHir+TKZjOill5k2vhP9mUm60SSNoUTwyFhr/X69sKYL/V7ayyiG9gWbs1S5FK41Br6
-        /JJX5+Ej++b148S8PdcfYqHEf7xE90Q=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id E7376B01C;
-        Fri,  9 Apr 2021 05:31:06 +0000 (UTC)
-To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     olteanv@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andriin@fb.com, edumazet@google.com, weiwan@google.com,
-        cong.wang@bytedance.com, ap420073@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@openeuler.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
-        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
-        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
-        a.fatoum@pengutronix.de, atenart@kernel.org,
-        alexander.duyck@gmail.com, Jiri Kosina <JKosina@suse.com>
-References: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH net v3] net: sched: fix packet stuck problem for lockless
- qdisc
-Message-ID: <eb0e44fe-bbe0-75ba-fd16-cbf4638e1c0d@suse.com>
-Date:   Fri, 9 Apr 2021 07:31:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S233083AbhDIKTG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 9 Apr 2021 06:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233935AbhDIKS6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Apr 2021 06:18:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C233C061762
+        for <linux-can@vger.kernel.org>; Fri,  9 Apr 2021 03:18:06 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id w3so7810987ejc.4
+        for <linux-can@vger.kernel.org>; Fri, 09 Apr 2021 03:18:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=citymesh-com.20150623.gappssmtp.com; s=20150623;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=AW1PpfcK7MwvMsDjoYmu8WfsrnQvu6Qs1xn0wuK0qwM=;
+        b=wt6sFNaiRA0wNiGvf7TZOB9KYeduhgvYfqBadVynt8UXV72DyRbztFyme7BnCSUAgp
+         HKx4ISrNLgm46F9sV/BNJOknVt+tinWPDdhQ3n1LHit4dsdvPvc5BKiif7xl8m2/ZHZJ
+         UfEYStGLeOxlOBhHzpKr3WrJCVhVMYe0p01CIlSdemIWBDs8JSu4lPo91WEGRFLD4MZR
+         yLv7fdUlS9qmEg/B/oij76Dl37AsPTg4M+s+e4uJqZKBN8lSpu58O2tOr7NpUOeHY2wg
+         xDUzqkadqEsB8moG0YuYDHxZR5lEtb2j6FTUYLbgSxwwm5j3iDMfDwxh5C9zJA8SbeQK
+         owGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=AW1PpfcK7MwvMsDjoYmu8WfsrnQvu6Qs1xn0wuK0qwM=;
+        b=ttp4xIr35TGrQ/ulaX0qXl7PcnwihBYv42fPlZKjLAHnHGf41gzCj53Br+J3GtadRT
+         VTZ7mOVOENHqHhvBhUA3V39bKFGZMeOr806hassfpJ/RC0Xp6xvG3VZ1AQ5O+o3T3NbO
+         QmogBJURdwrpgIaj9fPyeXvod9beCUsDxvcmzyY6OkgUjroftpuDoqo5TazGUYMUkLCa
+         F33rzmeGL/XUIQuFKpKhniE8eUDnHsXV+rVvUF8WTjLR+xubQmW/0Qu+cVUJUH+m7ahF
+         k1iJ598zEHRZ127ZnwkvwGnfUP5odwcAGTgD5fDdM3pMEh9QMuwT7J1r4ZiRTU3a1scz
+         /twQ==
+X-Gm-Message-State: AOAM5318ELnP1otOt1EeFxYsUgVPvHdJ9v4HxAW50ggf5/P1aPq37Zw2
+        14E7xRf4bhENwo1X0QWvq5Dz0GoH6Pxe3zV/
+X-Google-Smtp-Source: ABdhPJwVFYtqchj8BJAJ+q5ocY2t3TvldNkA7qyqxxwrOzddos79dpbdMN3OsF0mhwX2+ueddo709w==
+X-Received: by 2002:a17:906:1986:: with SMTP id g6mr15300113ejd.533.1617963484873;
+        Fri, 09 Apr 2021 03:18:04 -0700 (PDT)
+Received: from [10.202.0.7] ([31.31.140.89])
+        by smtp.gmail.com with ESMTPSA id qk3sm1007985ejb.22.2021.04.09.03.18.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Apr 2021 03:18:04 -0700 (PDT)
+To:     linux-can@vger.kernel.org
+Cc:     wg@grandegger.com, mkl@pengutronix.de, netdev@vger.kernel.org,
+        qiangqing.zhang@nxp.com, gregkh@linuxfoundation.org
+From:   Koen Vandeputte <koen.vandeputte@citymesh.com>
+Subject: flexcan introduced a DIV/0 in kernel
+Message-ID: <5bdfcccb-0b02-e46b-eefe-7df215cc9d02@citymesh.com>
+Date:   Fri, 9 Apr 2021 12:18:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="KNfSBDESab9zDoXGXKJSsQrdHG9FC4fMd"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---KNfSBDESab9zDoXGXKJSsQrdHG9FC4fMd
-Content-Type: multipart/mixed; boundary="LSz7PCDIMfnx6xL5FBKNaZUVKlHLEdp1Z";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
- kuba@kernel.org
-Cc: olteanv@gmail.com, ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
- edumazet@google.com, weiwan@google.com, cong.wang@bytedance.com,
- ap420073@gmail.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linuxarm@openeuler.org, mkl@pengutronix.de, linux-can@vger.kernel.org,
- jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
- andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
- john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
- jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
- johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
- a.fatoum@pengutronix.de, atenart@kernel.org, alexander.duyck@gmail.com,
- Jiri Kosina <JKosina@suse.com>
-Message-ID: <eb0e44fe-bbe0-75ba-fd16-cbf4638e1c0d@suse.com>
-Subject: Re: [PATCH net v3] net: sched: fix packet stuck problem for lockless
- qdisc
-References: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
-In-Reply-To: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
+Hi All,
 
---LSz7PCDIMfnx6xL5FBKNaZUVKlHLEdp1Z
-Content-Type: multipart/mixed;
- boundary="------------CDB4D2BA5B7A94706A1D1B2A"
-Content-Language: en-US
-
-This is a multi-part message in MIME format.
---------------CDB4D2BA5B7A94706A1D1B2A
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-
-On 25.03.21 04:13, Yunsheng Lin wrote:
-> Lockless qdisc has below concurrent problem:
->      cpu0                 cpu1
->       .                     .
-> q->enqueue                 .
->       .                     .
-> qdisc_run_begin()          .
->       .                     .
-> dequeue_skb()              .
->       .                     .
-> sch_direct_xmit()          .
->       .                     .
->       .                q->enqueue
->       .             qdisc_run_begin()
->       .            return and do nothing
->       .                     .
-> qdisc_run_end()            .
->=20
-> cpu1 enqueue a skb without calling __qdisc_run() because cpu0
-> has not released the lock yet and spin_trylock() return false
-> for cpu1 in qdisc_run_begin(), and cpu0 do not see the skb
-> enqueued by cpu1 when calling dequeue_skb() because cpu1 may
-> enqueue the skb after cpu0 calling dequeue_skb() and before
-> cpu0 calling qdisc_run_end().
->=20
-> Lockless qdisc has below another concurrent problem when
-> tx_action is involved:
->=20
-> cpu0(serving tx_action)     cpu1             cpu2
->            .                   .                .
->            .              q->enqueue            .
->            .            qdisc_run_begin()       .
->            .              dequeue_skb()         .
->            .                   .            q->enqueue
->            .                   .                .
->            .             sch_direct_xmit()      .
->            .                   .         qdisc_run_begin()
->            .                   .       return and do nothing
->            .                   .                .
->   clear __QDISC_STATE_SCHED    .                .
->   qdisc_run_begin()            .                .
->   return and do nothing        .                .
->            .                   .                .
->            .            qdisc_run_end()         .
->=20
-> This patch fixes the above data race by:
-> 1. Get the flag before doing spin_trylock().
-> 2. If the first spin_trylock() return false and the flag is not
->     set before the first spin_trylock(), Set the flag and retry
->     another spin_trylock() in case other CPU may not see the new
->     flag after it releases the lock.
-> 3. reschedule if the flags is set after the lock is released
->     at the end of qdisc_run_end().
->=20
-> For tx_action case, the flags is also set when cpu1 is at the
-> end if qdisc_run_end(), so tx_action will be rescheduled
-> again to dequeue the skb enqueued by cpu2.
->=20
-> Only clear the flag before retrying a dequeuing when dequeuing
-> returns NULL in order to reduce the overhead of the above double
-> spin_trylock() and __netif_schedule() calling.
->=20
-> The performance impact of this patch, tested using pktgen and
-> dummy netdev with pfifo_fast qdisc attached:
->=20
->   threads  without+this_patch   with+this_patch      delta
->      1        2.61Mpps            2.60Mpps           -0.3%
->      2        3.97Mpps            3.82Mpps           -3.7%
->      4        5.62Mpps            5.59Mpps           -0.5%
->      8        2.78Mpps            2.77Mpps           -0.3%
->     16        2.22Mpps            2.22Mpps           -0.0%
->=20
-> Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-
-I have a setup which is able to reproduce the issue quite reliably:
-
-In a Xen guest I'm mounting 8 NFS shares and run sysbench fileio on
-each of them. The average latency reported by sysbench is well below
-1 msec, but at least once per hour I get latencies in the minute
-range.
-
-With this patch I don't see these high latencies any longer (test
-is running for more than 20 hours now).
-
-So you can add my:
-
-Tested-by: Juergen Gross <jgross@suse.com>
+I just updated kernel 4.14 within OpenWRT from 4.14.224 to 4.14.229
+Booting it shows the splat below on each run. [1]
 
 
-Juergen
+It seems there are 2 patches regarding flexcan which were introduced in 
+4.14.226
 
---------------CDB4D2BA5B7A94706A1D1B2A
-Content-Type: application/pgp-keys;
- name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+--> ce59ffca5c49 ("can: flexcan: enable RX FIFO after FRZ/HALT valid")
+--> bb7c9039a396 ("can: flexcan: assert FRZ bit in flexcan_chip_freeze()")
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Reverting these fixes the splat.
 
-xsBNBFOMcBYBCACgGjqjoGvbEouQZw/ToiBg9W98AlM2QHV+iNHsEs7kxWhKMjrioyspZKOBy=
-cWx
-w3ie3j9uvg9EOB3aN4xiTv4qbnGiTr3oJhkB1gsb6ToJQZ8uxGq2kaV2KL9650I1SJvedYm8O=
-f8Z
-d621lSmoKOwlNClALZNew72NjJLEzTalU1OdT7/i1TXkH09XSSI8mEQ/ouNcMvIJNwQpd369y=
-9bf
-IhWUiVXEK7MlRgUG6MvIj6Y3Am/BBLUVbDa4+gmzDC9ezlZkTZG2t14zWPvxXP3FAp2pkW0xq=
-G7/
-377qptDmrk42GlSKN4z76ELnLxussxc7I2hx18NUcbP8+uty4bMxABEBAAHNHEp1ZXJnZW4gR=
-3Jv
-c3MgPGpnQHBmdXBmLm5ldD7CwHkEEwECACMFAlOMcBYCGwMHCwkIBwMCAQYVCAIJCgsEFgIDA=
-QIe
-AQIXgAAKCRCw3p3WKL8TL0KdB/93FcIZ3GCNwFU0u3EjNbNjmXBKDY4FUGNQH2lvWAUy+dnyT=
-hpw
-dtF/jQ6j9RwE8VP0+NXcYpGJDWlNb9/JmYqLiX2Q3TyevpB0CA3dbBQp0OW0fgCetToGIQrg0=
-MbD
-1C/sEOv8Mr4NAfbauXjZlvTj30H2jO0u+6WGM6nHwbh2l5O8ZiHkH32iaSTfN7Eu5RnNVUJbv=
-oPH
-Z8SlM4KWm8rG+lIkGurqqu5gu8q8ZMKdsdGC4bBxdQKDKHEFExLJK/nRPFmAuGlId1E3fe10v=
-5QL
-+qHI3EIPtyfE7i9Hz6rVwi7lWKgh7pe0ZvatAudZ+JNIlBKptb64FaiIOAWDCx1SzR9KdWVyZ=
-2Vu
-IEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+wsB5BBMBAgAjBQJTjHCvAhsDBwsJCAcDAgEGFQgCC=
-QoL
-BBYCAwECHgECF4AACgkQsN6d1ii/Ey/HmQf/RtI7kv5A2PS4RF7HoZhPVPogNVbC4YA6lW7Dr=
-Wf0
-teC0RR3MzXfy6pJ+7KLgkqMlrAbN/8Dvjoz78X+5vhH/rDLa9BuZQlhFmvcGtCF8eR0T1v0nC=
-/nu
-AFVGy+67q2DH8As3KPu0344TBDpAvr2uYM4tSqxK4DURx5INz4ZZ0WNFHcqsfvlGJALDeE0Lh=
-ITT
-d9jLzdDad1pQSToCnLl6SBJZjDOX9QQcyUigZFtCXFst4dlsvddrxyqT1f17+2cFSdu7+ynLm=
-XBK
-7abQ3rwJY8SbRO2iRulogc5vr/RLMMlscDAiDkaFQWLoqHHOdfO9rURssHNN8WkMnQfvUewRz=
-80h
-SnVlcmdlbiBHcm9zcyA8amdyb3NzQG5vdmVsbC5jb20+wsB5BBMBAgAjBQJTjHDXAhsDBwsJC=
-AcD
-AgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey8PUQf/ehmgCI9jB9hlgexLvgOtf7PJn=
-FOX
-gMLdBQgBlVPO3/D9R8LtF9DBAFPNhlrsfIG/SqICoRCqUcJ96Pn3P7UUinFG/I0ECGF4EvTE1=
-jnD
-kfJZr6jrbjgyoZHiw/4BNwSTL9rWASyLgqlA8u1mf+c2yUwcGhgkRAd1gOwungxcwzwqgljf0=
-N51
-N5JfVRHRtyfwq/ge+YEkDGcTU6Y0sPOuj4Dyfm8fJzdfHNQsWq3PnczLVELStJNdapwPOoE+l=
-otu
-fe3AM2vAEYJ9rTz3Cki4JFUsgLkHFqGZarrPGi1eyQcXeluldO3m91NK/1xMI3/+8jbO0tsn1=
-tqS
-EUGIJi7ox80eSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuZGU+wsB5BBMBAgAjBQJTjHDrA=
-hsD
-BwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQsN6d1ii/Ey+LhQf9GL45eU5vOowA2u5N3=
-g3O
-ZUEBmDHVVbqMtzwlmNC4k9Kx39r5s2vcFl4tXqW7g9/ViXYuiDXb0RfUpZiIUW89siKrkzmQ5=
-dM7
-wRqzgJpJwK8Bn2MIxAKArekWpiCKvBOB/Cc+3EXE78XdlxLyOi/NrmSGRIov0karw2RzMNOu5=
-D+j
-LRZQd1Sv27AR+IP3I8U4aqnhLpwhK7MEy9oCILlgZ1QZe49kpcumcZKORmzBTNh30FVKK1Evm=
-V2x
-AKDoaEOgQB4iFQLhJCdP1I5aSgM5IVFdn7v5YgEYuJYx37IoN1EblHI//x/e2AaIHpzK5h88N=
-Eaw
-QsaNRpNSrcfbFmAg987ATQRTjHAWAQgAyzH6AOODMBjgfWE9VeCgsrwH3exNAU32gLq2xvjpW=
-nHI
-s98ndPUDpnoxWQugJ6MpMncr0xSwFmHEgnSEjK/PAjppgmyc57BwKII3sV4on+gDVFJR6Y8ZR=
-wgn
-BC5mVM6JjQ5xDk8WRXljExRfUX9pNhdE5eBOZJrDRoLUmmjDtKzWaDhIg/+1Hzz93X4fCQkNV=
-bVF
-LELU9bMaLPBG/x5q4iYZ2k2ex6d47YE1ZFdMm6YBYMOljGkZKwYde5ldM9mo45mmwe0icXKLk=
-pEd
-IXKTZeKDO+Hdv1aqFuAcccTg9RXDQjmwhC3yEmrmcfl0+rPghO0Iv3OOImwTEe4co3c1mwARA=
-QAB
-wsBfBBgBAgAJBQJTjHAWAhsMAAoJELDendYovxMvQ/gH/1ha96vm4P/L+bQpJwrZ/dneZcmEw=
-Tbe
-8YFsw2V/Buv6Z4Mysln3nQK5ZadD534CF7TDVft7fC4tU4PONxF5D+/tvgkPfDAfF77zy2AH1=
-vJz
-Q1fOU8lYFpZXTXIHb+559UqvIB8AdgR3SAJGHHt4RKA0F7f5ipYBBrC6cyXJyyoprT10EMvU8=
-VGi
-wXvTyJz3fjoYsdFzpWPlJEBRMedCot60g5dmbdrZ5DWClAr0yau47zpWj3enf1tLWaqcsuylW=
-svi
-uGjKGw7KHQd3bxALOknAp4dN3QwBYCKuZ7AddY9yjynVaD5X7nF9nO5BjR/i1DG86lem3iBDX=
-zXs
-ZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Hope this helps,
 
---------------CDB4D2BA5B7A94706A1D1B2A--
+Koen
 
---LSz7PCDIMfnx6xL5FBKNaZUVKlHLEdp1Z--
 
---KNfSBDESab9zDoXGXKJSsQrdHG9FC4fMd
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
------BEGIN PGP SIGNATURE-----
+[1]
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmBv5pcFAwAAAAAACgkQsN6d1ii/Ey+U
-WQf/dvUZrKhZVIiZyvAc888M6ZYmJE5fOb/Cm0XkTJe0TiBSy6Q3HejzXgO+yFIWWKlb8VJ2s48N
-Ei0XoRMl9wi1ORkrAc/NBi6GqvPRVP0rdCgZ8JbjyP11XSWSrii/H+VAgxLHckSmizh9Inf5SvLl
-eWwcQ/cCOLicSNSEkbUAq+VVontel2FA9M4sVeSOyjkb9f3+Y8E8BkfPsTtuugTjtebQL4p3kFjz
-fBCIdP9CFVzHbRTw6XH9Xp9mRv5TDcNyp811nVFy9kgYv9oAbJXzd1WCbMSCrIGLC4drvUxoYswq
-RnSTgsBV72NTulgyo4T19cwWD1HDYS+D+R7mLLCr9w==
-=Pnqx
------END PGP SIGNATURE-----
+[   10.062140] flexcan 2090000.flexcan: 2090000.flexcan supply xceiver 
+not found, using dummy regulator
+[   10.071631] Division by zero in kernel.
+[   10.075511] CPU: 0 PID: 1061 Comm: kmodloader Not tainted 4.14.229 #0
+[   10.081981] Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+[   10.088529] Backtrace:
+[   10.091040] [<8010ba30>] (dump_backtrace) from [<8010bdd4>] 
+(show_stack+0x18/0x1c)
+[   10.098631]  r7:9f5edc10 r6:60000013 r5:00000000 r4:80932c88
+[   10.104336] [<8010bdbc>] (show_stack) from [<8063f8e0>] 
+(dump_stack+0x9c/0xb0)
+[   10.111591] [<8063f844>] (dump_stack) from [<8010bb90>] 
+(__div0+0x1c/0x20)
+[   10.118491]  r7:9f5edc10 r6:a0f0c000 r5:9ea3fd40 r4:9ea3f800
+[   10.124199] [<8010bb74>] (__div0) from [<8063de94>] (Ldiv0+0x8/0x10)
+[   10.130611] [<7f32b334>] (flexcan_mailbox_read [flexcan]) from 
+[<7f32c480>] (flexcan_probe+0x360/0x468 [flexcan])
+[   10.140902]  r7:9f5edc10 r6:a0f0c000 r5:9ea3fd40 r4:9ea3f800
+[   10.146608] [<7f32c120>] (flexcan_probe [flexcan]) from [<8040f384>] 
+(platform_drv_probe+0x60/0xb4)
+[   10.155698]  r10:80903c08 r9:00000000 r8:0000000d r7:fffffdfb 
+r6:7f32e014 r5:fffffffe
+[   10.163562]  r4:9f5edc10
+[   10.166117] [<8040f324>] (platform_drv_probe) from [<8040db78>] 
+(driver_probe_device+0x154/0x2ec)
+[   10.175012]  r7:7f32e014 r6:00000000 r5:9f5edc10 r4:80964928
+[   10.180720] [<8040da24>] (driver_probe_device) from [<8040dd98>] 
+(__driver_attach+0x88/0xac)
+[   10.189195]  r9:7f32e080 r8:014000c0 r7:00000000 r6:9f5edc44 
+r5:7f32e014 r4:9f5edc10
+[   10.196985] [<8040dd10>] (__driver_attach) from [<8040bfc0>] 
+(bus_for_each_dev+0x54/0xa8)
+[   10.205199]  r7:00000000 r6:8040dd10 r5:7f32e014 r4:00000000
+[   10.210891] [<8040bf6c>] (bus_for_each_dev) from [<8040d4ac>] 
+(driver_attach+0x24/0x28)
+[   10.218912]  r6:9e41e880 r5:8091b340 r4:7f32e014
+[   10.223559] [<8040d488>] (driver_attach) from [<8040d0a0>] 
+(bus_add_driver+0xf4/0x204)
+[   10.231529] [<8040cfac>] (bus_add_driver) from [<8040e4e8>] 
+(driver_register+0xb0/0xec)
+[   10.239574]  r7:7f331000 r6:00000000 r5:ffffe000 r4:7f32e014
+[   10.245266] [<8040e438>] (driver_register) from [<8040f2d4>] 
+(__platform_driver_register+0x48/0x50)
+[   10.254332]  r5:ffffe000 r4:80903c08
+[   10.257953] [<8040f28c>] (__platform_driver_register) from 
+[<7f331020>] (init_module+0x20/0x1000 [flexcan])
+[   10.267729] [<7f331000>] (init_module [flexcan]) from [<80101a1c>] 
+(do_one_initcall+0xc4/0x188)
+[   10.276490] [<80101958>] (do_one_initcall) from [<80192458>] 
+(do_init_module+0x68/0x204)
+[   10.284615]  r9:7f32e080 r8:014000c0 r7:00000000 r6:9e48b640 
+r5:9e4af000 r4:7f32e080
+[   10.292389] [<801923f0>] (do_init_module) from [<801944b4>] 
+(load_module+0x1e1c/0x220c)
+[   10.300441]  r7:00000000 r6:9e4af1a8 r5:9e4af000 r4:9e8f3f30
+[   10.306158] [<80192698>] (load_module) from [<80194a00>] 
+(SyS_init_module+0x15c/0x17c)
+[   10.314110]  r10:00000051 r9:000128ce r8:ffffe000 r7:001e545c 
+r6:00000000 r5:a0f0945c
+[   10.321957]  r4:0000345c
+[   10.324541] [<801948a4>] (SyS_init_module) from [<801079e0>] 
+(ret_fast_syscall+0x0/0x54)
+[   10.332663]  r10:00000080 r9:9e8f2000 r8:80107be4 r7:00000080 
+r6:00000003 r5:00000000
+[   10.340511]  r4:00000000
+[   10.344089] flexcan 2090000.flexcan: device registered 
+(reg_base=a0f0c000, irq=33)
 
---KNfSBDESab9zDoXGXKJSsQrdHG9FC4fMd--
+
