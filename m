@@ -2,134 +2,202 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8553E35A02B
-	for <lists+linux-can@lfdr.de>; Fri,  9 Apr 2021 15:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D553D35AC9D
+	for <lists+linux-can@lfdr.de>; Sat, 10 Apr 2021 12:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233832AbhDINmK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 9 Apr 2021 09:42:10 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:52444 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbhDINmD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 9 Apr 2021 09:42:03 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 139Dfbol029329;
-        Fri, 9 Apr 2021 08:41:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1617975697;
-        bh=yzQFMlEvLc1NJ8+6qQzAMS/IJa1/2LrIrpQLN6vAeQU=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=UNQR6TKCVjkHc2LapYnv+gSYZDa9D7jgM4msj9gaN4CbCbyhk70VjclQuaPZ27NTK
-         dO4M2i4au2NgZaIC+aksBNFvCZq2NCDdC13YvOL8Lh0I5CSU8dyfplbQVb11I3YiKZ
-         ZVVVF9vzfQ55HLYEixq0dNtSgTG3w9PjhNOwd+Ho=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 139DfbJF116872
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 9 Apr 2021 08:41:37 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 9 Apr
- 2021 08:41:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 9 Apr 2021 08:41:36 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 139Dewmd029277;
-        Fri, 9 Apr 2021 08:41:31 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Subject: [PATCH 4/4] can: m_can_platform: Add support for transceiver as phy
-Date:   Fri, 9 Apr 2021 19:10:54 +0530
-Message-ID: <20210409134056.18740-5-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210409134056.18740-1-a-govindraju@ti.com>
-References: <20210409134056.18740-1-a-govindraju@ti.com>
+        id S234306AbhDJKAu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 10 Apr 2021 06:00:50 -0400
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:25659 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229632AbhDJKAt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 10 Apr 2021 06:00:49 -0400
+Received: from localhost.localdomain ([153.202.107.157])
+        by mwinf5d06 with ME
+        id qy0H2400Q3PnFJp03y0W2D; Sat, 10 Apr 2021 12:00:33 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 10 Apr 2021 12:00:33 +0200
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Jimmy Assarsson <extja@kvaser.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v15 0/3] Introducing ETAS ES58X CAN USB interfaces
+Date:   Sat, 10 Apr 2021 18:59:45 +0900
+Message-Id: <20210410095948.233305-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Faiz Abbas <faiz_abbas@ti.com>
+Here comes the 15th iteration of the patch. This new version addresses
+the comments received from Marc (thanks again for the review!) and
+simplify the device probing by using .driver_info.
 
-Add support for implementing transceiver node as phy. The max_bitrate is
-obtained by getting a phy attribute.
+** Changelog **
 
-Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
- drivers/net/can/m_can/m_can_platform.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Changes in v15 (2021-04-10):
+  - Use of .driver_info to keep track of each device quirks (c.f. enum
+    es58x_driver_info).
+  - Replace es58x_netdev_queue_set_dql_min_limit() by
+    netdev_queue_set_dql_min_limit() which was recently added in
+    net-next.
+  - es58x_start_xmit: remove the recursive call.
+  - es58x_start_xmit: remove the memset zero of the urb
+    transfer_buffer in es58x_xmit(). Adjust the
+    es58{1_4,x_fd}_tx_can_msg() glue code accordingly to make sure
+    that all relevant fields are correctly initialised.
+  - es58x_start_xmit: directly update tx_head each time a packet is
+    queued in can.echo_skb[].
+  - Remove es58x_set_bittiming() and es58x_set_data_bittiming(). The
+    bittiming is now set when opening the channel.
+  - Shutdown the channel when a bus off event occurs. Remove the
+    es58x_reset() function which is not needed anymore after this
+    change.
+  - Cleanup of the {net,}dev_dbg() calls to make the driver less
+    verbose.
+  - Modify es58x_open(), es58x_close() and es58x_probe() in order to
+    release driver resources as much as possible when all the network
+    interfaces of the device are down.
+  - Other trivial changes (c.f. below link for details)
+Reference: https://lore.kernel.org/linux-can/20210321104103.213308-1-mailhol.vincent@wanadoo.fr/T/#m8ca804e9f53584b79acd236602403d5b82db1e6c
 
-diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_can/m_can_platform.c
-index 599de0e08cd7..4a762b5a21d8 100644
---- a/drivers/net/can/m_can/m_can_platform.c
-+++ b/drivers/net/can/m_can/m_can_platform.c
-@@ -6,6 +6,7 @@
- // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.com/
- 
- #include <linux/platform_device.h>
-+#include <linux/phy/phy.h>
- 
- #include "m_can.h"
- 
-@@ -67,7 +68,9 @@ static int m_can_plat_probe(struct platform_device *pdev)
- 	struct resource *res;
- 	void __iomem *addr;
- 	void __iomem *mram_addr;
-+	struct phy *transceiver;
- 	int irq, ret = 0;
-+	u32 bitrate_max;
- 
- 	mcan_class = m_can_class_allocate_dev(&pdev->dev,
- 					      sizeof(struct m_can_plat_priv));
-@@ -101,6 +104,28 @@ static int m_can_plat_probe(struct platform_device *pdev)
- 		goto probe_fail;
- 	}
- 
-+	transceiver = devm_phy_optional_get(&pdev->dev, "can_transceiver");
-+	if (IS_ERR(transceiver)) {
-+		ret = PTR_ERR(transceiver);
-+		dev_err(&pdev->dev, "error while getting phy, err=%d\n", ret);
-+		return ret;
-+	}
-+
-+	if (!transceiver) {
-+		dev_warn(&pdev->dev, "No transceiver phy found\n");
-+	} else {
-+		ret = phy_power_on(transceiver);
-+		if (ret) {
-+			dev_err(&pdev->dev, "error powering on phy, err=%d\n", ret);
-+			return ret;
-+		}
-+		/* converting from Mbps to bps */
-+		bitrate_max = (transceiver->attrs.max_link_rate) * 1000000;
-+		if (!bitrate_max)
-+			dev_warn(&pdev->dev, "Invalid value for transceiver max bitrate. Ignoring bitrate limit\n");
-+		priv->cdev.can.bitrate_max = bitrate_max;
-+	}
-+
- 	priv->base = addr;
- 	priv->mram_base = mram_addr;
- 
+Changes in v14 (2021-03-21):
+  - Rework the split into core support, es581_4, es58x_fd (cosmetic
+    change) so that es581_4.h and es58x_fd.h headers can be added in
+    one block.
+  - Add a fourth patch to introduce a helper function
+    es58x_netdev_queue_set_dql_min_limit() to set up dql minimum limit
+    (in parallel, I will try to have this merged in the network device
+    header)
+  - Remove unused function es58x_add_skb_idx(): leftover from the old
+    FIFO logic, should have been removed in v11.
+  - Fix memory leak in es58x_get_product_info(): buffer was not freed
+    in case of error in usb_sting().
+  - s/loopback/echo and s/self reception/echo: in the driver the terms
+    "loopback, self reception, and echo" were all used to designated
+    the same thing. Renamed structures, variables and comments
+    accordingly to make it more consistent.
+  - Remove CAN_CTRLMODE_LOOPBACK. The driver never supported this
+    feature. It was added due to a confusion with the echo skb.
+  - Use the new can_free_echo_skb() which return the frame_len.
+  - Do the statistics handling in es58x_rx_err_msg() even if kalloc()
+    fails.
+  - Replace array es58x_cmd_ret_desc[] by helper function
+    es58x_cmd_ret_desc().
+  - Other trivial changes (c.f. below link for details)
+Reference: https://lore.kernel.org/linux-can/50850e5f-87c6-505e-4398-babce3facb97@pengutronix.de/T/#mbcace9c13b19a504cd28d81591f983b95eb66657
+
+Changes in v13 (2021-03-19 by Marc Kleine-Budde):
+  - split the driver into 3 patches, so that it can be send via
+    mailing lists (core support, es581_4, es58x_fd)
+  - Remove the dql.min_limit settings
+  - typo and kernel doc fixes
+Reference: https://lore.kernel.org/linux-can/50850e5f-87c6-505e-4398-babce3facb97@pengutronix.de/T/#t
+
+Changes in v12 (2021-03-09):
+  - Rework the queue stop/wake management so that spinlocks are not
+    needed anymore.
+  - es58x_start_xmit(): check for valid SKB using
+    can_dropped_invalid_skb().
+  - Implemented TDC according to latest patches in linux-can-next.
+Reference: https://lore.kernel.org/linux-can/20210224002008.4158-1-mailhol.vincent@wanadoo.fr/T/#t
+
+Changes in v11 (2021-01-23):
+  - Remove all WARN_ON() calls: these were use during development,
+    relevant tests are done not to trigger these.
+  - es58x_start_xmit(): added net_ratelimit() condition to prevent
+    spamming dmesg.
+  - add a new es58x_xmit_more() function and simplify the code of
+    es58x_start_xmit().
+  - Removed functions {es581_4,es58x_fd}_print_conf() which were only
+    there for debug.
+  - Additional comment for es58x_fd_param.bitrate_max.
+  - Make the device FIFO size a power of two and modify the echo_skb
+    indexes logic to prevent the use of spinlocks.
+
+Changes in v10 (2021-01-12):
+  - Rebased on linux-can-next/testing and modified according to latest
+    BQL patches.
+Reference: https://lore.kernel.org/linux-can/20210111141930.693847-1-mkl@pengutronix.de/T/#m5f99d4da8e8934a75f9481ecc3137b59f3762413
+  - Replaced __netdev_sent_queue() by netdev_sent_queue().
+
+Changes in v9 (2021-01-09):
+  - es58x_start_xmit(): do not use skb anymore after the call of
+    can_put_echo_skb(). Rationale: can_put_echo_skb() calls
+    skb_clone() and thus the original skb gets consumed (i.e. use
+    after free issue).
+  - es58x_start_xmit(): Add a "drop_skb" label to free the skb when
+    errors occur.
+
+Changes in v8 (2021-01-04):
+  - The driver requires CRC16. Modified Kconfig accordingly.
+
+Changes in v7 (2020-11-17):
+  - Fix compilation issue if CONFIG_BQL is not set.
+Reference: https://lkml.org/lkml/2020/11/15/163
+
+Changes in v6 (2020-11-15):
+  - Rebase the patch on the testing branch of linux-can-next.
+  - Rename the helper functions according latest changes
+    (e.g. can_cc_get_len() -> can_cc_dlc2len())
+  - Fix comments of enum es58x_physical_layer and enum
+    es58x_sync_edge.
+
+Changes in v5 (2020-11-07):
+  - Add support for DLC greater than 8.
+  - All other patches from the previous series were either accepted or
+    dismissed. As such, this is not a series any more but a single
+    patch.
+
+Changes in v4 (2020-10-17):
+  - Remove struct es58x_abstracted_can_frame.
+  - Fix formatting (spaces, comment style).
+  - Transform macros into static inline functions when possible.
+  - Fix the ctrlmode_supported flags in es581_4.c and removed
+    misleading comments in enum es58x_samples_per_bit.
+  - Rename enums according to the type.
+  - Remove function es58x_can_put_echo_skb().
+Reference: https://lkml.org/lkml/2020/10/10/53
+
+Changes in v3 (2020-10-03):
+  - Remove all the calls to likely() and unlikely().
+Reference: https://lkml.org/lkml/2020/9/30/995
+
+Changes in v2 (2020-09-30):
+  - Fixed -W1 warnings (v1 was tested with GCC -WExtra but not with -W1).
+
+v1 (2020-09-27):
+  - First release
+
+Vincent Mailhol (3):
+  can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces
+  can: etas_es58x: add support for ETAS ES581.4 CAN USB interface
+  can: etas_es58x: add support for the ETAS ES58X_FD CAN USB interfaces
+
+ drivers/net/can/usb/Kconfig                 |   10 +
+ drivers/net/can/usb/Makefile                |    1 +
+ drivers/net/can/usb/etas_es58x/Makefile     |    3 +
+ drivers/net/can/usb/etas_es58x/es581_4.c    |  507 ++++
+ drivers/net/can/usb/etas_es58x/es581_4.h    |  207 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 2301 +++++++++++++++++++
+ drivers/net/can/usb/etas_es58x/es58x_core.h |  700 ++++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.c   |  562 +++++
+ drivers/net/can/usb/etas_es58x/es58x_fd.h   |  243 ++
+ 9 files changed, 4534 insertions(+)
+ create mode 100644 drivers/net/can/usb/etas_es58x/Makefile
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es581_4.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_core.h
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.c
+ create mode 100644 drivers/net/can/usb/etas_es58x/es58x_fd.h
+
 -- 
-2.17.1
+2.26.3
 
