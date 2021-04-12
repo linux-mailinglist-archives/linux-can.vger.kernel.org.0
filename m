@@ -2,27 +2,27 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B2835CB39
-	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 18:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D2535CBEB
+	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 18:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243542AbhDLQX5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Apr 2021 12:23:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55614 "EHLO mail.kernel.org"
+        id S244438AbhDLQZ6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Apr 2021 12:25:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57598 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243469AbhDLQXo (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 12 Apr 2021 12:23:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8653F6101B;
-        Mon, 12 Apr 2021 16:23:24 +0000 (UTC)
+        id S243943AbhDLQYo (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 12 Apr 2021 12:24:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F255A61355;
+        Mon, 12 Apr 2021 16:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618244605;
-        bh=nls74rZAFncj/MZ7ck+U1veNp93OqZSAfRNzfgpRTgQ=;
+        s=k20201202; t=1618244665;
+        bh=8f0KivQwDtabPuNPkKjSyxTPnYKqyeFY3eBdNML6BCg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kkVUT2I1QN+MCMEy/eJDm8nLG9Vltz/PSZBfSIMzGGmds6zVmHWxUJOZxciafz/KY
-         8kt8OO+R3czEu6c6KEEcYZ18oe3LdEm2ONDoNoqS2gr/Ib1NoRjyleSyzFOwPcuMr4
-         r02qNU9jirWMzYG1sZBuwANrZrp9CdpLdyPj2usXdqZV5SXkFWWi1Lkz8Rx84Dj/fD
-         mz9uFPI6kuPNxsifuPgweX2HGpz7Y5cUmTfqDuF3NTea4PLYTaG7LTm9wGxFJD/hTM
-         qljRCnAXCx1JjNXW5TTl+WG/mUByhP7vshVC8SWmRXktFQVXN4vo559OUN/In+qDlb
-         7IgC8POYyND9w==
+        b=XbkF2N4/JlJ0wBrhQxrg180WdmpdbqPQ8h8HnBJG8nnPmAb9lUPt1VfWUjl6nBBHa
+         cSnVtvp2q5uA3PMABhvhuA/9FOV+ocuvZI0lXtIO477GmggKQRIYWvqbvbyRKBcm76
+         jMlzlm4JmeQ1NdhB6QqbdEXyHpo70nwGwi45vZU2+cF7nz8t4amsu3cOIkT19aMbG7
+         4PNudoppJsYgd6WPaM+7OJq4nLU0aQCPyvp7xlt7jZPSy6Bytsk3cK4pv3fC9Y+X0O
+         qHQWOm3cqUgV4+nrYAE2sY1c2ypGnCUk0J93txBPOnCirEl0iUvS03UmISR4HeUk1f
+         rJNGk3GPQyHZQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Pavel Skripkin <paskripkin@gmail.com>,
@@ -30,12 +30,12 @@ Cc:     Pavel Skripkin <paskripkin@gmail.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 23/51] drivers: net: fix memory leak in peak_usb_create_dev
-Date:   Mon, 12 Apr 2021 12:22:28 -0400
-Message-Id: <20210412162256.313524-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 19/46] drivers: net: fix memory leak in peak_usb_create_dev
+Date:   Mon, 12 Apr 2021 12:23:34 -0400
+Message-Id: <20210412162401.314035-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210412162256.313524-1-sashal@kernel.org>
-References: <20210412162256.313524-1-sashal@kernel.org>
+In-Reply-To: <20210412162401.314035-1-sashal@kernel.org>
+References: <20210412162401.314035-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -70,10 +70,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-index 251835ea15aa..18c7d8c151a4 100644
+index 204ccb27d6d9..73c1bc3cb70d 100644
 --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
 +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
-@@ -857,7 +857,7 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+@@ -856,7 +856,7 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
  	if (dev->adapter->dev_set_bus) {
  		err = dev->adapter->dev_set_bus(dev, 0);
  		if (err)
@@ -82,7 +82,7 @@ index 251835ea15aa..18c7d8c151a4 100644
  	}
  
  	/* get device number early */
-@@ -869,6 +869,10 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+@@ -868,6 +868,10 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
  
  	return 0;
  
