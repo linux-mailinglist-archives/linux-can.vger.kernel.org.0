@@ -2,266 +2,151 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9268035C3C3
-	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 12:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1F435C44C
+	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 12:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238457AbhDLKXJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Apr 2021 06:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239042AbhDLKXG (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 06:23:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AD4C06174A
-        for <linux-can@vger.kernel.org>; Mon, 12 Apr 2021 03:22:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lVtiB-00079X-CW; Mon, 12 Apr 2021 12:22:31 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:3d5d:9164:44d1:db57] (unknown [IPv6:2a03:f580:87bc:d400:3d5d:9164:44d1:db57])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 41F5A60CD35;
-        Mon, 12 Apr 2021 10:22:29 +0000 (UTC)
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-References: <20210409134056.18740-1-a-govindraju@ti.com>
- <20210409134056.18740-5-a-govindraju@ti.com>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH 4/4] can: m_can_platform: Add support for transceiver as
- phy
-Message-ID: <9509372e-60f1-85cf-cc22-f7c1e66ae738@pengutronix.de>
-Date:   Mon, 12 Apr 2021 12:22:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S239187AbhDLKp3 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Apr 2021 06:45:29 -0400
+Received: from mail-eopbgr60087.outbound.protection.outlook.com ([40.107.6.87]:18646
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239082AbhDLKp1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 12 Apr 2021 06:45:27 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g7ybXNmCVlzjE6yGbWvysrkwZ2S1NopiL6/PoOtFMcOTVnEG1lCnLkyCiftiEEuV60jOzZg+z8iSCALiEHfBnV+YzJ7CD/jrl245X15x0M8Ic9uore/6iZHfgpMnWe/jSoEIxIHFT3dCBqAvFAucARkN2g5mI6RokQ0AupLu+cYFWsyG4bpwwp+LPUnzjTOkSGODhZRU7+nK+97AEXiA2T43pOof7syPIgbshzGDORAKQVxGgIgq1lmpoVxzxy2nbd1wgSM2Aj784JC7bzlyxUqFDlHK7WfH8h+nypEGDLPTK7fNKag39NtfYdY88NNfsDKsLwWxf2QeMVcO4Aws9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=buwJdYw5CzyCLadqUI3plZI7zlnYgcvAy+dW8VUFpoo=;
+ b=TwbIA2p89lU/BDqyvGSWMgS0M0oxxLP9IsiU3BGGBVmPKSOX99WM7+WmBRUzsG6tbnO+nlZECNNm4nnKo5IAkQ70FtBLYtxodRLqF4Ej9ukepI2nrySk3yYtM+l8W90K1IJ90ot1zpePtGjgyqKQQcvpYarCTpEyOU4ke3dv3Y0edqofhnLNfyV6cQm3iJ9O3RIUP6Dp1NWfM4FLbfj/S6zTNgCsGoBLTEBj6VGD+kusI2+JgLK9yp2v1KW5JFGHX0ttRPXWCT6M8pJX94GUnsYjiSIkJ8A/A8tLQjRt9FTnfa4ZK+6p5mgH4/s/AYsSQDHm3e156W9uT5qrR9FKww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=buwJdYw5CzyCLadqUI3plZI7zlnYgcvAy+dW8VUFpoo=;
+ b=0lSuVJyQ4tjXTTgHrUfV7U1/dV7gkSBbr5J7NjA/VLlQAriy0XoodcWDBA9f7cBDWV41uJ4HWGPIVTjnzWK/apztxNC+v12nGo8DSAKFa5wE0G59h6fb3zJWPc/5DIH6GVUcw6JCUHxbWWFJtB7RHy3z5WtSLdrmgOin6aVZ7zk=
+Received: from PA4PR03MB6797.eurprd03.prod.outlook.com (2603:10a6:102:f1::9)
+ by PA4PR03MB7328.eurprd03.prod.outlook.com (2603:10a6:102:109::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.18; Mon, 12 Apr
+ 2021 10:45:08 +0000
+Received: from PA4PR03MB6797.eurprd03.prod.outlook.com
+ ([fe80::816e:66e6:d784:304]) by PA4PR03MB6797.eurprd03.prod.outlook.com
+ ([fe80::816e:66e6:d784:304%4]) with mapi id 15.20.4020.022; Mon, 12 Apr 2021
+ 10:45:08 +0000
+From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Subject: RE: [RFC]: can-next 2021-04-06: peak_usb cleanups
+Thread-Topic: [RFC]: can-next 2021-04-06: peak_usb cleanups
+Thread-Index: AQHXKtZJaiQVc5OWm0+h8omhfBPoD6qwkA6G
+Date:   Mon, 12 Apr 2021 10:45:07 +0000
+Message-ID: <PA4PR03MB6797F3132E6EF387A0C809B5D6709@PA4PR03MB6797.eurprd03.prod.outlook.com>
+References: <20210406111622.1874957-1-mkl@pengutronix.de>
+In-Reply-To: <20210406111622.1874957-1-mkl@pengutronix.de>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none
+ header.from=peak-system.com;
+x-originating-ip: [89.158.142.148]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e13ca7d5-632b-4bcc-4e45-08d8fda00a39
+x-ms-traffictypediagnostic: PA4PR03MB7328:
+x-microsoft-antispam-prvs: <PA4PR03MB7328376372642823422B34BCD6709@PA4PR03MB7328.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 26Dt8O3rRC2/8vkoiiUuvl94faTwmQrE5ya4Qy5YwQG6bLyRUhHLxyYImA4uX8rFCuSRT8EOy3UWQWFWpp5/xH3uH6MhuGcKpJspkN3FJo1wA3IiA+Tjq82miMuRZrT33Ab44ygHfdegfZSsPoa4tpIZ8gJa0OVeXLR34g6rCJVLIfnQjJ1ZUoGGPFMye0IiXuxeaEtj88xTpoqJmUhwnXUSp8/8uAAJUaajG3tjAtoG0r6qxoYifzie6vTb2qWwfLceIcflmRrRLihQ6aMZ3Jn4D2/yi+AjGmb6GJ3B0oc45zOPQiFBt9onHYurEbTR7m1toQzLdAEm3qSJlGzv9ahzIi1KYk3SrSpyggYoAIBr7XuSkn6Yoq++eBW6LCIx9x9YkPatJpM62oq3N9UieystwfdoPNDVYgq9Om8RMbLDs4Hq5st86tCpXnxM04sWR82elKDfIxki45cF2foGSOsXVGBiDMgI46uVbfFJsacBx4ySNkz3A76xyKPYZ+TfJGHz3GCm1ecmD7nQvt5Neh5aM+KPzOjaFPRN/ox+xCsmjGNXprZ1AtlDYaI3B/Z6AGGlxef1+E76arGeZ3B+PlVwegH6K7ntc9oR7k/cSW4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB6797.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(346002)(136003)(39840400004)(366004)(52536014)(38100700002)(55016002)(64756008)(66556008)(76116006)(6506007)(5660300002)(66946007)(26005)(7696005)(66574015)(66446008)(54906003)(8936002)(478600001)(8676002)(9686003)(2906002)(33656002)(316002)(15974865002)(186003)(4326008)(86362001)(83380400001)(71200400001)(6916009)(66476007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?iso-8859-1?Q?LW2fFLScgAyRNTj8zwswYuWYjc4XdmsEy8wMK8BbmHgZCmKqPDKbT2oa7B?=
+ =?iso-8859-1?Q?A2w3yCtv9y+vyCvQcvokukbg0GVmdiQ5vdF0AlbjOQKhU6Niqtzp4eLFxy?=
+ =?iso-8859-1?Q?RFg+FjbIAwOh01RZDF7pXea4K5lC+J7GBBkfzg5asBm2qCfdDKTZQ8X4JN?=
+ =?iso-8859-1?Q?bRPzlcuWFuaxfg2tJf0l5Em3RGHdhXcr+gWGHr/rF0s6gCuLfH2JEJlgGE?=
+ =?iso-8859-1?Q?orauhnYUZ0VWWI7grBV1WiJXRcVLs9ocKnmpHfMlBtcuXk0NJjqmyQ2yaL?=
+ =?iso-8859-1?Q?cYHdXvUt5oS+zWrtVIfVo4w4qSkgznvgqbzaOq8BrO/Rc0i5Gi5cZcPZGP?=
+ =?iso-8859-1?Q?fd4hEZK/ak6buU5OT/RZpx4NHREc2L67VXNbO3ZM8peeRK5hoAcoN013WP?=
+ =?iso-8859-1?Q?O7VQxSoZUyAxShz/x8CUqoJXvULGrcMl5p+ze0VqnptKG9Syc0paJbL8tA?=
+ =?iso-8859-1?Q?p/o9LMgxe6GfxKQ/6JCb0C2+yfbO9spVh5vxk64qoQlDUkFv4foBCIZGRY?=
+ =?iso-8859-1?Q?hI7qtTy1K3OxNju892qelg8KFECs3pTARONRcGdfY/D5tFgAhmjBEx6UvB?=
+ =?iso-8859-1?Q?j+F8uMbJ1Ms/LyQgT4FYiXMzaoQXDz19qC9+1dT262GAyKK27ehpcQEvNt?=
+ =?iso-8859-1?Q?lMOWhqz3DTDnWrxagdMa7awHkLsuCa/bI+6lui+dPUWI6rSDxrlMidC78v?=
+ =?iso-8859-1?Q?obLDKq5W1+n5y7ckO5MfAuUAQdM1MiSH4OtAB5w1cvY/QEG9EHwuMROJJE?=
+ =?iso-8859-1?Q?0bmX6kcdue68yaY5AWiYwTsrmPBiFKjBeQH2yE6Fu88iMMWCRJZ0QncT/K?=
+ =?iso-8859-1?Q?1HbR5PRZgUMPaLPPueAKK6AlYHv6lUKWLmMVGjqsuPR0g9Cb2shZ+F0qyF?=
+ =?iso-8859-1?Q?Z5UgjpP2UXjQAl9VfHpZnde2ENRlnLDqLm4AQIz9DUYct5NytEgB0u8KkG?=
+ =?iso-8859-1?Q?GvtWl/GKTaWFMQ1xYPk4AzM54znaYamzO/TlOnDZbksP50VGc842KcEAAt?=
+ =?iso-8859-1?Q?VPQ/Qo6SU0ZTtbh9jrvvmhmx8m8/QjUX302TauyCBrD2BIx3cLExXFkllt?=
+ =?iso-8859-1?Q?3oHf24NgAtdkVGXyuxQ1Vopj0WP/9VsecIX/bbGtf3kmwIO5DPJFe0VBOc?=
+ =?iso-8859-1?Q?WUf7AhbUw3554BJkRhK+NW/ajJP8Pj5IDW6Y3MK7ASMHwNIeVjLCJbuQL9?=
+ =?iso-8859-1?Q?fVFFxY5YyEk6His0wnSmxxlCqH8C4Wh73iSfVBgnKNujXeyF6gL+R8cVrr?=
+ =?iso-8859-1?Q?/Rzva0q8VGD0STg8FzJCRn52NKTpMHv330SqHPuTn41hxHVQgRg8Wcy+0X?=
+ =?iso-8859-1?Q?Eg4W8b9MPqYzC5jOShoCkPxbVoO+odzRTH4p74JB+dgwXv+CLBvzNQECFO?=
+ =?iso-8859-1?Q?9bdBM5O8kz?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20210409134056.18740-5-a-govindraju@ti.com>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="ZcKzB18WVh2ifi2HCVkrsNr3IzjeryztF"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-OriginatorOrg: peak-system.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB6797.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e13ca7d5-632b-4bcc-4e45-08d8fda00a39
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2021 10:45:07.9793
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 52d3CXae7hqTau4wMCkZNmnwkbID1Pwsp9ZB3SRgyj7+qkexYyb9LWwGHnNRIHgHN5x9rx/f2wJsLRp5n7g95N1kYqxHFySwnKiO7xKX+sk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB7328
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ZcKzB18WVh2ifi2HCVkrsNr3IzjeryztF
-Content-Type: multipart/mixed; boundary="w3ghW4tZBR23ZVBlaIWDDYVNiMsMARMjl";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Aswath Govindraju <a-govindraju@ti.com>
-Cc: Vignesh Raghavendra <vigneshr@ti.com>,
- Kishon Vijay Abraham I <kishon@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
- Grygorii Strashko <grygorii.strashko@ti.com>, Faiz Abbas
- <faiz_abbas@ti.com>, Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Rob Herring <robh+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- Sriram Dash <sriram.dash@samsung.com>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-Message-ID: <9509372e-60f1-85cf-cc22-f7c1e66ae738@pengutronix.de>
-Subject: Re: [PATCH 4/4] can: m_can_platform: Add support for transceiver as
- phy
-References: <20210409134056.18740-1-a-govindraju@ti.com>
- <20210409134056.18740-5-a-govindraju@ti.com>
-In-Reply-To: <20210409134056.18740-5-a-govindraju@ti.com>
+Hello,
 
---w3ghW4tZBR23ZVBlaIWDDYVNiMsMARMjl
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Thank you for your time and your work.
 
-On 4/9/21 3:40 PM, Aswath Govindraju wrote:
-> From: Faiz Abbas <faiz_abbas@ti.com>
->=20
-> Add support for implementing transceiver node as phy. The max_bitrate i=
-s
-> obtained by getting a phy attribute.
->=20
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  drivers/net/can/m_can/m_can_platform.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->=20
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m=
-_can/m_can_platform.c
-> index 599de0e08cd7..4a762b5a21d8 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -6,6 +6,7 @@
->  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.t=
-i.com/
-> =20
->  #include <linux/platform_device.h>
-> +#include <linux/phy/phy.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -67,7 +68,9 @@ static int m_can_plat_probe(struct platform_device *p=
-dev)
->  	struct resource *res;
->  	void __iomem *addr;
->  	void __iomem *mram_addr;
-> +	struct phy *transceiver;
->  	int irq, ret =3D 0;
-> +	u32 bitrate_max;
-> =20
->  	mcan_class =3D m_can_class_allocate_dev(&pdev->dev,
->  					      sizeof(struct m_can_plat_priv));
-> @@ -101,6 +104,28 @@ static int m_can_plat_probe(struct platform_device=
- *pdev)
->  		goto probe_fail;
->  	}
-> =20
-> +	transceiver =3D devm_phy_optional_get(&pdev->dev, "can_transceiver");=
+I've tested that serie of patches with all the CAN-FD USB interfaces from P=
+EAK-System GmbH (that is, PCAN-USB FD, PCAN-USB Pro FD, PCAN-USB X6 and PCA=
+N-Chip USB) as well as with the CAN 2.0 only USB interfaces PCAN-USB and PC=
+AN-USB Pro, and I confirm all of them.
 
-> +	if (IS_ERR(transceiver)) {
-> +		ret =3D PTR_ERR(transceiver);
-> +		dev_err(&pdev->dev, "error while getting phy, err=3D%d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	if (!transceiver) {
-> +		dev_warn(&pdev->dev, "No transceiver phy found\n");
+Do you need my Acked-by and/or Tested-by for each patch?
 
-I think that's a bit to loud.
+Regards,
 
-> +	} else {
-> +		ret =3D phy_power_on(transceiver);
+--- St=E9phane
 
-Please move the phy power on/off to the ndo_open and ndo_stop callbacks. =
-There's
-no need to power the transceivers if the CAN interface is down.
 
-> +		if (ret) {
-> +			dev_err(&pdev->dev, "error powering on phy, err=3D%d\n", ret);
-> +			return ret;
-> +		}
-> +		/* converting from Mbps to bps */
-> +		bitrate_max =3D (transceiver->attrs.max_link_rate) * 1000000;
-> +		if (!bitrate_max)
-> +			dev_warn(&pdev->dev, "Invalid value for transceiver max bitrate. Ig=
-noring bitrate limit\n");
+De : Marc Kleine-Budde <mkl@pengutronix.de>
+Envoy=E9 : mardi 6 avril 2021 13:16
+=C0 : linux-can@vger.kernel.org <linux-can@vger.kernel.org>
+Cc : kernel@pengutronix.de <kernel@pengutronix.de>; St=E9phane Grosjean <s.=
+grosjean@peak-system.com>
+Objet : [RFC]: can-next 2021-04-06: peak_usb cleanups
 
-Please move this check to the generic transcevier code.
+Hello,
 
-> +		priv->cdev.can.bitrate_max =3D bitrate_max;
-> +	}
-> +
->  	priv->base =3D addr;
->  	priv->mram_base =3D mram_addr;
-> =20
->=20
+this series consist of several cleanups for the peak_usb driver. It
+was tested on the peak_usb_fd, but it also does some changes on the
+peak_usb, which I don't have access to.
 
+Please test.
+
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---w3ghW4tZBR23ZVBlaIWDDYVNiMsMARMjl--
-
---ZcKzB18WVh2ifi2HCVkrsNr3IzjeryztF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB0H2IACgkQqclaivrt
-76n6egf/eFsUSJiwBzgGg9LfFL04wB2B4YGhHoQGhX7uRj2QNAsq9btgslMVHJnd
-eHvdoYrB733sOkKSg/p0SBxuKRD3vca8aY44UNwdT+AnX3AyoelH2i7iXJofhy8c
-0McPKTY/uz/PQNvMzu1GyIoeF4cpYUwVnF9H3KEC/voONaDi8XHNoU6g7RP3uwSp
-9Nh/9QjXxHIa8OUkhW4Ymp/qk/NkA5l6zPDLMmMFu56u3q/bg00CMC0wVPpyL/nm
-7mkRiVt3fRYoqv+IqXSAs/M464fY0Np3+Gsd+PNP5nG/JAPLGTC8autLogS4XDaj
-kwq7/dF9WbHw0yssLda0q2EXtQRQvQ==
-=ZP+A
------END PGP SIGNATURE-----
-
---ZcKzB18WVh2ifi2HCVkrsNr3IzjeryztF--
+--
+PEAK-System Technik GmbH
+Sitz der Gesellschaft Darmstadt - HRB 9183
+Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
+Unsere Datenschutzerklaerung mit wichtigen Hinweisen
+zur Behandlung personenbezogener Daten finden Sie unter
+www.peak-system.com/Datenschutz.483.0.html
