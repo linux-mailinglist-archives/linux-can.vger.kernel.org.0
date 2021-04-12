@@ -2,94 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D125135C4A0
-	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 13:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE15A35C4FC
+	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 13:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239824AbhDLLDY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Apr 2021 07:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238912AbhDLLDX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 07:03:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DC2C061574
-        for <linux-can@vger.kernel.org>; Mon, 12 Apr 2021 04:03:05 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lVuLQ-00037u-3n; Mon, 12 Apr 2021 13:03:04 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:3d5d:9164:44d1:db57])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0E9FF60CD8C;
-        Mon, 12 Apr 2021 11:03:02 +0000 (UTC)
-Date:   Mon, 12 Apr 2021 13:03:02 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     =?utf-8?B?U3TDqXBoYW5l?= Grosjean <s.grosjean@peak-system.com>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: Re: [RFC]: can-next 2021-04-06: peak_usb cleanups
-Message-ID: <20210412110302.h3qulblayeqn2tuy@pengutronix.de>
-References: <20210406111622.1874957-1-mkl@pengutronix.de>
- <PA4PR03MB6797F3132E6EF387A0C809B5D6709@PA4PR03MB6797.eurprd03.prod.outlook.com>
+        id S240286AbhDLLXj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Apr 2021 07:23:39 -0400
+Received: from mail-yb1-f177.google.com ([209.85.219.177]:44892 "EHLO
+        mail-yb1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240345AbhDLLXg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 07:23:36 -0400
+Received: by mail-yb1-f177.google.com with SMTP id l14so8404442ybf.11;
+        Mon, 12 Apr 2021 04:23:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OAZeWmxZnRvBIOsIyb+Toh3owJVdNZMmbeBXAmpmoTg=;
+        b=njRqFYTFmdoeHuvUcbpyday07+mgqdbsiialNpgep8z8XzI8fYpG47EL8HJUQp9YeL
+         EnhDsYbgA550h3u0M7eccgksbmpp6cobMXx4Pwme5PNaSwYq6TQCipBniJTOAHvejF5e
+         0wkv/5iCGXacoWw2KT/1+v3Vjoi/cRsP4g0sRl2gE/mJoqL7pMLTEiy4mbRMCl3sbD/B
+         OHAdlSt03zgUeUZxJj4upxizo9teDA9S24y2J0mf+Jjw30M+M5vwHp3h+iygOGVnES05
+         1BeIbcE5mGfDWGPfzm8tqOSXtcNhgXGQtqZO8QaB4troHI8hvJQj697QhmFMli1LRY+V
+         2ZIw==
+X-Gm-Message-State: AOAM530l5LkJ7CGEyOsBaSfywhmu3cisn4H3nfYHIRuP+5qTHxN8x1Em
+        ycfT5VTut6D6zkhLZfT7Uq0zO/u6kYHeSYBdwV4=
+X-Google-Smtp-Source: ABdhPJwovRRPheJbvtDIuRSwXz1a4oqkVzcTXBDdYe2mdhIrszZieWLwk89XRYNJ9IaYCAKa61T3VFtjZehgxrdQ6bw=
+X-Received: by 2002:a25:cc84:: with SMTP id l126mr14879683ybf.487.1618226597994;
+ Mon, 12 Apr 2021 04:23:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4l7ewioiwvb62iu7"
-Content-Disposition: inline
-In-Reply-To: <PA4PR03MB6797F3132E6EF387A0C809B5D6709@PA4PR03MB6797.eurprd03.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210410095948.233305-1-mailhol.vincent@wanadoo.fr> <20210412092001.7vp7dtbvsb6bgh2t@pengutronix.de>
+In-Reply-To: <20210412092001.7vp7dtbvsb6bgh2t@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 12 Apr 2021 20:23:06 +0900
+Message-ID: <CAMZ6RqLgLzMymHus5O7qcL_q=AwywXQusNb51CNL1TtHZ0XwcQ@mail.gmail.com>
+Subject: Re: [PATCH v15 0/3] Introducing ETAS ES58X CAN USB interfaces
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---4l7ewioiwvb62iu7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon. 12 Apr 2021 at 18:20, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 10.04.2021 18:59:45, Vincent Mailhol wrote:
+> > Here comes the 15th iteration of the patch. This new version addresses
+> > the comments received from Marc (thanks again for the review!) and
+> > simplify the device probing by using .driver_info.
+>
+> diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> index 35ba8af89b2e..7222b3b6ca46 100644
+> --- a/drivers/net/can/usb/etas_es58x/es58x_core.c
+> +++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+> @@ -1096,7 +1096,7 @@ static void es58x_increment_rx_errors(struct es58x_device *es58x_dev)
+>   *     be aligned.
+>   *
+>   * Sends the URB command to the device specific function. Manages the
+> - * errors throwed back by those functions.
+> + * errors thrown back by those functions.
+>   */
+>  static void es58x_handle_urb_cmd(struct es58x_device *es58x_dev,
+>                                  const union es58x_urb_cmd *urb_cmd)
+>
+> I have applied to linux-can-next/testing with the above spell fix.
+> Thanks for the steady work on this and all the other features.
 
-On 12.04.2021 10:45:07, St=C3=A9phane Grosjean wrote:
-> I've tested that serie of patches with all the CAN-FD USB interfaces
-> from PEAK-System GmbH (that is, PCAN-USB FD, PCAN-USB Pro FD, PCAN-USB
-> X6 and PCAN-Chip USB) as well as with the CAN 2.0 only USB interfaces
-> PCAN-USB and PCAN-USB Pro, and I confirm all of them.
+Thanks to you too! This, together with the other features is my
+very first open source contribution. I learned a lot from you,
+Oliver and the others from the mailing list. It was a nice
+experience.
 
-Thanks for testing!
+That said, you will eventually hear from me again on the TDC
+netlink interface (and probably other topics as well).
 
-> Do you need my Acked-by and/or Tested-by for each patch?
 
-No need to, I can add them here. What should I add?
-Acked-by?
-Tested-by?
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---4l7ewioiwvb62iu7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB0KOIACgkQqclaivrt
-76kv2wf/WJ1K4JvEc3tofocjlDn65NltgSD+JeZnai2AyB4Byc03wbKwMoJ3TX+b
-rKUEwkk/3XhEUbI0dB7LCBygyKZacU3Pl0HjiKLR9h/XPoUqjRJl/ISZlFmzFJnW
-Xr/1TPIaG9D8cUFor+3DGjJu39g0VVNt46OZWAa2HdRrVS5BGcQj/qCimg767xka
-NvHU/wPso/EwTER6vWQOl+vrjLD8iNcGmGnWwBcTr/PsdoXQo2/nhdl0FI6yjHTa
-vNamLa8UJe4zE6qBlh8mhutxQiROPZNRYq+jU6r4etAErYG/ykeW8qnLa6vPobJM
-eiebKy47oF/YN+6zROwy52C4W0jXHA==
-=QALs
------END PGP SIGNATURE-----
-
---4l7ewioiwvb62iu7--
+Yours sincerely,
+Vincent
