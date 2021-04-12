@@ -2,49 +2,50 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE45135CFC9
-	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 19:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC62E35CFD3
+	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 19:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240777AbhDLRuR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Apr 2021 13:50:17 -0400
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:44613 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238145AbhDLRuR (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 13:50:17 -0400
-Received: by mail-oo1-f54.google.com with SMTP id p2-20020a4aa8420000b02901bc7a7148c4so3219220oom.11;
-        Mon, 12 Apr 2021 10:49:59 -0700 (PDT)
+        id S244028AbhDLRvz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Apr 2021 13:51:55 -0400
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:35555 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238145AbhDLRvz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 13:51:55 -0400
+Received: by mail-ot1-f47.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so13635072oto.2;
+        Mon, 12 Apr 2021 10:51:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=bFCs+VpPyphB2HOiiJJru9pRy8xratHPzgF28m8aMpo=;
-        b=eWmdhNexzswXIYBAGvB7gNcD8tkf1THk3qltjNB9vBeCQVNGm5CMEW7mZ6hwiHah1O
-         CxSPM/TzfHBk5bN/HcVl2eGjYNJWn6Mv8Uy8bf9ZBGIw7izF/OM/hp85l1Bghicfe2nz
-         fgVWrHbBcrBbWG0KdG0pNx4RHfmWsTjDFsgY5UdlDT35o7rcBSVqIXt9iaP4Nug7AirF
-         lqpleG9Y2c4gchiViIF4bZlv4HosagYGtKxgVA8/Os+6/0F2scP4TtXHjisvTzLgP+xj
-         4K/3zu0EZ6PZWUmFZKwcwr9hgBEqhyNIwVzRNtSZEv5wLEXgLkpuH6TIbmONxKB0OyQ6
-         TAIA==
-X-Gm-Message-State: AOAM532MK6uSrF9T3pUUngqflvHMANGjFT6voMIAleMJrCn8Dlgsdju5
-        0z+f0q8NFJoi4OC81Ul0ZQ==
-X-Google-Smtp-Source: ABdhPJzYjjV91KasGRlpdX2d8GjTfvG8l5nL7+XHdF2vj7lCJ8IP3juCXaE7zPb2z5C2tsbupG+PCw==
-X-Received: by 2002:a4a:6b04:: with SMTP id g4mr23753024ooc.78.1618249798739;
-        Mon, 12 Apr 2021 10:49:58 -0700 (PDT)
+        bh=Ea0wwblc4jIaUkhNsCQ47PE+8gSD1cmdNSdI/VVXgz4=;
+        b=M5cSKXn6xFv1MGOOg2Ok/TvmkvWZm9c5oust5OgN1YVre34g70qhlZiYR78p8gCOrT
+         7f3Qfqu5J1pvMzZuXo+7KtLDG4xvxuH5YDhCQdSwVLOIuWxAV1+6Cl86JYsFSJEMukVp
+         DETnz/RE02wBJuUuHW52eKyS3YOrqnIXXFMX2fbKOY2irofjTeOsvOW3Yu2ppGmThaE+
+         VyDBpZf6vUlf9Qyd4ee8GMPC1eUe2D7QxX4GTkgYtJ+wKqEJ8NynJWW8HaQoXuDO90u5
+         jxDqxqSvQEU/bu0f2kq7L8Lzxb6eWkJrGkmLdDhCK3Ag9LojkfqIvXhP+qNV+fiH6Kdr
+         fVwA==
+X-Gm-Message-State: AOAM530w+w1HfVf7Nb/eav6AwZ1NByalVSkpqMjOFc1NvAldofryLO65
+        h52n0VjGeCtu3zTIiEwLYg==
+X-Google-Smtp-Source: ABdhPJwKbxwTVUrZdMdU9k0p+Wsk4lVs9GvzycQRqjvxXm32f7UEUb2pz9nQfnBVTu6enLeSzHeDVw==
+X-Received: by 2002:a9d:4911:: with SMTP id e17mr3767679otf.38.1618249896643;
+        Mon, 12 Apr 2021 10:51:36 -0700 (PDT)
 Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 3sm2791398otw.58.2021.04.12.10.49.56
+        by smtp.gmail.com with ESMTPSA id h23sm2748216ots.0.2021.04.12.10.51.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 10:49:57 -0700 (PDT)
-Received: (nullmailer pid 4108783 invoked by uid 1000);
-        Mon, 12 Apr 2021 17:49:56 -0000
-Date:   Mon, 12 Apr 2021 12:49:56 -0500
+        Mon, 12 Apr 2021 10:51:35 -0700 (PDT)
+Received: (nullmailer pid 4110980 invoked by uid 1000);
+        Mon, 12 Apr 2021 17:51:34 -0000
+Date:   Mon, 12 Apr 2021 12:51:34 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Aswath Govindraju <a-govindraju@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>,
         Grygorii Strashko <grygorii.strashko@ti.com>,
+        Faiz Abbas <faiz_abbas@ti.com>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Vinod Koul <vkoul@kernel.org>,
@@ -52,112 +53,60 @@ Cc:     Aswath Govindraju <a-govindraju@ti.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org
-Subject: Re: [PATCH 1/4] dt-bindings: phy: Add binding for TI TCAN104x CAN
- transceivers
-Message-ID: <20210412174956.GA4049952@robh.at.kernel.org>
+Subject: Re: [PATCH 3/4] dt-bindings: net: can: Document transceiver
+ implementation as phy
+Message-ID: <20210412175134.GA4109207@robh.at.kernel.org>
 References: <20210409134056.18740-1-a-govindraju@ti.com>
- <20210409134056.18740-2-a-govindraju@ti.com>
- <f9b04d93-c249-970e-3721-50eb268a948f@pengutronix.de>
+ <20210409134056.18740-4-a-govindraju@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9b04d93-c249-970e-3721-50eb268a948f@pengutronix.de>
+In-Reply-To: <20210409134056.18740-4-a-govindraju@ti.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Apr 12, 2021 at 12:19:30PM +0200, Marc Kleine-Budde wrote:
-> On 4/9/21 3:40 PM, Aswath Govindraju wrote:
-> > Add binding documentation for TI TCAN104x CAN transceivers.
-> > 
-> > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> > ---
-> >  .../bindings/phy/ti,tcan104x-can.yaml         | 56 +++++++++++++++++++
-> >  1 file changed, 56 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > new file mode 100644
-> > index 000000000000..4abfc30a97d0
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > @@ -0,0 +1,56 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: "http://devicetree.org/schemas/phy/ti,tcan104x-can.yaml#"
-> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > +
-> > +title: TCAN104x CAN TRANSCEIVER PHY
-> > +
-> > +maintainers:
-> > +  - Aswath Govindraju <a-govindraju@ti.com>
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    pattern: "^tcan104x-phy"
-> > +
-> > +  compatible:
-> > +    enum:
-> > +      - ti,tcan1042
-> > +      - ti,tcan1043
+On Fri, Apr 09, 2021 at 07:10:53PM +0530, Aswath Govindraju wrote:
+> From: Faiz Abbas <faiz_abbas@ti.com>
 > 
-> Can you create a generic standby only and a generic standby and enable transceiver?
-
-As a fallback compatible fine, but no generic binding please. A generic 
-binding can't describe any timing requirements between the 2 GPIO as 
-well as supplies when someone wants to add those (and they will).
-
+> Some transceivers need a configuration step (for example, pulling the
+> standby or enable lines) for them to start sending messages. The
+> transceiver can be implemented as a phy with the configuration done in the
+> phy driver. The bit rate limitation can the be obtained by the driver using
+> the phy node.
 > 
-> > +
-> > +  '#phy-cells':
-> > +    const: 0
-> > +
-> > +  standby-gpios:
-> > +    description:
-> > +      gpio node to toggle standby signal on transceiver
-> > +    maxItems: 1
-> > +
-> > +  enable-gpios:
-> > +    description:
-> > +      gpio node to toggle enable signal on transceiver
-> > +    maxItems: 1
-> > +
-> > +  max-bitrate:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      max bit rate supported in bps
-
-We already have 'max-speed' for serial devices, use that.
-
-> > +    minimum: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - '#phy-cells'
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +
-> > +    transceiver1: tcan104x-phy {
-> > +      compatible = "ti,tcan1043";
-> > +      #phy-cells = <0>;
-> > +      max-bitrate = <5000000>;
-> > +      standby-gpios = <&wakeup_gpio1 16 GPIO_ACTIVE_LOW>;
-> > +      enable-gpios = <&main_gpio1 67 GPIO_ACTIVE_LOW>;
-> > +    };
-> > 
+> Document the above implementation in the bosch mcan bindings
 > 
+> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index 798fa5fb7bb2..2c01899b1a3e 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -109,6 +109,12 @@ properties:
+>    can-transceiver:
+>      $ref: can-transceiver.yaml#
+>  
+> +  phys:
+> +    minItems: 1
+
+maxItems: 1
+
+> +
+> +  phy-names:
+> +    const: can_transceiver
+
+Kind of a pointless name. You don't really need a name if there's a 
+single entry.
+
+> +
+>  required:
+>    - compatible
+>    - reg
 > -- 
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+> 2.17.1
 > 
-
-
-
