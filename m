@@ -2,111 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC62E35CFD3
-	for <lists+linux-can@lfdr.de>; Mon, 12 Apr 2021 19:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E011C35D45F
+	for <lists+linux-can@lfdr.de>; Tue, 13 Apr 2021 02:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244028AbhDLRvz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Apr 2021 13:51:55 -0400
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:35555 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238145AbhDLRvz (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 13:51:55 -0400
-Received: by mail-ot1-f47.google.com with SMTP id v24-20020a9d69d80000b02901b9aec33371so13635072oto.2;
-        Mon, 12 Apr 2021 10:51:37 -0700 (PDT)
+        id S237475AbhDMAOE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Apr 2021 20:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbhDMAOD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Apr 2021 20:14:03 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136E8C061574
+        for <linux-can@vger.kernel.org>; Mon, 12 Apr 2021 17:13:45 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id mh2so1538690ejb.8
+        for <linux-can@vger.kernel.org>; Mon, 12 Apr 2021 17:13:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ys209AiBo4oVxQkFm7luUcpbCWatt8PGCI+yQpttVb8=;
+        b=kW4bf7ULzgHRZANv2IkUDodAezCPZ9gpBjhxIkQ4rFrX9Xrl1Dy9O5AdrdRMHUxFH6
+         k1h1imMBOoMNeAQMzLvCd6aSZ3H+j1po59eKA+vsUhwK4xTsJmdYsfoOg0/+w+jYcgGu
+         m3a+cbsOei+26U+nwo3NK23TRHCunZOhV6Z8Vm5FyTOPPdSEMZurNnHB2S60GseTQlL2
+         7sRWPkvaAD9SFu8WS/18Z1W27qnBGWav7BpCx2QpNsKfYHozG+8epcn7P1Jq5JZe6EOp
+         6+PgyfsM0ZAtaCI2TaT6s6MtyJ5Ctza/B12/wj8cxc2QJZ74GcisdCb/zJLq9TTEVZaQ
+         UIjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ea0wwblc4jIaUkhNsCQ47PE+8gSD1cmdNSdI/VVXgz4=;
-        b=M5cSKXn6xFv1MGOOg2Ok/TvmkvWZm9c5oust5OgN1YVre34g70qhlZiYR78p8gCOrT
-         7f3Qfqu5J1pvMzZuXo+7KtLDG4xvxuH5YDhCQdSwVLOIuWxAV1+6Cl86JYsFSJEMukVp
-         DETnz/RE02wBJuUuHW52eKyS3YOrqnIXXFMX2fbKOY2irofjTeOsvOW3Yu2ppGmThaE+
-         VyDBpZf6vUlf9Qyd4ee8GMPC1eUe2D7QxX4GTkgYtJ+wKqEJ8NynJWW8HaQoXuDO90u5
-         jxDqxqSvQEU/bu0f2kq7L8Lzxb6eWkJrGkmLdDhCK3Ag9LojkfqIvXhP+qNV+fiH6Kdr
-         fVwA==
-X-Gm-Message-State: AOAM530w+w1HfVf7Nb/eav6AwZ1NByalVSkpqMjOFc1NvAldofryLO65
-        h52n0VjGeCtu3zTIiEwLYg==
-X-Google-Smtp-Source: ABdhPJwKbxwTVUrZdMdU9k0p+Wsk4lVs9GvzycQRqjvxXm32f7UEUb2pz9nQfnBVTu6enLeSzHeDVw==
-X-Received: by 2002:a9d:4911:: with SMTP id e17mr3767679otf.38.1618249896643;
-        Mon, 12 Apr 2021 10:51:36 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h23sm2748216ots.0.2021.04.12.10.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Apr 2021 10:51:35 -0700 (PDT)
-Received: (nullmailer pid 4110980 invoked by uid 1000);
-        Mon, 12 Apr 2021 17:51:34 -0000
-Date:   Mon, 12 Apr 2021 12:51:34 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org
-Subject: Re: [PATCH 3/4] dt-bindings: net: can: Document transceiver
- implementation as phy
-Message-ID: <20210412175134.GA4109207@robh.at.kernel.org>
-References: <20210409134056.18740-1-a-govindraju@ti.com>
- <20210409134056.18740-4-a-govindraju@ti.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ys209AiBo4oVxQkFm7luUcpbCWatt8PGCI+yQpttVb8=;
+        b=Abqdryoh3uA0sEyBaA7X0w+01JVnCk4e141yapAAfbV9lhuMn3hAUG31DrS/VvlYjH
+         zR1v5NyAAdU1G32cSUanpgYh2bAGSrDMLSDYXpEUQ64NqTIDrqIfqtLziPTr+SQZafJD
+         LUxhN1pvR3vhFrfn7S02m6FeWjRDBCaDs1w7SUX/FIzxZwWYvpcqmPTbMyuCRJDYN0nZ
+         iKgS1dXQEEFREvdOjRaQoKyAtfOcZs/qdh+5kChLbdBtteA2k9v1IHoKx/Vvk4qQCeCI
+         9ltEvz4QRI91HerPYmt9VYVur4zGeXU4/sN4A6rjPrAWWuE2HP9f6CvtIkV61EpJLQ3H
+         T6Og==
+X-Gm-Message-State: AOAM531thB2O0dkDS79/z90t7k+h+3Woe/g6q47Ei2AN8q43SBdCggwv
+        EcI8sbMiCq6VHcrjv9cRl6/Pm4rpCJQbk5NYPd4=
+X-Google-Smtp-Source: ABdhPJxz2Etbhba2KdjyirHQHtTg1H/bBszaakpy8ZS3XywBTAQZTyhBM8CdxxKUXn9PecyFVuM4k1dRgXGgl4OppBA=
+X-Received: by 2002:a17:906:cb1:: with SMTP id k17mr20942562ejh.307.1618272823676;
+ Mon, 12 Apr 2021 17:13:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210409134056.18740-4-a-govindraju@ti.com>
+Received: by 2002:a55:9709:0:b029:d5:fc6e:d766 with HTTP; Mon, 12 Apr 2021
+ 17:13:43 -0700 (PDT)
+Reply-To: officefille83@aol.com
+From:   " Frau Alicia H. Abraham" <mrs.calistakagebou@gmail.com>
+Date:   Tue, 13 Apr 2021 01:13:43 +0100
+Message-ID: <CAM_mR9zQD-um8y+FnC2_xqqKdxh=PTBXxZedVukMSw4L=FePBA@mail.gmail.com>
+Subject: My divine friend
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Apr 09, 2021 at 07:10:53PM +0530, Aswath Govindraju wrote:
-> From: Faiz Abbas <faiz_abbas@ti.com>
-> 
-> Some transceivers need a configuration step (for example, pulling the
-> standby or enable lines) for them to start sending messages. The
-> transceiver can be implemented as a phy with the configuration done in the
-> phy driver. The bit rate limitation can the be obtained by the driver using
-> the phy node.
-> 
-> Document the above implementation in the bosch mcan bindings
-> 
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index 798fa5fb7bb2..2c01899b1a3e 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -109,6 +109,12 @@ properties:
->    can-transceiver:
->      $ref: can-transceiver.yaml#
->  
-> +  phys:
-> +    minItems: 1
+My divine friend
 
-maxItems: 1
 
-> +
-> +  phy-names:
-> +    const: can_transceiver
 
-Kind of a pointless name. You don't really need a name if there's a 
-single entry.
+Greetings, I wish you and your family happy moments in life now and forever
+more amen. I am Mrs. Alicia H. Abraham from the United States of America by
+birth, but a German by origin. It is a pleasure for me to have contact with
+you, although I do not know you, that I was hospitalized in Washington
+General Hospital, USA, and my contact with you was not accidental but
+through divine connection. I suffered from lung cancer for years and my
+doctors bravely told me that if I didn't opt for surgery that has 50/50
+chances of survival, I would have short time to live, so please I need your
+prayers.
 
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.17.1
-> 
+However, I don't know when death will come, but I have a strong desire to
+help the poor orphans who suffer every day, but this dream cannot be
+realized because of my poor health which is not improving. Therefore, I
+don't know if I will survive after that.Therefore, I made up my mind to
+donate to you my legacy of $ 26 million ($ 26,000,000) that belongs to my
+late husband as my spirit directed me there to be used for charity because
+I wanted my own people there to benefit.
+
+
+It is my last wish to invest this fund in a very good business of your
+choice and then use the interest generated to help the needy and the poor
+and motherless babies, orphanages and widows at any time. These are the
+wishes of a dying woman as I decided I would not have a child to take over
+my inheritance when I grew up an orphan with no family member.
+
+
+All I need from you is truthfulness, honesty and sincerity, which assure me
+that you can use the means to do so with all honesty and honesty
+Obedience.
+
+
+Waiting for your urgent reply
+
+
+Mrs. Alicia H. Abraham
