@@ -2,177 +2,163 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 706F035D8CD
-	for <lists+linux-can@lfdr.de>; Tue, 13 Apr 2021 09:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134FF35D8DC
+	for <lists+linux-can@lfdr.de>; Tue, 13 Apr 2021 09:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbhDMH1a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Apr 2021 03:27:30 -0400
-Received: from mail-db8eur05on2060.outbound.protection.outlook.com ([40.107.20.60]:52052
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229838AbhDMH10 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 13 Apr 2021 03:27:26 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GyDQ0VRolz85Y2ZBxVkyhDJBgMlDdukv4obVHmDiQOWd9wHsoriOIxtRAtatblS+LZKqtJldv8rTbA3Fdvj3Z76IpA9/xRAuuI7xe/I9qkD+IjsVM0vNsAKCkwnxaY0X8jH1hlpE5m7xI5mTCWRsiafAUpmE4zwJNlvRQT5ISCe/YzF87NIAmF9Z4F4s9Qs1GNCoMmhlxf/gb+yZB/Ofq+iCV45iYV8ebdydu3kNKjYakrkV3fO5IU9EKLfcv/LIo57vwH/XPf7ZtiNz67Ys5CBZ3xppLy3weAu5R4C6BbO4bBvYNVAjMeCG8/2+AAbEc97kaTkMYI0uJMS5SRIW6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Iu+scwpDSxeEpHwtlgXclTl6B96q6Pd73yuQFDKSle8=;
- b=fFJWmCYPZGoK930MMVOpfEUTRv1Pa1QOxROoSq+MLxnm0lNzu16+O2+D8vSlPOcM1/wZxZ7vJ+oYgQSPfvAG18REktClaAfHn2NsbDy0o9w4G3U3M0VXDFBNJ2NXTMFrefNSRpf4VA9aG7X6wMlzTZV8dmzdNkA/H6vIgMtrv+shGOIjzA/bGMvJ3DYIFtnyHrfPbsiaQg6SqLt49dVpasdIn4GYAf+rIxifKAjSzqjGHu72E01FGdz0jqM114myuSGhNzlQ9mQb0qUvamLaem012tfz3HxJEStxHBzC3YRpxPrGeTiSkSJZUyOGvNJ1JTejQxkN7jbsCoK9NOO3rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=peak-system.com; dmarc=pass action=none
- header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Iu+scwpDSxeEpHwtlgXclTl6B96q6Pd73yuQFDKSle8=;
- b=6kESn+sWkLWK74iFR3k23rQrnacXfd9GEWTF1YXMdy9cZexhE712NQVJ0XVIr9uZdlMKMvncuNK/O7DWEJXOoUffjo+AJQKKNt5TsZnag/nkoB/MlmTfPli8SIcxDaYyMjBtvZrBsLDUnIlOQ1YJvxHnXOcdwlP4CgWsca2QDIc=
-Received: from PA4PR03MB6797.eurprd03.prod.outlook.com (2603:10a6:102:f1::9)
- by PR3PR03MB6604.eurprd03.prod.outlook.com (2603:10a6:102:7e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4020.17; Tue, 13 Apr
- 2021 07:27:04 +0000
-Received: from PA4PR03MB6797.eurprd03.prod.outlook.com
- ([fe80::816e:66e6:d784:304]) by PA4PR03MB6797.eurprd03.prod.outlook.com
- ([fe80::816e:66e6:d784:304%4]) with mapi id 15.20.4020.022; Tue, 13 Apr 2021
- 07:27:04 +0000
-From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        id S229762AbhDMH3y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Apr 2021 03:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239357AbhDMH3x (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Apr 2021 03:29:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A530C061574
+        for <linux-can@vger.kernel.org>; Tue, 13 Apr 2021 00:29:30 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lWDUF-0001PO-Oc; Tue, 13 Apr 2021 09:29:27 +0200
+Received: from [IPv6:2a03:f580:87bc:d400:d93:7b32:b325:ef5e] (unknown [IPv6:2a03:f580:87bc:d400:d93:7b32:b325:ef5e])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
+        (Authenticated sender: mkl@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 529E760D869;
+        Tue, 13 Apr 2021 07:29:26 +0000 (UTC)
+Subject: Re: [RFC]: can-next 2021-04-06: peak_usb cleanups
+To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
         "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
-Subject: RE: [RFC]: can-next 2021-04-06: peak_usb cleanups
-Thread-Topic: [RFC]: can-next 2021-04-06: peak_usb cleanups
-Thread-Index: AQHXMDXvvdvaG0hVqEW1Q0I4zj3Tyw==
-Date:   Tue, 13 Apr 2021 07:27:04 +0000
-Message-ID: <PA4PR03MB6797B570609FE70C0C1670B7D64F9@PA4PR03MB6797.eurprd03.prod.outlook.com>
-Accept-Language: fr-FR, en-US
-Content-Language: fr-FR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: pengutronix.de; dkim=none (message not signed)
- header.d=none;pengutronix.de; dmarc=none action=none
- header.from=peak-system.com;
-x-originating-ip: [89.158.142.148]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 267e8082-25df-46a6-c61c-08d8fe4d89b6
-x-ms-traffictypediagnostic: PR3PR03MB6604:
-x-microsoft-antispam-prvs: <PR3PR03MB660409AF9AEC9E2E46339652D64F9@PR3PR03MB6604.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LgfGT+6gx5TjVTwm5AaOwTXb0bCI+gx+HVeGoilGPn99I+KSvq+apK86Sf9tL4yl/avScZ8HCA9BsNRiEoTKp4jRhbBopEp9QihuNkZ3V0Sk5ebW6rdnbE8iaybIryQ2alT8bZ8XBChHF3P3bd5qvnx5qIeKIhLvMEhVp+uwEKCrP4Cy6zUKmmvvpBonL6Csl7ZHBEyJdo7s6Z1DFT/uLPOim7EHdPgiB43pVcDD2fj6xn4FfPB9WQE60Jhh7mhCMPBVWCAzfn2znNSazV2p0jiHEb7d7mSZ3El4U/q40FUf2SZaan6m0j4R/N2PgN3BIOdpupnqNyv3kN92uOHMB+EpUrOsCTEsa+QP8Zk2brMIuE17gXxx4gWwbfXfemuGXRGd5mdgVwylUrrZ651EcV6VT8s+FMYC1ha8VHiLms3xmPemAe3SIG2TBIJKfMyzGF/GJfILL5w7s/V9k2HKYam4VsJE0uKOiJ9G8LIfpS41y1+ubaUL8C74/nykNwKnacsCJSED4ywmwjh+oI2RsiGoFl+rcE/r75S1rP3O/MqLAzT3aAtUyw7DNGNpykCxNuZohAZhDG4zD6/+TJY0P3fxczkvM9N6gxmYh7ig7RduwN/4RE/CxRwwl/A60SlpJswvM/gUYxKWlnAvOgOmkswaJ8pAO2m1EhfZtBRyE+hHDpajiQRvDChjjMkvEMKB
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB6797.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39830400003)(376002)(396003)(136003)(366004)(7696005)(83380400001)(54906003)(66556008)(26005)(122000001)(2906002)(66446008)(6506007)(8676002)(53546011)(52536014)(186003)(966005)(33656002)(6916009)(316002)(66946007)(5660300002)(15974865002)(4326008)(9686003)(86362001)(478600001)(55016002)(38100700002)(64756008)(76116006)(8936002)(66476007)(71200400001)(66574015);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?iso-8859-1?Q?Ue5U/uHyyH9eDdPJEr5TsFcEfCYIrdKWUw9WexzjMY5SWSblzeshg0D9JS?=
- =?iso-8859-1?Q?DcL0ICEeRILcqUaKIf+onixp6DasdZGnoGlLg7/1/trQxyui9LRYYkT98T?=
- =?iso-8859-1?Q?6v1EQlbNZaO2tjJWlig5kiSyyJA9i6OTBZ7i5sLuYshGzhKrubgTcUCsnB?=
- =?iso-8859-1?Q?jKIesyavJlV3ENRwohQLPoawUiqR+od39p3prrKi2s+SZhAgP9Qj2Csgdm?=
- =?iso-8859-1?Q?txSUVbmV5X6LsruwBlG5TQ07Yznza3JhGC8N+Gw7a3L/SU/6b/IuvKvoeI?=
- =?iso-8859-1?Q?LUMQjFszFndrE9B6TTo/P7NF5xiLti7zBWyvTAlLPfHozhjBoJS4sXfJjY?=
- =?iso-8859-1?Q?6lzjNIKPBXIqNdl2xs4KZ2Yri3X4cLNi/cjz7T/mX0s7x7N2zQE23BoXRB?=
- =?iso-8859-1?Q?7CyoVIAlB5asGlbk+h0U/KnKqHdTFGHilt47BBwf60xz8EUfR0HJBZB/Xf?=
- =?iso-8859-1?Q?uKTY0vJtz+U2Uk9+z/sHAqZVum2ujMRNxVl65gjcOIADZNOwNvamhjzBSR?=
- =?iso-8859-1?Q?qeJ8YFrFVStiqO5nGJuif1rpGv5EwUMgzSJQLZBhYWUwMpnETWkcL6KxWR?=
- =?iso-8859-1?Q?ZsSnQjYSdqG/UBNZilU69zTZY7fY/1S7tj1Pnk/k1l0j5sufWlqtNIBgCh?=
- =?iso-8859-1?Q?tILN9SlbBLk5U5sqr5qoa6ih8d5KfXbKmFfTnYyDIc9+bo27nUiWSGXjtY?=
- =?iso-8859-1?Q?11daF45xKAcnEa+klshgVuvO8YfDBsszpeMruNRLlGd5LWASzQolJGpeQB?=
- =?iso-8859-1?Q?dkrBecWibHYFTDr7TF7IknIu1At1I7TUxbE5QaTonM2fOIEnYA/j2cFTNW?=
- =?iso-8859-1?Q?N3Hg7Zi6OWRSgYdldYnQzDqBa5+Yg/vMOjbqyRqrrET4uuK82xEWgYkLc3?=
- =?iso-8859-1?Q?NAieGShsaYVqDADgSeHGyYL+mSMtuhl1eCn9fdlLr+CeIyYSbYmMqMojIC?=
- =?iso-8859-1?Q?3tkOVErHIJZhHGQ0mT0eLXpHbvZM6LIi3pBLgjbRJ85V/haj15N8qXFTBe?=
- =?iso-8859-1?Q?kWAJgVJmGqUT0EtCWG2Es3jvFMHjDeY10nCxE68sxTWIY0lOjw4JIore+B?=
- =?iso-8859-1?Q?QHZ1O6sWXQWng19YwxT8HQjk8Bfose2+tCKs2pi2i/fXFyMXHZb+lji+ic?=
- =?iso-8859-1?Q?0nuz9sA6USPAesnHKtPC9w0yUcPTaIIFnqIZBbZnGBjdCsu545Z+63a0Uv?=
- =?iso-8859-1?Q?8jSz0N0lrXRukKp4WW6X8VnojMjyVpEuciVmPVAFXjVgYwgoSmQs/NKlVU?=
- =?iso-8859-1?Q?5L6y6z4uH0vUN+cfYzkjMQCk7gWuZYeC7moxkFgPE13FcOiedbAG+kEytX?=
- =?iso-8859-1?Q?Sd9TvqGjjXfgoAzoQaj1yTbhVslfeigxXa5hHEDftMwPK9h3V9gFQojl6P?=
- =?iso-8859-1?Q?F5Ot1aLMHt?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+References: <PA4PR03MB6797B570609FE70C0C1670B7D64F9@PA4PR03MB6797.eurprd03.prod.outlook.com>
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <32b22bf4-3ee2-1113-21f0-049936a41b95@pengutronix.de>
+Date:   Tue, 13 Apr 2021 09:29:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-OriginatorOrg: peak-system.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB6797.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 267e8082-25df-46a6-c61c-08d8fe4d89b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Apr 2021 07:27:04.7795
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ys2fRuQtoJgi+dKjVM4p1jG5QVVb4Vx8FIuqueMixIhIGhYOdjfJoNQh08x/3Z9IQZRugivEhWTRN211JEDDCVM+cYcQkScaG8hfkGz22WA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR03MB6604
+In-Reply-To: <PA4PR03MB6797B570609FE70C0C1670B7D64F9@PA4PR03MB6797.eurprd03.prod.outlook.com>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ protocol="application/pgp-signature";
+ boundary="87fjASHh5ofD93wBW5SzsbROpunZswLvw"
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--87fjASHh5ofD93wBW5SzsbROpunZswLvw
+Content-Type: multipart/mixed; boundary="R0a72YzRh38vq8zQYgOJFN9w1GcZODpsE";
+ protected-headers="v1"
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>
+Cc: "kernel@pengutronix.de" <kernel@pengutronix.de>,
+ "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+Message-ID: <32b22bf4-3ee2-1113-21f0-049936a41b95@pengutronix.de>
+Subject: Re: [RFC]: can-next 2021-04-06: peak_usb cleanups
+References: <PA4PR03MB6797B570609FE70C0C1670B7D64F9@PA4PR03MB6797.eurprd03.prod.outlook.com>
+In-Reply-To: <PA4PR03MB6797B570609FE70C0C1670B7D64F9@PA4PR03MB6797.eurprd03.prod.outlook.com>
 
-Take the one that best confirms (IMHO I would say "Acked-by").
+--R0a72YzRh38vq8zQYgOJFN9w1GcZODpsE
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: quoted-printable
 
-Regards,
+On 4/13/21 9:27 AM, St=C3=A9phane Grosjean wrote:
+> Take the one that best confirms (IMHO I would say "Acked-by").
 
---- St=E9phane
-
-
-
-            De: Marc Kleine-Budde
-Envoy=E9: Lundi 12 avril 2021 13:03
-=C0: St=E9phane Grosjean
-Cc: kernel@pengutronix.de; linux-can@vger.kernel.org
-Objet: Re: [RFC]: can-next 2021-04-06: peak_usb cleanups
-
-
-
-
-On 12.04.2021 10:45:07, St=E9phane Grosjean wrote:
-
-> I've tested that serie of patches with all the CAN-FD USB interfaces
-
-> from PEAK-System GmbH (that is, PCAN-USB FD, PCAN-USB Pro FD, PCAN-USB
-
-> X6 and PCAN-Chip USB) as well as with the CAN 2.0 only USB interfaces
-
-> PCAN-USB and PCAN-USB Pro, and I confirm all of them.
-
-
-
-Thanks for testing!
-
-
-
-> Do you need my Acked-by and/or Tested-by for each patch?
-
-
-
-No need to, I can add them here. What should I add?
-
-Acked-by?
-
-Tested-by?
-
-
-
-regards,
+As you have actually tested, I'll add both :)
 
 Marc
 
-
-
---
-
+--=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
-
 Embedded Linux                   | https://www.pengutronix.de  |
-
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---
-PEAK-System Technik GmbH
-Sitz der Gesellschaft Darmstadt - HRB 9183
-Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
-Unsere Datenschutzerklaerung mit wichtigen Hinweisen
-zur Behandlung personenbezogener Daten finden Sie unter
-www.peak-system.com/Datenschutz.483.0.html
+--R0a72YzRh38vq8zQYgOJFN9w1GcZODpsE--
+
+--87fjASHh5ofD93wBW5SzsbROpunZswLvw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB1SFMACgkQqclaivrt
+76kSHwf/VUivnC7wT9cmr3NbvwZNNe/ueVk1X6Ltn/8ThKaN750QOdxhqNDlXxSK
+WLVmF7H3ojrSiRTdmvqU5Kct4wYGRP6yV6VaYJ2dWTLeSbAyS0PA578IGmFqW1/7
+bobVMuD6g8arbFVp6ZBywdVGSwYUYN/Kq97qODPXZ1/uM2FL6ABMRhe0PJCz9YaO
+v67T5z7YdRsUKagMEdgqjZ9eMThjoORotZyp/Ve2cumx7jA1/t4ANQo/l3wF6aSj
+vCxBf3ziKlEidaPF55vPmmQTQ3jKIaV8C0/QIrrvhbGx9SewIpLdTIYJLrn7F3Dg
+nJAcXcTlBSda/7reM6+yRhbzNLf4nA==
+=MLu+
+-----END PGP SIGNATURE-----
+
+--87fjASHh5ofD93wBW5SzsbROpunZswLvw--
