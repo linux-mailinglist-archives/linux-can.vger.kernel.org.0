@@ -2,121 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E7B35DE29
-	for <lists+linux-can@lfdr.de>; Tue, 13 Apr 2021 14:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEB935DFE4
+	for <lists+linux-can@lfdr.de>; Tue, 13 Apr 2021 15:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343937AbhDMMBK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 13 Apr 2021 08:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343901AbhDMMBJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 13 Apr 2021 08:01:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAB6C061574
-        for <linux-can@vger.kernel.org>; Tue, 13 Apr 2021 05:00:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lWHin-0003AO-AL; Tue, 13 Apr 2021 14:00:45 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:d93:7b32:b325:ef5e])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 08F7F60DCD2;
-        Tue, 13 Apr 2021 12:00:42 +0000 (UTC)
-Date:   Tue, 13 Apr 2021 14:00:42 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH] can: etas_es58x: fix null pointer dereference when
- handling error frames
-Message-ID: <20210413120042.27sfrb4hgrr4ua7x@pengutronix.de>
-References: <20210413114242.2760-1-mailhol.vincent@wanadoo.fr>
+        id S1344766AbhDMNP5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 13 Apr 2021 09:15:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55788 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344864AbhDMNPx (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 13 Apr 2021 09:15:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A0FD6613B6;
+        Tue, 13 Apr 2021 13:15:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618319732;
+        bh=hntf3n54qqh0uXzZ6D8tUaPqStMPIr+/hNfZoDniY4A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pFpwLvstWECXqVpOgyrkrKmlfsQ28mBYBwtR2o1zDIZNTN3s1OyR8ka9IMQF3ifAE
+         apbS1JSkX1Thm0Dz70rv4l+fRx8vcuF9w7H0zOOqpejghSANJvWB7UO37TuxD0SsPE
+         tPNQd5x1e3XOL1g/hzXjXdaL4D/pRLipUmK6nOWDyro+mXVGfwYFTYKNilgerKm4ss
+         VbyvwloBimOPyZejVrnXMy5SwDPYjcGpLt7in7dRz23norkDFszPBjq6XLp2scE4Ss
+         IpeYXQTzhOEVZSa4EnQ+y8p0vmIN3KT0xqanjCYFh1IMn2jykf6CATmG4DFSpIF8+T
+         9Z6LYAE7/ltbQ==
+Received: by mail-ej1-f48.google.com with SMTP id sd23so17205708ejb.12;
+        Tue, 13 Apr 2021 06:15:32 -0700 (PDT)
+X-Gm-Message-State: AOAM531BGVUO9slmIAe8bA1f5SyEqknh1J7ju3fJz278EpTLZq+Qp2fC
+        Zk6j3NCd6UNh+cxw8K9q57fsClDc2UWan1ALmA==
+X-Google-Smtp-Source: ABdhPJzC/tge5Y9i/M8U9jxXXMaHumRpj2qoNI/uM/HWkeG+5F6Zoeof4s70jO3VjFJc52wf9aBwCKB/22YZrMkMMhQ=
+X-Received: by 2002:a17:907:367:: with SMTP id rs7mr18299959ejb.468.1618319731269;
+ Tue, 13 Apr 2021 06:15:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7vvsamthpjzsb2d4"
-Content-Disposition: inline
-In-Reply-To: <20210413114242.2760-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210409134056.18740-1-a-govindraju@ti.com> <20210409134056.18740-2-a-govindraju@ti.com>
+ <f9b04d93-c249-970e-3721-50eb268a948f@pengutronix.de> <20210412174956.GA4049952@robh.at.kernel.org>
+ <20210413074106.gvgtjkofyrdp5yxt@pengutronix.de>
+In-Reply-To: <20210413074106.gvgtjkofyrdp5yxt@pengutronix.de>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 13 Apr 2021 08:15:18 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+yEQGuZYWhsQ-we36_Xi5X94YJ23oFe-T6h4U4X6iUhg@mail.gmail.com>
+Message-ID: <CAL_Jsq+yEQGuZYWhsQ-we36_Xi5X94YJ23oFe-T6h4U4X6iUhg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: phy: Add binding for TI TCAN104x CAN transceivers
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Aswath Govindraju <a-govindraju@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-phy@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue, Apr 13, 2021 at 2:41 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 12.04.2021 12:49:56, Rob Herring wrote:
+> > On Mon, Apr 12, 2021 at 12:19:30PM +0200, Marc Kleine-Budde wrote:
+> > > On 4/9/21 3:40 PM, Aswath Govindraju wrote:
+> > > > Add binding documentation for TI TCAN104x CAN transceivers.
+> > > >
+> > > > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> > > > ---
+> > > >  .../bindings/phy/ti,tcan104x-can.yaml         | 56 +++++++++++++++++++
+> > > >  1 file changed, 56 insertions(+)
+> > > >  create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..4abfc30a97d0
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> > > > @@ -0,0 +1,56 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: "http://devicetree.org/schemas/phy/ti,tcan104x-can.yaml#"
+> > > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > > +
+> > > > +title: TCAN104x CAN TRANSCEIVER PHY
+> > > > +
+> > > > +maintainers:
+> > > > +  - Aswath Govindraju <a-govindraju@ti.com>
+> > > > +
+> > > > +properties:
+> > > > +  $nodename:
+> > > > +    pattern: "^tcan104x-phy"
+> > > > +
+> > > > +  compatible:
+> > > > +    enum:
+> > > > +      - ti,tcan1042
+> > > > +      - ti,tcan1043
+> > >
+> > > Can you create a generic standby only and a generic standby and enable transceiver?
+> >
+> > As a fallback compatible fine, but no generic binding please. A generic
+> > binding can't describe any timing requirements between the 2 GPIO as
+> > well as supplies when someone wants to add those (and they will).
+>
+> Right - that makes sense.
+>
+> > > > +
+> > > > +  '#phy-cells':
+> > > > +    const: 0
+> > > > +
+> > > > +  standby-gpios:
+> > > > +    description:
+> > > > +      gpio node to toggle standby signal on transceiver
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  enable-gpios:
+> > > > +    description:
+> > > > +      gpio node to toggle enable signal on transceiver
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  max-bitrate:
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    description:
+> > > > +      max bit rate supported in bps
+> >
+> > We already have 'max-speed' for serial devices, use that.
+>
+> There is already the neither Ethernet PHY (PHYLINK/PHYLIB) nor generic
+> PHY (GENERIC_PHY) can-transceiver binding
+> Documentation/devicetree/bindings/net/can/can-transceiver.yaml which
+> specifies max-bitrate. I don't have strong feelings whether to use
+> max-bitrate or max-speed.
 
---7vvsamthpjzsb2d4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Okay, max-bitrate is fine.
 
-On 13.04.2021 20:42:42, Vincent Mailhol wrote:
-> During the handling of CAN bus errors, a CAN error SKB is allocated
-> using alloc_can_err_skb(). Even if the allocation of the SKB fails,
-> the function continues in order to do the stats handling.
->=20
-> All access to the can_frame pointer (cf) should be guarded by an if
-> statement:
-> 	if (cf)
->=20
-> However, the increment of the rx_bytes stats:
-> 	netdev->stats.rx_bytes +=3D cf->can_dlc;
-> dereferences the cf pointer and was not guarded by an if condition
-> leading to a NULL pointer dereference if the can_err_skb() function
-> failed.
->=20
-> Replacing the cf->can_dlc by the macro CAN_ERR_DLC (which is the
-> length of any CAN error frames) solves this NULL pointer dereference.
->=20
-> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CA=
-N USB interfaces")
-> Reported-by: Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> Hi Marc,
->=20
-> I am really sorry, but I was just notified about this issue litteraly
-> a few minutes after you send the pull request to net-next.
+>
+> Speaking about Ethernet PHYs, what are to pros and cons to use the
+> generic PHY compared to the Ethernet PHY infrastructure?
 
-:D
+For higher speed ethernet, both are used. There's the serdes phy and
+the ethernet phy with serdes phy using the generic phy binding. For
+CAN, it probably comes down to what's a better fit.
 
-> I am not sure how to proceed. You might either cancel the pull request
-> and squash this to 8537257874e9 ("can: etas_es58x: add core support
-> for ETAS ES58X CAN USB interfaces") or send it as a separate patch.
->=20
-> Please let me know if you need me to do anything.
-
-I'll send a follow-up pull request tomorrow.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---7vvsamthpjzsb2d4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB1h+cACgkQqclaivrt
-76lw3wf8C32JuHk0dtao8qjHSHf9MLq8zaBkN4GxmtHvBMRajZUMxi3VgpXQcxon
-Mqu3zDFb57e+WD/7M0bbO2V3Blx6aH34uGKt+loMrZjDspJqo60Ut3yz4qT3sIzN
-mMIWYypg0Debofg4c9XKeKsTK5uq/5O7u24nhsGqRH6sw009mNVLB7T2ERaZmW9N
-cqpgkG4AzAaPvtgm89EmGSNWd7DsGJFtSZpyRFAu/86nxfx1w8+/qoNSvYs+HdXH
-Kn/X+lg3Znzd0GaSUa2YdIjveTZ7OFVw+ZfiTy8/AWcxEzfwrunTGJ7AJJIDR5oU
-xwLBtNNKnTvWuNUROuEADqozeiwNuA==
-=ILb7
------END PGP SIGNATURE-----
-
---7vvsamthpjzsb2d4--
+Rob
