@@ -2,116 +2,147 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 271EB35F4D4
-	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 15:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B4235F5CA
+	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 16:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347443AbhDNNZa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Apr 2021 09:25:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351349AbhDNNZ1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 14 Apr 2021 09:25:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4B7EB61132;
-        Wed, 14 Apr 2021 13:25:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618406705;
-        bh=KsfaSXwOVw8QET+rbrgc/Q2gfMGscvpWJQ5f6uP0bDI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Iks8ZnUzibOCOteCTqLQDc3sO5dWbVeFufkJSHTUyiuVNtcpRqRXS0SLs11jkHmkb
-         MM3xrtvIwsBTm4XeXa+KJBW5otpGgsXJdBf1PLWoFl6S+6jknNP+IEbgGHPls7OmuQ
-         kHZnazrVjYdMCTbHdbaTM5brZS9X3pnAGdhY44N6GEnw95SrMNdrMDcDwkciMq/Ps/
-         ffiJEXI7SmS/tWpFVde8yq8BhxsCkNgrrh030U5t5Z0HuTWY+1VXdnFLwC83BoOBOe
-         b0rnWYbgFPS4Xq0+Lz4Jqn8YGEFMv/iS7JktC43lK2k8yNa3ddhxjTHd2GzY/MAK3Z
-         GW8y9TNcG0/KA==
-Received: by mail-qt1-f181.google.com with SMTP id y2so15369137qtw.13;
-        Wed, 14 Apr 2021 06:25:05 -0700 (PDT)
-X-Gm-Message-State: AOAM532rKQpNZzGme299M/aVLuKhG/gFDtGPqldHy/7NodD/sBWr1Npy
-        CK4qHwXhAVtJtRDx2Xm4/3u3ldV/kEs8uFExLA==
-X-Google-Smtp-Source: ABdhPJwJA1ciQB+OakY6pTjV36EpJWrGm4YT0HjQNhSLoyqhAQXeNhsuTJc+12R0uWC9xI3XPGMST7pxg0owMnX4v58=
-X-Received: by 2002:a05:622a:8:: with SMTP id x8mr26156855qtw.31.1618406704544;
- Wed, 14 Apr 2021 06:25:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210409134056.18740-1-a-govindraju@ti.com> <20210409134056.18740-4-a-govindraju@ti.com>
- <20210412175134.GA4109207@robh.at.kernel.org> <e1c2b752-5a2b-e973-c188-5916d8a2e31f@ti.com>
-In-Reply-To: <e1c2b752-5a2b-e973-c188-5916d8a2e31f@ti.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 14 Apr 2021 08:24:52 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJ6OW6Pwtj7yTiCguvXDPfMreVpEsxAg59pwfa2qWvqEA@mail.gmail.com>
-Message-ID: <CAL_JsqJ6OW6Pwtj7yTiCguvXDPfMreVpEsxAg59pwfa2qWvqEA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: net: can: Document transceiver
- implementation as phy
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
+        id S1349406AbhDNOGV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Apr 2021 10:06:21 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:33044 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347911AbhDNOGS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Apr 2021 10:06:18 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13EE5RAB049687;
+        Wed, 14 Apr 2021 09:05:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1618409127;
+        bh=+lMvqu6ah1GaMcYti3LSJHHCNLxGEnObRGR6qXXpcyU=;
+        h=From:To:CC:Subject:Date;
+        b=mtkZvgXip2BqeVdC65NmKtokDPxSP7UGZ/d2HhcImqA5rR5iZwW/AjMShc3SITMXa
+         14QoSY8zDKPV7CXwuiC0ouFzO3zvfvZrrAldtUsw1tC9t58NNtkRJbFFgmxWi/FoBb
+         VXh5pHavqXiVJgwS4L41db5Nsb5FZQyYng4ZWpe8=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13EE5RUq119347
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 14 Apr 2021 09:05:27 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 14
+ Apr 2021 09:05:26 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Wed, 14 Apr 2021 09:05:26 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13EE5Lu8074247;
+        Wed, 14 Apr 2021 09:05:22 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-phy@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: [PATCH v2 0/6] CAN TRANSCEIVER: Add support for CAN transceivers
+Date:   Wed, 14 Apr 2021 19:35:15 +0530
+Message-ID: <20210414140521.11463-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 1:49 AM Aswath Govindraju <a-govindraju@ti.com> wrote:
->
-> Hi Rob,
->
-> On 12/04/21 11:21 pm, Rob Herring wrote:
-> > On Fri, Apr 09, 2021 at 07:10:53PM +0530, Aswath Govindraju wrote:
-> >> From: Faiz Abbas <faiz_abbas@ti.com>
-> >>
-> >> Some transceivers need a configuration step (for example, pulling the
-> >> standby or enable lines) for them to start sending messages. The
-> >> transceiver can be implemented as a phy with the configuration done in the
-> >> phy driver. The bit rate limitation can the be obtained by the driver using
-> >> the phy node.
-> >>
-> >> Document the above implementation in the bosch mcan bindings
-> >>
-> >> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> >> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> >> ---
-> >>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 6 ++++++
-> >>  1 file changed, 6 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> >> index 798fa5fb7bb2..2c01899b1a3e 100644
-> >> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> >> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> >> @@ -109,6 +109,12 @@ properties:
-> >>    can-transceiver:
-> >>      $ref: can-transceiver.yaml#
-> >>
-> >> +  phys:
-> >> +    minItems: 1
-> >
-> > maxItems: 1
->
-> Will add this in the respin.
->
-> >
-> >> +
-> >> +  phy-names:
-> >> +    const: can_transceiver
-> >
-> > Kind of a pointless name. You don't really need a name if there's a
-> > single entry.
-> >
->
-> This name used by devm_phy_optional_get() in m_can driver to get the phy
-> data structure.
+The following series of patches add support for CAN transceivers.
 
-With no name, you'll get the 1st one. Looks like the phy subsystem
-warns on this. That's wrong, so please fix that.
+TCAN1042 has a standby signal that needs to be pulled high for
+sending/receiving messages[1]. TCAN1043 has a enable signal along with
+standby signal that needs to be pulled up for sending/receiving
+messages[2], and other combinations of the two lines can be used to put the
+transceiver in different states to reduce power consumption. On boards
+like the AM654-idk and J721e-evm these signals are controlled using gpios.
 
-Rob
+Patch 1 rewords the comment that restricts max_link_rate attribute to have
+units of Mbps.
+
+Patch 2 adds an API for devm_of_phy_optional_get_by_index
+
+Patch 3 models the transceiver as a phy device tree node with properties
+for max bit rate supported, gpio properties for indicating gpio pin numbers
+to which standby and enable signals are connected.
+
+Patch 4 adds a generic driver to support CAN transceivers.
+
+Patches 5 & 6 add support for implementing the transceiver as a phy of
+m_can_platform driver.
+
+changes since v1:
+- Added patch 1 (in v2) that rewords the comment that restrict
+  max_link_rate attribute to have units of Mbps.
+- Added patch 2 (in v2) that adds an API for
+  devm_of_phy_optional_get_by_index
+- Patch 1 (in v1)
+  - updated MAINTAINERS file
+- Patch 2 (in v1)
+  - replaced m_can with CAN to make the driver independent of CAN driver
+  - Added prefix CAN_TRANSCEIVER for EN_PRESENT and STB_PRESENT
+  - Added new line before return statements in power_on() and power_off
+  - Added error handling patch for devm_kzalloc()
+  - used the max_link_rate attribute directly instead of dividing it by
+    1000000
+  - removed the spaces before GPIOD_OUT_LOW in devm_gpiod_get()
+  - Corrected requested value for standby-gpios to GPIOD_OUT_HIGH
+  - Updated MAINTAINERS file
+- Patch 3 (in v1)
+  - replaced minItems with maxItems
+  - Removed phy-names property as there is only one phy
+- Patch 4 (in v1)
+  - replaced dev_warn with dev_info when no transceiver is found
+  - Added struct phy * field in m_can_classdev struct
+  - moved phy_power_on and phy_power_off to m_can_open and m_can_close
+    respectively
+  - Moved the check for max_bit_rate to generice transceiver driver
+
+[1] - https://www.ti.com/lit/ds/symlink/tcan1042h.pdf
+[2] - https://www.ti.com/lit/ds/symlink/tcan1043-q1.pdf
+
+Aswath Govindraju (4):
+  phy: core: Reword the comment specifying the units of max_link_rate to
+    be Mbps
+  phy: Add API for devm_of_phy_optional_get_by_index
+  dt-bindings: phy: Add binding for TI TCAN104x CAN transceivers
+  phy: phy-can-transceiver: Add support for generic CAN transceiver
+    driver
+
+Faiz Abbas (2):
+  dt-bindings: net: can: Document transceiver implementation as phy
+  can: m_can: Add support for transceiver as phy
+
+ .../bindings/net/can/bosch,m_can.yaml         |   3 +
+ .../bindings/phy/ti,tcan104x-can.yaml         |  56 +++++++
+ MAINTAINERS                                   |   2 +
+ drivers/net/can/m_can/m_can.c                 |  18 +++
+ drivers/net/can/m_can/m_can.h                 |   2 +
+ drivers/net/can/m_can/m_can_platform.c        |  15 ++
+ drivers/phy/Kconfig                           |   9 ++
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-can-transceiver.c             | 146 ++++++++++++++++++
+ drivers/phy/phy-core.c                        |  26 ++++
+ include/linux/phy/phy.h                       |   4 +-
+ 11 files changed, 281 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+ create mode 100644 drivers/phy/phy-can-transceiver.c
+
+-- 
+2.17.1
+
