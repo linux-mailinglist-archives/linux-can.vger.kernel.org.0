@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573E735F806
-	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 17:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2617C35F816
+	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 17:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350546AbhDNPli (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Apr 2021 11:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S1350593AbhDNPn6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Apr 2021 11:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350473AbhDNPlg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Apr 2021 11:41:36 -0400
+        with ESMTP id S233426AbhDNPn6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Apr 2021 11:43:58 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08633C061756
-        for <linux-can@vger.kernel.org>; Wed, 14 Apr 2021 08:41:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B0CC061574
+        for <linux-can@vger.kernel.org>; Wed, 14 Apr 2021 08:43:37 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lWhdW-00056s-1I; Wed, 14 Apr 2021 17:41:02 +0200
+        id 1lWhfm-0005Fg-3Y; Wed, 14 Apr 2021 17:43:22 +0200
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:69d2:43d8:822b:d361])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 6AB1160EA59;
-        Wed, 14 Apr 2021 15:41:00 +0000 (UTC)
-Date:   Wed, 14 Apr 2021 17:40:59 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 429EA60EA5B;
+        Wed, 14 Apr 2021 15:43:20 +0000 (UTC)
+Date:   Wed, 14 Apr 2021 17:43:19 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Aswath Govindraju <a-govindraju@ti.com>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
@@ -41,16 +41,14 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         netdev@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>,
         Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: Re: [PATCH v2 4/6] phy: phy-can-transceiver: Add support for generic
- CAN transceiver driver
-Message-ID: <20210414154059.3uq2blnee5knfkha@pengutronix.de>
+Subject: Re: [PATCH v2 0/6] CAN TRANSCEIVER: Add support for CAN transceivers
+Message-ID: <20210414154319.knn323wo6vi3t2dp@pengutronix.de>
 References: <20210414140521.11463-1-a-govindraju@ti.com>
- <20210414140521.11463-5-a-govindraju@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tkjb36vvgctovqee"
+        protocol="application/pgp-signature"; boundary="ls64vuqf5liwgxeq"
 Content-Disposition: inline
-In-Reply-To: <20210414140521.11463-5-a-govindraju@ti.com>
+In-Reply-To: <20210414140521.11463-1-a-govindraju@ti.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -60,47 +58,42 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---tkjb36vvgctovqee
+--ls64vuqf5liwgxeq
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 14.04.2021 19:35:19, Aswath Govindraju wrote:
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -61,6 +61,15 @@ config USB_LGM_PHY
->  	  interface to interact with USB GEN-II and USB 3.x PHY that is part
->  	  of the Intel network SOC.
-> =20
-> +config PHY_CAN_TRANSCEIVER
-> +	tristate "CAN transceiver PHY"
-> +	select GENERIC_PHY
-> +	help
-> +	  This option enables support for CAN transceivers as a PHY. This
-> +	  driver provides function for putting the transceivers in various
-> +	  functional modes using gpios and sets the attribute max link
-> +	  rate, for mcan drivers.
-> +
->  source "drivers/phy/allwinner/Kconfig"
->  source "drivers/phy/amlogic/Kconfig"
->  source "drivers/phy/broadcom/Kconfig"
-> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> index adac1b1a39d1..9c66101c9605 100644
-> --- a/drivers/phy/Makefile
-> +++ b/drivers/phy/Makefile
-> @@ -9,6 +9,7 @@ obj-$(CONFIG_PHY_LPC18XX_USB_OTG)	+=3D phy-lpc18xx-usb-ot=
-g.o
->  obj-$(CONFIG_PHY_XGENE)			+=3D phy-xgene.o
->  obj-$(CONFIG_PHY_PISTACHIO_USB)		+=3D phy-pistachio-usb.o
->  obj-$(CONFIG_USB_LGM_PHY)		+=3D phy-lgm-usb.o
-> +obj-$(CONFIG_PHY_CAN_TRANSCEIVER)	+=3D phy-can-transceiver.o
->  obj-y					+=3D allwinner/	\
->  					   amlogic/	\
->  					   broadcom/	\
+On 14.04.2021 19:35:15, Aswath Govindraju wrote:
+> The following series of patches add support for CAN transceivers.
+>=20
+> TCAN1042 has a standby signal that needs to be pulled high for
+> sending/receiving messages[1]. TCAN1043 has a enable signal along with
+> standby signal that needs to be pulled up for sending/receiving
+> messages[2], and other combinations of the two lines can be used to put t=
+he
+> transceiver in different states to reduce power consumption. On boards
+> like the AM654-idk and J721e-evm these signals are controlled using gpios.
+>=20
+> Patch 1 rewords the comment that restricts max_link_rate attribute to have
+> units of Mbps.
+>=20
+> Patch 2 adds an API for devm_of_phy_optional_get_by_index
 
-I'm not sure how the phy framework handles this, but I assume it's
-alphabetically sorted, too.
+You probably want to split this into 2 or even 3 separate series. The
+first one would be patches 1+2 then 3+4 they can go via the phy tree.
+Patches 5+6 can go via linux-can-next
 
+> Patch 3 models the transceiver as a phy device tree node with properties
+> for max bit rate supported, gpio properties for indicating gpio pin numbe=
+rs
+> to which standby and enable signals are connected.
+>=20
+> Patch 4 adds a generic driver to support CAN transceivers.
+>=20
+> Patches 5 & 6 add support for implementing the transceiver as a phy of
+> m_can_platform driver.
+
+regards,
 Marc
 
 --=20
@@ -109,19 +102,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---tkjb36vvgctovqee
+--ls64vuqf5liwgxeq
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB3DQgACgkQqclaivrt
-76mmBgf/UVJvC3LyyxxsHlIki0bqM9azxpljxBEijh6bYMp3McfGtrceY+uekf1Z
-BbgUckVw3gwtEV54ZksGr7jy1uWOqimOPTsr7NHm+AoqrhbfwwZP5vWdcfYUC04J
-OcdyAtxJk0T0T+7bLk9sRuPF9T9viN7CTBWVGrNwT9zTdKo0eQDClVGXoVK+RoGO
-VpNh/cYAXoJdKh5Sg6faoK8TJwyy+GVZRYqolPSB8mxDVVCFNBZBMjh8GIQjUdmK
-GAx+G13i/NiM01X/gZcznY9j1TzGmAp/sdUjBF0t53eVVbZ7tLUwhy8urUGmPm8n
-PSPYUomuv+5Zq6t47oA2Hwk/CkYvyA==
-=OYMs
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB3DZQACgkQqclaivrt
+76l7xQf9EU/0dxjIIELdncw7YgkbG5MzMjxlZsTwehF/S7YPFD+SrhSE33kjSFr/
+yan8/T+N6Gg3fSsLFQxpw3E5w2i5+0d2UjFErypXkUrLsTgT0d1rjKgywvakE7lj
++4hn33gfbCEK3Nx7vdDsZTbjmPpkXuCgrZKuFhvC8mtVTVMLC2p9hxdpvpzD7pOL
+AmQJJwLv3ubkD2PUihd1Tbj1xbVK0vKtOFeGBCi4qE/EIdJMSldDvFkC9+6525pN
+XXB7gAkAO/GGx+rkfmyV36bj97nfyoVoNGFjdPPY+VtIAiL7Vg8xBuXL7O7Eod70
+AqwTVUnL6UCnpbH4gqtjjkock/G82w==
+=kqEi
 -----END PGP SIGNATURE-----
 
---tkjb36vvgctovqee--
+--ls64vuqf5liwgxeq--
