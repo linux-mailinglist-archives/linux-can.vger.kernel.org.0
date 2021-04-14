@@ -2,31 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3D035F772
-	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 17:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C29735F7E3
+	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 17:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbhDNPQc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Apr 2021 11:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
+        id S1350279AbhDNPdr (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Apr 2021 11:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350221AbhDNPQb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Apr 2021 11:16:31 -0400
+        with ESMTP id S1350286AbhDNPdn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Apr 2021 11:33:43 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3F8C061574
-        for <linux-can@vger.kernel.org>; Wed, 14 Apr 2021 08:16:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C0BC06175F
+        for <linux-can@vger.kernel.org>; Wed, 14 Apr 2021 08:33:21 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lWhF7-0002Ja-7c; Wed, 14 Apr 2021 17:15:49 +0200
+        id 1lWhVr-0004Ij-Pa; Wed, 14 Apr 2021 17:33:07 +0200
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:69d2:43d8:822b:d361])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B74A760EA21;
-        Wed, 14 Apr 2021 15:15:45 +0000 (UTC)
-Date:   Wed, 14 Apr 2021 17:15:44 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B6BBF60EA4F;
+        Wed, 14 Apr 2021 15:33:04 +0000 (UTC)
+Date:   Wed, 14 Apr 2021 17:33:03 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Aswath Govindraju <a-govindraju@ti.com>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
@@ -41,15 +41,16 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         netdev@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>,
         Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: Re: [PATCH v2 6/6] can: m_can: Add support for transceiver as phy
-Message-ID: <20210414151544.uk756tddae3gdmvv@pengutronix.de>
+Subject: Re: [PATCH v2 3/6] dt-bindings: phy: Add binding for TI TCAN104x CAN
+ transceivers
+Message-ID: <20210414153303.yig6bguue3g25yhg@pengutronix.de>
 References: <20210414140521.11463-1-a-govindraju@ti.com>
- <20210414140521.11463-7-a-govindraju@ti.com>
+ <20210414140521.11463-4-a-govindraju@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o2cm6ur22kzzisul"
+        protocol="application/pgp-signature"; boundary="ye5l67gk7hz5picn"
 Content-Disposition: inline
-In-Reply-To: <20210414140521.11463-7-a-govindraju@ti.com>
+In-Reply-To: <20210414140521.11463-4-a-govindraju@ti.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -59,161 +60,90 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---o2cm6ur22kzzisul
+--ye5l67gk7hz5picn
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 14.04.2021 19:35:21, Aswath Govindraju wrote:
-> From: Faiz Abbas <faiz_abbas@ti.com>
+On 14.04.2021 19:35:18, Aswath Govindraju wrote:
+> Add binding documentation for TI TCAN104x CAN transceivers.
 >=20
-> Add support for implementing transceiver node as phy. The max_bitrate is
-> obtained by getting a phy attribute.
->=20
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
 > Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
 > ---
->  drivers/net/can/m_can/m_can.c          | 18 ++++++++++++++++++
->  drivers/net/can/m_can/m_can.h          |  2 ++
->  drivers/net/can/m_can/m_can_platform.c | 15 +++++++++++++++
->  3 files changed, 35 insertions(+)
+>  .../bindings/phy/ti,tcan104x-can.yaml         | 56 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can=
+=2Eyaml
 >=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 34073cd077e4..4807a1f69cc7 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -21,6 +21,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/can/dev.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/phy/phy.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -1514,6 +1515,7 @@ static void m_can_stop(struct net_device *dev)
->  static int m_can_close(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> +	int err;
-> =20
->  	netif_stop_queue(dev);
-> =20
-> @@ -1536,6 +1538,14 @@ static int m_can_close(struct net_device *dev)
->  	close_candev(dev);
->  	can_led_event(dev, CAN_LED_EVENT_STOP);
-> =20
-> +	if (cdev->transceiver) {
-> +		err =3D phy_power_off(cdev->transceiver);
-
-phy_power_off() can handle NULL pointers
-
-> +		if (err) {
-> +			netdev_err(dev, "error powering off phy, err=3D%d\n", err);
-> +			return err;
-
-As far as I can see it already print an error message in case of an
-error.
-
-> +		}
-> +	}
+> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b=
+/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> new file mode 100644
+> index 000000000000..4abfc30a97d0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/phy/ti,tcan104x-can.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 > +
->  	return 0;
->  }
-> =20
-> @@ -1720,6 +1730,14 @@ static int m_can_open(struct net_device *dev)
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
->  	int err;
-> =20
-> +	if (cdev->transceiver) {
-> +		err =3D phy_power_on(cdev->transceiver);
-> +		if (err) {
-> +			netdev_err(dev, "error powering on phy, err=3D%d\n", err);
-> +			return err;
-> +		}
-
-same here
-
-> +	}
+> +title: TCAN104x CAN TRANSCEIVER PHY
 > +
->  	err =3D m_can_clk_start(cdev);
->  	if (err)
->  		return err;
-> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-> index ace071c3e58c..38cad068abad 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -28,6 +28,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/can/dev.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/phy/phy.h>
-> =20
->  /* m_can lec values */
->  enum m_can_lec_type {
-> @@ -82,6 +83,7 @@ struct m_can_classdev {
->  	struct workqueue_struct *tx_wq;
->  	struct work_struct tx_work;
->  	struct sk_buff *tx_skb;
-> +	struct phy *transceiver;
-> =20
->  	struct can_bittiming_const *bit_timing;
->  	struct can_bittiming_const *data_timing;
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
-an/m_can_platform.c
-> index 599de0e08cd7..566ba25fb186 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -6,6 +6,7 @@
->  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.=
-com/
-> =20
->  #include <linux/platform_device.h>
-> +#include <linux/phy/phy.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -67,6 +68,7 @@ static int m_can_plat_probe(struct platform_device *pde=
-v)
->  	struct resource *res;
->  	void __iomem *addr;
->  	void __iomem *mram_addr;
-> +	struct phy *transceiver;
->  	int irq, ret =3D 0;
-> =20
->  	mcan_class =3D m_can_class_allocate_dev(&pdev->dev,
-> @@ -101,6 +103,18 @@ static int m_can_plat_probe(struct platform_device *=
-pdev)
->  		goto probe_fail;
->  	}
-> =20
-> +	transceiver =3D devm_of_phy_optional_get_by_index(&pdev->dev, pdev->dev=
-=2Eof_node, 0);
-> +	if (IS_ERR(transceiver)) {
-> +		ret =3D PTR_ERR(transceiver);
-> +		dev_err(&pdev->dev, "error while getting phy, err=3D%d\n", ret);
-> +		return ret;
-> +	}
+> +maintainers:
+> +  - Aswath Govindraju <a-govindraju@ti.com>
 > +
-> +	if (!transceiver)
-> +		dev_info(&pdev->dev, "No transceiver phy found\n");
-
-I don't think you should print anything here...
-If the driver was working before w/o a phy it will still work without one.
-
-> +	else
-> +		priv->cdev.can.bitrate_max =3D transceiver->attrs.max_link_rate;
+> +properties:
+> +  $nodename:
+> +    pattern: "^tcan104x-phy"
 > +
->  	priv->base =3D addr;
->  	priv->mram_base =3D mram_addr;
-> =20
-> @@ -108,6 +122,7 @@ static int m_can_plat_probe(struct platform_device *p=
-dev)
->  	mcan_class->pm_clock_support =3D 1;
->  	mcan_class->can.clock.freq =3D clk_get_rate(mcan_class->cclk);
->  	mcan_class->dev =3D &pdev->dev;
-> +	mcan_class->transceiver =3D transceiver;
-> =20
->  	mcan_class->ops =3D &m_can_plat_ops;
+> +  compatible:
+> +    enum:
+> +      - ti,tcan1042
+> +      - ti,tcan1043
+
+Can you ensure that the 1042 has only the standby gpio and the 1043 has bot=
+h?
+
+> +
+> +  '#phy-cells':
+> +    const: 0
+> +
+> +  standby-gpios:
+> +    description:
+> +      gpio node to toggle standby signal on transceiver
+> +    maxItems: 1
+> +
+> +  enable-gpios:
+> +    description:
+> +      gpio node to toggle enable signal on transceiver
+> +    maxItems: 1
+> +
+> +  max-bitrate:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      max bit rate supported in bps
+> +    minimum: 1
+> +
+> +required:
+> +  - compatible
+> +  - '#phy-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    transceiver1: tcan104x-phy {
+> +      compatible =3D "ti,tcan1043";
+> +      #phy-cells =3D <0>;
+> +      max-bitrate =3D <5000000>;
+> +      standby-gpios =3D <&wakeup_gpio1 16 GPIO_ACTIVE_LOW>;
+> +      enable-gpios =3D <&main_gpio1 67 GPIO_ACTIVE_LOW>;
+
+AFAICS the enable gpio is active high.
 
 Marc
 
@@ -223,19 +153,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---o2cm6ur22kzzisul
+--ye5l67gk7hz5picn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB3Bx4ACgkQqclaivrt
-76nqJgf+LvxWJun+RUUBEPoWS+K37DWPDjH1rwLLtden4SbODJ8WChiTH/ePXBYW
-Y+FCVPbDdWfe2HdSLx+QKpupk9/xkowAeBTZmgQvxmZ9av0GNvO0BkuFauxqIRWv
-qw3U9KaiI9BSEQ4Z4eQqi9Ilm/vMLnqRJE45wbS6G07YI9jyFZfxFfRqA2TSoBmw
-Djn2OPbzHF0Z6OgrmnU3B5qtJ8XINX96dfQlRaLxEDJpSuQL0XkyKU5nr++Rs1Ih
-oU+Upvw9d7sj6wvWqadsX32r5eg3KIw+uBEVP53B/+q9EZhSP1rKPukAOvSWzjDU
-8oepPcFcmhLUyuMWrfEbzqeeYj/NWQ==
-=77j2
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB3Cy0ACgkQqclaivrt
+76mT/Af/WbnwgQ+a+aRsKHyfyTWezRr8G7s1RJjQLJFVegSR6EulxFLwmut1kluw
+rSVTQwfdgixY+aZeufAxAcz7NrIJb80Lmc5iNj+ClFYPb/nVagJ2ctjiddJilJ56
+df3vL1M2b4CUoE0fQN9MyfHeVKz81LY69QtXSOOdcgE+oTSOWUUpNFfpyVgtJHjN
+ZV8VGlxIt81gly02Gu1HZ2E0TDhRw9yy3dvGgh4hsckCaxCwwCon2MOOtmHRVKuF
+WqlJjpfd8jtdjG2WkKr/MnD4eqQR93nbnVzvBbyPxgqan/bN5vzXSAr+pwNRB0sS
+ejLqSWJS+Owu4gPtn1wDwDMyTz5jvA==
+=S3kp
 -----END PGP SIGNATURE-----
 
---o2cm6ur22kzzisul--
+--ye5l67gk7hz5picn--
