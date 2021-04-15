@@ -2,105 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B9436056A
-	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 11:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F516360845
+	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 13:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbhDOJQC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 05:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbhDOJQB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 05:16:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144BDC061574
-        for <linux-can@vger.kernel.org>; Thu, 15 Apr 2021 02:15:39 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lWy5s-0002bi-IT; Thu, 15 Apr 2021 11:15:24 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:983:856d:54dc:ee1c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0F88B60F30C;
-        Thu, 15 Apr 2021 09:15:21 +0000 (UTC)
-Date:   Thu, 15 Apr 2021 11:15:21 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        id S230526AbhDOLbS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 07:31:18 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:44831 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230056AbhDOLbS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 07:31:18 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1lX0Cw-00061I-L2; Thu, 15 Apr 2021 11:30:50 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: Re: [PATCH v2 3/6] dt-bindings: phy: Add binding for TI TCAN104x CAN
- transceivers
-Message-ID: <20210415091521.d62k47xpugcvid2t@pengutronix.de>
-References: <20210414140521.11463-1-a-govindraju@ti.com>
- <20210414140521.11463-4-a-govindraju@ti.com>
- <20210414153303.yig6bguue3g25yhg@pengutronix.de>
- <9a9a3b8b-f345-faae-b9bc-3961518e3d29@ti.com>
- <20210415073810.nwoi2hx57hdg4ima@pengutronix.de>
- <072648d4-a747-bc5f-a525-25dd055905ee@ti.com>
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] can: etas_es58x: Fix a couple of spelling mistakes
+Date:   Thu, 15 Apr 2021 12:30:50 +0100
+Message-Id: <20210415113050.1942333-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sqrdgl4qh74mzxtg"
-Content-Disposition: inline
-In-Reply-To: <072648d4-a747-bc5f-a525-25dd055905ee@ti.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+From: Colin Ian King <colin.king@canonical.com>
 
---sqrdgl4qh74mzxtg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There are spelling mistakes in netdev_dbg and netdev_dbg messages,
+fix these.
 
-On 15.04.2021 14:41:57, Aswath Govindraju wrote:
-> >>>> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
-> > Can you create a maintainers entry for this file with your address?
->=20
-> I don't see this being done for other phy yamls in the
-> Documentation/devicetree/bindings/phy folder. Also,
-> scripts/get_maintainer.pl is giving the names of maintainers after
-> reading the yaml files too.
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Nice! Clever script.
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index 57e5f94468e9..8e9102482c52 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -688,7 +688,7 @@ int es58x_rx_err_msg(struct net_device *netdev, enum es58x_err error,
+ 
+ 	case ES58X_ERR_PROT_STUFF:
+ 		if (net_ratelimit())
+-			netdev_dbg(netdev, "Error BITSUFF\n");
++			netdev_dbg(netdev, "Error BITSTUFF\n");
+ 		if (cf)
+ 			cf->data[2] |= CAN_ERR_PROT_STUFF;
+ 		break;
+@@ -1015,7 +1015,7 @@ int es58x_rx_cmd_ret_u32(struct net_device *netdev,
+ 			int ret;
+ 
+ 			netdev_warn(netdev,
+-				    "%s: channel is already opened, closing and re-openning it to reflect new configuration\n",
++				    "%s: channel is already opened, closing and re-opening it to reflect new configuration\n",
+ 				    ret_desc);
+ 			ret = ops->disable_channel(es58x_priv(netdev));
+ 			if (ret)
+-- 
+2.30.2
 
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---sqrdgl4qh74mzxtg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB4BCYACgkQqclaivrt
-76ms1Qf+MgNCzkHp1rtwktzh+c3mVAPjupRXLxsmNoEJ2WJPx3eQSRbdqazlOO0T
-2AXVVEnrU9hXjdzIdGB4hPzQkZzSDfv0NpOL7DYRPqkHs60Y66fypAjL+K+N16ym
-oEEP7Kxh2WjuFzOgyVbOvxI9k4IODUfzQqklQBQda3If0UEHsQXqgMEy80oIiOlC
-Ua6+Cws6eV/PGSNHM6NQBnQwvN4kZGzy/4O+zYXRPwM+fAbISCGS8tH7kt+eL5hu
-y5HRO5V0YG+r99zfXnOkov69cz3pXAZOVdVZ5xtw0ja8djyBTZxXPLiWtNkrArRJ
-xYKkh8KdiJaK7pd0W2EonECPHCtQBA==
-=tebW
------END PGP SIGNATURE-----
-
---sqrdgl4qh74mzxtg--
