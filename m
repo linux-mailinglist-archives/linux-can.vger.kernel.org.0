@@ -2,138 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC08360D80
-	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 17:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB5B360E08
+	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 17:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234363AbhDOPDK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 11:03:10 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:37698 "EHLO
+        id S234518AbhDOPIp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 11:08:45 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:39960 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235366AbhDOPBE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 11:01:04 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13FF0WgP101805;
-        Thu, 15 Apr 2021 10:00:32 -0500
+        with ESMTP id S234191AbhDOPHJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 11:07:09 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13FF6YCX105243;
+        Thu, 15 Apr 2021 10:06:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1618498832;
-        bh=pKl9USW4Lb4q2lT4TkJijaFrzIIfUx2rrVu/7hEAIwg=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=IpcH/Wot0NJFgpovlSvrAMOg9Odk3OJmWmyBfGoQON3QRTjAuRndajqjOAcqBIa9t
-         ko7d9o0ZcL8vL4ULPPKHYFwWKfAMWBhEJMCvWLw77cE7N6e/zK92l+nYaLg7dFHju3
-         e1c12kCm/1KgPXQx5HsZPyWv4AzygpmoMr+kZrxc=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13FF0W7k105205
+        s=ti-com-17Q1; t=1618499194;
+        bh=TddhIByRHAUrc3d1UoVU5WLxRPZpc3YiP4ZJ9S8Yb/Y=;
+        h=From:To:CC:Subject:Date;
+        b=kJ1VUrHtST2QiXzK076lqZsCv7stGm2GSfvtrtZjeD+LoExJW5mKQh6JOitfn99KY
+         NyZNVNMYCvSGWNBXYXpj5W7B/sSLSOrVmGXYVNsRIxBr2GfT/YA/3fZohK6fWq6CxQ
+         ImTJSLvAXwl2tavaj/D64ZDQtiLRKK19xAx56E1I=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13FF6YeI018218
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 15 Apr 2021 10:00:32 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 15 Apr 2021 10:06:34 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 15
- Apr 2021 10:00:31 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ Apr 2021 10:06:34 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Thu, 15 Apr 2021 10:00:31 -0500
-Received: from [10.250.233.30] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13FF0RlR061690;
-        Thu, 15 Apr 2021 10:00:28 -0500
-Subject: Re: [PATCH v3 2/4] phy: Add API for devm_of_phy_optional_get_by_index
-To:     Aswath Govindraju <a-govindraju@ti.com>
+ Frontend Transport; Thu, 15 Apr 2021 10:06:34 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13FF6TGH129989;
+        Thu, 15 Apr 2021 10:06:30 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
 CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-can@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         Lokesh Vutla <lokeshvutla@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-References: <20210415144947.4725-1-a-govindraju@ti.com>
- <20210415144947.4725-3-a-govindraju@ti.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <c3baf0bc-e166-4aee-f4c7-e5915352ec82@ti.com>
-Date:   Thu, 15 Apr 2021 20:30:26 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: [PATCH 0/2] MCAN: Add support for implementing transceiver as a phy
+Date:   Thu, 15 Apr 2021 20:36:27 +0530
+Message-ID: <20210415150629.5417-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210415144947.4725-3-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Aswath,
+The following series of patches add support for implementing the
+transceiver as a phy of m_can_platform driver.
 
-On 15/04/21 8:19 pm, Aswath Govindraju wrote:
-> Add API for devm_of_phy_optional_get_by_index, to obtain a reference to an
-> optional phy by index.
+TCAN1042 has a standby signal that needs to be pulled high for
+sending/receiving messages[1]. TCAN1043 has a enable signal along with
+standby signal that needs to be pulled up for sending/receiving
+messages[2], and other combinations of the two lines can be used to put the
+transceiver in different states to reduce power consumption. On boards
+like the AM654-idk and J721e-evm these signals are controlled using gpios.
 
-Rob has posted a patch
-http://lore.kernel.org/r/20210414135525.3535787-1-robh@kernel.org
-that doesn't require consumers to get a phy by using string. Since your
-usecase also requires only one PHY, that patch should be sufficient.
-$patch could be deferred until a real use case comes.
+These gpios are set in phy driver, and the transceiver can be put in
+different states using phy API. The phy driver is added in the series [3].
 
-Thanks
-Kishon
+[1] - https://www.ti.com/lit/ds/symlink/tcan1042h.pdf
+[2] - https://www.ti.com/lit/ds/symlink/tcan1043-q1.pdf
+[3] - https://lore.kernel.org/patchwork/project/lkml/list/?series=495365
 
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  drivers/phy/phy-core.c  | 26 ++++++++++++++++++++++++++
->  include/linux/phy/phy.h |  2 ++
->  2 files changed, 28 insertions(+)
-> 
-> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-> index ccb575b13777..bf06d4e0ede2 100644
-> --- a/drivers/phy/phy-core.c
-> +++ b/drivers/phy/phy-core.c
-> @@ -839,6 +839,32 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
->  }
->  EXPORT_SYMBOL_GPL(devm_of_phy_get);
->  
-> +/**
-> + * devm_of_phy_optional_get_by_index() - lookup and obtain a reference to an optional phy by index.
-> + * @dev: device that requests this phy
-> + * @np: node containing the phy
-> + * @index: index of the phy
-> + *
-> + * Gets the phy using _of_phy_get(), then gets a refcount to it,
-> + * and associates a device with it using devres. On driver detach,
-> + * release function is invoked on the devres data, then,
-> + * devres data is freed. This differs to devm_of_phy_get_by_index() in
-> + * that if the phy does not exist, it is not considered an error and
-> + * -ENODEV will not be returned. Instead the NULL phy is returned,
-> + * which can be passed to all other phy consumer calls.
-> + */
-> +struct phy *devm_of_phy_optional_get_by_index(struct device *dev, struct device_node *np,
-> +					      int index)
-> +{
-> +	struct phy *phy = devm_of_phy_get_by_index(dev, np, index);
-> +
-> +	if (PTR_ERR(phy) == -ENODEV)
-> +		phy = NULL;
-> +
-> +	return phy;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_of_phy_optional_get_by_index);
-> +
->  /**
->   * devm_of_phy_get_by_index() - lookup and obtain a reference to a phy by index.
->   * @dev: device that requests this phy
-> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-> index f3286f4cd306..c5f32b4fadd6 100644
-> --- a/include/linux/phy/phy.h
-> +++ b/include/linux/phy/phy.h
-> @@ -253,6 +253,8 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
->  			    const char *con_id);
->  struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
->  				     int index);
-> +struct phy *devm_of_phy_optional_get_by_index(struct device *dev, struct device_node *np,
-> +					      int index);
->  void of_phy_put(struct phy *phy);
->  void phy_put(struct device *dev, struct phy *phy);
->  void devm_phy_put(struct device *dev, struct phy *phy);
-> 
+Faiz Abbas (2):
+  dt-bindings: net: can: Document transceiver implementation as phy
+  can: m_can: Add support for transceiver as phy
+
+ .../devicetree/bindings/net/can/bosch,m_can.yaml    |  3 +++
+ drivers/net/can/m_can/m_can.c                       | 10 ++++++++++
+ drivers/net/can/m_can/m_can.h                       |  2 ++
+ drivers/net/can/m_can/m_can_platform.c              | 13 +++++++++++++
+ 4 files changed, 28 insertions(+)
+
+-- 
+2.17.1
+
