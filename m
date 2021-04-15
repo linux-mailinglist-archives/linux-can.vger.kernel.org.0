@@ -2,99 +2,185 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5475360533
-	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 11:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA7F360558
+	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 11:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbhDOJEo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 05:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbhDOJEn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 05:04:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AC9C061574
-        for <linux-can@vger.kernel.org>; Thu, 15 Apr 2021 02:04:20 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lWxv5-000169-KF; Thu, 15 Apr 2021 11:04:15 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:983:856d:54dc:ee1c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B209860F2DC;
-        Thu, 15 Apr 2021 09:04:12 +0000 (UTC)
-Date:   Thu, 15 Apr 2021 11:04:12 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        id S231847AbhDOJMu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 05:12:50 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47648 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231622AbhDOJMr (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 05:12:47 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13F9C3QS127848;
+        Thu, 15 Apr 2021 04:12:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1618477923;
+        bh=jGR561TrDqzLWL9VO6pvcCN3CbJFcTaYeFYvpbcz6N0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Z1jk2Vh/7eTOg55ohx9aljFaNhj3h4q4T2EY2S/V2NDbm16BoErnBInCT0JO0wL6/
+         5S0Uh/YA/4aUqMUJzHQBad2dqXgIh8DwMDmc97bzcDdiIdq+HlmvRNSENd4P6cShZl
+         07h4mzsn/LWP8wCgyBvOyTxnyAb7EVFFkFT79f5E=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13F9C31w073960
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Apr 2021 04:12:03 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 15
+ Apr 2021 04:12:03 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Thu, 15 Apr 2021 04:12:03 -0500
+Received: from [172.24.145.148] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13F9BwUV106092;
+        Thu, 15 Apr 2021 04:11:59 -0500
+Subject: Re: [PATCH v2 3/6] dt-bindings: phy: Add binding for TI TCAN104x CAN
+ transceivers
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
         "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] can: etas_es58x: Fix missing null check on netdev
- pointer
-Message-ID: <20210415090412.q3k4tmsp3rdfj54t@pengutronix.de>
-References: <20210415084723.1807935-1-colin.king@canonical.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+References: <20210414140521.11463-1-a-govindraju@ti.com>
+ <20210414140521.11463-4-a-govindraju@ti.com>
+ <20210414153303.yig6bguue3g25yhg@pengutronix.de>
+ <9a9a3b8b-f345-faae-b9bc-3961518e3d29@ti.com>
+ <20210415073810.nwoi2hx57hdg4ima@pengutronix.de>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <072648d4-a747-bc5f-a525-25dd055905ee@ti.com>
+Date:   Thu, 15 Apr 2021 14:41:57 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="szmpbpc75mtqb4hx"
-Content-Disposition: inline
-In-Reply-To: <20210415084723.1807935-1-colin.king@canonical.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20210415073810.nwoi2hx57hdg4ima@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---szmpbpc75mtqb4hx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 15/04/21 1:08 pm, Marc Kleine-Budde wrote:
+> On 15.04.2021 11:57:20, Aswath Govindraju wrote:
+>> Hi Marc,
+>>
+>> On 14/04/21 9:03 pm, Marc Kleine-Budde wrote:
+>>> On 14.04.2021 19:35:18, Aswath Govindraju wrote:
+>>>> Add binding documentation for TI TCAN104x CAN transceivers.
+>>>>
+>>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>>> ---
+>>>>  .../bindings/phy/ti,tcan104x-can.yaml         | 56 +++++++++++++++++++
+>>>>  MAINTAINERS                                   |  1 +
+>>>>  2 files changed, 57 insertions(+)
+>>>>  create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..4abfc30a97d0
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>>>> @@ -0,0 +1,56 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: "http://devicetree.org/schemas/phy/ti,tcan104x-can.yaml#"
+>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>>>> +
+>>>> +title: TCAN104x CAN TRANSCEIVER PHY
+>>>> +
+>>>> +maintainers:
+>>>> +  - Aswath Govindraju <a-govindraju@ti.com>
+> 
+> Can you create a maintainers entry for this file with your address?
 
-On 15.04.2021 09:47:23, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
->=20
-> There is an assignment to *netdev that is can potentially be null but the
-> null check is checking netdev and not *netdev as intended. Fix this by
-> adding in the missing * operator.
->=20
-> Addresses-Coverity: ("Dereference before null check")
-> Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CA=
-N USB interfaces")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+I don't see this being done for other phy yamls in the
+Documentation/devicetree/bindings/phy folder. Also,
+scripts/get_maintainer.pl is giving the names of maintainers after
+reading the yaml files too.
 
-Looks good. Applied to linux-can-next/testing.
+Thanks,
+Aswath
 
-Tnx,
-Marc
+> 
+>>>> +
+>>>> +properties:
+>>>> +  $nodename:
+>>>> +    pattern: "^tcan104x-phy"
+>>>> +
+>>>> +  compatible:
+>>>> +    enum:
+>>>> +      - ti,tcan1042
+>>>> +      - ti,tcan1043
+>>>
+>>> Can you ensure that the 1042 has only the standby gpio and the 1043 has both?
+>>>
+>>
+>> In the driver, it is the way the flags have been set for ti,tcan1042 and
+>> ti,tcan1043.
+> 
+> I was wondering if we would enforce in the DT the 1042 has exactly one
+> the standby GPIO and the 1043 has exactly the standby and the enable
+> GPIO.
+> 
+> On the other hand the HW might have pulled one or the other pin high or
+> low and only one of the pins is connected to a GPIO.
+> 
+>>>> +
+>>>> +  '#phy-cells':
+>>>> +    const: 0
+>>>> +
+>>>> +  standby-gpios:
+>>>> +    description:
+>>>> +      gpio node to toggle standby signal on transceiver
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  enable-gpios:
+>>>> +    description:
+>>>> +      gpio node to toggle enable signal on transceiver
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  max-bitrate:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    description:
+>>>> +      max bit rate supported in bps
+>>>> +    minimum: 1
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - '#phy-cells'
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    #include <dt-bindings/gpio/gpio.h>
+>>>> +
+>>>> +    transceiver1: tcan104x-phy {
+>>>> +      compatible = "ti,tcan1043";
+>>>> +      #phy-cells = <0>;
+>>>> +      max-bitrate = <5000000>;
+>>>> +      standby-gpios = <&wakeup_gpio1 16 GPIO_ACTIVE_LOW>;
+>>>> +      enable-gpios = <&main_gpio1 67 GPIO_ACTIVE_LOW>;
+>>>
+>>> AFAICS the enable gpio is active high.
+>>>
+>>
+>> I will correct this in the respin.
+> 
+> Marc
+> 
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---szmpbpc75mtqb4hx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB4AYgACgkQqclaivrt
-76lQ5gf+MVDfgP/lHzpBKIj8U4d1CJ+Hb2cUtI+HcxDsNqc08ZCbsoiWhze1E0df
-W4Hv7r7oN5RtUpsmM5hF8NV1jwjR3/buD6AIaTTMYWLOLm0QU+o/W2uKydBy1M9y
-ythlIG/6MN132kMeNLk7iHfXzT4jHCrVouq1kNVGZBwch+ljGCYw+1LJ5WwCutvh
-PP04dZZF/9EmYX10mWgmor6bMcD5tCPGd4P54sYsGuN6KV0pZiCWK2H2xqpi8sPW
-K3yWIPUnrI3RGqwmwAq/0v+JHi2rpipNvEUKz6+t326FhQcE6vy6oQ71pfcHM3Vk
-FN2fr4XDZLDEqPIe3Sl90lCNwKWhBA==
-=NznM
------END PGP SIGNATURE-----
-
---szmpbpc75mtqb4hx--
