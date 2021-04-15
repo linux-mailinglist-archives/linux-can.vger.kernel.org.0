@@ -2,72 +2,163 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D7335FD5C
-	for <lists+linux-can@lfdr.de>; Wed, 14 Apr 2021 23:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BD636025C
+	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 08:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbhDNVkg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Apr 2021 17:40:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232273AbhDNVke (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 14 Apr 2021 17:40:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A1895611AD;
-        Wed, 14 Apr 2021 21:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618436412;
-        bh=RNBt112aUgHObpmqsDO/S/Ba0UwuXGJD6FEkNBfvpTo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=V1iJFYnWpjhJfnVeP6mdyzmoWLymjO+oe9xR08t1M/eH1TldwCGbFTXX1+R5TkWUb
-         5ts5XvTN5bPhNOxGG6cVLhdQscuS10g39SvhNrXjR+ZuYA/SoMARFNU1s08iIM9way
-         i7L+akWqsqzZ3IHxKlpQdGSDbD/1YQf6o9BL28h6mNQBguTLTJtKGFMPMNSYIUKaL6
-         qVvWbpAIH5P7maKYMoIEBO8vGXlWs+Niz9Ukj3vUYW4Fx29xgIg4NWH21tPT0N+eh4
-         lZ3ydCsGPtkxH3Ir2RUkPRm2iXgpEmro2xpbuPGmTBG/KostSbQVFtN5R4HhVooKXR
-         /n0TaSPVZNDVQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 9294960CD5;
-        Wed, 14 Apr 2021 21:40:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next] can: etas_es58x: fix null pointer dereference when
- handling error frames
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161843641259.17301.17320204986142431938.git-patchwork-notify@kernel.org>
-Date:   Wed, 14 Apr 2021 21:40:12 +0000
-References: <20210414200352.2473363-2-mkl@pengutronix.de>
-In-Reply-To: <20210414200352.2473363-2-mkl@pengutronix.de>
+        id S230159AbhDOG2N (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 02:28:13 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57810 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229503AbhDOG2M (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 02:28:12 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13F6RSRu056407;
+        Thu, 15 Apr 2021 01:27:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1618468048;
+        bh=T1VGJWaSnZe1FPW2m57oyGHqhnqnwLtMvN8UhVow6dY=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=MgHlXsbXunc6B2jYzadb2+EQoQATkCj3eHcocRLODnfT0Mw4aX1II+ZWHdKY3TPQw
+         +3/wW85M+pIGnHlb/ynLl7Wfx7/QlPX19e3YCSqCOUXc/dhGBtAppo7igRU0oH+5Ta
+         K9N3o0Y12VdSwsu2mzWCZL8KB8r3ZVT3wGGCPOIA=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13F6RSod078266
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 15 Apr 2021 01:27:28 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 15
+ Apr 2021 01:27:28 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Thu, 15 Apr 2021 01:27:28 -0500
+Received: from [172.24.145.148] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13F6RL2o127491;
+        Thu, 15 Apr 2021 01:27:22 -0500
+Subject: Re: [PATCH v2 3/6] dt-bindings: phy: Add binding for TI TCAN104x CAN
+ transceivers
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        mailhol.vincent@wanadoo.fr, arunachalam.santhanam@in.bosch.com
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+References: <20210414140521.11463-1-a-govindraju@ti.com>
+ <20210414140521.11463-4-a-govindraju@ti.com>
+ <20210414153303.yig6bguue3g25yhg@pengutronix.de>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <9a9a3b8b-f345-faae-b9bc-3961518e3d29@ti.com>
+Date:   Thu, 15 Apr 2021 11:57:20 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20210414153303.yig6bguue3g25yhg@pengutronix.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi Marc,
 
-This patch was applied to netdev/net-next.git (refs/heads/master):
-
-On Wed, 14 Apr 2021 22:03:52 +0200 you wrote:
-> From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+On 14/04/21 9:03 pm, Marc Kleine-Budde wrote:
+> On 14.04.2021 19:35:18, Aswath Govindraju wrote:
+>> Add binding documentation for TI TCAN104x CAN transceivers.
+>>
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  .../bindings/phy/ti,tcan104x-can.yaml         | 56 +++++++++++++++++++
+>>  MAINTAINERS                                   |  1 +
+>>  2 files changed, 57 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>> new file mode 100644
+>> index 000000000000..4abfc30a97d0
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+>> @@ -0,0 +1,56 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/phy/ti,tcan104x-can.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: TCAN104x CAN TRANSCEIVER PHY
+>> +
+>> +maintainers:
+>> +  - Aswath Govindraju <a-govindraju@ti.com>
+>> +
+>> +properties:
+>> +  $nodename:
+>> +    pattern: "^tcan104x-phy"
+>> +
+>> +  compatible:
+>> +    enum:
+>> +      - ti,tcan1042
+>> +      - ti,tcan1043
 > 
-> During the handling of CAN bus errors, a CAN error SKB is allocated
-> using alloc_can_err_skb(). Even if the allocation of the SKB fails,
-> the function continues in order to do the stats handling.
+> Can you ensure that the 1042 has only the standby gpio and the 1043 has both?
 > 
-> All access to the can_frame pointer (cf) should be guarded by an if
-> statement:
-> 	if (cf)
+
+In the driver, it is the way the flags have been set for ti,tcan1042 and
+ti,tcan1043.
+
+>> +
+>> +  '#phy-cells':
+>> +    const: 0
+>> +
+>> +  standby-gpios:
+>> +    description:
+>> +      gpio node to toggle standby signal on transceiver
+>> +    maxItems: 1
+>> +
+>> +  enable-gpios:
+>> +    description:
+>> +      gpio node to toggle enable signal on transceiver
+>> +    maxItems: 1
+>> +
+>> +  max-bitrate:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      max bit rate supported in bps
+>> +    minimum: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - '#phy-cells'
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +
+>> +    transceiver1: tcan104x-phy {
+>> +      compatible = "ti,tcan1043";
+>> +      #phy-cells = <0>;
+>> +      max-bitrate = <5000000>;
+>> +      standby-gpios = <&wakeup_gpio1 16 GPIO_ACTIVE_LOW>;
+>> +      enable-gpios = <&main_gpio1 67 GPIO_ACTIVE_LOW>;
 > 
-> [...]
+> AFAICS the enable gpio is active high.
+> 
 
-Here is the summary with links:
-  - [net-next] can: etas_es58x: fix null pointer dereference when handling error frames
-    https://git.kernel.org/netdev/net-next/c/e2b1e4b532ab
+I will correct this in the respin.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Aswath
 
+> Marc
+> 
 
