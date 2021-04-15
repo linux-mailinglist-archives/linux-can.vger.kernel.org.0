@@ -2,20 +2,20 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2764C3604C6
-	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 10:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786A036050B
+	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 10:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbhDOIrv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 04:47:51 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:38580 "EHLO
+        id S231732AbhDOI4G (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 04:56:06 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:38759 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbhDOIru (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 04:47:50 -0400
+        with ESMTP id S231143AbhDOI4G (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 04:56:06 -0400
 Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <colin.king@canonical.com>)
-        id 1lWxel-0000fq-88; Thu, 15 Apr 2021 08:47:23 +0000
+        id 1lWxmi-00016L-Fb; Thu, 15 Apr 2021 08:55:36 +0000
 From:   Colin King <colin.king@canonical.com>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -25,9 +25,9 @@ To:     Wolfgang Grandegger <wg@grandegger.com>,
         Arunachalam Santhanam <arunachalam.santhanam@in.bosch.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] can: etas_es58x: Fix missing null check on netdev pointer
-Date:   Thu, 15 Apr 2021 09:47:23 +0100
-Message-Id: <20210415084723.1807935-1-colin.king@canonical.com>
+Subject: [PATCH][next] can: etas_es58x: Fix potential null pointer dereference on pointer cf
+Date:   Thu, 15 Apr 2021 09:55:35 +0100
+Message-Id: <20210415085535.1808272-1-colin.king@canonical.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -38,30 +38,34 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Colin Ian King <colin.king@canonical.com>
 
-There is an assignment to *netdev that is can potentially be null but the
-null check is checking netdev and not *netdev as intended. Fix this by
-adding in the missing * operator.
+The pointer cf is being null checked earlier in the code, however the
+update of the rx_bytes statistics is dereferencing cf without null
+checking cf.  Fix this by moving the statement into the following code
+block that has a null cf check.
 
-Addresses-Coverity: ("Dereference before null check")
+Addresses-Coverity: ("Dereference after null check")
 Fixes: 8537257874e9 ("can: etas_es58x: add core support for ETAS ES58X CAN USB interfaces")
 Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/net/can/usb/etas_es58x/es58x_core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.h b/drivers/net/can/usb/etas_es58x/es58x_core.h
-index 5f4e7dc5be35..fcf219e727bf 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_core.h
-+++ b/drivers/net/can/usb/etas_es58x/es58x_core.h
-@@ -625,7 +625,7 @@ static inline int es58x_get_netdev(struct es58x_device *es58x_dev,
- 		return -ECHRNG;
+diff --git a/drivers/net/can/usb/etas_es58x/es58x_core.c b/drivers/net/can/usb/etas_es58x/es58x_core.c
+index 7222b3b6ca46..5198e1d6b6ad 100644
+--- a/drivers/net/can/usb/etas_es58x/es58x_core.c
++++ b/drivers/net/can/usb/etas_es58x/es58x_core.c
+@@ -856,9 +856,10 @@ int es58x_rx_err_msg(struct net_device *netdev, enum es58x_err error,
+ 	 * consistency.
+ 	 */
+ 	netdev->stats.rx_packets++;
+-	netdev->stats.rx_bytes += cf->can_dlc;
  
- 	*netdev = es58x_dev->netdev[channel_idx];
--	if (!netdev || !netif_device_present(*netdev))
-+	if (!*netdev || !netif_device_present(*netdev))
- 		return -ENODEV;
- 
- 	return 0;
+ 	if (cf) {
++		netdev->stats.rx_bytes += cf->can_dlc;
++
+ 		if (cf->data[1])
+ 			cf->can_id |= CAN_ERR_CRTL;
+ 		if (cf->data[2] || cf->data[3]) {
 -- 
 2.30.2
 
