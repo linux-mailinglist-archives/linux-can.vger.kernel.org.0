@@ -2,138 +2,144 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCFE361AD3
-	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 09:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A4B361EB8
+	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 13:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbhDPHvv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Apr 2021 03:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239713AbhDPHvu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Apr 2021 03:51:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5BDC061574
-        for <linux-can@vger.kernel.org>; Fri, 16 Apr 2021 00:51:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lXJFv-0007Vj-FL; Fri, 16 Apr 2021 09:51:11 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:b21a:a98c:8cd:ce9c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id AEC6260FFEB;
-        Fri, 16 Apr 2021 07:51:09 +0000 (UTC)
-Date:   Fri, 16 Apr 2021 09:51:09 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-can@vger.kernel.org,
+        id S241106AbhDPLbl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Apr 2021 07:31:41 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:46844 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239255AbhDPLbl (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Apr 2021 07:31:41 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13GBV3jZ106510;
+        Fri, 16 Apr 2021 06:31:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1618572663;
+        bh=YzBU+cLhccqcsDURJtSYpEEhzleC4dnairSrugdNE1A=;
+        h=From:To:CC:Subject:Date;
+        b=Byweb9b+UMrEf5ZDslCCazJwDg0Vg7230dkxIilNF0VoU7p+ppY7EZtSBNiuVUuhJ
+         aNvuwpQpzyRkpxiwv0UyivgX5DSPfUTpNpEYMrg8BrSp1Ww47gjR+7RgAtTd+nYcEB
+         8tqOJyLVwFmb98BUIv4QoRWBFbrPCNYdP335QoSQ=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13GBV281122015
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 16 Apr 2021 06:31:03 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 16
+ Apr 2021 06:31:02 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 16 Apr 2021 06:31:02 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13GBUwIu073816;
+        Fri, 16 Apr 2021 06:30:59 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-can@vger.kernel.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Lokesh Vutla <lokeshvutla@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: Re: [PATCH v4 3/3] phy: phy-can-transceiver: Add support for generic
- CAN transceiver driver
-Message-ID: <20210416075109.yw3c47ii67gckeqd@pengutronix.de>
-References: <20210416052647.2758-1-a-govindraju@ti.com>
- <20210416052647.2758-4-a-govindraju@ti.com>
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: [PATCH v5 0/3] CAN TRANSCEIVER: Add support for CAN transceivers
+Date:   Fri, 16 Apr 2021 17:00:55 +0530
+Message-ID: <20210416113058.23815-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ady7filrbecwiiya"
-Content-Disposition: inline
-In-Reply-To: <20210416052647.2758-4-a-govindraju@ti.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The following series of patches add support for CAN transceivers.
 
---ady7filrbecwiiya
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+TCAN1042 has a standby signal that needs to be pulled high for
+sending/receiving messages[1]. TCAN1043 has a enable signal along with
+standby signal that needs to be pulled up for sending/receiving
+messages[2], and other combinations of the two lines can be used to put the
+transceiver in different states to reduce power consumption. On boards
+like the AM654-idk and J721e-evm these signals are controlled using gpios.
 
-On 16.04.2021 10:56:47, Aswath Govindraju wrote:
-> The driver adds support for generic CAN transceivers. Currently
-> the modes supported by this driver are standby and normal modes for TI
-> TCAN1042 and TCAN1043 CAN transceivers.
->=20
-> The transceiver is modelled as a phy with pins controlled by gpios, to put
-> the transceiver in various device functional modes. It also gets the phy
-> attribute max_link_rate for the usage of CAN drivers.
->=20
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  MAINTAINERS                       |   1 +
->  drivers/phy/Kconfig               |   9 ++
->  drivers/phy/Makefile              |   1 +
->  drivers/phy/phy-can-transceiver.c | 146 ++++++++++++++++++++++++++++++
->  4 files changed, 157 insertions(+)
->  create mode 100644 drivers/phy/phy-can-transceiver.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e666d33af10d..4e868f2a97c7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4048,6 +4048,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/gi=
-t/mkl/linux-can-next.git
->  F:	Documentation/devicetree/bindings/net/can/
->  F:	Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
->  F:	drivers/net/can/
-> +F:	drivers/phy/phy-can-transceiver.c
->  F:	include/linux/can/bittiming.h
->  F:	include/linux/can/dev.h
->  F:	include/linux/can/led.h
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index 54c1f2f0985f..51902b629fc6 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -61,6 +61,15 @@ config USB_LGM_PHY
->  	  interface to interact with USB GEN-II and USB 3.x PHY that is part
->  	  of the Intel network SOC.
-> =20
-> +config PHY_CAN_TRANSCEIVER
-> +	tristate "CAN transceiver PHY"
-> +	select GENERIC_PHY
-> +	help
-> +	  This option enables support for CAN transceivers as a PHY. This
-> +	  driver provides function for putting the transceivers in various
-> +	  functional modes using gpios and sets the attribute max link
-> +	  rate, for mcan drivers.
-                    ^^^^
+Patch 1 rewords the comment that restricts max_link_rate attribute to have
+units of Mbps.
 
-CAN
+Patch 2 models the transceiver as a phy device tree node with properties
+for max bit rate supported, gpio properties for indicating gpio pin numbers
+to which standby and enable signals are connected.
 
-Marc
+Patch 2 adds a generic driver to support CAN transceivers.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+changes since v4:
+- In patch 3 made the correction from mcan to CAN, in Kconfig help
 
---ady7filrbecwiiya
-Content-Type: application/pgp-signature; name="signature.asc"
+changes since v3:
+- dropped patch 2(in v3)
+- changed the node name property in patch 3(in v3)
+- picked up Rob Herring's reviewed-by for patch 3(in v3)
 
------BEGIN PGP SIGNATURE-----
+changes since v2:
+- dropped 5 and 6 patches and to be sent via linux-can-next
+- added static keyword for can_transceiver_phy_probe()
+- changed enable gpio example to active high in patch 3
+- Rearranged the file names in alphabetical order in Makefile
+  and MAINTAINERS file
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB5QeoACgkQqclaivrt
-76lL2Af/UvxExvGuIijK2rChTwL3SRtvX/+pPjQvIocOQXS0k3f/Qrn4kekRnYra
-L5E5CKfkfDyQ8+Z1hI10WxOKP12wtekyocXH06+wPYZfnSfVXTGa0udUzQsnDbZq
-HWJcSdy1AIAuDuRCteWuaAKpXkvqRIKcg2i06DWKHnsM/CiHN6PHunf2pNO7vN6N
-m+tM2haOcNWGb0MQ9MYL3q18rN+MtO/FyKhGnQ6G0WNPGzhwPoHHuYEk/tP2mMB8
-kbqRyYOOTdtmssPqLGU9/w3N2AB+av9m+JtiVO4xfk9lcREN5NdF7DFsdCg3pC2q
-uojUDhg536F1EyjPzsiuucbsPtSE7Q==
-=WkZb
------END PGP SIGNATURE-----
+changes since v1:
+- Added patch 1 (in v2) that rewords the comment that restrict
+  max_link_rate attribute to have units of Mbps.
+- Added patch 2 (in v2) that adds an API for
+  devm_of_phy_optional_get_by_index
+- Patch 1 (in v1)
+  - updated MAINTAINERS file
+- Patch 2 (in v1)
+  - replaced m_can with CAN to make the driver independent of CAN driver
+  - Added prefix CAN_TRANSCEIVER for EN_PRESENT and STB_PRESENT
+  - Added new line before return statements in power_on() and power_off
+  - Added error handling patch for devm_kzalloc()
+  - used the max_link_rate attribute directly instead of dividing it by
+    1000000
+  - removed the spaces before GPIOD_OUT_LOW in devm_gpiod_get()
+  - Corrected requested value for standby-gpios to GPIOD_OUT_HIGH
+  - Updated MAINTAINERS file
+- Patch 3 (in v1)
+  - replaced minItems with maxItems
+  - Removed phy-names property as there is only one phy
+- Patch 4 (in v1)
+  - replaced dev_warn with dev_info when no transceiver is found
+  - Added struct phy * field in m_can_classdev struct
+  - moved phy_power_on and phy_power_off to m_can_open and m_can_close
+    respectively
+  - Moved the check for max_bit_rate to generice transceiver driver
 
---ady7filrbecwiiya--
+[1] - https://www.ti.com/lit/ds/symlink/tcan1042h.pdf
+[2] - https://www.ti.com/lit/ds/symlink/tcan1043-q1.pdf
+
+Aswath Govindraju (3):
+  phy: core: Reword the comment specifying the units of max_link_rate to
+    be Mbps
+  dt-bindings: phy: Add binding for TI TCAN104x CAN transceivers
+  phy: phy-can-transceiver: Add support for generic CAN transceiver
+    driver
+
+ .../bindings/phy/ti,tcan104x-can.yaml         |  56 +++++++
+ MAINTAINERS                                   |   2 +
+ drivers/phy/Kconfig                           |   9 ++
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-can-transceiver.c             | 146 ++++++++++++++++++
+ include/linux/phy/phy.h                       |   2 +-
+ 6 files changed, 215 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+ create mode 100644 drivers/phy/phy-can-transceiver.c
+
+-- 
+2.17.1
+
