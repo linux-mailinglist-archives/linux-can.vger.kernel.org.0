@@ -2,208 +2,142 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1988636171A
-	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 03:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4AF361945
+	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 07:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237726AbhDPBRD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 21:17:03 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:17002 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236214AbhDPBRB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 21:17:01 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FLyrz6vtrzPr0F;
-        Fri, 16 Apr 2021 09:13:39 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 16 Apr 2021 09:16:30 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>
-Subject: [PATCH net v4 2/2] net: sched: fix endless tx action reschedule during deactivation
-Date:   Fri, 16 Apr 2021 09:16:49 +0800
-Message-ID: <1618535809-11952-3-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1618535809-11952-1-git-send-email-linyunsheng@huawei.com>
-References: <1618535809-11952-1-git-send-email-linyunsheng@huawei.com>
+        id S236990AbhDPF1a (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 16 Apr 2021 01:27:30 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:52448 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236464AbhDPF1a (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Apr 2021 01:27:30 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13G5QqFO100260;
+        Fri, 16 Apr 2021 00:26:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1618550812;
+        bh=OGWmPUCq+G+tmdEY0d0MYzZx+ArvEQd++b9Kv5/YV/E=;
+        h=From:To:CC:Subject:Date;
+        b=bKVPKDEfLI2hpgA9W5zUZ+v+2bH+DJh7fvypqo7urWwKY/ggxJdKUdLtFYoqfqYz6
+         c3xBY35VBjYNuvG8dzBASwFwfRBe9DfXrX8YnIbOtlDITgos/pO9XA3ka1n1FX4Uoa
+         BZSpMEUfiF6x+WLYrjbI1VIN1Q/mOksR9ICq0AFw=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13G5Qqpt114854
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 16 Apr 2021 00:26:52 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 16
+ Apr 2021 00:26:52 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 16 Apr 2021 00:26:52 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13G5QlLL023847;
+        Fri, 16 Apr 2021 00:26:48 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-can@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: [PATCH v4 0/3] CAN TRANSCEIVER: Add support for CAN transceivers
+Date:   Fri, 16 Apr 2021 10:56:44 +0530
+Message-ID: <20210416052647.2758-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Currently qdisc_run() checks the STATE_DEACTIVATED of lockless
-qdisc before calling __qdisc_run(), which ultimately clear the
-STATE_MISSED when all the skb is dequeued. If STATE_DEACTIVATED
-is set before clearing STATE_MISSED, there may be endless
-rescheduling of net_tx_action() at the end of qdisc_run_end(),
-see below:
+The following series of patches add support for CAN transceivers.
 
-CPU0(net_tx_atcion)  CPU1(__dev_xmit_skb)  CPU2(dev_deactivate)
-          .                   .                     .
-          .            set STATE_MISSED             .
-          .           __netif_schedule()            .
-          .                   .           set STATE_DEACTIVATED
-          .                   .                qdisc_reset()
-          .                   .                     .
-          .<---------------   .              synchronize_net()
-clear __QDISC_STATE_SCHED  |  .                     .
-          .                |  .                     .
-          .                |  .                     .
-          .                |  .           --------->.
-          .                |  .          |          .
-  test STATE_DEACTIVATED   |  .          | some_qdisc_is_busy()
-__qdisc_run() *not* called |  .          |-----return *true*
-          .                |  .                     .
-   test STATE_MISS         |  .                     .
- __netif_schedule()--------|  .                     .
-          .                   .                     .
-          .                   .                     .
+TCAN1042 has a standby signal that needs to be pulled high for
+sending/receiving messages[1]. TCAN1043 has a enable signal along with
+standby signal that needs to be pulled up for sending/receiving
+messages[2], and other combinations of the two lines can be used to put the
+transceiver in different states to reduce power consumption. On boards
+like the AM654-idk and J721e-evm these signals are controlled using gpios.
 
-__qdisc_run() is not called by net_tx_atcion() in CPU0 because
-CPU2 has set STATE_DEACTIVATED flag during dev_deactivate(), and
-STATE_MISSED is only cleared in __qdisc_run(), __netif_schedule
-is called endlessly at the end of qdisc_run_end(), causing endless
-tx action rescheduling problem.
+Patch 1 rewords the comment that restricts max_link_rate attribute to have
+units of Mbps.
 
-qdisc_run() called by net_tx_action() runs in the softirq context,
-which should has the same semantic as the qdisc_run() called by
-__dev_xmit_skb() protected by rcu_read_lock_bh(). And there is a
-synchronize_net() between STATE_DEACTIVATED flag being set and
-qdisc_reset()/some_qdisc_is_busy in dev_deactivate(), we can safely
-bail out for the deactived lockless qdisc in net_tx_action(), and
-qdisc_reset() will reset all skb not dequeued yet.
+Patch 2 models the transceiver as a phy device tree node with properties
+for max bit rate supported, gpio properties for indicating gpio pin numbers
+to which standby and enable signals are connected.
 
-So add the rcu_read_lock() explicitly to protect the qdisc_run()
-and do the STATE_DEACTIVATED checking in net_tx_action() before
-calling qdisc_run_begin(). Another option is to do the checking in
-the qdisc_run_end(), but it will add unnecessary overhead for
-non-tx_action case, because __dev_queue_xmit() will not see qdisc
-with STATE_DEACTIVATED after synchronize_net(), the qdisc with
-STATE_DEACTIVATED can only be seen by net_tx_action() because of
-__netif_schedule().
+Patch 2 adds a generic driver to support CAN transceivers.
 
-The STATE_DEACTIVATED checking in qdisc_run() is to avoid race
-between net_tx_action() and qdisc_reset(), see:
-commit d518d2ed8640 ("net/sched: fix race between deactivation
-and dequeue for NOLOCK qdisc"). As the bailout added above for
-deactived lockless qdisc in net_tx_action() provides better
-protection for the race without calling qdisc_run() at all, so
-remove the STATE_DEACTIVATED checking in qdisc_run().
+changes since v3:
+- dropped patch 2(in v3)
+- changed the node name property in patch 3(in v3)
+- picked up Rob Herring's reviewed-by for patch 3(in v3)
 
-After qdisc_reset(), there is no skb in qdisc to be dequeued, so
-clear the STATE_MISSED in dev_reset_queue() too.
+changes since v2:
+- dropped 5 and 6 patches and to be sent via linux-can-next
+- added static keyword for can_transceiver_phy_probe()
+- changed enable gpio example to active high in patch 3
+- Rearranged the file names in alphabetical order in Makefile
+  and MAINTAINERS file
 
-Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
- include/net/pkt_sched.h |  7 +------
- net/core/dev.c          | 26 ++++++++++++++++++++++----
- net/sched/sch_generic.c |  4 +++-
- 3 files changed, 26 insertions(+), 11 deletions(-)
+changes since v1:
+- Added patch 1 (in v2) that rewords the comment that restrict
+  max_link_rate attribute to have units of Mbps.
+- Added patch 2 (in v2) that adds an API for
+  devm_of_phy_optional_get_by_index
+- Patch 1 (in v1)
+  - updated MAINTAINERS file
+- Patch 2 (in v1)
+  - replaced m_can with CAN to make the driver independent of CAN driver
+  - Added prefix CAN_TRANSCEIVER for EN_PRESENT and STB_PRESENT
+  - Added new line before return statements in power_on() and power_off
+  - Added error handling patch for devm_kzalloc()
+  - used the max_link_rate attribute directly instead of dividing it by
+    1000000
+  - removed the spaces before GPIOD_OUT_LOW in devm_gpiod_get()
+  - Corrected requested value for standby-gpios to GPIOD_OUT_HIGH
+  - Updated MAINTAINERS file
+- Patch 3 (in v1)
+  - replaced minItems with maxItems
+  - Removed phy-names property as there is only one phy
+- Patch 4 (in v1)
+  - replaced dev_warn with dev_info when no transceiver is found
+  - Added struct phy * field in m_can_classdev struct
+  - moved phy_power_on and phy_power_off to m_can_open and m_can_close
+    respectively
+  - Moved the check for max_bit_rate to generice transceiver driver
 
-diff --git a/include/net/pkt_sched.h b/include/net/pkt_sched.h
-index f5c1bee..6d7b12c 100644
---- a/include/net/pkt_sched.h
-+++ b/include/net/pkt_sched.h
-@@ -128,12 +128,7 @@ void __qdisc_run(struct Qdisc *q);
- static inline void qdisc_run(struct Qdisc *q)
- {
- 	if (qdisc_run_begin(q)) {
--		/* NOLOCK qdisc must check 'state' under the qdisc seqlock
--		 * to avoid racing with dev_qdisc_reset()
--		 */
--		if (!(q->flags & TCQ_F_NOLOCK) ||
--		    likely(!test_bit(__QDISC_STATE_DEACTIVATED, &q->state)))
--			__qdisc_run(q);
-+		__qdisc_run(q);
- 		qdisc_run_end(q);
- 	}
- }
-diff --git a/net/core/dev.c b/net/core/dev.c
-index be941ed..47cefcc 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4958,25 +4958,43 @@ static __latent_entropy void net_tx_action(struct softirq_action *h)
- 		sd->output_queue_tailp = &sd->output_queue;
- 		local_irq_enable();
- 
-+		rcu_read_lock();
-+
- 		while (head) {
- 			struct Qdisc *q = head;
- 			spinlock_t *root_lock = NULL;
- 
- 			head = head->next_sched;
- 
--			if (!(q->flags & TCQ_F_NOLOCK)) {
--				root_lock = qdisc_lock(q);
--				spin_lock(root_lock);
--			}
- 			/* We need to make sure head->next_sched is read
- 			 * before clearing __QDISC_STATE_SCHED
- 			 */
- 			smp_mb__before_atomic();
-+
-+			if (!(q->flags & TCQ_F_NOLOCK)) {
-+				root_lock = qdisc_lock(q);
-+				spin_lock(root_lock);
-+			} else if (unlikely(test_bit(__QDISC_STATE_DEACTIVATED,
-+						     &q->state))) {
-+				/* There is a synchronize_net() between
-+				 * STATE_DEACTIVATED flag being set and
-+				 * qdisc_reset()/some_qdisc_is_busy() in
-+				 * dev_deactivate(), so we can safely bail out
-+				 * early here to avoid data race between
-+				 * qdisc_deactivate() and some_qdisc_is_busy()
-+				 * for lockless qdisc.
-+				 */
-+				clear_bit(__QDISC_STATE_SCHED, &q->state);
-+				continue;
-+			}
-+
- 			clear_bit(__QDISC_STATE_SCHED, &q->state);
- 			qdisc_run(q);
- 			if (root_lock)
- 				spin_unlock(root_lock);
- 		}
-+
-+		rcu_read_unlock();
- 	}
- 
- 	xfrm_dev_backlog(sd);
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 9bc73ea..c32ac5b 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1170,8 +1170,10 @@ static void dev_reset_queue(struct net_device *dev,
- 	qdisc_reset(qdisc);
- 
- 	spin_unlock_bh(qdisc_lock(qdisc));
--	if (nolock)
-+	if (nolock) {
-+		clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
- 		spin_unlock_bh(&qdisc->seqlock);
-+	}
- }
- 
- static bool some_qdisc_is_busy(struct net_device *dev)
+[1] - https://www.ti.com/lit/ds/symlink/tcan1042h.pdf
+[2] - https://www.ti.com/lit/ds/symlink/tcan1043-q1.pdf
+
+
+Aswath Govindraju (3):
+  phy: core: Reword the comment specifying the units of max_link_rate to
+    be Mbps
+  dt-bindings: phy: Add binding for TI TCAN104x CAN transceivers
+  phy: phy-can-transceiver: Add support for generic CAN transceiver
+    driver
+
+ .../bindings/phy/ti,tcan104x-can.yaml         |  56 +++++++
+ MAINTAINERS                                   |   2 +
+ drivers/phy/Kconfig                           |   9 ++
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-can-transceiver.c             | 146 ++++++++++++++++++
+ include/linux/phy/phy.h                       |   2 +-
+ 6 files changed, 215 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+ create mode 100644 drivers/phy/phy-can-transceiver.c
+
 -- 
-2.7.4
+2.17.1
 
