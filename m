@@ -2,83 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC8F361433
-	for <lists+linux-can@lfdr.de>; Thu, 15 Apr 2021 23:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06366361711
+	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 03:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236136AbhDOVfw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 17:35:52 -0400
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:45602 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236043AbhDOVfw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 17:35:52 -0400
-Received: by mail-oo1-f45.google.com with SMTP id s1-20020a4ac1010000b02901cfd9170ce2so5710548oop.12;
-        Thu, 15 Apr 2021 14:35:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dmuE5OCkOCbeBnudYMpaUgY0xXoUF0wjgw61Smpjy14=;
-        b=cTueS5L/3GrtP9wt2//hsSyzW46sk+A0SadpdU/A/NEVQKUXnJ+QmPEdgChO+4X/7B
-         cqyur9dNuxUYIwIQFQqaX7zG98fAZrtLmDU8B0eN9eQIUsIE1xr7y3C6fgRgBIqqGQXH
-         dH7HJ701KRzwLdNBHimnPqUzRm/hmP+Fc+h+HWjahTzXROFDuy/ivd+okxPvJHSc6uhC
-         dyDGl/97ff5AXOv2bBVTirLCldB5nMxPcCHahHCfiV3m4qs/JTk32JLyMMkNbpOC/kK9
-         913ItVbMUqNIUf1YjIp79wEDnAX0iRc+ZbXlNXw9TOKLeKAzCL7qhn65Gh6f1xWHYr2p
-         ab7w==
-X-Gm-Message-State: AOAM5302aed0uOf3fePGI7pEgZnDijuFM5Ewcy2DxIc2SghZ9lyELdY9
-        L2TS/AnGc9/3WSRtUr0n8Q==
-X-Google-Smtp-Source: ABdhPJxzLUMdEqX+77oFQN5BKMZF2ysJ7VeUIUWuWlLQ4vgWD/mRY2KKgtSluZ/+OLXPTpWW/nRc5Q==
-X-Received: by 2002:a4a:2410:: with SMTP id m16mr861841oof.90.1618522528558;
-        Thu, 15 Apr 2021 14:35:28 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x14sm930615otk.32.2021.04.15.14.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Apr 2021 14:35:28 -0700 (PDT)
-Received: (nullmailer pid 1921871 invoked by uid 1000);
-        Thu, 15 Apr 2021 21:35:27 -0000
-Date:   Thu, 15 Apr 2021 16:35:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-kernel@vger.kernel.org, Lokesh Vutla <lokeshvutla@ti.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: [PATCH v2 1/2] dt-bindings: net: can: Document transceiver
- implementation as phy
-Message-ID: <20210415213527.GA1921841@robh.at.kernel.org>
-References: <20210415154635.30094-1-a-govindraju@ti.com>
- <20210415154635.30094-2-a-govindraju@ti.com>
+        id S237597AbhDPBNZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 21:13:25 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:17345 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235109AbhDPBNY (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 21:13:24 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FLynT11LJz9yf6;
+        Fri, 16 Apr 2021 09:10:37 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
+ 14.3.498.0; Fri, 16 Apr 2021 09:12:51 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>
+Subject: [PATCH net v4 0/2] fix packet stuck problem for lockless qdisc
+Date:   Fri, 16 Apr 2021 09:13:12 +0800
+Message-ID: <1618535592-11845-1-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210415154635.30094-2-a-govindraju@ti.com>
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 15 Apr 2021 21:16:34 +0530, Aswath Govindraju wrote:
-> From: Faiz Abbas <faiz_abbas@ti.com>
-> 
-> Some transceivers need a configuration step (for example, pulling the
-> standby or enable lines) for them to start sending messages. The
-> transceiver can be implemented as a phy with the configuration done in the
-> phy driver. The bit rate limitation can the be obtained by the driver using
-> the phy node.
-> 
-> Document the above implementation in the bosch mcan bindings
-> 
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+This patchset fixes the packet stuck problem mentioned in [1].
 
-Acked-by: Rob Herring <robh@kernel.org>
+Patch 1: Add STATE_MISSED flag to fix packet stuck problem.
+Patch 2: Fix a tx_action rescheduling problem after STATE_MISSED
+         flag is added in patch 1.
+
+V4: Change STATE_NEED_RESCHEDULE to STATE_MISSED and add patch 2.
+
+[1]. https://lkml.org/lkml/2019/10/9/42
+
+Yunsheng Lin (2):
+  net: sched: fix packet stuck problem for lockless qdisc
+  net: sched: fix endless tx action reschedule during deactivation
+
+ include/net/pkt_sched.h   |  7 +------
+ include/net/sch_generic.h | 37 ++++++++++++++++++++++++++++++++++++-
+ net/core/dev.c            | 26 ++++++++++++++++++++++----
+ net/sched/sch_generic.c   | 16 +++++++++++++++-
+ 4 files changed, 74 insertions(+), 12 deletions(-)
+
+-- 
+2.7.4
+
