@@ -2,21 +2,21 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06366361711
-	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 03:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27175361715
+	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 03:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237597AbhDPBNZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Apr 2021 21:13:25 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:17345 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235109AbhDPBNY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 21:13:24 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FLynT11LJz9yf6;
-        Fri, 16 Apr 2021 09:10:37 +0800 (CST)
+        id S237637AbhDPBRB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Apr 2021 21:17:01 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:17004 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236366AbhDPBRB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Apr 2021 21:17:01 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FLyrz69k0zPr08;
+        Fri, 16 Apr 2021 09:13:39 +0800 (CST)
 Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 16 Apr 2021 09:12:51 +0800
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.498.0; Fri, 16 Apr 2021 09:16:29 +0800
 From:   Yunsheng Lin <linyunsheng@huawei.com>
 To:     <davem@davemloft.net>, <kuba@kernel.org>
 CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
@@ -35,8 +35,8 @@ CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
         <JKosina@suse.com>
 Subject: [PATCH net v4 0/2] fix packet stuck problem for lockless qdisc
-Date:   Fri, 16 Apr 2021 09:13:12 +0800
-Message-ID: <1618535592-11845-1-git-send-email-linyunsheng@huawei.com>
+Date:   Fri, 16 Apr 2021 09:16:47 +0800
+Message-ID: <1618535809-11952-1-git-send-email-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
