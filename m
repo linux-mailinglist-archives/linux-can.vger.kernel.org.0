@@ -2,110 +2,245 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932FE361FFA
-	for <lists+linux-can@lfdr.de>; Fri, 16 Apr 2021 14:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57205363860
+	for <lists+linux-can@lfdr.de>; Mon, 19 Apr 2021 01:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240606AbhDPMhu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 16 Apr 2021 08:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240513AbhDPMhu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 16 Apr 2021 08:37:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC68C061756
-        for <linux-can@vger.kernel.org>; Fri, 16 Apr 2021 05:37:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lXNie-0007oq-Rc; Fri, 16 Apr 2021 14:37:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:b21a:a98c:8cd:ce9c])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F3648610325;
-        Fri, 16 Apr 2021 12:37:01 +0000 (UTC)
-Date:   Fri, 16 Apr 2021 14:37:00 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>
-Subject: Re: [PATCH v2 0/2] MCAN: Add support for implementing transceiver as
- a phy
-Message-ID: <20210416123700.s77prohqjqkegebv@pengutronix.de>
-References: <20210415154635.30094-1-a-govindraju@ti.com>
+        id S232288AbhDRXA2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 18 Apr 2021 19:00:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45562 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232075AbhDRXA1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 18 Apr 2021 19:00:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 6B1FAB123;
+        Sun, 18 Apr 2021 22:59:57 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id 441D1607B3; Mon, 19 Apr 2021 00:59:56 +0200 (CEST)
+Date:   Mon, 19 Apr 2021 00:59:56 +0200
+From:   Michal Kubecek <mkubecek@suse.cz>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Juergen Gross <jgross@suse.com>, Jiri Kosina <jikos@kernel.org>,
+        davem@davemloft.net, kuba@kernel.org, olteanv@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
+        edumazet@google.com, weiwan@google.com, cong.wang@bytedance.com,
+        ap420073@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@openeuler.org,
+        mkl@pengutronix.de, linux-can@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
+        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
+        a.fatoum@pengutronix.de, atenart@kernel.org,
+        alexander.duyck@gmail.com
+Subject: Re: [PATCH net v3] net: sched: fix packet stuck problem for lockless
+ qdisc
+Message-ID: <20210418225956.a6ot6xox4eq6cvv5@lion.mk-sys.cz>
+References: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xqo6yibeskab43ot"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210415154635.30094-1-a-govindraju@ti.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <1616641991-14847-1-git-send-email-linyunsheng@huawei.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Thu, Mar 25, 2021 at 11:13:11AM +0800, Yunsheng Lin wrote:
+> Lockless qdisc has below concurrent problem:
+>     cpu0                 cpu1
+>      .                     .
+> q->enqueue                 .
+>      .                     .
+> qdisc_run_begin()          .
+>      .                     .
+> dequeue_skb()              .
+>      .                     .
+> sch_direct_xmit()          .
+>      .                     .
+>      .                q->enqueue
+>      .             qdisc_run_begin()
+>      .            return and do nothing
+>      .                     .
+> qdisc_run_end()            .
+> 
+> cpu1 enqueue a skb without calling __qdisc_run() because cpu0
+> has not released the lock yet and spin_trylock() return false
+> for cpu1 in qdisc_run_begin(), and cpu0 do not see the skb
+> enqueued by cpu1 when calling dequeue_skb() because cpu1 may
+> enqueue the skb after cpu0 calling dequeue_skb() and before
+> cpu0 calling qdisc_run_end().
+> 
+> Lockless qdisc has below another concurrent problem when
+> tx_action is involved:
+> 
+> cpu0(serving tx_action)     cpu1             cpu2
+>           .                   .                .
+>           .              q->enqueue            .
+>           .            qdisc_run_begin()       .
+>           .              dequeue_skb()         .
+>           .                   .            q->enqueue
+>           .                   .                .
+>           .             sch_direct_xmit()      .
+>           .                   .         qdisc_run_begin()
+>           .                   .       return and do nothing
+>           .                   .                .
+>  clear __QDISC_STATE_SCHED    .                .
+>  qdisc_run_begin()            .                .
+>  return and do nothing        .                .
+>           .                   .                .
+>           .            qdisc_run_end()         .
+> 
+> This patch fixes the above data race by:
+> 1. Get the flag before doing spin_trylock().
+> 2. If the first spin_trylock() return false and the flag is not
+>    set before the first spin_trylock(), Set the flag and retry
+>    another spin_trylock() in case other CPU may not see the new
+>    flag after it releases the lock.
+> 3. reschedule if the flags is set after the lock is released
+>    at the end of qdisc_run_end().
+> 
+> For tx_action case, the flags is also set when cpu1 is at the
+> end if qdisc_run_end(), so tx_action will be rescheduled
+> again to dequeue the skb enqueued by cpu2.
+> 
+> Only clear the flag before retrying a dequeuing when dequeuing
+> returns NULL in order to reduce the overhead of the above double
+> spin_trylock() and __netif_schedule() calling.
+> 
+> The performance impact of this patch, tested using pktgen and
+> dummy netdev with pfifo_fast qdisc attached:
+> 
+>  threads  without+this_patch   with+this_patch      delta
+>     1        2.61Mpps            2.60Mpps           -0.3%
+>     2        3.97Mpps            3.82Mpps           -3.7%
+>     4        5.62Mpps            5.59Mpps           -0.5%
+>     8        2.78Mpps            2.77Mpps           -0.3%
+>    16        2.22Mpps            2.22Mpps           -0.0%
+> 
+> Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> ---
+> V3: fix a compile error and a few comment typo, remove the
+>     __QDISC_STATE_DEACTIVATED checking, and update the
+>     performance data.
+> V2: Avoid the overhead of fixing the data race as much as
+>     possible.
 
---xqo6yibeskab43ot
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I tried this patch o top of 5.12-rc7 with real devices. I used two
+machines with 10Gb/s Intel ixgbe NICs, sender has 16 CPUs (2 8-core CPUs
+with HT disabled) and 16 Rx/Tx queues, receiver has 48 CPUs (2 12-core
+CPUs with HT enabled) and 48 Rx/Tx queues. With multiple TCP streams on
+a saturated ethernet, the CPU consumption grows quite a lot:
 
-On 15.04.2021 21:16:33, Aswath Govindraju wrote:
-> The following series of patches add support for implementing the
-> transceiver as a phy of m_can_platform driver.
->=20
-> TCAN1042 has a standby signal that needs to be pulled high for
-> sending/receiving messages[1]. TCAN1043 has a enable signal along with
-> standby signal that needs to be pulled up for sending/receiving
-> messages[2], and other combinations of the two lines can be used to put t=
-he
-> transceiver in different states to reduce power consumption. On boards
-> like the AM654-idk and J721e-evm these signals are controlled using gpios.
->=20
-> These gpios are set in phy driver, and the transceiver can be put in
-> different states using phy API. The phy driver is added in the series [3].
->=20
-> This patch series is dependent on [4].
+    threads     unpatched 5.12-rc7    5.12-rc7 + v3   
+      1               25.6%               30.6%
+      8               73.1%              241.4%
+    128              132.2%             1012.0%
 
-Looks good. Can you ping me after the next -rc1, when this patch hits
-mainline. Then I'll merge this into linux-can-next.
+(The values are normalized to one core, i.e. 100% corresponds to one
+fully used logical CPU.) I didn't perform a full statistical evaluation
+but the growth is way beyond any statistical fluctuation with one
+exception: 8-thread test of patched kernel showed values from 155.5% to
+311.4%. Closer look shows that most of the CPU time was spent in softirq
+and running top in parallel with the test confirms that there are
+multiple ksofirqd threads running at 100% CPU. I had similar problem
+with earlier versions of my patch (work in progress, I still need to
+check some corner cases and write commit message explaining the logic)
+and tracing confirmed that similar problem (non-empty queue, no other
+thread going to clean it up but device queue stopped) was happening
+repeatedly most of the time.
 
-regards,
-Marc
+The biggest problem IMHO is that the loop in __qdisc_run() may finish
+without rescheduling not only when the qdisc queue is empty but also
+when the corresponding device Tx queue is stopped which devices tend to
+do whenever they cannot send any more packets out. Thus whenever
+__QDISC_STATE_NEED_RESCHEDULE is set with device queue stopped or
+frozen, we keep rescheduling the queue cleanup without any chance to
+progress or clear __QDISC_STATE_NEED_RESCHEDULE. For this to happen, all
+we need is another thready to fail the first spin_trylock() while device
+queue is stopped and qdisc queue not empty.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Another part of the problem may be that to avoid the race, the logic is
+too pessimistic: consider e.g. (dotted lines show "barriers" where
+ordering is important):
 
---xqo6yibeskab43ot
-Content-Type: application/pgp-signature; name="signature.asc"
+    CPU A                            CPU B
+    spin_trylock() succeeds
+                                     pfifo_fast_enqueue()
+    ..................................................................
+    skb_array empty, exit loop
+                                     first spin_trylock() fails
+                                     set __QDISC_STATE_NEED_RESCHEDULE
+                                     second spin_trylock() fails
+    ..................................................................
+    spin_unlock()
+    call __netif_schedule()
 
------BEGIN PGP SIGNATURE-----
+When we switch the order of spin_lock() on CPU A and second
+spin_trylock() on CPU B (but keep setting __QDISC_STATE_NEED_RESCHEDULE
+before CPU A tests it), we end up scheduling a queue cleanup even if
+there is already one running. And either of these is quite realistic.
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmB5hOkACgkQqclaivrt
-76kycAf/TIfrDUXPJ4ouUR5LkNcMylId2QQaYz+ki2uzFPcL4UAXc0pLCn28b/vH
-2mzqV8XCm7nKVp5mlmsdGFgVVTsgmQRvfTZIJoElsilOag3/BteSrdokpZAORcMO
-RBRQakm1Y3pvWr+8oiWXXkpuDwU+KQRP4XzC3IIaxed9Nbilh6bQkSc6E4396fSP
-lF9CWFILd+XcWcDJcdSwbYvXCUw1ofGanJ8To1ylT5GT8Hbcn6G3rv7ro1fQXua2
-JO722JYSmk/TkhiyCAELW6sDePv/0qJcYu/VX/P7QMsudUYhYjtGsEB402JXRKnr
-SJSwEJHtF20H8Eb9mamNsvo3CTk0+w==
-=4TFD
------END PGP SIGNATURE-----
+> diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+> index f7a6e14..e3f46eb 100644
+> --- a/include/net/sch_generic.h
+> +++ b/include/net/sch_generic.h
+> @@ -36,6 +36,7 @@ struct qdisc_rate_table {
+>  enum qdisc_state_t {
+>  	__QDISC_STATE_SCHED,
+>  	__QDISC_STATE_DEACTIVATED,
+> +	__QDISC_STATE_NEED_RESCHEDULE,
+>  };
 
---xqo6yibeskab43ot--
+I'm not sure if putting the flag here is a good idea. If you look at the
+history of struct Qdisc reshufflings, this part (cacheline) should be
+used for members which don't change too often. However, this new flag is
+going to be touched about as often and in similar places as q->seqlock
+or q->empty so that it should probably be in the last cacheline with
+them.
+
+[...]
+> diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
+> index 44991ea..4953430 100644
+> --- a/net/sched/sch_generic.c
+> +++ b/net/sched/sch_generic.c
+> @@ -640,8 +640,10 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+>  {
+>  	struct pfifo_fast_priv *priv = qdisc_priv(qdisc);
+>  	struct sk_buff *skb = NULL;
+> +	bool need_retry = true;
+>  	int band;
+>  
+> +retry:
+>  	for (band = 0; band < PFIFO_FAST_BANDS && !skb; band++) {
+>  		struct skb_array *q = band2list(priv, band);
+>  
+> @@ -652,6 +654,16 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
+>  	}
+>  	if (likely(skb)) {
+>  		qdisc_update_stats_at_dequeue(qdisc, skb);
+> +	} else if (need_retry &&
+> +		   test_and_clear_bit(__QDISC_STATE_NEED_RESCHEDULE,
+> +				      &qdisc->state)) {
+> +		/* do another enqueuing after clearing the flag to
+> +		 * avoid calling __netif_schedule().
+> +		 */
+> +		smp_mb__after_atomic();
+> +		need_retry = false;
+> +
+> +		goto retry;
+>  	} else {
+>  		WRITE_ONCE(qdisc->empty, true);
+>  	}i
+
+Does the retry really provide significant improvement? IIUC it only
+helps if all of enqueue, first spin_trylock() failure and setting the
+__QDISC_STATE_NEED_RESCHEDULE flag happen between us finding the
+skb_array empty and checking the flag. If enqueue happens before we
+check the array (and flag is set before the check), the retry is
+useless. If the flag is set after we check it, we don't catch it (no
+matter if the enqueue happened before or after we found skb_array
+empty).
+
+Michal
