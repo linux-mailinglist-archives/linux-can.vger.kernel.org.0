@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEC936A722
-	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 14:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6622536A727
+	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 14:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbhDYMYw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Apr 2021 08:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S230144AbhDYMY5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Apr 2021 08:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbhDYMYw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 08:24:52 -0400
+        with ESMTP id S230175AbhDYMY4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 08:24:56 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D54C061574
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 05:24:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3116CC06175F
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 05:24:17 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lado2-0004Q5-Ku
-        for linux-can@vger.kernel.org; Sun, 25 Apr 2021 14:24:10 +0200
+        id 1lado7-0004XH-Er
+        for linux-can@vger.kernel.org; Sun, 25 Apr 2021 14:24:15 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 824F0616973
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 12:24:04 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 434F561699E
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 12:24:06 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 7E6E661694A;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 9BB9761694C;
         Sun, 25 Apr 2021 12:24:02 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 068bf980;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ba64731e;
         Sun, 25 Apr 2021 12:24:01 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
@@ -39,9 +39,9 @@ Cc:     kernel@pengutronix.de,
         Thomas Kopp <thomas.kopp@microchip.com>,
         =?UTF-8?q?Magnus=20Aagaard=20S=C3=B8rensen?= 
         <mas@csselectronics.com>, Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [can-next-rfc 04/14] can: mcp251xfd: mcp251xfd_reg_invalid(): rename from mcp251xfd_osc_invalid()
-Date:   Sun, 25 Apr 2021 14:23:50 +0200
-Message-Id: <20210425122400.3276975-5-mkl@pengutronix.de>
+Subject: [can-next-rfc 05/14] can: mcp251xfd: mcp251xfd_chip_wait_for_osc_ready(): factor out into separate function
+Date:   Sun, 25 Apr 2021 14:23:51 +0200
+Message-Id: <20210425122400.3276975-6-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210425122400.3276975-1-mkl@pengutronix.de>
 References: <20210425122400.3276975-1-mkl@pengutronix.de>
@@ -55,55 +55,78 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch renames mcp251xfd_osc_invalid() to mcp251xfd_reg_invalid(),
-as it will be used for other registers than the "osc" register in a
-later patch.
-
-This patch also moves this function to more towards the beginning of
-the file, to be available for other functions, too.
+This patch factors out mcp251xfd_chip_wait_for_osc_ready() into a
+separate function, it will be used in several places in the next
+patches.
 
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ .../net/can/spi/mcp251xfd/mcp251xfd-core.c    | 45 +++++++++++--------
+ 1 file changed, 27 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 1d267dfedead..45850521000c 100644
+index 45850521000c..c7c6d07ac175 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -504,6 +504,11 @@ static int mcp251xfd_ring_alloc(struct mcp251xfd_priv *priv)
- 	return 0;
- }
- 
-+static inline bool mcp251xfd_reg_invalid(u32 reg)
-+{
-+	return reg == 0x0 || reg == 0xffffffff;
-+}
-+
- static inline int
- mcp251xfd_chip_get_mode(const struct mcp251xfd_priv *priv, u8 *mode)
- {
-@@ -567,11 +572,6 @@ mcp251xfd_chip_set_mode_nowait(const struct mcp251xfd_priv *priv,
+@@ -572,6 +572,32 @@ mcp251xfd_chip_set_mode_nowait(const struct mcp251xfd_priv *priv,
  	return __mcp251xfd_chip_set_mode(priv, mode_req, true);
  }
  
--static inline bool mcp251xfd_osc_invalid(u32 reg)
--{
--	return reg == 0x0 || reg == 0xffffffff;
--}
--
++static int
++mcp251xfd_chip_wait_for_osc_ready(const struct mcp251xfd_priv *priv,
++				  u32 osc_reference, u32 osc_mask)
++{
++	u32 osc;
++	int err;
++
++	err = regmap_read_poll_timeout(priv->map_reg, MCP251XFD_REG_OSC, osc,
++				       (osc & osc_mask) == osc_reference,
++				       MCP251XFD_OSC_STAB_SLEEP_US,
++				       MCP251XFD_OSC_STAB_TIMEOUT_US);
++	if (mcp251xfd_reg_invalid(osc)) {
++		netdev_err(priv->ndev,
++			   "Failed to detect %s (osc=0x%08x).\n",
++			   mcp251xfd_get_model_str(priv), osc);
++		return -ENODEV;
++	} else if (err == -ETIMEDOUT) {
++		netdev_err(priv->ndev,
++			   "Timeout waiting for Oscillator Ready (osc=0x%08x, osc_reference=0x%08x)\n",
++			   osc, osc_reference);
++		return -ETIMEDOUT;
++	}
++
++	return 0;
++}
++
  static int mcp251xfd_chip_clock_enable(const struct mcp251xfd_priv *priv)
  {
  	u32 osc, osc_reference, osc_mask;
-@@ -600,7 +600,7 @@ static int mcp251xfd_chip_clock_enable(const struct mcp251xfd_priv *priv)
- 				       (osc & osc_mask) == osc_reference,
- 				       MCP251XFD_OSC_STAB_SLEEP_US,
- 				       MCP251XFD_OSC_STAB_TIMEOUT_US);
--	if (mcp251xfd_osc_invalid(osc)) {
-+	if (mcp251xfd_reg_invalid(osc)) {
- 		netdev_err(priv->ndev,
- 			   "Failed to detect %s (osc=0x%08x).\n",
- 			   mcp251xfd_get_model_str(priv), osc);
+@@ -595,24 +621,7 @@ static int mcp251xfd_chip_clock_enable(const struct mcp251xfd_priv *priv)
+ 	if (err)
+ 		return err;
+ 
+-	/* Wait for "Oscillator Ready" bit */
+-	err = regmap_read_poll_timeout(priv->map_reg, MCP251XFD_REG_OSC, osc,
+-				       (osc & osc_mask) == osc_reference,
+-				       MCP251XFD_OSC_STAB_SLEEP_US,
+-				       MCP251XFD_OSC_STAB_TIMEOUT_US);
+-	if (mcp251xfd_reg_invalid(osc)) {
+-		netdev_err(priv->ndev,
+-			   "Failed to detect %s (osc=0x%08x).\n",
+-			   mcp251xfd_get_model_str(priv), osc);
+-		return -ENODEV;
+-	} else if (err == -ETIMEDOUT) {
+-		netdev_err(priv->ndev,
+-			   "Timeout waiting for Oscillator Ready (osc=0x%08x, osc_reference=0x%08x)\n",
+-			   osc, osc_reference);
+-		return -ETIMEDOUT;
+-	}
+-
+-	return err;
++	return mcp251xfd_chip_wait_for_osc_ready(priv, osc_reference, osc_mask);
+ }
+ 
+ static int mcp251xfd_chip_softreset_do(const struct mcp251xfd_priv *priv)
 -- 
 2.30.2
 
