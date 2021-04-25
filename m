@@ -2,95 +2,216 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DA636A6EB
-	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 13:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A4536A700
+	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 14:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbhDYLlF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Apr 2021 07:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbhDYLlD (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 07:41:03 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8790CC061574
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 04:40:22 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id c4so14009811wrt.8
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 04:40:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flodin-me.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:cc;
-        bh=nlPkc3yLjB8ztnEoQxGNvyEpo51PywG0EprszA54rY4=;
-        b=MIo4GLF/Lt+VvXbgjvKPsCstBqsFfHbgM2RI5jpCuT+kHcm4I1jTRoGR469nKYHZVi
-         oexNfT+wawzpXjQ3PFzdytAaU4ffg/IE9FCZ8wwYlUn0RWOWt1UikLg4Z26FmORIwHii
-         vG1DKNkoS0FyMYx1+KUMRdt/NZuFzxlhaRbRLc/zy8ZMUtcTcm1n9GURcgI4JBLZQDCN
-         AzqeNMIX9kRP9/T6e9+opNMcatsbounh/K9ec2GkohvgpyqqxUPHOLK44b/97vptGA4i
-         oKVfmfqdyCXLUVemIeAF9S1zM2iqISSBwt4sTo0Uzmys/9T4+iDxC7OEWcmjrm4fE+08
-         brUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:cc;
-        bh=nlPkc3yLjB8ztnEoQxGNvyEpo51PywG0EprszA54rY4=;
-        b=Y9pwoYpiCQV5q1K25u2cbZdLTMXEU8umiNtisXzGTblIT1yDQU880w2xB1XAQ+gvsL
-         wZDLSSrlNTonAYNqUVZKzcjHW6HZ2NM0iLkaZrW0Nrc9JwpJGP1kuCZA5dFyQlVlilIf
-         CqW2cr5LJw9+Pyy9xkTd2MrKoAzOiYLi40x+f6XXImgIYilpesufEkojbBmXGPWry5F8
-         as+vGr890G0EM5MOQzKpOto6Tmq44nZBCHChkB5H1nTO7pKVZKbWJWjI2SSEBo7v1PZN
-         4M9sTXorbSOBMuHmUfytzzUB2ZoghEwsOJ8PDYabXD4rxwYy14XwCSomOartdie/YFYe
-         hXPA==
-X-Gm-Message-State: AOAM532WqZgr79wia1ndFDAVqHSPPtCfpNaig6qSTuOOGIoGdxKyXW6w
-        o6ylLrzZXxsf17K4A3EZEpv17s62/B04Mk5W0Z4nCA==
-X-Received: by 2002:a5d:640e:: with SMTP id z14mt11705015wru.258.1619350821152;
- Sun, 25 Apr 2021 04:40:21 -0700 (PDT)
+        id S229837AbhDYMFh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Apr 2021 08:05:37 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:53511 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229688AbhDYMFh (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 25 Apr 2021 08:05:37 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 83194240100
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 14:04:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1619352295; bh=5YH2DBdSaERSpu1Q4JiWQMdTBGpfk6fjRzPlhr+uL3A=;
+        h=From:To:Autocrypt:Subject:Date:From;
+        b=RMa/bsZlBaudpxnc9bCdKWO1xhAcZ5vVw5by1HAsjLPWbWZDtujgU/38VYdYJU/cf
+         enNzZvvKaMunWIEdaNLSmy7m4tVNgrD9NIOzHJnBAkpHas3tZmWXt1cW85E3g1jWfT
+         AmLGvRM8ciExW0TcnaBWHlUPWfHO29N0KzbEcz5Va0nt9biXDWEF3i50RMTynpIpWZ
+         lLXXBtWsCnSkizxIBXP2WtR6H/uML/d29niAitT8ObJiFCh1mzQxrAKcoGYmugkrG0
+         JWsR+sAMDQjPJOM/Yc/5V1tmlQRFdmagCjoIdT1/+/c00+rDFz7k/CvMG354ChJlx8
+         EHuY4U1SS6MGA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FSmtG6hcQz6tmD
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 14:04:54 +0200 (CEST)
+From:   Patrick Menschel <menschel.p@posteo.de>
+To:     linux-can <linux-can@vger.kernel.org>
+References: <97b76750-3416-decf-82a8-8039c8146482@posteo.de>
+ <cf0e6d47-2a10-457d-2351-efc358b0d54c@posteo.de>
+Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
+ elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
+ TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
+ ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
+ ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
+ Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
+ R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
+ N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
+ NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
+ S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
+ aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
+ djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
+ TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
+ WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
+ UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
+ bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
+ VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
+ NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
+ TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
+ YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
+ c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
+ NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
+ NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
+ dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
+ aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
+ TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
+ MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
+ S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
+ K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
+ dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
+ a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
+ ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
+ QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
+ YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
+ TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
+ T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
+ MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
+ U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
+ CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
+ T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
+ NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
+ YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
+ dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
+ U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
+ TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
+ TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
+ RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
+ STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
+ NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
+ ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
+ aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
+ UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
+ MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
+ WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
+ V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
+ a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
+ dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
+ QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
+ IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Subject: Re: can-isotp: isotp_tx_timer_handler: can_send_ret -105
+Message-ID: <2dbfc061-9a35-7c51-3cd3-637a5c8e2a61@posteo.de>
+Date:   Sun, 25 Apr 2021 12:04:54 +0000
 MIME-Version: 1.0
-References: <20210425090751.2jqj4yqx5ztyqhvg@pengutronix.de> <20210425095249.177588-1-erik@flodin.me>
-In-Reply-To: <20210425095249.177588-1-erik@flodin.me>
-From:   Erik Flodin <erik@flodin.me>
-Date:   Sun, 25 Apr 2021 13:40:10 +0200
-Message-ID: <CAAMKmodFEXj69mA2nHNfdtJYBTUR+sBpPc_2krm27oKUyVtqKA@mail.gmail.com>
-Subject: Re: [PATCH] can: proc: fix rcvlist_* header alignment on 64-bit system
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, mailhol.vincent@wanadoo.fr
-Content-Type: text/plain; charset="UTF-8"
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <cf0e6d47-2a10-457d-2351-efc358b0d54c@posteo.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+Am 25.04.21 um 12:59 schrieb Patrick Menschel:
+> Am 25.04.21 um 12:11 schrieb Patrick Menschel:
+>> Hi,
+>>
+>> I'm experiencing a socket timeout when receiving an isotp transfer of
+>> 256 + overhead bytes via a real can interface. The same application runs
+>> without problems on vcan0.
+>>
+>> The output of dmesg.
+>>
+>> [  146.507796] can: isotp protocol
+>> [  146.534527] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.534672] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.534794] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.534920] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.535044] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.535169] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.535294] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.535418] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.535543] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  146.535668] NOHZ tick-stop error: Non-RCU local softirq work is
+>> pending, handler #08!!!
+>> [  194.034609] can-isotp: isotp_tx_timer_handler: can_send_ret -105
+>>
+>>
+>> The output of candump.
+>>   mcp0  17FC05F4   [8]  11 07 3C 00 00 00 00 00
+>>   mcp0  17FE05F4   [3]  30 00 00
+>>   mcp0  17FC05F4   [8]  21 00 42 4F 4F 54 00 00
+>>   mcp0  17FC05F4   [8]  22 00 00 00 5E 02 00 6A
+>>   mcp0  17FC05F4   [8]  23 00 65 90 C4 BB FC 6C
+>>   mcp0  17FC05F4   [8]  24 7A 68 F2 A2 C0 33 1F
+>>   mcp0  17FC05F4   [8]  25 C8 D5 A7 E1 7C 00 01
+>>   mcp0  17FC05F4   [8]  26 43 20 01 00 00 00 00
+>>   mcp0  17FC05F4   [8]  27 00 00 00 00 00 00 00
+>>   mcp0  17FC05F4   [8]  28 00 00 00 00 00 00 00
+>>   mcp0  17FC05F4   [8]  29 00 00 00 00 00 00 00
+>>   mcp0  17FC05F4   [8]  2A 00 00 15 00 00 00 10
+>>   mcp0  17FC05F4   [8]  2B 00 00 00 02 00 00 00
+>>   mcp0  17FC05F4   [8]  2C D4 57 45 20 E8 57 45
+>>   mcp0  17FC05F4   [8]  2D 20 14 58 45 20 1C 58
+>>   mcp0  17FC05F4   [8]  2E 45 20 24 58 45 20 2C
+>>
+>>
+>> The setup is a pi0w with the seeed can fd board, e.g. mcp2518fd and
+>> current standard Raspbian. I'm running a (file) server on mcp0, a mock
+>> client on mcp1 and both are directly connected.
+>> The communication is technically full duplex with two independent isotp
+>> channels but the other channel is silent until a transfer is complete.
+>>
+>> Is such an issue known ?
+>> May this happen due to the limited resources of a pi0w ?
+>>
+>> Best Regards,
+>> Patrick Menschel
+>>
+> 
+> I just swapped the pi0w against a pi3b and have the same issue.
+> 
+> [  241.887464] can: controller area network core
+> [  241.887588] NET: Registered protocol family 29
+> [  241.900798] can: isotp protocol
+> [  241.906721] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.906770] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.906889] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907014] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907139] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907264] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907388] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907513] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907638] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  241.907763] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  275.326539] can-isotp: isotp_tx_timer_handler: can_send_ret -105
+> 
+> Is this a problem of the armhf platform?
+> 
+> Regards,
+> Patrick
+> 
 
-On Sun, 25 Apr 2021 at 11:53, Erik Flodin <erik@flodin.me> wrote:
-> -       seq_puts(m, "  device   can_id   can_mask  function"
-> -                       "  userdata   matches  ident\n");
-> +       seq_printf(m, "  device   can_id   can_mask  %sfunction%s  %suserdata%s   matches  ident\n",
-> +                  pad, pad, pad, pad);
->  }
+OK, I got it, user fault.
 
-If a compile-time variant is better I'm happy to change this to e.g.
-something like this:
+sudo ip link set mcp0 txqueuelen 4000
+sudo ip link set mcp1 txqueuelen 4000
 
-seq_puts(m, "  device   can_id   can_mask  ");
-if (IS_ENABLED(CONFIG_64BIT))
-        seq_puts(m, "    function          userdata    ");
-else
-        seq_puts(m, "function  userdata");
-seq_puts(m, "   matches  ident\n");
+did the job.
 
-or something like what Vincent suggested:
+Is it possible to add this error message into the "official"
+documentation or add an error when the queue is full.
+It is somewhat missleading to get a rx side timeout error instead of a
+tx side queue full error.
 
-#ifdef CONFIG_64BIT
-#define PAD "    "
-#else
-#define PAD ""
-#endif
-...
-seq_puts(m, "  device   can_id   can_mask  " PAD "function  " PAD
-PAD "userdata   " PAD "matches  ident\n");
-
-None of these versions are really grep friendly though. If that is
-needed, a third variant with two full strings can be used instead.
-Just let me know which one that's preferred.
-
-// Erik
+Thanks and Best Regards,
+Patrick
