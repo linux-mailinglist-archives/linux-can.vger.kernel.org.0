@@ -2,102 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEE636A5E0
-	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 10:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9D736A5F9
+	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 11:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbhDYIuu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Apr 2021 04:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S229543AbhDYJIl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Apr 2021 05:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbhDYIut (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 04:50:49 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C8FC061756
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 01:50:05 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id y4so43507879lfl.10
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 01:50:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flodin-me.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ujKca+JTuVhPoMhmMDjrRFgqpHT2xUS8hTPaqNfVQbk=;
-        b=d9lhczl3w/teld+CtLE7/6A5JlbDCkCfk35gVoI7EajXVuTY9M9jyd2lTBIPZHkLbv
-         IvA9i31Z413j20D3Jx2itwQPZrgutd0kZDnr4bzDDpVCTSSYLTBYawvEYvfQYWkAkZzs
-         rauUXGTJIZJAo6aroQtOXlquxa9OuFC22D4OngmZFYQuvLhXE4yfWBukIa04+XFfiJYL
-         IyX/d/g7hSFoDN7P9KTve0LD/cyfr3t9IUyZ66GB2UZb4c0kTc4kbbjOidnTfHiPz3Zp
-         5nhyYe5b7HQCFqvM2pSwHzRfEFJ0f9ZwmUimzqI92qwR5OtIzbBJ/DbNeW5QRlLigKLH
-         u3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ujKca+JTuVhPoMhmMDjrRFgqpHT2xUS8hTPaqNfVQbk=;
-        b=RmSmNAOfZbccLNpL02fPZm7eP9vykaCA29bWSkK2w2WU1ejZQJkTXQhhhGop28wJ5w
-         pnnc+pXgQsT6pHZdmRDND5F95gWSW/B1PnCeAtyDGDlwJrHRIyy/PPDCXKzQzo26MqED
-         7eQOqNy7iifJ+pijkhxEPwrDtCnqAZI5aPFqxVSdZmMQNcE+BRoqhmoM6nFGsM2t6muk
-         DO37S+scN97q8k/7+eJYrRL9ThgtGYw5iilzm8aRtLhhE7w+Zj5OWgEzsSn21VVCXp9z
-         QLdFrFh7nEYSa8wBvEZq2i1HtVYcOpqMG78djqOrzUoGLziLy3IXI3gZjcgv2IFs/b6G
-         mwAw==
-X-Gm-Message-State: AOAM5333FFAyFyA57jmCub4U1yas3DgBQgMqpd8IP5cUuL6SGnQF1YZL
-        b2nsE7Mxae9zMQFU76WL8PJL+Q==
-X-Google-Smtp-Source: ABdhPJyEFgEO40LQBZLQ1wGubsfRoX6hwUac66FyEFgBjq8gcw+EZPfv3dZH+MrDG77B+53EFo5f7w==
-X-Received: by 2002:a05:6512:2287:: with SMTP id f7mr8966561lfu.143.1619340604023;
-        Sun, 25 Apr 2021 01:50:04 -0700 (PDT)
-Received: from trillian.bjorktomta.lan (h-158-174-77-132.NA.cust.bahnhof.se. [158.174.77.132])
-        by smtp.gmail.com with ESMTPSA id u6sm1048433lfr.164.2021.04.25.01.50.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Apr 2021 01:50:03 -0700 (PDT)
-From:   Erik Flodin <erik@flodin.me>
-Cc:     Erik Flodin <erik@flodin.me>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        with ESMTP id S229485AbhDYJIk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 05:08:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC585C061574
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 02:08:00 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1laak7-0004FR-9Y; Sun, 25 Apr 2021 11:07:55 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:c28e:7dee:2502:6631])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id B055D61683D;
+        Sun, 25 Apr 2021 09:07:52 +0000 (UTC)
+Date:   Sun, 25 Apr 2021 11:07:51 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Erik Flodin <erik@flodin.me>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH] can: fix proc/can/net/rcvlist_* header alignment on 64-bit system
-Date:   Sun, 25 Apr 2021 10:49:29 +0200
-Message-Id: <20210425084950.171529-1-erik@flodin.me>
-X-Mailer: git-send-email 2.31.0
+Subject: Re: [PATCH] can: fix proc/can/net/rcvlist_* header alignment on
+ 64-bit system
+Message-ID: <20210425090751.2jqj4yqx5ztyqhvg@pengutronix.de>
+References: <20210425084950.171529-1-erik@flodin.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rjbsgmzjagbnrltp"
+Content-Disposition: inline
+In-Reply-To: <20210425084950.171529-1-erik@flodin.me>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Before this fix, the function and userdata columns weren't aligned:
-  device   can_id   can_mask  function  userdata   matches  ident
-   vcan0  92345678  9fffffff  0000000000000000  0000000000000000         0  raw
-   vcan0     123    00000123  0000000000000000  0000000000000000         0  raw
 
-After the fix they are:
-  device   can_id   can_mask      function          userdata       matches  ident
-   vcan0  92345678  9fffffff  0000000000000000  0000000000000000         0  raw
-   vcan0     123    00000123  0000000000000000  0000000000000000         0  raw
+--rjbsgmzjagbnrltp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Erik Flodin <erik@flodin.me>
----
- net/can/proc.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Hey Erik,
 
-diff --git a/net/can/proc.c b/net/can/proc.c
-index 5ea8695f507e..97901e56c429 100644
---- a/net/can/proc.c
-+++ b/net/can/proc.c
-@@ -205,8 +205,11 @@ static void can_print_recv_banner(struct seq_file *m)
- 	 *                  can1.  00000000  00000000  00000000
- 	 *                 .......          0  tp20
- 	 */
--	seq_puts(m, "  device   can_id   can_mask  function"
--			"  userdata   matches  ident\n");
-+	const char *pad = sizeof(void *) == 8 ? "    " : "";
-+
-+	seq_printf(m, "  device   can_id   can_mask  %sfunction%s"
-+		   "  %suserdata%s   matches  ident\n",
-+		   pad, pad, pad, pad);
- }
- 
- static int can_stats_proc_show(struct seq_file *m, void *v)
--- 
-2.31.0
+the subject is not 100% correct, actually it is /proc/net/can/rcvlist_*
 
+On 25.04.2021 10:49:29, Erik Flodin wrote:
+> Before this fix, the function and userdata columns weren't aligned:
+>   device   can_id   can_mask  function  userdata   matches  ident
+>    vcan0  92345678  9fffffff  0000000000000000  0000000000000000         =
+0  raw
+>    vcan0     123    00000123  0000000000000000  0000000000000000         =
+0  raw
+>=20
+> After the fix they are:
+>   device   can_id   can_mask      function          userdata       matche=
+s  ident
+>    vcan0  92345678  9fffffff  0000000000000000  0000000000000000         =
+0  raw
+>    vcan0     123    00000123  0000000000000000  0000000000000000         =
+0  raw
+>=20
+> Signed-off-by: Erik Flodin <erik@flodin.me>
+> ---
+>  net/can/proc.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/net/can/proc.c b/net/can/proc.c
+> index 5ea8695f507e..97901e56c429 100644
+> --- a/net/can/proc.c
+> +++ b/net/can/proc.c
+> @@ -205,8 +205,11 @@ static void can_print_recv_banner(struct seq_file *m)
+>  	 *                  can1.  00000000  00000000  00000000
+>  	 *                 .......          0  tp20
+>  	 */
+> -	seq_puts(m, "  device   can_id   can_mask  function"
+> -			"  userdata   matches  ident\n");
+> +	const char *pad =3D sizeof(void *) =3D=3D 8 ? "    " : "";
+
+nitpick: please move this to the beginning of the function, even before
+the comment.
+
+> +
+> +	seq_printf(m, "  device   can_id   can_mask  %sfunction%s"
+> +		   "  %suserdata%s   matches  ident\n",
+
+nitpick:
+For printed strings it's better to have them in a single line, so that
+grepping for them is easier.
+
+> +		   pad, pad, pad, pad);
+>  }
+> =20
+>  static int can_stats_proc_show(struct seq_file *m, void *v)
+> --=20
+> 2.31.0
+>=20
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--rjbsgmzjagbnrltp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCFMWUACgkQqclaivrt
+76nfpwf/cWOE7JZ/XzLWmDQF8+J8nzEU4xxgH0FXeoT9noHPZh0IbVTVtvCT/Z4K
+5VIsenBWH8ga0RB8O/hF7mhWHn6i3cptkiMqgBcNftje4+GkX89S5vTxeuHCgeYk
+EPY1lYhUbuTDQ4j/roV9kZsJ39aNofptVXVuLS2LTczRqdZmDVpCyfC85ybwpn+v
+8Aof1OiTb5hexwCYskTfX4lR+Eg2SJPb2qVLwKfoR7nqPouUQSGqTCMJFSeduVqZ
+ap5fNq7CIMb3akBY2CfJXyCFiOiYF7vb46KL+SlMTBAV1w5jeAMaaW73L8wkmyx+
+Qd/YrHjstGWeGUre04i5rhvTeb92ig==
+=OxLH
+-----END PGP SIGNATURE-----
+
+--rjbsgmzjagbnrltp--
