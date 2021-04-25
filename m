@@ -2,32 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD2B36A670
-	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 12:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 963B236A6D5
+	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 13:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhDYKLz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Apr 2021 06:11:55 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:42665 "EHLO mout01.posteo.de"
+        id S229659AbhDYLAn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Apr 2021 07:00:43 -0400
+Received: from mout01.posteo.de ([185.67.36.65]:37315 "EHLO mout01.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229551AbhDYKLy (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 25 Apr 2021 06:11:54 -0400
+        id S229525AbhDYLAn (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 25 Apr 2021 07:00:43 -0400
 Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 6CA40240026
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 12:11:12 +0200 (CEST)
+        by mout01.posteo.de (Postfix) with ESMTPS id A8466240026
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 13:00:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1619345472; bh=F9u1iTLwOt91V7mBbTjLBoz8agPwKE0L92eAGar5CeY=;
-        h=To:From:Autocrypt:Subject:Date:From;
-        b=TN6dH1/WX/odvYhw81AYWv7/58g3EaJvDKXV3cSw4uscnwpXSbAMUGh+i3xwIOpsY
-         JgYa0j0APP7wYdma1UcnClffGBkBZdhM10+GuzTnDVjlzifiknaHVWjh9WFNj/yemQ
-         CVrh8E2togYEb9+j+DGMqDg5tLU5ggxD/aXLxHJ0qFixbbUY2L+bxscy1O97yobFmv
-         J+CxxBbVEJ5Ox9h3QWvwZISf8PbxrQ+PPSIu+opqeP6Q9eqoldFVVsomAKRvxrEpST
-         R/Boud66Q57VcSONUn8qZi4hCTTLUPL/vevMlKYW3rfS88czY9ISsdQvuFn3gZrjXb
-         Ep1/CPZzBdoCw==
+        t=1619348402; bh=OH162lLsomiFu0Wse2imHZLmQPngC3wi+J65T/O+WXw=;
+        h=Subject:From:To:Autocrypt:Date:From;
+        b=n+YmKtgCe1l1yrKHPhsbceiPqd5k3/SeUyM3TUzYeN3c9Na/94vtusWGxLFZXIozU
+         LEMlvinW79uKIC5krDuRMJ8/L6f4rDPQn0dOKjCuHAE40ESjVYP3KoyJbLlrLD+TIz
+         stw2oACoTM4d2LGHGqpCW0nZfiBSL0wZJn/IrhUqqEWm+/WqWzHBWRRaogr6zOWanb
+         cSBpBD4RD8x+Gzr6No8x4FN6Q4LBlXsvgJS4aS6Al0OymyTQNZM90st/15zIdDhYYf
+         dqI6IbM/FOl9loxHuO7glZep7zNrMV7+REAj8ME1XGoELRluwD66iKpyoVBD7sQreo
+         19zH2DVbeTW1w==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4FSkM40b0mz9rxL
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 12:11:12 +0200 (CEST)
-To:     linux-can <linux-can@vger.kernel.org>
+        by submission (posteo.de) with ESMTPSA id 4FSlRQ1CZrz6tmH
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 13:00:02 +0200 (CEST)
+Subject: Re: can-isotp: isotp_tx_timer_handler: can_send_ret -105
 From:   Patrick Menschel <menschel.p@posteo.de>
+To:     linux-can <linux-can@vger.kernel.org>
+References: <97b76750-3416-decf-82a8-8039c8146482@posteo.de>
 Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
  elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
@@ -88,76 +90,110 @@ Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
  QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
  IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: can-isotp: isotp_tx_timer_handler: can_send_ret -105
-Message-ID: <97b76750-3416-decf-82a8-8039c8146482@posteo.de>
-Date:   Sun, 25 Apr 2021 10:11:11 +0000
+Message-ID: <cf0e6d47-2a10-457d-2351-efc358b0d54c@posteo.de>
+Date:   Sun, 25 Apr 2021 10:59:58 +0000
 MIME-Version: 1.0
+In-Reply-To: <97b76750-3416-decf-82a8-8039c8146482@posteo.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+Am 25.04.21 um 12:11 schrieb Patrick Menschel:
+> Hi,
+> 
+> I'm experiencing a socket timeout when receiving an isotp transfer of
+> 256 + overhead bytes via a real can interface. The same application runs
+> without problems on vcan0.
+> 
+> The output of dmesg.
+> 
+> [  146.507796] can: isotp protocol
+> [  146.534527] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.534672] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.534794] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.534920] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.535044] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.535169] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.535294] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.535418] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.535543] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  146.535668] NOHZ tick-stop error: Non-RCU local softirq work is
+> pending, handler #08!!!
+> [  194.034609] can-isotp: isotp_tx_timer_handler: can_send_ret -105
+> 
+> 
+> The output of candump.
+>   mcp0  17FC05F4   [8]  11 07 3C 00 00 00 00 00
+>   mcp0  17FE05F4   [3]  30 00 00
+>   mcp0  17FC05F4   [8]  21 00 42 4F 4F 54 00 00
+>   mcp0  17FC05F4   [8]  22 00 00 00 5E 02 00 6A
+>   mcp0  17FC05F4   [8]  23 00 65 90 C4 BB FC 6C
+>   mcp0  17FC05F4   [8]  24 7A 68 F2 A2 C0 33 1F
+>   mcp0  17FC05F4   [8]  25 C8 D5 A7 E1 7C 00 01
+>   mcp0  17FC05F4   [8]  26 43 20 01 00 00 00 00
+>   mcp0  17FC05F4   [8]  27 00 00 00 00 00 00 00
+>   mcp0  17FC05F4   [8]  28 00 00 00 00 00 00 00
+>   mcp0  17FC05F4   [8]  29 00 00 00 00 00 00 00
+>   mcp0  17FC05F4   [8]  2A 00 00 15 00 00 00 10
+>   mcp0  17FC05F4   [8]  2B 00 00 00 02 00 00 00
+>   mcp0  17FC05F4   [8]  2C D4 57 45 20 E8 57 45
+>   mcp0  17FC05F4   [8]  2D 20 14 58 45 20 1C 58
+>   mcp0  17FC05F4   [8]  2E 45 20 24 58 45 20 2C
+> 
+> 
+> The setup is a pi0w with the seeed can fd board, e.g. mcp2518fd and
+> current standard Raspbian. I'm running a (file) server on mcp0, a mock
+> client on mcp1 and both are directly connected.
+> The communication is technically full duplex with two independent isotp
+> channels but the other channel is silent until a transfer is complete.
+> 
+> Is such an issue known ?
+> May this happen due to the limited resources of a pi0w ?
+> 
+> Best Regards,
+> Patrick Menschel
+> 
 
-I'm experiencing a socket timeout when receiving an isotp transfer of
-256 + overhead bytes via a real can interface. The same application runs
-without problems on vcan0.
+I just swapped the pi0w against a pi3b and have the same issue.
 
-The output of dmesg.
+[  241.887464] can: controller area network core
+[  241.887588] NET: Registered protocol family 29
+[  241.900798] can: isotp protocol
+[  241.906721] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.906770] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.906889] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907014] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907139] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907264] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907388] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907513] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907638] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  241.907763] NOHZ tick-stop error: Non-RCU local softirq work is
+pending, handler #08!!!
+[  275.326539] can-isotp: isotp_tx_timer_handler: can_send_ret -105
 
-[  146.507796] can: isotp protocol
-[  146.534527] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.534672] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.534794] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.534920] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.535044] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.535169] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.535294] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.535418] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.535543] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  146.535668] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  194.034609] can-isotp: isotp_tx_timer_handler: can_send_ret -105
+Is this a problem of the armhf platform?
 
-
-The output of candump.
-  mcp0  17FC05F4   [8]  11 07 3C 00 00 00 00 00
-  mcp0  17FE05F4   [3]  30 00 00
-  mcp0  17FC05F4   [8]  21 00 42 4F 4F 54 00 00
-  mcp0  17FC05F4   [8]  22 00 00 00 5E 02 00 6A
-  mcp0  17FC05F4   [8]  23 00 65 90 C4 BB FC 6C
-  mcp0  17FC05F4   [8]  24 7A 68 F2 A2 C0 33 1F
-  mcp0  17FC05F4   [8]  25 C8 D5 A7 E1 7C 00 01
-  mcp0  17FC05F4   [8]  26 43 20 01 00 00 00 00
-  mcp0  17FC05F4   [8]  27 00 00 00 00 00 00 00
-  mcp0  17FC05F4   [8]  28 00 00 00 00 00 00 00
-  mcp0  17FC05F4   [8]  29 00 00 00 00 00 00 00
-  mcp0  17FC05F4   [8]  2A 00 00 15 00 00 00 10
-  mcp0  17FC05F4   [8]  2B 00 00 00 02 00 00 00
-  mcp0  17FC05F4   [8]  2C D4 57 45 20 E8 57 45
-  mcp0  17FC05F4   [8]  2D 20 14 58 45 20 1C 58
-  mcp0  17FC05F4   [8]  2E 45 20 24 58 45 20 2C
-
-
-The setup is a pi0w with the seeed can fd board, e.g. mcp2518fd and
-current standard Raspbian. I'm running a (file) server on mcp0, a mock
-client on mcp1 and both are directly connected.
-The communication is technically full duplex with two independent isotp
-channels but the other channel is silent until a transfer is complete.
-
-Is such an issue known ?
-May this happen due to the limited resources of a pi0w ?
-
-Best Regards,
-Patrick Menschel
+Regards,
+Patrick
