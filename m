@@ -2,74 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBA936A7E6
-	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 17:10:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6882F36A7FE
+	for <lists+linux-can@lfdr.de>; Sun, 25 Apr 2021 17:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbhDYPLL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Apr 2021 11:11:11 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:43155 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230244AbhDYPLL (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 25 Apr 2021 11:11:11 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 406F62400FC
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 17:10:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1619363429; bh=Z9soVQG98yv4Sne1cc+vGVqI7CCnMtVZOoPMJQfSt98=;
-        h=From:To:Subject:Date:From;
-        b=LQbuzjKLUehHIZ5e12INIDALMngukkByy4uy1LNQjuQu4bRNa7xq+xXnKTTgRxI/A
-         1SuKoHSHbpdMZ4ecAzlWobw0GCU5xvhJTWO/qCVGWVc1PJgPejts9ThjcMZzHlAgEH
-         T39XgikB+1qpMizWDnU+q2FTzrboFDz5fmnsfJzR5aUGdiz+8vc9rBV6dMWooOXVhi
-         ZLN3T8AZKPUA3lRKZrIglyD+2bK3zccu0JbCmtRHNiWI7OuyO4et3CUstb12s/ht/y
-         0qTe6jC95IAXO9LTk1Q86/KcY2tRVsIAGIxVRdBqjXUeAGWHXAoX5SXHRS5Ggxr0Ne
-         2X3/+zhuE9FKw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4FSs0N5HQzz6tmJ
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 17:10:28 +0200 (CEST)
-From:   Patrick Menschel <menschel.p@posteo.de>
-To:     linux-can@vger.kernel.org
-Subject: [PATCH] can-isotp: Add error message if txqueuelen is too small.
-Date:   Sun, 25 Apr 2021 15:10:28 +0000
-Message-Id: <20210425151028.8238-1-menschel.p@posteo.de>
+        id S230260AbhDYPga (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Apr 2021 11:36:30 -0400
+Received: from mail-yb1-f176.google.com ([209.85.219.176]:39926 "EHLO
+        mail-yb1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230194AbhDYPga (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 11:36:30 -0400
+Received: by mail-yb1-f176.google.com with SMTP id z1so61628659ybf.6
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 08:35:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8fy2b9DcmPURO1GLJUCuHqfsmgbBlL7O7NoddbJP4W0=;
+        b=LaV41E4y20/YWSHYVJcEP/awAOcJ9dXwdCHgyB/H8gZjX9p27sdruU0I0SivOPpfHo
+         crvFG49ubK+1DgcVFKwBEUsT2MylFeLg7lr8p5HdUVWmO4SWy3YFQVGBoTQXqi9cq7zZ
+         Mr4lB7ffTBO1Khhk0m0GrBD5c2T/okHG93P/BhXGf9CtCHFyutqADXETMePv58SPHDXM
+         ZNCyAeE4qduXdzMjF2bVNnhRAjaT9yjcP2ENie/kS/cAsw77F+gKyzOWcHJIYf59EEgw
+         H9E8cvXiShgKRcz+krD+FC9JQx6BTqHDMCGaRPsNQVnSeimnXw3ui9ezTOLBC3B3vZjd
+         ggdA==
+X-Gm-Message-State: AOAM532GrHurreT6LJrEqPFDTShTZPkN95RLWWJLJGt1ZQfrc+Kww+aV
+        y/W7UmsTV4QwWSvum4fEEDptFb0+PKhVnF81WVzilWZAlh0QrQ==
+X-Google-Smtp-Source: ABdhPJxduGkmuUMnHRKpKB8RhPKr+q7Ap3IQI5ZKwxmjYbf0pC/tDUyE7ifueB+24zJEUZt1MwdBQz9Ia6HbrYkbnJk=
+X-Received: by 2002:a25:c696:: with SMTP id k144mr15652085ybf.307.1619364948922;
+ Sun, 25 Apr 2021 08:35:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210425151028.8238-1-menschel.p@posteo.de>
+In-Reply-To: <20210425151028.8238-1-menschel.p@posteo.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Mon, 26 Apr 2021 00:35:37 +0900
+Message-ID: <CAMZ6RqKkeq6vo0X4_KH01=SXfjKF7YMXGT_cgm+sS+T10hr_CA@mail.gmail.com>
+Subject: Re: [PATCH] can-isotp: Add error message if txqueuelen is too small.
+To:     Patrick Menschel <menschel.p@posteo.de>
+Cc:     linux-can <linux-can@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds a comprehensive error message in
-case that txqueuelen is too small and the isotp
-driver encounters ENOBUFS (105), e.g.
-"no buffer space available" while it does
-enqueue its generated frames.
+On Sun. 26 Apr 2021 at 00:10, Patrick Menschel <menschel.p@posteo.de> wrote:
+>
+> This patch adds a comprehensive error message in
+> case that txqueuelen is too small and the isotp
+> driver encounters ENOBUFS (105), e.g.
+> "no buffer space available" while it does
+> enqueue its generated frames.
+>
+> Signed-off-by: Patrick Menschel <menschel.p@posteo.de>
+> ---
+>  net/can/isotp.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/can/isotp.c b/net/can/isotp.c
+> index 9f94ad3ca..c50e238b0 100644
+> --- a/net/can/isotp.c
+> +++ b/net/can/isotp.c
+> @@ -946,8 +946,17 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+>         err = can_send(skb, 1);
+>         dev_put(dev);
+>         if (err) {
+> -               pr_notice_once("can-isotp: %s: can_send_ret %d\n",
+> -                              __func__, err);
+> +               if (err == -ENOBUFS) {
+> +                       /* if txqueuelen is not of sufficient length
+> +                        * for this transfer
+> +                        */
+> +                       pr_notice_once("can-isotp: %s: can_send_ret %d : No buffer space available in tx queue\n",
+> +                                      __func__, err);
 
-Signed-off-by: Patrick Menschel <menschel.p@posteo.de>
----
- net/can/isotp.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Speaking of comprehensive error messages, it would be great to
+print the mnemotechnic of the error code instead of its value:
+|                       pr_notice_once("can-isotp: %s: can_send_ret
+%pe : tx queue is full\n",
+|                                      __func__, ERR_PTR(err));
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 9f94ad3ca..c50e238b0 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -946,8 +946,17 @@ static int isotp_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	err = can_send(skb, 1);
- 	dev_put(dev);
- 	if (err) {
--		pr_notice_once("can-isotp: %s: can_send_ret %d\n",
--			       __func__, err);
-+		if (err == -ENOBUFS) {
-+			/* if txqueuelen is not of sufficient length
-+			 * for this transfer
-+			 */
-+			pr_notice_once("can-isotp: %s: can_send_ret %d : No buffer space available in tx queue\n",
-+				       __func__, err);
-+		} else {
-+			/* general error */
-+			pr_notice_once("can-isotp: %s: can_send_ret %d\n",
-+				       __func__, err);
-+		}
- 		return err;
- 	}
- 
--- 
-2.17.1
+> +               } else {
+> +                       /* general error */
+> +                       pr_notice_once("can-isotp: %s: can_send_ret %d\n",
+> +                                      __func__, err);
 
+Same here:
+|                       pr_notice_once("can-isotp: %s: can_send_ret %pe\n",
+|                                      __func__, ERR_PTR(err));
+
+Yours sincerely,
+Vincent
