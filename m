@@ -2,69 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D62236A9F9
-	for <lists+linux-can@lfdr.de>; Mon, 26 Apr 2021 02:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A3736AC71
+	for <lists+linux-can@lfdr.de>; Mon, 26 Apr 2021 08:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbhDZAAi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Apr 2021 20:00:38 -0400
-Received: from mail-yb1-f182.google.com ([209.85.219.182]:41540 "EHLO
-        mail-yb1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbhDZAAi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Apr 2021 20:00:38 -0400
-Received: by mail-yb1-f182.google.com with SMTP id p202so18952844ybg.8
-        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 16:59:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zx8wfIX/8NCZCoYBreGQOOW9SIV4OZiyRDaduxCJp3A=;
-        b=DTFoQoMOgbf/y8vbqEWg2M8N+gYyEYJg2wJJsyfvkfffgytZSuwR/nHsJodn0BGnWa
-         wLySFAjXnK0HtBGEk9kiNRtBUnyxKdeyLkwQf2bU3NCv7JbaCb9u2ncJXBy+6WNvnwDK
-         rzPU2Dk4n59z5xam6qOGznLYmypdQfgyO+QHKQ9jiYlHdbw+X0CSJAq2gvBxjDllJHft
-         L7c9AONeFDFNSvT74ci/iuQq7tzrnTIDoErJi8JVw3gIAMdekZTvwjZjcq0mX+NVRYFu
-         12DLuFMlfgtSBOMxVbqFgg6jt0ZgKJZK+FDt2HaULgGBc3Ev7Ww2I9FjJIiPhUapcg1/
-         4jbQ==
-X-Gm-Message-State: AOAM53207Do1PmThu9hJyaq322mqtV/dkaZp7yunZntrW8KyxON34zXn
-        21QYqVieQ4YacKd3sLplnxQYTHL3rsmJ69XM0sMeD+9mWpQXBQ==
-X-Google-Smtp-Source: ABdhPJxkUvs9t4qZSmrSvxagq5wQBFuPamrmycGBX5KeMg9QwKDfNcKN6Mk2YNN4oNqGHPmXIH8plPD/Ss4gdm8I0pQ=
-X-Received: by 2002:a25:7381:: with SMTP id o123mr5949115ybc.145.1619395196351;
- Sun, 25 Apr 2021 16:59:56 -0700 (PDT)
+        id S231934AbhDZGzj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Apr 2021 02:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231816AbhDZGzi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Apr 2021 02:55:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CE6C061574
+        for <linux-can@vger.kernel.org>; Sun, 25 Apr 2021 23:54:57 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lav8y-0003yj-Jj
+        for linux-can@vger.kernel.org; Mon, 26 Apr 2021 08:54:56 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id A26CA616F70
+        for <linux-can@vger.kernel.org>; Mon, 26 Apr 2021 06:54:54 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 198F1616F67;
+        Mon, 26 Apr 2021 06:54:54 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 22b96167;
+        Mon, 26 Apr 2021 06:54:53 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-04-26
+Date:   Mon, 26 Apr 2021 08:54:48 +0200
+Message-Id: <20210426065452.3411360-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210425151028.8238-1-menschel.p@posteo.de> <CAMZ6RqKkeq6vo0X4_KH01=SXfjKF7YMXGT_cgm+sS+T10hr_CA@mail.gmail.com>
- <0a2b2615-ed9e-f813-8574-b170969c37ba@posteo.de>
-In-Reply-To: <0a2b2615-ed9e-f813-8574-b170969c37ba@posteo.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Mon, 26 Apr 2021 08:59:45 +0900
-Message-ID: <CAMZ6RqK=4QifudsgxWHxoDYR0PfZvJg-kJjeshqmds1X8c4XfA@mail.gmail.com>
-Subject: Re: [PATCH] can-isotp: Add error message if txqueuelen is too small.
-To:     Patrick Menschel <menschel.p@posteo.de>
-Cc:     linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon. 26 Apr 2021 at 01:45, Patrick Menschel <menschel.p@posteo.de> wrote:
->
-> Am 25.04.21 um 17:35 schrieb Vincent MAILHOL:
-> > On Sun. 26 Apr 2021 at 00:10, Patrick Menschel <menschel.p@posteo.de> wrote:
-> > Speaking of comprehensive error messages, it would be great to
-> > print the mnemotechnic of the error code instead of its value:
-> > |                       pr_notice_once("can-isotp: %s: can_send_ret
-> > %pe : tx queue is full\n",
-> > |                                      __func__, ERR_PTR(err));
-> >
-> Thanks Vincent,
->
-> it's the first time I see this format string %pe , is it new or kernel
-> specific?
+Hello Jakub, hello David,
 
-Yes, this is fairly recent and it is kernel specific (and I love it).
+this is a pull request of 4 patches for net-next/master.
 
-It was added in commit 57f5677e535ba ("printf: add support for
-printing symbolic error names").
-Ref: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=57f5677e535ba24b8926a7125be2ef8d7f09323c
+the first two patches are from Colin Ian King and target the
+etas_es58x driver, they add a missing NULL pointer check and fix some
+typos.
+
+The next two patches are by Erik Flodin. The first one updates the CAN
+documentation regarding filtering, the other one fixes the header
+alignment in CAN related proc output on 64 bit systems.
+
+regards,
+Marc
+
+---
+
+The following changes since commit b2f0ca00e6b34bd57c9298a869ea133699e8ec39:
+
+  phy: nxp-c45-tja11xx: add interrupt support (2021-04-23 14:13:16 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.13-20210426
+
+for you to fetch changes up to e6b031d3c37f79d135c642834bdda7233a29db8d:
+
+  can: proc: fix rcvlist_* header alignment on 64-bit system (2021-04-25 19:43:00 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.13-20210426
+
+----------------------------------------------------------------
+Colin Ian King (2):
+      can: etas_es58x: Fix missing null check on netdev pointer
+      can: etas_es58x: Fix a couple of spelling mistakes
+
+Erik Flodin (2):
+      can: add a note that RECV_OWN_MSGS frames are subject to filtering
+      can: proc: fix rcvlist_* header alignment on 64-bit system
+
+ Documentation/networking/can.rst            | 2 ++
+ drivers/net/can/usb/etas_es58x/es58x_core.c | 4 ++--
+ drivers/net/can/usb/etas_es58x/es58x_core.h | 2 +-
+ net/can/proc.c                              | 6 ++++--
+ 4 files changed, 9 insertions(+), 5 deletions(-)
 
 
-Yours sincerely,
-Vincent
