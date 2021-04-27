@@ -2,74 +2,61 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD10136BA61
-	for <lists+linux-can@lfdr.de>; Mon, 26 Apr 2021 22:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24F436BED8
+	for <lists+linux-can@lfdr.de>; Tue, 27 Apr 2021 07:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241661AbhDZUA4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Apr 2021 16:00:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47406 "EHLO mail.kernel.org"
+        id S229550AbhD0FWj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 27 Apr 2021 01:22:39 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:55661 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241643AbhDZUAz (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 26 Apr 2021 16:00:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3F08761359;
-        Mon, 26 Apr 2021 20:00:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619467210;
-        bh=TSP9laMO4J+RyNDorr3aO5dlTm3tpcLkmZhZFedDnnc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LGdYLZrHot33o7+u42dI7PJYWLMwidaL1Vedk4aFQAoIBd/gTOgH4FDP57mzfl+ku
-         tzY/jOu7TaIdND59qitwGamvCvM4y6jXh8zfkhS1el+RUlyEmPQny/ITMw1hJs60It
-         Ucfusx4/ecFeruN0ZQbv+Ehx6snjnIJNt/CnP6+x3BUBLBFFZXLm4VuMUnj4Nydwi3
-         T8TtQWbqS32znhpgHC/a+K5A8bKVvjccujatDwg1h+1HxsEBA6P4sqKr30orE4dVv8
-         uVEG00bXOiTdZoCdJpeAkX6H4fl9xfBmCUJKd4AtPNsQMw8ruH1ojdEBVNkBoYOeR3
-         is/mztaC9P+4A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 33868609B0;
-        Mon, 26 Apr 2021 20:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can-next 2021-04-26
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161946721020.23958.12763756415417873021.git-patchwork-notify@kernel.org>
-Date:   Mon, 26 Apr 2021 20:00:10 +0000
-References: <20210426065452.3411360-1-mkl@pengutronix.de>
-In-Reply-To: <20210426065452.3411360-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+        id S229536AbhD0FWg (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 27 Apr 2021 01:22:36 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id C0CDB2400FD
+        for <linux-can@vger.kernel.org>; Tue, 27 Apr 2021 07:21:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1619500911; bh=9OnaEzP7+K30fSr267P0abZkCLV5RfY0Ce9iEMsTJgU=;
+        h=From:To:Subject:Date:From;
+        b=pWY14SFSs5+n0YJS6P128no1j/HE9TMuwAWXlmTAYH24SFkPpCQPCedR31Z0CvvYA
+         NeZbUzY1Pv7bwYz6VGA6Is+LGpIOxWaAjHyUsYAsf4nHj8/4KJP+9PkOsDX6vF+m9S
+         Gderr/Pzj138dfLItnzLoLUZyo0U7Qgr2RPhnfgkjk0W2IipyaItB8iUaiPagX+UcD
+         8pFDkgZkWB93KmOkWgt3L62YnYDC4MVFIn7zWjWdzWR/wQRH1f8V+v2KHTEvylSUDR
+         FdlOaXsMnzEMZwMcSbxvxS0lIe82UOHSGioZxx1Qi73lSAR2DXLvhY5QCYIEDI3hc9
+         9pXdggK5abM3g==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FTqrG3sdWz9rxG;
+        Tue, 27 Apr 2021 07:21:50 +0200 (CEST)
+From:   Patrick Menschel <menschel.p@posteo.de>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] can-isotp: Add more comprehensive error messages
+Date:   Tue, 27 Apr 2021 05:21:46 +0000
+Message-Id: <20210427052150.2308-1-menschel.p@posteo.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+This patch series adds more comprehensive error messages to isotp.c by
+using error pointers instead of decimal error numbers.
 
-This pull request was applied to netdev/net-next.git (refs/heads/master):
+https://www.kernel.org/doc/html/latest/core-api/printk-formats.html#error-pointers
 
-On Mon, 26 Apr 2021 08:54:48 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 4 patches for net-next/master.
-> 
-> the first two patches are from Colin Ian King and target the
-> etas_es58x driver, they add a missing NULL pointer check and fix some
-> typos.
-> 
-> [...]
+It also adds a more comprehensive error message in case txqueue is full
+due to a burst transfer, telling the user to increase txqueuelen to 
+prevent this from happening.
 
-Here is the summary with links:
-  - pull-request: can-next 2021-04-26
-    https://git.kernel.org/netdev/net-next/c/d0c5d18da2da
-  - [net-next,2/4] can: etas_es58x: Fix a couple of spelling mistakes
-    https://git.kernel.org/netdev/net-next/c/1c9690dd308e
-  - [net-next,3/4] can: add a note that RECV_OWN_MSGS frames are subject to filtering
-    https://git.kernel.org/netdev/net-next/c/924e464f4a8a
-  - [net-next,4/4] can: proc: fix rcvlist_* header alignment on 64-bit system
-    https://git.kernel.org/netdev/net-next/c/e6b031d3c37f
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Patrick Menschel (3):
+  can-isotp: Change error format from decimal to symbolic error names
+  can-isotp: Add symbolic error message to isotp_module_init()
+  can-isotp: Add error message if txqueuelen is too small
 
+ net/can/isotp.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
+
+-- 
+2.17.1
 
