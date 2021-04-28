@@ -2,129 +2,72 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3B136D5EE
-	for <lists+linux-can@lfdr.de>; Wed, 28 Apr 2021 12:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B7736D6B5
+	for <lists+linux-can@lfdr.de>; Wed, 28 Apr 2021 13:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239536AbhD1KsX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Apr 2021 06:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239552AbhD1KsV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Apr 2021 06:48:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA7CC06138A
-        for <linux-can@vger.kernel.org>; Wed, 28 Apr 2021 03:47:36 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lbhjC-0007uO-CH; Wed, 28 Apr 2021 12:47:34 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4048:54d7:3c62:4ce5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5CD7B618789;
-        Wed, 28 Apr 2021 10:47:33 +0000 (UTC)
-Date:   Wed, 28 Apr 2021 12:47:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org,
-        "Sottas Guillaume (LMB)" <Guillaume.Sottas@liebherr.com>
+        id S229624AbhD1Lof (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Apr 2021 07:44:35 -0400
+Received: from lissvexedge01.liebherr.com ([193.27.220.105]:63911 "EHLO
+        lissvexedge01.liebherr.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229591AbhD1Loe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Apr 2021 07:44:34 -0400
+DKIM-Signature: v=1; c=relaxed/relaxed; d=liebherr.com; s=key1e; 
+ t=1619610228; bh=R1l6MAsDP9dV5O+hY5CP0z4nIlqI7E57ZYntb76P3nQ=; h=
+ "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
+ a=ed25519-sha256; b=
+ KVzfj/1bKFS3P6vOBYv9dzI26ZI5nFI3n7+2E3wwdN7ZZmfQ8PMMxWKIKoTce1LGvG6S+Xg4vO1kLJYiyEaMBg==
+DKIM-Signature: v=1; c=relaxed/relaxed; d=liebherr.com; s=key1; t=1619610228; 
+ bh=R1l6MAsDP9dV5O+hY5CP0z4nIlqI7E57ZYntb76P3nQ=; h=
+ "Subject:Subject:From:From:Date:Date:ReplyTo:ReplyTo:Cc:Cc:Message-Id:Message-Id"; 
+ a=rsa-sha256; b=
+ E6dR9K14G9bntcxB9YW27DEtMrt1O+0TWrTFCJ1zkMEBHFXEBSlbrCYyJEek0vcyTBKqo7LQ9a2MkKqZ0LIhiI1bQRyrhU0uYGueMLMBmAKIajNfemYqS0S3BMGBhRURoBlspVTee4E715rgpAM8TXfvzpsZsF3NDkvkuzeKaSk=
+From:   "Sottas Guillaume (LMB)" <Guillaume.Sottas@liebherr.com>
+To:     "mkl@pengutronix.de" <mkl@pengutronix.de>
+CC:     "Sottas Guillaume (LMB)" <Guillaume.Sottas@liebherr.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>
 Subject: Re: [PATCH] can: isotp: return -ECOMM on FC timeout on TX path
-Message-ID: <20210428104732.bbmklgyuto5oi3kd@pengutronix.de>
-References: <20210428090914.252967-1-mkl@pengutronix.de>
- <20210428091224.lsqf4tttd7uijdms@pengutronix.de>
- <f18cb9ce-4bab-80b2-ccc7-37fbafe04995@hartkopp.net>
- <f81170bc-b6d2-37c0-a6b0-86fb9570407c@hartkopp.net>
+Thread-Topic: Re: [PATCH] can: isotp: return -ECOMM on FC timeout on TX path
+Thread-Index: Adc8IczWtuMgQZGPSVCWltLg6Zj5tQ==
+Date:   Wed, 28 Apr 2021 11:43:47 +0000
+Message-ID: <7146dee416c049b5a29fd3cca8a1b773@liebherr.com>
+Accept-Language: de-DE, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rife7ladlqdowiw3"
-Content-Disposition: inline
-In-Reply-To: <f81170bc-b6d2-37c0-a6b0-86fb9570407c@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello,
 
---rife7ladlqdowiw3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+First of all thank you for your fast reply.
 
-On 28.04.2021 12:24:32, Oliver Hartkopp wrote:
-> > Maybe the way to trigger the sk_error_report(sk) we might return '-1'
-> > while the error is then propagated inside errno.
->=20
-> I added some debug print in isotpsend:
->=20
-> diff --git a/isotpsend.c b/isotpsend.c
-> index 3ea574c..c2937fa 100644
-> --- a/isotpsend.c
-> +++ b/isotpsend.c
-> @@ -45,10 +45,11 @@
->  #include <libgen.h>
->  #include <stdio.h>
->  #include <stdlib.h>
->  #include <string.h>
->  #include <unistd.h>
-> +#include <errno.h>
->=20
->  #include <net/if.h>
->  #include <sys/ioctl.h>
->  #include <sys/socket.h>
->  #include <sys/types.h>
-> @@ -252,10 +253,11 @@ int main(int argc, char **argv)
->                     buf[buflen] =3D ((buflen % 0xFF) + 1) & 0xFF;
->      }
->=20
->=20
->      retval =3D write(s, buf, buflen);
-> +    printf("retval %d errno %d\n", retval, errno);
+From my point of view, I think it would make sense to return an error to th=
+e user when CAN_ISOTP_WAIT_TX_DONE option is set. Otherwise, I don't unders=
+tand the use case of this option?
+If the CAN_ISOTP_WAIT_TX_DONE option is not set, then not receiving an erro=
+r on timeout could be the expected behavior, as the user does not explicitl=
+y ask for completion.
 
-Note: in user space errno is only valid if retval is "-1"...
+Concerning the way of reporting the error, setting the errno would be a nic=
+e solution, as it would not require that much modifications. However, as Ma=
+rk mentioned, the errno is not set.
+I'm not an expert in how this sk_error_report works internally, but I will =
+try to get more infos about it.
 
->      if (retval < 0) {
->             perror("write");
->             return retval;
->      }
->=20
->=20
-> $ date +%S.%N && ./isotpsend vcan0 -s 123 -d 321 -D 44 -b && date +%S.%N
-> 43.269173590
-> retval 44 errno 0
-> 44.271162277
->=20
-> So it waits for the timeout as required by the '-b' option - but the errno
-> is not set :-/
+In both cases, the documentation in the isotp.c (https://elixir.bootlin.com=
+/linux/latest/source/net/can/isotp.c#L7) file is not correct, as it is not =
+the actual behavior (most likely the expected).
+Additionally, I guess the -ETIMEOUT, -EILSEQ, -EBADMSG,... described in the=
+ same documentation are most likely not working that way either, but would =
+be fixed if the errno is reported correctly.
 
-I'm not sure what we have to return in the kernel...
+Best Regards,
 
-Marc
+Guillaume
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---rife7ladlqdowiw3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCJPUEACgkQqclaivrt
-76mRGgf/TDKXSgvwLMgzM6JV+gcc/XujR+2ofvJX6Po46aqdKgUB0nkI1r299h4r
-g4bICW7DDoa4EyKeCAb8wYA0TuDbGs5ehJ5cDoGwAIDFXjPs+5WwlGHDxxZGrX7m
-80yfnrGqKhdSawDM4qcXwmp1GHxli7mXCg9BePoymd/V60N7VmJ6QR+TiTObDIVs
-lO82UsGRZa3oCpkeMSuASs4WqcMfij1cRCqp2mnjVmADuRwzcU1kfxsN8o8JhT37
-sG7WrIWeP/0zaFXGjT9pFPD7ejdPZjeWYHTWWgopZI00nmQDuhvwTtVRmfutiW7s
-0cXpdkLCumnMwkDnG3LwvBMk6IuORg==
-=fznx
------END PGP SIGNATURE-----
-
---rife7ladlqdowiw3--
