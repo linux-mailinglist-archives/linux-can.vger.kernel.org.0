@@ -2,191 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA0C36D6FE
-	for <lists+linux-can@lfdr.de>; Wed, 28 Apr 2021 14:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100CC36E81B
+	for <lists+linux-can@lfdr.de>; Thu, 29 Apr 2021 11:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhD1MIl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Apr 2021 08:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
+        id S232467AbhD2JkD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 29 Apr 2021 05:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbhD1MIk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Apr 2021 08:08:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FA4C061574
-        for <linux-can@vger.kernel.org>; Wed, 28 Apr 2021 05:07:56 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lbiyv-0006tg-TU; Wed, 28 Apr 2021 14:07:53 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4048:54d7:3c62:4ce5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 761FC6187F7;
-        Wed, 28 Apr 2021 12:07:52 +0000 (UTC)
-Date:   Wed, 28 Apr 2021 14:07:51 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org,
-        "Sottas Guillaume (LMB)" <Guillaume.Sottas@liebherr.com>
-Subject: Re: [PATCH] can: isotp: return -ECOMM on FC timeout on TX path
-Message-ID: <20210428120751.xkczqby455rexpne@pengutronix.de>
-References: <20210428090914.252967-1-mkl@pengutronix.de>
- <20210428091224.lsqf4tttd7uijdms@pengutronix.de>
- <f18cb9ce-4bab-80b2-ccc7-37fbafe04995@hartkopp.net>
- <f81170bc-b6d2-37c0-a6b0-86fb9570407c@hartkopp.net>
- <20210428104732.bbmklgyuto5oi3kd@pengutronix.de>
- <ee8058e0-af0a-8759-a62b-b1585c8992b3@hartkopp.net>
+        with ESMTP id S232258AbhD2JkA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Apr 2021 05:40:00 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33554C06138B
+        for <linux-can@vger.kernel.org>; Thu, 29 Apr 2021 02:39:13 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id a36so64847330ljq.8
+        for <linux-can@vger.kernel.org>; Thu, 29 Apr 2021 02:39:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kvaser.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f3SP0lHfP9YT6WjjYc2XJn8gNeseipbmTunWo3yW2uI=;
+        b=Lk5fQdlQr+F0fFe28ObFPkF1+4Ox1SupK7YWaBeclakN5dZ2cov5DMeCqod1Liu6ZP
+         hJkPjGfV+JpG8xwvBiM5wrucXnH7Kvd7nq0b4IrwqpUcXyFAhFTF81D7bpTU04xLorIi
+         CDr7EQ8vPJeZZq5YZNbV/MSMvmquXc6iqzPaa8BBx1hOIzt82ZQTOgu0WpzkVdB4jC/j
+         eoea36OLt2jbrgAKd3ZoC3R0CW/EjIq9t8u7sk7JsZtvlIl6BWZ1xon/juRjmw3y4i/b
+         88fQ6E8234nGmmfczZoHf4eekiM1D3qpzjtl8CrKN8pOqLr50ukXDZOalDqH2CdL6EVy
+         6c6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f3SP0lHfP9YT6WjjYc2XJn8gNeseipbmTunWo3yW2uI=;
+        b=t+SZHpZbSzNRA+WHzh41Ixd+y9qP53WEXHN2WxlDcPokthsgu4D8vXF5UN3vKCv2rX
+         pesZKmRWCz+F8MDivMqei6xHmCxhvYw9KTKScT24XIlR84cB0p9Ox52V7xunhEqRcVu3
+         JzispwT29qIqwW0ItodNURCr9wMQt2wNlYIp5Nz7ROqVYNtWMpjj59f+5SQc4sANkXWN
+         2Ir+NLTZ0YCoJnPG+HSI1RxZ37z3v47vFo7ABs2RIMNPRBedcxmgxe+vLCPvszoCyxi8
+         S5A8k7yqo3dD6U02YyYL9zYi584erRmY4BjkWmwhKWFDOmO8rDdp9/UfgJMWEcVHGRV5
+         jvCQ==
+X-Gm-Message-State: AOAM531cvmtyujVszg5UTojwGaZB7MZsbHV04ktxO9cxlw11GCtAf0cp
+        dwPBEfxzII+h9ZZrZ5tQm7B0jJa1d/jYZ5Lk
+X-Google-Smtp-Source: ABdhPJxKtNQ/H4l0kXFPx0boVmSjTNWFPlkmouusvX3hhgBy55lJC7YjN1P9xJ3VQ+MPuvXNaclm5w==
+X-Received: by 2002:a05:651c:b20:: with SMTP id b32mr23547969ljr.42.1619689151797;
+        Thu, 29 Apr 2021 02:39:11 -0700 (PDT)
+Received: from jimmy-desk-arch.kvaser.se (h-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
+        by smtp.gmail.com with ESMTPSA id i30sm471071lfc.45.2021.04.29.02.39.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Apr 2021 02:39:11 -0700 (PDT)
+From:   Jimmy Assarsson <extja@kvaser.com>
+To:     linux-can@vger.kernel.org
+Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
+        Jimmy Assarsson <extja@kvaser.com>
+Subject: [PATCH 1/2] can: kvaser_usb: Rename define USB_HYBRID_{,PRO_}CANLIN_PRODUCT_ID
+Date:   Thu, 29 Apr 2021 11:37:29 +0200
+Message-Id: <20210429093730.499263-1-extja@kvaser.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dubs27k3a75eo2wp"
-Content-Disposition: inline
-In-Reply-To: <ee8058e0-af0a-8759-a62b-b1585c8992b3@hartkopp.net>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Rename define USB_HYBRID_{,PRO_}CANLIN_PRODUCT_ID to
+USB_HYBRID_{,PRO_}2CANLIN_PRODUCT_ID, to reflect the channel count.
 
---dubs27k3a75eo2wp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+---
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On 28.04.2021 13:45:10, Oliver Hartkopp wrote:
-> On 28.04.21 12:47, Marc Kleine-Budde wrote:
-> > On 28.04.2021 12:24:32, Oliver Hartkopp wrote:
-> > > > Maybe the way to trigger the sk_error_report(sk) we might return '-=
-1'
-> > > > while the error is then propagated inside errno.
-> > >=20
-> > > I added some debug print in isotpsend:
-> > >=20
-> > > diff --git a/isotpsend.c b/isotpsend.c
-> > > index 3ea574c..c2937fa 100644
-> > > --- a/isotpsend.c
-> > > +++ b/isotpsend.c
-> > > @@ -45,10 +45,11 @@
-> > >   #include <libgen.h>
-> > >   #include <stdio.h>
-> > >   #include <stdlib.h>
-> > >   #include <string.h>
-> > >   #include <unistd.h>
-> > > +#include <errno.h>
-> > >=20
-> > >   #include <net/if.h>
-> > >   #include <sys/ioctl.h>
-> > >   #include <sys/socket.h>
-> > >   #include <sys/types.h>
-> > > @@ -252,10 +253,11 @@ int main(int argc, char **argv)
-> > >                      buf[buflen] =3D ((buflen % 0xFF) + 1) & 0xFF;
-> > >       }
-> > >=20
-> > >=20
-> > >       retval =3D write(s, buf, buflen);
-> > > +    printf("retval %d errno %d\n", retval, errno);
-> >=20
-> > Note: in user space errno is only valid if retval is "-1"...
->=20
-> Ok, just returned '-1' in that case of blocking write (which runs into the
-> timeout) ...
->=20
-> diff --git a/net/can/isotp.c b/net/can/isotp.c
-> index 9f94ad3caee9..d5d541b4fed5 100644
-> --- a/net/can/isotp.c
-> +++ b/net/can/isotp.c
-> @@ -952,10 +952,11 @@ static int isotp_sendmsg(struct socket *sock, struct
-> msghdr *msg, size_t size)
->         }
->=20
->         if (wait_tx_done) {
->                 /* wait for complete transmission of current pdu */
->                 wait_event_interruptible(so->wait, so->tx.state =3D=3D
-> ISOTP_IDLE);
-> +               return -1;
->         }
->=20
->         return size;
->  }
->=20
-> And now got this:
->=20
-> $ date +%S.%N && ./isotpsend vcan0 -s 123 -d 321 -D 44 -b && date +%S.%N
-> 22.411570468
-> retval -1 errno 1
-         ^        ^
-         |     that is your -1
-      it's -1, as your return value was negative
-     =20
-> write: Operation not permitted
->=20
-> So still nothing to see from "sk->sk_err =3D ECOMM;"
->=20
-> But when adding 'return -ECOMM' at the above section it works like this:
->=20
-> $ date +%S.%N && ./isotpsend vcan0 -s 123 -d 321 -D 44 -b && date +%S.%N
-> 58.453452222
-> retval -1 errno 70
-> write: Communication error on send
+diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+index 4e97da8434ab..9a574ec013bc 100644
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -79,10 +79,10 @@
+ #define USB_USBCAN_PRO_2HS_V2_PRODUCT_ID	264
+ #define USB_MEMO_2HS_PRODUCT_ID			265
+ #define USB_MEMO_PRO_2HS_V2_PRODUCT_ID		266
+-#define USB_HYBRID_CANLIN_PRODUCT_ID		267
++#define USB_HYBRID_2CANLIN_PRODUCT_ID		267
+ #define USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID	268
+ #define USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID	269
+-#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	270
++#define USB_HYBRID_PRO_2CANLIN_PRODUCT_ID	270
+ #define USB_U100_PRODUCT_ID			273
+ #define USB_U100P_PRODUCT_ID			274
+ #define USB_U100S_PRODUCT_ID			275
+@@ -187,10 +187,10 @@ static const struct usb_device_id kvaser_usb_table[] = {
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_PRO_2HS_V2_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MEMO_2HS_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_MEMO_PRO_2HS_V2_PRODUCT_ID) },
+-	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_CANLIN_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_2CANLIN_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_USBCAN_PRO_2HS_V2_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_ATI_MEMO_PRO_2HS_V2_PRODUCT_ID) },
+-	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_PRO_CANLIN_PRODUCT_ID) },
++	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_PRO_2CANLIN_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100P_PRODUCT_ID) },
+ 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100S_PRODUCT_ID) },
+-- 
+2.30.0
 
-looks good
-
-> This is obviously the expected behaviour for user space:
->=20
-> - get '-1' in the case of socket related errors
-> - get the details from errno
-
-ACK
-
-> Maybe all that sk_err stuff is only relevant for listen/accept constructi=
-ons
-> for connection oriented sockets and can be removed inside isotp.c ...
-
-My theory is:
-- return bytes send from isotp_sendmsg() or -errno as usual
-- use sk->sk_error_report(sk) to wake up user space if it is blocked in
-  poll() or blocking in sendmsg()/recvmsg()
-
-For example, if you have a normal read() blocking on a CAN_RAW socket on
-an interface, you get a ENETDOWN when you ifdown the interface:
-
-https://elixir.bootlin.com/linux/latest/source/net/can/raw.c#L302
-
-e.g.:
-
-| =E2=9E=9C (pts/54) frogger@hardanger:/tmp candump can0 &
-| [1] 260474
-| =E2=9E=9C (pts/54) frogger@hardanger:/tmp (1) sudo ip link set can0 down
-| read: Network is down
-| [1]  + 260474 exit 1     candump can0
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---dubs27k3a75eo2wp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCJUBQACgkQqclaivrt
-76mVBwgAivX7Tdp2EcfeZjT/n0D+CgYc8IaR1FArBJLlZAvYAc2G0TyQ6WEgOw1g
-jG3R62nqP7eaMa2TgZoMypB++dkDTKLNAGFxdkhxnEmfe4x5+4qhUSELZgSF/WKh
-dJ41sKlMMT9vx9/+Le0eZC1lXm7M1V/itKHzHZvIDgaqDLVmuus+yHTIsgBw0m9k
-Yp71uwbQwWPEUj25nPN6L7384uv8VpvBBx3zWRycKjEFH2A0mx6OqjELmDgSWWtV
-tuE9JIoH03Znf7nqjaWkZ1cHH86S4y/lpF9vW8RVnQZOc5awyazXCGfBwm9+CEZI
-Y6YfVyGg2ocjIxmxdr7KKuhDHfekqg==
-=WwSR
------END PGP SIGNATURE-----
-
---dubs27k3a75eo2wp--
