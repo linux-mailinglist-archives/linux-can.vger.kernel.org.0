@@ -2,114 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C7236E81C
-	for <lists+linux-can@lfdr.de>; Thu, 29 Apr 2021 11:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E9336F447
+	for <lists+linux-can@lfdr.de>; Fri, 30 Apr 2021 05:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbhD2JkH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 29 Apr 2021 05:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60894 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbhD2JkH (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Apr 2021 05:40:07 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D31CC06138B
-        for <linux-can@vger.kernel.org>; Thu, 29 Apr 2021 02:39:19 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id o16so75668720ljp.3
-        for <linux-can@vger.kernel.org>; Thu, 29 Apr 2021 02:39:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kvaser.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UzOPYeNAlPbhSW9cUU9pom9En9tOXtwEtJOxgcbUs4g=;
-        b=t3dRmuUyWGUGGR9gDb9ho032BuTtRzF9Z0oF74lQk57LJWb/a3deiObH3697mkS2nh
-         CARYnYiZrOQF4X/ngzfeMnYGfHP7Cn3xO2sr26YEaW/FRE3WutiZb1NwEOIl+qNmQMBs
-         xGa2yZj+hq2a1H/hm/Upvp/sCdQXklb3LFoAP/ZOlh/IotFtGlg4rk2uutTLtUlgpe62
-         MXzAP91njqvzWFAgV6u+p0ZribLYadpncx3orDshtiC6VZZ4tqfJXdDMG/O3BOB40Nkl
-         aJD2M4Xfa6WJmgTrtvvtq+L9/ndcE9OKq304N4SJVttQ8YSOLzZViBViZmIYOR/y3bcs
-         xSUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UzOPYeNAlPbhSW9cUU9pom9En9tOXtwEtJOxgcbUs4g=;
-        b=ugg+wg2bqVuo5Crm06bOM4dDoWRtM2fxNGXvQj1AmCg+zUSZjZbYreEWzo3QE0GUqn
-         vRuVEW59AlVc/z6DU6AkRh4Z+kMXT0VTsxS8OAsezzOCIgdCWk8RkmmIU/Gh2qlwDhXx
-         sVJ/hd2dpUyBOLPvt1LhOjJFca52JnFC+LYhfWMPm2H0fWG4BnF64WGSVS++4rNFi2qj
-         Vbqu3mylxaC3DINhkC6XBhJczRQ2e85MPLSzKEULHqT2SPqmxYlNxV+IXurWQKA63MEv
-         aL9OITnLnwlL/wZGtUvRaKU7FRKekMZIMZGC1rt1UZU3L3F1XO1mWMjdrFXe5h5Su/O6
-         a2mw==
-X-Gm-Message-State: AOAM531IWBGTqbdMwl18QhtOY0s/uEIJ80PchsOM/vb1qmW+lUSm5jrP
-        rIQxklLXDkaXzt8g083zH2S63+Z7V+Z0aH/J
-X-Google-Smtp-Source: ABdhPJzetn2VIqPvgDZDXiX+3orZIDmdIBmRmLVWC34uz4V+rKsYM1DpeGZP62dpSsFqEv4sUSQp6g==
-X-Received: by 2002:a2e:7819:: with SMTP id t25mr24103908ljc.93.1619689158038;
-        Thu, 29 Apr 2021 02:39:18 -0700 (PDT)
-Received: from jimmy-desk-arch.kvaser.se (h-4-68-234.A785.priv.bahnhof.se. [155.4.68.234])
-        by smtp.gmail.com with ESMTPSA id i30sm471071lfc.45.2021.04.29.02.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Apr 2021 02:39:17 -0700 (PDT)
-From:   Jimmy Assarsson <extja@kvaser.com>
-To:     linux-can@vger.kernel.org
-Cc:     Jimmy Assarsson <jimmyassarsson@gmail.com>,
-        Jimmy Assarsson <extja@kvaser.com>
-Subject: [PATCH 2/2] can: kvaser_usb: Add new Kvaser hydra devices
-Date:   Thu, 29 Apr 2021 11:37:30 +0200
-Message-Id: <20210429093730.499263-2-extja@kvaser.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210429093730.499263-1-extja@kvaser.com>
-References: <20210429093730.499263-1-extja@kvaser.com>
+        id S229977AbhD3DMq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 29 Apr 2021 23:12:46 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:3409 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229577AbhD3DMp (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Apr 2021 23:12:45 -0400
+Received: from dggeml759-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4FWclL5LyFz5vwS;
+        Fri, 30 Apr 2021 11:08:46 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggeml759-chm.china.huawei.com (10.1.199.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Fri, 30 Apr 2021 11:11:55 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Fri, 30 Apr
+ 2021 11:11:55 +0800
+Subject: Re: [PATCH net v4 1/2] net: sched: fix packet stuck problem for
+ lockless qdisc
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     Michal Kubecek <mkubecek@suse.cz>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <olteanv@gmail.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <andriin@fb.com>,
+        <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <pabeni@redhat.com>, <mzhivich@akamai.com>,
+        <johunt@akamai.com>, <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>
+References: <1618535809-11952-1-git-send-email-linyunsheng@huawei.com>
+ <1618535809-11952-2-git-send-email-linyunsheng@huawei.com>
+ <20210419152946.3n7adsd355rfeoda@lion.mk-sys.cz>
+ <20210419235503.eo77f6s73a4d25oh@lion.mk-sys.cz>
+ <20210420203459.h7top4zogn56oa55@lion.mk-sys.cz>
+ <80d64438-e3e5-e861-4da0-f6c89e3c73f7@huawei.com>
+ <20210421053123.wdq3kwlvf72kwtch@lion.mk-sys.cz>
+ <6a8dea49-3a3e-4172-1d65-5dbcb0125eda@huawei.com>
+ <20210421084428.xbjgoi4r2d6t65gy@lion.mk-sys.cz>
+ <b3dacf14-0fb6-0cad-8b85-f5c8d7cd97ef@huawei.com>
+ <a6abb3d8-f857-14e1-4212-a12df36027cf@huawei.com>
+Message-ID: <e90e662d-ace1-1f32-6050-861db0a7e976@huawei.com>
+Date:   Fri, 30 Apr 2021 11:11:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <a6abb3d8-f857-14e1-4212-a12df36027cf@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme718-chm.china.huawei.com (10.1.199.114) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add new Kvaser hydra devices.
+On 2021/4/23 17:42, Yunsheng Lin wrote:
+> On 2021/4/21 17:25, Yunsheng Lin wrote:
+>> On 2021/4/21 16:44, Michal Kubecek wrote:
+>>
+>>>
+>>> I'll try running some tests also on other architectures, including arm64
+>>> and s390x (to catch potential endinanity issues).
+> 
+> I tried debugging nperf in arm64, with the below patch:
+>
+> Any idea what went wrong here?
+> 
+> Also, Would you mind running netperf to see if there is similar issue
+> in your system?
 
-Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
----
- drivers/net/can/usb/Kconfig                      | 2 ++
- drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c | 6 +++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
+Hi, Michal
+    I was able to reproduce the fluctuation for one thread TCP_STREAM test,
+So I am assuming it may more related to test environment or nperf issue.
 
-diff --git a/drivers/net/can/usb/Kconfig b/drivers/net/can/usb/Kconfig
-index 538f4d9adb91..64196e607409 100644
---- a/drivers/net/can/usb/Kconfig
-+++ b/drivers/net/can/usb/Kconfig
-@@ -66,7 +66,9 @@ config CAN_KVASER_USB
- 	    - Scania VCI2 (if you have the Kvaser logo on top)
- 	    - Kvaser BlackBird v2
- 	    - Kvaser Leaf Pro HS v2
-+	    - Kvaser Hybrid CAN/LIN
- 	    - Kvaser Hybrid 2xCAN/LIN
-+	    - Kvaser Hybrid Pro CAN/LIN
- 	    - Kvaser Hybrid Pro 2xCAN/LIN
- 	    - Kvaser Memorator 2xHS v2
- 	    - Kvaser Memorator Pro 2xHS v2
-diff --git a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-index 9a574ec013bc..ae930b91f053 100644
---- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-+++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
-@@ -87,8 +87,10 @@
- #define USB_U100P_PRODUCT_ID			274
- #define USB_U100S_PRODUCT_ID			275
- #define USB_USBCAN_PRO_4HS_PRODUCT_ID		276
-+#define USB_HYBRID_CANLIN_PRODUCT_ID		277
-+#define USB_HYBRID_PRO_CANLIN_PRODUCT_ID	278
- #define USB_HYDRA_PRODUCT_ID_END \
--	USB_USBCAN_PRO_4HS_PRODUCT_ID
-+	USB_HYBRID_PRO_CANLIN_PRODUCT_ID
- 
- static inline bool kvaser_is_leaf(const struct usb_device_id *id)
- {
-@@ -195,6 +197,8 @@ static const struct usb_device_id kvaser_usb_table[] = {
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100P_PRODUCT_ID) },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_U100S_PRODUCT_ID) },
- 	{ USB_DEVICE(KVASER_VENDOR_ID, USB_USBCAN_PRO_4HS_PRODUCT_ID) },
-+	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_CANLIN_PRODUCT_ID) },
-+	{ USB_DEVICE(KVASER_VENDOR_ID, USB_HYBRID_PRO_CANLIN_PRODUCT_ID) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(usb, kvaser_usb_table);
--- 
-2.30.0
+   I plan to send v5 with netdev queue stopped handling after the golden
+holiday in china. If there is any issue with patchset, please let me know,
+thanks.
+
+> 
+>>>
+>>> Michal
+>>>
+>>> .
+>>>
+>>
+>>
+>> .
+>>
+> 
+> 
+> .
+> 
 
