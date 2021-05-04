@@ -2,117 +2,93 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1B937297F
-	for <lists+linux-can@lfdr.de>; Tue,  4 May 2021 13:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7121D372988
+	for <lists+linux-can@lfdr.de>; Tue,  4 May 2021 13:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbhEDLVz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 May 2021 07:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S230043AbhEDL2z (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 May 2021 07:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbhEDLVy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 4 May 2021 07:21:54 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C3CC061574
-        for <linux-can@vger.kernel.org>; Tue,  4 May 2021 04:20:59 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id j3-20020a05600c4843b02901484662c4ebso1047605wmo.0
-        for <linux-can@vger.kernel.org>; Tue, 04 May 2021 04:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZAIrBNAGdubIxImzH4bJ+DfukA5xwd1feOLPy+4+v0I=;
-        b=ZY9NSzmJauM/vMplZTMZH5bmMG9V+WZsoTbAc3RREKKp6OENwt5ZCReVMcxCw0OFeG
-         n+/QDoKCijo0CkqF4irAEVZH8XBUGlkHIyZ2irDw2pY5c8KM8RoTfepYNSFViBmpUpTB
-         diImlrf7UbXKUiWvybKSQYGJWINmVmiULlyIUxhWG3RLmrdZSalYTYXEDyANwhF46Nrl
-         IuJRTcF+TiNE6TEwzP4zXiLtuJg8Nbwg2G1ZAnYL4WZQ547CoXvcdFKvOkC8P34La7F/
-         GvcUnf4jCepYV+11QiTVykvnrEDm4hu0l3V87l6eCTYfHWicAeM4r5Xr74iD19N+pc4i
-         wuzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZAIrBNAGdubIxImzH4bJ+DfukA5xwd1feOLPy+4+v0I=;
-        b=DJbhkm8HKVQaZcdCsXF4i8fpFf3fT3IXQrfhYjcsgOb5v6eebcotXYoCIxT68kt7kD
-         LfcBogtCa2xAi31JCg9IHXxMl+xKktf62e7zJHVcwDtwECq537tZYi9v9EOdTMDFckDw
-         opb6X16oWl5LgMROiVww3We0PR+g3LIis9IlVNU66OQryFsReWNHJo70FDlLomxW1eiJ
-         pljmFv/o76dQewv2wgywMFuK4I6FLe96y+BZ8RhVwmiJXh80/uDx6OmVSckooNkkuufL
-         uD9iUu36Fjl6M5fQSPceGFaSjX8ghQKqxUWlNhzclNaw5pu2bhrtuLg6gfxcUysZgkln
-         5uHA==
-X-Gm-Message-State: AOAM532meOgC7CNQg9LZh+DshiMpGIG2kRJRwX9IxhTRVslL2HE2g8TV
-        njlZ/d8sinwkjOsWkdvaeUeyB8lrFzE+k6EN
-X-Google-Smtp-Source: ABdhPJzzTyAxjCYHOEKogUJWj06nGuDRz7QN8kDxBWohwz3nXm75Qen6amF80cgH9HNfaDDikj40dw==
-X-Received: by 2002:a1c:f614:: with SMTP id w20mr26281970wmc.70.1620127258350;
-        Tue, 04 May 2021 04:20:58 -0700 (PDT)
-Received: from localhost.localdomain (92.41.10.173.threembb.co.uk. [92.41.10.173])
-        by smtp.gmail.com with ESMTPSA id a21sm2222022wmj.34.2021.05.04.04.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 May 2021 04:20:57 -0700 (PDT)
-From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Pankaj Sharma <pankj.sharma@samsung.com>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Subject: [PATCH 4/4] can: m_can: fix whitespace in a few comments
-Date:   Tue,  4 May 2021 12:20:35 +0100
-Message-Id: <20210504112035.336424-5-torin@maxiluxsystems.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210504112035.336424-1-torin@maxiluxsystems.com>
+        with ESMTP id S229903AbhEDL2z (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 May 2021 07:28:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951F6C061574
+        for <linux-can@vger.kernel.org>; Tue,  4 May 2021 04:28:00 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ldtDa-0006nR-K1; Tue, 04 May 2021 13:27:58 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4880:7cee:6dec:c8f9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DFCA861BBBC;
+        Tue,  4 May 2021 11:27:56 +0000 (UTC)
+Date:   Tue, 4 May 2021 13:27:56 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Cc:     linux-can@vger.kernel.org, Pankaj Sharma <pankj.sharma@samsung.com>
+Subject: Re: PATCH [0/4] can: m_can: various regmask-related cleanup
+Message-ID: <20210504112756.mqidrskk4mswgxvs@pengutronix.de>
 References: <20210504112035.336424-1-torin@maxiluxsystems.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mwb5asr2fneawbhu"
+Content-Disposition: inline
+In-Reply-To: <20210504112035.336424-1-torin@maxiluxsystems.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fixes whitespace in comments titling sections of register masks.
----
- drivers/net/can/m_can/m_can.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index e3b15b74fdc9..9d3c2116fd53 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -101,7 +101,7 @@ enum m_can_reg {
- /* Test Register (TEST) */
- #define TEST_LBCK		BIT(4)
- 
--/* CC Control Register(CCCR) */
-+/* CC Control Register (CCCR) */
- #define CCCR_TXP		BIT(14)
- #define CCCR_TEST		BIT(7)
- #define CCCR_DAR		BIT(6)
-@@ -147,18 +147,18 @@ enum m_can_reg {
- /* Timestamp Counter Value Register (TSCV) */
- #define TSCV_TSC_MASK		GENMASK(15, 0)
- 
--/* Error Counter Register(ECR) */
-+/* Error Counter Register (ECR) */
- #define ECR_RP			BIT(15)
- #define ECR_REC_MASK		GENMASK(14, 8)
- #define ECR_TEC_MASK		GENMASK(7, 0)
- 
--/* Protocol Status Register(PSR) */
-+/* Protocol Status Register (PSR) */
- #define PSR_BO		BIT(7)
- #define PSR_EW		BIT(6)
- #define PSR_EP		BIT(5)
- #define PSR_LEC_MASK	GENMASK(2, 0)
- 
--/* Interrupt Register(IR) */
-+/* Interrupt Register (IR) */
- #define IR_ALL_INT	0xffffffff
- 
- /* Renamed bits for versions > 3.1.x */
-@@ -250,7 +250,7 @@ enum m_can_reg {
- #define TXFQS_TFGI_MASK		GENMASK(12, 8)
- #define TXFQS_TFFL_MASK		GENMASK(5, 0)
- 
--/* Tx Buffer Element Size Configuration(TXESC) */
-+/* Tx Buffer Element Size Configuration (TXESC) */
- #define TXESC_TBDS_MASK		GENMASK(2, 0)
- #define TXESC_TBDS_64B		0x7
- 
--- 
-2.30.2
+--mwb5asr2fneawbhu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On 04.05.2021 12:20:31, Torin Cooper-Bennun wrote:
+> 1/4 modernises m_can.c, using GENMASK for all regmasks and
+> FIELD_{GET,PREP,MAX} for ops. Maintainable, consistent and concise.
+>=20
+> 2/4 makes clear all the differences in CCCR between M_CAN spec revisions,
+> and orders the defs by revision, ascending.
+>=20
+> 3/4 makes explicit the config of RX & TX buffer sizes, making it a bit
+> more readable, especially against the spec.
+>=20
+> 4/4 fixes whitespace in a few comments.
+
+Well done! A really nice cleanup series.
+
+Please repost with your Signed-off-by: added.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--mwb5asr2fneawbhu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCRL7kACgkQqclaivrt
+76lBDQf+MZUDHZqDFUXGCvGWs6Qfb6JUSNXsjbGdN1NfQPP7xcS4lKLtPHac2Dl+
+IWalpq7CojXco3CtfWshSHHRHqg9Vg+6JBjWNI39Nw4+X4UGQG9Qj0CAquaqGYgh
+F3RgU24DtG1WQZnHGHdrcEW362rc8LkyPEX8x1kmeIg9+vHMMUxxJcYR/JIv14K7
+xuks+YVWfCHdlt4hGUOvfNUMYRLwQI/5qD0N5kxyXvV/9xP6HeMmYfUYwpqwMfqa
+pTBYOwby+QRlMP3E3ukySQEFksuKYk29jnhuhZJLoVrCKCEBwv1fD/9xfLXMhHLY
+CgqwtJIiyrYR3AysmE3f05NOV9G0wA==
+=Bjaz
+-----END PGP SIGNATURE-----
+
+--mwb5asr2fneawbhu--
