@@ -2,34 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B247C37258C
-	for <lists+linux-can@lfdr.de>; Tue,  4 May 2021 07:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1886B3726C8
+	for <lists+linux-can@lfdr.de>; Tue,  4 May 2021 09:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbhEDFlu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 May 2021 01:41:50 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:34709 "EHLO mout01.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229825AbhEDFlu (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 4 May 2021 01:41:50 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id F2909240028
-        for <linux-can@vger.kernel.org>; Tue,  4 May 2021 07:40:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1620106854; bh=X9zMnZWbpphJLR9cwyAw3LTchw2Rw9tQDL45U3TEdRY=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=OLydHFsYWWU9DDs1x+zwAk1k9EwuASjTIl/of6HADAmpo6ByP3TQSalTxa7f9ZcJo
-         H5hv6GzGG/DfbHBL9/DK85aJUg7vtarYd0iKSNH8QnrxFeMnYD3xUqtCT9xFS86BTu
-         slbyV5mLZ+L6hOy4oyyVNgXcMo0PYKHSjUaxU4NMd1iCp7UUdjT+OzbVijyIYAk0VL
-         Hu4krSLbjigALeNefLRfaR5crql5+kF8ylN03zasV9SqCPH3PzaWxWeiwPO5j9wwvb
-         drfIEyAf1jdubpx9/NTpc3r0ApxfWKdkogFqj2EZq6NCZpxW2CTJcXOLvLkwRKRrVK
-         7Y6luFgbKPWfw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4FZ7x11VdVz9rxL;
-        Tue,  4 May 2021 07:40:53 +0200 (CEST)
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Ayoub Kaanich <kayoub5@live.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
+        id S229815AbhEDHth (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 4 May 2021 03:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhEDHtg (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 May 2021 03:49:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC83C061574
+        for <linux-can@vger.kernel.org>; Tue,  4 May 2021 00:48:42 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ldpnJ-00078f-2B; Tue, 04 May 2021 09:48:37 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4880:7cee:6dec:c8f9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 2627D61B97B;
+        Tue,  4 May 2021 07:48:35 +0000 (UTC)
+Date:   Tue, 4 May 2021 09:48:34 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Ayoub Kaanich <kayoub5@live.com>,
+        linux-can <linux-can@vger.kernel.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>
+Subject: mcp251xfd receiving non ACKed frames (was: Re: More flags for
+ logging)
+Message-ID: <20210504074834.tki7gzr6wz2le6o3@pengutronix.de>
 References: <20210503100246.n7uu437kbabdzu7m@pengutronix.de>
  <20210503100810.cacbmdfmpjipgoka@pengutronix.de>
  <CAMZ6RqLKp981zBus9K1RiLL14zC0B2BGp0U+xuQGvj1fjDMF1g@mail.gmail.com>
@@ -37,89 +42,212 @@ References: <20210503100246.n7uu437kbabdzu7m@pengutronix.de>
  <20210503154749.q3nrfjveixsqp3uj@pengutronix.de>
  <DBBPR03MB7082F029173018680E5D869C9D5B9@DBBPR03MB7082.eurprd03.prod.outlook.com>
  <CAMZ6RqJ0t91e-e9LwzaLWTY6G9MY7mosos9-DEs=pc0mWRf86Q@mail.gmail.com>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: More flags for logging
-Message-ID: <560021d6-d3cb-1f9b-7c85-f58e7a2dbc52@posteo.de>
-Date:   Tue,  4 May 2021 05:40:52 +0000
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lvk43m5ldgx4vi4i"
+Content-Disposition: inline
 In-Reply-To: <CAMZ6RqJ0t91e-e9LwzaLWTY6G9MY7mosos9-DEs=pc0mWRf86Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
 
-I think this is an interesting topic and would like to point out that
-only half of this discussion is reaching linux-can mailing list.
-The parts that originate from Ayoub Kaanich <kayoub5@live.com> are
-missing as far as I can tell. Maybe he did not register for linux-can
-and his emails are dropped by vger.kernel.org.
+--lvk43m5ldgx4vi4i
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If there are good ideas for a new can logging file format, I'd be
-interested myself.
+On 04.05.2021 06:46:17, Vincent MAILHOL wrote:
+> > And even on the mcp251xfd, where I receive the CAN frame, there's no way
+> > to tell if this frame has been acked or not.
 
-Thank you and Best Regards,
-Patrick Menschel
+The test setup is:
+
+                    flexcan (listen only)
+                             |
+                             |
+   PEAK PCAN-USB FD ---------+--------- mcp2518fd (listen only)
+        (sender)             |
+                             |
+               candlelight (going to be unplugged)
+
+pcan-usb: sending CAN frames
+flexcan: receiving CAN frames - but controller in listen only mode
+mcp2518fd: receiving CAN frames - but controller in listen only mode
+candlelight: receiving CAN frames - first attached, then detached
+
+> The mcp251xfd behavior is interesting. Do you also receive the ACK
+> error flag?
+
+In my tests from yesterday neither the flexcan nor the mcp2518fd had bus
+error reporting enabled. So I haven't noticed any ACK errors on the
+mcp2518fd nor the flexcan.
+
+I just repeated the test with bus error reporting enabled:
+
+On the flexcan I receive _only_ these errors (repeating) with
+candlelight detached:
+
+| (2021-05-04 09:00:30.407709)        can0  RX - -  20000088   [8]  00 00 0=
+8 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{tx-dominant-bit-error}{}}
+|        bus-error
+
+
+On the mcp2518fd I see these errors:
+
+| (2021-05-04 09:05:00.594321)  mcp251xfd0  RX - -  222   [8]  4A 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:01.094418)  mcp251xfd0  RX - -  222   [8]  4B 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:01.594577)  mcp251xfd0  RX - -  222   [8]  4C 00 00 00 =
+00 00 00 00
+=2E..unplug candlelight here...
+| (2021-05-04 09:05:02.094878)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+2 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{frame-format-error}{}}
+|        bus-error
+| (2021-05-04 09:05:02.095589)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+2 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{frame-format-error}{}}
+|        bus-error
+| (2021-05-04 09:05:02.096263)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+2 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{frame-format-error}{}}
+|        bus-error
+| (2021-05-04 09:05:02.096934)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+2 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{frame-format-error}{}}
+|        bus-error
+| (2021-05-04 09:05:02.097596)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+2 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{frame-format-error}{}}
+|        bus-error
+| (2021-05-04 09:05:02.098261)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+2 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{frame-format-error}{}}
+|        bus-error
+| (2021-05-04 09:05:02.099035)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:02.099054)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:02.099603)  mcp251xfd0  RX - -  20000088   [8]  00 00 0=
+0 00 00 00 00 00   ERRORFRAME
+|        protocol-violation{{}{}}
+|        bus-error
+
+=66rom here now only RX frames, no error frames
+
+| (2021-05-04 09:05:02.100540)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:02.100570)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:02.100583)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:02.100593)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+| (2021-05-04 09:05:02.101326)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 =
+00 00 00 00
+
+=2E.. and repeating.
+
+
+Here a short dump of the mcp2518fd registers:
+
+| INT: intf(0x01c)=3D0xbf1a0806
+|                 IE      IF      IE & IF
+|         IVMI    x                       Invalid Message Interrupt
+|         WAKI                            Bus Wake Up Interrupt
+|         CERRI   x                       CAN Bus Error Interrupt
+|         SERRI   x                       System Error Interrupt
+|         RXOVI   x       x       x       Receive FIFO Overflow Interrupt
+|         TXATI   x                       Transmit Attempt Interrupt
+|         SPICRCI x                       SPI CRC Error Interrupt
+|         ECCI    x                       ECC Error Interrupt
+|         TEFI    x                       Transmit Event FIFO Interrupt
+|         MODI    x                       Mode Change Interrupt
+|         TBCI            x               Time Base Counter Interrupt
+|         RXI     x       x       x       Receive FIFO Interrupt
+|         TXI                             Transmit FIFO Interrupt
+
+Note: there is no invalid message interrupt pending
+
+| TREC: trec(0x034)=3D0x00000000
+|             TXBO                Transmitter in Bus Off State
+|             TXBP                Transmitter in Error Passive State
+|             RXBP                Receiver in Error Passive State
+|           TXWARN                Transmitter in Error Warning State
+|           RXWARN                Receiver in Error Warning State
+|            EWARN                Transmitter or Receiver is in Error Warni=
+ng State
+|              TEC =3D   0          Transmit Error Counter
+|              REC =3D   0          Receive Error Counter
+|=20
+| BDIAG0: bdiag0(0x038)=3D0x00000010
+|         DTERRCNT =3D   0          Data Bit Rate Transmit Error Counter
+|         DRERRCNT =3D   0          Data Bit Rate Receive Error Counter
+|         NTERRCNT =3D   0          Nominal Bit Rate Transmit Error Counter
+|         NRERRCNT =3D  16          Nominal Bit Rate Receive Error Counter
+|=20
+| BDIAG1: bdiag1(0x03c)=3D0x0000dd4b
+|            DLCMM                DLC Mismatch
+|              ESI                ESI flag of a received CAN FD message was=
+ set
+|          DCRCERR                Data CRC Error
+|         DSTUFERR                Data Bit Stuffing Error
+|         DFORMERR                Data Format Error
+|         DBIT1ERR                Data BIT1 Error
+|         DBIT0ERR                Data BIT0 Error
+|          TXBOERR                Device went to bus-off (and auto-recovere=
+d)
+|          NCRCERR                CRC Error
+|         NSTUFERR                Bit Stuffing Error
+|         NFORMERR                Format Error
+|          NACKERR                Transmitted message was not acknowledged
+|         NBIT1ERR                Bit1 Error
+|         NBIT0ERR                Bit0 Error
+|         EFMSGCNT =3D 56651                Error Free Message Counter
+
+> Does the controller retry to send the frame until it gets
+> acknowledged?
+
+Yes - as it should.
+
+> Are you still able to send frames and receive the echo if there is a
+> single node on the network?
+
+No - But the peak driver/hw has some limitations:
+
+The peak driver doesn't have TX complete signaling, it send the echo
+after sending the TX CAN frame via USB. And the peak controller seems to
+buffer quite a lot TX CAN frames, so it looks for the first ~72 frames
+like the bus is still working.
+
+Marc
+
+--
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--lvk43m5ldgx4vi4i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCQ/E8ACgkQqclaivrt
+76lkVwf9Fk1xzoBGfqD0f6a9mEBiPwMOBThEAn2eFEUMIzoRDE2/z7JULQzGmrRa
+Be1nv0bcAoHf9ZjqSN6kqwhOX+qf/qA2gA+U7Cau9FV71vAoXbmqBSXkUoIGRGx5
+m6P+kFyKNjG/lpDZRWIMZYEQYgELx5/dzpg6wwfqrLYEbAvllNJtmz5cM4TuE7T+
+jnapOtjboC+z5WRz8dgImF5YGiFwVkEYDj2dNpgxlj4+RQIneTj2hzMO72GbGy77
+OeJAkQj3BZgNjrfj5RXrTUvZfWeUmPBFBvMWterOegDzhwYSBa7w/7Un24VmvCQ+
+vGhKWNNwi5GmgjvQCWQrDVTO7GKffw==
+=A/v7
+-----END PGP SIGNATURE-----
+
+--lvk43m5ldgx4vi4i--
