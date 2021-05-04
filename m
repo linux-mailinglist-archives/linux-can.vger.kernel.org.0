@@ -2,118 +2,117 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A535A372BE3
-	for <lists+linux-can@lfdr.de>; Tue,  4 May 2021 16:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05972372BF9
+	for <lists+linux-can@lfdr.de>; Tue,  4 May 2021 16:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbhEDOVE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 4 May 2021 10:21:04 -0400
-Received: from mga11.intel.com ([192.55.52.93]:8795 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231393AbhEDOVE (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 4 May 2021 10:21:04 -0400
-IronPort-SDR: Dl+3wmrQTGKQe1LSktxUyMlLjxVjrBAjRjgTlp4lf+7Hz/U36bQFiAl6QINunNaDc6f1k9wvso
- 5CxQGuo7vbhQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="194850852"
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="194850852"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 07:19:53 -0700
-IronPort-SDR: qkkek3nBW/8NP07FnHrQYnmKgZfSSISUdWCRAkwIrf5d8HXsXJ2e3cGRvxkM0XktglkpQAVGCE
- lLuF3QqPa6Wg==
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="406127072"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 07:19:49 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ldvtq-009YfE-5z; Tue, 04 May 2021 17:19:46 +0300
-Date:   Tue, 4 May 2021 17:19:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     Timo =?iso-8859-1?B?U2NobPzfbGVy?= <schluessler@krause.de>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Tim Harvey <tharvey@gateworks.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Null pointer dereference in mcp251x driver when resuming from
- sleep
-Message-ID: <YJFYAisb9xFUt15W@smile.fi.intel.com>
-References: <d031629f-4a28-70cd-4f27-e1866c7e1b3f@kontron.de>
- <YI/+OP4z787Tmd05@smile.fi.intel.com>
- <YI//GqCv0nkvtQ54@smile.fi.intel.com>
- <YJAAn+H9nQl425QN@smile.fi.intel.com>
- <66f07d90-e459-325c-8d5d-9f255a0d8c8f@kontron.de>
+        id S230246AbhEDO1y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 4 May 2021 10:27:54 -0400
+Received: from mail-yb1-f180.google.com ([209.85.219.180]:34467 "EHLO
+        mail-yb1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230213AbhEDO1y (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 4 May 2021 10:27:54 -0400
+Received: by mail-yb1-f180.google.com with SMTP id v188so2292030ybe.1
+        for <linux-can@vger.kernel.org>; Tue, 04 May 2021 07:26:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IpRRiO4mlKOBNvzXatg5SGAvdvrXnQ0q9E05iS4O6IA=;
+        b=jkgHjfnDYHEXz9oMXE9Sjcr9+3hrh6Lbpv5ffvu8tbQl6edq531FAdIx5mPqbU8u82
+         Trr43pVIZcdNDBH8pQiEECZyRL3cLyzrr6TdiBBcxjJFdv6SoPd7m2E+EsQdTUkSHobK
+         IcETKuWC+EchWcy0jkAWbMPAzn78kZoybPPRqMfDkWieTnA7ocGSx3TOC+Q05BnYkrkc
+         DeiaONtnhCD1p0mvSyKnwwfrqPVwkxNXPNPSjs10gjnrhB+Jv8Y08js8vbc03yn3iHp8
+         H/2idCQ1J8WVNohcUiL8XRoN7N4RzfprsZZeWulJQ2bDUFz2HiKIt3Pm0wj7vm3Dvoba
+         DI7Q==
+X-Gm-Message-State: AOAM531J71b0w64KVjkI1My8nKZepu1ju6CyJHjuARChIqeS31UQhnQx
+        dLdOG7RBkSBFbEhVLmYzflWTIqYbSCIuek3oHzc=
+X-Google-Smtp-Source: ABdhPJz0jjdIpQvRBKmfVz1fnkU5svZpvXozUbUCnabqOidus5UeiTT2L0sqoi2G3QRmHu4EuxGAwFGUCBPhIZxSMwo=
+X-Received: by 2002:a25:be09:: with SMTP id h9mr35665286ybk.239.1620138419115;
+ Tue, 04 May 2021 07:26:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66f07d90-e459-325c-8d5d-9f255a0d8c8f@kontron.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20210503100246.n7uu437kbabdzu7m@pengutronix.de>
+ <20210503100810.cacbmdfmpjipgoka@pengutronix.de> <CAMZ6RqLKp981zBus9K1RiLL14zC0B2BGp0U+xuQGvj1fjDMF1g@mail.gmail.com>
+ <DBBPR03MB70828377F51A1747B4E9E6529D5B9@DBBPR03MB7082.eurprd03.prod.outlook.com>
+ <20210503154749.q3nrfjveixsqp3uj@pengutronix.de> <DBBPR03MB7082F029173018680E5D869C9D5B9@DBBPR03MB7082.eurprd03.prod.outlook.com>
+ <CAMZ6RqJ0t91e-e9LwzaLWTY6G9MY7mosos9-DEs=pc0mWRf86Q@mail.gmail.com>
+ <20210504074834.tki7gzr6wz2le6o3@pengutronix.de> <CAMZ6RqK1ZnygjiZ=sXf7zBSodhL1oS1GZz1rcu=92aQ_A-sFew@mail.gmail.com>
+ <DM6PR11MB42835BBA69260C24BEAECA2EFB5A9@DM6PR11MB4283.namprd11.prod.outlook.com>
+In-Reply-To: <DM6PR11MB42835BBA69260C24BEAECA2EFB5A9@DM6PR11MB4283.namprd11.prod.outlook.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Tue, 4 May 2021 23:26:47 +0900
+Message-ID: <CAMZ6RqJt0Ai6Uk2ZsOTqD_C1Cw2FTNOg088RXp7UsgHKcAkE2w@mail.gmail.com>
+Subject: Re: mcp251xfd receiving non ACKed frames (was: Re: More flags for logging)
+To:     Thomas.Kopp@microchip.com
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Ayoub Kaanich <kayoub5@live.com>,
+        linux-can <linux-can@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, May 04, 2021 at 03:54:00PM +0200, Frieder Schrempf wrote:
-> On 03.05.21 15:54, Andy Shevchenko wrote:
-> > On Mon, May 03, 2021 at 04:48:10PM +0300, Andy Shevchenko wrote:
-> > > On Mon, May 03, 2021 at 04:44:24PM +0300, Andy Shevchenko wrote:
-> > > > On Mon, May 03, 2021 at 03:11:40PM +0200, Frieder Schrempf wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > with kernel 5.10.x and 5.12.x I'm getting a null pointer dereference
-> > > > > exception from the mcp251x driver when I resume from sleep (see trace
-> > > > > below).
-> > > > > 
-> > > > > As far as I can tell this was working fine with 5.4. As I currently don't
-> > > > > have the time to do further debugging/bisecting, for now I want to at least
-> > > > > report this here.
-> > > > > 
-> > > > > Maybe there is someone around who could already give a wild guess for what
-> > > > > might cause this just by looking at the trace/code!?
-> > > > 
-> > > > Does revert of c7299fea6769 ("spi: Fix spi device unregister flow") help?
-> > > 
-> > > Other than that, bisecting will take not more than 3-4 iterations only:
-> > > % git log --oneline v5.4..v5.10.34 -- drivers/net/can/spi/mcp251x.c
-> > > 3292c4fc9ce2 can: mcp251x: fix support for half duplex SPI host controllers
-> > > e0e25001d088 can: mcp251x: add support for half duplex controllers
-> > > 74fa565b63dc can: mcp251x: Use readx_poll_timeout() helper
-> > > 2d52dabbef60 can: mcp251x: add GPIO support
-> > > cfc24a0aa7a1 can: mcp251x: sort include files alphabetically
-> > > df561f6688fe treewide: Use fallthrough pseudo-keyword
-> > 
-> > > 8ce8c0abcba3 can: mcp251x: only reset hardware as required
-> > 
-> > And only smoking gun by analyzing the code is the above. So, for the first I
-> > would simply check before that commit and immediately after (15-30 minutes of
-> > work). (I would do it myself if I had a hardware at hand...)
-> 
-> Thanks for pointing that out. Indeed when I revert this commit it works fine
-> again.
-> 
-> When I look at the change I see that queue_work(priv->wq,
-> &priv->restart_work) is called in two cases, when the interface is brought
-> up after resume and now also when the device is only powered up after resume
-> but the interface stays down.
-> 
-> The latter is a problem if the device was never brought up before, as the
-> workqueue is only allocated and initialized in mcp251x_open().
-> 
-> To me it looks like a proper fix would be to just move the workqueue init to
-> the probe function to make sure it is available when resuming even if the
-> interface was never up before.
-> 
-> I will try this and send a patch if it looks good.
+On Tue. 4 Mai 2021 à 21:53, <Thomas.Kopp@microchip.com> wrote:
+> Hi All,
+>
+> > I guess that above error flags are the consequence of the
+> > interferences on the bus while unplugging the candlelight. Those
+> > are probably not relevant to our specific topic.
+> >
+> > > | (2021-05-04 09:05:02.100540)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 00
+> > 00 00 00
+> > > | (2021-05-04 09:05:02.100570)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 00
+> > 00 00 00
+> > > | (2021-05-04 09:05:02.100583)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 00
+> > 00 00 00
+> > > | (2021-05-04 09:05:02.100593)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 00
+> > 00 00 00
+> > > | (2021-05-04 09:05:02.101326)  mcp251xfd0  RX - -  222   [8]  4D 00 00 00 00
+> > 00 00 00
+> > >
+> Could be, would be worth to check that one a scope. From what I've seen so far the Bus looks clean without disconnecting nodes.
+>
+>
+> > Second, the receiver behaviour when receiving an non-ACKed frame
+> > is actually unspecified. As mentioned before, non-ACKed frames
+> > should be immediately followed by an ACK error flag. Here, the
+> > receiving nodes are facing a situation which should never
+> > occur. The mcp2518fd decides to register the frame as received
+> > and the flexcan decides to not register the frame. I think that
+> > both behaviors are actually fine: with the lack of specification,
+> > the implementation is free to decide how to handle this side
+> > case.
+>
+> I'd say it is actually defined. ISO 11989-1:2015 states the following in chapter 10.4 Bus monitoring
+> "Optionally, CAN implementations may provide the bus monitoring mode, where they shall be able to
+> receive valid DFs and valid RFs, but it sends only recessive bits on the CAN network and does not start
+> a transmission. If the MAC sub-layer is required to send a dominant bit (ACK bit, overload flag, active
+> error flag), the bit shall be rerouted internally so that the MAC sub-layer monitors this dominant bit,
+> although the CAN network may remain in recessive state."
+>
+> Looking at the MCAN manual here: https://github.com/linux-can/can-doc/blob/master/m_can/mcan_users_manual_v330.pdf
+>
+> There's a similar description including a picture showing the TX signal being "connected" internally to the RX path to generate the Ack internally.
 
-Sounds like a plan!
+Thanks for pointing this out. You are right and I completely
+missed that paragraph of the ISO.
 
--- 
-With Best Regards,
-Andy Shevchenko
+So this perfectly explains the behaviour of the mcp251xfd0. It
+also means that the ACK flag is set by the transmitter so there
+is indeed no way to differentiate if the frame was indeed ACKed
+or not by the other nodes.
+
+Concerning the flexcan it is not following the standard. Even if
+the monitor mode is optional, once it is implemented, it should
+behave as stated in chapter 10.4.
+
+However, this still does not explain why the Peak does not
+generate the ACK error flag. Also, the ISO says that in
+monitoring mode, the controller "does not start a
+transmission". So it also seems like a violation of the standard
+that Peak devices are able to transmit frames while being in
+monitor mode.
 
 
+Yours sincerely,
+Vincent
