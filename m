@@ -2,96 +2,104 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0FB37386A
-	for <lists+linux-can@lfdr.de>; Wed,  5 May 2021 12:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983B2373893
+	for <lists+linux-can@lfdr.de>; Wed,  5 May 2021 12:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbhEEKOp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 May 2021 06:14:45 -0400
-Received: from mga11.intel.com ([192.55.52.93]:62356 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232658AbhEEKOm (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 5 May 2021 06:14:42 -0400
-IronPort-SDR: ggwPz1PsP0h76l4orL1eWKGlUtDZ55fX9/dLh0oAkfM765QySENYivMAP6JnQOghrJq6UDfILW
- Ga6lGK4tIcrQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="195051102"
-X-IronPort-AV: E=Sophos;i="5.82,274,1613462400"; 
-   d="scan'208";a="195051102"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2021 03:13:46 -0700
-IronPort-SDR: pYKsr1hnKbkzRe6aFkCqPBhdoyOje4JHGiQ1MredtAr00vMgLaIupCFkwATjQqXH+vFTQgUvLz
- WrhLB+SLWEXg==
-X-IronPort-AV: E=Sophos;i="5.82,274,1613462400"; 
-   d="scan'208";a="433742342"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2021 03:13:44 -0700
-Received: from andy by smile with local (Exim 4.94)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1leEXF-009jyS-T8; Wed, 05 May 2021 13:13:41 +0300
-Date:   Wed, 5 May 2021 13:13:41 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org, kernel@pengutronix.de,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [can-nextc 1/2] can: mcp251x: mcp251x_can_probe(): silence clang
- warning
-Message-ID: <YJJv1f95WfTeJXCZ@smile.fi.intel.com>
-References: <20210504200520.1179635-1-mkl@pengutronix.de>
- <20210504200520.1179635-2-mkl@pengutronix.de>
+        id S232596AbhEEKbv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 May 2021 06:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232592AbhEEKbu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 May 2021 06:31:50 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A4C061574
+        for <linux-can@vger.kernel.org>; Wed,  5 May 2021 03:30:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id d4so1250185wru.7
+        for <linux-can@vger.kernel.org>; Wed, 05 May 2021 03:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=s23TUMcvZKOURbW8KYelmMo8xqTGbqHyeioo6aiGSUI=;
+        b=pEcuqtk1Rs0bMmIHQv29ANC6p75/gWXec3nH/DPbaJJXLnAGvPcc5znU8fIV7l2xuC
+         219DeIGf/C5lc1O/YR+MKelYojSY+IJb+kX5TBvCYbaSFJwYfr/QtnCCFk/Uv9YmD4vb
+         RWpOFzg3xgc02CUKBeQ4DdRFEkWfrQNKzRcRTsr1gXQGL13NuFTRMOiHo0K+PErDLzo8
+         vJcvqp2CCboEp9sRjlTfEOqUs8/slEtPDHsBsFO9wnRo/StVq2OmqGF0qJAa4r5/ERsa
+         PvLZahVEhWYplahJ8obRS4I4f3xqphORgpMKAdZmmUmmC6XpdA/wiHNAEMC98MWWimh1
+         LwKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=s23TUMcvZKOURbW8KYelmMo8xqTGbqHyeioo6aiGSUI=;
+        b=lLT96SBMXjnI226BsfIhvgDMbXZSH17jn00IDtcBkBrtYuTtEzSbqfYv6iifc7MSjT
+         v++gZ21cBzI8blwn7tgwhCf2kbV9YSXuN0Q70dB4kg10T7vAHnquwkGnKMc0rkmUWX4V
+         56QHSJ8B1luUTXf5i0lGBOeIz19zzOm1T5+5AjypOzUB+MzFrW5HV/2TgG42Oatpfa9g
+         6ulhy4qVmO+EuojM6GnX/9PqZFPO0yS6ahiv2U3+utHtOqQOv5v24yhs8DAw0076cha3
+         NZp+/V0tJBchOL8+VO07lR3mH6VjuyA4t8tuTaH+92wx/cO/08/J3SltTNwOhoeP4fY1
+         /HeQ==
+X-Gm-Message-State: AOAM531fkp5WgF4TmCpJ3BZUyK3+KNKRkwhgU+RwBla8tsJK/rC4QWix
+        Ajihqdjw+x249+q9cxUO6UGb5CsGFB+T9Xwv
+X-Google-Smtp-Source: ABdhPJwQIQAgfD3zJS8mTYz9dkcp8MGnG0Eq1Hb5mJQUwdnVdXKEBNzYAus+NCFn5/yBSVY9OLLjEg==
+X-Received: by 2002:adf:f3c1:: with SMTP id g1mr29405700wrp.242.1620210652091;
+        Wed, 05 May 2021 03:30:52 -0700 (PDT)
+Received: from bigthink (92.41.10.173.threembb.co.uk. [92.41.10.173])
+        by smtp.gmail.com with ESMTPSA id z14sm22446588wrt.54.2021.05.05.03.30.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 May 2021 03:30:51 -0700 (PDT)
+Date:   Wed, 5 May 2021 11:30:49 +0100
+From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
+To:     linux-can@vger.kernel.org
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: Improving TX for m_can peripherals
+Message-ID: <20210505103049.gboat4dr3zvdm4s6@bigthink>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210504200520.1179635-2-mkl@pengutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, May 04, 2021 at 10:05:19PM +0200, Marc Kleine-Budde wrote:
-> This patch silences the following clang warning:
-> 
-> | drivers/net/can/spi/mcp251x.c:1333:17: warning: cast to smaller integer type
-> | 'enum mcp251x_model' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> |                 priv->model = (enum mcp251x_model)match;
-> |                               ^~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Fixes: 8de29a5c34a5 ("can: mcp251x: Make use of device property API")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
->  drivers/net/can/spi/mcp251x.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-> index 492f1bcb0516..275b2ddab143 100644
-> --- a/drivers/net/can/spi/mcp251x.c
-> +++ b/drivers/net/can/spi/mcp251x.c
-> @@ -1343,7 +1343,7 @@ static int mcp251x_can_probe(struct spi_device *spi)
->  	priv->can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
->  		CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_LISTENONLY;
->  	if (match)
-> -		priv->model = (enum mcp251x_model)match;
-> +		priv->model = (enum mcp251x_model)(kernel_ulong_t)match;
+Good morning candevs,
 
-Usually we use uintptr_t, but either way
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Thanks!
+I've been testing the TCAN4550 recently with proper kit (no more jumper
+wires, hooray!) and I'm happy to say the RX path is fixed in v5.12 with
+the latest patches, and even with heavy load I see no missed frames or
+errors.
 
->  	else
->  		priv->model = spi_get_device_id(spi)->driver_data;
->  	priv->net = net;
-> 
-> base-commit: 9d31d2338950293ec19d9b095fbaa9030899dcb4
-> prerequisite-patch-id: 2d99a92f9c04a76341ba84b5f4924c2ba03bdd88
-> prerequisite-patch-id: 6dbb40c8b889604bf57aa2374f34290b247b7d28
-> prerequisite-patch-id: 24ff9c746552e4a8e100200f13bb1732990392a3
-> -- 
-> 2.30.2
-> 
-> 
+However, TX still needs work. It's easy to break the driver due to the
+following logic in m_can_start_xmit():
 
--- 
-With Best Regards,
-Andy Shevchenko
+| 	if (cdev->tx_skb) {
+| 		netdev_err(dev, "hard_xmit called while tx busy\n");
+| 		return NETDEV_TX_BUSY;
+| 	}
 
+Regardless of your netif TX queue length or the number of TX buffers
+allocated in the M_CAN core, if you try to transmit too quickly, you
+will hit this. For the application I'm working on, I run into this very
+quickly with real-world scenarios.
+
+Also, the queue is always stopped before the tx work is queued in
+m_can_start_xmit(), which seems wrong and clearly doesn't solve the
+problem:
+
+| 	/* Need to stop the queue to avoid numerous requests
+| 	 * from being sent.  Suggested improvement is to create
+| 	 * a queueing mechanism that will queue the skbs and
+| 	 * process them in order.
+| 	 */
+| 	cdev->tx_skb = skb;
+| 	netif_stop_queue(cdev->net);
+| 	queue_work(cdev->tx_wq, &cdev->tx_work);
+
+
+So - I'd like to fix this. The comment in the snippet above suggests a
+queueing mechanism. It would be good to hear your take on this, Marc -
+AFAIU you have written a similar mechanism for mcp251xfd. :)
+
+--
+Regards,
+
+Torin Cooper-Bennun
+Software Engineer | maxiluxsystems.com
 
