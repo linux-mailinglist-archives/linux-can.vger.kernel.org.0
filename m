@@ -2,194 +2,523 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46816373605
-	for <lists+linux-can@lfdr.de>; Wed,  5 May 2021 10:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E04F373662
+	for <lists+linux-can@lfdr.de>; Wed,  5 May 2021 10:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbhEEIHd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 May 2021 04:07:33 -0400
-Received: from mail-eopbgr20133.outbound.protection.outlook.com ([40.107.2.133]:30619
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231829AbhEEIHb (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 5 May 2021 04:07:31 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TG2qD9XVp3PDaLBYNbdLqX3KYSV/riutaH0UXDrQXH0QQ//QT+xpAMEw1UINsqlXVcj7Xb/7z2wviDPw5SOG4NRsFjYPkk4jYxYYrEUD952SqeICZUI/+y0k2p7M+wOMBzSjZ9qE1cPm8NfUQdv3boBCzRLfQZ02I1IffBTVyTAkZTzdzy7pw5+370GHr8GPNmI4xmub8j6zM7bL0KgdDFqd/GBZZ0KhpSzusVmFo3URXJrMcD3esWajFeMYSqmO9rvOHk7LfrRjMoUe6J4/QC1PMsp0ORfyrd4Iy2XPjKpM97FIgFnD/3UzuPIWzzRR9htEIaCQNRzypq9fQj8HsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PI/UpSOrXbkY3oiFUh544jygI4fK47wyICP2r/0oiOY=;
- b=LuzFALXx35fKc8u/ZtvYsJcqTf7LVeAR9g/2v6Dg/d9bgtXOegkVEuL7bfrOQnEBD7hNz/qgsgLqgSLl5Iz2uqV0v+3MoO1QJVuqWO7DJTloCQjbPRQbht4WdvdvELTN1W1DATHei/j+0LlotLZtJrzNEILSA4u4M4XVAsBIvU/3Np0o418L1nJZWtYGKwvNiduMVfd4TxXqWutN/mt/q7in/XdRFFT9Ns/AX/YDpemXQtZe0yQKN4bbvCCPFx/mJfkLtCoDLrdeARD3C0xf92zPAXJApdt8pnYmwb6gLtyDvzsP4QBsEISIWu99CJVcqHnWgjp2mAFM/tPKuOw2DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
- dkim=pass header.d=kontron.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
- s=selector2-mysnt-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PI/UpSOrXbkY3oiFUh544jygI4fK47wyICP2r/0oiOY=;
- b=NnDkxhajNBKyMr80FsiW5e7us1lz7kxX/EMz5zzNZ8JslsKl61knQUZcNw8Hjk7FhDexhQld+EmpOTfAMapdIpd+bt5OGEq0AC0MOBPjc4lw+J+ZRDOkG0n2qCMzt2lOc4zY5PqxCjWwRVyUQkzyVmoWb/CDUy360sF/TFToayA=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=kontron.de;
-Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
- by AM0PR10MB2354.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:da::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.35; Wed, 5 May
- 2021 08:06:33 +0000
-Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::3d8a:f56b:3a0c:8a87]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::3d8a:f56b:3a0c:8a87%7]) with mapi id 15.20.4108.024; Wed, 5 May 2021
- 08:06:33 +0000
-Subject: Re: [PATCH v2] can: mcp251x: Fix resume from sleep before interface
- was brought up
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        =?UTF-8?Q?Timo_Schl=c3=bc=c3=9fler?= <schluessler@krause.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Tim Harvey <tharvey@gateworks.com>, stable@vger.kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <17d5d714-b468-482f-f37a-482e3d6df84e@kontron.de>
- <20210505075127.yrx474t5dkpxxdmt@pengutronix.de>
-From:   Frieder Schrempf <frieder.schrempf@kontron.de>
-Message-ID: <96710db4-f330-eb3a-71fa-570dd651aee4@kontron.de>
-Date:   Wed, 5 May 2021 10:06:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
-In-Reply-To: <20210505075127.yrx474t5dkpxxdmt@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [46.142.67.208]
-X-ClientProxiedBy: AM0PR02CA0164.eurprd02.prod.outlook.com
- (2603:10a6:20b:28d::31) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:208:157::14)
+        id S231430AbhEEIii (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 May 2021 04:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231876AbhEEIih (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 May 2021 04:38:37 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AE2C061574
+        for <linux-can@vger.kernel.org>; Wed,  5 May 2021 01:37:41 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id n2so903671wrm.0
+        for <linux-can@vger.kernel.org>; Wed, 05 May 2021 01:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=flodin-me.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MPo0jFVvr6YwrVb5dUjllgUYR+LLM4QwOPCBpfOwY48=;
+        b=1+a7CDpQcgZ2NLsEHSlvYyMe1Y0AgwG7sO6RDdA0mj+t8WQQzr/x4JclSza93nKjB9
+         2FJNVwKu7khmu25b6mkt+C0dj2RyiZ5JgQ4BCZbZu3XWiiSQowEakOc6pOWIqGONx2C3
+         rA9YjJA/OVp+eGjmgWNPkcWGwpSwtjRaINw0fUjN0KdCE10bUl0qOX7aY1AgKuvQJN5T
+         DyRM5dB3580twa7lOhwvdBAC3724nANwrH3MPUBNPOfGAVkYNMxA/+3pDADq6RrR6FVx
+         Xfmna/IjYw2tcOfyODkOHw1zdgHfewMoPuWtTGn9nVIqW1vTFnK2fJUgSIhpL2i0Di7+
+         F15Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MPo0jFVvr6YwrVb5dUjllgUYR+LLM4QwOPCBpfOwY48=;
+        b=r6G77ujnNYT8zXkj7Zs3nroTaXNiXQ2lEoiLbt4XEFAgjNT6U+pQn9xvrYuCI5uQ4o
+         kg9I5E8aaWS4VCwWO0ANRZiwJH1+4+ovzG54vlmlQBK4Fahiz0dhx8+YKvtPVuRTgwU0
+         efClK6yVoPxaUte7eMqGlk93KXYVCjwZbrlB2amLsnu/FR7PWcUofMTBywpGOf5d0p5D
+         ubjhcPCvooovVMke6N4VmEO64mAYSt7FWPa4CBoNQwtpF1J7lXtCmaQP5Q1hlN3/7Bkd
+         8o74AchmfGb+e96/6IuzmF9maAVX3fOA9Wr4SudvFmMomxhyx0gcj5NUmC6lXIZPHQ/E
+         aGYQ==
+X-Gm-Message-State: AOAM531NVy/5DAFNF8x7ujpZcvmQT+wg1xfTH/jrK5mIsgs3xn475CEv
+        WlkAOC2RRG65YSYfVSu17Q5ALX9P/tgaWadJqjPjsmiCpezyqQ==
+X-Google-Smtp-Source: ABdhPJwdLVhhPORAe2aeXIchK6GsgGRlOu/TN6h0pKYNKeDCvR6cJAC3q9fqnT0xjlhb7oW1NRgbU+zE7SZppYPfKLE=
+X-Received: by 2002:a5d:63cb:: with SMTP id c11mr36688498wrw.49.1620203859517;
+ Wed, 05 May 2021 01:37:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.10.17] (46.142.67.208) by AM0PR02CA0164.eurprd02.prod.outlook.com (2603:10a6:20b:28d::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4108.25 via Frontend Transport; Wed, 5 May 2021 08:06:32 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7039707c-8642-411b-6a54-08d90f9cb255
-X-MS-TrafficTypeDiagnostic: AM0PR10MB2354:
-X-Microsoft-Antispam-PRVS: <AM0PR10MB2354E83AA7F6A2387A5684FBE9599@AM0PR10MB2354.EURPRD10.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vqYjdvP/zkaSTCSU/xdsyCvHNl3K+X6dTs+ilih3tvWZ6qOTDdX3ID/OesduSXqBrjkmKJkOwqEbU28PsTREwj+EOPFUw9dSOvjGlTfxFeDh2EPlXKZwAYnoJXuzSRwLno8x4pGdEvg+HMKX22e1Fztki9xY0fvukjolZsvMmg65NFigjpb8OPGXffADS5HMm9W4aapjqBuDs5ArO2Il6+yKLaBbsKIxytNISfyA5uMr86q+tXmiSP9hj6KCCqx75XJ0IfXSIQ5Pg5iihJ+i6dKqBXyhIBB6FtedCjvj4TrYHjdesB/x9Uh7Crnlc1gctzph+cVFrMQPA+bFIC3cd6C9LRGzVG2zlwhhYjIENwd+pu35j+yUF/hyFi4JpDP1QkjvUsT/IGjODbo25gk8YrrUtCwscnOGFRRd33OiI40PwXXw2n5KWJYJcDSvm1zBvcnBDyS5zHVJe7X7/AJhUvZHlZ3hQb23+GyGEIi2zjVQVyzjSkveZ7VbPmz+nfQ86TZNR/Ya5XVmr7x6U56LxNtSpf9gg4TbLsUQIhAwTdzJr+7EGWctEUpDg2dSCl0YFo8vMCoi8w+eLMVWulQP3Qoa+wtIVkRo4KKdqBM3iNm02dHD+tLwdcRGHYErsK6YP8benrSXmbLTtIN3wteUKv/fIEcewK03wQ1BdUaNvG8tcsstKjQPU9jSPtzxfdED
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(366004)(376002)(136003)(39850400004)(2616005)(44832011)(7416002)(86362001)(66946007)(6486002)(36756003)(31696002)(4326008)(8676002)(66476007)(66556008)(956004)(5660300002)(2906002)(6916009)(478600001)(316002)(31686004)(16576012)(16526019)(83380400001)(186003)(38100700002)(53546011)(8936002)(26005)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?QzNRVmdaMTkydWc1c3U2WWYweEVFR3NpYTBTM3Mzb3ErMFpmeFZpbkNsaGhx?=
- =?utf-8?B?R2tEN1NhRjVBamJIWjFXRXIvRlVHWERwZXFVNCs5S3BuTkRSUmd4eUZKSXZB?=
- =?utf-8?B?eGxLSDlJL2xRU3E3TFI4amxLQTJ2MkYxQVJHTDBuSTFoczRtRXVwZXp1RjR4?=
- =?utf-8?B?WVg5QzBnMmpOeEhwV2NmTTR3UmtNaFJQUExWZC9NeVhWYzJHek9YQ1BFQ0cw?=
- =?utf-8?B?VnN0MVNDdE01dG9leE9RdmpUclRBYnBkT1JqcHRyVjI5bmh1YVNUSmRxWVZi?=
- =?utf-8?B?OTdNZmxpcFNGZ2pmTmcxQlpqaTdQZm5SU0lPaWFYblVMUTRWVWNUT2VtZkVt?=
- =?utf-8?B?YnhuMkRRaUlTNDNVOGt3WDlYdGtpcHNVSzhzKzBPRXp0emtCTUZ5dFdDR2NL?=
- =?utf-8?B?RnVBdzdSTnVtaEtlZldybE5WMkRzc1Y4ZnErd2MvRVkxak9NU1U2d3Qwbnho?=
- =?utf-8?B?TVdRU2hZOHpHSjJZa2JkYThDUkRZWVdmeWlleGMvb2xaWFlub3dmaVNaSVRZ?=
- =?utf-8?B?bXFGT1BvSVFSTFEwbk9KZWN3SUZhN05sdnI4L053YjZSMHpyUEpZVXNGRWdG?=
- =?utf-8?B?R3lGcFFCdTh3dnhqeHo2c2JyTXl1a3lEYmlybEROallwL3d1dDRZaWhsUFE1?=
- =?utf-8?B?SkxmLzBOU3lRVWxpeTdOTm5ic1N5RGtiTkZiQXdSa284cGZkUnZHRXFsajY3?=
- =?utf-8?B?MDI0VU9oWFJOMVVRM0wvRlFjdnozUW51aTlLODJMZVdmVElHUEJDWjdPUStw?=
- =?utf-8?B?VFFLcE5Kbi94cHM5bElpTE5QdDBDUHFtdzZ5eUxGb3pldU4rYjFSOHowWVQ5?=
- =?utf-8?B?OHd6L0RNYkhUZ1YzcHUrTkNlK1Q4aEsweUpnWlBYRG1uaGQ2OHpJUWIwUVBx?=
- =?utf-8?B?ZVlLOTVtMnpQWWJTMnd0UUxBVzg0cG0vczhmcXZUeGFNRGNCZUwrb1E4c1Ey?=
- =?utf-8?B?YS9NS2lWRkxZUExCRlVKV2oyOEM0WHNFWE5TWjh2eEdOQXlTWEE0amNieUVr?=
- =?utf-8?B?a0NJeG1QTDk1cEkzdmhGSW9NUkVtOElMSzErY1ovSnRiRStXLzFwTG56WWJ4?=
- =?utf-8?B?eTRoaDdVUFVSTU1hejJORnlFeGdIYWF0Tm9zbGtwVk9RYVdsc2pNbkZKRFZG?=
- =?utf-8?B?c0dFdncxVWJWeW1zUTdKaGdYUmFrNHJBMGlmVmtXbnFDUHRkcWdQclhCbnR1?=
- =?utf-8?B?OHFaaG5VMEp2Y0pHcnFobmYzdFNoU2ovVXVGQWZxOXdWb0h3TkxyTXBLZkc3?=
- =?utf-8?B?Y01ZNy8rajFidkoybitCTjk5MzFyTFFJZUxvS2hWVUdZZ3hyOU9mSnpoWXFL?=
- =?utf-8?B?TUNobm15NnczWkRrMkNYaWhFb0xRUFllSkJ6V2kreU00eUVFQ1doQWx1Yjd5?=
- =?utf-8?B?ZmhNYWQrdnRuWE9aOURpOFpROFd3QVFaZFllTnNuRHVreFhzeHBlWkxkbVZL?=
- =?utf-8?B?aXhpeGpHY0JmelNwNE1nM1hTbkxTZmdOSEJwektaMG1PQTJhNWJVeXR6V1k4?=
- =?utf-8?B?ZWtwUTRaWUJHdy85TVBjYlA5Nm53MkkvQnZWK0RBdTZxNE1kaWp6cEV0UHA3?=
- =?utf-8?B?d2MvTXFxeS9zdHdnYUNxVjgwMUhyNTNUZFpMcW43dFVDQkMxUU95OFcvaFJB?=
- =?utf-8?B?aTZTOHVrTUJNcXF0RUI1ZkRPdTg4UGxsVkRKeGtEK0hpUUlnMHhma3E2K0Mz?=
- =?utf-8?B?TUZ0NlQ3YkZIT2ZxSGtobUFWaVlUMWxKcG5Bejl6S3NjTThCVktoajNPR3RS?=
- =?utf-8?Q?oPeiEBuoCNSARQY/8heIGZWJxrycmEEGiWR8n9z?=
-X-OriginatorOrg: kontron.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7039707c-8642-411b-6a54-08d90f9cb255
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2021 08:06:33.2262
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m5rva6/cz4Vrw89xf0O9jouVZfaeYtlMn3FaAWphfc/1VPiMgAO1rKDLfD5vDH/rMPDdMR74bZIIDq9U95YPIqT7Bx8Gj4J/rg1B3p6YYNE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB2354
+References: <20210504203546.115734-1-erik@flodin.me> <20210504203546.115734-2-erik@flodin.me>
+ <cf5fdb14-47e2-2d08-0d29-c621bff7b312@hartkopp.net>
+In-Reply-To: <cf5fdb14-47e2-2d08-0d29-c621bff7b312@hartkopp.net>
+From:   Erik Flodin <erik@flodin.me>
+Date:   Wed, 5 May 2021 10:37:28 +0200
+Message-ID: <CAAMKmocxj1zOQastSqKhHmV0-9HVh3NpPmSPWf=byxj+fFPUHQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] can: add support for filtering own messages only
+To:     Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 05.05.21 09:51, Marc Kleine-Budde wrote:
-> On 05.05.2021 09:14:15, Frieder Schrempf wrote:
->> From: Frieder Schrempf <frieder.schrempf@kontron.de>
->>
->> Since 8ce8c0abcba3 the driver queues work via priv->restart_work when
->> resuming after suspend, even when the interface was not previously
->> enabled. This causes a null dereference error as the workqueue is
->> only allocated and initialized in mcp251x_open().
->>
->> To fix this we move the workqueue init to mcp251x_can_probe() as
->> there is no reason to do it later and repeat it whenever
->> mcp251x_open() is called.
->>
->> Fixes: 8ce8c0abcba3 ("can: mcp251x: only reset hardware as required")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Frieder Schrempf <frieder.schrempf@kontron.de>
->> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->> ---
->> Changes in v2:
->>   * Remove the out_clean label in mcp251x_open()
->>   * Add Andy's R-b tag
->>   * Add 'From' tag
->>
->> Hi Marc, I'm sending a v2 mainly because I noticed that v1 is missing
->> the 'From' tag and as my company's mailserver always sends my name
->> reversed this causes incorrect author information in git. So if possible
->> you could fix this up. If this is too much work, just leave it as is.
->> Thanks!
-> 
-> Done.
+Hi,
 
-Thanks!
+On Wed, 5 May 2021 at 08:59, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+> IMO putting linux-can@vger.kernel.org in CC would be sufficient in this
+> stage of discussion.
 
-> 
-> I've also squashed this fixup:
+OK, I've trimmed the receive list.
 
-Oh dear, I really should have looked at this more closely.
-Thanks a lot and sorry for the mess!
+> On 04.05.21 22:35, Erik Flodin wrote:
+> > Add a new flag to can_rx_register/unregister that, when set, requires
+> > that the received sk_buff's owning socket matches the socket pointer
+> > given when setting the filter. This makes it possible to set a filter
+> > that matches all frames sent on a given socket and nothing else.
+>
+> This is a pretty simple requirement and you are touching almost every
+> CAN network layer file.
+>
+>  From this description I would suggest a two-liner to be added in raw.c
+>
+> diff --git a/net/can/raw.c b/net/can/raw.c
+> index 139d9471ddcf..8c6371a0c8a6 100644
+> --- a/net/can/raw.c
+> +++ b/net/can/raw.c
+> @@ -123,10 +123,14 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
+>
+>          /* check the received tx sock reference */
+>          if (!ro->recv_own_msgs && oskb->sk == sk)
+>                  return;
+>
+> +       /* check the received tx sock reference */
+> +       if (ro->recv_only_own_msgs && oskb->sk != sk)
+> +               return;
+> +
+>          /* do not pass non-CAN2.0 frames to a legacy socket */
+>          if (!ro->fd_frames && oskb->len != CAN_MTU)
+>                  return;
+>
+>          /* eliminate multiple filter matches for the same skb */
+>
+>
+> And then add CAN_RAW_RECV_ONLY_OWN_MSGS accordingly.
+>
+> Wouldn't that already match your requirements?
 
-> 
-> | --- a/drivers/net/can/spi/mcp251x.c
-> | +++ b/drivers/net/can/spi/mcp251x.c
-> | @@ -1224,13 +1224,13 @@ static int mcp251x_open(struct net_device *net)
-> |  
-> |         ret = mcp251x_hw_wake(spi);
-> |         if (ret)
-> | -               goto out_free_wq;
-> | +               goto out_free_irq;
-> |         ret = mcp251x_setup(net, spi);
-> |         if (ret)
-> | -               goto out_free_wq;
-> | +               goto out_free_irq;
-> |         ret = mcp251x_set_normal_mode(spi);
-> |         if (ret)
-> | -               goto out_free_wq;
-> | +               goto out_free_irq;
-> |  
-> |         can_led_event(net, CAN_LED_EVENT_OPEN);
-> |  
-> | @@ -1239,8 +1239,7 @@ static int mcp251x_open(struct net_device *net)
-> |  
-> |         return 0;
-> |  
-> | -out_free_wq:
-> | -       destroy_workqueue(priv->wq);
-> | +out_free_irq:
-> |         free_irq(spi->irq, priv);
-> |         mcp251x_hw_sleep(spi);
-> |  out_close:
-> 
-> Marc
-> 
+I guess that would require me to use two sockets: one for sending
+(with RECV_ONLY_OWN_MSGS set) and one for receiving. The problem might
+then be how to avoid the second socket seeing the frames sent from the
+first, without disabling loopback completly?
+
+// Erik
+
+> >
+> > Signed-off-by: Erik Flodin <erik@flodin.me>
+> > ---
+> >   include/linux/can/core.h |  4 ++--
+> >   net/can/af_can.c         | 50 ++++++++++++++++++++++------------------
+> >   net/can/af_can.h         |  1 +
+> >   net/can/bcm.c            |  9 +++++---
+> >   net/can/gw.c             |  7 +++---
+> >   net/can/isotp.c          |  8 +++----
+> >   net/can/j1939/main.c     |  4 ++--
+> >   net/can/proc.c           | 11 +++++----
+> >   net/can/raw.c            | 10 ++++----
+> >   9 files changed, 58 insertions(+), 46 deletions(-)
+> >
+> > diff --git a/include/linux/can/core.h b/include/linux/can/core.h
+> > index 5fb8d0e3f9c1..7ee68128dc10 100644
+> > --- a/include/linux/can/core.h
+> > +++ b/include/linux/can/core.h
+> > @@ -48,12 +48,12 @@ extern int  can_proto_register(const struct can_proto *cp);
+> >   extern void can_proto_unregister(const struct can_proto *cp);
+> >
+> >   int can_rx_register(struct net *net, struct net_device *dev,
+> > -                 canid_t can_id, canid_t mask,
+> > +                 canid_t can_id, canid_t mask, bool match_sk,
+> >                   void (*func)(struct sk_buff *, void *),
+> >                   void *data, char *ident, struct sock *sk);
+> >
+> >   extern void can_rx_unregister(struct net *net, struct net_device *dev,
+> > -                           canid_t can_id, canid_t mask,
+> > +                           canid_t can_id, canid_t mask, bool match_sk,
+> >                             void (*func)(struct sk_buff *, void *),
+> >                             void *data);
+> >
+> > diff --git a/net/can/af_can.c b/net/can/af_can.c
+> > index cce2af10eb3e..7b639c121653 100644
+> > --- a/net/can/af_can.c
+> > +++ b/net/can/af_can.c
+> > @@ -414,6 +414,7 @@ static struct hlist_head *can_rcv_list_find(canid_t *can_id, canid_t *mask,
+> >    * @dev: pointer to netdevice (NULL => subscribe from 'all' CAN devices list)
+> >    * @can_id: CAN identifier (see description)
+> >    * @mask: CAN mask (see description)
+> > + * @match_sk: match socket pointer on received sk_buff (see description)
+> >    * @func: callback function on filter match
+> >    * @data: returned parameter for callback function
+> >    * @ident: string for calling module identification
+> > @@ -428,6 +429,9 @@ static struct hlist_head *can_rcv_list_find(canid_t *can_id, canid_t *mask,
+> >    *  The filter can be inverted (CAN_INV_FILTER bit set in can_id) or it can
+> >    *  filter for error message frames (CAN_ERR_FLAG bit set in mask).
+> >    *
+> > + *  If match_sk is true, the received sk_buff's owning socket must also match
+> > + *  the given socket pointer.
+> > + *
+> >    *  The provided pointer to the sk_buff is guaranteed to be valid as long as
+> >    *  the callback function is running. The callback function must *not* free
+> >    *  the given sk_buff while processing it's task. When the given sk_buff is
+> > @@ -440,8 +444,9 @@ static struct hlist_head *can_rcv_list_find(canid_t *can_id, canid_t *mask,
+> >    *  -ENODEV unknown device
+> >    */
+> >   int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+> > -                 canid_t mask, void (*func)(struct sk_buff *, void *),
+> > -                 void *data, char *ident, struct sock *sk)
+> > +                 canid_t mask, bool match_sk,
+> > +                 void (*func)(struct sk_buff *, void *), void *data,
+> > +                 char *ident, struct sock *sk)
+> >   {
+> >       struct receiver *rcv;
+> >       struct hlist_head *rcv_list;
+> > @@ -468,6 +473,7 @@ int can_rx_register(struct net *net, struct net_device *dev, canid_t can_id,
+> >
+> >       rcv->can_id = can_id;
+> >       rcv->mask = mask;
+> > +     rcv->match_sk = match_sk;
+> >       rcv->matches = 0;
+> >       rcv->func = func;
+> >       rcv->data = data;
+> > @@ -503,6 +509,7 @@ static void can_rx_delete_receiver(struct rcu_head *rp)
+> >    * @dev: pointer to netdevice (NULL => unsubscribe from 'all' CAN devices list)
+> >    * @can_id: CAN identifier
+> >    * @mask: CAN mask
+> > + * @match_sk: match socket pointer on received sk_buff
+> >    * @func: callback function on filter match
+> >    * @data: returned parameter for callback function
+> >    *
+> > @@ -510,8 +517,8 @@ static void can_rx_delete_receiver(struct rcu_head *rp)
+> >    *  Removes subscription entry depending on given (subscription) values.
+> >    */
+> >   void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+> > -                    canid_t mask, void (*func)(struct sk_buff *, void *),
+> > -                    void *data)
+> > +                    canid_t mask, bool match_sk,
+> > +                    void (*func)(struct sk_buff *, void *), void *data)
+> >   {
+> >       struct receiver *rcv = NULL;
+> >       struct hlist_head *rcv_list;
+> > @@ -535,7 +542,8 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+> >        */
+> >       hlist_for_each_entry_rcu(rcv, rcv_list, list) {
+> >               if (rcv->can_id == can_id && rcv->mask == mask &&
+> > -                 rcv->func == func && rcv->data == data)
+> > +                 rcv->match_sk == match_sk && rcv->func == func &&
+> > +                 rcv->data == data)
+> >                       break;
+> >       }
+> >
+> > @@ -546,8 +554,8 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+> >        * a warning here.
+> >        */
+> >       if (!rcv) {
+> > -             pr_warn("can: receive list entry not found for dev %s, id %03X, mask %03X\n",
+> > -                     DNAME(dev), can_id, mask);
+> > +             pr_warn("can: receive list entry not found for dev %s, id %03X, mask %03X%s\n",
+> > +                     DNAME(dev), can_id, mask, match_sk ? " (match sk)" : "");
+> >               goto out;
+> >       }
+> >
+> > @@ -569,10 +577,14 @@ void can_rx_unregister(struct net *net, struct net_device *dev, canid_t can_id,
+> >   }
+> >   EXPORT_SYMBOL(can_rx_unregister);
+> >
+> > -static inline void deliver(struct sk_buff *skb, struct receiver *rcv)
+> > +static inline int deliver(struct sk_buff *skb, struct receiver *rcv)
+> >   {
+> > -     rcv->func(skb, rcv->data);
+> > -     rcv->matches++;
+> > +     if (!rcv->match_sk || skb->sk == rcv->sk) {
+> > +             rcv->func(skb, rcv->data);
+> > +             rcv->matches++;
+> > +             return 1;
+> > +     }
+> > +     return 0;
+> >   }
+> >
+> >   static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buff *skb)
+> > @@ -589,8 +601,7 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+> >               /* check for error message frame entries only */
+> >               hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_ERR], list) {
+> >                       if (can_id & rcv->mask) {
+> > -                             deliver(skb, rcv);
+> > -                             matches++;
+> > +                             matches += deliver(skb, rcv);
+> >                       }
+> >               }
+> >               return matches;
+> > @@ -598,23 +609,20 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+> >
+> >       /* check for unfiltered entries */
+> >       hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_ALL], list) {
+> > -             deliver(skb, rcv);
+> > -             matches++;
+> > +             matches += deliver(skb, rcv);
+> >       }
+> >
+> >       /* check for can_id/mask entries */
+> >       hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_FIL], list) {
+> >               if ((can_id & rcv->mask) == rcv->can_id) {
+> > -                     deliver(skb, rcv);
+> > -                     matches++;
+> > +                     matches += deliver(skb, rcv);
+> >               }
+> >       }
+> >
+> >       /* check for inverted can_id/mask entries */
+> >       hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx[RX_INV], list) {
+> >               if ((can_id & rcv->mask) != rcv->can_id) {
+> > -                     deliver(skb, rcv);
+> > -                     matches++;
+> > +                     matches += deliver(skb, rcv);
+> >               }
+> >       }
+> >
+> > @@ -625,15 +633,13 @@ static int can_rcv_filter(struct can_dev_rcv_lists *dev_rcv_lists, struct sk_buf
+> >       if (can_id & CAN_EFF_FLAG) {
+> >               hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx_eff[effhash(can_id)], list) {
+> >                       if (rcv->can_id == can_id) {
+> > -                             deliver(skb, rcv);
+> > -                             matches++;
+> > +                             matches += deliver(skb, rcv);
+> >                       }
+> >               }
+> >       } else {
+> >               can_id &= CAN_SFF_MASK;
+> >               hlist_for_each_entry_rcu(rcv, &dev_rcv_lists->rx_sff[can_id], list) {
+> > -                     deliver(skb, rcv);
+> > -                     matches++;
+> > +                     matches += deliver(skb, rcv);
+> >               }
+> >       }
+> >
+> > diff --git a/net/can/af_can.h b/net/can/af_can.h
+> > index 7c2d9161e224..ea98b10d93e7 100644
+> > --- a/net/can/af_can.h
+> > +++ b/net/can/af_can.h
+> > @@ -52,6 +52,7 @@ struct receiver {
+> >       struct hlist_node list;
+> >       canid_t can_id;
+> >       canid_t mask;
+> > +     bool match_sk;
+> >       unsigned long matches;
+> >       void (*func)(struct sk_buff *skb, void *data);
+> >       void *data;
+> > diff --git a/net/can/bcm.c b/net/can/bcm.c
+> > index 909b9e684e04..d89dd82c2178 100644
+> > --- a/net/can/bcm.c
+> > +++ b/net/can/bcm.c
+> > @@ -729,7 +729,8 @@ static void bcm_rx_unreg(struct net_device *dev, struct bcm_op *op)
+> >   {
+> >       if (op->rx_reg_dev == dev) {
+> >               can_rx_unregister(dev_net(dev), dev, op->can_id,
+> > -                               REGMASK(op->can_id), bcm_rx_handler, op);
+> > +                               REGMASK(op->can_id), false, bcm_rx_handler,
+> > +                               op);
+> >
+> >               /* mark as removed subscription */
+> >               op->rx_reg_dev = NULL;
+> > @@ -775,6 +776,7 @@ static int bcm_delete_rx_op(struct list_head *ops, struct bcm_msg_head *mh,
+> >                               can_rx_unregister(sock_net(op->sk), NULL,
+> >                                                 op->can_id,
+> >                                                 REGMASK(op->can_id),
+> > +                                               false,
+> >                                                 bcm_rx_handler, op);
+> >
+> >                       list_del(&op->list);
+> > @@ -1193,6 +1195,7 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+> >                               err = can_rx_register(sock_net(sk), dev,
+> >                                                     op->can_id,
+> >                                                     REGMASK(op->can_id),
+> > +                                                   false,
+> >                                                     bcm_rx_handler, op,
+> >                                                     "bcm", sk);
+> >
+> > @@ -1202,7 +1205,7 @@ static int bcm_rx_setup(struct bcm_msg_head *msg_head, struct msghdr *msg,
+> >
+> >               } else
+> >                       err = can_rx_register(sock_net(sk), NULL, op->can_id,
+> > -                                           REGMASK(op->can_id),
+> > +                                           REGMASK(op->can_id), false,
+> >                                             bcm_rx_handler, op, "bcm", sk);
+> >               if (err) {
+> >                       /* this bcm rx op is broken -> remove it */
+> > @@ -1500,7 +1503,7 @@ static int bcm_release(struct socket *sock)
+> >                       }
+> >               } else
+> >                       can_rx_unregister(net, NULL, op->can_id,
+> > -                                       REGMASK(op->can_id),
+> > +                                       REGMASK(op->can_id), false,
+> >                                         bcm_rx_handler, op);
+> >
+> >               bcm_remove_op(op);
+> > diff --git a/net/can/gw.c b/net/can/gw.c
+> > index ba4124805602..5dbc7b85e0fc 100644
+> > --- a/net/can/gw.c
+> > +++ b/net/can/gw.c
+> > @@ -567,14 +567,15 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+> >   static inline int cgw_register_filter(struct net *net, struct cgw_job *gwj)
+> >   {
+> >       return can_rx_register(net, gwj->src.dev, gwj->ccgw.filter.can_id,
+> > -                            gwj->ccgw.filter.can_mask, can_can_gw_rcv,
+> > -                            gwj, "gw", NULL);
+> > +                            gwj->ccgw.filter.can_mask, false,
+> > +                            can_can_gw_rcv, gwj, "gw", NULL);
+> >   }
+> >
+> >   static inline void cgw_unregister_filter(struct net *net, struct cgw_job *gwj)
+> >   {
+> >       can_rx_unregister(net, gwj->src.dev, gwj->ccgw.filter.can_id,
+> > -                       gwj->ccgw.filter.can_mask, can_can_gw_rcv, gwj);
+> > +                       gwj->ccgw.filter.can_mask, false, can_can_gw_rcv,
+> > +                       gwj);
+> >   }
+> >
+> >   static int cgw_notifier(struct notifier_block *nb,
+> > diff --git a/net/can/isotp.c b/net/can/isotp.c
+> > index 9f94ad3caee9..44d943bbe0b1 100644
+> > --- a/net/can/isotp.c
+> > +++ b/net/can/isotp.c
+> > @@ -1029,7 +1029,7 @@ static int isotp_release(struct socket *sock)
+> >                       if (dev) {
+> >                               can_rx_unregister(net, dev, so->rxid,
+> >                                                 SINGLE_MASK(so->rxid),
+> > -                                               isotp_rcv, sk);
+> > +                                               false, isotp_rcv, sk);
+> >                               dev_put(dev);
+> >                       }
+> >               }
+> > @@ -1111,7 +1111,7 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+> >       if (do_rx_reg)
+> >               can_rx_register(net, dev, addr->can_addr.tp.rx_id,
+> >                               SINGLE_MASK(addr->can_addr.tp.rx_id),
+> > -                             isotp_rcv, sk, "isotp", sk);
+> > +                             false, isotp_rcv, sk, "isotp", sk);
+> >
+> >       dev_put(dev);
+> >
+> > @@ -1122,7 +1122,7 @@ static int isotp_bind(struct socket *sock, struct sockaddr *uaddr, int len)
+> >                       if (dev) {
+> >                               can_rx_unregister(net, dev, so->rxid,
+> >                                                 SINGLE_MASK(so->rxid),
+> > -                                               isotp_rcv, sk);
+> > +                                               false, isotp_rcv, sk);
+> >                               dev_put(dev);
+> >                       }
+> >               }
+> > @@ -1323,7 +1323,7 @@ static int isotp_notifier(struct notifier_block *nb, unsigned long msg,
+> >               if (so->bound && (!(so->opt.flags & CAN_ISOTP_SF_BROADCAST)))
+> >                       can_rx_unregister(dev_net(dev), dev, so->rxid,
+> >                                         SINGLE_MASK(so->rxid),
+> > -                                       isotp_rcv, sk);
+> > +                                       false, isotp_rcv, sk);
+> >
+> >               so->ifindex = 0;
+> >               so->bound  = 0;
+> > diff --git a/net/can/j1939/main.c b/net/can/j1939/main.c
+> > index da3a7a7bcff2..466a20c76fb6 100644
+> > --- a/net/can/j1939/main.c
+> > +++ b/net/can/j1939/main.c
+> > @@ -177,7 +177,7 @@ static int j1939_can_rx_register(struct j1939_priv *priv)
+> >
+> >       j1939_priv_get(priv);
+> >       ret = can_rx_register(dev_net(ndev), ndev, J1939_CAN_ID, J1939_CAN_MASK,
+> > -                           j1939_can_recv, priv, "j1939", NULL);
+> > +                           false, j1939_can_recv, priv, "j1939", NULL);
+> >       if (ret < 0) {
+> >               j1939_priv_put(priv);
+> >               return ret;
+> > @@ -191,7 +191,7 @@ static void j1939_can_rx_unregister(struct j1939_priv *priv)
+> >       struct net_device *ndev = priv->ndev;
+> >
+> >       can_rx_unregister(dev_net(ndev), ndev, J1939_CAN_ID, J1939_CAN_MASK,
+> > -                       j1939_can_recv, priv);
+> > +                       false, j1939_can_recv, priv);
+> >
+> >       j1939_priv_put(priv);
+> >   }
+> > diff --git a/net/can/proc.c b/net/can/proc.c
+> > index d1fe49e6f16d..d312077832a6 100644
+> > --- a/net/can/proc.c
+> > +++ b/net/can/proc.c
+> > @@ -191,11 +191,12 @@ static void can_print_rcvlist(struct seq_file *m, struct hlist_head *rx_list,
+> >
+> >       hlist_for_each_entry_rcu(r, rx_list, list) {
+> >               char *fmt = (r->can_id & CAN_EFF_FLAG)?
+> > -                     "   %-5s  %08x  %08x  %pK  %pK  %8ld  %s\n" :
+> > -                     "   %-5s     %03x    %08x  %pK  %pK  %8ld  %s\n";
+> > +                     "   %-5s  %08x  %08x   %c   %pK  %pK  %8ld  %s\n" :
+> > +                     "   %-5s     %03x    %08x   %c   %pK  %pK  %8ld  %s\n";
+> >
+> >               seq_printf(m, fmt, DNAME(dev), r->can_id, r->mask,
+> > -                             r->func, r->data, r->matches, r->ident);
+> > +                             r->match_sk ? '*' : ' ', r->func, r->data,
+> > +                             r->matches, r->ident);
+> >       }
+> >   }
+> >
+> > @@ -206,9 +207,9 @@ static void can_print_recv_banner(struct seq_file *m)
+> >        *                 .......          0  tp20
+> >        */
+> >       if (IS_ENABLED(CONFIG_64BIT))
+> > -             seq_puts(m, "  device   can_id   can_mask      function          userdata       matches  ident\n");
+> > +             seq_puts(m, "  device   can_id   can_mask  own      function          userdata       matches  ident\n");
+> >       else
+> > -             seq_puts(m, "  device   can_id   can_mask  function  userdata   matches  ident\n");
+> > +             seq_puts(m, "  device   can_id   can_mask  own  function  userdata   matches  ident\n");
+> >   }
+> >
+> >   static int can_stats_proc_show(struct seq_file *m, void *v)
+> > diff --git a/net/can/raw.c b/net/can/raw.c
+> > index 139d9471ddcf..acfbae28d451 100644
+> > --- a/net/can/raw.c
+> > +++ b/net/can/raw.c
+> > @@ -187,13 +187,13 @@ static int raw_enable_filters(struct net *net, struct net_device *dev,
+> >
+> >       for (i = 0; i < count; i++) {
+> >               err = can_rx_register(net, dev, filter[i].can_id,
+> > -                                   filter[i].can_mask,
+> > +                                   filter[i].can_mask, false,
+> >                                     raw_rcv, sk, "raw", sk);
+> >               if (err) {
+> >                       /* clean up successfully registered filters */
+> >                       while (--i >= 0)
+> >                               can_rx_unregister(net, dev, filter[i].can_id,
+> > -                                               filter[i].can_mask,
+> > +                                               filter[i].can_mask, false,
+> >                                                 raw_rcv, sk);
+> >                       break;
+> >               }
+> > @@ -209,7 +209,7 @@ static int raw_enable_errfilter(struct net *net, struct net_device *dev,
+> >
+> >       if (err_mask)
+> >               err = can_rx_register(net, dev, 0, err_mask | CAN_ERR_FLAG,
+> > -                                   raw_rcv, sk, "raw", sk);
+> > +                                   false, raw_rcv, sk, "raw", sk);
+> >
+> >       return err;
+> >   }
+> > @@ -222,7 +222,7 @@ static void raw_disable_filters(struct net *net, struct net_device *dev,
+> >
+> >       for (i = 0; i < count; i++)
+> >               can_rx_unregister(net, dev, filter[i].can_id,
+> > -                               filter[i].can_mask, raw_rcv, sk);
+> > +                               filter[i].can_mask, false, raw_rcv, sk);
+> >   }
+> >
+> >   static inline void raw_disable_errfilter(struct net *net,
+> > @@ -233,7 +233,7 @@ static inline void raw_disable_errfilter(struct net *net,
+> >   {
+> >       if (err_mask)
+> >               can_rx_unregister(net, dev, 0, err_mask | CAN_ERR_FLAG,
+> > -                               raw_rcv, sk);
+> > +                               false, raw_rcv, sk);
+> >   }
+> >
+> >   static inline void raw_disable_allfilters(struct net *net,
+> >
