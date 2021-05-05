@@ -2,90 +2,92 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F86373A42
-	for <lists+linux-can@lfdr.de>; Wed,  5 May 2021 14:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721CF373B02
+	for <lists+linux-can@lfdr.de>; Wed,  5 May 2021 14:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbhEEMJl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 5 May 2021 08:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
+        id S231129AbhEEMWe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 5 May 2021 08:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233420AbhEEMIe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 5 May 2021 08:08:34 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F184AC06138D
-        for <linux-can@vger.kernel.org>; Wed,  5 May 2021 05:07:02 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 4-20020a05600c26c4b0290146e1feccd8so990749wmv.1
-        for <linux-can@vger.kernel.org>; Wed, 05 May 2021 05:07:02 -0700 (PDT)
+        with ESMTP id S229559AbhEEMWd (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 5 May 2021 08:22:33 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A182C061574
+        for <linux-can@vger.kernel.org>; Wed,  5 May 2021 05:21:36 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z6so1614995wrm.4
+        for <linux-can@vger.kernel.org>; Wed, 05 May 2021 05:21:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=uVQeqJ4Dnpl8/4KjeQnAtiL2Oi64xbGdF5JY8DeQ4wE=;
-        b=L5AsDkmfrC6tkCQOVS4x42xzXqdXBmsf6Q1ZFG3+aD8nVeUu0PpJlZA6123evoCtsI
-         ZSYpttb04Cnj8hZSQzc9YFgghjvQqZICsF7QDXNgnXHxL+HeYGE+41GCBdmoQAeSxEmd
-         QS8tqHoyxwhNS/erbKv7+85vKCxCC6iMTjdjIVNG5+dWvuyXjIDe01M5FbOC7jmONDwR
-         bw5QwRIa43Rbk6Hyv1EA9jKPnIevt0KSVnk87Uz8eSfvxn6atzFBqf5zg47OIQPYxy3c
-         vQ63qfuvqYK1x2uFsq3CrqgGDTWQM8OmXA+Mc7b6PvCHr+Qx2i7QgfgFZS1sAaszbGDN
-         5iew==
+        bh=5K/JBUgbItl9mJbXScIyKZb200bAuGLUE6EhA32E+d8=;
+        b=Cj6xvhclGU34Bo8ps66aKYgXz8Zlf4ugmm6GXIUcx770LtQhaE3/jTLwjPyp3s9RNn
+         nz+agkNofF+559wWMWMyjz4cRlnUkMvgRu46eoIxrdxu4yA623bie/pNu23md0nMEUE4
+         DVnmc3WjMX0/98qcYjgjJy7SS+FClZDqsJ58XMzgeTJtROmd4moT6c76k+tLQloLb2sK
+         b9xwr10TEufptuoGSyruDcLt36M+C+dHJbw005f0NOASrclkz9ze7SEyG+dHLydfcxfW
+         sdyU7MfphlECtzQFEjYt3EVc2pWLUTR1Htd6GKhMdDK2tWnmoOkIi3faqUszuajQNQVO
+         fD9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=uVQeqJ4Dnpl8/4KjeQnAtiL2Oi64xbGdF5JY8DeQ4wE=;
-        b=rIarKwZMElXMZyIyCyCBAEXbktE0rDCtXXHnuL5L8Md4sKy7h3YcR1WQmSYKTcX3Td
-         G2ZLe24SZRuzPeEU004E8bs/pfScSbI4q0U9cYF4ts6laDgKgPRVrJqR2k+2P2cxf/aJ
-         Ldr0527OS0erccD/wyJexHY5ZJ5C4RHivRMqqR91RcCVH36ia9AgfMTNPRROWh52Zk+Y
-         qJlrblVy2Gk5Wdc+rvymlnxdjEh/3wQmoiS3JNbSoPvz0MWUfY2mlSGYc/36t2JcTqKY
-         PFOS4HP9o3e54l/cEqAmXyw/mo5jyl+Qhy16FS2N481eBXLDAw0G7yi8hDRzVvMnLgg6
-         eIcQ==
-X-Gm-Message-State: AOAM533ZiUB18Xa5wqKMfBHubiTPzU8/xcqpqSRPGElDnigMAjSuf/p6
-        kLGw/4Odl6CS7RlQtxPQ0RD43LDEIL9nKdp0
-X-Google-Smtp-Source: ABdhPJz9HdGVKNN07mjNvQN4a6NNU8m9e79ca29VNcFLwbUCJuk1G7F08KxZTFQsCgy/I45nmbSeMA==
-X-Received: by 2002:a05:600c:2d42:: with SMTP id a2mr9673815wmg.99.1620216421756;
-        Wed, 05 May 2021 05:07:01 -0700 (PDT)
+        bh=5K/JBUgbItl9mJbXScIyKZb200bAuGLUE6EhA32E+d8=;
+        b=j9of+ePq5y6AHO4Kcir7080O6kepMglYyXb59uswmDSAeEBAXNr70+1NAvXj7CiHOZ
+         txoTjNlUFLtUGpO84tE22ffLvcAs0vkOKhwr3BZ73uwz8OBu4oMjRmaceaahw7GrLq9K
+         WydVSKGMZvzI09Gq/6pqe07IkDJZOdsfB/CSQwahsT7vweAozX2rttdampCJLo6MlgIW
+         in4jpqUGRn26hlH2bH4eZ7cicydUKM2b4NTncUHYQtTs+/R56ocaH7YpmiCXFYuOBCxO
+         sFiz4Bu1zQheso88prjRgEDvpRnLIQRo+Y+7zVpDBIMifektnOiPVFZKI40XE0d6NznE
+         RzRg==
+X-Gm-Message-State: AOAM531MnpmuXXtxo+YKk7d1c1Qiq9PaC5vhlSV221lCi0N9XWueieRR
+        nKGd8nliTPFZohMwTFYuxR6J3ozBdOKdC4BZ
+X-Google-Smtp-Source: ABdhPJx5a+uyelU7ZJdxHVShrt8j2qOL1/pAyh/YrXzybHF94736jys4ChHzkWSIydM/dQzeQRvXCg==
+X-Received: by 2002:adf:e510:: with SMTP id j16mr39212769wrm.28.1620217294973;
+        Wed, 05 May 2021 05:21:34 -0700 (PDT)
 Received: from bigthink (92.41.10.173.threembb.co.uk. [92.41.10.173])
-        by smtp.gmail.com with ESMTPSA id n6sm15287852wro.23.2021.05.05.05.07.00
+        by smtp.gmail.com with ESMTPSA id l5sm5777831wmh.0.2021.05.05.05.21.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 May 2021 05:07:01 -0700 (PDT)
-Date:   Wed, 5 May 2021 13:06:59 +0100
+        Wed, 05 May 2021 05:21:34 -0700 (PDT)
+Date:   Wed, 5 May 2021 13:21:32 +0100
 From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH RFC] can: m_can: m_can_tx_work_queue(): fix tx_skb race
- condition
-Message-ID: <20210505120659.bconnblkp5lhd52t@bigthink>
-References: <20210505114302.1241971-1-mkl@pengutronix.de>
+Subject: Re: Improving TX for m_can peripherals
+Message-ID: <20210505122132.sbutrydmu5qvggke@bigthink>
+References: <20210505103049.gboat4dr3zvdm4s6@bigthink>
+ <20210505115624.7qhbit4olyvpfkf4@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210505114302.1241971-1-mkl@pengutronix.de>
+In-Reply-To: <20210505115624.7qhbit4olyvpfkf4@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed, May 05, 2021 at 01:43:02PM +0200, Marc Kleine-Budde wrote:
-> The m_can_start_xmit() function checks if the cdev->tx_skb is NULL and
-> returns with NETDEV_TX_BUSY in case tx_sbk is not NULL.
+On Wed, May 05, 2021 at 01:56:24PM +0200, Marc Kleine-Budde wrote:
+> For easier queuing, get rid of the worker. Directly send the can_frame
+> from the xmit handler. The problem is, you cannot sleep inside it. This
+> means, you cannot use regmap(), the only thing that works is
+> spi_async(). And as it's async, you can only write data via SPI, reading
+> doesn't make sense.
+
+Yeah, this makes things pretty tough, given that we currently have to
+read the next available TX buffer index before doing the writes!
+
+> Have a look at the mcp251xfd_start_xmit() function. All data structures
+> for the SPI messages are prepared in beforehand in
+> mcp251xfd_tx_ring_init_tx_obj(). The xmit function looks up the correct
+> data structure, converts the skb to the chip's format
+> mcp251xfd_tx_obj_from_skb() and then sends the data over spi. Special
+> care is taken of the handling of the head and tail pointers and the
+> stopping of the queue to avoid race conditions - see
+> mcp251xfd_get_tx_free(), mcp251xfd_tx_busy(), netif_stop_queue(),
+> netif_wake_queue().
 > 
-> There is a race condition in the m_can_tx_work_queue(), where first
-> the skb is send to the driver and then the case tx_sbk is set to NULL.
-> A TX complete IRQ might come in between and wake the queue, which
-> results in tx_skb not being cleared yet.
-> 
-> Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
-> Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> ---
-> Hello,
-> 
-> compile time tested only.
-> 
+> Hope that helps,
 > Marc
 
-Thanks a lot for spotting this Marc, after initial testing this is
-working very well. I don't see that error message at all now, even at
-very high transmit rates, and dropped frames are reduced considerably.
-
-(Test setup: RPi CM4, TCAN4550, 500 kbit/s CAN-FD.)
+I'll be sure to look into it in more detail, thanks. In the meantime,
+your patch is working very well to mostly solve this issue :)
 
 --
 Regards,
