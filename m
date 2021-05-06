@@ -2,94 +2,84 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F262437504D
-	for <lists+linux-can@lfdr.de>; Thu,  6 May 2021 09:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598EE3752D4
+	for <lists+linux-can@lfdr.de>; Thu,  6 May 2021 13:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233548AbhEFHl1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 May 2021 03:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233545AbhEFHlY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 May 2021 03:41:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55753C061761
-        for <linux-can@vger.kernel.org>; Thu,  6 May 2021 00:40:25 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1leYcR-0003DP-Tq
-        for linux-can@vger.kernel.org; Thu, 06 May 2021 09:40:23 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E47B661DD90
-        for <linux-can@vger.kernel.org>; Thu,  6 May 2021 07:40:21 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 78BB061DD74;
-        Thu,  6 May 2021 07:40:18 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2c17e4ff;
-        Thu, 6 May 2021 07:40:17 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Subject: [net 4/4] can: m_can: m_can_tx_work_queue(): fix tx_skb race condition
-Date:   Thu,  6 May 2021 09:40:15 +0200
-Message-Id: <20210506074015.1300591-5-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210506074015.1300591-1-mkl@pengutronix.de>
-References: <20210506074015.1300591-1-mkl@pengutronix.de>
+        id S234644AbhEFLP0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 May 2021 07:15:26 -0400
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:54403 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234641AbhEFLP0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 May 2021 07:15:26 -0400
+Received: from tomoyo.flets-east.jp ([153.202.107.157])
+        by mwinf5d58 with ME
+        id 1PEF250013PnFJp03PEQrr; Thu, 06 May 2021 13:14:26 +0200
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 06 May 2021 13:14:26 +0200
+X-ME-IP: 153.202.107.157
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [RFC PATCH v1 0/1] add the netlink interface for CAN-FD Transmitter Delay Compensation (TDC)
+Date:   Thu,  6 May 2021 20:14:11 +0900
+Message-Id: <20210506111412.1665835-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The m_can_start_xmit() function checks if the cdev->tx_skb is NULL and
-returns with NETDEV_TX_BUSY in case tx_sbk is not NULL.
+This serie contains a single patch which adds a netlink interface for
+the TDC parameters using netlink nested attributes.
 
-There is a race condition in the m_can_tx_work_queue(), where first
-the skb is send to the driver and then the case tx_sbk is set to NULL.
-A TX complete IRQ might come in between and wake the queue, which
-results in tx_skb not being cleared yet.
+In March, I introduced the Transmitter Delay Compensation (TDC) to the
+kernel though two patches:
+  - commit 289ea9e4ae59 ("can: add new CAN FD bittiming parameters:
+    Transmitter Delay Compensation (TDC)")
+  - commit c25cc7993243 ("can: bittiming: add calculation for CAN FD
+    Transmitter Delay Compensation (TDC)")
 
-Fixes: f524f829b75a ("can: m_can: Create a m_can platform framework")
-Tested-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/m_can/m_can.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The netlink interface was missing from this series because the initial
+patch needed rework in order to make it more flexible for future
+changes.
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 34073cd077e4..3cf6de21d19c 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1562,6 +1562,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 	int i;
- 	int putidx;
- 
-+	cdev->tx_skb = NULL;
-+
- 	/* Generate ID field for TX buffer Element */
- 	/* Common to all supported M_CAN versions */
- 	if (cf->can_id & CAN_EFF_FLAG) {
-@@ -1678,7 +1680,6 @@ static void m_can_tx_work_queue(struct work_struct *ws)
- 						   tx_work);
- 
- 	m_can_tx_handler(cdev);
--	cdev->tx_skb = NULL;
- }
- 
- static netdev_tx_t m_can_start_xmit(struct sk_buff *skb,
+At that time, Marc suggested to take inspiration from the recently
+released ethtool-netlink interface.
+Ref: https://lore.kernel.org/linux-can/20210407081557.m3sotnepbgasarri@pengutronix.de/
+
+After further research, it appears that ethtool uses nested attributes
+(c.f. NLA_NESTED type in validation policy). A bit of trivia: the
+NLA_NESTED type was introduced in version 2.6.15 of the kernel and
+thus actually predates Socket CAN.
+Ref: commit bfa83a9e03cf ("[NETLINK]: Type-safe netlink
+messages/attributes interface")
+
+It took me a bit of time to understand and figure out how to use those
+nested attributes. While the patch should be functional, I am not fully
+done with my testing yet. I thus send this version as an RFC. I wish
+to receive comments of the overall design. Contents of the functions
+might still be subjected to small changes.
+
+After gathering the comments, I will send a new version in which I
+will also include an update to Documentation/networking/can.rst.
+
+Vincent Mailhol (1):
+  can: netlink: add interface for CAN-FD Transmitter Delay Compensation
+    (TDC)
+
+ drivers/net/can/dev/Makefile      |   1 +
+ drivers/net/can/dev/netlink-tdc.c | 122 ++++++++++++++++++++++++++++++
+ drivers/net/can/dev/netlink-tdc.h |  18 +++++
+ drivers/net/can/dev/netlink.c     |  15 +++-
+ include/uapi/linux/can/netlink.h  |  28 ++++++-
+ 5 files changed, 179 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/net/can/dev/netlink-tdc.c
+ create mode 100644 drivers/net/can/dev/netlink-tdc.h
+
 -- 
-2.30.2
-
+2.26.3
 
