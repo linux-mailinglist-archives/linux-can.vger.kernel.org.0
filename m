@@ -2,313 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50ABD3759C9
-	for <lists+linux-can@lfdr.de>; Thu,  6 May 2021 19:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC95F3759ED
+	for <lists+linux-can@lfdr.de>; Thu,  6 May 2021 20:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236349AbhEFR5E (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 6 May 2021 13:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbhEFR5D (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 6 May 2021 13:57:03 -0400
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096CCC0613ED
-        for <linux-can@vger.kernel.org>; Thu,  6 May 2021 10:56:03 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:f434:20f9:aa9e:b80c])
-        by albert.telenet-ops.be with bizsmtp
-        id 1Vvy250070ZPnBx06Vvyre; Thu, 06 May 2021 19:56:02 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1leiEA-003NT7-0r; Thu, 06 May 2021 19:55:58 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1leiE9-00HHNW-Eb; Thu, 06 May 2021 19:55:57 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 2/2] dt-bindings: can: rcar_canfd: Convert to json-schema
-Date:   Thu,  6 May 2021 19:55:54 +0200
-Message-Id: <905134c87f72e2d8e37c309e0ce28ecd7d4f3992.1620323639.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1620323639.git.geert+renesas@glider.be>
-References: <cover.1620323639.git.geert+renesas@glider.be>
+        id S236362AbhEFSCD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 6 May 2021 14:02:03 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:21818 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236389AbhEFSCD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 6 May 2021 14:02:03 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1620324063; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=W+iVTO9HuJof1hEZTF/DeUPsjKU3C89n9YnXua5ocPX55BqnjqhJHQmI0Z/5nkwNAo
+    IB6cEjA2ganLabsSVkBB5d0G8Uv0+NzX3RAHGwa0NvzUGymihRE78EPqiTY59h32Kujo
+    yCvCeJ++jye0lYQKZU/zcXxZNPqGiDuCND+WAYxXU+B84SYx8aNlkNs2LbfyxaDshbW1
+    cvXKX3zoVUoYjut2L/wEMrDR4+ixqj91BtngOjmvoqa5sArkhjo96Z385kjUt34Twssx
+    K/h2AJ2Pnxhhbg/T21EO7SWeFsX5NLaWUgVlqcy1to+aubiVl3GzOWrsVvVC1dalq6nP
+    /KQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1620324063;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:Date:Message-ID:Cc:From:References:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Utbqd4mo9pMH66+lxQyVg812iLGjXms55qaqLiivWZI=;
+    b=ooEzMRUf7kYeIJSek1Jzs2gEyD1CdXBoXRT1nXgTOGoNDFnUJfqJgM8GS0HfT569Q0
+    TI+Ph6Bg8uSCAqX9gH6WdC6TRy6hzAL1aq/mIPnEfiidTaF6/7O1xbgapavKxEDmo5oG
+    oqkN5tHVDR94Evly+uk/20J05pQw2EXxWZq5NeIGXgRdPovtOoPZWolT8S2SjJBwMIIe
+    G8pQ5BTMe6//uiMHjq93UjQ5nPKiQkdZJcfiutGRQ59p4bqoQXzpFwnARNImXR1oai5/
+    L0FnakLgWptxygFafnpCjJe8LDRk6O+eC5Bpg0tshc7fpzRHEoF9w5e7iRlgxjeW0i3F
+    2hCg==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1620324063;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:Cc:From:References:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=Utbqd4mo9pMH66+lxQyVg812iLGjXms55qaqLiivWZI=;
+    b=k8xQ0NMmKXsxBfeOcoMYPgYwK3BD+EVk4UfvHKL46OhFfEsgU8NxxDbCYtRCXCKEPW
+    IZhA4qvbzrTO+NpGLsRvergcr6P0kbTzetuyR2Oa6xCWu1YZedcvZNqT8nxWk2kcu83P
+    DJOXj3WS4ztOGBz75CUflQ6yj80iy0J4PJTwLLV9NKe/swnCjp4w6HUcZSp54LF3Ab2d
+    dpzWee+yBN1VaN4xHiA+58oqSlNc6kZWARVwKqgCYXSQd9tejgJb0WRpjE4l+bdMdWIP
+    HZC3T8w4WiZM+INjLH2KEayqvv34QefIaV6+TPtaa8I38TBOz8EpxhTh/jJDqyw+uV19
+    5JKg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKONebStI="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+    by smtp.strato.de (RZmta 47.25.6 DYNA|AUTH)
+    with ESMTPSA id e040b6x46I1305Q
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 6 May 2021 20:01:03 +0200 (CEST)
+Subject: Re: CAN ISO-TP
+To:     Bartosz Zdanowicz <zdanowiczb@gmail.com>
+References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Cc:     linux-can <linux-can@vger.kernel.org>
+Message-ID: <a7df697c-b6d3-1894-dcc6-672698caa19a@hartkopp.net>
+Date:   Thu, 6 May 2021 20:01:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Convert the Renesas R-Car CAN FD Controller Device Tree binding
-documentation to json-schema.
++CC Linux CAN ML
 
-Document missing properties.
-The CANFD clock needs to be configured for the maximum frequency on
-R-Car V3M and V3H, too.
-Update the example to match reality.
+Hi Bartosz,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-I have listed Fabrizio as the maintainer, as Ramesh is no longer
-available.  Fabrizio: Please scream if this is inappropriate ;-)
----
- .../bindings/net/can/rcar_canfd.txt           | 107 ---------------
- .../bindings/net/can/renesas,rcar-canfd.yaml  | 122 ++++++++++++++++++
- 2 files changed, 122 insertions(+), 107 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/net/can/rcar_canfd.txt
- create mode 100644 Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+On 06.05.21 19:28, Bartosz Zdanowicz wrote:
 
-diff --git a/Documentation/devicetree/bindings/net/can/rcar_canfd.txt b/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-deleted file mode 100644
-index 248c4ed97a0a078e..0000000000000000
---- a/Documentation/devicetree/bindings/net/can/rcar_canfd.txt
-+++ /dev/null
-@@ -1,107 +0,0 @@
--Renesas R-Car CAN FD controller Device Tree Bindings
------------------------------------------------------
--
--Required properties:
--- compatible: Must contain one or more of the following:
--  - "renesas,rcar-gen3-canfd" for R-Car Gen3 and RZ/G2 compatible controllers.
--  - "renesas,r8a774a1-canfd" for R8A774A1 (RZ/G2M) compatible controller.
--  - "renesas,r8a774b1-canfd" for R8A774B1 (RZ/G2N) compatible controller.
--  - "renesas,r8a774c0-canfd" for R8A774C0 (RZ/G2E) compatible controller.
--  - "renesas,r8a774e1-canfd" for R8A774E1 (RZ/G2H) compatible controller.
--  - "renesas,r8a7795-canfd" for R8A7795 (R-Car H3) compatible controller.
--  - "renesas,r8a7796-canfd" for R8A7796 (R-Car M3-W) compatible controller.
--  - "renesas,r8a77965-canfd" for R8A77965 (R-Car M3-N) compatible controller.
--  - "renesas,r8a77970-canfd" for R8A77970 (R-Car V3M) compatible controller.
--  - "renesas,r8a77980-canfd" for R8A77980 (R-Car V3H) compatible controller.
--  - "renesas,r8a77990-canfd" for R8A77990 (R-Car E3) compatible controller.
--  - "renesas,r8a77995-canfd" for R8A77995 (R-Car D3) compatible controller.
--
--  When compatible with the generic version, nodes must list the
--  SoC-specific version corresponding to the platform first, followed by the
--  family-specific and/or generic versions.
--
--- reg: physical base address and size of the R-Car CAN FD register map.
--- interrupts: interrupt specifiers for the Channel & Global interrupts
--- clocks: phandles and clock specifiers for 3 clock inputs.
--- clock-names: 3 clock input name strings: "fck", "canfd", "can_clk".
--- pinctrl-0: pin control group to be used for this controller.
--- pinctrl-names: must be "default".
--
--Required child nodes:
--The controller supports two channels and each is represented as a child node.
--The name of the child nodes are "channel0" and "channel1" respectively. Each
--child node supports the "status" property only, which is used to
--enable/disable the respective channel.
--
--Required properties for R8A774A1, R8A774B1, R8A774C0, R8A774E1, R8A7795,
--R8A7796, R8A77965, R8A77990, and R8A77995:
--In the denoted SoCs, canfd clock is a div6 clock and can be used by both CAN
--and CAN FD controller at the same time. It needs to be scaled to maximum
--frequency if any of these controllers use it. This is done using the below
--properties:
--
--- assigned-clocks: phandle of canfd clock.
--- assigned-clock-rates: maximum frequency of this clock.
--
--Optional property:
--The controller can operate in either CAN FD only mode (default) or
--Classical CAN only mode. The mode is global to both the channels. In order to
--enable the later, define the following optional property.
-- - renesas,no-can-fd: puts the controller in Classical CAN only mode.
--
--Example
---------
--
--SoC common .dtsi file:
--
--		canfd: can@e66c0000 {
--			compatible = "renesas,r8a7795-canfd",
--				     "renesas,rcar-gen3-canfd";
--			reg = <0 0xe66c0000 0 0x8000>;
--			interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
--				   <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&cpg CPG_MOD 914>,
--			       <&cpg CPG_CORE R8A7795_CLK_CANFD>,
--			       <&can_clk>;
--			clock-names = "fck", "canfd", "can_clk";
--			assigned-clocks = <&cpg CPG_CORE R8A7795_CLK_CANFD>;
--			assigned-clock-rates = <40000000>;
--			power-domains = <&cpg>;
--			status = "disabled";
--
--			channel0 {
--				status = "disabled";
--			};
--
--			channel1 {
--				status = "disabled";
--			};
--		};
--
--Board specific .dts file:
--
--E.g. below enables Channel 1 alone in the board in Classical CAN only mode.
--
--&canfd {
--	pinctrl-0 = <&canfd1_pins>;
--	pinctrl-names = "default";
--	renesas,no-can-fd;
--	status = "okay";
--
--	channel1 {
--		status = "okay";
--	};
--};
--
--E.g. below enables Channel 0 alone in the board using External clock
--as fCAN clock.
--
--&canfd {
--	pinctrl-0 = <&canfd0_pins>, <&can_clk_pins>;
--	pinctrl-names = "default";
--	status = "okay";
--
--	channel0 {
--		status = "okay";
--	};
--};
-diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-new file mode 100644
-index 0000000000000000..0b33ba9ccb47d1ab
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-@@ -0,0 +1,122 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/can/renesas,rcar-canfd.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas R-Car CAN FD Controller
-+
-+maintainers:
-+  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-+
-+allOf:
-+  - $ref: can-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,r8a774a1-canfd     # RZ/G2M
-+              - renesas,r8a774b1-canfd     # RZ/G2N
-+              - renesas,r8a774c0-canfd     # RZ/G2E
-+              - renesas,r8a774e1-canfd     # RZ/G2H
-+              - renesas,r8a7795-canfd      # R-Car H3
-+              - renesas,r8a7796-canfd      # R-Car M3-W
-+              - renesas,r8a77965-canfd     # R-Car M3-N
-+              - renesas,r8a77970-canfd     # R-Car V3M
-+              - renesas,r8a77980-canfd     # R-Car V3H
-+              - renesas,r8a77990-canfd     # R-Car E3
-+              - renesas,r8a77995-canfd     # R-Car D3
-+          - const: renesas,rcar-gen3-canfd # R-Car Gen3 and RZ/G2
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: Channel interrupt
-+      - description: Global interrupt
-+
-+  clocks:
-+    maxItems: 3
-+
-+  clock-names:
-+    items:
-+      - const: fck
-+      - const: canfd
-+      - const: can_clk
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  renesas,no-can-fd:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      The controller can operate in either CAN FD only mode (default) or
-+      Classical CAN only mode.  The mode is global to both the channels.
-+      Specify this property to put the controller in Classical CAN only mode.
-+
-+  assigned-clocks:
-+    description:
-+      Reference to the CANFD clock.  The CANFD clock is a div6 clock and can be
-+      used by both CAN (if present) and CAN FD controllers at the same time.
-+      It needs to be scaled to maximum frequency if any of these controllers
-+      use it.
-+
-+  assigned-clock-rates:
-+    description: Maximum frequency of the CANFD clock.
-+
-+patternProperties:
-+  "^channel[01]$":
-+    type: object
-+    description:
-+      The controller supports two channels and each is represented as a child
-+      node.  Each child node supports the "status" property only, which
-+      is used to enable/disable the respective channel.
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - power-domains
-+  - resets
-+  - assigned-clocks
-+  - assigned-clock-rates
-+  - channel0
-+  - channel1
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    canfd: can@e66c0000 {
-+            compatible = "renesas,r8a7795-canfd",
-+                         "renesas,rcar-gen3-canfd";
-+            reg = <0xe66c0000 0x8000>;
-+            interrupts = <GIC_SPI 29 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD 914>,
-+                     <&cpg CPG_CORE R8A7795_CLK_CANFD>,
-+                     <&can_clk>;
-+            clock-names = "fck", "canfd", "can_clk";
-+            assigned-clocks = <&cpg CPG_CORE R8A7795_CLK_CANFD>;
-+            assigned-clock-rates = <40000000>;
-+            power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+            resets = <&cpg 914>;
-+
-+            channel0 {
-+            };
-+
-+            channel1 {
-+            };
-+    };
--- 
-2.25.1
+> I'm not sure if you prefer e-mail message, but I don't want to raise 
+> GitHub Issue yet.
+> 
 
+Raising a GitHub issue is generally a good idea as it may help other 
+people too.
+
+But asking on the Linux CAN mailing list is even better ;-)
+
+> I'm using module that you are an author and it's working perfectly on my 
+> local PC. I'm using Ubuntu with Kernel version 5.4.0-70-generic
+
+Which branch did you use? master branch?
+
+> I tried to simplify example where I use python wrappers and other things 
+> and manage to get minimal example:
+> 
+> /import socket as s
+> socket = s.socket(s.AF_CAN, s.SOCK_DGRAM, s.CAN_ISOTP)
+> socket.bind(("vcan0", 1, 2))
+> socket.send(b"AAAAAAAAA")
+> socket.send(b"AAAAAAAAA")/
+> /
+> /
+> It's working perfectly, even if I don't open receiver socket. It just 
+> timeout and there is no issue.
+
+But this should raise an issue as you send 9 bytes which would need 
+segmentation.
+
+This should only work with CAN FD frames with a single frame.
+
+Can you create a candump log from vcan0 to see, what's going on the bus?
+
+> I tried to run my application on RPI, when module is already included 
+> with kernel version Linux raspberrypi 5.10.17-v7+ #1403 SMP Mon Feb 22 
+> 11:29:51 GMT 2021 armv7l GNU/Linux.
+> 
+> I run above code and first send is working (no receiver as well), 
+> timeout, but second one is printing
+> 
+> OSError: [Errno 70] Communication error on send
+
+That's interesting! We are currently working on creating that kind of 
+feedback.
+
+https://lore.kernel.org/linux-can/97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4@hartkopp.net/
+
+So how is Python getting this information?
+
+Regards,
+Oliver
+
+> 
+> And pattern is repeated. So sending next data works and after those 
+> error appears. It seems like sending new data somehow ,,validate" 
+> previous send. When I create other socket that reads data it's working 
+> perfectly. The issue is, somehow in our architecture other device might 
+> be unavailable.
+> 
+> I checked also dmesg and there is no tips. Is it any known issue, or 
+> maybe it's expected?
+> 
+> Thanks in advance for you reply.
+> 
+> Best Regards,
+> Bartosz Zdanowicz
