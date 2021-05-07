@@ -2,38 +2,39 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A34D376190
-	for <lists+linux-can@lfdr.de>; Fri,  7 May 2021 09:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E8E3761CD
+	for <lists+linux-can@lfdr.de>; Fri,  7 May 2021 10:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbhEGIA2 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 May 2021 04:00:28 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:45217 "EHLO mout02.posteo.de"
+        id S236095AbhEGIXD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 May 2021 04:23:03 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:58681 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233730AbhEGIA1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 7 May 2021 04:00:27 -0400
+        id S236072AbhEGIXD (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 7 May 2021 04:23:03 -0400
 Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 37D212400FD
-        for <linux-can@vger.kernel.org>; Fri,  7 May 2021 09:59:25 +0200 (CEST)
+        by mout02.posteo.de (Postfix) with ESMTPS id 9116A2400FD
+        for <linux-can@vger.kernel.org>; Fri,  7 May 2021 10:22:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1620374365; bh=XHrJOzuCSj1w1wLx7ng+DmZ22HCLue6kOt+K4FhZsBE=;
+        t=1620375722; bh=LYA5ogitjTp7jwaXbk6FDjY+jUFSRv5AMDTWb3PgxcM=;
         h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=YyozvbKHYdnReqYq3jgiFjwgR6wl6koMfE/odmC8d4dvelKEfxxo9OpjlD1oE7C6Z
-         Pm/ar0xuTwc9+TofWXCTQlBv3yhlI/jjOpkfrSWB7dMDo5ZsXaGPzHKR5m/H5To/5d
-         DpHqFJE4hJ8UCadg+tUstzFDLZI3CC/w9wwVbdcDOqdYc0QZ3n5NA1hMqyQPK5EJPz
-         2NNEoaMDnEmkpup8uI+7HmWY6P7I2DewqwycgqHNWSZAtLWfjiOGKa2sZz4FHLAGTi
-         RZGMLzHgfRaEASylNP3g9FxM4CI5XnQQaQS9AvClUlE8ywT5kvI3Rz/LAQvWqizxES
-         P5ZN3lpEzuTFA==
+        b=hkz/9WGK8SMbNSOb/7YDPbHmZ3tQWLak+Ug4HKi0ZTf0n5GABSokd1YZn56Angikm
+         C3uUKYgBXrJOLc/gjZ9gUcyVPvnBOrWYAtrJ196rQl4uUHBXLgrj7n8CceBE4AR8j6
+         gf1iFMmcLB6B4vxtX2fz8PtPrvGCVVxZBMKiwAq4EKHcAnCEPR8KEvgqhfSSawFTU6
+         HYQSsttvcigUjhm1P0WQuETB5O1Lh0GBHOlnHoVPtBZ3uLmgiV6V+4zDSz6HmTlFtG
+         jm90D4uspL+WYXkKqp6aJcZEK3jX0dkLsES1SxtTOXh3Lafp88Ci43ZOdyO5pmh1Gg
+         5NLglVVOv+IJA==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Fc2sS5ZFvz6tmD;
-        Fri,  7 May 2021 09:59:24 +0200 (CEST)
-To:     Bartosz Zdanowicz <zdanowiczb@gmail.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
-References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
- <a7df697c-b6d3-1894-dcc6-672698caa19a@hartkopp.net>
- <CAERdor5o6yKq1J-hBbjiBtU63OkxhijKifO0OEBt21ASKhCXuw@mail.gmail.com>
- <02607798-4701-376a-6a58-2ff29c87ccab@posteo.de>
- <CAERdor7LiPPJWLxMQdrQsF=jU0yHNU_uwLAbQegpUj4KeJHzgg@mail.gmail.com>
+        by submission (posteo.de) with ESMTPSA id 4Fc3MX2Skgz6tmp;
+        Fri,  7 May 2021 10:21:59 +0200 (CEST)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Drew Fustini <drew@beagleboard.org>
+Cc:     netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        Will C <will@macchina.cc>
+References: <20210407080118.1916040-1-mkl@pengutronix.de>
+ <20210407080118.1916040-7-mkl@pengutronix.de>
+ <CAPgEAj6N9d=s1a-P_P0mBe1aV2tQBQ4m6shvbPcPvX7W1NNzJw@mail.gmail.com>
+ <a46b95e3-4238-a930-6de3-360f86beaf52@pengutronix.de>
+ <20210507072521.3y652xz2kmibjo7d@pengutronix.de>
 From:   Patrick Menschel <menschel.p@posteo.de>
 Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
@@ -95,11 +96,12 @@ Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
  QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
  IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: CAN ISO-TP
-Message-ID: <587ef081-804b-9816-f899-f4bd645865cf@posteo.de>
-Date:   Fri,  7 May 2021 07:59:24 +0000
+Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
+ around broken CRC on TBC register
+Message-ID: <c0048a2a-2a32-00b5-f995-f30453aaeedb@posteo.de>
+Date:   Fri,  7 May 2021 08:21:57 +0000
 MIME-Version: 1.0
-In-Reply-To: <CAERdor7LiPPJWLxMQdrQsF=jU0yHNU_uwLAbQegpUj4KeJHzgg@mail.gmail.com>
+In-Reply-To: <20210507072521.3y652xz2kmibjo7d@pengutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
@@ -107,104 +109,42 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 07.05.21 um 09:24 schrieb Bartosz Zdanowicz:
-> pt., 7 maj 2021 o 09:02 Patrick Menschel <menschel.p@posteo.de> napisał(a):
->>
->> Am 06.05.21 um 23:28 schrieb Bartosz Zdanowicz:
->>>> Can you create a candump log from vcan0 to see, what's going on the bus?
->>>>
->>> On RPI after first send I got
->>> pi@raspberrypi:~ $ candump can0
->>>   can0  002   [8]  10 09 41 41 41 41 41 41
+Am 07.05.21 um 09:25 schrieb Marc Kleine-Budde:
+> On 22.04.2021 09:18:54, Marc Kleine-Budde wrote:
+>> On 4/21/21 9:58 PM, Drew Fustini wrote:
+>>> I am encountering similar error with the 5.10 raspberrypi kernel on
+>>> RPi 4 with MCP2518FD:
 >>>
->>> After the second message I got mentioned OSError and there is no data
->>> on candump. Sending again I received next frame:
->>> pi@raspberrypi:~ $ candump can0
->>>   can0  002   [8]  10 09 41 41 41 41 41 41
->>>   can0  002   [8]  10 09 41 41 41 41 41 41
->>>
->>> On my local PC where I get no system Error I got one frame per every send:
->>>  bartosz  ~/Work/DeltaThermal/can-isotp   master  candump vcan0
->>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
->>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
->>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
->>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
->>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
->>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
->>>>
->>>> ...
->>>> So how is Python getting this information?
->>>>
->>> In general, that's the biggest issue for me. Because in my real
->>> application I'm using python select() and recv() on that socket. When
->>> this error is raised, my select() on socket deduce something is
->>> received and recv() function also throws an error. I just tried to get
->>> a minimal example that reproduces the issue which is above. In those
->>> cases I would expect timeout, not OSError.
+>>>   mcp251xfd spi0.0 can0: CRC read error at address 0x0010 (length=4,
+>>> data=00 ad 58 67, CRC=0xbbfd) retrying
 >>
+>> What's the situation you see these errors?
 >>
->> As expected, timeout error on missing flow control. Since it's tx side
->> it just tells -ECOMM instead of -ETIMEDOUT .
+>> I'm not particular happy with that patch, as it only works around that one
+>> particular bit flip issue. If you really hammer the register, the driver will
+>> still notice CRC errors that can be explained by other bits flipping. Consider
+>> this as the first order approximation of a higher order problem :) - the root
+>> cause is still unknown.
 >>
->> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L10
->> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L755
+>>> Would it be possible for you to pull these patches into a v5.10 branch
+>>> in your linux-rpi repo [1]?
 >>
->> Is there a specific reason why you use select.select() instead of
->> Socket.recv(timeout) / Socket.send() ?
+>> Here you are:
 >>
->> Best Regards,
->> Patrick
+>> https://github.com/marckleinebudde/linux-rpi/tree/v5.10-rpi/backport-performance-improvements
+>>
+>> I've included the UINC performance enhancements, too. The branch is compiled
+>> tested only, though. I'll send a pull request to the rpi kernel after I've
+>> testing feedback from you.
 > 
-> I have a seperate thread that waits and process data, since I have
-> multiple sockets opened I want to wait for any of them:
+> Drew, Patrick, have you tested this branch? If so I'll send a pull
+> request to the raspi kernel.
 > 
-> while True:
->     ready_sockets = select.select(self.sockets, [], [], self.timeout)[0]
->         if not ready_sockets:
->         logging.info("No data received")
->         continue
->     for socket in ready_sockets:
->         self.process_data(socket=socket)
-> 
-> In process_data I call:
-> 
-> received = socket.recv()
->     if received:
->     #process data
-> 
-> My main thread is sending data on those sockets:
-> schedule.every(X).seconds.do(request_that_sends_using_socket.send(),
-> socket=socket)
-> 
-> So the flow is that my thread sends data to another device, and the
-> processing thread is waiting for data. When I don't send any data I
-> get only prints "No data received" which is expected cause no device
-> is responding (no device is running). When I send data (no other
-> device is running) I get an error on send AND my select() is finished
-> with an error socket inserted to ready_sockets. That means I enter
-> self.process_data() function with socket and also recv() fails. So it
-> seems it's not only that OSError is raised but also that socket is
-> somehow "invalid" because it triggers select() which should not be
-> triggered (no data was received).
+Sorry Marc,
 
+not yet. Thanks for reminding me. I'll start a native build on a pi0w asap.
 
-Ok,
-
-try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
-https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
-
-https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.py#L583
-
-and wrap tx into a try-except block.
-
-try:
-    self.process_data(socket=socket)
-except OSError as e:
-    print(e)
-
-With this you actually have a chance to do error handling on tx path
-instead of hitting an already present error of the previous op.
+Is there any test application or stress test that I should run?
 
 Regards,
 Patrick
-
