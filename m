@@ -2,43 +2,37 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6A8376337
-	for <lists+linux-can@lfdr.de>; Fri,  7 May 2021 12:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88C237633C
+	for <lists+linux-can@lfdr.de>; Fri,  7 May 2021 12:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234797AbhEGKBK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 May 2021 06:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S234911AbhEGKBw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 7 May 2021 06:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbhEGKBJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 7 May 2021 06:01:09 -0400
+        with ESMTP id S234906AbhEGKBw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 7 May 2021 06:01:52 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E24FC061574
-        for <linux-can@vger.kernel.org>; Fri,  7 May 2021 03:00:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499F8C061574
+        for <linux-can@vger.kernel.org>; Fri,  7 May 2021 03:00:52 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lexH6-00068j-Nx; Fri, 07 May 2021 12:00:00 +0200
+        id 1lexHu-0006Kw-Gn; Fri, 07 May 2021 12:00:50 +0200
 Received: from [IPv6:2a03:f580:87bc:d400:1c71:1fb7:6204:3618] (unknown [IPv6:2a03:f580:87bc:d400:1c71:1fb7:6204:3618])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
          client-signature RSA-PSS (4096 bits))
         (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
         (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id BEC5361EB33;
-        Fri,  7 May 2021 09:59:57 +0000 (UTC)
-Subject: Re: [PATCH 0/2] dt-bindings: can: renesas: Convert to json-schema
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org
-References: <cover.1620323639.git.geert+renesas@glider.be>
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9FFE861EB3E;
+        Fri,  7 May 2021 10:00:49 +0000 (UTC)
+Subject: Re: [PATCH RFC] can: isotp: isotp_sendmsg(): return error on FC
+ timeout on TX path
+To:     Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc:     Sottas Guillaume <Guillaume.Sottas@liebherr.com>
+References: <20210506133622.1336101-1-mkl@pengutronix.de>
+ <97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4@hartkopp.net>
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  mQINBFFVq30BEACtnSvtXHoeHJxG6nRULcvlkW6RuNwHKmrqoksispp43X8+nwqIFYgb8UaX
@@ -100,15 +94,15 @@ Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
  0yCEJ41rW/p3UpTV9wwE2VbGD1XjzVKl8SuAUfjjcGGys3yk5XQ5cccWTCwsVdo2uAcY1MVM
  HhN6YJjnMqbFoHQq0H+2YenTlTBn2Wsp8TIytE1GL6EbaPWbMh3VLRcihlMj28OUWGSERxat
  xlygDG5cBiY3snN3xJyBroh5xk/sHRgOdHpmujnFyu77y4RTZ2W8
-Message-ID: <15c9cb20-6c99-5b67-2291-0c6cd4b66589@pengutronix.de>
-Date:   Fri, 7 May 2021 11:59:51 +0200
+Message-ID: <b475a924-d3a2-113a-1dce-a3378951ecf2@pengutronix.de>
+Date:   Fri, 7 May 2021 12:00:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <cover.1620323639.git.geert+renesas@glider.be>
+In-Reply-To: <97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4@hartkopp.net>
 Content-Type: multipart/signed; micalg=pgp-sha512;
  protocol="application/pgp-signature";
- boundary="T1Z5AwwgJtxJx6t6W9SkPG9nb7WjWAhFw"
+ boundary="a4JnB7RCRH5cGeq6th07kJqAOpWC6zvKd"
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -118,40 +112,37 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---T1Z5AwwgJtxJx6t6W9SkPG9nb7WjWAhFw
-Content-Type: multipart/mixed; boundary="NDTCZUfUdzVb2haLbwM2Axl1JVByUf1vo";
+--a4JnB7RCRH5cGeq6th07kJqAOpWC6zvKd
+Content-Type: multipart/mixed; boundary="2PPKvR7mirMxwDu1hGfKnzfs4ZmNbmzoU";
  protected-headers="v1"
 From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Sergei Shtylyov <sergei.shtylyov@gmail.com>,
- Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
- Wolfgang Grandegger <wg@grandegger.com>,
- "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Rob Herring <robh+dt@kernel.org>, Ulrich Hecht <uli+renesas@fpond.eu>
-Cc: linux-can@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- devicetree@vger.kernel.org, netdev@vger.kernel.org
-Message-ID: <15c9cb20-6c99-5b67-2291-0c6cd4b66589@pengutronix.de>
-Subject: Re: [PATCH 0/2] dt-bindings: can: renesas: Convert to json-schema
-References: <cover.1620323639.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1620323639.git.geert+renesas@glider.be>
+To: Oliver Hartkopp <socketcan@hartkopp.net>, linux-can@vger.kernel.org
+Cc: Sottas Guillaume <Guillaume.Sottas@liebherr.com>
+Message-ID: <b475a924-d3a2-113a-1dce-a3378951ecf2@pengutronix.de>
+Subject: Re: [PATCH RFC] can: isotp: isotp_sendmsg(): return error on FC
+ timeout on TX path
+References: <20210506133622.1336101-1-mkl@pengutronix.de>
+ <97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4@hartkopp.net>
+In-Reply-To: <97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4@hartkopp.net>
 
---NDTCZUfUdzVb2haLbwM2Axl1JVByUf1vo
+--2PPKvR7mirMxwDu1hGfKnzfs4ZmNbmzoU
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: quoted-printable
 
-On 5/6/21 7:55 PM, Geert Uytterhoeven wrote:
-> 	Hi all,
->=20
-> This patch series converts the DT bindings for the Renesas R-Car CAN an=
-d
-> CAN FD controllers found in Renesas SoCs to json-schema.
->=20
-> Thanks for your comments!
+On 5/6/21 7:36 PM, Oliver Hartkopp wrote:
+>> can you check if this fixes your problem and that normal operation
+>> still works.
 
-Added to linux-can-next/testing.
+[...]
 
-thanks,
+> That's a nice simple improvement.
+>=20
+> But it has to be a negative value:
+
+I've send v2 that fixes the problem.
+
+regards,
 Marc
 
 --=20
@@ -161,23 +152,23 @@ Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
 
---NDTCZUfUdzVb2haLbwM2Axl1JVByUf1vo--
+--2PPKvR7mirMxwDu1hGfKnzfs4ZmNbmzoU--
 
---T1Z5AwwgJtxJx6t6W9SkPG9nb7WjWAhFw
+--a4JnB7RCRH5cGeq6th07kJqAOpWC6zvKd
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCVD5gACgkQqclaivrt
-76kQdgf/VfTjWj9gcZ3lfjVJhF1evm3G4P/gR6sIT90+CiFwsnjAS/2WmcAQyywE
-LZzQhTkuOIGBRgeifwbJR+tgX8Z85N4ql2SLrLWrLPhSkDkdYREEvDPhNka3a4lf
-4ihEC0t3JnWYFpwI6gCrF9pVtrcTATEKPqRpwz9J3TMcxOTBPSZXDhM3AMZyMTij
-DH0alsv3ecURsRhI0JchV5rkj3l8NTWVh9tUnTPmg+8IdAkXv0FulDnyU6Hq6Mil
-YxZwHQKPiAncM/pVe931yL5BwXt9oHMQfxjYuBaL83Z2kOU50boIsjVmLsrrjanY
-jZlWR//sZCJ4KdjaIa1u1ydzWsMVSA==
-=SBmw
+iQEzBAEBCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCVD84ACgkQqclaivrt
+76kDnwf+M5+zHGWoL8JeRZ09sctMSlQMoHhRXr3JPA6N+AC82RCEbEyXShp2YZNn
+3b2V46ZgxT7IOXRLjrdzbrl7eqSqPeUe5NydV66Hy2BOI4W3FCI5T6aOZhV1Vksi
+dWA+YkDCxjjK1cgoby7d/eEBRalHXSF+/oADB4eZoNdkc90sXc8NBMANSmpzPdkh
+x1qwPQrw3OEEacbJwIYlLfL6HCgIWwgw0kJKdTHThJUAKXauMa4LHg1p6zkVQjjG
+k/J9zEdmEQVy6XHqqCzMZIT1FBHJhcOlFH16huQjhBgMEB4GitYp7ESjcN/1bXm+
+QqPLlY+EGJpGS36hsuNeZ89S3W8fIA==
+=S99r
 -----END PGP SIGNATURE-----
 
---T1Z5AwwgJtxJx6t6W9SkPG9nb7WjWAhFw--
+--a4JnB7RCRH5cGeq6th07kJqAOpWC6zvKd--
