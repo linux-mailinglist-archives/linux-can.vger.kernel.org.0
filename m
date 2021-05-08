@@ -2,102 +2,114 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80460376F0D
-	for <lists+linux-can@lfdr.de>; Sat,  8 May 2021 05:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B564E3771C5
+	for <lists+linux-can@lfdr.de>; Sat,  8 May 2021 14:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbhEHDGS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 7 May 2021 23:06:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230399AbhEHDGR (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 7 May 2021 23:06:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF4646112F;
-        Sat,  8 May 2021 03:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620443117;
-        bh=UCWz0d1P680+8OLROOU7w4JlmYYVS6cncSAWi1+HSM4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VdR3exQSHYmPJOJ9LOTeCOOKI6FLRVGU6O/onZW5RqvCHiAZHqIvcnIT8NOv0nYJA
-         GUlWOpc83MHytIbWhBIJ+C97V6uv2sWWSldCJl3Kmrd+yCWwaoBGON3QCe71QYsh1R
-         sbQRPVwgdv1a+QBfJ78zQnPEUdU+VhmoiW/B6XX0RDwY2aL+sZXyCk2YuAhHcCUHDr
-         4/LSS647o+3VlFBcgvRtkRXBjomRp/T3DTGll4l9Ml28Dux7KWjlgUdbVK1vAhkOyL
-         j6xnlYDC7eS8OZLb0usW/YJ2GyrCYhTvk94kBMNFU8IWwAyq+FUon1nYHACKY0rVXw
-         hb9pgAznglEzw==
-Date:   Fri, 7 May 2021 20:05:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
-        <weiwan@google.com>, <cong.wang@bytedance.com>,
-        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>
-Subject: Re: [PATCH net v5 1/3] net: sched: fix packet stuck problem for
- lockless qdisc
-Message-ID: <20210507200514.0567ef27@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <83ff1619-5ca3-1e60-3a41-0faff1566569@huawei.com>
-References: <1620266264-48109-1-git-send-email-linyunsheng@huawei.com>
-        <1620266264-48109-2-git-send-email-linyunsheng@huawei.com>
-        <20210507165703.70771c55@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <83ff1619-5ca3-1e60-3a41-0faff1566569@huawei.com>
+        id S230438AbhEHMbs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 8 May 2021 08:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230419AbhEHMbs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 8 May 2021 08:31:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB9DC061574
+        for <linux-can@vger.kernel.org>; Sat,  8 May 2021 05:30:46 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lfM6T-00037N-T6; Sat, 08 May 2021 14:30:41 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:b841:e208:7812:9dd1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 987B561F553;
+        Sat,  8 May 2021 12:30:39 +0000 (UTC)
+Date:   Sat, 8 May 2021 14:30:38 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Drew Fustini <pdp7pdp7@gmail.com>
+Cc:     Drew Fustini <drew@beagleboard.org>, netdev@vger.kernel.org,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        Will C <will@macchina.cc>, menschel.p@posteo.de
+Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
+ around broken CRC on TBC register
+Message-ID: <20210508123038.zzowctdgpjld23hs@pengutronix.de>
+References: <20210407080118.1916040-1-mkl@pengutronix.de>
+ <20210407080118.1916040-7-mkl@pengutronix.de>
+ <CAPgEAj6N9d=s1a-P_P0mBe1aV2tQBQ4m6shvbPcPvX7W1NNzJw@mail.gmail.com>
+ <a46b95e3-4238-a930-6de3-360f86beaf52@pengutronix.de>
+ <20210507072521.3y652xz2kmibjo7d@pengutronix.de>
+ <CAEf4M_Dg5u=b+fYwXDUMRGSXeXHuo-bXZmzoAs2bW0kFncMSQg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7mc4hxetxzanenrr"
+Content-Disposition: inline
+In-Reply-To: <CAEf4M_Dg5u=b+fYwXDUMRGSXeXHuo-bXZmzoAs2bW0kFncMSQg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Sat, 8 May 2021 10:55:19 +0800 Yunsheng Lin wrote:
-> >> +		 * the flag set after releasing lock and reschedule the
-> >> +		 * net_tx_action() to do the dequeuing.  
-> > 
-> > I don't understand why MISSED is checked before the trylock.
-> > Could you explain why it can't be tested directly here?  
-> The initial thinking was:
-> Just like the set_bit() before the second trylock, If MISSED is set
-> before first trylock, it means other thread has set the MISSED flag
-> for this thread before doing the first trylock, so that this thread
-> does not need to do the set_bit().
-> 
-> But the initial thinking seems over thinking, as thread 3' setting the
-> MISSED before the second trylock has ensure either thread 3' second
-> trylock returns ture or thread 2 holding the lock will see the MISSED
-> flag, so thread 1 can do the test_bit() before or after the first
-> trylock, as below:
-> 
->     thread 1                thread 2                    thread 3
->                          holding q->seqlock
-> first trylock failed                              first trylock failed
->                          unlock q->seqlock
->                                                test_bit(MISSED) return false
->                    test_bit(MISSED) return false
->                           and not reschedule
->                                                       set_bit(MISSED)
-> 						      trylock success
-> test_bit(MISSED) retun ture
-> and not retry second trylock
-> 
-> If the above is correct, it seems we could:
-> 1. do test_bit(MISSED) before the first trylock to avoid doing the
->    first trylock for contended case.
-> or
-> 2. do test_bit(MISSED) after the first trylock to avoid doing the
->    test_bit() for un-contended case.
-> 
-> Which one do you prefer?
 
-No strong preference but testing after the trylock seems more obvious
-as it saves the temporary variable.
+--7mc4hxetxzanenrr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For the contended case could we potentially move or add a MISSED test
-before even the first try_lock()? I'm not good at optimizing things, 
-but it could save us the atomic op, right? (at least on x86)
+On 07.05.2021 15:36:32, Drew Fustini wrote:
+> > > > Would it be possible for you to pull these patches into a v5.10 bra=
+nch
+> > > > in your linux-rpi repo [1]?
+> > >
+> > > Here you are:
+> > >
+> > > https://github.com/marckleinebudde/linux-rpi/tree/v5.10-rpi/backport-=
+performance-improvements
+> > >
+> > > I've included the UINC performance enhancements, too. The branch is c=
+ompiled
+> > > tested only, though. I'll send a pull request to the rpi kernel after=
+ I've
+> > > testing feedback from you.
+> >
+> > Drew, Patrick, have you tested this branch? If so I'll send a pull
+> > request to the raspi kernel.
+>=20
+> Thank you for following up.
+>=20
+> I need to build it and send it to the friend who was testing to check
+> if the CRC errors go away.  He is testing CANFD with a 2021 Ford F150
+> truck.  I will follow up here once I know the results.
+
+The CRC Errors don't go away completely, however they are reduced by
+more than an order of magnitude.
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--7mc4hxetxzanenrr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCWhGwACgkQqclaivrt
+76nq4Af/YCRApll2xTUO0JeBwC0Q3z08g6zbPpm6mwk/8tvq2DSlBvZ0lZMhuAEE
+2UX/ujLBjpVPkOtjBsE5XAbClUCBr3n7ESCQKwXw8+83zIgJIzS28HZyTnJsCDDH
+H0j5xryhL1rZhcgsBt5PTPQgTJ4XYtHZ2Yi6A2KKMxXn2FDoIFyP9SmIuC+dVehF
+pjrYLmd0TmYMLZGyZUpSXRISFifOYZe7WRpJhIdFiznml93YTvajZf178e7LRk5P
+akmvEvAlP6KtujAWVCOImpzkNkhFLgzibCZiOSz00jBflVNpoS8QsPsTeZvbKvaP
+FaWGiVZBBQs0phWtOsFlPsaAIDBAlQ==
+=E8ul
+-----END PGP SIGNATURE-----
+
+--7mc4hxetxzanenrr--
