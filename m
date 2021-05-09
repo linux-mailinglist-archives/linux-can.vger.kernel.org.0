@@ -2,30 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BC33773A9
-	for <lists+linux-can@lfdr.de>; Sat,  8 May 2021 20:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0423775CE
+	for <lists+linux-can@lfdr.de>; Sun,  9 May 2021 09:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbhEHSiB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 8 May 2021 14:38:01 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:52383 "EHLO mout01.posteo.de"
+        id S229610AbhEIHrg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 9 May 2021 03:47:36 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:50587 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229489AbhEHSiA (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 8 May 2021 14:38:00 -0400
+        id S229585AbhEIHrf (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 9 May 2021 03:47:35 -0400
 Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 71C58240028
-        for <linux-can@vger.kernel.org>; Sat,  8 May 2021 20:36:57 +0200 (CEST)
+        by mout02.posteo.de (Postfix) with ESMTPS id 0E65D240100
+        for <linux-can@vger.kernel.org>; Sun,  9 May 2021 09:46:22 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1620499017; bh=woizo10EuEdtSwiBJ6mE/8V/AV91s8H60UJNgduiDQI=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=r9ANrwTug7PXzO6lKGH8lDc3JHF+dSIoK5U33tDrocfbqTMej8qY1lrINvdO+nSAN
-         tkI9pVh49O2LZ3oMqC5MWMEJsQmv+IjGUtW6J6YCgCW4w4gWONCxnhMLH5B9C7dElP
-         Oh37fqcpZoXrzTxwABep47AwZ7u9sAT6U2+EBvsHrY7slHX+yUdX+0NvgXowTjRnDH
-         l76dUk/jH0hE0Ccw1f4ln2p588HsgL7vgOvsUXA4nJpB5SRU1Yyqkq1xk0EsLH1BIt
-         CXrEy8H4+TvG2Pnp14bulA+vuk0zluVREt3U1rNQs6Q4YN+PoC/tIuM0zKzEQeGDKy
-         uj0TLBAmtoIPw==
+        t=1620546382; bh=sK4wl5IwkWJ2n0WlFhO+Ho3j0hfwWiWPygPRQOXSwKo=;
+        h=From:To:Cc:Autocrypt:Subject:Date:From;
+        b=kAr5gNMu45e/ki+wWXx/iFdBU/v+657mAZ6Tc3hueuKLBODEznc8ewnmOADAMpNM5
+         7fE8fp8A3B8Jef7+G0K+Kfph0reSHnXPcQTfrBuj9Jo6pXmmdXBoNUqLcmjwo9b2ow
+         f4AVpJzpoOznDhlPe2R3GDMH7DgOEiRK/t7J2WAmRcwYPy2V02nLtCzXG33+8qCFet
+         sChkTpLZk+aQR5XeTicefJVSi6SgpDuTqqE+jsGY34UNL40CQavXb53Fglwzv5xHGB
+         J1/TqQOg79ZbN+LOv+0HTRfceRSsdKNQksL5PIUanICF2Wm7uw03W2ds/0RL+HzgGt
+         agJZlSAXTyEfQ==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Fcwyc32j2z9rxG;
-        Sat,  8 May 2021 20:36:56 +0200 (CEST)
+        by submission (posteo.de) with ESMTPSA id 4FdGTT1BwDz9rxS;
+        Sun,  9 May 2021 09:46:21 +0200 (CEST)
+From:   Patrick Menschel <menschel.p@posteo.de>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     Drew Fustini <drew@beagleboard.org>, netdev@vger.kernel.org,
         linux-can@vger.kernel.org, Will C <will@macchina.cc>
@@ -36,7 +37,7 @@ References: <20210407080118.1916040-1-mkl@pengutronix.de>
  <20210507072521.3y652xz2kmibjo7d@pengutronix.de>
  <c0048a2a-2a32-00b5-f995-f30453aaeedb@posteo.de>
  <20210507082536.jgmaoyusp3papmlw@pengutronix.de>
-From:   Patrick Menschel <menschel.p@posteo.de>
+ <7cb69acc-ee56-900b-0320-a893f687d850@posteo.de>
 Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
  elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
@@ -99,140 +100,72 @@ Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
 Subject: Re: [net-next 6/6] can: mcp251xfd: mcp251xfd_regmap_crc_read(): work
  around broken CRC on TBC register
-Message-ID: <7cb69acc-ee56-900b-0320-a893f687d850@posteo.de>
-Date:   Sat,  8 May 2021 18:36:56 +0000
+Message-ID: <b58d4484-db27-f199-875e-ae3694cd271f@posteo.de>
+Date:   Sun,  9 May 2021 07:46:20 +0000
 MIME-Version: 1.0
-In-Reply-To: <20210507082536.jgmaoyusp3papmlw@pengutronix.de>
+In-Reply-To: <7cb69acc-ee56-900b-0320-a893f687d850@posteo.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 07.05.21 um 10:25 schrieb Marc Kleine-Budde:
-> On 07.05.2021 08:21:57, Patrick Menschel wrote:
->>>>> Would it be possible for you to pull these patches into a v5.10 branch
->>>>> in your linux-rpi repo [1]?
+Am 08.05.21 um 20:36 schrieb Patrick Menschel:
+> Am 07.05.21 um 10:25 schrieb Marc Kleine-Budde:
+>> On 07.05.2021 08:21:57, Patrick Menschel wrote:
+>>>>>> Would it be possible for you to pull these patches into a v5.10 branch
+>>>>>> in your linux-rpi repo [1]?
+>>>>>
+>>>>> Here you are:
+>>>>>
+>>>>> https://github.com/marckleinebudde/linux-rpi/tree/v5.10-rpi/backport-performance-improvements
+>>>>>
+>>>>> I've included the UINC performance enhancements, too. The branch is compiled
+>>>>> tested only, though. I'll send a pull request to the rpi kernel after I've
+>>>>> testing feedback from you.
 >>>>
->>>> Here you are:
+>>>> Drew, Patrick, have you tested this branch? If so I'll send a pull
+>>>> request to the raspi kernel.
 >>>>
->>>> https://github.com/marckleinebudde/linux-rpi/tree/v5.10-rpi/backport-performance-improvements
->>>>
->>>> I've included the UINC performance enhancements, too. The branch is compiled
->>>> tested only, though. I'll send a pull request to the rpi kernel after I've
->>>> testing feedback from you.
->>>
->>> Drew, Patrick, have you tested this branch? If so I'll send a pull
->>> request to the raspi kernel.
->>>
-> 
->> not yet. Thanks for reminding me. I'll start a native build on a pi0w asap.
 >>
->> Is there any test application or stress test that I should run?
+>>> not yet. Thanks for reminding me. I'll start a native build on a pi0w asap.
+>>>
+>>> Is there any test application or stress test that I should run?
+>>
+>> No, not any particular, do your normal (stress) testing.
+>>
+> Following up on this.
 > 
-> No, not any particular, do your normal (stress) testing.
+> ...
 > 
-Following up on this.
+> Do I have to change my test?
 
-Build and test finished on a pi0w.
+Hi Marc,
 
-### Test conditions ###
+I changed my test to 1 hour and removed the sleep statement.
+Still no measurable difference for performance and no CRC Errors with
+both kernels.
 
-Since I lacked a true stress test, I wrote one for regular tox with
-pytest collection.
-
-https://gitlab.com/Menschel/socketcan/-/blob/master/tests/test_socketcan.py#L872
-
-It uses mcp0 and mcp1 which are directly connected.
-No CAN FD, just 500k with regular frames, random id and random data.
-
-I basically mimic cangen but enhanced with a queue that handles to the
-rx thread what should be compared next.
-
-### Extract from dmesg shows no CRC Errors ###
-
-[   30.930608] CAN device driver interface
-[   30.967349] spi_master spi0: will run message pump with realtime priority
-[   31.054202] mcp251xfd spi0.1 can0: MCP2518FD rev0.0 (-RX_INT
--MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-r:17.00MHz e:16.66MHz) successfully initialized.
-[   31.076906] mcp251xfd spi0.0 can1: MCP2518FD rev0.0 (-RX_INT
--MAB_NO_WARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz
-r:17.00MHz e:16.66MHz) successfully initialized.
-[   31.298969] mcp251xfd spi0.0 mcp0: renamed from can1
-[   31.339864] mcp251xfd spi0.1 mcp1: renamed from can0
-[   33.471889] IPv6: ADDRCONF(NETDEV_CHANGE): mcp0: link becomes ready
-[   34.482260] IPv6: ADDRCONF(NETDEV_CHANGE): mcp1: link becomes ready
-[  215.218979] can: controller area network core
-[  215.219146] NET: Registered protocol family 29
-[  215.261599] can: raw protocol
-[  218.745376] can: isotp protocol
-[  220.931150] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  220.931274] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  220.931395] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  220.931518] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  220.931643] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  220.931768] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  220.931893] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  222.099822] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  222.099901] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  222.100022] NOHZ tick-stop error: Non-RCU local softirq work is
-pending, handler #08!!!
-[  222.330438] can: broadcast manager protocol
-
-That softirq error has something to do with IsoTp. I was not able to
-trace it back but I have it on multiple boards: pi0w, pi3b, pi3b+.
+Apparently the test is hard on the CPU, I have two pytest processes
+listed in htop one with 80%CPU and one with 60% CPU, approx 30% ram
+usage of 512MB. I have no clue how it reaches the CPU values, there
+should be only one CPU on the pi0w.
 
 
-### Performance ###
+### 5.10.17+ on pi0w ###
 
-## v5.10-rpi/backport-performance-improvements ##
-
-I get about 20000 frames in 2 minutes.
-
-2021-05-08 19:00:36 [    INFO] 20336 frames in 0:02:00
-(test_socketcan.py:890)
-
-2021-05-08 19:49:34 [    INFO] 20001 frames in 0:02:00
+2021-05-09 08:02:56 [    INFO] 725649 frames in 1:00:00
 (test_socketcan.py:890)
 
 
-## regular v5.10 ##
+### 5.10.31-performance-backports+ on pi0w ###
 
-2021-05-08 20:19:55 [    INFO] 20000 frames in 0:02:00
-(test_socketcan.py:890)
-
-2021-05-08 20:22:40 [    INFO] 19995 frames in 0:02:00
-(test_socketcan.py:890)
-
-2021-05-08 20:25:22 [    INFO] 19931 frames in 0:02:00
+2021-05-09 09:13:32 [    INFO] 715936 frames in 1:00:00
 (test_socketcan.py:890)
 
 
-The numbers are slightly better but I count that as tolerance. I also
-found that there are cross effects. If I run the same test on vcan0
-before, the frame count goes down to 13000 instead.
-
-I also have to admit, that I didn't get any crc errors with regular
-v5.10 during that tests.
-
-Do I have to change my test?
-
-I can still update that pi3b+ that runs my micro-hil at work. That was
-the one that occasionally had CRC errors.
+I'll switch boards to a pi3b and test again with these settings.
 
 Best Regards,
 Patrick
-
-
-
