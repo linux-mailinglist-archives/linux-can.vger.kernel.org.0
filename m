@@ -2,132 +2,149 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 986673779DA
-	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 03:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C14377B62
+	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 07:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbhEJBno (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 9 May 2021 21:43:44 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:2423 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbhEJBnn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 9 May 2021 21:43:43 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FdkJG0wGgzCr4y;
-        Mon, 10 May 2021 09:39:58 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.498.0; Mon, 10 May 2021 09:42:33 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
-        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-Subject: [PATCH net v6 3/3] net: sched: fix tx action reschedule issue with stopped queue
-Date:   Mon, 10 May 2021 09:42:36 +0800
-Message-ID: <1620610956-56306-4-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
-References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
+        id S229608AbhEJFLo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 May 2021 01:11:44 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:37612 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229958AbhEJFLo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 01:11:44 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14A5AKAs080845;
+        Mon, 10 May 2021 00:10:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1620623420;
+        bh=ZzDIovFyQLRHuyRfFSt9PbywYQnhkAHpLtYfN8kEak0=;
+        h=From:To:CC:Subject:Date;
+        b=DYhOpvbXI4rzW/HZwK1ERmHz71iMNJ6eOc0ObhHcNT8drec17TCbwm87ssp6n99Z7
+         l7DfkQz1mZzmyLVgZcD0zC2vAw7xMO+vRCw2KEO7/jSF2+T/z5BaYfrKuPdwCTWbTn
+         5H5PnSAUr4eqe0yNG8sQ+ArBYKJG4XqvU1xY5fW0=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14A5AKG6060617
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 10 May 2021 00:10:20 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 10
+ May 2021 00:10:20 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Mon, 10 May 2021 00:10:20 -0500
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14A5A9nL113970;
+        Mon, 10 May 2021 00:10:11 -0500
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-can@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 0/3] CAN TRANSCEIVER: Add support for CAN transceivers
+Date:   Mon, 10 May 2021 10:40:02 +0530
+Message-ID: <20210510051006.11393-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-CFilter-Loop: Reflected
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The netdev qeueue might be stopped when byte queue limit has
-reached or tx hw ring is full, net_tx_action() may still be
-rescheduled endlessly if STATE_MISSED is set, which consumes
-a lot of cpu without dequeuing and transmiting any skb because
-the netdev queue is stopped, see qdisc_run_end().
+The following series of patches add support for CAN transceivers.
 
-This patch fixes it by checking the netdev queue state before
-calling qdisc_run() and clearing STATE_MISSED if netdev queue is
-stopped during qdisc_run(), the net_tx_action() is recheduled
-again when netdev qeueue is restarted, see netif_tx_wake_queue().
+TCAN1042 has a standby signal that needs to be pulled high for
+sending/receiving messages[1]. TCAN1043 has a enable signal along with
+standby signal that needs to be pulled up for sending/receiving
+messages[2], and other combinations of the two lines can be used to put the
+transceiver in different states to reduce power consumption. On boards
+like the AM654-idk and J721e-evm these signals are controlled using gpios.
 
-Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
-Reported-by: Michal Kubecek <mkubecek@suse.cz>
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
-V6: Drop NET_XMIT_DROP checking for it is not really relevant
-    to this patch, and it may cause performance performance
-    regression with multi pktgen threads on dummy netdev with
-    pfifo_fast qdisc case.
----
- net/core/dev.c          | 3 ++-
- net/sched/sch_generic.c | 8 +++++++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
+Patch 1 rewords the comment that restricts max_link_rate attribute to have
+units of Mbps.
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index d596cd7..ef8cf76 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3853,7 +3853,8 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
- 
- 	if (q->flags & TCQ_F_NOLOCK) {
- 		rc = q->enqueue(skb, q, &to_free) & NET_XMIT_MASK;
--		qdisc_run(q);
-+		if (likely(!netif_xmit_frozen_or_stopped(txq)))
-+			qdisc_run(q);
- 
- 		if (unlikely(to_free))
- 			kfree_skb_list(to_free);
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index d86c4cc..37403c1 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -74,6 +74,7 @@ static inline struct sk_buff *__skb_dequeue_bad_txq(struct Qdisc *q)
- 			}
- 		} else {
- 			skb = SKB_XOFF_MAGIC;
-+			clear_bit(__QDISC_STATE_MISSED, &q->state);
- 		}
- 	}
- 
-@@ -242,6 +243,7 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 			}
- 		} else {
- 			skb = NULL;
-+			clear_bit(__QDISC_STATE_MISSED, &q->state);
- 		}
- 		if (lock)
- 			spin_unlock(lock);
-@@ -251,8 +253,10 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
- 	*validate = true;
- 
- 	if ((q->flags & TCQ_F_ONETXQUEUE) &&
--	    netif_xmit_frozen_or_stopped(txq))
-+	    netif_xmit_frozen_or_stopped(txq)) {
-+		clear_bit(__QDISC_STATE_MISSED, &q->state);
- 		return skb;
-+	}
- 
- 	skb = qdisc_dequeue_skb_bad_txq(q);
- 	if (unlikely(skb)) {
-@@ -311,6 +315,8 @@ bool sch_direct_xmit(struct sk_buff *skb, struct Qdisc *q,
- 		HARD_TX_LOCK(dev, txq, smp_processor_id());
- 		if (!netif_xmit_frozen_or_stopped(txq))
- 			skb = dev_hard_start_xmit(skb, dev, txq, &ret);
-+		else
-+			clear_bit(__QDISC_STATE_MISSED, &q->state);
- 
- 		HARD_TX_UNLOCK(dev, txq);
- 	} else {
+Patch 2 models the transceiver as a phy device tree node with properties
+for max bit rate supported, gpio properties for indicating gpio pin numbers
+to which standby and enable signals are connected.
+
+Patch 2 adds a generic driver to support CAN transceivers.
+
+changes since v5:
+- Updated copyright year to 2021 in patch 3
+- Rebased the series on top of latest linux next
+- picked-up Marc Kleine-Budde's acked-by
+
+changes since v4:
+- In patch 3 made the correction from mcan to CAN, in Kconfig help
+
+changes since v3:
+- dropped patch 2(in v3)
+- changed the node name property in patch 3(in v3)
+- picked up Rob Herring's reviewed-by for patch 3(in v3)
+
+changes since v2:
+- dropped 5 and 6 patches and to be sent via linux-can-next
+- added static keyword for can_transceiver_phy_probe()
+- changed enable gpio example to active high in patch 3
+- Rearranged the file names in alphabetical order in Makefile
+  and MAINTAINERS file
+
+changes since v1:
+- Added patch 1 (in v2) that rewords the comment that restrict
+  max_link_rate attribute to have units of Mbps.
+- Added patch 2 (in v2) that adds an API for
+  devm_of_phy_optional_get_by_index
+- Patch 1 (in v1)
+  - updated MAINTAINERS file
+- Patch 2 (in v1)
+  - replaced m_can with CAN to make the driver independent of CAN driver
+  - Added prefix CAN_TRANSCEIVER for EN_PRESENT and STB_PRESENT
+  - Added new line before return statements in power_on() and power_off
+  - Added error handling patch for devm_kzalloc()
+  - used the max_link_rate attribute directly instead of dividing it by
+    1000000
+  - removed the spaces before GPIOD_OUT_LOW in devm_gpiod_get()
+  - Corrected requested value for standby-gpios to GPIOD_OUT_HIGH
+  - Updated MAINTAINERS file
+- Patch 3 (in v1)
+  - replaced minItems with maxItems
+  - Removed phy-names property as there is only one phy
+- Patch 4 (in v1)
+  - replaced dev_warn with dev_info when no transceiver is found
+  - Added struct phy * field in m_can_classdev struct
+  - moved phy_power_on and phy_power_off to m_can_open and m_can_close
+    respectively
+  - Moved the check for max_bit_rate to generice transceiver driver
+
+[1] - https://www.ti.com/lit/ds/symlink/tcan1042h.pdf
+[2] - https://www.ti.com/lit/ds/symlink/tcan1043-q1.pdf
+
+Aswath Govindraju (3):
+  phy: core: Reword the comment specifying the units of max_link_rate to
+    be Mbps
+  dt-bindings: phy: Add binding for TI TCAN104x CAN transceivers
+  phy: phy-can-transceiver: Add support for generic CAN transceiver
+    driver
+
+ .../bindings/phy/ti,tcan104x-can.yaml         |  56 +++++++
+ MAINTAINERS                                   |   2 +
+ drivers/phy/Kconfig                           |   9 ++
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-can-transceiver.c             | 146 ++++++++++++++++++
+ include/linux/phy/phy.h                       |   2 +-
+ 6 files changed, 215 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+ create mode 100644 drivers/phy/phy-can-transceiver.c
+
 -- 
-2.7.4
+2.17.1
 
