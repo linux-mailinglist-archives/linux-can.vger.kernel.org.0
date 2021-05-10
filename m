@@ -2,137 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EB8378F3C
-	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 15:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F13378F45
+	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 15:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbhEJNlA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 May 2021 09:41:00 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:20580 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243008AbhEJM3v (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 08:29:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1620649719; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=auIbreXz3V0ZNnogbYJDTNorEBMntL3zEZ1vwkenMVNQ+uSjkdNN/3c1oBSvpHV8+K
-    YggiqcL8LXV2dtd//GAVlvZtq/97Gc/jW5zklg97GTHJ+VmMrFsxmwHysDlmhw8v1Mj4
-    LxvwS36A+0N0L4GgLC7H2JRVYsWRYX8zqt9vTSIDlNktIKHeo3qi5uvWia0pHasdqXAi
-    lSIjso82u48ACFhyLlBF1OXjnBUrWzYFj6vchN4opZSi+OThsTw9VhTDX36M6BvXSlrl
-    7Do9ybDAbKfDRNK7AcvTx4AmP0aQmTXH0aeZ4/YUjZDazDUt0Uqp/am41cB0Pmwc1ZVD
-    95yA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1620649719;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=2Gu6Uf1rJimRewBWKwFkbOOrKkXWkJ8v9dvNuOb3GKA=;
-    b=opvaPDa86zFCG8HwJZwkV/RKVWjclOOKkSPXgFBhxBsYqg7EWlNsrYfTdb1R5hwZNr
-    muRWORdD8IOv5TGITR0uUwPiWPBEoexnPqfFx9KjTq82TWpEdBD9ZhFErYPtdqVqqjov
-    pOo5Jz0vpyx7GdFrPvzRuDCoXl73sI3OBw0WkA7nwVdw/nwFP41ioysaPpHv4Hvh/OBA
-    RHIzzBpoecf1gA/rZUxRGf/zEBj9lkIqdJzKSuez6+RyAIW9UQd5ZntPjbmevPG2yROv
-    zyXffCOsc5FITrrzv0o7gTeOVonmJkjFvI1zebYdvtUUFBqFUUds4idBWTPH2Iu3WqVh
-    sgOA==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1620649719;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=2Gu6Uf1rJimRewBWKwFkbOOrKkXWkJ8v9dvNuOb3GKA=;
-    b=T5FaP34NcKh9Pf67qscFxKreiRSkshUOql8eTd9/XHF1YZhR554+3tSpGngzvau69y
-    BlURPJaphrO69HX2aW8ScAYBOob7ICyDSd+edNI1KestjzvngoKOY/nU6RMMAWXFWgID
-    WMdxHkvdVzyAqYkgqlXU55VJ+LbqVyXlXxS6/2YwzlWcJmCHUkQ53BjK4vsbfnfhHUWr
-    ulhkvcgxiYqprM0qxXbCMWlWwXXS6u2wjk6VSzdnXd4Wc9QdALa592UbSiRlYqiu6pJq
-    Cpe7OlQyNfxqs2m/bPyMtffkA+PPiqUwP52AvKUgjVCmuwmEg5ZuY0rdqRKvFhh72Wxr
-    cJiQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVxiOMpjpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-    by smtp.strato.de (RZmta 47.25.6 DYNA|AUTH)
-    with ESMTPSA id e040b6x4ACSd7hp
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 10 May 2021 14:28:39 +0200 (CEST)
-Subject: Re: [PATCH v2 1/2] can: add support for filtering own messages only
-To:     Erik Flodin <erik@flodin.me>
-Cc:     linux-can@vger.kernel.org
-References: <20210504203546.115734-1-erik@flodin.me>
- <20210504203546.115734-2-erik@flodin.me>
- <cf5fdb14-47e2-2d08-0d29-c621bff7b312@hartkopp.net>
- <CAAMKmocxj1zOQastSqKhHmV0-9HVh3NpPmSPWf=byxj+fFPUHQ@mail.gmail.com>
- <64bf5aaf-1e8c-2f29-8263-63710a771843@hartkopp.net>
- <CAAMKmoda0U912_6Qp97fzt4BjcbUPDrE8Cy5C7C-TS5_7du31Q@mail.gmail.com>
- <46bdff5c-c0ab-56e9-7c70-8a3267458d55@hartkopp.net>
- <CAAMKmocsZBsFfpRLyLHqFE94xb-xrm5S8YG=QzQTndDjtOyuzw@mail.gmail.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <64e37aae-e6b5-20aa-04fb-10b4a2f50b5e@hartkopp.net>
-Date:   Mon, 10 May 2021 14:28:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233590AbhEJNlE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 May 2021 09:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347957AbhEJMh7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 08:37:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE40C06138C
+        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 05:36:16 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lg58s-0008K6-Np; Mon, 10 May 2021 14:36:10 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:80ab:77d5:ac71:3f91])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 49B146214AC;
+        Mon, 10 May 2021 12:36:09 +0000 (UTC)
+Date:   Mon, 10 May 2021 14:36:08 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Gianluca Falavigna <gianluca.falavigna@inwind.it>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 3/3] can: c_can: cache frames to operate as a true FIFO
+Message-ID: <20210510123608.wywx3bb3vrgkzq2o@pengutronix.de>
+References: <20210509124309.30024-1-dariobin@libero.it>
+ <20210509124309.30024-4-dariobin@libero.it>
+ <20210510122512.5lcvvvwzk6ujamzb@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CAAMKmocsZBsFfpRLyLHqFE94xb-xrm5S8YG=QzQTndDjtOyuzw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4agsopltf3horqgr"
+Content-Disposition: inline
+In-Reply-To: <20210510122512.5lcvvvwzk6ujamzb@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--4agsopltf3horqgr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 09.05.21 13:28, Erik Flodin wrote:
-> On Thu, 6 May 2021 at 07:26, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+On 10.05.2021 14:25:15, Marc Kleine-Budde wrote:
+> On 09.05.2021 14:43:09, Dario Binacchi wrote:
+> > As reported by a comment in the c_can_start_xmit() this was not a FIFO.
+> > C/D_CAN controller sends out the buffers prioritized so that the lowest
+> > buffer number wins.
+> >=20
+> > What did c_can_start_xmit() do if it found tx_active =3D 0x80000000 ? It
+> > waited until the only frame of the FIFO was actually transmitted by the
+> > controller. Only one message in the FIFO but we had to wait for it to
+> > empty completely to ensure that the messages were transmitted in the
+> > order in which they were loaded.
+> >=20
+> > By storing the frames in the FIFO without requiring its transmission, we
+> > will be able to use the full size of the FIFO even in cases such as the
+> > one described above. The transmission interrupt will trigger their
+> > transmission only when all the messages previously loaded but stored in
+> > less priority positions of the buffers have been transmitted.
+>=20
+> The algorithm you implemented looks a bit too complicated to me. Let me
+> sketch the algorithm that's implemented by several other drivers.
+>=20
+> - have a power of two number of TX objects
+> - add a number of objects to struct priv (tx_num)
+>   (or make it a define, if the number of tx objects is compile time fixed)
+> - add two "unsigned int" variables to your struct priv,
+>   one "tx_head", one "tx_tail"
+> - the hard_start_xmit() writes to priv->tx_head & (priv->tx_num - 1)
+> - increment tx_head
+> - stop the tx_queue if there is no space or if the object with the
+>   lowest prio has been written
+> - in TX complete IRQ, handle priv->tx_tail object
+> - increment tx_tail
+> - wake queue if there is space but don't wake if we wait for the lowest
+>   prio object to be TX completed.
+>=20
+> Special care needs to be taken to implement that lock-less and race
+> free. I suggest to look the the mcp251xfd driver.
 
->>>>    From what I understood your main requirement is to double check the
->>>> outgoing traffic whether is has been sent.
->>>
->>> What I would like to have is:
->>> 1. Be notified when a frame has been sent. I send (from user space) a
->>> single frame and wait until I get confirmation before sending the next
->>> to give other nodes on the bus a slot to start sending, even if their
->>> frames have ID with lower priority.
->>
->> o_O
->>
->> Sorry, but I have problems to get behind your use-case.
->>
->> 1. You are sending a frame
->> 2. You get a confirmation
->> 3. You are waiting some time (which is not written above), to give other
->> nodes a slot??
-> 
-> No explicit sleep is needed. The machine is sufficient slow so that
-> just waiting for the confirmation before sending the next frame is
-> enough. But if the frames are queued in the socket/device then the
-> frames are sent back-to-back.
+After converting the driver to the above outlined implementation it
+should be more straight forward to add the caching you implemented. =20
 
-Ok, I feel I'm getting behind your requirement ...
+regards,
+Marc
 
-You mainly want to throttle the outgoing traffic, to make sure that e.g. 
-a specific CAN ID is not sent 'back-to'back' and might lead to a DoS 
-situation on the wire?!?
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-Do you know about the Linux CAN queuing disciplines that might provide 
-the solution to your question?
+--4agsopltf3horqgr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-See:
+-----BEGIN PGP SIGNATURE-----
 
-http://rtime.felk.cvut.cz/can/
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCZKLYACgkQqclaivrt
+76m1qgf/fiVu7/ZCZhMwnqZuz9j3MT1jLSpNNkzrDbePZ069i1CO4i9Xv0UhZ7n+
+w3L9xxILOZvGPrgD7//YWOxPTT3XxUCRqdmqRlECKfe4kOZTHe36a25smD7oYfdC
+z76fHITmu0tXLsP41kg5gYGlqKyYeiPrnCPRyCDf4VS791Av/zqZBz5M679VQ8lo
+Y901dndw76sq+Vd+zTxjhvJnTQhm9C09+yIfjtCAIEI87sLsf7WSYC4e/DeFgiW+
+4p11uccWeSoeawj4CTtZ+TA6etos30QunO7cRE6J+0aTp43Y9tXwSPTJhrq6FoBY
+rZV1qIgLpEMdI1oPaERnIuRxJF5s9A==
+=IF7C
+-----END PGP SIGNATURE-----
 
-http://rtime.felk.cvut.cz/can/socketcan-qdisc-final.pdf
-
-
-A four-slides-intro to the concept can be found here (slides 41ff):
-
-https://wiki.automotivelinux.org/_media/agl-distro/agl2017-socketcan-print.pdf
-
-Best,
-Oliver
-
-> 
->> 4. goto 1??
-> 
-> Yes.
-> 
-> // Erik
-> 
+--4agsopltf3horqgr--
