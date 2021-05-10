@@ -2,188 +2,122 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 759233780CC
-	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 12:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EE3378F42
+	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 15:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbhEJKEp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 May 2021 06:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S233494AbhEJNlD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 May 2021 09:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbhEJKD4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 06:03:56 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5413DC061574
-        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 03:02:48 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id o16so20098051ljp.3
-        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 03:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=g+bSDZsh1iBikjz4vXhw3s4YJh1Ah9D5vbX7trF6hwU=;
-        b=mj24zROE5N3jKWkkWC3N0yqK01VoMZRYFYOS0N0ddbLedktyHH+pTMra69FyFWD2VT
-         PB+Vz7G5hv8jjl81un+2Taa/o+jJoge5Rkq/onlbWYl5QXrMR9jRUrEbnYvACINYAkNQ
-         e+kGH/Iob9OpVIptMRcocZq3+vXKwZTgPiV8A70J3H9wCArjQzdOAPpWjPTwFHMoR1Q/
-         W/9R31vJnAk119J+FTHwwYms6gxh5pdT6RAfcPr11Mbwk435xOGlh+OHCvA1Y6nbi+wo
-         w9EQUSj+MRhNgNW8YDqgADnZqF4pIt171wN8IFlnT0gSYomjOLM/p5FP7ul+mrM3pOiD
-         /wxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=g+bSDZsh1iBikjz4vXhw3s4YJh1Ah9D5vbX7trF6hwU=;
-        b=TFeGIf4vAZJ9tT/RrTZT+ej+I4WBWLUqP0HqiUFAA7hiXgdfbeoqL3WCHI2RbiDbmp
-         MvCQyIUHjQdA64o6cJuSEbTSoZi+Qj+BnIOhSH+PoTcH5nq370xCk1XkwPpjVPrS2wRO
-         U6rt6WiLcMcOyhYcVOIkW3plc58cbcLKS5U5n1rJGdlXh5lMs01f/pM8MxQwiI0kA+6f
-         eRQVLfhpxGlS4eDuzlhhAw7x7DCtnx5cxIW+nH0xObdf7SQ3mOtW/i+znXZvmgMBPVYN
-         IUP1SgVCWp58o+hSTtP6XQs2aKFrj8lGedSynlDNPmhdG/hseLL0EZHqBEHbIGzmfu7P
-         Xk0A==
-X-Gm-Message-State: AOAM530yGgI2H7OVrY/3bTOgOAl91RELbaIxmQsb4njRm5p68EmMxsR1
-        wOqHHkZ7JgasNWozyAJxhThJk9QfK9l+JOXp6512qUOgFDGrEg==
-X-Google-Smtp-Source: ABdhPJwaNwl30j3s/7CVTuwpwIdi0AQ7DqgKGJ42VlL+fOs2/UnJN2zN8x3i4LnWhp/3RBrlNezZ9ymShRVZnBH9fBk=
-X-Received: by 2002:a2e:7805:: with SMTP id t5mr6103723ljc.204.1620640966875;
- Mon, 10 May 2021 03:02:46 -0700 (PDT)
+        with ESMTP id S1346889AbhEJMcu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 08:32:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6796BC061574
+        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 05:25:22 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lg4yK-0006PI-Q0; Mon, 10 May 2021 14:25:16 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:80ab:77d5:ac71:3f91])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AEB03621482;
+        Mon, 10 May 2021 12:25:13 +0000 (UTC)
+Date:   Mon, 10 May 2021 14:25:12 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Gianluca Falavigna <gianluca.falavigna@inwind.it>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 3/3] can: c_can: cache frames to operate as a true FIFO
+Message-ID: <20210510122512.5lcvvvwzk6ujamzb@pengutronix.de>
+References: <20210509124309.30024-1-dariobin@libero.it>
+ <20210509124309.30024-4-dariobin@libero.it>
 MIME-Version: 1.0
-References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
- <a7df697c-b6d3-1894-dcc6-672698caa19a@hartkopp.net> <CAERdor5o6yKq1J-hBbjiBtU63OkxhijKifO0OEBt21ASKhCXuw@mail.gmail.com>
- <02607798-4701-376a-6a58-2ff29c87ccab@posteo.de> <CAERdor7LiPPJWLxMQdrQsF=jU0yHNU_uwLAbQegpUj4KeJHzgg@mail.gmail.com>
- <587ef081-804b-9816-f899-f4bd645865cf@posteo.de>
-In-Reply-To: <587ef081-804b-9816-f899-f4bd645865cf@posteo.de>
-From:   Bartosz Zdanowicz <zdanowiczb@gmail.com>
-Date:   Mon, 10 May 2021 12:02:35 +0200
-Message-ID: <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
-Subject: Re: CAN ISO-TP
-To:     Patrick Menschel <menschel.p@posteo.de>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2ih2q34cstztikmf"
+Content-Disposition: inline
+In-Reply-To: <20210509124309.30024-4-dariobin@libero.it>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-I used following code:
 
-import isotp
-import time
-s =3D isotp.socket()
-s._socket.settimeout(2)
-s.set_opts(s.flags.WAIT_TX_DONE)
-s.bind("can0", isotp.Address(rxid=3D1, txid=3D2))
+--2ih2q34cstztikmf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-s.send(b"aaaaaaaaa") -> returns immediately with number of bytes
-s.send(b"aaaaaaaaa") -> same OS error as above (Error 70)
+On 09.05.2021 14:43:09, Dario Binacchi wrote:
+> As reported by a comment in the c_can_start_xmit() this was not a FIFO.
+> C/D_CAN controller sends out the buffers prioritized so that the lowest
+> buffer number wins.
+>=20
+> What did c_can_start_xmit() do if it found tx_active =3D 0x80000000 ? It
+> waited until the only frame of the FIFO was actually transmitted by the
+> controller. Only one message in the FIFO but we had to wait for it to
+> empty completely to ensure that the messages were transmitted in the
+> order in which they were loaded.
+>=20
+> By storing the frames in the FIFO without requiring its transmission, we
+> will be able to use the full size of the FIFO even in cases such as the
+> one described above. The transmission interrupt will trigger their
+> transmission only when all the messages previously loaded but stored in
+> less priority positions of the buffers have been transmitted.
 
-pt., 7 maj 2021 o 09:59 Patrick Menschel <menschel.p@posteo.de> napisa=C5=
-=82(a):
->
-> Am 07.05.21 um 09:24 schrieb Bartosz Zdanowicz:
-> > pt., 7 maj 2021 o 09:02 Patrick Menschel <menschel.p@posteo.de> napisa=
-=C5=82(a):
-> >>
-> >> Am 06.05.21 um 23:28 schrieb Bartosz Zdanowicz:
-> >>>> Can you create a candump log from vcan0 to see, what's going on the =
-bus?
-> >>>>
-> >>> On RPI after first send I got
-> >>> pi@raspberrypi:~ $ candump can0
-> >>>   can0  002   [8]  10 09 41 41 41 41 41 41
-> >>>
-> >>> After the second message I got mentioned OSError and there is no data
-> >>> on candump. Sending again I received next frame:
-> >>> pi@raspberrypi:~ $ candump can0
-> >>>   can0  002   [8]  10 09 41 41 41 41 41 41
-> >>>   can0  002   [8]  10 09 41 41 41 41 41 41
-> >>>
-> >>> On my local PC where I get no system Error I got one frame per every =
-send:
-> >>>  bartosz =EE=82=B0 ~/Work/DeltaThermal/can-isotp =EE=82=B0 =EE=82=A0 =
-master =EE=82=B0 candump vcan0
-> >>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
-> >>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
-> >>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
-> >>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
-> >>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
-> >>>   vcan0  002   [8]  10 09 41 41 41 41 41 41
-> >>>>
-> >>>> ...
-> >>>> So how is Python getting this information?
-> >>>>
-> >>> In general, that's the biggest issue for me. Because in my real
-> >>> application I'm using python select() and recv() on that socket. When
-> >>> this error is raised, my select() on socket deduce something is
-> >>> received and recv() function also throws an error. I just tried to ge=
-t
-> >>> a minimal example that reproduces the issue which is above. In those
-> >>> cases I would expect timeout, not OSError.
-> >>
-> >>
-> >> As expected, timeout error on missing flow control. Since it's tx side
-> >> it just tells -ECOMM instead of -ETIMEDOUT .
-> >>
-> >> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L=
-10
-> >> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L=
-755
-> >>
-> >> Is there a specific reason why you use select.select() instead of
-> >> Socket.recv(timeout) / Socket.send() ?
-> >>
-> >> Best Regards,
-> >> Patrick
-> >
-> > I have a seperate thread that waits and process data, since I have
-> > multiple sockets opened I want to wait for any of them:
-> >
-> > while True:
-> >     ready_sockets =3D select.select(self.sockets, [], [], self.timeout)=
-[0]
-> >         if not ready_sockets:
-> >         logging.info("No data received")
-> >         continue
-> >     for socket in ready_sockets:
-> >         self.process_data(socket=3Dsocket)
-> >
-> > In process_data I call:
-> >
-> > received =3D socket.recv()
-> >     if received:
-> >     #process data
-> >
-> > My main thread is sending data on those sockets:
-> > schedule.every(X).seconds.do(request_that_sends_using_socket.send(),
-> > socket=3Dsocket)
-> >
-> > So the flow is that my thread sends data to another device, and the
-> > processing thread is waiting for data. When I don't send any data I
-> > get only prints "No data received" which is expected cause no device
-> > is responding (no device is running). When I send data (no other
-> > device is running) I get an error on send AND my select() is finished
-> > with an error socket inserted to ready_sockets. That means I enter
-> > self.process_data() function with socket and also recv() fails. So it
-> > seems it's not only that OSError is raised but also that socket is
-> > somehow "invalid" because it triggers select() which should not be
-> > triggered (no data was received).
->
->
-> Ok,
->
-> try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
-> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
->
-> https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.p=
-y#L583
->
-> and wrap tx into a try-except block.
->
-> try:
->     self.process_data(socket=3Dsocket)
-> except OSError as e:
->     print(e)
->
-> With this you actually have a chance to do error handling on tx path
-> instead of hitting an already present error of the previous op.
->
-> Regards,
-> Patrick
->
+The algorithm you implemented looks a bit too complicated to me. Let me
+sketch the algorithm that's implemented by several other drivers.
+
+- have a power of two number of TX objects
+- add a number of objects to struct priv (tx_num)
+  (or make it a define, if the number of tx objects is compile time fixed)
+- add two "unsigned int" variables to your struct priv,
+  one "tx_head", one "tx_tail"
+- the hard_start_xmit() writes to priv->tx_head & (priv->tx_num - 1)
+- increment tx_head
+- stop the tx_queue if there is no space or if the object with the
+  lowest prio has been written
+- in TX complete IRQ, handle priv->tx_tail object
+- increment tx_tail
+- wake queue if there is space but don't wake if we wait for the lowest
+  prio object to be TX completed.
+
+Special care needs to be taken to implement that lock-less and race
+free. I suggest to look the the mcp251xfd driver.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--2ih2q34cstztikmf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCZJiYACgkQqclaivrt
+76n85Qf+IT0CNwHgyifNTN8tBzEVWhYReBtoqj7LAtMvAsdAwLBdWxwfZYmV/W2Z
+j4qm4tSAVx8HXltmly0GfUgCcGAaPKLg83sGd29Azlgmj+6R4/rWB5ygDyjvLPgc
+TByJLVMRF5Tlur1rvIr9gMPi18DFa3GtvG9eT3lN2yl1CLCjltae1oXDO084S559
+uU9bU2WS+cjjljWqN60AHG/KaZMT7+Iw6bqkgi6NYcDHXEl0mSJU1j7jXw8tNvPY
+WHypzcF2Svg1rxdo1JDNRwgMMFPGzGwrI+R4OrsPzTKI6VuV8IE5noRTWziEx2R/
+k0Bw3cXlQcvx78nTGXPv25iBlvCVyQ==
+=cxQ0
+-----END PGP SIGNATURE-----
+
+--2ih2q34cstztikmf--
