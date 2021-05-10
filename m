@@ -2,198 +2,149 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D72203792DB
-	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 17:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039233796CA
+	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 20:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbhEJPil (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 May 2021 11:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236988AbhEJPhi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 11:37:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F423C06134B
-        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 08:35:44 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lg7wc-0004BL-Oj; Mon, 10 May 2021 17:35:42 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:a33b:547d:8182:18b0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8F6A862179F;
-        Mon, 10 May 2021 15:35:41 +0000 (UTC)
-Date:   Mon, 10 May 2021 17:35:40 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: CAN: TX frames marked as RX after the sending socket is closed
-Message-ID: <20210510153540.52uzcndqyp6yu7ve@pengutronix.de>
-References: <20210510142302.ijbwowv4usoiqkxq@bigthink>
+        id S230185AbhEJSFU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 May 2021 14:05:20 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:41295 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230151AbhEJSFT (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 10 May 2021 14:05:19 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 9781D2400FF
+        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 20:04:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1620669852; bh=NEaM+w1lByLYqxm4/ZJNPzB6YBiXDd0iYHST13Kpcok=;
+        h=To:Cc:From:Autocrypt:Subject:Date:From;
+        b=mbdhbrzT4lcrY2ptj20eIlBntHzAZOKvOTq9pgnLKupp17VH38G5+kLqIB0ZK6y5H
+         rTAvdpc4D6+y0uhS2HtmFxzf+8MUSWpd2hqTNUDKTgTxc5cmNvzI0mk83h8NagizNk
+         urlgYmSJbkebw/p940JH4z1+1ovZ8PZDunSu1qG9Dn7y31M5D2i92rVzah/TSvCwEs
+         lv7MeTIZuGcTbvHuDW0D0q4v5R5W6k8Iz13eg9N2NCzCGYXBlIfYIAiheFSircMmTZ
+         dYHoyhuTG8z6qzkb4EUX8MgDPr6N6HZ8HRbAGKWEMGgc+cpGZITd76uDY2NF0Ev6to
+         mYKVj3/+HmrIw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4Ff87v5z2Gz6tm6;
+        Mon, 10 May 2021 20:04:11 +0200 (CEST)
+To:     Bartosz Zdanowicz <zdanowiczb@gmail.com>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-can <linux-can@vger.kernel.org>
+References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
+ <a7df697c-b6d3-1894-dcc6-672698caa19a@hartkopp.net>
+ <CAERdor5o6yKq1J-hBbjiBtU63OkxhijKifO0OEBt21ASKhCXuw@mail.gmail.com>
+ <02607798-4701-376a-6a58-2ff29c87ccab@posteo.de>
+ <CAERdor7LiPPJWLxMQdrQsF=jU0yHNU_uwLAbQegpUj4KeJHzgg@mail.gmail.com>
+ <587ef081-804b-9816-f899-f4bd645865cf@posteo.de>
+ <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
+ elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
+ TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
+ ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
+ ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
+ Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
+ R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
+ N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
+ NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
+ S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
+ aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
+ djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
+ TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
+ WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
+ UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
+ bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
+ VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
+ NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
+ TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
+ YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
+ c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
+ NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
+ NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
+ dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
+ aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
+ TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
+ MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
+ S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
+ K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
+ dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
+ a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
+ ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
+ QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
+ YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
+ TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
+ T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
+ MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
+ U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
+ CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
+ T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
+ NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
+ YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
+ dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
+ U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
+ TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
+ TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
+ RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
+ STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
+ NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
+ ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
+ aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
+ UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
+ MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
+ WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
+ V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
+ a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
+ dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
+ QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
+ IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Subject: Re: CAN ISO-TP
+Message-ID: <7ad89748-c309-1153-aa8f-b0e98160e39d@posteo.de>
+Date:   Mon, 10 May 2021 18:04:11 +0000
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hddizjikimcuaham"
-Content-Disposition: inline
-In-Reply-To: <20210510142302.ijbwowv4usoiqkxq@bigthink>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Am 10.05.21 um 12:02 schrieb Bartosz Zdanowicz:
+> pt., 7 maj 2021 o 09:59 Patrick Menschel <menschel.p@posteo.de> napisał(a):
+>> try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
+>> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
+>>
+>> https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.py#L583
+>>
+>> and wrap tx into a try-except block.
+>>
+>> try:
+>>     self.process_data(socket=socket)
+>> except OSError as e:
+>>     print(e)
+>>
+>> With this you actually have a chance to do error handling on tx path
+>> instead of hitting an already present error of the previous op.
+>>
+> I used following code:
+> 
+> import isotp
+> import time
+> s = isotp.socket()
+> s._socket.settimeout(2)
+> s.set_opts(s.flags.WAIT_TX_DONE)
+> s.bind("can0", isotp.Address(rxid=1, txid=2))
+> 
+> s.send(b"aaaaaaaaa") -> returns immediately with number of bytes
+> s.send(b"aaaaaaaaa") -> same OS error as above (Error 70)
+> 
 
---hddizjikimcuaham
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+OK,
 
-On 10.05.2021 15:23:02, Torin Cooper-Bennun wrote:
-> Scenario: I open a raw CAN socket, queue a bunch of frames for TX, then
-> close the socket as soon as possible. For the duration of the test, I
-> have another socket open listening for all frames (candump).
->=20
-> After the sending socket has been closed, and there are still frames in
-> the queue yet to be transmitted, I find candump reporting the remainder
-> of my sent frames as RX rather than TX.
->=20
-> For example, I send 1,000 8-byte classical CAN frames, immediately close
-> the socket and log the time at which I did so.
+this is really strange. I have no clue how that is possible unless it's
+on kernel side.
 
-Can you provide the program to reproduce the issue?
-Have you increased the CAN interface's txqueuelen?
+I have to write a test for it later.
 
-> My application reports the socket closed:
->=20
-> | Socket closed at 15:02:45.987278
->=20
-> My candump log shows:
->=20
-> | (2021-05-10 15:02:45.327724)  can0  TX - -  000  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.329578)  can0  TX - -  001  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.330493)  can0  TX - -  002  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.331341)  can0  TX - -  003  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.332264)  can0  TX - -  004  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.333148)  can0  TX - -  005  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.334115)  can0  TX - -  006  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.335061)  can0  TX - -  007  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.336021)  can0  TX - -  008  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:45.336951)  can0  TX - -  009  [08]  EE EE EE EE EE E=
-E EE EE
-> |=20
-> | .... snip ....
-> |
-> | (2021-05-10 15:02:46.089177)  can0  TX - -  399  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.090001)  can0  TX - -  39A  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.090852)  can0  TX - -  39B  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.091735)  can0  TX - -  39C  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.092483)  can0  TX - -  39D  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.093313)  can0  RX - -  39E  [08]  EE EE EE EE EE E=
-E EE EE <----- !!!!!
-> | (2021-05-10 15:02:46.094091)  can0  RX - -  39F  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.094931)  can0  RX - -  3A0  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.095774)  can0  RX - -  3A1  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.096513)  can0  RX - -  3A2  [08]  EE EE EE EE EE E=
-E EE EE
-> |
-> | .... snip ....
-> |
-> | (2021-05-10 15:02:46.143287)  can0  RX - -  3DE  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.144046)  can0  RX - -  3DF  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.144808)  can0  RX - -  3E0  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.145570)  can0  RX - -  3E1  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.146357)  can0  RX - -  3E2  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.147117)  can0  RX - -  3E3  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.147876)  can0  RX - -  3E4  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.148635)  can0  RX - -  3E5  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.149395)  can0  RX - -  3E6  [08]  EE EE EE EE EE E=
-E EE EE
-> | (2021-05-10 15:02:46.150161)  can0  RX - -  3E7  [08]  EE EE EE EE EE E=
-E EE EE
->=20
-> Why?
->=20
-> candump.c prints 'RX' if the received frame has no MSG_DONTROUTE flag.
->=20
-> |	if (msg.msg_flags & MSG_DONTROUTE)
-> |		printf ("  TX %s", extra_m_info[frame.flags & 3]);
-> |	else
-> |		printf ("  RX %s", extra_m_info[frame.flags & 3]);
->=20
-> In turn, MSG_DONTROUTE is set in net/can/raw.c: raw_rcv():
->=20
-> |	/* add CAN specific message flags for raw_recvmsg() */
-> |	pflags =3D raw_flags(skb);
-> |	*pflags =3D 0;
-> |	if (oskb->sk)
-> |		*pflags |=3D MSG_DONTROUTE;
-> |	if (oskb->sk =3D=3D sk)
-> |		*pflags |=3D MSG_CONFIRM;
->=20
-> So, I'm guessing, some 100 ms after my application begins to request
-> that the socket be closed, the socket's pointer becomes NULL in further
-> TX skbs in the queue, so the raw CAN layer can no longer differentiate
-> these skbs as TX. (Sorry if my pathways are a bit mixed up.)
->=20
-> Seems broken to me - is this known behaviour?
-
-Looks like a unknown bug to me!
-
-> Test setup:
->  - kernel: v5.13-rc1 with some RPi-specific patches
->  - hardware: RPi CM4 with TCAN4550 (so, m_can driver in peripheral mode)
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---hddizjikimcuaham
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCZUsoACgkQqclaivrt
-76nFgAf/b6m+O8oOzdhcwqNZYfjgZA6IzWsP5PzBRTsScGo+tlONGvaSiuVTF5LR
-4ID+Tgj+4Ke6X7aAMZdFU7h5qBRoKQoCZ6193redBeU4efIXCB7yqcZXWFIT9PWg
-KFYPPuJWTQlwqvhtuaLRGfGzHApLMuihD+JVWXZE6wxKRJKJYL0Mm6O8VFuU70df
-Cwk/KooZzuNqc2cibxBDy7KpvDuFtc8JH5nfxEx4RpCh7pqf09Otyn+7Tv3UGfFC
-EN9rfp99hMDZ1hFDKEytwz40spKOAEvGTn5gXtRQAYWvPPDt3nwpfuR2p/Q5dFPO
-iyfkywa/KuYOR5JO8PVtNMqnXZB57A==
-=QyjB
------END PGP SIGNATURE-----
-
---hddizjikimcuaham--
+Regards,
+Patrick
