@@ -2,149 +2,151 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039233796CA
-	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 20:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC96F3796EA
+	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 20:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbhEJSFU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 May 2021 14:05:20 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:41295 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230151AbhEJSFT (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 10 May 2021 14:05:19 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 9781D2400FF
-        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 20:04:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1620669852; bh=NEaM+w1lByLYqxm4/ZJNPzB6YBiXDd0iYHST13Kpcok=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=mbdhbrzT4lcrY2ptj20eIlBntHzAZOKvOTq9pgnLKupp17VH38G5+kLqIB0ZK6y5H
-         rTAvdpc4D6+y0uhS2HtmFxzf+8MUSWpd2hqTNUDKTgTxc5cmNvzI0mk83h8NagizNk
-         urlgYmSJbkebw/p940JH4z1+1ovZ8PZDunSu1qG9Dn7y31M5D2i92rVzah/TSvCwEs
-         lv7MeTIZuGcTbvHuDW0D0q4v5R5W6k8Iz13eg9N2NCzCGYXBlIfYIAiheFSircMmTZ
-         dYHoyhuTG8z6qzkb4EUX8MgDPr6N6HZ8HRbAGKWEMGgc+cpGZITd76uDY2NF0Ev6to
-         mYKVj3/+HmrIw==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Ff87v5z2Gz6tm6;
-        Mon, 10 May 2021 20:04:11 +0200 (CEST)
-To:     Bartosz Zdanowicz <zdanowiczb@gmail.com>
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-can <linux-can@vger.kernel.org>
-References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
- <a7df697c-b6d3-1894-dcc6-672698caa19a@hartkopp.net>
- <CAERdor5o6yKq1J-hBbjiBtU63OkxhijKifO0OEBt21ASKhCXuw@mail.gmail.com>
- <02607798-4701-376a-6a58-2ff29c87ccab@posteo.de>
- <CAERdor7LiPPJWLxMQdrQsF=jU0yHNU_uwLAbQegpUj4KeJHzgg@mail.gmail.com>
- <587ef081-804b-9816-f899-f4bd645865cf@posteo.de>
- <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: CAN ISO-TP
-Message-ID: <7ad89748-c309-1153-aa8f-b0e98160e39d@posteo.de>
-Date:   Mon, 10 May 2021 18:04:11 +0000
+        id S232196AbhEJSTR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 10 May 2021 14:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231577AbhEJSTR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 14:19:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EAFC061574
+        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 11:18:12 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lgATp-0002mZ-NH; Mon, 10 May 2021 20:18:09 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5dca:2b47:47f4:4cec])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AD244621A30;
+        Mon, 10 May 2021 18:18:08 +0000 (UTC)
+Date:   Mon, 10 May 2021 20:18:07 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: CAN: TX frames marked as RX after the sending socket is closed
+Message-ID: <20210510181807.sel6igxglzwqoi44@pengutronix.de>
+References: <20210510142302.ijbwowv4usoiqkxq@bigthink>
 MIME-Version: 1.0
-In-Reply-To: <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w5jclh3gdbvuvry7"
+Content-Disposition: inline
+In-Reply-To: <20210510142302.ijbwowv4usoiqkxq@bigthink>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 10.05.21 um 12:02 schrieb Bartosz Zdanowicz:
-> pt., 7 maj 2021 o 09:59 Patrick Menschel <menschel.p@posteo.de> napisał(a):
->> try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
->> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
->>
->> https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.py#L583
->>
->> and wrap tx into a try-except block.
->>
->> try:
->>     self.process_data(socket=socket)
->> except OSError as e:
->>     print(e)
->>
->> With this you actually have a chance to do error handling on tx path
->> instead of hitting an already present error of the previous op.
->>
-> I used following code:
-> 
-> import isotp
-> import time
-> s = isotp.socket()
-> s._socket.settimeout(2)
-> s.set_opts(s.flags.WAIT_TX_DONE)
-> s.bind("can0", isotp.Address(rxid=1, txid=2))
-> 
-> s.send(b"aaaaaaaaa") -> returns immediately with number of bytes
-> s.send(b"aaaaaaaaa") -> same OS error as above (Error 70)
-> 
 
-OK,
+--w5jclh3gdbvuvry7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-this is really strange. I have no clue how that is possible unless it's
-on kernel side.
+On 10.05.2021 15:23:02, Torin Cooper-Bennun wrote:
+> Why?
+>=20
+> candump.c prints 'RX' if the received frame has no MSG_DONTROUTE flag.
+>=20
+> |	if (msg.msg_flags & MSG_DONTROUTE)
+> |		printf ("  TX %s", extra_m_info[frame.flags & 3]);
+> |	else
+> |		printf ("  RX %s", extra_m_info[frame.flags & 3]);
+>=20
+> In turn, MSG_DONTROUTE is set in net/can/raw.c: raw_rcv():
+>=20
+> |	/* add CAN specific message flags for raw_recvmsg() */
+> |	pflags =3D raw_flags(skb);
+> |	*pflags =3D 0;
+> |	if (oskb->sk)
+> |		*pflags |=3D MSG_DONTROUTE;
+> |	if (oskb->sk =3D=3D sk)
+> |		*pflags |=3D MSG_CONFIRM;
 
-I have to write a test for it later.
+Without testing, I think you're right here, the MSG_DONTROUTE isn't set
+here anymore.
 
-Regards,
-Patrick
+> So, I'm guessing, some 100 ms after my application begins to request
+> that the socket be closed, the socket's pointer becomes NULL in further
+> TX skbs in the queue, so the raw CAN layer can no longer differentiate
+> these skbs as TX. (Sorry if my pathways are a bit mixed up.)
+
+I have a git feeling that I've found the problem. Can you revert
+e940e0895a82 ("can: skb: can_skb_set_owner(): fix ref counting if socket
+was closed before setting skb ownership") and check if that fixes your
+problem? This might trigger the problem described in the patch:
+
+| WARNING: CPU: 0 PID: 280 at lib/refcount.c:25 refcount_warn_saturate+0x11=
+4/0x134
+| refcount_t: addition on 0; use-after-free.
+| Modules linked in: coda_vpu(E) v4l2_jpeg(E) videobuf2_vmalloc(E) imx_vdoa=
+(E)
+| CPU: 0 PID: 280 Comm: test_can.sh Tainted: G            E     5.11.0-0457=
+7-gf8ff6603c617 #203
+| Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+| Backtrace:
+| [<80bafea4>] (dump_backtrace) from [<80bb0280>] (show_stack+0x20/0x24) r7=
+:00000000 r6:600f0113 r5:00000000 r4:81441220
+| [<80bb0260>] (show_stack) from [<80bb593c>] (dump_stack+0xa0/0xc8)
+| [<80bb589c>] (dump_stack) from [<8012b268>] (__warn+0xd4/0x114) r9:000000=
+19 r8:80f4a8c2 r7:83e4150c r6:00000000 r5:00000009 r4:80528f90
+| [<8012b194>] (__warn) from [<80bb09c4>] (warn_slowpath_fmt+0x88/0xc8) r9:=
+83f26400 r8:80f4a8d1 r7:00000009 r6:80528f90 r5:00000019 r4:80f4a8c2
+| [<80bb0940>] (warn_slowpath_fmt) from [<80528f90>] (refcount_warn_saturat=
+e+0x114/0x134) r8:00000000 r7:00000000 r6:82b44000 r5:834e5600 r4:83f4d540
+| [<80528e7c>] (refcount_warn_saturate) from [<8079a4c8>] (__refcount_add.c=
+onstprop.0+0x4c/0x50)
+| [<8079a47c>] (__refcount_add.constprop.0) from [<8079a57c>] (can_put_echo=
+_skb+0xb0/0x13c)
+| [<8079a4cc>] (can_put_echo_skb) from [<8079ba98>] (flexcan_start_xmit+0x1=
+c4/0x230) r9:00000010 r8:83f48610 r7:0fdc0000 r6:0c080000 r5:82b44000 r4:83=
+4e5600
+| [<8079b8d4>] (flexcan_start_xmit) from [<80969078>] (netdev_start_xmit+0x=
+44/0x70) r9:814c0ba0 r8:80c8790c r7:00000000 r6:834e5600 r5:82b44000 r4:82a=
+b1f00
+| [<80969034>] (netdev_start_xmit) from [<809725a4>] (dev_hard_start_xmit+0=
+x19c/0x318) r9:814c0ba0 r8:00000000 r7:82ab1f00 r6:82b44000 r5:00000000 r4:=
+834e5600
+| [<80972408>] (dev_hard_start_xmit) from [<809c6584>] (sch_direct_xmit+0xc=
+c/0x264) r10:834e5600 r9:00000000 r8:00000000 r7:82b44000 r6:82ab1f00 r5:83=
+4e5600 r4:83f27400
+| [<809c64b8>] (sch_direct_xmit) from [<809c6c0c>] (__qdisc_run+0x4f0/0x534)
+
+Can you give me feedback if
+1. the revert "fixes" your problem
+2. the revert triggers the above backtrace
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--w5jclh3gdbvuvry7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCZeN0ACgkQqclaivrt
+76nhigf6AtEkH/kzq+whT0TYcjAQ9giTCQVVqlAStCXFsG7/RC/3RdsyDL09fDhL
+CTuASs1uM3YhDiCkTjm/3EFsE2yWVcRNjiBV+V36pjB4TZI2R+UJpysaVtLEH8pn
+C5BzxrZWWdR0Zu1SkysWsOqqV+NSXTqc6hdD3ydOqWyl7vgNNyMn0kErN3DRc7B5
+y2+fd8Aj7XfUuqmVBnJ5vEtzB5yrmpo4b/kqg7yi4bCsWat70eeyhXNLCitQAqwr
+7WPW92v7uAGfRkIPfbFVAaEC0Sgo3R3SLHBl99ouj1IRx1uuE0l5MEccHHY3wut4
+ubPe7sFeUj4KivL1PzD1XdoY8JuSUQ==
+=B8Ml
+-----END PGP SIGNATURE-----
+
+--w5jclh3gdbvuvry7--
