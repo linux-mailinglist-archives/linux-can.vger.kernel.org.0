@@ -2,59 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A043D37AD4A
-	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 19:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34DD037AF00
+	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 21:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbhEKRpY (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 May 2021 13:45:24 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:11715 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbhEKRpX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 May 2021 13:45:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1620755054; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=skmYe45i9hZr5ScmEnkga6owMtgAI5IDsLrHdd5vKut0PYiCW2KqaPvYYKoM/uimLs
-    C1BymL77BnEo9x00i2XEBoQjE0MJuGHlK2yeik81Z4VoE6hEaOtfJhNalcT+qwpq5dEq
-    Zue1XBTZlsvpCtNioyYcYctJm8Gr8nC5RFuGqnypgRwo7VU5l1dj9V4CJDzatPZlAfs7
-    ySn92GK5klEsHmunV7f8NpLHQnCTMBkEG3Irx6mGTAAv6wjWn0d6/1mQnWN0RK2tINpD
-    cNQkDH0/TWSi1r+4eF9XgPa+Vs7rUzH3bf5a/s4/BEffRrgA79ZYM/FoMWTICtudMiM+
-    ZROg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1620755054;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=W92xU5GWr+hJ3VyvfRpKET1qrDrsd2ZJ0F835qQcDNM=;
-    b=L1b8j9QukhOmMxINXcRJ6TqMGModlGP/+mQuFlruIGJaXJ9gsJ7YZqAGL5vZKXPtwk
-    lwZUglZr1O0P0cdKeGyus4Jw/DGEKQ7b/UfnXDCrCt88u0ayIlHFFEzjtSA9RIs38aYT
-    jIxjEsSmJDfyTvEJSKxvJP63NvrEJ5OygrSyg+p81alUqN9zXYxe3quo33MklK03++Rm
-    cBrRCreejSja3XXisOpzar92/akGFj1Q/jXB8i1YcGsMnA89BX4L8oMJbZRiLAwVxe+r
-    y2drGAHuuyygBqBAJKbcFfjYHwFwDtAO07M2ObyBM/54IOHuVCPxh9u6P0Se/m39wwJ9
-    f6XQ==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1620755054;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=W92xU5GWr+hJ3VyvfRpKET1qrDrsd2ZJ0F835qQcDNM=;
-    b=ChmW6064J8OqbUliRo7XGVBwYnzOTN8PdE3e9Yl0nso0HstmbttkmgaisFJdDRTrNB
-    jILl7Ran1aHzY68CNOFpGcTbaLgZYFFHvhpuE5oQd3xBsmaPvifPGLqbhgbDGp3L7G4f
-    hxEnDHQD42tkERSlLJFntNnHNL+4x4malGoDaFljj5ry612Bd5MV9xCmwbP53zHZLmy8
-    U0El9ttCYVzCu5CheaSMl6IiCsv9gk3MWBnr0do7ehDSPKlA9xydZzJex4K7mvtHsz2w
-    EdmIk+Vycmsy1h61i2j3TfsWes8/iWkE2t50/MiDmGD5U0vegPIOr21LE6HTlqq5Cwld
-    /EqA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3HMbEWKN9eTTrsO"
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-    by smtp.strato.de (RZmta 47.25.7 DYNA|AUTH)
-    with ESMTPSA id I04856x4BHiE0g6
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 11 May 2021 19:44:14 +0200 (CEST)
-Subject: Re: CAN ISO-TP
-To:     Patrick Menschel <menschel.p@posteo.de>,
+        id S231439AbhEKTEE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 May 2021 15:04:04 -0400
+Received: from mout01.posteo.de ([185.67.36.65]:52273 "EHLO mout01.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231329AbhEKTEE (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 11 May 2021 15:04:04 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id A287924002F
+        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 21:02:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1620759775; bh=5UKkvdlAa9I47UOzci7E2Fbswj9fLU8igfc5A2/Dg1U=;
+        h=To:Cc:From:Autocrypt:Subject:Date:From;
+        b=F0FgMe40U0bcYKHjkVeNTRdPXwKnULF92Kk9+hd9SRMngXZgyw0QWET54GcKLTZJY
+         Uz9Qs0mgeAD0ZIKBTPxIeL497n1K40/i6lpIjTTS9wjwxRMx20f34W6FVFFTKDlmMq
+         W8jb2FNHZ0B2fhFj+Rq9UHlmn/Ll/wkvG+CfuBuuB5/xllkBTU88HcMACZliCT7TrI
+         ReJy4Hzri2KsoXvgd6jaZyd3kTc9+0tcBJ/v46yZLti0spRo5hzMMXdhQcMpWdLSLJ
+         8VXMyxdlgO2EKM0yD9iimLFfYpjXIGWYshS8DXKmVRp9pQUBKKK/Pe1MgKyiLTBZXK
+         5lDuXV8LZgvrQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4FfnPC1jyQz6tmR;
+        Tue, 11 May 2021 21:02:55 +0200 (CEST)
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Bartosz Zdanowicz <zdanowiczb@gmail.com>
 Cc:     linux-can <linux-can@vger.kernel.org>
 References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
@@ -66,98 +38,174 @@ References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
  <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
  <7ad89748-c309-1153-aa8f-b0e98160e39d@posteo.de>
  <43d77f58-1ec9-302c-d8f0-654444046cab@posteo.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <90c29725-5d6d-e4b9-6e28-a002a8f0bfcf@hartkopp.net>
-Date:   Tue, 11 May 2021 19:44:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+ <90c29725-5d6d-e4b9-6e28-a002a8f0bfcf@hartkopp.net>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
+ elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
+ TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
+ ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
+ ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
+ Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
+ R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
+ N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
+ NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
+ S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
+ aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
+ djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
+ TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
+ WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
+ UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
+ bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
+ VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
+ NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
+ TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
+ YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
+ c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
+ NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
+ NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
+ dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
+ aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
+ TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
+ MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
+ S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
+ K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
+ dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
+ a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
+ ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
+ QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
+ YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
+ TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
+ T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
+ MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
+ U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
+ CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
+ T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
+ NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
+ YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
+ dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
+ U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
+ TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
+ TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
+ RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
+ STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
+ NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
+ ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
+ aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
+ UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
+ MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
+ WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
+ V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
+ a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
+ dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
+ QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
+ IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Subject: Re: CAN ISO-TP
+Message-ID: <fcb494bd-8871-587c-b097-578f0760d05c@posteo.de>
+Date:   Tue, 11 May 2021 19:02:54 +0000
 MIME-Version: 1.0
-In-Reply-To: <43d77f58-1ec9-302c-d8f0-654444046cab@posteo.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <90c29725-5d6d-e4b9-6e28-a002a8f0bfcf@hartkopp.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 11.05.21 18:37, Patrick Menschel wrote:
-> Am 10.05.21 um 20:04 schrieb Patrick Menschel:
->> Am 10.05.21 um 12:02 schrieb Bartosz Zdanowicz:
->>> pt., 7 maj 2021 o 09:59 Patrick Menschel <menschel.p@posteo.de> napisał(a):
->>>> try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
->>>> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
+Am 11.05.21 um 19:44 schrieb Oliver Hartkopp:
+> On 11.05.21 18:37, Patrick Menschel wrote:
+>> Am 10.05.21 um 20:04 schrieb Patrick Menschel:
+>>> Am 10.05.21 um 12:02 schrieb Bartosz Zdanowicz:
+>>>> pt., 7 maj 2021 o 09:59 Patrick Menschel <menschel.p@posteo.de>
+>>>> napisał(a):
+>>>>> try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
+>>>>> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
+>>>>>
+>>>>>
+>>>>> https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.py#L583
+>>>>>
+>>>>>
+>>>>> and wrap tx into a try-except block.
+>>>>>
+>>>>> try:
+>>>>>      self.process_data(socket=socket)
+>>>>> except OSError as e:
+>>>>>      print(e)
+>>>>>
+>>>>> With this you actually have a chance to do error handling on tx path
+>>>>> instead of hitting an already present error of the previous op.
+>>>>>
+>>>> I used following code:
 >>>>
->>>> https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.py#L583
+>>>> import isotp
+>>>> import time
+>>>> s = isotp.socket()
+>>>> s._socket.settimeout(2)
+>>>> s.set_opts(s.flags.WAIT_TX_DONE)
+>>>> s.bind("can0", isotp.Address(rxid=1, txid=2))
 >>>>
->>>> and wrap tx into a try-except block.
+>>>> s.send(b"aaaaaaaaa") -> returns immediately with number of bytes
+>>>> s.send(b"aaaaaaaaa") -> same OS error as above (Error 70)
 >>>>
->>>> try:
->>>>      self.process_data(socket=socket)
->>>> except OSError as e:
->>>>      print(e)
->>>>
->>>> With this you actually have a chance to do error handling on tx path
->>>> instead of hitting an already present error of the previous op.
->>>>
->>> I used following code:
 >>>
->>> import isotp
->>> import time
->>> s = isotp.socket()
->>> s._socket.settimeout(2)
->>> s.set_opts(s.flags.WAIT_TX_DONE)
->>> s.bind("can0", isotp.Address(rxid=1, txid=2))
+>>> OK,
 >>>
->>> s.send(b"aaaaaaaaa") -> returns immediately with number of bytes
->>> s.send(b"aaaaaaaaa") -> same OS error as above (Error 70)
+>>> this is really strange. I have no clue how that is possible unless it's
+>>> on kernel side.
 >>>
+>>> I have to write a test for it later.
 >>
->> OK,
+>> I can confirm this behaviour, it is definetly kernel-side of the socket.
 >>
->> this is really strange. I have no clue how that is possible unless it's
->> on kernel side.
+>> tests/test_socketcan.py::TestCanIsoTpSocket::test_should_fail_missing_flow_control_on_transfer
 >>
->> I have to write a test for it later.
+>>
+>> --------------------------------------------------------------------------------------------------
+>>
+>> live log call
+>> --------------------------------------------------------------------------------------------------
+>>
+>> 2021-05-11 18:14:00 [    INFO] Return value of IsoTpSend without flow
+>> control: 64 (test_socketcan.py:720)
+>> 2021-05-11 18:14:01 [   ERROR] Return value of IsoTpSend without flow
+>> control: None, Raised [Errno 70] Communication error on send
+>> (test_socketcan.py:718)
+>>
+>> Apparently there is another message thread for this and something was
+>> fixed.
+>>
+>> https://marc.info/?i=97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4%20()%20hartkopp%20!%20net
+>>
+>>
+>> Funny thing is, it does not care about the wait_tx_done flag, this
+>> happens with and without it.
 > 
-> I can confirm this behaviour, it is definetly kernel-side of the socket.
+> The error handling was originally intended to be done by simple timeout
+> monitoring on application level.
 > 
-> tests/test_socketcan.py::TestCanIsoTpSocket::test_should_fail_missing_flow_control_on_transfer
+> What I assume from the output above:
 > 
-> --------------------------------------------------------------------------------------------------
-> live log call
-> --------------------------------------------------------------------------------------------------
-> 2021-05-11 18:14:00 [    INFO] Return value of IsoTpSend without flow
-> control: 64 (test_socketcan.py:720)
-> 2021-05-11 18:14:01 [   ERROR] Return value of IsoTpSend without flow
-> control: None, Raised [Errno 70] Communication error on send
-> (test_socketcan.py:718)
+> 1st attempt: We have a failure but we happily return that we have send
+> 64 bytes (which Marc improved with the above referenced patch for
+> CAN_ISOTP_WAIT_TX_DONE mode).
 > 
-> Apparently there is another message thread for this and something was fixed.
+> (socket remains open?!?)
 > 
-> https://marc.info/?i=97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4%20()%20hartkopp%20!%20net
+> 2nd attempt: The error from the first attempt shows up in the socket
+> error message queue?!?
 > 
-> Funny thing is, it does not care about the wait_tx_done flag, this
-> happens with and without it.
+> I just did some tests with a modified isotpsend.c which closes the
+> socket after the sending operation. This is probably the reason I did
+> not see that behaviour ...
 
-The error handling was originally intended to be done by simple timeout 
-monitoring on application level.
+I forgot to post my test which produced that result above.
 
-What I assume from the output above:
+https://gitlab.com/Menschel/socketcan/-/commit/bd7bfebde1d791c7dccb717c849398c0d0f53dcd
 
-1st attempt: We have a failure but we happily return that we have send 
-64 bytes (which Marc improved with the above referenced patch for 
-CAN_ISOTP_WAIT_TX_DONE mode).
-
-(socket remains open?!?)
-
-2nd attempt: The error from the first attempt shows up in the socket 
-error message queue?!?
-
-I just did some tests with a modified isotpsend.c which closes the 
-socket after the sending operation. This is probably the reason I did 
-not see that behaviour ...
+I run it on a pi0w with regular raspbian buster and a recent python
+3.9.4 installed.
+"pytest
+tests/test_socketcan.py::TestCanIsoTpSocket::test_should_fail_missing_flow_control_on_transfer"
 
 Regards,
-Oliver
+Patrick
