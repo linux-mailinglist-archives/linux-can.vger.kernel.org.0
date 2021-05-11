@@ -2,133 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E845337A2F0
-	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 11:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D42C37A369
+	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 11:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbhEKJGL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 May 2021 05:06:11 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:2298 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbhEKJGJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 May 2021 05:06:09 -0400
-Received: from dggeml712-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4FfX2Q6vYWz19NB4;
-        Tue, 11 May 2021 17:00:46 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggeml712-chm.china.huawei.com (10.3.17.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Tue, 11 May 2021 17:05:00 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Tue, 11 May
- 2021 17:05:00 +0800
-Subject: Re: [PATCH net v6 3/3] net: sched: fix tx action reschedule issue
- with stopped queue
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
-        <weiwan@google.com>, <cong.wang@bytedance.com>,
-        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
- <1620610956-56306-4-git-send-email-linyunsheng@huawei.com>
- <20210510212232.3386c5b4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <c676404c-f210-b0cb-ced3-5449676055a8@huawei.com>
-Date:   Tue, 11 May 2021 17:04:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S231380AbhEKJV0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 May 2021 05:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231388AbhEKJVS (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 May 2021 05:21:18 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148FEC0613ED
+        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 02:20:11 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id l2so19361415wrm.9
+        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 02:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=T+Qb3ETarQ/vtKWwashh1NEh9qw/aCmj6/v/uG5lQ+I=;
+        b=B/0XPLk9Y8PBdSncdHyxRp5xL/n3hXiC3spftSmWnAvQ+C+klBwKIQeYXGoGgnlF3o
+         s3uWZlLxtipVASfaXi3awUyUlx9xkSgUcgDN1OtfDeI/xa4UZIIvIcj+T62yVHzKES6Z
+         yR102Yzox97GjkEeqnNtquAaPJ8p3YMvZLwogaFfQjJNL1OoHNei8oU3XKJfinewiBST
+         W3IELCF0jMrYNee6fDi1T61NOxajbM5l+Tf+OfsfdVRDrwddSI/dkMxs/LMrV10bbjTp
+         THFY3w1RJxY01aR94rF4BdhCW+vj6Tse0MrPkl1W7TK+elqMu24luYypofqsx37DwPv7
+         4B9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T+Qb3ETarQ/vtKWwashh1NEh9qw/aCmj6/v/uG5lQ+I=;
+        b=XCyHxOM+8rec4Sj6IRXVM63mCr5NA3A+TbmWtA/oL75zCTVbRo74X315wPixjabJPn
+         sfQrkINE52JAlw+HKW4kl24cvIuQIofvd/qt0mBmZ/lOLqnF1911laQn1HzdXNx34kYc
+         rzueTJLaSZ5C7B7hkoPB1wfAWVWWGXE5m0DKAduXyaspJqdneVUcKoDzOrG1s6jyK05a
+         +IcJnALCW72kQal7LFXIgivl0mBRINiLMl8PJbHjtycS18xrClCnps5E9+ZFnM+nivfg
+         qPYYaZqdSae5PUGhM08Ivm/3z3UPL5sQ00usY6YXizisgPl8LY33myXVwdDogQIJx+tf
+         IWKA==
+X-Gm-Message-State: AOAM533RSVpWFk5Aelxm1Q9IB8f57QgGWvANzYQbsAPcBOMzxSqW9lII
+        Xt2Gpli76TIe8yooh4PBrm5U0C87SbFGTWcW
+X-Google-Smtp-Source: ABdhPJySuK6i6iaW2XARFq193i9ZGUyh+Yn19cUYF/9vHHngiJ96TrlgXbi+6CXMlyZv6jRXEnpKQQ==
+X-Received: by 2002:a5d:6088:: with SMTP id w8mr35670778wrt.424.1620724809740;
+        Tue, 11 May 2021 02:20:09 -0700 (PDT)
+Received: from bigthink (92.41.10.184.threembb.co.uk. [92.41.10.184])
+        by smtp.gmail.com with ESMTPSA id g11sm27438329wri.59.2021.05.11.02.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 May 2021 02:20:09 -0700 (PDT)
+Date:   Tue, 11 May 2021 10:20:07 +0100
+From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: CAN: TX frames marked as RX after the sending socket is closed
+Message-ID: <20210511092007.t6beiemeufvhu46n@bigthink>
+References: <20210510142302.ijbwowv4usoiqkxq@bigthink>
+ <20210510153540.52uzcndqyp6yu7ve@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20210510212232.3386c5b4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme719-chm.china.huawei.com (10.1.199.115) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/mixed; boundary="u32vfygc3h2c6apd"
+Content-Disposition: inline
+In-Reply-To: <20210510153540.52uzcndqyp6yu7ve@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/5/11 12:22, Jakub Kicinski wrote:
-> On Mon, 10 May 2021 09:42:36 +0800 Yunsheng Lin wrote:
->> The netdev qeueue might be stopped when byte queue limit has
->> reached or tx hw ring is full, net_tx_action() may still be
->> rescheduled endlessly if STATE_MISSED is set, which consumes
->> a lot of cpu without dequeuing and transmiting any skb because
->> the netdev queue is stopped, see qdisc_run_end().
->>
->> This patch fixes it by checking the netdev queue state before
->> calling qdisc_run() and clearing STATE_MISSED if netdev queue is
->> stopped during qdisc_run(), the net_tx_action() is recheduled
->> again when netdev qeueue is restarted, see netif_tx_wake_queue().
->>
->> Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
->> Reported-by: Michal Kubecek <mkubecek@suse.cz>
->> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> 
-> Patches 1 and 2 look good to me but this one I'm not 100% sure.
-> 
->> @@ -251,8 +253,10 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
->>  	*validate = true;
->>  
->>  	if ((q->flags & TCQ_F_ONETXQUEUE) &&
->> -	    netif_xmit_frozen_or_stopped(txq))
->> +	    netif_xmit_frozen_or_stopped(txq)) {
->> +		clear_bit(__QDISC_STATE_MISSED, &q->state);
->>  		return skb;
->> +	}
-> 
-> The queues are woken asynchronously without holding any locks via
-> netif_tx_wake_queue(). Theoretically we can have a situation where:
-> 
-> CPU 0                            CPU 1   
->   .                                .
-> dequeue_skb()                      .
->   netif_xmit_frozen..() # true     .
->   .                              [IRQ]
->   .                              netif_tx_wake_queue()
->   .                              <end of IRQ>
->   .                              netif_tx_action()
->   .                              set MISSED
->   clear MISSED
->   return NULL
-> ret from qdisc_restart()
-> ret from __qdisc_run()
-> qdisc_run_end()
-> -> MISSED not set
 
-Yes, the above does seems to have the above data race.
+--u32vfygc3h2c6apd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-As my understanding, there is two ways to fix the above data race:
-1. do not clear the STATE_MISSED for netif_xmit_frozen_or_stopped()
-   case, just check the netif_xmit_frozen_or_stopped() before
-   calling __netif_schedule() at the end of qdisc_run_end(). This seems
-   to only work with qdisc with TCQ_F_ONETXQUEUE flag because it seems
-   we can only check the netif_xmit_frozen_or_stopped() with q->dev_queue,
-   I am not sure q->dev_queue is pointint to which netdev queue when qdisc
-   is not set with TCQ_F_ONETXQUEUE flag.
+On Mon, May 10, 2021 at 05:35:40PM +0200, Marc Kleine-Budde wrote:
+> Can you provide the program to reproduce the issue?
 
-2. clearing the STATE_MISSED for netif_xmit_frozen_or_stopped() case
-   as this patch does, and protect the __netif_schedule() with q->seqlock
-   for netif_tx_wake_queue(), which might bring unnecessary overhead for
-   non-stopped queue case
+See attached below this email (tx only, rx done with candump).
 
-Any better idea?
+> Have you increased the CAN interface's txqueuelen?
 
-> 
-> .
-> 
+Yup, qlen is 1000.
 
+--
+Regards,
+
+Torin Cooper-Bennun
+Software Engineer | maxiluxsystems.com
+
+
+--u32vfygc3h2c6apd
+Content-Type: text/x-csrc; charset=us-ascii
+Content-Disposition: attachment; filename="tx_rx_bug.c"
+
+#include <errno.h>
+#include <linux/can.h>
+#include <net/if.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
+
+int main(int argc, char *argv[])
+{
+	const char *if_name = "can0";
+	int sockfd;
+	struct ifreq req = {};
+	struct sockaddr_can sockaddr = {};
+	struct can_frame frame = {};
+	struct timeval tv;
+	char timestr[16];
+
+	sockfd = socket(AF_CAN, SOCK_RAW, CAN_RAW);
+
+	strncpy(req.ifr_name, if_name, IF_NAMESIZE);
+	ioctl(sockfd, SIOCGIFINDEX, &req);
+
+	sockaddr.can_family = AF_CAN;
+	sockaddr.can_ifindex = req.ifr_ifindex;
+
+	bind(sockfd, (const struct sockaddr *) &sockaddr, sizeof(sockaddr));
+
+	frame.can_dlc = 8;
+	memset(frame.data, 0xee, 8);
+	for (int i = 0; i < 1000; ++i)
+	{
+		frame.can_id = (i & 0x7ff);
+		send(sockfd, &frame, sizeof(frame), 0);
+	}
+
+	close(sockfd);
+
+	gettimeofday(&tv, NULL);
+	strftime(timestr, sizeof(timestr), "%H:%M:%S", localtime(&tv.tv_sec));
+	printf("Socket closed at %s.%06ld\n", timestr, tv.tv_usec);
+
+	return 0;
+}
+
+--u32vfygc3h2c6apd--
