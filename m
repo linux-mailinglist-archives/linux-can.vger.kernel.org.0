@@ -2,210 +2,109 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DD037AF00
-	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 21:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7054837B136
+	for <lists+linux-can@lfdr.de>; Wed, 12 May 2021 00:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbhEKTEE (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 May 2021 15:04:04 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:52273 "EHLO mout01.posteo.de"
+        id S229784AbhEKWB4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 May 2021 18:01:56 -0400
+Received: from mout.gmx.net ([212.227.17.22]:54817 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231329AbhEKTEE (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 11 May 2021 15:04:04 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id A287924002F
-        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 21:02:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1620759775; bh=5UKkvdlAa9I47UOzci7E2Fbswj9fLU8igfc5A2/Dg1U=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=F0FgMe40U0bcYKHjkVeNTRdPXwKnULF92Kk9+hd9SRMngXZgyw0QWET54GcKLTZJY
-         Uz9Qs0mgeAD0ZIKBTPxIeL497n1K40/i6lpIjTTS9wjwxRMx20f34W6FVFFTKDlmMq
-         W8jb2FNHZ0B2fhFj+Rq9UHlmn/Ll/wkvG+CfuBuuB5/xllkBTU88HcMACZliCT7TrI
-         ReJy4Hzri2KsoXvgd6jaZyd3kTc9+0tcBJ/v46yZLti0spRo5hzMMXdhQcMpWdLSLJ
-         8VXMyxdlgO2EKM0yD9iimLFfYpjXIGWYshS8DXKmVRp9pQUBKKK/Pe1MgKyiLTBZXK
-         5lDuXV8LZgvrQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4FfnPC1jyQz6tmR;
-        Tue, 11 May 2021 21:02:55 +0200 (CEST)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Bartosz Zdanowicz <zdanowiczb@gmail.com>
-Cc:     linux-can <linux-can@vger.kernel.org>
-References: <CAERdor5nY73X4qip=up8fNU=xT+H7r2XnKiob66=4DxovkBiGw@mail.gmail.com>
- <a7df697c-b6d3-1894-dcc6-672698caa19a@hartkopp.net>
- <CAERdor5o6yKq1J-hBbjiBtU63OkxhijKifO0OEBt21ASKhCXuw@mail.gmail.com>
- <02607798-4701-376a-6a58-2ff29c87ccab@posteo.de>
- <CAERdor7LiPPJWLxMQdrQsF=jU0yHNU_uwLAbQegpUj4KeJHzgg@mail.gmail.com>
- <587ef081-804b-9816-f899-f4bd645865cf@posteo.de>
- <CAERdor4VkyxQ3X4gZn1jR9PFkwg2BqbC+iG9DQXECakdpsotkA@mail.gmail.com>
- <7ad89748-c309-1153-aa8f-b0e98160e39d@posteo.de>
- <43d77f58-1ec9-302c-d8f0-654444046cab@posteo.de>
- <90c29725-5d6d-e4b9-6e28-a002a8f0bfcf@hartkopp.net>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: CAN ISO-TP
-Message-ID: <fcb494bd-8871-587c-b097-578f0760d05c@posteo.de>
-Date:   Tue, 11 May 2021 19:02:54 +0000
+        id S229714AbhEKWBz (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 11 May 2021 18:01:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1620770433;
+        bh=Ezf3+4/5WESk8OkhoMsaJlcqfc3Htg1LJN1RDH+6u1k=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=gN58ZNyDm+TQF5yCreJxdhLCIZVdkhlvj5FtoQNH7RyqlhZzdxcmqgsNCeWzUridt
+         b99U8Q9lMRwpG8k7PHLKiTo9jCkd0gjvASj+6NaadIDwEdQylsG9svo+6GbbRQU7kg
+         Jq1TnSGbRz912Kw2AssFZYj4M5TLQNVX42vCve/w=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [89.247.255.239] ([89.247.255.239]) by web-mail.gmx.net
+ (3c-app-gmx-bap63.server.lan [172.19.172.133]) (via HTTP); Wed, 12 May 2021
+ 00:00:33 +0200
 MIME-Version: 1.0
-In-Reply-To: <90c29725-5d6d-e4b9-6e28-a002a8f0bfcf@hartkopp.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+Message-ID: <trinity-10aeed49-cb96-47d9-818e-b938913e6fce-1620770433273@3c-app-gmx-bap63>
+From:   Norbert Slusarek <nslusarek@gmx.net>
+To:     oss-security@lists.openwall.com
+Cc:     netdev@vger.kernel.org, socketcan@hartkopp.net, mkl@pengutronix.de,
+        alex.popov@linux.com, linux-can@vger.kernel.org,
+        seth.arnold@canonical.com, steve.beattie@canonical.com,
+        cascardo@canonical.com
+Subject: Linux kernel: net/can/isotp: race condition leads to local
+ privilege escalation
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 12 May 2021 00:00:33 +0200
+Importance: normal
+Sensitivity: Normal
+X-Priority: 3
+X-Provags-ID: V03:K1:sTuBeu26LFRf9uFTz8G/CIAspz4RlbypygBf7W0g+BG51Z19YdJL6eE3XgacocgX9E5hQ
+ e+dDjOA3/EkoXbJo5U6DalUUgrJ/kNxwXEsEOWU2QRHdiHbiMjbcvVvwrPla846b1D8+4ac8P23p
+ VluC8Dj1X56VtiIrUSCjRJqg3wGcdnWwu9zf//JlGtKXDulxThX6x5nwCiA42RHaxNOmEz+u7stB
+ CqIoWZnqXndk1VKnRDpWzNfE/EOA1IOLk0AX64ombKQ+FPkYkORLBs4wRGX0gtuk5+Yh/OF8QiKa
+ lQ=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eHrAPSba1PY=:uLosab/yJfOjF8kNOcEO8F
+ JusYW6oNwA+VO55rLhhXgjWHAPSp/KZKaM0RzQ8N6amlXs346TFYDAqNXUJgHRNzcLSb/Hng7
+ 4YIDTtQBeAyYsrDMiBrj/8WBQrFk1WDB+TOU3wNQDjxxDfRrOe+bJpL5OfEqMd4xHjSBdKj9A
+ rV+lYKoNgQPDtrxSQE5nUNcvRA+V3bXdbfv4mwpkrj3O2cr+9/bIXXxDsZSjviq7WWGi7/u19
+ MzMXUu91TgT8+/A7yw6rJ3x7mPR9KLBTN7ZNAFpV6p1a7xREINc67Bo+lbcQ1PZurDVIZHEaC
+ Dz41Y601DfmsdwfcmKQZBp8QI6Eyj404tvSY37dFHZ0B2RXCGI2EP/KlS2ERTuXJG8EvIBUa4
+ dpCfnnNvCwbjGYMm7famU+BODbXX6pfbS2XHnLi9Z9+9yZyzvnJkOO0r9yzlJI+Qt6OsoNcuB
+ vkJQ4kHHRvwo80LKeeLGe1hMAAVlfOX/ZSRfsYYw3Nx0ZqAtpb33OBcJ3NkJmSvvOs9+ED0lG
+ AJgbJdNSSLNsbNa+v3A+mliBPzVqLj2tyuvdZwlnqglQ9nevR/KqhnMwvGGnH7i60RXTkFxT1
+ u7qU+6zgdUmcwJUH6B5Z+ae4doK+qsu/qCcIFLhXNGu7aPgjXggEgYfOqNLIXnt836UBPPodl
+ dath8Yt1ZXLbqEIFqyMgptvehlPILsaEzTvkIDxff52LHMFkDVZAymHzDt1jLK0H53976d9Xz
+ X3fMae4pX+LUais4xPvS4qlmNethvylnjVJau+IUr/E6bjuLeSdsei8NAJcB2Kt0YFHhoQPR8
+ bGYG16TRBxukpeWRnFHOheUItanLBhycf47dL/mBL92AVAgob5pTUY0Ofyvns3a1SGWYvUpCt
+ 8ngmbKQ2PfVnNfScwcYSnaI67lw8vhsQzYn6ECcv9y4dQxtVHDrd2Yy0uQcbVI
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 11.05.21 um 19:44 schrieb Oliver Hartkopp:
-> On 11.05.21 18:37, Patrick Menschel wrote:
->> Am 10.05.21 um 20:04 schrieb Patrick Menschel:
->>> Am 10.05.21 um 12:02 schrieb Bartosz Zdanowicz:
->>>> pt., 7 maj 2021 o 09:59 Patrick Menschel <menschel.p@posteo.de>
->>>> napisał(a):
->>>>> try to enable CAN_ISOTP_WAIT_TX_DONE via socket.setsockopt() .
->>>>> https://github.com/raspberrypi/linux/blob/rpi-5.10.y/net/can/isotp.c#L14
->>>>>
->>>>>
->>>>> https://gitlab.com/Menschel/socketcan/-/blob/master/socketcan/socketcan.py#L583
->>>>>
->>>>>
->>>>> and wrap tx into a try-except block.
->>>>>
->>>>> try:
->>>>>      self.process_data(socket=socket)
->>>>> except OSError as e:
->>>>>      print(e)
->>>>>
->>>>> With this you actually have a chance to do error handling on tx path
->>>>> instead of hitting an already present error of the previous op.
->>>>>
->>>> I used following code:
->>>>
->>>> import isotp
->>>> import time
->>>> s = isotp.socket()
->>>> s._socket.settimeout(2)
->>>> s.set_opts(s.flags.WAIT_TX_DONE)
->>>> s.bind("can0", isotp.Address(rxid=1, txid=2))
->>>>
->>>> s.send(b"aaaaaaaaa") -> returns immediately with number of bytes
->>>> s.send(b"aaaaaaaaa") -> same OS error as above (Error 70)
->>>>
->>>
->>> OK,
->>>
->>> this is really strange. I have no clue how that is possible unless it's
->>> on kernel side.
->>>
->>> I have to write a test for it later.
->>
->> I can confirm this behaviour, it is definetly kernel-side of the socket.
->>
->> tests/test_socketcan.py::TestCanIsoTpSocket::test_should_fail_missing_flow_control_on_transfer
->>
->>
->> --------------------------------------------------------------------------------------------------
->>
->> live log call
->> --------------------------------------------------------------------------------------------------
->>
->> 2021-05-11 18:14:00 [    INFO] Return value of IsoTpSend without flow
->> control: 64 (test_socketcan.py:720)
->> 2021-05-11 18:14:01 [   ERROR] Return value of IsoTpSend without flow
->> control: None, Raised [Errno 70] Communication error on send
->> (test_socketcan.py:718)
->>
->> Apparently there is another message thread for this and something was
->> fixed.
->>
->> https://marc.info/?i=97e2ddd5-cc8b-9c7b-6198-2eceee39dfd4%20()%20hartkopp%20!%20net
->>
->>
->> Funny thing is, it does not care about the wait_tx_done flag, this
->> happens with and without it.
-> 
-> The error handling was originally intended to be done by simple timeout
-> monitoring on application level.
-> 
-> What I assume from the output above:
-> 
-> 1st attempt: We have a failure but we happily return that we have send
-> 64 bytes (which Marc improved with the above referenced patch for
-> CAN_ISOTP_WAIT_TX_DONE mode).
-> 
-> (socket remains open?!?)
-> 
-> 2nd attempt: The error from the first attempt shows up in the socket
-> error message queue?!?
-> 
-> I just did some tests with a modified isotpsend.c which closes the
-> socket after the sending operation. This is probably the reason I did
-> not see that behaviour ...
+A race condition in the CAN ISOTP networking protocol was discovered which
+allows forbidden changing of socket members after binding the socket.
 
-I forgot to post my test which produced that result above.
+In particular, the lack of locking behavior in isotp_setsockopt() makes it
+feasible to assign the flag CAN_ISOTP_SF_BROADCAST to the socket, despite having
+previously registered a can receiver. After closing the isotp socket, the can
+receiver will still be registered and use-after-free's can be triggered in
+isotp_rcv() on the freed isotp_sock structure.
+This leads to arbitrary kernel execution by overwriting the sk_error_report()
+pointer, which can be misused in order to execute a user-controlled ROP chain to
+gain root privileges.
 
-https://gitlab.com/Menschel/socketcan/-/commit/bd7bfebde1d791c7dccb717c849398c0d0f53dcd
+The vulnerability was introduced with the introduction of SF_BROADCAST support
+in commit 921ca574cd38 ("can: isotp: add SF_BROADCAST support for functional
+addressing") in 5.11-rc1.
+In fact, commit 323a391a220c ("can: isotp: isotp_setsockopt():
+block setsockopt on bound sockets") did not effectively prevent isotp_setsockopt()
+from modifying socket members before isotp_bind().
 
-I run it on a pi0w with regular raspbian buster and a recent python
-3.9.4 installed.
-"pytest
-tests/test_socketcan.py::TestCanIsoTpSocket::test_should_fail_missing_flow_control_on_transfer"
+The requested CVE ID will be revealed along with further exploitation details
+as a response to this notice on 13th May of 2021.
+
+Credits: Norbert Slusarek
+
+*** exploit log ***
+
+Adjusted to work with openSUSE Tumbleweed.
+
+noprivs@suse:~/expl> uname -a
+Linux suse 5.12.0-1-default #1 SMP Mon Apr 26 04:25:46 UTC 2021 (5d43652) x86_64 x86_64 x86_64 GNU/Linux
+noprivs@suse:~/expl> ./lpe
+[+] entering setsockopt
+[+] entering bind
+[+] left bind with ret = 0
+[+] left setsockopt with flags = 838
+[+] race condition hit, closing and spraying socket
+[+] sending msg to run softirq with isotp_rcv()
+[+] check sudo su for root rights
+noprivs@suse:~/expl> sudo su
+suse:/home/noprivs/expl # id
+uid=0(root) gid=0(root) groups=0(root)
+suse:/home/noprivs/expl # cat /root/check
+high school student living in germany looking for an internship in info sec.
+if interested please reach out to nslusarek@gmx.net.
 
 Regards,
-Patrick
+Norbert Slusarek
