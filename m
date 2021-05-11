@@ -2,136 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1DB3796F3
-	for <lists+linux-can@lfdr.de>; Mon, 10 May 2021 20:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7B7379E5C
+	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 06:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbhEJSV4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 10 May 2021 14:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbhEJSV4 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 10 May 2021 14:21:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC27C061574
-        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 11:20:51 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lgAWP-0002z9-RP
-        for linux-can@vger.kernel.org; Mon, 10 May 2021 20:20:49 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 13F32621A3C
-        for <linux-can@vger.kernel.org>; Mon, 10 May 2021 18:20:49 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id C40FB621A39;
-        Mon, 10 May 2021 18:20:48 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 7b6f4c68;
-        Mon, 10 May 2021 18:20:48 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Subject: [PATCH] can: raw: fix TX CAN frames show up as RX'ed ones
-Date:   Mon, 10 May 2021 20:20:39 +0200
-Message-Id: <20210510182038.1528631-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        id S229871AbhEKEXl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 May 2021 00:23:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42618 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229745AbhEKEXk (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 11 May 2021 00:23:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ED9946191F;
+        Tue, 11 May 2021 04:22:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620706954;
+        bh=YwtDo3LeR3JmT4NhxeAjnRuwPnLFemK+gI6XznEvRuU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qf5ZA9kI5amR23oIRR7F81z2D0LxmAnmoLwxO2OyLSFJFYWjuYQORJ2YWtTJmCpHJ
+         iGoa6+lsQh291Chp3pTo125Jwjhu90Js32+fMFn+AqFywBpCnH/cCpnXhDqKnTqL5V
+         xmj6ak1pAZnCPCqvWmm7ciI4MZUf7c0b72bDlvsnUPKXM1UvyDpYQFo28guHAF6ZKu
+         oQL4xWvfOjssqtBBO8oaoCpkayKPK38sedLFCRLOjtRGkAAQkduELVY70xu3p0nwyO
+         pp5/y9lh1kQ295Dvdl9pxry8WGlr3Wv4bAmGRc8+wm4lllYnXrgoW63BWBaQDnVo4L
+         /VOv3PsisNa5g==
+Date:   Mon, 10 May 2021 21:22:32 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
+        <weiwan@google.com>, <cong.wang@bytedance.com>,
+        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: Re: [PATCH net v6 3/3] net: sched: fix tx action reschedule issue
+ with stopped queue
+Message-ID: <20210510212232.3386c5b4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1620610956-56306-4-git-send-email-linyunsheng@huawei.com>
+References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
+        <1620610956-56306-4-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fixes: e940e0895a82 ("can: skb: can_skb_set_owner(): fix ref counting if socket was closed before setting skb ownership")
-Reported-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
-Hey Torin,
+On Mon, 10 May 2021 09:42:36 +0800 Yunsheng Lin wrote:
+> The netdev qeueue might be stopped when byte queue limit has
+> reached or tx hw ring is full, net_tx_action() may still be
+> rescheduled endlessly if STATE_MISSED is set, which consumes
+> a lot of cpu without dequeuing and transmiting any skb because
+> the netdev queue is stopped, see qdisc_run_end().
+> 
+> This patch fixes it by checking the netdev queue state before
+> calling qdisc_run() and clearing STATE_MISSED if netdev queue is
+> stopped during qdisc_run(), the net_tx_action() is recheduled
+> again when netdev qeueue is restarted, see netif_tx_wake_queue().
+> 
+> Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
+> Reported-by: Michal Kubecek <mkubecek@suse.cz>
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 
-this is only compile time tested. Please give it a try.
+Patches 1 and 2 look good to me but this one I'm not 100% sure.
 
-regards,
-Marc
+> @@ -251,8 +253,10 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
+>  	*validate = true;
+>  
+>  	if ((q->flags & TCQ_F_ONETXQUEUE) &&
+> -	    netif_xmit_frozen_or_stopped(txq))
+> +	    netif_xmit_frozen_or_stopped(txq)) {
+> +		clear_bit(__QDISC_STATE_MISSED, &q->state);
+>  		return skb;
+> +	}
 
- drivers/net/can/dev/skb.c |  2 ++
- include/linux/can/skb.h   | 14 +++++++++++---
- net/can/raw.c             |  2 +-
- 3 files changed, 14 insertions(+), 4 deletions(-)
+The queues are woken asynchronously without holding any locks via
+netif_tx_wake_queue(). Theoretically we can have a situation where:
 
-diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-index 61660248c69e..9644c0d85bb6 100644
---- a/drivers/net/can/dev/skb.c
-+++ b/drivers/net/can/dev/skb.c
-@@ -200,6 +200,7 @@ struct sk_buff *alloc_can_skb(struct net_device *dev, struct can_frame **cf)
- 	can_skb_reserve(skb);
- 	can_skb_prv(skb)->ifindex = dev->ifindex;
- 	can_skb_prv(skb)->skbcnt = 0;
-+	can_skb_prv(skb)->flags = 0;
- 
- 	*cf = skb_put_zero(skb, sizeof(struct can_frame));
- 
-@@ -231,6 +232,7 @@ struct sk_buff *alloc_canfd_skb(struct net_device *dev,
- 	can_skb_reserve(skb);
- 	can_skb_prv(skb)->ifindex = dev->ifindex;
- 	can_skb_prv(skb)->skbcnt = 0;
-+	can_skb_prv(skb)->flags = 0;
- 
- 	*cfd = skb_put_zero(skb, sizeof(struct canfd_frame));
- 
-diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-index d311bc369a39..24a3e682b4a2 100644
---- a/include/linux/can/skb.h
-+++ b/include/linux/can/skb.h
-@@ -51,6 +51,7 @@ struct can_skb_priv {
- 	int ifindex;
- 	int skbcnt;
- 	unsigned int frame_len;
-+	unsigned int flags;
- 	struct can_frame cf[];
- };
- 
-@@ -71,9 +72,16 @@ static inline void can_skb_set_owner(struct sk_buff *skb, struct sock *sk)
- 	 * after the last TX skb has been freed). So only increase
- 	 * socket refcount if the refcount is > 0.
- 	 */
--	if (sk && refcount_inc_not_zero(&sk->sk_refcnt)) {
--		skb->destructor = sock_efree;
--		skb->sk = sk;
-+	if (sk) {
-+		struct can_skb_priv *skb_priv;
-+
-+		skb_priv = can_skb_prv(skb);
-+		skb_priv->flags = MSG_DONTROUTE;
-+
-+		if (refcount_inc_not_zero(&sk->sk_refcnt)) {
-+			skb->destructor = sock_efree;
-+			skb->sk = sk;
-+		}
- 	}
- }
- 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 139d9471ddcf..9bedd0672fae 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -169,7 +169,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
- 	/* add CAN specific message flags for raw_recvmsg() */
- 	pflags = raw_flags(skb);
- 	*pflags = 0;
--	if (oskb->sk)
-+	if (can_skb_prv(oskb)->flags == MSG_DONTROUTE)
- 		*pflags |= MSG_DONTROUTE;
- 	if (oskb->sk == sk)
- 		*pflags |= MSG_CONFIRM;
--- 
-2.30.2
-
-
+CPU 0                            CPU 1   
+  .                                .
+dequeue_skb()                      .
+  netif_xmit_frozen..() # true     .
+  .                              [IRQ]
+  .                              netif_tx_wake_queue()
+  .                              <end of IRQ>
+  .                              netif_tx_action()
+  .                              set MISSED
+  clear MISSED
+  return NULL
+ret from qdisc_restart()
+ret from __qdisc_run()
+qdisc_run_end()
+-> MISSED not set
