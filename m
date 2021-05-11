@@ -2,181 +2,168 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3129F37A4B7
-	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 12:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070D637A65C
+	for <lists+linux-can@lfdr.de>; Tue, 11 May 2021 14:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbhEKKkQ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 May 2021 06:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbhEKKkQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 11 May 2021 06:40:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D11C061574
-        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 03:39:10 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lgPnA-0004gx-2X; Tue, 11 May 2021 12:39:08 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:9fa4:6162:2385:92e7])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 921EF62211A;
-        Tue, 11 May 2021 10:39:06 +0000 (UTC)
-Date:   Tue, 11 May 2021 12:39:05 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org, Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
-Subject: Re: [PATCH] can: raw: fix TX CAN frames show up as RX'ed ones
-Message-ID: <20210511103905.eniozcfxccgwgirz@pengutronix.de>
-References: <20210510182038.1528631-1-mkl@pengutronix.de>
+        id S231338AbhEKMPI (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 May 2021 08:15:08 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:2486 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230225AbhEKMPH (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 11 May 2021 08:15:07 -0400
+Received: from dggeml710-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FfcGV1S42zYd8s;
+        Tue, 11 May 2021 20:11:30 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggeml710-chm.china.huawei.com (10.3.17.140) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Tue, 11 May 2021 20:13:57 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Tue, 11 May
+ 2021 20:13:57 +0800
+Subject: Re: Re: [PATCH net v6 3/3] net: sched: fix tx action reschedule issue
+ with stopped queue
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
+        <weiwan@google.com>, <cong.wang@bytedance.com>,
+        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
+ <1620610956-56306-4-git-send-email-linyunsheng@huawei.com>
+ <20210510212232.3386c5b4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <c676404c-f210-b0cb-ced3-5449676055a8@huawei.com>
+Message-ID: <8db8e594-9606-2c93-7274-1c180afaadb2@huawei.com>
+Date:   Tue, 11 May 2021 20:13:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xj27d5dyoi2qojlb"
-Content-Disposition: inline
-In-Reply-To: <20210510182038.1528631-1-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <c676404c-f210-b0cb-ced3-5449676055a8@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme713-chm.china.huawei.com (10.1.199.109) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On 2021/5/11 17:04, Yunsheng Lin wrote:
+> On 2021/5/11 12:22, Jakub Kicinski wrote:
+>> On Mon, 10 May 2021 09:42:36 +0800 Yunsheng Lin wrote:
+>>> The netdev qeueue might be stopped when byte queue limit has
+>>> reached or tx hw ring is full, net_tx_action() may still be
+>>> rescheduled endlessly if STATE_MISSED is set, which consumes
+>>> a lot of cpu without dequeuing and transmiting any skb because
+>>> the netdev queue is stopped, see qdisc_run_end().
+>>>
+>>> This patch fixes it by checking the netdev queue state before
+>>> calling qdisc_run() and clearing STATE_MISSED if netdev queue is
+>>> stopped during qdisc_run(), the net_tx_action() is recheduled
+>>> again when netdev qeueue is restarted, see netif_tx_wake_queue().
+>>>
+>>> Fixes: 6b3ba9146fe6 ("net: sched: allow qdiscs to handle locking")
+>>> Reported-by: Michal Kubecek <mkubecek@suse.cz>
+>>> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+>>
+>> Patches 1 and 2 look good to me but this one I'm not 100% sure.
+>>
+>>> @@ -251,8 +253,10 @@ static struct sk_buff *dequeue_skb(struct Qdisc *q, bool *validate,
+>>>  	*validate = true;
+>>>  
+>>>  	if ((q->flags & TCQ_F_ONETXQUEUE) &&
+>>> -	    netif_xmit_frozen_or_stopped(txq))
+>>> +	    netif_xmit_frozen_or_stopped(txq)) {
+>>> +		clear_bit(__QDISC_STATE_MISSED, &q->state);
+>>>  		return skb;
+>>> +	}
+>>
+>> The queues are woken asynchronously without holding any locks via
+>> netif_tx_wake_queue(). Theoretically we can have a situation where:
+>>
+>> CPU 0                            CPU 1   
+>>   .                                .
+>> dequeue_skb()                      .
+>>   netif_xmit_frozen..() # true     .
+>>   .                              [IRQ]
+>>   .                              netif_tx_wake_queue()
+>>   .                              <end of IRQ>
+>>   .                              netif_tx_action()
+>>   .                              set MISSED
+>>   clear MISSED
+>>   return NULL
+>> ret from qdisc_restart()
+>> ret from __qdisc_run()
+>> qdisc_run_end()
+>> -> MISSED not set
+> 
+> Yes, the above does seems to have the above data race.
+> 
+> As my understanding, there is two ways to fix the above data race:
+> 1. do not clear the STATE_MISSED for netif_xmit_frozen_or_stopped()
+>    case, just check the netif_xmit_frozen_or_stopped() before
+>    calling __netif_schedule() at the end of qdisc_run_end(). This seems
+>    to only work with qdisc with TCQ_F_ONETXQUEUE flag because it seems
+>    we can only check the netif_xmit_frozen_or_stopped() with q->dev_queue,
+>    I am not sure q->dev_queue is pointint to which netdev queue when qdisc
+>    is not set with TCQ_F_ONETXQUEUE flag.
+> 
+> 2. clearing the STATE_MISSED for netif_xmit_frozen_or_stopped() case
+>    as this patch does, and protect the __netif_schedule() with q->seqlock
+>    for netif_tx_wake_queue(), which might bring unnecessary overhead for
+>    non-stopped queue case
+> 
+> Any better idea?
 
---xj27d5dyoi2qojlb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+3. Or check the netif_xmit_frozen_or_stopped() again after clearing
+   STATE_MISSED, like below:
 
-On 10.05.2021 20:20:39, Marc Kleine-Budde wrote:
-> diff --git a/drivers/net/can/dev/skb.c b/drivers/net/can/dev/skb.c
-> index 61660248c69e..9644c0d85bb6 100644
-> --- a/drivers/net/can/dev/skb.c
-> +++ b/drivers/net/can/dev/skb.c
-> @@ -200,6 +200,7 @@ struct sk_buff *alloc_can_skb(struct net_device *dev,=
- struct can_frame **cf)
->  	can_skb_reserve(skb);
->  	can_skb_prv(skb)->ifindex =3D dev->ifindex;
->  	can_skb_prv(skb)->skbcnt =3D 0;
-> +	can_skb_prv(skb)->flags =3D 0;
-> =20
->  	*cf =3D skb_put_zero(skb, sizeof(struct can_frame));
-> =20
-> @@ -231,6 +232,7 @@ struct sk_buff *alloc_canfd_skb(struct net_device *de=
-v,
->  	can_skb_reserve(skb);
->  	can_skb_prv(skb)->ifindex =3D dev->ifindex;
->  	can_skb_prv(skb)->skbcnt =3D 0;
-> +	can_skb_prv(skb)->flags =3D 0;
-> =20
->  	*cfd =3D skb_put_zero(skb, sizeof(struct canfd_frame));
-> =20
-> diff --git a/include/linux/can/skb.h b/include/linux/can/skb.h
-> index d311bc369a39..24a3e682b4a2 100644
-> --- a/include/linux/can/skb.h
-> +++ b/include/linux/can/skb.h
-> @@ -51,6 +51,7 @@ struct can_skb_priv {
->  	int ifindex;
->  	int skbcnt;
->  	unsigned int frame_len;
-> +	unsigned int flags;
->  	struct can_frame cf[];
->  };
-> =20
-> @@ -71,9 +72,16 @@ static inline void can_skb_set_owner(struct sk_buff *s=
-kb, struct sock *sk)
->  	 * after the last TX skb has been freed). So only increase
->  	 * socket refcount if the refcount is > 0.
->  	 */
-> -	if (sk && refcount_inc_not_zero(&sk->sk_refcnt)) {
-                  ^^^^^^^^^^^^^^^^^^^^^
-> -		skb->destructor =3D sock_efree;
-> -		skb->sk =3D sk;
+   if (netif_xmit_frozen_or_stopped(txq)) {
+	  clear_bit(__QDISC_STATE_MISSED, &q->state);
 
-This is the problem:
+	  /* Make sure the below netif_xmit_frozen_or_stopped()
+	   * checking happens after clearing STATE_MISSED.
+	   */
+	  smp_mb__after_atomic();
 
-It was introduced by Oleksij and me in e940e0895a82 ("can: skb:
-can_skb_set_owner(): fix ref counting if socket was closed before
-setting skb ownership").
+	  /* Checking netif_xmit_frozen_or_stopped() again to
+	   * make sure __QDISC_STATE_MISSED is set if the
+	   * __QDISC_STATE_MISSED set by netif_tx_wake_queue()'s
+	   * rescheduling of net_tx_action() is cleared by the
+	   * above clear_bit().
+	   */
+	  if (!netif_xmit_frozen_or_stopped(txq))
+	  	set_bit(__QDISC_STATE_MISSED, &q->state);
+  }
 
-In e940e0895a82 we fix the ref counting on the socket problem, as
-described in the comment of that patch:
+  It is kind of ugly, but it does seem to fix the above data race too.
+  And it seems like a common pattern to deal with the concurrency between
+  xmit and NAPI polling, as below:
 
-|  static inline void can_skb_set_owner(struct sk_buff *skb, struct sock *s=
-k)
-|  {
-| -       if (sk) {
-| -               sock_hold(sk);
-| +       /* If the socket has already been closed by user space, the
-| +        * refcount may already be 0 (and the socket will be freed
-| +        * after the last TX skb has been freed). So only increase
-| +        * socket refcount if the refcount is > 0.
-| +        */
-| +       if (sk && refcount_inc_not_zero(&sk->sk_refcnt)) {
-|                 skb->destructor =3D sock_efree;
-|                 skb->sk =3D sk;
-|         }
+https://elixir.bootlin.com/linux/v5.12-rc2/source/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c#L1409
 
-We missed the fact that skb->sk is used in raw_rcv() to determine if the
-CAN frame was received from outside or it was the echo of a TX skb. As a
-workaround/fix I introduced a new variable "flags" to the struct
-can_skb_priv and added MSG_DONTROUTE directly there, if a socket was
-associated with the skb. I haven't tested what that means for vxcan
-devices in network name spaces.
 
-> +	if (sk) {
-> +		struct can_skb_priv *skb_priv;
-> +
-> +		skb_priv =3D can_skb_prv(skb);
-> +		skb_priv->flags =3D MSG_DONTROUTE;
-> +
-> +		if (refcount_inc_not_zero(&sk->sk_refcnt)) {
-> +			skb->destructor =3D sock_efree;
-> +			skb->sk =3D sk;
-> +		}
->  	}
->  }
-> =20
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index 139d9471ddcf..9bedd0672fae 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-> @@ -169,7 +169,7 @@ static void raw_rcv(struct sk_buff *oskb, void *data)
->  	/* add CAN specific message flags for raw_recvmsg() */
->  	pflags =3D raw_flags(skb);
->  	*pflags =3D 0;
-> -	if (oskb->sk)
-> +	if (can_skb_prv(oskb)->flags =3D=3D MSG_DONTROUTE)
->  		*pflags |=3D MSG_DONTROUTE;
->  	if (oskb->sk =3D=3D sk)
->  		*pflags |=3D MSG_CONFIRM;
+> 
+>>
+>> .
+>>
+> _______________________________________________
+> Linuxarm mailing list -- linuxarm@openeuler.org
+> To unsubscribe send an email to linuxarm-leave@openeuler.org
+> 
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---xj27d5dyoi2qojlb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCaXscACgkQqclaivrt
-76n2fwf/ShKomB9hi8ysmG8VZsexow8uaDmSbArQILv301Sb9QK9ToUXvZdVk1qr
-nb8g2et41BEM6ojx8GnSxec2r5oEeTeWx/XRYxQreKQK65wxQgfbZCywz/4eaSrQ
-YWZFi0r57ets7ipoar9miZdDcg0a1XnkPNicfXhb1MJ8CHLUE6QyfKPc2KYB9rW/
-faB9i6BKDzVJ3Wp82E6xceaxxbHvhriY6EBKRuQtZjv13Kol+ndIqIl67m9O4ps8
-mPX+fE9AOOi7nGfZczV1xdDaWBQ+ZRzr/5gTrdtLslvEMJumgbWYOlwq/sb50zrC
-GkpBo1r0GnxJdd+VmrQ2QHL3AzemQA==
-=PXKc
------END PGP SIGNATURE-----
-
---xj27d5dyoi2qojlb--
