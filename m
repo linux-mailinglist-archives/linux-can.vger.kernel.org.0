@@ -2,109 +2,151 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7054837B136
-	for <lists+linux-can@lfdr.de>; Wed, 12 May 2021 00:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AED37B28F
+	for <lists+linux-can@lfdr.de>; Wed, 12 May 2021 01:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbhEKWB4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 11 May 2021 18:01:56 -0400
-Received: from mout.gmx.net ([212.227.17.22]:54817 "EHLO mout.gmx.net"
+        id S229784AbhEKXb7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 11 May 2021 19:31:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229714AbhEKWBz (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 11 May 2021 18:01:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1620770433;
-        bh=Ezf3+4/5WESk8OkhoMsaJlcqfc3Htg1LJN1RDH+6u1k=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=gN58ZNyDm+TQF5yCreJxdhLCIZVdkhlvj5FtoQNH7RyqlhZzdxcmqgsNCeWzUridt
-         b99U8Q9lMRwpG8k7PHLKiTo9jCkd0gjvASj+6NaadIDwEdQylsG9svo+6GbbRQU7kg
-         Jq1TnSGbRz912Kw2AssFZYj4M5TLQNVX42vCve/w=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [89.247.255.239] ([89.247.255.239]) by web-mail.gmx.net
- (3c-app-gmx-bap63.server.lan [172.19.172.133]) (via HTTP); Wed, 12 May 2021
- 00:00:33 +0200
+        id S229637AbhEKXb7 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 11 May 2021 19:31:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 505FE6162A;
+        Tue, 11 May 2021 23:30:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620775851;
+        bh=vkyZkRo8XZF1l9dNhg4dKa+k+Q//WBXTlsGnQgWLcIw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hb1QUOfP4nf8yBZuUH1Chzg6CHXTDU3/sJyMgLPeNUHTmmuKFHLXcVcfYjMk/6E9c
+         C1EdEgayThIJixVOz3cQ06NR++1YqndnQNByvLKK6nclSoJyVcc9nOSGxpu8srVXUi
+         GKBYY9KPHkDKNbt2l4hVmNQsPHvzdDa10ROxNPQQlrZlTK4kA0mytjrDZTTz9Eyzjl
+         RdOfrkGGDcJQB1rtzgbRZd5OlCy0//+7nyVEUFUzaVY8KdrrfsGEM0Lzaa81WmvZHC
+         10rL4XQ+3/b/QHzDUhCITdFKVpLUbWjaRmt3JsSsrpIukAVwEliQgug+tmLXhhEvtJ
+         TZ3uE1CSmPKrg==
+Date:   Tue, 11 May 2021 16:30:49 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
+        <weiwan@google.com>, <cong.wang@bytedance.com>,
+        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: Re: [PATCH net v6 3/3] net: sched: fix tx action reschedule issue
+ with stopped queue
+Message-ID: <20210511163049.37d2cba0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <8db8e594-9606-2c93-7274-1c180afaadb2@huawei.com>
+References: <1620610956-56306-1-git-send-email-linyunsheng@huawei.com>
+        <1620610956-56306-4-git-send-email-linyunsheng@huawei.com>
+        <20210510212232.3386c5b4@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <c676404c-f210-b0cb-ced3-5449676055a8@huawei.com>
+        <8db8e594-9606-2c93-7274-1c180afaadb2@huawei.com>
 MIME-Version: 1.0
-Message-ID: <trinity-10aeed49-cb96-47d9-818e-b938913e6fce-1620770433273@3c-app-gmx-bap63>
-From:   Norbert Slusarek <nslusarek@gmx.net>
-To:     oss-security@lists.openwall.com
-Cc:     netdev@vger.kernel.org, socketcan@hartkopp.net, mkl@pengutronix.de,
-        alex.popov@linux.com, linux-can@vger.kernel.org,
-        seth.arnold@canonical.com, steve.beattie@canonical.com,
-        cascardo@canonical.com
-Subject: Linux kernel: net/can/isotp: race condition leads to local
- privilege escalation
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 12 May 2021 00:00:33 +0200
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:sTuBeu26LFRf9uFTz8G/CIAspz4RlbypygBf7W0g+BG51Z19YdJL6eE3XgacocgX9E5hQ
- e+dDjOA3/EkoXbJo5U6DalUUgrJ/kNxwXEsEOWU2QRHdiHbiMjbcvVvwrPla846b1D8+4ac8P23p
- VluC8Dj1X56VtiIrUSCjRJqg3wGcdnWwu9zf//JlGtKXDulxThX6x5nwCiA42RHaxNOmEz+u7stB
- CqIoWZnqXndk1VKnRDpWzNfE/EOA1IOLk0AX64ombKQ+FPkYkORLBs4wRGX0gtuk5+Yh/OF8QiKa
- lQ=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eHrAPSba1PY=:uLosab/yJfOjF8kNOcEO8F
- JusYW6oNwA+VO55rLhhXgjWHAPSp/KZKaM0RzQ8N6amlXs346TFYDAqNXUJgHRNzcLSb/Hng7
- 4YIDTtQBeAyYsrDMiBrj/8WBQrFk1WDB+TOU3wNQDjxxDfRrOe+bJpL5OfEqMd4xHjSBdKj9A
- rV+lYKoNgQPDtrxSQE5nUNcvRA+V3bXdbfv4mwpkrj3O2cr+9/bIXXxDsZSjviq7WWGi7/u19
- MzMXUu91TgT8+/A7yw6rJ3x7mPR9KLBTN7ZNAFpV6p1a7xREINc67Bo+lbcQ1PZurDVIZHEaC
- Dz41Y601DfmsdwfcmKQZBp8QI6Eyj404tvSY37dFHZ0B2RXCGI2EP/KlS2ERTuXJG8EvIBUa4
- dpCfnnNvCwbjGYMm7famU+BODbXX6pfbS2XHnLi9Z9+9yZyzvnJkOO0r9yzlJI+Qt6OsoNcuB
- vkJQ4kHHRvwo80LKeeLGe1hMAAVlfOX/ZSRfsYYw3Nx0ZqAtpb33OBcJ3NkJmSvvOs9+ED0lG
- AJgbJdNSSLNsbNa+v3A+mliBPzVqLj2tyuvdZwlnqglQ9nevR/KqhnMwvGGnH7i60RXTkFxT1
- u7qU+6zgdUmcwJUH6B5Z+ae4doK+qsu/qCcIFLhXNGu7aPgjXggEgYfOqNLIXnt836UBPPodl
- dath8Yt1ZXLbqEIFqyMgptvehlPILsaEzTvkIDxff52LHMFkDVZAymHzDt1jLK0H53976d9Xz
- X3fMae4pX+LUais4xPvS4qlmNethvylnjVJau+IUr/E6bjuLeSdsei8NAJcB2Kt0YFHhoQPR8
- bGYG16TRBxukpeWRnFHOheUItanLBhycf47dL/mBL92AVAgob5pTUY0Ofyvns3a1SGWYvUpCt
- 8ngmbKQ2PfVnNfScwcYSnaI67lw8vhsQzYn6ECcv9y4dQxtVHDrd2Yy0uQcbVI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-A race condition in the CAN ISOTP networking protocol was discovered which
-allows forbidden changing of socket members after binding the socket.
+On Tue, 11 May 2021 20:13:56 +0800 Yunsheng Lin wrote:
+> On 2021/5/11 17:04, Yunsheng Lin wrote:
+> > On 2021/5/11 12:22, Jakub Kicinski wrote:  
+> >> The queues are woken asynchronously without holding any locks via
+> >> netif_tx_wake_queue(). Theoretically we can have a situation where:
+> >>
+> >> CPU 0                            CPU 1   
+> >>   .                                .
+> >> dequeue_skb()                      .
+> >>   netif_xmit_frozen..() # true     .
+> >>   .                              [IRQ]
+> >>   .                              netif_tx_wake_queue()
+> >>   .                              <end of IRQ>
+> >>   .                              netif_tx_action()
+> >>   .                              set MISSED
+> >>   clear MISSED
+> >>   return NULL
+> >> ret from qdisc_restart()
+> >> ret from __qdisc_run()
+> >> qdisc_run_end()  
+>  [...]  
+> > 
+> > Yes, the above does seems to have the above data race.
+> > 
+> > As my understanding, there is two ways to fix the above data race:
+> > 1. do not clear the STATE_MISSED for netif_xmit_frozen_or_stopped()
+> >    case, just check the netif_xmit_frozen_or_stopped() before
+> >    calling __netif_schedule() at the end of qdisc_run_end(). This seems
+> >    to only work with qdisc with TCQ_F_ONETXQUEUE flag because it seems
+> >    we can only check the netif_xmit_frozen_or_stopped() with q->dev_queue,
+> >    I am not sure q->dev_queue is pointint to which netdev queue when qdisc
+> >    is not set with TCQ_F_ONETXQUEUE flag.
 
-In particular, the lack of locking behavior in isotp_setsockopt() makes it
-feasible to assign the flag CAN_ISOTP_SF_BROADCAST to the socket, despite having
-previously registered a can receiver. After closing the isotp socket, the can
-receiver will still be registered and use-after-free's can be triggered in
-isotp_rcv() on the freed isotp_sock structure.
-This leads to arbitrary kernel execution by overwriting the sk_error_report()
-pointer, which can be misused in order to execute a user-controlled ROP chain to
-gain root privileges.
+Isn't the case where we have a NOLOCK qdisc without TCQ_F_ONETXQUEUE
+rather unexpected? It'd have to be a single pfifo on multi-queue
+netdev, right? Sounds not worth optimizing for. How about:
 
-The vulnerability was introduced with the introduction of SF_BROADCAST support
-in commit 921ca574cd38 ("can: isotp: add SF_BROADCAST support for functional
-addressing") in 5.11-rc1.
-In fact, commit 323a391a220c ("can: isotp: isotp_setsockopt():
-block setsockopt on bound sockets") did not effectively prevent isotp_setsockopt()
-from modifying socket members before isotp_bind().
+ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ {
+ 	write_seqcount_end(&qdisc->running);
+	if (qdisc->flags & TCQ_F_NOLOCK) {
+ 		spin_unlock(&qdisc->seqlock);
 
-The requested CVE ID will be revealed along with further exploitation details
-as a response to this notice on 13th May of 2021.
+		if (unlikely(test_bit(__QDISC_STATE_MISSED,
+				      &qdisc->state))) {
+			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
+			if (!(q->flags & TCQ_F_ONETXQUEUE) ||
+			    !netif_xmit_frozen_or_stopped(q->dev_queue))
+				__netif_schedule(qdisc);
+		}
+	}
+ }
 
-Credits: Norbert Slusarek
+For the strange non-ONETXQUEUE case we'd have an occasional unnecessary
+net_tx_action, but no infinite loop possible.
 
-*** exploit log ***
+> > 2. clearing the STATE_MISSED for netif_xmit_frozen_or_stopped() case
+> >    as this patch does, and protect the __netif_schedule() with q->seqlock
+> >    for netif_tx_wake_queue(), which might bring unnecessary overhead for
+> >    non-stopped queue case
+> > 
+> > Any better idea?  
+> 
+> 3. Or check the netif_xmit_frozen_or_stopped() again after clearing
+>    STATE_MISSED, like below:
+> 
+>    if (netif_xmit_frozen_or_stopped(txq)) {
+> 	  clear_bit(__QDISC_STATE_MISSED, &q->state);
+> 
+> 	  /* Make sure the below netif_xmit_frozen_or_stopped()
+> 	   * checking happens after clearing STATE_MISSED.
+> 	   */
+> 	  smp_mb__after_atomic();
+> 
+> 	  /* Checking netif_xmit_frozen_or_stopped() again to
+> 	   * make sure __QDISC_STATE_MISSED is set if the
+> 	   * __QDISC_STATE_MISSED set by netif_tx_wake_queue()'s
+> 	   * rescheduling of net_tx_action() is cleared by the
+> 	   * above clear_bit().
+> 	   */
+> 	  if (!netif_xmit_frozen_or_stopped(txq))
+> 	  	set_bit(__QDISC_STATE_MISSED, &q->state);
+>   }
+> 
+>   It is kind of ugly, but it does seem to fix the above data race too.
+>   And it seems like a common pattern to deal with the concurrency between
+>   xmit and NAPI polling, as below:
+> 
+> https://elixir.bootlin.com/linux/v5.12-rc2/source/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c#L1409
 
-Adjusted to work with openSUSE Tumbleweed.
-
-noprivs@suse:~/expl> uname -a
-Linux suse 5.12.0-1-default #1 SMP Mon Apr 26 04:25:46 UTC 2021 (5d43652) x86_64 x86_64 x86_64 GNU/Linux
-noprivs@suse:~/expl> ./lpe
-[+] entering setsockopt
-[+] entering bind
-[+] left bind with ret = 0
-[+] left setsockopt with flags = 838
-[+] race condition hit, closing and spraying socket
-[+] sending msg to run softirq with isotp_rcv()
-[+] check sudo su for root rights
-noprivs@suse:~/expl> sudo su
-suse:/home/noprivs/expl # id
-uid=0(root) gid=0(root) groups=0(root)
-suse:/home/noprivs/expl # cat /root/check
-high school student living in germany looking for an internship in info sec.
-if interested please reach out to nslusarek@gmx.net.
-
-Regards,
-Norbert Slusarek
+This is indeed the idiomatic way of dealing with Tx queue stopping race,
+but it's a bit of code to sprinkle around. My vote would be option 1.
