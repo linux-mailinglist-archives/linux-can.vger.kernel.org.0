@@ -2,123 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C8137B4D4
-	for <lists+linux-can@lfdr.de>; Wed, 12 May 2021 06:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4AE37B560
+	for <lists+linux-can@lfdr.de>; Wed, 12 May 2021 07:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbhELERT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 May 2021 00:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
+        id S229580AbhELFUo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 May 2021 01:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbhELERT (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 12 May 2021 00:17:19 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CDDC061574;
-        Tue, 11 May 2021 21:16:11 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id o127so12181647wmo.4;
-        Tue, 11 May 2021 21:16:11 -0700 (PDT)
+        with ESMTP id S229952AbhELFUn (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 May 2021 01:20:43 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6777CC061574
+        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 22:19:35 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id b21so10591300pft.10
+        for <linux-can@vger.kernel.org>; Tue, 11 May 2021 22:19:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JCncdDjE7Srd7BUCB3CPtEnkitbRPaUmqjcTmdGK2+s=;
-        b=aipHKNVyb/XjRKn46VmjkCzFRB+Thi4NQbiuj/K5+hduiPoWM4YPwjPcbDpqgS0zVt
-         jaus4A20Am5DwCf+cwp43X5JILZHguFZDjjvYr2e8rpoOEvtPOUYJhb/f7MPFVOd4zAv
-         tSO4Ih+xzNKFhLPc/ExIDfa8l4oTaIyEIUfNZdpB9cvUpuboGg6Zum/l82/PmX4fVuyj
-         SLTuG4mAcdkiypRZH5p9WIxUgywwytHURcH61exNne2yXxNNghHBPiNSWqcR67qGE0dn
-         n4A4tep+UjwTvZaZOTVYUeqybQT2rMg5dALmwRccSLz1x+uPiIO8o8obrdtKVTrXGjph
-         2pKQ==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=pYbNpjnnqjc+Xi/bRrpptmfJ508WVQ/5TiSYG5equZ4=;
+        b=XWonxCP3dQz5ODnTGuC+GU4rPFS1MslOahyXw2jdI2UZwPgziS7QZlKNLxnSrpdF2i
+         PTSbb+K9lENLEXphfOmKvVpHTFIxeFcvh5c6L7IH3nXetKP13W5hZfwjX8FePck50+fC
+         EJQtLPUaYu4cQ8340w5PJTegT0V7tfwJmpbalU+NjDE02Yn82IbFVS3/CauOUYJWvFqM
+         m7/f9woBbqOze7mwYPQBeUwThKoeMr6aaDbZbTLyJ/bX34sjJxyaMfVCxDSq9A3Y0Q8C
+         sEXuPJHLYAsvqakTcDB7LBSasRIpqvzz5U990yyhG6+lHmick7QpldHQq44mTiYeVHj1
+         SMIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JCncdDjE7Srd7BUCB3CPtEnkitbRPaUmqjcTmdGK2+s=;
-        b=CAvOZp3ZJ5yvw/QJpJkeREmUzN/r/SlPd4KVciNWcz3S9fd6KktsMm1xA05EqRbEBA
-         TNAwbFC45L8Jkel6PoLkMm6t5DeRvPkOVVpDyoX5ZUxHb3nK+HruGVMdgXg+E3CkPwqv
-         JxYSkTPS1XV1nnCnQxed5Lca3jWlheojMT2dE3znsJjuyUftadQKpk30aiz4lS824nGX
-         OXINnz4knGgYBNOKm4ctJ1GkJf/RuJogLm6e/zYQrRDyY5zdxcuL6V2q+udnYHB2MWBN
-         QqDr3OwIPSQL43QiW3IHmaiF4oJe4ZV73UQSiO7pZZ9JPR6jfSmV2NFQGubvP1jAwJHz
-         78Tw==
-X-Gm-Message-State: AOAM531NYnclXB+b9ZxyTzIcRLsyFR794ZBuOqXPo9bwp9Umd+ZFPfuZ
-        Dv41Rle9zySdOKxXKNAiVIRwUY9ohYW82g==
-X-Google-Smtp-Source: ABdhPJxON1Uvwty2GZz67IASvmlU0zxVGLrQUop9ggaCt5KNqRk9zVyImtJ4y0WSrtFpcUfe/5T6rQ==
-X-Received: by 2002:a1c:750b:: with SMTP id o11mr9186963wmc.188.1620792970259;
-        Tue, 11 May 2021 21:16:10 -0700 (PDT)
-Received: from lorien (lorien.valinor.li. [2a01:4f8:192:61d5::2])
-        by smtp.gmail.com with ESMTPSA id f1sm2438168wrr.63.2021.05.11.21.16.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 21:16:09 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Wed, 12 May 2021 06:16:08 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     oss-security@lists.openwall.com
-Cc:     netdev@vger.kernel.org, socketcan@hartkopp.net, mkl@pengutronix.de,
-        alex.popov@linux.com, linux-can@vger.kernel.org,
-        seth.arnold@canonical.com, steve.beattie@canonical.com,
-        cascardo@canonical.com
-Subject: Re: [oss-security] Linux kernel: net/can/isotp: race condition leads
- to local privilege escalation
-Message-ID: <20210512041608.GA1420@lorien.valinor.li>
-References: <trinity-10aeed49-cb96-47d9-818e-b938913e6fce-1620770433273@3c-app-gmx-bap63>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=pYbNpjnnqjc+Xi/bRrpptmfJ508WVQ/5TiSYG5equZ4=;
+        b=MQ600Lh5eUxbDuO+dRsRymh912egYpH4tfx3oK0JCdZ3low83D0g7D/lqkYB2vtwKx
+         NPADQqV9/QU6+qBfQIoXQytA2seb22lUr5Q9OTr91RsCgatQFf17BjSusb4/gr/Z+Hxs
+         uAXW+fuAF56sBpeXGbz+wFvJbPF56fGhAJgEfHLsogTr0L/uX/JTnXBt0zVgoWVgcBbQ
+         RLL2HTSiqoDCLShLVd907ueJAyy3dCXe0VG1Ib0M7OcD03t32w6K9s42HOEcZau87nNB
+         3bOjCtULm57FqROv2zp1O9YRQjmnGTGuZiRnz1qdc2tmSX0ad+h6SheW5qgHe9CG3zQY
+         vHDg==
+X-Gm-Message-State: AOAM532bG1IelRZlGsLyf0Jhxpwf5aFzSay69Y25DsLMHxWqBJXiVYeC
+        ef8lrUFgA2Dqx+NIPSOHw9agZjlVLySh6pAI47o=
+X-Google-Smtp-Source: ABdhPJzm6uMLyUFX45llg6+FvC+y1MAYXrDUhnsgqkb9lw/OHSg4sccEt8SJlIXGx6ewu2F5wFUkuaLgmHRcmZvOI+M=
+X-Received: by 2002:a63:1210:: with SMTP id h16mr13035490pgl.189.1620796774791;
+ Tue, 11 May 2021 22:19:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-10aeed49-cb96-47d9-818e-b938913e6fce-1620770433273@3c-app-gmx-bap63>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Reply-To: mrdabirebasole@gmail.com
+Sender: brightlugard558@gmail.com
+Received: by 2002:a05:6a10:f3c3:0:0:0:0 with HTTP; Tue, 11 May 2021 22:19:34
+ -0700 (PDT)
+From:   "Mr. Dabire Basole" <mrdabirebasole@gmail.com>
+Date:   Tue, 11 May 2021 22:19:34 -0700
+X-Google-Sender-Auth: mZGegj9rQyhxjeKNvWJmBP_xRIk
+Message-ID: <CALuo520S0k9hjW7zJZDvLMrLZVYJyVeLJq_h4p3sEBTZJEthKA@mail.gmail.com>
+Subject: PERSONAL TREAT AS URGENT.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+FROM MR. DABIRE BASOLE
+AUDIT & ACCOUNT MANAGER
+BANK OF AFRICA (B.O.A)
+OUAGADOUGOU BURKINA FASO
+WEST AFRICA.
 
-On Wed, May 12, 2021 at 12:00:33AM +0200, Norbert Slusarek wrote:
-> A race condition in the CAN ISOTP networking protocol was discovered which
-> allows forbidden changing of socket members after binding the socket.
-> 
-> In particular, the lack of locking behavior in isotp_setsockopt() makes it
-> feasible to assign the flag CAN_ISOTP_SF_BROADCAST to the socket, despite having
-> previously registered a can receiver. After closing the isotp socket, the can
-> receiver will still be registered and use-after-free's can be triggered in
-> isotp_rcv() on the freed isotp_sock structure.
-> This leads to arbitrary kernel execution by overwriting the sk_error_report()
-> pointer, which can be misused in order to execute a user-controlled ROP chain to
-> gain root privileges.
-> 
-> The vulnerability was introduced with the introduction of SF_BROADCAST support
-> in commit 921ca574cd38 ("can: isotp: add SF_BROADCAST support for functional
-> addressing") in 5.11-rc1.
-> In fact, commit 323a391a220c ("can: isotp: isotp_setsockopt():
-> block setsockopt on bound sockets") did not effectively prevent isotp_setsockopt()
-> from modifying socket members before isotp_bind().
-> 
-> The requested CVE ID will be revealed along with further exploitation details
-> as a response to this notice on 13th May of 2021.
-> 
-> Credits: Norbert Slusarek
-> 
-> *** exploit log ***
-> 
-> Adjusted to work with openSUSE Tumbleweed.
-> 
-> noprivs@suse:~/expl> uname -a
-> Linux suse 5.12.0-1-default #1 SMP Mon Apr 26 04:25:46 UTC 2021 (5d43652) x86_64 x86_64 x86_64 GNU/Linux
-> noprivs@suse:~/expl> ./lpe
-> [+] entering setsockopt
-> [+] entering bind
-> [+] left bind with ret = 0
-> [+] left setsockopt with flags = 838
-> [+] race condition hit, closing and spraying socket
-> [+] sending msg to run softirq with isotp_rcv()
-> [+] check sudo su for root rights
-> noprivs@suse:~/expl> sudo su
-> suse:/home/noprivs/expl # id
-> uid=0(root) gid=0(root) groups=0(root)
-> suse:/home/noprivs/expl # cat /root/check
-> high school student living in germany looking for an internship in info sec.
-> if interested please reach out to nslusarek@gmx.net.
+Dear Friend,
 
-FTR, this issue has CVE-2021-32606[1] assigned.
+With due respect, I have decided to contact you on a business
+transaction that will be beneficial to both of us. At the bank last
+account and auditing evaluation, my staffs came across an old account
+which was being maintained by a foreign client who we learn was among
+the deceased passengers of motor accident on November.2003, the
+deceased was unable to run this account since his death. The account
+has remained dormant without the knowledge of his family since it was
+put in a safe deposit account in the bank for future investment by the
+client.
 
- [1]: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-32606
+Since his demise, even the members of his family haven't applied for
+claims over this fund and it has been in the safe deposit account
+until I discovered that it cannot be claimed since our client is a
+foreign national and we are sure that he has no next of kin here to
+file claims over the money. As the director of the department, this
+discovery was brought to my office so as to decide what is to be done.
+I decided to seek ways through which to transfer this money out of the
+bank and out of the country too.
 
-Regards,
-Salvatore
+The total amount in the account is USD$18.6 ( Eighteen Million Six Hundred
+Thousand United Stated Dollars) with my positions as
+staffs of the bank, I am handicapped because I cannot operate foreign
+accounts and cannot lay bonafide claim over this money. The client was
+a foreign national and you will only be asked to act as his next of
+kin and I will supply you with all the necessary information and bank
+data to assist you in being able to transfer this money to any bank of
+your choice where this money could be transferred into.
+
+The total sum will be shared as follows: 50% for me, 50% for you,
+while 10% will map aside for any expenses incidental occur during the
+transfering of this fund into your bank account. and the expenses
+should be the first thing to be remove before sharing of this fund
+according to our percentages . The transfer is risk free on both sides
+hence you are going to follow my instruction till the fund transfer to
+your account. Since I work in this bank that is why you should be
+confident in the success of this transaction because you will be
+updated with information as at when desired.
+
+I will wish you to keep this transaction secret and confidential as I
+am hoping to retire with my share of this money at the end of
+transaction which will be when this money is safety in your account. I
+will then come over to your country for sharing according to the
+previously agreed percentages. You might even have to advise me on
+possibilities of investment in your country or elsewhere of our
+choice. May God help you to help me to a restive retirement, Amen,
+
+Please for further information and inquires feel free to contact me
+back immediately for more explanation and better understanding I want
+you to assure me your capability of handling this project with trust
+by providing me your following information details such as:
+
+(1)NAME..............
+(2)AGE:................
+(3)SEX:.....................
+(4)PHONE NUMBER:.................
+(5)OCCUPATION:................ .....
+(6)YOUR COUNTRY:.....................
+
+Yours sincerely,
+
+Mr. Dabire Basole.
