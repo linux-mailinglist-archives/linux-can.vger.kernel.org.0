@@ -2,67 +2,79 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 687E537EE4D
-	for <lists+linux-can@lfdr.de>; Thu, 13 May 2021 00:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C996337F0CC
+	for <lists+linux-can@lfdr.de>; Thu, 13 May 2021 03:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345903AbhELV1l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 12 May 2021 17:27:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45834 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1390993AbhELVVT (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 12 May 2021 17:21:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6402061264;
-        Wed, 12 May 2021 21:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620854410;
-        bh=VmOZv9p56pL3wba3dxCNrn4hX2NTFN2PN34AgaXiFaE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=H3n5jUat6WIe2QIh/hA3zVSFq4TrsKatpSfPaIOXtlF7S+DB9yihQ7XEoymAZegmD
-         rNzjj6w2LF+imwiAKbW9H0eOvgNQoJtSsODVxxleUUvAA8PnMpgTFgepk0iIeAYxt9
-         Jkog7lWJ1G7x593tnfdrhke3Cq5BCIFHwKYVbNkd+XYW20Cm7nuvwdQ/MAoyakV/oz
-         vQSWHcxOW0xw5m7ppyXAqmFIUV2mUDf9gsRf6X2ZfWQD3K26JbcDzkAtHOQJvlbT1v
-         ftmO3/osCiK1KxsjnKGkPZhb2qyWVTBjD6ux6EihtGZwPznvUQRDVBCC0xzLmLgxzA
-         XaEulbmXjHQIg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 55C1560A23;
-        Wed, 12 May 2021 21:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S239231AbhEMBM0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 12 May 2021 21:12:26 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2573 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235264AbhEMBMX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 12 May 2021 21:12:23 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FgYSc17k0zsRN8;
+        Thu, 13 May 2021 09:08:32 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.498.0; Thu, 13 May 2021 09:10:57 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: [PATCH net v7 0/3] fix packet stuck problem for lockless qdisc
+Date:   Thu, 13 May 2021 09:10:57 +0800
+Message-ID: <1620868260-32984-1-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can 2021-05-12
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162085441034.10928.2548564810445954372.git-patchwork-notify@kernel.org>
-Date:   Wed, 12 May 2021 21:20:10 +0000
-References: <20210512071050.1760001-1-mkl@pengutronix.de>
-In-Reply-To: <20210512071050.1760001-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+This patchset fixes the packet stuck problem mentioned in [1].
 
-This pull request was applied to netdev/net.git (refs/heads/master):
+Patch 1: Add STATE_MISSED flag to fix packet stuck problem.
+Patch 2: Fix a tx_action rescheduling problem after STATE_MISSED
+         flag is added in patch 1.
+Patch 3: Fix the significantly higher CPU consumption problem when
+         multiple threads are competing on a saturated outgoing
+         device.
 
-On Wed, 12 May 2021 09:10:49 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of a single patch for net/master.
-> 
-> The patch is by Norbert Slusarek and it fixes a race condition in the
-> CAN ISO-TP socket between isotp_bind() and isotp_setsockopt().
-> 
-> [...]
+V7: Fix netif_tx_wake_queue() data race noted by Jakub.
+V6: Some performance optimization in patch 1 suggested by Jakub
+    and drop NET_XMIT_DROP checking in patch 3.
+V5: add patch 3 to fix the problem reported by Michal Kubecek.
+V4: Change STATE_NEED_RESCHEDULE to STATE_MISSED and add patch 2.
 
-Here is the summary with links:
-  - pull-request: can 2021-05-12
-    https://git.kernel.org/netdev/net/c/364642ae80d6
+[1]. https://lkml.org/lkml/2019/10/9/42
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Yunsheng Lin (3):
+  net: sched: fix packet stuck problem for lockless qdisc
+  net: sched: fix endless tx action reschedule during deactivation
+  net: sched: fix tx action reschedule issue with stopped queue
 
+ include/net/pkt_sched.h   |  7 +------
+ include/net/sch_generic.h | 35 ++++++++++++++++++++++++++++++++-
+ net/core/dev.c            | 29 ++++++++++++++++++++++-----
+ net/sched/sch_generic.c   | 50 +++++++++++++++++++++++++++++++++++++++++++++--
+ 4 files changed, 107 insertions(+), 14 deletions(-)
+
+-- 
+2.7.4
 
