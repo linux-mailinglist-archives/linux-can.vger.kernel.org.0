@@ -2,102 +2,129 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058E438099F
-	for <lists+linux-can@lfdr.de>; Fri, 14 May 2021 14:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21C0380A33
+	for <lists+linux-can@lfdr.de>; Fri, 14 May 2021 15:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbhENMfc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 May 2021 08:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S231666AbhENNMF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 May 2021 09:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbhENMfc (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 May 2021 08:35:32 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA52CC061574
-        for <linux-can@vger.kernel.org>; Fri, 14 May 2021 05:34:20 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lhX1H-0006Y0-Dw; Fri, 14 May 2021 14:34:19 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:ab9e:cb46:9dda:16ff])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 66F5C624336;
-        Fri, 14 May 2021 12:34:18 +0000 (UTC)
-Date:   Fri, 14 May 2021 14:34:17 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
+        with ESMTP id S229469AbhENNMF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 14 May 2021 09:12:05 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E50AC061574
+        for <linux-can@vger.kernel.org>; Fri, 14 May 2021 06:10:54 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id q5so10535747wrs.4
+        for <linux-can@vger.kernel.org>; Fri, 14 May 2021 06:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ReoAafVXI0ufU6Nnb6MGeE01RfLuYaVptOWExyXRYGg=;
+        b=zika6ban8LZU9sYSKIO4vQITlK9KVkwWQJdufmiFy3O8DYoOUXcC3CcePGt62rzUTp
+         rDx621sZWRaVUtlDqbOywls1+/6F1kAebuRNXQwyaeOFvikeA6bk0HVVzHCTAhPzcHTd
+         5uxCrJPwYfOehYT1SNtRFtz1M/kb8L28Fdjrrfyb5le8fQV/S5MAwH1Ie9yvikJjOZe6
+         oTtpLCfmMzKYwHelK/z0VMgIPH/PtsNgoNKwFMHGsQsQBBKoFlGaxIT5bMGVIg4L3Isd
+         vjyglyAOyIOX+b8ivQijbqIEC/TNe9tv69vJOyQHPE79ATX0s52/omntKJn9mz+b34NW
+         dFhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ReoAafVXI0ufU6Nnb6MGeE01RfLuYaVptOWExyXRYGg=;
+        b=hHJbSTLfrk4ynE7AZcDuAVPfXmdiN5xYk//XJ4Q7FEhcJOSUtYTxCgoBCfJcaUwvPr
+         I2tXaD9HcJ9NADyT25iEwIZdL2Ar2BkSgcMUW1CbZTpkOa8MkRtwj5HBPcdu3ernPGZ2
+         q4R+vXq8uU0bx7rDDZR22zvSXSaHdhmePchYB7cWoXxfVFk+/5QQST3S146jAhE5g1bf
+         GtKa30g2I3jtk7iyjJj4lrHFJw3+wjtEd7cq+42uWYz+ErI0JzClE+2cs8Xy1qwrC5Ek
+         Hwh/idwbVT505n28GZTab8MpmyHugP1X8Fu75F9spyFuyaVeRpvqFtK2cMxuENBJvDyX
+         MJDg==
+X-Gm-Message-State: AOAM533fNGtFtbJRRynl3h8mmH4fdsYiPOKE4NTF7UYtmOLCvp4oHhPC
+        JDKBUPRaGRRILpEHXIntxgVYcR4jAqHhpA==
+X-Google-Smtp-Source: ABdhPJz4Y6jtyBED+AsermqlWbsVsXXnBv1uMzdtoG09bi75Fiv+CejBdJVjPP1SXCFPKV4CMxo57Q==
+X-Received: by 2002:a5d:650b:: with SMTP id x11mr23239610wru.186.1620997852740;
+        Fri, 14 May 2021 06:10:52 -0700 (PDT)
+Received: from bigthink (92.41.10.182.threembb.co.uk. [92.41.10.182])
+        by smtp.gmail.com with ESMTPSA id x16sm6576507wrp.6.2021.05.14.06.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 May 2021 06:10:51 -0700 (PDT)
+Date:   Fri, 14 May 2021 14:10:49 +0100
+From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org
 Subject: Re: [PATCH RFC can-next 0/3] m_can: support device-specific
  interrupt handling
-Message-ID: <20210514123417.tlm4bvqidwnioesm@pengutronix.de>
+Message-ID: <20210514131049.yluxu3cxaspeptvb@bigthink>
 References: <20210514121946.2344901-1-torin@maxiluxsystems.com>
+ <20210514123417.tlm4bvqidwnioesm@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z5fwxuo2nitak6py"
+        protocol="application/pgp-signature"; boundary="optgmcnlgkf6uss5"
 Content-Disposition: inline
-In-Reply-To: <20210514121946.2344901-1-torin@maxiluxsystems.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20210514123417.tlm4bvqidwnioesm@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---z5fwxuo2nitak6py
-Content-Type: text/plain; charset=utf-8
+--optgmcnlgkf6uss5
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 14.05.2021 13:19:43, Torin Cooper-Bennun wrote:
-> Using the TCAN4550, I've had occasions where the m_can driver has fallen
-> over with the "nobody cared" message -- the ISR has returned IRQ_NONE
-> upon "99,900 of the previous 100,000 interrupts" (see
-> kernel/irq/spurious.c, __report_bad_irq()).
+On Fri, May 14, 2021 at 02:34:17PM +0200, Marc Kleine-Budde wrote:
+> On 14.05.2021 13:19:43, Torin Cooper-Bennun wrote:
+> > Using the TCAN4550, I've had occasions where the m_can driver has fallen
+> > over with the "nobody cared" message -- the ISR has returned IRQ_NONE
+> > upon "99,900 of the previous 100,000 interrupts" (see
+> > kernel/irq/spurious.c, __report_bad_irq()).
+> >=20
+> > While such high numbers certainly indicate some kind of fault,
+> > presently, device-specific interrupts are totally ignored -- it may be
+> > that such a fault can be handled with a device-specific action.
 >=20
-> While such high numbers certainly indicate some kind of fault,
-> presently, device-specific interrupts are totally ignored -- it may be
-> that such a fault can be handled with a device-specific action.
+> Do you know why the tcan4x5x specific interrupts are enabled in the
+> first place? If no-one is handling them, just mask/disable/etc then....
 
-Do you know why the tcan4x5x specific interrupts are enabled in the
-first place? If no-one is handling them, just mask/disable/etc then....
+The TCAN4550 has interrupts that cannot be disabled or masked, including
+those for faults involving SPI, power, and transceiver issues (e.g. CAN
+stuck dominant).
 
-> Comments are welcome. One thing right off the bat: I'm not sure whether
-> the new callback should be added alongside clear_interrupts, or if it
-> should replace it.
+>=20
+> > Comments are welcome. One thing right off the bat: I'm not sure whether
+> > the new callback should be added alongside clear_interrupts, or if it
+> > should replace it.
+>=20
+> I don't see why we need two callbacks from the generic interrupt
+> handler, one should be enough.
 
-I don't see why we need two callbacks from the generic interrupt
-handler, one should be enough.
+Fair enough, and it makes sense to always clear the device-specific
+interrupts when handling them anyway.
 
-> I also need to replicate the fault observed with the TCAN4550 - it's
-> unlikely that the handling added in this patchset is effective by
-> itself.
+tcan4x5x needs some cleanup re interrupt init/handling/clearing anyway,
+so I'll incorporate that next time!
 
-Marc
+Regards,
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Torin Cooper-Bennun
+Software Engineer | maxiluxsystems.com
 
---z5fwxuo2nitak6py
+
+--optgmcnlgkf6uss5
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCebkYACgkQqclaivrt
-76nLMQf/UhvX35bB3/A+I6Fj1f6vz1mq30njCuo6c7/rW+wR0emthFo4MXfGJD8b
-G63tzCUV5957naw3/mbZRvXyF/4Xgf71daSBdOuS1ktpvEdD5PTvmxOrHjmXs3+d
-+P7vCvcUOXkps2T3+c/iFKlZhCoGBAiJ5j4e18qR+JqRTv98pgq58tLFS0pZgEkS
-3sJbNwCKUuo3eV7pyWd8FXxDvZ1we4USKGfE2YhCh7AohC2R1T2R96UU7yKPzk3U
-PABKtGqO9TGODEQXR88zRhJTBlwYwAcFQn0FcW5neKLnq+L+SGcjuxAzpgWQp5g+
-DvKvD6YVXaWC5PhQBkXQIZ5YWx/DTg==
-=h3Av
+iQGzBAABCgAdFiEEHoj68wxDgkT3Oo2Mj1jJmDXJkUgFAmCedtIACgkQj1jJmDXJ
+kUhXZwwAvNHPKXSqrtlPiRwlAUyl8mtAnsGqO623CGWJdZms7/MTtKg/Ewt9gAlX
+DwM+xio/4x4AH8q1WVp31+EDO+3RTnCPiG2mIbdgBU5gbZHRaQlUImo9FEtZpbMI
+dfAqSc3Eoy7Cso+hxKmld8qov28Ieuwv2qUpNLXfAD8rIMTPiQ9lMiYY4s3JD5jk
+uz3pEtjdHoi6Q5j2nco1LQd6NGB+rPvFwp0nXGDepOE2wgOlYbBCMbOeLak8J9AY
+8urgCSv13NsFMZbXpvKO0mEcpwe9iS/ko/RYt8VEIXdnXjVTIfRs/2H/h+WIjhsY
+Qpqya8pUe7/2nkWxixhjizPrEic27XuQRoGg0qAt6dT60rWOjnFwa6R5Ma81jtCT
+xroKqxk7ZkNR+5Sg2FlDlMqg1MI7hC3/fauyazeoIYusnHrML1jT5AF7T/12ZtcB
+aS0f4rQkqdhjzNhyybKHeRVTTyepp6jeffTjtZrd7lhnbrysOX5A4g0Rl5PLnanB
+OeUdXRK1
+=PtT5
 -----END PGP SIGNATURE-----
 
---z5fwxuo2nitak6py--
+--optgmcnlgkf6uss5--
