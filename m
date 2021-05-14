@@ -2,90 +2,86 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6863811EE
-	for <lists+linux-can@lfdr.de>; Fri, 14 May 2021 22:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284343813A9
+	for <lists+linux-can@lfdr.de>; Sat, 15 May 2021 00:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbhENUmW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 May 2021 16:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbhENUmV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 May 2021 16:42:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B91C061574
-        for <linux-can@vger.kernel.org>; Fri, 14 May 2021 13:41:08 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lhecK-0006lj-3Z; Fri, 14 May 2021 22:41:04 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:d2a9:f0ae:b10b:5ba5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 7929A6246DB;
-        Fri, 14 May 2021 20:40:59 +0000 (UTC)
-Date:   Fri, 14 May 2021 22:40:58 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     zuoqilin1@163.com
-Cc:     socketcan@hartkopp.net, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zuoqilin <zuoqilin@yulong.com>
-Subject: Re: [PATCH] net: Remove unnecessary variables
-Message-ID: <20210514204058.lqd2gryxbfkto4ra@pengutronix.de>
-References: <20210514100806.792-1-zuoqilin1@163.com>
+        id S230214AbhENWVW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 14 May 2021 18:21:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230096AbhENWVW (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 14 May 2021 18:21:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5480461440;
+        Fri, 14 May 2021 22:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621030810;
+        bh=bN6ZhnJyMojIp9seq7zVzzHT/C7j3keiCK+LEFp2cOQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YAZEd86fnNFL+tBmNptR7uPbSwB6PZ1AlkBwQsfsdYg48WQ2cw43sdbPugnCH2umN
+         KoTCz1f3EdDesA3By+NnuU2P6owvhqGZDhUhFx+Tim1BUBKYHKROWKFxvFVC0x5IxB
+         I0bf5oyn+ruzdKT1YY0ErUvOZPqndfOVR1UjxyMXrFabWuF0GFwMtAs7meZhyA2Vwu
+         JjHxtLnzHJoTtNNMmr39a4BilVNHXz2SuhBNG6U8rkTeFy7MxvjwgiJhsgL3wH4zbO
+         fEaSBj2jRxLK1QkbQQg+t7qdAUsIhxCSFVXG1qOQd90efQqfo/d3GTRb8jAWZjC46F
+         6bEcwmE4EuZZg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 43AD060972;
+        Fri, 14 May 2021 22:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gyij337c7zi7s5x5"
-Content-Disposition: inline
-In-Reply-To: <20210514100806.792-1-zuoqilin1@163.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v8 0/3] fix packet stuck problem for lockless qdisc
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162103081027.6483.17994151706527065595.git-patchwork-notify@kernel.org>
+Date:   Fri, 14 May 2021 22:20:10 +0000
+References: <1620962221-40131-1-git-send-email-linyunsheng@huawei.com>
+In-Reply-To: <1620962221-40131-1-git-send-email-linyunsheng@huawei.com>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, olteanv@gmail.com,
+        ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
+        edumazet@google.com, weiwan@google.com, cong.wang@bytedance.com,
+        ap420073@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@openeuler.org,
+        mkl@pengutronix.de, linux-can@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
+        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
+        a.fatoum@pengutronix.de, atenart@kernel.org,
+        alexander.duyck@gmail.com, hdanton@sina.com, jgross@suse.com,
+        JKosina@suse.com, mkubecek@suse.cz, bjorn@kernel.org,
+        alobakin@pm.me
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
 
---gyij337c7zi7s5x5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net.git (refs/heads/master):
 
-On 14.05.2021 18:08:06, zuoqilin1@163.com wrote:
-> From: zuoqilin <zuoqilin@yulong.com>
->=20
-> There is no need to define the variable "rate" to receive,
-> just return directly.
->=20
-> Signed-off-by: zuoqilin <zuoqilin@yulong.com>
+On Fri, 14 May 2021 11:16:58 +0800 you wrote:
+> This patchset fixes the packet stuck problem mentioned in [1].
+> 
+> Patch 1: Add STATE_MISSED flag to fix packet stuck problem.
+> Patch 2: Fix a tx_action rescheduling problem after STATE_MISSED
+>          flag is added in patch 1.
+> Patch 3: Fix the significantly higher CPU consumption problem when
+>          multiple threads are competing on a saturated outgoing
+>          device.
+> 
+> [...]
 
-Applied to linux-can-next/testing.
+Here is the summary with links:
+  - [net,v8,1/3] net: sched: fix packet stuck problem for lockless qdisc
+    https://git.kernel.org/netdev/net/c/a90c57f2cedd
+  - [net,v8,2/3] net: sched: fix tx action rescheduling issue during deactivation
+    https://git.kernel.org/netdev/net/c/102b55ee92f9
+  - [net,v8,3/3] net: sched: fix tx action reschedule issue with stopped queue
+    https://git.kernel.org/netdev/net/c/dcad9ee9e066
 
-regards,
-Marc
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---gyij337c7zi7s5x5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCe4FgACgkQqclaivrt
-76n23Qf/cgv1dhi3wsb0LE/7sAE/Ui1kVpBZ4FnrVb39mfj9OwlaGIw9kq+Ibfzg
-BNZcFYkNh5Je/B7sEkdtLrmuITgdidzhZyfMRa8Dx21kTxD1FQL+fO2Zx45imfzn
-BfvyVPrxLdypRxvrD6QyvfwI7iqPxasBXfu0Hzz9TpNSEXCs+SAn9WEYUHl6HHrn
-y7T/tPQx+NxUTXM1WsuA+rNTyWG0BcLECG78ivgxtPbFNtHyfRKj4uWTReZpa3Ae
-5kJCWSL77ZmhJc0cQeuH1rHJsIJLWqKVJ1EcBGwYPUdI9P5WxSGo92Bnukg66o4V
-ex1yG02lzElETbg5ogIXTzRLiunO/Q==
-=Ds8o
------END PGP SIGNATURE-----
-
---gyij337c7zi7s5x5--
