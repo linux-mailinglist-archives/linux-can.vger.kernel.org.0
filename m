@@ -2,33 +2,36 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4180D38193B
-	for <lists+linux-can@lfdr.de>; Sat, 15 May 2021 16:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C11381A6A
+	for <lists+linux-can@lfdr.de>; Sat, 15 May 2021 20:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhEOODJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 15 May 2021 10:03:09 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:48241 "EHLO mout01.posteo.de"
+        id S234367AbhEOSLh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 15 May 2021 14:11:37 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:57699 "EHLO mout02.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230210AbhEOODI (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 15 May 2021 10:03:08 -0400
+        id S234189AbhEOSLg (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 15 May 2021 14:11:36 -0400
 Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id C1CDD240026
-        for <linux-can@vger.kernel.org>; Sat, 15 May 2021 16:01:53 +0200 (CEST)
+        by mout02.posteo.de (Postfix) with ESMTPS id 7DA352400E5
+        for <linux-can@vger.kernel.org>; Sat, 15 May 2021 20:10:21 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1621087313; bh=0fB7tsNzJvwikDHx3uoLz2vaMXQw2yJqTJUpAhGG0ts=;
-        h=From:Autocrypt:To:Cc:Subject:Date:From;
-        b=KVNNjei27B3b83MHNj4UteqdYCEfK8YwpjrrlzPATVmPyBFfiblmSdWys1yxwfvYV
-         YXubgjFMSnEWXdwz/bUm/UvQM6HQkszHQwZnFN15PRJ4Ve5xYW2LvTQSMugh0DJ6Lz
-         EPfwVMBybRGtxTUS5nw4iHTvv+8eispwNMGH0PFJXTCcdniwnuZ8aCWsTeAOZBlfJn
-         YMzoeUIXsVtC+R6HGP6T48UVxLZducEU1Ze87pq5o+y6QDr4MWGXoOwu0eSFTfdnwd
-         G5UIz05sG8gQZzPagch/aIBa6SOnMepSk0uZbJtfgWEoftVjMQSb+KJVkgrpYsw66B
-         CEE2gyGH4U07Q==
+        t=1621102221; bh=V7E/WV9FA0yJeURIxg7Ul/BBVza0NI8uLbaHmvGkSgI=;
+        h=From:To:Cc:Autocrypt:Subject:Date:From;
+        b=sJAUoqgsigt4Nb83krz4KE5abYNSmm7JqqBUPgM13CiwsxFpV45fjTKply0P1vrrQ
+         iKkJGMXZ/pVURJUAtbeuP7MpcGnlQsyqOrS876kY9cCuMqoEv3drGgM981u51ysHb+
+         ZZunhGpjgwN7tzpLi1UYZOj1yqWrCJHO+UbVniRNKkIY+K1j86l/NTkk5SrXVksxhM
+         3/h1JiqwvMBLyLfDfz9UcC8swEfdoejqq3RFAtJ5nuVkfTXHSlSBaw2iI1JC/fDqTK
+         kq5YnPbWjIUmLftQYdGG2+yGwmzZpOfvnQtodZf9D5EKmJKQpLbBzbo/GvUoAE6GLe
+         RnslvYhYJSQdA==
 Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4Fj6X12HXnz9rxK;
-        Sat, 15 May 2021 16:01:53 +0200 (CEST)
+        by submission (posteo.de) with ESMTPSA id 4FjD2j0BWSz9rxM;
+        Sat, 15 May 2021 20:10:20 +0200 (CEST)
+From:   Patrick Menschel <menschel.p@posteo.de>
+To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Cc:     linux-can <linux-can@vger.kernel.org>
 References: <f0d77797-c485-2f88-57e3-b5c7b4953706@posteo.de>
  <20210515122611.GC2387@x1.vandijck-laurijssen.be>
-From:   Patrick Menschel <menschel.p@posteo.de>
+ <38c85980-a569-b714-2643-9623b3dbc973@posteo.de>
 Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
  elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
@@ -89,13 +92,11 @@ Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
  dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
  QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
  IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-To:     Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc:     linux-can <linux-can@vger.kernel.org>
 Subject: Re: J1939 Questions on Intended usage
-Message-ID: <38c85980-a569-b714-2643-9623b3dbc973@posteo.de>
-Date:   Sat, 15 May 2021 14:01:53 +0000
+Message-ID: <72aa8b79-5ba9-26ee-3918-09532e0f1eae@posteo.de>
+Date:   Sat, 15 May 2021 18:10:20 +0000
 MIME-Version: 1.0
-In-Reply-To: <20210515122611.GC2387@x1.vandijck-laurijssen.be>
+In-Reply-To: <38c85980-a569-b714-2643-9623b3dbc973@posteo.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: de-DE
 Content-Transfer-Encoding: 8bit
@@ -103,53 +104,117 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 15.05.21 um 14:26 schrieb Kurt Van Dijck:
-> On Fri, 14 May 2021 12:04:47 +0000, Patrick Menschel wrote:
->> Do I need to open one socket per PGN I'm sending?
->> e.g.
+Am 15.05.21 um 16:01 schrieb Patrick Menschel:
+> Am 15.05.21 um 14:26 schrieb Kurt Van Dijck:
+>> On Fri, 14 May 2021 12:04:47 +0000, Patrick Menschel wrote:
+>>> Do I need to open one socket per PGN I'm sending?
+>>> e.g.
+>>>
+>>> s1 = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+>>> s1.bind(interface_name, MY_NAME, PGN_OF_TSC1, MY_SA)
+>>> s1.write(bytes(8))
+>>>
+>>> s2 = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+>>> s2.bind(interface_name, MY_NAME, PGN_OF_EBC1, MY_SA)
+>>> s2.write(bytes(8))
 >>
->> s1 = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
->> s1.bind(interface_name, MY_NAME, PGN_OF_TSC1, MY_SA)
->> s1.write(bytes(8))
+>> No, you don't _need_ to. You can.
 >>
->> s2 = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
->> s2.bind(interface_name, MY_NAME, PGN_OF_EBC1, MY_SA)
->> s2.write(bytes(8))
+>> If you need quite some different PGN's, it may be more interesting to:
+>> s = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+>> s.bind(interface_name, MY_NAME, ANY_PGN, MY_SA)
+>> s.sendto(bytes(8), DST_1, PGN_1)
+>> s.sendto(bytes(8), DST_2, PGN_2)
+>> ...
+>>
+>> I'm not a python expert, I just assume something like that is possible.
 > 
-> No, you don't _need_ to. You can.
+> Yes, the method exists
 > 
-> If you need quite some different PGN's, it may be more interesting to:
-> s = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
-> s.bind(interface_name, MY_NAME, ANY_PGN, MY_SA)
-> s.sendto(bytes(8), DST_1, PGN_1)
-> s.sendto(bytes(8), DST_2, PGN_2)
-> ...
+> sendto()
+> https://docs.python.org/3/library/socket.html#socket.socket.sendto
+> https://github.com/python/cpython/blob/main/Modules/socketmodule.c#L4279
 > 
-> I'm not a python expert, I just assume something like that is possible.
-
-Yes, the method exists
-
-sendto()
-https://docs.python.org/3/library/socket.html#socket.socket.sendto
-https://github.com/python/cpython/blob/main/Modules/socketmodule.c#L4279
-
-but apparently sockaddr_can is not yet expanded to individual parameters
-as it was done with the
-
-bind()
-https://github.com/python/cpython/blob/main/Modules/socketmodule.c#L2207
-
-Then I'll start by passing in the sockaddr_can struct as a first test
-and make a PR to that repo in the long run.
-
->> What about the cyclic transmitted PGNs? Do I drop those into
->> BroadcastManager somehow?
+> but apparently sockaddr_can is not yet expanded to individual parameters
+> as it was done with the
 > 
-> The broadcast manager is seperate from j1939, so it's apart.
+> bind()
+> https://github.com/python/cpython/blob/main/Modules/socketmodule.c#L2207
+> 
+> Then I'll start by passing in the sockaddr_can struct as a first test
+> and make a PR to that repo in the long run.
 
-Now that would have been the cherry on the cake  ;-)
-99% of J1939 are information sharing, cyclic messages of PDU2 format.
-Handing the timing over to the BCM would have been super convenient.
+Guess I have to amend that impression, everything works fine,
+except for broadcast which gives me a PermissionError ?!
 
-Thanks again and Best Regards,
+python -i
+Python 3.9.5 (default, May 13 2021, 13:29:45)
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import socket
+>>> s = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+>>> s.bind(("mcp0", 0, 0x40000, 0x20))
+>>> s.sendto(bytes(range(8)), ("", 0, 0x12300, 0x30))
+8
+>>> s.sendto(bytes(range(0,0x88,0x11)), ("", 0, 0x12300, 0x30))
+8
+>>>
+
+Took me some try and error to get rid of
+
+OSError: [Errno 77] File descriptor in bad state
+
+but at least something comes out.
+
+candump mcp0
+  mcp0  19233020   [8]  00 01 02 03 04 05 06 07
+  mcp0  19233020   [8]  00 11 22 33 44 55 66 77
+
+Maybe I didn't get the concept at all.
+
+
+
+The transport protocol also does something.
+
+s.sendto(bytes(range(64)), ("mcp0", 0, 0xFECA, 0x20))
+
+
+TP.CM.RTS
+  mcp0  18EC2020   [8]  10 40 00 0A 0A CA FE 00
+TP.CM.CTS
+  mcp0  18EC2020   [8]  11 0A 01 FF FF CA FE 00
+
+TP.DT
+  mcp0  18EB2020   [8]  01 00 01 02 03 04 05 06
+  mcp0  18EB2020   [8]  02 07 08 09 0A 0B 0C 0D
+  mcp0  18EB2020   [8]  03 0E 0F 10 11 12 13 14
+  mcp0  18EB2020   [8]  04 15 16 17 18 19 1A 1B
+  mcp0  18EB2020   [8]  05 1C 1D 1E 1F 20 21 22
+  mcp0  18EB2020   [8]  06 23 24 25 26 27 28 29
+  mcp0  18EB2020   [8]  07 2A 2B 2C 2D 2E 2F 30
+  mcp0  18EB2020   [8]  08 31 32 33 34 35 36 37
+  mcp0  18EB2020   [8]  09 38 39 3A 3B 3C 3D 3E
+  mcp0  18EB2020   [8]  0A 3F FF FF FF FF FF FF
+
+TP.CM.EndMsgAck
+  mcp0  18EC2020   [8]  13 40 00 0A FF CA FE 00
+
+Those with a little knowledge of J1939 will now roll on the floor ;-)
+
+
+The only thing that I didn't get to work is send to broadcast.
+That PermissionError is somewhat strange.
+
+>>> s.sendto(bytes(range(8)), ("", 0, 0xFECA, 0xFF))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+PermissionError: [Errno 13] Permission denied
+
+>>> s.sendto(bytes(range(64)), ("mcp0", 0, 0xFECA, 0xFF))
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+PermissionError: [Errno 13] Permission denied
+
+
+Best Regards,
 Patrick
