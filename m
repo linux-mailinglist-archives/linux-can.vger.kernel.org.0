@@ -2,130 +2,103 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E63381525
-	for <lists+linux-can@lfdr.de>; Sat, 15 May 2021 04:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7460F3818B6
+	for <lists+linux-can@lfdr.de>; Sat, 15 May 2021 14:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235455AbhEOC0k (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 14 May 2021 22:26:40 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:2986 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbhEOC0k (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 14 May 2021 22:26:40 -0400
-Received: from dggems705-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Fhq1s0Z3Vzlbrx;
-        Sat, 15 May 2021 10:23:13 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggems705-chm.china.huawei.com (10.3.19.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Sat, 15 May 2021 10:25:26 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Sat, 15 May
- 2021 10:25:25 +0800
-Subject: Re: [PATCH net v8 1/3] net: sched: fix packet stuck problem for
- lockless qdisc
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Cong Wang <xiyou.wangcong@gmail.com>
-CC:     David Miller <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "Wei Wang" <weiwan@google.com>,
-        "Cong Wang ." <cong.wang@bytedance.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        <linux-can@vger.kernel.org>, Jamal Hadi Salim <jhs@mojatatu.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jonas Bonn <jonas.bonn@netrounds.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Zhivich <mzhivich@akamai.com>,
-        Josh Hunt <johunt@akamai.com>, Jike Song <albcamus@gmail.com>,
-        Kehuan Feng <kehuan.feng@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        "Hillf Danton" <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, "Michal Kubecek" <mkubecek@suse.cz>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>
-References: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
- <1620959218-17250-2-git-send-email-linyunsheng@huawei.com>
- <CAM_iQpXWgYQxf8Ba-D4JQJMPUaR9MBfQFTLFCHWJMVq9PcUWRg@mail.gmail.com>
- <20210514163923.53f39888@kicinski-fedora-PC1C0HJN>
- <CAM_iQpXZNASp7+kA=OoCVbXuReAtOzHnqMn8kFUVfi9_qWe_kw@mail.gmail.com>
- <20210514171759.5572c8f0@kicinski-fedora-PC1C0HJN>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <def859b3-b6ea-7338-38eb-3f18ec3d60c2@huawei.com>
-Date:   Sat, 15 May 2021 10:25:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S230144AbhEOM13 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 15 May 2021 08:27:29 -0400
+Received: from relay-b02.edpnet.be ([212.71.1.222]:51732 "EHLO
+        relay-b02.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229940AbhEOM11 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 15 May 2021 08:27:27 -0400
+X-ASG-Debug-ID: 1621081572-15c4337c2915de1d0001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (94.105.122.62.dyn.edpnet.net [94.105.122.62]) by relay-b02.edpnet.be with ESMTP id IKHNp2ggqfbybzUt; Sat, 15 May 2021 14:26:12 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 94.105.122.62.dyn.edpnet.net[94.105.122.62]
+X-Barracuda-Apparent-Source-IP: 94.105.122.62
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id 3ABAB141AEF8;
+        Sat, 15 May 2021 14:26:12 +0200 (CEST)
+Date:   Sat, 15 May 2021 14:26:11 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     Patrick Menschel <menschel.p@posteo.de>
+Cc:     linux-can <linux-can@vger.kernel.org>
+Subject: Re: J1939 Questions on Intended usage
+Message-ID: <20210515122611.GC2387@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: J1939 Questions on Intended usage
+Mail-Followup-To: Patrick Menschel <menschel.p@posteo.de>,
+        linux-can <linux-can@vger.kernel.org>
+References: <f0d77797-c485-2f88-57e3-b5c7b4953706@posteo.de>
 MIME-Version: 1.0
-In-Reply-To: <20210514171759.5572c8f0@kicinski-fedora-PC1C0HJN>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme718-chm.china.huawei.com (10.1.199.114) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f0d77797-c485-2f88-57e3-b5c7b4953706@posteo.de>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 94.105.122.62.dyn.edpnet.net[94.105.122.62]
+X-Barracuda-Start-Time: 1621081572
+X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 1719
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.89954
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/5/15 8:17, Jakub Kicinski wrote:
-> On Fri, 14 May 2021 16:57:29 -0700 Cong Wang wrote:
->> On Fri, May 14, 2021 at 4:39 PM Jakub Kicinski <kuba@kernel.org> wrote:
->>>
->>> On Fri, 14 May 2021 16:36:16 -0700 Cong Wang wrote:  
->>  [...]  
->>>>
->>>> We have test_and_clear_bit() which is atomic, test_bit()+clear_bit()
->>>> is not.  
->>>
->>> It doesn't have to be atomic, right? I asked to split the test because
->>> test_and_clear is a locked op on x86, test by itself is not.  
->>
->> It depends on whether you expect the code under the true condition
->> to run once or multiple times, something like:
->>
->> if (test_bit()) {
->>   clear_bit();
->>   // this code may run multiple times
->> }
->>
->> With the atomic test_and_clear_bit(), it only runs once:
->>
->> if (test_and_clear_bit()) {
->>   // this code runs once
->> }
+On Fri, 14 May 2021 12:04:47 +0000, Patrick Menschel wrote:
+> Hi Kurt,
+> 
+> J1939 just hit the raspberrypi-kernel-headers and will soon be part of
+> regular raspberrypi-kernel [1] while it was already
+> available in Python 3.9 for a couple of month. [2]
+> 
+> I was about to give it a spin but was confused of the call parameters.
+> 
+> Could you shed some light on the intended usage.
+> 
+> Do I need to open one socket per PGN I'm sending?
+> e.g.
+> 
+> s1 = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+> s1.bind(interface_name, MY_NAME, PGN_OF_TSC1, MY_SA)
+> s1.write(bytes(8))
+> 
+> s2 = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+> s2.bind(interface_name, MY_NAME, PGN_OF_EBC1, MY_SA)
+> s2.write(bytes(8))
 
-I am not sure if the above really matter when the test and clear
-does not need to be atomic.
+No, you don't _need_ to. You can.
 
-In order for the above to happens, the MISSED has to set between
-test and clear, right?
+If you need quite some different PGN's, it may be more interesting to:
+s = socket.socket(socket.AF_CAN, socket.SOCK_DGRAM, socket.CAN_J1939)
+s.bind(interface_name, MY_NAME, ANY_PGN, MY_SA)
+s.sendto(bytes(8), DST_1, PGN_1)
+s.sendto(bytes(8), DST_2, PGN_2)
+...
 
->>
->> This is why __netif_schedule() uses test_and_set_bit() instead of
->> test_bit()+set_bit().
-
-I think test_and_set_bit() is needed in __netif_schedule() mainly
-because STATE_SCHED is also used to indicate if the qdisc is in
-sd->output_queue, so it has to be atomic.
+I'm not a python expert, I just assume something like that is possible.
 
 > 
-> Thanks, makes sense, so hopefully the MISSED-was-set case is not common
-> and we can depend on __netif_schedule() to DTRT, avoiding the atomic op
-> in the common case.
 > 
-> .
-> 
+> What about the cyclic transmitted PGNs? Do I drop those into
+> BroadcastManager somehow?
 
+The broadcast manager is seperate from j1939, so it's apart.
+> 
+> 
+> If I want to open an ISOTP Channel while a j1939 socket exists for my
+> SA, does anything weird happen on that socket?
+
+No, nothing weird will happen.
+
+The only possible disadvantage I can think of is that the messages sent
+using ISOTP do not honor the NAME-SA mapping, so on a bus with dynamic
+addressing, you should be carefull to use local/remote addresses.
+
+Kind regards,
+Kurt
