@@ -2,102 +2,158 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B89383BEF
-	for <lists+linux-can@lfdr.de>; Mon, 17 May 2021 20:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A34386E7A
+	for <lists+linux-can@lfdr.de>; Tue, 18 May 2021 02:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbhEQSKj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 17 May 2021 14:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
+        id S1345167AbhERAuz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 17 May 2021 20:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236935AbhEQSKi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 17 May 2021 14:10:38 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0DCC061573
-        for <linux-can@vger.kernel.org>; Mon, 17 May 2021 11:09:20 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id u5-20020a7bc0450000b02901480e40338bso356181wmc.1
-        for <linux-can@vger.kernel.org>; Mon, 17 May 2021 11:09:20 -0700 (PDT)
+        with ESMTP id S1345165AbhERAuy (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 17 May 2021 20:50:54 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CE0C061573;
+        Mon, 17 May 2021 17:49:37 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id t11so4620212pjm.0;
+        Mon, 17 May 2021 17:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flodin-me.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=X/x/VHNWCMz/4kvAJtfiWKVvppih4W25iBv5lcNDtY4=;
-        b=E+eZnxfvZO1TPOxf1FnMPMLCJY6XYOkERIZzK62zSwo4Ov2reoGS+rGmXK+upO7rRP
-         4LFifobRvlunzQY/NbF0KEPKlfKcM/LCC00xgeggippUwBThbjcrxCKyrUzP2xQPhT+A
-         YUwgSVkSHzm5Sag2d/HBexqRjMyu8c8U5T/UBD0dRp0bHfOtLfMhLD08yiZkQJvIjD/a
-         Ldg3F8q5M49UNfAWp/cinddumyCl2DhLYhRtMLmKUjf/8VFay3Rnz+O6pXEM9WHyXZla
-         H2CzkYkLRexrrHeepIcUA/IBewJa2BGZL5ok/GaZmAHWhtge3rGoh2qWoYT4oXp+lLAf
-         YGgg==
+        bh=KH84QVoxsXQraCnrDp+zrzvkTxvsgpiKrsXZqfq/Xz4=;
+        b=KxVvzeOuRabT9C0NU6Lj//HMl4gIJgKyl56J5LIEDbtHQB7HZHfUNURxtFy/ciT7Z3
+         D4dgXhhFfmOWKeJGRAY4eElY+oNO3lOrsHXMrMRUkaTuERuuUNbS04rmVirWX8pWEJsK
+         E/UhcI0QiQEVWNAb/HQHmG1O0WIHwssfnokcnI5isRrYDFqF5yFphUEKSGu1MoftSQFB
+         ns2cICOBt0qp0sIenFO6xW5AcoL690QQZV88Vw37xQNsLxEM65BAMEPGLyZY+1MQVRJ3
+         wkHvniBTdSG5B1+ZODRwNl+xoxLnpnt1x0py80k9i7swCUMDpEjDawIpbjMUVISEk+9o
+         0spg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X/x/VHNWCMz/4kvAJtfiWKVvppih4W25iBv5lcNDtY4=;
-        b=Vo3cLqDmV3T3qCVTbA7Kc8JzZNh//cGaTc5trELP3fSZ7EAdUnMIc8U6773AaMKRnW
-         /tMH1o/X1hvz8o2ftQSETwO2ktfrr+1PLRslWYG97+Uv2ZNgwusIUruTrVsvJOJz6Lef
-         0j58oStDezPyRYY6TmXHu6j7cggDyXjRy40bcBv7x3AHgcHn932CCW+UFq/+E7dkAcvF
-         x8trFZufosceJ7phr1eOrZkeAsxX2wyM1HrIQDdjhS6I9Cv//Wz/Ze3Mw2Mvpg4Rh6eY
-         2Un+drQ3EWZ9W/T8XEnHT5glJD6F1cFB6XOVzIj3tkgAZNHH5sBUKgkgTd08Mstwm+fG
-         sfSw==
-X-Gm-Message-State: AOAM531OH99QngGvKIXy5dm2EuGl2ysZWwjB6H710bVjXouz4qT/TWoy
-        wj/Ybx6A4qpuHAkgYbYwn2H+djngMCBEEIQcqzCrOQo4Z3E=
-X-Google-Smtp-Source: ABdhPJxXtOXXLDuZzEfkZTkMebfrbCqX15+4uCsqCAoXbLu/WdCIlnSiCQzjMp8DmGzpXb2jW8CS/TpaiLx3ODLRrzY=
-X-Received: by 2002:a1c:1d8e:: with SMTP id d136mr864088wmd.80.1621274959560;
- Mon, 17 May 2021 11:09:19 -0700 (PDT)
+        bh=KH84QVoxsXQraCnrDp+zrzvkTxvsgpiKrsXZqfq/Xz4=;
+        b=L1tQnD9plhLLH7e69DRNKfuQthbjBBR4r7p0q0uyLY8tJnbuKneWULQZFjblqd2L3m
+         gO/rdPPmmqbLqL//OQrTCohjJOdmbopLhZ0gSk/8fdjen2Ooi1lOy8fQX3rf8laCacWY
+         8kuQ19gblvLEnpl/RAUX5d0CDwGZKTjvNXhAIilonHbbyudpJniN2mbNHeBhsdh/Nuzg
+         uMkkgfUGNLCIkTdice/JSCK6HQ1KuGdKppMFXWxDmclkvIyDVPfbpag3XyAxgEPyOlFB
+         lozds5EZzmACiQzDtF4ZqeycSnI6DZAAZBl9e9NvoIpEp9bJOcMRzFUmRCjWgkHxqzs7
+         OpqA==
+X-Gm-Message-State: AOAM531tEXRqFe5ArOH34Q5wSOYq4D5iOdmOGf+2dO4+FVDbW68efea2
+        VqEKriyWVV/8m+jb/w5fd2SXvXNwiF1kEpjD9hw=
+X-Google-Smtp-Source: ABdhPJwWvoEgJOE4GgT3wa3staV8IWm+iqdKu7eWqalD/1Y98ngy1UeFpylkhuNX/GV4CY4PdSN6Bc4wsXAIRZqf+oc=
+X-Received: by 2002:a17:902:a60a:b029:f0:ad94:70bf with SMTP id
+ u10-20020a170902a60ab02900f0ad9470bfmr1434578plq.31.1621298976622; Mon, 17
+ May 2021 17:49:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210504203546.115734-1-erik@flodin.me> <20210504203546.115734-2-erik@flodin.me>
- <cf5fdb14-47e2-2d08-0d29-c621bff7b312@hartkopp.net> <CAAMKmocxj1zOQastSqKhHmV0-9HVh3NpPmSPWf=byxj+fFPUHQ@mail.gmail.com>
- <64bf5aaf-1e8c-2f29-8263-63710a771843@hartkopp.net> <CAAMKmoda0U912_6Qp97fzt4BjcbUPDrE8Cy5C7C-TS5_7du31Q@mail.gmail.com>
- <46bdff5c-c0ab-56e9-7c70-8a3267458d55@hartkopp.net> <CAAMKmocsZBsFfpRLyLHqFE94xb-xrm5S8YG=QzQTndDjtOyuzw@mail.gmail.com>
- <64e37aae-e6b5-20aa-04fb-10b4a2f50b5e@hartkopp.net> <CAAMKmocfkcFhhg+JgosbOVZD7AexWEwF6rJzN=Vv86WPFhQYyA@mail.gmail.com>
- <df854f78-cd82-81b6-2456-b4c272920b6a@hartkopp.net>
-In-Reply-To: <df854f78-cd82-81b6-2456-b4c272920b6a@hartkopp.net>
-From:   Erik Flodin <erik@flodin.me>
-Date:   Mon, 17 May 2021 20:09:07 +0200
-Message-ID: <CAAMKmocgjpH399_UFDG0sOwuKbqYuhhRi8mKhSew4S-spE=z-A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] can: add support for filtering own messages only
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org
+References: <1620959218-17250-1-git-send-email-linyunsheng@huawei.com>
+ <1620959218-17250-2-git-send-email-linyunsheng@huawei.com>
+ <CAM_iQpXWgYQxf8Ba-D4JQJMPUaR9MBfQFTLFCHWJMVq9PcUWRg@mail.gmail.com>
+ <20210514163923.53f39888@kicinski-fedora-PC1C0HJN> <CAM_iQpXZNASp7+kA=OoCVbXuReAtOzHnqMn8kFUVfi9_qWe_kw@mail.gmail.com>
+ <20210514171759.5572c8f0@kicinski-fedora-PC1C0HJN> <def859b3-b6ea-7338-38eb-3f18ec3d60c2@huawei.com>
+In-Reply-To: <def859b3-b6ea-7338-38eb-3f18ec3d60c2@huawei.com>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Mon, 17 May 2021 17:49:25 -0700
+Message-ID: <CAM_iQpWSvbTzhj5+OFDaiMA+ARthRDb4iNrK37gzVYa3caGC+A@mail.gmail.com>
+Subject: Re: [PATCH net v8 1/3] net: sched: fix packet stuck problem for
+ lockless qdisc
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Wei Wang <weiwan@google.com>,
+        "Cong Wang ." <cong.wang@bytedance.com>,
+        Taehee Yoo <ap420073@gmail.com>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linuxarm@openeuler.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org, Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>, kpsingh@kernel.org,
+        bpf <bpf@vger.kernel.org>, Jonas Bonn <jonas.bonn@netrounds.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Zhivich <mzhivich@akamai.com>,
+        Josh Hunt <johunt@akamai.com>, Jike Song <albcamus@gmail.com>,
+        Kehuan Feng <kehuan.feng@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>, atenart@kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Hillf Danton <hdanton@sina.com>, jgross@suse.com,
+        JKosina@suse.com, Michal Kubecek <mkubecek@suse.cz>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Alexander Lobakin <alobakin@pm.me>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 17 May 2021 at 09:36, Oliver Hartkopp <socketcan@hartkopp.net> wrote:
+On Fri, May 14, 2021 at 7:25 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
 >
+> On 2021/5/15 8:17, Jakub Kicinski wrote:
+> > On Fri, 14 May 2021 16:57:29 -0700 Cong Wang wrote:
+> >> On Fri, May 14, 2021 at 4:39 PM Jakub Kicinski <kuba@kernel.org> wrote:
+> >>>
+> >>> On Fri, 14 May 2021 16:36:16 -0700 Cong Wang wrote:
+> >>  [...]
+> >>>>
+> >>>> We have test_and_clear_bit() which is atomic, test_bit()+clear_bit()
+> >>>> is not.
+> >>>
+> >>> It doesn't have to be atomic, right? I asked to split the test because
+> >>> test_and_clear is a locked op on x86, test by itself is not.
+> >>
+> >> It depends on whether you expect the code under the true condition
+> >> to run once or multiple times, something like:
+> >>
+> >> if (test_bit()) {
+> >>   clear_bit();
+> >>   // this code may run multiple times
+> >> }
+> >>
+> >> With the atomic test_and_clear_bit(), it only runs once:
+> >>
+> >> if (test_and_clear_bit()) {
+> >>   // this code runs once
+> >> }
 >
+> I am not sure if the above really matter when the test and clear
+> does not need to be atomic.
 >
-> On 16.05.21 22:02, Erik Flodin wrote:
->
-> >> You mainly want to throttle the outgoing traffic, to make sure that e.g.
-> >> a specific CAN ID is not sent 'back-to'back' and might lead to a DoS
-> >> situation on the wire?!?
-> >
-> > Yes, so after a frame has been sent, I want to leave the bus idle long
-> > enough to give another device on the bus that has something in its TX
-> > queue an opportunity to send.
-> >
-> >> Do you know about the Linux CAN queuing disciplines that might provide
-> >> the solution to your question?
-> >
-> > Yes, I came across that when I started my journey in CAN-land, but
-> > unfortunately the kernel I have to use doesn't have support for
-> > traffic control. That's when I started using RECV_OWN_MSGS which
-> > worked until I added filters and here we are now :)
-> >
-> > If I get the chance to update the kernel (which would have to happen
-> > before my proposed patch could be used anyway) I should perhaps try to
-> > get tc support instead. That would simplify my application at least.
->
-> :-D
->
-> In any case it seems you need to change some kernel code.
->
-> The CAN frame ematch rule is from 2012:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=f057bbb6f9ed0fb61ea11105c9ef0ed5ac1a354d
->
-> Is your kernel older than 2012? o_O
-> Or was TC just not enabled?
+> In order for the above to happens, the MISSED has to set between
+> test and clear, right?
 
-TC wasn't enabled.
+Nope, see the following:
 
-// Erik
+// MISSED bit is already set
+CPU0                            CPU1
+if (test_bit(MISSED) ( //true
+                                if (test_bit(MISSED)) { // also true
+        clear_bit(MISSED);
+        do_something();
+                                        clear_bit(MISSED);
+                                        do_something();
+                                }
+}
+
+Now do_something() is called twice instead of once. This may or may
+not be a problem, hence I asked this question.
+
+>
+> >>
+> >> This is why __netif_schedule() uses test_and_set_bit() instead of
+> >> test_bit()+set_bit().
+>
+> I think test_and_set_bit() is needed in __netif_schedule() mainly
+> because STATE_SCHED is also used to indicate if the qdisc is in
+> sd->output_queue, so it has to be atomic.
+
+If you replace the "do_something()" above with __netif_reschedule(),
+this is exactly my point. An entry can not be inserted twice into a
+list, hence it should never be called twice like above.
+
+Thanks.
