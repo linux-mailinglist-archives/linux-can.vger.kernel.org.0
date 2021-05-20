@@ -2,28 +2,31 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C8A38A17A
-	for <lists+linux-can@lfdr.de>; Thu, 20 May 2021 11:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B3838A30F
+	for <lists+linux-can@lfdr.de>; Thu, 20 May 2021 11:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbhETJbV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 20 May 2021 05:31:21 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:3621 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbhETJ3V (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 20 May 2021 05:29:21 -0400
-Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Fm4906WpbzmX6w;
-        Thu, 20 May 2021 17:25:40 +0800 (CST)
+        id S234157AbhETJsl (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 20 May 2021 05:48:41 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4768 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233833AbhETJqj (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 20 May 2021 05:46:39 -0400
+Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Fm4WY03tVzqVFT;
+        Thu, 20 May 2021 17:41:45 +0800 (CST)
 Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
+ dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 20 May 2021 17:27:57 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 20 May 2021 17:27:57 +0800
+ 15.1.2176.2; Thu, 20 May 2021 17:45:15 +0800
+Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Thu, 20 May
+ 2021 17:45:15 +0800
+Subject: Re: [Linuxarm] [PATCH RFC v4 0/3] Some optimization for lockless
+ qdisc
 From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
+To:     <davem@davemloft.net>, <kuba@kernel.org>,
+        <a.fatoum@pengutronix.de>, <vladimir.oltean@nxp.com>
 CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
         <cong.wang@bytedance.com>, <ap420073@gmail.com>,
@@ -40,97 +43,61 @@ CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
         <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
         <alobakin@pm.me>
-Subject: [PATCH RFC v4 3/3] net: sched: remove qdisc->empty for lockless qdisc
-Date:   Thu, 20 May 2021 17:27:53 +0800
-Message-ID: <1621502873-62720-4-git-send-email-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1621502873-62720-1-git-send-email-linyunsheng@huawei.com>
 References: <1621502873-62720-1-git-send-email-linyunsheng@huawei.com>
+Message-ID: <829cc4c1-46cc-c96c-47ba-438ae3534b94@huawei.com>
+Date:   Thu, 20 May 2021 17:45:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+In-Reply-To: <1621502873-62720-1-git-send-email-linyunsheng@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggeme717-chm.china.huawei.com (10.1.199.113) To
  dggpemm500005.china.huawei.com (7.185.36.74)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-As MISSED and DRAINING state are used to indicate a non-empty
-qdisc, qdisc->empty is not longer needed, so remove it.
+On 2021/5/20 17:27, Yunsheng Lin wrote:
+> Patch 1: remove unnecessary seqcount operation.
+> Patch 2: implement TCQ_F_CAN_BYPASS.
+> Patch 3: remove qdisc->empty.
+> 
+> RFC v4: Use STATE_MISSED and STATE_DRAINING to indicate non-empty
+>         qdisc, and add patch 1 and 3.
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
- include/net/sch_generic.h | 13 +++----------
- net/sched/sch_generic.c   |  3 ---
- 2 files changed, 3 insertions(+), 13 deletions(-)
+@Vladimir, Ahmad
+It would be good to run your testcase to see if there are any
+out of order for this version, because this version has used
+STATE_MISSED and STATE_DRAINING to indicate non-empty qdisc,
+thanks.
 
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index 0940ad56..51e74fc 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -117,8 +117,6 @@ struct Qdisc {
- 	spinlock_t		busylock ____cacheline_aligned_in_smp;
- 	spinlock_t		seqlock;
- 
--	/* for NOLOCK qdisc, true if there are no enqueued skbs */
--	bool			empty;
- 	struct rcu_head		rcu;
- 
- 	/* private data */
-@@ -160,7 +158,7 @@ static inline bool qdisc_is_percpu_stats(const struct Qdisc *q)
- static inline bool qdisc_is_empty(const struct Qdisc *qdisc)
- {
- 	if (qdisc_is_percpu_stats(qdisc))
--		return READ_ONCE(qdisc->empty);
-+		return !(READ_ONCE(qdisc->state) & QDISC_STATE_NON_EMPTY);
- 	return !READ_ONCE(qdisc->q.qlen);
- }
- 
-@@ -168,7 +166,7 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- {
- 	if (qdisc->flags & TCQ_F_NOLOCK) {
- 		if (spin_trylock(&qdisc->seqlock))
--			goto nolock_empty;
-+			return true;
- 
- 		/* If the MISSED flag is set, it means other thread has
- 		 * set the MISSED flag before second spin_trylock(), so
-@@ -190,12 +188,7 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
- 		/* Retry again in case other CPU may not see the new flag
- 		 * after it releases the lock at the end of qdisc_run_end().
- 		 */
--		if (!spin_trylock(&qdisc->seqlock))
--			return false;
--
--nolock_empty:
--		WRITE_ONCE(qdisc->empty, false);
--		return true;
-+		return spin_trylock(&qdisc->seqlock);
- 	} else if (qdisc_is_running(qdisc)) {
- 		return false;
- 	}
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 83d7f5f..1abd9c7 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -707,8 +707,6 @@ static struct sk_buff *pfifo_fast_dequeue(struct Qdisc *qdisc)
- 		need_retry = false;
- 
- 		goto retry;
--	} else {
--		WRITE_ONCE(qdisc->empty, true);
- 	}
- 
- 	return skb;
-@@ -909,7 +907,6 @@ struct Qdisc *qdisc_alloc(struct netdev_queue *dev_queue,
- 	sch->enqueue = ops->enqueue;
- 	sch->dequeue = ops->dequeue;
- 	sch->dev_queue = dev_queue;
--	sch->empty = true;
- 	dev_hold(dev);
- 	refcount_set(&sch->refcnt, 1);
- 
--- 
-2.7.4
+It is based on newest net branch with qdisc stuck patchset.
+
+Some performance data as below:
+
+pktgen + dummy netdev:
+ threads  without+this_patch   with+this_patch      delta
+    1       2.60Mpps            3.18Mpps             +22%
+    2       3.84Mpps            5.72Mpps             +48%
+    4       5.52Mpps            5.52Mpps             +0.0%
+    8       2.77Mpps            2.81Mpps             +1.4%
+   16       2.24Mpps            2.29Mpps             +2.2%
+
+IP forward testing: 1.05Mpps increases to 1.15Mpps
+
+> 
+> Yunsheng Lin (3):
+>   net: sched: avoid unnecessary seqcount operation for lockless qdisc
+>   net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
+>   net: sched: remove qdisc->empty for lockless qdisc
+> 
+>  include/net/sch_generic.h | 26 +++++++++++++-------------
+>  net/core/dev.c            | 22 ++++++++++++++++++++--
+>  net/sched/sch_generic.c   | 23 ++++++++++++++++-------
+>  3 files changed, 49 insertions(+), 22 deletions(-)
+> 
 
