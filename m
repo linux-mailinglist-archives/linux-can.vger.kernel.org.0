@@ -2,33 +2,34 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB953920C6
-	for <lists+linux-can@lfdr.de>; Wed, 26 May 2021 21:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CE23920E7
+	for <lists+linux-can@lfdr.de>; Wed, 26 May 2021 21:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbhEZTYC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 May 2021 15:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232155AbhEZTYB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 May 2021 15:24:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90BCC061574
-        for <linux-can@vger.kernel.org>; Wed, 26 May 2021 12:22:28 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1llz6f-00033s-Vn; Wed, 26 May 2021 21:22:18 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:405c:46a2:a678:b7b3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9E1E762CD86;
-        Wed, 26 May 2021 19:22:15 +0000 (UTC)
-Date:   Wed, 26 May 2021 21:22:14 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S231377AbhEZTdu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 May 2021 15:33:50 -0400
+Received: from mga01.intel.com ([192.55.52.88]:58465 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231449AbhEZTdu (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 26 May 2021 15:33:50 -0400
+IronPort-SDR: 08Iss5CDVh2XNMQpamHIvLkM0qVZzEkT/ikcPgrk/aPvP0ulk5VpunOXN2MaidJ7hyhB79PbZS
+ rKJLHg5oVD5w==
+X-IronPort-AV: E=McAfee;i="6200,9189,9996"; a="223746441"
+X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
+   d="scan'208";a="223746441"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 12:32:13 -0700
+IronPort-SDR: 7lVBb8F0/kEdc31JNLmG5hOeV50t2w7whsgGB05tUzKK8LM/Cae57uggs1vmb6QYk2C6gezhQO
+ klKAKNrcclrg==
+X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
+   d="scan'208";a="397922936"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 12:32:11 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1llzGC-00EsQn-Cy; Wed, 26 May 2021 22:32:08 +0300
+Date:   Wed, 26 May 2021 22:32:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <mani@kernel.org>,
@@ -38,59 +39,37 @@ Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         Jakub Kicinski <kuba@kernel.org>
 Subject: Re: [PATCH v1 1/1] can: mcp251xfd: Fix header block to clarify
  independence from OF
-Message-ID: <20210526192214.ksgyjescrtnhg5yq@pengutronix.de>
+Message-ID: <YK6iOB/u9wJZy8cG@smile.fi.intel.com>
 References: <20210526191801.70012-1-andriy.shevchenko@linux.intel.com>
+ <20210526192214.ksgyjescrtnhg5yq@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="35obomvnpd3qtcqc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210526191801.70012-1-andriy.shevchenko@linux.intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20210526192214.ksgyjescrtnhg5yq@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed, May 26, 2021 at 09:22:14PM +0200, Marc Kleine-Budde wrote:
+> On 26.05.2021 22:18:01, Andy Shevchenko wrote:
+> > The driver is neither dependent on OF, nor it requires any OF headers.
+> > Fix header block to clarify independence from OF.
+> > 
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Does it already work on ACPI?
 
---35obomvnpd3qtcqc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nope.
 
-On 26.05.2021 22:18:01, Andy Shevchenko wrote:
-> The driver is neither dependent on OF, nor it requires any OF headers.
-> Fix header block to clarify independence from OF.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Applied to linux-can-next/testing.
 
-Does it already work on ACPI?
+Please, scratch this (because of above).
 
-Applied to linux-can-next/testing.=20
+I'll send out a v2 shortly.
 
-thanks,
-Marc
+-- 
+With Best Regards,
+Andy Shevchenko
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---35obomvnpd3qtcqc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCun+QACgkQqclaivrt
-76kfAwf/aK8QV0Ce/jJmkynoxALJjqE6oQDIJvq7XXLvDqfMlfk72C/bhXrL5VFq
-28bknJrFjlOPuCrU/a4RIzbCocpIOE4EaL58HhnJ0uBGsOtNNzLP6Xsk+nm/gMio
-Fy2KSetxowpmiYQaMJNFnBfn1a+L3Gu6P0MDpYENWG+W/fdvlaxLbjd5xe5zSPFN
-wfCWyCMkhPsJVqm1eA3kO2yGE2nMMfecYAWWDSeZ8fuc+lR9xqb/5/TYXym/Tq4D
-+irzNBKMR26mq2fPNumqMpXAlqnsc9euu3VufvGGV/TiIYOmxb76pXajmtJE5OgE
-vpsInk2VvqJ4VDJKmGYgzVTRWM3bBA==
-=KlTk
------END PGP SIGNATURE-----
-
---35obomvnpd3qtcqc--
