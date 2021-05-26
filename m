@@ -2,44 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C5B391B2F
-	for <lists+linux-can@lfdr.de>; Wed, 26 May 2021 17:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBADB391B76
+	for <lists+linux-can@lfdr.de>; Wed, 26 May 2021 17:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235214AbhEZPIk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 26 May 2021 11:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41896 "EHLO
+        id S233747AbhEZPRf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 26 May 2021 11:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235299AbhEZPIk (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 26 May 2021 11:08:40 -0400
+        with ESMTP id S233431AbhEZPRe (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 26 May 2021 11:17:34 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591E9C061574
-        for <linux-can@vger.kernel.org>; Wed, 26 May 2021 08:07:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214EFC061574
+        for <linux-can@vger.kernel.org>; Wed, 26 May 2021 08:16:03 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1llv7i-0005nt-Qh; Wed, 26 May 2021 17:07:06 +0200
+        id 1llvGL-0007Kp-K5; Wed, 26 May 2021 17:16:01 +0200
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:cbc5:840b:a05c:ea5c])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id DF89C62CAFA;
-        Wed, 26 May 2021 15:07:05 +0000 (UTC)
-Date:   Wed, 26 May 2021 17:07:05 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CE88362CB1F;
+        Wed, 26 May 2021 15:16:00 +0000 (UTC)
+Date:   Wed, 26 May 2021 17:15:59 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
 Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH can-next 2/5] can: m_can: m_can_isr(): handle
- device-specific interrupts
-Message-ID: <20210526150705.s4ms7jhowsuts3yf@pengutronix.de>
+Subject: Re: [PATCH can-next 5/5] can: tcan4x5x: implement handling of device
+ interrupts
+Message-ID: <20210526151559.sfmseqqxzatlboay@pengutronix.de>
 References: <20210526124747.674055-1-torin@maxiluxsystems.com>
- <20210526124747.674055-3-torin@maxiluxsystems.com>
+ <20210526124747.674055-6-torin@maxiluxsystems.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="c3m4hliicdao5cdh"
+        protocol="application/pgp-signature"; boundary="2zmfg37rnbhupzmb"
 Content-Disposition: inline
-In-Reply-To: <20210526124747.674055-3-torin@maxiluxsystems.com>
+In-Reply-To: <20210526124747.674055-6-torin@maxiluxsystems.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -49,65 +49,118 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---c3m4hliicdao5cdh
+--2zmfg37rnbhupzmb
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 26.05.2021 13:47:44, Torin Cooper-Bennun wrote:
-> Device-specific interrupts are handled, if no M_CAN core interrupts were
-> handled in the ISR call.
+On 26.05.2021 13:47:47, Torin Cooper-Bennun wrote:
+> Handle power, transceiver and SPI failures by printing a useful error
+> message (multiple simultaneous failures are not logged) and disabling
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In case there are both core and device specific interrupts the kernel
-IRQ handler will call the ISR a 2nd time - should be OK.
+Is this a limitation of your code or the tcan core?
 
-> The patch also improves the flow at the start of m_can_isr(), removing a
-> conditional which always evaluates to true, and improves comments.
+> the TCAN4550 by setting it to standby mode.
+>=20
+> Additionally, print an error message if any regmap access fails in the
+> tcan4x5x_handle_dev_interrupts() call.
 >=20
 > Signed-off-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
 > ---
->  drivers/net/can/m_can/m_can.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  drivers/net/can/m_can/tcan4x5x-core.c | 50 ++++++++++++++++++++++++++-
+>  1 file changed, 49 insertions(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index fa853201d2c4..3bc957da06f7 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1033,17 +1033,24 @@ static irqreturn_t m_can_isr(int irq, void *dev_i=
-d)
->  	struct net_device *dev =3D (struct net_device *)dev_id;
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
->  	u32 ir;
-> +	irqreturn_t irq_ret =3D IRQ_NONE;
+> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_ca=
+n/tcan4x5x-core.c
+> index a300a14dc5de..2016a4b54a44 100644
+> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> @@ -38,6 +38,7 @@
+>  #define TCAN4X5X_CANDOM_INT_EN BIT(8)
+>  #define TCAN4X5X_CANBUS_ERR_INT_EN BIT(5)
+>  #define TCAN4X5X_BUS_FAULT BIT(4)
+> +#define TCAN4X5X_SPIERR_INT BIT(3)
+>  #define TCAN4X5X_MCAN_INT BIT(1)
+>  #define TCAN4X5X_ENABLE_TCAN_INT \
+>  	(TCAN4X5X_UVSUP_INT_EN | TCAN4X5X_UVIO_INT_EN | TCAN4X5X_TSD_INT_EN | \
+> @@ -214,7 +215,54 @@ static int tcan4x5x_clear_interrupts(struct m_can_cl=
+assdev *cdev)
+>  static irqreturn_t tcan4x5x_handle_dev_interrupts(struct m_can_classdev =
+*cdev,
+>  						  bool clear_only)
+>  {
+> -	tcan4x5x_clear_interrupts(cdev);
+> +	struct tcan4x5x_priv *priv =3D cdev_to_priv(cdev);
+> +	int err =3D 0;
+> +	irqreturn_t handled =3D IRQ_NONE;
 
-nitpick: please move before the "u32 ir;"
+nitpick: please make "int err" the last.
 
-> =20
->  	if (pm_runtime_suspended(cdev->dev))
->  		return IRQ_NONE;
 > +
->  	ir =3D m_can_read(cdev, M_CAN_IR);
-> -	if (!ir)
-> -		return IRQ_NONE;
-> =20
-> -	/* ACK all irqs */
-> -	if (ir & IR_ALL_INT)
-> -		m_can_write(cdev, M_CAN_IR, ir);
-> +	if (!ir) {
-> +		/* Handle device-specific interrupts */
-> +		if (cdev->ops->handle_dev_interrupts)
-> +			irq_ret =3D cdev->ops->handle_dev_interrupts(cdev, false);
-> +		return irq_ret;
+> +	if (!clear_only) {
+> +		u32 ir =3D 0;
+> +		const char *fail_str =3D "";
+
+nitpick: please make the u32 the last.
+
+> +
+> +		err =3D regmap_read(priv->regmap, TCAN4X5X_INT_FLAGS, &ir);
+> +		if (err)
+> +			goto exit_regmap_failure;
+> +
+> +		handled =3D IRQ_HANDLED;
+> +
+> +		if (ir & TCAN4X5X_UVSUP_INT_EN)
+> +			fail_str =3D "supply under-voltage (UVSUP)";
+> +		else if (ir & TCAN4X5X_UVIO_INT_EN)
+> +			fail_str =3D "I/O under-voltage (UVIO)";
+> +		else if (ir & TCAN4X5X_TSD_INT_EN)
+> +			fail_str =3D "thermal shutdown (TSD)";
+> +		else if (ir & TCAN4X5X_ECCERR_INT_EN)
+> +			fail_str =3D "uncorrectable ECC error (ECCERR)";
+> +		else if (ir & TCAN4X5X_CANDOM_INT_EN)
+> +			fail_str =3D "CAN stuck dominant (CANDOM)";
+
+The error message suggests, that this error can be triggered by messing
+around with the CAN high/low wires. I'm not sure if it's a good idea to
+shutdown the driver in this case.
+
+> +		else if (ir & TCAN4X5X_SPIERR_INT)
+> +			fail_str =3D "SPI error (SPIERR)";
+> +		else
+> +			handled =3D IRQ_NONE;
+> +
+> +		if (handled =3D=3D IRQ_HANDLED) {
+> +			netdev_err(cdev->net, "%s: device is disabled.\n",
+
+Better change the error message and say that the driver is disabling the
+device due to the error.
+
+> +				   fail_str);
+> +			err =3D regmap_update_bits(priv->regmap, TCAN4X5X_CONFIG,
+> +						 TCAN4X5X_MODE_SEL_MASK,
+> +						 TCAN4X5X_MODE_STANDBY);
+> +			if (err)
+> +				goto exit_regmap_failure;
+> +		}
 > +	}
 > +
-> +	/* ACK M_CAN interrupts */
-> +	m_can_write(cdev, M_CAN_IR, ir);
+> +	err =3D tcan4x5x_clear_interrupts(cdev);
+> +	if (err)
+> +		goto exit_regmap_failure;
+> +
+> +	return handled;
+> +
+> +exit_regmap_failure:
+> +	netdev_err(cdev->net, "regmap access failed in IRQ handler.\n");
+>  	return IRQ_NONE;
+>  }
 > =20
-> +	/* ACK device-specific interrupts */
->  	if (cdev->ops->handle_dev_interrupts)
->  		cdev->ops->handle_dev_interrupts(cdev, true);
-
-Why do you call a 2nd time the handle_dev_interrupts() callback?
+> --=20
+> 2.30.2
+>=20
+>
 
 Marc
 
@@ -117,19 +170,19 @@ Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---c3m4hliicdao5cdh
+--2zmfg37rnbhupzmb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCuZBYACgkQqclaivrt
-76lC1wgAk+nqdsbA9IXfk4CffBzob6q31XaHcZ1MPT7henkCYttEduvWGBjQVkWm
-xhlAG3KEM8ch7qJ3wnz3HXreKywS3QypQa2fTmzRTrIAdH3G28LyuE5Z9eX1EUCW
-WS4W961Tfhl8oHtsWPVRpNY3c2D4rX7F843sAB4lVI6nhB97OXr7jO4DuQogyJRL
-CYH2/ZDWWn/Bik/G/SfieU5iMjnFPriTlbSLgInVSsvFfo2z400SOT11fr1WakSq
-oIap97q+7q9R9EDs+2itKRhSuUNBpraFxdesXy62MtfqPS8AjBLuRJdD+aUK6VGz
-M6lKZdHPZ/yzrEZDWcCL7pho0Lyayg==
-=8FxF
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmCuZi0ACgkQqclaivrt
+76mWlAf/UGzHdaYejMSrr0Z3oFMg03XMQvViWhTrO6ayZRqOLnppJVmQlrq0a6N3
+ah1QZiqxS9qrDq+Mx9rvppOcdFQisWnOKE5yKed9lZzsEzIeHSMdWxuCTu4Xvsrd
+x38kQUO+ewSUC14MEGB5voqEq+Yx/yXfRYeGucYC6lK56t1zVVnzhLcjIXzu/yjW
+YOaaUhXXFjFbkpdEsBnf2UZiQKgQG7GH6fAb2Y3wp+LIBGMmGHDc8h3YdqbV2KTC
+dvLpKjLGoBPMYvrWy7FZFNzaalPnluMootpLpJDglx0coSYCXezo5MpJbEmUK7sw
+nopekRSghSJsERjtYtAwRaCU3ep2OA==
+=SFIR
 -----END PGP SIGNATURE-----
 
---c3m4hliicdao5cdh--
+--2zmfg37rnbhupzmb--
