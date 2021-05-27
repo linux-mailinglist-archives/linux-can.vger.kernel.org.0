@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 497DF392A03
-	for <lists+linux-can@lfdr.de>; Thu, 27 May 2021 10:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A88A3929DD
+	for <lists+linux-can@lfdr.de>; Thu, 27 May 2021 10:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbhE0Iuh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 May 2021 04:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+        id S235632AbhE0Itz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 May 2021 04:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235734AbhE0IuW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 May 2021 04:50:22 -0400
+        with ESMTP id S235574AbhE0Itv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 May 2021 04:49:51 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92001C061360
-        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 01:48:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB95C06138E
+        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 01:48:18 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lmBgq-0002Qn-SV
-        for linux-can@vger.kernel.org; Thu, 27 May 2021 10:48:28 +0200
+        id 1lmBge-000206-A7
+        for linux-can@vger.kernel.org; Thu, 27 May 2021 10:48:16 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E673E62D4BD
-        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 08:45:45 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 5C9F262D4CB
+        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 08:45:46 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 78D0162D42B;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 300A562D437;
         Thu, 27 May 2021 08:45:39 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 34fe22dc;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id dbfd6183;
         Thu, 27 May 2021 08:45:34 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de,
         Torin Cooper-Bennun <torin@maxiluxsystems.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [net-next 19/21] can: m_can: clean up CCCR reg defs, order by revs
-Date:   Thu, 27 May 2021 10:45:30 +0200
-Message-Id: <20210527084532.1384031-20-mkl@pengutronix.de>
+Subject: [net-next 20/21] can: m_can: make TXESC, RXESC config more explicit
+Date:   Thu, 27 May 2021 10:45:31 +0200
+Message-Id: <20210527084532.1384031-21-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210527084532.1384031-1-mkl@pengutronix.de>
 References: <20210527084532.1384031-1-mkl@pengutronix.de>
@@ -56,65 +56,72 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Torin Cooper-Bennun <torin@maxiluxsystems.com>
 
-Ensures that the different CCCR regmasks for m_can revs 3.0.x, 3.1.x,
-3.2.x and 3.3.x are clearly distinguishable. Removes incorrect
-CCCR_CANFD define. Adds bit fields UTSU and WMM for rev 3.3.x, for
-completeness.
+Introduce masks for the three RXESC fields (RBDS, F1DS, F0DS) and the
+one TXESC field (TBDS). Update m_can_chip_config() to explicitly set all
+four fields to the 64-byte option (0x7) (and these defs are renamed to
+be more concise).
 
-Link: https://lore.kernel.org/r/20210504125123.500553-3-torin@maxiluxsystems.com
+This is an improvement in maintainability, and also makes it easier to
+implement more flexible configuration of the M_CAN buffers in the
+future.
+
+Link: https://lore.kernel.org/r/20210504125123.500553-4-torin@maxiluxsystems.com
 Signed-off-by: Torin Cooper-Bennun <torin@maxiluxsystems.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/m_can/m_can.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ drivers/net/can/m_can/m_can.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 5bed59b1083f..cee542c0fdd5 100644
+index cee542c0fdd5..ce7722229964 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -102,14 +102,6 @@ enum m_can_reg {
- #define TEST_LBCK		BIT(4)
+@@ -235,8 +235,10 @@ enum m_can_reg {
+ #define RXFS_FFL_MASK	GENMASK(6, 0)
  
- /* CC Control Register(CCCR) */
--#define CCCR_CMR_MASK		GENMASK(11, 10)
--#define CCCR_CMR_CANFD		0x1
--#define CCCR_CMR_CANFD_BRS	0x2
--#define CCCR_CMR_CAN		0x3
--#define CCCR_CME_MASK		GENMASK(9, 8)
--#define CCCR_CME_CAN		0
--#define CCCR_CME_CANFD		0x1
--#define CCCR_CME_CANFD_BRS	0x2
- #define CCCR_TXP		BIT(14)
- #define CCCR_TEST		BIT(7)
- #define CCCR_DAR		BIT(6)
-@@ -119,14 +111,25 @@ enum m_can_reg {
- #define CCCR_ASM		BIT(2)
- #define CCCR_CCE		BIT(1)
- #define CCCR_INIT		BIT(0)
--#define CCCR_CANFD		BIT(4)
-+/* for version 3.0.x */
-+#define CCCR_CMR_MASK		GENMASK(11, 10)
-+#define CCCR_CMR_CANFD		0x1
-+#define CCCR_CMR_CANFD_BRS	0x2
-+#define CCCR_CMR_CAN		0x3
-+#define CCCR_CME_MASK		GENMASK(9, 8)
-+#define CCCR_CME_CAN		0
-+#define CCCR_CME_CANFD		0x1
-+#define CCCR_CME_CANFD_BRS	0x2
- /* for version >=3.1.x */
- #define CCCR_EFBI		BIT(13)
- #define CCCR_PXHD		BIT(12)
- #define CCCR_BRSE		BIT(9)
- #define CCCR_FDOE		BIT(8)
--/* only for version >=3.2.x */
-+/* for version >=3.2.x */
- #define CCCR_NISO		BIT(15)
-+/* for version >=3.3.x */
-+#define CCCR_WMM		BIT(11)
-+#define CCCR_UTSU		BIT(10)
+ /* Rx Buffer / FIFO Element Size Configuration (RXESC) */
+-#define M_CAN_RXESC_8BYTES	0x0
+-#define M_CAN_RXESC_64BYTES	0x777
++#define RXESC_RBDS_MASK		GENMASK(10, 8)
++#define RXESC_F1DS_MASK		GENMASK(6, 4)
++#define RXESC_F0DS_MASK		GENMASK(2, 0)
++#define RXESC_64B		0x7
  
- /* Nominal Bit Timing & Prescaler Register (NBTP) */
- #define NBTP_NSJW_MASK		GENMASK(31, 25)
+ /* Tx Buffer Configuration (TXBC) */
+ #define TXBC_TFQS_MASK		GENMASK(29, 24)
+@@ -249,8 +251,8 @@ enum m_can_reg {
+ #define TXFQS_TFFL_MASK		GENMASK(5, 0)
+ 
+ /* Tx Buffer Element Size Configuration(TXESC) */
+-#define TXESC_TBDS_8BYTES	0x0
+-#define TXESC_TBDS_64BYTES	0x7
++#define TXESC_TBDS_MASK		GENMASK(2, 0)
++#define TXESC_TBDS_64B		0x7
+ 
+ /* Tx Event FIFO Configuration (TXEFC) */
+ #define TXEFC_EFS_MASK		GENMASK(21, 16)
+@@ -1191,7 +1193,10 @@ static void m_can_chip_config(struct net_device *dev)
+ 	m_can_config_endisable(cdev, true);
+ 
+ 	/* RX Buffer/FIFO Element Size 64 bytes data field */
+-	m_can_write(cdev, M_CAN_RXESC, M_CAN_RXESC_64BYTES);
++	m_can_write(cdev, M_CAN_RXESC,
++		    FIELD_PREP(RXESC_RBDS_MASK, RXESC_64B) |
++		    FIELD_PREP(RXESC_F1DS_MASK, RXESC_64B) |
++		    FIELD_PREP(RXESC_F0DS_MASK, RXESC_64B));
+ 
+ 	/* Accept Non-matching Frames Into FIFO 0 */
+ 	m_can_write(cdev, M_CAN_GFC, 0x0);
+@@ -1209,7 +1214,8 @@ static void m_can_chip_config(struct net_device *dev)
+ 	}
+ 
+ 	/* support 64 bytes payload */
+-	m_can_write(cdev, M_CAN_TXESC, TXESC_TBDS_64BYTES);
++	m_can_write(cdev, M_CAN_TXESC,
++		    FIELD_PREP(TXESC_TBDS_MASK, TXESC_TBDS_64B));
+ 
+ 	/* TX Event FIFO */
+ 	if (cdev->version == 30) {
 -- 
 2.30.2
 
