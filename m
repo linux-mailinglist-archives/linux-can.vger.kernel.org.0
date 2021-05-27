@@ -2,177 +2,173 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581A539297D
-	for <lists+linux-can@lfdr.de>; Thu, 27 May 2021 10:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAC43929EC
+	for <lists+linux-can@lfdr.de>; Thu, 27 May 2021 10:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235452AbhE0IZ7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 May 2021 04:25:59 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:56852 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbhE0IZ5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 27 May 2021 04:25:57 -0400
-Received: by mail-il1-f200.google.com with SMTP id 15-20020a920d0f0000b02901c54acae19eso2680816iln.23
-        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 01:24:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=s8GwG3dIVbArB28FmUQQibTN5cRvKFBSK38RO0GpilI=;
-        b=HDnOuDH86n+H+yLU5LH8Dg5I7QWAjCxvmKG76Itk9oZST0egdoXt7lMmCIwLPCLrwN
-         tAHN79kZbN0KxOyLe8yMZ0UGPjDB9Ohw0OZUQ7olca2C6X6Mp416ptypf+6ZVvnMZbfO
-         IVBdcb657lf+yExQ0f0iDGUn4b7PqbeIvrQmlLtfmpjQs+N5i3ENWRIxMhv/Ty4Oc48k
-         7iM/pYgprl8ctn6tRkugP+AECSKMxcbRKsIAbPiuPRUUVBMlMQn6ipwwyGGk8oQwTSoI
-         QtRv1mIwJawkPc4k8siiTWg4/vMAvFgBaB0dEwdrIphz5Dw7dSh9A3NBWzPCZmgwC59S
-         PqVw==
-X-Gm-Message-State: AOAM530wnT3loBT/tdYdM97PO3igAoyi2TEao8+/wOZIR3SXNtJ2O5vQ
-        GRvmAb0Xs9K0P5eRngJYwrDHd5p4lBq7WSe7wKG3ilhZQOJm
-X-Google-Smtp-Source: ABdhPJyIWTDxmJQL/Mmg65zNIphk/UwUjrUCN3LDmy9R+Gnbs7j3ijv9rcZkCRxsc70XHV8hF+4m9smE2Av080u9sVzixlHQLRFK
+        id S235579AbhE0IuP (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 May 2021 04:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235633AbhE0Itz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 May 2021 04:49:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFE2C06134D
+        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 01:48:22 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lmBgi-000269-Kv
+        for linux-can@vger.kernel.org; Thu, 27 May 2021 10:48:20 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 95B8A62D3EA
+        for <linux-can@vger.kernel.org>; Thu, 27 May 2021 08:45:35 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 64E7C62D3D8;
+        Thu, 27 May 2021 08:45:34 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 4ac409e1;
+        Thu, 27 May 2021 08:45:33 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-05-27
+Date:   Thu, 27 May 2021 10:45:11 +0200
+Message-Id: <20210527084532.1384031-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:130f:: with SMTP id g15mr2096070ilr.73.1622103865048;
- Thu, 27 May 2021 01:24:25 -0700 (PDT)
-Date:   Thu, 27 May 2021 01:24:25 -0700
-In-Reply-To: <000000000000f32b3c05958ed0eb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aa42ce05c34b7c28@google.com>
-Subject: Re: [syzbot] INFO: task hung in register_netdevice_notifier (2)
-From:   syzbot <syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hello Jakub, hello David,
 
-HEAD commit:    7ac3a1c1 Merge tag 'mtd/fixes-for-5.13-rc4' of git://git.k..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1660d517d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266cda122a0b56c
-dashboard link: https://syzkaller.appspot.com/bug?extid=355f8edb2ff45d5f95fa
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cc630fd00000
+this is a pull request of 21 patches for net-next/master. I hope
+that's OK, as http://vger.kernel.org/~davem/net-next.html still says
+closed.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com
+The first 2 patches are by Geert Uytterhoeven and convert the rcan_can
+and rcan_canfd device tree bindings to yaml.
 
-INFO: task syz-executor.0:16395 blocked for more than 143 seconds.
-      Not tainted 5.13.0-rc3-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:25952 pid:16395 ppid: 16156 flags:0x00004004
-Call Trace:
- context_switch kernel/sched/core.c:4339 [inline]
- __schedule+0x916/0x23e0 kernel/sched/core.c:5147
- schedule+0xcf/0x270 kernel/sched/core.c:5226
- rwsem_down_write_slowpath+0x7e5/0x1200 kernel/locking/rwsem.c:1106
- __down_write_common kernel/locking/rwsem.c:1261 [inline]
- __down_write_common kernel/locking/rwsem.c:1258 [inline]
- __down_write kernel/locking/rwsem.c:1270 [inline]
- down_write+0x137/0x150 kernel/locking/rwsem.c:1407
- register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1902
- bcm_init+0x1a3/0x210 net/can/bcm.c:1451
- can_create+0x27c/0x4d0 net/can/af_can.c:168
- __sock_create+0x3de/0x780 net/socket.c:1408
- sock_create net/socket.c:1459 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1501
- __do_sys_socket net/socket.c:1510 [inline]
- __se_sys_socket net/socket.c:1508 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1508
- do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x4665d9
-RSP: 002b:00007f7e1ffa7188 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 000000000056bf80 RCX: 00000000004665d9
-RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
-RBP: 00000000004bfcb9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000056bf80
-R13: 00007ffc744b4b1f R14: 00007f7e1ffa7300 R15: 0000000000022000
-INFO: task syz-executor.0:16400 blocked for more than 143 seconds.
-      Not tainted 5.13.0-rc3-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.0  state:D stack:29408 pid:16400 ppid: 16156 flags:0x00000004
-Call Trace:
- context_switch kernel/sched/core.c:4339 [inline]
- __schedule+0x916/0x23e0 kernel/sched/core.c:5147
- schedule+0xcf/0x270 kernel/sched/core.c:5226
- rwsem_down_write_slowpath+0x7e5/0x1200 kernel/locking/rwsem.c:1106
- __down_write_common kernel/locking/rwsem.c:1261 [inline]
- __down_write_common kernel/locking/rwsem.c:1258 [inline]
- __down_write kernel/locking/rwsem.c:1270 [inline]
- down_write+0x137/0x150 kernel/locking/rwsem.c:1407
- register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1902
- bcm_init+0x1a3/0x210 net/can/bcm.c:1451
- can_create+0x27c/0x4d0 net/can/af_can.c:168
- __sock_create+0x3de/0x780 net/socket.c:1408
- sock_create net/socket.c:1459 [inline]
- __sys_socket+0xef/0x200 net/socket.c:1501
- __do_sys_socket net/socket.c:1510 [inline]
- __se_sys_socket net/socket.c:1508 [inline]
- __x64_sys_socket+0x6f/0xb0 net/socket.c:1508
- do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x4665d9
-RSP: 002b:00007f7e1ff44188 EFLAGS: 00000246 ORIG_RAX: 0000000000000029
-RAX: ffffffffffffffda RBX: 000000000056c1a8 RCX: 00000000004665d9
-RDX: 0000000000000002 RSI: 0000000000000002 RDI: 000000000000001d
-RBP: 00000000004bfcb9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000056c1a8
-R13: 00007ffc744b4b1f R14: 00007f7e1ff44300 R15: 0000000000022000
+The next 2 patches are by Oliver Hartkopp and me and update the CAN
+uapi headers.
 
-Showing all locks held in the system:
-1 lock held by khungtaskd/1627:
- #0: ffffffff8bf79320 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6333
-1 lock held by in:imklog/8277:
- #0: ffff888030e12870 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:974
-3 locks held by kworker/u4:2/14373:
-1 lock held by syz-executor.0/16395:
- #0: ffffffff8d691f10 (pernet_ops_rwsem){++++}-{3:3}, at: register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1902
-1 lock held by syz-executor.0/16400:
- #0: ffffffff8d691f10 (pernet_ops_rwsem){++++}-{3:3}, at: register_netdevice_notifier+0x1e/0x260 net/core/dev.c:1902
+zuoqilin's patch removes an unnecessary variable from the CAN proc
+code.
 
-=============================================
+Patrick Menschel contributes 3 patches for CAN ISOTP to enhance the
+error messages.
 
-NMI backtrace for cpu 0
-CPU: 0 PID: 1627 Comm: khungtaskd Not tainted 5.13.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x141/0x1d7 lib/dump_stack.c:120
- nmi_cpu_backtrace.cold+0x44/0xd7 lib/nmi_backtrace.c:105
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:209 [inline]
- watchdog+0xd48/0xfb0 kernel/hung_task.c:294
- kthread+0x3b1/0x4a0 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 14373 Comm: kworker/u4:2 Not tainted 5.13.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: netns cleanup_net
-RIP: 0010:__sanitizer_cov_trace_pc+0x37/0x60 kernel/kcov.c:197
-Code: 81 e1 00 01 00 00 65 48 8b 14 25 00 f0 01 00 a9 00 01 ff 00 74 0e 85 c9 74 35 8b 82 3c 15 00 00 85 c0 74 2b 8b 82 18 15 00 00 <83> f8 02 75 20 48 8b 8a 20 15 00 00 8b 92 1c 15 00 00 48 8b 01 48
-RSP: 0018:ffffc900019afb58 EFLAGS: 00000046
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffff8880286d9c40 RSI: ffffffff8145d523 RDI: 0000000000000003
-RBP: ffffffff874d2c23 R08: 0000000000000000 R09: ffffffff8bc703c3
-R10: ffffffff817ae39d R11: 0000000000000000 R12: ffffffff8bc703c0
-R13: 000000000000dee5 R14: 0000000000000000 R15: 0000000000000001
-FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005622c9273cd8 CR3: 00000000137ea000 CR4: 0000000000350ee0
-Call Trace:
- __local_bh_enable_ip+0xc3/0x120 kernel/softirq.c:366
- local_bh_enable include/linux/bottom_half.h:32 [inline]
- get_next_corpse net/netfilter/nf_conntrack_core.c:2237 [inline]
- nf_ct_iterate_cleanup+0x15a/0x450 net/netfilter/nf_conntrack_core.c:2260
- nf_conntrack_cleanup_net_list+0x184/0x4f0 net/netfilter/nf_conntrack_core.c:2454
- ops_exit_list+0x10d/0x160 net/core/net_namespace.c:178
- cleanup_net+0x4ea/0xb10 net/core/net_namespace.c:595
- process_one_work+0x98d/0x1600 kernel/workqueue.c:2276
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2422
- kthread+0x3b1/0x4a0 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Jiapeng Chong's patch removes two dead stores from the softing driver.
+
+The next 4 patches are by me and silence several warnings found by
+clang compiler.
+
+Jimmy Assarsson's patches for the kvaser_usb driver add support for
+the Kvaser hydra devices.
+
+Dario Binacchi provides 2 patches for the c_can driver, first removing
+an unused variable, then adding basic ethtool support to query driver
+and ring parameter info.
+
+The last 4 patches are by Torin Cooper-Bennun and clean up the m_can
+driver.
+
+regards,
+Marc
+
+---
+
+The following changes since commit 59c56342459a483d5e563ed8b5fdb77ab7622a73:
+
+  Merge branch '1GbE' of git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue (2021-05-26 18:33:01 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.14-20210527
+
+for you to fetch changes up to 50fe7547b637b3cf51876ce9ec829e79d76e5de0:
+
+  can: m_can: fix whitespace in a few comments (2021-05-27 09:42:24 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.14-20210527
+
+----------------------------------------------------------------
+Dario Binacchi (2):
+      can: c_can: remove unused variable struct c_can_priv::rxmasked
+      can: c_can: add ethtool support
+
+Geert Uytterhoeven (2):
+      dt-bindings: can: rcar_can: Convert to json-schema
+      dt-bindings: can: rcar_canfd: Convert to json-schema
+
+Jiapeng Chong (1):
+      can: softing: Remove redundant variable ptr
+
+Jimmy Assarsson (2):
+      can: kvaser_usb: Rename define USB_HYBRID_{,PRO_}CANLIN_PRODUCT_ID
+      can: kvaser_usb: Add new Kvaser hydra devices
+
+Marc Kleine-Budde (5):
+      can: uapi: update CAN-FD frame description
+      can: hi311x: hi3110_can_probe(): silence clang warning
+      can: mcp251x: mcp251x_can_probe(): silence clang warning
+      can: mcp251xfd: silence clang warning
+      can: at91_can: silence clang warning
+
+Oliver Hartkopp (1):
+      can: uapi: introduce CANFD_FDF flag for mixed content in struct canfd_frame
+
+Patrick Menschel (3):
+      can: isotp: change error format from decimal to symbolic error names
+      can: isotp: add symbolic error message to isotp_module_init()
+      can: isotp: Add error message if txqueuelen is too small
+
+Torin Cooper-Bennun (4):
+      can: m_can: use bits.h macros for all regmasks
+      can: m_can: clean up CCCR reg defs, order by revs
+      can: m_can: make TXESC, RXESC config more explicit
+      can: m_can: fix whitespace in a few comments
+
+zuoqilin (1):
+      can: proc: remove unnecessary variables
+
+ .../devicetree/bindings/net/can/rcar_can.txt       |  80 -------
+ .../devicetree/bindings/net/can/rcar_canfd.txt     | 107 ---------
+ .../bindings/net/can/renesas,rcar-can.yaml         | 139 ++++++++++++
+ .../bindings/net/can/renesas,rcar-canfd.yaml       | 122 +++++++++++
+ drivers/net/can/at91_can.c                         |   2 +-
+ drivers/net/can/c_can/Makefile                     |   5 +
+ drivers/net/can/c_can/c_can.h                      |   3 +-
+ drivers/net/can/c_can/c_can_ethtool.c              |  43 ++++
+ drivers/net/can/c_can/{c_can.c => c_can_main.c}    |   2 +-
+ drivers/net/can/m_can/m_can.c                      | 244 ++++++++++-----------
+ drivers/net/can/softing/softing_main.c             |   2 -
+ drivers/net/can/spi/hi311x.c                       |   2 +-
+ drivers/net/can/spi/mcp251x.c                      |   2 +-
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c     |   2 +-
+ drivers/net/can/usb/Kconfig                        |   2 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c   |  14 +-
+ include/uapi/linux/can.h                           |  13 +-
+ net/can/isotp.c                                    |  20 +-
+ net/can/proc.c                                     |   6 +-
+ 19 files changed, 463 insertions(+), 347 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/can/rcar_can.txt
+ delete mode 100644 Documentation/devicetree/bindings/net/can/rcar_canfd.txt
+ create mode 100644 Documentation/devicetree/bindings/net/can/renesas,rcar-can.yaml
+ create mode 100644 Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+ create mode 100644 drivers/net/can/c_can/c_can_ethtool.c
+ rename drivers/net/can/c_can/{c_can.c => c_can_main.c} (99%)
+
+
 
