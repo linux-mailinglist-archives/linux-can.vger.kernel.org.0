@@ -2,109 +2,91 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A8F393868
-	for <lists+linux-can@lfdr.de>; Thu, 27 May 2021 23:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73FE2393B99
+	for <lists+linux-can@lfdr.de>; Fri, 28 May 2021 04:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbhE0Vvk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 27 May 2021 17:51:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55982 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229822AbhE0Vvk (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 27 May 2021 17:51:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 03C46613DA;
-        Thu, 27 May 2021 21:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622152207;
-        bh=S36GH2Q8C47XQMgo17B/GDwSJB9O2tStxWlxmDTlfE0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gYL9qxOYx1sB6AD6Su7vHdPVxh1VFkpsMT9/bfw4acHE2+RBifcFfvOIQSZd5cXZi
-         cgYUaiO6gcBr/TeGKhicVKJxwK+Lw+7Rnrh8zND/iu+OcfB9zE1BCzwHWu+89ah3n5
-         3hnRDpuiM9QraSGofetjPhozDnyVPiXHGJI3VwuQybQsYrGG8bpAYslaCZGg7PVTc7
-         7ct6THdcFwV+vKbfuQ0rgBxdrgaFDhV7AXFN8OLeO+6RK0g2FUX1HcCk3wWOeg5mqT
-         sb1fKdqenftbtgmN8RY64U808/4iMSLhgoadmxYYong13hQ08ECpQkMjGz4JCfVtpA
-         rvGg5V7SffrKg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EBADE60BE2;
-        Thu, 27 May 2021 21:50:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S236064AbhE1Cvn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 27 May 2021 22:51:43 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:5124 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234485AbhE1Cvm (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 27 May 2021 22:51:42 -0400
+Received: from dggeml714-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Frpxn2YTRzYnp2;
+        Fri, 28 May 2021 10:47:25 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggeml714-chm.china.huawei.com (10.3.17.125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Fri, 28 May 2021 10:50:05 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 28 May 2021 10:50:05 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>
+CC:     <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: [PATCH net-next 0/3] Some optimization for lockless qdisc
+Date:   Fri, 28 May 2021 10:49:54 +0800
+Message-ID: <1622170197-27370-1-git-send-email-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can-next 2021-05-27
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162215220696.21706.14264910157873912468.git-patchwork-notify@kernel.org>
-Date:   Thu, 27 May 2021 21:50:06 +0000
-References: <20210527084532.1384031-1-mkl@pengutronix.de>
-In-Reply-To: <20210527084532.1384031-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Patch 1: remove unnecessary seqcount operation.
+Patch 2: implement TCQ_F_CAN_BYPASS.
+Patch 3: remove qdisc->empty.
 
-This pull request was applied to netdev/net-next.git (refs/heads/master):
+Performance data for pktgen in queue_xmit mode + dummy netdev
+with pfifo_fast:
 
-On Thu, 27 May 2021 10:45:11 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 21 patches for net-next/master. I hope
-> that's OK, as http://vger.kernel.org/~davem/net-next.html still says
-> closed.
-> 
-> The first 2 patches are by Geert Uytterhoeven and convert the rcan_can
-> and rcan_canfd device tree bindings to yaml.
-> 
-> [...]
+ threads    unpatched           patched             delta
+    1       2.60Mpps            3.21Mpps             +23%
+    2       3.84Mpps            5.56Mpps             +44%
+    4       5.52Mpps            5.58Mpps             +1%
+    8       2.77Mpps            2.76Mpps             -0.3%
+   16       2.24Mpps            2.23Mpps             +0.4%
 
-Here is the summary with links:
-  - pull-request: can-next 2021-05-27
-    https://git.kernel.org/netdev/net-next/c/b14b27fffa2e
-  - [net-next,02/21] dt-bindings: can: rcar_canfd: Convert to json-schema
-    https://git.kernel.org/netdev/net-next/c/8a5e7d19c8c7
-  - [net-next,03/21] can: uapi: update CAN-FD frame description
-    https://git.kernel.org/netdev/net-next/c/7e97d274db92
-  - [net-next,04/21] can: uapi: introduce CANFD_FDF flag for mixed content in struct canfd_frame
-    https://git.kernel.org/netdev/net-next/c/025468842212
-  - [net-next,05/21] can: proc: remove unnecessary variables
-    https://git.kernel.org/netdev/net-next/c/24a774a4f975
-  - [net-next,06/21] can: isotp: change error format from decimal to symbolic error names
-    https://git.kernel.org/netdev/net-next/c/46d8657a6b28
-  - [net-next,07/21] can: isotp: add symbolic error message to isotp_module_init()
-    https://git.kernel.org/netdev/net-next/c/6a5ddae57884
-  - [net-next,08/21] can: isotp: Add error message if txqueuelen is too small
-    https://git.kernel.org/netdev/net-next/c/c69d190f7bb9
-  - [net-next,09/21] can: softing: Remove redundant variable ptr
-    https://git.kernel.org/netdev/net-next/c/9208f7bf053a
-  - [net-next,10/21] can: hi311x: hi3110_can_probe(): silence clang warning
-    https://git.kernel.org/netdev/net-next/c/83415669d8d8
-  - [net-next,11/21] can: mcp251x: mcp251x_can_probe(): silence clang warning
-    https://git.kernel.org/netdev/net-next/c/10462b3558d4
-  - [net-next,12/21] can: mcp251xfd: silence clang warning
-    https://git.kernel.org/netdev/net-next/c/b558e200d626
-  - [net-next,13/21] can: at91_can: silence clang warning
-    https://git.kernel.org/netdev/net-next/c/4318b1aa22b7
-  - [net-next,14/21] can: kvaser_usb: Rename define USB_HYBRID_{,PRO_}CANLIN_PRODUCT_ID
-    https://git.kernel.org/netdev/net-next/c/893974d9b565
-  - [net-next,15/21] can: kvaser_usb: Add new Kvaser hydra devices
-    https://git.kernel.org/netdev/net-next/c/ee6bb641bc70
-  - [net-next,16/21] can: c_can: remove unused variable struct c_can_priv::rxmasked
-    https://git.kernel.org/netdev/net-next/c/c7b0f6887d90
-  - [net-next,17/21] can: c_can: add ethtool support
-    https://git.kernel.org/netdev/net-next/c/2722ac986e93
-  - [net-next,18/21] can: m_can: use bits.h macros for all regmasks
-    https://git.kernel.org/netdev/net-next/c/20779943a080
-  - [net-next,19/21] can: m_can: clean up CCCR reg defs, order by revs
-    https://git.kernel.org/netdev/net-next/c/38395f302f4d
-  - [net-next,20/21] can: m_can: make TXESC, RXESC config more explicit
-    https://git.kernel.org/netdev/net-next/c/0f3157166891
-  - [net-next,21/21] can: m_can: fix whitespace in a few comments
-    https://git.kernel.org/netdev/net-next/c/50fe7547b637
+Performance for IP forward testing: 1.05Mpps increases to
+1.16Mpps, about 10% improvement.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+V1: Drop RFC tag, Add nolock_qdisc_is_empty() and do the qdisc
+    empty checking without the protection of qdisc->seqlock to
+    aviod doing unnecessary spin_trylock() for contention case.
+RFC v4: Use STATE_MISSED and STATE_DRAINING to indicate non-empty
+        qdisc, and add patch 1 and 3.
 
+Yunsheng Lin (3):
+  net: sched: avoid unnecessary seqcount operation for lockless qdisc
+  net: sched: implement TCQ_F_CAN_BYPASS for lockless qdisc
+  net: sched: remove qdisc->empty for lockless qdisc
+
+ include/net/sch_generic.h | 31 ++++++++++++++++++-------------
+ net/core/dev.c            | 26 ++++++++++++++++++++++++--
+ net/sched/sch_generic.c   | 23 ++++++++++++++++-------
+ 3 files changed, 58 insertions(+), 22 deletions(-)
+
+-- 
+2.7.4
 
