@@ -2,112 +2,98 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1711539570A
-	for <lists+linux-can@lfdr.de>; Mon, 31 May 2021 10:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8133B39574E
+	for <lists+linux-can@lfdr.de>; Mon, 31 May 2021 10:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbhEaIgW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 31 May 2021 04:36:22 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48784 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbhEaIgV (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 31 May 2021 04:36:21 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14V8YPIC054720;
-        Mon, 31 May 2021 03:34:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622450065;
-        bh=WdtpfZPowPiCpRprSpaKbtvu6+Gb9+ktjGrBmve1/Yk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=IboIlrSNI8JWHEMEHnrJLIia3sBOPpz8SkWmwEvrO9t/YWPWKkevaORko7bGucVef
-         +OrG8eu9iwGxfvUdhcIrdzA0q8thkyTu841ZlZFIGbPN0uptFYg3K0ICwKWgxyujGM
-         JGk7EL4wPEgl1Ye6C9JVy9NTeoDyWrgXdOOUIkL4=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14V8YPFT029524
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 May 2021 03:34:25 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 31
- May 2021 03:34:25 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 31 May 2021 03:34:25 -0500
-Received: from [10.250.235.117] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14V8YI0w030521;
-        Mon, 31 May 2021 03:34:20 -0500
-Subject: Re: [PATCH v6 1/3] phy: core: Reword the comment specifying the units
- of max_link_rate to be Mbps
-To:     Vinod Koul <vkoul@kernel.org>
-CC:     <linux-can@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210510051006.11393-1-a-govindraju@ti.com>
- <20210510051006.11393-2-a-govindraju@ti.com>
- <YLSNvUDJZ/v6NTuN@vkoul-mobl.Dlink>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <615d3a2a-0dc2-0e87-fdac-e170542d33da@ti.com>
-Date:   Mon, 31 May 2021 14:04:17 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230430AbhEaIqa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 May 2021 04:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230463AbhEaIq2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 31 May 2021 04:46:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0965AC06174A
+        for <linux-can@vger.kernel.org>; Mon, 31 May 2021 01:44:49 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lndXT-0002jK-GZ
+        for linux-can@vger.kernel.org; Mon, 31 May 2021 10:44:47 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 5F05362FB21
+        for <linux-can@vger.kernel.org>; Mon, 31 May 2021 08:44:46 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1DC1762FB1C;
+        Mon, 31 May 2021 08:44:46 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2b3cfe99;
+        Mon, 31 May 2021 08:44:45 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH v3 1/2] can: mcp251xfd: mcp251xfd_probe(): try to get crystal clock rate from property
+Date:   Mon, 31 May 2021 10:44:43 +0200
+Message-Id: <20210531084444.1785397-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YLSNvUDJZ/v6NTuN@vkoul-mobl.Dlink>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Vinod,
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On 31/05/21 12:48 pm, Vinod Koul wrote:
-> On 10-05-21, 10:40, Aswath Govindraju wrote:
->> In some subsystems (eg. CAN, SPI), the max link rate supported can be less
->> than 1 Mbps and if the unit for max_link_rate is Mbps then it can't be
->> used. Therefore, leave the decision of units to be used, to the producer
->> and consumer.
->>
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
->> ---
->>  include/linux/phy/phy.h | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
->> index 0ed434d02196..f3286f4cd306 100644
->> --- a/include/linux/phy/phy.h
->> +++ b/include/linux/phy/phy.h
->> @@ -125,7 +125,7 @@ struct phy_ops {
->>  /**
->>   * struct phy_attrs - represents phy attributes
->>   * @bus_width: Data path width implemented by PHY
->> - * @max_link_rate: Maximum link rate supported by PHY (in Mbps)
->> + * @max_link_rate: Maximum link rate supported by PHY (units to be decided by producer and consumer)
-> 
-> So there are a few users of max_link_rate. It would be better that we
-> document all previous users of max_link_rate that unit is in Mbps and
-> then modify it here
-> 
+In some configurations, mainly ACPI-based, the clock frequency of the
+device is supplied by very well established 'clock-frequency'
+property. Hence, try to get it from the property at last if no other
+providers are available.
 
-I was able to see that the max_link_rate attribute was used at,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+v3: - only read clock-frequency property if no clk is found
+    - add error handling to device_property_read_u32()
+v2: new patch    
 
-drivers/phy/cadence/phy-cadence-torrent.c:2514:
-gphy->attrs.max_link_rate = cdns_phy->max_bit_rate;
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-and in the bindings there is indication that the units to be used is Mbps.
-
-Can you please point me if there is any other place that I might have
-missed to look at or that might need documentation update?
-
-Thanks,
-Aswath
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 47c3f408a799..c8f8bdfc1bfb 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -2883,11 +2883,19 @@ static int mcp251xfd_probe(struct spi_device *spi)
+ 		return dev_err_probe(&spi->dev, PTR_ERR(reg_xceiver),
+ 				     "Failed to get Transceiver regulator!\n");
+ 
+-	clk = devm_clk_get(&spi->dev, NULL);
++	clk = devm_clk_get_optional(&spi->dev, NULL);
+ 	if (IS_ERR(clk))
+ 		return dev_err_probe(&spi->dev, PTR_ERR(clk),
+ 				     "Failed to get Oscillator (clock)!\n");
+-	freq = clk_get_rate(clk);
++	if (clk) {
++		freq = clk_get_rate(clk);
++	} else {
++		err = device_property_read_u32(&spi->dev, "clock-frequency",
++					       &freq);
++		if (err)
++			return dev_err_probe(&spi->dev, err,
++					     "Failed to get clock-frequency!\n");
++	}
+ 
+ 	/* Sanity check */
+ 	if (freq < MCP251XFD_SYSCLOCK_HZ_MIN ||
+-- 
+2.30.2
 
 
