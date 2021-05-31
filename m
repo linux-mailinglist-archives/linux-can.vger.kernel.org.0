@@ -2,44 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8133B39574E
+	by mail.lfdr.de (Postfix) with ESMTP id CA2B639574F
 	for <lists+linux-can@lfdr.de>; Mon, 31 May 2021 10:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbhEaIqa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S230449AbhEaIqa (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Mon, 31 May 2021 04:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhEaIq2 (ORCPT
+        with ESMTP id S230475AbhEaIq2 (ORCPT
         <rfc822;linux-can@vger.kernel.org>); Mon, 31 May 2021 04:46:28 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0965AC06174A
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77385C061763
         for <linux-can@vger.kernel.org>; Mon, 31 May 2021 01:44:49 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lndXT-0002jK-GZ
-        for linux-can@vger.kernel.org; Mon, 31 May 2021 10:44:47 +0200
+        id 1lndXT-0002je-Vp
+        for linux-can@vger.kernel.org; Mon, 31 May 2021 10:44:48 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 5F05362FB21
+        by bjornoya.blackshift.org (Postfix) with SMTP id 77DC862FB23
         for <linux-can@vger.kernel.org>; Mon, 31 May 2021 08:44:46 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 1DC1762FB1C;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 2E91C62FB1D;
         Mon, 31 May 2021 08:44:46 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2b3cfe99;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a0c7eb16;
         Mon, 31 May 2021 08:44:45 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH v3 1/2] can: mcp251xfd: mcp251xfd_probe(): try to get crystal clock rate from property
-Date:   Mon, 31 May 2021 10:44:43 +0200
-Message-Id: <20210531084444.1785397-1-mkl@pengutronix.de>
+Subject: [PATCH v3 2/2] can: mcp251xfd: Fix header block to clarify independence from OF
+Date:   Mon, 31 May 2021 10:44:44 +0200
+Message-Id: <20210531084444.1785397-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210531084444.1785397-1-mkl@pengutronix.de>
+References: <20210531084444.1785397-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -52,47 +54,36 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-In some configurations, mainly ACPI-based, the clock frequency of the
-device is supplied by very well established 'clock-frequency'
-property. Hence, try to get it from the property at last if no other
-providers are available.
+The driver is neither dependent on OF, nor it requires any OF headers.
+Fix header block to clarify independence from OF.
 
+Link: https://lore.kernel.org/r/20210526193327.70468-2-andriy.shevchenko@linux.intel.com
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
-v3: - only read clock-frequency property if no clk is found
-    - add error handling to device_property_read_u32()
-v2: new patch    
+v3: no change
+v2: included property.h
 
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 47c3f408a799..c8f8bdfc1bfb 100644
+index c8f8bdfc1bfb..0aaac3f8b9b2 100644
 --- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
 +++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -2883,11 +2883,19 @@ static int mcp251xfd_probe(struct spi_device *spi)
- 		return dev_err_probe(&spi->dev, PTR_ERR(reg_xceiver),
- 				     "Failed to get Transceiver regulator!\n");
+@@ -15,10 +15,10 @@
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/device.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/property.h>
  
--	clk = devm_clk_get(&spi->dev, NULL);
-+	clk = devm_clk_get_optional(&spi->dev, NULL);
- 	if (IS_ERR(clk))
- 		return dev_err_probe(&spi->dev, PTR_ERR(clk),
- 				     "Failed to get Oscillator (clock)!\n");
--	freq = clk_get_rate(clk);
-+	if (clk) {
-+		freq = clk_get_rate(clk);
-+	} else {
-+		err = device_property_read_u32(&spi->dev, "clock-frequency",
-+					       &freq);
-+		if (err)
-+			return dev_err_probe(&spi->dev, err,
-+					     "Failed to get clock-frequency!\n");
-+	}
+ #include <asm/unaligned.h>
  
- 	/* Sanity check */
- 	if (freq < MCP251XFD_SYSCLOCK_HZ_MIN ||
 -- 
 2.30.2
 
