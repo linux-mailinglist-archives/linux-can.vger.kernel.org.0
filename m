@@ -2,202 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C58395397
-	for <lists+linux-can@lfdr.de>; Mon, 31 May 2021 03:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEAE3955E3
+	for <lists+linux-can@lfdr.de>; Mon, 31 May 2021 09:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbhEaBMG (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 30 May 2021 21:12:06 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:2413 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230031AbhEaBMC (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 30 May 2021 21:12:02 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4FtcZ73RDtz66wN;
-        Mon, 31 May 2021 09:06:39 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 31 May 2021 09:10:20 +0800
-Received: from [127.0.0.1] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 31 May
- 2021 09:10:20 +0800
-Subject: Re: [Linuxarm] Re: [PATCH net-next 2/3] net: sched: implement
- TCQ_F_CAN_BYPASS for lockless qdisc
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        Yunsheng Lin <yunshenglin0825@gmail.com>
-CC:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
-        <weiwan@google.com>, <cong.wang@bytedance.com>,
-        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-References: <1622170197-27370-1-git-send-email-linyunsheng@huawei.com>
- <1622170197-27370-3-git-send-email-linyunsheng@huawei.com>
- <20210528180012.676797d6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <a6a965ee-7368-d37b-9c70-bba50c67eec9@huawei.com>
- <20210528213218.2b90864c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <ee1a62da-9758-70db-abd3-c5ca2e8e0ce0@huawei.com>
- <20210529114919.4f8b1980@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <9cc9f513-7655-07df-3c74-5abe07ae8321@gmail.com>
- <20210530132111.3a974275@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
- <3c2fbc70-841f-d90b-ca13-1f058169be50@huawei.com>
-Message-ID: <3a307707-9fb5-d73a-01f9-93aaf5c7a437@huawei.com>
-Date:   Mon, 31 May 2021 09:10:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        id S230247AbhEaHUF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 31 May 2021 03:20:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33328 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230150AbhEaHUE (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 31 May 2021 03:20:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 391FD61186;
+        Mon, 31 May 2021 07:18:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622445505;
+        bh=NwKJSIDFWeCFMJuw/KCGn/ZQUFJqsq4w0+WD258Sv0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ckzb9zbO6Tc674QzI3Gv5MJM2m5giiqLZJCGwIumpgv+pEfbUjU5DJBl0njVWwIlG
+         Kz9Gja4elz+cd1Mg0kkwZAg7I81Jbu3bxE38hkBVAsXfKvRNb0/oWZNXMJYaoIQAjD
+         G9yV1ISamcEsm3JNhyBW5v2HvWJ/20JqtzQEAYeuNzbHRkmhKcQXlyQJAKQlcgzQrO
+         oNKmQy5QOY5FdQnj6uOK7yv3C5ajHpSfbAHURwuYPtLZKNQYbqIFygtHQSHwBRg+PB
+         38Cu2dJLK5jS9+ulPXO6X9ZPDVX3peWgGJKosTJx8wAHRVJYujOuSmcV5A+izxQ6Gq
+         xdwPDdcMKQfeg==
+Date:   Mon, 31 May 2021 12:48:21 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] phy: core: Reword the comment specifying the
+ units of max_link_rate to be Mbps
+Message-ID: <YLSNvUDJZ/v6NTuN@vkoul-mobl.Dlink>
+References: <20210510051006.11393-1-a-govindraju@ti.com>
+ <20210510051006.11393-2-a-govindraju@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <3c2fbc70-841f-d90b-ca13-1f058169be50@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggeme707-chm.china.huawei.com (10.1.199.103) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210510051006.11393-2-a-govindraju@ti.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 2021/5/31 8:40, Yunsheng Lin wrote:
-> On 2021/5/31 4:21, Jakub Kicinski wrote:
->> On Sun, 30 May 2021 09:37:09 +0800 Yunsheng Lin wrote:
->>> On 2021/5/30 2:49, Jakub Kicinski wrote:
->>>> The fact that MISSED is only cleared under q->seqlock does not matter,
->>>> because setting it and ->enqueue() are not under any lock. If the thread
->>>> gets interrupted between:
->>>>
->>>> 	if (q->flags & TCQ_F_CAN_BYPASS && nolock_qdisc_is_empty(q) &&
->>>> 	    qdisc_run_begin(q)) {
->>>>
->>>> and ->enqueue() we can't guarantee that something else won't come in,
->>>> take q->seqlock and clear MISSED.
->>>>
->>>> thread1                thread2             thread3
->>>> # holds seqlock
->>>>                        qdisc_run_begin(q)
->>>>                        set(MISSED)
->>>> pfifo_fast_dequeue
->>>>   clear(MISSED)
->>>>   # recheck the queue
->>>> qdisc_run_end()  
->>>>                        ->enqueue()  
->>>>                                             q->flags & TCQ_F_CAN_BYPASS..
->>>>                                             qdisc_run_begin() # true
->>>>                                             sch_direct_xmit()
->>>>                        qdisc_run_begin()
->>>>                        set(MISSED)
->>>>
->>>> Or am I missing something?
->>>>
->>>> Re-checking nolock_qdisc_is_empty() may or may not help.
->>>> But it doesn't really matter because there is no ordering
->>>> requirement between thread2 and thread3 here.  
->>>
->>> I were more focued on explaining that using MISSED is reliable
->>> as sch_may_need_requeuing() checking in RFCv3 [1] to indicate a
->>> empty qdisc, and forgot to mention the data race described in
->>> RFCv3, which is kind of like the one described above:
->>>
->>> "There is a data race as below:
->>>
->>>       CPU1                                   CPU2
->>> qdisc_run_begin(q)                            .
->>>         .                                q->enqueue()
->>> sch_may_need_requeuing()                      .
->>>     return true                               .
->>>         .                                     .
->>>         .                                     .
->>>     q->enqueue()                              .
->>>
->>> When above happen, the skb enqueued by CPU1 is dequeued after the
->>> skb enqueued by CPU2 because sch_may_need_requeuing() return true.
->>> If there is not qdisc bypass, the CPU1 has better chance to queue
->>> the skb quicker than CPU2.
->>>
->>> This patch does not take care of the above data race, because I
->>> view this as similar as below:
->>>
->>> Even at the same time CPU1 and CPU2 write the skb to two socket
->>> which both heading to the same qdisc, there is no guarantee that
->>> which skb will hit the qdisc first, becuase there is a lot of
->>> factor like interrupt/softirq/cache miss/scheduling afffecting
->>> that."
->>>
->>> Does above make sense? Or any idea to avoid it?
->>>
->>> 1. https://patchwork.kernel.org/project/netdevbpf/patch/1616404156-11772-1-git-send-email-linyunsheng@huawei.com/
->>
->> We agree on this one.
->>
->> Could you draw a sequence diagram of different CPUs (like the one
->> above) for the case where removing re-checking nolock_qdisc_is_empty()
->> under q->seqlock leads to incorrect behavior? 
+On 10-05-21, 10:40, Aswath Govindraju wrote:
+> In some subsystems (eg. CAN, SPI), the max link rate supported can be less
+> than 1 Mbps and if the unit for max_link_rate is Mbps then it can't be
+> used. Therefore, leave the decision of units to be used, to the producer
+> and consumer.
 > 
-> When nolock_qdisc_is_empty() is not re-checking under q->seqlock, we
-> may have:
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> ---
+>  include/linux/phy/phy.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
->         CPU1                                   CPU2
->   qdisc_run_begin(q)                            .
->           .                                enqueue skb1
-> deuqueue skb1 and clear MISSED                  .
->           .                        nolock_qdisc_is_empty() return true
->     requeue skb                                 .
->    q->enqueue()                                 .
->     set MISSED                                  .
->         .                                       .
->  qdisc_run_end(q)                               .
->         .                              qdisc_run_begin(q)
->         .                             transmit skb2 directly
->         .                           transmit the requeued skb1
-> 
-> The problem here is that skb1 and skb2  are from the same CPU, which
-> means they are likely from the same flow, so we need to avoid this,
-> right?
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index 0ed434d02196..f3286f4cd306 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -125,7 +125,7 @@ struct phy_ops {
+>  /**
+>   * struct phy_attrs - represents phy attributes
+>   * @bus_width: Data path width implemented by PHY
+> - * @max_link_rate: Maximum link rate supported by PHY (in Mbps)
+> + * @max_link_rate: Maximum link rate supported by PHY (units to be decided by producer and consumer)
 
+So there are a few users of max_link_rate. It would be better that we
+document all previous users of max_link_rate that unit is in Mbps and
+then modify it here
 
-         CPU1                                   CPU2
-   qdisc_run_begin(q)                            .
-           .                                enqueue skb1
-     dequeue skb1                                .
-           .                                     .
-netdevice stopped and MISSED is clear            .
-           .                        nolock_qdisc_is_empty() return true
-     requeue skb                                 .
-           .                                     .
-           .                                     .
-           .                                     .
-  qdisc_run_end(q)                               .
-           .                              qdisc_run_begin(q)
-           .                             transmit skb2 directly
-           .                           transmit the requeued skb1
-
-The above sequence diagram seems more correct, it is basically about how to
-avoid transmitting a packet directly bypassing the requeued packet.
-
-> 
->>
->> If there is no such case would you be willing to repeat the benchmark
->> with and without this test?
->>
->> Sorry for dragging the review out..
->>
->> .
->>
-> _______________________________________________
-> Linuxarm mailing list -- linuxarm@openeuler.org
-> To unsubscribe send an email to linuxarm-leave@openeuler.org
-> 
-
+-- 
+~Vinod
