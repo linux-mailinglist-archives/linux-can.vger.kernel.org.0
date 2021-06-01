@@ -2,173 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 695E1397166
-	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 12:25:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 326BC3971F2
+	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 12:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbhFAK1V (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Jun 2021 06:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S230308AbhFAK6T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Jun 2021 06:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233409AbhFAK1T (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 06:27:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EE5C061574
-        for <linux-can@vger.kernel.org>; Tue,  1 Jun 2021 03:25:37 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lo1aa-0002Sm-Ed; Tue, 01 Jun 2021 12:25:36 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:f875:cb52:3051:44e8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 8F81063087A;
-        Tue,  1 Jun 2021 10:25:35 +0000 (UTC)
-Date:   Tue, 1 Jun 2021 12:25:34 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
+        with ESMTP id S230282AbhFAK6S (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 06:58:18 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A47C061574
+        for <linux-can@vger.kernel.org>; Tue,  1 Jun 2021 03:56:36 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l11-20020a05600c4f0bb029017a7cd488f5so1658187wmq.0
+        for <linux-can@vger.kernel.org>; Tue, 01 Jun 2021 03:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QTqLbaq0k6Ll5x8dBP006fogUdqFSviRCeeYquOCuG8=;
+        b=y+sSNi4oAJ6KH0JizsdZXj730SsC+YHfgf86LKo5yVNXdk6soQGzduhjuNiyhnrEXd
+         PhRbYigBuhX7QfaGWLHFvP+DnqHPd1fhTqoyo8mtIirw/BZtoV2nSU35eOGOo7JC+Prg
+         fsXKjXzeBwqQVWB025KsHwGKZcGnq+/XN/mdHI/a0VGsfg5SjxJh5qR1XOdYfGAu9v2G
+         4yZLtci72glWnABLa8lcOoMI1dp1L1ycvClLk8L+dzuZdSh3UkP6Q9dYEsyP9gJuaAgz
+         xR0Rg1ak+mzsjRkk6fMn42q4CyB+bSMc22gFGGSEHgIUqfAPakonHyz+Udv0JFEyHVgN
+         tBPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QTqLbaq0k6Ll5x8dBP006fogUdqFSviRCeeYquOCuG8=;
+        b=E1VxYpBUZefGOZ4mQGuPX8kLqhVFVDx3bNpIf9VRLRYwHJ62Q1Bhsdv/2ODnkJqgk+
+         HBLFbsbyoZ7riICsVs2RrczWFD/R87y5xMREF+76yr61bfN2WkzuCcJmnfst4czNpoz8
+         UIREpbDLDPo1OW1U762odwRnybJ+kCnxyt4oretKJrI4qRBRHoM0eTctpgBiMXU/3/kb
+         1Afh4sKBCprXuIHmqyvGI+JKhvn6tMYn/X4be5/JzZdqRykFKjvfw6KDkWx1VvJlCu2T
+         uvpeyuaGBMYcPJ17V4EwmeOkKHqcFL7feKChX3G7+rQN4EXgvMWfDH5XlvhP68Cxy3Tc
+         GYZw==
+X-Gm-Message-State: AOAM53352bBrwMlW18A+0sFCQpiDHav+oGI+dr5awXQg0doLwTikv4UA
+        kjfZFRr4egD1sXgpQkOGTgWjfw==
+X-Google-Smtp-Source: ABdhPJz7r7rnbo2H5k9yBJne3y6kTAyp1ex/qbJ0Zm0ns3tqE9Y3jAh5hvzUjlpH5Yd/BZ41p3uW3Q==
+X-Received: by 2002:a1c:7402:: with SMTP id p2mr4000991wmc.88.1622544995009;
+        Tue, 01 Jun 2021 03:56:35 -0700 (PDT)
+Received: from bigthink ([109.249.181.35])
+        by smtp.gmail.com with ESMTPSA id j1sm5827206wmi.44.2021.06.01.03.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jun 2021 03:56:34 -0700 (PDT)
+Date:   Tue, 1 Jun 2021 11:56:31 +0100
+From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH can-next 2/5] can: m_can: m_can_isr(): handle
- device-specific interrupts
-Message-ID: <20210601102534.ocbktq2jj4g564q4@pengutronix.de>
+Subject: Re: [PATCH can-next 0/5] m_can, tcan4x5x: device-specific interrupt
+ handling
+Message-ID: <20210601105631.lvtziz7gzsauayov@bigthink>
 References: <20210526124747.674055-1-torin@maxiluxsystems.com>
- <20210526124747.674055-3-torin@maxiluxsystems.com>
- <20210526150705.s4ms7jhowsuts3yf@pengutronix.de>
- <20210526151833.5ppprex6zzrclr6u@pengutronix.de>
- <20210601082338.b7t67oebywhcwcnd@bigthink>
+ <20210526152045.j3efhxqpytixa7tt@pengutronix.de>
+ <20210601082107.g6rfrtfpfnjfe43s@bigthink>
+ <20210601091847.ixsbe4gz4jk7eeeb@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4sjdsiy7f5zrxein"
+        protocol="application/pgp-signature"; boundary="zmtilgl6wizdius4"
 Content-Disposition: inline
-In-Reply-To: <20210601082338.b7t67oebywhcwcnd@bigthink>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20210601091847.ixsbe4gz4jk7eeeb@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---4sjdsiy7f5zrxein
-Content-Type: text/plain; charset=utf-8
+--zmtilgl6wizdius4
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 01.06.2021 09:23:38, Torin Cooper-Bennun wrote:
-> On Wed, May 26, 2021 at 05:18:33PM +0200, Marc Kleine-Budde wrote:
-> > On 26.05.2021 17:07:05, Marc Kleine-Budde wrote:
-> > > On 26.05.2021 13:47:44, Torin Cooper-Bennun wrote:
-> > > > +	if (!ir) {
-> > > > +		/* Handle device-specific interrupts */
-> > > > +		if (cdev->ops->handle_dev_interrupts)
-> > > > +			irq_ret =3D cdev->ops->handle_dev_interrupts(cdev, false);
-> > > > +		return irq_ret;
-> > > > +	}
-> > > > +
-> > > > +	/* ACK M_CAN interrupts */
-> > > > +	m_can_write(cdev, M_CAN_IR, ir);
-> > > > =20
-> > > > +	/* ACK device-specific interrupts */
-> > > >  	if (cdev->ops->handle_dev_interrupts)
-> > > >  		cdev->ops->handle_dev_interrupts(cdev, true);
-> > >=20
-> > > Why do you call a 2nd time the handle_dev_interrupts() callback?
-> >=20
-> > I see, clear and no clear. Why are these two separate operations?
+On Tue, Jun 01, 2021 at 11:18:47AM +0200, Marc Kleine-Budde wrote:
+> I think there already is a function to stop the m-can core:
 >=20
-> As discussed here,
+> | m_can_stop(struct net_device *dev)
 >=20
-> https://lore.kernel.org/linux-can/20210514141012.3ehw4tosog3lreq4@pengutr=
-onix.de/
->=20
-> you previously recommended adding a 2nd parameter the callback to
-> indicate that we only want to clear the device IR, not read it, in order
-> to save an SPI transaction when M_CAN core interrupts were already
-> handled.
+> You have remove the static to use it from the tcan4x5x, though. If this
+> function doesn't stop the tcan properly, you might have to add another
+> callback.
 
-ACK.
+ACK, that looks like it'll work. When I get the chance I'll do some
+testing to make sure.
 
-I had in mind a single call to handle_dev_interrupts().
+--
+Regards,
 
-In tcan4x5x_clear_interrupts() the original code does 4 individual reg
-writes. With:
+Torin Cooper-Bennun
+Software Engineer | maxiluxsystems.com
 
-| tcan4x5x: tcan4x5x_clear_interrupts(): rm unnecessary reg clears
 
-two of them are removed \o/. In Linux we want to avoid individual SPI
-transfers at all cost, as they are quite expensive. So the SPI accesses
-should be optimized for the no error use case.
-
-If the tcan4x5x interrupts only need clearing/handling in the error
-case, it might be an option to only call handle_dev_interrupts() if the
-M_CAN_IR register shows no interrupts.
-
-If both m-can and tcan interrupts are pending, in the first run only the
-m-can IRQs are handled. If the IRQ line is still asserted the Linux IRQ
-code should call the ISR again, no m-can IRQ, then the tcan IRQs will be
-handled.
-
-> However, quoting from your previous mail,
->=20
-> > On 26.05.2021 13:47:44, Torin Cooper-Bennun wrote:
-> > > Device-specific interrupts are handled, if no M_CAN core interrupts w=
-ere
-> > > handled in the ISR call.
-> >=20
-> > In case there are both core and device specific interrupts the kernel
-> > IRQ handler will call the ISR a 2nd time - should be OK.
->=20
-> this implies I should leave device IR totally alone unless no M_CAN
-> interrupts are asserted, and do the following only:
-
-ACK
-
-> |	ir =3D m_can_read(cdev, M_CAN_IR);
-> |
-> |	if (!ir) {
-> |		/* Handle device-specific interrupts */
-> |		if (cdev->ops->handle_dev_interrupts)
-> |			irq_ret =3D cdev->ops->handle_dev_interrupts(cdev, false);
-
-ACK - and the handle_dev_interrupts handler should do all necessary
-things :)
-
-> |		return irq_ret;
-> |	}
-> |
-> |	/* ACK M_CAN interrupts */
-> |	m_can_write(cdev, M_CAN_IR, ir);
->=20
-> I can probably also kill off the clear_only parameter.
-
-If the tcan only needs handling/clearing in the error case, then there's
-no need for a 2nd parameter.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---4sjdsiy7f5zrxein
+--zmtilgl6wizdius4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmC2CxwACgkQqclaivrt
-76l0Wwf+LojOA7Gq1QDFJdjKkCchMlzW106JaFc0OaDvBAXcjJHt1zLGuS3nt18C
-f073GoH73KwHfLQplnSX9nLAInWBYiHTfxw5W28ykCJHZJlPqy1HHaAaREk/lwPD
-BgcSNv1UAVksaD+x1UyP++CzEz5YBgM+bsz3Wl/KSYZXrofbvPDGRfaArIT1VWwX
-wNQBRF1f75sf31z00eaN3k90nQKDGy6POY2ZXh0Me4YHn5cXsS8/9LWKfvx6Fkg2
-7k7uARGvAYxVs/jF1lO5CXb91RjqL5+3y42/+GgaP7j3/BOrDIRA4RpelYYpqCA6
-49ig0TPXK0p2eDXW3pTj/6BIaVEFyA==
-=t0ke
+iQGzBAABCgAdFiEEHoj68wxDgkT3Oo2Mj1jJmDXJkUgFAmC2ElwACgkQj1jJmDXJ
+kUjxiwv/aZWO97f2i5P//Mjq+KOd8pNdCPHHDAJ0GE2+l0wWp7yP73EAeTkkVEBo
+qS7j1mMUSgHg3y77q5j5GmaWsAiQ1w1AhIw/xkquivktHyQNxqij0aqR+FnUjsiM
+DEkySzPBnklLSf+bTm9z6UEIeUpwv26utvoHnwTAhOVJcBuwvMx4fHOARNcOnR37
+Nn8tjn52aTrKXuPL1jTAXmVE4pRtncsUPA5T5TAfO8TBDvp/H78wRVtqQrqFQ82S
+ikxbNEV7X2YW69U5vjPKx1e3VNRrTgZ8Cyy+V0iJs4d/76ari2Kq4TDiJXD24iyL
+QWwWYLliSMkzInPAxdqcSmAIlq820+4b61qJPER54TNY8wJXUi5r7LfOaM3fTcjA
+OrtskecM9+5EdYp+LqDRxPq9KmhF+wUbhKsmkjT1hbNbBa14UyI0KB1aLNqK3tpW
+BCWz/Nud74yEJN73sAkR76HlwcDKSPJadcppYH7ZSUDbHdiX5g6MHICE7rF0U8p9
+fxNWtDqs
+=u3IQ
 -----END PGP SIGNATURE-----
 
---4sjdsiy7f5zrxein--
+--zmtilgl6wizdius4--
