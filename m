@@ -2,74 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5384396C8F
-	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 07:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2B8396DE0
+	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 09:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbhFAFBz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Jun 2021 01:01:55 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:40947 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbhFAFBv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 01:01:51 -0400
-Received: by mail-il1-f198.google.com with SMTP id b4-20020a920b040000b02901dc81bf7e72so4057345ilf.7
-        for <linux-can@vger.kernel.org>; Mon, 31 May 2021 22:00:10 -0700 (PDT)
+        id S229984AbhFAHX4 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Jun 2021 03:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231928AbhFAHX4 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 03:23:56 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BF2C061574
+        for <linux-can@vger.kernel.org>; Tue,  1 Jun 2021 00:22:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o2-20020a05600c4fc2b029019a0a8f959dso1255943wmq.1
+        for <linux-can@vger.kernel.org>; Tue, 01 Jun 2021 00:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=u+POkfG1CrcK0sWpp61LCjDf/jPt2qgx9RB+7wZOVlA=;
+        b=ni91RT2WYexFTLwiCn7sG3JRYcQBFWT1yZVxeS2jwMooWQUy1lbYLnlZeMJPiHYlx4
+         cnj+Itaj7p1GPFW5BMY/CaEDwzhna+3piGmlq+x3dvItcGxLna98jHC65x2LEsIgEw+3
+         5hOzpci77ao2NKF+yI2nqPOcReBKC2f2IlB7CHx3P95tpPUlgX7AKt11CHTdMHW25isP
+         g6g1KarONPcLCsdPvO9GeEur1+GWYMTSfCe+TjBInrpAoazBTplXLguvk3NwzbQuqGh9
+         ZDCGR1bmPAPc07io53Go19C1fYPR+L3IBaseg0co2gYHSubGtOTLAOejSDb6YOmje5lX
+         K+FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=HZoCrhifvFqebweO5oM8sTQXrnYAq0UL7ZIrots2vSc=;
-        b=M+uAj0H1hJ0/e9UgFx4Y3iT8pZmTzmM4zeHBnHsiLxNs0zhVKO879cqWCtpcnjDShW
-         uX+QJWGSbgb8bAZFgIf59nuPOdBfUElGDvQKm4TeHh0lpcFqPW+Y7Nz8jwlK6xNPly/d
-         us7JKH2RQXeBk/jwzuaCCFH5fm7oYVV7hEPCLcPvev+jR/Dfw44M0iO8IKJXVFZ85aE7
-         konBNdF4glwaWS7EokEVi/0h7Rq1MaY+MQjsd0eDNwVuxAHWY/0HyEt01D/OYI5utqlf
-         A4Fs42J1dtbK5PIVHj2/th6C+qtrUgkN/W6fXzyenFAHHbsR1Yi7Cw+Q3wefonKu+kJq
-         NUYw==
-X-Gm-Message-State: AOAM5309y/UJFbqNbG7SpV5lea6N54SJR2yqWYQbwAukezva0WzMli5v
-        FQZpsnrvxi3XUu4f8ex73oN16fC/1LiNenyzytbSrwoVpu/M
-X-Google-Smtp-Source: ABdhPJyDPqVeQwFPYxvwDFNm5lVzsEmrtB9fOyxrUNzo2mPUK0UzLNL7BZ0jpoGpdR7H0zY1Wl5YoHHlpd3CmiPaYpmOLCQaOLqA
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=u+POkfG1CrcK0sWpp61LCjDf/jPt2qgx9RB+7wZOVlA=;
+        b=uAlxTzlM0EyQWiLTGduE8DkJ53do41Vbff8nGFfTBH5VBeizfbTumwRRq9lm/1lubl
+         BLoa3YSwbF2e/EnSQRp5JvD9jXcQfoD/QL2lKMeXsRdVcYzVteQT9qFsEuTjdBkSLlLy
+         Sjp25VyKje9LuP18D93LbxluM0wr6aSprExKRb72yowD9TiTUzMNAjHQnZUq0irsvFyN
+         NbBN8YE5rDy93tkMGKqOLVKZtcTYmGmrteJd2T5E0iSJwfmty/fJ5/TtHyo6ezFAzjxU
+         7uISAywOXLotrkMX5FbBF+ww0BJSXLkgJpFpRyQ27gt8bOb4aDTNMWbxlWYxqwLlJEL/
+         ZuYg==
+X-Gm-Message-State: AOAM530TaX2WBRHak4vnFg+09V2o3R5mKsxVvKY6hEWiCgtV+98ZFCUs
+        1sTHv1/SXbElqW2sDP/53USpUw==
+X-Google-Smtp-Source: ABdhPJzmlUeISEvUxkdqmNK1cKVGKnm1SJKs1+ZIixLjTO930WTvvVhLNrJYLCFVqAJbopKBcJNgdg==
+X-Received: by 2002:a05:600c:4657:: with SMTP id n23mr2246550wmo.47.1622532132541;
+        Tue, 01 Jun 2021 00:22:12 -0700 (PDT)
+Received: from bigthink (94.197.211.16.threembb.co.uk. [94.197.211.16])
+        by smtp.gmail.com with ESMTPSA id 89sm2405211wrq.14.2021.06.01.00.22.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Jun 2021 00:22:11 -0700 (PDT)
+Date:   Tue, 1 Jun 2021 08:22:17 +0100
+From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [PATCH can-next 2/5] can: m_can: m_can_isr(): handle
+ device-specific interrupts
+Message-ID: <20210601072217.kazos5xe7iqcqkmd@bigthink>
+References: <20210526124747.674055-1-torin@maxiluxsystems.com>
+ <20210526124747.674055-3-torin@maxiluxsystems.com>
+ <20210526150705.s4ms7jhowsuts3yf@pengutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d201:: with SMTP id y1mr19795884ily.103.1622523610124;
- Mon, 31 May 2021 22:00:10 -0700 (PDT)
-Date:   Mon, 31 May 2021 22:00:10 -0700
-In-Reply-To: <000000000000f32b3c05958ed0eb@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006bd5ff05c3ad37da@google.com>
-Subject: Re: [syzbot] INFO: task hung in register_netdevice_notifier (2)
-From:   syzbot <syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com>
-To:     a@unstable.cc, ast@kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
-        bpf@vger.kernel.org, brouer@redhat.com, daniel@iogearbox.net,
-        davem@davemloft.net, hawk@kernel.org, jakub.kicinski@netronome.com,
-        john.fastabend@gmail.com, kafai@fb.com, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mareklindner@neomailbox.ch, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        songliubraving@fb.com, sw@simonwunderlich.de,
-        syzkaller-bugs@googlegroups.com, xdp-newbies@vger.kernel.org,
-        yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="alw2hcilcd7f2z6m"
+Content-Disposition: inline
+In-Reply-To: <20210526150705.s4ms7jhowsuts3yf@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-syzbot has bisected this issue to:
 
-commit 6bf071bf09d4b2ff3ee8783531e2ce814f0870cb
-Author: Jesper Dangaard Brouer <brouer@redhat.com>
-Date:   Tue Jun 18 13:05:27 2019 +0000
+--alw2hcilcd7f2z6m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    xdp: page_pool related fix to cpumap
+On Wed, May 26, 2021 at 05:07:05PM +0200, Marc Kleine-Budde wrote:
+> > diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_ca=
+n.c
+> > index fa853201d2c4..3bc957da06f7 100644
+> > --- a/drivers/net/can/m_can/m_can.c
+> > +++ b/drivers/net/can/m_can/m_can.c
+> > @@ -1033,17 +1033,24 @@ static irqreturn_t m_can_isr(int irq, void *dev=
+_id)
+> >  	struct net_device *dev =3D (struct net_device *)dev_id;
+> >  	struct m_can_classdev *cdev =3D netdev_priv(dev);
+> >  	u32 ir;
+> > +	irqreturn_t irq_ret =3D IRQ_NONE;
+>=20
+> nitpick: please move before the "u32 ir;"
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1397c4a7d00000
-start commit:   7ac3a1c1 Merge tag 'mtd/fixes-for-5.13-rc4' of git://git.k..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1057c4a7d00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1797c4a7d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=266cda122a0b56c
-dashboard link: https://syzkaller.appspot.com/bug?extid=355f8edb2ff45d5f95fa
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cc630fd00000
+ACK
 
-Reported-by: syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com
-Fixes: 6bf071bf09d4 ("xdp: page_pool related fix to cpumap")
+--
+Regards,
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Torin Cooper-Bennun
+Software Engineer | maxiluxsystems.com
+
+
+--alw2hcilcd7f2z6m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAABCgAdFiEEHoj68wxDgkT3Oo2Mj1jJmDXJkUgFAmC14CMACgkQj1jJmDXJ
+kUio6QwArg+XukLRYmI5y4yCfgb2/Nf99jXryiGWNYbwnroWEEJVLWaQt2YJLBru
+lKcyBSk7Y9wsva9OpWhcgih42/IyCUXtiRJ89VHoj05mJIDl2tLAfTzvICwijwqG
+8JiumKFutpQsaOK/IvpiXNrkRks0R0RdhUBODI6x6qsPpUy164K5l5Gg2o8wT8qR
+5WVJ7yL0x423C7x4ZaYpT4w7DfUTxxGilfOAIKyQYqsGkZcZQKo7jDc7ItblKvo9
+kH76C+FIzApSlXBsh/7fjvGbtid9c7gJIH+yPX45xqflc2Gu8Zxe6EWFLwL9u238
+hV2hyR706i6tLmCIKlmFkkL/fsUxZbPm/7D0NwwcHshXztTIH0N/GzRMGFneIvd2
+ncyV/24dpoX3zvlnrQEFqgXTLSUXarVd/0mIOjJiYrE+zMd6pIMYQOQstMM8A6PK
+LW7WgjSO+7zZV9WdIVwRAiE/JxHI0LzGw5O6kqltyRe0uQEH7yteW5cWhhgE1vhV
+no9n1TPs
+=7J2s
+-----END PGP SIGNATURE-----
+
+--alw2hcilcd7f2z6m--
