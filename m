@@ -2,110 +2,118 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C17A7396F91
-	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 10:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1517139702C
+	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 11:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233506AbhFAIwc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Jun 2021 04:52:32 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:30490 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233739AbhFAIwF (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 04:52:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1622537418; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=p9BG81JdxrWNkxmdUMY4ynrMyWp9QrFt5hDDjZV7aBhIFJ3nhvkhHLaaS/ErA+RqQR
-    c+yGqNNX8wrGjsHWao/gvTuCE4OqcRJI48rb9Sty64FxNql4ZIXfUBNeYgdQmB3qxNzf
-    h/D019GL0oHGE+Fpsp9O6gVHlkPZynHyOYaeyS7ldQ3am9Kiou+MXxFHlASYc7op4jBN
-    ZcestJt3tiasaM5IflErZY5FVIB1aEoLl7zhaPJqsb7rhnctlYnC1pCC1JruedqfK2gc
-    BB+NW8BybR0aPslcosKkfp1glAalc+bd+YKwMDYcwPHNyr1VEA/IbN97TNoVZfkIAu4d
-    ddIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1622537418;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
-    Subject:Sender;
-    bh=EIpDeEnWKDbk8mlSINtPRfTUi+ajWOZlTj3R0444KFM=;
-    b=kx1cZ32c8dlPN29w8vi5bWe69ePJg4O+12OA9K5FMANvx1YmC+4KtwJoPnZyZHYpZU
-    xihR4jK0rjkleXA3FqE5TrJ1/ht+RKL8sLST/ZsvzxIiffRI5NgxN9v4gysYQ97dabB/
-    gEdgXGyLTsC3m550tqGa94NG23a9aB4OnvCyE51kFOIJqHcnZy6PTX+RHm5Q5pjjyYbs
-    QqvqGmwdfMQiRNm5mcq6ZtTqQp4SzOusXRYd9EGxl3cHMRwUBSmXzllMqJoJZ2twSJRd
-    y7Vmw+VaY5w0MdrTJeTV2E6Twbu3QOF0HtUm2mAfMbADt3tkCNs395ENx4HloCxtsAD6
-    pfLA==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1622537418;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:To:Subject:Cc:Date:From:
-    Subject:Sender;
-    bh=EIpDeEnWKDbk8mlSINtPRfTUi+ajWOZlTj3R0444KFM=;
-    b=F4z/oTl/HEdbdE9M+CnFmA479yWPkPPYJSxYyD6T0TcYTXElVGNniB7o4k6T8ovz0+
-    T84uDeiZemlxTwuNChagZk34GA05OIQ2xeDRVPPm+3685pZEq2jja0a1G5Z70+7AiJ4Z
-    XRHyGoIDaEU4vyZtO0Fh/6EENKGdS0kHNzB+VS3pIaz3UQGzrFyQjb971FKHiMedXhhZ
-    KgYh72srgtskBzt4ODfYXZCNrq5WaeVTuo9NrtCbIcfCnL/s6ylr1foPRMQsed5jpiC2
-    V0YcNyzL7uGGOrFwefV0TuY1Rk90Uw1gQK8yS4ooX8thgu8E1Pzm0yaTvDEcRd5cHIGT
-    jBvA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTGVNiOMpjpw=="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.137]
-    by smtp.strato.de (RZmta 47.26.3 DYNA|AUTH)
-    with ESMTPSA id L04ff0x518oIBNx
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 1 Jun 2021 10:50:18 +0200 (CEST)
-Subject: Re: vxcan RX/TX/echo semantics
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20210527150759.az3lal4vnhivwhlx@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <ebaf846a-f325-80fd-f926-6ad9854bf453@hartkopp.net>
-Date:   Tue, 1 Jun 2021 10:50:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S233336AbhFAJUc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Jun 2021 05:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233160AbhFAJUc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 05:20:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B55C061574
+        for <linux-can@vger.kernel.org>; Tue,  1 Jun 2021 02:18:51 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lo0Xx-0002Be-G5; Tue, 01 Jun 2021 11:18:49 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:f875:cb52:3051:44e8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 88DFF6307B7;
+        Tue,  1 Jun 2021 09:18:48 +0000 (UTC)
+Date:   Tue, 1 Jun 2021 11:18:47 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Torin Cooper-Bennun <torin@maxiluxsystems.com>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [PATCH can-next 0/5] m_can, tcan4x5x: device-specific interrupt
+ handling
+Message-ID: <20210601091847.ixsbe4gz4jk7eeeb@pengutronix.de>
+References: <20210526124747.674055-1-torin@maxiluxsystems.com>
+ <20210526152045.j3efhxqpytixa7tt@pengutronix.de>
+ <20210601082107.g6rfrtfpfnjfe43s@bigthink>
 MIME-Version: 1.0
-In-Reply-To: <20210527150759.az3lal4vnhivwhlx@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="n4usy6k3oh7n6mot"
+Content-Disposition: inline
+In-Reply-To: <20210601082107.g6rfrtfpfnjfe43s@bigthink>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
 
-On 27.05.21 17:07, Marc Kleine-Budde wrote:
+--n4usy6k3oh7n6mot
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> I was wondering what the RX, TX and echo semantics on vxcan interfaces
-> should be.
-> 
-> I have started a "cangen" in one namespace and a "candump" in other.
-> 
-> The "candump" in the receiving namespace shows the CAN frames as "TX"
-> and in the sending namespace the CAN frames don't show up in a "candump"
-> at all. Is this intentional? If so what's the idea behind this and is
-> this documented?
-> 
-> I'm adding "cangw" to the mix and see what happens....
+On 01.06.2021 09:21:07, Torin Cooper-Bennun wrote:
+> On Wed, May 26, 2021 at 05:20:45PM +0200, Marc Kleine-Budde wrote:
+> > On 26.05.2021 13:47:42, Torin Cooper-Bennun wrote:
+> > > TCAN4550 shutdown is attempted by setting the device into standby mod=
+e.
+> > > There is probably a better way, but I understand we are limited by be=
+ing
+> > > in the ISR context.
+> >=20
+> > Not exactly. The tcan's ISR runs in a threaded context, so you can
+> > basically do normal SPI or regmap transactions, shut down clocks and
+> > regulators, etc...
+>=20
+> Got you. I keep forgetting that detail!
+>=20
+> Would it be sufficient to change the CAN state as follows?
+>=20
+> |	if (handled =3D=3D IRQ_HANDLED) {
+> |		netdev_err(cdev->net,
+> |			   "Device is disabled by driver.\n");
+> |
+> |		cdev->can.state =3D CAN_STATE_STOPPED;
+> |
+> |		err =3D regmap_update_bits(priv->regmap, TCAN4X5X_CONFIG,
+> |					 TCAN4X5X_MODE_SEL_MASK,
+> |					 TCAN4X5X_MODE_STANDBY);
+> |		if (err)
+> |			goto exit_regmap_failure;
+> |	}
 
-Yes. That is needed ...
+I think there already is a function to stop the m-can core:
 
-If you take a look at slide 19 here:
-https://wiki.automotivelinux.org/_media/agl-distro/agl2018-socketcan.pdf
+| m_can_stop(struct net_device *dev)
 
-The difference to vcan's (which are providing a local echo 
-functionality) the vxcan's are more like veth's:
+You have remove the static to use it from the tcan4x5x, though. If this
+function doesn't stop the tcan properly, you might have to add another
+callback.
 
-Providing a link between two namespaces but nothing more.
+Marc
 
-The question is if it would make sense to provide an additional local 
-echo in vxcan_xmit() when sending to a vxcan?
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-When deriving vxcan from veth I probably had a some weird thoughts why 
-that local echo could add problems. But while looking at it now, 
-creating a second skb for a local echo on the side where the CAN frame 
-is put into the vxcan seems applicable.
+--n4usy6k3oh7n6mot
+Content-Type: application/pgp-signature; name="signature.asc"
 
-What do you think?
+-----BEGIN PGP SIGNATURE-----
 
-Best,
-Oliver
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmC1+3UACgkQqclaivrt
+76kupAgArUebbD2UM/HpRjOo1XVH3XDhBBX1D2IXIVQHh/d/xOG5lNzK31HNjJ+4
+ztIHNGQZS4vXE7CrSnsM5lnrMC1fhP7WNjSt15F+wjluy8ZXASo+jSqbDaf2DTB/
+6/WBBfR+R6qaNeSlyhu9TqYW+cHSFT2v4yX3nomlvYhAN/9u66UmNdxzC3CbnqL3
+C4pORXP1RhMeX+hRrNl52hK0dk6RGPhSkID8zAyvlXSjmO0i1u75NluzlzIhMWJk
+kkBLGlfBbQD9XdQmlwMYQV7jWpkMSNqPWiAqjb2mWdHKu+92u2OWuiut+QO+S0lC
+EaVtfQQIBUlEfEfAWPYhMgwLoNeXFQ==
+=6WfT
+-----END PGP SIGNATURE-----
+
+--n4usy6k3oh7n6mot--
