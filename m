@@ -2,112 +2,125 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 326BC3971F2
-	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 12:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62A1397B6B
+	for <lists+linux-can@lfdr.de>; Tue,  1 Jun 2021 22:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbhFAK6T (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 1 Jun 2021 06:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbhFAK6S (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 1 Jun 2021 06:58:18 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A47C061574
-        for <linux-can@vger.kernel.org>; Tue,  1 Jun 2021 03:56:36 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l11-20020a05600c4f0bb029017a7cd488f5so1658187wmq.0
-        for <linux-can@vger.kernel.org>; Tue, 01 Jun 2021 03:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=maxiluxsystems-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QTqLbaq0k6Ll5x8dBP006fogUdqFSviRCeeYquOCuG8=;
-        b=y+sSNi4oAJ6KH0JizsdZXj730SsC+YHfgf86LKo5yVNXdk6soQGzduhjuNiyhnrEXd
-         PhRbYigBuhX7QfaGWLHFvP+DnqHPd1fhTqoyo8mtIirw/BZtoV2nSU35eOGOo7JC+Prg
-         fsXKjXzeBwqQVWB025KsHwGKZcGnq+/XN/mdHI/a0VGsfg5SjxJh5qR1XOdYfGAu9v2G
-         4yZLtci72glWnABLa8lcOoMI1dp1L1ycvClLk8L+dzuZdSh3UkP6Q9dYEsyP9gJuaAgz
-         xR0Rg1ak+mzsjRkk6fMn42q4CyB+bSMc22gFGGSEHgIUqfAPakonHyz+Udv0JFEyHVgN
-         tBPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QTqLbaq0k6Ll5x8dBP006fogUdqFSviRCeeYquOCuG8=;
-        b=E1VxYpBUZefGOZ4mQGuPX8kLqhVFVDx3bNpIf9VRLRYwHJ62Q1Bhsdv/2ODnkJqgk+
-         HBLFbsbyoZ7riICsVs2RrczWFD/R87y5xMREF+76yr61bfN2WkzuCcJmnfst4czNpoz8
-         UIREpbDLDPo1OW1U762odwRnybJ+kCnxyt4oretKJrI4qRBRHoM0eTctpgBiMXU/3/kb
-         1Afh4sKBCprXuIHmqyvGI+JKhvn6tMYn/X4be5/JzZdqRykFKjvfw6KDkWx1VvJlCu2T
-         uvpeyuaGBMYcPJ17V4EwmeOkKHqcFL7feKChX3G7+rQN4EXgvMWfDH5XlvhP68Cxy3Tc
-         GYZw==
-X-Gm-Message-State: AOAM53352bBrwMlW18A+0sFCQpiDHav+oGI+dr5awXQg0doLwTikv4UA
-        kjfZFRr4egD1sXgpQkOGTgWjfw==
-X-Google-Smtp-Source: ABdhPJz7r7rnbo2H5k9yBJne3y6kTAyp1ex/qbJ0Zm0ns3tqE9Y3jAh5hvzUjlpH5Yd/BZ41p3uW3Q==
-X-Received: by 2002:a1c:7402:: with SMTP id p2mr4000991wmc.88.1622544995009;
-        Tue, 01 Jun 2021 03:56:35 -0700 (PDT)
-Received: from bigthink ([109.249.181.35])
-        by smtp.gmail.com with ESMTPSA id j1sm5827206wmi.44.2021.06.01.03.56.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Jun 2021 03:56:34 -0700 (PDT)
-Date:   Tue, 1 Jun 2021 11:56:31 +0100
-From:   Torin Cooper-Bennun <torin@maxiluxsystems.com>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH can-next 0/5] m_can, tcan4x5x: device-specific interrupt
- handling
-Message-ID: <20210601105631.lvtziz7gzsauayov@bigthink>
-References: <20210526124747.674055-1-torin@maxiluxsystems.com>
- <20210526152045.j3efhxqpytixa7tt@pengutronix.de>
- <20210601082107.g6rfrtfpfnjfe43s@bigthink>
- <20210601091847.ixsbe4gz4jk7eeeb@pengutronix.de>
+        id S234872AbhFAUul (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 1 Jun 2021 16:50:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49184 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234756AbhFAUuk (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Tue, 1 Jun 2021 16:50:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B85A560E0C;
+        Tue,  1 Jun 2021 20:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622580539;
+        bh=alP6MwNJj6Tz9IWa3CoTduqAUpA0QOW99jGw8zk2njU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RWn1Gby6RnNrr32g8UFmJmfRd5MahcuQZ+zOd8xVMBtrLgDRovGotB9OtbO+5mHlT
+         eUa5Bl7atcRLL7oIWawrltnShlo6/e3w/qxCDhWvRw2vm4JKr2EzRKcLYHvmmG8XCq
+         +j8tqiqr335SoRdSysnMUbzX75x1eaQXgLYuGEpXhpKRcsPF63E9RR9mLkiZQ2PSr7
+         mqPc3kXdHdzh0WvwaKc/GGPp9h8BGFyoEs9lTviAWptf7F4AnGiReDYxWrwW3j4JYl
+         3f/v/ImdR9nphGLJF4uezurJkGNB0iwrO/wX5bYutvvcHMHtpzrTi0MN929byBwGKF
+         l/PzYctLmkh+A==
+Date:   Tue, 1 Jun 2021 13:48:56 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Yunsheng Lin <yunshenglin0825@gmail.com>, <davem@davemloft.net>,
+        <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: Re: [Linuxarm] Re: [PATCH net-next 2/3] net: sched: implement
+ TCQ_F_CAN_BYPASS for lockless qdisc
+Message-ID: <20210601134856.12573333@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <cf75e1f4-7972-8efa-7554-fc528c5da380@huawei.com>
+References: <1622170197-27370-1-git-send-email-linyunsheng@huawei.com>
+        <1622170197-27370-3-git-send-email-linyunsheng@huawei.com>
+        <20210528180012.676797d6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <a6a965ee-7368-d37b-9c70-bba50c67eec9@huawei.com>
+        <20210528213218.2b90864c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <ee1a62da-9758-70db-abd3-c5ca2e8e0ce0@huawei.com>
+        <20210529114919.4f8b1980@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <9cc9f513-7655-07df-3c74-5abe07ae8321@gmail.com>
+        <20210530132111.3a974275@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <3c2fbc70-841f-d90b-ca13-1f058169be50@huawei.com>
+        <3a307707-9fb5-d73a-01f9-93aaf5c7a437@huawei.com>
+        <428f92d8-f4a2-13cf-8dcc-b38d48a42965@huawei.com>
+        <20210531215146.5ca802a5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <cf75e1f4-7972-8efa-7554-fc528c5da380@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zmtilgl6wizdius4"
-Content-Disposition: inline
-In-Reply-To: <20210601091847.ixsbe4gz4jk7eeeb@pengutronix.de>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Tue, 1 Jun 2021 16:18:54 +0800 Yunsheng Lin wrote:
+> > I see, thanks! That explains the need. Perhaps we can rephrase the
+> > comment? Maybe:
+> > 
+> > +			/* Retest nolock_qdisc_is_empty() within the protection
+> > +			 * of q->seqlock to protect from racing with requeuing.
+> > +			 */  
+> 
+> Yes if we still decide to preserve the nolock_qdisc_is_empty() rechecking
+> under q->seqlock.
 
---zmtilgl6wizdius4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sounds good.
 
-On Tue, Jun 01, 2021 at 11:18:47AM +0200, Marc Kleine-Budde wrote:
-> I think there already is a function to stop the m-can core:
->=20
-> | m_can_stop(struct net_device *dev)
->=20
-> You have remove the static to use it from the tcan4x5x, though. If this
-> function doesn't stop the tcan properly, you might have to add another
-> callback.
+> >> --- a/net/sched/sch_generic.c
+> >> +++ b/net/sched/sch_generic.c
+> >> @@ -38,6 +38,15 @@ EXPORT_SYMBOL(default_qdisc_ops);
+> >>  static void qdisc_maybe_clear_missed(struct Qdisc *q,
+> >>                                      const struct netdev_queue *txq)
+> >>  {
+> >> +       set_bit(__QDISC_STATE_DRAINING, &q->state);
+> >> +
+> >> +       /* Make sure DRAINING is set before clearing MISSED
+> >> +        * to make sure nolock_qdisc_is_empty() always return
+> >> +        * false for aoviding transmitting a packet directly
+> >> +        * bypassing the requeued packet.
+> >> +        */
+> >> +       smp_mb__after_atomic();
+> >> +
+> >>         clear_bit(__QDISC_STATE_MISSED, &q->state);
+> >>
+> >>         /* Make sure the below netif_xmit_frozen_or_stopped()
+> >> @@ -52,8 +61,6 @@ static void qdisc_maybe_clear_missed(struct Qdisc *q,
+> >>          */
+> >>         if (!netif_xmit_frozen_or_stopped(txq))
+> >>                 set_bit(__QDISC_STATE_MISSED, &q->state);
+> >> -       else
+> >> -               set_bit(__QDISC_STATE_DRAINING, &q->state);
+> >>  }  
+> > 
+> > But this would not be enough because we may also clear MISSING 
+> > in pfifo_fast_dequeue()?  
+> 
+> For the MISSING clearing in pfifo_fast_dequeue(), it seems it
+> looks like the data race described in RFC v3 too?
+> 
+>       CPU1                 CPU2               CPU3
+> qdisc_run_begin(q)          .                  .
+>         .              MISSED is set           .
+>   MISSED is cleared         .                  .
+>     q->dequeue()            .                  .
+>         .              enqueue skb1     check MISSED # true
+> qdisc_run_end(q)            .                  .
+>         .                   .         qdisc_run_begin(q) # true
+>         .            MISSED is set      send skb2 directly
 
-ACK, that looks like it'll work. When I get the chance I'll do some
-testing to make sure.
-
---
-Regards,
-
-Torin Cooper-Bennun
-Software Engineer | maxiluxsystems.com
-
-
---zmtilgl6wizdius4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEEHoj68wxDgkT3Oo2Mj1jJmDXJkUgFAmC2ElwACgkQj1jJmDXJ
-kUjxiwv/aZWO97f2i5P//Mjq+KOd8pNdCPHHDAJ0GE2+l0wWp7yP73EAeTkkVEBo
-qS7j1mMUSgHg3y77q5j5GmaWsAiQ1w1AhIw/xkquivktHyQNxqij0aqR+FnUjsiM
-DEkySzPBnklLSf+bTm9z6UEIeUpwv26utvoHnwTAhOVJcBuwvMx4fHOARNcOnR37
-Nn8tjn52aTrKXuPL1jTAXmVE4pRtncsUPA5T5TAfO8TBDvp/H78wRVtqQrqFQ82S
-ikxbNEV7X2YW69U5vjPKx1e3VNRrTgZ8Cyy+V0iJs4d/76ari2Kq4TDiJXD24iyL
-QWwWYLliSMkzInPAxdqcSmAIlq820+4b61qJPER54TNY8wJXUi5r7LfOaM3fTcjA
-OrtskecM9+5EdYp+LqDRxPq9KmhF+wUbhKsmkjT1hbNbBa14UyI0KB1aLNqK3tpW
-BCWz/Nud74yEJN73sAkR76HlwcDKSPJadcppYH7ZSUDbHdiX5g6MHICE7rF0U8p9
-fxNWtDqs
-=u3IQ
------END PGP SIGNATURE-----
-
---zmtilgl6wizdius4--
+Not sure what you mean.
