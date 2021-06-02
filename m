@@ -2,158 +2,107 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C868398EF5
-	for <lists+linux-can@lfdr.de>; Wed,  2 Jun 2021 17:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3535E398FEE
+	for <lists+linux-can@lfdr.de>; Wed,  2 Jun 2021 18:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232421AbhFBPpM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 2 Jun 2021 11:45:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46810 "EHLO mail.kernel.org"
+        id S229641AbhFBQaO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 2 Jun 2021 12:30:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232363AbhFBPpG (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 2 Jun 2021 11:45:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 749A96140A;
-        Wed,  2 Jun 2021 15:43:22 +0000 (UTC)
+        id S229541AbhFBQaO (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 2 Jun 2021 12:30:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8E1806197C;
+        Wed,  2 Jun 2021 16:28:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622648602;
-        bh=j4vbbGMmkpw6vv8LF4aIg9gX2V7O+Y4hZhiS1MaxEmc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AB7FT6nD0+rEQCgHBe5Cc5z4DRLD3icjFOBiw6oUwpll2X2vUmNqYYA86Mis0nQok
-         GUVdVQnl5wZ5UdKS1IFtwJmMOJbRm/TuUiIAkVHY4l1NYVVQAn1lpXU4WDZAJjZiIt
-         Zj3vPyUaPqYduitPsdm0HQRG0b4aNL/BErsSx7TEcKpEaV42FMxSH3GWTMWGTilfOy
-         EIHbJD4Wjmd3Kx44o49Q3rESdin3UZo0Het2NItM/PG8dKGKjyvqsS87KI7Dshih5t
-         LrRX46kAZV/zWvGzK5YQGEZTeNLdZD56yEF4sDICfrD6yFi4PlcnBGdp103t4oyP/V
-         easJ3WNVtDkDA==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1loT1b-006Xbn-D0; Wed, 02 Jun 2021 17:43:19 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml references
-Date:   Wed,  2 Jun 2021 17:43:10 +0200
-Message-Id: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1622648507.git.mchehab+huawei@kernel.org>
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+        s=k20201202; t=1622651310;
+        bh=ym3BhES639iZHefP/a/KoEYjxWioWEK1emlID8aS13o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bOsoN+tVW0saMH88vcIVp0E/Dvsx2otzQyMvCxf7gIlWFtRbavufvF1MfuSlpa/kG
+         B9pcBgUr1Xkl1akir38jE5sq5RFJ1PxTRCc8CK7J509YCWF9bGHtXXVrRFdNQYqKXQ
+         RauoG54tu3oD5Cd31Tk141tJIT8/4+08/P0UugxiqEqlZzPGAWUtPSfK9ngMBQUB6q
+         GhHvJCGIH7EZsq5EAvrZaV/HqDJt/wzRKFkGDT35sNbvuP7mb8Abd7vFWqty7CEQT9
+         FH7Od/yFs9b7o1PbshhFnkzgIePNnkeT8L7DnzbZrAmyQvn3FgpgynR6l4eYHBK00O
+         57hfSfTFUzGeA==
+Date:   Wed, 2 Jun 2021 09:28:28 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Yunsheng Lin <yunshenglin0825@gmail.com>, <davem@davemloft.net>,
+        <olteanv@gmail.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <andriin@fb.com>, <edumazet@google.com>, <weiwan@google.com>,
+        <cong.wang@bytedance.com>, <ap420073@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>, <mkl@pengutronix.de>,
+        <linux-can@vger.kernel.org>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: Re: [Linuxarm] Re: [PATCH net-next 2/3] net: sched: implement
+ TCQ_F_CAN_BYPASS for lockless qdisc
+Message-ID: <20210602092828.21d30135@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+In-Reply-To: <20e9bf35-444c-8c35-97ec-de434fc80d73@huawei.com>
+References: <1622170197-27370-1-git-send-email-linyunsheng@huawei.com>
+        <1622170197-27370-3-git-send-email-linyunsheng@huawei.com>
+        <20210528180012.676797d6@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <a6a965ee-7368-d37b-9c70-bba50c67eec9@huawei.com>
+        <20210528213218.2b90864c@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <ee1a62da-9758-70db-abd3-c5ca2e8e0ce0@huawei.com>
+        <20210529114919.4f8b1980@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <9cc9f513-7655-07df-3c74-5abe07ae8321@gmail.com>
+        <20210530132111.3a974275@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <3c2fbc70-841f-d90b-ca13-1f058169be50@huawei.com>
+        <3a307707-9fb5-d73a-01f9-93aaf5c7a437@huawei.com>
+        <428f92d8-f4a2-13cf-8dcc-b38d48a42965@huawei.com>
+        <20210531215146.5ca802a5@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <cf75e1f4-7972-8efa-7554-fc528c5da380@huawei.com>
+        <20210601134856.12573333@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+        <20e9bf35-444c-8c35-97ec-de434fc80d73@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
+On Wed, 2 Jun 2021 09:21:01 +0800 Yunsheng Lin wrote:
+> >> For the MISSING clearing in pfifo_fast_dequeue(), it seems it
+> >> looks like the data race described in RFC v3 too?
+> >>
+> >>       CPU1                 CPU2               CPU3
+> >> qdisc_run_begin(q)          .                  .
+> >>         .              MISSED is set           .
+> >>   MISSED is cleared         .                  .
+> >>     q->dequeue()            .                  .
+> >>         .              enqueue skb1     check MISSED # true
+> >> qdisc_run_end(q)            .                  .
+> >>         .                   .         qdisc_run_begin(q) # true
+> >>         .            MISSED is set      send skb2 directly  
+> > 
+> > Not sure what you mean.  
+> 
+>        CPU1                 CPU2               CPU3
+>  qdisc_run_begin(q)          .                  .
+>          .              MISSED is set           .
+>    MISSED is cleared         .                  .
+>    another dequeuing         .                  .
+>          .                   .                  .
+>          .              enqueue skb1  nolock_qdisc_is_empty() # true
+>  qdisc_run_end(q)            .                  .
+>          .                   .         qdisc_run_begin(q) # true
+>          .                   .          send skb2 directly
+>          .               MISSED is set          .
+> 
+> As qdisc is indeed empty at the point when MISSED is clear and
+> another dequeue is retried by CPU1, MISSED setting is not under
+> q->seqlock, so it seems retesting MISSED under q->seqlock does not
+> seem to make any difference? and it seems like the case that does
+> not need handling as we agreed previously?
 
-Update the cross-references accordingly.
-
-Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json schema")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/devicetree/bindings/gpio/gpio-davinci.txt | 2 +-
- Documentation/devicetree/bindings/i2c/i2c-davinci.txt   | 2 +-
- Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt | 2 +-
- Documentation/devicetree/bindings/net/can/c_can.txt     | 2 +-
- Documentation/devicetree/bindings/spi/spi-davinci.txt   | 2 +-
- MAINTAINERS                                             | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-davinci.txt b/Documentation/devicetree/bindings/gpio/gpio-davinci.txt
-index 696ea46227d1..8ad4fd9aaffd 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-davinci.txt
-+++ b/Documentation/devicetree/bindings/gpio/gpio-davinci.txt
-@@ -32,7 +32,7 @@ Required Properties:
-           Documentation/devicetree/bindings/clock/keystone-gate.txt
-                             for 66AK2HK/66AK2L/66AK2E SoCs or,
- 
--          Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+          Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
-                             for 66AK2G SoCs
- 
- - clock-names: Name should be "gpio";
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-davinci.txt b/Documentation/devicetree/bindings/i2c/i2c-davinci.txt
-index b35ad748ed68..6590501c53d4 100644
---- a/Documentation/devicetree/bindings/i2c/i2c-davinci.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c-davinci.txt
-@@ -8,7 +8,7 @@ Required properties:
- - reg : Offset and length of the register set for the device
- - clocks: I2C functional clock phandle.
- 	  For 66AK2G this property should be set per binding,
--	  Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+	  Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- 
- SoC-specific Required Properties:
- 
-diff --git a/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt b/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt
-index 0663e7648ef9..57d077c0b7c1 100644
---- a/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt
-+++ b/Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt
-@@ -28,7 +28,7 @@ The following are mandatory properties for 66AK2G SoCs only:
- 		Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
- - clocks:	Must contain an entry for each entry in clock-names. Should
- 		be defined as per the he appropriate clock bindings consumer
--		usage in Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+		usage in Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- - clock-names:	Shall be "fck" for the functional clock,
- 		and "mmchsdb_fck" for the debounce clock.
- 
-diff --git a/Documentation/devicetree/bindings/net/can/c_can.txt b/Documentation/devicetree/bindings/net/can/c_can.txt
-index febd2cc1ca14..366479806acb 100644
---- a/Documentation/devicetree/bindings/net/can/c_can.txt
-+++ b/Documentation/devicetree/bindings/net/can/c_can.txt
-@@ -22,7 +22,7 @@ The following are mandatory properties for Keystone 2 66AK2G SoCs only:
- 			  Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
- - clocks		: CAN functional clock phandle. This property is as per the
- 			  binding,
--			  Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+			  Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- 
- Optional properties:
- - syscon-raminit	: Handle to system control region that contains the
-diff --git a/Documentation/devicetree/bindings/spi/spi-davinci.txt b/Documentation/devicetree/bindings/spi/spi-davinci.txt
-index e2198a389484..200c7fc7b089 100644
---- a/Documentation/devicetree/bindings/spi/spi-davinci.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-davinci.txt
-@@ -25,7 +25,7 @@ Required properties:
- - interrupts: interrupt number mapped to CPU.
- - clocks: spi clk phandle
-           For 66AK2G this property should be set per binding,
--          Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+          Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- 
- SoC-specific Required Properties:
- 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0f0a01b54c1b..790eff88b53e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18193,7 +18193,7 @@ L:	linux-arm-kernel@lists.infradead.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/arm/keystone/ti,k3-sci-common.yaml
- F:	Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
--F:	Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-+F:	Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/ti,sci-inta.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/ti,sci-intr.yaml
- F:	Documentation/devicetree/bindings/reset/ti,sci-reset.txt
--- 
-2.31.1
-
+Right, this case doesn't need the re-check under the lock, but pointed
+out that the re-queuing case requires the re-check.
