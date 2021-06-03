@@ -2,26 +2,26 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC902399F8D
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 13:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36247399FA2
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 13:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhFCLKz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Jun 2021 07:10:55 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:3046 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbhFCLKy (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 07:10:54 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FwjhR6jZLzWr77;
-        Thu,  3 Jun 2021 19:04:23 +0800 (CST)
+        id S229629AbhFCLTc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Jun 2021 07:19:32 -0400
+Received: from szxga03-in.huawei.com ([45.249.212.189]:3407 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229610AbhFCLTc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 07:19:32 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4FwjvW6z5hz67Sq;
+        Thu,  3 Jun 2021 19:13:59 +0800 (CST)
 Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 19:09:08 +0800
+ 15.1.2176.2; Thu, 3 Jun 2021 19:17:45 +0800
 Received: from thunder-town.china.huawei.com (10.174.177.72) by
  dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 19:09:07 +0800
+ 15.1.2176.2; Thu, 3 Jun 2021 19:17:44 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
 To:     Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -34,75 +34,83 @@ To:     Wolfgang Grandegger <wg@grandegger.com>,
         netdev <netdev@vger.kernel.org>,
         linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] can: esd_usb2: use DEVICE_ATTR_RO() helper macro
-Date:   Thu, 3 Jun 2021 19:09:02 +0800
-Message-ID: <20210603110902.11930-1-thunder.leizhen@huawei.com>
+Subject: [PATCH 1/1] can: janz-ican3: use DEVICE_ATTR_RO/RW() helper macro
+Date:   Thu, 3 Jun 2021 19:17:39 +0800
+Message-ID: <20210603111739.11983-1-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.174.177.72]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use DEVICE_ATTR_RO() helper macro instead of plain DEVICE_ATTR(), which
+Use DEVICE_ATTR_RO/RW() helper macro instead of plain DEVICE_ATTR(), which
 makes the code a bit shorter and easier to read.
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/net/can/usb/esd_usb2.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/can/janz-ican3.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/net/can/usb/esd_usb2.c b/drivers/net/can/usb/esd_usb2.c
-index 65b58f8fc3287cd..60f3e0ca080afdb 100644
---- a/drivers/net/can/usb/esd_usb2.c
-+++ b/drivers/net/can/usb/esd_usb2.c
-@@ -474,7 +474,7 @@ static void esd_usb2_write_bulk_callback(struct urb *urb)
- 	netif_trans_update(netdev);
+diff --git a/drivers/net/can/janz-ican3.c b/drivers/net/can/janz-ican3.c
+index 2a6c918186c02ed..c68ad56628bd444 100644
+--- a/drivers/net/can/janz-ican3.c
++++ b/drivers/net/can/janz-ican3.c
+@@ -1815,9 +1815,9 @@ static int ican3_get_berr_counter(const struct net_device *ndev,
+  * Sysfs Attributes
+  */
+ 
+-static ssize_t ican3_sysfs_show_term(struct device *dev,
+-				     struct device_attribute *attr,
+-				     char *buf)
++static ssize_t termination_show(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
+ {
+ 	struct ican3_dev *mod = netdev_priv(to_net_dev(dev));
+ 	int ret;
+@@ -1834,9 +1834,9 @@ static ssize_t ican3_sysfs_show_term(struct device *dev,
+ 	return snprintf(buf, PAGE_SIZE, "%u\n", mod->termination_enabled);
  }
  
--static ssize_t show_firmware(struct device *d,
-+static ssize_t firmware_show(struct device *d,
- 			     struct device_attribute *attr, char *buf)
+-static ssize_t ican3_sysfs_set_term(struct device *dev,
+-				    struct device_attribute *attr,
+-				    const char *buf, size_t count)
++static ssize_t termination_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
  {
- 	struct usb_interface *intf = to_usb_interface(d);
-@@ -485,9 +485,9 @@ static ssize_t show_firmware(struct device *d,
- 		       (dev->version >> 8) & 0xf,
- 		       dev->version & 0xff);
+ 	struct ican3_dev *mod = netdev_priv(to_net_dev(dev));
+ 	unsigned long enable;
+@@ -1852,18 +1852,17 @@ static ssize_t ican3_sysfs_set_term(struct device *dev,
+ 	return count;
  }
--static DEVICE_ATTR(firmware, 0444, show_firmware, NULL);
-+static DEVICE_ATTR_RO(firmware);
  
--static ssize_t show_hardware(struct device *d,
-+static ssize_t hardware_show(struct device *d,
- 			     struct device_attribute *attr, char *buf)
+-static ssize_t ican3_sysfs_show_fwinfo(struct device *dev,
+-				       struct device_attribute *attr,
+-				       char *buf)
++static ssize_t fwinfo_show(struct device *dev,
++			   struct device_attribute *attr,
++			   char *buf)
  {
- 	struct usb_interface *intf = to_usb_interface(d);
-@@ -498,9 +498,9 @@ static ssize_t show_hardware(struct device *d,
- 		       (dev->version >> 24) & 0xf,
- 		       (dev->version >> 16) & 0xff);
+ 	struct ican3_dev *mod = netdev_priv(to_net_dev(dev));
+ 
+ 	return scnprintf(buf, PAGE_SIZE, "%s\n", mod->fwinfo);
  }
--static DEVICE_ATTR(hardware, 0444, show_hardware, NULL);
-+static DEVICE_ATTR_RO(hardware);
  
--static ssize_t show_nets(struct device *d,
-+static ssize_t nets_show(struct device *d,
- 			 struct device_attribute *attr, char *buf)
- {
- 	struct usb_interface *intf = to_usb_interface(d);
-@@ -508,7 +508,7 @@ static ssize_t show_nets(struct device *d,
+-static DEVICE_ATTR(termination, 0644, ican3_sysfs_show_term,
+-		   ican3_sysfs_set_term);
+-static DEVICE_ATTR(fwinfo, 0444, ican3_sysfs_show_fwinfo, NULL);
++static DEVICE_ATTR_RW(termination);
++static DEVICE_ATTR_RO(fwinfo);
  
- 	return sprintf(buf, "%d", dev->net_count);
- }
--static DEVICE_ATTR(nets, 0444, show_nets, NULL);
-+static DEVICE_ATTR_RO(nets);
- 
- static int esd_usb2_send_msg(struct esd_usb2 *dev, struct esd_usb2_msg *msg)
- {
+ static struct attribute *ican3_sysfs_attrs[] = {
+ 	&dev_attr_termination.attr,
 -- 
 2.26.0.106.g9fadedd
 
