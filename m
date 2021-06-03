@@ -2,98 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7611F399E62
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 12:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C8B399F70
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 13:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbhFCKEn (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Jun 2021 06:04:43 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:7088 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbhFCKEm (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 06:04:42 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4FwhGM2hmkzYqN9;
-        Thu,  3 Jun 2021 18:00:11 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 18:02:44 +0800
-Received: from thunder-town.china.huawei.com (10.174.177.72) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Thu, 3 Jun 2021 18:02:43 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
+        id S229629AbhFCLFB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Jun 2021 07:05:01 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:54442 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229665AbhFCLFB (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 07:05:01 -0400
+Received: from fsav105.sakura.ne.jp (fsav105.sakura.ne.jp [27.133.134.232])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 153B2uuO040347;
+        Thu, 3 Jun 2021 20:02:56 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav105.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav105.sakura.ne.jp);
+ Thu, 03 Jun 2021 20:02:56 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav105.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 153B2uKZ040343
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 3 Jun 2021 20:02:56 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] can: bcm/raw/isotp: use per module netdevice notifier
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-can <linux-can@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] can: at91_can: use DEVICE_ATTR_RW() helper macro
-Date:   Thu, 3 Jun 2021 18:02:33 +0800
-Message-ID: <20210603100233.11877-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        linux-can@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org
+References: <20210602151733.3630-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <265c1129-96f1-7bb1-1d01-b2b8cc5b1a42@hartkopp.net>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <51ed3352-b5b0-03a1-ec25-faa368adcc46@i-love.sakura.ne.jp>
+Date:   Thu, 3 Jun 2021 20:02:52 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.72]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+In-Reply-To: <265c1129-96f1-7bb1-1d01-b2b8cc5b1a42@hartkopp.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Use DEVICE_ATTR_RW() helper macro instead of plain DEVICE_ATTR(), which
-makes the code a bit shorter and easier to read.
+On 2021/06/03 15:09, Oliver Hartkopp wrote:
+> so I wonder why only the *registering* of a netdev notifier can cause a 'hang' in that way?!?
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
----
- drivers/net/can/at91_can.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Not only the *registering* of a netdev notifier causes a 'hang' in that way.
+For example,
 
-diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index 04d0bb3ffe89661..ca736b26e218ca4 100644
---- a/drivers/net/can/at91_can.c
-+++ b/drivers/net/can/at91_can.c
-@@ -1176,8 +1176,8 @@ static const struct net_device_ops at91_netdev_ops = {
- 	.ndo_change_mtu = can_change_mtu,
- };
- 
--static ssize_t at91_sysfs_show_mb0_id(struct device *dev,
--		struct device_attribute *attr, char *buf)
-+static ssize_t mb0_id_show(struct device *dev,
-+			   struct device_attribute *attr, char *buf)
- {
- 	struct at91_priv *priv = netdev_priv(to_net_dev(dev));
- 
-@@ -1187,8 +1187,8 @@ static ssize_t at91_sysfs_show_mb0_id(struct device *dev,
- 		return snprintf(buf, PAGE_SIZE, "0x%03x\n", priv->mb0_id);
- }
- 
--static ssize_t at91_sysfs_set_mb0_id(struct device *dev,
--		struct device_attribute *attr, const char *buf, size_t count)
-+static ssize_t mb0_id_store(struct device *dev,
-+			    struct device_attribute *attr, const char *buf, size_t count)
- {
- 	struct net_device *ndev = to_net_dev(dev);
- 	struct at91_priv *priv = netdev_priv(ndev);
-@@ -1222,7 +1222,7 @@ static ssize_t at91_sysfs_set_mb0_id(struct device *dev,
- 	return ret;
- }
- 
--static DEVICE_ATTR(mb0_id, 0644, at91_sysfs_show_mb0_id, at91_sysfs_set_mb0_id);
-+static DEVICE_ATTR_RW(mb0_id);
- 
- static struct attribute *at91_sysfs_attrs[] = {
- 	&dev_attr_mb0_id.attr,
--- 
-2.26.0.106.g9fadedd
+> My assumption would be that a wrong type of locking mechanism is used in
+> register_netdevice_notifier() which you already tried to address here:
+> 
+> https://syzkaller.appspot.com/bug?id=391b9498827788b3cc6830226d4ff5be87107c30
 
+the result of
+
+> -> https://syzkaller.appspot.com/text?tag=Patch&x=106ad8dbd00000
+
+is https://syzkaller.appspot.com/text?tag=CrashReport&x=1705d92fd00000 which
+says that the *unregistering* of a netdev notifier caused a 'hang'. In other
+words, making register_netdevice_notifier() killable is not sufficient, and
+it is impossible to make unregister_netdevice_notifier() killable.
+
+Moreover, there are modules (e.g. CAN driver's raw/bcm/isotp modules) which are
+not prepared for register_netdevice_notifier() failure. Therefore, I made this
+patch which did not cause a 'hang' even if "many things" (see the next paragraph)
+are run concurrently.
+
+> The removal of one to three data structures in CAN is not time consuming.
+
+Yes, it would be true that CAN socket's operations alone are not time consuming.
+But since syzkaller is a fuzzer, it concurrently runs many things (including
+non-CAN sockets operations and various networking devices), and cleanup_net()
+for some complicated combinations will be time consuming.
+
+> IMHO we need to fix some locking semantics (with pernet_ops_rwsem??) here.
+
+Assuming that lockdep is correctly detecting possibility of deadlock, no lockdep
+warning indicates that there is no locking semantics error here. In other words,
+taking locks (e.g. pernet_ops_rwsem, rtnl_mutex) that are shared by many protocols
+causes fast protocols to be slowed down to the possible slowest operations.
+
+As explained at
+https://lkml.kernel.org/r/CACT4Y+Y8KmaoEj0L8g=wX4owS38mjNLVMMLsjyoN8DU9n=FrrQ@mail.gmail.com ,
+unbounded asynchronous queuing is always a recipe for disaster. cleanup_net() is
+called from a WQ context, and does time consuming operations with pernet_ops_rwsem
+held for read. Therefore, reducing frequency of holding pernet_ops_rwsem for write
+(because CAN driver's raw/bcm/isotp modules are calling {,un}register_netdevice_notifier()
+on every socket) helps cleanup_net() to make more progress; a low-hanging mitigation
+for this problem.
 
