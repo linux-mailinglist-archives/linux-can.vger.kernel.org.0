@@ -2,97 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4CC39A315
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 16:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D97A39A43E
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 17:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbhFCO0o (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Jun 2021 10:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbhFCO0o (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 10:26:44 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884F9C06174A
-        for <linux-can@vger.kernel.org>; Thu,  3 Jun 2021 07:24:59 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id i67so6072090qkc.4
-        for <linux-can@vger.kernel.org>; Thu, 03 Jun 2021 07:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wP59I0JjAAzAi5Kr7DDx4sIfqPNVECDcPZLJXqMtNWs=;
-        b=WZdb6vB2UZNJg81cUcf5d1BfPtT35vbiO3ut4/qqkVqMIyCG0770eWDcnHf+gio2WS
-         hMYkwBs4i6NvrF7jgxIVpCco5GTrd1MqwnPhUL7ODrdUxoK4IsMoyFQA8CcIyqVtw+XM
-         6BsW6eTLASGGkKzrQqv0MAMtXmd2i8i7G6lU2Ml7e80X8cS9Clg5+ITOvqVA1NcrBfkS
-         VpNYUwGBm0PQnAaGOmYLBO5rsd8ix2ldvHzhYTu+dXvqX7yNTe4rnerb/4lZMyQfZJYS
-         MHtZESGr6hve7LhJY+ZEWcW3EWGeCz1wnanG7x4Mxkx45Eo4fdJvcHtmfJ7YtHSnS5IZ
-         YcnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wP59I0JjAAzAi5Kr7DDx4sIfqPNVECDcPZLJXqMtNWs=;
-        b=I8A3jB5RkBHeNOT08H4LJol9lKSy9udjDyv4GZ+Rs5jncrmgS537E6N1W2ejL8oBTg
-         ySAPcoVD0xG2tmyNp8m5qhrTuw1kJKUCWSFFLgKtg10jz98OtLYRParvzcnShs3UU+1C
-         BjwEl0bGwz+9oI/sgRQRoCWucARkyfd2eWdvBw9a6p5elE3WEfhKdYk7VCGfmZ/PrL1t
-         CfiNcud5smZwIbe/ivxcfOC/Rz+Oa2Bgkey4Atft0XkfTO7jO4q2tHcQGKBn4QQRVFeC
-         IohKYG2J8sjxYsoj5sFj1mCDZ7V/nOiBqv/cxLxBOLL6t+fYcuwvg7MEer0RmJ6zxqS+
-         t7Fg==
-X-Gm-Message-State: AOAM5310+1D42G1hNDQRPQlBfo26fzAwcJSRAJ80OtLjN5i5Fvwzv/9i
-        rSTPP/qwsLTR38wdT/AsOBk=
-X-Google-Smtp-Source: ABdhPJxVYmky+OsFYaEclhdz5XB79xZXqmfV1F3wVmNGBEakgHvnIM20265doNn8nRZMcU07ZFqYsQ==
-X-Received: by 2002:a05:620a:675:: with SMTP id a21mr32088907qkh.333.1622730298327;
-        Thu, 03 Jun 2021 07:24:58 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:485:504a:1fe8:47aa:9548:352c])
-        by smtp.gmail.com with ESMTPSA id c6sm2038332qke.83.2021.06.03.07.24.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Jun 2021 07:24:57 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     mkl@pengutronix.de
-Cc:     linux-can@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] can: mcp251xfd: Align the table of comments
-Date:   Thu,  3 Jun 2021 11:24:50 -0300
-Message-Id: <20210603142450.2221703-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S232097AbhFCPR5 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Jun 2021 11:17:57 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:28347 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231826AbhFCPR5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 11:17:57 -0400
+Received: from tomoyo.flets-east.jp ([114.149.34.46])
+        by mwinf5d75 with ME
+        id CfFu2500H0zjR6y03fG8Pq; Thu, 03 Jun 2021 17:16:10 +0200
+X-ME-Helo: tomoyo.flets-east.jp
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 03 Jun 2021 17:16:10 +0200
+X-ME-IP: 114.149.34.46
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v2 0/2] add the netlink interface for CAN-FD Transmitter Delay Compensation (TDC)
+Date:   Fri,  4 Jun 2021 00:15:48 +0900
+Message-Id: <20210603151550.140727-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Align the table of comments for better readability.
+This series adds a netlink interface for the TDC parameters using
+netlink nested attributes.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+The first patch remove a redundant check. The second patch is the real
+thing: the TDC netlink interface.
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 47c3f408a799..db07dd112603 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -2957,14 +2957,14 @@ static int mcp251xfd_probe(struct spi_device *spi)
- 	 *
- 	 * Known good combinations are:
- 	 *
--	 * MCP	ext-clk	SoC			SPI			SPI-clk		max-clk	parent-clk	config
-+	 * MCP		ext-clk SoC			SPI			SPI-clk	max-clk	parent-clk	config
- 	 *
--	 * 2518	20 MHz	allwinner,sun8i-h3	allwinner,sun8i-h3-spi	 8333333 Hz	 83.33%	600000000 Hz	assigned-clocks = <&ccu CLK_SPIx>
--	 * 2518	40 MHz	allwinner,sun8i-h3	allwinner,sun8i-h3-spi	16666667 Hz	 83.33%	600000000 Hz	assigned-clocks = <&ccu CLK_SPIx>
--	 * 2517	40 MHz	atmel,sama5d27		atmel,at91rm9200-spi	16400000 Hz	 82.00%	 82000000 Hz	default
--	 * 2518	40 MHz	atmel,sama5d27		atmel,at91rm9200-spi	16400000 Hz	 82.00%	 82000000 Hz	default
--	 * 2518	40 MHz	fsl,imx6dl		fsl,imx51-ecspi		15000000 Hz	 75.00%	 30000000 Hz	default
--	 * 2517	20 MHz	fsl,imx8mm		fsl,imx51-ecspi		 8333333 Hz	 83.33%	 16666667 Hz	assigned-clocks = <&clk IMX8MM_CLK_ECSPIx_ROOT>
-+	 * 2518	20 MHz	allwinner,sun8i-h3	allwinner,sun8i-h3-spi	8333333 Hz	83.33%		600000000 Hz	assigned-clocks = <&ccu CLK_SPIx>
-+	 * 2518	40 MHz	allwinner,sun8i-h3	allwinner,sun8i-h3-spi	16666667 Hz	83.33%		600000000 Hz	assigned-clocks = <&ccu CLK_SPIx>
-+	 * 2517	40 MHz	atmel,sama5d27		atmel,at91rm9200-spi	16400000 Hz	82.00%		82000000 Hz	default
-+	 * 2518	40 MHz	atmel,sama5d27		atmel,at91rm9200-spi	16400000 Hz	82.00%		82000000 Hz	default
-+	 * 2518	40 MHz	fsl,imx6dl		fsl,imx51-ecspi	15000000 Hz	75.00%		30000000 Hz	default
-+	 * 2517	20 MHz	fsl,imx8mm		fsl,imx51-ecspi	8333333 Hz	83.33%		16666667 Hz	assigned-clocks = <&clk IMX8MM_CLK_ECSPIx_ROOT>
- 	 *
- 	 */
- 	priv->spi_max_speed_hz_orig = spi->max_speed_hz;
+In March, I introduced the Transmitter Delay Compensation (TDC) to the
+kernel though two patches:
+  - commit 289ea9e4ae59 ("can: add new CAN FD bittiming parameters:
+    Transmitter Delay Compensation (TDC)")
+  - commit c25cc7993243 ("can: bittiming: add calculation for CAN FD
+    Transmitter Delay Compensation (TDC)")
+
+The netlink interface was missing from this series because the initial
+patch needed rework in order to make it more flexible for future
+changes.
+
+At that time, Marc suggested to take inspiration from the recently
+released ethtool-netlink interface.
+Ref: https://lore.kernel.org/linux-can/20210407081557.m3sotnepbgasarri@pengutronix.de/
+
+ethtool uses nested attributes (c.f. NLA_NESTED type in validation
+policy). A bit of trivia: the NLA_NESTED type was introduced in
+version 2.6.15 of the kernel and thus actually predates Socket CAN.
+Ref: commit bfa83a9e03cf ("[NETLINK]: Type-safe netlink messages/attributes interface")
+
+I sent a v1 as an RFC which got zero comments, so I am assuming that
+the overall design is OK :)
+
+Now, I feel confident enough to drop the RFC tag. Thanks for your review!
+
+For those who would like to test it, please refer to this iproute2 patch:
+https://lore.kernel.org/linux-can/20210507102819.1932386-1-mailhol.vincent@wanadoo.fr/t/#u
+
+** Changelog **
+The nested structure (IFLAC_CAN_TDC*) remains unchanged since RFC v1.
+The v2 fixes several issue in can_tdc_get_size() and
+can_tdc_fill_info(). Namely: can_tdc_get_size() returned an incorrect
+size if TDC was not implemented and can_tdc_fill_info() did not
+include a fail path with nla_nest_cancel().
+
+
+Vincent Mailhol (2):
+  can: netlink: remove redundant check in can_validate()
+  can: netlink: add interface for CAN-FD Transmitter Delay Compensation
+    (TDC)
+
+ drivers/net/can/dev/netlink.c    | 140 ++++++++++++++++++++++++++++++-
+ include/uapi/linux/can/netlink.h |  26 +++++-
+ 2 files changed, 160 insertions(+), 6 deletions(-)
+
 -- 
-2.25.1
+2.31.1
 
