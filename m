@@ -2,73 +2,82 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 048F839AA20
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 20:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8269239AB4A
+	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 22:00:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhFCShf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Jun 2021 14:37:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51706 "EHLO mail.kernel.org"
+        id S230105AbhFCUC1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Jun 2021 16:02:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37486 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhFCShf (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 3 Jun 2021 14:37:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11DE9613F3;
-        Thu,  3 Jun 2021 18:35:49 +0000 (UTC)
+        id S230078AbhFCUC1 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 3 Jun 2021 16:02:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E226140A;
+        Thu,  3 Jun 2021 20:00:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622745350;
-        bh=ff8c2MjuINj4Z68DxBy172+R76+T6ILfVjdeXXZ2NaM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t8J2VpCStOku7beQqJjqRzVTE8AevnBQGPNheec5ehM+Y0n/6juzl7mty2DeEFclm
-         LXJjpFIYVPkYSNY4nd1K2CvufA6ehDSHxdWZIBMsm7VfLnB/OlNYCOq00mnX2pjUMq
-         RjDPyJNqyAsbVXSSoq6jhcNH3QI1BYBI8Ea/lNPCUS4DCn+/F5CyuS62GoC4ufP7AE
-         uA0DdRMLafHql1E2iLZbPHi1F2LFLYOjIXuhLNajCH66vDtsf3Y9SAtNYqCGG/ufKL
-         fL9DzXsAq55rCTMcls+6AC+rhT2aGu1UwnS4DVI5iPAhpaZQLW0bVG47wiCSHiYiaq
-         59ar0AirWhTew==
-Date:   Thu, 3 Jun 2021 11:35:48 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
-        <weiwan@google.com>, <cong.wang@bytedance.com>,
-        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
-        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
-        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
-        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
-        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
-        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
-        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
-        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
-        <alobakin@pm.me>
-Subject: Re: [PATCH net-next v2 0/3] Some optimization for lockless qdisc
-Message-ID: <20210603113548.2d71b4d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
-References: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
+        s=k20201202; t=1622750441;
+        bh=bL91cu6ogtTyGxRPIZri6Ql+FCiu+SF6QSQHbM1zYpU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Tr2eRL2ruuI3sDRg5RflhkOkyV9mFTujf1VRSwWuWzGKIhZvbVCaAxYpgxsOn967z
+         NSAD7IYMIoOO8cgexRa8htj5TMa5JoT3Wkv0szF26PJNQMzsXvJWAGYrsny6UgxWOB
+         0DSG8won1tshR1VxRhArAz/SO25OQjYrnL5dyQS242aahuCLuEtgIYx6YTOuGDajz0
+         VHL9LXHRxKII0rPps4b8g2l1RYIZFPwbgL/Xx11gmnvOpzM53mf3Uy04x4VbkhOV+Z
+         glYdnkCOfixzeKFSHUpB7CAwyKWxHMoZF81Ql2bUy103FcIKpKZNrY/s3wN0K43mHs
+         i4TDGELShuacg==
+Received: by mail-ej1-f51.google.com with SMTP id a11so10323612ejf.3;
+        Thu, 03 Jun 2021 13:00:41 -0700 (PDT)
+X-Gm-Message-State: AOAM532vyxjdQayA5RHN/BZ3eSM5VLUqqhLnZp8Z0LjUv6v41+SWwB5I
+        gzz1Ys23MifmIGCwdrRsLZQ4Ow6jF77dUPl5Hg==
+X-Google-Smtp-Source: ABdhPJw+IpYqfuukI2sJnNmANmuAWrENFVxO3xUzzlu0fu/6+LhA82SGF/btdHtPoNYDNnkITP5uV0NhDBINu7IILPI=
+X-Received: by 2002:a17:906:1d0a:: with SMTP id n10mr868094ejh.341.1622750440433;
+ Thu, 03 Jun 2021 13:00:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <cover.1622648507.git.mchehab+huawei@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 3 Jun 2021 15:00:29 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
+Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
+Subject: Re: [PATCH 00/12] Fix broken docs references at next-20210602
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Keerthy <j-keerthy@ti.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Thu, 3 Jun 2021 09:47:57 +0800 Yunsheng Lin wrote:
-> Patch 1: remove unnecessary seqcount operation.
-> Patch 2: implement TCQ_F_CAN_BYPASS.
-> Patch 3: remove qdisc->empty.
-> 
-> Performance data for pktgen in queue_xmit mode + dummy netdev
-> with pfifo_fast:
-> 
->  threads    unpatched           patched             delta
->     1       2.60Mpps            3.21Mpps             +23%
->     2       3.84Mpps            5.56Mpps             +44%
->     4       5.52Mpps            5.58Mpps             +1%
->     8       2.77Mpps            2.76Mpps             -0.3%
->    16       2.24Mpps            2.23Mpps             +0.4%
-> 
-> Performance for IP forward testing: 1.05Mpps increases to
-> 1.16Mpps, about 10% improvement.
+On Wed, Jun 2, 2021 at 10:43 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> There are some broken references at today's linux-next with regards
+> to files inside Documentation/.
+>
+> Address them.
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+I've finally added this to my automated checks, so now anyone that
+breaks this on binding schema patches should get notified (with the
+exception of patches not Cc'ed to the DT list).
+
+Rob
