@@ -2,119 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7384939AB8F
-	for <lists+linux-can@lfdr.de>; Thu,  3 Jun 2021 22:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DF739AF09
+	for <lists+linux-can@lfdr.de>; Fri,  4 Jun 2021 02:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbhFCUKv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 3 Jun 2021 16:10:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39754 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230083AbhFCUKu (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 3 Jun 2021 16:10:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8EBE8611C9;
-        Thu,  3 Jun 2021 20:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622750945;
-        bh=vouxc5KMLEMa3QrqPqXja2Z4KHWtjXXf/sVDLuzgUZE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UYeXhRQkhsFG2wW4pMFx1ENgilnnfZtGlHetX3wkENSTPOwGglvuReS2frt1cjTtl
-         JLKCPkpKMa+NFqpLVPYTtBPL0W7QDpwuraSUhXTED5ruFCTZ9l/ZX9j2f0fTHd72HX
-         kez6g1QVBsDVie8+Ol70lWcbLUVi1CXU1PW0xR/2pCdlEh0uFsIt5t1odTPh3MK5Rr
-         a5Km3PlwQZ/OU5n1g2kWDQQWpus4Z5O11Vo1RXQubZjb3F/M7e1Zij82vHdp1Vv0Lw
-         PNnhqdSX0wMy7B0BUu9GlN4yLxGGR/WG4yMmJYO7tsywLyQGMS7Po49eXeaSRMo1qA
-         +IfEKzjVtpXVQ==
-Date:   Thu, 3 Jun 2021 22:09:02 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        id S229685AbhFDAZJ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 3 Jun 2021 20:25:09 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:49553 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229576AbhFDAZJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 3 Jun 2021 20:25:09 -0400
+Received: from fsav402.sakura.ne.jp (fsav402.sakura.ne.jp [133.242.250.101])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1540N0ME072055;
+        Fri, 4 Jun 2021 09:23:00 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav402.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav402.sakura.ne.jp);
+ Fri, 04 Jun 2021 09:23:00 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav402.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1540MrED071967
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 4 Jun 2021 09:23:00 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] can: bcm/raw/isotp: use per module netdevice notifier
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+To:     Kirill Tkhai <ktkhai@virtuozzo.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 04/12] dt-bindings: clock: update ti,sci-clk.yaml
- references
-Message-ID: <YLk23rrWN9ze+zru@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jakub Kicinski <kuba@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Rob Herring <robh+dt@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfgang Grandegger <wg@grandegger.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, netdev@vger.kernel.org
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
- <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+        linux-can@vger.kernel.org
+References: <20210602151733.3630-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <265c1129-96f1-7bb1-1d01-b2b8cc5b1a42@hartkopp.net>
+ <51ed3352-b5b0-03a1-ec25-faa368adcc46@i-love.sakura.ne.jp>
+Message-ID: <5e4693cf-4691-e7da-9a04-3e70cc449bf5@i-love.sakura.ne.jp>
+Date:   Fri, 4 Jun 2021 09:22:52 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HwDyggedf9K45ZIg"
-Content-Disposition: inline
-In-Reply-To: <0fae687366c09dfb510425b3c88316a727b27d6d.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <51ed3352-b5b0-03a1-ec25-faa368adcc46@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Adding Kirill for commit 328fbe747ad4622f ("net: Close race between
+{un, }register_netdevice_notifier() and setup_net()/cleanup_net()").
 
---HwDyggedf9K45ZIg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm proposing this patch because calling {,un}register_netdevice_notifier()
+on every socket {initialization,destruction} is killing ability to
+concurrently run cleanup_net() enough for khungtaskd to complain.
 
-On Wed, Jun 02, 2021 at 05:43:10PM +0200, Mauro Carvalho Chehab wrote:
-> Changeset a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json s=
-chema")
-> renamed: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
-> to: Documentation/devicetree/bindings/clock/ti,sci-clk.yaml.
->=20
-> Update the cross-references accordingly.
->=20
-> Fixes: a7dbfa6f3877 ("dt-bindings: clock: Convert ti,sci-clk to json sche=
-ma")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+You are referring something with raw_init() in the above commit.
+What is your concern? (I'm asking you in case this patch breaks
+something you mentioned.)
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+On 2021/06/03 20:02, Tetsuo Handa wrote:
+> On 2021/06/03 15:09, Oliver Hartkopp wrote:
+>> so I wonder why only the *registering* of a netdev notifier can cause a 'hang' in that way?!?
+> 
+> Not only the *registering* of a netdev notifier causes a 'hang' in that way.
+> For example,
+> 
+>> My assumption would be that a wrong type of locking mechanism is used in
+>> register_netdevice_notifier() which you already tried to address here:
+>>
+>> https://syzkaller.appspot.com/bug?id=391b9498827788b3cc6830226d4ff5be87107c30
+> 
+> the result of
+> 
+>> -> https://syzkaller.appspot.com/text?tag=Patch&x=106ad8dbd00000
+> 
+> is https://syzkaller.appspot.com/text?tag=CrashReport&x=1705d92fd00000 which
+> says that the *unregistering* of a netdev notifier caused a 'hang'. In other
+> words, making register_netdevice_notifier() killable is not sufficient, and
+> it is impossible to make unregister_netdevice_notifier() killable.
+> 
+> Moreover, there are modules (e.g. CAN driver's raw/bcm/isotp modules) which are
+> not prepared for register_netdevice_notifier() failure. Therefore, I made this
+> patch which did not cause a 'hang' even if "many things" (see the next paragraph)
+> are run concurrently.
+> 
+>> The removal of one to three data structures in CAN is not time consuming.
+> 
+> Yes, it would be true that CAN socket's operations alone are not time consuming.
+> But since syzkaller is a fuzzer, it concurrently runs many things (including
+> non-CAN sockets operations and various networking devices), and cleanup_net()
+> for some complicated combinations will be time consuming.
+> 
+>> IMHO we need to fix some locking semantics (with pernet_ops_rwsem??) here.
+> 
+> Assuming that lockdep is correctly detecting possibility of deadlock, no lockdep
+> warning indicates that there is no locking semantics error here. In other words,
+> taking locks (e.g. pernet_ops_rwsem, rtnl_mutex) that are shared by many protocols
+> causes fast protocols to be slowed down to the possible slowest operations.
+> 
+> As explained at
+> https://lkml.kernel.org/r/CACT4Y+Y8KmaoEj0L8g=wX4owS38mjNLVMMLsjyoN8DU9n=FrrQ@mail.gmail.com ,
+> unbounded asynchronous queuing is always a recipe for disaster. cleanup_net() is
+> called from a WQ context, and does time consuming operations with pernet_ops_rwsem
+> held for read. Therefore, reducing frequency of holding pernet_ops_rwsem for write
+> (because CAN driver's raw/bcm/isotp modules are calling {,un}register_netdevice_notifier()
+> on every socket) helps cleanup_net() to make more progress; a low-hanging mitigation
+> for this problem.
+> 
 
-
---HwDyggedf9K45ZIg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC5Nt4ACgkQFA3kzBSg
-KbYA5BAAmxrTszpFm+SFwkhyzevlAeZO+O6tTPRp2hAT0FogM2Us0fUzfwLEFgWP
-dR+9Lw8BinKXs9tNQwP3RGM6/azDSnS8tL5a1l0aaI52mxwwu0zGKPZmCvvMizT2
-AQX51DP3llTCDdTc85P1C7TYhRyhYy1GWPJrfhAxfUBS+maMcJJ3VX7rfnmQlAWG
-6FOy1eZaCP2d2DxVZNlMi0TXsYuudltp75a0T7k8wesRQv+BEEE4MpyfFwDquX/N
-3BtPLsuwSDnSQ1hL3gEPEbrm++yG+3g0PHdhWxdrDeRV/eRW8EM4rjJ0xHutgimp
-LyQ0SnSdM6/EMF0h4jjQ2CPLGedDPpKkBdXsAH0yU8GqD2P5mijVUJHZqqyCKdz4
-8elfRdDzaLOrwvZrqTQYqGpeup/953O/m8mbKfy0zhkc2X0Ceqmqb2iKDzvemODe
-OpVnrneL06Fo3k9Mi0c828teZf7T4kZPBFI896XMP8MYeT7ghBaOrRBt6mIaefTN
-dCZGUE9vm2SbKqBOJ88QHbyFwDwHDj7UU4O9uhZH77nUj3kzQC+yfp0xLhkkT3lE
-ME9gAuT18XacriGNwHQVpMUPTvMAcLUWeHqfYIvPVd/HQRNMwV/IB2paBkGThO7/
-gzP8cd9cYoh9D2thXE0J/EnXq+MPeo6KVP9Uirz9eSo6jxKoggM=
-=2IA3
------END PGP SIGNATURE-----
-
---HwDyggedf9K45ZIg--
