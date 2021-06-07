@@ -2,123 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9160C39E019
-	for <lists+linux-can@lfdr.de>; Mon,  7 Jun 2021 17:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B60739E431
+	for <lists+linux-can@lfdr.de>; Mon,  7 Jun 2021 18:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbhFGPTy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 7 Jun 2021 11:19:54 -0400
-Received: from smtp1-g21.free.fr ([212.27.42.1]:46884 "EHLO smtp1-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230212AbhFGPTy (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 7 Jun 2021 11:19:54 -0400
-Received: from linux-dev.peak.localnet (unknown [185.109.201.203])
-        (Authenticated sender: stephane.grosjean@free.fr)
-        by smtp1-g21.free.fr (Postfix) with ESMTPSA id 901E3B0053D;
-        Mon,  7 Jun 2021 17:17:58 +0200 (CEST)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH] can/peak_pci: Add name and FW version of the card in kernel buffer
-Date:   Mon,  7 Jun 2021 17:17:20 +0200
-Message-Id: <20210607151720.13571-1-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.19.1
+        id S233877AbhFGQdB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 7 Jun 2021 12:33:01 -0400
+Received: from mail-lf1-f46.google.com ([209.85.167.46]:42730 "EHLO
+        mail-lf1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232490AbhFGQa5 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 7 Jun 2021 12:30:57 -0400
+Received: by mail-lf1-f46.google.com with SMTP id a2so27266092lfc.9
+        for <linux-can@vger.kernel.org>; Mon, 07 Jun 2021 09:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZJajTiG1pO7FKqF5OSKd0lfapkYFLpcjfATFaOyP3tc=;
+        b=RuaepdpiL9h+sukLaiNq6Z9bVLynH33YyAEDA3Q5CSHFSBqWZCxtho/jTv7X9RWq6i
+         ZaViWpBRgNRqjEi021UuOnJCPMjfLomMTRqGy3J0Pwht+dV+vPy/7cGP+WlIlboJJgTG
+         /60d1GDZK7kxghcmGoL/p3+5JBX0CAjIYdH6VUOhVGFhE0ms4exUEQ2T702JIX53DN2U
+         eOwaGWUeATJu/GRvuEhQmbOmzj/n1DnSn8Dne35990Kb/mbtbW+zUkhVeFPKRzdc46qj
+         UrvUoZxhGxAnPLgN6y8r9v9D5Dqu5/T07U/JJN16affdN7dE+WJ30Ilq+kDckXZsYIGK
+         fodQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZJajTiG1pO7FKqF5OSKd0lfapkYFLpcjfATFaOyP3tc=;
+        b=U0BSHhACRfXRZaB2UmyydmGXdXv8Ji9Fqo4UJqm0ceKUCbj/8oKAajp/CQdsBcEhXh
+         uOanCKclGE6JkrFJ7bSRA9ANM32C7LrzF+JJjwCPmdm9E1Lgy/duygnBk75SX3QidhNo
+         xbMcR1JwY5kJTAlyRAvpT0XQpuN/B7G5kWMMITYq1evksg/IPmQ1WH4Jf7B8Fy7S4JDw
+         EuN7ITd3qy6B0mWyWJyTB9zdchtBn5qtVmuuYBSlpPpgFTBe3pXWk2kU4ys0T+7aBJ7b
+         3FgGIhKR0f+U3eTCO0w5Fl5/IHPuNvn2CfNABEp/O6PI8AJU9k7XMkVN5VfD86QDbh2f
+         sOTQ==
+X-Gm-Message-State: AOAM530kppXUCsRAFndRgshNqzXnHG6iyhiY4sI0fbSNljibGA7pfYqP
+        kU4FA2lDyAdHDZO9LDAeLLtx2CBt88NuQJ/WXGvSvn7kj/A=
+X-Google-Smtp-Source: ABdhPJzY5SkaELhywsGzFtP1nMzdyEiKuggXQjTZBNmL4GalthVdOkY8J1l9jCzsMTYYOI7f8Ir+U+EHf1PjpNyZH1Y=
+X-Received: by 2002:ac2:51a9:: with SMTP id f9mr12030788lfk.223.1623083284336;
+ Mon, 07 Jun 2021 09:28:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210603142450.2221703-1-festevam@gmail.com> <20210607150108.r5idhfnaxdccaduc@pengutronix.de>
+In-Reply-To: <20210607150108.r5idhfnaxdccaduc@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 7 Jun 2021 13:27:53 -0300
+Message-ID: <CAOMZO5DtFXBNrTPQ=JT=e3u_uthd2sbHv6sf9Zp=aTr5KGobyQ@mail.gmail.com>
+Subject: Re: [PATCH] can: mcp251xfd: Align the table of comments
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds name and (possibly) firmware version information to the
-kernel about the detected PEAK-System CAN - PCI/PCIe interface card.
+Hi Marc,
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/sja1000/peak_pci.c | 50 ++++++++++++++++++++++++------
- 1 file changed, 40 insertions(+), 10 deletions(-)
+On Mon, Jun 7, 2021 at 12:01 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 03.06.2021 11:24:50, Fabio Estevam wrote:
+> > Align the table of comments for better readability.
+>
+> My editor uses 1 tab = 8 spaces and it looks correct without the patch.
+> Have a look at:
+>
+> | tps://elixir.bootlin.com/linux/v5.12/source/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c#L2915
 
-diff --git a/drivers/net/can/sja1000/peak_pci.c b/drivers/net/can/sja1000/peak_pci.c
-index 84eac8cb8686..00743f024657 100644
---- a/drivers/net/can/sja1000/peak_pci.c
-+++ b/drivers/net/can/sja1000/peak_pci.c
-@@ -28,6 +28,10 @@ MODULE_LICENSE("GPL v2");
- 
- #define DRV_NAME  "peak_pci"
- 
-+/* FPGA cards FW version registers */
-+#define PEAK_VER_REG1		0x40
-+#define PEAK_VER_REG2		0x44
-+
- struct peak_pciec_card;
- struct peak_pci_chan {
- 	void __iomem *cfg_base;		/* Common for all channels */
-@@ -70,17 +74,27 @@ static const u16 peak_pci_icr_masks[PEAK_PCI_CHAN_MAX] = {
- };
- 
- static const struct pci_device_id peak_pci_tbl[] = {
--	{PEAK_PCI_VENDOR_ID, PEAK_PCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_MPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_MPCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PC_104P_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCI_104E_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_CPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIE_OEM_ID, PCI_ANY_ID, PCI_ANY_ID,},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-PCI",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-PCI Express",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_MPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-miniPCI",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_MPCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-miniPCIe",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PC_104P_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-PC/104-Plus Quad",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PCI_104E_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-PCI/104-Express",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_CPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-cPCI",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PCIE_OEM_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-Chip PCIe",},
- #ifdef CONFIG_CAN_PEAK_PCIEC
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIEC_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIEC34_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PCIEC_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-ExpressCard",},
-+	{PEAK_PCI_VENDOR_ID, PEAK_PCIEC34_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+	.driver_data = (kernel_ulong_t)"PCAN-ExpressCard 34",},
- #endif
- 	{0,}
- };
-@@ -549,6 +563,7 @@ static int peak_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	void __iomem *cfg_base, *reg_base;
- 	u16 sub_sys_id, icr;
- 	int i, err, channels;
-+	char fw_str[14] = "";
- 
- 	err = pci_enable_device(pdev);
- 	if (err)
-@@ -602,6 +617,21 @@ static int peak_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	/* Leave parport mux mode */
- 	writeb(0x04, cfg_base + PITA_MISC + 3);
- 
-+	/* FPGA equipped card if not 0 */
-+	if (readl(cfg_base + PEAK_VER_REG1)) {
-+		/* FPGA card: display version of the running firmware */
-+		u32 fw_ver = readl(cfg_base + PEAK_VER_REG2);
-+
-+		snprintf(fw_str, sizeof(fw_str), " FW v%u.%u.%u",
-+			 (fw_ver >> 12) & 0xf,
-+			 (fw_ver >> 8) & 0xf,
-+			 (fw_ver >> 4) & 0xf);
-+	}
-+
-+	/* Display commercial name (and, eventually, FW version) of the card */
-+	dev_info(&pdev->dev, "%ux CAN %s%s\n",
-+		 channels, (const char *)ent->driver_data, fw_str);
-+
- 	icr = readw(cfg_base + PITA_ICR + 2);
- 
- 	for (i = 0; i < channels; i++) {
--- 
-2.25.1
+Oh, it is on my editor that it appears unaligned then. Sorry for the noise!
 
+Cheers
