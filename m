@@ -2,84 +2,136 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B90C39FAB4
-	for <lists+linux-can@lfdr.de>; Tue,  8 Jun 2021 17:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5453A023E
+	for <lists+linux-can@lfdr.de>; Tue,  8 Jun 2021 21:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbhFHPav (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 8 Jun 2021 11:30:51 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40907 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbhFHPau (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Jun 2021 11:30:50 -0400
-Received: by mail-lf1-f67.google.com with SMTP id w33so32752192lfu.7
-        for <linux-can@vger.kernel.org>; Tue, 08 Jun 2021 08:28:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smile-fr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xT1A2zX5P+BjQO3UCmhtHEAfietKFU3xP0WbjwTvUvw=;
-        b=vR+OAPyLLjc9XC2gQqVP1rKSqq7vY1OckJTh9hXYaULG3lNd6KRpkgZGYav8If/Ls3
-         dckwlz/Fr+wJGR/wWCqB5/nvB7T7je2KuKPwN/PBlpLjmEusg89qRGWOCTHD9eNGhpO5
-         WBIB9uE1nw3bPGGUc8reTTcB7/zbajGjQA8BGX6VhXQJTbGV44y+DtGaZlrHpnS0lhen
-         kQ1ya/tCkZ8jnMvgmZ8WW0WxAVI/VxticEGcV7ZVhUJ0IDtmk7Pl0Fhct3KJJjBiYcPy
-         lwxTF/mTEQNSTCxdjnifPHY4WER0Isxr8sucmolDOloRIWpiWu2Aqm6kKgRQfJi220SZ
-         6+nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=xT1A2zX5P+BjQO3UCmhtHEAfietKFU3xP0WbjwTvUvw=;
-        b=D6U+c2gzywsqqS/rD//f2Te+PseAfafnyLKsbANvLDZZJU7AO2FFP88HOaACL8y4eL
-         ASnpLTLah/2nBM2P7Xeu6sLH1QUJgB3325maFi/t+wPfZC9BttxbNWd/TRZYvBNwAUHB
-         JGt9RAmRHYsgrf1fzEK7T4s2ghgNtMTT3ALzIu5pmjJH/0eJ9Jf8PQsmkz6uXk9yF9yw
-         8RsoISzZa6uquhqO5QtmlO6gEBDho49sYLeRdOZefw8aAc2ZQBqL0Y+DbYrtsILDYGaO
-         xJi3RBa3efhLh01iARS9QYXxL4zd4qoHU9ACEMZnUtIVDBiVfhxX/M2/GWhNamQr62B+
-         05dQ==
-X-Gm-Message-State: AOAM530nrTEpTEErd5AbSfKIskjA/aZNp/mQ3o0IQCvhXQWJZBKLcPU8
-        6ytkunN2OZ9OyXoJjtV5Df2JatEDCyjGL9w64SSRYPiZ5FdCrklL
-X-Google-Smtp-Source: ABdhPJx4qdaRkFPUEDfPXipLkG+RgZPeml2iUZ4OEtS4KhYpYSOq3uADYGgDGtJfwe2lxWfImiJcEMAdZRC6PIa1xSw=
-X-Received: by 2002:ac2:46f5:: with SMTP id q21mr6431796lfo.518.1623166076160;
- Tue, 08 Jun 2021 08:27:56 -0700 (PDT)
+        id S235294AbhFHTCO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 8 Jun 2021 15:02:14 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:28032 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236086AbhFHS7S (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 8 Jun 2021 14:59:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1623178624; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=klyteFDZ+WDekeP6QtMLUV+5wOl5ku5ghoMuNNz7VcWVIutWkSmNdNZptVTGWRNx+3
+    tXs9nDu5q5acpPP4W7M0FkHaC/zFAJB5zt6OBsIpdjX2/oVtO2uFLaQBUW4LN8Kq6upN
+    ClcAhhwAOpiTVjTcgbjckNqpwZHyk0U8FOUeC+vXufSQCF0ESv51D+ZdrqQIhWiiHiYG
+    TyXZylWqmOSxOAtozJ95HyQmCfk58ChqGa7cPyC0+rscQJide6uPsEEwb2ecg/8Qpmir
+    kVqCT03mJNAvteH557iO9GdLe5x4fMGB67lUwgz++/CzSc8GInNKIOUH8KkkRAUMmGeN
+    5OMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1623178624;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=K7m0ttXxl3h7ZX+LO6SZjTt3dphMnFPY1o2TmpIgYSg=;
+    b=BLAo/bTXsnKPzKRQb1W9BKrncoPZXte7581ZtS3tRB8/0lQKY3KA/eppXIEF5URwrH
+    lag1S5fbRtPsz4r1SAmi1yA42/nwZJPAfy4KiXx2+LEDYGRijcTSmL90VLNred1SfwuV
+    8GJ0doK/Yr4WfmoM8caL9IyOuPT3fcBnWM3uJR02aUo22FKKNSlyiIznTdrZYrXiQGDx
+    kaFbYqC0tB4tPXLOVJ/c+vk3yfT9UPAST0Z1wYA6GNrzKiFWS0LWgbAGwtlGnWcUcc7L
+    7hJQsB148pRFAsx/z7Pxx3nl8wNqq3KKmeCHZAe/sDfgKp33IYXic/rv8/B00jcj5NSS
+    cpVw==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1623178624;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=K7m0ttXxl3h7ZX+LO6SZjTt3dphMnFPY1o2TmpIgYSg=;
+    b=aW/ej2qcTignCuQy/xs0XaCDfjpIkseld878Gxt1uaQVIboqk2Hfhn/ePF5CWN+p78
+    6kcji3uLkkfR5DMSWlF6cFTa+ryKEJgLdF4pM5O33lLnQP+32zKvoc3RQgWp9uPo49jp
+    hA6VWYSEzxFxY5p8WK5SjSTaN7bWQ/YTXJICfb332pfe4ExGw+P8mgSthc4B6CoojIHR
+    xkkAYyNRFZ0rFM3fBTmOtvrdaDz+FTLjGdTObREZ2sfm9R4iUs+DUtw3nR2gEDrSD0Bq
+    /FxRKt1jEmLLaxiGUHuoBkn+3wDIQJygX4FJeuY1QWYwzPuTw368bfYq3uH7p7fC9ZBF
+    Jyyw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xozF0="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+    by smtp.strato.de (RZmta 47.27.2 DYNA|AUTH)
+    with ESMTPSA id d075c5x58Iv3HZJ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 8 Jun 2021 20:57:03 +0200 (CEST)
+Subject: Re: [PATCH v2] can: bcm/raw/isotp: use per module netdevice notifier
+To:     Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        linux-can@vger.kernel.org
+References: <20210602151733.3630-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <265c1129-96f1-7bb1-1d01-b2b8cc5b1a42@hartkopp.net>
+ <51ed3352-b5b0-03a1-ec25-faa368adcc46@i-love.sakura.ne.jp>
+ <5e4693cf-4691-e7da-9a04-3e70cc449bf5@i-love.sakura.ne.jp>
+ <e5a53bed-4333-bd99-ca3d-0e25dfb546e5@virtuozzo.com>
+ <54a5f451-05ed-f977-8534-79e7aa2bcc8f@i-love.sakura.ne.jp>
+ <5922ca3a-b7ed-ca19-afeb-2f55233434ae@virtuozzo.com>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <6dc06795-9bfd-9bde-cab7-66dae0920b14@hartkopp.net>
+Date:   Tue, 8 Jun 2021 20:56:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-From:   =?UTF-8?Q?R=C3=A9my_DZIEMIASZKO?= <remy.dziemiaszko@smile.fr>
-Date:   Tue, 8 Jun 2021 17:27:45 +0200
-Message-ID: <CAEWvZg2rvR=9kE_wcm-KtzMvDtnqTEXSLF56zrB=3TgqZbEs1w@mail.gmail.com>
-Subject: How to statically set J1939 addresses and names
-To:     linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5922ca3a-b7ed-ca19-afeb-2f55233434ae@virtuozzo.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
 
-I need that my applications do not care about J1939 node addresses but
-directly bind / connect to socket based on node name only and the
-kernel takes care of the conversion to addresses.
 
-I know this is possible if addresses are dynamically assigned through
-the Address Claiming protocol that is implemented in the kernel. The
-kernel keeps track of its own address and name as well as the
-addresses and names of other ECUs on the network and convert name to
-adresse when requested by the applications.
+On 07.06.21 18:15, Kirill Tkhai wrote:
+> On 05.06.2021 13:26, Tetsuo Handa wrote:
 
-But I don't want to use the Address Claiming protocol. I want to
-statically set all addresses and names.
+>>
+>> Updated patch is shown below.
+>>
+>>
+>>  From 12c61ae3d06889c9bbc414f0230c05dc630f6409 Mon Sep 17 00:00:00 2001
+>> From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+>> Date: Sat, 5 Jun 2021 19:18:21 +0900
+>> Subject: [PATCH v2] can: bcm/raw/isotp: use per module netdevice notifier
+>>
+>> syzbot is reporting hung task at register_netdevice_notifier() [1] and
+>> unregister_netdevice_notifier() [2], for cleanup_net() might perform
+>> time consuming operations while CAN driver's raw/bcm/isotp modules are
+>> calling {register,unregister}_netdevice_notifier() on each socket.
+>>
+>> Change raw/bcm/isotp modules to call register_netdevice_notifier() from
+>> module's __init function and call unregister_netdevice_notifier() from
+>> module's __exit function, as with gw/j1939 modules are doing.
+>>
+>> Link: https://syzkaller.appspot.com/bug?id=391b9498827788b3cc6830226d4ff5be87107c30 [1]
+>> Link: https://syzkaller.appspot.com/bug?id=1724d278c83ca6e6df100a2e320c10d991cf2bce [2]
+>> Reported-by: syzbot <syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com>
+>> Reported-by: syzbot <syzbot+0f1827363a305f74996f@syzkaller.appspotmail.com>
+>> Tested-by: syzbot <syzbot+355f8edb2ff45d5f95fa@syzkaller.appspotmail.com>
+>> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> 
+> Reviewed-by: Kirill Tkhai <ktkhai@virtuozzo.com>
 
-Is there a way to assign J1939 addresses and names to a CAN interface
-without using the J1939 address claim protocol?
+Tested-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-I found in old j1939 kernel documentation something like
-ip addr add dev canX j1939 0xXX
-ip addr add dev canX j1939 name 0xXX
-See https://www.spinics.net/lists/netdev/msg162350.html
+Hello Tetsuo and Kirill,
 
-But in the latest j1939 kernel documentation I do not find any
-reference to these commands.
+thanks for your effort and the review!
 
-Thanks for your help
---
-R=C3=A9my Dziemiaszko
-Tech Manager
-Smile Embedded & Connected Systems
+Indeed I really had problems to get behind the locking but now I got it 
+(hopefully) :-)
+
+At least I can confirm that the original functionality still works for 
+all three affected CAN protocols (bcm/isotp/raw).
+
+Many thanks and best regards,
+Oliver
+
+> 
+>> ---
+>>   net/can/bcm.c   | 59 +++++++++++++++++++++++++++++++++++-----------
+>>   net/can/isotp.c | 61 +++++++++++++++++++++++++++++++++++++-----------
+>>   net/can/raw.c   | 62 ++++++++++++++++++++++++++++++++++++++-----------
+>>   3 files changed, 142 insertions(+), 40 deletions(-)
+>>
