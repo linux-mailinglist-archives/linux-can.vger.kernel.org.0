@@ -2,158 +2,102 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 998243A1F8E
-	for <lists+linux-can@lfdr.de>; Wed,  9 Jun 2021 23:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277E73A25FA
+	for <lists+linux-can@lfdr.de>; Thu, 10 Jun 2021 09:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbhFIWAp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 9 Jun 2021 18:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S230035AbhFJIBx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 10 Jun 2021 04:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbhFIWAp (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 9 Jun 2021 18:00:45 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08BBC061574;
-        Wed,  9 Jun 2021 14:58:37 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id c11so1802475ljd.6;
-        Wed, 09 Jun 2021 14:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=szIH5XmBD8gBJtERHlpOkSnME50sJ1/XS/4Dv/VOoFQ=;
-        b=lDY6B4Msxh/CS2Z2CiZCDh/XeW2xwQAO7cDPG9t33BfHmYHTzXJZsagZgXBe5646Ma
-         sVsWURHsL2PoBdYqaDbLznGgVVEzQuJotk9/GFjKPW/W2SqJ/UuERzdSLEtJd2a1XX6Q
-         zrPjDa0pbZC8kvNf5p7Xajjaj3wcGnxK0ItYUIB0I0QLGJ3RgAgIVlz8s96MQaTAUKmL
-         uXz8i/kn85KER//jkjtVteWNuuj7sowX0efVSa58S9NkHJupoXYEoZ9xFXt8y6VXgb7K
-         GDEezj0wjwTMQHDqjX0uj+xeAuJWx7vEc5825XedITxDQKKzGKt9/9tkP1JXFS3WqIaD
-         KoHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=szIH5XmBD8gBJtERHlpOkSnME50sJ1/XS/4Dv/VOoFQ=;
-        b=CsX4WtSVEREw0n2tzxZWBGtzfPAsgeX+0x5Yqctc6usT43f1JS7yVX5w88GjqtHuy4
-         ZpJm2ybKkJbBYyyxXBQA/d1T4QHWmdXwR6RPGv24GQuiLanSeUSyFB/Hh+IIrZuegfCz
-         piwzQuJM9Ck3SoX99rmlGXhUZoc44Gix/LUGSDaHKWQwyGeHemnydns/qsb3uURM0gvO
-         PKDbuOlGHuwGrlsVg84zsBkVWssVcmcqW+u+cPhp8bu8KzfzkJd4BprT96DtqrMbPioF
-         jmoTxQdh4F6CSKtxPOK536S42kAfbmNaY+J/cKFVUhxkjiYH/E4pqy/3+DWsptfxKkE8
-         zcEg==
-X-Gm-Message-State: AOAM533t/aCwRt0SV6dsaDkWpQU/tWSZDYj2ZiJZkTgdUUJsSZt/PG2M
-        ddQrkmpNSivsEOpM8vMkn8o8HSN3QC8=
-X-Google-Smtp-Source: ABdhPJyuck5vx8roOEOOGjGiMZn6D89QrZAx15YFV9AY56fGOrnVMpyMwdlgbHhm1r1mGKvlaDuJYA==
-X-Received: by 2002:a2e:3c0c:: with SMTP id j12mr1391782lja.131.1623275916242;
-        Wed, 09 Jun 2021 14:58:36 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.224.40])
-        by smtp.gmail.com with ESMTPSA id v26sm117156lfp.0.2021.06.09.14.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 14:58:35 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+57281c762a3922e14dfe@syzkaller.appspotmail.com
-Subject: [PATCH] can: mcba_usb: fix memory leak in mcba_usb
-Date:   Thu, 10 Jun 2021 00:58:33 +0300
-Message-Id: <20210609215833.30393-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S229911AbhFJIBx (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 10 Jun 2021 04:01:53 -0400
+Received: from mail.kernel-space.org (unknown [IPv6:2a01:4f8:c2c:5a84::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33535C061574;
+        Thu, 10 Jun 2021 00:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
+        s=20190913; t=1623311994;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=39V4s+sVCo1oQcEymUPlJD8SGX7KJs2jN7asEPCVDGE=;
+        b=HwL9G6i+wPEFyeYrasxoj8dcHe5ntbufwQnQv/fZapWOklxTVN7Xq0+0u0Zq0Aip2MCB6R
+        35XP8mJpLnuk4jAMn5WFMJNkmA9ngjMCEi3GBACVhx05FwGsax36weLSd/4HUMofpgT0Vm
+        StDVez4JLSqS2xMW/Xp6MMi8/teG+Ls=
+Received: from [192.168.0.2] (host-87-8-57-171.retail.telecomitalia.it [87.8.57.171])
+        by ziongate (OpenSMTPD) with ESMTPSA id 95b3ef80 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 10 Jun 2021 07:59:54 +0000 (UTC)
+Subject: Re: [PATCH 3/5] m68k: m5441x: add flexcan support
+To:     Greg Ungerer <gerg@linux-m68k.org>, wg@grandegger.com,
+        mkl@pengutronix.de
+Cc:     geert@linux-m68k.org, linux-m68k@vger.kernel.org,
+        linux-can@vger.kernel.org, qiangqing.zhang@nxp.com
+References: <20210608204542.983925-1-angelo@kernel-space.org>
+ <20210608204542.983925-3-angelo@kernel-space.org>
+ <30aef0c6-e1fb-63ed-5e46-a2bc14e198a2@linux-m68k.org>
+From:   Angelo Dureghello <angelo@kernel-space.org>
+Message-ID: <835a0684-e4ec-00fa-4682-b9d99d3f1c56@kernel-space.org>
+Date:   Thu, 10 Jun 2021 09:59:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <30aef0c6-e1fb-63ed-5e46-a2bc14e198a2@linux-m68k.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Syzbot reported memory leak in SocketCAN driver
-for Microchip CAN BUS Analyzer Tool. The problem
-was in unfreed usb_coherent.
+Hi Greg,
 
-In mcba_usb_start() 20 coherent buffers are allocated
-and there is nothing, that frees them:
+On 09/06/21 3:24 PM, Greg Ungerer wrote:
+> Hi Angelo,
+> 
+> On 9/6/21 6:45 am, Angelo Dureghello wrote:
+>> Add flexcan support.
+>>
+>> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+>> ---
+>>   arch/m68k/coldfire/device.c       | 31 +++++++++++++++++++++++++++++++
+>>   arch/m68k/coldfire/m5441x.c       |  8 ++++----
+>>   arch/m68k/include/asm/m5441xsim.h | 19 +++++++++++++++++++
+>>   3 files changed, 54 insertions(+), 4 deletions(-)
+>>
 
-	1) In callback function the urb is resubmitted and that's all
-	2) In disconnect function urbs are simply killed, but
-	   URB_FREE_BUFFER is not set (see mcba_usb_start)
-           and this flag cannot be used with coherent buffers.
+>> diff --git a/arch/m68k/coldfire/m5441x.c b/arch/m68k/coldfire/m5441x.c
+>> index 1e5259a652d1..18b152edb69c 100644
+>> --- a/arch/m68k/coldfire/m5441x.c
+>> +++ b/arch/m68k/coldfire/m5441x.c
+>> @@ -18,8 +18,8 @@
+>>   #include <asm/mcfclk.h>
+>>   DEFINE_CLK(0, "flexbus", 2, MCF_CLK);
+>> -DEFINE_CLK(0, "mcfcan.0", 8, MCF_CLK);
+>> -DEFINE_CLK(0, "mcfcan.1", 9, MCF_CLK);
+>> +DEFINE_CLK(0, "flexcan.0", 8, MCF_CLK);
+>> +DEFINE_CLK(0, "flexcan.1", 9, MCF_CLK);
+>>   DEFINE_CLK(0, "imx1-i2c.1", 14, MCF_CLK);
+> 
+> Just a heads up, but this will likely conflict with Arnd's clock 
+> changes, see:
+> 
+>      https://lkml.org/lkml/2021/6/8/774
+> 
 
-Fail log:
-[ 1354.053291][ T8413] mcba_usb 1-1:0.0 can0: device disconnected
-[ 1367.059384][ T8420] kmemleak: 20 new suspected memory leaks (see /sys/kernel/debug/kmem)
+is this a clock naming issue ? The "mcfcan" is actually
+not referenced in any driver so naming it "flexcan"
+shouldn't be an issue.
 
-So, all allocated buffers should be freed with usb_free_coherent()
-explicitly
+Or i should get and enable "mcfcan" clock from the driver ?
 
-NOTE:
-The same pattern for allocating and freeing coherent buffers
-is used in drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+> Regards
+> Greg
+> 
 
-Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
-Reported-and-tested-by: syzbot+57281c762a3922e14dfe@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
- drivers/net/can/usb/mcba_usb.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-index 029e77dfa773..a45865bd7254 100644
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -82,6 +82,8 @@ struct mcba_priv {
- 	bool can_ka_first_pass;
- 	bool can_speed_check;
- 	atomic_t free_ctx_cnt;
-+	void *rxbuf[MCBA_MAX_RX_URBS];
-+	dma_addr_t rxbuf_dma[MCBA_MAX_RX_URBS];
- };
- 
- /* CAN frame */
-@@ -633,6 +635,7 @@ static int mcba_usb_start(struct mcba_priv *priv)
- 	for (i = 0; i < MCBA_MAX_RX_URBS; i++) {
- 		struct urb *urb = NULL;
- 		u8 *buf;
-+		dma_addr_t buf_dma;
- 
- 		/* create a URB, and a buffer for it */
- 		urb = usb_alloc_urb(0, GFP_KERNEL);
-@@ -642,7 +645,7 @@ static int mcba_usb_start(struct mcba_priv *priv)
- 		}
- 
- 		buf = usb_alloc_coherent(priv->udev, MCBA_USB_RX_BUFF_SIZE,
--					 GFP_KERNEL, &urb->transfer_dma);
-+					 GFP_KERNEL, &buf_dma);
- 		if (!buf) {
- 			netdev_err(netdev, "No memory left for USB buffer\n");
- 			usb_free_urb(urb);
-@@ -661,11 +664,14 @@ static int mcba_usb_start(struct mcba_priv *priv)
- 		if (err) {
- 			usb_unanchor_urb(urb);
- 			usb_free_coherent(priv->udev, MCBA_USB_RX_BUFF_SIZE,
--					  buf, urb->transfer_dma);
-+					  buf, buf_dma);
- 			usb_free_urb(urb);
- 			break;
- 		}
- 
-+		priv->rxbuf[i] = buf;
-+		priv->rxbuf_dma[i] = buf_dma;
-+
- 		/* Drop reference, USB core will take care of freeing it */
- 		usb_free_urb(urb);
- 	}
-@@ -708,7 +714,14 @@ static int mcba_usb_open(struct net_device *netdev)
- 
- static void mcba_urb_unlink(struct mcba_priv *priv)
- {
-+	int i;
-+
- 	usb_kill_anchored_urbs(&priv->rx_submitted);
-+
-+	for (i = 0; i < MCBA_MAX_RX_URBS; ++i)
-+		usb_free_coherent(priv->udev, MCBA_USB_RX_BUFF_SIZE,
-+				  priv->rxbuf[i], priv->rxbuf_dma[i]);
-+
- 	usb_kill_anchored_urbs(&priv->tx_submitted);
- }
- 
+Thanks,
+regards,
 -- 
-2.31.1
-
+Angelo Dureghello
++++ kernelspace +++
++E: angelo AT kernel-space.org
++W: www.kernel-space.org
