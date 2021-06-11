@@ -2,111 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F302C3A3C69
-	for <lists+linux-can@lfdr.de>; Fri, 11 Jun 2021 08:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CB93A3C82
+	for <lists+linux-can@lfdr.de>; Fri, 11 Jun 2021 09:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbhFKG7K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Fri, 11 Jun 2021 02:59:10 -0400
-Received: from relay-b03.edpnet.be ([212.71.1.220]:58220 "EHLO
-        relay-b03.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbhFKG7J (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Jun 2021 02:59:09 -0400
-X-ASG-Debug-ID: 1623394629-15c4354db919d030001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (94.105.106.252.dyn.edpnet.net [94.105.106.252]) by relay-b03.edpnet.be with ESMTP id xGY3Oo2Ysux6EFwm; Fri, 11 Jun 2021 08:57:09 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 94.105.106.252.dyn.edpnet.net[94.105.106.252]
-X-Barracuda-Apparent-Source-IP: 94.105.106.252
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id A94E214BBA4C;
-        Fri, 11 Jun 2021 08:57:09 +0200 (CEST)
-Date:   Fri, 11 Jun 2021 08:57:08 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     =?utf-8?B?UsOpbXk=?= DZIEMIASZKO <remy.dziemiaszko@smile.fr>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
-Subject: Re: How to statically set J1939 addresses and names
-Message-ID: <20210611065708.GA2028@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: How to statically set J1939 addresses and names
-Mail-Followup-To: =?utf-8?B?UsOpbXk=?= DZIEMIASZKO <remy.dziemiaszko@smile.fr>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
-References: <CAEWvZg2rvR=9kE_wcm-KtzMvDtnqTEXSLF56zrB=3TgqZbEs1w@mail.gmail.com>
- <20210611041232.6avft7jhzsqcuuwc@pengutronix.de>
+        id S230321AbhFKHFS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 11 Jun 2021 03:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230211AbhFKHFP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Jun 2021 03:05:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67F3C061574
+        for <linux-can@vger.kernel.org>; Fri, 11 Jun 2021 00:03:16 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lrbC5-0007o2-Rg; Fri, 11 Jun 2021 09:03:05 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4d4a:8a80:782c:77df])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 98DF6638E82;
+        Fri, 11 Jun 2021 07:02:58 +0000 (UTC)
+Date:   Fri, 11 Jun 2021 09:02:57 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     13145886936@163.com
+Cc:     robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
+        socketcan@hartkopp.net, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gushengxian <gushengxian@yulong.com>
+Subject: Re: [PATCH net-next] can: j1939: socket: correct a grammatical error
+Message-ID: <20210611070257.xbca7pi6hwjrynsn@pengutronix.de>
+References: <20210611043933.17047-1-13145886936@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lpt7vlyp74ppkexj"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20210611041232.6avft7jhzsqcuuwc@pengutronix.de>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 94.105.106.252.dyn.edpnet.net[94.105.106.252]
-X-Barracuda-Start-Time: 1623394629
-X-Barracuda-URL: https://212.71.1.220:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 2364
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.90564
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <20210611043933.17047-1-13145886936@163.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, 11 Jun 2021 06:12:32 +0200, Oleksij Rempel wrote:
-> Hi Rémy,
-> 
-> On Tue, Jun 08, 2021 at 05:27:45PM +0200, Rémy DZIEMIASZKO wrote:
-> > Hello,
-> > 
-> > I need that my applications do not care about J1939 node addresses but
-> > directly bind / connect to socket based on node name only and the
-> > kernel takes care of the conversion to addresses.
-> > 
-> > I know this is possible if addresses are dynamically assigned through
-> > the Address Claiming protocol that is implemented in the kernel. The
-> > kernel keeps track of its own address and name as well as the
-> > addresses and names of other ECUs on the network and convert name to
-> > adresse when requested by the applications.
-> > 
-> > But I don't want to use the Address Claiming protocol. I want to
-> > statically set all addresses and names.
 
-It is supported to not use Address Claiming.
+--lpt7vlyp74ppkexj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > 
-> > Is there a way to assign J1939 addresses and names to a CAN interface
-> > without using the J1939 address claim protocol?
-> 
-> Current version do not have this functionality.
+On 11.06.2021 12:39:33, 13145886936@163.com wrote:
+> From: gushengxian <gushengxian@yulong.com>
+>=20
+> Correct a grammatical error.
+>=20
+> Signed-off-by: gushengxian <gushengxian@yulong.com>
 
-If you bind() your socket with only sockaddr_can.j1939.sa set to your
-SA, and sockaddr_can.j1939.name to 0, makes your socket use your SA as
-static address.
+Applied can-next/testing.
 
-> 
-> > I found in old j1939 kernel documentation something like
-> > ip addr add dev canX j1939 0xXX
-> > ip addr add dev canX j1939 name 0xXX
-> > See https://www.spinics.net/lists/netdev/msg162350.html
-> > 
-> > But in the latest j1939 kernel documentation I do not find any
-> > reference to these commands.
-> 
-> Yes, it was pre mainline version. For mainlining we reduced UAPI to the
-> minimum to simplify reviewing, mainlining and testing process.
-> 
+regards,
+Marc
 
-The strict addressing was rejected because it felt much heavier than
-what most CAN users were used to. Moving to the current ad-hoc
-implementation allowed to drop quite some kernel code too.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> IF you need this option, you are welcome to send patches :)
-> Or you can contact us or other company to implement it.
-> 
-> Regards,
-> Oleksij
-> -- 
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+--lpt7vlyp74ppkexj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDDCp8ACgkQqclaivrt
+76nxrQf/b0qn6ydgv+6zMROr7Yd7xpct4O1iDdgH2SfflTnQGQ/J21sU9UL71nKM
+c0peAaZDERVcUeWpfitgAQ0CHSe6sEZ+ueB69W3GYL6gW3gJMU02Rexr2BtXir8G
+YI7xsyNS/5ARS7XUMj30XA+Vf5qnyUnjf6kGHC6+dekDhMWIKtHhivp+tHMGZ+rz
+3Enn0pW/ayAatm3+0WY1CRKYM0vfRPzEShMFt0cOb7prxhq2YMU9HSE+fkNuDmoZ
+7Rm2x48XRrMuxSKfaDJiqBxx0rLWwLJN3mKEck1/yKpZInJBr51Qh+jS0eD3M36Q
+5TcSjTokeNnbTqepzmYKPGcegVgd+w==
+=FTh+
+-----END PGP SIGNATURE-----
+
+--lpt7vlyp74ppkexj--
