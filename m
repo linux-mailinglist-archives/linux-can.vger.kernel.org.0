@@ -2,90 +2,99 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CB93A3C82
-	for <lists+linux-can@lfdr.de>; Fri, 11 Jun 2021 09:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD963A421A
+	for <lists+linux-can@lfdr.de>; Fri, 11 Jun 2021 14:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbhFKHFS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 11 Jun 2021 03:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39246 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhFKHFP (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 11 Jun 2021 03:05:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67F3C061574
-        for <linux-can@vger.kernel.org>; Fri, 11 Jun 2021 00:03:16 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lrbC5-0007o2-Rg; Fri, 11 Jun 2021 09:03:05 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:4d4a:8a80:782c:77df])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 98DF6638E82;
-        Fri, 11 Jun 2021 07:02:58 +0000 (UTC)
-Date:   Fri, 11 Jun 2021 09:02:57 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     13145886936@163.com
-Cc:     robin@protonic.nl, linux@rempel-privat.de, kernel@pengutronix.de,
-        socketcan@hartkopp.net, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gushengxian <gushengxian@yulong.com>
-Subject: Re: [PATCH net-next] can: j1939: socket: correct a grammatical error
-Message-ID: <20210611070257.xbca7pi6hwjrynsn@pengutronix.de>
-References: <20210611043933.17047-1-13145886936@163.com>
+        id S231264AbhFKMky (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 11 Jun 2021 08:40:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230291AbhFKMky (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 11 Jun 2021 08:40:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2219B613DE;
+        Fri, 11 Jun 2021 12:38:54 +0000 (UTC)
+Subject: Re: [PATCH 3/5] m68k: m5441x: add flexcan support
+To:     Angelo Dureghello <angelo@kernel-space.org>, wg@grandegger.com,
+        mkl@pengutronix.de
+Cc:     geert@linux-m68k.org, linux-m68k@vger.kernel.org,
+        linux-can@vger.kernel.org, qiangqing.zhang@nxp.com
+References: <20210608204542.983925-1-angelo@kernel-space.org>
+ <20210608204542.983925-3-angelo@kernel-space.org>
+ <30aef0c6-e1fb-63ed-5e46-a2bc14e198a2@linux-m68k.org>
+ <835a0684-e4ec-00fa-4682-b9d99d3f1c56@kernel-space.org>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Message-ID: <6fdaadc0-0567-20d9-7077-d6d38453686d@linux-m68k.org>
+Date:   Fri, 11 Jun 2021 22:38:52 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lpt7vlyp74ppkexj"
-Content-Disposition: inline
-In-Reply-To: <20210611043933.17047-1-13145886936@163.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <835a0684-e4ec-00fa-4682-b9d99d3f1c56@kernel-space.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Angelo,
 
---lpt7vlyp74ppkexj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 10/6/21 5:59 pm, Angelo Dureghello wrote:
+> Hi Greg,
+> 
+> On 09/06/21 3:24 PM, Greg Ungerer wrote:
+>> Hi Angelo,
+>>
+>> On 9/6/21 6:45 am, Angelo Dureghello wrote:
+>>> Add flexcan support.
+>>>
+>>> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+>>> ---
+>>>   arch/m68k/coldfire/device.c       | 31 +++++++++++++++++++++++++++++++
+>>>   arch/m68k/coldfire/m5441x.c       |  8 ++++----
+>>>   arch/m68k/include/asm/m5441xsim.h | 19 +++++++++++++++++++
+>>>   3 files changed, 54 insertions(+), 4 deletions(-)
+>>>
+> 
+>>> diff --git a/arch/m68k/coldfire/m5441x.c b/arch/m68k/coldfire/m5441x.c
+>>> index 1e5259a652d1..18b152edb69c 100644
+>>> --- a/arch/m68k/coldfire/m5441x.c
+>>> +++ b/arch/m68k/coldfire/m5441x.c
+>>> @@ -18,8 +18,8 @@
+>>>   #include <asm/mcfclk.h>
+>>>   DEFINE_CLK(0, "flexbus", 2, MCF_CLK);
+>>> -DEFINE_CLK(0, "mcfcan.0", 8, MCF_CLK);
+>>> -DEFINE_CLK(0, "mcfcan.1", 9, MCF_CLK);
+>>> +DEFINE_CLK(0, "flexcan.0", 8, MCF_CLK);
+>>> +DEFINE_CLK(0, "flexcan.1", 9, MCF_CLK);
+>>>   DEFINE_CLK(0, "imx1-i2c.1", 14, MCF_CLK);
+>>
+>> Just a heads up, but this will likely conflict with Arnd's clock changes, see:
+>>
+>>      https://lkml.org/lkml/2021/6/8/774
+>>
+> 
+> is this a clock naming issue ? The "mcfcan" is actually
+> not referenced in any driver so naming it "flexcan"
+> shouldn't be an issue.
 
-On 11.06.2021 12:39:33, 13145886936@163.com wrote:
-> From: gushengxian <gushengxian@yulong.com>
->=20
-> Correct a grammatical error.
->=20
-> Signed-off-by: gushengxian <gushengxian@yulong.com>
+Yeah, no problem with that. The "mcfcan" name was really just a
+place holder here. Not used previously.
 
-Applied can-next/testing.
+My comment is more that your patches and Anrd's are touching
+some of the same things. Depending on whose is applied first one
+or the other will need to be updated to reflect the others.
+No big deal, and easy to do in this case.
 
-regards,
-Marc
+Regards
+Greg
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---lpt7vlyp74ppkexj
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDDCp8ACgkQqclaivrt
-76nxrQf/b0qn6ydgv+6zMROr7Yd7xpct4O1iDdgH2SfflTnQGQ/J21sU9UL71nKM
-c0peAaZDERVcUeWpfitgAQ0CHSe6sEZ+ueB69W3GYL6gW3gJMU02Rexr2BtXir8G
-YI7xsyNS/5ARS7XUMj30XA+Vf5qnyUnjf6kGHC6+dekDhMWIKtHhivp+tHMGZ+rz
-3Enn0pW/ayAatm3+0WY1CRKYM0vfRPzEShMFt0cOb7prxhq2YMU9HSE+fkNuDmoZ
-7Rm2x48XRrMuxSKfaDJiqBxx0rLWwLJN3mKEck1/yKpZInJBr51Qh+jS0eD3M36Q
-5TcSjTokeNnbTqepzmYKPGcegVgd+w==
-=FTh+
------END PGP SIGNATURE-----
-
---lpt7vlyp74ppkexj--
+> Or i should get and enable "mcfcan" clock from the driver ?
+> 
+>> Regards
+>> Greg
+>>
+> 
+> Thanks,
+> regards,
