@@ -2,104 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F563A4F74
-	for <lists+linux-can@lfdr.de>; Sat, 12 Jun 2021 17:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E18C3A50C5
+	for <lists+linux-can@lfdr.de>; Sat, 12 Jun 2021 23:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbhFLPMg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 12 Jun 2021 11:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbhFLPMe (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 12 Jun 2021 11:12:34 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208EDC061574
-        for <linux-can@vger.kernel.org>; Sat, 12 Jun 2021 08:10:34 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m21so13233652lfg.13
-        for <linux-can@vger.kernel.org>; Sat, 12 Jun 2021 08:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ykPI4HH0SC/VWY27HGZ1a2z7D4uLGivlFbMyMdOdpbA=;
-        b=duAckLmaN9hDm6gXQfSxZAwykPNXif6rUpVNbPDLz75pEYRggX5dVG36F/89GMCAQx
-         W363fjT6nfMnjD/2bFUm26cK1erVDRSdBOUqr0wMHo/xbJFdSOQV5QrLKKdczjoCPv65
-         CqJGhT/zW6wWuXFf5u4AXZMmBrknGM2wMVwV1WtPqV9UcHj5R2ye2+4QkhuanGrccRbq
-         eT4LxRddcmCfQkDjuZugTy5dbnrR727LqCBqwPzYTRWKl9rh1pSaHyPk/WQDeSoRRlAx
-         dniaOSmKqYS9wkE8ie2l8AXX29pDMntDhkpWmhIT0jxaOimRCio/qXFZS1MRX5aJmN8i
-         219g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ykPI4HH0SC/VWY27HGZ1a2z7D4uLGivlFbMyMdOdpbA=;
-        b=q6jdkOU/r9YUgBtdjGU5Ppnyg4OrrthtjfslO2DjrHAAzZvcJQVxDN3mNoM3r74tQT
-         NuvWHDiZCZni7gEJqr4IW8DV3cjZfhhToKN3EgbqLc0H5jjLqsYOkBmhpGwY3TTt/uD7
-         DRieXM/LvTpdZM455MohmI5okhi+Y7a/oJkuTa7RBmkkH1A0Qr2XqgQyEiInSv/Q6G9o
-         l5TwTBbzT2mKu2hD+ay1OLLdq3ZJx669Kfl0oJH9SxIwORV4SfLxh6Rf7dfMSkm1DLka
-         8B0a46io/vQeobcKyIMIH5GCN5Dpo7gFEb84JNEk1/kYXO9jbuFJvEwJVnif4eOZ7ioa
-         FbsA==
-X-Gm-Message-State: AOAM533nolxe4/IGJmCzceQICmjHuF5pkHr6VnpAi5KlQkVMSLQrPhGZ
-        q7PCmnDUfo6e31X+LU3ISHCw7HDv6U3496+JgWM=
-X-Google-Smtp-Source: ABdhPJzYw7osmdVTtW/yuQeHJRbUodNUNt06qBA/Ebf28CUKZwb6bPlQQon4oXwtF4flj4bWHac9UhKkkZDHIYNIEfU=
-X-Received: by 2002:ac2:4d25:: with SMTP id h5mr5381412lfk.583.1623510630218;
- Sat, 12 Jun 2021 08:10:30 -0700 (PDT)
+        id S229814AbhFLVLe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 12 Jun 2021 17:11:34 -0400
+Received: from mout.gmx.net ([212.227.15.19]:57675 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229777AbhFLVLe (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 12 Jun 2021 17:11:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1623532166;
+        bh=beQBwqMpQA6B9ivaGgIzPpPIRq4yawuZkejHQIKAC8U=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=cFzqj1VARk5J4nClH81fI3EfbiYsy10zRNTuOAs7KOPcQ46fWAOUxnlf3cKkdoN8b
+         bbgvmrvc5Ck3sTlwBOkhe7Nu6MSYaDhwPMNWpCYPqktg2v63Uk2vv53X7VsVxZibET
+         LeGrLknqM/704AG2lnpPgUQdZUf0brDtkTeov7Zw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [94.134.180.149] ([94.134.180.149]) by web-mail.gmx.net
+ (3c-app-gmx-bs52.server.lan [172.19.170.105]) (via HTTP); Sat, 12 Jun 2021
+ 23:09:26 +0200
 MIME-Version: 1.0
-References: <CAOMZO5CwS-cO3W148YHVYFwcL3QC8oFJfeQBb+WN=QgEPU7AsQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5CwS-cO3W148YHVYFwcL3QC8oFJfeQBb+WN=QgEPU7AsQ@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sat, 12 Jun 2021 12:10:19 -0300
-Message-ID: <CAOMZO5D3suvPzaMq3Fx9LKDC9mzb-0w6i3EbQum-ozczdY-EPQ@mail.gmail.com>
-Subject: Re: Testing two MCP2518FD's on i.MX8MM
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        dev.kurt@vandijck-laurijssen.be
-Cc:     linux-can@vger.kernel.org, kernel@martin.sperl.org
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <trinity-7c1b2e82-e34f-4885-8060-2cd7a13769ce-1623532166177@3c-app-gmx-bs52>
+From:   Norbert Slusarek <nslusarek@gmx.net>
+To:     socketcan@hartkopp.net
+Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 12 Jun 2021 23:09:26 +0200
+Importance: normal
+Sensitivity: Normal
+X-Priority: 3
+X-Provags-ID: V03:K1:khf1SZseDGSCzVEyTjbukIC45rDMGYCLGPXdJt91XdrnnujuevRl/aifeSC5Do5Adnrhq
+ rldgOuIAA/QnZgybbpcu70Oit3Hj6FBnho2KlIhnvpTzlJs+r92dlY23jIoIq70f4bnOgh+z5fcz
+ rT5uog1Hd+onC0YGRfPJ2qYiDRN7Atxyvnj6SVGjsbno4CIuHE+X0TqxcfFc0cP/GRgIrMNWn96Q
+ EnRPwgVluRGzBossm1MggMDiP/3h3REnw1RY1BZhBEnsmsBj4t/M3o3QaTA1EKcsAJPHLWD8HJg2
+ TI=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Ha6xDhGW7kA=:ThQdfaYZ54eLhtt6Xuu8FY
+ j3/HI5f8Ap96Lx4tNCxvQnV/Fv6WDWDs9hBqBmZkIht6L62gshpA/N8CuvUBUZEy4WhyZYq45
+ j+U7XROY8nRHP39mj3cBLj7xaijTy8p5WpgmQJTHdnmg0u9JZOjDgAOHX2/Nn8HKxcZfy2kF7
+ k5tTo2Gzon+y0NxIXVL1kkLteF9Ok+P+9SuB5OB6saqZqOjkjJMPZT5ZaauF6m8Lg6H5/hu5O
+ J69j2yl1oRIecgb/Hl1yaiGcxOAViqxJgLhe+z8zy9fmgHsP6OAZM9cPFpT9XotpPj8A4a84D
+ qZA8QSb7oYup9ydx5zRqHm/qQjZ6g3vqZPA1NO7SBP5FrWlokYk37ZpPI9BwyvlGSZpx393yb
+ NhhkgojP6Ymkb9/GnzfM3ZDaKDe8jpqKN/jEXjCyAiFJmkqhJgjEWrln46voRtA8owDJ/eF2L
+ 9OFWBFqnxP+KvH7LsutbRGZ8zL+yUdpThO/kXc2li/UEShGhvFL7bIVZ9XzLH3PQa3QZ5nV71
+ UicYAifkdDNCAe65SxJVvVGqmQEgYZkZyFoPApEak+HsjGNl9X6WBP7Xh1A5MK24LAr/N+ZCR
+ OpT86OUTkPVqI9loI72mTmgF9UzjOZd3erxhgM7ffsZ5ZPIyuewwVKMIFvHBm+TFXVYUM3AeG
+ IjrwSc4cmwIozen1XaB4eFhU8tIxZiA8YJZ3kb63kv+eo2nplLR9/bMUKsNeqpX0FaMFxQjaU
+ ARApqURT0LLgC271muPXrhSdsbkxSxiVGC07idA0rY9zgYmrv6fsZ6FQkdCcCPwJ/UorhfM3Z
+ jH6+UuF44VrTWoE2Bgo3hxJ0OYymA==
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-[Sorry, resending. Sent HTML content by mistake]
+From: Norbert Slusarek <nslusarek@gmx.net>
+Date: Sat, 12 Jun 2021 22:18:54 +0200
+Subject: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
 
-On Sat, Jun 12, 2021 at 12:07 PM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi,
->
-> I am trying to run CAN stress tests on an i.MX8MM-based board that has two mcp2518fd chips.
-> I am using linux-next 20210607 and this is the ecspi dts:
-> https://pastebin.com/raw/YVvuqAAc
->
-> Then I launch the test script:
-> ./cantest start
->
-> This is the script content:
-> https://pastebin.com/raw/hc8gKgUf
->
-> The problem is that RX FIFO overflow happens:
->
-> [  128.559485] mcp251xfd spi0.0 can0: RX-0: FIFO overflow.
-> [  128.573478] mcp251xfd spi0.0 can0: RX-0: FIFO overflow.
-> [  128.584787] mcp251xfd spi0.0 can0: RX-0: FIFO overflow.
->
-> and also cansequence errors:
-> # 2020-02-09 01:41:15:368 sequence CNT: 2779938, RX:      8    expected:  34    missing:  230    skt overfl d:    0 a:    0    delta: 230    incident: 6    seq_wrap RX: 10860     sequ_wrap_expected: 10860   overall lost: 136
-> 2020-02-09 01:41:15:368 sequence CNT:      9, RX:     34    expected:   9    missing:   25    skt overfl d:   [  899.794388] mcp251xfd spi0.0 can0: RX-0: FIFO overflow.
->  0 a:    0    delta:  25    incident: 7    seq_wrap RX: 10860   [  899.804780] mcp251xfd spi0.0 can0: RX-0: FIFO overflow.
->   sequ_wrap_expected: 10860   overall lost: 161
-> 2020-02-09 01:41:15:370 sequence CNT:     40, RX:      9    expected:  40    missing:  225    skt overfl d:    0 a:    0    delta: 225    incident: 8    seq_wrap RX: 10860     sequ_wrap_expected: 10860   overall lost: 130
-> 2020-02-09 01:41:15:392 sequence CNT:    137, RX:    105    expected: 137    missing:  224    skt overfl d:    0 a:    0    delta: 224    incident: 9    seq_wrap RX: 10860     sequ_wrap_expected: 10860   overall lost: 98
-> 2020-02-09 01:41:15:396 sequence CNT:    137, RX:    145    expected: 137    missing:    8    skt overfl d:    0 a:    0    delta:   8    incident: 10    seq_wrap RX: 10860     sequ_wrap_expected: 10860   overall lost: 106
-> 2020-02-09 01:41:15:403 sequence CNT:    160, ERRORFRAME 20000004   00 01 00 00 00 00 00 00
-> 2020-02-09 01:41:15:414 sequence CNT:    192, ERRORFRAME 20000004   00 01 00 00 00 00 00 00
-> 2020-02-09 01:41:15:414 sequence CNT:    192, RX:    210    expected: 192    missing:   18    skt overfl d:    0 a:    0    delta:  18    incident: 11    seq_wrap RX: 10860     sequ_wrap_expected: 10860   overall lost: 124
-> 2020-02-09 01:41:15:416 sequence CNT:    220, RX:    222    expected: 220    missing:    2    skt overfl d:    0 a:    0    delta:   2    incident: 12    seq_wrap RX: 10860     sequ_wrap_expected: 10860   overall lost: 126
->
-> I have applied this series to get SPI DMA to work on i.MX8MM:
-> https://patches.linaro.org/cover/417924/
->
-> I have also tried SPI PIO mode instead of DMA, but it does not help.
->
-> Any ideas of what can be done to improve this?
->
-> Thanks!
->
-> Fabio Estevam
+On 64-bit systems, struct bcm_msg_head has an added padding of 4 bytes bet=
+ween
+struct members count and ival1. Even though all struct members are initial=
+ized,
+the 4-byte hole will contain data from the kernel stack. This patch zeroes=
+ out
+struct bcm_msg_head before usage, preventing infoleaks to userspace.
+
+Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+Signed-off-by: Norbert Slusarek <nslusarek@gmx.net>
+
+=2D--
+ net/can/bcm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index 909b9e684e04..b03062f84fe7 100644
+=2D-- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -402,6 +402,7 @@ static enum hrtimer_restart bcm_tx_timeout_handler(str=
+uct hrtimer *hrtimer)
+                if (!op->count && (op->flags & TX_COUNTEVT)) {
+
+                        /* create notification to user */
++                       memset(&msg_head, 0, sizeof(msg_head));
+                        msg_head.opcode  =3D TX_EXPIRED;
+                        msg_head.flags   =3D op->flags;
+                        msg_head.count   =3D op->count;
+@@ -439,6 +440,7 @@ static void bcm_rx_changed(struct bcm_op *op, struct c=
+anfd_frame *data)
+        /* this element is not throttled anymore */
+        data->flags &=3D (BCM_CAN_FLAGS_MASK|RX_RECV);
+
++       memset(&head, 0, sizeof(head));
+        head.opcode  =3D RX_CHANGED;
+        head.flags   =3D op->flags;
+        head.count   =3D op->count;
+@@ -560,6 +562,7 @@ static enum hrtimer_restart bcm_rx_timeout_handler(str=
+uct hrtimer *hrtimer)
+        }
+
+        /* create notification to user */
++       memset(&msg_head, 0, sizeof(msg_head));
+        msg_head.opcode  =3D RX_TIMEOUT;
+        msg_head.flags   =3D op->flags;
+        msg_head.count   =3D op->count;
+=2D-
+2.30.2
