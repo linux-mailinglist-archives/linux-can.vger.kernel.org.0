@@ -2,111 +2,140 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E18C3A50C5
-	for <lists+linux-can@lfdr.de>; Sat, 12 Jun 2021 23:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 943A63A576A
+	for <lists+linux-can@lfdr.de>; Sun, 13 Jun 2021 11:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbhFLVLe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 12 Jun 2021 17:11:34 -0400
-Received: from mout.gmx.net ([212.227.15.19]:57675 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229777AbhFLVLe (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sat, 12 Jun 2021 17:11:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1623532166;
-        bh=beQBwqMpQA6B9ivaGgIzPpPIRq4yawuZkejHQIKAC8U=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=cFzqj1VARk5J4nClH81fI3EfbiYsy10zRNTuOAs7KOPcQ46fWAOUxnlf3cKkdoN8b
-         bbgvmrvc5Ck3sTlwBOkhe7Nu6MSYaDhwPMNWpCYPqktg2v63Uk2vv53X7VsVxZibET
-         LeGrLknqM/704AG2lnpPgUQdZUf0brDtkTeov7Zw=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [94.134.180.149] ([94.134.180.149]) by web-mail.gmx.net
- (3c-app-gmx-bs52.server.lan [172.19.170.105]) (via HTTP); Sat, 12 Jun 2021
- 23:09:26 +0200
-MIME-Version: 1.0
-Message-ID: <trinity-7c1b2e82-e34f-4885-8060-2cd7a13769ce-1623532166177@3c-app-gmx-bs52>
-From:   Norbert Slusarek <nslusarek@gmx.net>
-To:     socketcan@hartkopp.net
+        id S231277AbhFMJxw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Jun 2021 05:53:52 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:20671 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231223AbhFMJxw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 13 Jun 2021 05:53:52 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1623577899; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Ek/ootHM4vaMzT2EpE+Lyl6ZgpOuEZKAGfjJDG/U/hmirvs7ywAEf7ZsNe2DtAsvUU
+    azHWwrGaWrZi74ig2LpcjKrUGisKhus5Fk/wa1Dt/6rE8ekk/H4GrwFrK9MJaFvO5Wy7
+    x8SzhOEMKCvJYTrZEf50c/sjuM4zj0IRT7wqas8jzS6aYOJ8JlBQv2EGdg9xKbfcMmFh
+    LBiix8H4JcnkrUjESKnHpgoK0poELAzetsGdkywBq3xh2P86YYRcKVYHSeTAzpJa9XS9
+    Jlp0+mpQWh9pJurlk4YpXRcDDyXYjr8PcijUa6KMU00L2YuFCUPJl8DWoGRERBtOxws2
+    sWfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1623577899;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=yRn/NkknMjFNPm+iKgTuo3/Mq9bdemw03ZI+Ugm7CcM=;
+    b=O3jCm9sUucyN7tP80GGtTZgg9AKOE6DCymBUAG+Y97L9iAvV7Gsu46gVa+ixVdWq+/
+    ytwGZ1IxKtSwgdG/PPoyvChxZyB8yau66WCsfRcCYB3u6vQ2zvLx9PN8Dp/MPatpbgtQ
+    CVFZcXK6hFg53sfSuRUGr2/ZyqfsemxVehKfUuGrGUZlbRhcobc3QBCDlkMi4kV40jmg
+    Mrtqsyn2Qz4B/fdjiRXfXgg8biUQLTfyXIzacb5aU225ccebfHT9yA5Ghoy2ZJ5H/0ff
+    NbipozhsE9qZhJZu5+RYVq4alWzeHfCssimoZBMNTSPhpQC9KP0DUgWN4ieP8pdp2Bzc
+    h0ag==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1623577899;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=yRn/NkknMjFNPm+iKgTuo3/Mq9bdemw03ZI+Ugm7CcM=;
+    b=PNl/btihdnKYgf9dGyL/cQKav3aawDtQNi+zYgcZAYifIPy5xQd6rcLSvENm9i4NP7
+    y4QfyCTWjNbp2mI0bwtdD1eueBV5cDnUKXuXfi283MAgubUjjJVEwQsh9dz5Kp2LQffN
+    5YwpGg1W31iu/M+YTdQ2nlFAuglVwYtV+kdG7hLoSbrquX1XLEkb3s7mINqE8xjQZOH9
+    V1eeG/JNVLWM/rppX5dkFZzgcr7+AR6ypuLoqDfvq2eZCXQ4oRHDs//Ax7QBOjJAu4A5
+    zPxy4HU6LnSc3ocUIKr8rXYzV57m+x2X83RwtDSXUrtyJvuSmOMz5bgq7UQu49xdxeTB
+    Z9Qw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xozF0="
+X-RZG-CLASS-ID: mo00
+Received: from [192.168.50.177]
+    by smtp.strato.de (RZmta 47.27.2 DYNA|AUTH)
+    with ESMTPSA id d075c5x5D9pcSQ1
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 13 Jun 2021 11:51:38 +0200 (CEST)
+Subject: Re: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
+To:     Norbert Slusarek <nslusarek@gmx.net>
 Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
-Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 12 Jun 2021 23:09:26 +0200
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:khf1SZseDGSCzVEyTjbukIC45rDMGYCLGPXdJt91XdrnnujuevRl/aifeSC5Do5Adnrhq
- rldgOuIAA/QnZgybbpcu70Oit3Hj6FBnho2KlIhnvpTzlJs+r92dlY23jIoIq70f4bnOgh+z5fcz
- rT5uog1Hd+onC0YGRfPJ2qYiDRN7Atxyvnj6SVGjsbno4CIuHE+X0TqxcfFc0cP/GRgIrMNWn96Q
- EnRPwgVluRGzBossm1MggMDiP/3h3REnw1RY1BZhBEnsmsBj4t/M3o3QaTA1EKcsAJPHLWD8HJg2
- TI=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ha6xDhGW7kA=:ThQdfaYZ54eLhtt6Xuu8FY
- j3/HI5f8Ap96Lx4tNCxvQnV/Fv6WDWDs9hBqBmZkIht6L62gshpA/N8CuvUBUZEy4WhyZYq45
- j+U7XROY8nRHP39mj3cBLj7xaijTy8p5WpgmQJTHdnmg0u9JZOjDgAOHX2/Nn8HKxcZfy2kF7
- k5tTo2Gzon+y0NxIXVL1kkLteF9Ok+P+9SuB5OB6saqZqOjkjJMPZT5ZaauF6m8Lg6H5/hu5O
- J69j2yl1oRIecgb/Hl1yaiGcxOAViqxJgLhe+z8zy9fmgHsP6OAZM9cPFpT9XotpPj8A4a84D
- qZA8QSb7oYup9ydx5zRqHm/qQjZ6g3vqZPA1NO7SBP5FrWlokYk37ZpPI9BwyvlGSZpx393yb
- NhhkgojP6Ymkb9/GnzfM3ZDaKDe8jpqKN/jEXjCyAiFJmkqhJgjEWrln46voRtA8owDJ/eF2L
- 9OFWBFqnxP+KvH7LsutbRGZ8zL+yUdpThO/kXc2li/UEShGhvFL7bIVZ9XzLH3PQa3QZ5nV71
- UicYAifkdDNCAe65SxJVvVGqmQEgYZkZyFoPApEak+HsjGNl9X6WBP7Xh1A5MK24LAr/N+ZCR
- OpT86OUTkPVqI9loI72mTmgF9UzjOZd3erxhgM7ffsZ5ZPIyuewwVKMIFvHBm+TFXVYUM3AeG
- IjrwSc4cmwIozen1XaB4eFhU8tIxZiA8YJZ3kb63kv+eo2nplLR9/bMUKsNeqpX0FaMFxQjaU
- ARApqURT0LLgC271muPXrhSdsbkxSxiVGC07idA0rY9zgYmrv6fsZ6FQkdCcCPwJ/UorhfM3Z
- jH6+UuF44VrTWoE2Bgo3hxJ0OYymA==
-Content-Transfer-Encoding: quoted-printable
+References: <trinity-7c1b2e82-e34f-4885-8060-2cd7a13769ce-1623532166177@3c-app-gmx-bs52>
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+Message-ID: <f9d008bc-2416-8032-0005-35d7c6d87fc1@hartkopp.net>
+Date:   Sun, 13 Jun 2021 11:51:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
+MIME-Version: 1.0
+In-Reply-To: <trinity-7c1b2e82-e34f-4885-8060-2cd7a13769ce-1623532166177@3c-app-gmx-bs52>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Norbert Slusarek <nslusarek@gmx.net>
-Date: Sat, 12 Jun 2021 22:18:54 +0200
-Subject: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
 
-On 64-bit systems, struct bcm_msg_head has an added padding of 4 bytes bet=
-ween
-struct members count and ival1. Even though all struct members are initial=
-ized,
-the 4-byte hole will contain data from the kernel stack. This patch zeroes=
- out
-struct bcm_msg_head before usage, preventing infoleaks to userspace.
 
-Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
-Signed-off-by: Norbert Slusarek <nslusarek@gmx.net>
+On 12.06.21 23:09, Norbert Slusarek wrote:
+> From: Norbert Slusarek <nslusarek@gmx.net>
+> Date: Sat, 12 Jun 2021 22:18:54 +0200
+> Subject: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
+> 
+> On 64-bit systems, struct bcm_msg_head has an added padding of 4 bytes between
+> struct members count and ival1. Even though all struct members are initialized,
+> the 4-byte hole will contain data from the kernel stack. This patch zeroes out
+> struct bcm_msg_head before usage, preventing infoleaks to userspace.
+> 
+> Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
+> Signed-off-by: Norbert Slusarek <nslusarek@gmx.net>
 
-=2D--
- net/can/bcm.c | 3 +++
- 1 file changed, 3 insertions(+)
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
 
-diff --git a/net/can/bcm.c b/net/can/bcm.c
-index 909b9e684e04..b03062f84fe7 100644
-=2D-- a/net/can/bcm.c
-+++ b/net/can/bcm.c
-@@ -402,6 +402,7 @@ static enum hrtimer_restart bcm_tx_timeout_handler(str=
-uct hrtimer *hrtimer)
-                if (!op->count && (op->flags & TX_COUNTEVT)) {
+Thanks Norbert!
 
-                        /* create notification to user */
-+                       memset(&msg_head, 0, sizeof(msg_head));
-                        msg_head.opcode  =3D TX_EXPIRED;
-                        msg_head.flags   =3D op->flags;
-                        msg_head.count   =3D op->count;
-@@ -439,6 +440,7 @@ static void bcm_rx_changed(struct bcm_op *op, struct c=
-anfd_frame *data)
-        /* this element is not throttled anymore */
-        data->flags &=3D (BCM_CAN_FLAGS_MASK|RX_RECV);
+Yes, when this data structure was created in 2003 either 64 bit machines 
+were far away for me and infoleaks were not a hot topic like today.
 
-+       memset(&head, 0, sizeof(head));
-        head.opcode  =3D RX_CHANGED;
-        head.flags   =3D op->flags;
-        head.count   =3D op->count;
-@@ -560,6 +562,7 @@ static enum hrtimer_restart bcm_rx_timeout_handler(str=
-uct hrtimer *hrtimer)
-        }
+Would be interesting to check where data structures are used in the 
+Linux UAPI that became an infoleak in the 32-to-64-bit compilation 
+transistion.
 
-        /* create notification to user */
-+       memset(&msg_head, 0, sizeof(msg_head));
-        msg_head.opcode  =3D RX_TIMEOUT;
-        msg_head.flags   =3D op->flags;
-        msg_head.count   =3D op->count;
-=2D-
-2.30.2
+Thanks for the heads up!
+
+Best regards,
+Oliver
+
+> 
+> ---
+>   net/can/bcm.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/net/can/bcm.c b/net/can/bcm.c
+> index 909b9e684e04..b03062f84fe7 100644
+> --- a/net/can/bcm.c
+> +++ b/net/can/bcm.c
+> @@ -402,6 +402,7 @@ static enum hrtimer_restart bcm_tx_timeout_handler(struct hrtimer *hrtimer)
+>                  if (!op->count && (op->flags & TX_COUNTEVT)) {
+> 
+>                          /* create notification to user */
+> +                       memset(&msg_head, 0, sizeof(msg_head));
+>                          msg_head.opcode  = TX_EXPIRED;
+>                          msg_head.flags   = op->flags;
+>                          msg_head.count   = op->count;
+> @@ -439,6 +440,7 @@ static void bcm_rx_changed(struct bcm_op *op, struct canfd_frame *data)
+>          /* this element is not throttled anymore */
+>          data->flags &= (BCM_CAN_FLAGS_MASK|RX_RECV);
+> 
+> +       memset(&head, 0, sizeof(head));
+>          head.opcode  = RX_CHANGED;
+>          head.flags   = op->flags;
+>          head.count   = op->count;
+> @@ -560,6 +562,7 @@ static enum hrtimer_restart bcm_rx_timeout_handler(struct hrtimer *hrtimer)
+>          }
+> 
+>          /* create notification to user */
+> +       memset(&msg_head, 0, sizeof(msg_head));
+>          msg_head.opcode  = RX_TIMEOUT;
+>          msg_head.flags   = op->flags;
+>          msg_head.count   = op->count;
+> --
+> 2.30.2
+> 
