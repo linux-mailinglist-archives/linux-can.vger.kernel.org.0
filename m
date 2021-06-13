@@ -2,164 +2,121 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD8B3A57F1
-	for <lists+linux-can@lfdr.de>; Sun, 13 Jun 2021 13:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58793A58B9
+	for <lists+linux-can@lfdr.de>; Sun, 13 Jun 2021 15:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbhFMLUg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 13 Jun 2021 07:20:36 -0400
-Received: from mout01.posteo.de ([185.67.36.65]:56699 "EHLO mout01.posteo.de"
+        id S231747AbhFMNiA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 13 Jun 2021 09:38:00 -0400
+Received: from mout.gmx.net ([212.227.17.22]:55865 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231176AbhFMLUf (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Sun, 13 Jun 2021 07:20:35 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 3EF3D24002A
-        for <linux-can@vger.kernel.org>; Sun, 13 Jun 2021 13:18:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1623583113; bh=UCYdNcGgYnd4qiRqu9g12MZukrC/xpiUogCk3ixDcfE=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=o+ApaqVPxIppvqykDyIaXkJPvlW1M5pnhpklTB5dLmasRFEI2p9qrKknZ1FtaqKlR
-         5LZ+9AcIAzX5Y7Wn1FzbJCoFq6nW1YUWH3Tl7SgThvx6VuDUWW0bpRO2wAFTDjbnde
-         7ti2jPdaEyC+5ifLQFpKNpeFvCCxXEjP/jFd6yJNMgof7abXU7v8NKT8MM88kWQodx
-         A1jVQkRRqWI6vQKFE3UiDl3omQrdBn+VXr3doGs7Gxi5g7t5je2BX2Ze8kFkf3MHol
-         qOhvJsOw/hamFGwoW4GYuxzImk8c5XExptQsnTPMWOE2/npS4vpj4WKN39pKG3ElEx
-         W/SPxlYf8I44w==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4G2sX82T07z9rxQ;
-        Sun, 13 Jun 2021 13:18:32 +0200 (CEST)
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Norbert Slusarek <nslusarek@gmx.net>
-Cc:     mkl@pengutronix.de, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
+        id S231738AbhFMNiA (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sun, 13 Jun 2021 09:38:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1623591348;
+        bh=1ZFz1/mIB5bnttffrzVRdlzUMFRiToLqs1Cx70F/Amg=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=MEP/7dKvW9Lon3sGRdxs3ybRvk7Ztnq8/LNDyRd4KMcONHy2Yx9thdJADCYBlPbF+
+         LYPRXdCnNxriSjmUQmWON4JuoOv3pedN/4CqpmTGgYarxEiGcGkXbWuanlwb1YaDaZ
+         1D1yIfGZo3QP0NBdNiSuma+Z1VHDbFIVErnZ/Fw4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [88.130.61.210] ([88.130.61.210]) by web-mail.gmx.net
+ (3c-app-gmx-bap71.server.lan [172.19.172.171]) (via HTTP); Sun, 13 Jun 2021
+ 15:35:48 +0200
+MIME-Version: 1.0
+Message-ID: <trinity-0d8be729-1e3c-452c-8171-962963abed0d-1623591348277@3c-app-gmx-bap71>
+From:   Norbert Slusarek <nslusarek@gmx.net>
+To:     Patrick Menschel <menschel.p@posteo.de>
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, mkl@pengutronix.de,
+        davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 13 Jun 2021 15:35:48 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <34cc6b6a-6eb0-f3ce-1864-9057b80fab9e@posteo.de>
 References: <trinity-7c1b2e82-e34f-4885-8060-2cd7a13769ce-1623532166177@3c-app-gmx-bs52>
  <f9d008bc-2416-8032-0005-35d7c6d87fc1@hartkopp.net>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
-Message-ID: <34cc6b6a-6eb0-f3ce-1864-9057b80fab9e@posteo.de>
-Date:   Sun, 13 Jun 2021 11:18:32 +0000
-MIME-Version: 1.0
-In-Reply-To: <f9d008bc-2416-8032-0005-35d7c6d87fc1@hartkopp.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+ <34cc6b6a-6eb0-f3ce-1864-9057b80fab9e@posteo.de>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:3XXrmPETE/w+QQQSBfRwD8jlRdcWg0F4qeUVnsI2jxRZEnIM9y8sUU+H+zgX0s45v83oM
+ gfDilZI82cCAc6K2COQh5NUQT39eDl1ZdoANWdJe5jjybCAyaMw68Ir7hLX7gjkEGU6FvqnP4BLc
+ Zkdn4SqgPNPwfYPA3HH3t3y1v3q1F2WIF37Q+Dl75vfJTpvGnXZsZ2YYouoi4VTnmYG8Qtgh3uz+
+ IhS9KpbppL1odOt8RFf1qmHfc0Y4sql6vg2LMNKXyvx1+Ljy34rKtufPvxrTVHLmefVFeGE9r48N
+ D0=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r+vepHbWli4=:PwJ8/RS50nQhfIw7wsSj5Q
+ cu8Rcc4JKlwYV4H6KnoAGOfl2mQT5KXRWoeyNbKjfxxhjK6VrPYA6IKASR8Qa2uXOdpefDHwQ
+ g2B5m217mOCif+lNIJUpKmqhh4Qg3+hswtoFEdhiaz3HoFAFq8YF3tIkUJry5GVAFOEnkYZRz
+ /ofJrTH1BHcuopAxzUrGIgoctgEkXUJp9CGNNoMbf1FztjF2IyoVWIu8Ljutl+vVI9EqGMliU
+ OUaeSsR64TXTvZT9Zlpem5UydvZYG6SWm9iR8r5HQkx1p3Y62A5h9bgq+3dRBIJ9HrC0h5y1y
+ o2b8l0G/HniRrM0fdosePBeKPyW42L6mn6Cnh0ArNPsuuim10kfiQAyet06UVXMJ0yuy8TO22
+ I4LroPMHydVaG71GC2UmpWPJjujUjGLyqXKLTVbxTQ4IE+otmcE6bEc746Mgf9/9JZLULO14v
+ zlECHK+F+uoGoxZrmtQfCwAt1kagh5KJcDPhx2909ttduwLTZD+cLSh1AZOSqxK2ej4I/W+b0
+ S32wEuVS4XuNRlaAJHJKTvGySCBiSeFyGLS5JGDoDwTESyDxVBc8q+p+2gMBfpa9oM7H4VCFl
+ wx4JQlVnNo4AYzFL4kAT73zgVfY2JMHRkGdwUhL3jJ+Tgwq576MDzhTt+vRD6hdhhHpgmlc5h
+ PomJwU8kwLevKZ3kBC7PZ8LTylo/rxuwmS+HQvQkdpWCNUB3wwF42+31+fkyXzY3ivLItsVeH
+ RfEwF05R1fEpKnKWVDsQ1nna1b9/tjiRzihj5LYGpqCIFSqJEzgnmYAVuq5Ne3qaHmUUH23B8
+ YycXy6zFD/bgzlQX07Mq/YgtR2J6A==
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 13.06.21 um 11:51 schrieb Oliver Hartkopp:
-> 
-> 
-> On 12.06.21 23:09, Norbert Slusarek wrote:
->> From: Norbert Slusarek <nslusarek@gmx.net>
->> Date: Sat, 12 Jun 2021 22:18:54 +0200
->> Subject: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
->>
->> On 64-bit systems, struct bcm_msg_head has an added padding of 4 bytes
->> between
->> struct members count and ival1. Even though all struct members are
->> initialized,
->> the 4-byte hole will contain data from the kernel stack. This patch
->> zeroes out
->> struct bcm_msg_head before usage, preventing infoleaks to userspace.
->>
->> Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
->> Signed-off-by: Norbert Slusarek <nslusarek@gmx.net>
-> 
-> Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> 
-> Thanks Norbert!
-> 
-> Yes, when this data structure was created in 2003 either 64 bit machines
-> were far away for me and infoleaks were not a hot topic like today.
-> 
-> Would be interesting to check where data structures are used in the
-> Linux UAPI that became an infoleak in the 32-to-64-bit compilation
-> transistion.
+>Hi,
 >
-Hi,
+>1.
+>Are you sure this leak really happens on 64-bit and not on 32-bit instead?
+>
+>I remember I got the problems with bcm msg head on the 32bit raspberry
+>pi because I missed the alignment by accident.
+>
+>When I calculate the size of msg head on a Ryzen 1800X with Python
+>3.9.5, I get:
+>
+>struct.calcsize("IIIllllII"),struct.calcsize("IIIllllII0q")
+>(56, 56)
+>
+>First Value is raw, the second value is the alignment hack with the zero
+>length quad word "0q".
+>
+>On the 32bit raspberry pi, same op results in the gap.
+>
+>struct.calcsize("IIIllllII"),struct.calcsize("IIIllllII0q")
+>(36, 40)
 
-1.
-Are you sure this leak really happens on 64-bit and not on 32-bit instead?
+Hey Patrick,
 
-I remember I got the problems with bcm msg head on the 32bit raspberry
-pi because I missed the alignment by accident.
+having reproduced this leak I could only observe the issue on 64-bit systems.
+I've just tested it on a 32-bit OS running on a raspberry pi and I couldn't observe
+any leak. The offset difference on 32-bit between count and ival1 is 4.
+On 64-bit systems, it's 8:
 
-When I calculate the size of msg head on a Ryzen 1800X with Python
-3.9.5, I get:
+(gdb) ptype struct bcm_msg_head
+type = struct bcm_msg_head {
+    __u32 opcode;
+    __u32 flags;
+    __u32 count;
+    struct bcm_timeval ival1;
+    struct bcm_timeval ival2;
+    canid_t can_id;
+    __u32 nframes;
+    struct can_frame frames[0];
+}
+(gdb) p/x &((struct bcm_msg_head *)0x0)->count
+$1 = 0x8
+(gdb) p/x &((struct bcm_msg_head *)0x0)->ival1
+$2 = 0x10
+(gdb) p sizeof(((struct bcm_msg_head *)0x0)->count)
+$3 = 4
 
-struct.calcsize("IIIllllII"),struct.calcsize("IIIllllII0q")
-(56, 56)
+>2.
+>Finding stucts with non-zero-ed gaps should be easy with a skript or
+>even better with a GCC directive. I believe Syzbot does such a thing too.
+>
+>Kind Regards,
+>Patrick Menschel
 
-First Value is raw, the second value is the alignment hack with the zero
-length quad word "0q".
+I didn't notice any syzbot report about this leak, nor did I find it with syzkaller.
 
-On the 32bit raspberry pi, same op results in the gap.
-
-struct.calcsize("IIIllllII"),struct.calcsize("IIIllllII0q")
-(36, 40)
-
-2.
-Finding stucts with non-zero-ed gaps should be easy with a skript or
-even better with a GCC directive. I believe Syzbot does such a thing too.
-
-Kind Regards,
-Patrick Menschel
+Norbert
