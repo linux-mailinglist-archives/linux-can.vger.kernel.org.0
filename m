@@ -2,145 +2,118 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5843A5EEB
-	for <lists+linux-can@lfdr.de>; Mon, 14 Jun 2021 11:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CE83A66AB
+	for <lists+linux-can@lfdr.de>; Mon, 14 Jun 2021 14:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232630AbhFNJMs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-can@lfdr.de>); Mon, 14 Jun 2021 05:12:48 -0400
-Received: from relay-b01.edpnet.be ([212.71.1.221]:59086 "EHLO
-        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232621AbhFNJMs (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Jun 2021 05:12:48 -0400
-X-ASG-Debug-ID: 1623661842-15c43444e51c82d0001-ZXuqFv
-Received: from zotac.vandijck-laurijssen.be (94.105.106.252.dyn.edpnet.net [94.105.106.252]) by relay-b01.edpnet.be with ESMTP id e7nB3u5SwS6kRYqb; Mon, 14 Jun 2021 11:10:43 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 94.105.106.252.dyn.edpnet.net[94.105.106.252]
-X-Barracuda-Apparent-Source-IP: 94.105.106.252
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
-        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id D0D6414CF42B;
-        Mon, 14 Jun 2021 11:10:42 +0200 (CEST)
-Date:   Mon, 14 Jun 2021 11:10:41 +0200
-From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-To:     =?utf-8?B?UsOpbXk=?= DZIEMIASZKO <remy.dziemiaszko@smile.fr>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
-Subject: Re: How to statically set J1939 addresses and names
-Message-ID: <20210614091041.GD2028@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: How to statically set J1939 addresses and names
-Mail-Followup-To: =?utf-8?B?UsOpbXk=?= DZIEMIASZKO <remy.dziemiaszko@smile.fr>,
-        Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
-References: <CAEWvZg2rvR=9kE_wcm-KtzMvDtnqTEXSLF56zrB=3TgqZbEs1w@mail.gmail.com>
- <20210611041232.6avft7jhzsqcuuwc@pengutronix.de>
- <20210611065708.GA2028@x1.vandijck-laurijssen.be>
- <CAEWvZg3vk7WUr1S-e0VxWd-BuFgf51m9WXyASeCssAPc2Yo+dg@mail.gmail.com>
+        id S233454AbhFNMfX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 14 Jun 2021 08:35:23 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:60160 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233040AbhFNMfV (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Jun 2021 08:35:21 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 15ECX0g1126397;
+        Mon, 14 Jun 2021 07:33:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1623673980;
+        bh=K9aA0EEHDadNv3Gx8t1nVIU1t9/F1DE1N2f1aCytT/Y=;
+        h=Subject:CC:References:To:From:Date:In-Reply-To;
+        b=laiaxztoru0AR/pQx7GoqGtV31haRRB6fir93GR4p9T6bvgFkUxHCq0IptbY0to0V
+         35WMAu/x8KS5pU/Zfhkyj6QYZ/GyVT2fj3DCl4y8O18M+3KeDNSSvG3DsbYaKzfMhj
+         MWzLE+GUrkL3IJxFVJgzxZ8cs89wUv27dtlrqq3E=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 15ECX0Es064241
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Jun 2021 07:33:00 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 14
+ Jun 2021 07:33:00 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Mon, 14 Jun 2021 07:33:00 -0500
+Received: from [10.250.235.117] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 15ECWshU005055;
+        Mon, 14 Jun 2021 07:32:55 -0500
+Subject: Re: [PATCH v4 0/2] MCAN: Add support for implementing transceiver as
+ a phy
+CC:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20210510052541.14168-1-a-govindraju@ti.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <2c5b76f7-8899-ab84-736b-790482764384@ti.com>
+Date:   Mon, 14 Jun 2021 18:02:53 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <CAEWvZg3vk7WUr1S-e0VxWd-BuFgf51m9WXyASeCssAPc2Yo+dg@mail.gmail.com>
-User-Agent: Mutt/1.5.22 (2013-10-16)
-X-Barracuda-Connect: 94.105.106.252.dyn.edpnet.net[94.105.106.252]
-X-Barracuda-Start-Time: 1623661842
-X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 3701
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.90635
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
+In-Reply-To: <20210510052541.14168-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, 14 Jun 2021 10:32:34 +0200, Rémy DZIEMIASZKO wrote:
-> Le ven. 11 juin 2021 à 08:57, Kurt Van Dijck
-> <dev.kurt@vandijck-laurijssen.be> a écrit :
-> >
-> > On Fri, 11 Jun 2021 06:12:32 +0200, Oleksij Rempel wrote:
-> > > Hi Rémy,
-> > >
-> > > On Tue, Jun 08, 2021 at 05:27:45PM +0200, Rémy DZIEMIASZKO wrote:
-> > > > Hello,
-> > > >
-> > > > I need that my applications do not care about J1939 node addresses but
-> > > > directly bind / connect to socket based on node name only and the
-> > > > kernel takes care of the conversion to addresses.
-> > > >
-> > > > I know this is possible if addresses are dynamically assigned through
-> > > > the Address Claiming protocol that is implemented in the kernel. The
-> > > > kernel keeps track of its own address and name as well as the
-> > > > addresses and names of other ECUs on the network and convert name to
-> > > > adresse when requested by the applications.
-> > > >
-> > > > But I don't want to use the Address Claiming protocol. I want to
-> > > > statically set all addresses and names.
+Hi Marc,
 
-> >
-> >
-> Hi Kurt,
+On 10/05/21 10:55 am, Aswath Govindraju wrote:
+> The following series of patches add support for implementing the
+> transceiver as a phy of m_can_platform driver.
 > 
-> When I develop my application I don't know it's source address. I only
-> know its name.
-> In the future my application shall be integrated in different
-> projects/vehicules.
-> For each project, the source_address may be different but the name
-> will never change.
+> TCAN1042 has a standby signal that needs to be pulled high for
+> sending/receiving messages[1]. TCAN1043 has a enable signal along with
+> standby signal that needs to be pulled up for sending/receiving
+> messages[2], and other combinations of the two lines can be used to put the
+> transceiver in different states to reduce power consumption. On boards
+> like the AM654-idk and J721e-evm these signals are controlled using gpios.
+> 
+> These gpios are set in phy driver, and the transceiver can be put in
+> different states using phy API. The phy driver is added in the series [3].
+> 
+> This patch series is dependent on [4].
+> 
 
-Ok, I have a little misunderstood your question before.
-The way I interpret your setup now is going a bit off the j1939 spec.
+[4] is now part of linux-next
 
-You use the NAME only, but don't want to use address claiming? that are
-opposite requrements.
+May I know if this series is okay to be picked up ?
 
-You want to re-use the same NAME on different projects/vehicules.
-Part of the NAME is the ECU serial number. You may keep the manufacturer
-and function attributes equal, but the NAME is (supposed to be) unique
-across the universe. And due to that, you can't know the complete NAME
-at compile time.
+Thanks,
+Aswath
 
-Please note that the kernel will only translate NAME to SA for dynamic
-addresses, i.e. where address claiming took place.
-Please also not that the kernel does not care if another application
-dealt with the actual address claiming. So, can-utils contains a
-program, j1939acd, that can do the job for you.
-
-> I don't want to adapt the source code of the application for each
-> project so I don't want to bind/connect to source_addresses but to
-> names.
-
-I understand. That is a true goal.
-
-> That's why it would be nice if the platform / the kernel does the
-> translation name --> source_address.
-
-The way I now see your problem, you have 2 ways to proceed,
-which are pretty equal in development and deploy work.
-Both options avoid Address claiming code in your application, and avoid
-hardcoded static addresses.
-
-1. You absolutely want no Address claiming on the CAN bus.
-
-You must use static addressing then.
-You make the effective SA used on the bus a parameter of your
-application, and use this static addressing mode.
-
-2. You 'tolerate' Address claiming on the CAN bus, but only with a single
-predictable address.
-
-You can use j1939acd from can-utils to do the address claiming work.
-Your application still needs the final NAME as a parameter of your final
-application, who will use it to bind using dynamic addressing.
-
-To j1939acd, you only proved the single address as option. All dynamic
-addressing rules apply in case of address conflicts etc, but I suppose
-you manage somehow to not have any address collisions.
-
-A 3rd option with less deployment work could be a variation of 2., with
-hardcoded fixed NAME. You would still need to call j1939acd.
-Since hardcoded fixed NAME is out of the j1939 spec, it's a bit on your own risk.
-
-Kind regards,
-Kurt
-
+> changes since v3:
+> - Added phy_power_off() in case of an error in m_can_open().
+> 
+> changes since v2:
+> - changed dev_err to dev_err_probe in patch 2
+> - used mcan_class instead of priv to assign max bit rate
+> - Picked up  Rob Herring's acked-by for patch 1
+> 
+> changes since v1:
+> - Used the API devm_phy_get_optional() instead of
+>   devm_of_phy_get_optional_by_index()
+> 
+> [1] - https://www.ti.com/lit/ds/symlink/tcan1042h.pdf
+> [2] - https://www.ti.com/lit/ds/symlink/tcan1043-q1.pdf
+> [3] - https://lore.kernel.org/patchwork/project/lkml/list/?series=498359
+> [4] - https://lore.kernel.org/patchwork/patch/1413286/
+> 
+> Faiz Abbas (2):
+>   dt-bindings: net: can: Document transceiver implementation as phy
+>   can: m_can: Add support for transceiver as phy
+> 
+>  .../devicetree/bindings/net/can/bosch,m_can.yaml    |  3 +++
+>  drivers/net/can/m_can/m_can.c                       | 11 +++++++++++
+>  drivers/net/can/m_can/m_can.h                       |  2 ++
+>  drivers/net/can/m_can/m_can_platform.c              | 13 +++++++++++++
+>  4 files changed, 29 insertions(+)
