@@ -2,126 +2,145 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 785C53A5E6D
-	for <lists+linux-can@lfdr.de>; Mon, 14 Jun 2021 10:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5843A5EEB
+	for <lists+linux-can@lfdr.de>; Mon, 14 Jun 2021 11:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbhFNIeu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 14 Jun 2021 04:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbhFNIet (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Jun 2021 04:34:49 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A13EC061574
-        for <linux-can@vger.kernel.org>; Mon, 14 Jun 2021 01:32:47 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id z22so18983751ljh.8
-        for <linux-can@vger.kernel.org>; Mon, 14 Jun 2021 01:32:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smile-fr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=35OIADZf3Zib/l8yyoH9XWcjiZc4+9KjqhlM5wbqk/I=;
-        b=eQmY7AF3+HK8oyQRXd4Y0hJV88ojfovklLcHrA19ov3s9B6GukjxC2IE9W4J6TGs9W
-         9DUYHT6RTCdddjJqrvuPisTIpGRl7k4RU0n5U8O36AgYGlOHRUaJNZH/UrWfSc7pkwUp
-         RVDCWimE9OzQuseDmxnNORHZqZREwSmvp1cLmMPUMWwCuQf3P+fEGgeAFhWsBmRVYXj5
-         w1oYPBBS9eREDpbcnRblTynbqk0ZbV2cVwHdeSqiM51USggDeUVJHsb2aZQ26Ds8wWir
-         m7lbXAETYEWlGoPiaKl6US83F30dL/wDCrepc72bQRS6fWpib+gRg9GNsq2gIuNU/d6E
-         A5hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=35OIADZf3Zib/l8yyoH9XWcjiZc4+9KjqhlM5wbqk/I=;
-        b=Zc4Ml3CpJYyd0eHDdoXTyTL1PGTS4bzbnKymsR/nsB4ispPEiP5i+2CJ3Eqs+v9g38
-         XvSiQSxdad09ZRMBSLUx1ARdhJAb2MsX8Z6AEzR5CIbSCNFBAoSDPfjTZFYg2NpJGwdB
-         +DXnY2jseqgte4yLvmSYZVFv2m1BU54l2xFLWfAAFHOsci9lGq+ydX/bzWXsfNXPpkRW
-         UFwbgX2YrEr8enRcjD9+s5oJAEk/SVCP7PmybrsTdY7A0eKXypC6vQN+i7AYmGGKDOkF
-         uiNS9iEf5gxzEKbqOsB5PSpxqJ8ZBrte/eQziUUmOk+zcxLUKog9SRadXQ20jOP0HEOx
-         ZxeQ==
-X-Gm-Message-State: AOAM532jPIZsw1LXXIyLDhJ9l6ou1/pwa6DViEuqiv1bnSWoPOMYo5X2
-        cfO++Zxgn29sZ0HXGqYHTuRpP9fISsotpdslN8gb5E/sXetvrw==
-X-Google-Smtp-Source: ABdhPJyHgWOtSWBERacrSDgfSVKADgvX3U0Pdf2qtE+HMNdvAH3aOJmJqLIWxuqr7y9g8WQJRx+JPDU0Y9M9l4bU4SM=
-X-Received: by 2002:a2e:b790:: with SMTP id n16mr10967188ljo.9.1623659565348;
- Mon, 14 Jun 2021 01:32:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAEWvZg2rvR=9kE_wcm-KtzMvDtnqTEXSLF56zrB=3TgqZbEs1w@mail.gmail.com>
- <20210611041232.6avft7jhzsqcuuwc@pengutronix.de> <20210611065708.GA2028@x1.vandijck-laurijssen.be>
-In-Reply-To: <20210611065708.GA2028@x1.vandijck-laurijssen.be>
-From:   =?UTF-8?Q?R=C3=A9my_DZIEMIASZKO?= <remy.dziemiaszko@smile.fr>
-Date:   Mon, 14 Jun 2021 10:32:34 +0200
-Message-ID: <CAEWvZg3vk7WUr1S-e0VxWd-BuFgf51m9WXyASeCssAPc2Yo+dg@mail.gmail.com>
+        id S232630AbhFNJMs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Mon, 14 Jun 2021 05:12:48 -0400
+Received: from relay-b01.edpnet.be ([212.71.1.221]:59086 "EHLO
+        relay-b01.edpnet.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232621AbhFNJMs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 14 Jun 2021 05:12:48 -0400
+X-ASG-Debug-ID: 1623661842-15c43444e51c82d0001-ZXuqFv
+Received: from zotac.vandijck-laurijssen.be (94.105.106.252.dyn.edpnet.net [94.105.106.252]) by relay-b01.edpnet.be with ESMTP id e7nB3u5SwS6kRYqb; Mon, 14 Jun 2021 11:10:43 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 94.105.106.252.dyn.edpnet.net[94.105.106.252]
+X-Barracuda-Apparent-Source-IP: 94.105.106.252
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be [IPv6:fd01::1a1d:eaff:fe02:d339])
+        by zotac.vandijck-laurijssen.be (Postfix) with ESMTPSA id D0D6414CF42B;
+        Mon, 14 Jun 2021 11:10:42 +0200 (CEST)
+Date:   Mon, 14 Jun 2021 11:10:41 +0200
+From:   Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+To:     =?utf-8?B?UsOpbXk=?= DZIEMIASZKO <remy.dziemiaszko@smile.fr>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
 Subject: Re: How to statically set J1939 addresses and names
-To:     =?UTF-8?Q?R=C3=A9my_DZIEMIASZKO?= <remy.dziemiaszko@smile.fr>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-ID: <20210614091041.GD2028@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: How to statically set J1939 addresses and names
+Mail-Followup-To: =?utf-8?B?UsOpbXk=?= DZIEMIASZKO <remy.dziemiaszko@smile.fr>,
+        Oleksij Rempel <o.rempel@pengutronix.de>, linux-can@vger.kernel.org
+References: <CAEWvZg2rvR=9kE_wcm-KtzMvDtnqTEXSLF56zrB=3TgqZbEs1w@mail.gmail.com>
+ <20210611041232.6avft7jhzsqcuuwc@pengutronix.de>
+ <20210611065708.GA2028@x1.vandijck-laurijssen.be>
+ <CAEWvZg3vk7WUr1S-e0VxWd-BuFgf51m9WXyASeCssAPc2Yo+dg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <CAEWvZg3vk7WUr1S-e0VxWd-BuFgf51m9WXyASeCssAPc2Yo+dg@mail.gmail.com>
+User-Agent: Mutt/1.5.22 (2013-10-16)
+X-Barracuda-Connect: 94.105.106.252.dyn.edpnet.net[94.105.106.252]
+X-Barracuda-Start-Time: 1623661842
+X-Barracuda-URL: https://212.71.1.221:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 3701
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.90635
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Le ven. 11 juin 2021 =C3=A0 08:57, Kurt Van Dijck
-<dev.kurt@vandijck-laurijssen.be> a =C3=A9crit :
->
-> On Fri, 11 Jun 2021 06:12:32 +0200, Oleksij Rempel wrote:
-> > Hi R=C3=A9my,
+On Mon, 14 Jun 2021 10:32:34 +0200, Rémy DZIEMIASZKO wrote:
+> Le ven. 11 juin 2021 à 08:57, Kurt Van Dijck
+> <dev.kurt@vandijck-laurijssen.be> a écrit :
 > >
-> > On Tue, Jun 08, 2021 at 05:27:45PM +0200, R=C3=A9my DZIEMIASZKO wrote:
-> > > Hello,
+> > On Fri, 11 Jun 2021 06:12:32 +0200, Oleksij Rempel wrote:
+> > > Hi Rémy,
 > > >
-> > > I need that my applications do not care about J1939 node addresses bu=
-t
-> > > directly bind / connect to socket based on node name only and the
-> > > kernel takes care of the conversion to addresses.
-> > >
-> > > I know this is possible if addresses are dynamically assigned through
-> > > the Address Claiming protocol that is implemented in the kernel. The
-> > > kernel keeps track of its own address and name as well as the
-> > > addresses and names of other ECUs on the network and convert name to
-> > > adresse when requested by the applications.
-> > >
-> > > But I don't want to use the Address Claiming protocol. I want to
-> > > statically set all addresses and names.
->
-> It is supported to not use Address Claiming.
->
-> > >
-> > > Is there a way to assign J1939 addresses and names to a CAN interface
-> > > without using the J1939 address claim protocol?
-> >
-> > Current version do not have this functionality.
->
-> If you bind() your socket with only sockaddr_can.j1939.sa set to your
-> SA, and sockaddr_can.j1939.name to 0, makes your socket use your SA as
-> static address.
->
-> >
-> > > I found in old j1939 kernel documentation something like
-> > > ip addr add dev canX j1939 0xXX
-> > > ip addr add dev canX j1939 name 0xXX
-> > > See https://www.spinics.net/lists/netdev/msg162350.html
-> > >
-> > > But in the latest j1939 kernel documentation I do not find any
-> > > reference to these commands.
-> >
-> > Yes, it was pre mainline version. For mainlining we reduced UAPI to the
-> > minimum to simplify reviewing, mainlining and testing process.
-> >
->
-> The strict addressing was rejected because it felt much heavier than
-> what most CAN users were used to. Moving to the current ad-hoc
-> implementation allowed to drop quite some kernel code too.
->
-Hi Kurt,
+> > > On Tue, Jun 08, 2021 at 05:27:45PM +0200, Rémy DZIEMIASZKO wrote:
+> > > > Hello,
+> > > >
+> > > > I need that my applications do not care about J1939 node addresses but
+> > > > directly bind / connect to socket based on node name only and the
+> > > > kernel takes care of the conversion to addresses.
+> > > >
+> > > > I know this is possible if addresses are dynamically assigned through
+> > > > the Address Claiming protocol that is implemented in the kernel. The
+> > > > kernel keeps track of its own address and name as well as the
+> > > > addresses and names of other ECUs on the network and convert name to
+> > > > adresse when requested by the applications.
+> > > >
+> > > > But I don't want to use the Address Claiming protocol. I want to
+> > > > statically set all addresses and names.
 
-When I develop my application I don't know it's source address. I only
-know its name.
-In the future my application shall be integrated in different
-projects/vehicules.
-For each project, the source_address may be different but the name
-will never change.
-I don't want to adapt the source code of the application for each
-project so I don't want to bind/connect to source_addresses but to
-names.
-That's why it would be nice if the platform / the kernel does the
-translation name --> source_address.
+> >
+> >
+> Hi Kurt,
+> 
+> When I develop my application I don't know it's source address. I only
+> know its name.
+> In the future my application shall be integrated in different
+> projects/vehicules.
+> For each project, the source_address may be different but the name
+> will never change.
+
+Ok, I have a little misunderstood your question before.
+The way I interpret your setup now is going a bit off the j1939 spec.
+
+You use the NAME only, but don't want to use address claiming? that are
+opposite requrements.
+
+You want to re-use the same NAME on different projects/vehicules.
+Part of the NAME is the ECU serial number. You may keep the manufacturer
+and function attributes equal, but the NAME is (supposed to be) unique
+across the universe. And due to that, you can't know the complete NAME
+at compile time.
+
+Please note that the kernel will only translate NAME to SA for dynamic
+addresses, i.e. where address claiming took place.
+Please also not that the kernel does not care if another application
+dealt with the actual address claiming. So, can-utils contains a
+program, j1939acd, that can do the job for you.
+
+> I don't want to adapt the source code of the application for each
+> project so I don't want to bind/connect to source_addresses but to
+> names.
+
+I understand. That is a true goal.
+
+> That's why it would be nice if the platform / the kernel does the
+> translation name --> source_address.
+
+The way I now see your problem, you have 2 ways to proceed,
+which are pretty equal in development and deploy work.
+Both options avoid Address claiming code in your application, and avoid
+hardcoded static addresses.
+
+1. You absolutely want no Address claiming on the CAN bus.
+
+You must use static addressing then.
+You make the effective SA used on the bus a parameter of your
+application, and use this static addressing mode.
+
+2. You 'tolerate' Address claiming on the CAN bus, but only with a single
+predictable address.
+
+You can use j1939acd from can-utils to do the address claiming work.
+Your application still needs the final NAME as a parameter of your final
+application, who will use it to bind using dynamic addressing.
+
+To j1939acd, you only proved the single address as option. All dynamic
+addressing rules apply in case of address conflicts etc, but I suppose
+you manage somehow to not have any address collisions.
+
+A 3rd option with less deployment work could be a variation of 2., with
+hardcoded fixed NAME. You would still need to call j1939acd.
+Since hardcoded fixed NAME is out of the j1939 spec, it's a bit on your own risk.
+
+Kind regards,
+Kurt
+
