@@ -2,67 +2,88 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A79C43A8A42
-	for <lists+linux-can@lfdr.de>; Tue, 15 Jun 2021 22:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEABE3A8C80
+	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 01:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbhFOUm0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 15 Jun 2021 16:42:26 -0400
-Received: from mout.gmx.net ([212.227.17.22]:45067 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229898AbhFOUmZ (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 15 Jun 2021 16:42:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1623789610;
-        bh=EAElDhEvE0npNuUB64RNjL9W4eVHMaspYGhc4IBGHtE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ShNLsT9HJ4XPopUGPBM5HabevtWBvmoIb2QM066mqsF6zdQ9NPy26epXmS/DxCvWX
-         uQ0EEINGtfyoarpbQwq1xQHZBVbirXXyQWRCWN23ukPWg6IDhrtA34PPTRhysRIL5v
-         DOuMNbgaPtWwgK2nWt0RmCT+iNU9p9ZuoTO+ODVo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [89.247.255.103] ([89.247.255.103]) by web-mail.gmx.net
- (3c-app-gmx-bap35.server.lan [172.19.172.105]) (via HTTP); Tue, 15 Jun 2021
- 22:40:10 +0200
+        id S231488AbhFOXcA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 15 Jun 2021 19:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229966AbhFOXb7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 15 Jun 2021 19:31:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD957C061574;
+        Tue, 15 Jun 2021 16:29:53 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id d7so219966edx.0;
+        Tue, 15 Jun 2021 16:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dMu6Ebpu3T3ImGY3emMLa/ibwH7Jz5A6ZlvdLonFw94=;
+        b=JQbC59Bt9iZ2ofmMkX7Kl9HL7wZA/xVTJDwwp0xpvuMwo3pba02UrjnNg9d0zCKfaD
+         4JHyjgm+fvkt0QAozm0OGqxqsBPAGJoSnlb0bIQz6uj7Z72RNQMiPbdy4MfmqnmL38Aj
+         Ou986wZdevoaPTBs4B//uhLDseLwl1c6b6gZY3zloQsCd13iAANAM4/dG8lO4whN3fGu
+         NlR4704c85iQ3g17AcdaSdqFJN1NK2k1NI1c3xmTCPPdqhOu44itOnKwBlvaScfLYepe
+         3rhHqQqlMbSbSL+BKlzLolRqG6uTd/1idpXMkHRjbDL9LeQPt4EZXzoz/2vB7Q+IWvf1
+         GSvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dMu6Ebpu3T3ImGY3emMLa/ibwH7Jz5A6ZlvdLonFw94=;
+        b=CQ68oiAatZjpOyxArxpXtU3WGljyxGdn0VN0pSSEdE+s2mJEpc2Hju3RW0JtIaftXh
+         oK1wcdysDTVY0emR9OJAMZjbJ08TMtcvhnT/gACBZTPz2gymyitatimTvF8FnQzpahUj
+         UzmlbHh+WTzmdqBN8Z/P6bTT5ZrmZs5Ca8nfA5kmcfRhf1qc3RcAI17oEP67oH+ME+ls
+         Un7HCliy6Lh34WaNNqf1TDGHuwuGcbqWnMHzXMtkjbiVQdB4gBzfLvLCL05M6qs/tPCv
+         CAfTRUq5d9e3UWCCqFfYSwPhnqzmajlqv8S/t6rRjhA0ml7KzCEA+k/88P9/4o8pZv5k
+         86fg==
+X-Gm-Message-State: AOAM531IKMWEtirigwA2tOYFoiKWZm1RW7I9T7c3yOiYlkT24nHCgiql
+        gU1ALuuywnI8VHF2UtJ62sQ=
+X-Google-Smtp-Source: ABdhPJyr9pJPFLX4drWnvJMzUHLNg4ImgihZ1B8LGDBTk8opezpzsSyrD4Z2oro8ZkFoOcKUrN15wQ==
+X-Received: by 2002:aa7:d344:: with SMTP id m4mr667424edr.281.1623799792558;
+        Tue, 15 Jun 2021 16:29:52 -0700 (PDT)
+Received: from skbuf ([188.26.224.68])
+        by smtp.gmail.com with ESMTPSA id dh18sm313170edb.92.2021.06.15.16.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Jun 2021 16:29:52 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 02:29:49 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
+        edumazet@google.com, weiwan@google.com, cong.wang@bytedance.com,
+        ap420073@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@openeuler.org,
+        mkl@pengutronix.de, linux-can@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
+        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
+        a.fatoum@pengutronix.de, atenart@kernel.org,
+        alexander.duyck@gmail.com, hdanton@sina.com, jgross@suse.com,
+        JKosina@suse.com, mkubecek@suse.cz, bjorn@kernel.org,
+        alobakin@pm.me
+Subject: Re: [PATCH net-next v2 0/3] Some optimization for lockless qdisc
+Message-ID: <20210615232949.2ntjv5kh3g7z2ua2@skbuf>
+References: <1622684880-39895-1-git-send-email-linyunsheng@huawei.com>
+ <20210603113548.2d71b4d3@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+ <20210608125349.7azp7zeae3oq3izc@skbuf>
+ <64aaa011-41a3-1e06-af02-909ff329ef7a@huawei.com>
 MIME-Version: 1.0
-Message-ID: <trinity-b69ee8f7-2a39-428c-898e-1b55a48ff9cf-1623789610211@3c-app-gmx-bap35>
-From:   Norbert Slusarek <nslusarek@gmx.net>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     socketcan@hartkopp.net, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] can: bcm: fix infoleak in struct bcm_msg_head
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 15 Jun 2021 22:40:10 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20210614072058.syvgyz7lexexsvxp@pengutronix.de>
-References: <trinity-7c1b2e82-e34f-4885-8060-2cd7a13769ce-1623532166177@3c-app-gmx-bs52>
- <20210614072058.syvgyz7lexexsvxp@pengutronix.de>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:kvJqYaTAwZQ+GOMSQVKgKv/t7zSGTtdGay5yeLq9xABaKwJDp0n2HZeGrGw2va48DvQxl
- lFJDin1/zTEaLjm7eZOVphD+ldAjvSRU4Sqz8dvnM80KxJSCXuSnWyG5zQWa1Y/9fjHNf99vT9jn
- hDDubJ0TMK3NSuRNu96A5LblbcfNX8paZ4gdRfWCNqsx5aDr0jfMrLK4dpS/k4St3X59tKySdGBh
- 8eRojiSMsQOuZUXiuwAwtH7d2YaqYWZNhhMU0iiC71pTHxTiRtIVeK3TDie5hh67u8BVFZkMz3I7
- 1w=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nJBizfb9i/c=:MDd5F9BMcIiHIgJd4gJghe
- uK/5GFLIq79D6dE6EhdWKYFqq2l/O5F1AqH+OtDEwzUw1f/SC8d1EdcQexN2fHNNf32JAqHQv
- lFI6pEy2TeOBYwFckY1VlRWJuhHcHbJi1RECnTsxDklKqrWtBh3tbTl7IoN5JZxuHGduH9ifi
- wa4gIInxueikBdkMYpFBgmFbSVAKkJfwnE1dup4DrwBKfHuvsoz5/gDqdSq8zmq9++wTthClk
- MtarIy9HhXLQ0I5bZ2fflDhYgQAPtCrQJXKvtbvHjf4zOO7yb5KXM/rw5UhwoSrKLLJ2Bnoat
- J9OodZNNCiuCImOim9D8AKs4xG1mViAGQ7CnpE2qUkKhJ82R6Uu7kZj/sAsDAX2oDLmOEJAxs
- Hy/XfaOiUQBVj+VdjCrFOqd83Z7Sn2ta64V9a7bGdyaIanoKpFHPq+MzvhmyaLElgMgXCaUiX
- j3LP5oaU7+zUtXez+MnGq0EbPPq8/GJnHX2SI0LM520qfOUPR1ez8ic849JLXHBd1geVV8oY+
- JdVx/w/AIQbVYxp6vc1IoGNb/IdEvOY4MJxytFSDG1eaO+J4lG3HUbZwQCFpffbtaEemSsEdo
- QJ3hFdL8MiudzB897eTZwbpDIpZPjvYHgT0kR2EvUa3dV0fgVZc1AtmdnWIS9DpO6Y3vUc4iK
- njGmEksg+Zs+DiOGRmhFWbtb0k0+Xgtq1En8RHr9Vwm4f34bL4Nsc5yM7uQskoTFu8iqT3uij
- +Uc1+LDO2y4U0z5fBZ9wSjuFsV0V7thyKAmDsxtWy84+Iy/7i0C9EiZmwopH827Uij334e+/L
- G71s/mD63gd76tuwHj/ATlycFvW2g==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64aaa011-41a3-1e06-af02-909ff329ef7a@huawei.com>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-The issue has been assigned CVE-2021-34693 and the announcement on
-oss-security is available in the link below.
-https://www.openwall.com/lists/oss-security/2021/06/15/1
+On Wed, Jun 09, 2021 at 09:31:39AM +0800, Yunsheng Lin wrote:
+> By the way, I did not pick up your "Tested-by" from previous
+> RFC version because there is some change between those version
+> that deserves a retesting. So it would be good to have a
+> "Tested-by" from you after confirming no out of order happening
+> for this version, thanks.
 
-Norbert
+Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com> # flexcan
