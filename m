@@ -2,73 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A38B3AA493
-	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 21:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0964F3AA751
+	for <lists+linux-can@lfdr.de>; Thu, 17 Jun 2021 01:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbhFPTwL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Jun 2021 15:52:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55112 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230402AbhFPTwL (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 16 Jun 2021 15:52:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id EB7D26135C;
-        Wed, 16 Jun 2021 19:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623873005;
-        bh=bJtVT2M+B8DHVvYnVFiIXqrsqMmkxLclKXa/WLigXXQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Sg29COUURaEIn+O/hIZvxZ5/iHfIZREV1fxuBz/lwuVSJztpgdS64B79YB6IQmUp7
-         N//Cf5OXhSODUtMcTnO03p8K1wZp63tOQQ6vICE/yE+f/O9HdhlWu1aX8mIImfhuZl
-         AFm662K7YCBaO8yPE9XDYuBe90Vaq2eCddki6WcVQCokaG/7RuC+/gFxHvwWLVGtE7
-         rlC+H/vlo8tTFLqDZvalrkoEcpopygpv8LeQ/svHTz1J+HhAUqtjUc/irLLR6ZHVGp
-         zcdu+tSe1TnJzBxCtp6hA8Ky5DeImvt5n30x9/oMNH8B9HG2SU+CUjZwuSZr7IlemA
-         f/E7AxOFSfKDQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E28EB60C29;
-        Wed, 16 Jun 2021 19:50:04 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234364AbhFPXTz (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Jun 2021 19:19:55 -0400
+Received: from mail.kernel-space.org ([195.201.34.187]:38042 "EHLO
+        mail.kernel-space.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234361AbhFPXTz (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 19:19:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
+        s=20190913; t=1623885464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GMzM6rne3aqNDELEFFWbt27YcLcmG9IGt3KJNXfYwgA=;
+        b=e4mc4D/PVvsEDSWw1pJbtwFkPFRB9t9k3xdovlK76vkbdDoC5CvBY9mPrw+Qplq11i7lo+
+        Brj35CwmtsJAiFehFmiz+UkNEd069fRgU7YChgzn10GS9Fo86xAZYjYU5ysCsUWoFonwpf
+        +P154vTqNWKBoRMVYFH2E45iJ06h/jU=
+Received: from dfj.1.1.1.1 (host-87-8-57-171.retail.telecomitalia.it [87.8.57.171])
+        by ziongate (OpenSMTPD) with ESMTPSA id 34ec42f6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Wed, 16 Jun 2021 23:17:44 +0000 (UTC)
+From:   Angelo Dureghello <angelo@kernel-space.org>
+To:     gerg@linux-m68k.org, wg@grandegger.com, mkl@pengutronix.de
+Cc:     geert@linux-m68k.org, linux-m68k@vger.kernel.org,
+        linux-can@vger.kernel.org, qiangqing.zhang@nxp.com,
+        Angelo Dureghello <angelo@kernel-space.org>
+Subject: [PATCH v2 1/5] can: flexcan: add platform data for ColdFire
+Date:   Thu, 17 Jun 2021 01:16:48 +0200
+Message-Id: <20210616231652.738027-1-angelo@kernel-space.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can 2021-06-16
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162387300492.13042.9681987049571047223.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Jun 2021 19:50:04 +0000
-References: <20210616110152.2456765-1-mkl@pengutronix.de>
-In-Reply-To: <20210616110152.2456765-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Add platform data object for ColdFire architecture.
 
-This pull request was applied to netdev/net.git (refs/heads/master):
+---
+Changes for v2:
+- move header file in more proper location
+- remove irq defines
+- change variable types to match driver types
 
-On Wed, 16 Jun 2021 13:01:48 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 4 patches for net/master.
-> 
-> The first patch is by Oleksij Rempel and fixes a Use-after-Free found
-> by syzbot in the j1939 stack.
-> 
-> [...]
+Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+---
+ include/linux/can/platform/mcf5441x.h | 28 +++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 include/linux/can/platform/mcf5441x.h
 
-Here is the summary with links:
-  - pull-request: can 2021-06-16
-    https://git.kernel.org/netdev/net/c/e82a35aead2f
-  - [net,2/4] can: bcm/raw/isotp: use per module netdevice notifier
-    https://git.kernel.org/netdev/net/c/8d0caedb7596
-  - [net,3/4] can: bcm: fix infoleak in struct bcm_msg_head
-    https://git.kernel.org/netdev/net/c/5e87ddbe3942
-  - [net,4/4] can: mcba_usb: fix memory leak in mcba_usb
-    https://git.kernel.org/netdev/net/c/91c02557174b
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/include/linux/can/platform/mcf5441x.h b/include/linux/can/platform/mcf5441x.h
+new file mode 100644
+index 000000000000..6866f0f60caf
+--- /dev/null
++++ b/include/linux/can/platform/mcf5441x.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Flexcan options for ColdFire family
++ *
++ * Copyright (C) 2021  Angelo Dureghello <angelo@kernel-space.org>
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License
++ * version 2 as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#ifndef _PLAT_FLEXCAN_MCF_H
++#define _PLAT_FLEXCAN_MCF_H
++
++struct mcf_flexcan_platform_data {
++	u8 clk_src;
++	u32 clock_frequency;
++	bool big_endian;
++};
++
++#define FLEXCAN_MCF5411X_MB_CNT_MCF	16
++
++#endif /* _PLAT_FLEXCAN_MCF_H */
+-- 
+2.31.1
 
