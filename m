@@ -2,110 +2,76 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22C23A9A45
-	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 14:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28F13A9A9F
+	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 14:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbhFPM3w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Jun 2021 08:29:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48688 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232637AbhFPM3l (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 16 Jun 2021 08:29:41 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBA8561369;
-        Wed, 16 Jun 2021 12:27:07 +0000 (UTC)
-Date:   Wed, 16 Jun 2021 13:29:08 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <20210616132908.76a780b8@jic23-huawei>
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
-References: <20210615191543.1043414-1-robh@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S231441AbhFPMnX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Jun 2021 08:43:23 -0400
+Received: from smtp03.smtpout.orange.fr ([80.12.242.125]:44495 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230269AbhFPMnX (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 08:43:23 -0400
+Received: from localhost.localdomain ([114.149.34.46])
+        by mwinf5d50 with ME
+        id Hoh22500M0zjR6y03ohCBC; Wed, 16 Jun 2021 14:41:14 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 16 Jun 2021 14:41:14 +0200
+X-ME-IP: 114.149.34.46
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH] can: bittiming: fix two grammar mistakes in documentation for struct can_tdc
+Date:   Wed, 16 Jun 2021 21:40:57 +0900
+Message-Id: <20210616124057.60723-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, 15 Jun 2021 13:15:43 -0600
-Rob Herring <robh@kernel.org> wrote:
+This patch fixes two grammar errors in the documentation for struct
+can_tdc.
 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
-> 
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-> 
+First grammar error: add a missing third person 's'.
 
-...
+Second grammar error: replace "such as" by "such that". The intent is
+to give a condition, not an example.
 
->  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
+Fixes: 289ea9e4ae59 ("can: add new CAN FD bittiming parameters: Transmitter Delay Compensation (TDC)")
+Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+---
+Hi Marc,
 
-For this one, the fact it overrides maxItems elsewhere makes this a little
-bit odd.  I guess we can get used to it being implicit.
+If that makes sense to you, feel free to squash this in your other
+patch.
+---
+ include/linux/can/bittiming.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
+index d61d8716345e..9de6e9053e34 100644
+--- a/include/linux/can/bittiming.h
++++ b/include/linux/can/bittiming.h
+@@ -37,7 +37,7 @@
+  *	quanta, from when the bit is sent on the TX pin to when it is
+  *	received on the RX pin of the transmitter. Possible options:
+  *
+- *	  0: automatic mode. The controller dynamically measure @tdcv
++ *	  0: automatic mode. The controller dynamically measures @tdcv
+  *	  for each transmitted CAN FD frame.
+  *
+  *	  Other values: manual mode. Use the fixed provided value.
+@@ -45,7 +45,7 @@
+  * @tdco: Transmitter Delay Compensation Offset. Offset value, in time
+  *	quanta, defining the distance between the start of the bit
+  *	reception on the RX pin of the transceiver and the SSP
+- *	position such as SSP = @tdcv + @tdco.
++ *	position such that SSP = @tdcv + @tdco.
+  *
+  *	If @tdco is zero, then TDC is disabled and both @tdcv and
+  *	@tdcf should be ignored.
+-- 
+2.31.1
 
