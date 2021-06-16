@@ -2,181 +2,202 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FC93A9CB7
-	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 15:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660223A9D98
+	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 16:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233693AbhFPN4U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Jun 2021 09:56:20 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:42865 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbhFPNzW (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 09:55:22 -0400
-Received: by mail-lj1-f175.google.com with SMTP id r16so3927987ljk.9;
-        Wed, 16 Jun 2021 06:53:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Yak0Jw5qtLSF6XuLp21VlMysIAiLyA6w6CP8nitLvQk=;
-        b=mEfyXChHnSHaCrGszybE5zi+Y5Q52iSpBk2fEZ+qYpEDlTE3eYnKoHB4hdc5ScNCm1
-         GyZl/a7GbkFK6zaAISQ0EOF+JcI9aj2N24fsVDDSGZ7A4/QKI2neA8IvlGdhXyLPeHLW
-         5U6c4CBETcf1zv16Yse7ZJuxvyJ3gYhHvUyy5oqCQ6uodcthYOKmiEgB1mgPdz4cNPj9
-         w439Q5blXZAhwG0R7xHA+cAGZ+YtsZA4cA2+gxN0KXs2CWi+4vlDt5pxyEJ5s0f0dbRI
-         eq7LsmwrgdG7O0U+jVGmlYdEznTKvUFKgtZqrT4uILxDaNHtixOcmaZ92VxIYB8jTosy
-         aEXw==
-X-Gm-Message-State: AOAM530Lkxbozny+eTZTw58Pjndsvpra/7V1OxBd3qWFMeMxgB98tCRd
-        PPi6Ox/RRtIySu1/6L9A+lgz532hETy3baxFRfg=
-X-Google-Smtp-Source: ABdhPJztjS7vGrTuoCmVUMZtJGuQRKly2mHe+80maPnLjPtU4tmHy4EeVuU3+loy+xoAWDpQCjIOm2Ro0fGrZJYK60E=
-X-Received: by 2002:a2e:bf14:: with SMTP id c20mr4534138ljr.57.1623851594153;
- Wed, 16 Jun 2021 06:53:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210603151550.140727-1-mailhol.vincent@wanadoo.fr>
- <20210603151550.140727-3-mailhol.vincent@wanadoo.fr> <20210616094633.fwg6rsyxyvm2zc6d@pengutronix.de>
-In-Reply-To: <20210616094633.fwg6rsyxyvm2zc6d@pengutronix.de>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Wed, 16 Jun 2021 22:53:02 +0900
-Message-ID: <CAMZ6RqLj59+3PrQwTCfK_bVebRBHE=HqCfRb31MU9pRDBPxG8w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] can: netlink: add interface for CAN-FD Transmitter
- Delay Compensation (TDC)
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S233882AbhFPObw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Jun 2021 10:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232408AbhFPObv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 10:31:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81446C061574
+        for <linux-can@vger.kernel.org>; Wed, 16 Jun 2021 07:29:44 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ltWY2-0004bx-UO; Wed, 16 Jun 2021 16:29:43 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:27:4a54:dbae:b593])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id AC06263D56B;
+        Wed, 16 Jun 2021 14:29:41 +0000 (UTC)
+Date:   Wed, 16 Jun 2021 16:29:40 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 Cc:     linux-can <linux-can@vger.kernel.org>,
         netdev <netdev@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>,
         Oliver Hartkopp <socketcan@hartkopp.net>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v2 2/2] can: netlink: add interface for CAN-FD
+ Transmitter Delay Compensation (TDC)
+Message-ID: <20210616142940.wxllr3c55rk66rij@pengutronix.de>
+References: <20210603151550.140727-1-mailhol.vincent@wanadoo.fr>
+ <20210603151550.140727-3-mailhol.vincent@wanadoo.fr>
+ <20210616094633.fwg6rsyxyvm2zc6d@pengutronix.de>
+ <CAMZ6RqLj59+3PrQwTCfK_bVebRBHE=HqCfRb31MU9pRDBPxG8w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="keephfcgqr6o5xe3"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqLj59+3PrQwTCfK_bVebRBHE=HqCfRb31MU9pRDBPxG8w@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Wed. 16 Jun 2021 at 18:46, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 04.06.2021 00:15:50, Vincent Mailhol wrote:
-> [...]
->
-> > +static size_t can_tdc_get_size(const struct net_device *dev)
-> > +{
-> > +     struct can_priv *priv = netdev_priv(dev);
-> > +     size_t size;
-> > +
-> > +     if (!priv->tdc_const)
-> > +             return 0;
-> > +
-> > +     size = nla_total_size(0);                       /* nest IFLA_CAN_TDC */
-> > +     size += nla_total_size(sizeof(u32));            /* IFLA_CAN_TDCV_MAX */
-> > +     size += nla_total_size(sizeof(u32));            /* IFLA_CAN_TDCO_MAX */
-> > +     size += nla_total_size(sizeof(u32));            /* IFLA_CAN_TDCF_MAX */
-> > +
-> > +     if (priv->tdc.tdco) {
->
-> Naively I'd say, iff the device has tdc_const give the user space the
-> tdc parameters, regardless if some value is 0 or not.
->
-> What do you think?
 
-I thought about that.
-The first important remark is that if tdc.tdco is zero, then TDC
-is off (c.f. documentation of struct can_tdc::tdco).
+--keephfcgqr6o5xe3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Let me illustrate my vision through examples.
+On 16.06.2021 22:53:02, Vincent MAILHOL wrote:
+> On Wed. 16 Jun 2021 at 18:46, Marc Kleine-Budde <mkl@pengutronix.de> wrot=
+e:
+> > On 04.06.2021 00:15:50, Vincent Mailhol wrote:
+> > [...]
+> >
+> > > +static size_t can_tdc_get_size(const struct net_device *dev)
+> > > +{
+> > > +     struct can_priv *priv =3D netdev_priv(dev);
+> > > +     size_t size;
+> > > +
+> > > +     if (!priv->tdc_const)
+> > > +             return 0;
+> > > +
+> > > +     size =3D nla_total_size(0);                       /* nest IFLA_=
+CAN_TDC */
+> > > +     size +=3D nla_total_size(sizeof(u32));            /* IFLA_CAN_T=
+DCV_MAX */
+> > > +     size +=3D nla_total_size(sizeof(u32));            /* IFLA_CAN_T=
+DCO_MAX */
+> > > +     size +=3D nla_total_size(sizeof(u32));            /* IFLA_CAN_T=
+DCF_MAX */
+> > > +
+> > > +     if (priv->tdc.tdco) {
+> >
+> > Naively I'd say, iff the device has tdc_const give the user space the
+> > tdc parameters, regardless if some value is 0 or not.
+> >
+> > What do you think?
+>=20
+> I thought about that.
+> The first important remark is that if tdc.tdco is zero, then TDC
+> is off (c.f. documentation of struct can_tdc::tdco).
+>=20
+> Let me illustrate my vision through examples.
 
+[...]
 
-** Case 1: link is not configured at all. **
-Here, only the constant values are displayed.
+examples makes sense \o/
 
-# ip --details link show can0
-1:  can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT group
-default qlen 10
-    link/can  promiscuity 0 minmtu 0 maxmtu 0
-    can state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
-      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
-      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
-      tdcv_max 0 tdco_max 127 tdcf_max 127
-      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
-gso_max_segs 65535
+[...]
 
+> Finally, I have one side comment. It seems to me that you did not
+> understand that the intent of
+> |     if (priv->tdc.tdco)
+> was to actually check whether TDC was on or off. In other words, my
+> code was unclear.
+>=20
+> I am now thinking to introduce an helper macro:
+> static bool can_tdc_is_enabled(const struct can_priv *priv)
+> |{
+> |    return !!priv->tdc.tdco;
+> |}
+>=20
+> The code would look more clear like that.
+> -     if (priv->tdc.tdco) {
+> +     if (can_tdc_is_enabled(priv) {
 
-** Case 2: only the nominal bitrate is configured. **
-The data bittiming variables (including TDC) are not shown.
+Sounds good, I'm squashing this patch:
 
-# ip --details link show can0
-1:  can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT group
-default qlen 10
-    link/can  promiscuity 0 minmtu 0 maxmtu 0
-    can state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
-      bitrate 500000 sample-point 0.875
-      tq 12 prop-seg 69 phase-seg1 70phase-seg2 20  sjw 1
-      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
-      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
-      tdcv_max 0 tdco_max 127 tdcf_max 127
-      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
-gso_max_segs 65535
+| diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
+| index 6134bbf69c10..d48be574eae7 100644
+| --- a/drivers/net/can/dev/netlink.c
+| +++ b/drivers/net/can/dev/netlink.c
+| @@ -311,7 +311,7 @@ static size_t can_tdc_get_size(const struct net_devic=
+e *dev)
+|         size +=3D nla_total_size(sizeof(u32));            /* IFLA_CAN_TDC=
+O_MAX */
+|         size +=3D nla_total_size(sizeof(u32));            /* IFLA_CAN_TDC=
+F_MAX */
+| =20
+| -       if (priv->tdc.tdco) {
+| +       if (can_tdc_is_enabled(priv)) {
+|                 size +=3D nla_total_size(sizeof(u32));    /* IFLA_CAN_TDC=
+V */
+|                 size +=3D nla_total_size(sizeof(u32));    /* IFLA_CAN_TDC=
+O */
+|                 size +=3D nla_total_size(sizeof(u32));    /* IFLA_CAN_TDC=
+F */
+| @@ -352,6 +352,7 @@ static size_t can_get_size(const struct net_device *d=
+ev)
+|                                        priv->data_bitrate_const_cnt);
+|         size +=3D sizeof(priv->bitrate_max);                      /* IFLA=
+_CAN_BITRATE_MAX */
+|         size +=3D can_tdc_get_size(dev);                          /* IFLA=
+_CAN_TDC */
+| +
+|         return size;
+|  }
+| =20
+| @@ -374,7 +375,7 @@ static int can_tdc_fill_info(struct sk_buff *skb, con=
+st struct net_device *dev)
+|             nla_put_u32(skb, IFLA_CAN_TDC_TDCF_MAX, tdc_const->tdcf_max))
+|                 goto err_cancel;
+| =20
+| -       if (priv->tdc.tdco)
+| +       if (can_tdc_is_enabled(priv)) {
+|                 if (nla_put_u32(skb, IFLA_CAN_TDC_TDCV, tdc->tdcv) ||
+|                     nla_put_u32(skb, IFLA_CAN_TDC_TDCO, tdc->tdco) ||
+|                     nla_put_u32(skb, IFLA_CAN_TDC_TDCF, tdc->tdcf))
+| diff --git a/include/linux/can/bittiming.h b/include/linux/can/bittiming.h
+| index 9de6e9053e34..b6d1db1e7258 100644
+| --- a/include/linux/can/bittiming.h
+| +++ b/include/linux/can/bittiming.h
+| @@ -83,6 +83,11 @@ struct can_tdc_const {
+|         u32 tdcf_max;
+|  };
+| =20
+| +static inline bool can_tdc_is_enabled(const struct can_priv *priv)
+| +{
+| +       return !!priv->tdc.tdco;
+| +}
+| +
+|  #ifdef CONFIG_CAN_CALC_BITTIMING
+|  int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt,
+|                        const struct can_bittiming_const *btc);
 
+regards,
+Marc
 
-** Case 3: both nominal and data bitrates are configured (but not TDC). **
-Only the TDC variables are not shown.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-# ip --details link show can0
-1:  can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group
-default qlen 10
-    link/can  promiscuity 0 minmtu 0 maxmtu 0
-    can <FD> state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
-      bitrate 500000 sample-point 0.875
-      tq 12 prop-seg 69 phase-seg1 70phase-seg2 20  sjw 1
-      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
-      dbitrate 2000000 dsample-point 0.750
-      dtq 12 dprop-seg 14 dphase-seg1 15 dphase-seg2 10 dsjw 1
-      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
-      tdcv_max 0 tdco_max 127 tdcf_max 127
-      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
-gso_max_segs 65535
+--keephfcgqr6o5xe3
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-** Case 4: nominal and data bitrates and TDC are configured. **
-Everything is shown.
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDKCs8ACgkQqclaivrt
+76lt8gf/TtOfBy0Tjh1hzJDVPQBUQMDVSq0ldxwA12Uyn1toEwckuaG4fC9r3z2W
+MFVqo5LRkdZwtTNArXMbE4qz3c0ei8TsTLb7ruyOSp5ell/rI0i7yT+ekJRXjcnD
+lBN8UjSpN4vXDz+NcVkPOpCqq6FuqfI3FQ6qc5+/lIHf9jhsGZGhCYPdZZ12wVL9
+i3Iv/N9eelMVPlyBy2+fQvklcz0q6LqKBhoyCALKo+B9lwAcFJVLTlf339CIJSZ0
+fJLjJV2k9w+sjrlmAhOx9zu42wBbSuOTH6Px8RqtZc7jXOOzWqIBicxSpub/Eywi
+liAdLNFt54PEkrpFc1apLQjd/wvK6A==
+=8Wb0
+-----END PGP SIGNATURE-----
 
-# ip --details link show can0
-1:  can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group
-default qlen 10
-    link/can  promiscuity 0 minmtu 0 maxmtu 0
-    can <FD> state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
-      bitrate 1000000 sample-point 0.750
-      tq 12 prop-seg 29 phase-seg1 30phase-seg2 20  sjw 1
-      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
-      dbitrate 5000000 dsample-point 0.750
-      dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 1
-      tdcv 0 tdco 12 tdcf 0
-      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
-      tdcv_max 0 tdco_max 127 tdcf_max 127
-      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
-gso_max_segs 65535
-
-
-I think that we can agree on Cases 1, 2 (it would not make sense
-to display TDC without the data bittiming variables) and 4.
-
-The edge case is Case 3. It depends if we consider the TDC as a
-separate set or not. It is not silly to display the TDC whenever
-fd is on. I prefer to keep it the way I did it. But I would not
-object to changing this if you insist. That would mean:
--     if (priv->tdc.tdco) {
-+     if (priv->data_bittiming.bitrate) {
-
-
-Finally, I have one side comment. It seems to me that you did not
-understand that the intent of
-|     if (priv->tdc.tdco)
-was to actually check whether TDC was on or off. In other words, my
-code was unclear.
-
-I am now thinking to introduce an helper macro:
-static bool can_tdc_is_enabled(const struct can_priv *priv)
-|{
-|    return !!priv->tdc.tdco;
-|}
-
-The code would look more clear like that.
--     if (priv->tdc.tdco) {
-+     if (can_tdc_is_enabled(priv) {
-
-
-Yours sincerely,
-Vincent
+--keephfcgqr6o5xe3--
