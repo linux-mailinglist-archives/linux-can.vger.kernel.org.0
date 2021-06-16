@@ -2,123 +2,181 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 256823A9C09
-	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 15:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FC93A9CB7
+	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 15:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbhFPNfO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Jun 2021 09:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbhFPNfN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 09:35:13 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747AC061574
-        for <linux-can@vger.kernel.org>; Wed, 16 Jun 2021 06:33:07 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1ltVfF-00044J-W3; Wed, 16 Jun 2021 15:33:06 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:27:4a54:dbae:b593])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 16CE263D490;
-        Wed, 16 Jun 2021 13:33:05 +0000 (UTC)
-Date:   Wed, 16 Jun 2021 15:33:04 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH] can: bittiming: fix two grammar mistakes in
- documentation for struct can_tdc
-Message-ID: <20210616133304.txu6tt7v3ezfgvvi@pengutronix.de>
-References: <20210616124057.60723-1-mailhol.vincent@wanadoo.fr>
+        id S233693AbhFPN4U (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Jun 2021 09:56:20 -0400
+Received: from mail-lj1-f175.google.com ([209.85.208.175]:42865 "EHLO
+        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233697AbhFPNzW (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 09:55:22 -0400
+Received: by mail-lj1-f175.google.com with SMTP id r16so3927987ljk.9;
+        Wed, 16 Jun 2021 06:53:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yak0Jw5qtLSF6XuLp21VlMysIAiLyA6w6CP8nitLvQk=;
+        b=mEfyXChHnSHaCrGszybE5zi+Y5Q52iSpBk2fEZ+qYpEDlTE3eYnKoHB4hdc5ScNCm1
+         GyZl/a7GbkFK6zaAISQ0EOF+JcI9aj2N24fsVDDSGZ7A4/QKI2neA8IvlGdhXyLPeHLW
+         5U6c4CBETcf1zv16Yse7ZJuxvyJ3gYhHvUyy5oqCQ6uodcthYOKmiEgB1mgPdz4cNPj9
+         w439Q5blXZAhwG0R7xHA+cAGZ+YtsZA4cA2+gxN0KXs2CWi+4vlDt5pxyEJ5s0f0dbRI
+         eq7LsmwrgdG7O0U+jVGmlYdEznTKvUFKgtZqrT4uILxDaNHtixOcmaZ92VxIYB8jTosy
+         aEXw==
+X-Gm-Message-State: AOAM530Lkxbozny+eTZTw58Pjndsvpra/7V1OxBd3qWFMeMxgB98tCRd
+        PPi6Ox/RRtIySu1/6L9A+lgz532hETy3baxFRfg=
+X-Google-Smtp-Source: ABdhPJztjS7vGrTuoCmVUMZtJGuQRKly2mHe+80maPnLjPtU4tmHy4EeVuU3+loy+xoAWDpQCjIOm2Ro0fGrZJYK60E=
+X-Received: by 2002:a2e:bf14:: with SMTP id c20mr4534138ljr.57.1623851594153;
+ Wed, 16 Jun 2021 06:53:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uiexeids3bprc5zy"
-Content-Disposition: inline
-In-Reply-To: <20210616124057.60723-1-mailhol.vincent@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <20210603151550.140727-1-mailhol.vincent@wanadoo.fr>
+ <20210603151550.140727-3-mailhol.vincent@wanadoo.fr> <20210616094633.fwg6rsyxyvm2zc6d@pengutronix.de>
+In-Reply-To: <20210616094633.fwg6rsyxyvm2zc6d@pengutronix.de>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Wed, 16 Jun 2021 22:53:02 +0900
+Message-ID: <CAMZ6RqLj59+3PrQwTCfK_bVebRBHE=HqCfRb31MU9pRDBPxG8w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] can: netlink: add interface for CAN-FD Transmitter
+ Delay Compensation (TDC)
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can <linux-can@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+On Wed. 16 Jun 2021 at 18:46, Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> On 04.06.2021 00:15:50, Vincent Mailhol wrote:
+> [...]
+>
+> > +static size_t can_tdc_get_size(const struct net_device *dev)
+> > +{
+> > +     struct can_priv *priv = netdev_priv(dev);
+> > +     size_t size;
+> > +
+> > +     if (!priv->tdc_const)
+> > +             return 0;
+> > +
+> > +     size = nla_total_size(0);                       /* nest IFLA_CAN_TDC */
+> > +     size += nla_total_size(sizeof(u32));            /* IFLA_CAN_TDCV_MAX */
+> > +     size += nla_total_size(sizeof(u32));            /* IFLA_CAN_TDCO_MAX */
+> > +     size += nla_total_size(sizeof(u32));            /* IFLA_CAN_TDCF_MAX */
+> > +
+> > +     if (priv->tdc.tdco) {
+>
+> Naively I'd say, iff the device has tdc_const give the user space the
+> tdc parameters, regardless if some value is 0 or not.
+>
+> What do you think?
 
---uiexeids3bprc5zy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I thought about that.
+The first important remark is that if tdc.tdco is zero, then TDC
+is off (c.f. documentation of struct can_tdc::tdco).
 
-On 16.06.2021 21:40:57, Vincent Mailhol wrote:
-> This patch fixes two grammar errors in the documentation for struct
-> can_tdc.
->=20
-> First grammar error: add a missing third person 's'.
->=20
-> Second grammar error: replace "such as" by "such that". The intent is
-> to give a condition, not an example.
->=20
-> Fixes: 289ea9e4ae59 ("can: add new CAN FD bittiming parameters: Transmitt=
-er Delay Compensation (TDC)")
-> Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-> ---
-> Hi Marc,
->=20
-> If that makes sense to you, feel free to squash this in your other
-> patch.
+Let me illustrate my vision through examples.
 
-Makes sense. I've added you as Co-developed-by:
 
-|     can: bittiming: fix documentation for struct can_tdc::tdcv
-|    =20
-|     This patch fixes a typo in the documentation for struct can_tdc::tdcv.
-|     The number "0" refers to automatic mode not the letter "O".
-|    =20
-|     Further two grammar errors in the documentation for struct can_tdc are
-|     fixed.
-|    =20
-|     First grammar error: add a missing third person 's'.
-|    =20
-|     Second grammar error: replace "such as" by "such that". The intent is
-|     to give a condition, not an example.
-|    =20
-|     Fixes: 289ea9e4ae59 ("can: add new CAN FD bittiming parameters: Trans=
-mitter Delay Compensation (TDC)")
-|     Link: https://lore.kernel.org/r/20210616095922.2430415-1-mkl@pengutro=
-nix.de
-|     Link: https://lore.kernel.org/r/20210616124057.60723-1-mailhol.vincen=
-t@wanadoo.fr
-|     Co-developed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-|     Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-|     Acked-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-|     Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+** Case 1: link is not configured at all. **
+Here, only the constant values are displayed.
 
-regards,
-Marc
+# ip --details link show can0
+1:  can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT group
+default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
+      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
+      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
+      tdcv_max 0 tdco_max 127 tdcf_max 127
+      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
+gso_max_segs 65535
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---uiexeids3bprc5zy
-Content-Type: application/pgp-signature; name="signature.asc"
+** Case 2: only the nominal bitrate is configured. **
+The data bittiming variables (including TDC) are not shown.
 
------BEGIN PGP SIGNATURE-----
+# ip --details link show can0
+1:  can0: <NOARP,ECHO> mtu 16 qdisc noop state DOWN mode DEFAULT group
+default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
+      bitrate 500000 sample-point 0.875
+      tq 12 prop-seg 69 phase-seg1 70phase-seg2 20  sjw 1
+      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
+      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
+      tdcv_max 0 tdco_max 127 tdcf_max 127
+      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
+gso_max_segs 65535
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDJ/X0ACgkQqclaivrt
-76mnDQgAtxz2QuDwbAUmbxoNf66uj2Lk2IW4CJPNHpvvgfkb0JTeO3qtFBLHRbUF
-aIzFfwTp17w76cJKFLFjqFXIryIc8pGtcktf2pyd0ffXQXmgW8XamQhTXlJeWoeS
-RONKO6Tp2qqxrMj6IBVm374wlejp1fdyUYlQgM/ZxDScHH2rr7XFS1+o5Mz+MWoJ
-Ei0dH03bMbjkpC2ijDnhQ28nuxwK2eGZyyrDYm2ySYWvd9wUbVSct6q3UzyyRat0
-NVVMx0mRzBQEUBwRT78GBwNY5mVd6yxDevAaWcNaanuzI7rhSbDOaXQY8LV2+DUR
-HFaDltUXvgGVwRjWDjWL1PBFP0H/Sg==
-=11DW
------END PGP SIGNATURE-----
 
---uiexeids3bprc5zy--
+** Case 3: both nominal and data bitrates are configured (but not TDC). **
+Only the TDC variables are not shown.
+
+# ip --details link show can0
+1:  can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group
+default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can <FD> state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
+      bitrate 500000 sample-point 0.875
+      tq 12 prop-seg 69 phase-seg1 70phase-seg2 20  sjw 1
+      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
+      dbitrate 2000000 dsample-point 0.750
+      dtq 12 dprop-seg 14 dphase-seg1 15 dphase-seg2 10 dsjw 1
+      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
+      tdcv_max 0 tdco_max 127 tdcf_max 127
+      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
+gso_max_segs 65535
+
+
+** Case 4: nominal and data bitrates and TDC are configured. **
+Everything is shown.
+
+# ip --details link show can0
+1:  can0: <NOARP,ECHO> mtu 72 qdisc noop state DOWN mode DEFAULT group
+default qlen 10
+    link/can  promiscuity 0 minmtu 0 maxmtu 0
+    can <FD> state STOPPED (berr-counter tx 0 rx 0) restart-ms 0
+      bitrate 1000000 sample-point 0.750
+      tq 12 prop-seg 29 phase-seg1 30phase-seg2 20  sjw 1
+      ES582.1/ES584.1: tseg1 2..256 tseg2 2..128 sjw 1..128 brp 1..512 brp_inc 1
+      dbitrate 5000000 dsample-point 0.750
+      dtq 12 dprop-seg 5 dphase-seg1 6 dphase-seg2 4 dsjw 1
+      tdcv 0 tdco 12 tdcf 0
+      ES582.1/ES584.1: dtseg1 2..32 dtseg2 1..16 dsjw 1..8 dbrp 1..32 brp_inc 1
+      tdcv_max 0 tdco_max 127 tdcf_max 127
+      clock 80000000 numtxqueues 1 numrxqueues 1 gso_max_size 65536
+gso_max_segs 65535
+
+
+I think that we can agree on Cases 1, 2 (it would not make sense
+to display TDC without the data bittiming variables) and 4.
+
+The edge case is Case 3. It depends if we consider the TDC as a
+separate set or not. It is not silly to display the TDC whenever
+fd is on. I prefer to keep it the way I did it. But I would not
+object to changing this if you insist. That would mean:
+-     if (priv->tdc.tdco) {
++     if (priv->data_bittiming.bitrate) {
+
+
+Finally, I have one side comment. It seems to me that you did not
+understand that the intent of
+|     if (priv->tdc.tdco)
+was to actually check whether TDC was on or off. In other words, my
+code was unclear.
+
+I am now thinking to introduce an helper macro:
+static bool can_tdc_is_enabled(const struct can_priv *priv)
+|{
+|    return !!priv->tdc.tdco;
+|}
+
+The code would look more clear like that.
+-     if (priv->tdc.tdco) {
++     if (can_tdc_is_enabled(priv) {
+
+
+Yours sincerely,
+Vincent
