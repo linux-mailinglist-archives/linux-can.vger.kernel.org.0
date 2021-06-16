@@ -2,94 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BA83A97D3
-	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 12:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D5E3A9894
+	for <lists+linux-can@lfdr.de>; Wed, 16 Jun 2021 13:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbhFPKnt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 16 Jun 2021 06:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
+        id S232455AbhFPLEj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 16 Jun 2021 07:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbhFPKnt (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 06:43:49 -0400
+        with ESMTP id S230236AbhFPLEF (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 16 Jun 2021 07:04:05 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37731C061574
-        for <linux-can@vger.kernel.org>; Wed, 16 Jun 2021 03:41:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BCCC061283
+        for <linux-can@vger.kernel.org>; Wed, 16 Jun 2021 04:01:59 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1ltSzN-0004RX-MH; Wed, 16 Jun 2021 12:41:41 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:27:4a54:dbae:b593])
+        id 1ltTJ0-0007kK-2Z
+        for linux-can@vger.kernel.org; Wed, 16 Jun 2021 13:01:58 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id E241D63D298
+        for <linux-can@vger.kernel.org>; Wed, 16 Jun 2021 11:01:55 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 9048463D23F;
-        Wed, 16 Jun 2021 10:41:36 +0000 (UTC)
-Date:   Wed, 16 Jun 2021 12:41:35 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 75DF763D28C;
+        Wed, 16 Jun 2021 11:01:54 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id b4297ccf;
+        Wed, 16 Jun 2021 11:01:53 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <20210616104135.z5bjalhan4ui2ibz@pengutronix.de>
-References: <20210615191543.1043414-1-robh@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2021-06-16
+Date:   Wed, 16 Jun 2021 13:01:48 +0200
+Message-Id: <20210616110152.2456765-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="agvztsrh6izyn335"
-Content-Disposition: inline
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -98,50 +50,60 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---agvztsrh6izyn335
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 4 patches for net/master.
 
-On 15.06.2021 13:15:43, Rob Herring wrote:
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with t=
-he
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooli=
-ng
-> will fixup the final schema adding any unspecified minItems/maxItems.
->=20
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-[...]
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
+The first patch is by Oleksij Rempel and fixes a Use-after-Free found
+by syzbot in the j1939 stack.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
+The next patch is by Tetsuo Handa and fixes hung task detected by
+syzbot in the bcm, raw and isotp protocols.
+
+Norbert Slusarek's patch fixes a infoleak in bcm's struct
+bcm_msg_head.
+
+Pavel Skripkin's patch fixes a memory leak in the mcba_usb driver.
 
 regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---agvztsrh6izyn335
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit a4f0377db1254373513b992ff31a351a7111f0fd:
 
------BEGIN PGP SIGNATURE-----
+  Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2021-06-15 15:26:07 -0700)
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDJ1V0ACgkQqclaivrt
-76nTUAf+NueTtFpURzEcaqcVzU9on1r9+EA8Cl4Mxhgg3Nw3TGp6enDeBSGPVR5B
-MaJtsub8PAEbECezUQxWPaNPa5uvS7dCW5eygZ2z3lDMGZGhYjtv67LVAJgCDq3q
-BWNuKMkKu25Ccsxl33ItHRrAmrlcwBcZMfzN+E9OgZ60GySlRv+AxcLR2XiwST9t
-kWlEW417Mj0P+cvwFo/3Ms4zRddEiw92YruesAK73pkxrB2u2xqaSy9BqNHZCG/J
-F9Q0VsjhTwLAI/7VQohXgcrL2yHsMRJt0M1+XMaxNncf1amrPNo8eWjyNDNbbIIi
-s6uvO8FoLgDLRqbX7Q14cLQ+uQmadw==
-=ZOig
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---agvztsrh6izyn335--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.13-20210616
+
+for you to fetch changes up to 91c02557174be7f72e46ed7311e3bea1939840b0:
+
+  can: mcba_usb: fix memory leak in mcba_usb (2021-06-16 12:52:18 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.13-20210616
+
+----------------------------------------------------------------
+Norbert Slusarek (1):
+      can: bcm: fix infoleak in struct bcm_msg_head
+
+Oleksij Rempel (1):
+      can: j1939: fix Use-after-Free, hold skb ref while in use
+
+Pavel Skripkin (1):
+      can: mcba_usb: fix memory leak in mcba_usb
+
+Tetsuo Handa (1):
+      can: bcm/raw/isotp: use per module netdevice notifier
+
+ drivers/net/can/usb/mcba_usb.c | 17 ++++++++++--
+ net/can/bcm.c                  | 62 +++++++++++++++++++++++++++++++++---------
+ net/can/isotp.c                | 61 ++++++++++++++++++++++++++++++++---------
+ net/can/j1939/transport.c      | 54 ++++++++++++++++++++++++++----------
+ net/can/raw.c                  | 62 ++++++++++++++++++++++++++++++++----------
+ 5 files changed, 200 insertions(+), 56 deletions(-)
+
+
+
