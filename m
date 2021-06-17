@@ -2,349 +2,318 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A40A33ABE94
-	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 00:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342C93ABEA2
+	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 00:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbhFQWRh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 17 Jun 2021 18:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbhFQWRh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 17 Jun 2021 18:17:37 -0400
-Received: from mail.kernel-space.org (unknown [IPv6:2a01:4f8:c2c:5a84::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F60C061574;
-        Thu, 17 Jun 2021 15:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
-        s=20190913; t=1623968125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EMt1TLYEt9dlOXGA+w25phC64EajGIBc119mgltbYKM=;
-        b=v+8tcnR3os8fQyC5yc/sWYF/zKPcYUhq3E14Jf7EOtvSHM6Zsh2LXSIqMv4DHt3mMDfCks
-        qURLpH2MJrmRWJk6WrkFULx6dCCuzLo1wEDnUXp0kgt8DndAzW8SVaIeZRUQ/j0JNgnTWR
-        1qn2u3kK++uM4U2gWKgtKVUJVmSTNSI=
-Received: from [192.168.0.2] (host-87-8-57-171.retail.telecomitalia.it [87.8.57.171])
-        by ziongate (OpenSMTPD) with ESMTPSA id 5fca30a3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 17 Jun 2021 22:15:25 +0000 (UTC)
-Subject: Re: [PATCH v2 5/5] can: flexcan: add mcf5441x support
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     gerg@linux-m68k.org, wg@grandegger.com, geert@linux-m68k.org,
-        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
-        qiangqing.zhang@nxp.com
-References: <20210616231652.738027-1-angelo@kernel-space.org>
- <20210616231652.738027-5-angelo@kernel-space.org>
- <20210617130053.yovl3b3p5mn2srnd@pengutronix.de>
-From:   Angelo Dureghello <angelo@kernel-space.org>
-Message-ID: <b6b948f4-dcdb-5f75-9fe8-138de0acf1f7@kernel-space.org>
-Date:   Fri, 18 Jun 2021 00:14:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S232120AbhFQWTO (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 17 Jun 2021 18:19:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232088AbhFQWTM (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 17 Jun 2021 18:19:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F0DD6613B4;
+        Thu, 17 Jun 2021 22:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623968224;
+        bh=8lLNvAQJFBYHcwyHgNEpUKH4liF//tJL8IXh/++g2VQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=huvrHHpH2Av8vejTexiFgCIX8gaey/rp/0fjLnRAt1uHvre0POa9FMvPn6CSKF4vP
+         c1dyDYSMYo16eAP+y8b7jCtqCSK/GxM08QdxX1G394l3E8JBesdgSfezsVwCObf+XY
+         7aWLgTlzsBBO6TKNEHxE7nsZ/+OgD85yLW8ohdjh7wOtV4YkqobaNmS5taze+KHWCO
+         fK6lrJ8I7DNEWJB2YicAQ/PLhU6Y66Is1uaJonoeXzDn/9t9wK0lIH/tQqckcXFuET
+         u5Swl2hwja6dodRo6iE7Vpv+Vl8JR6ZLXVJxbLuKQjO/HsCiolAUliP6AHbf478B1T
+         ZnwiO+IrhijxQ==
+Received: by mail-ej1-f42.google.com with SMTP id g8so12572868ejx.1;
+        Thu, 17 Jun 2021 15:17:03 -0700 (PDT)
+X-Gm-Message-State: AOAM533H3WTBiNxJM6fB2cmYC7GQaa7pmWFlsaU47n2KIwiQ92m1Lq8f
+        UK4pz+k6qhTXDxkxwrDizAPdZXHPBGMyCwOnhw==
+X-Google-Smtp-Source: ABdhPJxzgkf6C07sPN7yjl1phyvHCv9pAxXmIQ1iuWsb7n6aw/LK46UKCpGaWvweVtQco41YaA9gmDx268LBgSxFl4o=
+X-Received: by 2002:a17:907:264b:: with SMTP id ar11mr7391845ejc.525.1623968222450;
+ Thu, 17 Jun 2021 15:17:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210617130053.yovl3b3p5mn2srnd@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210615191543.1043414-1-robh@kernel.org> <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
+In-Reply-To: <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 17 Jun 2021 16:16:50 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+-ggeBMT_507HN+mM1KirM+w2ZnhZNe+Q7tRsFRJxDOw@mail.gmail.com>
+Message-ID: <CAL_Jsq+-ggeBMT_507HN+mM1KirM+w2ZnhZNe+Q7tRsFRJxDOw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+To:     Suman Anna <s-anna@ti.com>
+Cc:     devicetree@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-phy@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-can@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dmaengine@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Mark,
+On Thu, Jun 17, 2021 at 10:06 AM Suman Anna <s-anna@ti.com> wrote:
+>
+> Hi Rob,
+>
+> On 6/15/21 2:15 PM, Rob Herring wrote:
+> > If a property has an 'items' list, then a 'minItems' or 'maxItems' with=
+ the
+> > same size as the list is redundant and can be dropped. Note that is DT
+> > schema specific behavior and not standard json-schema behavior. The too=
+ling
+> > will fixup the final schema adding any unspecified minItems/maxItems.
+> >
+> > This condition is partially checked with the meta-schema already, but
+> > only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> > An improved meta-schema is pending.
+> >
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> > Cc: Jonathan Cameron <jic23@kernel.org>
+> > Cc: Lars-Peter Clausen <lars@metafoo.de>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Joerg Roedel <joro@8bytes.org>
+> > Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Wolfgang Grandegger <wg@grandegger.com>
+> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> > Cc: Vladimir Oltean <olteanv@gmail.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
+> > Cc: Lee Jones <lee.jones@linaro.org>
+> > Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Zhang Rui <rui.zhang@intel.com>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../devicetree/bindings/ata/nvidia,tegra-ahci.yaml          | 1 -
+> >  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml  | 2 --
+> >  .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml         | 1 -
+> >  Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml | 2 --
+> >  .../devicetree/bindings/clock/qcom,gcc-sm8350.yaml          | 2 --
+> >  .../devicetree/bindings/clock/sprd,sc9863a-clk.yaml         | 1 -
+> >  .../devicetree/bindings/crypto/allwinner,sun8i-ce.yaml      | 2 --
+> >  Documentation/devicetree/bindings/crypto/fsl-dcp.yaml       | 1 -
+> >  .../display/allwinner,sun4i-a10-display-backend.yaml        | 6 ------
+> >  .../bindings/display/allwinner,sun6i-a31-mipi-dsi.yaml      | 1 -
+> >  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml      | 4 ----
+> >  .../bindings/display/allwinner,sun8i-a83t-hdmi-phy.yaml     | 2 --
+> >  .../bindings/display/allwinner,sun8i-r40-tcon-top.yaml      | 2 --
+> >  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 2 --
+> >  .../bindings/display/rockchip/rockchip,dw-hdmi.yaml         | 2 --
+> >  Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
+> >  .../devicetree/bindings/display/st,stm32-ltdc.yaml          | 1 -
+> >  .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml | 4 ----
+> >  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
+> >  .../devicetree/bindings/edac/amazon,al-mc-edac.yaml         | 2 --
+> >  Documentation/devicetree/bindings/eeprom/at24.yaml          | 1 -
+> >  Documentation/devicetree/bindings/example-schema.yaml       | 2 --
+> >  Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.yaml     | 1 -
+> >  Documentation/devicetree/bindings/gpu/vivante,gc.yaml       | 1 -
+> >  Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml | 1 -
+> >  .../devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml        | 2 --
+> >  .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml         | 1 -
+> >  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
+> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
+> >  .../bindings/interrupt-controller/fsl,irqsteer.yaml         | 1 -
+> >  .../bindings/interrupt-controller/loongson,liointc.yaml     | 1 -
+> >  Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml    | 1 -
+> >  .../devicetree/bindings/iommu/renesas,ipmmu-vmsa.yaml       | 1 -
+> >  .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml          | 2 --
+> >  .../devicetree/bindings/media/amlogic,gx-vdec.yaml          | 1 -
+> >  Documentation/devicetree/bindings/media/i2c/adv7604.yaml    | 1 -
+> >  .../devicetree/bindings/media/marvell,mmp2-ccic.yaml        | 1 -
+> >  .../devicetree/bindings/media/qcom,sc7180-venus.yaml        | 1 -
+> >  .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml     | 1 -
+> >  .../devicetree/bindings/media/qcom,sm8250-venus.yaml        | 1 -
+> >  Documentation/devicetree/bindings/media/renesas,drif.yaml   | 1 -
+> >  .../bindings/memory-controllers/mediatek,smi-common.yaml    | 6 ++----
+> >  .../bindings/memory-controllers/mediatek,smi-larb.yaml      | 1 -
+> >  .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml    | 2 --
+> >  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml    | 1 -
+> >  Documentation/devicetree/bindings/mmc/mtk-sd.yaml           | 2 --
+> >  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml     | 2 --
+> >  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml      | 1 -
+> >  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml        | 1 -
+> >  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml        | 2 --
+> >  .../devicetree/bindings/net/brcm,bcm4908-enet.yaml          | 2 --
+> >  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
+> >  Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml     | 2 --
+> >  Documentation/devicetree/bindings/net/snps,dwmac.yaml       | 2 --
+> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 1 -
+> >  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml    | 2 --
+> >  Documentation/devicetree/bindings/pci/loongson.yaml         | 1 -
+> >  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml         | 1 -
+> >  .../devicetree/bindings/pci/microchip,pcie-host.yaml        | 2 --
+> >  Documentation/devicetree/bindings/perf/arm,cmn.yaml         | 1 -
+> >  .../devicetree/bindings/phy/brcm,bcm63xx-usbh-phy.yaml      | 1 -
+> >  .../devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml       | 3 ---
+> >  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
+> >  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
+> >  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
+> >  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
+> >  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
+> >  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
+> >  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
+> >  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
+> >  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
+> >  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
+> >  .../devicetree/bindings/pinctrl/actions,s500-pinctrl.yaml   | 1 -
+> >  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml    | 1 -
+> >  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml    | 1 -
+> >  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml      | 2 --
+> >  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml     | 1 -
+> >  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml  | 1 -
+> >  Documentation/devicetree/bindings/reset/fsl,imx-src.yaml    | 1 -
+> >  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
+> >  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml    | 1 -
+> >  Documentation/devicetree/bindings/rtc/imxdi-rtc.yaml        | 1 -
+> >  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml    | 2 --
+> >  Documentation/devicetree/bindings/serial/samsung_uart.yaml  | 1 -
+> >  .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml          | 1 -
+> >  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml      | 2 --
+> >  .../bindings/sound/nvidia,tegra-audio-graph-card.yaml       | 1 -
+> >  .../devicetree/bindings/sound/nvidia,tegra210-i2s.yaml      | 2 --
+> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 3 ---
+> >  .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml     | 1 -
+> >  .../devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml          | 2 --
+> >  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml          | 2 --
+> >  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml   | 1 -
+> >  .../bindings/timer/allwinner,sun5i-a13-hstimer.yaml         | 1 -
+> >  Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 -
+> >  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml      | 2 --
+> >  .../devicetree/bindings/timer/intel,ixp4xx-timer.yaml       | 1 -
+> >  .../devicetree/bindings/usb/maxim,max3420-udc.yaml          | 2 --
+> >  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml          | 4 ----
+> >  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml    | 3 ---
+> >  .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 1 -
+> >  101 files changed, 2 insertions(+), 163 deletions(-)
+> >
+>
+> [snip]
+>
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rpr=
+oc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> > index 6070456a7b67..f399743b631b 100644
+> > --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> > +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> > @@ -57,7 +57,6 @@ properties:
+> >
+> >    memory-region:
+> >      minItems: 2
+> > -    maxItems: 8
+> >      description: |
+> >        phandle to the reserved memory nodes to be associated with the r=
+emoteproc
+> >        device. There should be at least two reserved memory nodes defin=
+ed. The
+>
+> Does this enforce the maxItems to be 2 only now? Or should this be droppi=
+ng the
+> minItems here which matches the length of items instead of maxItems?
+>
+> I have originally listed the individual item list only for the mandatory =
+items
+> and rest are scalable. I provided this through "additionalItems: true" un=
+der
+> this property.
 
-On 17/06/21 3:00 PM, Marc Kleine-Budde wrote:
-> On 17.06.2021 01:16:52, Angelo Dureghello wrote:
->> Add flexcan support for NXP ColdFire mcf5441x family.
->>
->> This flexcan module is quite similar to imx6 flexcan module, but
->> with some exceptions:
->>
->> - 3 separate interrupt sources, MB, BOFF and ERR,
->> - implements 16 mb only,
->> - m68k architecture is not supporting devicetrees, so a
->>    platform data check/case has been added,
->> - ColdFire is m68k, so big-endian cpu, with a little-endian flexcan
->>    module.
-> 
-> Please add the mcg5441x to the "FLEXCAN hardware feature flags" table in
-> the driver, and add a new column for the number of mailboxes.
-> 
+Good catch. This should be dropped. The meta-schema doesn't enforce
+this if "additionalItems: true" which is rarely used.
 
-need a little help here: where can i find IP version and
-FlexCAN version ? I am 90% sure mcf5441x is FlexCAN2 (no FD).
-No trace of IP version in the datasheets.
+> Also, have the exact same usage in
+> Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml as well=
+ which
+> is not included in this patch.
 
->> ---
->> Changes for v2:
->> - re-add platform data handling restarting from 2c0ac9208135
->> - re-add flexcan_id_table, as from 2c0ac9208135
->> - usinig irq resources for ERR and BOFF interrupts
->> - add missing free_irq() for interrupts
->> - minor syntax fixes
->>
->> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
->> ---
->>   drivers/net/can/flexcan.c | 95 ++++++++++++++++++++++++++++++++++-----
->>   1 file changed, 84 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
->> index 57f3635ad8d7..2188dc36a010 100644
->> --- a/drivers/net/can/flexcan.c
->> +++ b/drivers/net/can/flexcan.c
->> @@ -28,6 +28,7 @@
->>   #include <linux/of_device.h>
->>   #include <linux/pinctrl/consumer.h>
->>   #include <linux/platform_device.h>
->> +#include <linux/can/platform/mcf5441x.h>
->>   #include <linux/pm_runtime.h>
->>   #include <linux/regmap.h>
->>   #include <linux/regulator/consumer.h>
->> @@ -246,6 +247,8 @@
->>   #define FLEXCAN_QUIRK_SUPPORT_ECC BIT(10)
->>   /* Setup stop mode with SCU firmware to support wakeup */
->>   #define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW BIT(11)
->> +/* Setup for flexcan module as in mcf, 16 mb, 3 separate interrupts  */
->> +#define FLEXCAN_QUIRK_SETUP_MCF BIT(12)
->>   
->>   /* Structure of the message buffer */
->>   struct flexcan_mb {
->> @@ -363,6 +366,9 @@ struct flexcan_priv {
->>   	struct regulator *reg_xceiver;
->>   	struct flexcan_stop_mode stm;
->>   
->> +	int irq_boff;
->> +	int irq_err;
->> +
->>   	/* IPC handle when setup stop mode by System Controller firmware(scfw) */
->>   	struct imx_sc_ipc *sc_ipc_handle;
->>   
->> @@ -371,6 +377,12 @@ struct flexcan_priv {
->>   	void (*write)(u32 val, void __iomem *addr);
->>   };
->>   
->> +static const struct flexcan_devtype_data fsl_mcf_devtype_data = {
->> +	.quirks = FLEXCAN_QUIRK_BROKEN_WERR_STATE |
->> +		FLEXCAN_QUIRK_BROKEN_PERR_STATE |
->> +		FLEXCAN_QUIRK_SETUP_MCF,
->> +};
->> +
->>   static const struct flexcan_devtype_data fsl_p1010_devtype_data = {
->>   	.quirks = FLEXCAN_QUIRK_BROKEN_WERR_STATE |
->>   		FLEXCAN_QUIRK_BROKEN_PERR_STATE |
->> @@ -637,13 +649,17 @@ static int flexcan_clks_enable(const struct flexcan_priv *priv)
->>   {
->>   	int err;
->>   
->> -	err = clk_prepare_enable(priv->clk_ipg);
->> -	if (err)
->> -		return err;
->> +	if (priv->clk_ipg) {
->> +		err = clk_prepare_enable(priv->clk_ipg);
-> 
-> Does the coldfire clk_disable_unprepare() work with NULL pointers? I'm
-> asking for flexcan_clks_disable()...
-> 
+Yeah, I just missed this one. I've double checked and there aren't any more=
+.
 
-tested, it's ok with NULL.
-
->> +		if (err)
->> +			return err;
->> +	}
->>   
->> -	err = clk_prepare_enable(priv->clk_per);
->> -	if (err)
->> -		clk_disable_unprepare(priv->clk_ipg);
->> +	if (priv->clk_per) {
->> +		err = clk_prepare_enable(priv->clk_per);
->> +		if (err)
->> +			clk_disable_unprepare(priv->clk_ipg);
->> +	}
->>   
->>   	return err;
->>   }
->> @@ -1401,8 +1417,12 @@ static int flexcan_rx_offload_setup(struct net_device *dev)
->>   		priv->mb_size = sizeof(struct flexcan_mb) + CANFD_MAX_DLEN;
->>   	else
->>   		priv->mb_size = sizeof(struct flexcan_mb) + CAN_MAX_DLEN;
->> -	priv->mb_count = (sizeof(priv->regs->mb[0]) / priv->mb_size) +
->> -			 (sizeof(priv->regs->mb[1]) / priv->mb_size);
->> +
->> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_MCF)
->> +		priv->mb_count = FLEXCAN_MCF5411X_MB_CNT_MCF;
->> +	else
->> +		priv->mb_count = (sizeof(priv->regs->mb[0]) / priv->mb_size) +
->> +				 (sizeof(priv->regs->mb[1]) / priv->mb_size);
->>   
->>   	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP)
->>   		priv->tx_mb_reserved =
->> @@ -1774,6 +1794,18 @@ static int flexcan_open(struct net_device *dev)
->>   	if (err)
->>   		goto out_can_rx_offload_disable;
->>   
->> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_MCF) {
->> +		err = request_irq(priv->irq_boff,
->> +				  flexcan_irq, IRQF_SHARED, dev->name, dev);
->> +		if (err)
->> +			goto out_can_rx_offload_disable;
-> 
-> Please add proper error handling.
-
-done
-
-> 
->> +
->> +		err = request_irq(priv->irq_err,
->> +				  flexcan_irq, IRQF_SHARED, dev->name, dev);
->> +		if (err)
->> +			goto out_can_rx_offload_disable;
-> 
-> Please add proper error handling.
-
-done
-
-> 
->> +	}
->> +
->>   	flexcan_chip_interrupts_enable(dev);
->>   
->>   	can_led_event(dev, CAN_LED_EVENT_OPEN);
->> @@ -1804,6 +1836,12 @@ static int flexcan_close(struct net_device *dev)
->>   	netif_stop_queue(dev);
->>   	flexcan_chip_interrupts_disable(dev);
->>   	free_irq(dev->irq, dev);
->> +
->> +	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SETUP_MCF) {
->> +		free_irq(priv->irq_boff, dev);
->> +		free_irq(priv->irq_err, dev);
->> +	}
-> 
-> please free in the opposite order of requesting
-> 
-
-done
-
->> +
->>   	can_rx_offload_disable(&priv->offload);
->>   	flexcan_chip_stop_disable_on_error(dev);
->>   
->> @@ -2039,14 +2077,26 @@ static const struct of_device_id flexcan_of_match[] = {
->>   };
->>   MODULE_DEVICE_TABLE(of, flexcan_of_match);
->>   
->> +static const struct platform_device_id flexcan_id_table[] = {
->> +	{
->> +		.name = "flexcan-mcf",
->> +		.driver_data = (kernel_ulong_t)&fsl_mcf_devtype_data,
->> +	}, {
->> +		/* sentinel */
->> +	},
->> +};
->> +MODULE_DEVICE_TABLE(platform, flexcan_id_table);
->> +
->>   static int flexcan_probe(struct platform_device *pdev)
->>   {
->> +	const struct of_device_id *of_id;
->>   	const struct flexcan_devtype_data *devtype_data;
->>   	struct net_device *dev;
->>   	struct flexcan_priv *priv;
->>   	struct regulator *reg_xceiver;
->>   	struct clk *clk_ipg = NULL, *clk_per = NULL;
->>   	struct flexcan_regs __iomem *regs;
->> +	struct mcf_flexcan_platform_data *pdata;
->>   	int err, irq;
->>   	u8 clk_src = 1;
->>   	u32 clock_freq = 0;
->> @@ -2061,9 +2111,15 @@ static int flexcan_probe(struct platform_device *pdev)
->>   
->>   	if (pdev->dev.of_node) {
->>   		of_property_read_u32(pdev->dev.of_node,
->> -				     "clock-frequency", &clock_freq);
->> +				"clock-frequency", &clock_freq);
-> 
-> unrelated change
-
-removed
-
-> 
->>   		of_property_read_u8(pdev->dev.of_node,
->> -				    "fsl,clk-source", &clk_src);
->> +				"fsl,clk-source", &clk_src);
-> 
-> unrelated change
-
-removed
-
-> 
->> +	} else {
->> +		pdata = dev_get_platdata(&pdev->dev);
->> +		if (pdata) {
->> +			clock_freq = pdata->clock_frequency;
->> +			clk_src = pdata->clk_src;
->> +		}
->>   	}
->>   
->>   	if (!clock_freq) {
->> @@ -2089,7 +2145,14 @@ static int flexcan_probe(struct platform_device *pdev)
->>   	if (IS_ERR(regs))
->>   		return PTR_ERR(regs);
->>   
->> -	devtype_data = of_device_get_match_data(&pdev->dev);
->> +	of_id = of_match_device(flexcan_of_match, &pdev->dev);
->> +	if (of_id)
->> +		devtype_data = of_id->data;
->> +	else if (platform_get_device_id(pdev)->driver_data)
->> +		devtype_data = (struct flexcan_devtype_data *)
->> +			platform_get_device_id(pdev)->driver_data;
->> +	else
->> +		return -ENODEV;
->>   
->>   	if ((devtype_data->quirks & FLEXCAN_QUIRK_SUPPORT_FD) &&
->>   	    !(devtype_data->quirks & FLEXCAN_QUIRK_USE_OFF_TIMESTAMP)) {
->> @@ -2133,6 +2196,15 @@ static int flexcan_probe(struct platform_device *pdev)
->>   	priv->devtype_data = devtype_data;
->>   	priv->reg_xceiver = reg_xceiver;
->>   
->> +	if (devtype_data->quirks & FLEXCAN_QUIRK_SETUP_MCF) {
->> +		priv->irq_boff = platform_get_irq(pdev, 1);
->> +		if (priv->irq_boff <= 0)
->> +			return -ENODEV;
-> 
-> Please add proper error handling.
-
-done
-
-> 
->> +		priv->irq_err = platform_get_irq(pdev, 2);
->> +		if (priv->irq_err <= 0)
->> +			return -ENODEV;
-> 
-> Please add proper error handling.
-
-done
-
-> 
->> +	}
->> +
->>   	if (priv->devtype_data->quirks & FLEXCAN_QUIRK_SUPPORT_FD) {
->>   		priv->can.ctrlmode_supported |= CAN_CTRLMODE_FD |
->>   			CAN_CTRLMODE_FD_NON_ISO;
->> @@ -2322,6 +2394,7 @@ static struct platform_driver flexcan_driver = {
->>   	},
->>   	.probe = flexcan_probe,
->>   	.remove = flexcan_remove,
->> +	.id_table = flexcan_id_table,
->>   };
->>   
->>   module_platform_driver(flexcan_driver);
->> -- 
->> 2.31.1
->>
->>
-> 
-> regards,
-> Marc
-> 
-
-Regards,
-angelo
-
-
+Rob
