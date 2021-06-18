@@ -2,78 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DF33AC613
-	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 10:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21C83AC62B
+	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233654AbhFRI3y (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Jun 2021 04:29:54 -0400
-Received: from mout.web.de ([212.227.17.11]:36861 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232389AbhFRI3y (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 18 Jun 2021 04:29:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1624004861;
-        bh=V4E7DMwvoGe++o3d+07AXtDcXykJhut6IDTEHrKEH78=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=nqEHIOj/KdPH7vY83VGl1IhbbrVt4fJFp0dP2D0E2kBTpFSjtg5hTHMELqScEAKGL
-         e0Pw2EzJ8ObDkQrqjMn0ShT61LX2Nl/LTyFn3uzr+NrcyybkBhFKNr5XlS2FM/7AGV
-         5yYGYegzB6+Ms+EhNd5WnEtRVp0MmHvHIe8OGN/k=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from THOMASPC ([84.184.243.4]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MDPIf-1m4LVh44Dd-00GoTU; Fri, 18
- Jun 2021 10:27:41 +0200
-From:   "Thomas Wagner" <thwa1@web.de>
-To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>, <larssusaas@gmail.com>
-Cc:     <linux-can@vger.kernel.org>
-Subject: libsocketcan: Setting CAN FD data bitrate
-Date:   Fri, 18 Jun 2021 10:27:40 +0200
-Message-ID: <002c01d7641b$cd80bda0$688238e0$@web.de>
+        id S233273AbhFRIex (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Jun 2021 04:34:53 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:10130 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S233809AbhFRIew (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Jun 2021 04:34:52 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15I8Cjxt029418;
+        Fri, 18 Jun 2021 10:32:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=tobkvdP0XEB3rizTcrRI77boeUhPqCNPjzbxlCZFFxA=;
+ b=X5X8I/QkX33NRBreeXhB2ivJwbQuY5nuHgNW56Uf80eHr1kpxFzJX/wxy30SZc3yHrRO
+ gxoRyWbYCAvnGgSb8aL8RUYEo+Lnc2jiUKv9J3aqrgQvmbAepjonsNVPl4jb5fZwrxQS
+ WRaNuhHVAs8RVOMDVNmyvf3h5FnSW9OUwOn94pr5kQC/EUAJ0ZiFwOfJLOLLnrCAYFUs
+ BZIaGP163AH9zXouCLD1bZlXEQSjs+vGTyV3+iVAhFNuSFJte2f9xJJLgimn2EW1nPti
+ xLNiTJugAuzBGR39U+LRrbT90wL6HdH/11sqQflFkResdNC8fu2/znIYJiJtvorF2b9Q Kw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3984bm6b7h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Jun 2021 10:32:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 668DE10002A;
+        Fri, 18 Jun 2021 10:32:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F05B921B501;
+        Fri, 18 Jun 2021 10:32:37 +0200 (CEST)
+Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 18 Jun
+ 2021 10:32:35 +0200
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-crypto@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <iommu@lists.linux-foundation.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-can@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20210615191543.1043414-1-robh@kernel.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <e61633b9-48d1-81bf-9ab2-59a7b64987f3@foss.st.com>
+Date:   Fri, 18 Jun 2021 10:32:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: de
-Thread-Index: AddkGtGtBTcrThXOQNa4EdRCr0d4Eg==
-X-Provags-ID: V03:K1:5h7CrSWGmkHjJkgK+xU/oizsLqi4ATqYTGnt6VTUC7qOsek0X86
- yRNzVTD2RW+NXKraz6ee9+5IPt/36eV5BttP+4345Dobbkk6rn3kRoPp2jJiUsMgz6g2MuE
- XgbVrhDpvCrgA9waW9qnZHpotbcUwUffFehuDDt9D9rpvchIsh55XqRldLh4JRxJENYzNHo
- oavwclD1tcXftX9dZwqvg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MYRRzENfMnc=:H3DTR5cOLSFAB0HVg0aC5L
- KBPeTMQASiwHUKBn9rqmlESAO/JOGeuRFQxQbeeDLH8wS9Uz7jQ7qpApCEIhBSWL65sWKnqcC
- AyU2lNrrinizRV72aKdTze9mmjN9dyz30bezdBDDvIxfgsysRNcVGhdbE8g/otOwjppYyRcUf
- Q9oIlOl8Op3RbhLnNcQiFSFY8M5g1wLf/9d+lf6n/upatyi5Qdl4KmUQLrMd/PRvzlYJkeaD1
- HY7ywPXIeupPINrC4SR4De93CBFNdv2cBz/BVNtMeKNO7UiroLUq36B7+aioCYHZtOGJRb5ku
- F9ko5k5PQy2HugGnlaCXdWbWYCWY9vU3uIS3KQ9PQfVbas54RH4SKxRPt6oatYHZ52ecTiQ+i
- 0g2SbeisX39BSQzKaiWbZn389/McLsN8gLGQCR0/1zqvpaTo3rjZkvboHZWtl8R7z06tny9cO
- gg5Fuzkmlp30S8GjMGx+elsBl3n5efLd9HIThVP+HIn8Bv7i/VVi8jVG+s7j70zVu/9/4FtZt
- dlOyUY00swNZI2TvRwq0rg/L743vpklvX3/+AJwzZ7hr6dy0uLGveWBmQWJd2dU7Ki91kvNAh
- p2vHfTf0WPLFI/o9qDCHaOODcW3t6BM2KF8RbLdeY/c5h0odLrqAgg/bxSHrZ9gujlLgmDC1T
- DSsRkzX4/A3Lf90aXvYepr6WS/1keLQo/bhXu4eAdncZsUHDvM696wPJz/0oARCX7vRhrzbm5
- TOUvYTXL75w8xglm8O8uTJf9QBBkTrW0hipP+0U8nTIhZWqTrS+HlBu6E6U2dXGGw29l8TCa/
- t1RL9H9r5q/QjFO2slBASXziBW9rhU4gDHtyLTrUy9h+i6zulgBZqLClJx1/Tc+SMGF35juMW
- /DkANwaTElUH2RIHWVmxF6NNl2I78AXcSj24RkHCuf/MrKny8kplP9UnDEI5xAsx63Cp9/N6C
- 5xWv3PFJLlgkXu4kj2isnW50mLirNYpzFATbu6oLSDRn1wIq6blpEWH+u4TTBU7EzFl/Dvz81
- xseshzlMn1IhH6qHzbsCOP+Qu9ExMja2EimiZ8PuuCbw4kkvykdPkZ8QoAfiLkBniprcwZzOm
- PXOlWP8fr9trFIx3y2HQlqYVSpApAx8gtdq
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-06-17_17:2021-06-15,2021-06-17 signatures=0
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc and Lars,
+Hello ROb,
 
-I have been searching for a possibility to set the CAN FD data bitrate
-with libsocketcan recently and came across this [1] old thread.
+On 6/15/21 9:15 PM, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
+> 
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
+> 
+[...]
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
+[...]
+>  .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml          | 2 --
+[...]
+>  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml      | 2 --
+[...]
+>  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 3 ---
+Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 
-It seems like there has never been a final patch?  If this is the case I
-will look into it myself but I wanted to make sure there is no other
-solution already present beforehand.
-
-[1] - https://marc.info/?l=linux-can&m=153418949026459&w=2
-
-Regards
-Thomas Wagner
-
-
-
+Thanks,
+Arnaud
