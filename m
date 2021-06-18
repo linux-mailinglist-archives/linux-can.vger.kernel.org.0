@@ -2,98 +2,108 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C07E3AC4C6
-	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 09:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A5C3AC598
+	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 10:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233114AbhFRHTj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Jun 2021 03:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbhFRHTi (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Jun 2021 03:19:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C76C061574
-        for <linux-can@vger.kernel.org>; Fri, 18 Jun 2021 00:17:29 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lu8kk-0003gX-Sh; Fri, 18 Jun 2021 09:17:22 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:e7d0:b47e:7728:2b24])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 66FB563EA4B;
-        Fri, 18 Jun 2021 07:15:33 +0000 (UTC)
-Date:   Fri, 18 Jun 2021 09:15:32 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        syzbot+bdf710cfc41c186fdff3@syzkaller.appspotmail.com,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] can: j1939: j1939_sk_init(): set SOCK_RCU_FREE to
- call sk_destruct() after RCU is done
-Message-ID: <20210618071532.kr7o2rnx6ia4t6n6@pengutronix.de>
-References: <20210617130623.12705-1-o.rempel@pengutronix.de>
+        id S232438AbhFRIDH (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Jun 2021 04:03:07 -0400
+Received: from mail.kernel-space.org ([195.201.34.187]:40022 "EHLO
+        mail.kernel-space.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232455AbhFRIDA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Jun 2021 04:03:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
+        s=20190913; t=1624003228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cdx0lnD35FU0zWS7M/aFD/0+udR81CFLOOBC06iW+Bk=;
+        b=oUl2+5MOmd5Oc6hfMLVzjEVFGUwnZu/ZwshOV2Z3E677xie1BaNwZXt2k3DmPUWMF0pKaa
+        5uVoJ9VWfue2+PIeDG7OMK5wuaY/8G0R3jV/j6RmbB7RmSlhCMB278znuHStjsswaHHHEw
+        URNCLya3euKmgoJA40NSJJtEepNJmok=
+Received: from [192.168.0.2] (host-87-8-57-171.retail.telecomitalia.it [87.8.57.171])
+        by ziongate (OpenSMTPD) with ESMTPSA id ce60978d (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Fri, 18 Jun 2021 08:00:28 +0000 (UTC)
+Subject: Re: [PATCH v2 5/5] can: flexcan: add mcf5441x support
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     gerg@linux-m68k.org, wg@grandegger.com, geert@linux-m68k.org,
+        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
+        qiangqing.zhang@nxp.com
+References: <20210616231652.738027-1-angelo@kernel-space.org>
+ <20210616231652.738027-5-angelo@kernel-space.org>
+ <20210617193823.w75gayd33jpmkw4d@pengutronix.de>
+From:   Angelo Dureghello <angelo@kernel-space.org>
+Message-ID: <3e47a1a4-c0c5-fd1e-ffa7-b9f217a9a859@kernel-space.org>
+Date:   Fri, 18 Jun 2021 09:59:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="accmuapjky6tul3y"
-Content-Disposition: inline
-In-Reply-To: <20210617130623.12705-1-o.rempel@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+In-Reply-To: <20210617193823.w75gayd33jpmkw4d@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---accmuapjky6tul3y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 17/06/21 9:38 PM, Marc Kleine-Budde wrote:
+> On 17.06.2021 01:16:52, Angelo Dureghello wrote:
+>> Add flexcan support for NXP ColdFire mcf5441x family.
+>>
+>> This flexcan module is quite similar to imx6 flexcan module, but
+>> with some exceptions:
+>>
+>> - 3 separate interrupt sources, MB, BOFF and ERR,
+>> - implements 16 mb only,
+>> - m68k architecture is not supporting devicetrees, so a
+>>    platform data check/case has been added,
+>> - ColdFire is m68k, so big-endian cpu, with a little-endian flexcan
+>>    module.
+>>
+>> ---
+>> Changes for v2:
+>> - re-add platform data handling restarting from 2c0ac9208135
+>> - re-add flexcan_id_table, as from 2c0ac9208135
+>> - usinig irq resources for ERR and BOFF interrupts
+>> - add missing free_irq() for interrupts
+>> - minor syntax fixes
+>>
+>> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+>> ---
+>>   drivers/net/can/flexcan.c | 95 ++++++++++++++++++++++++++++++++++-----
+>>   1 file changed, 84 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+>> index 57f3635ad8d7..2188dc36a010 100644
+>> --- a/drivers/net/can/flexcan.c
+>> +++ b/drivers/net/can/flexcan.c
+>> @@ -28,6 +28,7 @@
+>>   #include <linux/of_device.h>
+>>   #include <linux/pinctrl/consumer.h>
+>>   #include <linux/platform_device.h>
+>> +#include <linux/can/platform/mcf5441x.h>
+>>   #include <linux/pm_runtime.h>
+>>   #include <linux/regmap.h>
+>>   #include <linux/regulator/consumer.h>
+>> @@ -246,6 +247,8 @@
+>>   #define FLEXCAN_QUIRK_SUPPORT_ECC BIT(10)
+>>   /* Setup stop mode with SCU firmware to support wakeup */
+>>   #define FLEXCAN_QUIRK_SETUP_STOP_MODE_SCFW BIT(11)
+>> +/* Setup for flexcan module as in mcf, 16 mb, 3 separate interrupts  */
+>> +#define FLEXCAN_QUIRK_SETUP_MCF BIT(12)
+> 
+> Can you split this into QUIRK_NR_IRQ_3 and QUIRK_NR_MB_16.
+> 
 
-On 17.06.2021 15:06:23, Oleksij Rempel wrote:
-> Set SOCK_RCU_FREE to let RCU to call sk_destruct() on completion.
-> Without this patch, we will run in to j1939_can_recv() after priv was
-> freed by j1939_sk_release()->j1939_sk_sock_destruct()
->=20
-> Reported-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-> Reported-by: syzbot+bdf710cfc41c186fdff3@syzkaller.appspotmail.com
-> Fixes: 25fe97cb7620 ("can: j1939: move j1939_priv_put() into sk_destruct =
-callback")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+done
 
-Applied to linux-can/testing.
+> Marc
+> 
 
-Thanks,
-Marc
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---accmuapjky6tul3y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDMSBIACgkQqclaivrt
-76l4EQf/eQFCAisRXL95N/VcHXQ0ZG5FhJztpGqR4PGTpK3XAvS2KaHwX2RpekDl
-ezrqPMDsLeDVTVXhUYsLOQWrtfEXrUO2nk4Rhv83jxIDZy5RjOrtziPt9damyMJM
-ZfIS5+bkInegRE8++p9nLYi1S2vuyzhhdMqe4jlRaQ8XRc7/naoOY9A/gUi7OCCR
-v7aLBehASTxI/hskP7ETX3g0/p0CFFSBnkCdOlVObwTwHRHWrrky5jdICRC+GWcq
-SF422Kfy61t0vdZ8yVkCIsuDDbqxhTRkOQo4rsSCbTaHRkqwGUC7HCHoSKO79Z6T
-O5ux1T8aOwG+c8o6o/oqbVNEZrG5YA==
-=ZtWx
------END PGP SIGNATURE-----
-
---accmuapjky6tul3y--
+-- 
+Angelo Dureghello
++++ kernelspace +++
++E: angelo AT kernel-space.org
++W: www.kernel-space.org
