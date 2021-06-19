@@ -2,110 +2,111 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4953AD9CA
-	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 13:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FBD73AD9EA
+	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 14:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233605AbhFSL0Q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 19 Jun 2021 07:26:16 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.20]:18776 "EHLO
+        id S233960AbhFSMOT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 19 Jun 2021 08:14:19 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:33218 "EHLO
         mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233146AbhFSL0Q (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 07:26:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624101833;
+        with ESMTP id S233887AbhFSMOT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 08:14:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624104727;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:References:To:From:Subject:Cc:Date:From:
-    Subject:Sender;
-    bh=W/FBRczRthfH8wY1xfuTKFLk8Jtk/A/fac/RMutkg0c=;
-    b=CqeyHsUM+Z55CgkWy7R3USjA7gdcQRqRSLgXHBoPfU0FJld6jzEiqZmdiL4rqaDJCF
-    HkFX/GbodZtPifnG3RvLbxQY1xbUVzzYIna1WhQjoWBEcjQp3g5/QoU7MuFg1d+H4a7h
-    nwCXCyWuLIKNQDZlOKv0Ayt4la5OU64QBrNtADYq6mRsfqyQTYpSLotxFbnZqIPDdlED
-    4GDpQjE3GEIOpAi/yFMWQVPmqtpfBPwVTgLGPUSY+65d6gjp1yHCABQqX6IDiOe6Nfg5
-    BwveA+PccG2R9Oal8H0o3Mw4VWS96N5CqxKK7b34K16IPSHLWVql5Eh1KIZly6elSgXo
-    emxw==
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=etkyWav0iN0wA8IwSOpNSJnMEVsd4GpbY7I2Rd1SK10=;
+    b=lM94ktLjbznPkEaZ9NN/XtiLRqEcNySi4CLMvtTCA9VQHdS/W1rwUkQBzU0ewypGcq
+    SGO8ja3wsVKhKO7Qc53UVmXX5xJ4+ti9GlK7MD7i4Nm/YZZQtJ4biwfPyKpOY8+gaKnY
+    l4ZxhETn5h2x0Geh/3cAASWtvC2oElnm1DJwlsYq5rcDei3gXJZsAyh2TZHiQXuE2nFh
+    3OBa3vYqa9i8wrBGDNwSVlh+tbswTkYwCJSVu+iIXSDWfrJbof2R8ZiCX6GhUg+suyQh
+    S6r/fKCCodVzRIRv84MYGHXe73nMli92Z4GExnJWC6AbRiOZwMwk5OG2j7BEiVlOrAWS
+    bGKA==
 Authentication-Results: strato.com;
     dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xozF0="
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejudJywjsS7yVw=="
 X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
+Received: from silver.lan
     by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
-    with ESMTPSA id N0b2dax5JBNr3Z3
+    with ESMTPSA id N0b2dax5JCC73bY
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Sat, 19 Jun 2021 13:23:53 +0200 (CEST)
-Subject: Re: vxcan RX/TX/echo semantics
+    Sat, 19 Jun 2021 14:12:07 +0200 (CEST)
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can <linux-can@vger.kernel.org>
-References: <20210527150759.az3lal4vnhivwhlx@pengutronix.de>
- <ebaf846a-f325-80fd-f926-6ad9854bf453@hartkopp.net>
-Message-ID: <4b35d316-3987-4c77-14a0-f37c4ca265a3@hartkopp.net>
-Date:   Sat, 19 Jun 2021 13:23:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [RFC PATCH] vxcan: remove sk reference in peer skb
+Date:   Sat, 19 Jun 2021 14:11:59 +0200
+Message-Id: <20210619121159.1805-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <ebaf846a-f325-80fd-f926-6ad9854bf453@hartkopp.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Marc,
+With can_create_echo_skb() the skb which is forwarded to the peer CAN
+interface shares the sk pointer from the originating socket.
+This makes the CAN frame show up in the peer namespace as a TX packet.
 
-I sent a RFC patch which enables the local echo on vxcan interfaces by 
-simply removing the IFF_ECHO flag which is set by default.
+With the use of skb_clone() analogue to the handling in gw.c the peer
+skb gets a new start in the peer namespace and correctly appears as
+a RX packet.
 
-With this solution we make use of the echo functionality in can_send() 
-which is used by slcan and vcan by default.
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ drivers/net/can/vxcan.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-This approach sends the echo'ed frame instantly without checking whether 
-the frame has been delivered to the peer interface in the other namespace.
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index be5566168d0f..e5fd8b9bfca5 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -35,10 +35,11 @@ struct vxcan_priv {
+ 
+ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct vxcan_priv *priv = netdev_priv(dev);
+ 	struct net_device *peer;
++	struct sk_buff *nskb;
+ 	struct canfd_frame *cfd = (struct canfd_frame *)skb->data;
+ 	struct net_device_stats *peerstats, *srcstats = &dev->stats;
+ 	u8 len;
+ 
+ 	if (can_dropped_invalid_skb(dev, skb))
+@@ -50,22 +51,26 @@ static netdev_tx_t vxcan_xmit(struct sk_buff *skb, struct net_device *dev)
+ 		kfree_skb(skb);
+ 		dev->stats.tx_dropped++;
+ 		goto out_unlock;
+ 	}
+ 
+-	skb = can_create_echo_skb(skb);
+-	if (!skb)
++	nskb = skb_clone(skb, GFP_ATOMIC);
++	if (nskb)
++		consume_skb(skb);
++	else {
++		kfree_skb(skb);
+ 		goto out_unlock;
++	}
+ 
+ 	/* reset CAN GW hop counter */
+-	skb->csum_start = 0;
+-	skb->pkt_type   = PACKET_BROADCAST;
+-	skb->dev        = peer;
+-	skb->ip_summed  = CHECKSUM_UNNECESSARY;
++	nskb->csum_start = 0;
++	nskb->pkt_type   = PACKET_BROADCAST;
++	nskb->dev        = peer;
++	nskb->ip_summed  = CHECKSUM_UNNECESSARY;
+ 
+ 	len = cfd->len;
+-	if (netif_rx_ni(skb) == NET_RX_SUCCESS) {
++	if (netif_rx_ni(nskb) == NET_RX_SUCCESS) {
+ 		srcstats->tx_packets++;
+ 		srcstats->tx_bytes += len;
+ 		peerstats = &peer->stats;
+ 		peerstats->rx_packets++;
+ 		peerstats->rx_bytes += len;
+-- 
+2.30.2
 
-I don't know whether it's worth the effort to handle the local echo in 
-vxcan_xmit() for that 'successful delivery' feature?!?
-
-At least vxcan feels more natural with this patch.
-
-Best regards,
-Oliver
-
-On 01.06.21 10:50, Oliver Hartkopp wrote:
-> Hello Marc,
-> 
-> On 27.05.21 17:07, Marc Kleine-Budde wrote:
-> 
->> I was wondering what the RX, TX and echo semantics on vxcan interfaces
->> should be.
->>
->> I have started a "cangen" in one namespace and a "candump" in other.
->>
->> The "candump" in the receiving namespace shows the CAN frames as "TX"
->> and in the sending namespace the CAN frames don't show up in a "candump"
->> at all. Is this intentional? If so what's the idea behind this and is
->> this documented?
->>
->> I'm adding "cangw" to the mix and see what happens....
-> 
-> Yes. That is needed ...
-> 
-> If you take a look at slide 19 here:
-> https://wiki.automotivelinux.org/_media/agl-distro/agl2018-socketcan.pdf
-> 
-> The difference to vcan's (which are providing a local echo 
-> functionality) the vxcan's are more like veth's:
-> 
-> Providing a link between two namespaces but nothing more.
-> 
-> The question is if it would make sense to provide an additional local 
-> echo in vxcan_xmit() when sending to a vxcan?
-> 
-> When deriving vxcan from veth I probably had a some weird thoughts why 
-> that local echo could add problems. But while looking at it now, 
-> creating a second skb for a local echo on the side where the CAN frame 
-> is put into the vxcan seems applicable.
-> 
-> What do you think?
-> 
-> Best,
-> Oliver
