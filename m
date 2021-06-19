@@ -2,116 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669143ADAE0
-	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 18:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA103ADB99
+	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 22:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234704AbhFSQ2Q (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 19 Jun 2021 12:28:16 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:26574 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232640AbhFSQ2Q (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 12:28:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624119953;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=RT/Z+HTuBHVYZyc8sHkhkVJxAthV/PxHFaygLMLHaKE=;
-    b=pHc5df34V7CZBMWNwLaQ2bRjKTlgS+Z7yagyXLQ7IGLPssw/0Motm6yYS0KMfYlNjr
-    1yAmOMYCHvEsPBowKfoH76whD9log5vyBc2nKextmG15A3AUoPByK0hfjBVkWY+h8DXr
-    wdnc+isLc9v7IKzYtMksk7vrwyCcP32K6Hh9iLH6SE52oPUUd7YpTwuM6TGNJ903ISil
-    Bk7XPqqvDTnMtWG3y34fcLgHGWUBn86QVT0JQjbIaiSJKyfheaQQE9asdPks1fSK2g6C
-    +7c0LEmRglKHQbDJMIZCslLRDBfT5maTBVHSjTTm7LOT0MrGBS//cmfmxpGla6L77toM
-    T1tQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xozF0="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.50.177]
-    by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
-    with ESMTPSA id N0b2dax5JGPr3mm
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 19 Jun 2021 18:25:53 +0200 (CEST)
-Subject: Re: [PATCH] can: bcm: delay release of struct bcm_op after
- synchronize_rcu
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        id S230043AbhFSUPD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 19 Jun 2021 16:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229887AbhFSUPD (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 16:15:03 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CF4C061574
+        for <linux-can@vger.kernel.org>; Sat, 19 Jun 2021 13:12:51 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1luhKc-0004Y7-Nf; Sat, 19 Jun 2021 22:12:42 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:8352:71b5:153f:5f88])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 149D363F78A;
+        Sat, 19 Jun 2021 20:12:38 +0000 (UTC)
+Date:   Sat, 19 Jun 2021 22:12:38 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         syzbot+0f7e7e5e2f4f40fa89c0@syzkaller.appspotmail.com,
         Norbert Slusarek <nslusarek@gmx.net>
+Subject: Re: [PATCH] can: bcm: delay release of struct bcm_op after
+ synchronize_rcu
+Message-ID: <20210619201238.isat2vojezfkfndf@pengutronix.de>
 References: <20210619161813.2098382-1-cascardo@canonical.com>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <685d97b7-3129-251f-9b44-03c636a44845@hartkopp.net>
-Date:   Sat, 19 Jun 2021 18:25:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="mgigocquvvi3aw7a"
+Content-Disposition: inline
 In-Reply-To: <20210619161813.2098382-1-cascardo@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
+--mgigocquvvi3aw7a
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 19.06.21 18:18, Thadeu Lima de Souza Cascardo wrote:
+On 19.06.2021 13:18:13, Thadeu Lima de Souza Cascardo wrote:
 > can_rx_register callbacks may be called concurrently to the call to
-> can_rx_unregister. The callbacks and callback data, though, are protected by
+> can_rx_unregister. The callbacks and callback data, though, are protected=
+ by
 > RCU and the struct sock reference count.
-> 
+>=20
 > So the callback data is really attached to the life of sk, meaning that it
-> should be released on sk_destruct. However, bcm_remove_op calls tasklet_kill,
-> and RCU callbacks may be called under RCU softirq, so that cannot be used on
+> should be released on sk_destruct. However, bcm_remove_op calls tasklet_k=
+ill,
+> and RCU callbacks may be called under RCU softirq, so that cannot be used=
+ on
 > kernels before the introduction of HRTIMER_MODE_SOFT.
-> 
+>=20
 > However, bcm_rx_handler is called under RCU protection, so after calling
-> can_rx_unregister, we may call synchronize_rcu in order to wait for any RCU
-> read-side critical sections to finish. That is, bcm_rx_handler won't be called
-> anymore for those ops. So, we only free them, after we do that synchronize_rcu.
-> 
+> can_rx_unregister, we may call synchronize_rcu in order to wait for any R=
+CU
+> read-side critical sections to finish. That is, bcm_rx_handler won't be c=
+alled
+> anymore for those ops. So, we only free them, after we do that synchroniz=
+e_rcu.
+>=20
 > Reported-by: syzbot+0f7e7e5e2f4f40fa89c0@syzkaller.appspotmail.com
 > Reported-by: Norbert Slusarek <nslusarek@gmx.net>
 > Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-Fixes: ffd980f976e7 ("[CAN]: Add broadcast manager (bcm) protocol")
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Added to linux-can/testing.
 
-Thanks Norbert for reporting and Thadeu for working out the fix!
+Thanks,
+Marc
 
-Best regards,
-Oliver
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-> ---
->   net/can/bcm.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/net/can/bcm.c b/net/can/bcm.c
-> index f3e4d9528fa3..c67916020e63 100644
-> --- a/net/can/bcm.c
-> +++ b/net/can/bcm.c
-> @@ -785,6 +785,7 @@ static int bcm_delete_rx_op(struct list_head *ops, struct bcm_msg_head *mh,
->   						  bcm_rx_handler, op);
->   
->   			list_del(&op->list);
-> +			synchronize_rcu();
->   			bcm_remove_op(op);
->   			return 1; /* done */
->   		}
-> @@ -1533,6 +1534,11 @@ static int bcm_release(struct socket *sock)
->   					  REGMASK(op->can_id),
->   					  bcm_rx_handler, op);
->   
-> +	}
-> +
-> +	synchronize_rcu();
-> +
-> +	list_for_each_entry_safe(op, next, &bo->rx_ops, list) {
->   		bcm_remove_op(op);
->   	}
->   
-> 
+--mgigocquvvi3aw7a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDOT7MACgkQqclaivrt
+76lDQAf/aep/tGDob6DaLHc5aJhktFcJfqkXx1PwdEIQEve0WIEdLxHu9uYlFK4H
+T+Yg/I1A2dtovq+SeWsRkKFDwNpQKRUQ78RjTozr0gs7dIQNNb2NwAb4d5Hywtux
+rfbN1YaNOJYisLLqlLTARr9kez16pWnahuJIM8kS/HFkwCOn/pzuzWJDC6oYFfBQ
+o3pMRgeZ0FWJH1RkfPbcRGCrdN+UX9dZ04F5muCLOUjqsP1r5mO47iRbkD+qTwKv
+OoyhQrZedww2TZlyb/4P5j3aY6kGLGL/wAEA3EMBB9dWVHsgxjqwfH+ohIXbgiAw
+nwkdGXDVHtB3SJEsgBxcux9U8dQ8pw==
+=56Ct
+-----END PGP SIGNATURE-----
+
+--mgigocquvvi3aw7a--
