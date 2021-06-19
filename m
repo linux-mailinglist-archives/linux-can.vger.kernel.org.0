@@ -2,142 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A34E3AD964
-	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 12:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E1B3AD9C9
+	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 13:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbhFSKc1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 19 Jun 2021 06:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbhFSKc0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 06:32:26 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A190C061574;
-        Sat, 19 Jun 2021 03:30:15 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id p14so4090318ilg.8;
-        Sat, 19 Jun 2021 03:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=btyhMs4BkaLRs/VMcp+enV+QTHYcvlAoTR3AvLbdS/U=;
-        b=jtsTLOo/2Og5PavjWiBWWetfdiOD6O3MtdQCnm67cZpkXC+khgTySN4toBchSCCkN8
-         z96E/8suqcqpzGNMa7lscwSNRzJRgu3PCQV6F7pScTurBGWQueCoIzDfTaaJMauer4G6
-         C9vfYEEDeb89jdtlfzvcWwPIXOnHlXI4zdClj9rZlqoemMtFoKrHsFYgqrkAhylIpYZV
-         O4q8C+6FYIcDpzEKthEg7gSWsJJciIaQ9KGnTY6hE0+kwo9YwhUTNak973UWLUrSA1yC
-         iZtBbo3N+uQ12BPSRVwO84vYhvlPS8InCXzSDypzHEJGNu2LP/mb31cpGIi4TuGRkGrH
-         2k0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=btyhMs4BkaLRs/VMcp+enV+QTHYcvlAoTR3AvLbdS/U=;
-        b=jPUMOpQFGs6/QYAi1Jl8K6hod5exASFFJG6K60OasfvvamPWUYeJbmAm4R/jp5M1fg
-         KkWQAAzLnsCaFia94rcwXsuyMAMU2Ud/1hF6E+udZ/iayEgvWynuBsPN+PpCKhmLc3Pa
-         otnOcg41ImvaxHM/z0R7SDNJL0qBMswHOsRGk4JCeUeC3fjWe3fndLo5p+ZqnHi771jd
-         wOnPpHd9qUiw10YrYP7bdFmBZp5pm6rRx6wqLNitxFBFYj3tlpnxM6f3nm16LTf+v9pl
-         YYhyUufa9hr+iowyVA8VIIRG2JTvpGBVzjvp5gFizRbp3JMP/jN1HsjFCU54CyIUK6oJ
-         u71Q==
-X-Gm-Message-State: AOAM531MBwcINKxJtw1RPkxruBJFc+QTvt094WUjoVzu9Q7NZd2tUK1i
-        IMFSg5U1YNWTqT1pN5dqPvg=
-X-Google-Smtp-Source: ABdhPJyvmJv4uXJsxkLlkbrO1wG4kwi3D99EUsIl+tbuYjBX1Gk1oJ3fY9NR2Acv3pMVeRzs92rZng==
-X-Received: by 2002:a92:d2ce:: with SMTP id w14mr5111289ilg.217.1624098614544;
-        Sat, 19 Jun 2021 03:30:14 -0700 (PDT)
-Received: from ip-172-31-30-86.us-east-2.compute.internal (ec2-18-118-82-35.us-east-2.compute.amazonaws.com. [18.118.82.35])
-        by smtp.gmail.com with ESMTPSA id l5sm6141996ion.44.2021.06.19.03.30.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 19 Jun 2021 03:30:13 -0700 (PDT)
-Date:   Sat, 19 Jun 2021 10:30:09 +0000
-From:   Yunsheng Lin <yunshenglin0825@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        olteanv@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andriin@fb.com, edumazet@google.com, weiwan@google.com,
-        cong.wang@bytedance.com, ap420073@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@openeuler.org, mkl@pengutronix.de,
-        linux-can@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
-        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
-        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
-        a.fatoum@pengutronix.de, atenart@kernel.org,
-        alexander.duyck@gmail.com, hdanton@sina.com, jgross@suse.com,
-        JKosina@suse.com, mkubecek@suse.cz, bjorn@kernel.org,
-        alobakin@pm.me
-Subject: Re: [PATCH net v2] net: sched: add barrier to ensure correct
- ordering for lockless qdisc
-Message-ID: <20210619103009.GA1530@ip-172-31-30-86.us-east-2.compute.internal>
-References: <1623891854-57416-1-git-send-email-linyunsheng@huawei.com>
- <20210618173047.68db0b81@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20210618173837.0131edc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S233574AbhFSLZu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 19 Jun 2021 07:25:50 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.162]:28103 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233146AbhFSLZs (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 07:25:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624101812;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=aAIe1ntCdeVHlSG24jsbLt3hU5nfnfJXFYRMpbjcRVQ=;
+    b=dUoOnfyyjBtlOWmny57+oDEXOSkZttM2vVbD5s7LYtW5/5FGmuBjqEZNuev+yxvDQl
+    xjR5SMiXVlmFp70xpA8MeFQIZzlxWhZy9TS02fdr1cu+Fnl5KESZp1NbjIVdefj5ERac
+    HzzUqcOnkFFUikGN7rSx+3bWrPbfJFWnOvabtyqaiq8Ui2AvikXzO3d4O7DeWWVrKEdG
+    J6n50NEF5PokRaI1H/8vZcGh0KJKoIWwG5tSq8lT4oj5/jPNT0jfYZTavsM6oGK7K+dZ
+    R3RBQG7fOs9WQetMLkSB+jQ7zRRGTj9JOyGciM/G5zYNHhUuK1+aFq0hmpmuCfFOmFtV
+    Lgdg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS0k+8CejudJywjsS7yVw=="
+X-RZG-CLASS-ID: mo00
+Received: from silver.lan
+    by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
+    with ESMTPSA id N0b2dax5JBNW3Z1
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 19 Jun 2021 13:23:32 +0200 (CEST)
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+To:     linux-can@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>
+Subject: [PATCH] [RFC] vxcan: enable local echo for sent CAN frames
+Date:   Sat, 19 Jun 2021 13:23:18 +0200
+Message-Id: <20210619112318.79145-1-socketcan@hartkopp.net>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210618173837.0131edc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Fri, Jun 18, 2021 at 05:38:37PM -0700, Jakub Kicinski wrote:
-> On Fri, 18 Jun 2021 17:30:47 -0700 Jakub Kicinski wrote:
-> > On Thu, 17 Jun 2021 09:04:14 +0800 Yunsheng Lin wrote:
-> > > The spin_trylock() was assumed to contain the implicit
-> > > barrier needed to ensure the correct ordering between
-> > > STATE_MISSED setting/clearing and STATE_MISSED checking
-> > > in commit a90c57f2cedd ("net: sched: fix packet stuck
-> > > problem for lockless qdisc").
-> > > 
-> > > But it turns out that spin_trylock() only has load-acquire
-> > > semantic, for strongly-ordered system(like x86), the compiler
-> > > barrier implicitly contained in spin_trylock() seems enough
-> > > to ensure the correct ordering. But for weakly-orderly system
-> > > (like arm64), the store-release semantic is needed to ensure
-> > > the correct ordering as clear_bit() and test_bit() is store
-> > > operation, see queued_spin_lock().
-> > > 
-> > > So add the explicit barrier to ensure the correct ordering
-> > > for the above case.
-> > > 
-> > > Fixes: a90c57f2cedd ("net: sched: fix packet stuck problem for lockless qdisc")
-> > > Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>  
-> > 
-> > Acked-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> Actually.. do we really need the _before_atomic() barrier?
-> I'd think we only need to make sure we re-check the lock 
-> after we set the bit, ordering of the first check doesn't 
-> matter.
+The vxcan driver provides a pair of virtual CAN interfaces to exchange
+CAN traffic between different namespaces - analogue to veth.
 
-When debugging pointed to the misordering between STATE_MISSED
-setting/clearing and STATE_MISSED checking, only _after_atomic()
-was added first, and it did not fix the misordering problem,
-when both _before_atomic() and _after_atomic() were added, the
-misordering problem disappeared.
+In opposite to the vcan driver the local sent CAN traffic on this interface
+is not echo'ed back but only sent to the remote peer. This is unusual and
+can be easily fixed by removing IFF_ECHO from the netdevice flags that
+are set for vxcan interfaces by default at startup.
 
-I suppose _before_atomic() matters because the STATE_MISSED
-setting and the lock rechecking is only done when first check of
-STATE_MISSED returns false. _before_atomic() is used to make sure
-the first check returns correct result, if it does not return the
-correct result, then we may have misordering problem too.
+Without IFF_ECHO set on driver level, the local sent CAN frames are echo'ed
+in af_can.c in can_send(). This patch makes vxcan interfaces adopt the
+same local echo behavior and procedures as known from the vcan interfaces.
 
-     cpu0                        cpu1
-                              clear MISSED
-                             _after_atomic()
-                                dequeue
-    enqueue
- first trylock() #false
-  MISSED check #*true* ?
+Fixes: a8f820a380a2 ("can: add Virtual CAN Tunnel driver (vxcan)")
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+---
+ drivers/net/can/vxcan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As above, even cpu1 has a _after_atomic() between clearing
-STATE_MISSED and dequeuing, we might stiil need a barrier to
-prevent cpu0 doing speculative MISSED checking before cpu1
-clearing MISSED?
+diff --git a/drivers/net/can/vxcan.c b/drivers/net/can/vxcan.c
+index 8861a7d875e7..be5566168d0f 100644
+--- a/drivers/net/can/vxcan.c
++++ b/drivers/net/can/vxcan.c
+@@ -146,11 +146,11 @@ static void vxcan_setup(struct net_device *dev)
+ 	dev->type		= ARPHRD_CAN;
+ 	dev->mtu		= CANFD_MTU;
+ 	dev->hard_header_len	= 0;
+ 	dev->addr_len		= 0;
+ 	dev->tx_queue_len	= 0;
+-	dev->flags		= (IFF_NOARP|IFF_ECHO);
++	dev->flags		= IFF_NOARP;
+ 	dev->netdev_ops		= &vxcan_netdev_ops;
+ 	dev->needs_free_netdev	= true;
+ 
+ 	can_ml = netdev_priv(dev) + ALIGN(sizeof(struct vxcan_priv), NETDEV_ALIGN);
+ 	can_set_ml_priv(dev, can_ml);
+-- 
+2.30.2
 
-And the implicit load-acquire barrier contained in the first
-trylock() does not seems to prevent the above case too.
-
-And there is no load-acquire barrier in pfifo_fast_dequeue()
-too, which possibly make the above case more likely to happen.
