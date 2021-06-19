@@ -2,99 +2,77 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 342C53AD210
-	for <lists+linux-can@lfdr.de>; Fri, 18 Jun 2021 20:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2D73AD648
+	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 02:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbhFRSZ7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 18 Jun 2021 14:25:59 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:20296 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbhFRSZ6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 18 Jun 2021 14:25:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1624040620;
-    s=strato-dkim-0002; d=hartkopp.net;
-    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=Z/7KQL3RWy5V/qdO8j/nQM+5/mCc4X05Celw40GdZhU=;
-    b=D55goZDXDhLX/t8yp9hvVWgB1+eGojbvK9Tk8UFD0WFBr4pw0IR7EZQ3CZevbP6T9J
-    9VYt8SVGNBkCRImGZ3WRopMPLkc7rCeM8++CEMnMLzKzdZxCC9PK1Zduw6TEM4e6d6ml
-    dU6gRJoqfKu60YWbK58dMaPJsmsz97fI6GZJpkNcQlpBjlZ5htVyyUphWXyirJBUKLe4
-    MV+JCAtuEkpN8edCL346ZoCz6PojDw0TMjf0UZWHaeqUbVW+qDJDyJGRU2KYp69SkHHd
-    WFAuuFntp6mlzSupmPpL83eF2lr/5OAZQj+RIt8/zdZZFqGL0JEtYvHQ2wzpMDx+j03m
-    AEGA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1o3TMaFqTEVR9J8xozF0="
-X-RZG-CLASS-ID: mo00
-Received: from [192.168.10.177]
-    by smtp.strato.de (RZmta 47.27.3 DYNA|AUTH)
-    with ESMTPSA id N0b2dax5IINe2wt
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 18 Jun 2021 20:23:40 +0200 (CEST)
-Subject: Re: MSG_CONFIRM RX messages with SocketCAN known as unreliable under
- heavy load?
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Harald Mommer <hmo@opensynergy.com>
-Cc:     linux-can@vger.kernel.org
-References: <c3fc258b-2f62-74ba-ca41-e6f839930020@opensynergy.com>
- <20210618091614.nqcvvmtf4wo4aejm@pengutronix.de>
-From:   Oliver Hartkopp <socketcan@hartkopp.net>
-Message-ID: <4dad20db-b9be-24c8-d97b-7cc614a7c7c9@hartkopp.net>
-Date:   Fri, 18 Jun 2021 20:23:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S233305AbhFSAiN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 18 Jun 2021 20:38:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232609AbhFSAiN (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 18 Jun 2021 20:38:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 982936108D;
+        Sat, 19 Jun 2021 00:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624062650;
+        bh=fb7gOglTIgwVS2He785TzxOkWPXogDzT/XZ8kGkPjME=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LtD1QQETPMXaQkcDrvVldrSyDDQkp4a7YGx2LuGrMEG7jF1YDtNDlgZtiJ0m0j0uE
+         rs86SfWfHy137XA3V8rmedtBpHYTpjwVuzMZGaDyAMQQL2e6gYqP1273DsEVvC/w66
+         mK1zfSf1mmK0S6chAyPU6+MA5ZsFdaM32zHlExSJLjrDtLkJsshrZLMTOAyemqe3vl
+         nHHdbBvAe/MQHTLFQoDJBKBRbWY7ypwgGBogOyXrVwmAQsS+/K5BmWw9YQN2NEFHKZ
+         d4o2/zAOMqR7Rv73OSfmGn5vtQWVPo5jngHjbIWKrTXYYyl+6AwsIbVDaxFtv4y6Ro
+         PRZa87k5Sc0zw==
+Date:   Fri, 18 Jun 2021 17:30:47 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     <davem@davemloft.net>, <olteanv@gmail.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <andriin@fb.com>, <edumazet@google.com>,
+        <weiwan@google.com>, <cong.wang@bytedance.com>,
+        <ap420073@gmail.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>,
+        <mkl@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <andrii@kernel.org>, <kafai@fb.com>, <songliubraving@fb.com>,
+        <yhs@fb.com>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <bpf@vger.kernel.org>, <jonas.bonn@netrounds.com>,
+        <pabeni@redhat.com>, <mzhivich@akamai.com>, <johunt@akamai.com>,
+        <albcamus@gmail.com>, <kehuan.feng@gmail.com>,
+        <a.fatoum@pengutronix.de>, <atenart@kernel.org>,
+        <alexander.duyck@gmail.com>, <hdanton@sina.com>, <jgross@suse.com>,
+        <JKosina@suse.com>, <mkubecek@suse.cz>, <bjorn@kernel.org>,
+        <alobakin@pm.me>
+Subject: Re: [PATCH net v2] net: sched: add barrier to ensure correct
+ ordering for lockless qdisc
+Message-ID: <20210618173047.68db0b81@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1623891854-57416-1-git-send-email-linyunsheng@huawei.com>
+References: <1623891854-57416-1-git-send-email-linyunsheng@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20210618091614.nqcvvmtf4wo4aejm@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-
-
-On 18.06.21 11:16, Marc Kleine-Budde wrote:
-
+On Thu, 17 Jun 2021 09:04:14 +0800 Yunsheng Lin wrote:
+> The spin_trylock() was assumed to contain the implicit
+> barrier needed to ensure the correct ordering between
+> STATE_MISSED setting/clearing and STATE_MISSED checking
+> in commit a90c57f2cedd ("net: sched: fix packet stuck
+> problem for lockless qdisc").
 > 
-> Even if the Linux Kernel doesn't drop any messages, not all CAN
-> controllers support that feature. On the Linux side we try our best, but
-> some USB attached devices don't report a TX complete event back, so the
-> driver triggers the CAN echo skb after the USB transfer has been
-> completed.
+> But it turns out that spin_trylock() only has load-acquire
+> semantic, for strongly-ordered system(like x86), the compiler
+> barrier implicitly contained in spin_trylock() seems enough
+> to ensure the correct ordering. But for weakly-orderly system
+> (like arm64), the store-release semantic is needed to ensure
+> the correct ordering as clear_bit() and test_bit() is store
+> operation, see queued_spin_lock().
 > 
-> We don't have a feature flag to query if the Linux driver support proper
-> CAN echo on TX complete notification.
+> So add the explicit barrier to ensure the correct ordering
+> for the above case.
 > 
+> Fixes: a90c57f2cedd ("net: sched: fix packet stuck problem for lockless qdisc")
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 
-We have. It is set in struct netdevice.flags and called IFF_ECHO.
-
-https://elixir.bootlin.com/linux/v5.12.11/source/net/can/af_can.c#L257
-
-E.g. the slcan driver does not have this bit set.
-
-Regards,
-Oliver
-
-
->> But before declaring as "not reliably implementable with
->> Linux SocketCAN" I would like to be sure that it's really that way and
->> absolutely nothing can be done about it. Could even be that I missed an
->> additional setting I'm not aware of. But the observed behavior may as well
->> be something which is known to everyone except me.
->>
->> Of course it can be that there is still a bug in my software but checked
->> this carefully and I'm now convinced that under heavy load situations
->> MSG_CONFIRM messages are lost somewhere in the Linux SocketCAN protocol
->> stack. If there's no way to recover from this situaton I've to weaken the
->> next draft Virtio CAN draft specification regarding the TX ACK timing. As
->> this has some additional impact on the specification before doing so I would
->> like to be really sure that the TX ACK timing cannot be done reliably the
->> way it was originally planned.
-> 
-> Do you have some code available yet?
-> 
-> regards,
-> Marc
-> 
+Acked-by: Jakub Kicinski <kuba@kernel.org>
