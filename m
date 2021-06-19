@@ -2,208 +2,142 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DD63AD937
-	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 11:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A34E3AD964
+	for <lists+linux-can@lfdr.de>; Sat, 19 Jun 2021 12:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbhFSKCA (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 19 Jun 2021 06:02:00 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:5051 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbhFSKB5 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 06:01:57 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G6WNb6bYlzXh8G;
-        Sat, 19 Jun 2021 17:54:39 +0800 (CST)
-Received: from dggemi759-chm.china.huawei.com (10.1.198.145) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Sat, 19 Jun 2021 17:59:45 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- dggemi759-chm.china.huawei.com (10.1.198.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Sat, 19 Jun 2021 17:59:44 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <wg@grandegger.com>, <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lipeng321@huawei.com>,
-        <huangguangbin2@huawei.com>
-Subject: [PATCH net-next 8/8] net: at91_can: fix the comments style issue
-Date:   Sat, 19 Jun 2021 17:56:29 +0800
-Message-ID: <1624096589-13452-9-git-send-email-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1624096589-13452-1-git-send-email-huangguangbin2@huawei.com>
-References: <1624096589-13452-1-git-send-email-huangguangbin2@huawei.com>
+        id S230512AbhFSKc1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 19 Jun 2021 06:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230430AbhFSKc0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 19 Jun 2021 06:32:26 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A190C061574;
+        Sat, 19 Jun 2021 03:30:15 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id p14so4090318ilg.8;
+        Sat, 19 Jun 2021 03:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=btyhMs4BkaLRs/VMcp+enV+QTHYcvlAoTR3AvLbdS/U=;
+        b=jtsTLOo/2Og5PavjWiBWWetfdiOD6O3MtdQCnm67cZpkXC+khgTySN4toBchSCCkN8
+         z96E/8suqcqpzGNMa7lscwSNRzJRgu3PCQV6F7pScTurBGWQueCoIzDfTaaJMauer4G6
+         C9vfYEEDeb89jdtlfzvcWwPIXOnHlXI4zdClj9rZlqoemMtFoKrHsFYgqrkAhylIpYZV
+         O4q8C+6FYIcDpzEKthEg7gSWsJJciIaQ9KGnTY6hE0+kwo9YwhUTNak973UWLUrSA1yC
+         iZtBbo3N+uQ12BPSRVwO84vYhvlPS8InCXzSDypzHEJGNu2LP/mb31cpGIi4TuGRkGrH
+         2k0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=btyhMs4BkaLRs/VMcp+enV+QTHYcvlAoTR3AvLbdS/U=;
+        b=jPUMOpQFGs6/QYAi1Jl8K6hod5exASFFJG6K60OasfvvamPWUYeJbmAm4R/jp5M1fg
+         KkWQAAzLnsCaFia94rcwXsuyMAMU2Ud/1hF6E+udZ/iayEgvWynuBsPN+PpCKhmLc3Pa
+         otnOcg41ImvaxHM/z0R7SDNJL0qBMswHOsRGk4JCeUeC3fjWe3fndLo5p+ZqnHi771jd
+         wOnPpHd9qUiw10YrYP7bdFmBZp5pm6rRx6wqLNitxFBFYj3tlpnxM6f3nm16LTf+v9pl
+         YYhyUufa9hr+iowyVA8VIIRG2JTvpGBVzjvp5gFizRbp3JMP/jN1HsjFCU54CyIUK6oJ
+         u71Q==
+X-Gm-Message-State: AOAM531MBwcINKxJtw1RPkxruBJFc+QTvt094WUjoVzu9Q7NZd2tUK1i
+        IMFSg5U1YNWTqT1pN5dqPvg=
+X-Google-Smtp-Source: ABdhPJyvmJv4uXJsxkLlkbrO1wG4kwi3D99EUsIl+tbuYjBX1Gk1oJ3fY9NR2Acv3pMVeRzs92rZng==
+X-Received: by 2002:a92:d2ce:: with SMTP id w14mr5111289ilg.217.1624098614544;
+        Sat, 19 Jun 2021 03:30:14 -0700 (PDT)
+Received: from ip-172-31-30-86.us-east-2.compute.internal (ec2-18-118-82-35.us-east-2.compute.amazonaws.com. [18.118.82.35])
+        by smtp.gmail.com with ESMTPSA id l5sm6141996ion.44.2021.06.19.03.30.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 19 Jun 2021 03:30:13 -0700 (PDT)
+Date:   Sat, 19 Jun 2021 10:30:09 +0000
+From:   Yunsheng Lin <yunshenglin0825@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        olteanv@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        andriin@fb.com, edumazet@google.com, weiwan@google.com,
+        cong.wang@bytedance.com, ap420073@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@openeuler.org, mkl@pengutronix.de,
+        linux-can@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, bpf@vger.kernel.org,
+        jonas.bonn@netrounds.com, pabeni@redhat.com, mzhivich@akamai.com,
+        johunt@akamai.com, albcamus@gmail.com, kehuan.feng@gmail.com,
+        a.fatoum@pengutronix.de, atenart@kernel.org,
+        alexander.duyck@gmail.com, hdanton@sina.com, jgross@suse.com,
+        JKosina@suse.com, mkubecek@suse.cz, bjorn@kernel.org,
+        alobakin@pm.me
+Subject: Re: [PATCH net v2] net: sched: add barrier to ensure correct
+ ordering for lockless qdisc
+Message-ID: <20210619103009.GA1530@ip-172-31-30-86.us-east-2.compute.internal>
+References: <1623891854-57416-1-git-send-email-linyunsheng@huawei.com>
+ <20210618173047.68db0b81@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20210618173837.0131edc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggemi759-chm.china.huawei.com (10.1.198.145)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210618173837.0131edc3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Peng Li <lipeng321@huawei.com>
+On Fri, Jun 18, 2021 at 05:38:37PM -0700, Jakub Kicinski wrote:
+> On Fri, 18 Jun 2021 17:30:47 -0700 Jakub Kicinski wrote:
+> > On Thu, 17 Jun 2021 09:04:14 +0800 Yunsheng Lin wrote:
+> > > The spin_trylock() was assumed to contain the implicit
+> > > barrier needed to ensure the correct ordering between
+> > > STATE_MISSED setting/clearing and STATE_MISSED checking
+> > > in commit a90c57f2cedd ("net: sched: fix packet stuck
+> > > problem for lockless qdisc").
+> > > 
+> > > But it turns out that spin_trylock() only has load-acquire
+> > > semantic, for strongly-ordered system(like x86), the compiler
+> > > barrier implicitly contained in spin_trylock() seems enough
+> > > to ensure the correct ordering. But for weakly-orderly system
+> > > (like arm64), the store-release semantic is needed to ensure
+> > > the correct ordering as clear_bit() and test_bit() is store
+> > > operation, see queued_spin_lock().
+> > > 
+> > > So add the explicit barrier to ensure the correct ordering
+> > > for the above case.
+> > > 
+> > > Fixes: a90c57f2cedd ("net: sched: fix packet stuck problem for lockless qdisc")
+> > > Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>  
+> > 
+> > Acked-by: Jakub Kicinski <kuba@kernel.org>
+> 
+> Actually.. do we really need the _before_atomic() barrier?
+> I'd think we only need to make sure we re-check the lock 
+> after we set the bit, ordering of the first check doesn't 
+> matter.
 
-Networking block comments don't use an empty /* line,
-use /* Comment...
+When debugging pointed to the misordering between STATE_MISSED
+setting/clearing and STATE_MISSED checking, only _after_atomic()
+was added first, and it did not fix the misordering problem,
+when both _before_atomic() and _after_atomic() were added, the
+misordering problem disappeared.
 
-Block comments use * on subsequent lines.
-Block comments use a trailing */ on a separate line.
+I suppose _before_atomic() matters because the STATE_MISSED
+setting and the lock rechecking is only done when first check of
+STATE_MISSED returns false. _before_atomic() is used to make sure
+the first check returns correct result, if it does not return the
+correct result, then we may have misordering problem too.
 
-This patch fixes the comments style issues.
+     cpu0                        cpu1
+                              clear MISSED
+                             _after_atomic()
+                                dequeue
+    enqueue
+ first trylock() #false
+  MISSED check #*true* ?
 
-Signed-off-by: Peng Li <lipeng321@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/can/at91_can.c | 42 ++++++++++++++----------------------------
- 1 file changed, 14 insertions(+), 28 deletions(-)
+As above, even cpu1 has a _after_atomic() between clearing
+STATE_MISSED and dequeuing, we might stiil need a barrier to
+prevent cpu0 doing speculative MISSED checking before cpu1
+clearing MISSED?
 
-diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index 0e6ed59a763d..566891312eda 100644
---- a/drivers/net/can/at91_can.c
-+++ b/drivers/net/can/at91_can.c
-@@ -317,8 +317,7 @@ static void at91_setup_mailboxes(struct net_device *dev)
- 	unsigned int i;
- 	u32 reg_mid;
- 
--	/*
--	 * Due to a chip bug (errata 50.2.6.3 & 50.3.5.3) the first
-+	/* Due to a chip bug (errata 50.2.6.3 & 50.3.5.3) the first
- 	 * mailbox is disabled. The next 11 mailboxes are used as a
- 	 * reception FIFO. The last mailbox is configured with
- 	 * overwrite option. The overwrite flag indicates a FIFO
-@@ -424,8 +423,7 @@ static void at91_chip_stop(struct net_device *dev, enum can_state state)
- 	priv->can.state = state;
- }
- 
--/*
-- * theory of operation:
-+/* theory of operation:
-  *
-  * According to the datasheet priority 0 is the highest priority, 15
-  * is the lowest. If two mailboxes have the same priority level the
-@@ -487,8 +485,7 @@ static netdev_tx_t at91_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 	/* _NOTE_: subtract AT91_MB_TX_FIRST offset from mb! */
- 	can_put_echo_skb(skb, dev, mb - get_mb_tx_first(priv), 0);
- 
--	/*
--	 * we have to stop the queue and deliver all messages in case
-+	/* we have to stop the queue and deliver all messages in case
- 	 * of a prio+mb counter wrap around. This is the case if
- 	 * tx_next buffer prio and mailbox equals 0.
- 	 *
-@@ -799,8 +796,7 @@ static int at91_poll(struct napi_struct *napi, int quota)
- 	if (reg_sr & get_irq_mb_rx(priv))
- 		work_done += at91_poll_rx(dev, quota - work_done);
- 
--	/*
--	 * The error bits are clear on read,
-+	/* The error bits are clear on read,
- 	 * so use saved value from irq handler.
- 	 */
- 	reg_sr |= priv->reg_sr;
-@@ -820,8 +816,7 @@ static int at91_poll(struct napi_struct *napi, int quota)
- 	return work_done;
- }
- 
--/*
-- * theory of operation:
-+/* theory of operation:
-  *
-  * priv->tx_echo holds the number of the oldest can_frame put for
-  * transmission into the hardware, but not yet ACKed by the CAN tx
-@@ -850,8 +845,7 @@ static void at91_irq_tx(struct net_device *dev, u32 reg_sr)
- 		/* Disable irq for this TX mailbox */
- 		at91_write(priv, AT91_IDR, 1 << mb);
- 
--		/*
--		 * only echo if mailbox signals us a transfer
-+		/* only echo if mailbox signals us a transfer
- 		 * complete (MSR_MRDY). Otherwise it's a tansfer
- 		 * abort. "can_bus_off()" takes care about the skbs
- 		 * parked in the echo queue.
-@@ -866,8 +860,7 @@ static void at91_irq_tx(struct net_device *dev, u32 reg_sr)
- 		}
- 	}
- 
--	/*
--	 * restart queue if we don't have a wrap around but restart if
-+	/* restart queue if we don't have a wrap around but restart if
- 	 * we get a TX int for the last can frame directly before a
- 	 * wrap around.
- 	 */
-@@ -887,8 +880,7 @@ static void at91_irq_err_state(struct net_device *dev,
- 
- 	switch (priv->can.state) {
- 	case CAN_STATE_ERROR_ACTIVE:
--		/*
--		 * from: ERROR_ACTIVE
-+		/* from: ERROR_ACTIVE
- 		 * to  : ERROR_WARNING, ERROR_PASSIVE, BUS_OFF
- 		 * =>  : there was a warning int
- 		 */
-@@ -904,8 +896,7 @@ static void at91_irq_err_state(struct net_device *dev,
- 		}
- 		fallthrough;
- 	case CAN_STATE_ERROR_WARNING:
--		/*
--		 * from: ERROR_ACTIVE, ERROR_WARNING
-+		/* from: ERROR_ACTIVE, ERROR_WARNING
- 		 * to  : ERROR_PASSIVE, BUS_OFF
- 		 * =>  : error passive int
- 		 */
-@@ -921,8 +912,7 @@ static void at91_irq_err_state(struct net_device *dev,
- 		}
- 		break;
- 	case CAN_STATE_BUS_OFF:
--		/*
--		 * from: BUS_OFF
-+		/* from: BUS_OFF
- 		 * to  : ERROR_ACTIVE, ERROR_WARNING, ERROR_PASSIVE
- 		 */
- 		if (new_state <= CAN_STATE_ERROR_PASSIVE) {
-@@ -942,8 +932,7 @@ static void at91_irq_err_state(struct net_device *dev,
- 	/* process state changes depending on the new state */
- 	switch (new_state) {
- 	case CAN_STATE_ERROR_ACTIVE:
--		/*
--		 * actually we want to enable AT91_IRQ_WARN here, but
-+		/* actually we want to enable AT91_IRQ_WARN here, but
- 		 * it screws up the system under certain
- 		 * circumstances. so just enable AT91_IRQ_ERRP, thus
- 		 * the "fallthrough"
-@@ -1055,8 +1044,7 @@ static void at91_irq_err(struct net_device *dev)
- 	priv->can.state = new_state;
- }
- 
--/*
-- * interrupt handler
-+/* interrupt handler
-  */
- static irqreturn_t at91_irq(int irq, void *dev_id)
- {
-@@ -1077,8 +1065,7 @@ static irqreturn_t at91_irq(int irq, void *dev_id)
- 
- 	/* Receive or error interrupt? -> napi */
- 	if (reg_sr & (get_irq_mb_rx(priv) | AT91_IRQ_ERR_FRAME)) {
--		/*
--		 * The error bits are clear on read,
-+		/* The error bits are clear on read,
- 		 * save for later use.
- 		 */
- 		priv->reg_sr = reg_sr;
-@@ -1135,8 +1122,7 @@ static int at91_open(struct net_device *dev)
- 	return err;
- }
- 
--/*
-- * stop CAN bus activity
-+/* stop CAN bus activity
-  */
- static int at91_close(struct net_device *dev)
- {
--- 
-2.8.1
+And the implicit load-acquire barrier contained in the first
+trylock() does not seems to prevent the above case too.
 
+And there is no load-acquire barrier in pfifo_fast_dequeue()
+too, which possibly make the above case more likely to happen.
