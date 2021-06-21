@@ -2,43 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A9B3AE925
-	for <lists+linux-can@lfdr.de>; Mon, 21 Jun 2021 14:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77D2D3AE926
+	for <lists+linux-can@lfdr.de>; Mon, 21 Jun 2021 14:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhFUMhB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Jun 2021 08:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
+        id S229708AbhFUMhD (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Jun 2021 08:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbhFUMg6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Jun 2021 08:36:58 -0400
+        with ESMTP id S229837AbhFUMg7 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Jun 2021 08:36:59 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F796C061574
-        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 05:34:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35AFC06175F
+        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 05:34:44 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1lvJ8T-0007AI-JB
-        for linux-can@vger.kernel.org; Mon, 21 Jun 2021 14:34:41 +0200
+        id 1lvJ8V-0007DO-AC
+        for linux-can@vger.kernel.org; Mon, 21 Jun 2021 14:34:43 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id CA42E6405E7
-        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 12:34:39 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 5932B6405F5
+        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 12:34:41 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id BDEE46405D8;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id CD00A6405D9;
         Mon, 21 Jun 2021 12:34:38 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a47d0ddc;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id bce58cfc;
         Mon, 21 Jun 2021 12:34:37 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>
-Subject: [RFC]: can-next 2021-06-21: try to fix softirq error from threaded IRQs
-Date:   Mon, 21 Jun 2021 14:34:28 +0200
-Message-Id: <20210621123436.2897023-1-mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Subject: [can-next-rfc 1/8] can: rx-offload: add skb queue for use during ISR
+Date:   Mon, 21 Jun 2021 14:34:29 +0200
+Message-Id: <20210621123436.2897023-2-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210621123436.2897023-1-mkl@pengutronix.de>
+References: <20210621123436.2897023-1-mkl@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
@@ -49,18 +53,187 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+Adding a skb to the skb_queue in rx-offload requires to take a lock.
 
-this series tries to fix the softirq error which occurs if NAPI is
-scheduled from threaded IRQ context [1][2]. Also it fixes a RX-before-TX
-problem seen on the mcp251xfd driver.
+This commit avoids this by adding an unlocked skb queue that is
+appended at the end of the ISR. Having one lock at the end of the ISR
+should be OK as the HW is empty, not about to overflow.
 
-regards,
-Marc
+Co-developed-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+---
+ drivers/net/can/dev/rx-offload.c | 67 ++++++++++++++++----------------
+ include/linux/can/rx-offload.h   |  2 +
+ 2 files changed, 35 insertions(+), 34 deletions(-)
 
-[1] https://lore.kernel.org/r/20210310064626.GA11893@homes.emlix.com
-[2] http://lore.kernel.org/r/CAOMZO5AMP537Qz1MAb-D_27C=WH-5Cf602hichxty95A6db9-A@mail.gmail.com
+diff --git a/drivers/net/can/dev/rx-offload.c b/drivers/net/can/dev/rx-offload.c
+index ab2c1543786c..d0bdb6db3a57 100644
+--- a/drivers/net/can/dev/rx-offload.c
++++ b/drivers/net/can/dev/rx-offload.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2014      Protonic Holland,
+  *                         David Jander
+- * Copyright (C) 2014-2017 Pengutronix,
++ * Copyright (C) 2014-2021 Pengutronix,
+  *                         Marc Kleine-Budde <kernel@pengutronix.de>
+  */
+ 
+@@ -174,10 +174,8 @@ can_rx_offload_offload_one(struct can_rx_offload *offload, unsigned int n)
+ int can_rx_offload_irq_offload_timestamp(struct can_rx_offload *offload,
+ 					 u64 pending)
+ {
+-	struct sk_buff_head skb_queue;
+ 	unsigned int i;
+-
+-	__skb_queue_head_init(&skb_queue);
++	int received = 0;
+ 
+ 	for (i = offload->mb_first;
+ 	     can_rx_offload_le(offload, i, offload->mb_last);
+@@ -191,26 +189,12 @@ int can_rx_offload_irq_offload_timestamp(struct can_rx_offload *offload,
+ 		if (IS_ERR_OR_NULL(skb))
+ 			continue;
+ 
+-		__skb_queue_add_sort(&skb_queue, skb, can_rx_offload_compare);
+-	}
+-
+-	if (!skb_queue_empty(&skb_queue)) {
+-		unsigned long flags;
+-		u32 queue_len;
+-
+-		spin_lock_irqsave(&offload->skb_queue.lock, flags);
+-		skb_queue_splice_tail(&skb_queue, &offload->skb_queue);
+-		spin_unlock_irqrestore(&offload->skb_queue.lock, flags);
+-
+-		queue_len = skb_queue_len(&offload->skb_queue);
+-		if (queue_len > offload->skb_queue_len_max / 8)
+-			netdev_dbg(offload->dev, "%s: queue_len=%d\n",
+-				   __func__, queue_len);
+-
+-		can_rx_offload_schedule(offload);
++		__skb_queue_add_sort(&offload->skb_irq_queue, skb,
++				     can_rx_offload_compare);
++		received++;
+ 	}
+ 
+-	return skb_queue_len(&skb_queue);
++	return received;
+ }
+ EXPORT_SYMBOL_GPL(can_rx_offload_irq_offload_timestamp);
+ 
+@@ -226,13 +210,10 @@ int can_rx_offload_irq_offload_fifo(struct can_rx_offload *offload)
+ 		if (!skb)
+ 			break;
+ 
+-		skb_queue_tail(&offload->skb_queue, skb);
++		__skb_queue_tail(&offload->skb_irq_queue, skb);
+ 		received++;
+ 	}
+ 
+-	if (received)
+-		can_rx_offload_schedule(offload);
+-
+ 	return received;
+ }
+ EXPORT_SYMBOL_GPL(can_rx_offload_irq_offload_fifo);
+@@ -241,7 +222,6 @@ int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
+ 				struct sk_buff *skb, u32 timestamp)
+ {
+ 	struct can_rx_offload_cb *cb;
+-	unsigned long flags;
+ 
+ 	if (skb_queue_len(&offload->skb_queue) >
+ 	    offload->skb_queue_len_max) {
+@@ -252,11 +232,8 @@ int can_rx_offload_queue_sorted(struct can_rx_offload *offload,
+ 	cb = can_rx_offload_get_cb(skb);
+ 	cb->timestamp = timestamp;
+ 
+-	spin_lock_irqsave(&offload->skb_queue.lock, flags);
+-	__skb_queue_add_sort(&offload->skb_queue, skb, can_rx_offload_compare);
+-	spin_unlock_irqrestore(&offload->skb_queue.lock, flags);
+-
+-	can_rx_offload_schedule(offload);
++	__skb_queue_add_sort(&offload->skb_irq_queue, skb,
++			     can_rx_offload_compare);
+ 
+ 	return 0;
+ }
+@@ -295,13 +272,33 @@ int can_rx_offload_queue_tail(struct can_rx_offload *offload,
+ 		return -ENOBUFS;
+ 	}
+ 
+-	skb_queue_tail(&offload->skb_queue, skb);
+-	can_rx_offload_schedule(offload);
++	__skb_queue_tail(&offload->skb_irq_queue, skb);
+ 
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(can_rx_offload_queue_tail);
+ 
++void can_rx_offload_irq_finish(struct can_rx_offload *offload)
++{
++	unsigned long flags;
++	int queue_len;
++
++	if (skb_queue_empty_lockless(&offload->skb_irq_queue))
++		return;
++
++	spin_lock_irqsave(&offload->skb_queue.lock, flags);
++	skb_queue_splice_tail_init(&offload->skb_irq_queue, &offload->skb_queue);
++	spin_unlock_irqrestore(&offload->skb_queue.lock, flags);
++
++	queue_len = skb_queue_len(&offload->skb_queue);
++	if (queue_len > offload->skb_queue_len_max / 8)
++		netdev_dbg(offload->dev, "%s: queue_len=%d\n",
++			   __func__, queue_len);
++
++	can_rx_offload_schedule(offload);
++}
++EXPORT_SYMBOL_GPL(can_rx_offload_irq_finish);
++
+ static int can_rx_offload_init_queue(struct net_device *dev,
+ 				     struct can_rx_offload *offload,
+ 				     unsigned int weight)
+@@ -312,6 +309,7 @@ static int can_rx_offload_init_queue(struct net_device *dev,
+ 	offload->skb_queue_len_max = 2 << fls(weight);
+ 	offload->skb_queue_len_max *= 4;
+ 	skb_queue_head_init(&offload->skb_queue);
++	__skb_queue_head_init(&offload->skb_irq_queue);
+ 
+ 	netif_napi_add(dev, &offload->napi, can_rx_offload_napi_poll, weight);
+ 
+@@ -373,5 +371,6 @@ void can_rx_offload_del(struct can_rx_offload *offload)
+ {
+ 	netif_napi_del(&offload->napi);
+ 	skb_queue_purge(&offload->skb_queue);
++	__skb_queue_purge(&offload->skb_irq_queue);
+ }
+ EXPORT_SYMBOL_GPL(can_rx_offload_del);
+diff --git a/include/linux/can/rx-offload.h b/include/linux/can/rx-offload.h
+index 40882df7105e..d71c938e17d0 100644
+--- a/include/linux/can/rx-offload.h
++++ b/include/linux/can/rx-offload.h
+@@ -20,6 +20,7 @@ struct can_rx_offload {
+ 					bool drop);
+ 
+ 	struct sk_buff_head skb_queue;
++	struct sk_buff_head skb_irq_queue;
+ 	u32 skb_queue_len_max;
+ 
+ 	unsigned int mb_first;
+@@ -48,6 +49,7 @@ unsigned int can_rx_offload_get_echo_skb(struct can_rx_offload *offload,
+ 					 unsigned int *frame_len_ptr);
+ int can_rx_offload_queue_tail(struct can_rx_offload *offload,
+ 			      struct sk_buff *skb);
++void can_rx_offload_irq_finish(struct can_rx_offload *offload);
+ void can_rx_offload_del(struct can_rx_offload *offload);
+ void can_rx_offload_enable(struct can_rx_offload *offload);
+ 
 
-
+base-commit: adc2e56ebe6377f5c032d96aee0feac30a640453
+-- 
+2.30.2
 
 
