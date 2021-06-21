@@ -2,88 +2,106 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1DC73AE93F
-	for <lists+linux-can@lfdr.de>; Mon, 21 Jun 2021 14:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066CA3AE9BD
+	for <lists+linux-can@lfdr.de>; Mon, 21 Jun 2021 15:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbhFUMlg (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Jun 2021 08:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33466 "EHLO
+        id S229663AbhFUNJt (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Jun 2021 09:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbhFUMlg (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Jun 2021 08:41:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FCBC061574
-        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 05:39:22 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1lvJCy-0008F1-Qx; Mon, 21 Jun 2021 14:39:20 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:3569:1fb5:40be:61fc])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0ADF464064B;
-        Mon, 21 Jun 2021 12:39:20 +0000 (UTC)
-Date:   Mon, 21 Jun 2021 14:39:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>
-Subject: Re: [RFC]: can-next 2021-06-21: try to fix softirq error from
- threaded IRQs
-Message-ID: <20210621123919.3zozhgrxpk2r6zci@pengutronix.de>
-References: <20210621123436.2897023-1-mkl@pengutronix.de>
+        with ESMTP id S229651AbhFUNJt (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Jun 2021 09:09:49 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8A6C061574
+        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 06:07:35 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a21so20141929ljj.1
+        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 06:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3UyPxp0v8uPqJluhDVjnbsvpnwwAHrAcHqt9QJm04lc=;
+        b=GLnC7aWUIEdauH1HwOlQFdPCEUdx2RTSNC0fdXVw5UrTZObhlO2IsiaaUGOaRqBIYO
+         JAHcJdgCg++RUEktHXVB0ERWK17LfqWbDy2G2yolSgzJbGsC61KAq4p0I0tFdnaH1d6K
+         NM1Wkhcw0TgePKOIObpNsdkHwOPrZUA6v3tC1xLMXdFA52qxUQwlytm6giv7TkGb8cQL
+         PRD54tuPwUjZO9wRyZy1/oJeu0zmwDhenNWakYpkAnmUpNi7M0RW0ARcsY+taVMyeqv3
+         eZUFpr2qlMCgYUiBVFPslRT5BbmQyKOvlzFgd6nTaHJwBsk33Aj4FCp2Br61ebwBqLhX
+         XYBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3UyPxp0v8uPqJluhDVjnbsvpnwwAHrAcHqt9QJm04lc=;
+        b=m9q6tiHAcdFcvyIQixureT4Y7R88KV74KoAsEfa2d7nYnTbvRrIPRufLoBZgdVLcf6
+         ckeJi7MgNbHiMYRaz/PUVDtjGM4yayHjs9Ngv5D86Stj0g/n8kis5fG/fGVilg8iRW7H
+         /Vtm36hMl4k7WiuqDNgXWNELDvvu+BiZMP91sLgQTVrGhfcsVMRVt8Qcf/pI7/OkB4OW
+         3bXqEEcWgUb5Mwzs3rO8fcCc4Tmf78psmPiEZngmQbTynu89AVkRVMsxN1ZmC4INLakf
+         ZInglsY1pBGMMNVDKRSuuO4/tcuJolpoNlxe1egpEVFgCXSFIvb9l49iVgmO1Yb+ihbB
+         pd0A==
+X-Gm-Message-State: AOAM531mX5PbSYhIucpURLqJhCsjgz0sXLXwvM7kxrD5Fll5voTIYi+c
+        CIeYxWQY53rWMRSZLVBKa6JpJfHl2flWrCZBlLPx8+uN653sbg==
+X-Google-Smtp-Source: ABdhPJx5PiIziHM196guhmlYttpzT8e3M9jZz2+CBmgIyveTHzZLIcZrEyFVlvlce3DSN6TtbXZYvy2MdVBEWtF/i/4=
+X-Received: by 2002:a05:651c:54f:: with SMTP id q15mr15782579ljp.347.1624280853248;
+ Mon, 21 Jun 2021 06:07:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mw2la6uhbs2h7okq"
-Content-Disposition: inline
-In-Reply-To: <20210621123436.2897023-1-mkl@pengutronix.de>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <CAOMZO5CwS-cO3W148YHVYFwcL3QC8oFJfeQBb+WN=QgEPU7AsQ@mail.gmail.com>
+ <CAOMZO5D3suvPzaMq3Fx9LKDC9mzb-0w6i3EbQum-ozczdY-EPQ@mail.gmail.com>
+ <20210615071557.o7fjkleuk777otvm@pengutronix.de> <CAOMZO5AMP537Qz1MAb-D_27C=WH-5Cf602hichxty95A6db9-A@mail.gmail.com>
+ <20210621123704.yc7ohwbuedofoq53@pengutronix.de>
+In-Reply-To: <20210621123704.yc7ohwbuedofoq53@pengutronix.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 21 Jun 2021 10:07:22 -0300
+Message-ID: <CAOMZO5BgUHHsT_abpPgOdgVXNSrDApouhtWydvS9soYH65PJww@mail.gmail.com>
+Subject: Re: Testing two MCP2518FD's on i.MX8MM
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---mw2la6uhbs2h7okq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 21, 2021 at 9:37 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
 
-On 21.06.2021 14:34:28, Marc Kleine-Budde wrote:
-> Hello,
->=20
-> this series tries to fix the softirq error which occurs if NAPI is
-> scheduled from threaded IRQ context [1][2]. Also it fixes a RX-before-TX
-> problem seen on the mcp251xfd driver.
+> Can you test if
+> https://lore.kernel.org/r/20210621123436.2897023-1-mkl@pengutronix.de
+> fixes your problem? We still have to check if lockdep complains...
 
-please ignore patch 8/8, as this is obviously the DT of my testing board
-:)
+I tested your series and I don't see the initial RCU errors after
+launching the application, but
+now it causes a storm of cansequence errors:
 
-Marc
+root@verdin-imx8mm:~# ./cantest.sh start
+root@verdin-imx8mm:~# interface = can1, family = 29, type = 3, proto = 1
+interface = can1, family = 29, type = 3, proto = 1
+interface = can0, family = 29, type = 3, proto = 1
+interface = can0, family = 29, type = 3, proto = 1
+2020-02-12 19:36:05:161 sequence CNT:   1304, RX:     39    expected:
+24    missing:   15    skt overfl d:    0 a:    0    delta:  15
+incident: 1    seq_wrap RX: 5     sequ_wrap_expected: 5   overall
+lost: 15
+2020-02-12 19:36:05:406 sequence CNT:   3015, RX:    230    expected:
+199    missing:   31    skt overfl d:    0 a:    0    delta:  31
+incident: 1    seq_wrap RX: 11     sequ_wrap_expected: 11   overall
+lost: 31
+2020-02-12 19:36:05:455 sequence CNT:    742, RX:    238    expected:
+230    missing:    8    skt overfl d:    0 a:    0    delta:   8
+incident: 2    seq_wrap RX: 7     sequ_wrap_expected: 7   overall
+lost: 23
+2020-02-12 19:36:05:730 sequence CNT:   1287, RX:      8    expected:
+ 7    missing:    1    skt overfl d:    0 a:    0    delta:   1
+incident: 3    seq_wrap RX: 12     sequ_wrap_expected: 12   overall
+lost: 24
+2020-02-12 19:36:05:746 sequence CNT:    991, RX:    228    expected:
+223    missing:    5    skt overfl d:    0 a:    0    delta:   5
+incident: 4    seq_wrap RX: 15     sequ_wrap_expected: 15   overall
+lost: 29
+....
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+For mcp2518fd usage with imx8mm: would you recommend SPI in PIO or DMA mode?
+Looking at your imx6dl devicetree it seems you use DMA.
 
---mw2la6uhbs2h7okq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDQiHQACgkQqclaivrt
-76mDWgf+LcXCxHNZd2r/np03zr7Mi5F727gH1I2mkZyqTOyjjWBPHL9jBZtQqHa5
-CLAPrJrdT6HriaDOySQrTi4dMot2A4GSEnBXoO6qZoUeM4US/2E1ddDVO/3c3OqC
-uNf5/s9QzGTcYSASNwsHP0zmddm6+8Osn6FNjnQ5Q2qzKsT0vDJsfqOO8OkZrAx4
-X6e26Hm3Iu3ZWqVYdwZz5Fc1lDNNVhaAJSu3IW22zuY/T9GTz9DUsyn2ynBMX8iZ
-qkIUAQTlX5E8ITVPdTdyd+sIDSOPvb8UJmrUD7hvO81C1bGg20U+Mauz+r7xQS6f
-1vhVy3pDgOLZQiEtqLAK51p6QW9mZQ==
-=5YG1
------END PGP SIGNATURE-----
-
---mw2la6uhbs2h7okq--
+Thanks
