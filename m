@@ -2,76 +2,97 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F28313AF66C
-	for <lists+linux-can@lfdr.de>; Mon, 21 Jun 2021 21:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2253AF6AF
+	for <lists+linux-can@lfdr.de>; Mon, 21 Jun 2021 22:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbhFUTwT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 21 Jun 2021 15:52:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56368 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230409AbhFUTwS (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 21 Jun 2021 15:52:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 273C461108;
-        Mon, 21 Jun 2021 19:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624305004;
-        bh=9+MN0Q/dxWPYVOCi1+nP1UOLdwkE2fdXf44uJ9Vn+Lw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=l+U8ABulMT6Bn3gM4DWGQ5a/K6cE7S1pAv1FUZDxf8vmzbUc4CfAQGGq3FtQM199X
-         LFG4/i1xwYaBNOSQP2xVbFr0sRI4qvPJ17bkQ0E4aqyAMV0Qc8pNqAwOubyXiDK2Kx
-         KCyPKUWSVHt+Lptgw57LGjXxdZjDm0IxLo4Z9Kgg4MlBkPgrt+GCDuTSJa6ad5rVQA
-         t05v3AeQl1BSl5A5IJ7gDXfv7cGnq9XKsCsCjrwV6xGEkZxpcjHExo/2HXNkIT8+xm
-         L5mTKtepePWvG5OBP445sU4vFUvx25Tu1BtxKvDOhi37jaF9ffBhvjIupzx3DB45UJ
-         1PnpGrNrD6Vqg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1EA8560A02;
-        Mon, 21 Jun 2021 19:50:04 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231424AbhFUUO0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 21 Jun 2021 16:14:26 -0400
+Received: from mail-vs1-f53.google.com ([209.85.217.53]:35643 "EHLO
+        mail-vs1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230274AbhFUUO0 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 21 Jun 2021 16:14:26 -0400
+Received: by mail-vs1-f53.google.com with SMTP id j15so9981507vsf.2;
+        Mon, 21 Jun 2021 13:12:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Kip9GifiuNfj9QeA3XUqqC+M+epRVwb+HCe4pTkQPs=;
+        b=nDWU7VwIzisaQioFwWkl+61kzV6rl9qtweaHJAEfnkQ+jbrgTclfypZUam9IoQYhU4
+         ykcyFqp5w11qNH0MpjvfOmRmISalrCRxt4vig42nOUd5lGncX8mu+atRKl5xHAl0G//C
+         8DNOSXpEvPdVGSVvVA6rpSoCI+D2W/E5FrmIb7VYk50US8IF69CsjKRNQvRf3W6ehL1n
+         iCbCiSBc59lU01t52zAb3ef4OvjkD0E4lpMAO1URzSZ6xl7SdOKoQeInAgc7IWhCip5N
+         7By63lJHZoDN4l/RGAVDU9alNeP7REAsFllk5P6WklbTMX8XuKhzPHO3hzgZ+kifKRRT
+         0GTQ==
+X-Gm-Message-State: AOAM530H0kRtx169RPs9srwtN0QhImk782iZ+nl72HojOBoJDD5C5pL9
+        uPODXBzBpt4RjW8PLnSF84hTAKA4d+aWO6hP/7GYEq4RdTPiiw==
+X-Google-Smtp-Source: ABdhPJxONGPsVicbk+opB70+yMR9opfn4r2E02U4PIHhh4jNXoJZ+ClcNEBwkvKxL8FhXH438zf5uhlOUUlvx0eToP8=
+X-Received: by 2002:a05:6102:c4c:: with SMTP id y12mr19756967vss.18.1624306329961;
+ Mon, 21 Jun 2021 13:12:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can 2021-06-19
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162430500412.22375.10749525556148932583.git-patchwork-notify@kernel.org>
-Date:   Mon, 21 Jun 2021 19:50:04 +0000
-References: <20210619220115.2830761-1-mkl@pengutronix.de>
-In-Reply-To: <20210619220115.2830761-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+References: <20210621184615.3345846-1-angelo@kernel-space.org> <20210621184615.3345846-4-angelo@kernel-space.org>
+In-Reply-To: <20210621184615.3345846-4-angelo@kernel-space.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 21 Jun 2021 22:11:58 +0200
+Message-ID: <CAMuHMdV8a=YKowGLY3kGqwsfAPd3VPEXS8x7xqYaUz9ZBh64hg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/5] can: flexcan: update Kconfig to allow non-of cases
+To:     Angelo Dureghello <angelo@kernel-space.org>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        linux-can@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi Angelo,
 
-This pull request was applied to netdev/net.git (refs/heads/master):
+On Mon, Jun 21, 2021 at 8:47 PM Angelo Dureghello
+<angelo@kernel-space.org> wrote:
+> Update flexcan to support architectures without fdt.
+>
+> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+> ---
+> Changes for v2:
+> none
+> Changes for v3:
+> - change to just remove OF
+> ---
+>  drivers/net/can/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> index e355d3974977..a0f4ae7ccb84 100644
+> --- a/drivers/net/can/Kconfig
+> +++ b/drivers/net/can/Kconfig
+> @@ -97,7 +97,7 @@ config CAN_AT91
+>
+>  config CAN_FLEXCAN
+>         tristate "Support for Freescale FLEXCAN based chips"
+> -       depends on OF && HAS_IOMEM
+> +       depends on HAS_IOMEM
 
-On Sun, 20 Jun 2021 00:01:10 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 5 patches for net/master.
-> 
-> The first patch is by Thadeu Lima de Souza Cascardo and fixes a
-> potential use-after-free in the CAN broadcast manager socket, by
-> delaying the release of struct bcm_op after synchronize_rcu().
-> 
-> [...]
+I think you want to add a line
 
-Here is the summary with links:
-  - pull-request: can 2021-06-19
-    https://git.kernel.org/netdev/net/c/d52f9b22d56f
-  - [net,2/5] can: gw: synchronize rcu operations before removing gw job entry
-    https://git.kernel.org/netdev/net/c/fb8696ab14ad
-  - [net,3/5] can: isotp: isotp_release(): omit unintended hrtimer restart on socket release
-    https://git.kernel.org/netdev/net/c/14a4696bc311
-  - [net,4/5] can: j1939: j1939_sk_init(): set SOCK_RCU_FREE to call sk_destruct() after RCU is done
-    https://git.kernel.org/netdev/net/c/22c696fed25c
-  - [net,5/5] net: can: ems_usb: fix use-after-free in ems_usb_disconnect()
-    https://git.kernel.org/netdev/net/c/ab4a0b8fcb9a
+    depends on ARCH_LAYERSCAPE || ARCH_MXC || COLDFIRE ||
+FSL_SOC_BOOKE || COMPILE_TEST
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+(or PPC instead of FSL_SOC_BOOKE?)
+so the question doesn't pop up when compiling a kernel for a system
+that cannot have a Freescale FlexCAN IP block.
 
+>         help
+>           Say Y here if you want to support for Freescale FlexCAN.
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
