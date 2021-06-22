@@ -2,175 +2,168 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2443B060F
-	for <lists+linux-can@lfdr.de>; Tue, 22 Jun 2021 15:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC153B0B5B
+	for <lists+linux-can@lfdr.de>; Tue, 22 Jun 2021 19:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbhFVNqK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Jun 2021 09:46:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37118 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229988AbhFVNqJ (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 22 Jun 2021 09:46:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BC2F861353;
-        Tue, 22 Jun 2021 13:43:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624369432;
-        bh=NqFXh1RzaIB7T3yUivBhV+3jLDLAyj/zzCtWY0JA0SQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n2C4l95B/w+7fm3Hy/W1ls3BjWTgUnPkeMWPcJwuHNhjALViq36NSNRvf1J+UxXwT
-         W1of8Zg2OiipKGz+JaQJVEN0Rymz9BqpYAiOBzmrtdT5/mgiDbEVBsHlr3gDk+TOBO
-         Fe7qpiKq+UgUir5JlR9fsJDRZtySIEJhB36NWX9yf5t0mO64+Z1mYCq7ew8ZAwg0KI
-         F5hwQr8sPPDgEGs9UTcylTzkdsRMaQyTccf/acpKJhxDJxKtULLFNQYEsUOGj4MJxK
-         B3a0hJqzs9FjH4X1uUrkMDUidT5NSByby5xfUTkfYV6nW2261SSjbz6fXsdgEAv5QU
-         qCbHec6qB4IfA==
-Received: by mail-ed1-f48.google.com with SMTP id t3so23726766edc.7;
-        Tue, 22 Jun 2021 06:43:52 -0700 (PDT)
-X-Gm-Message-State: AOAM530naL8j0CKzvJfrllBmASUFsX2bsI1GjGzC0mAXDpPnd7e/OVpX
-        4EDZT2wnXe4JGzDS7JIUEAN3Ta5uIGiYDz5J5Q==
-X-Google-Smtp-Source: ABdhPJzR0Ub3ZgSNkr3MEhjSHq6x9DynzmvMX7quMzOS1boijoDJs7nsAsYPAJuJ3rupM/aSXMVZuLXS4ayPZR+vCGA=
-X-Received: by 2002:a05:6402:ca2:: with SMTP id cn2mr2897976edb.62.1624369431373;
- Tue, 22 Jun 2021 06:43:51 -0700 (PDT)
+        id S231549AbhFVR0l (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Jun 2021 13:26:41 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:40683 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229501AbhFVR0l (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Jun 2021 13:26:41 -0400
+Received: by mail-il1-f199.google.com with SMTP id c15-20020a92b74f0000b02901ee2d62033eso1607ilm.7
+        for <linux-can@vger.kernel.org>; Tue, 22 Jun 2021 10:24:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TWUiO1YZGpvaS76ZHhe+JSwwIrerDvGwOdhWfmTH2VY=;
+        b=rwoJuzM39yqIpcoShqVCmP4z5vanixw/8+jPwsppnrZq2HL9YoYw3oaBlEOiRgXT3K
+         5aOfqlxkfdM4HW9MfCIXSFO3Nnp7Omqzw5JZNmqq7M6rIFELgQPYOdToC2VL29w9/Mq4
+         Ago46edD2hn7qytdmB2OgHsHR684Ebp2NSAxcsXwI0JDiA300aBScp2lcuOD/HfDoTxn
+         e55vuMioRxSzs3R+MJCe6LqURdy2GVZ/jq63OcERPnZc1RpbKSsVd6LgA5nD+K+jPEho
+         ybp7na45BRDx+RfMoT301YSwgyOTa1xouReuuyIfcWKb6nvz2lDwncbK8Fh35Q0W0x/p
+         0Dfg==
+X-Gm-Message-State: AOAM530l7q0AvXXilD+Ytcs9OGbFOEKWHg2wyDB1iDbPMRiuexML0rHg
+        EjiYEKvQCXLySEkB2tiNAwRVeoWCnAPZVub8nvzMrPoMpcOZ
+X-Google-Smtp-Source: ABdhPJwFf6BqLXzzPmMy2MUlHAhXeH9dt1YUXkmsVOD/qRbLygvTTvI14qNET7Y6ajo8lVrNpxZbJMQ71IVqr8dzTzuf9N1hKGoW
 MIME-Version: 1.0
-References: <20210615191543.1043414-1-robh@kernel.org> <CAMuHMdUGXu8yj3JWKwM8mt7axkrzGMiowC1t0PHrbpxRCBME3w@mail.gmail.com>
-In-Reply-To: <CAMuHMdUGXu8yj3JWKwM8mt7axkrzGMiowC1t0PHrbpxRCBME3w@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 22 Jun 2021 07:43:37 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ8jjkufTAmoFHuqpWB0bMUfCCkUR-pFFa2MoyeGzgBvA@mail.gmail.com>
-Message-ID: <CAL_JsqJ8jjkufTAmoFHuqpWB0bMUfCCkUR-pFFa2MoyeGzgBvA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-can@vger.kernel.org,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
+X-Received: by 2002:a05:6e02:20e4:: with SMTP id q4mr3175014ilv.50.1624382664849;
+ Tue, 22 Jun 2021 10:24:24 -0700 (PDT)
+Date:   Tue, 22 Jun 2021 10:24:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b7bee505c55e0f20@google.com>
+Subject: [syzbot] memory leak in j1939_xtp_rx_rts
+From:   syzbot <syzbot+d56eaa979f1a3d6e2e2e@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
+        robin@protonic.nl, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 2:17 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Rob,
->
-> On Tue, Jun 15, 2021 at 9:16 PM Rob Herring <robh@kernel.org> wrote:
-> > If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> > same size as the list is redundant and can be dropped. Note that is DT
-> > schema specific behavior and not standard json-schema behavior. The tooling
-> > will fixup the final schema adding any unspecified minItems/maxItems.
-> >
-> > This condition is partially checked with the meta-schema already, but
-> > only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> > An improved meta-schema is pending.
->
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->
-> > --- a/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> > +++ b/Documentation/devicetree/bindings/net/stm32-dwmac.yaml
-> > @@ -46,7 +46,6 @@ properties:
-> >
-> >    clocks:
-> >      minItems: 3
-> > -    maxItems: 5
-> >      items:
-> >        - description: GMAC main clock
-> >        - description: MAC TX clock
->
-> While resolving the conflict with commit fea99822914039c6
-> ("dt-bindings: net: document ptp_ref clk in dwmac") in soc/for-next,
-> I noticed the following construct for clock-names:
->
->   clock-names:
->     minItems: 3
->     maxItems: 6
->     contains:
->       enum:
->         - stmmaceth
->         - mac-clk-tx
->         - mac-clk-rx
->         - ethstp
->         - eth-ck
->         - ptp_ref
->
-> Should this use items instead of enum, and drop maxItems, or is this
-> a valid construct to support specifying the clocks in random order?
-> If the latter, it does mean that the order of clock-names may not
-> match the order of the clock descriptions.
+Hello,
 
-'contains' is true if one or more entries match the strings. So it is
-really saying one of these is required. That's not really much of a
-constraint. There's 'minContains' and 'maxContains' in newer
-json-schema versions (not yet supported) that could add some
-constraints if there has to be at least N entries from contains. An
-'items' schema (as opposed to a list) would say all items have to
-match one of the strings. I'm sure that's too strict.
+syzbot found the following issue on:
 
-TLDR: clocks for this binding are a mess and the above is probably all
-we can do here.
+HEAD commit:    fd0aa1a4 Merge tag 'for-linus' of git://git.kernel.org/pub..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=155c8d10300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6ec2526c74098317
+dashboard link: https://syzkaller.appspot.com/bug?extid=d56eaa979f1a3d6e2e2e
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=110912a4300000
 
-Rob
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d56eaa979f1a3d6e2e2e@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff888126b3d500 (size 232):
+  comm "softirq", pid 0, jiffies 4294974634 (age 13.120s)
+  hex dump (first 32 bytes):
+    68 16 14 26 81 88 ff ff 68 16 14 26 81 88 ff ff  h..&....h..&....
+    00 80 5d 22 81 88 ff ff 00 00 00 00 00 00 00 00  ..]"............
+  backtrace:
+    [<ffffffff836a0d5f>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:413
+    [<ffffffff83c599e1>] alloc_skb include/linux/skbuff.h:1107 [inline]
+    [<ffffffff83c599e1>] j1939_session_fresh_new net/can/j1939/transport.c:1484 [inline]
+    [<ffffffff83c599e1>] j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1578 [inline]
+    [<ffffffff83c599e1>] j1939_xtp_rx_rts+0x451/0xac0 net/can/j1939/transport.c:1679
+    [<ffffffff83c5a7eb>] j1939_tp_cmd_recv net/can/j1939/transport.c:1986 [inline]
+    [<ffffffff83c5a7eb>] j1939_tp_recv+0x44b/0x640 net/can/j1939/transport.c:2067
+    [<ffffffff83c515dc>] j1939_can_recv+0x2bc/0x420 net/can/j1939/main.c:101
+    [<ffffffff83c43d98>] deliver net/can/af_can.c:574 [inline]
+    [<ffffffff83c43d98>] can_rcv_filter+0xd8/0x290 net/can/af_can.c:608
+    [<ffffffff83c44360>] can_receive+0xf0/0x140 net/can/af_can.c:665
+    [<ffffffff83c4442d>] can_rcv+0x7d/0xf0 net/can/af_can.c:696
+    [<ffffffff836d2e1a>] __netif_receive_skb_one_core+0x6a/0xa0 net/core/dev.c:5459
+    [<ffffffff836d2ea7>] __netif_receive_skb+0x27/0xa0 net/core/dev.c:5573
+    [<ffffffff836d3234>] process_backlog+0xb4/0x1a0 net/core/dev.c:6437
+    [<ffffffff836d54fd>] __napi_poll+0x3d/0x2a0 net/core/dev.c:6985
+    [<ffffffff836d5cea>] napi_poll net/core/dev.c:7052 [inline]
+    [<ffffffff836d5cea>] net_rx_action+0x32a/0x410 net/core/dev.c:7139
+    [<ffffffff846000bf>] __do_softirq+0xbf/0x2ab kernel/softirq.c:559
+    [<ffffffff81238a0c>] do_softirq kernel/softirq.c:460 [inline]
+    [<ffffffff81238a0c>] do_softirq+0x5c/0x80 kernel/softirq.c:447
+    [<ffffffff81238a81>] __local_bh_enable_ip+0x51/0x60 kernel/softirq.c:384
+    [<ffffffff840bf0cd>] spin_unlock_bh include/linux/spinlock.h:399 [inline]
+    [<ffffffff840bf0cd>] batadv_nc_purge_paths+0x19d/0x1f0 net/batman-adv/network-coding.c:467
+
+BUG: memory leak
+unreferenced object 0xffff888126141600 (size 512):
+  comm "softirq", pid 0, jiffies 4294974634 (age 13.120s)
+  hex dump (first 32 bytes):
+    00 e0 9f 2a 81 88 ff ff 08 16 14 26 81 88 ff ff  ...*.......&....
+    08 16 14 26 81 88 ff ff 18 16 14 26 81 88 ff ff  ...&.......&....
+  backtrace:
+    [<ffffffff83c552eb>] kmalloc include/linux/slab.h:556 [inline]
+    [<ffffffff83c552eb>] kzalloc include/linux/slab.h:686 [inline]
+    [<ffffffff83c552eb>] j1939_session_new+0x5b/0x160 net/can/j1939/transport.c:1443
+    [<ffffffff83c59a78>] j1939_session_fresh_new net/can/j1939/transport.c:1495 [inline]
+    [<ffffffff83c59a78>] j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1578 [inline]
+    [<ffffffff83c59a78>] j1939_xtp_rx_rts+0x4e8/0xac0 net/can/j1939/transport.c:1679
+    [<ffffffff83c5a7eb>] j1939_tp_cmd_recv net/can/j1939/transport.c:1986 [inline]
+    [<ffffffff83c5a7eb>] j1939_tp_recv+0x44b/0x640 net/can/j1939/transport.c:2067
+    [<ffffffff83c515dc>] j1939_can_recv+0x2bc/0x420 net/can/j1939/main.c:101
+    [<ffffffff83c43d98>] deliver net/can/af_can.c:574 [inline]
+    [<ffffffff83c43d98>] can_rcv_filter+0xd8/0x290 net/can/af_can.c:608
+    [<ffffffff83c44360>] can_receive+0xf0/0x140 net/can/af_can.c:665
+    [<ffffffff83c4442d>] can_rcv+0x7d/0xf0 net/can/af_can.c:696
+    [<ffffffff836d2e1a>] __netif_receive_skb_one_core+0x6a/0xa0 net/core/dev.c:5459
+    [<ffffffff836d2ea7>] __netif_receive_skb+0x27/0xa0 net/core/dev.c:5573
+    [<ffffffff836d3234>] process_backlog+0xb4/0x1a0 net/core/dev.c:6437
+    [<ffffffff836d54fd>] __napi_poll+0x3d/0x2a0 net/core/dev.c:6985
+    [<ffffffff836d5cea>] napi_poll net/core/dev.c:7052 [inline]
+    [<ffffffff836d5cea>] net_rx_action+0x32a/0x410 net/core/dev.c:7139
+    [<ffffffff846000bf>] __do_softirq+0xbf/0x2ab kernel/softirq.c:559
+    [<ffffffff81238a0c>] do_softirq kernel/softirq.c:460 [inline]
+    [<ffffffff81238a0c>] do_softirq+0x5c/0x80 kernel/softirq.c:447
+    [<ffffffff81238a81>] __local_bh_enable_ip+0x51/0x60 kernel/softirq.c:384
+    [<ffffffff840bf0cd>] spin_unlock_bh include/linux/spinlock.h:399 [inline]
+    [<ffffffff840bf0cd>] batadv_nc_purge_paths+0x19d/0x1f0 net/batman-adv/network-coding.c:467
+
+BUG: memory leak
+unreferenced object 0xffff888126b3d300 (size 232):
+  comm "softirq", pid 0, jiffies 4294974634 (age 13.120s)
+  hex dump (first 32 bytes):
+    68 08 05 27 81 88 ff ff 68 08 05 27 81 88 ff ff  h..'....h..'....
+    00 00 0b 22 81 88 ff ff 00 00 00 00 00 00 00 00  ..."............
+  backtrace:
+    [<ffffffff836a0d5f>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:413
+    [<ffffffff83c599e1>] alloc_skb include/linux/skbuff.h:1107 [inline]
+    [<ffffffff83c599e1>] j1939_session_fresh_new net/can/j1939/transport.c:1484 [inline]
+    [<ffffffff83c599e1>] j1939_xtp_rx_rts_session_new net/can/j1939/transport.c:1578 [inline]
+    [<ffffffff83c599e1>] j1939_xtp_rx_rts+0x451/0xac0 net/can/j1939/transport.c:1679
+    [<ffffffff83c5a7eb>] j1939_tp_cmd_recv net/can/j1939/transport.c:1986 [inline]
+    [<ffffffff83c5a7eb>] j1939_tp_recv+0x44b/0x640 net/can/j1939/transport.c:2067
+    [<ffffffff83c515dc>] j1939_can_recv+0x2bc/0x420 net/can/j1939/main.c:101
+    [<ffffffff83c43d98>] deliver net/can/af_can.c:574 [inline]
+    [<ffffffff83c43d98>] can_rcv_filter+0xd8/0x290 net/can/af_can.c:608
+    [<ffffffff83c44360>] can_receive+0xf0/0x140 net/can/af_can.c:665
+    [<ffffffff83c4442d>] can_rcv+0x7d/0xf0 net/can/af_can.c:696
+    [<ffffffff836d2e1a>] __netif_receive_skb_one_core+0x6a/0xa0 net/core/dev.c:5459
+    [<ffffffff836d2ea7>] __netif_receive_skb+0x27/0xa0 net/core/dev.c:5573
+    [<ffffffff836d3234>] process_backlog+0xb4/0x1a0 net/core/dev.c:6437
+    [<ffffffff836d54fd>] __napi_poll+0x3d/0x2a0 net/core/dev.c:6985
+    [<ffffffff836d5cea>] napi_poll net/core/dev.c:7052 [inline]
+    [<ffffffff836d5cea>] net_rx_action+0x32a/0x410 net/core/dev.c:7139
+    [<ffffffff846000bf>] __do_softirq+0xbf/0x2ab kernel/softirq.c:559
+    [<ffffffff81238a0c>] do_softirq kernel/softirq.c:460 [inline]
+    [<ffffffff81238a0c>] do_softirq+0x5c/0x80 kernel/softirq.c:447
+    [<ffffffff81238a81>] __local_bh_enable_ip+0x51/0x60 kernel/softirq.c:384
+    [<ffffffff840bf0cd>] spin_unlock_bh include/linux/spinlock.h:399 [inline]
+    [<ffffffff840bf0cd>] batadv_nc_purge_paths+0x19d/0x1f0 net/batman-adv/network-coding.c:467
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
