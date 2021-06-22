@@ -2,119 +2,116 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512C83AFD68
-	for <lists+linux-can@lfdr.de>; Tue, 22 Jun 2021 08:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D063AFD75
+	for <lists+linux-can@lfdr.de>; Tue, 22 Jun 2021 08:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbhFVGyq (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 22 Jun 2021 02:54:46 -0400
-Received: from mail-ua1-f41.google.com ([209.85.222.41]:47081 "EHLO
-        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbhFVGyd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Jun 2021 02:54:33 -0400
-Received: by mail-ua1-f41.google.com with SMTP id t22so5648169uar.13;
-        Mon, 21 Jun 2021 23:52:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AfedJPMzBTJHeSpIFogH4M36+otVjxFa0xdxf+rXd68=;
-        b=KUvx2c0JtFXdkzvOCQoKx+I0rYy4/KKJJSMtCAeNlaGOnc7j2iyA8ei60gRBjhmGC6
-         jJVeIrN0XKoxICDVS3ksbMa7IvWRhThtgnm5d2GLBxWFuNFHp41bCtMZCWzDNBTC3tb9
-         Wxh3G1WQmjORiVp64J/fjXfnJGVjh2JH1HKqBm1VbyCSEi4GmjzRkI/KiLQk8Zo0INm6
-         IapxSECuzxvIMBl6dAGgfymtCqhe8Tzm/18WUHz5DmprHhKcqvYIC5XBe7rltHQQafj8
-         ti94A69ch7mCf6iSf1Qv0MUarxVn0jA9B6sdoXeW+pk7m1+9MLCZA7B6tIHhpatNy0H/
-         erHA==
-X-Gm-Message-State: AOAM531OHTlLWyrgL3wWe9emHe7BSoCRxFWnjdtcHaeDzPDtnoM9ARaX
-        T4UTIXKq4KXVZEQUOhpgu11hm7w8cZs+Op7C7fk=
-X-Google-Smtp-Source: ABdhPJy78Q6xRg3zp4Q7kUDnqKsXHRRRMjrYNgae4hQAY6j/8CoeaFnnR/9g/SXsgPUL/qIav3d1dhdsZT0Q6kD7hys=
-X-Received: by 2002:ab0:484b:: with SMTP id c11mr2045706uad.100.1624344736709;
- Mon, 21 Jun 2021 23:52:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210621184615.3345846-1-angelo@kernel-space.org>
- <20210621184615.3345846-4-angelo@kernel-space.org> <CAMuHMdV8a=YKowGLY3kGqwsfAPd3VPEXS8x7xqYaUz9ZBh64hg@mail.gmail.com>
- <20210621201816.pk6n4xa7j4bi6vfk@pengutronix.de> <CAMuHMdUHQyPB8G5QX-oK7+MDvkLihR6QCoD+9_3pQKQZWu7TGw@mail.gmail.com>
- <20210621204127.xwrk2tlxggct7kst@pengutronix.de>
-In-Reply-To: <20210621204127.xwrk2tlxggct7kst@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 22 Jun 2021 08:52:05 +0200
-Message-ID: <CAMuHMdUrFa6r2VQdNTgr8mV_wGoOb4VhK0Y5_XQQ1Xzgc93NMw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] can: flexcan: update Kconfig to allow non-of cases
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
+        id S229490AbhFVG4u (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 22 Jun 2021 02:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229629AbhFVG4u (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 22 Jun 2021 02:56:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42440C061574
+        for <linux-can@vger.kernel.org>; Mon, 21 Jun 2021 23:54:35 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lvaIo-000842-Hq; Tue, 22 Jun 2021 08:54:30 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:f4a:9a72:36be:c814])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id E4E43640FEC;
+        Tue, 22 Jun 2021 06:54:28 +0000 (UTC)
+Date:   Tue, 22 Jun 2021 08:54:27 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
 Cc:     Angelo Dureghello <angelo@kernel-space.org>,
         Greg Ungerer <gerg@linux-m68k.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
         linux-can@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 4/5] can: flexcan: update Kconfig to allow non-of cases
+Message-ID: <20210622065427.z5dnixenf47zag4g@pengutronix.de>
+References: <20210621184615.3345846-1-angelo@kernel-space.org>
+ <20210621184615.3345846-4-angelo@kernel-space.org>
+ <CAMuHMdV8a=YKowGLY3kGqwsfAPd3VPEXS8x7xqYaUz9ZBh64hg@mail.gmail.com>
+ <20210621201816.pk6n4xa7j4bi6vfk@pengutronix.de>
+ <CAMuHMdUHQyPB8G5QX-oK7+MDvkLihR6QCoD+9_3pQKQZWu7TGw@mail.gmail.com>
+ <20210621204127.xwrk2tlxggct7kst@pengutronix.de>
+ <CAMuHMdUrFa6r2VQdNTgr8mV_wGoOb4VhK0Y5_XQQ1Xzgc93NMw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="s6dgs2ngnlnhqaoo"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUrFa6r2VQdNTgr8mV_wGoOb4VhK0Y5_XQQ1Xzgc93NMw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
 
-On Mon, Jun 21, 2021 at 10:41 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> On 21.06.2021 22:22:50, Geert Uytterhoeven wrote:
-> > On Mon, Jun 21, 2021 at 10:18 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> > > On 21.06.2021 22:11:58, Geert Uytterhoeven wrote:
-> > > > On Mon, Jun 21, 2021 at 8:47 PM Angelo Dureghello
-> > > > <angelo@kernel-space.org> wrote:
-> > > > > Update flexcan to support architectures without fdt.
-> > > > >
-> > > > > Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+--s6dgs2ngnlnhqaoo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > > > --- a/drivers/net/can/Kconfig
-> > > > > +++ b/drivers/net/can/Kconfig
-> > > > > @@ -97,7 +97,7 @@ config CAN_AT91
-> > > > >
-> > > > >  config CAN_FLEXCAN
-> > > > >         tristate "Support for Freescale FLEXCAN based chips"
-> > > > > -       depends on OF && HAS_IOMEM
-> > > > > +       depends on HAS_IOMEM
-> > > >
-> > > > I think you want to add a line
-> > > >
-> > > >     depends on ARCH_LAYERSCAPE || ARCH_MXC || COLDFIRE ||
-> > > > FSL_SOC_BOOKE || COMPILE_TEST
-> > > >
-> > > > (or PPC instead of FSL_SOC_BOOKE?)
-> > > > so the question doesn't pop up when compiling a kernel for a system
-> > > > that cannot have a Freescale FlexCAN IP block.
+On 22.06.2021 08:52:05, Geert Uytterhoeven wrote:
+> > Probably. What about the original proposed change: "(OF || M5441x) && H=
+AS_IOMEM"?
+>=20
+> Yeah, the Flexcan might pop up on RISC-V, too.
+> But any new platforms should use OF.
+> Given the Flexcan is probably present on more than just M5441x,
+> I'd go for:
+>=20
+>     depends on OF || COLDFIRE || COMPILE_TEST
+>     depends on HAS_IOMEM
+
+Looks good to me!
+
+> > > > So I think there won't be too many configs where the oldconfig ques=
+tion
+> > > > would pop up.
 > > >
-> > > Back in 2018 Pankaj Bansal replaced the "depends on ARM || PPC" by "OF
-> > > && HAS_IOMEM", see:
-> > >
-> > > | 0f8af56f74cd can: flexcan: enable flexcan for all architectures
+> > > Now it will, as Mr. Torvalds' main machine does not satisfy "ARM || P=
+PC"
+> > > or "OF && HAS_IOMEM", but does "HAS_IOMEM" ;-)
 > >
-> > Probably the real reason behind that was to enable it on ARM64
-> > (more specifically ARCH_LAYERSCAPE || ARCH_MXC).
->
-> Probably. What about the original proposed change: "(OF || M5441x) && HAS_IOMEM"?
+> > IC, that would be one question too much :)
+>=20
+> I do doubt he has CONFIG_CAN enabled ;-)
 
-Yeah, the Flexcan might pop up on RISC-V, too.
-But any new platforms should use OF.
-Given the Flexcan is probably present on more than just M5441x,
-I'd go for:
+:D
 
-    depends on OF || COLDFIRE || COMPILE_TEST
-    depends on HAS_IOMEM
+regards,
+Marc
 
-> > > So I think there won't be too many configs where the oldconfig question
-> > > would pop up.
-> >
-> > Now it will, as Mr. Torvalds' main machine does not satisfy "ARM || PPC"
-> > or "OF && HAS_IOMEM", but does "HAS_IOMEM" ;-)
->
-> IC, that would be one question too much :)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-I do doubt he has CONFIG_CAN enabled ;-)
+--s6dgs2ngnlnhqaoo
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Gr{oetje,eeting}s,
+-----BEGIN PGP SIGNATURE-----
 
-                        Geert
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDRiSEACgkQqclaivrt
+76lZCAf/ekQ8XfkOJIawXZDDpjaVLO1FOL9o4/es0jY+ytWjQWUWshRKWgTbxeY3
+EP+LTnf+0R3jVGXVslMaANyyfhgYjRrM2aCQD6I55cXBkxJsrmWVeNRbLYl0giHh
+GOkykIEJejF6h+HCz1sq2vHftbb0JA5YFB0VrjJqY4bYf5W5sXT4EytRwLneT9Na
+p+sdTPE4hPV+bRwWjsd0Tz0P4RW1cz6mPejTXRr/PXJoyINv5kBCFEUiYW/mOIQD
+k36vLMdR8tooj1eK5IqQJRGkgMgpAvtnpmYtBFSurmohesu4iGyfDob4348oTvJa
+uyRISslDj+tPyMk2udDn4vTzwvzKxA==
+=pPbT
+-----END PGP SIGNATURE-----
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--s6dgs2ngnlnhqaoo--
