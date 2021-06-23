@@ -2,58 +2,66 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041623B1C71
-	for <lists+linux-can@lfdr.de>; Wed, 23 Jun 2021 16:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF68F3B1DEB
+	for <lists+linux-can@lfdr.de>; Wed, 23 Jun 2021 17:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbhFWOaV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 23 Jun 2021 10:30:21 -0400
-Received: from smtp5-g21.free.fr ([212.27.42.5]:60026 "EHLO smtp5-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230061AbhFWOaV (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Wed, 23 Jun 2021 10:30:21 -0400
-Received: from Focal.peak-system.com (unknown [89.158.142.148])
-        (Authenticated sender: stephane.grosjean@free.fr)
-        by smtp5-g21.free.fr (Postfix) with ESMTPSA id 536E05FFA8;
-        Wed, 23 Jun 2021 16:27:29 +0200 (CEST)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH] can/peak_pciefd: fix a potential issue of sending frames
-Date:   Wed, 23 Jun 2021 16:26:00 +0200
-Message-Id: <20210623142600.149904-1-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.25.1
+        id S231394AbhFWP42 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Wed, 23 Jun 2021 11:56:28 -0400
+Received: from [183.90.58.236] ([183.90.58.236]:51580 "EHLO ns1.zackeruz.tk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231397AbhFWP42 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 23 Jun 2021 11:56:28 -0400
+Received: from johnlewis.com (unknown [192.168.20.1])
+        by ns1.zackeruz.tk (Postfix) with ESMTPSA id A2D0584631D
+        for <linux-can@vger.kernel.org>; Wed, 23 Jun 2021 23:54:08 +0800 (+08)
+Reply-To: robert_turner@johnlewis-trading.com,
+          pippawicks.sales@johnlewis-trading.com
+From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
+To:     linux-can@vger.kernel.org
+Subject: 6/23/2021 Product Inquiry 
+Date:   23 Jun 2021 15:54:08 +0000
+Message-ID: <20210623094114.7630E4F393357F30@johnlewis.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Rather than just indicating that transmission can start, this patch
-requires the explicit flushing of the network Tx queue when the driver is
-informed by the device that it can transmit, next to its configuration.
-In this way, if frames have already been written by the application, they
-will actually be transmitted.
+Dear linux-can
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/peak_canfd/peak_canfd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The famous brand John Lewis Partnership, is UK's largest multi-
+channel retailer with over 126 shops and multiple expansion in 
+Africa furnished by European/Asian/American products. We are 
+sourcing new products to attract new customers and also retain 
+our existing ones, create new partnerships with companies dealing 
+with different kinds of goods globally.
 
-diff --git a/drivers/net/can/peak_canfd/peak_canfd.c b/drivers/net/can/peak_canfd/peak_canfd.c
-index 00847cbaf7b6..d08718e98e11 100644
---- a/drivers/net/can/peak_canfd/peak_canfd.c
-+++ b/drivers/net/can/peak_canfd/peak_canfd.c
-@@ -351,8 +351,8 @@ static int pucan_handle_status(struct peak_canfd_priv *priv,
- 				return err;
- 		}
- 
--		/* start network queue (echo_skb array is empty) */
--		netif_start_queue(ndev);
-+		/* wake network queue up (echo_skb array is empty) */
-+		netif_wake_queue(ndev);
- 
- 		return 0;
- 	}
--- 
-2.25.1
+Your company's products are of interest to our market as we have 
+an amazing market for your products.
 
+Provide us your current catalog through email to review more. We 
+hope to be able to order with you and start a long-term friendly,
+respectable and solid business partnership. Please we would 
+appreciate it if you could send us your stock availability via 
+email if any.
+
+Our payment terms are 15 days net in Europe, 30 days Net in UK 
+and 30 days net in Asia/USA as we operate with over 5297 
+suppliers around the globe for the past 50 years now. For 
+immediate response Send your reply to robert_turner@johnlewis-
+trading.com for us to be able to 
+treat with care and urgency.
+
+
+Best Regards
+
+Rob Turner
+Head Of Procurement Operations
+John Lewis & Partners.
+robert_turner@johnlewis-trading.com
+Tel: +44-7451-274090
+WhatsApp: +447497483925
+www.johnlewis.com
+REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
