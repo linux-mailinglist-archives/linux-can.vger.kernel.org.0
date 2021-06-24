@@ -2,68 +2,63 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC9B3B35BD
-	for <lists+linux-can@lfdr.de>; Thu, 24 Jun 2021 20:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B298C3B35BC
+	for <lists+linux-can@lfdr.de>; Thu, 24 Jun 2021 20:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbhFXScb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        id S232696AbhFXScb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
         Thu, 24 Jun 2021 14:32:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33432 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:33428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232671AbhFXScY (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        id S232666AbhFXScY (ORCPT <rfc822;linux-can@vger.kernel.org>);
         Thu, 24 Jun 2021 14:32:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 465FE613CA;
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3ABB6610A2;
         Thu, 24 Jun 2021 18:30:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1624559405;
-        bh=UMTLdBRRTHt6zFsJxYYBaOzNMFisozJB6p2McLlu19Q=;
+        bh=6r3D+w9wSai1i5AYKCkavmXfX1NiggGUJIFxg+8gjIg=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Ckom5Zsyuq4H7BUTCOMeJWh4iUX785tXRdtw+8ePrPFWIX3LPsGIsBmBum2xLTk3a
-         BIk8xfMfutcfl7eo5thYH2qwlVPa61WXALj5VZbTmg1FY/xlhh/rIvc74qhLaRoxNZ
-         CQu0eftMVQ2kA/h0kSZGlJ2w5QKbfGAZKRLy50iUxfb1TSic9bxO3oLBJC3+HbRtA7
-         IWLmKuJtiMCnYVnGIRAIADtDsXLJPADv0kLMiuD5uMwxmDdkC2o3X4pum+TUrzPyus
-         AVQU+1Tq8Mvnk4Oq4u9SkVXyrcMiCN/Yxnf/IBaZB6foADXO8h7zwqAhO6CfBKF/EF
-         WK5TNKjiDPrSw==
+        b=ksKlS+xh3NmM8FYKf/pJiHmk+RPykfHpg6Tc2DC+QBAeO7PezbfDnkS9oKvffEjb5
+         4rEhsiL4U5smTgUsBNSRZ9b6Ah6PR9ZpvxnIRWFVewH1atQeYTIxjDI274UMJvBrx4
+         B6Yo/U2fdHavJZ+MWihH9Ye5YSn4DCCDKzySxkkcwVmgu8KBWVvNlnqoSTPsG/TbmB
+         7rbv16EkuH5olBnseLlW9aqr2zMbtDn4Wm9BI9mecboHadH/pd5j3cLJnIBx2icUMx
+         iZXygiMWpybwP5yj57ZBAbTV6mmtvQiQRZIosV/ZivH0MwxDPV201bgbcv+zAlQYHk
+         iVgeeCqKT0oeg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2C9AD60BFB;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2348060952;
         Thu, 24 Jun 2021 18:30:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [net 1/2] can: j1939: j1939_sk_setsockopt(): prevent allocation of
- j1939 filter for optlen == 0
+Subject: Re: pull-request: can 2021-06-24
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162455940517.3292.6011951304218982459.git-patchwork-notify@kernel.org>
+Message-Id: <162455940514.3292.1536393943631339193.git-patchwork-notify@kernel.org>
 Date:   Thu, 24 Jun 2021 18:30:05 +0000
-References: <20210624064200.2998085-2-mkl@pengutronix.de>
-In-Reply-To: <20210624064200.2998085-2-mkl@pengutronix.de>
+References: <20210624064200.2998085-1-mkl@pengutronix.de>
+In-Reply-To: <20210624064200.2998085-1-mkl@pengutronix.de>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>
 Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de,
-        nslusarek@gmx.net, o.rempel@pengutronix.de
+        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net.git (refs/heads/master):
+This pull request was applied to netdev/net.git (refs/heads/master):
 
-On Thu, 24 Jun 2021 08:41:59 +0200 you wrote:
-> From: Norbert Slusarek <nslusarek@gmx.net>
+On Thu, 24 Jun 2021 08:41:58 +0200 you wrote:
+> Hello Jakub, hello David,
 > 
-> If optval != NULL and optlen == 0 are specified for SO_J1939_FILTER in
-> j1939_sk_setsockopt(), memdup_sockptr() will return ZERO_PTR for 0
-> size allocation. The new filter will be mistakenly assigned ZERO_PTR.
-> This patch checks for optlen != 0 and filter will be assigned NULL in
-> case of optlen == 0.
+> this is a pull request of 2 patches for net/master.
+> 
+> The first patch is by Norbert Slusarek and prevent allocation of
+> filter for optlen == 0 in the j1939 CAN protocol.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,1/2] can: j1939: j1939_sk_setsockopt(): prevent allocation of j1939 filter for optlen == 0
-    https://git.kernel.org/netdev/net/c/aaf473d0100f
-  - [net,2/2] can: peak_pciefd: pucan_handle_status(): fix a potential starvation issue in TX path
-    https://git.kernel.org/netdev/net/c/b17233d385d0
+  - pull-request: can 2021-06-24
+    https://git.kernel.org/netdev/net/c/abe90454f075
 
 You are awesome, thank you!
 --
