@@ -2,150 +2,142 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C793B3808
-	for <lists+linux-can@lfdr.de>; Thu, 24 Jun 2021 22:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930853B3CD9
+	for <lists+linux-can@lfdr.de>; Fri, 25 Jun 2021 08:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbhFXUoB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 24 Jun 2021 16:44:01 -0400
-Received: from mout02.posteo.de ([185.67.36.66]:52823 "EHLO mout02.posteo.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232029AbhFXUoB (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 24 Jun 2021 16:44:01 -0400
-Received: from submission (posteo.de [89.146.220.130]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 0A6112400FD
-        for <linux-can@vger.kernel.org>; Thu, 24 Jun 2021 22:41:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1624567300; bh=h0whPnmsiYa4tdzpimBjmLYuvWf+lEo9a3Mb390imd4=;
-        h=To:Cc:From:Autocrypt:Subject:Date:From;
-        b=OKiszWktDpwpS18OUmpzfY0O90SdvEpcex+yqt9ia3tEdD4f+FsnMMhqsSfGw4vfL
-         18InJ4GAUIu9J1LR7Ynz+Rx8HjnDt4b1tQKi3yUjD3XaXiTGN8gzgbPBWet7LbOhCh
-         c3eJpSL/OI4nvUZxfowJ4YK3ZiiSFLewU8c3wRSiNUIzh4ql1ziZzH46a7OIPT1mM+
-         yhkAweHW3GK+9ZFDBRsu0dxTMybWDu+dH943Hhs0TnfU/2IwSTLXELHygJkSJdcyUO
-         QeOUpKI5+S76QuVLUNu4FoCiARKLgI8iem0zt0CznjCLl2bE5q/iFK8I7H3WGFrhWS
-         mulT9vLw+zMlg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4G9sVq1yhKz6tm6;
-        Thu, 24 Jun 2021 22:41:39 +0200 (CEST)
-To:     Joshua Quesenberry <engnfrc@gmail.com>,
-        'Marc Kleine-Budde' <mkl@pengutronix.de>
-Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org
+        id S229764AbhFYG6w (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 25 Jun 2021 02:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229448AbhFYG6v (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 25 Jun 2021 02:58:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88823C061574
+        for <linux-can@vger.kernel.org>; Thu, 24 Jun 2021 23:56:31 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lwflN-0007M8-7Y; Fri, 25 Jun 2021 08:56:29 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6633:1401:6bbf:57ef])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id A182564344F;
+        Fri, 25 Jun 2021 06:56:27 +0000 (UTC)
+Date:   Fri, 25 Jun 2021 08:56:26 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Joshua Quesenberry <engnfrc@gmail.com>
+Cc:     'Patrick Menschel' <menschel.p@posteo.de>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org
+Subject: Re: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
+Message-ID: <20210625065626.b7afwhptoyoxoblx@pengutronix.de>
 References: <016701d7678c$2b3d50c0$81b7f240$@gmail.com>
  <20210622212818.enfx5fzgghfxfznb@pengutronix.de>
  <CAMGHUonufNF7CgAzcPkhgykxdYBtA+r5nY2i5xRGXN7Nxd5yMQ@mail.gmail.com>
  <2a99d742-b2dc-4411-acbb-2e23ce7cd132@posteo.de>
  <029101d76855$fa5ac300$ef104900$@gmail.com>
- <fe0a5628-e87f-6261-58c7-dbfccbb143a2@posteo.de>
- <010b01d76926$2c3c6bf0$84b543d0$@gmail.com>
-From:   Patrick Menschel <menschel.p@posteo.de>
-Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
- elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
- TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
- ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
- ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
- Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
- R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
- N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
- NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
- S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
- aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
- djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
- TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
- WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
- UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
- bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
- VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
- NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
- TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
- YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
- c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
- NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
- NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
- dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
- aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
- TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
- MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
- S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
- K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
- dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
- a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
- ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
- QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
- YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
- TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
- T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
- MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
- U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
- CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
- T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
- NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
- YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
- dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
- U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
- TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
- TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
- RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
- STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
- NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
- ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
- aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
- UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
- MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
- WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
- V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
- a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
- dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
- QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
- IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
-Subject: Re: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
-Message-ID: <0e678105-0f24-1d73-4c99-dfea3d1731e5@posteo.de>
-Date:   Thu, 24 Jun 2021 20:41:38 +0000
 MIME-Version: 1.0
-In-Reply-To: <010b01d76926$2c3c6bf0$84b543d0$@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m7uyiu6owgw2avzh"
+Content-Disposition: inline
+In-Reply-To: <029101d76855$fa5ac300$ef104900$@gmail.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-Am 24.06.21 um 20:24 schrieb Joshua Quesenberry:
-> Thanks for the tips Patrick on config.txt cleanup, I'll take a closer look into that.
-> 
-> Not sure I'm following what you're asking for with regards to i2c. i2c1 is currently is use to communicate with accel, gyro, mag, and a power supervisor MCU that helps us accomplish wake/sleep based on accel or vehicle ignition and some other low-level hardware tasks.
+--m7uyiu6owgw2avzh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Concerning i2c1 afaik it is already set up by the other two lines but I
-may be wrong about that.
->> # typical combination out of raspi-config
->> dtparam=i2c_arm=on
->> dtparam=i2s=on
+On 23.06.2021 13:34:10, Joshua Quesenberry wrote:
+> I added printing the error number as Marc suggested and the number
+> appears to be -110 every time.
 
-If you want to wake/sleep according to automotive standards, select a
-CAN transceiver with a wakeup pin.
+#define	ETIMEDOUT	110	/* Connection timed out */
+https://elixir.bootlin.com/linux/latest/source/include/uapi/asm-generic/err=
+no.h#L93
 
-If I remember right there is even a dt overlay for on/off via pin event.
+That means something has timed out, we see this in the previous log
+message, too:
 
-> 
-> I removed the UDEV rules I had that rename can0 and can1, just in case that was causing a race condition or something else odd, but the system is behaving the same.
-> 
-> Not sure what else to try at this point, any ideas? What does the error number of -110 mean to you all?
-...
->> [  146.964971] mcp251xfd spi0.0: SPI transfer timed out [  146.965023] 
->> spi_master spi0: failed to transfer one message from queue (ret=-110) 
->> [  146.965216] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (length=4, data=00 00 00 00, CRC=0x0000) retrying.
->> [  146.965247] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (length=4, data=00 00 00 00, CRC=0x0000) retrying.
->> [  146.965277] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (length=4, data=00 00 00 00, CRC=0x0000) retrying.
->> [  146.965286] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (length=4, data=00 00 00 00, CRC=0x0000).
->> [  146.965331] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (length=4, data=00 00 00 00, CRC=0x0000) retrying.
->> [  146.965360] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (length=4, data=00 00 00 00, CRC=0x0000) retrying.
->> [  146.965389] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (length=4, data=00 00 00 00, CRC=0x0000) retrying.
->> [  146.965397] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (length=4, data=00 00 00 00, CRC=0x0000).
+> [   25.660006] CAN device driver interface
+> [   25.668720] spi_master spi0: will run message pump with realtime prior=
+ity
+> [   25.676697] mcp251xfd spi0.1 can0: MCP2518FD rev0.0 (-RX_INT -MAB_NO_W=
+ARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:16=
+=2E66MHz) successfully initialized.
+> [   25.684900] mcp251xfd spi0.0 can1: MCP2518FD rev0.0 (-RX_INT -MAB_NO_W=
+ARN +CRC_REG +CRC_RX +CRC_TX +ECC -HD c:40.00MHz m:20.00MHz r:17.00MHz e:16=
+=2E66MHz) successfully initialized.
+> [   28.098033] mcp251xfd spi0.1 rename4: renamed from can0
+> [   28.175644] mcp251xfd spi0.0 can0: renamed from can1
+> [   28.225891] mcp251xfd spi0.1 can1: renamed from rename4
+                                   VVVVVVVVVVVVVVVVVVVVVV
+> [  146.964971] mcp251xfd spi0.0: SPI transfer timed out
+> [  146.965023] spi_master spi0: failed to transfer one message from queue=
+ (ret=3D-110)
 
-110 is ETIMEOUT
-according to your dmesg output, it is raised in a send context from SPI
-Master and afterwards only zeros are recieved, so may be an issue with
-the chip select pin. Scope it to be sure.
+> [  146.965216] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000) retrying.
+> [  146.965247] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000) retrying.
+> [  146.965277] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000) retrying.
+> [  146.965286] mcp251xfd spi0.0 can0: CRC read error at address 0x0e0c (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000).
+> [  146.965331] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000) retrying.
+> [  146.965360] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000) retrying.
+> [  146.965389] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000) retrying.
+> [  146.965397] mcp251xfd spi0.0 can0: CRC read error at address 0x0000 (l=
+ength=3D4, data=3D00 00 00 00, CRC=3D0x0000).
+> [  146.965413] A link change request failed with some changes committed a=
+lready. Interface can0 may have been left with an inconsistent configuratio=
+n, please check.
+>=20
+> Regarding the discussion about Kconfig flags, I went ahead and rebuilt
+> kernel 5.10.44 using a config that was essentially
+> arch/arm/configs/bcm2711_defconfig with these additions needed to get
+> our I2S working. This should have undone the switch to ONDEMAND
+> governor and enabling 1000 Hz clock.
 
-Regards,
-Patrick
+Please switch back the clock to the standard HZ setting.
+
+BTW: why have you changed the clock setting in the first place? All
+timer (not timeout) code in Linux makes use of hrtimer, which run
+independent of the clock HZ setting.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--m7uyiu6owgw2avzh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDVfhcACgkQqclaivrt
+76niJwf7BUZjS9l9Fg7a3DTsrftDZvd/w1w5UXVq7UpgPKXXIishLRVyAbDPvcOC
+8WKJoiP24IjxgKcCz2JetkXFAxZFH66OS7QWpZ01XBZHWRZPHCcmsRH8juLSEjcd
+zV+vys7Zx7T6oIqf+D7L/GhFqoK+Tavv026dsQWdu+wq2xWxyn5jhkvasCf/Db43
+mDqrDH5U/V6jNyzksJffI8ydTRyciHFaSbQeOYG0eIVaiYBLomN0d8hA3w9PqoWz
+yXi/enY3R4Ielk309j2YIk/LyoOAhuVxSkNeAR8A2k02YJrOLYQXMdTKNR1ZsYKn
+taHQYx5Pcg7ag3HRlxA9ajAkoIoQVg==
+=SfXt
+-----END PGP SIGNATURE-----
+
+--m7uyiu6owgw2avzh--
