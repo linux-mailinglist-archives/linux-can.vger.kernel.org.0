@@ -2,251 +2,115 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3193B4425
-	for <lists+linux-can@lfdr.de>; Fri, 25 Jun 2021 15:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42C33B4E76
+	for <lists+linux-can@lfdr.de>; Sat, 26 Jun 2021 14:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhFYNNi (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 25 Jun 2021 09:13:38 -0400
-Received: from smtp5-g21.free.fr ([212.27.42.5]:35480 "EHLO smtp5-g21.free.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231512AbhFYNNh (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Fri, 25 Jun 2021 09:13:37 -0400
-Received: from localhost.localdomain (unknown [89.158.142.148])
-        (Authenticated sender: stephane.grosjean@free.fr)
-        by smtp5-g21.free.fr (Postfix) with ESMTPSA id D2AA65FF67;
-        Fri, 25 Jun 2021 15:10:41 +0200 (CEST)
-From:   Stephane Grosjean <s.grosjean@peak-system.com>
-To:     linux-can Mailing List <linux-can@vger.kernel.org>
-Cc:     Stephane Grosjean <s.grosjean@peak-system.com>
-Subject: [PATCH 5/5] can: peak_usb: upgrades the handling of bus state changes
-Date:   Fri, 25 Jun 2021 15:09:31 +0200
-Message-Id: <20210625130931.27438-6-s.grosjean@peak-system.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210625130931.27438-1-s.grosjean@peak-system.com>
-References: <20210625130931.27438-1-s.grosjean@peak-system.com>
+        id S229850AbhFZMVj (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 26 Jun 2021 08:21:39 -0400
+Received: from mail.kernel-space.org ([195.201.34.187]:60372 "EHLO
+        mail.kernel-space.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229518AbhFZMVi (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 26 Jun 2021 08:21:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
+        s=20190913; t=1624709953;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yE2t7aTLXnsIGk9NsRTTnIh6+5LIIl0v6R6s6pcp9W8=;
+        b=WCSQMDx38NWXj/DClaJFiEjLRxdGN9o8o5ZuR5NEdhrehvslsoqovJIW87XfY5H6rACluR
+        Y3A1kMAxdRPoc5X6NdQPbnScqypo2jlY7k1yWlUTFBC8GtpXzchQatnkcFwbY3x9CuX5BP
+        xE4LNVi3qTVeBgRTrQMX2yhrSDKTm+4=
+Received: from [192.168.0.2] (host-87-8-57-171.retail.telecomitalia.it [87.8.57.171])
+        by ziongate (OpenSMTPD) with ESMTPSA id 47016f6f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sat, 26 Jun 2021 12:19:13 +0000 (UTC)
+Subject: Re: [PATCH v3 4/5] can: flexcan: update Kconfig to allow non-of cases
+To:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        linux-can@vger.kernel.org, Joakim Zhang <qiangqing.zhang@nxp.com>
+References: <20210621184615.3345846-1-angelo@kernel-space.org>
+ <20210621184615.3345846-4-angelo@kernel-space.org>
+ <CAMuHMdV8a=YKowGLY3kGqwsfAPd3VPEXS8x7xqYaUz9ZBh64hg@mail.gmail.com>
+ <20210621201816.pk6n4xa7j4bi6vfk@pengutronix.de>
+ <CAMuHMdUHQyPB8G5QX-oK7+MDvkLihR6QCoD+9_3pQKQZWu7TGw@mail.gmail.com>
+ <20210621204127.xwrk2tlxggct7kst@pengutronix.de>
+ <CAMuHMdUrFa6r2VQdNTgr8mV_wGoOb4VhK0Y5_XQQ1Xzgc93NMw@mail.gmail.com>
+ <20210622065427.z5dnixenf47zag4g@pengutronix.de>
+From:   Angelo Dureghello <angelo@kernel-space.org>
+Message-ID: <9d724149-3c30-adca-1ecc-96d204699c03@kernel-space.org>
+Date:   Sat, 26 Jun 2021 14:18:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210622065427.z5dnixenf47zag4g@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch updates old code by using the functions published since by the
-socket-can module. In particular, this new code better manages the change
-of bus state by also using the value of the error counters that the driver
-now systematically asks for when initializing the channel.
+Hi Marc, Geert,
 
-Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
----
- drivers/net/can/usb/peak_usb/pcan_usb.c | 169 ++++++------------------
- 1 file changed, 41 insertions(+), 128 deletions(-)
+thanks, fixed all, but i am still fighting on an
+occasional strange heisenbug.
 
-diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
-index 7d18bc6911f5..1ab3be8dbb83 100644
---- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-+++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-@@ -453,146 +453,59 @@ static int pcan_usb_decode_error(struct pcan_usb_msg_context *mc, u8 n,
- {
- 	struct sk_buff *skb;
- 	struct can_frame *cf;
--	enum can_state new_state;
-+	enum can_state new_state = CAN_STATE_ERROR_ACTIVE;
- 
- 	/* ignore this error until 1st ts received */
- 	if (n == PCAN_USB_ERROR_QOVR)
- 		if (!mc->pdev->time_ref.tick_count)
- 			return 0;
- 
--	new_state = mc->pdev->dev.can.state;
--
--	switch (mc->pdev->dev.can.state) {
--	case CAN_STATE_ERROR_ACTIVE:
--		if (n & PCAN_USB_ERROR_BUS_LIGHT) {
--			new_state = CAN_STATE_ERROR_WARNING;
--			break;
--		}
--		fallthrough;
--
--	case CAN_STATE_ERROR_WARNING:
--		if (n & PCAN_USB_ERROR_BUS_HEAVY) {
--			new_state = CAN_STATE_ERROR_PASSIVE;
--			break;
--		}
--		if (n & PCAN_USB_ERROR_BUS_OFF) {
--			new_state = CAN_STATE_BUS_OFF;
--			break;
--		}
--		if (n & ~PCAN_USB_ERROR_BUS) {
--			/*
--			 * trick to bypass next comparison and process other
--			 * errors
--			 */
--			new_state = CAN_STATE_MAX;
--			break;
--		}
--		if ((n & PCAN_USB_ERROR_BUS_LIGHT) == 0) {
--			/* no error (back to active state) */
--			new_state = CAN_STATE_ERROR_ACTIVE;
--			break;
--		}
--		break;
--
--	case CAN_STATE_ERROR_PASSIVE:
--		if (n & PCAN_USB_ERROR_BUS_OFF) {
--			new_state = CAN_STATE_BUS_OFF;
--			break;
--		}
--		if (n & PCAN_USB_ERROR_BUS_LIGHT) {
--			new_state = CAN_STATE_ERROR_WARNING;
--			break;
--		}
--		if (n & ~PCAN_USB_ERROR_BUS) {
--			/*
--			 * trick to bypass next comparison and process other
--			 * errors
--			 */
--			new_state = CAN_STATE_MAX;
--			break;
--		}
--
--		if ((n & PCAN_USB_ERROR_BUS_HEAVY) == 0) {
--			/* no error (back to warning state) */
--			new_state = CAN_STATE_ERROR_WARNING;
--			break;
--		}
--		break;
--
--	default:
--		/* do nothing waiting for restart */
-+	if (n & PCAN_USB_ERROR_TXQFULL) {
-+		netdev_dbg(mc->netdev, "device Tx queue full)\n");
- 		return 0;
- 	}
- 
--	/* donot post any error if current state didn't change */
--	if (mc->pdev->dev.can.state == new_state)
--		return 0;
--
- 	/* allocate an skb to store the error frame */
- 	skb = alloc_can_err_skb(mc->netdev, &cf);
- 	if (!skb)
--		return -ENOMEM;
--
--	switch (new_state) {
--	case CAN_STATE_BUS_OFF:
--		cf->can_id |= CAN_ERR_BUSOFF;
--		mc->pdev->dev.can.can_stats.bus_off++;
--		can_bus_off(mc->netdev);
--		break;
--
--	case CAN_STATE_ERROR_PASSIVE:
--		cf->can_id |= CAN_ERR_CRTL;
--		cf->data[1] = (mc->pdev->bec.txerr > mc->pdev->bec.rxerr) ?
--				CAN_ERR_CRTL_TX_PASSIVE :
--				CAN_ERR_CRTL_RX_PASSIVE;
--		cf->data[6] = mc->pdev->bec.txerr;
--		cf->data[7] = mc->pdev->bec.rxerr;
--
--		mc->pdev->dev.can.can_stats.error_passive++;
--		break;
--
--	case CAN_STATE_ERROR_WARNING:
--		cf->can_id |= CAN_ERR_CRTL;
--		cf->data[1] = (mc->pdev->bec.txerr > mc->pdev->bec.rxerr) ?
--				CAN_ERR_CRTL_TX_WARNING :
--				CAN_ERR_CRTL_RX_WARNING;
--		cf->data[6] = mc->pdev->bec.txerr;
--		cf->data[7] = mc->pdev->bec.rxerr;
--
--		mc->pdev->dev.can.can_stats.error_warning++;
--		break;
-+		return 0;
- 
--	case CAN_STATE_ERROR_ACTIVE:
-+	if (n & PCAN_USB_ERROR_RXQOVR) {
-+		/* data overrun interrupt */
-+		netdev_dbg(mc->netdev, "data overrun interrupt\n");
- 		cf->can_id |= CAN_ERR_CRTL;
--		cf->data[1] = CAN_ERR_CRTL_ACTIVE;
-+		cf->data[1] |= CAN_ERR_CRTL_RX_OVERFLOW;
-+		mc->netdev->stats.rx_over_errors++;
-+		mc->netdev->stats.rx_errors++;
-+	}
- 
--		/* sync local copies of rxerr/txerr counters */
--		mc->pdev->bec.txerr = 0;
--		mc->pdev->bec.rxerr = 0;
--		break;
-+	if (n & PCAN_USB_ERROR_BUS_OFF) {
-+		new_state = CAN_STATE_BUS_OFF;
-+	} else if (n & PCAN_USB_ERROR_BUS_HEAVY) {
-+		new_state = ((mc->pdev->bec.txerr >= 128) ||
-+			     (mc->pdev->bec.rxerr >= 128)) ?
-+				CAN_STATE_ERROR_PASSIVE :
-+				CAN_STATE_ERROR_WARNING;
-+	} else {
-+		new_state = CAN_STATE_ERROR_ACTIVE;
-+	}
- 
--	default:
--		/* CAN_STATE_MAX (trick to handle other errors) */
--		if (n & PCAN_USB_ERROR_TXQFULL)
--			netdev_dbg(mc->netdev, "device Tx queue full)\n");
--
--		if (n & PCAN_USB_ERROR_RXQOVR) {
--			netdev_dbg(mc->netdev, "data overrun interrupt\n");
--			cf->can_id |= CAN_ERR_CRTL;
--			cf->data[1] |= CAN_ERR_CRTL_RX_OVERFLOW;
--			mc->netdev->stats.rx_over_errors++;
--			mc->netdev->stats.rx_errors++;
--		}
-+	/* handle change of state */
-+	if (new_state != mc->pdev->dev.can.state) {
-+		enum can_state tx_state =
-+			(mc->pdev->bec.txerr >= mc->pdev->bec.rxerr) ?
-+				new_state : 0;
-+		enum can_state rx_state =
-+			(mc->pdev->bec.txerr <= mc->pdev->bec.rxerr) ?
-+				new_state : 0;
- 
--		cf->data[6] = mc->pdev->bec.txerr;
--		cf->data[7] = mc->pdev->bec.rxerr;
-+		can_change_state(mc->netdev, cf, tx_state, rx_state);
- 
--		new_state = mc->pdev->dev.can.state;
--		break;
-+		/* things must be done even in case of OOM */
-+		if (new_state == CAN_STATE_BUS_OFF)
-+			can_bus_off(mc->netdev);
- 	}
- 
--	mc->pdev->dev.can.state = new_state;
--
- 	if (status_len & PCAN_USB_STATUSLEN_TIMESTAMP) {
- 		struct skb_shared_hwtstamps *hwts = skb_hwtstamps(skb);
- 
-@@ -921,14 +834,14 @@ static int pcan_usb_start(struct peak_usb_device *dev)
- 	pdev->bec.rxerr = 0;
- 	pdev->bec.txerr = 0;
- 
--	/* be notified on error counter changes (if requested by user) */
--	if (dev->can.ctrlmode & CAN_CTRLMODE_BERR_REPORTING) {
--		err = pcan_usb_set_err_frame(dev, PCAN_USB_BERR_MASK);
--		if (err)
--			netdev_warn(dev->netdev,
--				    "Asking for BERR reporting error %u\n",
--				    err);
--	}
-+	/* always ask the device for BERR reporting, to be able to switch from
-+	 * WARNING to PASSIVE state
-+	 */
-+	err = pcan_usb_set_err_frame(dev, PCAN_USB_BERR_MASK);
-+	if (err)
-+		netdev_warn(dev->netdev,
-+			    "Asking for BERR reporting error %u\n",
-+			    err);
- 
- 	/* if revision greater than 3, can put silent mode on/off */
- 	if (dev->device_rev > 3) {
--- 
-2.25.1
+After several hours of "candump can0" on coldfire and
+"cangen can0" from PC (peak_usb) at 1Mbit/s, coldfire
+side suddenly produces a 129 RX errors from one packet
+to another 0 -> 129.
+In this condition, after reset and reboot, issue seems
+to persist, at the first received packet coldfire
+produces no ack, i still get 129 rx errors:
 
+[   18.090000] flexcan flexcan-mcf5441x.0 can0: flexcan_chip_start: 
+reading mcr=0x60a3020f ctrl=0x052d2056
+[   18.090000] flexcan_irq() ecr=0x00008100 esr=0x0001c912
+[   18.090000] flexcan flexcan-mcf5441x.0 can0: Controller changed from 
+Error Active State (0) into Error Passive State (2).
+
+Issue seems to disappear again after resoldering the
+can transceiver (SN65HVD230).
+
+So it seems some issue with my hw, investigating on
+this before v4, need to be fully sure it's not a
+driver issue. By oscilloscope, differential signal and
+rx signal seems perfect, no rings. Also baudrate seems
+nearly perfect.
+
+
+On 22/06/21 8:54 AM, Marc Kleine-Budde wrote:
+> On 22.06.2021 08:52:05, Geert Uytterhoeven wrote:
+>>> Probably. What about the original proposed change: "(OF || M5441x) && HAS_IOMEM"?
+>>
+>> Yeah, the Flexcan might pop up on RISC-V, too.
+>> But any new platforms should use OF.
+>> Given the Flexcan is probably present on more than just M5441x,
+>> I'd go for:
+>>
+>>      depends on OF || COLDFIRE || COMPILE_TEST
+>>      depends on HAS_IOMEM
+> 
+> Looks good to me!
+> 
+>>>>> So I think there won't be too many configs where the oldconfig question
+>>>>> would pop up.
+>>>>
+>>>> Now it will, as Mr. Torvalds' main machine does not satisfy "ARM || PPC"
+>>>> or "OF && HAS_IOMEM", but does "HAS_IOMEM" ;-)
+>>>
+>>> IC, that would be one question too much :)
+>>
+>> I do doubt he has CONFIG_CAN enabled ;-)
+> 
+> :D
+> 
+> regards,
+> Marc
+> 
+
+Regards,
+angelo
