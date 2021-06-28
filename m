@@ -2,175 +2,90 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DD63B5854
-	for <lists+linux-can@lfdr.de>; Mon, 28 Jun 2021 06:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D08E83B5949
+	for <lists+linux-can@lfdr.de>; Mon, 28 Jun 2021 08:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbhF1Eap (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 28 Jun 2021 00:30:45 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:45756 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbhF1Eam (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Jun 2021 00:30:42 -0400
-Received: by mail-il1-f199.google.com with SMTP id s18-20020a92cbd20000b02901bb78581beaso9962978ilq.12
-        for <linux-can@vger.kernel.org>; Sun, 27 Jun 2021 21:28:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=icxrGNLP9JeJyygKnYHu0Kd8QQahd5TDh1IJBmjQ4fU=;
-        b=VNgeXJSGrYsTsDru0lQjCOgHdlngGnfCkNHrPv10n0QU5Pg+PMU4mQVQ6ypUaS4hew
-         7k6558sw27FMYjjQLzdGdEZHRR9bsrXizhjavwrxXlVLJeiRjdQ18YclIVDpNpCpUxA5
-         V2EykE10Bwfhk9Xzv2e9T0SlGSurx4bFdb6AqTkErJxqvFSXbFemrMrQtdfgc0DtQFFR
-         p79q7wySiKgJn3nEeGBIT6cdtz3/GvsDYjzbDHVai0F2N4TJgjrMJza8Y1jO1GsfsWwS
-         kYW/0fayKorPjWVjttlp1P/hiOtdzUKgF59vorDuqBIbcASVXn6nHgJW/+tIyUSWd7iA
-         6nIg==
-X-Gm-Message-State: AOAM533YHw1hEF2/T00ullBboju8MbAAfoeJ5KgrbZEd1T4AGCOoguaZ
-        C8bp6VaeBLPU32xp4aBZxAJvO03MWnsV1U0Pug6H3ZWrkwPz
-X-Google-Smtp-Source: ABdhPJz7x+mV90IRliuwgevDl/SQ8cw3MqpMFiOQ9959GwywBmL3g9wJR0IxB8UWyt3n+YMx9APc5G0ogAWyctYmtGl/Od5a/Frl
+        id S232214AbhF1Gye (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 28 Jun 2021 02:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229998AbhF1Gye (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 28 Jun 2021 02:54:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DE0C061574
+        for <linux-can@vger.kernel.org>; Sun, 27 Jun 2021 23:52:09 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lxl7n-0004wj-JP; Mon, 28 Jun 2021 08:52:07 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:5559:217e:8326:2717])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 757AE644A52;
+        Mon, 28 Jun 2021 06:52:06 +0000 (UTC)
+Date:   Mon, 28 Jun 2021 08:52:04 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Stephane Grosjean <s.grosjean@peak-system.com>
+Cc:     linux-can Mailing List <linux-can@vger.kernel.org>
+Subject: Re: [PATCH 3/5] can: peak_usb: pcan_usb_handle_bus_evt(): fix
+ reading rxerr/txerr values
+Message-ID: <20210628065204.kliez5lpjfy5uapt@pengutronix.de>
+References: <20210625130931.27438-1-s.grosjean@peak-system.com>
+ <20210625130931.27438-4-s.grosjean@peak-system.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9c43:: with SMTP id 3mr3689294iof.123.1624854496443;
- Sun, 27 Jun 2021 21:28:16 -0700 (PDT)
-Date:   Sun, 27 Jun 2021 21:28:16 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001285b905c5cbeb8f@google.com>
-Subject: [syzbot] memory leak in j1939_sk_sendmsg
-From:   syzbot <syzbot+085305c4b952053c9437@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kernel@pengutronix.de, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@rempel-privat.de, mkl@pengutronix.de, netdev@vger.kernel.org,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wf5wyesqrrdruxpj"
+Content-Disposition: inline
+In-Reply-To: <20210625130931.27438-4-s.grosjean@peak-system.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--wf5wyesqrrdruxpj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    7266f203 Merge tag 'pm-5.13-rc8' of git://git.kernel.org/p..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e22d34300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3aac8c6ef370586a
-dashboard link: https://syzkaller.appspot.com/bug?extid=085305c4b952053c9437
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11e0d6a4300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13528400300000
+On 25.06.2021 15:09:29, Stephane Grosjean wrote:
+> This patch fixes an incorrect way of reading error counters in messages
+> received for this purpose from the PCAN-USB interface. These messages
+> inform about the increase or decrease of the error counters, whose values
+> are placed in bytes 1 and 2 of the message data (not 0 and 1).
+>=20
+> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+085305c4b952053c9437@syzkaller.appspotmail.com
+Added to linux-can/testing, added a fixes tag and stable on Cc.
 
-BUG: memory leak
-unreferenced object 0xffff888112d44400 (size 232):
-  comm "syz-executor006", pid 8628, jiffies 4294942391 (age 8.470s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 80 d7 0f 81 88 ff ff 00 64 db 16 81 88 ff ff  .........d......
-  backtrace:
-    [<ffffffff836a0f8f>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:413
-    [<ffffffff836ac44a>] alloc_skb include/linux/skbuff.h:1107 [inline]
-    [<ffffffff836ac44a>] alloc_skb_with_frags+0x6a/0x2c0 net/core/skbuff.c:5992
-    [<ffffffff83699e63>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2364
-    [<ffffffff83c54592>] j1939_sk_alloc_skb net/can/j1939/socket.c:858 [inline]
-    [<ffffffff83c54592>] j1939_sk_send_loop net/can/j1939/socket.c:1040 [inline]
-    [<ffffffff83c54592>] j1939_sk_sendmsg+0x2e2/0x7d0 net/can/j1939/socket.c:1175
-    [<ffffffff83690ad6>] sock_sendmsg_nosec net/socket.c:654 [inline]
-    [<ffffffff83690ad6>] sock_sendmsg+0x56/0x80 net/socket.c:674
-    [<ffffffff83696e9f>] sock_no_sendpage+0x8f/0xc0 net/core/sock.c:2862
-    [<ffffffff836903db>] kernel_sendpage.part.0+0xeb/0x150 net/socket.c:3618
-    [<ffffffff836910bb>] kernel_sendpage net/socket.c:3615 [inline]
-    [<ffffffff836910bb>] sock_sendpage+0x5b/0x90 net/socket.c:947
-    [<ffffffff815b8862>] pipe_to_sendpage+0xa2/0x110 fs/splice.c:364
-    [<ffffffff815ba702>] splice_from_pipe_feed fs/splice.c:418 [inline]
-    [<ffffffff815ba702>] __splice_from_pipe+0x1e2/0x330 fs/splice.c:562
-    [<ffffffff815baf2f>] splice_from_pipe fs/splice.c:597 [inline]
-    [<ffffffff815baf2f>] generic_splice_sendpage+0x6f/0xa0 fs/splice.c:746
-    [<ffffffff815b891b>] do_splice_from fs/splice.c:767 [inline]
-    [<ffffffff815b891b>] direct_splice_actor+0x4b/0x70 fs/splice.c:936
-    [<ffffffff815b9033>] splice_direct_to_actor+0x153/0x350 fs/splice.c:891
-    [<ffffffff815b9318>] do_splice_direct+0xe8/0x150 fs/splice.c:979
-    [<ffffffff8155a64f>] do_sendfile+0x51f/0x760 fs/read_write.c:1260
-    [<ffffffff8155cf82>] __do_sys_sendfile64 fs/read_write.c:1325 [inline]
-    [<ffffffff8155cf82>] __se_sys_sendfile64 fs/read_write.c:1311 [inline]
-    [<ffffffff8155cf82>] __x64_sys_sendfile64+0xe2/0x100 fs/read_write.c:1311
+regards,
+Marc
 
-BUG: memory leak
-unreferenced object 0xffff888116d2d800 (size 1024):
-  comm "syz-executor006", pid 8628, jiffies 4294942391 (age 8.470s)
-  hex dump (first 32 bytes):
-    0d 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff836a0e5f>] kmalloc_reserve net/core/skbuff.c:354 [inline]
-    [<ffffffff836a0e5f>] __alloc_skb+0xdf/0x280 net/core/skbuff.c:425
-    [<ffffffff836ac44a>] alloc_skb include/linux/skbuff.h:1107 [inline]
-    [<ffffffff836ac44a>] alloc_skb_with_frags+0x6a/0x2c0 net/core/skbuff.c:5992
-    [<ffffffff83699e63>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2364
-    [<ffffffff83c54592>] j1939_sk_alloc_skb net/can/j1939/socket.c:858 [inline]
-    [<ffffffff83c54592>] j1939_sk_send_loop net/can/j1939/socket.c:1040 [inline]
-    [<ffffffff83c54592>] j1939_sk_sendmsg+0x2e2/0x7d0 net/can/j1939/socket.c:1175
-    [<ffffffff83690ad6>] sock_sendmsg_nosec net/socket.c:654 [inline]
-    [<ffffffff83690ad6>] sock_sendmsg+0x56/0x80 net/socket.c:674
-    [<ffffffff83696e9f>] sock_no_sendpage+0x8f/0xc0 net/core/sock.c:2862
-    [<ffffffff836903db>] kernel_sendpage.part.0+0xeb/0x150 net/socket.c:3618
-    [<ffffffff836910bb>] kernel_sendpage net/socket.c:3615 [inline]
-    [<ffffffff836910bb>] sock_sendpage+0x5b/0x90 net/socket.c:947
-    [<ffffffff815b8862>] pipe_to_sendpage+0xa2/0x110 fs/splice.c:364
-    [<ffffffff815ba702>] splice_from_pipe_feed fs/splice.c:418 [inline]
-    [<ffffffff815ba702>] __splice_from_pipe+0x1e2/0x330 fs/splice.c:562
-    [<ffffffff815baf2f>] splice_from_pipe fs/splice.c:597 [inline]
-    [<ffffffff815baf2f>] generic_splice_sendpage+0x6f/0xa0 fs/splice.c:746
-    [<ffffffff815b891b>] do_splice_from fs/splice.c:767 [inline]
-    [<ffffffff815b891b>] direct_splice_actor+0x4b/0x70 fs/splice.c:936
-    [<ffffffff815b9033>] splice_direct_to_actor+0x153/0x350 fs/splice.c:891
-    [<ffffffff815b9318>] do_splice_direct+0xe8/0x150 fs/splice.c:979
-    [<ffffffff8155a64f>] do_sendfile+0x51f/0x760 fs/read_write.c:1260
-    [<ffffffff8155cf82>] __do_sys_sendfile64 fs/read_write.c:1325 [inline]
-    [<ffffffff8155cf82>] __se_sys_sendfile64 fs/read_write.c:1311 [inline]
-    [<ffffffff8155cf82>] __x64_sys_sendfile64+0xe2/0x100 fs/read_write.c:1311
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-BUG: memory leak
-unreferenced object 0xffff888111010d00 (size 232):
-  comm "syz-executor006", pid 8628, jiffies 4294942391 (age 8.470s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 80 d7 0f 81 88 ff ff 00 64 db 16 81 88 ff ff  .........d......
-  backtrace:
-    [<ffffffff836a0f8f>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:413
-    [<ffffffff836ac44a>] alloc_skb include/linux/skbuff.h:1107 [inline]
-    [<ffffffff836ac44a>] alloc_skb_with_frags+0x6a/0x2c0 net/core/skbuff.c:5992
-    [<ffffffff83699e63>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2364
-    [<ffffffff83c54592>] j1939_sk_alloc_skb net/can/j1939/socket.c:858 [inline]
-    [<ffffffff83c54592>] j1939_sk_send_loop net/can/j1939/socket.c:1040 [inline]
-    [<ffffffff83c54592>] j1939_sk_sendmsg+0x2e2/0x7d0 net/can/j1939/socket.c:1175
-    [<ffffffff83690ad6>] sock_sendmsg_nosec net/socket.c:654 [inline]
-    [<ffffffff83690ad6>] sock_sendmsg+0x56/0x80 net/socket.c:674
-    [<ffffffff83696e9f>] sock_no_sendpage+0x8f/0xc0 net/core/sock.c:2862
-    [<ffffffff836903db>] kernel_sendpage.part.0+0xeb/0x150 net/socket.c:3618
-    [<ffffffff836910bb>] kernel_sendpage net/socket.c:3615 [inline]
-    [<ffffffff836910bb>] sock_sendpage+0x5b/0x90 net/socket.c:947
-    [<ffffffff815b8862>] pipe_to_sendpage+0xa2/0x110 fs/splice.c:364
-    [<ffffffff815ba702>] splice_from_pipe_feed fs/splice.c:418 [inline]
-    [<ffffffff815ba702>] __splice_from_pipe+0x1e2/0x330 fs/splice.c:562
-    [<ffffffff815baf2f>] splice_from_pipe fs/splice.c:597 [inline]
-    [<ffffffff815baf2f>] generic_splice_sendpage+0x6f/0xa0 fs/splice.c:746
-    [<ffffffff815b891b>] do_splice_from fs/splice.c:767 [inline]
-    [<ffffffff815b891b>] direct_splice_actor+0x4b/0x70 fs/splice.c:936
-    [<ffffffff815b9033>] splice_direct_to_actor+0x153/0x350 fs/splice.c:891
-    [<ffffffff815b9318>] do_splice_direct+0xe8/0x150 fs/splice.c:979
-    [<ffffffff8155a64f>] do_sendfile+0x51f/0x760 fs/read_write.c:1260
-    [<ffffffff8155cf82>] __do_sys_sendfile64 fs/read_write.c:1325 [inline]
-    [<ffffffff8155cf82>] __se_sys_sendfile64 fs/read_write.c:1311 [inline]
-    [<ffffffff8155cf82>] __x64_sys_sendfile64+0xe2/0x100 fs/read_write.c:1311
+--wf5wyesqrrdruxpj
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDZcZAACgkQqclaivrt
+76k2Cwf+MBb2jH2y6WextoTHWgkHVY81UQu0lMmT9kQwj+fyZmH5LHaKGMkrKg4h
+klWiwS2Br0mBKTjkACixT7ZGGP+JCx6LCASjwfm949s8gzeFmkBcgVETTOtJBfVR
+n8j4Zu7unvpS/RfYNPTL89upYTZil3Iv+UYoEnxaGIj86vIhS5yEdqhvYJSM41q6
+dwF4iWOea0Qx2Hgp6k6a8VgZta6DoqlwpVa/DVY/h1Isi1xQclc8t2zeWoNl4FHr
+wZscdUzna5SCuC1X6rYYMO36FnNsWH3km5RrrApFFNxzrTQUDKnfG0Dsimy5q1B0
+1548HpVouiV8NjcfpJmKjTQN5MndNg==
+=ilZx
+-----END PGP SIGNATURE-----
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+--wf5wyesqrrdruxpj--
