@@ -2,62 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D50D3B8E84
-	for <lists+linux-can@lfdr.de>; Thu,  1 Jul 2021 10:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAE93B8F57
+	for <lists+linux-can@lfdr.de>; Thu,  1 Jul 2021 11:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234958AbhGAIFM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 1 Jul 2021 04:05:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53866 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234760AbhGAIFM (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Thu, 1 Jul 2021 04:05:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DEBD761480;
-        Thu,  1 Jul 2021 08:02:40 +0000 (UTC)
-Subject: Re: [PATCH v4 2/5] m68k: stmark2: update board setup
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Angelo Dureghello <angelo@kernel-space.org>, wg@grandegger.com,
-        geert@linux-m68k.org, linux-m68k@vger.kernel.org,
-        linux-can@vger.kernel.org, qiangqing.zhang@nxp.com
+        id S235357AbhGAJEu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 1 Jul 2021 05:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235067AbhGAJEu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 1 Jul 2021 05:04:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1EE1C061756
+        for <linux-can@vger.kernel.org>; Thu,  1 Jul 2021 02:02:19 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1lysaK-0004js-RY; Thu, 01 Jul 2021 11:02:13 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:6b79:f6d8:f46:d3ca])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 6FA15646E2F;
+        Thu,  1 Jul 2021 09:02:11 +0000 (UTC)
+Date:   Thu, 1 Jul 2021 11:02:10 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Angelo Dureghello <angelo@kernel-space.org>
+Cc:     gerg@linux-m68k.org, wg@grandegger.com, geert@linux-m68k.org,
+        linux-m68k@vger.kernel.org, linux-can@vger.kernel.org,
+        qiangqing.zhang@nxp.com
+Subject: Re: [PATCH v4 4/5] can: flexcan: update Kconfig to enable coldfire
+Message-ID: <20210701090210.s6s7h5mrptlckbtv@pengutronix.de>
 References: <20210630230016.4099050-1-angelo@kernel-space.org>
- <20210630230016.4099050-2-angelo@kernel-space.org>
- <20210701065327.maawrm546dkfzxbx@pengutronix.de>
- <7effec9f-e3aa-12d1-fc91-cb7b2c4ae9ab@linux-m68k.org>
- <20210701074255.jutewhpjqxsi7bdl@pengutronix.de>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-Message-ID: <7252e8f0-7d16-4707-d091-784c27911173@linux-m68k.org>
-Date:   Thu, 1 Jul 2021 18:02:38 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ <20210630230016.4099050-4-angelo@kernel-space.org>
 MIME-Version: 1.0
-In-Reply-To: <20210701074255.jutewhpjqxsi7bdl@pengutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kw5h2rzmey2xh2bf"
+Content-Disposition: inline
+In-Reply-To: <20210630230016.4099050-4-angelo@kernel-space.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
-On 1/7/21 5:42 pm, Marc Kleine-Budde wrote:
-> On 01.07.2021 17:41:04, Greg Ungerer wrote:
->>
->> On 1/7/21 4:53 pm, Marc Kleine-Budde wrote:
->>> On 01.07.2021 01:00:13, Angelo Dureghello wrote:
->>>> Add configuration for flexcan pads.
->>>>
->>>> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
->>>
->>> How do we upstream the m68k changes? Should we split this series into
->>> m68k and CAN?
->>
->> I am happy to take the m68k specific changes (patches 2 and 3)
->> through the m68knommu git tree.
-> 
-> Make it so. \o/ I'll take the rest.
+--kw5h2rzmey2xh2bf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As soon as the current merge window closes I will pull them in.
+On 01.07.2021 01:00:15, Angelo Dureghello wrote:
+> Update flexcan to support coldfire architecture.
+>=20
+> Any new platform should use OF, but coldfire architecture is
+> actually not supporting devicetrees.
+>=20
+> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
+> ---
+> Changes for v2:
+> none
+> Changes for v3:
+> - change to just remove OF
+> Changes for v4:
+> - readjust options with coldfire and compile test additions
+> ---
+>  drivers/net/can/Kconfig | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+> index e355d3974977..3d6f319f6c91 100644
+> --- a/drivers/net/can/Kconfig
+> +++ b/drivers/net/can/Kconfig
+> @@ -97,7 +97,8 @@ config CAN_AT91
+> =20
+>  config CAN_FLEXCAN
+>  	tristate "Support for Freescale FLEXCAN based chips"
+> -	depends on OF && HAS_IOMEM
+> +	depends on OF || COLDFIRE || COMPILE_TEST
 
-Regards
-Greg
+This adds a trailing whitespace, fixed while applying.
 
+> +	depends on HAS_IOMEM
+>  	help
+>  	  Say Y here if you want to support for Freescale FlexCAN.
+> =20
+> --=20
+> 2.31.1
+>=20
+>
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--kw5h2rzmey2xh2bf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDdhJAACgkQqclaivrt
+76lh+Af/ZP4Fqu1P+xdZL6VPtTvzR18w4ytV26+B04WH68cZBgFZ8adAGnoxR41i
+P9WqADItM7WRAWPFyXV0Fd2VtTMgV8fronMHyq2fPn0/yr2GpJkFgnkrlrciyT8C
+Z4Q8IDs9l6WWHM44qgiesvbNRsLvdbWNjHcTuguEvDfq2/VX9RqVZRM3A8qNsxvk
+pyeKpMak305aPYToTC3MG6MZX4PLCNSfMm1mBNS6uzudZNs1BygIhMYIsez2mNuh
+1BVppjQUs5pg6aLD9NB9XeBS2E8b+kmBmNkZDXOCYpNvZ/z+qQKoS7ypYkHCbD3S
+zGGgbLSkyVKix5+9CxTIp/M0faYi0Q==
+=NikZ
+-----END PGP SIGNATURE-----
+
+--kw5h2rzmey2xh2bf--
