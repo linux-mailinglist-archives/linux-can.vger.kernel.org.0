@@ -2,285 +2,257 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2953BA136
-	for <lists+linux-can@lfdr.de>; Fri,  2 Jul 2021 15:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611453BA21D
+	for <lists+linux-can@lfdr.de>; Fri,  2 Jul 2021 16:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbhGBN21 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 2 Jul 2021 09:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S233061AbhGBO3n (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 2 Jul 2021 10:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbhGBN20 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Jul 2021 09:28:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC13C061762
-        for <linux-can@vger.kernel.org>; Fri,  2 Jul 2021 06:25:54 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lzJAz-0000hj-T4; Fri, 02 Jul 2021 15:25:49 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lzJAz-0006Sr-BS; Fri, 02 Jul 2021 15:25:49 +0200
-Date:   Fri, 2 Jul 2021 15:25:49 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
-        wg@grandegger.com
-Cc:     netdev@vger.kernel.org, David Jander <david@protonic.nl>,
-        kernel@pengutronix.de, linux-can@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] net: j1939: extend UAPI to notify about RX status
-Message-ID: <20210702132549.jwdotirq2eclcmt7@pengutronix.de>
-References: <20210702131208.20354-1-o.rempel@pengutronix.de>
- <20210702131208.20354-2-o.rempel@pengutronix.de>
+        with ESMTP id S233053AbhGBO3n (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 2 Jul 2021 10:29:43 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E90DC061762
+        for <linux-can@vger.kernel.org>; Fri,  2 Jul 2021 07:27:10 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id l26so8871636oic.7
+        for <linux-can@vger.kernel.org>; Fri, 02 Jul 2021 07:27:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6ryf7KKlLEZnGCFd3e8j8LiNLsT7TKCYDg8h06X7fOQ=;
+        b=QEvn4FIxvpfGeA9gOvSA/rfiDXF7vnaz/lrxI1NXlZnmrS6pUD9+bXR6ID608sBE0F
+         wsKUlTUuHplOE85voU5US/oN5ltEUcLyk/qZN8baE/qvVbXumhGjwpKkn5r1b18LFLbq
+         /zzAcLyMgtn6WL8wcLVu1dy7BeG8C2RxQFMrZO8oIhaE/0GEsWAIyhR5HQoktglD+9vx
+         1pZuBza6AyZ7nMmJr3yEcE2iO2lMFJZTFLYgz4cJGv49koFoOzTWbCDHTZ6UlwwQfMLD
+         Akazuyz6pWUinNiIsL/OyHNwpsaZ6pvollLBPkfPLjd1AHCRl59mgzNNInoZDnTb5Iou
+         UyvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6ryf7KKlLEZnGCFd3e8j8LiNLsT7TKCYDg8h06X7fOQ=;
+        b=KE1uVuQ42EmG3in4pQ+beOVvwzEBx86vqbnAYc6ZvVcps1P9fF31CAiRXO2jyZ3eeH
+         2JaJ27LHynzMsli3H46Wyd99CkFX48Or2DE6NJke/JVXnl/tv+JVvPzFedquPLWW0Ydv
+         3WcttpPk9esA3hdqSTqbmGOzuygDi5TzZ4u6yrikkoONfbM+YMxzhdekq6yflcmNAYUD
+         UPg7N9W865RuPY/6u6XDB06tYnoyCccf95l8gsdu54BRkqM7MA3e1YPnYJbFvcH2LQG3
+         7JaGkHRBHrIQfnQxRY5cEvgTYsXM2Ki7w3m0HDUL9ESzicxPLGHA7I4LXnErRyEJ1TQQ
+         CLOg==
+X-Gm-Message-State: AOAM533EB0PZ23NTt1NfulHtCkjFviv7sscbHpzckm6Z9OEDms4Y8abb
+        dI7KgV1KOBzl+SNi6gqYyAJwjtldn6QGWLAy9wA=
+X-Google-Smtp-Source: ABdhPJxG30NWAzDGl+f+Txf0Splvst5XVekCZQ8LttpVnmAxYGGn3BknkZewWZ8KcMKiOSHuNk/9aDYfP/VNIBKrG+g=
+X-Received: by 2002:aca:d6c2:: with SMTP id n185mr59813oig.51.1625236029575;
+ Fri, 02 Jul 2021 07:27:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210702131208.20354-2-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:20:39 up 212 days,  3:27, 49 users,  load average: 0.06, 0.07,
- 0.04
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+References: <016701d7678c$2b3d50c0$81b7f240$@gmail.com> <20210622212818.enfx5fzgghfxfznb@pengutronix.de>
+ <CAMGHUonufNF7CgAzcPkhgykxdYBtA+r5nY2i5xRGXN7Nxd5yMQ@mail.gmail.com>
+ <2a99d742-b2dc-4411-acbb-2e23ce7cd132@posteo.de> <029101d76855$fa5ac300$ef104900$@gmail.com>
+ <20210625065626.b7afwhptoyoxoblx@pengutronix.de> <20210625121648.hg4hihfmddss7ptu@pengutronix.de>
+ <020f01d769da$9fac86b0$df059410$@gmail.com> <022d01d769e2$e623cbf0$b26b63d0$@gmail.com>
+ <20210702093110.vzfjk4dgovrrs4mj@pengutronix.de>
+In-Reply-To: <20210702093110.vzfjk4dgovrrs4mj@pengutronix.de>
+From:   Joshua Quesenberry <engnfrc@gmail.com>
+Date:   Fri, 2 Jul 2021 10:26:57 -0400
+Message-ID: <CAMGHUo=NK0Q=4y8Wgp3Mo+G8CuUcK8gLhxBH6Z1to8PZMZRr3w@mail.gmail.com>
+Subject: Re: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Patrick Menschel <menschel.p@posteo.de>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, Joshua Quesenberry <EngnFrc@gmail.com>
+Content-Type: multipart/mixed; boundary="00000000000038becc05c624c0ac"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello folks!
+--00000000000038becc05c624c0ac
+Content-Type: text/plain; charset="UTF-8"
 
-Here is a proof of concept for the new UAPI for j1939. It can be tested
-with following patch on can-utils:
-https://github.com/olerem/can-utils/commit/608923c7c0b196e97690d1ea03886a600601db2c
+The only other format I have is Saleae's trace format, if you're
+willing to install their software, the attached trace should work. I
+double checked that the application will load even without the device
+attached, and it does, so it should work for you. I was using Logic 1,
+but switched to their Logic 2 app and recollected a trace for you.
+https://www.saleae.com/downloads/
 
-What kind of information would be needed for the:
-RTS, DPO and ABORT?
-Do any thing else is needed?
+Thanks,
 
-Regards,
-Oleksij
+Josh Q
 
-On Fri, Jul 02, 2021 at 03:12:08PM +0200, Oleksij Rempel wrote:
-> To be able to create applications with user friendly feedback, we need be
-> able to provide receive status information.
-> 
-> Typical ETP transfer may take seconds or even hours. To gave user some
-> clue or show some progress bar, the stack should push status update.
-> Same as for the TX information, the socket error queue will be used with
-> following new signals:
-> - J1939_EE_INFO_RX_RTS   - received and accepted request to send signal.
-> - J1939_EE_INFO_RX_DPO   - received data package offset signal
-> - J1939_EE_INFO_RX_ABORT - RX session was aborted
-> 
-> Instead of completion signal, user will get data package.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  include/uapi/linux/can/j1939.h |  3 ++
->  net/can/j1939/j1939-priv.h     |  4 +++
->  net/can/j1939/socket.c         | 56 +++++++++++++++++++++++++++-------
->  net/can/j1939/transport.c      | 10 ++++++
->  4 files changed, 62 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/uapi/linux/can/j1939.h b/include/uapi/linux/can/j1939.h
-> index df6e821075c1..d7cd0a858820 100644
-> --- a/include/uapi/linux/can/j1939.h
-> +++ b/include/uapi/linux/can/j1939.h
-> @@ -83,6 +83,9 @@ enum {
->  enum {
->  	J1939_EE_INFO_NONE,
->  	J1939_EE_INFO_TX_ABORT,
-> +	J1939_EE_INFO_RX_RTS,
-> +	J1939_EE_INFO_RX_DPO,
-> +	J1939_EE_INFO_RX_ABORT,
->  };
->  
->  struct j1939_filter {
-> diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-> index 93b8ad7f7d04..f6df20808f5e 100644
-> --- a/net/can/j1939/j1939-priv.h
-> +++ b/net/can/j1939/j1939-priv.h
-> @@ -23,6 +23,9 @@ enum j1939_sk_errqueue_type {
->  	J1939_ERRQUEUE_TX_ACK,
->  	J1939_ERRQUEUE_TX_SCHED,
->  	J1939_ERRQUEUE_TX_ABORT,
-> +	J1939_ERRQUEUE_RX_RTS,
-> +	J1939_ERRQUEUE_RX_DPO,
-> +	J1939_ERRQUEUE_RX_ABORT,
->  };
->  
->  /* j1939 devices */
-> @@ -87,6 +90,7 @@ struct j1939_priv {
->  	struct list_head j1939_socks;
->  
->  	struct kref rx_kref;
-> +	u32 rx_tskey;
->  };
->  
->  void j1939_ecu_put(struct j1939_ecu *ecu);
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index c2bf1c02597e..6e0443408761 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -930,21 +930,16 @@ j1939_sk_get_timestamping_opt_stats(struct j1939_session *session)
->  	return stats;
->  }
->  
-> -void j1939_sk_errqueue(struct j1939_session *session,
-> -		       enum j1939_sk_errqueue_type type)
-> +static void __j1939_sk_errqueue(struct j1939_session *session, struct sock *sk,
-> +				enum j1939_sk_errqueue_type type)
->  {
->  	struct j1939_priv *priv = session->priv;
-> -	struct sock *sk = session->sk;
->  	struct j1939_sock *jsk;
->  	struct sock_exterr_skb *serr;
->  	struct sk_buff *skb;
->  	char *state = "UNK";
->  	int err;
->  
-> -	/* currently we have no sk for the RX session */
-> -	if (!sk)
-> -		return;
-> -
->  	jsk = j1939_sk(sk);
->  
->  	if (!(jsk->state & J1939_SOCK_ERRQUEUE))
-> @@ -970,7 +965,7 @@ void j1939_sk_errqueue(struct j1939_session *session,
->  		serr->ee.ee_errno = ENOMSG;
->  		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
->  		serr->ee.ee_info = SCM_TSTAMP_ACK;
-> -		state = "ACK";
-> +		state = "TX ACK";
->  		break;
->  	case J1939_ERRQUEUE_TX_SCHED:
->  		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED)) {
-> @@ -981,13 +976,31 @@ void j1939_sk_errqueue(struct j1939_session *session,
->  		serr->ee.ee_errno = ENOMSG;
->  		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
->  		serr->ee.ee_info = SCM_TSTAMP_SCHED;
-> -		state = "SCH";
-> +		state = "TX SCH";
->  		break;
->  	case J1939_ERRQUEUE_TX_ABORT:
->  		serr->ee.ee_errno = session->err;
->  		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
->  		serr->ee.ee_info = J1939_EE_INFO_TX_ABORT;
-> -		state = "ABT";
-> +		state = "TX ABT";
-> +		break;
-> +	case J1939_ERRQUEUE_RX_RTS:
-> +		serr->ee.ee_errno = session->err;
-> +		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
-> +		serr->ee.ee_info = J1939_EE_INFO_RX_RTS;
-> +		state = "RX RTS";
-> +		break;
-> +	case J1939_ERRQUEUE_RX_DPO:
-> +		serr->ee.ee_errno = session->err;
-> +		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
-> +		serr->ee.ee_info = J1939_EE_INFO_RX_DPO;
-> +		state = "RX DPO";
-> +		break;
-> +	case J1939_ERRQUEUE_RX_ABORT:
-> +		serr->ee.ee_errno = session->err;
-> +		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
-> +		serr->ee.ee_info = J1939_EE_INFO_RX_ABORT;
-> +		state = "RX ABT";
->  		break;
->  	default:
->  		netdev_err(priv->ndev, "Unknown errqueue type %i\n", type);
-> @@ -997,7 +1010,7 @@ void j1939_sk_errqueue(struct j1939_session *session,
->  	if (sk->sk_tsflags & SOF_TIMESTAMPING_OPT_ID)
->  		serr->ee.ee_data = session->tskey;
->  
-> -	netdev_dbg(session->priv->ndev, "%s: 0x%p tskey: %i, state: %s\n",
-> +	netdev_info(session->priv->ndev, "%s: 0x%p tskey: %i, state: %s\n",
->  		   __func__, session, session->tskey, state);
->  	err = sock_queue_err_skb(sk, skb);
->  
-> @@ -1005,6 +1018,27 @@ void j1939_sk_errqueue(struct j1939_session *session,
->  		kfree_skb(skb);
->  };
->  
-> +void j1939_sk_errqueue(struct j1939_session *session,
-> +		       enum j1939_sk_errqueue_type type)
-> +{
-> +	struct j1939_priv *priv = session->priv;
-> +	struct j1939_sock *jsk;
-> +
-> +	if (session->sk) {
-> +		/* send TX notifications to the socket of origin  */
-> +		__j1939_sk_errqueue(session, session->sk, type);
-> +		return;
-> +	}
-> +
-> +	/* spread RX notifications to all sockets subscribed to this session */
-> +	spin_lock_bh(&priv->j1939_socks_lock);
-> +	list_for_each_entry(jsk, &priv->j1939_socks, list) {
-> +		if (j1939_sk_recv_match_one(jsk, &session->skcb))
-> +			__j1939_sk_errqueue(session, &jsk->sk, type);
-> +	}
-> +	spin_unlock_bh(&priv->j1939_socks_lock);
-> +};
-> +
->  void j1939_sk_send_loop_abort(struct sock *sk, int err)
->  {
->  	sk->sk_err = err;
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index 362cf38cacca..3b59b4d4d4ff 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -1087,6 +1087,8 @@ static void __j1939_session_cancel(struct j1939_session *session,
->  
->  	if (session->sk)
->  		j1939_sk_send_loop_abort(session->sk, session->err);
-> +	else
-> +		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
->  }
->  
->  static void j1939_session_cancel(struct j1939_session *session,
-> @@ -1297,6 +1299,8 @@ static void j1939_xtp_rx_abort_one(struct j1939_priv *priv, struct sk_buff *skb,
->  	session->err = j1939_xtp_abort_to_errno(priv, abort);
->  	if (session->sk)
->  		j1939_sk_send_loop_abort(session->sk, session->err);
-> +	else
-> +		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
->  	j1939_session_deactivate_activate_next(session);
->  
->  abort_put:
-> @@ -1597,6 +1601,9 @@ j1939_session *j1939_xtp_rx_rts_session_new(struct j1939_priv *priv,
->  	session->pkt.rx = 0;
->  	session->pkt.tx = 0;
->  
-> +	session->tskey = priv->rx_tskey++;
-> +	j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_RTS);
-> +
->  	WARN_ON_ONCE(j1939_session_activate(session));
->  
->  	return session;
-> @@ -1719,6 +1726,9 @@ static void j1939_xtp_rx_dpo_one(struct j1939_session *session,
->  	session->pkt.dpo = j1939_etp_ctl_to_packet(skb->data);
->  	session->last_cmd = dat[0];
->  	j1939_tp_set_rxtimeout(session, 750);
-> +
-> +	if (!session->transmission)
-> +		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_DPO);
->  }
->  
->  static void j1939_xtp_rx_dpo(struct j1939_priv *priv, struct sk_buff *skb,
-> -- 
-> 2.30.2
-> 
-> 
-> 
+On Fri, Jul 2, 2021 at 5:31 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 25.06.2021 12:55:26, Joshua Quesenberry wrote:
+> > Forgive me, I forgot can0 = spi0.1 and can1 = spi0.0 right now because
+> > I killed my UDEV rule so I was tapped onto the wrong CS line. Attached
+> > is a snapshot of what I'm seeing AND an export of the data from Saleae
+> > which may prove more useful than snapshots.
+>
+> Pulseview cannot parse the csv file correctly (see [1]). Can you save it
+> in a different format?
+>
+> Marc
+>
+> [1] https://www.mail-archive.com/sigrok-devel@lists.sourceforge.net/msg03751.html
+>
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+--00000000000038becc05c624c0ac
+Content-Type: application/octet-stream; 
+	name="MCP251xFD - Not Working - 50 MHz, 500 M Samples - 20210702 1018.sal"
+Content-Disposition: attachment; 
+	filename="MCP251xFD - Not Working - 50 MHz, 500 M Samples - 20210702 1018.sal"
+Content-Transfer-Encoding: base64
+Content-ID: <f_kqmfj1ak0>
+X-Attachment-Id: f_kqmfj1ak0
+
+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
+--00000000000038becc05c624c0ac--
