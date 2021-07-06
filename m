@@ -2,74 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3991A3BCAFF
-	for <lists+linux-can@lfdr.de>; Tue,  6 Jul 2021 12:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972433BD661
+	for <lists+linux-can@lfdr.de>; Tue,  6 Jul 2021 14:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbhGFK4j (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Jul 2021 06:56:39 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:6071 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbhGFK4i (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Jul 2021 06:56:38 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4GJzmt42s8zXq4H;
-        Tue,  6 Jul 2021 18:48:30 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 6 Jul 2021 18:53:58 +0800
-Received: from compute.localdomain (10.175.112.70) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Tue, 6 Jul 2021 18:53:57 +0800
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-To:     Robin van der Gracht <robin@protonic.nl>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        <kernel@pengutronix.de>, Oliver Hartkopp <socketcan@hartkopp.net>,
+        id S239783AbhGFMdR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Jul 2021 08:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242827AbhGFMDA (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Jul 2021 08:03:00 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68786C0A8887
+        for <linux-can@vger.kernel.org>; Tue,  6 Jul 2021 04:38:37 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1m0jOz-0004xP-Sv; Tue, 06 Jul 2021 13:38:09 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1m0jOw-0008Aw-5G; Tue, 06 Jul 2021 13:38:06 +0200
+Date:   Tue, 6 Jul 2021 13:38:06 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Robin van der Gracht <robin@protonic.nl>,
+        Oleksij Rempel <linux@rempel-privat.de>, kernel@pengutronix.de,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        "Kurt Van Dijck" <dev.kurt@vandijck-laurijssen.be>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>
-CC:     Zhang Changzhong <zhangchangzhong@huawei.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): fix rxtimer value between consecutive TP.DT to 750ms
-Date:   Tue, 6 Jul 2021 19:00:08 +0800
-Message-ID: <1625569210-47506-1-git-send-email-zhangchangzhong@huawei.com>
-X-Mailer: git-send-email 1.8.3.1
+        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
+        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-can@vger.kernel.org
+Subject: Re: [PATCH net] can: j1939: j1939_xtp_rx_dat_one(): fix rxtimer
+ value between consecutive TP.DT to 750ms
+Message-ID: <20210706113806.tgcijzi5z7kxhiw2@pengutronix.de>
+References: <1625569210-47506-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1625569210-47506-1-git-send-email-zhangchangzhong@huawei.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 13:35:02 up 216 days,  1:41, 45 users,  load average: 0.01, 0.04,
+ 0.01
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-For receive side, the max time interval between two consecutive TP.DT
-should be 750ms.
+On Tue, Jul 06, 2021 at 07:00:08PM +0800, Zhang Changzhong wrote:
+> For receive side, the max time interval between two consecutive TP.DT
+> should be 750ms.
+> 
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
 
-Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
----
- net/can/j1939/transport.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ACK,
+according to: SAE-J1939-21: T1 time is 750ms
+according to: ISO 11783-3: T1 time is <=750ms
 
-diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-index c3946c3..4113229 100644
---- a/net/can/j1939/transport.c
-+++ b/net/can/j1939/transport.c
-@@ -1869,7 +1869,7 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
- 		if (!session->transmission)
- 			j1939_tp_schedule_txtimer(session, 0);
- 	} else {
--		j1939_tp_set_rxtimeout(session, 250);
-+		j1939_tp_set_rxtimeout(session, 750);
- 	}
- 	session->last_cmd = 0xff;
- 	consume_skb(se_skb);
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+> ---
+>  net/can/j1939/transport.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
+> index c3946c3..4113229 100644
+> --- a/net/can/j1939/transport.c
+> +++ b/net/can/j1939/transport.c
+> @@ -1869,7 +1869,7 @@ static void j1939_xtp_rx_dat_one(struct j1939_session *session,
+>  		if (!session->transmission)
+>  			j1939_tp_schedule_txtimer(session, 0);
+>  	} else {
+> -		j1939_tp_set_rxtimeout(session, 250);
+> +		j1939_tp_set_rxtimeout(session, 750);
+>  	}
+>  	session->last_cmd = 0xff;
+>  	consume_skb(se_skb);
+> -- 
+> 2.9.5
+> 
+> 
+> 
+
 -- 
-2.9.5
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
