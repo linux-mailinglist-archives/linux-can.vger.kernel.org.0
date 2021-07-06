@@ -2,394 +2,204 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AD13BD7DD
-	for <lists+linux-can@lfdr.de>; Tue,  6 Jul 2021 15:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30223BDD62
+	for <lists+linux-can@lfdr.de>; Tue,  6 Jul 2021 20:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbhGFNjh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 6 Jul 2021 09:39:37 -0400
-Received: from protonic.xs4all.nl ([83.163.252.89]:44712 "EHLO
-        protonic.xs4all.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbhGFNjd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Jul 2021 09:39:33 -0400
-X-Greylist: delayed 498 seconds by postgrey-1.27 at vger.kernel.org; Tue, 06 Jul 2021 09:39:32 EDT
-Received: from erd992 (erd988.prtnl [192.168.224.30])
-        by sparta.prtnl (Postfix) with ESMTP id B3B4E44A024D;
-        Tue,  6 Jul 2021 15:28:34 +0200 (CEST)
-Date:   Tue, 6 Jul 2021 15:28:34 +0200
-From:   David Jander <david@protonic.nl>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     dev.kurt@vandijck-laurijssen.be, mkl@pengutronix.de,
-        wg@grandegger.com, kernel@pengutronix.de,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        Zhang Changzhong <zhangchangzhong@huawei.com>
-Subject: Re: [PATCH v1 2/2] net: j1939: extend UAPI to notify about RX
- status
-Message-ID: <20210706152834.44e62837@erd992>
-In-Reply-To: <20210706115758.11196-2-o.rempel@pengutronix.de>
-References: <20210706115758.11196-1-o.rempel@pengutronix.de>
-        <20210706115758.11196-2-o.rempel@pengutronix.de>
-Organization: Protonic Holland
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S231515AbhGFSnR (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 6 Jul 2021 14:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231404AbhGFSnR (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 6 Jul 2021 14:43:17 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC5DC061574
+        for <linux-can@vger.kernel.org>; Tue,  6 Jul 2021 11:40:37 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id b18so9655136qkc.5
+        for <linux-can@vger.kernel.org>; Tue, 06 Jul 2021 11:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=R3kUMwYP8BmJcVRKqRjLHvg/ZeKigOnEq8HJ3zYwaxo=;
+        b=LXkTkF8cz9WsHA0lxWN1pXbZ3SKpYvEf4+DvjSN6jxvnXHZA6pUatZRcUxj6Nxv97o
+         g/wNQRDDjXLKY0KBJYR6Byfl2Cx1s2OJFPvj5YohL1vJMORt7X2J0LBkyIXOiJGD7VFo
+         O8wYHOXkiiAGogoe8VW8Z8LRhAXwoxCmtygrn15rJO+XYxxEuXYQOLKZPhMv6dJBkAkk
+         ZGAeZ4xaiVtzp216gjvEyRrAQhurl6PhYATPVK7xpy5PbTsy0Me56NadDUyybnq9iSmJ
+         T5k71LiiWFTJl4faRt1sTIoYiuXhjAK+yNaYZ+YUuFxX8ZO4gtto24gTxq/7mG4ycXZ8
+         j+cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=R3kUMwYP8BmJcVRKqRjLHvg/ZeKigOnEq8HJ3zYwaxo=;
+        b=YTrgBZaPppziR9c15yWHpJDHTmAgl79kGnVtBl/2aOyJJgAnWExH5Yfn5V5DPus0qO
+         LZe1JBiiYp7SD9uFYQz4dUhp5f05AT8r0BygEkIjVEADklUOs0W4+RUtamgzUhxffaT+
+         tjGkeYvlEynD5nBpoRcFO7u453xPsAfvozqfEpbNdyThK0s241Pc62JYr1dbPmalNumv
+         lEz52ehznKrduzVmZTVJV3CDddKjpFRAic/Iobr0sjeW0VguF4rhCwmCn6jruvfBHsNa
+         Zlq/VjtsJ+pcHHy9o8YtenXj+lmiLdkHsSFe+7vLidXjLR0IgC3r71dmihYhr7yBzypL
+         4sHA==
+X-Gm-Message-State: AOAM533+jri7Vrz/SAOCTXOUHXtRWZEc56vNZE6DknHVZ9MdHEyhaIwn
+        AKHZlWaGmSeq5no4/3DZA0Y=
+X-Google-Smtp-Source: ABdhPJy+9GiaFDG0AQ/Oskl4Ps8mOK/pcZivzRRzAPqzrPuN2dR+pLjvsNc9W05DNf5Wo8oJ4adVQQ==
+X-Received: by 2002:ae9:e519:: with SMTP id w25mr18575052qkf.391.1625596836776;
+        Tue, 06 Jul 2021 11:40:36 -0700 (PDT)
+Received: from DTJQUESENBERRY ([2001:468:c80:a202:b578:7d7:5843:274e])
+        by smtp.gmail.com with ESMTPSA id p3sm5824034qti.31.2021.07.06.11.40.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Jul 2021 11:40:36 -0700 (PDT)
+From:   "Joshua Quesenberry" <engnfrc@gmail.com>
+To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
+Cc:     "'Patrick Menschel'" <menschel.p@posteo.de>,
+        <kernel@pengutronix.de>, <linux-can@vger.kernel.org>,
+        <engnfrc@gmail.com>
+References: <016701d7678c$2b3d50c0$81b7f240$@gmail.com> <20210622212818.enfx5fzgghfxfznb@pengutronix.de>        <CAMGHUonufNF7CgAzcPkhgykxdYBtA+r5nY2i5xRGXN7Nxd5yMQ@mail.gmail.com>    <2a99d742-b2dc-4411-acbb-2e23ce7cd132@posteo.de>        <029101d76855$fa5ac300$ef104900$@gmail.com>     <20210625065626.b7afwhptoyoxoblx@pengutronix.de>        <20210625121648.hg4hihfmddss7ptu@pengutronix.de>        <020f01d769da$9fac86b0$df059410$@gmail.com>     <022d01d769e2$e623cbf0$b26b63d0$@gmail.com>     <20210702093110.vzfjk4dgovrrs4mj@pengutronix.de> <CAMGHUo=NK0Q=4y8Wgp3Mo+G8CuUcK8gLhxBH6Z1to8PZMZRr3w@mail.gmail.com>
+In-Reply-To: <CAMGHUo=NK0Q=4y8Wgp3Mo+G8CuUcK8gLhxBH6Z1to8PZMZRr3w@mail.gmail.com>
+Subject: RE: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
+Date:   Tue, 6 Jul 2021 14:40:35 -0400
+Message-ID: <006601d77296$68e41d40$3aac57c0$@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQKkU7o+qbTtuE7WZsCEE+zhLGrysQHOwZAXAgLTME4A15gpjQI9UoC3AfsMaV4CTizomAGzk0WoAZKSgAIBs/x7BAFwQIEbqQ+ksyA=
+Content-Language: en-us
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Tue,  6 Jul 2021 13:57:58 +0200
-Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+Good Afternoon,
 
-> To be able to create applications with user friendly feedback, we need be
-> able to provide receive status information.
-> 
-> Typical ETP transfer may take seconds or even hours. To give user some
-> clue or show a progress bar, the stack should push status updates.
-> Same as for the TX information, the socket error queue will be used with
-> following new signals:
-> - J1939_EE_INFO_RX_RTS   - received and accepted request to send signal.
-> - J1939_EE_INFO_RX_DPO   - received data package offset signal
-> - J1939_EE_INFO_RX_ABORT - RX session was aborted
-> 
-> Instead of completion signal, user will get data package.
-> To activate this signals, application should set
-> SOF_TIMESTAMPING_RX_SOFTWARE to the SO_TIMESTAMPING socket option. This
-> will avoid unpredictable application behavior for the old software.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  include/uapi/linux/can/j1939.h |   9 +++
->  net/can/j1939/j1939-priv.h     |   4 +
->  net/can/j1939/socket.c         | 135 +++++++++++++++++++++++++--------
->  net/can/j1939/transport.c      |  22 +++++-
->  4 files changed, 136 insertions(+), 34 deletions(-)
-> 
-> diff --git a/include/uapi/linux/can/j1939.h b/include/uapi/linux/can/j1939.h
-> index df6e821075c1..dc2a8e15c0b7 100644
-> --- a/include/uapi/linux/can/j1939.h
-> +++ b/include/uapi/linux/can/j1939.h
-> @@ -78,11 +78,20 @@ enum {
->  enum {
->  	J1939_NLA_PAD,
->  	J1939_NLA_BYTES_ACKED,
-> +	J1939_NLA_TOTAL_SIZE,
-> +	J1939_NLA_DEST_ADDR,
-> +	J1939_NLA_DEST_NAME,
-> +	J1939_NLA_SRC_ADDR,
-> +	J1939_NLA_SRC_NAME,
-> +	J1939_NLA_PGN,
->  };
->  
->  enum {
->  	J1939_EE_INFO_NONE,
->  	J1939_EE_INFO_TX_ABORT,
-> +	J1939_EE_INFO_RX_RTS,
-> +	J1939_EE_INFO_RX_DPO,
-> +	J1939_EE_INFO_RX_ABORT,
->  };
->  
->  struct j1939_filter {
-> diff --git a/net/can/j1939/j1939-priv.h b/net/can/j1939/j1939-priv.h
-> index 93b8ad7f7d04..f6df20808f5e 100644
-> --- a/net/can/j1939/j1939-priv.h
-> +++ b/net/can/j1939/j1939-priv.h
-> @@ -23,6 +23,9 @@ enum j1939_sk_errqueue_type {
->  	J1939_ERRQUEUE_TX_ACK,
->  	J1939_ERRQUEUE_TX_SCHED,
->  	J1939_ERRQUEUE_TX_ABORT,
-> +	J1939_ERRQUEUE_RX_RTS,
-> +	J1939_ERRQUEUE_RX_DPO,
-> +	J1939_ERRQUEUE_RX_ABORT,
->  };
->  
->  /* j1939 devices */
-> @@ -87,6 +90,7 @@ struct j1939_priv {
->  	struct list_head j1939_socks;
->  
->  	struct kref rx_kref;
-> +	u32 rx_tskey;
->  };
->  
->  void j1939_ecu_put(struct j1939_ecu *ecu);
-> diff --git a/net/can/j1939/socket.c b/net/can/j1939/socket.c
-> index c2bf1c02597e..30b99897c473 100644
-> --- a/net/can/j1939/socket.c
-> +++ b/net/can/j1939/socket.c
-> @@ -902,20 +902,33 @@ static struct sk_buff *j1939_sk_alloc_skb(struct net_device *ndev,
->  	return NULL;
->  }
->  
-> -static size_t j1939_sk_opt_stats_get_size(void)
-> +static size_t j1939_sk_opt_stats_get_size(enum j1939_sk_errqueue_type type)
->  {
-> -	return
-> -		nla_total_size(sizeof(u32)) + /* J1939_NLA_BYTES_ACKED */
-> -		0;
-> +	switch (type) {
-> +	case J1939_ERRQUEUE_RX_RTS:
-> +		return
-> +			nla_total_size(sizeof(u32)) + /* J1939_NLA_BYTES_ALL */
-> +			nla_total_size(sizeof(u64)) + /* J1939_NLA_DEST_ADDR */
-> +			nla_total_size(sizeof(u64)) + /* J1939_NLA_SRC_ADDR */
+Today I was planning to attack this problem from two different angles, =
+first to detach the HAT and try narrowing down my config.txt to just =
+what's needed for CAN (HAT wired up by jumper wires) and second to =
+completely rebuild my OS from scratch in case something went awry during =
+the upgrades; luckily during narrowing down my config.txt I found the =
+issue. It appears that when I try to load the I2S subsystem that it's =
+conflicting with SPI0. Since it's a lesser used feature, I'm guessing =
+none of you all are testing with it loaded? Any ideas on how to begin =
+troubleshooting this? I2S is something we need.
 
-DST and SRC address are u8...?
+Current config.txt with two I2S lines (double hash) removed that results =
+in working CAN on each reboot:
 
-> +			nla_total_size(sizeof(u64)) + /* J1939_NLA_DEST_NAME */
-> +			nla_total_size(sizeof(u64)) + /* J1939_NLA_SRC_NAME */
-> +			nla_total_size(sizeof(u32)) + /* J1939_NLA_PGN */
-> +			0;
-> +	default:
-> +		return
-> +			nla_total_size(sizeof(u32)) + /* J1939_NLA_BYTES_ACKED */
-> +			0;
-> +	}
->  }
->  
->  static struct sk_buff *
-> -j1939_sk_get_timestamping_opt_stats(struct j1939_session *session)
-> +j1939_sk_get_timestamping_opt_stats(struct j1939_session *session,
-> +				    enum j1939_sk_errqueue_type type)
->  {
->  	struct sk_buff *stats;
->  	u32 size;
->  
-> -	stats = alloc_skb(j1939_sk_opt_stats_get_size(), GFP_ATOMIC);
-> +	stats = alloc_skb(j1939_sk_opt_stats_get_size(type), GFP_ATOMIC);
->  	if (!stats)
->  		return NULL;
->  
-> @@ -925,32 +938,67 @@ j1939_sk_get_timestamping_opt_stats(struct j1939_session *session)
->  		size = min(session->pkt.tx_acked * 7,
->  			   session->total_message_size);
->  
-> -	nla_put_u32(stats, J1939_NLA_BYTES_ACKED, size);
-> +	switch (type) {
-> +	case J1939_ERRQUEUE_RX_RTS:
-> +		nla_put_u32(stats, J1939_NLA_TOTAL_SIZE,
-> +			    session->total_message_size);
-> +		nla_put_u32(stats, J1939_NLA_PGN,
-> +			    session->skcb.addr.pgn);
-> +		nla_put_u64_64bit(stats, J1939_NLA_SRC_NAME,
-> +				  session->skcb.addr.src_name, J1939_NLA_PAD);
-> +		nla_put_u64_64bit(stats, J1939_NLA_DEST_NAME,
-> +				  session->skcb.addr.dst_name, J1939_NLA_PAD);
-> +		nla_put_u8(stats, J1939_NLA_SRC_ADDR,
-> +			   session->skcb.addr.sa);
-> +		nla_put_u8(stats, J1939_NLA_DEST_ADDR,
-> +			   session->skcb.addr.da);
+-------------------------------------------------------------------------=
+-----------------------------------------------------------
 
-See above.
-Also, shouldn't the order of these be the same as in
-j1939_sk_opt_stats_get_size()... for readability?
+dtdebug=3D1
 
-> +		break;
-> +	default:
-> +		nla_put_u32(stats, J1939_NLA_BYTES_ACKED, size);
-> +	}
->  
->  	return stats;
->  }
->  
-> -void j1939_sk_errqueue(struct j1939_session *session,
-> -		       enum j1939_sk_errqueue_type type)
-> +static void __j1939_sk_errqueue(struct j1939_session *session, struct sock *sk,
-> +				enum j1939_sk_errqueue_type type)
->  {
->  	struct j1939_priv *priv = session->priv;
-> -	struct sock *sk = session->sk;
->  	struct j1939_sock *jsk;
->  	struct sock_exterr_skb *serr;
->  	struct sk_buff *skb;
->  	char *state = "UNK";
->  	int err;
->  
-> -	/* currently we have no sk for the RX session */
-> -	if (!sk)
-> -		return;
-> -
->  	jsk = j1939_sk(sk);
->  
->  	if (!(jsk->state & J1939_SOCK_ERRQUEUE))
->  		return;
->  
-> -	skb = j1939_sk_get_timestamping_opt_stats(session);
-> +	switch (type) {
-> +	case J1939_ERRQUEUE_TX_ACK:
-> +		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_ACK))
-> +			return;
-> +		break;
-> +	case J1939_ERRQUEUE_TX_SCHED:
-> +		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED))
-> +			return;
-> +		break;
-> +	case J1939_ERRQUEUE_TX_ABORT:
-> +		break;
-> +	case J1939_ERRQUEUE_RX_RTS:
-> +		fallthrough;
-> +	case J1939_ERRQUEUE_RX_DPO:
-> +		fallthrough;
-> +	case J1939_ERRQUEUE_RX_ABORT:
-> +		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_RX_SOFTWARE))
-> +			return;
-> +		break;
-> +	default:
-> +		netdev_err(priv->ndev, "Unknown errqueue type %i\n", type);
-> +	}
-> +
-> +	skb = j1939_sk_get_timestamping_opt_stats(session, type);
->  	if (!skb)
->  		return;
->  
-> @@ -962,35 +1010,41 @@ void j1939_sk_errqueue(struct j1939_session *session,
->  	memset(serr, 0, sizeof(*serr));
->  	switch (type) {
->  	case J1939_ERRQUEUE_TX_ACK:
-> -		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_ACK)) {
-> -			kfree_skb(skb);
-> -			return;
-> -		}
-> -
->  		serr->ee.ee_errno = ENOMSG;
->  		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
->  		serr->ee.ee_info = SCM_TSTAMP_ACK;
-> -		state = "ACK";
-> +		state = "TX ACK";
->  		break;
->  	case J1939_ERRQUEUE_TX_SCHED:
-> -		if (!(sk->sk_tsflags & SOF_TIMESTAMPING_TX_SCHED)) {
-> -			kfree_skb(skb);
-> -			return;
-> -		}
-> -
->  		serr->ee.ee_errno = ENOMSG;
->  		serr->ee.ee_origin = SO_EE_ORIGIN_TIMESTAMPING;
->  		serr->ee.ee_info = SCM_TSTAMP_SCHED;
-> -		state = "SCH";
-> +		state = "TX SCH";
->  		break;
->  	case J1939_ERRQUEUE_TX_ABORT:
->  		serr->ee.ee_errno = session->err;
->  		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
->  		serr->ee.ee_info = J1939_EE_INFO_TX_ABORT;
-> -		state = "ABT";
-> +		state = "TX ABT";
-> +		break;
-> +	case J1939_ERRQUEUE_RX_RTS:
-> +		serr->ee.ee_errno = ENOMSG;
-> +		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
-> +		serr->ee.ee_info = J1939_EE_INFO_RX_RTS;
-> +		state = "RX RTS";
-> +		break;
-> +	case J1939_ERRQUEUE_RX_DPO:
-> +		serr->ee.ee_errno = ENOMSG;
-> +		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
-> +		serr->ee.ee_info = J1939_EE_INFO_RX_DPO;
-> +		state = "RX DPO";
-> +		break;
-> +	case J1939_ERRQUEUE_RX_ABORT:
-> +		serr->ee.ee_errno = session->err;
-> +		serr->ee.ee_origin = SO_EE_ORIGIN_LOCAL;
-> +		serr->ee.ee_info = J1939_EE_INFO_RX_ABORT;
-> +		state = "RX ABT";
->  		break;
-> -	default:
-> -		netdev_err(priv->ndev, "Unknown errqueue type %i\n", type);
->  	}
->  
->  	serr->opt_stats = true;
-> @@ -1005,6 +1059,27 @@ void j1939_sk_errqueue(struct j1939_session *session,
->  		kfree_skb(skb);
->  };
->  
-> +void j1939_sk_errqueue(struct j1939_session *session,
-> +		       enum j1939_sk_errqueue_type type)
-> +{
-> +	struct j1939_priv *priv = session->priv;
-> +	struct j1939_sock *jsk;
-> +
-> +	if (session->sk) {
-> +		/* send TX notifications to the socket of origin  */
-> +		__j1939_sk_errqueue(session, session->sk, type);
-> +		return;
-> +	}
-> +
-> +	/* spread RX notifications to all sockets subscribed to this session */
-> +	spin_lock_bh(&priv->j1939_socks_lock);
-> +	list_for_each_entry(jsk, &priv->j1939_socks, list) {
-> +		if (j1939_sk_recv_match_one(jsk, &session->skcb))
-> +			__j1939_sk_errqueue(session, &jsk->sk, type);
-> +	}
-> +	spin_unlock_bh(&priv->j1939_socks_lock);
-> +};
-> +
->  void j1939_sk_send_loop_abort(struct sock *sk, int err)
->  {
->  	sk->sk_err = err;
-> diff --git a/net/can/j1939/transport.c b/net/can/j1939/transport.c
-> index 362cf38cacca..cb358646e382 100644
-> --- a/net/can/j1939/transport.c
-> +++ b/net/can/j1939/transport.c
-> @@ -260,10 +260,14 @@ static void __j1939_session_drop(struct j1939_session *session)
->  
->  static void j1939_session_destroy(struct j1939_session *session)
->  {
-> -	if (session->err)
-> -		j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_ABORT);
-> -	else
-> -		j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_ACK);
-> +	if (session->transmission) {
-> +		if (session->err)
-> +			j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_ABORT);
-> +		else
-> +			j1939_sk_errqueue(session, J1939_ERRQUEUE_TX_ACK);
-> +	} else if (session->err) {
-> +			j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
-> +	}
->  
->  	netdev_dbg(session->priv->ndev, "%s: 0x%p\n", __func__, session);
->  
-> @@ -1087,6 +1091,8 @@ static void __j1939_session_cancel(struct j1939_session *session,
->  
->  	if (session->sk)
->  		j1939_sk_send_loop_abort(session->sk, session->err);
-> +	else
-> +		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
->  }
->  
->  static void j1939_session_cancel(struct j1939_session *session,
-> @@ -1297,6 +1303,8 @@ static void j1939_xtp_rx_abort_one(struct j1939_priv *priv, struct sk_buff *skb,
->  	session->err = j1939_xtp_abort_to_errno(priv, abort);
->  	if (session->sk)
->  		j1939_sk_send_loop_abort(session->sk, session->err);
-> +	else
-> +		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_ABORT);
->  	j1939_session_deactivate_activate_next(session);
->  
->  abort_put:
-> @@ -1597,6 +1605,9 @@ j1939_session *j1939_xtp_rx_rts_session_new(struct j1939_priv *priv,
->  	session->pkt.rx = 0;
->  	session->pkt.tx = 0;
->  
-> +	session->tskey = priv->rx_tskey++;
-> +	j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_RTS);
-> +
->  	WARN_ON_ONCE(j1939_session_activate(session));
->  
->  	return session;
-> @@ -1719,6 +1730,9 @@ static void j1939_xtp_rx_dpo_one(struct j1939_session *session,
->  	session->pkt.dpo = j1939_etp_ctl_to_packet(skb->data);
->  	session->last_cmd = dat[0];
->  	j1939_tp_set_rxtimeout(session, 750);
-> +
-> +	if (!session->transmission)
-> +		j1939_sk_errqueue(session, J1939_ERRQUEUE_RX_DPO);
->  }
->  
->  static void j1939_xtp_rx_dpo(struct j1939_priv *priv, struct sk_buff *skb,
+disable_splash=3D1
+boot_delay=3D0
 
-Best regards,
+hdmi_force_mode=3D1
 
--- 
-David Jander
-Protonic Holland.
+hdmi_group=3D1
+hdmi_mode=3D3 # 480p 60Hz H
+
+# Uncomment some or all of these to enable the optional hardware =
+interfaces
+dtparam=3Di2c_arm=3Don
+## dtparam=3Di2s=3Don
+dtparam=3Dspi=3Doff
+enable_uart=3D0
+
+# Enable audio (loads snd_bcm2835)
+dtparam=3Daudio=3Don
+
+# I2S WM8782 Driver
+## dtoverlay=3Dhel-wm8782,alsaname=3Dmic
+
+[pi4]
+# Enable DRM VC4 V3D driver on top of the dispmanx display stack
+dtoverlay=3Dvc4-fkms-v3d
+max_framebuffers=3D2
+
+[all]
+start_x=3D1
+gpu_mem=3D512
+
+# GPS
+dtoverlay=3Duart3
+
+# Reserved for HAT IDs
+dtoverlay=3Di2c0
+dtparam=3Dpins_0_1=3Don
+dtparam=3Dcombine=3Doff
+
+# Power Supervisor, IMU, RPi I2C Bus
+dtoverlay=3Di2c1
+
+# CAN 0/1
+dtoverlay=3Dspi0-cs
+dtparam=3Dcs0_pin=3D8
+dtparam=3Dcs1_pin=3D7
+
+# Reserved
+dtoverlay=3Dspi5-2cs
+dtparam=3Dcs0_pin=3D12
+dtparam=3Dcs0_spidev=3Ddisabled
+dtparam=3Dcs1_pin=3D26
+dtparam=3Dcs1_spidev=3Ddisabled
+
+# CAN 0
+dtoverlay=3Dmcp251xfd,spi0-0,interrupt=3D24,oscillator=3D40000000,speed=3D=
+20000000
+
+# CAN 1
+dtoverlay=3Dmcp251xfd,spi0-1,interrupt=3D25,oscillator=3D40000000,speed=3D=
+20000000
+
+-------------------------------------------------------------------------=
+-----------------------------------------------------------
+
+Thanks,
+
+Josh Q
+
+-----Original Message-----
+From: Joshua Quesenberry <engnfrc@gmail.com>=20
+Sent: Friday, July 2, 2021 10:27 AM
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Patrick Menschel <menschel.p@posteo.de>; kernel@pengutronix.de; =
+linux-can@vger.kernel.org; Joshua Quesenberry <EngnFrc@gmail.com>
+Subject: Re: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
+
+The only other format I have is Saleae's trace format, if you're willing =
+to install their software, the attached trace should work. I double =
+checked that the application will load even without the device attached, =
+and it does, so it should work for you. I was using Logic 1, but =
+switched to their Logic 2 app and recollected a trace for you.
+https://www.saleae.com/downloads/
+
+Thanks,
+
+Josh Q
+
+On Fri, Jul 2, 2021 at 5:31 AM Marc Kleine-Budde <mkl@pengutronix.de> =
+wrote:
+>
+> On 25.06.2021 12:55:26, Joshua Quesenberry wrote:
+> > Forgive me, I forgot can0 =3D spi0.1 and can1 =3D spi0.0 right now=20
+> > because I killed my UDEV rule so I was tapped onto the wrong CS=20
+> > line. Attached is a snapshot of what I'm seeing AND an export of the =
+
+> > data from Saleae which may prove more useful than snapshots.
+>
+> Pulseview cannot parse the csv file correctly (see [1]). Can you save=20
+> it in a different format?
+>
+> Marc
+>
+> [1]=20
+> https://www.mail-archive.com/sigrok-devel@lists.sourceforge.net/msg037
+> 51.html
+>
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
