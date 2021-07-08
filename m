@@ -2,79 +2,59 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E783BED54
-	for <lists+linux-can@lfdr.de>; Wed,  7 Jul 2021 19:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21AD3BF6D3
+	for <lists+linux-can@lfdr.de>; Thu,  8 Jul 2021 10:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbhGGRsB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 7 Jul 2021 13:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhGGRsA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 7 Jul 2021 13:48:00 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0D2C061574
-        for <linux-can@vger.kernel.org>; Wed,  7 Jul 2021 10:45:18 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id g12so2670496qtb.2
-        for <linux-can@vger.kernel.org>; Wed, 07 Jul 2021 10:45:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding:thread-index:content-language;
-        bh=FfR3EXgZI/NWhZ7z8AfrnfE0BsMefBJqItpzconP07Y=;
-        b=jjs2mvX5UWnO67N6XYvPHLdAo5j+8o0U49JBc4JkgaoJTZ6zZo60As00Bespf5Sveq
-         aQGbzAR5ShWe6fgcnh9TtkwpGGnHzwIYh1eUmhjDylfErKLQZN8K7xrG0NbVu4LeQ6ny
-         QWx+pd0lpoLZvWH5X1Gpk32OdcEjn9480p9EiOovTeBtun76wos/eERjiinFvhLEnAk3
-         ICKUk+XJ8rpDFE6jpHt4ie8c8itgz2ynC/fg1+3gG+Fp7JnBlkmCKQjx6GQiR6F7fyLp
-         bAsVUt1drulRZmCCapYxgZN9LpvJzSM5V2TJa552xyTYs1qUb6nsnV2UUgunhnG0CCYi
-         flTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding:thread-index:content-language;
-        bh=FfR3EXgZI/NWhZ7z8AfrnfE0BsMefBJqItpzconP07Y=;
-        b=ljwm3uOS64N5toioRmb4UAstpMIj6klPAdfgORkRaKleoNkimlYk1uusGpMXo39VWH
-         4Uz3/ECkgBrNQnP8y6Z5M/kUpk4NwXAdIVghJoW6xpYA97jbv7c0VKO5R8HGLrQ7gsir
-         gym4ovsw1pBoiB3XEFhghKvMv9cwS7FU4aT83e9oULjpStLCS0IuGyu0JFL7FIyLSErN
-         60GfvaNKWRzMRFwXK0smENvXlq1Mn8yyoGKUOnji2ze2tCYk8i/kTeA13wQ7vXLM+stq
-         cUwdtsnoUNE/1HgAMq8s3DptXC69y1RdZ43/Rz2UORNJU6Fy/EETwmDn0w6qhdXpTPHJ
-         z9iA==
-X-Gm-Message-State: AOAM532N3gpF7mVQ4BKI7kN3CIYgi2ZQKeocw/xJvbVhrWUexZvoTK2c
-        U0G2z2VZ3KlgPJt23i8Lyco=
-X-Google-Smtp-Source: ABdhPJxdO7cINnIT2n8UOIgY6LNrrqkfVXfZXbPSsTvZFSrHnzKSkIaY24sfDuvb5boPj6+/kZDawg==
-X-Received: by 2002:ac8:775c:: with SMTP id g28mr10662207qtu.193.1625679918046;
-        Wed, 07 Jul 2021 10:45:18 -0700 (PDT)
-Received: from DTJQUESENBERRY ([2001:468:c80:a202:13e:6f62:b761:81c5])
-        by smtp.gmail.com with ESMTPSA id h7sm6865314qtq.79.2021.07.07.10.45.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 07 Jul 2021 10:45:17 -0700 (PDT)
-From:   "Joshua Quesenberry" <engnfrc@gmail.com>
-To:     <linux-can@vger.kernel.org>
-Cc:     <engnfrc@gmail.com>
-Subject: ip link valid options checking
-Date:   Wed, 7 Jul 2021 13:45:16 -0400
-Message-ID: <002501d77357$d93c36b0$8bb4a410$@gmail.com>
+        id S230526AbhGHIUc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Thu, 8 Jul 2021 04:20:32 -0400
+Received: from mail8.turbodal.cl ([200.27.120.195]:55766 "EHLO
+        debian.turbodal.cl" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230509AbhGHIUb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 8 Jul 2021 04:20:31 -0400
+X-Greylist: delayed 6054 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 04:20:31 EDT
+Received: from mail4.turbodal.cl (unknown [192.100.110.128])
+        by debian.turbodal.cl (Postfix) with ESMTPS id 765D21697DE;
+        Thu,  8 Jul 2021 02:12:41 -0400 (-04)
+Received: from mail4.turbodal.cl (localhost [127.0.0.1])
+        by mail4.turbodal.cl (Postfix) with ESMTPS id 330EE62E0616;
+        Thu,  8 Jul 2021 02:13:07 -0400 (-04)
+Received: from localhost (localhost [127.0.0.1])
+        by mail4.turbodal.cl (Postfix) with ESMTP id 1EE5862E04C8;
+        Thu,  8 Jul 2021 02:13:07 -0400 (-04)
+Received: from mail4.turbodal.cl ([127.0.0.1])
+        by localhost (mail4.turbodal.cl [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wi6sIKPTy5vq; Thu,  8 Jul 2021 02:13:07 -0400 (-04)
+Received: from cris-PC.wifi (unknown [105.9.19.190])
+        by mail4.turbodal.cl (Postfix) with ESMTPSA id D59CE62E0278;
+        Thu,  8 Jul 2021 02:12:58 -0400 (-04)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AddzV6mHoqDJXZTYR7O82+vlM/59OA==
-Content-Language: en-us
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: spende von 2,000,000 euro
+To:     Recipients <fae.eva@ptt.cl>
+From:   ''michael weirsky'' <fae.eva@ptt.cl>
+Date:   Thu, 08 Jul 2021 08:12:43 +0200
+Reply-To: mikeweirskyspende@gmail.com
+Message-Id: <20210708061258.D59CE62E0278@mail4.turbodal.cl>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Good Afternoon,
+Lieber Freund,
 
-Do any of you know a way to check what options are valid when setting up a
-CAN device with the ip link commands, either from bash or through C++? I'm
-working on a piece of code that will get used on systems with varying CAN
-drivers and for instance one of them doesn't support CAN-FD, so how would I
-be able to know that setting the fd flag or dbitrate value would fail before
-calling the setup command and seeing it fail?
+Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen.
+Das ist dein Spendencode: [MW530342019]
 
-Thanks,
-
-Josh Q
+www.youtube.com/watch?v=un8yRTmrYMY
 
 
+Antworten Sie mit dem SPENDE-CODE an diese 
+
+E-Mail:mikeweirskyspende@gmail.com
+
+
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Mike Weirsky
