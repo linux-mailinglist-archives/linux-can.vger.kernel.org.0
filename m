@@ -2,221 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A62D23C6304
-	for <lists+linux-can@lfdr.de>; Mon, 12 Jul 2021 20:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE4D3C6463
+	for <lists+linux-can@lfdr.de>; Mon, 12 Jul 2021 21:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbhGLTAF (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 12 Jul 2021 15:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230409AbhGLTAE (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 12 Jul 2021 15:00:04 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2251C0613DD
-        for <linux-can@vger.kernel.org>; Mon, 12 Jul 2021 11:57:15 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id 9so19020494qkf.3
-        for <linux-can@vger.kernel.org>; Mon, 12 Jul 2021 11:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=8YFSmiXcbPL4BtL1sPq91EzD3+IYQVSEJ7eSXMCRfew=;
-        b=KowMsFvjtFIAdKYs9Ad288KWa08B3QXWGcO7VlTVIf89OvRsDGQ3NkYhohzOSrTO0L
-         aJdfq9zId6xjnjEj+pXfw/+CYQOI3NmHecOE2VhhhopToGKqEMeGHZi6dopK/n1rtgIC
-         z3wDE6zrqpdDtoFMK+ftEF0S71+sgNkSGoMVmqjJ+TYw+LRuv3ZcDM+EVxsmEKMApDpK
-         6zUvON8nKaeI+cjg7NX66Z8aiKvTxPqgW4imGGoZSyLzATG1XXqORCF+s4meEMa+eDks
-         Nz+QesZACSYnzcayFBDD0drpP5vC758ZX69H0nxuzkIYBhRdYCPFFdMC4Y+NS9Gu0igE
-         K34w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=8YFSmiXcbPL4BtL1sPq91EzD3+IYQVSEJ7eSXMCRfew=;
-        b=rtLYRVd1KYSlkZ6rGXB2SqUFOF8QlitnmQetSjd3ebWnNBNZP0x/cCZ0smte07Ux22
-         3naJ9GWI0plh59dfdCpQ0OxOG3VQb/jb6qCFIDtVVKB/mLhCts3QufhRnAxvl91O2GE0
-         jFPKgXjw14nMIZGm05+S461BW9mBF6VcQPb/XyagyFmYWZy+VtXZ71u0p8OGNcP/iumb
-         H0HWGtvQUvh32dVMbcQK03vZtiJW9M3lYW3+7RZLWfSzt4TQ0svhrooEacxYH6j4nqvi
-         vOhLdSQohcN+Egw/u3yi6y6RVid2f+rWCl6n+p/RRK4qdhHmS4wvl2S7S0sDXzkQBKrr
-         Niwg==
-X-Gm-Message-State: AOAM533LS5ym6oLqWormndWpdodXFizOm0oJnSC+K6sNe+f6RELGPWZk
-        p+bxOGYZdDAqA9PhNy565VM=
-X-Google-Smtp-Source: ABdhPJy2lbW3jR4Ug7nxmd2Lo1hH21xLBYdAPeN/dlTfm70wEFZlQ60sgYE5gdWxrELFchWbF5QgxA==
-X-Received: by 2002:a05:620a:4f5:: with SMTP id b21mr139286qkh.253.1626116235172;
-        Mon, 12 Jul 2021 11:57:15 -0700 (PDT)
-Received: from DTJQUESENBERRY ([2001:468:c80:a202:1de7:4e01:590a:fc56])
-        by smtp.gmail.com with ESMTPSA id x20sm7028145qkp.15.2021.07.12.11.57.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Jul 2021 11:57:13 -0700 (PDT)
-From:   "Joshua Quesenberry" <engnfrc@gmail.com>
-To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
-Cc:     "'Patrick Menschel'" <menschel.p@posteo.de>,
-        <kernel@pengutronix.de>, <linux-can@vger.kernel.org>,
-        <engnfrc@gmail.com>
-References: <016701d7678c$2b3d50c0$81b7f240$@gmail.com> <20210622212818.enfx5fzgghfxfznb@pengutronix.de>        <CAMGHUonufNF7CgAzcPkhgykxdYBtA+r5nY2i5xRGXN7Nxd5yMQ@mail.gmail.com>    <2a99d742-b2dc-4411-acbb-2e23ce7cd132@posteo.de>        <029101d76855$fa5ac300$ef104900$@gmail.com>     <20210625065626.b7afwhptoyoxoblx@pengutronix.de>        <20210625121648.hg4hihfmddss7ptu@pengutronix.de>        <020f01d769da$9fac86b0$df059410$@gmail.com>     <022d01d769e2$e623cbf0$b26b63d0$@gmail.com>     <20210702093110.vzfjk4dgovrrs4mj@pengutronix.de> <CAMGHUo=NK0Q=4y8Wgp3Mo+G8CuUcK8gLhxBH6Z1to8PZMZRr3w@mail.gmail.com> <006601d77296$68e41d40$3aac57c0$@gmail.com>
-In-Reply-To: <006601d77296$68e41d40$3aac57c0$@gmail.com>
-Subject: RE: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
-Date:   Mon, 12 Jul 2021 14:57:12 -0400
-Message-ID: <02be01d7774f$b9c29da0$2d47d8e0$@gmail.com>
+        id S234152AbhGLT7e (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 12 Jul 2021 15:59:34 -0400
+Received: from mout01.posteo.de ([185.67.36.65]:42613 "EHLO mout01.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233862AbhGLT7e (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Mon, 12 Jul 2021 15:59:34 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id C0F1124002C
+        for <linux-can@vger.kernel.org>; Mon, 12 Jul 2021 21:56:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
+        t=1626119803; bh=lXGL+KeYrC/J6NUp2Oq5lL5aeEKHz/MJiY4xt7Wcj90=;
+        h=To:Cc:From:Autocrypt:Subject:Date:From;
+        b=Lf4VKaUEjTGRBU6tsTH1Ae9ZizD8stAcDUjTmdHJZfj9yFmRQW8Z2ZMu9TxaX58i6
+         PHYKzM3MLHVU8ijvJtX88gicIG4m1HRfk+tv1LnpKQcEoOMx/rg6w81BCuIpQ+7pPu
+         W5u8FCb0GVk1PfvQ3Ipzex87toX8eqo4SPj/nVp5lCFAieGKiaV73o3RPK5HnVfzJS
+         LvvrO7KRrc+gNHm52ZH79HuRIEUcSDWbzbG7FhTz34HUNHnyoTd/I+3i10XGs/gsjN
+         5iBWSNWdgkJ0FDZKT//JJfvJ4pl/a3DYIrjlpvJEIxKj5JcaeprwOwX0sYItYqDIzk
+         M7+KXHa6jjtEw==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4GNvff6RQ1z9rxQ;
+        Mon, 12 Jul 2021 21:56:42 +0200 (CEST)
+To:     Joshua Quesenberry <engnfrc@gmail.com>,
+        'Marc Kleine-Budde' <mkl@pengutronix.de>
+Cc:     kernel@pengutronix.de, linux-can@vger.kernel.org
+References: <016701d7678c$2b3d50c0$81b7f240$@gmail.com>
+ <20210622212818.enfx5fzgghfxfznb@pengutronix.de>
+ <CAMGHUonufNF7CgAzcPkhgykxdYBtA+r5nY2i5xRGXN7Nxd5yMQ@mail.gmail.com>
+ <2a99d742-b2dc-4411-acbb-2e23ce7cd132@posteo.de>
+ <029101d76855$fa5ac300$ef104900$@gmail.com>
+ <20210625065626.b7afwhptoyoxoblx@pengutronix.de>
+ <20210625121648.hg4hihfmddss7ptu@pengutronix.de>
+ <020f01d769da$9fac86b0$df059410$@gmail.com>
+ <022d01d769e2$e623cbf0$b26b63d0$@gmail.com>
+ <20210702093110.vzfjk4dgovrrs4mj@pengutronix.de>
+ <CAMGHUo=NK0Q=4y8Wgp3Mo+G8CuUcK8gLhxBH6Z1to8PZMZRr3w@mail.gmail.com>
+ <006601d77296$68e41d40$3aac57c0$@gmail.com>
+ <02be01d7774f$b9c29da0$2d47d8e0$@gmail.com>
+From:   Patrick Menschel <menschel.p@posteo.de>
+Autocrypt: addr=menschel.p@posteo.de; prefer-encrypt=mutual; keydata=
+ LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCgptUUlOQkZ3RG1RZ0JFQUMr
+ elBRRy9KTHQyWUpiNTRERFBKd0Jtd25EUTh4dUZQcEFjRjNYSVVuZkFOTGs0OUpoClhWczFR
+ TnVHZk1VLytmY3RPWGd0SmF6Q3doc3NGdlUvWStPc1Nmd3FTN1ROOXhIWE1DZmtnK1gxRHhI
+ ZGtqcmoKL1pUYkxHd1FUQlE2SVpVeW9BTEVSQ2RHZFBETFVqWERSS0poSTdvV3RqYlVFWUVr
+ ZE9RYnY2eDhLVWd1bGtHUgpYYWxka1hJZ0R0VWZLaUE0VGhBVXpncVJuZ09DV2ZITis4TnBo
+ Q2pGVlFnclRSakxCc3pkZTFnTmJkZ2kvdWxiClcyTngvS1Jqa0F1TTdFUVJvVUJ2QUJWb2FX
+ R3ZYenIzUmphUFhrSk5wNHdFbm1IcVoxZlVteWMvSGZRNnVjWnkKRW5QZnlEWExtWTJQUU5P
+ N2ZCemZLMTJVRTdWZHh0OTBDNURPSkRBc25kNHYreloxNHJObEpmTHNwaDZkVlNIbApsS2t2
+ NE1BTndNaGxRT3Bta1pLMHhVU0Q2R0M1OHRiV0RSbEg4b3UrWUhDYlh2OHJCTXphR0phWDVB
+ S25lNTJTCmZEUCtiQVVTdWVQdDhrRG5TaU1ZNk9iUEdObWhqcW1JN1RmNkU1NDdqRXUzcmxr
+ aVI3Rno2cktVVzA5VlBlcnAKUnVya3orSTFtTDZ5ZTlZdGFDZ3MwbFR4b3VuYnA5emROVE04
+ djZFOGJsMWNoSnRoYWs1bkEvRktnbmRtVHdhUQpNclFTRFEyNmxMcUw0MXRPZzhlVXFhTzJI
+ TXVPRGNaaVVIMGVNWHlQZjhsbXhMcy9sbUVZU3hGUXFMWlBjWW9pClA0SGxVcDNSMkxIa0hO
+ WDg1WDBKUldwRkkwLzNKMTFiWEpjLzc1MzVKODExdE9aRDkyRHlkK20zS3dBUkFRQUIKdENk
+ UVlYUnlhV05ySUUxbGJuTmphR1ZzSUR4dFpXNXpZMmhsYkM1d1FIQnZjM1JsYnk1a1pUNkpB
+ bFFFRXdFSwpBRDRXSVFUcFZLQkNXcGNoUW9QQURFY3g1bTR3ejYrNFRnVUNYQU9aQ0FJYkl3
+ VUpDV1lCZ0FVTENRZ0hBZ1lWCkNna0lDd0lFRmdJREFRSWVBUUlYZ0FBS0NSQXg1bTR3ejYr
+ NFRnQTJELzBTQW92U0xuK1pTcGUzK0d4UUhKMzYKWmJ1TWs0REVSa0RKMnIveStvc254WUd2
+ TmNtU3N5Q1pBaVZjTTlFM0kxUXVtdDZvWHpoditJUDJNd09MZTlQMwpvUmhJQ1JyQ2RwWmY1
+ YjdDb0lOc3lENUJwNGFsSUs5UFpHUDdXTjRHeGE3OVpNYkRhNVBNWGVQZ2psckFNVGNOCjRv
+ c2Q5NVB4eFNkV1dheTB2TUh0VWYwRGJkaDFRNUs1U3lkREpxdG56dFBkNzBzUG9wOHBRSWhE
+ NExGUWdpcFgKL3VRdkEvWnZpN2c5T3N4YThCNnRDTG41VG5LT2lNYktCVUFya1FHTDFnbDQ4
+ NFJtKzRlR011YVZrVjVBb3VYMApOaGQvTVU3eEMxS2dGcWZwYTMzZ0ZRdUxTSTU2aStuRkt6
+ dzNIdiszeHBJOXJjaHFXQjNnSWNVQ2lQZmFxcU1vCnI4RVNKODF0NWlvckQrRlpQb1RyMUEz
+ aGZTMTNuMGxWUytsZUd3dlNucjRRZ0gvcjZ5eGw4RERIaUdFMUFXblAKaTNaWFNKWnkxRUJW
+ TWJXTXFBNzFwczZDS2ZnbmpmSHVvVmNsTElXd3cxT2gwYXlER1hMZUFic1VPTGtGOXAxMwo1
+ MWxRS0lJWUZpcXVwL09qa0pKMlgxaTdITjlqV2xRVnR0SER3QlhZOWNYWDRHUzk3cnNwSVhj
+ S2hHRytFSVB0CjFEaFdBdDR1ZDdqcDIrSDRmTXlKZGlVK0wrYTVXNjlTODZpOURTMjBUdXd2
+ K3JRemNQWTQ3MkVxZmo0elhWWmsKNUNzZ2kxVDZzQ1lnZDd5TGpHMnFYblZsSTJqQ1JyT0RW
+ dGJiY25jSi9peEhPQ1h2TmlvRzZPREhBM3ZtNlZxaQpEelBmYTBFaWZveWMxbDRvSUZvQ2c3
+ a0NEUVJjQTVrSUFSQUEwdUlXUGNrRlpzb0ZVZG1Sd29vMW95YzhmSyttCll6TmhTc1l0UTlI
+ ZDMvQmlWeUxwUERQK0F6eks4U2JvWXVGcTJOaGRJaTIyeFRTZ2pyRFZMOU10YTdNbDB6cHgK
+ QnJSTitySm5LRFl3bThJeUl6eUpCRmhXU1l3YnVPSXVqbnB6U1IvVGVDT1VvelRadFhnQmRU
+ YzZrUG5kV1BWTgpDWU9hZVFXdDI1Qnc3ZGNVbllUQ1FWYm9EN0RFVWFEVkVqM1BKM2U0aGli
+ TEp1UnEvK1dQY3kxQ3g2UFNucTJ6CkdQN1pVNWh6NjF2ZGovbVJJa2QxS2UzUTZmWUwzSVRN
+ T1l1WGF6VUVEZ3l3TlN0bVkwRmZUT05GWEtGTXdSNm8KcUtuSGlTN2tINytxQWFodUpkdVFB
+ MW9SU2xUTWRFb3F2WHEySlVJTm1NaGdYL0ZQN3ZpZEFxcTdnVjRXWElxcAptckliVHBiNVpz
+ U0N6dUJBd3lkOTYxM1lmYWpZVGlUYkJGRzQ1Mld4TnlJeTFUdVpWMmIxZlhPbGdLRjNvbmUx
+ CnhwbURqbTFlZVhSdjRnV0d0Vks5cXlEaUtYWnlmQ0YyL2o5d08xaTNnUHZqYmFvU1dhT2hH
+ T2V6dlNFQzB4RjgKWU9TMitGSmxVclVyVm54UXZsZkdyWFYxbUpRTHpvcFJ5N0VndjNlRDI0
+ NUx5YjhjUHpOUmppelRqV2RYN0g0MwpuNTlXMkdWTkFLTkNyV1pkOGNjZEdJK1RodmwzUUh1
+ YWQ3NEY5cGdDUUNZWXM5dG92YVZldFR1WlI2Y3JMaG10CmxmK1V4ME5SV29PV2ZTR0w5anBt
+ dkR3aGlwWCszMUlvb1FiOTZ1a2UzOFBZMUVOMjJ6QlBxZ25jVVVrUkxQQncKbEhYbnpFVit6
+ U1p4QXpFQUVRRUFBWWtDUEFRWUFRb0FKaFloQk9sVW9FSmFseUZDZzhBTVJ6SG1iakRQcjdo
+ TwpCUUpjQTVrSUFoc01CUWtKWmdHQUFBb0pFREhtYmpEUHI3aE9Db0lQLzNTanBFdTl4Wkpj
+ TlZvU0s5MTA0enB6CmtnS2FUVmcrR0tZSEFJa1NZL3U2NU1zVmFTWk14bWVDSzdtTiswNU1w
+ RUZCYW9uMG5sVTlRK0ZMRDFkRDBsenYKTVBkOEZOcEx4VEMxVDQwbXBVN0ZCV1hlVjZWRHoz
+ STY5VkFBdjRWVDM4ZVZhYXBOS1lmVGdwcFRYVEVNYVdoTApVYUpGaU1HaFNYaGkrR01GV2Ji
+ NVNFOGJJRTZ0WUpONWlYZUFNVFE4NjhYVGtHS0VHTjk3bEU2S09odmpWV0kxCkhiUVIzZ0tV
+ ck1uVmlhbGp0YnV4bGNvS2YrblRvNG85OUEyTkprRCswaFozclJZTWhacFR1MitkcCt2Rm9p
+ aEQKdVNFTCtoblZhNFRMd2pYd2gzNzNweU9XMFhra2E5YWpNTEFoMUFtMmRBa0pLSDhzMVlJ
+ UUlpL2Q3bEkyYXQ1awpIcWtIa2p0YzE1ZkgrQUU5Q0VSM3RCSVNoYU9Fb0hXTXc0WEs5NS9n
+ MWVnMVB1cmJmN3RwRnltcklxU3ppQjlvCjJBWituSHVDQ001ZC9pQXh5MmJOcndqNDhPM2Z5
+ WXd1a0pManUyNlJKbzRMNStjNEJoTU1Ray9nVWROdldHK2YKNUxreVhvbHNMY0p0SktLdStD
+ V1pFK1hxc2RGWHd2d2xDRVNSQ012cGZyQmNtY1hrT0g3S1JKVy9pUjFXVjVRZApjR3ZDcDl0
+ a08vaEhSb2t0dzBibUl1MlFhZkovajZLTGJqZWV4cTc0TWUyb0U5YmkxY3B2azYvSElDV0JQ
+ dHVYCnNqd2o1Q2M3UlZOMjJLekdZT0RKVGtxU0d4RjV1NVlkTHVNVG5CVGNweEphR2h3MzNq
+ QjgwY3o3enFwQXBpREIKZFFnR2psVlNQT3ZidU04aXBPZDYKPW1nREMKLS0tLS1FTkQgUEdQ
+ IFBVQkxJQyBLRVkgQkxPQ0stLS0tLQo=
+Subject: Re: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
+Message-ID: <d68ced7f-a407-da41-520f-d12d8161f027@posteo.de>
+Date:   Mon, 12 Jul 2021 19:56:42 +0000
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKkU7o+qbTtuE7WZsCEE+zhLGrysQHOwZAXAgLTME4A15gpjQI9UoC3AfsMaV4CTizomAGzk0WoAZKSgAIBs/x7BAFwQIEbAfLOJN2pCY+AUA==
-Content-Language: en-us
+In-Reply-To: <02be01d7774f$b9c29da0$2d47d8e0$@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Any thoughts on my recent findings? So far the raspberrypi.org forums =
-haven't proved fruitful, not sure if there's another more appropriate =
-place I should take this conversation now that the issue doesn't seem to =
-be relating to the CAN drivers themselves, but underlying subsystems =
-conflicting.
-
-Thanks!
-
-Josh Q
-
------Original Message-----
-From: Joshua Quesenberry <engnfrc@gmail.com>=20
-Sent: Tuesday, July 6, 2021 2:41 PM
-To: 'Marc Kleine-Budde' <mkl@pengutronix.de>
-Cc: 'Patrick Menschel' <menschel.p@posteo.de>; kernel@pengutronix.de; =
-linux-can@vger.kernel.org; engnfrc@gmail.com
-Subject: RE: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
-
-Good Afternoon,
-
-Today I was planning to attack this problem from two different angles, =
-first to detach the HAT and try narrowing down my config.txt to just =
-what's needed for CAN (HAT wired up by jumper wires) and second to =
-completely rebuild my OS from scratch in case something went awry during =
-the upgrades; luckily during narrowing down my config.txt I found the =
-issue. It appears that when I try to load the I2S subsystem that it's =
-conflicting with SPI0. Since it's a lesser used feature, I'm guessing =
-none of you all are testing with it loaded? Any ideas on how to begin =
-troubleshooting this? I2S is something we need.
-
-Current config.txt with two I2S lines (double hash) removed that results =
-in working CAN on each reboot:
-
--------------------------------------------------------------------------=
------------------------------------------------------------
-
-dtdebug=3D1
-
-disable_splash=3D1
-boot_delay=3D0
-
-hdmi_force_mode=3D1
-
-hdmi_group=3D1
-hdmi_mode=3D3 # 480p 60Hz H
-
-# Uncomment some or all of these to enable the optional hardware =
-interfaces dtparam=3Di2c_arm=3Don ## dtparam=3Di2s=3Don =
-dtparam=3Dspi=3Doff
-enable_uart=3D0
-
-# Enable audio (loads snd_bcm2835)
-dtparam=3Daudio=3Don
-
-# I2S WM8782 Driver
-## dtoverlay=3Dhel-wm8782,alsaname=3Dmic
-
-[pi4]
-# Enable DRM VC4 V3D driver on top of the dispmanx display stack =
-dtoverlay=3Dvc4-fkms-v3d
-max_framebuffers=3D2
-
-[all]
-start_x=3D1
-gpu_mem=3D512
-
-# GPS
-dtoverlay=3Duart3
-
-# Reserved for HAT IDs
-dtoverlay=3Di2c0
-dtparam=3Dpins_0_1=3Don
-dtparam=3Dcombine=3Doff
-
-# Power Supervisor, IMU, RPi I2C Bus
-dtoverlay=3Di2c1
-
-# CAN 0/1
-dtoverlay=3Dspi0-cs
-dtparam=3Dcs0_pin=3D8
-dtparam=3Dcs1_pin=3D7
-
-# Reserved
-dtoverlay=3Dspi5-2cs
-dtparam=3Dcs0_pin=3D12
-dtparam=3Dcs0_spidev=3Ddisabled
-dtparam=3Dcs1_pin=3D26
-dtparam=3Dcs1_spidev=3Ddisabled
-
-# CAN 0
-dtoverlay=3Dmcp251xfd,spi0-0,interrupt=3D24,oscillator=3D40000000,speed=3D=
-20000000
-
-# CAN 1
-dtoverlay=3Dmcp251xfd,spi0-1,interrupt=3D25,oscillator=3D40000000,speed=3D=
-20000000
-
--------------------------------------------------------------------------=
------------------------------------------------------------
-
-Thanks,
-
-Josh Q
-
------Original Message-----
-From: Joshua Quesenberry <engnfrc@gmail.com>
-Sent: Friday, July 2, 2021 10:27 AM
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Patrick Menschel <menschel.p@posteo.de>; kernel@pengutronix.de; =
-linux-can@vger.kernel.org; Joshua Quesenberry <EngnFrc@gmail.com>
-Subject: Re: MCP2518FD Drivers Rarely Working with Custom Kernel 5.10.Y
-
-The only other format I have is Saleae's trace format, if you're willing =
-to install their software, the attached trace should work. I double =
-checked that the application will load even without the device attached, =
-and it does, so it should work for you. I was using Logic 1, but =
-switched to their Logic 2 app and recollected a trace for you.
-https://www.saleae.com/downloads/
-
-Thanks,
-
-Josh Q
-
-On Fri, Jul 2, 2021 at 5:31 AM Marc Kleine-Budde <mkl@pengutronix.de> =
-wrote:
->
-> On 25.06.2021 12:55:26, Joshua Quesenberry wrote:
-> > Forgive me, I forgot can0 =3D spi0.1 and can1 =3D spi0.0 right now=20
-> > because I killed my UDEV rule so I was tapped onto the wrong CS=20
-> > line. Attached is a snapshot of what I'm seeing AND an export of the =
-
-> > data from Saleae which may prove more useful than snapshots.
->
-> Pulseview cannot parse the csv file correctly (see [1]). Can you save=20
-> it in a different format?
->
-> Marc
->
-> [1]
-> https://www.mail-archive.com/sigrok-devel@lists.sourceforge.net/msg037
-> 51.html
->
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Am 12.07.21 um 20:57 schrieb Joshua Quesenberry:
+> Any thoughts on my recent findings? So far the raspberrypi.org forums haven't proved fruitful, not sure if there's another more appropriate place I should take this conversation now that the issue doesn't seem to be relating to the CAN drivers themselves, but underlying subsystems conflicting.
 
 
+Technically you could open an issue on
+https://github.com/raspberrypi/linux
+
+This is usually the straight forward solution to get in touch with the
+platform experts.
+
+Cheers,
+Patrick
