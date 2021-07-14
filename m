@@ -2,43 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEF13C8BAE
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jul 2021 21:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763773C8BB2
+	for <lists+linux-can@lfdr.de>; Wed, 14 Jul 2021 21:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbhGNTd6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Jul 2021 15:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46236 "EHLO
+        id S229721AbhGNTfN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 14 Jul 2021 15:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbhGNTd6 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jul 2021 15:33:58 -0400
+        with ESMTP id S229706AbhGNTfM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jul 2021 15:35:12 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1873C06175F
-        for <linux-can@vger.kernel.org>; Wed, 14 Jul 2021 12:31:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E865C061760
+        for <linux-can@vger.kernel.org>; Wed, 14 Jul 2021 12:32:21 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1m3kb3-0002z4-9L; Wed, 14 Jul 2021 21:31:05 +0200
+        id 1m3kc9-00037Y-BM; Wed, 14 Jul 2021 21:32:13 +0200
 Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:1d5a:f852:d9c2:1ad3])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
         (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 38BC464F573;
-        Wed, 14 Jul 2021 19:31:04 +0000 (UTC)
-Date:   Wed, 14 Jul 2021 21:31:03 +0200
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 753FC64F576;
+        Wed, 14 Jul 2021 19:32:06 +0000 (UTC)
+Date:   Wed, 14 Jul 2021 21:32:05 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     linux-can@vger.kernel.org
-Subject: Re: [PATCH 0/6] Miscellaneous small fix and improvements on driver
- etas_es58x
-Message-ID: <20210714193103.vhnmir4dognftwng@pengutronix.de>
-References: <20210628155420.1176217-1-mailhol.vincent@wanadoo.fr>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     dev.kurt@vandijck-laurijssen.be, wg@grandegger.com,
+        Xiaochen Zou <xzou017@ucr.edu>, kernel@pengutronix.de,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Zhang Changzhong <zhangchangzhong@huawei.com>
+Subject: Re: [PATCH v1] can: j1939: j1939_session_deactivate(): clarify
+ lifetime of session object
+Message-ID: <20210714193205.jsygqqnimcqarety@pengutronix.de>
+References: <20210714111602.24021-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="m66mzz4x7ouqs7wy"
+        protocol="application/pgp-signature"; boundary="dz7anhbgfjbiwfae"
 Content-Disposition: inline
-In-Reply-To: <20210628155420.1176217-1-mailhol.vincent@wanadoo.fr>
+In-Reply-To: <20210714111602.24021-1-o.rempel@pengutronix.de>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -48,50 +52,52 @@ List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
 
---m66mzz4x7ouqs7wy
+--dz7anhbgfjbiwfae
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On 29.06.2021 00:54:14, Vincent Mailhol wrote:
-> This series fixes some issues on etas_es58x and add a few improvement,
-> mostly on the code readability (i.e. no new features nor functional
-> changes in this series).
+On 14.07.2021 13:16:02, Oleksij Rempel wrote:
+> The j1939_session_deactivate() is decrementing the session ref-count and
+> potentially can free() the session. This would cause use-after-free
+> situation.
 >=20
-> Vincent Mailhol (6):
->   can: etas_es58x: fix three typos in author name and documentation
->   can: etas_es58x: use error pointer during device probing
->   can: etas_es58x: use devm_kzalloc() to allocate device resources
->   can: etas_es58x: add es58x_free_netdevs() to factorize code
->   can: etas_es58x: use sizeof and sizeof_field macros instead of
->     constant values
->   can: etas_es58x: rewrite the message cast in es58{1,_fd}_tx_can_msg to
->     increase readability
+> However, the code calling j1939_session_deactivate() does always hold
+> another reference to the session, so that it would not be free()ed in
+> this code path.
+>=20
+> This patch adds a comment to make this clear and a WARN_ON, to ensure
+> that future changes will not violate this requirement. Further this
+> patch avoids dereferencing the session pointer as a precaution to avoid
+> use-after-free if the session is actually free()ed.
+>=20
+> Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+> Reported-by: Xiaochen Zou <xzou017@ucr.edu>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-Added to linux-can-next/testing
+Added to linux-can/testing
 
 regards,
 Marc
-
 --=20
 Pengutronix e.K.                 | Marc Kleine-Budde           |
 Embedded Linux                   | https://www.pengutronix.de  |
 Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
 Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---m66mzz4x7ouqs7wy
+--dz7anhbgfjbiwfae
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDvO3QACgkQqclaivrt
-76kRTAf+OjwB6pzwMSkQIAnHNWhimNRC8ALHsysw35J3qYKQagMeipFfMlwu+oIg
-lZtculQyDOJFAcvUi22oxt2lGAMtWLxMzB3d12B4KEx8g0cCL6nx4uRsnyzCuw0K
-b/CrEvbkiEpiKthKdhyMyvTT/Gp02TRtx1xj18q77kHnYJked/O+XKiP9ihp1RM+
-mo52tkEuLmwvmCf+fnlIJrrr3yRmWg/88BedLzTF8ge6NypJGtsNy8MxVTDHV1yb
-Sh+AGhRvxVMEbobwn4EiI2CLk54WYaeRSuEYmpF/ezu1Gv9EJmFmUKYlpn6B8YeW
-glPAMTxPiBPSk6nxKzw4OOXj8Qy/rg==
-=8plR
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDvO7MACgkQqclaivrt
+76mGSAgAsLSRfsllRRbGlDGyUpGnatoujGqN/9WIUXnFcrLCnYIobnxirDez9DzY
+Cb/vyUZ/qFESv8GCMOOTllg30+gGRW6FA0jusEO45CBklTR2CiqT6XrWG3n1hbA+
+mf+RXareY5+M2SG1fNMvtsrGOWLatYDkxuIL6mC9F8MYXTwmHYWwnUh1ctxHnQqV
+nryZ6cF/9/tbHpEEV567+r1hGTVjlOSOUu3eLfzPYMnE2TeU2Jg3KuP09z2G/Gl2
+sf2n03rsjfDTMeUWXpvZzcV+nt6eWD7evTieYGHrO9bMx9QO2rEX4Ko/xForYEEg
+nVVskpTBqmFjGUPZe0/LjeF5HL1kNw==
+=YbdO
 -----END PGP SIGNATURE-----
 
---m66mzz4x7ouqs7wy--
+--dz7anhbgfjbiwfae--
