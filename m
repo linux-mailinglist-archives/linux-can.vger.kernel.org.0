@@ -2,76 +2,81 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C73F73CA44A
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jul 2021 19:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2413CA553
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jul 2021 20:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235732AbhGOR2s (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Jul 2021 13:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbhGOR2r (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jul 2021 13:28:47 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45AD7C061760
-        for <linux-can@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id h9so7541800oih.4
-        for <linux-can@vger.kernel.org>; Thu, 15 Jul 2021 10:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=A07qw47jpyx7/pJf1ZS9aQv4pD7PiHBZWlsl9UoiurRqqc+7ZndQI51YdaaD0nkecu
-         Qd4i+G02coH8O2I/r6ZupOF8oYSIAoIwVq4zkuCtuhDJYsbynWGQdegcG7aq+QxGg/bp
-         poyp2DbaibSeABlojQr/pIAqMWExNaHg4RIE+IQzBlXdCiQq16Yp/UqkBXwITYu4DgIP
-         XTs1gXkC7Br62pPmJXs/2nF+jRhXCAs3iAxTxuy51YthTghMWE/kONdSGZKCG8sWM+Ev
-         WU1ATEDaIH5W63c7UQCvZTdM21+mq9I9FOl7BCTb650pCRFEJMZ521zklByg85zlNwmj
-         7b/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
-        b=GDwrZUHnV0qs8Yp9+nmu0ItfsAxqzb93eEKhU2K3CDeMHaLqm1Ag90MxdUWOTytm5K
-         RhUuIdvkj8fh5I/mdowZjwJTJep6HaHP4CIOszGwMOjeXMU/52DmE5nA9Ws4QfWiVmCx
-         5HFQa9owFyRJM/8LYnvEXefMIEkgr3LbhCOjlIwRRVAhpAiKa28B8Wjks02weSKtkiwe
-         u1pyIw++KqF4aNZnCcby9w2ZIGSiQ4viqauwga4pVt+lmOfS1pSOyfF35hJlHZ1HyPiZ
-         mBt4h6Iej54muuivTtxSoLPPgHJX/gTFn6FvYA5ldeoKF9nstpBf4kjuaiGge4+N2blW
-         fthg==
-X-Gm-Message-State: AOAM531K6L94FhynuNkq/3f9AHSOPM+CCHmdwtkLsLb9xeXIVmMNrL4x
-        Az2BrHjaWLuk3ovvK28EXw1JjbA7Nfaa9Kqxpn+PecBQjjQ=
-X-Google-Smtp-Source: ABdhPJyZMrq1Z7I3pjjmyAtUHW3ABh0oEghTe77F5dAxRk/llsByjQhtZ30eIUOoh7sIooPsLTy5+nPJ1BCNgIavtsM=
-X-Received: by 2002:a17:90b:d8f:: with SMTP id bg15mr10963237pjb.152.1626369941880;
- Thu, 15 Jul 2021 10:25:41 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a10:fc85:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:41
- -0700 (PDT)
-Reply-To: faty.muhamad@gmail.com
-From:   Ms Fatima Muhammad <general.infofederalreserve@gmail.com>
-Date:   Thu, 15 Jul 2021 17:25:41 +0000
-Message-ID: <CAJzJz_Dwu6rUxmnqq1QV9qD4hugxutFJZuENGUwx7RamXm5txA@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S238078AbhGOSYb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Jul 2021 14:24:31 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:61202 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232539AbhGOSYb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jul 2021 14:24:31 -0400
+X-IronPort-AV: E=Sophos;i="5.84,243,1620658800"; 
+   d="scan'208";a="87775111"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 16 Jul 2021 03:21:36 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 890D840C5552;
+        Fri, 16 Jul 2021 03:21:32 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH 0/6] Renesas RZ/G2L CANFD support
+Date:   Thu, 15 Jul 2021 19:21:17 +0100
+Message-Id: <20210715182123.23372-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello Dear,
+Hi All,
 
-My name is Ms.Fatima Muhammad., Please forgive me for stressing you
-with my predicaments and I sorry to approach you through this media
-because is serves the fastest means of  my communication right now,
+This patch series adds CANFD support to Renesas RZ/G2L family.
 
-I came across your Email from my personal search and I decided to
-contact you believing you will be honest to fulfill my business
-proposal which I believe that will be a very good opportunity for both
-of us. Please it is my pleasure to contact you today for a business
-partnership investments projects worth $4.6 million USD which I intend
-to establish in your country..
+CANFD block on RZ/G2L SoC is almost identical to one found on
+R-Car Gen3 SoC's. On RZ/G2L SoC interrupt sources for each channel
+are split into individual sources.
 
-Pls If this business proposal offends your moral and ethic values do
-accept my apology. therefore kindly contact me immediately if you are
-interested for more details.
+Patches are based on top of [1] (master branch) + patch [2].
 
-Thank you for your wiliness to help me
-Yours Sincerely Fatima Muhammad
+Cheers,
+Prabhakar
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/
+[2] https://patchwork.kernel.org/project/linux-renesas-soc/patch/
+20210712194422.12405-4-prabhakar.mahadev-lad.rj@bp.renesas.com/
+
+Lad Prabhakar (6):
+  dt-bindings: net: can: renesas,rcar-canfd: Document RZ/G2L SoC
+  can: rcar_canfd: Add support for RZ/G2L family
+  dt-bindings: clk: r9a07g044-cpg: Add entry for P0_DIV2 core clock
+  clk: renesas: r9a07g044-cpg: Add entry for fixed clock P0_DIV2
+  clk: renesas: r9a07g044-cpg: Add clock and reset entries for CANFD
+  arm64: dts: renesas: r9a07g044: Add CANFD node
+
+ .../bindings/net/can/renesas,rcar-canfd.yaml  |  45 ++-
+ arch/arm64/boot/dts/renesas/r9a07g044.dtsi    |  37 +++
+ drivers/clk/renesas/r9a07g044-cpg.c           |   7 +-
+ drivers/net/can/rcar/rcar_canfd.c             | 275 ++++++++++++++++--
+ include/dt-bindings/clock/r9a07g044-cpg.h     |   2 +
+ 5 files changed, 328 insertions(+), 38 deletions(-)
+
+
+base-commit: b37235d5fdf50e5f1c23f868ab70bbe640081b21
+prerequisite-patch-id: 7436c0d801737268ef470fcb50e620428286e085
+-- 
+2.17.1
+
