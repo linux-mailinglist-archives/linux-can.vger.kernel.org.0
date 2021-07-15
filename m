@@ -2,92 +2,95 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D4C23C9B2E
-	for <lists+linux-can@lfdr.de>; Thu, 15 Jul 2021 11:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE653C9D34
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jul 2021 12:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbhGOJPN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 15 Jul 2021 05:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S236933AbhGOKux (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Jul 2021 06:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbhGOJPM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jul 2021 05:15:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6130C06175F
-        for <linux-can@vger.kernel.org>; Thu, 15 Jul 2021 02:12:19 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m3xPe-0002vP-4a; Thu, 15 Jul 2021 11:12:10 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:968e:ea40:4726:28f1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 14EBA64FD1A;
-        Thu, 15 Jul 2021 09:12:08 +0000 (UTC)
-Date:   Thu, 15 Jul 2021 11:12:07 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, kernel@pengutronix.de, dongas86@gmail.com,
-        robh+dt@kernel.org, shawnguo@kernel.org,
+        with ESMTP id S234463AbhGOKux (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 15 Jul 2021 06:50:53 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60186C06175F;
+        Thu, 15 Jul 2021 03:47:59 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id u11so6083410oiv.1;
+        Thu, 15 Jul 2021 03:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3NyXpXRKjtF+eoBi9AYOFh14nRSx/CxFB77Rn5t87IM=;
+        b=Jeo4Lj3HUoqZnyLNGyYN7IHXohg0b/Znf7iz5+lc/yxKRpDDiw0NJRgr134dnydbNu
+         RU2tPfr159eBw9c0Rv1wuG2gWHQM2691N/a6buiaK4OyK0nA+TO1aH4jwNwZUtYClMwS
+         UYTxvVc1tmHO909M99WmP0FVsuuzBTDjSSpZla+vzrho3jol/Wx6/FV/WxH8w7aAZXYf
+         ucW23/8nphTrnTIG7Mgtsuagj3k3MoKCY2vndueaeKBtiTqxUunk0cREDGw43+SQhBjc
+         eZxcoTfUW+xxhBN3vXXU/U+AiK4oNLosr598cRx6/WD8HjauLvmhLqmAG/CG34PHbZD9
+         KbPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3NyXpXRKjtF+eoBi9AYOFh14nRSx/CxFB77Rn5t87IM=;
+        b=qs46dxKcbAEg1bxj6110ce+aMinJKZ/WzNKTUvj8RAbAwUaZ+GDBihvhmmpi6g54Rq
+         xBXnAjqFlKwGTQNbd5VxBaVCrGGF8LPwca968shVsosQxlhCbUj3nbgD7a5eno9VuI6Z
+         4HPrjD0JdyCAprnj7WBSNAsY65f2iMORZ3SLoLaiHmChSZIEqMsqT/uFnQjABfdY0CiC
+         2tf544GjtOhh4S+8CsrYyd4CaRJdZZQnXbuiC5HQMg3eB2oa/fbQgQ9GxsJJaW508lxu
+         a4w3q8fedB9TkSmZAFfYESF0GAwrLaWRwgsbxow5JfGftcTfBpR/gIGmuC2azVfgVCtG
+         Ocgg==
+X-Gm-Message-State: AOAM532f00kjJOsZXybcRuYgF+M6ogH3+qlMHlPlWAkMuSAZZEQ1PbhX
+        RIrUxuyzThtmfxQ9kCww/1VyoVm0Ba/g10nKhds=
+X-Google-Smtp-Source: ABdhPJy0zOlJy5vogI53OX57ulbJPDYAGuNkdoSKKgNsC8tQwxV2MHPAJ5XvGbCy2tigjJW0KBqTP4pOQbXTD0SIww8=
+X-Received: by 2002:aca:f54e:: with SMTP id t75mr3129803oih.142.1626346078817;
+ Thu, 15 Jul 2021 03:47:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210715082536.1882077-1-aisheng.dong@nxp.com>
+ <20210715082536.1882077-2-aisheng.dong@nxp.com> <20210715091207.gkd73vh3w67ccm4q@pengutronix.de>
+In-Reply-To: <20210715091207.gkd73vh3w67ccm4q@pengutronix.de>
+From:   Dong Aisheng <dongas86@gmail.com>
+Date:   Thu, 15 Jul 2021 18:45:58 +0800
+Message-ID: <CAA+hA=QDJhf_LnBZCiKE-FbUNciX4bmgmrvft8Y-vkB9Lguj=w@mail.gmail.com>
+Subject: Re: [PATCH 1/7] dt-bindings: can: flexcan: fix imx8mp compatbile
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
         Joakim Zhang <qiangqing.zhang@nxp.com>,
         linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/7] dt-bindings: can: flexcan: fix imx8mp compatbile
-Message-ID: <20210715091207.gkd73vh3w67ccm4q@pengutronix.de>
-References: <20210715082536.1882077-1-aisheng.dong@nxp.com>
- <20210715082536.1882077-2-aisheng.dong@nxp.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wmxjb5ivzs2k5a7d"
-Content-Disposition: inline
-In-Reply-To: <20210715082536.1882077-2-aisheng.dong@nxp.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi Marc,
 
---wmxjb5ivzs2k5a7d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 15, 2021 at 5:12 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 15.07.2021 16:25:30, Dong Aisheng wrote:
+> > This patch fixes the following errors during make dtbs_check:
+> > arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml: can@308c0000: compatible: 'oneOf' conditional failed, one must be fixed:
+> >       ['fsl,imx8mp-flexcan', 'fsl,imx6q-flexcan'] is too long
+>
+> IIRC the fsl,imx6q-flexcan binding doesn't work on the imx8mp. Maybe
+> better change the dtsi?
 
-On 15.07.2021 16:25:30, Dong Aisheng wrote:
-> This patch fixes the following errors during make dtbs_check:
-> arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml: can@308c0000: compatibl=
-e: 'oneOf' conditional failed, one must be fixed:
-> 	['fsl,imx8mp-flexcan', 'fsl,imx6q-flexcan'] is too long
+I checked with Joakim that the flexcan on MX8MP is derived from MX6Q with extra
+ECC added. Maybe we should still keep it from HW point of view?
 
-IIRC the fsl,imx6q-flexcan binding doesn't work on the imx8mp. Maybe
-better change the dtsi?
+Regards
+Aisheng
 
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wmxjb5ivzs2k5a7d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDv++QACgkQqclaivrt
-76lkpAf+NgsqEVY19xmRYoc424kQpm//J2pvhFCtpyRwHSzPGX6rrq2Betpq5yqb
-EWpxnE0qP7Lr1nLJu+WUN4GJUA94UU+F83QpqQUMxSaWcqTZHyewqEqG5KJpJeCf
-n+O+D3DIv4bnAC0A372LVSd2q+nfhMaL+zMphkmwlxlZPDxrHsauwWu3OTWWmU5E
-dhApUvrBSGnp2eQZzqj6NAs4U54aDENzdusLLQdLuJDkI7ap2d2BgKaBMv6HF55g
-uPodBPiIo2zRmvM4VlTP3gh2M7NkPMMyz2D90H6y6utYQQuc83F/sbjlj6v2a+1B
-tW6uIdmxHoNw3EjpsPi5feFH/wDuOA==
-=R46E
------END PGP SIGNATURE-----
-
---wmxjb5ivzs2k5a7d--
+>
+> regards,
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
