@@ -2,296 +2,152 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAD83C921F
-	for <lists+linux-can@lfdr.de>; Wed, 14 Jul 2021 22:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5F23C9A8E
+	for <lists+linux-can@lfdr.de>; Thu, 15 Jul 2021 10:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbhGNUfB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 14 Jul 2021 16:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbhGNUfA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 14 Jul 2021 16:35:00 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E302C06175F
-        for <linux-can@vger.kernel.org>; Wed, 14 Jul 2021 13:32:08 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m3lY7-0006gb-3z; Wed, 14 Jul 2021 22:32:07 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:1d5a:f852:d9c2:1ad3])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id F117F64F623;
-        Wed, 14 Jul 2021 20:32:05 +0000 (UTC)
-Date:   Wed, 14 Jul 2021 22:32:05 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Stephane Grosjean <s.grosjean@peak-system.com>
-Cc:     linux-can Mailing List <linux-can@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] can: peak_usb: upgrades the handling of bus state
- changes
-Message-ID: <20210714203205.kxgbopb2kkgujadu@pengutronix.de>
-References: <20210628142043.15034-1-s.grosjean@peak-system.com>
+        id S237031AbhGOI32 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 15 Jul 2021 04:29:28 -0400
+Received: from mail-eopbgr10072.outbound.protection.outlook.com ([40.107.1.72]:12478
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230310AbhGOI31 (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 15 Jul 2021 04:29:27 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kte3QX1yvXEe+x6l/ASiPOq6DJCTfHiJn5CjMiAiQaCyZ74lg9eJvk6+XZ3+4zoSxk6vhSjBH6dgvsnz5YDxtqF3/P/m6tE0mBo5it7kVx+vvjSP5CqH/+PLalNyggRFzYWdhCvUSGD42U8SRsXwikmvRpJZaMEI1/YKaR15yEMcvAY4r7OIpR4idl9L7uuyIVRqrqjdFlb+LbiBZ7jTPtVEQZLfrK6Ri9cMD0c7m46f0IMkasQN9xS4/TuvJqKflV63fhOS6TtoJ66XEs73tYy92+bO6soZII3UaJnvboUSssrExBzYii3V2/w9Nv7T7LjNhI8c0qMboGIK0ldCWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qgrx0tpDSkjW5NldaxEIFiHlzAVwxQLwVKpyNW31RRo=;
+ b=RX3cSgTc16zKro5LGaCVPkZ0ggUejhdingAluxEAeqeSLcAJF0vZMACreSQFAYjw6W5PoBO/TTyMnKzz7lm75WFky+I17ZABu6jrDyEyj8D0gb1fydGSOReadiutgrU+T4IsO5oUYobZdrsREp+Keu6QpQRccvBfBlGL8TKi1LW9BZIar7aNMFjmgPhdOqrDLzuS/R8VapBiPXXBWNgTKh3xg7SWMV2qZNJS/QgWP5L9EnThfVtSv0xdUNXav+P1Y/6xMUWp7WVi8KLG4lkzS2uRC2BuJF0ZRxR9gl7Jdzn/DTD85M8R5YbHUkwMbk3tEhGyjj0+veva7xWJphoK2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qgrx0tpDSkjW5NldaxEIFiHlzAVwxQLwVKpyNW31RRo=;
+ b=FBZvkRJ1r3mc6YB4Na7tlz4O2Tl1xw2l7Ci7+sf+CBg8kqIGnYZ0QMqVZkwLrgS0uESDyMQ89lg0Duodz2YgYMNAf8Pe+vljKJyxOTvyxxBg4XzONPts1kXNbIG2B8bpvUvfFhbd4XVfAu8BKlMqPDOXHEKDk/cfbQ8qd3uC3qE=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from DB9PR04MB8477.eurprd04.prod.outlook.com (2603:10a6:10:2c3::11)
+ by DU2PR04MB8680.eurprd04.prod.outlook.com (2603:10a6:10:2df::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.23; Thu, 15 Jul
+ 2021 08:26:32 +0000
+Received: from DB9PR04MB8477.eurprd04.prod.outlook.com
+ ([fe80::9daa:ab21:f749:36d2]) by DB9PR04MB8477.eurprd04.prod.outlook.com
+ ([fe80::9daa:ab21:f749:36d2%9]) with mapi id 15.20.4308.027; Thu, 15 Jul 2021
+ 08:26:32 +0000
+From:   Dong Aisheng <aisheng.dong@nxp.com>
+To:     devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        kernel@pengutronix.de, aisheng.dong@nxp.com, dongas86@gmail.com,
+        robh+dt@kernel.org, shawnguo@kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH 1/7] dt-bindings: can: flexcan: fix imx8mp compatbile
+Date:   Thu, 15 Jul 2021 16:25:30 +0800
+Message-Id: <20210715082536.1882077-2-aisheng.dong@nxp.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210715082536.1882077-1-aisheng.dong@nxp.com>
+References: <20210715082536.1882077-1-aisheng.dong@nxp.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0083.apcprd02.prod.outlook.com
+ (2603:1096:4:90::23) To DB9PR04MB8477.eurprd04.prod.outlook.com
+ (2603:10a6:10:2c3::11)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uhbwwlkosdf6s4oi"
-Content-Disposition: inline
-In-Reply-To: <20210628142043.15034-1-s.grosjean@peak-system.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (119.31.174.66) by SG2PR02CA0083.apcprd02.prod.outlook.com (2603:1096:4:90::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.22 via Frontend Transport; Thu, 15 Jul 2021 08:26:28 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8cb14f39-3fe3-4374-e019-08d9476a403f
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8680:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DU2PR04MB86807AE2217D0A557D6642E480129@DU2PR04MB8680.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:826;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vLUYMROXA4+GtLcFVaxWPq6iewt2Azxl/1OBwuOxr0CUJ94qmJZzneBnIkT2f6siZKB8jj3uSbG11KO9dEw9onjjjwpVzU15P7AVuHxiQpv5EtC7Lp+ys3IvYhgKq+xhemcFRGotl4KSGyNr2sHXg7h9SgvMF0yozKVc0VfK2y401ApMZQfXF4N4U5e9MLsPck+zG/dD75a3fyQ9Yj8DNzJJPuCQmKvgbDDO42JGOeSyQeAnyKqdMa9sOS5CcKJMvJWmqoaA7OQ3cLraaccBadMOfo1IzCpKIaPin/nzR5diz6jKFOFTo/Ccp4GeeKR7it/Ijqzm9xIW5hrEuHskLN5vKvzU8PGxAuUXH15MnGWQixNpkm0fLhhZ9zY+ywAQF0Zm8cFTsNHCFflGRpug7nQQ1ejnh9y/fAS46botZzaeX/c8TGXhGxoi8x+qCH3gI8EPWxjz4CzamoKvnjp3miwLKRB/GCTiueEfBw65PDicv5VHLKIOsUykI7Lx6BNXkYWpCPfvrSHSjcuIAiAiBxC0HwVEnqRu+hjP38pVDUzbTj7hvXbC04+c5akANJ+VM/LvjRamNpfSL5FZcra7ZCn6oll8c/VnBABCU8+lWAjeJub0W+DVUXugL6ryAWcmNjxAjm024niJMEEyTvHi2p/N7KKoFsu/+/5He1x2JNJ5modASpT9HOw/8FKWm53nTzXeyHvBfichNbKlrCaQjwzg5SO1vgLxx6tNUkcAzEw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(39860400002)(376002)(366004)(396003)(6506007)(2906002)(52116002)(186003)(5660300002)(6916009)(4326008)(6512007)(8936002)(1076003)(36756003)(8676002)(38350700002)(478600001)(2616005)(6666004)(6486002)(956004)(26005)(38100700002)(54906003)(316002)(66476007)(86362001)(83380400001)(66556008)(66946007)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?utY0hZTweyp7kF92anHXrP8vxL4K5yxrjtdVhUCLuy3dl9E2XDcqNJ3J0AOZ?=
+ =?us-ascii?Q?Yi7wkgtwNUej38kEyPRbzqdSFZS5Ne0K0sY2vLrGP4bmP2TbxM27Jdlt02bH?=
+ =?us-ascii?Q?UKWwp3fZl5p1LaXPD0B4vAvRJN/mB1QsjhdAbX+8t8FAnJO9nGP7gwSZveAJ?=
+ =?us-ascii?Q?72R/oTfUqEaYkd+cQx4c0z4yVEjPc+78qXk2/GwIGyUg/khRVxzY1N2REAS6?=
+ =?us-ascii?Q?dFBJHwIlVxiBpjOCvX3XBPlYvVziygk2rwbG1rLR8Hu2/4Tw2AMFPhgVZOrP?=
+ =?us-ascii?Q?+wxeSv2a8H1ZBn3EqBVSw9yMhzJ94ui8hrruvKHEnlRuiMRa6gmWIYf9dmtC?=
+ =?us-ascii?Q?pE0jzSCAxBEeIG5kNo5T+2nENIaiCY5mCbKkxffG8jWI3E604+GZ4PQn/5fE?=
+ =?us-ascii?Q?56nUBNRQtlS/Q2CCBo/vGlS2rQEs9wHSWG9otpqEWEZWbZf5n1/pVSsqk6a6?=
+ =?us-ascii?Q?GrlD9njeor+0eGHLd7PHKi1i/UXc08MrK6OBzwdqQzXI4vVWj1+rXavDuFje?=
+ =?us-ascii?Q?6jyzfOCjto/S4qQECqKm+eRTO8DdJiX8AfnKVlYC4lY71dKlQUmu73HBH9Dp?=
+ =?us-ascii?Q?jlCdRQ05AzW0RcEHRJKxaYyhWCwzbLsGeS2fubuFqGlVBfNjN2OsP/T5KuXZ?=
+ =?us-ascii?Q?WSWbFPdpcZ/W1htf7I6mEJKo804Ep3JeoEJM1w3XUylhtZNZJwiaNL9ivch1?=
+ =?us-ascii?Q?CNTUc1yOkJDQqNqt50fyosY2gVMTRJTCdFzkpIbZX8RWjfcPTJ/insuApOgn?=
+ =?us-ascii?Q?xTf/cW25mrS2x/3n7SM34X0Y+PFMmIH9rKFHposloklmtvTETzccdWNsXHYO?=
+ =?us-ascii?Q?Z3uVQzWBFlom4YCBF+/bNJyVhY2GoOLkmoeNhn1m0Q/K7Sgj2xv7iOTq+z3a?=
+ =?us-ascii?Q?QWKYvJuuFgo0AGtTJp/Wa6tW84QZh+BehmY+Yy1M6JHibZrdvlPVgyRNDR3J?=
+ =?us-ascii?Q?o/kTZQEowskwSiLr5B60vB13cr4Ab2mE7QtAjdRXw1+I8Qj7pLbNST/IZlK1?=
+ =?us-ascii?Q?HJ37nwGaQ1r1LVO3a04YxX618UhaU35f2aYxlMzLLvjoSkiDiACbLj8RLu7w?=
+ =?us-ascii?Q?nsu9K2aixp7VHeAQuSq2FAYa3Y51riIVZX2L5kXP9ReNeQBL4muGej0yyJ2V?=
+ =?us-ascii?Q?vgLS2NUW6niaogg6ylbpZk2qAkevpPECz6q8tgBVAwkJl603dassU4JDJqfj?=
+ =?us-ascii?Q?QnGnwi+o6vewyP/hrrZjd588heo05EZJbKQeiR66QFpza/PY4zpA2BVv43y+?=
+ =?us-ascii?Q?Hzwb7ztnUpE8UVvcfJ52HJhnG5bufeca+26jmkZcDx2ZBdnywCqbbNwNa56T?=
+ =?us-ascii?Q?NWMW+wIRBjDLm2VqEPHOIqnG?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8cb14f39-3fe3-4374-e019-08d9476a403f
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8477.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2021 08:26:32.2317
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mtcK9AFr1i6WuHj8suMlxmkGv0e6njzINw7W8YGCZ1o0A3XPQyM2ezkhBHYhOqZykYvOvX3Sa8D3lcm3Gs1X5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8680
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+This patch fixes the following errors during make dtbs_check:
+arch/arm64/boot/dts/freescale/imx8mp-evk.dt.yaml: can@308c0000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['fsl,imx8mp-flexcan', 'fsl,imx6q-flexcan'] is too long
+	Additional items are not allowed ('fsl,imx6q-flexcan' was unexpected)
+	'fsl,imx8mp-flexcan' is not one of ['fsl,imx53-flexcan', 'fsl,imx35-flexcan']
+	'fsl,imx8mp-flexcan' is not one of ['fsl,imx7d-flexcan', 'fsl,imx6ul-flexcan', 'fsl,imx6sx-flexcan']
+	'fsl,imx8mp-flexcan' is not one of ['fsl,ls1028ar1-flexcan']
+	'fsl,imx25-flexcan' was expected
+	'fsl,lx2160ar1-flexcan' was expected
 
---uhbwwlkosdf6s4oi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Joakim Zhang <qiangqing.zhang@nxp.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-can@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+---
+ Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 28.06.2021 16:20:42, Stephane Grosjean wrote:
-> This patch updates old code by using the functions published since by the
-> socket-can module. In particular, this new code better manages the change
-> of bus state by also using the value of the error counters that the driver
-> now systematically asks for when initializing the channel.
->=20
-> Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
-> ---
-> v2:
->  - do the statistics and state update, even if the allocation of the skb
->    fails.
+diff --git a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+index 55bff1586b6f..ca9caac68777 100644
+--- a/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
++++ b/Documentation/devicetree/bindings/net/can/fsl,flexcan.yaml
+@@ -18,7 +18,6 @@ properties:
+     oneOf:
+       - enum:
+           - fsl,imx8qm-flexcan
+-          - fsl,imx8mp-flexcan
+           - fsl,imx6q-flexcan
+           - fsl,imx28-flexcan
+           - fsl,imx25-flexcan
+@@ -33,6 +32,7 @@ properties:
+           - const: fsl,imx25-flexcan
+       - items:
+           - enum:
++              - fsl,imx8mp-flexcan
+               - fsl,imx7d-flexcan
+               - fsl,imx6ul-flexcan
+               - fsl,imx6sx-flexcan
+-- 
+2.25.1
 
-BTW: please send the whole series with the same "v$NUMBER" as the b4
-tool wants to have v2 on all patches of the series.
-
->=20
->  drivers/net/can/usb/peak_usb/pcan_usb.c | 161 ++++++------------------
->  1 file changed, 38 insertions(+), 123 deletions(-)
->=20
-> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/us=
-b/peak_usb/pcan_usb.c
-> index 7d18bc6911f5..4c3e18ca3181 100644
-> --- a/drivers/net/can/usb/peak_usb/pcan_usb.c
-> +++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
-> @@ -453,146 +453,61 @@ static int pcan_usb_decode_error(struct pcan_usb_m=
-sg_context *mc, u8 n,
->  {
->  	struct sk_buff *skb;
->  	struct can_frame *cf;
-> -	enum can_state new_state;
-> +	enum can_state new_state =3D CAN_STATE_ERROR_ACTIVE;
-> =20
->  	/* ignore this error until 1st ts received */
->  	if (n =3D=3D PCAN_USB_ERROR_QOVR)
->  		if (!mc->pdev->time_ref.tick_count)
->  			return 0;
-> =20
-> -	new_state =3D mc->pdev->dev.can.state;
-> -
-> -	switch (mc->pdev->dev.can.state) {
-> -	case CAN_STATE_ERROR_ACTIVE:
-> -		if (n & PCAN_USB_ERROR_BUS_LIGHT) {
-> -			new_state =3D CAN_STATE_ERROR_WARNING;
-> -			break;
-> -		}
-> -		fallthrough;
-> -
-> -	case CAN_STATE_ERROR_WARNING:
-> -		if (n & PCAN_USB_ERROR_BUS_HEAVY) {
-> -			new_state =3D CAN_STATE_ERROR_PASSIVE;
-> -			break;
-> -		}
-> -		if (n & PCAN_USB_ERROR_BUS_OFF) {
-> -			new_state =3D CAN_STATE_BUS_OFF;
-> -			break;
-> -		}
-> -		if (n & ~PCAN_USB_ERROR_BUS) {
-> -			/*
-> -			 * trick to bypass next comparison and process other
-> -			 * errors
-> -			 */
-> -			new_state =3D CAN_STATE_MAX;
-> -			break;
-> -		}
-> -		if ((n & PCAN_USB_ERROR_BUS_LIGHT) =3D=3D 0) {
-> -			/* no error (back to active state) */
-> -			new_state =3D CAN_STATE_ERROR_ACTIVE;
-> -			break;
-> -		}
-> -		break;
-> -
-> -	case CAN_STATE_ERROR_PASSIVE:
-> -		if (n & PCAN_USB_ERROR_BUS_OFF) {
-> -			new_state =3D CAN_STATE_BUS_OFF;
-> -			break;
-> -		}
-> -		if (n & PCAN_USB_ERROR_BUS_LIGHT) {
-> -			new_state =3D CAN_STATE_ERROR_WARNING;
-> -			break;
-> -		}
-> -		if (n & ~PCAN_USB_ERROR_BUS) {
-> -			/*
-> -			 * trick to bypass next comparison and process other
-> -			 * errors
-> -			 */
-> -			new_state =3D CAN_STATE_MAX;
-> -			break;
-> -		}
-> -
-> -		if ((n & PCAN_USB_ERROR_BUS_HEAVY) =3D=3D 0) {
-> -			/* no error (back to warning state) */
-> -			new_state =3D CAN_STATE_ERROR_WARNING;
-> -			break;
-> -		}
-> -		break;
-> -
-> -	default:
-> -		/* do nothing waiting for restart */
-> -		return 0;
-> -	}
-> -
-> -	/* donot post any error if current state didn't change */
-> -	if (mc->pdev->dev.can.state =3D=3D new_state)
-> -		return 0;
-> -
->  	/* allocate an skb to store the error frame */
->  	skb =3D alloc_can_err_skb(mc->netdev, &cf);
-> -	if (!skb)
-> -		return -ENOMEM;
-> -
-> -	switch (new_state) {
-> -	case CAN_STATE_BUS_OFF:
-> -		cf->can_id |=3D CAN_ERR_BUSOFF;
-> -		mc->pdev->dev.can.can_stats.bus_off++;
-> -		can_bus_off(mc->netdev);
-> -		break;
-> -
-> -	case CAN_STATE_ERROR_PASSIVE:
-> -		cf->can_id |=3D CAN_ERR_CRTL;
-> -		cf->data[1] =3D (mc->pdev->bec.txerr > mc->pdev->bec.rxerr) ?
-> -				CAN_ERR_CRTL_TX_PASSIVE :
-> -				CAN_ERR_CRTL_RX_PASSIVE;
-> -		cf->data[6] =3D mc->pdev->bec.txerr;
-> -		cf->data[7] =3D mc->pdev->bec.rxerr;
-
-The TX and RX error counters are not supplied anymore, was this intentional?
-
-> -
-> -		mc->pdev->dev.can.can_stats.error_passive++;
-> -		break;
-> -
-> -	case CAN_STATE_ERROR_WARNING:
-> -		cf->can_id |=3D CAN_ERR_CRTL;
-> -		cf->data[1] =3D (mc->pdev->bec.txerr > mc->pdev->bec.rxerr) ?
-> -				CAN_ERR_CRTL_TX_WARNING :
-> -				CAN_ERR_CRTL_RX_WARNING;
-> -		cf->data[6] =3D mc->pdev->bec.txerr;
-> -		cf->data[7] =3D mc->pdev->bec.rxerr;
-> -
-> -		mc->pdev->dev.can.can_stats.error_warning++;
-> -		break;
-> =20
-> -	case CAN_STATE_ERROR_ACTIVE:
-> -		cf->can_id |=3D CAN_ERR_CRTL;
-> -		cf->data[1] =3D CAN_ERR_CRTL_ACTIVE;
-> -
-> -		/* sync local copies of rxerr/txerr counters */
-> -		mc->pdev->bec.txerr =3D 0;
-> -		mc->pdev->bec.rxerr =3D 0;
-> -		break;
-> -
-> -	default:
-> -		/* CAN_STATE_MAX (trick to handle other errors) */
-> -		if (n & PCAN_USB_ERROR_TXQFULL)
-> -			netdev_dbg(mc->netdev, "device Tx queue full)\n");
-> -
-> -		if (n & PCAN_USB_ERROR_RXQOVR) {
-> -			netdev_dbg(mc->netdev, "data overrun interrupt\n");
-> +	if (n & PCAN_USB_ERROR_RXQOVR) {
-> +		/* data overrun interrupt */
-> +		netdev_dbg(mc->netdev, "data overrun interrupt\n");
-> +		mc->netdev->stats.rx_over_errors++;
-> +		mc->netdev->stats.rx_errors++;
-> +		if (skb) {
->  			cf->can_id |=3D CAN_ERR_CRTL;
->  			cf->data[1] |=3D CAN_ERR_CRTL_RX_OVERFLOW;
-> -			mc->netdev->stats.rx_over_errors++;
-> -			mc->netdev->stats.rx_errors++;
->  		}
-> +	}
-> =20
-> -		cf->data[6] =3D mc->pdev->bec.txerr;
-> -		cf->data[7] =3D mc->pdev->bec.rxerr;
-> +	if (n & PCAN_USB_ERROR_TXQFULL)
-> +		netdev_dbg(mc->netdev, "device Tx queue full)\n");
-> =20
-> -		new_state =3D mc->pdev->dev.can.state;
-> -		break;
-> +	if (n & PCAN_USB_ERROR_BUS_OFF) {
-> +		new_state =3D CAN_STATE_BUS_OFF;
-> +	} else if (n & PCAN_USB_ERROR_BUS_HEAVY) {
-> +		new_state =3D ((mc->pdev->bec.txerr >=3D 128) ||
-> +			     (mc->pdev->bec.rxerr >=3D 128)) ?
-> +				CAN_STATE_ERROR_PASSIVE :
-> +				CAN_STATE_ERROR_WARNING;
-> +	} else {
-> +		new_state =3D CAN_STATE_ERROR_ACTIVE;
->  	}
-> =20
-> -	mc->pdev->dev.can.state =3D new_state;
-> +	/* handle change of state */
-> +	if (new_state !=3D mc->pdev->dev.can.state) {
-> +		if (skb) {
-> +			enum can_state tx_state =3D
-> +				(mc->pdev->bec.txerr >=3D mc->pdev->bec.rxerr) ?
-> +					new_state : 0;
-> +			enum can_state rx_state =3D
-> +				(mc->pdev->bec.txerr <=3D mc->pdev->bec.rxerr) ?
-> +					new_state : 0;
-> +
-> +			can_change_state(mc->netdev, cf, tx_state, rx_state);
-
-You have to call can_change_state() even if cf is NULL, because it does
-the change state and can handle cf =3D=3D NULL.
-
-> +		}
-> +
-> +		/* things must be done even in case of OOM */
-> +		if (new_state =3D=3D CAN_STATE_BUS_OFF)
-> +			can_bus_off(mc->netdev);
-> +	}
-> =20
-> +	if (!skb)
-> +		return -ENOMEM;
->  	if (status_len & PCAN_USB_STATUSLEN_TIMESTAMP) {
->  		struct skb_shared_hwtstamps *hwts =3D skb_hwtstamps(skb);
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---uhbwwlkosdf6s4oi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmDvScIACgkQqclaivrt
-76msTwf+PrW/vfWWETxg5g32h7rts6Xdql2vePPH2IFo2LLkTzZANzfVpAqK4F9/
-sv0RPJTCSFVs8OzHElRtfDVWxIyrF3gIFeAG8uCE4+VT1uCHe1HHgEufyzkBkfbg
-1mC+KXgmSRFeFmHy+WNNsKtndeelSpLA1fXpTsKfE9pChU3HM1QuS8Gt+cYZ9Ij0
-Eoq8ZEvGJnSWiV62LZoZsd7QiIO/uWnOHUCDavv67gXIazk1f5UH7LQU83G+tN7V
-zXMNXQ0B12CJatELzvCKWEGtURB2gVSf4GacUcrB8mDZrvJlNTDqfi9OgujAM9Kl
-DrDHR9Cu88/bh3UJOqKdeOvSg7oRMw==
-=twYQ
------END PGP SIGNATURE-----
-
---uhbwwlkosdf6s4oi--
