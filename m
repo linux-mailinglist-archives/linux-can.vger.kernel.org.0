@@ -2,60 +2,32 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C97B93CFEC5
-	for <lists+linux-can@lfdr.de>; Tue, 20 Jul 2021 18:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5DC3CFF96
+	for <lists+linux-can@lfdr.de>; Tue, 20 Jul 2021 18:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbhGTP2B (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Jul 2021 11:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
+        id S234812AbhGTPxg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Tue, 20 Jul 2021 11:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239812AbhGTPSQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jul 2021 11:18:16 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46784C06127E;
-        Tue, 20 Jul 2021 08:56:56 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id c16so26655779ybl.9;
-        Tue, 20 Jul 2021 08:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WnvkgdxtoAemKPJLVMVY6hqBu9goS/fqMgfnJCN6o5Y=;
-        b=DfZdlfpB9mN4dbZ8DAGVh9rGPukd8Qb2dOC6nAI/GMp64aBSKlOxqoJqUkklal8mmi
-         Wxq0TdLtRv4zS9DMnK6gDuYxs9sSf/vJhRtvYvpO0Nfl1+aE0a6RGhxu3LvtSMttQoN3
-         iFguBYIF+scSIPVSo3OISIVSSb4yVuoVuWkvcbNsh6Uim+kPsJQC5e80kAjxIuIId/Ir
-         B53P/vRmrpKXB/RhM6KoO4WtmpEfA1lxOeafoCGY7vnC3622TEtWRaSfBHI3BKOtu9xx
-         3fOyeQTnCvtdz8N/2lfeLVhj49ecYt8XEEuIeo6Qzyw9oE0f5GTxOb8LYHTgKFCb138F
-         AoCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WnvkgdxtoAemKPJLVMVY6hqBu9goS/fqMgfnJCN6o5Y=;
-        b=g7Ivv75DOMtRyzRgbpTH85+KFfr5s/vxwpBd3Sgd6ve375bKs2HUTjYG6bUQGjDgCY
-         5BtWudR62qNBByk/Mdc+lH7bSREFn6NrFrhlJ7nOewQr5ldDuUbcfZqlMXaH/qD6zI8a
-         Q5O4yKeXXSuH/tFcZ2Z1XUQI6WxTQvQjGi0c0vXwTg2ZXcG586N8eU1/f9BzP7r+YoYF
-         2lfiCj4Y815uMoNm5lvmTtDj7USx5PZd1WiarP9HX5DbQ/AC+MBxgeHITir5ff/T4jx7
-         Z8wCwZvyDF6Sn+/b6YHyM1ekUSBx6/W21AV6IveGJE3/9oqRLE3VDJA3G9dr36vfUaPO
-         Oq9A==
-X-Gm-Message-State: AOAM5315RY58ssYhQkAl7sPoOw7V9f8bJl7jjKXPAxczjZM2m2YsfKs2
-        OVyz22RQewtR0VukljKHTSdEOEAAMepibegowH8=
-X-Google-Smtp-Source: ABdhPJwcLYTBQc1sWKW28kOeuJp5aYajJPTD3dd6Ctg+5bv2Sh4Mp1muP9ZdFeVJhMt1/OIu3K5lHGtHOJPD1wu06dA=
-X-Received: by 2002:a25:cc52:: with SMTP id l79mr39052227ybf.476.1626796615519;
- Tue, 20 Jul 2021 08:56:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210719143811.2135-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210719143811.2135-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <dc2de27b087c7030ea7e76dd31bb3d8bce18d97f.camel@pengutronix.de>
- <CA+V-a8v-54QXtcT-gPy5vj9drqZ6Ntr0-3j=42Dedi-kojNtXQ@mail.gmail.com> <CAMuHMdVFarkF49=Vvcv-6NLhxbLUE33PXnqhAiPxpaCNN7u4Bw@mail.gmail.com>
-In-Reply-To: <CAMuHMdVFarkF49=Vvcv-6NLhxbLUE33PXnqhAiPxpaCNN7u4Bw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 20 Jul 2021 16:56:29 +0100
-Message-ID: <CA+V-a8sKDGyBCYJnxH=_cJrbYFL1Ev4ETsjYEXx7fQsW-NYiYA@mail.gmail.com>
+        with ESMTP id S232253AbhGTPxI (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jul 2021 11:53:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9098C061767
+        for <linux-can@vger.kernel.org>; Tue, 20 Jul 2021 09:33:44 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1m5sgX-0001iW-Qe; Tue, 20 Jul 2021 18:33:33 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1m5sgW-0002xT-0G; Tue, 20 Jul 2021 18:33:32 +0200
+Message-ID: <a129d6ea0b2706d290418db5bfe4a5f3f274dce1.camel@pengutronix.de>
 Subject: Re: [PATCH v2 1/5] dt-bindings: net: can: renesas,rcar-canfd:
  Document RZ/G2L SoC
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Rob Herring <robh+dt@kernel.org>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
@@ -72,70 +44,136 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Biju Das <biju.das.jz@bp.renesas.com>
+Date:   Tue, 20 Jul 2021 18:33:31 +0200
+In-Reply-To: <CA+V-a8v-54QXtcT-gPy5vj9drqZ6Ntr0-3j=42Dedi-kojNtXQ@mail.gmail.com>
+References: <20210719143811.2135-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+         <20210719143811.2135-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+         <dc2de27b087c7030ea7e76dd31bb3d8bce18d97f.camel@pengutronix.de>
+         <CA+V-a8v-54QXtcT-gPy5vj9drqZ6Ntr0-3j=42Dedi-kojNtXQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Geert,
+Hi Prabhakar,
 
-On Tue, Jul 20, 2021 at 4:11 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Tue, Jul 20, 2021 at 4:31 PM Lad, Prabhakar
-> <prabhakar.csengg@gmail.com> wrote:
-> > On Tue, Jul 20, 2021 at 11:22 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> > > On Mon, 2021-07-19 at 15:38 +0100, Lad Prabhakar wrote:
-> > > > Add CANFD binding documentation for Renesas RZ/G2L SoC.
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
->
-> > > > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > > > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
->
-> > > > +    resets:
-> > > > +      items:
-> > > > +        - description: CANFD_RSTP_N
-> > > > +        - description: CANFD_RSTC_N
-> > >
-> > > Do you know what the "P" and "C" stands for? It would be nice if the
-> > > description could tell us what the reset lines are used for.
-> > >
-> > unfortunately the HW manual does not mention  anything about "P" and "C" :(
-> >
-> > > I would prefer if you used these names (or shortened versions, for
-> > > example "rstp_n", "rstc_n") as "reset-names" and let the driver
-> > > reference the resets by name instead of by index.
-> > >
-> > OK will do that and maxItems:2 for resets.
-> >
-> > @Geert, for R-Car Gen3 does "canfd_rst" (as it's a module reset)
-> > sounds good for reset-names? Or do you have any other suggestions?
->
-> I wouldn't bother with reset-names on R-Car, as there is only a
-> single reset.
->
-OK will keep "description: CANFD reset" for R-Car as done in the
-current patch and just add reset-names only for RZ/G2L SoC.
+On Tue, 2021-07-20 at 15:31 +0100, Lad, Prabhakar wrote:
+> Hi Philipp,
+> 
+> Thank you for the review.
+> 
+> On Tue, Jul 20, 2021 at 11:22 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
+> > Hi Lad,
 
-> BTW, does there exist a generally-accepted reset-equivalent of "fck"
-> ("Functional ClocK")?
->
-None that I am aware of (Couple of binding docs have "rst"), but maybe
-Philipp could have some suggestions.
+Sorry I mixed up your name.
 
-Cheers,
-Prabhakar
+> > On Mon, 2021-07-19 at 15:38 +0100, Lad Prabhakar wrote:
+> > > Add CANFD binding documentation for Renesas RZ/G2L SoC.
+> > > 
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > > ---
+> > >  .../bindings/net/can/renesas,rcar-canfd.yaml  | 66 +++++++++++++++++--
+> > >  1 file changed, 60 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+> > > index 0b33ba9ccb47..4fb6dd370904 100644
+> > > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+> > > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
+> > > @@ -30,13 +30,15 @@ properties:
+> > >                - renesas,r8a77995-canfd     # R-Car D3
+> > >            - const: renesas,rcar-gen3-canfd # R-Car Gen3 and RZ/G2
+> > > 
+> > > +      - items:
+> > > +          - enum:
+> > > +              - renesas,r9a07g044-canfd    # RZ/G2{L,LC}
+> > > +          - const: renesas,rzg2l-canfd     # RZ/G2L family
+> > > +
+> > >    reg:
+> > >      maxItems: 1
+> > > 
+> > > -  interrupts:
+> > > -    items:
+> > > -      - description: Channel interrupt
+> > > -      - description: Global interrupt
+> > > +  interrupts: true
+> > > 
+> > >    clocks:
+> > >      maxItems: 3
+> > > @@ -50,8 +52,7 @@ properties:
+> > >    power-domains:
+> > >      maxItems: 1
+> > > 
+> > > -  resets:
+> > > -    maxItems: 1
+> > > +  resets: true
+> > > 
+> > >    renesas,no-can-fd:
+> > >      $ref: /schemas/types.yaml#/definitions/flag
+> > > @@ -91,6 +92,59 @@ required:
+> > >    - channel0
+> > >    - channel1
+> > > 
+> > > +if:
+> > > +  properties:
+> > > +    compatible:
+> > > +      contains:
+> > > +        enum:
+> > > +          - renesas,rzg2l-canfd
+> > > +then:
+> > > +  properties:
+> > > +    interrupts:
+> > > +      items:
+> > > +        - description: CAN global error interrupt
+> > > +        - description: CAN receive FIFO interrupt
+> > > +        - description: CAN0 error interrupt
+> > > +        - description: CAN0 transmit interrupt
+> > > +        - description: CAN0 transmit/receive FIFO receive completion interrupt
+> > > +        - description: CAN1 error interrupt
+> > > +        - description: CAN1 transmit interrupt
+> > > +        - description: CAN1 transmit/receive FIFO receive completion interrupt
+> > > +
+> > > +    interrupt-names:
+> > > +      items:
+> > > +        - const: g_error
+> > > +        - const: g_rx_fifo
+> > > +        - const: can0_error
+> > > +        - const: can0_tx
+> > > +        - const: can0_tx_rx_fifo_receive_completion
+> > > +        - const: can1_error
+> > > +        - const: can1_tx
+> > > +        - const: can1_tx_rx_fifo_receive_completion
+> > > +
+> > > +    resets:
+> > > +      items:
+> > > +        - description: CANFD_RSTP_N
+> > > +        - description: CANFD_RSTC_N
+> > 
+> > Do you know what the "P" and "C" stands for? It would be nice if the
+> > description could tell us what the reset lines are used for.
+> > 
+> unfortunately the HW manual does not mention  anything about "P" and "C" :(
 
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Yes, unfortunately this is all too common.
+
+> > I would prefer if you used these names (or shortened versions, for
+> > example "rstp_n", "rstc_n") as "reset-names" and let the driver
+> > reference the resets by name instead of by index.
+> > 
+> OK will do that and maxItems:2 for resets.
+> 
+> @Geert, for R-Car Gen3 does "canfd_rst" (as it's a module reset)
+> sounds good for reset-names? Or do you have any other suggestions?
+
+I agree with Geert here. Assuming no second reset will be discovered for
+R-Car Gen3 later, there is no need to invent a name.
+
+regards
+Philipp
