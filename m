@@ -2,58 +2,58 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B0F3CFC92
-	for <lists+linux-can@lfdr.de>; Tue, 20 Jul 2021 16:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6063CFDF6
+	for <lists+linux-can@lfdr.de>; Tue, 20 Jul 2021 17:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240394AbhGTOBs (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Jul 2021 10:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S232729AbhGTPA0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Jul 2021 11:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239541AbhGTN5V (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jul 2021 09:57:21 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E66FC061574;
-        Tue, 20 Jul 2021 07:37:46 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id v189so33052668ybg.3;
-        Tue, 20 Jul 2021 07:37:46 -0700 (PDT)
+        with ESMTP id S239758AbhGTOUf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jul 2021 10:20:35 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC79C06178C;
+        Tue, 20 Jul 2021 07:58:07 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id a16so33089252ybt.8;
+        Tue, 20 Jul 2021 07:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=twAcJwRNZdn+hWF5eUUfRv0NDfKoXSW2Ryat6Jwflqo=;
-        b=sfbDpPPNijKyZ6UiRIh5zgydDChl1eYmSO177LQ0yoCG6RUj36kmUTPJo+RIz+wFnq
-         zp/s6taOtwOiSasGeavhSCYtFQ864wSdmGwUbs9tKPPqHyWGc72LysIzT1pzskxE4QR0
-         pAXwrdRllNJ8YTQkbwiPT3J8BFMXSPxJ4STzyDjhm1x+lMdncyosKw+ZU3MTtcMPBpqt
-         2KtxPeKnmyjR9vWroZ2zo+8MX9la4ndE7gDmTK+4C+6i/Uyu7fEcKhbtEdwcDFUDKD1x
-         QpqirVBkaAolKP3ls5aMwrakG5GcvxcSisq87W0XMiiHhvOsFyEgbu2phzdlFMZbb1yT
-         RBjw==
+        bh=XEVu3hZadiQ0WDLAIZgrzrDxA6oJ53H3vgdnVOEPrQ8=;
+        b=n9M8ng2msIt5IVVUGfaXSWpXav+TDZEIagymTXBbK6NB9K94HWizCRAthlQJvmliKm
+         Gzdtvxx/uufYsp8+M6u4ZBSTDOeIsPPbGz30DYhJykCGoWAT1cTP7ZrU2W7P35Y6Cfj8
+         hxp1Zx51G1hOifLvPpPbEB9TAjFdusIJPxObM1q498JKWUxjpWIM5janJxbg2623gxdU
+         0HpzCE5gefwU3sua2Eq/86zqj4o6ZzkkdaEbZf62d3LyE5JZ44DGjW1qdPXRb7e8UtNx
+         IsCPErg8XaT3cxTj2mGv/WuW4TKVZvg+CfR5crFWdKhY8STF2RhBpJAg1b7aPj8Jv9k1
+         Om+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=twAcJwRNZdn+hWF5eUUfRv0NDfKoXSW2Ryat6Jwflqo=;
-        b=XTfHCE04ZHXxdbAHZdNMrIVpJAvoGf2Wg2GAwOEoLPvMHVazJapiVAmhhjtVP4KMpl
-         l2hB3JnoE0E+kTOlzWwxT3K1/TYnBsN7cREL/WuJZpjT4foO5/ZaWTUnG7rjqAP2idOv
-         AJRBsGUj+fALaEYVZN1euF9kSl5l5FyVnqCI+RteTmlC1TQxxf2oLCRHvqqFeMJ/XlRr
-         iNQ6m4B4M1G0Fpb9k9xl/ZGDTgmlqaAfiptdTntqwosvgGA2eCsFLjcwXPX73dS+whjO
-         n6qEoXn7yYwV5JOw/CNs10RzSuS17Bg1YGYkGg7llje0ETde1/wGmKOXfrKp3qGDaePd
-         H8Lw==
-X-Gm-Message-State: AOAM530n2VB1ctg9vh01ITtDpmH9iwar2gzxqsnk7VQ4PcPjD9Xi3icT
-        HeXwvrGbaViVVoUn97tI0AHSrmJnB9eLL9jJOMYAJPyJs3k=
-X-Google-Smtp-Source: ABdhPJyAcO8dYvfHnYTMIJBpgaNLQrfDXOatIRgq5EcoKOshwfU5hDRIuaNZ9zCFEILzu6oKVT0xeH75bB2s95FlkyE=
-X-Received: by 2002:a25:d491:: with SMTP id m139mr38146443ybf.156.1626791865876;
- Tue, 20 Jul 2021 07:37:45 -0700 (PDT)
+        bh=XEVu3hZadiQ0WDLAIZgrzrDxA6oJ53H3vgdnVOEPrQ8=;
+        b=OTJSGm4m3Dld+aruncoMhti/8ApBprSz7u8Rm8tv8wLieXmqxyYXbQQux7+NcCwggW
+         AWz2nqv6bz4Mu++NZ+61n/i7H5MOTlwJDr6n/1mF9rKIhWIjbVpCY2FgrACfCg5DYUBU
+         JApBWhEnYXAFjTOYttZ+nsE8voibLavsn9Gn5Ty4j+hQiFkruRb9I1hpU/78QmuizKkT
+         pdEKGBlEjWm8QMVnh5snJLVMrStyqx1s2PSJPJr16bTxh8XxrqMJ6yOuqw/EfAMVNOWv
+         zupNbCJCatqmg5bCF83HQiAXyQxLXJkcJ6kef1kkcThEdV9ihndM1lGCjjGzO2R6bG+G
+         l+nw==
+X-Gm-Message-State: AOAM533CUD9nJfXqE+ltwZToYQtHIh6IG6wTnpQGJKYiwtq6e7aFr0e7
+        0+RPXUVo4ZyfY4J9H7u5CKh3ZBthZ6YVhK6/+eA=
+X-Google-Smtp-Source: ABdhPJxZZZwLPoyYOzEhes1wmyLaTcvkDSmkoB9Xggix4AffH0qsiSVQQQq6OFTNnq4iakaROVUT1p49GBa/uUhSbxo=
+X-Received: by 2002:a25:e404:: with SMTP id b4mr40451306ybh.426.1626793087054;
+ Tue, 20 Jul 2021 07:58:07 -0700 (PDT)
 MIME-Version: 1.0
 References: <20210719143811.2135-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210719143811.2135-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdV1cLZkvyocVrAo6n6Y73QZBGOUMeJKqjk533gqk_RVLg@mail.gmail.com>
-In-Reply-To: <CAMuHMdV1cLZkvyocVrAo6n6Y73QZBGOUMeJKqjk533gqk_RVLg@mail.gmail.com>
+ <20210719143811.2135-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <c8ec5fe0c8eb86898416edb7c68dcf0eeeaccf54.camel@pengutronix.de>
+In-Reply-To: <c8ec5fe0c8eb86898416edb7c68dcf0eeeaccf54.camel@pengutronix.de>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 20 Jul 2021 15:37:20 +0100
-Message-ID: <CA+V-a8s8gO5M_+2XBWoknxDL0nnY9PNtPr0PYfqYgv_SeRd7Sg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: net: can: renesas,rcar-canfd:
- Document RZ/G2L SoC
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 20 Jul 2021 15:57:40 +0100
+Message-ID: <CA+V-a8vgQ1-tUOw2o3E39reZmnLGFVN_HEvZeH-x5cj01x-Pzg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] can: rcar_canfd: Add support for RZ/G2L family
+To:     Philipp Zabel <p.zabel@pengutronix.de>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Rob Herring <robh+dt@kernel.org>,
         Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -61,13 +61,12 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -75,124 +74,62 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Geert,
+Hi Philipp,
 
 Thank you for the review.
 
-On Tue, Jul 20, 2021 at 11:21 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
+On Tue, Jul 20, 2021 at 11:23 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
 >
-> Hi Prabhakar,
->
-> On Mon, Jul 19, 2021 at 4:39 PM Lad Prabhakar
-> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > Add CANFD binding documentation for Renesas RZ/G2L SoC.
+> On Mon, 2021-07-19 at 15:38 +0100, Lad Prabhakar wrote:
+> > CANFD block on RZ/G2L SoC is almost identical to one found on
+> > R-Car Gen3 SoC's. On RZ/G2L SoC interrupt sources for each channel
+> > are split into different sources and the IP doesn't divide (1/2)
+> > CANFD clock within the IP.
+> >
+> > This patch adds compatible string for RZ/G2L family and registers
+> > the irq handlers required for CANFD operation. IRQ numbers are now
+> > fetched based on names instead of indices. For backward compatibility
+> > on non RZ/G2L SoC's we fallback reading based on indices.
 > >
 > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
->
-> Thanks for your patch!
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Just some bikeshedding on the exact naming below ;-)
->
-> > --- a/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > +++ b/Documentation/devicetree/bindings/net/can/renesas,rcar-canfd.yaml
-> > @@ -91,6 +92,59 @@ required:
-> >    - channel0
-> >    - channel1
+> > ---
+> >  drivers/net/can/rcar/rcar_canfd.c | 178 ++++++++++++++++++++++++------
+> >  1 file changed, 147 insertions(+), 31 deletions(-)
 > >
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        enum:
-> > +          - renesas,rzg2l-canfd
-> > +then:
-> > +  properties:
-> > +    interrupts:
-> > +      items:
-> > +        - description: CAN global error interrupt
-> > +        - description: CAN receive FIFO interrupt
-> > +        - description: CAN0 error interrupt
-> > +        - description: CAN0 transmit interrupt
-> > +        - description: CAN0 transmit/receive FIFO receive completion interrupt
-> > +        - description: CAN1 error interrupt
-> > +        - description: CAN1 transmit interrupt
-> > +        - description: CAN1 transmit/receive FIFO receive completion interrupt
-> > +
-> > +    interrupt-names:
-> > +      items:
-> > +        - const: g_error
-> > +        - const: g_rx_fifo
-> > +        - const: can0_error
+> > diff --git a/drivers/net/can/rcar/rcar_canfd.c b/drivers/net/can/rcar/rcar_canfd.c
+> > index 311e6ca3bdc4..d4affc002fb3 100644
+> > --- a/drivers/net/can/rcar/rcar_canfd.c
+> > +++ b/drivers/net/can/rcar/rcar_canfd.c
+> > @@ -37,9 +37,15 @@
+> [...]
+> > +     if (gpriv->chip_id == RENESAS_RZG2L) {
+> > +             gpriv->rstc1 = devm_reset_control_get_exclusive_by_index(&pdev->dev, 0);
+> > +             if (IS_ERR(gpriv->rstc1)) {
+> > +                     dev_err(&pdev->dev, "failed to get reset index 0\n");
 >
-> s/error/err/?
+> Please consider requesting the reset controls by name instead of by
+> index. See also my reply to the binding patch.
 >
-> > +        - const: can0_tx
-> > +        - const: can0_tx_rx_fifo_receive_completion
-> > +        - const: can1_error
-> > +        - const: can1_tx
-> > +        - const: can1_tx_rx_fifo_receive_completion
->
-> s/receive/rx/?
->
-> Some are also a bit long to type.
-> Perhaps use naming closer to the User's Manual?
->
-> INTRCANGERR => g_err
-> INTRCANGRECC => g_recc
-> INTRCAN0ERR => ch0_err
-> INTRCAN0REC => ch0_rec
-> INTRCAN0TRX => ch0_trx
-> INTRCAN1ERR => ch1_err
-> INTRCAN1REC => ch1_rec
-> INTRCAN1TRX => ch1_trx
->
-> These do not have "_int" suffixes...
->
-Agreed thanks for the input.
+Will do.
 
+> > +                     return PTR_ERR(gpriv->rstc1);
+> > +             }
 > > +
-> > +    resets:
-> > +      items:
-> > +        - description: CANFD_RSTP_N
-> > +        - description: CANFD_RSTC_N
-> > +
-> > +  required:
-> > +    - interrupt-names
-> > +else:
-> > +  properties:
-> > +    interrupts:
-> > +      items:
-> > +        - description: Channel interrupt
-> > +        - description: Global interrupt
-> > +
-> > +    interrupt-names:
-> > +      items:
-> > +        - const: ch_int
-> > +        - const: g_int
+> > +             err = reset_control_reset(gpriv->rstc1);
+> > +             if (err)
+> > +                     return err;
 >
-> ... and these do have "_int" suffixes.
+> I suggest to wait until after all resource requests have succeeded
+> before triggering the resets, i.e. first get all reset controls and
+> clocks, etc., and only then trigger resets, enable clocks, and so on.
 >
-indeed
+> That way there will be no spurious resets in case of probe deferrals.
+>
+Agreed, will update the code.
 
 Cheers,
 Prabhakar
-> > +
-> > +    resets:
-> > +      items:
-> > +        - description: CANFD reset
-> > +
-> >  unevaluatedProperties: false
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+
+> regards
+> Philipp
