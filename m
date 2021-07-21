@@ -2,235 +2,171 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9893D04EF
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 01:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5E13D0650
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 03:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbhGTWUy (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 20 Jul 2021 18:20:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37214 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229909AbhGTWUT (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Tue, 20 Jul 2021 18:20:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 25D3160FF1;
-        Tue, 20 Jul 2021 23:00:54 +0000 (UTC)
-Subject: Re: [PATCH v5 3/5] m68k: m5441x: add flexcan support
-To:     Angelo Dureghello <angelo@kernel-space.org>, wg@grandegger.com,
-        mkl@pengutronix.de
-Cc:     geert@linux-m68k.org, linux-m68k@vger.kernel.org,
-        linux-can@vger.kernel.org, qiangqing.zhang@nxp.com
-References: <20210702094841.327679-1-angelo@kernel-space.org>
- <20210702094841.327679-3-angelo@kernel-space.org>
- <1a95b055-5d14-f43e-81dd-d0a0ddbdb1f1@linux-m68k.org>
- <aaa06e75-bcfa-d6ae-a994-630a74501f6b@kernel-space.org>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-Message-ID: <4a745955-8e43-3024-a004-0db0e084d74f@linux-m68k.org>
-Date:   Wed, 21 Jul 2021 09:00:52 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230051AbhGUAac (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 20 Jul 2021 20:30:32 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:7407 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229617AbhGUAaT (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 20 Jul 2021 20:30:19 -0400
+Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4GTy9J004Zz7xQZ;
+        Wed, 21 Jul 2021 09:07:15 +0800 (CST)
+Received: from localhost.localdomain (10.175.104.82) by
+ dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Wed, 21 Jul 2021 09:10:53 +0800
+From:   Ziyang Xuan <william.xuanziyang@huawei.com>
+To:     <davem@davemloft.net>
+CC:     <kuba@kernel.org>, <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH net] can: raw: fix raw_rcv panic for sock UAF
+Date:   Wed, 21 Jul 2021 09:09:37 +0800
+Message-ID: <20210721010937.670275-1-william.xuanziyang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <aaa06e75-bcfa-d6ae-a994-630a74501f6b@kernel-space.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.104.82]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggeml757-chm.china.huawei.com (10.1.199.137)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Angelo,
+We get a bug during ltp can_filter test as following.
 
-On 21/7/21 4:53 am, Angelo Dureghello wrote:
-> Hi Greg,
-> 
-> sorry was away for some vacation time.
-> 
-> Is there still any job required here ?
+===========================================
+[60919.264984] BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
+[60919.265223] PGD 8000003dda726067 P4D 8000003dda726067 PUD 3dda727067 PMD 0
+[60919.265443] Oops: 0000 [#1] SMP PTI
+[60919.265550] CPU: 30 PID: 3638365 Comm: can_filter Kdump: loaded Tainted: G        W         4.19.90+ #1
+[60919.266068] RIP: 0010:selinux_socket_sock_rcv_skb+0x3e/0x200
+[60919.293289] RSP: 0018:ffff8d53bfc03cf8 EFLAGS: 00010246
+[60919.307140] RAX: 0000000000000000 RBX: 000000000000001d RCX: 0000000000000007
+[60919.320756] RDX: 0000000000000001 RSI: ffff8d5104a8ed00 RDI: ffff8d53bfc03d30
+[60919.334319] RBP: ffff8d9338056800 R08: ffff8d53bfc29d80 R09: 0000000000000001
+[60919.347969] R10: ffff8d53bfc03ec0 R11: ffffb8526ef47c98 R12: ffff8d53bfc03d30
+[60919.350320] perf: interrupt took too long (3063 > 2500), lowering kernel.perf_event_max_sample_rate to 65000
+[60919.361148] R13: 0000000000000001 R14: ffff8d53bcf90000 R15: 0000000000000000
+[60919.361151] FS:  00007fb78b6b3600(0000) GS:ffff8d53bfc00000(0000) knlGS:0000000000000000
+[60919.400812] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[60919.413730] CR2: 0000000000000010 CR3: 0000003e3f784006 CR4: 00000000007606e0
+[60919.426479] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[60919.439339] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[60919.451608] PKRU: 55555554
+[60919.463622] Call Trace:
+[60919.475617]  <IRQ>
+[60919.487122]  ? update_load_avg+0x89/0x5d0
+[60919.498478]  ? update_load_avg+0x89/0x5d0
+[60919.509822]  ? account_entity_enqueue+0xc5/0xf0
+[60919.520709]  security_sock_rcv_skb+0x2a/0x40
+[60919.531413]  sk_filter_trim_cap+0x47/0x1b0
+[60919.542178]  ? kmem_cache_alloc+0x38/0x1b0
+[60919.552444]  sock_queue_rcv_skb+0x17/0x30
+[60919.562477]  raw_rcv+0x110/0x190 [can_raw]
+[60919.572539]  can_rcv_filter+0xbc/0x1b0 [can]
+[60919.582173]  can_receive+0x6b/0xb0 [can]
+[60919.591595]  can_rcv+0x31/0x70 [can]
+[60919.600783]  __netif_receive_skb_one_core+0x5a/0x80
+[60919.609864]  process_backlog+0x9b/0x150
+[60919.618691]  net_rx_action+0x156/0x400
+[60919.627310]  ? sched_clock_cpu+0xc/0xa0
+[60919.635714]  __do_softirq+0xe8/0x2e9
+[60919.644161]  do_softirq_own_stack+0x2a/0x40
+[60919.652154]  </IRQ>
+[60919.659899]  do_softirq.part.17+0x4f/0x60
+[60919.667475]  __local_bh_enable_ip+0x60/0x70
+[60919.675089]  __dev_queue_xmit+0x539/0x920
+[60919.682267]  ? finish_wait+0x80/0x80
+[60919.689218]  ? finish_wait+0x80/0x80
+[60919.695886]  ? sock_alloc_send_pskb+0x211/0x230
+[60919.702395]  ? can_send+0xe5/0x1f0 [can]
+[60919.708882]  can_send+0xe5/0x1f0 [can]
+[60919.715037]  raw_sendmsg+0x16d/0x268 [can_raw]
 
-No :-)
-I modified the change as per my suggestions below - so I could push to m68knommu git tree.
-(Otherwise It does not compile). See:
+It's because raw_setsockopt() concurrently with
+unregister_netdevice_many(). Concurrent scenario as following.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git/commit/?h=for-next&id=64151620227a2fcb13dae0b99b6a1003edb38c67
+	cpu0						cpu1
+raw_bind
+raw_setsockopt					unregister_netdevice_many
+						unlist_netdevice
+dev_get_by_index				raw_notifier
+raw_enable_filters				......
+can_rx_register
+can_rcv_list_find(..., net->can.rx_alldev_list)
 
-Regards
-Greg
+......
 
+sock_close
+raw_release(sock_a)
 
+......
 
-> 
-> On 12/07/21 6:33 AM, Greg Ungerer wrote:
->> Hi Angelo,
->>
->> There is a couple of changes I would like to see here to make this
->> not depend on patch 1/5.
->>
->>
->> On 2/7/21 7:48 pm, Angelo Dureghello wrote:
->>> Add flexcan support.
->>>
->>> Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
->>> ---
->>> Changes for v2:
->>> - add irq resources for ERR and BOFF interrutps
->>> Changes for v3:
->>> - differentiate device name, for future variants addition
->>> Changes for v4:
->>> - change platform data structure name to flexcan_platform_data
->>> Changes for v5:
->>> none
->>> ---
->>>   arch/m68k/coldfire/device.c       | 42 +++++++++++++++++++++++++++++++
->>>   arch/m68k/coldfire/m5441x.c       |  8 +++---
->>>   arch/m68k/include/asm/m5441xsim.h | 19 ++++++++++++++
->>>   3 files changed, 65 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/arch/m68k/coldfire/device.c b/arch/m68k/coldfire/device.c
->>> index 59f7dfe50a4d..5f7effbf7c60 100644
->>> --- a/arch/m68k/coldfire/device.c
->>> +++ b/arch/m68k/coldfire/device.c
->>> @@ -23,6 +23,7 @@
->>>   #include <linux/platform_data/edma.h>
->>>   #include <linux/platform_data/dma-mcf-edma.h>
->>>   #include <linux/platform_data/mmc-esdhc-mcf.h>
->>> +#include <linux/can/platform/flexcan.h>
->>
->> Move this to inside the CONFIG_CAN block.
->>
->>>   /*
->>>    *    All current ColdFire parts contain from 2, 3, 4 or 10 UARTS.
->>> @@ -581,6 +582,44 @@ static struct platform_device mcf_esdhc = {
->>>   };
->>>   #endif /* MCFSDHC_BASE */
->>> +#if IS_ENABLED(CONFIG_CAN)
->>
->> Change this to IS_ENABLED(CONFIG_CAN_FLEXCAN).
->>
->> All the other device resource blocks in this file depend on the
->> actual driver being enabled that they apply to. Not the general subsystem
->> (in this case CAN).
->>
->> That way the timing of patches 1, 4 and 5 being applied doesn't matter.
->> There is no way to enable CONFIG_CAN_FLEXCAN until patch 4 is applied.
->> (And you probably should have swapped the order of patches 4 and 5, so that
->> the Kconfig change is the last in the series.)
->>
->> Regards
->> Greg
->>
->>
->>
->>> +static struct flexcan_platform_data mcf5441x_flexcan_info = {
->>> +    .clk_src = 1,
->>> +    .clock_frequency = 120000000,
->>> +};
->>> +
->>> +static struct resource mcf5441x_flexcan0_resource[] = {
->>> +    {
->>> +        .start = MCFFLEXCAN_BASE0,
->>> +        .end = MCFFLEXCAN_BASE0 + MCFFLEXCAN_SIZE,
->>> +        .flags = IORESOURCE_MEM,
->>> +    },
->>> +    {
->>> +        .start = MCF_IRQ_IFL0,
->>> +        .end = MCF_IRQ_IFL0,
->>> +        .flags = IORESOURCE_IRQ,
->>> +    },
->>> +    {
->>> +        .start = MCF_IRQ_BOFF0,
->>> +        .end = MCF_IRQ_BOFF0,
->>> +        .flags = IORESOURCE_IRQ,
->>> +    },
->>> +    {
->>> +        .start = MCF_IRQ_ERR0,
->>> +        .end = MCF_IRQ_ERR0,
->>> +        .flags = IORESOURCE_IRQ,
->>> +    },
->>> +};
->>> +
->>> +static struct platform_device mcf_flexcan0 = {
->>> +    .name = "flexcan-mcf5441x",
->>> +    .id = 0,
->>> +    .num_resources = ARRAY_SIZE(mcf5441x_flexcan0_resource),
->>> +    .resource = mcf5441x_flexcan0_resource,
->>> +    .dev.platform_data = &mcf5441x_flexcan_info,
->>> +};
->>> +#endif /* IS_ENABLED(CONFIG_CAN) */
->>> +
->>>   static struct platform_device *mcf_devices[] __initdata = {
->>>       &mcf_uart,
->>>   #if IS_ENABLED(CONFIG_FEC)
->>> @@ -616,6 +655,9 @@ static struct platform_device *mcf_devices[] __initdata = {
->>>   #ifdef MCFSDHC_BASE
->>>       &mcf_esdhc,
->>>   #endif
->>> +#if IS_ENABLED(CONFIG_CAN)
->>> +    &mcf_flexcan0,
->>> +#endif
->>>   };
->>>   /*
->>> diff --git a/arch/m68k/coldfire/m5441x.c b/arch/m68k/coldfire/m5441x.c
->>> index 1e5259a652d1..18b152edb69c 100644
->>> --- a/arch/m68k/coldfire/m5441x.c
->>> +++ b/arch/m68k/coldfire/m5441x.c
->>> @@ -18,8 +18,8 @@
->>>   #include <asm/mcfclk.h>
->>>   DEFINE_CLK(0, "flexbus", 2, MCF_CLK);
->>> -DEFINE_CLK(0, "mcfcan.0", 8, MCF_CLK);
->>> -DEFINE_CLK(0, "mcfcan.1", 9, MCF_CLK);
->>> +DEFINE_CLK(0, "flexcan.0", 8, MCF_CLK);
->>> +DEFINE_CLK(0, "flexcan.1", 9, MCF_CLK);
->>>   DEFINE_CLK(0, "imx1-i2c.1", 14, MCF_CLK);
->>>   DEFINE_CLK(0, "mcfdspi.1", 15, MCF_CLK);
->>>   DEFINE_CLK(0, "edma", 17, MCF_CLK);
->>> @@ -146,6 +146,8 @@ struct clk *mcf_clks[] = {
->>>   static struct clk * const enable_clks[] __initconst = {
->>>       /* make sure these clocks are enabled */
->>> +    &__clk_0_8, /* flexcan.0 */
->>> +    &__clk_0_9, /* flexcan.1 */
->>>       &__clk_0_15, /* dspi.1 */
->>>       &__clk_0_17, /* eDMA */
->>>       &__clk_0_18, /* intc0 */
->>> @@ -166,8 +168,6 @@ static struct clk * const enable_clks[] __initconst = {
->>>       &__clk_1_37, /* gpio */
->>>   };
->>>   static struct clk * const disable_clks[] __initconst = {
->>> -    &__clk_0_8, /* can.0 */
->>> -    &__clk_0_9, /* can.1 */
->>>       &__clk_0_14, /* i2c.1 */
->>>       &__clk_0_22, /* i2c.0 */
->>>       &__clk_0_23, /* dspi.0 */
->>> diff --git a/arch/m68k/include/asm/m5441xsim.h b/arch/m68k/include/asm/m5441xsim.h
->>> index e091e36d3464..f48cf63bd782 100644
->>> --- a/arch/m68k/include/asm/m5441xsim.h
->>> +++ b/arch/m68k/include/asm/m5441xsim.h
->>> @@ -73,6 +73,12 @@
->>>   #define MCFINT0_FECENTC1    55
->>>   /* on interrupt controller 1 */
->>> +#define MCFINT1_FLEXCAN0_IFL    0
->>> +#define MCFINT1_FLEXCAN0_BOFF    1
->>> +#define MCFINT1_FLEXCAN0_ERR    3
->>> +#define MCFINT1_FLEXCAN1_IFL    4
->>> +#define MCFINT1_FLEXCAN1_BOFF    5
->>> +#define MCFINT1_FLEXCAN1_ERR    7
->>>   #define MCFINT1_UART4        48
->>>   #define MCFINT1_UART5        49
->>>   #define MCFINT1_UART6        50
->>> @@ -314,4 +320,17 @@
->>>   #define MCF_IRQ_SDHC        (MCFINT2_VECBASE + MCFINT2_SDHC)
->>>   #define MCFSDHC_CLK        (MCFSDHC_BASE + 0x2c)
->>> +/*
->>> + * Flexcan module
->>> + */
->>> +#define MCFFLEXCAN_BASE0    0xfc020000
->>> +#define MCFFLEXCAN_BASE1    0xfc024000
->>> +#define MCFFLEXCAN_SIZE        0x4000
->>> +#define MCF_IRQ_IFL0        (MCFINT1_VECBASE + MCFINT1_FLEXCAN0_IFL)
->>> +#define MCF_IRQ_BOFF0        (MCFINT1_VECBASE + MCFINT1_FLEXCAN0_BOFF)
->>> +#define MCF_IRQ_ERR0        (MCFINT1_VECBASE + MCFINT1_FLEXCAN0_ERR)
->>> +#define MCF_IRQ_IFL1        (MCFINT1_VECBASE + MCFINT1_FLEXCAN1_IFL)
->>> +#define MCF_IRQ_BOFF1        (MCFINT1_VECBASE + MCFINT1_FLEXCAN1_BOFF)
->>> +#define MCF_IRQ_ERR1        (MCFINT1_VECBASE + MCFINT1_FLEXCAN1_ERR)
->>> +
->>>   #endif /* m5441xsim_h */
->>>
-> 
-> Regards,
+can_receive
+can_rcv_filter(net->can.rx_alldev_list, ...)
+raw_rcv(skb, sock_a)
+BUG
+
+After unlist_netdevice(), dev_get_by_index() return NULL in
+raw_setsockopt(). Function raw_enable_filters() will add sock
+and can_filter to net->can.rx_alldev_list. Then the sock is closed.
+Followed by, we sock_sendmsg() to a new vcan device use the same
+can_filter. Protocol stack match the old receiver whose sock has
+been released on net->can.rx_alldev_list in can_rcv_filter().
+Function raw_rcv() uses the freed sock. UAF BUG is triggered.
+
+We can find that the key issue is that net_device has not been
+protected in raw_setsockopt(). Use rtnl_lock to protect net_device
+in raw_setsockopt().
+
+Fixes: c18ce101f2e4 ("[CAN]: Add raw protocol")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+---
+ net/can/raw.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/net/can/raw.c b/net/can/raw.c
+index ed4fcb7ab0c3..a63e9915c66a 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -546,6 +546,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 				return -EFAULT;
+ 		}
+ 
++		rtnl_lock();
+ 		lock_sock(sk);
+ 
+ 		if (ro->bound && ro->ifindex)
+@@ -588,6 +589,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 			dev_put(dev);
+ 
+ 		release_sock(sk);
++		rtnl_unlock();
+ 
+ 		break;
+ 
+@@ -600,6 +602,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 
+ 		err_mask &= CAN_ERR_MASK;
+ 
++		rtnl_lock();
+ 		lock_sock(sk);
+ 
+ 		if (ro->bound && ro->ifindex)
+@@ -627,6 +630,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+ 			dev_put(dev);
+ 
+ 		release_sock(sk);
++		rtnl_unlock();
+ 
+ 		break;
+ 
+-- 
+2.25.1
+
