@@ -2,100 +2,351 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF1D3D0D8A
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 13:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B31D3D0E42
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 13:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237539AbhGUKnk (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jul 2021 06:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238477AbhGUJe3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jul 2021 05:34:29 -0400
-Received: from mail.kernel-space.org (unknown [IPv6:2a01:4f8:c2c:5a84::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097ABC0613B7;
-        Wed, 21 Jul 2021 03:12:01 -0700 (PDT)
-Received: from ziongate (localhost [127.0.0.1])
-        by ziongate (OpenSMTPD) with ESMTP id fc018ed5;
-        Wed, 21 Jul 2021 10:05:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=simple; d=kernel-space.org; h=subject
-        :to:cc:references:from:message-id:date:mime-version:in-reply-to
-        :content-type:content-transfer-encoding; s=default; bh=WH9fkuBaC
-        W6AXKnQB5kTe3bEZcI=; b=aJC1LttRyCOYIJHk3dMMGRjzmoSMV2i128E8fx9nu
-        CrM+rE6ZbT/Bgkv+/MMnzDGDSuiMRXyyOgA/ptcr2KBuPC2B8b2sK9AL60E4aswl
-        Y3rkMaSzjHz6RL1R3fBcitZRgK+GxBDUslOiz+WRfitGLxZy8gsxfUjphfUs3qFx
-        qI=
-DomainKey-Signature: a=rsa-sha1; c=simple; d=kernel-space.org; h=subject
-        :to:cc:references:from:message-id:date:mime-version:in-reply-to
-        :content-type:content-transfer-encoding; q=dns; s=default; b=lJq
-        3EJ7N4tjRltDCDhDVzqzOEcY7vkcvhBaJGWfDcDxaDb6byhpx/OzotM8g/2gQmJZ
-        obGLrM1mL2JDOjlgtZTZrtoiyoJMS074j0Nfc0tMxVtjDFmEsq6p5BEgwSOmMPoR
-        /GrzTxDP6DRgFu+uMCDFm8d15wWkzZibyhDBGv+A=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel-space.org;
-        s=20190913; t=1626861919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tT1drKIFh/pk2IunUXW1WLo26FZPmF/ilo2ON2O/XFI=;
-        b=JRt/Xgg3GxPZX12NhSc7zQuxBsl2oslzQlKwdQNOUH7HQdGWEja1ytPbpCpQiOW6bJyrUd
-        sii6QkRClEHnOwggnf1KafEx4GAybdtr4+NkE7iDH2VBSLc9cAvDeTnGfI1Iz6IWG+7Dby
-        bub1sCNHMq+taWaUuVpmk2efMA3H33w=
-Received: from [192.168.0.2] (host-79-44-236-76.retail.telecomitalia.it [79.44.236.76])
-        by ziongate (OpenSMTPD) with ESMTPSA id 8b877209 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 21 Jul 2021 10:05:19 +0000 (UTC)
-Subject: Re: [PATCH v5 3/5] m68k: m5441x: add flexcan support
-To:     Greg Ungerer <gerg@linux-m68k.org>, wg@grandegger.com,
-        mkl@pengutronix.de
-Cc:     geert@linux-m68k.org, linux-m68k@vger.kernel.org,
-        linux-can@vger.kernel.org, qiangqing.zhang@nxp.com
-References: <20210702094841.327679-1-angelo@kernel-space.org>
- <20210702094841.327679-3-angelo@kernel-space.org>
- <1a95b055-5d14-f43e-81dd-d0a0ddbdb1f1@linux-m68k.org>
- <aaa06e75-bcfa-d6ae-a994-630a74501f6b@kernel-space.org>
- <4a745955-8e43-3024-a004-0db0e084d74f@linux-m68k.org>
-From:   Angelo Dureghello <angelo@kernel-space.org>
-Message-ID: <e1e702b8-9124-b063-a17c-217336f8c840@kernel-space.org>
-Date:   Wed, 21 Jul 2021 12:04:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S233838AbhGULQX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jul 2021 07:16:23 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:12231 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236241AbhGUK6D (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jul 2021 06:58:03 -0400
+Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GVD2P0ZHJz1CM0x;
+        Wed, 21 Jul 2021 19:32:13 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Wed, 21 Jul 2021 19:37:59 +0800
+Subject: Re: [PATCH net] can: raw: fix raw_rcv panic for sock UAF
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <mkl@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+References: <20210721010937.670275-1-william.xuanziyang@huawei.com>
+ <YPeoQG19PSh3B3Dc@kroah.com>
+ <44c3e0e2-03c5-80e5-001c-03e7e9758bca@hartkopp.net>
+ <11822417-5931-b2d8-ae77-ec4a84b8b895@hartkopp.net>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <d5eb8e8d-bce9-cccd-a102-b60692c242f0@huawei.com>
+Date:   Wed, 21 Jul 2021 19:37:59 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <4a745955-8e43-3024-a004-0db0e084d74f@linux-m68k.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <11822417-5931-b2d8-ae77-ec4a84b8b895@hartkopp.net>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggeml757-chm.china.huawei.com (10.1.199.137)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Greg,
-
-On 21/07/21 1:00 AM, Greg Ungerer wrote:
-> Hi Angelo,
+On 7/21/2021 5:24 PM, Oliver Hartkopp wrote:
+> Answering myself ...
 > 
-> On 21/7/21 4:53 am, Angelo Dureghello wrote:
->> Hi Greg,
+> On 21.07.21 08:35, Oliver Hartkopp wrote:
 >>
->> sorry was away for some vacation time.
 >>
->> Is there still any job required here ?
+>> On 21.07.21 06:53, Greg KH wrote:
+>>> On Wed, Jul 21, 2021 at 09:09:37AM +0800, Ziyang Xuan wrote:
+>>>> We get a bug during ltp can_filter test as following.
+>>>>
+>>>> ===========================================
+>>>> [60919.264984] BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
+>>>> [60919.265223] PGD 8000003dda726067 P4D 8000003dda726067 PUD 3dda727067 PMD 0
+>>>> [60919.265443] Oops: 0000 [#1] SMP PTI
+>>>> [60919.265550] CPU: 30 PID: 3638365 Comm: can_filter Kdump: loaded Tainted: G        W         4.19.90+ #1
+>>
+>> This kernel version 4.19.90 is definitely outdated.
+>>
+>> Can you please check your issue with the latest uptream kernel as this problem should have been fixed with this patch:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8d0caedb759683041d9db82069937525999ada53
+>> ("can: bcm/raw/isotp: use per module netdevice notifier")
+>>
+>> Thanks!
 > 
-> No :-)
-> I modified the change as per my suggestions below - so I could push to 
-> m68knommu git tree.
-> (Otherwise It does not compile). See:
+> I think my hint had a wrong assumption. The suggestion to add some locking seems correct.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git/commit/?h=for-next&id=64151620227a2fcb13dae0b99b6a1003edb38c67 
+>>>> [60919.266068] RIP: 0010:selinux_socket_sock_rcv_skb+0x3e/0x200
+>>>> [60919.293289] RSP: 0018:ffff8d53bfc03cf8 EFLAGS: 00010246
+>>>> [60919.307140] RAX: 0000000000000000 RBX: 000000000000001d RCX: 0000000000000007
+>>>> [60919.320756] RDX: 0000000000000001 RSI: ffff8d5104a8ed00 RDI: ffff8d53bfc03d30
+>>>> [60919.334319] RBP: ffff8d9338056800 R08: ffff8d53bfc29d80 R09: 0000000000000001
+>>>> [60919.347969] R10: ffff8d53bfc03ec0 R11: ffffb8526ef47c98 R12: ffff8d53bfc03d30
+>>>> [60919.350320] perf: interrupt took too long (3063 > 2500), lowering kernel.perf_event_max_sample_rate to 65000
+>>>> [60919.361148] R13: 0000000000000001 R14: ffff8d53bcf90000 R15: 0000000000000000
+>>>> [60919.361151] FS:  00007fb78b6b3600(0000) GS:ffff8d53bfc00000(0000) knlGS:0000000000000000
+>>>> [60919.400812] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> [60919.413730] CR2: 0000000000000010 CR3: 0000003e3f784006 CR4: 00000000007606e0
+>>>> [60919.426479] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>>> [60919.439339] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>>> [60919.451608] PKRU: 55555554
+>>>> [60919.463622] Call Trace:
+>>>> [60919.475617]  <IRQ>
+>>>> [60919.487122]  ? update_load_avg+0x89/0x5d0
+>>>> [60919.498478]  ? update_load_avg+0x89/0x5d0
+>>>> [60919.509822]  ? account_entity_enqueue+0xc5/0xf0
+>>>> [60919.520709]  security_sock_rcv_skb+0x2a/0x40
+>>>> [60919.531413]  sk_filter_trim_cap+0x47/0x1b0
+>>>> [60919.542178]  ? kmem_cache_alloc+0x38/0x1b0
+>>>> [60919.552444]  sock_queue_rcv_skb+0x17/0x30
+>>>> [60919.562477]  raw_rcv+0x110/0x190 [can_raw]
+>>>> [60919.572539]  can_rcv_filter+0xbc/0x1b0 [can]
+>>>> [60919.582173]  can_receive+0x6b/0xb0 [can]
+>>>> [60919.591595]  can_rcv+0x31/0x70 [can]
+>>>> [60919.600783]  __netif_receive_skb_one_core+0x5a/0x80
+>>>> [60919.609864]  process_backlog+0x9b/0x150
+>>>> [60919.618691]  net_rx_action+0x156/0x400
+>>>> [60919.627310]  ? sched_clock_cpu+0xc/0xa0
+>>>> [60919.635714]  __do_softirq+0xe8/0x2e9
+>>>> [60919.644161]  do_softirq_own_stack+0x2a/0x40
+>>>> [60919.652154]  </IRQ>
+>>>> [60919.659899]  do_softirq.part.17+0x4f/0x60
+>>>> [60919.667475]  __local_bh_enable_ip+0x60/0x70
+>>>> [60919.675089]  __dev_queue_xmit+0x539/0x920
+>>>> [60919.682267]  ? finish_wait+0x80/0x80
+>>>> [60919.689218]  ? finish_wait+0x80/0x80
+>>>> [60919.695886]  ? sock_alloc_send_pskb+0x211/0x230
+>>>> [60919.702395]  ? can_send+0xe5/0x1f0 [can]
+>>>> [60919.708882]  can_send+0xe5/0x1f0 [can]
+>>>> [60919.715037]  raw_sendmsg+0x16d/0x268 [can_raw]
+>>>>
+>>>> It's because raw_setsockopt() concurrently with
+>>>> unregister_netdevice_many(). Concurrent scenario as following.
+>>>>
+>>>>     cpu0                        cpu1
+>>>> raw_bind
+>>>> raw_setsockopt                    unregister_netdevice_many
+>>>>                         unlist_netdevice
+>>>> dev_get_by_index                raw_notifier
+>>>> raw_enable_filters                ......
+>>>> can_rx_register
+>>>> can_rcv_list_find(..., net->can.rx_alldev_list)
+>>>>
+>>>> ......
+>>>>
+>>>> sock_close
+>>>> raw_release(sock_a)
+>>>>
+>>>> ......
+>>>>
+>>>> can_receive
+>>>> can_rcv_filter(net->can.rx_alldev_list, ...)
+>>>> raw_rcv(skb, sock_a)
+>>>> BUG
+>>>>
+>>>> After unlist_netdevice(), dev_get_by_index() return NULL in
+>>>> raw_setsockopt(). Function raw_enable_filters() will add sock
+>>>> and can_filter to net->can.rx_alldev_list.
 > 
+> Btw. this should not happen too!
 > 
+> dev_get_by_index() is executed depending on ro->ifindex which means there should be a real network interface. When dev_get_by_index() returns NULL this can considered to be wrong.
+> 
+> Adding a new filter to net->can.rx_alldev_list as a consequence is wrong too.
+> 
+>>>> Then the sock is closed.
+>>>> Followed by, we sock_sendmsg() to a new vcan device use the same
+>>>> can_filter. Protocol stack match the old receiver whose sock has
+>>>> been released on net->can.rx_alldev_list in can_rcv_filter().
+>>>> Function raw_rcv() uses the freed sock. UAF BUG is triggered.
+>>>>
+>>>> We can find that the key issue is that net_device has not been
+>>>> protected in raw_setsockopt(). Use rtnl_lock to protect net_device
+>>>> in raw_setsockopt().
+>>>>
+>>>> Fixes: c18ce101f2e4 ("[CAN]: Add raw protocol")
+>>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> 
+> Can you please resend the below patch as suggested by Greg KH and add my
+> 
+> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+> 
+> as it also adds the dev_get_by_index() return check.
+> 
+> diff --git a/net/can/raw.c b/net/can/raw.c
+> index ed4fcb7ab0c3..d3cbc32036c7 100644
+> --- a/net/can/raw.c
+> +++ b/net/can/raw.c
+> @@ -544,14 +544,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>          } else if (count == 1) {
+>              if (copy_from_sockptr(&sfilter, optval, sizeof(sfilter)))
+>                  return -EFAULT;
+>          }
+> 
+> +        rtnl_lock();
+>          lock_sock(sk);
+> 
+> -        if (ro->bound && ro->ifindex)
+> +        if (ro->bound && ro->ifindex) {
+>              dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+> +            if (!dev)
+> +                goto out_fil;
+> +        }
+At first, I also use this modification. After discussion with my partner, we found that
+it is impossible scenario if we use rtnl_lock to protect net_device object.
+We can see two sequences:
+1. raw_setsockopt first get rtnl_lock, unregister_netdevice_many later.
+It can be simplified to add the filter in raw_setsockopt, then remove the filter in raw_notify.
 
-Super thanks ! Will check this properly next time.
+2. unregister_netdevice_many first get rtnl_lock, raw_setsockopt later.
+raw_notify will set ro->ifindex, ro->bound and ro->count to zero firstly. The filter will not
+be added to any filter_list in raw_notify.
 
-> Regards
-> Greg
+So I selected the current modification. Do you think so?
+
+My first modification as following:
+
+diff --git a/net/can/raw.c b/net/can/raw.c
+index ed4fcb7ab0c3..a0ce4908317f 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -546,10 +546,16 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+                                return -EFAULT;
+                }
+
++               rtnl_lock();
+                lock_sock(sk);
+
+-               if (ro->bound && ro->ifindex)
++               if (ro->bound && ro->ifindex) {
+                        dev = dev_get_by_index(sock_net(sk), ro->ifindex);
++                       if (!dev) {
++                               err = -ENODEV;
++                               goto out_fil;
++                       }
++               }
+
+                if (ro->bound) {
+                        /* (try to) register the new filters */
+@@ -559,11 +565,8 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+                        else
+                                err = raw_enable_filters(sock_net(sk), dev, sk,
+                                                         filter, count);
+-                       if (err) {
+-                               if (count > 1)
+-                                       kfree(filter);
++                       if (err)
+                                goto out_fil;
+-                       }
+
+                        /* remove old filter registrations */
+                        raw_disable_filters(sock_net(sk), dev, sk, ro->filter,
+@@ -584,10 +587,14 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+                ro->count  = count;
+
+  out_fil:
++               if (err && count > 1)
++                       kfree(filter);
++
+                if (dev)
+                        dev_put(dev);
+
+                release_sock(sk);
++               rtnl_unlock();
+
+                break;
+
+@@ -600,10 +607,16 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+
+                err_mask &= CAN_ERR_MASK;
+
++               rtnl_lock();
+                lock_sock(sk);
+
+-               if (ro->bound && ro->ifindex)
++               if (ro->bound && ro->ifindex) {
+                        dev = dev_get_by_index(sock_net(sk), ro->ifindex);
++                       if (!dev) {
++                               err = -ENODEV;
++                               goto out_err;
++                       }
++               }
+
+                /* remove current error mask */
+                if (ro->bound) {
+@@ -627,6 +640,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+                        dev_put(dev);
+
+                release_sock(sk);
++               rtnl_unlock();
+
+                break;
+
+> 
+>          if (ro->bound) {
+>              /* (try to) register the new filters */
+>              if (count == 1)
+>                  err = raw_enable_filters(sock_net(sk), dev, sk,
+> @@ -586,10 +590,11 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   out_fil:
+>          if (dev)
+>              dev_put(dev);
+> 
+>          release_sock(sk);
+> +        rtnl_unlock();
+> 
+>          break;
+> 
+>      case CAN_RAW_ERR_FILTER:
+>          if (optlen != sizeof(err_mask))
+> @@ -598,14 +603,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>          if (copy_from_sockptr(&err_mask, optval, optlen))
+>              return -EFAULT;
+> 
+>          err_mask &= CAN_ERR_MASK;
+> 
+> +        rtnl_lock();
+>          lock_sock(sk);
+> 
+> -        if (ro->bound && ro->ifindex)
+> +        if (ro->bound && ro->ifindex) {
+>              dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+> +            if (!dev)
+> +                goto out_err;
+> +        }
+> 
+>          /* remove current error mask */
+>          if (ro->bound) {
+>              /* (try to) register the new err_mask */
+>              err = raw_enable_errfilter(sock_net(sk), dev, sk,
+> @@ -625,10 +634,11 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>   out_err:
+>          if (dev)
+>              dev_put(dev);
+> 
+>          release_sock(sk);
+> +        rtnl_unlock();
+> 
+>          break;
+> 
+>      case CAN_RAW_LOOPBACK:
+>          if (optlen != sizeof(ro->loopback))
 > 
 > 
 > 
-
-Regards,
-Angelo
-
+> 
+> Thanks for the finding!
+> 
+> Best regards,
+> Oliver
+> 
+> (..)
+>>>
+>>>
+>>> <formletter>
+>>>
+>>> This is not the correct way to submit patches for inclusion in the
+>>> stable kernel tree.  Please read:
+>>>      https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+>>> for how to do this properly.
+>>>
+>>> </formletter>
+>>>
+> .
