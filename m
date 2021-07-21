@@ -2,351 +2,128 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B31D3D0E42
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 13:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF573D0EEF
+	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 14:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbhGULQX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jul 2021 07:16:23 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:12231 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbhGUK6D (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jul 2021 06:58:03 -0400
-Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GVD2P0ZHJz1CM0x;
-        Wed, 21 Jul 2021 19:32:13 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Wed, 21 Jul 2021 19:37:59 +0800
-Subject: Re: [PATCH net] can: raw: fix raw_rcv panic for sock UAF
-To:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <mkl@pengutronix.de>,
-        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20210721010937.670275-1-william.xuanziyang@huawei.com>
- <YPeoQG19PSh3B3Dc@kroah.com>
- <44c3e0e2-03c5-80e5-001c-03e7e9758bca@hartkopp.net>
- <11822417-5931-b2d8-ae77-ec4a84b8b895@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <d5eb8e8d-bce9-cccd-a102-b60692c242f0@huawei.com>
-Date:   Wed, 21 Jul 2021 19:37:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S233417AbhGUMBc (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 21 Jul 2021 08:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233069AbhGUMBc (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jul 2021 08:01:32 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE95C061574;
+        Wed, 21 Jul 2021 05:42:07 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id l6so1271808wmq.0;
+        Wed, 21 Jul 2021 05:42:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8zpSU1Ov841qsvPoGnhSNRnkLtBuvpxGfmjQdkDkDWo=;
+        b=df3hPmm9PmOVkTBbNuqGhWvyR4OmjkOeKdhNDBKhRq8F5vzHxD4i2TBagnOtuYSlmn
+         wBdo/ibD9/1c6OcdRVDEcdjWNX3y7nnp41LklKbgdT/mz2Iv2SSLfRgI2lOflRKD7ZqO
+         Fdx5CibUmgP0TIKKSJ8BiJGE6iu7MKTkmUuA1Cc8NH3tEjio8k3ZzPCTSLYf5QoGeLOZ
+         jxVFb5wPSBW8ka7QpKbN7ivI14ZO1m/81JA/3Ahb/WQYVEF7OAGXbW2SSA23snKhpgQF
+         wmSLeY8DpKchoPJxn9WVsfq0gL7lmV8NUATaaIA6ZIJhPXI9zA7XROYHRf1lVEZ9RG6F
+         UYyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8zpSU1Ov841qsvPoGnhSNRnkLtBuvpxGfmjQdkDkDWo=;
+        b=gdaNLHAiHJ9usHaqtFyv704VHnNstk/qIc3zS+HhgqevACOUyqEM7Bu8QgDfjaPCbC
+         VBahgIhsB4SeKOCUpl9r8AbBpfqoEis2bFqL7bUbXREJ5ATRz15+NrMrJXlaWjBIYgcI
+         GkaeVUsiEAVqqKbbUGiAE+cXVD8/JVBQEq2Bfl+xWQkmgEWSTw8DHgy5jmPGW0tw+9jF
+         rE0TXYxmbeRlpOyqBjJ/meShwGd+zWGEIclpcRLehIav+X18aShaybqQ/tIYUTWKXuwX
+         vTFYJKIV0hvt1AIbtj3zeueFNrt+NAVyif/4sE5XUDME1CbIqz8Krqm02lB06ZHGkfq/
+         wBmw==
+X-Gm-Message-State: AOAM530ehRFISVXlisZ4tHv1olTJHsLpADy99vEGdtGfW1//lgFHtkrv
+        wyh+2nVs7SDV7ho5ZziJhig=
+X-Google-Smtp-Source: ABdhPJxx3HQLRz/wWiWInAaQmqxYQMLmTIXULJdPDTBnbKM5ZL70D9tC+HAHPy2Q7hOl1WQM6KH0xQ==
+X-Received: by 2002:a05:600c:4f4d:: with SMTP id m13mr3983852wmq.31.1626871326316;
+        Wed, 21 Jul 2021 05:42:06 -0700 (PDT)
+Received: from Buzz.nordsys.de ([2a02:810d:d40:2317:2ef0:5dff:fe0a:a2d5])
+        by smtp.gmail.com with ESMTPSA id w15sm1540668wmi.3.2021.07.21.05.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jul 2021 05:42:05 -0700 (PDT)
+From:   Andre Naujoks <nautsch2@gmail.com>
+To:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Andre Naujoks <nautsch2@gmail.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Expose Peak USB device id in sysfs via phys_port_name.
+Date:   Wed, 21 Jul 2021 14:40:47 +0200
+Message-Id: <20210721124048.590426-1-nautsch2@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <11822417-5931-b2d8-ae77-ec4a84b8b895@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggeml757-chm.china.huawei.com (10.1.199.137)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On 7/21/2021 5:24 PM, Oliver Hartkopp wrote:
-> Answering myself ...
-> 
-> On 21.07.21 08:35, Oliver Hartkopp wrote:
->>
->>
->> On 21.07.21 06:53, Greg KH wrote:
->>> On Wed, Jul 21, 2021 at 09:09:37AM +0800, Ziyang Xuan wrote:
->>>> We get a bug during ltp can_filter test as following.
->>>>
->>>> ===========================================
->>>> [60919.264984] BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
->>>> [60919.265223] PGD 8000003dda726067 P4D 8000003dda726067 PUD 3dda727067 PMD 0
->>>> [60919.265443] Oops: 0000 [#1] SMP PTI
->>>> [60919.265550] CPU: 30 PID: 3638365 Comm: can_filter Kdump: loaded Tainted: G        W         4.19.90+ #1
->>
->> This kernel version 4.19.90 is definitely outdated.
->>
->> Can you please check your issue with the latest uptream kernel as this problem should have been fixed with this patch:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8d0caedb759683041d9db82069937525999ada53
->> ("can: bcm/raw/isotp: use per module netdevice notifier")
->>
->> Thanks!
-> 
-> I think my hint had a wrong assumption. The suggestion to add some locking seems correct.
-> 
->>>> [60919.266068] RIP: 0010:selinux_socket_sock_rcv_skb+0x3e/0x200
->>>> [60919.293289] RSP: 0018:ffff8d53bfc03cf8 EFLAGS: 00010246
->>>> [60919.307140] RAX: 0000000000000000 RBX: 000000000000001d RCX: 0000000000000007
->>>> [60919.320756] RDX: 0000000000000001 RSI: ffff8d5104a8ed00 RDI: ffff8d53bfc03d30
->>>> [60919.334319] RBP: ffff8d9338056800 R08: ffff8d53bfc29d80 R09: 0000000000000001
->>>> [60919.347969] R10: ffff8d53bfc03ec0 R11: ffffb8526ef47c98 R12: ffff8d53bfc03d30
->>>> [60919.350320] perf: interrupt took too long (3063 > 2500), lowering kernel.perf_event_max_sample_rate to 65000
->>>> [60919.361148] R13: 0000000000000001 R14: ffff8d53bcf90000 R15: 0000000000000000
->>>> [60919.361151] FS:  00007fb78b6b3600(0000) GS:ffff8d53bfc00000(0000) knlGS:0000000000000000
->>>> [60919.400812] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>> [60919.413730] CR2: 0000000000000010 CR3: 0000003e3f784006 CR4: 00000000007606e0
->>>> [60919.426479] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>> [60919.439339] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>> [60919.451608] PKRU: 55555554
->>>> [60919.463622] Call Trace:
->>>> [60919.475617]  <IRQ>
->>>> [60919.487122]  ? update_load_avg+0x89/0x5d0
->>>> [60919.498478]  ? update_load_avg+0x89/0x5d0
->>>> [60919.509822]  ? account_entity_enqueue+0xc5/0xf0
->>>> [60919.520709]  security_sock_rcv_skb+0x2a/0x40
->>>> [60919.531413]  sk_filter_trim_cap+0x47/0x1b0
->>>> [60919.542178]  ? kmem_cache_alloc+0x38/0x1b0
->>>> [60919.552444]  sock_queue_rcv_skb+0x17/0x30
->>>> [60919.562477]  raw_rcv+0x110/0x190 [can_raw]
->>>> [60919.572539]  can_rcv_filter+0xbc/0x1b0 [can]
->>>> [60919.582173]  can_receive+0x6b/0xb0 [can]
->>>> [60919.591595]  can_rcv+0x31/0x70 [can]
->>>> [60919.600783]  __netif_receive_skb_one_core+0x5a/0x80
->>>> [60919.609864]  process_backlog+0x9b/0x150
->>>> [60919.618691]  net_rx_action+0x156/0x400
->>>> [60919.627310]  ? sched_clock_cpu+0xc/0xa0
->>>> [60919.635714]  __do_softirq+0xe8/0x2e9
->>>> [60919.644161]  do_softirq_own_stack+0x2a/0x40
->>>> [60919.652154]  </IRQ>
->>>> [60919.659899]  do_softirq.part.17+0x4f/0x60
->>>> [60919.667475]  __local_bh_enable_ip+0x60/0x70
->>>> [60919.675089]  __dev_queue_xmit+0x539/0x920
->>>> [60919.682267]  ? finish_wait+0x80/0x80
->>>> [60919.689218]  ? finish_wait+0x80/0x80
->>>> [60919.695886]  ? sock_alloc_send_pskb+0x211/0x230
->>>> [60919.702395]  ? can_send+0xe5/0x1f0 [can]
->>>> [60919.708882]  can_send+0xe5/0x1f0 [can]
->>>> [60919.715037]  raw_sendmsg+0x16d/0x268 [can_raw]
->>>>
->>>> It's because raw_setsockopt() concurrently with
->>>> unregister_netdevice_many(). Concurrent scenario as following.
->>>>
->>>>     cpu0                        cpu1
->>>> raw_bind
->>>> raw_setsockopt                    unregister_netdevice_many
->>>>                         unlist_netdevice
->>>> dev_get_by_index                raw_notifier
->>>> raw_enable_filters                ......
->>>> can_rx_register
->>>> can_rcv_list_find(..., net->can.rx_alldev_list)
->>>>
->>>> ......
->>>>
->>>> sock_close
->>>> raw_release(sock_a)
->>>>
->>>> ......
->>>>
->>>> can_receive
->>>> can_rcv_filter(net->can.rx_alldev_list, ...)
->>>> raw_rcv(skb, sock_a)
->>>> BUG
->>>>
->>>> After unlist_netdevice(), dev_get_by_index() return NULL in
->>>> raw_setsockopt(). Function raw_enable_filters() will add sock
->>>> and can_filter to net->can.rx_alldev_list.
-> 
-> Btw. this should not happen too!
-> 
-> dev_get_by_index() is executed depending on ro->ifindex which means there should be a real network interface. When dev_get_by_index() returns NULL this can considered to be wrong.
-> 
-> Adding a new filter to net->can.rx_alldev_list as a consequence is wrong too.
-> 
->>>> Then the sock is closed.
->>>> Followed by, we sock_sendmsg() to a new vcan device use the same
->>>> can_filter. Protocol stack match the old receiver whose sock has
->>>> been released on net->can.rx_alldev_list in can_rcv_filter().
->>>> Function raw_rcv() uses the freed sock. UAF BUG is triggered.
->>>>
->>>> We can find that the key issue is that net_device has not been
->>>> protected in raw_setsockopt(). Use rtnl_lock to protect net_device
->>>> in raw_setsockopt().
->>>>
->>>> Fixes: c18ce101f2e4 ("[CAN]: Add raw protocol")
->>>> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-> 
-> Can you please resend the below patch as suggested by Greg KH and add my
-> 
-> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-> 
-> as it also adds the dev_get_by_index() return check.
-> 
-> diff --git a/net/can/raw.c b/net/can/raw.c
-> index ed4fcb7ab0c3..d3cbc32036c7 100644
-> --- a/net/can/raw.c
-> +++ b/net/can/raw.c
-> @@ -544,14 +544,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
->          } else if (count == 1) {
->              if (copy_from_sockptr(&sfilter, optval, sizeof(sfilter)))
->                  return -EFAULT;
->          }
-> 
-> +        rtnl_lock();
->          lock_sock(sk);
-> 
-> -        if (ro->bound && ro->ifindex)
-> +        if (ro->bound && ro->ifindex) {
->              dev = dev_get_by_index(sock_net(sk), ro->ifindex);
-> +            if (!dev)
-> +                goto out_fil;
-> +        }
-At first, I also use this modification. After discussion with my partner, we found that
-it is impossible scenario if we use rtnl_lock to protect net_device object.
-We can see two sequences:
-1. raw_setsockopt first get rtnl_lock, unregister_netdevice_many later.
-It can be simplified to add the filter in raw_setsockopt, then remove the filter in raw_notify.
+The Peak USB CAN adapters can be assigned a device id via the Peak
+provided tools (pcan-settings). This id can currently not be set by the
+upstream kernel drivers, but some devices expose this id already.
 
-2. unregister_netdevice_many first get rtnl_lock, raw_setsockopt later.
-raw_notify will set ro->ifindex, ro->bound and ro->count to zero firstly. The filter will not
-be added to any filter_list in raw_notify.
+The id can be used for consistent naming of CAN interfaces regardless of
+order of attachment or recognition on the system. The classical CAN Peak
+USB adapters expose this id via bcdDevice (combined with another value)
+on USB-level in the sysfs tree and this value is then available in
+ID_REVISION from udev. This is not a feasible approach, when a single
+USB device offers more than one CAN-interface, like e.g. the PCAN-USB
+Pro FD devices.
 
-So I selected the current modification. Do you think so?
+This patch exposes those ids via the, up to now unused, netdevice sysfs
+attribute phys_port_name as a simple decimal ASCII representation of the
+id. phys_port_id was not used, since the default print functions from
+net/core/net-sysfs.c output a hex-encoded binary value, which is
+overkill for a one-byte device id, like this one.
+---
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-My first modification as following:
-
-diff --git a/net/can/raw.c b/net/can/raw.c
-index ed4fcb7ab0c3..a0ce4908317f 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -546,10 +546,16 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
-                                return -EFAULT;
-                }
-
-+               rtnl_lock();
-                lock_sock(sk);
-
--               if (ro->bound && ro->ifindex)
-+               if (ro->bound && ro->ifindex) {
-                        dev = dev_get_by_index(sock_net(sk), ro->ifindex);
-+                       if (!dev) {
-+                               err = -ENODEV;
-+                               goto out_fil;
-+                       }
-+               }
-
-                if (ro->bound) {
-                        /* (try to) register the new filters */
-@@ -559,11 +565,8 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
-                        else
-                                err = raw_enable_filters(sock_net(sk), dev, sk,
-                                                         filter, count);
--                       if (err) {
--                               if (count > 1)
--                                       kfree(filter);
-+                       if (err)
-                                goto out_fil;
--                       }
-
-                        /* remove old filter registrations */
-                        raw_disable_filters(sock_net(sk), dev, sk, ro->filter,
-@@ -584,10 +587,14 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
-                ro->count  = count;
-
-  out_fil:
-+               if (err && count > 1)
-+                       kfree(filter);
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index e8f43ed90b72..f6cbb01a58cc 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -408,6 +408,21 @@ static netdev_tx_t peak_usb_ndo_start_xmit(struct sk_buff *skb,
+ 	return NETDEV_TX_OK;
+ }
+ 
++static int peak_usb_ndo_get_phys_port_name(struct net_device *netdev,
++					   char *name, size_t len)
++{
++	const struct peak_usb_device *dev = netdev_priv(netdev);
++	int err;
 +
-                if (dev)
-                        dev_put(dev);
++	err = snprintf(name, len, "%u", dev->device_number);
++
++	if (err >= len || err <= 0) {
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ /*
+  * start the CAN interface.
+  * Rx and Tx urbs are allocated here. Rx urbs are submitted here.
+@@ -769,6 +784,7 @@ static const struct net_device_ops peak_usb_netdev_ops = {
+ 	.ndo_stop = peak_usb_ndo_stop,
+ 	.ndo_start_xmit = peak_usb_ndo_start_xmit,
+ 	.ndo_change_mtu = can_change_mtu,
++	.ndo_get_phys_port_name = peak_usb_ndo_get_phys_port_name,
+ };
+ 
+ /*
+-- 
+2.32.0
 
-                release_sock(sk);
-+               rtnl_unlock();
-
-                break;
-
-@@ -600,10 +607,16 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
-
-                err_mask &= CAN_ERR_MASK;
-
-+               rtnl_lock();
-                lock_sock(sk);
-
--               if (ro->bound && ro->ifindex)
-+               if (ro->bound && ro->ifindex) {
-                        dev = dev_get_by_index(sock_net(sk), ro->ifindex);
-+                       if (!dev) {
-+                               err = -ENODEV;
-+                               goto out_err;
-+                       }
-+               }
-
-                /* remove current error mask */
-                if (ro->bound) {
-@@ -627,6 +640,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
-                        dev_put(dev);
-
-                release_sock(sk);
-+               rtnl_unlock();
-
-                break;
-
-> 
->          if (ro->bound) {
->              /* (try to) register the new filters */
->              if (count == 1)
->                  err = raw_enable_filters(sock_net(sk), dev, sk,
-> @@ -586,10 +590,11 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
->   out_fil:
->          if (dev)
->              dev_put(dev);
-> 
->          release_sock(sk);
-> +        rtnl_unlock();
-> 
->          break;
-> 
->      case CAN_RAW_ERR_FILTER:
->          if (optlen != sizeof(err_mask))
-> @@ -598,14 +603,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
->          if (copy_from_sockptr(&err_mask, optval, optlen))
->              return -EFAULT;
-> 
->          err_mask &= CAN_ERR_MASK;
-> 
-> +        rtnl_lock();
->          lock_sock(sk);
-> 
-> -        if (ro->bound && ro->ifindex)
-> +        if (ro->bound && ro->ifindex) {
->              dev = dev_get_by_index(sock_net(sk), ro->ifindex);
-> +            if (!dev)
-> +                goto out_err;
-> +        }
-> 
->          /* remove current error mask */
->          if (ro->bound) {
->              /* (try to) register the new err_mask */
->              err = raw_enable_errfilter(sock_net(sk), dev, sk,
-> @@ -625,10 +634,11 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
->   out_err:
->          if (dev)
->              dev_put(dev);
-> 
->          release_sock(sk);
-> +        rtnl_unlock();
-> 
->          break;
-> 
->      case CAN_RAW_LOOPBACK:
->          if (optlen != sizeof(ro->loopback))
-> 
-> 
-> 
-> 
-> Thanks for the finding!
-> 
-> Best regards,
-> Oliver
-> 
-> (..)
->>>
->>>
->>> <formletter>
->>>
->>> This is not the correct way to submit patches for inclusion in the
->>> stable kernel tree.  Please read:
->>>      https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
->>> for how to do this properly.
->>>
->>> </formletter>
->>>
-> .
