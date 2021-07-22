@@ -2,170 +2,68 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C702B3D23DD
-	for <lists+linux-can@lfdr.de>; Thu, 22 Jul 2021 14:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9B63D2C2C
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jul 2021 20:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbhGVMMx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 22 Jul 2021 08:12:53 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:12286 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbhGVMMx (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jul 2021 08:12:53 -0400
-Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4GVshJ0KWzz7tCv;
-        Thu, 22 Jul 2021 20:48:48 +0800 (CST)
-Received: from [10.174.179.200] (10.174.179.200) by
- dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Thu, 22 Jul 2021 20:53:24 +0800
-Subject: Re: [PATCH net v2] can: raw: fix raw_rcv panic for sock UAF
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-CC:     <mkl@pengutronix.de>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210722070819.1048263-1-william.xuanziyang@huawei.com>
- <d684ef4d-d6c1-56b0-dc9e-b330fb92ba87@hartkopp.net>
-From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
-Message-ID: <dfb8e04b-257d-6de5-280b-e0326b4d0dbe@huawei.com>
-Date:   Thu, 22 Jul 2021 20:53:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229585AbhGVSMo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Jul 2021 14:12:44 -0400
+Received: from mga01.intel.com ([192.55.52.88]:46225 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229556AbhGVSMn (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Thu, 22 Jul 2021 14:12:43 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10053"; a="233541808"
+X-IronPort-AV: E=Sophos;i="5.84,261,1620716400"; 
+   d="scan'208";a="233541808"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 11:53:01 -0700
+X-IronPort-AV: E=Sophos;i="5.84,261,1620716400"; 
+   d="scan'208";a="662809561"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2021 11:53:00 -0700
+Received: from andy by smile with local (Exim 4.94.2)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1m6doU-00H8uR-QA; Thu, 22 Jul 2021 21:52:54 +0300
+Date:   Thu, 22 Jul 2021 21:52:54 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-can@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] can: mcp251xfd: mcp251xfd_probe(): try to get
+ crystal clock rate from property
+Message-ID: <YPm+hkutsbtsTNlB@smile.fi.intel.com>
+References: <20210531084444.1785397-1-mkl@pengutronix.de>
+ <YLS15VESjAVZ2w6G@smile.fi.intel.com>
+ <YOQsM4spPVfca4dE@smile.fi.intel.com>
+ <20210706101421.ukdgfo3eyoijblbu@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <d684ef4d-d6c1-56b0-dc9e-b330fb92ba87@hartkopp.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.200]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggeml757-chm.china.huawei.com (10.1.199.137)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210706101421.ukdgfo3eyoijblbu@pengutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
->> diff --git a/net/can/raw.c b/net/can/raw.c
->> index ed4fcb7ab0c3..cd5a49380116 100644
->> --- a/net/can/raw.c
->> +++ b/net/can/raw.c
->> @@ -546,10 +546,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
->>                   return -EFAULT;
->>           }
->>   +        rtnl_lock();
->>           lock_sock(sk);
->>   -        if (ro->bound && ro->ifindex)
->> +        if (ro->bound && ro->ifindex) {
->>               dev = dev_get_by_index(sock_net(sk), ro->ifindex);
->> +            if (!dev) {
+On Tue, Jul 06, 2021 at 12:14:21PM +0200, Marc Kleine-Budde wrote:
+> On 06.07.2021 13:10:59, Andy Shevchenko wrote:
+> > On Mon, May 31, 2021 at 01:09:41PM +0300, Andy Shevchenko wrote:
+> > > On Mon, May 31, 2021 at 10:44:43AM +0200, Marc Kleine-Budde wrote:
+> > > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > > 
+> > > > In some configurations, mainly ACPI-based, the clock frequency of the
+> > > > device is supplied by very well established 'clock-frequency'
+> > > > property. Hence, try to get it from the property at last if no other
+> > > > providers are available.
+> > 
+> > Is this series missed merge window?
+> > I never saw it in Linux Next and nor in vanilla...
 > 
-> 
->> +                if (count > 1)
->> +                    kfree(filter);
-> 
-> This was NOT suggested!
-> 
-> I've been talking about removing the other kfree() "improvement" you suggested.
-> 
-> The kfree() should only be done when ro->bound and ro->ifindex are cleared.
-> 
-> So when you remove these two lines it should be ok.
-> 
-> Please try to increase the context in the diff.
-> 
-> Thanks,
-> Oliver
+> Yes, I missed the merge window. Will send a pull request after -rc1
+> (when net-next is open again).
 
-Sorry, I am a little confused.
+Still no sign of them anywhere. Please, proceed with them!
 
-The following codes are the latest raw_setsockopt function realization(ignore some non-key parts)
-with my patch. Now we assume the condition that count more than 1, ro->bound and ro->ifindex
-are not zero, dev_get_by_index() will return NULL. We analyze the code logic.
-
-static int raw_setsockopt(struct socket *sock, int level, int optname,
-                          sockptr_t optval, unsigned int optlen)
-{
-        ......
-	struct can_filter *filter = NULL;
-	......
-
-        switch (optname) {
-        case CAN_RAW_FILTER:
-                ......
-
-                if (count > 1) {
-                        /* filter does not fit into dfilter => alloc space */
-                        filter = memdup_sockptr(optval, optlen); // filter point to a heap memory
-                        if (IS_ERR(filter))
-                                return PTR_ERR(filter);
-                } else if (count == 1) {
-                        ......
-                }
-
-                rtnl_lock();
-                lock_sock(sk);
-
-                if (ro->bound && ro->ifindex) {
-                        dev = dev_get_by_index(sock_net(sk), ro->ifindex);
-
-			/*
-			 * dev == NULL is exception. The function will exit abnormally.
-			 * Memory pointed by filer does not forward to anyone for maintenance.
-			 * If we do not kfree(filter) here, memory will be leaked after function exit.
-			 */
-                        if (!dev) {
-                                if (count > 1)
-                                        kfree(filter);
-                                err = -ENODEV;
-                                goto out_fil;
-                        }
-                }
-
-                if (ro->bound) {
-                        /* (try to) register the new filters */
-                        if (count == 1)
-                                err = raw_enable_filters(sock_net(sk), dev, sk,
-                                                         &sfilter, 1);
-                        else
-                                err = raw_enable_filters(sock_net(sk), dev, sk,
-                                                         filter, count);
-                        if (err) {
-                                if (count > 1)
-                                        kfree(filter);
-                               goto out_fil;
-                        }
-
-                        /* remove old filter registrations */
-                        raw_disable_filters(sock_net(sk), dev, sk, ro->filter,
-                                            ro->count);
-                }
-
-                /* remove old filter space */
-                if (ro->count > 1)
-                        kfree(ro->filter);
-
-                /* link new filters to the socket */
-                if (count == 1) {
-                        /* copy filter data for single filter */
-                        ro->dfilter = sfilter;
-                        filter = &ro->dfilter;
-                }
-                ro->filter = filter;
-                ro->count  = count;
-
- out_fil:
-                if (dev)
-                        dev_put(dev);
-
-                release_sock(sk);
-                rtnl_unlock();
-
-                break;
-	......
-
-	return err;
-}
-
-So I think my modification is right. Thank you.
-
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
