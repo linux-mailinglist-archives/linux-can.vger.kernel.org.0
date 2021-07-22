@@ -2,114 +2,148 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A5A3D175D
-	for <lists+linux-can@lfdr.de>; Wed, 21 Jul 2021 22:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D605E3D1EA2
+	for <lists+linux-can@lfdr.de>; Thu, 22 Jul 2021 09:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbhGUTKL (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 21 Jul 2021 15:10:11 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:5615 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S239624AbhGUTKJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 21 Jul 2021 15:10:09 -0400
-X-IronPort-AV: E=Sophos;i="5.84,258,1620658800"; 
-   d="scan'208";a="88350330"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 22 Jul 2021 04:50:44 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 837D8400D4D6;
-        Thu, 22 Jul 2021 04:50:41 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 3/3] arm64: dts: renesas: r9a07g044: Add CANFD node
-Date:   Wed, 21 Jul 2021 20:49:51 +0100
-Message-Id: <20210721194951.30983-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210721194951.30983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20210721194951.30983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S229998AbhGVG0d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 22 Jul 2021 02:26:33 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:12236 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229715AbhGVG0d (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 22 Jul 2021 02:26:33 -0400
+Received: from dggeml757-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4GVjzL3QrGz1CMCH;
+        Thu, 22 Jul 2021 15:01:18 +0800 (CST)
+Received: from [10.174.179.200] (10.174.179.200) by
+ dggeml757-chm.china.huawei.com (10.1.199.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Thu, 22 Jul 2021 15:06:40 +0800
+Subject: Re: [PATCH net] can: raw: fix raw_rcv panic for sock UAF
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <mkl@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210721010937.670275-1-william.xuanziyang@huawei.com>
+ <YPeoQG19PSh3B3Dc@kroah.com>
+ <44c3e0e2-03c5-80e5-001c-03e7e9758bca@hartkopp.net>
+ <11822417-5931-b2d8-ae77-ec4a84b8b895@hartkopp.net>
+ <d5eb8e8d-bce9-cccd-a102-b60692c242f0@huawei.com>
+ <fc68ffdf-50f0-9cc7-6943-4b16b1447a9b@hartkopp.net>
+From:   "Ziyang Xuan (William)" <william.xuanziyang@huawei.com>
+Message-ID: <ea64e0db-0507-16bf-b040-900f17c65dd8@huawei.com>
+Date:   Thu, 22 Jul 2021 15:06:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <fc68ffdf-50f0-9cc7-6943-4b16b1447a9b@hartkopp.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.200]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggeml757-chm.china.huawei.com (10.1.199.137)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Add CANFD node to R9A07G044 (RZ/G2L) SoC DTSI.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-index 9a7489dc70d1..51655c09f1f8 100644
---- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-@@ -13,6 +13,13 @@
- 	#address-cells = <2>;
- 	#size-cells = <2>;
- 
-+	/* External CAN clock - to be overridden by boards that provide it */
-+	can_clk: can {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <0>;
-+	};
-+
- 	/* clock can be either from exclk or crystal oscillator (XIN/XOUT) */
- 	extal_clk: extal {
- 		compatible = "fixed-clock";
-@@ -89,6 +96,40 @@
- 			status = "disabled";
- 		};
- 
-+		canfd: can@10050000 {
-+			compatible = "renesas,r9a07g044-canfd", "renesas,rzg2l-canfd";
-+			reg = <0 0x10050000 0 0x8000>;
-+			interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 427 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 428 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 429 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "g_err", "g_recc",
-+					  "ch0_err", "ch0_rec", "ch0_trx",
-+					  "ch1_err", "ch1_rec", "ch1_trx";
-+			clocks = <&cpg CPG_MOD R9A07G044_CANFD_PCLK>,
-+				 <&cpg CPG_CORE R9A07G044_CLK_P0_DIV2>,
-+				 <&can_clk>;
-+			clock-names = "fck", "canfd", "can_clk";
-+			assigned-clocks = <&cpg CPG_CORE R9A07G044_CLK_P0_DIV2>;
-+			assigned-clock-rates = <50000000>;
-+			resets = <&cpg R9A07G044_CANFD_RSTP_N>,
-+				 <&cpg R9A07G044_CANFD_RSTC_N>;
-+			reset-names = "rstp_n", "rstc_n";
-+			power-domains = <&cpg>;
-+			status = "disabled";
-+
-+			channel0 {
-+				status = "disabled";
-+			};
-+			channel1 {
-+				status = "disabled";
-+			};
-+		};
-+
- 		i2c0: i2c@10058000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--- 
-2.17.1
+On 7/21/2021 11:13 PM, Oliver Hartkopp wrote:
+> 
+> 
+> On 21.07.21 13:37, Ziyang Xuan (William) wrote:
+>> On 7/21/2021 5:24 PM, Oliver Hartkopp wrote:
+> 
+>>>
+>>> Can you please resend the below patch as suggested by Greg KH and add my
+>>>
+>>> Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+>>>
+>>> as it also adds the dev_get_by_index() return check.
+>>>
+>>> diff --git a/net/can/raw.c b/net/can/raw.c
+>>> index ed4fcb7ab0c3..d3cbc32036c7 100644
+>>> --- a/net/can/raw.c
+>>> +++ b/net/can/raw.c
+>>> @@ -544,14 +544,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>>>           } else if (count == 1) {
+>>>               if (copy_from_sockptr(&sfilter, optval, sizeof(sfilter)))
+>>>                   return -EFAULT;
+>>>           }
+>>>
+>>> +        rtnl_lock();
+>>>           lock_sock(sk);
+>>>
+>>> -        if (ro->bound && ro->ifindex)
+>>> +        if (ro->bound && ro->ifindex) {
+>>>               dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+>>> +            if (!dev)
+>>> +                goto out_fil;
+>>> +        }
+>> At first, I also use this modification. After discussion with my partner, we found that
+>> it is impossible scenario if we use rtnl_lock to protect net_device object.
+>> We can see two sequences:
+>> 1. raw_setsockopt first get rtnl_lock, unregister_netdevice_many later.
+>> It can be simplified to add the filter in raw_setsockopt, then remove the filter in raw_notify.
+>>
+>> 2. unregister_netdevice_many first get rtnl_lock, raw_setsockopt later.
+>> raw_notify will set ro->ifindex, ro->bound and ro->count to zero firstly. The filter will not
+>> be added to any filter_list in raw_notify.
+>>
+>> So I selected the current modification. Do you think so?
+>>
+>> My first modification as following:
+>>
+>> diff --git a/net/can/raw.c b/net/can/raw.c
+>> index ed4fcb7ab0c3..a0ce4908317f 100644
+>> --- a/net/can/raw.c
+>> +++ b/net/can/raw.c
+>> @@ -546,10 +546,16 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>>                                  return -EFAULT;
+>>                  }
+>>
+>> +               rtnl_lock();
+>>                  lock_sock(sk);
+>>
+>> -               if (ro->bound && ro->ifindex)
+>> +               if (ro->bound && ro->ifindex) {
+>>                          dev = dev_get_by_index(sock_net(sk), ro->ifindex);
+>> +                       if (!dev) {
+>> +                               err = -ENODEV;
+>> +                               goto out_fil;
+>> +                       }
+>> +               }
+>>
+>>                  if (ro->bound) {
+>>                          /* (try to) register the new filters */
+>> @@ -559,11 +565,8 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>>                          else
+>>                                  err = raw_enable_filters(sock_net(sk), dev, sk,
+>>                                                           filter, count);
+>> -                       if (err) {
+>> -                               if (count > 1)
+>> -                                       kfree(filter);
+>> +                       if (err)
+>>                                  goto out_fil;
+>> -                       }
+>>
+>>                          /* remove old filter registrations */
+>>                          raw_disable_filters(sock_net(sk), dev, sk, ro->filter,
+>> @@ -584,10 +587,14 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
+>>                  ro->count  = count;
+>>
+>>    out_fil:
+>> +               if (err && count > 1)
+>> +                       kfree(filter);
+>> +
+> 
+> Setting the err variable to -ENODEV is a good idea but I do not like the movement of kfree(filter).
+> 
+> The kfree() has a tight relation inside the if-statement for ro->bound which makes it easier to understand.
+> 
+> Regards,
+> Oliver
 
+I will submit the v2 patch for the problem according to your suggestions. Than you.
