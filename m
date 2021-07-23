@@ -2,216 +2,163 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E313D355D
-	for <lists+linux-can@lfdr.de>; Fri, 23 Jul 2021 09:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A79F3D3CF7
+	for <lists+linux-can@lfdr.de>; Fri, 23 Jul 2021 17:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbhGWGxN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 23 Jul 2021 02:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbhGWGxN (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Jul 2021 02:53:13 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34895C061575;
-        Fri, 23 Jul 2021 00:33:46 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j2so1250234wrx.9;
-        Fri, 23 Jul 2021 00:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=VgC3vPpNT5La+R1XF1jyN9pqTr6GT5OZov/rHCOsaMQ=;
-        b=LzzDWdADRUkSbBay5xrPP+bpll1wxkfmRtcG0CBrtdw+DL+zg1Yi46ZIFfgFWOJhe/
-         j06xVhF+MfX+GHHIaR5KAf6EhfMnvXHvObTNiOUAVsPOAltQvzrdeHD9Ehua9DrkWcVP
-         s/V/rDzauqd/j3+ZJC527TXO2Nhj7zYbVO9yzhFb0BjTms5yb1/6f4Yy3coD/V5wwxDE
-         NNaEVQhH1MLGwzk+5qCLZo29ilPVGRabcp+FyyUuaK0RzwhKh3p8twblp3+XfFeTIu/U
-         yJYHwboPdQkr1lcR/t2yyo7dHhm0J3qVK16emB1TdlS4OJeA3DBVYX3e78qKgcIA4IUi
-         TM6g==
+        id S235736AbhGWPOw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 23 Jul 2021 11:14:52 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:53823 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235663AbhGWPOu (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Jul 2021 11:14:50 -0400
+Received: by mail-io1-f72.google.com with SMTP id w3-20020a0566020343b02905393057ad92so1930632iou.20
+        for <linux-can@vger.kernel.org>; Fri, 23 Jul 2021 08:55:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VgC3vPpNT5La+R1XF1jyN9pqTr6GT5OZov/rHCOsaMQ=;
-        b=XqLzdIMmTpFU7v8/CSpGUxtDXeFWLovJ450exd4LIgmVXJMsg9l9yLUNTv4C5pgSrt
-         o4Y6A35G55oQpq0Qu5p+Un11/tfbljXzFWuE7+pZF73lMJzvi39EZQyG2qaVHw0DjO+G
-         cWffoRB/syw3ICFWXkphINlmR1lCg6ITafFtxshNzT6EetZfRyqebzT9RtAxh2Tn/SCc
-         ytHqy7T2rcxkh9Vg8bJDT01y3F47m7yLx3QNQST97wJ73Sj/krjC25RLas5d2c6jOSQf
-         uOJk6zWQMUQPxbHrbLK2s7yURBqvEudB/rPwj+MJF5Xu0wHGCeOji11jzjGh3onBC4IO
-         1o7Q==
-X-Gm-Message-State: AOAM533Py5dB0HJebdhaKPe0oUElME2dN00Hpru3Oky1rgP8JlWKo9as
-        V4a3CLbSFjn5oV6iNdVghR5A/L2nGWq9sA==
-X-Google-Smtp-Source: ABdhPJykCwF5I969etjP8bi0AekEUMs/Y+Rps6uy3Npu3PwBQ8byqJ5w7l2ggmdg8oNLePEi1rvN9Q==
-X-Received: by 2002:adf:ed08:: with SMTP id a8mr3612303wro.375.1627025624839;
-        Fri, 23 Jul 2021 00:33:44 -0700 (PDT)
-Received: from ?IPv6:2a02:810d:d40:2317:2ef0:5dff:fe0a:a2d5? ([2a02:810d:d40:2317:2ef0:5dff:fe0a:a2d5])
-        by smtp.gmail.com with ESMTPSA id n23sm26882957wmc.38.2021.07.23.00.33.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jul 2021 00:33:44 -0700 (PDT)
-Subject: Re: [PATCH v2] Expose Peak USB device id in sysfs via phys_port_name.
-To:     =?UTF-8?Q?St=c3=a9phane_Grosjean?= <s.grosjean@peak-system.com>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20210721124048.590426-1-nautsch2@gmail.com>
- <20210721125926.593283-1-nautsch2@gmail.com>
- <PA4PR03MB67973D473C7CE600A6104EE8D6E39@PA4PR03MB6797.eurprd03.prod.outlook.com>
- <fe8998f2-7897-735c-926f-6b6b74018784@gmail.com>
- <DBBPR03MB67952FE719401869BC8F1A77D6E59@DBBPR03MB6795.eurprd03.prod.outlook.com>
-From:   Andre Naujoks <nautsch2@gmail.com>
-Message-ID: <e3c8a6c1-a108-0a11-aaf7-f17e1851f6d7@gmail.com>
-Date:   Fri, 23 Jul 2021 09:33:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=jrEVoI183Kmw64l8qy1wZKHXIRYmyIqbXtBbkwNlUZY=;
+        b=IU5zemoCRdZ70iryrDsl5hNObTZ/Lk8/OO7U6L5dQXPHBhEBxI0hV0nx/XLbeSFyua
+         r2Nb+rPmIGtesUOaWDhd3h65ysNbm57MX1IT5rfT4xFxC26bWEZiIXrZBwPg4XqLAqVV
+         +xLOryfDAmKaHDJxg5xshgt4+zweuTcst47RgsYqD7+Dqw63Wb5/GR7+Gp1VTXlMQ5kW
+         m1QaSXEWYX1rwrfwF9Pw+WwaIctagD5wRbvwrhOmIiAC8sSEzDyKkHuzo3qMaJOtWvfu
+         TmlAPYwfTiUZv3YPsFMIh601norAkuBeY49toZfnHmoK0VDuOr06bZktcYE0Cd2l8Nef
+         OJzg==
+X-Gm-Message-State: AOAM533pEDwJ+Lseyb+RzM2SjU1tK3u64O8gjp9r6i1wtyK8rhHyaipk
+        MqniHFTNZaLrwhL5W9dkDKw1n/0r6FEqvS9PBjifQgZIf2bu
+X-Google-Smtp-Source: ABdhPJymrKiMmzSlvulLG5/vb/egL5Os45wshW6Wj0yEXXxrLSIF25GxB2eY1uphmCT3VKL5XqftjR/PRS8uLkhbrBIE4xyG1JRq
 MIME-Version: 1.0
-In-Reply-To: <DBBPR03MB67952FE719401869BC8F1A77D6E59@DBBPR03MB6795.eurprd03.prod.outlook.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5e:8619:: with SMTP id z25mr4488495ioj.13.1627055723368;
+ Fri, 23 Jul 2021 08:55:23 -0700 (PDT)
+Date:   Fri, 23 Jul 2021 08:55:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006bd5e505c7cc6ec3@google.com>
+Subject: [syzbot] memory leak in can_create
+From:   syzbot <syzbot+ba3c733fb22a7be2ce04@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, socketcan@hartkopp.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Am 23.07.21 um 09:24 schrieb Stéphane Grosjean:
-> Hi,
-> 
-> We plan to send the patches during the next month.
+Hello,
 
-Thank you for the info! Sounds great. I'm looking forward to it.
+syzbot found the following issue on:
 
-Best Regards
-   Andre
+HEAD commit:    2734d6c1b1a0 Linux 5.14-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=121ee3f2300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7384ed231a0fd986
+dashboard link: https://syzkaller.appspot.com/bug?extid=ba3c733fb22a7be2ce04
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1200c812300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1608525a300000
 
-> 
-> Regards,
-> 
-> — Stéphane
-> 
-> 
-> ------------------------------------------------------------------------
-> *De :* Andre Naujoks <nautsch2@gmail.com>
-> *Envoyé :* mercredi 21 juillet 2021 15:39
-> *À :* Stéphane Grosjean <s.grosjean@peak-system.com>; Wolfgang 
-> Grandegger <wg@grandegger.com>; Marc Kleine-Budde <mkl@pengutronix.de>; 
-> David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; 
-> Vincent Mailhol <mailhol.vincent@wanadoo.fr>; Gustavo A. R. Silva 
-> <gustavoars@kernel.org>; Pavel Skripkin <paskripkin@gmail.com>; Colin 
-> Ian King <colin.king@canonical.com>; linux-can@vger.kernel.org 
-> <linux-can@vger.kernel.org>; netdev@vger.kernel.org 
-> <netdev@vger.kernel.org>; linux-kernel@vger.kernel.org 
-> <linux-kernel@vger.kernel.org>
-> *Objet :* Re: [PATCH v2] Expose Peak USB device id in sysfs via 
-> phys_port_name.
-> Am 21.07.21 um 15:29 schrieb Stéphane Grosjean:
->> Hi,
->> 
->> The display and the possibility to change this "device_number" is a current modification of the peak_usb driver. This modification will offer this possibility for all CAN - USB interfaces of PEAK-System.
-> 
-> Hi.
-> 
-> By "current modification" you mean something not yet public? Do you have
-> a time frame for when you are planning to make it public? I'd really
-> like to use this :-)
-> 
->> 
->> However, it is planned to create new R/W entries for this (under /sys/class/net/canX/...) as is already the case in other USB - CAN interface drivers.
-> 
-> I'd be fine with that. I just chose something, that was already
-> available and looked as if it made the most sense without breaking anything.
-> 
-> Thanks for the reply!
->     Andre
-> 
->> 
->> — Stéphane
->> 
->> 
->> De : Andre Naujoks <nautsch2@gmail.com>
->> Envoyé : mercredi 21 juillet 2021 14:59
->> À : Wolfgang Grandegger <wg@grandegger.com>; Marc Kleine-Budde <mkl@pengutronix.de>; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kernel.org>; Stéphane Grosjean <s.grosjean@peak-system.com>; Vincent Mailhol <mailhol.vincent@wanadoo.fr>; Gustavo  A. R. Silva <gustavoars@kernel.org>; Pavel Skripkin 
-> <paskripkin@gmail.com>; Colin Ian King <colin.king@canonical.com>; Andre 
-> Naujoks <nautsch2@gmail.com>; linux-can@vger.kernel.org 
-> <linux-can@vger.kernel.org>; netdev@vger.kernel.org 
-> <netdev@vger.kernel.org>; linux-kernel@vger.kernel.org 
-> <linux-kernel@vger.kernel.org>
->> Objet : [PATCH v2] Expose Peak USB device id in sysfs via phys_port_name.
->> 
->> The Peak USB CAN adapters can be assigned a device id via the Peak
->> provided tools (pcan-settings). This id can currently not be set by the
->> upstream kernel drivers, but some devices expose this id already.
->> 
->> The id can be used for consistent naming of CAN interfaces regardless of
->> order of attachment or recognition on the system. The classical CAN Peak
->> USB adapters expose this id via bcdDevice (combined with another value)
->> on USB-level in the sysfs tree and this value is then available in
->> ID_REVISION from udev. This is not a feasible approach, when a single
->> USB device offers more than one CAN-interface, like e.g. the PCAN-USB
->> Pro FD devices.
->> 
->> This patch exposes those ids via the, up to now unused, netdevice sysfs
->> attribute phys_port_name as a simple decimal ASCII representation of the
->> id. phys_port_id was not used, since the default print functions from
->> net/core/net-sysfs.c output a hex-encoded binary value, which is
->> overkill for a one-byte device id, like this one.
->> 
->> Signed-off-by: Andre Naujoks <nautsch2@gmail.com>
->> ---
->>   drivers/net/can/usb/peak_usb/pcan_usb_core.c | 16 ++++++++++++++++
->>   1 file changed, 16 insertions(+)
->> 
->> diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
->> index e8f43ed90b72..f6cbb01a58cc 100644
->> --- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
->> +++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
->> @@ -408,6 +408,21 @@ static netdev_tx_t peak_usb_ndo_start_xmit(struct sk_buff *skb,
->>           return NETDEV_TX_OK;
->>   }
->> 
->> +static int peak_usb_ndo_get_phys_port_name(struct net_device *netdev,
->> +                                          char *name, size_t len)
->> +{
->> +       const struct peak_usb_device *dev = netdev_priv(netdev);
->> +       int err;
->> +
->> +       err = snprintf(name, len, "%u", dev->device_number);
->> +
->> +       if (err >= len || err <= 0) {
->> +               return -EINVAL;
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->>   /*
->>    * start the CAN interface.
->>    * Rx and Tx urbs are allocated here. Rx urbs are submitted here.
->> @@ -769,6 +784,7 @@ static const struct net_device_ops peak_usb_netdev_ops = {
->>           .ndo_stop = peak_usb_ndo_stop,
->>           .ndo_start_xmit = peak_usb_ndo_start_xmit,
->>           .ndo_change_mtu = can_change_mtu,
->> +       .ndo_get_phys_port_name = peak_usb_ndo_get_phys_port_name,
->>   };
->> 
->>   /*
->> --
->> 2.32.0
->> 
->> --
->> PEAK-System Technik GmbH
->> Sitz der Gesellschaft Darmstadt - HRB 9183
->> Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
->> Unsere Datenschutzerklaerung mit wichtigen Hinweisen
->> zur Behandlung personenbezogener Daten finden Sie unter
->> www.peak-system.com/Datenschutz.483.0.html 
-> <http://www.peak-system.com/Datenschutz.483.0.html>
->> 
-> 
-> 
-> --
-> PEAK-System Technik GmbH
-> Sitz der Gesellschaft Darmstadt - HRB 9183
-> Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
-> Unsere Datenschutzerklaerung mit wichtigen Hinweisen
-> zur Behandlung personenbezogener Daten finden Sie unter
-> www.peak-system.com/Datenschutz.483.0.html
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ba3c733fb22a7be2ce04@syzkaller.appspotmail.com
 
+executing program
+BUG: memory leak
+unreferenced object 0xffff8881140ffc00 (size 1024):
+  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    1d 00 07 41 00 00 00 00 00 00 00 00 00 00 00 00  ...A............
+  backtrace:
+    [<ffffffff836d5d92>] kmalloc include/linux/slab.h:596 [inline]
+    [<ffffffff836d5d92>] sk_prot_alloc+0xd2/0x1b0 net/core/sock.c:1808
+    [<ffffffff836da5a0>] sk_alloc+0x30/0x3f0 net/core/sock.c:1861
+    [<ffffffff83c8fd18>] can_create+0x108/0x300 net/can/af_can.c:158
+    [<ffffffff836ce96b>] __sock_create+0x1ab/0x2b0 net/socket.c:1450
+    [<ffffffff836d198f>] sock_create net/socket.c:1501 [inline]
+    [<ffffffff836d198f>] __sys_socket+0x6f/0x140 net/socket.c:1543
+    [<ffffffff836d1a7a>] __do_sys_socket net/socket.c:1552 [inline]
+    [<ffffffff836d1a7a>] __se_sys_socket net/socket.c:1550 [inline]
+    [<ffffffff836d1a7a>] __x64_sys_socket+0x1a/0x20 net/socket.c:1550
+    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+BUG: memory leak
+unreferenced object 0xffff8881170d2340 (size 32):
+  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
+  hex dump (first 32 bytes):
+    b0 02 05 40 81 88 ff ff 00 00 00 00 00 00 00 00  ...@............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff82167ee3>] kmalloc include/linux/slab.h:591 [inline]
+    [<ffffffff82167ee3>] kzalloc include/linux/slab.h:721 [inline]
+    [<ffffffff82167ee3>] apparmor_sk_alloc_security+0x53/0xd0 security/apparmor/lsm.c:785
+    [<ffffffff8212d441>] security_sk_alloc+0x31/0x70 security/security.c:2261
+    [<ffffffff836d5dad>] sk_prot_alloc+0xed/0x1b0 net/core/sock.c:1811
+    [<ffffffff836da5a0>] sk_alloc+0x30/0x3f0 net/core/sock.c:1861
+    [<ffffffff83c8fd18>] can_create+0x108/0x300 net/can/af_can.c:158
+    [<ffffffff836ce96b>] __sock_create+0x1ab/0x2b0 net/socket.c:1450
+    [<ffffffff836d198f>] sock_create net/socket.c:1501 [inline]
+    [<ffffffff836d198f>] __sys_socket+0x6f/0x140 net/socket.c:1543
+    [<ffffffff836d1a7a>] __do_sys_socket net/socket.c:1552 [inline]
+    [<ffffffff836d1a7a>] __se_sys_socket net/socket.c:1550 [inline]
+    [<ffffffff836d1a7a>] __x64_sys_socket+0x1a/0x20 net/socket.c:1550
+    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+BUG: memory leak
+unreferenced object 0xffff88811344a100 (size 232):
+  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 2c 10 81 88 ff ff 00 fc 0f 14 81 88 ff ff  ..,.............
+  backtrace:
+    [<ffffffff836e0ebf>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:414
+    [<ffffffff836eb6fa>] alloc_skb include/linux/skbuff.h:1112 [inline]
+    [<ffffffff836eb6fa>] alloc_skb_with_frags+0x6a/0x2b0 net/core/skbuff.c:6005
+    [<ffffffff836d8fe3>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2461
+    [<ffffffff83c9ee2f>] j1939_sk_alloc_skb net/can/j1939/socket.c:861 [inline]
+    [<ffffffff83c9ee2f>] j1939_sk_send_loop net/can/j1939/socket.c:1043 [inline]
+    [<ffffffff83c9ee2f>] j1939_sk_sendmsg+0x2cf/0x800 net/can/j1939/socket.c:1178
+    [<ffffffff836cfb86>] sock_sendmsg_nosec net/socket.c:703 [inline]
+    [<ffffffff836cfb86>] sock_sendmsg+0x56/0x80 net/socket.c:723
+    [<ffffffff836d00ec>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2392
+    [<ffffffff836d413b>] ___sys_sendmsg+0x8b/0xd0 net/socket.c:2446
+    [<ffffffff836d4238>] __sys_sendmsg+0x88/0x100 net/socket.c:2475
+    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+BUG: memory leak
+unreferenced object 0xffff88811344aa00 (size 232):
+  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 2c 10 81 88 ff ff 00 fc 0f 14 81 88 ff ff  ..,.............
+  backtrace:
+    [<ffffffff836e0ebf>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:414
+    [<ffffffff836eb6fa>] alloc_skb include/linux/skbuff.h:1112 [inline]
+    [<ffffffff836eb6fa>] alloc_skb_with_frags+0x6a/0x2b0 net/core/skbuff.c:6005
+    [<ffffffff836d8fe3>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2461
+    [<ffffffff83c9ee2f>] j1939_sk_alloc_skb net/can/j1939/socket.c:861 [inline]
+    [<ffffffff83c9ee2f>] j1939_sk_send_loop net/can/j1939/socket.c:1043 [inline]
+    [<ffffffff83c9ee2f>] j1939_sk_sendmsg+0x2cf/0x800 net/can/j1939/socket.c:1178
+    [<ffffffff836cfb86>] sock_sendmsg_nosec net/socket.c:703 [inline]
+    [<ffffffff836cfb86>] sock_sendmsg+0x56/0x80 net/socket.c:723
+    [<ffffffff836d00ec>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2392
+    [<ffffffff836d413b>] ___sys_sendmsg+0x8b/0xd0 net/socket.c:2446
+    [<ffffffff836d4238>] __sys_sendmsg+0x88/0x100 net/socket.c:2475
+    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
