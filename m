@@ -2,44 +2,43 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D413D4872
-	for <lists+linux-can@lfdr.de>; Sat, 24 Jul 2021 17:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110363D48C4
+	for <lists+linux-can@lfdr.de>; Sat, 24 Jul 2021 19:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbhGXPLK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 24 Jul 2021 11:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        id S230151AbhGXQjd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 24 Jul 2021 12:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhGXPLJ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 24 Jul 2021 11:11:09 -0400
+        with ESMTP id S229909AbhGXQj2 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 24 Jul 2021 12:39:28 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ED2C061575
-        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 08:51:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCD8C061575
+        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 10:19:59 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1m7Jw7-0003Ng-LY
-        for linux-can@vger.kernel.org; Sat, 24 Jul 2021 17:51:35 +0200
+        id 1m7LJe-0002P5-0Q
+        for linux-can@vger.kernel.org; Sat, 24 Jul 2021 19:19:58 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id B2C5A65695A
-        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 15:51:34 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 23B8D6569BE
+        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 17:19:55 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4AA93656956;
-        Sat, 24 Jul 2021 15:51:34 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id B7D256569AC;
+        Sat, 24 Jul 2021 17:19:53 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d9ea2ddf;
-        Sat, 24 Jul 2021 15:51:33 +0000 (UTC)
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id da0a1bc2;
+        Sat, 24 Jul 2021 17:19:52 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Thomas Kopp <thomas.kopp@microchip.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH] can: mcp251xfd: mcp251xfd_irq(): stop timestamping worker in case error in IRQ
-Date:   Sat, 24 Jul 2021 17:51:31 +0200
-Message-Id: <20210724155131.471303-1-mkl@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2021-07-24
+Date:   Sat, 24 Jul 2021 19:19:41 +0200
+Message-Id: <20210724171947.547867-1-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -51,34 +50,72 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-In case an error occurred in the IRQ handler, the chip status is
-dumped via devcoredump and all IRQs are disabled, but the chip stays
-powered for further analysis.
+Hello Jakub, hello David,
 
-The chip is in an undefined state and will not receive any CAN frames,
-so shut down the timestamping worker, which reads the TBC register
-regularly, too. This avoids any CRC read error messages if there is a
-communication problem with the chip.
+this is a pull request of 6 patches for net/master.
 
-Fixes: efd8d98dfb90 ("can: mcp251xfd: add HW timestamp infrastructure")
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+The first patch is by Joakim Zhang targets the imx8mp device tree. It
+removes the imx6 fallback from the flexcan binding, as the imx6 is not
+compatible with the imx8mp.
+
+Ziyang Xuan contributes a patch to fix a use-after-free in the CAN
+raw's raw_setsockopt().
+
+The next two patches target the CAN J1939 protocol. The first one is
+by Oleksij Rempel and clarifies the lifetime of session object in
+j1939_session_deactivate(). Zhang Changzhong's patch fixes the timeout
+value between consecutive TP.DT.
+
+Stephane Grosjean contributes a patch for the peak_usb driver to fix
+reading of the rxerr/txerr values.
+
+The last patch is by me for the mcp251xfd driver. It stops the
+timestamp worker in case of a fatal error in the IRQ handler.
+
+regards,
+Marc
+
 ---
- drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-index 47c3f408a799..9ae48072b6c6 100644
---- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-+++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
-@@ -2300,6 +2300,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
- 		   err, priv->regs_status.intf);
- 	mcp251xfd_dump(priv);
- 	mcp251xfd_chip_interrupts_disable(priv);
-+	mcp251xfd_timestamp_stop(priv);
- 
- 	return handled;
- }
--- 
-2.30.2
+The following changes since commit 5aa1959d18003472cc741dc490c3335c5bd804e2:
+
+  Merge branch 'ionic-fixes' (2021-07-23 21:57:52 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.14-20210724
+
+for you to fetch changes up to ef68a717960658e6a1e5f08adb0574326e9a12c2:
+
+  can: mcp251xfd: mcp251xfd_irq(): stop timestamping worker in case error in IRQ (2021-07-24 19:02:32 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.14-20210724
+
+----------------------------------------------------------------
+Joakim Zhang (1):
+      arm64: dts: imx8mp: remove fallback compatible string for FlexCAN
+
+Marc Kleine-Budde (1):
+      can: mcp251xfd: mcp251xfd_irq(): stop timestamping worker in case error in IRQ
+
+Oleksij Rempel (1):
+      can: j1939: j1939_session_deactivate(): clarify lifetime of session object
+
+Stephane Grosjean (1):
+      can: peak_usb: pcan_usb_handle_bus_evt(): fix reading rxerr/txerr values
+
+Zhang Changzhong (1):
+      can: j1939: j1939_xtp_rx_dat_one(): fix rxtimer value between consecutive TP.DT to 750ms
+
+Ziyang Xuan (1):
+      can: raw: raw_setsockopt(): fix raw_rcv panic for sock UAF
+
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi      |  4 ++--
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c |  1 +
+ drivers/net/can/usb/peak_usb/pcan_usb.c        | 10 ++++++----
+ net/can/j1939/transport.c                      | 11 ++++++++---
+ net/can/raw.c                                  | 20 ++++++++++++++++++--
+ 5 files changed, 35 insertions(+), 11 deletions(-)
 
 
