@@ -2,238 +2,78 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 854E73D48F8
-	for <lists+linux-can@lfdr.de>; Sat, 24 Jul 2021 19:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C553D4935
+	for <lists+linux-can@lfdr.de>; Sat, 24 Jul 2021 20:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbhGXRQX (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sat, 24 Jul 2021 13:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbhGXRQX (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sat, 24 Jul 2021 13:16:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E21DC061575
-        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 10:56:55 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m7LtC-0006BX-5X; Sat, 24 Jul 2021 19:56:42 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:41cc:c65c:f580:3bde])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 1B18D657090;
-        Sat, 24 Jul 2021 17:56:39 +0000 (UTC)
-Date:   Sat, 24 Jul 2021 19:56:37 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: Re: [PATCH v4 2/2] can: m_can: Add support for transceiver as phy
-Message-ID: <20210724175637.vcslc2iewcdqnvev@pengutronix.de>
-References: <20210510052541.14168-1-a-govindraju@ti.com>
- <20210510052541.14168-3-a-govindraju@ti.com>
+        id S229609AbhGXR7d (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 24 Jul 2021 13:59:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40178 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229530AbhGXR7d (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Sat, 24 Jul 2021 13:59:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1449D60BD3;
+        Sat, 24 Jul 2021 18:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627152005;
+        bh=iTtYTtRzmi24IbC0gYwXZ5XtX4dfA8c930yrnjPsVDM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oxp40UpTzYgOvj4cTO6J1WGd1HT05DSb0odkgroh2mUesigJXsQGmbvvwdOp4Rlw6
+         rC1gIi9JO6go6eeyp7rjSS1H3x6MQDaldlLU3uOSH2l251P+8kb6n4h0wHNto3M9W9
+         FUB+60og4WlKyCchu54qpqWbCaWWxjHE3GuIwe18QFslMUvl7k/VsghLCX2N2VfJRz
+         Sr9x5fHNXdnG+TjqBe+PVjeccujabv9MPrnQ3HBO6eYCC92/e7YX1eagcwued8hlw9
+         PpTXLJJR+pbGEO7azt9pIJkhgF2ibeUFICSSnKdenVNf1/dpphjgNhTk08LWkRoLgb
+         KCXh4IoGBVgcQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 084CB60A0C;
+        Sat, 24 Jul 2021 18:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aozsztylvh5w2ifj"
-Content-Disposition: inline
-In-Reply-To: <20210510052541.14168-3-a-govindraju@ti.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Subject: Re: pull-request: can 2021-07-24
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162715200502.23954.17648964928279230319.git-patchwork-notify@kernel.org>
+Date:   Sat, 24 Jul 2021 18:40:05 +0000
+References: <20210724171947.547867-1-mkl@pengutronix.de>
+In-Reply-To: <20210724171947.547867-1-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello:
 
---aozsztylvh5w2ifj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This pull request was applied to netdev/net.git (refs/heads/master):
 
-On 10.05.2021 10:55:41, Aswath Govindraju wrote:
-> From: Faiz Abbas <faiz_abbas@ti.com>
->=20
-> Add support for implementing transceiver node as phy. The max_bitrate is
-> obtained by getting a phy attribute.
->=20
-> Signed-off-by: Faiz Abbas <faiz_abbas@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  drivers/net/can/m_can/m_can.c          | 11 +++++++++++
->  drivers/net/can/m_can/m_can.h          |  2 ++
->  drivers/net/can/m_can/m_can_platform.c | 13 +++++++++++++
->  3 files changed, 26 insertions(+)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 3cf6de21d19c..afbecc35d3b6 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -21,6 +21,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/can/dev.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/phy/phy.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -1514,6 +1515,7 @@ static void m_can_stop(struct net_device *dev)
->  static int m_can_close(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> +	int err;
-> =20
->  	netif_stop_queue(dev);
-> =20
-> @@ -1536,6 +1538,10 @@ static int m_can_close(struct net_device *dev)
->  	close_candev(dev);
->  	can_led_event(dev, CAN_LED_EVENT_STOP);
-> =20
-> +	err =3D phy_power_off(cdev->transceiver);
-> +	if (err)
-> +		return err;
+On Sat, 24 Jul 2021 19:19:41 +0200 you wrote:
+> Hello Jakub, hello David,
+> 
+> this is a pull request of 6 patches for net/master.
+> 
+> The first patch is by Joakim Zhang targets the imx8mp device tree. It
+> removes the imx6 fallback from the flexcan binding, as the imx6 is not
+> compatible with the imx8mp.
+> 
+> [...]
 
-No need to propagate errors in the close().
+Here is the summary with links:
+  - pull-request: can 2021-07-24
+    https://git.kernel.org/netdev/net/c/e394f1e3b139
+  - [net,2/6] can: raw: raw_setsockopt(): fix raw_rcv panic for sock UAF
+    https://git.kernel.org/netdev/net/c/54f93336d000
+  - [net,3/6] can: j1939: j1939_session_deactivate(): clarify lifetime of session object
+    https://git.kernel.org/netdev/net/c/0c71437dd50d
+  - [net,4/6] can: j1939: j1939_xtp_rx_dat_one(): fix rxtimer value between consecutive TP.DT to 750ms
+    https://git.kernel.org/netdev/net/c/c6eea1c8bda5
+  - [net,5/6] can: peak_usb: pcan_usb_handle_bus_evt(): fix reading rxerr/txerr values
+    https://git.kernel.org/netdev/net/c/590eb2b7d8cf
+  - [net,6/6] can: mcp251xfd: mcp251xfd_irq(): stop timestamping worker in case error in IRQ
+    https://git.kernel.org/netdev/net/c/ef68a7179606
 
-> +
->  	return 0;
->  }
-> =20
-> @@ -1721,6 +1727,10 @@ static int m_can_open(struct net_device *dev)
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
->  	int err;
-> =20
-> +	err =3D phy_power_on(cdev->transceiver);
-> +	if (err)
-> +		return err;
-> +
->  	err =3D m_can_clk_start(cdev);
->  	if (err)
->  		return err;
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Here, don't handle the error properly.
 
-> @@ -1781,6 +1791,7 @@ static int m_can_open(struct net_device *dev)
->  	close_candev(dev);
->  exit_disable_clks:
->  	m_can_clk_stop(cdev);
-> +	phy_power_off(cdev->transceiver);
->  	return err;
->  }
-> =20
-> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-> index ace071c3e58c..38cad068abad 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -28,6 +28,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/can/dev.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/phy/phy.h>
-> =20
->  /* m_can lec values */
->  enum m_can_lec_type {
-> @@ -82,6 +83,7 @@ struct m_can_classdev {
->  	struct workqueue_struct *tx_wq;
->  	struct work_struct tx_work;
->  	struct sk_buff *tx_skb;
-> +	struct phy *transceiver;
-> =20
->  	struct can_bittiming_const *bit_timing;
->  	struct can_bittiming_const *data_timing;
-> diff --git a/drivers/net/can/m_can/m_can_platform.c b/drivers/net/can/m_c=
-an/m_can_platform.c
-> index 599de0e08cd7..f102d532b7f0 100644
-> --- a/drivers/net/can/m_can/m_can_platform.c
-> +++ b/drivers/net/can/m_can/m_can_platform.c
-> @@ -6,6 +6,7 @@
->  // Copyright (C) 2018-19 Texas Instruments Incorporated - http://www.ti.=
-com/
-> =20
->  #include <linux/platform_device.h>
-> +#include <linux/phy/phy.h>
-> =20
->  #include "m_can.h"
-> =20
-> @@ -67,6 +68,7 @@ static int m_can_plat_probe(struct platform_device *pde=
-v)
->  	struct resource *res;
->  	void __iomem *addr;
->  	void __iomem *mram_addr;
-> +	struct phy *transceiver;
->  	int irq, ret =3D 0;
-> =20
->  	mcan_class =3D m_can_class_allocate_dev(&pdev->dev,
-> @@ -101,6 +103,16 @@ static int m_can_plat_probe(struct platform_device *=
-pdev)
->  		goto probe_fail;
->  	}
-> =20
-> +	transceiver =3D devm_phy_optional_get(&pdev->dev, NULL);
-> +	if (IS_ERR(transceiver)) {
-> +		ret =3D PTR_ERR(transceiver);
-> +		dev_err_probe(&pdev->dev, ret, "failed to get phy\n");
-> +		return ret;
-
-Here you leak the memory allocated by m_can_class_allocate_dev().
-
-> +	}
-> +
-> +	if (transceiver)
-> +		mcan_class->can.bitrate_max =3D transceiver->attrs.max_link_rate;
-> +
->  	priv->base =3D addr;
->  	priv->mram_base =3D mram_addr;
-> =20
-> @@ -108,6 +120,7 @@ static int m_can_plat_probe(struct platform_device *p=
-dev)
->  	mcan_class->pm_clock_support =3D 1;
->  	mcan_class->can.clock.freq =3D clk_get_rate(mcan_class->cclk);
->  	mcan_class->dev =3D &pdev->dev;
-> +	mcan_class->transceiver =3D transceiver;
-> =20
->  	mcan_class->ops =3D &m_can_plat_ops;
-> =20
-> --=20
-> 2.17.1
->=20
->
-
-I've send a v5 fixing these problems.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---aozsztylvh5w2ifj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmD8VFMACgkQqclaivrt
-76lU3Af6A5JrBDeFGF/y9LtAa9s/HuuJtW5am23+tonZTKV2LwpFZlxSR18/e9of
-ZpdHaLJf+XBo33FxQKc32zvHg+4u+d2qgfkrAJrqaSadRx0V3nwm08Ab/QBc4LPM
-gO99CqSvRUGZkmhiFMQ51u5WQHQ1VDS4UszqAcyuyZ7JIlwUE2/tzDU0/Ovmu6kO
-yuRIOHZuhEO8bHP26u1/4iZOpOhRfC9xg70/HeXZvwGQmLXLLZzXQJVY1+mPEjkn
-us6tglOHQO/SWugT8xwSxGydys3NN92aB+xxsmsd97det544z0wEjjS4d6gJYSaN
-/psJgaQEDFCttcrHRUMT4XfxylnhxA==
-=uHbx
------END PGP SIGNATURE-----
-
---aozsztylvh5w2ifj--
