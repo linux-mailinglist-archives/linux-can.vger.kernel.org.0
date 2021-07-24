@@ -2,163 +2,83 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A79F3D3CF7
-	for <lists+linux-can@lfdr.de>; Fri, 23 Jul 2021 17:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D413D4872
+	for <lists+linux-can@lfdr.de>; Sat, 24 Jul 2021 17:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235736AbhGWPOw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 23 Jul 2021 11:14:52 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:53823 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235663AbhGWPOu (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 23 Jul 2021 11:14:50 -0400
-Received: by mail-io1-f72.google.com with SMTP id w3-20020a0566020343b02905393057ad92so1930632iou.20
-        for <linux-can@vger.kernel.org>; Fri, 23 Jul 2021 08:55:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=jrEVoI183Kmw64l8qy1wZKHXIRYmyIqbXtBbkwNlUZY=;
-        b=IU5zemoCRdZ70iryrDsl5hNObTZ/Lk8/OO7U6L5dQXPHBhEBxI0hV0nx/XLbeSFyua
-         r2Nb+rPmIGtesUOaWDhd3h65ysNbm57MX1IT5rfT4xFxC26bWEZiIXrZBwPg4XqLAqVV
-         +xLOryfDAmKaHDJxg5xshgt4+zweuTcst47RgsYqD7+Dqw63Wb5/GR7+Gp1VTXlMQ5kW
-         m1QaSXEWYX1rwrfwF9Pw+WwaIctagD5wRbvwrhOmIiAC8sSEzDyKkHuzo3qMaJOtWvfu
-         TmlAPYwfTiUZv3YPsFMIh601norAkuBeY49toZfnHmoK0VDuOr06bZktcYE0Cd2l8Nef
-         OJzg==
-X-Gm-Message-State: AOAM533pEDwJ+Lseyb+RzM2SjU1tK3u64O8gjp9r6i1wtyK8rhHyaipk
-        MqniHFTNZaLrwhL5W9dkDKw1n/0r6FEqvS9PBjifQgZIf2bu
-X-Google-Smtp-Source: ABdhPJymrKiMmzSlvulLG5/vb/egL5Os45wshW6Wj0yEXXxrLSIF25GxB2eY1uphmCT3VKL5XqftjR/PRS8uLkhbrBIE4xyG1JRq
+        id S229909AbhGXPLK (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sat, 24 Jul 2021 11:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhGXPLJ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sat, 24 Jul 2021 11:11:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ED2C061575
+        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 08:51:41 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1m7Jw7-0003Ng-LY
+        for linux-can@vger.kernel.org; Sat, 24 Jul 2021 17:51:35 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id B2C5A65695A
+        for <linux-can@vger.kernel.org>; Sat, 24 Jul 2021 15:51:34 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 4AA93656956;
+        Sat, 24 Jul 2021 15:51:34 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id d9ea2ddf;
+        Sat, 24 Jul 2021 15:51:33 +0000 (UTC)
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     linux-can@vger.kernel.org
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH] can: mcp251xfd: mcp251xfd_irq(): stop timestamping worker in case error in IRQ
+Date:   Sat, 24 Jul 2021 17:51:31 +0200
+Message-Id: <20210724155131.471303-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8619:: with SMTP id z25mr4488495ioj.13.1627055723368;
- Fri, 23 Jul 2021 08:55:23 -0700 (PDT)
-Date:   Fri, 23 Jul 2021 08:55:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006bd5e505c7cc6ec3@google.com>
-Subject: [syzbot] memory leak in can_create
-From:   syzbot <syzbot+ba3c733fb22a7be2ce04@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
-        netdev@vger.kernel.org, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello,
+In case an error occurred in the IRQ handler, the chip status is
+dumped via devcoredump and all IRQs are disabled, but the chip stays
+powered for further analysis.
 
-syzbot found the following issue on:
+The chip is in an undefined state and will not receive any CAN frames,
+so shut down the timestamping worker, which reads the TBC register
+regularly, too. This avoids any CRC read error messages if there is a
+communication problem with the chip.
 
-HEAD commit:    2734d6c1b1a0 Linux 5.14-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=121ee3f2300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7384ed231a0fd986
-dashboard link: https://syzkaller.appspot.com/bug?extid=ba3c733fb22a7be2ce04
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1200c812300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1608525a300000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ba3c733fb22a7be2ce04@syzkaller.appspotmail.com
-
-executing program
-BUG: memory leak
-unreferenced object 0xffff8881140ffc00 (size 1024):
-  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    1d 00 07 41 00 00 00 00 00 00 00 00 00 00 00 00  ...A............
-  backtrace:
-    [<ffffffff836d5d92>] kmalloc include/linux/slab.h:596 [inline]
-    [<ffffffff836d5d92>] sk_prot_alloc+0xd2/0x1b0 net/core/sock.c:1808
-    [<ffffffff836da5a0>] sk_alloc+0x30/0x3f0 net/core/sock.c:1861
-    [<ffffffff83c8fd18>] can_create+0x108/0x300 net/can/af_can.c:158
-    [<ffffffff836ce96b>] __sock_create+0x1ab/0x2b0 net/socket.c:1450
-    [<ffffffff836d198f>] sock_create net/socket.c:1501 [inline]
-    [<ffffffff836d198f>] __sys_socket+0x6f/0x140 net/socket.c:1543
-    [<ffffffff836d1a7a>] __do_sys_socket net/socket.c:1552 [inline]
-    [<ffffffff836d1a7a>] __se_sys_socket net/socket.c:1550 [inline]
-    [<ffffffff836d1a7a>] __x64_sys_socket+0x1a/0x20 net/socket.c:1550
-    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff8881170d2340 (size 32):
-  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
-  hex dump (first 32 bytes):
-    b0 02 05 40 81 88 ff ff 00 00 00 00 00 00 00 00  ...@............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff82167ee3>] kmalloc include/linux/slab.h:591 [inline]
-    [<ffffffff82167ee3>] kzalloc include/linux/slab.h:721 [inline]
-    [<ffffffff82167ee3>] apparmor_sk_alloc_security+0x53/0xd0 security/apparmor/lsm.c:785
-    [<ffffffff8212d441>] security_sk_alloc+0x31/0x70 security/security.c:2261
-    [<ffffffff836d5dad>] sk_prot_alloc+0xed/0x1b0 net/core/sock.c:1811
-    [<ffffffff836da5a0>] sk_alloc+0x30/0x3f0 net/core/sock.c:1861
-    [<ffffffff83c8fd18>] can_create+0x108/0x300 net/can/af_can.c:158
-    [<ffffffff836ce96b>] __sock_create+0x1ab/0x2b0 net/socket.c:1450
-    [<ffffffff836d198f>] sock_create net/socket.c:1501 [inline]
-    [<ffffffff836d198f>] __sys_socket+0x6f/0x140 net/socket.c:1543
-    [<ffffffff836d1a7a>] __do_sys_socket net/socket.c:1552 [inline]
-    [<ffffffff836d1a7a>] __se_sys_socket net/socket.c:1550 [inline]
-    [<ffffffff836d1a7a>] __x64_sys_socket+0x1a/0x20 net/socket.c:1550
-    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88811344a100 (size 232):
-  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 2c 10 81 88 ff ff 00 fc 0f 14 81 88 ff ff  ..,.............
-  backtrace:
-    [<ffffffff836e0ebf>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:414
-    [<ffffffff836eb6fa>] alloc_skb include/linux/skbuff.h:1112 [inline]
-    [<ffffffff836eb6fa>] alloc_skb_with_frags+0x6a/0x2b0 net/core/skbuff.c:6005
-    [<ffffffff836d8fe3>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2461
-    [<ffffffff83c9ee2f>] j1939_sk_alloc_skb net/can/j1939/socket.c:861 [inline]
-    [<ffffffff83c9ee2f>] j1939_sk_send_loop net/can/j1939/socket.c:1043 [inline]
-    [<ffffffff83c9ee2f>] j1939_sk_sendmsg+0x2cf/0x800 net/can/j1939/socket.c:1178
-    [<ffffffff836cfb86>] sock_sendmsg_nosec net/socket.c:703 [inline]
-    [<ffffffff836cfb86>] sock_sendmsg+0x56/0x80 net/socket.c:723
-    [<ffffffff836d00ec>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2392
-    [<ffffffff836d413b>] ___sys_sendmsg+0x8b/0xd0 net/socket.c:2446
-    [<ffffffff836d4238>] __sys_sendmsg+0x88/0x100 net/socket.c:2475
-    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88811344aa00 (size 232):
-  comm "syz-executor060", pid 8644, jiffies 4294942938 (age 13.010s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 2c 10 81 88 ff ff 00 fc 0f 14 81 88 ff ff  ..,.............
-  backtrace:
-    [<ffffffff836e0ebf>] __alloc_skb+0x20f/0x280 net/core/skbuff.c:414
-    [<ffffffff836eb6fa>] alloc_skb include/linux/skbuff.h:1112 [inline]
-    [<ffffffff836eb6fa>] alloc_skb_with_frags+0x6a/0x2b0 net/core/skbuff.c:6005
-    [<ffffffff836d8fe3>] sock_alloc_send_pskb+0x353/0x3c0 net/core/sock.c:2461
-    [<ffffffff83c9ee2f>] j1939_sk_alloc_skb net/can/j1939/socket.c:861 [inline]
-    [<ffffffff83c9ee2f>] j1939_sk_send_loop net/can/j1939/socket.c:1043 [inline]
-    [<ffffffff83c9ee2f>] j1939_sk_sendmsg+0x2cf/0x800 net/can/j1939/socket.c:1178
-    [<ffffffff836cfb86>] sock_sendmsg_nosec net/socket.c:703 [inline]
-    [<ffffffff836cfb86>] sock_sendmsg+0x56/0x80 net/socket.c:723
-    [<ffffffff836d00ec>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2392
-    [<ffffffff836d413b>] ___sys_sendmsg+0x8b/0xd0 net/socket.c:2446
-    [<ffffffff836d4238>] __sys_sendmsg+0x88/0x100 net/socket.c:2475
-    [<ffffffff843b0915>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff843b0915>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84400068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-
-
+Fixes: efd8d98dfb90 ("can: mcp251xfd: add HW timestamp infrastructure")
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+index 47c3f408a799..9ae48072b6c6 100644
+--- a/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
++++ b/drivers/net/can/spi/mcp251xfd/mcp251xfd-core.c
+@@ -2300,6 +2300,7 @@ static irqreturn_t mcp251xfd_irq(int irq, void *dev_id)
+ 		   err, priv->regs_status.intf);
+ 	mcp251xfd_dump(priv);
+ 	mcp251xfd_chip_interrupts_disable(priv);
++	mcp251xfd_timestamp_stop(priv);
+ 
+ 	return handled;
+ }
+-- 
+2.30.2
+
+
