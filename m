@@ -2,72 +2,96 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 924EC3D4EC3
-	for <lists+linux-can@lfdr.de>; Sun, 25 Jul 2021 18:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBE63D506D
+	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 00:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbhGYPzh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Jul 2021 11:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbhGYPzh (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Jul 2021 11:55:37 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE93C061757
-        for <linux-can@vger.kernel.org>; Sun, 25 Jul 2021 09:36:06 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id nd39so12455095ejc.5
-        for <linux-can@vger.kernel.org>; Sun, 25 Jul 2021 09:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KJwi4BtpDU9DQVgjNcD6W/2IbnosknmGX0re0QYTQiQ=;
-        b=IyyOmgVrjT0kmb+RlYz2FTZenPPgdIId5ZGUcSJTTjeQWHxELyPxuXzOPXQPped3U6
-         F9YcUIHDeiuULV/qbncSw2Sjy92VicTH00lhEGDQ+KTc37stZtOqF7hW0dm4h66jObto
-         yOl0n+sof1sLPofrJn4tysOq+D878QSzDfsWes/J76QhfR9X0s2vQrOTs6Zpz+vtlwva
-         kY5hsyaRmdXM1gSqBrzdBmih9DPR/0g8Iq9wN4PcsFhUJN56/hFe2U3ccKUdG4Fw3JqI
-         ykTbHVs/WaVFP+ZU6uFKA3G5QYy/chMCyUsu9wzIEnBdmZzaAEiu8BLKNn4H3poCEliI
-         xpwQ==
+        id S229709AbhGYVo6 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Jul 2021 17:44:58 -0400
+Received: from mail-il1-f176.google.com ([209.85.166.176]:46878 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229531AbhGYVo6 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Jul 2021 17:44:58 -0400
+Received: by mail-il1-f176.google.com with SMTP id r5so7073099ilc.13;
+        Sun, 25 Jul 2021 15:25:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KJwi4BtpDU9DQVgjNcD6W/2IbnosknmGX0re0QYTQiQ=;
-        b=g4m/UVeVeqfF6h+7r/UQO735JSOHJFxYQ6eQ7+00CBTJrZ5kcdgtLziVvLLjFJaUes
-         5FR8RrLBq+qhCHhlLSbi5b6XwOaCa+nK1YfQltlEuQ+kZ8qk/n6C6FAdZZip3K9/t7Mg
-         0X+hoSlA8f1/rPRzGwNZOeXKVILguyIv7XT8PIsr/2DpGPSnMyct6NMT8pDRwEUSLxmA
-         v2sezcbITwrnQmeWgpGfyQgzK+yCsHbLl07an9Bamc4u32EAzNnqjoJUJLg9uEnlYHdp
-         6Ly0JuId1IpOzg4y9p0kO138n3O1KnTfB87/DjYgKnx6vz+/2dguf96sowM+HfjRCXlF
-         m7jQ==
-X-Gm-Message-State: AOAM532sWCiojOTWT5TJ534r2FhmIM3an8rtiFeNc4MzdF5vIHC1YUrW
-        hRoLfFMZ4LBJii/Jro04jklY8FykEuc6EEFjBMTb/s0v
-X-Google-Smtp-Source: ABdhPJxU1uyy1PaRoD0hQArU+KIQRPo9DiMWFyuTijUIRlv90apJdU6mXaBSYmXvZXT3Cs8ZNnTqVOnfZNi7lIRXlD0=
-X-Received: by 2002:a05:6402:2206:: with SMTP id cq6mr17038606edb.209.1627230964751;
- Sun, 25 Jul 2021 09:36:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAELBRW+6BGDPaUGrTDJtv020zF1AvtBAy2Jb1+i=uDbcH+0SzA@mail.gmail.com>
- <20210725111242.2d9a819f@gmail.com> <CAELBRWJQ+QN6+D0M-61Fz818fm7Q-pP4LW=-KUe+nsyFFSXXPg@mail.gmail.com>
- <20210725162720.74fu6qny6dqdc625@pengutronix.de>
-In-Reply-To: <20210725162720.74fu6qny6dqdc625@pengutronix.de>
-From:   Yasushi SHOJI <yasushi.shoji@gmail.com>
-Date:   Mon, 26 Jul 2021 01:35:53 +0900
-Message-ID: <CAELBRWKqs_XndF46Ucw9g0Y0n2q9qz-iO+CHyDvdJGMt37OuwQ@mail.gmail.com>
-Subject: Re: [PATCH] can: mcba_usb: fix memory leak in mcba_usb
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Pavel Skripkin <paskripkin@gmail.com>, linux-can@vger.kernel.org,
-        Yasushi SHOJI <yashi@spacecubics.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=bfV54EGNX7QM/avi9Ym1d5XEwwIaFGu3hKWgMFw+twQ=;
+        b=gZe54hPqzph4r30Q0cIEo1vXzkOTWHC27EJWSZbgc+FGHjGTExbdEPljWOd6e/bjM0
+         JUC6wEVGd2/T/buvgeYty/J9YO+p34y8WrLRcDT5JwUvenMlIb7KrH8djT/dW1x4/VY5
+         QnzEcjDf/s5tkQtHKO0lEE9PBvMW0TP7laVYmd5yMCpBgAsI8yMcdg5xDVE8DE3lSUCD
+         KliTpGPpPQK304JdCZOymG/LNRfgNeH35v5/b5kxcjip1PTfnMYAkU1zEZH1oXgZ+A2u
+         ePFDANbD0vI9HsuNVYY1N+jslxEXm6V0aGp7zIX6fbOThfhi0Fd2h2Ve2A/FXNuIIrac
+         dUgQ==
+X-Gm-Message-State: AOAM532riRgOwvRllczRid51FGEvAOrQnBC3lxEggJCJtEkiCPLPR/AO
+        7bTI4v4qklJUD4ldWdqJYA==
+X-Google-Smtp-Source: ABdhPJz7sehIjKPVRRXQU9jNngs6H+dktG1OrVWvfczvtxRlLnL3r7Of8U6SBHj7BPK7/630fo8wCg==
+X-Received: by 2002:a92:d305:: with SMTP id x5mr11113322ila.150.1627251926708;
+        Sun, 25 Jul 2021 15:25:26 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id l12sm3532731ilg.2.2021.07.25.15.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Jul 2021 15:25:26 -0700 (PDT)
+Received: (nullmailer pid 2960747 invoked by uid 1000);
+        Sun, 25 Jul 2021 22:25:22 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+In-Reply-To: <20210725160318.9312-2-dariobin@libero.it>
+References: <20210725160318.9312-1-dariobin@libero.it> <20210725160318.9312-2-dariobin@libero.it>
+Subject: Re: [PATCH 2/2] dt-bindings: net: can: c_can: convert to json-schema
+Date:   Sun, 25 Jul 2021 16:25:22 -0600
+Message-Id: <1627251922.224313.2960746.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi,
+On Sun, 25 Jul 2021 18:03:18 +0200, Dario Binacchi wrote:
+> Convert the Bosch C_CAN/D_CAN controller device tree binding
+> documentation to json-schema.
+> 
+> Document missing properties.
+> Remove "ti,hwmods" as it is no longer used in TI dts.
+> Make "clocks" required as it is used in all dts.
+> Correct nodename in the example.
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> ---
+> 
+>  .../bindings/net/can/bosch,c_can.yaml         | 85 +++++++++++++++++++
+>  .../devicetree/bindings/net/can/c_can.txt     | 65 --------------
+>  2 files changed, 85 insertions(+), 65 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/can/bosch,c_can.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/can/c_can.txt
+> 
 
-On Mon, Jul 26, 2021 at 1:27 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> Yes absolutely - but I don't have access to that hardware. Since you're
-> interested in that hardware, what about adding you as a reviewer to the
-> kernel. Then for every change on this driver, you'll be added on Cc and
-> can test it. What do you think?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Sure, I'm happy to help.
--- 
-               yashi
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+
+\ndoc reference errors (make refcheckdocs):
+Documentation/devicetree/bindings/net/can/bosch,c_can.yaml: Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+Documentation/devicetree/bindings/net/can/bosch,c_can.yaml: Documentation/devicetree/bindings/clock/ti,sci-clk.txt
+
+See https://patchwork.ozlabs.org/patch/1509610
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
