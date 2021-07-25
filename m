@@ -2,57 +2,57 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0183D4D23
-	for <lists+linux-can@lfdr.de>; Sun, 25 Jul 2021 12:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB7B3D4DB5
+	for <lists+linux-can@lfdr.de>; Sun, 25 Jul 2021 15:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhGYKE0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Sun, 25 Jul 2021 06:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S230260AbhGYMrU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Sun, 25 Jul 2021 08:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhGYKE0 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Jul 2021 06:04:26 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE1CC061757
-        for <linux-can@vger.kernel.org>; Sun, 25 Jul 2021 03:44:56 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id he41so10890010ejc.6
-        for <linux-can@vger.kernel.org>; Sun, 25 Jul 2021 03:44:56 -0700 (PDT)
+        with ESMTP id S230075AbhGYMrU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Sun, 25 Jul 2021 08:47:20 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D23C061757;
+        Sun, 25 Jul 2021 06:27:49 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id nd39so11565720ejc.5;
+        Sun, 25 Jul 2021 06:27:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=d9tDKxxu1nBGHpGHrqePXfcY3AA21uJAxfWtTn10vj8=;
-        b=ksTXzhRkolw8RucLcC5bz4krKNH1JlMe4GEJJlM6aI6a4d/QWhhuFuDsbJNyNynRBn
-         CKeCJHENNQVScIe5hdm7bnCf9Qv+HVnOTWVzkOMXIgXhiKw8TORfFhwogon/mv5Q0aeE
-         S50EUPWSUC0rBjRdm4UghdynO4BVEJlm758TZxpr7ZnKG/gG2khXVvg2Ts2KHXv2cgYq
-         qYaPeLvpYttFEisMKvvndfdtG3M1ZxRQldK81yNz+3YZswTWpBHEnB8l0fznLD+hWfOc
-         SLR7GcYGFf5/cll5CRIESiwSacALH3Fm2NWixEv5E4HFZnfKxnWsWCZ5a2ttDx8LkpHj
-         Y4bQ==
+        bh=ug8zSMnU2kdew7XA3SZRT3wjKRPWxWw7Hd9uOpR6CJA=;
+        b=gd2oUl8nbz84CXt9wnNFIsRdmnwQoogkMOycJdnORJdtf/u84hmFvhMAf/JyZ2KpLr
+         g1ST/icPVs2fMUeP4eHYJjcoQDEcgdQqSLwa0yVElQVyPEcyqRxGiXWoIxE7ZtkYu2Cw
+         SC9pE0qsJVHRkZAW7S1I4xicRIU4aVnriezrtG4ZPdGnQ+4qhsL9biTAr4R7c7cH9lel
+         pDL88NPGJ0AInK0kXjIq3PpXVVsWlkXwX3aCPaQFHrBA0WoruBJaviydIfY/LzNnb5Uu
+         7hGAMP4oW9VpbwjgKeEHAI7MGbNdx+mhxyTK++vs5tgRUetnvfHJYZ8AeXLBGh8lBv4Z
+         q22Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=d9tDKxxu1nBGHpGHrqePXfcY3AA21uJAxfWtTn10vj8=;
-        b=GtcwzhhVOs2Yd/0WLXBvhi2RHmpcqugz1GatW7rbaUgVWHVG5z0Fosl3pZJqnZADra
-         xCzbkXnnQfzX6Sp0MUvsMx5YufH3siKdM+Xsk291EPKirK58sIC6cu/oTx9zcRHcf4qt
-         jhv2RTGXtu6Z3GoOG5rX3XDddXXsefxtjizNoL5zwDifdKhz2eus63ZLjFHooK6I8azo
-         u2dmxX5cISx4eOyew3A+n7NJOb1Sbv17AQek0GgSUO/qgmIJPRScOSGRYGHLuIq4noGt
-         0hZGZD/t1jhS8jmTrhKYmI17bPA3DEPavMf62DkVaKEFFSkoxj8NbsE+udwKjZzSJGrK
-         UVQQ==
-X-Gm-Message-State: AOAM531N4oEqhoYFI00qex5zKWoHfAw1J8GUTFD4S1H738Th4sTQfDWZ
-        cSd4Z63AX6rAVYMQR0dcn6G/fEMWyC/iiJvYWuI=
-X-Google-Smtp-Source: ABdhPJxHqo49kRcAS9X3k7dxD2twK3suPLbQ/VU+8+LnKIwyRPCA1ccoFQMk15hXku/recnsm3KS55mw1RDJ9gW2nro=
-X-Received: by 2002:a05:6402:10cc:: with SMTP id p12mr15650464edu.328.1627209894992;
- Sun, 25 Jul 2021 03:44:54 -0700 (PDT)
+        bh=ug8zSMnU2kdew7XA3SZRT3wjKRPWxWw7Hd9uOpR6CJA=;
+        b=MUkU4ojqnnvRHdcvWrKkTIQaJCNwfwtL7BDVtP9ptHVFmvKwWeEbwHQz7qgkhKxRS/
+         J3nuTRyozTxOP7x/8rsGXKNFyJbFh43zsQksCqAZFwHCyYVCaOSc/5DvdF547SCLI1dg
+         JR4iI+3KYLOrQJf6mv8C8dEKIBVx1aN4iTDjfUmrgvWIzlFiHVvawtAPbwbmWIrBGTy7
+         jacS9KaZE1/sL52lM18E9DeAIhPXl1LdDieJTAA6KBxcxQtrM43UWzh6Iimp4fiW710V
+         cFQd5tdqHYn+JHQJQITd2hUgH9yaPi8laSvyve+V3dqyo8qqb++uZO+BqZXxXMs5k9JM
+         xh5A==
+X-Gm-Message-State: AOAM530SoHeu1/Ya54DCXQraUAvuLXibzna8FA7RxtrMke59jx7YSLG5
+        6gTRX6Xjq7y5U8fKeaQvGE4UqLSNU+6lc6pSdRA=
+X-Google-Smtp-Source: ABdhPJyy5ZC9QKf9nblbrjmiCMuYBIj1PGsylZzS8j9ydD/aG3lgDrsVKxYxZmOTacQNVr33TTuypV4whMxeZ/1vTrY=
+X-Received: by 2002:aa7:cfcf:: with SMTP id r15mr16001396edy.161.1627219667975;
+ Sun, 25 Jul 2021 06:27:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAELBRW+6BGDPaUGrTDJtv020zF1AvtBAy2Jb1+i=uDbcH+0SzA@mail.gmail.com>
- <20210725111242.2d9a819f@gmail.com>
-In-Reply-To: <20210725111242.2d9a819f@gmail.com>
+References: <20210725094246.pkdpvl5aaaftur3a@pengutronix.de> <20210725103630.23864-1-paskripkin@gmail.com>
+In-Reply-To: <20210725103630.23864-1-paskripkin@gmail.com>
 From:   Yasushi SHOJI <yasushi.shoji@gmail.com>
-Date:   Sun, 25 Jul 2021 19:44:43 +0900
-Message-ID: <CAELBRWJQ+QN6+D0M-61Fz818fm7Q-pP4LW=-KUe+nsyFFSXXPg@mail.gmail.com>
-Subject: Re: [PATCH] can: mcba_usb: fix memory leak in mcba_usb
+Date:   Sun, 25 Jul 2021 22:27:37 +0900
+Message-ID: <CAELBRWKfyOBanMBteO=LpL9R1QMp97zTYtKY689jeR2gDOa_Gw@mail.gmail.com>
+Subject: Re: [PATCH] net: can: add missing urb->transfer_dma initialization
 To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     linux-can@vger.kernel.org, mkl@pengutronix.de,
+Cc:     mkl@pengutronix.de, wg@grandegger.com, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         Yasushi SHOJI <yashi@spacecubics.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
@@ -61,8 +61,43 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 Hi Pavel,
 
-On Sun, Jul 25, 2021 at 5:12 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
-> Can You try the following patch?
+I've tested this patch on top of v5.14-rc2.  All good.
+
+Tested-by: Yasushi SHOJI <yashi@spacecubics.com>
+
+Some nitpicks.
+
+On Sun, Jul 25, 2021 at 7:36 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Yasushi reported, that his Microchip CAN Analyzer stopped working since
+> commit 91c02557174b ("can: mcba_usb: fix memory leak in mcba_usb").
+> The problem was in missing urb->transfer_dma initialization.
+>
+> In my previous patch to this driver I refactored mcba_usb_start() code to
+> avoid leaking usb coherent buffers. To achive it, I passed local stack
+
+achieve
+
+> variable to usb_alloc_coherent() and then saved it to private array to
+> correctly free all coherent buffers on ->close() call. But I forgot to
+> inialize urb->transfer_dma with variable passed to usb_alloc_coherent().
+
+initialize
+
+> All of this was causing device to not work, since dma addr 0 is not valid
+> and following log can be found on bug report page, which points exactly to
+> problem described above.
+>
+> [   33.862175] DMAR: [DMA Write] Request device [00:14.0] PASID ffffffff fault addr 0 [fault reason 05] PTE Write access is not set
+>
+> Bug report: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=990850
+>
+> Reported-by: Yasushi SHOJI <yasushi.shoji@gmail.com>
+> Fixes: 91c02557174b ("can: mcba_usb: fix memory leak in mcba_usb")
+> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+> ---
+>  drivers/net/can/usb/mcba_usb.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
 > diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
 > index a45865bd7254..a1a154c08b7f 100644
@@ -77,17 +112,11 @@ On Sun, Jul 25, 2021 at 5:12 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
 >                 usb_fill_bulk_urb(urb, priv->udev,
 >                                   usb_rcvbulkpipe(priv->udev, MCBA_USB_EP_IN),
 >                                   buf, MCBA_USB_RX_BUFF_SIZE,
+> --
+> 2.32.0
 
-Yup, this patch fixed it.  I've tested on top of v5.10.52.
+Pavel, thanks again for your quick fix. :-)
 
-Tested-by: Yasushi SHOJI <yashi@spacecubics.com>
-
-> I am sorry for breaking your device :(
-
-No problem.  It'd be nice if we'd test with real hardware before
-merging into the stable tree, though.
-Anyway, thank you for your quick fix!
-
-Best regards,
+Best,
 --
                yashi
