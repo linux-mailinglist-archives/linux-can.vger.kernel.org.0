@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF653D5B54
-	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 16:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC83C3D5B5E
+	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 16:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbhGZNdh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Jul 2021 09:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53384 "EHLO
+        id S234120AbhGZNeB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Jul 2021 09:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234505AbhGZNdY (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 09:33:24 -0400
+        with ESMTP id S234801AbhGZNd3 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 09:33:29 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6DEC0619DC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A523BC0619DE
         for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 07:12:45 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1m81LX-0002Me-Qn
-        for linux-can@vger.kernel.org; Mon, 26 Jul 2021 16:12:43 +0200
+        id 1m81LY-0002MM-1R
+        for linux-can@vger.kernel.org; Mon, 26 Jul 2021 16:12:44 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D2AF56582CD
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 14:12:25 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 88D306582C5
+        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 14:12:24 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id D08076581FD;
-        Mon, 26 Jul 2021 14:12:03 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id C6C0C658206;
+        Mon, 26 Jul 2021 14:12:04 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id cabfa6f0;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9ca0619f;
         Mon, 26 Jul 2021 14:11:46 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de,
         Stephane Grosjean <s.grosjean@peak-system.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 33/46] can: peak_pci: Add name and FW version of the card in kernel buffer
-Date:   Mon, 26 Jul 2021 16:11:31 +0200
-Message-Id: <20210726141144.862529-34-mkl@pengutronix.de>
+Subject: [PATCH net-next 34/46] can: peak_usb: pcan_usb_get_device_id(): read value only in case of success
+Date:   Mon, 26 Jul 2021 16:11:32 +0200
+Message-Id: <20210726141144.862529-35-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210726141144.862529-1-mkl@pengutronix.de>
 References: <20210726141144.862529-1-mkl@pengutronix.de>
@@ -56,116 +56,29 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Stephane Grosjean <s.grosjean@peak-system.com>
 
-This patch adds name and (possibly) firmware version information to
-the kernel about the detected PEAK-System CAN - PCI/PCIe interface
-card.
+In case of error, reading value from response argument is useless.
 
-Link: https://lore.kernel.org/r/20210607151720.13571-1-s.grosjean@peak-system.com
+Link: https://lore.kernel.org/r/20210625130931.27438-2-s.grosjean@peak-system.com
 Signed-off-by: Stephane Grosjean <s.grosjean@peak-system.com>
-[mkl: reformated struct pci_device_id peak_pci_tbl]
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/sja1000/peak_pci.c | 64 +++++++++++++++++++++++++-----
- 1 file changed, 53 insertions(+), 11 deletions(-)
+ drivers/net/can/usb/peak_usb/pcan_usb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/sja1000/peak_pci.c b/drivers/net/can/sja1000/peak_pci.c
-index aff8a1dee135..6db90dc4bc9d 100644
---- a/drivers/net/can/sja1000/peak_pci.c
-+++ b/drivers/net/can/sja1000/peak_pci.c
-@@ -28,6 +28,10 @@ MODULE_LICENSE("GPL v2");
- 
- #define DRV_NAME  "peak_pci"
- 
-+/* FPGA cards FW version registers */
-+#define PEAK_VER_REG1		0x40
-+#define PEAK_VER_REG2		0x44
-+
- struct peak_pciec_card;
- struct peak_pci_chan {
- 	void __iomem *cfg_base;		/* Common for all channels */
-@@ -68,19 +72,41 @@ static const u16 peak_pci_icr_masks[PEAK_PCI_CHAN_MAX] = {
- };
- 
- static const struct pci_device_id peak_pci_tbl[] = {
--	{PEAK_PCI_VENDOR_ID, PEAK_PCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_MPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_MPCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PC_104P_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCI_104E_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_CPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIE_OEM_ID, PCI_ANY_ID, PCI_ANY_ID,},
-+	{
-+		PEAK_PCI_VENDOR_ID, PEAK_PCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-PCI",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_PCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-PCI Express",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_MPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-miniPCI",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_MPCIE_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-miniPCIe",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_PC_104P_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-PC/104-Plus Quad",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_PCI_104E_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-PCI/104-Express",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_CPCI_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-cPCI",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_PCIE_OEM_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-Chip PCIe",
-+	},
- #ifdef CONFIG_CAN_PEAK_PCIEC
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIEC_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
--	{PEAK_PCI_VENDOR_ID, PEAK_PCIEC34_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
-+	{
-+		PEAK_PCI_VENDOR_ID, PEAK_PCIEC_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-ExpressCard",
-+	}, {
-+		PEAK_PCI_VENDOR_ID, PEAK_PCIEC34_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,
-+		.driver_data = (kernel_ulong_t)"PCAN-ExpressCard 34",
-+	},
- #endif
--	{0,}
-+	{ /* sentinel */ }
- };
- 
- MODULE_DEVICE_TABLE(pci, peak_pci_tbl);
-@@ -530,6 +556,7 @@ static int peak_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	void __iomem *cfg_base, *reg_base;
- 	u16 sub_sys_id, icr;
- 	int i, err, channels;
-+	char fw_str[14] = "";
- 
- 	err = pci_enable_device(pdev);
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb.c b/drivers/net/can/usb/peak_usb/pcan_usb.c
+index 1d6f77252f01..9f3e16684e28 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb.c
+@@ -384,7 +384,8 @@ static int pcan_usb_get_device_id(struct peak_usb_device *dev, u32 *device_id)
  	if (err)
-@@ -583,6 +610,21 @@ static int peak_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	/* Leave parport mux mode */
- 	writeb(0x04, cfg_base + PITA_MISC + 3);
+ 		netdev_err(dev->netdev, "getting device id failure: %d\n", err);
  
-+	/* FPGA equipped card if not 0 */
-+	if (readl(cfg_base + PEAK_VER_REG1)) {
-+		/* FPGA card: display version of the running firmware */
-+		u32 fw_ver = readl(cfg_base + PEAK_VER_REG2);
-+
-+		snprintf(fw_str, sizeof(fw_str), " FW v%u.%u.%u",
-+			 (fw_ver >> 12) & 0xf,
-+			 (fw_ver >> 8) & 0xf,
-+			 (fw_ver >> 4) & 0xf);
-+	}
-+
-+	/* Display commercial name (and, eventually, FW version) of the card */
-+	dev_info(&pdev->dev, "%ux CAN %s%s\n",
-+		 channels, (const char *)ent->driver_data, fw_str);
-+
- 	icr = readw(cfg_base + PITA_ICR + 2);
+-	*device_id = args[0];
++	else
++		*device_id = args[0];
  
- 	for (i = 0; i < channels; i++) {
+ 	return err;
+ }
 -- 
 2.30.2
 
