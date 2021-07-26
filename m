@@ -2,35 +2,35 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 555E93D5B44
-	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 16:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638643D5B4D
+	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 16:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbhGZNdV (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Jul 2021 09:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S234597AbhGZNd0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Jul 2021 09:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234534AbhGZNdO (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 09:33:14 -0400
+        with ESMTP id S234599AbhGZNdP (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 09:33:15 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44295C0611BB
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 07:12:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC5C0619C5
+        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 07:12:40 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1m81LO-000241-Ec
-        for linux-can@vger.kernel.org; Mon, 26 Jul 2021 16:12:34 +0200
+        id 1m81LS-0002Bk-FH
+        for linux-can@vger.kernel.org; Mon, 26 Jul 2021 16:12:38 +0200
 Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id 79A13658279
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 14:12:13 +0000 (UTC)
+        by bjornoya.blackshift.org (Postfix) with SMTP id 01C7B6582A1
+        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 14:12:21 +0000 (UTC)
 Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 5CBEC6581E0;
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 078B66581E8;
         Mon, 26 Jul 2021 14:11:59 +0000 (UTC)
 Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 9862abe9;
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 1dc6051d;
         Mon, 26 Jul 2021 14:11:46 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
 To:     netdev@vger.kernel.org
@@ -38,9 +38,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
         kernel@pengutronix.de, Peng Li <lipeng321@huawei.com>,
         Guangbin Huang <huangguangbin2@huawei.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 28/46] net: at91_can: add braces {} to all arms of the statement
-Date:   Mon, 26 Jul 2021 16:11:26 +0200
-Message-Id: <20210726141144.862529-29-mkl@pengutronix.de>
+Subject: [PATCH net-next 29/46] net: at91_can: remove redundant space
+Date:   Mon, 26 Jul 2021 16:11:27 +0200
+Message-Id: <20210726141144.862529-30-mkl@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210726141144.862529-1-mkl@pengutronix.de>
 References: <20210726141144.862529-1-mkl@pengutronix.de>
@@ -56,53 +56,29 @@ X-Mailing-List: linux-can@vger.kernel.org
 
 From: Peng Li <lipeng321@huawei.com>
 
-Braces {} should be used on all arms of this statement.
+According to the chackpatch.pl, no space before tabs.
 
-Link: https://lore.kernel.org/r/1624096589-13452-7-git-send-email-huangguangbin2@huawei.com
+Link: https://lore.kernel.org/r/1624096589-13452-8-git-send-email-huangguangbin2@huawei.com
 Signed-off-by: Peng Li <lipeng321@huawei.com>
 Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/at91_can.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/can/at91_can.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
-index 8fab80887117..87c2555933e4 100644
+index 87c2555933e4..3709152e9695 100644
 --- a/drivers/net/can/at91_can.c
 +++ b/drivers/net/can/at91_can.c
-@@ -585,9 +585,9 @@ static void at91_read_mb(struct net_device *dev, unsigned int mb,
- 	reg_msr = at91_read(priv, AT91_MSR(mb));
- 	cf->len = can_cc_dlc2len((reg_msr >> 16) & 0xf);
- 
--	if (reg_msr & AT91_MSR_MRTR)
-+	if (reg_msr & AT91_MSR_MRTR) {
- 		cf->can_id |= CAN_RTR_FLAG;
--	else {
-+	} else {
- 		*(u32 *)(cf->data + 0) = at91_read(priv, AT91_MDL(mb));
- 		*(u32 *)(cf->data + 4) = at91_read(priv, AT91_MDH(mb));
- 	}
-@@ -1020,15 +1020,15 @@ static void at91_irq_err(struct net_device *dev)
- 		reg_sr = at91_read(priv, AT91_SR);
- 
- 		/* we need to look at the unmasked reg_sr */
--		if (unlikely(reg_sr & AT91_IRQ_BOFF))
-+		if (unlikely(reg_sr & AT91_IRQ_BOFF)) {
- 			new_state = CAN_STATE_BUS_OFF;
--		else if (unlikely(reg_sr & AT91_IRQ_ERRP))
-+		} else if (unlikely(reg_sr & AT91_IRQ_ERRP)) {
- 			new_state = CAN_STATE_ERROR_PASSIVE;
--		else if (unlikely(reg_sr & AT91_IRQ_WARN))
-+		} else if (unlikely(reg_sr & AT91_IRQ_WARN)) {
- 			new_state = CAN_STATE_ERROR_WARNING;
--		else if (likely(reg_sr & AT91_IRQ_ERRA))
-+		} else if (likely(reg_sr & AT91_IRQ_ERRA)) {
- 			new_state = CAN_STATE_ERROR_ACTIVE;
--		else {
-+		} else {
- 			netdev_err(dev, "BUG! hardware in undefined state\n");
- 			return;
- 		}
+@@ -163,7 +163,7 @@ static const struct can_bittiming_const at91_bittiming_const = {
+ 	.tseg2_min	= 2,
+ 	.tseg2_max	= 8,
+ 	.sjw_max	= 4,
+-	.brp_min 	= 2,
++	.brp_min	= 2,
+ 	.brp_max	= 128,
+ 	.brp_inc	= 1,
+ };
 -- 
 2.30.2
 
