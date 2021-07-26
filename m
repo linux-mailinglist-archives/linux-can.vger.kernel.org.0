@@ -2,159 +2,144 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED6B3D6889
-	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 23:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D783B3D6917
+	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 23:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233137AbhGZUjp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Jul 2021 16:39:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36802 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232788AbhGZUjo (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 26 Jul 2021 16:39:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1023760F94;
-        Mon, 26 Jul 2021 21:20:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627334413;
-        bh=G1p25avqGfyWyg8DRY7MOjFOMVYQc0IHpJA9Sl0ihSg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QqillQYygjstWVA6oc8RP2vDz+e6ccZAvxrw/r1SqIC3pn5Hy/NCPfB871DpQ1ExM
-         jzE3cpNyT5S6YL+kh8/UA/iYM2xaAgzVn7lnQWldHWP7S9+OyFdAOVkNKDz7yDwYTJ
-         ADaf2vzt4AE3ulU7d/UoX0h3mZWU2xJ3BVl/ifrB7NDYbNxP6zhL381Z4JNbKc268p
-         HAEJZiIEWzapX+hLsotY37ryCCFFpZqgNDLN4oTV623UAJ0QnnR1ZfWTWtrv7VlOGD
-         n2JGaZox41N4raTsVnTdfioRFsAo2uuFl2/K4LpjG6h8KiohNwRe1YjHH1vBwJsOJm
-         FFy9PMLovvGKw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0429C60972;
-        Mon, 26 Jul 2021 21:20:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S231839AbhGZVQ0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Jul 2021 17:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229687AbhGZVQZ (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 17:16:25 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7370C061757;
+        Mon, 26 Jul 2021 14:56:53 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id k65so12644050yba.13;
+        Mon, 26 Jul 2021 14:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sBI78aRCVQAvE8Z8PpiRODU8s6N59NkofucxXTLbXbM=;
+        b=KNah28FQRrK6Hj97zy80gHnou4q0AK5xk/HbFUtvWGt9Fg+kXVaaZlYNPxxYSasyTb
+         oNj4zqxAjaWT9qXUzFliwCU5XFZwsIOq+X5VuPtsYPqdoEOTJkFKcdQkp7tFObZpw5Ys
+         B/lrPJPL4rv5vxFOKPPzjfpuT2L+jBiQYlvMEdTAfzy4DhWSqemVy1cWPknSHharDl46
+         a9N9E/AOedHXmW1t9KdpdyG53aBYVdSk+5nCt48OL39MoDwn/sh4cyxq0WyKElfeG3x8
+         QtZVDAoka8WXkcExWqorQ4sY2yMbjuBYciWX4BvffY0DvGfMtms7MlSsybEQCaZ0OE1P
+         8fag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sBI78aRCVQAvE8Z8PpiRODU8s6N59NkofucxXTLbXbM=;
+        b=eWgcNcNDScUOh0FeroaUE7I6hIwtenI+qHgJoLG4W/nGYqHzap3FTwDavfmtiD3NaL
+         uyqj1k5uxPTMvmAfZsuHriB21YKHy8fYT+DyOVDMkmYg7lfoTYnlE79OyrB/oXxfQb4+
+         EEmCiw91DI4q2wyKnr21SdbLjXmTprXZdkfyVovOyft95JaayrJftcYVOn4vWZRcwcwB
+         MNdY2S4v/VQp2qAhizQ0vRkEN+VVLjrWyx050XnMDVWwPDN4mds9R7ZdE/KulOx/QVIp
+         vtMmYLOYqOgRMgtMV/j7k0VFrJiA8yrSM8e+6Y7xVGrAgAHNosbrjLdXzUXUhXkBuQDz
+         c6DA==
+X-Gm-Message-State: AOAM533NutGgJIinLXtWBSPJvWr3hSquCHqdE9Etou+x2pVtC+wMUAlO
+        3IjY0UPquQmu/W221Kd+JDzuvbZVHo2NUOPlw7A=
+X-Google-Smtp-Source: ABdhPJzJ0Gn54eQ+Gmudy7C7TBsYRWR+aTc6h+4qjmgIBDhRDwBJAf2BE/25TgFpDB8tWqrIyGDUlhQ/o/aHjnFK2Pk=
+X-Received: by 2002:a25:2449:: with SMTP id k70mr10224909ybk.156.1627336612855;
+ Mon, 26 Jul 2021 14:56:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: pull-request: can-next 2021-07-25
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162733441301.18684.10819552730140170023.git-patchwork-notify@kernel.org>
-Date:   Mon, 26 Jul 2021 21:20:13 +0000
-References: <20210726141144.862529-1-mkl@pengutronix.de>
-In-Reply-To: <20210726141144.862529-1-mkl@pengutronix.de>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-can@vger.kernel.org, kernel@pengutronix.de
+References: <20210721194951.30983-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <202107251336.iD47PRoA-lkp@intel.com> <20210725094605.gzhrbunkot7ytvel@pengutronix.de>
+ <CAMuHMdUuFdc5JJfdsvFTfKPh1Z+o0iTabHLso4U6DUHRJowD6g@mail.gmail.com>
+In-Reply-To: <CAMuHMdUuFdc5JJfdsvFTfKPh1Z+o0iTabHLso4U6DUHRJowD6g@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 26 Jul 2021 22:56:26 +0100
+Message-ID: <CA+V-a8s-DDsTqx6R4bqtA3ruWF=8E_==ao45+toYREDvWsrYZg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] can: rcar_canfd: Add support for RZ/G2L family
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     kernel test robot <lkp@intel.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-can@vger.kernel.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        kbuild-all@lists.01.org, netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hello:
+Hi Geert, Marc,
 
-This pull request was applied to netdev/net-next.git (refs/heads/master):
+On Mon, Jul 26, 2021 at 9:07 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Marc,
+>
+> On Sun, Jul 25, 2021 at 11:46 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+> > On 25.07.2021 13:39:37, kernel test robot wrote:
+> > > [auto build test WARNING on renesas-devel/next]
+> > > [also build test WARNING on v5.14-rc2 next-20210723]
+> > > [cannot apply to mkl-can-next/testing robh/for-next]
+> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > > And when submitting patch, we suggest to use '--base' as documented in
+> > > https://git-scm.com/docs/git-format-patch]
+> > >
+> > > url:    https://github.com/0day-ci/linux/commits/Lad-Prabhakar/Renesas-RZ-G2L-CANFD-support/20210722-035332
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git next
+> > > config: arm64-randconfig-r031-20210723 (attached as .config)
+> > > compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project 9625ca5b602616b2f5584e8a49ba93c52c141e40)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # install arm64 cross compiling tool for clang build
+> > >         # apt-get install binutils-aarch64-linux-gnu
+> > >         # https://github.com/0day-ci/linux/commit/082d605e73c5922419a736aa9ecd3a76c0241bf7
+> > >         git remote add linux-review https://github.com/0day-ci/linux
+> > >         git fetch --no-tags linux-review Lad-Prabhakar/Renesas-RZ-G2L-CANFD-support/20210722-035332
+> > >         git checkout 082d605e73c5922419a736aa9ecd3a76c0241bf7
+> > >         # save the attached .config to linux build tree
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=arm64
+> > >
+> > > If you fix the issue, kindly add following tag as appropriate
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > > All warnings (new ones prefixed by >>):
+> > >
+> > > >> drivers/net/can/rcar/rcar_canfd.c:1699:12: warning: cast to smaller integer type 'enum rcanfd_chip_id' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+> > >            chip_id = (enum rcanfd_chip_id)of_device_get_match_data(&pdev->dev);
+> > >                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >    1 warning generated.
+> >
+> > Seems we need the cast (uintptr_t), that I asked you to remove. Can you
+>
+> Bummer, I had seen your comment while reading email on my phone,
+> but forgot to reply when I got back to my computer...
+>
+> > test if
+> >
+> > | chip_id = (enum rcanfd_chip_id)(uintptr_t)of_device_get_match_data(&pdev->dev);
+> >
+> > works?
+>
+> Just
+>
+>     chip_id = (uintptr_t)of_device_get_match_data(&pdev->dev);
+>
+> should be fine.
+>
+Above works, cast is not required.
 
-On Mon, 26 Jul 2021 16:10:58 +0200 you wrote:
-> Hello Jakub, hello David,
-> 
-> this is a pull request of 46 patches for net-next/master.
-> 
-> The first 6 patches target the CAN J1939 protocol. One is from
-> gushengxian, fixing a grammatical error, 5 are by me fixing a checkpatch
-> warning, make use of the fallthrough pseudo-keyword, and use
-> consistent variable naming.
-> 
-> [...]
+Cheers,
+Prabhakar
 
-Here is the summary with links:
-  - pull-request: can-next 2021-07-25
-    https://git.kernel.org/netdev/net-next/c/d20e5880fe9d
-  - [net-next,02/46] can: j1939: fix checkpatch warnings
-    https://git.kernel.org/netdev/net-next/c/333128737955
-  - [net-next,03/46] can: j1939: replace fall through comment by fallthrough pseudo-keyword
-    https://git.kernel.org/netdev/net-next/c/641ba6ded234
-  - [net-next,04/46] can: j1939: j1939_session_completed(): use consistent name se_skb for the session skb
-    https://git.kernel.org/netdev/net-next/c/7ac56e40d054
-  - [net-next,05/46] can: j1939: j1939_session_tx_dat(): use consistent name se_skcb for session skb control buffer
-    https://git.kernel.org/netdev/net-next/c/78b77c760f71
-  - [net-next,06/46] can: j1939: j1939_xtp_rx_dat_one(): use separate pointer for session skb control buffer
-    https://git.kernel.org/netdev/net-next/c/a08ec5fe709f
-  - [net-next,07/46] can: rx-offload: add skb queue for use during ISR
-    https://git.kernel.org/netdev/net-next/c/c757096ea103
-  - [net-next,08/46] can: rx-offload: can_rx_offload_irq_finish(): directly call napi_schedule()
-    https://git.kernel.org/netdev/net-next/c/1e0d8e507ea4
-  - [net-next,09/46] can: rx-offload: can_rx_offload_threaded_irq_finish(): add new function to be called from threaded interrupt
-    https://git.kernel.org/netdev/net-next/c/30bfec4fec59
-  - [net-next,10/46] can: bittiming: fix documentation for struct can_tdc
-    https://git.kernel.org/netdev/net-next/c/8345a3307381
-  - [net-next,11/46] can: netlink: clear data_bittiming if FD is turned off
-    https://git.kernel.org/netdev/net-next/c/e3b0a4a47064
-  - [net-next,12/46] can: netlink: remove redundant check in can_validate()
-    https://git.kernel.org/netdev/net-next/c/6b6bd1999267
-  - [net-next,13/46] dt-bindings: net: can: Document transceiver implementation as phy
-    https://git.kernel.org/netdev/net-next/c/9c0e7ccd831b
-  - [net-next,14/46] can: m_can: Add support for transceiver as phy
-    https://git.kernel.org/netdev/net-next/c/d836cb5fe045
-  - [net-next,15/46] can: m_can: use devm_platform_ioremap_resource_byname
-    https://git.kernel.org/netdev/net-next/c/9808dba1bbcb
-  - [net-next,16/46] can: m_can: remove support for custom bit timing
-    https://git.kernel.org/netdev/net-next/c/0ddd83fbebbc
-  - [net-next,17/46] can: mcp251xfd: mcp251xfd_probe(): try to get crystal clock rate from property
-    https://git.kernel.org/netdev/net-next/c/74f89cf17e44
-  - [net-next,18/46] can: mcp251xfd: Fix header block to clarify independence from OF
-    https://git.kernel.org/netdev/net-next/c/71520f85f908
-  - [net-next,19/46] can: mcp251xfd: mcp251xfd_open(): request IRQ as shared
-    https://git.kernel.org/netdev/net-next/c/cb6adfe27680
-  - [net-next,20/46] can: esd_usb2: use DEVICE_ATTR_RO() helper macro
-    https://git.kernel.org/netdev/net-next/c/681e4a764521
-  - [net-next,21/46] can: janz-ican3: use DEVICE_ATTR_RO/RW() helper macro
-    https://git.kernel.org/netdev/net-next/c/f731707c5667
-  - [net-next,22/46] can: at91_can: use DEVICE_ATTR_RW() helper macro
-    https://git.kernel.org/netdev/net-next/c/42b9fd6ec7c9
-  - [net-next,23/46] net: at91_can: remove redundant blank lines
-    https://git.kernel.org/netdev/net-next/c/822a99c41fb4
-  - [net-next,24/46] net: at91_can: add blank line after declarations
-    https://git.kernel.org/netdev/net-next/c/933850c4b912
-  - [net-next,25/46] net: at91_can: fix the code style issue about macro
-    https://git.kernel.org/netdev/net-next/c/57bca980bad4
-  - [net-next,26/46] net: at91_can: use BIT macro
-    https://git.kernel.org/netdev/net-next/c/8ed1661cf21e
-  - [net-next,27/46] net: at91_can: fix the alignment issue
-    https://git.kernel.org/netdev/net-next/c/ccc5f1c994df
-  - [net-next,28/46] net: at91_can: add braces {} to all arms of the statement
-    https://git.kernel.org/netdev/net-next/c/02400533bb70
-  - [net-next,29/46] net: at91_can: remove redundant space
-    https://git.kernel.org/netdev/net-next/c/fc1d97d4fbfd
-  - [net-next,30/46] net: at91_can: fix the comments style issue
-    https://git.kernel.org/netdev/net-next/c/5bbe60493a21
-  - [net-next,31/46] can: peak_pci: convert comments to network style comments
-    https://git.kernel.org/netdev/net-next/c/9b69aff9fd1a
-  - [net-next,32/46] can: peak_pci: fix checkpatch warnings
-    https://git.kernel.org/netdev/net-next/c/fe1fa1387a15
-  - [net-next,33/46] can: peak_pci: Add name and FW version of the card in kernel buffer
-    https://git.kernel.org/netdev/net-next/c/805ff68c8e7f
-  - [net-next,34/46] can: peak_usb: pcan_usb_get_device_id(): read value only in case of success
-    https://git.kernel.org/netdev/net-next/c/1d0214a0f5db
-  - [net-next,35/46] can: peak_usb: PCAN-USB: add support of loopback and one-shot mode
-    https://git.kernel.org/netdev/net-next/c/3a7939495ce8
-  - [net-next,36/46] can: peak_usb: pcan_usb_encode_msg(): add information
-    https://git.kernel.org/netdev/net-next/c/1763c547648d
-  - [net-next,37/46] can: peak_usb: pcan_usb_decode_error(): upgrade handling of bus state changes
-    https://git.kernel.org/netdev/net-next/c/c11dcee75830
-  - [net-next,38/46] can: etas_es58x: fix three typos in author name and documentation
-    https://git.kernel.org/netdev/net-next/c/58fb92a517b5
-  - [net-next,39/46] can: etas_es58x: use error pointer during device probing
-    https://git.kernel.org/netdev/net-next/c/45cb13963df3
-  - [net-next,40/46] can: etas_es58x: use devm_kzalloc() to allocate device resources
-    https://git.kernel.org/netdev/net-next/c/6bde4c7fd845
-  - [net-next,41/46] can: etas_es58x: add es58x_free_netdevs() to factorize code
-    https://git.kernel.org/netdev/net-next/c/004653f0abf2
-  - [net-next,42/46] can: etas_es58x: use sizeof and sizeof_field macros instead of constant values
-    https://git.kernel.org/netdev/net-next/c/7fcecf51c18f
-  - [net-next,43/46] can: etas_es58x: rewrite the message cast in es58{1,_fd}_tx_can_msg to increase readability
-    https://git.kernel.org/netdev/net-next/c/f4f5247daa45
-  - [net-next,44/46] can: flexcan: add platform data header
-    https://git.kernel.org/netdev/net-next/c/896e7f3e7424
-  - [net-next,45/46] can: flexcan: add mcf5441x support
-    https://git.kernel.org/netdev/net-next/c/d9cead75b1c6
-  - [net-next,46/46] can: flexcan: update Kconfig to enable coldfire
-    https://git.kernel.org/netdev/net-next/c/8dad5561c13a
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
