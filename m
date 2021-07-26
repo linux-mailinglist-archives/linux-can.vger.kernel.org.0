@@ -2,86 +2,101 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C07E93D5B6A
-	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 16:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3573D5CFB
+	for <lists+linux-can@lfdr.de>; Mon, 26 Jul 2021 17:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234652AbhGZNe0 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Jul 2021 09:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S234960AbhGZOt1 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 26 Jul 2021 10:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbhGZNeB (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 09:34:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDACC0613CF
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 07:12:52 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m81Lf-0002XF-6C
-        for linux-can@vger.kernel.org; Mon, 26 Jul 2021 16:12:51 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E09E5658308
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 14:12:32 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 6A514658239;
-        Mon, 26 Jul 2021 14:12:08 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 2906ae59;
-        Mon, 26 Jul 2021 14:11:47 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Angelo Dureghello <angelo@kernel-space.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 46/46] can: flexcan: update Kconfig to enable coldfire
-Date:   Mon, 26 Jul 2021 16:11:44 +0200
-Message-Id: <20210726141144.862529-47-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210726141144.862529-1-mkl@pengutronix.de>
-References: <20210726141144.862529-1-mkl@pengutronix.de>
+        with ESMTP id S234546AbhGZOt1 (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 10:49:27 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74CCC061757;
+        Mon, 26 Jul 2021 08:29:55 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z2so16235770lft.1;
+        Mon, 26 Jul 2021 08:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QQDP+eHMr4gIyfgZISAXdJqxWneVlfNIaPi7Q7Y+BwY=;
+        b=SwEHCOQT1sN8eHHMk33PPlmsf2WsfQgiHx8uF0f9S896ItrbMhXMPfDroM8u/gPvlr
+         jwcDjHRK7IgMnr/RlEFwSUMQ7w7bb8fHlGO17KZ9Ml7hYWvXbFbD7S5pLW3is2aEaw+W
+         7BMpPSJqapC2KUknmlHtxNq9Ph+r2LVKDs6aBSYfeuBiMIr5cxUsDGT+qnC5XepvYurQ
+         UTjv11zmP//A1j7QBJ3djJ+W0kjagOj6ntkLvR1X6wHqbFNgB9v/767T595LLzo/a16d
+         QCS/H8BWUODnEgzYrTvPUjTNHhMToryAk+86NXZjrcbbm2r6ENXgOfQSdOESaO2PEwCL
+         0w8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QQDP+eHMr4gIyfgZISAXdJqxWneVlfNIaPi7Q7Y+BwY=;
+        b=NxbK7tT9VFAlFl975jNRkqRxJ5PAzPCw08MCjRzt2luWr6EmRTDcbXqh7bn/LktWw4
+         72gDF87qZQwz0yAhS1ae3LurZhAVnoScDdmVHWajOoPeE6ZUtsRFng/5tgnSUVh9Gwhv
+         LLy5k88IR8XeFYOvointQEyPVncDB9HpyXOVdqElA4Vx3XVrefo+GQLmlJhSnivkM19u
+         arRtqcRYRCEurm+1knCnNeyOv8kVE1nucPTSWUuyqaZcAka+vkCfpnN+e+u4bGLf60vk
+         XMrHe5iNcDXtxVV2Iw9eTa70Don95O6HZvMfkmrdYeubITezsJjSvXGQpU46aoech2dZ
+         9Bfg==
+X-Gm-Message-State: AOAM5319M3Tgw0ipMGoK41T82YzHj7/5PZOna9vyJv4+rtDpNvhD0yEy
+        Nn0zeLoB2C3YDZt0o1jMAfY=
+X-Google-Smtp-Source: ABdhPJwtzMFVQxYvh3fdYb9FSirxW5NjdglUjsIIDuSENTmCpKDBFWTRtL1xs+mKvC9NONt7zsDLkg==
+X-Received: by 2002:a05:6512:3147:: with SMTP id s7mr12921939lfi.189.1627313394193;
+        Mon, 26 Jul 2021 08:29:54 -0700 (PDT)
+Received: from localhost.localdomain ([46.61.204.59])
+        by smtp.gmail.com with ESMTPSA id r201sm30165lff.179.2021.07.26.08.29.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jul 2021 08:29:53 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     wg@grandegger.com, mkl@pengutronix.de, davem@davemloft.net,
+        socketcan@hartkopp.net, mailhol.vincent@wanadoo.fr,
+        b.krumboeck@gmail.com, haas@ems-wuensche.com, Stefan.Maetje@esd.eu,
+        matthias.fuchs@esd.eu
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>
+Subject: [PATCH 0/3] can: fix same memory leaks in can drivers
+Date:   Mon, 26 Jul 2021 18:29:38 +0300
+Message-Id: <cover.1627311383.git.paskripkin@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Angelo Dureghello <angelo@kernel-space.org>
+Hi, Marc and can drivers maintainers/reviewers!
 
-Update flexcan to support coldfire architecture.
+A long time ago syzbot reported memory leak in mcba_usb can driver[1]. It was
+using strange pattern for allocating coherent buffers, which was leading to
+memory leaks. Yesterday I got a report, that mcba_usb stopped working since my commit.
+I came up with quick fix and all started working well.
 
-Any new platform should use OF, but coldfire architecture is
-actually not supporting devicetrees.
+There are at least 3 more drivers with this pattern, I decided to fix leaks
+in them too, since code is actually the same (I guess, driver authors just copy pasted
+code parts). Each of following patches is combination of 91c02557174b
+("can: mcba_usb: fix memory leak in mcba_usb") and my yesterday fix [2].
 
-Link: https://lore.kernel.org/r/20210702094841.327679-4-angelo@kernel-space.org
-Signed-off-by: Angelo Dureghello <angelo@kernel-space.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
-index e355d3974977..fff259247d52 100644
---- a/drivers/net/can/Kconfig
-+++ b/drivers/net/can/Kconfig
-@@ -97,7 +97,8 @@ config CAN_AT91
- 
- config CAN_FLEXCAN
- 	tristate "Support for Freescale FLEXCAN based chips"
--	depends on OF && HAS_IOMEM
-+	depends on OF || COLDFIRE || COMPILE_TEST
-+	depends on HAS_IOMEM
- 	help
- 	  Say Y here if you want to support for Freescale FlexCAN.
- 
+Dear maintainers/reviewers, if You have one of these hardware pieces, please, test
+these patches and report any errors you will find.
+
+[1] https://syzkaller.appspot.com/bug?id=c94c1c23e829d5ac97995d51219f0c5a0cd1fa54
+[2] https://lore.kernel.org/netdev/20210725103630.23864-1-paskripkin@gmail.com/
+
+
+With regards,
+Pavel Skripkin
+
+Pavel Skripkin (3):
+  can: usb_8dev: fix memory leak
+  can: ems_usb: fix memory leak
+  can: esd_usb2: fix memory leak
+
+ drivers/net/can/usb/ems_usb.c  | 14 +++++++++++++-
+ drivers/net/can/usb/esd_usb2.c | 16 +++++++++++++++-
+ drivers/net/can/usb/usb_8dev.c | 15 +++++++++++++--
+ 3 files changed, 41 insertions(+), 4 deletions(-)
+
 -- 
-2.30.2
-
+2.32.0
 
