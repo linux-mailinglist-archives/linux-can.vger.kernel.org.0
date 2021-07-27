@@ -2,73 +2,100 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B79D73D6BE1
-	for <lists+linux-can@lfdr.de>; Tue, 27 Jul 2021 04:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3752D3D6FC0
+	for <lists+linux-can@lfdr.de>; Tue, 27 Jul 2021 08:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbhG0Bja (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 26 Jul 2021 21:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51264 "EHLO
+        id S235612AbhG0Gyh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 27 Jul 2021 02:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbhG0Bj3 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 26 Jul 2021 21:39:29 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875FEC061757
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 19:19:57 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a4-20020a17090aa504b0290176a0d2b67aso1931861pjq.2
-        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 19:19:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=spacecubics-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cJTYTqeiPr7O6j38Vm+ZF8iO5nrhTQe3Rtg5btGRmjI=;
-        b=hoJcCc2kJGdJnPSBfHVErE+vu2as6cfi5jll41nuDvYwzCfCsjkichLUYGegAfjks/
-         +kSxafy/6eWQJnOsAXZmgU1o6uDq0gho8AGb7kTl0B4zAIwLrG8mZYj0Gi65Fx61X+sN
-         FbQgtpi6kpYhUHev4HuVCG3hDP17D/zur92yUAUkM+wub7ZefZ8caUsxuy7TjUDKpKGs
-         3euqN8IEYS7jOxVZyzPoRewRHfEqSVpjOVDfjQhsO41twyg/LYc3nvIZ0fKGamY1NdyS
-         DEwsjveDddo6NT93hGJJvUptvqvUerY55iw+MjWp3T9SIBgGuv6pmATfbL5LHBjyXyPa
-         u1ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cJTYTqeiPr7O6j38Vm+ZF8iO5nrhTQe3Rtg5btGRmjI=;
-        b=j8NWKuOpwkjbpQtqZMBuR22u0KyL1c4cZs9k1q0jC5hBhlhich90YgH1W0syRSy048
-         YGHNUF2PlCC4X1lAs2BIM8jMQFt9I7s7LGlube53nIubuBoC8ohKoDQ/Su5zj11bFpll
-         yEDDbr2GaOZg8ZzJRS+KDD65kWWxFfmVbjjpm6LEBu/+ybq823jv9MA0iJ0YZcroUage
-         zC7zLqNnfwSVrSEDJHZ5ET22piJT02/Vstvlzuqne2MviopFR0UQa9ZmvHjlUWphaYzv
-         dRTztHEO9pWIVtVGUCoP5yDEsUaMAit0CfHmTahNDbvcCHBhaIb+V8I8L3oCsqeDuJZD
-         /7pQ==
-X-Gm-Message-State: AOAM531gm320lROWLYPbSjeiy6qsu5BfoDU2FJIIhe6yw0Pr4KruUj69
-        1VUrPAOSkNMeTpO+3KY3MJ5q/g3MAzKXw3996ZdaUg==
-X-Google-Smtp-Source: ABdhPJx4rRdlGScUYyX5Ch7Z/w5SY1Lgm4amdw4lY251WBtEYb/o3cgTs14ONDkqE2aZnmnEq0y0L6SZPrAVLRe/T9A=
-X-Received: by 2002:a65:6494:: with SMTP id e20mr21458081pgv.101.1627352397085;
- Mon, 26 Jul 2021 19:19:57 -0700 (PDT)
+        with ESMTP id S235236AbhG0Gyf (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 27 Jul 2021 02:54:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36573C061760
+        for <linux-can@vger.kernel.org>; Mon, 26 Jul 2021 23:54:33 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1m8Gys-0006Jm-P6; Tue, 27 Jul 2021 08:54:22 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:ebcc:d5d8:601d:f340])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 07494658DBB;
+        Tue, 27 Jul 2021 06:54:16 +0000 (UTC)
+Date:   Tue, 27 Jul 2021 08:54:16 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH v4 0/2] MCAN: Add support for implementing transceiver as
+ a phy
+Message-ID: <20210727065416.k2kye47iiuubkpoz@pengutronix.de>
+References: <20210510052541.14168-1-a-govindraju@ti.com>
+ <2c5b76f7-8899-ab84-736b-790482764384@ti.com>
+ <20210616091709.n7x62wmvafz4rzs7@pengutronix.de>
+ <218d6825-82c0-38f5-19ab-235f8e6f74a0@ti.com>
 MIME-Version: 1.0
-References: <CAELBRW+6BGDPaUGrTDJtv020zF1AvtBAy2Jb1+i=uDbcH+0SzA@mail.gmail.com>
- <20210725111242.2d9a819f@gmail.com> <CAELBRWJQ+QN6+D0M-61Fz818fm7Q-pP4LW=-KUe+nsyFFSXXPg@mail.gmail.com>
- <20210725162720.74fu6qny6dqdc625@pengutronix.de> <CAELBRWKqs_XndF46Ucw9g0Y0n2q9qz-iO+CHyDvdJGMt37OuwQ@mail.gmail.com>
- <20210726093108.4uqfrvoiu5d2s4br@pengutronix.de> <CAGLTpnK2_v9rEvFgsp8ARrSncYLa1vqfgVh-WzGs0qESfCgehw@mail.gmail.com>
- <20210726111738.pgdhynfnw2xaigp5@pengutronix.de>
-In-Reply-To: <20210726111738.pgdhynfnw2xaigp5@pengutronix.de>
-From:   Yasushi SHOJI <yashi@spacecubics.com>
-Date:   Tue, 27 Jul 2021 11:19:46 +0900
-Message-ID: <CAGLTpn+C14JM+zNDcEiTNL1uSBSUkkyRV5Ur-SkeM35RtLenYQ@mail.gmail.com>
-Subject: Re: [PATCH] can: mcba_usb: fix memory leak in mcba_usb
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Yasushi SHOJI <yasushi.shoji@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-can@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="v2azx64h5w2k2b3r"
+Content-Disposition: inline
+In-Reply-To: <218d6825-82c0-38f5-19ab-235f8e6f74a0@ti.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 8:17 PM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
-> Sorry for not being clear - I mean reply to the patch I've send.
->
-> However, I've updated your email address, add your Acked-by and sent a
-> v2.
 
-Thanks!
--- 
-             yashi
+--v2azx64h5w2k2b3r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On 19.07.2021 19:47:33, Aswath Govindraju wrote:
+> I am planning on posting device tree patches to arm64 tree and
+> Nishanth(maintainer of the tree) requested for an immutable tag if the
+> dependent patches are not in master. So, after applying this patch
+> series, can you please provide an immutable tag ?
+
+The patches are included in my pull request with the tag
+linux-can-next-for-5.15-20210725 [1], meanwhile they are in
+net-next/master.
+
+Hope that helps,
+Marc
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git/=
+log/?h=3Dlinux-can-next-for-5.15-20210725
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--v2azx64h5w2k2b3r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmD/rZUACgkQqclaivrt
+76m3tAf/YPWX2pxQDaenuXAhziJe1b3a8dM/H5hQZNEPWEnHLNVUiPZMr2cdkEqi
+n9H29B9DCjMijeGJNzvjLSPwazaPAopW9BAYkYJ1HW/Ou/V8eYag8icJdlU3CAM4
+BTLtIusvbQ1CMrUZsU0y/qSlh9V2agH58I1naVROXXGFHFyTN7/+MUqrm1/GD5IA
+/LWjOhGgA3OmZ7wxhzp8YL3PlXgONUAlMPpdPw7i5HOWaXB27DYK16tndyPWQnd9
+CIT0cYxKsz5aT60YPuTKYo6+3HuToZRcuRvkKgXbX9IJisv3GLVedAb3SjdEto4y
+zpEK+qakjxUwTdmMzaKmFvggvK5zkw==
+=Ul5n
+-----END PGP SIGNATURE-----
+
+--v2azx64h5w2k2b3r--
