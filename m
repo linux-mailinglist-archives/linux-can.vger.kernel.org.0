@@ -2,47 +2,47 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681AE3D8923
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jul 2021 09:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA033D8926
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jul 2021 09:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbhG1Hyf (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Jul 2021 03:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S233469AbhG1H4P (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Jul 2021 03:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233407AbhG1Hyf (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Jul 2021 03:54:35 -0400
+        with ESMTP id S233407AbhG1H4O (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Jul 2021 03:56:14 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1BBC061757
-        for <linux-can@vger.kernel.org>; Wed, 28 Jul 2021 00:54:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FC9C061757
+        for <linux-can@vger.kernel.org>; Wed, 28 Jul 2021 00:56:13 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1m8eOe-0000c4-Qy
-        for linux-can@vger.kernel.org; Wed, 28 Jul 2021 09:54:32 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D0F57659F87
-        for <linux-can@vger.kernel.org>; Wed, 28 Jul 2021 07:54:31 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
+        id 1m8eQA-0000sS-Kd; Wed, 28 Jul 2021 09:56:06 +0200
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7213:487e:ab4f:842a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 160F8659F83;
-        Wed, 28 Jul 2021 07:54:31 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id c8874af9;
-        Wed, 28 Jul 2021 07:54:30 +0000 (UTC)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 99551659F8F;
+        Wed, 28 Jul 2021 07:56:03 +0000 (UTC)
+Date:   Wed, 28 Jul 2021 09:56:02 +0200
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     linux-can@vger.kernel.org
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        kernel test robot <lkp@intel.com>,
-        Angelo Dureghello <angelo@kernel-space.org>
-Subject: [PATCH] can: flexcan: flexcan_error_irq_disable(): add missing variable initialization
-Date:   Wed, 28 Jul 2021 09:54:28 +0200
-Message-Id: <20210728075428.1493568-1-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
+        mailhol.vincent@wanadoo.fr, socketcan@hartkopp.net,
+        b.krumboeck@gmail.com, haas@ems-wuensche.com, Stefan.Maetje@esd.eu,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] can: fix same memory leaks in can drivers
+Message-ID: <20210728075602.egmaxiqlkch6ujvj@pengutronix.de>
+References: <cover.1627311383.git.paskripkin@gmail.com>
+ <cover.1627404470.git.paskripkin@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kn4lllrif7pukgb2"
+Content-Disposition: inline
+In-Reply-To: <cover.1627404470.git.paskripkin@gmail.com>
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -51,31 +51,60 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-This patch adds the missing initialization of the "err" variable in
-the flexcan_clks_enable() function.
 
-Fixes: d9cead75b1c6 ("can: flexcan: add mcf5441x support")
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Angelo Dureghello <angelo@kernel-space.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- drivers/net/can/flexcan.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--kn4lllrif7pukgb2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
-index 54ffb796a320..7734229aa078 100644
---- a/drivers/net/can/flexcan.c
-+++ b/drivers/net/can/flexcan.c
-@@ -649,7 +649,7 @@ static inline void flexcan_error_irq_disable(const struct flexcan_priv *priv)
- 
- static int flexcan_clks_enable(const struct flexcan_priv *priv)
- {
--	int err;
-+	int err = 0;
- 
- 	if (priv->clk_ipg) {
- 		err = clk_prepare_enable(priv->clk_ipg);
--- 
-2.30.2
+On 27.07.2021 19:59:12, Pavel Skripkin wrote:
+> Hi, Marc and can drivers maintainers/reviewers!
+>=20
+> A long time ago syzbot reported memory leak in mcba_usb can driver[1]. It=
+ was
+> using strange pattern for allocating coherent buffers, which was leading =
+to
+> memory leaks. I fixed this wrong pattern in mcba_usb driver and yesterday=
+ I got
+> a report, that mcba_usb stopped working since my commit. I came up with q=
+uick fix
+> and all started working well.
+>=20
+> There are at least 3 more drivers with this pattern, I decided to fix lea=
+ks
+> in them too, since code is actually the same (I guess, driver authors jus=
+t copy pasted
+> code parts). Each of following patches is combination of 91c02557174b
+> ("can: mcba_usb: fix memory leak in mcba_usb") and my yesterday fix [2].
+>=20
+>=20
+> Dear maintainers/reviewers, if You have one of these hardware pieces, ple=
+ase, test
+> these patches and report any errors you will find.
 
+Added to linux-can-next/testing.
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--kn4lllrif7pukgb2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEBDZAACgkQqclaivrt
+76kGfgf+JCMpV9+udOzCu5a3UQeqsAoFbNZyUEnFZWr8jBJZsa9kpytiMLzr1xnD
+5SF643QF1VO0b99a2yIO2YbtOP2gUNz8yVHodWoi4ajqDtTd+78OeFHeqAuocdek
+nsXe0Cbl5ljBOKFp6CQG+rQGw9CM6N1wT6TOCCT1IaML7b1IWF4xjdbh1YRT/WMs
+U1l6HPe08bdR1E60CWYv+C70063emyNRKus7kl4GrR1KwwyQbczySenNwwNizywb
+HomeMKqo+4DG7OotHrp77ethU670PaQCuZCx2mcpEoTVKImMjXluG/NmFuv5A2Cz
+zTgEsOQ+z4HkmrvpPPb01CPT8UFLFQ==
+=0UgU
+-----END PGP SIGNATURE-----
+
+--kn4lllrif7pukgb2--
