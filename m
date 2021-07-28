@@ -2,88 +2,138 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FE03D89A4
-	for <lists+linux-can@lfdr.de>; Wed, 28 Jul 2021 10:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6D33D96D6
+	for <lists+linux-can@lfdr.de>; Wed, 28 Jul 2021 22:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235054AbhG1ITZ (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 28 Jul 2021 04:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235338AbhG1ITI (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 28 Jul 2021 04:19:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CCDC0613D3
-        for <linux-can@vger.kernel.org>; Wed, 28 Jul 2021 01:19:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m8emG-0004CS-3B; Wed, 28 Jul 2021 10:18:56 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:7213:487e:ab4f:842a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id E17DA659FEA;
-        Wed, 28 Jul 2021 08:18:54 +0000 (UTC)
-Date:   Wed, 28 Jul 2021 10:18:54 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel test robot <rong.a.chen@intel.com>
-Cc:     Angelo Dureghello <angelo@kernel-space.org>,
-        kbuild-all@lists.01.org, linux-can@vger.kernel.org
-Subject: Re: [mkl-can-next:testing 45/46] drivers/net/can/flexcan.c:666:2:
- warning: Undefined or garbage value returned to caller
- [clang-analyzer-core.uninitialized.UndefReturn]
-Message-ID: <20210728081854.i6qv3epufar6vrbj@pengutronix.de>
-References: <202107271336.3E6TbTmM-lkp@intel.com>
- <123e9e3f-69e3-661b-d02c-d6b5bf89604b@intel.com>
+        id S231454AbhG1UhS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 28 Jul 2021 16:37:18 -0400
+Received: from mail-eopbgr70118.outbound.protection.outlook.com ([40.107.7.118]:10413
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231126AbhG1UhS (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 28 Jul 2021 16:37:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bZqbxbUoq9Z0JYQtQ/qh/7JztdZHATaiQP7NjFUsklvczAw2Ijiy7YUkUQ6RXr+N27n7h4nX5r5yFTB/WEk1s2abonSUxPYOfZ/MLLtSivtVvZsiU7KwmK04nTiZLfm76ovX3jjmfjq+kzadMDlmyZ9d816z9xa7MAFrhw2xrzeD/sX6kzzbm0kw4zSeaU8FE1DVxFi1gYo/PRqvkaC9LxCXqik470ILL8O7feFv7nuQSmIe6xLJ6gfFgCysawH67j+oqbzX1l1/wLkhGT/THW6F8DG/JP+7bHe35qEx9R/XXXPhUEJvRSBjC6eOgLAFY4YDKGsxmdKEI8Ko3daL/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HFjp1NGI6PjO3aK6T9acMtmI6rHYFU6HaIJeP3os7yI=;
+ b=kAhWziW/GKSGSbIqH0cxo6mC6S6gy205I8O0Tgb6IaevxQYft56zL09a6sJSCv/pd+QqdDBVz1EcgWzeUuKPA0wBRpwFGFeE/+HAFdM75JJY9kNpi8F6yN+iDuBbMf3L2ewPfkefcLAZT3EXs/Ui0D6tP1lvxFISk56L0N+UwNK4pE4RwYUPvSNMX19rjELrOKb3Axk48XOYTyUfCBzVoSXtnBdDpi//QS7sRBENxMyvtKCN0vauyJFqk/KOuybJ6NT+aSszzEvNFWcGAreCdqxJEAEOjtiF98LqdLaXROEPShjmCJwQ0U/sPJT4S7YEPWiFwbJYaIKegYs3H7ghMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 217.86.141.140) smtp.rcpttodomain=esd.eu smtp.mailfrom=esd.eu; dmarc=none
+ action=none header.from=esd.eu; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=esdhannover.onmicrosoft.com; s=selector1-esdhannover-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HFjp1NGI6PjO3aK6T9acMtmI6rHYFU6HaIJeP3os7yI=;
+ b=GZshHPIZJXGL4OLcQ1JTPKXfMjJJoslD9iqW2j+vnAyzNUPWWNkffQKXDcS2XiR+jjsoNCHV2k1zxClTchQDd7M3r3qNADkzJP0lEXA/PJ5nyauLj1sf3p02Pop07D4ML8DJ72auc8LlGoTTiqc/H916r3p0DS8aWEwucR3GaYQ=
+Received: from DU2P251CA0002.EURP251.PROD.OUTLOOK.COM (2603:10a6:10:230::11)
+ by VI1PR03MB6239.eurprd03.prod.outlook.com (2603:10a6:800:140::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Wed, 28 Jul
+ 2021 20:37:12 +0000
+Received: from DB8EUR06FT020.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:10:230:cafe::3b) by DU2P251CA0002.outlook.office365.com
+ (2603:10a6:10:230::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18 via Frontend
+ Transport; Wed, 28 Jul 2021 20:37:12 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 217.86.141.140) smtp.mailfrom=esd.eu; esd.eu; dkim=none (message not signed)
+ header.d=none;esd.eu; dmarc=none action=none header.from=esd.eu;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning esd.eu
+ discourages use of 217.86.141.140 as permitted sender)
+Received: from esd-s7.esd (217.86.141.140) by
+ DB8EUR06FT020.mail.protection.outlook.com (10.233.253.6) with Microsoft SMTP
+ Server id 15.20.4373.18 via Frontend Transport; Wed, 28 Jul 2021 20:37:12
+ +0000
+Received: from esd-s9.esd.local (unknown [10.0.0.190])
+        by esd-s7.esd (Postfix) with ESMTP id E92F07C16C5;
+        Wed, 28 Jul 2021 22:37:11 +0200 (CEST)
+Received: by esd-s9.esd.local (Postfix, from userid 2044)
+        id D46E0E00E4; Wed, 28 Jul 2021 22:37:11 +0200 (CEST)
+From:   =?UTF-8?q?Stefan=20M=C3=A4tje?= <Stefan.Maetje@esd.eu>
+To:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     netdev@vger.kernel.org,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <Stefan.Maetje@esd.eu>
+Subject: [PATCH 0/1] can: esd: add support for esd GmbH PCIe/402 CAN interface family
+Date:   Wed, 28 Jul 2021 22:36:46 +0200
+Message-Id: <20210728203647.15240-1-Stefan.Maetje@esd.eu>
+X-Mailer: git-send-email 2.19.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rtxayyqxpwo6pc4i"
-Content-Disposition: inline
-In-Reply-To: <123e9e3f-69e3-661b-d02c-d6b5bf89604b@intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dcadf09a-8520-414a-528a-08d952077a7b
+X-MS-TrafficTypeDiagnostic: VI1PR03MB6239:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR03MB6239B9520A4EE31048CDBCE081EA9@VI1PR03MB6239.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2201;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ja2Pej20CsJEK0855yUHIsu+3WNi2k3s8H9KThK8t3BClR4EO3TFdyDBDxZoMU0hbjN+yKvpj00/DR/n0/PoD2nzKuY/Lj54DYThw1KVpS3n/4R7XPxe0slwifj8rwpWEr3EGCPqPcDntDZeW0XQyjY2clCicDHcbRZADwGn0VauTebogh4lJEdLoYDzunuYm1cmyCxAut3+j4WqaGS3EilPMHatR+J/H9T8KqJEkmlFxNcrQfPhVrQW1qZtb9DSdmmIxngTlo0Xw4uV8qOSnUl1bQXJFkxLk6dvmYKRNllwu/OrQcMV7yTsuD5XrVyeOgHXirkjySALS9LJTSj3hLUxy1FPzAxCj/2DKSqMmJtHShVEkSso6p2G5VlJhSe55eXhEBynpYNaEzpvwxNfn1kAgQmP7BsgHoSADTDQeSOC9SpQH3r9VbBAGJ1ontzk0NzkztUUYJMb9aDBb2HkZ3Us+9OizQ/WtD4/9pWyk8LiwINLpTETEuBNm9bKccnxjqXVSTIG0XpQL6RkfomGS3Fp34/2xFK432ZQBOf/qckXSRQyOx8TfZUqcunmhyH/FDQGhNHmWyiNUwCMA4y8/GToOO4hpw5evteL82K8iBNJPip5Lcf0dwFNzMRTo+glve6JtqA29Nhj2onoJfKECt6a/ixssnWhrOzFoR4SLn/YTx+lNinoF51swBmOqcNIahBRzCDSrCrUJ2GzYB4kJXgFObJb+23Yskckh98mI6Gyu+IoRwVwvajmEh3HJMmAPEtnnfBO3J/1KMqrWAVYyis3GCRUe2y7JhafMXdx1/k=
+X-Forefront-Antispam-Report: CIP:217.86.141.140;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:esd-s7.esd;PTR:pd9568d8c.dip0.t-ipconnect.de;CAT:NONE;SFS:(136003)(346002)(39830400003)(396003)(376002)(36840700001)(46966006)(36756003)(2906002)(36860700001)(86362001)(186003)(82310400003)(4326008)(966005)(81166007)(2616005)(1076003)(26005)(336012)(6666004)(70586007)(66574015)(47076005)(83380400001)(8676002)(8936002)(110136005)(42186006)(6266002)(5660300002)(478600001)(356005)(70206006)(316002);DIR:OUT;SFP:1102;
+X-OriginatorOrg: esd.eu
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2021 20:37:12.1677
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcadf09a-8520-414a-528a-08d952077a7b
+X-MS-Exchange-CrossTenant-Id: 5a9c3a1d-52db-4235-b74c-9fd851db2e6b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5a9c3a1d-52db-4235-b74c-9fd851db2e6b;Ip=[217.86.141.140];Helo=[esd-s7.esd]
+X-MS-Exchange-CrossTenant-AuthSource: DB8EUR06FT020.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR03MB6239
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+The purpose of this patch is to introduce a new CAN driver to support
+the esd GmbH 402 family of CAN interface boards. The hardware design
+is based on a CAN controller implemented in a FPGA attached to a
+PCIe link.
 
---rtxayyqxpwo6pc4i
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+More information on these boards can be found following the links
+included in the commit message.
 
-On 28.07.2021 08:31:19, kernel test robot wrote:
-> > > drivers/net/can/flexcan.c:666:2: warning: Undefined or garbage value =
-returned to caller [clang-analyzer-core.uninitialized.UndefReturn]
->            return err;
->            ^
+This patch supports all boards but will operate the CAN-FD capable
+boards only in Classic-CAN mode. The CAN-FD support will be added
+when the initial patch has stabilized.
 
-Fixed, thanks,
-Marc
+The patch is based on the linux-can-next testing branch.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+The patch is uses the previous work of my former colleague:
+Link: https://lore.kernel.org/linux-can/1426592308-23817-1-git-send-email-thomas.koerper@esd.eu/
 
---rtxayyqxpwo6pc4i
-Content-Type: application/pgp-signature; name="signature.asc"
+*Note*: scripts/checkpatch.pl still emits the following warnings:
+1.esd402_pci.c:293: Still prints the non-hashed virtual address for
+  debug purposes with pci_err(). This is done only on fatal
+  initialization failure during modprobe and seems sensible in this
+  case to debug the error. This will never occur in normal operation.
+2.esdacc.h:269: The irq_cnt pointer is still declared volatile and
+  this has a reason and is explained in detail in the header
+  referencing the exception noted in volatile-considered-harmful.rst.
 
------BEGIN PGP SIGNATURE-----
+Stefan Mätje (1):
+  can: esd: add support for esd GmbH PCIe/402 CAN interface family
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEBEusACgkQqclaivrt
-76k3GAgAn1d8SvDLvxMIX5+di+7suQbE8YJk1Y1YjuwwuWsHRUyl5P8sCuXEC6LT
-9s+engphtAGchuZLnBLqGWx1469TiYuCfHnZQ9NXdCfvwjfzbkvb++13hz5uhuTq
-sbWQgAJG37d1xip68Z/PiECB9Thc6U3H4XIeN++pzt/Z4bOWqI8GRALTNPhIYhYH
-Juvk0zVzp/GJy7g9jg9wFw8EZcH+WeorJ1L3aoZVazAh5VvICzoLYANVNS3OamJh
-Jkf7Rlqq+Gypk/yI9Ar/s4DQe5vtmWZqGXeKU8YwJToBg2HieRNTFJL+3Ee8Jvah
-HsiKl/3dch1H7cMyylmatT52MLejkA==
-=P2At
------END PGP SIGNATURE-----
+ drivers/net/can/Kconfig          |   1 +
+ drivers/net/can/Makefile         |   1 +
+ drivers/net/can/esd/Kconfig      |  12 +
+ drivers/net/can/esd/Makefile     |  11 +
+ drivers/net/can/esd/esd402_pci.c | 531 +++++++++++++++++++++++
+ drivers/net/can/esd/esdacc.c     | 717 +++++++++++++++++++++++++++++++
+ drivers/net/can/esd/esdacc.h     | 394 +++++++++++++++++
+ 7 files changed, 1667 insertions(+)
+ create mode 100644 drivers/net/can/esd/Kconfig
+ create mode 100644 drivers/net/can/esd/Makefile
+ create mode 100644 drivers/net/can/esd/esd402_pci.c
+ create mode 100644 drivers/net/can/esd/esdacc.c
+ create mode 100644 drivers/net/can/esd/esdacc.h
 
---rtxayyqxpwo6pc4i--
+
+base-commit: 8dad5561c13ade87238d9de6dd410b43f7562447
+-- 
+2.25.1
+
