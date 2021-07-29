@@ -2,128 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50C53DA2A6
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jul 2021 13:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A07B3DA2C6
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jul 2021 14:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234176AbhG2L6F (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 29 Jul 2021 07:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbhG2L6E (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Jul 2021 07:58:04 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC87C061765
-        for <linux-can@vger.kernel.org>; Thu, 29 Jul 2021 04:58:01 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m94fd-00060L-LG; Thu, 29 Jul 2021 13:57:49 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:f664:c769:c9a5:5ced])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 80EE165AE04;
-        Thu, 29 Jul 2021 11:57:45 +0000 (UTC)
-Date:   Thu, 29 Jul 2021 13:57:44 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        wg@grandegger.com, davem@davemloft.net, kuba@kernel.org,
-        angelo@kernel-space.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH] can: flexcan: Fix an uninitialized variable issue
-Message-ID: <20210729115744.ta5lo42d4metzxtf@pengutronix.de>
-References: <a55780a2f4c8f1895b6bcbac4d3f8312b2731079.1627557857.git.christophe.jaillet@wanadoo.fr>
- <20210729113101.n5aucrwu56lyqhg7@pengutronix.de>
- <20210729114442.GT1931@kadam>
+        id S234317AbhG2MCk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-can@lfdr.de>); Thu, 29 Jul 2021 08:02:40 -0400
+Received: from smtp02-ext3.udag.de ([62.146.106.33]:37408 "EHLO
+        smtp02-ext3.udag.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234176AbhG2MCk (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Jul 2021 08:02:40 -0400
+Received: from THOMASPC (p54b8f506.dip0.t-ipconnect.de [84.184.245.6])
+        by smtp02-ext3.udag.de (Postfix) with ESMTPA id E5CDCE045D;
+        Thu, 29 Jul 2021 14:02:35 +0200 (CEST)
+From:   "Thomas Wagner" <thomas@the-wagner.de>
+To:     "'Marc Kleine-Budde'" <mkl@pengutronix.de>
+Cc:     <linux-can@vger.kernel.org>
+References: <006401d78461$0b868b60$2293a220$@the-wagner.de> <20210729105539.ppi7rm6uglwbpyov@pengutronix.de>
+In-Reply-To: <20210729105539.ppi7rm6uglwbpyov@pengutronix.de>
+Subject: RE: Write canfd_frame to can interface
+Date:   Thu, 29 Jul 2021 14:02:34 +0200
+Message-ID: <00a601d78471$9e6f3ca0$db4db5e0$@the-wagner.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="73tosamqqeac4x5o"
-Content-Disposition: inline
-In-Reply-To: <20210729114442.GT1931@kadam>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain;
+        charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQLovzA57bGxcX3nUvQATAnP4bQP2QDyf15pqS/KtvA=
+Content-Language: de
+Authentication-Results: smtp02-ext3.udag.de;
+        auth=pass smtp.auth=thomas@the-wagner.de smtp.mailfrom=thomas@the-wagner.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Marc,
 
---73tosamqqeac4x5o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2021-07-29 12:55, Marc Kleine-Budde wrote:
+> On 29.07.2021 12:03:56, thomas@the-wagner.de wrote:
+>> Shouldn't the error only be returned if the
+>> canfd_frame I pass has more than 8 bytes when the interface is not in
+>> FD-mode?
+> 
+> A CAN-2.0 frame with 8 bytes is something different than a CAN-FD frame
+> with 8 bytes. The kernel uses the length of the frame to decide if it is
+> a CAN-2.0 or CAN-FD frame. If your CAN controller has switched CAN-FD
+> off, it cannot send CAN-FD frames, thus you get an error.
+>
+> Does that make sense?
 
-On 29.07.2021 14:44:42, Dan Carpenter wrote:
-> On Thu, Jul 29, 2021 at 01:31:01PM +0200, Marc Kleine-Budde wrote:
-> > On 29.07.2021 13:27:42, Christophe JAILLET wrote:
-> > > If both 'clk_ipg' and 'clk_per' are NULL, we return an un-init value.
-> > > So set 'err' to 0, to return success in such a case.
-> >=20
-> > Thanks for the patch, a similar one has been posted before:
-> > https://lore.kernel.org/linux-can/20210728075428.1493568-1-mkl@pengutro=
-nix.de/
-> >=20
-> > > Fixes: d9cead75b1c6 ("can: flexcan: add mcf5441x support")
-> > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > > ---
-> > > Another way to fix it is to remove the NULL checks for 'clk_ipg' and
-> > > 'clk_per' that been added in commit d9cead75b1c6.
-> > >=20
-> > > They look useless to me because 'clk_prepare_enable()' returns 0 if i=
-t is
-> > > passed a NULL pointer.
-> >=20
-> > ACK, while the common clock framework's clk_prepare_enable() can handle
-> > NULL pointers, the clock framework used on the mcf5441x doesn't.
->=20
-> Huh?  It looks like it just uses the regular stuff?
+Sure!
 
-https://lore.kernel.org/linux-can/CAMuHMdUeeH2BWgVRoVX7yfckY=3Dwi8X3qkaH0TH=
-hVF_3FpZsbqg@mail.gmail.com/
-Geert Uytterhoeven said:
+I see how a CAN-2.0 frame with 8 bytes differs from a CAN-FD frame with
+8-bytes, but when I receive into a canfd_frame I can't differentiate like that
+anymore. In userspace an 8B CAN-2.0 frame and an 8B CAN-FD frame look just
+the same, no matter the interface running with FD on or off.
 
->> Except that the non-CCF implementation of clk_enable() in
->> arch/m68k/coldfire/clk.c still returns -EINVAL instead of NULL.
->> Any plans to move to CCF? Or at least fix legacy clk_enable().
+... which is wrong as I just noticed. Paying attention to the actual bytes read
+by the socket I can see the 16 vs. 72B that make up a can_frame vs. a
+canfd_frame respectively. Even when always writing into a canfd_frame.
+The same differentiation I must make when sending...
 
-https://lore.kernel.org/linux-can/7c1151fc-cc28-cbc0-c385-313428b32dd7@kern=
-el-space.org/
-Angelo Dureghello said:
->> as Geert pointed out, right now without this protection
->> (that shouldn't anyway harm), probe fails:
->>=20
->> [    1.680000] flexcan: probe of flexcan.0 failed with error -22
+Thanks for the quick reply!
 
-Maybe it's time to fix the mcf5441x's clk_enable() as Geert pointed out.
+Best regards
+Thomas Wagner
 
-regards,
-Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---73tosamqqeac4x5o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmECl7YACgkQqclaivrt
-76k7Hwf8CPDPauuzqcjQbON/KZXOqa6NlC4gzaGfi769N9cePz2abzU5lSugGuYR
-J8nIAU8rnksLWHn7KkxPBF4wSfrbFHv/oWpy5V420b0X9dHHP57dGREZVSqbhGg6
-TL8Kb+Guud/L+Z9W1yEkis9Y7e0E3NJNsg56fnOwec9MeFPHSWdkSVve3ng8Te5N
-o72z+HcEgN8YdJXZA7v4TX6FdJMevFVhvTH31Oj3SnugmgiHR9UEXGhBSNYhqP2R
-isXmNfo1wXJ4itD+5CGHyRZzrJN4iH8acpLwbsdJ6pESCv6XXMxIbHsGaCEe38mh
-uo7VfTlr+PLoNIqLsLv0eCAQHZVZYg==
-=hCb4
------END PGP SIGNATURE-----
-
---73tosamqqeac4x5o--
