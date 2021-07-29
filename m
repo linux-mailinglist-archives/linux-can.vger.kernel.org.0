@@ -2,156 +2,70 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F09A43D9E2D
-	for <lists+linux-can@lfdr.de>; Thu, 29 Jul 2021 09:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2DF3DA0E1
+	for <lists+linux-can@lfdr.de>; Thu, 29 Jul 2021 12:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234464AbhG2HQ7 (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Thu, 29 Jul 2021 03:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234382AbhG2HQ7 (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Jul 2021 03:16:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E243C061757
-        for <linux-can@vger.kernel.org>; Thu, 29 Jul 2021 00:16:56 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m90Hl-0007wL-18; Thu, 29 Jul 2021 09:16:53 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:f664:c769:c9a5:5ced])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B01CA65AB97;
-        Thu, 29 Jul 2021 07:16:51 +0000 (UTC)
-Date:   Thu, 29 Jul 2021 09:16:50 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Stefan =?utf-8?B?TcOkdGpl?= <Stefan.Maetje@esd.eu>
-Cc:     linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 1/1] can: esd: add support for esd GmbH PCIe/402 CAN
- interface family
-Message-ID: <20210729071650.77e274e4zobv5uwo@pengutronix.de>
-References: <20210728203647.15240-1-Stefan.Maetje@esd.eu>
- <20210728203647.15240-2-Stefan.Maetje@esd.eu>
+        id S235189AbhG2KMp (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Thu, 29 Jul 2021 06:12:45 -0400
+Received: from smtp03-ext2.udag.de ([62.146.106.30]:56390 "EHLO
+        smtp03-ext2.udag.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231488AbhG2KMo (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Thu, 29 Jul 2021 06:12:44 -0400
+X-Greylist: delayed 523 seconds by postgrey-1.27 at vger.kernel.org; Thu, 29 Jul 2021 06:12:44 EDT
+Received: from THOMASPC (p54b8f506.dip0.t-ipconnect.de [84.184.245.6])
+        by smtp03-ext2.udag.de (Postfix) with ESMTPA id A57DCE012E
+        for <linux-can@vger.kernel.org>; Thu, 29 Jul 2021 12:03:57 +0200 (CEST)
+From:   <thomas@the-wagner.de>
+To:     <linux-can@vger.kernel.org>
+Subject: Write canfd_frame to can interface
+Date:   Thu, 29 Jul 2021 12:03:56 +0200
+Message-ID: <006401d78461$0b868b60$2293a220$@the-wagner.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2ylmwzleifore2fq"
-Content-Disposition: inline
-In-Reply-To: <20210728203647.15240-2-Stefan.Maetje@esd.eu>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdeEXylJv8eLJZBMQA61Yy5UUnR1Kg==
+Content-Language: de
+Authentication-Results: smtp03-ext2.udag.de;
+        auth=pass smtp.auth=thomas@the-wagner.de smtp.mailfrom=thomas@the-wagner.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hi there!
 
---2ylmwzleifore2fq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I have been working on getting my device compatible with both, CAN and CAN
+FD.
 
-On 28.07.2021 22:36:47, Stefan M=C3=A4tje wrote:
-> This patch adds support for the PCI based PCIe/402 CAN interface family
-> from esd GmbH that is available with various form factors
-> (https://esd.eu/en/products/402-series-can-interfaces).
->=20
-> All boards utilize a FPGA based CAN controller solution developed
-> by esd (esdACC). For more information on the esdACC see
-> https://esd.eu/en/products/esdacc.
+For receiving this is working straight forward. My physical interface is CAN
+FD capable
+and no matter whether I set it up as
+  ip link set can0 type can bitrate 500000 fd off
+or
+  ip link set can0 type can bitrate 500000 fd dbitrate 2000000 off
+in code I can always just use the canfd_frame struct and set the
+CAN_RAW_FD_FRAMES
+option. Doing this I can receive CAN and CAN FD frames in both modes without
+having
+to fall back to the can_frame struct (as explained in the docs).
 
-Thanks for the patch!
+For sending I expected a similar behavior. I set the CAN_RAW_FD_FRAMES
+option and
+always sent using the canfd_frame struct. Sadly, this fails while writing on
+the interface
+when it is not in FD-mode with an Invalid Argument error. To make this work
+without
+falling back to the can_frame struct I just do
+  write(sock, &canfdf, sizeof(struct can_frame));
+where canfdf is a canfd_frame. Not setting CAN_RAW_FD_FRAMES when the
+interface
+is in CAN mode but sending using the full canfd_frame won't work too.
 
-> This driver detects all available CAN interface boards but atm.
-> operates the CAN-FD capable devices in Classic-CAN mode only!
+Is this expected behavior? Shouldn't the error only be returned if the
+canfd_frame I
+pass has more than 8 bytes when the interface is not in FD-mode?
 
-Are you planing to change this?
+Regards,
+Thomas
 
-> Signed-off-by: Stefan M=C3=A4tje <Stefan.Maetje@esd.eu>
-
-For now just some nitpicks:
-
-Compilation throws this error message on 32 bit ARM:
-
-| drivers/net/can/esd/esd402_pci.c: In function =E2=80=98pci402_init_dma=E2=
-=80=99:                                                                    =
-                                                                           =
-              =20
-| drivers/net/can/esd/esd402_pci.c:304:32: warning: right shift count >=3D =
-width of type [-Wshift-count-overflow]                                     =
-                                                                           =
-=20
-|   304 |  iowrite32((u32)(card->dma_hnd >> 32),                           =
-                                                                           =
-                                                                           =
-                                =20
-|       |                                ^~                                =
-                                                                           =
-                                                                           =
-                                =20
-|   CHECK   /srv/work/frogger/socketcan/linux/drivers/net/can/esd/esd402_pc=
-i.c                                                                        =
-                                                                           =
-                                =20
-| drivers/net/can/esd/esd402_pci.c:304:42: warning: shift too big (32) for =
-type unsigned int                           =20
-
-[...]
-
-> diff --git a/drivers/net/can/esd/Makefile b/drivers/net/can/esd/Makefile
-> new file mode 100644
-> index 000000000000..a960e8b97c6f
-> --- /dev/null
-> +++ b/drivers/net/can/esd/Makefile
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +#  Makefile for esd gmbh ESDACC controller driver
-> +#
-> +esd_402_pci-y :=3D esdacc.o esd402_pci.o
-> +
-> +ifeq ($(CONFIG_CAN_ESD_402_PCI),)
-> +obj-m +=3D esd_402_pci.o
-> +else
-> +obj-$(CONFIG_CAN_ESD_402_PCI) +=3D esd_402_pci.o
-> +endif
-
-Why do you build the driver, if it has not been enabled?
-
-The straight forward way to build the driver would be:
-
-| obj-$(CONFIG_CAN_ESD_402_PCI) +=3D esd_402_pci.o
-|
-| esd_402_pci-objs :=3D esdacc.o esd402_pci.o
-
-You can rename the esd_402_pci.c to esd_402_pci-core.c to avoid
-inconsistent naming, (C file is called esd402_pci.c, while the driver
-module is esd_402_pci.ko)
-
-Marc
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---2ylmwzleifore2fq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmECVeAACgkQqclaivrt
-76kh8Af6AgwRrntMx4RiKY+Uc0u3wZD3/KJ5yU31cvFo/8ATetQ9u0I15xmmCY4u
-7Vyiln0kvsdJ4tcEIu7ofC6iCApH1tC/XXWsqLUf26Hbb36TBCXeB+bQWX3Nrz2f
-dMhbU/8G3oLHGCcU69h5Q0pFbG0Xp9PqkWktKsBjB4nNwP0HFrHEDI42Pd9hfYVP
-+QWV2G/6aaHM8O3o2oXtJCD/+ysCY9Spt419n6ysg3iU7SA6o7Hv0HY39CtGQ/Ra
-riMXwFaui/2hQ+7HWv5MK6REMnNMkkyNsH4Dzz6+sLgW2yQc9JCzk4eaPGxPxMdp
-yiLAa2li7S6OzNPsYT27LHC/VHh1Sw==
-=qGLC
------END PGP SIGNATURE-----
-
---2ylmwzleifore2fq--
