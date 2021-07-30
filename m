@@ -2,49 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E13F3DB3DB
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jul 2021 08:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E973DB42D
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jul 2021 09:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbhG3Gsd (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Jul 2021 02:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
+        id S237638AbhG3HFh (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Jul 2021 03:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237452AbhG3Gsd (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jul 2021 02:48:33 -0400
+        with ESMTP id S237600AbhG3HFh (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jul 2021 03:05:37 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01478C061765
-        for <linux-can@vger.kernel.org>; Thu, 29 Jul 2021 23:48:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C18BC061765
+        for <linux-can@vger.kernel.org>; Fri, 30 Jul 2021 00:05:33 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1m9MJh-0003zF-Ll; Fri, 30 Jul 2021 08:48:21 +0200
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:999f:536:c369:29ed])
+        id 1m9MaJ-00061C-Qb
+        for linux-can@vger.kernel.org; Fri, 30 Jul 2021 09:05:31 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 8698565B79B
+        for <linux-can@vger.kernel.org>; Fri, 30 Jul 2021 07:05:29 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id A2C2565B751;
-        Fri, 30 Jul 2021 06:48:18 +0000 (UTC)
-Date:   Fri, 30 Jul 2021 08:48:17 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id C93C265B78F;
+        Fri, 30 Jul 2021 07:05:28 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 8da5ee61;
+        Fri, 30 Jul 2021 07:05:28 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Akshay Bhat <akshay.bhat@timesys.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net] can: hi311x: fix a signedness bug in hi3110_cmd()
-Message-ID: <20210730064817.jktiyy4rodvgjppi@pengutronix.de>
-References: <20210729141246.GA1267@kili>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can 2021-07-30
+Date:   Fri, 30 Jul 2021 09:05:20 +0200
+Message-Id: <20210730070526.1699867-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o4rz6babiigy7wze"
-Content-Disposition: inline
-In-Reply-To: <20210729141246.GA1267@kili>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -53,44 +50,59 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---o4rz6babiigy7wze
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 6 patches for net/master.
 
-On 29.07.2021 17:12:46, Dan Carpenter wrote:
-> The hi3110_cmd() is supposed to return zero on success and negative
-> error codes on failure, but it was accidentally declared as a u8 when
-> it needs to be an int type.
->=20
-> Fixes: 57e83fb9b746 ("can: hi311x: Add Holt HI-311x CAN driver")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+The first patch is by me and adds Yasushi SHOJI as a reviewer for the
+Microchip CAN BUS Analyzer Tool driver.
 
-Applied to linux-can/testing.
+Dan Carpenter's patch fixes a signedness bug in the hi311x driver.
 
-Thanks,
+Pavel Skripkin provides 4 patches, the first targets the mcba_usb
+driver by adding the missing urb->transfer_dma initialization, which
+was broken in a previous commit. The last 3 patches fix a memory leak
+in the usb_8dev, ems_usb and esd_usb2 driver.
+
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---o4rz6babiigy7wze
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit fc16a5322ee6c30ea848818722eee5d352f8d127:
 
------BEGIN PGP SIGNATURE-----
+  Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf (2021-07-29 00:53:32 +0100)
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEDoK8ACgkQqclaivrt
-76k+sggArSfN5Qz1jEA+oE2PvBMy73+C8oCKI/tIS4bI55e2MienYaZLbKr5z4a/
-xMuXRU2FQJEts0k8OCnSqR0HTdbVm8vTsK1nOS9r6cb2Wn6TSserdCg9AewBdEFY
-fCxQ/VdgHeYWErNL+uWOHM45eoW1AmFVO+JCzaGsqCkj02/UomLM7LNX079pkhrb
-MWM46nCWVsRGrcY0gVHf8HyX+cuDxXDfRNU/oCKnPYEopdoCktFs2hVANhaKxa/0
-SrIToyAGlCqk1d1TJEZOJ38/N6uts+w9JgFUYFk3Ufn7hg23S/yllCUr9fk6h/wx
-8/o2LaP3OyYPyDChsWR3ATDvXIDb6g==
-=QFrE
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---o4rz6babiigy7wze--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can.git tags/linux-can-fixes-for-5.14-20210730
+
+for you to fetch changes up to 928150fad41ba16df7fcc9f7f945747d0f56cbb6:
+
+  can: esd_usb2: fix memory leak (2021-07-30 08:47:34 +0200)
+
+----------------------------------------------------------------
+linux-can-fixes-for-5.14-20210730
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      can: hi311x: fix a signedness bug in hi3110_cmd()
+
+Marc Kleine-Budde (1):
+      MAINTAINERS: add Yasushi SHOJI as reviewer for the Microchip CAN BUS Analyzer Tool driver
+
+Pavel Skripkin (4):
+      can: mcba_usb_start(): add missing urb->transfer_dma initialization
+      can: usb_8dev: fix memory leak
+      can: ems_usb: fix memory leak
+      can: esd_usb2: fix memory leak
+
+ MAINTAINERS                    |  6 ++++++
+ drivers/net/can/spi/hi311x.c   |  2 +-
+ drivers/net/can/usb/ems_usb.c  | 14 +++++++++++++-
+ drivers/net/can/usb/esd_usb2.c | 16 +++++++++++++++-
+ drivers/net/can/usb/mcba_usb.c |  2 ++
+ drivers/net/can/usb/usb_8dev.c | 15 +++++++++++++--
+ 6 files changed, 50 insertions(+), 5 deletions(-)
+
+
