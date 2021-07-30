@@ -2,150 +2,243 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 729633DB43C
-	for <lists+linux-can@lfdr.de>; Fri, 30 Jul 2021 09:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E583DBD8A
+	for <lists+linux-can@lfdr.de>; Fri, 30 Jul 2021 19:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbhG3HFu (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Fri, 30 Jul 2021 03:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237832AbhG3HFn (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Fri, 30 Jul 2021 03:05:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B28C06179B
-        for <linux-can@vger.kernel.org>; Fri, 30 Jul 2021 00:05:38 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1m9MaP-00066d-AL
-        for linux-can@vger.kernel.org; Fri, 30 Jul 2021 09:05:37 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id D39F265B7C6
-        for <linux-can@vger.kernel.org>; Fri, 30 Jul 2021 07:05:32 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 908F465B79C;
-        Fri, 30 Jul 2021 07:05:29 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id a61cec51;
-        Fri, 30 Jul 2021 07:05:28 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-stable <stable@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net 6/6] can: esd_usb2: fix memory leak
-Date:   Fri, 30 Jul 2021 09:05:26 +0200
-Message-Id: <20210730070526.1699867-7-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210730070526.1699867-1-mkl@pengutronix.de>
-References: <20210730070526.1699867-1-mkl@pengutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+        id S229999AbhG3RRC (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Fri, 30 Jul 2021 13:17:02 -0400
+Received: from smtp-36.italiaonline.it ([213.209.10.36]:36119 "EHLO libero.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229738AbhG3RRB (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Fri, 30 Jul 2021 13:17:01 -0400
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([79.45.223.112])
+        by smtp-36.iol.local with ESMTPA
+        id 9W7tmvxuai9pC9W7xmkmuu; Fri, 30 Jul 2021 19:16:55 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1627665415; bh=byHMCPhGZ+GTEHiz8XqPFAP8SrcBPUm0jTW9VfwGYOY=;
+        h=From;
+        b=Ben7FH+9T6DVWKZOGqC/MWsm5wIS4XKn54DitfWke9aeyEojXFhEOlqu6M20AM1KD
+         JbaQpdOfxOOtpfYwpdVj6iAuGXyjI/sOsP5TLWWvxRX21XXXNeqTPesIQIs5Mf5g6C
+         dBfoUipL16tuJVLA4s4f41C22AG9Hgzx0ccmDmmEITY58HZ7aDS1AygE8P6QXJgh+u
+         R19WwlxWx6OqGbv3Dom87u8fiBRjPKvs+QioXHKh2GGhyR2X+84WwVa0bVLpJ1bo8/
+         T86nSLUksveG3sBao4pJxCMBCcdCHRzqR+jlE6QDD9cn97q8MDVqHqnNt5tEwqGkq3
+         Uz/G1pyd1V5Bg==
+X-CNFS-Analysis: v=2.4 cv=RqYAkAqK c=1 sm=1 tr=0 ts=61043407 cx=a_exe
+ a=bNRYHniHET+FA3QFAnazSw==:117 a=bNRYHniHET+FA3QFAnazSw==:17 a=gEfo2CItAAAA:8
+ a=faqJUPsDrVUeZvGr8DYA:9 a=Sf5sUmNcCa837iNl:21 a=jsU-foglF0TQYXlV:21
+ a=sptkURWiP4Gy88Gu7hUp:22
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dariobin@libero.it>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: net: can: c_can: convert to json-schema
+Date:   Fri, 30 Jul 2021 19:16:46 +0200
+Message-Id: <20210730171646.2406-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfNEl38DIm46sYo5x2RN/cpQMMGVk1GQcqlOmoXyZIRQM6+rUaKxqIilWxWW/3wXJxChimr3dTLjccutauXzSnJAjrrRuLYRd3JVRHgy1Fk4JF5iIS1EJ
+ h/lqDBxiHdDd2u5G5X643k8ag0Z/i9+CGmL+uoSfsPXKk5Nc8JoOiFVRfPDH1OYTmK+g9C1S+vBlgeWSnHznmYukabZUXwr0JuSrxaP+zbK5L5LBCdf9qXp1
+ Ysp6yUTRuXjXlT3Yk9Mgp5Ypl+olmWHnxUJhPyfmf5AZEuGln+LIL0t0zuxBaxrM+M6WlIhh1nwzUQqdZ23BfxMe3bLtMifsPRgMqy9piR8kOAzX6od1+MO1
+ VrODlPpaYpYxUX1GOhb51aMVtAVXsNPjKh7h/nfwjB87YsAu0w9m8w+hmebudyyoYhY2HXr8lO3xVv76wY0vV6xGy9JdNgd00czyZrrKRK4S2J/EtUienJik
+ 4dlaMUzLTYXvMo3OYYobGFG21BAfVDGr6UtkiGdg1DdneSu31vv+8VD+yxo=
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+Convert the Bosch C_CAN/D_CAN controller device tree binding
+documentation to json-schema.
 
-In esd_usb2_setup_rx_urbs() MAX_RX_URBS coherent buffers are allocated
-and there is nothing, that frees them:
+Document missing properties.
+Remove "ti,hwmods" as it is no longer used in TI dts.
+Make "clocks" required as it is used in all dts.
+Correct nodename in the example.
 
-1) In callback function the urb is resubmitted and that's all
-2) In disconnect function urbs are simply killed, but URB_FREE_BUFFER
-   is not set (see esd_usb2_setup_rx_urbs) and this flag cannot be used
-   with coherent buffers.
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
 
-So, all allocated buffers should be freed with usb_free_coherent()
-explicitly.
-
-Side note: This code looks like a copy-paste of other can drivers. The
-same patch was applied to mcba_usb driver and it works nice with real
-hardware. There is no change in functionality, only clean-up code for
-coherent buffers.
-
-Fixes: 96d8e90382dc ("can: Add driver for esd CAN-USB/2 device")
-Link: https://lore.kernel.org/r/b31b096926dcb35998ad0271aac4b51770ca7cc8.1627404470.git.paskripkin@gmail.com
-Cc: linux-stable <stable@vger.kernel.org>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 ---
- drivers/net/can/usb/esd_usb2.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/usb/esd_usb2.c b/drivers/net/can/usb/esd_usb2.c
-index 65b58f8fc328..66fa8b07c2e6 100644
---- a/drivers/net/can/usb/esd_usb2.c
-+++ b/drivers/net/can/usb/esd_usb2.c
-@@ -195,6 +195,8 @@ struct esd_usb2 {
- 	int net_count;
- 	u32 version;
- 	int rxinitdone;
-+	void *rxbuf[MAX_RX_URBS];
-+	dma_addr_t rxbuf_dma[MAX_RX_URBS];
- };
- 
- struct esd_usb2_net_priv {
-@@ -545,6 +547,7 @@ static int esd_usb2_setup_rx_urbs(struct esd_usb2 *dev)
- 	for (i = 0; i < MAX_RX_URBS; i++) {
- 		struct urb *urb = NULL;
- 		u8 *buf = NULL;
-+		dma_addr_t buf_dma;
- 
- 		/* create a URB, and a buffer for it */
- 		urb = usb_alloc_urb(0, GFP_KERNEL);
-@@ -554,7 +557,7 @@ static int esd_usb2_setup_rx_urbs(struct esd_usb2 *dev)
- 		}
- 
- 		buf = usb_alloc_coherent(dev->udev, RX_BUFFER_SIZE, GFP_KERNEL,
--					 &urb->transfer_dma);
-+					 &buf_dma);
- 		if (!buf) {
- 			dev_warn(dev->udev->dev.parent,
- 				 "No memory left for USB buffer\n");
-@@ -562,6 +565,8 @@ static int esd_usb2_setup_rx_urbs(struct esd_usb2 *dev)
- 			goto freeurb;
- 		}
- 
-+		urb->transfer_dma = buf_dma;
+Changes in v3:
+ - Add type (phandle-array) and size (maxItems: 2) to syscon-raminit
+   property.
+
+Changes in v2:
+ - Drop Documentation references.
+
+ .../bindings/net/can/bosch,c_can.yaml         | 85 +++++++++++++++++++
+ .../devicetree/bindings/net/can/c_can.txt     | 65 --------------
+ 2 files changed, 85 insertions(+), 65 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/bosch,c_can.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/can/c_can.txt
+
+diff --git a/Documentation/devicetree/bindings/net/can/bosch,c_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,c_can.yaml
+new file mode 100644
+index 000000000000..416db97fbf9d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/bosch,c_can.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/can/bosch,c_can.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 		usb_fill_bulk_urb(urb, dev->udev,
- 				  usb_rcvbulkpipe(dev->udev, 1),
- 				  buf, RX_BUFFER_SIZE,
-@@ -574,8 +579,12 @@ static int esd_usb2_setup_rx_urbs(struct esd_usb2 *dev)
- 			usb_unanchor_urb(urb);
- 			usb_free_coherent(dev->udev, RX_BUFFER_SIZE, buf,
- 					  urb->transfer_dma);
-+			goto freeurb;
- 		}
- 
-+		dev->rxbuf[i] = buf;
-+		dev->rxbuf_dma[i] = buf_dma;
++title: Bosch C_CAN/D_CAN controller Device Tree Bindings
 +
- freeurb:
- 		/* Drop reference, USB core will take care of freeing it */
- 		usb_free_urb(urb);
-@@ -663,6 +672,11 @@ static void unlink_all_urbs(struct esd_usb2 *dev)
- 	int i, j;
- 
- 	usb_kill_anchored_urbs(&dev->rx_submitted);
++description: Bosch C_CAN/D_CAN controller for CAN bus
 +
-+	for (i = 0; i < MAX_RX_URBS; ++i)
-+		usb_free_coherent(dev->udev, RX_BUFFER_SIZE,
-+				  dev->rxbuf[i], dev->rxbuf_dma[i]);
++maintainers:
++  - Dario Binacchi <dariobin@libero.it>
 +
- 	for (i = 0; i < dev->net_count; i++) {
- 		priv = dev->nets[i];
- 		if (priv) {
++allOf:
++  - $ref: can-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - bosch,c_can
++          - bosch,d_can
++          - ti,dra7-d_can
++          - ti,am3352-d_can
++      - items:
++          - enum:
++              - ti,am4372-d_can
++          - const: ti,am3352-d_can
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  power-domains:
++    description: |
++      Should contain a phandle to a PM domain provider node and an args
++      specifier containing the DCAN device id value. It's mandatory for
++      Keystone 2 66AK2G SoCs only.
++    maxItems: 1
++
++  clocks:
++    description: |
++      CAN functional clock phandle.
++    maxItems: 1
++
++  clock-names:
++    maxItems: 1
++
++  syscon-raminit:
++    description: |
++      Handle to system control region that contains the RAMINIT register,
++      register offset to the RAMINIT register and the CAN instance number (0
++      offset).
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    maxItems: 2
++
++required:
++ - compatible
++ - reg
++ - interrupts
++ - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++    can@481d0000 {
++        compatible = "bosch,d_can";
++        reg = <0x481d0000 0x2000>;
++        interrupts = <55>;
++        interrupt-parent = <&intc>;
++        status = "disabled";
++    };
++  - |
++    can@0 {
++        compatible = "ti,am3352-d_can";
++        reg = <0x0 0x2000>;
++        clocks = <&dcan1_fck>;
++        clock-names = "fck";
++        syscon-raminit = <&scm_conf 0x644 1>;
++        interrupts = <55>;
++        status = "disabled";
++    };
+diff --git a/Documentation/devicetree/bindings/net/can/c_can.txt b/Documentation/devicetree/bindings/net/can/c_can.txt
+deleted file mode 100644
+index 366479806acb..000000000000
+--- a/Documentation/devicetree/bindings/net/can/c_can.txt
++++ /dev/null
+@@ -1,65 +0,0 @@
+-Bosch C_CAN/D_CAN controller Device Tree Bindings
+--------------------------------------------------
+-
+-Required properties:
+-- compatible		: Should be "bosch,c_can" for C_CAN controllers and
+-			  "bosch,d_can" for D_CAN controllers.
+-			  Can be "ti,dra7-d_can", "ti,am3352-d_can" or
+-			  "ti,am4372-d_can".
+-- reg			: physical base address and size of the C_CAN/D_CAN
+-			  registers map
+-- interrupts		: property with a value describing the interrupt
+-			  number
+-
+-The following are mandatory properties for DRA7x, AM33xx and AM43xx SoCs only:
+-- ti,hwmods		: Must be "d_can<n>" or "c_can<n>", n being the
+-			  instance number
+-
+-The following are mandatory properties for Keystone 2 66AK2G SoCs only:
+-- power-domains		: Should contain a phandle to a PM domain provider node
+-			  and an args specifier containing the DCAN device id
+-			  value. This property is as per the binding,
+-			  Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
+-- clocks		: CAN functional clock phandle. This property is as per the
+-			  binding,
+-			  Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
+-
+-Optional properties:
+-- syscon-raminit	: Handle to system control region that contains the
+-			  RAMINIT register, register offset to the RAMINIT
+-			  register and the CAN instance number (0 offset).
+-
+-Note: "ti,hwmods" field is used to fetch the base address and irq
+-resources from TI, omap hwmod data base during device registration.
+-Future plan is to migrate hwmod data base contents into device tree
+-blob so that, all the required data will be used from device tree dts
+-file.
+-
+-Example:
+-
+-Step1: SoC common .dtsi file
+-
+-	dcan1: d_can@481d0000 {
+-		compatible = "bosch,d_can";
+-		reg = <0x481d0000 0x2000>;
+-		interrupts = <55>;
+-		interrupt-parent = <&intc>;
+-		status = "disabled";
+-	};
+-
+-(or)
+-
+-	dcan1: d_can@481d0000 {
+-		compatible = "bosch,d_can";
+-		ti,hwmods = "d_can1";
+-		reg = <0x481d0000 0x2000>;
+-		interrupts = <55>;
+-		interrupt-parent = <&intc>;
+-		status = "disabled";
+-	};
+-
+-Step 2: board specific .dts file
+-
+-	&dcan1 {
+-		status = "okay";
+-	};
 -- 
-2.30.2
-
+2.17.1
 
