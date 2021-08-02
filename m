@@ -2,45 +2,44 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B83C73DD2C8
-	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 11:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEC03DD2D7
+	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 11:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbhHBJSx (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Aug 2021 05:18:53 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:55740 "EHLO
+        id S232974AbhHBJVv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Aug 2021 05:21:51 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:56540 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbhHBJSw (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 05:18:52 -0400
+        with ESMTP id S232699AbhHBJVv (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 05:21:51 -0400
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1729IVVh028556;
-        Mon, 2 Aug 2021 04:18:31 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1729LXaf030014;
+        Mon, 2 Aug 2021 04:21:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1627895911;
-        bh=4Z+3ysRgexbfccgrBWiUFU3xK2qFdvWRaUojKrBGN50=;
-        h=From:To:CC:Subject:Date;
-        b=JdKr7Fmp1rWuq1n1sMwaNqINY940i69NpzOkney8ldmSewGM+lf/pJREi0+Pi/STJ
-         BlwhV0eOP1rkAohzb5+1Qt3jbP2WANTNifiqljRGEzxf3r4gwv3O8UBleIOyaRI7Pm
-         SdPp6NPeWzPVj0KHTQqy2JIdZtl6Ri1OLJ9E/1cE=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1729IVWZ099533
+        s=ti-com-17Q1; t=1627896093;
+        bh=YMxXYRcOOZzWcRxCfyHyAuouRqLYkZ86TeNgdCgm/iQ=;
+        h=Subject:CC:References:From:Date:In-Reply-To;
+        b=n80Kv3u455hse6ybmRoxjnbFVdBL21hF4rjHIilz1k+xDjRBZ4ZV+knIZkilLL5Lm
+         a/KPCGMxSM6gdOHaF8K3o4+rvjzRv6XXHOL+xwondg8Bx0HWZGkYg0/tvc6M4g/wwg
+         An2SFwpe/hBOnEH9EfZJiVzBzlaKooBeAYVE9SKk=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1729LXWM103605
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 2 Aug 2021 04:18:31 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 2 Aug 2021 04:21:33 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 2 Aug
- 2021 04:18:31 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ 2021 04:21:33 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 2 Aug 2021 04:18:30 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1729IPBW101552;
-        Mon, 2 Aug 2021 04:18:25 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
+ Frontend Transport; Mon, 2 Aug 2021 04:21:33 -0500
+Received: from [10.250.232.46] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1729LRQL024144;
+        Mon, 2 Aug 2021 04:21:28 -0500
+Subject: Re: [PATCH] dt-bindings: net: can: Document power-domains property
 CC:     Lokesh Vutla <lokeshvutla@ti.com>, Nishanth Menon <nm@ti.com>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Marc Kleine-Budde <mkl@pengutronix.de>,
@@ -50,46 +49,59 @@ CC:     Lokesh Vutla <lokeshvutla@ti.com>, Nishanth Menon <nm@ti.com>,
         Sriram Dash <sriram.dash@samsung.com>,
         <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] dt-bindings: net: can: Document power-domains property
-Date:   Mon, 2 Aug 2021 14:48:22 +0530
-Message-ID: <20210802091822.16407-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+References: <20210731045138.29912-1-a-govindraju@ti.com>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <00760fc2-6731-8bad-4d3a-993acbc86bcc@ti.com>
+Date:   Mon, 2 Aug 2021 14:51:27 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20210731045138.29912-1-a-govindraju@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Document power-domains property for adding the Power domain provider.
+Hi all,
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
+On 31/07/21 10:21 am, Aswath Govindraju wrote:
+> Document power-domains property for adding the Power domain provider.
+> 
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
 
-Changes since v1:
-- removed reference in the description
+Posted respin v2[1] for this patch, after removing the reference in
+description.
 
- Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+[1] - https://lore.kernel.org/patchwork/patch/1470806/
 
-diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-index a7b5807c5543..fb547e26c676 100644
---- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-+++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-@@ -104,6 +104,12 @@ properties:
-           maximum: 32
-     maxItems: 1
- 
-+  power-domains:
-+    description:
-+      Power domain provider node and an args specifier containing
-+      the can device id value.
-+    maxItems: 1
-+
-   can-transceiver:
-     $ref: can-transceiver.yaml#
- 
--- 
-2.17.1
+Thanks,
+Aswath
+
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index a7b5807c5543..d633fe1da870 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -104,6 +104,13 @@ properties:
+>            maximum: 32
+>      maxItems: 1
+>  
+> +  power-domains:
+> +    description:
+> +      Power domain provider node and an args specifier containing
+> +      the can device id value. Please see,
+> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
+> +    maxItems: 1
+> +
+>    can-transceiver:
+>      $ref: can-transceiver.yaml#
+>  
+> 
 
