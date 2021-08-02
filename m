@@ -2,106 +2,69 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEC03DD2D7
-	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 11:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED67D3DD3B0
+	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 12:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbhHBJVv (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Aug 2021 05:21:51 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:56540 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbhHBJVv (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 05:21:51 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1729LXaf030014;
-        Mon, 2 Aug 2021 04:21:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1627896093;
-        bh=YMxXYRcOOZzWcRxCfyHyAuouRqLYkZ86TeNgdCgm/iQ=;
-        h=Subject:CC:References:From:Date:In-Reply-To;
-        b=n80Kv3u455hse6ybmRoxjnbFVdBL21hF4rjHIilz1k+xDjRBZ4ZV+knIZkilLL5Lm
-         a/KPCGMxSM6gdOHaF8K3o4+rvjzRv6XXHOL+xwondg8Bx0HWZGkYg0/tvc6M4g/wwg
-         An2SFwpe/hBOnEH9EfZJiVzBzlaKooBeAYVE9SKk=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1729LXWM103605
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 2 Aug 2021 04:21:33 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 2 Aug
- 2021 04:21:33 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Mon, 2 Aug 2021 04:21:33 -0500
-Received: from [10.250.232.46] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1729LRQL024144;
-        Mon, 2 Aug 2021 04:21:28 -0500
-Subject: Re: [PATCH] dt-bindings: net: can: Document power-domains property
-CC:     Lokesh Vutla <lokeshvutla@ti.com>, Nishanth Menon <nm@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sriram Dash <sriram.dash@samsung.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20210731045138.29912-1-a-govindraju@ti.com>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <00760fc2-6731-8bad-4d3a-993acbc86bcc@ti.com>
-Date:   Mon, 2 Aug 2021 14:51:27 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232056AbhHBK3m (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Aug 2021 06:29:42 -0400
+Received: from rspamd-proxy-01.udag.de ([62.146.106.33]:51998 "EHLO
+        smtp02-ext3.udag.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231357AbhHBK3l (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 06:29:41 -0400
+Received: from NBVM2-TW.fritz.box (p54b8ff0e.dip0.t-ipconnect.de [84.184.255.14])
+        by smtp02-ext3.udag.de (Postfix) with ESMTPA id 1DD02E03ED;
+        Mon,  2 Aug 2021 12:29:31 +0200 (CEST)
+From:   Thomas Wagner <thomas@the-wagner.de>
+To:     mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org, Thomas Wagner <thomas@the-wagner.de>
+Subject: [PATCH] can: Documentation: Sending with canfd_frame on a CAN 2.0 interface
+Date:   Mon,  2 Aug 2021 12:28:53 +0200
+Message-Id: <20210802102853.29308-1-thomas@the-wagner.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210731045138.29912-1-a-govindraju@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp02-ext3.udag.de;
+        auth=pass smtp.auth=thomas@the-wagner.de smtp.mailfrom=thomas@the-wagner.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi all,
+In response to my uncertainty described here
+https://lore.kernel.org/linux-can/20210729121417.kysljj4636hmhem2@pengutronix.de/T/#t.
 
-On 31/07/21 10:21 am, Aswath Govindraju wrote:
-> Document power-domains property for adding the Power domain provider.
-> 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
+This patch clarifies sending CAN 2.0 frames on CAN FD capable hardware
+when the interface is configured as CAN 2.0.
 
-Posted respin v2[1] for this patch, after removing the reference in
-description.
+Signed-off-by: Thomas Wagner <thomas@the-wagner.de>
+---
+ Documentation/networking/can.rst | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-[1] - https://lore.kernel.org/patchwork/patch/1470806/
-
-Thanks,
-Aswath
-
->  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> index a7b5807c5543..d633fe1da870 100644
-> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-> @@ -104,6 +104,13 @@ properties:
->            maximum: 32
->      maxItems: 1
->  
-> +  power-domains:
-> +    description:
-> +      Power domain provider node and an args specifier containing
-> +      the can device id value. Please see,
-> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
-> +    maxItems: 1
-> +
->    can-transceiver:
->      $ref: can-transceiver.yaml#
->  
-> 
+diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
+index f34cb0e4460e..af94ece79d5e 100644
+--- a/Documentation/networking/can.rst
++++ b/Documentation/networking/can.rst
+@@ -675,6 +675,20 @@ When sending to CAN devices make sure that the device is capable to handle
+ CAN FD frames by checking if the device maximum transfer unit is CANFD_MTU.
+ The CAN device MTU can be retrieved e.g. with a SIOCGIFMTU ioctl() syscall.
+ 
++You should also check the MTU in an environment, where the device is CAN
++FD capable, but the interface might be configured for just CAN 2.0. In
++this case the canfd_frame struct can still be used, but when writing to
++the socket write CAN_MTU bytes at most to send a CAN 2.0 frame.
++
++In conclusion:
++- Set the CAN_RAW_FD_FRAMES flag and ignore the error on older kernels
++- Send and receive using the canfd_frame struct
++- Check the bytes received to know, whether you got an CAN 2.0 or FD frame
++- Check the devices MTU to know, whether you can send CAN 2.0 or FD frame
++
++Building your application using always the canfd_frame, setting the  this enables it to run on devices with and
++without CAN FD hardware. It also handles the possibility of interfaces that
++are configured as CAN 2.0 or CAN FD on CAN FD hardware.
+ 
+ RAW socket option CAN_RAW_JOIN_FILTERS
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- 
+2.25.1
 
