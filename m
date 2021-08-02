@@ -2,55 +2,74 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD2E3DCF19
-	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 06:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325A33DCF47
+	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 06:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbhHBEHU (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Aug 2021 00:07:20 -0400
-Received: from guitar.tcltek.co.il ([192.115.133.116]:56653 "EHLO
-        mx.tkos.co.il" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229500AbhHBEHS (ORCPT <rfc822;linux-can@vger.kernel.org>);
-        Mon, 2 Aug 2021 00:07:18 -0400
-X-Greylist: delayed 442 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Aug 2021 00:07:18 EDT
-Received: from tarshish.tkos.co.il (unknown [10.0.8.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx.tkos.co.il (Postfix) with ESMTPS id 65B7444065D;
-        Mon,  2 Aug 2021 06:59:28 +0300 (IDT)
-From:   Baruch Siach <baruch@tkos.co.il>
-To:     Yasushi SHOJI <yashi@spacecubics.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     linux-can@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>
-Subject: [PATCH] MAINTAINERS: fix Microchip CAN BUS Analyzer Tool entry typo
-Date:   Mon,  2 Aug 2021 06:59:41 +0300
-Message-Id: <cc4831cb1c8759c15fb32c21fd326e831183733d.1627876781.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.30.2
+        id S229628AbhHBEYN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Aug 2021 00:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230423AbhHBEYM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 00:24:12 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA6BC0617A3
+        for <linux-can@vger.kernel.org>; Sun,  1 Aug 2021 21:23:58 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id g21so3404304edb.4
+        for <linux-can@vger.kernel.org>; Sun, 01 Aug 2021 21:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=czeOQMYeZau4ejaBbgDdCuklRCyHoHRlo6xUfJcAj3bciaGtFBitiUib5a5MwOumE9
+         w7/Jn7bBNsLcP1+CHZ7cIXH8h+QOe2ioJtROZD2bqhS/lqEvaNcrldVE+LZBhK9CNKw9
+         GasUZeZx/Kcocc9jX4O3VqyeOrpbJXFle0t9OXPFTLvjA0ffc0WpqgkYu8CQSXrFRLzD
+         Yc8UR7mKpLCqpwn4ZFojN5x09EwrnOTDpyVyuL9REZStwkguR4uL/4srDE+vjWW4JCu8
+         Sy5z9ei3l3c7g9TC5s6E8Wj1tuL0hGAP5lkkVvlHQCNnMoccEAC8Z+koQ2tbRnEruEUY
+         O8Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
+        b=DwX2EyVYyESXAAm9skch+nXz8BIz8SdPxFeJwKuplaNx+1ZW8yLnPHuqmJRLj8/YNM
+         a3xYsHOUrvFHQ1MjEZjIsW30bxbVBVKV3/zjyqwjFRFfL0deKPp+w8pz8bupdnM9K/XP
+         jIF+PZsQ9CxoxXrC+NuAz5LDXg2PT8btKRL5HD7cUaCagGV8dAUJa7zDDX6UrGUmKmyA
+         0A0gdAhAiiuFXzyNRLz22rQEYS8FeNxNtjCSc6XOfQdSUj0AMOrNW4CySyH9WGv8URd5
+         OqcBlct2B4pPiWTPmFDlyJmpZcwrirxGeabaaqMZA5Whq7IoE5LTWgTyaZTzN1qfKUB/
+         t/wQ==
+X-Gm-Message-State: AOAM530ps87osOS0NGNpMeil3YjAGtmumHo6/Fi5EzUDfSKNtWgTqZHN
+        bcYDQavD3Q/H8qjbkd8rZlzIuSeinxbmpckZ3Is=
+X-Google-Smtp-Source: ABdhPJxItSnYdNOJr/eCcDJG9Ed81FEJCtux30e3VMRN30hf/TzQyuXNRWDf+H2IgaMscJY+xnmH/x8e0HLuRnwx6WI=
+X-Received: by 2002:a50:d70a:: with SMTP id t10mr16749153edi.253.1627878237019;
+ Sun, 01 Aug 2021 21:23:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:23:56
+ -0700 (PDT)
+Reply-To: ablahikazabl67@gmail.com
+From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
+Date:   Mon, 2 Aug 2021 05:23:56 +0100
+Message-ID: <CAKwBCXvLzgfEHCKMKUxki4k1yYap9oH1ox=muoK9koBZXish5g@mail.gmail.com>
+Subject: More Authentic Information
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Fixes: 8a7b46fa7902 ("MAINTAINERS: add Yasushi SHOJI as reviewer for the Microchip CAN BUS Analyzer Tool driver")
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c9467d2839f5..25dc566a67c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11327,7 +11327,7 @@ W:	https://linuxtv.org
- T:	git git://linuxtv.org/media_tree.git
- F:	drivers/media/radio/radio-maxiradio*
- 
--MCAB MICROCHIP CAN BUS ANALYZER TOOL DRIVER
-+MCBA MICROCHIP CAN BUS ANALYZER TOOL DRIVER
- R:	Yasushi SHOJI <yashi@spacecubics.com>
- L:	linux-can@vger.kernel.org
- S:	Maintained
 -- 
-2.30.2
+Dear Partner,
 
+I am soliciting your partnership to relocate $12.5 Million to your
+country for investment on my behalf and you will be entitled to 30% of
+the sum once the transaction is successful made.
+
+Please indicate your genuine interest if you are capable so that i
+will send you the authentic details and documents of the transaction
+in awareness with some of my fellow Directors in the bank.
+
+If you are interested, here is my private Email address:
+(ablahikazabl67@gmail.com)
+For more authentic and legit information.
+
+
+Regards :  Abdoulahi Kazim
