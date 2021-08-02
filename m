@@ -2,74 +2,112 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 325A33DCF47
-	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 06:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2553DD101
+	for <lists+linux-can@lfdr.de>; Mon,  2 Aug 2021 09:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbhHBEYN (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S232512AbhHBHLW (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Mon, 2 Aug 2021 03:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbhHBEYM (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 00:24:12 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA6BC0617A3
-        for <linux-can@vger.kernel.org>; Sun,  1 Aug 2021 21:23:58 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id g21so3404304edb.4
-        for <linux-can@vger.kernel.org>; Sun, 01 Aug 2021 21:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=czeOQMYeZau4ejaBbgDdCuklRCyHoHRlo6xUfJcAj3bciaGtFBitiUib5a5MwOumE9
-         w7/Jn7bBNsLcP1+CHZ7cIXH8h+QOe2ioJtROZD2bqhS/lqEvaNcrldVE+LZBhK9CNKw9
-         GasUZeZx/Kcocc9jX4O3VqyeOrpbJXFle0t9OXPFTLvjA0ffc0WpqgkYu8CQSXrFRLzD
-         Yc8UR7mKpLCqpwn4ZFojN5x09EwrnOTDpyVyuL9REZStwkguR4uL/4srDE+vjWW4JCu8
-         Sy5z9ei3l3c7g9TC5s6E8Wj1tuL0hGAP5lkkVvlHQCNnMoccEAC8Z+koQ2tbRnEruEUY
-         O8Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=DwX2EyVYyESXAAm9skch+nXz8BIz8SdPxFeJwKuplaNx+1ZW8yLnPHuqmJRLj8/YNM
-         a3xYsHOUrvFHQ1MjEZjIsW30bxbVBVKV3/zjyqwjFRFfL0deKPp+w8pz8bupdnM9K/XP
-         jIF+PZsQ9CxoxXrC+NuAz5LDXg2PT8btKRL5HD7cUaCagGV8dAUJa7zDDX6UrGUmKmyA
-         0A0gdAhAiiuFXzyNRLz22rQEYS8FeNxNtjCSc6XOfQdSUj0AMOrNW4CySyH9WGv8URd5
-         OqcBlct2B4pPiWTPmFDlyJmpZcwrirxGeabaaqMZA5Whq7IoE5LTWgTyaZTzN1qfKUB/
-         t/wQ==
-X-Gm-Message-State: AOAM530ps87osOS0NGNpMeil3YjAGtmumHo6/Fi5EzUDfSKNtWgTqZHN
-        bcYDQavD3Q/H8qjbkd8rZlzIuSeinxbmpckZ3Is=
-X-Google-Smtp-Source: ABdhPJxItSnYdNOJr/eCcDJG9Ed81FEJCtux30e3VMRN30hf/TzQyuXNRWDf+H2IgaMscJY+xnmH/x8e0HLuRnwx6WI=
-X-Received: by 2002:a50:d70a:: with SMTP id t10mr16749153edi.253.1627878237019;
- Sun, 01 Aug 2021 21:23:57 -0700 (PDT)
+        with ESMTP id S232499AbhHBHLU (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Mon, 2 Aug 2021 03:11:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9FE7C061796
+        for <linux-can@vger.kernel.org>; Mon,  2 Aug 2021 00:11:11 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1mAS69-0001v0-T2; Mon, 02 Aug 2021 09:10:53 +0200
+Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:4a0c:d314:db6a:e70b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 53AB765D6D5;
+        Mon,  2 Aug 2021 07:10:49 +0000 (UTC)
+Date:   Mon, 2 Aug 2021 09:10:47 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     Lokesh Vutla <lokeshvutla@ti.com>, Nishanth Menon <nm@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sriram Dash <sriram.dash@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: net: can: Document power-domains property
+Message-ID: <20210802071047.n6mxecdohahhzifr@pengutronix.de>
+References: <20210731045138.29912-1-a-govindraju@ti.com>
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:23:56
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:23:56 +0100
-Message-ID: <CAKwBCXvLzgfEHCKMKUxki4k1yYap9oH1ox=muoK9koBZXish5g@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o67442xqmg5tkmue"
+Content-Disposition: inline
+In-Reply-To: <20210731045138.29912-1-a-govindraju@ti.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-can@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
--- 
-Dear Partner,
 
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
+--o67442xqmg5tkmue
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
+On 31.07.2021 10:21:38, Aswath Govindraju wrote:
+> Document power-domains property for adding the Power domain provider.
+>=20
+> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> ---
+>  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b=
+/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> index a7b5807c5543..d633fe1da870 100644
+> --- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> +++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+> @@ -104,6 +104,13 @@ properties:
+>            maximum: 32
+>      maxItems: 1
+> =20
+> +  power-domains:
+> +    description:
+> +      Power domain provider node and an args specifier containing
+> +      the can device id value. Please see,
+> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
 
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
+Why are you referring to a TI specific file in a generic binding?
 
+Marc
 
-Regards :  Abdoulahi Kazim
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--o67442xqmg5tkmue
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEHmnUACgkQqclaivrt
+76mUdggAjrFdavL7Dr/oqcEEPBT4eddl+T9hQgJRRR6i4H1hsq+nU0vOhItxpg1A
+BXqalihcrHqyzNjWQMqBsnW9vSgaJBKEV8LlC1Zsbjry67dkP1tTLUxp3WuaBsdm
+fPt5laCPuJ8c1QZydryQUKgjx+Vz27ooFd8EIic7PBVeGhfRrDnFDMbXCb407m9p
+5j2z8HhCSJgVu61+Pqf+4j45NYK4o2+62jr9QjZbJDJUiGfrAau7vheK62fguGxa
+mN548WUJTKqGrk/6UqQ9O1wDuMcPbXWaIyfs/4bEHFlSdrg2A5edPITZWcmcE6x3
+Yq5DNNJMMerizk9W3cjTulBhsvYkiQ==
+=UbZx
+-----END PGP SIGNATURE-----
+
+--o67442xqmg5tkmue--
