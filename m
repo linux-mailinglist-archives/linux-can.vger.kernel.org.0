@@ -2,211 +2,120 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FFCC3DEBA9
-	for <lists+linux-can@lfdr.de>; Tue,  3 Aug 2021 13:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4471B3DEDF3
+	for <lists+linux-can@lfdr.de>; Tue,  3 Aug 2021 14:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235329AbhHCLXo (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Tue, 3 Aug 2021 07:23:44 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.25]:19362 "EHLO
+        id S235635AbhHCMhw (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Tue, 3 Aug 2021 08:37:52 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.23]:11111 "EHLO
         mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235254AbhHCLXo (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Aug 2021 07:23:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1627989798;
+        with ESMTP id S235721AbhHCMhw (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Tue, 3 Aug 2021 08:37:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1627994256;
     s=strato-dkim-0002; d=hartkopp.net;
-    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=02bxvCoDOe0IHW3IpUIMEklenO/33KVZPTAhxGyNx/0=;
-    b=LbzhjXAZLmr657qMNtZa8j/Oixoq4UjXBDC5fOa+KtG0hIKHzfe7nbElPN1YGINqxS
-    EwFTrc7ocxNyWibxWTkEUoY+fFA2/DhQRpcc2jKTqQ2y+T0lGIohrxPvTd6h1n4WbHMu
-    lm/PBYrKlEHR8d0MF8suOJWG5LfOg/tMuj2akA/KoigZ6bn6tnpG7rlKhYcds1BIJdrV
-    sDF+yckESwDKUs1sPkvZHNUzaUHmZM+E3Iih5MzSZX+5t7JJ/4Kvnp1PtISrYOp5d+qw
-    7V41o6siETSRYSkM3y6eVq9QsCyJoZqUoOJSbSHBbr8Atof2m6IscwsoJy+I05VmhU4+
-    xBAQ==
+    h=In-Reply-To:Date:Message-ID:From:References:Cc:To:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=i8qw8GnXo3lH3fnYgzex796igd3y3xsMePLqd1rjo9Y=;
+    b=OZuPGEGBH6kJa/b+ZJ1n+wjG+/bF5v89MIHjsEo+tkkrV6V6Kjpxx+5SGKaTtcyr09
+    wbTJDhY+CGhcWaFB1/S+MF6j7pdg9qLMQobjZl2/Xb+ee8FsGNDHfXXNI6sehj+Ukj6+
+    VYUwgqwSdNqEUtyjXKG+vYUCWOViSDjYuDKDPwPVjUBrit6jouOgCV5aeEfZ158FDl6x
+    eX9aDafSqZXKjvYrXLwg6vcgt+ngG225gEun20EGRShoEUSqpk49LdGdwTdMHVzIkmuw
+    PpMYsK17Vka+ZAAk2dmpyU3YAyCxI63A8ziIO8tIXHz7xrQVGHe4r4lTj0iiAQvWPbCi
+    T13Q==
 Authentication-Results: strato.com;
     dkim=none
-X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjGrp7owjzFK3JbFk1mS/xvEDlBxgAcPNuVYUcPxoP37qlUJyScjc1GiW8jydNgHFJOxomnM="
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSaVHfOnZpL4pXGcZUU3PtFyotFv9pQT1mXDddOnDGQ0lqHV7n"
 X-RZG-CLASS-ID: mo00
-Received: from wopr.fritz.box
+Received: from [IPv6:2a02:b98:4731:d170:f5a6:f8c6:2b42:2e18]
     by smtp.strato.de (RZmta 47.28.1 AUTH)
-    with ESMTPSA id Z03199x73BNIp5J
+    with ESMTPSA id Z03199x73CbapLb
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Tue, 3 Aug 2021 13:23:18 +0200 (CEST)
+    Tue, 3 Aug 2021 14:37:36 +0200 (CEST)
+Subject: Re: [PATCH v2] can: Documentation: Sending with canfd_frame on a CAN
+ 2.0 interface
+To:     Thomas Wagner <thomas@the-wagner.de>, mkl@pengutronix.de
+Cc:     linux-can@vger.kernel.org
+References: <20210802102853.29308-1-thomas@the-wagner.de>
+ <20210802104048.32007-1-thomas@the-wagner.de>
 From:   Oliver Hartkopp <socketcan@hartkopp.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-can@vger.kernel.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        linux-stable <stable@vger.kernel.org>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH stable 4.4 4.9] can: raw: raw_setsockopt(): fix raw_rcv panic for sock UAF
-Date:   Tue,  3 Aug 2021 13:22:41 +0200
-Message-Id: <20210803112241.3253-1-socketcan@hartkopp.net>
-X-Mailer: git-send-email 2.30.2
+Message-ID: <b784563b-a489-8e3f-1152-7e3d4c948422@hartkopp.net>
+Date:   Tue, 3 Aug 2021 14:37:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210802104048.32007-1-thomas@the-wagner.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-commit 54f93336d000229f72c26d8a3f69dd256b744528 upstream.
 
-We get a bug during ltp can_filter test as following.
+On 02.08.21 12:40, Thomas Wagner wrote:
+> In response to my uncertainty described here
+> https://lore.kernel.org/linux-can/20210729121417.kysljj4636hmhem2@pengutronix.de/T/#t.
+> 
+> This patch clarifies sending CAN 2.0 frames on CAN FD capable hardware
+> when the interface is configured as CAN 2.0.
+> 
+> Signed-off-by: Thomas Wagner <thomas@the-wagner.de>
+> ---
+>   Documentation/networking/can.rst | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/Documentation/networking/can.rst b/Documentation/networking/can.rst
+> index f34cb0e4460e..ac3fe948c888 100644
+> --- a/Documentation/networking/can.rst
+> +++ b/Documentation/networking/can.rst
+> @@ -675,6 +675,17 @@ When sending to CAN devices make sure that the device is capable to handle
+>   CAN FD frames by checking if the device maximum transfer unit is CANFD_MTU.
+>   The CAN device MTU can be retrieved e.g. with a SIOCGIFMTU ioctl() syscall.
+>   
+> +You should also check the MTU in an environment, where the device is CAN
+> +FD capable, but the interface might be configured for just CAN 2.0. In
+> +this case the canfd_frame struct can still be used, but when writing to
+> +the socket write CAN_MTU bytes at most to send a CAN 2.0 frame.
 
-===========================================
-[60919.264984] BUG: unable to handle kernel NULL pointer dereference at 0000000000000010
-[60919.265223] PGD 8000003dda726067 P4D 8000003dda726067 PUD 3dda727067 PMD 0
-[60919.265443] Oops: 0000 [#1] SMP PTI
-[60919.265550] CPU: 30 PID: 3638365 Comm: can_filter Kdump: loaded Tainted: G        W         4.19.90+ #1
-[60919.266068] RIP: 0010:selinux_socket_sock_rcv_skb+0x3e/0x200
-[60919.293289] RSP: 0018:ffff8d53bfc03cf8 EFLAGS: 00010246
-[60919.307140] RAX: 0000000000000000 RBX: 000000000000001d RCX: 0000000000000007
-[60919.320756] RDX: 0000000000000001 RSI: ffff8d5104a8ed00 RDI: ffff8d53bfc03d30
-[60919.334319] RBP: ffff8d9338056800 R08: ffff8d53bfc29d80 R09: 0000000000000001
-[60919.347969] R10: ffff8d53bfc03ec0 R11: ffffb8526ef47c98 R12: ffff8d53bfc03d30
-[60919.350320] perf: interrupt took too long (3063 > 2500), lowering kernel.perf_event_max_sample_rate to 65000
-[60919.361148] R13: 0000000000000001 R14: ffff8d53bcf90000 R15: 0000000000000000
-[60919.361151] FS:  00007fb78b6b3600(0000) GS:ffff8d53bfc00000(0000) knlGS:0000000000000000
-[60919.400812] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[60919.413730] CR2: 0000000000000010 CR3: 0000003e3f784006 CR4: 00000000007606e0
-[60919.426479] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[60919.439339] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[60919.451608] PKRU: 55555554
-[60919.463622] Call Trace:
-[60919.475617]  <IRQ>
-[60919.487122]  ? update_load_avg+0x89/0x5d0
-[60919.498478]  ? update_load_avg+0x89/0x5d0
-[60919.509822]  ? account_entity_enqueue+0xc5/0xf0
-[60919.520709]  security_sock_rcv_skb+0x2a/0x40
-[60919.531413]  sk_filter_trim_cap+0x47/0x1b0
-[60919.542178]  ? kmem_cache_alloc+0x38/0x1b0
-[60919.552444]  sock_queue_rcv_skb+0x17/0x30
-[60919.562477]  raw_rcv+0x110/0x190 [can_raw]
-[60919.572539]  can_rcv_filter+0xbc/0x1b0 [can]
-[60919.582173]  can_receive+0x6b/0xb0 [can]
-[60919.591595]  can_rcv+0x31/0x70 [can]
-[60919.600783]  __netif_receive_skb_one_core+0x5a/0x80
-[60919.609864]  process_backlog+0x9b/0x150
-[60919.618691]  net_rx_action+0x156/0x400
-[60919.627310]  ? sched_clock_cpu+0xc/0xa0
-[60919.635714]  __do_softirq+0xe8/0x2e9
-[60919.644161]  do_softirq_own_stack+0x2a/0x40
-[60919.652154]  </IRQ>
-[60919.659899]  do_softirq.part.17+0x4f/0x60
-[60919.667475]  __local_bh_enable_ip+0x60/0x70
-[60919.675089]  __dev_queue_xmit+0x539/0x920
-[60919.682267]  ? finish_wait+0x80/0x80
-[60919.689218]  ? finish_wait+0x80/0x80
-[60919.695886]  ? sock_alloc_send_pskb+0x211/0x230
-[60919.702395]  ? can_send+0xe5/0x1f0 [can]
-[60919.708882]  can_send+0xe5/0x1f0 [can]
-[60919.715037]  raw_sendmsg+0x16d/0x268 [can_raw]
+IMO this is still confusing. The point is that the struct can_frame and 
+canfd_frame have a compatible layout (up to the length of struct 
+can_frame) - and therefore you can use struct canfd_frame up to this 
+length for most use-cases. But not for all! E.g. the handling of raw DLC 
+values for Classical CAN.
 
-It's because raw_setsockopt() concurrently with
-unregister_netdevice_many(). Concurrent scenario as following.
+> +
+> +In conclusion, to handle devices with and without CAN FD and with
+> +interfaces configured as CAN 2.0 or CAN FD:
+> +- Set the CAN_RAW_FD_FRAMES flag and ignore the error on older kernels
 
-	cpu0						cpu1
-raw_bind
-raw_setsockopt					unregister_netdevice_many
-						unlist_netdevice
-dev_get_by_index				raw_notifier
-raw_enable_filters				......
-can_rx_register
-can_rcv_list_find(..., net->can.rx_alldev_list)
+This is done in candump.c to be able to *receive* any kind of CAN(FD) 
+traffic.
 
-......
+IMO this is generally not a good advise to ignore the result in any 
+case. Please take a look into cansend.c how it is handled there.
 
-sock_close
-raw_release(sock_a)
+> +- Send and receive using the canfd_frame struct
 
-......
+IMO when you know what you are doing and you are handling CAN *and* 
+CANFD frames you get behind this simplification on your own.
 
-can_receive
-can_rcv_filter(net->can.rx_alldev_list, ...)
-raw_rcv(skb, sock_a)
-BUG
+There are still good reasons to work with the struct can_frame, e.g. 
+when you want to work with raw CAN dlc values.
 
-After unlist_netdevice(), dev_get_by_index() return NULL in
-raw_setsockopt(). Function raw_enable_filters() will add sock
-and can_filter to net->can.rx_alldev_list. Then the sock is closed.
-Followed by, we sock_sendmsg() to a new vcan device use the same
-can_filter. Protocol stack match the old receiver whose sock has
-been released on net->can.rx_alldev_list in can_rcv_filter().
-Function raw_rcv() uses the freed sock. UAF BUG is triggered.
+> +- Check the bytes received to know, whether you got an CAN 2.0 or FD frame
 
-We can find that the key issue is that net_device has not been
-protected in raw_setsockopt(). Use rtnl_lock to protect net_device
-in raw_setsockopt().
+... once you set the CAN_RAW_FD_FRAMES flag.
 
-Fixes: c18ce101f2e4 ("[CAN]: Add raw protocol")
-Link: https://lore.kernel.org/r/20210722070819.1048263-1-william.xuanziyang@huawei.com
-Cc: linux-stable <stable@vger.kernel.org>
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- net/can/raw.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+> +- Check the devices MTU to know, whether you can send CAN 2.0 or FD frames
 
-diff --git a/net/can/raw.c b/net/can/raw.c
-index 2bb50b1535c2..082965c8dcaf 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -541,10 +541,18 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 				return -EFAULT;
- 		}
- 
-+		rtnl_lock();
- 		lock_sock(sk);
- 
--		if (ro->bound && ro->ifindex)
-+		if (ro->bound && ro->ifindex) {
- 			dev = dev_get_by_index(&init_net, ro->ifindex);
-+			if (!dev) {
-+				if (count > 1)
-+					kfree(filter);
-+				err = -ENODEV;
-+				goto out_fil;
-+			}
-+		}
- 
- 		if (ro->bound) {
- 			/* (try to) register the new filters */
-@@ -581,6 +589,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 			dev_put(dev);
- 
- 		release_sock(sk);
-+		rtnl_unlock();
- 
- 		break;
- 
-@@ -593,10 +602,16 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 
- 		err_mask &= CAN_ERR_MASK;
- 
-+		rtnl_lock();
- 		lock_sock(sk);
- 
--		if (ro->bound && ro->ifindex)
-+		if (ro->bound && ro->ifindex) {
- 			dev = dev_get_by_index(&init_net, ro->ifindex);
-+			if (!dev) {
-+				err = -ENODEV;
-+				goto out_err;
-+			}
-+		}
- 
- 		/* remove current error mask */
- 		if (ro->bound) {
-@@ -618,6 +633,7 @@ static int raw_setsockopt(struct socket *sock, int level, int optname,
- 			dev_put(dev);
- 
- 		release_sock(sk);
-+		rtnl_unlock();
- 
- 		break;
- 
--- 
-2.30.2
+Yes. An example for that is in cansend.c
+But I wonder if such a use-case is relevant to a normal CAN application.
+The programmer usually knows whether he wants to work with CAN or CAN FD 
+frames. And when sending a CAN FD frame results into an error you can 
+just drop an error message about "sending the CAN FD frame not possible".
+
+Best regards,
+Oliver
 
