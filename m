@@ -2,166 +2,133 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D87983DFC83
-	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 10:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CE83DFC98
+	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 10:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236185AbhHDIMB (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Aug 2021 04:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbhHDIMA (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 04:12:00 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48AFCC0613D5;
-        Wed,  4 Aug 2021 01:11:47 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id z18so2777662ybg.8;
-        Wed, 04 Aug 2021 01:11:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jPCIyaMUeP4YlX+eHOCe2Hk3dvS6J1yRREr3ZpK8PqE=;
-        b=mBZXRCJ9MZQM0MB8te1m5lfQcuzIgUJPb7Xs16M5wRmELRwp69N0rffDJeMYpwoJSx
-         VBM2jPH21DzzbruKOFYOTj4bKoPSSf8vJM0U4XZXPhpBThjCPGkzkiwUy1Q8QJBBVpC0
-         zPTZx8HLYHgQPvyFr8UIXLql7GnJMC9WuMtoHRkE/QT6lC1h0Lhwrz77ncevHQ8BlZ63
-         PvpTOtoG5SPZnOqNsRZkq+nwd5ohsAVeFnQQsPFOwJ+HwB28SaS+gYx8FHLy6TEGt4Jo
-         AvSqmPOr7CKNEy0JjDP+eBvGiAmKGyngDilCjhDGX6JJPoYj4Zge1ChrJmnf3kvGi/lr
-         nagA==
+        id S236188AbhHDIQb (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Aug 2021 04:16:31 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:41622 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236185AbhHDIQb (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 04:16:31 -0400
+Received: by mail-io1-f70.google.com with SMTP id c18-20020a0566023352b0290523c137a6a4so1011453ioz.8
+        for <linux-can@vger.kernel.org>; Wed, 04 Aug 2021 01:16:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jPCIyaMUeP4YlX+eHOCe2Hk3dvS6J1yRREr3ZpK8PqE=;
-        b=ORfUHKGfyEc9EVIdbEaqg0Y6ZlxHuwy8cdg6Klf3Z2zZkOGQbJjm2b5trw45/TGB6V
-         3F4PhFo1tqOfhdNXbV8B7rquytD3K/NdGRNY93qcQj5aK7qYY/WJqqdCfQOj/wM1Bsqv
-         qyGWOHQnkMhTLxSmNapS7vdVsQy3sge8v9QcHNbmGW+0xy3MYX+EEsTk8N9hDhmM9Jto
-         K40HINA9brFh1QE+r59k9mD+GviWpuNIFqhMTQ+UYk9B0RUfsd1w1CaqWi1UKlRHOa/B
-         Mib3W39KQzwpITBw8J0ko1fUFxO9ylpl10FNjFJiKX4BZyCxPOxALYH21QyXfg9IaDvj
-         05aQ==
-X-Gm-Message-State: AOAM5336cXm0gwlIPxoVFN6t0/P7KLkOioy1/WoS2ZEwIuD7pjEZg3Fu
-        gr6pCkymK2XuhfHMr0ZXc0IajqozokJRwW5VEVI=
-X-Google-Smtp-Source: ABdhPJw64BR7H6H44pztlxskpaS2F1m6uWL8/z1U+9L2hJwCQ7r3CCvgZV8iT0vTOh9BsbeOkyUYAKMiJMIJWlqew6Q=
-X-Received: by 2002:a25:e404:: with SMTP id b4mr34296150ybh.426.1628064706525;
- Wed, 04 Aug 2021 01:11:46 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=oKFGrnqPpcOPV7wZiKJ6cPKB9Oi3nefvOJEtkwdIyG4=;
+        b=U7YHHBqfuECOou8XdBp9GQ8ne+zFhx6SeMTABi2As3RYhQRyzt26s+0AzfOX68SJUI
+         zm4hZPvv5LtqmFyiGgozt6SkU1oCx+q284wzvaYPzbri9YmlWqquymzU0crBJVBst6a3
+         N6u2CUox6fw3LIDW5ml0NseG6x3nIJTkWZzRM69ogLX0Cy+/+DKikSPOqbEfZriKbuAT
+         0wxDpdFiNtfl8OrSpSO4xSFxAHyMD1IX9Xt5Db5pz0YFDqc4PNgsDzVNv29qaPBkTDv8
+         /5XeTKjTu+YW8ryuTD4V3TdX9TS26vUoozJa9iNsUbA3ul2GmobMvkn0b5H1pGOYku2R
+         0KBw==
+X-Gm-Message-State: AOAM530KUqmARHll3vw6RjX0t2xr4H/4KkjenM5f36cI1GXkeRzahL/k
+        oMHdW9pk/gcg5Ee/VdBl+vkqtmlndbY3o6QFSi6TOSZWjgQh
+X-Google-Smtp-Source: ABdhPJxWm9eHbu5NZ/QigOM9PqOGbgeIUqYHTyGBkWDzxpyQHt2ScxP4AaoT5sSsF9AsTyG1mj8HvIxGR+ygQHi4plbEQ0yLvAyK
 MIME-Version: 1.0
-References: <20210727133022.634-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20210727133022.634-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210804075855.2vjvfb67kufiibqx@pengutronix.de>
-In-Reply-To: <20210804075855.2vjvfb67kufiibqx@pengutronix.de>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 4 Aug 2021 09:11:20 +0100
-Message-ID: <CA+V-a8tWMVfnS3PWeOSqtDddO-M6zDS+WFpUSjv=2MgUV56Qvg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] arm64: dts: renesas: r9a07g044: Add CANFD node
-To:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
+X-Received: by 2002:a92:c549:: with SMTP id a9mr313514ilj.248.1628064978847;
+ Wed, 04 Aug 2021 01:16:18 -0700 (PDT)
+Date:   Wed, 04 Aug 2021 01:16:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bc4eb305c8b76ab5@google.com>
+Subject: [syzbot] WARNING in j1939_xtp_rx_abort_one
+From:   syzbot <syzbot+9981a614060dcee6eeca@syzkaller.appspotmail.com>
+To:     bst@pengutronix.de, davem@davemloft.net,
+        dev.kurt@vandijck-laurijssen.be, ecathinds@gmail.com,
+        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
+        lkp@intel.com, maxime.jayat@mobile-devices.fr, mkl@pengutronix.de,
+        netdev@vger.kernel.org, o.rempel@pengutronix.de, robin@protonic.nl,
+        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-Hi Marc,
+Hello,
 
-On Wed, Aug 4, 2021 at 8:59 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
->
-> On 27.07.2021 14:30:22, Lad Prabhakar wrote:
-> > Add CANFD node to R9A07G044 (RZ/G2L) SoC DTSI.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
-> > ---
-> >  arch/arm64/boot/dts/renesas/r9a07g044.dtsi | 41 ++++++++++++++++++++++
-> >  1 file changed, 41 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > index 9a7489dc70d1..51655c09f1f8 100644
-> > --- a/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > +++ b/arch/arm64/boot/dts/renesas/r9a07g044.dtsi
-> > @@ -13,6 +13,13 @@
-> >       #address-cells = <2>;
-> >       #size-cells = <2>;
-> >
-> > +     /* External CAN clock - to be overridden by boards that provide it */
-> > +     can_clk: can {
-> > +             compatible = "fixed-clock";
-> > +             #clock-cells = <0>;
-> > +             clock-frequency = <0>;
-> > +     };
-> > +
-> >       /* clock can be either from exclk or crystal oscillator (XIN/XOUT) */
-> >       extal_clk: extal {
-> >               compatible = "fixed-clock";
-> > @@ -89,6 +96,40 @@
-> >                       status = "disabled";
-> >               };
-> >
-> > +             canfd: can@10050000 {
-> > +                     compatible = "renesas,r9a07g044-canfd", "renesas,rzg2l-canfd";
-> > +                     reg = <0 0x10050000 0 0x8000>;
-> > +                     interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 427 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 428 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH>,
-> > +                                  <GIC_SPI 429 IRQ_TYPE_LEVEL_HIGH>;
-> > +                     interrupt-names = "g_err", "g_recc",
-> > +                                       "ch0_err", "ch0_rec", "ch0_trx",
-> > +                                       "ch1_err", "ch1_rec", "ch1_trx";
-> > +                     clocks = <&cpg CPG_MOD R9A07G044_CANFD_PCLK>,
-> > +                              <&cpg CPG_CORE R9A07G044_CLK_P0_DIV2>,
-> > +                              <&can_clk>;
-> > +                     clock-names = "fck", "canfd", "can_clk";
-> > +                     assigned-clocks = <&cpg CPG_CORE R9A07G044_CLK_P0_DIV2>;
-> > +                     assigned-clock-rates = <50000000>;
-> > +                     resets = <&cpg R9A07G044_CANFD_RSTP_N>,
-> > +                              <&cpg R9A07G044_CANFD_RSTC_N>;
-> > +                     reset-names = "rstp_n", "rstc_n";
-> > +                     power-domains = <&cpg>;
-> > +                     status = "disabled";
-> > +
-> > +                     channel0 {
-> > +                             status = "disabled";
-> > +                     };
-> > +                     channel1 {
-> > +                             status = "disabled";
-> > +                     };
-> > +             };
-> > +
-> >               i2c0: i2c@10058000 {
-> >                       #address-cells = <1>;
-> >                       #size-cells = <0>;
->
-> This doesn't apply to net-next/master, the r9a07g044.dtsi doesn't have a
-> i2c0 node at all. There isn't a i2c0 node in Linus' master branch, yet.
->
-I had based the patch on top [1] (sorry I should have mentioned the
-dependency), usually Geert picks up the DTS/I patches and queues it
-via ARM tree. Shall I rebase it on net-next and re-send ?
+syzbot found the following issue on:
 
-@Geert Uytterhoeven Is that OK ?
+HEAD commit:    c7d102232649 Merge tag 'net-5.14-rc4' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1308610a300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6cc86e19161c9d37
+dashboard link: https://syzkaller.appspot.com/bug?extid=9981a614060dcee6eeca
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15874fda300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a507b6300000
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-arm-dt-for-v5.15
+The issue was bisected to:
 
-Cheers,
-Prabhakar
+commit 9d71dd0c70099914fcd063135da3c580865e924c
+Author: The j1939 authors <linux-can@vger.kernel.org>
+Date:   Mon Oct 8 09:48:36 2018 +0000
 
-> Marc
->
-> --
-> Pengutronix e.K.                 | Marc Kleine-Budde           |
-> Embedded Linux                   | https://www.pengutronix.de  |
-> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+    can: add support of SAE J1939 protocol
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17a70c66300000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=14670c66300000
+console output: https://syzkaller.appspot.com/x/log.txt?x=10670c66300000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9981a614060dcee6eeca@syzkaller.appspotmail.com
+Fixes: 9d71dd0c7009 ("can: add support of SAE J1939 protocol")
+
+vcan0: j1939_tp_rxtimer: 0xffff888012588c00: rx timeout, send abort
+vcan0: j1939_xtp_rx_abort_one: 0xffff88802f335800: 0x00000: (3) A timeout occurred and this is the connection abort to close the session.
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 19 at net/can/j1939/transport.c:1085 j1939_session_deactivate net/can/j1939/transport.c:1085 [inline]
+WARNING: CPU: 1 PID: 19 at net/can/j1939/transport.c:1085 j1939_session_deactivate_activate_next net/can/j1939/transport.c:1095 [inline]
+WARNING: CPU: 1 PID: 19 at net/can/j1939/transport.c:1085 j1939_xtp_rx_abort_one+0x666/0x790 net/can/j1939/transport.c:1329
+Modules linked in:
+CPU: 1 PID: 19 Comm: ksoftirqd/1 Not tainted 5.14.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:j1939_session_deactivate net/can/j1939/transport.c:1085 [inline]
+RIP: 0010:j1939_session_deactivate_activate_next net/can/j1939/transport.c:1095 [inline]
+RIP: 0010:j1939_xtp_rx_abort_one+0x666/0x790 net/can/j1939/transport.c:1329
+Code: e9 88 fa ff ff e8 da 5f 8b f8 4c 89 f7 be 03 00 00 00 48 83 c4 20 5b 41 5c 41 5d 41 5e 41 5f 5d e9 af 1f 11 fb e8 ba 5f 8b f8 <0f> 0b e9 4b fd ff ff e8 ae 5f 8b f8 0f 0b e9 ca fd ff ff 89 e9 80
+RSP: 0018:ffffc90000d975a0 EFLAGS: 00010246
+RAX: ffffffff88f4c4f6 RBX: 0000000000000001 RCX: ffff8880124354c0
+RDX: 0000000000000301 RSI: 0000000000000001 RDI: 0000000000000002
+RBP: 1ffff11005e66b00 R08: ffffffff88f4c23a R09: ffffed1005e66b06
+R10: ffffed1005e66b06 R11: 0000000000000000 R12: ffff88802f335800
+R13: 0000000000000009 R14: ffff8880221ad070 R15: ffff88802f335828
+FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000004b8120 CR3: 00000000334c1000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ j1939_xtp_rx_abort net/can/j1939/transport.c:1340 [inline]
+ j1939_tp_cmd_recv+0x374/0x1200 net/can/j1939/transport.c:2065
+ j1939_tp_recv+0x1f7/0x540 net/can/j1939/transport.c:2098
+ j1939_can_recv+0x652/0xa10 net/can/j1939/main.c:101
+ deliver net/can/af_can.c:574 [inline]
+ can_rcv_filter+0x35e/0x800 net/can/af_can.c:608
+ can_receive+0x2e8/0x410 net/can/af_can.c:665
+ can_rcv+0xda/0x1f0 net/can/af_can.c:696
+ __netif_receive_skb_one_core net/core/dev.c:5498 [inline]
+ __netif_receive_skb+0x1d1/0x500 net/core/dev.c:5612
+ process_backlog+0x4d8/0x940 net/core/dev.c:6492
+ __napi_poll+0xba/0x4f0 net/core/dev.c:7047
+ napi_poll net/core/dev.c:7114 [inline]
+ net_rx_action+0x62c/0xf30 net/core/dev.c:7201
+ __do_softirq+0x372/0x783 kernel/softirq.c:558
+ run_ksoftirqd+0xa2/0x100 kernel/softirq.c:920
+ smpboot_thread_fn+0x533/0x9d0 kernel/smpboot.c:164
+ kthread+0x453/0x480 kernel/kthread.c:319
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
