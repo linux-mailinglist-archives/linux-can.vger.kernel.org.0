@@ -2,45 +2,46 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F2F3DFE6C
-	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 11:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91AC63DFF48
+	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 12:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236352AbhHDJxe (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Aug 2021 05:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S237183AbhHDKSM (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Aug 2021 06:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235522AbhHDJxb (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 05:53:31 -0400
+        with ESMTP id S237142AbhHDKSM (ORCPT
+        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 06:18:12 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B483C0613D5
-        for <linux-can@vger.kernel.org>; Wed,  4 Aug 2021 02:53:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A51C0613D5
+        for <linux-can@vger.kernel.org>; Wed,  4 Aug 2021 03:17:59 -0700 (PDT)
 Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mkl@pengutronix.de>)
-        id 1mBDaI-0000a8-JG; Wed, 04 Aug 2021 11:53:10 +0200
-Received: from pengutronix.de (unknown [IPv6:2a02:810a:8940:aa0:e44:2d7c:bf4a:7b36])
+        id 1mBDyI-00047E-CL
+        for linux-can@vger.kernel.org; Wed, 04 Aug 2021 12:17:58 +0200
+Received: from dspam.blackshift.org (localhost [127.0.0.1])
+        by bjornoya.blackshift.org (Postfix) with SMTP id 39869660794
+        for <linux-can@vger.kernel.org>; Wed,  4 Aug 2021 10:17:57 +0000 (UTC)
+Received: from hardanger.blackshift.org (unknown [172.20.34.65])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 92942660752;
-        Wed,  4 Aug 2021 09:53:07 +0000 (UTC)
-Date:   Wed, 4 Aug 2021 11:53:06 +0200
+        by bjornoya.blackshift.org (Postfix) with ESMTPS id 69BB366078F;
+        Wed,  4 Aug 2021 10:17:56 +0000 (UTC)
+Received: from blackshift.org (localhost [::1])
+        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id ef98d73c;
+        Wed, 4 Aug 2021 10:17:55 +0000 (UTC)
 From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     dev.kurt@vandijck-laurijssen.be, wg@grandegger.com,
-        kernel@pengutronix.de, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, David Jander <david@protonic.nl>,
-        Zhang Changzhong <zhangchangzhong@huawei.com>
-Subject: Re: [PATCH v2 0/2] net: j1939: extend UAPI for RX notifications
-Message-ID: <20210804095306.clain5rwtwae3gwa@pengutronix.de>
-References: <20210707094854.30781-1-o.rempel@pengutronix.de>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: pull-request: can-next 2021-08-04
+Date:   Wed,  4 Aug 2021 12:17:48 +0200
+Message-Id: <20210804101753.23826-1-mkl@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jsatu2nnuv3rvstw"
-Content-Disposition: inline
-In-Reply-To: <20210707094854.30781-1-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
 X-SA-Exim-Mail-From: mkl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
@@ -49,40 +50,61 @@ Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
+Hello Jakub, hello David,
 
---jsatu2nnuv3rvstw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+this is a pull request of 5 patches for net-next/master.
 
-On 07.07.2021 11:48:52, Oleksij Rempel wrote:
-> changes v2:
-> - fix size calculation for the addresses
-> - make sure all J1939_NLA* have same order
+The first patch is by me and fixes a typo in a comment in the CAN
+J1939 protocol.
 
-Applied to linux-can-next/testing.
+The next 2 patches are by Oleksij Rempel and update the CAN J1939
+protocol to send RX status updates via the error queue mechanism.
 
+The next patch is by me and adds a missing variable initialization to
+the flexcan driver (the problem was introduced in the current net-next
+cycle).
+
+The last patch is by Aswath Govindraju and adds power-domains to the
+Bosch m_can DT binding documentation.
+
+regards,
 Marc
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+---
 
---jsatu2nnuv3rvstw
-Content-Type: application/pgp-signature; name="signature.asc"
+The following changes since commit 7cdd0a89ec70ce6a720171f1f7817ee9502b134c:
 
------BEGIN PGP SIGNATURE-----
+  net/mlx4: make the array states static const, makes object smaller (2021-08-02 15:02:13 -0700)
 
-iQEzBAABCgAdFiEEK3kIWJt9yTYMP3ehqclaivrt76kFAmEKY38ACgkQqclaivrt
-76lJHwf+JRnAS/+Bk0W1mWwgFreEDcuNZ670PjVUtGSeHGZz0stUIqL6Q1PoF+ia
-RND4Vy39W14bCz9O7gD+m1NhvmQiksOiLHdOYsDF56Dnb+kNZAODYDxbijlT1/VH
-fSjtdDTQpJjv33+fFvKK878UkgN6GXq244d8w+1LUlf3gPov5sgdofT0Sf7buGlZ
-Gm/8ogVlMm6sP/GTSxdKas74xyFpcigDyznKsapRW2GvmpwEgmxLxLGNSkdjO7o2
-SKvvo5Qi/5QSkAD2vN9hHK4E2mdrBdXf4nK/zxfRwxBC5+LeNmexe0qUzdMdSeuQ
-AQ9kCYTdaLmO6AzvVRfPHS5CdcbjdQ==
-=Np+y
------END PGP SIGNATURE-----
+are available in the Git repository at:
 
---jsatu2nnuv3rvstw--
+  git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git tags/linux-can-next-for-5.15-20210804
+
+for you to fetch changes up to d85165b2381ce2638cfb8c8787a61b97b38251c2:
+
+  dt-bindings: net: can: Document power-domains property (2021-08-04 12:11:57 +0200)
+
+----------------------------------------------------------------
+linux-can-next-for-5.15-20210804
+
+----------------------------------------------------------------
+Aswath Govindraju (1):
+      dt-bindings: net: can: Document power-domains property
+
+Marc Kleine-Budde (2):
+      can: j1939: j1939_session_tx_dat(): fix typo
+      can: flexcan: flexcan_clks_enable(): add missing variable initialization
+
+Oleksij Rempel (2):
+      can: j1939: rename J1939_ERRQUEUE_* to J1939_ERRQUEUE_TX_*
+      can: j1939: extend UAPI to notify about RX status
+
+ .../devicetree/bindings/net/can/bosch,m_can.yaml   |   6 +
+ drivers/net/can/flexcan.c                          |   2 +-
+ include/uapi/linux/can/j1939.h                     |   9 ++
+ net/can/j1939/j1939-priv.h                         |  10 +-
+ net/can/j1939/socket.c                             | 141 ++++++++++++++++-----
+ net/can/j1939/transport.c                          |  28 +++-
+ 6 files changed, 152 insertions(+), 44 deletions(-)
+
+
