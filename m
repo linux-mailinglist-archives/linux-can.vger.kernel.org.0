@@ -2,88 +2,75 @@ Return-Path: <linux-can-owner@vger.kernel.org>
 X-Original-To: lists+linux-can@lfdr.de
 Delivered-To: lists+linux-can@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B5A3DFF50
-	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 12:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387AE3DFF73
+	for <lists+linux-can@lfdr.de>; Wed,  4 Aug 2021 12:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237134AbhHDKSS (ORCPT <rfc822;lists+linux-can@lfdr.de>);
-        Wed, 4 Aug 2021 06:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237473AbhHDKSQ (ORCPT
-        <rfc822;linux-can@vger.kernel.org>); Wed, 4 Aug 2021 06:18:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFA8C06179A
-        for <linux-can@vger.kernel.org>; Wed,  4 Aug 2021 03:18:03 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1mBDyM-0004Bc-6h
-        for linux-can@vger.kernel.org; Wed, 04 Aug 2021 12:18:02 +0200
-Received: from dspam.blackshift.org (localhost [127.0.0.1])
-        by bjornoya.blackshift.org (Postfix) with SMTP id E51EB6607BC
-        for <linux-can@vger.kernel.org>; Wed,  4 Aug 2021 10:18:00 +0000 (UTC)
-Received: from hardanger.blackshift.org (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bjornoya.blackshift.org (Postfix) with ESMTPS id 5E17D6607AB;
-        Wed,  4 Aug 2021 10:17:59 +0000 (UTC)
-Received: from blackshift.org (localhost [::1])
-        by hardanger.blackshift.org (OpenSMTPD) with ESMTP id 3530ddcc;
-        Wed, 4 Aug 2021 10:17:55 +0000 (UTC)
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-can@vger.kernel.org,
-        kernel@pengutronix.de, Aswath Govindraju <a-govindraju@ti.com>,
-        Rob Herring <robh@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH net-next 5/5] dt-bindings: net: can: Document power-domains property
-Date:   Wed,  4 Aug 2021 12:17:53 +0200
-Message-Id: <20210804101753.23826-6-mkl@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210804101753.23826-1-mkl@pengutronix.de>
-References: <20210804101753.23826-1-mkl@pengutronix.de>
+        id S235643AbhHDKkT (ORCPT <rfc822;lists+linux-can@lfdr.de>);
+        Wed, 4 Aug 2021 06:40:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235472AbhHDKkS (ORCPT <rfc822;linux-can@vger.kernel.org>);
+        Wed, 4 Aug 2021 06:40:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 46D3361002;
+        Wed,  4 Aug 2021 10:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628073606;
+        bh=qKhFxitct69BQEWtg/14NvSlzhD2LYnpJkRy3FaufDI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ajAGviox2ZzE/SlkeBerHdfubj7Nt1FnS09Sxsd7/b8+Wt98rTcn/ZvG5AUNM744t
+         k0AiCEUyV8h45Tx5ZR36mg8aI4Xmz4/fBHa7bjaXeJX+nWOeolWmgOyly3/3Y3AK3H
+         Of6YNusVS8w6UyEOjJ2zBTj9paKSxDe/MdQ+JUksQEi5AYUqaOEvHneQo/dImbg3CT
+         ycLl2gMinITcsiXLUXyCkfjV6v+kCRePqLzaCAbNv6d8estk5UYuvfbKvmLbYU0ipS
+         o9+ZL2Yp3rkgb5bRXLtdAsk6yYKZ5JpcD0N8d2Q70Ii4w3TPD1iX4hODGrfzr4UPaW
+         y629WJJJ3ARiA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3A1C560A6A;
+        Wed,  4 Aug 2021 10:40:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-can@vger.kernel.org
+Subject: Re: pull-request: can-next 2021-08-04
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162807360623.27025.15762249349058033410.git-patchwork-notify@kernel.org>
+Date:   Wed, 04 Aug 2021 10:40:06 +0000
+References: <20210804101753.23826-1-mkl@pengutronix.de>
+In-Reply-To: <20210804101753.23826-1-mkl@pengutronix.de>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-can@vger.kernel.org, kernel@pengutronix.de
 Precedence: bulk
 List-ID: <linux-can.vger.kernel.org>
 X-Mailing-List: linux-can@vger.kernel.org
 
-From: Aswath Govindraju <a-govindraju@ti.com>
+Hello:
 
-Document power-domains property for adding the Power domain provider.
+This pull request was applied to netdev/net-next.git (refs/heads/master):
 
-Link: https://lore.kernel.org/r/20210802091822.16407-1-a-govindraju@ti.com
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
----
- Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Wed,  4 Aug 2021 12:17:48 +0200 you wrote:
+> Hello Jakub, hello David,
+> 
+> this is a pull request of 5 patches for net-next/master.
+> 
+> The first patch is by me and fixes a typo in a comment in the CAN
+> J1939 protocol.
+> 
+> [...]
 
-diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-index a7b5807c5543..fb547e26c676 100644
---- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-+++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
-@@ -104,6 +104,12 @@ properties:
-           maximum: 32
-     maxItems: 1
- 
-+  power-domains:
-+    description:
-+      Power domain provider node and an args specifier containing
-+      the can device id value.
-+    maxItems: 1
-+
-   can-transceiver:
-     $ref: can-transceiver.yaml#
- 
--- 
-2.30.2
+Here is the summary with links:
+  - pull-request: can-next 2021-08-04
+    https://git.kernel.org/netdev/net-next/c/9c0532f9cc93
+  - [net-next,2/5] can: j1939: rename J1939_ERRQUEUE_* to J1939_ERRQUEUE_TX_*
+    https://git.kernel.org/netdev/net-next/c/cd85d3aed5cf
+  - [net-next,3/5] can: j1939: extend UAPI to notify about RX status
+    https://git.kernel.org/netdev/net-next/c/5b9272e93f2e
+  - [net-next,4/5] can: flexcan: flexcan_clks_enable(): add missing variable initialization
+    https://git.kernel.org/netdev/net-next/c/336266697213
+  - [net-next,5/5] dt-bindings: net: can: Document power-domains property
+    https://git.kernel.org/netdev/net-next/c/d85165b2381c
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
